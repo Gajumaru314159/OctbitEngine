@@ -44,8 +44,8 @@ namespace ob {
         //  コンストラクタ / デストラクタ
         //===============================================================
         Color()noexcept;                                                // 白で初期化
-        Color(f32 r_, f32 g_, f32 b_, f32 a_ = 1.0)noexcept;            // 各要素を指定して初期化
-        Color(f32 grey_, f32 a_ = 1.0)noexcept;                         // 輝度とアルファ値を指定して初期化
+        Color(f32 r, f32 g, f32 b, f32 a = 1.0)noexcept;                // 各要素を指定して初期化
+        Color(f32 grey, f32 a = 1.0)noexcept;                           // 輝度とアルファ値を指定して初期化
         explicit Color(const Color32& another)noexcept;                 // ColorU8 を変換して初期化
         explicit Color(const Vec3& another)noexcept;                    // Vec3 を変換して初期化(アルファは1.0に設定)
         explicit Color(const Vec4& another)noexcept;                    // Vec4 を変換して初期化
@@ -73,8 +73,8 @@ namespace ob {
         //===============================================================
         //  セッター
         //===============================================================
-        void Set(f32 r_, f32 g_, f32 b_, f32 a_ = 1.0) noexcept;        // 色成分を指定
-        void Set(f32 grey_, f32 a_ = 1.0) noexcept;                     // 色成分を輝度で指定
+        void Set(f32 r, f32 g, f32 b, f32 a = 1.0) noexcept;            // 色成分を指定
+        void Set(f32 grey, f32 a = 1.0) noexcept;                       // 色成分を輝度で指定
         void Clamp() noexcept;                                          // カラー要素を0.0～にクランプ
         void Clamp01() noexcept;                                        // カラー要素を0.0～1.0にクランプ
 
@@ -154,16 +154,16 @@ namespace ob {
     //-----------------------------------------------------------------------------
     //! @brief コンストラクタ(各要素を指定して初期化)
     //-----------------------------------------------------------------------------
-    inline Color::Color(f32 r_, f32 g_, f32 b_, f32 a_) noexcept {
-        Set(r_, g_, b_, a_);
+    inline Color::Color(f32 r, f32 g, f32 b, f32 a) noexcept {
+        Set(r, g, b, a);
     }
 
 
     //-----------------------------------------------------------------------------
     //! @brief コンストラクタ(輝度とアルファ値を指定して初期化)
     //-----------------------------------------------------------------------------
-    inline Color::Color(f32 grey_, f32 a_) noexcept {
-        Set(grey_, grey_, grey_, a);
+    inline Color::Color(f32 grey, f32 a) noexcept {
+        Set(grey, grey, grey, a);
     }
 
 
@@ -300,37 +300,37 @@ namespace ob {
 
 
     //-----------------------------------------------------------------------------
-    // @brief		色成分を指定
-    // 
-    // @param r_	赤成分
-    // @param g_	緑成分
-    // @param b_	青成分
-    // @param a_	アルファ
+    //! @brief		色成分を指定
+    //! 
+    //! @param r	赤成分
+    //! @param g	緑成分
+    //! @param b	青成分
+    //! @param a	アルファ
     //-----------------------------------------------------------------------------
-    inline void Color::Set(f32 r_, f32 g_, f32 b_, f32 a_) noexcept {
-        r = r_;
-        g = g_;
-        b = b_;
-        a = a_;
+    inline void Color::Set(f32 r, f32 g, f32 b, f32 a) noexcept {
+        this->r = r;
+        this->g = g;
+        this->b = b;
+        this->a = a;
     }
 
 
     //-----------------------------------------------------------------------------
-    // @brief			色成分を輝度で指定
-    // 
-    // @param grey_	輝度
-    // @param a_		アルファ
+    //! @brief			色成分を輝度で指定
+    //! 
+    //! @param grey	    輝度
+    //! @param a		アルファ
     //-----------------------------------------------------------------------------
-    inline void Color::Set(f32 grey_, f32 a_) noexcept {
-        r = grey_;
-        g = grey_;
-        b = grey_;
-        a = a_;
+    inline void Color::Set(f32 grey, f32 a) noexcept {
+        r = grey;
+        g = grey;
+        b = grey;
+        this->a = a;
     }
 
 
     //-----------------------------------------------------------------------------
-    // @brief      カラー要素を0.0～にクランプ
+    //! @brief      カラー要素を0.0～にクランプ
     //-----------------------------------------------------------------------------
     inline void Color::Clamp() noexcept {
         r = Mathf::Max(r, 0.0f);
@@ -340,7 +340,7 @@ namespace ob {
     }
 
     //-----------------------------------------------------------------------------
-    // @brief      カラー要素を0.0～1.0にクランプ
+    //! @brief      カラー要素を0.0～1.0にクランプ
     //-----------------------------------------------------------------------------
     inline void Color::Clamp01() noexcept {
         r = Mathf::Clamp01(r);
@@ -351,7 +351,7 @@ namespace ob {
 
 
     //-----------------------------------------------------------------------------
-    // @brief      RGBのうち最小の値を取得
+    //! @brief      RGBのうち最小の値を取得
     //-----------------------------------------------------------------------------
     inline f32 Color::GetMin()const noexcept {
         return Mathf::Min(r, g, b);
@@ -359,7 +359,7 @@ namespace ob {
 
 
     //-----------------------------------------------------------------------------
-    // @brief      RGBのうち最大の値を取得
+    //! @brief      RGBのうち最大の値を取得
     //-----------------------------------------------------------------------------
     inline f32 Color::GetMax()const noexcept {
         return Mathf::Max(r, g, b);
@@ -376,7 +376,7 @@ namespace ob {
 
 
     //-----------------------------------------------------------------------------
-    // @brief      セピアカラーに変換
+    //! @brief      セピアカラーに変換
     //-----------------------------------------------------------------------------
     inline Color Color::ToSepia()const noexcept {
         Color sepia = this->ToGrayscale();
