@@ -40,29 +40,31 @@
 
 //-----------------------------------------------------------------------------
 //! @brief		クラスコピーの禁止
+//! 
 //! @details	コピーコンストラクタと代入演算子の削除。
 //-----------------------------------------------------------------------------
-#define OB_DISALLOW_COPY(typeName) \
-	typeName(const typeName&) = delete; \
-	typeName& operator=(const typeName&) = delete
-
 class Noncopyable {
 protected:
 	Noncopyable() {}
-	~Noncopyable(){}
+	~Noncopyable() {}
 private:
 	Noncopyable(const Noncopyable&);
 	Noncopyable& operator=(const Noncopyable&);
 };
 
-
 //-----------------------------------------------------------------------------
 //! @brief		クラスムーブの禁止
+//! 
 //! @details	コピーコンストラクタと代入演算子の削除。
 //-----------------------------------------------------------------------------
-#define OB_DISALLOW_MOVE(typeName) \
-	typeName(typeName&&) = delete; \
-	typeName& operator=(typeName&&) = delete
+class Nonmovable {
+protected:
+	Nonmovable() {}
+	~Nonmovable() {}
+private:
+	Nonmovable(Nonmovable&&);
+	Nonmovable& operator=(Nonmovable&&);
+};
 
 
 //-----------------------------------------------------------------------------

@@ -36,7 +36,7 @@ namespace ob {
     //! ```
     //-----------------------------------------------------------------------------
     template<typename T>
-    class handle_list {
+    class handle_list:private Noncopyable {
     public:
 
         //! @cond
@@ -71,7 +71,7 @@ namespace ob {
         //-----------------------------------------------------------------------------
         //! @brief ハンドル
         //-----------------------------------------------------------------------------
-        class handle :public handle_base {
+        class handle :public handle_base,private Noncopyable,private Nonmovable {
             friend class handle_list<T>;
         public:
 
@@ -79,8 +79,6 @@ namespace ob {
             //! @brief コンストラクタ
             //-----------------------------------------------------------------------------
             handle() = default;
-            OB_DISALLOW_MOVE(handle);
-            OB_DISALLOW_COPY(handle);
 
             //-----------------------------------------------------------------------------
             //! @brief デストラクタ
@@ -252,9 +250,6 @@ namespace ob {
         handle_list(this_type&& x)noexcept;                                     // ムーブコンストラクタ
         this_type& operator=(this_type&& x)noexcept;                            // ムーブ代入演算子
         ~handle_list();                                                         // デストラクタ
-        //! @cond
-        OB_DISALLOW_COPY(handle_list);                                          // コピーの禁止(ハンドル管理のため)
-        //! @endcond
         
 
         //===============================================================

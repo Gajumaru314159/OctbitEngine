@@ -19,7 +19,7 @@ namespace ob
     //! @tparam ...Args     イベント引数
     //-----------------------------------------------------------------------------
     template<typename... Args>
-    class event_notifier
+    class event_notifier:private Noncopyable
     {
     public:
 
@@ -44,9 +44,6 @@ namespace ob
         //===============================================================
         event_notifier();
         virtual ~event_notifier();
-        //! @cond
-        OB_DISALLOW_COPY(event_notifier);
-        //! @endcond
         
 
         //===============================================================

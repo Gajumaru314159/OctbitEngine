@@ -36,7 +36,7 @@ namespace ob {
     //! ```
     //-----------------------------------------------------------------------------
     template<typename T>
-    class handle_forward_list {
+    class handle_forward_list :private Noncopyable{
     public:
 
         //-----------------------------------------------------------------------------
@@ -67,7 +67,7 @@ namespace ob {
         //-----------------------------------------------------------------------------
         //! @brief ハンドル
         //-----------------------------------------------------------------------------
-        class handle :public handle_base {
+        class handle :public handle_base,private Noncopyable,private Nonmovable {
             friend class handle_forward_list<T>;
         public:
 
@@ -75,8 +75,6 @@ namespace ob {
             //! @brief コンストラクタ
             //-----------------------------------------------------------------------------
             handle() = default;
-            OB_DISALLOW_MOVE(handle);
-            OB_DISALLOW_COPY(handle);
 
             //-----------------------------------------------------------------------------
             //! @brief デストラクタ
@@ -177,7 +175,6 @@ namespace ob {
         handle_forward_list();
         handle_forward_list(this_type&& x)noexcept;
         this_type& operator=(this_type&& x)noexcept;
-        OB_DISALLOW_COPY(handle_forward_list);
         ~handle_forward_list();
 
         iterator begin_before()noexcept;

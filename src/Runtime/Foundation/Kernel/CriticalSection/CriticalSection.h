@@ -46,7 +46,7 @@ namespace ob
     //! 
     //! @details    クリティカルセクションの開始と終了をコンストラクタ/デストラクタで自動的に行う。
     //-----------------------------------------------------------------------------
-    class ScopedCriticalSection
+    class ScopedCriticalSection:private Noncopyable,private Nonmovable
     {
     public:
         //! @cond 
@@ -56,9 +56,9 @@ namespace ob
         ScopedCriticalSection() = delete;
         //! @endcond
     private:
+        
         CriticalSection& m_cs;
 
-        OB_DISALLOW_COPY(ScopedCriticalSection);
     };
 
 

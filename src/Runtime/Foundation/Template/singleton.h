@@ -18,7 +18,7 @@ namespace ob
     //!                 インスタンスの生成と破壊はコンストラクタとデストラクタで行われる。
     //-----------------------------------------------------------------------------
     template<class T>
-    class singleton
+    class singleton:private Noncopyable,private Nonmovable
     {
     public:
 
@@ -37,9 +37,6 @@ namespace ob
         //===============================================================
         // コピー / ムーブ の禁止
         //===============================================================
-        OB_DISALLOW_COPY(singleton);
-        OB_DISALLOW_MOVE(singleton);
-
 
     private:
 
