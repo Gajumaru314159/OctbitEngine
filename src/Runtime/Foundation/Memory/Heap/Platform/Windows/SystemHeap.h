@@ -12,19 +12,20 @@
 namespace ob
 {
 
-    //-----------------------------------------------------------------------------
+    //@―-------------------------------------------------------------------------------
     //! @brief		OSヒープ
     //! 
     //! @details	システムのnewから動的に割り当てるアロケータ。
-    //-----------------------------------------------------------------------------
-    class SystemHeap final:public Heap
+    //@―-------------------------------------------------------------------------------
+    class SystemHeap final :public Heap
     {
+        friend class Heap;
+        friend class MemoryDevice;
     public:
 
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
-        SystemHeap();
         virtual ~SystemHeap() override;
         virtual void	Release() override;                     // 内部アロケート情報のクリア
 
@@ -42,6 +43,10 @@ namespace ob
         virtual size_t	GetHeapSize()		const override;    // アロケータのヒープサイズを取得
         virtual size_t	GetFreeHeapSize()	const override;    // アロケータの使用可能なヒープサイズを取得
         virtual bool	IsValid()           const override;    // 利用可能な状態かどうか
+
+    protected:
+
+        SystemHeap();
 
     private:
 

@@ -8,9 +8,4 @@
 namespace ob
 {
 
-	//-----------------------------------------------------------------------------
-	void LogTrace(const SourceLocation& sourceLocation){
-		// OutputDebugLog
-	}
-
 }// namespace ob
