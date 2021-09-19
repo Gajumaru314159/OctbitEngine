@@ -12,7 +12,7 @@
 namespace ob
 {
 
-    //@―-------------------------------------------------------------------------------
+    //@―---------------------------------------------------------------------------
     template<typename T,typename TDeleter=std::default_delete<T>>
     using unique_ptr = std::unique_ptr<T, TDeleter>;
 
