@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 
-#include <Core/Math/Vector/VectorInt2.h>
-#include <Core/Math/Vector/VectorInt3.h>
-#include <Core/Math/Vector/VectorInt4.h>
+#include <Core/Math/Vector/IntVector2.h>
+#include <Core/Math/Vector/IntVector3.h>
+#include <Core/Math/Vector/IntVector4.h>
 #include <Core/Math/Vector/Vector2.h>
 #include <Core/Math/Vector/Vector3.h>
 #include <Core/Math/Vector/Vector4.h>
@@ -83,13 +83,16 @@ namespace ob {
     //  IntVec4
     //===============================================================
 
+    //@―---------------------------------------------------------------------------
     // コンストラクタ( Vec4 初期化)
+    //@―---------------------------------------------------------------------------
     IntVec4::IntVec4(Vec4 vec)noexcept {
         x = static_cast<s32>(vec.x);
         y = static_cast<s32>(vec.y);
         z = static_cast<s32>(vec.z);
         w = static_cast<s32>(vec.w);
     }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief s32*IntVec4演算子 

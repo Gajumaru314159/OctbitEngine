@@ -14,10 +14,12 @@
 #include "LogType.h"
 #include "ILogEvent.hpp"
 
+//! @cond
 // Check if fmt/format.h compiles with the X11 index macro defined.
 #define index(x, y) no nice things
 #include <fmt/format.h>
 #undef index
+//! @endcond
 
 namespace ob
 {
@@ -104,6 +106,7 @@ namespace ob
         void RemoveEvent(EventHandle& handle);
 
     private:
+
         mutex m_mutex;
         list<ILogEvent*> m_events;
         EventNotifier m_eventList;

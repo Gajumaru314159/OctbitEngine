@@ -231,6 +231,7 @@ namespace ob {
     //===============================================================
     // インライン関数
     //===============================================================
+    //! @cond
 
     // @brief 高速余弦正弦関数
     inline void Mathf::SinCos(f32 radians, f32& outSin, f32& outCos)noexcept {
@@ -328,4 +329,5 @@ namespace ob {
     }
 
 
+    //! @endcond
 }// namespace ob

@@ -14,6 +14,11 @@ namespace ob {
     class delegate {};
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      デリゲート
+    //! 
+    //! @details    インスタンスへの参照をメソッドへの参照をペアにしてカプセル化する。
+    //@―---------------------------------------------------------------------------
     template<typename Ret, typename... Args>
     class delegate<Ret(Args...)> :public detail::delegate_base
     {

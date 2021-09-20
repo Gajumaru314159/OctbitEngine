@@ -122,7 +122,9 @@ namespace ob {
         using difference_type = int;
 
 
-
+        //@―---------------------------------------------------------------------------
+        //! @brief constイテレータ
+        //@―---------------------------------------------------------------------------
         class const_iterator {
             friend class handle_forward_list<T>;
         public:
@@ -149,6 +151,10 @@ namespace ob {
             handle_base* pHandle;                                                                                           //!< インスタンス・ポインタ
         };
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief イテレータ
+        //@―---------------------------------------------------------------------------
         class iterator :public const_iterator {
             friend class handle_forward_list<T>;
         public:

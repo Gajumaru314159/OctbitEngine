@@ -28,9 +28,9 @@ namespace ob {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief          コンストラクタ( 0初期化 )
+        //! @brief          コンストラクタ( ゼロ初期化 )
         //@―---------------------------------------------------------------------------
-        explicit Capsule(EZeroInit) noexcept;
+        explicit Capsule(EForceInit) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -146,6 +146,7 @@ namespace ob {
     //===============================================================
     // インライン関数
     //===============================================================
+    //! @cond
 
     //@―---------------------------------------------------------------------------
     //! @brief          デフォルトコンストラクタ(初期化なし)
@@ -154,9 +155,9 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief          コンストラクタ( 0初期化 )
+    //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    explicit Capsule::Capsule(EZeroInit) noexcept {
+    explicit Capsule::Capsule(EForceInit) noexcept {
         pos1.SetZero();
         pos2.SetZero();
         radius=0.0f;
@@ -235,7 +236,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline void Capsule::Set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept {
         this->radius = radius;
-        const Vec3 half = quat.Up() * (height * 0.5f);
+        const Vec3 half = quat.GetUp() * (height * 0.5f);
         pos1 = center + half;
         pos2 = center - half;
     }
@@ -281,4 +282,5 @@ namespace ob {
         return (pos2 - pos1).GetUnitVec();
     }
 
+    //! @endcond
 }// namespcae ob

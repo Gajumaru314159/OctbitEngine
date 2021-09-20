@@ -20,9 +20,9 @@ namespace ob
     //! @details    構築には CURRENT_SOURCE_LOCATION マクロを使用してください。
     //@―---------------------------------------------------------------------------
     struct SourceLocation {
-        const Char* filePath = nullptr;
-        const Char* functionName = nullptr;
-        s32 line = 0;
+        const Char* filePath = nullptr;             //!< ファイルパス
+        const Char* functionName = nullptr;         //!< 関数名
+        s32 line = 0;                               //!< 行番号
     };
 
 

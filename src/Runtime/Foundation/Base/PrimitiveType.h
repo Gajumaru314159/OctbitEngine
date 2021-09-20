@@ -39,8 +39,14 @@ namespace ob
 
 #undef TEXT
 #undef TEXT_BASE
+    //! @cond
 #define TEXT_BASE(x) u ## x
+    //! @endcond
 #define TEXT(x) TEXT_BASE(x)
+    //@―---------------------------------------------------------------------------
+    //! @def        TEXT
+    //! @brief      文字/文字列リテラルをエンジン既定のエンコーディングに変更する。
+    //@―---------------------------------------------------------------------------
 
 
 #if defined(OS_64BIT)

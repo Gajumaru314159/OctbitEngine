@@ -7,7 +7,7 @@
 #include <Core/Math/Matrix.h>
 #include <Core/Math/Quaternion.h>
 
-#include <Core/Math/Vector/VectorInt4.h>
+#include <Core/Math/Vector/IntVector4.h>
 
 
 
@@ -94,7 +94,9 @@ namespace ob {
     //  Vec4
     //===============================================================
 
-    // コンストラクタ( IntVec4 初期化)
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ( IntVec4 初期化)
+    //@―---------------------------------------------------------------------------
     Vec4::Vec4(const IntVec4& vec)noexcept {
         x = static_cast<f32>(vec.x);
         y = static_cast<f32>(vec.y);

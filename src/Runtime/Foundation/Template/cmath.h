@@ -176,9 +176,9 @@ namespace ob
     //!                 bool ok=is_in_range(index,0,container.size()-1);
     //!                 ```
     //!                 とする必要がある。
-    //! @val            入力
-    //! @minVal         最小値
-    //! @minVal         最大値
+    //! @param val      入力
+    //! @param minVal   最小値
+    //! @param minVal   最大値
     //! @retval true    範囲内
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
@@ -197,9 +197,9 @@ namespace ob
     //!                 bool ok=is_in_range(index,0,container.size()-1);
     //!                 ```
     //!                 とする必要がある。
-    //! @val            入力
-    //! @minVal         最小値
-    //! @minVal         最大値
+    //! @param val      入力
+    //! @param minVal   最小値
+    //! @param minVal   最大値
     //! @retval true    範囲内
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------

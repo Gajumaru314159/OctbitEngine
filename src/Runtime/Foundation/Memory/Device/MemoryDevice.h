@@ -124,6 +124,7 @@ extern "C"
     //! 
     //! @details            ヒープが設定されていない場合はシステムヒープが返される。
     //! @param heapType     ヒープ・タイプ
+    //! @param pHeap        ヒープ
     //@―---------------------------------------------------------------------------
     void OB_API SetHeap(ob::HeapType heapType, ob::Heap* pHeap);
 }

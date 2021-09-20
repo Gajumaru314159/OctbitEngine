@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Foundation/Base/Fwd.h>
+#include <Foundation/Assertion/Assertion.h>
 #include <Foundation/Template/atomic.h>
 #include <Foundation/Log/LogMacro.h>
 #include "exponential_backoff.h"
@@ -16,13 +17,12 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief スピン・ミューテックス
     //@―---------------------------------------------------------------------------
-    class spin_mutex
+    class spin_mutex:private Noncopyable
     {
     public:
 
         spin_mutex(bool isLocked = false);
         ~spin_mutex();
-        OB_DISALLOW_COPY(spin_mutex);
 
         void lock();
         bool try_lock();
@@ -37,7 +37,7 @@ namespace ob
 
 
 
-    class recursive_spin_mutex
+    class recursive_spin_mutex :private Noncopyable
     {
     private:
 
@@ -51,7 +51,6 @@ namespace ob
 
         recursive_spin_mutex(bool isLocked = false);
         ~recursive_spin_mutex();
-        OB_DISALLOW_COPY(recursive_spin_mutex);
 
         void lock();
         bool try_lock();
@@ -186,7 +185,7 @@ namespace ob
         {
             auto nowValue = m_syncFlag.load(memory_order::memory_order_acquire);
 
-            OB_CHECK_ASSERT_EX(newValue.threadID == threadID, "Thread", "Thread ID Missmatch");
+            OB_REQUIRE_EX(newValue.threadID == threadID, TEXT("Thread"), TEXT("Thread ID Missmatch"));
 
             newValue.lockCount = nowValue.lockCount - 1;
             if (newValue.lockCount == 0)    newValue.threadID = thread::id();
