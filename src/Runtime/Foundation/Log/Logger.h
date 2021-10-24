@@ -5,14 +5,13 @@
 //***********************************************************
 #pragma once
 
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/singleton.h>
-#include <Foundation/Template/delegate/delegate.h>
-#include <Foundation/Template/event/event_notifier.h>
-#include <Foundation/Template/Container/list.h>
-#include <Foundation/Template/String/String.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/singleton.h>
+#include <Runtime/Foundation/Template/Container/list.h>
+#include <Runtime/Foundation/Template/String/String.h>
+#include <Runtime/Foundation/Template/Thread/mutex.h>
 #include "LogType.h"
-#include "ILogEvent.hpp"
+#include "ILogEvent.h"
 
 //! @cond
 // Check if fmt/format.h compiles with the X11 index macro defined.
@@ -36,7 +35,6 @@ namespace ob
     {
     public:
 
-
         //@―---------------------------------------------------------------------------
         //! @brief メッセージの最大バイト数
         //@―---------------------------------------------------------------------------
@@ -45,9 +43,6 @@ namespace ob
             MESSAGE_MAX = 2048, //! メッセージの最大バイト数
         };
 
-        using EventNotifier = event_notifier<const Log&>;        //!< ログ・イベント通知 
-        using EventDelegate = EventNotifier::delegate_type;      //!< イベント・デリゲート
-        using EventHandle   = EventNotifier::handle;             //!< イベント・ハンドル
 
     public:
 
@@ -61,7 +56,7 @@ namespace ob
         //! @param category         カテゴリ名
         //! @param pMessage         メッセージ
         //@―---------------------------------------------------------------------------
-        void Add(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
+        void AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
 
 
         //@―---------------------------------------------------------------------------
@@ -76,40 +71,28 @@ namespace ob
         //! @param ...args          フォーマット引数
         //@―---------------------------------------------------------------------------
         template<typename... Args>
-        void Add(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
+        void AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
             const String message = fmt::format(pFormat, ob::forward<Args>(args)...);
-            Add(type, sourceLocation, category, message.c_str());
+            AddLog(type, sourceLocation, category, message.c_str());
         }
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの追加
         //@―---------------------------------------------------------------------------
-        void AddEvent(gsl::not_null<ILogEvent*> logEvent);
+        void AddListener(ILogEvent* pLogEvent);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの削除
         //@―---------------------------------------------------------------------------
-        void RemoveEvent(ILogEvent* const logEvent);
+        void RemoveListener(ILogEvent* logEvent);
 
-
-        //@―---------------------------------------------------------------------------
-        //! @brief ログ・イベントの追加
-        //@―---------------------------------------------------------------------------
-        void AddEvent(EventHandle& handle, EventDelegate& delegate);
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief ログ・イベントの削除
-        //@―---------------------------------------------------------------------------
-        void RemoveEvent(EventHandle& handle);
 
     private:
 
         mutex m_mutex;
         list<ILogEvent*> m_events;
-        EventNotifier m_eventList;
 
     };
 

@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Core/Module/IModule.hpp>
-#include <Graphic/Device/Device.hpp>
+#include <Core/Module/IModule.h>
+#include <Graphic/Device/Device.h>
 
 namespace ob {
     namespace graphic {
@@ -17,6 +17,10 @@ namespace ob {
             SM4_REMOVED,
             SM5,
             Max
+        };
+
+        class Device {
+
         };
 
         //-----------------------------------------------------------

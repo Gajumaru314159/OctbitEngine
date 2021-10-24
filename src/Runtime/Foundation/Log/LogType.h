@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/delegate/delegate.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/delegate/delegate.h>
 
 namespace ob
 {
@@ -29,7 +29,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログの種類
     //@―---------------------------------------------------------------------------
-    enum class LogType
+    enum class ELogType
     {
         Fatal,      //!< 致命的エラー
         Error,		//!< エラー
@@ -43,11 +43,11 @@ namespace ob
     //@―---------------------------------------------------------------------------
     struct Log
     {
-        LogType         type;           //!< タイプ
-                                        //   時間
+        ELogType         type;           //!< タイプ
         const Char*     category;       //!< カテゴリ
         const Char*     message;        //!< メッセージ
         SourceLocation  sourceLocation; //!< ログが発生したソースコード上の位置
+                                        //   時間         ->プラットフォーム依存になるので受け取り段階で処理する?
                                         //   スレッドID
     };
 

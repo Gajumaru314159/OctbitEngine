@@ -4,13 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/algorithm.h>
-#include <Foundation/Template/allocator.h>
-#include <Foundation/Template/iterator.h>
-#include <Foundation/Template/utility.h>
-#include <Foundation/Template/memory.h>
-#include <Foundation/Template/thread/mutex.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/algorithm.h>
+#include <Runtime/Foundation/Template/allocator.h>
+#include <Runtime/Foundation/Template/iterator.h>
+#include <Runtime/Foundation/Template/utility.h>
+#include <Runtime/Foundation/Template/memory.h>
+#include <Runtime/Foundation/Template/thread/mutex.h>
 
 namespace ob {
 

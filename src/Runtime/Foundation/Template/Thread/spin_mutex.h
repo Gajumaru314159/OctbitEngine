@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Assertion/Assertion.h>
-#include <Foundation/Template/atomic.h>
-#include <Foundation/Log/LogMacro.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Assertion/Assertion.h>
+#include <Runtime/Foundation/Template/atomic.h>
+#include <Runtime/Foundation/Log/LogMacro.h>
 #include "exponential_backoff.h"
 
 

@@ -6,7 +6,7 @@
 #pragma once
 #include <cmath>
 
-#include <Foundation/Template/type_traits.h>
+#include <Runtime/Foundation/Template/type_traits.h>
 
 namespace ob
 {
@@ -185,7 +185,7 @@ namespace ob
     template<typename T>
     inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(is_arithmetic<T>::value)
     {
-        return (minVal <= val) && (val < maxVale);
+        return (minVal <= val) && (val < maxVal);
     }
 
 

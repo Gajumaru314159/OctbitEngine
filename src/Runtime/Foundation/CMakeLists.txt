@@ -15,7 +15,7 @@ add_library(${PROJECT_NAME} STATIC ${out_sources} "Foundation.h" ${gsl_sources})
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
-    "${OCTBIT_ROOT_PATH}/src/Runtime"
+    "${OCTBIT_SOURCE_PATH}"
     "${OCTBIT_EXTERNAL_PATH}/gsl/include"
     "${OCTBIT_EXTERNAL_PATH}/fmt/include"
 )

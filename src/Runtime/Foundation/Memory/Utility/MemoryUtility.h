@@ -27,10 +27,33 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief nullチェック付きretain呼び出し
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    inline void safeRetain(T* ptr)noexcept(ptr->retain()) {
+        if (ptr) {
+            ptr->retain();
+        }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief nullチェック付き解放release呼び出し
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    inline void safeRelease(T*& pBuffer)noexcept(ptr->release()) {
+        if (ptr) {
+            ptr->release();
+            ptr = nullptr;
+        }
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief deleteによるnullチェック付き解放
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void SafeDelete(T*& pBuffer)     {
+    inline void SafeDelete(T*& pBuffer) {
         if (pBuffer) {
             delete pBuffer;
             pBuffer = nullptr;
@@ -42,7 +65,7 @@ namespace ob {
     //! @brief delete[]によるnullチェック付き解放
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void SafeDeleteArray(T*& pBuffer)     {
+    inline void SafeDeleteArray(T*& pBuffer) {
         if (pBuffer) {
             delete[] pBuffer;
             pBuffer = nullptr;

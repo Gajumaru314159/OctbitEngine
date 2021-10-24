@@ -321,7 +321,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
-    explicit IntVec4::IntVec4(EForceInit)noexcept {
+    inline IntVec4::IntVec4(EForceInit)noexcept {
         SetZero();
     }
 

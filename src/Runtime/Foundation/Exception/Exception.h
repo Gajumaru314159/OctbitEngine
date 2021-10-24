@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/string/string.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/string/string.h>
 #include "ExceptionType.h"
 
 #undef GetMessage
@@ -41,10 +41,10 @@ namespace ob {
 		//@―---------------------------------------------------------------------------
 		//! @brief メッセージの取得
 		//@―---------------------------------------------------------------------------
-		virtual const String& GetMessage()const;
+		virtual const String& getMessage()const;
+
 
 	protected:
-
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			メッセージの設定
@@ -52,11 +52,12 @@ namespace ob {
 		//! @param format	フォーマット文字列
 		//! @param args		フォーマット引数
 		//@―---------------------------------------------------------------------------
-		void SetMessage(const Char* format, va_list args);
+		void setMessage(const Char* format, va_list args);
+
 
 	private:
 
-		ExceptionLevel m_level;		//!< 例外レベル
+		EExceptionLevel m_level;		//!< 例外レベル
 		String m_message;			//!< メッセージ
 
 	};

@@ -25,7 +25,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     Matrix& Matrix::operator = (const Affine& other) {
         // TODO アフィン行列の変換
-        Matrix mtx;
+        //Matrix mtx;
         return *this;
     }
 
@@ -53,7 +53,7 @@ namespace ob {
     //! @brief 行列演算子
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator * (const Matrix& other) const {
-        Matrix result;
+        Matrix result(EForceInit::Force);
         result.m[0][0] = 0;
         result.m[1][1] = 0;
         result.m[2][2] = 0;
@@ -75,7 +75,7 @@ namespace ob {
     //! @brief 行列演算代入演算子 
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator *= (const Matrix& other) {
-        Matrix result;
+        Matrix result(EForceInit::Force);
         result.m[0][0] = 0;
         result.m[1][1] = 0;
         result.m[2][2] = 0;

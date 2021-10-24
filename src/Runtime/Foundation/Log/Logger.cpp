@@ -12,15 +12,14 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief                  ログの追加
     //! 
-    //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。
+    //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
+    //!                         直接呼び出しは非推奨です。
     //! @param type             ログの種類
+    //! @param sourceLocation   ログ生成場所
     //! @param category         カテゴリ名
-    //! @param fileName         ログ生成場所のファイル名
-    //! @param functionName     ログ生成場所の関数名
-    //! @param line             ログ生成場所の行数
     //! @param pMessage         メッセージ
-	//@―---------------------------------------------------------------------------
-    void Logger::Add(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
+    //@―---------------------------------------------------------------------------
+    void Logger::AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
     {
         Log log;
         log.type = type;
@@ -29,8 +28,6 @@ namespace ob
         log.message = pMessage;
 
         // 登録されたすべてのログリスナに通知
-        m_eventList.invoke(log);
-
         {
             lock_guard lock(m_mutex);
             for (auto& event : m_events) {
@@ -39,7 +36,7 @@ namespace ob
         }
 
         // Fatalログはブレークポイントを発生させる
-        if (type == LogType::Fatal) {
+        if (type == ELogType::Fatal) {
             CALL_BREAK_POINT();
         }
     }
@@ -49,38 +46,22 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの追加
     //@―---------------------------------------------------------------------------
-    void Logger::AddEvent(gsl::not_null<ILogEvent*> logEvent) {
+    void Logger::AddListener(ILogEvent* pLogEvent) {
+        if (!pLogEvent)return;
         lock_guard lock(m_mutex);
-        m_events.push_back(logEvent.get());
-        (*logEvent).OnRegistered();
+        m_events.push_back(pLogEvent);
+        pLogEvent->OnRegistered();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの削除
     //@―---------------------------------------------------------------------------
-    void Logger::RemoveEvent(ILogEvent* const logEvent) {
+    void Logger::RemoveListener(ILogEvent* pLogEvent) {
+        if (!pLogEvent)return;
         lock_guard lock(m_mutex);
-        m_events.remove(logEvent);
-        (*logEvent).OnUnregistered();
+        m_events.remove(pLogEvent);
+        pLogEvent->OnUnregistered();
     }
     
-
-    //@―---------------------------------------------------------------------------
-    //! @brief ログ・イベントの追加
-    //@―---------------------------------------------------------------------------
-    void Logger::AddEvent(EventHandle& handle, EventDelegate& delegate)
-    {
-        m_eventList.add(handle, delegate);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief ログ・イベントの削除
-    //@―---------------------------------------------------------------------------
-    void Logger::RemoveEvent(EventHandle& handle)
-    {
-        m_eventList.remove(handle);
-    }
-
 }// namespace ob

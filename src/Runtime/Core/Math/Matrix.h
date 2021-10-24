@@ -351,7 +351,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief		コンストラクタ(単位行列初期化)
     //@―---------------------------------------------------------------------------
-    inline explicit Matrix::Matrix(EForceInit) {
+    inline Matrix::Matrix(EForceInit) {
         SetIdentity();
     }
 

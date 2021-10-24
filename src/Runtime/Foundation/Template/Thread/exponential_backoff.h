@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/chrono.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/chrono.h>
 #include "thread.h"
 
 

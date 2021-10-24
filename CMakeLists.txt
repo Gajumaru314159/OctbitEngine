@@ -17,11 +17,9 @@ include(src/BuildCommon.cmake)
 include(Common.cmake)
 
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
-
-set(OCTBIT_INCLUDE_DIRECTORIES
-    "${OCTBIT_ROOT_PATH}/include/Runtime")
-
+set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/src")
 set(OCTBIT_EXTERNAL_PATH "${OCTBIT_ROOT_PATH}/external")
+
 set(OB_CONFIGURATION "Debug")
 
 if(MSVC)
@@ -35,25 +33,32 @@ if(MSVC)
     string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS_RELWITHDEBINFO})
 endif(MSVC)
 
+add_definitions(-D_UNICODE -DUNICODE)
+
 if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
     add_definitions(/W4)
 endif()
 
 if (MSVC)
-    #set(OB_COMMON_META_FILES "${CMAKE_CURRENT_LIST_DIR}/tools/VisualStudio/Lumino.natvis")
 endif()
+
 
 
 # プロジェクト読み込み
 add_subdirectory ("src/Runtime/Foundation")
-add_subdirectory ("src/Runtime/Core")
-#add_subdirectory ("src/Runtime/Graphic")
-#add_subdirectory ("src/Runtime/GraphicD3D12")
+add_subdirectory ("src/Runtime/Platform")
+# add_subdirectory ("src/Runtime/Core")
+# add_subdirectory ("src/Runtime/Engine")
+# add_subdirectory ("src/Runtime/Graphic")
+# add_subdirectory ("src/Runtime/GraphicD3D12")
 # add_subdirectory ("src/Runtime/GraphicVulkan")
 
 # テストプロジェクト読み込み
-add_subdirectory ("test/Runtime/Foundation")
-add_subdirectory ("test/Runtime/Core")
+# add_subdirectory ("test/Runtime/Foundation")
+# add_subdirectory ("test/Runtime/Core")
 
 # アプリケーションプロジェクト読み込み
-#add_subdirectory ("src/Application")
+
+
+add_subdirectory ("src/Application")
+

@@ -6,7 +6,9 @@ message("Load project [${PROJECT_NAME}]")
 # ソースコードの登録
 #------------------------------------------------------------------------------
 LOAD_FILES(out_sources)
-add_library(${PROJECT_NAME} STATIC ${out_sources})
+add_library(${PROJECT_NAME} SHARED ${out_sources})
+
+ADD_FORCE_INCLUDE("Foundation/Foundation.h")
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
@@ -20,9 +22,12 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
-    Foundation
+    GraphicBase
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Runtime/Graphic")
+
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)

@@ -154,7 +154,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline explicit Rect::Rect(EForceInit) noexcept{
+    inline Rect::Rect(EForceInit) noexcept{
         Reset();
     }
 

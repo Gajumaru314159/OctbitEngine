@@ -5,9 +5,7 @@
 //***********************************************************
 #pragma once
 #include <new>
-#include <Foundation/Memory/Device/MemoryDevice.h>
-namespace ob
-{
+namespace ob {
     //! @cond
     struct allocator_base {
     public:
@@ -29,7 +27,7 @@ namespace ob
     //! @brief  STLアロケータ
     //@―---------------------------------------------------------------------------
     template <class T>
-    struct allocator:public allocator_base {
+    struct allocator :public allocator_base {
     public:
 
         using value_type = T;   //!< アロケート要素の型
@@ -50,16 +48,14 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief メモリ確保
         //@―---------------------------------------------------------------------------
-        T* allocate(std::size_t n)
-        {
-            return reinterpret_cast<T*>(allocator_base::allocate(sizeof(T)*n));
+        T* allocate(std::size_t n) {
+            return reinterpret_cast<T*>(allocator_base::allocate(sizeof(T) * n));
         }
 
         //@―---------------------------------------------------------------------------
         //! @brief メモリ解放
         //@―---------------------------------------------------------------------------
-        void deallocate(T* p, std::size_t n)
-        {
+        void deallocate(T* p, std::size_t n) {
             allocator_base::deallocate(p);
         }
     };
@@ -73,8 +69,7 @@ namespace ob
     //! 等価演算子
     //@―---------------------------------------------------------------------------
     template <class T, class U>
-    bool operator==(const allocator<T>&, const allocator<U>&)
-    {
+    bool operator==(const allocator<T>&, const allocator<U>&) {
         return true;
     }
 
@@ -83,8 +78,7 @@ namespace ob
     //! 否等価演算子
     //@―---------------------------------------------------------------------------
     template <class T, class U>
-    bool operator!=(const allocator<T>&, const allocator<U>&)
-    {
+    bool operator!=(const allocator<T>&, const allocator<U>&) {
         return false;
     }
 

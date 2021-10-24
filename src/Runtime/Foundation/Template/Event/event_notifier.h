@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/delegate/delegate.h>
-#include <Foundation/Template/container/handle_list.h>
-#include <Foundation/Template/thread/mutex.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/delegate/delegate.h>
+#include <Runtime/Foundation/Template/container/handle_list.h>
+#include <Runtime/Foundation/Template/thread/mutex.h>
 
 namespace ob
 {

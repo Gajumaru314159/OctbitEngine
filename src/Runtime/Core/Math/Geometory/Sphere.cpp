@@ -10,7 +10,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子(合成)
     //@―---------------------------------------------------------------------------
-    Sphere Sphere::operator+(const Vec3& point)const {
+    Sphere Sphere::operator+(const Vec3& point)const noexcept {
         return Sphere(*this) += point;
     }
 
@@ -18,7 +18,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子(合成)
     //@―---------------------------------------------------------------------------
-    Sphere& Sphere::operator+=(const Vec3& point) {
+    Sphere& Sphere::operator+=(const Vec3& point)noexcept {
         Vec3 dir;
         f32 len;
         (point - center).ToDirectionAndLength(dir, len);

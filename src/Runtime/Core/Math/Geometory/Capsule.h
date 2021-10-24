@@ -157,7 +157,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    explicit Capsule::Capsule(EForceInit) noexcept {
+    inline Capsule::Capsule(EForceInit) noexcept {
         pos1.SetZero();
         pos2.SetZero();
         radius=0.0f;
@@ -184,7 +184,7 @@ namespace ob {
     //! @param height   カプセルの高さ(半径を含まない)
     //! @param quat     カプセルの回転(無回転でY-up方向)
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(const Vec3& center, f32 height, f32 radius, const Quat& quat) {
+    inline Capsule::Capsule(const Vec3& center, f32 height, f32 radius, const Quat& quat)noexcept {
         Set(center, radius, height, quat);
     }
 

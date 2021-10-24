@@ -5,8 +5,8 @@
 //***********************************************************
 #pragma once
 #include <memory>
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Template/container/stack.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Template/container/stack.h>
 /*
 namespace ob
 {

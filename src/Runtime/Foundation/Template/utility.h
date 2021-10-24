@@ -5,8 +5,8 @@
 //***********************************************************
 #pragma once
 #include <utility>
-#include <Foundation/Base/PrimitiveType.h>
-#include <Foundation/Template/type_traits.h>
+#include <Runtime/Foundation/Base/PrimitiveType.h>
+#include <Runtime/Foundation/Template/type_traits.h>
 
 namespace ob
 {

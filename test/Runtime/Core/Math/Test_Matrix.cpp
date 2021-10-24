@@ -29,7 +29,7 @@ TEST(Matrix, OperatorMul) {
         0, 0, 0, 2,
         0, 2, 0, 3);
 
-    Matrix mtxB;
+    Matrix mtxB(EForceInit::Force);
     mtxB = mtxA * mtxB;
     EXPECT_EQ(mtxA, mtxB);
 }
@@ -40,9 +40,8 @@ TEST(Matrix, OperatorMulSet) {
         1, 0, 0, 0,
         0, 0, 0, 2,
         0, 2, 0, 3);
-    Matrix mtxAB;
 
-    Matrix mtxB;
+    Matrix mtxB(EForceInit::Force);
     mtxB *= mtxA;
     EXPECT_EQ(mtxA, mtxB);
 }
@@ -79,7 +78,7 @@ TEST(Matrix, Translate) {
 }
 
 TEST(Matrix, Rotate) {
-    Matrix mtx;
+    Matrix mtx(EForceInit::Force);
     mtx.Rotate(0.0f, 90.0f, 0.0f);
 
     Matrix mtx2(

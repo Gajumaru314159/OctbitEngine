@@ -10,10 +10,10 @@ using namespace ob;
 
 TEST(Capsule, Construct) {
     {
-        Capsule capsule;
+        Capsule capsule(EForceInit::Force);
         EXPECT_EQ(capsule.pos1, Vec3::zero);
         EXPECT_EQ(capsule.pos2, Vec3::zero);
-        EXPECT_EQ(capsule.radius, 0.5f);
+        EXPECT_EQ(capsule.radius, 0.0f);
     }
 
     // 始点 / 終点

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Core/Math/Vector/include.h>
-#include <Core/Math/Vector/VectorInt4.h>
+#include <Core/Math/Vector/IntVector4.h>
 #include <Core/Math/Quaternion.h>
 
 using namespace ob;
@@ -14,13 +14,13 @@ TEST(Vector, ConstructorArg) {
     EXPECT_TRUE(v.x == 1.0f && v.y == 2.0f);
 
     Vec4    vf(4.0f, 5.0f, 6.0f, 7.0f);
-    Vec4Int vi(1, 2, 3, 4);
+    IntVec4 vi(1, 2, 3, 4);
 
     Vec4    vi2f(vi);
-    Vec4Int vf2i(vf);
+    IntVec4 vf2i(vf);
 
     EXPECT_EQ(vi2f, Vec4(1.0f, 2.0f, 3.0f, 4.0f));
-    EXPECT_EQ(vf2i, Vec4Int(4,5,6,7));
+    EXPECT_EQ(vf2i, IntVec4(4,5,6,7));
 }
 
 

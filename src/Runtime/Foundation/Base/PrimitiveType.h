@@ -6,8 +6,7 @@
 #pragma once
 #include <stdint.h>
 #include <stddef.h>
-
-#include "Platform.h"
+#include "Discrimination.h"
 
 namespace ob
 {

@@ -5,9 +5,9 @@
 //***********************************************************
 #pragma once
 #include <memory>
-#include <Foundation/Base/Fwd.h>
-#include <Foundation/Memory/Device/MemoryDevice.h>
-#include <Foundation/Template/type_traits.h>
+#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Memory/System/MemorySystem.h>
+#include <Runtime/Foundation/Template/type_traits.h>
 
 namespace ob
 {
@@ -19,8 +19,7 @@ namespace ob
     template<typename T, typename... Args>
     typename enable_if<!is_array<T>::value, unique_ptr<T>>::type make_unique(Args&&...args)
     {
-        auto pValue = new(MemoryDevice::GetHeap()) T(forward<Args>(args)...);
-        return unique_ptr<T>(pValue);
+        return std::make_unique(std::forward(args)...);
     }
 
     //template<typename T>
@@ -38,7 +37,7 @@ namespace ob
     template<typename T, typename... Args>
     typename enable_if<!is_array<T>::value, unique_ptr<T>>::type make_unique_debug(Args&&...args)
     {
-        auto pValue = new(MemoryDevice::GetDebugHeap()) T(forward<Args>(args)...);
+        auto pValue = new(MemorySystem::GetDebugHeap()) T(forward<Args>(args)...);
         return unique_ptr<T>(pValue);
     }
 

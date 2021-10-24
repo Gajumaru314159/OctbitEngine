@@ -13,7 +13,7 @@ namespace ob {
     //! 
     //! @details    指定された点群をすべて含むボックスを構築する
     //@―---------------------------------------------------------------------------
-    Rect::Rect(const gsl::span<Vec2>& points) {
+    Rect::Rect(const gsl::span<Vec2>& points)noexcept {
         if (points.size() <= 1) {
             Reset();
             return;

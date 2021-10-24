@@ -10,7 +10,7 @@
 
 namespace ob {
 
-    const Quat Quat::identity = Quat();
+    const Quat Quat::identity = Quat(EForceInit::Force);
 
 
     //@―---------------------------------------------------------------------------

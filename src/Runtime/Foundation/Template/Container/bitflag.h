@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include<Foundation/Base/Fwd.h>
+#include<Runtime/Foundation/Base/Fwd.h>
 
 namespace ob
 {

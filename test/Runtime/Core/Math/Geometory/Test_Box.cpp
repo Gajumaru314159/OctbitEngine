@@ -10,7 +10,7 @@ using namespace ob;
 
 TEST(Box, Construct) {
     {
-        Box box;
+        Box box(EForceInit::Force);
         EXPECT_EQ(box.center, Vec3::zero);
         EXPECT_EQ(box.size, Vec3::zero);
     }
@@ -33,7 +33,7 @@ TEST(Box, Construct) {
             Vec3(-4,0,0),
             Vec3(0,-4,3),
         };
-        Box box(points, 5);
+        Box box(points);
 
         EXPECT_EQ(box.size, Vec3(7, 6, 4));
         EXPECT_EQ(box.center, Vec3(-0.5f, -1, 2));
@@ -71,7 +71,7 @@ TEST(Box, Getter) {
 
 TEST(Box, IsEmpty) {
     {
-        Box boxA;
+        Box boxA(Vec3::zero);
         Box boxB(Vec3::one, Vec3::zero);
         EXPECT_TRUE(boxA.IsEmpty());
         EXPECT_FALSE(boxB.IsEmpty());

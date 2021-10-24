@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "allocator.h"
-#include <Foundation/Memory/Device/MemoryDevice.h>
+#include <Runtime/Foundation/Memory/System/MemorySystem.h>
 
 namespace ob
 {
@@ -17,7 +17,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     void* allocator_base::allocate(std::size_t n)
     {
-        return MemoryDevice::GetHeap().Allocate(n);
+        return MemorySystem::GetHeapAllocator().Allocate(n);
     }
 
 
@@ -26,6 +26,6 @@ namespace ob
     //@―---------------------------------------------------------------------------
     void allocator_base::deallocate(void* pBuffer)
     {
-        return Heap::Free(pBuffer);
+        return Allocator::Free(pBuffer);
     }
 }// namespace ob

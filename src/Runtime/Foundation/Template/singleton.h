@@ -5,38 +5,51 @@
 //***********************************************************
 #pragma once
 #include <cassert>
-#include <Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Fwd.h>
 
-namespace ob
-{
-
+namespace ob {
 
     //@―---------------------------------------------------------------------------
     //! @brief          シングルトン・パターン
     //! 
-    //! @details        インスタンスを2つ以上つくるとassertを発生させる。
-    //!                 インスタンスの生成と破壊はコンストラクタとデストラクタで行われる。
+    //! @details        インスタンスを2つ以上つくるとassertを発生させる。@n
+    //!                 インスタンスの生成と破壊はコンストラクタとデストラクタで行わ
+    //!                 れる。
     //@―---------------------------------------------------------------------------
     template<class T>
-    class singleton:private Noncopyable,private Nonmovable
-    {
+    class singleton :private Noncopyable, private Nonmovable {
     public:
 
-        static constexpr T& Get()noexcept;              // インスタンスの取得
-        static constexpr T* GetPtr()noexcept;           // ポインタの取得
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      インスタンスの取得
+        //@―---------------------------------------------------------------------------
+        static constexpr T& Get()noexcept;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      インスタンスのポインタの取得
+        //@―---------------------------------------------------------------------------
+        static constexpr T* GetPtr()noexcept;
 
     protected:
 
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        constexpr singleton()noexcept;                  // コンストラクタ
-        ~singleton()noexcept;                           // デストラクタ
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        constexpr singleton()noexcept;
 
 
-        //===============================================================
-        // コピー / ムーブ の禁止
-        //===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~singleton()noexcept;
+
 
     private:
 
@@ -52,8 +65,7 @@ namespace ob
     //===============================================================
     // インライン関数
     //===============================================================
-
-    //@―---------------------------------------------------------------------------
+    //! @cond
 
     template<class T>
     T* singleton<T>::s_pInstance = nullptr;
@@ -62,8 +74,7 @@ namespace ob
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr singleton<T>::singleton()noexcept
-    {
+    constexpr singleton<T>::singleton()noexcept {
         assert(s_pInstance == nullptr);
         s_pInstance = static_cast<T*>(this);
     }
@@ -73,8 +84,7 @@ namespace ob
     //! @brief      デストラクタ
     //@―---------------------------------------------------------------------------
     template<class T>
-    singleton<T>::~singleton()noexcept
-    {
+    singleton<T>::~singleton()noexcept {
         assert(s_pInstance != nullptr);
         s_pInstance = nullptr;
     }
@@ -84,8 +94,7 @@ namespace ob
     //! @brief      インスタンスの取得
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr T& singleton<T>::Get()noexcept
-    {
+    constexpr T& singleton<T>::Get()noexcept {
         assert(s_pInstance != nullptr);
         return *s_pInstance;
     }
@@ -95,11 +104,11 @@ namespace ob
     //! @brief      インスタンスのポインタの取得
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr T* singleton<T>::GetPtr()noexcept
-    {
+    constexpr T* singleton<T>::GetPtr()noexcept {
         assert(s_pInstance != nullptr);
         return s_pInstance;
     }
 
 
+    //! @endcond
 }// namespcae ob

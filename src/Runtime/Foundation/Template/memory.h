@@ -6,8 +6,8 @@
 #pragma once
 #include <memory>
 
-#include <Foundation/Template/utility.h>
-#include <Foundation/Template/type_traits.h>
+#include <Runtime/Foundation/Template/utility.h>
+#include <Runtime/Foundation/Template/type_traits.h>
 
 namespace ob {
 

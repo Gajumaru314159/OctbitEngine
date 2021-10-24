@@ -4,13 +4,19 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Fwd.h>
 
 #include <string>
 #include <string_view>
 
 namespace ob
 {
+    template <class TChar>
+    using StringBase = std::basic_string<TChar>;
+
+    using WString = std::basic_string<wchar_t>;
+    using WStringView = std::basic_string_view<wchar_t>;
+
     using String = std::basic_string<Char>;
     using StringView = std::basic_string_view<Char>;
 

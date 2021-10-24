@@ -416,7 +416,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(Identityで初期化)
     //@―---------------------------------------------------------------------------
-    explicit Quat::Quat(EForceInit)noexcept {
+    inline Quat::Quat(EForceInit)noexcept {
         SetIdentity();
     }
 

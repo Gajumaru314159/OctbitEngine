@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-//#include <Foundation/Template/include.h>
+//#include <Runtime/Foundation/Template/include.h>
 #include "delegate_base.h"
-#include <Foundation/Template/type_traits.h>
-#include <Foundation/Template/utility.h>
+#include <Runtime/Foundation/Template/type_traits.h>
+#include <Runtime/Foundation/Template/utility.h>
 
 namespace ob {
     template<class SIGNATURE>

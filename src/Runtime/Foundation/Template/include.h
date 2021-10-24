@@ -5,7 +5,9 @@
 //***********************************************************
 #pragma once
 
+#include "atomic.h"
 #include "cmath.h"
+#include "singleton.h"
 
 #include "Container/array.h"
 #include "Container/bitflag.h"
@@ -22,3 +24,6 @@
 #include "Container/vector.h"
 
 #include "SmartPointer/unique_ptr.h"
+
+#include "String/String.h"
+#include "String/StringEncoder.h"

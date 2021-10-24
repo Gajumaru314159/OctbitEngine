@@ -5,18 +5,20 @@
 //***********************************************************
 #pragma once
 #include<cassert>
-#include "Platform/PlatformDefine.h"
-#include "PrimitiveType.h"
+
+#include "Discrimination.h"		// プラットフォーム識別
+#include "BuildConfig.h"		// コンフィグ読み込み
+#include "Macro.h"				// マクロ
+#include "PrimitiveType.h"		// プリミティブ型
 #include "../gsl/gsl_loader.h"
 
 
 #if defined(_DEBUG)||defined(DEBUG)
-#define OB_DEBUG
-#endif
 //@―---------------------------------------------------------------------------
-//! @def    OB_DEBUG
 //! @brief  デバッグフラグ
 //@―---------------------------------------------------------------------------
+#define OB_DEBUG
+#endif
 
 
 #ifdef OB_DEBUG    
@@ -26,7 +28,7 @@
 #endif
 //@―---------------------------------------------------------------------------
 //! @def    OB_DEBUG_ONLY
-//! @brief  デバッグのみで使用する文脈
+//! @brief  デバッグのみで使用するコード
 //@―---------------------------------------------------------------------------
 
 
@@ -54,8 +56,8 @@ namespace ob {
 		Noncopyable() {}
 		~Noncopyable() {}
 	private:
-		Noncopyable(const Noncopyable&);
-		Noncopyable& operator=(const Noncopyable&);
+		Noncopyable(const Noncopyable&) = delete;
+		Noncopyable& operator=(const Noncopyable&) = delete;
 		//! @endvond
 	};
 
@@ -71,63 +73,29 @@ namespace ob {
 		Nonmovable() {}
 		~Nonmovable() {}
 	private:
-		Nonmovable(Nonmovable&&);
+		Nonmovable(Nonmovable&&) = delete;
 		Nonmovable& operator=(Nonmovable&&);
 		//! @endcond
 	};
 
-}
+}// namespace ob
 
-//@―---------------------------------------------------------------------------
-//! @brief		デフォルトコピーコンストラクタの定義
-//@―---------------------------------------------------------------------------
-#define DEFAULT_COPY_CONSTRUCTOR(typeName)	\
-	typeName(const typeName&)=default;		\
-	typeName& operator=(const typeName&)=default
-
-
-//@―---------------------------------------------------------------------------
-//! @brief		デフォルトコピーコンストラクタの定義
-//@―---------------------------------------------------------------------------
-#define DEFAULT_MOVE_CONSTRUCTOR(typeName)	\
-	typeName(typeName&&)=default;		\
-	typeName& operator=(typeName&&)=default
 
 //============================================
 // DLLエクスポート/インポート
 //============================================
 
-#if   defined(_WIN32) && defined(OB_BUILD_DLL)
-#define OB_API __declspec(dllexport)
+#if defined(OB_BUILD_DLL)
+#define OB_API DLL_EXPORT
 #elif defined(_WIN32) && defined(OB_USE_DLL)
-#define OB_API __declspec(dllimport)
-#elif defined(__GNUC__) && defined(OB_BUILD_DLL)
-#define OB_API __attribute__((visibility("default")))
+#define OB_API DLL_IMPORT
 #else
-#define OB_API
+#define OB_API /**/
 #endif
 //@―---------------------------------------------------------------------------
 //! @def		OB_API
 //! @brief		DLLエクスポート/インポートマクロ
 //! @details	DLL出力 / DLL入力 / その他(LIB)
-//@―---------------------------------------------------------------------------
-
-
-
-//============================================
-// コンパイラ依存
-//============================================
-
-#if defined(__GNUC__)
-#define __FUNC_NAME__ __PRETTY_FUNCTION__
-#elif defined(_MSC_VER)
-#define __FUNC_NAME__ __FUNCSIG__
-#else
-#define __FUNC_NAME__ __func__
-#endif
-//@―---------------------------------------------------------------------------
-//! @def	__FUNC_NAME__
-//! @brief	関数名取得マクロ(詳細版)
 //@―---------------------------------------------------------------------------
 
 
@@ -143,5 +111,7 @@ namespace ob {
 		Force,
 	};
 
-
 }// namespace ob
+
+
+#include "Assertion.h"

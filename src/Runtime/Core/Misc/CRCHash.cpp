@@ -11,7 +11,7 @@ namespace ob {
 
     namespace {
         // CRCテーブル
-        static const unsigned g_crctab[256] =
+        static const u32 g_crctab[256] =
         {
             0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
             0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -57,6 +57,7 @@ namespace ob {
             0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8, 0x5d681b02, 0x2a6f2b94,
             0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
         };
+
     }
 
 
@@ -69,14 +70,11 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    static uint32_t calcCrcHash(const byte* str, int len) {
-        if (str == nullptr) {
-            throw ArgumentException(TEXT("str is null"));
-        }
-        uint32_t hash = len;
-        for (int i = 0; i < len; ++i) {
+    static u32 CalcCRCHash(gsl::span<const byte> bytes){
+        u32 hash = static_cast<u32>(bytes.size());
+        for (s32 i = 0; i < bytes.size(); ++i) {
 #pragma warning( disable:6011)
-            hash = (hash >> 8) ^ g_crctab[(hash & 0xff) ^ str[i]];
+            hash = (hash >> 8) ^ g_crctab[(hash & 0xff) ^ bytes[i]];
 #pragma warning( default:6011)
         }
         return hash;
@@ -90,9 +88,10 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    uint32_t CRCHash::compute(const char* str, int len) {
-        len = static_cast<int>((len < 0) ? strlen(str) : len);
-        return calcCrcHash((const byte*)str, len);
+    u32 CRCHash::Compute(const char* str, s32 len) {
+        if (str == nullptr)return 0;
+        len = static_cast<s32>((len < 0) ? strlen(str) : len);
+        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
     }
 
 
@@ -103,9 +102,10 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    uint32_t CRCHash::compute(const wchar_t* str, int len) {
-        len = static_cast<int>(((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
-        return calcCrcHash((const byte*)str, len);
+    u32 CRCHash::Compute(const wchar_t* str, s32 len) {
+        if (str == nullptr)return 0;
+        len = static_cast<s32>(((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
+        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
     }
 
 
@@ -116,9 +116,10 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    uint32_t CRCHash::compute(const char16_t* str, int len) {
-        len = static_cast<int>(((len < 0) ? std::char_traits<char16_t>::length(str) : len) * sizeof(char16_t));
-        return calcCrcHash((const byte*)str, len);
+    u32 CRCHash::Compute(const char16_t* str, s32 len) {
+        if (str == nullptr)return 0;
+        len = static_cast<s32>(((len < 0) ? std::char_traits<char16_t>::length(str) : len) * sizeof(char16_t));
+        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
     }
 
 
@@ -129,9 +130,10 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    uint32_t CRCHash::compute(const char32_t* str, int len) {
-        len = static_cast<int>(((len < 0) ? std::char_traits<char32_t>::length(str) : len) * sizeof(char32_t));
-        return calcCrcHash((const byte*)str, len);
+    u32 CRCHash::Compute(const char32_t* str, s32 len) {
+        if (str == nullptr)return 0;
+        len = static_cast<s32>(((len < 0) ? std::char_traits<char32_t>::length(str) : len) * sizeof(char32_t));
+        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
     }
 
 
