@@ -4,39 +4,32 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "ModuleManager.h"
-#include <windows.h>
+
+#include "Implement/Windows/ModuleLoader.h"
 
 namespace ob {
     namespace platform {
 
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  モジュールの破棄
+        //@―---------------------------------------------------------------------------
+        void ModuleManager::UnloadModule(const String& moduleName) {
+
+
+        }
+
         IModule* ModuleManager::LoadModuleImpl(const String& moduleName) {
-            StringBase<wchar_t> moduleNameW;
-            StringEncoder::Encode(moduleName, moduleNameW);
-            HMODULE dll = LoadLibraryW(moduleNameW.c_str());
-            if (dll == nullptr) {
-                LOG_ERROR_EX(TEXT("System"), TEXT("{0}が見つかりませんでした。"), moduleName);
+            
+            auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
+            if (auto pModule = moduleLoader->GetModule<IModule>()) {
+                m_moduleMap[moduleName] = ob::move(moduleLoader);
+            } else {
                 return nullptr;
             }
 
-            FARPROC proc = GetProcAddress(dll, "GetModule");
-            if (proc == nullptr) {
-                LOG_ERROR_EX(TEXT("System"), TEXT("{0}にCreateModule()が含まれていません。"), moduleName);
-                return nullptr;
-            }
-
-            typedef IModule* (*Func)();
-            Func createModule = reinterpret_cast<Func>(proc);
-            IModule* pModule = createModule();
-            if (!pModule) {
-                LOG_ERROR_EX(TEXT("System"), TEXT("モジュールの生成に失敗しました。({0})"), moduleName);
-                return nullptr;
-            }
-
-            //m_moduleList.emplace_back(make_pair(HashedName(moduleName), unique_ptr<IModule>(pModule)));
-
-            // 起動呼び出し
-            pModule->Startup();
-            return pModule;
+            return m_moduleMap[moduleName]->GetModule<IModule>();
         }
 
         //@―---------------------------------------------------------------------------

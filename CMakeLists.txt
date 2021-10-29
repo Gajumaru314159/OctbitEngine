@@ -60,5 +60,5 @@ add_subdirectory ("src/Runtime/Platform")
 # アプリケーションプロジェクト読み込み
 
 
-add_subdirectory ("src/Application")
 
+add_subdirectory ("src/Application")

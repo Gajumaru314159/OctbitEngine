@@ -9,6 +9,8 @@
 namespace ob {
     namespace platform {
 
+        class ModuleLoader;
+
         //@―---------------------------------------------------------------------------
         //! @brief      モジュール・マネージャ
         //! 
@@ -51,7 +53,7 @@ namespace ob {
             //@―---------------------------------------------------------------------------
             //! @brief  モジュールの破棄
             //@―---------------------------------------------------------------------------
-            void UnloadModule(gsl::not_null<IModule> pModule);
+            void UnloadModule(const String& moduleName);
 
 
             //@―---------------------------------------------------------------------------
@@ -73,8 +75,7 @@ namespace ob {
 
         private:
 
-            //ob::list<pair<HashedName, unique_ptr<IModule>>> m_moduleList;
-            //ob::map<HashedName, unique_ptr<IModule>> m_modeluMap;
+            ob::map<String, unique_ptr<ModuleLoader>> m_moduleMap;
 
         };
 
