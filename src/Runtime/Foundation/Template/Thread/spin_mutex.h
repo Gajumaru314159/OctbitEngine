@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Assertion/Assertion.h>
 #include <Runtime/Foundation/Template/atomic.h>
 #include <Runtime/Foundation/Log/LogMacro.h>
@@ -185,7 +185,7 @@ namespace ob
         {
             auto nowValue = m_syncFlag.load(memory_order::memory_order_acquire);
 
-            OB_REQUIRE_EX(newValue.threadID == threadID, TEXT("Thread"), TEXT("Thread ID Missmatch"));
+            OB_REQUIRE_EX(newValue.threadID == threadID, TC("Thread"), TC("Thread ID Missmatch"));
 
             newValue.lockCount = nowValue.lockCount - 1;
             if (newValue.lockCount == 0)    newValue.threadID = thread::id();

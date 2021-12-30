@@ -13,7 +13,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #------------------------------------------------------------------------------
 
 set(CMAKE_DEBUG_POSTFIX "d")
-include(src/BuildCommon.cmake)
 include(Common.cmake)
 
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
@@ -46,19 +45,21 @@ endif()
 
 # プロジェクト読み込み
 add_subdirectory ("src/Runtime/Foundation")
-add_subdirectory ("src/Runtime/Platform")
-# add_subdirectory ("src/Runtime/Core")
+#add_subdirectory ("src/Runtime/Platform")
+ add_subdirectory ("src/Runtime/Core")
 # add_subdirectory ("src/Runtime/Engine")
 # add_subdirectory ("src/Runtime/Graphic")
 # add_subdirectory ("src/Runtime/GraphicD3D12")
 # add_subdirectory ("src/Runtime/GraphicVulkan")
 
 # テストプロジェクト読み込み
-# add_subdirectory ("test/Runtime/Foundation")
+add_subdirectory ("test/Runtime/Foundation")
 # add_subdirectory ("test/Runtime/Core")
 
 # アプリケーションプロジェクト読み込み
 
 
 
-add_subdirectory ("src/Application")
+#add_subdirectory ("src/Application")
+
+

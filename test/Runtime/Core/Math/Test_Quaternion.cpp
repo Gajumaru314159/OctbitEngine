@@ -3,8 +3,8 @@
 //! @brief		Quat のテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Math/Vector/include.h>
-#include <Core/Math/Quaternion.h>
+#include <Runtime/Core/Math/Vector/include.h>
+#include <Runtime/Core/Math/Quaternion.h>
 
 using namespace ob;
 

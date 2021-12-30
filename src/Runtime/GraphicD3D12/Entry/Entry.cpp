@@ -30,7 +30,7 @@ public:
         return true;
     };
 
-    ob::graphic::Device CreateDevice(ob::graphic::FeatureLevel featureLevel)override {
+    ob::graphic::D3D12Device CreateDevice(ob::graphic::FeatureLevel featureLevel)override {
         
         
         //D3D12CreateDevice();

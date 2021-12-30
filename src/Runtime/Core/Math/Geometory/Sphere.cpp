@@ -3,7 +3,7 @@
 //! @brief		スフィア構造体
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Math/Geometory/Sphere.h>
+#include <Runtime/Core/Math/Geometory/Sphere.h>
 
 namespace ob {
 

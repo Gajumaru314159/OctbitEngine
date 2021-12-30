@@ -3,9 +3,9 @@
 //! @brief		Matrix ‚ÌƒeƒXƒg
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Math/Matrix.h>
-#include <Core/Math/Vector/include.h>
-#include <Core/Math/Quaternion.h>
+#include <Runtime/Core/Math/Matrix.h>
+#include <Runtime/Core/Math/Vector/include.h>
+#include <Runtime/Core/Math/Quaternion.h>
 
 using namespace ob;
 

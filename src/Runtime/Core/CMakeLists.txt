@@ -8,7 +8,7 @@ message("Load project [${PROJECT_NAME}]")
 LOAD_FILES(out_sources)
 add_library(${PROJECT_NAME} STATIC ${out_sources})
 
-ADD_FORCE_INCLUDE("Foundation/Foundation.h")
+ADD_FORCE_INCLUDE("Runtime/Foundation/Foundation.h")
 
 #------------------------------------------------------------------------------
 # プロジェクト設定

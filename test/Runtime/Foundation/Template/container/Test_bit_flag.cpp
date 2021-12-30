@@ -3,7 +3,7 @@
 //! @brief		BitFlags テスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Foundation/Template/Container/bitflag.h>
+#include <Runtime/Foundation/Template/Container/bitflag.h>
 using namespace ob;
 
 

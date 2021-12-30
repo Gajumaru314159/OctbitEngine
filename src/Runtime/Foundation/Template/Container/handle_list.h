@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Template/algorithm.h>
 #include <Runtime/Foundation/Template/allocator.h>
 #include <Runtime/Foundation/Template/iterator.h>

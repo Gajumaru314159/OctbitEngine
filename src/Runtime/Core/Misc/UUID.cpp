@@ -3,11 +3,11 @@
 //! @brief UUID
 //! @author Gajumaru
 //***********************************************************
-#include <Core/Misc/UUID.h>
+#include <Runtime/Core/Misc/UUID.h>
 
 #include <objbase.h>
 
-#include <Core/Misc/CRCHash.h>
+#include <Runtime/Core/Misc/CRCHash.h>
 
 
 namespace ob {
@@ -83,7 +83,7 @@ namespace ob {
         s32 idx = 0;
         for (s32 i = 0; i < (s32)uuidText.length(); i++) {
             Char ch = uuidText[i];
-            if (ch == TEXT('-') || ch == TEXT('{') || ch == TEXT('}') || ch == TEXT('(') || ch == TEXT(')')) continue;
+            if (ch == TC('-') || ch == TC('{') || ch == TC('}') || ch == TC('(') || ch == TC(')')) continue;
 
             if (lookingCh1) {
                 ch1 = ch;
@@ -125,7 +125,7 @@ namespace ob {
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
     String UUID::ToString() const {
-        Char fmtD[] = TEXT("00000000-0000-0000-0000-000000000000");
+        Char fmtD[] = TC("00000000-0000-0000-0000-000000000000");
 
         Char* str = fmtD;
         HexToCharPair(m_data[0], &str[0], &str[1]);

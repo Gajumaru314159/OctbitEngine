@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Math/FloatCompression.h>
+#include <Runtime/Core/Math/FloatCompression.h>
 
 
 

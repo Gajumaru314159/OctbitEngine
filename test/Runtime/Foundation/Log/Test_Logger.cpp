@@ -3,8 +3,8 @@
 //! @brief		Loggerテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Foundation/Log/LogMacro.h>
-#include <Foundation/Template/String/String.h>
+#include <Runtime/Foundation/Log/LogMacro.h>
+#include <Runtime/Foundation/Template/String/String.h>
 using namespace ob;
 
 
@@ -46,31 +46,31 @@ public:
 
 
 TEST(Logger, AddLogEvent) {
-    Logger::EventDelegate event = LogEvent;
+    Logger::EventDelegateType event = LogEvent;
 
     // ログイベントを登録
     Logger::EventHandle handle;
     Logger::Get().AddEvent(handle, event);
 
     // ログ追加
-    const Char message1[] = TEXT("Hoge");
-    LOG_INFO(message1);
+    const Char message1[] = TC("Hoge");
+    LOG_INFO("{0}",message1);
 
     EXPECT_EQ(s_logType, LogType::Info);
     EXPECT_TRUE(s_message, message1);
 
     // ログ追加
-    LOG_WARNING(TEXT("Hoge{0}{1}"),2,TEXT("A"));
+    LOG_WARNING("Hoge{0}{1}",2,TC("A"));
 
     EXPECT_EQ(s_logType, LogType::Warning);
-    EXPECT_TRUE(s_message, TEXT("Hoge2A"));
+    EXPECT_TRUE(s_message, TC("Hoge2A"));
 
     // ログイベントの削除
     Logger::Get().RemoveEvent(handle);
 
     // ログ追加
-    const Char message2[] = TEXT("Fuga");
-    LOG_ERROR(message2);
+    const Char message2[] = TC("Fuga");
+    LOG_ERROR("{0}",message2);
 
     EXPECT_FALSE(s_logType == LogType::Error);
     EXPECT_TRUE(s_message, message2);

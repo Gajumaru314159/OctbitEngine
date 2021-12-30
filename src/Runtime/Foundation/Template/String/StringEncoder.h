@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Template/String/String.h>
 #include <Runtime/Foundation/Template/cmath.h>
 #include <Runtime/Foundation/gsl/gsl_loader.h>
@@ -22,9 +22,14 @@ namespace ob {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  説明
+        //! @brief  char16_t から wchar_t に変換する
         //@―---------------------------------------------------------------------------
         static bool Encode(const StringBase<char16_t>& src, StringBase<wchar_t>& dest);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  wchar_t から char16_t に変換する
+        //@―---------------------------------------------------------------------------
+        static bool Encode(const StringBase<wchar_t>& src, StringBase<char16_t>& dest);
 
 
     };

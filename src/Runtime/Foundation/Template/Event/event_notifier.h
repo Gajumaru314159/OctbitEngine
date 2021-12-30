@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Template/delegate/delegate.h>
 #include <Runtime/Foundation/Template/container/handle_list.h>
 #include <Runtime/Foundation/Template/thread/mutex.h>

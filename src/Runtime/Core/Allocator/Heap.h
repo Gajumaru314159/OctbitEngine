@@ -4,9 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Memory/Utility/MemoryUtility.h>
-#include <Runtime/Foundation/Kernel/CriticalSection/CriticalSection.h>
 
 #include "../Type/HeapType.h"
 

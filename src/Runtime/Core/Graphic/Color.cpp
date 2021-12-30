@@ -3,11 +3,11 @@
 //! @brief		カラー
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Graphic/Color.h>
-#include <Core/Graphic/IntColor.h>
+#include <Runtime/Core/Graphic/Color.h>
+#include <Runtime/Core/Graphic/IntColor.h>
 
-#include <Core/Math/Mathf.h>
-#include <Core/Math/Vector/include.h>
+#include <Runtime/Core/Math/Mathf.h>
+#include <Runtime/Core/Math/Vector/include.h>
 
 namespace ob {
 

@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.8)
-project (GraphicBase)
+project (Graphic)
 message("Load project [${PROJECT_NAME}]")
 
 #------------------------------------------------------------------------------

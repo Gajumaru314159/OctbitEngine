@@ -3,11 +3,11 @@
 //! @brief ベクトル
 //! @author Gajumaru
 //***********************************************************
-#include <Core/Math/Vector/include.h>
-#include <Core/Math/Matrix.h>
-#include <Core/Math/Quaternion.h>
+#include <Runtime/Core/Math/Vector/include.h>
+#include <Runtime/Core/Math/Matrix.h>
+#include <Runtime/Core/Math/Quaternion.h>
 
-#include <Core/Math/Vector/IntVector4.h>
+#include <Runtime/Core/Math/Vector/IntVector4.h>
 
 
 

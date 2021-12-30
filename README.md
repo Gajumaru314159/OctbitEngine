@@ -6,7 +6,9 @@ OctbitEngineはマルチプラットフォームのゲームエンジンを目�
 * PC
   * Windows
   * Linux
-* Android
+* Mobile
+  * Android
+  * iOS
 
 対応予定グラフィックAPI
 * DirectX12
@@ -26,7 +28,6 @@ Build Status
 
 |モジュール名|namespace|機能|説明|
 |:--|---|---|---|
-|Project|任意|Component/Logic|ゲームロジック|
 |Engine|ob::engine|各種モジュール起動||
 |Sequence|ob::squence|タイムライン制御|アニメーションやサウンドの再生|
 |Model|ob::model|StaticMesh/SkeltalMesh|3Dモデル描画|

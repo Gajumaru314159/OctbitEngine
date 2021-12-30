@@ -4,40 +4,42 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Graphic/Device/IDevice.h>
-
-#include <d3d12.h>
-#include <dxgi1_6.h>
-//#include <d3dx12.h>
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
+#include <Runtime/Graphic/Public/Device.h>
 
 namespace ob {
     namespace graphic {
 
-        class Device:public IDevice {
+        class D3D12Device:public Device {
         public:
 
-            Device();
+            D3D12Device();
 
-            bool IsValid()const noexcept override {
+        protected:
 
-            }
+            //@―---------------------------------------------------------------------------
+            //! @brief  スワップチェーンの生成
+            //@―---------------------------------------------------------------------------
+            Ref<Swapchain> createSwapchainImpl(const SwapchainDesc& desc) override;
+
+            //@―---------------------------------------------------------------------------
+            //! @brief  コマンドリストの生成
+            //@―---------------------------------------------------------------------------
+            Ref<CommandList> createCommandListImpl(CommandListType type)override;
+
 
         private:
 
             void Initialize();
-            HRESULT CreateMainWindow();
+
             HRESULT InitializeDXGIDevice();
             HRESULT InitializeCommand();
-            HRESULT CreateSwapChain(const HWND& hwnd);
-            HRESULT CreateFinalRenderTargets();
-            HRESULT CreateFence();
 
         private:
 
-            ComPtr<ID3D12Device>    m_device;                   // D3D12のデバイス本体
-            ComPtr<IDXGIFactory4>   m_dxgiFactory = nullptr;    // DXGIインターフェイス
+            ComPtr<ID3D12Device>            m_device;                   // D3D12のデバイス本体
+            ComPtr<IDXGIFactory4>           m_dxgiFactory;              // DXGIインターフェイス
+            ComPtr<ID3D12CommandAllocator>  m_commandAllocator;         // コマンドアロケータ
+            ComPtr<ID3D12CommandQueue>      m_commandQueue;             // コマンドキュー
 
 
         };

@@ -1,44 +1,24 @@
-﻿#include <Runtime/Platform/Platform.h>
+﻿#include <Runtime/Graphic/Public/System.h>
+using namespace ob;
 
-#include <Windows.h>
+class App {
+public:
+    App(graphic::GraphicAPI api):
+        m_logger(),
+        m_graphicSystem(api){
 
-using namespace ob::platform;
-
-int main() {
-    ob::Logger logger;
-
-    WindowCreationDesc desc;
-    desc.title = TEXT("Test");
-    desc.fullscreen = false;
-    desc.resizable = true;
-    desc.clientSize.width = 640;
-    desc.clientSize.height = 480;
-
-    auto window = ob::MakeRef<Window>(desc);
-
-    auto window2 = ob::MakeRef<Window>(desc);
-
-
-    while (1) { /* メインループ */
-        MSG msg{};
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-
-            if (msg.message == WM_QUIT) {
-                break;
-            } else {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-
-        }
 
     }
-    //window.show();
 
-    // window.Show();
+private:
+    ob::Logger      m_logger;
+    graphic::System m_graphicSystem;
+};
 
+int main() {
 
-    // window.Close();
+    App app(graphic::GraphicAPI::DirectX);
 
+    
     return 0;
 }

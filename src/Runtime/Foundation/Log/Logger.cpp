@@ -19,7 +19,7 @@ namespace ob
     //! @param category         カテゴリ名
     //! @param pMessage         メッセージ
     //@―---------------------------------------------------------------------------
-    void Logger::AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
+    void Logger::AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
     {
         Log log;
         log.type = type;
@@ -30,14 +30,12 @@ namespace ob
         // 登録されたすべてのログリスナに通知
         {
             lock_guard lock(m_mutex);
-            for (auto& event : m_events) {
-                event->OnReceived(log);
-            }
+            m_notifier.invoke(log);
         }
 
         // Fatalログはブレークポイントを発生させる
-        if (type == ELogType::Fatal) {
-            CALL_BREAK_POINT();
+        if (type == LogType::Fatal) {
+            ::CallBreakPoint();
         }
     }
 
@@ -46,22 +44,16 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの追加
     //@―---------------------------------------------------------------------------
-    void Logger::AddListener(ILogEvent* pLogEvent) {
-        if (!pLogEvent)return;
-        lock_guard lock(m_mutex);
-        m_events.push_back(pLogEvent);
-        pLogEvent->OnRegistered();
+    void Logger::AddEvent(EventHandle& handle, EventDelegateType delegate) {
+        m_notifier.add(handle, delegate);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの削除
     //@―---------------------------------------------------------------------------
-    void Logger::RemoveListener(ILogEvent* pLogEvent) {
-        if (!pLogEvent)return;
-        lock_guard lock(m_mutex);
-        m_events.remove(pLogEvent);
-        pLogEvent->OnUnregistered();
+    void Logger::RemoveEvent(EventHandle& handle) {
+        m_notifier.remove(handle);
     }
     
 }// namespace ob

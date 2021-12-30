@@ -6,7 +6,7 @@
 #pragma once
 #include <stdint.h>
 #include <stddef.h>
-#include "Discrimination.h"
+#include "Platform.h"
 
 namespace ob
 {
@@ -36,14 +36,14 @@ namespace ob
 
     using Char = char16_t;  //!< 文字型
 
-#undef TEXT
-#undef TEXT_BASE
+#undef TC
+#undef TC_BASE
     //! @cond
-#define TEXT_BASE(x) u ## x
+#define TC_BASE(x) u ## x
     //! @endcond
-#define TEXT(x) TEXT_BASE(x)
+#define TC(x) TC_BASE(x)
     //@―---------------------------------------------------------------------------
-    //! @def        TEXT
+    //! @def        TC
     //! @brief      文字/文字列リテラルをエンジン既定のエンコーディングに変更する。
     //@―---------------------------------------------------------------------------
 

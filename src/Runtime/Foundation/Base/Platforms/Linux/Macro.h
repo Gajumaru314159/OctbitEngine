@@ -1,11 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デファイン(Linux)
+//! @brief		マクロ定義(Linux)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 //! @cond
-#include "../../Discrimination.h"
+#include <Runtime/Foundation/Base/Platform.h>
 #if defined(OS_LINUX)
 
 //@―---------------------------------------------------------------------------

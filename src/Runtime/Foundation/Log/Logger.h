@@ -5,11 +5,12 @@
 //***********************************************************
 #pragma once
 
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Template/singleton.h>
 #include <Runtime/Foundation/Template/Container/list.h>
 #include <Runtime/Foundation/Template/String/String.h>
 #include <Runtime/Foundation/Template/Thread/mutex.h>
+#include <Runtime/Foundation/Template/Event/event_notifier.h>
 #include "LogType.h"
 #include "ILogEvent.h"
 
@@ -35,6 +36,10 @@ namespace ob
     {
     public:
 
+        using EventNotifier = event_notifier<const Log&>;
+        using EventHandle = EventNotifier::handle;
+        using EventDelegateType= EventNotifier::delegate_type;
+
         //@―---------------------------------------------------------------------------
         //! @brief メッセージの最大バイト数
         //@―---------------------------------------------------------------------------
@@ -56,7 +61,7 @@ namespace ob
         //! @param category         カテゴリ名
         //! @param pMessage         メッセージ
         //@―---------------------------------------------------------------------------
-        void AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
+        void AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
 
 
         //@―---------------------------------------------------------------------------
@@ -71,7 +76,7 @@ namespace ob
         //! @param ...args          フォーマット引数
         //@―---------------------------------------------------------------------------
         template<typename... Args>
-        void AddLog(ELogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
+        void AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
             const String message = fmt::format(pFormat, ob::forward<Args>(args)...);
             AddLog(type, sourceLocation, category, message.c_str());
         }
@@ -80,20 +85,19 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの追加
         //@―---------------------------------------------------------------------------
-        void AddListener(ILogEvent* pLogEvent);
+        void AddEvent(EventHandle& handle, EventDelegateType delegate);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの削除
         //@―---------------------------------------------------------------------------
-        void RemoveListener(ILogEvent* logEvent);
+        void RemoveEvent(EventHandle& handle);
 
 
     private:
 
-        mutex m_mutex;
-        list<ILogEvent*> m_events;
-
+        mutex           m_mutex;
+        EventNotifier   m_notifier;
     };
 
 }// namespace ob

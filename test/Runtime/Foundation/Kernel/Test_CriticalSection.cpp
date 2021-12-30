@@ -7,7 +7,8 @@
 //!             コンパイルエラー検知のため成功パターンのみテストしています。
 //***********************************************************
 #pragma once
-#include <Foundation/Log/LogMacro.h>
+/*
+#include <Runtime/Foundation/Log/LogMacro.h>
 
 #include <thread>
 #include <vector>
@@ -110,3 +111,4 @@ TEST(CriticalSection, Valid) {
     
     EXPECT_FALSE(cs.IsValid());
 }
+*/

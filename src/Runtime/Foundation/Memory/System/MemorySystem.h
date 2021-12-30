@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Memory/Allocator/Allocator.h>
 #include <Runtime/Foundation/Memory/Type/HeapType.h>
 
@@ -38,7 +38,7 @@ namespace ob {
         //! @param heapType     設定対象のヒープ・タイプ
         //! @param pAllocator   アロケータ
         //@―---------------------------------------------------------------------------
-        static void SetHeapAllocator(EHeapType heapType, Allocator* pAllocator);
+        static void SetHeapAllocator(HeapType heapType, Allocator* pAllocator);
 
 
         //@―---------------------------------------------------------------------------
@@ -47,7 +47,7 @@ namespace ob {
         //! @param heapType     設定対象のヒープ・タイプ
         //! @param pAllocator   アロケータ
         //@―---------------------------------------------------------------------------
-        static void SetDebugHeapAllocator(EHeapType heapType, Allocator* pAllocator);
+        static void SetDebugHeapAllocator(HeapType heapType, Allocator* pAllocator);
 
 
         //@―---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ob {
         //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
         //! @param heapType     対象のヒープ・タイプ
         //@―---------------------------------------------------------------------------
-        static Allocator& GetHeapAllocator(EHeapType heapType = EHeapType::VirtualMemory);
+        static Allocator& GetHeapAllocator(HeapType heapType = HeapType::VirtualMemory);
 
 
         //@―---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace ob {
         //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
         //! @param heapType     対象のヒープ・タイプ
         //@―---------------------------------------------------------------------------
-        static Allocator& GetDebugHeapAllocator(EHeapType heapType = EHeapType::VirtualMemory);
+        static Allocator& GetDebugHeapAllocator(HeapType heapType = HeapType::VirtualMemory);
 
     };
 
@@ -84,7 +84,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetHeapAllocator(ob::EHeapType heapType, ob::Allocator* pAllocator);
+    void OB_API SetHeapAllocator(ob::HeapType heapType, ob::Allocator* pAllocator);
 
 
     //@―---------------------------------------------------------------------------
@@ -93,7 +93,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetDebugHeapAllocator(ob::EHeapType heapType, ob::Allocator* pAllocator);
+    void OB_API SetDebugHeapAllocator(ob::HeapType heapType, ob::Allocator* pAllocator);
 
 }
 #endif

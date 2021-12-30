@@ -3,7 +3,7 @@
 //! @brief		カラー(R8G8B8A8)
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Graphic/IntColor.h>
+#include <Runtime/Core/Graphic/IntColor.h>
 
 
 namespace ob {

@@ -3,7 +3,7 @@
 //! @brief		Capsule のテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Math/Geometory/Capsule.h>
+#include <Runtime/Core/Math/Geometory/Capsule.h>
 
 using namespace ob;
 

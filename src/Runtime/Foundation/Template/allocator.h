@@ -6,6 +6,7 @@
 #pragma once
 #include <new>
 namespace ob {
+
     //! @cond
     struct allocator_base {
     public:

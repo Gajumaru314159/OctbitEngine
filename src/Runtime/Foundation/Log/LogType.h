@@ -4,15 +4,16 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Runtime/Foundation/Base/Fwd.h>
-#include <Runtime/Foundation/Template/delegate/delegate.h>
+#include <Runtime/Foundation/Base/Common.h>
 
 namespace ob
 {
+    
     //@―---------------------------------------------------------------------------
     //! @brief このマクロの呼び出し位置の SourceLocation オブジェクトを作成する
     //@―---------------------------------------------------------------------------
-    #define CURRENT_SOURCE_LOCATION SourceLocation{TEXT(__FILE__),TEXT( __FUNC_NAME__ ),__LINE__}
+    #define CURRENT_SOURCE_LOCATION SourceLocation{TC(__FILE__),TC( __FUNC_NAME__ ),__LINE__}
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      ソースコード上の位置を表す構造体
@@ -29,7 +30,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログの種類
     //@―---------------------------------------------------------------------------
-    enum class ELogType
+    enum class LogType
     {
         Fatal,      //!< 致命的エラー
         Error,		//!< エラー
@@ -43,12 +44,12 @@ namespace ob
     //@―---------------------------------------------------------------------------
     struct Log
     {
-        ELogType         type;           //!< タイプ
-        const Char*     category;       //!< カテゴリ
-        const Char*     message;        //!< メッセージ
-        SourceLocation  sourceLocation; //!< ログが発生したソースコード上の位置
-                                        //   時間         ->プラットフォーム依存になるので受け取り段階で処理する?
-                                        //   スレッドID
+        LogType         type;               //!< タイプ
+        const Char*     category=nullptr;   //!< カテゴリ
+        const Char*     message=nullptr;    //!< メッセージ
+        SourceLocation  sourceLocation;     //!< ログが発生したソースコード上の位置
+                                            //   時間         ->プラットフォーム依存になるので受け取り段階で処理する?
+                                            //   スレッドID
     };
 
 }// namespcae ob

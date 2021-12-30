@@ -4,12 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 
-#include <Core/Math/Vector/IntVector2.h>
-#include <Core/Math/Vector/IntVector3.h>
-#include <Core/Math/Vector/IntVector4.h>
-#include <Core/Math/Vector/Vector2.h>
-#include <Core/Math/Vector/Vector3.h>
-#include <Core/Math/Vector/Vector4.h>
+#include <Runtime/Core/Math/Vector/IntVector2.h>
+#include <Runtime/Core/Math/Vector/IntVector3.h>
+#include <Runtime/Core/Math/Vector/IntVector4.h>
+#include <Runtime/Core/Math/Vector/Vector2.h>
+#include <Runtime/Core/Math/Vector/Vector3.h>
+#include <Runtime/Core/Math/Vector/Vector4.h>
 namespace ob {
     /*
     //===============================================================

@@ -3,7 +3,7 @@
 //! @brief		エントリー
 //! @author		Gajumaru
 //***********************************************************
-#include <Foundation/Log/Logger.h>
+#include <Runtime/Foundation/Log/Logger.h>
 
 int main(int argc, char** argv)
 {

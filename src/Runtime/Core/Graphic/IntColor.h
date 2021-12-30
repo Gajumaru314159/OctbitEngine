@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Core/Graphic/Color.h>
+#include <Runtime/Core/Graphic/Color.h>
 
 namespace ob {
 

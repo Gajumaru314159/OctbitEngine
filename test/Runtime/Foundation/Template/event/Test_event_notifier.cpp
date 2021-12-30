@@ -3,7 +3,7 @@
 //! @brief		event_notifierテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Foundation/Template/event/event_notifier.h>
+#include <Runtime/Foundation/Template/event/event_notifier.h>
 #include <vector>
 using namespace ob;
 

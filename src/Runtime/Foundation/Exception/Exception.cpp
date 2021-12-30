@@ -13,7 +13,7 @@ namespace ob
 	//! @brief	コンストラクタ
 	//@―---------------------------------------------------------------------------
 	Exception::Exception()
-		:Exception(TEXT(""))
+		:Exception(TC(""))
 	{
 
 	}

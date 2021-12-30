@@ -3,7 +3,7 @@
 //! @brief f32型算術演算
 //! @author Gajumaru
 //***********************************************************
-#include <Core/Math/Mathf.h>
+#include <Runtime/Core/Math/Mathf.h>
 #include <limits>
 
 namespace ob {

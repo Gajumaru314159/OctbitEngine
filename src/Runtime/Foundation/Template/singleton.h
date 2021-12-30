@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <cassert>
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 
 namespace ob {
 

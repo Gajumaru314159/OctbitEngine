@@ -7,7 +7,7 @@ message("Load project [${PROJECT_NAME}]")
 #------------------------------------------------------------------------------
 
 LOAD_FILES(sources)
-add_library(${PROJECT_NAME} STATIC ${sources} "Platform.h")
+add_library(${PROJECT_NAME} STATIC ${sources})
 
 ADD_FORCE_INCLUDE("Runtime/Foundation/Foundation.h")
 

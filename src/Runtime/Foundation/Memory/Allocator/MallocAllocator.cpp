@@ -6,6 +6,7 @@
 #include "MallocAllocator.h"
 
 #include <cstdlib>
+#include <Windows.h>
 
 #include <Runtime/Foundation/Memory/Utility/MemoryUtility.h>
 #include <Runtime/Foundation/Template/cmath.h>
@@ -17,7 +18,7 @@ namespace ob {
     //! @brief	                コンストラクタ
     //@―---------------------------------------------------------------------------
     MallocAllocator::MallocAllocator(const Char* pName) {
-        m_pName = pName?pName:TEXT("MallocAllocator");
+        m_pName = pName?pName:TC("MallocAllocator");
     }
 
 

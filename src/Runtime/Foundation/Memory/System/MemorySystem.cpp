@@ -6,7 +6,7 @@
 #include "MemorySystem.h"
 
 #include <Runtime/Foundation/Memory/Allocator/MallocAllocator.h>
-#include <Runtime/Foundation/Base/Fwd.h>
+#include <Runtime/Foundation/Base/Common.h>
 #include <Runtime/Foundation/Template/utility.h>
 #include <Runtime/Foundation/Template/container/array.h>
 #include <Runtime/Foundation/Log/LogMacro.h>
@@ -14,8 +14,8 @@
 namespace ob {
     //! @cond
     //static bool s_isInitialized = false;
-    static array<Allocator*, enum_cast(EHeapType::Max)> s_heaps;          //!< ヒープリスト
-    static array<Allocator*, enum_cast(EHeapType::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
+    static array<Allocator*, enum_cast(HeapType::Max)> s_heaps;          //!< ヒープリスト
+    static array<Allocator*, enum_cast(HeapType::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
     //! @endcond
 
 
@@ -44,7 +44,7 @@ namespace ob {
     //! @brief              解放
     //@―---------------------------------------------------------------------------
     void MemorySystem::Release() {
-        for (s32 i = 0; i < enum_cast(EHeapType::Max); ++i) {
+        for (s32 i = 0; i < enum_cast(HeapType::Max); ++i) {
             if (s_heaps[i] != nullptr)
                 s_heaps[i]->Release();
             if (s_debugHeaps[i] != nullptr)
@@ -59,11 +59,11 @@ namespace ob {
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void MemorySystem::SetHeapAllocator(EHeapType heapType, Allocator* pAllocator) {
+    void MemorySystem::SetHeapAllocator(HeapType heapType, Allocator* pAllocator) {
         const s32 index = static_cast<s32>(heapType);
-        assert(0 <= index && index < enum_cast(EHeapType::Max));
+        assert(0 <= index && index < enum_cast(HeapType::Max));
         if (s_heaps[index] != nullptr) {
-            LOG_WARNING_EX(TEXT("Memory"), TEXT("初期化済みのヒープを差し替えました。"));
+            LOG_WARNING_EX("Memory", "初期化済みのヒープを差し替えました。");
         }
         s_heaps[index] = pAllocator;
     }
@@ -75,11 +75,11 @@ namespace ob {
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void MemorySystem::SetDebugHeapAllocator(EHeapType heapType, Allocator* pAllocator) {
+    void MemorySystem::SetDebugHeapAllocator(HeapType heapType, Allocator* pAllocator) {
         const s32 index = enum_cast(heapType);
-        assert(0 <= index && index < enum_cast(EHeapType::Max));
+        assert(0 <= index && index < enum_cast(HeapType::Max));
         if (s_debugHeaps[index] != nullptr) {
-            LOG_WARNING_EX(TEXT("Memory"), TEXT("初期化済みのデバッグヒープを差し替えました。"));
+            LOG_WARNING_EX("Memory", "初期化済みのデバッグヒープを差し替えました。");
         }
         s_debugHeaps[index] = pAllocator;
     }
@@ -91,13 +91,13 @@ namespace ob {
     //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
     //! @param heapType     対象のヒープ・タイプ
     //@―---------------------------------------------------------------------------
-    Allocator& MemorySystem::GetHeapAllocator(EHeapType heapType) {
+    Allocator& MemorySystem::GetHeapAllocator(HeapType heapType) {
         const s32 index = enum_cast(heapType);
-        assert(0 <= index && index < enum_cast(EHeapType::Max));
+        assert(0 <= index && index < enum_cast(HeapType::Max));
         auto pHeap = s_heaps[index];
 
         if (pHeap == nullptr) {
-            static MallocAllocator systemHeap(TEXT("Default Allocator"));
+            static MallocAllocator systemHeap(TC("Default Allocator"));
             return systemHeap;
         }
 
@@ -111,13 +111,13 @@ namespace ob {
     //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
     //! @param heapType     対象のヒープ・タイプ
     //@―---------------------------------------------------------------------------
-    Allocator& MemorySystem::GetDebugHeapAllocator(EHeapType heapType) {
+    Allocator& MemorySystem::GetDebugHeapAllocator(HeapType heapType) {
         const s32 index = enum_cast(heapType);
-        assert(0 <= index && index < enum_cast(EHeapType::Max));
+        assert(0 <= index && index < enum_cast(HeapType::Max));
         auto pHeap = s_debugHeaps[index];
 
         if (pHeap == nullptr) {
-            static MallocAllocator systemHeap(TEXT("Default Debug Allocator"));
+            static MallocAllocator systemHeap(TC("Default Debug Allocator"));
             return systemHeap;
         }
 
@@ -137,7 +137,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetHeapAllocator(ob::EHeapType heapType, ob::Allocator* pAllocator) {
+    void OB_API SetHeapAllocator(ob::HeapType heapType, ob::Allocator* pAllocator) {
         ob::MemorySystem::SetHeapAllocator(heapType, pAllocator);
     }
 
@@ -148,7 +148,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetDebugHeapAllocator(ob::EHeapType heapType, ob::Allocator* pAllocator) {
+    void OB_API SetDebugHeapAllocator(ob::HeapType heapType, ob::Allocator* pAllocator) {
         ob::MemorySystem::SetDebugHeapAllocator(heapType, pAllocator);
     }
 

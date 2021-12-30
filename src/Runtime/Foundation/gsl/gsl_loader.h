@@ -1,6 +1,6 @@
 //***********************************************************
 //! @file
-//! @brief		Guidelines Support Library
+//! @brief		Guidelines Support Library(Microsoft)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once

@@ -3,7 +3,7 @@
 //! @brief 乱数生成
 //! @author Gajumaru
 //***********************************************************
-#include <Core/Math/Random.h>
+#include <Runtime/Core/Math/Random.h>
 
 
 namespace ob {

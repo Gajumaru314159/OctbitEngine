@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include "IRefObject.h"
+#include "RefObject.h"
 
 
 namespace ob {
@@ -17,7 +17,7 @@ namespace ob {
         template<class T, class... TArgs>
         friend Ref<T> MakeRef(TArgs&&... args);
 
-        static_assert(is_base_of_v<IRefObject, T>, "T must inherit IRefObject");
+        static_assert(is_base_of_v<RefObject, T>, "T must inherit RefObject");
     public:
 
         //@―---------------------------------------------------------------------------
@@ -173,7 +173,7 @@ namespace ob {
        
     private:
 
-        IRefObject* m_ptr;
+        RefObject* m_ptr;
 
         template<class U>
         friend class Ref;

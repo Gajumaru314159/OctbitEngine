@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-#include "Base/Fwd.h"
+#include "Base/Common.h"
 #include "Base/Assertion.h"
 #include "Exception/Exception.h"
 #include "Log/LogMacro.h"

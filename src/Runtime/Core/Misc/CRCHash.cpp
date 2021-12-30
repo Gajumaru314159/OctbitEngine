@@ -3,7 +3,7 @@
 //! @brief		CRCハッシュ関数
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Misc/CRCHash.h>
+#include <Runtime/Core/Misc/CRCHash.h>
 
 #include <string>
 

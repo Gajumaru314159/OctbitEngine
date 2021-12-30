@@ -5,10 +5,10 @@
 //***********************************************************
 #pragma once
 //! @cond
-#include "Discrimination.h"
+#include "Platform.h"
 
 //===============================================================
-// ビルドオプション
+// ログ
 //===============================================================
 
 #define OB_ENABLE_LOG_FATAL
@@ -18,15 +18,23 @@
 
 
 //===============================================================
+// アサーション
+//===============================================================
+
+#define OB_DISABLE_REQUIRE
+#define OB_DISABLE_ENSURE
+
+
+//===============================================================
 // プラットフォーム毎の定義で置き換え
 //===============================================================
 #if defined(OS_WINDOWS)
 #include "Platforms/Windows/BuildConfig.h"
 
-#elif defined(OS_ANDROID)
+#elif defined(OS_LINUX)
 #include "Platforms/Linux/BuildConfig.h"
 
 #else
-#pragma error(OS_NAME"ではConfigの定義がありません")
+#pragma error("Config("OS_NAME")がありません")
 #endif
 //! @endcond

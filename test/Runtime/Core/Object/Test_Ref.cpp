@@ -3,9 +3,8 @@
 //! @brief		Box のテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Core/Object/Ref.h>
-#include <Core/Object/RefObject.h>
-
+#include <Runtime/Foundation/Memory/Reference/Ref.h>
+#include <Runtime/Foundation/Memory/Reference/RefObject.h>
 using namespace ob;
 
 namespace {

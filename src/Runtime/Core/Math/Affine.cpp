@@ -3,11 +3,11 @@
 //! @brief 行列
 //! @author Gajumaru
 //***********************************************************
-#include <Core/Math/Affine.h>
+#include <Runtime/Core/Math/Affine.h>
 
-#include <Core/Math/Mathf.h>
-#include <Core/Math/Vector/include.h>
-#include <Core/Math/Quaternion.h>
+#include <Runtime/Core/Math/Mathf.h>
+#include <Runtime/Core/Math/Vector/include.h>
+#include <Runtime/Core/Math/Quaternion.h>
 /*
 namespace ob
 {
