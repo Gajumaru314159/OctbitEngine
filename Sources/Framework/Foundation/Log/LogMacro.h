@@ -18,7 +18,7 @@
 //@―---------------------------------------------------------------------------
 //! @brief      基底のログ出力マクロ
 //@―---------------------------------------------------------------------------
-#define OB_LOG_BASE(type,category,format,...) ob::Logger::Ref().AddLog(type,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__)
+#define OB_LOG_BASE(type,category,format,...) ob::Logger::Get().AddLog(type,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__)
 
 
 //@―---------------------------------------------------------------------------

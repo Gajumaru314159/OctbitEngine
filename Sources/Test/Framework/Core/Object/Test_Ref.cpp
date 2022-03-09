@@ -50,12 +50,12 @@ TEST(RefObject, Construct) {
         EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
         EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
         {
-            // Base => Ref<Base>
+            // Base => Get<Base>
             Ref<Base> ref1(&obj1);
             EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
             EXPECT_EQ(&obj1, ref1.Get());
 
-            // Derived => Ref<Base>
+            // Derived => Get<Base>
             Ref<Base> ref2(&obj2);
             EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
             EXPECT_EQ(&obj2, ref2.Get());
@@ -69,13 +69,13 @@ TEST(RefObject, Construct) {
         Base obj1;
         Derived obj2;
         {
-            // Base => Ref<Base>
+            // Base => Get<Base>
             Ref<Base> ref1(&obj1);
             Ref<Base> ref1_2(ref1);
             EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
             EXPECT_EQ(&obj1, ref1_2.Get());
 
-            // Ref<Derived> => Ref<Base>
+            // Get<Derived> => Get<Base>
             Ref<Derived> ref2(&obj2);
             Ref<Base> ref2_2(ref2);
             EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj2));
@@ -90,13 +90,13 @@ TEST(RefObject, Construct) {
         Base obj1;
         Derived obj2;
         {
-            // Base => Ref<Base>
+            // Base => Get<Base>
             Ref<Base> ref1(&obj1);
             Ref<Base> ref1_2(move(ref1));
             EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
             EXPECT_EQ(&obj1, ref1_2.Get());
 
-            // Ref<Derived> => Ref<Base>
+            // Get<Derived> => Get<Base>
             Ref<Derived> ref2(&obj2);
             Ref<Base> ref2_2(move(ref2));
             EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
@@ -109,7 +109,7 @@ TEST(RefObject, Construct) {
 
     {
         // IRefObjectを継承していない場合コンパイルエラー
-        //Ref<InvalidBase> invalidRef;
+        //Get<InvalidBase> invalidRef;
     }
 
     // 暗黙的キャスト

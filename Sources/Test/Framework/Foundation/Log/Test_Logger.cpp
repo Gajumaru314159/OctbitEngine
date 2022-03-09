@@ -50,7 +50,7 @@ TEST(Logger, AddLogEvent) {
 
     // ログイベントを登録
     Logger::EventHandle handle;
-    Logger::Ref().AddEvent(handle, event);
+    Logger::Get().AddEvent(handle, event);
 
     // ログ追加
     const Char message1[] = TC("Hoge");
@@ -66,7 +66,7 @@ TEST(Logger, AddLogEvent) {
     EXPECT_TRUE(s_message, TC("Hoge2A"));
 
     // ログイベントの削除
-    Logger::Ref().RemoveEvent(handle);
+    Logger::Get().RemoveEvent(handle);
 
     // ログ追加
     const Char message2[] = TC("Fuga");
