@@ -14,10 +14,12 @@ FUNCTION(SUBDIRLIST result relative_path)
   FILE(GLOB children RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/${relative_path})
   SET(dirlist "")
   FOREACH(child ${children})
-    IF(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${child})
-	  LIST(APPEND dirlist ${child})
-	  SUBDIRLIST(subdirs "${child}/*")
-	  LIST(APPEND dirlist ${subdirs})
+	IF(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${child})
+	  IF(NOT child MATCHES "_$")
+		LIST(APPEND dirlist ${child})
+		SUBDIRLIST(subdirs "${child}/*")
+		LIST(APPEND dirlist ${subdirs})
+	  ENDIF()
     ENDIF()
   ENDFOREACH()
   SET(${result} ${dirlist} PARENT_SCOPE)
@@ -27,6 +29,8 @@ ENDFUNCTION()
 # カレントとディレクトリ以下のソースファイルを読み込み
 #------------------------------------------------------------------------------
 MACRO(LOAD_FILES result)
+	get_filename_component(project_dir ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY ${})
+
 	SET(dirs "")
 	SUBDIRLIST(dirs "*")
 	
@@ -49,11 +53,13 @@ ENDMACRO()
 #------------------------------------------------------------------------------
 # すべてのファイルにインクルードさせるファイルを追加
 #------------------------------------------------------------------------------
-FUNCTION(ADD_FORCE_INCLUDE path)
+FUNCTION(SET_PCH header source)
 	if(MSVC)
-		add_definitions(/FI"${path}")
+		# プリコンパイル済みヘッダの使用(/Yu)を全体に設定
+		add_definitions(/FI${CMAKE_CURRENT_SOURCE_DIR}/${header})
+		#set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/${source} PROPERTIES COMPILE_FLAGS "/Yc")
 	else()
 		# GCC or Clang
-		add_definitions(-include ${path})
+		add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/${header})
 	endif()
 ENDFUNCTION()

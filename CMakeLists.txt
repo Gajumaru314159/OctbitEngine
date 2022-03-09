@@ -16,12 +16,15 @@ set(CMAKE_DEBUG_POSTFIX "d")
 include(Common.cmake)
 
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
-set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/src")
-set(OCTBIT_EXTERNAL_PATH "${OCTBIT_ROOT_PATH}/external")
+set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Sources")
+set(OCTBIT_PUBLIC_FRAMEWORK_PATH "${OCTBIT_SOURCE_PATH}/Public/Framework")
+set(OCTBIT_PRIVATE_FRAMEWORK_PATH "${OCTBIT_SOURCE_PATH}/Private/Framework")
+set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
 
 set(OB_CONFIGURATION "Debug")
 
 if(MSVC)
+    #set(CMAKE_CXX_FLAGS "/Yu")
     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_DEBUG            ${CMAKE_C_FLAGS_DEBUG})
     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_MINSIZEREL       ${CMAKE_C_FLAGS_MINSIZEREL})
     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_RELEASE          ${CMAKE_C_FLAGS_RELEASE})
@@ -44,22 +47,24 @@ endif()
 
 
 # プロジェクト読み込み
-add_subdirectory ("src/Runtime/Foundation")
-#add_subdirectory ("src/Runtime/Platform")
- add_subdirectory ("src/Runtime/Core")
-# add_subdirectory ("src/Runtime/Engine")
-# add_subdirectory ("src/Runtime/Graphic")
-# add_subdirectory ("src/Runtime/GraphicD3D12")
-# add_subdirectory ("src/Runtime/GraphicVulkan")
+
+add_subdirectory ("Sources/Framework/Foundation")
+add_subdirectory ("Sources/Framework/Core")
+add_subdirectory ("Sources/Framework/Platform")
+# add_subdirectory ("Sources/Framework/Core")
+# add_subdirectory ("Sources/Framework/Engine")
+# add_subdirectory ("Sources/Framework/Graphic")
+# add_subdirectory ("Sources/Framework/GraphicD3D12")
+# add_subdirectory ("Sources/Framework/GraphicVulkan")
 
 # テストプロジェクト読み込み
-add_subdirectory ("test/Runtime/Foundation")
-# add_subdirectory ("test/Runtime/Core")
+add_subdirectory ("Sources/Test/Framework/Foundation")
+
+add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み
 
 
-
-#add_subdirectory ("src/Application")
+#add_subdirectory ("Sources/Application")
 
 

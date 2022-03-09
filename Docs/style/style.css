@@ -1,0 +1,66 @@
+td.mdescRight{
+    font-size:80%;
+}
+
+div.contents, div.header .title {
+    line-height: initial;
+    margin: initial;
+}
+
+#top{
+    background: rgb(255,255,255);
+    background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(215,248,255,1) 100%);
+}
+
+div.contents, div.header .title, div.header .summary {
+    max-width:initial;
+}
+
+div.qindex, div.navtab {
+    background-color: rgba(215,248,255,1);
+    border: 1px solid rgb(114, 229, 255);
+    text-align: center;
+}
+
+.left #MSearchSelect {
+    padding-left:0;
+}
+
+h2.groupheader{
+    margin: 12px 0px 12px 0;
+    padding: 5px;
+    background:#f7f7f7;
+    border-left:7px solid #5cd1ff;
+    color:black;
+    font-size:20px;
+    font-weight:normal;
+    box-shadow:0px 2px 2px 0px #DEDEDE ;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+div.groupHeader{
+    display: inline-block;
+    margin: 12px;
+    padding: 5px;
+    padding-right: 50px;
+    background:#f7f7f7;
+    border-left:7px solid #ff7c5c;
+    color:black;
+    font-size:20px;
+    font-weight:normal;
+    box-shadow:0px 2px 2px 0px #DEDEDE ;
+    border-radius: 5px;
+}
+
+div.summary{
+    font-size: 14px;
+    position: absolute;
+    background: white;
+    right: 50px;
+    border-radius: 100px;
+    box-shadow: #00000026 1px 1px 2px 2px;
+}
+
+.arrow{
+    font-family: fantasy;
+}
