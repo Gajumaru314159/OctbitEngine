@@ -240,8 +240,8 @@ namespace ob {
     //! @brief 方向ベクトルをfromDirからtoDirに回転するQuaternionの計算
     //@―---------------------------------------------------------------------------
     Quat Quat::FromTo(const Vec3& fromDir, const Vec3& toDir) {
-        Vec3 fromDirN = fromDir.GetUnitVec();
-        Vec3 toDirN = toDir.GetUnitVec();
+        Vec3 fromDirN = fromDir.unitVec();
+        Vec3 toDirN = toDir.unitVec();
         Vec3 axis = Vec3::Cross(fromDirN, toDirN);
         f32 angle = Vec3::Dot(fromDirN, toDirN);
         return Quat(angle, axis);
@@ -252,12 +252,12 @@ namespace ob {
     //! @brief ターゲット方向に向けるQuaternionを計算
     //@―---------------------------------------------------------------------------
     Quat Quat::LookAt(const Vec3& target, const Vec3& up) {
-        Vec3 tar = target.GetUnitVec();
+        Vec3 tar = target.unitVec();
         Vec3 norm(0, 0, 1);
         f32 dot = Vec3::Dot(norm, tar);
         f32 theta = Mathf::Acos(dot);
         Vec3 cross = Vec3::Cross(norm, tar);
-        cross.Normalize();
+        cross.normalize();
         theta = theta / 2;
 
         f32 sin = Mathf::Sin(theta);

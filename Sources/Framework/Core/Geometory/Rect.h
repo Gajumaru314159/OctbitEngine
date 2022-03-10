@@ -98,7 +98,7 @@ namespace ob {
         //! 
         //! @see        getEnd()
         //@―---------------------------------------------------------------------------
-        Vec2 getStart()const noexcept;
+        Vec2 start()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -106,7 +106,7 @@ namespace ob {
         //! 
         //! @see        getStart()
         //@―---------------------------------------------------------------------------
-        Vec2 getEnd()const noexcept;
+        Vec2 end()const noexcept;
 
 
         //===============================================================
@@ -209,8 +209,8 @@ namespace ob {
     //! @brief      構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
     inline void Rect::reset() noexcept {
-        center.SetZero();
-        size.SetZero();
+        center.setZero();
+        size.setZero();
     }
 
 
@@ -228,7 +228,7 @@ namespace ob {
     //! 
     //! @see        GetEnd()
     //@―---------------------------------------------------------------------------
-    inline Vec2 Rect::getStart()const noexcept {
+    inline Vec2 Rect::start()const noexcept {
         return size + center * 0.5f;
     }
 
@@ -238,7 +238,7 @@ namespace ob {
     //! 
     //! @see        GetStart()
     //@―---------------------------------------------------------------------------
-    inline Vec2 Rect::getEnd()const noexcept {
+    inline Vec2 Rect::end()const noexcept {
         return size - center * 0.5f;
     }
 
@@ -247,7 +247,7 @@ namespace ob {
     //! @brief      サイズが0以下であるか
     //@―---------------------------------------------------------------------------
     inline bool Rect::isEmpty()const noexcept {
-        return size.IsZero();
+        return size.isZero();
     }
 
 

@@ -123,17 +123,17 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      ボックスの起点となる頂点を取得
         //! 
-        //! @see        getEnd()
+        //! @see        end()
         //@―---------------------------------------------------------------------------
-        Vec3 getStart()const noexcept;
+        Vec3 start()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      getStart() と対角となる頂点を取得
+        //! @brief      start() と対角となる頂点を取得
         //! 
-        //! @see        getStart()
+        //! @see        start()
         //@―---------------------------------------------------------------------------
-        Vec3 getEnd()const noexcept;
+        Vec3 end()const noexcept;
 
 
         //===============================================================
@@ -243,8 +243,8 @@ namespace ob {
     //! @brief      構造体をゼロ初期化する
     //@―---------------------------------------------------------------------------
     inline void Box::reset()noexcept {
-        center.SetZero();
-        size.SetZero();
+        center.setZero();
+        size.setZero();
     }
 
 
@@ -270,7 +270,7 @@ namespace ob {
     //! 
     //! @see        GetEnd()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::getStart()const noexcept {
+    inline Vec3 Box::start()const noexcept {
         return center + size * 0.5f;
     }
 
@@ -280,7 +280,7 @@ namespace ob {
     //! 
     //! @see        GetStart()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::getEnd()const noexcept {
+    inline Vec3 Box::end()const noexcept {
         return center - size * 0.5f;
     }
 
@@ -289,7 +289,7 @@ namespace ob {
     //! @brief      サイズが0
     //@―---------------------------------------------------------------------------
     inline bool Box::isEmpty()const noexcept {
-        return size.IsZero();
+        return size.isZero();
     }
 
     //! @endcond

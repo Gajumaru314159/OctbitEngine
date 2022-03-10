@@ -103,74 +103,74 @@ TEST(Vector, set) {
     v2.set(v);
     EXPECT_EQ(v2, v);
 
-    v.SetZero();
+    v.setZero();
     EXPECT_EQ(v, Vec3::zero);
 
-    v.SetAll(1);
+    v.setAll(1);
     EXPECT_EQ(v, Vec3(1, 1, 1));
 }
 
 
 TEST(Vector, get) {
     Vec3 v(1, -4, 3);
-    EXPECT_EQ(v.GetMaxComponent(), 3);
+    EXPECT_EQ(v.maxComponent(), 3);
 
-    EXPECT_EQ(v.GetMaxAbsComponent(), 4);
+    EXPECT_EQ(v.maxAbsComponent(), 4);
 
-    EXPECT_EQ(v.GetMinComponent(), -4);
+    EXPECT_EQ(v.minComponent(), -4);
 
-    EXPECT_EQ(v.GetMinAbsComponent(), 1);
+    EXPECT_EQ(v.minAbsComponent(), 1);
 
     Vec3 v2(3, 4, 0);
-    EXPECT_EQ(v2.GetMag(), 5);
-    EXPECT_EQ(v2.GetSqrMag(), 25);
+    EXPECT_EQ(v2.mag(), 5);
+    EXPECT_EQ(v2.sqrMag(), 25);
 
     Vec3 v3(100, 0, 0);
-    EXPECT_EQ(v3.GetUnitVec(), Vec3(1, 0, 0));
+    EXPECT_EQ(v3.unitVec(), Vec3(1, 0, 0));
 }
 
 
 TEST(Vector, Convert) {
     Vec3 v(100, 0, 0);
-    v.Normalize();
+    v.normalize();
     EXPECT_EQ(v, Vec3(1, 0, 0));
 
     Vec3 dir;
     f32 len;
     Vec3 v2(2, 2, 0);
-    v2.ToDirectionAndLength(dir, len);
-    EXPECT_EQ(dir, Vec3(1, 1, 0).GetUnitVec());
+    v2.toDirectionAndLength(dir, len);
+    EXPECT_EQ(dir, Vec3(1, 1, 0).unitVec());
     EXPECT_EQ(len, Mathf::Sqrt(8));
 }
 
 
 TEST(Vector, Transform) {
     Vec3 v(1, 0, 0);
-    v.Translate(1, 2, 3);
+    v.translate(1, 2, 3);
     EXPECT_EQ(v, Vec3(2, 2, 3));
 
-    v.Translate(Vec3(1, 2, 3));
+    v.translate(Vec3(1, 2, 3));
     EXPECT_EQ(v, Vec3(3, 4, 6));
 
     v.set(1, 2, 3);
 
-    v.RotateZ(90);
+    v.rotateZ(90);
     EXPECT_EQ(v, Vec3(-2, 1, 3));
 
-    v.RotateX(90);
+    v.rotateX(90);
     EXPECT_EQ(v, Vec3(-2, -3, 1));
 
-    v.RotateY(90);
+    v.rotateY(90);
     EXPECT_EQ(v, Vec3(1, -3, 2));
 
     v.set(1, 2, 3);
-    v.Rotate(90, 90, 90);
+    v.rotate(90, 90, 90);
     EXPECT_EQ(v, Vec3(1, -3, 2));
 
-    v.Scale(2);
+    v.scale(2);
     EXPECT_EQ(v, Vec3(2, -6, 4));
 
-    v.Scale(0, 1, 2);
+    v.scale(0, 1, 2);
     EXPECT_EQ(v, Vec3(0, -6, 8));
 
 }
@@ -178,23 +178,23 @@ TEST(Vector, Transform) {
 
 TEST(Vector, Judge) {
     Vec3 v(1, 0, 0);
-    EXPECT_TRUE(v.IsUnit());
+    EXPECT_TRUE(v.isUnit());
 
     Vec3 v2(0.91f, 0, 0);
-    EXPECT_TRUE(v.Equals(v2, 0.1f));
+    EXPECT_TRUE(v.equals(v2, 0.1f));
 
 
-    EXPECT_FALSE(v.AllComponentsEqual());
+    EXPECT_FALSE(v.allComponentsEqual());
     v.set(3, 3, 3);
-    EXPECT_TRUE(v.AllComponentsEqual());
+    EXPECT_TRUE(v.allComponentsEqual());
 
-    EXPECT_FALSE(v.IsZero());
+    EXPECT_FALSE(v.isZero());
     v *= 0;
-    EXPECT_TRUE(v.IsZero());
+    EXPECT_TRUE(v.isZero());
 
-    EXPECT_FALSE(v.IsNaN());
+    EXPECT_FALSE(v.isNaN());
     v /= 0;
-    EXPECT_TRUE(v.IsNaN());
+    EXPECT_TRUE(v.isNaN());
 }
 
 

@@ -86,7 +86,7 @@ TEST(Quat, get) {
     EXPECT_EQ(q.getRight(), Vec3::back);
     EXPECT_EQ(q.getLeft(), Vec3::front);
 
-    EXPECT_EQ(q.getAxis(), Vec3(1, 1, -1).GetUnitVec());
+    EXPECT_EQ(q.getAxis(), Vec3(1, 1, -1).unitVec());
     f32 ang = q.getAngle();
     EXPECT_EQ(q.getAngle(), 120.0f);
 

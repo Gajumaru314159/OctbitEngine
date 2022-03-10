@@ -21,7 +21,7 @@ namespace ob {
     Sphere& Sphere::operator+=(const Vec3& point)noexcept {
         Vec3 dir;
         f32 len;
-        (point - center).ToDirectionAndLength(dir, len);
+        (point - center).toDirectionAndLength(dir, len);
         f32 diff = Mathf::Max(len - radius, 0.0f) * 0.5f;
         center += dir * diff;
         radius += diff;

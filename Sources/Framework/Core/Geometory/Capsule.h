@@ -116,19 +116,19 @@ namespace ob {
         //!                  
         //! @details         カプセルの半径を含みません。
         //@―---------------------------------------------------------------------------
-        f32 getHeight()const;
+        f32 height()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief           半径を含まない高さの取得
         //@―---------------------------------------------------------------------------
-        f32 getMinHeight()const;
+        f32 minHeight()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief           pos1->pos2の方向ベクトルの取得
         //@―---------------------------------------------------------------------------
-        Vec3 getDirection()const;
+        Vec3 direction()const;
 
     public:
 
@@ -158,8 +158,8 @@ namespace ob {
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
     inline Capsule::Capsule(EForceInit) noexcept {
-        pos1.SetZero();
-        pos2.SetZero();
+        pos1.setZero();
+        pos2.setZero();
         radius=0.0f;
     }
 
@@ -206,8 +206,8 @@ namespace ob {
     //! @brief      構造体を-初期化する
     //@―---------------------------------------------------------------------------
     inline void Capsule::reset() noexcept {
-        pos1.SetZero();
-        pos2.SetZero();
+        pos1.setZero();
+        pos2.setZero();
         radius = 0.5f;
     }
 
@@ -251,7 +251,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline void Capsule::set(const Vec3& center, f32 radius, f32 height, const Vec3& direction) {
         this->radius = radius;
-        const Vec3 half = direction.GetUnitVec() * (height * 0.5f);
+        const Vec3 half = direction.unitVec() * (height * 0.5f);
         pos1 = center + half;
         pos2 = center - half;
     }
@@ -262,7 +262,7 @@ namespace ob {
     //!                  
     //! @details         カプセルの半径を含みません。
     //@―---------------------------------------------------------------------------
-    inline f32 Capsule::getHeight()const {
+    inline f32 Capsule::height()const {
         return Vec3::Dist(pos1, pos2) + radius;
     }
 
@@ -270,7 +270,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief           半径を含まない高さの取得
     //@―---------------------------------------------------------------------------
-    inline f32 Capsule::getMinHeight()const {
+    inline f32 Capsule::minHeight()const {
         return Vec3::Dist(pos1, pos2);
     }
 
@@ -278,8 +278,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief           pos1->pos2の方向ベクトルの取得
     //@―---------------------------------------------------------------------------
-    inline Vec3 Capsule::getDirection()const {
-        return (pos2 - pos1).GetUnitVec();
+    inline Vec3 Capsule::direction()const {
+        return (pos2 - pos1).unitVec();
     }
 
     //! @endcond

@@ -205,13 +205,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief 要素を全て0に設定
         //@―---------------------------------------------------------------------------
-        void    SetZero() noexcept;
+        void    setZero() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 全ての要素を同じ値で設定
         //@―---------------------------------------------------------------------------
-        void    SetAll(f32 scalar) noexcept;
+        void    setAll(f32 scalar) noexcept;
 
 
         //===============================================================
@@ -221,39 +221,39 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     GetMaxComponent() const noexcept;
+        f32     maxComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     GetMaxAbsComponent() const noexcept;
+        f32     maxAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     GetMinComponent() const noexcept;
+        f32     minComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     GetMinAbsComponent() const noexcept;
+        f32     minAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの取得
         //! 
-        //! @details 二つのベクトルの長さを比較する場合はSqrMagのほうが高速です。
+        //! @details 二つのベクトルの長さを比較する場合はsqrMagのほうが高速です。
         //@―---------------------------------------------------------------------------
-        f32     GetMag() const;
+        f32     mag() const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの二乗を取得
         //@―---------------------------------------------------------------------------
-        f32     GetSqrMag() const noexcept;
+        f32     sqrMag() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -262,13 +262,13 @@ namespace ob {
         //! @details            0ベクトルの場合は0ベクトルを返す。
         //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
         //@―---------------------------------------------------------------------------
-        Vec4    GetUnitVec(f32 tolerance = Mathf::TOLERANCE)const;
+        Vec4    unitVec(f32 tolerance = Mathf::TOLERANCE)const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief              単位ベクトルの取得(ゼロチェックなし)
         //@―---------------------------------------------------------------------------
-        Vec4    GetUnitVecUnsafe()const;
+        Vec4    getUnitVecUnsafe()const;
 
 
         //@―---------------------------------------------------------------------------
@@ -277,7 +277,7 @@ namespace ob {
         //! @param[out] outDir  方向ベクトルの出力
         //! @param[out] outLen  ベクトルの大きさ
         //@―---------------------------------------------------------------------------
-        void    ToDirectionAndLength(Vec4& outDir, f32& outLen)const;
+        void    toDirectionAndLength(Vec4& outDir, f32& outLen)const;
 
 
         //===========================================================
@@ -290,13 +290,13 @@ namespace ob {
         //! @details            0ベクトルの場合は何もしない。
         //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
         //@―---------------------------------------------------------------------------
-        void     Normalize(f32 tolerance = Mathf::TOLERANCE);
+        void     normalize(f32 tolerance = Mathf::TOLERANCE);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief              ベクトルの正規化(ゼロチェックなし)
         //@―---------------------------------------------------------------------------
-        void     NormalizeUnsafe();
+        void     normalizeUnsafe();
 
 
         //===============================================================
@@ -306,7 +306,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief 単位ベクトルか判定
         //@―---------------------------------------------------------------------------
-        b32     IsUnit(f32 tolerance = Mathf::TOLERANCE)const;
+        b32     isUnit(f32 tolerance = Mathf::TOLERANCE)const;
 
 
         //@―---------------------------------------------------------------------------
@@ -315,7 +315,7 @@ namespace ob {
         //! @param v            比較対象
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        b32     Equals(const Vec4& v, f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        b32     equals(const Vec4& v, f32 tolerance = Mathf::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -323,31 +323,31 @@ namespace ob {
         //! 
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        b32     AllComponentsEqual(f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        b32     allComponentsEqual(f32 tolerance = Mathf::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ゼロベクトルか判定
         //@―---------------------------------------------------------------------------
-        b32     IsZero(f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        b32     isZero(f32 tolerance = Mathf::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素にNaNを含むか判定
         //@―---------------------------------------------------------------------------
-        b32     IsNaN()const;
+        b32     isNaN()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素にInfを含むか判定
         //@―---------------------------------------------------------------------------
-        b32     IsInf()const;
+        b32     isInf()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素にNaNまたはInfを含むか判定
         //@―---------------------------------------------------------------------------
-        b32     IsNaNOrInf()const;
+        b32     isNaNOrInf()const;
 
     public:
 
@@ -476,7 +476,7 @@ namespace ob {
     //! @brief      コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
     inline Vec4::Vec4(EForceInit) noexcept {
-        SetZero();
+        setZero();
     }
 
 
@@ -719,7 +719,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を全て0に設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::SetZero() noexcept {
+    inline void Vec4::setZero() noexcept {
         set(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
@@ -727,7 +727,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 全ての要素を同じ値で設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::SetAll(f32 scalar) noexcept {
+    inline void Vec4::setAll(f32 scalar) noexcept {
         set(scalar, scalar, scalar, scalar);
     }
 
@@ -739,7 +739,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetMaxComponent() const noexcept {
+    inline f32 Vec4::maxComponent() const noexcept {
         return Mathf::Max(x, y, z, w);
     }
 
@@ -747,7 +747,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetMaxAbsComponent() const noexcept {
+    inline f32 Vec4::maxAbsComponent() const noexcept {
         return Mathf::Max(Mathf::Abs(x), Mathf::Abs(y), Mathf::Abs(z), Mathf::Abs(w));
     }
 
@@ -755,7 +755,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetMinComponent() const noexcept {
+    inline f32 Vec4::minComponent() const noexcept {
         return Mathf::Min(x, y, z, w);
     }
 
@@ -763,7 +763,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetMinAbsComponent() const noexcept {
+    inline f32 Vec4::minAbsComponent() const noexcept {
         return Mathf::Min(Mathf::Abs(x), Mathf::Abs(y), Mathf::Abs(z), Mathf::Abs(w));
     }
 
@@ -773,15 +773,15 @@ namespace ob {
     //! 
     //! @details 二つのベクトルの長さを比較する場合はSqrMagのほうが高速です。
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetMag() const {
-        return Mathf::Sqrt(GetSqrMag());
+    inline f32 Vec4::mag() const {
+        return Mathf::Sqrt(sqrMag());
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの長さの二乗を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::GetSqrMag() const noexcept {
+    inline f32 Vec4::sqrMag() const noexcept {
         return x * x + y * y + z * z + w * w;
     }
 
@@ -792,9 +792,9 @@ namespace ob {
     //! @details            0ベクトルの場合は0ベクトルを返す。
     //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::GetUnitVec(f32 tolerance)const {
+    inline Vec4 Vec4::unitVec(f32 tolerance)const {
         Vec4 unitVec = *this;
-        unitVec.Normalize(tolerance);
+        unitVec.normalize(tolerance);
         return unitVec;
     }
 
@@ -802,9 +802,9 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief              単位ベクトルの取得(ゼロチェックなし)
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::GetUnitVecUnsafe()const {
+    inline Vec4 Vec4::getUnitVecUnsafe()const {
         Vec4 unitVec = *this;
-        unitVec.NormalizeUnsafe();
+        unitVec.normalizeUnsafe();
         return unitVec;
     }
 
@@ -815,13 +815,13 @@ namespace ob {
     //! @param[out] outDir  方向ベクトルの出力
     //! @param[out] outLen  ベクトルの大きさ
     //@―---------------------------------------------------------------------------
-    inline void Vec4::ToDirectionAndLength(Vec4& outDir, f32& outLen)const {
-        if (IsZero()) {
-            outDir.SetZero();
+    inline void Vec4::toDirectionAndLength(Vec4& outDir, f32& outLen)const {
+        if (isZero()) {
+            outDir.setZero();
             outLen = 0.0f;
             return;
         }
-        outLen = GetSqrMag();
+        outLen = sqrMag();
         if (outLen < Mathf::TOLERANCE) {
             outDir = Vec4::zero;
         } else {
@@ -840,8 +840,8 @@ namespace ob {
     //! @details            0ベクトルの場合は何もしない。
     //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
     //@―---------------------------------------------------------------------------
-    inline void Vec4::Normalize(f32 tolerance) {
-        f32 f = GetMag();
+    inline void Vec4::normalize(f32 tolerance) {
+        f32 f = mag();
         // 0ベクトルの場合は何もしない
         if (f <= tolerance)return;
         this->operator/=(f);
@@ -851,8 +851,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief              ベクトルの正規化(ゼロチェックなし)
     //@―---------------------------------------------------------------------------
-    inline void Vec4::NormalizeUnsafe() {
-        f32 f = GetMag();
+    inline void Vec4::normalizeUnsafe() {
+        f32 f = mag();
         this->operator/=(f);
     }
 
@@ -864,8 +864,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 単位ベクトルか判定
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::IsUnit(f32 tolerance)const {
-        const f32 mag = GetSqrMag();
+    inline b32 Vec4::isUnit(f32 tolerance)const {
+        const f32 mag = sqrMag();
         return Mathf::Abs(mag - 1.0f) < tolerance;
     }
 
@@ -875,7 +875,7 @@ namespace ob {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::Equals(const Vec4& v, f32 tolerance)const noexcept {
+    inline b32 Vec4::equals(const Vec4& v, f32 tolerance)const noexcept {
         return
             Mathf::Abs(x - v.x) <= tolerance &&
             Mathf::Abs(y - v.y) <= tolerance &&
@@ -889,7 +889,7 @@ namespace ob {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::AllComponentsEqual(f32 tolerance)const noexcept {
+    inline b32 Vec4::allComponentsEqual(f32 tolerance)const noexcept {
         if (tolerance < Mathf::Abs(x - y))return false;
         if (tolerance < Mathf::Abs(y - z))return false;
         if (tolerance < Mathf::Abs(z - w))return false;
@@ -903,7 +903,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief ゼロベクトルか判定
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::IsZero(f32 tolerance)const noexcept {
+    inline b32 Vec4::isZero(f32 tolerance)const noexcept {
         if (tolerance < Mathf::Abs(x))return false;
         if (tolerance < Mathf::Abs(y))return false;
         if (tolerance < Mathf::Abs(z))return false;
@@ -915,7 +915,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素にNaNを含むか判定
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::IsNaN()const {
+    inline b32 Vec4::isNaN()const {
         if (Mathf::IsNaN(x))return true;
         if (Mathf::IsNaN(y))return true;
         if (Mathf::IsNaN(z))return true;
@@ -927,7 +927,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素にInfを含むか判定
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::IsInf()const {
+    inline b32 Vec4::isInf()const {
         if (Mathf::IsInf(x))return true;
         if (Mathf::IsInf(y))return true;
         if (Mathf::IsInf(z))return true;
@@ -939,8 +939,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素にNaNまたはInfを含むか判定
     //@―---------------------------------------------------------------------------
-    inline b32 Vec4::IsNaNOrInf()const {
-        return IsNaN() || IsInf();
+    inline b32 Vec4::isNaNOrInf()const {
+        return isNaN() || isInf();
     }
 
 
@@ -976,7 +976,7 @@ namespace ob {
     //! @brief  二つのベクトルの距離を計算
     //@―---------------------------------------------------------------------------
     inline f32 Vec4::Dist(const Vec4& a, const Vec4& b) {
-        return (b - a).GetMag();
+        return (b - a).mag();
     }
 
 
@@ -984,7 +984,7 @@ namespace ob {
     //! @brief  二つのベクトルの距離の二乗を計算
     //@―---------------------------------------------------------------------------
     inline f32 Vec4::SqrDist(const Vec4& a, const Vec4& b) noexcept {
-        return (b - a).GetSqrMag();
+        return (b - a).sqrMag();
     }
 
 
@@ -1025,8 +1025,8 @@ namespace ob {
     inline Vec4 Vec4::Slerp(const Vec4& a, const Vec4& b, f32 t) {
         f32 al, bl;
         Vec4 an, bn;
-        a.ToDirectionAndLength(an, al);
-        b.ToDirectionAndLength(bn, bl);
+        a.toDirectionAndLength(an, al);
+        b.toDirectionAndLength(bn, bl);
         f32 angle = Mathf::Acos(Dot(an, bn));
         f32 sinTh = Mathf::Sin(angle);
         f32 ps = Mathf::Sin(angle * (1.0f - t)) * Mathf::Lerp(al, bl, t);
@@ -1061,7 +1061,7 @@ namespace ob {
     //! @brief 二つのベクトルのなす角のコサインを取得
     //@―---------------------------------------------------------------------------
     inline f32 Vec4::CosAngle(const Vec4& a, const Vec4& b) {
-        return Dot(a.GetUnitVec(), b.GetUnitVec());
+        return Dot(a.unitVec(), b.unitVec());
     }
 
 

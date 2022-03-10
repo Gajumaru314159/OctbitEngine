@@ -37,16 +37,16 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief	                ヒープ名の取得
 	//@―---------------------------------------------------------------------------
-	Char* MimallocHeap::getName() const {
+	Char* MimallocHeap::name() const {
 		return m_pName;
 	}
 
-	size_t MimallocHeap::getHeapSize() const
+	size_t MimallocHeap::heapSize() const
 	{
 		return size_t();
 	}
 
-	size_t MimallocHeap::getFreeHeapSize() const
+	size_t MimallocHeap::freeHeapSize() const
 	{
 		return size_t();
 	}

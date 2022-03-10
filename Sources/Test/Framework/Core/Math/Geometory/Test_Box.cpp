@@ -64,8 +64,8 @@ TEST(Box, Setter) {
 TEST(Box, Getter) {
     {
         Box box(Vec3(4, 2, 6), Vec3(2, 1, 0));
-        EXPECT_EQ(box.getStart(), Vec3(4, 2, 3));
-        EXPECT_EQ(box.getEnd(), Vec3(0, 0, -3));
+        EXPECT_EQ(box.start(), Vec3(4, 2, 3));
+        EXPECT_EQ(box.end(), Vec3(0, 0, -3));
     }
 }
 

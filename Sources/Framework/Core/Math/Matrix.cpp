@@ -361,7 +361,7 @@ namespace ob {
         Vec3 sxr = (*this) * Vec3(1.0f, 0.0f, 0.0f);
         Vec3 syr = (*this) * Vec3(0.0f, 1.0f, 0.0f);
         Vec3 szr = (*this) * Vec3(0.0f, 0.0f, 1.0f);
-        return Vec3(sxr.GetMag(), syr.GetMag(), szr.GetMag());
+        return Vec3(sxr.mag(), syr.mag(), szr.mag());
     }
 
 

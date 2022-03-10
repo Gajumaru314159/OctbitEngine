@@ -74,16 +74,16 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief	                ヒープ名の取得
 	//@―---------------------------------------------------------------------------
-	Char* TLSFHeap::getName() const {
+	Char* TLSFHeap::name() const {
 		return m_pName;
 	}
 
-	size_t TLSFHeap::getHeapSize() const
+	size_t TLSFHeap::heapSize() const
 	{
 		return size_t();
 	}
 
-	size_t TLSFHeap::getFreeHeapSize() const
+	size_t TLSFHeap::freeHeapSize() const
 	{
 		return size_t();
 	}

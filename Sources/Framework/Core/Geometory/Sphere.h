@@ -133,7 +133,7 @@ namespace ob {
     //! @brief 構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
     inline void Sphere::reset() noexcept {
-        center.SetZero();
+        center.setZero();
         radius = 0.5f;
     }
 

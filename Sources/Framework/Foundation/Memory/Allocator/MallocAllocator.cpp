@@ -87,7 +87,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名の取得
     //@―---------------------------------------------------------------------------
-    const Char* MallocAllocator::getName() const {
+    const Char* MallocAllocator::name() const {
         return m_pName;
     }
 
@@ -95,7 +95,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータのヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t MallocAllocator::getHeapSize() const {
+    size_t MallocAllocator::heapSize() const {
         return static_cast<size_t>(-1);
     }
 
@@ -103,7 +103,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータの使用可能なヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t MallocAllocator::getFreeHeapSize() const {
+    size_t MallocAllocator::freeHeapSize() const {
         return static_cast<size_t>(-1);
     }
 

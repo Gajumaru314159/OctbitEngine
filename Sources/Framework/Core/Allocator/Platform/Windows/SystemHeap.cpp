@@ -88,7 +88,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名の取得
     //@―---------------------------------------------------------------------------
-    Char* SystemHeap::getName() const     {
+    Char* SystemHeap::name() const     {
         return m_pName;
     }
 
@@ -96,7 +96,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータのヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::getHeapSize() const     {
+    size_t SystemHeap::heapSize() const     {
         return static_cast<size_t>(-1);
     }
 
@@ -104,7 +104,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータの使用可能なヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::getFreeHeapSize() const
+    size_t SystemHeap::freeHeapSize() const
     {
         return static_cast<size_t>(-1);
     }
