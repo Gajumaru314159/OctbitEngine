@@ -12,15 +12,15 @@ namespace ob::platform {
     //! @brief  ウィンドウ・イベント・タイプ
     //@―---------------------------------------------------------------------------
     enum class WindowEventType {
-        Move,
-        Size,
-        Activate,
-        Deactivate,
-        Focus,
-        Close,
-        Destroy,
-        Minimize,
-        Maximize,
+        Move,       //! ウィンドウが移動
+        Size,       //! サイズ変更
+        Activate,   //! アクティブ状態に変更
+        Deactivate, //! 非アクティブ状態に変更
+        Focus,      //! フォーカスを取得
+        Close,      //! 終了時
+        Destroy,    //! 破棄
+        Minimize,   //! 最小化
+        Maximize,   //! 最大か
     };
 
 
@@ -28,28 +28,32 @@ namespace ob::platform {
     //! @brief  システム・イベント・タイプ
     //@―---------------------------------------------------------------------------
     enum class SystemEventType {
-        Unknown,
+        Unknown,                //! 不明
 
-        Quit,
-        Close,
-        WindowActivate,
-        WindowsDeactivate,
+        Quit,                   //! アプリケーションの終了
+        Close,                  //! ウィンドウを閉じようとした
+        WindowActivate,         //! ウィンドウがアクティブ化
+        WindowsDeactivate,      //! ウィンドウが非アクティブ化
 
-        MouseDown,
-        MouseUp,
-        MouseMove,
-        MouseWheel,
+        MouseDown,              //! マウスボタンが押された
+        MouseUp,                //! マウスボタンが離された
+        MouseMove,              //! マウスが移動した
+        MouseWheel,             //! マウスのホイールが動かされた
 
-        KeyDown,
-        KeyUp,
-        KeyChar,
+        KeyDown,                //! キーが押された
+        KeyUp,                  //! キーが離された
+        KeyChar,                //! 文字入力
 
-        WindowSizeChanged,
+        WindowSizeChanged,      //! ウィンドウサイズが変わった
 
-        DragEnter,
-        DragDrop,
+        DragEnter,              //! ドラッグアイテムがウィンドウ内に入った
+        DragDrop,               //! ドラッグアイテムがドロップされた
     };
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  マウスボタン
+    //@―---------------------------------------------------------------------------
     enum class MouseButton {
         None,
         Left,
@@ -58,6 +62,7 @@ namespace ob::platform {
         X1,
         X2,
     };
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント
