@@ -1,19 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		グラフィック・システム
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#ifdef OS_WINDOWS
-#include "../IModuleLoader.h"
-#include <Windows.h>
+#include <Framework/Graphic/Type/GraphicAPI.h>
+#include <Framework/Graphic/Device.h>
 
-namespace ob::platform {
+namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class ModuleLoader :public IModuleLoader {
+    class System :public Singleton<System> {
     public:
 
         //===============================================================
@@ -21,50 +20,52 @@ namespace ob::platform {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
+        //! @brief      コンストラクタ
+        //! 
+        //! @details    プラットフォームにより使用できないAPIがあります。
+        //!             使用できるプラットフォームは GraphicAPI を参照してください。
+        //! @param api  使用するグラフィックAPIタイプ
         //@―---------------------------------------------------------------------------
-        ModuleLoader(StringView filePath);
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  デストラクタ
-        //@―---------------------------------------------------------------------------
-        ~ModuleLoader();
-
+        System(GraphicAPI api);
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュール名を取得
+        //! @brief      デストラクタ
         //@―---------------------------------------------------------------------------
-        virtual StringView GetName()const { return m_name; };
+        ~System();
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  スワップチェーンの生成
+        //@―---------------------------------------------------------------------------
+        Ref<Swapchain> createSwapchain(const SwapchainDesc& desc);
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュールの取得
+        //! @brief  コマンドリストの生成
         //@―---------------------------------------------------------------------------
-        IModule* GetInterface()override {
-            return m_interface.get();
-        }
+        Ref<CommandList> createCommandList(CommandListType type);
+
+    protected:
+
+        // SwapChain
+        // CommandList
+        // RenderPass
+        // Pipeline
+        // VertexLayout
+        // Buffer
+        // VertexBuffer
+        // IndexBuffer
+        // Texture2D
+        // Texture3D
+        // RenderTexture
+        // DepthBuffer
+        // SamplerState
+        // ShaderPss
+
+        // onFlushCommandList
 
     private:
 
-        String m_name;
-        HMODULE m_handle;
-        std::unique_ptr<IModule> m_interface;
+        std::unique_ptr<Device> m_device;
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
-}// namespace ob::platform
-#endif// OS_WINDOWS
+}// namespcae ob::graphic

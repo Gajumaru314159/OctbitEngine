@@ -43,7 +43,8 @@ namespace ob {
     //! @brief  参照の解放
     //@―---------------------------------------------------------------------------
     s32 RefObject::Release() {
-        s32 count = m_referenceCount.fetch_sub(1);
+        m_referenceCount.fetch_sub(1);
+        s32 count = m_referenceCount.load();
         if (count <= 0) {
             delete this;
         }

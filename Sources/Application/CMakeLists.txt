@@ -24,6 +24,7 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
     Foundation
+    Core
     Platform
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})

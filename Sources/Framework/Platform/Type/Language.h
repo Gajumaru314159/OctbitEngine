@@ -13,6 +13,19 @@ namespace ob::platform {
     enum class Language {
         Unknown = -1,	    // 不明
 
+        Japanese,	        // 日本語
+        English,	        // 英語
+        French,	            // フランス語
+        Italian,	        // イタリア語
+        German,	            // ドイツ語
+        Spanish,	        // スペイン語
+        Korean,	            // 韓国語
+        Portuguese,	        // ポルトガル語
+        Russian,	        // ロシア語
+        Chinese,	        // 中国語
+
+
+        /*
         Afrikaans,	        // アフリカ語
         Arabic,	            // アラビア語
         Basque,	            // バスク語
@@ -55,7 +68,11 @@ namespace ob::platform {
         ChineseSimplified,	// 中国語簡体字
         ChineseTraditional,	// 中国語繁体字
         Hungarian,          // ハンガリー語
-
+        */
         Max,                // 言語数
+    };
+
+    enum class Locale {
+
     };
 }// namespace ob::platform

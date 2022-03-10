@@ -1,8 +1,7 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		フレームワーク基盤
+//! @brief		プリコンパイル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-
-#include <Framework/Platform/Window/Window.h>
+#include "stdafx.h"

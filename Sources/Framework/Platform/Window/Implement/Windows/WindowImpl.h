@@ -22,7 +22,7 @@ namespace ob::platform {
         //! @details    生成情報を指定してウィンドウを生成する。
         //@―---------------------------------------------------------------------------
         WindowImpl(const WindowCreationDesc& params);
-        ~WindowImpl()override;
+        virtual ~WindowImpl()override;
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウを表示する
@@ -37,21 +37,27 @@ namespace ob::platform {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      ウィンドウ・イベントのリスナを追加する
+        //! @brief      ウィンドウ・イベントのリスナを追加
         //@―---------------------------------------------------------------------------
         void AddEventListener(WindowEventType type, const WindowEvent& event)override;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウのタイトルを設定する
+        //! @brief  ウィンドウのタイトルを設定
         //@―---------------------------------------------------------------------------
-        void SetWindowTitle(const String& title) override;
+        void SetWindowTitle(StringView title) override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ウィンドウのタイトルを取得
+        //@―---------------------------------------------------------------------------
+        const String& GetWindowTitle() const noexcept override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウサイズの取得
         //@―---------------------------------------------------------------------------
-        Size GetSize() override;
+        Size GetSize()const override;
 
 
         //@―---------------------------------------------------------------------------
@@ -121,6 +127,8 @@ namespace ob::platform {
         HWND    m_hWnd;                             //!< ウィンドウハンドル
         const StringBase<TCHAR> m_className;        //!< ウィンドウクラス名
         s32     m_windowID;                         //!< ウィンドウごとに割り当てられるID
+
+        String  m_windowTitle;
 
         bool    m_isActive;
         bool    m_isMinimized;

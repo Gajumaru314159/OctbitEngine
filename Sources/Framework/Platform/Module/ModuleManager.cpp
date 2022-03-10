@@ -12,39 +12,53 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  モジュールの破棄
+    //! @brief  モジュールを読み込み
     //@―---------------------------------------------------------------------------
-    void ModuleManager::UnloadModule(const String& moduleName) {
-
-
-    }
-
-    IModule* ModuleManager::LoadModuleImpl(const String& moduleName) {
-
-        auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
-        if (auto pModule = moduleLoader->GetInterface<IModule>()) {
-            m_moduleMap[moduleName] = ob::move(moduleLoader);
-        } else {
-            return nullptr;
+    void ModuleManager::UnloadModule(StringView moduleName) {
+        auto found = m_moduleMap.find(moduleName);
+        if (found != m_moduleMap.end()) {
+            //found->second.release();
+            m_moduleMap.erase(found);
         }
-
-        return m_moduleMap[moduleName]->GetInterface<IModule>();
     }
 
+
     //@―---------------------------------------------------------------------------
-    //! @brief  モジュールの破棄
+    //! @brief  モジュールを読み込み
     //@―---------------------------------------------------------------------------
-    //void ModuleManager::UnloadModule(gsl::not_null<IModule> pModule){
-    //
-    //}
+    IModule* ModuleManager::LoadModuleImpl(StringView moduleName) {
+        ModuleLoader module(moduleName);
+        return nullptr;
+        //auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
+        //if (auto pModule = moduleLoader->GetInterface()) {
+        //    m_moduleMap[moduleName] = ob::move(moduleLoader);
+        //} else {
+        //    return nullptr;
+        //}
+        //
+        //return m_moduleMap[moduleName]->GetInterface();
+    }
 
 
-
-    IModule* ModuleManager::GetModule(const String& moduleName) {
+    //@―---------------------------------------------------------------------------
+    //! @brief  モジュールを取得
+    //@―---------------------------------------------------------------------------
+    IModule* ModuleManager::GetModule(StringView moduleName)const {
+        auto found = m_moduleMap.find(moduleName);
+        if (found != m_moduleMap.end()) {
+            if (found->second) {
+                return found->second->GetInterface();
+            }
+        }
         return nullptr;
     }
-    bool ModuleManager::HasLoadedModule(const String& moduleName)const {
-        return false;////m_moduleList.find(TC("モジュール名")) != m_modeluMap.end();
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  モジュールが読み込まれているか
+    //@―---------------------------------------------------------------------------
+    bool ModuleManager::HasLoadedModule(StringView moduleName)const {
+        return GetModule(moduleName)!=nullptr;
     }
 
 }// namespace ob::platform

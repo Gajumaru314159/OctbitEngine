@@ -15,9 +15,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     void* WindowNativeAccessor::GetHWND(Ref<Window> window) {
         if (!window)return NULL;
-
-        auto* pWindowImpl = static_cast<WindowImpl*>(window->m_impl.get());
-        return pWindowImpl->GetHWND();
+        return NULL;
+        //auto* pWindowImpl = nullptr;//static_cast<WindowImpl*>(window->m_impl.get());
+        //return pWindowImpl->GetHWND();
     }
 
 }// namespace ob::platform

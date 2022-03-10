@@ -8,7 +8,7 @@ message("Load project [${PROJECT_NAME}]")
 LOAD_FILES(out_sources)
 add_library(${PROJECT_NAME} STATIC ${out_sources})
 
-ADD_FORCE_INCLUDE("Foundation/Foundation.h")
+SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
@@ -16,13 +16,14 @@ ADD_FORCE_INCLUDE("Foundation/Foundation.h")
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR 
-    "${OCTBIT_ROOT_PATH}/src/Framework"
+    "${OCTBIT_SOURCE_PATH}"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
     Core
+    Platform
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 

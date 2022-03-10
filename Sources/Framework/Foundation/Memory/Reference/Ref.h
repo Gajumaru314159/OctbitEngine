@@ -154,12 +154,6 @@ namespace ob {
     private:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ(生ポインタ指定)
-        //@―---------------------------------------------------------------------------
-        Ref(T* ptr,bool isDestructable);
-
-
-        //@―---------------------------------------------------------------------------
         //! @brief  保持しているオブジェクトの参照を追加する
         //@―---------------------------------------------------------------------------
         void SafeRetain();
@@ -189,7 +183,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class... TArgs>
     inline Ref<T> MakeRef(TArgs&&... args) {
-        return Ref<T>(new T(std::forward<TArgs>(args)...),true);
+        return Ref<T>(new T(std::forward<TArgs>(args)...));
     }
 
 
@@ -601,15 +595,6 @@ namespace ob {
     template<class T>
     inline T* Ref<T>::Get()const {
         return reinterpret_cast<T*>(m_ptr);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ(生ポインタ指定)
-    //@―---------------------------------------------------------------------------
-    template<class T>
-    Ref<T>::Ref(T* ptr, bool isDestructable):Ref(ptr) {
-        if(LIKELY(isDestructable))m_ptr->EnableDestruct();
     }
 
 

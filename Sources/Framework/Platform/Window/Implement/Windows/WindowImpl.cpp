@@ -9,8 +9,8 @@
 
 namespace ob::platform {
 
-    const TCHAR* WindowImpl::WINDOW_CLASS_NAME = __TC("OctbitWindow");
-    const TCHAR* WindowImpl::PROPERTY_NAME = __TC("OctbitWindowProp");
+    const TCHAR* WindowImpl::WINDOW_CLASS_NAME = TEXT("OctbitWindow");
+    const TCHAR* WindowImpl::PROPERTY_NAME = TEXT("OctbitWindowProp");
 
     atomic<s32> WindowImpl::m_windowNum = 0;
 
@@ -66,6 +66,7 @@ namespace ob::platform {
         ::AdjustWindowRect(&clientRect, mWindowedStyle, FALSE);
 
         // 文字コードを変換
+        m_windowTitle = desc.title;
         WString titleW;
         StringEncoder::Encode(desc.title, titleW);
 
@@ -93,8 +94,8 @@ namespace ob::platform {
         // ウィンドウハンドルとインスタンスを関連付ける
         ::SetProp(m_hWnd, PROPERTY_NAME, this);
 
-        // ウィンドウの表示
-        ::ShowWindow(m_hWnd, SW_SHOW);
+        // ウィンドウを表示
+        Show();
     }
 
 
@@ -110,7 +111,10 @@ namespace ob::platform {
     //! @brief  ウィンドウを表示する
     //@―---------------------------------------------------------------------------
     void WindowImpl::Show() {
-        OB_REQUIRE(m_hWnd);
+        if (m_hWnd) {
+            // ウィンドウを表示
+            ::ShowWindow(m_hWnd, SW_SHOW);
+        }
     }
 
 
@@ -159,18 +163,27 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
-    void WindowImpl::SetWindowTitle(const String& title) {
+    void WindowImpl::SetWindowTitle(StringView title) {
         OB_REQUIRE(m_hWnd);
+        m_windowTitle = title;
         WString titleW;
-        StringEncoder::Encode(title, titleW);
+        StringEncoder::Encode(m_windowTitle, titleW);
         ::SetWindowTextW(m_hWnd, titleW.c_str());
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウのタイトルを取得する
+    //@―---------------------------------------------------------------------------
+    const String& WindowImpl::GetWindowTitle() const noexcept{
+        return m_windowTitle;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウサイズの取得
     //@―---------------------------------------------------------------------------
-    Size WindowImpl::GetSize() {
+    Size WindowImpl::GetSize()const {
         OB_REQUIRE(m_hWnd);
         RECT rect;
         ::GetClientRect(m_hWnd, &rect);

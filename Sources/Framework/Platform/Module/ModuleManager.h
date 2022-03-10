@@ -6,9 +6,12 @@
 #pragma once
 #include "IModule.h"
 
-namespace ob::platform {
 
+namespace ob::platform {
     class ModuleLoader;
+}
+
+namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
     //! @brief      モジュール・マネージャ
@@ -35,46 +38,45 @@ namespace ob::platform {
     //!             ModuleManager::Get().UnloadModule(pSampleModule);
     //! ```
     //@―---------------------------------------------------------------------------
-    class ModuleManager :public singleton<ModuleManager> {
+    class ModuleManager :public Singleton<ModuleManager> {
     public:
 
-
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュールの読み込み
+        //! @brief  モジュールを読み込み
         //@―---------------------------------------------------------------------------
         template<typename TModule>
-        TModule* LoadModule(const String& moduleName) {
+        TModule* LoadModule(StringView moduleName) {
             IModule* pModule = LoadModuleImpl(moduleName);
             return reinterpret_cast<TModule*>(pModule);
         }
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュールの破棄
+        //! @brief  モジュールを破棄
         //@―---------------------------------------------------------------------------
-        void UnloadModule(const String& moduleName);
+        void UnloadModule(StringView moduleName);
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュールの取得
+        //! @brief  モジュールを取得
         //@―---------------------------------------------------------------------------
-        IModule* GetModule(const String& moduleName);
+        IModule* GetModule(StringView moduleName)const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  モジュールが読み込まれているか
         //@―---------------------------------------------------------------------------
-        bool HasLoadedModule(const String& moduleName)const;
+        bool HasLoadedModule(StringView moduleName)const;
 
 
     private:
 
-        IModule* LoadModuleImpl(const String& moduleName);
+        IModule* LoadModuleImpl(StringView moduleName);
 
 
     private:
 
-        ob::map<String, std::unique_ptr<ModuleLoader>> m_moduleMap;
+        std::map<StringView, ModuleLoader*> m_moduleMap;
 
     };
 

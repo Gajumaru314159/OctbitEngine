@@ -3,33 +3,34 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
+#ifdef OS_WINDOWS
 #include "PlatformSystemImpl.h"
 
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 
-namespace ob::platform {
-    namespace detail {
+namespace ob::platform::detail {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //@―---------------------------------------------------------------------------
+    PlatformSystemImpl::PlatformSystemImpl() {
+        CreateMainWindow();
+    }
 
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
+    //@―---------------------------------------------------------------------------
+    //! @brief  デストラクタ
+    //@―---------------------------------------------------------------------------
+    PlatformSystemImpl::~PlatformSystemImpl() {
+        int  a = 0;
+        a++;
+    }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  システムイベントのリスナを追加
+    //@―---------------------------------------------------------------------------
+    void PlatformSystemImpl::AddSystemEventListener() {
+    }
 
-        bool PlatformSystemImpl::Startup() {
-            LANGID langID = GetSystemDefaultLangID();
-
-            CreateMainWindow();
-
-            return false;
-        }
-
-        Language PlatformSystemImpl::GetLanguage() const {
-            return Language();
-        }
-
-        void PlatformSystemImpl::AddSystemEventListener() {
-        }
-
-    }// namespace detail
-}// namespace ob::platform
+}// namespace ob::platform::detail
+#endif

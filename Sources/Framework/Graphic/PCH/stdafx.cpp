@@ -1,7 +1,7 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		プリコンパイル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/GraphicD3D12/Common/GraphicLibrary.h>
+#include "stdafx.h"

@@ -23,6 +23,7 @@ namespace ob::platform {
     public:
 
         virtual ~IModule() = default;                    //!< デストラクタ
+        virtual u32 GetMagicCode()const=0;
         virtual void Startup() {};                      //!< DLLが読み込まれ、モジュールオブジェクトが生成されたときに呼び出される。
         virtual void Shutdown() {};                     //!< DLLがアンロードされる直前に呼び出される
 

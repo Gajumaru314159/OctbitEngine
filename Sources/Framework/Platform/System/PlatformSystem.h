@@ -7,18 +7,26 @@
 #include <Framework/Platform/Window/Window.h>
 #include <Framework/Platform/Type/Language.h>
 
+//============================================
+// 前方宣言
+//============================================
+namespace ob::platform::detail {
+    class PlatformSystemImpl;
+}
+
+//============================================
+// クラス宣言
+//============================================
 namespace ob::platform {
-    //! @cond
-    namespace detail {
-        class PlatformSystemImpl;
-    }
-    //! @endcond
 
     //@―---------------------------------------------------------------------------
     //! @brief  プラットフォーム・システム
     //@―---------------------------------------------------------------------------
-    class PlatformSystem :Singleton<PlatformSystem> {
+    class PlatformSystem :public Singleton<PlatformSystem> {
     public:
+
+        PlatformSystem();
+        ~PlatformSystem();
 
         //@―---------------------------------------------------------------------------
         //! @brief  システムを起動する
@@ -39,8 +47,6 @@ namespace ob::platform {
         //! @brief  プラットフォームのシステム言語を取得する
         //@―---------------------------------------------------------------------------
         Language GetUserLanguage()const;
-
-
 
     private:
 

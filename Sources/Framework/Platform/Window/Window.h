@@ -4,18 +4,28 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Type/Point.h>
+#include <Framework/Core/Type/Size.h>
 #include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/Platform/Type/CursorType.h>
 #include <Framework/Platform/Type/WindowCreationParams.h>
-#include <Framework/Core/Type/Point.h>
-#include <Framework/Core/Type/Size.h>
+#include <Framework/Platform/Window/WindowState.h>
 
-#include "WindowState.h"
 
+//===============================================================
+// 前方宣言
+//===============================================================
 namespace ob::platform {
-
     class WindowImpl;
     class WindowNativeAccessor;
+}
+
+
+//===============================================================
+// クラス宣言
+//===============================================================
+namespace ob::platform {
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ
@@ -30,6 +40,11 @@ namespace ob::platform {
         //! @details    生成情報を指定してウィンドウを生成する。
         //@―---------------------------------------------------------------------------
         Window(const WindowCreationDesc& desc);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~Window();
 
 
         //@―---------------------------------------------------------------------------
@@ -53,25 +68,26 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウのタイトルを設定する
         //@―---------------------------------------------------------------------------
-        void SetWindowTitle(const String& title);
+        void SetWindowTitle(StringView title);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウのタイトルを設定する
         //@―---------------------------------------------------------------------------
-        const String& GetWindowTitle()const noexcept;
+        const String& GetWindowTitle()const;
 
+        /*
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウの状態を取得する
         //@―---------------------------------------------------------------------------
-        const WindowState& GetState()const noexcept;
+        const WindowState& GetState()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウのスタイルを取得する
         //@―---------------------------------------------------------------------------
-        inline WindowStyle& GetStyle()const noexcept;
+        inline WindowStyle& GetStyle()const;
 
 
         //@―---------------------------------------------------------------------------
@@ -127,6 +143,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         Size SetFullscreen(bool isFullscreen)const;
 
+        */
 
         //@―---------------------------------------------------------------------------
         //! @brief              スクリーン座標の取得

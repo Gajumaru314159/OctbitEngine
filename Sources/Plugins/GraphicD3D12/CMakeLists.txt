@@ -5,14 +5,11 @@ message("Load project [${PROJECT_NAME}]")
 #------------------------------------------------------------------------------
 # ソースコードの登録
 #------------------------------------------------------------------------------
+
 LOAD_FILES(out_sources)
-add_library(${PROJECT_NAME} SHARED ${out_sources} "stdafx.h" "stdafx.cpp")
+add_library(${PROJECT_NAME} SHARED ${out_sources})
 
-ADD_FORCE_INCLUDE("Framework/Foundation/Foundation.h")
-ADD_FORCE_INCLUDE("Framework/GraphicD3D12/stdafx.h")
-
-#target_precompile_headers(${PROJECT_NAME} PRIVATE "stdafx.h")
-
+SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
@@ -20,18 +17,18 @@ ADD_FORCE_INCLUDE("Framework/GraphicD3D12/stdafx.h")
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
-    "${OCTBIT_ROOT_PATH}/src"
+    "${OCTBIT_SOURCE_PATH}"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
-    GraphicBase
+    Graphic
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 
 # プロジェクトのフィルタ設定
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework/Graphic")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins/Graphic")
 
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)

@@ -12,21 +12,22 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    ModuleLoader::ModuleLoader(const String& fileName) {
+    ModuleLoader::ModuleLoader(StringView fileName) {
         m_handle = NULL;
+        m_name = fileName;
 
         StringBase<wchar_t> fileNameW;
-        StringEncoder::Encode(fileName, fileNameW);
+        StringEncoder::Encode(m_name, fileNameW);
         HMODULE dll = ::LoadLibrary(fileNameW.c_str());
 
         if (dll == nullptr) {
-            LOG_ERROR_EX("System", "{0}が見つかりませんでした。", fileName.c_str());
+            LOG_ERROR_EX("System", "{0}が見つかりませんでした。", m_name.c_str());
             return;
         }
 
         FARPROC proc = GetProcAddress(dll, "GetModule");
         if (proc == nullptr) {
-            LOG_ERROR_EX("System", "{0}にCreateModule()が含まれていません。", fileName.c_str());
+            LOG_ERROR_EX("System", "{0}にCreateModule()が含まれていません。", m_name.c_str());
             return;
         }
 
@@ -34,7 +35,7 @@ namespace ob::platform {
         Func createModule = reinterpret_cast<Func>(proc);
         IModule* pModule = createModule();
         if (!pModule) {
-            LOG_ERROR_EX("System", "モジュールの生成に失敗しました。({0})", fileName.c_str());
+            LOG_ERROR_EX("System", "モジュールの生成に失敗しました。({0})", m_name.c_str());
             return;
         }
 
@@ -43,7 +44,7 @@ namespace ob::platform {
     }
 
     ModuleLoader::~ModuleLoader() {
-        m_interface.release();
+        m_interface.reset();
         ::FreeLibrary(m_handle);
     }
 
