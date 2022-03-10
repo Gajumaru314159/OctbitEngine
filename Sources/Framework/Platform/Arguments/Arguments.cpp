@@ -56,6 +56,13 @@ namespace ob::platform {
         return static_cast<s32>(m_args.size());
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief          空か
+    //@―---------------------------------------------------------------------------
+    bool Arguments::empty()const noexcept {
+        return m_args.empty();
+    }
+
 
 }// namespace ob::platform
 

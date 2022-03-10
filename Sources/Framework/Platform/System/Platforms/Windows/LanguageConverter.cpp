@@ -12,7 +12,7 @@ namespace ob::platform::detail {
     //@―---------------------------------------------------------------------------
     //! @brief  システム言語を取得
     //@―---------------------------------------------------------------------------
-    Language PlatformSystemImpl::GetLanguage() const {
+    Language PlatformSystemImpl::getSystemLanguage() const {
         LANGID langID = GetSystemDefaultLangID();
         switch (langID) {
         case 0x0411:

@@ -21,17 +21,17 @@ namespace ob::platform {
             //===============================================================
             virtual ~PlatformSystemImplBase() = default;
 
-            virtual Language GetLanguage()const = 0;
+            virtual Language getSystemLanguage()const = 0;
 
-            virtual void AddSystemEventListener() = 0;
+            virtual void addSystemEventListener() = 0;
 
         public:
 
-            Ref<Window>& GetMainWindow();
+            Ref<Window>& getMainWindow();
 
         protected:
 
-            void CreateMainWindow();
+            void createMainWindow();
 
 
 

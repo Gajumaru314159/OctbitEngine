@@ -30,12 +30,12 @@ namespace ob::platform {
     //!             @par
     //!             使用例@n
     //! ```
-    //!             auto pSampleModule = ModuleManager::get().LoadModule<ISampleModule>("SampleModule.dll");
+    //!             auto pSampleModule = ModuleManager::get().loadModule<ISampleModule>("SampleModule.dll");
     //!             {
     //!                 auto pSampleInstance = unique_ptr<ISampleInstance>(pSampleModule->CreateInstance());
     //!                 pSampleInstance->Function();
     //!             }
-    //!             ModuleManager::get().UnloadModule(pSampleModule);
+    //!             ModuleManager::get().unloadModule(pSampleModule);
     //! ```
     //@―---------------------------------------------------------------------------
     class ModuleManager :public Singleton<ModuleManager> {
@@ -45,8 +45,8 @@ namespace ob::platform {
         //! @brief  モジュールを読み込み
         //@―---------------------------------------------------------------------------
         template<typename TModule>
-        TModule* LoadModule(StringView moduleName) {
-            IModule* pModule = LoadModuleImpl(moduleName);
+        TModule* loadModule(StringView moduleName) {
+            IModule* pModule = loadModuleImpl(moduleName);
             return reinterpret_cast<TModule*>(pModule);
         }
 
@@ -54,24 +54,24 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  モジュールを破棄
         //@―---------------------------------------------------------------------------
-        void UnloadModule(StringView moduleName);
+        void unloadModule(StringView moduleName);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  モジュールを取得
         //@―---------------------------------------------------------------------------
-        IModule* GetModule(StringView moduleName)const;
+        IModule* findModule(StringView moduleName)const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  モジュールが読み込まれているか
         //@―---------------------------------------------------------------------------
-        bool HasLoadedModule(StringView moduleName)const;
+        bool hasLoadedModule(StringView moduleName)const;
 
 
     private:
 
-        IModule* LoadModuleImpl(StringView moduleName);
+        IModule* loadModuleImpl(StringView moduleName);
 
 
     private:

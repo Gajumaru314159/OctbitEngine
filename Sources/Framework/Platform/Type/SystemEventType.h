@@ -17,7 +17,7 @@ namespace ob::platform {
         Activate,   //! アクティブ状態に変更
         Deactivate, //! 非アクティブ状態に変更
         Focus,      //! フォーカスを取得
-        Close,      //! 終了時
+        close,      //! 終了時
         Destroy,    //! 破棄
         Minimize,   //! 最小化
         Maximize,   //! 最大か
@@ -31,7 +31,7 @@ namespace ob::platform {
         Unknown,                //! 不明
 
         Quit,                   //! アプリケーションの終了
-        Close,                  //! ウィンドウを閉じようとした
+        close,                  //! ウィンドウを閉じようとした
         WindowActivate,         //! ウィンドウがアクティブ化
         WindowsDeactivate,      //! ウィンドウが非アクティブ化
 

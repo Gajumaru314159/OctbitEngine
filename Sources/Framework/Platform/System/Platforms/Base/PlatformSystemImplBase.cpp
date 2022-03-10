@@ -11,7 +11,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        void PlatformSystemImplBase::CreateMainWindow() {
+        void PlatformSystemImplBase::createMainWindow() {
             WindowCreationDesc desc;
             desc.fullscreen = false;
             desc.resizable = true;
@@ -24,7 +24,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        Ref<Window>& PlatformSystemImplBase::GetMainWindow() {
+        Ref<Window>& PlatformSystemImplBase::getMainWindow() {
             return m_mainWindow;
         }
 

@@ -116,18 +116,18 @@ namespace ob {
             }
         }
 
-        void WindowsWindow::SetWindowTitle(const Char* pTitle) {
+        void WindowsWindow::setTitle(const Char* pTitle) {
         }
 
-        Size WindowsWindow::GetSize() {
+        Size WindowsWindow::size() {
             return Size();
         }
 
-        Point WindowsWindow::GetScreenPoint(const Point& clientPoint) {
+        Point WindowsWindow::getScreenPoint(const Point& clientPoint) {
             return Point();
         }
 
-        Point WindowsWindow::GetClientPoint(const Point& screenPoint) {
+        Point WindowsWindow::getClientPoint(const Point& screenPoint) {
             return Point();
         }
 

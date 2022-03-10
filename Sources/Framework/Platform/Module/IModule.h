@@ -13,19 +13,19 @@ namespace ob::platform {
     //! @details    すべてのモジュールが実装すべきインターフェースクラスです。 
     //!             これは、モジュールがロードされた後に初期化するために使用されます。
     //!             モジュールがロードされた後の初期化と、モジュールがアンロードされる前のクリーンアップに使用されます。
-    //!             1. Startup
+    //!             1. startup
     //!             2. PostLoadCallback
     //!             3. メイン動作
     //!             4. PreUnloadCallback
-    //!             5. Shutdown
+    //!             5. shutdown
     //@―---------------------------------------------------------------------------
     class IModule {
     public:
 
         virtual ~IModule() = default;                    //!< デストラクタ
-        virtual u32 GetMagicCode()const=0;
-        virtual void Startup() {};                      //!< DLLが読み込まれ、モジュールオブジェクトが生成されたときに呼び出される。
-        virtual void Shutdown() {};                     //!< DLLがアンロードされる直前に呼び出される
+        virtual u32 magicCode()const=0;
+        virtual void startup() {};                      //!< DLLが読み込まれ、モジュールオブジェクトが生成されたときに呼び出される。
+        virtual void shutdown() {};                     //!< DLLがアンロードされる直前に呼び出される
 
     };
 

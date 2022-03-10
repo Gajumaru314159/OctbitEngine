@@ -23,7 +23,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     PlatformSystem::~PlatformSystem() {
         if (m_implement) {
-            Shutdown();
+            shutdown();
         }
     }
 
@@ -31,7 +31,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  システムを起動する
     //@―---------------------------------------------------------------------------
-    bool PlatformSystem::Startup() {
+    bool PlatformSystem::startup() {
         m_implement = std::make_unique<detail::PlatformSystemImpl>();
         return true;
     }
@@ -40,7 +40,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  システムを終了する
     //@―---------------------------------------------------------------------------
-    void PlatformSystem::Shutdown() {
+    void PlatformSystem::shutdown() {
         if(m_implement)m_implement.reset();
     }
 
@@ -48,18 +48,18 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  メインウィンドウを取得する
     //@―---------------------------------------------------------------------------
-    Ref<Window> PlatformSystem::GetMainWindow() {
+    Ref<Window> PlatformSystem::getMainWindow() {
         if (!m_implement)return nullptr;
-        return m_implement->GetMainWindow();
+        return m_implement->getMainWindow();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  システムの言語を取得する
     //@―---------------------------------------------------------------------------
-    Language PlatformSystem::GetUserLanguage()const {
+    Language PlatformSystem::getSystemLanguage()const {
         if (!m_implement)return Language::Unknown;
-        return m_implement->GetLanguage();
+        return m_implement->getSystemLanguage();
     }
 
 }// namespace ob::platform

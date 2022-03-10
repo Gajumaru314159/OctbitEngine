@@ -14,7 +14,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  モジュールを読み込み
     //@―---------------------------------------------------------------------------
-    void ModuleManager::UnloadModule(StringView moduleName) {
+    void ModuleManager::unloadModule(StringView moduleName) {
         auto found = m_moduleMap.find(moduleName);
         if (found != m_moduleMap.end()) {
             //found->second.release();
@@ -26,28 +26,28 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  モジュールを読み込み
     //@―---------------------------------------------------------------------------
-    IModule* ModuleManager::LoadModuleImpl(StringView moduleName) {
+    IModule* ModuleManager::loadModuleImpl(StringView moduleName) {
         ModuleLoader module(moduleName);
         return nullptr;
         //auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
-        //if (auto pModule = moduleLoader->GetInterface()) {
+        //if (auto pModule = moduleLoader->getInterface()) {
         //    m_moduleMap[moduleName] = ob::move(moduleLoader);
         //} else {
         //    return nullptr;
         //}
         //
-        //return m_moduleMap[moduleName]->GetInterface();
+        //return m_moduleMap[moduleName]->getInterface();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  モジュールを取得
     //@―---------------------------------------------------------------------------
-    IModule* ModuleManager::GetModule(StringView moduleName)const {
+    IModule* ModuleManager::findModule(StringView moduleName)const {
         auto found = m_moduleMap.find(moduleName);
         if (found != m_moduleMap.end()) {
             if (found->second) {
-                return found->second->GetInterface();
+                return found->second->getInterface();
             }
         }
         return nullptr;
@@ -57,8 +57,8 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  モジュールが読み込まれているか
     //@―---------------------------------------------------------------------------
-    bool ModuleManager::HasLoadedModule(StringView moduleName)const {
-        return GetModule(moduleName)!=nullptr;
+    bool ModuleManager::hasLoadedModule(StringView moduleName)const {
+        return findModule(moduleName)!=nullptr;
     }
 
 }// namespace ob::platform

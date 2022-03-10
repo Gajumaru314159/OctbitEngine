@@ -95,7 +95,7 @@ namespace ob::platform {
         ::SetProp(m_hWnd, PROPERTY_NAME, this);
 
         // ウィンドウを表示
-        Show();
+        show();
     }
 
 
@@ -103,14 +103,14 @@ namespace ob::platform {
     //! @brief      デストラクタ
     //@―---------------------------------------------------------------------------
     WindowImpl::~WindowImpl() {
-        Close();
+        close();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウを表示する
     //@―---------------------------------------------------------------------------
-    void WindowImpl::Show() {
+    void WindowImpl::show() {
         if (m_hWnd) {
             // ウィンドウを表示
             ::ShowWindow(m_hWnd, SW_SHOW);
@@ -121,7 +121,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウを閉じる
     //@―---------------------------------------------------------------------------
-    void WindowImpl::Close() {
+    void WindowImpl::close() {
         if (m_hWnd) {
             HINSTANCE hInst = (HINSTANCE)::GetModuleHandleW(NULL);
             ::DestroyWindow(m_hWnd);
@@ -134,7 +134,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
-    void WindowImpl::AddEventListener(WindowEventType type, const WindowEvent& event) {
+    void WindowImpl::addEventListener(WindowEventType type, const WindowEvent& event) {
         switch (type) {
         case WindowEventType::Move:
             break;
@@ -146,7 +146,7 @@ namespace ob::platform {
             break;
         case WindowEventType::Focus:
             break;
-        case WindowEventType::Close:
+        case WindowEventType::close:
             break;
         case WindowEventType::Destroy:
             break;
@@ -163,7 +163,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
-    void WindowImpl::SetWindowTitle(StringView title) {
+    void WindowImpl::setTitle(StringView title) {
         OB_REQUIRE(m_hWnd);
         m_windowTitle = title;
         WString titleW;
@@ -175,7 +175,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを取得する
     //@―---------------------------------------------------------------------------
-    const String& WindowImpl::GetWindowTitle() const noexcept{
+    const String& WindowImpl::title() const noexcept{
         return m_windowTitle;
     }
 
@@ -183,7 +183,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウサイズの取得
     //@―---------------------------------------------------------------------------
-    Size WindowImpl::GetSize()const {
+    Size WindowImpl::size()const {
         OB_REQUIRE(m_hWnd);
         RECT rect;
         ::GetClientRect(m_hWnd, &rect);
@@ -201,7 +201,7 @@ namespace ob::platform {
     //! @patam clientPoint  クライアント座標
     //! @return             スクリーン座標
     //@―---------------------------------------------------------------------------
-    Point WindowImpl::GetScreenPoint(const Point& clientPoint) const {
+    Point WindowImpl::getScreenPoint(const Point& clientPoint) const {
         OB_REQUIRE(m_hWnd);
         POINT point;
         point.x = clientPoint.x;
@@ -218,7 +218,7 @@ namespace ob::platform {
     //! @patam screenPoint  スクリーン座標  
     //! @return             クライアント座標
     //@―---------------------------------------------------------------------------
-    Point WindowImpl::GetClientPoint(const Point& screenPoint) const {
+    Point WindowImpl::getClientPoint(const Point& screenPoint) const {
         OB_REQUIRE(m_hWnd);
         POINT point;
         point.x = screenPoint.x;

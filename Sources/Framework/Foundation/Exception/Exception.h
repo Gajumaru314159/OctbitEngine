@@ -40,7 +40,7 @@ namespace ob {
 		//@―---------------------------------------------------------------------------
 		//! @brief メッセージの取得
 		//@―---------------------------------------------------------------------------
-		virtual const String& getMessage()const;
+		virtual const String& message()const;
 
 
 	protected:

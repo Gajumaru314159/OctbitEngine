@@ -13,7 +13,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  HWNDを取得
     //@―---------------------------------------------------------------------------
-    void* WindowNativeAccessor::GetHWND(Ref<Window> window) {
+    void* WindowNativeAccessor::getHWND(Ref<Window> window) {
         if (!window)return NULL;
         return NULL;
         //auto* pWindowImpl = nullptr;//static_cast<WindowImpl*>(window->m_impl.get());

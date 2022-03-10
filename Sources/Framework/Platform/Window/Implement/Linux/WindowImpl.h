@@ -18,10 +18,10 @@ namespace ob {
             WindowImpl(const WindowCreationParams& params);
             ~WindowImpl()override;
 
-            virtual void SetWindowTitle(const Char* pTitle) override;
-            virtual Size GetSize() override;
-            virtual Point GetScreenPoint(const Point& clientPoint) override;
-            virtual Point GetClientPoint(const Point& screenPoint) override;
+            virtual void setTitle(const Char* pTitle) override;
+            virtual Size size() override;
+            virtual Point getScreenPoint(const Point& clientPoint) override;
+            virtual Point getClientPoint(const Point& screenPoint) override;
             virtual void setCursor() override;
             virtual bool isValid();
 

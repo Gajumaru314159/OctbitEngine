@@ -41,7 +41,7 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief メッセージの取得
 	//@―---------------------------------------------------------------------------
-	const String& Exception::getMessage()const {
+	const String& Exception::message()const {
 		return m_message;
 	}
 

@@ -31,9 +31,9 @@ namespace ob::platform::detail {
         virtual ~PlatformSystemImpl()override;
 
 
-        virtual Language GetLanguage() const override;
+        virtual Language getSystemLanguage() const override;
 
-        virtual void AddSystemEventListener() override;
+        virtual void addSystemEventListener() override;
 
     };
 

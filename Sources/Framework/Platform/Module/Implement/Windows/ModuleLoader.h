@@ -41,7 +41,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  モジュールの取得
         //@―---------------------------------------------------------------------------
-        IModule* GetInterface()override {
+        IModule* getInterface()override {
             return m_interface.get();
         }
 

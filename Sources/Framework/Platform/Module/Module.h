@@ -42,7 +42,7 @@ namespace ob::platform {
         template<class T>
         auto get()->enable_if_t<is_base_of_v<IModule, T>, T*> {
             if (auto pLoader = m_loader.get()) {
-                return static_cast<T*>(pLoader->GetModule());
+                return static_cast<T*>(pLoader->findModule());
             }
             return nullptr;
         }

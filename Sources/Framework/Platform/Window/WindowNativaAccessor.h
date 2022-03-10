@@ -30,7 +30,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        static void* GetHWND(Ref<Window> window);
+        static void* getHWND(Ref<Window> window);
 
     private:
 

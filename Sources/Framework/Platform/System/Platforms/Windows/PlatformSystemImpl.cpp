@@ -14,7 +14,7 @@ namespace ob::platform::detail {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     PlatformSystemImpl::PlatformSystemImpl() {
-        CreateMainWindow();
+        createMainWindow();
     }
 
 
@@ -29,7 +29,7 @@ namespace ob::platform::detail {
     //@―---------------------------------------------------------------------------
     //! @brief  システムイベントのリスナを追加
     //@―---------------------------------------------------------------------------
-    void PlatformSystemImpl::AddSystemEventListener() {
+    void PlatformSystemImpl::addSystemEventListener() {
     }
 
 }// namespace ob::platform::detail

@@ -32,45 +32,45 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウを表示する
     //@―---------------------------------------------------------------------------
-    void Window::Show() {
+    void Window::show() {
         OB_REQUIRE(m_impl);
-        m_impl->Show();
+        m_impl->show();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウを閉じる
     //@―---------------------------------------------------------------------------
-    void Window::Close() {
+    void Window::close() {
         OB_REQUIRE(m_impl);
-        m_impl->Close();
+        m_impl->close();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
-    void Window::AddEventListener(WindowEventType type, const WindowEvent& event) {
+    void Window::addEventListener(WindowEventType type, const WindowEvent& event) {
         OB_REQUIRE(m_impl);
-        m_impl->AddEventListener(type, event);
+        m_impl->addEventListener(type, event);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
-    void Window::SetWindowTitle(StringView title) {
+    void Window::setTitle(StringView title) {
         OB_REQUIRE(m_impl);
-        m_impl->SetWindowTitle(title);
+        m_impl->setTitle(title);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
-    const String& Window::GetWindowTitle()const {
+    const String& Window::title()const {
         OB_REQUIRE(m_impl);
-        return m_impl->GetWindowTitle();
+        return m_impl->title();
     }
     /*
 
@@ -95,9 +95,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウサイズの取得
     //@―---------------------------------------------------------------------------
-    Size Window::GetSize()const {
+    Size Window::size()const {
         OB_REQUIRE(m_impl);
-        return m_impl->GetSize();
+        return m_impl->size();
     }
     */
 
@@ -108,9 +108,9 @@ namespace ob::platform {
     //! @patam clientPoint  クライアント座標
     //! @return             スクリーン座標
     //@―---------------------------------------------------------------------------
-    Point Window::GetScreenPoint(const Point& clientPoint)const {
+    Point Window::getScreenPoint(const Point& clientPoint)const {
         OB_REQUIRE(m_impl);
-        return m_impl->GetScreenPoint(clientPoint);
+        return m_impl->getScreenPoint(clientPoint);
     }
 
 
@@ -121,9 +121,9 @@ namespace ob::platform {
     //! @patam screenPoint  スクリーン座標  
     //! @return             クライアント座標
     //@―---------------------------------------------------------------------------
-    Point Window::GetClientPoint(const Point& screenPoint)const {
+    Point Window::getClientPoint(const Point& screenPoint)const {
         OB_REQUIRE(m_impl);
-        return m_impl->GetClientPoint(screenPoint);
+        return m_impl->getClientPoint(screenPoint);
     }
 
 

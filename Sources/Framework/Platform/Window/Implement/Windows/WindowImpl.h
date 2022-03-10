@@ -27,37 +27,37 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウを表示する
         //@―---------------------------------------------------------------------------
-        void Show() override;
+        void show() override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウを閉じる
         //@―---------------------------------------------------------------------------
-        void Close() override;
+        void close() override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウ・イベントのリスナを追加
         //@―---------------------------------------------------------------------------
-        void AddEventListener(WindowEventType type, const WindowEvent& event)override;
+        void addEventListener(WindowEventType type, const WindowEvent& event)override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウのタイトルを設定
         //@―---------------------------------------------------------------------------
-        void SetWindowTitle(StringView title) override;
+        void setTitle(StringView title) override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウのタイトルを取得
         //@―---------------------------------------------------------------------------
-        const String& GetWindowTitle() const noexcept override;
+        const String& title() const noexcept override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウサイズの取得
         //@―---------------------------------------------------------------------------
-        Size GetSize()const override;
+        Size size()const override;
 
 
         //@―---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ namespace ob::platform {
         //! @patam clientPoint  クライアント座標
         //! @return             スクリーン座標
         //@―---------------------------------------------------------------------------
-        Point GetScreenPoint(const Point& clientPoint)const override;
+        Point getScreenPoint(const Point& clientPoint)const override;
 
 
         //@―---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ namespace ob::platform {
         //! @patam screenPoint  スクリーン座標  
         //! @return             クライアント座標
         //@―---------------------------------------------------------------------------
-        Point GetClientPoint(const Point& screenPoint)const override;
+        Point getClientPoint(const Point& screenPoint)const override;
 
 
         //@―---------------------------------------------------------------------------
@@ -94,7 +94,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief              HWNDの取得
         //@―---------------------------------------------------------------------------
-        HWND GetHWND() { return m_hWnd; }
+        HWND getHWND() { return m_hWnd; }
 
     private:
 
