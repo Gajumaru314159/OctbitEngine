@@ -8,7 +8,8 @@ message("Load project [${PROJECT_NAME}]")
 LOAD_FILES(out_sources)
 add_executable(${PROJECT_NAME} ${out_sources})
 
-ADD_FORCE_INCLUDE("Runtime/Foundation/Foundation.h")
+SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
+
 
 #------------------------------------------------------------------------------
 # プロジェクト設定

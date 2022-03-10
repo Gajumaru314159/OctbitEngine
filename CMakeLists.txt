@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
 set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")
 #------------------------------------------------------------------------------
 # options
 # option(変数名 "説明" ON/OFF)
@@ -65,6 +65,6 @@ add_subdirectory ("Sources/Test/Framework/Core")
 # アプリケーションプロジェクト読み込み
 
 
-#add_subdirectory ("Sources/Application")
+add_subdirectory ("Sources/Application")
 
 
