@@ -23,7 +23,7 @@ namespace ob {
             virtual Point GetScreenPoint(const Point& clientPoint) override;
             virtual Point GetClientPoint(const Point& screenPoint) override;
             virtual void setCursor() override;
-            virtual bool IsValid();
+            virtual bool isValid();
 
             LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 

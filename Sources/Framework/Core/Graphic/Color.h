@@ -177,7 +177,7 @@ namespace ob {
         //! @param b	青成分
         //! @param a	アルファ
         //@―---------------------------------------------------------------------------
-        void Set(f32 r, f32 g, f32 b, f32 a = 1.0) noexcept;
+        void set(f32 r, f32 g, f32 b, f32 a = 1.0) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -186,19 +186,19 @@ namespace ob {
         //! @param grey	    輝度
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        void Set(f32 grey, f32 a = 1.0) noexcept;
+        void set(f32 grey, f32 a = 1.0) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～にクランプ
         //@―---------------------------------------------------------------------------
-        void Clamp() noexcept;
+        void clamp() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～1.0にクランプ
         //@―---------------------------------------------------------------------------
-        void Clamp01() noexcept;
+        void clamp01() noexcept;
 
 
         //===============================================================
@@ -208,13 +208,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      RGBのうち最小の値を取得
         //@―---------------------------------------------------------------------------
-        f32 GetMinComponent()const noexcept;
+        f32 getMinComponent()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      RGBのうち最大の値を取得
         //@―---------------------------------------------------------------------------
-        f32 GetMaxComponent()const noexcept; 
+        f32 getMaxComponent()const noexcept; 
 
 
         //===============================================================
@@ -224,13 +224,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief          色をカラーコードに変換
         //@―---------------------------------------------------------------------------
-        u32  ToCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
+        u32  toCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          IntColorに変換
         //@―---------------------------------------------------------------------------
-        IntColor ToIntColor()const noexcept;
+        IntColor toIntColor()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -240,7 +240,7 @@ namespace ob {
         //! @param[out] s   彩度出力先
         //! @param[out] v   輝度出力先
         //@―---------------------------------------------------------------------------
-        void ToHSV(f32& h, f32& s, f32& v) noexcept;
+        void toHSV(f32& h, f32& s, f32& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -248,31 +248,31 @@ namespace ob {
         //! 
         //! @param[out] vec	出力先
         //@―---------------------------------------------------------------------------
-        void ToHSV(Vec3& vec) noexcept;
+        void toHSV(Vec3& vec) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief           グレイスケールに変換
         //@―---------------------------------------------------------------------------
-        Color ToGrayscale()const noexcept;
+        Color toGrayscale()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          セピアカラーに変換
         //@―---------------------------------------------------------------------------
-        Color ToSepia()const noexcept;
+        Color toSepia()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          sRGBカラーをリニアカラーに変換
         //@―---------------------------------------------------------------------------
-        Color ToLinear()const;
+        Color toLinear()const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          リニアカラーをsRGBカラーに変換
         //@―---------------------------------------------------------------------------
-        Color ToSRGB()const;
+        Color toSRGB()const;
 
 
         //===============================================================
@@ -282,7 +282,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      等価判定(許容誤差指定)
         //@―---------------------------------------------------------------------------
-        bool Equals(const Color& another, f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        bool equals(const Color& another, f32 tolerance = Mathf::TOLERANCE)const noexcept;
 
 
     public:
@@ -372,7 +372,7 @@ namespace ob {
     //! @details		色を白(1,1,1,1)で初期化します。
     //@―---------------------------------------------------------------------------
     inline Color::Color(EForceInit) noexcept {
-        Set(1, 1, 1, 1);
+        set(1, 1, 1, 1);
     }
 
 
@@ -386,7 +386,7 @@ namespace ob {
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
     inline Color::Color(f32 r, f32 g, f32 b, f32 a) noexcept {
-        Set(r, g, b, a);
+        set(r, g, b, a);
     }
 
 
@@ -398,7 +398,7 @@ namespace ob {
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
     inline Color::Color(f32 grey, f32 a) noexcept {
-        Set(grey, grey, grey, a);
+        set(grey, grey, grey, a);
     }
 
 
@@ -474,7 +474,7 @@ namespace ob {
     //! @brief 加算代入演算子
     //@―---------------------------------------------------------------------------
     inline Color& Color::operator += (const Color& another) noexcept {
-        Set(r + another.r, g + another.g, b + another.b, a + another.a);
+        set(r + another.r, g + another.g, b + another.b, a + another.a);
         return *this;
     }
 
@@ -483,7 +483,7 @@ namespace ob {
     //! @brief 減算代入演算子
     //@―---------------------------------------------------------------------------
     inline Color& Color::operator -= (const Color& another) noexcept {
-        Set(r - another.r, g - another.g, b - another.b, a - another.a);
+        set(r - another.r, g - another.g, b - another.b, a - another.a);
         return *this;
     }
 
@@ -542,7 +542,7 @@ namespace ob {
     //! @param b	青成分
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
-    inline void Color::Set(f32 r, f32 g, f32 b, f32 a) noexcept {
+    inline void Color::set(f32 r, f32 g, f32 b, f32 a) noexcept {
         this->r = r;
         this->g = g;
         this->b = b;
@@ -556,7 +556,7 @@ namespace ob {
     //! @param grey	    輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline void Color::Set(f32 grey, f32 a) noexcept {
+    inline void Color::set(f32 grey, f32 a) noexcept {
         r = grey;
         g = grey;
         b = grey;
@@ -567,7 +567,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～にクランプ
     //@―---------------------------------------------------------------------------
-    inline void Color::Clamp() noexcept {
+    inline void Color::clamp() noexcept {
         r = Mathf::Max(r, 0.0f);
         g = Mathf::Max(g, 0.0f);
         b = Mathf::Max(b, 0.0f);
@@ -577,7 +577,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～1.0にクランプ
     //@―---------------------------------------------------------------------------
-    inline void Color::Clamp01() noexcept {
+    inline void Color::clamp01() noexcept {
         r = Mathf::Clamp01(r);
         g = Mathf::Clamp01(g);
         b = Mathf::Clamp01(b);
@@ -588,7 +588,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Color::GetMinComponent()const noexcept {
+    inline f32 Color::getMinComponent()const noexcept {
         return Mathf::Min(r, g, b);
     }
 
@@ -596,7 +596,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Color::GetMaxComponent()const noexcept {
+    inline f32 Color::getMaxComponent()const noexcept {
         return Mathf::Max(r, g, b);
     }
 
@@ -604,7 +604,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     // @brief      グレイスケールに変換
     //@―---------------------------------------------------------------------------
-    inline Color Color::ToGrayscale()const noexcept {
+    inline Color Color::toGrayscale()const noexcept {
         f32 gray = r * 0.29f + g * 0.57f + b * 0.14f;
         return Color(gray, a);
     }
@@ -613,12 +613,12 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      セピアカラーに変換
     //@―---------------------------------------------------------------------------
-    inline Color Color::ToSepia()const noexcept {
-        Color sepia = this->ToGrayscale();
+    inline Color Color::toSepia()const noexcept {
+        Color sepia = this->toGrayscale();
         sepia.r *= 1.351f;
         sepia.g *= 1.2f;
         sepia.b *= 0.934f;
-        sepia.Clamp01();
+        sepia.clamp01();
         return sepia;
     }
 
@@ -626,7 +626,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      等価判定(許容誤差指定)
     //@―---------------------------------------------------------------------------
-    inline bool Color::Equals(const Color& another, f32 tolerance)const noexcept {
+    inline bool Color::equals(const Color& another, f32 tolerance)const noexcept {
         return
             Mathf::Approximately(r, another.r, tolerance) &&
             Mathf::Approximately(g, another.g, tolerance) &&

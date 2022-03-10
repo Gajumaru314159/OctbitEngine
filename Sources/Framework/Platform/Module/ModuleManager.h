@@ -30,12 +30,12 @@ namespace ob::platform {
     //!             @par
     //!             使用例@n
     //! ```
-    //!             auto pSampleModule = ModuleManager::Get().LoadModule<ISampleModule>("SampleModule.dll");
+    //!             auto pSampleModule = ModuleManager::get().LoadModule<ISampleModule>("SampleModule.dll");
     //!             {
     //!                 auto pSampleInstance = unique_ptr<ISampleInstance>(pSampleModule->CreateInstance());
     //!                 pSampleInstance->Function();
     //!             }
-    //!             ModuleManager::Get().UnloadModule(pSampleModule);
+    //!             ModuleManager::get().UnloadModule(pSampleModule);
     //! ```
     //@―---------------------------------------------------------------------------
     class ModuleManager :public Singleton<ModuleManager> {

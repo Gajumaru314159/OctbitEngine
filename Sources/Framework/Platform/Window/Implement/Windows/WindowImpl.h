@@ -86,7 +86,7 @@ namespace ob::platform {
         //! @details            システムからウィンドウのクローズ処理が呼ばれた場合false
         //!                     を返すようになります。
         //@―---------------------------------------------------------------------------
-        bool IsValid()const noexcept;
+        bool isValid()const noexcept;
 
 
     public:

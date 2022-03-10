@@ -94,13 +94,13 @@ TEST(Vec3, Op) {
 }
 
 
-TEST(Vector, Set) {
+TEST(Vector, set) {
     Vec3 v;
-    v.Set(1, 2, 3);
+    v.set(1, 2, 3);
     EXPECT_EQ(v, Vec3(1, 2, 3));
 
     Vec3 v2;
-    v2.Set(v);
+    v2.set(v);
     EXPECT_EQ(v2, v);
 
     v.SetZero();
@@ -111,7 +111,7 @@ TEST(Vector, Set) {
 }
 
 
-TEST(Vector, Get) {
+TEST(Vector, get) {
     Vec3 v(1, -4, 3);
     EXPECT_EQ(v.GetMaxComponent(), 3);
 
@@ -152,7 +152,7 @@ TEST(Vector, Transform) {
     v.Translate(Vec3(1, 2, 3));
     EXPECT_EQ(v, Vec3(3, 4, 6));
 
-    v.Set(1, 2, 3);
+    v.set(1, 2, 3);
 
     v.RotateZ(90);
     EXPECT_EQ(v, Vec3(-2, 1, 3));
@@ -163,7 +163,7 @@ TEST(Vector, Transform) {
     v.RotateY(90);
     EXPECT_EQ(v, Vec3(1, -3, 2));
 
-    v.Set(1, 2, 3);
+    v.set(1, 2, 3);
     v.Rotate(90, 90, 90);
     EXPECT_EQ(v, Vec3(1, -3, 2));
 
@@ -185,7 +185,7 @@ TEST(Vector, Judge) {
 
 
     EXPECT_FALSE(v.AllComponentsEqual());
-    v.Set(3, 3, 3);
+    v.set(3, 3, 3);
     EXPECT_TRUE(v.AllComponentsEqual());
 
     EXPECT_FALSE(v.IsZero());
@@ -208,8 +208,8 @@ TEST(Vector, Static) {
 
     EXPECT_EQ(Vec3::Cross(a, b), Vec3(14, 3, -19));
 
-    a.Set(2, 0, 0);
-    b.Set(5, 4, 0);
+    a.set(2, 0, 0);
+    b.set(5, 4, 0);
     EXPECT_EQ(Vec3::Dist(a, b), 5);
     EXPECT_EQ(Vec3::MDist(a, b), 7);
 
@@ -219,17 +219,17 @@ TEST(Vector, Static) {
 
     EXPECT_EQ(Vec3::Lerp(a, b, 0.5f), Vec3(3.5f, 2.0f, 0));
 
-    a.Set(1, 0, 0);
-    b.Set(0, 1, 0);
+    a.set(1, 0, 0);
+    b.set(0, 1, 0);
     EXPECT_EQ(Vec3::Slerp(a, b, 0.5f), Vec3(Mathf::CosD(45), Mathf::SinD(45), 0));
 
-    a.Set(3, 5, 3);
-    b.Set(5, 2, 4);
+    a.set(3, 5, 3);
+    b.set(5, 2, 4);
     EXPECT_EQ(Vec3::Max(a, b), Vec3(5, 5, 4));
     EXPECT_EQ(Vec3::Min(a, b), Vec3(3, 2, 3));
 
-    a.Set(1, 0, 0);
-    b.Set(0, 1, 0);
+    a.set(1, 0, 0);
+    b.set(0, 1, 0);
     EXPECT_EQ(Vec3::Angle(a, b), 90.0f);
 
     Vec3 f(1, 1, 1);

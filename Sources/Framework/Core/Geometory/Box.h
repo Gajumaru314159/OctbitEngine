@@ -43,7 +43,7 @@ namespace ob {
         //! @brief          コンストラクタ(点群指定)
         //! 
         //! @details        指定された点群をすべて含む最小のボックスを構築する。
-        //!                 要素数が1以下の時は Reset() が呼び出される。
+        //!                 要素数が1以下の時は reset() が呼び出される。
         //@―---------------------------------------------------------------------------
         Box(const gsl::span<Vec3>& points)noexcept;
 
@@ -87,33 +87,33 @@ namespace ob {
         //! 
         //! @details        点群を含む最小の Box に設定する
         //@―---------------------------------------------------------------------------
-        void Set(const Vec3& center, const Vec3& size = Vec3::zero)noexcept;
+        void set(const Vec3& center, const Vec3& size = Vec3::zero)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          点群から Box を設定
         //! 
         //! @details        点群を含む最小の Box に設定する。
-        //!                 要素数が0の時は Reset() が呼び出される。
+        //!                 要素数が0の時は reset() が呼び出される。
         //@―---------------------------------------------------------------------------
-        void Set(const gsl::span<Vec3>& points)noexcept;
+        void set(const gsl::span<Vec3>& points)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          構造体をゼロ初期化する
         //@―---------------------------------------------------------------------------
-        void Reset()noexcept;
+        void reset()noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          size を絶対値に更新
         //@―---------------------------------------------------------------------------
-        void Normalize()noexcept;
+        void normalize()noexcept;
 
         //@―---------------------------------------------------------------------------
         //! @brief          size を絶対値に更新
         //@―---------------------------------------------------------------------------
-        void SetStartEnd(const Vec3& start, const Vec3& end)noexcept;
+        void setStartEnd(const Vec3& start, const Vec3& end)noexcept;
 
 
         //===============================================================
@@ -123,17 +123,17 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      ボックスの起点となる頂点を取得
         //! 
-        //! @see        GetEnd()
+        //! @see        getEnd()
         //@―---------------------------------------------------------------------------
-        Vec3 GetStart()const noexcept;
+        Vec3 getStart()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      GetStart() と対角となる頂点を取得
+        //! @brief      getStart() と対角となる頂点を取得
         //! 
-        //! @see        GetStart()
+        //! @see        getStart()
         //@―---------------------------------------------------------------------------
-        Vec3 GetEnd()const noexcept;
+        Vec3 getEnd()const noexcept;
 
 
         //===============================================================
@@ -143,7 +143,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0
         //@―---------------------------------------------------------------------------
-        bool IsEmpty()const noexcept;
+        bool isEmpty()const noexcept;
 
     public:
 
@@ -172,7 +172,7 @@ namespace ob {
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
     inline Box::Box(EForceInit)noexcept {
-        Reset();
+        reset();
     }
 
 
@@ -180,7 +180,7 @@ namespace ob {
     //! @brief          コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
     inline Box::Box(const Vec3& size, const Vec3& center)noexcept {
-        Set(size, center);
+        set(size, center);
     }
 
 
@@ -211,7 +211,7 @@ namespace ob {
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
     inline Box& Box::operator+=(const Vec3& point)noexcept {
-        if (IsEmpty()) {
+        if (isEmpty()) {
             return *this;
         }
 
@@ -233,7 +233,7 @@ namespace ob {
     //! 
     //! @detail     点群を含む最小の Box に設定する
     //@―---------------------------------------------------------------------------
-    inline void Box::Set(const Vec3& size, const Vec3& center)noexcept {
+    inline void Box::set(const Vec3& size, const Vec3& center)noexcept {
         this->size = size;
         this->center = center;
     }
@@ -242,7 +242,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体をゼロ初期化する
     //@―---------------------------------------------------------------------------
-    inline void Box::Reset()noexcept {
+    inline void Box::reset()noexcept {
         center.SetZero();
         size.SetZero();
     }
@@ -251,7 +251,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      size を絶対値に更新
     //@―---------------------------------------------------------------------------
-    inline void Box::Normalize()noexcept {
+    inline void Box::normalize()noexcept {
         size = Vec3::Abs(size);
     }
 
@@ -259,7 +259,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      2点を指定して Box を設定
     //@―---------------------------------------------------------------------------
-    inline void Box::SetStartEnd(const Vec3& start, const Vec3& end) noexcept {
+    inline void Box::setStartEnd(const Vec3& start, const Vec3& end) noexcept {
         center = (start + end) * 0.5f;
         size = Vec3::Abs(start - end);
     }
@@ -270,7 +270,7 @@ namespace ob {
     //! 
     //! @see        GetEnd()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::GetStart()const noexcept {
+    inline Vec3 Box::getStart()const noexcept {
         return center + size * 0.5f;
     }
 
@@ -280,7 +280,7 @@ namespace ob {
     //! 
     //! @see        GetStart()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::GetEnd()const noexcept {
+    inline Vec3 Box::getEnd()const noexcept {
         return center - size * 0.5f;
     }
 
@@ -288,7 +288,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0
     //@―---------------------------------------------------------------------------
-    inline bool Box::IsEmpty()const noexcept {
+    inline bool Box::isEmpty()const noexcept {
         return size.IsZero();
     }
 

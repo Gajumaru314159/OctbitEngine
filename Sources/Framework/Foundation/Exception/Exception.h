@@ -40,7 +40,7 @@ namespace ob {
 		//@―---------------------------------------------------------------------------
 		//! @brief メッセージの取得
 		//@―---------------------------------------------------------------------------
-		virtual const String& GetMessage()const;
+		virtual const String& getMessage()const;
 
 
 	protected:
@@ -51,7 +51,7 @@ namespace ob {
 		//! @param format	フォーマット文字列
 		//! @param args		フォーマット引数
 		//@―---------------------------------------------------------------------------
-		void SetMessage(const Char* format, va_list args);
+		void setMessage(const Char* format, va_list args);
 
 
 	private:

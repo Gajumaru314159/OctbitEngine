@@ -107,7 +107,7 @@ namespace ob {
         //! @param b	    青成分
         //! @param a	    アルファ
         //@―---------------------------------------------------------------------------
-        void Set(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
+        void set(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -116,7 +116,7 @@ namespace ob {
         //! @param grey     輝度
         //! @param a	    アルファ
         //@―---------------------------------------------------------------------------
-        void Set(s32 grey, s32 a = 255) noexcept;
+        void set(s32 grey, s32 a = 255) noexcept;
 
 
         //===============================================================
@@ -126,13 +126,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief          RGBのうち最小の値を取得
         //@―---------------------------------------------------------------------------
-        u8 GetMinComponent()const noexcept;
+        u8 getMinComponent()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          RGBのうち最大の値を取得
         //@―---------------------------------------------------------------------------
-        u8 GetMaxComponent()const noexcept;
+        u8 getMaxComponent()const noexcept;
 
 
         //===============================================================
@@ -144,7 +144,7 @@ namespace ob {
         //! 
         //! @param          format  カラーフォーマット(色の並び)
         //@―---------------------------------------------------------------------------
-        u32 ToCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
+        u32 toCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
 
     public:
 
@@ -199,7 +199,7 @@ namespace ob {
     //! @details		色を白(255,255,255,255)で初期化します。
     //@―---------------------------------------------------------------------------
     inline IntColor::IntColor(EForceInit) noexcept {
-        Set(1, 1, 1, 1);
+        set(1, 1, 1, 1);
     }
 
 
@@ -213,7 +213,7 @@ namespace ob {
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
     inline IntColor::IntColor(s32 r, s32 g, s32 b, s32 a) noexcept {
-        Set(r, g, b, a);
+        set(r, g, b, a);
     }
 
 
@@ -225,7 +225,7 @@ namespace ob {
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
     inline IntColor::IntColor(s32 grey, s32 a) noexcept {
-        Set(grey, grey, grey, a);
+        set(grey, grey, grey, a);
     }
 
 
@@ -257,7 +257,7 @@ namespace ob {
     //! @brief			加算代入演算子
     //@―---------------------------------------------------------------------------
     inline IntColor& IntColor::operator += (const IntColor& another) noexcept {
-        Set(r + another.r, g + another.g, b + another.b, a);
+        set(r + another.r, g + another.g, b + another.b, a);
         return *this;
     }
 
@@ -266,7 +266,7 @@ namespace ob {
     //! @brief			減算代入演算子
     //@―---------------------------------------------------------------------------
     inline IntColor& IntColor::operator -= (const IntColor& another) noexcept {
-        Set(r - another.r, g - another.g, b - another.b, a);
+        set(r - another.r, g - another.g, b - another.b, a);
         return *this;
     }
 
@@ -275,7 +275,7 @@ namespace ob {
     //! @brief			乗算代入演算子
     //@―---------------------------------------------------------------------------
     inline IntColor& IntColor::operator *= (const IntColor& another) noexcept {
-        Set((s32)r * another.r / 255,
+        set((s32)r * another.r / 255,
             (s32)g * another.g / 255,
             (s32)b * another.b / 255,
             (s32)a * another.a / 255);
@@ -291,7 +291,7 @@ namespace ob {
     //! @param b	青成分
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
-    inline void IntColor::Set(s32 r, s32 g, s32 b, s32 a) noexcept {
+    inline void IntColor::set(s32 r, s32 g, s32 b, s32 a) noexcept {
         this->r = (u8)get_clamp(r, 0, 255);
         this->g = (u8)get_clamp(g, 0, 255);
         this->b = (u8)get_clamp(b, 0, 255);
@@ -305,15 +305,15 @@ namespace ob {
     //! @param grey	輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline void IntColor::Set(s32 grey, s32 a) noexcept {
-        Set(grey, grey, grey, a);
+    inline void IntColor::set(s32 grey, s32 a) noexcept {
+        set(grey, grey, grey, a);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
-    inline u8 IntColor::GetMinComponent()const noexcept {
+    inline u8 IntColor::getMinComponent()const noexcept {
         return get_min(r, g, b);
     }
 
@@ -321,7 +321,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
-    inline u8 IntColor::GetMaxComponent()const noexcept {
+    inline u8 IntColor::getMaxComponent()const noexcept {
         return get_max(r, g, b);
     }
 

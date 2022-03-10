@@ -27,7 +27,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  参照カウントの取得
     //@―---------------------------------------------------------------------------
-    s32 RefObject::GetReferenceCount()const noexcept {
+    s32 RefObject::getReferenceCount()const noexcept {
         return m_referenceCount.load();
     }
 
@@ -35,14 +35,14 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  参照の追加
     //@―---------------------------------------------------------------------------
-    s32 RefObject::Retain() {
+    s32 RefObject::retain() {
         return m_referenceCount.fetch_add(1);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  参照の解放
     //@―---------------------------------------------------------------------------
-    s32 RefObject::Release() {
+    s32 RefObject::release() {
         m_referenceCount.fetch_sub(1);
         s32 count = m_referenceCount.load();
         if (count <= 0) {
@@ -56,9 +56,9 @@ namespace ob {
     //! 
     //! @param pObj 捜査対象の IRefObject
     //@―---------------------------------------------------------------------------
-    s32 RefObjectHelper::GetReferenceCount(RefObject* pObj) {
+    s32 RefObjectHelper::getReferenceCount(RefObject* pObj) {
         if (pObj == nullptr)return 0;
-        return pObj->GetReferenceCount();
+        return pObj->getReferenceCount();
     }
 
 
@@ -67,9 +67,9 @@ namespace ob {
     //! 
     //! @param pObj 捜査対象の IRefObject
     //@―---------------------------------------------------------------------------
-    s32 RefObjectHelper::Retain(RefObject* pObj) {
+    s32 RefObjectHelper::retain(RefObject* pObj) {
         if (pObj == nullptr)return 0;
-        return pObj->Retain();
+        return pObj->retain();
     }
 
 
@@ -78,9 +78,9 @@ namespace ob {
     //! 
     //! @param pObj 捜査対象の IRefObject
     //@―---------------------------------------------------------------------------
-    s32 RefObjectHelper::Release(RefObject* pObj) {
+    s32 RefObjectHelper::release(RefObject* pObj) {
         if (pObj == nullptr)return 0;
-        return pObj->Release();
+        return pObj->release();
     }
 
 }// namespace ob

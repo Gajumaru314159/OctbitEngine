@@ -26,15 +26,15 @@ namespace ob {
         }
 
 
-        Vec3 Front()const;      //!< 回転後の前ベクトル取得
-        Vec3 Back()const;       //!< 回転後の後ベクトル取得
-        Vec3 Up()const;         //!< 回転後の上ベクトル取得
-        Vec3 Down()const;       //!< 回転後の下ベクトル取得
-        Vec3 Left()const;       //!< 回転後の左ベクトル取得
-        Vec3 Right()const;      //!< 回転後の右ベクトル取得
+        Vec3 front()const;      //!< 回転後の前ベクトル取得
+        Vec3 back()const;       //!< 回転後の後ベクトル取得
+        Vec3 up()const;         //!< 回転後の上ベクトル取得
+        Vec3 down()const;       //!< 回転後の下ベクトル取得
+        Vec3 left()const;       //!< 回転後の左ベクトル取得
+        Vec3 right()const;      //!< 回転後の右ベクトル取得
 
-        Rotator& Clamp();
-        bool IsNaN();
+        Rotator& clamp();
+        bool isNaN();
 
     public:
 

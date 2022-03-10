@@ -21,13 +21,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      インスタンスの取得
         //@―---------------------------------------------------------------------------
-        static constexpr T& Get()noexcept;
+        static constexpr T& ref()noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      インスタンスのポインタの取得
         //@―---------------------------------------------------------------------------
-        static constexpr T* Ptr()noexcept;
+        static constexpr T* ptr()noexcept;
 
     protected:
 
@@ -90,7 +90,7 @@ namespace ob {
     //! @brief      インスタンスの取得
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr T& Singleton<T>::Get()noexcept {
+    constexpr T& Singleton<T>::ref()noexcept {
         assert(s_pInstance != nullptr);
         return *s_pInstance;
     }
@@ -100,7 +100,7 @@ namespace ob {
     //! @brief      インスタンスのポインタの取得
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr T* Singleton<T>::Ptr()noexcept {
+    constexpr T* Singleton<T>::ptr()noexcept {
         assert(s_pInstance != nullptr);
         return s_pInstance;
     }

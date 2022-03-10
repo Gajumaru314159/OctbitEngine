@@ -53,7 +53,7 @@ TEST(Matrix, GetColumn) {
         0, 0, 0, 2,
         0, 2, 0, 3);
 
-    Vec4 vec = mtxA.GetColumn(1);
+    Vec4 vec = mtxA.getColumn(1);
     EXPECT_EQ(vec, Vec4(1, 0, 0, 2));
 }
 
@@ -64,22 +64,22 @@ TEST(Matrix, GetRow) {
         0, 0, 0, 2,
         0, 2, 0, 3);
 
-    Vec4 vec = mtxA.GetRow(3);
+    Vec4 vec = mtxA.getRow(3);
     EXPECT_EQ(vec, Vec4(0, 2, 0, 3));
 }
 
 TEST(Matrix, Translate) {
     Matrix mtx;
-    mtx.SetRow(3, Vec4(1, 2, 3, 1));
+    mtx.setRow(3, Vec4(1, 2, 3, 1));
 
     Matrix mtx2;
-    mtx2.Translate(1, 2, 3);
+    mtx2.translate(1, 2, 3);
     EXPECT_EQ(mtx2, mtx2);
 }
 
 TEST(Matrix, Rotate) {
     Matrix mtx(EForceInit::Force);
-    mtx.Rotate(0.0f, 90.0f, 0.0f);
+    mtx.rotate(0.0f, 90.0f, 0.0f);
 
     Matrix mtx2(
         0, 0, -1, 0,

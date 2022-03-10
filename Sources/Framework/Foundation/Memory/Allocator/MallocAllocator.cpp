@@ -31,7 +31,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープの開放
     //@―---------------------------------------------------------------------------
-    void MallocAllocator::Release() {
+    void MallocAllocator::release() {
     }
 
 
@@ -42,7 +42,7 @@ namespace ob {
     //! @param[in] alignment    アライメント
     //! @param[in] zeroClear    確保したバッファをゼロで初期化するか
     //@―---------------------------------------------------------------------------
-    void* MallocAllocator::Allocate(size_t size, u32 alignment, bool zeroClear) {
+    void* MallocAllocator::allocate(size_t size, u32 alignment, bool zeroClear) {
         assert(0 <= alignment);
 
         const size_t allocSize = sizeof(BlockHeader) + size + alignment;
@@ -79,7 +79,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                メモリの開放
     //@―---------------------------------------------------------------------------
-    void MallocAllocator::Deallocate(void* pBuffer) {
+    void MallocAllocator::deallocate(void* pBuffer) {
         free(pBuffer);
     }
 
@@ -87,7 +87,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名の取得
     //@―---------------------------------------------------------------------------
-    const Char* MallocAllocator::GetName() const {
+    const Char* MallocAllocator::getName() const {
         return m_pName;
     }
 
@@ -95,7 +95,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータのヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t MallocAllocator::GetHeapSize() const {
+    size_t MallocAllocator::getHeapSize() const {
         return static_cast<size_t>(-1);
     }
 
@@ -103,7 +103,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータの使用可能なヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t MallocAllocator::GetFreeHeapSize() const {
+    size_t MallocAllocator::getFreeHeapSize() const {
         return static_cast<size_t>(-1);
     }
 
@@ -111,7 +111,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief	                利用可能な状態かどうか
     //@―---------------------------------------------------------------------------
-    bool MallocAllocator::IsValid() const {
+    bool MallocAllocator::isValid() const {
         return true;
     }
 

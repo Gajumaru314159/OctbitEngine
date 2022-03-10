@@ -37,7 +37,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     Color::Color(const IntColor& another) noexcept {
         const f32 div = 1.0f / 255.0f;
-        Set(another.r * div, another.g * div, another.b * div, another.a * div);
+        set(another.r * div, another.g * div, another.b * div, another.a * div);
     }
 
 
@@ -45,7 +45,7 @@ namespace ob {
     //! @brief Vec3 を変換して初期化(アルファは1.0)
     //@―---------------------------------------------------------------------------
     Color::Color(const Vec3& another) noexcept {
-        Set(another.x, another.y, another.z);
+        set(another.x, another.y, another.z);
     }
 
 
@@ -53,23 +53,23 @@ namespace ob {
     //! @brief Vec4 を変換して初期化
     //@―---------------------------------------------------------------------------
     Color::Color(const Vec4& another) noexcept {
-        Set(another.x, another.y, another.z, another.w);
+        set(another.x, another.y, another.z, another.w);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 色をカラーコードに変換
     //@―---------------------------------------------------------------------------
-    u32 Color::ToCode(ColorCodeFormat format)const noexcept {
-        IntColor c32=ToIntColor();
-        return c32.ToCode();
+    u32 Color::toCode(ColorCodeFormat format)const noexcept {
+        IntColor c32=toIntColor();
+        return c32.toCode();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          IntColorに変換
     //@―---------------------------------------------------------------------------
-    IntColor Color::ToIntColor()const noexcept {
+    IntColor Color::toIntColor()const noexcept {
         return IntColor(
             static_cast<s32>(get_clamp01(r) * 255),
             static_cast<s32>(get_clamp01(g) * 255),
@@ -85,7 +85,7 @@ namespace ob {
     //! @param[out] s   彩度出力先
     //! @param[out] v   輝度出力先
     //@―---------------------------------------------------------------------------
-    void Color::ToHSV(f32& h, f32& s, f32& v) noexcept {
+    void Color::toHSV(f32& h, f32& s, f32& v) noexcept {
         f32 max = Mathf::Max(r, g, b);
         f32 min = Mathf::Min(r, g, b);
         h = max - min;
@@ -113,15 +113,15 @@ namespace ob {
     //! 
     //! @param[out] vec	出力先
     //@―---------------------------------------------------------------------------
-    void Color::ToHSV(Vec3& vec) noexcept {
-        ToHSV(vec.x, vec.y, vec.z);
+    void Color::toHSV(Vec3& vec) noexcept {
+        toHSV(vec.x, vec.y, vec.z);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      リニアカラーに変換
     //@―---------------------------------------------------------------------------
-    Color Color::ToLinear()const {
+    Color Color::toLinear()const {
         Color linear;
         auto convert = [](f32 value) {
             return value <= 0.04045f ? value / 12.92f : Mathf::Pow(value + 0.055f, 2.4f);
@@ -138,7 +138,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      sRGBカラーに変換
     //@―---------------------------------------------------------------------------
-    Color Color::ToSRGB()const {
+    Color Color::toSRGB()const {
         Color linear;
         auto convert = [](f32 value) {
             return value <= 0.0031308f ? value * 12.92f : Mathf::Pow(value, 1.0f / 2.4f) * 1.055f - 0.055f;
@@ -204,8 +204,8 @@ namespace ob {
     Color Color::LerpHSV(Color a, Color b, f32 t) noexcept {
         f32 aH, aS, aV;
         f32 bH, bS, bV;
-        a.ToHSV(aH, aS, aV);
-        b.ToHSV(bH, bS, bV);
+        a.toHSV(aH, aS, aV);
+        b.toHSV(bH, bS, bV);
 
         if (0.5f < Mathf::Abs(aH - bH)) {
             if (aH < bH)

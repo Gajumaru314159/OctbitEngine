@@ -61,13 +61,13 @@ TEST(Capsule, Getter) {
         f32 radius = 2.f;
         Capsule capsule(pos1, pos2, radius);
 
-        EXPECT_EQ(capsule.GetHeight(), Vec3::Dist(pos1, pos2) + radius);
-        EXPECT_EQ(capsule.GetPointDistance(), Vec3::Dist(pos1,pos2));
+        EXPECT_EQ(capsule.getHeight(), Vec3::Dist(pos1, pos2) + radius);
+        EXPECT_EQ(capsule.getMinHeight(), Vec3::Dist(pos1,pos2));
     }
 
     // 中心 / 高さ / 回転
     {
         Capsule capsule(Vec3(0,3,3),Vec3(0,5,2),1.0f);
-        EXPECT_EQ(capsule.GetDirection(), Vec3(0, 2, -1).GetUnitVec());
+        EXPECT_EQ(capsule.getDirection(), Vec3(0, 2, -1).GetUnitVec());
     }
 }

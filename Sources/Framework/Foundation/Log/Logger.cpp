@@ -19,7 +19,7 @@ namespace ob
     //! @param category         カテゴリ名
     //! @param pMessage         メッセージ
     //@―---------------------------------------------------------------------------
-    void Logger::AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
+    void Logger::addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
     {
         Log log;
         log.type = type;
@@ -44,7 +44,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの追加
     //@―---------------------------------------------------------------------------
-    void Logger::AddEvent(EventHandle& handle, EventDelegateType delegate) {
+    void Logger::addEvent(EventHandle& handle, EventDelegateType delegate) {
         m_notifier.add(handle, delegate);
     }
 
@@ -52,7 +52,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの削除
     //@―---------------------------------------------------------------------------
-    void Logger::RemoveEvent(EventHandle& handle) {
+    void Logger::removeEvent(EventHandle& handle) {
         m_notifier.remove(handle);
     }
     

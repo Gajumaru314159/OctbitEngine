@@ -124,7 +124,7 @@ namespace ob {
     //! 
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
-    String UUID::ToString() const {
+    String UUID::toString() const {
         Char fmtD[] = TC("00000000-0000-0000-0000-000000000000");
 
         Char* str = fmtD;
@@ -159,7 +159,7 @@ namespace ob {
     //! @retval true	空
     //! @retval false	空ではない
     //@―---------------------------------------------------------------------------
-    bool UUID::IsEmpty() const {
+    bool UUID::isEmpty() const {
         for (auto i : m_data) {
             if (i != 0) return false;
         }

@@ -18,7 +18,7 @@ namespace ob {
     //! @brief メモリ確保
     //@―---------------------------------------------------------------------------
     void* allocator_base::allocate(std::size_t n) {
-        return MemorySystem::GetHeapAllocator().Allocate(n);
+        return MemorySystem::GetHeapAllocator().allocate(n);
     }
 
 

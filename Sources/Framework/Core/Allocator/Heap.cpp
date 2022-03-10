@@ -25,7 +25,7 @@ namespace ob {
         // メモリの破壊を検知しました。
         assert(pHeader->signature == MEMORY_SIGNATURE);
 #endif
-        pHeader->pHeap->Deallocate(pHeader->pRaw);
+        pHeader->pHeap->deallocate(pHeader->pRaw);
     }
 
 

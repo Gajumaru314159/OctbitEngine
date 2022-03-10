@@ -13,7 +13,7 @@ namespace ob {
     //! 
     //! @param format   カラーフォーマット(色の並び)
     //@―---------------------------------------------------------------------------
-    u32 IntColor::ToCode(ColorCodeFormat format)const noexcept {
+    u32 IntColor::toCode(ColorCodeFormat format)const noexcept {
         switch (format) {
         case ob::ColorCodeFormat::ARGB:
             return (a << 24) | (r << 16) | (g << 8) | (b);

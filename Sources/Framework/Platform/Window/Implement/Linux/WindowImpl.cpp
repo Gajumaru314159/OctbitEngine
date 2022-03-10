@@ -136,7 +136,7 @@ namespace ob {
 
 
 
-        bool WindowsWindow::IsValid() {
+        bool WindowsWindow::isValid() {
             return m_hWnd != nullptr;
         }
 

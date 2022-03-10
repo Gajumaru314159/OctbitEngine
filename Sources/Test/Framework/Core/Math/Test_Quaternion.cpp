@@ -56,45 +56,45 @@ TEST(Quat, Rotate) {
 
     Quat q1 = qy * qx * qz;
     Quat q2 = Quat::identity;
-    q2.RotateZ(45);
-    q2.RotateX(90);
-    q2.RotateY(90);
+    q2.rotateZ(45);
+    q2.rotateX(90);
+    q2.rotateY(90);
     EXPECT_EQ(q1, q2);
     Quat q2_2 = Quat::identity;
-    q2_2.Rotate(90, 90, 45);
+    q2_2.rotate(90, 90, 45);
     EXPECT_EQ(q2, q2_2);
 
 
     Quat q3 = qy * qx * qz;
     Quat q4 = Quat::identity;
-    q4.RotateLocalY(90);
-    q4.RotateLocalX(90);
-    q4.RotateLocalZ(45);
+    q4.rotateLocalY(90);
+    q4.rotateLocalX(90);
+    q4.rotateLocalZ(45);
     EXPECT_EQ(q3, q4);
     Quat q4_2 = Quat::identity;
-    q4_2.RotateLocal(90, 90, 45);
+    q4_2.rotateLocal(90, 90, 45);
     EXPECT_EQ(q4, q4_2);
 }
 
-TEST(Quat, Get) {
+TEST(Quat, get) {
     Quat q(90, 90, 0);
 
-    EXPECT_EQ(q.GetFront(), Vec3::down);
-    EXPECT_EQ(q.GetBack(), Vec3::up);
-    EXPECT_EQ(q.GetUp(), Vec3::right);
-    EXPECT_EQ(q.GetDown(), Vec3::left);
-    EXPECT_EQ(q.GetRight(), Vec3::back);
-    EXPECT_EQ(q.GetLeft(), Vec3::front);
+    EXPECT_EQ(q.getFront(), Vec3::down);
+    EXPECT_EQ(q.getBack(), Vec3::up);
+    EXPECT_EQ(q.getUp(), Vec3::right);
+    EXPECT_EQ(q.getDown(), Vec3::left);
+    EXPECT_EQ(q.getRight(), Vec3::back);
+    EXPECT_EQ(q.getLeft(), Vec3::front);
 
-    EXPECT_EQ(q.GetAxis(), Vec3(1, 1, -1).GetUnitVec());
-    f32 ang = q.GetAngle();
-    EXPECT_EQ(q.GetAngle(), 120.0f);
+    EXPECT_EQ(q.getAxis(), Vec3(1, 1, -1).GetUnitVec());
+    f32 ang = q.getAngle();
+    EXPECT_EQ(q.getAngle(), 120.0f);
 
 }
 
 TEST(Quat, GetRotation) {
     Quat q(30, 90, 0);
 
-    Vec3 r = q.GetRot();
+    Vec3 r = q.getRot();
     EXPECT_EQ(r, Vec3(30, 90, 0));
 }

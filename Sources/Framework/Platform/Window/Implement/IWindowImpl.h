@@ -27,7 +27,7 @@ namespace ob::platform {
         virtual Size    GetSize()const = 0;
         virtual Point   GetScreenPoint(const Point& clientPoint)const = 0;
         virtual Point   GetClientPoint(const Point& screenPoint)const = 0;
-        virtual bool    IsValid()const noexcept = 0;
+        virtual bool    isValid()const noexcept = 0;
     };
 
 }// namespace ob::platform

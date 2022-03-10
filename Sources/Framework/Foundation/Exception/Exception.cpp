@@ -41,7 +41,7 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief メッセージの取得
 	//@―---------------------------------------------------------------------------
-	const String& Exception::GetMessage()const {
+	const String& Exception::getMessage()const {
 		return m_message;
 	}
 
@@ -52,7 +52,7 @@ namespace ob
 	//! @param format	フォーマット文字列
 	//! @param args		フォーマット引数
 	//@―---------------------------------------------------------------------------
-	void Exception::SetMessage(const Char* format, va_list args) {
+	void Exception::setMessage(const Char* format, va_list args) {
 
 	}
 

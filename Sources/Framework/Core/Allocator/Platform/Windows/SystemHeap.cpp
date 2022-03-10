@@ -33,7 +33,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープの開放
     //@―---------------------------------------------------------------------------
-    void SystemHeap::Release()
+    void SystemHeap::release()
     {
     }
 
@@ -44,7 +44,7 @@ namespace ob
     //! @param[in] alignment    アライメント
     //! @param[in] zeroClear    確保したバッファをゼロで初期化するか
     //@―---------------------------------------------------------------------------
-    void* SystemHeap::Allocate(size_t size, u32 alignment, bool zeroClear)
+    void* SystemHeap::allocate(size_t size, u32 alignment, bool zeroClear)
     {
         assert(m_handle!=NULL);
         assert(0 <= alignment);
@@ -79,7 +79,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                メモリの開放
     //@―---------------------------------------------------------------------------
-    void SystemHeap::Deallocate(void* pBuffer)
+    void SystemHeap::deallocate(void* pBuffer)
     {
         ::HeapFree(m_handle,0,pBuffer);
     }
@@ -88,7 +88,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名の取得
     //@―---------------------------------------------------------------------------
-    Char* SystemHeap::GetName() const     {
+    Char* SystemHeap::getName() const     {
         return m_pName;
     }
 
@@ -96,7 +96,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータのヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::GetHeapSize() const     {
+    size_t SystemHeap::getHeapSize() const     {
         return static_cast<size_t>(-1);
     }
 
@@ -104,7 +104,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータの使用可能なヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::GetFreeHeapSize() const
+    size_t SystemHeap::getFreeHeapSize() const
     {
         return static_cast<size_t>(-1);
     }
@@ -113,7 +113,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                利用可能な状態かどうか
     //@―---------------------------------------------------------------------------
-    bool SystemHeap::IsValid() const
+    bool SystemHeap::isValid() const
     {
         return true;
     }

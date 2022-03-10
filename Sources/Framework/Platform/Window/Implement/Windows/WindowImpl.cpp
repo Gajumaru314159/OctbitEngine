@@ -234,7 +234,7 @@ namespace ob::platform {
     //! @details            システムからウィンドウのクローズ処理が呼ばれた場合false
     //!                     を返すようになります。
     //@―---------------------------------------------------------------------------
-    bool WindowImpl::IsValid()const noexcept {
+    bool WindowImpl::isValid()const noexcept {
         return m_hWnd != nullptr;
     }
 

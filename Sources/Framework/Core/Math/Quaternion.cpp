@@ -27,7 +27,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     Vec3 Quat::operator *  (const Vec3& v) const noexcept {
         Quat vec(v.x, v.y, v.z, 0.0f);
-        vec = (*this) * vec * GetInverse();
+        vec = (*this) * vec * getInverse();
         return Vec3(vec.x, vec.y, vec.z);
     }
 
@@ -48,8 +48,8 @@ namespace ob {
     inline Quat Quat::operator *= (f32 scalar) {
         f32 angle;
         Vec3 axis;
-        ToAxisAndAngle(angle, axis);
-        Set(angle * scalar, axis);
+        toAxisAndAngle(angle, axis);
+        set(angle * scalar, axis);
         return *this;
     }
 
@@ -57,15 +57,15 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief ロール・ピッチ・ヨー設定
     //@―---------------------------------------------------------------------------
-    void Quat::Set(const Vec3& rotation) {
-        Set(rotation.x, rotation.y, rotation.z);
+    void Quat::set(const Vec3& rotation) {
+        set(rotation.x, rotation.y, rotation.z);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 任意軸回転設定
     //@―---------------------------------------------------------------------------
-    void Quat::Set(f32 angle, const Vec3& axis) {
+    void Quat::set(f32 angle, const Vec3& axis) {
         f32 s, c;
         Mathf::SinCos(Mathf::Degrees(angle * 0.5f), s, c);
         x = axis.x * s;
@@ -83,7 +83,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief グローバル回転
     //@―---------------------------------------------------------------------------
-    void Quat::Rotate(const Vec3& eulerAngles) {
+    void Quat::rotate(const Vec3& eulerAngles) {
         (*this) = Quat(eulerAngles) * (*this);
     }
 
@@ -91,7 +91,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief ローカル回転
     //@―---------------------------------------------------------------------------
-    void Quat::RotateLocal(const Vec3& eulerAngles) {
+    void Quat::rotateLocal(const Vec3& eulerAngles) {
         (*this) *= Quat(eulerAngles);
     }
 
@@ -99,7 +99,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の前ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetFront()const noexcept {
+    Vec3 Quat::getFront()const noexcept {
         return (*this) * Vec3::front;
     }
 
@@ -107,7 +107,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の後ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetBack()const noexcept {
+    Vec3 Quat::getBack()const noexcept {
         return (*this) * Vec3::back;
     }
 
@@ -115,7 +115,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の上ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetUp()const noexcept {
+    Vec3 Quat::getUp()const noexcept {
         return (*this) * Vec3::up;
     }
 
@@ -123,7 +123,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の下ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetDown()const noexcept {
+    Vec3 Quat::getDown()const noexcept {
         return (*this) * Vec3::down;
     }
 
@@ -131,7 +131,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の左ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetLeft()const noexcept {
+    Vec3 Quat::getLeft()const noexcept {
         return (*this) * Vec3::left;
     }
 
@@ -139,7 +139,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転後の右ベクトル取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetRight()const noexcept {
+    Vec3 Quat::getRight()const noexcept {
         return (*this) * Vec3::right;
     }
 
@@ -147,7 +147,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 行列表現を取得
     //@―---------------------------------------------------------------------------
-    Matrix Quat::GetMatrix()const noexcept {
+    Matrix Quat::getMatrix()const noexcept {
         const f32 ww = w * w;
         const f32 xx = x * x;
         const f32 yy = y * y;
@@ -164,7 +164,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief オイラー角での表現を取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetRot()const {
+    Vec3 Quat::getRot()const {
         f32 tx, ty, tz;
         f32 sx = -2 * (y * z - w * x);
         if (Mathf::Abs(sx - 1.0f) < Mathf::EPSILON) {
@@ -190,7 +190,7 @@ namespace ob {
     //! 
     //! @return 回転量が0の場合はVector3(0.0f,1.0f,0.0f)を返す。
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::GetAxis() const {
+    Vec3 Quat::getAxis() const {
         f32 sin = Mathf::Sqrt(1.0f - w * w);
         if (sin <= Mathf::EPSILON)return Vec3(0.0f, 1.0f, 0.0f);
         f32 div = 1.0f / sin;
@@ -201,7 +201,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 回転軸と回転量を取得
     //@―---------------------------------------------------------------------------
-    void Quat::ToAxisAndAngle(f32& angle, Vec3& axis) const {
+    void Quat::toAxisAndAngle(f32& angle, Vec3& axis) const {
         f32 sin = Mathf::Sqrt(1.0f - w * w);
         if (sin <= Mathf::EPSILON) {
             angle = 0.0f;
@@ -210,14 +210,14 @@ namespace ob {
         f32 div = 1.0f / sin;
 
         angle = Mathf::Radians(Mathf::Acos(w) * 2.0f);
-        axis.Set(x * div, y * div, z * div);
+        axis.set(x * div, y * div, z * div);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 回転軸と回転量を取得
     //@―---------------------------------------------------------------------------
-    void Quat::ToSwingTwist(const Vec3& twistAxis, Quat& outSwing, Quat& outTwist) const {
+    void Quat::toSwingTwist(const Vec3& twistAxis, Quat& outSwing, Quat& outTwist) const {
         // Vector part projected onto twist axis
         Vec3 Projection = Vec3::Dot(twistAxis, Vec3(x, y, z)) * twistAxis;
 
@@ -225,14 +225,14 @@ namespace ob {
         outTwist = Quat(Projection.x, Projection.y, Projection.z, w);
 
         // Singularity close to 180deg
-        if (outTwist.GetSqrMag() == 0.0f) {
+        if (outTwist.getSqrMag() == 0.0f) {
             outTwist = Quat::identity;
         } else {
-            outTwist.Normalize();
+            outTwist.normalize();
         }
 
         // Set swing
-        outSwing = (*this) * outTwist.GetInverse();
+        outSwing = (*this) * outTwist.getInverse();
     }
 
 
@@ -272,7 +272,7 @@ namespace ob {
     Quat Quat::Lerp(const Quat& a, const Quat& b, f32 t) {
         if (t <= 0.0f)return a;
         if (1.0f <= t)return b;
-        return Quat(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t).GetNorm();
+        return Quat(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t).getNorm();
     }
 
 

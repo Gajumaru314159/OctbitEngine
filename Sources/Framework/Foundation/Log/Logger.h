@@ -57,7 +57,7 @@ namespace ob
         //! @param category         カテゴリ名
         //! @param pMessage         メッセージ
         //@―---------------------------------------------------------------------------
-        void AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
+        void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
 
 
         //@―---------------------------------------------------------------------------
@@ -72,22 +72,22 @@ namespace ob
         //! @param ...args          フォーマット引数
         //@―---------------------------------------------------------------------------
         template<typename... Args>
-        void AddLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
+        void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
             const String message = fmt::format(pFormat, ob::forward<Args>(args)...);
-            AddLog(type, sourceLocation, category, message.c_str());
+            addLog(type, sourceLocation, category, message.c_str());
         }
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの追加
         //@―---------------------------------------------------------------------------
-        void AddEvent(EventHandle& handle, EventDelegateType delegate);
+        void addEvent(EventHandle& handle, EventDelegateType delegate);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの削除
         //@―---------------------------------------------------------------------------
-        void RemoveEvent(EventHandle& handle);
+        void removeEvent(EventHandle& handle);
 
 
     private:

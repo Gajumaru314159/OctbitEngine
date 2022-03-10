@@ -99,7 +99,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator * (const Quat& other) const {
         Matrix mtx = *this;
-        return mtx *= other.GetMatrix();
+        return mtx *= other.getMatrix();
     }
 
 
@@ -107,7 +107,7 @@ namespace ob {
     //! @brief Quat 合成代入演算子
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator *= (const Quat& other) {
-        (*this) *= other.GetMatrix();
+        (*this) *= other.getMatrix();
         return *this;
     }
 
@@ -129,7 +129,7 @@ namespace ob {
     //! @details 存在しない行を取得しようとした場合はエラー
     //! @param index 行インデックス
     //@―---------------------------------------------------------------------------
-    Vec4 Matrix::GetColumn(const s32 index)const {
+    Vec4 Matrix::getColumn(const s32 index)const {
         OB_REQUIRE(0 <= index && index < 4);
         return Vec4(m[0][index], m[1][index], m[2][index], m[3][index]);
     }
@@ -141,7 +141,7 @@ namespace ob {
     //! @details 存在しない列を取得しようとした場合はエラー
     //! @param index 列インデックス
     //@―---------------------------------------------------------------------------
-    Vec4 Matrix::GetRow(const s32 index)const {
+    Vec4 Matrix::getRow(const s32 index)const {
         OB_REQUIRE(0 <= index && index < 4);
         return Vec4(m[index][0], m[index][1], m[index][2], m[index][3]);
     }
@@ -154,7 +154,7 @@ namespace ob {
     //! @param index 行インデックス
     //! @param column 行ベクトル
     //@―---------------------------------------------------------------------------
-    void Matrix::SetColumn(const s32 index, const Vec4& column) {
+    void Matrix::setColumn(const s32 index, const Vec4& column) {
         if (index < 0 || COL <= index)return;
         m[0][index] = column.x;
         m[1][index] = column.y;
@@ -169,7 +169,7 @@ namespace ob {
     //! @param index 列インデックス
     //! @param row 列ベクトル
     //@―---------------------------------------------------------------------------
-    void Matrix::SetRow(const s32 index, const Vec4& column) {
+    void Matrix::setRow(const s32 index, const Vec4& column) {
         if (index < 0 || ROW <= index)return;
         m[index][0] = column.x;
         m[index][1] = column.y;
@@ -181,7 +181,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 行列値の設定
     //@―---------------------------------------------------------------------------
-    void Matrix::Set(const f32 m00, const f32 m01, const f32 m02, const f32 m03,
+    void Matrix::set(const f32 m00, const f32 m01, const f32 m02, const f32 m03,
         const f32 m10, const f32 m11, const f32 m12, const f32 m13,
         const f32 m20, const f32 m21, const f32 m22, const f32 m23,
         const f32 m30, const f32 m31, const f32 m32, const f32 m33) {
@@ -209,8 +209,8 @@ namespace ob {
     //! 
     //! @param position 移動量
     //@―---------------------------------------------------------------------------
-    void Matrix::Translate(const Vec3& pos) {
-        Translate(pos.x, pos.y, pos.z);
+    void Matrix::translate(const Vec3& pos) {
+        translate(pos.x, pos.y, pos.z);
     }
 
 
@@ -221,7 +221,7 @@ namespace ob {
     //! @param y Y軸の回転量
     //! @param z Z軸の回転量
     //@―---------------------------------------------------------------------------
-    void Matrix::Rotate(const f32 x, const f32 y, const f32 z) {
+    void Matrix::rotate(const f32 x, const f32 y, const f32 z) {
         const f32 sr = Mathf::SinD(x);
         const f32 cr = Mathf::CosD(x);
         const f32 sp = Mathf::SinD(y);
@@ -243,8 +243,8 @@ namespace ob {
     //! 
     //! @param eulerAngles 回転量
     //@―---------------------------------------------------------------------------
-    void Matrix::Rotate(const Vec3& eulerAngles) {
-        Rotate(eulerAngles.x, eulerAngles.y, eulerAngles.z);
+    void Matrix::rotate(const Vec3& eulerAngles) {
+        rotate(eulerAngles.x, eulerAngles.y, eulerAngles.z);
     }
 
 
@@ -253,8 +253,8 @@ namespace ob {
     //! 
     //! @param rotation 回転量
     //@―---------------------------------------------------------------------------
-    void Matrix::Rotate(const Quat& quat) {
-        (*this) *= quat.GetMatrix();
+    void Matrix::rotate(const Quat& quat) {
+        (*this) *= quat.getMatrix();
     }
 
 
@@ -263,15 +263,15 @@ namespace ob {
     //! 
     //! @param scale 拡大縮小量
     //@―---------------------------------------------------------------------------
-    void Matrix::Scale(const Vec3& scale) {
-        Scale(scale.x, scale.y, scale.z);
+    void Matrix::scale(const Vec3& scale) {
+        scale(scale.x, scale.y, scale.z);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 行列式の計算
     //@―---------------------------------------------------------------------------
-    f32 Matrix::GetDeterminant()const {
+    f32 Matrix::getDeterminant()const {
         f32 ret = 0;
         for (s32 i = 0; i < ROW; i++) {
             f32 tmp = 1;
@@ -291,8 +291,8 @@ namespace ob {
     //! 
     //! @detail 逆行列が計算できない場合は単位行列を返す
     //@―---------------------------------------------------------------------------
-    bool Matrix::GetInverse(Matrix& dest)const {
-        f32 det = GetDeterminant();
+    bool Matrix::getInverse(Matrix& dest)const {
+        f32 det = getDeterminant();
         if (Mathf::Abs(det) <= Mathf::EPSILON)return false;
 
         f32 invDet = 1.0f / det;
@@ -328,7 +328,7 @@ namespace ob {
     //! 
     //! @note       直交行列の転置行列は逆行列となる。
     //@―---------------------------------------------------------------------------
-    Matrix Matrix::GetTranspose()const {
+    Matrix Matrix::getTranspose()const {
         Matrix ret;
         for (s32 i = 0; i < COL; i++) {
             for (s32 j = 0; j < ROW; j++) {
@@ -341,7 +341,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 行列から回転量を計算
     //@―---------------------------------------------------------------------------
-    Vec3 Matrix::GetTrans()const {
+    Vec3 Matrix::getTrans()const {
         return Vec3(m[0][3], m[1][3], m[2][3]);
     }
 
@@ -349,15 +349,15 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 行列から回転量を計算
     //@―---------------------------------------------------------------------------
-    Vec3 Matrix::GetRot()const {
-        return GetQuat().GetRot();
+    Vec3 Matrix::getRot()const {
+        return getQuat().getRot();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 行列から拡大量を計算
     //@―---------------------------------------------------------------------------
-    Vec3 Matrix::GetScale()const {
+    Vec3 Matrix::getScale()const {
         Vec3 sxr = (*this) * Vec3(1.0f, 0.0f, 0.0f);
         Vec3 syr = (*this) * Vec3(0.0f, 1.0f, 0.0f);
         Vec3 szr = (*this) * Vec3(0.0f, 0.0f, 1.0f);
@@ -368,7 +368,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 行列から回転量を計算
     //@―---------------------------------------------------------------------------
-    Quat Matrix::GetQuat()const {
+    Quat Matrix::getQuat()const {
         // TODO 修正
 
         // 最大成分を検索

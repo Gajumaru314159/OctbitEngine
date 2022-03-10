@@ -11,7 +11,7 @@
 _NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR
 void* operator new(size_t size)
 {
-    return ob::MemorySystem::GetHeapAllocator().Allocate(size);
+    return ob::MemorySystem::GetHeapAllocator().allocate(size);
 }
 
 //@―---------------------------------------------------------------------------
@@ -20,7 +20,7 @@ void* operator new(size_t size)
 _NODISCARD _Ret_notnull_ _Post_writable_byte_size_(size) _VCRT_ALLOCATOR
 void* operator new[](size_t size)
 {
-    return ob::MemorySystem::GetHeapAllocator().Allocate(size);
+    return ob::MemorySystem::GetHeapAllocator().allocate(size);
 }
 
 //@―---------------------------------------------------------------------------
@@ -28,7 +28,7 @@ void* operator new[](size_t size)
 //@―---------------------------------------------------------------------------
 void* operator new(size_t size, std::align_val_t alignment)
 {
-    return ob::MemorySystem::GetHeapAllocator().Allocate(size, static_cast<ob::u32>(alignment));
+    return ob::MemorySystem::GetHeapAllocator().allocate(size, static_cast<ob::u32>(alignment));
 }
 
 //@―---------------------------------------------------------------------------
@@ -36,7 +36,7 @@ void* operator new(size_t size, std::align_val_t alignment)
 //@―---------------------------------------------------------------------------
 void* operator new[](size_t size, std::align_val_t alignment)
 {
-    return ob::MemorySystem::GetHeapAllocator().Allocate(size, static_cast<ob::u32>(alignment));
+    return ob::MemorySystem::GetHeapAllocator().allocate(size, static_cast<ob::u32>(alignment));
 }
 
 //@―---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ void* operator new[](size_t size, std::align_val_t alignment)
 //@―---------------------------------------------------------------------------
 void* operator new(size_t size, ob::Allocator& Allocator)noexcept
 {
-    return Allocator.Allocate(size);
+    return Allocator.allocate(size);
 }
 
 //@―---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ void* operator new(size_t size, ob::Allocator& Allocator)noexcept
 //@―---------------------------------------------------------------------------
 void* operator new[](size_t size, ob::Allocator& Allocator)noexcept
 {
-    return Allocator.Allocate(size);
+    return Allocator.allocate(size);
 }
 
 //@―---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ void* operator new[](size_t size, ob::Allocator& Allocator)noexcept
 //@―---------------------------------------------------------------------------
 void* operator new(size_t size, size_t alignment, ob::Allocator& Allocator)noexcept
 {
-    return Allocator.Allocate(size, static_cast<ob::u32>(alignment));
+    return Allocator.allocate(size, static_cast<ob::u32>(alignment));
 }
 
 //@―---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ void* operator new(size_t size, size_t alignment, ob::Allocator& Allocator)noexc
 //@―---------------------------------------------------------------------------
 void* operator new[](size_t size, size_t alignment, ob::Allocator& Allocator)noexcept
 {
-    return Allocator.Allocate(size, static_cast<ob::u32>(alignment));
+    return Allocator.allocate(size, static_cast<ob::u32>(alignment));
 }
 
 

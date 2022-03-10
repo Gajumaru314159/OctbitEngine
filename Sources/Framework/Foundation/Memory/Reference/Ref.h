@@ -136,19 +136,19 @@ namespace ob {
         //!             を保持する。
         //! @param ptr  新しく保持するオブジェクトのポインタ
         //@―---------------------------------------------------------------------------
-        void Reset(T* ptr);
+        void reset(T* ptr);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  保持しているオブジェクトの参照を放棄する
         //@―---------------------------------------------------------------------------
-        void Reset();
+        void reset();
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  保持しているオブジェクトのポインタを取得する
         //@―---------------------------------------------------------------------------
-        T* Get()const;
+        T* get()const;
 
 
     private:
@@ -156,13 +156,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief  保持しているオブジェクトの参照を追加する
         //@―---------------------------------------------------------------------------
-        void SafeRetain();
+        void safeRetain();
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  保持しているオブジェクトの参照を放棄する
         //@―---------------------------------------------------------------------------
-        void SafeRelease();
+        void safeRelease();
 
        
     private:
@@ -176,9 +176,9 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  Get の構築
+    //! @brief  get の構築
     //! 
-    //! @details    型 T のコンストラクタに args を渡して新しい Get を構築します。
+    //! @details    型 T のコンストラクタに args を渡して新しい get を構築します。
     //! @param args コンストラクタに渡す引数
     //@―---------------------------------------------------------------------------
     template<class T, class... TArgs>
@@ -201,7 +201,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator==(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() == rhs.Get());
+        return (lhs.get() == rhs.get());
     }
 
 
@@ -210,7 +210,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator==(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return (lhs.Get() == nullptr);
+        return (lhs.get() == nullptr);
     }
 
 
@@ -219,7 +219,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator==(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return (nullptr == rhs.Get());
+        return (nullptr == rhs.get());
     }
 
 
@@ -228,7 +228,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator!=(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() != rhs.Get());
+        return (lhs.get() != rhs.get());
     }
 
 
@@ -237,7 +237,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator!=(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return (lhs.Get() != nullptr);
+        return (lhs.get() != nullptr);
     }
 
 
@@ -246,7 +246,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator!=(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return (nullptr != rhs.Get());
+        return (nullptr != rhs.get());
     }
 
 
@@ -255,7 +255,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator<(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() < rhs.Get());
+        return (lhs.get() < rhs.get());
     }
 
 
@@ -264,7 +264,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator<(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return std::less<RefObject*>()(lhs.Get(), nullptr);
+        return std::less<RefObject*>()(lhs.get(), nullptr);
     }
 
 
@@ -273,7 +273,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator<(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return std::less<T*>()(nullptr, rhs.Get());
+        return std::less<T*>()(nullptr, rhs.get());
     }
 
 
@@ -282,7 +282,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator<=(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() <= rhs.Get());
+        return (lhs.get() <= rhs.get());
     }
 
 
@@ -291,7 +291,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator<=(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return (lhs.Get() <= nullptr);
+        return (lhs.get() <= nullptr);
     }
 
 
@@ -300,7 +300,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator<=(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return (nullptr <= rhs.Get());
+        return (nullptr <= rhs.get());
     }
 
 
@@ -309,7 +309,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator>(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() > rhs.Get());
+        return (lhs.get() > rhs.get());
     }
 
 
@@ -318,7 +318,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator>(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return (lhs.Get() > nullptr);
+        return (lhs.get() > nullptr);
     }
 
 
@@ -327,7 +327,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator>(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return (nullptr > rhs.Get());
+        return (nullptr > rhs.get());
     }
 
 
@@ -336,7 +336,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T, class U>
     inline bool operator>=(const Ref<T>& lhs, const Ref<U>& rhs) noexcept {
-        return (lhs.Get() >= rhs.Get());
+        return (lhs.get() >= rhs.get());
     }
 
 
@@ -345,7 +345,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator>=(const Ref<T>& lhs, std::nullptr_t) noexcept {
-        return (lhs.Get() >= nullptr);
+        return (lhs.get() >= nullptr);
     }
 
 
@@ -354,7 +354,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline bool operator>=(std::nullptr_t, const Ref<T>& rhs) noexcept {
-        return (nullptr >= rhs.Get());
+        return (nullptr >= rhs.get());
     }
 
 
@@ -393,7 +393,7 @@ namespace ob {
     template<class T>
     inline Ref<T>::Ref(T* ptr)
         :m_ptr(ptr) {
-        SafeRetain();
+        safeRetain();
     }
 
 
@@ -403,7 +403,7 @@ namespace ob {
     template<class T>
     inline Ref<T>::Ref(const Ref& ref)noexcept {
         m_ptr = ref.m_ptr;
-        SafeRetain();
+        safeRetain();
     }
 
     //@―---------------------------------------------------------------------------
@@ -416,7 +416,7 @@ namespace ob {
     inline Ref<T>::Ref(const Ref<U>& ref)noexcept {
         static_assert(is_base_of_v<T, U>, "U must inherit T.");
         m_ptr = ref.m_ptr;
-        SafeRetain();
+        safeRetain();
     }
 
 
@@ -448,7 +448,7 @@ namespace ob {
     template<class T>
     //@―---------------------------------------------------------------------------
     inline Ref<T>::~Ref() {
-        SafeRelease();
+        safeRelease();
     }
 
 
@@ -459,10 +459,10 @@ namespace ob {
     inline Ref<T>& Ref<T>::operator=(const Ref& ref)noexcept {
         if (m_ptr != ref.m_ptr) {
             if (ref.m_ptr) {
-                ref.m_ptr->Retain();
+                ref.m_ptr->retain();
             }
             if (m_ptr) {
-                m_ptr->Release();
+                m_ptr->release();
             }
             m_ptr = ref.m_ptr;
         }
@@ -480,10 +480,10 @@ namespace ob {
     inline Ref<T>& Ref<T>::operator=(const Ref<U>& ref)noexcept {
         if (m_ptr != ref.m_ptr) {
             if (ref.m_ptr) {
-                ref.m_ptr->Retain();
+                ref.m_ptr->retain();
             }
             if (m_ptr) {
-                m_ptr->Release();
+                m_ptr->release();
             }
             m_ptr = ref.m_ptr;
         }
@@ -497,7 +497,7 @@ namespace ob {
     template<class T>
     inline Ref<T>& Ref<T>::operator=(Ref&& f)noexcept {
         if (&f != this) {
-            SafeRelease();
+            safeRelease();
             m_ptr = f.m_ptr;
             f.m_ptr = nullptr;
         }
@@ -514,7 +514,7 @@ namespace ob {
     template<class U, typename enable_if_t<is_base_of_v<T, U>>>
     inline Ref<T>& Ref<T>::operator=(Ref<U>&& f)noexcept {
         if (&f != this) {
-            SafeRelease();
+            safeRelease();
             m_ptr = f.m_ptr;
             f.m_ptr = nullptr;
         }
@@ -571,11 +571,11 @@ namespace ob {
     //! @param ptr  新しく保持するオブジェクトのポインタ
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void Ref<T>::Reset(T* ptr) {
+    inline void Ref<T>::reset(T* ptr) {
         if (ptr != m_ptr) {
-            SafeRelease();
+            safeRelease();
             m_ptr = ptr;
-            SafeRetain();
+            safeRetain();
         }
     }
 
@@ -584,8 +584,8 @@ namespace ob {
     //! @brief  保持しているオブジェクトの参照を放棄する
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void Ref<T>::Reset() {
-        SafeRelease();
+    inline void Ref<T>::reset() {
+        safeRelease();
     }
 
 
@@ -593,7 +593,7 @@ namespace ob {
     //! @brief  保持しているオブジェクトのポインタを取得する
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline T* Ref<T>::Get()const {
+    inline T* Ref<T>::get()const {
         return reinterpret_cast<T*>(m_ptr);
     }
 
@@ -602,9 +602,9 @@ namespace ob {
     //! @brief  保持しているオブジェクトの参照を追加する
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void Ref<T>::SafeRetain() {
+    inline void Ref<T>::safeRetain() {
         if (m_ptr) {
-            m_ptr->Retain();
+            m_ptr->retain();
         }
     }
 
@@ -613,9 +613,9 @@ namespace ob {
     //! @brief  保持しているオブジェクトの参照を放棄する
     //@―---------------------------------------------------------------------------
     template<class T>
-    inline void Ref<T>::SafeRelease() {
+    inline void Ref<T>::safeRelease() {
         if (m_ptr) {
-            m_ptr->Release();
+            m_ptr->release();
             m_ptr = nullptr;
         }
     }

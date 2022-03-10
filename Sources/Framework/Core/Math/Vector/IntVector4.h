@@ -186,13 +186,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief 要素の設定
         //@―---------------------------------------------------------------------------
-        void    Set(s32 x, s32 y, s32 z, s32 w) noexcept;
+        void    set(s32 x, s32 y, s32 z, s32 w) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の設定
         //@―---------------------------------------------------------------------------
-        void    Set(const IntVec4& v) noexcept;
+        void    set(const IntVec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -330,7 +330,7 @@ namespace ob {
     //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
     //@―---------------------------------------------------------------------------
     inline IntVec4::IntVec4(s32 scalar) noexcept {
-        Set(scalar, scalar, scalar, scalar);
+        set(scalar, scalar, scalar, scalar);
     }
 
 
@@ -338,7 +338,7 @@ namespace ob {
     //! @brief      コンストラクタ(要素を指定して初期化)
     //@―---------------------------------------------------------------------------
     inline IntVec4::IntVec4(s32 x, s32 y, s32 z, s32 w) noexcept {
-        Set(x, y, z, w);
+        set(x, y, z, w);
     }
 
 
@@ -542,7 +542,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec4::Set(s32 x, s32 y, s32 z, s32 w) noexcept {
+    inline void IntVec4::set(s32 x, s32 y, s32 z, s32 w) noexcept {
         this->x = x;
         this->y = y;
         this->z = z;
@@ -553,8 +553,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec4::Set(const IntVec4& v) noexcept {
-        Set(v.x, v.y, v.z, v.w);
+    inline void IntVec4::set(const IntVec4& v) noexcept {
+        set(v.x, v.y, v.z, v.w);
     }
 
 
@@ -562,7 +562,7 @@ namespace ob {
     //! @brief 要素を全て0に設定
     //@―---------------------------------------------------------------------------
     inline void IntVec4::SetZero() noexcept {
-        Set(0, 0, 0, 0);
+        set(0, 0, 0, 0);
     }
 
 
@@ -570,7 +570,7 @@ namespace ob {
     //! @brief 全ての要素を同じ値で設定
     //@―---------------------------------------------------------------------------
     inline void IntVec4::SetAll(s32 scalar) noexcept {
-        Set(scalar, scalar, scalar, scalar);
+        set(scalar, scalar, scalar, scalar);
     }
 
 

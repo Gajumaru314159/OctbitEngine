@@ -57,16 +57,16 @@ namespace ob
 		
 	}
 
-	void* TLSFHeap::Allocate(size_t size, u32 alignment, bool zeroClear)
+	void* TLSFHeap::allocate(size_t size, u32 alignment, bool zeroClear)
 	{
 		return nullptr;
 	}
 
-	void TLSFHeap::Deallocate(void* pBuffer)
+	void TLSFHeap::deallocate(void* pBuffer)
 	{
 	}
 
-	void TLSFHeap::Release()
+	void TLSFHeap::release()
 	{
 	}
 
@@ -74,21 +74,21 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief	                ヒープ名の取得
 	//@―---------------------------------------------------------------------------
-	Char* TLSFHeap::GetName() const {
+	Char* TLSFHeap::getName() const {
 		return m_pName;
 	}
 
-	size_t TLSFHeap::GetHeapSize() const
+	size_t TLSFHeap::getHeapSize() const
 	{
 		return size_t();
 	}
 
-	size_t TLSFHeap::GetFreeHeapSize() const
+	size_t TLSFHeap::getFreeHeapSize() const
 	{
 		return size_t();
 	}
 
-	bool TLSFHeap::IsValid() const
+	bool TLSFHeap::isValid() const
 	{
 		return false;
 	}

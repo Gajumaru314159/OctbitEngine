@@ -130,7 +130,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief              妥当な状態か
     //@―---------------------------------------------------------------------------
-    bool Window::IsValid()const noexcept {
+    bool Window::isValid()const noexcept {
         return static_cast<bool>(m_impl);
     }
 

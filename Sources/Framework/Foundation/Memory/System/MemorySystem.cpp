@@ -44,9 +44,9 @@ namespace ob {
     void MemorySystem::Release() {
         for (s32 i = 0; i < enum_cast(HeapUsage::Max); ++i) {
             if (s_heaps[i] != nullptr)
-                s_heaps[i]->Release();
+                s_heaps[i]->release();
             if (s_debugHeaps[i] != nullptr)
-                s_heaps[i]->Release();
+                s_heaps[i]->release();
         }
     }
 

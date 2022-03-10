@@ -80,13 +80,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      構造体の初期化
         //@―---------------------------------------------------------------------------
-        void Reset() noexcept;
+        void reset() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      2点を指定して Rect を設定
         //@―---------------------------------------------------------------------------
-        void SetStartEnd(const Vec2& start, const Vec2& end) noexcept;
+        void setStartEnd(const Vec2& start, const Vec2& end) noexcept;
 
 
         //===============================================================
@@ -96,17 +96,17 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      矩形の起点となる頂点を取得
         //! 
-        //! @see        GetEnd()
+        //! @see        getEnd()
         //@―---------------------------------------------------------------------------
-        Vec2 GetStart()const noexcept;
+        Vec2 getStart()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      GetStart() と対角となる頂点を取得
+        //! @brief      getStart() と対角となる頂点を取得
         //! 
-        //! @see        GetStart()
+        //! @see        getStart()
         //@―---------------------------------------------------------------------------
-        Vec2 GetEnd()const noexcept;
+        Vec2 getEnd()const noexcept;
 
 
         //===============================================================
@@ -116,7 +116,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0以下であるか
         //@―---------------------------------------------------------------------------
-        bool IsEmpty()const noexcept;
+        bool isEmpty()const noexcept;
 
 
     public:
@@ -155,7 +155,7 @@ namespace ob {
     //! @brief      コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
     inline Rect::Rect(EForceInit) noexcept{
-        Reset();
+        reset();
     }
 
 
@@ -208,7 +208,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
-    inline void Rect::Reset() noexcept {
+    inline void Rect::reset() noexcept {
         center.SetZero();
         size.SetZero();
     }
@@ -217,7 +217,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      2点を指定して Box を設定
     //@―---------------------------------------------------------------------------
-    inline void Rect::SetStartEnd(const Vec2& start, const Vec2& end) noexcept {
+    inline void Rect::setStartEnd(const Vec2& start, const Vec2& end) noexcept {
         center = (start + end) * 0.5f;
         size = Vec2::Abs(start - end);
     }
@@ -228,7 +228,7 @@ namespace ob {
     //! 
     //! @see        GetEnd()
     //@―---------------------------------------------------------------------------
-    inline Vec2 Rect::GetStart()const noexcept {
+    inline Vec2 Rect::getStart()const noexcept {
         return size + center * 0.5f;
     }
 
@@ -238,7 +238,7 @@ namespace ob {
     //! 
     //! @see        GetStart()
     //@―---------------------------------------------------------------------------
-    inline Vec2 Rect::GetEnd()const noexcept {
+    inline Vec2 Rect::getEnd()const noexcept {
         return size - center * 0.5f;
     }
 
@@ -246,7 +246,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0以下であるか
     //@―---------------------------------------------------------------------------
-    inline bool Rect::IsEmpty()const noexcept {
+    inline bool Rect::isEmpty()const noexcept {
         return size.IsZero();
     }
 

@@ -20,16 +20,16 @@ namespace ob
 
 	}
 
-	void* MimallocHeap::Allocate(size_t size, u32 alignment, bool zeroClear)
+	void* MimallocHeap::allocate(size_t size, u32 alignment, bool zeroClear)
 	{
 		return nullptr;
 	}
 
-	void MimallocHeap::Deallocate(void* pBuffer)
+	void MimallocHeap::deallocate(void* pBuffer)
 	{
 	}
 
-	void MimallocHeap::Release()
+	void MimallocHeap::release()
 	{
 	}
 
@@ -37,21 +37,21 @@ namespace ob
 	//@―---------------------------------------------------------------------------
 	//! @brief	                ヒープ名の取得
 	//@―---------------------------------------------------------------------------
-	Char* MimallocHeap::GetName() const {
+	Char* MimallocHeap::getName() const {
 		return m_pName;
 	}
 
-	size_t MimallocHeap::GetHeapSize() const
+	size_t MimallocHeap::getHeapSize() const
 	{
 		return size_t();
 	}
 
-	size_t MimallocHeap::GetFreeHeapSize() const
+	size_t MimallocHeap::getFreeHeapSize() const
 	{
 		return size_t();
 	}
 
-	bool MimallocHeap::IsValid() const
+	bool MimallocHeap::isValid() const
 	{
 		return false;
 	}

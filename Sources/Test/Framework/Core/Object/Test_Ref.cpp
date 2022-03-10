@@ -40,28 +40,28 @@ TEST(RefObject, Construct) {
         Ref<Base> ref1;
         Ref<Base> ref2(nullptr);
 
-        EXPECT_EQ(nullptr, ref1.Get());
-        EXPECT_EQ(nullptr, ref2.Get());
+        EXPECT_EQ(nullptr, ref1.get());
+        EXPECT_EQ(nullptr, ref2.get());
     }
     // 生ポインタ初期化
     {
         Base obj1;
         Derived obj2;
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
         {
-            // Base => Get<Base>
+            // Base => get<Base>
             Ref<Base> ref1(&obj1);
-            EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-            EXPECT_EQ(&obj1, ref1.Get());
+            EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+            EXPECT_EQ(&obj1, ref1.get());
 
-            // Derived => Get<Base>
+            // Derived => get<Base>
             Ref<Base> ref2(&obj2);
-            EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
-            EXPECT_EQ(&obj2, ref2.Get());
+            EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
+            EXPECT_EQ(&obj2, ref2.get());
         }
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
     }
 
     // コピー
@@ -69,20 +69,20 @@ TEST(RefObject, Construct) {
         Base obj1;
         Derived obj2;
         {
-            // Base => Get<Base>
+            // Base => get<Base>
             Ref<Base> ref1(&obj1);
             Ref<Base> ref1_2(ref1);
-            EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
-            EXPECT_EQ(&obj1, ref1_2.Get());
+            EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
+            EXPECT_EQ(&obj1, ref1_2.get());
 
-            // Get<Derived> => Get<Base>
+            // get<Derived> => get<Base>
             Ref<Derived> ref2(&obj2);
             Ref<Base> ref2_2(ref2);
-            EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj2));
-            EXPECT_EQ(&obj2, ref2_2.Get());
+            EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj2));
+            EXPECT_EQ(&obj2, ref2_2.get());
         }
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
     }
 
     // ムーブ
@@ -90,26 +90,26 @@ TEST(RefObject, Construct) {
         Base obj1;
         Derived obj2;
         {
-            // Base => Get<Base>
+            // Base => get<Base>
             Ref<Base> ref1(&obj1);
             Ref<Base> ref1_2(move(ref1));
-            EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-            EXPECT_EQ(&obj1, ref1_2.Get());
+            EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+            EXPECT_EQ(&obj1, ref1_2.get());
 
-            // Get<Derived> => Get<Base>
+            // get<Derived> => get<Base>
             Ref<Derived> ref2(&obj2);
             Ref<Base> ref2_2(move(ref2));
-            EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
-            EXPECT_EQ(&obj2, ref2_2.Get());
+            EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
+            EXPECT_EQ(&obj2, ref2_2.get());
         }
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
     }
 
 
     {
         // IRefObjectを継承していない場合コンパイルエラー
-        //Get<InvalidBase> invalidRef;
+        //get<InvalidBase> invalidRef;
     }
 
     // 暗黙的キャスト
@@ -137,35 +137,35 @@ TEST(RefObject, Assign) {
         // null => OBJ
         ref3 = ref1;
         ref4 = ref2;
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj2));
-        EXPECT_EQ(&obj1, ref3.Get());
-        EXPECT_EQ(&obj2, ref4.Get());
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj2));
+        EXPECT_EQ(&obj1, ref3.get());
+        EXPECT_EQ(&obj2, ref4.get());
 
         // OBJ => null
         ref3 = nullptr;
         ref4 = nullptr;
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
-        EXPECT_EQ(nullptr, ref3.Get());
-        EXPECT_EQ(nullptr, ref4.Get());
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
+        EXPECT_EQ(nullptr, ref3.get());
+        EXPECT_EQ(nullptr, ref4.get());
 
         // OBJ1 => OBJ2
         ref3 = ref1;
         ref4 = ref2;
         ref3 = nullref;
         ref4 = nullref;
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
-        EXPECT_EQ(nullptr, ref3.Get());
-        EXPECT_EQ(nullptr, ref4.Get());
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
+        EXPECT_EQ(nullptr, ref3.get());
+        EXPECT_EQ(nullptr, ref4.get());
 
         // self assign
         ref3 = ref1;
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
         ref3 = ref3;
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(&obj1, ref3.Get());
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(&obj1, ref3.get());
     }
 
     //* [ ] move
@@ -175,26 +175,26 @@ TEST(RefObject, Assign) {
 
         ref3 = std::move(ref1);
         ref4 = std::move(ref2);
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
-        EXPECT_EQ(nullptr, ref1.Get());
-        EXPECT_EQ(nullptr, ref2.Get());
-        EXPECT_EQ(&obj1, ref3.Get());
-        EXPECT_EQ(&obj2, ref4.Get());
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
+        EXPECT_EQ(nullptr, ref1.get());
+        EXPECT_EQ(nullptr, ref2.get());
+        EXPECT_EQ(&obj1, ref3.get());
+        EXPECT_EQ(&obj2, ref4.get());
 
         // self assign
         ref1 = &obj1;
         ref3 = ref1;
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
         ref3 = std::move(ref3);
-        EXPECT_EQ(2, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(&obj1, ref3.Get());
+        EXPECT_EQ(2, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(&obj1, ref3.get());
     }
 
     ref1 = nullptr;
     ref2 = nullptr;
-    EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-    EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+    EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+    EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
 
     //* [ ] raw ptr
     {
@@ -203,27 +203,27 @@ TEST(RefObject, Assign) {
 
         ref3 = &obj1;
         ref4 = &obj2;
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-        EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj2));
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+        EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj2));
     }
-    EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-    EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj2));
+    EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+    EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj2));
 }
 
-TEST(RefObject, Reset) {
+TEST(RefObject, reset) {
     Base obj1;
 
     Ref<Base> ref1;
-    ref1.Reset();
-    EXPECT_EQ(nullptr, ref1.Get());
+    ref1.reset();
+    EXPECT_EQ(nullptr, ref1.get());
 
-    ref1.Reset(&obj1);
-    EXPECT_EQ(1, RefObjectHelper::GetReferenceCount(&obj1));
-    EXPECT_EQ(&obj1, ref1.Get());
+    ref1.reset(&obj1);
+    EXPECT_EQ(1, RefObjectHelper::getReferenceCount(&obj1));
+    EXPECT_EQ(&obj1, ref1.get());
 
-    ref1.Reset();
-    EXPECT_EQ(0, RefObjectHelper::GetReferenceCount(&obj1));
-    EXPECT_EQ(nullptr, ref1.Get());
+    ref1.reset();
+    EXPECT_EQ(0, RefObjectHelper::getReferenceCount(&obj1));
+    EXPECT_EQ(nullptr, ref1.get());
 }
 
 TEST(RefObject, Operator) {

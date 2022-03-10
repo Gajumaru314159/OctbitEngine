@@ -18,7 +18,7 @@ namespace ob {
         w = 88675123;
 
         // TODO Timeクラスができたら現在の時間から乱数のシード生成
-        SetSeed(0);
+        setSeed(0);
     }
 
 
@@ -26,14 +26,14 @@ namespace ob {
     //! @brief コンストラクタ(シード値指定)
     //@―---------------------------------------------------------------------------
     Random::Random(u32 seed) :Random() {
-        SetSeed(seed);
+        setSeed(seed);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 乱数のシード値を変更
     //@―---------------------------------------------------------------------------
-    void Random::SetSeed(u32 seed) {
+    void Random::setSeed(u32 seed) {
         do {
             seed = seed * 1812433253 + 1; seed ^= seed << 13; seed ^= seed >> 17;
             x = 123464980 ^ seed;
@@ -52,7 +52,7 @@ namespace ob {
     //! 
     //! @param seed		シード値
     //@―---------------------------------------------------------------------------
-    u32 Random::GetU32() {
+    u32 Random::getU32() {
         u32 t;
         t = x ^ (x << 11);
         x = y; y = z; z = w;
@@ -68,9 +68,9 @@ namespace ob {
     //! @param minimum	乱数の最小値
     //! @param maximum	乱数の最大値
     //@―---------------------------------------------------------------------------
-    s32 Random::Range(s32 minimum, s32 maximum) {
+    s32 Random::range(s32 minimum, s32 maximum) {
         if (maximum < minimum)return minimum;
-        return GetU32() % (maximum - minimum + 1) + minimum;
+        return getU32() % (maximum - minimum + 1) + minimum;
     }
 
 
@@ -81,8 +81,8 @@ namespace ob {
     //! @param minimum	乱数の最小値
     //! @param maximum	乱数の最大値
     //@―---------------------------------------------------------------------------
-    f32 Random::Range(f32 minimum, f32 maximum) {
-        GetU32();
+    f32 Random::range(f32 minimum, f32 maximum) {
+        getU32();
         f32 result = ((x + 0.5f) / 4294967296.0f + w) / 4294967296.0f;
         return minimum + result * (maximum - minimum);
     }

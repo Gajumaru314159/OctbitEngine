@@ -15,7 +15,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     Rect::Rect(const gsl::span<Vec2>& points)noexcept {
         if (points.size() <= 1) {
-            Reset();
+            reset();
             return;
         }
         Vec2 min = points[0];
