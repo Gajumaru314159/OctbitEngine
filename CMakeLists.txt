@@ -49,16 +49,16 @@ endif()
 add_subdirectory ("Sources/Framework/Foundation")
 add_subdirectory ("Sources/Framework/Core")
 add_subdirectory ("Sources/Framework/Platform")
-add_subdirectory ("Sources/Framework/Graphic")
+#add_subdirectory ("Sources/Framework/Graphic")
 
 # Pluginsプロジェクト読み込み
-add_subdirectory ("Sources/Plugins/GraphicD3D12")
+#add_subdirectory ("Sources/Plugins/GraphicD3D12")
 
 # テストプロジェクト読み込み
 add_subdirectory ("Sources/Test/Framework/Foundation")
 add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み
-add_subdirectory ("Sources/Application")
+#add_subdirectory ("Sources/Application")
 
 

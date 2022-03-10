@@ -7,36 +7,34 @@
 #include "Swapchain.h"
 #include "CommandList.h"
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  グラフィック・デバイス
+    //@―---------------------------------------------------------------------------
+    class Device {
+    public:
+
+        //===============================================================
+        // コンストラクタ / デストラクタ
+        //===============================================================
+        virtual ~Device() = default;
 
         //@―---------------------------------------------------------------------------
-        //! @brief  グラフィック・デバイス
+        //! @brief  スワップチェーンを生成
         //@―---------------------------------------------------------------------------
-        class Device {
-        public:
+        Ref<Swapchain> CreateSwapchain(const SwapchainDesc& desc);
 
-            //===============================================================
-            // コンストラクタ / デストラクタ
-            //===============================================================
-            virtual ~Device() = default;
+        //@―---------------------------------------------------------------------------
+        //! @brief  コマンドリストを生成
+        //@―---------------------------------------------------------------------------
+        Ref<CommandList> CreateCommandList(CommandListType type);
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  スワップチェーンの生成
-            //@―---------------------------------------------------------------------------
-            Ref<Swapchain> createSwapchain(const SwapchainDesc& desc);
+    protected:
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  コマンドリストの生成
-            //@―---------------------------------------------------------------------------
-            Ref<CommandList> createCommandList(CommandListType type);
+        virtual Ref<Swapchain> CreateSwapchainImpl(const SwapchainDesc& desc) = 0;
+        virtual Ref<CommandList> CreateCommandListImpl(CommandListType type) = 0;
 
-        protected:
+    };
 
-            virtual Ref<Swapchain> createSwapchainImpl(const SwapchainDesc& desc) = 0;
-            virtual Ref<CommandList> createCommandListImpl(CommandListType type)=0;
-
-        };
-
-    }// namespace graphic
-}// namespcae ob
+}// namespace pb::graphic

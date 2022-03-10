@@ -28,4 +28,4 @@ set(OB_PROJECT_INCLUDE_LIB
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 
 # プロジェクトのフィルタ設定
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework/Graphic")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")

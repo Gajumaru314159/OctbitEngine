@@ -5,19 +5,17 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
 
-        class Texture2D;
+    class Texture2D;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-        class GraphicManager:public RefObject{
-        public:
-            Ref<Texture2D> loadTexture2D(const StringView filePath);            // テクスチャファイルの読み込み
-            Ref<Texture2D> loadTexture2DAsync(const StringView filePath);       // テクスチャファイルの非同期読み込み
-        };
+    //@―---------------------------------------------------------------------------
+    //! @brief  説明
+    //@―---------------------------------------------------------------------------
+    class GraphicManager :public RefObject {
+    public:
+        Ref<Texture2D> loadTexture2D(const StringView filePath);            // テクスチャファイルの読み込み
+        Ref<Texture2D> loadTexture2DAsync(const StringView filePath);       // テクスチャファイルの非同期読み込み
+    };
 
-    }// namespace graphic
-}// namespcae ob
+}// namespace pb::graphic

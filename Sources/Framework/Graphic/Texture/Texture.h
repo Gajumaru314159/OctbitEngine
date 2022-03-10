@@ -11,20 +11,18 @@
 #include "TextureDimension.h"
 #include "TextureFormat.h"
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      テクスチャ
-        //@―---------------------------------------------------------------------------
-        class Texture {
-        public:
+    //@―---------------------------------------------------------------------------
+    //! @brief      テクスチャ
+    //@―---------------------------------------------------------------------------
+    class Texture {
+    public:
 
-        protected:
+    protected:
 
-            Texture() = default;
+        Texture() = default;
 
-        };
+    };
 
-    }// namespace graphic
-}// namespcae ob
+}// namespace pb::graphic

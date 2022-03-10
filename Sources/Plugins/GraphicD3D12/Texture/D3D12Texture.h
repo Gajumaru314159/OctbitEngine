@@ -4,14 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Public/Image/Image.h>
-#include <Framework/Graphic/Public/Texture/Texture.h>
-#include <Framework/Graphic/Private/Texture/ITexture.h>
+#include <Framework/Graphic/Image/Image.h>
+#include <Framework/Graphic/Texture/Texture.h>
+#include <Framework/Graphic/Texture/ITexture.h>
 
-#include <d3d12.h>
-#include <dxgi1_6.h>
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
 
 namespace ob {
     namespace graphic {

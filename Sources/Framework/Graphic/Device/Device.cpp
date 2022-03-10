@@ -3,26 +3,24 @@
 //! @brief		グラフィック・デバイス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/Public/Device.h>
+#include <Framework/Graphic/Device.h>
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  スワップチェーンの生成
-        //@―---------------------------------------------------------------------------
-        Ref<Swapchain> Device::createSwapchain(const SwapchainDesc& desc) {
-            return createSwapchainImpl(desc);
-        }
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  コマンドリストの生成
-        //@―---------------------------------------------------------------------------
-        Ref<CommandList> Device::createCommandList(CommandListType type) {
-            return createCommandList(type);
-        }
+    //@―---------------------------------------------------------------------------
+    //! @brief  スワップチェーンを生成
+    //@―---------------------------------------------------------------------------
+    Ref<Swapchain> Device::CreateSwapchain(const SwapchainDesc& desc) {
+        return CreateSwapchainImpl(desc);
+    }
 
 
-    }// namespace graphic
-}// namespace ob
+    //@―---------------------------------------------------------------------------
+    //! @brief  コマンドリストを生成
+    //@―---------------------------------------------------------------------------
+    Ref<CommandList> Device::CreateCommandList(CommandListType type) {
+        return CreateCommandListImpl(type);
+    }
+
+
+}// namespace pb::graphic

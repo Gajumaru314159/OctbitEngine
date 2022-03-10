@@ -6,63 +6,61 @@
 #pragma once
 #include "Texture.h"
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
 
-        namespace detail {
-            class ITexture;
-        }
+    namespace detail {
+        class ITexture;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  2Dテクスチャ
+    //@―---------------------------------------------------------------------------
+    class Texture2D :public Texture {
+    public:
+
+        //===============================================================
+        // 生成/読み込み関数
+        //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  2Dテクスチャ
+        //! @brief  テクスチャの生成
         //@―---------------------------------------------------------------------------
-        class Texture2D:public Texture {
-        public:
+        static Ref<Texture2D> create(s32 width, s32 height);
 
-            //===============================================================
-            // 生成/読み込み関数
-            //===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief  テクスチャの生成
+        //@―---------------------------------------------------------------------------
+        static Ref<Texture2D> create(s32 width, s32 height, TextureFormat format);
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  テクスチャの生成
-            //@―---------------------------------------------------------------------------
-            static Ref<Texture2D> create(s32 width, s32 height);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ファイルからテクスチャを読み込み
+        //@―---------------------------------------------------------------------------
+        static Ref<Texture2D> load(const StringView& filePath);
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  テクスチャの生成
-            //@―---------------------------------------------------------------------------
-            static Ref<Texture2D> create(s32 width, s32 height, TextureFormat format);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ファイルからテクスチャを非同期読み込み
+        //@―---------------------------------------------------------------------------
+        static Ref<Texture2D> loadAsync(const StringView& filePath);
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  ファイルからテクスチャを読み込み
-            //@―---------------------------------------------------------------------------
-            static Ref<Texture2D> load(const StringView& filePath);
-
-            //@―---------------------------------------------------------------------------
-            //! @brief  ファイルからテクスチャを非同期読み込み
-            //@―---------------------------------------------------------------------------
-            static Ref<Texture2D> loadAsync(const StringView& filePath);
-
-            static Texture2D* blackTexture();
-            static Texture2D* whiteTexture();
-            static Texture2D* normalTexture();
-            static Texture2D* errorTexture();
+        static Texture2D* blackTexture();
+        static Texture2D* whiteTexture();
+        static Texture2D* normalTexture();
+        static Texture2D* errorTexture();
 
 
-        protected:
+    protected:
 
-            Texture2D() = default;
-            Texture2D(s32 width,s32 height,TextureFormat format);
+        Texture2D() = default;
+        Texture2D(s32 width, s32 height, TextureFormat format);
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  
-            //@―---------------------------------------------------------------------------
+        //@―---------------------------------------------------------------------------
+        //! @brief  
+        //@―---------------------------------------------------------------------------
 
-        private:
+    private:
 
-            Ref<detail::ITexture> m_object;
+        Ref<detail::ITexture> m_object;
 
-        };
+    };
 
-    }// namespace graphic
-}// namespcae ob
+}// namespace pb::graphic

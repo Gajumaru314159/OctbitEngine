@@ -9,37 +9,35 @@
 
 #include "PixelFormat.h"
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  説明
+    //@―---------------------------------------------------------------------------
+    class Bitmap {
+    public:
+
+        //===============================================================
+        // コンストラクタ / デストラクタ
+        //===============================================================
 
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        class Bitmap{
-        public:
+        Bitmap();
+        explicit Bitmap(Size size, Color color = Color::white);
+        explicit Bitmap(StringView path, PixelFormtat format = PixelFormtat::Auto);
 
-            //===============================================================
-            // コンストラクタ / デストラクタ
-            //===============================================================
+        Size getSize()const noexcept;
 
-            //@―---------------------------------------------------------------------------
-            //! @brief  説明
-            //@―---------------------------------------------------------------------------
-            Bitmap();
-            explicit Bitmap(Size size, Color color = Color::white);
-            explicit Bitmap(StringView path, PixelFormtat format= PixelFormtat::Auto);
+        Color getPixel(s32 x, s32 y, s32 z);
+        void setPixel(s32 x, s32 y, s32 z, Color& color);
 
-            Size getSize()const noexcept;
+    private:
 
-            Color getPixel(s32 x, s32 y, s32 z);
-            void setPixel(s32 x, s32 y,s32 z,Color& color);
+        Size         m_size;
+        vector<byte> m_data;
 
-        private:
+    };
 
-            Size         m_size;
-            vector<byte> m_data;
-
-        };
-
-    }// namespace graphic
-}// namespcae ob
+}// namespace pb::graphic

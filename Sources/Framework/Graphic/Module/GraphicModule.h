@@ -4,58 +4,57 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Private/Module/IGraphicModule.h>
-#include <Framework/Graphic/Private/Texture/ITexture.h>
+#include <Framework/Graphic/Module/IGraphicModule.h>
+#include <Framework/Graphic/Texture/ITexture.h>
 
-namespace ob {
-    namespace graphic {
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  グラフィックAPIタイプ
-        //@―---------------------------------------------------------------------------
-        enum class GraphicAPI {
-            D3D12,      //!< Direct3D 12
-            Vulkan,     //!< Vulkan
-        };
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-        class GraphicModule:public singleton<GraphicModule> {
-        public:
-
-            //===============================================================
-            // コンストラクタ / デストラクタ
-            //===============================================================
-
-            //@―---------------------------------------------------------------------------
-            //! @brief              コンストラクタ
-            //! 
-            //! @param graphicAPI   使用するグラフィックAPI
-            //@―---------------------------------------------------------------------------
-            GraphicModule(GraphicAPI graphicAPI);
-
-            Ref<ITexture> CreateTexture();
-
-        private:
-
-            unique_ptr<IGraphicModule> m_module;
-
-        };
+namespace ob::graphic {
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  グラフィックAPIタイプ
+    //@―---------------------------------------------------------------------------
+    enum class GraphicAPI {
+        D3D12,      //!< Direct3D 12
+        Vulkan,     //!< Vulkan
+    };
 
-
-
+    //@―---------------------------------------------------------------------------
+    //! @brief  説明
+    //@―---------------------------------------------------------------------------
+    class GraphicModule :public Singleton<GraphicModule> {
+    public:
 
         //===============================================================
-        // インライン関数
+        // コンストラクタ / デストラクタ
         //===============================================================
-        //! @cond
+
+        //@―---------------------------------------------------------------------------
+        //! @brief              コンストラクタ
+        //! 
+        //! @param graphicAPI   使用するグラフィックAPI
+        //@―---------------------------------------------------------------------------
+        GraphicModule(GraphicAPI graphicAPI);
+        ~GraphicModule();
+
+        Ref<ITexture> CreateTexture();
+
+    private:
+
+        std::unique_ptr<IGraphicModule> m_module;
+
+    };
 
 
 
-        //! @endcond
-    }// namespace graphic
-}// namespcae ob
+
+
+
+    //===============================================================
+    // インライン関数
+    //===============================================================
+    //! @cond
+
+
+
+    //! @endcond
+}// namespace pb::graphic

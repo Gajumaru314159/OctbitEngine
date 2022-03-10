@@ -3,44 +3,52 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/Public/System.h>
-#include <Framework/GraphicD3D12/Device/D3D12Device.h>
+#include <Framework/Graphic/System.h>
+#include <Framework/Platform/Module/ModuleManager.h>
+#include <Framework/Graphic/Module/IGraphicModule.h>
 
-namespace ob {
-    namespace graphic {
+namespace ob::graphic {
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
-        //@―---------------------------------------------------------------------------
-        System::System(GraphicAPI api) {
-            
-            if (api == GraphicAPI::D3D12) {
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //@―---------------------------------------------------------------------------
+    System::System(GraphicAPI api) {
+        if (api == GraphicAPI::D3D12) {
 #if defined(OS_WINDOWS)
-                m_device = make_unique<D3D12Device>();
-#endif
-            } else if(api==GraphicAPI::Vulkan){
-                OB_NOTIMPLEMENTED();
-            }
+            auto pModule = platform::ModuleManager::Get().LoadModule<IGraphicModule>(TC("GraphicD3D12"));
             
-            if(m_device.get()==nullptr){
-                OB_NOTIMPLEMENTED();
-            }
+            m_device = std::unique_ptr<I>(pModule->CreateDevice(FeatureLevel::Default));
+#endif
+        } else if (api == GraphicAPI::Vulkan) {
+            OB_NOTIMPLEMENTED();
         }
 
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  スワップチェーンの生成
-        //@―---------------------------------------------------------------------------
-        Ref<Swapchain> System::createSwapchain(const SwapchainDesc& desc) {
-            return m_device->createSwapchain(desc);
+        if (m_device.get() == nullptr) {
+            OB_NOTIMPLEMENTED();
         }
+    }
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  コマンドリストの生成
-        //@―---------------------------------------------------------------------------
-        Ref<CommandList> System::createCommandList(CommandListType type) {
-            return m_device->createCommandList(type);
-        }
 
-    }// namespace graphic
-}// namespace ob
+    //@―---------------------------------------------------------------------------
+    //! @brief  デストラクタ
+    //@―---------------------------------------------------------------------------
+    System::~System() {
+
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  スワップチェーンの生成
+    //@―---------------------------------------------------------------------------
+    Ref<Swapchain> System::createSwapchain(const SwapchainDesc& desc) {
+        return m_device->createSwapchain(desc);
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コマンドリストの生成
+    //@―---------------------------------------------------------------------------
+    Ref<CommandList> System::createCommandList(CommandListType type) {
+        return m_device->createCommandList(type);
+    }
+
+}// namespace pb::graphic
