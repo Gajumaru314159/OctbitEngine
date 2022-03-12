@@ -9,12 +9,24 @@
 #include <Framework/Core/Graphic/Color.h>
 #include <Framework/Core/Graphic/IntColor.h>
 
+#include <Framework/Core/Geometory/Point.h>
+#include <Framework/Core/Geometory/Size.h>
+#include <Framework/Core/Geometory/IntRect.h>
+
 #include <Framework/Core/Geometory/Box.h>
 #include <Framework/Core/Geometory/Capsule.h>
+#include <Framework/Core/Geometory/Circle.h>
+#include <Framework/Core/Geometory/Cylinder.h>
+#include <Framework/Core/Geometory/Frustom.h>
+#include <Framework/Core/Geometory/Margin.h>
 #include <Framework/Core/Geometory/Plane.h>
-#include <Framework/Core/Geometory/Primitive.h>
+#include <Framework/Core/Geometory/Line.h>
+#include <Framework/Core/Geometory/HalfLine.h>
+#include <Framework/Core/Geometory/Segment.h>
 #include <Framework/Core/Geometory/Rect.h>
 #include <Framework/Core/Geometory/Sphere.h>
+#include <Framework/Core/Geometory/Triangle.h>
+
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Affine.h>
 #include <Framework/Core/Math/Axis.h>
