@@ -38,7 +38,7 @@ namespace ob::core
         Affine operator *= (const Affine& o);               //!< 行列合成代入演算子
 
         void SetIdentity();									//!< 行列に単位行列を設定
-        void Set(f32 m00, f32 m01, f32 m02, f32 m03,		//!< 行列値の設定
+        void Set(f32 m00, f32 m01, f32 m02, f32 m03,		//!< 行列値を設定
             f32 m10, f32 m11, f32 m12, f32 m13,
             f32 m20, f32 m21, f32 m22, f32 m23);
 

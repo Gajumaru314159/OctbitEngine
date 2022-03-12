@@ -46,7 +46,7 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      最大値の取得
+    //! @brief      最大値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_max(T a, T b)noexcept(is_arithmetic<T>::value) {
@@ -55,7 +55,7 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      最大値の取得
+    //! @brief      最大値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_max(T a, T b, T c)noexcept(is_arithmetic<T>::value) {
@@ -65,7 +65,7 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      最小値の取得
+    //! @brief      最小値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_min(T a, T b)noexcept(is_arithmetic<T>::value) {
@@ -74,7 +74,7 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      最小値の取得
+    //! @brief      最小値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_min(T a, T b, T c)noexcept(is_arithmetic<T>::value) {

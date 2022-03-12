@@ -25,7 +25,7 @@ namespace ob {
 
             HINSTANCE hInst = (HINSTANCE)::GetModuleHandle(NULL);
 
-            // ウィンドウクラスの設定
+            // ウィンドウクラスを設定
             WNDCLASSEXW	wcex = {
                 sizeof(WNDCLASSEX),
                 NULL,

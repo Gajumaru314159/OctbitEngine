@@ -24,11 +24,11 @@ namespace ob::platform {
         m_hWnd = nullptr;
         m_windowID = m_windowNum++;
 
-        // ウィンドウクラス名の設定
+        // ウィンドウクラス名を設定
 
         HINSTANCE hInst = (HINSTANCE)::GetModuleHandle(NULL);
 
-        // ウィンドウクラスの設定
+        // ウィンドウクラスを設定
         WNDCLASSEX	wcex = {};
         wcex.cbSize = sizeof(WNDCLASSEXW);
         wcex.style = CS_HREDRAW | CS_VREDRAW;//縦横の再描画をする
@@ -181,7 +181,7 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  ウィンドウサイズの取得
+    //! @brief  ウィンドウサイズを取得
     //@―---------------------------------------------------------------------------
     Size WindowImpl::size()const {
         OB_REQUIRE(m_hWnd);
@@ -195,7 +195,7 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief              スクリーン座標の取得
+    //! @brief              スクリーン座標を取得
     //! 
     //! @details            クライアント座標をスクリーン座標に変換して取得する。
     //! @patam clientPoint  クライアント座標
@@ -212,7 +212,7 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief              クライアント座標の取得
+    //! @brief              クライアント座標を取得
     //! 
     //! @details            スクリーン座標をクライアント座標に変換して取得する。
     //! @patam screenPoint  スクリーン座標  
