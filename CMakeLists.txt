@@ -59,6 +59,6 @@ add_subdirectory ("Sources/Test/Framework/Foundation")
 add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み
-#add_subdirectory ("Sources/Application")
+add_subdirectory ("Sources/Application")
 
 

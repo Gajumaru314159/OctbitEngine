@@ -6,13 +6,13 @@ using namespace ob;
 int main() {
     platform::PlatformSystem sys;
     
-    platform::PlatformSystem::Get().Startup();
+    platform::PlatformSystem::ref().startup();
 
-    auto& window =platform::PlatformSystem::Get().GetMainWindow();
+    auto& window =platform::PlatformSystem::ref().getMainWindow();
     if (window) {
-        window->SetWindowTitle(TC("اللغة العربية"));
+        window->setTitle(TC("اللغة العربية"));
     }
-    auto lang = platform::PlatformSystem::Get().GetUserLanguage();
-    platform::PlatformSystem::Get().Shutdown();
+    auto lang = platform::PlatformSystem::ref().getSystemLanguage();
+    platform::PlatformSystem::ref().shutdown();
     return 0;
 }
