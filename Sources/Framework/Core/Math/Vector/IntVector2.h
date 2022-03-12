@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     struct Vec2;
 
@@ -566,7 +566,7 @@ namespace ob {
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
     inline s32 IntVec2::maxComponent() const noexcept {
-        return  get_max(x,y);
+        return  get_max(x, y);
     }
 
 
@@ -582,7 +582,7 @@ namespace ob {
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
     inline s32 IntVec2::minComponent() const noexcept {
-        return get_min(x,y);
+        return get_min(x, y);
     }
 
 
@@ -602,7 +602,7 @@ namespace ob {
     //! @brief ゼロベクトルか判定
     //@―---------------------------------------------------------------------------
     inline b32 IntVec2::isZero()const noexcept {
-        return x == 0 && y == 0 ;
+        return x == 0 && y == 0;
     }
 
 
@@ -660,4 +660,4 @@ namespace ob {
     }
 
     //! @endcond
-}// namespace ob
+}// namespace ob::core

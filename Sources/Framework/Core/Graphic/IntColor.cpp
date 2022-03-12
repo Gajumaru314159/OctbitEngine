@@ -6,7 +6,7 @@
 #include <Framework/Core/Graphic/IntColor.h>
 
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief          色をカラーコードに変換
@@ -15,13 +15,13 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     u32 IntColor::toCode(ColorCodeFormat format)const noexcept {
         switch (format) {
-        case ob::ColorCodeFormat::ARGB:
+        case ColorCodeFormat::ARGB:
             return (a << 24) | (r << 16) | (g << 8) | (b);
-        case ob::ColorCodeFormat::ABGR:
+        case ColorCodeFormat::ABGR:
             return (a << 24) | (b << 16) | (g << 8) | (r);
-        case ob::ColorCodeFormat::RGBA:
+        case ColorCodeFormat::RGBA:
             return (r << 24) | (g << 16) | (b << 8) | (a);
-        case ob::ColorCodeFormat::BGRA:
+        case ColorCodeFormat::BGRA:
             return (b << 24) | (g << 16) | (r << 8) | (a);
         default:break;
         }

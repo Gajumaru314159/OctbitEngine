@@ -8,7 +8,7 @@
 #include <Framework/Core/Math/Matrix.h>
 #include <Framework/Core/Math/Rotation.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  トランスフォーム

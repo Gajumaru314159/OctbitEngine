@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 /*
-namespace ob
+namespace ob::core
 {
 
     class Vec3;
@@ -132,5 +132,5 @@ namespace ob
         (*this) *= af;
     }
 
-}// namespace ob
+}// namespace ob::core
 */

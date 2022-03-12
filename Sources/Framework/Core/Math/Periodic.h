@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Mathf.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  周期関数
@@ -18,7 +18,7 @@ namespace ob {
         //! @brief  サインカーブに従って周期的に[-1,1]の値を返す
         //@―---------------------------------------------------------------------------
         f32 Sin1_1(f32 period, f32 t)noexcept {
-            return Mathf::Sin(t * Mathf::TWO_PI/period);
+            return Mathf::Sin(t * Mathf::TWO_PI / period);
         }
 
 

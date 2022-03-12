@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     struct Vec3;
 
@@ -672,4 +672,4 @@ namespace ob {
     }
 
     //! @endcond
-}// namespace ob
+}// namespace ob::core

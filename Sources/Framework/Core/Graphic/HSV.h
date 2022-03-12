@@ -8,7 +8,7 @@
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Graphic/Color.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief		HSVカラー

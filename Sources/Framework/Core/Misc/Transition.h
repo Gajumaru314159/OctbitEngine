@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Mathf.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  トランジション
@@ -41,7 +41,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief  要素を設定
         //@―---------------------------------------------------------------------------
-        void set(f32 length,f32 in,f32 out,f32 minValue=0.0f,f32 maxValue=1.0f)noexcept;
+        void set(f32 length, f32 in, f32 out, f32 minValue = 0.0f, f32 maxValue = 1.0f)noexcept;
 
 
         //@―---------------------------------------------------------------------------

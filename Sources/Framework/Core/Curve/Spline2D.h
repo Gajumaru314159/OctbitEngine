@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  スプラインカーブ
@@ -75,7 +75,7 @@ namespace ob {
         //! @params t1 終了位置[t1,1]
         //! @params resolution いくつの直線で近似した長さを計算するか
         //@―---------------------------------------------------------------------------
-        f32 length(f32 t0,f32 t1,s32 resolution = 100)const;
+        f32 length(f32 t0, f32 t1, s32 resolution = 100)const;
 
 
         //@―---------------------------------------------------------------------------

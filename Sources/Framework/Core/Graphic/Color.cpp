@@ -10,7 +10,7 @@
 #include <Framework/Core/Math/Mathf.h>
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     const Color Color::white = { 1,1,1,1 };
     const Color Color::grey = { 0.5,0.5,0.5,1 };
@@ -64,7 +64,7 @@ namespace ob {
     //! @brief 色をカラーコードに変換
     //@―---------------------------------------------------------------------------
     u32 Color::toCode(ColorCodeFormat format)const noexcept {
-        IntColor c32=toIntColor();
+        IntColor c32 = toIntColor();
         return c32.toCode();
     }
 
@@ -124,7 +124,7 @@ namespace ob {
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
     //@―---------------------------------------------------------------------------
-    Color Color::Lerp(const Color& a,const Color& b, f32 t) noexcept {
+    Color Color::Lerp(const Color& a, const Color& b, f32 t) noexcept {
         return (a * t) + (b * (1.0f - t));
     }
 
@@ -149,9 +149,9 @@ namespace ob {
     //! @return		色オブジェクト
     //@―---------------------------------------------------------------------------
     Color Color::FromCode(StringView code) noexcept {
-        auto size=code.size();
+        auto size = code.size();
         if (size <= 1)return Color::white;
-        if(code[0]==TC('#'))return Color::white;
+        if (code[0] == TC('#'))return Color::white;
 
         return Color::white;
     }

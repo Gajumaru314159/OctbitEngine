@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief      矩形
@@ -227,7 +227,7 @@ namespace ob {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Rect Lerp(const Rect& a, const Rect& b,f32 t) noexcept;
+        static Rect Lerp(const Rect& a, const Rect& b, f32 t) noexcept;
 
 
     public:
@@ -268,15 +268,15 @@ namespace ob {
     //! @brief      コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
     inline Rect::Rect(f32 left, f32 top, f32 right, f32 bottom) noexcept {
-        set(left, top, right,bottom);
+        set(left, top, right, bottom);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
-    inline Rect::Rect(const Vec2& size, const Vec2& center) noexcept{
-        set(size,center);
+    inline Rect::Rect(const Vec2& size, const Vec2& center) noexcept {
+        set(size, center);
     }
 
 
@@ -327,7 +327,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      LTRB を設定
     //@―---------------------------------------------------------------------------
-    inline void Rect::set(f32 left, f32 top,f32 right, f32 bottom) noexcept {
+    inline void Rect::set(f32 left, f32 top, f32 right, f32 bottom) noexcept {
         this->left = left;
         this->top = top;
         this->right = right;
@@ -360,7 +360,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline void Rect::setSize(const Vec2& size) noexcept {
         auto dt = size - this->size();
-        left -= dt.x*0.5f;
+        left -= dt.x * 0.5f;
         right += dt.x * 0.5f;
         top -= dt.y * 0.5f;
         bottom += dt.y * 0.5f;
@@ -371,7 +371,7 @@ namespace ob {
     //! @brief      左上
     //@―---------------------------------------------------------------------------
     inline Vec2 Rect::tl()const noexcept {
-        return Vec2(left,top);
+        return Vec2(left, top);
     }
 
 
@@ -443,7 +443,7 @@ namespace ob {
     //! @brief      高さ
     //@―---------------------------------------------------------------------------
     inline Vec2 Rect::size()const noexcept {
-        return Vec2(width(),height());
+        return Vec2(width(), height());
     }
 
 
@@ -459,7 +459,7 @@ namespace ob {
     //! @brief      高さ
     //@―---------------------------------------------------------------------------
     inline f32 Rect::height()const noexcept {
-        return bottom-top;
+        return bottom - top;
     }
 
 

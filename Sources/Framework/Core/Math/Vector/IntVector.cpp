@@ -10,7 +10,7 @@
 #include <Framework/Core/Math/Vector/Vector2.h>
 #include <Framework/Core/Math/Vector/Vector3.h>
 #include <Framework/Core/Math/Vector/Vector4.h>
-namespace ob {
+namespace ob::core {
 
     //===============================================================
     //  IntVec2
@@ -85,7 +85,7 @@ namespace ob {
     //! @brief Vec3 で取得
     //@―---------------------------------------------------------------------------
     Vec3 IntVec3::toVec3() const noexcept {
-        return Vec3(1.0f*x, 1.0f * y, 1.0f * z);
+        return Vec3(1.0f * x, 1.0f * y, 1.0f * z);
     }
 
 
@@ -126,7 +126,7 @@ namespace ob {
     //! @brief Vec4 で取得
     //@―---------------------------------------------------------------------------
     Vec4 IntVec4::toVec4() const noexcept {
-        return Vec4(1.0f*x, 1.0f * y, 1.0f * z, 1.0f * w);
+        return Vec4(1.0f * x, 1.0f * y, 1.0f * z, 1.0f * w);
     }
 
 }// namespace ob

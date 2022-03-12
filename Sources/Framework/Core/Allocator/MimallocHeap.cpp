@@ -5,55 +5,46 @@
 //***********************************************************
 #include "MimallocHeap.h"
 
-namespace ob
-{
+namespace ob::core {
 
-	//@―---------------------------------------------------------------------------
-	MimallocHeap::MimallocHeap(void* pBuffer, size_t size)
-	{
-		m_pName = TC("MimallocHeap");
-		OB_REQUIRE(pBuffer != nullptr);
-	}
+    //@―---------------------------------------------------------------------------
+    MimallocHeap::MimallocHeap(void* pBuffer, size_t size) {
+        m_pName = TC("MimallocHeap");
+        OB_REQUIRE(pBuffer != nullptr);
+    }
 
-	MimallocHeap::~MimallocHeap()
-	{
+    MimallocHeap::~MimallocHeap() {
 
-	}
+    }
 
-	void* MimallocHeap::allocate(size_t size, u32 alignment, bool zeroClear)
-	{
-		return nullptr;
-	}
+    void* MimallocHeap::allocate(size_t size, u32 alignment, bool zeroClear) {
+        return nullptr;
+    }
 
-	void MimallocHeap::deallocate(void* pBuffer)
-	{
-	}
+    void MimallocHeap::deallocate(void* pBuffer) {
+    }
 
-	void MimallocHeap::release()
-	{
-	}
+    void MimallocHeap::release() {
+    }
 
 
-	//@―---------------------------------------------------------------------------
-	//! @brief	                ヒープ名の取得
-	//@―---------------------------------------------------------------------------
-	Char* MimallocHeap::name() const {
-		return m_pName;
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief	                ヒープ名の取得
+    //@―---------------------------------------------------------------------------
+    Char* MimallocHeap::name() const {
+        return m_pName;
+    }
 
-	size_t MimallocHeap::heapSize() const
-	{
-		return size_t();
-	}
+    size_t MimallocHeap::heapSize() const {
+        return size_t();
+    }
 
-	size_t MimallocHeap::freeHeapSize() const
-	{
-		return size_t();
-	}
+    size_t MimallocHeap::freeHeapSize() const {
+        return size_t();
+    }
 
-	bool MimallocHeap::isValid() const
-	{
-		return false;
-	}
+    bool MimallocHeap::isValid() const {
+        return false;
+    }
 
 }// namespace ob

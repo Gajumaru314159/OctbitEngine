@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Geometory/Rect.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(点群指定)

@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief      ボックス
@@ -168,7 +168,7 @@ namespace ob {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Box Lerp(const Box& a,const Box& b,f32 t)noexcept;
+        static Box Lerp(const Box& a, const Box& b, f32 t)noexcept;
 
 
     public:

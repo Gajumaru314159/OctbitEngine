@@ -7,15 +7,13 @@
 
 #include <cstdlib>
 
-namespace ob
-{
+namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
     //! @brief	                コンストラクタ
     //@―---------------------------------------------------------------------------
-    SystemHeap::SystemHeap()
-    {
+    SystemHeap::SystemHeap() {
         m_pName = TC("SystemHeap");
         m_handle = ::HeapCreate(NULL, 0, 0);
     }
@@ -24,8 +22,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                デストラクタ
     //@―---------------------------------------------------------------------------
-    SystemHeap::~SystemHeap()
-    {
+    SystemHeap::~SystemHeap() {
         ::HeapDestroy(m_handle);
     }
 
@@ -33,8 +30,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープの開放
     //@―---------------------------------------------------------------------------
-    void SystemHeap::release()
-    {
+    void SystemHeap::release() {
     }
 
     //@―---------------------------------------------------------------------------
@@ -44,21 +40,20 @@ namespace ob
     //! @param[in] alignment    アライメント
     //! @param[in] zeroClear    確保したバッファをゼロで初期化するか
     //@―---------------------------------------------------------------------------
-    void* SystemHeap::allocate(size_t size, u32 alignment, bool zeroClear)
-    {
-        assert(m_handle!=NULL);
+    void* SystemHeap::allocate(size_t size, u32 alignment, bool zeroClear) {
+        assert(m_handle != NULL);
         assert(0 <= alignment);
 
         const size_t allocSize = sizeof(HeapHeader) + size + alignment;
 
         DWORD flags = 0;
         if (zeroClear)flags |= HEAP_ZERO_MEMORY;
-        auto pRaw=::HeapAlloc(m_handle, flags, allocSize);
+        auto pRaw = ::HeapAlloc(m_handle, flags, allocSize);
 
 
         addr_t startData = (addr_t)(GetOffsetPtr(pRaw, sizeof(HeapHeader)));
         addr_t offset = 0;
-        if (0<alignment)offset = (alignment - startData % alignment) % alignment;
+        if (0 < alignment)offset = (alignment - startData % alignment) % alignment;
         void* pAlloc = GetOffsetPtr(pRaw, static_cast<s32>(sizeof(HeapHeader) + offset));
 
 
@@ -79,16 +74,15 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                メモリの開放
     //@―---------------------------------------------------------------------------
-    void SystemHeap::deallocate(void* pBuffer)
-    {
-        ::HeapFree(m_handle,0,pBuffer);
+    void SystemHeap::deallocate(void* pBuffer) {
+        ::HeapFree(m_handle, 0, pBuffer);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名の取得
     //@―---------------------------------------------------------------------------
-    Char* SystemHeap::name() const     {
+    Char* SystemHeap::name() const {
         return m_pName;
     }
 
@@ -96,7 +90,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータのヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::heapSize() const     {
+    size_t SystemHeap::heapSize() const {
         return static_cast<size_t>(-1);
     }
 
@@ -104,8 +98,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                アロケータの使用可能なヒープサイズを取得
     //@―---------------------------------------------------------------------------
-    size_t SystemHeap::freeHeapSize() const
-    {
+    size_t SystemHeap::freeHeapSize() const {
         return static_cast<size_t>(-1);
     }
 
@@ -113,8 +106,7 @@ namespace ob
     //@―---------------------------------------------------------------------------
     //! @brief	                利用可能な状態かどうか
     //@―---------------------------------------------------------------------------
-    bool SystemHeap::isValid() const
-    {
+    bool SystemHeap::isValid() const {
         return true;
     }
 

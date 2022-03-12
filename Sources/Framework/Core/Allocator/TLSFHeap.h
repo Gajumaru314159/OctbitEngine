@@ -6,8 +6,7 @@
 #pragma once
 #include <Framework/Core/Allocator/Heap.h>
 
-namespace ob
-{
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  Two-Level Segregate Fitアロケータ
@@ -15,8 +14,7 @@ namespace ob
     //! @ref    http://www.gii.upv.es/tlsf/
     //! @ref    https://www.researchgate.net/publication/234785757_A_comparison_of_memory_allocators_for_real-time_applications
     //@―---------------------------------------------------------------------------
-    class TLSFHeap final:public Heap
-    {
+    class TLSFHeap final :public Heap {
         friend class Heap;
     public:
 
@@ -105,7 +103,7 @@ namespace ob
         byte GetFreeListSLI(byte fli, byte sli);
         byte GetFreeListFLI(byte fli);
         byte GetFIndex(size_t size);
-        byte GetFIndex(byte fli,byte sli);
+        byte GetFIndex(byte fli, byte sli);
         s32 GetBitCount(u32 value);
 
     private:
@@ -145,8 +143,7 @@ namespace ob
     //! 
     //! @ref    TLSFHeap
     //@―---------------------------------------------------------------------------
-    struct TLSFHeap::BlockTag
-    {
+    struct TLSFHeap::BlockTag {
     public:
 
         BlockTag();

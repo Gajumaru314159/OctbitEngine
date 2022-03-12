@@ -5,7 +5,7 @@
 //***********************************************************
 #include "HSV.h"
 
-namespace ob {
+namespace ob::core {
 
     const HSV HSV::white = { 0,0,1,1 };
     const HSV HSV::grey = { 0,0,0.5,1 };

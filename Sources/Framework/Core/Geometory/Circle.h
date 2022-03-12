@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/Vector2.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  円
@@ -173,7 +173,7 @@ namespace ob {
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
     inline Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
-        return Circle(Vec2::Lerp(a.center,b.center,t),Mathf::Lerp(a.radius,b.radius,t));
+        return Circle(Vec2::Lerp(a.center, b.center, t), Mathf::Lerp(a.radius, b.radius, t));
     }
 
     //! @endcond

@@ -6,7 +6,7 @@
 #include <Framework/Core/Math/Random.h>
 
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief デフォルトコンストラクタ

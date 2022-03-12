@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace ob {
+namespace ob::core {
 
     namespace {
         // CRCテーブル
@@ -70,7 +70,7 @@ namespace ob {
     //! @param len 配列の長さ
     //! @return ハッシュ値
     //@―---------------------------------------------------------------------------
-    static u32 CalcCRCHash(gsl::span<const byte> bytes){
+    static u32 CalcCRCHash(gsl::span<const byte> bytes) {
         u32 hash = static_cast<u32>(bytes.size());
         for (s32 i = 0; i < bytes.size(); ++i) {
 #pragma warning( disable:6011)
@@ -148,4 +148,4 @@ namespace ob {
     } // namespace detail
     //! @endcond
     //! 
-} // namespace ob
+} // namespace ob::core

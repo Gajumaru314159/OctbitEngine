@@ -5,7 +5,7 @@
 //***********************************************************
 #include "Transition.h"
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  更新
@@ -21,9 +21,9 @@ namespace ob {
         }
         f32 outRate = 1.0f;
         if (Mathf::EPSILON < out) {
-            outRate = get_clamp01((length-time)/out);
+            outRate = get_clamp01((length - time) / out);
         }
-        f32 rate = get_min(inRate,outRate);
+        f32 rate = get_min(inRate, outRate);
         return Mathf::Lerp(minValue, maxValue, rate);
     }
 

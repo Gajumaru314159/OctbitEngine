@@ -11,7 +11,7 @@
 
 
 
-namespace ob {
+namespace ob::core {
 
     const Vec2 Vec2::up(0.0f, 1.0f);
     const Vec2 Vec2::down(0.0f, -1.0f);

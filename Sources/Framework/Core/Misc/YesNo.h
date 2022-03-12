@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  Yes/No表現
@@ -63,12 +63,12 @@ namespace ob {
         bool m_yesNo;   // 内部表現
 
     };
-    
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  YesNo定義マクロ
     //@―---------------------------------------------------------------------------
-    #define DEFINE_YES_NO(name) using name = YesNo<struct name##_tag>;
+#define DEFINE_YES_NO(name) using name = YesNo<struct name##_tag>;
 
 
 }// namespcae ob

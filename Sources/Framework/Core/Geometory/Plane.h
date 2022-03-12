@@ -6,7 +6,7 @@
 #pragma once
 #include<Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief 平面

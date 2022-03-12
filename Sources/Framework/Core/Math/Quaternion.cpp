@@ -9,7 +9,7 @@
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     const Quat Quat::identity = Quat(EForceInit::Force);
 

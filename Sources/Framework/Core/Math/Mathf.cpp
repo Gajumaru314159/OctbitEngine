@@ -6,7 +6,7 @@
 #include <Framework/Core/Math/Mathf.h>
 #include <limits>
 
-namespace ob {
+namespace ob::core {
     const f32 Mathf::PI = 3.1415926535897932384626433832795f;
     const f32 Mathf::TWO_PI = Mathf::PI * 2.0f;
     const f32 Mathf::HALF_PI = Mathf::PI * 0.5f;

@@ -7,7 +7,7 @@
 #include <Framework/Core/Math/Vector/Vector3.h>
 #include <Framework/Core/Math/Quaternion.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(Vec3指定)

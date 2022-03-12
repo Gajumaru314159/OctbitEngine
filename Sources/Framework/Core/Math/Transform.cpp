@@ -6,7 +6,7 @@
 #include <Framework/Core/Math/Transform.h>
 #include <Framework/Core/Math/Matrix.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  Matrix に変換

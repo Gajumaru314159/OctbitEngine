@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief ハッシュ値の計算を行うクラス
@@ -20,7 +20,7 @@ namespace ob {
         //! @param len 配列の長さ
         //! @return ハッシュ値
         //@―---------------------------------------------------------------------------
-        static u32 Compute(const char* str, s32 len = -1);	
+        static u32 Compute(const char* str, s32 len = -1);
 
 
         //@―---------------------------------------------------------------------------
@@ -63,4 +63,4 @@ namespace ob {
     } // namespace detail
     //! @endcond
 
-} // namespace ob
+} // namespace ob::core

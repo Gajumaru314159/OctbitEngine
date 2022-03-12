@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  スフィア
@@ -57,7 +57,7 @@ namespace ob {
         //===============================================================
         //  セッター
         //===============================================================
-        
+
         //@―---------------------------------------------------------------------------
         //! @brief 構造体のゼロ初期化
         //@―---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief 構造体のゼロ初期化
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& center,f32 radius) noexcept;
+        void set(const Vec3& center, f32 radius) noexcept;
 
 
     public:
@@ -109,7 +109,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
-    inline Sphere::Sphere(EForceInit) noexcept{
+    inline Sphere::Sphere(EForceInit) noexcept {
         reset();
     }
 
@@ -117,8 +117,8 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(中心/サイズ指定)
     //@―---------------------------------------------------------------------------
-    inline Sphere::Sphere(const Vec3& center, f32 radius) noexcept{
-        set(center,radius);
+    inline Sphere::Sphere(const Vec3& center, f32 radius) noexcept {
+        set(center, radius);
     }
 
 
@@ -165,7 +165,7 @@ namespace ob {
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
     inline Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
-        return Sphere(Vec3::Lerp(a.center,b.center,t),Mathf::Lerp(a.radius,b.radius,t));
+        return Sphere(Vec3::Lerp(a.center, b.center, t), Mathf::Lerp(a.radius, b.radius, t));
     }
 
     //! @endcond

@@ -7,7 +7,7 @@
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Quaternion.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  シリンダー

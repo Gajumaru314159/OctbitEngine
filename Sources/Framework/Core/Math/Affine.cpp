@@ -9,7 +9,7 @@
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Quaternion.h>
 /*
-namespace ob
+namespace ob::core
 {
 
     //==============================================================================
@@ -477,5 +477,5 @@ namespace ob
 
 
 
-}// namespace ob
+}// namespace ob::core
 */

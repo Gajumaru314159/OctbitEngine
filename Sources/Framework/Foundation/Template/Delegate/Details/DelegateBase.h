@@ -3,6 +3,7 @@
 //! @brief		デリゲート基底クラス
 //! @author		Gajumaru
 //***********************************************************
+//! @cond
 #pragma once
 
 namespace ob
@@ -167,3 +168,4 @@ namespace ob
 
 
 }// namespcae ob
+//! @endcond

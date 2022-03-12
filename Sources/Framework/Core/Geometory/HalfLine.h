@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/Vector3.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  半直線
@@ -30,7 +30,7 @@ namespace ob {
         //! @param p0 始点
         //! @param p1 半直線状のもう1点
         //@―---------------------------------------------------------------------------
-        HalfLine(const Vec3 & p0, const Vec3 & p1)noexcept;
+        HalfLine(const Vec3& p0, const Vec3& p1)noexcept;
 
 
         //===============================================================
@@ -43,7 +43,7 @@ namespace ob {
         //! @param p0 始点
         //! @param p1 半直線状のもう1点
         //@―---------------------------------------------------------------------------
-        void set(const Vec3 & p0, const Vec3 & p1)noexcept;
+        void set(const Vec3& p0, const Vec3& p1)noexcept;
 
     public:
 

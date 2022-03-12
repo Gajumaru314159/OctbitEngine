@@ -5,6 +5,6 @@
 //***********************************************************
 #include <Framework/Core/Geometory/Sphere.h>
 
-namespace ob {
+namespace ob::core {
 
 }// namespace ob

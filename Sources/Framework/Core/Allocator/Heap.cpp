@@ -8,7 +8,7 @@
 #include "MimallocHeap.h"
 #include "TLSFHeap.h"
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief		メモリの解放
@@ -35,16 +35,16 @@ namespace ob {
     Heap* Heap::Create(size_t size, HeapMethodType type, const Char* pName, Heap* pParent) {
         Heap* result = nullptr;
         switch (type) {
-        case ob::HeapMethodType::System:
+        case HeapMethodType::System:
             result = new SystemHeap();
             break;
-        case ob::HeapMethodType::Mimalloc:
+        case HeapMethodType::Mimalloc:
             result = new MimallocHeap(nullptr, 0);
             break;
-        case ob::HeapMethodType::TLSF:
+        case HeapMethodType::TLSF:
             LOG_ERROR_EX("Memory", "not implemented heap mode.");
             break;
-        case ob::HeapMethodType::Invalid:
+        case HeapMethodType::Invalid:
             LOG_ERROR_EX("Memory", "invalid heap mode.");
             break;
         default:

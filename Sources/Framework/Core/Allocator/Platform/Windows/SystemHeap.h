@@ -8,7 +8,7 @@
 #include <Windows.h>
 
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief		OSヒープ

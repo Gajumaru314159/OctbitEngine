@@ -6,7 +6,7 @@
 #pragma once
 #include <math.h>
 
-namespace ob {
+namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ namespace ob {
         static constexpr f32 InverseLerp(f32 a, f32 b, f32 f)noexcept { return (b - a) / (f - a); }
 
         //! @brief tを[a,b]から[c,d]に変換する
-        static constexpr f32 Map(f32 a, f32 b, f32 c,f32 d,f32 t)noexcept { return IsNearEquals(b-a,0.0f)?c:((t-a)/(b-a)*(d-c)+c); }
+        static constexpr f32 Map(f32 a, f32 b, f32 c, f32 d, f32 t)noexcept { return IsNearEquals(b - a, 0.0f) ? c : ((t - a) / (b - a) * (d - c) + c); }
 
 
         //===============================================================
@@ -143,7 +143,7 @@ namespace ob {
         static bool IsNearEquals(f32 a, f32 b, f32 tolerance = Mathf::TOLERANCE)noexcept { return Abs(a - b) < tolerance; }
 
         //! @brief 値が0に近い場合はtrueを返す
-        static bool IsNearZero(f32 a, f32 tolerance = Mathf::TOLERANCE)noexcept { return IsNearEquals(a,0.0f,tolerance); }
+        static bool IsNearZero(f32 a, f32 tolerance = Mathf::TOLERANCE)noexcept { return IsNearEquals(a, 0.0f, tolerance); }
 
         //! @brief 値が無効な数字か判定する
         static bool IsNaN(f32 value);

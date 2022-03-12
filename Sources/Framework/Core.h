@@ -41,3 +41,7 @@
 
 #include <Framework/Core/Misc/CRCHash.h>
 #include <Framework/Core/Misc/UUID.h>
+
+namespace ob{
+    using namespace core;
+}

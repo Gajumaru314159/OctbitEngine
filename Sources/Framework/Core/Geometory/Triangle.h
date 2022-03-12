@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/include.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  三角形
@@ -259,7 +259,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline f32 Triangle::area()const noexcept {
         f32 abac = Vec3::Dot(p1 - p0, p2 - p0);
-        return Mathf::Sqrt(Vec3::SqrDist(p0, p1) * Vec3::SqrDist(p0, p2) - abac * abac)*0.5f;
+        return Mathf::Sqrt(Vec3::SqrDist(p0, p1) * Vec3::SqrDist(p0, p2) - abac * abac) * 0.5f;
     }
 
 

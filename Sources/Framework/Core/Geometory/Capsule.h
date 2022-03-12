@@ -7,7 +7,7 @@
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Quaternion.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  カプセル構造体
@@ -164,7 +164,7 @@ namespace ob {
     inline Capsule::Capsule(EForceInit) noexcept {
         pos1.setZero();
         pos2.setZero();
-        radius=0.0f;
+        radius = 0.0f;
     }
 
 
@@ -289,7 +289,7 @@ namespace ob {
     //! @brief           体積を取得
     //@―---------------------------------------------------------------------------
     inline f32 Capsule::volume()const noexcept {
-        return 
+        return
             radius * radius * Mathf::PI * minHeight() +
             radius * radius * radius * Mathf::PI * 4.0f / 3.0f;
     }

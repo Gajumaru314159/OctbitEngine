@@ -7,7 +7,7 @@
 
 
 
-namespace ob {
+namespace ob::core {
 
     static f32 s_float16ToFloat[2][32];
 

@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Mathf.h>
 
-namespace ob {
+namespace ob::core {
 
     struct Vec3;
     struct Quat;
@@ -173,7 +173,7 @@ namespace ob {
         pitch = Mathf::Mod(pitch, Mathf::PI);
         yaw = Mathf::Mod(yaw, Mathf::PI);
         if (roll < 0.0f)roll += Mathf::TWO_PI;
-        if (pitch < 0.0f)pitch+= Mathf::TWO_PI;
+        if (pitch < 0.0f)pitch += Mathf::TWO_PI;
         if (yaw < 0.0f)yaw += Mathf::TWO_PI;
     }
 

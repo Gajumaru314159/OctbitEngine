@@ -7,7 +7,7 @@
 #include <Framework/Core/Math/Vector/IntVector2.h>
 #include <Framework/Core/Math/Vector/Vector2.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief      矩形
@@ -320,7 +320,7 @@ namespace ob {
     //! @brief      上辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::topCenter()const noexcept {
-        return Vec2((left + right) * 0.5f, 1.0f*top);
+        return Vec2((left + right) * 0.5f, 1.0f * top);
     }
 
 
@@ -336,7 +336,7 @@ namespace ob {
     //! @brief      左辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::leftCenter()const noexcept {
-        return Vec2(1.0f * left, (top+bottom)*0.5f);
+        return Vec2(1.0f * left, (top + bottom) * 0.5f);
     }
 
 
@@ -352,7 +352,7 @@ namespace ob {
     //! @brief      サイズ
     //@―---------------------------------------------------------------------------
     inline IntVec2 IntRect::size()const noexcept {
-        return IntVec2(width(),height());
+        return IntVec2(width(), height());
     }
 
 
@@ -368,7 +368,7 @@ namespace ob {
     //! @brief      高さ
     //@―---------------------------------------------------------------------------
     inline s32 IntRect::height()const noexcept {
-        return bottom-top;
+        return bottom - top;
     }
 
 
@@ -384,7 +384,7 @@ namespace ob {
     //! @brief      外周の長さ
     //@―---------------------------------------------------------------------------
     inline s32 IntRect::perimeter()const noexcept {
-        return (width()+height()) * 2;
+        return (width() + height()) * 2;
     }
 
 

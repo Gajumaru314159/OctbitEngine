@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  ノイズ
@@ -25,7 +25,7 @@ namespace ob {
         //! @params octaves     何回重ね合わせるか
         //! @params persistence 詳細なノイズの強度
         //@―---------------------------------------------------------------------------
-        static f32 PerlinOctave(s32 octaves,f32 persistence,f32 x, f32 y = defaultY(), f32 z = defaultZ());
+        static f32 PerlinOctave(s32 octaves, f32 persistence, f32 x, f32 y = defaultY(), f32 z = defaultZ());
 
 
     private:

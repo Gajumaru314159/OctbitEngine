@@ -10,7 +10,7 @@
 #include <Framework/Core/Misc/CRCHash.h>
 
 
-namespace ob {
+namespace ob::core {
 
 
     byte DigitCharToHex(int ch) {

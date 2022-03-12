@@ -6,7 +6,7 @@
 
 #include <Framework/Core/Geometory/Box.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(点群指定)
@@ -26,13 +26,13 @@ namespace ob {
     //!             要素数が1以下の時は reset() が呼び出される。
     //@―---------------------------------------------------------------------------
     void Box::set(const gsl::span<Vec3>& points)noexcept {
-        if (points.size()<=1) {
+        if (points.size() <= 1) {
             reset();
             return;
         }
         Vec3 min = points[0];
         Vec3 max = points[0];
-        for (auto& point:points) {
+        for (auto& point : points) {
             min = Vec3::Min(min, point);
             max = Vec3::Max(max, point);
         }

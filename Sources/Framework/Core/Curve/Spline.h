@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  スプラインカーブ
@@ -32,7 +32,7 @@ namespace ob {
         //! @brief  接線計算
         //@―---------------------------------------------------------------------------
         template<class T>
-        static constexpr T CalculateTangent(const T& p0, const T& p1, const T& p2,f32 a,f32 b)noexcept;
+        static constexpr T CalculateTangent(const T& p0, const T& p1, const T& p2, f32 a, f32 b)noexcept;
 
 
     };

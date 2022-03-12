@@ -7,7 +7,7 @@
 #include <Framework/Core/Math/Vector/Vector2.h>
 #include <Framework/Core/Geometory/Rect.h>
 
-namespace ob {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  マージン
@@ -34,7 +34,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ(要素指定)
         //@―---------------------------------------------------------------------------
-        Margin(f32 left,f32 top,f32 right,f32 bottom);
+        Margin(f32 left, f32 top, f32 right, f32 bottom);
 
 
         //===============================================================
@@ -138,7 +138,7 @@ namespace ob {
     //! @brief  コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
     inline Margin::Margin(EForceInit) {
-        set(0.0f,0.0f,0.0f,0.0f);
+        set(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
 
@@ -149,14 +149,14 @@ namespace ob {
         : left(left)
         , top(top)
         , right(right)
-        , bottom(bottom){
+        , bottom(bottom) {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Margin::operator==(const Margin& another)const noexcept{
+    inline bool Margin::operator==(const Margin& another)const noexcept {
         return
             Mathf::IsNearEquals(left, another.left) &&
             Mathf::IsNearEquals(top, another.top) &&
@@ -188,7 +188,7 @@ namespace ob {
     //! @brief      左上
     //@―---------------------------------------------------------------------------
     inline Vec2 Margin::tl()const noexcept {
-        return Vec2(left,top);
+        return Vec2(left, top);
     }
 
 
@@ -236,7 +236,7 @@ namespace ob {
     //! @brief  親サイズからサイズを計算
     //@―---------------------------------------------------------------------------
     inline Vec2 Margin::size(const Vec2& parent)const noexcept {
-        return Vec2(parent.x-left-right,parent.y-top-bottom);
+        return Vec2(parent.x - left - right, parent.y - top - bottom);
     }
 
 
@@ -246,7 +246,7 @@ namespace ob {
     inline Rect Margin::rect(const Rect& parent)const noexcept {
         return Rect(
             size(parent.size()),
-            parent.center()+Vec2(left+right,top+bottom)*0.5f
+            parent.center() + Vec2(left + right, top + bottom) * 0.5f
         );
     }
 
