@@ -282,25 +282,25 @@ namespace ob {
         //! @details            0ベクトルの場合は何もしない。
         //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
         //@―---------------------------------------------------------------------------
-        void     normalize(f32 tolerance = Mathf::TOLERANCE);
+        Vec3&   normalize(f32 tolerance = Mathf::TOLERANCE);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief              ベクトルの正規化(ゼロチェックなし)
         //@―---------------------------------------------------------------------------
-        void     normalizeUnsafe();
+        Vec3&   normalizeUnsafe();
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      移動
         //@―---------------------------------------------------------------------------
-        void    translate(f32 x, f32 y, f32 z) noexcept;
+        Vec3&   translate(f32 x, f32 y, f32 z) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      移動
         //@―---------------------------------------------------------------------------
-        void    translate(const Vec3& add) noexcept;
+        Vec3&   translate(const Vec3& add) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -309,7 +309,7 @@ namespace ob {
         //! @details    回転順序はZXYです。
         //! @param      eulerAngles 回転量(Degrees)
         //@―---------------------------------------------------------------------------
-        void    rotate(const Vec3& eulerAngles);
+        Vec3&   rotate(const Vec3& eulerAngles);
 
 
         //@―---------------------------------------------------------------------------
@@ -320,7 +320,7 @@ namespace ob {
         //! @param y Y軸の回転量(Degrees)
         //! @param z Z軸の回転量(Degrees)
         //@―---------------------------------------------------------------------------
-        void    rotate(f32 x, f32 y, f32 z);
+        Vec3&   rotate(f32 x, f32 y, f32 z);
 
 
         //@―---------------------------------------------------------------------------
@@ -329,43 +329,43 @@ namespace ob {
         //! @param angle    回転量(Degrees)
         //! @param axis     回転軸
         //@―---------------------------------------------------------------------------
-        void    rotate(f32 angle, const Vec3& axis);
+        Vec3&   rotate(f32 angle, const Vec3& axis);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      X軸回転(Degrees)
         //@―---------------------------------------------------------------------------
-        void    rotateX(f32 theta);
+        Vec3&   rotateX(f32 theta);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      Y軸回転(Degrees)
         //@―---------------------------------------------------------------------------
-        void    rotateY(f32 theta);
+        Vec3&   rotateY(f32 theta);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      Z軸回転(Degrees)
         //@―---------------------------------------------------------------------------
-        void    rotateZ(f32 theta);
+        Vec3&   rotateZ(f32 theta);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        void    scale(f32 scale) noexcept;
+        Vec3&   scale(f32 scale) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        void    scale(f32 sx, f32 sy, f32 sz) noexcept;
+        Vec3&   scale(f32 sx, f32 sy, f32 sz) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        void    scale(const Vec3& scale) noexcept;
+        Vec3&   scale(const Vec3& scale) noexcept;
 
 
         //===============================================================
@@ -963,11 +963,12 @@ namespace ob {
     //! @details            0ベクトルの場合は何もしない。
     //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
     //@―---------------------------------------------------------------------------
-    inline void Vec3::normalize(f32 tolerance) {
+    inline Vec3& Vec3::normalize(f32 tolerance) {
         f32 f = length();
         // 0ベクトルの場合は何もしない
-        if (f <= tolerance)return;
+        if (f <= tolerance)return *this;
         this->operator/=(f);
+        return *this;
     }
 
 
@@ -976,27 +977,29 @@ namespace ob {
     //! 
     //! @note               0ベクトルを正規化した場合は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline void Vec3::normalizeUnsafe() {
+    inline Vec3& Vec3::normalizeUnsafe() {
         f32 f = length();
         this->operator/=(f);
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      移動
     //@―---------------------------------------------------------------------------
-    inline void Vec3::translate(f32 x, f32 y, f32 z) noexcept {
+    inline Vec3& Vec3::translate(f32 x, f32 y, f32 z) noexcept {
         this->x += x;
         this->y += y;
         this->z += z;
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      移動
     //@―---------------------------------------------------------------------------
-    inline void Vec3::translate(const Vec3& v) noexcept {
-        translate(v.x, v.y, v.z);
+    inline Vec3& Vec3::translate(const Vec3& v) noexcept {
+        return translate(v.x, v.y, v.z);
     }
 
 
@@ -1005,10 +1008,11 @@ namespace ob {
     //! 
     //! @details    回転順序はZXYです。
     //@―---------------------------------------------------------------------------
-    inline void Vec3::rotate(const Vec3& eulerAngles) {
+    inline Vec3& Vec3::rotate(const Vec3& eulerAngles) {
         rotateZ(eulerAngles.z);
         rotateX(eulerAngles.x);
         rotateY(eulerAngles.y);
+        return *this;
     }
 
 
@@ -1017,17 +1021,18 @@ namespace ob {
     //! 
     //! @details    回転順序はZXYです。
     //@―---------------------------------------------------------------------------
-    inline void Vec3::rotate(f32 x, f32 y, f32 z) {
+    inline Vec3& Vec3::rotate(f32 x, f32 y, f32 z) {
         rotateZ(z);
         rotateX(x);
         rotateY(y);
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      X軸回転
     //@―---------------------------------------------------------------------------
-    inline void Vec3::rotateX(f32 theta) {
+    inline Vec3& Vec3::rotateX(f32 theta) {
         const f32 lx = y;
         const f32 ly = z;
         const f32 rad = Mathf::Degrees(theta);
@@ -1035,13 +1040,14 @@ namespace ob {
         Mathf::SinCos(rad, sin, cos);
         y = lx * cos - ly * sin;
         z = lx * sin + ly * cos;
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      Y軸回転
     //@―---------------------------------------------------------------------------
-    inline void Vec3::rotateY(f32 theta) {
+    inline Vec3& Vec3::rotateY(f32 theta) {
         const f32 lx = z;
         const f32 ly = x;
         const f32 rad = Mathf::Degrees(theta);
@@ -1049,13 +1055,14 @@ namespace ob {
         Mathf::SinCos(rad, sin, cos);
         z = lx * cos - ly * sin;
         x = lx * sin + ly * cos;
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      Z軸回転
     //@―---------------------------------------------------------------------------
-    inline void Vec3::rotateZ(f32 theta) {
+    inline Vec3& Vec3::rotateZ(f32 theta) {
         const f32 lx = x;
         const f32 ly = y;
         const f32 rad = Mathf::Degrees(theta);
@@ -1063,32 +1070,34 @@ namespace ob {
         Mathf::SinCos(rad, sin, cos);
         x = lx * cos - ly * sin;
         y = lx * sin + ly * cos;
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline void Vec3::scale(f32 s) noexcept {
-        scale(s, s, s);
+    inline Vec3& Vec3::scale(f32 s) noexcept {
+        return scale(s, s, s);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline void Vec3::scale(f32 sx, f32 sy, f32 sz) noexcept {
+    inline Vec3& Vec3::scale(f32 sx, f32 sy, f32 sz) noexcept {
         x *= sx;
         y *= sy;
         z *= sz;
+        return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline void Vec3::scale(const Vec3& s) noexcept {
-        scale(s.x, s.y, s.z);
+    inline Vec3& Vec3::scale(const Vec3& s) noexcept {
+        return scale(s.x, s.y, s.z);
     }
 
 

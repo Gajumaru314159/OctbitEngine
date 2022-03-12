@@ -282,13 +282,13 @@ namespace ob {
         //! @details            0ベクトルの場合は何もしない。
         //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
         //@―---------------------------------------------------------------------------
-        void     normalize(f32 tolerance = Mathf::TOLERANCE);
+        Vec2&   normalize(f32 tolerance = Mathf::TOLERANCE);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief              ベクトルの正規化(ゼロチェックなし)
         //@―---------------------------------------------------------------------------
-        void     normalizeUnsafe();
+        Vec2&   normalizeUnsafe();
 
 
         //===============================================================
@@ -823,11 +823,12 @@ namespace ob {
     //! @details            0ベクトルの場合は何もしない。
     //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
     //@―---------------------------------------------------------------------------
-    inline void Vec2::normalize(f32 tolerance) {
+    inline Vec2& Vec2::normalize(f32 tolerance) {
         f32 f = length();
         // 0ベクトルの場合は何もしない
-        if (f <= tolerance)return;
+        if (f <= tolerance)return *this;
         this->operator/=(f);
+        return *this;
     }
 
 
@@ -836,9 +837,10 @@ namespace ob {
     //! 
     //! @note               0ベクトルを正規化した場合は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline void Vec2::normalizeUnsafe() {
+    inline Vec2& Vec2::normalizeUnsafe() {
         f32 f = length();
         this->operator/=(f);
+        return *this;
     }
 
 

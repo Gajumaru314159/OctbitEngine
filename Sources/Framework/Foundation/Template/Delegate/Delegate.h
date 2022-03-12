@@ -7,8 +7,11 @@
 #include "Details/DelegateBase.h"
 
 namespace ob {
+
+    //! @cond
     template<class SIGNATURE>
     class delegate {};
+    //! @endcond
 
 
     //@―---------------------------------------------------------------------------
