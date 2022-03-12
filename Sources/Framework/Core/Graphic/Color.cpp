@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Graphic/Color.h>
+#include <Framework/Core/Graphic/HSV.h>
 #include <Framework/Core/Graphic/IntColor.h>
 
 #include <Framework/Core/Math/Mathf.h>
@@ -11,25 +12,27 @@
 
 namespace ob {
 
-    const Color Color::blue = { 0,0,0,1 };
-    const Color Color::clear = { 0,0,0,0 };
-    const Color Color::cyan = { 0,1,1,1 };
-    const Color Color::green = { 0,1,0,1 };
-    const Color Color::grey = { 0.5,0.5,0.5,1 };
-    const Color Color::magenta = { 1,0,1,1 };
-    const Color Color::red = { 1,0,0,1 };
     const Color Color::white = { 1,1,1,1 };
-    const Color Color::yellow = { 1,0.92f,0.016f,1 };
+    const Color Color::grey = { 0.5,0.5,0.5,1 };
+    const Color Color::black = { 0,0,0,1 };
+    const Color Color::clear = { 0,0,0,0 };
+    const Color Color::red = { 1,0,0,1 };
+    const Color Color::yellow = { 1,1,0,1 };
+    const Color Color::green = { 0,1,0,1 };
+    const Color Color::cyan = { 0,1,1,1 };
+    const Color Color::blue = { 0,0,1,1 };
+    const Color Color::magenta = { 1,0,1,1 };
 
-    const IntColor IntColor::blue = { 0,0,0,255 };
-    const IntColor IntColor::clear = { 0,0,0,0 };
-    const IntColor IntColor::cyan = { 0,255,255,255 };
-    const IntColor IntColor::green = { 0,255,0,255 };
-    const IntColor IntColor::grey = { 128,128,128,255 };
-    const IntColor IntColor::magenta = { 255,0,255,255 };
-    const IntColor IntColor::red = { 255,0,0,255 };
     const IntColor IntColor::white = { 255,255,255,255 };
-    const IntColor IntColor::yellow = { 255,235,4,255 };
+    const IntColor IntColor::grey = { 128,128,128,255 };
+    const IntColor IntColor::black = { 0,0,0,255 };
+    const IntColor IntColor::clear = { 0,0,0,0 };
+    const IntColor IntColor::red = { 255,0,0,255 };
+    const IntColor IntColor::yellow = { 255,255,0,255 };
+    const IntColor IntColor::green = { 0,255,0,255 };
+    const IntColor IntColor::cyan = { 0,255,255,255 };
+    const IntColor IntColor::blue = { 0,0,255,255 };
+    const IntColor IntColor::magenta = { 255,0,255,255 };
 
 
     //@―---------------------------------------------------------------------------
@@ -79,46 +82,6 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief			RGBカラーをHSVに変換する
-    //! 
-    //! @param[out] h   色相出力先
-    //! @param[out] s   彩度出力先
-    //! @param[out] v   輝度出力先
-    //@―---------------------------------------------------------------------------
-    void Color::toHSV(f32& h, f32& s, f32& v) noexcept {
-        f32 max = Mathf::Max(r, g, b);
-        f32 min = Mathf::Min(r, g, b);
-        h = max - min;
-        if (h > 0.0f) {
-            if (max == r) {
-                h = (g - b) / h;
-                if (h < 0.0f) {
-                    h += 6.0f;
-                }
-            } else if (max == g) {
-                h = 2.0f + (b - r) / h;
-            } else {
-                h = 4.0f + (r - g) / h;
-            }
-        }
-        h *= (1.0f / 6.0f);
-        s = (max - min);
-        if (max != 0.0f)s /= max;
-        v = max;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief			RGBカラーをHSVに変換する
-    //! 
-    //! @param[out] vec	出力先
-    //@―---------------------------------------------------------------------------
-    void Color::toHSV(Vec3& vec) noexcept {
-        toHSV(vec.x, vec.y, vec.z);
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief      リニアカラーに変換
     //@―---------------------------------------------------------------------------
     Color Color::toLinear()const {
@@ -153,41 +116,15 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief		HSV色空間からRGB色を生成する
-    //! @param h	色相(0～1)
-    //! @param s	彩度(0～1)
-    //! @param v	輝度(0～1)
-    //! @param a	アルファ(0～1)
-    //! @return		色オブジェクト
-    //@―---------------------------------------------------------------------------
-    Color Color::HSV(f32 h, f32 s, f32 v, f32 a) noexcept {
-        // 色相は循環可
-        h = Mathf::Fract(1.0f + Mathf::Fract(h));
-
-        f32 c = v * s;
-        f32 hp = Mathf::Fract(h) * 6.0f;
-        f32 x = c * (1.0f - Mathf::Abs(Mathf::Fract(hp * 0.5f) * 2.0f - 1.0f));
-        f32 m = v - c;
-
-        if (hp < 1.0f)return Color(c + m, x + m, 0 + m, a);
-        else if (hp < 2.0f)return Color(x + m, c + m, 0 + m, a);
-        else if (hp < 3.0f)return Color(0 + m, c + m, x + m, a);
-        else if (hp < 4.0f)return Color(0 + m, x + m, c + m, a);
-        else if (hp < 5.0f)return Color(x + m, 0 + m, c + m, a);
-        else			   return Color(c + m, 0 + m, x + m, a);
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief		色の線形補完
     //! 
-    //! @details	t が0のとき col1 を返し、 t が1のとき col2 を返す。
+    //! @details	t が0のとき a を返し、 t が1のとき b を返す。
     //! @param a    色1
     //! @param b    色2
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
     //@―---------------------------------------------------------------------------
-    Color Color::Lerp(Color a, Color b, f32 t) noexcept {
+    Color Color::Lerp(const Color& a,const Color& b, f32 t) noexcept {
         return (a * t) + (b * (1.0f - t));
     }
 
@@ -195,26 +132,28 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief		HSV空間で色の線形補完
     //! 
-    //! @details	t が0のとき col1 を返し、 t が1のとき col2 を返す。
+    //! @details	t が0のとき a を返し、 t が1のとき b を返す。
     //! @param a    色1
     //! @param b    色2
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
     //@―---------------------------------------------------------------------------
-    Color Color::LerpHSV(Color a, Color b, f32 t) noexcept {
-        f32 aH, aS, aV;
-        f32 bH, bS, bV;
-        a.toHSV(aH, aS, aV);
-        b.toHSV(bH, bS, bV);
+    Color Color::LerpHSV(const Color& a, const Color& b, f32 t) noexcept {
+        return HSV::Lerp(HSV(a), HSV(b), t).toColor();
+    }
 
-        if (0.5f < Mathf::Abs(aH - bH)) {
-            if (aH < bH)
-                aH += 1.0f;
-            else
-                bH += 1.0f;
-        }
 
-        return Color(Mathf::Fract(Mathf::Lerp(aH, bH, t)), Mathf::Lerp(aS, bS, t), Mathf::Lerp(aV, bV, t));
+    //@―---------------------------------------------------------------------------
+    //! @brief		カラーコードから色を生成する
+    //! 
+    //! @return		色オブジェクト
+    //@―---------------------------------------------------------------------------
+    Color Color::FromCode(StringView code) noexcept {
+        auto size=code.size();
+        if (size <= 1)return Color::white;
+        if(code[0]==TC('#'))return Color::white;
+
+        return Color::white;
     }
 
 }// namespace ob

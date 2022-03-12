@@ -148,16 +148,16 @@ namespace ob {
 
     public:
 
-        static const IntColor black;		//!< Color(0,0,0,255)
-        static const IntColor blue;		    //!< Color(0,0,255,255)
-        static const IntColor clear;		//!< Color(0,0,0,0)
-        static const IntColor cyan;		    //!< Color(0,255,255,255)
-        static const IntColor green;		//!< Color(0,255,0,255)
-        static const IntColor grey;		    //!< Color(0.5,0.5,0.5,255)
-        static const IntColor magenta;	    //!< Color(255,0,255,255)
-        static const IntColor red;		    //!< Color(255,0,0,255)
         static const IntColor white;		//!< Color(255,255,255,255)
-        static const IntColor yellow;	    //!< Color(255,235,4,255)
+        static const IntColor grey;		    //!< Color(128.128.128,255)
+        static const IntColor black;		//!< Color(0  ,0  ,0  ,255)
+        static const IntColor clear;		//!< Color(0  ,0  ,0  ,0  )
+        static const IntColor red;		    //!< Color(255,0  ,0  ,255)
+        static const IntColor yellow;	    //!< Color(255,255,0  ,255)
+        static const IntColor green;		//!< Color(0  ,255,0  ,255)
+        static const IntColor cyan;		    //!< Color(0  ,255,255,255)
+        static const IntColor blue;		    //!< Color(0  ,0  ,255,255)
+        static const IntColor magenta;	    //!< Color(255,0  ,255,255)
 
     public:
 

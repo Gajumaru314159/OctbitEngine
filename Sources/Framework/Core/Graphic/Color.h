@@ -228,27 +228,15 @@ namespace ob {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief          IntColorに変換
+        //! @brief          IntColor に変換
         //@―---------------------------------------------------------------------------
         IntColor toIntColor()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief			RGBカラーをHSVに変換する
-        //! 
-        //! @param[out] h   色相出力先
-        //! @param[out] s   彩度出力先
-        //! @param[out] v   輝度出力先
+        //! @brief          Vec4 に変換
         //@―---------------------------------------------------------------------------
-        void toHSV(f32& h, f32& s, f32& v) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief			RGBカラーをHSVに変換する
-        //! 
-        //! @param[out] vec	出力先
-        //@―---------------------------------------------------------------------------
-        void toHSV(Vec3& vec) noexcept;
+        Vec4 toVec4()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -288,64 +276,55 @@ namespace ob {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief		HSV色空間からRGB色を生成する
-        //! @param h	色相(0～1)
-        //! @param s	彩度(0～1)
-        //! @param v	輝度(0～1)
-        //! @param a	アルファ(0～1)
+        //! @brief		カラーコードから色を生成する
         //! @return		色オブジェクト
         //@―---------------------------------------------------------------------------
-        static Color HSV(f32 h, f32 s, f32 v, f32 a) noexcept;
+        static Color FromCode(StringView code) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief		色の線形補完
         //! 
-        //! @details	t が0のとき col1 を返し、 t が1のとき col2 を返す。
+        //! @details	t が0のとき a を返し、 t が1のとき b を返す。
         //! @param a    色1
         //! @param b    色2
         //! @param t	補完パラメータ
         //! @return		補完された色オブジェクト
         //@―---------------------------------------------------------------------------
-        static Color Lerp(Color a, Color b, f32 t) noexcept;
+        static Color Lerp(const Color& a, const Color& b, f32 t) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief		HSV空間で色の線形補完
         //! 
-        //! @details	t が0のとき col1 を返し、 t が1のとき col2 を返す。
+        //! @details	t が0のとき a を返し、 t が1のとき b を返す。
         //! @param a    色1
         //! @param b    色2
         //! @param t	補完パラメータ
         //! @return		補完された色オブジェクト
         //@―---------------------------------------------------------------------------
-        static Color LerpHSV(Color a, Color b, f32 t) noexcept;
+        static Color LerpHSV(const Color& a,const Color& b, f32 t) noexcept;
 
 
     public:
 
-        static const Color black;		//!< Color(0,0,0,1)
-        static const Color blue;		//!< Color(0,0,1,1)
-        static const Color clear;		//!< Color(0,0,0,0)
-        static const Color cyan;		//!< Color(0,1,1,1)
-        static const Color green;		//!< Color(0,1,0,1)
-        static const Color grey;		//!< Color(0.5,0.5,0.5,1)
-        static const Color magenta;		//!< Color(1,0,1,1)
-        static const Color red;			//!< Color(1,0,0,1)
         static const Color white;		//!< Color(1,1,1,1)
-        static const Color yellow;		//!< Color(1,0.92,0.016,1)
+        static const Color grey;		//!< Color(0.5,0.5,0.5,1)
+        static const Color black;		//!< Color(0,0,0,1)
+        static const Color clear;		//!< Color(0,0,0,0)
+        static const Color red;			//!< Color(1,0,0,1)
+        static const Color yellow;		//!< Color(1,1,0,1)
+        static const Color green;		//!< Color(0,1,0,1)
+        static const Color cyan;		//!< Color(0,1,1,1)
+        static const Color blue;		//!< Color(0,0,1,1)
+        static const Color magenta;		//!< Color(1,0,1,1)
 
     public:
 
-        union {
-            struct {
-                f32 r;      //!< 赤成分
-                f32 g;      //!< 緑成分
-                f32 b;      //!< 青成分
-                f32 a;      //!< アルファ成分
-            };
-            f32 data[4];    //!< ベクトルの成分
-        };
+        f32 r;      //!< 赤成分
+        f32 g;      //!< 緑成分
+        f32 b;      //!< 青成分
+        f32 a;      //!< アルファ成分
 
     };
 
@@ -598,6 +577,14 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline f32 Color::maxComponent()const noexcept {
         return Mathf::Max(r, g, b);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief          Vec4 に変換
+    //@―---------------------------------------------------------------------------
+    Vec4 Color::toVec4()const noexcept {
+        return Vec4(r,g,b,a);
     }
 
 
