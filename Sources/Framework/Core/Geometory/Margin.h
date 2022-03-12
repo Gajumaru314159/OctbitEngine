@@ -176,7 +176,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  要素を指定
     //@―---------------------------------------------------------------------------
-    void Margin::set(f32 left, f32 top, f32 right, f32 bottom)noexcept {
+    inline void Margin::set(f32 left, f32 top, f32 right, f32 bottom)noexcept {
         this->left = left;
         this->top = top;
         this->right = right;

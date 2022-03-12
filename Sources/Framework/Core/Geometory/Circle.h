@@ -142,7 +142,7 @@ namespace ob {
     //! @param center   中心座標
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    void Circle::set(const Vec2& center, f32 radius)noexcept {
+    inline void Circle::set(const Vec2& center, f32 radius)noexcept {
         this->center = center;
         this->radius = radius;
     }
@@ -151,7 +151,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief          面積を取得
     //@―---------------------------------------------------------------------------
-    f32 Circle::area()const noexcept {
+    inline f32 Circle::area()const noexcept {
         return radius * radius * Mathf::PI;
     }
 
@@ -159,7 +159,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief          円周の長さを取得
     //@―---------------------------------------------------------------------------
-    f32 Circle::perimeter()const noexcept {
+    inline f32 Circle::perimeter()const noexcept {
         return 2.0f * Mathf::PI;
     }
 
@@ -172,7 +172,7 @@ namespace ob {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
+    inline Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
         return Circle(Vec2::Lerp(a.center,b.center,t),Mathf::Lerp(a.radius,b.radius,t));
     }
 

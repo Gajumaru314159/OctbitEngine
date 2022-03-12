@@ -164,7 +164,7 @@ namespace ob {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
+    inline Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
         return Sphere(Vec3::Lerp(a.center,b.center,t),Mathf::Lerp(a.radius,b.radius,t));
     }
 
