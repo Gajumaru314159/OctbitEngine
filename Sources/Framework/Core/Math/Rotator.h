@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Math/Quaternion.h>
 
 namespace ob {
 
@@ -25,6 +26,8 @@ namespace ob {
             :roll(roll_), pitch(pitch_), yaw(yaw_) {
         }
 
+
+        Quat toQuat()const;
 
         Vec3 front()const;      //!< 回転後の前ベクトル取得
         Vec3 back()const;       //!< 回転後の後ベクトル取得
@@ -59,7 +62,11 @@ namespace ob {
     //! @cond
 
     //@―---------------------------------------------------------------------------
-
+    //! @brief  Quat に変換
+    //@―---------------------------------------------------------------------------
+    Quat Rotator::toQuat()const {
+        return Quat(roll, pitch, yaw);
+    }
 
     //! @endcond
 }// namespcae ob
