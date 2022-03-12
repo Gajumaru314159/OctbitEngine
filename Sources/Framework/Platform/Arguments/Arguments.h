@@ -13,9 +13,9 @@ namespace ob::platform {
     class Arguments {
     public:
 
-        using container_type = vector<String>;
-        using iterator = container_type::iterator;
-        using const_iterator = container_type::const_iterator;
+        using container_type = vector<String>;                      //!< 引数コンテナ
+        using iterator = container_type::iterator;                  //!< イテレータ
+        using const_iterator = container_type::const_iterator;      //!< constイテレータ
 
     public:
 

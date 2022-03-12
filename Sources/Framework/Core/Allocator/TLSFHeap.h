@@ -11,8 +11,8 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  Two-Level Segregate Fitアロケータ
     //! 
-    //! @ref    http://www.gii.upv.es/tlsf/
-    //! @ref    https://www.researchgate.net/publication/234785757_A_comparison_of_memory_allocators_for_real-time_applications
+    //! @details http://www.gii.upv.es/tlsf/
+    //!          https://www.researchgate.net/publication/234785757_A_comparison_of_memory_allocators_for_real-time_applications
     //@―---------------------------------------------------------------------------
     class TLSFHeap final :public Heap {
         friend class Heap;
@@ -138,6 +138,7 @@ namespace ob::core {
     };
 
 
+    //! @cond
     //@―---------------------------------------------------------------------------
     //! @brief  TLSFブロック・タグ
     //! 
@@ -164,7 +165,7 @@ namespace ob::core {
         BlockTag* m_pPrev;
         BlockTag* m_pNext;
     };
-
+    //! @endcond
 
 
     //===============================================================

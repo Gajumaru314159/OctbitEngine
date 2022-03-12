@@ -35,6 +35,7 @@ namespace ob::foundation {
         //@―---------------------------------------------------------------------------
         //! @brief ハンドル基底
         //@―---------------------------------------------------------------------------
+        //!@cond
         class handle_base {
             friend class handle_forward_list<T>;
         public:
@@ -47,6 +48,9 @@ namespace ob::foundation {
             }
 
         protected:
+            //@―---------------------------------------------------------------------------
+            //! @brief クリア
+            //@―---------------------------------------------------------------------------
             void clear()noexcept {
                 pParent = nullptr;
                 pNext = nullptr;
@@ -55,6 +59,7 @@ namespace ob::foundation {
             handle_base* pNext = nullptr;
             handle_forward_list<T>* pParent = nullptr;
         };
+        //!@endcond
 
 
         //@―---------------------------------------------------------------------------
@@ -102,17 +107,17 @@ namespace ob::foundation {
 
     public:
 
-        using this_type = handle_forward_list<T>;
-        using value_type = T;
-        using size_type = size_t;
+        using this_type = handle_forward_list<T>;   //!< 型
+        using value_type = T;                       //!< アイテムの型
+        using size_type = size_t;                   //!< サイズ型
 
-        using pointer = T*;
-        using const_pointer = const T*;
-        using reference = T&;
-        using const_reference = const T&;
+        using pointer = T*;                         //!< ポインタ型
+        using const_pointer = const T*;             //!< constポインタ型
+        using reference = T&;                       //!< 参照型
+        using const_reference = const T&;           //!< const参照型
 
-        using mutex_type = mutex;
-        using difference_type = int;
+        using mutex_type = mutex;                   //!< ミューテックス
+        using difference_type = int;                //!< 差分型
 
 
         //@―---------------------------------------------------------------------------
@@ -177,20 +182,23 @@ namespace ob::foundation {
         ~handle_forward_list();
 
         iterator begin_before()noexcept;
-        const_iterator begin_before()const noexcept;
         iterator begin()noexcept;
-        const_iterator begin()const noexcept;
         iterator end()noexcept;
-        const_iterator end()const noexcept;
         const_iterator cbegin_before()const noexcept;
         const_iterator cbegin()const noexcept;
         const_iterator cend()const noexcept;
+        
+        //! @cond 
+        const_iterator begin_before()const noexcept;
+        const_iterator begin()const noexcept;
+        const_iterator end()const noexcept;
+        const_reference front() const;
+        //! @endcond 
 
         bool empty()const noexcept;
         size_type size() const noexcept;
 
         reference front();
-        const_reference front() const;
 
         template<class... Args>
         reference emplace_front(handle& h, Args&&... args);

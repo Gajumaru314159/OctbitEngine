@@ -30,9 +30,9 @@ namespace ob::foundation {
     class Logger :public Singleton<Logger> {
     public:
 
-        using EventNotifier = event_notifier<const Log&>;
-        using EventHandle = EventNotifier::handle;
-        using EventDelegateType = EventNotifier::delegate_type;
+        using EventNotifier = event_notifier<const Log&>;       //!< イベント・通知型
+        using EventHandle = EventNotifier::handle;              //!< イベント・ハンドル型
+        using EventDelegateType = EventNotifier::delegate_type; //!< イベント・デリゲート型
 
         //@―---------------------------------------------------------------------------
         //! @brief メッセージの最大バイト数

@@ -211,8 +211,8 @@ namespace ob::core {
     //! 
     //! @param position 移動量
     //@―---------------------------------------------------------------------------
-    void Matrix::translate(const Vec3& pos) {
-        translate(pos.x, pos.y, pos.z);
+    void Matrix::translate(const Vec3& trans) {
+        translate(trans.x, trans.y, trans.z);
     }
 
 

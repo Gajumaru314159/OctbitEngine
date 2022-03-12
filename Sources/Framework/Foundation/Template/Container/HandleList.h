@@ -248,20 +248,23 @@ namespace ob::foundation {
         //===============================================================
         // イテレータ
         //===============================================================
+
         iterator begin()noexcept;                                               // 先頭を指すイテレータを取得する
-        const_iterator begin()const noexcept;                                   // 先頭を指すイテレータを取得する(const)
         iterator end()noexcept;                                                 // 末尾の次を指すイテレータを取得する
-        const_iterator end()const noexcept;                                     // 末尾の次を指すイテレータを取得する(const)
         const_iterator cbegin()const noexcept;                                  // 先頭を指すイテレータを取得する(const)
         const_iterator cend()const noexcept;                                    // 末尾の次を指すイテレータを取得する(const)
 
         reverse_iterator rbegin()noexcept;                                      // 先頭を指す逆イテレータを取得する
-        const_reverse_iterator rbegin()const noexcept;                          // 先頭を指す逆イテレータを取得する(const)
         reverse_iterator rend()noexcept;                                        // 末尾の次を指す逆イテレータを取得する
-        const_reverse_iterator rend()const noexcept;                            // 末尾の次を指す逆イテレータを取得する(const)
         const_reverse_iterator crbegin()const noexcept;                         // 先頭を指す逆イテレータを取得する(const)
         const_reverse_iterator crend()const noexcept;                           // 末尾の次を指す逆イテレータを取得する(const)
 
+        //! @cond 
+        const_iterator begin()const noexcept;                                   // 先頭を指すイテレータを取得する(const)
+        const_iterator end()const noexcept;                                     // 末尾の次を指すイテレータを取得する(const)
+        const_reverse_iterator rbegin()const noexcept;                          // 先頭を指す逆イテレータを取得する(const)
+        const_reverse_iterator rend()const noexcept;                            // 末尾の次を指す逆イテレータを取得する(const)
+        //! @endcond
 
         //===============================================================
         // 領域
@@ -274,9 +277,11 @@ namespace ob::foundation {
         // 要素アクセス
         //===============================================================
         reference front();                                                      // 先頭要素への参照を取得する
-        const_reference front() const;                                          // 先頭要素への参照を取得する(const)
         reference back();                                                       // 末尾要素への参照を取得する
+        //! @cond 
+        const_reference front() const;                                          // 先頭要素への参照を取得する(const)
         const_reference back() const;                                           // 末尾要素への参照を取得する(const)
+        //! @endcond 
 
 
         //===============================================================

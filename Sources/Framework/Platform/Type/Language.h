@@ -11,18 +11,18 @@ namespace ob::platform {
     //! @brief  言語
     //@―---------------------------------------------------------------------------
     enum class Language {
-        Unknown = -1,	    // 不明
+        Unknown = -1,	    //!< 不明
 
-        Japanese,	        // 日本語
-        English,	        // 英語
-        French,	            // フランス語
-        Italian,	        // イタリア語
-        German,	            // ドイツ語
-        Spanish,	        // スペイン語
-        Korean,	            // 韓国語
-        Portuguese,	        // ポルトガル語
-        Russian,	        // ロシア語
-        Chinese,	        // 中国語
+        Japanese,	        //!< 日本語
+        English,	        //!< 英語
+        French,	            //!< フランス語
+        Italian,	        //!< イタリア語
+        German,	            //!< ドイツ語
+        Spanish,	        //!< スペイン語
+        Korean,	            //!< 韓国語
+        Portuguese,	        //!< ポルトガル語
+        Russian,	        //!< ロシア語
+        Chinese,	        //!< 中国語
 
 
         /*
@@ -72,7 +72,4 @@ namespace ob::platform {
         Max,                // 言語数
     };
 
-    enum class Locale {
-
-    };
 }// namespace ob::platform

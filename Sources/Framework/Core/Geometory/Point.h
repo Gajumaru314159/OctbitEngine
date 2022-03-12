@@ -23,9 +23,9 @@ namespace ob::core {
 
     public:
 
-        s32 x;
-        s32 y;
-        s32 z;
+        s32 x;  //!< X座標
+        s32 y;  //!< Y座標
+        s32 z;  //!< Z座標
 
     };
 

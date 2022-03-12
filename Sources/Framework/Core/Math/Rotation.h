@@ -127,7 +127,7 @@ namespace ob::core {
 
     public:
 
-        static const Rot zero;
+        static const Rot zero;  //!< 無回転
 
     public:
 

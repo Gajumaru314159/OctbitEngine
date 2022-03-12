@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+//! @cond
 #include <type_traits>
 
 namespace ob::foundation {
@@ -458,3 +459,4 @@ namespace ob::foundation {
 
 
 }// namespcae ob
+//!@endcond

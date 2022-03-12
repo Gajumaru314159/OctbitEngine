@@ -23,9 +23,9 @@ namespace ob::core {
 
     public:
 
-        s32 width;
-        s32 height;
-        s32 depth;
+        s32 width;  //!< 幅
+        s32 height; //!< 高さ
+        s32 depth;  //!< 深さ(奥行)
 
     };
 

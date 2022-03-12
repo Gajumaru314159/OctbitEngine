@@ -25,14 +25,14 @@ namespace ob::platform {
     //! @brief  日時型
     //@―---------------------------------------------------------------------------
     struct Date {
-        s32 year;
-        s32 month;
-        DayOfWeek dayOfWeek;
-        s32 day;
-        s32 hour;
-        s32 minute;
-        s32 second;
-        s32 milliseconds;
+        s32 year;               //!< 年
+        s32 month;              //!< 月
+        DayOfWeek dayOfWeek;    //!< 曜日
+        s32 day;                //!< 日
+        s32 hour;               //!< 時間
+        s32 minute;             //!< 分
+        s32 second;             //!< 秒
+        s32 milliseconds;       //!< ミリ秒
     };
 
 }// namespace ob::platform

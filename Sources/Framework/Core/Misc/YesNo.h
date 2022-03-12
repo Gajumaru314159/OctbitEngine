@@ -25,9 +25,11 @@ namespace ob::core {
     class YesNo {
     public:
 
+        //! @cond
         struct Helper {
             bool yesNo;
         };
+        //! @endcond
 
     public:
 

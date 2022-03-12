@@ -148,7 +148,7 @@ namespace ob::platform {
         //! @brief              スクリーン座標の取得
         //! 
         //! @details            クライアント座標をスクリーン座標に変換して取得する。
-        //! @patam clientPoint  クライアント座標
+        //! @param clientPoint  クライアント座標
         //! @return             スクリーン座標
         //@―---------------------------------------------------------------------------
         Point getScreenPoint(const Point& clientPoint)const;
@@ -158,7 +158,7 @@ namespace ob::platform {
         //! @brief              クライアント座標の取得
         //! 
         //! @details            スクリーン座標をクライアント座標に変換して取得する。
-        //! @patam screenPoint  スクリーン座標  
+        //! @param screenPoint  スクリーン座標  
         //! @return             クライアント座標
         //@―---------------------------------------------------------------------------
         Point getClientPoint(const Point& screenPoint)const;

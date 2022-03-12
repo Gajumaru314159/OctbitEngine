@@ -27,9 +27,9 @@ namespace ob::core {
 
     public:
 
-        Vec3    position;
-        Rot     rotation;
-        Vec3    scale;
+        Vec3    position;   //!< 位置
+        Rot     rotation;   //!< 回転
+        Vec3    scale;      //!< 拡縮
 
     };
 

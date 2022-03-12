@@ -28,7 +28,7 @@
 //!             ブレークポイントを発生させる。
 //! @param category カテゴリ名
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_FATAL_EX(category,format,...)	    OB_LOG_BASE(ob::foundation::LogType::Fatal,category, format, __VA_ARGS__)
 //@―---------------------------------------------------------------------------
@@ -37,7 +37,7 @@
 //! @details    アプリケーションは直ちに終了しなければならない。@n
 //!             ブレークポイントを発生させる。//!             
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_FATAL(format,...)                   LOG_FATAL_EX(LOG_DEFAULT_CATEGORY,format,__VA_ARGS__)
 
@@ -48,7 +48,7 @@
 //! @details    アプリケーションの継続が危険であり、早急に終了することが望まれる。
 //! @param category カテゴリ名
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_ERROR_EX(category,format,...)	    OB_LOG_BASE(ob::foundation::LogType::Error,category, format, __VA_ARGS__)
 
@@ -58,7 +58,7 @@
 //!
 //! @details    アプリケーションの継続が危険であり、早急に終了することが望まれる。
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_ERROR(format,...)                   LOG_ERROR_EX(LOG_DEFAULT_CATEGORY,format,__VA_ARGS__)
 
@@ -69,7 +69,7 @@
 //! @details    アプリケーションの継続が可能である。
 //! @param category カテゴリ名
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_WARNING_EX(category,format,...)	    OB_LOG_BASE(ob::foundation::LogType::Warning,category, format, __VA_ARGS__)
 //@―---------------------------------------------------------------------------
@@ -77,7 +77,7 @@
 //!
 //! @details    アプリケーションの継続が可能である。
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_WARNING(format,...)                 LOG_WARNING_EX(LOG_DEFAULT_CATEGORY,format,__VA_ARGS__)
 
@@ -88,14 +88,16 @@
 //! @details    アプリケーションの継続が可能である。
 //! @param category カテゴリ名
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_INFO_EX(category,format,...)        OB_LOG_BASE(ob::foundation::LogType::Info,category, format, __VA_ARGS__)
+
 //@―---------------------------------------------------------------------------
 //! @brief      アプリケーション実行中に発生した軽微な問題を通知
 //!
 //! @details    アプリケーションの継続が可能である。
 //! @param format   フォーマット文字列
-//! @param args     フォーマット引数
+//! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
 #define LOG_INFO(format,...)                    LOG_INFO_EX(LOG_DEFAULT_CATEGORY,format,__VA_ARGS__)
+

@@ -11,7 +11,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  Mimallocヒープ
     //! 
-    //! @ref    https://github.com/microsoft/mimalloc
+    //! @details https://github.com/microsoft/mimalloc
     //@―---------------------------------------------------------------------------
     class MimallocHeap final :public Heap {
         friend class Heap;

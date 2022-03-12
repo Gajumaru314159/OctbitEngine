@@ -55,30 +55,4 @@ namespace ob::foundation {
     using offset_t = s32;
 #endif
 
-    //@―---------------------------------------------------------------------------
-    //! @typedef    addr_t
-    //! @brief      アドレス型
-    //! @details    アドレスに対して演算処理をする場合に使用。
-    //!             ```
-    //!             // アライメントされたアドレスの計算
-    //!             const s32 alignment=32;
-    //!             byte bytes[128];
-    //!             addr_t address=static_cast<addr_t>(bytes);
-    //!             offset_t offset=-(alignment-address%alignment)%alignment;
-    //!             address=address+offset;
-    //!             ```
-    //@―---------------------------------------------------------------------------
-    //! @typedef    offset_t
-    //! @brief      アドレス差分型
-    //! @details    アドレスに対して負の方向の差分を表すことが可能。
-    //!             ```
-    //!             // アライメントされたアドレスの計算
-    //!             const s32 alignment=32;
-    //!             byte bytes[128];
-    //!             addr_t address=static_cast<addr_t>(bytes);
-    //!             offset_t offset=-(alignment-address%alignment)%alignment;
-    //!             address=address+offset;
-    //!             ```
-    //@―---------------------------------------------------------------------------
-
 }// namespcae ob

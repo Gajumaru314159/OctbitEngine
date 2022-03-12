@@ -86,9 +86,9 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     //! @brief      クランプ
     //! 
-    //! @val        入力
-    //! @minVal     最小値
-    //! @minVal     最大値
+    //! @param val        入力
+    //! @param minVal     最小値
+    //! @param maxVal     最大値
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_clamp(T val, T minVal, T maxVal)noexcept(is_arithmetic<T>::value) {
@@ -97,11 +97,9 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      クランプ
+    //! @brief      0～1にクランプ
     //! 
-    //! @val        入力
-    //! @minVal     最小値
-    //! @minVal     最大値
+    //! @param val        入力
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_clamp01(T val)noexcept(is_arithmetic<T>::value) {
@@ -119,7 +117,7 @@ namespace ob::foundation {
     //!                 とする必要がある。
     //! @param val      入力
     //! @param minVal   最小値
-    //! @param minVal   最大値
+    //! @param maxVal   最大値
     //! @retval true    範囲内
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
@@ -137,9 +135,8 @@ namespace ob::foundation {
     //!                 bool ok=is_in_range(index,0,container.size()-1);
     //!                 ```
     //!                 とする必要がある。
-    //! @param val      入力
-    //! @param minVal   最小値
-    //! @param minVal   最大値
+    //! @param index    インデックス
+    //! @param container コンテナ
     //! @retval true    範囲内
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
@@ -150,18 +147,7 @@ namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief          入力値が minVal 以上 manVal 以下か判定
-    //! 
-    //! @note           範囲が[minVal,maxVal]であるため、コンテナサイズの範囲確認の場合は
-    //!                 ```
-    //!                 bool ok=is_in_range(index,0,container.size()-1);
-    //!                 ```
-    //!                 とする必要がある。
-    //! @param val      入力
-    //! @param minVal   最小値
-    //! @param minVal   最大値
-    //! @retval true    範囲内
-    //! @retval false   範囲外
+    //! @brief          1<<digit
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr T get_bit(T digit)noexcept(is_arithmetic<T>::value) {

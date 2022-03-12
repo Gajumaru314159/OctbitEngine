@@ -9,6 +9,9 @@
 #include <string_view>
 
 namespace ob::foundation {
+
+    //! @cond
+    
     template <class TChar>
     using StringBase = std::basic_string<TChar>;
 
@@ -18,6 +21,7 @@ namespace ob::foundation {
     using String = std::basic_string<Char>;
     using StringView = std::basic_string_view<Char>;
 
+    //! @endcond
 
 
     /*

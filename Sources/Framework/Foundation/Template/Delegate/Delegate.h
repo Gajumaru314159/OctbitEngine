@@ -115,7 +115,7 @@ namespace ob::foundation {
 
     };
 
-    using void_delegate_type = delegate<void(void)>;
+    using void_delegate_type = delegate<void(void)>;    //!< voidデリゲート
 
     // noexcept版未対応
 

@@ -30,8 +30,8 @@ if(UNLIKELY(!(expr))){                                          \
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
 #define OB_REQUIRE_EX(expr,format,...)				OB_ASSERT_BASE(expr,ob::LogType::Fatal,format,__VA_ARGS__)
+//! @copydoc OB_REQUIRE_EX
 #define OB_REQUIRE(expr)					        OB_REQUIRE_EX(expr,#expr)
-
 
 //@―---------------------------------------------------------------------------
 //! @brief      関数やロジックを実行した後の条件を確認する
@@ -39,8 +39,8 @@ if(UNLIKELY(!(expr))){                                          \
 //! @details    式がfalseである場合警告ログを出力する。
 //@―---------------------------------------------------------------------------
 #define OB_ENSURE_EX(expr,format,...)				OB_ASSERT_BASE(expr,ob::LogType::Warning,format,__VA_ARGS__)
+//! @copydoc OB_ENSURE_EX
 #define OB_ENSURE(expr)					            OB_ENSURE_EX(expr,#expr)
-
 
 //============================================
 // 典型アサーション

@@ -7,42 +7,52 @@
 #include <Framework/Platform/Type/Language.h>
 #include <Framework/Platform/Window/Window.h>
 
-namespace ob::platform {
-    namespace detail {
+namespace ob::platform::detail {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  プラットフォーム・システム実装基底
+    //@―---------------------------------------------------------------------------
+    class PlatformSystemImplBase {
+    public:
+
+        //===============================================================
+        // コンストラクタ / デストラクタ
+        //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  プラットフォーム・システム実装基底
+        //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        class PlatformSystemImplBase {
-        public:
-
-            //===============================================================
-            // コンストラクタ / デストラクタ
-            //===============================================================
-            virtual ~PlatformSystemImplBase() = default;
-
-            virtual Language getSystemLanguage()const = 0;
-
-            virtual void addSystemEventListener() = 0;
-
-        public:
-
-            Ref<Window>& getMainWindow();
-
-        protected:
-
-            void createMainWindow();
+        virtual ~PlatformSystemImplBase() = default;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  システム言語を取得
+        //@―---------------------------------------------------------------------------
+        virtual Language getSystemLanguage()const = 0;
 
-        protected:
 
-            // イベントマネージャ
-            Language m_language;
+        //@―---------------------------------------------------------------------------
+        //! @brief  イベントリスナを追加
+        //@―---------------------------------------------------------------------------
+        virtual void addSystemEventListener() = 0;
 
-            Ref<Window> m_mainWindow;
 
-        };
+        //@―---------------------------------------------------------------------------
+        //! @brief  メインウィンドウを取得
+        //@―---------------------------------------------------------------------------
+        Ref<Window>& getMainWindow();
 
-    }// namespace detail
-}// namespace ob::platform
+    protected:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  メインウィンドウを生成
+        //@―---------------------------------------------------------------------------
+        void createMainWindow();
+
+    protected:
+
+        Ref<Window> m_mainWindow;   //!< メインウィンドウ
+
+    };
+
+}// namespace ob::platform::detail

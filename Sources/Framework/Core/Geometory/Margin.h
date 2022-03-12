@@ -117,10 +117,10 @@ namespace ob::core {
 
     public:
 
-        f32 left;
-        f32 top;
-        f32 right;
-        f32 bottom;
+        f32 left;   //!< 左座標
+        f32 top;    //!< 上座標
+        f32 right;  //!< 右座標
+        f32 bottom; //!< 上座標
 
     };
 
