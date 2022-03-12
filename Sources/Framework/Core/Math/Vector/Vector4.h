@@ -247,13 +247,13 @@ namespace ob {
         //! 
         //! @details 二つのベクトルの長さを比較する場合はsqrMagのほうが高速です。
         //@―---------------------------------------------------------------------------
-        f32     mag() const;
+        f32     length() const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの二乗を取得
         //@―---------------------------------------------------------------------------
-        f32     sqrMag() const noexcept;
+        f32     sqrLength() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -773,15 +773,15 @@ namespace ob {
     //! 
     //! @details 二つのベクトルの長さを比較する場合はSqrMagのほうが高速です。
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::mag() const {
-        return Mathf::Sqrt(sqrMag());
+    inline f32 Vec4::length() const {
+        return Mathf::Sqrt(sqrLength());
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの長さの二乗を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::sqrMag() const noexcept {
+    inline f32 Vec4::sqrLength() const noexcept {
         return x * x + y * y + z * z + w * w;
     }
 
@@ -821,7 +821,7 @@ namespace ob {
             outLen = 0.0f;
             return;
         }
-        outLen = sqrMag();
+        outLen = sqrLength();
         if (outLen < Mathf::TOLERANCE) {
             outDir = Vec4::zero;
         } else {
@@ -841,7 +841,7 @@ namespace ob {
     //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
     //@―---------------------------------------------------------------------------
     inline void Vec4::normalize(f32 tolerance) {
-        f32 f = mag();
+        f32 f = length();
         // 0ベクトルの場合は何もしない
         if (f <= tolerance)return;
         this->operator/=(f);
@@ -852,7 +852,7 @@ namespace ob {
     //! @brief              ベクトルの正規化(ゼロチェックなし)
     //@―---------------------------------------------------------------------------
     inline void Vec4::normalizeUnsafe() {
-        f32 f = mag();
+        f32 f = length();
         this->operator/=(f);
     }
 
@@ -865,8 +865,8 @@ namespace ob {
     //! @brief 単位ベクトルか判定
     //@―---------------------------------------------------------------------------
     inline b32 Vec4::isUnit(f32 tolerance)const {
-        const f32 mag = sqrMag();
-        return Mathf::Abs(mag - 1.0f) < tolerance;
+        const f32 length = sqrLength();
+        return Mathf::Abs(length - 1.0f) < tolerance;
     }
 
 
@@ -976,7 +976,7 @@ namespace ob {
     //! @brief  二つのベクトルの距離を計算
     //@―---------------------------------------------------------------------------
     inline f32 Vec4::Dist(const Vec4& a, const Vec4& b) {
-        return (b - a).mag();
+        return (b - a).length();
     }
 
 
@@ -984,7 +984,7 @@ namespace ob {
     //! @brief  二つのベクトルの距離の二乗を計算
     //@―---------------------------------------------------------------------------
     inline f32 Vec4::SqrDist(const Vec4& a, const Vec4& b) noexcept {
-        return (b - a).sqrMag();
+        return (b - a).sqrLength();
     }
 
 

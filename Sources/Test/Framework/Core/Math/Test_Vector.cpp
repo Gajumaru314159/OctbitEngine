@@ -122,8 +122,8 @@ TEST(Vector, get) {
     EXPECT_EQ(v.minAbsComponent(), 1);
 
     Vec3 v2(3, 4, 0);
-    EXPECT_EQ(v2.mag(), 5);
-    EXPECT_EQ(v2.sqrMag(), 25);
+    EXPECT_EQ(v2.length(), 5);
+    EXPECT_EQ(v2.sqrLength(), 25);
 
     Vec3 v3(100, 0, 0);
     EXPECT_EQ(v3.unitVec(), Vec3(1, 0, 0));

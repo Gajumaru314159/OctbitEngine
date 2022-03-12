@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		カプセル
+//! @brief		シリンダー
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,11 +10,11 @@
 namespace ob {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  カプセル構造体
+    //! @brief  シリンダー
     //! 
     //! @note   radius が負の数の時は未定義動作です。
     //@―---------------------------------------------------------------------------
-    struct OB_API Capsule {
+    struct OB_API Cylinder {
     public:
 
         //===============================================================
@@ -24,13 +24,13 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief          デフォルトコンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
-        Capsule() noexcept;
+        Cylinder() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          コンストラクタ( ゼロ初期化 )
         //@―---------------------------------------------------------------------------
-        explicit Capsule(EForceInit) noexcept;
+        explicit Cylinder(EForceInit) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -40,7 +40,7 @@ namespace ob {
         //! @param pos2     終点
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
+        Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ob {
         //! @param height   カプセルの高さ(半径を含まない)
         //! @param quat     カプセルの回転(無回転でY-up方向)
         //@―---------------------------------------------------------------------------
-        Capsule(const Vec3& center, f32 height, f32 radius, const Quat& quat) noexcept;
+        Cylinder(const Vec3& center, f32 height, f32 radius, const Quat& quat) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ namespace ob {
         //! @param height    カプセルの高さ(半径を含まない)
         //! @param direction カプセルの上方向
         //@―---------------------------------------------------------------------------
-        Capsule(const Vec3& center, f32 height, f32 radius, const Vec3& direction);
+        Cylinder(const Vec3& center, f32 height, f32 radius, const Vec3& direction);
 
 
         //===============================================================
@@ -90,7 +90,7 @@ namespace ob {
         //! 
         //! @param center   中心点
         //! @param radius   半径
-        //! @param height   カプセルの高さ(半径を含まない)
+        //! @param height   カプセルの高さ
         //! @param quat     カプセルの回転(無回転でY-up方向)
         //@―---------------------------------------------------------------------------
         void set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept;
@@ -101,7 +101,7 @@ namespace ob {
         //!                  
         //! @param center    中心点
         //! @param radius    半径
-        //! @param height    カプセルの高さ(半径を含まない)
+        //! @param height    カプセルの高さ
         //! @param direction カプセルの上方向
         //@―---------------------------------------------------------------------------
         void set(const Vec3& center, f32 radius, f32 height, const Vec3& direction);
@@ -112,19 +112,15 @@ namespace ob {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief           高さを取得
+        //! @brief           高さの取得
+        //!                  
+        //! @details         カプセルの半径を含みません。
         //@―---------------------------------------------------------------------------
         f32 height()const;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief           半径を含まない高さを取得
-        //@―---------------------------------------------------------------------------
-        f32 minHeight()const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief           pos1->pos2の方向ベクトルを取得
+        //! @brief           pos1->pos2の方向ベクトルの取得
         //@―---------------------------------------------------------------------------
         Vec3 direction()const;
 
@@ -155,16 +151,16 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief          デフォルトコンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule() noexcept {}
+    inline Cylinder::Cylinder() noexcept {}
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(EForceInit) noexcept {
+    inline Cylinder::Cylinder(EForceInit) noexcept {
         pos1.setZero();
         pos2.setZero();
-        radius=0.0f;
+        radius = 0.0f;
     }
 
 
@@ -175,7 +171,7 @@ namespace ob {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
+    inline Cylinder::Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
         set(pos1, pos2, radius);
     }
 
@@ -185,10 +181,10 @@ namespace ob {
     //! 
     //! @param center   中心点
     //! @param radius   半径
-    //! @param height   カプセルの高さ(半径を含まない)
+    //! @param height   カプセルの高さ
     //! @param quat     カプセルの回転(無回転でY-up方向)
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(const Vec3& center, f32 height, f32 radius, const Quat& quat)noexcept {
+    inline Cylinder::Cylinder(const Vec3& center, f32 height, f32 radius, const Quat& quat)noexcept {
         set(center, radius, height, quat);
     }
 
@@ -198,10 +194,10 @@ namespace ob {
     //!                  
     //! @param center    中心点
     //! @param radius    半径
-    //! @param height    カプセルの高さ(半径を含まない)
+    //! @param height    カプセルの高さ
     //! @param direction カプセルの上方向
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(const Vec3& center, f32 height, f32 radius, const Vec3& direction) {
+    inline Cylinder::Cylinder(const Vec3& center, f32 height, f32 radius, const Vec3& direction) {
         set(center, radius, height, direction);
     }
 
@@ -209,7 +205,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体を-初期化する
     //@―---------------------------------------------------------------------------
-    inline void Capsule::reset() noexcept {
+    inline void Cylinder::reset() noexcept {
         pos1.setZero();
         pos2.setZero();
         radius = 0.5f;
@@ -223,7 +219,7 @@ namespace ob {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline void Capsule::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
+    inline void Cylinder::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
         this->pos1 = pos1;
         this->pos2 = pos2;
         this->radius = radius;
@@ -235,10 +231,10 @@ namespace ob {
     //! 
     //! @param center   中心点
     //! @param radius   半径
-    //! @param height   カプセルの高さ(半径を含まない)
+    //! @param height   カプセルの高さ
     //! @param quat     カプセルの回転(無回転でY-up方向)
     //@―---------------------------------------------------------------------------
-    inline void Capsule::set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept {
+    inline void Cylinder::set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept {
         this->radius = radius;
         const Vec3 half = quat.getUp() * (height * 0.5f);
         pos1 = center + half;
@@ -250,10 +246,10 @@ namespace ob {
     //!                  
     //! @param center    中心点
     //! @param radius    半径
-    //! @param height    カプセルの高さ(半径を含まない)
+    //! @param height    カプセルの高さ
     //! @param direction カプセルの上方向
     //@―---------------------------------------------------------------------------
-    inline void Capsule::set(const Vec3& center, f32 radius, f32 height, const Vec3& direction) {
+    inline void Cylinder::set(const Vec3& center, f32 radius, f32 height, const Vec3& direction) {
         this->radius = radius;
         const Vec3 half = direction.unitVec() * (height * 0.5f);
         pos1 = center + half;
@@ -262,25 +258,19 @@ namespace ob {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief           高さを取得
+    //! @brief           高さの取得
+    //!                  
+    //! @details         カプセルの半径を含みません。
     //@―---------------------------------------------------------------------------
-    inline f32 Capsule::height()const {
-        return Vec3::Dist(pos1, pos2) + radius;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief           半径を含まない高さを取得
-    //@―---------------------------------------------------------------------------
-    inline f32 Capsule::minHeight()const {
+    inline f32 Cylinder::height()const {
         return Vec3::Dist(pos1, pos2);
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief           pos1->pos2の方向ベクトルを取得
+    //! @brief           pos1->pos2の方向ベクトルの取得
     //@―---------------------------------------------------------------------------
-    inline Vec3 Capsule::direction()const {
+    inline Vec3 Cylinder::direction()const {
         return (pos2 - pos1).unitVec();
     }
 
@@ -288,9 +278,9 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief           体積を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Capsule::volume()const noexcept {
-        return 
-            radius * radius * Mathf::PI * minHeight() +
+    inline f32 Cylinder::volume()const noexcept {
+        return
+            radius * radius * Mathf::PI * height() +
             radius * radius * radius * Mathf::PI * 4.0f / 3.0f;
     }
 
