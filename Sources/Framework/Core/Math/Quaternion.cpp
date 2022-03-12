@@ -6,6 +6,7 @@
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Mathf.h>
 #include <Framework/Core/Math/Matrix.h>
+#include <Framework/Core/Math/Rotator.h>
 #include <Framework/Core/Math/Vector/include.h>
 
 namespace ob {
@@ -164,7 +165,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief オイラー角での表現を取得
     //@―---------------------------------------------------------------------------
-    Vec3 Quat::getRot()const {
+    Rotator Quat::getRot()const {
         f32 tx, ty, tz;
         f32 sx = -2 * (y * z - w * x);
         if (Mathf::Abs(sx - 1.0f) < Mathf::EPSILON) {
@@ -181,7 +182,7 @@ namespace ob {
             tz = Mathf::Atan2(2 * (x * y + w * z), w * w - x * x + y * y - z * z);
         }
 
-        return Vec3(tx, ty, tz) * (180.0f / Mathf::PI);
+        return Rotator(Mathf::Degrees(tx), Mathf::Degrees(ty), Mathf::Degrees(tz));
     }
 
 
