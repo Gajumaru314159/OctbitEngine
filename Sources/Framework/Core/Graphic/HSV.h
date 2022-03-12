@@ -230,10 +230,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline bool HSV::operator == (const HSV& another) const noexcept {
         return
-            Mathf::Approximately(h, another.h) &&
-            Mathf::Approximately(s, another.s) &&
-            Mathf::Approximately(v, another.v) &&
-            Mathf::Approximately(a, another.a);
+            Mathf::IsNearEquals(h, another.h) &&
+            Mathf::IsNearEquals(s, another.s) &&
+            Mathf::IsNearEquals(v, another.v) &&
+            Mathf::IsNearEquals(a, another.a);
     }
 
 
@@ -288,10 +288,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline bool HSV::equals(const HSV& another, f32 tolerance)const noexcept {
         return
-            Mathf::Approximately(h, another.h, tolerance) &&
-            Mathf::Approximately(s, another.s, tolerance) &&
-            Mathf::Approximately(v, another.v, tolerance) &&
-            Mathf::Approximately(a, another.a, tolerance);
+            Mathf::IsNearEquals(h, another.h, tolerance) &&
+            Mathf::IsNearEquals(s, another.s, tolerance) &&
+            Mathf::IsNearEquals(v, another.v, tolerance) &&
+            Mathf::IsNearEquals(a, another.a, tolerance);
     }
 
 

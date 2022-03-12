@@ -8,6 +8,7 @@
 #include <Framework/Core/Math/Mathf.h>
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Quaternion.h>
+#include <Framework/Core/Geometory/Frustum.h>
 
 namespace ob {
 
@@ -35,7 +36,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     bool Matrix::operator == (const Matrix& v) const {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++) {
-            if (Mathf::Approximately(m[y][x], v.m[y][x]) == false)return false;
+            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
         }
         return true;
     }
@@ -264,7 +265,7 @@ namespace ob {
     //! @param scale 拡大縮小量
     //@―---------------------------------------------------------------------------
     void Matrix::scale(const Vec3& scale) {
-        scale(scale.x, scale.y, scale.z);
+        this->scale(scale.x, scale.y, scale.z);
     }
 
 
@@ -430,28 +431,22 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief 視錐台からビュー行列の生成
     //@―---------------------------------------------------------------------------
-    Matrix MatrixHelper::Frustum(f32 left, f32 right, f32 bottom, f32 top, f32 zNear, f32 zFar) {
+    Matrix MatrixHelper::CreateFrustum(Frustum frustum) {
+
         Matrix ret(
-            2 * zNear / (right - left), 0, (right + left) / (right - left), 0,
-            0, 2 * zNear / (top - bottom), (top + bottom) / (top - bottom), 0,
-            0, 0, -(zFar + zNear) / (zFar - zNear), -2 * zFar * zNear / (zFar - zNear),
+            2 * frustum.zNear / (frustum.right - frustum.left), 0, (frustum.right + frustum.left) / (frustum.right - frustum.left), 0,
+            0, 2 * frustum.zNear / (frustum.top - frustum.bottom), (frustum.top + frustum.bottom) / (frustum.top - frustum.bottom), 0,
+            0, 0, -(frustum.zFar + frustum.zNear) / (frustum.zFar - frustum.zNear), -2 * frustum.zFar * frustum.zNear / (frustum.zFar - frustum.zNear),
             0, 0, -1, 0
         );
         return ret;
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief 視錐台からビュー行列の生成
-    //@―---------------------------------------------------------------------------
-    Matrix MatrixHelper::Frustum(FrustumDesc desc) {
-        return Frustum(desc.left, desc.right, desc.bottom, desc.top, desc.zNear, desc.zFar);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 透視投影行列の生成
     //@―---------------------------------------------------------------------------
-    Matrix MatrixHelper::Perspective(const f32 fov, const f32 aspect, const f32 zNear, const f32 zFar) {
+    Matrix MatrixHelper::CreatePerspective(const f32 fov, const f32 aspect, const f32 zNear, const f32 zFar) {
         Matrix matrix;
         f32 f = 1.0f / Mathf::Tan(Mathf::Degrees(fov * 0.5f));
         f32 dz = zFar - zNear;
@@ -468,7 +463,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  平行投影行列の生成
     //@―---------------------------------------------------------------------------
-    Matrix MatrixHelper::Ortho(const f32 left, const f32 right, const f32 bottom, const f32 top, const f32 zNear, const f32 zFar) {
+    Matrix MatrixHelper::CreateOrtho(const f32 left, const f32 right, const f32 bottom, const f32 top, const f32 zNear, const f32 zFar) {
         Matrix ret(
             2 / (right - left), 0, 0, -(right + left) / (right - left),
             0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),

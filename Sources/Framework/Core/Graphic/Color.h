@@ -386,10 +386,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline bool Color::operator == (const Color& another) const noexcept {
         return
-            Mathf::Approximately(r, another.r) &&
-            Mathf::Approximately(g, another.g) &&
-            Mathf::Approximately(b, another.b) &&
-            Mathf::Approximately(a, another.a);
+            Mathf::IsNearEquals(r, another.r) &&
+            Mathf::IsNearEquals(g, another.g) &&
+            Mathf::IsNearEquals(b, another.b) &&
+            Mathf::IsNearEquals(a, another.a);
     }
 
 
@@ -615,10 +615,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline bool Color::equals(const Color& another, f32 tolerance)const noexcept {
         return
-            Mathf::Approximately(r, another.r, tolerance) &&
-            Mathf::Approximately(g, another.g, tolerance) &&
-            Mathf::Approximately(b, another.b, tolerance) &&
-            Mathf::Approximately(a, another.a, tolerance);
+            Mathf::IsNearEquals(r, another.r, tolerance) &&
+            Mathf::IsNearEquals(g, another.g, tolerance) &&
+            Mathf::IsNearEquals(b, another.b, tolerance) &&
+            Mathf::IsNearEquals(a, another.a, tolerance);
     }
 
     //! @endcond

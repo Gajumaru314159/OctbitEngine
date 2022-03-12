@@ -491,8 +491,8 @@ namespace ob {
     //! @details    2つのベクトルの差が Mathf::TOLERANCE より小さい場合、2つのベクトルは等しいと見なされます。
     //@―---------------------------------------------------------------------------
     inline bool Vec2::operator == (const Vec2& v) const noexcept {
-        return Mathf::Approximately(x, v.x) &&
-            Mathf::Approximately(y, v.y);
+        return Mathf::IsNearEquals(x, v.x) &&
+            Mathf::IsNearEquals(y, v.y);
     }
 
 

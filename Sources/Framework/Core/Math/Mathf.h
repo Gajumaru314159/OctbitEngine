@@ -102,6 +102,9 @@ namespace ob {
         //! @brief [a,b] の範囲内で補間する値valueを生成する線形パラメータtを計算する
         static constexpr f32 InverseLerp(f32 a, f32 b, f32 f)noexcept { return (b - a) / (f - a); }
 
+        //! @brief tを[a,b]から[c,d]に変換する
+        static constexpr f32 Map(f32 a, f32 b, f32 c,f32 d,f32 t)noexcept { return IsNearEquals(b-a,0.0f)?c:((t-a)/(b-a)*(d-c)+c); }
+
 
         //===============================================================
         //	Min / Max
@@ -137,7 +140,10 @@ namespace ob {
         //===============================================================
 
         //! @brief 2つの浮動小数点値を比較し近似している場合はtrueを返す
-        static bool Approximately(f32 a, f32 b, f32 tolerance = Mathf::TOLERANCE)noexcept { return Abs(a - b) < tolerance; }
+        static bool IsNearEquals(f32 a, f32 b, f32 tolerance = Mathf::TOLERANCE)noexcept { return Abs(a - b) < tolerance; }
+
+        //! @brief 値が0に近い場合はtrueを返す
+        static bool IsNearZero(f32 a, f32 tolerance = Mathf::TOLERANCE)noexcept { return IsNearEquals(a,0.0f,tolerance); }
 
         //! @brief 値が無効な数字か判定する
         static bool IsNaN(f32 value);

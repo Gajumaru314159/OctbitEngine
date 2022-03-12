@@ -117,7 +117,7 @@ namespace ob {
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
     inline bool Sphere::operator==(const Sphere& other)const noexcept {
-        return center == other.center && Mathf::Approximately(radius, other.radius);
+        return center == other.center && Mathf::IsNearEquals(radius, other.radius);
     }
 
 

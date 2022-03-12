@@ -39,7 +39,7 @@ namespace ob
     {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++)
         {
-            if (Mathf::Approximately(m[y][x], v.m[y][x]) == false)return false;
+            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
         }
         return true;
     }
@@ -52,7 +52,7 @@ namespace ob
     {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++)
         {
-            if (Mathf::Approximately(m[y][x], v.m[y][x]) == false)return true;
+            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return true;
         }
         return false;
     }
@@ -358,7 +358,7 @@ namespace ob
         return ret;
     }
 
-    Affine AffineHelper::Frustum(FrustumDesc desc)
+    Affine AffineHelper::Frustum(Frustum desc)
     {
         return Frustum(desc.left, desc.right, desc.bottom, desc.top, desc.zNear, desc.zFar);
     }

@@ -501,10 +501,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     inline bool Quat::operator == (const Quat& quat)const noexcept {
         return
-            Mathf::Approximately(x, quat.x) &&
-            Mathf::Approximately(y, quat.y) &&
-            Mathf::Approximately(z, quat.z) &&
-            Mathf::Approximately(w, quat.w);
+            Mathf::IsNearEquals(x, quat.x) &&
+            Mathf::IsNearEquals(y, quat.y) &&
+            Mathf::IsNearEquals(z, quat.z) &&
+            Mathf::IsNearEquals(w, quat.w);
     }
 
 

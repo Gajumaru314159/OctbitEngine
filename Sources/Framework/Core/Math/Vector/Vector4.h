@@ -507,10 +507,10 @@ namespace ob {
     //!             見なされます。
     //@―---------------------------------------------------------------------------
     inline bool Vec4::operator == (const Vec4& v) const noexcept {
-        return Mathf::Approximately(x, v.x) &&
-            Mathf::Approximately(y, v.y) &&
-            Mathf::Approximately(z, v.z) &&
-            Mathf::Approximately(w, v.w);
+        return Mathf::IsNearEquals(x, v.x) &&
+            Mathf::IsNearEquals(y, v.y) &&
+            Mathf::IsNearEquals(z, v.z) &&
+            Mathf::IsNearEquals(w, v.w);
     }
 
 
