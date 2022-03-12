@@ -14,8 +14,9 @@ namespace ob
     //! 
     //! @params resolution いくつの直線で近似した長さを計算するか
     //@―---------------------------------------------------------------------------
-    f32 Spline2D::length(s32 resolution = 100)const {
-
+    f32 Spline2D::length(s32 resolution)const {
+        OB_NOTIMPLEMENTED();
+        return 0.0f;
     }
 
 
@@ -27,8 +28,9 @@ namespace ob
     //! @params t1 終了位置[t1,1]
     //! @params resolution いくつの直線で近似した長さを計算するか
     //@―---------------------------------------------------------------------------
-    f32 Spline2D::length(f32 t0, f32 t1, s32 resolution = 100)const {
-
+    f32 Spline2D::length(f32 t0, f32 t1, s32 resolution)const {
+        OB_NOTIMPLEMENTED();
+        return 0.0f;
     }
 
 
@@ -38,7 +40,8 @@ namespace ob
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
     Spline2D::point_type Spline2D::position(f32 t)const {
-
+        OB_NOTIMPLEMENTED();
+        return point_type();
     }
 
 
@@ -48,7 +51,8 @@ namespace ob
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
     Spline2D::point_type Spline2D::velocity(f32 t)const {
-
+        OB_NOTIMPLEMENTED();
+        return point_type();
     }
 
 
@@ -58,7 +62,8 @@ namespace ob
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
     Spline2D::point_type Spline2D::acceleration(f32 t)const {
-
+        OB_NOTIMPLEMENTED();
+        return point_type();
     }
 
 
@@ -68,7 +73,8 @@ namespace ob
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
     f32 Spline2D::curvature(f32 t)const {
-
+        OB_NOTIMPLEMENTED();
+        return 0.0f;
     }
 
 }// namespace ob

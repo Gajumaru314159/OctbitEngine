@@ -17,7 +17,7 @@
 #include <Framework/Core/Geometory/Capsule.h>
 #include <Framework/Core/Geometory/Circle.h>
 #include <Framework/Core/Geometory/Cylinder.h>
-#include <Framework/Core/Geometory/Frustom.h>
+#include <Framework/Core/Geometory/Frustum.h>
 #include <Framework/Core/Geometory/Margin.h>
 #include <Framework/Core/Geometory/Plane.h>
 #include <Framework/Core/Geometory/Line.h>
@@ -35,7 +35,7 @@
 #include <Framework/Core/Math/Matrix.h>
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Random.h>
-#include <Framework/Core/Math/Rotator.h>
+#include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Math/Random.h>
 

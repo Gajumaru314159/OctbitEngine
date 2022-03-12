@@ -83,9 +83,10 @@ namespace ob {
     //! @param angle    回転量
     //! @param axis     回転軸
     //@―---------------------------------------------------------------------------
-    void Vec3::rotate(f32 angle, const Vec3& axis) {
+    Vec3& Vec3::rotate(f32 angle, const Vec3& axis) {
         Quat q(angle, axis);
         *this = axis * (*this);
+        return *this;
     }
 
 

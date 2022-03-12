@@ -8,6 +8,7 @@
 #include <Framework/Core/Math/Mathf.h>
 #include <Framework/Core/Math/Vector/include.h>
 #include <Framework/Core/Math/Quaternion.h>
+#include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Geometory/Frustum.h>
 
 namespace ob {
@@ -244,6 +245,16 @@ namespace ob {
     //! 
     //! @param eulerAngles 回転量
     //@―---------------------------------------------------------------------------
+    void Matrix::rotate(const Rot& rotation) {
+        rotate(rotation.roll, rotation.pitch, rotation.yaw);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief 行列に回転行列を乗算
+    //! 
+    //! @param eulerAngles 回転量
+    //@―---------------------------------------------------------------------------
     void Matrix::rotate(const Vec3& eulerAngles) {
         rotate(eulerAngles.x, eulerAngles.y, eulerAngles.z);
     }
@@ -346,14 +357,12 @@ namespace ob {
         return Vec3(m[0][3], m[1][3], m[2][3]);
     }
 
-
     //@―---------------------------------------------------------------------------
     //! @brief 行列から回転量を計算
     //@―---------------------------------------------------------------------------
-    Vec3 Matrix::getRot()const {
+    Rot Matrix::getRot()const {
         return getQuat().getRot();
     }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief 行列から拡大量を計算

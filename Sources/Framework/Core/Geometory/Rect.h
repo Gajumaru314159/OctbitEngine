@@ -36,7 +36,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(要素指定)
         //@―---------------------------------------------------------------------------
-        Rect(s32 left, s32 top, s32 right, s32 bottom) noexcept;
+        Rect(f32 left, f32 top, f32 right, f32 bottom) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief      LTRB を設定
         //@―---------------------------------------------------------------------------
-        void set(s32 left, s32 top, s32 right, s32 bottom) noexcept;
+        void set(f32 left, f32 top, f32 right, f32 bottom) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -267,7 +267,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
-    inline Rect::Rect(s32 left, s32 top, s32 right, s32 bottom) noexcept {
+    inline Rect::Rect(f32 left, f32 top, f32 right, f32 bottom) noexcept {
         set(left, top, right,bottom);
     }
 
@@ -327,7 +327,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      LTRB を設定
     //@―---------------------------------------------------------------------------
-    void Rect::set(s32 left, s32 top, s32 right, s32 bottom) noexcept {
+    inline void Rect::set(f32 left, f32 top,f32 right, f32 bottom) noexcept {
         this->left = left;
         this->top = top;
         this->right = right;
@@ -338,7 +338,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      2点を指定して Rect を設定
     //@―---------------------------------------------------------------------------
-    void Rect::set(const Vec2& center, const Vec2& size) noexcept {
+    inline void Rect::set(const Vec2& center, const Vec2& size) noexcept {
         set(center.x - size.x * 0.5f, center.y - size.y * 0.5f, center.x + size.x * 0.5f, center.y * size.y * 0.5f);
     }
 
@@ -346,7 +346,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      中央座標を設定
     //@―---------------------------------------------------------------------------
-    void Rect::setCenter(const Vec2& center) noexcept {
+    inline void Rect::setCenter(const Vec2& center) noexcept {
         auto dt = center - this->center();
         left += dt.x;
         right += dt.x;
@@ -358,7 +358,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief      中央座標を設定
     //@―---------------------------------------------------------------------------
-    void Rect::setSize(const Vec2& size) noexcept {
+    inline void Rect::setSize(const Vec2& size) noexcept {
         auto dt = size - this->size();
         left -= dt.x*0.5f;
         right += dt.x * 0.5f;

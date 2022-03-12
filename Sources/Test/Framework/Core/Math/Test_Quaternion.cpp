@@ -95,6 +95,6 @@ TEST(Quat, get) {
 TEST(Quat, GetRotation) {
     Quat q(30, 90, 0);
 
-    Vec3 r = q.getRot();
-    EXPECT_EQ(r, Vec3(30, 90, 0));
+    Rot r = q.getRot();
+    EXPECT_EQ(r, Rot(30, 90, 0));
 }

@@ -24,8 +24,10 @@ namespace ob {
             min = Vec2::Min(min, point);
             max = Vec2::Max(max, point);
         }
-        center = (min + max) * 0.5f;
-        size = max - min;
+        left = min.x;
+        top = min.y;
+        right = max.x;
+        bottom = max.y;
     }
 
 }// namespcae ob

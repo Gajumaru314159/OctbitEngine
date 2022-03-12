@@ -137,7 +137,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
-    Margin::Margin(EForceInit) {
+    inline Margin::Margin(EForceInit) {
         set(0.0f,0.0f,0.0f,0.0f);
     }
 
@@ -145,7 +145,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(要素指定)
     //@―---------------------------------------------------------------------------
-    Margin::Margin(f32 left, f32 top, f32 right, f32 bottom)
+    inline Margin::Margin(f32 left, f32 top, f32 right, f32 bottom)
         : left(left)
         , top(top)
         , right(right)
@@ -235,7 +235,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  親サイズからサイズを計算
     //@―---------------------------------------------------------------------------
-    Vec2 Margin::size(const Vec2& parent)const noexcept {
+    inline Vec2 Margin::size(const Vec2& parent)const noexcept {
         return Vec2(parent.x-left-right,parent.y-top-bottom);
     }
 
@@ -243,10 +243,10 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  親矩形から Rect を計算
     //@―---------------------------------------------------------------------------
-    Rect Margin::rect(const Rect& parent)const noexcept {
+    inline Rect Margin::rect(const Rect& parent)const noexcept {
         return Rect(
-            size(parent.size),
-            parent.center+Vec2(left+right,top+bottom)*0.5f
+            size(parent.size()),
+            parent.center()+Vec2(left+right,top+bottom)*0.5f
         );
     }
 

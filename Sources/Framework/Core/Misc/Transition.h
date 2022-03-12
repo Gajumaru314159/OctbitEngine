@@ -74,7 +74,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  更新
     //@―---------------------------------------------------------------------------
-    f32 Transition::update(f32 deltaTime)noexcept {
+    inline f32 Transition::update(f32 deltaTime)noexcept {
         time += deltaTime;
         return get();
     }
@@ -83,7 +83,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  要素を設定
     //@―---------------------------------------------------------------------------
-    void Transition::set(f32 length, f32 in, f32 out, f32 minValue = 0.0f, f32 maxValue = 1.0f)noexcept {
+    inline void Transition::set(f32 length, f32 in, f32 out, f32 minValue, f32 maxValue)noexcept {
         this->length = length;
         this->in = in;
         this->out = out;
@@ -94,7 +94,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief  再生位置を開始地点に戻す
     //@―---------------------------------------------------------------------------
-    void Transition::restart()noexcept {
+    inline void Transition::restart()noexcept {
         time = 0.0f;
     }
 

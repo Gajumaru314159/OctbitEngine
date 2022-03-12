@@ -583,7 +583,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief          Vec4 に変換
     //@―---------------------------------------------------------------------------
-    Vec4 Color::toVec4()const noexcept {
+    inline Vec4 Color::toVec4()const noexcept {
         return Vec4(r,g,b,a);
     }
 

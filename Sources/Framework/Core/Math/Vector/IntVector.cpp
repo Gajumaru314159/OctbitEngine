@@ -28,7 +28,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief s32*IntVec2演算子
     //@―---------------------------------------------------------------------------
-    IntVec2 operator * (s32 f, const IntVec2& v) {
+    IntVec2 operator * (s32 f, const IntVec2& v)noexcept {
         return v * f;
     }
 
@@ -36,7 +36,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief s32/IntVec2演算子
     //@―---------------------------------------------------------------------------
-    IntVec2 operator / (s32 f, const IntVec2& v) {
+    IntVec2 operator / (s32 f, const IntVec2& v)noexcept {
         return IntVec2(f, f) / v;
     }
 
@@ -45,7 +45,7 @@ namespace ob {
     //! @brief Vec4 で取得
     //@―---------------------------------------------------------------------------
     Vec2 IntVec2::toVec2() const noexcept {
-        return Vec2(x, y);
+        return Vec2(1.0f * x, 1.0f * y);
     }
 
 
@@ -68,7 +68,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief s32*IntVec3演算子
     //@―---------------------------------------------------------------------------
-    IntVec3 operator * (s32 f, const IntVec3& v) {
+    IntVec3 operator * (s32 f, const IntVec3& v)noexcept {
         return v * f;
     }
 
@@ -76,7 +76,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     //! @brief s32/IntVec3演算子
     //@―---------------------------------------------------------------------------
-    IntVec3 operator / (s32 f, const IntVec3& v) {
+    IntVec3 operator / (s32 f, const IntVec3& v)noexcept {
         return IntVec3(f, f, f) / v;
     }
 
@@ -85,7 +85,7 @@ namespace ob {
     //! @brief Vec3 で取得
     //@―---------------------------------------------------------------------------
     Vec3 IntVec3::toVec3() const noexcept {
-        return Vec3(x, y, z);
+        return Vec3(1.0f*x, 1.0f * y, 1.0f * z);
     }
 
 
@@ -126,7 +126,7 @@ namespace ob {
     //! @brief Vec4 で取得
     //@―---------------------------------------------------------------------------
     Vec4 IntVec4::toVec4() const noexcept {
-        return Vec4(x, y, z, w);
+        return Vec4(1.0f*x, 1.0f * y, 1.0f * z, 1.0f * w);
     }
 
 }// namespace ob

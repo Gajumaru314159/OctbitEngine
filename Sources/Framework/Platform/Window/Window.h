@@ -4,8 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Type/Point.h>
-#include <Framework/Core/Type/Size.h>
 #include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/Platform/Type/CursorType.h>
 #include <Framework/Platform/Type/WindowCreationParams.h>

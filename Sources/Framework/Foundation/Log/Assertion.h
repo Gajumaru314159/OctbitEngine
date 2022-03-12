@@ -59,7 +59,7 @@ if(UNLIKELY(!(expr))){                                          \
 //!
 //! @details    式が呼び出された場合、エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_UNREACHABLE()                                        OB_REQUIRE(false,"Unreachable code.")
+#define OB_UNREACHABLE()                                        OB_REQUIRE_EX(false,"Unreachable code.")
 
 
 //@―---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ if(UNLIKELY(!(expr))){                                          \
 //! 
 //! @details    式が呼び出された場合、Warningログを出力する。
 //@―---------------------------------------------------------------------------
-#define OB_NOTIMPLEMENTED()                                     OB_ENSURE(false,"Not implemented code.")
+#define OB_NOTIMPLEMENTED()                                     OB_ENSURE_EX(false,"Not implemented code.")
 
 
 //============================================

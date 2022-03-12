@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Math/Vector/Vector3.h>
 #include <Framework/Core/Math/Matrix.h>
-#include <Framework/Core/Math/Rotator.h>
+#include <Framework/Core/Math/Rotation.h>
 
 namespace ob {
 
@@ -28,7 +28,7 @@ namespace ob {
     public:
 
         Vec3    position;
-        Rotator rotation;
+        Rot     rotation;
         Vec3    scale;
 
     };

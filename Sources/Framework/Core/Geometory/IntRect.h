@@ -320,7 +320,7 @@ namespace ob {
     //! @brief      上辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::topCenter()const noexcept {
-        return Vec2((left + right) * 0.5f, top);
+        return Vec2((left + right) * 0.5f, 1.0f*top);
     }
 
 
@@ -328,7 +328,7 @@ namespace ob {
     //! @brief      下辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::bottomCenter()const noexcept {
-        return Vec2((left + right) * 0.5f, bottom);
+        return Vec2((left + right) * 0.5f, 1.0f * bottom);
     }
 
 
@@ -336,7 +336,7 @@ namespace ob {
     //! @brief      左辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::leftCenter()const noexcept {
-        return Vec2(left, (top+bottom)*0.5f);
+        return Vec2(1.0f * left, (top+bottom)*0.5f);
     }
 
 
@@ -344,7 +344,7 @@ namespace ob {
     //! @brief      右辺の中央
     //@―---------------------------------------------------------------------------
     inline Vec2 IntRect::rightCenter()const noexcept {
-        return Vec2(right, (top + bottom) * 0.5f);
+        return Vec2(1.0f * right, (top + bottom) * 0.5f);
     }
 
 
