@@ -6,7 +6,7 @@
 #pragma once
 #include <array>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::array;
 

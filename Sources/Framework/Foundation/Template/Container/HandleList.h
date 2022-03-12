@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace ob {
     //! ```
     //@―---------------------------------------------------------------------------
     template<typename T>
-    class handle_list:private Noncopyable {
+    class handle_list :private Noncopyable {
     public:
 
         //! @cond
@@ -44,7 +44,7 @@ namespace ob {
             //! @brief ハンドルが対象のリストの要素か判定する
             //@―---------------------------------------------------------------------------
             bool is_child_of(const handle_list<T>& parent)const noexcept {
-                return pParent == ob::addressof(parent);
+                return pParent == addressof(parent);
             }
 
         protected:
@@ -64,7 +64,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief ハンドル
         //@―---------------------------------------------------------------------------
-        class handle :public handle_base,private Noncopyable,private Nonmovable {
+        class handle :public handle_base, private Noncopyable, private Nonmovable {
             friend class handle_list<T>;
         public:
 
@@ -117,7 +117,7 @@ namespace ob {
         using const_reference = const T&;       //!< const参照型
 
     private:
-        using mutex_type = ob::mutex;           //!<
+        using mutex_type = ob::foundation::mutex;        //!<
 
     public:
 
@@ -134,10 +134,10 @@ namespace ob {
             using value_type = T;                                                                                           //!< インスタンス型
             using pointer = T*;                                                                                             //!< ポインタ型
             using reference = value_type&;                                                                                  //!< 参照型
-            using iterator_category = ob::bidirectional_iterator_tag;                                                       //!< イテレータ・カテゴリ
+            using iterator_category = bidirectional_iterator_tag;                                                           //!< イテレータ・カテゴリ
         public:
             const_iterator(const this_type& x)noexcept :pHandle(const_cast<handle_base*>(x.pHandle)) {}                     //!< ムーブコンストラクタ
-            const_iterator& operator = (const this_type & x)noexcept{ pHandle = const_cast<handle_base*>(x.pHandle); return*this; }     //!< ムーブ代入演算子
+            const_iterator& operator = (const this_type& x)noexcept { pHandle = const_cast<handle_base*>(x.pHandle); return*this; }     //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
             pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pNext; return *this; }                                    //!< インクリメント
@@ -167,7 +167,7 @@ namespace ob {
             using reference = const T&;                                                                                     //!< 参照型
         public:
             iterator(const this_type& x)noexcept :const_iterator(x) {}                                                      //!< ムーブコンストラクタ
-            iterator& operator = (const this_type & x)noexcept{ const_iterator::operator=(x); return *this; }               //!< ムーブ代入演算子
+            iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }               //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
             pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pNext; return *this; }                                    //!< インクリメント
@@ -193,7 +193,7 @@ namespace ob {
             using reference = T&;                                                                                               //!< 参照型
         public:
             const_reverse_iterator(const this_type& x)noexcept :const_iterator(x) {}                                            //!< ムーブコンストラクタ
-            const_reverse_iterator& operator = (const this_type & x)noexcept{ const_iterator::operator=(x); return *this; }     //!< ムーブ代入演算子
+            const_reverse_iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }     //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
             pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pPrev; return *this; }                                        //!< インクリメント
@@ -219,7 +219,7 @@ namespace ob {
             using reference = const T&;                                                                                         //!< 参照型
         public:
             reverse_iterator(const this_type& x)noexcept :const_reverse_iterator(x) {}                                          //!< ムーブコンストラクタ
-            reverse_iterator& operator = (const this_type & x)noexcept{ const_iterator::operator=(x); return *this; }           //!< ムーブ代入演算子
+            reverse_iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }           //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
             pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pPrev; return *this; }                                        //!< インクリメント
@@ -243,7 +243,7 @@ namespace ob {
         handle_list(this_type&& x)noexcept;                                     // ムーブコンストラクタ
         this_type& operator=(this_type&& x)noexcept;                            // ムーブ代入演算子
         ~handle_list();                                                         // デストラクタ
-        
+
 
         //===============================================================
         // イテレータ
@@ -675,7 +675,7 @@ namespace ob {
     inline typename handle_list<T>::iterator handle_list<T>::insert(handle& h, const_iterator position, T&& x) {
         lock_guard<mutex_type> lg(mutex);
         insert_impl(position.pHandle, h);
-        *h.get_ptr()=x;
+        *h.get_ptr() = x;
         return &h;
     }
 
@@ -743,7 +743,7 @@ namespace ob {
         while (position != last) {
             auto pHandle = position.pHandle;
             ++position;
-            itr=erase_impl(pHandle);
+            itr = erase_impl(pHandle);
         }
         return itr.pHandle;
     }
@@ -798,7 +798,7 @@ namespace ob {
         const auto itrEnd = end();
         while (itr != itrEnd) {
             if (pred(*itr)) {
-                itr=erase_impl(itr.pHandle);
+                itr = erase_impl(itr.pHandle);
             } else {
                 ++itr;
             }
@@ -880,7 +880,7 @@ namespace ob {
 
         h.remove();
         h.pParent = this;
-        
+
         if (pPrev == m_header.pNext) {
             h.pPrev = &m_header;
             h.pNext = pPrev;
@@ -891,8 +891,8 @@ namespace ob {
             h.pPrev = pPrev->pPrev;
             h.pNext = pPrev;
 
-            pPrev->pPrev->pNext= &h;
-            pPrev->pPrev= &h;
+            pPrev->pPrev->pNext = &h;
+            pPrev->pPrev = &h;
         }
     }
 

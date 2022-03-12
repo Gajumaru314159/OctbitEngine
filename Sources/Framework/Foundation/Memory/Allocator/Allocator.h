@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief システムのデフォルトアライメント
@@ -122,4 +122,4 @@ namespace ob {
     };
 
 
-}// namespace ob
+}// namespace ob::foundation

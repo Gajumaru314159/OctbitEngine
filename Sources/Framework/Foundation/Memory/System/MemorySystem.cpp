@@ -9,7 +9,7 @@
 #include <Framework/Foundation/Log/Assertion.h>
 #include <Framework/Foundation/Log/LogMacro.h>
 
-namespace ob {
+namespace ob::foundation {
     //! @cond
     //static bool s_isInitialized = false;
     static array<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
@@ -26,7 +26,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     void MemorySystem::Init() {
         // ゼロ初期化で必要なさそう
-        
+
         //if (s_isInitialized)return;
         //for (auto& pHeap : s_heaps) {
         //    pHeap = nullptr;
@@ -122,7 +122,7 @@ namespace ob {
         return *pHeap;
     }
 
-}// namespace ob
+}// namespace ob::foundation::foundation
 
 
 #if !defined(OB_BUILD)
@@ -135,8 +135,8 @@ extern "C"
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetHeapAllocator(ob::HeapUsage HeapUsage, ob::Allocator* pAllocator) {
-        ob::MemorySystem::SetHeapAllocator(HeapUsage, pAllocator);
+    void OB_API SetHeapAllocator(ob::foundation::HeapUsage HeapUsage, ob::foundation::Allocator* pAllocator) {
+        ob::foundation::MemorySystem::SetHeapAllocator(HeapUsage, pAllocator);
     }
 
 
@@ -146,8 +146,8 @@ extern "C"
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetDebugHeapAllocator(ob::HeapUsage HeapUsage, ob::Allocator* pAllocator) {
-        ob::MemorySystem::SetDebugHeapAllocator(HeapUsage, pAllocator);
+    void OB_API SetDebugHeapAllocator(ob::foundation::HeapUsage HeapUsage, ob::foundation::Allocator* pAllocator) {
+        ob::foundation::MemorySystem::SetDebugHeapAllocator(HeapUsage, pAllocator);
     }
 
 }

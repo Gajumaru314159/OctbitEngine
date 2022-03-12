@@ -6,7 +6,7 @@
 #pragma once
 #include <memory>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::uninitialized_default_construct;
     using std::uninitialized_default_construct_n;

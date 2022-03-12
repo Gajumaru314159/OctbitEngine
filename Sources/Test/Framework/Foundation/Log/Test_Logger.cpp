@@ -3,8 +3,6 @@
 //! @brief		Loggerテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Foundation/Log/LogMacro.h>
-#include <Framework/Foundation/String/String.h>
 using namespace ob;
 
 

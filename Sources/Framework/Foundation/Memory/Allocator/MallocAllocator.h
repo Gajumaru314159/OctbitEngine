@@ -6,7 +6,7 @@
 #pragma once
 #include "Allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief		OSヒープ
@@ -101,4 +101,4 @@ namespace ob {
     // インライン関数
     //===============================================================
 
-}// namespace ob
+}// namespace ob::foundation

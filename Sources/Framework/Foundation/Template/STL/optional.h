@@ -6,7 +6,7 @@
 #pragma once
 #include <optional>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::optional;
     using std::make_optional;

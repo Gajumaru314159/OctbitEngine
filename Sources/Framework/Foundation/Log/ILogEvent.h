@@ -6,7 +6,7 @@
 #pragma once
 #include "LogType.h"
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief      ログ・イベント・インターフェース

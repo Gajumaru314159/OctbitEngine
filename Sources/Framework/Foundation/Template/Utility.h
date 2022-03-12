@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief      enum値を基底型(整数型)に変換する
@@ -143,9 +143,9 @@ namespace ob {
     //! @retval true    範囲内
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
-    template<typename T,typename TContainer>
+    template<typename T, typename TContainer>
     inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(is_arithmetic<T>::value) {
-        return is_in_range<T>(index,0,container.size());
+        return is_in_range<T>(index, 0, container.size());
     }
 
 

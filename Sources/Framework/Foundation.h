@@ -16,3 +16,13 @@
 #include <Framework/Foundation/Memory/Reference/Ref.h>
 #include <Framework/Foundation/Memory/System/MemorySystem.h>
 #include <Framework/Foundation/Memory/Utility/MemoryUtility.h>
+#include <Framework/Foundation/Template/Container/BitFlags.h>
+#include <Framework/Foundation/Template/Container/HandleForwardList.h>
+#include <Framework/Foundation/Template/Container/HandleList.h>
+#include <Framework/Foundation/Template/Delegate/Delegate.h>
+#include <Framework/Foundation/Template/Event/EventNotifier.h>
+#include <Framework/Foundation/Template/Handle/HandleManager.h>
+
+namespace ob{
+    using namespace foundation;
+}

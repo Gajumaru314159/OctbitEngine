@@ -17,8 +17,7 @@
 #undef index
 //! @endcond
 
-namespace ob
-{
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief      ロガー
@@ -28,19 +27,17 @@ namespace ob
     //!             出力やログファイルへの保存をする場合は別途実装し登録する必要があ
     //!             る。
     //@―---------------------------------------------------------------------------
-    class Logger:public Singleton<Logger>
-    {
+    class Logger :public Singleton<Logger> {
     public:
 
         using EventNotifier = event_notifier<const Log&>;
         using EventHandle = EventNotifier::handle;
-        using EventDelegateType= EventNotifier::delegate_type;
+        using EventDelegateType = EventNotifier::delegate_type;
 
         //@―---------------------------------------------------------------------------
         //! @brief メッセージの最大バイト数
         //@―---------------------------------------------------------------------------
-        enum
-        {
+        enum {
             MESSAGE_MAX = 2048, //! メッセージの最大バイト数
         };
 
@@ -96,4 +93,4 @@ namespace ob
         EventNotifier   m_notifier;
     };
 
-}// namespace ob
+}// namespace ob::foundation

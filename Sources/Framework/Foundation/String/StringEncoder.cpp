@@ -5,7 +5,7 @@
 //***********************************************************
 #include"StringEncoder.h"
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  char16_t から wchar_t に変換する
@@ -76,4 +76,4 @@ namespace ob {
         }
         return true;
     }
-}// namespace ob
+}// namespace ob::foundation

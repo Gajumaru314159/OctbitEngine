@@ -6,7 +6,7 @@
 #pragma once
 #include <numeric>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::accumulate;
     using std::reduce;

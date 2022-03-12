@@ -7,7 +7,7 @@
 #include <queue>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using queue = std::queue<T, allocator<T>>;

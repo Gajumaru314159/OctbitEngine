@@ -6,7 +6,7 @@
 #include "allocator.h"
 #include <Framework/Foundation/Memory/System/MemorySystem.h>
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ
@@ -29,4 +29,4 @@ namespace ob {
         return Allocator::Free(pBuffer);
     }
 
-}// namespace ob
+}// namespace ob::foundation

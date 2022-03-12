@@ -5,17 +5,17 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  入力ポインタからオフセットバイト進んだポインタの取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    constexpr T* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept     {
+    constexpr T* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept {
         return reinterpret_cast<T*>(reinterpret_cast<byte*>(const_cast<void*>(pBuffer)) + offset);
     }
 
-    constexpr void* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept     {
+    constexpr void* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept {
         return GetOffsetPtr<byte>(pBuffer, offset);
     }
 

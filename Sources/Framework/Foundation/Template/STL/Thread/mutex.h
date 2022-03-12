@@ -6,7 +6,7 @@
 #pragma once
 #include <mutex>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::mutex;
     using std::recursive_mutex;

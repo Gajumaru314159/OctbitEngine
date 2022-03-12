@@ -3,7 +3,6 @@
 //! @brief		delegateテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Foundation/Template/delegate/delegate.h>
 using namespace ob;
 
 static int s_calledNo = 0;

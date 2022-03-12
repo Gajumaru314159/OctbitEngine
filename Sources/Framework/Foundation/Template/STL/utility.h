@@ -6,7 +6,7 @@
 #pragma once
 #include <utility>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::swap;
     using std::exchange;

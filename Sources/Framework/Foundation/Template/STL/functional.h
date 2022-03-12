@@ -6,7 +6,7 @@
 #pragma once
 #include <functional>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::function;
     using std::bad_function_call;

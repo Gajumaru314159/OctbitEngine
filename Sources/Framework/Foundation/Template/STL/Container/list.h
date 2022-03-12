@@ -7,7 +7,7 @@
 #include <list>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using list = std::list<T, allocator<T>>;

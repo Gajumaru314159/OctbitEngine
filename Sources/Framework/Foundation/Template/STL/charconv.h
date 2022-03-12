@@ -6,7 +6,7 @@
 #pragma once
 #include <charconv>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::to_chars;
     using std::from_chars;

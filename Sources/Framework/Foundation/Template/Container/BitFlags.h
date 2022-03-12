@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief		enum値をビットフラグとして扱うためのラップクラス
@@ -170,4 +170,4 @@ namespace ob {
 
     };
 
-}// namespace ob
+}// namespace ob::foundation

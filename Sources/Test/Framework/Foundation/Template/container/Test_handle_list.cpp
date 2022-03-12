@@ -3,7 +3,6 @@
 //! @brief		handle_listƒeƒXƒg
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Foundation/Template/Container/HandleList.h>
 using namespace ob;
 
 struct Hoge {

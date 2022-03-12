@@ -7,7 +7,7 @@
 #include <forward_list>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using forward_list = std::forward_list<T, allocator<T>>;

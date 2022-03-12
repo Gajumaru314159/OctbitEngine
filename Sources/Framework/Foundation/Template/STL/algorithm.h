@@ -6,7 +6,7 @@
 #pragma once
 #include <algorithm>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::all_of;
     using std::any_of;

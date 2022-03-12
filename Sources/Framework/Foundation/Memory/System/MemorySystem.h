@@ -7,7 +7,7 @@
 #include <Framework/Foundation/Memory/Allocator/Allocator.h>
 #include <Framework/Foundation/Memory/Types/HeapUsage.h>
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief メモリーデバイス
@@ -83,7 +83,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetHeapAllocator(ob::HeapUsage heapType, ob::Allocator* pAllocator);
+    void OB_API SetHeapAllocator(ob::foundation::HeapUsage heapType, ob::foundation::Allocator* pAllocator);
 
 
     //@―---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ extern "C"
     //! @param heapType     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
     //@―---------------------------------------------------------------------------
-    void OB_API SetDebugHeapAllocator(ob::HeapUsage heapType, ob::Allocator* pAllocator);
+    void OB_API SetDebugHeapAllocator(ob::foundation::HeapUsage heapType, ob::foundation::Allocator* pAllocator);
 
 }
 #endif

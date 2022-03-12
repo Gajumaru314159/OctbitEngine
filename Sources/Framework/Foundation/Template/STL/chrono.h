@@ -6,7 +6,7 @@
 #pragma once
 #include <chrono>
 
-namespace ob {
+namespace ob::foundation {
     namespace chrono {
 
         using std::chrono::duration;

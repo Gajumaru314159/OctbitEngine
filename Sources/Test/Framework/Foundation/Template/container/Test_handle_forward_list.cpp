@@ -3,7 +3,6 @@
 //! @brief		handle_forward_listテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Foundation/Template/Container/HandleForwardList.h>
 using namespace ob;
 
 struct Hoge {

@@ -6,7 +6,7 @@
 #pragma once
 #include "Details/DelegateBase.h"
 
-namespace ob {
+namespace ob::foundation {
 
     //! @cond
     template<class SIGNATURE>
@@ -98,7 +98,7 @@ namespace ob {
 
 
     private:
-        
+
         void copy_impl(const this_type& rhs)noexcept;                                   // コピー
         static Ret invoke_nop(const functor_type&, Args...)noexcept;                    // 無効関数
         static Ret invoke_function(const functor_type& functor, Args... args);          // 登録された関数を呼び出す

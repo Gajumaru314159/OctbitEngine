@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <typeindex>
-namespace ob {
+namespace ob::foundation {
 
     using std::type_index;
 

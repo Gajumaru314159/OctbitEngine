@@ -6,7 +6,7 @@
 #pragma once
 #include <limits>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::numeric_limits;
     using std::float_round_style;

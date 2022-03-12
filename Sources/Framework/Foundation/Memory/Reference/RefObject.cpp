@@ -7,7 +7,7 @@
 #include <Framework/Foundation/Log/Assertion.h>
 
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
@@ -83,4 +83,4 @@ namespace ob {
         return pObj->release();
     }
 
-}// namespace ob
+}// namespace ob::foundation

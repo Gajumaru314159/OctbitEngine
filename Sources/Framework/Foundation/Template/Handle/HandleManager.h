@@ -4,11 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <memory>
-#include <Framework/Foundation/Base/Common.h>
-#include <Framework/Foundation/Template/container/stack.h>
+
 /*
-namespace ob
+namespace ob::foundation
 {
 
     //@―---------------------------------------------------------------------------

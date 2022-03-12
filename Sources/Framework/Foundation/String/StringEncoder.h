@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Foundation/String/String.h>
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明

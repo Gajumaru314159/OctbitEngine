@@ -6,16 +6,13 @@
 //! @cond
 #pragma once
 
-namespace ob
-{
-    namespace detail
-    {
+namespace ob::foundation {
+    namespace detail {
 
         //@―---------------------------------------------------------------------------
         //! @brief ファンクタ
         //@―---------------------------------------------------------------------------
-        struct Functor
-        {
+        struct Functor {
         private:
 
             class Base {
@@ -25,12 +22,10 @@ namespace ob
             class B :public virtual Base {};
             class Derived :public A, public B { public:virtual void Func()noexcept override {} };
 
-            enum
-            {
+            enum {
                 function_size = sizeof(&Derived::Func),
             };
-            enum
-            {
+            enum {
                 buffer_size = 32,
             };
             static_assert(function_size < buffer_size, "buffer_size is too small.");
@@ -68,8 +63,7 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief デリゲート基底クラス
         //@―---------------------------------------------------------------------------
-        class delegate_base
-        {
+        class delegate_base {
         protected:
 
             Functor m_functor;  //!< ファンクタ
@@ -88,8 +82,7 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief コピー演算子
         //@―---------------------------------------------------------------------------
-        inline Functor& Functor::operator=(const Functor& src)noexcept
-        {
+        inline Functor& Functor::operator=(const Functor& src)noexcept {
             m_pObject = src.m_pObject;
             memcpy_s(m_function, sizeof(m_function), src.m_function, sizeof(m_function));
             return *this;
@@ -99,8 +92,7 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        inline bool Functor::operator==(const Functor& rhs)const noexcept
-        {
+        inline bool Functor::operator==(const Functor& rhs)const noexcept {
             if (m_pObject != rhs.m_pObject)return false;
             return (memcmp((void*)m_function, (void*)rhs.m_function, sizeof(m_function)) == 0);
         }
@@ -108,8 +100,7 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        inline bool Functor::operator!=(const Functor& rhs)const noexcept
-        {
+        inline bool Functor::operator!=(const Functor& rhs)const noexcept {
             return !(*this == rhs);
         }
 
@@ -117,8 +108,7 @@ namespace ob
         //@―---------------------------------------------------------------------------
         //! @brief クリア
         //@―---------------------------------------------------------------------------
-        inline void Functor::clear()noexcept
-        {
+        inline void Functor::clear()noexcept {
             m_pObject = nullptr;
             memset(m_function, 0x00, sizeof(m_function));
         }
@@ -128,8 +118,7 @@ namespace ob
         //! @brief オブジェクトの取得
         //@―---------------------------------------------------------------------------
         template<typename T>
-        inline T* Functor::get_object()const
-        {
+        inline T* Functor::get_object()const {
             return reinterpret_cast<T*>(m_pObject);
         }
 
@@ -138,8 +127,7 @@ namespace ob
         //! @brief オブジェクトの設定
         //@―---------------------------------------------------------------------------
         template<typename T>
-        inline void Functor::set_object(T* pObject)noexcept
-        {
+        inline void Functor::set_object(T* pObject)noexcept {
             m_pObject = reinterpret_cast<void*>(pObject);
         }
 
@@ -148,8 +136,7 @@ namespace ob
         //! @brief 関数の取得
         //@―---------------------------------------------------------------------------
         template<typename F>
-        inline F Functor::get_function()const
-        {
+        inline F Functor::get_function()const {
             return *reinterpret_cast<const F*>(&m_function[0]);
         }
 
@@ -158,8 +145,7 @@ namespace ob
         //! @brief 関数の設定
         //@―---------------------------------------------------------------------------
         template<typename F>
-        inline void Functor::set_function(const F function)noexcept
-        {
+        inline void Functor::set_function(const F function)noexcept {
             static_assert(sizeof(F) <= sizeof(m_function), "require more function size");
             memcpy(m_function, &function, sizeof(F));
         }

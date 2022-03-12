@@ -7,7 +7,7 @@
 #include <deque>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using deque = std::deque<T, allocator<T>>;

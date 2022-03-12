@@ -6,7 +6,7 @@
 #pragma once
 #include <thread>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::thread;
 

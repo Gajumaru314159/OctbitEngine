@@ -6,7 +6,7 @@
 #pragma once
 #include <future>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::future_errc;
     using std::launch;

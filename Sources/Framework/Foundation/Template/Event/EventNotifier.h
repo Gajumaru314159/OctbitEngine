@@ -7,7 +7,7 @@
 #include <Framework/Foundation/Template/Delegate/Delegate.h>
 #include <Framework/Foundation/Template/Container/HandleList.h>
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief              イベント通知クラス

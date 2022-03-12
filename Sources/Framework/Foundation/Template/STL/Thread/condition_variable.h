@@ -6,7 +6,7 @@
 #pragma once
 #include <condition_variable>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::condition_variable;
     using std::condition_variable_any;

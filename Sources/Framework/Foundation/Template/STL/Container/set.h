@@ -8,7 +8,7 @@
 #include <unordered_set>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using set = std::set<T, allocator<T>>;

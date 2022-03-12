@@ -6,7 +6,7 @@
 #pragma once
 #include <variant>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::variant;
     using std::variant_size;

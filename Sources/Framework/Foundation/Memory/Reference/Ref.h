@@ -7,7 +7,7 @@
 #include "RefObject.h"
 
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  参照カウント式スマートポインタ
@@ -164,7 +164,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         void safeRelease();
 
-       
+
     private:
 
         RefObject* m_ptr;
@@ -372,7 +372,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline constexpr Ref<T>::Ref()noexcept
-        :m_ptr(nullptr){
+        :m_ptr(nullptr) {
 
     }
 
@@ -527,7 +527,7 @@ namespace ob {
     //@―---------------------------------------------------------------------------
     template<class T>
     inline T& Ref<T>::operator*() const noexcept {
-        assert(m_ptr!=nullptr);
+        assert(m_ptr != nullptr);
         return *static_cast<T*>(m_ptr);
     }
 

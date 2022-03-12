@@ -6,7 +6,7 @@
 #pragma once
 #include <type_traits>
 
-namespace ob {
+namespace ob::foundation {
 
     //===============================================================
     // ヘルパークラス

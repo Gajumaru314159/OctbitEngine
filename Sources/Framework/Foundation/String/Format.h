@@ -14,12 +14,12 @@
 //! @endcond
 
 
-namespace ob {
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    template<typename TChar,class... Args>
+    template<typename TChar, class... Args>
     ob::StringBase<TChar> format(const TChar* fmt, Args&&... args) {
         return fmt::format(fmt, ob::forward<Args>(args)...);
     }

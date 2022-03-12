@@ -8,8 +8,7 @@
 #include <string>
 #include <string_view>
 
-namespace ob
-{
+namespace ob::foundation {
     template <class TChar>
     using StringBase = std::basic_string<TChar>;
 
@@ -127,12 +126,12 @@ namespace ob
         void Reserve(int size);
         void Assign(const Char* str);
         void Assign(const Char* str, int length);
-        void Assign(int count, Char ch);         
-        void Assign(const StringView& str);      
+        void Assign(int count, Char ch);
+        void Assign(const StringView& str);
         void Append(const Char* str, int length);
-        void Append(const String& str); 
+        void Append(const String& str);
         bool Contains(const StringView& str, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
-        bool Contains(Char ch, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const; 
+        bool Contains(Char ch, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
         int indexOf(const StringView& str, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
         int indexOf(Char ch, int startIndex = 0, CaseSensitivity cs = CaseSensitivity::CaseSensitive) const;
 
@@ -170,30 +169,30 @@ namespace ob
 
         int toInt(int base = 0) const;
         int8_t toInt8(int base = 0) const;
-        int16_t toInt16(int base = 0) const;   
-        int32_t toInt32(int base = 0) const;   
-        int64_t toInt64(int base = 0) const;   
-        uint8_t toUInt8(int base = 0) const;   
-        uint16_t toUInt16(int base = 0) const; 
-        uint32_t toUInt32(int base = 0) const; 
-        uint64_t toUInt64(int base = 0) const; 
+        int16_t toInt16(int base = 0) const;
+        int32_t toInt32(int base = 0) const;
+        int64_t toInt64(int base = 0) const;
+        uint8_t toUInt8(int base = 0) const;
+        uint16_t toUInt16(int base = 0) const;
+        uint32_t toUInt32(int base = 0) const;
+        uint64_t toUInt64(int base = 0) const;
         bool tryToInt(int* outValue, int base = 0) const;
         bool tryToInt8(int8_t* outValue, int base = 0) const;
-        bool tryToInt16(int16_t* outValue, int base = 0) const;   
-        bool tryToInt32(int32_t* outValue, int base = 0) const;   
-        bool tryToInt64(int64_t* outValue, int base = 0) const;   
-        bool tryToUInt8(uint8_t* outValue, int base = 0) const;   
-        bool tryToUInt16(uint16_t* outValue, int base = 0) const; 
-        bool tryToUInt32(uint32_t* outValue, int base = 0) const; 
-        bool tryToUInt64(uint64_t* outValue, int base = 0) const; 
+        bool tryToInt16(int16_t* outValue, int base = 0) const;
+        bool tryToInt32(int32_t* outValue, int base = 0) const;
+        bool tryToInt64(int64_t* outValue, int base = 0) const;
+        bool tryToUInt8(uint8_t* outValue, int base = 0) const;
+        bool tryToUInt16(uint16_t* outValue, int base = 0) const;
+        bool tryToUInt32(uint32_t* outValue, int base = 0) const;
+        bool tryToUInt64(uint64_t* outValue, int base = 0) const;
 
         std::string toStdString() const;
 
         std::wstring toStdWString() const;
 
         static String concat(const StringView& str1, const StringView& str2);
-        static String concat(const StringView& str1, const StringView& str2, const StringView& str3);                       
-        static String concat(const StringView& str1, const StringView& str2, const StringView& str3, const StringView& str4); 
+        static String concat(const StringView& str1, const StringView& str2, const StringView& str3);
+        static String concat(const StringView& str1, const StringView& str2, const StringView& str3, const StringView& str4);
 
         static String join(const List<String>& list, const StringView& delim);
 
@@ -214,11 +213,11 @@ namespace ob
         static String fromStdString(const std::wstring& str);
 
         static String fromNumber(int32_t value, Char format = 'D');
-        static String fromNumber(int64_t value, Char format = 'D');                   
-        static String fromNumber(uint32_t value, Char format = 'D');                  
-        static String fromNumber(uint64_t value, Char format = 'D');                  
-        static String fromNumber(float value, Char format = 'F', int precision = 6);  
-        static String fromNumber(double value, Char format = 'F', int precision = 6); 
+        static String fromNumber(int64_t value, Char format = 'D');
+        static String fromNumber(uint32_t value, Char format = 'D');
+        static String fromNumber(uint64_t value, Char format = 'D');
+        static String fromNumber(float value, Char format = 'F', int precision = 6);
+        static String fromNumber(double value, Char format = 'F', int precision = 6);
 
         CharRef operator[](int index);
 
@@ -285,7 +284,7 @@ namespace ob
 
         static const String Empty;
     };
-    
+
 
     */
 }// namespcae ob

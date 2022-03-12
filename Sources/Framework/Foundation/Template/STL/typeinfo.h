@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <typeinfo>
-namespace ob {
+namespace ob::foundation {
 
     using std::type_info;
     using std::bad_cast;

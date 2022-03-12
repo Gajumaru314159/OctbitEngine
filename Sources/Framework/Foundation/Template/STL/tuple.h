@@ -6,7 +6,7 @@
 #pragma once
 #include <tuple>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::tuple;
 

@@ -6,7 +6,7 @@
 #pragma once
 #include <cmath>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::abs;
     using std::acos;

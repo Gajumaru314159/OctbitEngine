@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class TKey, class TValue>
     using map = std::map<TKey, TValue, allocator<pair<const TKey, TValue>>>;

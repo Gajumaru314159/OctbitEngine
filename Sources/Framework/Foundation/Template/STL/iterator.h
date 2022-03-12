@@ -6,7 +6,7 @@
 #pragma once
 #include <iterator>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::iterator_traits;
     using std::input_iterator_tag;

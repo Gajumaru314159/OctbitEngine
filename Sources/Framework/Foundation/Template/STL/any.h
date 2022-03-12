@@ -6,7 +6,7 @@
 #pragma once
 #include <any>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::any;
     using std::bad_any_cast;

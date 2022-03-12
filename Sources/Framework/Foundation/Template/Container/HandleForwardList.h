@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace ob {
     //! ```
     //@―---------------------------------------------------------------------------
     template<typename T>
-    class handle_forward_list :private Noncopyable{
+    class handle_forward_list :private Noncopyable {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         //! @brief ハンドル
         //@―---------------------------------------------------------------------------
-        class handle :public handle_base,private Noncopyable,private Nonmovable {
+        class handle :public handle_base, private Noncopyable, private Nonmovable {
             friend class handle_forward_list<T>;
         public:
 
@@ -111,7 +111,7 @@ namespace ob {
         using reference = T&;
         using const_reference = const T&;
 
-        using mutex_type = ob::mutex;
+        using mutex_type = mutex;
         using difference_type = int;
 
 
@@ -126,7 +126,7 @@ namespace ob {
             using value_type = T;                                                                                           //!< インスタンス型
             using pointer = T*;                                                                                             //!< ポインタ型
             using reference = value_type&;                                                                                  //!< 参照型
-            using iterator_category = ob::bidirectional_iterator_tag;                                                       //!< イテレータ・カテゴリ
+            using iterator_category = bidirectional_iterator_tag;                                                       //!< イテレータ・カテゴリ
         public:
             const_iterator(const this_type& x)noexcept :pHandle(const_cast<handle_base*>(x.pHandle)) {}                     //!< ムーブコンストラクタ
             const_iterator& operator = (const this_type& x)noexcept { pHandle = const_cast<handle_base*>(x.pHandle); return*this; }     //!< ムーブ代入演算子
@@ -242,7 +242,7 @@ namespace ob {
     template<typename T>
     inline bool operator==(handle_forward_list<T> const& a, handle_forward_list<T> const& b)noexcept {
         lock_guard<mutex_type> lg(mutex);
-        return (a.size() == b.size()) && ob::equal(a.begin(), a.end(), b.begin());
+        return (a.size() == b.size()) && equal(a.begin(), a.end(), b.begin());
     }
 
     //@―---------------------------------------------------------------------------
@@ -566,7 +566,7 @@ namespace ob {
         auto itr = begin();
         const auto itrEnd = end();
         while (itr != itrEnd) {
-            if (itr.pHandle==&h) {
+            if (itr.pHandle == &h) {
                 ++itr;
                 erase_impl(itrPrev.pHandle);
             } else {
@@ -608,8 +608,8 @@ namespace ob {
 
         handle_base* pPrev = nullptr;
         handle_base* pPos = m_header.pNext;
-        while (pPos!=nullptr) {
-            auto pNext =pPos->pNext;
+        while (pPos != nullptr) {
+            auto pNext = pPos->pNext;
             pPos->pNext = pPrev;
             pPrev = pPos;
             pPos = pNext;
@@ -696,7 +696,7 @@ namespace ob {
         assert(pHandle->is_child_of(*this));
 
         auto pDelete = pHandle->pNext;
-        pHandle->pNext= pDelete->pNext;
+        pHandle->pNext = pDelete->pNext;
 
         pDelete->clear();
 

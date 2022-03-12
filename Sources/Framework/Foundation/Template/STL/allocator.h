@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <new>
-namespace ob {
+namespace ob::foundation {
 
     //! @cond
     struct allocator_base {

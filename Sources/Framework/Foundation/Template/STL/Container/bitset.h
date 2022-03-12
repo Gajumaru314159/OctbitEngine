@@ -6,7 +6,7 @@
 #pragma once
 #include <bitset>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::bitset;
 

@@ -7,7 +7,7 @@
 #include <vector>
 #include "../allocator.h"
 
-namespace ob {
+namespace ob::foundation {
 
     template <class T>
     using vector = std::vector<T, allocator<T>>;

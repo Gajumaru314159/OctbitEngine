@@ -6,8 +6,7 @@
 #include "Logger.h"
 #include "LogType.h"
 
-namespace ob
-{
+namespace ob::foundation {
 
     //@―---------------------------------------------------------------------------
     //! @brief                  ログの追加
@@ -19,8 +18,7 @@ namespace ob
     //! @param category         カテゴリ名
     //! @param pMessage         メッセージ
     //@―---------------------------------------------------------------------------
-    void Logger::addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage)
-    {
+    void Logger::addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage) {
         Log log;
         log.type = type;
         log.category = category;
@@ -55,5 +53,5 @@ namespace ob
     void Logger::removeEvent(EventHandle& handle) {
         m_notifier.remove(handle);
     }
-    
-}// namespace ob
+
+}// namespace ob::foundation

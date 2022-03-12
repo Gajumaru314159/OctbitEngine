@@ -6,7 +6,7 @@
 #pragma once
 #include <complex>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::complex;
 

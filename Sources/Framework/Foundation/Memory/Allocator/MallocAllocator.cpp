@@ -10,14 +10,14 @@
 
 #include <Framework/Foundation/Memory/Utility/MemoryUtility.h>
 
-namespace ob {
+namespace ob::foundation {
 
 
     //@―---------------------------------------------------------------------------
     //! @brief	                コンストラクタ
     //@―---------------------------------------------------------------------------
     MallocAllocator::MallocAllocator(const Char* pName) {
-        m_pName = pName?pName:TC("MallocAllocator");
+        m_pName = pName ? pName : TC("MallocAllocator");
     }
 
 
@@ -115,4 +115,4 @@ namespace ob {
         return true;
     }
 
-}// namespace ob
+}// namespace ob::foundation

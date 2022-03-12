@@ -6,7 +6,7 @@
 #pragma once
 #include <atomic>
 
-namespace ob {
+namespace ob::foundation {
 
     using std::memory_order;
     using std::kill_dependency;
