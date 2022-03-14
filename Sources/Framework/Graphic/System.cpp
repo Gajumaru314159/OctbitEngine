@@ -5,27 +5,33 @@
 //***********************************************************
 #include <Framework/Graphic/System.h>
 #include <Framework/Platform/Module/ModuleManager.h>
-#include <Framework/Graphic/Module/IGraphicModule.h>
+#include <Framework/Graphic/Interface/IGraphicModule.h>
+#include <Framework/Graphic/Interface/IDevice.h>
+#include <Framework/Graphic/Interface/GraphicObject.h>
 
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    System::System(GraphicAPI api) {
+    System::System(GraphicAPI api)
+        : m_nowStackIndex(0){
+        IDevice* pDevice = nullptr;
         if (api == GraphicAPI::D3D12) {
 #if defined(OS_WINDOWS)
-            auto pModule = platform::ModuleManager::Get().LoadModule<IGraphicModule>(TC("GraphicD3D12"));
-            
-            m_device = std::unique_ptr<I>(pModule->CreateDevice(FeatureLevel::Default));
+            auto pModule = platform::ModuleManager::ref().loadModule<IGraphicModule>(TC("GraphicD3D12"));
+            if (pModule->magicCode() == IGraphicModule::graphicMagicCode()) {
+                pDevice=pModule->createDevice(FeatureLevel::Default);
+                return;
+            }
 #endif
         } else if (api == GraphicAPI::Vulkan) {
             OB_NOTIMPLEMENTED();
         }
 
-        if (m_device.get() == nullptr) {
-            OB_NOTIMPLEMENTED();
-        }
+
+        m_device.m_impl = pDevice;
+        OB_ENSURE_EX(pDevice,"無効なグラフィックモジュール{0}",api);
     }
 
 
@@ -38,17 +44,20 @@ namespace ob::graphic {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  スワップチェーンの生成
+    //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
-    Ref<Swapchain> System::createSwapchain(const SwapchainDesc& desc) {
-        return m_device->createSwapchain(desc);
+    Device& System::getDevice() {
+        return m_device;
     }
 
+
     //@―---------------------------------------------------------------------------
-    //! @brief  コマンドリストの生成
+    //! @brief      デバイスを取得デバイスを取得
     //@―---------------------------------------------------------------------------
-    Ref<CommandList> System::createCommandList(CommandListType type) {
-        return m_device->createCommandList(type);
+    void System::requestRelease(GraphicObject* pObject) {
+        if (pObject == nullptr)return;
+        auto& nowStack=m_delayReleaseStack[m_nowStackIndex];
+        nowStack.emplace(pObject);
     }
 
 }// namespace pb::graphic

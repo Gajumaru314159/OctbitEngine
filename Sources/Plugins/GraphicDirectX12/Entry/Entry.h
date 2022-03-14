@@ -1,16 +1,14 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スタック
+//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <stack>
-#include "../allocator.h"
-
-namespace ob::foundation {
-
-    template <class T>
-    using stack = std::stack<T>;
+#include <Framework/Platform/Module/IModule.h>
 
 
-}// namespcae ob
+extern"C" {
+
+    ob::platform::IModule OB_API *GetModule();
+
+}

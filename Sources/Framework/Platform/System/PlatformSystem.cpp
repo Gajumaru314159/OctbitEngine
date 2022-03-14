@@ -48,10 +48,10 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  メインウィンドウを取得する
     //@―---------------------------------------------------------------------------
-    Ref<Window> PlatformSystem::getMainWindow() {
-        if (!m_implement)return nullptr;
-        return m_implement->getMainWindow();
-    }
+    //Ref<Window> PlatformSystem::getMainWindow() {
+    //    if (!m_implement)return nullptr;
+    //    return m_implement->getMainWindow();
+    //}
 
 
     //@―---------------------------------------------------------------------------

@@ -16,7 +16,7 @@ namespace ob::platform {
     //! @details    生成情報を指定してウィンドウを生成する。
     //@―---------------------------------------------------------------------------
     Window::Window(const WindowCreationDesc& desc) {
-        m_impl = std::make_unique<WindowImpl>(desc);
+        m_impl = std::make_shared<WindowImpl>(desc);
     }
 
 
@@ -90,7 +90,7 @@ namespace ob::platform {
         OB_REQUIRE(m_impl);
         return m_impl->GetStyle();
     }
-
+    */
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウサイズを取得
@@ -99,7 +99,7 @@ namespace ob::platform {
         OB_REQUIRE(m_impl);
         return m_impl->size();
     }
-    */
+    
 
     //@―---------------------------------------------------------------------------
     //! @brief              スクリーン座標を取得

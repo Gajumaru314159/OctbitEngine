@@ -4,8 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Type/GraphicAPI.h>
+#include <Framework/Graphic/Types/GraphicAPI.h>
+#include <Framework/Graphic/Interface/IDevice.h>
 #include <Framework/Graphic/Device.h>
+
+namespace ob::graphic {
+    class GraphicObject;
+}
 
 namespace ob::graphic {
 
@@ -28,43 +33,30 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         System(GraphicAPI api);
 
+
         //@―---------------------------------------------------------------------------
         //! @brief      デストラクタ
         //@―---------------------------------------------------------------------------
         ~System();
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  スワップチェーンの生成
-        //@―---------------------------------------------------------------------------
-        Ref<Swapchain> createSwapchain(const SwapchainDesc& desc);
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コマンドリストの生成
+        //! @brief      デバイスを取得デバイスを取得
         //@―---------------------------------------------------------------------------
-        Ref<CommandList> createCommandList(CommandListType type);
+        Device& getDevice();
 
-    protected:
 
-        // SwapChain
-        // CommandList
-        // RenderPass
-        // Pipeline
-        // VertexLayout
-        // Buffer
-        // VertexBuffer
-        // IndexBuffer
-        // Texture2D
-        // Texture3D
-        // RenderTexture
-        // DepthBuffer
-        // SamplerState
-        // ShaderPss
+        //@―---------------------------------------------------------------------------
+        //! @brief      デバイスを取得デバイスを取得
+        //@―---------------------------------------------------------------------------
+        void requestRelease(GraphicObject* pObject);
 
-        // onFlushCommandList
 
     private:
 
-        std::unique_ptr<Device> m_device;
+        Device m_device;
+        std::vector<ob::stack<GraphicObject*>> m_delayReleaseStack;
+        s32 m_nowStackIndex;
 
     };
 

@@ -14,7 +14,7 @@ namespace ob::platform::detail {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     PlatformSystemImpl::PlatformSystemImpl() {
-        createMainWindow();
+        //createMainWindow();
     }
 
 
