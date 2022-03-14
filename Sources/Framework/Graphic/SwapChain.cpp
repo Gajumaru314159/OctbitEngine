@@ -12,14 +12,14 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    Swapchain::Swapchain()
+    SwapChain::SwapChain()
         :m_impl(nullptr) {
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
-    Swapchain::~Swapchain() {
+    SwapChain::~SwapChain() {
         release();
     }
 
@@ -27,7 +27,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  明示的開放
     //@―---------------------------------------------------------------------------
-    void Swapchain::release() {
+    void SwapChain::release() {
         if (m_impl) {
             System::ref().requestRelease(m_impl);
         }
@@ -37,7 +37,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  空か
     //@―---------------------------------------------------------------------------
-    bool Swapchain::isEmpty()const noexcept {
+    bool SwapChain::isEmpty()const noexcept {
         return m_impl == nullptr;
     }
 
@@ -45,7 +45,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  バックバッファの数を取得
     //@―---------------------------------------------------------------------------
-    s32 Swapchain::getBackBufferCount()const {
+    s32 SwapChain::getBackBufferCount()const {
         OB_REQUIRE(m_impl != nullptr);
         return m_impl->getBackBufferCount();
     }
@@ -54,7 +54,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  描画先テクスチャを取得
     //@―---------------------------------------------------------------------------
-    ITexture* Swapchain::getRederTexture(s32 index)const {
+    ITexture* SwapChain::getRederTexture(s32 index)const {
         OB_REQUIRE(m_impl != nullptr);
         return m_impl->getRederTexture(index);
     }
@@ -63,7 +63,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  VSyncが有効か
     //@―---------------------------------------------------------------------------
-    s32 Swapchain::isVSyncEnabled()const {
+    s32 SwapChain::isVSyncEnabled()const {
         OB_REQUIRE(m_impl != nullptr);
         return m_impl->isVSyncEnabled();
     }
@@ -72,7 +72,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  HDRが有効か
     //@―---------------------------------------------------------------------------
-    s32 Swapchain::isHdrEnabled()const {
+    s32 SwapChain::isHdrEnabled()const {
         OB_REQUIRE(m_impl != nullptr);
         return m_impl->isHdrEnabled();
     }
@@ -81,7 +81,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  バックバッファのサイズを変更
     //@―---------------------------------------------------------------------------
-    bool Swapchain::resizeBackBuffer(const Size& size) {
+    bool SwapChain::resizeBackBuffer(const Size& size) {
         OB_REQUIRE(m_impl != nullptr);
         return m_impl->resizeBackBuffer(size);
     }
@@ -92,7 +92,7 @@ namespace ob::graphic {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void Swapchain::update() {
+    void SwapChain::update() {
         OB_REQUIRE(m_impl!=nullptr);
         m_impl->update();
     }

@@ -15,7 +15,7 @@ namespace ob::graphic {
     //! @details    モニターに表示するバッファを複数のバッファから切り替えることで
     //!             表示のちらつきを解決する。
     //@―---------------------------------------------------------------------------
-    class Swapchain :public RefObject {
+    class SwapChain :public RefObject {
         friend class System;
     public:
 

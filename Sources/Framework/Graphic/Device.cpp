@@ -15,7 +15,7 @@ namespace ob::graphic {
     //! @details    モニターに表示するバッファを複数のバッファから切り替えることで
     //!             表示のちらつきを解決する。
     //@―---------------------------------------------------------------------------
-    void Device::createSwapChain(Swapchain& display, SwapchainDesc& desc) {
+    void Device::createSwapChain(SwapChain& display, SwapchainDesc& desc) {
         display.release();
         display.m_impl = m_impl->createSwapChain(desc);
     }

@@ -48,7 +48,7 @@ namespace ob::graphic {
         virtual void flip();
         */
 
-        void createSwapChain(Swapchain& display, SwapchainDesc& desc);
+        void createSwapChain(SwapChain& display, SwapchainDesc& desc);
 
         /*
         virtual void createCommandList(CommandList& commandList, CommandListType type);
