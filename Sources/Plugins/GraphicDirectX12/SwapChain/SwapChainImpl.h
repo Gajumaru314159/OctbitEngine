@@ -11,6 +11,7 @@
 //===============================================================
 namespace ob::graphic::dx12 {
     class DeviceImpl;
+    class ITexture;
 }
 
 
@@ -78,23 +79,44 @@ namespace ob::graphic::dx12 {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update() override;
+        void update(ITexture* pTexture) override;
 
     private:
 
         //@―---------------------------------------------------------------------------
         //! @brief      レンダーテクスチャを初期化
         //@―---------------------------------------------------------------------------
-        void initializeRenderTexture(DeviceImpl& rDevice);
+        void createSwapChain(DeviceImpl& rDevice);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      レンダーテクスチャを初期化
+        //@―---------------------------------------------------------------------------
+        void createBuffer(DeviceImpl& rDevice);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      カラースペースを設定
+        //@―---------------------------------------------------------------------------
+        void setColorSpace();
+
+
 
     private:
 
         SwapchainDesc m_desc;
         ComPtr<IDXGISwapChain4> m_swapchain = nullptr;  //!< スワップチェイン
-        vector<ITexture*> m_buffers;                    //!< バックバッファ
+        vector<ComPtr<ID3D12Resource>> m_buffers;                    //!< バックバッファ
         ComPtr<ID3D12DescriptorHeap> m_rtvHeaps;        //!< ディスクリプタヒープ
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorrect;                       //!< シザー矩形
+
+        s32 m_frameIndex;
+        TextureFormat m_displayViewFormat;              //!< ディスプレイ・ビューフォーマット
+        DXGI_FORMAT m_nativeDisplayViewFormat;          //!< ディスプレイ・ビューフォーマット
+        DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
+
+
+        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー
 
     };
 

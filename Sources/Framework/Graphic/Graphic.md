@@ -21,3 +21,14 @@ graphic::System::Ref()::startup(GraphicAPI::DirectX);
 auto pDevice=graphic::System::Ref()::getDevice();
 auto buffer=pDevice->createBuffer(0x1000,TC("TestBuffer"));
 ```
+
+## リソース
+リソースは大別して三種類あります。
+### Read
+* 頂点
+* インデックス
+* テクスチャ
+### ReadWrite
+* レンダーターゲット
+### ReadWrite
+* Unoredered Access

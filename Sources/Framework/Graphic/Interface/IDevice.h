@@ -16,6 +16,7 @@
 namespace ob::graphic {
     class ISwapChain;
     class ITexture;
+    class IRenderTexture;
 }
 
 
@@ -51,7 +52,7 @@ namespace ob::graphic {
         virtual void createTexture(Texture& texture, const TextureData& data,StringView name)=0;
         */
         virtual ITexture* createTexture(const TextureDesc& desc, StringView name)=0;
-        //virtual void createRenderTexture(Texture& texture, const TextureDesc& desc, StringView name)=0;
+        virtual IRenderTexture* createRenderTexture(const TextureDesc& desc, StringView name)=0;
         /*
         virtual void createBuffer(Buffer& buffer,const BufferDesc& desc,const virtual void* data,StringView name)=0;
 

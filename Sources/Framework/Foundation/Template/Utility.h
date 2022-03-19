@@ -110,11 +110,6 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     //! @brief          入力値が minVal 以上 manVal 以下か判定
     //! 
-    //! @note           範囲が[minVal,maxVal]であるため、コンテナサイズの範囲確認の場合は
-    //!                 ```
-    //!                 bool ok=is_in_range(index,0,container.size()-1);
-    //!                 ```
-    //!                 とする必要がある。
     //! @param val      入力
     //! @param minVal   最小値
     //! @param maxVal   最大値
@@ -123,18 +118,13 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(is_arithmetic<T>::value) {
-        return (minVal <= val) && (val < maxVal);
+        return (minVal <= val) && (val <= maxVal);
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief          入力値が minVal 以上 manVal 以下か判定
+    //! @brief          インデックスがコンテナ内か判定
     //! 
-    //! @note           範囲が[minVal,maxVal]であるため、コンテナサイズの範囲確認の場合は
-    //!                 ```
-    //!                 bool ok=is_in_range(index,0,container.size()-1);
-    //!                 ```
-    //!                 とする必要がある。
     //! @param index    インデックス
     //! @param container コンテナ
     //! @retval true    範囲内

@@ -56,8 +56,27 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void System::requestRelease(GraphicObject* pObject) {
         if (pObject == nullptr)return;
-        auto& nowStack=m_delayReleaseStack[m_nowStackIndex];
+        auto& nowStack = m_delayReleaseStack[m_nowStackIndex];
         nowStack.emplace(pObject);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      更新
+    //@―---------------------------------------------------------------------------
+    void System::update() {
+
+        // 削除スタックのインデックスを更新
+        m_nowStackIndex = (m_nowStackIndex+1)%get_size(m_delayReleaseStack);
+
+        // グラフィック・オブジェクトを削除
+        auto& deleteStack = m_delayReleaseStack[m_nowStackIndex];
+        while (!deleteStack.empty()) {
+            auto pObject = deleteStack.top();
+            deleteStack.pop();
+
+            delete pObject;
+        }
     }
 
 }// namespace pb::graphic

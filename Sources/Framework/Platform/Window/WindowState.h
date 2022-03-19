@@ -24,8 +24,11 @@ namespace ob::platform {
         Minimized   = get_bit(1),//!< 最小化されているか
         Maximized   = get_bit(2),//!< 最小化されているか
         Focused     = get_bit(3),//!< フォーカス中 
-        Moved       = get_bit(4),//!< 移動中
-        Resized     = get_bit(5),//!< リサイズ中
     };
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウ状態セット
+    //@―---------------------------------------------------------------------------
+    using WindowStates = bit_flags<WindowState>;
 
 }// namespcae ob::platform

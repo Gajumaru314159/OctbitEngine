@@ -9,36 +9,13 @@
 
 namespace ob::graphic {
 
+    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(SwapChain);
+
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     SwapChain::SwapChain()
-        :m_impl(nullptr) {
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  デストラクタ
-    //@―---------------------------------------------------------------------------
-    SwapChain::~SwapChain() {
-        release();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  明示的開放
-    //@―---------------------------------------------------------------------------
-    void SwapChain::release() {
-        if (m_impl) {
-            System::ref().requestRelease(m_impl);
-        }
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  空か
-    //@―---------------------------------------------------------------------------
-    bool SwapChain::isEmpty()const noexcept {
-        return m_impl == nullptr;
+        :m_pImpl(nullptr) {
     }
 
 
@@ -47,7 +24,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::getBackBufferCount()const {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->getBackBufferCount();
+        return m_pImpl->getBackBufferCount();
     }
 
 
@@ -56,7 +33,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     ITexture* SwapChain::getRederTexture(s32 index)const {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->getRederTexture(index);
+        return m_pImpl->getRederTexture(index);
     }
 
 
@@ -65,7 +42,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isVSyncEnabled()const {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->isVSyncEnabled();
+        return m_pImpl->isVSyncEnabled();
     }
 
 
@@ -74,7 +51,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isHdrEnabled()const {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->isHdrEnabled();
+        return m_pImpl->isHdrEnabled();
     }
 
 
@@ -83,7 +60,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     bool SwapChain::resizeBackBuffer(const Size& size) {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->resizeBackBuffer(size);
+        return m_pImpl->resizeBackBuffer(size);
     }
 
 
@@ -94,7 +71,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void SwapChain::update() {
         OB_REQUIRE(m_impl!=nullptr);
-        m_impl->update();
+        m_pImpl->update();
     }
 
 }// namespace ob::graphic

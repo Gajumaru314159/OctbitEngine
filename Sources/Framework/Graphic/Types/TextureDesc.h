@@ -9,6 +9,8 @@
 #include <Framework/Graphic/Types/ResourceUsage.h>
 #include <Framework/Graphic/Types/ResourceType.h>
 #include <Framework/Graphic/Types/BindFlag.h>
+#include <Framework/Graphic/Types/FilterMode.h>
+#include <Framework/Graphic/Types/TextureWrapMode.h>
 
 namespace ob::graphic {
 
@@ -24,9 +26,9 @@ namespace ob::graphic {
         TextureFormat   format = TextureFormat::RGB8;   //!< テクスチャフォーマット
 
         // ResourceDescにまとめる？
-        ResourceUsage   usage = ResourceUsage::Default;             //!< 利用法
-        ResourceType    resourceType = ResourceType::RenderTarget;  //!< リソース・タイプ
-        BindFlags       bindFlags;                                  //!< バインドフラグ
+        ResourceUsage   usage = ResourceUsage::Default;         //!< 利用法
+        BufferType      bufferType = BufferType::RenderTarget;  //!< リソース・タイプ
+        BindFlags       bindFlags;                              //!< バインドフラグ
     };
 
 }// namespcae ob::graphic

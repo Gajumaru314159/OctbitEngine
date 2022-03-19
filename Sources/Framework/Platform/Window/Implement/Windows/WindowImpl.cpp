@@ -24,6 +24,9 @@ namespace ob::platform {
         m_hWnd = nullptr;
         m_windowID = m_windowNum++;
 
+        // TODO ウィンドウモードを設定
+        m_mode = desc.mode;
+
         // ウィンドウクラス名を設定
 
         HINSTANCE hInst = (HINSTANCE)::GetModuleHandle(NULL);
@@ -86,7 +89,7 @@ namespace ob::platform {
             NULL);
         if (!m_hWnd) return;
 
-        abjustLocationCentering();
+        moveToCenter();
 
         // WM_PAINTが呼ばれないようにする
         ::ValidateRect(m_hWnd, NULL);
@@ -128,6 +131,173 @@ namespace ob::platform {
             ::UnregisterClass(m_className.c_str(), hInst);
             m_hWnd = NULL;
         }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウを最大化する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::maximize() {
+        if (m_hWnd) {
+            ::ShowWindow(m_hWnd, SW_MAXIMIZE);
+        }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウを最小化する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::minimize() {
+        if (m_hWnd) {
+            ::ShowWindow(m_hWnd, SW_MINIMIZE);
+        }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウを最小化する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::moveToCenter() {
+        if (m_hWnd == nullptr)return;
+
+        RECT rcWindow;
+        ::GetWindowRect(m_hWnd, &rcWindow);
+
+        // ディスプレイ全体のサイズを取得
+        int sw = ::GetSystemMetrics(SM_CXSCREEN);
+        int sh = ::GetSystemMetrics(SM_CYSCREEN);
+        int x = (sw - (rcWindow.right - rcWindow.left)) / 2;
+        int y = (sh - (rcWindow.bottom - rcWindow.top)) / 2;
+
+        // サイズ変更せず移動だけ行う
+        ::SetWindowPos(m_hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウサイズを元のサイズに戻す
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::restoreSize() {
+        if (m_hWnd) {
+            ::ShowWindow(m_hWnd, SW_RESTORE);
+        }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief              妥当な状態か
+    //! 
+    //! @details            システムからウィンドウのクローズ処理が呼ばれた場合false
+    //!                     を返すようになります。
+    //@―---------------------------------------------------------------------------
+    bool WindowImpl::isValid()const noexcept {
+        return m_hWnd != nullptr;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      メインウィンドウか
+    //@―---------------------------------------------------------------------------
+    bool WindowImpl::isMainWindow()const {
+        if (!m_hWnd) return false;
+        return ::GetParent(m_hWnd) == NULL;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの状態を取得する
+    //@―---------------------------------------------------------------------------
+    WindowStates WindowImpl::getState()const {
+        WindowStates status;
+        status.clear();
+        if (!m_hWnd)return status;
+
+        // TODO フルスクリーン判定(HWNDにフルスクリーンはない？)
+        if (::IsZoomed(m_hWnd))status.on(WindowState::Maximized);
+        if (::IsIconic(m_hWnd))status.on(WindowState::Minimized);
+        if (::GetFocus() == m_hWnd)status.on(WindowState::Focused);
+        if (::GetFocus() == m_hWnd)status.on(WindowState::Focused);
+
+        return status;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの位置を設定する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::setPosition(Point position) {
+        if (!m_hWnd)return;
+        auto size = getSize();
+        ::MoveWindow(m_hWnd, position.x, position.y, size.width, size.height, TRUE);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの位置を取得する
+    //@―---------------------------------------------------------------------------
+    Point WindowImpl::getPosition()const noexcept {
+        if (!m_hWnd)return{0,0};
+        RECT rect;
+        ::GetWindowRect(m_hWnd, &rect);
+        return {rect.left,rect.top};
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウサイズを取得
+    //@―---------------------------------------------------------------------------
+    Size WindowImpl::getSize()const {
+        OB_REQUIRE(m_hWnd);
+        RECT rect;
+        ::GetClientRect(m_hWnd, &rect);
+        return Size{
+            static_cast<s32>(rect.right - rect.left),
+            static_cast<s32>(rect.bottom - rect.top)
+        };
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウ・モードを設定する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::setMode(WindowMode mode) {
+        switch (mode) {
+        case WindowMode::Window:
+            break;
+        case WindowMode::FullScreen:
+            break;
+        case WindowMode::Borderless:
+            break;
+        default:
+            OB_NOTIMPLEMENTED();
+            break;
+        }
+        m_mode = mode;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウ・モードを取得する
+    //@―---------------------------------------------------------------------------
+    WindowMode WindowImpl::getMode()const {
+        return m_mode;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウのスタイルを取得する
+    //@―---------------------------------------------------------------------------
+    WindowStyle WindowImpl::getStyle()const {
+        // TODO ウィンドウスタイル設定
+        return WindowStyle::Sizable;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウのスタイルを設定する
+    //@―---------------------------------------------------------------------------
+    void WindowImpl::setStyle(WindowStyle style) {
+        // TODO ウィンドウスタイル設定
     }
 
 
@@ -175,23 +345,10 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウのタイトルを取得する
     //@―---------------------------------------------------------------------------
-    const String& WindowImpl::title() const noexcept{
+    const String& WindowImpl::getTitle() const noexcept{
         return m_windowTitle;
     }
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  ウィンドウサイズを取得
-    //@―---------------------------------------------------------------------------
-    Size WindowImpl::size()const {
-        OB_REQUIRE(m_hWnd);
-        RECT rect;
-        ::GetClientRect(m_hWnd, &rect);
-        return Size{
-            static_cast<s32>(rect.right - rect.left),
-            static_cast<s32>(rect.bottom - rect.top)
-        };
-    }
 
 
     //@―---------------------------------------------------------------------------
@@ -229,17 +386,6 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief              妥当な状態か
-    //! 
-    //! @details            システムからウィンドウのクローズ処理が呼ばれた場合false
-    //!                     を返すようになります。
-    //@―---------------------------------------------------------------------------
-    bool WindowImpl::isValid()const noexcept {
-        return m_hWnd != nullptr;
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief              ウィンドウごとの Window Proceduer
     //@―---------------------------------------------------------------------------
     LRESULT WindowImpl::wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -264,26 +410,6 @@ namespace ob::platform {
         }
 
         return DefWindowProc(hwnd, msg, wparam, lparam);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              ウィンドウ位置を画面の中央にする
-    //@―---------------------------------------------------------------------------
-    void WindowImpl::abjustLocationCentering() {
-        if (m_hWnd == nullptr)return;
-
-        RECT rcWindow;
-        ::GetWindowRect(m_hWnd, &rcWindow);
-
-        // ディスプレイ全体のサイズを取得
-        int sw = ::GetSystemMetrics(SM_CXSCREEN);
-        int sh = ::GetSystemMetrics(SM_CYSCREEN);
-        int x = (sw - (rcWindow.right - rcWindow.left)) / 2;
-        int y = (sh - (rcWindow.bottom - rcWindow.top)) / 2;
-
-        // サイズ変更せず移動だけ行う
-        ::SetWindowPos(m_hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
     }
 
 

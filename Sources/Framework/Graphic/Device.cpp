@@ -17,7 +17,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void Device::createSwapChain(SwapChain& display, SwapchainDesc& desc) {
         display.release();
-        display.m_impl = m_impl->createSwapChain(desc);
+        display.m_pImpl = m_impl->createSwapChain(desc);
     }
 
 
@@ -26,7 +26,16 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void Device::createTexture(Texture& texture, const TextureDesc& desc, StringView name) {
         texture.release();
-        texture.m_impl = m_impl->createTexture(desc,name);
+        texture.m_pImpl = m_impl->createTexture(desc, name);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      レンダーテクスチャを生成
+    //@―---------------------------------------------------------------------------
+    void Device::createRenderTexture(RenderTexture& texture, const TextureDesc& desc, StringView name) {
+        texture.release();
+        texture.m_pImpl = m_impl->createRenderTexture(desc, name);
     }
 
 }// namespace pb::graphic

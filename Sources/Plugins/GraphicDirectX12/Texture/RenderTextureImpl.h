@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Interface/IRenderTexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
-/*
+
 
 namespace ob::graphic::dx12 {
 
@@ -18,18 +18,22 @@ namespace ob::graphic::dx12 {
     class RenderTextureImpl :public IRenderTexture {
     public:
 
-        RenderTextureImpl(ID3D12Device* pDevice, const vector<TextureDesc>& desc,StringView name);
+        RenderTextureImpl(ID3D12Device& rDevice, const vector<TextureDesc>& desc, DepthStencilFormat dsFormat,StringView name);
+
+    public:
+
 
     private:
 
-        vector<ComPtr<ID3D12Resource>> m_resources;
-        ComPtr<ID3D12DescriptorHeap> m_srvHeap;
+        vector<ComPtr<ID3D12Resource>> m_resources;             //!< リソースリスト
+        ComPtr<ID3D12Resource> m_depth;                         //!< デプステクスチャ
 
-        ComPtr<ID3D12Resource> m_depth = nullptr;               // デプステクスチャ
-        ComPtr<ID3D12DescriptorHeap> m_rtvHeap = nullptr;       // レンダー・ターゲット・ビュー
-        ComPtr<ID3D12DescriptorHeap> m_dsvHeap = nullptr;       // デプス・ステンシル・ビュー
-        ComPtr<ID3D12GraphicsCommandList> m_cmdList = nullptr;  // コマンドリスト
-        ComPtr<ID3D12CommandAllocator> m_cmdAllocator = nullptr;// コマンド・アロケータ
+        ComPtr<ID3D12DescriptorHeap> m_srvHeap;                 //!< シェーダリソースビュー
+        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー
+        ComPtr<ID3D12DescriptorHeap> m_dsvHeap;                 //!< デプス・ステンシル・ビュー
+
+        ComPtr<ID3D12GraphicsCommandList> m_cmdList;            //!< コマンドリスト
+        ComPtr<ID3D12CommandAllocator> m_cmdAllocator;          //!< コマンド・アロケータ
 
         D3D12_VIEWPORT m_viewport;         //ビューポート
         D3D12_RECT m_scissorrect;          //シザー矩形
@@ -37,5 +41,3 @@ namespace ob::graphic::dx12 {
     };
 
 }// namespace ob::graphic::dx12
-
-*/

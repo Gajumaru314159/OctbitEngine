@@ -66,6 +66,7 @@ namespace ob::graphic::dx12 {
 
         HRESULT initializeDXGIDevice();
         HRESULT initializeCommand();
+        void    initializeVideoCardInfo();
 
     private:
 

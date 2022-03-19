@@ -23,6 +23,13 @@ namespace ob::graphic {
         R16,        //!< R(16bit)
         R8,         //!< R(8bit)
 
+        R10G10B10A2,//!< HDR
+
+        D32S8,      //!< Depth(32bit) Stencil(8bit) Unused(24bit)
+        D32,        //!< Depth(32bit)
+        D24S8,      //!< Depth(24bit) Stencil(8bit)
+        D16,        //!< Depth(16bit)
+
         BC1,        //!< 2値アルファ(DXT1)               @n 圧縮率1/6
         BC2,        //!< 16階調アルファ(DXT2/DXT3)       @n 圧縮率1/4
         BC3,        //!< 多階調アルファ(DXT4/DXT5)       @n 圧縮率1/4
@@ -36,5 +43,17 @@ namespace ob::graphic {
         BC3_SRGB,   //!< 多階調アルファ(DXT4/DXT5)       @n 圧縮率1/4
         BC7_SRGB,   //!< BPTC                            @n 圧縮率1/4
     };
+
+    
+    //@―---------------------------------------------------------------------------
+    //! @brief  デプス・ステンシル・フォーマット
+    //@―---------------------------------------------------------------------------
+    enum class DepthStencilFormat {
+        Unused,     //!< 使用しない
+        D32S8,      //!< Depth(32bit) Stencil(8bit) Unused(24bit)
+        D32,        //!< Depth(32bit)
+        D24S8,      //!< Depth(24bit) Stencil(8bit)
+        D16,        //!< Depth(16bit)
+    }
 
 }// namespace pb::graphic

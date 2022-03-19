@@ -16,78 +16,53 @@ namespace ob::platform {
     class WindowImpl : public IWindowImpl {
     public:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ
-        //! 
-        //! @details    生成情報を指定してウィンドウを生成する。
-        //@―---------------------------------------------------------------------------
         WindowImpl(const WindowCreationDesc& params);
         virtual ~WindowImpl()override;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウを表示する
-        //@―---------------------------------------------------------------------------
-        void show() override;
+
+        //===============================================================
+        // ウィンドウ操作
+        //===============================================================
+        void show()override;
+        void close()override;
+
+        void maximize()override;
+        void minimize()override;
+        void moveToCenter()override;
+        void restoreSize()override;
 
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウを閉じる
-        //@―---------------------------------------------------------------------------
-        void close() override;
+        //===============================================================
+        // 情報取得
+        //===============================================================
 
+        bool isValid()const noexcept override;
+        bool isMainWindow()const override;
+        WindowStates getState()const override;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      ウィンドウ・イベントのリスナを追加
-        //@―---------------------------------------------------------------------------
-        void addEventListener(WindowEventType type, const WindowEvent& event)override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウのタイトルを設定
-        //@―---------------------------------------------------------------------------
-        void setTitle(StringView title) override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウのタイトルを取得
-        //@―---------------------------------------------------------------------------
-        const String& title() const noexcept override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  ウィンドウサイズを取得
-        //@―---------------------------------------------------------------------------
-        Size size()const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief              スクリーン座標を取得
-        //! 
-        //! @details            クライアント座標をスクリーン座標に変換して取得する。
-        //! @patam clientPoint  クライアント座標
-        //! @return             スクリーン座標
-        //@―---------------------------------------------------------------------------
         Point getScreenPoint(const Point& clientPoint)const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief              クライアント座標を取得
-        //! 
-        //! @details            スクリーン座標をクライアント座標に変換して取得する。
-        //! @patam screenPoint  スクリーン座標  
-        //! @return             クライアント座標
-        //@―---------------------------------------------------------------------------
         Point getClientPoint(const Point& screenPoint)const override;
 
+        void setTitle(StringView getTitle) override;
+        const String& getTitle()const override;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief              妥当な状態か
-        //! 
-        //! @details            システムからウィンドウのクローズ処理が呼ばれた場合false
-        //!                     を返すようになります。
-        //@―---------------------------------------------------------------------------
-        bool isValid()const noexcept;
+        void setPosition(Point position) override;
+        Point getPosition()const noexcept override;
 
+        Size getSize()const override;
+
+        void setMode(WindowMode mode) override;
+        WindowMode getMode()const override;
+
+        WindowStyle getStyle()const override;
+        void setStyle(WindowStyle style) override;
+
+
+        //===============================================================
+        // イベント
+        //===============================================================
+
+        void addEventListener(WindowEventType type, const WindowEvent& event) override;
 
     public:
 
@@ -102,11 +77,6 @@ namespace ob::platform {
         //! @brief              ウィンドウごとの Window Proceduer
         //@―---------------------------------------------------------------------------
         LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-
-        //@―---------------------------------------------------------------------------
-        //! @brief              ウィンドウ位置を画面の中央にする
-        //@―---------------------------------------------------------------------------
-        void abjustLocationCentering();
 
 
     public:
@@ -123,6 +93,8 @@ namespace ob::platform {
         static const TCHAR* PROPERTY_NAME;          //!< HWNDに結びつけるプロパティ名
 
         static atomic<s32> m_windowNum;             //!< 生成されたウィンドウの数
+
+        WindowMode m_mode;
 
         HWND    m_hWnd;                             //!< ウィンドウハンドル
         const StringBase<TCHAR> m_className;        //!< ウィンドウクラス名

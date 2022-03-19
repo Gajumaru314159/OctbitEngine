@@ -18,21 +18,14 @@ namespace ob::graphic {
     //!             システムのスタックに積まれている間は破棄されていないことが保証できるため
     //!             GPUからのアクセスにも対応できます。
     //!```          
-    //!             class ShaderResourceImpl:public GraphicObject{
-    //!             private:
-    //!                 ComPtr<ID3D12Resource> m_resource;  // 各種描画APIのグラフィック・オブジェクト
+    //!             class ITexture:public GraphicObject{
     //!             }
     //! 
-    //!             class ShadreResource{
+    //!             class Texture{
     //!             public:
-    //!                 ShadreResource(){
-    //!                     m_pImpl =new ShaderResourceImpl();
-    //!                 }
-    //!                 ~ShadreResource(){
-    //!                     System::Ref().stackDelayDelete(m_pImpl);
-    //!                 }
+    //!                 OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Texture);
     //!             private:
-    //!                 ShaderResourceImpl* m_pImpl;
+    //!                 ITexture* m_pImpl;
     //!             }
     //! 
     //!             class System:public Singleton(System){
@@ -65,6 +58,24 @@ namespace ob::graphic {
         const StringView getName()const;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      参照を追加
+        //@―---------------------------------------------------------------------------
+        void addReference();
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      参照を解放
+        //@―---------------------------------------------------------------------------
+        s32 releaseReference();
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      参照カウントを取得
+        //@―---------------------------------------------------------------------------
+        s32 getReferenceCount()const;
+
+
     protected:
 
         //@―---------------------------------------------------------------------------
@@ -75,7 +86,8 @@ namespace ob::graphic {
 
     private:
 
-        GraphicObject* m_pStack;    //!< 削除スタック用ポインタ
+        GraphicObject*  m_pStack;    //!< 削除スタック用ポインタ
+        atomic<s32>     m_referenceCount;
 
 #ifdef OB_DEBUG
         String      m_name;
@@ -83,85 +95,4 @@ namespace ob::graphic {
 
     };
 
-
-
-#pragma region DEFINE
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      グラフィック・オブジェクトに必要な宣言を定義するマクロ
-    //! @details    GraphicObjectを継承したImplクラスを保持するクラスに使用します。
-    //!             ```
-    //!             class SharerRsourceImpl:public GraphicObject{}
-    //!             class SharerResource{
-    //!                 OB_DEFINE_GRAPHIC_OBJECT(SharerResource);
-    //!             }
-    //!             ```
-    //!             生成される宣言は以下の通りです。
-    //!             * コンストラクタ宣言
-    //!             * デストラクタ宣言             
-    //@―---------------------------------------------------------------------------
-#define OB_DEFINE_GRAPHIC_OBJECT(type)              \
-            private:                                \
-                class Impl* m_pImpl;                \
-            public:                                 \
-                type(const type&);                  \
-                type(const type&&);                 \
-                type& operator=(const type&);       \
-                type& operator=(const type&&);      \
-                ~type();                            \
-                bool operator==(const type&)const;  \
-                bool operator!=(const type&)const;  \
-                operator bool()const;               \
-                void release();                     \
-                bool isEmpty()const;                    
-
-#define OB_IMPLEMENT_GRAPHIC_OBJECT(type)                               \
-                type::type(const type& another) {                       \
-                    m_pImpl = another.m_pImpl;                          \
-                    m_pImpl.addRef();                                   \
-                }                                                       \
-                type::type(const type&& another) {                      \
-                    m_pImpl = another.m_pImpl;                          \
-                    another.m_pImpl = nullptr;                          \
-                }                                                       \
-                type::~type() {                                         \
-                    release();                                          \
-                }                                                       \
-                type& type::operator=(const type& another) {            \
-                    m_pImpl = another.m_pImpl;                          \
-                    m_pImpl->addRef();                                  \
-                }                                                       \
-                type& type::operator=(const type&& another) {           \
-                    m_pImpl = another.m_pImpl;                          \
-                    another.m_pImpl = nullptr;                          \
-                }                                                       \
-                bool type::operator==(const type& another)const {       \
-                    return m_pImpl == another.m_pImpl;                  \
-                }                                                       \
-                bool type::operator!=(const type& another)const {       \
-                    return !(*this == another);                         \
-                }                                                       \
-                type::operator bool()const {                            \
-                    return m_pImpl != nullptr;                          \
-                }                                                       \
-                void type::release() {                                  \
-                    if (m_pImpl)m_pImpl->releaseRef();                  \
-                    m_pImpl = nullptr;                                  \
-                }                                                       \
-                bool type::isEmpty()const {                             \
-                    return m_pImpl == nullptr;                          \
-                }
-#pragma endregion
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob::graphic

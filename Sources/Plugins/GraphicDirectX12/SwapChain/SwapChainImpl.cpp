@@ -5,12 +5,13 @@
 //***********************************************************
 #include "SwapChainImpl.h"
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
+#include <Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
+#include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Platform/Window/WindowNativaAccessor.h>
-#include "../Utility/Utility.h"
 
 namespace {
-    int static const s_maxSwapChainCount=4;
+    int static const s_maxSwapChainCount = 4;
 }
 
 namespace ob::graphic::dx12 {
@@ -18,43 +19,16 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice,const SwapchainDesc& desc) {
-
-        OB_REQUIRE_EX(desc.window,"Windowがnullptrです。");
-
+    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc) {
         m_desc = desc;
-        HWND hWnd=static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(*m_desc.window));
 
-        auto size = desc.window->size();
+        m_displayViewFormat = desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
+        m_nativeDisplayViewFormat = Utility::convertTextureFormat(m_displayViewFormat);
+        m_nativeSwapChainFormat = Utility::convertTextureFormat(m_displayViewFormat);
 
-        DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-        swapChainDesc.Width = size.width;									// 画面解像度【横】
-        swapChainDesc.Height = size.height;								    // 画面解像度【縦】
-        swapChainDesc.Format = Utility::convertTextureFormat(desc.format);	// ピクセルフォーマット
-        swapChainDesc.Stereo = false;										// 3Dディスプレイかどうか
-        swapChainDesc.SampleDesc.Count = 1;// desc.sampleCount;             // マルチサンプル指定
-        swapChainDesc.SampleDesc.Quality = 1;// desc.sampleQuarity;         // マルチサンプル指定
-        swapChainDesc.BufferUsage = DXGI_USAGE_BACK_BUFFER;					// CPUのバックバッファへのアクセス方法
-        swapChainDesc.BufferCount = desc.backBufferNum;						// バッファの数。ダブルバッファのため2。
-        swapChainDesc.Scaling = DXGI_SCALING_STRETCH;						// リサイズ時の挙動。見た目に合わせる。
-        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;			// スワップ後に速やかに破棄
-        swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;				// バックバッファの透過の挙動
-        swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;		// ウィンドウ⇔フルスクリーン切り替え可能
-
-        auto result = rDevice.getFactory()->CreateSwapChainForHwnd(
-            rDevice.getCommandQueue().Get(),
-            hWnd,
-            &swapChainDesc,
-            nullptr,  // フルスクリーン時の設定
-            nullptr,  // アウトプット
-            (IDXGISwapChain1**)m_swapchain.ReleaseAndGetAddressOf());
-
-        OB_ENSURE(SUCCEEDED(result));
-
-        initializeRenderTexture(rDevice);
+        createSwapChain(rDevice);
+        createBuffer(rDevice);
     }
-
-
 
 
     //@―---------------------------------------------------------------------------
@@ -104,15 +78,91 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::update() {
+    void SwapChainImpl::update(ITexture* pTexture) {
+
         OB_NOTIMPLEMENTED();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //@―---------------------------------------------------------------------------
+    void SwapChainImpl::createSwapChain(DeviceImpl& rDevice) {
+        auto& window = m_desc.window;
+        OB_REQUIRE_EX(window, "Windowがnullptrです。");
+
+        UINT sampleQuarity = 0;
+        UINT sampleCount = 1;
+        HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(*window));
+        {
+            D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature;
+            auto result = rDevice.getNativeDevice()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
+            if (SUCCEEDED(result)) {
+                LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
+                LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
+                //sampleQuarity = feature.SampleCount;
+                //sampleCount = feature.NumQualityLevels;
+            }
+        }
+
+        auto windowSize = window->getSize();
+        auto bufferSize = m_desc.size;
+        if (bufferSize.width == 0 || bufferSize.height == 0)bufferSize = windowSize;
+
+        DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+        swapChainDesc.BufferDesc.Width = bufferSize.width;                                  // 画面解像度【横】
+        swapChainDesc.BufferDesc.Height = bufferSize.height;                                // 画面解像度【縦】
+        swapChainDesc.BufferDesc.Format = Utility::convertTextureFormat(m_desc.format);     // ピクセルフォーマット
+        swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
+        swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母
+        swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
+        swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;                     //解像度に合うように同補正するか => 拡大
+
+        swapChainDesc.SampleDesc.Quality = sampleQuarity;                                   // マルチサンプル・クオリティ
+        swapChainDesc.SampleDesc.Count = sampleCount;                                       // マルチサンプル・カウント
+
+        swapChainDesc.BufferCount = m_desc.backBufferNum;						            // バッファの数
+        swapChainDesc.OutputWindow = hWnd;                                                  // ウィンドウ
+        swapChainDesc.Windowed = TRUE;                                                      // ※公式リファレンスによるとフルスクリーン指定は別ので行う
+        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;                                // Present後破棄
+
+        swapChainDesc.Flags =
+            //DXGI_SWAP_CHAIN_FLAG_NONPREROTATED |                  // フルスクリーン時自動回転
+            DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH |                // ResizeTargetでサイズ変更許可
+            //DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY |                   // リモートアクセス禁止
+            //DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT |  // フルスクリーン以外で描画待機
+            //DXGI_SWAP_CHAIN_FLAG_FULLSCREEN_VIDEO |               // フルスクリーンビデオ
+            //DXGI_SWAP_CHAIN_FLAG_YUV_VIDEO |                      // YUVビデオのスワップチェーン
+            0;
+
+        // スワップチェイン生成
+        auto result = rDevice.getFactory()->CreateSwapChain(
+            rDevice.getCommandQueue().Get(),
+            &swapChainDesc,
+            (IDXGISwapChain**)m_swapchain.ReleaseAndGetAddressOf());
+
+        OB_ENSURE(SUCCEEDED(result), "スワップチェインの生成に失敗{0}", Utility::getErrorMessage(result).c_str());
+
+
+        if (window->isMainWindow()) {
+
+            // Alt + Enter でウィンドウモードに変わらないようにする 
+            rDevice.getFactory()->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+
+            if (window->getMode() == platform::WindowMode::FullScreen) {
+                // TODO フルスクリーンの場合バックバッファをリサイズ
+            }
+        }
+
+        m_frameIndex = m_swapchain->GetCurrentBackBufferIndex();
+
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      レンダーテクスチャを初期化
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::initializeRenderTexture(DeviceImpl& rDevice) {
+    void SwapChainImpl::createBuffer(DeviceImpl& rDevice) {
 
         OB_REQUIRE_EX(
             m_desc.backBufferNum <= s_maxSwapChainCount,
@@ -121,27 +171,15 @@ namespace ob::graphic::dx12 {
             0 < m_desc.backBufferNum,
             "バックバッファは1つ以上にしてください。"backBufferNum);
 
-        TextureDesc desc;
-        desc.size = m_desc.size;
-        desc.format = m_desc.format;
-        //hdr
-
-        // バックバッファを生成
-        for (s32 i = 0; i < m_desc.backBufferNum; ++i) {
-            m_buffers.push_back(rDevice.createTexture(desc, TC("SwapChainTarget")));
-        }
-
-
 
         D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;   // レンダーターゲットビュー
-        heapDesc.NodeMask = 0;                                // GPUが1つの時は0、複数の時は識別用のbitを指定
-        heapDesc.NumDescriptors = 2;                                // ディスクリプタの数。表と裏バッファの２つ。
-        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;  // ビューの情報をシェーダから参照する必要があるか
+        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;     // レンダーターゲットビュー
+        heapDesc.NodeMask = 0;                              // GPUが1つの時は0、複数の時は識別用のbitを指定
+        heapDesc.NumDescriptors = m_desc.backBufferNum;     // ディスクリプタの数。表と裏バッファの２つ。
+        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;   // ビューの情報をシェーダから参照する必要があるか
 
         auto result = rDevice.getNativeDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(m_rtvHeaps.ReleaseAndGetAddressOf()));
-
-        OB_ENSURE(SUCCEEDED(result));
+        OB_ENSURE(SUCCEEDED(result), "スワップチェインの生成に失敗{0}", Utility::getErrorMessage(result).c_str());
 
 
         DXGI_SWAP_CHAIN_DESC swcDesc = {};
@@ -151,20 +189,43 @@ namespace ob::graphic::dx12 {
 
         //SRGBレンダーターゲットビュー設定
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-        rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+        rtvDesc.Format = m_nativeSwapChainFormat;
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 
-        for (u32 i = 0; i < swcDesc.BufferCount; ++i) {
+        for (s32 i = 0; i < swcDesc.BufferCount; ++i) {
             result = m_swapchain->GetBuffer(i, IID_PPV_ARGS(m_buffers[i].ReleaseAndGetAddressOf()));
-            ms_device->CreateRenderTargetView(m_backBuffers[i].Get(), &rtvDesc, handle);
-            handle.ptr += ms_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+            rDevice.getNativeDevice()->CreateRenderTargetView(m_buffers[i].Get(), &rtvDesc, handle);
+            handle.ptr += rDevice.getNativeDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
         }
 
 
 
-        m_viewport = CD3DX12_VIEWPORT(m_backBuffers[0].Get());
-        m_scissorrect = CD3DX12_RECT(0, 0, (U32)m_viewport.Width, (U32)m_viewport.Height);
+        m_viewport = CD3DX12_VIEWPORT(m_buffers[0].Get());
+        m_scissorrect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
+
     }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      カラースペースを設定
+    //@―---------------------------------------------------------------------------
+    void SwapChainImpl::setColorSpace() {
+        bool isHdrEnabled = m_desc.hdr;
+        if (!isHdrEnabled)return;
+
+        // TODO Rec2020以外の指定対応
+        DXGI_COLOR_SPACE_TYPE colorSpace=DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
+        UINT colorSpaceSupport;
+
+        auto result = m_swapchain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
+        OB_ENSURE(SUCCEEDED(result), "カラースペースの確認に失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+
+        if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
+            result = m_swapchain->SetColorSpace1(colorSpace);
+            OB_ENSURE(SUCCEEDED(result), "カラースペースの設定に失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+        }
+    }
+
 
 }// namespace ob::graphic::dx12

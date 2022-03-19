@@ -21,7 +21,7 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      でストラクタ
+    //! @brief      デストラクタ
     //! 
     //! @details    生成情報を指定してウィンドウを生成する。
     //@―---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ob::platform {
     //! @brief  ウィンドウを表示する
     //@―---------------------------------------------------------------------------
     void Window::show() {
-        OB_REQUIRE(m_impl);
+        if (!m_impl)return;
         m_impl->show();
     }
 
@@ -42,64 +42,72 @@ namespace ob::platform {
     //! @brief  ウィンドウを閉じる
     //@―---------------------------------------------------------------------------
     void Window::close() {
-        OB_REQUIRE(m_impl);
+        if (!m_impl)return;
         m_impl->close();
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      ウィンドウ・イベントのリスナを追加する
+    //! @brief      ウィンドウを現在のモニタの中央に移動する
     //@―---------------------------------------------------------------------------
-    void Window::addEventListener(WindowEventType type, const WindowEvent& event) {
-        OB_REQUIRE(m_impl);
-        m_impl->addEventListener(type, event);
+    void Window::moveToCenter() {
+        if (!m_impl)return;
+        m_impl->close();
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  ウィンドウのタイトルを設定する
+    //! @brief      ウィンドウを最大化する
     //@―---------------------------------------------------------------------------
-    void Window::setTitle(StringView title) {
-        OB_REQUIRE(m_impl);
-        m_impl->setTitle(title);
+    void Window::maximize() {
+        if (!m_impl)return;
+        m_impl->maximize();
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  ウィンドウのタイトルを設定する
+    //! @brief      ウィンドウを最小化する
     //@―---------------------------------------------------------------------------
-    const String& Window::title()const {
-        OB_REQUIRE(m_impl);
-        return m_impl->title();
+    void Window::minimize() {
+        if (!m_impl)return;
+        m_impl->minimize();
     }
-    /*
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウサイズを元のサイズに戻す
+    //@―---------------------------------------------------------------------------
+    void Window::restoreSize() {
+        if (!m_impl)return;
+        m_impl->restoreSize();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief              妥当な状態か
+    //@―---------------------------------------------------------------------------
+    bool Window::isValid()const noexcept {
+        return static_cast<bool>(m_impl);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      メインウィンドウか
+    //@―---------------------------------------------------------------------------
+    bool Window::isMainWindow()const {
+        if (!m_impl)return false;
+        m_impl->isMainWindow();
+    }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウの状態を取得する
     //@―---------------------------------------------------------------------------
-    const WindowState& Window::GetState()const {
+    WindowStates Window::getState()const {
         OB_REQUIRE(m_impl);
-        return m_impl->GetState();
+        return m_impl->getState();
     }
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      ウィンドウの状態を取得する
-    //@―---------------------------------------------------------------------------
-    const WindowState& Window::GetStyle()const {
-        OB_REQUIRE(m_impl);
-        return m_impl->GetStyle();
-    }
-    */
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  ウィンドウサイズを取得
-    //@―---------------------------------------------------------------------------
-    Size Window::size()const {
-        OB_REQUIRE(m_impl);
-        return m_impl->size();
-    }
-    
 
     //@―---------------------------------------------------------------------------
     //! @brief              スクリーン座標を取得
@@ -109,7 +117,7 @@ namespace ob::platform {
     //! @return             スクリーン座標
     //@―---------------------------------------------------------------------------
     Point Window::getScreenPoint(const Point& clientPoint)const {
-        OB_REQUIRE(m_impl);
+        if (!m_impl)return { 0, 0 };
         return m_impl->getScreenPoint(clientPoint);
     }
 
@@ -122,16 +130,96 @@ namespace ob::platform {
     //! @return             クライアント座標
     //@―---------------------------------------------------------------------------
     Point Window::getClientPoint(const Point& screenPoint)const {
-        OB_REQUIRE(m_impl);
+        if (!m_impl)return { 0, 0 };
         return m_impl->getClientPoint(screenPoint);
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief              妥当な状態か
+    //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
-    bool Window::isValid()const noexcept {
-        return static_cast<bool>(m_impl);
+    void Window::setTitle(StringView title) {
+        if (!m_impl)return;
+        m_impl->setTitle(title);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウのタイトルを設定する
+    //@―---------------------------------------------------------------------------
+    const String& Window::getTitle()const {
+        OB_REQUIRE(m_impl);
+        return m_impl->getTitle();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの位置を設定する
+    //@―---------------------------------------------------------------------------
+    void Window::setPosition(Point position) {
+        if (!m_impl)return;
+        m_impl->setPosition(position);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの位置を取得する
+    //@―---------------------------------------------------------------------------
+    Point Window::getPosition()const noexcept {
+        if (!m_impl)return {0,0};
+        return m_impl->getPosition();
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ウィンドウサイズを取得
+    //@―---------------------------------------------------------------------------
+    Size Window::getSize()const {
+        OB_REQUIRE(m_impl);
+        return m_impl->getSize();
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウ・モードを取得する
+    //@―---------------------------------------------------------------------------
+    WindowMode Window::getMode()const {
+        OB_REQUIRE(m_impl);
+        return m_impl->getMode();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウ・モードを設定する
+    //@―---------------------------------------------------------------------------
+    void Window::setMode(WindowMode mode) {
+        if (!m_impl)return ;
+        return m_impl->setMode(mode);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウのスタイルを取得する
+    //@―---------------------------------------------------------------------------
+    WindowStyle Window::getStyle()const {
+        OB_REQUIRE(m_impl);
+        return m_impl->getStyle();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウのスタイルを設定する
+    //@―---------------------------------------------------------------------------
+    void Window::setStyle(WindowStyle style) {
+        if (!m_impl)return;
+        return m_impl->setStyle(style);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウ・イベントのリスナを追加する
+    //@―---------------------------------------------------------------------------
+    void Window::addEventListener(WindowEventType type, const WindowEvent& event) {
+        if (!m_impl)return;
+        m_impl->addEventListener(type, event);
     }
 
 }// namespace ob::platform

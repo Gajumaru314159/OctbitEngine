@@ -18,47 +18,27 @@ namespace ob::graphic
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    Texture::Texture() {
+    Texture::Texture()
+        : m_pImpl(nullptr){
 
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  デストラクタ
+    //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    Texture::~Texture() {
-        release();
+    Texture::Texture(ITexture& texture) {
+        texture.addReference();
+        m_pImpl = &texture;
     }
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  明示的開放
-    //@―---------------------------------------------------------------------------
-    void Texture::release() {
-        if (m_impl) {
-            System::ref().requestRelease(m_impl);
-        }
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  空か
-    //@―---------------------------------------------------------------------------
-    bool Texture::isEmpty()const noexcept {
-        return m_impl != nullptr;
-    }
-
-
-    //===============================================================
-    // ゲッター
-    //===============================================================
 
     //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ・サイズを取得
     //@―---------------------------------------------------------------------------
-    Size Texture::size() {
-        OB_REQUIRE(m_impl != nullptr);
-        return m_impl->size();
+    Size Texture::size()const {
+        OB_REQUIRE(m_pImpl != nullptr);
+        return m_pImpl->getDesc().size;
     }
 
 
@@ -66,8 +46,8 @@ namespace ob::graphic
     //! @brief      テクスチャ・フォーマットを取得
     //@―---------------------------------------------------------------------------
     auto Texture::format()const->TextureFormat {
-        OB_REQUIRE(m_impl != nullptr);
-        return m_impl->format();
+        OB_REQUIRE(m_pImpl != nullptr);
+        return m_pImpl->getDesc().format;
     }
 
 
@@ -75,17 +55,17 @@ namespace ob::graphic
     //! @brief      テクスチャ使用法を取得
     //@―---------------------------------------------------------------------------
     auto Texture::usage()const->ResourceUsage {
-        OB_REQUIRE(m_impl != nullptr);
-        return m_impl->usage();
+        OB_REQUIRE(m_pImpl != nullptr);
+        return m_pImpl->getDesc().usage;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      ミップマップを持っているか
     //@―---------------------------------------------------------------------------
-    bool Texture::hasMipmap()const {
+    s32 Texture::mipLevels()const {
         OB_REQUIRE(m_impl != nullptr);
-        return m_impl->hasMipmap();
+        return m_pImpl->getDesc().mipLevel;
     }
 
 }// namespace ob::graphic
