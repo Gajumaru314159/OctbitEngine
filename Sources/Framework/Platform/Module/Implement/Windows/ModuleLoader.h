@@ -42,14 +42,14 @@ namespace ob::platform {
         //! @brief  モジュールを取得
         //@―---------------------------------------------------------------------------
         IModule* getInterface()override {
-            return m_interface.get();
+            return m_pModule;
         }
 
     private:
 
         String m_name;
         HMODULE m_handle;
-        std::unique_ptr<IModule> m_interface;
+        IModule* m_pModule;
 
     };
 

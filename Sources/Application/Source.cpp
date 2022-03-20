@@ -44,8 +44,6 @@ int main() {
                     break;
                 }
             }
-            moduleManager.ref().shutdown();
-
         }
     }
 

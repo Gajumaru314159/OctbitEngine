@@ -37,6 +37,9 @@ namespace ob::graphic {
 
         m_device.m_impl = pDevice;
         OB_CHECK_ASSERT_EX(pDevice,"無効なグラフィックモジュール[GraphicAPI={0}]",api);
+
+        // とりあえず固定で3フレーム
+        m_delayReleaseStack.resize(3);
     }
 
 

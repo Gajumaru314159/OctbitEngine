@@ -19,7 +19,8 @@ namespace ob::graphic::dx12 {
 
         }
 
-        void startup() override {
+        void startup(ob::foundation::Allocator* pAllocator) override {
+            MemorySystem::SetHeapAllocator(HeapUsage::VirtualMemory, pAllocator);
             // PIX開始
         }
         void shutdown() override {
@@ -32,14 +33,12 @@ namespace ob::graphic::dx12 {
 
         IDevice* createDevice(FeatureLevel featureLevel)override {
             return new DeviceImpl(featureLevel);
-
-            //D3D12CreateDevice();
         }
     };
 }// namespace ob::graphic::dx12
 
 ob::platform::IModule* GetModule() {
-    static ob::graphic::dx12::GraphicModule test;
+    static ob::graphic::dx12::GraphicModule module;
     static ob::Logger logger;
-    return &test;
+    return &module;
 }
