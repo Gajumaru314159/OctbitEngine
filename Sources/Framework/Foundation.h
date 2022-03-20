@@ -12,8 +12,6 @@
 #include <Framework/Foundation/Memory/Allocator/Allocator.h>
 #include <Framework/Foundation/Memory/Allocator/MallocAllocator.h>
 #include <Framework/Foundation/Memory/Operator/NewOpetrator.h>
-#include <Framework/Foundation/Memory/Reference/RefObject.h>
-#include <Framework/Foundation/Memory/Reference/Ref.h>
 #include <Framework/Foundation/Memory/System/MemorySystem.h>
 #include <Framework/Foundation/Memory/Utility/MemoryUtility.h>
 #include <Framework/Foundation/Template/Container/BitFlags.h>

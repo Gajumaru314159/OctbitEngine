@@ -15,6 +15,8 @@ namespace ob::graphic {
         Texture2D,          //!< 2Dテクスチャ
         Texture3D,          //!< 3Dテクスチャ
         Cube,               //!< キューブテクスチャ
+        RenderTarget,       //!< レンダーターゲット
+        DeptthStencil,      //!< デプス・ステンシル
     };
 
 }// namespace pb::graphic

@@ -12,6 +12,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
+    class ITexture;
 }
 
 //===============================================================
@@ -25,8 +26,8 @@ namespace ob::graphic {
     class IRenderTexture :public GraphicObject {
     public:
 
-        virtual ITexture* getTexture(s32 index = 0) = 0;
-        virtual ITexture* getDepthStencilTexture(s32 index = 0) = 0;
+        virtual ITexture* getTexture(s32 index = 0)const = 0;
+        virtual ITexture* getDepthStencilTexture()const = 0;
 
     protected:
 

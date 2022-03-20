@@ -132,7 +132,7 @@ namespace ob::core {
     //! @param index 行インデックス
     //@―---------------------------------------------------------------------------
     Vec4 Matrix::getColumn(const s32 index)const {
-        OB_REQUIRE(0 <= index && index < 4);
+        OB_CHECK_ASSERT(0 <= index && index < 4);
         return Vec4(m[0][index], m[1][index], m[2][index], m[3][index]);
     }
 
@@ -144,7 +144,7 @@ namespace ob::core {
     //! @param index 列インデックス
     //@―---------------------------------------------------------------------------
     Vec4 Matrix::getRow(const s32 index)const {
-        OB_REQUIRE(0 <= index && index < 4);
+        OB_CHECK_ASSERT(0 <= index && index < 4);
         return Vec4(m[index][0], m[index][1], m[index][2], m[index][3]);
     }
 #pragma warning( default : 6385)

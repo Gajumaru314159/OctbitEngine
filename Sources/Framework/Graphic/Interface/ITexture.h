@@ -5,8 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/TextureFormat.h>
-#include <Framework/Graphic/Types/ResourceUsage.h>
+#include <Framework/Graphic/Types/TextureDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -25,7 +24,7 @@ namespace ob::graphic {
     class ITexture :public GraphicObject {
     public:
 
-        virtual auto getDesc()const -> const TextureDesc & = 0;
+        virtual const TextureDesc& getDesc()const = 0;
 
     };
 

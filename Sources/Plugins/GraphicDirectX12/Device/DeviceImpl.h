@@ -7,7 +7,7 @@
 #include <Framework/Graphic/Interface/IDevice.h>
 
 //===============================================================
-// クラス宣言
+// クラス定義
 //===============================================================
 namespace ob::graphic::dx12 {
 
@@ -31,13 +31,19 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  スワップ・チェーンを生成
         //@―---------------------------------------------------------------------------
-        ISwapChain* createSwapChain(SwapchainDesc& desc)override;
+        ob::graphic::ISwapChain* createSwapChain(SwapchainDesc& desc)override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  テクスチャを生成
         //@―---------------------------------------------------------------------------
-        ITexture* createTexture(const TextureDesc& desc, StringView name)override;
+        ob::graphic::ITexture* createTexture(const TextureDesc& desc, StringView name)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  レンダーテクスチャを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)override;
 
 
         //===============================================================
@@ -64,9 +70,9 @@ namespace ob::graphic::dx12 {
 
         void initialize();
 
-        HRESULT initializeDXGIDevice();
-        HRESULT initializeCommand();
-        void    initializeVideoCardInfo();
+        void initializeDXGIDevice();
+        void initializeCommand();
+        void initializeVideoCardInfo();
 
     private:
 
@@ -75,7 +81,6 @@ namespace ob::graphic::dx12 {
         ComPtr<IDXGIFactory4>           m_dxgiFactory;              // DXGIインターフェイス
         ComPtr<ID3D12CommandAllocator>  m_commandAllocator;         // コマンドアロケータ
         ComPtr<ID3D12CommandQueue>      m_commandQueue;             // コマンドキュー
-
 
     };
 }// namespace ob::graphic::dx12

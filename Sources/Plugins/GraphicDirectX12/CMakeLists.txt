@@ -15,6 +15,8 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 # プロジェクト設定
 #------------------------------------------------------------------------------
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE OB_GRAPHIC_DIRECTX12_BUILD)
+
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
     "${OCTBIT_SOURCE_PATH}"
@@ -26,6 +28,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 set(OB_PROJECT_INCLUDE_LIB
     Graphic
     "${OCTBIT_THIRD_PARTY_PATH}/DirectXTex/lib/${OB_CONFIGURATION}/DirectXTex.lib"
+    "d3d12.lib"
+    "dxgi.lib"
+    "d3dcompiler.lib"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 

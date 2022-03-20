@@ -18,7 +18,8 @@
 //@―---------------------------------------------------------------------------
 //! @brief      基底のログ出力マクロ
 //@―---------------------------------------------------------------------------
-#define OB_LOG_BASE(type,category,format,...) ob::foundation::Logger::ref().addLog(type,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__)
+#define OB_LOG_BASE(type,category,format,...) ob::foundation::Logger::ref().addLog(type,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__);\
+                                                if(type==ob::foundation::LogType::Fatal){assert(false);}
 
 
 //@―---------------------------------------------------------------------------

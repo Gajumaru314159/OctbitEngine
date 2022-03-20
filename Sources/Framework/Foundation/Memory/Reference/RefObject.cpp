@@ -1,11 +1,11 @@
-﻿//***********************************************************
+﻿/*
+//***********************************************************
 //! @file
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include "RefObject.h"
 #include <Framework/Foundation/Log/Assertion.h>
-
 
 namespace ob::foundation {
 
@@ -21,7 +21,7 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     RefObject::~RefObject() {
         auto count = m_referenceCount.load();
-        OB_REQUIRE(count <= 0);
+        OB_ASSERT(count <= 0);
     }
 
     //@―---------------------------------------------------------------------------
@@ -84,3 +84,4 @@ namespace ob::foundation {
     }
 
 }// namespace ob::foundation
+*/

@@ -11,11 +11,24 @@ namespace ob::graphic {
     //! @brief  バッファ・タイプ
     //@―---------------------------------------------------------------------------
     enum class BufferType {
-        ByteAddressBuffer,  //!< バイトアドレス・バッファ
-        ConstanttBuffer,    //!< 定数バッファ
-        StructuredBuffer,   //!< 構造体バッファ
-        IndexBuffer,        //!< インデックスバッファ
-        VertexBuffer,       //!< 頂点バッファ
+        Unknown,
+        VertexBuffer,
+        IndexBuffer,
+        ConstantBuffer,
+        RenderTarget,
+        UnorderedAccess,
+        DepthWrite,
+        StencilWrite,
+        DepthStencilWrite,
+        DepthStencilRead,
+        // AllShaderResource,
+        ComputeShaderResource,
+        PixelShaderResource,
+        StreamOut,
+        IndirectArgument,
+        CopyDest,
+        CopySource,
+        Present,
     };
 
 }// namespcae ob::graphic

@@ -9,6 +9,14 @@
 
 namespace ob::platform {
 
+    ModuleManager::ModuleManager() = default;
+    ModuleManager::~ModuleManager() = default;
+
+    void ModuleManager::shutdown() {
+        for (auto& [key, loader] : m_moduleMap) {
+            loader.reset();
+        }
+    }
 
 
     //@―---------------------------------------------------------------------------
@@ -27,16 +35,14 @@ namespace ob::platform {
     //! @brief  モジュールを読み込み
     //@―---------------------------------------------------------------------------
     IModule* ModuleManager::loadModuleImpl(StringView moduleName) {
-        ModuleLoader module(moduleName);
-        return nullptr;
-        //auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
-        //if (auto pModule = moduleLoader->getInterface()) {
-        //    m_moduleMap[moduleName] = ob::move(moduleLoader);
-        //} else {
-        //    return nullptr;
-        //}
-        //
-        //return m_moduleMap[moduleName]->getInterface();
+        auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
+        if (auto pModule = moduleLoader->getInterface()) {
+            m_moduleMap[moduleName] = ob::move(moduleLoader);
+        } else {
+            return nullptr;
+        }
+        
+        return m_moduleMap[moduleName]->getInterface();
     }
 
 

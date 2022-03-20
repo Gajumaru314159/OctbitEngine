@@ -40,5 +40,6 @@ namespace ob::graphic::dx12 {
 
 ob::platform::IModule* GetModule() {
     static ob::graphic::dx12::GraphicModule test;
+    static ob::Logger logger;
     return &test;
 }

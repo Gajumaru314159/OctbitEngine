@@ -132,7 +132,7 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     template<typename T, typename TContainer>
     inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(is_arithmetic<T>::value) {
-        return is_in_range<T>(index, 0, container.size());
+        return is_in_range<T>(index, (T)0, (T)container.size());
     }
 
 

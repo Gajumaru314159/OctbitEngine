@@ -26,6 +26,8 @@ set(OB_PROJECT_INCLUDE_LIB
     Foundation
     Core
     Platform
+    Graphic
+    GraphicDirectX12
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 

@@ -44,16 +44,42 @@ namespace ob::graphic {
         BC7_SRGB,   //!< BPTC                            @n 圧縮率1/4
     };
 
-    
+
     //@―---------------------------------------------------------------------------
-    //! @brief  デプス・ステンシル・フォーマット
+    //! @brief  テクスチャ・フォーマット・ユーティリティ
     //@―---------------------------------------------------------------------------
-    enum class DepthStencilFormat {
-        Unused,     //!< 使用しない
-        D32S8,      //!< Depth(32bit) Stencil(8bit) Unused(24bit)
-        D32,        //!< Depth(32bit)
-        D24S8,      //!< Depth(24bit) Stencil(8bit)
-        D16,        //!< Depth(16bit)
-    }
+    class TextureFormatUtility {
+    public:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  HDRフォーマットか
+        //@―---------------------------------------------------------------------------
+        static bool IsHdr(TextureFormat format) {
+            return
+                format == TextureFormat::R10G10B10A2;
+        }
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  デプスを持っているか
+        //@―---------------------------------------------------------------------------
+        static bool HasDepth(TextureFormat format) {
+            return
+                format == TextureFormat::D32S8 ||
+                format == TextureFormat::D32 ||
+                format == TextureFormat::D24S8 ||
+                format == TextureFormat::D16;
+        }
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ステンシルを持っているか
+        //@―---------------------------------------------------------------------------
+        static bool HasStencil(TextureFormat format) {
+            return
+                format == TextureFormat::D32S8 ||
+                format == TextureFormat::D24S8;
+        }
+    };
 
 }// namespace pb::graphic

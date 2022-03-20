@@ -6,16 +6,15 @@
 #pragma once
 #include <Framework/Graphic/Types/TextureType.h>
 #include <Framework/Graphic/Types/TextureFormat.h>
-#include <Framework/Graphic/Types/ResourceUsage.h>
-#include <Framework/Graphic/Types/ResourceType.h>
-#include <Framework/Graphic/Types/BindFlag.h>
 #include <Framework/Graphic/Types/FilterMode.h>
 #include <Framework/Graphic/Types/TextureWrapMode.h>
+//#include <Framework/Graphic/Types/BindFlag.h>
+//#include <Framework/Graphic/Types/ResourceUsage.h>
 
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  テクスチャ定義
     //@―---------------------------------------------------------------------------
     struct TextureDesc {
     public:
@@ -26,9 +25,9 @@ namespace ob::graphic {
         TextureFormat   format = TextureFormat::RGB8;   //!< テクスチャフォーマット
 
         // ResourceDescにまとめる？
-        ResourceUsage   usage = ResourceUsage::Default;         //!< 利用法
-        BufferType      bufferType = BufferType::RenderTarget;  //!< リソース・タイプ
-        BindFlags       bindFlags;                              //!< バインドフラグ
+        //ResourceUsage   usage = ResourceUsage::Default;         //!< 利用法
+        //BufferType      bufferType = BufferType::RenderTarget;  //!< リソース・タイプ
+        //BindFlags       bindFlags;                              //!< バインドフラグ
     };
 
 }// namespcae ob::graphic

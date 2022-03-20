@@ -96,7 +96,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     bool Window::isMainWindow()const {
         if (!m_impl)return false;
-        m_impl->isMainWindow();
+        return m_impl->isMainWindow();
     }
 
 
@@ -104,7 +104,7 @@ namespace ob::platform {
     //! @brief      ウィンドウの状態を取得する
     //@―---------------------------------------------------------------------------
     WindowStates Window::getState()const {
-        OB_REQUIRE(m_impl);
+        OB_CHECK_ASSERT(m_impl);
         return m_impl->getState();
     }
 
@@ -148,7 +148,7 @@ namespace ob::platform {
     //! @brief  ウィンドウのタイトルを設定する
     //@―---------------------------------------------------------------------------
     const String& Window::getTitle()const {
-        OB_REQUIRE(m_impl);
+        OB_CHECK_ASSERT(m_impl);
         return m_impl->getTitle();
     }
 
@@ -174,7 +174,7 @@ namespace ob::platform {
     //! @brief  ウィンドウサイズを取得
     //@―---------------------------------------------------------------------------
     Size Window::getSize()const {
-        OB_REQUIRE(m_impl);
+        OB_CHECK_ASSERT(m_impl);
         return m_impl->getSize();
     }
 
@@ -182,7 +182,7 @@ namespace ob::platform {
     //! @brief      ウィンドウ・モードを取得する
     //@―---------------------------------------------------------------------------
     WindowMode Window::getMode()const {
-        OB_REQUIRE(m_impl);
+        OB_CHECK_ASSERT(m_impl);
         return m_impl->getMode();
     }
 
@@ -200,7 +200,7 @@ namespace ob::platform {
     //! @brief      ウィンドウのスタイルを取得する
     //@―---------------------------------------------------------------------------
     WindowStyle Window::getStyle()const {
-        OB_REQUIRE(m_impl);
+        OB_CHECK_ASSERT(m_impl);
         return m_impl->getStyle();
     }
 

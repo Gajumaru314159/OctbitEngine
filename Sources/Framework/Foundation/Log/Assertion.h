@@ -3,7 +3,7 @@
 //! @brief		アサーション定義
 //! @author		Gajumaru
 //! 
-//! @details    OB_REQUIRE や OB_ENSURE はリリース版でプログラムに含まれません。
+//! @details    OB_ASSERT や OB_ASSERT はリリース版でプログラムに含まれません。
 //!             アサーションは主にプログラムの前提条件を表すために使用されます。
 //!             エラー処理には適切に対処してエラーログを出力するか、例外を発生させてください。
 //***********************************************************
@@ -18,29 +18,27 @@
 //@―---------------------------------------------------------------------------
 //! @brief      アサーションの基底マクロ
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_BASE(expr,level,format,...)                   \
-if(UNLIKELY(!(expr))){                                          \
-    OB_LOG_BASE(level,"Assertion",format,__VA_ARGS__);    \
+#define OB_ASSERT_BASE(expr,format,...)                             \
+if(UNLIKELY(!(expr))){                                              \
+    OB_LOG_BASE(ob::LogType::Fatal,"Assertion",format,__VA_ARGS__); \
 }
 
-
 //@―---------------------------------------------------------------------------
-//! @brief      関数やロジックを実行する前の前提条件を確認する
+//! @brief      式を評価してアサートを発生させる
 //! 
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_REQUIRE_EX(expr,format,...)				OB_ASSERT_BASE(expr,ob::LogType::Fatal,format,__VA_ARGS__)
-//! @copydoc OB_REQUIRE_EX
-#define OB_REQUIRE(expr)					        OB_REQUIRE_EX(expr,#expr)
+#define OB_CHECK_ASSERT_EX(expr,format,...)				OB_ASSERT_BASE(expr,format,__VA_ARGS__)
+//! @copydoc OB_ASSERT_EX
+#define OB_CHECK_ASSERT(expr)					        OB_CHECK_ASSERT_EX(expr,#expr)
 
 //@―---------------------------------------------------------------------------
-//! @brief      関数やロジックを実行した後の条件を確認する
+//! @brief      アサートを出力する
 //! 
-//! @details    式がfalseである場合警告ログを出力する。
+//! @details    エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ENSURE_EX(expr,format,...)				OB_ASSERT_BASE(expr,ob::LogType::Warning,format,__VA_ARGS__)
-//! @copydoc OB_ENSURE_EX
-#define OB_ENSURE(expr)					            OB_ENSURE_EX(expr,#expr)
+#define OB_ASSERT(format,...)				OB_CHECK_ASSERT_EX(true,format,__VA_ARGS__)
+
 
 //============================================
 // 典型アサーション
@@ -51,7 +49,7 @@ if(UNLIKELY(!(expr))){                                          \
 //! 
 //! @details    min<value<max でない場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_REQUIRE_RANGE(value, minVal, maxVal)		            OB_REQUIRE(minVal <= value && value < maxVal,category,"Out of range.")
+#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,category,"Out of range.")
 
 
 //@―---------------------------------------------------------------------------
@@ -59,7 +57,7 @@ if(UNLIKELY(!(expr))){                                          \
 //!
 //! @details    式が呼び出された場合、エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_UNREACHABLE()                                        OB_REQUIRE_EX(false,"Unreachable code.")
+#define OB_UNREACHABLE()                                        OB_ASSERT("Unreachable code.")
 
 
 //@―---------------------------------------------------------------------------
@@ -67,7 +65,7 @@ if(UNLIKELY(!(expr))){                                          \
 //! 
 //! @details    式が呼び出された場合、Warningログを出力する。
 //@―---------------------------------------------------------------------------
-#define OB_NOTIMPLEMENTED()                                     OB_ENSURE_EX(false,"Not implemented code.")
+#define OB_NOTIMPLEMENTED()                                     OB_ASSERT("Not implemented code.")
 
 
 //============================================
@@ -75,11 +73,11 @@ if(UNLIKELY(!(expr))){                                          \
 //============================================
 
 #ifndef OB_ENABLE_REQUIRE
-#undef OB_REQUIRE_EX
-#define OB_REQUIRE_EX(expr,format,...) /* space */
+#undef OB_ASSERT_EX
+#define OB_ASSERT_EX(expr,format,...) /* space */
 #endif // OB_DISABLE_REQUIRE
 
 #ifndef OB_ENABLE_ENSURE
-#undef OB_ENSURE_EX
-#define OB_ENSURE_EX(expr,format,...)  /* space */
+#undef OB_ASSERT_EX
+#define OB_ASSERT_EX(expr,format,...)  /* space */
 #endif // OB_DISABLE_ENSURE

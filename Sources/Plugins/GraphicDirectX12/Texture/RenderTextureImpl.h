@@ -8,6 +8,18 @@
 #include <Framework/Graphic/Types/TextureDesc.h>
 
 
+//===============================================================
+// 前方宣言
+//===============================================================
+namespace ob::graphic::dx12 {
+    class DeviceImpl;
+    class TextureImpl;
+}
+
+
+//===============================================================
+// クラス定義
+//===============================================================
 namespace ob::graphic::dx12 {
 
     //@―---------------------------------------------------------------------------
@@ -15,18 +27,24 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    描画可能なテクスチャ。
     //@―---------------------------------------------------------------------------
-    class RenderTextureImpl :public IRenderTexture {
+    class RenderTextureImpl :public graphic::IRenderTexture {
     public:
 
-        RenderTextureImpl(ID3D12Device& rDevice, const vector<TextureDesc>& desc, DepthStencilFormat dsFormat,StringView name);
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth,StringView name);
 
     public:
+
+        graphic::ITexture* getTexture(s32 index)const override;
+        graphic::ITexture* getDepthStencilTexture()const override;
 
 
     private:
 
-        vector<ComPtr<ID3D12Resource>> m_resources;             //!< リソースリスト
-        ComPtr<ID3D12Resource> m_depth;                         //!< デプステクスチャ
+        vector<std::unique_ptr<TextureImpl>> m_textures;        //!< ターゲット・テクスチャ・リスト
+        std::unique_ptr<TextureImpl> m_depth;                   //!< デプス・ステンシル・テクスチャ
 
         ComPtr<ID3D12DescriptorHeap> m_srvHeap;                 //!< シェーダリソースビュー
         ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー

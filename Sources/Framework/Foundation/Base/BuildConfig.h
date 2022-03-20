@@ -21,8 +21,8 @@
 // アサーション
 //===============================================================
 
-#define OB_DISABLE_REQUIRE
-#define OB_DISABLE_ENSURE
+#define OB_ENABLE_REQUIRE
+#define OB_ENABLE_ENSURE
 
 
 //===============================================================

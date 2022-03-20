@@ -102,7 +102,7 @@ namespace ob::core {
     //! @param bytes	バイト列
     //@―---------------------------------------------------------------------------
     UUID UUID::FromByte(const byte* bytes) {
-        OB_REQUIRE(bytes != nullptr);
+        OB_CHECK_ASSERT(bytes != nullptr);
         UUID result;
         for (s32 i = 0; i < 16; i++) {
             result.m_data[i] = *(bytes + i);

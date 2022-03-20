@@ -14,13 +14,13 @@ namespace ob::graphic {
     //! @brief  スワップチェーン定義
     //@―---------------------------------------------------------------------------
     struct SwapchainDesc {
-        platform::Window*   window;         //!< 描画ウィンドウ
-        TextureFormat       format;         //!< フォーマット
-        f32                 refleshRate;    //!< リフレッシュ・レート
-        Size                size;           //!< バックバッファのサイズ
-        s32                 backBufferNum;  //!< バックバッファの数
-        bool                vsync;          //!< VSyncが有効か
-        bool                hdr;            //!< HDRが有効か
+        platform::Window*   window=nullptr;             //!< 描画ウィンドウ
+        TextureFormat       format=TextureFormat::RGBA8;//!< フォーマット
+        f32                 refleshRate=60.0f;          //!< リフレッシュ・レート
+        Size                size = {0,0};               //!< バックバッファのサイズ(0の場合ウィンドウサイズを使用)
+        s32                 backBufferNum=2;            //!< バックバッファの数
+        bool                vsync=true;                 //!< VSyncが有効か
+        bool                hdr=false;                  //!< HDRが有効か
     };
 
 }// namespcae ob::graphic

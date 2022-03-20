@@ -15,13 +15,76 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc, StringView name) {
 
-    }
+		auto format = Utility::convertTextureFormat(desc.format);
+		
+		// 定義生成
+		D3D12_RESOURCE_DESC resourceDesc{};
+		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
+		
+		switch (desc.type) {
+		case TextureType::Texture1D:
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex1D(format, desc.size.width);
+			resourceStates |= D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+			break;
+
+		case TextureType::Texture2D:
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
+			resourceStates |= D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+			break;
+
+		case TextureType::Texture3D:
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex3D(format, desc.size.width, desc.size.height,desc.size.depth);
+			resourceStates |= D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+			break;
+
+		case TextureType::Cube:
+			OB_NOTIMPLEMENTED();
+			break;
+
+		case TextureType::RenderTarget:
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
+			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+			resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
+			break;
+
+		case TextureType::DeptthStencil:
+			OB_CHECK_ASSERT_EX(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
+			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+			resourceStates |= D3D12_RESOURCE_STATE_DEPTH_WRITE;
+			break;
+		default:
+			OB_NOTIMPLEMENTED();
+			break;
+		}
+
+		if (desc.arrayNum != 1) {
+			resourceDesc.DepthOrArraySize = desc.arrayNum;
+		}
+		if (desc.mipLevel != 1) {
+			resourceDesc.DepthOrArraySize = desc.mipLevel;
+		}
 
 
-    //@―---------------------------------------------------------------------------
-    //! @brief      シェーダリソースビューを取得
-    //@―---------------------------------------------------------------------------
-    ID3D12DescriptorHeap* TextureImpl::getSRV() {
+		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
+
+
+		ComPtr<ID3D12Resource> resource;
+
+		auto result = rDevice.getNativeDevice()->CreateCommittedResource(
+			&texHeapProp,
+			D3D12_HEAP_FLAG_NONE,
+			&resourceDesc,
+			resourceStates,
+			nullptr,
+			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+
+		if (FAILED(result)) {
+			LOG_FATAL_EX("Graphic", "ID3D12Device::CreateCommittedResourceに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+		}
+
+		m_resource = resource;
 
     }
 
@@ -38,7 +101,8 @@ namespace ob::graphic::dx12 {
     //! @brief      シェーダリソースビューを生成
     //@―---------------------------------------------------------------------------
     bool TextureImpl::createSRV(ID3D12Device& rNativeDevice, D3D12_CPU_DESCRIPTOR_HANDLE& handle) {
-		if (hasResource() == false)return -1;
+		if (hasResource() == false)return false;
+		OB_NOTIMPLEMENTED();
 
 		auto& desc = m_resource->GetDesc();
 

@@ -9,6 +9,6 @@
 
 extern"C" {
 
-    ob::platform::IModule OB_API *GetModule();
+    ob::platform::IModule OB_GRAPHIC_DIRECTX12_API *GetModule();
 
 }

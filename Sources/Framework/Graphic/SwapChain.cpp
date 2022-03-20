@@ -23,17 +23,8 @@ namespace ob::graphic {
     //! @brief  バックバッファの数を取得
     //@―---------------------------------------------------------------------------
     s32 SwapChain::getBackBufferCount()const {
-        OB_REQUIRE(m_impl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->getBackBufferCount();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  描画先テクスチャを取得
-    //@―---------------------------------------------------------------------------
-    ITexture* SwapChain::getRederTexture(s32 index)const {
-        OB_REQUIRE(m_impl != nullptr);
-        return m_pImpl->getRederTexture(index);
     }
 
 
@@ -41,7 +32,7 @@ namespace ob::graphic {
     //! @brief  VSyncが有効か
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isVSyncEnabled()const {
-        OB_REQUIRE(m_impl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->isVSyncEnabled();
     }
 
@@ -50,7 +41,7 @@ namespace ob::graphic {
     //! @brief  HDRが有効か
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isHdrEnabled()const {
-        OB_REQUIRE(m_impl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->isHdrEnabled();
     }
 
@@ -59,7 +50,7 @@ namespace ob::graphic {
     //! @brief  バックバッファのサイズを変更
     //@―---------------------------------------------------------------------------
     bool SwapChain::resizeBackBuffer(const Size& size) {
-        OB_REQUIRE(m_impl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->resizeBackBuffer(size);
     }
 
@@ -70,7 +61,7 @@ namespace ob::graphic {
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
     void SwapChain::update() {
-        OB_REQUIRE(m_impl!=nullptr);
+        OB_CHECK_ASSERT(m_pImpl !=nullptr);
         m_pImpl->update();
     }
 

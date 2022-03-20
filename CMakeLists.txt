@@ -12,13 +12,14 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")
 # option(変数名 "説明" ON/OFF)
 #------------------------------------------------------------------------------
 
-set(CMAKE_DEBUG_POSTFIX "d")
+#set(CMAKE_DEBUG_POSTFIX "d")
 include(Common.cmake)
 
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Sources")
 set(OCTBIT_FRAMEWORK_PATH "${OCTBIT_SOURCE_PATH}/Framework")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
+set(OCTBIT_DLL_PATH "${OCTBIT_ROOT_PATH}/Build/Libray")
 
 set(OB_CONFIGURATION "Debug")
 

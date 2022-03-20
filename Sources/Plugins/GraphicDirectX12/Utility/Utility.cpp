@@ -23,7 +23,7 @@ namespace ob::graphic::dx12 {
         case TextureFormat::RGB32:
             return DXGI_FORMAT_R32G32B32_FLOAT;
         case TextureFormat::RGB8:
-            return DXGI_FORMAT_R8G8_UNORM;
+            return DXGI_FORMAT_B8G8R8X8_UNORM;
 
         case TextureFormat::RG32:
             return DXGI_FORMAT_R32G32_FLOAT;
@@ -78,23 +78,6 @@ namespace ob::graphic::dx12 {
         return DXGI_FORMAT_UNKNOWN;
     }
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  DepthStencilFormat を DXGI_FORMAT に変換
-    //@―---------------------------------------------------------------------------
-    DXGI_FORMAT Utility::convertTextureFormat(DepthStencilFormat format) {
-        switch (format) {
-        case DepthStencilFormat::D32S8:
-            return DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-        case DepthStencilFormat::D32:
-            return DXGI_FORMAT_D32_FLOAT;
-        case DepthStencilFormat::D24S8:
-            return DXGI_FORMAT_D24_UNORM_S8_UINT;
-        case DepthStencilFormat::D16:
-            return DXGI_FORMAT_D16_UNORM;
-        }
-        return DXGI_FORMAT_UNKNOWN;
-    }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief  エラーメッセージを取得
@@ -111,7 +94,7 @@ namespace ob::graphic::dx12 {
             nullptr
         );
 
-        String error=fmt::format(TC("[% 08x]"),errorCode);
+        String error=fmt::format(TC("[{0:#X}]"),errorCode);
         if (0 < result) {
             String message;
             StringEncoder::Encode(buffer, message);

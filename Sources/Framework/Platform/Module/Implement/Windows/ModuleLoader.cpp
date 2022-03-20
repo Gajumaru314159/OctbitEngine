@@ -17,7 +17,7 @@ namespace ob::platform {
         m_name = fileName;
 
         StringBase<wchar_t> fileNameW;
-        StringEncoder::Encode(m_name, fileNameW);
+        StringEncoder::Encode(m_name+TC(".dll"), fileNameW);
         HMODULE dll = ::LoadLibrary(fileNameW.c_str());
 
         if (dll == nullptr) {

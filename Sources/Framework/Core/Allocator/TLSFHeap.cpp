@@ -99,7 +99,7 @@ namespace ob::core {
     TLSFHeap::BlockTag::BlockTag(byte* pData, s32 size)
         :m_flag(false)
         , m_pData(pData) {
-        OB_REQUIRE(size < 0);
+        OB_CHECK_ASSERT(size < 0);
         m_pPrev = m_pNext = this;
         m_size = size;
         if (m_pData != nullptr) {

@@ -5,6 +5,7 @@
 //***********************************************************
 #include "Logger.h"
 #include "LogType.h"
+#include <Framework/Foundation/String/StringEncoder.h>
 
 namespace ob::foundation {
 
@@ -31,9 +32,14 @@ namespace ob::foundation {
             m_notifier.invoke(log);
         }
 
-        // Fatalログはブレークポイントを発生させる
+        WString ws;
+        StringEncoder::Encode(pMessage, ws);
+
+        ::OutputDebugLog(ws.c_str());
+
         if (type == LogType::Fatal) {
             ::CallBreakPoint();
+            assert(false);
         }
     }
 

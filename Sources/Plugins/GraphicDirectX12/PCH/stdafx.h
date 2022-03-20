@@ -25,3 +25,13 @@
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;
 #pragma warning(pop)
+
+
+//============================================
+// DLL Import / Export
+//============================================
+#if defined(OB_GRAPHIC_DIRECTX12_BUILD)
+#define OB_GRAPHIC_DIRECTX12_API DLL_EXPORT
+#else
+#define OB_GRAPHIC_DIRECTX12_API DLL_IMPORT
+#endif

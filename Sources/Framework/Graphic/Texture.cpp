@@ -7,9 +7,9 @@
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Graphic/System.h>
 
-namespace ob::graphic
-{
+namespace ob::graphic {
 
+    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(Texture);
 
     //===============================================================
     // コンストラクタ / デストラクタ
@@ -19,7 +19,7 @@ namespace ob::graphic
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     Texture::Texture()
-        : m_pImpl(nullptr){
+        : m_pImpl(nullptr) {
 
     }
 
@@ -34,10 +34,19 @@ namespace ob::graphic
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief      テクスチャ定義を取得
+    //@―---------------------------------------------------------------------------
+    const TextureDesc& Texture::desc()const {
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        return m_pImpl->getDesc();
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ・サイズを取得
     //@―---------------------------------------------------------------------------
     Size Texture::size()const {
-        OB_REQUIRE(m_pImpl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->getDesc().size;
     }
 
@@ -46,17 +55,8 @@ namespace ob::graphic
     //! @brief      テクスチャ・フォーマットを取得
     //@―---------------------------------------------------------------------------
     auto Texture::format()const->TextureFormat {
-        OB_REQUIRE(m_pImpl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->getDesc().format;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      テクスチャ使用法を取得
-    //@―---------------------------------------------------------------------------
-    auto Texture::usage()const->ResourceUsage {
-        OB_REQUIRE(m_pImpl != nullptr);
-        return m_pImpl->getDesc().usage;
     }
 
 
@@ -64,8 +64,17 @@ namespace ob::graphic
     //! @brief      ミップマップを持っているか
     //@―---------------------------------------------------------------------------
     s32 Texture::mipLevels()const {
-        OB_REQUIRE(m_impl != nullptr);
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
         return m_pImpl->getDesc().mipLevel;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      テクスチャタイプを取得
+    //@―---------------------------------------------------------------------------
+    TextureType Texture::type()const {
+        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        return m_pImpl->getDesc().type;
     }
 
 }// namespace ob::graphic

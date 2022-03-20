@@ -68,7 +68,7 @@ namespace ob::graphic {
         virtual void createTexture(Texture& texture, const TextureData& data,StringView name);
         */
         void createTexture(Texture& texture, const TextureDesc& desc, StringView name);
-        void createRenderTexture(RenderTexture& texture, const TextureDesc& desc, StringView name);
+        void createRenderTexture(RenderTexture& texture, const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name);
 
         //virtual void createBuffer(Buffer& buffer,const BufferDesc& desc,const virtual void* data,StringView name);
         //

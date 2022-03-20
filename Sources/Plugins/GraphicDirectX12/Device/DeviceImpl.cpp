@@ -6,6 +6,8 @@
 #include "DeviceImpl.h"
 #include<Plugins/GraphicDirectX12/SwapChain/SwapChainImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/TextureImpl.h>
+#include<Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
+#include<Plugins/GraphicDirectX12/Utility/Utility.h>
 
 namespace ob::graphic::dx12 {
 
@@ -29,8 +31,16 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  テクスチャを生成
     //@―---------------------------------------------------------------------------
-    ITexture* DeviceImpl::createTexture(const TextureDesc& desc, StringView name) {
+    ob::graphic::ITexture* DeviceImpl::createTexture(const TextureDesc& desc, StringView name) {
         return new TextureImpl(*this, desc, name);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  レンダーテクスチャを生成
+    //@―---------------------------------------------------------------------------
+    ob::graphic::IRenderTexture* DeviceImpl::createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
+        return new RenderTextureImpl(*this, targets, depth, name);
     }
 
 
@@ -40,26 +50,22 @@ namespace ob::graphic::dx12 {
     void DeviceImpl::initialize() {
 
         // デバイスの初期化
-        if (FAILED(initializeDXGIDevice())) {
-            LOG_ERROR_EX("Graphic", "Failed InitializeDXGIDevice()");
-        }
+        initializeDXGIDevice();
 
         // コマンドキューの初期化
-        if (FAILED(initializeCommand())) {
-            LOG_ERROR_EX("Graphic", "Failed InitializeCommand()");
-        }
+        initializeCommand();
 
         //// スワップチェーンの作成
         //if (FAILED(CreateSwapChain())) {
-        //	LOG_ERROR_EX("Graphic", "Failed CreateSwapChain()");
+        //	LOG_FATAL_EX("Graphic", "Failed CreateSwapChain()");
         //}
         //// 最終レンダリング先の作成
         //if (FAILED(CreateFinalRenderTargets())) {
-        //	LOG_ERROR_EX("Graphic", "Failed CreateFinalRenderTargets()");
+        //	LOG_FATAL_EX("Graphic", "Failed CreateFinalRenderTargets()");
         //}
         ////フェンスの作成
         //if (FAILED(CreateFence())) {
-        //	LOG_ERROR_EX("Graphic", "Failed CreateFence()");
+        //	LOG_FATAL_EX("Graphic", "Failed CreateFence()");
         //}
 
     }
@@ -68,13 +74,13 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  DXGIDeviceの初期化
     //@―---------------------------------------------------------------------------
-    HRESULT DeviceImpl::initializeDXGIDevice() {
+    void DeviceImpl::initializeDXGIDevice() {
         // ファクトリの生成
         UINT flagsDXGI = 0;
         flagsDXGI |= DXGI_CREATE_FACTORY_DEBUG;
-        auto result = CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
+        auto result = ::CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
-            return result;
+            LOG_FATAL_EX("Graphic","CreateDXGIFactoryに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
         }
 
         // アダプターの列挙し、メモリ量が最大のグラフィックボードを選択
@@ -106,25 +112,27 @@ namespace ob::graphic::dx12 {
 
         result = S_FALSE;
         for (auto level : levels) {
-            if (SUCCEEDED(D3D12CreateDevice(selectedAdapter, level, IID_PPV_ARGS(&m_device)))) {
+            if (SUCCEEDED(::D3D12CreateDevice(selectedAdapter, level, IID_PPV_ARGS(&m_device)))) {
                 featureLevel = level;
                 result = S_OK;
                 break;
             }
         }
-        return result;
+        if (FAILED(result)) {
+            LOG_FATAL_EX("Graphic", "D3D12CreateDeviceに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+        }
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  コマンドの初期化
     //@―---------------------------------------------------------------------------
-    HRESULT DeviceImpl::initializeCommand() {
+    void DeviceImpl::initializeCommand() {
 
         // コマンドアロケータを生成
         auto result = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_commandAllocator.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
-            return result;
+            LOG_FATAL_EX("Graphic", "CreateCommandAllocatorに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
         }
 
 
@@ -136,6 +144,7 @@ namespace ob::graphic::dx12 {
         cmdQueueDesc.NodeMask = 0;										// GPUが1つの時は0、複数の時は識別用のbitを指定
 
         result = m_device->CreateCommandQueue(&cmdQueueDesc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
+
 
     }
 

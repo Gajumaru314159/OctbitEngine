@@ -54,10 +54,12 @@ namespace ob::graphic {
                 type& type::operator=(const type& another) {                \
                     m_pImpl = another.m_pImpl;                              \
                     m_pImpl->addReference();                                \
+                    return *this;                                           \
                 }                                                           \
                 type& type::operator=(type&& another) {                     \
                     m_pImpl = another.m_pImpl;                              \
                     another.m_pImpl = nullptr;                              \
+                    return *this;                                           \
                 }                                                           \
                 type::~type() {                                             \
                     release();                                              \
