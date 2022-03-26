@@ -44,7 +44,8 @@ MACRO(LOAD_FILES result)
 			RELATIVE
 			${CMAKE_CURRENT_SOURCE_DIR}
 			"${dir}/*.h"
-			"${dir}/*.cpp")
+			"${dir}/*.cpp"
+			"${dir}/*.md")
 		SET(all_source ${all_source} ${sources})
 		if(${dir} STREQUAL "./")
 			SOURCE_GROUP("Sources/" FILES ${sources})

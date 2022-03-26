@@ -36,6 +36,7 @@ if(MSVC)
 endif(MSVC)
 
 add_definitions(-D_UNICODE -DUNICODE)
+add_definitions(/Zc:__cplusplus)
 
 if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
     add_definitions(/W4)

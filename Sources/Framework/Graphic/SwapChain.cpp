@@ -4,8 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "Swapchain.h"
-#include <Framework/Graphic/System.h>
+#include <Framework/Graphic/Private/Device.h>
+#include <Framework/Graphic/RenderTexture.h>
 #include <Framework/Graphic/Interface/ISwapchain.h>
+#include <Framework/Graphic/Interface/IRenderTexture.h>
 
 namespace ob::graphic {
 
@@ -14,8 +16,8 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChain::SwapChain()
-        :m_pImpl(nullptr) {
+    SwapChain::SwapChain(const SwapchainDesc& desc) {
+        m_pImpl = Device::Get()->createSwapChain(desc);
     }
 
 
@@ -60,9 +62,9 @@ namespace ob::graphic {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChain::update() {
-        OB_CHECK_ASSERT(m_pImpl !=nullptr);
-        m_pImpl->update();
+    void SwapChain::update(RenderTexture& renderTexture) {
+        OB_CHECK_ASSERT(m_pImpl !=nullptr); 
+        m_pImpl->update(renderTexture.m_pImpl);
     }
 
 }// namespace ob::graphic

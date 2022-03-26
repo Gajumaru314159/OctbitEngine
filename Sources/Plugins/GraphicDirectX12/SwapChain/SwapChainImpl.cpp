@@ -20,11 +20,15 @@ namespace ob::graphic::dx12 {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc) {
+        OB_CHECK_ASSERT_EX(desc.window, "Windowがnullptrです。");
+
         m_desc = desc;
+        if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window->getSize();
 
         m_displayViewFormat = desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
         m_nativeDisplayViewFormat = Utility::convertTextureFormat(m_displayViewFormat);
         m_nativeSwapChainFormat = Utility::convertTextureFormat(m_displayViewFormat);
+        m_syncInterval = desc.vsync ? 1 : 0;
 
         createSwapChain(rDevice);
         createBuffer(rDevice);
@@ -69,9 +73,22 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::update() {
+    void SwapChainImpl::update(IRenderTexture* renderTexture) {
 
-        OB_NOTIMPLEMENTED();
+        // レンダーテクスチャをバックバッファにコピー
+        auto rtSize = renderTexture->getTexture()->getDesc().size;
+          
+
+        
+        auto result = m_swapchain->Present(m_syncInterval, 0);
+
+        if (FAILED(result)) {
+            LOG_ERROR_EX("Graphic", "IDXGISwapChain4::Presentに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            return;
+        }
+
+        m_frameIndex = m_swapchain->GetCurrentBackBufferIndex();
+
     }
 
 
@@ -80,7 +97,6 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     void SwapChainImpl::createSwapChain(DeviceImpl& rDevice) {
         auto& window = m_desc.window;
-        OB_CHECK_ASSERT_EX(window, "Windowがnullptrです。");
 
         UINT sampleQuarity = 0;
         UINT sampleCount = 1;
@@ -96,13 +112,9 @@ namespace ob::graphic::dx12 {
             }
         }
 
-        auto windowSize = window->getSize();
-        auto bufferSize = m_desc.size;
-        if (bufferSize.width == 0 || bufferSize.height == 0)bufferSize = windowSize;
-
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-        swapChainDesc.BufferDesc.Width = bufferSize.width;                                  // 画面解像度【横】
-        swapChainDesc.BufferDesc.Height = bufferSize.height;                                // 画面解像度【縦】
+        swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
+        swapChainDesc.BufferDesc.Height = m_desc.size.height;                              // 画面解像度【縦】
         swapChainDesc.BufferDesc.Format = Utility::convertTextureFormat(m_desc.format);     // ピクセルフォーマット
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母

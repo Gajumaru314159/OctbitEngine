@@ -12,6 +12,7 @@
 //===============================================================
 namespace ob::graphic {
     class Device;
+    class SwapChain;
     class Texture;
     class IRenderTexture;
 }
@@ -27,6 +28,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class RenderTexture {
         friend Device;
+        friend SwapChain;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderTexture);
     public:
 
@@ -37,7 +39,17 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        RenderTexture();
+        RenderTexture()=default;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  コンストラクタ
+        //! 
+        //! @param targets  各レンダ―ターゲットの定義
+        //! @param depth    デプス・ステンシル・テクスチャの定義
+        //! @param name     オブジェクト名
+        //@―---------------------------------------------------------------------------
+        RenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name=TC("RenderTexture"));
 
 
         //@―---------------------------------------------------------------------------
@@ -49,7 +61,7 @@ namespace ob::graphic {
 
     private:
 
-        IRenderTexture* m_pImpl;
+        IRenderTexture* m_pImpl=nullptr;
 
     };
 

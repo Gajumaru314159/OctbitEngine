@@ -37,7 +37,7 @@ if(UNLIKELY(!(expr))){                                              \
 //! 
 //! @details    エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT(format,...)				OB_CHECK_ASSERT_EX(true,format,__VA_ARGS__)
+#define OB_ASSERT(format,...)				OB_CHECK_ASSERT_EX(false,format,__VA_ARGS__)
 
 
 //============================================

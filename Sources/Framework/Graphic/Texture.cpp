@@ -5,22 +5,20 @@
 //***********************************************************
 #include "Texture.h"
 #include <Framework/Graphic/Interface/ITexture.h>
-#include <Framework/Graphic/System.h>
+#include <Framework/Graphic/Private/Device.h>
 
 namespace ob::graphic {
 
     OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(Texture);
 
-    //===============================================================
-    // コンストラクタ / デストラクタ
-    //===============================================================
-
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
+    //! 
+    //! @param desc テクスチャ定義
+    //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
-    Texture::Texture()
-        : m_pImpl(nullptr) {
-
+    Texture::Texture(const TextureDesc& desc, StringView name) {
+        m_pImpl = Device::Get()->createTexture(desc, name);
     }
 
 

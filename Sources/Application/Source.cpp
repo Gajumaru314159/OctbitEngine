@@ -2,6 +2,8 @@
 #include <Framework/Platform/Module/ModuleManager.h>
 #include <Framework/Platform/System/PlatformSystem.h>
 #include <Framework/Graphic/System.h>
+#include <Framework/Graphic/SwapChain.h>
+#include <Framework/Graphic/RenderTexture.h>
 
 #include <Windows.h>
 
@@ -11,15 +13,17 @@ int main() {
     using namespace ob::graphic;
     
     platform::PlatformSystem sys;
-    platform::PlatformSystem::ref().startup();
+    platform::PlatformSystem::Instance().startup();
     {
         platform::ModuleManager moduleManager;
         Logger logger;
-        moduleManager.ref();
+        moduleManager.Instance();
         {
-            graphic::System system(graphic::GraphicAPI::D3D12);
-            system.ref();
-
+            SystemDesc sysDesc;
+            sysDesc.api = graphic::GraphicAPI::D3D12;
+            sysDesc.bufferCount = 2;
+            graphic::System system;
+            graphic::System::Instance().initialize(sysDesc);
 
             platform::WindowCreationDesc windowDesc;
             windowDesc.title = TC("Graphic Test");
@@ -28,10 +32,17 @@ int main() {
             window.show();
 
 
-            SwapChain swapChain;
             SwapchainDesc swapChainDesc;
             swapChainDesc.window = &window;
-            system.getDevice().createSwapChain(swapChain, swapChainDesc);
+            SwapChain swapChain(swapChainDesc);
+
+            TextureDesc texDesc[1];
+            texDesc[0].type = TextureType::RenderTarget;
+            TextureDesc depth;
+            depth.format = TextureFormat::D24S8;
+            depth.type = TextureType::DeptthStencil;
+            RenderTexture rt(texDesc, depth);
+            
 
             MSG msg = {};
             while (true) {
@@ -43,6 +54,8 @@ int main() {
                 if (msg.message == WM_QUIT) {
                     break;
                 }
+
+                swapChain.update(rt);
             }
         }
     }

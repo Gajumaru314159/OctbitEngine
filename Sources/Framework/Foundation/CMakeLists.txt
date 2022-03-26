@@ -20,6 +20,8 @@ set(OB_PROJECT_INCLUDE_DIR
     "${OCTBIT_SOURCE_PATH}"
     "${OCTBIT_THIRD_PARTY_PATH}/gsl/include"
     "${OCTBIT_THIRD_PARTY_PATH}/fmt/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/MagicEnum/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/utfcpp/include"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 

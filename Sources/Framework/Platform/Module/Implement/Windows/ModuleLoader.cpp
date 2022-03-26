@@ -48,7 +48,10 @@ namespace ob::platform {
     }
 
     ModuleLoader::~ModuleLoader() {
-        m_pModule->shutdown();
+        if (m_pModule) {
+            m_pModule->shutdown();
+            delete m_pModule;
+        }
         ::FreeLibrary(m_handle);
     }
 

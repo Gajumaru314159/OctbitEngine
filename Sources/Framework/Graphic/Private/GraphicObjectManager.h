@@ -1,19 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		グラフィック・オブジェクト・マネージャ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#ifdef OS_WINDOWS
-#include "../IModuleLoader.h"
-#include <Windows.h>
+#include <Framework/Graphic/Interface/GraphicObject.h>
 
-namespace ob::platform {
+namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  グラフィック・オブジェクト・マネージャ
     //@―---------------------------------------------------------------------------
-    class ModuleLoader :public IModuleLoader {
+    class GraphicObjectManager {
     public:
 
         //===============================================================
@@ -22,34 +20,45 @@ namespace ob::platform {
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
+        //! 
+        //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
         //@―---------------------------------------------------------------------------
-        ModuleLoader(StringView filePath);
+        GraphicObjectManager(s32 frameCount);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        ~ModuleLoader();
+        ~GraphicObjectManager();
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュール名を取得
+        //! @brief  更新
         //@―---------------------------------------------------------------------------
-        virtual StringView name()const { return m_name; };
+        void update();
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  モジュールを取得
+        //! @brief  登録
         //@―---------------------------------------------------------------------------
-        IModule* getInterface()override {
-            return m_pModule;
-        }
+        void registerObject(GraphicObject&);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      解放予約
+        //! 
+        //! @details    指定フレーム更新後に削除するよう予約します。
+        //@―---------------------------------------------------------------------------
+        void requestRelease(GraphicObject&);
 
     private:
 
-        String m_name;
-        HMODULE m_handle;
-        IModule* m_pModule=nullptr;
+        list<GraphicObject*> m_objects;
+
+        using ObjectStack = stack<GraphicObject*>;
+        std::vector<ObjectStack>    m_deleteStackList;
+
+        s32 m_index;
 
     };
 
@@ -66,5 +75,4 @@ namespace ob::platform {
 
 
     //! @endcond
-}// namespace ob::platform
-#endif// OS_WINDOWS
+}// namespcae ob::graphic

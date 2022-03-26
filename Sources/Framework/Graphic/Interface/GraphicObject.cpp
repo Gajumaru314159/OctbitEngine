@@ -13,32 +13,28 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     GraphicObject::GraphicObject(StringView name)
         : m_pStack(nullptr)
-        , m_name(name)
         , m_referenceCount(1){
-        // TODO できればFixedStringにしたい
-        //m_refCount.store(0, memory_order::memory_order_release);
+
+        OB_CHECK_ASSERT_EX(name.size()<get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
+        //System::Instance().registerObject(*this);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObject::~GraphicObject() {
-        auto pName = TC("Unknown");
-#ifdef OB_DEBUG
-        if (!m_name.empty())pName = m_name.c_str();
-#endif
-        OB_CHECK_ASSERT_EX(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。Object={0}", pName);
+        OB_CHECK_ASSERT_EX(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  名前を取得
     //@―---------------------------------------------------------------------------
-    const StringView GraphicObject::getName()const {
+    const Char* GraphicObject::getName()const {
 #ifdef OB_DEBUG
         return m_name;
 #else
-        return TC("The name of the graphic object can only be used during debugging.");
+        return TC("Unknown");
 #endif
     }
 
@@ -61,7 +57,7 @@ namespace ob::graphic {
         }
         OB_CHECK_ASSERT_EX(m_referenceCount == 0, "参照カウントエラー");
         // デバイスの削除スタックに追加
-        System::ref().requestRelease(*this);
+        System::Instance().requestRelease(*this);
         return m_referenceCount;
     }
 

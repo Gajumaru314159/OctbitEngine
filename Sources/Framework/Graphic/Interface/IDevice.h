@@ -36,6 +36,17 @@ namespace ob::graphic {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
+        //! @brief  デストラクタ
+        //@―---------------------------------------------------------------------------
+        virtual ~IDevice() = default;
+
+
+        //===============================================================
+        // 更新
+        //===============================================================
+        virtual void update() = 0;
+
+        //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
         /*
@@ -45,7 +56,7 @@ namespace ob::graphic {
         virtual void flip()=0;
         */
 
-        virtual ISwapChain* createSwapChain(SwapchainDesc& desc)=0;
+        virtual ISwapChain* createSwapChain(const SwapchainDesc& desc)=0;
 
         /*
         virtual void createCommandList(CommandList& commandList, CommandListType type)=0;
@@ -82,9 +93,6 @@ namespace ob::graphic {
         virtual bool isRaytracingSupported()const=0;
         */
 
-    protected:
-
-        ~IDevice() = default;
 
     };
 

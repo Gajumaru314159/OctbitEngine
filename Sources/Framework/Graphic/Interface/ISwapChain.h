@@ -12,6 +12,7 @@
 //===============================================================
 namespace ob::graphic {
     class ITexture;
+    class IRenderTexture;
 }
 
 //===============================================================
@@ -57,7 +58,7 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        virtual void update() = 0;
+        virtual void update(IRenderTexture* pRendrerTexture) = 0;
 
     protected:
 

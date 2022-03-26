@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Graphic/Types/ShaderType.h>
 
 //===============================================================
 // 前方宣言
@@ -18,14 +19,11 @@ namespace ob::graphic {
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      スワップチェーン
-    //! 
-    //! @details    モニターに表示するバッファを複数のバッファから切り替えることで
-    //!             表示のちらつきを解決する。
+    //! @brief      シェーダ
     //@―---------------------------------------------------------------------------
-    //class ISwapchain :public GraphicObject {
-    //public:
-    //
-    //};
+    class IShader:public GraphicObject {
+    public:
+    
+    };
 
 }// namespace pb::graphic

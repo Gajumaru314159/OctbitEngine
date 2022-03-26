@@ -73,7 +73,7 @@ namespace ob::graphic::dx12 {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update() override;
+        void update(IRenderTexture* renderTexture) override;
 
     private:
 
@@ -111,6 +111,8 @@ namespace ob::graphic::dx12 {
 
 
         ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー
+
+        UINT m_syncInterval;
 
     };
 

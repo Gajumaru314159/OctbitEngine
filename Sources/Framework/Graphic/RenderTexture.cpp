@@ -6,16 +6,22 @@
 #include "RenderTexture.h"
 #include <Framework/Graphic/Interface/IRenderTexture.h>
 #include <Framework/Graphic/System.h>
+#include <Framework/Graphic/Private/Device.h>
 
 namespace ob::graphic {
 
     OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(RenderTexture);
 
+
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
+    //! 
+    //! @param targets  各レンダ―ターゲットの定義
+    //! @param depth    デプス・ステンシル・テクスチャの定義
+    //! @param name     オブジェクト名
     //@―---------------------------------------------------------------------------
-    RenderTexture::RenderTexture()
-        : m_pImpl(nullptr) {
+    RenderTexture::RenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
+        m_pImpl = Device::Get()->createRenderTexture(targets, depth, name);
     }
 
 

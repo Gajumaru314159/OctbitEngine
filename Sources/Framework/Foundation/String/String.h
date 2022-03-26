@@ -15,11 +15,14 @@ namespace ob::foundation {
     template <class TChar>
     using StringBase = std::basic_string<TChar>;
 
-    using WString = std::basic_string<wchar_t>;
-    using WStringView = std::basic_string_view<wchar_t>;
+    template <class TChar>
+    using StringViewBase = std::basic_string_view<TChar>;
 
-    using String = std::basic_string<Char>;
-    using StringView = std::basic_string_view<Char>;
+    using WString = StringBase<wchar_t>;
+    using WStringView = StringViewBase<wchar_t>;
+
+    using String = StringBase<Char>;
+    using StringView = StringViewBase<Char>;
 
     //! @endcond
 

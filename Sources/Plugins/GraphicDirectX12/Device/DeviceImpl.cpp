@@ -20,10 +20,18 @@ namespace ob::graphic::dx12 {
     }
 
 
+    void DeviceImpl::update(){
+        // 
+        
+        // コマンドをGPUに送信
+        
+        // 描画結果を画面に反映
+    }
+
     //@―---------------------------------------------------------------------------
     //! @brief  ディスプレイを生成
     //@―---------------------------------------------------------------------------
-    ISwapChain* DeviceImpl::createSwapChain(SwapchainDesc& desc) {
+    ISwapChain* DeviceImpl::createSwapChain(const SwapchainDesc& desc) {
         return new SwapChainImpl(*this, desc);
     }
 
@@ -133,6 +141,12 @@ namespace ob::graphic::dx12 {
         auto result = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_commandAllocator.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
             LOG_FATAL_EX("Graphic", "CreateCommandAllocatorに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+        }
+        
+        // システム・コマンドリストを生成
+        result = m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator.Get(), nullptr, IID_PPV_ARGS(m_systemCmdList.ReleaseAndGetAddressOf()));
+        if (FAILED(result)) {
+            LOG_FATAL_EX("Graphic", "CreateCommandListに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
         }
 
 

@@ -11,12 +11,12 @@
 namespace ob::foundation {
 
     template <class T>
-    using set = std::set<T, allocator<T>>;
+    using set = std::set<T, less<T>, allocator<T>>;
     template <class T>
-    using unordered_set = std::unordered_set<T, allocator<T>>;
+    using unordered_set = std::unordered_set<T,hash<T>, equal_to<T>, allocator<T>>;
     template <class T>
-    using multiset = std::multiset<T, allocator<T>>;
+    using multiset = std::multiset<T, less<T>, allocator<T>>;
     template <class T>
-    using unordered_multiset = std::unordered_multiset<T, allocator<T>>;
+    using unordered_multiset = std::unordered_multiset<T, hash<T>, equal_to<T>, allocator<T>>;
 
 }// namespcae ob

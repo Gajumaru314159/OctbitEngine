@@ -1,95 +1,145 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/System.h>
+
 #include <Framework/Platform/Module/ModuleManager.h>
+#include <Framework/Graphic/Private/GraphicObjectManager.h>
+
 #include <Framework/Graphic/Interface/IGraphicModule.h>
 #include <Framework/Graphic/Interface/IDevice.h>
 #include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Foundation/String/StringEncoder.h>
+
+#include <MagicEnum/magic_enum.hpp>
 
 namespace ob::graphic {
 
+    System::System() = default;
+    System::~System() = default;
+
     //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ
+    //! @brief          初期化
+    //! 
+    //! @details        プラットフォームにより使用できないAPIがあります。
+    //!                 使用できるプラットフォームは GraphicAPI を参照してください。
+    //!                 システムの初期化に失敗した場合アサートを発生させます。
+    //! @param desc     使用するグラフィックAPIタイプ
+    //! @retval true    成功
+    //! @retval false   失敗
     //@―---------------------------------------------------------------------------
-    System::System(GraphicAPI api)
-        : m_nowStackIndex(0){
-        ref();
+    bool System::initialize(SystemDesc desc) {
+
+        if (m_device) {
+            LOG_FATAL_EX("Graphic", "グラフィック・システムは初期化済みです。");
+            return false;
+        }
 
         IDevice* pDevice = nullptr;
-        if (api == GraphicAPI::D3D12) {
+
+        if (desc.api == GraphicAPI::D3D12) {
+
 #if defined(OS_WINDOWS)
-            if (auto pModule = platform::ModuleManager::ref().loadModule<IGraphicModule>(TC("D:/My/Productions/C++/OctbitEngine/build/Sources/Plugins/GraphicDirectX12/Debug/GraphicDirectX12"))) {
+            if (auto pModule = platform::ModuleManager::Instance().loadModule<IGraphicModule>(TC("D:/My/Productions/C++/OctbitEngine/build/Sources/Plugins/GraphicDirectX12/Debug/GraphicDirectX12"))) {
 
                 if (pModule->magicCode() == IGraphicModule::graphicMagicCode()) {
                     pDevice = pModule->createDevice(FeatureLevel::Default);
                 }
 
             }
-            
 #endif
-        } else if (api == GraphicAPI::Vulkan) {
-            OB_NOTIMPLEMENTED();
+
+        } else if (desc.api == GraphicAPI::Vulkan) {
+
         }
 
+        if (pDevice == nullptr) {
+            auto rawName = magic_enum::enum_name(desc.api);
+            String name;
+            StringEncoder::Encode(rawName, name);
 
-        m_device.m_impl = pDevice;
-        OB_CHECK_ASSERT_EX(pDevice,"無効なグラフィックモジュール[GraphicAPI={0}]",api);
+            LOG_ERROR_EX("Graphic","無効なグラフィックモジュール[GraphicAPI={0}]", name.c_str());
+            return false;
+        }
 
-        // とりあえず固定で3フレーム
-        m_delayReleaseStack.resize(3);
+        m_device = std::unique_ptr<IDevice>(pDevice);
+        m_objectManager = std::make_unique<GraphicObjectManager>(desc.bufferCount);
+        return true;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      更新
+    //@―---------------------------------------------------------------------------
+    void System::update() {
+        if (m_objectManager) {
+            m_objectManager->update();
+        }
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  デストラクタ
+    //! @brief      サポートしているAPIか
     //@―---------------------------------------------------------------------------
-    System::~System() {
-        for (s32 i = 0; i < m_delayReleaseStack.size(); ++i) {
-            update();
-        }
+    bool System::IsSupported(GraphicAPI api) {
+        auto apis = GetSupportedApiList();
+        return apis.find(api) != apis.end();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      グラフィックAPIがサポートされているか
+    //@―---------------------------------------------------------------------------
+    set<GraphicAPI> System::GetSupportedApiList() {
+
+        set<GraphicAPI> apis;
+
+#ifdef OS_WINDOWS
+        apis.emplace(GraphicAPI::D3D12);
+        apis.emplace(GraphicAPI::Vulkan);
+#endif // OS_WINDOWS
+
+
+        return move(apis);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
-    Device& System::getDevice() {
-        return m_device;
+    IDevice* System::getDevice() {
+        return m_device.get();
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      デバイスを取得デバイスを取得
+    //! @brief  グラフィック・オブジェクトを解放
     //@―---------------------------------------------------------------------------
-    void System::requestRelease(GraphicObject& pObject) {
-        if (m_delayReleaseStack.empty()) {
-            delete &pObject;
-        } else {
-            auto& nowStack = m_delayReleaseStack[m_nowStackIndex];
-            nowStack.emplace(&pObject);
+    void System::registerObject(GraphicObject& object) {
+
+        if (!m_objectManager) {
+            LOG_FATAL_EX("Graphic", "システムの開放後にグラフィックオブジェクトを解放しようとしました。");
+            return;
         }
+
+        m_objectManager->registerObject(object);
+
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      更新
+    //! @brief  グラフィック・オブジェクトを解放
     //@―---------------------------------------------------------------------------
-    void System::update() {
+    void System::requestRelease(GraphicObject& object) {
 
-        // 削除スタックのインデックスを更新
-        m_nowStackIndex = (m_nowStackIndex+1)%get_size(m_delayReleaseStack);
-
-        // グラフィック・オブジェクトを削除
-        auto& deleteStack = m_delayReleaseStack[m_nowStackIndex];
-        while (!deleteStack.empty()) {
-            auto pObject = deleteStack.top();
-            deleteStack.pop();
-
-            delete pObject;
+        if (!m_objectManager) {
+            LOG_FATAL_EX("Graphic", "システムの開放後にグラフィックオブジェクトを解放しようとしました。");
+            return;
         }
+
+        m_objectManager->requestRelease(object);
+
     }
 
 }// namespace pb::graphic

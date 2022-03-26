@@ -21,7 +21,7 @@ namespace ob::foundation {
         //@―---------------------------------------------------------------------------
         //! @brief      インスタンスを取得
         //@―---------------------------------------------------------------------------
-        static constexpr T& ref()noexcept;
+        static constexpr T& Instance()noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -90,19 +90,9 @@ namespace ob::foundation {
     //! @brief      インスタンスを取得
     //@―---------------------------------------------------------------------------
     template<class T>
-    constexpr T& Singleton<T>::ref()noexcept {
+    constexpr T& Singleton<T>::Instance()noexcept {
         assert(s_pInstance != nullptr);
         return *s_pInstance;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      インスタンスのポインタを取得
-    //@―---------------------------------------------------------------------------
-    template<class T>
-    constexpr T* Singleton<T>::ptr()noexcept {
-        assert(s_pInstance != nullptr);
-        return s_pInstance;
     }
 
 

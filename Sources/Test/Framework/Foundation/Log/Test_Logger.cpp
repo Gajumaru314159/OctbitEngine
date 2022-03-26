@@ -48,7 +48,7 @@ TEST(Logger, AddLogEvent) {
 
     // ログイベントを登録
     Logger::EventHandle handle;
-    Logger::ref().addEvent(handle, event);
+    Logger::Instance().addEvent(handle, event);
 
     // ログ追加
     const Char message1[] = TC("Hoge");
@@ -64,7 +64,7 @@ TEST(Logger, AddLogEvent) {
     EXPECT_TRUE(s_message, TC("Hoge2A"));
 
     // ログイベントの削除
-    Logger::ref().removeEvent(handle);
+    Logger::Instance().removeEvent(handle);
 
     // ログ追加
     const Char message2[] = TC("Fuga");

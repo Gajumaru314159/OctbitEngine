@@ -25,13 +25,20 @@ namespace ob::graphic::dx12 {
 
 
         //===============================================================
+        // 更新
+        //===============================================================
+        void update()override;
+
+
+
+        //===============================================================
         // 生成
         //===============================================================
 
         //@―---------------------------------------------------------------------------
         //! @brief  スワップ・チェーンを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::ISwapChain* createSwapChain(SwapchainDesc& desc)override;
+        ob::graphic::ISwapChain* createSwapChain(const SwapchainDesc& desc)override;
 
 
         //@―---------------------------------------------------------------------------
@@ -65,6 +72,11 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         ComPtr<ID3D12CommandQueue>& getCommandQueue();
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  システム・コマンド・リストを取得
+        //@―---------------------------------------------------------------------------
+        ComPtr<ID3D12GraphicsCommandList>& getSystemCommandList();
+
 
     private:
 
@@ -76,11 +88,12 @@ namespace ob::graphic::dx12 {
 
     private:
 
-        FeatureLevel                    m_featureLevel;             // フィーチャーレベル
-        ComPtr<ID3D12Device>            m_device;                   // D3D12のデバイス本体
-        ComPtr<IDXGIFactory4>           m_dxgiFactory;              // DXGIインターフェイス
-        ComPtr<ID3D12CommandAllocator>  m_commandAllocator;         // コマンドアロケータ
-        ComPtr<ID3D12CommandQueue>      m_commandQueue;             // コマンドキュー
+        FeatureLevel                        m_featureLevel;             // フィーチャーレベル
+        ComPtr<ID3D12Device>                m_device;                   // D3D12のデバイス本体
+        ComPtr<IDXGIFactory4>               m_dxgiFactory;              // DXGIインターフェイス
+        ComPtr<ID3D12CommandAllocator>      m_commandAllocator;         // コマンドアロケータ
+        ComPtr<ID3D12CommandQueue>          m_commandQueue;             // コマンドキュー
+        ComPtr<ID3D12GraphicsCommandList>   m_systemCmdList;            // システムコマンドリスト
 
     };
 }// namespace ob::graphic::dx12
@@ -116,6 +129,14 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     inline ComPtr<ID3D12CommandQueue>& DeviceImpl::getCommandQueue() {
         return m_commandQueue;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  システム・コマンド・リストを取得
+    //@―---------------------------------------------------------------------------
+    inline ComPtr<ID3D12GraphicsCommandList>& DeviceImpl::getSystemCommandList() {
+        return m_systemCmdList;
     }
 
 }// namespace ob::graphic::dx12
