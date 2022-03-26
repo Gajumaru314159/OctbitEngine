@@ -15,7 +15,7 @@ namespace ob::graphic {
         : m_pStack(nullptr)
         , m_referenceCount(1){
 
-        OB_CHECK_ASSERT_EX(name.size()<get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
+        OB_CHECK_ASSERT(name.size()<get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
         //System::Instance().registerObject(*this);
     }
 
@@ -23,7 +23,7 @@ namespace ob::graphic {
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObject::~GraphicObject() {
-        OB_CHECK_ASSERT_EX(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
+        OB_CHECK_ASSERT(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
     }
 
 
@@ -55,7 +55,7 @@ namespace ob::graphic {
         if (1 < m_referenceCount) {
             return m_referenceCount;
         }
-        OB_CHECK_ASSERT_EX(m_referenceCount == 0, "参照カウントエラー");
+        OB_CHECK_ASSERT(m_referenceCount == 0, "参照カウントエラー");
         // デバイスの削除スタックに追加
         System::Instance().requestRelease(*this);
         return m_referenceCount;

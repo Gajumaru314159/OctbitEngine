@@ -28,16 +28,16 @@ if(UNLIKELY(!(expr))){                                              \
 //! 
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_CHECK_ASSERT_EX(expr,format,...)				OB_ASSERT_BASE(expr,format,__VA_ARGS__)
+#define OB_CHECK_ASSERT(expr,format,...)				OB_ASSERT_BASE(expr,format,__VA_ARGS__)
 //! @copydoc OB_ASSERT_EX
-#define OB_CHECK_ASSERT(expr)					        OB_CHECK_ASSERT_EX(expr,#expr)
+#define OB_CHECK_ASSERT_EXPR(expr)					    OB_CHECK_ASSERT(expr,#expr)
 
 //@―---------------------------------------------------------------------------
 //! @brief      アサートを出力する
 //! 
 //! @details    エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT(format,...)				OB_CHECK_ASSERT_EX(false,format,__VA_ARGS__)
+#define OB_ASSERT(format,...)				OB_CHECK_ASSERT(false,format,__VA_ARGS__)
 
 
 //============================================
@@ -49,7 +49,7 @@ if(UNLIKELY(!(expr))){                                              \
 //! 
 //! @details    min<value<max でない場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,category,"Out of range.")
+#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,category,"Out of range.[{0},{1}) value = {2}",minVal,maxVal,value)
 
 
 //@―---------------------------------------------------------------------------

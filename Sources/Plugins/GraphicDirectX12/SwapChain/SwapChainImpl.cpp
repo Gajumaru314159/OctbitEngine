@@ -20,7 +20,7 @@ namespace ob::graphic::dx12 {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc) {
-        OB_CHECK_ASSERT_EX(desc.window, "Windowがnullptrです。");
+        OB_CHECK_ASSERT(desc.window, "Windowがnullptrです。");
 
         m_desc = desc;
         if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window->getSize();
@@ -170,10 +170,10 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     void SwapChainImpl::createBuffer(DeviceImpl& rDevice) {
 
-        OB_CHECK_ASSERT_EX(
+        OB_CHECK_ASSERT(
             m_desc.backBufferNum <= s_maxSwapChainCount,
             "{0}つのバックバッファは多すぎます。{1}以下にしてください。", m_desc.backBufferNum, s_maxSwapChainCount);
-        OB_CHECK_ASSERT_EX(
+        OB_CHECK_ASSERT(
             0 < m_desc.backBufferNum,
             "バックバッファは1つ以上にしてください。",m_desc.backBufferNum);
 

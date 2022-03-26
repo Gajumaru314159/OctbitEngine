@@ -14,7 +14,7 @@ namespace ob::graphic::dx12 {
         
         HRESULT result;
         const s32 targetNum = get_size(targets);
-        OB_CHECK_ASSERT_EX(0 < targetNum && targetNum <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", targetNum);
+        OB_CHECK_ASSERT(0 < targetNum && targetNum <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", targetNum);
 
         auto& nativeDevice = rDevice.getNativeDevice();
 

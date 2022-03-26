@@ -14,7 +14,7 @@ namespace ob::graphic {
     //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
     //@―---------------------------------------------------------------------------
     GraphicObjectManager::GraphicObjectManager(s32 frameCount) {
-        OB_CHECK_ASSERT(0 < frameCount);
+        OB_CHECK_ASSERT_EXPR(0 < frameCount);
         m_deleteStackList.resize(frameCount);
         m_index = 0;
     }
@@ -65,7 +65,7 @@ namespace ob::graphic {
     //! @brief  解放
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
-        OB_CHECK_ASSERT(0 < object.getReferenceCount());
+        OB_CHECK_ASSERT_EXPR(0 < object.getReferenceCount());
 
         auto& nowStack = m_deleteStackList[m_index];
         nowStack.emplace(&object);

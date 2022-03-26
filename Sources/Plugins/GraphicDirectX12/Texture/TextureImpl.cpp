@@ -48,7 +48,7 @@ namespace ob::graphic::dx12 {
 			break;
 
 		case TextureType::DeptthStencil:
-			OB_CHECK_ASSERT_EX(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
+			OB_CHECK_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 			resourceStates |= D3D12_RESOURCE_STATE_DEPTH_WRITE;

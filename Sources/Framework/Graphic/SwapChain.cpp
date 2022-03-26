@@ -25,7 +25,7 @@ namespace ob::graphic {
     //! @brief  バックバッファの数を取得
     //@―---------------------------------------------------------------------------
     s32 SwapChain::getBackBufferCount()const {
-        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
         return m_pImpl->getBackBufferCount();
     }
 
@@ -34,7 +34,7 @@ namespace ob::graphic {
     //! @brief  VSyncが有効か
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isVSyncEnabled()const {
-        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
         return m_pImpl->isVSyncEnabled();
     }
 
@@ -43,7 +43,7 @@ namespace ob::graphic {
     //! @brief  HDRが有効か
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isHdrEnabled()const {
-        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
         return m_pImpl->isHdrEnabled();
     }
 
@@ -52,7 +52,7 @@ namespace ob::graphic {
     //! @brief  バックバッファのサイズを変更
     //@―---------------------------------------------------------------------------
     bool SwapChain::resizeBackBuffer(const Size& size) {
-        OB_CHECK_ASSERT(m_pImpl != nullptr);
+        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
         return m_pImpl->resizeBackBuffer(size);
     }
 
@@ -63,7 +63,7 @@ namespace ob::graphic {
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
     void SwapChain::update(RenderTexture& renderTexture) {
-        OB_CHECK_ASSERT(m_pImpl !=nullptr); 
+        OB_CHECK_ASSERT_EXPR(m_pImpl !=nullptr); 
         m_pImpl->update(renderTexture.m_pImpl);
     }
 
