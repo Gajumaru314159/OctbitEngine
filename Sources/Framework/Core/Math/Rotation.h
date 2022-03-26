@@ -175,6 +175,7 @@ namespace ob::core {
         if (roll < 0.0f)roll += Mathf::TWO_PI;
         if (pitch < 0.0f)pitch += Mathf::TWO_PI;
         if (yaw < 0.0f)yaw += Mathf::TWO_PI;
+        return *this;
     }
 
 

@@ -144,7 +144,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator *= (Color& another) noexcept;
+        Color& operator *= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator /= (Color& another) noexcept;
+        Color& operator /= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -429,7 +429,7 @@ namespace ob::core {
     //! @brief 乗算演算子
     //@―---------------------------------------------------------------------------
     inline Color Color::operator * (const Color& another) const noexcept {
-        return Color(*this) * another;
+        return Color(*this)*=another;
     }
 
 
@@ -481,7 +481,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator *= (Color& another) noexcept {
+    inline Color& Color::operator *= (const Color& another) noexcept {
         r *= another.r;
         g *= another.g;
         b *= another.b;
@@ -504,7 +504,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator /= (Color& another) noexcept {
+    inline Color& Color::operator /= (const Color& another) noexcept {
         r /= another.r;
         g /= another.g;
         b /= another.b;

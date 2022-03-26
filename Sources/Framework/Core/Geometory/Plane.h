@@ -123,6 +123,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline Plane& Plane::flip() noexcept {
         normal *= -1.0f;
+        return *this;
     }
 
     //! @endcond
