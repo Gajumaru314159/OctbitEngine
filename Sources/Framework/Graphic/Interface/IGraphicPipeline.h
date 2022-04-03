@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Graphic/Types/GraphicPipelineDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -23,58 +24,59 @@ namespace ob::graphic {
     class IGraphicPipeline :public GraphicObject {
     public:
 
-		/// <summary>
-		/// コマンドリストにこのグラフィックパイプラインを設定する
-		/// </summary>
-		/// <param name="commandList">グラフィックコマンドリスト</param>
-		/// <returns>　０：成功\n－１：失敗</returns>
+		//@―---------------------------------------------------------------------------
+		//! @brief		指定したスロットの定数バッファのサイズを取得
+		//! 
+		//! @param slot スロット番号
+		//! @return		バッファのサイズ
+		//@―---------------------------------------------------------------------------
+		virtual s32 getConstantBufferSize(const s32 slot)const;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		指定したレジスタのテクスチャの枚数を取得
+		//! 
+		//! @param slot	スロット番号
+		//! @return		枚数
+		//@―---------------------------------------------------------------------------
+		virtual s32 getTextureNum(const s32 slot)const;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		指定した定数バッファのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
+		//! 
+		//! @param slot スロット番号
+		//! @return		インデックス
+		//! @retval	-1	指定したレジスタがマテリアルに含まれていない
+		//@―---------------------------------------------------------------------------
+		virtual s32 getConstantBufferIndex(const s32 slot)const;
 		
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      グラフィックパイプライン・インターフェイス
+		//! @brief		指定したテクスチャのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
+		//! 
+		//! @param slot スロット番号
+		//! @return		インデックス
+		//! @retval	-1	指定したレジスタがマテリアルに含まれていない
 		//@―---------------------------------------------------------------------------
-		virtual s32 SetGraphicPipeline(ComPtr<ID3D12GraphicsCommandList>& commandList)const;
+		virtual s32 getTextureIndex(const s32 slot)const;
 
-		/// <summary>
-		/// 指定したレジスタの定数バッファのサイズを取得
-		/// </summary>
-		/// <param name="resister">レジスタ番号</param>
-		/// <returns>定数バッファのサイズ</returns>
-		virtual s32 GetConstantBufferSize(const s32 resister)const;
 
-		/// <summary>
-		/// 指定したレジスタのテクスチャの枚数を取得
-		/// </summary>
-		///  <param name="resister">レジスタ番号</param>
-		/// <returns>枚数</returns>
-		virtual s32 GetTextureNum(const s32 resister)const;
-
-		/// <summary>
-		/// 指定した定数バッファのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
-		/// </summary>
-		/// <param name="resister"></param>
-		/// <returns>－１以外：インデックス\n　　－１：指定したレジスタがマテリアルに含まれていない</returns>
-		virtual s32 GetConstantBufferIndex(const s32 resister)const;
-
-		/// <summary>
-		/// 指定したテクスチャのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
-		/// </summary>
-		/// <param name="resister"></param>
-		/// <returns>－１以外：インデックス\n　　－１：指定したレジスタがマテリアルに含まれていない</returns>
-		virtual s32 GetTextureIndex(const s32 resister)const;
-
-		/// <summary>
-		/// シェーダー変数の情報を変数名から取得する
-		/// </summary>
-		/// <param name="name">変数名</param>
-		/// <returns>変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。</returns>
+		//@―---------------------------------------------------------------------------
+		//! @brief		シェーダー変数の情報を変数名から取得する
+		//! 
+		//! @param name	変数名
+		//! @return		変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。
+		//@―---------------------------------------------------------------------------
 		virtual ShaderVariableDesc GetVariableData(const String& name)const;
 
-		/// <summary>
-		/// シェーダー変数の情報を変数名から取得する
-		/// </summary>
-		/// <param name="name">変数名</param>
-		/// <returns>変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。</returns>
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		シェーダー変数の情報を変数名から取得する
+		//! 
+		//! @param name	変数名
+		//! @return		変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。
+		//@―---------------------------------------------------------------------------
 		virtual ShaderTextureDesc GetTextureData(const String& name)const;
 
 

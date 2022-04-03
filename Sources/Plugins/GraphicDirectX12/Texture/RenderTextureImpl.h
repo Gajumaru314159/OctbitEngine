@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Interface/IRenderTexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Framework/Graphic/Texture.h>
 
 
 //===============================================================
@@ -35,27 +36,44 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth,StringView name);
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~RenderTextureImpl();
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
+        bool isValid()const override;
+
+
     public:
 
-        graphic::ITexture* getTexture(s32 index)const override;
-        graphic::ITexture* getDepthStencilTexture()const override;
+        //@―---------------------------------------------------------------------------
+        //! @brief      テクスチャ取得
+        //@―---------------------------------------------------------------------------
+        const Texture& getTexture(s32 index)const override;
+        const Texture& getDepthStencilTexture()const override;
 
 
     private:
 
-        vector<std::unique_ptr<TextureImpl>> m_textures;        //!< ターゲット・テクスチャ・リスト
-        std::unique_ptr<TextureImpl> m_depth;                   //!< デプス・ステンシル・テクスチャ
+        vector<Texture> m_textures;                     //!< ターゲット・テクスチャ・リスト
+        Texture m_depth;                                //!< デプス・ステンシル・テクスチャ
 
-        ComPtr<ID3D12DescriptorHeap> m_srvHeap;                 //!< シェーダリソースビュー
-        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー
-        ComPtr<ID3D12DescriptorHeap> m_dsvHeap;                 //!< デプス・ステンシル・ビュー
+        ComPtr<ID3D12DescriptorHeap> m_srvHeap;         //!< シェーダリソースビュー
+        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;         //!< レンダー・ターゲット・ビュー
+        ComPtr<ID3D12DescriptorHeap> m_dsvHeap;         //!< デプス・ステンシル・ビュー
 
-        ComPtr<ID3D12GraphicsCommandList> m_cmdList;            //!< コマンドリスト
-        ComPtr<ID3D12CommandAllocator> m_cmdAllocator;          //!< コマンド・アロケータ
+        ComPtr<ID3D12GraphicsCommandList> m_cmdList;    //!< コマンドリスト
+        ComPtr<ID3D12CommandAllocator> m_cmdAllocator;  //!< コマンド・アロケータ
 
-        D3D12_VIEWPORT m_viewport;         //ビューポート
-        D3D12_RECT m_scissorrect;          //シザー矩形
+        D3D12_VIEWPORT m_viewport;                      //!< ビューポート
+        D3D12_RECT m_scissorrect;                       //!< シザー矩形
 
+        bool m_initialized =false;
     };
 
 }// namespace ob::graphic::dx12

@@ -30,6 +30,18 @@ namespace ob::graphic {
     public:
 
         //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
+        virtual bool isValid()const = 0;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  定義を取得
+        //@―---------------------------------------------------------------------------
+        virtual const SwapchainDesc& getDesc()const = 0;
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief  バックバッファの数を取得
         //@―---------------------------------------------------------------------------
         virtual s32 getBackBufferCount()const = 0;
@@ -58,10 +70,12 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        virtual void update(IRenderTexture* pRendrerTexture) = 0;
+        virtual void update(ITexture* pTexture) = 0;
+
 
     protected:
 
+        ISwapChain(StringView name) :GraphicObject(name) {}
         virtual ~ISwapChain() = default;
 
 

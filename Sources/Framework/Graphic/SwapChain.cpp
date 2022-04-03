@@ -16,8 +16,13 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChain::SwapChain(const SwapchainDesc& desc) {
-        m_pImpl = Device::Get()->createSwapChain(desc);
+    SwapChain::SwapChain(const SwapchainDesc& desc, StringView name) {
+        m_pImpl = Device::Get()->createSwapChain(desc, name);
+        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        if (!m_pImpl->isValid()) {
+            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
+            release();
+        }
     }
 
 
@@ -62,9 +67,9 @@ namespace ob::graphic {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChain::update(RenderTexture& renderTexture) {
+    void SwapChain::update(Texture& texture) {
         OB_CHECK_ASSERT_EXPR(m_pImpl !=nullptr); 
-        m_pImpl->update(renderTexture.m_pImpl);
+        m_pImpl->update(texture.m_pImpl);
     }
 
 }// namespace ob::graphic

@@ -10,8 +10,8 @@
 namespace ob::foundation {
 
     template <class T>
-    using queue = std::queue<T, allocator<T>>;
+    using queue = std::queue<T, deque<T>>;
     template <class T>
-    using priority_queue = std::priority_queue<T, allocator<T>>;
+    using priority_queue = std::priority_queue<T>;
 
 }// namespcae ob

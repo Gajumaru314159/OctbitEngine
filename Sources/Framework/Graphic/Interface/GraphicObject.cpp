@@ -16,7 +16,12 @@ namespace ob::graphic {
         , m_referenceCount(1){
 
         OB_CHECK_ASSERT(name.size()<get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
-        //System::Instance().registerObject(*this);
+        for (s32 i = 0; i < get_size(m_name) && i < name.size(); ++i) {
+            m_name[i] = name[i];
+        }
+        m_name[name.size()] = TC('\0');
+
+        System::Instance().registerObject(*this);
     }
 
     //@―---------------------------------------------------------------------------
@@ -52,7 +57,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 GraphicObject::releaseReference() {
         m_referenceCount.fetch_sub(1);
-        if (1 < m_referenceCount) {
+        if (0 < m_referenceCount) {
             return m_referenceCount;
         }
         OB_CHECK_ASSERT(m_referenceCount == 0, "参照カウントエラー");

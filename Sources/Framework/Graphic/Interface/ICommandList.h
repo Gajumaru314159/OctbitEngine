@@ -57,7 +57,10 @@ namespace ob::graphic {
 
         virtual void insertResourceBarrier() = 0;
 
+    protected:
 
+        ICommandList(StringView name) :GraphicObject(name) {}
+        ~ICommandList() = default;
 
     };
 

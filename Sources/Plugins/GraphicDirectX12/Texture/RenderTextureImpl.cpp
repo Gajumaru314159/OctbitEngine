@@ -8,9 +8,16 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 
+#include <Framework/Graphic/Private/Device.h>
+#include <Framework/Foundation/String/StringEncoder.h>
+
 namespace ob::graphic::dx12 {
 
-    RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
+    //@―---------------------------------------------------------------------------
+    //! @brief      コンストラクタ
+    //@―---------------------------------------------------------------------------
+    RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)
+        :IRenderTexture(name) {
         
         HRESULT result;
         const s32 targetNum = get_size(targets);
@@ -18,7 +25,8 @@ namespace ob::graphic::dx12 {
 
         auto& nativeDevice = rDevice.getNativeDevice();
 
-        // RTVディスクリプタの生成
+
+        // RTVディスクリプタを生成
         D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
         heapDesc.NodeMask = 0;
@@ -30,9 +38,7 @@ namespace ob::graphic::dx12 {
             LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
         }
 
-        auto heapHandleRTV = m_rtvHeap->GetCPUDescriptorHandleForHeapStart();
-
-        // SRVディスクリプタの生成
+        // SRVディスクリプタを生成
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 
@@ -40,26 +46,30 @@ namespace ob::graphic::dx12 {
         if (FAILED(result)) {
             LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
         }
+
+
+        // ターゲットテクスチャ生成
+        auto heapHandleRTV = m_rtvHeap->GetCPUDescriptorHandleForHeapStart();
         auto heapHandleSRV = m_srvHeap->GetCPUDescriptorHandleForHeapStart();
-
-
-
 
         const auto incSizeRTV = nativeDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
         const auto incSizeSRV = nativeDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-
-        // ターゲットテクスチャ生成
+        // レンダーターゲットを生成
         s32 index = 0;
         for (auto& desc:targets) {
 
             auto format = Utility::convertTextureFormat(desc.format);
 
+            auto subName = fmt::format(TC("{0}_Color{1}"), getName(), index);
+
             // メインリソースを生成
-            auto pTexture=reinterpret_cast<TextureImpl*>(rDevice.createTexture(desc, name));
-            // 外部から削除されないよう参照を追加
-            pTexture->addReference();
-            m_textures.push_back(std::unique_ptr<TextureImpl>(pTexture));
+            auto& texture = m_textures.emplace_back(Texture(desc, subName));
+            auto pTexture = Device::GetImpl<TextureImpl>(texture);
+            if (pTexture==nullptr) {
+                LOG_WARNING_EX("Graphic","RenderTextureのレンダーターゲットの生成に失敗");
+                return;
+            }
 
             // レンダーターゲットビューを生成
             {
@@ -84,6 +94,7 @@ namespace ob::graphic::dx12 {
             }
 
             ++index;
+
         }
 
         // デプス・ステンシル生成
@@ -91,13 +102,16 @@ namespace ob::graphic::dx12 {
             auto format = Utility::convertTextureFormat(depth.format);
 
             // メインリソースを生成
-            auto pTexture = reinterpret_cast<TextureImpl*>(rDevice.createTexture(depth, name));
-            // 外部から削除されないよう参照を追加
-            pTexture->addReference();
-            m_depth = std::unique_ptr<TextureImpl>(pTexture);
+            auto subName = fmt::format(TC("{0}_Depth"), getName());
+            m_depth = Texture(depth, subName);
+            auto pTexture = Device::GetImpl<TextureImpl>(m_depth);
+            if (pTexture == nullptr) {
+                LOG_WARNING_EX("Graphic", "RenderTextureのレンダーターゲットの生成に失敗");
+                return;
+            }
 
 
-            //深度のためのデスクリプタヒープ作成
+            //深度ビューのデスクリプタヒープ作成
             D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
             dsvHeapDesc.NumDescriptors = 1;
             dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -107,10 +121,9 @@ namespace ob::graphic::dx12 {
                 LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
             }
 
-
             //深度ビュー作成
             D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-            dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;//デプス値に32bit使用
+            dsvDesc.Format = pTexture->getResource()->GetDesc().Format;//デプス値に32bit使用
             dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
             dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
             nativeDevice->CreateDepthStencilView(pTexture->getResource(), &dsvDesc, m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
@@ -120,33 +133,58 @@ namespace ob::graphic::dx12 {
 
         }
 
-
+        // コマンド・アロケータ生成
         result = nativeDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
             return;
         }
+        // コマンド・リスト生成
         result = nativeDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
             return;
         }
 
         // 0番目のターゲットをビューポートサイズとする
-        m_viewport = CD3DX12_VIEWPORT(m_textures[0]->getResource());
+        m_viewport = CD3DX12_VIEWPORT(reinterpret_cast<TextureImpl*>(Device::GetImpl(m_textures[0]))->getResource());
         m_scissorrect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
+
+        m_initialized = true;
     }
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  デストラクタ
+    //@―---------------------------------------------------------------------------
+    RenderTextureImpl::~RenderTextureImpl() {
+    }
 
 
-    ITexture* RenderTextureImpl::getTexture(s32 index)const {
+    //@―---------------------------------------------------------------------------
+    //! @brief  妥当な状態か
+    //@―---------------------------------------------------------------------------
+    bool RenderTextureImpl::isValid()const {
+        return m_initialized;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  テクスチャを取得
+    //! 
+    //! @param index    マルチレンダーターゲットのインデックス
+    //@―---------------------------------------------------------------------------
+    const Texture& RenderTextureImpl::getTexture(s32 index)const {
         if (is_in_range(index, m_textures)) {
-            return m_textures[index].get();
+            return m_textures[index];
         }
-        return nullptr;
+        return Texture();
     }
 
-    ITexture* RenderTextureImpl::getDepthStencilTexture()const {
-        return m_depth.get();
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  デプス・テクスチャを取得
+    //@―---------------------------------------------------------------------------
+    const Texture& RenderTextureImpl::getDepthStencilTexture()const {
+        return m_depth;
     }
 
 }// namespace ob::graphic::dx12

@@ -25,6 +25,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
+    Foundation
     Core
     "${OCTBIT_THIRD_PARTY_PATH}/fmt/lib/${OB_CONFIGURATION}/fmt.lib"
 )

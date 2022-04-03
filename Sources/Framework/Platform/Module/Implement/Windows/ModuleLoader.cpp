@@ -50,7 +50,7 @@ namespace ob::platform {
     ModuleLoader::~ModuleLoader() {
         if (m_pModule) {
             m_pModule->shutdown();
-            delete m_pModule;
+            // モジュールはstatic変数なので削除しない
         }
         ::FreeLibrary(m_handle);
     }

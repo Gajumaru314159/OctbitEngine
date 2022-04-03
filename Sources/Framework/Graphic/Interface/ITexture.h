@@ -24,7 +24,21 @@ namespace ob::graphic {
     class ITexture :public GraphicObject {
     public:
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
+        virtual bool isValid()const = 0;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  定義を取得
+        //@―---------------------------------------------------------------------------
         virtual const TextureDesc& getDesc()const = 0;
+
+    protected:
+
+        ITexture(StringView name) :GraphicObject(name) {}
+        virtual ~ITexture() = default;
 
     };
 

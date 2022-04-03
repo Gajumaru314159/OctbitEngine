@@ -23,6 +23,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
     Foundation
+    Singleton
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 

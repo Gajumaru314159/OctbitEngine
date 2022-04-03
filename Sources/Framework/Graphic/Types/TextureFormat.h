@@ -42,6 +42,8 @@ namespace ob::graphic {
         BC2_SRGB,   //!< 16階調アルファ(DXT2/DXT3)       @n 圧縮率1/4
         BC3_SRGB,   //!< 多階調アルファ(DXT4/DXT5)       @n 圧縮率1/4
         BC7_SRGB,   //!< BPTC                            @n 圧縮率1/4
+
+        // ETC / EAC / ASTC / PVRTC などは未対応
     };
 
 

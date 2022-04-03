@@ -45,4 +45,3 @@
 //============================================
 #include <Framework/Foundation/Template/Utility.h>
 #include <Framework/Foundation/Template/Memory.h>
-#include <Framework/Foundation/Template/Singleton.h>

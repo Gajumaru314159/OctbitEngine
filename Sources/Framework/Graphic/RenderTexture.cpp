@@ -22,6 +22,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     RenderTexture::RenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
         m_pImpl = Device::Get()->createRenderTexture(targets, depth, name);
+        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        if (!m_pImpl->isValid()) {
+            LOG_ERROR_EX("Graphic", "レンダーテクスチャの生成に失敗");
+            release();
+        }
     }
 
 
@@ -29,16 +34,15 @@ namespace ob::graphic {
     //! @brief  Texture を取得
     //@―---------------------------------------------------------------------------
     Texture RenderTexture::getTexture(s32 index) {
-        if (m_pImpl == nullptr) {
-            return Texture();
-        }
-        
-        auto pTexture=m_pImpl->getTexture(index);
-        if (pTexture == nullptr) {
-            return Texture();
-        }
+        return m_pImpl->getTexture(index);
+    }
 
-        return Texture(*pTexture);
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  デプステクスチャを取得
+    //@―---------------------------------------------------------------------------
+    Texture RenderTexture::getDepthStencilTexture() {
+        return m_pImpl->getDepthStencilTexture();
     }
 
 }// namespace ob::graphic

@@ -30,7 +30,6 @@ namespace ob::graphic::dx12 {
         void update()override;
 
 
-
         //===============================================================
         // 生成
         //===============================================================
@@ -38,7 +37,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  スワップ・チェーンを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::ISwapChain* createSwapChain(const SwapchainDesc& desc)override;
+        ob::graphic::ISwapChain* createSwapChain(const SwapchainDesc& desc, StringView name)override;
 
 
         //@―---------------------------------------------------------------------------
@@ -51,6 +50,18 @@ namespace ob::graphic::dx12 {
         //! @brief  レンダーテクスチャを生成
         //@―---------------------------------------------------------------------------
         ob::graphic::IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  シェーダを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IShader* createShader(const String&,ShaderType, StringView name) override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  シェーダを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IShader* createShader(const Blob&, ShaderType, StringView name) override;
 
 
         //===============================================================

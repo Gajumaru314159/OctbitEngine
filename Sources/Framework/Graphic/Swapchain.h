@@ -11,10 +11,8 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
-    class Device;
-    class RenderTexture;
     class ISwapChain;
-    class ITexture;
+    class Texture;
 }
 
 
@@ -29,7 +27,7 @@ namespace ob::graphic {
     //! @details    ウィンドウの情報は platform::Window で制御されますが、このクラスでは
     //!             グラフィック機能と結びつけるために必要な情報を制御します。
     //@―---------------------------------------------------------------------------
-    class SwapChain:private Noncopyable {
+    class OB_API SwapChain:private Noncopyable {
         friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(SwapChain);
     public:
@@ -49,7 +47,7 @@ namespace ob::graphic {
         //! 
         //! @param  スワップチェーン定義
         //@―---------------------------------------------------------------------------
-        explicit SwapChain(const SwapchainDesc& desc);
+        explicit SwapChain(const SwapchainDesc& desc, StringView name=TC("SwapChain"));
 
 
         //===============================================================
@@ -89,10 +87,10 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update(RenderTexture& renderTexture);
+        void update(Texture& texture);
 
 
-    private:
+    protected:
 
         ISwapChain* m_pImpl=nullptr;
 

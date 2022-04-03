@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob::foundation {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief このマクロの呼び出し位置の SourceLocation オブジェクトを作成する
@@ -13,11 +13,11 @@ namespace ob::foundation {
 #define CURRENT_SOURCE_LOCATION SourceLocation{TC(__FILE__),TC( __FUNC_NAME__ ),__LINE__}
 
 
-//@―---------------------------------------------------------------------------
-//! @brief      ソースコード上の位置を表す構造体
-//! 
-//! @details    構築には CURRENT_SOURCE_LOCATION マクロを使用してください。
-//@―---------------------------------------------------------------------------
+    //@―---------------------------------------------------------------------------
+    //! @brief      ソースコード上の位置を表す構造体
+    //! 
+    //! @details    構築には CURRENT_SOURCE_LOCATION マクロを使用してください。
+    //@―---------------------------------------------------------------------------
     struct SourceLocation {
         const Char* filePath = nullptr;             //!< ファイルパス
         const Char* functionName = nullptr;         //!< 関数名
@@ -48,4 +48,4 @@ namespace ob::foundation {
                                             //   スレッドID
     };
 
-}// namespcae ob
+}// namespcae ob::core

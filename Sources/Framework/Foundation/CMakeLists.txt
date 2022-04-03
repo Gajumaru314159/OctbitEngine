@@ -15,6 +15,9 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 # プロジェクト設定
 #------------------------------------------------------------------------------
 
+# 定義
+target_compile_definitions(${PROJECT_NAME} PRIVATE OB_FOUNDATION_BUILD)
+
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
     "${OCTBIT_SOURCE_PATH}"

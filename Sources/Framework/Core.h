@@ -5,6 +5,9 @@
 //***********************************************************
 #pragma once
 
+#include <Framework/Core/Log/Assertion.h>
+#include <Framework/Core/Log/LogMacro.h>
+
 #include <Framework/Core/Allocator/Heap.h>
 #include <Framework/Core/Graphic/Color.h>
 #include <Framework/Core/Graphic/IntColor.h>

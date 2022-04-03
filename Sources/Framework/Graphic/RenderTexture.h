@@ -28,7 +28,6 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class RenderTexture {
         friend Device;
-        friend SwapChain;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderTexture);
     public:
 
@@ -57,7 +56,13 @@ namespace ob::graphic {
         //! 
         //! @param index    マルチレンダーターゲットのインデックス
         //@―---------------------------------------------------------------------------
-        Texture getTexture(s32 index=0);
+        Texture getTexture(s32 index = 0);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  デプス・テクスチャを取得
+        //@―---------------------------------------------------------------------------
+        Texture getDepthStencilTexture();
 
     private:
 

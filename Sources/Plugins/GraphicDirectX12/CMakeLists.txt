@@ -30,6 +30,7 @@ set(OB_PROJECT_INCLUDE_LIB
     "${OCTBIT_THIRD_PARTY_PATH}/DirectXTex/lib/${OB_CONFIGURATION}/DirectXTex.lib"
     "d3d12.lib"
     "dxgi.lib"
+    "dxguid.lib"
     "d3dcompiler.lib"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})

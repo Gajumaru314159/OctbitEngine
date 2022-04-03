@@ -24,10 +24,18 @@ namespace ob::graphic {
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObjectManager::~GraphicObjectManager() {
+
+        // フレームバッファ分解放
+        for (s32 i = 0; i < get_size(m_deleteStackList); ++i) {
+            update();
+        }
+
+        // メモリリーク検知
         for (auto& pObject : m_objects) {
 #ifdef OB_DEBUG
-            LOG_ERROR_EX("Graphic", "未開放のグラフィックオブジェクト[ name = {} ]", pObject->getName());
+            OB_ASSERT("未開放のグラフィックオブジェクト[ name = {} ]", pObject->getName());
 #endif
+            delete pObject;
         }
     }
 
@@ -43,7 +51,7 @@ namespace ob::graphic {
         // グラフィック・オブジェクトを削除
         auto& deleteStack = m_deleteStackList[m_index];
         while (!deleteStack.empty()) {
-            auto pObject = deleteStack.top();
+            auto pObject = deleteStack.front();
             deleteStack.pop();
             m_objects.remove(pObject);
 
@@ -65,7 +73,7 @@ namespace ob::graphic {
     //! @brief  解放
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
-        OB_CHECK_ASSERT_EXPR(0 < object.getReferenceCount());
+        OB_CHECK_ASSERT_EXPR(object.getReferenceCount()==0);
 
         auto& nowStack = m_deleteStackList[m_index];
         nowStack.emplace(&object);

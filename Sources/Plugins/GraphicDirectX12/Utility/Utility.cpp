@@ -84,22 +84,27 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     String Utility::getErrorMessage(DWORD errorCode) {
         WCHAR buffer[256];
+        DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
         auto result = ::FormatMessageW(
-            FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            dwFlags,
             nullptr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             errorCode,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             buffer,
             sizeof(buffer),
             nullptr
         );
 
-        String error=fmt::format(TC("[{0:#X}]"),errorCode);
-        if (0 < result) {
+        if (0 == result) {
             String message;
             StringEncoder::Encode(buffer, message);
-            error += message;
+            String error = fmt::format(TC("HRESULT={0:#X}"), errorCode);
+            return move(error);
         }
+        String message;
+        StringEncoder::Encode(buffer, message);
+        if (2 <= message.size())message.resize(message.size() - 2);
+        String error = fmt::format(TC("HRESULT={0:#X}:{1}"), errorCode, message.c_str());
         return move(error);
     }
 

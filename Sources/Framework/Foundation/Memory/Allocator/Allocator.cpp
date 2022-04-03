@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "Allocator.h"
-#include <Framework/Foundation/Log/LogMacro.h>
 #include <Framework/Foundation/Memory/Utility/MemoryUtility.h>
 
 namespace ob::foundation {

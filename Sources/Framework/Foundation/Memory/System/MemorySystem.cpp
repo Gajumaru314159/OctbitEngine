@@ -6,12 +6,9 @@
 #include "MemorySystem.h"
 
 #include <Framework/Foundation/Memory/Allocator/MallocAllocator.h>
-#include <Framework/Foundation/Log/Assertion.h>
-#include <Framework/Foundation/Log/LogMacro.h>
 
 namespace ob::foundation {
     //! @cond
-    //static bool s_isInitialized = false;
     static array<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
     static array<Allocator*, enum_cast(HeapUsage::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
     //! @endcond
@@ -25,16 +22,6 @@ namespace ob::foundation {
     //!                     zeから新規のヒープが生成される。
     //@―---------------------------------------------------------------------------
     void MemorySystem::Init() {
-        // ゼロ初期化で必要なさそう
-
-        //if (s_isInitialized)return;
-        //for (auto& pHeap : s_heaps) {
-        //    pHeap = nullptr;
-        //}
-        //for (auto& pHeap : s_debugHeaps) {
-        //    pHeap = nullptr;
-        //}
-        //s_isInitialized = true;
     }
 
 
@@ -61,7 +48,8 @@ namespace ob::foundation {
         const s32 index = static_cast<s32>(HeapUsage);
         assert(0 <= index && index < enum_cast(HeapUsage::Max));
         if (s_heaps[index] != nullptr) {
-            LOG_WARNING_EX("Memory", "初期化済みのヒープを差し替えました。");
+            //LOG_WARNING_EX("Memory", "初期化済みのヒープを差し替えました。");
+            assert(false);
         }
         s_heaps[index] = pAllocator;
     }
@@ -77,7 +65,8 @@ namespace ob::foundation {
         const s32 index = enum_cast(HeapUsage);
         assert(0 <= index && index < enum_cast(HeapUsage::Max));
         if (s_debugHeaps[index] != nullptr) {
-            LOG_WARNING_EX("Memory", "初期化済みのデバッグヒープを差し替えました。");
+            //LOG_WARNING_EX("Memory", "初期化済みのデバッグヒープを差し替えました。");
+            assert(false);
         }
         s_debugHeaps[index] = pAllocator;
     }

@@ -13,7 +13,7 @@ namespace ob::foundation {
     //! 
     //! @details	システムのnewから動的に割り当てるアロケータ。
     //@―---------------------------------------------------------------------------
-    class MallocAllocator final :public Allocator {
+    class OB_API MallocAllocator final :public Allocator {
     public:
 
         //===============================================================

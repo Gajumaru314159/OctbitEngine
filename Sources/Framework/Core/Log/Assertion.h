@@ -8,7 +8,7 @@
 //!             エラー処理には適切に対処してエラーログを出力するか、例外を発生させてください。
 //***********************************************************
 #pragma once
-#include <Framework/Foundation/Log/LogMacro.h>
+#include <Framework/Core/Log/LogMacro.h>
 
 
 //============================================
@@ -20,7 +20,7 @@
 //@―---------------------------------------------------------------------------
 #define OB_ASSERT_BASE(expr,format,...)                             \
 if(UNLIKELY(!(expr))){                                              \
-    OB_LOG_BASE(ob::LogType::Fatal,"Assertion",format,__VA_ARGS__); \
+    OB_LOG_BASE(ob::core::LogType::Fatal,"Assertion",format,__VA_ARGS__); \
 }
 
 //@―---------------------------------------------------------------------------

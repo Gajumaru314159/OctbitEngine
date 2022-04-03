@@ -6,8 +6,9 @@
 #include "Logger.h"
 #include "LogType.h"
 #include <Framework/Foundation/String/StringEncoder.h>
+#include <MagicEnum/magic_enum.hpp>
 
-namespace ob::foundation {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief                  ログの追加
@@ -32,10 +33,24 @@ namespace ob::foundation {
             m_notifier.invoke(log);
         }
 
-        WString ws;
-        StringEncoder::Encode(pMessage, ws);
+        auto logTypeNameAscii = magic_enum::enum_name(type);
+        Char logTypeName[10];
+        for (s32 i = 0; i < logTypeNameAscii.size(); ++i) {
+            logTypeName[i] = static_cast<char>(logTypeNameAscii[i]);
+        }
+        logTypeName[logTypeNameAscii.size()] = TC('\0');
 
-        ::OutputDebugLog(ws.c_str());
+        auto msg=fmt::format(TC("[{0}] {1} [{2}({3})] [::{4}()]"),
+            logTypeName,
+            pMessage,
+            sourceLocation.filePath, 
+            sourceLocation.line,
+            sourceLocation.functionName);
+
+        WString ws;
+        StringEncoder::Encode(msg, ws);
+
+        ::ShowMessageBox(ws.c_str());
 
         if (type == LogType::Fatal) {
             ::CallBreakPoint();
@@ -59,4 +74,4 @@ namespace ob::foundation {
         m_notifier.remove(handle);
     }
 
-}// namespace ob::foundation
+}// namespace ob::core

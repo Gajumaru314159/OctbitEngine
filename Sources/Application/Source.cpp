@@ -11,18 +11,15 @@ using namespace ob;
 
 int main() {
     using namespace ob::graphic;
-    
-    platform::PlatformSystem sys;
+
+    Logger::Instance();
     platform::PlatformSystem::Instance().startup();
     {
-        platform::ModuleManager moduleManager;
-        Logger logger;
-        moduleManager.Instance();
+        platform::ModuleManager::Instance();
         {
             SystemDesc sysDesc;
             sysDesc.api = graphic::GraphicAPI::D3D12;
             sysDesc.bufferCount = 2;
-            graphic::System system;
             graphic::System::Instance().initialize(sysDesc);
 
             platform::WindowCreationDesc windowDesc;
@@ -35,12 +32,14 @@ int main() {
             SwapchainDesc swapChainDesc;
             swapChainDesc.window = &window;
             SwapChain swapChain(swapChainDesc);
-
+            
             TextureDesc texDesc[1];
             texDesc[0].type = TextureType::RenderTarget;
+            texDesc[0].size = {1280,720};
             TextureDesc depth;
             depth.format = TextureFormat::D24S8;
             depth.type = TextureType::DeptthStencil;
+            depth.size = { 1280,720 };
             RenderTexture rt(texDesc, depth);
             
 
@@ -55,7 +54,7 @@ int main() {
                     break;
                 }
 
-                swapChain.update(rt);
+                //swapChain.update(rt);
             }
         }
     }

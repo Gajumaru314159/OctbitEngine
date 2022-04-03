@@ -7,6 +7,7 @@
 #include<Plugins/GraphicDirectX12/SwapChain/SwapChainImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
+#include<Plugins/GraphicDirectX12/Shader/ShaderImpl.h>
 #include<Plugins/GraphicDirectX12/Utility/Utility.h>
 
 namespace ob::graphic::dx12 {
@@ -20,6 +21,9 @@ namespace ob::graphic::dx12 {
     }
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  更新
+    //@―---------------------------------------------------------------------------
     void DeviceImpl::update(){
         // 
         
@@ -28,11 +32,12 @@ namespace ob::graphic::dx12 {
         // 描画結果を画面に反映
     }
 
+
     //@―---------------------------------------------------------------------------
     //! @brief  ディスプレイを生成
     //@―---------------------------------------------------------------------------
-    ISwapChain* DeviceImpl::createSwapChain(const SwapchainDesc& desc) {
-        return new SwapChainImpl(*this, desc);
+    ISwapChain* DeviceImpl::createSwapChain(const SwapchainDesc& desc, StringView name) {
+        return new SwapChainImpl(*this, desc, name);
     }
 
 
@@ -49,6 +54,22 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     ob::graphic::IRenderTexture* DeviceImpl::createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
         return new RenderTextureImpl(*this, targets, depth, name);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  頂点シェーダを生成
+    //@―---------------------------------------------------------------------------
+    ob::graphic::IVertexShader* DeviceImpl::createShader(const String& code,ShaderType type, StringView name) {
+        return new ShaderImpl(code,type, name);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  頂点シェーダを生成
+    //@―---------------------------------------------------------------------------
+    ob::graphic::IVertexShader* DeviceImpl::createShader(const Blob& binary, ShaderType type, StringView name) {
+        return new ShaderImpl(binary,type, name);
     }
 
 
@@ -94,10 +115,10 @@ namespace ob::graphic::dx12 {
         // アダプターの列挙し、メモリ量が最大のグラフィックボードを選択
         std::vector<IDXGIAdapter*> adapters;
 
-        IDXGIAdapter* tmpAdapter = nullptr;
-        IDXGIAdapter* selectedAdapter = nullptr;
+        ComPtr<IDXGIAdapter> tmpAdapter = nullptr;
+        ComPtr<IDXGIAdapter> selectedAdapter = nullptr;
         SIZE_T maxVideoCardMemory = 0;
-        for (int i = 0; m_dxgiFactory->EnumAdapters(i, &tmpAdapter) != DXGI_ERROR_NOT_FOUND; i++) {
+        for (int i = 0; m_dxgiFactory->EnumAdapters(i, tmpAdapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; i++) {
             DXGI_ADAPTER_DESC adesc = {};
             tmpAdapter->GetDesc(&adesc);
 
@@ -120,7 +141,7 @@ namespace ob::graphic::dx12 {
 
         result = S_FALSE;
         for (auto level : levels) {
-            if (SUCCEEDED(::D3D12CreateDevice(selectedAdapter, level, IID_PPV_ARGS(&m_device)))) {
+            if (SUCCEEDED(::D3D12CreateDevice(selectedAdapter.Get(), level, IID_PPV_ARGS(&m_device)))) {
                 featureLevel = level;
                 result = S_OK;
                 break;

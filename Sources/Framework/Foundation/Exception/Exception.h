@@ -14,7 +14,7 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     //! @brief 例外クラス
     //@―---------------------------------------------------------------------------
-    class Exception {
+    class OB_API Exception {
     public:
         using NotificationHandler = bool(*)(const Exception& e);		//!< 例外ハンドラ型
     public:
@@ -28,7 +28,7 @@ namespace ob::foundation {
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ(メッセージ指定)
         //@―---------------------------------------------------------------------------
-        Exception(const String& message);
+        Exception(StringView message);
 
 
         //@―---------------------------------------------------------------------------
@@ -67,13 +67,13 @@ namespace ob::foundation {
 #define EXCEPTION_CONSTRUCTORS(typeName)	\
 public:										\
 	typeName():Exception(){}				\
-	typeName(const String& message):Exception(message){}
+	typeName(StringView message):Exception(message){}
 //! @endcond
 
     //@―---------------------------------------------------------------------------
     //! @brief 無効な引数に対する例外クラス
     //@―---------------------------------------------------------------------------
-    class ArgumentException :public Exception {
+    class OB_API ArgumentException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(ArgumentException)
             //! @endcond
@@ -82,7 +82,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 算術演算の失敗に対する例外クラス
     //@―---------------------------------------------------------------------------
-    class ArithmeticException :public Exception {
+    class OB_API ArithmeticException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(ArithmeticException)
             //! @endcond
@@ -91,7 +91,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 存在しないファイルパス/ディレクトリパスに対する例外クラス
     //@―---------------------------------------------------------------------------
-    class PathNotFoundException :public Exception {
+    class OB_API PathNotFoundException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(PathNotFoundException)
             //! @endcond
@@ -100,7 +100,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 値などの変換の失敗に対する例外クラス
     //@―---------------------------------------------------------------------------
-    class FormatException :public Exception {
+    class OB_API FormatException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(FormatException)
             //! @endcond
@@ -109,7 +109,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 範囲外アクセスに対する例外クラス
     //@―---------------------------------------------------------------------------
-    class OutOfRangeException :public Exception {
+    class OB_API OutOfRangeException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(OutOfRangeException)
             //! @endcond
@@ -118,7 +118,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 無効な状態でのメソッド呼び出しに対する例外クラス
     //@―---------------------------------------------------------------------------
-    class InvalidOperationException :public Exception {
+    class OB_API InvalidOperationException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(InvalidOperationException)
             //! @endcond
@@ -127,7 +127,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief コレクションのアクセスに存在しないキーを使用した場合の例外クラス
     //@―---------------------------------------------------------------------------
-    class KeyNotFoundException :public Exception {
+    class OB_API KeyNotFoundException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(KeyNotFoundException)
             //! @endcond
@@ -136,7 +136,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief 未実装メソッド呼び出しに対する例外クラス
     //@―---------------------------------------------------------------------------
-    class NotImplementedException :public Exception {
+    class OB_API NotImplementedException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(NotImplementedException)
             //! @endcond
@@ -145,7 +145,7 @@ public:										\
     //@―---------------------------------------------------------------------------
     //! @brief サポートされていない操作に対する例外クラス
     //@―---------------------------------------------------------------------------
-    class NotSupportedException :public Exception {
+    class OB_API NotSupportedException :public Exception {
         //! @cond
         EXCEPTION_CONSTRUCTORS(NotSupportedException)
             //! @endcond

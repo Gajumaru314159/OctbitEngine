@@ -20,7 +20,7 @@ namespace ob::foundation {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(メッセージ指定)
     //@―---------------------------------------------------------------------------
-    Exception::Exception(const String& message)
+    Exception::Exception(StringView message)
         :m_level(ExceptionLevel::Error)
         , m_message(message) {
 

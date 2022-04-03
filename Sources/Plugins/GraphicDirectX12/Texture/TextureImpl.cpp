@@ -13,9 +13,15 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
-    TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc, StringView name) {
+    TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc, StringView name)
+		:ITexture(name){
 
 		auto format = Utility::convertTextureFormat(desc.format);
+		D3D12_CLEAR_VALUE* pClearValue=nullptr;
+
+		const FLOAT clearColor[4] = {0,0,0,1};
+		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
+		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
 		
 		// 定義生成
 		D3D12_RESOURCE_DESC resourceDesc{};
@@ -44,7 +50,8 @@ namespace ob::graphic::dx12 {
 		case TextureType::RenderTarget:
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-			resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
+			//resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
+			pClearValue = &colorClearValue;
 			break;
 
 		case TextureType::DeptthStencil:
@@ -52,22 +59,22 @@ namespace ob::graphic::dx12 {
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 			resourceStates |= D3D12_RESOURCE_STATE_DEPTH_WRITE;
+			pClearValue = &depthClearValue;
 			break;
 		default:
 			OB_NOTIMPLEMENTED();
 			break;
 		}
 
-		if (desc.arrayNum != 1) {
+		if (0 < desc.arrayNum) {
 			resourceDesc.DepthOrArraySize = desc.arrayNum;
 		}
-		if (desc.mipLevel != 1) {
-			resourceDesc.DepthOrArraySize = desc.mipLevel;
+		if (0 < desc.mipLevel) {
+			resourceDesc.MipLevels = desc.mipLevel;
 		}
 
 
 		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 
 
 		ComPtr<ID3D12Resource> resource;
@@ -77,16 +84,32 @@ namespace ob::graphic::dx12 {
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
 			resourceStates,
-			nullptr,
+			pClearValue,
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			LOG_FATAL_EX("Graphic", "ID3D12Device::CreateCommittedResourceに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+			LOG_FATAL_EX("Graphic", "ID3D12Device::CreateCommittedResourceに失敗。 [{0}]", Utility::getErrorMessage(result).c_str());
 		}
 
 		m_resource = resource;
 
     }
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      デストラクタ
+	//@―---------------------------------------------------------------------------
+	TextureImpl::~TextureImpl() {
+
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  妥当な状態か
+	//@―---------------------------------------------------------------------------
+	bool TextureImpl::isValid()const{
+		return !!m_resource;
+	}
 
 
 	//@―---------------------------------------------------------------------------

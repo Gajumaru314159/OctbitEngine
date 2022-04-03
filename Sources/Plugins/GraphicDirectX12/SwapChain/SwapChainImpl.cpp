@@ -19,10 +19,16 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc) {
-        OB_CHECK_ASSERT(desc.window, "Windowがnullptrです。");
+    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc, StringView name)
+        :ISwapChain(name) {
+
+        if (desc.window == nullptr) {
+            LOG_ERROR("Graphic","SwapchainDesc::windowがnullptrです。");
+            return;
+        }
 
         m_desc = desc;
+        // サイズが指定されていない場合はウィンドウサイズを使用
         if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window->getSize();
 
         m_displayViewFormat = desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
@@ -30,8 +36,26 @@ namespace ob::graphic::dx12 {
         m_nativeSwapChainFormat = Utility::convertTextureFormat(m_displayViewFormat);
         m_syncInterval = desc.vsync ? 1 : 0;
 
-        createSwapChain(rDevice);
-        createBuffer(rDevice);
+        if (!createSwapChain(rDevice))return;
+        if (!createBuffer(rDevice))return;
+
+        m_initialized = true;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  デストラクタ
+    //@―---------------------------------------------------------------------------
+    SwapChainImpl::~SwapChainImpl() {
+
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  妥当なオブジェクトか
+    //@―---------------------------------------------------------------------------
+    bool SwapChainImpl::isValid()const {
+        return m_initialized;
     }
 
 
@@ -39,7 +63,7 @@ namespace ob::graphic::dx12 {
     //! @brief  バックバッファの数を取得
     //@―---------------------------------------------------------------------------
     s32 SwapChainImpl::getBackBufferCount()const {
-        return m_desc.backBufferNum;
+        return m_desc.bufferCount;
     }
 
 
@@ -73,13 +97,11 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::update(IRenderTexture* renderTexture) {
+    void SwapChainImpl::update(graphic::ITexture* pTexture) {
 
-        // レンダーテクスチャをバックバッファにコピー
-        auto rtSize = renderTexture->getTexture()->getDesc().size;
-          
+        if (!pTexture)return;
 
-        
+
         auto result = m_swapchain->Present(m_syncInterval, 0);
 
         if (FAILED(result)) {
@@ -95,7 +117,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::createSwapChain(DeviceImpl& rDevice) {
+    bool SwapChainImpl::createSwapChain(DeviceImpl& rDevice) {
         auto& window = m_desc.window;
 
         UINT sampleQuarity = 0;
@@ -114,7 +136,7 @@ namespace ob::graphic::dx12 {
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
         swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
-        swapChainDesc.BufferDesc.Height = m_desc.size.height;                              // 画面解像度【縦】
+        swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
         swapChainDesc.BufferDesc.Format = Utility::convertTextureFormat(m_desc.format);     // ピクセルフォーマット
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母
@@ -124,7 +146,7 @@ namespace ob::graphic::dx12 {
         swapChainDesc.SampleDesc.Quality = sampleQuarity;                                   // マルチサンプル・クオリティ
         swapChainDesc.SampleDesc.Count = sampleCount;                                       // マルチサンプル・カウント
 
-        swapChainDesc.BufferCount = m_desc.backBufferNum;						            // バッファの数
+        swapChainDesc.BufferCount = m_desc.bufferCount;						            // バッファの数
         swapChainDesc.BufferUsage = DXGI_USAGE_BACK_BUFFER;						            // バックバッファとして使用
         swapChainDesc.OutputWindow = hWnd;                                                  // ウィンドウ
         swapChainDesc.Windowed = TRUE;                                                      // ※公式リファレンスによるとフルスクリーン指定は別ので行う
@@ -146,7 +168,8 @@ namespace ob::graphic::dx12 {
             (IDXGISwapChain**)m_swapchain.ReleaseAndGetAddressOf());
 
         if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "CreateSwapChainに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            LOG_ERROR_EX("Graphic","CreateSwapChainに失敗[{0}]", Utility::getErrorMessage(result).c_str());
+            return false;
         }
 
 
@@ -162,87 +185,87 @@ namespace ob::graphic::dx12 {
 
         m_frameIndex = m_swapchain->GetCurrentBackBufferIndex();
 
+        return true;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      レンダーテクスチャを初期化
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::createBuffer(DeviceImpl& rDevice) {
+    bool SwapChainImpl::createBuffer(DeviceImpl& rDevice) {
 
-        OB_CHECK_ASSERT(
-            m_desc.backBufferNum <= s_maxSwapChainCount,
-            "{0}つのバックバッファは多すぎます。{1}以下にしてください。", m_desc.backBufferNum, s_maxSwapChainCount);
-        OB_CHECK_ASSERT(
-            0 < m_desc.backBufferNum,
-            "バックバッファは1つ以上にしてください。",m_desc.backBufferNum);
+        if (is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
+            LOG_ERROR_EX("Graphic","バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxSwapChainCount, m_desc.bufferCount);
+            return false;
+        }
 
-
+        // スワップチェインのRTVデスクリプタを生成
         D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
         heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;     // レンダーターゲットビュー
         heapDesc.NodeMask = 0;                              // GPUが1つの時は0、複数の時は識別用のbitを指定
-        heapDesc.NumDescriptors = m_desc.backBufferNum;     // ディスクリプタの数。表と裏バッファの２つ。
+        heapDesc.NumDescriptors = m_desc.bufferCount;     // ディスクリプタの数。表と裏バッファの２つ。
         heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;   // ビューの情報をシェーダから参照する必要があるか
 
         auto result = rDevice.getNativeDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(m_rtvHeaps.ReleaseAndGetAddressOf()));
+
         if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "ID3D12Deice::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            // 枚数チェックをしているので呼ばれないはず
+            LOG_ERROR_EX("Graphic","{}",Utility::getErrorMessage(result).c_str());
+            return false;
         }
 
-
-        DXGI_SWAP_CHAIN_DESC swcDesc = {};
-        result = m_swapchain->GetDesc(&swcDesc);
-        if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "IDXGISwapChain::GetDescに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
-        }
-        m_buffers.resize(swcDesc.BufferCount);
+        // バッファを生成
+        m_buffers.resize(m_desc.bufferCount);
         D3D12_CPU_DESCRIPTOR_HANDLE handle = m_rtvHeaps->GetCPUDescriptorHandleForHeapStart();
 
-        //SRGBレンダーターゲットビュー設定
+        // レンダーターゲットビュー生成
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
         rtvDesc.Format = m_nativeSwapChainFormat;
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-
-        for (s32 i = 0; i < swcDesc.BufferCount; ++i) {
-            result = m_swapchain->GetBuffer(i, IID_PPV_ARGS(m_buffers[i].ReleaseAndGetAddressOf()));
+        for (s32 i = 0; i < m_desc.bufferCount; ++i) {
+            auto& buffer = m_buffers[i];
+            result = m_swapchain->GetBuffer(i, IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
-                LOG_FATAL_EX("Graphic", "IDXGISwapChain::GetBufferに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+                // 生成が正しければ呼ばれないはず
+                LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+                return false;
             }
-            rDevice.getNativeDevice()->CreateRenderTargetView(m_buffers[i].Get(), &rtvDesc, handle);
+            rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, handle);
             handle.ptr += rDevice.getNativeDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
         }
 
-
-
         m_viewport = CD3DX12_VIEWPORT(m_buffers[0].Get());
         m_scissorrect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
-
+        return true;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      カラースペースを設定
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::setColorSpace() {
+    bool SwapChainImpl::setColorSpace() {
         bool isHdrEnabled = m_desc.hdr;
         if (!isHdrEnabled)return;
 
         // TODO Rec2020以外の指定対応
-        DXGI_COLOR_SPACE_TYPE colorSpace=DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
+        DXGI_COLOR_SPACE_TYPE colorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
         UINT colorSpaceSupport;
 
         auto result = m_swapchain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
         if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "IDXGISwapChain::CheckColorSpaceSupportに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+            return false;
         }
 
         if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
             result = m_swapchain->SetColorSpace1(colorSpace);
             if (FAILED(result)) {
-                LOG_FATAL_EX("Graphic", "IDXGISwapChain::SetColorSpace1に失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+                LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+                return false;
             }
         }
+        return true;
     }
 
 

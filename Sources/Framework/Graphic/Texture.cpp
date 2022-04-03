@@ -19,15 +19,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     Texture::Texture(const TextureDesc& desc, StringView name) {
         m_pImpl = Device::Get()->createTexture(desc, name);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ
-    //@―---------------------------------------------------------------------------
-    Texture::Texture(ITexture& texture) {
-        texture.addReference();
-        m_pImpl = &texture;
+        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        if (!m_pImpl->isValid()) {
+            LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗");
+            release();
+        }
     }
 
 

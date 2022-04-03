@@ -33,7 +33,19 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        SwapChainImpl(DeviceImpl& rDevice,const SwapchainDesc& desc);
+        SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc, StringView name);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~SwapChainImpl();
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当なオブジェクトか
+        //@―---------------------------------------------------------------------------
+        bool isValid()const override;
 
 
         //===============================================================
@@ -73,25 +85,25 @@ namespace ob::graphic::dx12 {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update(IRenderTexture* renderTexture) override;
+        void update(graphic::ITexture* pTexture) override;
 
     private:
 
         //@―---------------------------------------------------------------------------
         //! @brief      レンダーテクスチャを初期化
         //@―---------------------------------------------------------------------------
-        void createSwapChain(DeviceImpl& rDevice);
+        bool createSwapChain(DeviceImpl& rDevice);
 
         //@―---------------------------------------------------------------------------
         //! @brief      レンダーテクスチャを初期化
         //@―---------------------------------------------------------------------------
-        void createBuffer(DeviceImpl& rDevice);
+        bool createBuffer(DeviceImpl& rDevice);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラースペースを設定
         //@―---------------------------------------------------------------------------
-        void setColorSpace();
+        bool setColorSpace();
 
 
 
@@ -99,7 +111,7 @@ namespace ob::graphic::dx12 {
 
         SwapchainDesc m_desc;
         ComPtr<IDXGISwapChain4> m_swapchain = nullptr;  //!< スワップチェイン
-        vector<ComPtr<ID3D12Resource>> m_buffers;                    //!< バックバッファ
+        vector<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
         ComPtr<ID3D12DescriptorHeap> m_rtvHeaps;        //!< ディスクリプタヒープ
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorrect;                       //!< シザー矩形
@@ -110,9 +122,11 @@ namespace ob::graphic::dx12 {
         DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
 
 
-        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;                 //!< レンダー・ターゲット・ビュー
+        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;         //!< レンダー・ターゲット・ビュー
 
         UINT m_syncInterval;
+
+        bool m_initialized = false;
 
     };
 

@@ -14,6 +14,10 @@ namespace ob::graphic {
         Unknown,    //!< 不明
         Graphic,    //!< グラフィック
         Compute,    //!< コンピュート
+        // Copy
+        // VideoDecode
+        // VideoProcess
+        // ViewoEncode
     };
 
 }// namespcae ob::graphic

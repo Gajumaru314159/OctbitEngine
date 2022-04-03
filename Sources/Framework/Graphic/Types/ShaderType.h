@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Misc/Blob.h>
 
 namespace ob::graphic {
 
@@ -23,5 +24,43 @@ namespace ob::graphic {
         Intersection,       //!< Intersectionシェーダ
         Miss,               //!< ミスシェーダ
     };
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      シェーダのバイナリセット
+    //! 
+    //! @details    実行環境によって使用できるシェーダ言語が異なります。
+    //!             |DirectX|Vulkan|
+    //!             |-------|------|
+    //!             |HLSL   |GLSL  |
+    //!             シェーダのエントリー関数は固定です。
+    //!             |Vertex|Pixel |
+    //!             |------|------|
+    //!             |VSMain|PSMain|
+    //@―---------------------------------------------------------------------------
+    struct ShaderBinarySet {
+        Blob vs;
+        Blob ps;
+    };
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      シェーダのコードセット
+    //! 
+    //! @details    実行環境によって使用できるシェーダ言語が異なります。
+    //!             |DirectX|Vulkan|
+    //!             |-------|------|
+    //!             |HLSL   |GLSL  |
+    //!             シェーダのエントリー関数は固定です。
+    //!             |Vertex|Pixel |
+    //!             |------|------|
+    //!             |VSMain|PSMain|
+    //@―---------------------------------------------------------------------------
+    struct ShaderCodeSet {
+        String code;
+        bool useVS;
+        bool usePS;
+    };
+
 
 }// namespace pb::graphic

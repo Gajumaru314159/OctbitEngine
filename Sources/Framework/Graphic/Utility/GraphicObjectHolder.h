@@ -29,7 +29,7 @@ namespace ob::graphic {
                 type(type&&);                               \
                 type& operator=(const type&);               \
                 type& operator=(type&&);                    \
-                ~type();                                    \
+                virtual ~type();                            \
                 bool operator==(const type&)const noexcept; \
                 bool operator!=(const type&)const noexcept; \
                 operator bool()const noexcept;              \

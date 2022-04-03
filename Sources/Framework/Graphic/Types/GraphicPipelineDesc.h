@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		グラフィックパイプライン定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -13,19 +13,19 @@ namespace ob::graphic {
 	//! @brief  シェーダプログラムに使用できる変数の型
 	//@―---------------------------------------------------------------------------
 	enum class ShaderParamType {
-		UNDEFINED,
-		BOOL,
-		INT,
-		INT2,
-		INT3,
-		INT4,
-		FLOAT,
-		FLOAT2,
-		FLOAT3,
-		FLOAT4,
-		TEXTURE2D,
-		TEXTURE3D,
-		MATRIX
+		Unknown,		//!< 不明
+		Bool,			//!< bool
+		Int,			//!< int
+		Int2,			//!< int2
+		Int3,			//!< int3
+		Int4,			//!< int4
+		Float,			//!< float
+		Float2,			//!< float2
+		Float3,			//!< float3
+		Float4,			//!< float4
+		Texture2D,		//!< Texture2D
+		Texture3D,		//!< Texture3D
+		Matrix			//!< matrix4x4
 	};
 
 
@@ -39,13 +39,19 @@ namespace ob::graphic {
 	};
 
 
-
+	//@―---------------------------------------------------------------------------
+	//! @brief  カリング・モード
+	//@―---------------------------------------------------------------------------
 	enum class CullMode {
 		Back,	//!< 裏面をカリング
 		Front,	//!< 表面をカリング
 		None,	//!< カリングなし
 	};
 
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  ブレンド・ファクター
+	//@―---------------------------------------------------------------------------
 	enum class BlendFactor {
 		ONE,
 		ZERO,
@@ -85,12 +91,9 @@ namespace ob::graphic {
 		}
 
 	public:
-		// シェーダID
-		Shader vs;
-		Shader ps;
-		Shader gs;
-		Shader hs;
-		Shader ds;
+
+		VertexShader vs;
+		PixelShader ps;
 
 		bool useWireframe = false;
 		CullMode cullMode = CullMode::Back;
@@ -111,16 +114,4 @@ namespace ob::graphic {
 		BlendMode blendMode[8] = {};
 	};
 
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob::graphic

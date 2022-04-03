@@ -7,8 +7,6 @@
 
 #include <Framework/Foundation/PCH/stdafx.h>
 #include <Framework/Foundation/Exception/Exception.h>
-#include <Framework/Foundation/Log/Assertion.h>
-#include <Framework/Foundation/Log/LogMacro.h>
 #include <Framework/Foundation/Memory/Allocator/Allocator.h>
 #include <Framework/Foundation/Memory/Allocator/MallocAllocator.h>
 #include <Framework/Foundation/Memory/Operator/NewOpetrator.h>

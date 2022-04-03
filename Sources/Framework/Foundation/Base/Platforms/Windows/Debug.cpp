@@ -20,13 +20,13 @@
 //! @brief  システムログ出力 
 //@―---------------------------------------------------------------------------
 void OutputDebugLog(const wchar_t* message) {
-    ::OutputDebugString(message);
-    ::OutputDebugString(TEXT("\n"));
+    ::OutputDebugStringW(message);
+    ::OutputDebugStringW(L"\n");
 }
 
 
 //@―---------------------------------------------------------------------------
-//! @brief  ブレークポイントの呼び出し
+//! @brief  ブレークポイントを呼び出し
 //@―---------------------------------------------------------------------------
 void CallBreakPoint() {
 #ifdef _DEBUG
@@ -34,6 +34,14 @@ void CallBreakPoint() {
         _CrtDbgBreak();
     }
 #endif
+}
+
+
+//@―---------------------------------------------------------------------------
+//! @brief  ブレークポイントを呼び出し
+//@―---------------------------------------------------------------------------
+void ShowMessageBox(const wchar_t* pMessage) {
+    ::MessageBoxW(NULL, pMessage, L"OctbitEngine", MB_YESNO | MB_TOPMOST);
 }
 
 #endif// OS_WINDOWS

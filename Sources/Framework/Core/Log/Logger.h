@@ -4,9 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-
-#include <Framework/Foundation/String/String.h>
-#include <Framework/Foundation/Template/Event/EventNotifier.h>
+#include <Framework/Singleton/Singleton.h>
 #include "LogType.h"
 #include "ILogEvent.h"
 
@@ -17,7 +15,8 @@
 #undef index
 //! @endcond
 
-namespace ob::foundation {
+namespace ob::core {
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      ロガー
@@ -93,4 +92,5 @@ namespace ob::foundation {
         EventNotifier   m_notifier;
     };
 
-}// namespace ob::foundation
+
+}// namespace ob::core

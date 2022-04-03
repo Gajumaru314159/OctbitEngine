@@ -9,6 +9,7 @@
 #include <Framework/Graphic/Types/TextureDesc.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
 #include <Framework/Graphic/Types/SwapchainDesc.h>
+#include <Framework/Graphic/Types/ShaderType.h>
 
 //===============================================================
 // 前方宣言
@@ -17,6 +18,8 @@ namespace ob::graphic {
     class ISwapChain;
     class ITexture;
     class IRenderTexture;
+    class IShader;
+    class IRootSignature;
 }
 
 
@@ -46,6 +49,12 @@ namespace ob::graphic {
         //===============================================================
         virtual void update() = 0;
 
+        //virtual ICommandQueue* getCommandQueue()const = 0;
+        //virtual Result        waitIdle()=0;
+        //virtual ICommandAllocator* createCommanndAllocator();
+        //virtual ICommandList* createCommandList();// アロケータ/タイプを指定して生成
+        //virtual IFence*   createFence(const FenceDesc&);
+
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
@@ -56,18 +65,25 @@ namespace ob::graphic {
         virtual void flip()=0;
         */
 
-        virtual ISwapChain* createSwapChain(const SwapchainDesc& desc)=0;
+        virtual ISwapChain*     createSwapChain(const SwapchainDesc& desc, StringView name)=0;
+
+        virtual ITexture*       createTexture(const TextureDesc& desc, StringView name)=0;
+        virtual IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)=0;
+        
+        virtual IShader*        createShader(const String& code,ShaderType type, StringView name) = 0;
+        virtual IShader*        createShader(const Blob& binary, ShaderType type, StringView name) = 0;
+
+        virtual IRootSignature* createRootSignature(const RootSignatureDesc& desc, StringView name) = 0;
+        
 
         /*
         virtual void createCommandList(CommandList& commandList, CommandListType type)=0;
         virtual void createTexture(Texture& texture, const TextureData& data,StringView name)=0;
         */
-        virtual ITexture* createTexture(const TextureDesc& desc, StringView name)=0;
-        virtual IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)=0;
         /*
         virtual void createBuffer(Buffer& buffer,const BufferDesc& desc,const virtual void* data,StringView name)=0;
 
-        virtual void createRootSignature(RootSignature& signature, const RootSignatureDesc& desc, StringView name)=0;
+        
         //virtual void createCommandSignature(CommandSignature& signature, const CommandSignatureDesc& desc, StringView name)=0;
 
         virtual void createVertexShader(VertexShader& shader, const virtual void* data, s32 dataSize,StringView name)=0;

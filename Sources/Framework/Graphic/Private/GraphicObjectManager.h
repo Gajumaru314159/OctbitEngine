@@ -55,8 +55,8 @@ namespace ob::graphic {
 
         list<GraphicObject*> m_objects;
 
-        using ObjectStack = stack<GraphicObject*>;
-        std::vector<ObjectStack>    m_deleteStackList;
+        using ObjectQueue = queue<GraphicObject*>;
+        std::vector<ObjectQueue>    m_deleteStackList;
 
         s32 m_index;
 

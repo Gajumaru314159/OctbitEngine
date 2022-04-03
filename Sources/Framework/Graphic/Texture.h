@@ -11,8 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
-    class Device;
-    class ISwapChain;
+    class SwapChain;
     class ITexture;
 }
 
@@ -30,6 +29,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class Texture {
         friend class Device;
+        friend class SwapChain;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Texture);
     public:
 
@@ -50,12 +50,6 @@ namespace ob::graphic {
         //! @param name オブジェクト名
         //@―---------------------------------------------------------------------------
         Texture(const TextureDesc& desc, StringView name=TC("Texture"));
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
-        //@―---------------------------------------------------------------------------
-        Texture(ITexture& texture);
 
 
         //===============================================================
