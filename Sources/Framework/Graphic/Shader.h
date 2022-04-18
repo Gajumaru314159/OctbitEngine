@@ -11,6 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
+    class IShader;
     class IVertexShader;
     class IPixelShader;
 }
