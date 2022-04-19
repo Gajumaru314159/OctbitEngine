@@ -11,6 +11,8 @@ namespace ob::graphic {
 
     OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(Texture);
 
+#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のTextureへアクセス")
+
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //! 
@@ -31,7 +33,7 @@ namespace ob::graphic {
     //! @brief      テクスチャ定義を取得
     //@―---------------------------------------------------------------------------
     const TextureDesc& Texture::desc()const {
-        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
+        CHECK_IMPL();
         return m_pImpl->getDesc();
     }
 
@@ -40,7 +42,7 @@ namespace ob::graphic {
     //! @brief      テクスチャ・サイズを取得
     //@―---------------------------------------------------------------------------
     Size Texture::size()const {
-        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
+        CHECK_IMPL();
         return m_pImpl->getDesc().size;
     }
 
@@ -49,7 +51,7 @@ namespace ob::graphic {
     //! @brief      テクスチャ・フォーマットを取得
     //@―---------------------------------------------------------------------------
     auto Texture::format()const->TextureFormat {
-        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
+        CHECK_IMPL();
         return m_pImpl->getDesc().format;
     }
 
@@ -58,7 +60,7 @@ namespace ob::graphic {
     //! @brief      ミップマップを持っているか
     //@―---------------------------------------------------------------------------
     s32 Texture::mipLevels()const {
-        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
+        CHECK_IMPL();
         return m_pImpl->getDesc().mipLevel;
     }
 
@@ -67,7 +69,7 @@ namespace ob::graphic {
     //! @brief      テクスチャタイプを取得
     //@―---------------------------------------------------------------------------
     TextureType Texture::type()const {
-        OB_CHECK_ASSERT_EXPR(m_pImpl != nullptr);
+        CHECK_IMPL();
         return m_pImpl->getDesc().type;
     }
 

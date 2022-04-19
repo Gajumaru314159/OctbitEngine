@@ -20,6 +20,7 @@ namespace ob::graphic {
     class IRenderTexture;
     class IShader;
     class IRootSignature;
+    class IBuffer;
 }
 
 
@@ -73,15 +74,15 @@ namespace ob::graphic {
         virtual IShader*        createShader(const String& code,ShaderType type, StringView name) = 0;
         virtual IShader*        createShader(const Blob& binary, ShaderType type, StringView name) = 0;
 
-        virtual IRootSignature* createRootSignature(const RootSignatureDesc& desc, StringView name) = 0;
-        
+        //virtual IRootSignature* createRootSignature(const RootSignatureDesc& desc, StringView name) = 0;
+
+        virtual IBuffer*        createBuffer(const BufferDesc& desc) = 0;
 
         /*
         virtual void createCommandList(CommandList& commandList, CommandListType type)=0;
         virtual void createTexture(Texture& texture, const TextureData& data,StringView name)=0;
         */
         /*
-        virtual void createBuffer(Buffer& buffer,const BufferDesc& desc,const virtual void* data,StringView name)=0;
 
         
         //virtual void createCommandSignature(CommandSignature& signature, const CommandSignatureDesc& desc, StringView name)=0;

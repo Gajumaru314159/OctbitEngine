@@ -12,6 +12,7 @@ namespace ob::graphic {
 
     OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(RenderTexture);
 
+#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のRenderTextureへアクセス")
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
@@ -34,6 +35,7 @@ namespace ob::graphic {
     //! @brief  Texture を取得
     //@―---------------------------------------------------------------------------
     Texture RenderTexture::getTexture(s32 index) {
+        CHECK_IMPL();
         return m_pImpl->getTexture(index);
     }
 
@@ -42,6 +44,7 @@ namespace ob::graphic {
     //! @brief  デプステクスチャを取得
     //@―---------------------------------------------------------------------------
     Texture RenderTexture::getDepthStencilTexture() {
+        CHECK_IMPL();
         return m_pImpl->getDepthStencilTexture();
     }
 

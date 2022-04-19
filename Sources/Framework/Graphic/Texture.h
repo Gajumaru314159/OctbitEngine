@@ -8,15 +8,6 @@
 #include <Framework/Graphic/Types/TextureDesc.h>
 
 //===============================================================
-// 前方宣言
-//===============================================================
-namespace ob::graphic {
-    class SwapChain;
-    class ITexture;
-}
-
-
-//===============================================================
 // クラス宣言
 //===============================================================
 namespace ob::graphic {
@@ -86,7 +77,7 @@ namespace ob::graphic {
 
     private:
 
-        ITexture* m_pImpl;
+        class ITexture* m_pImpl;
 
     };
 

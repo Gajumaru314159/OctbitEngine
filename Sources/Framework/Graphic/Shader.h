@@ -8,16 +8,6 @@
 #include <Framework/Core/Misc/Blob.h>
 
 //===============================================================
-// 前方宣言
-//===============================================================
-namespace ob::graphic {
-    class IShader;
-    class IVertexShader;
-    class IPixelShader;
-}
-
-
-//===============================================================
 // クラス定義
 //===============================================================
 namespace ob::graphic {
@@ -34,7 +24,7 @@ namespace ob::graphic {
 
     protected:
 
-        IShader* m_pImpl;
+        class IShader* m_pImpl;
 
     };
 

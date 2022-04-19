@@ -14,7 +14,6 @@ namespace ob::graphic {
     class Device;
     class SwapChain;
     class Texture;
-    class IRenderTexture;
 }
 
 
@@ -66,7 +65,7 @@ namespace ob::graphic {
 
     private:
 
-        IRenderTexture* m_pImpl=nullptr;
+        class IRenderTexture* m_pImpl=nullptr;
 
     };
 

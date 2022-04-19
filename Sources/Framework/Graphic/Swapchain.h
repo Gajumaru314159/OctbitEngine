@@ -11,7 +11,6 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
-    class ISwapChain;
     class Texture;
 }
 
@@ -92,7 +91,7 @@ namespace ob::graphic {
 
     protected:
 
-        ISwapChain* m_pImpl=nullptr;
+        class ISwapChain* m_pImpl=nullptr;
 
     };
 

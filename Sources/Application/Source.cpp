@@ -4,6 +4,7 @@
 #include <Framework/Graphic/System.h>
 #include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/RenderTexture.h>
+#include <Framework/Graphic/Geometry.h>
 
 #include <Windows.h>
 
@@ -11,6 +12,26 @@ using namespace ob;
 
 int main() {
     using namespace ob::graphic;
+
+    struct Vertex {
+        Vec3 position;
+        Vec2 uv;
+        Color color;
+    };
+
+    VertexLayout layout
+    {
+        sizeof(Vertex),
+        {
+            {Semantic::Position ,Type::Float,3,offsetof(Vertex,position)},
+            {Semantic::TexCoord ,Type::Float,2,offsetof(Vertex,uv)},
+            {Semantic::Color    ,Type::Float,4,offsetof(Vertex,color)},
+        }
+    };
+
+    Geometry<Vertex> geometry(layout);
+    geometry.addQuad();
+
 
     Logger::Instance();
     platform::PlatformSystem::Instance().startup();
@@ -32,16 +53,16 @@ int main() {
             SwapchainDesc swapChainDesc;
             swapChainDesc.window = &window;
             SwapChain swapChain(swapChainDesc);
-            
+
             TextureDesc texDesc[1];
             texDesc[0].type = TextureType::RenderTarget;
-            texDesc[0].size = {1280,720};
+            texDesc[0].size = { 1280,720 };
             TextureDesc depth;
             depth.format = TextureFormat::D24S8;
             depth.type = TextureType::DeptthStencil;
             depth.size = { 1280,720 };
             RenderTexture rt(texDesc, depth);
-            
+
 
             MSG msg = {};
             while (true) {
