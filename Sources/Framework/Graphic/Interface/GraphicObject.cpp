@@ -15,11 +15,7 @@ namespace ob::graphic {
         : m_pStack(nullptr)
         , m_referenceCount(1){
 
-        OB_CHECK_ASSERT(name.size()<get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
-        for (s32 i = 0; i < get_size(m_name) && i < name.size(); ++i) {
-            m_name[i] = name[i];
-        }
-        m_name[name.size()] = TC('\0');
+        setName(name);
 
         System::Instance().registerObject(*this);
     }
@@ -40,6 +36,20 @@ namespace ob::graphic {
         return m_name;
 #else
         return TC("Unknown");
+#endif
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      名前を設定
+    //@―---------------------------------------------------------------------------
+    void GraphicObject::setName(StringView name) {
+#ifdef OB_DEBUG
+        OB_CHECK_ASSERT(name.size() < get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
+        for (s32 i = 0; i < get_size(m_name) && i < name.size(); ++i) {
+            m_name[i] = name[i];
+        }
+        m_name[name.size()] = TC('\0');
 #endif
     }
 
