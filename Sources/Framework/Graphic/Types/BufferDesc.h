@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Types/ResourceUsage.h>
 
 namespace ob::graphic {
 

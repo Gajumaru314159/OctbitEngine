@@ -7,57 +7,7 @@
 #include <Framework/Graphic/Types/Topology.h>
 
 namespace ob::graphic {
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  型
-    //! @see    VertexAttribute
-    //! @see    VertexLayout
-    //@―---------------------------------------------------------------------------
-    enum class Type : u32 {
-        Int8,
-        Int16,
-        Int32,
-        UInt8,
-        UInt16,
-        UInt32,
-        Float,
-    };
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  セマンティクス
-    //! @see    VertexAttribute
-    //! @see    VertexLayout
-    //@―---------------------------------------------------------------------------
-    enum class Semantic : u32 {
-        Position,
-        Normal,
-        Color,
-        TexCoord,
-        Binormal,
-        BlendIndices,
-        BlendWeights,
-        PointSize,
-        Tangent,
-    };
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  頂点属性
-    //! @see    VertexLayout
-    //@―---------------------------------------------------------------------------
-    struct VertexAttribute {
-        Semantic	semantic;
-        Type		type;
-        size_t	    dimention;
-        size_t      offset;
-    };
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  頂点レイアウト
-    //@―---------------------------------------------------------------------------
-    struct VertexLayout {
-        size_t size;
-        vector<VertexAttribute> attributes;
-    };
+    
     /*
     //@―---------------------------------------------------------------------------
     //! @brief  ジオメトリ

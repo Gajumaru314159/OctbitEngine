@@ -26,7 +26,7 @@ namespace ob::graphic {
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "レンダーテクスチャの生成に失敗[name={}]",name);
+            LOG_ERROR_EX("Graphic", "レンダーテクスチャの生成に失敗[name={}]", name);
             release();
         }
     }

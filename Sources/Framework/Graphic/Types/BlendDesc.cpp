@@ -1,9 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		ブレンド定義
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/Types/BlendState.h>
+#include <Framework/Graphic/Types/BlendDesc.h>
 
 namespace ob::graphic {
 
@@ -16,7 +16,7 @@ namespace ob::graphic {
         3
 
 
-    const BlendState BlendState::None = {
+    const BlendDesc BlendDesc::None = {
         false,
         BlendFactor::One,
         BlendFactor::Zero,
@@ -24,7 +24,7 @@ namespace ob::graphic {
         SHARED_STATE
     };
 
-    const BlendState BlendState::AlphaBlend = {
+    const BlendDesc BlendDesc::AlphaBlend = {
         false,
         BlendFactor::One,
         BlendFactor::Zero,
@@ -32,7 +32,7 @@ namespace ob::graphic {
         SHARED_STATE
     };
 
-    const BlendState BlendState::Addition = {
+    const BlendDesc BlendDesc::Addition = {
         false,
         BlendFactor::One,
         BlendFactor::Zero,
@@ -40,7 +40,7 @@ namespace ob::graphic {
         SHARED_STATE
     };
 
-    const BlendState BlendState::AdditionAlpha = {
+    const BlendDesc BlendDesc::AdditionAlpha = {
         false,
         BlendFactor::One,
         BlendFactor::Zero,
@@ -48,7 +48,7 @@ namespace ob::graphic {
         SHARED_STATE
     };
 
-    const BlendState BlendState::Subtraction = {
+    const BlendDesc BlendDesc::Subtraction = {
         false,
         BlendFactor::One,
         BlendFactor::Zero,

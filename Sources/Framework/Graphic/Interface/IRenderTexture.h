@@ -5,15 +5,12 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/TextureFormat.h>
-#include <Framework/Graphic/Types/ResourceUsage.h>
-#include <Framework/Graphic/Texture.h>
 
 //===============================================================
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
-    class ITexture;
+    class Texture;
 }
 
 //===============================================================

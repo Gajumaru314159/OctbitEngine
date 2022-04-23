@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ラスタライズ・ステート
+//! @brief		ラスタライズ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -30,10 +30,10 @@ namespace ob::graphic {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      ラスタライズ・ステート
+	//! @brief      ラスタライズ定義
 	//@―---------------------------------------------------------------------------
-	struct RasterizerState{
-		FillMode fillMode{FillMode::Solid};		//!< フィル・モード
+	struct RasterizerDesc{
+		FillMode fillMode{ FillMode::Solid };	//!< フィル・モード
 		CullMode cullMode{ CullMode::Back };	//!< カリング方法
 	};
 

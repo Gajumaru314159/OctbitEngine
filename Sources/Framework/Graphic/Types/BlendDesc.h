@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ブレンド・ステート
+//! @brief		ブレンド定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -76,11 +76,11 @@ namespace ob::graphic {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      ブレンド・ステート
+    //! @brief      ブレンド定義
     //! 
     //! @details    レンダーターゲットのブレンド方法を定義
     //@―---------------------------------------------------------------------------
-    struct BlendState{
+    struct BlendDesc{
         bool        blendEnable;        //!< ブレンドの有効設定
         BlendFactor srcColorFactor;     //!< ソースカラー係数
         BlendFactor dstColorFactor;     //!< デストカラー係数
@@ -92,11 +92,11 @@ namespace ob::graphic {
         LogicOp     logicOp;            //!< 論理演算方法
         u32         mask;               //!< 書き込みマスク
 
-        static const BlendState None;           //!< ブレンドなし(置き換え)
-        static const BlendState AlphaBlend;     //!< アルファブレンド
-        static const BlendState Addition;       //!< 加算合成
-        static const BlendState AdditionAlpha;  //!< アルファあり加算合成
-        static const BlendState Subtraction;    //!< 減算合成
+        static const BlendDesc None;           //!< ブレンドなし(置き換え)
+        static const BlendDesc AlphaBlend;     //!< アルファブレンド
+        static const BlendDesc Addition;       //!< 加算合成
+        static const BlendDesc AdditionAlpha;  //!< アルファあり加算合成
+        static const BlendDesc Subtraction;    //!< 減算合成
     };
 
 }// namespcae ob::graphic
