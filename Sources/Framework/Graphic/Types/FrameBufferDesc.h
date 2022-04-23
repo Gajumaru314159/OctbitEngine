@@ -1,24 +1,22 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ステンシル・オペレータ
+//! @brief		フレームバッファ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphic/RenderPass.h>
+#include <Framework/Graphic/RenderTexture.h>
 
 namespace ob::graphic {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      ステンシル・オペレータ
+	//! @brief		フレームバッファ定義
 	//@―---------------------------------------------------------------------------
-	enum class StencilOp :u32 {
-		Keep,				//!< 			
-		Zero,				//!< 
-		Replace,			//!< 
-		IncrementAndClamp,	//!< 
-		DecrementAndClamp,	//!< 
-		Invert,				//!< 
-		IncrementAndWrap,	//!< 
-		DecrementAndWrap,	//!< 
+	struct FrameBufferDesc {
+		RenderPass		renderPass;
+		RenderTexture	renderTexture;		
+		Size size;
+		u32 layers;	//!< マルチビューを使用しない限り1
 	};
 
 }// namespcae ob::graphic

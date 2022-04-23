@@ -5,7 +5,13 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Utility/GraphicObjectHolder.h>
-#include <Framework/Core/Misc/Blob.h>
+
+//===============================================================
+// クラス定義
+//===============================================================
+namespace ob::core{
+    class Blob;
+}
 
 //===============================================================
 // クラス定義
@@ -21,10 +27,6 @@ namespace ob::graphic {
     protected:
 
         Shader() = default;
-
-    protected:
-
-        class IShader* m_pImpl;
 
     };
 

@@ -34,20 +34,20 @@ namespace ob::graphic::dx12 {
         //! @brief				シェーダーコードからシェーダーオブジェクトを生成
         //!
         //! @param src			シェーダコード
-        //! @param type			シェーダタイプ
+        //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const String& code, const ShaderType type, StringView name);
+        ShaderImpl(const String& code, const ShaderStage stage);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief				バイナリからシェーダーオブジェクトを生成
         //!
         //! @param src			バイナリ
-        //! @param type			シェーダタイプ
+        //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const Blob& blob, const ShaderType type, StringView name);
+        ShaderImpl(const Blob& blob, const ShaderStage stage);
 
 
         //@―---------------------------------------------------------------------------
@@ -78,7 +78,7 @@ namespace ob::graphic::dx12 {
 
     private:
 
-        void initialize(const Blob& blob, const ShaderType type);
+        void initialize(const Blob& blob, const ShaderStage stage);
 
 
     private:

@@ -63,10 +63,6 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         Texture getDepthStencilTexture();
 
-    private:
-
-        class IRenderTexture* m_pImpl=nullptr;
-
     };
 
 

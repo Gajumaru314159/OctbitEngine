@@ -20,7 +20,6 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class Texture {
         friend class Device;
-        friend class SwapChain;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Texture);
     public:
 
@@ -72,12 +71,6 @@ namespace ob::graphic {
 
         auto type()const->TextureType;
 
-
-
-
-    private:
-
-        class ITexture* m_pImpl;
 
     };
 

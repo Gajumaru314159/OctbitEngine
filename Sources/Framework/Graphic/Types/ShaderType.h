@@ -5,26 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Misc/Blob.h>
+#include <Framework/Graphic/Types/ShaderStage.h>
 
 namespace ob::graphic {
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  シェーダ・タイプ
-    //@―---------------------------------------------------------------------------
-    enum class ShaderType {
-        Vertex,             //!< 頂点シェーダ        
-        Pixel,              //!< ピクセルシェーダ
-        Geometory,          //!< ジオメトリシェーダ
-        Hull,               //!< ハルシェーダ
-        Domain,             //!< ドメインシェーダ
-        Compute,            //!< コンピュートシェーダ
-        Raygen,             //!< レイ生成シェーダ
-        Closest,            //!< Closestシェーダ
-        AnyHit,             //!< AnyHitシェーダ
-        Intersection,       //!< Intersectionシェーダ
-        Miss,               //!< ミスシェーダ
-    };
-
 
     //@―---------------------------------------------------------------------------
     //! @brief      シェーダのバイナリセット
@@ -57,9 +40,8 @@ namespace ob::graphic {
     //!             |VSMain|PSMain|
     //@―---------------------------------------------------------------------------
     struct ShaderCodeSet {
-        String code;
-        bool useVS;
-        bool usePS;
+        String          code;
+        ShaderStages    flags;
     };
 
 

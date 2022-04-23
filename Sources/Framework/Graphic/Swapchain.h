@@ -26,7 +26,7 @@ namespace ob::graphic {
     //! @details    ウィンドウの情報は platform::Window で制御されますが、このクラスでは
     //!             グラフィック機能と結びつけるために必要な情報を制御します。
     //@―---------------------------------------------------------------------------
-    class OB_API SwapChain:private Noncopyable {
+    class OB_API SwapChain {
         friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(SwapChain);
     public:
@@ -87,11 +87,6 @@ namespace ob::graphic {
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
         void update(Texture& texture);
-
-
-    protected:
-
-        class ISwapChain* m_pImpl=nullptr;
 
     };
 

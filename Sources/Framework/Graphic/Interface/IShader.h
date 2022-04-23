@@ -44,7 +44,7 @@ namespace ob::graphic {
 
     protected:
 
-        IShader(StringView name) :GraphicObject(name) {}
+        virtual ~IShader() = default;
 
     };
 
@@ -57,7 +57,7 @@ namespace ob::graphic {
 
     protected:
 
-        IVertexShader(StringView name) :IShader(name) {}
+        IVertexShader(){}
 
     };
 
@@ -70,7 +70,7 @@ namespace ob::graphic {
 
     protected:
 
-        IPixelShader(StringView name) :IShader(name) {}
+        IPixelShader() {}
 
     };
 

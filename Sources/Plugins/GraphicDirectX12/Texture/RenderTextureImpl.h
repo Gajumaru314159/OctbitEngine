@@ -34,7 +34,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth,StringView name);
+        RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth);
 
 
         //@―---------------------------------------------------------------------------
@@ -54,8 +54,8 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      テクスチャ取得
         //@―---------------------------------------------------------------------------
-        const Texture& getTexture(s32 index)const override;
-        const Texture& getDepthStencilTexture()const override;
+        const Texture getTexture(s32 index)const override;
+        const Texture getDepthStencilTexture()const override;
 
 
     private:

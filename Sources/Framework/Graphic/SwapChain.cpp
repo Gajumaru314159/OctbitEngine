@@ -19,10 +19,11 @@ namespace ob::graphic {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     SwapChain::SwapChain(const SwapchainDesc& desc, StringView name) {
-        m_pImpl = Device::Get()->createSwapChain(desc, name);
+        m_pImpl = Device::Get()->createSwapChain(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
+        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
+            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗[name={}]",name);
             release();
         }
     }
@@ -33,7 +34,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::getBackBufferCount()const {
         CHECK_IMPL();
-        return m_pImpl->getBackBufferCount();
+        return m_pImpl->getDesc().bufferCount;
     }
 
 
@@ -42,7 +43,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isVSyncEnabled()const {
         CHECK_IMPL();
-        return m_pImpl->isVSyncEnabled();
+        return m_pImpl->getDesc().vsync;
     }
 
 
@@ -51,7 +52,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     s32 SwapChain::isHdrEnabled()const {
         CHECK_IMPL();
-        return m_pImpl->isHdrEnabled();
+        return m_pImpl->getDesc().hdr;
     }
 
 
@@ -71,7 +72,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void SwapChain::update(Texture& texture) {
         CHECK_IMPL();
-        m_pImpl->update(texture.m_pImpl);
+        //m_pImpl->update(texture);
     }
 
 }// namespace ob::graphic

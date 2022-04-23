@@ -7,6 +7,7 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
+#include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Platform/Window/WindowNativaAccessor.h>
 
@@ -19,21 +20,21 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc, StringView name)
-        :ISwapChain(name) {
+    SwapChainImpl::SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc)
+        : m_desc(desc)
+    {
 
         if (desc.window == nullptr) {
-            LOG_ERROR("Graphic","SwapchainDesc::windowがnullptrです。");
+            LOG_ERROR_EX("Graphic","SwapchainDesc::windowがnullptrです。");
             return;
         }
 
-        m_desc = desc;
         // サイズが指定されていない場合はウィンドウサイズを使用
         if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window->getSize();
 
         m_displayViewFormat = desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
-        m_nativeDisplayViewFormat = Utility::convertTextureFormat(m_displayViewFormat);
-        m_nativeSwapChainFormat = Utility::convertTextureFormat(m_displayViewFormat);
+        m_nativeDisplayViewFormat = TypeConverter::convert(m_displayViewFormat);
+        m_nativeSwapChainFormat = TypeConverter::convert(m_displayViewFormat);
         m_syncInterval = desc.vsync ? 1 : 0;
 
         if (!createSwapChain(rDevice))return;
@@ -60,26 +61,10 @@ namespace ob::graphic::dx12 {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  バックバッファの数を取得
+    //! @brief  定義を取得
     //@―---------------------------------------------------------------------------
-    s32 SwapChainImpl::getBackBufferCount()const {
-        return m_desc.bufferCount;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  VSyncが有効か
-    //@―---------------------------------------------------------------------------
-    s32 SwapChainImpl::isVSyncEnabled()const {
-        return m_desc.vsync;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  HDRが有効か
-    //@―---------------------------------------------------------------------------
-    s32 SwapChainImpl::isHdrEnabled()const {
-        return m_desc.hdr;
+    const SwapchainDesc& SwapChainImpl::getDesc()const noexcept {
+        return m_desc;
     }
 
 
@@ -105,7 +90,8 @@ namespace ob::graphic::dx12 {
         auto result = m_swapchain->Present(m_syncInterval, 0);
 
         if (FAILED(result)) {
-            LOG_ERROR_EX("Graphic", "IDXGISwapChain4::Presentに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("IDXGUISwapChain::Present()"));
+            LOG_FATAL_EX("Graphic","スワップチェーンの更新に失敗")
             return;
         }
 
@@ -137,7 +123,7 @@ namespace ob::graphic::dx12 {
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
         swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
         swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
-        swapChainDesc.BufferDesc.Format = Utility::convertTextureFormat(m_desc.format);     // ピクセルフォーマット
+        swapChainDesc.BufferDesc.Format = TypeConverter::convert(m_desc.format);     // ピクセルフォーマット
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母
         swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
@@ -168,7 +154,7 @@ namespace ob::graphic::dx12 {
             (IDXGISwapChain**)m_swapchain.ReleaseAndGetAddressOf());
 
         if (FAILED(result)) {
-            LOG_ERROR_EX("Graphic","CreateSwapChainに失敗[{0}]", Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("IDXGIFactory::CreateSwapChain()"));
             return false;
         }
 
@@ -194,7 +180,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     bool SwapChainImpl::createBuffer(DeviceImpl& rDevice) {
 
-        if (is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
+        if (!is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
             LOG_ERROR_EX("Graphic","バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxSwapChainCount, m_desc.bufferCount);
             return false;
         }
@@ -210,7 +196,7 @@ namespace ob::graphic::dx12 {
 
         if (FAILED(result)) {
             // 枚数チェックをしているので呼ばれないはず
-            LOG_ERROR_EX("Graphic","{}",Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
             return false;
         }
 
@@ -228,7 +214,7 @@ namespace ob::graphic::dx12 {
             result = m_swapchain->GetBuffer(i, IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
                 // 生成が正しければ呼ばれないはず
-                LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+                Utility::outputErrorLog(result, TC("IDXGISwapChain::GetBuffer()"));
                 return false;
             }
             rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, handle);
@@ -246,7 +232,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     bool SwapChainImpl::setColorSpace() {
         bool isHdrEnabled = m_desc.hdr;
-        if (!isHdrEnabled)return;
+        if (!isHdrEnabled)return false;
 
         // TODO Rec2020以外の指定対応
         DXGI_COLOR_SPACE_TYPE colorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
@@ -254,14 +240,14 @@ namespace ob::graphic::dx12 {
 
         auto result = m_swapchain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
         if (FAILED(result)) {
-            LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("IDXGISwapChain::CheckColorSpaceSupport()"));
             return false;
         }
 
         if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
             result = m_swapchain->SetColorSpace1(colorSpace);
             if (FAILED(result)) {
-                LOG_ERROR_EX("Graphic", "{}", Utility::getErrorMessage(result).c_str());
+                Utility::outputErrorLog(result, TC("IDXGISwapChain::SetColorSpace1()"));
                 return false;
             }
         }

@@ -64,6 +64,12 @@ namespace ob::graphic {
             return false;
         }
 
+        if (!pDevice->isValid()) {
+            LOG_ERROR_EX("Graphic", "グラフィックデバイスの初期化に失敗");
+            delete pDevice;
+            return false;
+        }
+
         m_device = std::unique_ptr<IDevice>(pDevice);
         m_objectManager = std::make_unique<GraphicObjectManager>(desc.bufferCount);
         return true;
@@ -109,6 +115,7 @@ namespace ob::graphic {
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     IDevice* System::getDevice() {
+        OB_CHECK_ASSERT_EXPR(m_device);
         return m_device.get();
     }
 

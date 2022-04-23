@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		テクスチャ・フォーマット
+//! @brief		テクスチャ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -84,4 +84,4 @@ namespace ob::graphic {
         }
     };
 
-}// namespace pb::graphic
+}// namespcae ob::graphic

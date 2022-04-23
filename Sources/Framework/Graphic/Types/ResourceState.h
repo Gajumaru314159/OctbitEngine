@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		バッファ・タイプ
+//! @brief		リソース状態
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,10 +8,12 @@
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  バッファ・タイプ
+    //! @brief      リソース使用法
+    //! 
+    //! @details    D3D12_RESOURCE_STATES 参照
     //@―---------------------------------------------------------------------------
-    enum class BufferType {
-        Unknown,
+    enum class ResourceState {
+        Present,
         VertexBuffer,
         IndexBuffer,
         ConstantBuffer,
@@ -21,14 +23,18 @@ namespace ob::graphic {
         StencilWrite,
         DepthStencilWrite,
         DepthStencilRead,
-        // AllShaderResource,
+        
+        AllShaderResource,
         ComputeShaderResource,
-        PixelShaderResource,
-        StreamOut,
+        PixelShadeResource,
+        
+        StreamOut,              
         IndirectArgument,
-        CopyDest,
+        CoptyDest,
         CopySource,
-        Present,
+        ResolveDest,
+        ResolveSource,
+        RaytracingAccelerationStructure,
     };
 
 }// namespcae ob::graphic

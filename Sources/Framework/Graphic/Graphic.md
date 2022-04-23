@@ -61,6 +61,56 @@ auto buffer=pDevice->createBuffer(0x1000,TC("TestBuffer"));
 	* デプス・ステンシルの書き込み方法
 	* 出力カラーフォーマット
 	* 出力デプスフォーマット
+
 ### RenderPass
-利用される/生成されるリソースを処理ごとに定義してそれらの依存性をまとめたもの
-Subpass/Attachment/Dependency
+レンダーターゲットの事前定義
+リソースの依存定義
+### FrameBuffer
+書き込み先サイズ
+
+
+
+```
+Window window(WindowDesc());
+
+SystemDesc sysDesc;
+sysDesc.api = GraphicAPI::DirectX12;
+sysDesc.bufferNum = 2;
+System::Get().initialize(sysDesc);
+
+SwapChain swapChain;
+{
+	SwapchainDesc desc;
+	desc.window=window;
+	swapChain=SwapChain(desc);
+}
+
+RenderTexture rt;
+{
+	TextureDesc colorDescs[1];
+	colorDescs.size=window.getSize();
+	rt=RenderTexture(colorDesc);
+}
+
+RenderPass renderPass;
+FrameBuffer frameBuffer;
+
+PipelineState pipeline;
+RootDescriptorTable;
+
+CommandList cmdList;
+
+while(true){
+	
+	cmdList.beginRenderPass(frameBuffer);
+	cmdList.setPipelineState(pipelineState);
+	cmdList.setRootDescriptorTable(rdt);
+	cmdList.setVertexBuffer();
+	cmdList.setIndexBuffer();
+	cmdList.draw();
+
+
+	swapChain.update(rt);
+}
+
+```

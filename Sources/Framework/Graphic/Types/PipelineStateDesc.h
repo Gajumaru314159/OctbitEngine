@@ -7,9 +7,15 @@
 #include <Framework/Graphic/Types/TextureFormat.h>
 #include <Framework/Graphic/Shader.h>
 
-namespace ob::graphic {
+#include <Framework/Graphic/Types/BlendState.h>
+#include <Framework/Graphic/Types/DepthStencilState.h>
+#include <Framework/Graphic/Types/RasterizerState.h>
 
-    //@―---------------------------------------------------------------------------
+namespace ob::graphic {
+	/*
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダプログラムに使用できる変数の型
 	//@―---------------------------------------------------------------------------
 	enum class ShaderParamType {
@@ -29,51 +35,71 @@ namespace ob::graphic {
 	};
 
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  描画に使用するトポロジーの種類
-	//@―---------------------------------------------------------------------------
-	enum class PrimitiveTopology {
-		Point,		//!< 点群
-		Line,		//!< ライン・リスト
-		Triangle,	//!< トライアングル・リスト
+
+	//struct InputLayoutElement {
+	//	u16				stream;
+	//	u16				offset;
+	//	InputFormat		format;
+	//	InputSemantic	semantic;
+	//	u8				semanttinIndex;
+	//};
+
+	enum class VertexInputRate {
+		Vertex,
+		Instance,
 	};
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  カリング・モード
-	//@―---------------------------------------------------------------------------
-	enum class CullMode {
-		Back,	//!< 裏面をカリング
-		Front,	//!< 表面をカリング
-		None,	//!< カリングなし
+	struct VertexInputBinding {
+		u16 stream;					//!< 
+		u16 stride;					//!< 頂点データの配置間隔
+		VertexInputRate inputRate;	//!<
 	};
 
+	struct PipelineStateDesc {
+		RootSignature rootSignature;
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  ブレンド・ファクター
-	//@―---------------------------------------------------------------------------
-	enum class BlendFactor {
-		ONE,
-		ZERO,
-		SRC_COLOR,
-		SRC_INV_COLOR,
-		SRC_ALPHA,
-		SRC_INV_ALPHA,
-		DEST_COLOR,
-		DEST_INV_COLOR,
-		DEST_ALPHA,
-		DEST_INV_ALPHA,
-		SRC_ALPHA_SAT
+		VertexShader vs;
+		PixelShader ps;
+		//GeometryShader ps;
+		//HullShader ps;
+		//DomainShader ps;
+
+		// StreamOutput
+		// SampleMask
+		// NodeMask
+		// CacchedPSO
+		// Flags
+
+		BlendState			blendState;
+		DepthStencilState	depthStencilState;
+		RasterizerState		rasterizerState;
+		//SampleDesc
+		
+
+		VertexLayout vertexLayout;
+
+		vector<TextureFormat> renderTargetFormats;
+		TextureFormat depthStencilFormat;
+		vector<VertexInputBinding> vertexInputBinding;
+
+
+
+
+
+			bool useWireframe = false;
+		CullMode cullMode = CullMode::Back;
+		bool useMultisample = true;
+		bool zTest = true;
+		bool zWrite = true;
+		bool useStencil = true;
+
+
+		// その他
+
+		Topology primitiveTopologyType = Topology::TriangleList;
+		u32 controlPointNum;//!< テッセレーションで使用するコントロールポイントの数
 	};
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  描画時に使用する合成モード
-	//@―---------------------------------------------------------------------------
-	struct BlendMode {
-		BlendFactor src;
-		BlendFactor dest;
-	};
 
 
 	//@―---------------------------------------------------------------------------
@@ -92,8 +118,24 @@ namespace ob::graphic {
 
 	public:
 
+
+		RootSignature rootSignature;
+		RenderPass renderPass;
+		u32 subpass;
+		//NodeMask
+		// PipelineStateFlags
+
 		VertexShader vs;
 		PixelShader ps;
+		//GeometryShader ps;
+		//HullShader ps;
+		//DomainShader ps;
+
+		// 入力レイアウト
+		// 入力アセンブリ定義	PrimitiveTopology
+
+
+
 
 		bool useWireframe = false;
 		CullMode cullMode = CullMode::Back;
@@ -113,5 +155,14 @@ namespace ob::graphic {
 
 		BlendMode blendMode[8] = {};
 	};
+
+
+
+	*/
+
+	struct PipelineStateDesc {
+
+	};
+
 
 }// namespcae ob::graphic

@@ -4,17 +4,37 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Types/FillMode.h>
-#include <Framework/Graphic/Types/CullMode.h>
 
 namespace ob::graphic {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      フィル・モード
+	//! 
+	//! @details	ポリゴン描画時にどこを塗りつぶすか
+	//@―---------------------------------------------------------------------------
+	enum class FillMode :u32 {
+		Solid,		//<! 全面
+		Wireframe,	//<! 辺のみ
+		Point,		//<! 頂点のみ
+	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      カリング方法
+	//@―---------------------------------------------------------------------------
+	enum class CullMode :u32 {
+		None,		//!< なし
+		Front,		//!< 前面を非表示
+		Back,		//!< 背面を非表示 
+	};
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ラスタライズ・ステート
 	//@―---------------------------------------------------------------------------
 	struct RasterizerState{
-		FillMode fillMode{FillMode::Solid};
-		CullMode cullMode{ CullMode::Back };
+		FillMode fillMode{FillMode::Solid};		//!< フィル・モード
+		CullMode cullMode{ CullMode::Back };	//!< カリング方法
 	};
 
 }// namespcae ob::graphic

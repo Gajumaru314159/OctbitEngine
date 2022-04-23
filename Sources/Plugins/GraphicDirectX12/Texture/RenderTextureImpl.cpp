@@ -5,6 +5,7 @@
 //***********************************************************
 #include "RenderTextureImpl.h"
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
+#include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 
@@ -16,8 +17,8 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
-    RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)
-        :IRenderTexture(name) {
+    RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const gsl::span<TextureDesc> targets, const TextureDesc& depth)
+    {
         
         HRESULT result;
         const s32 targetNum = get_size(targets);
@@ -35,7 +36,8 @@ namespace ob::graphic::dx12 {
 
         result = nativeDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(m_rtvHeap.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+            return;
         }
 
         // SRVディスクリプタを生成
@@ -44,7 +46,8 @@ namespace ob::graphic::dx12 {
 
         result = nativeDevice->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(m_srvHeap.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
-            LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+            Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+            return;
         }
 
 
@@ -59,7 +62,7 @@ namespace ob::graphic::dx12 {
         s32 index = 0;
         for (auto& desc:targets) {
 
-            auto format = Utility::convertTextureFormat(desc.format);
+            auto format = TypeConverter::convert(desc.format);
 
             auto subName = fmt::format(TC("{0}_Color{1}"), getName(), index);
 
@@ -67,7 +70,7 @@ namespace ob::graphic::dx12 {
             auto& texture = m_textures.emplace_back(Texture(desc, subName));
             auto pTexture = Device::GetImpl<TextureImpl>(texture);
             if (pTexture==nullptr) {
-                LOG_WARNING_EX("Graphic","RenderTextureのレンダーターゲットの生成に失敗");
+                LOG_WARNING_EX("Graphic","カラーテクスチャの生成に失敗");
                 return;
             }
 
@@ -99,14 +102,14 @@ namespace ob::graphic::dx12 {
 
         // デプス・ステンシル生成
         {
-            auto format = Utility::convertTextureFormat(depth.format);
+            auto format = TypeConverter::convert(depth.format);
 
             // メインリソースを生成
             auto subName = fmt::format(TC("{0}_Depth"), getName());
             m_depth = Texture(depth, subName);
             auto pTexture = Device::GetImpl<TextureImpl>(m_depth);
             if (pTexture == nullptr) {
-                LOG_WARNING_EX("Graphic", "RenderTextureのレンダーターゲットの生成に失敗");
+                LOG_WARNING_EX("Graphic", "デプステクスチャの生成に失敗");
                 return;
             }
 
@@ -118,7 +121,8 @@ namespace ob::graphic::dx12 {
 
             result = nativeDevice->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(m_dsvHeap.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
-                LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDescriptorHeapに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+                Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+                return;
             }
 
             //深度ビュー作成
@@ -128,7 +132,8 @@ namespace ob::graphic::dx12 {
             dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
             nativeDevice->CreateDepthStencilView(pTexture->getResource(), &dsvDesc, m_dsvHeap->GetCPUDescriptorHandleForHeapStart());
             if (FAILED(result)) {
-                LOG_FATAL_EX("Graphic", "ID3D12Device::CreateDepthStencilViewに失敗 [{0}]", Utility::getErrorMessage(result).c_str());
+                Utility::outputErrorLog(result, TC("ID3D12Device::CreateDepthStencilView()"));
+                return;
             }
 
         }
@@ -136,11 +141,13 @@ namespace ob::graphic::dx12 {
         // コマンド・アロケータ生成
         result = nativeDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
+            Utility::outputErrorLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
             return;
         }
         // コマンド・リスト生成
         result = nativeDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
         if (FAILED(result)) {
+            Utility::outputErrorLog(result, TC("ID3D12Device::CreateCommandList()"));
             return;
         }
 
@@ -172,7 +179,7 @@ namespace ob::graphic::dx12 {
     //! 
     //! @param index    マルチレンダーターゲットのインデックス
     //@―---------------------------------------------------------------------------
-    const Texture& RenderTextureImpl::getTexture(s32 index)const {
+    const Texture RenderTextureImpl::getTexture(s32 index)const {
         if (is_in_range(index, m_textures)) {
             return m_textures[index];
         }
@@ -183,7 +190,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  デプス・テクスチャを取得
     //@―---------------------------------------------------------------------------
-    const Texture& RenderTextureImpl::getDepthStencilTexture()const {
+    const Texture RenderTextureImpl::getDepthStencilTexture()const {
         return m_depth;
     }
 

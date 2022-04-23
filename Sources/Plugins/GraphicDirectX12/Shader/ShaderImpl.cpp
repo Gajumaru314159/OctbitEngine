@@ -25,11 +25,11 @@ namespace ob::graphic::dx12 {
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
     //!
     //! @param src			シェーダコード
-    //! @param type			シェーダタイプ
+    //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const String& code, const ShaderType type, StringView name)
-        : IShader(name) {
+    ShaderImpl::ShaderImpl(const String& code, const ShaderStage stage)
+    {
 
         // コンパイルできるようにUTF-8にコンバート
         StringBase<char> utfCode;
@@ -37,7 +37,7 @@ namespace ob::graphic::dx12 {
 
         Blob blob(utfCode.data(),utfCode.size());
 
-        initialize(blob,type);
+        initialize(blob, stage);
     }
 
 
@@ -46,11 +46,11 @@ namespace ob::graphic::dx12 {
     //! @brief				バイナリからシェーダーオブジェクトを生成
     //!
     //! @param src			バイナリ
-    //! @param type			シェーダタイプ
+    //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const Blob& blob, const ShaderType type, StringView name)
-        : IShader(name) {
+    ShaderImpl::ShaderImpl(const Blob& blob, const ShaderStage stage)
+    {
 
     }
 
@@ -58,11 +58,11 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief				初期化
     //@―---------------------------------------------------------------------------
-    void ShaderImpl::initialize(const Blob& blob, const ShaderType type) {
+    void ShaderImpl::initialize(const Blob& blob, const ShaderStage stage) {
 
         ComPtr<ID3DBlob> errorBlob = nullptr;
 
-        s32 index = enum_cast(type);
+        s32 index = enum_cast(stage);
         if (!is_in_range(index, 0, get_size(s_entryName))) {
             LOG_ERROR("不正なシェーダタイプ");
             return;

@@ -41,6 +41,7 @@
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Math/Random.h>
+#include <Framework/Core/Math/Range.h>
 
 #include <Framework/Core/Misc/CRCHash.h>
 #include <Framework/Core/Misc/UUID.h>

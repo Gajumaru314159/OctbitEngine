@@ -37,7 +37,6 @@ namespace ob::graphic {
 
     protected:
 
-        ITexture(StringView name) :GraphicObject(name) {}
         virtual ~ITexture() = default;
 
     };

@@ -7,15 +7,4 @@
 
 namespace ob::graphic {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  リソース使用法
-    //@―---------------------------------------------------------------------------
-    enum class ResourceUsage{
-        Default,    //!< GPUでの読み取り/書き込み
-        Immutable,  //!< GPUでの読み取り
-        Dynamic,    //!< CPUでの書き込み/GPUでの読み取りバッファ
-        ReadBack,   //!< GPUでの書き込み/CPUでの読み取り
-        WiteBack,   //!< CPUでの書き込み/GPUでの読み取り
-    };
-
 }// namespcae ob::graphic

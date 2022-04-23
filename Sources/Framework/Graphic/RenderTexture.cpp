@@ -22,10 +22,11 @@ namespace ob::graphic {
     //! @param name     オブジェクト名
     //@―---------------------------------------------------------------------------
     RenderTexture::RenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name) {
-        m_pImpl = Device::Get()->createRenderTexture(targets, depth, name);
+        m_pImpl = Device::Get()->createRenderTexture(targets, depth);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
+        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "レンダーテクスチャの生成に失敗");
+            LOG_ERROR_EX("Graphic", "レンダーテクスチャの生成に失敗[name={}]",name);
             release();
         }
     }

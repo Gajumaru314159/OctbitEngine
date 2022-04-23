@@ -5,6 +5,7 @@
 #include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/RenderTexture.h>
 #include <Framework/Graphic/Geometry.h>
+#include <Framework/Graphic/RootSignature.h>
 
 #include <Windows.h>
 
@@ -12,25 +13,6 @@ using namespace ob;
 
 int main() {
     using namespace ob::graphic;
-
-    struct Vertex {
-        Vec3 position;
-        Vec2 uv;
-        Color color;
-    };
-
-    VertexLayout layout
-    {
-        sizeof(Vertex),
-        {
-            {Semantic::Position ,Type::Float,3,offsetof(Vertex,position)},
-            {Semantic::TexCoord ,Type::Float,2,offsetof(Vertex,uv)},
-            {Semantic::Color    ,Type::Float,4,offsetof(Vertex,color)},
-        }
-    };
-
-    Geometry<Vertex> geometry(layout);
-    geometry.addQuad();
 
 
     Logger::Instance();
@@ -64,8 +46,31 @@ int main() {
             RenderTexture rt(texDesc, depth);
 
 
+            RootSignatureDesc desc(
+                {
+                    RootParameter(
+                        {
+                            DescriptorRange(DescriptorRangeType::CBV,1,0),
+                            DescriptorRange(DescriptorRangeType::SRV,1,0),
+                        }
+                    )
+                },
+                {
+                    StaticSamplerDesc(SamplerDesc(),0)
+                }
+             );
+            RootSignature signature(desc);
+
+
             MSG msg = {};
             while (true) {
+
+                swapChain.update(rt.getTexture());
+                //mat.setMatrix("WorldMatrix",mtx);
+                //mat.setTexture("MainTex",tex);
+                //rt.setPipeline(pipeline);
+                //rt.setMaterial(mat);
+                //rt.draw(shape);
 
                 if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
                     TranslateMessage(&msg);

@@ -29,8 +29,9 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const String& code, StringView name = TC("Shader")) {
-        m_pImpl = Device::Get()->createShader(code,ShaderType::Vertex, name);
+    VertexShader::VertexShader(const String& code, StringView name) {
+        //m_pImpl = Device::Get()->createShader(code,ShaderType::Vertex);
+
     }
 
 
@@ -40,8 +41,8 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const Blob& binary, StringView name = TC("Shader")) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderType::Vertex, name);
+    VertexShader::VertexShader(const Blob& binary, StringView name) {
+        //m_pImpl = Device::Get()->createShader(binary, ShaderType::Vertex);
     }
 
 
@@ -62,8 +63,8 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const String& code, StringView name = TC("Shader")) {
-        m_pImpl = Device::Get()->createShader(code, ShaderType::Pixel, name);
+    PixelShader::PixelShader(const String& code, StringView name) {
+        //m_pImpl = Device::Get()->createShader(code, ShaderType::Pixel, name);
     }
 
 
@@ -73,8 +74,8 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const Blob& binary, StringView name = TC("Shader")) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderType::Pixel, name);
+    PixelShader::PixelShader(const Blob& binary, StringView name) {
+        //m_pImpl = Device::Get()->createShader(binary, ShaderType::Pixel, name);
     }
 
 }// namespace ob::graphic

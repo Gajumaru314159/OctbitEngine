@@ -20,10 +20,11 @@ namespace ob::graphic {
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
     Texture::Texture(const TextureDesc& desc, StringView name) {
-        m_pImpl = Device::Get()->createTexture(desc, name);
+        m_pImpl = Device::Get()->createTexture(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
+        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗");
+            LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗[name={}]",name);
             release();
         }
     }

@@ -5,9 +5,22 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Types/ComparisonFunc.h>
-#include <Framework/Graphic/Types/StencilOp.h>
 
 namespace ob::graphic {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      ステンシル・オペレータ
+	//@―---------------------------------------------------------------------------
+	enum class StencilOp :u32 {
+		Keep,				//!< 			
+		Zero,				//!< 
+		Replace,			//!< 
+		IncrementAndClamp,	//!< 
+		DecrementAndClamp,	//!< 
+		Invert,				//!< 
+		IncrementAndWrap,	//!< 
+		DecrementAndWrap,	//!< 
+	};
 
     //@―---------------------------------------------------------------------------
     //! @brief  デプス・ステンシル・ステート
@@ -20,14 +33,14 @@ namespace ob::graphic {
 		} depth;
 
 		struct {
-			bool				enable{ false };
-			u8		read_mask{ 0xff };
-			u8		write_mask{ 0xff };
-			StencilOp	failOp{ StencilOp::Keep };
-			StencilOp	depthFailOp{ StencilOp::Keep };
-			StencilOp	passOp{ StencilOp::Keep };
-			ComparisonFunc		func{ ComparisonFunc::Always };
-			u8		reference{ 0x00 };
+			bool			enable{ false };
+			u8				read_mask{ 0xff };
+			u8				write_mask{ 0xff };
+			StencilOp		failOp{ StencilOp::Keep };
+			StencilOp		depthFailOp{ StencilOp::Keep };
+			StencilOp		passOp{ StencilOp::Keep };
+			ComparisonFunc	func{ ComparisonFunc::Always };
+			u8				reference{ 0x00 };
 		} stencil;
 	};
 

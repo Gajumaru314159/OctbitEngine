@@ -88,7 +88,9 @@
 //============================================
 
 #if defined(_DEBUG)||defined(DEBUG)
-#define OB_DEBUG
+#define OB_DEBUG 1
+#elif
+#define OB_DEBUG 0
 #endif
 
 //! @endcond

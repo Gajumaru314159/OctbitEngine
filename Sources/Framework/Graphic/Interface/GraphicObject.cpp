@@ -11,11 +11,10 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    GraphicObject::GraphicObject(StringView name)
+    GraphicObject::GraphicObject()
         : m_pStack(nullptr)
         , m_referenceCount(1){
-
-        setName(name);
+        m_name[0] = TC('\0');
 
         System::Instance().registerObject(*this);
     }

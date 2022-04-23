@@ -40,19 +40,21 @@ namespace ob::core {
         }
         logTypeName[logTypeNameAscii.size()] = TC('\0');
 
-        auto msg=fmt::format(TC("[{0}] {1} [{2}({3})] [::{4}()]"),
+        auto msg = fmt::format(TC("[{0}][{1}] {2} [{3}({4})] [::{5}()]"),
             logTypeName,
+            category,
             pMessage,
-            sourceLocation.filePath, 
+            sourceLocation.filePath,
             sourceLocation.line,
             sourceLocation.functionName);
 
         WString ws;
         StringEncoder::Encode(msg, ws);
+        ::OutputDebugLog(ws.c_str());
 
-        ::ShowMessageBox(ws.c_str());
-
+        // TODO エラーダイアログ表示は外部から設定する？
         if (type == LogType::Fatal) {
+            ::ShowMessageBox(ws.c_str());
             ::CallBreakPoint();
             assert(false);
         }

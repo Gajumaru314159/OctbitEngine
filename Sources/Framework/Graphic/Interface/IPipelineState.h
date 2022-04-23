@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/GraphicPipelineDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -21,8 +20,14 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      グラフィックパイプライン・インターフェイス
     //@―---------------------------------------------------------------------------
-    class IGraphicPipeline :public GraphicObject {
+    class IPipelineState :public GraphicObject {
     public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  妥当な状態か
+		//@―---------------------------------------------------------------------------
+		virtual bool isValid()const = 0;
+		/*
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		指定したスロットの定数バッファのサイズを取得
@@ -87,13 +92,7 @@ namespace ob::graphic {
 		/// <returns>　０：取得成功\n－１：取得失敗</returns>
 		virtual const HashMap<String, ShaderVariableDesc>& GetShaderParamList()const;
 
-
-		/// <summary>
-		/// インスタンスの生成に成功しているか
-		/// </summary>
-		/// <returns></returns>
-		virtual bool IsValid()const { return m_pipelineState != nullptr; }
-
+		*/
     
     };
 

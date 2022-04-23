@@ -124,7 +124,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         void set(const void* pData, size_t dataSize) {
             m_data.resize(dataSize);
-            ob::copy_n(pData, dataSize, m_data.begin());
+            memcpy_s(m_data.data(), dataSize, pData, dataSize);
         }
 
 
@@ -149,7 +149,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         void append(const void* pData, size_t dataSize) {
             m_data.reserve(m_data.size()+dataSize);
-            ob::copy_n(pData, dataSize, m_data.begin()+ m_data.size());
+            memcpy_s(m_data.data() + m_data.size(), dataSize, pData, dataSize);
         }
 
 

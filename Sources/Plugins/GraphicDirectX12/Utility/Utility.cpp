@@ -9,75 +9,11 @@
 namespace ob::graphic::dx12 {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  TextureFormat を DXGI_FORMAT に変換
+    //! @brief  HRESULTのエラーログを出力
     //@―---------------------------------------------------------------------------
-    DXGI_FORMAT Utility::convertTextureFormat(TextureFormat format) {
-        switch (format) {
-        case TextureFormat::RGBA32:
-            return DXGI_FORMAT_R32G32B32A32_FLOAT;
-        case TextureFormat::RGBA16:
-            return DXGI_FORMAT_R16G16B16A16_FLOAT;
-        case TextureFormat::RGBA8:
-            return DXGI_FORMAT_R8G8B8A8_UNORM;
-
-        case TextureFormat::RGB32:
-            return DXGI_FORMAT_R32G32B32_FLOAT;
-        case TextureFormat::RGB8:
-            return DXGI_FORMAT_B8G8R8X8_UNORM;
-
-        case TextureFormat::RG32:
-            return DXGI_FORMAT_R32G32_FLOAT;
-        case TextureFormat::RG16:
-            return DXGI_FORMAT_R16G16_FLOAT;
-        case TextureFormat::RG8:
-            return DXGI_FORMAT_R8G8_UNORM;
-
-        case TextureFormat::R32:
-            return DXGI_FORMAT_R32_FLOAT;
-        case TextureFormat::R16:
-            return DXGI_FORMAT_R16_FLOAT;
-        case TextureFormat::R8:
-            return DXGI_FORMAT_R8_UNORM;
-
-        case TextureFormat::R10G10B10A2:
-            return DXGI_FORMAT_R10G10B10A2_UNORM;
-
-        case TextureFormat::D32S8:
-            return DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-        case TextureFormat::D32:
-            return DXGI_FORMAT_D32_FLOAT;
-        case TextureFormat::D24S8:
-            return DXGI_FORMAT_D24_UNORM_S8_UINT;
-        case TextureFormat::D16:
-            return DXGI_FORMAT_D16_UNORM;
-
-        case TextureFormat::BC1:
-            return DXGI_FORMAT_BC1_UNORM;
-        case TextureFormat::BC2:
-            return DXGI_FORMAT_BC2_UNORM;
-        case TextureFormat::BC3:
-            return DXGI_FORMAT_BC3_UNORM;
-        case TextureFormat::BC4:
-            return DXGI_FORMAT_BC4_UNORM;
-        case TextureFormat::BC5:
-            return DXGI_FORMAT_BC5_UNORM;
-        case TextureFormat::BC6H:
-            return DXGI_FORMAT_BC6H_UF16;
-        case TextureFormat::BC7:
-            return DXGI_FORMAT_BC7_UNORM;
-
-        case TextureFormat::BC1_SRGB:
-            return DXGI_FORMAT_BC1_UNORM_SRGB;
-        case TextureFormat::BC2_SRGB:
-            return DXGI_FORMAT_BC2_UNORM_SRGB;
-        case TextureFormat::BC3_SRGB:
-            return DXGI_FORMAT_BC3_UNORM_SRGB;
-        case TextureFormat::BC7_SRGB:
-            return DXGI_FORMAT_BC7_UNORM_SRGB;
-        }
-        return DXGI_FORMAT_UNKNOWN;
+    void Utility::outputErrorLog(HRESULT result, StringView message){
+        LOG_ERROR_EX("Graphic", "{0}[{1:#X}:{2}]", message,result, Utility::getErrorMessage(result));
     }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief  エラーメッセージを取得
@@ -98,17 +34,20 @@ namespace ob::graphic::dx12 {
         if (0 == result) {
             String message;
             StringEncoder::Encode(buffer, message);
-            String error = fmt::format(TC("HRESULT={0:#X}"), errorCode);
-            return move(error);
+            return TC("不明なエラー");
         }
         String message;
         StringEncoder::Encode(buffer, message);
         if (2 <= message.size())message.resize(message.size() - 2);
-        String error = fmt::format(TC("HRESULT={0:#X}:{1}"), errorCode, message.c_str());
+        String error = fmt::format(TC("{0}"), message.c_str());
+
         return move(error);
     }
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  エラーメッセージを取得
+    //@―---------------------------------------------------------------------------
     D3D12_SRV_DIMENSION Utility::getSrvDimention(const D3D12_RESOURCE_DESC& desc) {
         switch (desc.Dimension) {
         case D3D12_RESOURCE_DIMENSION_TEXTURE1D:

@@ -28,7 +28,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc, StringView name);
+        TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

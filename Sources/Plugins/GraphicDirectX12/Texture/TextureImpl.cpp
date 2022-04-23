@@ -6,6 +6,7 @@
 #include "TextureImpl.h"
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
+#include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 
 
 namespace ob::graphic::dx12 {
@@ -13,10 +14,10 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
-    TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc, StringView name)
-		:ITexture(name){
+    TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc)
+	{
 
-		auto format = Utility::convertTextureFormat(desc.format);
+		auto format = TypeConverter::convert(desc.format);
 		D3D12_CLEAR_VALUE* pClearValue=nullptr;
 
 		const FLOAT clearColor[4] = {0,0,0,1};
@@ -88,7 +89,7 @@ namespace ob::graphic::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			LOG_FATAL_EX("Graphic", "ID3D12Device::CreateCommittedResourceに失敗。 [{0}]", Utility::getErrorMessage(result).c_str());
+			Utility::outputErrorLog(result,TC("ID3D12Device::CreateCommittedResource()"));
 		}
 
 		m_resource = resource;

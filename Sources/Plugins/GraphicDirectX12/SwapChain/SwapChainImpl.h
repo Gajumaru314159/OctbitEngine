@@ -33,7 +33,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc, StringView name);
+        SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
@@ -55,19 +55,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  バックバッファの数を取得
         //@―---------------------------------------------------------------------------
-        s32 getBackBufferCount()const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  VSyncが有効か
-        //@―---------------------------------------------------------------------------
-        s32 isVSyncEnabled()const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  HDRが有効か
-        //@―---------------------------------------------------------------------------
-        s32 isHdrEnabled()const override;
+        const SwapchainDesc& getDesc()const noexcept override;
 
 
         //===============================================================
@@ -110,6 +98,7 @@ namespace ob::graphic::dx12 {
     private:
 
         SwapchainDesc m_desc;
+
         ComPtr<IDXGISwapChain4> m_swapchain = nullptr;  //!< スワップチェイン
         vector<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
         ComPtr<ID3D12DescriptorHeap> m_rtvHeaps;        //!< ディスクリプタヒープ

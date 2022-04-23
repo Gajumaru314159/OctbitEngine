@@ -38,19 +38,17 @@ namespace ob::graphic {
         //! 
         //! @param index    マルチレンダーターゲットのインデックス
         //@―---------------------------------------------------------------------------
-        virtual const Texture& getTexture(s32 index = 0)const = 0;
+        virtual const Texture getTexture(s32 index = 0)const = 0;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  デプス・テクスチャを取得
         //@―---------------------------------------------------------------------------
-        virtual const Texture& getDepthStencilTexture()const = 0;
+        virtual const Texture getDepthStencilTexture()const = 0;
 
     protected:
 
-        IRenderTexture(StringView name) :GraphicObject(name) {}
         virtual ~IRenderTexture()=default;
-
 
     };
 

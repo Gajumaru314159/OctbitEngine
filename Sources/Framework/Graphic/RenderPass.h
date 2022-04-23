@@ -1,9 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		レンダーパス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphic/Utility/GraphicObjectHolder.h>
+#include <Framework/Graphic/Types/RenderPassDesc.h>
 
 namespace ob::graphic {
 
@@ -11,6 +13,8 @@ namespace ob::graphic {
     //! @brief  説明
     //@―---------------------------------------------------------------------------
     class RenderPass {
+        friend class Device;
+        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderPass);
     public:
 
         //===============================================================
@@ -18,13 +22,15 @@ namespace ob::graphic {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  説明
+        //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
+        RenderPass();
 
 
-    private:
-
-
+        //@―---------------------------------------------------------------------------
+        //! @brief  デストラクタ
+        //@―---------------------------------------------------------------------------
+        RenderPass(const RenderPassDesc& desc,StringView name=TC("RenderPass"));
 
     };
 

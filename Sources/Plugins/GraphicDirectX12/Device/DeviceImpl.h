@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/IDevice.h>
+#include <Framework/Graphic/Types/FeatureLevel.h>
 
 //===============================================================
 // クラス定義
@@ -24,6 +25,12 @@ namespace ob::graphic::dx12 {
         DeviceImpl(FeatureLevel featureLevel);
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
+        bool isValid()const override;
+
+
         //===============================================================
         // 更新
         //===============================================================
@@ -37,31 +44,60 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  スワップ・チェーンを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::ISwapChain* createSwapChain(const SwapchainDesc& desc, StringView name)override;
+        ob::graphic::ISwapChain* createSwapChain(const SwapchainDesc& desc)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  レンダーパス生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IRenderPass* createRenderPass(const RenderPassDesc& desc)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  フレームバッファを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IFrameBuffer* createFrameBuffer(const FrameBufferDesc& desc)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ルートシグネチャを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IRootSignature* createRootSignature(const RootSignatureDesc& desc)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  パイプラインステートを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IPipelineState* createPipelineState(const PipelineStateDesc& desc)override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  テクスチャを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::ITexture* createTexture(const TextureDesc& desc, StringView name)override;
+        ob::graphic::ITexture* createTexture(const TextureDesc& desc)override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  レンダーテクスチャを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth, StringView name)override;
+        ob::graphic::IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth)override;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  バッファーを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IBuffer* createBuffer(const BufferDesc& desc) override;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  シェーダを生成
+        //@―---------------------------------------------------------------------------
+        //ob::graphic::IShader* createShader(const String&,ShaderType) override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  シェーダを生成
         //@―---------------------------------------------------------------------------
-        ob::graphic::IShader* createShader(const String&,ShaderType, StringView name) override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  シェーダを生成
-        //@―---------------------------------------------------------------------------
-        ob::graphic::IShader* createShader(const Blob&, ShaderType, StringView name) override;
+        //ob::graphic::IShader* createShader(const Blob&, ShaderType) override;
 
 
         //===============================================================
@@ -91,11 +127,11 @@ namespace ob::graphic::dx12 {
 
     private:
 
-        void initialize();
+        bool initialize();
 
-        void initializeDXGIDevice();
-        void initializeCommand();
-        void initializeVideoCardInfo();
+        bool initializeDXGIDevice();
+        bool initializeCommand();
+        bool initializeVideoCardInfo();
 
     private:
 
@@ -105,6 +141,8 @@ namespace ob::graphic::dx12 {
         ComPtr<ID3D12CommandAllocator>      m_commandAllocator;         // コマンドアロケータ
         ComPtr<ID3D12CommandQueue>          m_commandQueue;             // コマンドキュー
         ComPtr<ID3D12GraphicsCommandList>   m_systemCmdList;            // システムコマンドリスト
+        ComPtr<ID3D12Debug>                 m_debugLayer;               // デバッグレイヤ
+        ComPtr<ID3D12Debug1>                m_debugLayer1;              // デバッグレイヤ
 
     };
 }// namespace ob::graphic::dx12

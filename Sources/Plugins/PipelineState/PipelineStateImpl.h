@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IGraphicPipeline.h>
-#include <Framework/Graphic/Types/GraphicPipelineDesc.h>
+#include <Framework/Graphic/Interface/IPipelineState.h>
+#include <Framework/Graphic/Types/PipelineStateDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -42,7 +42,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class GraphicPipelineImpl :public IGraphicPipeline {
+    class GraphicPipelineImpl :public IPipelineState {
     public:
         static constexpr s32 REGISTER_MAX=8;
         using variable_map = map<String, ShaderVariableDesc, less<>>;
@@ -52,7 +52,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
         //@―---------------------------------------------------------------------------
-        GraphicPipelineImpl(DeviceImpl&, const GraphicPipelineDesc& desc);
+        GraphicPipelineImpl(DeviceImpl&, const PipelineStateDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

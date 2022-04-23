@@ -86,7 +86,7 @@ namespace ob::graphic {
         //! 
         //! @param name オブジェクト名
         //@―---------------------------------------------------------------------------
-        GraphicObject(StringView name=TC("NONAME"));
+        GraphicObject();
 
 
     private:

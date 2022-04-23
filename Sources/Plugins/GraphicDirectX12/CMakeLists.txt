@@ -38,5 +38,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins/Graphic")
 
-
+# 
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)

@@ -34,7 +34,9 @@ namespace ob::graphic {
                 bool operator!=(const type&)const noexcept; \
                 operator bool()const noexcept;              \
                 void release();                             \
-                bool isEmpty()const noexcept;
+                bool isEmpty()const noexcept;               \
+            private:                                        \
+                class I##type* m_pImpl = nullptr;
 
 
     //@―---------------------------------------------------------------------------

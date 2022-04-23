@@ -58,7 +58,7 @@ namespace ob::graphic {
         size_t size;
         vector<VertexAttribute> attributes;
     };
-
+    /*
     //@―---------------------------------------------------------------------------
     //! @brief  ジオメトリ
     //@―---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ namespace ob::graphic {
         size_t              getVertexArrayCount()
     };
 
-
+    */
 
 
 

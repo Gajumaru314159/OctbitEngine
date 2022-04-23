@@ -59,8 +59,7 @@ namespace ob::graphic {
 
     protected:
 
-        ICommandList(StringView name) :GraphicObject(name) {}
-        ~ICommandList() = default;
+        virtual ~ICommandList() = default;
 
     };
 

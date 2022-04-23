@@ -16,11 +16,10 @@ namespace ob::graphic::dx12 {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  TextureFormat を DXGI_FORMAT に変換
+        //! @brief  HRESULTのエラーログを出力
         //@―---------------------------------------------------------------------------
-        static DXGI_FORMAT convertTextureFormat(TextureFormat format);
-
-
+        static void outputErrorLog(HRESULT result, StringView message = TC(""));
+        
         //@―---------------------------------------------------------------------------
         //! @brief  エラーメッセージを取得
         //@―---------------------------------------------------------------------------

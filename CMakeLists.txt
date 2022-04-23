@@ -23,6 +23,7 @@ set(OCTBIT_DLL_PATH "${OCTBIT_ROOT_PATH}/Build/Libray")
 
 set(OB_CONFIGURATION "Debug")
 
+
 if(MSVC)
     #set(CMAKE_CXX_FLAGS "/Yu")
     string(REPLACE "/MD" "/MT" CMAKE_C_FLAGS_DEBUG            ${CMAKE_C_FLAGS_DEBUG})

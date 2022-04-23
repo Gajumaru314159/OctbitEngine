@@ -1,17 +1,25 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		テクスチャ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Types/TextureType.h>
 #include <Framework/Graphic/Types/TextureFormat.h>
-#include <Framework/Graphic/Types/FilterMode.h>
-#include <Framework/Graphic/Types/TextureWrapMode.h>
-//#include <Framework/Graphic/Types/BindFlag.h>
-//#include <Framework/Graphic/Types/ResourceUsage.h>
 
 namespace ob::graphic {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  テクスチャ・タイプ
+    //@―---------------------------------------------------------------------------
+    enum class TextureType {
+        Texture1D,          //!< 1Dテクスチャ
+        Texture2D,          //!< 2Dテクスチャ
+        Texture3D,          //!< 3Dテクスチャ
+        Cube,               //!< キューブテクスチャ
+        RenderTarget,       //!< レンダーターゲット
+        DeptthStencil,      //!< デプス・ステンシル
+    };
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  テクスチャ定義

@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シェーダ・ステージ・フラグ
+//! @brief		シェーダ・ステージ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,9 +8,9 @@
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      シェーダ・ステージ・フラグ
+    //! @brief      シェーダ・ステージ
     //@―---------------------------------------------------------------------------
-    enum class ShaderStageFlag{
+    enum class ShaderStage :u32{
         Unknown         = get_bit(0),
         Vertex          = get_bit(1),
         Hull            = get_bit(2),
@@ -26,11 +26,14 @@ namespace ob::graphic {
         Miss            = get_bit(12),
         Intersection    = get_bit(13),
         Callable        = get_bit(14),
+        Amplification   = get_bit(15),
+
+        All             = get_bit(17)-1,
     };
 
     //@―---------------------------------------------------------------------------
-    //! @brief      シェーダ・ステージ・フラグ・セット
+    //! @brief      シェーダ・ステージ・セット
     //@―---------------------------------------------------------------------------
-    using ShaderStageFlags = bit_flags<ShaderStageFlag>;
+    using ShaderStages = bit_flags<ShaderStage>;
 
 }// namespace pb::graphic

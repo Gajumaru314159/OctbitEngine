@@ -72,10 +72,6 @@ namespace ob::graphic {
         void beginUpdate(UpdateResourceParameter&);
         void endUpdate(UpdateResourceParameter&);
 
-    private:
-
-        class IBuffer* m_pImpl;
-
     };
 
 
