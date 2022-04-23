@@ -3,7 +3,7 @@
 //! @brief		スワップ・チェーン
 //! @author		Gajumaru
 //***********************************************************
-#include "Swapchain.h"
+#include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/RenderTexture.h>
 #include <Framework/Graphic/Interface/ISwapchain.h>

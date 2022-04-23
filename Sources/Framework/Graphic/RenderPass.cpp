@@ -3,7 +3,7 @@
 //! @brief		レンダーパス
 //! @author		Gajumaru
 //***********************************************************
-#include "RenderPass.h"
+#include <Framework/Graphic/RenderPass.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/Interface/IRenderPass.h>
 

@@ -3,7 +3,7 @@
 //! @brief		シェーダ
 //! @author		Gajumaru
 //***********************************************************
-#include "Shader.h"
+#include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/Interface/IShader.h>
 

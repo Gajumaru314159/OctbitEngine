@@ -3,7 +3,7 @@
 //! @brief		バッファ
 //! @author		Gajumaru
 //***********************************************************
-#include "Buffer.h"
+#include <Framework/Graphic/Buffer.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/Interface/IBuffer.h>
 

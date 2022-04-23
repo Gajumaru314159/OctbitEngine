@@ -3,7 +3,7 @@
 //! @brief		テクスチャ
 //! @author		Gajumaru
 //***********************************************************
-#include "RenderTexture.h"
+#include <Framework/Graphic/RenderTexture.h>
 #include <Framework/Graphic/Interface/IRenderTexture.h>
 #include <Framework/Graphic/System.h>
 #include <Framework/Graphic/Private/Device.h>

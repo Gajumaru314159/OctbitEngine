@@ -3,7 +3,7 @@
 //! @brief		ルートシグネチャ
 //! @author		Gajumaru
 //***********************************************************
-#include "RootSignature.h"
+#include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/Interface/IRootSignature.h>
 

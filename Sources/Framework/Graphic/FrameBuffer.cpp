@@ -3,7 +3,7 @@
 //! @brief		フレームバッファ
 //! @author		Gajumaru
 //***********************************************************
-#include "FrameBuffer.h"
+#include <Framework/Graphic/FrameBuffer.h>
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/Types/FrameBufferDesc.h>
 #include <Framework/Graphic/Interface/IFrameBuffer.h>
