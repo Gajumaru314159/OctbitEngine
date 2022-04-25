@@ -91,8 +91,8 @@ namespace ob::graphic {
         virtual ITexture*       createTexture(const TextureDesc& desc)=0;
         virtual IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth)=0;
         
-        //virtual IShader*        createShader(const String& code,ShaderType type) = 0;
-        //virtual IShader*        createShader(const Blob& binary, ShaderType type) = 0;
+        virtual IShader*        createShader(const String& code,ShaderStage stage) = 0;
+        virtual IShader*        createShader(const Blob& binary, ShaderStage stage) = 0;
 
 
 

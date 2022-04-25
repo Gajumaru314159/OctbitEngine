@@ -9,7 +9,7 @@
 #include<Plugins/GraphicDirectX12/RenderPass/RenderPassImpl.h>
 #include<Plugins/GraphicDirectX12/FrameBuffer/FrameBufferImpl.h>
 #include<Plugins/GraphicDirectX12/RootSignature/RootSignatureImpl.h>
-//#include<Plugins/GraphicDirectX12/PipelineState/PipelineStateImpl.h>
+#include<Plugins/GraphicDirectX12/PipelineState/PipelineStateImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
 #include<Plugins/GraphicDirectX12/Shader/ShaderImpl.h>
@@ -81,7 +81,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  パイプラインステートを生成
 	//@―---------------------------------------------------------------------------
 	IPipelineState* DeviceImpl::createPipelineState(const PipelineStateDesc& desc) {
-		return nullptr;// new PipelineStateImpl(*this, desc);
+		return new PipelineStateImpl(*this, desc);
 	}
 
 
@@ -107,22 +107,21 @@ namespace ob::graphic::dx12 {
 		return nullptr;
 	}
 
-	
 
-	////@―---------------------------------------------------------------------------
-	////! @brief  頂点シェーダを生成
-	////@―---------------------------------------------------------------------------
-	//ob::graphic::IVertexShader* DeviceImpl::createShader(const String& code, ShaderType type) {
-	//	return new ShaderImpl(code, type);
-	//}
+	//@―---------------------------------------------------------------------------
+	//! @brief  頂点シェーダを生成
+	//@―---------------------------------------------------------------------------
+	ob::graphic::IShader* DeviceImpl::createShader(const String& code, ShaderStage stage) {
+		return new ShaderImpl(code, stage);
+	}
 
 
-	////@―---------------------------------------------------------------------------
-	////! @brief  頂点シェーダを生成
-	////@―---------------------------------------------------------------------------
-	//ob::graphic::IVertexShader* DeviceImpl::createShader(const Blob& binary, ShaderType type) {
-	//	return new ShaderImpl(binary, type);
-	//}
+	//@―---------------------------------------------------------------------------
+	//! @brief  頂点シェーダを生成
+	//@―---------------------------------------------------------------------------
+	ob::graphic::IShader* DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
+		return new ShaderImpl(binary, stage);
+	}
 
 
 	//@―---------------------------------------------------------------------------

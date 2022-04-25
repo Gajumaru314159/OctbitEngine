@@ -30,7 +30,7 @@ namespace ob::graphic {
         s32             arrayNum = 0;                   //!< テクスチャ配列の要素数
         s32             mipLevel = 0;                   //!< ミップ生成レベル
         TextureType     type = TextureType::Texture2D;  //!< テクスチャタイプ
-        TextureFormat   format = TextureFormat::RGB8;   //!< テクスチャフォーマット
+        TextureFormat   format = TextureFormat::RGBA8;  //!< テクスチャフォーマット
 
         // ResourceDescにまとめる？
         //ResourceUsage   usage = ResourceUsage::Default;         //!< 利用法

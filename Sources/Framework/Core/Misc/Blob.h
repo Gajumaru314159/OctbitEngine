@@ -208,7 +208,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 空か
         //@―---------------------------------------------------------------------------
-        bool isEmpty() const noexcept {
+        bool empty() const noexcept {
             return m_data.empty();
         }
 
@@ -217,7 +217,7 @@ namespace ob::core {
         //! @brief 空か
         //@―---------------------------------------------------------------------------
         explicit operator bool() const noexcept {
-            return !isEmpty();
+            return !empty();
         }
 
 

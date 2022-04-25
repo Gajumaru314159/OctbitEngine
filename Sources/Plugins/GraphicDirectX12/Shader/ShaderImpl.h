@@ -37,7 +37,7 @@ namespace ob::graphic::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const String& code, const ShaderStage stage);
+        ShaderImpl(const String& code, ShaderStage stage);
 
 
         //@―---------------------------------------------------------------------------
@@ -47,23 +47,25 @@ namespace ob::graphic::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const Blob& blob, const ShaderStage stage);
+        ShaderImpl(const Blob& blob, ShaderStage stage);
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief				シェーダーオブジェクトを取得
+        //! @brief  妥当な状態か
         //@―---------------------------------------------------------------------------
-        const ComPtr<ID3DBlob>& getShaderBolb() { return m_shaderBolb; }
+        bool isValid()const;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief				シェーダーオブジェクトが有効な状態かどうか
-        //!
-        //! @details			シェーダーの生成を行った場合はこの関数を用いて生成に成功したかを判定できる。
-        //! @retval true		使用可能
-        //! @retval false		使用不可
+        //! @brief  バイナリデータを取得
         //@―---------------------------------------------------------------------------
-        bool isValid()const { return m_shaderBolb; };
+        const void* getBinaryData()const;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  バイナリサイズを取得
+        //@―---------------------------------------------------------------------------
+        SIZE_T getBinarySize()const;
 
 
     public:
@@ -78,28 +80,15 @@ namespace ob::graphic::dx12 {
 
     private:
 
-        void initialize(const Blob& blob, const ShaderStage stage);
+        void compile(const StringBase<char>& blob,ShaderStage stage);
 
 
     private:
 
-        ComPtr<ID3DBlob> m_shaderBolb;						//!< シェーダ・バイナリ
-
-        vector<D3D12_INPUT_ELEMENT_DESC> m_inputLayoutDesc;	//!< 入力レイアウト
-        vector<D3D12_INPUT_ELEMENT_DESC> m_textureDesc;		//!< 入力レイアウト(テクスチャ)
+        ShaderStage         m_stage;                        //!< シェーダ・ステージ
+        Blob                m_shaderBlob;                   //!< シェーダ・バイナリ
+        ComPtr<ID3DBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ
 
     };
 
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob::graphic::dx12

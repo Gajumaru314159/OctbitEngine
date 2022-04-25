@@ -35,7 +35,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  Texture を取得
     //@―---------------------------------------------------------------------------
-    Texture RenderTexture::getTexture(s32 index) {
+    Texture RenderTexture::getTexture(s32 index)const {
         CHECK_IMPL();
         return m_pImpl->getTexture(index);
     }
@@ -44,7 +44,27 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  デプステクスチャを取得
     //@―---------------------------------------------------------------------------
-    Texture RenderTexture::getDepthStencilTexture() {
+    Texture RenderTexture::getDepthStencilTexture()const {
+        CHECK_IMPL();
+        return m_pImpl->getDepthStencilTexture();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      描画ターゲット枚数を取得
+    //! 
+    //! @details    デプス・ステンシルテクスチャは含まれません。
+    //@―---------------------------------------------------------------------------
+    s32 RenderTexture::getTargetNum()const {
+        CHECK_IMPL();
+        return m_pImpl->getTargetNum();
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  デプス・テクスチャを持っているか
+    //@―---------------------------------------------------------------------------
+    bool RenderTexture::hasDepthStencil()const {
         CHECK_IMPL();
         return m_pImpl->getDepthStencilTexture();
     }

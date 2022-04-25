@@ -6,9 +6,11 @@
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/System.h>
 #include <Framework/Graphic/SwapChain.h>
+#include <Framework/Graphic/RootSignature.h>
+#include <Framework/Graphic/PipelineState.h>
+#include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/Texture.h>
 #include <Framework/Graphic/RenderTexture.h>
-#include <Framework/Graphic/Shader.h>
 
 namespace ob::graphic
 {
@@ -26,23 +28,23 @@ namespace ob::graphic
     //@―---------------------------------------------------------------------------
     //! @brief  SwapChain の実装を取得
     //@―---------------------------------------------------------------------------
-    ISwapChain* Device::GetImpl(SwapChain& obj) {
+    const ISwapChain* Device::GetImpl(const SwapChain& obj) {
         return obj.m_pImpl;
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  Texture の実装を取得
+    //! @brief  RootSignature の実装を取得
     //@―---------------------------------------------------------------------------
-    ITexture* Device::GetImpl(Texture& obj) {
+    const IRootSignature* Device::GetImpl(const RootSignature& obj) {
         return obj.m_pImpl;
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  RenderTexture の実装を取得
+    //! @brief  PipelineState の実装を取得
     //@―---------------------------------------------------------------------------
-    IRenderTexture* Device::GetImpl(RenderTexture& obj) {
+    const IPipelineState* Device::GetImpl(const PipelineState& obj) {
         return obj.m_pImpl;
     }
 
@@ -50,7 +52,23 @@ namespace ob::graphic
     //@―---------------------------------------------------------------------------
     //! @brief  Shader の実装を取得
     //@―---------------------------------------------------------------------------
-    IShader* Device::GetImpl(Shader& obj) {
+    const IShader* Device::GetImpl(const Shader& obj) {
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  Texture の実装を取得
+    //@―---------------------------------------------------------------------------
+    const ITexture* Device::GetImpl(const Texture& obj) {
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  RenderTexture の実装を取得
+    //@―---------------------------------------------------------------------------
+    const IRenderTexture* Device::GetImpl(const RenderTexture& obj) {
         return obj.m_pImpl;
     }
 

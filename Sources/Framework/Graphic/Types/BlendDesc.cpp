@@ -11,9 +11,7 @@ namespace ob::graphic {
         BlendFactor::One,   \
         BlendFactor::Zero,  \
         BlendOp::Add,       \
-        false,              \
-        LogicOp::Noop,      \
-        3
+        ColorCompoent::All
 
 
     const BlendDesc BlendDesc::None = {

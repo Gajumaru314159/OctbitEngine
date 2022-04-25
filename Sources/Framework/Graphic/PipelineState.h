@@ -30,7 +30,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        PipelineState(const PipelineStateDesc& desc, StringView name = TC("RenderPass"));
+        PipelineState(const PipelineStateDesc& desc, StringView name = TC("PipelineState"));
 
 
     };

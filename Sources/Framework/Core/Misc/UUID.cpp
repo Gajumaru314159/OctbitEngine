@@ -159,7 +159,7 @@ namespace ob::core {
     //! @retval true	空
     //! @retval false	空ではない
     //@―---------------------------------------------------------------------------
-    bool UUID::isEmpty() const {
+    bool UUID::empty() const {
         for (auto i : m_data) {
             if (i != 0) return false;
         }

@@ -91,13 +91,13 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  シェーダを生成
         //@―---------------------------------------------------------------------------
-        //ob::graphic::IShader* createShader(const String&,ShaderType) override;
+        ob::graphic::IShader* createShader(const String&,ShaderStage) override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  シェーダを生成
         //@―---------------------------------------------------------------------------
-        //ob::graphic::IShader* createShader(const Blob&, ShaderType) override;
+        ob::graphic::IShader* createShader(const Blob&, ShaderStage) override;
 
 
         //===============================================================

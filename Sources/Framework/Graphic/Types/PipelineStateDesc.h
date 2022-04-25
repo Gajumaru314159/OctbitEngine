@@ -93,9 +93,21 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	struct VertexAttribute {
 		Semantic	semantic;	//!< セマンティクス
+		s32			offset;		//!< 頂点構造体内でのオフセット
 		Type		type;		//!< コンポーネント型
 		s32			dimention;	//!< 次元数
-		s32			offset;		//!< 頂点構造体内でのオフセット
+		s32			index;		//!< セマンティクス内インデックス
+	public:
+		//@―---------------------------------------------------------------------------
+		//! @brief      コンストラクタ
+		//@―---------------------------------------------------------------------------
+		VertexAttribute() = default;
+		//@―---------------------------------------------------------------------------
+		//! @brief      コンストラクタ
+		//@―---------------------------------------------------------------------------
+		VertexAttribute(Semantic semantic, s32 offset,Type type,s32 dimention=1,s32 index = 0)
+			:semantic(semantic), offset(offset), type(type), dimention(dimention),index(index) {}
+
 	};
 
 
@@ -123,21 +135,21 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
 		RootSignature		rootSignature;	//!< ルートシグネチャ
+		RenderTexture		target;			//!< 描画先
+		VertexLayout		vertexLayout;	//!< 頂点レイアウト
+		Topology			topology=Topology::TriangleList;//!< トポロジー
 
 		VertexShader		vs;				//!< 頂点シェーダ
 		PixelShader			ps;				//!< ピクセルシェーダ
-		//GeometryShader gs;				//!< ジオメトリシェーダ
-		//HullShader hs;					//!< ハルシェーダ
-		//DomainShader ds;					//!< ドメインシェーダ
+		GeometryShader		gs;				//!< ジオメトリシェーダ
+		HullShader			hs;				//!< ハルシェーダ
+		DomainShader		ds;				//!< ドメインシェーダ
 
 		SampleDesc			sample;			//!< サンプル定義
-		BlendDesc			blend;			//!< ブレンド定義
+		BlendDesc			blend[8];		//!< ブレンド定義
 		RasterizerDesc		rasterizer;		//!< ラスタライズ定義
 		DepthStencilDesc	depthStencil;	//!< デプス・ステンシル定義
-		VertexLayout		vertexLayout;	//!< 頂点レイアウト
-		Topology			topology;		//!< トポロジー
 
-		RenderTexture		target;			//!< 描画先
 		u32					sampleMask=0b11111111;	//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 

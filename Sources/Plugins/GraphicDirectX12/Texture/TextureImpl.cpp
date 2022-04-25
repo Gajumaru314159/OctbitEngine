@@ -15,6 +15,7 @@ namespace ob::graphic::dx12 {
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
     TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc)
+		: m_desc(desc)
 	{
 
 		auto format = TypeConverter::convert(desc.format);

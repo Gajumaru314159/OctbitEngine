@@ -73,7 +73,7 @@ TEST(Box, IsEmpty) {
     {
         Box boxA(Vec3::zero);
         Box boxB(Vec3::one, Vec3::zero);
-        EXPECT_TRUE(boxA.isEmpty());
-        EXPECT_FALSE(boxB.isEmpty());
+        EXPECT_TRUE(boxA.empty());
+        EXPECT_FALSE(boxB.empty());
     }
 }

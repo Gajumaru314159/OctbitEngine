@@ -34,10 +34,25 @@ namespace ob::graphic {
                 bool operator!=(const type&)const noexcept; \
                 operator bool()const noexcept;              \
                 void release();                             \
-                bool isEmpty()const noexcept;               \
+                bool empty()const noexcept;               \
             private:                                        \
                 class I##type* m_pImpl = nullptr;
 
+    //@―---------------------------------------------------------------------------
+    //! @copydoc OB_DEFINE_GRAPHIC_OBJECT_HOLDER(type)
+    //@―---------------------------------------------------------------------------
+    #define OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(type)      \
+            public:                                         \
+                type(const type&);                          \
+                type(type&&);                               \
+                type& operator=(const type&);               \
+                type& operator=(type&&);                    \
+                virtual ~type();                            \
+                bool operator==(const type&)const noexcept; \
+                bool operator!=(const type&)const noexcept; \
+                operator bool()const noexcept;              \
+                void release();                             \
+                bool empty()const noexcept;               
 
     //@―---------------------------------------------------------------------------
     //! @brief      グラフィック・オブジェクトホルダーに必要な実装を生成するマクロ
@@ -47,7 +62,7 @@ namespace ob::graphic {
     #define OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(type)                        \
                 type::type(const type& another) {                           \
                     m_pImpl = another.m_pImpl;                              \
-                    m_pImpl->addReference();                                \
+                    if(m_pImpl)m_pImpl->addReference();                     \
                 }                                                           \
                 type::type(type&& another) {                                \
                     m_pImpl = another.m_pImpl;                              \
@@ -55,7 +70,7 @@ namespace ob::graphic {
                 }                                                           \
                 type& type::operator=(const type& another) {                \
                     m_pImpl = another.m_pImpl;                              \
-                    m_pImpl->addReference();                                \
+                    if(m_pImpl)m_pImpl->addReference();                     \
                     return *this;                                           \
                 }                                                           \
                 type& type::operator=(type&& another) {                     \
@@ -79,7 +94,7 @@ namespace ob::graphic {
                     if (m_pImpl)m_pImpl->releaseReference();                \
                     m_pImpl = nullptr;                                      \
                 }                                                           \
-                bool type::isEmpty()const noexcept {                        \
+                bool type::empty()const noexcept {                        \
                     return m_pImpl == nullptr;                              \
                 }
 

@@ -58,6 +58,14 @@ namespace ob::graphic::dx12 {
         const Texture getDepthStencilTexture()const override;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      描画ターゲット枚数を取得
+        //! 
+        //! @details    デプス・ステンシルテクスチャは含まれません。
+        //@―---------------------------------------------------------------------------
+        s32 getTargetNum()const override;
+
+
     private:
 
         vector<Texture> m_textures;                     //!< ターゲット・テクスチャ・リスト

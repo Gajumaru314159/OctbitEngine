@@ -58,6 +58,12 @@ namespace ob::graphic::dx12 {
         const RootSignatureDesc& getDesc()const noexcept override;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  ネイティブオブジェクトを取得
+        //@―---------------------------------------------------------------------------
+        auto& getNative()const noexcept { return m_rootSignature; };
+
+
     private:
 
         const RootSignatureDesc m_desc;

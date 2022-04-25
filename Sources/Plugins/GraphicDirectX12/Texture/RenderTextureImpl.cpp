@@ -152,7 +152,7 @@ namespace ob::graphic::dx12 {
         }
 
         // 0番目のターゲットをビューポートサイズとする
-        m_viewport = CD3DX12_VIEWPORT(reinterpret_cast<TextureImpl*>(Device::GetImpl(m_textures[0]))->getResource());
+        m_viewport = CD3DX12_VIEWPORT(Device::GetImpl<TextureImpl>(m_textures[0])->getResource());
         m_scissorrect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
         m_initialized = true;
@@ -192,6 +192,16 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     const Texture RenderTextureImpl::getDepthStencilTexture()const {
         return m_depth;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      描画ターゲット枚数を取得
+    //! 
+    //! @details    デプス・ステンシルテクスチャは含まれません。
+    //@―---------------------------------------------------------------------------
+    s32 RenderTextureImpl::getTargetNum()const {
+        return gsl::narrow_cast<s32>(m_textures.size());
     }
 
 }// namespace ob::graphic::dx12

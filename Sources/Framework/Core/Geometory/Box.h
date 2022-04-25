@@ -155,7 +155,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0
         //@―---------------------------------------------------------------------------
-        bool isEmpty()const noexcept;
+        bool empty()const noexcept;
 
 
     public:
@@ -245,7 +245,7 @@ namespace ob::core {
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
     inline Box& Box::operator+=(const Vec3& point)noexcept {
-        if (isEmpty()) {
+        if (empty()) {
             return *this;
         }
 
@@ -330,7 +330,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0
     //@―---------------------------------------------------------------------------
-    inline bool Box::isEmpty()const noexcept {
+    inline bool Box::empty()const noexcept {
         return size.isZero();
     }
 

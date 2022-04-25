@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		グラフィック・パイプライン実装(DirectX12)
+//! @brief		パイプラインステート実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -42,7 +42,7 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class GraphicPipelineImpl :public IPipelineState {
+    class PipelineStateImpl :public IPipelineState {
     public:
         static constexpr s32 REGISTER_MAX=8;
         using variable_map = map<String, ShaderVariableDesc, less<>>;
@@ -52,8 +52,11 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
         //@―---------------------------------------------------------------------------
-        GraphicPipelineImpl(DeviceImpl&, const PipelineStateDesc& desc);
+        PipelineStateImpl(DeviceImpl&, const PipelineStateDesc& desc);
 
+        bool isValid()const { return m_pipelineState != nullptr; }
+
+        /*
 
         //@―---------------------------------------------------------------------------
         //! @brief		指定したスロットの定数バッファのサイズを取得
@@ -123,7 +126,6 @@ namespace ob::graphic::dx12 {
         /// インスタンスの生成に成功しているか
         /// </summary>
         /// <returns></returns>
-        bool isValid()const { return m_pipelineState != nullptr; }
 
 
 
@@ -136,11 +138,21 @@ namespace ob::graphic::dx12 {
         s32 reflectOutputLayout(const ComPtr<ID3DBlob>& vsInstance);
 
     private:
+    */
 
-        GraphicPipelineDesc m_desc;
+    private:
+        
+        void setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src);
+        void setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src);
+        void setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src);
+        void setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src);
+        void setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
 
+    private:
+        const PipelineStateDesc m_desc;
+
+        RootSignature   m_rootSignature;
         ComPtr<ID3D12PipelineState> m_pipelineState;    //!< パイプラインステート
-        ComPtr<ID3D12RootSignature> m_rootSignature;    //!< ルートシグネチャ
 
         vector<String> m_inputLayoutNames;              //!< 頂点レイアウト・セマンティクス
         vector<D3D12_INPUT_ELEMENT_DESC> m_inputLayout; //!< 頂点レイアウト

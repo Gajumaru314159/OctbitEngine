@@ -208,7 +208,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0以下であるか
         //@―---------------------------------------------------------------------------
-        bool isEmpty()const noexcept;
+        bool empty()const noexcept;
 
 
     public:
@@ -482,7 +482,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0以下であるか
     //@―---------------------------------------------------------------------------
-    inline bool Rect::isEmpty()const noexcept {
+    inline bool Rect::empty()const noexcept {
         return area() == Mathf::EPSILON;
     }
 

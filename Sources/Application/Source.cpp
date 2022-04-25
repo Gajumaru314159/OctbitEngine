@@ -6,6 +6,8 @@
 #include <Framework/Graphic/RenderTexture.h>
 #include <Framework/Graphic/Geometry.h>
 #include <Framework/Graphic/RootSignature.h>
+#include <Framework/Graphic/Shader.h>
+#include <Framework/Graphic/PipelineState.h>
 
 #include <Windows.h>
 
@@ -40,7 +42,7 @@ int main() {
             texDesc[0].type = TextureType::RenderTarget;
             texDesc[0].size = { 1280,720 };
             TextureDesc depth;
-            depth.format = TextureFormat::D24S8;
+            depth.format = TextureFormat::D32;
             depth.type = TextureType::DeptthStencil;
             depth.size = { 1280,720 };
             RenderTexture rt(texDesc, depth);
@@ -60,6 +62,46 @@ int main() {
                 }
              );
             RootSignature signature(desc);
+
+            String vssrc;
+            vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+            vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
+            vssrc.append(TC("\n    Output o;"));
+            vssrc.append(TC("\n    o.pos = pos;"));
+            vssrc.append(TC("\n    o.uv = uv;"));
+            vssrc.append(TC("\n    return o;"));
+            vssrc.append(TC("\n}"));
+            String pssrc;
+            pssrc.append(TC("\nTexture2D tex:register(t0);"));
+            pssrc.append(TC("\nSamplerState smp:register(s0);"));
+            pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+            pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{"));
+            pssrc.append(TC("\n    return float4(tex.Sample(smp,i.uv));"));
+            pssrc.append(TC("\n}"));
+            VertexShader vs(vssrc);
+            PixelShader ps(pssrc);
+            OB_CHECK_ASSERT_EXPR(vs && ps);
+
+            struct Vert {
+                Vec4 pos;
+                Vec2 uv;
+            };
+
+            PipelineState pipeline;
+            {
+                PipelineStateDesc desc;
+                desc.rootSignature = signature;
+                desc.vs = vs;
+                desc.ps = ps;
+                desc.vertexLayout.attributes = {
+                    VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
+                    VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
+                };
+                desc.target = rt;
+                desc.blend[0] = BlendDesc::AlphaBlend;
+
+                pipeline = PipelineState(desc);
+            }
 
 
             MSG msg = {};
