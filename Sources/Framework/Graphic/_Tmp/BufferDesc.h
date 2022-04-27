@@ -23,12 +23,12 @@ namespace ob::graphic {
     //! @brief  バインド・フラグ
     //@―---------------------------------------------------------------------------
     enum class BindFlag {
-        NonPixelShaderResource = get_bit(0),   //!< ピクセルシェーダ以外のバインド許可
-        PixelShaderResource = get_bit(1),   //!< ピクセルシェーダのバインド許可
-        UnorderedAccess = get_bit(2),   //!< UnorderedAccessのバインド許可
-        RenderTarget = get_bit(3),   //!< レンダーターゲットビューの作成許可
-        CopySource = get_bit(4),   //!< コピー元許可
-        CopyDest = get_bit(5),   //!< コピー先許可
+        NonPixelShaderResource  = get_bit(0),   //!< ピクセルシェーダ以外のバインド許可
+        PixelShaderResource     = get_bit(1),   //!< ピクセルシェーダのバインド許可
+        UnorderedAccess         = get_bit(2),   //!< UnorderedAccessのバインド許可
+        RenderTarget            = get_bit(3),   //!< レンダーターゲットビューの作成許可
+        CopySource              = get_bit(4),   //!< コピー元許可
+        CopyDest                = get_bit(5),   //!< コピー先許可
     };
 
     //@―---------------------------------------------------------------------------

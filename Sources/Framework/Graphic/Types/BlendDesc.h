@@ -150,6 +150,7 @@ namespace ob::graphic {
         static const BlendDesc Addition;       //!< 加算合成
         static const BlendDesc AdditionAlpha;  //!< アルファあり加算合成
         static const BlendDesc Subtraction;    //!< 減算合成
+
     };
 
 }// namespcae ob::graphic

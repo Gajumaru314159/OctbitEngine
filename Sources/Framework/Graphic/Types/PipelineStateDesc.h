@@ -14,42 +14,6 @@
 
 namespace ob::graphic {
 
-
-	/*
-	//@―---------------------------------------------------------------------------
-	//! @brief  シェーダプログラムに使用できる変数の型
-	//@―---------------------------------------------------------------------------
-	enum class ShaderParamType {
-		Unknown,		//!< 不明
-		Bool,			//!< bool
-		Int,			//!< int
-		Int2,			//!< int2
-		Int3,			//!< int3
-		Int4,			//!< int4
-		Float,			//!< float
-		Float2,			//!< float2
-		Float3,			//!< float3
-		Float4,			//!< float4
-		Texture2D,		//!< Texture2D
-		Texture3D,		//!< Texture3D
-		Matrix			//!< matrix4x4
-	};
-	
-	enum class VertexInputRate {
-		Vertex,
-		Instance,
-	};
-
-	struct VertexInputBinding {
-		u16 stream;					//!< 
-		u16 stride;					//!< 頂点データの配置間隔
-		VertexInputRate inputRate;	//!<
-	};
-	*/
-
-
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief		型
 	//! 
