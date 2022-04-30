@@ -9,10 +9,10 @@
 #include <Framework/Graphic/Types/FrameBufferDesc.h>
 #include <Framework/Graphic/Types/RootSignatureDesc.h>
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
-#include <Framework/Graphic/Types/CommandListType.h>
-#include <Framework/Graphic/Types/ShaderType.h>
+#include <Framework/Graphic/Types/ShaderStage.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
+#include <Framework/Graphic/Types/DescriptorDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -27,6 +27,7 @@ namespace ob::graphic {
     class IRenderTexture;
     class IShader;
     class IBuffer;
+    class IDescriptorTable;
 }
 
 
@@ -95,6 +96,7 @@ namespace ob::graphic {
         virtual IShader*        createShader(const Blob& binary, ShaderStage stage) = 0;
 
 
+        virtual IDescriptorTable* createDescriptorTable(DescriptorHeapType type,s32 elementNum) = 0;
 
         /*
         virtual void createCommandList(CommandList& commandList, CommandListType type)=0;

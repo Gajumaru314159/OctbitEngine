@@ -7,6 +7,7 @@
 #include <Framework/Graphic/Types/TextureFormat.h>
 #include <Framework/Graphic/Types/RootSignatureDesc.h>
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
+#include <Framework/Graphic/Types/DescriptorDesc.h>
 
 namespace ob::graphic::dx12 {
 
@@ -100,6 +101,10 @@ namespace ob::graphic::dx12 {
         //! @brief  ComparisonFunc を D3D12_COMPARISON_FUNC に変換
         //@―---------------------------------------------------------------------------
         static D3D12_COMPARISON_FUNC convert(ComparisonFunc value);
+        //@―---------------------------------------------------------------------------
+        //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
+        //@―---------------------------------------------------------------------------
+        static D3D12_DESCRIPTOR_HEAP_TYPE convert(DescriptorHeapType value);
 
     private:
 

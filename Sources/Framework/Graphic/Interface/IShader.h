@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/ShaderType.h>
+#include <Framework/Graphic/Types/ShaderStage.h>
 
 //===============================================================
 // 前方宣言
@@ -28,6 +28,12 @@ namespace ob::graphic {
         //! @brief  妥当な状態か
         //@―---------------------------------------------------------------------------
         virtual bool isValid()const = 0;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  シェーダステージを取得
+        //@―---------------------------------------------------------------------------
+        virtual ShaderStage getStage()const = 0;
 
 
     protected:

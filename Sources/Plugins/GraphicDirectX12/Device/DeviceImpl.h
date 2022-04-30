@@ -88,6 +88,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         ob::graphic::IBuffer* createBuffer(const BufferDesc& desc) override;
 
+
         //@―---------------------------------------------------------------------------
         //! @brief  シェーダを生成
         //@―---------------------------------------------------------------------------
@@ -100,6 +101,13 @@ namespace ob::graphic::dx12 {
         ob::graphic::IShader* createShader(const Blob&, ShaderStage) override;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  デスクリプタ・テーブルを生成
+        //@―---------------------------------------------------------------------------
+        ob::graphic::IDescriptorTable* createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
+
+    public:
+
         //===============================================================
         // ゲッター
         //===============================================================
@@ -109,15 +117,18 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         ComPtr<ID3D12Device>& getNativeDevice();
 
+
         //@―---------------------------------------------------------------------------
         //! @brief  ファクトリを取得
         //@―---------------------------------------------------------------------------
         ComPtr<IDXGIFactory4>& getFactory();
 
+
         //@―---------------------------------------------------------------------------
         //! @brief  システム・コマンド・キューを取得
         //@―---------------------------------------------------------------------------
         ComPtr<ID3D12CommandQueue>& getCommandQueue();
+
 
         //@―---------------------------------------------------------------------------
         //! @brief  システム・コマンド・リストを取得
@@ -132,6 +143,7 @@ namespace ob::graphic::dx12 {
         bool initializeDXGIDevice();
         bool initializeCommand();
         bool initializeVideoCardInfo();
+        bool initializeDescriptorHeaps();
 
     private:
 
@@ -141,8 +153,7 @@ namespace ob::graphic::dx12 {
         ComPtr<ID3D12CommandAllocator>      m_commandAllocator;         // コマンドアロケータ
         ComPtr<ID3D12CommandQueue>          m_commandQueue;             // コマンドキュー
         ComPtr<ID3D12GraphicsCommandList>   m_systemCmdList;            // システムコマンドリスト
-        ComPtr<ID3D12Debug>                 m_debugLayer;               // デバッグレイヤ
-        ComPtr<ID3D12Debug1>                m_debugLayer1;              // デバッグレイヤ
+        vector<std::unique_ptr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 
     };
 }// namespace ob::graphic::dx12

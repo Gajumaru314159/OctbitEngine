@@ -13,6 +13,9 @@
 #include<Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 #include<Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
 #include<Plugins/GraphicDirectX12/Shader/ShaderImpl.h>
+#include<Plugins/GraphicDirectX12/Descriptor/DescriptorHeap.h>
+#include<Plugins/GraphicDirectX12/Descriptor/DescriptorTableImpl.h>
+
 
 namespace ob::graphic::dx12 {
 
@@ -125,26 +128,23 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  デスクリプタ・テーブルを生成
+	//@―---------------------------------------------------------------------------
+	ob::graphic::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
+		auto index = enum_cast(type);
+		if (!is_in_range(index, m_descriptorHeaps))return nullptr;
+		return new DescriptorTableImpl(*m_descriptorHeaps[index],type,elementNum);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initialize() {
 		if (!initializeDXGIDevice())return false;
 		if (!initializeCommand())return false;
+		if (!initializeDescriptorHeaps())return false;
 		return true;
-
-		//// スワップチェーンの作成
-		//if (FAILED(CreateSwapChain())) {
-		//	LOG_FATAL_EX("Graphic", "Failed CreateSwapChain()");
-		//}
-		//// 最終レンダリング先の作成
-		//if (FAILED(CreateFinalRenderTargets())) {
-		//	LOG_FATAL_EX("Graphic", "Failed CreateFinalRenderTargets()");
-		//}
-		////フェンスの作成
-		//if (FAILED(CreateFence())) {
-		//	LOG_FATAL_EX("Graphic", "Failed CreateFence()");
-		//}
-
 	}
 
 
@@ -155,22 +155,15 @@ namespace ob::graphic::dx12 {
 		HRESULT result;
 		UINT flagsDXGI = 0;
 #if OB_DEBUG
-		result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&m_debugLayer));
-		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("D3D12GetDebugInterface()"));
-			return false;
-		}
-		if (m_debugLayer) {
-			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&m_debugLayer));
+		// DirectX12のデバッグレイヤーを有効にする
+		{
+			ComPtr<ID3D12Debug>	debugController;
+			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
 				Utility::outputErrorLog(result, TC("D3D12GetDebugInterface()"));
+				return false;
 			}
-			result = m_debugLayer->QueryInterface(IID_PPV_ARGS(&m_debugLayer1));
-			if (FAILED(result)) {
-				Utility::outputErrorLog(result, TC("QueryInterface()"));
-			}
-			m_debugLayer1->SetEnableGPUBasedValidation(true);
-			flagsDXGI |= DXGI_CREATE_FACTORY_DEBUG;
+			debugController->EnableDebugLayer();
 		}
 #endif
 
@@ -271,6 +264,23 @@ namespace ob::graphic::dx12 {
 	//! @brief  ビデオカード情報を初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeVideoCardInfo() {
+		return true;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  デスクリプタヒープを初期化
+	//@―---------------------------------------------------------------------------
+	bool DeviceImpl::initializeDescriptorHeaps() {
+		m_descriptorHeaps.resize(enum_cast(DescriptorHeapType::Max));
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 100);
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 100);
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 100);
 		return true;
 	}
 

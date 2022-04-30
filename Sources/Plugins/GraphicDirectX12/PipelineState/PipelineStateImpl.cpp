@@ -82,6 +82,7 @@ namespace ob::graphic::dx12 {
 			if (depthTex)gpsd.DSVFormat = TypeConverter::convert(depthTex.format());
 		}
 
+		setupBlend(gpsd.BlendState, desc);
 		setupRasterizerState(gpsd.RasterizerState, desc.rasterizer);
 		setupDepthStencilState(gpsd.DepthStencilState, desc.depthStencil);
 
@@ -99,7 +100,7 @@ namespace ob::graphic::dx12 {
 		gpsd.PrimitiveTopologyType = TypeConverter::convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
 		gpsd.SampleDesc.Quality = desc.sample.qualitty;
-		gpsd.NodeMask = 1;
+		gpsd.NodeMask = 0;
 		gpsd.SampleMask = desc.sampleMask;
 
 
@@ -123,7 +124,6 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src) {
 		dst = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		dst.RenderTarget[0].BlendEnable = true;
 		for (s32 i = 0; i < get_size(src.blend); ++i) {
 			setupRenderTargetBlend(dst.RenderTarget[i], src.blend[i]);
 		}
@@ -156,10 +156,6 @@ namespace ob::graphic::dx12 {
 		dst.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 		dst.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
 		dst.InstanceDataStepRate = 0;
-
-		if (src.semantic == Semantic::Position) {
-			dst.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-		}
 	}
 
 
@@ -188,7 +184,6 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src) {
 		dst = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-
 		dst.DepthEnable=src.depth.enable;
 		dst.DepthWriteMask=src.depth.write? D3D12_DEPTH_WRITE_MASK_ALL:D3D12_DEPTH_WRITE_MASK_ZERO;
 		dst.DepthFunc=TypeConverter::convert(src.depth.func);

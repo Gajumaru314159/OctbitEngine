@@ -31,16 +31,11 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     D3D12_ROOT_PARAMETER_TYPE TypeConverter::convert(RootParameterType value) {
         switch (value) {
-        case RootParameterType::CBV:
-            return D3D12_ROOT_PARAMETER_TYPE_CBV;
-        case RootParameterType::SRV:
-            return D3D12_ROOT_PARAMETER_TYPE_SRV;
-        case RootParameterType::UAV:
-            return D3D12_ROOT_PARAMETER_TYPE_UAV;
-        case RootParameterType::DescriptorTable:
-            return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-        case RootParameterType::RootConstants:
-            return D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+        case RootParameterType::CBV:                return D3D12_ROOT_PARAMETER_TYPE_CBV;
+        case RootParameterType::SRV:                return D3D12_ROOT_PARAMETER_TYPE_SRV;
+        case RootParameterType::UAV:                return D3D12_ROOT_PARAMETER_TYPE_UAV;
+        case RootParameterType::DescriptorTable:    return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+        case RootParameterType::RootConstants:      return D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
         }
         LOG_WARNING_EX("Graphic", "不正なRootParameterType[value={}]", enum_cast(value));
         return D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -52,14 +47,10 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::convert(DescriptorRangeType value) {
         switch (value) {
-        case DescriptorRangeType::CBV:
-            return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-        case DescriptorRangeType::SRV:
-            return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-        case DescriptorRangeType::UAV:
-            return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-        case DescriptorRangeType::Sampler:
-            return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+        case DescriptorRangeType::CBV:              return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+        case DescriptorRangeType::SRV:              return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+        case DescriptorRangeType::UAV:              return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+        case DescriptorRangeType::Sampler:          return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
         }
         LOG_WARNING_EX("Graphic", "不正なDescriptorRangeType[value={}]", enum_cast(value));
         return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -71,22 +62,14 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     D3D12_SHADER_VISIBILITY TypeConverter::convert(ShaderStage value) {
         switch (value) {
-        case ShaderStage::Vertex:
-            return D3D12_SHADER_VISIBILITY_VERTEX;
-        case ShaderStage::Hull:
-            return D3D12_SHADER_VISIBILITY_HULL;
-        case ShaderStage::Domain:
-            return D3D12_SHADER_VISIBILITY_DOMAIN;
-        case ShaderStage::Geometry:
-            return D3D12_SHADER_VISIBILITY_GEOMETRY;
-        case ShaderStage::Pixel:
-            return D3D12_SHADER_VISIBILITY_PIXEL;
-        case ShaderStage::Amplification:
-            return D3D12_SHADER_VISIBILITY_AMPLIFICATION;
-        case ShaderStage::Mesh:
-            return D3D12_SHADER_VISIBILITY_MESH;
-        case ShaderStage::All:
-            return D3D12_SHADER_VISIBILITY_ALL;
+        case ShaderStage::Vertex:           return D3D12_SHADER_VISIBILITY_VERTEX;
+        case ShaderStage::Hull:             return D3D12_SHADER_VISIBILITY_HULL;
+        case ShaderStage::Domain:           return D3D12_SHADER_VISIBILITY_DOMAIN;
+        case ShaderStage::Geometry:         return D3D12_SHADER_VISIBILITY_GEOMETRY;
+        case ShaderStage::Pixel:            return D3D12_SHADER_VISIBILITY_PIXEL;
+        case ShaderStage::Amplification:    return D3D12_SHADER_VISIBILITY_AMPLIFICATION;
+        case ShaderStage::Mesh:             return D3D12_SHADER_VISIBILITY_MESH;
+        case ShaderStage::All:              return D3D12_SHADER_VISIBILITY_ALL;
         }
 
         LOG_WARNING_EX("Graphic", "不正なShaderStage[value={}]", enum_cast(value));
@@ -99,10 +82,8 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     D3D12_FILTER_TYPE TypeConverter::convert(TextureFillter value){
         switch (value) {
-        case TextureFillter::Point:
-            return D3D12_FILTER_TYPE_POINT;
-        case TextureFillter::Linear:
-            return D3D12_FILTER_TYPE_LINEAR;
+        case TextureFillter::Point:         return D3D12_FILTER_TYPE_POINT;
+        case TextureFillter::Linear:        return D3D12_FILTER_TYPE_LINEAR;
         }
 
         LOG_WARNING_EX("Graphic", "不正なTextureFillter[value={}]", enum_cast(value));
@@ -115,10 +96,8 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     D3D12_FILTER_TYPE TypeConverter::convert(MipFillter value){
         switch (value) {
-        case MipFillter::Point:
-            return D3D12_FILTER_TYPE_POINT;
-        case MipFillter::Linear:
-            return D3D12_FILTER_TYPE_LINEAR;
+        case MipFillter::Point:             return D3D12_FILTER_TYPE_POINT;
+        case MipFillter::Linear:            return D3D12_FILTER_TYPE_LINEAR;
         }
         LOG_WARNING_EX("Graphic", "不正なMipFillter[value={}]", enum_cast(value));
         return D3D12_FILTER_TYPE_LINEAR;
@@ -145,18 +124,12 @@ namespace ob::graphic::dx12
     UINT TypeConverter::convert(Anisotropy value){
         switch (value)
         {
-        case Anisotropy::None:
-            return 0;
-        case Anisotropy::Level1:
-            return 1;
-        case Anisotropy::Level2:
-            return 2;
-        case Anisotropy::Level4:
-            return 4;
-        case Anisotropy::Level8:
-            return 8;
-        case Anisotropy::Level16:
-            return 16;
+        case Anisotropy::None:      return 0;
+        case Anisotropy::Level1:    return 1;
+        case Anisotropy::Level2:    return 2;
+        case Anisotropy::Level4:    return 4;
+        case Anisotropy::Level8:    return 8;
+        case Anisotropy::Level16:   return 16;
         }
         LOG_WARNING_EX("Graphic", "不正なAnisotropy[value={}]", enum_cast(value));
         return 0;
@@ -169,12 +142,9 @@ namespace ob::graphic::dx12
     D3D12_TEXTURE_ADDRESS_MODE TypeConverter::convert(TextureAddress value){
         switch (value)
         {
-        case ob::graphic::TextureAddress::Repeat:
-            return D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-        case ob::graphic::TextureAddress::Clamp:
-            return D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-        case ob::graphic::TextureAddress::Mirror:
-            return D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
+        case TextureAddress::Repeat:   return D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        case TextureAddress::Clamp:    return D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+        case TextureAddress::Mirror:   return D3D12_TEXTURE_ADDRESS_MODE_MIRROR;
         }
         LOG_WARNING_EX("Graphic", "不正なAnisotropy[value={}]", enum_cast(value));
         return D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -187,9 +157,9 @@ namespace ob::graphic::dx12
     D3D12_FILL_MODE TypeConverter::convert(FillMode value) {
         switch (value)
         {
-        case ob::graphic::FillMode::Wireframe:  return D3D12_FILL_MODE_WIREFRAME;
-        case ob::graphic::FillMode::Solid:      return D3D12_FILL_MODE_SOLID;
-        case ob::graphic::FillMode::Point:
+        case FillMode::Wireframe:       return D3D12_FILL_MODE_WIREFRAME;
+        case FillMode::Solid:           return D3D12_FILL_MODE_SOLID;
+        case FillMode::Point:
             LOG_WARNING_EX("Graphic", "FillMode::Pointは非対応です。");
             break;
         }
@@ -204,9 +174,9 @@ namespace ob::graphic::dx12
     D3D12_CULL_MODE TypeConverter::convert(CullMode value) {
         switch (value)
         {
-        case ob::graphic::CullMode::None:   return D3D12_CULL_MODE_NONE;
-        case ob::graphic::CullMode::Front:  return D3D12_CULL_MODE_FRONT;
-        case ob::graphic::CullMode::Back:   return D3D12_CULL_MODE_BACK;
+        case CullMode::None:            return D3D12_CULL_MODE_NONE;
+        case CullMode::Front:           return D3D12_CULL_MODE_FRONT;
+        case CullMode::Back:            return D3D12_CULL_MODE_BACK;
         }
         LOG_WARNING_EX("Graphic", "不正なCullMode[value={}]", enum_cast(value));
         return D3D12_CULL_MODE_NONE;
@@ -297,11 +267,11 @@ namespace ob::graphic::dx12
     D3D12_BLEND_OP TypeConverter::convert(BlendOp value) {
         switch (value)
         {
-        case ob::graphic::BlendOp::Add:     return D3D12_BLEND_OP_ADD;
-        case ob::graphic::BlendOp::Sub:     return D3D12_BLEND_OP_SUBTRACT;
-        case ob::graphic::BlendOp::RevSub:  return D3D12_BLEND_OP_REV_SUBTRACT;
-        case ob::graphic::BlendOp::Min:     return D3D12_BLEND_OP_MIN;
-        case ob::graphic::BlendOp::Max:     return D3D12_BLEND_OP_MAX;
+        case BlendOp::Add:     return D3D12_BLEND_OP_ADD;
+        case BlendOp::Sub:     return D3D12_BLEND_OP_SUBTRACT;
+        case BlendOp::RevSub:  return D3D12_BLEND_OP_REV_SUBTRACT;
+        case BlendOp::Min:     return D3D12_BLEND_OP_MIN;
+        case BlendOp::Max:     return D3D12_BLEND_OP_MAX;
         }
         LOG_WARNING_EX("Graphic", "不正なBlendOp[value={}]", enum_cast(value));
         return D3D12_BLEND_OP_ADD;
@@ -355,9 +325,9 @@ namespace ob::graphic::dx12
     D3D12_PRIMITIVE_TOPOLOGY_TYPE TypeConverter::convert(Topology value) {
         switch (value)
         {
-        case ob::graphic::Topology::PointList:      return D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-        case ob::graphic::Topology::LineList:       return D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
-        case ob::graphic::Topology::TriangleList:   return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        case Topology::PointList:      return D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
+        case Topology::LineList:       return D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
+        case Topology::TriangleList:   return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
         }
         LOG_WARNING_EX("Graphic", "不正なTopology[value={}]", enum_cast(value));
         return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
@@ -427,15 +397,15 @@ namespace ob::graphic::dx12
     LPCSTR TypeConverter::convert(Semantic value) {
         switch (value)
         {
-        case ob::graphic::Semantic::Position:       return "POSITION";
-        case ob::graphic::Semantic::Normal:         return "NORMAL";
-        case ob::graphic::Semantic::Binormal:       return "BINOMAL";
-        case ob::graphic::Semantic::Tangent:        return "TANGENT";
-        case ob::graphic::Semantic::Color:          return "COLOR";
-        case ob::graphic::Semantic::TexCoord:       return "TEXCOORD0";
-        case ob::graphic::Semantic::BlendIndices:   return "BLENDINDICES";
-        case ob::graphic::Semantic::BlendWeights:   return "BLENDWEIGHT";
-        case ob::graphic::Semantic::PointSize:      return "PSIZE";
+        case Semantic::Position:       return "POSITION";
+        case Semantic::Normal:         return "NORMAL";
+        case Semantic::Binormal:       return "BINOMAL";
+        case Semantic::Tangent:        return "TANGENT";
+        case Semantic::Color:          return "COLOR";
+        case Semantic::TexCoord:       return "TEXCOORD";
+        case Semantic::BlendIndices:   return "BLENDINDICES";
+        case Semantic::BlendWeights:   return "BLENDWEIGHT";
+        case Semantic::PointSize:      return "PSIZE";
         }
         LOG_WARNING_EX("Graphic", "不正なSemantic[value={}]", enum_cast(value));
         return "";
@@ -468,17 +438,34 @@ namespace ob::graphic::dx12
     D3D12_COMPARISON_FUNC TypeConverter::convert(ComparisonFunc value) {
         switch (value)
         {
-        case ob::graphic::ComparisonFunc::Never:        return D3D12_COMPARISON_FUNC_NEVER;
-        case ob::graphic::ComparisonFunc::Always:       return D3D12_COMPARISON_FUNC_ALWAYS;
-        case ob::graphic::ComparisonFunc::Equal:        return D3D12_COMPARISON_FUNC_EQUAL;
-        case ob::graphic::ComparisonFunc::NotEqual:     return D3D12_COMPARISON_FUNC_NOT_EQUAL;
-        case ob::graphic::ComparisonFunc::Less:         return D3D12_COMPARISON_FUNC_LESS;
-        case ob::graphic::ComparisonFunc::Greater:      return D3D12_COMPARISON_FUNC_GREATER;
-        case ob::graphic::ComparisonFunc::LessEqual:    return D3D12_COMPARISON_FUNC_LESS_EQUAL;
-        case ob::graphic::ComparisonFunc::GreaterEqual: return D3D12_COMPARISON_FUNC_GREATER_EQUAL;
+        case ComparisonFunc::Never:        return D3D12_COMPARISON_FUNC_NEVER;
+        case ComparisonFunc::Always:       return D3D12_COMPARISON_FUNC_ALWAYS;
+        case ComparisonFunc::Equal:        return D3D12_COMPARISON_FUNC_EQUAL;
+        case ComparisonFunc::NotEqual:     return D3D12_COMPARISON_FUNC_NOT_EQUAL;
+        case ComparisonFunc::Less:         return D3D12_COMPARISON_FUNC_LESS;
+        case ComparisonFunc::Greater:      return D3D12_COMPARISON_FUNC_GREATER;
+        case ComparisonFunc::LessEqual:    return D3D12_COMPARISON_FUNC_LESS_EQUAL;
+        case ComparisonFunc::GreaterEqual: return D3D12_COMPARISON_FUNC_GREATER_EQUAL;
         }
         LOG_WARNING_EX("Graphic", "不正なComparisonFunc[value={}]", enum_cast(value));
         return D3D12_COMPARISON_FUNC_NEVER;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
+    //@―---------------------------------------------------------------------------
+    D3D12_DESCRIPTOR_HEAP_TYPE TypeConverter::convert(DescriptorHeapType value) {
+        switch (value)
+        {
+        case DescriptorHeapType::CBV_SRV_UAV:  return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+        case DescriptorHeapType::Sampler:      return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+        case DescriptorHeapType::RTV:          return D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+        case DescriptorHeapType::DSV:          return D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なDescriptorHeapType[value={}]", enum_cast(value));
+        return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
     }
 
 }// namespace ob

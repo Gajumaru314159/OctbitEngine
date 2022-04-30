@@ -49,7 +49,7 @@ if(UNLIKELY(!(expr))){                                              \
 //! 
 //! @details    min<value<max でない場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,category,"Out of range.[{0},{1}) value = {2}",minVal,maxVal,value)
+#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,"Out of range.[{0},{1}) value = {2}",minVal,maxVal,value)
 
 
 //@―---------------------------------------------------------------------------

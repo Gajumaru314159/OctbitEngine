@@ -6,6 +6,7 @@
 #include "ShaderImpl.h"
 #include <d3dcompiler.h>
 #include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/Misc/Blob.h>
 #include <Framework/Graphic/Shader.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 
@@ -92,6 +93,14 @@ namespace ob::graphic::dx12 {
         if (!m_shaderBlob.empty())return true;
         if (m_shaderBolb2)return true;
         return false;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  シェーダステージを取得
+    //@―---------------------------------------------------------------------------
+    ShaderStage ShaderImpl::getStage()const {
+        return m_stage;
     }
 
 

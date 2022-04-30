@@ -24,6 +24,7 @@ namespace ob::graphic {
     //!             メンバ変数にGraphicObjectを継承したクラス```m_pImpl```がある必要があります。
     //@―---------------------------------------------------------------------------
     #define OB_DEFINE_GRAPHIC_OBJECT_HOLDER(type)           \
+                friend class Device;                        \
             public:                                         \
                 type(const type&);                          \
                 type(type&&);                               \

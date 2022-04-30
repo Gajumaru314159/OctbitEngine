@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Types/ComparisonFunc.h>
 
 namespace ob::graphic {
 

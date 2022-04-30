@@ -8,6 +8,8 @@
 #include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/PipelineState.h>
+#include <Framework/Graphic/DescriptorTable.h>
+#include <Framework/Graphic/Buffer.h>
 
 #include <Windows.h>
 
@@ -102,6 +104,18 @@ int main() {
 
                 pipeline = PipelineState(desc);
             }
+
+
+            //Buffer buffer;
+            //{
+            //    BufferDesc desc;
+            //    desc.bufferSize = 128;
+            //    buffer = Buffer(desc);
+            //}
+
+
+            DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
+            //dt.setResource(0,buffer);
 
 
             MSG msg = {};
