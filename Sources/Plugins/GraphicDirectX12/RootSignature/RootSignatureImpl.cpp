@@ -96,7 +96,7 @@ namespace ob::graphic::dx12 {
 
 		auto result = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("D3D12SerializeRootSignature"));
+			Utility::outputFatalLog(result, TC("D3D12SerializeRootSignature"));
 			if (errorBlob) {
 				StringBase<char> s;
 				s.resize(errorBlob->GetBufferSize());
@@ -111,7 +111,7 @@ namespace ob::graphic::dx12 {
 			rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(),
 			IID_PPV_ARGS(m_rootSignature.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("ID3D12Device::CreateRootSignature()"));
+			Utility::outputFatalLog(result, TC("ID3D12Device::CreateRootSignature()"));
 			return;
 		}
 

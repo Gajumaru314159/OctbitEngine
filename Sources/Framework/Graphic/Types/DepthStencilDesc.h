@@ -7,16 +7,18 @@
 
 namespace ob::graphic {
 
+#pragma region Enum
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      ステンシル・オペレータ
 	//@―---------------------------------------------------------------------------
 	enum class StencilOp :u32 {
 		Keep,				//!< 			
-		Zero,				//!< 
 		Replace,			//!< 
+		Zero,				//!< 
+		Invert,				//!< 
 		IncrementAndClamp,	//!< 
 		DecrementAndClamp,	//!< 
-		Invert,				//!< 
 		IncrementAndWrap,	//!< 
 		DecrementAndWrap,	//!< 
 	};
@@ -36,13 +38,14 @@ namespace ob::graphic {
 		GreaterEqual,	//!< ソースがデスト以上の場合成功
 	};
 
+#pragma endregion
 
     //@―---------------------------------------------------------------------------
     //! @brief  デプス・ステンシル定義
     //@―---------------------------------------------------------------------------
 	struct DepthStencilDesc {
 		struct {
-			bool            enable{ true };
+			bool            enable{ false };
 			bool            write{ true };
 			ComparisonFunc  func{ ComparisonFunc::Less };
 		} depth;

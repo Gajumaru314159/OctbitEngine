@@ -24,14 +24,30 @@ namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
+    //! 
+    //! @param desc バッファ定義
     //@―---------------------------------------------------------------------------
-    Buffer::Buffer(const BufferDesc& desc, const Blob& data) {
+    Buffer::Buffer(const BufferDesc& desc, StringView name) {
         m_pImpl = Device::Get()->createBuffer(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
             release();
         }
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //@―---------------------------------------------------------------------------
+    Buffer::Buffer(const BufferDesc& desc, const Blob& blob, StringView name) {
+        m_pImpl = Device::Get()->createBuffer(desc);
+        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        if (!m_pImpl->isValid()) {
+            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
+            release();
+        }
+        update(blob.size(), blob.data());
     }
 
 
@@ -49,6 +65,28 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     size_t Buffer::size()const {
         return getDesc().bufferSize;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      バッファを更新
+    //! 
+    //! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+    //@―---------------------------------------------------------------------------
+    void Buffer::update(size_t size, const void* pData, size_t offset) {
+        // TODO
+        updateDirect(size,pData,offset);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      バッファを更新
+    //! 
+    //! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+    //@―---------------------------------------------------------------------------
+    void Buffer::updateDirect(size_t size, const void* pData, size_t offset) {
+        CHECK_IMPL();
+        m_pImpl->updateDirect(size, pData, offset);
     }
 
 

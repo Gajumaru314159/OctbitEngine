@@ -245,16 +245,6 @@ namespace ob::graphic::dx12
         case BlendFactor::OneMinusSrcAlpha:         return D3D12_BLEND_INV_SRC_ALPHA;
         case BlendFactor::DstAlpha:                 return D3D12_BLEND_DEST_ALPHA;
         case BlendFactor::OneMinusDstAlpha:         return D3D12_BLEND_INV_DEST_ALPHA;
-        case BlendFactor::ConstantColor:            return D3D12_BLEND_BLEND_FACTOR;
-        case BlendFactor::OneMinusConstantColor:    return D3D12_BLEND_INV_BLEND_FACTOR;
-            
-        //case BlendFactor::ConstantAlpha:            return 
-        //case BlendFactor::OneMinusConstantAlpha:    return 
-        //case BlendFactor::SrcAlphaSaturate:         return 
-        //case BlendFactor::Src1Color:                return 
-        //case BlendFactor::OneMinusSrc1Color:        return 
-        //case BlendFactor::Src1Alpha:                return 
-        //case BlendFactor::OneMinusSrc1Alpha:        return 
         }
         LOG_WARNING_EX("Graphic", "不正なBlendFactor[value={}]", enum_cast(value));
         return D3D12_BLEND_ZERO;
@@ -320,17 +310,17 @@ namespace ob::graphic::dx12
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  Topology を D3D12_LOGIC_OP に変換
+    //! @brief  Topology を D3D12_PRIMITIVE_TOPOLOGY に変換
     //@―---------------------------------------------------------------------------
-    D3D12_PRIMITIVE_TOPOLOGY_TYPE TypeConverter::convert(Topology value) {
+    D3D12_PRIMITIVE_TOPOLOGY TypeConverter::convert(Topology value) {
         switch (value)
         {
-        case Topology::PointList:      return D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT;
-        case Topology::LineList:       return D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
-        case Topology::TriangleList:   return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        case Topology::PointList:      return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
+        case Topology::LineList:       return D3D_PRIMITIVE_TOPOLOGY_LINELIST;
+        case Topology::TriangleList:   return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
         }
         LOG_WARNING_EX("Graphic", "不正なTopology[value={}]", enum_cast(value));
-        return D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
 
 
@@ -466,6 +456,21 @@ namespace ob::graphic::dx12
 
         LOG_WARNING_EX("Graphic", "不正なDescriptorHeapType[value={}]", enum_cast(value));
         return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
+    //@―---------------------------------------------------------------------------
+    D3D12_COMMAND_LIST_TYPE TypeConverter::convert(CommandListType value) {
+        switch (value)
+        {
+        case ob::graphic::CommandListType::Graphic: return D3D12_COMMAND_LIST_TYPE_DIRECT;
+        case ob::graphic::CommandListType::Compute: return D3D12_COMMAND_LIST_TYPE_COMPUTE;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なCommandListType[value={}]", enum_cast(value));
+        return D3D12_COMMAND_LIST_TYPE_DIRECT;
     }
 
 }// namespace ob

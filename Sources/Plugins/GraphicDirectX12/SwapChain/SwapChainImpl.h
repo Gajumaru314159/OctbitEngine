@@ -73,7 +73,8 @@ namespace ob::graphic::dx12 {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update(graphic::ITexture* pTexture) override;
+        void update(const Texture& texture) override;
+
 
     private:
 
@@ -94,7 +95,6 @@ namespace ob::graphic::dx12 {
         bool setColorSpace();
 
 
-
     private:
 
         SwapchainDesc m_desc;
@@ -111,11 +111,13 @@ namespace ob::graphic::dx12 {
         DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
 
 
-        ComPtr<ID3D12DescriptorHeap> m_rtvHeap;         //!< レンダー・ターゲット・ビュー
+        ComPtr<ID3D12DescriptorHeap> m_hRTV;         //!< レンダー・ターゲット・ビュー
 
         UINT m_syncInterval;
 
         bool m_initialized = false;
+
+
 
     };
 

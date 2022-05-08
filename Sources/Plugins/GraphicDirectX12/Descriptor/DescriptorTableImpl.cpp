@@ -4,8 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DescriptorTableImpl.h"
-#include <Plugins/GraphicDirectX12/Descriptor/DescriptorHeap.h>
+#include <Framework/Graphic/Texture.h>
+#include <Framework/Graphic/Private/Device.h>
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
+#include <Plugins/GraphicDirectX12/Descriptor/DescriptorHeap.h>
+#include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 
 namespace ob::graphic::dx12
 {
@@ -34,7 +37,14 @@ namespace ob::graphic::dx12
 	//@―---------------------------------------------------------------------------
 	//! @{
 	//bool setResource(s32 index, class Buffer& resource) override{}
-	bool DescriptorTableImpl::setResource(s32 index, class Texture& resource) {
+	bool DescriptorTableImpl::setResource(s32 index, Texture& resource) {
+		if (auto pTexture = Device::GetImpl<TextureImpl>(resource)) {
+			auto handle = m_handle.getCpuHandle(index);
+			pTexture->createSRV(handle);
+		} else {
+			OB_ASSERT("Textureが空です。");
+		}
+
 		return true;
 	}
 	//bool setResource(s32 index, class Sampler& resource) override{}

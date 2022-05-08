@@ -12,11 +12,6 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     enum class FeatureLevel {
         Default,
-        ES2_REMOVED,
-        ES3_1,
-        SM4_REMOVED,
-        SM5,
-        Max
     };
 
 }// namespcae ob::graphic

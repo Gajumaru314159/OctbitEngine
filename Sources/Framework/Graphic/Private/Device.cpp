@@ -6,11 +6,14 @@
 #include <Framework/Graphic/Private/Device.h>
 #include <Framework/Graphic/System.h>
 #include <Framework/Graphic/SwapChain.h>
+#include <Framework/Graphic/CommandList.h>
 #include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/PipelineState.h>
 #include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/Texture.h>
-#include <Framework/Graphic/RenderTexture.h>
+#include <Framework/Graphic/RenderTarget.h>
+#include <Framework/Graphic/Buffer.h>
+#include <Framework/Graphic/DescriptorTable.h>
 
 namespace ob::graphic
 {
@@ -29,6 +32,14 @@ namespace ob::graphic
     //! @brief  SwapChain の実装を取得
     //@―---------------------------------------------------------------------------
     const ISwapChain* Device::GetImpl(const SwapChain& obj) {
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  CommandList の実装を取得
+    //@―---------------------------------------------------------------------------
+    const ICommandList* Device::GetImpl(const CommandList& obj) {
         return obj.m_pImpl;
     }
 
@@ -66,9 +77,25 @@ namespace ob::graphic
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  RenderTexture の実装を取得
+    //! @brief  RenderTarget の実装を取得
     //@―---------------------------------------------------------------------------
-    const IRenderTexture* Device::GetImpl(const RenderTexture& obj) {
+    const IRenderTarget* Device::GetImpl(const RenderTarget& obj) {
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  RenderTarget の実装を取得
+    //@―---------------------------------------------------------------------------
+    const IBuffer* Device::GetImpl(const Buffer& obj) {
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  DescriptorTable の実装を取得
+    //@―---------------------------------------------------------------------------
+    const IDescriptorTable* Device::GetImpl(const DescriptorTable& obj) {
         return obj.m_pImpl;
     }
 

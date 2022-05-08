@@ -56,6 +56,12 @@ namespace ob::graphic::dx12 {
 
         bool isValid()const { return m_pipelineState != nullptr; }
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      定義を取得
+        //@―---------------------------------------------------------------------------
+        const PipelineStateDesc& getDesc()const override { return m_desc; };
+
         /*
 
         //@―---------------------------------------------------------------------------
@@ -140,6 +146,9 @@ namespace ob::graphic::dx12 {
     private:
     */
 
+        const auto& getNative()const {
+            return m_pipelineState;
+        }
     private:
         
         void setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src);

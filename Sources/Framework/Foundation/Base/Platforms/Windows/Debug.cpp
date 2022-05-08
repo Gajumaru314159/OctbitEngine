@@ -41,7 +41,7 @@ void CallBreakPoint() {
 //! @brief  ブレークポイントを呼び出し
 //@―---------------------------------------------------------------------------
 void ShowMessageBox(const wchar_t* pMessage) {
-    ::MessageBoxW(NULL, pMessage, L"OctbitEngine", MB_YESNO | MB_TOPMOST);
+    ::MessageBoxW(NULL, pMessage, L"OctbitEngine", MB_OK);
 }
 
 #endif// OS_WINDOWS

@@ -9,6 +9,8 @@
 
 namespace ob::graphic {
 
+#pragma region Enum
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      ルートシグネチャスロットのタイプ
 	//! 
@@ -35,6 +37,35 @@ namespace ob::graphic {
 		Sampler,            //!< サンプラー
 	};
 
+#pragma endregion
+
+#pragma region Flag
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      ルートシグネチャ・フラグ
+	//! @see        RootSignatureDesc
+	//@―---------------------------------------------------------------------------
+	enum class RootSignatureFlag :u32 {
+		None							= 0,
+		AllowInputAssemblerInputLayout  = get_bit(0),	//!< 頂点入力あり
+		DenyVertexShaderAccess			= get_bit(1),	//!< 
+		DenyHullShaderAccess			= get_bit(2),	//!< 
+		DenyDomainShaderAccess			= get_bit(3),	//!< 
+		DenyGeometryShaderAccess		= get_bit(4),	//!< 
+		DenyPixelShaderAccess			= get_bit(5),	//!< 
+		AllowStreamOutput				= get_bit(6),	//!< 
+		DenyAmplificationShaderAccess	= get_bit(7),	//!< 
+		DenyMeshShaderAccess			= get_bit(8),	//!< 
+	};
+	//@―---------------------------------------------------------------------------
+	//! @brief      ルートシグネチャ・フラグ・セット
+	//! @see        RootSignatureDesc
+	//@―---------------------------------------------------------------------------
+	using RootSignatureFlags = bit_flags<RootSignatureFlag>;
+
+#pragma endregion
+
+#pragma region Sub Structure
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      デスクリプタ範囲
@@ -165,29 +196,7 @@ namespace ob::graphic {
 			:visibility(visibility), sampler(sampler), registerNo(registerNo), registerSpace(registerSpace) {}
 	};
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      ルートシグネチャ・フラグ
-	//! @see        RootSignatureDesc
-	//@―---------------------------------------------------------------------------
-	enum class RootSignatureFlag :u32 {
-		None							= 0,
-		AllowInputAssemblerInputLayout  = get_bit(0),	//!< 頂点入力あり
-		DenyVertexShaderAccess			= get_bit(1),	//!< 
-		DenyHullShaderAccess			= get_bit(2),	//!< 
-		DenyDomainShaderAccess			= get_bit(3),	//!< 
-		DenyGeometryShaderAccess		= get_bit(4),	//!< 
-		DenyPixelShaderAccess			= get_bit(5),	//!< 
-		AllowStreamOutput				= get_bit(6),	//!< 
-		DenyAmplificationShaderAccess	= get_bit(7),	//!< 
-		DenyMeshShaderAccess			= get_bit(8),	//!< 
-	};
-	//@―---------------------------------------------------------------------------
-	//! @brief      ルートシグネチャ・フラグ・セット
-	//! @see        RootSignatureDesc
-	//@―---------------------------------------------------------------------------
-	using RootSignatureFlags = bit_flags<RootSignatureFlag>;
-
+#pragma endregion
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ルートシグネチャ定義
@@ -195,7 +204,7 @@ namespace ob::graphic {
 	struct RootSignatureDesc {
 		vector<RootParameter>       parameters;
 		vector<StaticSamplerDesc>   samplers;
-		RootSignatureFlags           flags;
+		RootSignatureFlags          flags;
 	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
@@ -207,6 +216,5 @@ namespace ob::graphic {
 		RootSignatureDesc(vector<RootParameter>&& parameters, vector<StaticSamplerDesc>&& samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
 			: parameters(parameters), samplers(samplers), flags(flags) {}
 	};
-
 
 }// namespcae ob

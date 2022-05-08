@@ -5,9 +5,9 @@
 //***********************************************************
 #include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/Private/Device.h>
-#include <Framework/Graphic/RenderTexture.h>
+#include <Framework/Graphic/Texture.h>
 #include <Framework/Graphic/Interface/ISwapchain.h>
-#include <Framework/Graphic/Interface/IRenderTexture.h>
+#include <Framework/Graphic/Interface/ITexture.h>
 
 namespace ob::graphic {
 
@@ -23,7 +23,7 @@ namespace ob::graphic {
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗[name={}]",name);
+            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗 [name={}]", name);
             release();
         }
     }
@@ -70,9 +70,9 @@ namespace ob::graphic {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChain::update(Texture& texture) {
+    void SwapChain::update(const Texture& texture) {
         CHECK_IMPL();
-        //m_pImpl->update(texture);
+        m_pImpl->update(texture);
     }
 
 }// namespace ob::graphic

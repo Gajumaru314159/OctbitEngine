@@ -16,8 +16,8 @@ namespace ob::graphic {
         Texture2D,          //!< 2Dテクスチャ
         Texture3D,          //!< 3Dテクスチャ
         Cube,               //!< キューブテクスチャ
-        RenderTarget,       //!< レンダーターゲット
-        DeptthStencil,      //!< デプス・ステンシル
+        RenderTarget,       //!< レンダーターゲット(Texture2D)
+        DepthStencil,       //!< デプス・ステンシル(Texture2D)
     };
 
 
@@ -25,17 +25,12 @@ namespace ob::graphic {
     //! @brief  テクスチャ定義
     //@―---------------------------------------------------------------------------
     struct TextureDesc {
-    public:
-        Size            size = { 0,0,0 };               //!< サイズ
-        s32             arrayNum = 0;                   //!< テクスチャ配列の要素数
-        s32             mipLevel = 0;                   //!< ミップ生成レベル
-        TextureType     type = TextureType::Texture2D;  //!< テクスチャタイプ
-        TextureFormat   format = TextureFormat::RGBA8;  //!< テクスチャフォーマット
-
-        // ResourceDescにまとめる？
-        //ResourceUsage   usage = ResourceUsage::Default;         //!< 利用法
-        //BufferType      bufferType = BufferType::RenderTarget;  //!< リソース・タイプ
-        //BindFlags       bindFlags;                              //!< バインドフラグ
+        Size            size        = { 0,0,0 };                //!< サイズ
+        TextureType     type        = TextureType::Texture2D;   //!< テクスチャタイプ
+        TextureFormat   format      = TextureFormat::RGBA8;     //!< テクスチャフォーマット
+        s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数
+        s32             mipLevel    = 0;                        //!< ミップ生成レベル
+        Color           color;
     };
 
 }// namespcae ob::graphic

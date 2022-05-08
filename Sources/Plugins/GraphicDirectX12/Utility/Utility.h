@@ -16,21 +16,32 @@ namespace ob::graphic::dx12 {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  HRESULTのエラーログを出力
+        //! @brief  デバッグレイヤメッセージを取得
         //@―---------------------------------------------------------------------------
-        static void outputErrorLog(HRESULT result, StringView message = TC(""));
-        
+        static String getDebugLayerLastString(ID3D12Device* pDevice,s32 count=3);
+
         //@―---------------------------------------------------------------------------
         //! @brief  エラーメッセージを取得
         //@―---------------------------------------------------------------------------
         static String getErrorMessage(DWORD errorCode);
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  HRESULTのエラーログを出力
+        //@―---------------------------------------------------------------------------
+        static void outputErrorLog(HRESULT result, StringView message = TC(""));
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  HRESULTのFatalログを出力
+        //@―---------------------------------------------------------------------------
+        static void outputFatalLog(HRESULT result, StringView message = TC(""));
+
         
+        //@―---------------------------------------------------------------------------
+        //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
+        //@―---------------------------------------------------------------------------
         static D3D12_SRV_DIMENSION getSrvDimention(const D3D12_RESOURCE_DESC& desc);
-
-    private:
-
-
 
     };
 

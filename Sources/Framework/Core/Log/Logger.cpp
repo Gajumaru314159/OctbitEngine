@@ -40,13 +40,18 @@ namespace ob::core {
         }
         logTypeName[logTypeNameAscii.size()] = TC('\0');
 
-        auto msg = fmt::format(TC("[{0}][{1}] {2} [{3}({4})] [::{5}()]"),
+        //auto msg = fmt::format(TC("[{0}][{1}] {2} [{3}({4})] [::{5}()]"),
+        //    logTypeName,
+        //    category,
+        //    pMessage,
+        //    sourceLocation.filePath,
+        //    sourceLocation.line,
+        //    sourceLocation.functionName);
+
+        auto msg = fmt::format(TC("[{0}][{1}] {2}"),
             logTypeName,
             category,
-            pMessage,
-            sourceLocation.filePath,
-            sourceLocation.line,
-            sourceLocation.functionName);
+            pMessage);
 
         WString ws;
         StringEncoder::Encode(msg, ws);

@@ -8,6 +8,7 @@
 #include <Framework/Graphic/Types/RootSignatureDesc.h>
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
+#include <Framework/Graphic/Types/CommandListDesc.h>
 
 namespace ob::graphic::dx12 {
 
@@ -82,9 +83,9 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         static D3D12_LOGIC_OP convert(LogicOp value);
         //@―---------------------------------------------------------------------------
-        //! @brief  Topology を D3D12_LOGIC_OP に変換
+        //! @brief  Topology を D3D12_PRIMITIVE_TOPOLOGY に変換
         //@―---------------------------------------------------------------------------
-        static D3D12_PRIMITIVE_TOPOLOGY_TYPE convert(Topology value);
+        static D3D12_PRIMITIVE_TOPOLOGY convert(Topology value);
         //@―---------------------------------------------------------------------------
         //! @brief  Type を DXGI_FORMAT に変換
         //@―---------------------------------------------------------------------------
@@ -105,10 +106,10 @@ namespace ob::graphic::dx12 {
         //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
         //@―---------------------------------------------------------------------------
         static D3D12_DESCRIPTOR_HEAP_TYPE convert(DescriptorHeapType value);
-
-    private:
-
-
+        //@―---------------------------------------------------------------------------
+        //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
+        //@―---------------------------------------------------------------------------
+        static D3D12_COMMAND_LIST_TYPE convert(CommandListType value);
 
     };
 }// namespcae ob

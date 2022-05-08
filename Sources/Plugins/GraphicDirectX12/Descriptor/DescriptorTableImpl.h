@@ -43,7 +43,7 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @{
 		//bool setResource(s32 index, class Buffer& resource) override;
-		bool setResource(s32 index, class Texture& resource) override;
+		bool setResource(s32 index, Texture& resource) override;
 		//bool setResource(s32 index, class Sampler& resource) override;
 		//! @}
 
@@ -59,6 +59,13 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		void clearAt(s32 index) override;
 
+		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const {
+			return m_handle.getCpuHandle(index);
+		}
+
+		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0)const {
+			return m_handle.getGpuHandle(index);
+		}
 
     private:
 

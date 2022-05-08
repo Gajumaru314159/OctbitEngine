@@ -19,7 +19,6 @@ namespace ob::graphic {
     //!             グラフィック機能と結びつけるために必要な情報を制御します。
     //@―---------------------------------------------------------------------------
     class Texture {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Texture);
     public:
 

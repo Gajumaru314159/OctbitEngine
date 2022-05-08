@@ -5,12 +5,12 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Types/SwapchainDesc.h>
-#include <Framework/Graphic/Types/RenderPassDesc.h>
-#include <Framework/Graphic/Types/FrameBufferDesc.h>
+#include <Framework/Graphic/Types/CommandListDesc.h>
 #include <Framework/Graphic/Types/RootSignatureDesc.h>
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
 #include <Framework/Graphic/Types/ShaderStage.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Framework/Graphic/Types/RenderTargetDesc.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
 
@@ -19,12 +19,12 @@
 //===============================================================
 namespace ob::graphic {
     class ISwapChain;
-    class IRenderPass;
-    class IFrameBuffer;
+    class ICommandList;
     class IRootSignature;
     class IPipelineState;
     class ITexture;
     class IRenderTexture;
+    class IRenderTarget;
     class IShader;
     class IBuffer;
     class IDescriptorTable;
@@ -61,6 +61,8 @@ namespace ob::graphic {
         //===============================================================
         // 更新
         //===============================================================
+        virtual void entryCommandList(const class CommandList&) = 0;
+
         virtual void update() = 0;
 
         //virtual ICommandQueue* getCommandQueue()const = 0;
@@ -79,27 +81,24 @@ namespace ob::graphic {
         virtual void flip()=0;
         */
 
-        virtual ISwapChain*     createSwapChain(const SwapchainDesc& desc)=0;
+        virtual ISwapChain*         createSwapChain(const SwapchainDesc& desc) = 0;
 
-        virtual IRenderPass*    createRenderPass(const RenderPassDesc& desc) = 0;
-        virtual IFrameBuffer*   createFrameBuffer(const FrameBufferDesc& desc) = 0;
+        virtual ICommandList*       createCommandList(const CommandListDesc& desc) = 0;
 
-        virtual IRootSignature* createRootSignature(const RootSignatureDesc& desc) = 0;
-        virtual IPipelineState* createPipelineState(const PipelineStateDesc& desc) = 0;
+        virtual IRootSignature*     createRootSignature(const RootSignatureDesc& desc) = 0;
+        virtual IPipelineState*     createPipelineState(const PipelineStateDesc& desc) = 0;
 
-        virtual IBuffer*        createBuffer(const BufferDesc& desc) = 0;
+        virtual IBuffer*            createBuffer(const BufferDesc& desc) = 0;
 
-        virtual ITexture*       createTexture(const TextureDesc& desc)=0;
-        virtual IRenderTexture* createRenderTexture(const gsl::span<TextureDesc> targets, const TextureDesc& depth)=0;
+        virtual ITexture*           createTexture(const TextureDesc& desc) = 0;
+        virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc)=0;
         
-        virtual IShader*        createShader(const String& code,ShaderStage stage) = 0;
-        virtual IShader*        createShader(const Blob& binary, ShaderStage stage) = 0;
+        virtual IShader*            createShader(const String& code,ShaderStage stage) = 0;
+        virtual IShader*            createShader(const Blob& binary, ShaderStage stage) = 0;
 
-
-        virtual IDescriptorTable* createDescriptorTable(DescriptorHeapType type,s32 elementNum) = 0;
+        virtual IDescriptorTable*   createDescriptorTable(DescriptorHeapType type,s32 elementNum) = 0;
 
         /*
-        virtual void createCommandList(CommandList& commandList, CommandListType type)=0;
         virtual void createTexture(Texture& texture, const TextureData& data,StringView name)=0;
         */
         /*

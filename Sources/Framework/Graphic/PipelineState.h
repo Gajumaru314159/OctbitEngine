@@ -13,7 +13,6 @@ namespace ob::graphic {
     //! @brief  パイプラインステート
     //@―---------------------------------------------------------------------------
     class PipelineState {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(PipelineState);
     public:
 
@@ -31,6 +30,12 @@ namespace ob::graphic {
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
         PipelineState(const PipelineStateDesc& desc, StringView name = TC("PipelineState"));
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      定義を取得
+        //@―---------------------------------------------------------------------------
+        const PipelineStateDesc& getDesc()const;
 
 
     };

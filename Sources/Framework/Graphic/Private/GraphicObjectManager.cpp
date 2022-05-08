@@ -33,7 +33,7 @@ namespace ob::graphic {
         // メモリリーク検知
         for (auto& pObject : m_objects) {
 #ifdef OB_DEBUG
-            OB_ASSERT("未開放のグラフィックオブジェクト[ name = {} ]", pObject->getName());
+            OB_ASSERT("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
 #endif
             delete pObject;
         }

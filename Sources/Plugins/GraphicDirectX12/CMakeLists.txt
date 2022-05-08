@@ -21,6 +21,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE OB_GRAPHIC_DIRECTX12_BUILD)
 set(OB_PROJECT_INCLUDE_DIR
     "${OCTBIT_SOURCE_PATH}"
     "${OCTBIT_THIRD_PARTY_PATH}/DirectXTex/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/PIX/include"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 

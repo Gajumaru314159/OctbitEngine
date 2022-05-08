@@ -4,15 +4,18 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphic/Constants.h>
 #include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/Shader.h>
-#include <Framework/Graphic/RenderTexture.h>
+#include <Framework/Graphic/RenderTarget.h>
 #include <Framework/Graphic/Types/BlendDesc.h>
 #include <Framework/Graphic/Types/DepthStencilDesc.h>
 #include <Framework/Graphic/Types/RasterizerDesc.h>
 #include <Framework/Graphic/Types/Topology.h>
 
 namespace ob::graphic {
+
+#pragma region Enum
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		型
@@ -50,22 +53,29 @@ namespace ob::graphic {
 		PointSize,		//!< ポイントサイズ
 	};
 
+#pragma endregion
+
+#pragma region Sub Structure
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点属性
 	//! @see    VertexLayout
 	//@―---------------------------------------------------------------------------
 	struct VertexAttribute {
+
 		Semantic	semantic;	//!< セマンティクス
 		s32			offset;		//!< 頂点構造体内でのオフセット
 		Type		type;		//!< コンポーネント型
 		s32			dimention;	//!< 次元数
 		s32			index;		//!< セマンティクス内インデックス
+
 	public:
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
 		VertexAttribute() = default;
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
@@ -89,17 +99,18 @@ namespace ob::graphic {
 	//! @details	描画速度に直結するため、アンチエイリアシングの使用を検討してください。
 	//@―---------------------------------------------------------------------------
 	struct SampleDesc {
-		s32 count=1;		//!< ピクセル当たりのマルチサンプル数
+		s32 count	=1;		//!< ピクセル当たりのマルチサンプル数
 		s32 qualitty=0;		//!< 品質
 	};
 
+#pragma endregion
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
 		RootSignature		rootSignature;	//!< ルートシグネチャ
-		RenderTexture		target;			//!< 描画先
+		RenderTarget		target;			//!< 描画先
 		VertexLayout		vertexLayout;	//!< 頂点レイアウト
 		Topology			topology=Topology::TriangleList;//!< トポロジー
 
@@ -110,13 +121,11 @@ namespace ob::graphic {
 		DomainShader		ds;				//!< ドメインシェーダ
 
 		SampleDesc			sample;			//!< サンプル定義
-		BlendDesc			blend[8];		//!< ブレンド定義
+		BlendDesc			blend[RENDER_TARGET_MAX];//!< ブレンド定義
 		RasterizerDesc		rasterizer;		//!< ラスタライズ定義
 		DepthStencilDesc	depthStencil;	//!< デプス・ステンシル定義
 
-		u32					sampleMask=0b11111111;	//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
+		u32					sampleMask=-1;	//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
-
-
 
 }// namespcae ob::graphic

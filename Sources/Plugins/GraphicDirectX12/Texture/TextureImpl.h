@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 
 
@@ -58,33 +59,18 @@ namespace ob::graphic::dx12 {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      シェーダリソースビューを取得
-        //@―---------------------------------------------------------------------------
-        ID3D12DescriptorHeap* getSrv()const;
-
-
-
-    protected:
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      リソースを持っているか
-        //@―---------------------------------------------------------------------------
-        bool hasResource()const;
-
-        //@―---------------------------------------------------------------------------
         //! @brief      シェーダリソースビューを生成
         //@―---------------------------------------------------------------------------
-        bool createSRV(ID3D12Device& rNativeDevice,D3D12_CPU_DESCRIPTOR_HANDLE& handle);
+        void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
 
     private:
-    protected:
+
+        class DeviceImpl& m_device;
 
         TextureDesc                 m_desc;         //!< 定義
         ComPtr<ID3D12Resource>      m_resource;     //!< リソース
-        ComPtr<ID3D12DescriptorHeap> m_srvHeap;     //!< シェーダ・リソース・ビュー
-        //vector<Texture> m_mipmaps;              //!< ミップマップ
-
+        DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
 
     };
 
@@ -102,14 +88,6 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     inline ID3D12Resource* TextureImpl::getResource() const {
         return m_resource.Get();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      シェーダ・リソース・ビューを取得
-    //@―---------------------------------------------------------------------------
-    inline ID3D12DescriptorHeap* TextureImpl::getSrv() const {
-        return m_srvHeap.Get();
     }
 
 

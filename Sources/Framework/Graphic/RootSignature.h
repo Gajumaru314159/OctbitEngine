@@ -13,7 +13,6 @@ namespace ob::graphic {
     //! @brief  ルートシグネチャ
     //@―---------------------------------------------------------------------------
     class RootSignature {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RootSignature);
     public:
 

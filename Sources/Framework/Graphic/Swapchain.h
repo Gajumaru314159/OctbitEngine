@@ -27,7 +27,6 @@ namespace ob::graphic {
     //!             グラフィック機能と結びつけるために必要な情報を制御します。
     //@―---------------------------------------------------------------------------
     class OB_API SwapChain {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(SwapChain);
     public:
 
@@ -86,7 +85,7 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update(Texture& texture);
+        void update(const Texture& texture);
 
     };
 

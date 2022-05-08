@@ -46,6 +46,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::DescriptorHeap(DeviceImpl& device, DescriptorHeapType type, s32 capacity)
 		: m_capacity(0)
+		, m_type(type)
 	{
 		capacity = get_max(capacity, s_linearManagementSize);
 		{
@@ -64,7 +65,7 @@ namespace ob::graphic::dx12 {
 			HRESULT result;
 			result = device.getNativeDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+				Utility::outputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
 				return;
 			}
 		}
@@ -89,7 +90,7 @@ namespace ob::graphic::dx12 {
 		// 初回ブロックを生成
 		{
 			auto pBlock = m_freeList.back();
-			m_buffer.pop_back();
+			m_freeList.pop_back();
 			pBlock->pHeap = this;
 			pBlock->allocated = false;
 			pBlock->capacity = m_capacity;
@@ -106,8 +107,8 @@ namespace ob::graphic::dx12 {
 	//! @brief          デストラクタ
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::~DescriptorHeap() {
-		// TODO m_usedCountを用意しなくてもいいかも
-		OB_CHECK_ASSERT(m_freeList.size() == m_capacity, "未開放のDescriptorHandleがあります。");
+		// m_blocks の最上位に1つ残っているのが正常
+		OB_CHECK_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。");
 	}
 
 
@@ -188,6 +189,14 @@ namespace ob::graphic::dx12 {
 		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_heap->GetGPUDescriptorHandleForHeapStart();
 		handle.ptr += index * m_descriptorSize;
 		return handle;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  タイプを取得
+	//@―---------------------------------------------------------------------------
+	DescriptorHeapType DescriptorHeap::getHeapType()const {
+		return m_type;
 	}
 
 
@@ -302,14 +311,21 @@ namespace ob::graphic::dx12 {
 
 		OB_CHECK_ASSERT(!block1.allocated, "アロケート済みのブロックはマージできません。");
 		OB_CHECK_ASSERT(!block2.allocated, "アロケート済みのブロックはマージできません。");
-		OB_CHECK_ASSERT(block1.pNext == block2.pPrev && block1.pNext != nullptr, "連続していないブロックはマージできません。");
+		OB_CHECK_ASSERT(block1.pNext == &block2 && &block1 == block2.pPrev, "連続していないブロックはマージできません。");
 
 		separateFreeList(block1);
 		separateFreeList(block2);
 
+		// block1を拡張
 		block1.capacity += block2.capacity;
-		block1.pNext = block2.pNext;
 
+		// 再連結
+		block1.pNext = block2.pNext;
+		if (block2.pNext) {
+			block2.pNext->pPrev = &block1;
+		}
+
+		// リセット
 		block2.capacity = 0;
 		block2.index = 0;
 		block2.pPrev = block2.pNext = nullptr;

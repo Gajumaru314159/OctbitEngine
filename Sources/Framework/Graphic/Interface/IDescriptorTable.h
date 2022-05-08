@@ -6,6 +6,13 @@
 #pragma once
 #include <Framework/Graphic/Interface/GraphicObject.h>
 
+//===============================================================
+//	前方宣言
+//===============================================================
+namespace ob::graphic {
+	class Texture;
+}
+
 
 //===============================================================
 // クラス宣言
@@ -29,7 +36,7 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @{
 		//virtual bool setResource(s32 index, class Buffer& resource) = 0;
-		virtual bool setResource(s32 index, class Texture& resource) = 0;
+		virtual bool setResource(s32 index, Texture& resource) = 0;
 		//virtual bool setResource(s32 index, class Sampler& resource) = 0;
 		//! @}
 

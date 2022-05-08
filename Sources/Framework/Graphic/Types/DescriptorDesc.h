@@ -11,12 +11,10 @@ namespace ob::graphic {
     //! @brief  ディスクリプタ・タイプ
     //@―---------------------------------------------------------------------------
     enum class DescriptorHeapType :u32 {
-        CBV_SRV_UAV,
-        Sampler,
-        RTV,
-        DSV,
-
-        Max,
+        CBV_SRV_UAV,    //!< 定数バッファ/シェーダリソース/アンオーダードアクセス
+        Sampler,        //!< サンプラー
+        RTV,            //!< レンダーターゲット
+        DSV,            //!< デプスステンシル
     };
 
 

@@ -5,7 +5,6 @@
 //***********************************************************
 #include "SwapChainImpl.h"
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
-#include <Plugins/GraphicDirectX12/Texture/RenderTextureImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 #include <Framework/Graphic/Interface/ITexture.h>
@@ -82,15 +81,17 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::update(graphic::ITexture* pTexture) {
+    void SwapChainImpl::update(const graphic::Texture& texture) {
 
-        if (!pTexture)return;
+        if (!texture) {
+            LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗。空テクスチャを設定できません。")
+        }
 
 
         auto result = m_swapchain->Present(m_syncInterval, 0);
 
         if (FAILED(result)) {
-            Utility::outputErrorLog(result, TC("IDXGUISwapChain::Present()"));
+            Utility::outputFatalLog(result, TC("IDXGUISwapChain::Present()"));
             LOG_FATAL_EX("Graphic","スワップチェーンの更新に失敗")
             return;
         }
@@ -154,7 +155,7 @@ namespace ob::graphic::dx12 {
             (IDXGISwapChain**)m_swapchain.ReleaseAndGetAddressOf());
 
         if (FAILED(result)) {
-            Utility::outputErrorLog(result, TC("IDXGIFactory::CreateSwapChain()"));
+            Utility::outputFatalLog(result, TC("IDXGIFactory::CreateSwapChain()"));
             return false;
         }
 
@@ -196,7 +197,7 @@ namespace ob::graphic::dx12 {
 
         if (FAILED(result)) {
             // 枚数チェックをしているので呼ばれないはず
-            Utility::outputErrorLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+            Utility::outputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
             return false;
         }
 
@@ -214,7 +215,7 @@ namespace ob::graphic::dx12 {
             result = m_swapchain->GetBuffer(i, IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
                 // 生成が正しければ呼ばれないはず
-                Utility::outputErrorLog(result, TC("IDXGISwapChain::GetBuffer()"));
+                Utility::outputFatalLog(result, TC("IDXGISwapChain::GetBuffer()"));
                 return false;
             }
             rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, handle);
@@ -240,14 +241,14 @@ namespace ob::graphic::dx12 {
 
         auto result = m_swapchain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
         if (FAILED(result)) {
-            Utility::outputErrorLog(result, TC("IDXGISwapChain::CheckColorSpaceSupport()"));
+            Utility::outputFatalLog(result, TC("IDXGISwapChain::CheckColorSpaceSupport()"));
             return false;
         }
 
         if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
             result = m_swapchain->SetColorSpace1(colorSpace);
             if (FAILED(result)) {
-                Utility::outputErrorLog(result, TC("IDXGISwapChain::SetColorSpace1()"));
+                Utility::outputFatalLog(result, TC("IDXGISwapChain::SetColorSpace1()"));
                 return false;
             }
         }

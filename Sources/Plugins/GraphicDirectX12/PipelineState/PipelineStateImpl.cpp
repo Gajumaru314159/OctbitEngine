@@ -45,7 +45,7 @@ namespace ob::graphic::dx12 {
 			return;
 		}
 
-		const auto targetCount = desc.target.getTargetNum();
+		const auto targetCount = desc.target.getColorTextureCount();
 		if (8 < targetCount) {
 			LOG_ERROR_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
 			return;
@@ -75,10 +75,10 @@ namespace ob::graphic::dx12 {
 			// フォーマット
 			gpsd.NumRenderTargets = targetCount;
 			for (s32 i = 0; i < targetCount; ++i) {
-				auto& tex = desc.target.getTexture(i);
+				auto& tex = desc.target.getColorTexture(i);
 				gpsd.RTVFormats[i] = TypeConverter::convert(tex.format());
 			}
-			auto depthTex = desc.target.getDepthStencilTexture();
+			auto depthTex = desc.target.getDepthTexture();
 			if (depthTex)gpsd.DSVFormat = TypeConverter::convert(depthTex.format());
 		}
 
@@ -97,7 +97,7 @@ namespace ob::graphic::dx12 {
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
-		gpsd.PrimitiveTopologyType = TypeConverter::convert(desc.topology);
+		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
 		gpsd.SampleDesc.Quality = desc.sample.qualitty;
 		gpsd.NodeMask = 0;
@@ -109,7 +109,7 @@ namespace ob::graphic::dx12 {
 		ComPtr<ID3D12PipelineState> pipelineState;
 		result = rDevice.getNativeDevice()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
+			Utility::outputFatalLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
 			return;
 		}
 

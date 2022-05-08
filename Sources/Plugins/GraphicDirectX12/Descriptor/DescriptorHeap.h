@@ -81,6 +81,18 @@ namespace ob::graphic::dx12 {
 		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(u32 index);
 
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  タイプを取得
+		//@―---------------------------------------------------------------------------
+		DescriptorHeapType getHeapType()const;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  ネイティブクラスを取得
+		//@―---------------------------------------------------------------------------
+		const auto& getNative()const { return m_heap; };
+
+
 	private:
 
 		BBlock* allocateFreeBlock(s32 size);							//!< ブロックをアロケート
@@ -107,13 +119,14 @@ namespace ob::graphic::dx12 {
 		using lock_guard_type = lock_guard<mutex_type>;
 		mutex_type		m_mutex;		//!< ミューテックス
 
+		const DescriptorHeapType m_type;
 		s32				m_capacity;     //!< 最大容量
 
 		u32				m_freeFLI;      //!< First Level のフリー・ビットフラグ
 		vector<u32>		m_freeSLI;      //!< Second Level のフリー・ビットフラグ
 
 		vector<BBlock>  m_buffer;		//!< バッファ(ブロック実体)
-		vector<BBlock*> m_freeList;		//!< ブロックリスト(実体)
+		std::vector<BBlock*> m_freeList;		//!< ブロックリスト(実体)
 		vector<BBlock*> m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
 
 		static s32 s_maxSecondLevelLog2;

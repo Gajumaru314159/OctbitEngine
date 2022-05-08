@@ -11,7 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
-    class ITexture;
+    class Texture;
     class IRenderTexture;
 }
 
@@ -52,7 +52,7 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        virtual void update(ITexture* pTexture) = 0;
+        virtual void update(const Texture& texture) = 0;
 
 
     protected:

@@ -79,6 +79,9 @@ namespace ob::graphic {
     //! @brief      更新
     //@―---------------------------------------------------------------------------
     void System::update() {
+        if (m_device) {
+            m_device->update();
+        }
         if (m_objectManager) {
             m_objectManager->update();
         }

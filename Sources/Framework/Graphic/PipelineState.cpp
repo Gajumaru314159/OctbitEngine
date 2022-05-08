@@ -29,9 +29,18 @@ namespace ob::graphic {
 		OB_CHECK_ASSERT_EXPR(m_pImpl);
 		m_pImpl->setName(name);
 		if (!m_pImpl->isValid()) {
-			LOG_ERROR_EX("Graphic", "PipelineStateの生成に失敗[name={}]",name);
+			LOG_ERROR_EX("Graphic", "PipelineStateの生成に失敗 [name={}]", name);
 			release();
 		}
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      定義を取得
+	//@―---------------------------------------------------------------------------
+	const PipelineStateDesc& PipelineState::getDesc()const {
+		CHECK_IMPL();
+		return m_pImpl->getDesc();
 	}
 
 }// namespace ob

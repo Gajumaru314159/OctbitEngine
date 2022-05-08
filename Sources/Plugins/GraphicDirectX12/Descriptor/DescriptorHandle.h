@@ -29,8 +29,8 @@ namespace ob::graphic::dx12 {
         void release();
         DescriptorHeapType getHeapType()const;
 
-        D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0);
-        D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0);
+        D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const;
+        D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0)const;
 
     private:
 

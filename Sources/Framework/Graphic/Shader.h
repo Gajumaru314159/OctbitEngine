@@ -64,7 +64,6 @@ namespace ob::graphic {
     //! @brief      頂点シェーダ
     //@―---------------------------------------------------------------------------
     class VertexShader:public Shader {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(VertexShader);
     public:
 
@@ -102,7 +101,6 @@ namespace ob::graphic {
     //! @brief      シェーダ
     //@―---------------------------------------------------------------------------
     class PixelShader :public Shader {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(PixelShader);
     public:
 
@@ -140,7 +138,6 @@ namespace ob::graphic {
     //! @brief      ジオメトリ・シェーダ
     //@―---------------------------------------------------------------------------
     class GeometryShader :public Shader {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(GeometryShader);
     public:
 
@@ -178,7 +175,6 @@ namespace ob::graphic {
     //! @brief      ハル・シェーダ
     //@―---------------------------------------------------------------------------
     class HullShader :public Shader {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(HullShader);
     public:
 
@@ -216,7 +212,6 @@ namespace ob::graphic {
     //! @brief      ドメイン・シェーダ
     //@―---------------------------------------------------------------------------
     class DomainShader :public Shader {
-        friend class Device;
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(DomainShader);
     public:
 

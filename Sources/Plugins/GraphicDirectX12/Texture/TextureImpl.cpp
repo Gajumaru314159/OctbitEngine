@@ -15,12 +15,14 @@ namespace ob::graphic::dx12 {
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
     TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc)
-		: m_desc(desc)
+		: m_device(rDevice)
+		, m_desc(desc)
 	{
 
 		auto format = TypeConverter::convert(desc.format);
 		D3D12_CLEAR_VALUE* pClearValue=nullptr;
 
+		//TODO RenderTargetから生成する場合はクリアバリューを設定する(RenderTextureDesc)
 		const FLOAT clearColor[4] = {0,0,0,1};
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
@@ -52,11 +54,11 @@ namespace ob::graphic::dx12 {
 		case TextureType::RenderTarget:
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-			//resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
+			resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
 			pClearValue = &colorClearValue;
 			break;
 
-		case TextureType::DeptthStencil:
+		case TextureType::DepthStencil:
 			OB_CHECK_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -90,8 +92,16 @@ namespace ob::graphic::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result,TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::outputFatalLog(result,TC("ID3D12Device::CreateCommittedResource()"));
 		}
+
+#ifdef OB_DEBUG
+		{
+			resource->SetName(TEXT("Texture"));
+		}
+#endif
+
+		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 
 		m_resource = resource;
 
@@ -115,64 +125,58 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      リソースを持っているか
+	//! @brief      シェーダリソースビューを生成
 	//@―---------------------------------------------------------------------------
-	bool TextureImpl::hasResource()const {
-		return !m_resource;
-	}
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      シェーダリソースビューを生成
-    //@―---------------------------------------------------------------------------
-    bool TextureImpl::createSRV(ID3D12Device& rNativeDevice, D3D12_CPU_DESCRIPTOR_HANDLE& handle) {
-		if (hasResource() == false)return false;
-		OB_NOTIMPLEMENTED();
-
-		auto& desc = m_resource->GetDesc();
+	void TextureImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC texDesc = {};
-		texDesc.Format = desc.Format;
+		texDesc.Format = m_resource->GetDesc().Format;
 		texDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		// TODO: テクスチャリソース定義
-		texDesc.ViewDimension = Utility::getSrvDimention(desc);
 
-		/*
-		switch (texDesc.ViewDimension) {
-		case D3D12_SRV_DIMENSION_TEXTURE1D:
-			texDesc.Texture1D.MipLevels = 1;
+		switch (m_desc.type) {
+		case TextureType::Texture1D:
+			if (m_desc.arrayNum) {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
+				texDesc.Texture1DArray.MipLevels = 1;
+			} else {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1D;
+				texDesc.Texture1D.MipLevels = 1;
+			}
 			break;
-		case D3D12_SRV_DIMENSION_TEXTURE1DARRAY:
-			texDesc.Texture1DArray.MipLevels = 1;
+		case TextureType::Texture2D:
+		case TextureType::RenderTarget:
+		case TextureType::DepthStencil:
+			if (m_desc.arrayNum) {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+				texDesc.Texture2DArray.MipLevels = 1;
+			} else {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+				texDesc.Texture2D.MipLevels = 1;
+			}
 			break;
-		case D3D12_SRV_DIMENSION_TEXTURE2D:
-			texDesc.Texture2D.MipLevels = 1;
+		case TextureType::Texture3D:
+			if (m_desc.arrayNum) {
+				OB_ASSERT("Texture3Dは配列にできません。");
+			} else {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
+				texDesc.Texture3D.MipLevels = 1;
+			}
 			break;
-		case D3D12_SRV_DIMENSION_TEXTURE2DARRAY:
-			texDesc.Texture2DArray.MipLevels = 1;
+		case TextureType::Cube:
+			if (m_desc.arrayNum) {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
+				texDesc.TextureCubeArray.MipLevels = 1;
+			} else {
+				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+				texDesc.TextureCube.MipLevels = 1;
+			}
 			break;
-		case D3D12_SRV_DIMENSION_TEXTURE2DMS:
-			break;
-		case D3D12_SRV_DIMENSION_TEXTURE2DMSARRAY:
-			texDesc.Texture2DMSArray.ArraySize;
-			texDesc.Texture2DMSArray.FirstArraySlice;
-			break;
-		case D3D12_SRV_DIMENSION_TEXTURE3D:
-			texDesc.Texture3D.MipLevels = 1;
-			break;
-		case D3D12_SRV_DIMENSION_TEXTURECUBE:
-			texDesc.TextureCube.MipLevels;// .MipLevels = 1;
-			break;
-		case D3D12_SRV_DIMENSION_TEXTURECUBEARRAY:
-			texDesc.TextureCube.MipLevels;// .MipLevels = 1;
+		default:
+			OB_ASSERT("不明なテクスチャタイプ");
 			break;
 		}
-		*/
 
-		rNativeDevice.CreateShaderResourceView(m_resource.Get(), &texDesc, handle);
-		handle.ptr += rNativeDevice.GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-		return 0;
-    }
+		m_device.getNativeDevice()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
+	}
 
 }// ob::graphic::dx12

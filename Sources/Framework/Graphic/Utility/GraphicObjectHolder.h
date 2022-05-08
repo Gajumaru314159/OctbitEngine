@@ -35,14 +35,15 @@ namespace ob::graphic {
                 bool operator!=(const type&)const noexcept; \
                 operator bool()const noexcept;              \
                 void release();                             \
-                bool empty()const noexcept;               \
+                bool empty()const noexcept;                 \
             private:                                        \
                 class I##type* m_pImpl = nullptr;
 
     //@―---------------------------------------------------------------------------
     //! @copydoc OB_DEFINE_GRAPHIC_OBJECT_HOLDER(type)
     //@―---------------------------------------------------------------------------
-    #define OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(type)      \
+    #define OB_DEFINE_GRAPHIC_OBJECT_HOLDER_OVERRIDE(type)  \
+                friend class Device;                        \
             public:                                         \
                 type(const type&);                          \
                 type(type&&);                               \
@@ -95,7 +96,7 @@ namespace ob::graphic {
                     if (m_pImpl)m_pImpl->releaseReference();                \
                     m_pImpl = nullptr;                                      \
                 }                                                           \
-                bool type::empty()const noexcept {                        \
+                bool type::empty()const noexcept {                          \
                     return m_pImpl == nullptr;                              \
                 }
 

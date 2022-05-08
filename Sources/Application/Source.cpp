@@ -3,17 +3,29 @@
 #include <Framework/Platform/System/PlatformSystem.h>
 #include <Framework/Graphic/System.h>
 #include <Framework/Graphic/SwapChain.h>
-#include <Framework/Graphic/RenderTexture.h>
-#include <Framework/Graphic/Geometry.h>
+#include <Framework/Graphic/RenderTarget.h>
 #include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/PipelineState.h>
 #include <Framework/Graphic/DescriptorTable.h>
-#include <Framework/Graphic/Buffer.h>
+#include <Framework/Graphic/CommandList.h>
+#include <Framework/Graphic/MeshBuffer.h>
+#include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/Types/CommandParam.h>
 
 #include <Windows.h>
 
 using namespace ob;
+
+struct Vert {
+    Vec4 pos;
+    Vec2 uv;
+};
+
+struct ShaderData {
+    
+};
+
 
 int main() {
     using namespace ob::graphic;
@@ -24,70 +36,92 @@ int main() {
     {
         platform::ModuleManager::Instance();
         {
+            // グラフィックシステム初期化
             SystemDesc sysDesc;
             sysDesc.api = graphic::GraphicAPI::D3D12;
             sysDesc.bufferCount = 2;
             graphic::System::Instance().initialize(sysDesc);
 
+            // ウィンドウ生成
             platform::WindowCreationDesc windowDesc;
             windowDesc.title = TC("Graphic Test");
             platform::Window window(windowDesc);
-
             window.show();
 
+            // スワップチェイン
+            SwapChain swapChain;
+            {
+                SwapchainDesc desc;
+                desc.window = &window;
+                swapChain = SwapChain(desc);
+                OB_CHECK_ASSERT_EXPR(swapChain);
+            }
 
-            SwapchainDesc swapChainDesc;
-            swapChainDesc.window = &window;
-            SwapChain swapChain(swapChainDesc);
+            Texture tex;
+            {
+                TextureDesc desc;
+                desc.size = {512,512};
+                desc.color.set(1, 0, 1);
+                tex = Texture(desc);
+            }
 
-            TextureDesc texDesc[1];
-            texDesc[0].type = TextureType::RenderTarget;
-            texDesc[0].size = { 1280,720 };
-            TextureDesc depth;
-            depth.format = TextureFormat::D32;
-            depth.type = TextureType::DeptthStencil;
-            depth.size = { 1280,720 };
-            RenderTexture rt(texDesc, depth);
+            RenderTarget rt;
+            {
+                RenderTargetDesc desc;
+                desc.size = { 1280,720 };
+                desc.colors = {
+                    ColorTextureDesc{TextureFormat::RGBA8,Color::red},
+                    ColorTextureDesc{TextureFormat::RGBA8,Color::yellow},
+                };
 
+                desc.depth = {
+                    DepthTextureDesc{TextureFormat::D32,0,0},
+                };
 
-            RootSignatureDesc desc(
-                {
-                    RootParameter(
-                        {
-                            DescriptorRange(DescriptorRangeType::CBV,1,0),
-                            DescriptorRange(DescriptorRangeType::SRV,1,0),
-                        }
-                    )
-                },
-                {
-                    StaticSamplerDesc(SamplerDesc(),0)
-                }
-             );
-            RootSignature signature(desc);
+                rt = RenderTarget(desc);
+                OB_CHECK_ASSERT_EXPR(rt);
+            }
 
-            String vssrc;
-            vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-            vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
-            vssrc.append(TC("\n    Output o;"));
-            vssrc.append(TC("\n    o.pos = pos;"));
-            vssrc.append(TC("\n    o.uv = uv;"));
-            vssrc.append(TC("\n    return o;"));
-            vssrc.append(TC("\n}"));
-            String pssrc;
-            pssrc.append(TC("\nTexture2D tex:register(t0);"));
-            pssrc.append(TC("\nSamplerState smp:register(s0);"));
-            pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-            pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{"));
-            pssrc.append(TC("\n    return float4(tex.Sample(smp,i.uv));"));
-            pssrc.append(TC("\n}"));
-            VertexShader vs(vssrc);
-            PixelShader ps(pssrc);
-            OB_CHECK_ASSERT_EXPR(vs && ps);
+            RootSignature signature;
+            {
+                RootSignatureDesc desc(
+                    {
+                        RootParameter(
+                            {
+                                DescriptorRange(DescriptorRangeType::SRV,1,0),
+                            }
+                        ),
+                    },
+                    {
+                        StaticSamplerDesc(SamplerDesc(),0),
+                    }
+                );
+                signature = RootSignature(desc);
+                OB_CHECK_ASSERT_EXPR(signature);
+            }
 
-            struct Vert {
-                Vec4 pos;
-                Vec2 uv;
-            };
+            VertexShader vs;
+            PixelShader ps;
+            {
+                String vssrc;
+                vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+                vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
+                vssrc.append(TC("\n    Output o;"));
+                vssrc.append(TC("\n    o.pos = pos;"));
+                vssrc.append(TC("\n    o.uv = uv;"));
+                vssrc.append(TC("\n    return o;"));
+                vssrc.append(TC("\n}"));
+                String pssrc;
+                pssrc.append(TC("\nTexture2D g_mainTex;"));
+                pssrc.append(TC("\nSamplerState g_mainSampler;"));
+                pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+                pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{"));
+                pssrc.append(TC("\n    return g_mainTex.Sample(g_mainSampler,i.uv);"));
+                pssrc.append(TC("\n}"));
+                vs= VertexShader(vssrc);
+                ps= PixelShader(pssrc);
+                OB_CHECK_ASSERT_EXPR(vs && ps);
+            }
 
             PipelineState pipeline;
             {
@@ -101,32 +135,61 @@ int main() {
                 };
                 desc.target = rt;
                 desc.blend[0] = BlendDesc::AlphaBlend;
+                desc.rasterizer.cullMode = CullMode::None;
 
                 pipeline = PipelineState(desc);
+                OB_CHECK_ASSERT_EXPR(pipeline);
             }
 
 
-            //Buffer buffer;
-            //{
-            //    BufferDesc desc;
-            //    desc.bufferSize = 128;
-            //    buffer = Buffer(desc);
-            //}
-
-
             DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
-            //dt.setResource(0,buffer);
+            dt.setResource(0,tex);
+            
+            CommandList cmdList;
+            {
+                CommandListDesc desc;
+                desc.type = CommandListType::Graphic;
+                cmdList = CommandList(desc);
+                OB_CHECK_ASSERT_EXPR(cmdList);
+            }
 
+            Mesh<Vert> mesh;
+            mesh.appendQuad(
+                {Vec4(0,0,0,1),Vec2(0,0)},
+                {Vec4(0.5,0,0,1),Vec2(1,0)},
+                {Vec4(0,0.5,0,1),Vec2(0,1)},
+                {Vec4(0.5,0.5,0,1),Vec2(1,1)}
+            );
 
+            MeshBuffer meshBuffer(mesh);
+
+            Random random;
             MSG msg = {};
             while (true) {
 
-                swapChain.update(rt.getTexture());
+                cmdList.begin();
+                
+                cmdList.setRenderTarget(rt);
+                cmdList.clearColors();
+                cmdList.setRootSignature(signature);
+                cmdList.setPipelineState(pipeline);
+                cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
+                cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
+
+                SetDescriptorTableParam params;
+                params.table = dt;
+                params.slot = 0;
+                cmdList.setRootDesciptorTable(&params,1);
+                cmdList.drawIndexedInstanced();
                 //mat.setMatrix("WorldMatrix",mtx);
                 //mat.setTexture("MainTex",tex);
-                //rt.setPipeline(pipeline);
-                //rt.setMaterial(mat);
-                //rt.draw(shape);
+                cmdList.end();
+                cmdList.flush();
+                //swapChain.update(rt.getTexture());
+
+                graphic::System::Instance().update();
+
+                swapChain.update(rt.getColorTexture());
 
                 if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
                     TranslateMessage(&msg);

@@ -5,15 +5,9 @@
 //***********************************************************
 #include "Utility.h"
 #include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/Misc/Blob.h>
 
 namespace ob::graphic::dx12 {
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  HRESULTのエラーログを出力
-    //@―---------------------------------------------------------------------------
-    void Utility::outputErrorLog(HRESULT result, StringView message){
-        LOG_ERROR_EX("Graphic", "{0}[{1:#X}:{2}]", message,result, Utility::getErrorMessage(result));
-    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  エラーメッセージを取得
@@ -44,9 +38,88 @@ namespace ob::graphic::dx12 {
         return move(error);
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  デバッグレイヤメッセージを取得
+    //@―---------------------------------------------------------------------------
+    String Utility::getDebugLayerLastString(ID3D12Device* pDevice, s32 count) {
+
+        String message;
+
+#ifdef OB_DEBUG
+
+        String desc;
+        Blob blob;
+
+        ComPtr<ID3D12InfoQueue> infoQueue;
+        if (pDevice&&SUCCEEDED(pDevice->QueryInterface(IID_PPV_ARGS(infoQueue.ReleaseAndGetAddressOf())))) {
+            u64 storedCount = infoQueue->GetNumStoredMessages();
+            u64 displayCount = get_min<u64>(storedCount, get_max(count,0));
+            for (u64 i = 0; i < displayCount; ++i) {
+                u64 index = (storedCount - 1) - i;
+                SIZE_T messageLength = 0;
+                if (FAILED(infoQueue->GetMessageW(index, nullptr, &messageLength))) {
+                    continue;
+                }
+                blob.resize(messageLength);
+                auto pMessage = reinterpret_cast<D3D12_MESSAGE*>(blob.data());
+                if (FAILED(infoQueue->GetMessageW(index, pMessage, &messageLength))) {
+                    continue;
+                }
+
+                message = TC("DebugLayer: ");
+                switch (pMessage->Severity)
+                {
+                case D3D12_MESSAGE_SEVERITY_CORRUPTION: message += TC("[CORRUPTION]"); break;
+                case D3D12_MESSAGE_SEVERITY_ERROR:      message += TC("[ERROR]"); break;
+                case D3D12_MESSAGE_SEVERITY_WARNING:    message += TC("[WARNING]"); break;
+                }
+                switch (pMessage->Category)
+                {
+                case D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED:    message += TC("[APPLICATION_DEFINED]"); break;
+                case D3D12_MESSAGE_CATEGORY_MISCELLANEOUS:          message += TC("[MISCELLANEOUS]"); break;
+                case D3D12_MESSAGE_CATEGORY_INITIALIZATION:         message += TC("[INITIALIZATION]"); break;
+                case D3D12_MESSAGE_CATEGORY_CLEANUP:                message += TC("[CLEANUP]"); break;
+                case D3D12_MESSAGE_CATEGORY_COMPILATION:            message += TC("[COMPILATION]"); break;
+                case D3D12_MESSAGE_CATEGORY_STATE_CREATION:         message += TC("[STATE_CREATION]"); break;
+                case D3D12_MESSAGE_CATEGORY_STATE_SETTING:          message += TC("[STATE_SETTING]"); break;
+                case D3D12_MESSAGE_CATEGORY_STATE_GETTING:          message += TC("[STATE_GETTING]"); break;
+                case D3D12_MESSAGE_CATEGORY_RESOURCE_MANIPULATION:  message += TC("[RESOURCE_MANIPULATION]"); break;
+                case D3D12_MESSAGE_CATEGORY_EXECUTION:              message += TC("[EXECUTION]"); break;
+                case D3D12_MESSAGE_CATEGORY_SHADER:                 message += TC("[SHADER]"); break;
+                default:                                            message += TC("[UNKNOWN]"); break;
+                }
+
+                
+                StringEncoder::Encode(pMessage->pDescription, desc);
+                message += desc;
+                message += TC("\n");
+            }
+            infoQueue->ClearStoredMessages();
+            infoQueue->Release();
+        }
+#endif
+
+        return move(message);
+    }
 
     //@―---------------------------------------------------------------------------
-    //! @brief  エラーメッセージを取得
+    //! @brief  HRESULTのエラーログを出力
+    //@―---------------------------------------------------------------------------
+    void Utility::outputErrorLog(HRESULT result, StringView message) {
+        LOG_ERROR_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::getErrorMessage(result));
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  HRESULTのFatalログを出力
+    //@―---------------------------------------------------------------------------
+    void Utility::outputFatalLog(HRESULT result, StringView message) {
+        LOG_FATAL_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::getErrorMessage(result));
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
     //@―---------------------------------------------------------------------------
     D3D12_SRV_DIMENSION Utility::getSrvDimention(const D3D12_RESOURCE_DESC& desc) {
         switch (desc.Dimension) {

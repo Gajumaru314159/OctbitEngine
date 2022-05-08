@@ -23,7 +23,7 @@ namespace ob::graphic {
     };
 
     const BlendDesc BlendDesc::AlphaBlend = {
-        false,
+        true,
         BlendFactor::One,
         BlendFactor::Zero,
         BlendOp::Add,
@@ -31,7 +31,7 @@ namespace ob::graphic {
     };
 
     const BlendDesc BlendDesc::Addition = {
-        false,
+        true,
         BlendFactor::One,
         BlendFactor::Zero,
         BlendOp::Add,
@@ -39,7 +39,7 @@ namespace ob::graphic {
     };
 
     const BlendDesc BlendDesc::AdditionAlpha = {
-        false,
+        true,
         BlendFactor::One,
         BlendFactor::Zero,
         BlendOp::Add,
@@ -47,13 +47,11 @@ namespace ob::graphic {
     };
 
     const BlendDesc BlendDesc::Subtraction = {
-        false,
+        true,
         BlendFactor::One,
         BlendFactor::Zero,
         BlendOp::Add,
         SHARED_STATE
     };
-
-#undef SHARED_STATE
 
 }// namespace ob
