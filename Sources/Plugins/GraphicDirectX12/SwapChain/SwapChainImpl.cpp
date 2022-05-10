@@ -186,24 +186,12 @@ namespace ob::graphic::dx12 {
             return false;
         }
 
-        // スワップチェインのRTVデスクリプタを生成
-        D3D12_DESCRIPTOR_HEAP_DESC heapDesc = {};
-        heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;     // レンダーターゲットビュー
-        heapDesc.NodeMask = 0;                              // GPUが1つの時は0、複数の時は識別用のbitを指定
-        heapDesc.NumDescriptors = m_desc.bufferCount;     // ディスクリプタの数。表と裏バッファの２つ。
-        heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;   // ビューの情報をシェーダから参照する必要があるか
-
-        auto result = rDevice.getNativeDevice()->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(m_rtvHeaps.ReleaseAndGetAddressOf()));
-
-        if (FAILED(result)) {
-            // 枚数チェックをしているので呼ばれないはず
-            Utility::outputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
-            return false;
-        }
+        HRESULT result;
 
         // バッファを生成
         m_buffers.resize(m_desc.bufferCount);
-        D3D12_CPU_DESCRIPTOR_HANDLE handle = m_rtvHeaps->GetCPUDescriptorHandleForHeapStart();
+
+        rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV,m_desc.bufferCount);
 
         // レンダーターゲットビュー生成
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
@@ -218,8 +206,7 @@ namespace ob::graphic::dx12 {
                 Utility::outputFatalLog(result, TC("IDXGISwapChain::GetBuffer()"));
                 return false;
             }
-            rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, handle);
-            handle.ptr += rDevice.getNativeDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+            rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, m_hRTV.getCpuHandle(i));
         }
 
         m_viewport = CD3DX12_VIEWPORT(m_buffers[0].Get());

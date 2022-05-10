@@ -288,6 +288,10 @@ namespace ob::graphic::dx12 {
 		if (pFreeNext)pFreeNext->pFreePrev = pFreePrev;
 		if (pFreePrev)pFreePrev->pFreeNext = pFreeNext;
 
+		// 自分はリセット
+		block.pFreePrev = nullptr;
+		block.pFreeNext = nullptr;
+
 		// フリーリストの先頭の場合は先頭を入れなおす
 		s32 firstIndex, secondIndex, blockIndex;
 		getLevelAndIndex(block.capacity, firstIndex, secondIndex, blockIndex);

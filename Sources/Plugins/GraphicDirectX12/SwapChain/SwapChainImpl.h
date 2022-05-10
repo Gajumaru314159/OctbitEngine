@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/ISwapChain.h>
+#include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 //===============================================================
 // 前方宣言
@@ -101,7 +102,6 @@ namespace ob::graphic::dx12 {
 
         ComPtr<IDXGISwapChain4> m_swapchain = nullptr;  //!< スワップチェイン
         vector<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
-        ComPtr<ID3D12DescriptorHeap> m_rtvHeaps;        //!< ディスクリプタヒープ
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorrect;                       //!< シザー矩形
 
@@ -110,8 +110,7 @@ namespace ob::graphic::dx12 {
         DXGI_FORMAT m_nativeDisplayViewFormat;          //!< ディスプレイ・ビューフォーマット
         DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
 
-
-        ComPtr<ID3D12DescriptorHeap> m_hRTV;         //!< レンダー・ターゲット・ビュー
+        DescriptorHandle m_hRTV;
 
         UINT m_syncInterval;
 

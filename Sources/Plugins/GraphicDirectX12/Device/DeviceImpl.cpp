@@ -200,9 +200,7 @@ namespace ob::graphic::dx12 {
 	void DeviceImpl::setDescriptorHeaps(CommandListImpl& cmdList) {
 		ID3D12DescriptorHeap* pHeaps[] = {
 			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->getNative().Get(),
-			//m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->getNative().Get(),
-			//m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)]->getNative().Get(),
-			//m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)]->getNative().Get(),
+			m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->getNative().Get(),
 		};
 		cmdList.getNative()->SetDescriptorHeaps(get_size(pHeaps), pHeaps);
 	}
