@@ -83,7 +83,7 @@ namespace ob::graphic::dx12 {
 
 		ComPtr<ID3D12Resource> resource;
 
-		auto result = rDevice.getNativeDevice()->CreateCommittedResource(
+		auto result = rDevice.getNative()->CreateCommittedResource(
 			&texHeapProp,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
@@ -176,7 +176,7 @@ namespace ob::graphic::dx12 {
 			break;
 		}
 
-		m_device.getNativeDevice()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
+		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
 	}
 
 }// ob::graphic::dx12

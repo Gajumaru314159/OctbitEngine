@@ -151,6 +151,7 @@ namespace ob::graphic::dx12 {
         }
     private:
         
+        void setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src);
         void setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src);
         void setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src);
         void setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src);

@@ -10,6 +10,7 @@
 #include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Graphic/Buffer.h>
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
+#include <Plugins/GraphicDirectX12/SwapChain/SwapChainImpl.h>
 #include <Plugins/GraphicDirectX12/Texture/RenderTargetImpl.h>
 #include <Plugins/GraphicDirectX12/RootSignature/RootSignatureImpl.h>
 #include <Plugins/GraphicDirectX12/PipelineState/PipelineStateImpl.h>
@@ -41,7 +42,7 @@ namespace ob::graphic::dx12 {
 		auto type = TypeConverter::convert(desc.type);
 
 		// アロケータ生成
-		result = device.getNativeDevice()->CreateCommandAllocator(type, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
+		result = device.getNative()->CreateCommandAllocator(type, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
 			return;
@@ -49,7 +50,7 @@ namespace ob::graphic::dx12 {
 
 		// コマンドリスト生成
 		UINT nodeMask = 0;
-		result = device.getNativeDevice()->CreateCommandList(nodeMask, type, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
+		result = device.getNative()->CreateCommandList(nodeMask, type, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
 			return;
@@ -83,7 +84,7 @@ namespace ob::graphic::dx12 {
 		result = m_cmdAllocator->Reset();
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandAllocator::Reset()\n");
-			message += Utility::getDebugLayerLastString(m_device.getNativeDevice().Get());
+			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
 			Utility::outputFatalLog(result, message);
 		}
 
@@ -91,7 +92,7 @@ namespace ob::graphic::dx12 {
 		result = m_cmdList->Reset(m_cmdAllocator.Get(), nullptr);
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandList::Reset()\n");
-			message += Utility::getDebugLayerLastString(m_device.getNativeDevice().Get());
+			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
 			Utility::outputFatalLog(result, message);
 		}
 
@@ -107,6 +108,33 @@ namespace ob::graphic::dx12 {
 	void CommandListImpl::end() {
 		// リソースバリア設定
 		m_cmdList->Close();
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      レンダーターゲットを設定
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::setRenderTarget(const graphic::SwapChain& target) {
+
+		auto pSwapChain = Device::GetImpl<SwapChainImpl>(target);
+		if (pSwapChain == nullptr) {
+			LOG_FATAL_EX("Graphic", "SwapChainが空です。");
+			return;
+		}
+
+		m_pRenderTarget = nullptr;
+
+		clearDescriptorHandle();
+
+		// RTV更新
+		m_hRTV[0] = pSwapChain->getCpuHandle();
+		m_cmdList->OMSetRenderTargets(1, m_hRTV, false, nullptr);
+
+		// ビューポートリセット
+		auto viewport = pSwapChain->getViewport();
+		auto rect = pSwapChain->getScissorRect();
+		m_cmdList->RSSetViewports(1, &viewport);
+		m_cmdList->RSSetScissorRects(1, &rect);
 	}
 
 

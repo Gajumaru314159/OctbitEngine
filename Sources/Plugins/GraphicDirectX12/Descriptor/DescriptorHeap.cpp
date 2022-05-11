@@ -60,10 +60,10 @@ namespace ob::graphic::dx12 {
 				descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			}
 
-			m_descriptorSize = device.getNativeDevice()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);
+			m_descriptorSize = device.getNative()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);
 
 			HRESULT result;
-			result = device.getNativeDevice()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
+			result = device.getNative()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				Utility::outputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
 				return;

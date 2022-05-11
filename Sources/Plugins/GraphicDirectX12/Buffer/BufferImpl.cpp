@@ -43,7 +43,7 @@ namespace ob::graphic::dx12 {
 		ComPtr<ID3D12Resource> buffer;
 
 		//UPLOAD(確保は可能)
-		result = rDevice.getNativeDevice()->CreateCommittedResource(
+		result = rDevice.getNative()->CreateCommittedResource(
 			&heapprop,
 			D3D12_HEAP_FLAG_NONE,
 			&resdesc,

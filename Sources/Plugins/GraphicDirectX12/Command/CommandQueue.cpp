@@ -27,7 +27,7 @@ namespace ob::graphic::dx12 {
 			desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 			desc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 
-			result = device.getNativeDevice()->CreateCommandQueue(&desc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
+			result = device.getNative()->CreateCommandQueue(&desc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				Utility::outputFatalLog(result, TC("ID3D12Device::CreatteCommandQueue()"));
 				return;
@@ -35,7 +35,7 @@ namespace ob::graphic::dx12 {
 		}
 		// フェンス生成
 		{
-			result = device.getNativeDevice()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
+			result = device.getNative()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				Utility::outputFatalLog(result, TC("ID3D12Device::CreateFence()"));
 				return;

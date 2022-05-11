@@ -106,7 +106,7 @@ namespace ob::graphic::dx12 {
 		}
 
 		// ルートシグネチャの作成
-		result = rDevice.getNativeDevice()->CreateRootSignature(
+		result = rDevice.getNative()->CreateRootSignature(
 			0,
 			rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(),
 			IID_PPV_ARGS(m_rootSignature.ReleaseAndGetAddressOf()));

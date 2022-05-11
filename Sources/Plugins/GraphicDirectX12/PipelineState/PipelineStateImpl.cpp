@@ -22,11 +22,11 @@ namespace ob::graphic::dx12 {
 	{
 
 		if (!desc.rootSignature) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
 			return;
 		}
 		if (!desc.target) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RenderTargetが設定されていません。");
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderTargetが設定されていません。");
 			return;
 		}
 
@@ -37,24 +37,23 @@ namespace ob::graphic::dx12 {
 		auto ds = Device::GetImpl<ShaderImpl>(m_desc.ds);
 
 		if (vs == nullptr) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
 			return;
 		}
 		if (ps == nullptr) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。ピクセルシェーダが設定されていません。");
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。ピクセルシェーダが設定されていません。");
 			return;
 		}
 
 		const auto targetCount = desc.target.getColorTextureCount();
 		if (8 < targetCount) {
-			LOG_ERROR_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
+			LOG_FATAL_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
 			return;
 		}
 
 		// グラフィックパイプラインの定義
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC gpsd = {};
 
-		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature)->getNative().Get();
 
 		// シェーダ
 		{
@@ -70,18 +69,7 @@ namespace ob::graphic::dx12 {
 
 		}
 
-		// レンダーターゲットごとの設定
-		{
-			// フォーマット
-			gpsd.NumRenderTargets = targetCount;
-			for (s32 i = 0; i < targetCount; ++i) {
-				auto& tex = desc.target.getColorTexture(i);
-				gpsd.RTVFormats[i] = TypeConverter::convert(tex.format());
-			}
-			auto depthTex = desc.target.getDepthTexture();
-			if (depthTex)gpsd.DSVFormat = TypeConverter::convert(depthTex.format());
-		}
-
+		setupFormats(gpsd, desc);
 		setupBlend(gpsd.BlendState, desc);
 		setupRasterizerState(gpsd.RasterizerState, desc.rasterizer);
 		setupDepthStencilState(gpsd.DepthStencilState, desc.depthStencil);
@@ -96,6 +84,7 @@ namespace ob::graphic::dx12 {
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 
+		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature)->getNative().Get();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
@@ -107,7 +96,7 @@ namespace ob::graphic::dx12 {
 		// グラフィックパイプラインを生成
 		HRESULT result;
 		ComPtr<ID3D12PipelineState> pipelineState;
-		result = rDevice.getNativeDevice()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
+		result = rDevice.getNative()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::outputFatalLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
 			return;
@@ -116,6 +105,21 @@ namespace ob::graphic::dx12 {
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
 		m_rootSignature = m_rootSignature;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  フォーマット設定
+	//@―---------------------------------------------------------------------------
+	void PipelineStateImpl::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
+
+		dst.NumRenderTargets = src.target.getColorTextureCount();
+		for (s32 i = 0; i < dst.NumRenderTargets; ++i) {
+			auto& tex = src.target.getColorTexture(i);
+			dst.RTVFormats[i] = TypeConverter::convert(tex.format());
+		}
+		auto depthTex = src.target.getDepthTexture();
+		if (depthTex)dst.DSVFormat = TypeConverter::convert(depthTex.format());
 	}
 
 

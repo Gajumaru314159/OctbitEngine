@@ -71,11 +71,15 @@ namespace ob::graphic {
                     another.m_pImpl = nullptr;                              \
                 }                                                           \
                 type& type::operator=(const type& another) {                \
+                    if(m_pImpl==another.m_pImpl)return *this;               \
+                    if(another.m_pImpl)another.m_pImpl->addReference();     \
+                    if(m_pImpl)m_pImpl->releaseReference();                 \
                     m_pImpl = another.m_pImpl;                              \
-                    if(m_pImpl)m_pImpl->addReference();                     \
                     return *this;                                           \
                 }                                                           \
                 type& type::operator=(type&& another) {                     \
+                    if(m_pImpl==another.m_pImpl)return *this;               \
+                    if(m_pImpl)m_pImpl->releaseReference();                 \
                     m_pImpl = another.m_pImpl;                              \
                     another.m_pImpl = nullptr;                              \
                     return *this;                                           \

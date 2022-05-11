@@ -98,7 +98,7 @@ namespace ob::graphic::dx12 {
         DescriptorHandle m_hDSV;                        //!< デプス・ステンシル・ビュー
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
-        D3D12_RECT m_scissorrect;                       //!< シザー矩形
+        D3D12_RECT m_scissorRect;                       //!< シザー矩形
 
         bool m_initialized =false;
     };

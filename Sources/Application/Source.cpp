@@ -71,7 +71,6 @@ int main() {
                 desc.size = { 1280,720 };
                 desc.colors = {
                     ColorTextureDesc{TextureFormat::RGBA8,Color::red},
-                    ColorTextureDesc{TextureFormat::RGBA8,Color::yellow},
                 };
 
                 desc.depth = {
@@ -124,6 +123,24 @@ int main() {
             }
 
             PipelineState pipeline;
+            {
+                PipelineStateDesc desc;
+                desc.rootSignature = signature;
+                desc.vs = vs;
+                desc.ps = ps;
+                desc.vertexLayout.attributes = {
+                    VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
+                    VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
+                };
+                desc.target = rt;
+                desc.blend[0] = BlendDesc::AlphaBlend;
+                desc.rasterizer.cullMode = CullMode::None;
+
+                pipeline = PipelineState(desc);
+                OB_CHECK_ASSERT_EXPR(pipeline);
+            }
+
+            PipelineState pipeline2;
             {
                 PipelineStateDesc desc;
                 desc.rootSignature = signature;

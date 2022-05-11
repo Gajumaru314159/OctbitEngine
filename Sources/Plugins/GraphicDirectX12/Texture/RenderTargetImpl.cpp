@@ -24,7 +24,7 @@ namespace ob::graphic::dx12 {
         const s32 targetNum = get_size(m_desc.colors);
         OB_CHECK_ASSERT(0 < targetNum && targetNum <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", targetNum);
 
-        auto& nativeDevice = rDevice.getNativeDevice();
+        auto& nativeDevice = rDevice.getNative();
 
 
         // RTVディスクリプタを生成
@@ -104,7 +104,7 @@ namespace ob::graphic::dx12 {
 
         // 0番目のターゲットをビューポートサイズとする
         m_viewport = CD3DX12_VIEWPORT(Device::GetImpl<TextureImpl>(m_textures[0])->getResource());
-        m_scissorrect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
+        m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
         m_initialized = true;
     }
@@ -200,7 +200,7 @@ namespace ob::graphic::dx12 {
         return m_viewport;
     }
     D3D12_RECT RenderTargetImpl::getScissorRect()const {
-        return m_scissorrect;
+        return m_scissorRect;
     }
 
 }// namespace ob::graphic::dx12

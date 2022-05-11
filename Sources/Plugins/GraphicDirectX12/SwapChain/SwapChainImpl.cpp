@@ -102,6 +102,38 @@ namespace ob::graphic::dx12 {
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief      デスクリプタCPUハンドルを取得
+    //@―---------------------------------------------------------------------------
+    D3D12_CPU_DESCRIPTOR_HANDLE SwapChainImpl::getCpuHandle()const {
+        return m_hRTV.getCpuHandle(m_frameIndex);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      デスクリプタGPUハンドルを取得
+    //@―---------------------------------------------------------------------------
+    D3D12_GPU_DESCRIPTOR_HANDLE SwapChainImpl::getGpuHandle()const {
+        return m_hRTV.getGpuHandle(m_frameIndex);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ビューポートを取得
+    //@―---------------------------------------------------------------------------
+    D3D12_VIEWPORT SwapChainImpl::getViewport()const {
+        return m_viewport;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      シザー矩形を取得
+    //@―---------------------------------------------------------------------------
+    D3D12_RECT SwapChainImpl::getScissorRect()const {
+        return m_scissorRect;
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     bool SwapChainImpl::createSwapChain(DeviceImpl& rDevice) {
@@ -112,7 +144,7 @@ namespace ob::graphic::dx12 {
         HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(*window));
         {
             D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature;
-            auto result = rDevice.getNativeDevice()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
+            auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
             if (SUCCEEDED(result)) {
                 LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
                 LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
@@ -206,11 +238,11 @@ namespace ob::graphic::dx12 {
                 Utility::outputFatalLog(result, TC("IDXGISwapChain::GetBuffer()"));
                 return false;
             }
-            rDevice.getNativeDevice()->CreateRenderTargetView(buffer.Get(), &rtvDesc, m_hRTV.getCpuHandle(i));
+            rDevice.getNative()->CreateRenderTargetView(buffer.Get(), &rtvDesc, m_hRTV.getCpuHandle(i));
         }
 
         m_viewport = CD3DX12_VIEWPORT(m_buffers[0].Get());
-        m_scissorrect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
+        m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
         return true;
     }
 

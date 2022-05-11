@@ -77,6 +77,21 @@ namespace ob::graphic::dx12 {
         void update(const Texture& texture) override;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      デスクリプタCPUハンドルを取得
+        //@―---------------------------------------------------------------------------
+        D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle()const;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      デスクリプタGPUハンドルを取得
+        //@―---------------------------------------------------------------------------
+        D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle()const;
+
+
+        D3D12_VIEWPORT getViewport()const;
+        D3D12_RECT getScissorRect()const;
+
     private:
 
         //@―---------------------------------------------------------------------------
@@ -100,17 +115,18 @@ namespace ob::graphic::dx12 {
 
         SwapchainDesc m_desc;
 
-        ComPtr<IDXGISwapChain4> m_swapchain = nullptr;  //!< スワップチェイン
+        ComPtr<IDXGISwapChain4> m_swapchain;            //!< スワップチェイン
         vector<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
-        D3D12_VIEWPORT m_viewport;                      //!< ビューポート
-        D3D12_RECT m_scissorrect;                       //!< シザー矩形
 
-        s32 m_frameIndex;
+        D3D12_VIEWPORT m_viewport;                      //!< ビューポート
+        D3D12_RECT m_scissorRect;                       //!< シザー矩形
+
         TextureFormat m_displayViewFormat;              //!< ディスプレイ・ビューフォーマット
         DXGI_FORMAT m_nativeDisplayViewFormat;          //!< ディスプレイ・ビューフォーマット
         DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
 
         DescriptorHandle m_hRTV;
+        s32 m_frameIndex;
 
         UINT m_syncInterval;
 
