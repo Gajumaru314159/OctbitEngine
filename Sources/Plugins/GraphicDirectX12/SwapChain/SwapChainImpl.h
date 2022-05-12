@@ -129,10 +129,6 @@ namespace ob::graphic::dx12 {
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorRect;                       //!< シザー矩形
 
-        TextureFormat m_displayViewFormat;              //!< ディスプレイ・ビューフォーマット
-        DXGI_FORMAT m_nativeDisplayViewFormat;          //!< ディスプレイ・ビューフォーマット
-        DXGI_FORMAT m_nativeSwapChainFormat;            //!< ディスプレイ・ビューフォーマット
-
         DescriptorHandle m_hRTV;
         s32 m_frameIndex;
 

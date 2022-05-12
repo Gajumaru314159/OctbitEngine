@@ -69,6 +69,7 @@ namespace ob::graphic::dx12 {
 		return m_cmdList;
 	}
 
+#pragma endregion Command
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画開始
@@ -96,8 +97,7 @@ namespace ob::graphic::dx12 {
 			Utility::outputFatalLog(result, message);
 		}
 
-		// TODO デスクリプタを送信
-		//m_device.SetDescriptorHeaps();
+		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);
 	}
 
@@ -289,8 +289,9 @@ namespace ob::graphic::dx12 {
 	}
 
 
-
-
+	//@―---------------------------------------------------------------------------
+	//! @brief      ルートシグネチャを設定
+	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRootSignature(const RootSignature& signature) {
 		auto pSignature = Device::GetImpl<RootSignatureImpl>(signature);
 		if (!pSignature) {
@@ -300,6 +301,11 @@ namespace ob::graphic::dx12 {
 		}
 
 	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      パイプラインステートを設定
+	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setPipelineState(const PipelineState& pipeline) {
 		auto pPipeline = Device::GetImpl<PipelineStateImpl>(pipeline);
 		if (!pPipeline) {
@@ -311,6 +317,8 @@ namespace ob::graphic::dx12 {
 		}
 
 	}
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      インデックスバッファを設定
 	//@―---------------------------------------------------------------------------
@@ -319,6 +327,9 @@ namespace ob::graphic::dx12 {
 	}
 
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      デスクリプタテーブルを設定
+	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRootDesciptorTable(const graphic::SetDescriptorTableParam* params, s32 num) {
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
@@ -338,6 +349,7 @@ namespace ob::graphic::dx12 {
 		// m_cmdList->ResourceBarrier(num, barriers.data());
 	}
 
+#pragma endregion
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタハンドルのキャッシュをクリア

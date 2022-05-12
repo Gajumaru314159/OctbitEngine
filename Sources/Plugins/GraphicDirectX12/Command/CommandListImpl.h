@@ -37,6 +37,8 @@ namespace ob::graphic::dx12 {
         // コマンド
         //===============================================================
 
+#pragma region Command
+
         //@―---------------------------------------------------------------------------
         //! @brief      記録開始
         //@―---------------------------------------------------------------------------
@@ -127,11 +129,11 @@ namespace ob::graphic::dx12 {
         void popMarker() override;
 #endif
 
+#pragma endregion
+
     public:
 
-        const ComPtr<ID3D12GraphicsCommandList5>& getNative()const {
-            return m_cmdList;
-        }
+        const ID3D12GraphicsCommandList5* getNative()const { return m_cmdList.Get(); }
 
     private:
 
