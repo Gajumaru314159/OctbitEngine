@@ -305,7 +305,7 @@ namespace ob::graphic::dx12 {
 		if (!pPipeline) {
 			OB_ASSERT("PipelineState が空です。");
 		} else {
-			m_cmdList->SetPipelineState(pPipeline->getNative().Get());
+			m_cmdList->SetPipelineState(pPipeline->getNative());
 			auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
 			m_cmdList->IASetPrimitiveTopology(topology);
 		}

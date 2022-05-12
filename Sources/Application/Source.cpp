@@ -140,24 +140,6 @@ int main() {
                 OB_CHECK_ASSERT_EXPR(pipeline);
             }
 
-            PipelineState pipeline2;
-            {
-                PipelineStateDesc desc;
-                desc.rootSignature = signature;
-                desc.vs = vs;
-                desc.ps = ps;
-                desc.vertexLayout.attributes = {
-                    VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
-                    VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
-                };
-                desc.target = rt;
-                desc.blend[0] = BlendDesc::AlphaBlend;
-                desc.rasterizer.cullMode = CullMode::None;
-
-                pipeline = PipelineState(desc);
-                OB_CHECK_ASSERT_EXPR(pipeline);
-            }
-
 
             DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
             dt.setResource(0,tex);
@@ -193,20 +175,22 @@ int main() {
                 cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
                 cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
 
-                SetDescriptorTableParam params;
-                params.table = dt;
-                params.slot = 0;
-                cmdList.setRootDesciptorTable(&params,1);
+                SetDescriptorTableParam params[] = {
+                    SetDescriptorTableParam(dt,0),
+                };
+                cmdList.setRootDesciptorTable(params,1);
                 cmdList.drawIndexedInstanced();
                 //mat.setMatrix("WorldMatrix",mtx);
                 //mat.setTexture("MainTex",tex);
+
+                cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
                 cmdList.end();
                 cmdList.flush();
                 //swapChain.update(rt.getTexture());
 
                 graphic::System::Instance().update();
 
-                swapChain.update(rt.getColorTexture());
+                //swapChain.update(rt.getColorTexture());
 
                 if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
                     TranslateMessage(&msg);
@@ -216,7 +200,6 @@ int main() {
                     break;
                 }
 
-                //swapChain.update(rt);
             }
         }
     }

@@ -78,15 +78,8 @@ namespace ob::graphic::dx12 {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief				シェーダーで使用される変数の型ごとの使用メモリサイズを調べる
-        //!
-        //! @param type			シェーダー変数の型
-        //! @return				使用メモリサイズ
+        //! @brief  コンパイル
         //@―---------------------------------------------------------------------------
-        //static s32 GetShaderDataSize(const ShaderParamType type);
-
-    private:
-
         void compile(const StringBase<char>& blob,ShaderStage stage);
 
 

@@ -14,6 +14,11 @@ namespace ob::graphic {
 	struct SetDescriptorTableParam {
 		DescriptorTable table;
 		s32				slot;
+	public:
+		SetDescriptorTableParam() = default;
+		SetDescriptorTableParam(DescriptorTable table,s32 slot)
+			:table(table),slot(slot)
+		{}
 	};
 
 }// namespcae ob

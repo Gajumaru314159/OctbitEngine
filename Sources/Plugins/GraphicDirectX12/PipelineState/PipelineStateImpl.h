@@ -54,101 +54,25 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         PipelineStateImpl(DeviceImpl&, const PipelineStateDesc& desc);
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
         bool isValid()const { return m_pipelineState != nullptr; }
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      定義を取得
         //@―---------------------------------------------------------------------------
-        const PipelineStateDesc& getDesc()const override { return m_desc; };
-
-        /*
-
-        //@―---------------------------------------------------------------------------
-        //! @brief		指定したスロットの定数バッファのサイズを取得
-        //! 
-        //! @param slot スロット番号
-        //! @return		バッファのサイズ
-        //@―---------------------------------------------------------------------------
-        s32 getConstantBufferSize(const s32 slot)const;
+        //const PipelineStateDesc& getDesc()const override { return m_desc; };
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief		指定したレジスタのテクスチャの枚数を取得
-        //! 
-        //! @param slot	スロット番号
-        //! @return		枚数
+        //! @brief      ネイティブオブジェクトを取得
         //@―---------------------------------------------------------------------------
-        s32 getTextureNum(const s32 slot)const;
+        ID3D12PipelineState* getNative()const noexcept { return m_pipelineState.Get(); }
 
 
-        //@―---------------------------------------------------------------------------
-        //! @brief		指定した定数バッファのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
-        //! 
-        //! @param slot スロット番号
-        //! @return		インデックス
-        //! @retval	-1	指定したレジスタがマテリアルに含まれていない
-        //@―---------------------------------------------------------------------------
-        s32 getConstantBufferIndex(const s32 slot)const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief		指定したテクスチャのレジスタがディスクリプタヒープの何番目に割り当てられているかを取得
-        //! 
-        //! @param slot スロット番号
-        //! @return		インデックス
-        //! @retval	-1	指定したレジスタがマテリアルに含まれていない
-        //@―---------------------------------------------------------------------------
-        s32 getTextureIndex(const s32 slot)const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief		シェーダー変数の情報を変数名から取得する
-        //! 
-        //! @param name	変数名
-        //! @return		変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。
-        //@―---------------------------------------------------------------------------
-        ShaderVariableDesc getVariableData(const String& name)const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief		シェーダー変数の情報を変数名から取得する
-        //! 
-        //! @param name	変数名
-        //! @return		変数が存在する場合は変数情報を返す。存在しない場合は変数情報のレジスタ番号が-1となる。
-        //@―---------------------------------------------------------------------------
-        ShaderTextureDesc getTextureData(const String& name)const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  シェーダーに含まれる変数の一覧を取得する
-        //! 
-        //! @return 変数データの出力先のリスト
-        //@―---------------------------------------------------------------------------
-        const variable_map& getShaderParamList()const;
-
-
-        //@―---------------------------------------------------------------------------
-        /// インスタンスの生成に成功しているか
-        /// </summary>
-        /// <returns></returns>
-
-
-
-    private:
-
-        s32 reflectShader(const ComPtr<ID3DBlob>& vsInstance);
-        s32 reflectInputLayout(const ComPtr<ID3DBlob>& vsInstance);
-        s32 reflectConstantBuffer(const ComPtr<ID3D12ShaderReflection>& reflection);
-        s32 reflectBoundingResource(const ComPtr<ID3D12ShaderReflection>& reflection);
-        s32 reflectOutputLayout(const ComPtr<ID3DBlob>& vsInstance);
-
-    private:
-    */
-
-        const auto& getNative()const {
-            return m_pipelineState;
-        }
     private:
         
         void setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src);
@@ -159,6 +83,7 @@ namespace ob::graphic::dx12 {
         void setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
 
     private:
+
         const PipelineStateDesc m_desc;
 
         RootSignature   m_rootSignature;
@@ -189,8 +114,6 @@ namespace ob::graphic::dx12 {
     // インライン関数
     //===============================================================
     //! @cond
-
-
 
     //! @endcond
 }// namespcae ob::graphic::dx12

@@ -61,7 +61,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  ネイティブオブジェクトを取得
         //@―---------------------------------------------------------------------------
-        auto& getNative()const noexcept { return m_rootSignature; };
+        auto getNative()const noexcept { return m_rootSignature.Get(); };
 
 
     private:

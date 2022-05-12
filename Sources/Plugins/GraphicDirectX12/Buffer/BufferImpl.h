@@ -62,9 +62,10 @@ namespace ob::graphic::dx12 {
 
 	public:
 
-		const ComPtr<ID3D12Resource>& getNative()const {
-			return m_buffer;
-		}
+		//@―---------------------------------------------------------------------------
+		//! @brief      ネイティブオブジェクトを取得
+		//@―---------------------------------------------------------------------------
+		ID3D12Resource* getNative()const {return m_buffer.Get();}
 
 
 	private:
