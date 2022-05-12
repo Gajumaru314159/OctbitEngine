@@ -41,9 +41,10 @@ namespace ob::graphic {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
+        //! @brief      コンストラクタ
         //! 
-        //! @param  スワップチェーン定義
+        //! @param desc スワップチェーン定義
+        //! @param name 名前
         //@―---------------------------------------------------------------------------
         explicit SwapChain(const SwapchainDesc& desc, StringView name=TC("SwapChain"));
 

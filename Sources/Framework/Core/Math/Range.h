@@ -79,8 +79,8 @@ namespace ob::core {
 
 	public:
 
-		f32 min;
-		f32 max;
+		f32 min;	//!< 最小値
+		f32 max;	//!< 最大値
 
 	};
 

@@ -17,24 +17,33 @@ namespace ob::core {
 		//! @brief ビット数を計算
 		//@―---------------------------------------------------------------------------
 		static inline s32 getBitCount(u8  value);
+		//! @copydoc getBitCount(u8)
 		static inline s32 getBitCount(u16 value);
+		//! @copydoc getBitCount(u8)
 		static inline s32 getBitCount(u32 value);
+		//! @copydoc getBitCount(u8)
 		static inline s32 getBitCount(u64 value);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief 最上位ビットのインデックスを取得(Most Significant Bit)
 		//@―---------------------------------------------------------------------------
 		static inline s32 getMSB(u8  value);
+		//! @copydoc getMSB(u8)
 		static inline s32 getMSB(u16 value);
+		//! @copydoc getMSB(u8)
 		static inline s32 getMSB(u32 value);
+		//! @copydoc getMSB(u8)
 		static inline s32 getMSB(u64 value);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief 最下位ビットのインデックスを取得(Least Significant Bit)
 		//@―---------------------------------------------------------------------------
 		static inline s32 getLSB(u8  value);
+		//! @copydoc getLSB(u8)
 		static inline s32 getLSB(u16 value);
+		//! @copydoc getLSB(u8)
 		static inline s32 getLSB(u32 value);
+		//! @copydoc getLSB(u8)
 		static inline s32 getLSB(u64 value);
 
 	};

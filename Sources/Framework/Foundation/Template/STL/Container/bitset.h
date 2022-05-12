@@ -8,6 +8,7 @@
 
 namespace ob::foundation {
 
+    //! @brief ビットセット
     using std::bitset;
 
 }// namespcae ob

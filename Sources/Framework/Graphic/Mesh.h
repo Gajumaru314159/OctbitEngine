@@ -77,7 +77,7 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief			四角形を追加
 		//! 
-		//! @param dettails	頂点の追加とインデックスを追加します。
+		//! @details		頂点の追加とインデックスを追加します。
 		//!					topology が Topology::TriangleListでない場合スキップされます。
 		//@―---------------------------------------------------------------------------
 		void appendQuad(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2, const vertex_type& v3);

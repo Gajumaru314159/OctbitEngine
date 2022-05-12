@@ -9,6 +9,7 @@
 
 namespace ob::foundation {
 
+    //! @brief 動的配列
     template <class T>
     using vector = std::vector<T, allocator<T>>;
 

@@ -8,6 +8,7 @@
 
 namespace ob::foundation {
 
+    //! @brief 固定長配列
     using std::array;
 
 }// namespcae ob

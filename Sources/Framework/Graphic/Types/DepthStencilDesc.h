@@ -45,21 +45,21 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
 	struct DepthStencilDesc {
 		struct {
-			bool            enable{ false };
-			bool            write{ true };
-			ComparisonFunc  func{ ComparisonFunc::Less };
-		} depth;
+			bool            enable{ false };					//!< デプステストを有効にする
+			bool            write{ true };						//!< デプスを書き込む
+			ComparisonFunc  func{ ComparisonFunc::Less };		//!< 
+		} depth;//!< デプス設定
 
 		struct {
-			bool			enable{ false };
-			u8				read_mask{ 0xff };
-			u8				write_mask{ 0xff };
-			StencilOp		failOp{ StencilOp::Keep };
-			StencilOp		depthFailOp{ StencilOp::Keep };
-			StencilOp		passOp{ StencilOp::Keep };
-			ComparisonFunc	func{ ComparisonFunc::Always };
-			u8				reference{ 0x00 };
-		} stencil;
+			bool			enable{ false };					//!< ステンシルテストを有効にする
+			u8				read_mask{ 0xff };					//!< 読み込みビットマスク
+			u8				write_mask{ 0xff };					//!< 書き込みビットマスク
+			StencilOp		failOp{ StencilOp::Keep };			//!< 
+			StencilOp		depthFailOp{ StencilOp::Keep };		//!< 
+			StencilOp		passOp{ StencilOp::Keep };			//!< 
+			ComparisonFunc	func{ ComparisonFunc::Always };		//!< 
+			u8				reference{ 0x00 };					//!< 
+		} stencil;//!< ステンシル設定
 	};
 
 }// namespcae ob::graphic

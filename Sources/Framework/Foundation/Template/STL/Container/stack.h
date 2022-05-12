@@ -9,8 +9,8 @@
 
 namespace ob::foundation {
 
+    //! @brief スタック
     template <class T>
     using stack = std::stack<T>;
-
 
 }// namespcae ob

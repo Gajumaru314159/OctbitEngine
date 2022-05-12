@@ -9,6 +9,7 @@
 
 namespace ob::foundation {
 
+    //! @brief デック
     template <class T>
     using deque = std::deque<T, allocator<T>>;
 

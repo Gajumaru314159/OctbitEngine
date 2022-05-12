@@ -30,7 +30,7 @@ namespace ob::graphic {
         TextureFormat   format      = TextureFormat::RGBA8;     //!< テクスチャフォーマット
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数
         s32             mipLevel    = 0;                        //!< ミップ生成レベル
-        Color           color;
+        Color           color;                                  //!< 初期化色
     };
 
 }// namespcae ob::graphic

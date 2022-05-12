@@ -9,6 +9,7 @@
 
 namespace ob::foundation {
 
+    //! @brief 単連結リスト
     template <class T>
     using forward_list = std::forward_list<T, allocator<T>>;
 

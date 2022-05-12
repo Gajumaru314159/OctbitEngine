@@ -140,7 +140,7 @@ namespace ob::graphic {
 		vector<DescriptorRange> descriptors;    //!< typeがDescriptorTableの場合使用
 		RootConstantsDesc		constants;		//!< typeがRootConstantsの場合使用
 		RootDescriptorDesc		descriptor;     //!< typeがCBV/SRV/UAVの場合使用
-		ShaderStage				visibility;		//<! どのシェーダステージから利用可能か
+		ShaderStage				visibility;		//!< どのシェーダステージから利用可能か
 	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
@@ -149,19 +149,20 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief      デストラクタ
 		//@―---------------------------------------------------------------------------
-		~RootParameter() {
+		~RootParameter() {}
 
-		}
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ(DescriptorTable)
 		//@―---------------------------------------------------------------------------
 		RootParameter(vector<DescriptorRange>&& descriptorTable, ShaderStage visibility = ShaderStage::All)
 			:type(RootParameterType::DescriptorTable), descriptors(descriptorTable), visibility(visibility) {}
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ(RootConstants)
 		//@―---------------------------------------------------------------------------
 		RootParameter(RootConstantsDesc constants, ShaderStage visibility = ShaderStage::All)
 			:type(RootParameterType::RootConstants), constants(constants), visibility(visibility) {}
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ(CBV/SRV/UAV)
 		//@―---------------------------------------------------------------------------
@@ -180,10 +181,10 @@ namespace ob::graphic {
 	//! @see        RootSignatureDesc
 	//@―---------------------------------------------------------------------------
 	struct StaticSamplerDesc {
-		SamplerDesc     sampler;        //<! サンプラー設定
-		u32             registerNo;     //<! レジスタ番号
-		u32             registerSpace;  //<! レジスタ空間
-		ShaderStage		visibility;   //<! どのシェーダステージから利用可能か
+		SamplerDesc     sampler;        //!< サンプラー設定
+		u32             registerNo;     //!< レジスタ番号
+		u32             registerSpace;  //!< レジスタ空間
+		ShaderStage		visibility;		//!< どのシェーダステージから利用可能か
 	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
@@ -203,14 +204,15 @@ namespace ob::graphic {
 	//! @brief      ルートシグネチャ定義
 	//@―---------------------------------------------------------------------------
 	struct RootSignatureDesc {
-		vector<RootParameter>       parameters;
-		vector<StaticSamplerDesc>   samplers;
-		RootSignatureFlags          flags;
+		vector<RootParameter>       parameters;	//!< ルートパラメータ
+		vector<StaticSamplerDesc>   samplers;	//!< 固定サンプラー
+		RootSignatureFlags          flags;		//!< フラグ
 	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
 		RootSignatureDesc() = default;
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------

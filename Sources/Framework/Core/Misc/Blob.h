@@ -13,11 +13,11 @@ namespace ob::core {
     class Blob {
     public:
 
-        using base_type = vector<byte>;
-        using iterator = base_type::iterator;
-        using const_iterator = base_type::const_iterator;
-        using reverse_iterator = base_type::reverse_iterator;
-        using const_reverse_iterator = base_type::const_reverse_iterator;
+        using base_type = vector<byte>;                                     //!< 内部型
+        using iterator = base_type::iterator;                               //!< イテレータ
+        using const_iterator = base_type::const_iterator;                   //!< イテレータ(const)
+        using reverse_iterator = base_type::reverse_iterator;               //!< 逆イテレータ
+        using const_reverse_iterator = base_type::const_reverse_iterator;   //!< 逆イテレータ(const)
 
     public:
 

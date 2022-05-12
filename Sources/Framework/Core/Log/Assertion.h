@@ -29,7 +29,7 @@ if(UNLIKELY(!(expr))){                                              \
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
 #define OB_CHECK_ASSERT(expr,format,...)				OB_ASSERT_BASE(expr,format,__VA_ARGS__)
-//! @copydoc OB_ASSERT_EX
+//! @copydoc OB_ASSERT
 #define OB_CHECK_ASSERT_EXPR(expr)					    OB_CHECK_ASSERT(expr,#expr)
 
 //@―---------------------------------------------------------------------------
@@ -71,13 +71,14 @@ if(UNLIKELY(!(expr))){                                              \
 //============================================
 // 無効化
 //============================================
-
+//! @cond
 #ifndef OB_ENABLE_REQUIRE
-#undef OB_ASSERT_EX
-#define OB_ASSERT_EX(expr,format,...) /* space */
+#undef OB_ASSERT_EXPR
+#define OB_ASSERT_EXPR(expr,format,...) /* space */
 #endif // OB_DISABLE_REQUIRE
 
 #ifndef OB_ENABLE_ENSURE
-#undef OB_ASSERT_EX
-#define OB_ASSERT_EX(expr,format,...)  /* space */
+#undef OB_ASSERT_EXPR
+#define OB_ASSERT_EXPR(expr,format,...)  /* space */
 #endif // OB_DISABLE_ENSURE
+//! @endcond

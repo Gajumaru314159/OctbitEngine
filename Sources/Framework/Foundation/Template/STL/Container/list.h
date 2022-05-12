@@ -9,6 +9,7 @@
 
 namespace ob::foundation {
 
+    //! @brief 双方向連結リスト
     template <class T>
     using list = std::list<T, allocator<T>>;
 

@@ -10,6 +10,7 @@
 
 namespace ob::graphic {
 
+	//! @cond
 	enum class MapMode {
 		Read,
 		Write,
@@ -19,6 +20,7 @@ namespace ob::graphic {
 		void* pData;
 		size_t offset;
 	};
+	//! @endcond
 
 
 	//@―---------------------------------------------------------------------------
@@ -38,6 +40,7 @@ namespace ob::graphic {
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
+		//! @param name 名前
 		//@―---------------------------------------------------------------------------
 		Buffer(const BufferDesc& desc, StringView name = TC("Buffer"));
 
@@ -46,7 +49,8 @@ namespace ob::graphic {
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
-		//! @param data 初期化データ
+		//! @param blob 初期化データ
+		//! @param name 名前
 		//@―---------------------------------------------------------------------------
 		Buffer(const BufferDesc& desc, const Blob& blob, StringView name = TC("Buffer"));
 
@@ -88,17 +92,3 @@ namespace ob::graphic {
 
 
 }// namespace pb::graphic
-
-
-
-
-
-
-//===============================================================
-// インライン
-//===============================================================
-//! @cond
-namespace ob::graphic {
-
-}
-//! @endcond
