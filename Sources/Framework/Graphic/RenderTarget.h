@@ -22,7 +22,7 @@ namespace ob::graphic {
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  レンダー・ターゲット
     //@―---------------------------------------------------------------------------
     class RenderTarget {
         OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderTarget);
