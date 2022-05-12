@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Interface/IDevice.h>
+//! @cond
 
 namespace ob::graphic {
 	class SwapChain;		class ISwapChain;
@@ -19,16 +20,20 @@ namespace ob::graphic {
 }
 
 #define GRAPHIC_DECLEAR_GET_IMPL(type)														\
+	public:																					\
     template<class T>																		\
-    static auto GetImpl(const type& obj)->enable_if_t<is_base_of_v<I##type, T>, const T*> { \
-        return reinterpret_cast<const T*>(GetImpl(obj));									\
-    }       
+    static auto GetImpl(const type& obj)->enable_if_t<is_base_of_v<I##type, T>, const T&> { \
+        return *reinterpret_cast<const T*>(GetImpl(obj));									\
+    }       																				\
+	private:
 
 #define GRAPHIC_DECLEAR_GET_IMPL_EX(type,base)												\
+	public:																					\
     template<class T>																		\
-    static auto GetImpl(const base& obj)->enable_if_t<is_base_of_v<I##type, T>, const T*> { \
-        return reinterpret_cast<const T*>(GetImpl(obj));									\
-    }                                                                             
+    static auto GetImpl(const base& obj)->enable_if_t<is_base_of_v<I##type, T>, const T&> { \
+        return *reinterpret_cast<const T*>(GetImpl(obj));									\
+    }       																				\
+	private:
 
 namespace ob::graphic {
 
@@ -48,7 +53,7 @@ namespace ob::graphic {
 		static IDevice* Get();
 
 
-	public:
+	private:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  SwapChain の実装を取得
@@ -121,3 +126,4 @@ namespace ob::graphic {
 
 #undef GRAPHIC_DECLEAR_GET_IMPL
 #undef GRAPHIC_DECLEAR_GET_IMPL_EX
+//! @endcond

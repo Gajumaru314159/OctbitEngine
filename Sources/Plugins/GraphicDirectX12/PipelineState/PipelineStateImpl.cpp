@@ -30,17 +30,11 @@ namespace ob::graphic::dx12 {
 			return;
 		}
 
-		auto vs = Device::GetImpl<ShaderImpl>(m_desc.vs);
-		auto ps = Device::GetImpl<ShaderImpl>(m_desc.ps);
-		auto gs = Device::GetImpl<ShaderImpl>(m_desc.gs);
-		auto hs = Device::GetImpl<ShaderImpl>(m_desc.hs);
-		auto ds = Device::GetImpl<ShaderImpl>(m_desc.ds);
-
-		if (vs == nullptr) {
+		if (!m_desc.vs) {
 			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
 			return;
 		}
-		if (ps == nullptr) {
+		if (!m_desc.ps) {
 			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。ピクセルシェーダが設定されていません。");
 			return;
 		}
@@ -57,11 +51,26 @@ namespace ob::graphic::dx12 {
 
 		// シェーダ
 		{
-			if (vs)gpsd.VS = CD3DX12_SHADER_BYTECODE(vs->getBinaryData(), vs->getBinarySize());
-			if (vs)gpsd.PS = CD3DX12_SHADER_BYTECODE(ps->getBinaryData(), ps->getBinarySize());
-			if (gs)gpsd.PS = CD3DX12_SHADER_BYTECODE(gs->getBinaryData(), gs->getBinarySize());
-			if (hs)gpsd.PS = CD3DX12_SHADER_BYTECODE(hs->getBinaryData(), hs->getBinarySize());
-			if (ds)gpsd.PS = CD3DX12_SHADER_BYTECODE(ds->getBinaryData(), ds->getBinarySize());
+			if (m_desc.vs) {
+				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.vs);
+				gpsd.VS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.gs) {
+				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.gs);
+				gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.hs) {
+				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.hs);
+				gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.ds) {
+				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.ds);
+				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.ps) {
+				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.ps);
+				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
 		}
 
 		// TODO: StreamOutput
@@ -84,7 +93,7 @@ namespace ob::graphic::dx12 {
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 
-		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature)->getNative();
+		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature).getNative();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;

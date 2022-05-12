@@ -116,23 +116,19 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRenderTarget(const graphic::SwapChain& target) {
 
-		auto pSwapChain = Device::GetImpl<SwapChainImpl>(target);
-		if (pSwapChain == nullptr) {
-			LOG_FATAL_EX("Graphic", "SwapChainが空です。");
-			return;
-		}
+		auto& rSwapChain = Device::GetImpl<SwapChainImpl>(target);
 
 		m_pRenderTarget = nullptr;
 
 		clearDescriptorHandle();
 
 		// RTV更新
-		m_hRTV[0] = pSwapChain->getCpuHandle();
+		m_hRTV[0] = rSwapChain.getCpuHandle();
 		m_cmdList->OMSetRenderTargets(1, m_hRTV, false, nullptr);
 
 		// ビューポートリセット
-		auto viewport = pSwapChain->getViewport();
-		auto rect = pSwapChain->getScissorRect();
+		auto viewport = rSwapChain.getViewport();
+		auto rect = rSwapChain.getScissorRect();
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &rect);
 	}
@@ -143,7 +139,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRenderTarget(const graphic::RenderTarget& target) {
 		auto count = target.getColorTextureCount();
-		auto pTarget = Device::GetImpl<RenderTargetImpl>(target);
+		auto& rTarget = Device::GetImpl<RenderTargetImpl>(target);
 
 		m_pRenderTarget = &target;
 
@@ -151,12 +147,12 @@ namespace ob::graphic::dx12 {
 
 		// RTV更新
 		for (s32 i = 0; i < count; ++i) {
-			m_hRTV[i] = pTarget->getColorCpuHandle(i);
+			m_hRTV[i] = rTarget.getColorCpuHandle(i);
 		}
 
 		// DSV更新
 		if (target.hasDepth()) {
-			m_hDSV = pTarget->getDepthCpuHandle();
+			m_hDSV = rTarget.getDepthCpuHandle();
 		}
 
 		// コマンド発行
@@ -167,8 +163,8 @@ namespace ob::graphic::dx12 {
 
 		m_cmdList->OMSetRenderTargets(count, pRTV, false, pDSV);
 
-		auto viewport= pTarget->getViewport();
-		auto rect = pTarget->getScissorRect();
+		auto viewport= rTarget.getViewport();
+		auto rect = rTarget.getScissorRect();
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &rect);
 	}
@@ -259,16 +255,12 @@ namespace ob::graphic::dx12 {
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setVertexBuffer(const Buffer& buffer) {
-		auto pBuffer = Device::GetImpl<BufferImpl>(buffer);
-		if (!pBuffer) {
-			OB_ASSERT("Buffer が空です。");
-		} else {
-			D3D12_VERTEX_BUFFER_VIEW view;
-			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
-			view.StrideInBytes = pBuffer->getDesc().bufferStride;
-			m_cmdList->IASetVertexBuffers(0, 1, &view);
-		}
+		auto& rBuffer = Device::GetImpl<BufferImpl>(buffer);
+		D3D12_VERTEX_BUFFER_VIEW view;
+		view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
+		view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
+		view.StrideInBytes = rBuffer.getDesc().bufferStride;
+		m_cmdList->IASetVertexBuffers(0, 1, &view);
 	}
 
 
@@ -276,16 +268,12 @@ namespace ob::graphic::dx12 {
 	//! @brief      インデックスバッファを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setIndexBuffer(const Buffer& buffer) {
-		auto pBuffer = Device::GetImpl<BufferImpl>(buffer);
-		if (!pBuffer) {
-			OB_ASSERT("Buffer が空です。");
-		} else {
-			D3D12_INDEX_BUFFER_VIEW view;
-			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
-			view.Format = pBuffer->getDesc().bufferStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
-			m_cmdList->IASetIndexBuffer(&view);
-		}
+		auto& rBuffer = Device::GetImpl<BufferImpl>(buffer);
+		D3D12_INDEX_BUFFER_VIEW view;
+		view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
+		view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
+		view.Format = rBuffer.getDesc().bufferStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+		m_cmdList->IASetIndexBuffer(&view);
 	}
 
 
@@ -293,13 +281,8 @@ namespace ob::graphic::dx12 {
 	//! @brief      ルートシグネチャを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRootSignature(const RootSignature& signature) {
-		auto pSignature = Device::GetImpl<RootSignatureImpl>(signature);
-		if (!pSignature) {
-			OB_ASSERT("RootSignature が空です。");
-		} else {
-			m_cmdList->SetGraphicsRootSignature(pSignature->getNative());
-		}
-
+		auto& rSignature = Device::GetImpl<RootSignatureImpl>(signature);
+		m_cmdList->SetGraphicsRootSignature(rSignature.getNative());
 	}
 
 
@@ -307,16 +290,11 @@ namespace ob::graphic::dx12 {
 	//! @brief      パイプラインステートを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setPipelineState(const PipelineState& pipeline) {
-		auto pPipeline = Device::GetImpl<PipelineStateImpl>(pipeline);
-		if (!pPipeline) {
-			OB_ASSERT("PipelineState が空です。");
-		} else {
-			m_cmdList->SetPipelineState(pPipeline->getNative());
-			//auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
-			// TODO IASetPrimitiveTopology
-			m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		}
-
+		auto& rPipeline = Device::GetImpl<PipelineStateImpl>(pipeline);
+		m_cmdList->SetPipelineState(rPipeline.getNative());
+		//auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
+		// TODO IASetPrimitiveTopology
+		m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
 
@@ -334,9 +312,8 @@ namespace ob::graphic::dx12 {
 	void CommandListImpl::setRootDesciptorTable(const graphic::SetDescriptorTableParam* params, s32 num) {
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
-			if (auto pTable = Device::GetImpl<DescriptorTableImpl>(param.table)) {
-				m_cmdList->SetGraphicsRootDescriptorTable(param.slot,pTable->getGpuHandle());
-			}
+			auto& rTable = Device::GetImpl<DescriptorTableImpl>(param.table);
+			m_cmdList->SetGraphicsRootDescriptorTable(param.slot,rTable.getGpuHandle());
 		}
 	}
 

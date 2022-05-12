@@ -38,13 +38,9 @@ namespace ob::graphic::dx12
 	//! @{
 	//bool setResource(s32 index, class Buffer& resource) override{}
 	bool DescriptorTableImpl::setResource(s32 index, Texture& resource) {
-		if (auto pTexture = Device::GetImpl<TextureImpl>(resource)) {
-			auto handle = m_handle.getCpuHandle(index);
-			pTexture->createSRV(handle);
-		} else {
-			OB_ASSERT("Textureが空です。");
-		}
-
+		auto& rTexture = Device::GetImpl<TextureImpl>(resource);
+		auto handle = m_handle.getCpuHandle(index);
+		rTexture.createSRV(handle);
 		return true;
 	}
 	//bool setResource(s32 index, class Sampler& resource) override{}

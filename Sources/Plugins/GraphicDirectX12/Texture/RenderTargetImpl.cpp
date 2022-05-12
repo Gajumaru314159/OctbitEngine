@@ -46,11 +46,7 @@ namespace ob::graphic::dx12 {
 
 			// メインリソースを生成
 			auto& texture = m_textures.emplace_back(Texture(tdesc, subName));
-			auto pTexture = Device::GetImpl<TextureImpl>(texture);
-			if (pTexture == nullptr) {
-				LOG_WARNING_EX("Graphic", "カラーテクスチャの生成に失敗。");
-				return;
-			}
+			auto& rTexture = Device::GetImpl<TextureImpl>(texture);
 
 			// レンダーターゲットビューを生成
 			D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
@@ -58,7 +54,7 @@ namespace ob::graphic::dx12 {
 			rtvDesc.Format = format;
 
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hRTV.getCpuHandle(index);
-			nativeDevice->CreateRenderTargetView(pTexture->getResource(), &rtvDesc, handle);
+			nativeDevice->CreateRenderTargetView(rTexture.getResource(), &rtvDesc, handle);
 
 			++index;
 
@@ -80,25 +76,21 @@ namespace ob::graphic::dx12 {
 
 			// メインリソースを生成
 			m_depth = Texture(tdesc, subName);
-			auto pTexture = Device::GetImpl<TextureImpl>(m_depth);
-			if (pTexture == nullptr) {
-				LOG_WARNING_EX("Graphic", "デプステクスチャの生成に失敗。");
-				return;
-			}
+			auto& rTexture = Device::GetImpl<TextureImpl>(m_depth);
 
 			//深度ビュー作成
 			D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-			dsvDesc.Format = pTexture->getResource()->GetDesc().Format;//デプス値に32bit使用
+			dsvDesc.Format = rTexture.getResource()->GetDesc().Format;//デプス値に32bit使用
 			dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 			dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
 
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hDSV.getCpuHandle();
-			nativeDevice->CreateDepthStencilView(pTexture->getResource(), &dsvDesc, handle);
+			nativeDevice->CreateDepthStencilView(rTexture.getResource(), &dsvDesc, handle);
 
 		}
 
 		// 0番目のターゲットをビューポートサイズとする
-		m_viewport = CD3DX12_VIEWPORT(Device::GetImpl<TextureImpl>(m_textures[0])->getResource());
+		m_viewport = CD3DX12_VIEWPORT(Device::GetImpl<TextureImpl>(m_textures[0]).getResource());
 		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
 		m_initialized = true;

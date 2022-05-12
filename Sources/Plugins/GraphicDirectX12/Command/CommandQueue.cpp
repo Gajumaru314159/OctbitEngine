@@ -51,9 +51,8 @@ namespace ob::graphic::dx12 {
 	void CommandQueue::execute() {
 		m_entriedNativeCommandList.clear();
 		for (auto& cmdList : m_entriedCommandList) {
-			if (auto pCmdList = Device::GetImpl<CommandListImpl>(cmdList)) {
-				m_entriedNativeCommandList.push_back(pCmdList->getNative());
-			}
+			auto& rCmdList = Device::GetImpl<CommandListImpl>(cmdList);
+			m_entriedNativeCommandList.push_back(rCmdList.getNative());
 		}
 		m_entriedCommandList.clear();
 		m_commandQueue->ExecuteCommandLists((UINT)m_entriedNativeCommandList.size(), m_entriedNativeCommandList.data());

@@ -32,6 +32,7 @@ namespace ob::graphic
     //! @brief  SwapChain の実装を取得
     //@―---------------------------------------------------------------------------
     const ISwapChain* Device::GetImpl(const SwapChain& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のSwapChainにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -40,6 +41,7 @@ namespace ob::graphic
     //! @brief  CommandList の実装を取得
     //@―---------------------------------------------------------------------------
     const ICommandList* Device::GetImpl(const CommandList& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のCommandListにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -48,6 +50,7 @@ namespace ob::graphic
     //! @brief  RootSignature の実装を取得
     //@―---------------------------------------------------------------------------
     const IRootSignature* Device::GetImpl(const RootSignature& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のRootSignatureにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -56,6 +59,7 @@ namespace ob::graphic
     //! @brief  PipelineState の実装を取得
     //@―---------------------------------------------------------------------------
     const IPipelineState* Device::GetImpl(const PipelineState& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のPipelineStateにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -64,6 +68,7 @@ namespace ob::graphic
     //! @brief  Shader の実装を取得
     //@―---------------------------------------------------------------------------
     const IShader* Device::GetImpl(const Shader& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のShaderにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -72,6 +77,7 @@ namespace ob::graphic
     //! @brief  Texture の実装を取得
     //@―---------------------------------------------------------------------------
     const ITexture* Device::GetImpl(const Texture& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のTextureにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -80,6 +86,7 @@ namespace ob::graphic
     //! @brief  RenderTarget の実装を取得
     //@―---------------------------------------------------------------------------
     const IRenderTarget* Device::GetImpl(const RenderTarget& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のRenderTargetにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -88,6 +95,7 @@ namespace ob::graphic
     //! @brief  RenderTarget の実装を取得
     //@―---------------------------------------------------------------------------
     const IBuffer* Device::GetImpl(const Buffer& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のBufferにアクセスしました。");
         return obj.m_pImpl;
     }
 
@@ -96,6 +104,7 @@ namespace ob::graphic
     //! @brief  DescriptorTable の実装を取得
     //@―---------------------------------------------------------------------------
     const IDescriptorTable* Device::GetImpl(const DescriptorTable& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のDescriptorTableにアクセスしました。");
         return obj.m_pImpl;
     }
 

@@ -190,7 +190,7 @@ int main() {
 
                 graphic::System::Instance().update();
 
-                //swapChain.update(rt.getColorTexture());
+                swapChain.update(rt.getColorTexture());
 
                 if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
                     TranslateMessage(&msg);
