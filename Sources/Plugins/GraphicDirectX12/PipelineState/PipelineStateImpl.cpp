@@ -84,7 +84,7 @@ namespace ob::graphic::dx12 {
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 
-		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature)->getNative().Get();
+		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature)->getNative();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;

@@ -133,7 +133,7 @@ namespace ob::graphic::dx12 {
 
     public:
 
-        const ID3D12GraphicsCommandList5* getNative()const { return m_cmdList.Get(); }
+        ID3D12GraphicsCommandList5* getNative()const { return m_cmdList.Get(); }
 
     private:
 

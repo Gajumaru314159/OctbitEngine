@@ -44,10 +44,6 @@ namespace ob::graphic::dx12 {
     //@―---------------------------------------------------------------------------
     class PipelineStateImpl :public IPipelineState {
     public:
-        static constexpr s32 REGISTER_MAX=8;
-        using variable_map = map<String, ShaderVariableDesc, less<>>;
-        using texture_map = map<String, ShaderTextureDesc, less<>>;
-    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
@@ -88,20 +84,6 @@ namespace ob::graphic::dx12 {
 
         RootSignature   m_rootSignature;
         ComPtr<ID3D12PipelineState> m_pipelineState;    //!< パイプラインステート
-
-        vector<String> m_inputLayoutNames;              //!< 頂点レイアウト・セマンティクス
-        vector<D3D12_INPUT_ELEMENT_DESC> m_inputLayout; //!< 頂点レイアウト
-
-        variable_map m_varMap;                          //!< 変数マップ
-        texture_map  m_texMap;                          //!< テクスチャマップ
-
-        array<s32, REGISTER_MAX> m_cBufDataSizes;       //!< 定数バッファのレジスタごとのサイズ
-        s32 m_texNums[REGISTER_MAX];                    //!< テクスチャのレジスタごとの枚数
-
-        array<s32, REGISTER_MAX> m_cBufIndices;         //!< 定数バッファのインデックス
-        array<s32, REGISTER_MAX> m_texIndices;          //!< 手クスやインデックス
-
-        s32 m_targetNum;                                // レンダーターゲットの枚数
             
     };
 

@@ -183,7 +183,7 @@ int main() {
                 //mat.setMatrix("WorldMatrix",mtx);
                 //mat.setTexture("MainTex",tex);
 
-                cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
+                //cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
                 cmdList.end();
                 cmdList.flush();
                 //swapChain.update(rt.getTexture());

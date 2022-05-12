@@ -52,7 +52,7 @@ namespace ob::graphic::dx12 {
 		m_entriedNativeCommandList.clear();
 		for (auto& cmdList : m_entriedCommandList) {
 			if (auto pCmdList = Device::GetImpl<CommandListImpl>(cmdList)) {
-				m_entriedNativeCommandList.push_back(pCmdList->getNative().Get());
+				m_entriedNativeCommandList.push_back(pCmdList->getNative());
 			}
 		}
 		m_entriedCommandList.clear();

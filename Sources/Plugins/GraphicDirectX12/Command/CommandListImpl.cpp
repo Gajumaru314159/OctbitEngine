@@ -297,7 +297,7 @@ namespace ob::graphic::dx12 {
 		if (!pSignature) {
 			OB_ASSERT("RootSignature が空です。");
 		} else {
-			m_cmdList->SetGraphicsRootSignature(pSignature->getNative().Get());
+			m_cmdList->SetGraphicsRootSignature(pSignature->getNative());
 		}
 
 	}
@@ -312,8 +312,9 @@ namespace ob::graphic::dx12 {
 			OB_ASSERT("PipelineState が空です。");
 		} else {
 			m_cmdList->SetPipelineState(pPipeline->getNative());
-			auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
-			m_cmdList->IASetPrimitiveTopology(topology);
+			//auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
+			// TODO IASetPrimitiveTopology
+			m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		}
 
 	}

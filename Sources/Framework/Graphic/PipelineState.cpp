@@ -34,13 +34,4 @@ namespace ob::graphic {
 		}
 	}
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      定義を取得
-	//@―---------------------------------------------------------------------------
-	const PipelineStateDesc& PipelineState::getDesc()const {
-		CHECK_IMPL();
-		return m_pImpl->getDesc();
-	}
-
 }// namespace ob
