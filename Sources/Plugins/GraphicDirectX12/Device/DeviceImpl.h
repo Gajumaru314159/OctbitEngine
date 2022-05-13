@@ -142,6 +142,10 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		void allocateHandle(DescriptorHeapType type, class DescriptorHandle& handle, s32 size);
 
+
+		//@―---------------------------------------------------------------------------
+		//! @brief          デスクリプタヒープを設定
+		//@―---------------------------------------------------------------------------
 		void setDescriptorHeaps(class CommandListImpl& cmdList);
 
 

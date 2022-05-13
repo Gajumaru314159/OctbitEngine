@@ -39,7 +39,7 @@ namespace ob::graphic {
         virtual void begin()=0;
         virtual void end()=0;
 
-        virtual void setRenderTarget(const class SwapChain& target) = 0;
+        virtual void applySwapChain(const class SwapChain& swapChain, const class Texture& texture)=0;
         virtual void setRenderTarget(const class RenderTarget& target) = 0;
         // TODO endRender
 

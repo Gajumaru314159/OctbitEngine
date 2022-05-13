@@ -63,11 +63,12 @@ namespace ob::graphic {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      書き込み先をスワップチェーンに設定
+	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandList::setRenderTarget(const SwapChain& target) {
+	void CommandList::applySwapChain(const class SwapChain& swapChain, const class Texture& texture)
+	{
 		CHECK_IMPL();
-		m_pImpl->setRenderTarget(target);
+		m_pImpl->applySwapChain(swapChain,texture);
 	}
 
 	//@―---------------------------------------------------------------------------

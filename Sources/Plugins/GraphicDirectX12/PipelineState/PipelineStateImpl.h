@@ -21,25 +21,6 @@ namespace ob::graphic::dx12 {
 namespace ob::graphic::dx12 {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
-
-    // シェーダパラメータ情報
-    struct ShaderVariableDesc {
-        //ShaderParamType type2;
-        D3D_SHADER_VARIABLE_TYPE type;
-        s32 registerNum;
-        s32 offset;
-        s32 rows;
-        s32 columns;
-        s32 elementCount;
-    };
-    struct ShaderTextureDesc {
-        s32 registerNum;
-        s32 dimension;
-    };
-
-    //@―---------------------------------------------------------------------------
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     //@―---------------------------------------------------------------------------
     class PipelineStateImpl :public IPipelineState {

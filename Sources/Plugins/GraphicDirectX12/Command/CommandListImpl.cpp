@@ -12,6 +12,7 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/SwapChain/SwapChainImpl.h>
 #include <Plugins/GraphicDirectX12/Texture/RenderTargetImpl.h>
+#include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 #include <Plugins/GraphicDirectX12/RootSignature/RootSignatureImpl.h>
 #include <Plugins/GraphicDirectX12/PipelineState/PipelineStateImpl.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorTableImpl.h>
@@ -112,25 +113,38 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーターゲットを設定
+	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRenderTarget(const graphic::SwapChain& target) {
+	void CommandListImpl::applySwapChain(const SwapChain& swapChain, const Texture& texture)
+	{
+		//auto& rSwapChain = Device::GetImpl<SwapChainImpl>(swapChain);
+		//auto& rTexture = Device::GetImpl<TextureImpl>(texture);
+		//
+		//// cmdList.setRenderTarget(rt);
+		//m_pRenderTarget = nullptr;
+		//clearDescriptorHandle();
+		//
+		//// コマンド発行
+		//D3D12_CPU_DESCRIPTOR_HANDLE hRTV = rSwapChain.getCpuHandle();
+		//m_cmdList->OMSetRenderTargets(1, &hRTV, false, nullptr);
+		//// ビューポート初期化
+		//auto viewport = rSwapChain.getViewport();
+		//auto rect = rSwapChain.getScissorRect();
+		//m_cmdList->RSSetViewports(1, &viewport);
+		//m_cmdList->RSSetScissorRects(1, &rect);
 
-		auto& rSwapChain = Device::GetImpl<SwapChainImpl>(target);
+		// cmdList.setRootSignature(signature);
 
-		m_pRenderTarget = nullptr;
 
-		clearDescriptorHandle();
+		// cmdList.setPipelineState(pipeline);
+		// cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
+		// cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
 
-		// RTV更新
-		m_hRTV[0] = rSwapChain.getCpuHandle();
-		m_cmdList->OMSetRenderTargets(1, m_hRTV, false, nullptr);
-
-		// ビューポートリセット
-		auto viewport = rSwapChain.getViewport();
-		auto rect = rSwapChain.getScissorRect();
-		m_cmdList->RSSetViewports(1, &viewport);
-		m_cmdList->RSSetScissorRects(1, &rect);
+		//SetDescriptorTableParam params[] = {
+		//	SetDescriptorTableParam(dt,0),
+		//};
+		//cmdList.setRootDesciptorTable(params, 1);
+		//cmdList.drawIndexedInstanced();
 	}
 
 

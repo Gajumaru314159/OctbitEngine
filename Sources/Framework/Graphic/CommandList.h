@@ -54,9 +54,9 @@ namespace ob::graphic {
         void end();
 
         //@―---------------------------------------------------------------------------
-        //! @brief      書き込み先をスワップチェーンに設定
+        //! @brief      スワップチェーンにテクスチャを適用
         //@―---------------------------------------------------------------------------
-        void setRenderTarget(const class SwapChain& target);
+        void applySwapChain(const class SwapChain& swapChain,const class Texture& texture);
 
         //@―---------------------------------------------------------------------------
         //! @brief      書き込み先をレンダーターゲットに設定
