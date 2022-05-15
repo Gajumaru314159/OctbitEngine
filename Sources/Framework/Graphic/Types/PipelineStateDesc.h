@@ -109,23 +109,24 @@ namespace ob::graphic {
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
-		RootSignature		rootSignature;	//!< ルートシグネチャ
-		RenderTarget		target;			//!< 描画先
-		VertexLayout		vertexLayout;	//!< 頂点レイアウト
+		RenderTarget		target;						//!< 描画先
+
+		RootSignature		rootSignature;				//!< ルートシグネチャ
+		VertexLayout		vertexLayout;				//!< 頂点レイアウト
+
+		VertexShader		vs;							//!< 頂点シェーダ
+		GeometryShader		gs;							//!< ジオメトリシェーダ
+		HullShader			hs;							//!< ハルシェーダ
+		DomainShader		ds;							//!< ドメインシェーダ
+		PixelShader			ps;							//!< ピクセルシェーダ
+
+		SampleDesc			sample;						//!< サンプル定義
+		BlendDesc			blend[RENDER_TARGET_MAX];	//!< ブレンド定義
+		RasterizerDesc		rasterizer;					//!< ラスタライズ定義
+		DepthStencilDesc	depthStencil;				//!< デプス・ステンシル定義
+
 		Topology			topology=Topology::TriangleList;//!< トポロジー
-
-		VertexShader		vs;				//!< 頂点シェーダ
-		PixelShader			ps;				//!< ピクセルシェーダ
-		GeometryShader		gs;				//!< ジオメトリシェーダ
-		HullShader			hs;				//!< ハルシェーダ
-		DomainShader		ds;				//!< ドメインシェーダ
-
-		SampleDesc			sample;			//!< サンプル定義
-		BlendDesc			blend[RENDER_TARGET_MAX];//!< ブレンド定義
-		RasterizerDesc		rasterizer;		//!< ラスタライズ定義
-		DepthStencilDesc	depthStencil;	//!< デプス・ステンシル定義
-
-		u32					sampleMask=-1;	//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
+		u32					sampleMask=-1;				//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 
 }// namespcae ob::graphic
