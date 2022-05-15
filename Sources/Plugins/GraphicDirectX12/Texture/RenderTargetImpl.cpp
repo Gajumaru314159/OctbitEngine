@@ -43,6 +43,7 @@ namespace ob::graphic::dx12 {
 			tdesc.format = element.format;
 			tdesc.arrayNum = 0;
 			tdesc.mipLevel = 1;
+			tdesc.color = element.clearColor;
 
 			// メインリソースを生成
 			auto& texture = m_textures.emplace_back(Texture(tdesc, subName));

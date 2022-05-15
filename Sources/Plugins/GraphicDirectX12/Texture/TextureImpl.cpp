@@ -22,8 +22,7 @@ namespace ob::graphic::dx12 {
 		auto format = TypeConverter::convert(desc.format);
 		D3D12_CLEAR_VALUE* pClearValue=nullptr;
 
-		//TODO RenderTargetから生成する場合はクリアバリューを設定する(RenderTextureDesc)
-		const FLOAT clearColor[4] = {0,0,0,1};
+		const FLOAT clearColor[4] = { desc.color.r,desc.color.g,desc.color.b,desc.color.a};
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
 		
