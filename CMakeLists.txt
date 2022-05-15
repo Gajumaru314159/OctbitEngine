@@ -58,6 +58,7 @@ add_subdirectory ("Sources/Framework/Rendering")
 
 # Pluginsプロジェクト読み込み
 add_subdirectory ("Sources/Plugins/GraphicDirectX12")
+add_subdirectory ("Sources/Plugins/GraphicVulkan")
 
 # テストプロジェクト読み込み
 add_subdirectory ("Sources/Test/Framework/Foundation")
