@@ -185,11 +185,14 @@ int main() {
 
                 //cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
                 cmdList.end();
+
+                // TODO コマンドの個別実行を許可する？
                 cmdList.flush();
                 //swapChain.update(rt.getTexture());
 
                 graphic::System::Instance().update();
 
+                // 表示を更新(Present)
                 swapChain.update();
 
                 if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
