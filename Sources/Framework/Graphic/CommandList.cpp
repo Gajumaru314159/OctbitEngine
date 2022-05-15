@@ -72,11 +72,19 @@ namespace ob::graphic {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーターゲットを設定
+	//! @brief      描画開始
 	//@―---------------------------------------------------------------------------
-	void CommandList::setRenderTarget(const RenderTarget& target) {
+	void CommandList::beginRender(const RenderTarget& target) {
 		CHECK_IMPL();
-		m_pImpl->setRenderTarget(target);
+		m_pImpl->beginRender(target);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画終了
+	//@―---------------------------------------------------------------------------
+	void CommandList::endRender() {
+		CHECK_IMPL();
+		m_pImpl->endRender();
 	}
 
 	//@―---------------------------------------------------------------------------

@@ -55,9 +55,14 @@ namespace ob::graphic::dx12 {
         void applySwapChain(const SwapChain& swapChain, const Texture& texture) override;
 
         //@―---------------------------------------------------------------------------
-        //! @brief      レンダーターゲットを設定
+        //! @brief      描画開始
         //@―---------------------------------------------------------------------------
-        void setRenderTarget(const class RenderTarget& target) override;
+        void beginRender(const class graphic::RenderTarget& target) override;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      描画終了
+        //@―---------------------------------------------------------------------------
+        void endRender() override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      シザー矩形を設定

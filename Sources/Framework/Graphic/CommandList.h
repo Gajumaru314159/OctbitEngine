@@ -59,9 +59,14 @@ namespace ob::graphic {
         void applySwapChain(const class SwapChain& swapChain,const class Texture& texture);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      書き込み先をレンダーターゲットに設定
+        //! @brief      描画開始
         //@―---------------------------------------------------------------------------
-        void setRenderTarget(const class RenderTarget& target);
+        void beginRender(const class RenderTarget& target);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      描画終了
+        //@―---------------------------------------------------------------------------
+        void endRender();
 
         //@―---------------------------------------------------------------------------
         //! @brief      シザー矩形を設定

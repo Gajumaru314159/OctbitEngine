@@ -168,7 +168,7 @@ int main() {
 
                 cmdList.begin();
                 
-                cmdList.setRenderTarget(rt);
+                cmdList.beginRender(rt);
                 cmdList.clearColors();
                 cmdList.setRootSignature(signature);
                 cmdList.setPipelineState(pipeline);

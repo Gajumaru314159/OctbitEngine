@@ -151,7 +151,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーターゲットを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRenderTarget(const graphic::RenderTarget& target) {
+	void CommandListImpl::beginRender(const RenderTarget& target) {
 		auto count = target.getColorTextureCount();
 		auto& rTarget = Device::GetImpl<RenderTargetImpl>(target);
 
@@ -181,6 +181,14 @@ namespace ob::graphic::dx12 {
 		auto rect = rTarget.getScissorRect();
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &rect);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画終了
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::endRender() {
+		m_pRenderTarget = nullptr;
 	}
 
 
