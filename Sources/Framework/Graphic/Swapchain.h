@@ -86,7 +86,7 @@ namespace ob::graphic {
         //! 
         //! @details    表示するテクスチャを次のバックバッファにします。
         //@―---------------------------------------------------------------------------
-        void update(const Texture& texture);
+        void update();
 
     };
 

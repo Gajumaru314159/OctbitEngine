@@ -220,12 +220,7 @@ namespace ob::graphic::dx12 {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChainImpl::update(const graphic::Texture& texture) {
-
-        if (!texture) {
-            LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗。空テクスチャを設定できません。")
-        }
-
+    void SwapChainImpl::update() {
 
         auto result = m_swapchain->Present(m_syncInterval, 0);
 

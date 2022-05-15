@@ -155,9 +155,9 @@ namespace ob::graphic::dx12 {
 		auto count = target.getColorTextureCount();
 		auto& rTarget = Device::GetImpl<RenderTargetImpl>(target);
 
+		clearDescriptorHandle();
 		m_pRenderTarget = &target;
 
-		clearDescriptorHandle();
 
 		// RTV更新
 		for (s32 i = 0; i < count; ++i) {

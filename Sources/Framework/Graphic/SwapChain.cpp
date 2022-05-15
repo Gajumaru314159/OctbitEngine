@@ -70,9 +70,9 @@ namespace ob::graphic {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChain::update(const Texture& texture) {
+    void SwapChain::update() {
         CHECK_IMPL();
-        m_pImpl->update(texture);
+        m_pImpl->update();
     }
 
 }// namespace ob::graphic
