@@ -267,6 +267,14 @@ namespace ob::graphic::dx12 {
     }
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      リソース取得
+    //@―---------------------------------------------------------------------------
+    ID3D12Resource* SwapChainImpl::getResource()const {
+        return m_buffers[m_frameIndex].Get();
+    }
+
+
 
 
 }// namespace ob::graphic::dx12

@@ -9,6 +9,7 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHeap.h>
 #include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
+#include <Plugins/GraphicDirectX12/Buffer/BufferImpl.h>
 
 namespace ob::graphic::dx12
 {
@@ -37,6 +38,21 @@ namespace ob::graphic::dx12
 	//@―---------------------------------------------------------------------------
 	//! @{
 	//bool setResource(s32 index, class Buffer& resource) override{}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  バッファリソースを設定
+	//@―---------------------------------------------------------------------------
+	bool DescriptorTableImpl::setResource(s32 index, Buffer& resource) {
+		auto& rBuffer = Device::GetImpl<BufferImpl>(resource);
+		auto handle = m_handle.getCpuHandle(index);
+		rBuffer.createCBV(handle);
+		return true;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  テクスチャリソースを設定
+	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, Texture& resource) {
 		auto& rTexture = Device::GetImpl<TextureImpl>(resource);
 		auto handle = m_handle.getCpuHandle(index);

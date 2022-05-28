@@ -18,16 +18,14 @@ namespace ob::graphic::dx12 {
 	//! @param desc バッファ定義
 	//@―---------------------------------------------------------------------------
 	BufferImpl::BufferImpl(DeviceImpl& rDevice, const BufferDesc& desc)
-		: m_desc(desc)
+		: m_device(rDevice)
+		, m_desc(desc)
 	{
 		HRESULT result;
-		// リソースの生成
-		D3D12_HEAP_PROPERTIES heapprop = {};
-		// TODO UploadResource作成
-		heapprop.Type = D3D12_HEAP_TYPE_UPLOAD;
-		heapprop.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-		heapprop.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 
+		// リソースの生成
+		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		
 		D3D12_RESOURCE_DESC resdesc = {};
 		resdesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
 		resdesc.Width = desc.bufferSize;
@@ -38,6 +36,7 @@ namespace ob::graphic::dx12 {
 		resdesc.SampleDesc.Count = 1;
 		resdesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 		resdesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+		resdesc = CD3DX12_RESOURCE_DESC::Buffer(desc.bufferSize);
 
 
 		ComPtr<ID3D12Resource> buffer;
@@ -58,7 +57,7 @@ namespace ob::graphic::dx12 {
 		}
 
 		m_buffer = buffer;
-
+		m_buffer->SetName(L"Buffer");
 	}
 
 
@@ -69,7 +68,8 @@ namespace ob::graphic::dx12 {
 	//! @param data 初期化データ
 	//@―---------------------------------------------------------------------------
 	BufferImpl::BufferImpl(DeviceImpl& rDevice, const BufferDesc& desc, const Blob& blob)
-		: m_desc(desc)
+		: m_device(rDevice)
+		, m_desc(desc)
 	{
 
 	}
@@ -119,6 +119,21 @@ namespace ob::graphic::dx12 {
 		}
 		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
 		m_buffer->Unmap(0, nullptr);
+
+	}
+
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      定数バッファ―ビューを生成
+	//@―---------------------------------------------------------------------------
+	void BufferImpl::createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
+
+		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+		cbvDesc.BufferLocation = m_buffer->GetGPUVirtualAddress();
+		cbvDesc.SizeInBytes = m_desc.bufferSize;
+
+		m_device.getNative()->CreateConstantBufferView(&cbvDesc, handle);
 
 	}
 

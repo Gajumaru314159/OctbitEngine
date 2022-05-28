@@ -38,9 +38,7 @@ namespace ob::graphic {
     //! @{
     bool DescriptorTable::setResource(s32 index, class Buffer& resource) {
         CHECK_IMPL();
-        //m_pImpl->setResource(index, resource);
-        OB_NOTIMPLEMENTED();
-        return false;
+        return m_pImpl->setResource(index, resource);
     }
     bool DescriptorTable::setResource(s32 index, class Texture& resource) {
         CHECK_IMPL();

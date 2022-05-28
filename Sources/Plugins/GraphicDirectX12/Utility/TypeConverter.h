@@ -9,6 +9,7 @@
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
 #include <Framework/Graphic/Types/CommandListDesc.h>
+#include <Framework/Graphic/Types/BufferDesc.h>
 
 namespace ob::graphic::dx12 {
 
@@ -110,6 +111,10 @@ namespace ob::graphic::dx12 {
         //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
         //@―---------------------------------------------------------------------------
         static D3D12_COMMAND_LIST_TYPE convert(CommandListType value);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
+        //@―---------------------------------------------------------------------------
+        static D3D12_HEAP_TYPE convert(ResourceUsage value);
 
     };
 }// namespcae ob

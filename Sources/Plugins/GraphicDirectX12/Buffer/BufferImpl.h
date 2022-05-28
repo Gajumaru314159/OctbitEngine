@@ -68,8 +68,15 @@ namespace ob::graphic::dx12 {
 		ID3D12Resource* getNative()const {return m_buffer.Get();}
 
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      シェーダリソースビューを生成
+		//@―---------------------------------------------------------------------------
+		void createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
+
+
 	private:
 
+		class DeviceImpl& m_device;
 		const BufferDesc m_desc;
 
 		ComPtr<ID3D12Resource> m_buffer;

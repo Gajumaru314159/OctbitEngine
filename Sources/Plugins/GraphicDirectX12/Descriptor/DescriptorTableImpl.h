@@ -42,7 +42,7 @@ namespace ob::graphic::dx12 {
 		//! @brief  リソースを設定
 		//@―---------------------------------------------------------------------------
 		//! @{
-		//bool setResource(s32 index, class Buffer& resource) override;
+		bool setResource(s32 index, class Buffer& resource) override;
 		bool setResource(s32 index, Texture& resource) override;
 		//bool setResource(s32 index, class Sampler& resource) override;
 		//! @}

@@ -117,34 +117,43 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::applySwapChain(const SwapChain& swapChain, const Texture& texture)
 	{
-		//auto& rSwapChain = Device::GetImpl<SwapChainImpl>(swapChain);
-		//auto& rTexture = Device::GetImpl<TextureImpl>(texture);
-		//
-		//// cmdList.setRenderTarget(rt);
-		//m_pRenderTarget = nullptr;
-		//clearDescriptorHandle();
-		//
-		//// コマンド発行
-		//D3D12_CPU_DESCRIPTOR_HANDLE hRTV = rSwapChain.getCpuHandle();
-		//m_cmdList->OMSetRenderTargets(1, &hRTV, false, nullptr);
-		//// ビューポート初期化
-		//auto viewport = rSwapChain.getViewport();
-		//auto rect = rSwapChain.getScissorRect();
-		//m_cmdList->RSSetViewports(1, &viewport);
-		//m_cmdList->RSSetScissorRects(1, &rect);
+		auto& rSwapChain = Device::GetImpl<SwapChainImpl>(swapChain);
+		auto& rTexture = Device::GetImpl<TextureImpl>(texture);
 
-		// cmdList.setRootSignature(signature);
+		{
+			D3D12_RESOURCE_BARRIER barrier[2] = {
+				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
+				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE),
+			};
+			m_cmdList->ResourceBarrier(get_size(barrier), barrier);
+		}
+
+		{
+			auto desc = rTexture.getResource()->GetDesc();
+			auto desc2 = rSwapChain.getResource()->GetDesc();
+
+			const int maxSubresources = 100;
+			D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprints[maxSubresources];
+			UINT numRows[maxSubresources];
+			UINT64 rowSizeInBytes[maxSubresources], uploadSize;
+			
+			m_device.getNative()->GetCopyableFootprints(&desc,0,1,0, footprints, numRows, rowSizeInBytes, &uploadSize);
+
+			m_cmdList->CopyTextureRegion(
+				&CD3DX12_TEXTURE_COPY_LOCATION(rSwapChain.getResource(), 0),
+				0, 0, 0,
+				&CD3DX12_TEXTURE_COPY_LOCATION(rTexture.getResource(),0),
+				nullptr);
+		}
 
 
-		// cmdList.setPipelineState(pipeline);
-		// cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
-		// cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
-
-		//SetDescriptorTableParam params[] = {
-		//	SetDescriptorTableParam(dt,0),
-		//};
-		//cmdList.setRootDesciptorTable(params, 1);
-		//cmdList.drawIndexedInstanced();
+		{
+			D3D12_RESOURCE_BARRIER barrier[2] = {
+				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT),
+				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET),
+			};
+			m_cmdList->ResourceBarrier(get_size(barrier), barrier);
+		}
 	}
 
 

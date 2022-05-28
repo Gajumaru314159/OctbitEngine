@@ -465,12 +465,30 @@ namespace ob::graphic::dx12
     D3D12_COMMAND_LIST_TYPE TypeConverter::convert(CommandListType value) {
         switch (value)
         {
-        case ob::graphic::CommandListType::Graphic: return D3D12_COMMAND_LIST_TYPE_DIRECT;
-        case ob::graphic::CommandListType::Compute: return D3D12_COMMAND_LIST_TYPE_COMPUTE;
+        case CommandListType::Graphic: return D3D12_COMMAND_LIST_TYPE_DIRECT;
+        case CommandListType::Compute: return D3D12_COMMAND_LIST_TYPE_COMPUTE;
         }
 
         LOG_WARNING_EX("Graphic", "不正なCommandListType[value={}]", enum_cast(value));
         return D3D12_COMMAND_LIST_TYPE_DIRECT;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
+    //@―---------------------------------------------------------------------------
+    D3D12_HEAP_TYPE TypeConverter::convert(ResourceUsage value) {
+        switch (value)
+        {
+        case ResourceUsage::Default: return D3D12_HEAP_TYPE_DEFAULT;
+        //case ResourceUsage::Immutable: return D3D12_COMMAND_LIST_TYPE_DIRECT;
+        case ResourceUsage::Dynamic: return D3D12_HEAP_TYPE_UPLOAD;
+        case ResourceUsage::ReadBack: return D3D12_HEAP_TYPE_DEFAULT;
+        //case ResourceUsage::WiteBack: return D3D12_COMMAND_LIST_TYPE_DIRECT;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なResourceUsage[value={}]", enum_cast(value));
+        return D3D12_HEAP_TYPE_DEFAULT;
     }
 
 }// namespace ob

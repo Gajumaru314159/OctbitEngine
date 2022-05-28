@@ -68,9 +68,9 @@ int main() {
             RenderTarget rt;
             {
                 RenderTargetDesc desc;
-                desc.size = { 1280,720 };
+                desc.size = { 640,480 };
                 desc.colors = {
-                    ColorTextureDesc{TextureFormat::RGBA8,Color::red},
+                    ColorTextureDesc{swapChain.getDesc().format,Color::red},
                 };
 
                 desc.depth = {
@@ -87,7 +87,8 @@ int main() {
                     {
                         RootParameter(
                             {
-                                DescriptorRange(DescriptorRangeType::SRV,1,0),
+                                //DescriptorRange(DescriptorRangeType::SRV,1,0),
+                                DescriptorRange(DescriptorRangeType::CBV,1,0),
                             }
                         ),
                     },
@@ -111,12 +112,19 @@ int main() {
                 vssrc.append(TC("\n    return o;"));
                 vssrc.append(TC("\n}"));
                 String pssrc;
-                pssrc.append(TC("\nTexture2D g_mainTex;"));
-                pssrc.append(TC("\nSamplerState g_mainSampler;"));
-                pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-                pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{"));
-                pssrc.append(TC("\n    return g_mainTex.Sample(g_mainSampler,i.uv);"));
-                pssrc.append(TC("\n}"));
+                pssrc.append(uR"(
+
+cbuffer Param : register(b0) {
+  float4 color;
+};
+
+SamplerState g_mainSampler;
+struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};
+float4 PS_Main(Output i) : SV_TARGET{
+    return color;//g_mainTex.Sample(g_mainSampler,i.uv);
+}
+
+)");
                 vs= VertexShader(vssrc);
                 ps= PixelShader(pssrc);
                 OB_CHECK_ASSERT_EXPR(vs && ps);
@@ -140,9 +148,29 @@ int main() {
                 OB_CHECK_ASSERT_EXPR(pipeline);
             }
 
+            Buffer buffer;
+            {
+                BufferDesc desc;
+
+                desc.bufferType = BufferType::ConstantBuffer;     //!< バッファタイプ
+                desc.usage = ResourceUsage::Dynamic;          //!< リソース使用法
+                desc.bufferSize = 256;     //!< バッファサイズ
+                desc.bufferStride = 0;   //!< ストライブ幅
+                desc.bufferFlags;    //!< バッファフラグ
+                desc.bindFlags = BindFlag::PixelShaderResource;      //!< バインドフラグ
+
+                buffer = Buffer(desc);
+                OB_CHECK_ASSERT_EXPR(buffer);
+
+                Color color = Color::red;
+                buffer.updateDirect(sizeof(color), &color);
+            }
 
             DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
-            dt.setResource(0,tex);
+            dt.setResource(0, buffer);
+
+            //DescriptorTable dt2(DescriptorHeapType::CBV_SRV_UAV, 1);
+            //dt2.setResource(0, buffer);
             
             CommandList cmdList;
             {
@@ -162,6 +190,18 @@ int main() {
 
             MeshBuffer meshBuffer(mesh);
 
+            Mesh<Vert> mesh2;
+            mesh2.appendQuad(
+                { Vec4(0.3,0,0,1),Vec2(0,0) },
+                { Vec4(0.5,0,0,1),Vec2(1,0) },
+                { Vec4(0,0.5,0,1),Vec2(0,1) },
+                { Vec4(0.5,0.5,0,1),Vec2(1,1) }
+            );
+
+            MeshBuffer meshBuffer2(mesh2);
+
+
+            static s32 flag = 0;
             Random random;
             MSG msg = {};
             while (true) {
@@ -172,8 +212,14 @@ int main() {
                 cmdList.clearColors();
                 cmdList.setRootSignature(signature);
                 cmdList.setPipelineState(pipeline);
-                cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
-                cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
+
+                if ((flag/60)%2) {
+                    cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
+                    cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
+                } else {
+                    cmdList.setVertexBuffer(meshBuffer2.getVertexBuffer());
+                    cmdList.setIndexBuffer(meshBuffer2.getIndexBuffer());
+                }
 
                 SetDescriptorTableParam params[] = {
                     SetDescriptorTableParam(dt,0),
@@ -183,12 +229,11 @@ int main() {
                 //mat.setMatrix("WorldMatrix",mtx);
                 //mat.setTexture("MainTex",tex);
 
-                //cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
+                cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
                 cmdList.end();
 
                 // TODO コマンドの個別実行を許可する？
                 cmdList.flush();
-                //swapChain.update(rt.getTexture());
 
                 graphic::System::Instance().update();
 
@@ -202,6 +247,12 @@ int main() {
                 if (msg.message == WM_QUIT) {
                     break;
                 }
+
+
+                Color color(random.get0_1(), random.get0_1(), random.get0_1(), 1);
+                buffer.updateDirect(sizeof(color), &color);
+
+                flag++;
 
             }
         }

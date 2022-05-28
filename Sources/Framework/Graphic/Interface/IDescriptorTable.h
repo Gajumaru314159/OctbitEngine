@@ -35,7 +35,7 @@ namespace ob::graphic {
 		//! @brief  リソースを設定
 		//@―---------------------------------------------------------------------------
 		//! @{
-		//virtual bool setResource(s32 index, class Buffer& resource) = 0;
+		virtual bool setResource(s32 index, class Buffer& resource) = 0;
 		virtual bool setResource(s32 index, Texture& resource) = 0;
 		//virtual bool setResource(s32 index, class Sampler& resource) = 0;
 		//! @}
