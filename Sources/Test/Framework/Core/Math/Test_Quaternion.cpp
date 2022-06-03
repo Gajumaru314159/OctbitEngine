@@ -3,7 +3,7 @@
 //! @brief		Quat のテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Quaternion.h>
 
 using namespace ob;
@@ -19,7 +19,7 @@ TEST(Quat, Construct) {
     EXPECT_EQ(q2, Quat(0.5f, 0.5f, -0.5f, 0.5f));
 
     Quat q3(90, Vec3(1, 0, 0));
-    EXPECT_EQ(q3, Quat(Mathf::SinD(45), 0, 0, Mathf::CosD(45)));
+    EXPECT_EQ(q3, Quat(Math::SinD(45), 0, 0, Math::CosD(45)));
 }
 
 TEST(Quat, Operator) {

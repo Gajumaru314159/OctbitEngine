@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 
@@ -265,7 +267,7 @@ namespace ob::core {
         //! @brief データをクリア
         //@―---------------------------------------------------------------------------
         void clear() {
-            return m_data.clear();
+            m_data.clear();
         }
 
 

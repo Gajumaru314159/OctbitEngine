@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "Utility.h"
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 
 namespace ob::graphic::dx12 {

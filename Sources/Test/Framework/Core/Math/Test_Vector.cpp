@@ -3,8 +3,8 @@
 //! @brief		Vector テスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Math/Vector/include.h>
-#include <Framework/Core/Math/Vector/IntVector4.h>
+#include <Framework/Core/Math/Vectors.h>
+#include <Framework/Core/Math/IntVector4.h>
 #include <Framework/Core/Math/Quaternion.h>
 
 using namespace ob;
@@ -140,7 +140,7 @@ TEST(Vector, Convert) {
     Vec3 v2(2, 2, 0);
     v2.toDirectionAndLength(dir, len);
     EXPECT_EQ(dir, Vec3(1, 1, 0).unitVec());
-    EXPECT_EQ(len, Mathf::Sqrt(8));
+    EXPECT_EQ(len, Math::Sqrt(8));
 }
 
 
@@ -221,7 +221,7 @@ TEST(Vector, Static) {
 
     a.set(1, 0, 0);
     b.set(0, 1, 0);
-    EXPECT_EQ(Vec3::Slerp(a, b, 0.5f), Vec3(Mathf::CosD(45), Mathf::SinD(45), 0));
+    EXPECT_EQ(Vec3::Slerp(a, b, 0.5f), Vec3(Math::CosD(45), Math::SinD(45), 0));
 
     a.set(3, 5, 3);
     b.set(5, 2, 4);

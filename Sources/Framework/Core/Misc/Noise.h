@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
 
 namespace ob::core {
 
@@ -20,7 +21,7 @@ namespace ob::core {
         //! @param y            サンプリングY座標
         //! @param z            サンプリングZ座標
         //@―---------------------------------------------------------------------------
-        static f32 Perlin(f32 x, f32 y = defaultY(), f32 z = defaultZ());
+        static f32 Perlin(f32 x, f32 y = DefaultY(), f32 z = DefaultZ());
 
 
         //@―---------------------------------------------------------------------------
@@ -32,33 +33,20 @@ namespace ob::core {
         //! @param y            サンプリングY座標
         //! @param z            サンプリングZ座標
         //@―---------------------------------------------------------------------------
-        static f32 PerlinOctave(s32 octaves, f32 persistence, f32 x, f32 y = defaultY(), f32 z = defaultZ());
+        static f32 PerlinOctave(s32 octaves, f32 persistence, f32 x, f32 y = DefaultY(), f32 z = DefaultZ());
 
 
     private:
 
 
-        static constexpr f32 defaultY() {
+        static constexpr f32 DefaultY() {
             return 0.3983755219259f;
         }
-        static constexpr f32 defaultZ() {
+        static constexpr f32 DefaultZ() {
             return 0.6932752758284f;
         }
 
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob

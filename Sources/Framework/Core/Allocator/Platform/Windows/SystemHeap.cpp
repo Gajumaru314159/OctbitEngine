@@ -6,6 +6,8 @@
 #include "SystemHeap.h"
 
 #include <cstdlib>
+#include <assert.h>
+#include <Framework/Core/Memory/Utility/MemoryUtility.h>
 
 namespace ob::core {
 

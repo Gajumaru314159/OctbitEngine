@@ -7,6 +7,9 @@
 #include "Platform/PlatformSystemHeap.h"
 #include "MimallocHeap.h"
 #include "TLSFHeap.h"
+#include <Framework/Core/Log/LogMacro.h>
+#include <Framework/Core/Memory/Utility/MemoryUtility.h>
+#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 

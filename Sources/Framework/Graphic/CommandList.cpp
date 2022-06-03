@@ -158,18 +158,20 @@ namespace ob::graphic {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      インデックスありで描画
+	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	void CommandList::drawIndexedInstanced() {
+	void CommandList::draw(const DrawParam& param) {
 		CHECK_IMPL();
-		m_pImpl->drawIndexed();
+		m_pImpl->draw(param);
 	}
 
+
 	//@―---------------------------------------------------------------------------
-	//! @brief      インデックスなしで描画
+	//! @brief      インデックス描画
 	//@―---------------------------------------------------------------------------
-	void CommandList::drawInstanced() {
-		OB_NOTIMPLEMENTED();
+	void CommandList::drawIndexed(const DrawIndexedParam& param) {
+		CHECK_IMPL();
+		m_pImpl->drawIndexed(param);
 	}
 
 }// namespace ob

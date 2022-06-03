@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Mathf.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -169,12 +169,12 @@ namespace ob::core {
     //! @brief  正規化
     //@―---------------------------------------------------------------------------
     inline Rot& Rot::normalize() {
-        roll = Mathf::Mod(roll, Mathf::PI);
-        pitch = Mathf::Mod(pitch, Mathf::PI);
-        yaw = Mathf::Mod(yaw, Mathf::PI);
-        if (roll < 0.0f)roll += Mathf::TWO_PI;
-        if (pitch < 0.0f)pitch += Mathf::TWO_PI;
-        if (yaw < 0.0f)yaw += Mathf::TWO_PI;
+        roll = Math::Mod(roll, Math::PI);
+        pitch = Math::Mod(pitch, Math::PI);
+        yaw = Math::Mod(yaw, Math::PI);
+        if (roll < 0.0f)roll += Math::TWO_PI;
+        if (pitch < 0.0f)pitch += Math::TWO_PI;
+        if (yaw < 0.0f)yaw += Math::TWO_PI;
         return *this;
     }
 
@@ -184,9 +184,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Rot::isNaN() {
         return
-            Mathf::IsNaN(roll) ||
-            Mathf::IsNaN(pitch) ||
-            Mathf::IsNaN(yaw);
+            Math::IsNaN(roll) ||
+            Math::IsNaN(pitch) ||
+            Math::IsNaN(yaw);
     }
 
     //! @endcond

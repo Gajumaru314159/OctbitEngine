@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Graphic/ColorTypes.h>
+#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 
@@ -292,10 +293,10 @@ namespace ob::core {
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
     inline void IntColor::set(s32 r, s32 g, s32 b, s32 a) noexcept {
-        this->r = (u8)get_clamp(r, 0, 255);
-        this->g = (u8)get_clamp(g, 0, 255);
-        this->b = (u8)get_clamp(b, 0, 255);
-        this->a = (u8)get_clamp(a, 0, 255);
+        this->r = (u8)std::clamp(r, 0, 255);
+        this->g = (u8)std::clamp(g, 0, 255);
+        this->b = (u8)std::clamp(b, 0, 255);
+        this->a = (u8)std::clamp(a, 0, 255);
     }
 
 
@@ -314,7 +315,7 @@ namespace ob::core {
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
     inline u8 IntColor::minComponent()const noexcept {
-        return get_min(r, g, b);
+        return std::min({ r, g, b });
     }
 
 
@@ -322,7 +323,7 @@ namespace ob::core {
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
     inline u8 IntColor::maxComponent()const noexcept {
-        return get_max(r, g, b);
+        return std::min({ r, g, b });
     }
 
     //! @endcond

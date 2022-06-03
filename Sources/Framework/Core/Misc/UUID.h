@@ -4,6 +4,8 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/String/String.h>
 
 namespace ob::core {
 

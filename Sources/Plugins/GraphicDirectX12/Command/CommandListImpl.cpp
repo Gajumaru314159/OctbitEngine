@@ -330,10 +330,18 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      インデックスバッファを設定
+	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::drawIndexed() {
-		m_cmdList->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	void CommandListImpl::draw(const DrawParam& param) {
+		m_cmdList->DrawInstanced(param.indexCount, 1, param.startVertex,0);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      インデックス描画
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::drawIndexed(const DrawIndexedParam& param) {
+		m_cmdList->DrawIndexedInstanced(param.indexCount,1, param.startIndex,param.startVertex,0);
 	}
 
 

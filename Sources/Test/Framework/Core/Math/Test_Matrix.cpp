@@ -4,9 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Matrix.h>
-#include <Framework/Core/Math/Vector/include.h>
-#include <Framework/Core/Math/Quaternion.h>
-
+#include <Framework/Core/Math/Vectors.h>
 using namespace ob;
 
 

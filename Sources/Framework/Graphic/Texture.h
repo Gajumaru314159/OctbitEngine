@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Utility/GraphicObjectHolder.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Framework/Core/Misc/BlobView.h>
 
 //===============================================================
 // クラス宣言
@@ -41,6 +42,15 @@ namespace ob::graphic {
         Texture(const TextureDesc& desc, StringView name=TC("Texture"));
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  コンストラクタ
+        //! 
+        //! @param desc テクスチャ定義
+        //! @param name オブジェクト名
+        //@―---------------------------------------------------------------------------
+        Texture(const BlobView& desc, StringView name = TC("Texture"));
+
+
         //===============================================================
         // ゲッター
         //===============================================================
@@ -73,6 +83,9 @@ namespace ob::graphic {
         //! @brief      テクスチャタイプを取得
         //@―---------------------------------------------------------------------------
         auto type()const->TextureType;
+
+    public:
+
 
 
     };

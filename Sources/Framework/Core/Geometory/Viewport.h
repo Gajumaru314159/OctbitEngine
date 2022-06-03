@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Math/Vector2.h>
 
 namespace ob::core {
 
@@ -165,6 +166,14 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline f32 Viewport::height()const noexcept {
         return bottom - top;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      高さ
+    //@―---------------------------------------------------------------------------
+    inline f32 Viewport::depth()const noexcept {
+        return farZ - nearZ;
     }
 
     //! @endcond

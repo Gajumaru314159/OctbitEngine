@@ -18,6 +18,8 @@ namespace ob::graphic {
     class ResourceBarrier;
     class Buffer;
     struct SetDescriptorTableParam;
+    struct DrawParam;
+    struct DrawIndexedParam;
 }
 
 //===============================================================
@@ -40,22 +42,22 @@ namespace ob::graphic {
         virtual void end()=0;
 
         virtual void applySwapChain(const class SwapChain& swapChain, const class Texture& texture)=0;
-        virtual void beginRender(const class RenderTarget& target) = 0;
-        virtual void endRender() = 0;
+        virtual void beginRender(const class RenderTarget& target) = 0; //!< 描画開始
+        virtual void endRender() = 0;                                   //!< 描画終了
         // TODO endRender
 
-        virtual void setViewport(const Viewport* pViewport,s32 num)=0;
-        virtual void setScissorRect(const IntRect* pRect,s32 num)=0;
+        virtual void setViewport(const Viewport* pViewport,s32 num)=0;  //!< ビューポートを設定
+        virtual void setScissorRect(const IntRect* pRect,s32 num)=0;    //!< シザー矩形を設定
         
-        virtual void clearColors(u32 mask) = 0;
-        virtual void clearDepthStencil() = 0;
+        virtual void clearColors(u32 mask) = 0;                         //!< カラーをクリア
+        virtual void clearDepthStencil() = 0;                           //!< 深度値をクリア
 
-        virtual void setVertexBuffer(const Buffer&) = 0;
-        virtual void setIndexBuffer(const Buffer&) = 0;
+        virtual void setVertexBuffer(const Buffer&) = 0;                //!< 頂点バッファ設定
+        virtual void setIndexBuffer(const Buffer&) = 0;                 //!< インデックスバッファ設定
 
 
         virtual void setRootSignature(const RootSignature&) = 0;// TODO 削除
-        virtual void setPipelineState(const PipelineState&) = 0;
+        virtual void setPipelineState(const PipelineState&) = 0;        //!< パイプライン設定
         //virtual void setComputePipelineState(const ComputePipelineState&) = 0;
 
         // setBlendFactor
@@ -66,7 +68,8 @@ namespace ob::graphic {
         // void setRootConstant();
 
 
-        virtual void drawIndexed() = 0;
+        virtual void draw(const DrawParam& param) = 0;
+        virtual void drawIndexed(const DrawIndexedParam& param) = 0;
         //virtual void drawInstanced() = 0;
 
 

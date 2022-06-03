@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vector3.h>
 
 namespace ob::core {
 
@@ -126,7 +126,7 @@ namespace ob::core {
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
     inline bool Sphere::operator==(const Sphere& other)const noexcept {
-        return center == other.center && Mathf::IsNearEquals(radius, other.radius);
+        return center == other.center && Math::IsNearEquals(radius, other.radius);
     }
 
 
@@ -165,7 +165,7 @@ namespace ob::core {
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
     inline Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
-        return Sphere(Vec3::Lerp(a.center, b.center, t), Mathf::Lerp(a.radius, b.radius, t));
+        return Sphere(Vec3::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t));
     }
 
     //! @endcond

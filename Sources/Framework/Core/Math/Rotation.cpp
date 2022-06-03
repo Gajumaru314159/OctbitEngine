@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Rotation.h>
-#include <Framework/Core/Math/Vector/Vector3.h>
+#include <Framework/Core/Math/Vector3.h>
 #include <Framework/Core/Math/Quaternion.h>
 
 namespace ob::core {

@@ -19,7 +19,7 @@ namespace ob::graphic::vulkan {
 
         }
 
-        void startup(ob::foundation::Allocator* pAllocator) override {
+        void startup(ob::core::Allocator* pAllocator) override {
             MemorySystem::SetHeapAllocator(HeapUsage::VirtualMemory, pAllocator);
             // PIX開始
         }

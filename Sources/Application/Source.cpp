@@ -87,8 +87,8 @@ int main() {
                     {
                         RootParameter(
                             {
-                                //DescriptorRange(DescriptorRangeType::SRV,1,0),
                                 DescriptorRange(DescriptorRangeType::CBV,1,0),
+                                //DescriptorRange(DescriptorRangeType::CBV,1,0),
                             }
                         ),
                     },
@@ -118,7 +118,7 @@ cbuffer Param : register(b0) {
   float4 color;
 };
 
-SamplerState g_mainSampler;
+//SamplerState g_mainSampler;
 struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};
 float4 PS_Main(Output i) : SV_TARGET{
     return color;//g_mainTex.Sample(g_mainSampler,i.uv);
@@ -167,10 +167,10 @@ float4 PS_Main(Output i) : SV_TARGET{
             }
 
             DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
-            dt.setResource(0, buffer);
+            dt.setResource(0, tex);
 
-            //DescriptorTable dt2(DescriptorHeapType::CBV_SRV_UAV, 1);
-            //dt2.setResource(0, buffer);
+            DescriptorTable dt2(DescriptorHeapType::CBV_SRV_UAV, 1);
+            dt2.setResource(0, buffer);
             
             CommandList cmdList;
             {
@@ -223,11 +223,15 @@ float4 PS_Main(Output i) : SV_TARGET{
 
                 SetDescriptorTableParam params[] = {
                     SetDescriptorTableParam(dt,0),
+                    SetDescriptorTableParam(dt2,1),
                 };
                 cmdList.setRootDesciptorTable(params,1);
-                cmdList.drawIndexedInstanced();
-                //mat.setMatrix("WorldMatrix",mtx);
-                //mat.setTexture("MainTex",tex);
+
+                {
+                    DrawParam param{};
+                    param.indexCount = 4;
+                    cmdList.draw(param);
+                }
 
                 cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
                 cmdList.end();

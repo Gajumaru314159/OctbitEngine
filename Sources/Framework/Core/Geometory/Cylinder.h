@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vector3.h>
 #include <Framework/Core/Math/Quaternion.h>
 
 namespace ob::core {
@@ -280,8 +280,8 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline f32 Cylinder::volume()const noexcept {
         return
-            radius * radius * Mathf::PI * height() +
-            radius * radius * radius * Mathf::PI * 4.0f / 3.0f;
+            radius * radius * Math::PI * height() +
+            radius * radius * radius * Math::PI * 4.0f / 3.0f;
     }
 
     //! @endcond

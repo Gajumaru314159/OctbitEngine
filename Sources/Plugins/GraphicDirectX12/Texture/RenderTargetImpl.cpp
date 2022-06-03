@@ -10,7 +10,7 @@
 #include <Plugins/GraphicDirectX12/Texture/TextureImpl.h>
 
 #include <Framework/Graphic/Private/Device.h>
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 
 namespace ob::graphic::dx12 {
 

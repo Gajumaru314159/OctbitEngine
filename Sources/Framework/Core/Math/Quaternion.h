@@ -4,7 +4,7 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Mathf.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
     struct Vec3;
@@ -357,7 +357,7 @@ namespace ob::core {
         //! @param v            比較対象
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool equals(const Quat& v, f32 tolerance = Mathf::TOLERANCE)const noexcept;         // 等価判定(許容誤差指定)
+        bool equals(const Quat& v, f32 tolerance = Math::TOLERANCE)const noexcept;         // 等価判定(許容誤差指定)
 
 
     public:
@@ -502,10 +502,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Quat::operator == (const Quat& quat)const noexcept {
         return
-            Mathf::IsNearEquals(x, quat.x) &&
-            Mathf::IsNearEquals(y, quat.y) &&
-            Mathf::IsNearEquals(z, quat.z) &&
-            Mathf::IsNearEquals(w, quat.w);
+            Math::IsNearEquals(x, quat.x) &&
+            Math::IsNearEquals(y, quat.y) &&
+            Math::IsNearEquals(z, quat.z) &&
+            Math::IsNearEquals(w, quat.w);
     }
 
 
@@ -604,12 +604,12 @@ namespace ob::core {
     //! @brief ロール・ピッチ・ヨー設定
     //@―---------------------------------------------------------------------------
     inline void Quat::set(f32 roll, f32 pitch, f32 yaw) {
-        f32 sx = Mathf::Sin(Mathf::Degrees(roll * 0.5f));
-        f32 cx = Mathf::Cos(Mathf::Degrees(roll * 0.5f));
-        f32 sy = Mathf::Sin(Mathf::Degrees(pitch * 0.5f));
-        f32 cy = Mathf::Cos(Mathf::Degrees(pitch * 0.5f));
-        f32 sz = Mathf::Sin(Mathf::Degrees(yaw * 0.5f));
-        f32 cz = Mathf::Cos(Mathf::Degrees(yaw * 0.5f));
+        f32 sx = Math::Sin(Math::Degrees(roll * 0.5f));
+        f32 cx = Math::Cos(Math::Degrees(roll * 0.5f));
+        f32 sy = Math::Sin(Math::Degrees(pitch * 0.5f));
+        f32 cy = Math::Cos(Math::Degrees(pitch * 0.5f));
+        f32 sz = Math::Sin(Math::Degrees(yaw * 0.5f));
+        f32 cz = Math::Cos(Math::Degrees(yaw * 0.5f));
         //this->x = cy * sx * cz - sy * cx * sz;
         //this->y = cy * sx * sz + sy * cx * sz;
         //this->z = cy * cx * sz + sy * sx * cz;
@@ -632,7 +632,7 @@ namespace ob::core {
     //! @details 二つの Quat の長さを比較する場合はSqrMagのほうが高速です。
     //@―---------------------------------------------------------------------------
     inline f32 Quat::getMag() const {
-        return Mathf::Sqrt(getSqrMag());
+        return Math::Sqrt(getSqrMag());
     }
 
     //@―---------------------------------------------------------------------------
@@ -649,7 +649,7 @@ namespace ob::core {
     //! @note 計算誤差によりノルムが1でなくなった場合は明示的に正規化する必要がある
     //@―---------------------------------------------------------------------------
     inline void Quat::normalize() {
-        f32 div = 1.0f / Mathf::Sqrt(x * x + y * y + z * z + w * w);
+        f32 div = 1.0f / Math::Sqrt(x * x + y * y + z * z + w * w);
         x *= div;
         y *= div;
         z *= div;
@@ -663,7 +663,7 @@ namespace ob::core {
     //! @note 計算誤差によりノルムが1でなくなった場合は明示的に正規化する必要がある
     //@―---------------------------------------------------------------------------
     inline Quat Quat::getNorm()const {
-        f32 div = 1.0f / Mathf::Sqrt(x * x + y * y + z * z + w * w);
+        f32 div = 1.0f / Math::Sqrt(x * x + y * y + z * z + w * w);
         return Quat(x * div, y * div, z * div, w * div);
     }
 
@@ -672,7 +672,7 @@ namespace ob::core {
     //! @brief 回転量を取得
     //@―---------------------------------------------------------------------------
     inline f32 Quat::getAngle() const {
-        return Mathf::Radians(Mathf::Acos(w) * 2.0f);
+        return Math::Radians(Math::Acos(w) * 2.0f);
     }
 
 
@@ -691,10 +691,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Quat::equals(const Quat& v, f32 tolerance)const noexcept {
         return
-            Mathf::Abs(x - v.x) <= tolerance &&
-            Mathf::Abs(y - v.y) <= tolerance &&
-            Mathf::Abs(z - v.z) <= tolerance &&
-            Mathf::Abs(w - v.w) <= tolerance;
+            Math::Abs(x - v.x) <= tolerance &&
+            Math::Abs(y - v.y) <= tolerance &&
+            Math::Abs(z - v.z) <= tolerance &&
+            Math::Abs(w - v.w) <= tolerance;
     }
 
 

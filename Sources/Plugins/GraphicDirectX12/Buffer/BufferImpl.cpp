@@ -123,7 +123,6 @@ namespace ob::graphic::dx12 {
 	}
 
 
-
 	//@―---------------------------------------------------------------------------
 	//! @brief      定数バッファ―ビューを生成
 	//@―---------------------------------------------------------------------------
@@ -131,7 +130,7 @@ namespace ob::graphic::dx12 {
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
 		cbvDesc.BufferLocation = m_buffer->GetGPUVirtualAddress();
-		cbvDesc.SizeInBytes = m_desc.bufferSize;
+		cbvDesc.SizeInBytes = (UINT)m_desc.bufferSize;
 
 		m_device.getNative()->CreateConstantBufferView(&cbvDesc, handle);
 

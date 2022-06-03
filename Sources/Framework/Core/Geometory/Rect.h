@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vector2.h>
 
 namespace ob::core {
 
@@ -322,10 +322,10 @@ namespace ob::core {
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
     inline Rect& Rect::operator+=(const Vec2& point) noexcept {
-        left = get_min(point.x, left);
-        right = get_max(point.x, right);
-        top = get_min(point.y, top);
-        bottom = get_max(point.y, bottom);
+        left = Math::Min(point.x, left);
+        right = Math::Max(point.x, right);
+        top = Math::Min(point.y, top);
+        bottom = Math::Max(point.y, bottom);
         return *this;
     }
 
@@ -497,7 +497,7 @@ namespace ob::core {
     //! @brief      サイズが0以下であるか
     //@―---------------------------------------------------------------------------
     inline bool Rect::empty()const noexcept {
-        return area() == Mathf::EPSILON;
+        return area() == Math::EPSILON;
     }
 
 
@@ -519,10 +519,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline Rect Lerp(const Rect& a, const Rect& b, f32 t) noexcept {
         return Rect(
-            Mathf::Lerp(a.left, b.left, t),
-            Mathf::Lerp(a.top, b.top, t),
-            Mathf::Lerp(a.right, b.right, t),
-            Mathf::Lerp(a.bottom, b.bottom, t)
+            Math::Lerp(a.left, b.left, t),
+            Math::Lerp(a.top, b.top, t),
+            Math::Lerp(a.right, b.right, t),
+            Math::Lerp(a.bottom, b.bottom, t)
         );
     }
 

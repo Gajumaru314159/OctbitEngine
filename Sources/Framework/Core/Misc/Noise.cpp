@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Misc/Noise.h>
-#include <Framework/Core/Math/Mathf.h>
+#include <Framework/Core/Math/Math.h>
 
 
 namespace ob::core {
@@ -45,9 +45,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     f32 Noise::Perlin(f32 x, f32 y, f32 z) {
 
-        const f32 _x = Mathf::Floor(x);
-        const f32 _y = Mathf::Floor(y);
-        const f32 _z = Mathf::Floor(z);
+        const f32 _x = Math::Floor(x);
+        const f32 _y = Math::Floor(y);
+        const f32 _z = Math::Floor(z);
 
         const s32 ix = static_cast<s32>(_x) & 255;
         const s32 iy = static_cast<s32>(_y) & 255;
@@ -79,15 +79,15 @@ namespace ob::core {
         const f32 p6 = grad(s_perm[(AB + 1) & 255], fx, fy - 1, fz - 1);
         const f32 p7 = grad(s_perm[(BB + 1) & 255], fx - 1, fy - 1, fz - 1);
 
-        const f32 q0 = Mathf::Lerp(p0, p1, u);
-        const f32 q1 = Mathf::Lerp(p2, p3, u);
-        const f32 q2 = Mathf::Lerp(p4, p5, u);
-        const f32 q3 = Mathf::Lerp(p6, p7, u);
+        const f32 q0 = Math::Lerp(p0, p1, u);
+        const f32 q1 = Math::Lerp(p2, p3, u);
+        const f32 q2 = Math::Lerp(p4, p5, u);
+        const f32 q3 = Math::Lerp(p6, p7, u);
 
-        const f32 r0 = Mathf::Lerp(q0, q1, v);
-        const f32 r1 = Mathf::Lerp(q2, q3, v);
+        const f32 r0 = Math::Lerp(q0, q1, v);
+        const f32 r1 = Math::Lerp(q2, q3, v);
 
-        return Mathf::Lerp(r0, r1, w);
+        return Math::Lerp(r0, r1, w);
     }
 
     //@―---------------------------------------------------------------------------

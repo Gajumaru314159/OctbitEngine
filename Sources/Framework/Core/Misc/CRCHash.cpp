@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Misc/CRCHash.h>
-
+#include <gsl/gsl>
 #include <string>
 
 namespace ob::core {

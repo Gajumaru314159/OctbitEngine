@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "MimallocHeap.h"
+#include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {
 

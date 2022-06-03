@@ -69,11 +69,11 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Color HSV::toColor()const {
         // 色相は循環可
-        auto clamp_h = Mathf::Fract(1.0f + Mathf::Fract(h));
+        auto clamp_h = Math::Fract(1.0f + Math::Fract(h));
 
         f32 c = v * s;
-        f32 hp = Mathf::Fract(clamp_h) * 6.0f;
-        f32 x = c * (1.0f - Mathf::Abs(Mathf::Fract(hp * 0.5f) * 2.0f - 1.0f));
+        f32 hp = Math::Fract(clamp_h) * 6.0f;
+        f32 x = c * (1.0f - Math::Abs(Math::Fract(hp * 0.5f) * 2.0f - 1.0f));
         f32 m = v - c;
 
         if (hp < 1.0f)return Color(c + m, x + m, 0 + m, a);

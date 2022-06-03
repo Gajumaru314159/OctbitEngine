@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Mathf.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Math.h>
+#include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Graphic/Color.h>
 
 namespace ob::core {
@@ -136,7 +136,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      等価判定(許容誤差指定)
         //@―---------------------------------------------------------------------------
-        bool equals(const HSV& another, f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        bool equals(const HSV& another, f32 tolerance = Math::TOLERANCE)const noexcept;
 
     public:
 
@@ -230,10 +230,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool HSV::operator == (const HSV& another) const noexcept {
         return
-            Mathf::IsNearEquals(h, another.h) &&
-            Mathf::IsNearEquals(s, another.s) &&
-            Mathf::IsNearEquals(v, another.v) &&
-            Mathf::IsNearEquals(a, another.a);
+            Math::IsNearEquals(h, another.h) &&
+            Math::IsNearEquals(s, another.s) &&
+            Math::IsNearEquals(v, another.v) &&
+            Math::IsNearEquals(a, another.a);
     }
 
 
@@ -266,20 +266,20 @@ namespace ob::core {
     //! @brief      カラー要素を0.0～にクランプ
     //@―---------------------------------------------------------------------------
     inline void HSV::clamp() noexcept {
-        h = Mathf::Max(h, 0.0f);
-        s = Mathf::Max(s, 0.0f);
-        v = Mathf::Max(v, 0.0f);
-        a = Mathf::Clamp01(a);
+        h = Math::Max(h, 0.0f);
+        s = Math::Max(s, 0.0f);
+        v = Math::Max(v, 0.0f);
+        a = Math::Clamp01(a);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～1.0にクランプ
     //@―---------------------------------------------------------------------------
     inline void HSV::clamp01() noexcept {
-        h = Mathf::Clamp01(h);
-        s = Mathf::Clamp01(s);
-        v = Mathf::Clamp01(v);
-        a = Mathf::Clamp01(a);
+        h = Math::Clamp01(h);
+        s = Math::Clamp01(s);
+        v = Math::Clamp01(v);
+        a = Math::Clamp01(a);
     }
 
 
@@ -288,10 +288,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool HSV::equals(const HSV& another, f32 tolerance)const noexcept {
         return
-            Mathf::IsNearEquals(h, another.h, tolerance) &&
-            Mathf::IsNearEquals(s, another.s, tolerance) &&
-            Mathf::IsNearEquals(v, another.v, tolerance) &&
-            Mathf::IsNearEquals(a, another.a, tolerance);
+            Math::IsNearEquals(h, another.h, tolerance) &&
+            Math::IsNearEquals(s, another.s, tolerance) &&
+            Math::IsNearEquals(v, another.v, tolerance) &&
+            Math::IsNearEquals(a, another.a, tolerance);
     }
 
 
@@ -306,10 +306,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline HSV HSV::Lerp(const HSV& a, const HSV& b, f32 t) noexcept {
         return HSV(
-            Mathf::Lerp(a.h, b.h, t),
-            Mathf::Lerp(a.s, b.s, t),
-            Mathf::Lerp(a.v, b.v, t),
-            Mathf::Lerp(a.a, b.a, t)
+            Math::Lerp(a.h, b.h, t),
+            Math::Lerp(a.s, b.s, t),
+            Math::Lerp(a.v, b.v, t),
+            Math::Lerp(a.a, b.a, t)
         );
     }
 

@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Utility/GraphicObjectHolder.h>
 #include <Framework/Graphic/Types/CommandListDesc.h>
+#include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Core/Geometory/Viewport.h>
 
 namespace ob::graphic {
@@ -120,14 +121,14 @@ namespace ob::graphic {
         void setRootDesciptorTable(const struct SetDescriptorTableParam*, s32 num);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      インデックスありで描画
+        //! @brief      描画
         //@―---------------------------------------------------------------------------
-        void drawIndexedInstanced();
+        void draw(const DrawParam&);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      インデックスなしで描画
+        //! @brief      インデックス描画
         //@―---------------------------------------------------------------------------
-        void drawInstanced();
+        void drawIndexed(const DrawIndexedParam&);
 
     };
 

@@ -5,7 +5,7 @@
 //***********************************************************
 #include "ShaderImpl.h"
 #include <d3dcompiler.h>
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/Graphic/Shader.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>

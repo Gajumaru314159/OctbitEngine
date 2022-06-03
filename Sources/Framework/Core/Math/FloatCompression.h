@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vectors.h>
 
 
 namespace ob::core {

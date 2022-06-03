@@ -5,11 +5,12 @@
 //***********************************************************
 #include <Framework/Core/Math/Matrix.h>
 
-#include <Framework/Core/Math/Mathf.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Math.h>
+#include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Geometory/Frustum.h>
+#include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {
 
@@ -37,7 +38,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     bool Matrix::operator == (const Matrix& v) const {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++) {
-            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
+            if (Math::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
         }
         return true;
     }
@@ -224,12 +225,12 @@ namespace ob::core {
     //! @param z Z軸の回転量
     //@―---------------------------------------------------------------------------
     void Matrix::rotate(const f32 x, const f32 y, const f32 z) {
-        const f32 sr = Mathf::SinD(x);
-        const f32 cr = Mathf::CosD(x);
-        const f32 sp = Mathf::SinD(y);
-        const f32 cp = Mathf::CosD(y);
-        const f32 sy = Mathf::SinD(z);
-        const f32 cy = Mathf::CosD(z);
+        const f32 sr = Math::SinD(x);
+        const f32 cr = Math::CosD(x);
+        const f32 sp = Math::SinD(y);
+        const f32 cp = Math::CosD(y);
+        const f32 sy = Math::SinD(z);
+        const f32 cy = Math::CosD(z);
 
         Matrix mat(
             cy * cp, sy * cp, -sp, 0,
@@ -305,7 +306,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     bool Matrix::getInverse(Matrix& dest)const {
         f32 det = getDeterminant();
-        if (Mathf::Abs(det) <= Mathf::EPSILON)return false;
+        if (Math::Abs(det) <= Math::EPSILON)return false;
 
         f32 invDet = 1.0f / det;
         Matrix temp;
@@ -457,7 +458,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Matrix MatrixHelper::CreatePerspective(const f32 fov, const f32 aspect, const f32 zNear, const f32 zFar) {
         Matrix matrix;
-        f32 f = 1.0f / Mathf::Tan(Mathf::Degrees(fov * 0.5f));
+        f32 f = 1.0f / Math::Tan(Math::Degrees(fov * 0.5f));
         f32 dz = zFar - zNear;
         matrix.m[0][0] = f / aspect;
         matrix.m[1][1] = f;

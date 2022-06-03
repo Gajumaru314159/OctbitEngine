@@ -49,7 +49,6 @@ endif()
 
 
 # Frameworkプロジェクト読み込み
-add_subdirectory ("Sources/Framework/Foundation")
 add_subdirectory ("Sources/Framework/Singleton")
 add_subdirectory ("Sources/Framework/Core")
 add_subdirectory ("Sources/Framework/Platform")
@@ -61,7 +60,6 @@ add_subdirectory ("Sources/Plugins/GraphicDirectX12")
 add_subdirectory ("Sources/Plugins/GraphicVulkan")
 
 # テストプロジェクト読み込み
-add_subdirectory ("Sources/Test/Framework/Foundation")
 add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み

@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
 
 namespace ob::core {
 
@@ -41,8 +42,8 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     struct Log {
         LogType         type;               //!< タイプ
-        const Char* category = nullptr;   //!< カテゴリ
-        const Char* message = nullptr;    //!< メッセージ
+        const Char*     category = nullptr; //!< カテゴリ
+        const Char*     message = nullptr;  //!< メッセージ
         SourceLocation  sourceLocation;     //!< ログが発生したソースコード上の位置
                                             //   時間         ->プラットフォーム依存になるので受け取り段階で処理する?
                                             //   スレッドID

@@ -5,15 +5,12 @@
 //***********************************************************
 #pragma once
 #include <Framework/Singleton/Singleton.h>
+#include <Framework/Core/Template/include.h>
+#include <Framework/Core/String/Format.h>
+#include <Framework/Core/Thread/Mutex.h>
 #include "LogType.h"
 #include "ILogEvent.h"
 
-//! @cond
-// Check if fmt/format.h compiles with the X11 index macro defined.
-#define index(x, y) no nice things
-#include <fmt/format.h>
-#undef index
-//! @endcond
 
 namespace ob::core {
 
@@ -69,7 +66,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename... Args>
         void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
-            const String message = fmt::format(pFormat, ob::forward<Args>(args)...);
+            const String message = Format(StringView(pFormat), ob::forward<Args>(args)...);
             addLog(type, sourceLocation, category, message.c_str());
         }
 
@@ -88,7 +85,7 @@ namespace ob::core {
 
     private:
 
-        mutex           m_mutex;
+        Mutex           m_mutex;
         EventNotifier   m_notifier;
     };
 

@@ -1,11 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		ログ出力
 //! @author		Gajumaru
 //***********************************************************
 #include "Logger.h"
 #include "LogType.h"
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Core/Thread/ScopeLock.h>
 #include <MagicEnum/magic_enum.hpp>
 
 namespace ob::core {
@@ -29,7 +30,7 @@ namespace ob::core {
 
         // 登録されたすべてのログリスナに通知
         {
-            lock_guard lock(m_mutex);
+            ScopeLock<decltype(m_mutex)> lock(m_mutex);
             m_notifier.invoke(log);
         }
 
@@ -40,15 +41,8 @@ namespace ob::core {
         }
         logTypeName[logTypeNameAscii.size()] = TC('\0');
 
-        //auto msg = fmt::format(TC("[{0}][{1}] {2} [{3}({4})] [::{5}()]"),
-        //    logTypeName,
-        //    category,
-        //    pMessage,
-        //    sourceLocation.filePath,
-        //    sourceLocation.line,
-        //    sourceLocation.functionName);
 
-        auto msg = fmt::format(TC("[{0}][{1}] {2}"),
+        auto msg = Format(StringView(TC("[{0}][{1}] {2}")),
             logTypeName,
             category,
             pMessage);

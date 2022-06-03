@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include "Arguments.h"
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 
 
 #ifdef OS_WINDOWS

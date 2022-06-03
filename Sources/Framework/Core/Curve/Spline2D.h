@@ -4,14 +4,15 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vector2.h>
+#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief  スプラインカーブ
     //@―---------------------------------------------------------------------------
-    class OB_API Spline2D {
+    class Spline2D {
     public:
 
         using point_type = Vec2;                //!< ポイント型

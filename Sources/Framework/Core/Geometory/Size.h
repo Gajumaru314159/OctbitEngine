@@ -1,9 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		サイズ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
 
 namespace ob::core {
 

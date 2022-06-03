@@ -9,5 +9,4 @@
 //============================================
 // System Base
 //============================================
-#include <Framework/Foundation.h>
 #include <Framework/Core.h>

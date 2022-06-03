@@ -5,8 +5,8 @@
 //***********************************************************
 #include <Framework/Core/Math/Affine.h>
 
-#include <Framework/Core/Math/Mathf.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Math.h>
+#include <Framework/Core/Math/Vector3.h>
 #include <Framework/Core/Math/Quaternion.h>
 /*
 namespace ob::core
@@ -39,7 +39,7 @@ namespace ob::core
     {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++)
         {
-            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
+            if (Math::IsNearEquals(m[y][x], v.m[y][x]) == false)return false;
         }
         return true;
     }
@@ -52,7 +52,7 @@ namespace ob::core
     {
         for (u32 y = 0; y < ROW; y++)for (u32 x = 0; x < COL; x++)
         {
-            if (Mathf::IsNearEquals(m[y][x], v.m[y][x]) == false)return true;
+            if (Math::IsNearEquals(m[y][x], v.m[y][x]) == false)return true;
         }
         return false;
     }
@@ -216,12 +216,12 @@ namespace ob::core
     //@―---------------------------------------------------------------------------
     void Affine::Rotate(const f32 x, const f32 y, const f32 z)
     {
-        const f32 sr = Mathf::Sin(x);
-        const f32 cr = Mathf::Cos(x);
-        const f32 sp = Mathf::Sin(y);
-        const f32 cp = Mathf::Cos(y);
-        const f32 sy = Mathf::Sin(z);
-        const f32 cy = Mathf::Cos(z);
+        const f32 sr = Math::Sin(x);
+        const f32 cr = Math::Cos(x);
+        const f32 sp = Math::Sin(y);
+        const f32 cp = Math::Cos(y);
+        const f32 sy = Math::Sin(z);
+        const f32 cy = Math::Cos(z);
 
         Affine mat(
             cy * cp, sy * cp, -sp, 0,
@@ -291,7 +291,7 @@ namespace ob::core
     {
         Affine ret;
         f32 det = GetDeterminant();
-        if (Mathf::Abs(det) <= Mathf::EPSILON)
+        if (Math::Abs(det) <= Math::EPSILON)
         {
             return ret;
         }
@@ -366,7 +366,7 @@ namespace ob::core
     Affine AffineHelper::Perspective(const f32 fov, const f32 aspect, const f32 zNear, const f32 zFar)
     {
         Affine Affine;
-        f32 f = 1.0f / Mathf::Tan(Mathf::Radians(fov * 0.5f));
+        f32 f = 1.0f / Math::Tan(Math::Radians(fov * 0.5f));
         f32 dz = zFar - zNear;
         Affine.m[0][0] = f / aspect;
         Affine.m[1][1] = f;

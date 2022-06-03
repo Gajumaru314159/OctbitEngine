@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Foundation/Base/Platform.h>
+#include <Framework/Core/HAL/Platform.h>
 
 #if defined(OS_WINDOWS)
 #include "Windows/SystemHeap.h"

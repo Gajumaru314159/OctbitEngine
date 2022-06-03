@@ -6,9 +6,7 @@ message("Load project [${PROJECT_NAME}]")
 # ソースコードの登録
 #------------------------------------------------------------------------------
 LOAD_FILES(out_sources)
-add_library(${PROJECT_NAME} STATIC ${out_sources})
-
-SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
+add_library(${PROJECT_NAME} STATIC ${out_sources} ${gsl_sources})
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
@@ -17,12 +15,16 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR 
     "${OCTBIT_SOURCE_PATH}"
+    "${OCTBIT_THIRD_PARTY_PATH}/gsl/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/fmt/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/MagicEnum/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/utfcpp/include"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
-    Foundation
+    "${OCTBIT_THIRD_PARTY_PATH}/fmt/lib/${OB_CONFIGURATION}/fmt.lib"
     Singleton
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})

@@ -4,10 +4,10 @@
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Quaternion.h>
-#include <Framework/Core/Math/Mathf.h>
+#include <Framework/Core/Math/Math.h>
 #include <Framework/Core/Math/Matrix.h>
 #include <Framework/Core/Math/Rotation.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vectors.h>
 
 namespace ob::core {
 
@@ -68,12 +68,12 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     void Quat::set(f32 angle, const Vec3& axis) {
         f32 s, c;
-        Mathf::SinCos(Mathf::Degrees(angle * 0.5f), s, c);
+        Math::SinCos(Math::Degrees(angle * 0.5f), s, c);
         x = axis.x * s;
         y = axis.y * s;
         z = axis.z * s;
         w = c;
-        f32 magDiv = 1.0f / Mathf::Sqrt(x * x + y * y + z * z + w * w);
+        f32 magDiv = 1.0f / Math::Sqrt(x * x + y * y + z * z + w * w);
         x /= magDiv;
         y /= magDiv;
         z /= magDiv;
@@ -168,21 +168,21 @@ namespace ob::core {
     Rot Quat::getRot()const {
         f32 tx, ty, tz;
         f32 sx = -2 * (y * z - w * x);
-        if (Mathf::Abs(sx - 1.0f) < Mathf::EPSILON) {
-            tx = Mathf::HALF_PI;
-            ty = Mathf::Atan2(2 * (x * y - w * z), w * w + x * x - y * y - z * z);
+        if (Math::Abs(sx - 1.0f) < Math::EPSILON) {
+            tx = Math::HALF_PI;
+            ty = Math::Atan2(2 * (x * y - w * z), w * w + x * x - y * y - z * z);
             tz = 0;
-        } else if (Mathf::Abs(sx + 1.0f) < Mathf::EPSILON) {
-            tx = -Mathf::HALF_PI;
-            ty = Mathf::Atan2(-2 * (x * y - w * z), w * w + x * x - y * y - z * z);
+        } else if (Math::Abs(sx + 1.0f) < Math::EPSILON) {
+            tx = -Math::HALF_PI;
+            ty = Math::Atan2(-2 * (x * y - w * z), w * w + x * x - y * y - z * z);
             tz = 0;
         } else {
-            tx = Mathf::Asin(-2 * (y * z - w * x));
-            ty = Mathf::Atan2(2 * (w * y + x * z), w * w - x * x - y * y + z * z);
-            tz = Mathf::Atan2(2 * (x * y + w * z), w * w - x * x + y * y - z * z);
+            tx = Math::Asin(-2 * (y * z - w * x));
+            ty = Math::Atan2(2 * (w * y + x * z), w * w - x * x - y * y + z * z);
+            tz = Math::Atan2(2 * (x * y + w * z), w * w - x * x + y * y - z * z);
         }
 
-        return Rot(Mathf::Degrees(tx), Mathf::Degrees(ty), Mathf::Degrees(tz));
+        return Rot(Math::Degrees(tx), Math::Degrees(ty), Math::Degrees(tz));
     }
 
 
@@ -192,8 +192,8 @@ namespace ob::core {
     //! @return 回転量が0の場合はVector3(0.0f,1.0f,0.0f)を返す。
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getAxis() const {
-        f32 sin = Mathf::Sqrt(1.0f - w * w);
-        if (sin <= Mathf::EPSILON)return Vec3(0.0f, 1.0f, 0.0f);
+        f32 sin = Math::Sqrt(1.0f - w * w);
+        if (sin <= Math::EPSILON)return Vec3(0.0f, 1.0f, 0.0f);
         f32 div = 1.0f / sin;
         return Vec3(x * div, y * div, z * div);
     }
@@ -203,14 +203,14 @@ namespace ob::core {
     //! @brief 回転軸と回転量を取得
     //@―---------------------------------------------------------------------------
     void Quat::toAxisAndAngle(f32& angle, Vec3& axis) const {
-        f32 sin = Mathf::Sqrt(1.0f - w * w);
-        if (sin <= Mathf::EPSILON) {
+        f32 sin = Math::Sqrt(1.0f - w * w);
+        if (sin <= Math::EPSILON) {
             angle = 0.0f;
             axis = Vec3::up;
         }
         f32 div = 1.0f / sin;
 
-        angle = Mathf::Radians(Mathf::Acos(w) * 2.0f);
+        angle = Math::Radians(Math::Acos(w) * 2.0f);
         axis.set(x * div, y * div, z * div);
     }
 
@@ -256,13 +256,13 @@ namespace ob::core {
         Vec3 tar = target.unitVec();
         Vec3 norm(0, 0, 1);
         f32 dot = Vec3::Dot(norm, tar);
-        f32 theta = Mathf::Acos(dot);
+        f32 theta = Math::Acos(dot);
         Vec3 cross = Vec3::Cross(norm, tar);
         cross.normalize();
         theta = theta / 2;
 
-        f32 sin = Mathf::Sin(theta);
-        f32 cos = Mathf::Cos(theta);
+        f32 sin = Math::Sin(theta);
+        f32 cos = Math::Cos(theta);
         return Quat(cross.x * sin, cross.y * sin, cross.z * sin, cos);
     }
 
@@ -285,16 +285,16 @@ namespace ob::core {
         if (1.0f <= t)return b;
 
         f32 dot = Quat::Dot(a, b);
-        f32 theta = Mathf::Acos(dot);
+        f32 theta = Math::Acos(dot);
 
         if (theta < 0.0)theta = -theta;
 
-        f32 st = Mathf::Sin(theta);
+        f32 st = Math::Sin(theta);
 
         if (st == 0)return a;
 
-        f32 sut = Mathf::Sin(theta * t);
-        f32 sout = Mathf::Sin(theta * (1.0f - t));
+        f32 sut = Math::Sin(theta * t);
+        f32 sout = Math::Sin(theta * (1.0f - t));
 
         f32 coeff1 = sout / st;
         f32 coeff2 = sut / st;

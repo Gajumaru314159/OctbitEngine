@@ -29,6 +29,22 @@ namespace ob::graphic {
         }
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //! 
+    //! @param desc テクスチャ定義
+    //! @param name オブジェクト名
+    //@―---------------------------------------------------------------------------
+    Texture::Texture(const BlobView& blob, StringView name){
+        //m_pImpl = Device::Get()->createTexture(blob);
+        //OB_CHECK_ASSERT_EXPR(m_pImpl);
+        //m_pImpl->setName(name);
+        //if (!m_pImpl->isValid()) {
+        //    LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗 [name={}]", name);
+        //    release();
+        //}
+    }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ定義を取得

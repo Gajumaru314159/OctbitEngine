@@ -11,7 +11,7 @@
 #include <Framework/Graphic/Interface/IGraphicModule.h>
 #include <Framework/Graphic/Interface/IDevice.h>
 #include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 
 #include <MagicEnum/magic_enum.hpp>
 

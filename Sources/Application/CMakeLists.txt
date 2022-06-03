@@ -23,7 +23,6 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
-    Foundation
     Core
     Platform
     Graphic

@@ -4,10 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Mathf.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Math.h>
+#include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Graphic/ColorTypes.h>
 #include <Framework/Core/Graphic/IntColor.h>
+#include <Framework/Core/String/String.h>
 
 namespace ob::core {
 
@@ -270,7 +271,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      等価判定(許容誤差指定)
         //@―---------------------------------------------------------------------------
-        bool equals(const Color& another, f32 tolerance = Mathf::TOLERANCE)const noexcept;
+        bool equals(const Color& another, f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
     public:
@@ -386,10 +387,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Color::operator == (const Color& another) const noexcept {
         return
-            Mathf::IsNearEquals(r, another.r) &&
-            Mathf::IsNearEquals(g, another.g) &&
-            Mathf::IsNearEquals(b, another.b) &&
-            Mathf::IsNearEquals(a, another.a);
+            Math::IsNearEquals(r, another.r) &&
+            Math::IsNearEquals(g, another.g) &&
+            Math::IsNearEquals(b, another.b) &&
+            Math::IsNearEquals(a, another.a);
     }
 
 
@@ -547,20 +548,20 @@ namespace ob::core {
     //! @brief      カラー要素を0.0～にクランプ
     //@―---------------------------------------------------------------------------
     inline void Color::clamp() noexcept {
-        r = Mathf::Max(r, 0.0f);
-        g = Mathf::Max(g, 0.0f);
-        b = Mathf::Max(b, 0.0f);
-        a = Mathf::Clamp01(a);
+        r = Math::Max(r, 0.0f);
+        g = Math::Max(g, 0.0f);
+        b = Math::Max(b, 0.0f);
+        a = Math::Clamp01(a);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～1.0にクランプ
     //@―---------------------------------------------------------------------------
     inline void Color::clamp01() noexcept {
-        r = Mathf::Clamp01(r);
-        g = Mathf::Clamp01(g);
-        b = Mathf::Clamp01(b);
-        a = Mathf::Clamp01(a);
+        r = Math::Clamp01(r);
+        g = Math::Clamp01(g);
+        b = Math::Clamp01(b);
+        a = Math::Clamp01(a);
     }
 
 
@@ -568,7 +569,7 @@ namespace ob::core {
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
     inline f32 Color::minComponent()const noexcept {
-        return Mathf::Min(r, g, b);
+        return Math::Min(r, g, b);
     }
 
 
@@ -576,7 +577,7 @@ namespace ob::core {
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
     inline f32 Color::maxComponent()const noexcept {
-        return Mathf::Max(r, g, b);
+        return Math::Max(r, g, b);
     }
 
 
@@ -615,10 +616,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Color::equals(const Color& another, f32 tolerance)const noexcept {
         return
-            Mathf::IsNearEquals(r, another.r, tolerance) &&
-            Mathf::IsNearEquals(g, another.g, tolerance) &&
-            Mathf::IsNearEquals(b, another.b, tolerance) &&
-            Mathf::IsNearEquals(a, another.a, tolerance);
+            Math::IsNearEquals(r, another.r, tolerance) &&
+            Math::IsNearEquals(g, another.g, tolerance) &&
+            Math::IsNearEquals(b, another.b, tolerance) &&
+            Math::IsNearEquals(a, another.a, tolerance);
     }
 
     //! @endcond

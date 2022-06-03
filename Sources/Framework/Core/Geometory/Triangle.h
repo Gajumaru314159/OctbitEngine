@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Vector3.h>
 
 namespace ob::core {
 
@@ -235,7 +235,7 @@ namespace ob::core {
         f32 a = Vec3::Dist(p1, p2);
         f32 b = Vec3::Dist(p2, p0);
         f32 c = Vec3::Dist(p0, p1);
-        if (a + b + c < Mathf::EPSILON)return p0;
+        if (a + b + c < Math::EPSILON)return p0;
         return (p0 * a + p1 * b + p2 * c) / (a + b + c);
     }
 
@@ -259,7 +259,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline f32 Triangle::area()const noexcept {
         f32 abac = Vec3::Dot(p1 - p0, p2 - p0);
-        return Mathf::Sqrt(Vec3::SqrDist(p0, p1) * Vec3::SqrDist(p0, p2) - abac * abac) * 0.5f;
+        return Math::Sqrt(Vec3::SqrDist(p0, p1) * Vec3::SqrDist(p0, p2) - abac * abac) * 0.5f;
     }
 
 

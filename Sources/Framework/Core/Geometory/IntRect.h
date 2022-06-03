@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/IntVector2.h>
-#include <Framework/Core/Math/Vector/Vector2.h>
+#include <Framework/Core/Math/IntVector2.h>
+#include <Framework/Core/Math/Vector2.h>
 
 namespace ob::core {
 

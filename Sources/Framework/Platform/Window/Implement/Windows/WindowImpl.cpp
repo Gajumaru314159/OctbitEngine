@@ -5,7 +5,7 @@
 //***********************************************************
 #ifdef OS_WINDOWS
 #include "WindowImpl.h"
-#include <Framework/Foundation/String/StringEncoder.h>
+#include <Framework/Core/String/StringEncoder.h>
 
 namespace ob::platform {
 

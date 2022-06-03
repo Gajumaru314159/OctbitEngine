@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/Vector2.h>
+#include <Framework/Core/Math/Vector2.h>
 #include <Framework/Core/Geometory/Rect.h>
 
 namespace ob::core {
@@ -158,10 +158,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Margin::operator==(const Margin& another)const noexcept {
         return
-            Mathf::IsNearEquals(left, another.left) &&
-            Mathf::IsNearEquals(top, another.top) &&
-            Mathf::IsNearEquals(right, another.right) &&
-            Mathf::IsNearEquals(bottom, another.bottom);
+            Math::IsNearEquals(left, another.left) &&
+            Math::IsNearEquals(top, another.top) &&
+            Math::IsNearEquals(right, another.right) &&
+            Math::IsNearEquals(bottom, another.bottom);
     }
 
 

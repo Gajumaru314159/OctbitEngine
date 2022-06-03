@@ -115,8 +115,8 @@ namespace ob::graphic::dx12 {
 		ComPtr<ID3D12DescriptorHeap> m_heap;
 		u32	m_descriptorSize;
 
-		using mutex_type = mutex;
-		using lock_guard_type = lock_guard<mutex_type>;
+		using mutex_type = Mutex;
+		using lock_guard_type = ScopeLock<mutex_type>;
 		mutex_type		m_mutex;		//!< ミューテックス
 
 		const DescriptorHeapType m_type;

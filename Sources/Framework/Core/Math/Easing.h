@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 

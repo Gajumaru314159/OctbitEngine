@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
+#include <typeindex>
 
 #if defined(OB_SINGLETON_BUILD)
 #define OB_FND_API DLL_EXPORT
@@ -31,7 +33,7 @@ extern "C"
         void*& dest);
 }
 
-namespace ob::foundation {
+namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief          シングルトン・パターン
@@ -108,4 +110,4 @@ namespace ob::foundation {
     }
 
     //! @endcond
-}// namespcae ob::foundation
+}// namespcae ob::core

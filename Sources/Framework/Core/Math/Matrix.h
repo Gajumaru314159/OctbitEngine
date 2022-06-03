@@ -4,6 +4,8 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CoreTypes.h>
+#include <memory>
 
 namespace ob::core {
 

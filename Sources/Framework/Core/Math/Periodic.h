@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Mathf.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -18,7 +18,7 @@ namespace ob::core {
         //! @brief  サインカーブに従って周期的に[-1,1]の値を返す
         //@―---------------------------------------------------------------------------
         f32 Sin1_1(f32 period, f32 t)noexcept {
-            return Mathf::Sin(t * Mathf::TWO_PI / period);
+            return Math::Sin(t * Math::TWO_PI / period);
         }
 
 
@@ -58,7 +58,7 @@ namespace ob::core {
         //! @brief  三角波に従って周期的に[0,1]の値を返す
         //@―---------------------------------------------------------------------------
         f32 Triangle0_1(f32 period, f32 t)noexcept {
-            return 1.0f - Mathf::Abs(Mathf::Fract(t / period) * 2.0f - 1.0f);
+            return 1.0f - Math::Abs(Math::Fract(t / period) * 2.0f - 1.0f);
         }
 
 
@@ -74,7 +74,7 @@ namespace ob::core {
         //! @brief  鋸波に従って周期的に[0,1]の値を返す
         //@―---------------------------------------------------------------------------
         f32 Sawthooth0_1(f32 period, f32 t)noexcept {
-            return Mathf::Fract(t / period);
+            return Math::Fract(t / period);
         }
 
 

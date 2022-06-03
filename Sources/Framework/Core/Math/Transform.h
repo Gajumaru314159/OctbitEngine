@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/Vector3.h>
+#include <Framework/Core/Math/Vector3.h>
 #include <Framework/Core/Math/Matrix.h>
 #include <Framework/Core/Math/Rotation.h>
 

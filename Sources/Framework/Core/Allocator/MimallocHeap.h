@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Allocator/Heap.h>
+#include <Framework/Core/Thread/Mutex.h>
 
 namespace ob::core {
 
@@ -89,23 +90,13 @@ namespace ob::core {
 
     private:
 
-        mutex m_mutex;
+        using lock_type = ScopeLock<Mutex>;
+
+        Mutex m_mutex;
 
         Char* m_pName;
 
 
     };
-
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-
-    //@―---------------------------------------------------------------------------
-
 
 }// namespcae ob

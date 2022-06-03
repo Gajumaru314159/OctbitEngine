@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Vector/Vector2.h>
+#include <Framework/Core/Math/Vector2.h>
 
 namespace ob::core {
 
@@ -152,7 +152,7 @@ namespace ob::core {
     //! @brief          面積を取得
     //@―---------------------------------------------------------------------------
     inline f32 Circle::area()const noexcept {
-        return radius * radius * Mathf::PI;
+        return radius * radius * Math::PI;
     }
 
 
@@ -160,7 +160,7 @@ namespace ob::core {
     //! @brief          円周の長さを取得
     //@―---------------------------------------------------------------------------
     inline f32 Circle::perimeter()const noexcept {
-        return 2.0f * Mathf::PI;
+        return 2.0f * Math::PI;
     }
 
 
@@ -173,7 +173,7 @@ namespace ob::core {
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
     inline Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
-        return Circle(Vec2::Lerp(a.center, b.center, t), Mathf::Lerp(a.radius, b.radius, t));
+        return Circle(Vec2::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t));
     }
 
     //! @endcond

@@ -7,8 +7,8 @@
 #include <Framework/Core/Graphic/HSV.h>
 #include <Framework/Core/Graphic/IntColor.h>
 
-#include <Framework/Core/Math/Mathf.h>
-#include <Framework/Core/Math/Vector/include.h>
+#include <Framework/Core/Math/Math.h>
+#include <Framework/Core/Math/Vectors.h>
 
 namespace ob::core {
 
@@ -87,7 +87,7 @@ namespace ob::core {
     Color Color::toLinear()const {
         Color linear;
         auto convert = [](f32 value) {
-            return value <= 0.04045f ? value / 12.92f : Mathf::Pow(value + 0.055f, 2.4f);
+            return value <= 0.04045f ? value / 12.92f : Math::Pow(value + 0.055f, 2.4f);
         };
 
         linear.r = convert(r);
@@ -104,7 +104,7 @@ namespace ob::core {
     Color Color::toSRGB()const {
         Color linear;
         auto convert = [](f32 value) {
-            return value <= 0.0031308f ? value * 12.92f : Mathf::Pow(value, 1.0f / 2.4f) * 1.055f - 0.055f;
+            return value <= 0.0031308f ? value * 12.92f : Math::Pow(value, 1.0f / 2.4f) * 1.055f - 0.055f;
         };
 
         linear.r = convert(r);
