@@ -14,9 +14,9 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
 	//@―---------------------------------------------------------------------------
-	TimeSpan::TimeSpan(const DataTime& from, const DataTime& to) noexcept {
+	TimeSpan::TimeSpan(const DateTime& from, const DateTime& to) noexcept {
 
-		auto getDays = [](const DataTime& dt) {
+		auto getDays = [](const DateTime& dt) {
 			return dt.year * 365 + (dt.year/4) - (dt.year / 100) + (dt.year / 400);
 		};
 

@@ -12,14 +12,14 @@ namespace ob::core {
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
 
-	DataTime& DataTime::normalize() {
+	DateTime& DateTime::normalize() {
 		//TODO DataTimeの正規化
 		return *this;
 	}
 
-	DataTime DataTime::Now() {
+	DateTime DateTime::Now() {
 		using namespace std::chrono;
-		DataTime dt{};
+		DateTime dt{};
 
 #ifdef OS_WINDOWS
 		system_clock::time_point tp = system_clock::now();

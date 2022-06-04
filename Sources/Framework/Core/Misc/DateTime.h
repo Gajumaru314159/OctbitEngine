@@ -27,7 +27,7 @@ namespace ob::core {
 	//! 
 	//! @details	各種関数は時刻が正規化されているものとして計算されます。
 	//@―---------------------------------------------------------------------------
-	struct DataTime {
+	struct DateTime {
 	public:
 		s32			year = 0;						//!< 年
 		s32			month = 1;						//!< 月
@@ -37,7 +37,7 @@ namespace ob::core {
 		s32			second = 0;						//!< 秒
 		s32			milliSeconds = 0;				//!< ミリ秒
 	public:
-		DataTime& normalize();
+		DateTime& normalize();
 		bool isMorning()const;
 		bool isAfternoon()const;
 		s32 daysInYear();
@@ -46,7 +46,7 @@ namespace ob::core {
 	public:
 		static s32 DayInMonth(s32 month, s32 year);
 
-		static DataTime Now();						//!< システムの現在時刻を取得
+		static DateTime Now();						//!< システムの現在時刻を取得
 	};
 
 
@@ -55,14 +55,14 @@ namespace ob::core {
 	//===============================================================
 	//! @cond
 
-	inline bool DataTime::isMorning()const {
-		return DataTime(*this).normalize().hour < 12;
+	inline bool DateTime::isMorning()const {
+		return DateTime(*this).normalize().hour < 12;
 	}
-	inline bool DataTime::isAfternoon()const {
+	inline bool DateTime::isAfternoon()const {
 		return !isMorning();
 	}
 
-	inline s32 DataTime::DayInMonth(s32  month, s32 year) {
+	inline s32 DateTime::DayInMonth(s32  month, s32 year) {
 		switch (month) {
 		case 2:
 			return IsLerpYear(year) ? 29 : 28;
@@ -84,12 +84,12 @@ namespace ob::core {
 		}
 	}
 
-	inline bool DataTime::IsLerpYear(s32 year) {
+	inline bool DateTime::IsLerpYear(s32 year) {
 		return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
 	}
 
 
-	inline s32 DataTime::daysInYear() {
+	inline s32 DateTime::daysInYear() {
 		s32 sum = day;
 		for (s32 m = 1; m < month; ++m) {
 			sum += DayInMonth(m, year);
