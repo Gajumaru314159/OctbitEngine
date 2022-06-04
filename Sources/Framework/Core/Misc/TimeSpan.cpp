@@ -14,6 +14,25 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
 	//@―---------------------------------------------------------------------------
+	TimeSpan::TimeSpan(const DataTime& from, const DataTime& to) noexcept {
+
+		auto getDays = [](const DataTime& dt) {
+			return dt.year * 365 + (dt.year/4) - (dt.year / 100) + (dt.year / 400);
+		};
+
+		*this = 			
+		TimeSpan(
+			getDays(to) - getDays(from),
+			to.hour - from.hour,
+			to.minute - from.minute,
+			to.second - from.second,
+			to.milliSeconds - from.milliSeconds
+		);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  システムを起動してからの時間
+	//@―---------------------------------------------------------------------------
 	TimeSpan TimeSpan::FromSystemLaunch() {
 #ifdef OS_WINDOWS
 		return TimeSpan::MilliSeconds(GetTickCount());

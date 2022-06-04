@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Misc/DataTime.h>
 
 namespace ob::core {
 
@@ -24,6 +25,7 @@ namespace ob::core {
 		TimeSpan() = default;										//!< デフォルトコンストラクタ
 		TimeSpan(s64 ticks) noexcept;								//!< コンストラクタ(Tick初期化)
 		TimeSpan(s32 days, s32 hours, s32 minutes, s32 seconds, s32 milliSeconds) noexcept;	//!< コンストラクタ
+		TimeSpan(const DataTime& from, const DataTime& to) noexcept;	//!< コンストラクタ
 
 
 		//===============================================================
