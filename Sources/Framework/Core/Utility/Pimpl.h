@@ -22,7 +22,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename ...Args>
         Pimpl(Args&&... args) 
-            : m_impl(std::make_unique<T>(std::formard<Args>(args)...))
+            : m_impl(std::make_unique<T>(std::forward<Args>(args)...))
         {}
 
         //@―---------------------------------------------------------------------------
