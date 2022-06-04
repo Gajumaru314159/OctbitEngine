@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Misc/DataTime.h>
+#include <Framework/Core/Misc/DateTime.h>
 #include <chrono>
 
 namespace ob::core {
