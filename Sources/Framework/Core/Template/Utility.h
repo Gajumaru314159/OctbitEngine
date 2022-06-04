@@ -145,4 +145,57 @@ namespace ob::core {
         return 1 << digit;
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値を一番近いアライメントの倍数に増やして合わせる
+    //!
+    //! @param val              位置合わせするアライメント値
+    //! @param alignment        アライメントの値(2の累乗)
+    //! @return                 アラインされた値
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr T align_up(T val, size_t alignment) {
+        return (T)(((size_t)val + alignment - 1) & (~(alignment - 1)));
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値を一番近いアライメントの倍数に減らして合わせる
+    //!
+    //! @param val              位置合わせするアライメント値
+    //! @param alignment        アライメントの値(2の累乗)
+    //! @return                 アラインされた値
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr T align_down(T val, size_t alignment) {
+        return (T)(((size_t)val) & (~(alignment - 1)));
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値を一番近いアライメントの倍数に合わせる
+    //!
+    //! @param val              位置合わせするアライメント値
+    //! @param alignment        アライメントの値(2の累乗)
+    //! @return                 アラインされた値
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr T align_near(T val, size_t alignment) {
+        return (T)((((size_t)val + alignment - 1) / alignment) * alignment);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値がアライメントの倍数か判定
+    //!
+    //! @param val              判定する値
+    //! @param alignment        アライメントの値(2の累乗)
+    //! @retval TRUE            アライメントされている
+    //! @retval FALSE           アライメントされていない
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr bool is_aligned(T val, size_t alignment) {
+        return !((size_t)val & (alignment - 1));
+    }
+
 }// namespcae ob

@@ -51,7 +51,7 @@ namespace ob::core {
 	//! @details	u32 で表せるエラーコードを16進数表記でフォーマットする。
 	//@―---------------------------------------------------------------------------
 	struct ErrorCode {
-		ErrorCode(u32 _code)
+		ErrorCode(u32 code)
 			:code(code) {}
 		u32 code;
 	};

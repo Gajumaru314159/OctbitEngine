@@ -183,19 +183,19 @@ float4 PS_Main(Output i) : SV_TARGET{
             Mesh<Vert> mesh;
             mesh.appendQuad(
                 {Vec4(0,0,0,1),Vec2(0,0)},
-                {Vec4(0.5,0,0,1),Vec2(1,0)},
-                {Vec4(0,0.5,0,1),Vec2(0,1)},
-                {Vec4(0.5,0.5,0,1),Vec2(1,1)}
+                {Vec4(0.5f,0,0,1),Vec2(1,0)},
+                {Vec4(0,0.5f,0,1),Vec2(0,1)},
+                {Vec4(0.5f,0.5f,0,1),Vec2(1,1)}
             );
 
             MeshBuffer meshBuffer(mesh);
 
             Mesh<Vert> mesh2;
             mesh2.appendQuad(
-                { Vec4(0.3,0,0,1),Vec2(0,0) },
-                { Vec4(0.5,0,0,1),Vec2(1,0) },
-                { Vec4(0,0.5,0,1),Vec2(0,1) },
-                { Vec4(0.5,0.5,0,1),Vec2(1,1) }
+                { Vec4(0.3f,0,0,1),Vec2(0,0) },
+                { Vec4(0.5f,0,0,1),Vec2(1,0) },
+                { Vec4(0,0.5f,0,1),Vec2(0,1) },
+                { Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
             );
 
             MeshBuffer meshBuffer2(mesh2);
