@@ -55,14 +55,14 @@ namespace ob::core {
 	//===============================================================
 	//! @cond
 
-	bool DataTime::isMorning()const {
+	inline bool DataTime::isMorning()const {
 		return DataTime(*this).normalize().hour < 12;
 	}
-	bool DataTime::isAfternoon()const {
+	inline bool DataTime::isAfternoon()const {
 		return !isMorning();
 	}
 
-	s32 DataTime::DayInMonth(s32  month, s32 year) {
+	inline s32 DataTime::DayInMonth(s32  month, s32 year) {
 		switch (month) {
 		case 2:
 			return IsLerpYear(year) ? 29 : 28;
@@ -84,12 +84,12 @@ namespace ob::core {
 		}
 	}
 
-	bool DataTime::IsLerpYear(s32 year) {
+	inline bool DataTime::IsLerpYear(s32 year) {
 		return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
 	}
 
 
-	s32 DataTime::daysInYear() {
+	inline s32 DataTime::daysInYear() {
 		s32 sum = day;
 		for (s32 m = 1; m < month; ++m) {
 			sum += DayInMonth(m, year);
