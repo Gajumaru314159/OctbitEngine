@@ -12,6 +12,9 @@ namespace ob::core {
     //! @brief      Pimplユーティリティ
     //! 
     //! @details    unique_ptrからデフォルトコンストラクタ/reset()/release()を削除することでRAIIに対応したPimplを実現する。
+    //!             Pimplを使用するクラスはコンストラクタとデストラクタをソースファイルで実装する必要がある。
+    //!             これはコンストラクタがインライン展開されると翻訳単位にImplの定義が必要なためある。
+    //!             [参照](https://qiita.com/false-git@github/items/79bf1b6acc00dc43d173#comment-9071ab88afe79f2cf834)
     //@―---------------------------------------------------------------------------
     template<class T>
     class Pimpl {
