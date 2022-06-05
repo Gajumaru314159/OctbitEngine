@@ -36,6 +36,7 @@ MACRO(LOAD_FILES result)
 			sources
 			RELATIVE
 			${CMAKE_CURRENT_SOURCE_DIR}
+			"${dir}/*.natvis"
 			"${dir}/*.h"
 			"${dir}/*.cpp"
 			"${dir}/*.md")
