@@ -42,7 +42,7 @@ namespace ob::core {
         logTypeName[logTypeNameAscii.size()] = TC('\0');
 
 
-        auto msg = Format(StringView(TC("[{0}][{1}] {2}")),
+        auto msg = fmt::format(TC("[{0}][{1}] {2}"),
             logTypeName,
             category,
             pMessage);
@@ -50,7 +50,7 @@ namespace ob::core {
         WString ws;
         StringEncoder::Encode(msg, ws);
         ::OutputDebugLog(ws.c_str());
-
+        
         // TODO エラーダイアログ表示は外部から設定する？
         if (type == LogType::Fatal) {
             ::ShowMessageBox(ws.c_str());

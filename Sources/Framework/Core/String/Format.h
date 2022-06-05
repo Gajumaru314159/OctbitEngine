@@ -10,8 +10,15 @@
 //! @cond
 // Check if fmt/format.h compiles with the X11 index macro defined.
 #define index(x, y) no nice things
-#include <fmt/format.h>
+
+#pragma warning(push)
+#pragma warning(disable:26451)
+#pragma warning(disable:26495)
+#pragma warning(disable:26498)
+#pragma warning(disable:26812)
+#include <fmt/xchar.h>
 #include <fmt/color.h>
+#pragma warning(pop)
 #undef index
 //! @endcond
 
@@ -21,8 +28,8 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  文字列をフォーマット
 	//@―---------------------------------------------------------------------------
-	template<typename TChar, class... Args>
-	StringBase<TChar> Format(StringViewBase<TChar> fmt, Args&&... args) {
+	template <typename S, typename TChar = fmt::char_t<S>, std::enable_if_t<!std::is_same<TChar, TChar>::value>, typename... Args>
+	auto Format(const S& fmt, Args&&... args) -> StringBase<TChar> {
 		return fmt::format(fmt, ob::forward<Args>(args)...);
 	}
 
@@ -30,8 +37,10 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  出力先を指定して文字列をフォーマット
 	//@―---------------------------------------------------------------------------
-	template<typename TOutItr, typename TChar, class... Args, typename = std::enable_if_t<!std::is_same_v<TOutItr, StringBase<TChar>>>>
-	TOutItr FormatTo(TOutItr out, StringViewBase<TChar> fmt, Args&&... args) {
+	template <typename OutputIt, typename S,typename TChar = fmt::char_t<S>,
+		std::enable_if_t<fmt::detail::is_output_iterator<OutputIt, TChar>::value&&fmt::detail::is_exotic_char<TChar>::value>,
+		typename... Args>
+	inline auto FormatTo(OutputIt out, const S& fmt, Args&&... args) -> OutputIt {
 		return fmt::format_to(out, fmt, args...);
 	}
 
@@ -39,8 +48,10 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  出力先を指定して文字列をフォーマット
 	//@―---------------------------------------------------------------------------
-	template<typename TOutItr, typename TChar, class... Args>
-	TOutItr FormatToN(TOutItr out, size_t length, StringViewBase<TChar> fmt, Args&&... args) {
+	template <typename OutputIt, typename S,typename TChar = fmt::char_t<S>,
+		std::enable_if_t<fmt::detail::is_output_iterator<OutputIt, TChar>::value&&fmt::detail::is_exotic_char<TChar>::value>,
+		typename... Args>
+	inline auto FormatToN(OutputIt out, size_t n, const S& fmt,const Args&... args) -> fmt::format_to_n_result<OutputIt> {
 		return fmt::format_to_n(out, length, fmt, args...);
 	}
 

@@ -66,7 +66,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename... Args>
         void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
-            const String message = Format(StringView(pFormat), ob::forward<Args>(args)...);
+            const String message = fmt::format(StringView(pFormat), ob::forward<Args>(args)...);
             addLog(type, sourceLocation, category, message.c_str());
         }
 

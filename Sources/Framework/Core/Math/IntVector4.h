@@ -4,7 +4,7 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Template/include.h>
 
 namespace ob::core {
@@ -687,3 +687,21 @@ namespace ob::core {
 
     //! @endcond
 }// namespace ob::core
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::IntVec4, ob::core::Char> {
+    template<typename ParseContext>
+    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template<typename FormatContext>
+    auto format(ob::core::IntVec4 value, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), TC("({},{},{},{})"), value.x, value.y, value.z, value.w);
+    }
+};
+//! @endcond

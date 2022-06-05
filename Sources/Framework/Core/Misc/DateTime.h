@@ -100,3 +100,21 @@ namespace ob::core {
 
 	//! @endcond
 }// namespcae ob
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::DateTime, ob::core::Char> {
+	template<typename ParseContext>
+	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+		return ctx.end();
+	}
+
+	template<typename FormatContext>
+	auto format(const ob::core::DateTime& dt, FormatContext& ctx) -> decltype(ctx.out()) {
+		return format_to(ctx.out(), TC("{:>4}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2},{:0>2}"), dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.milliSeconds / 10);
+	}
+};
+//! @endcond

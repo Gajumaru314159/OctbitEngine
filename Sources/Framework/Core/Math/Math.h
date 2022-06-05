@@ -6,7 +6,7 @@
 #pragma once
 #include <math.h>
 #include <gsl/gsl>
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/CorePrivate.h>
 
 namespace ob::core {
 

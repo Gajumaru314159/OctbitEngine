@@ -1044,3 +1044,21 @@ namespace ob::core {
 
     //! @endcond
 }// namespace ob::core
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::Vec2, ob::core::Char> {
+    template<typename ParseContext>
+    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template<typename FormatContext>
+    auto format(ob::core::Vec2 value, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), TC("({},{})"), value.x, value.y);
+    }
+};
+//! @endcond

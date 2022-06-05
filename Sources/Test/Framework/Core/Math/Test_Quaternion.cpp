@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Quaternion.h>
+#include <Framework/Core/Math/Rotation.h>
 
 using namespace ob;
 

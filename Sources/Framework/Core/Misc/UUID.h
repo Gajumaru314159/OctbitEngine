@@ -52,6 +52,14 @@ namespace ob::core {
         //! 
         //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
         //@―---------------------------------------------------------------------------
+        void  toString(Char(&dest)[37])const;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief 文字列表現で取得
+        //! 
+        //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
+        //@―---------------------------------------------------------------------------
         String  toString()const;
 
 
@@ -138,6 +146,26 @@ namespace ob::core {
 
     //! @endcond
 }// namespace ob::core
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::UUID, ob::core::Char> {
+    template<typename ParseContext>
+    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template<typename FormatContext>
+    auto format(ob::core::UUID value, FormatContext& ctx) -> decltype(ctx.out()) {
+        ob::core::Char text[37];
+        value.toString(text);
+        return format_to(ctx.out(), TC("{}"), text);
+    }
+};
+//! @endcond
 
 
 

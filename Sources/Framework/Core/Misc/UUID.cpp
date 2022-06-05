@@ -124,7 +124,7 @@ namespace ob::core {
     //! 
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
-    String UUID::toString() const {
+    void UUID::toString(Char(&dest)[37])const {
         Char fmtD[] = TC("00000000-0000-0000-0000-000000000000");
 
         Char* str = fmtD;
@@ -148,8 +148,19 @@ namespace ob::core {
         HexToCharPair(m_data[13], &str[30], &str[31]);
         HexToCharPair(m_data[14], &str[32], &str[33]);
         HexToCharPair(m_data[15], &str[34], &str[35]);
+    }
 
-        return String(str);
+
+    //@―---------------------------------------------------------------------------
+    //! @brief 文字列表現で取得
+    //! 
+    //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
+    //@―---------------------------------------------------------------------------
+    String UUID::toString() const {
+        Char text[37];
+        toString(text);
+        text[36] = TC('\0');
+        return String(text);
     }
 
 
