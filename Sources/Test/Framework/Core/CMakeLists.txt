@@ -28,3 +28,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
+
+
+# カスタムコマンド
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Core-test>
+    )

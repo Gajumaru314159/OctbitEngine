@@ -24,6 +24,7 @@
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Misc/DateTime.h>
 #include <Framework/Core/Misc/TimeSpan.h>
+#include <Framework/Core/Misc/UUID.h>
 
 using namespace ob;
 
@@ -58,6 +59,7 @@ int main() {
 		LOG_INFO("TimeSpan :{}", TimeSpan::Minutes(23.12534573));
 		LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
 		LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
+		LOG_INFO("UUID     :{}", ob::UUID::Generate());
 
 		/*platform::ModuleManager::Instance();
 		{

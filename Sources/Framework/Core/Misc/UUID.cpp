@@ -25,7 +25,7 @@ namespace ob::core {
     }
 
     Char HexToDigitChar(byte hex) {
-        if (hex >= 10) return 'A' + (hex - 10);
+        if (hex >= 10) return 'a' + (hex - 10);
         return '0' + hex;
     }
 
@@ -125,29 +125,28 @@ namespace ob::core {
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
     void UUID::toString(Char(&dest)[37])const {
-        Char fmtD[] = TC("00000000-0000-0000-0000-000000000000");
-
-        Char* str = fmtD;
+        Char* str = dest;
         HexToCharPair(m_data[0], &str[0], &str[1]);
         HexToCharPair(m_data[1], &str[2], &str[3]);
         HexToCharPair(m_data[2], &str[4], &str[5]);
         HexToCharPair(m_data[3], &str[6], &str[7]);
-
+        str[8] = TC('-');
         HexToCharPair(m_data[4], &str[9], &str[10]);
         HexToCharPair(m_data[5], &str[11], &str[12]);
-
+        str[13] = TC('-');
         HexToCharPair(m_data[6], &str[14], &str[15]);
         HexToCharPair(m_data[7], &str[16], &str[17]);
-
+        str[18] = TC('-');
         HexToCharPair(m_data[8], &str[19], &str[20]);
         HexToCharPair(m_data[9], &str[21], &str[22]);
-
+        str[23] = TC('-');
         HexToCharPair(m_data[10], &str[24], &str[25]);
         HexToCharPair(m_data[11], &str[26], &str[27]);
         HexToCharPair(m_data[12], &str[28], &str[29]);
         HexToCharPair(m_data[13], &str[30], &str[31]);
         HexToCharPair(m_data[14], &str[32], &str[33]);
         HexToCharPair(m_data[15], &str[34], &str[35]);
+        str[36] = TC('\0');
     }
 
 
