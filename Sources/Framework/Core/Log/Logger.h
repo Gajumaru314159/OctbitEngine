@@ -25,7 +25,7 @@ namespace ob::core {
     class Logger :public Singleton<Logger> {
     public:
 
-        using EventNotifier = event_notifier<const Log&>;       //!< イベント・通知型
+        using EventNotifier = EventNotifier<const Log&>;       //!< イベント・通知型
         using EventHandle = EventNotifier::Handle;              //!< イベント・ハンドル型
         using EventDelegateType = EventNotifier::delegate_type; //!< イベント・デリゲート型
 

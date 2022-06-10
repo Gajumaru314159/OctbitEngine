@@ -29,7 +29,7 @@ public:
 
 TEST(EventNotifier, Test) {
 
-    using Notifier = event_notifier<size_t>;
+    using Notifier = EventNotifier<size_t>;
     using Handle = Notifier::handle;
     Notifier en;
 

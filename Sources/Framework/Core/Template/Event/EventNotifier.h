@@ -18,22 +18,20 @@ namespace ob::core {
     //! @tparam ...Args     イベント引数
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    class event_notifier :Noncopyable {
+    class EventNotifier :Noncopyable {
     public:
 
-        using this_type = event_notifier <Args...>;                                 //!< 型
+        using this_type = EventNotifier <Args...>;                                  //!< 型
 
-        using delegate_type = delegate<void(Args...)>;                              //!< デリゲート型
+        using delegate_type = ob::delegate<void(Args...)>;                          //!< デリゲート型
         using function_type = void(Args...);                                        //!< 関数型
         template<typename T>using method_type = void(T::*)(Args...);                //!< メンバ関数ポインタ型
         template<typename T>using const_method_type = void(T::*)(Args...)const;     //!< constメンバ関数ポインタ型
 
-        using Handle = typename HandleList<delegate_type>::Handle;                 //!< イベントハンドル型
+        using Handle = typename HandleList<delegate_type>::Handle;                  //!< イベントハンドル型
 
     private:
 
-        using mutex_type = Mutex;
-        using lock_type = ScopeLock<mutex_type> ;
         using handle_list_type = HandleList<delegate_type>;
 
     public:
@@ -41,8 +39,8 @@ namespace ob::core {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        event_notifier();
-        virtual ~event_notifier();
+        EventNotifier();
+        virtual ~EventNotifier();
 
 
         //===============================================================
@@ -65,7 +63,7 @@ namespace ob::core {
 
     private:
 
-        mutable mutex_type m_mutex;
+        mutable SpinLock m_mutex;
         handle_list_type m_handleList;
 
     };
@@ -83,7 +81,7 @@ namespace ob::core {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    event_notifier<Args...>::event_notifier() {
+    EventNotifier<Args...>::EventNotifier() {
         clear();
     }
 
@@ -92,7 +90,7 @@ namespace ob::core {
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    event_notifier<Args...>::~event_notifier() {
+    EventNotifier<Args...>::~EventNotifier() {
         clear();
     }
 
@@ -101,11 +99,11 @@ namespace ob::core {
     //! @brief  デリゲートをイベントとして登録する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::add(Handle& Handle, const delegate_type& delegate) {
-        Handle.remove();
+    void EventNotifier<Args...>::add(Handle& handle, const delegate_type& delegate) {
+        handle.remove();
         {
-            lock_type lockGuard(m_mutex);
-            m_handleList.push_back(Handle, delegate);
+            ScopeLock lock(m_mutex);
+            m_handleList.push_back(handle, delegate);
         }
     }
 
@@ -114,10 +112,10 @@ namespace ob::core {
     //! @brief  関数をイベントとして登録する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::add(Handle& handle, function_type& function) {
+    void EventNotifier<Args...>::add(Handle& handle, function_type& function) {
         handle.remove();
         {
-            lock_type lockGuard(m_mutex);
+            ScopeLock lock(m_mutex);
             delegate_type delegate(function);
             m_handleList.emplace_back(handle, function);
         }
@@ -129,10 +127,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename... Args>
     template<class T>
-    void event_notifier<Args...>::add(Handle& handle, T& instance, method_type<T> pMethod) {
+    void EventNotifier<Args...>::add(Handle& handle, T& instance, method_type<T> pMethod) {
         handle.remove();
         {
-            lock_type lockGuard(m_mutex);
+            ScopeLock lock(m_mutex);
             delegate_type delegate(instance, pMethod);
             m_handleList.push_back(handle, delegate);
         }
@@ -144,10 +142,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename... Args>
     template<class T>
-    void event_notifier<Args...>::add(Handle& handle, const T& instance, const_method_type<T> pMethod) {
+    void EventNotifier<Args...>::add(Handle& handle, const T& instance, const_method_type<T> pMethod) {
         handle.remove();
         {
-            lock_type lockGuard(m_mutex);
+            ScopeLock lock(m_mutex);
             delegate_type delegate(instance, pMethod);
             m_handleList.push_back(handle, delegate);
         }
@@ -158,8 +156,8 @@ namespace ob::core {
     //! @brief  登録したイベントをすべて削除する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::clear()noexcept {
-        lock_type lockGuard(m_mutex);
+    void EventNotifier<Args...>::clear()noexcept {
+        ScopeLock lock(m_mutex);
         m_handleList.clear();
     }
 
@@ -168,8 +166,8 @@ namespace ob::core {
     //! @brief  イベントを削除する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::remove(Handle& h) {
-        lock_type lockGuard(m_mutex);
+    void EventNotifier<Args...>::remove(Handle& h) {
+        ScopeLock lock(m_mutex);
         m_handleList.remove(h);
     }
 
@@ -180,8 +178,8 @@ namespace ob::core {
     //! @param ...args 呼び出し引数
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::invoke(Args... args)const {
-        lock_type lockGuard(m_mutex);
+    void EventNotifier<Args...>::invoke(Args... args)const {
+        ScopeLock lock(m_mutex);
         for (auto& e : m_handleList) {
             if (e.empty())continue;
             e(args...);
@@ -193,8 +191,8 @@ namespace ob::core {
     //! @brief  イベントが登録さえていないか判定する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    bool event_notifier<Args...>::empty()const noexcept {
-        lock_type lockGuard(m_mutex);
+    bool EventNotifier<Args...>::empty()const noexcept {
+        ScopeLock lock(m_mutex);
         return m_handleList.empty();
     }
 
@@ -203,8 +201,8 @@ namespace ob::core {
     //! @brief  登録されているイベントの数を取得する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    size_t event_notifier<Args...>::size()const noexcept {
-        lock_type lockGuard(m_mutex);
+    size_t EventNotifier<Args...>::size()const noexcept {
+        ScopeLock lock(m_mutex);
         return m_handleList.size();
     }
 
