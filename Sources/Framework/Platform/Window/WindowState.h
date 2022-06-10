@@ -29,6 +29,6 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ状態セット
     //@―---------------------------------------------------------------------------
-    using WindowStates = bit_flags<WindowState>;
+    using WindowStates = BitFlags<WindowState>;
 
 }// namespcae ob::platform

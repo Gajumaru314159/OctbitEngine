@@ -34,6 +34,6 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      シェーダ・ステージ・セット
     //@―---------------------------------------------------------------------------
-    using ShaderStages = bit_flags<ShaderStage>;
+    using ShaderStages = BitFlags<ShaderStage>;
 
 }// namespace pb::graphic

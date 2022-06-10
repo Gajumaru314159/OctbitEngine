@@ -91,7 +91,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      色マスク
     //@―---------------------------------------------------------------------------
-    using ColorMask = bit_flags<ColorCompoent>;
+    using ColorMask = BitFlags<ColorCompoent>;
 
 #pragma endregion
 

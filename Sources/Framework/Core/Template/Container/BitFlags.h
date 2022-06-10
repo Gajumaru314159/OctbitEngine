@@ -16,21 +16,21 @@ namespace ob::core {
 	//! @tparam		BitType 内部でビットを管理する変数の型
 	//@―---------------------------------------------------------------------------
 	template<typename TEnum, typename TBitsType = u32>
-	class bit_flags {
+	class BitFlags {
 	public:
 
 		//! @brief bit_flagss<TEnum, TBitsType>
-		using this_type = typename bit_flags<TEnum, TBitsType>;
+		using this_type = typename BitFlags<TEnum, TBitsType>;
 
 	public:
 
 		//===============================================================
 		// コンストラクタ / デストラクタ
 		//===============================================================
-		bit_flags() :m_bits(0) {}										//!< コンストラクタ
-		bit_flags(TEnum bit) :m_bits(static_cast<TBitsType>(bit)) {}	//!< コンストラクタ(初期値指定)
-		explicit bit_flags(TBitsType flags) :m_bits(flags) {}			//!< コンストラクタ(初期値指定)
-		bit_flags(const this_type& rhs) :m_bits(rhs.m_bits) {}			//!< コピーコンストラクタ
+		BitFlags() :m_bits(0) {}										//!< コンストラクタ
+		BitFlags(TEnum bit) :m_bits(static_cast<TBitsType>(bit)) {}	//!< コンストラクタ(初期値指定)
+		explicit BitFlags(TBitsType flags) :m_bits(flags) {}			//!< コンストラクタ(初期値指定)
+		BitFlags(const this_type& rhs) :m_bits(rhs.m_bits) {}			//!< コピーコンストラクタ
 
 
 		//===============================================================
@@ -40,7 +40,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief コピー代入演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum>& operator=(const bit_flags<TEnum>& rhs) {
+		BitFlags<TEnum>& operator=(const BitFlags<TEnum>& rhs) {
 			m_bits = rhs.m_bits;
 			return *this;
 		}
@@ -48,7 +48,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief OR代入演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum>& operator|=(const bit_flags<TEnum>& rhs) {
+		BitFlags<TEnum>& operator|=(const BitFlags<TEnum>& rhs) {
 			m_bits |= rhs.m_bits;
 			return *this;
 		}
@@ -56,7 +56,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief AND代入演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum>& operator&=(const bit_flags<TEnum>& rhs) {
+		BitFlags<TEnum>& operator&=(const BitFlags<TEnum>& rhs) {
 			m_bits &= rhs.m_bits;
 			return *this;
 		}
@@ -64,7 +64,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief XOR代入演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum>& operator^=(const bit_flags<TEnum>& rhs) {
+		BitFlags<TEnum>& operator^=(const BitFlags<TEnum>& rhs) {
 			m_bits ^= rhs.m_bits;
 			return *this;
 		}
@@ -72,8 +72,8 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief ビット反転演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum> operator~() const {
-			bit_flags<TEnum> result;
+		BitFlags<TEnum> operator~() const {
+			BitFlags<TEnum> result;
 			result.m_bits = (TBitsType)(~m_bits);
 			return result;
 		}
@@ -81,7 +81,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief OR結合演算子
 		//@―---------------------------------------------------------------------------
-		bit_flags<TEnum>& operator|(TEnum value) {
+		BitFlags<TEnum>& operator|(TEnum value) {
 			m_bits |= static_cast<TBitsType>(value);
 			return *this;
 		}
@@ -192,8 +192,8 @@ namespace ob::core {
 	//! @brief OR結合演算子
 	//@―---------------------------------------------------------------------------
 	template<typename TEnum>
-	auto operator|(TEnum left, TEnum right) -> std::enable_if_t<std::is_enum_v<TEnum>, bit_flags<TEnum>> {
-		return bit_flags<TEnum>(left) | right;
+	auto operator|(TEnum left, TEnum right) -> std::enable_if_t<std::is_enum_v<TEnum>, BitFlags<TEnum>> {
+		return BitFlags<TEnum>(left) | right;
 	}
 
 }// namespace ob::core

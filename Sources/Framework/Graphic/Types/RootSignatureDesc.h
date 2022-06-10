@@ -61,7 +61,7 @@ namespace ob::graphic {
 	//! @brief      ルートシグネチャ・フラグ・セット
 	//! @see        RootSignatureDesc
 	//@―---------------------------------------------------------------------------
-	using RootSignatureFlags = bit_flags<RootSignatureFlag>;
+	using RootSignatureFlags = BitFlags<RootSignatureFlag>;
 
 #pragma endregion
 

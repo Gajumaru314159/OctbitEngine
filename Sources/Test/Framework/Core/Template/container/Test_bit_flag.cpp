@@ -15,7 +15,7 @@ enum class Flags
 
 
 TEST(BitFlags, HasFlag) {
-    ob::bit_flags<Flags> flag;
+    ob::BitFlags<Flags> flag;
 
     flag.on(Flags::A);
 
@@ -36,7 +36,7 @@ TEST(BitFlags, HasFlag) {
 
 
 TEST(BitFlags, Cast) {
-    ob::bit_flags<Flags> flag(3);
+    ob::BitFlags<Flags> flag(3);
 
     EXPECT_TRUE(flag.has(Flags::A));
     EXPECT_TRUE(flag.has(Flags::B));

@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/CoreTypes.h>
 #include <type_traits>
+#include <algorithm>
 
 namespace ob::core {
 
