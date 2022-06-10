@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		バイナリデータ(Binary Large Object)
+//! @brief		バイナリデータビュー(Binary Large Object)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +10,9 @@
 namespace ob::core {
 
     //@―---------------------------------------------------------------------------
-    //! @brief バイナリデータ(Binary Large Object)
+    //! @brief バイナリデータビュー(Binary Large Object View)
+    //! 
+    //! @details    Blob と異なり、内部にバイト列のコピーを持ちません。
     //@―---------------------------------------------------------------------------
     class BlobView {
     public:
@@ -30,22 +32,34 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief コピーコンストラクタ
+        //! @brief コンストラクタ(Blob指定)
+        //@―---------------------------------------------------------------------------
+        BlobView(const Blob& blob)
+        {
+            m_pData = blob.data();
+            m_size = blob.size();
+            OB_CHECK_ASSERT_EXPR(m_pData != nullptr);
+        }
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ(ポインタ指定)
         //@―---------------------------------------------------------------------------
         BlobView(const void* pData, size_t size)
         {
             m_pData = reinterpret_cast<const byte*>(pData);
             m_size = size;
-            OB_CHECK_ASSERT_EXPR(pData!=nullptr);
+            OB_CHECK_ASSERT_EXPR(m_pData !=nullptr);
         }
 
 
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
-        explicit BlobView(const vector<byte>& data) {
-            m_pData = data.data();
-            m_size = data.size();
+        template<class T>
+        explicit BlobView(const vector<T>& data) {
+            m_pData = static_cast<const byte*>(data.data());
+            m_size = data.size()*sizeof(T);
         }
 
 
@@ -74,11 +88,22 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief コピー代入演算子(vector)
+        //! @brief コピー代入演算子(Blob)
         //@―---------------------------------------------------------------------------
-        BlobView& operator =(const vector<byte>& other) {
+        BlobView& operator =(const Blob& other) {
             m_pData = other.data();
             m_size = other.size();
+            return *this;
+        }
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コピー代入演算子(vector)
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        BlobView& operator =(const vector<T>& other) {
+            m_pData = static_cast<const byte*>(other.data());
+            m_size = other.size()*sizeof(T);
             return *this;
         }
 

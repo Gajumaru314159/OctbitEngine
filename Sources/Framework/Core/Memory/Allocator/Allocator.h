@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/CorePrivate.h>
 
 namespace ob::core {
 

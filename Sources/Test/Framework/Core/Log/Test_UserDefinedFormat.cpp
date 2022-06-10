@@ -28,6 +28,6 @@ TEST(UserDefinedFormat, DataTime) {
 	TimeSpan ts4 = TimeSpan::Seconds(23.12534573);
 	TimeSpan ts5 = TimeSpan::MilliSeconds(23.12534573);
 	
-	auto s = fmt::format(U"{}", dt);
+	auto s = fmt::format(TC("{}"), dt);
 
 }

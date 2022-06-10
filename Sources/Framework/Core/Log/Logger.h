@@ -8,12 +8,11 @@
 #include <Framework/Core/Template/include.h>
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/Thread/Mutex.h>
-#include "LogType.h"
-#include "ILogEvent.h"
+#include <Framework/Core/Thread/Atomic.h>
+#include <Framework/Core/Log/LogTypes.h>
 
 
 namespace ob::core {
-
 
     //@―---------------------------------------------------------------------------
     //! @brief      ロガー
@@ -41,6 +40,18 @@ namespace ob::core {
     public:
 
         //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ
+        //@―---------------------------------------------------------------------------
+        Logger();
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~Logger();
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief                  ログの追加
         //! 
         //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
@@ -50,7 +61,7 @@ namespace ob::core {
         //! @param category         カテゴリ名
         //! @param pMessage         メッセージ
         //@―---------------------------------------------------------------------------
-        void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
+        void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage);  // ログの追加
 
 
         //@―---------------------------------------------------------------------------
@@ -65,9 +76,9 @@ namespace ob::core {
         //! @param ...args          フォーマット引数
         //@―---------------------------------------------------------------------------
         template<typename... Args>
-        void addLog(LogType type, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
+        void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
             const String message = fmt::format(StringView(pFormat), ob::forward<Args>(args)...);
-            addLog(type, sourceLocation, category, message.c_str());
+            addLog(level, sourceLocation, category, message.c_str());
         }
 
 
@@ -87,6 +98,8 @@ namespace ob::core {
 
         Mutex           m_mutex;
         EventNotifier   m_notifier;
+        std::atomic<bool>            m_logged = false;
+
     };
 
 

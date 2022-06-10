@@ -1,27 +1,19 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		フォーマット関数
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
-#include <Framework/core/String/String.h>
+#include <Framework/Core/String/String.h>
 
-//! @cond
-// Check if fmt/format.h compiles with the X11 index macro defined.
-#define index(x, y) no nice things
-
-#pragma warning(push)
-#pragma warning(disable:26451)
-#pragma warning(disable:26495)
-#pragma warning(disable:26498)
-#pragma warning(disable:26812)
+#pragma warning(push,0)
+#ifdef OS_WINDOWS
+#include <codeanalysis/warnings.h>
+#pragma warning(disable: ALL_CODE_ANALYSIS_WARNINGS)
+#endif
 #include <fmt/xchar.h>
 #include <fmt/color.h>
 #pragma warning(pop)
-#undef index
-//! @endcond
-
 
 namespace ob::core {
 
@@ -69,6 +61,7 @@ namespace ob::core {
 
 }// namespcae ob
 
+//! @cond
 template<> struct fmt::formatter<ob::core::ErrorCode> {
 	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
 		return ctx.end();
@@ -78,3 +71,4 @@ template<> struct fmt::formatter<ob::core::ErrorCode> {
 		return fmt::format_to(ctx.out(), TC("0x{:08X}"),code.Value)
 	}
 };
+//! @endcond

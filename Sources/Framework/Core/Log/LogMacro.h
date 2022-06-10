@@ -18,8 +18,8 @@
 //@―---------------------------------------------------------------------------
 //! @brief      基底のログ出力マクロ
 //@―---------------------------------------------------------------------------
-#define OB_LOG_BASE(type,category,format,...) ob::core::Logger::Instance().addLog(type,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__);\
-                                                if(type==ob::core::LogType::Fatal){assert(false);}
+#define OB_LOG_BASE(level,category,format,...) ob::core::Logger::Instance().addLog(level,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__);\
+                                                if(level==ob::core::LogLevel::Fatal){assert(false);}
 
 
 //@―---------------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //! @param format   フォーマット文字列
 //! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
-#define LOG_FATAL_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogType::Fatal,category, format, __VA_ARGS__)
+#define LOG_FATAL_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogLevel::Fatal,category, format, __VA_ARGS__)
 //@―---------------------------------------------------------------------------
 //! @brief      アプリケーションの継続が難しい致命的なエラーを通知
 //!
@@ -51,7 +51,7 @@
 //! @param format   フォーマット文字列
 //! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
-#define LOG_ERROR_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogType::Error,category, format, __VA_ARGS__)
+#define LOG_ERROR_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogLevel::Error,category, format, __VA_ARGS__)
 
 
 //@―---------------------------------------------------------------------------
@@ -72,7 +72,7 @@
 //! @param format   フォーマット文字列
 //! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
-#define LOG_WARNING_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogType::Warning,category, format, __VA_ARGS__)
+#define LOG_WARNING_EX(category,format,...)	    OB_LOG_BASE(ob::core::LogLevel::Warning,category, format, __VA_ARGS__)
 //@―---------------------------------------------------------------------------
 //! @brief      アプリケーション実行中に発生した軽微な問題を通知
 //!
@@ -91,7 +91,7 @@
 //! @param format   フォーマット文字列
 //! @param ...     フォーマット引数
 //@―---------------------------------------------------------------------------
-#define LOG_INFO_EX(category,format,...)        OB_LOG_BASE(ob::core::LogType::Info,category, format, __VA_ARGS__)
+#define LOG_INFO_EX(category,format,...)        OB_LOG_BASE(ob::core::LogLevel::Info,category, format, __VA_ARGS__)
 
 //@―---------------------------------------------------------------------------
 //! @brief      アプリケーション実行中に発生した軽微な問題を通知

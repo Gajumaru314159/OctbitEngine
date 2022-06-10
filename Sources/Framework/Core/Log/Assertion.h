@@ -20,7 +20,7 @@
 //@―---------------------------------------------------------------------------
 #define OB_ASSERT_BASE(expr,format,...)                                     \
 if(UNLIKELY(!(expr))){                                                      \
-    OB_LOG_BASE(ob::core::LogType::Fatal,"Assertion",format,__VA_ARGS__);   \
+    OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);   \
 }
 
 //@―---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ if(UNLIKELY(!(expr))){                                                      \
 //! 
 //! @details    min<value<max でない場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,"Out of range.[{},{}) value = {}",minVal,maxVal,value)
+#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,"範囲外アクセス[{},{}) value = {}]",minVal,maxVal,value)
 
 
 //@―---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ if(UNLIKELY(!(expr))){                                                      \
 //!
 //! @details    式が呼び出された場合、エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_UNREACHABLE()                                        OB_ASSERT("Unreachable code.")
+#define OB_UNREACHABLE()                                        OB_ASSERT("到達不能コード")
 
 
 //@―---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ if(UNLIKELY(!(expr))){                                                      \
 //! 
 //! @details    式が呼び出された場合、Warningログを出力する。
 //@―---------------------------------------------------------------------------
-#define OB_NOTIMPLEMENTED()                                     OB_ASSERT("Not implemented code.")
+#define OB_NOTIMPLEMENTED()                                     OB_ASSERT("未実装の機能")
 
 
 //============================================

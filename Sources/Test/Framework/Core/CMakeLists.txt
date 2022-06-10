@@ -29,6 +29,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
 
+set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # カスタムコマンド
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CoreTypes.h>
+#include <type_traits>
 
 namespace ob::core {
 
@@ -14,7 +15,7 @@ namespace ob::core {
     //! @param e    enum値
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr auto enum_cast(T e)->enable_if_t<is_enum_v<T>, underlying_type_t<T>> {
+    inline constexpr auto enum_cast(T e)->std::enable_if_t<std::is_enum_v<T>, std::underlying_type_t<T>> {
         return static_cast<underlying_type_t<T>>(e);
     }
 
@@ -41,7 +42,7 @@ namespace ob::core {
     //! @brief      二乗値の計算
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_square(T value)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_square(T value)noexcept(std::is_arithmetic<T>::value) {
         return v * v;
     }
 
@@ -50,7 +51,7 @@ namespace ob::core {
     //! @brief      最大値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_max(T a, T b)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_max(T a, T b)noexcept(std::is_arithmetic<T>::value) {
         return (a < b) ? b : a;
     }
 
@@ -59,7 +60,7 @@ namespace ob::core {
     //! @brief      最大値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_max(T a, T b, T c)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_max(T a, T b, T c)noexcept(std::is_arithmetic<T>::value) {
         if (a <= c && b <= c)return c;
         return get_max(a, b);
     }
@@ -69,7 +70,7 @@ namespace ob::core {
     //! @brief      最小値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_min(T a, T b)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_min(T a, T b)noexcept(std::is_arithmetic<T>::value) {
         return (a < b) ? a : b;
     }
 
@@ -78,7 +79,7 @@ namespace ob::core {
     //! @brief      最小値を取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_min(T a, T b, T c)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_min(T a, T b, T c)noexcept(std::is_arithmetic<T>::value) {
         if (c <= a && c <= b)return c;
         return get_min(a, b);
     }
@@ -92,7 +93,7 @@ namespace ob::core {
     //! @param maxVal     最大値
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_clamp(T val, T minVal, T maxVal)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_clamp(T val, T minVal, T maxVal)noexcept(std::is_arithmetic<T>::value) {
         return get_min(get_max(val, minVal), maxVal);
     }
 
@@ -103,7 +104,7 @@ namespace ob::core {
     //! @param val        入力
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_clamp01(T val)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_clamp01(T val)noexcept(std::is_arithmetic<T>::value) {
         return get_clamp(val, (T)0, (T)1);
     }
 
@@ -118,7 +119,7 @@ namespace ob::core {
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(is_arithmetic<T>::value) {
+    inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(std::is_arithmetic<T>::value) {
         return (minVal <= val) && (val <= maxVal);
     }
 
@@ -132,7 +133,7 @@ namespace ob::core {
     //! @retval false   範囲外
     //@―---------------------------------------------------------------------------
     template<typename T, typename TContainer>
-    inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(is_arithmetic<T>::value) {
+    inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(std::is_arithmetic<T>::value) {
         return is_in_range<T>(index, (T)0, (T)container.size());
     }
 
@@ -141,7 +142,7 @@ namespace ob::core {
     //! @brief          1<<digit
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_bit(T digit)noexcept(is_arithmetic<T>::value) {
+    inline constexpr T get_bit(T digit)noexcept(std::is_arithmetic<T>::value) {
         return 1 << digit;
     }
 

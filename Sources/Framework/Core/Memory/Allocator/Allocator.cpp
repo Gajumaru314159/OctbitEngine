@@ -19,10 +19,10 @@ namespace ob::core {
         if (pBuffer == nullptr)return;
         auto pHeader = GetOffsetPtr<BlockHeader>(pBuffer, -static_cast<s32>(sizeof(BlockHeader)));
 
-        assert(pHeader->pHeap != nullptr);
+        OB_CHECK_ASSERT(pHeader->pHeap != nullptr,"無効なポインタの開放");
 #if defined(OB_DEBUG)
         // メモリの破壊を検知しました。
-        assert(pHeader->signature == MEMORY_SIGNATURE);
+        OB_CHECK_ASSERT(pHeader->signature == MEMORY_SIGNATURE,"メモリの破壊を検知");
 #endif
         pHeader->pHeap->deallocate(pHeader->pRaw);
     }

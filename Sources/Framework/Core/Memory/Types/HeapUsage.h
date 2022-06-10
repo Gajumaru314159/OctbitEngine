@@ -17,7 +17,7 @@ namespace ob::core {
 		GPUReadable,            //!< GPU読み込み
 		GPUReadWritable,        //!< GPU読み書き
 
-		Max
+		Max,					//!< 最大値
 	};
 
 }// namespcae ob

@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/core/Memory/Allocator/Allocator.h>
-#include <Framework/core/Memory/Types/HeapUsage.h>
+#include <Framework/Core/Memory/Allocator/Allocator.h>
+#include <Framework/Core/Memory/Types/HeapUsage.h>
 
 namespace ob::core {
 

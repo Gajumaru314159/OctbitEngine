@@ -44,7 +44,7 @@ namespace ob::core {
     //! @param[in] zeroClear    確保したバッファをゼロで初期化するか
     //@―---------------------------------------------------------------------------
     void* MallocAllocator::allocate(size_t size, u32 alignment, bool zeroClear) {
-        assert(0 <= alignment);
+        OB_CHECK_ASSERT_EXPR(0 <= alignment);
 
         const size_t allocSize = sizeof(BlockHeader) + size + alignment;
 

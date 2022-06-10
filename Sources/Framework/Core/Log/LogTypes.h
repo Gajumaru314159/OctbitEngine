@@ -27,9 +27,9 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief ログの種類
+    //! @brief ログのレベル
     //@―---------------------------------------------------------------------------
-    enum class LogType {
+    enum class LogLevel {
         Fatal,      //!< 致命的エラー
         Error,		//!< エラー
         Warning,	//!< 警告表示
@@ -41,12 +41,10 @@ namespace ob::core {
     //! @brief ログ・オブジェクト
     //@―---------------------------------------------------------------------------
     struct Log {
-        LogType         type;               //!< タイプ
+        LogLevel        level;              //!< タイプ
         const Char*     category = nullptr; //!< カテゴリ
         const Char*     message = nullptr;  //!< メッセージ
         SourceLocation  sourceLocation;     //!< ログが発生したソースコード上の位置
-                                            //   時間         ->プラットフォーム依存になるので受け取り段階で処理する?
-                                            //   スレッドID
     };
 
 }// namespcae ob::core

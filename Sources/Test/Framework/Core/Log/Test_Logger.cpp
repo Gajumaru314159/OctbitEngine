@@ -6,12 +6,12 @@
 using namespace ob;
 
 
-static LogType s_logType;
+static LogLevel s_logType;
 static String s_message;
 
 void LogEvent(const Log& log)
 {
-    s_logType = log.type;
+    s_logType = log.level;
 
     s32 index = 0;
 
@@ -23,21 +23,21 @@ class LogTest
 public:
     LogTest() = default;
 
-    void LogEvent(LogType type, const Char* pMessage)
+    void LogEvent(LogLevel level, const Char* pMessage)
     {
-        s_logType = type;
+        s_logType = level;
         s_message = pMessage;
     }
 
-    void LogEventConst(LogType type, const Char* pMessage)const
+    void LogEventConst(LogLevel level, const Char* pMessage)const
     {
-        s_logType = type;
+        s_logType = level;
         s_message = pMessage;
     }
 
-    static void LogEventStatic(LogType type, const Char* pMessage)
+    static void LogEventStatic(LogLevel level, const Char* pMessage)
     {
-        s_logType = type;
+        s_logType = level;
         s_message = pMessage;
     }
 };
@@ -54,13 +54,13 @@ TEST(Logger, AddLogEvent) {
     const Char message1[] = TC("Hoge");
     LOG_INFO("{0}",message1);
 
-    EXPECT_EQ(s_logType, LogType::Info);
+    EXPECT_EQ(s_logType, LogLevel::Info);
     EXPECT_TRUE(s_message, message1);
 
     // ログ追加
     LOG_WARNING("Hoge{0}{1}",2,TC("A"));
 
-    EXPECT_EQ(s_logType, LogType::Warning);
+    EXPECT_EQ(s_logType, LogLevel::Warning);
     EXPECT_TRUE(s_message, TC("Hoge2A"));
 
     // ログイベントの削除
@@ -70,7 +70,7 @@ TEST(Logger, AddLogEvent) {
     const Char message2[] = TC("Fuga");
     LOG_ERROR("{0}",message2);
 
-    EXPECT_FALSE(s_logType == LogType::Error);
+    EXPECT_FALSE(s_logType == LogLevel::Error);
     EXPECT_TRUE(s_message, message2);
 
 }
