@@ -1,16 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スタック
+//! @brief		双方向連結リスト
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <stack>
-#include "../allocator.h"
+#include <list>
+#include <Framework/Core/Template/STLAllocator.h>
 
 namespace ob::core {
 
-    //! @brief スタック
+    //! @brief 双方向連結リスト
     template <class T>
-    using stack = std::stack<T>;
+    using list = std::list<T, ob::core::allocator<T>>;
 
 }// namespcae ob

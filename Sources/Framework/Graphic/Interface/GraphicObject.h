@@ -92,7 +92,7 @@ namespace ob::graphic {
     private:
 
         GraphicObject*  m_pStack;    //!< 削除スタック用ポインタ
-        atomic<s32>     m_referenceCount;
+        Atomic<s32>     m_referenceCount;
 
 #ifdef OB_DEBUG
         Char      m_name[100];

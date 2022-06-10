@@ -40,7 +40,7 @@ namespace ob::platform {
         //! @brief          インターフェイスを取得
         //@―---------------------------------------------------------------------------
         template<class T>
-        auto get()->enable_if_t<is_base_of_v<IModule, T>, T*> {
+        auto get()->std::enable_if_t<std::is_base_of_v<IModule, T>, T*> {
             if (auto pLoader = m_loader.get()) {
                 return static_cast<T*>(pLoader->findModule());
             }

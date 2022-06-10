@@ -32,7 +32,7 @@ public:
 auto lamda = [](int arg) {s_calledNo = arg; };
 
 
-using delegate_type = delegate<void(int)>;
+using delegate_type = Delegate<void(int)>;
 
 TEST(delegate, Construct) {
     LogTest lt;

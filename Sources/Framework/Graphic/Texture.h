@@ -8,6 +8,7 @@
 #include <Framework/Graphic/Types/TextureDesc.h>
 #include <Framework/Graphic/TextureData.h>
 #include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/File/Path.h>
 
 //===============================================================
 // クラス宣言

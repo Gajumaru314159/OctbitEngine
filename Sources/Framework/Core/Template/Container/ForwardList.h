@@ -1,16 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		双方向連結リスト
+//! @brief		単方向リスト
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <list>
-#include "../allocator.h"
+#include <forward_list>
+#include <Framework/Core/Template/STLAllocator.h>
 
 namespace ob::core {
 
-    //! @brief 双方向連結リスト
+    //! @brief 単連結リスト
     template <class T>
-    using list = std::list<T, allocator<T>>;
+    using forward_list = std::forward_list<T, ob::core::allocator<T>>;
 
 }// namespcae ob

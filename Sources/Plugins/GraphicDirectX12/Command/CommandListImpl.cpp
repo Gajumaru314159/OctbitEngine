@@ -125,7 +125,7 @@ namespace ob::graphic::dx12 {
 				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
 				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE),
 			};
-			m_cmdList->ResourceBarrier(get_size(barrier), barrier);
+			m_cmdList->ResourceBarrier(std::size(barrier), barrier);
 		}
 
 		{
@@ -152,7 +152,7 @@ namespace ob::graphic::dx12 {
 				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT),
 				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET),
 			};
-			m_cmdList->ResourceBarrier(get_size(barrier), barrier);
+			m_cmdList->ResourceBarrier(std::size(barrier), barrier);
 		}
 	}
 
@@ -373,7 +373,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDescriptorHandle() {
 		m_hDSV.ptr = 0;
-		for (s32 i = 0; i < get_size(m_hRTV); ++i) {
+		for (s32 i = 0; i < std::size(m_hRTV); ++i) {
 			m_hRTV[i].ptr = 0;
 		}
 	}

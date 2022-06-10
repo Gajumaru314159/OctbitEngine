@@ -6,6 +6,7 @@
 #pragma once
 #include <assert.h>
 #include <iterator>
+#include <memory>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/Thread/SpinLock.h>
 #include <Framework/Core/Utility/Noncopyable.h>
@@ -25,7 +26,7 @@ namespace ob::core {
     //!                 使用方法：<br> 
     //! ```
     //!                 ob::HandleList<ob::s32> ls;
-    //!                 using Handle =  ob::handle_list<ob::s32>::Handle;
+    //!                 using Handle =  ob::HandleList<ob::s32>::Handle;
     //!                 {
     //!                     Handle handle;
     //!                     ls.emplace_back(handle,123);
@@ -50,7 +51,7 @@ namespace ob::core {
             //! @brief ハンドルが対象のリストの要素か判定する
             //@―---------------------------------------------------------------------------
             bool is_child_of(const HandleList<T>& parent)const noexcept {
-                return pParent == addressof(parent);
+                return pParent == std::addressof(parent);
             }
 
         protected:
@@ -172,8 +173,8 @@ namespace ob::core {
         public:
             iterator(const this_type& x)noexcept :const_iterator(x) {}                                                      //!< ムーブコンストラクタ
             iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }               //!< ムーブ代入演算子
-            reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
-            pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
+            reference operator*() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
+            pointer   operator->() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pNext; return *this; }                                    //!< インクリメント
             this_type& operator--() noexcept { pHandle = pHandle->pPrev; return *this; }                                    //!< デクリメント
             this_type operator++(int)noexcept { auto temp = *this; ++(*this); return temp; }                                //!< 後置インクリメント
@@ -198,8 +199,8 @@ namespace ob::core {
         public:
             const_reverse_iterator(const this_type& x)noexcept :const_iterator(x) {}                                            //!< ムーブコンストラクタ
             const_reverse_iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }     //!< ムーブ代入演算子
-            reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
-            pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
+            reference operator*() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
+            pointer   operator->() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pPrev; return *this; }                                        //!< インクリメント
             this_type& operator--() noexcept { pHandle = pHandle->pNext; return *this; }                                        //!< デクリメント
             this_type operator++(int)noexcept { auto temp = *this; ++(*this); return temp; }                                    //!< 後置インクリメント
@@ -224,8 +225,8 @@ namespace ob::core {
         public:
             reverse_iterator(const this_type& x)noexcept :const_reverse_iterator(x) {}                                          //!< ムーブコンストラクタ
             reverse_iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }           //!< ムーブ代入演算子
-            reference operator*() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
-            pointer   operator->() const noexcept { return *(static_cast<handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
+            reference operator*() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                        //!< インスタンス参照
+            pointer   operator->() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                       //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pPrev; return *this; }                                        //!< インクリメント
             this_type& operator--() noexcept { pHandle = pHandle->pNext; return *this; }                                        //!< デクリメント
             this_type operator++(int)noexcept { auto temp = *this; ++(*this); return temp; }                                    //!< 後置インクリメント
@@ -380,7 +381,7 @@ namespace ob::core {
     template<typename T>
     inline HandleList<T>::HandleList(this_type&& x)noexcept {
         clear_impl();
-        move_impl(ob::move(x));
+        move_impl(std::move(x));
     }
 
 
@@ -392,7 +393,7 @@ namespace ob::core {
         if (this != &rhs) {
             clear();
             ScopeLock lock(m_mutex);
-            move_impl(ob::move(rhs));
+            move_impl(std::move(rhs));
         }
         return *this;
     }
@@ -533,7 +534,7 @@ namespace ob::core {
     template<typename T>
     inline typename HandleList<T>::size_type HandleList<T>::size()const noexcept {
         ScopeLock lock(m_mutex);
-        return ob::distance(begin(), end());
+        return std::distance(begin(), end());
     }
 
 
@@ -546,7 +547,7 @@ namespace ob::core {
     inline typename HandleList<T>::reference HandleList<T>::front() {
         ScopeLock lock(m_mutex);
         assert(m_header.pNext != &m_header);
-        return *(static_cast<handle*>(m_header.pNext)->get_ptr());
+        return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
 
 
@@ -559,7 +560,7 @@ namespace ob::core {
     inline typename HandleList<T>::const_reference HandleList<T>::front() const {
         ScopeLock lock(m_mutex);
         assert(m_header.pNext != &m_header);
-        return *(static_cast<handle*>(m_header.pNext)->get_ptr());
+        return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
 
 
@@ -572,7 +573,7 @@ namespace ob::core {
     inline typename HandleList<T>::reference HandleList<T>::back() {
         ScopeLock lock(m_mutex);
         assert(m_header.pPrev != &m_header);
-        return *(static_cast<handle*>(m_header.pPrev)->get_ptr());
+        return *(static_cast<Handle*>(m_header.pPrev)->get_ptr());
     }
 
 
@@ -585,7 +586,7 @@ namespace ob::core {
     inline typename HandleList<T>::const_reference HandleList<T>::back() const {
         ScopeLock lock(m_mutex);
         assert(m_header.pPrev != &m_header);
-        return *(static_cast<handle*>(m_header.pPrev)->get_ptr());
+        return *(static_cast<Handle*>(m_header.pPrev)->get_ptr());
     }
 
 
@@ -607,7 +608,7 @@ namespace ob::core {
     inline void HandleList<T>::push_front(Handle& h, T&& x) {
         ScopeLock lock(m_mutex);
         insert_front_impl(h);
-        *h.get_ptr() = ob::move(x);
+        *h.get_ptr() = std::move(x);
     }
 
 
@@ -619,7 +620,7 @@ namespace ob::core {
     inline typename HandleList<T>::reference HandleList<T>::emplace_front(Handle& h, Args&&... args) {
         ScopeLock lock(m_mutex);
         insert_front_impl(h);
-        ob::construct_at(h.get_ptr(), ob::forward<Args>(args)...);
+        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
     }
 
@@ -642,7 +643,7 @@ namespace ob::core {
     inline void HandleList<T>::push_back(Handle& h, T&& x) {
         ScopeLock lock(m_mutex);
         insert_back_impl(h);
-        *h.get_ptr() = ob::move(x);
+        *h.get_ptr() = std::move(x);
     }
 
 
@@ -656,7 +657,7 @@ namespace ob::core {
     inline typename HandleList<T>::reference HandleList<T>::emplace_back(Handle& h, Args&&... args) {
         ScopeLock lock(m_mutex);
         insert_back_impl(h);
-        ob::construct_at(h.get_ptr(), ob::forward<Args>(args)...);
+        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
     }
 
@@ -699,7 +700,7 @@ namespace ob::core {
     inline typename HandleList<T>::iterator HandleList<T>::emplace(Handle& h, const_iterator position, Args&&... args) {
         ScopeLock lock(m_mutex);
         insert_impl(position.pHandle, h);
-        ob::construct_at(h.get_ptr(), ob::forward<Args>(args)...);
+        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return &h;
     }
 
@@ -713,7 +714,7 @@ namespace ob::core {
     inline void HandleList<T>::pop_front()noexcept {
         ScopeLock lock(m_mutex);
         if (m_header.pNext == &m_header)return;
-        erase_impl(static_cast<handle*>(m_header.pNext));
+        erase_impl(static_cast<Handle*>(m_header.pNext));
     }
 
 
@@ -726,7 +727,7 @@ namespace ob::core {
     inline void HandleList<T>::pop_back()noexcept {
         ScopeLock lock(m_mutex);
         if (m_header.pPrev == &m_header)return;
-        erase_impl(static_cast<handle*>(m_header.pPrev));
+        erase_impl(static_cast<Handle*>(m_header.pPrev));
     }
 
 
@@ -779,7 +780,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::swap(this_type& x)noexcept {
-        ob::swap(*this, x);
+        std::swap(*this, x);
     }
 
 
@@ -827,9 +828,9 @@ namespace ob::core {
         while (itr != itrEnd) {
             auto pHandle = itr.pHandle;
             ++itr;
-            ob::swap(pHandle->pPrev, pHandle->pNext);
+            std::swap(pHandle->pPrev, pHandle->pNext);
         }
-        ob::swap(m_header.pPrev, m_header.pNext);
+        std::swap(m_header.pPrev, m_header.pNext);
     }
 
 

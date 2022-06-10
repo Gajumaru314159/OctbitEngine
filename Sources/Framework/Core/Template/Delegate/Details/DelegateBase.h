@@ -5,6 +5,7 @@
 //***********************************************************
 //! @cond
 #pragma once
+#include <memory>
 
 namespace ob::core {
     namespace detail {
@@ -63,7 +64,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief デリゲート基底クラス
         //@―---------------------------------------------------------------------------
-        class delegate_base {
+        class DelegateBase {
         protected:
 
             Functor m_functor;  //!< ファンクタ
@@ -94,7 +95,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         inline bool Functor::operator==(const Functor& rhs)const noexcept {
             if (m_pObject != rhs.m_pObject)return false;
-            return (memcmp((void*)m_function, (void*)rhs.m_function, sizeof(m_function)) == 0);
+            return (std::memcmp((void*)m_function, (void*)rhs.m_function, sizeof(m_function)) == 0);
         }
 
         //@―---------------------------------------------------------------------------
@@ -147,7 +148,7 @@ namespace ob::core {
         template<typename F>
         inline void Functor::set_function(const F function)noexcept {
             static_assert(sizeof(F) <= sizeof(m_function), "require more function size");
-            memcpy(m_function, &function, sizeof(F));
+            memcpy_s(m_function, sizeof(m_function), &function, sizeof(F));
         }
 
     }

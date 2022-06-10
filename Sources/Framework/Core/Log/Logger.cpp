@@ -9,8 +9,6 @@
 #include <Framework/Core/Utility/Scope.h>
 #include <MagicEnum/magic_enum.hpp>
 
-#include <Framework/Core/Log/LogMacro.h>
-
 #include <iostream>
 
 static ob::core::Logger::EventHandle s_debugLogEvent;
@@ -155,8 +153,8 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの追加
     //@―---------------------------------------------------------------------------
-    void Logger::addEvent(EventHandle& handle, EventDelegateType delegate) {
-        m_notifier.add(handle, delegate);
+    void Logger::addEvent(EventHandle& handle, EventDelegateType func) {
+        m_notifier.add(handle, func);
     }
 
 

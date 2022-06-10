@@ -79,7 +79,7 @@ namespace ob::graphic {
             f32 mipLodBias = 0,
             Anisotropy anisotropy = Anisotropy::Level16,
             f32 minLod = 0,
-            f32 maxLod = (numeric_limits<f32>::max)(),
+            f32 maxLod = (std::numeric_limits<f32>::max)(),
             MipFillter mipFilter = MipFillter::Linear,
             bool zFilter = false
         ) {

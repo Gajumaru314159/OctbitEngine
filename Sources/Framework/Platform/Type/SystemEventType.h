@@ -67,12 +67,12 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント
     //@―---------------------------------------------------------------------------
-    using WindowEvent = delegate<void(WindowEventType)>;
+    using WindowEvent = Delegate<void(WindowEventType)>;
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    using MouseMoveEvent = delegate<void(void)>;
+    using MouseMoveEvent = Delegate<void(void)>;
 
 }// namespace ob::platform

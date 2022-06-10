@@ -1,10 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		STLアロケータ
 //! @author		Gajumaru
 //***********************************************************
-#include "allocator.h"
-#include <Framework/core/Memory/System/MemorySystem.h>
+#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Memory/System/MemorySystem.h>
 
 namespace ob::core {
 

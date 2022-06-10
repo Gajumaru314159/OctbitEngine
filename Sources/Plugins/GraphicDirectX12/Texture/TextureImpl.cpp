@@ -121,7 +121,7 @@ namespace ob::graphic::dx12 {
 		DirectX::TexMetadata metadata = {};
 		DirectX::ScratchImage scratchImg = {};
 
-		result = DirectX::LoadFromDDSMemory(data.data.data(), data.data.size(), DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+		result = DirectX::LoadFromDDSMemory(data.data.data(), data.data.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
 
 		if (FAILED(result)) {
 			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));

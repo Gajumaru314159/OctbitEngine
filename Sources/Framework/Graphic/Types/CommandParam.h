@@ -57,7 +57,7 @@ namespace ob::graphic {
 		u32 arrayIndex;
 		u32 faceIndex;
 		u32 mipLevel;
-		optional<IntRect> region;
+		std::optional<IntRect> region;
 	};
 
 

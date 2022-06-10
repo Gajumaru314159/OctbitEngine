@@ -210,7 +210,7 @@ namespace ob::graphic::dx12 {
 			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->getNative().Get(),
 			m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->getNative().Get(),
 		};
-		cmdList.getNative()->SetDescriptorHeaps(get_size(pHeaps), pHeaps);
+		cmdList.getNative()->SetDescriptorHeaps(std::size(pHeaps), pHeaps);
 	}
 
 
@@ -309,9 +309,9 @@ namespace ob::graphic::dx12 {
 			  D3D12_MESSAGE_SEVERITY_INFO
 			};
 			D3D12_INFO_QUEUE_FILTER filter{};
-			filter.DenyList.NumIDs = get_size(denyIds);
+			filter.DenyList.NumIDs = std::size(denyIds);
 			filter.DenyList.pIDList = denyIds;
-			filter.DenyList.NumSeverities = get_size(severities);
+			filter.DenyList.NumSeverities = std::size(severities);
 			filter.DenyList.pSeverityList = severities;
 
 			infoQueue->PushStorageFilter(&filter);

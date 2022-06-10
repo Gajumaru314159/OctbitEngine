@@ -38,7 +38,7 @@ namespace ob::platform {
         auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
         if (auto pModule = moduleLoader->getInterface()) {
             pModule->startup(&MemorySystem::GetHeapAllocator());
-            m_moduleMap[moduleName] = ob::move(moduleLoader);
+            m_moduleMap[moduleName] = std::move(moduleLoader);
         } else {
             return nullptr;
         }

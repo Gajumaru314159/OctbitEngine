@@ -6,6 +6,7 @@
 #include <Framework/Graphic/TextureData.h>
 #include <Framework/Graphic/Private/DDSFormat.h>
 
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
 namespace ob::graphic
@@ -15,7 +16,8 @@ namespace ob::graphic
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
 
-	TextureData::TextureData(const Path& path) {
+	TextureData::TextureData(const Path& path) 
+	{
 		if (path.extension() == ".dds") {
 
 		} else {
@@ -25,23 +27,10 @@ namespace ob::graphic
 			auto p = path.generic_string();
 			pixels = stbi_load(p.c_str(), &width, &height, &bpp, 0);
 			if (pixels != nullptr) {
-				data.append(pixels, width * height * bpp);
+				data.append(pixels, (size_t)width * height * bpp);
 			}
 		}
 	}
-
-
-	class ErrorFunc {
-		using func_type = std::function<void()>;
-		ErrorFunc(func_type func)
-			: m_func(func) {}
-		~ErrorFunc() {
-			m_func();
-		}
-	private:
-		func_type m_func;
-	};
-
 
 
 	template<size_t N, typename T = unsigned int>
@@ -53,7 +42,8 @@ namespace ob::graphic
 		return result;
 	}
 
-	TextureData::TextureData(const void* data, size_t size) {
+	TextureData::TextureData(const void* data, size_t size)
+	{
 
 		if (size < sizeof(DDS_HEADER))goto ERROR_END;
 
@@ -87,7 +77,7 @@ namespace ob::graphic
 
 	ERROR_END:
 
-
+		return;
 	}
 
 }// namespace ob

@@ -1,16 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		可変長配列
+//! @brief		Deque(二重終端キュー)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <vector>
-#include "../allocator.h"
+#include <deque>
+#include <Framework/Core/Template/STLAllocator.h>
 
 namespace ob::core {
 
-    //! @brief 動的配列
+    //! @brief デック
     template <class T>
-    using vector = std::vector<T, allocator<T>>;
+    using deque = std::deque<T, ob::core::allocator<T>>;
 
 }// namespcae ob

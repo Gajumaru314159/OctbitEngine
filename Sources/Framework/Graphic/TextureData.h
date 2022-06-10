@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/Misc/BlobView.h>
 #include <Framework/Graphic/Types/TextureFormat.h>
+#include <Framework/Core/File/Path.h>
 
 namespace ob::graphic {
 

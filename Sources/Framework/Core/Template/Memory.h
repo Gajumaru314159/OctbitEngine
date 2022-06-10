@@ -18,7 +18,7 @@ namespace ob::core {
     template<class T, class... Args>
     constexpr T* construct_at(T* p, Args&&... args) {
         return ::new (const_cast<void*>(static_cast<const volatile void*>(p)))
-            T(ob::forward<Args>(args)...);
+            T(std::forward<Args>(args)...);
     }
 
 
@@ -33,7 +33,7 @@ namespace ob::core {
     template<class T, class ForwardIterator, class... Args>
     constexpr void construct(ForwardIterator first, ForwardIterator last, Args&&... args) {
         for (; first != last; ++first)
-            ob::construct_at(&(*first), ob::forward(args)...);
+            ob::construct_at(&(*first), std::forward(args)...);
     }
 
 

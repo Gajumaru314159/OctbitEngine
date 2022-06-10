@@ -53,7 +53,7 @@ namespace ob::graphic::dx12 {
         ComPtr<ID3D12InfoQueue> infoQueue;
         if (pDevice&&SUCCEEDED(pDevice->QueryInterface(IID_PPV_ARGS(infoQueue.ReleaseAndGetAddressOf())))) {
             u64 storedCount = infoQueue->GetNumStoredMessages();
-            u64 displayCount = get_min<u64>(storedCount, get_max(count,0));
+            u64 displayCount = std::clamp<u64>(storedCount, 0,count);
             for (u64 i = 0; i < displayCount; ++i) {
                 u64 index = (storedCount - 1) - i;
                 SIZE_T messageLength = 0;

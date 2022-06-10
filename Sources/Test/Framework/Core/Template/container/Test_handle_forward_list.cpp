@@ -3,9 +3,8 @@
 //! @brief		handle_forward_listテスト
 //! @author		Gajumaru
 //***********************************************************
-using namespace ob;
-using namespace ob;
 #include <Framework/Core/Template/Container/HandleForwardList.h>
+using namespace ob;
 
 struct Hoge {
     Hoge(int a, int b) :val(a* b) {}
@@ -18,7 +17,7 @@ struct Hoge {
 
 TEST(HandleForwardList, Test) {
     using List = HandleForwardList<Hoge>;
-    using Handle = List::handle;
+    using Handle = List::Handle;
 
     // ムーブ・コンストラクタ
     {
@@ -27,10 +26,10 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h1, 2, 3);
         lst.emplace_front(h2, 5, 7);
 
-        List lst2 = ob::move(lst);
+        List lst2 = std::move(lst);
 
         int sum2 = 0;
-        ob::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
+        std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
         EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
@@ -42,10 +41,10 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h2, 5, 7);
 
         List lst2;
-        lst2 = ob::move(lst);
+        lst2 = std::move(lst);
 
         int sum2 = 0;
-        ob::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
+        std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
         EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
@@ -58,7 +57,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h1, 1, 3);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
         EXPECT_EQ(val, 357);
     }
@@ -72,7 +71,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h1, 1, 3);
 
         int val = 0;
-        ob::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
 
         EXPECT_EQ(val, 357);
     }
@@ -114,7 +113,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h4, 1, 9);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
         EXPECT_EQ(val, 9753);
     }
@@ -133,7 +132,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_after(h6, ++(++(++lst.begin())), 1, 6);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
         EXPECT_EQ(val, 451263);
     }
@@ -151,7 +150,7 @@ TEST(HandleForwardList, Test) {
         lst.pop_front();
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 34);
     }
 
@@ -167,7 +166,7 @@ TEST(HandleForwardList, Test) {
         lst.erase_after(++lst.begin());
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 124);
     }
 
@@ -183,7 +182,7 @@ TEST(HandleForwardList, Test) {
         lst.erase_after(++lst.begin(), ++(++lst.begin()));
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 124);
     }
 
@@ -204,7 +203,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h1, 1, 1);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 13);
     }
 
@@ -223,11 +222,11 @@ TEST(HandleForwardList, Test) {
         lst.swap(lst2);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 4);
 
         val = 0;
-        ob::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 123);
     }
 
@@ -243,13 +242,13 @@ TEST(HandleForwardList, Test) {
         lst.remove(h1);
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 234);
 
         h3.remove();
 
         val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 24);
     }
 
@@ -265,7 +264,7 @@ TEST(HandleForwardList, Test) {
         lst.remove_if([](const Hoge& pred) {return pred.val % 2 == 0; });
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 13);
     }
 
@@ -281,7 +280,7 @@ TEST(HandleForwardList, Test) {
         lst.reverse();
 
         int val = 0;
-        ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         EXPECT_EQ(val, 4321);
     }
 
@@ -300,7 +299,7 @@ TEST(HandleForwardList, Test) {
             }
             {
                 int val = 0;
-                ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+                std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
                 EXPECT_EQ(val, 21);
             }
             {
@@ -310,14 +309,14 @@ TEST(HandleForwardList, Test) {
             }
             {
                 int val = 0;
-                ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+                std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
                 EXPECT_EQ(val, 21);
             }
         }
 
         {
             int val = 0;
-            ob::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+            std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
             EXPECT_EQ(val, 1);
         }
 

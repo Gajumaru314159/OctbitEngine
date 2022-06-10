@@ -5,13 +5,14 @@
 //***********************************************************
 #pragma once
 #include <queue>
-#include "../allocator.h"
+#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Template/Container/Deque.h>
 
 namespace ob::core {
 
     //! @brief キュー
     template <class T>
-    using queue = std::queue<T, deque<T>>;
+    using queue = std::queue<T, ob::core::deque<T>>;
 
     //! @brief 優先度付きキュー
     template <class T>

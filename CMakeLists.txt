@@ -16,7 +16,7 @@ add_definitions(/Zc:__cplusplus)
 # option(変数名 "説明" ON/OFF)
 #------------------------------------------------------------------------------
 
-set(CMAKE_DEBUG_POSTFIX "d")
+set(CMAKE_DEBUG_POSTFIX "")
 include(Common.cmake)
 
 # パス設定

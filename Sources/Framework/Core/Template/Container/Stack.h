@@ -1,16 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		単方向リスト
+//! @brief		スタック
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <forward_list>
-#include "../allocator.h"
+#include <stack>
+#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Template/Container/Deque.h>
 
 namespace ob::core {
 
-    //! @brief 単連結リスト
+    //! @brief スタック
     template <class T>
-    using forward_list = std::forward_list<T, allocator<T>>;
+    using stack = std::stack<T,ob::core::deque<T>>;
 
 }// namespcae ob

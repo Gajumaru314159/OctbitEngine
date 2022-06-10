@@ -278,7 +278,7 @@ namespace ob::core {
     //! @details p1 と p2 をスワップします。
     //@―---------------------------------------------------------------------------
     inline Triangle& Triangle::flip()noexcept {
-        swap(p1, p2);
+        std::swap(p1, p2);
         return *this;
     }
 

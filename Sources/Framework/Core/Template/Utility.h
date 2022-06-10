@@ -17,7 +17,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr auto enum_cast(T e)->std::enable_if_t<std::is_enum_v<T>, std::underlying_type_t<T>> {
-        return static_cast<underlying_type_t<T>>(e);
+        return static_cast<std::underlying_type_t<T>>(e);
     }
 
 

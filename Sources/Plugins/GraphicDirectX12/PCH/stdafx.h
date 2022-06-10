@@ -15,6 +15,7 @@
 // DirectX
 //============================================
 
+#define WIN32_LEAN_AND_MEAN     // ヘッダーからあまり使われない関数を省く
 #pragma warning(push)
 #pragma warning(disable:4100)
 #include <d3d12.h>

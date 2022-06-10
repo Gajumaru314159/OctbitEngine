@@ -47,7 +47,7 @@ namespace ob::core {
             //! @brief ハンドルが対象のリストの要素か判定する
             //@―---------------------------------------------------------------------------
             bool is_child_of(const HandleForwardList<T>& parent)const noexcept {
-                return pParent == ob::addressof(parent);
+                return pParent == std::addressof(parent);
             }
 
         protected:
@@ -281,7 +281,7 @@ namespace ob::core {
     template<typename T>
     inline HandleForwardList<T>::HandleForwardList(this_type&& x)noexcept {
         clear_impl();
-        move_impl(ob::move(x));
+        move_impl(std::move(x));
     }
 
 
@@ -293,7 +293,7 @@ namespace ob::core {
         if (this != &rhs) {
             clear();
             ScopeLock lock(m_mutex);;
-            move_impl(ob::move(rhs));
+            move_impl(std::move(rhs));
         }
         return *this;
     }
@@ -405,7 +405,7 @@ namespace ob::core {
     template<typename T>
     inline typename HandleForwardList<T>::size_type HandleForwardList<T>::size()const noexcept {
         ScopeLock lock(m_mutex);;
-        return ob::distance(begin(), end());
+        return std::distance(begin(), end());
     }
 
 
@@ -450,7 +450,7 @@ namespace ob::core {
     inline typename HandleForwardList<T>::reference HandleForwardList<T>::emplace_front(Handle& h, Args&&... args) {
         ScopeLock lock(m_mutex);;
         insert_front_impl(h);
-        ob::construct_at(h.get_ptr(), ob::forward<Args>(args)...);
+        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
     }
 
@@ -462,7 +462,7 @@ namespace ob::core {
     inline void HandleForwardList<T>::push_front(Handle& h, T&& x) {
         ScopeLock lock(m_mutex);;
         insert_front_impl(h);
-        *h.get_ptr() = ob::move(x);
+        *h.get_ptr() = std::move(x);
     }
 
 
@@ -485,7 +485,7 @@ namespace ob::core {
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::emplace_after(Handle& h, const_iterator position, Args&&... args) {
         ScopeLock lock(m_mutex);;
         insert_impl(position.pHandle, h);
-        ob::construct_at(h.get_ptr(), ob::forward<Args>(args)...);
+        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return &h;
     }
 
@@ -546,7 +546,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleForwardList<T>::swap(this_type& x)noexcept {
-        ob::swap(*this, x);
+        std::swap(*this, x);
     }
 
 

@@ -19,20 +19,20 @@ namespace ob::graphic {
 	class DescriptorTable;	class IDescriptorTable;
 }
 
-#define GRAPHIC_DECLEAR_GET_IMPL(type)														\
-	public:																					\
-    template<class T>																		\
-    static auto GetImpl(const type& obj)->enable_if_t<is_base_of_v<I##type, T>, const T&> { \
-        return *reinterpret_cast<const T*>(GetImpl(obj));									\
-    }       																				\
+#define GRAPHIC_DECLEAR_GET_IMPL(type)																	\
+	public:																								\
+    template<class T>																					\
+    static auto GetImpl(const type& obj)->std::enable_if_t<std::is_base_of_v<I##type, T>, const T&> {	\
+        return *reinterpret_cast<const T*>(GetImpl(obj));												\
+    }       																							\
 	private:
 
-#define GRAPHIC_DECLEAR_GET_IMPL_EX(type,base)												\
-	public:																					\
-    template<class T>																		\
-    static auto GetImpl(const base& obj)->enable_if_t<is_base_of_v<I##type, T>, const T&> { \
-        return *reinterpret_cast<const T*>(GetImpl(obj));									\
-    }       																				\
+#define GRAPHIC_DECLEAR_GET_IMPL_EX(type,base)															\
+	public:																								\
+    template<class T>																					\
+    static auto GetImpl(const base& obj)->std::enable_if_t<std::is_base_of_v<I##type, T>, const T&> {	\
+        return *reinterpret_cast<const T*>(GetImpl(obj));												\
+    }       																							\
 	private:
 
 namespace ob::graphic {

@@ -48,7 +48,7 @@ namespace ob::graphic::dx12 {
 		: m_capacity(0)
 		, m_type(type)
 	{
-		capacity = get_max(capacity, s_linearManagementSize);
+		capacity = std::max(capacity, s_linearManagementSize);
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 			descHeapDesc.Type = TypeConverter::convert(type);
@@ -399,7 +399,7 @@ namespace ob::graphic::dx12 {
 			firstLevel = 0;
 			secondLevel = size >> s_secondLevelShift;
 		} else {
-			firstLevel = get_max(0, BitOp::getMSB((u32)size) - s_linearManagementSizeLog2);
+			firstLevel = std::max(0, BitOp::getMSB((u32)size) - s_linearManagementSizeLog2);
 			secondLevel = size >> (firstLevel - s_maxSecondLevel);
 			secondLevel &= (s_maxSecondLevel - 1);
 		}

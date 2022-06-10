@@ -21,7 +21,7 @@ namespace ob::graphic::dx12 {
 		: m_desc(desc)
 	{
 
-		const s32 colorCount = get_size(m_desc.colors);
+		const s32 colorCount = std::size(m_desc.colors);
 		const s32 depthCount = m_desc.depth.empty() ? 0 : 1;
 		auto& nativeDevice = rDevice.getNative();
 		OB_CHECK_ASSERT(0 < colorCount && colorCount <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", colorCount);

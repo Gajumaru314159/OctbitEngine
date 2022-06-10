@@ -22,7 +22,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	template <typename S, typename TChar = fmt::char_t<S>, std::enable_if_t<!std::is_same<TChar, TChar>::value>, typename... Args>
 	auto Format(const S& fmt, Args&&... args) -> StringBase<TChar> {
-		return fmt::format(fmt, ob::forward<Args>(args)...);
+		return fmt::format(fmt, std::forward<Args>(args)...);
 	}
 
 

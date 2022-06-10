@@ -5,7 +5,8 @@
 //***********************************************************
 #pragma once
 #include <Framework/Singleton/Singleton.h>
-#include <Framework/Core/Template/include.h>
+#include <Framework/Core/Template/Event/EventNotifier.h>
+#include <Framework/Core/Template/Delegate/Delegate.h>
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/Atomic.h>
@@ -77,7 +78,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename... Args>
         void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
-            const String message = fmt::format(StringView(pFormat), ob::forward<Args>(args)...);
+            const String message = fmt::format(StringView(pFormat), std::forward<Args>(args)...);
             addLog(level, sourceLocation, category, message.c_str());
         }
 
@@ -85,7 +86,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ログ・イベントの追加
         //@―---------------------------------------------------------------------------
-        void addEvent(EventHandle& handle, EventDelegateType delegate);
+        void addEvent(EventHandle& handle, EventDelegateType func);
 
 
         //@―---------------------------------------------------------------------------

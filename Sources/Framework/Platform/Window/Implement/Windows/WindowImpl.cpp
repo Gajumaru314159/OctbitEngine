@@ -12,7 +12,7 @@ namespace ob::platform {
     const TCHAR* WindowImpl::WINDOW_CLASS_NAME = TEXT("OctbitWindow");
     const TCHAR* WindowImpl::PROPERTY_NAME = TEXT("OctbitWindowProp");
 
-    atomic<s32> WindowImpl::m_windowNum = 0;
+    Atomic<s32> WindowImpl::m_windowNum = 0;
 
     //@―---------------------------------------------------------------------------
     //! @brief t     コンストラクタ

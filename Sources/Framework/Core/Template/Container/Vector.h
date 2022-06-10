@@ -1,14 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		typeinfo
+//! @brief		可変長配列
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <typeinfo>
+#include <vector>
+#include <Framework/Core/Template/Container/Deque.h>
+
 namespace ob::core {
 
-    using std::type_info;
-    using std::bad_cast;
-    using std::bad_typeid;
+    //! @brief 動的配列
+    template <class T>
+    using vector = std::vector<T, ob::core::allocator<T>>;
 
 }// namespcae ob

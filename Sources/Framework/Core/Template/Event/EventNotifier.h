@@ -23,7 +23,7 @@ namespace ob::core {
 
         using this_type = EventNotifier <Args...>;                                  //!< 型
 
-        using delegate_type = ob::delegate<void(Args...)>;                          //!< デリゲート型
+        using delegate_type = ob::Delegate<void(Args...)>;                          //!< デリゲート型
         using function_type = void(Args...);                                        //!< 関数型
         template<typename T>using method_type = void(T::*)(Args...);                //!< メンバ関数ポインタ型
         template<typename T>using const_method_type = void(T::*)(Args...)const;     //!< constメンバ関数ポインタ型

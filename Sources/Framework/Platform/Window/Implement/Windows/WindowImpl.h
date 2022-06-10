@@ -92,7 +92,7 @@ namespace ob::platform {
         static const TCHAR* WINDOW_CLASS_NAME;      //!< WNDCLASSEXに登録するウィンドウクラス名
         static const TCHAR* PROPERTY_NAME;          //!< HWNDに結びつけるプロパティ名
 
-        static atomic<s32> m_windowNum;             //!< 生成されたウィンドウの数
+        static Atomic<s32> m_windowNum;             //!< 生成されたウィンドウの数
 
         WindowMode m_mode;
 

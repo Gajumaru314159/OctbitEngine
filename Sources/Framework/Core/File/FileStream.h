@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/File/Stream.h>
+#include <Framework/Core/File/Path.h>
 
 namespace ob::core {
 

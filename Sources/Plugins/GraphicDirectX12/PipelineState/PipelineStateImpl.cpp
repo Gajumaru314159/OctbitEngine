@@ -137,7 +137,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src) {
 		dst = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		for (s32 i = 0; i < get_size(src.blend); ++i) {
+		for (s32 i = 0; i < std::size(src.blend); ++i) {
 			setupRenderTargetBlend(dst.RenderTarget[i], src.blend[i]);
 		}
 	}
