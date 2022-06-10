@@ -21,24 +21,6 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      コンテナのサイズを取得
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr s32 get_size(const T& container)noexcept(noexcept(container.size())) {
-        return static_cast<s32>(container.size());
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      静的配列のサイズを取得
-    //@―---------------------------------------------------------------------------
-    template<typename T, s32 N>
-    inline constexpr s32 get_size(const T(&)[N])noexcept {
-        return N;
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief      二乗値の計算
     //@―---------------------------------------------------------------------------
     template<typename T>
@@ -48,64 +30,13 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      最大値を取得
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr T get_max(T a, T b)noexcept(std::is_arithmetic<T>::value) {
-        return (a < b) ? b : a;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      最大値を取得
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr T get_max(T a, T b, T c)noexcept(std::is_arithmetic<T>::value) {
-        if (a <= c && b <= c)return c;
-        return get_max(a, b);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      最小値を取得
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr T get_min(T a, T b)noexcept(std::is_arithmetic<T>::value) {
-        return (a < b) ? a : b;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      最小値を取得
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr T get_min(T a, T b, T c)noexcept(std::is_arithmetic<T>::value) {
-        if (c <= a && c <= b)return c;
-        return get_min(a, b);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      クランプ
-    //! 
-    //! @param val        入力
-    //! @param minVal     最小値
-    //! @param maxVal     最大値
-    //@―---------------------------------------------------------------------------
-    template<typename T>
-    inline constexpr T get_clamp(T val, T minVal, T maxVal)noexcept(std::is_arithmetic<T>::value) {
-        return get_min(get_max(val, minVal), maxVal);
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief      0～1にクランプ
     //! 
     //! @param val        入力
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline constexpr T get_clamp01(T val)noexcept(std::is_arithmetic<T>::value) {
-        return get_clamp(val, (T)0, (T)1);
+    inline constexpr T clamp01(T val)noexcept(std::is_arithmetic<T>::value) {
+        return std::clamp(val, (T)0, (T)1);
     }
 
 

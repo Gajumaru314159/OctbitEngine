@@ -568,7 +568,7 @@ namespace ob::core {
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
     inline s32 IntVec2::maxComponent() const noexcept {
-        return  get_max(x, y);
+        return  std::max(x, y);
     }
 
 
@@ -576,7 +576,7 @@ namespace ob::core {
     //! @brief 要素の絶対値の最大を取得
     //@―---------------------------------------------------------------------------
     inline s32 IntVec2::maxAbsComponent() const noexcept {
-        return get_max(abs(x), abs(y));
+        return std::max(abs(x), abs(y));
     }
 
 
@@ -584,7 +584,7 @@ namespace ob::core {
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
     inline s32 IntVec2::minComponent() const noexcept {
-        return get_min(x, y);
+        return std::min(x, y);
     }
 
 
@@ -650,7 +650,7 @@ namespace ob::core {
     //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
     inline IntVec2 IntVec2::Max(const IntVec2& a, const IntVec2& b) noexcept {
-        return IntVec2(get_max(a.x, b.x), get_max(a.y, b.y));
+        return IntVec2(std::max(a.x, b.x), std::max(a.y, b.y));
     }
 
 
@@ -658,7 +658,7 @@ namespace ob::core {
     //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
     inline IntVec2 IntVec2::Min(const IntVec2& a, const IntVec2& b) noexcept {
-        return IntVec2(get_min(a.x, b.x), get_min(a.y, b.y));
+        return IntVec2(std::min(a.x, b.x), std::min(a.y, b.y));
     }
 
     //! @endcond

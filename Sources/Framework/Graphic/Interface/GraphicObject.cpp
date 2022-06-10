@@ -44,8 +44,8 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void GraphicObject::setName(StringView name) {
 #ifdef OB_DEBUG
-        OB_CHECK_ASSERT(name.size() < get_size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", get_size(m_name), name.data());
-        for (s32 i = 0; i < get_size(m_name) && i < name.size(); ++i) {
+        OB_CHECK_ASSERT(name.size() < std::size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", std::size(m_name), name.data());
+        for (s32 i = 0; i < std::size(m_name) && i < name.size(); ++i) {
             m_name[i] = name[i];
         }
         m_name[name.size()] = TC('\0');

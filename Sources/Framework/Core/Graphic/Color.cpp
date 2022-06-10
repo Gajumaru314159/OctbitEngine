@@ -74,10 +74,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     IntColor Color::toIntColor()const noexcept {
         return IntColor(
-            static_cast<s32>(get_clamp01(r) * 255),
-            static_cast<s32>(get_clamp01(g) * 255),
-            static_cast<s32>(get_clamp01(b) * 255),
-            static_cast<s32>(get_clamp01(a) * 255));
+            static_cast<s32>(ob::core::clamp01(r) * 255),
+            static_cast<s32>(ob::core::clamp01(g) * 255),
+            static_cast<s32>(ob::core::clamp01(b) * 255),
+            static_cast<s32>(ob::core::clamp01(a) * 255));
     }
 
 

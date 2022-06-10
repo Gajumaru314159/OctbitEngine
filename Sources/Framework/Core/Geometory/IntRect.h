@@ -249,10 +249,10 @@ namespace ob::core {
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
     inline IntRect& IntRect::operator+=(const IntVec2& point) noexcept {
-        left = get_min(point.x, left);
-        right = get_max(point.x, right);
-        top = get_min(point.y, top);
-        bottom = get_max(point.y, bottom);
+        left = std::min(point.x, left);
+        right = std::max(point.x, right);
+        top = std::min(point.y, top);
+        bottom = std::max(point.y, bottom);
         return *this;
     }
 

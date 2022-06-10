@@ -26,7 +26,7 @@ namespace ob::graphic {
     GraphicObjectManager::~GraphicObjectManager() {
 
         // フレームバッファ分解放
-        for (s32 i = 0; i < get_size(m_deleteStackList); ++i) {
+        for (s32 i = 0; i < std::size(m_deleteStackList); ++i) {
             update();
         }
 
@@ -46,7 +46,7 @@ namespace ob::graphic {
     void GraphicObjectManager::update() {
 
         // インデックスを更新
-        m_index = (m_index + 1) % get_size(m_deleteStackList);
+        m_index = (m_index + 1) % std::size(m_deleteStackList);
 
         // グラフィック・オブジェクトを削除
         auto& deleteStack = m_deleteStackList[m_index];

@@ -18,13 +18,13 @@ namespace ob::core {
 
         f32 inRate = 1.0f;
         if (Math::EPSILON < in) {
-            inRate = get_clamp01(time / in);
+            inRate = clamp01(time / in);
         }
         f32 outRate = 1.0f;
         if (Math::EPSILON < out) {
-            outRate = get_clamp01((length - time) / out);
+            outRate = clamp01((length - time) / out);
         }
-        f32 rate = get_min(inRate, outRate);
+        f32 rate = std::min(inRate, outRate);
         return Math::Lerp(minValue, maxValue, rate);
     }
 
