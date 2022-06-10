@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.21)
 project (Core)
 message("Load project [${PROJECT_NAME}]")
 
@@ -28,6 +28,8 @@ set(OB_PROJECT_INCLUDE_LIB
     Singleton
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")

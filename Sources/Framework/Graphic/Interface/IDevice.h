@@ -28,6 +28,8 @@ namespace ob::graphic {
     class IShader;
     class IBuffer;
     class IDescriptorTable;
+
+    struct TextureData;
 }
 
 
@@ -91,6 +93,7 @@ namespace ob::graphic {
         virtual IBuffer*            createBuffer(const BufferDesc& desc) = 0;
 
         virtual ITexture*           createTexture(const TextureDesc& desc) = 0;
+        virtual ITexture*           createTexture(const TextureData& data) = 0;
         virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc)=0;
         
         virtual IShader*            createShader(const String& code,ShaderStage stage) = 0;

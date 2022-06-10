@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.21)
 project (GraphicDirectX12)
 message("Load project [${PROJECT_NAME}]")
 
@@ -38,6 +38,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 
 # プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins/Graphic")
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # 
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)

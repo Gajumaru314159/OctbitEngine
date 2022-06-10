@@ -122,6 +122,14 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  テクスチャを生成
+	//@―---------------------------------------------------------------------------
+	ob::graphic::ITexture* DeviceImpl::createTexture(const TextureData& data) {
+		return new TextureImpl(*this, data);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
 	ob::graphic::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {

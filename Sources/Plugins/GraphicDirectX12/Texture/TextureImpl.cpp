@@ -7,6 +7,8 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
+#include <Framework/Graphic/TextureData.h>
+#include <DirectXTex/DirectXTex.h>
 
 
 namespace ob::graphic::dx12 {
@@ -105,6 +107,66 @@ namespace ob::graphic::dx12 {
 		m_resource = resource;
 
     }
+
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      コンストラクタ
+	//@―---------------------------------------------------------------------------
+	TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureData& data)
+		: m_device(rDevice)
+	{
+		// 拡張子に合わせて読み込み
+		HRESULT result;
+		DirectX::TexMetadata metadata = {};
+		DirectX::ScratchImage scratchImg = {};
+
+		result = DirectX::LoadFromDDSMemory(data.data.data(), data.data.size(), DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+		}
+
+		//WriteToSubresourceで転送する用のヒープ設定
+		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		auto resDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+			metadata.format,
+			(UINT16)metadata.width,
+			(UINT)metadata.height,
+			(UINT16)metadata.arraySize,
+			(UINT16)metadata.mipLevels);
+
+		ComPtr<ID3D12Resource> resource;
+
+		result = m_device.getNative()->CreateCommittedResource(
+			&texHeapProp,
+			D3D12_HEAP_FLAG_NONE,
+			&resDesc,
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			nullptr,
+			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+		}
+
+
+		// GPUにデータ転送
+		auto img = scratchImg.GetImage(0, 0, 0);
+
+		result = resource->WriteToSubresource(0,
+			nullptr,               //全領域へコピー
+			img->pixels,           //元データアドレス
+			(UINT)img->rowPitch,   //1ラインサイズ
+			(UINT)img->slicePitch  //全サイズ
+		);
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+		}
+		
+		m_resource = resource;
+
+	}
 
 
 	//@―---------------------------------------------------------------------------

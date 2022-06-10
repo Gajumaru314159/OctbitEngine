@@ -5,15 +5,42 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Misc/DataTime.h>
+#include <Framework/Core/Misc/DateTime.h>
+#include <Framework/Core/Misc/YesNo.h>
 
 namespace ob::core {
+
+	DEFINE_YES_NO(Recrusive);
+
+	enum class SearchOption :u32 {
+		TopDirectoryOnly,
+		Drecursive,
+	};
+
+
+	struct DirectoryInfo {};
+	struct FileInfo {};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	class File {
+	class Directory {
 	public:
+
+		static DirectoryInfo CreateDirectory(Path path);
+		static void Delete(Path path, Recrusive recrusive = Recrusive::Yes);
+
+		using VisitDirectoryFunc = const std::function<void(const DirectoryInfo&)>&;
+		using VisitFileFunc = const std::function<void(const FileInfo&)>&;
+
+		static void VisitDirectories(Path path, VisitDirectoryFunc func);
+		static void VisitFiles(Path path, VisitFileFunc func);
+		//void VisitItems(Path path, VisitFileFunc func);
+		//void VisitDirectories(Path path, VisitFunc func,Regex regex);
+		static  bool Exists(Path path);
+		static Path GetCurrentDirectory();
+		static void Move(Path sourceDirName, Path destDirName);
+
 
 		//===============================================================
 		// コンストラクタ / デストラクタ
@@ -22,49 +49,17 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  説明
 		//@―---------------------------------------------------------------------------
-		size_t pos();
-		bool seek(size_t pos);
-		bool seekFromEnd(size_t offset);
-		bool read(byte* dest, size_t size);
-		bool write(const byte* dest, size_t size);
-		bool flush();
-		bool truncate(size_t size);
-		size_t size();
-
 
 	private:
 
-		 
 
 
 	};
 
 
-	enum class FileType {
-		Directory,
-		Reguler,
-	};
-
-	struct FileStatData {
-		FileType type;
-		DateTime creationTime;
-		DateTime accessTime;
-		DateTime modificationTime;
-		size_t	 fileSize;
-
-		bool bIsDirectory : 1;
-		bool bIsReadOnly : 1;
-		bool bIsValid : 1;
-	};
 
 
-	class IDirectoryVisitor {
-	public:
-		virtual ~IDirectoryVisitor() = default;
 
-		virtual bool visit(Path path, const FileStatData& statData) = 0;
-
-	}
 
 	//===============================================================
 	// インライン関数

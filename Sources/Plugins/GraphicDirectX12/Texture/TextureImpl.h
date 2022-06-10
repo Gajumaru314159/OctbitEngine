@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Framework/Graphic/TextureData.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 
@@ -30,6 +31,11 @@ namespace ob::graphic::dx12 {
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
         TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        TextureImpl(DeviceImpl& rDevice, const TextureData& data);
 
 
         //@―---------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Utility/GraphicObjectHolder.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
+#include <Framework/Graphic/TextureData.h>
 #include <Framework/Core/Misc/BlobView.h>
 
 //===============================================================
@@ -48,7 +49,7 @@ namespace ob::graphic {
         //! @param desc テクスチャ定義
         //! @param name オブジェクト名
         //@―---------------------------------------------------------------------------
-        Texture(const BlobView& desc, StringView name = TC("Texture"));
+        Texture(const Path& path, StringView name = TC("Texture"));
 
 
         //===============================================================
