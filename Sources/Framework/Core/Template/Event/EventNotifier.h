@@ -28,13 +28,13 @@ namespace ob::core {
         template<typename T>using method_type = void(T::*)(Args...);                //!< メンバ関数ポインタ型
         template<typename T>using const_method_type = void(T::*)(Args...)const;     //!< constメンバ関数ポインタ型
 
-        using handle = typename handle_list<delegate_type>::handle;                 //!< イベントハンドル型
+        using Handle = typename HandleList<delegate_type>::Handle;                 //!< イベントハンドル型
 
     private:
 
         using mutex_type = Mutex;
         using lock_type = ScopeLock<mutex_type> ;
-        using handle_list_type = handle_list<delegate_type>;
+        using handle_list_type = HandleList<delegate_type>;
 
     public:
 
@@ -48,15 +48,15 @@ namespace ob::core {
         //===============================================================
         // 公開関数
         //===============================================================
-        void add(handle& handle, const delegate_type& delegate);                        // デリゲートをイベントとして登録する
-        void add(handle& handle, function_type& function);                              // 関数をイベントとして登録する
+        void add(Handle& handle, const delegate_type& delegate);                        // デリゲートをイベントとして登録する
+        void add(Handle& handle, function_type& function);                              // 関数をイベントとして登録する
         template<class T>
-        void add(handle& handle, T& instance, method_type<T> pMethod);                  // メンバ関数をイベントとして登録する
+        void add(Handle& handle, T& instance, method_type<T> pMethod);                  // メンバ関数をイベントとして登録する
         template<class T>
-        void add(handle& handle, const T& instance, const_method_type<T> pMethod);      // constメンバ関数をイベントとして登録する
+        void add(Handle& handle, const T& instance, const_method_type<T> pMethod);      // constメンバ関数をイベントとして登録する
 
         void clear()noexcept;                                                           // 登録したイベントをすべて削除する
-        void remove(handle& handle);                                                    // イベントを削除する
+        void remove(Handle& handle);                                                    // イベントを削除する
 
         void invoke(Args...)const;                                                      // イベントを呼び出す
         bool empty()const noexcept;                                                     // イベントが登録さえていないか判定する
@@ -101,11 +101,11 @@ namespace ob::core {
     //! @brief  デリゲートをイベントとして登録する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::add(handle& handle, const delegate_type& delegate) {
-        handle.remove();
+    void event_notifier<Args...>::add(Handle& Handle, const delegate_type& delegate) {
+        Handle.remove();
         {
             lock_type lockGuard(m_mutex);
-            m_handleList.push_back(handle, delegate);
+            m_handleList.push_back(Handle, delegate);
         }
     }
 
@@ -114,7 +114,7 @@ namespace ob::core {
     //! @brief  関数をイベントとして登録する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::add(handle& handle, function_type& function) {
+    void event_notifier<Args...>::add(Handle& handle, function_type& function) {
         handle.remove();
         {
             lock_type lockGuard(m_mutex);
@@ -129,7 +129,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename... Args>
     template<class T>
-    void event_notifier<Args...>::add(handle& handle, T& instance, method_type<T> pMethod) {
+    void event_notifier<Args...>::add(Handle& handle, T& instance, method_type<T> pMethod) {
         handle.remove();
         {
             lock_type lockGuard(m_mutex);
@@ -144,7 +144,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename... Args>
     template<class T>
-    void event_notifier<Args...>::add(handle& handle, const T& instance, const_method_type<T> pMethod) {
+    void event_notifier<Args...>::add(Handle& handle, const T& instance, const_method_type<T> pMethod) {
         handle.remove();
         {
             lock_type lockGuard(m_mutex);
@@ -168,7 +168,7 @@ namespace ob::core {
     //! @brief  イベントを削除する
     //@―---------------------------------------------------------------------------
     template<typename... Args>
-    void event_notifier<Args...>::remove(handle& h) {
+    void event_notifier<Args...>::remove(Handle& h) {
         lock_type lockGuard(m_mutex);
         m_handleList.remove(h);
     }
@@ -182,9 +182,9 @@ namespace ob::core {
     template<typename... Args>
     void event_notifier<Args...>::invoke(Args... args)const {
         lock_type lockGuard(m_mutex);
-        for (auto& event : m_handleList) {
-            if (event.empty())continue;
-            event(args...);
+        for (auto& e : m_handleList) {
+            if (e.empty())continue;
+            e(args...);
         }
     }
 

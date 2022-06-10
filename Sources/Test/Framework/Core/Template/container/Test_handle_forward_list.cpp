@@ -17,7 +17,7 @@ struct Hoge {
 };
 
 TEST(HandleForwardList, Test) {
-    using List = handle_forward_list<Hoge>;
+    using List = HandleForwardList<Hoge>;
     using Handle = List::handle;
 
     // ムーブ・コンストラクタ

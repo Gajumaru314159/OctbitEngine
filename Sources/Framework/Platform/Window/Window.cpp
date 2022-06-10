@@ -217,9 +217,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
-    void Window::addEventListener(WindowEventType type, const WindowEvent& event) {
+    void Window::addEventListener(WindowEventType type, const WindowEvent& e) {
         if (!m_impl)return;
-        m_impl->addEventListener(type, event);
+        m_impl->addEventListener(type, e);
     }
 
 }// namespace ob::platform

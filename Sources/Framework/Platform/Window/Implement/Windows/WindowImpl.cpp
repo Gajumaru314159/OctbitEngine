@@ -304,7 +304,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
-    void WindowImpl::addEventListener(WindowEventType type, const WindowEvent& event) {
+    void WindowImpl::addEventListener(WindowEventType type, const WindowEvent& e) {
         switch (type) {
         case WindowEventType::Move:
             break;

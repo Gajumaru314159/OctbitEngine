@@ -170,7 +170,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウ・イベントのリスナを追加する
         //@―---------------------------------------------------------------------------
-        virtual void addEventListener(WindowEventType type, const WindowEvent& event) = 0;
+        virtual void addEventListener(WindowEventType type, const WindowEvent& e) = 0;
 
     };
 

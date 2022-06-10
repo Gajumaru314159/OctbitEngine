@@ -16,8 +16,8 @@ struct Hoge {
 };
 
 TEST(HandleList, Test) {
-    using List = handle_list<Hoge>;
-    using Handle = List::handle;
+    using List = HandleList<Hoge>;
+    using Handle = List::Handle;
 
     // ムーブ・コンストラクタ
     {

@@ -62,7 +62,7 @@ namespace ob::platform {
         // イベント
         //===============================================================
 
-        void addEventListener(WindowEventType type, const WindowEvent& event) override;
+        void addEventListener(WindowEventType type, const WindowEvent& e) override;
 
     public:
 
