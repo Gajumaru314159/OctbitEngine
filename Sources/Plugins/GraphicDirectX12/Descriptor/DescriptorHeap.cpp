@@ -123,7 +123,7 @@ namespace ob::graphic::dx12 {
 		handle.release();
 		if (size <= 0)return;
 
-		lock_guard_type lock(m_mutex);
+		ScopeLock lock(m_mutex);
 
 		BBlock* pBlock = allocateFreeBlock(size);
 		if (pBlock == nullptr) {
@@ -142,9 +142,9 @@ namespace ob::graphic::dx12 {
 	void DescriptorHeap::releaseHandle(class DescriptorHandle& handle) {
 
 		auto pFreeBlock = handle.m_pBlock;
-		if (pFreeBlock == nullptr)return;
 
-		lock_guard_type lock(m_mutex);
+		ScopeLock lock(m_mutex);
+		if (pFreeBlock == nullptr)return;
 
 		pFreeBlock->allocated = false;
 

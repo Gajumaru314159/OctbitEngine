@@ -84,7 +84,7 @@ namespace ob::graphic::dx12 {
 		setupDepthStencilState(gpsd.DepthStencilState, desc.depthStencil);
 
 		// 頂点レイアウト
-		vector<D3D12_INPUT_ELEMENT_DESC> attributes;
+		Array<D3D12_INPUT_ELEMENT_DESC> attributes;
 		gpsd.InputLayout.NumElements = gsl::narrow_cast<UINT>(desc.vertexLayout.attributes.size());
 		attributes.reserve(gpsd.InputLayout.NumElements);
 		for (auto& attr : desc.vertexLayout.attributes) {

@@ -175,16 +175,16 @@ namespace ob::graphic::dx12 {
 		//ComPtr<ID3D12CommandQueue>          m_commandQueue;             // コマンドキュー
 		//ComPtr<ID3D12GraphicsCommandList>   m_systemCmdList;            // システムコマンドリスト
 
-		std::unique_ptr<class CommandQueue>	m_commandQueue;
+		UPtr<class CommandQueue>			m_commandQueue;
 
 		ComPtr<ID3D12Fence>                 m_fence;
 		UINT64                              m_fenceVal;
 
 
-		vector<std::unique_ptr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
+		Array<std::unique_ptr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 
 #ifdef OB_DEBUG
-		std::unique_ptr<class PIXModule> m_pixModule;
+		Pimpl<class PIXModule> m_pixModule;
 #endif
 	};
 }// namespace ob::graphic::dx12

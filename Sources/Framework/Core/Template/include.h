@@ -9,13 +9,13 @@
 // Standard Template Library
 //============================================
 #include "STL.h"
-#include "Memory.h"
 
 
 //============================================
 // ユーティリティ
 //============================================
-#include "Utility.h"
+#include "Utility/Memory.h"
+#include "Utility/Utility.h"
 
 
 //============================================
@@ -33,7 +33,7 @@
 #include "Container/Queue.h"
 #include "Container/Set.h"
 #include "Container/Stack.h"
-#include "Container/Vector.h"
+#include "Container/StaticArray.h"
 
 
 //============================================

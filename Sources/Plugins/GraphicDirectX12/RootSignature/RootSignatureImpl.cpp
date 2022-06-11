@@ -18,8 +18,8 @@ namespace ob::graphic::dx12 {
 		: m_desc(desc)
 	{
 		// パラメータ
-		vector<D3D12_ROOT_PARAMETER> parameters;
-		vector<CD3DX12_DESCRIPTOR_RANGE> descriptors;
+		Array<D3D12_ROOT_PARAMETER> parameters;
+		Array<CD3DX12_DESCRIPTOR_RANGE> descriptors;
 		parameters.reserve(desc.parameters.size());
 		for (const auto& param : desc.parameters) {
 			D3D12_ROOT_PARAMETER elm;
@@ -59,7 +59,7 @@ namespace ob::graphic::dx12 {
 
 		// 静的サンプラー
 		// TODO テクスチャごとのサンプラーを定義するか検討
-		vector<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
+		Array<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
 		samplerDescs.reserve(desc.samplers.size());
 		for (auto& params: desc.samplers) {
 			CD3DX12_STATIC_SAMPLER_DESC sampler(

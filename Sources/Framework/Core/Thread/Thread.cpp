@@ -32,7 +32,6 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Thread::Thread(StringView name, ThreadDesc desc, const std::function<void()>& entryPoint) 
 	{
-		m_impl = std::make_unique<ThreadImpl>();
 		m_impl->th = std::thread(entryPoint);
 	}
 

@@ -13,7 +13,7 @@ namespace ob::platform {
     class Arguments {
     public:
 
-        using container_type = vector<String>;                      //!< 引数コンテナ
+        using container_type = Array<String>;                      //!< 引数コンテナ
         using iterator = container_type::iterator;                  //!< イテレータ
         using const_iterator = container_type::const_iterator;      //!< constイテレータ
 
@@ -53,7 +53,7 @@ namespace ob::platform {
 
     private:
 
-        vector<String> m_args;
+        Array<String> m_args;
 
     };
 

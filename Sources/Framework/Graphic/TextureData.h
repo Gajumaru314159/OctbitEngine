@@ -33,7 +33,7 @@ namespace ob::graphic {
     };
 
     struct TextureMipsData {
-        vector<TextureData> mips;
+        Array<TextureData> mips;
         TextureFormat format;
         Size size;
     };

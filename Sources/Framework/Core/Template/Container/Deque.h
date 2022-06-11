@@ -5,12 +5,12 @@
 //***********************************************************
 #pragma once
 #include <deque>
-#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Template/Allocator/STLAllocator.h>
 
 namespace ob::core {
 
-    //! @brief デック
-    template <class T>
-    using deque = std::deque<T, ob::core::allocator<T>>;
+    //! @brief Deque(二重終端キュー)
+    template <class T, class TAlloc = ob::core::allocator<T>>
+    using Deque = std::deque<T, TAlloc>;
 
 }// namespcae ob

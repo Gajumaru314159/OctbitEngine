@@ -15,7 +15,7 @@ namespace ob::core {
     class Blob {
     public:
 
-        using base_type = vector<byte>;                                     //!< 内部型
+        using base_type = Array<byte>;                                     //!< 内部型
         using iterator = base_type::iterator;                               //!< イテレータ
         using const_iterator = base_type::const_iterator;                   //!< イテレータ(const)
         using reverse_iterator = base_type::reverse_iterator;               //!< 逆イテレータ
@@ -64,7 +64,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
-        explicit Blob(const vector<byte>& data) {
+        explicit Blob(const Array<byte>& data) {
             m_data = data;
         }
 
@@ -72,7 +72,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
-        explicit Blob(vector<byte>&& data) {
+        explicit Blob(Array<byte>&& data) {
             m_data = move(data);
         }
 
@@ -100,18 +100,18 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief コピー代入演算子(vector)
+        //! @brief コピー代入演算子(Array)
         //@―---------------------------------------------------------------------------
-        Blob& operator =(const vector<byte>& other) {
+        Blob& operator =(const Array<byte>& other) {
             m_data = other;
             return *this;
         }
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief ムーブ代入演算子(vector)
+        //! @brief ムーブ代入演算子(Array)
         //@―---------------------------------------------------------------------------
-        Blob& operator =(vector<byte>&& other) noexcept{
+        Blob& operator =(Array<byte>&& other) noexcept{
             m_data = move(other);
             return *this;
         }
@@ -131,9 +131,9 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief データを設定(vector)
+        //! @brief データを設定(Array)
         //@―---------------------------------------------------------------------------
-        void set(const vector<byte>& data) {
+        void set(const Array<byte>& data) {
             m_data = data;
         }
 
@@ -158,7 +158,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief データを追加
         //@―---------------------------------------------------------------------------
-        void append(const vector<byte>& data) {
+        void append(const Array<byte>& data) {
             append(data.data(), data.size());
         }
 
@@ -200,9 +200,9 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief vector にアクセス
+        //! @brief Array にアクセス
         //@―---------------------------------------------------------------------------
-        const vector<byte>& toVector() const noexcept {
+        const Array<byte>& toVector() const noexcept {
             return m_data;
         }
 

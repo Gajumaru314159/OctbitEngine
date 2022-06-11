@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <type_traits>
 #include <Framework/Core/Template/include.h>
 #include <Framework/Core/Log/Assertion.h>
 
@@ -40,9 +41,9 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  構築済みか
 		//@―---------------------------------------------------------------------------
-		//bool operator()const noexcept {
-		//	return m_constructed;
-		//}
+		bool operator()const noexcept {
+			return m_constructed;
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  空か

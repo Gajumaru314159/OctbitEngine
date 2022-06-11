@@ -39,8 +39,8 @@ namespace ob::graphic::dx12 {
         UINT64 m_fenceVal;
         HANDLE m_fenceEvent;
 
-        vector<ID3D12CommandList*> m_entriedNativeCommandList;
-        vector<CommandList> m_entriedCommandList;
+        Array<ID3D12CommandList*> m_entriedNativeCommandList;
+        Array<CommandList> m_entriedCommandList;
 
     };
 

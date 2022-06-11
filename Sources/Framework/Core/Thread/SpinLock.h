@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Thread/ScopeLock.h>
-#include <memory>
+#include <Framework/Core/Utility/Noncopyable.h>
+#include <Framework/Core/Utility/Pimpl.h>
 
 namespace ob::core {
 
@@ -41,7 +41,7 @@ namespace ob::core {
 
     private:
 
-        std::unique_ptr<class SpinLockImpl> m_impl;
+        Pimpl<class SpinLockImpl> m_impl;
 
     };
 

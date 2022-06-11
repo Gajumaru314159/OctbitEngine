@@ -1,16 +1,15 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		可変長配列
+//! @brief		静的配列
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <vector>
-#include <Framework/Core/Template/Container/Deque.h>
+#include <array>
 
 namespace ob::core {
 
-    //! @brief 動的配列
-    template <class T>
-    using vector = std::vector<T, ob::core::allocator<T>>;
+	//! @brief 静的配列
+	template<class T, size_t N>
+	using StaticArray = std::array<T, N>;
 
 }// namespcae ob

@@ -115,19 +115,17 @@ namespace ob::graphic::dx12 {
 		ComPtr<ID3D12DescriptorHeap> m_heap;
 		u32	m_descriptorSize;
 
-		using mutex_type = Mutex;
-		using lock_guard_type = ScopeLock<mutex_type>;
-		mutex_type		m_mutex;		//!< ミューテックス
+		Mutex			m_mutex;		//!< ミューテックス
 
 		const DescriptorHeapType m_type;
 		s32				m_capacity;     //!< 最大容量
 
 		u32				m_freeFLI;      //!< First Level のフリー・ビットフラグ
-		vector<u32>		m_freeSLI;      //!< Second Level のフリー・ビットフラグ
+		Array<u32>		m_freeSLI;      //!< Second Level のフリー・ビットフラグ
 
-		vector<BBlock>  m_buffer;		//!< バッファ(ブロック実体)
-		std::vector<BBlock*> m_freeList;		//!< ブロックリスト(実体)
-		vector<BBlock*> m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
+		Array<BBlock>  	m_buffer;		//!< バッファ(ブロック実体)
+		Array<BBlock*> 	m_freeList;		//!< ブロックリスト(実体)
+		Array<BBlock*> 	m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
 
 		static s32 s_maxSecondLevelLog2;
 		static s32 s_maxSecondLevel;

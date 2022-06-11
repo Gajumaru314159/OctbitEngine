@@ -71,7 +71,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief      サポートしているAPIリストを取得
         //@―---------------------------------------------------------------------------
-        static set<GraphicAPI> GetSupportedApiList();
+        static Set<GraphicAPI> GetSupportedApiList();
 
 
     private:
@@ -95,8 +95,8 @@ namespace ob::graphic {
 
     private:
 
-        std::unique_ptr<IDevice> m_device;
-        std::unique_ptr<GraphicObjectManager> m_objectManager;
+        UPtr<IDevice> m_device;
+        UPtr<GraphicObjectManager> m_objectManager;
 
     };
 

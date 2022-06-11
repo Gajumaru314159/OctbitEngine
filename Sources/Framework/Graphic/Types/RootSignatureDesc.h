@@ -137,7 +137,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	struct RootParameter {
 		RootParameterType		type;			//!< パラメータ・タイプ
-		vector<DescriptorRange> descriptors;    //!< typeがDescriptorTableの場合使用
+		Array<DescriptorRange> descriptors;    //!< typeがDescriptorTableの場合使用
 		RootConstantsDesc		constants;		//!< typeがRootConstantsの場合使用
 		RootDescriptorDesc		descriptor;     //!< typeがCBV/SRV/UAVの場合使用
 		ShaderStage				visibility;		//!< どのシェーダステージから利用可能か
@@ -154,7 +154,7 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ(DescriptorTable)
 		//@―---------------------------------------------------------------------------
-		RootParameter(vector<DescriptorRange>&& descriptorTable, ShaderStage visibility = ShaderStage::All)
+		RootParameter(Array<DescriptorRange>&& descriptorTable, ShaderStage visibility = ShaderStage::All)
 			:type(RootParameterType::DescriptorTable), descriptors(descriptorTable), visibility(visibility) {}
 
 		//@―---------------------------------------------------------------------------
@@ -204,8 +204,8 @@ namespace ob::graphic {
 	//! @brief      ルートシグネチャ定義
 	//@―---------------------------------------------------------------------------
 	struct RootSignatureDesc {
-		vector<RootParameter>       parameters;	//!< ルートパラメータ
-		vector<StaticSamplerDesc>   samplers;	//!< 固定サンプラー
+		Array<RootParameter>       parameters;	//!< ルートパラメータ
+		Array<StaticSamplerDesc>   samplers;	//!< 固定サンプラー
 		RootSignatureFlags          flags;		//!< フラグ
 	public:
 		//@―---------------------------------------------------------------------------
@@ -216,7 +216,7 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
-		RootSignatureDesc(vector<RootParameter>&& parameters, vector<StaticSamplerDesc>&& samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
+		RootSignatureDesc(Array<RootParameter>&& parameters, Array<StaticSamplerDesc>&& samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
 			: parameters(parameters), samplers(samplers), flags(flags) {}
 	};
 

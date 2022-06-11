@@ -45,7 +45,7 @@ namespace ob::platform {
 
     private:
 
-        std::unique_ptr<detail::PlatformSystemImpl> m_implement;
+        UPtr<detail::PlatformSystemImpl> m_implement;
 
     };
 

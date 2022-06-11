@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CorePrivate.h>
 
 namespace ob::core {
 
@@ -192,7 +193,7 @@ namespace ob::core {
 
 	private:
 
-		vector<T> m_instances;
+		Array<T> m_instances;
 		size_t m_index;
 
 	};

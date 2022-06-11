@@ -32,7 +32,7 @@ namespace ob::platform {
     //! ```
     //!             auto pSampleModule = ModuleManager::get().loadModule<ISampleModule>("SampleModule.dll");
     //!             {
-    //!                 auto pSampleInstance = unique_ptr<ISampleInstance>(pSampleModule->CreateInstance());
+    //!                 auto pSampleInstance = UPtr<ISampleInstance>(pSampleModule->CreateInstance());
     //!                 pSampleInstance->Function();
     //!             }
     //!             ModuleManager::get().unloadModule(pSampleModule);
@@ -95,7 +95,7 @@ namespace ob::platform {
 
     private:
 
-        std::map<StringView, std::unique_ptr<ModuleLoader>> m_moduleMap;
+        Map<StringView, UPtr<ModuleLoader>> m_moduleMap;
 
     };
 

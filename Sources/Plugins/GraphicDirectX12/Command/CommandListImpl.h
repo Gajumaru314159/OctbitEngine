@@ -163,7 +163,7 @@ namespace ob::graphic::dx12 {
 
 
 
-        vector<D3D12_RESOURCE_BARRIER> m_barriers;
+        Array<D3D12_RESOURCE_BARRIER> m_barriers;
 
         //// class DepthStencilView
         //s32 m_listIndex;
@@ -171,7 +171,7 @@ namespace ob::graphic::dx12 {
         //
         //class FrameBufferImpl*    m_pFrameBuffer;
         //s32                 m_subpassIndex;
-        //vector<ResourceState> m_atttachmentLayout;
+        //Array<ResourceState> m_atttachmentLayout;
 
         //D3D12_RECT m_renderArea;
         //bool m_bRenderArea;

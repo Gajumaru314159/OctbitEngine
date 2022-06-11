@@ -59,7 +59,7 @@ namespace ob::core {
 
 	private:
 
-		std::unique_ptr<FileStreamImpl> m_impl;
+		UPtr<FileStreamImpl> m_impl;
 
 	};
 

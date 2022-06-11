@@ -5,12 +5,12 @@
 //***********************************************************
 #pragma once
 #include <Framework/Singleton/Singleton.h>
-#include <Framework/Core/Template/Event/EventNotifier.h>
-#include <Framework/Core/Template/Delegate/Delegate.h>
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Log/LogTypes.h>
+
+#include <Framework/Core/Template/Event/EventNotifier.h>
 
 
 namespace ob::core {
@@ -99,7 +99,7 @@ namespace ob::core {
 
         Mutex           m_mutex;
         EventNotifier   m_notifier;
-        std::atomic<bool>            m_logged = false;
+        Atomic<bool>    m_logged = false;
 
     };
 

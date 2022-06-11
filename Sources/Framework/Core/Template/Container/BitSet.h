@@ -9,6 +9,7 @@
 namespace ob::core {
 
     //! @brief ビットセット
-    using std::bitset;
+    template<size_t N>
+    using BitSet = std::bitset<N>;
 
 }// namespcae ob

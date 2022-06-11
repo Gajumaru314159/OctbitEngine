@@ -53,10 +53,10 @@ namespace ob::graphic {
 
     private:
 
-        list<GraphicObject*> m_objects;
+        List<GraphicObject*> m_objects;
 
-        using ObjectQueue = queue<GraphicObject*>;
-        std::vector<ObjectQueue>    m_deleteStackList;
+        using ObjectQueue = Queue<GraphicObject*>;
+        Array<ObjectQueue>    m_deleteStackList;
 
         s32 m_index;
 

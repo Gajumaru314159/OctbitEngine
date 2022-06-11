@@ -31,7 +31,7 @@ namespace ob::core {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	Mutex::Mutex() {
-		m_impl = std::make_unique<MutexImpl>();
+
 	}
 
 

@@ -29,9 +29,6 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	DeviceImpl::DeviceImpl(FeatureLevel featureLevel)
 		:m_featureLevel(featureLevel) {
-#ifdef OB_DEBUG
-		m_pixModule = std::make_unique<PIXModule>();
-#endif
 		initialize();
 	}
 
@@ -257,7 +254,7 @@ namespace ob::graphic::dx12 {
 		}
 
 		// アダプターの列挙し、メモリ量が最大のグラフィックボードを選択
-		std::vector<IDXGIAdapter*> adapters;
+		Array<IDXGIAdapter*> adapters;
 
 		ComPtr<IDXGIAdapter> tmpAdapter = nullptr;
 		ComPtr<IDXGIAdapter> selectedAdapter = nullptr;

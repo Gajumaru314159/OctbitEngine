@@ -19,8 +19,8 @@ namespace ob::graphic {
 		using this_type = Mesh<TVertex, TIndex>;		//!< 型
 		using vertex_type = TVertex;					//!< 頂点型
 		using index_type = TIndex;						//!< インデックス型
-		using vertices_type = vector<TVertex>;          //!< 頂点列型
-		using indices_type = vector<TIndex>;			//!< インデックス列型
+		using vertices_type = Array<TVertex>;          //!< 頂点列型
+		using indices_type = Array<TIndex>;			//!< インデックス列型
 
 	public:
 
@@ -87,7 +87,7 @@ namespace ob::graphic {
 
 		Geometry(VertexLayout layout, Topology topology=Topology::TriangleList)
 			:layout(layout),topology(topology){}
-		Geometry(VertexLayout layout, vector<TVertex> vertices, Topology topology = Topology::TriangleList)
+		Geometry(VertexLayout layout, Array<TVertex> vertices, Topology topology = Topology::TriangleList)
 			:layout(layout), vertices(vertices), topology(topology) {}
 
 		void addTriangle(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2);

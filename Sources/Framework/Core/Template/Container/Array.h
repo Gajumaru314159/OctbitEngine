@@ -1,14 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		固定長配列
+//! @brief		動的配列
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <array>
+#include <vector>
+#include <Framework/Core/Template/Allocator/STLAllocator.h>
 
 namespace ob::core {
 
-    //! @brief 固定長配列
-    using std::array;
+	//! @brief 動的配列
+	template <class T, class TAlloc = ob::core::allocator<T>>
+	using Array = std::vector<T, TAlloc>;
 
 }// namespcae ob

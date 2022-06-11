@@ -70,7 +70,7 @@ namespace ob::graphic {
             return false;
         }
 
-        m_device = std::unique_ptr<IDevice>(pDevice);
+        m_device = UPtr<IDevice>(pDevice);
         m_objectManager = std::make_unique<GraphicObjectManager>(desc.bufferCount);
         return true;
     }
@@ -100,9 +100,9 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      グラフィックAPIがサポートされているか
     //@―---------------------------------------------------------------------------
-    set<GraphicAPI> System::GetSupportedApiList() {
+    Set<GraphicAPI> System::GetSupportedApiList() {
 
-        set<GraphicAPI> apis;
+        Set<GraphicAPI> apis;
 
 #ifdef OS_WINDOWS
         apis.emplace(GraphicAPI::D3D12);

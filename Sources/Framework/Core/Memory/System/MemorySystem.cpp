@@ -7,13 +7,11 @@
 
 #include <Framework/Core/Memory/Allocator/MallocAllocator.h>
 #include <Framework/Core/Template/include.h>
-#include <array>
-#include <assert.h>
 
 namespace ob::core {
     //! @cond
-    static std::array<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
-    static std::array<Allocator*, enum_cast(HeapUsage::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
+    static StaticArray<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
+    static StaticArray<Allocator*, enum_cast(HeapUsage::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
     //! @endcond
 
 

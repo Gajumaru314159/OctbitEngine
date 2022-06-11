@@ -38,8 +38,8 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     struct RenderTargetDesc {
         Size                        size = { 0,0 };                 //!< サイズ
-        vector<ColorTextureDesc>    colors;                         //!< カラー書き込み先
-        vector<DepthTextureDesc>    depth;                          //!< デプス書き込み先
+        Array<ColorTextureDesc>    colors;                         //!< カラー書き込み先
+        Array<DepthTextureDesc>    depth;                          //!< デプス書き込み先
     };
 
 }// namespcae ob::graphic

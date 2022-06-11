@@ -91,7 +91,7 @@ namespace ob::graphic::dx12 {
 
         const RenderTargetDesc m_desc;
 
-        vector<Texture> m_textures;                     //!< ターゲット・テクスチャ・リスト
+        Array<Texture> m_textures;                     //!< ターゲット・テクスチャ・リスト
         Texture m_depth;                                //!< デプス・ステンシル・テクスチャ
 
         DescriptorHandle m_hRTV;                        //!< レンダー・ターゲット・ビュー

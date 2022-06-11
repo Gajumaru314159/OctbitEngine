@@ -131,7 +131,7 @@ namespace ob::graphic::dx12 {
         SwapchainDesc m_desc;
 
         ComPtr<IDXGISwapChain4> m_swapchain;            //!< スワップチェイン
-        vector<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
+        Array<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorRect;                       //!< シザー矩形

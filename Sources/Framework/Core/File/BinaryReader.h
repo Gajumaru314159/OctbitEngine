@@ -36,7 +36,7 @@ namespace ob::core {
 	private:
 		class Stream* m_stream;
 		ByteOrder m_byteOrder;
-		//std::vector<byte_t> m_stringCache;
+		//std::Array<byte_t> m_stringCache;
 	};
 
 

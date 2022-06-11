@@ -12,7 +12,6 @@
 #pragma warning(disable: ALL_CODE_ANALYSIS_WARNINGS)
 #endif
 #include <fmt/xchar.h>
-#include <fmt/color.h>
 #pragma warning(pop)
 
 namespace ob::core {

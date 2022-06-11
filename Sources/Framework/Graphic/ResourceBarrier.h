@@ -38,7 +38,7 @@ namespace ob::graphic {
 			s32 arrayIndex;
 		};
 
-		vector<TextureBarrier> m_textureBarriers;
+		Array<TextureBarrier> m_textureBarriers;
 
 	};
 

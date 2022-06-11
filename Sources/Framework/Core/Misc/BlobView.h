@@ -57,7 +57,7 @@ namespace ob::core {
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
         template<class T>
-        explicit BlobView(const vector<T>& data) {
+        explicit BlobView(const Array<T>& data) {
             m_pData = static_cast<const byte*>(data.data());
             m_size = data.size()*sizeof(T);
         }
@@ -98,10 +98,10 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief コピー代入演算子(vector)
+        //! @brief コピー代入演算子(Array)
         //@―---------------------------------------------------------------------------
         template<class T>
-        BlobView& operator =(const vector<T>& other) {
+        BlobView& operator =(const Array<T>& other) {
             m_pData = static_cast<const byte*>(other.data());
             m_size = other.size()*sizeof(T);
             return *this;

@@ -4,10 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/Utility/Noncopyable.h>
-#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 
@@ -106,7 +105,7 @@ namespace ob::core {
 
 	private:
 
-		std::unique_ptr<class ThreadImpl> m_impl;
+		UPtr<class ThreadImpl> m_impl;
 
 	};
 

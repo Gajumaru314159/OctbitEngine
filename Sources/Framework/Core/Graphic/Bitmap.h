@@ -26,7 +26,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     class Bitmap {
     public:
-        using base_type                 = vector<Color>;                        //!< ベース型
+        using base_type                 = Array<Color>;                        //!< ベース型
         using iterator                  = base_type::iterator;                  //!< イテレータ
         using const_iterator            = base_type::const_iterator;            //!< const イテレータ
         using reverse_iterator          = base_type::reverse_iterator;          //!< 逆イテレータ
@@ -108,7 +108,7 @@ namespace ob::core {
 
     private:
 
-        vector<IntColor> m_pixels;
+        Array<IntColor> m_pixels;
         Size m_size;
 
     };

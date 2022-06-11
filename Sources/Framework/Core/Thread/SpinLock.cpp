@@ -30,7 +30,7 @@ namespace ob::core {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	SpinLock::SpinLock() {
-		m_impl = std::make_unique<SpinLockImpl>();
+
 	}
 
 

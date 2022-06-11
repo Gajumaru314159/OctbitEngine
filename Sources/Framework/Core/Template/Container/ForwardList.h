@@ -5,12 +5,12 @@
 //***********************************************************
 #pragma once
 #include <forward_list>
-#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Template/Allocator/STLAllocator.h>
 
 namespace ob::core {
 
     //! @brief 単連結リスト
-    template <class T>
-    using forward_list = std::forward_list<T, ob::core::allocator<T>>;
+    template <class T, class TAlloc = ob::core::allocator<T>>
+    using ForwardList = std::forward_list<T, TAlloc>;
 
 }// namespcae ob

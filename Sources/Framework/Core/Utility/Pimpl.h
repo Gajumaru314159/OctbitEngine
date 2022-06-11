@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Template/include.h>
+#include <Framework/Core/Template/Utility/Memory.h>
 
 namespace ob::core {
 
@@ -73,7 +73,7 @@ namespace ob::core {
 
     private:
 
-        std::unique_ptr<T> m_impl;
+        UPtr<T> m_impl;
 
     };
 

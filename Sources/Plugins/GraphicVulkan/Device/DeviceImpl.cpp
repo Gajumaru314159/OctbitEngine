@@ -168,7 +168,7 @@ namespace ob::graphic::vulkan {
 			uint32_t gpu_count = 0;
 			vkEnumeratePhysicalDevices(m_instance, &gpu_count, nullptr);
 
-			std::vector<VkPhysicalDevice> physDevs(gpu_count);
+			Array<VkPhysicalDevice> physDevs(gpu_count);
 			vkEnumeratePhysicalDevices(m_instance, &gpu_count, physDevs.data());
 
 
@@ -183,7 +183,7 @@ namespace ob::graphic::vulkan {
 			vkGetPhysicalDeviceMemoryProperties(m_physicalDevice, &m_physMemProps);
 
 			uint32_t propCount=1; // 個 数 は 取 得 済 み と する.
-			std::vector<VkQueueFamilyProperties> props(propCount);
+			Array<VkQueueFamilyProperties> props(propCount);
 			vkGetPhysicalDeviceQueueFamilyProperties(m_physicalDevice, &propCount, props.data());
 			uint32_t graphicsQueue = ~0u;
 			for (uint32_t i = 0; i < propCount; ++i)

@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/core/Template/Delegate/Delegate.h>
-#include <Framework/core/Template/Container/HandleList.h>
+#include <Framework/Core/Template/Delegate/Delegate.h>
+#include <Framework/Core/Template/Container/HandleList.h>
 #include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/ScopeLock.h>
 

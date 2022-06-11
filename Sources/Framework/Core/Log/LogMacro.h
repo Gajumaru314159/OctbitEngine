@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include "Logger.h"
+#include <Framework/Core/Log/Logger.h>
 
 //============================================
 // ログ出力マクロ

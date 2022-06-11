@@ -16,7 +16,7 @@ namespace ob::core {
     public:
 
         using point_type = Vec2;                //!< ポイント型
-        using points_type = vector<point_type>; //!< ポイントリスト型
+        using points_type = Array<point_type>; //!< ポイントリスト型
 
     public:
 

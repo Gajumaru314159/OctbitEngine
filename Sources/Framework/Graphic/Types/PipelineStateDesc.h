@@ -89,7 +89,7 @@ namespace ob::graphic {
 	//! @brief  頂点レイアウト
 	//@―---------------------------------------------------------------------------
 	struct VertexLayout {
-		vector<VertexAttribute> attributes;	//!< 属性リスト
+		Array<VertexAttribute> attributes;	//!< 属性リスト
 	};
 
 

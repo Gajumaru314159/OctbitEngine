@@ -3,7 +3,7 @@
 //! @brief		STLアロケータ
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Template/STLAllocator.h>
+#include <Framework/Core/Template/Allocator/STLAllocator.h>
 #include <Framework/Core/Memory/System/MemorySystem.h>
 
 namespace ob::core {
