@@ -5,32 +5,16 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Misc/DataTime.h>
+#include <Framework/Core/File/Path.h>
+#include <Framework/Core/Misc/DateTime.h>
 
 namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  説明
+	//! @brief  ファイル
 	//@―---------------------------------------------------------------------------
 	class File {
 	public:
-
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  説明
-		//@―---------------------------------------------------------------------------
-		size_t pos();
-		bool seek(size_t pos);
-		bool seekFromEnd(size_t offset);
-		bool read(byte* dest, size_t size);
-		bool write(const byte* dest, size_t size);
-		bool flush();
-		bool truncate(size_t size);
-		size_t size();
-
 
 	private:
 
@@ -64,7 +48,7 @@ namespace ob::core {
 
 		virtual bool visit(Path path, const FileStatData& statData) = 0;
 
-	}
+	};
 
 	//===============================================================
 	// インライン関数

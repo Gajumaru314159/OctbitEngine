@@ -13,6 +13,7 @@
 //#include <Framework/Graphic/Mesh.h>
 //#include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Core/File/FileStream.h>
+#include <Framework/Core/File/BinaryReader.h>
 #include <Windows.h>
 
 #include <Framework/Core/String/Format.h>
@@ -60,6 +61,15 @@ int main() {
 		LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
 		LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
 		LOG_INFO("UUID     :{}", ob::UUID::Generate());
+
+		{
+			FileStream fs(L"D:/My/Productions/C++/OctbitEngine/Sources/Framework/Core.h");
+			BinaryReader reader(fs);
+			byte bom[3];
+			auto value = reader.read(bom,3);
+			LOG_INFO("BOM     :{:#06x}", value);
+			LOG_INFO("BOM     :{}", Endian::IsLittleEndian());
+		}
 
 		/*platform::ModuleManager::Instance();
 		{
@@ -131,13 +141,13 @@ int main() {
 			PixelShader ps;
 			{
 				String vssrc;
-				vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-				vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
-				vssrc.append(TC("\n    Output o;"));
-				vssrc.append(TC("\n    o.pos = pos;"));
-				vssrc.append(TC("\n    o.uv = uv;"));
-				vssrc.append(TC("\n    return o;"));
-				vssrc.append(TC("\n}"));
+				vssrc.append(TC("/nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+				vssrc.append(TC("/nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
+				vssrc.append(TC("/n    Output o;"));
+				vssrc.append(TC("/n    o.pos = pos;"));
+				vssrc.append(TC("/n    o.uv = uv;"));
+				vssrc.append(TC("/n    return o;"));
+				vssrc.append(TC("/n}"));
 				String pssrc;
 				pssrc.append(uR"(
 
