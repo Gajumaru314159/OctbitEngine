@@ -11,13 +11,13 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ
     //@―---------------------------------------------------------------------------
-    allocator_base::allocator_base() {}
+    STLAllocatorBase::STLAllocatorBase() {}
 
 
     //@―---------------------------------------------------------------------------
     //! @brief メモリ確保
     //@―---------------------------------------------------------------------------
-    void* allocator_base::allocate(std::size_t n) {
+    void* STLAllocatorBase::allocate(std::size_t n) {
         return MemorySystem::GetHeapAllocator().allocate(n);
     }
 
@@ -25,7 +25,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief メモリ解放
     //@―---------------------------------------------------------------------------
-    void allocator_base::deallocate(void* pBuffer) {
+    void STLAllocatorBase::deallocate(void* pBuffer) {
         return Allocator::Free(pBuffer);
     }
 

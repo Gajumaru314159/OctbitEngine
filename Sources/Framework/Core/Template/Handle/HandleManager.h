@@ -12,7 +12,7 @@ namespace ob::core
     //@―---------------------------------------------------------------------------
     //! @brief 可変長ハンドルマネージャ
     //@―---------------------------------------------------------------------------
-    template<typename T, class TAllocator = std::allocator<T>>
+    template<typename T, class TAllocator = std::STLAllocator<T>>
     class handle_manager
     {
     public:
@@ -79,7 +79,7 @@ namespace ob::core
 
         using allocator_type = TAllocator;
 
-        handle_manager(const allocator_type& allocator = allocator_type());
+        handle_manager(const allocator_type& STLAllocator = allocator_type());
         ~handle_manager();
 
         OB_DISALLOW_COPY(handle_manager);

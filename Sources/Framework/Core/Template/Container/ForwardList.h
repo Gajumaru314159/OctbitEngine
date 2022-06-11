@@ -10,7 +10,7 @@
 namespace ob::core {
 
     //! @brief 単連結リスト
-    template <class T, class TAlloc = ob::core::allocator<T>>
+    template <class T, class TAlloc = ob::core::STLAllocator<T>>
     using ForwardList = std::forward_list<T, TAlloc>;
 
 }// namespcae ob

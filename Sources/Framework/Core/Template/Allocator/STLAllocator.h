@@ -8,12 +8,12 @@
 namespace ob::core {
 
     //! @cond
-    struct allocator_base {
+    struct STLAllocatorBase {
     public:
         // 特殊関数
         // (デフォルトコンストラクタ、コピーコンストラクタ
         //  、ムーブコンストラクタ)
-        allocator_base();
+        STLAllocatorBase();
 
         // メモリ確保
         void* allocate(std::size_t n);
@@ -28,7 +28,7 @@ namespace ob::core {
     //! @brief  STLアロケータ
     //@―---------------------------------------------------------------------------
     template <class T>
-    struct allocator :public allocator_base {
+    struct STLAllocator :public STLAllocatorBase {
     public:
 
         using value_type = T;   //!< アロケート要素の型
@@ -38,26 +38,26 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ
         //@―---------------------------------------------------------------------------
-        allocator() {}
+        STLAllocator() {}
 
         //@―---------------------------------------------------------------------------
         //! @brief 別な要素型のアロケータを受け取るコンストラクタ
         //@―---------------------------------------------------------------------------
         template <class U>
-        allocator(const allocator<U>&) {}
+        STLAllocator(const STLAllocator<U>&) {}
 
         //@―---------------------------------------------------------------------------
         //! @brief メモリ確保
         //@―---------------------------------------------------------------------------
         T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(allocator_base::allocate(sizeof(T) * n));
+            return reinterpret_cast<T*>(STLAllocatorBase::allocate(sizeof(T) * n));
         }
 
         //@―---------------------------------------------------------------------------
         //! @brief メモリ解放
         //@―---------------------------------------------------------------------------
         void deallocate(T* p, std::size_t n) {
-            allocator_base::deallocate(p);
+            STLAllocatorBase::deallocate(p);
         }
     };
 
@@ -70,7 +70,7 @@ namespace ob::core {
     //! 等価演算子
     //@―---------------------------------------------------------------------------
     template <class T, class U>
-    bool operator==(const allocator<T>&, const allocator<U>&) {
+    bool operator==(const STLAllocator<T>&, const STLAllocator<U>&) {
         return true;
     }
 
@@ -79,7 +79,7 @@ namespace ob::core {
     //! 否等価演算子
     //@―---------------------------------------------------------------------------
     template <class T, class U>
-    bool operator!=(const allocator<T>&, const allocator<U>&) {
+    bool operator!=(const STLAllocator<T>&, const STLAllocator<U>&) {
         return false;
     }
 
