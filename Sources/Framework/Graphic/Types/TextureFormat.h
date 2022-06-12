@@ -11,6 +11,8 @@ namespace ob::graphic {
     //! @brief  テクスチャ・フォーマット
     //@―---------------------------------------------------------------------------
     enum class TextureFormat {
+        Unknown,    //!< 不明なフォーマット
+
         RGBA32,     //!< RGBA(32bit)
         RGBA16,     //!< RGBA(16bit)
         RGBA8,      //!< RGBA(8bit)

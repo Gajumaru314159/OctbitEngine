@@ -33,7 +33,7 @@ namespace ob::graphic::dx12
         case RootParameterType::CBV:                return D3D12_ROOT_PARAMETER_TYPE_CBV;
         case RootParameterType::SRV:                return D3D12_ROOT_PARAMETER_TYPE_SRV;
         case RootParameterType::UAV:                return D3D12_ROOT_PARAMETER_TYPE_UAV;
-        case RootParameterType::DescriptorTable:    return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+        case RootParameterType::Range:    return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
         case RootParameterType::RootConstants:      return D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
         }
         LOG_WARNING_EX("Graphic", "不正なRootParameterType[value={}]", enum_cast(value));

@@ -13,6 +13,7 @@
 #include <Framework/Graphic/Types/RenderTargetDesc.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
+#include <Framework/Core/Misc/BlobView.h>
 
 //===============================================================
 // 前方宣言
@@ -93,7 +94,7 @@ namespace ob::graphic {
         virtual IBuffer*            createBuffer(const BufferDesc& desc) = 0;
 
         virtual ITexture*           createTexture(const TextureDesc& desc) = 0;
-        virtual ITexture*           createTexture(const TextureData& data) = 0;
+        virtual ITexture*           createTexture(BlobView blob) = 0;
         virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc)=0;
         
         virtual IShader*            createShader(const String& code,ShaderStage stage) = 0;

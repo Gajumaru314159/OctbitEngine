@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Interface/ITexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
-#include <Framework/Graphic/TextureData.h>
+#include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 
@@ -35,7 +35,7 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const TextureData& data);
+        TextureImpl(DeviceImpl& rDevice, BlobView blob);
 
 
         //@―---------------------------------------------------------------------------

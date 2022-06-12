@@ -21,26 +21,25 @@ namespace ob::graphic::dx12 {
 		Array<D3D12_ROOT_PARAMETER> parameters;
 		Array<CD3DX12_DESCRIPTOR_RANGE> descriptors;
 		parameters.reserve(desc.parameters.size());
+		descriptors.reserve(desc.parameters.size());
 		for (const auto& param : desc.parameters) {
 			D3D12_ROOT_PARAMETER elm;
 			elm.ParameterType = TypeConverter::convert(param.type);
 			elm.ShaderVisibility = TypeConverter::convert(param.visibility);
 			switch (param.type)
 			{
-			case RootParameterType::DescriptorTable:
+			case RootParameterType::Range:
 			{
-				size_t start = descriptors.size();
-				for (const auto& param2 : param.descriptors) {
-					CD3DX12_DESCRIPTOR_RANGE range(
-						TypeConverter::convert(param2.type),
-						param2.num,
-						param2.baseRegister,
-						param2.registerSpace
-					);
-					descriptors.push_back(range);
-				}
-				elm.DescriptorTable.NumDescriptorRanges=(UINT)param.descriptors.size();
-				elm.DescriptorTable.pDescriptorRanges= descriptors.data()+ start;
+				CD3DX12_DESCRIPTOR_RANGE range(
+					TypeConverter::convert(param.range.type),
+					param.range.num,
+					param.range.baseRegister,
+					param.range.registerSpace
+				);
+				descriptors.push_back(range);
+
+				elm.DescriptorTable.NumDescriptorRanges=1;
+				elm.DescriptorTable.pDescriptorRanges= descriptors.data()+ descriptors.size()-1;
 				break;
 			}
 			case RootParameterType::RootConstants:
@@ -54,6 +53,7 @@ namespace ob::graphic::dx12 {
 				break;
 			}
 			parameters.push_back(elm);
+			parameters.back();
 		}
 
 

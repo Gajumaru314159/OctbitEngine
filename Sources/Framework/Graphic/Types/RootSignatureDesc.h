@@ -21,7 +21,7 @@ namespace ob::graphic {
 		CBV,                //!< 定数バッファ・ビュー
 		SRV,                //!< シェーダ・リソース・ビュー
 		UAV,                //!< UnorderedAccessView
-		DescriptorTable,    //!< デスクリプタ・テーブル
+		Range,    //!< デスクリプタ・テーブル
 		RootConstants,      //!< ルート定数
 	};
 
@@ -137,7 +137,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	struct RootParameter {
 		RootParameterType		type;			//!< パラメータ・タイプ
-		Array<DescriptorRange> descriptors;    //!< typeがDescriptorTableの場合使用
+		DescriptorRange			range;			//!< typeがDescriptorTableの場合使用
 		RootConstantsDesc		constants;		//!< typeがRootConstantsの場合使用
 		RootDescriptorDesc		descriptor;     //!< typeがCBV/SRV/UAVの場合使用
 		ShaderStage				visibility;		//!< どのシェーダステージから利用可能か
@@ -152,22 +152,50 @@ namespace ob::graphic {
 		~RootParameter() {}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      コンストラクタ(DescriptorTable)
+		//! @brief      コンストラクタ(CBV/SRV/UAV)
 		//@―---------------------------------------------------------------------------
-		RootParameter(Array<DescriptorRange>&& descriptorTable, ShaderStage visibility = ShaderStage::All)
-			:type(RootParameterType::DescriptorTable), descriptors(descriptorTable), visibility(visibility) {}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      コンストラクタ(RootConstants)
-		//@―---------------------------------------------------------------------------
-		RootParameter(RootConstantsDesc constants, ShaderStage visibility = ShaderStage::All)
-			:type(RootParameterType::RootConstants), constants(constants), visibility(visibility) {}
+		RootParameter(RootParameterType type, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All)
+			:type(type), descriptor({ registerNo,registerSpace }), visibility(visibility) {}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ(CBV/SRV/UAV)
 		//@―---------------------------------------------------------------------------
-		RootParameter(RootParameterType type, RootDescriptorDesc descriptor, ShaderStage visibility = ShaderStage::All)
-			:type(type), descriptor(descriptor), visibility(visibility) {}
+		RootParameter(RootParameterType type, u32 registerNo, ShaderStage visibility = ShaderStage::All)
+			:RootParameter(type, registerNo, 0, visibility) {}
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      Range
+		//@―---------------------------------------------------------------------------
+		static RootParameter Range(DescriptorRangeType type, u32 num, u32 baseRegister, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
+			RootParameter result;
+			result.type = RootParameterType::Range;
+			result.range.type = type;
+			result.range.num = num;
+			result.range.baseRegister = baseRegister;
+			result.range.registerSpace = registerSpace;
+			result.visibility = visibility;
+			return result;
+		}
+		static RootParameter Range(DescriptorRangeType type, u32 num, u32 baseRegister, ShaderStage visibility = ShaderStage::All) {
+			return Range(type, num, baseRegister, 0, visibility);
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		定数
+		//@―---------------------------------------------------------------------------
+		static RootParameter Constants(u32 value, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
+			RootParameter result;
+			result.type = RootParameterType::RootConstants;
+			result.constants.value = value;
+			result.constants.registerNo = registerNo;
+			result.constants.registerSpace = registerSpace;
+			result.visibility = visibility;
+			return result;
+		}
+		static RootParameter Constants(u32 value, u32 registerNo, ShaderStage visibility = ShaderStage::All) {
+			return Constants(value, registerNo, 0, visibility);
+		}
 	};
 
 

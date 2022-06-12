@@ -75,6 +75,10 @@ namespace ob::core {
 
         };
 
+        // std::wcoutで日本語が表示できないため対応
+        setlocale(LC_ALL, "Japanese");
+
+
         addEvent(s_debugLogEvent, func);
     }
 

@@ -77,7 +77,7 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  テクスチャを生成
 		//@―---------------------------------------------------------------------------
-		ob::graphic::ITexture* createTexture(const TextureData& data)override;
+		ob::graphic::ITexture* createTexture(BlobView blob)override;
 
 
 		//@―---------------------------------------------------------------------------

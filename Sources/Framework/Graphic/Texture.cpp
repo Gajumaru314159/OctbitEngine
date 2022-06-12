@@ -35,8 +35,8 @@ namespace ob::graphic {
     //! @param desc テクスチャ定義
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
-    Texture::Texture(const Path& path, StringView name){
-        m_pImpl = Device::Get()->createTexture(path);
+    Texture::Texture(BlobView blob, StringView name){
+        m_pImpl = Device::Get()->createTexture(blob);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {

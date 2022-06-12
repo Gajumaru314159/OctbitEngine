@@ -121,8 +121,8 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::ITexture* DeviceImpl::createTexture(const TextureData& data) {
-		return new TextureImpl(*this, data);
+	ob::graphic::ITexture* DeviceImpl::createTexture(BlobView blob) {
+		return new TextureImpl(*this, blob);
 	}
 
 

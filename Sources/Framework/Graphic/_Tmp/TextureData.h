@@ -22,8 +22,9 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
 
         TextureData(const Path& path);
-        TextureData(const void* data,size_t size);
+        //TextureData(const void* data,size_t size);
 
+    private:
         TextureFormat   m_format;
         TextureType     m_type;
 
@@ -32,7 +33,6 @@ namespace ob::graphic {
         Blob    m_blob;
 
         //Array<TextureMipsData> m_mips;
-    private:
     };
 
     struct TextureMipsData {

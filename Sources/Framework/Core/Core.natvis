@@ -22,4 +22,10 @@
 			</ArrayItems>
 		</Expand>
 	</Type>
+
+
+	<Type Name="ob::core::Pimpl&lt;*&gt;">
+		<DisplayString>value = {*m_impl}</DisplayString>
+	</Type>
+	
 </AutoVisualizer>

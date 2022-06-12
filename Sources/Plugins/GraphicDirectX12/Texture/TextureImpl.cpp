@@ -7,11 +7,45 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
-#include <Framework/Graphic/TextureData.h>
 #include <DirectXTex.h>
 
 
 namespace ob::graphic::dx12 {
+
+	TextureFormat convertDXGIFormat(DXGI_FORMAT dxgi) {
+		switch (static_cast<DXGI_FORMAT>(dxgi)) {
+		case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;
+		case DXGI_FORMAT_R16G16B16A16_FLOAT:	return TextureFormat::RGBA16;
+		case DXGI_FORMAT_R8G8B8A8_UNORM:		return TextureFormat::RGBA8;
+		case DXGI_FORMAT_R32G32B32_FLOAT:		return TextureFormat::RGB32;
+		case DXGI_FORMAT_R32G32_FLOAT:			return TextureFormat::RG32;
+		case DXGI_FORMAT_R16G16_FLOAT:			return TextureFormat::RG16;
+		case DXGI_FORMAT_R8G8_UNORM:			return TextureFormat::RG8;
+		case DXGI_FORMAT_R32_FLOAT:				return TextureFormat::R32;
+		case DXGI_FORMAT_R16_FLOAT:				return TextureFormat::R16;
+		case DXGI_FORMAT_R8_UNORM:				return TextureFormat::R8;
+		case DXGI_FORMAT_R10G10B10A2_UNORM:		return TextureFormat::R10G10B10A2;
+		case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:	return TextureFormat::D32S8;
+		case DXGI_FORMAT_D32_FLOAT:				return TextureFormat::D32;
+		case DXGI_FORMAT_D24_UNORM_S8_UINT:		return TextureFormat::D24S8;
+		case DXGI_FORMAT_D16_UNORM:				return TextureFormat::D16;
+		case DXGI_FORMAT_BC1_UNORM:				return TextureFormat::BC1;
+		case DXGI_FORMAT_BC2_UNORM:				return TextureFormat::BC2;
+		case DXGI_FORMAT_BC3_UNORM:				return TextureFormat::BC3;
+		case DXGI_FORMAT_BC4_UNORM:				return TextureFormat::BC4;
+		case DXGI_FORMAT_BC5_UNORM:				return TextureFormat::BC5;
+		case DXGI_FORMAT_BC6H_UF16:				return TextureFormat::BC6H;
+		case DXGI_FORMAT_BC7_UNORM:				return TextureFormat::BC7;
+		case DXGI_FORMAT_BC1_UNORM_SRGB:		return TextureFormat::BC1_SRGB;
+		case DXGI_FORMAT_BC2_UNORM_SRGB:		return TextureFormat::BC2_SRGB;
+		case DXGI_FORMAT_BC3_UNORM_SRGB:		return TextureFormat::BC3_SRGB;
+		case DXGI_FORMAT_BC7_UNORM_SRGB:		return TextureFormat::BC7_SRGB;
+		}
+		return TextureFormat::Unknown;
+	}
+
+
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
@@ -113,7 +147,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureData& data)
+	TextureImpl::TextureImpl(DeviceImpl& rDevice, BlobView blob)
 		: m_device(rDevice)
 	{
 		// 拡張子に合わせて読み込み
@@ -121,50 +155,72 @@ namespace ob::graphic::dx12 {
 		DirectX::TexMetadata metadata = {};
 		DirectX::ScratchImage scratchImg = {};
 
-		//result = DirectX::LoadFromDDSMemory(data.data.data(), data.data.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
-		//
-		//if (FAILED(result)) {
-		//	Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
-		//}
-		//
-		////WriteToSubresourceで転送する用のヒープ設定
-		//auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
-		//auto resDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		//	metadata.format,
-		//	(UINT16)metadata.width,
-		//	(UINT)metadata.height,
-		//	(UINT16)metadata.arraySize,
-		//	(UINT16)metadata.mipLevels);
-		//
-		//ComPtr<ID3D12Resource> resource;
-		//
-		//result = m_device.getNative()->CreateCommittedResource(
-		//	&texHeapProp,
-		//	D3D12_HEAP_FLAG_NONE,
-		//	&resDesc,
-		//	D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-		//	nullptr,
-		//	IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
-		//
-		//if (FAILED(result)) {
-		//	Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
-		//}
-		//
-		//
-		//// GPUにデータ転送
-		//auto img = scratchImg.GetImage(0, 0, 0);
-		//
-		//result = resource->WriteToSubresource(0,
-		//	nullptr,               //全領域へコピー
-		//	img->pixels,           //元データアドレス
-		//	(UINT)img->rowPitch,   //1ラインサイズ
-		//	(UINT)img->slicePitch  //全サイズ
-		//);
-		//if (FAILED(result)) {
-		//	Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
-		//}
-		//
-		//m_resource = resource;
+		result = DirectX::LoadFromDDSMemory(blob.data(), blob.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
+		
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			return;
+		}
+		
+		//WriteToSubresourceで転送する用のヒープ設定
+		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		auto resDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+			metadata.format,
+			(UINT16)metadata.width,
+			(UINT)metadata.height,
+			(UINT16)metadata.arraySize,
+			(UINT16)metadata.mipLevels);
+		
+		ComPtr<ID3D12Resource> resource;
+		
+		result = m_device.getNative()->CreateCommittedResource(
+			&texHeapProp,
+			D3D12_HEAP_FLAG_NONE,
+			&resDesc,
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			nullptr,
+			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+		
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			return;
+		}
+		
+		
+		// GPUにデータ転送
+		auto img = scratchImg.GetImage(0, 0, 0);
+		
+		result = resource->WriteToSubresource(0,
+			nullptr,               //全領域へコピー
+			img->pixels,           //元データアドレス
+			(UINT)img->rowPitch,   //1ラインサイズ
+			(UINT)img->slicePitch  //全サイズ
+		);
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			return;
+		}
+		
+
+		auto convertType = [](DirectX::TEX_DIMENSION dimension) {
+			switch (dimension) {
+			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE1D:return TextureType::Texture1D;
+			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE2D:return TextureType::Texture2D;
+			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE3D:return TextureType::Texture3D;
+			}
+			return TextureType::Texture2D;
+		};
+		resource->SetName(L"aaaa");
+
+		m_desc.size = {(s32)metadata.width,(s32)metadata.height,(s32)metadata.depth};
+		m_desc.type = convertType(metadata.dimension);
+		m_desc.format = convertDXGIFormat(metadata.format);
+		m_desc.arrayNum = metadata.arraySize;
+		m_desc.mipLevel = metadata.mipLevels;
+		m_desc.color = Color::white;
+
+		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
+		m_resource = resource;
 
 	}
 
@@ -207,7 +263,7 @@ namespace ob::graphic::dx12 {
 		case TextureType::Texture2D:
 		case TextureType::RenderTarget:
 		case TextureType::DepthStencil:
-			if (m_desc.arrayNum) {
+			if (1<m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
 				texDesc.Texture2DArray.MipLevels = 1;
 			} else {
@@ -216,7 +272,7 @@ namespace ob::graphic::dx12 {
 			}
 			break;
 		case TextureType::Texture3D:
-			if (m_desc.arrayNum) {
+			if (1 < m_desc.arrayNum) {
 				OB_ASSERT("Texture3Dは配列にできません。");
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
@@ -224,7 +280,7 @@ namespace ob::graphic::dx12 {
 			}
 			break;
 		case TextureType::Cube:
-			if (m_desc.arrayNum) {
+			if (1 < m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
 				texDesc.TextureCubeArray.MipLevels = 1;
 			} else {

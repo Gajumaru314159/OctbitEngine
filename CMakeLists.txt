@@ -42,18 +42,14 @@ FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TA
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v3.2.1")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
-FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
 FetchContent_Declare(iutest  GIT_REPOSITORY https://github.com/srz-zumix/iutest.git GIT_TAG "v1.17.1")
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum DirectXTex iutest)
+FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum iutest)
+
 
 set_target_properties(fmt PROPERTIES FOLDER "ThirdParty")
 set_target_properties(GSL PROPERTIES FOLDER "ThirdParty")
 set_target_properties(utf8cpp PROPERTIES FOLDER "ThirdParty")
 set_target_properties(magic_enum PROPERTIES FOLDER "ThirdParty")
-set_target_properties(DirectXTex PROPERTIES FOLDER "ThirdParty")
-set_target_properties(texconv PROPERTIES FOLDER "ThirdParty")
-set_target_properties(texdiag PROPERTIES FOLDER "ThirdParty")
-set_target_properties(texassemble PROPERTIES FOLDER "ThirdParty")
 set_target_properties(iutest PROPERTIES FOLDER "ThirdParty")
 set_target_properties(iutest_main PROPERTIES FOLDER "ThirdParty")
 set_target_properties(iutest_sample PROPERTIES FOLDER "ThirdParty")
@@ -61,8 +57,18 @@ set_property(TARGET fmt PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:D
 set_property(TARGET GSL PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET utf8cpp PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET magic_enum PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET DirectXTex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET iutest PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+if(WIN32)
+    FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
+    FetchContent_MakeAvailable(DirectXTex)
+    
+    set_target_properties(DirectXTex PROPERTIES FOLDER "ThirdParty")
+    set_target_properties(texconv PROPERTIES FOLDER "ThirdParty")
+    set_target_properties(texdiag PROPERTIES FOLDER "ThirdParty")
+    set_target_properties(texassemble PROPERTIES FOLDER "ThirdParty")
+    set_property(TARGET DirectXTex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 
 # Frameworkプロジェクト読み込み
@@ -73,7 +79,9 @@ add_subdirectory ("Sources/Framework/Graphic")
 add_subdirectory ("Sources/Framework/Rendering")
 
 # Pluginsプロジェクト読み込み
-add_subdirectory ("Sources/Plugins/GraphicDirectX12")
+if(WIN32)
+    add_subdirectory ("Sources/Plugins/GraphicDirectX12")
+endif()
 #add_subdirectory ("Sources/Plugins/GraphicVulkan")
 
 # テストプロジェクト読み込み

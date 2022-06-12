@@ -26,6 +26,72 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  DDSピクセルフォーマット
     //@―---------------------------------------------------------------------------
+    enum DDSD :u32 {
+        DDSD_CAPS           = 0x1,      // すべての.dds ファイルで必要です。
+        DDSD_HEIGHT	        = 0x2,      // すべての.dds ファイルで必要です。	0x2
+        DDSD_WIDTH	        = 0x4,      // すべての.dds ファイルで必要です。	
+        DDSD_PITCH	        = 0x8,      // 非圧縮テクスチャにピッチが指定されている場合に必要です。	0x8
+        DDSD_PIXELFORMAT    = 0x1000,   // すべての.dds ファイルで必要です。	0x1000
+        DDSD_MIPMAPCOUNT	= 0x20000,  // mipmapped テクスチャで必要です。	0x20000
+        DDSD_LINEARSIZE	    = 0x80000,  // 圧縮テクスチャにピッチが指定されている場合に必要です。
+        DDSD_DEPTH	        = 0x800000, // 深度テクスチャで必要です。
+    };
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  DDSピクセルフォーマット
+    //@―---------------------------------------------------------------------------
+    enum DDSCAPS :u32 {
+        DDSCAPS_ALPHA	=0x00000002,//Alpha が含まれている場合(あまり参照されない)
+        DDSCAPS_COMPLEX	=0x00000008,//複数のデータが含まれている場合。Palette / Mipmap / Cubemap / VolumeTexture では On にする。
+        DDSCAPS_TEXTURE	=0x00001000,//常に On
+        DDSCAPS_MIPMAP	=0x00400000,//MipMap が存在する場合。(dwFlags の DDSD_MIPMAPCOUNT が On でかつ dwMipMapCount が 2以上の場合に On)
+    };
+
+    enum DDSCAPS2 :u32 {
+        DDSCAPS2_CUBEMAP	        = 0x00000200,//Cubemap の場合
+        DDSCAPS2_CUBEMAP_POSITIVEX	= 0x00000400,//Cubemap + X が含まれている
+        DDSCAPS2_CUBEMAP_NEGATIVEX	= 0x00000800,//Cubemap - X が含まれている
+        DDSCAPS2_CUBEMAP_POSITIVEY	= 0x00001000,//Cubemap + Y が含まれている
+        DDSCAPS2_CUBEMAP_NEGATIVEY	= 0x00002000,//Cubemap - Y が含まれている
+        DDSCAPS2_CUBEMAP_POSITIVEZ	= 0x00004000,//Cubemap + Z が含まれている
+        DDSCAPS2_CUBEMAP_NEGATIVEZ	= 0x00008000,//Cubemap - Z が含まれている
+        DDSCAPS2_VOLUME	            = 0x00400000,//VolumeTexture の場合
+    };
+
+    enum DDS_DIMENSION:u32 {
+        DDS_DIMENSION_UNKNOWN = 0,
+        DDS_DIMENSION_BUFFER = 1,
+        DDS_DIMENSION_TEXTURE1D = 2,
+        DDS_DIMENSION_TEXTURE2D = 3,
+        DDS_DIMENSION_TEXTURE3D = 4
+    };
+
+    enum DDS_MISC_FLAG:u8 {
+        DDS_MISC_FLAG_GENERATE_MIPS = 0x1L,
+        DDS_MISC_FLAG_SHARED = 0x2L,
+        DDS_MISC_FLAG_TEXTURECUBE = 0x4L,
+        DDS_MISC_FLAG_DRAWINDIRECT_ARGS = 0x10L,
+        DDS_MISC_FLAG_BUFFER_ALLOW_RAW_VIEWS = 0x20L,
+        DDS_MISC_FLAG_BUFFER_STRUCTURED = 0x40L,
+        DDS_MISC_FLAG_RESOURCE_CLAMP = 0x80L,
+        DDS_MISC_FLAG_SHARED_KEYEDMUTEX = 0x100L,
+        DDS_MISC_FLAG_GDI_COMPATIBLE = 0x200L,
+        DDS_MISC_FLAG_SHARED_NTHANDLE = 0x800L,
+        DDS_MISC_FLAG_RESTRICTED_CONTENT = 0x1000L,
+        DDS_MISC_FLAG_RESTRICT_SHARED_RESOURCE = 0x2000L,
+        DDS_MISC_FLAG_RESTRICT_SHARED_RESOURCE_DRIVER = 0x4000L,
+        DDS_MISC_FLAG_GUARDED = 0x8000L,
+        DDS_MISC_FLAG_TILE_POOL = 0x20000L,
+        DDS_MISC_FLAG_TILED = 0x40000L,
+        DDS_MISC_FLAG_HW_PROTECTED = 0x80000L,
+        DDS_MISC_FLAG_SHARED_DISPLAYABLE,
+        DDS_MISC_FLAG_SHARED_EXCLUSIVE_WRITER
+    };
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  DDSピクセルフォーマット
+    //@―---------------------------------------------------------------------------
     struct DDS_PIXEL_FORMAT {
         u32     size;           //!< 構造体サイズ 32
         DDPF    flags;          //!< pixel フォーマットを表す DDPF_* の組み合わせ
@@ -67,7 +133,7 @@ namespace ob::graphic {
         u32                 resourceDimension;  //!< 
         u32                 miscFlag;           //!< D3D11_RESOURCE_MISC_FLAG
         u32                 arraySize;          //!< 
-        u32                 miscGlags2;         //!< DDS_MISC_FLAGS2
+        u32                 miscFlags2;         //!< DDS_MISC_FLAGS2
     };
 
 }// namespcae ob

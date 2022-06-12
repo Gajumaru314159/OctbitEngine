@@ -1,17 +1,17 @@
-﻿//#include <Framework/Platform/Window/Window.h>
-//#include <Framework/Platform/Module/ModuleManager.h>
-//#include <Framework/Platform/System/PlatformSystem.h>
-//#include <Framework/Graphic/System.h>
-//#include <Framework/Graphic/SwapChain.h>
-//#include <Framework/Graphic/RenderTarget.h>
-//#include <Framework/Graphic/RootSignature.h>
-//#include <Framework/Graphic/Shader.h>
-//#include <Framework/Graphic/PipelineState.h>
-//#include <Framework/Graphic/DescriptorTable.h>
-//#include <Framework/Graphic/CommandList.h>
-//#include <Framework/Graphic/MeshBuffer.h>
-//#include <Framework/Graphic/Mesh.h>
-//#include <Framework/Graphic/Types/CommandParam.h>
+﻿#include <Framework/Platform/Window/Window.h>
+#include <Framework/Platform/Module/ModuleManager.h>
+#include <Framework/Platform/System/PlatformSystem.h>
+#include <Framework/Graphic/System.h>
+#include <Framework/Graphic/SwapChain.h>
+#include <Framework/Graphic/RenderTarget.h>
+#include <Framework/Graphic/RootSignature.h>
+#include <Framework/Graphic/Shader.h>
+#include <Framework/Graphic/PipelineState.h>
+#include <Framework/Graphic/DescriptorTable.h>
+#include <Framework/Graphic/CommandList.h>
+#include <Framework/Graphic/MeshBuffer.h>
+#include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Core/File/FileStream.h>
 #include <Framework/Core/File/BinaryReader.h>
 #include <Windows.h>
@@ -27,8 +27,6 @@
 #include <Framework/Core/Misc/TimeSpan.h>
 #include <Framework/Core/Misc/UUID.h>
 
-//#include <Framework/Graphic/TextureData.h>
-
 using namespace ob;
 
 struct Vert {
@@ -42,40 +40,31 @@ struct ShaderData {
 
 
 int main() {
-	//using namespace ob::graphic;
+	using namespace ob::graphic;
 
 
 	Logger::Instance();
-	//platform::PlatformSystem::Instance().startup();
+	platform::PlatformSystem::Instance().startup();
 	{
-		LOG_INFO("Vec2     :{}", Vec2(1, 2));
-		LOG_INFO("Vec3     :{}", Vec3(1.5235223f, 2.11f, -0.01f));
-		LOG_INFO("Vec4     :{}", Vec4(3.1415f, 2.235e6f, -0.01f, -123.5e-5f));
-		LOG_INFO("IntVec2  :{}", IntVec2(4, 12));
-		LOG_INFO("IntVec3  :{}", IntVec3(474, 124, 12));
-		LOG_INFO("IntVec4  :{}", IntVec4(45, 1472, 313, 1444));
-		LOG_INFO("Quat     :{}", Quat::identity);
-		LOG_INFO("Rot      :{}", Rot(Math::PI, Math::EPSILON, Math::HALF_PI));
-		LOG_INFO("DateTime :{}", DateTime::Now());
-		LOG_INFO("TimeSpan :{}", TimeSpan::Days(23.12534573));
-		LOG_INFO("TimeSpan :{}", TimeSpan::Hours(23.12534573));
-		LOG_INFO("TimeSpan :{}", TimeSpan::Minutes(23.12534573));
-		LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
-		LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
-		LOG_INFO("UUID     :{}", ob::UUID::Generate());
-
-		{
-			//FileStream fs(L"D:/My/Productions/C++/OctbitEngine/Sources/Framework/Core.h");
-			//BinaryReader reader(fs);
-			//byte bom[3];
-			//auto value = reader.read(bom,3);
-			//LOG_INFO("BOM     :{:#06x}", value);
-			//LOG_INFO("BOM     :{}", Endian::IsLittleEndian());
+		if (false) {
+			LOG_INFO("Vec2     :{}", Vec2(1, 2));
+			LOG_INFO("Vec3     :{}", Vec3(1.5235223f, 2.11f, -0.01f));
+			LOG_INFO("Vec4     :{}", Vec4(3.1415f, 2.235e6f, -0.01f, -123.5e-5f));
+			LOG_INFO("IntVec2  :{}", IntVec2(4, 12));
+			LOG_INFO("IntVec3  :{}", IntVec3(474, 124, 12));
+			LOG_INFO("IntVec4  :{}", IntVec4(45, 1472, 313, 1444));
+			LOG_INFO("Quat     :{}", Quat::identity);
+			LOG_INFO("Rot      :{}", Rot(Math::PI, Math::EPSILON, Math::HALF_PI));
+			LOG_INFO("DateTime :{}", DateTime::Now());
+			LOG_INFO("TimeSpan :{}", TimeSpan::Days(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Hours(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Minutes(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
+			LOG_INFO("UUID     :{}", ob::UUID::Generate());
 		}
 
-		//graphic::TextureData tex(TC("D:/Users/Gajumaru/Pictures/test.dds"));
-
-		/*platform::ModuleManager::Instance();
+		platform::ModuleManager::Instance();
 		{
 			// グラフィックシステム初期化
 			SystemDesc sysDesc;
@@ -98,13 +87,6 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(swapChain);
 			}
 
-			Texture tex;
-			{
-				TextureDesc desc;
-				desc.size = { 512,512 };
-				desc.color.set(1, 0, 1);
-				tex = Texture(desc);
-			}
 
 			RenderTarget rt;
 			{
@@ -121,17 +103,24 @@ int main() {
 				rt = RenderTarget(desc);
 				OB_CHECK_ASSERT_EXPR(rt);
 			}
+			Texture tex;
+			{
+				FileStream fs(L"D:/Users/Gajumaru/Pictures/test.dds");
+				if (fs) {
+					Blob blob(fs.size());
+					fs.read(blob.data(), blob.size());
+					tex = Texture(blob, TC("TestTex"));
+				}
+
+				OB_CHECK_ASSERT_EXPR(tex);
+			}
 
 			RootSignature signature;
 			{
 				RootSignatureDesc desc(
 					{
-						RootParameter(
-							{
-								DescriptorRange(DescriptorRangeType::CBV,1,0),
-								//DescriptorRange(DescriptorRangeType::CBV,1,0),
-							}
-						),
+						RootParameter::Range(DescriptorRangeType::CBV,1,0),
+						RootParameter::Range(DescriptorRangeType::SRV,1,0),
 					},
 					{
 						StaticSamplerDesc(SamplerDesc(),0),
@@ -145,27 +134,24 @@ int main() {
 			PixelShader ps;
 			{
 				String vssrc;
-				vssrc.append(TC("/nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-				vssrc.append(TC("/nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
-				vssrc.append(TC("/n    Output o;"));
-				vssrc.append(TC("/n    o.pos = pos;"));
-				vssrc.append(TC("/n    o.uv = uv;"));
-				vssrc.append(TC("/n    return o;"));
-				vssrc.append(TC("/n}"));
+				vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
+				vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
+				vssrc.append(TC("\n    Output o;"));
+				vssrc.append(TC("\n    o.pos = pos;"));
+				vssrc.append(TC("\n    o.uv = uv;"));
+				vssrc.append(TC("\n    return o;"));
+				vssrc.append(TC("\n}"));
 				String pssrc;
-				pssrc.append(uR"(
+				pssrc.append(TC("\ncbuffer Param : register(b0) {								"));
+				pssrc.append(TC("\n  float4 color;												"));
+				pssrc.append(TC("\n};															"));
+				pssrc.append(TC("\nSamplerState g_mainSampler:register(s0);						"));
+				pssrc.append(TC("\nTexture2D g_mainTex:register(t0);							"));
+				pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	"));
+				pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{						"));
+				pssrc.append(TC("\n    return color;//g_mainTex.Sample(g_mainSampler,i.uv);				"));
+				pssrc.append(TC("\n}															"));
 
-cbuffer Param : register(b0) {
-  float4 color;
-};
-
-//SamplerState g_mainSampler;
-struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};
-float4 PS_Main(Output i) : SV_TARGET{
-    return color;//g_mainTex.Sample(g_mainSampler,i.uv);
-}
-
-)");
 				vs = VertexShader(vssrc);
 				ps = PixelShader(pssrc);
 				OB_CHECK_ASSERT_EXPR(vs && ps);
@@ -300,7 +286,7 @@ float4 PS_Main(Output i) : SV_TARGET{
 				flag++;
 
 			}
-		}*/
+		}
 	}
 
 
