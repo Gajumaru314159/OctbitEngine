@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/Misc/BlobView.h>
 #include <Framework/Graphic/Types/TextureFormat.h>
+#include <Framework/Graphic/Types/TextureDesc.h>
 #include <Framework/Core/File/Path.h>
 
 namespace ob::graphic {
@@ -16,10 +17,6 @@ namespace ob::graphic {
     class TextureData {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
@@ -27,15 +24,21 @@ namespace ob::graphic {
         TextureData(const Path& path);
         TextureData(const void* data,size_t size);
 
-        Size        size;
-        Blob        data;
+        TextureFormat   m_format;
+        TextureType     m_type;
 
+        s32     m_arrayNum;
+        Size    m_size;
+        Blob    m_blob;
+
+        //Array<TextureMipsData> m_mips;
+    private:
     };
 
     struct TextureMipsData {
-        Array<TextureData> mips;
-        TextureFormat format;
-        Size size;
+        void* data;
+        size_t rowPitch;
+        size_t slicePitch;
     };
 
 

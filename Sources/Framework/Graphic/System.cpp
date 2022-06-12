@@ -13,7 +13,7 @@
 #include <Framework/Graphic/Interface/GraphicObject.h>
 #include <Framework/Core/String/StringEncoder.h>
 
-#include <MagicEnum/magic_enum.hpp>
+#include <magic_enum.hpp>
 
 namespace ob::graphic {
 

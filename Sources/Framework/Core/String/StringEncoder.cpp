@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include"StringEncoder.h"
-#include <utfcpp/utf8.h>
+#include <utf8.h>
 
 namespace {
     //! @cond 

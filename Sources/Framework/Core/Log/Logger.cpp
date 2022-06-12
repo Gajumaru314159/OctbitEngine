@@ -7,7 +7,6 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Thread/ScopeLock.h>
 #include <Framework/Core/Utility/Scope.h>
-#include <MagicEnum/magic_enum.hpp>
 
 #include <iostream>
 
@@ -113,33 +112,6 @@ namespace ob::core {
 
         // 登録されたすべてのリスナに通知
         m_notifier.invoke(log);
-
-        // デバッグログに出力
-        //{
-        //    auto logTypeNameAscii = magic_enum::enum_name(type);
-        //    Char logTypeName[10];
-        //    for (s32 i = 0; i < logTypeNameAscii.size(); ++i) {
-        //        logTypeName[i] = static_cast<char>(logTypeNameAscii[i]);
-        //    }
-        //    logTypeName[logTypeNameAscii.size()] = TC('\0');
-
-
-        //    auto msg = fmt::format(TC("[{0}][{1}] {2}"),
-        //        logTypeName,
-        //        category,
-        //        pMessage);
-
-        //    WString ws;
-        //    StringEncoder::Encode(msg, ws);
-        //    ::OutputDebugLog(ws.c_str());
-
-        //    // TODO エラーダイアログ表示は外部から設定する？
-        //    if (type == LogType::Fatal) {
-        //        ::ShowMessageBox(ws.c_str());
-        //        ::CallBreakPoint();
-        //        assert(false);
-        //    }
-        //}
 
         if (log.level == LogLevel::Fatal) {
             ::CallBreakPoint();

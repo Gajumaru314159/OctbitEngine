@@ -15,19 +15,26 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 # プロジェクト設定
 #------------------------------------------------------------------------------
 
+# DLL用define定義
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_GRAPHIC_VULKAN_BUILD)
+
+# ThirdPartyライブラリ
+find_package(Vulkan REQUIRED)
+
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
-    "${OCTBIT_SOURCE_PATH}"
-    "$ENV{VULKAN_SDK}/Include"
+    ${OCTBIT_SOURCE_PATH}
+    ${Vulkan_INCLUDE_DIRS}
+    #"$ENV{VULKAN_SDK}/Include"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
-    Graphic
-    "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
+    Graphic 
+    ${Vulkan_LIBRARIES}
+    #"$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 

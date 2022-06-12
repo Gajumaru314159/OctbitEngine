@@ -65,9 +65,9 @@ namespace ob::core {
 		//! 
 		//! @param buffer 　 読み込みデータ格納先のポインタ
 		//! @param byteCount 読み込むバイト数
-		//! @return 読み込んだデータ個数※エラー時やファイルの末端に達したときは byteCount 以下の値が返される
+		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		size_t read(void* buffer, size_t byteCount) override;
+		bool read(void* buffer, size_t byteCount) override;
 
 
 		//@―---------------------------------------------------------------------------
@@ -75,9 +75,9 @@ namespace ob::core {
 		//! 
 		//! @param buffer 　 書き込むデータ格納先のポインタ
 		//! @param byteCount 書き込むバイト数
-		//! @return 読み込んだデータ個数※エラー時やファイルの末端に達したときは byteCount 以下の値が返される
+		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		size_t write(void* buffer, size_t byteCount) override;
+		bool write(void* buffer, size_t byteCount) override;
 
 
 		//@―---------------------------------------------------------------------------
@@ -85,9 +85,9 @@ namespace ob::core {
 		//! 
 		//! @param offset 　 基準からの移動量
 		//! @param origin	 基準位置
-		//! @return 0 のとき成功
+		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		size_t seek(offset_t offset, SeekOrigin origin) override;
+		bool seek(offset_t offset, SeekOrigin origin) override;
 
 
 		//@―---------------------------------------------------------------------------

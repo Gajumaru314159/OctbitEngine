@@ -19,7 +19,7 @@
 
 
 // Windows(32bit)
-#elif defined(_WIN64)
+#elif defined(_WIN32)
 #define OS_WINDOWS
 #define OS_32BIT
 #define OS_NAME "Windows(32bit)"
@@ -95,7 +95,7 @@
 
 #if defined(_DEBUG)||defined(DEBUG)
 #define OB_DEBUG 1
-#elif
+#else
 #define OB_DEBUG 0
 #endif
 

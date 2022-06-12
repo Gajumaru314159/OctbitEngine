@@ -27,6 +27,8 @@
 #include <Framework/Core/Misc/TimeSpan.h>
 #include <Framework/Core/Misc/UUID.h>
 
+//#include <Framework/Graphic/TextureData.h>
+
 using namespace ob;
 
 struct Vert {
@@ -63,13 +65,15 @@ int main() {
 		LOG_INFO("UUID     :{}", ob::UUID::Generate());
 
 		{
-			FileStream fs(L"D:/My/Productions/C++/OctbitEngine/Sources/Framework/Core.h");
-			BinaryReader reader(fs);
-			byte bom[3];
-			auto value = reader.read(bom,3);
-			LOG_INFO("BOM     :{:#06x}", value);
-			LOG_INFO("BOM     :{}", Endian::IsLittleEndian());
+			//FileStream fs(L"D:/My/Productions/C++/OctbitEngine/Sources/Framework/Core.h");
+			//BinaryReader reader(fs);
+			//byte bom[3];
+			//auto value = reader.read(bom,3);
+			//LOG_INFO("BOM     :{:#06x}", value);
+			//LOG_INFO("BOM     :{}", Endian::IsLittleEndian());
 		}
+
+		//graphic::TextureData tex(TC("D:/Users/Gajumaru/Pictures/test.dds"));
 
 		/*platform::ModuleManager::Instance();
 		{

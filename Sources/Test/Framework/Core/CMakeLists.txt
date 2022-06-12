@@ -16,13 +16,13 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR
-    "${OCTBIT_EXTERNAL_PATH}/iutest/include"
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_DIR})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
     Core
+    iutest
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 

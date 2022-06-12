@@ -20,6 +20,7 @@ namespace ob::core {
 			: m_fp(nullptr)
 			, m_mode(mode)
 			, m_path(path)
+			, m_size(0)
 		{
 			const wchar_t* pMode = L"";
 			switch (mode) {
@@ -30,11 +31,20 @@ namespace ob::core {
 			}
 			auto wpath = path.wstring();
 			if (_wfopen_s(&m_fp, wpath.c_str(), pMode) == 0) {
-
+				std::error_code code;
+				auto s = file_size(m_path, code);
+				if (s != static_cast<std::uintmax_t>(-1)) {
+					m_size = (size_t)s;
+				} else {
+					String path2;
+					StringEncoder::Encode(path.wstring(), path2);
+					LOG_WARNING("サイズの取得に失敗[{}]", path2);
+					m_fp = nullptr;
+				}
 			} else {
 				String path2;
 				StringEncoder::Encode(path.wstring(), path2);
-				LOG_WARNING("{}を開けませんでした。", path2);
+				LOG_WARNING("ファイルを開けませんでした[{}]", path2);
 				m_fp = nullptr;
 			}
 
@@ -81,13 +91,7 @@ namespace ob::core {
 		//! @brief  ファイルサイズ取得
 		//@―---------------------------------------------------------------------------
 		size_t size()const {
-			std::error_code code;
-			auto s = file_size(m_path, code);
-			if (s == static_cast<std::uintmax_t>(-1)) {
-				// 失敗したら0をかえす
-				return 0;
-			}
-			return (size_t)s;
+			return m_size;
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -105,24 +109,39 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  読み取り
 		//@―---------------------------------------------------------------------------
-		size_t read(void* buffer, size_t byteCount) {
+		bool read(void* buffer, size_t byteCount) {
 			checkOpen();
-			return fread_s(buffer, byteCount, sizeof(byte), byteCount, m_fp);
+			offset_t readCount = fread_s(buffer, byteCount, sizeof(byte), byteCount, m_fp);
+			if(readCount!=byteCount) {
+				// readCount 読めなかったら戻す
+				seek(-readCount, SeekOrigin::Current);
+				return false;
+			}
+			return true;
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  書き込み
 		//@―---------------------------------------------------------------------------
-		size_t write(void* buffer, size_t byteCount) {
+		bool write(void* buffer, size_t byteCount) {
 			checkOpen();
-			return fwrite(buffer, sizeof(byte), byteCount, m_fp);
+			offset_t writeCount = fwrite(buffer, sizeof(byte), byteCount, m_fp);
+			m_size = std::max(m_size,position()+writeCount);
+			if (writeCount != byteCount) {
+				String path;
+				StringEncoder::Encode(m_path.wstring(), path);
+				LOG_ERROR("ファイルの書き込みに失敗[{}]", path);
+				return false;
+			}
+			return true;
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  シーク
 		//@―---------------------------------------------------------------------------
-		size_t seek(offset_t offset, SeekOrigin origin) {
+		bool seek(offset_t offset, SeekOrigin origin) {
 			checkOpen();
+
 			auto convert = [](SeekOrigin origin) {
 				if (origin == SeekOrigin::Begin)return SEEK_SET;
 				if (origin == SeekOrigin::Current)return SEEK_CUR;
@@ -130,10 +149,19 @@ namespace ob::core {
 				return SEEK_SET;
 			};
 
-			if (fseek(m_fp, (long)offset, convert(origin)) != 0) {
-				LOG_ERROR("ファイルのシークに失敗");
+			// fseekにSEEK_ENDを指定すると結果が不定になるため先頭からに変換
+			if (origin == SeekOrigin::End) {
+				origin = SeekOrigin::Begin;
+				offset += size();
 			}
-			return position();
+
+			if (fseek(m_fp, (long)offset, convert(origin)) != 0) {
+				String path;
+				StringEncoder::Encode(m_path.wstring(), path);
+				LOG_ERROR("ファイルのシークに失敗[{}]", path);
+				return false;
+			}
+			return true;
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -149,6 +177,7 @@ namespace ob::core {
 		FILE* m_fp = nullptr;
 		FileOpenMode m_mode;
 		Path m_path;
+		size_t m_size;
 	};
 
 
@@ -184,15 +213,15 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  読み込み
 	//@―---------------------------------------------------------------------------
-	size_t FileStream::read(void* buffer, size_t byteCount) { return m_impl->read(buffer, byteCount); }
+	bool FileStream::read(void* buffer, size_t byteCount) { return m_impl->read(buffer, byteCount); }
 	//@―---------------------------------------------------------------------------
 	//! @brief  書き込み
 	//@―---------------------------------------------------------------------------
-	size_t FileStream::write(void* buffer, size_t byteCount) { return m_impl->write(buffer, byteCount); }
+	bool FileStream::write(void* buffer, size_t byteCount) { return m_impl->write(buffer, byteCount); }
 	//@―---------------------------------------------------------------------------
 	//! @brief  シーク
 	//@―---------------------------------------------------------------------------
-	size_t FileStream::seek(offset_t offset, SeekOrigin origin) { return m_impl->seek(offset, origin); }
+	bool FileStream::seek(offset_t offset, SeekOrigin origin) { return m_impl->seek(offset, origin); }
 	//@―---------------------------------------------------------------------------
 	//! @brief  フラッシュ
 	//@―---------------------------------------------------------------------------

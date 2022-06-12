@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "TypeConverter.h"
-#include "MagicEnum/magic_enum.hpp"
 
 namespace ob::graphic::dx12
 {
