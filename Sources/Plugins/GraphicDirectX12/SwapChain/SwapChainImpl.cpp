@@ -50,7 +50,7 @@ namespace ob::graphic::dx12 {
         UINT sampleCount = 1;
         HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(*window));
         {
-            D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature;
+            D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
             auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
             if (SUCCEEDED(result)) {
                 LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);

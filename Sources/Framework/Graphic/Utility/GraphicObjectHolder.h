@@ -27,9 +27,9 @@ namespace ob::graphic {
             friend class Device;                        \
         public:                                         \
             type(const type&);                          \
-            type(type&&);                               \
+            type(type&&)noexcept;                       \
             type& operator=(const type&);               \
-            type& operator=(type&&);                    \
+            type& operator=(type&&)noexcept;            \
             virtual ~type();                            \
             bool operator==(const type&)const noexcept; \
             bool operator!=(const type&)const noexcept; \
@@ -47,9 +47,9 @@ namespace ob::graphic {
             friend class Device;                            \
         public:                                             \
             type(const type&);                              \
-            type(type&&);                                   \
+            type(type&&)noexcept;                           \
             type& operator=(const type&);                   \
-            type& operator=(type&&);                        \
+            type& operator=(type&&)noexcept;                \
             virtual ~type();                                \
             bool operator==(const type&)const noexcept;     \
             bool operator!=(const type&)const noexcept;     \
@@ -68,7 +68,7 @@ namespace ob::graphic {
             m_pImpl = another.m_pImpl;                              \
             if(m_pImpl)m_pImpl->addReference();                     \
         }                                                           \
-        type::type(type&& another) {                                \
+        type::type(type&& another)noexcept {                        \
             m_pImpl = another.m_pImpl;                              \
             another.m_pImpl = nullptr;                              \
         }                                                           \
@@ -79,7 +79,7 @@ namespace ob::graphic {
             m_pImpl = another.m_pImpl;                              \
             return *this;                                           \
         }                                                           \
-        type& type::operator=(type&& another) {                     \
+        type& type::operator=(type&& another)noexcept {             \
             if(m_pImpl==another.m_pImpl)return *this;               \
             if(m_pImpl)m_pImpl->releaseReference();                 \
             m_pImpl = another.m_pImpl;                              \

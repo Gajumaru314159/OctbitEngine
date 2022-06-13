@@ -395,7 +395,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  デスクリプタヒープを初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeDescriptorHeaps() {
-		m_descriptorHeaps.resize(enum_cast(DescriptorHeapType::DSV)+1u);
+		m_descriptorHeaps.resize((size_t)enum_cast(DescriptorHeapType::DSV)+1u);
 
 		m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);

@@ -32,9 +32,12 @@ set(OB_CONFIGURATION "Debug")
 if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
     add_definitions(/W4)
 endif()
+add_compile_options(/wd26495)
 
 set(build_tests OFF)
-set(build_namespace_tests OFF)
+
+# 警告抑制
+set(build_namespace_tests OFF)  # 未初期化の変数
 
 # 外部ライブラリ
 include(FetchContent)
