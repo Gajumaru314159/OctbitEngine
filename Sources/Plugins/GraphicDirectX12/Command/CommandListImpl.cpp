@@ -333,7 +333,7 @@ namespace ob::graphic::dx12 {
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::draw(const DrawParam& param) {
-		m_cmdList->DrawInstanced(param.indexCount, 1, param.startVertex,0);
+		m_cmdList->DrawInstanced(param.vertexCount, 1, param.startVertex,0);
 	}
 
 

@@ -264,9 +264,9 @@ int main() {
 				cmdList.setRootDesciptorTable(params, 2);
 
 				{
-					DrawParam param{};
-					param.indexCount = 4;
-					cmdList.draw(param);
+					DrawIndexedParam param{};
+					param.indexCount = 6;
+					cmdList.drawIndexed(param);
 				}
 
 				cmdList.applySwapChain(swapChain, rt.getColorTexture(0));

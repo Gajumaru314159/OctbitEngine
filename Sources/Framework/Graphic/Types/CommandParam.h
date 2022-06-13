@@ -27,7 +27,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	struct DrawParam {
 		u32 startVertex;	//!< 頂点開始インデックス
-		u32 indexCount;		//!< 描画頂点数
+		u32 vertexCount;	//!< 描画頂点数
 	};
 
 
