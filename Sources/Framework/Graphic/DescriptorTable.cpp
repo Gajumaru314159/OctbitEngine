@@ -21,12 +21,11 @@ namespace ob::graphic {
     //! @param elementNum   要素数
     //! @param name         デバッグ名
     //@―---------------------------------------------------------------------------
-    DescriptorTable::DescriptorTable(DescriptorHeapType type, s32 elementNum, StringView name) {
+    DescriptorTable::DescriptorTable(DescriptorHeapType type, s32 elementNum) {
         m_pImpl = Device::Get()->createDescriptorTable(type,elementNum);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "DescriptorTableの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "DescriptorTableの生成に失敗");
             release();
         }
     }

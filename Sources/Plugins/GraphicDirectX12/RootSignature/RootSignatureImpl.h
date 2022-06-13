@@ -63,6 +63,9 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         auto getNative()const noexcept { return m_rootSignature.Get(); };
 
+    private:
+
+        void onNameChanged()override;
 
     private:
 

@@ -38,18 +38,16 @@ namespace ob::graphic {
         //! @brief  コンストラクタ
         //! 
         //! @param desc テクスチャ定義
-        //! @param name オブジェクト名
         //@―---------------------------------------------------------------------------
-        Texture(const TextureDesc& desc, StringView name=TC("Texture"));
+        Texture(const TextureDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //! 
         //! @param desc テクスチャ定義
-        //! @param name オブジェクト名
         //@―---------------------------------------------------------------------------
-        Texture(BlobView blob, StringView name = TC("Texture"));
+        Texture(BlobView blob);
 
 
         //===============================================================

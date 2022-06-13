@@ -18,12 +18,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChain::SwapChain(const SwapchainDesc& desc, StringView name) {
+    SwapChain::SwapChain(const SwapchainDesc& desc) {
         m_pImpl = Device::Get()->createSwapChain(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "スワップチェインの生成に失敗");
             release();
         }
     }

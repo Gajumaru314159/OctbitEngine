@@ -27,12 +27,11 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandList::CommandList(const CommandListDesc& desc, StringView name) {
+	CommandList::CommandList(const CommandListDesc& desc) {
 		m_pImpl = Device::Get()->createCommandList(desc);
 		OB_CHECK_ASSERT_EXPR(m_pImpl);
-		m_pImpl->setName(name);
 		if (!m_pImpl->isValid()) {
-			LOG_ERROR_EX("Graphic", "CommandListの生成に失敗 [name={}]", name);
+			LOG_FATAL_EX("Graphic", "CommandListの生成に失敗");
 			release();
 		}
 	}

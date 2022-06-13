@@ -29,7 +29,7 @@ namespace ob::graphic {
         //! @param elementNum   要素数
         //! @param name         デバッグ名
         //@―---------------------------------------------------------------------------
-        DescriptorTable(DescriptorHeapType type, s32 elementNum, StringView name = TC("DescriptorTable"));
+        DescriptorTable(DescriptorHeapType type, s32 elementNum);
 
 
         //@―---------------------------------------------------------------------------

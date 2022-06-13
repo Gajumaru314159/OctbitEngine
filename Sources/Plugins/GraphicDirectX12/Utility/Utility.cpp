@@ -154,4 +154,15 @@ namespace ob::graphic::dx12 {
         // D3D12_SRV_DIMENSION_RAYTRACING_ACCELERATION_STRUCTURE
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ID3D12Objectに名前を設定
+    //@―---------------------------------------------------------------------------
+    void Utility::setName(ID3D12Object* pObject, StringView name) {
+        if (pObject == nullptr)return;
+        WString wname;
+        StringEncoder::Encode(name, wname);
+        pObject->SetName(wname.c_str());
+    }
+
 }// namespace ob::graphic::dx12

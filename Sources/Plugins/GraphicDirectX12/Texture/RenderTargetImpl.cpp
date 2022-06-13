@@ -35,7 +35,6 @@ namespace ob::graphic::dx12 {
 		for (auto& element : m_desc.colors) {
 
 			auto format = TypeConverter::convert(element.format);
-			auto subName = fmt::format(TC("{0}_Color{1}"), getName(), index);
 
 			TextureDesc tdesc;
 			tdesc.size = m_desc.size;
@@ -46,7 +45,7 @@ namespace ob::graphic::dx12 {
 			tdesc.color = element.clearColor;
 
 			// メインリソースを生成
-			auto& texture = m_textures.emplace_back(Texture(tdesc, subName));
+			auto& texture = m_textures.emplace_back(Texture(tdesc));
 			auto& rTexture = Device::GetImpl<TextureImpl>(texture);
 
 			// レンダーターゲットビューを生成
@@ -66,7 +65,6 @@ namespace ob::graphic::dx12 {
 
 			auto& element = m_desc.depth[0];
 			auto format = TypeConverter::convert(element.format);
-			auto subName = fmt::format(TC("{0}_Depth"), getName());
 
 			TextureDesc tdesc;
 			tdesc.size = m_desc.size;
@@ -76,7 +74,7 @@ namespace ob::graphic::dx12 {
 			tdesc.mipLevel = 1;
 
 			// メインリソースを生成
-			m_depth = Texture(tdesc, subName);
+			m_depth = Texture(tdesc);
 			auto& rTexture = Device::GetImpl<TextureImpl>(m_depth);
 
 			//深度ビュー作成
@@ -197,6 +195,22 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_RECT RenderTargetImpl::getScissorRect()const {
 		return m_scissorRect;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void RenderTargetImpl::onNameChanged() {
+		s32 index = 0;
+		for (auto& texture : m_textures) {
+			String childName = fmt::format(TC("{}_Color{}"), getName(), index);
+			texture.setName(childName);
+			index++;
+		}
+		{
+			String childName = fmt::format(TC("{}_Depth"), getName());
+			m_depth.setName(childName);
+		}
 	}
 
 }// namespace ob::graphic::dx12

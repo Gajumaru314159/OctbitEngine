@@ -88,6 +88,8 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         GraphicObject();
 
+        virtual void onNameChanged(){}
+
 
     private:
 

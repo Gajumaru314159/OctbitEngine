@@ -126,6 +126,12 @@ namespace ob::graphic::dx12 {
         bool setColorSpace();
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      名前変更時
+        //@―---------------------------------------------------------------------------
+        void onNameChanged()override;
+
+
     private:
 
         SwapchainDesc m_desc;

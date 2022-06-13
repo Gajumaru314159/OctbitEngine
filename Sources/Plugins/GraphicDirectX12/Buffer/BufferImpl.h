@@ -65,7 +65,7 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief      ネイティブオブジェクトを取得
 		//@―---------------------------------------------------------------------------
-		ID3D12Resource* getNative()const {return m_buffer.Get();}
+		ID3D12Resource* getNative()const {return m_resource.Get();}
 
 
 		//@―---------------------------------------------------------------------------
@@ -73,13 +73,16 @@ namespace ob::graphic::dx12 {
 		//@―---------------------------------------------------------------------------
 		void createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
+	private:
+
+		void onNameChanged()override;
 
 	private:
 
 		class DeviceImpl& m_device;
 		const BufferDesc m_desc;
 
-		ComPtr<ID3D12Resource> m_buffer;
+		ComPtr<ID3D12Resource> m_resource;
 
 	};
 

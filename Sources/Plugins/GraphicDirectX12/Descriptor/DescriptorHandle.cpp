@@ -79,7 +79,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHandle::getCpuHandle(s32 index)const {
 		OB_CHECK_ASSERT(m_pBlock, "空のハンドルです。");
-		return m_pBlock->pHeap->getCpuHandle(index);
+		return m_pBlock->pHeap->getCpuHandle(m_pBlock->index + index);
 	}
 
 
@@ -88,7 +88,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHandle::getGpuHandle(s32 index)const {
 		OB_CHECK_ASSERT(m_pBlock, "空のハンドルです。");
-		return m_pBlock->pHeap->getGpuHandle(index);
+		return m_pBlock->pHeap->getGpuHandle(m_pBlock->index + index);
 	}
 
 }// namespcae ob::graphic::dx12

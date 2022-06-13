@@ -29,7 +29,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        PipelineState(const PipelineStateDesc& desc, StringView name = TC("PipelineState"));
+        PipelineState(const PipelineStateDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

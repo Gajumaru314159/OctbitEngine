@@ -42,7 +42,7 @@ namespace ob::graphic {
 		//! @param desc バッファ定義
 		//! @param name 名前
 		//@―---------------------------------------------------------------------------
-		Buffer(const BufferDesc& desc, StringView name = TC("Buffer"));
+		Buffer(const BufferDesc& desc);
 
 
 		//@―---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ namespace ob::graphic {
 		//! @param blob 初期化データ
 		//! @param name 名前
 		//@―---------------------------------------------------------------------------
-		Buffer(const BufferDesc& desc, const Blob& blob, StringView name = TC("Buffer"));
+		Buffer(const BufferDesc& desc, const Blob& blob);
 
 
 		//@―---------------------------------------------------------------------------

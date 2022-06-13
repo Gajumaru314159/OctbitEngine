@@ -161,7 +161,7 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点レイアウト設定
 	//@―---------------------------------------------------------------------------
-	void PipelineStateImpl::setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute&src) {
+	void PipelineStateImpl::setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src) {
 		dst.SemanticName = TypeConverter::convert(src.semantic);
 		dst.SemanticIndex = src.index;
 		dst.Format = TypeConverter::convert(src.type, src.dimention);
@@ -197,20 +197,26 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src) {
 		dst = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		dst.DepthEnable=src.depth.enable;
-		dst.DepthWriteMask=src.depth.write? D3D12_DEPTH_WRITE_MASK_ALL:D3D12_DEPTH_WRITE_MASK_ZERO;
-		dst.DepthFunc=TypeConverter::convert(src.depth.func);
-		
-		dst.StencilEnable=src.stencil.enable;
-		dst.StencilReadMask=src.stencil.read_mask;
-		dst.StencilWriteMask=src.stencil.write_mask;
-		
+		dst.DepthEnable = src.depth.enable;
+		dst.DepthWriteMask = src.depth.write ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;
+		dst.DepthFunc = TypeConverter::convert(src.depth.func);
+
+		dst.StencilEnable = src.stencil.enable;
+		dst.StencilReadMask = src.stencil.read_mask;
+		dst.StencilWriteMask = src.stencil.write_mask;
+
 		dst.FrontFace.StencilFailOp = TypeConverter::convert(src.stencil.failOp);
 		dst.FrontFace.StencilDepthFailOp = TypeConverter::convert(src.stencil.depthFailOp);
 		dst.FrontFace.StencilPassOp = TypeConverter::convert(src.stencil.passOp);
-		dst.FrontFace.StencilFunc= TypeConverter::convert(src.stencil.func);
-		dst.BackFace= dst.FrontFace;
+		dst.FrontFace.StencilFunc = TypeConverter::convert(src.stencil.func);
+		dst.BackFace = dst.FrontFace;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void PipelineStateImpl::onNameChanged() {
+		Utility::setName(m_pipelineState.Get(), getName());
+	}
 
 }// namespace ob::graphic::dx12

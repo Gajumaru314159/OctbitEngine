@@ -27,11 +27,11 @@ namespace ob::graphic {
     //! 
     //! @param desc バッファ定義
     //@―---------------------------------------------------------------------------
-    Buffer::Buffer(const BufferDesc& desc, StringView name) {
+    Buffer::Buffer(const BufferDesc& desc) {
         m_pImpl = Device::Get()->createBuffer(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
+            LOG_FATAL_EX("Graphic", "スワップチェインの生成に失敗");
             release();
         }
     }
@@ -40,11 +40,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    Buffer::Buffer(const BufferDesc& desc, const Blob& blob, StringView name) {
+    Buffer::Buffer(const BufferDesc& desc, const Blob& blob) {
         m_pImpl = Device::Get()->createBuffer(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "スワップチェインの生成に失敗");
+            LOG_FATAL_EX("Graphic", "スワップチェインの生成に失敗");
             release();
         }
         update(blob.size(), blob.data());

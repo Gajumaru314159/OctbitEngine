@@ -83,7 +83,7 @@ namespace ob::graphic {
         //! @param code     シェーダコード
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        VertexShader(const String& code, StringView name = TC("VertexShader"));
+        VertexShader(const String& code);
 
 
         //@―---------------------------------------------------------------------------
@@ -92,7 +92,7 @@ namespace ob::graphic {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        VertexShader(const Blob& binary, StringView name = TC("VertexShader"));
+        VertexShader(const Blob& binary);
 
     };
 
@@ -120,7 +120,7 @@ namespace ob::graphic {
         //! @param code     シェーダコード
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        PixelShader(const String& code, StringView name = TC("PixelShader"));
+        PixelShader(const String& code);
 
 
         //@―---------------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace ob::graphic {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        PixelShader(const Blob& binary, StringView name = TC("PixelShader"));
+        PixelShader(const Blob& binary);
 
     };
 
@@ -157,7 +157,7 @@ namespace ob::graphic {
         //! @param code     シェーダコード
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        GeometryShader(const String& code, StringView name = TC("GeometryShader"));
+        GeometryShader(const String& code);
 
 
         //@―---------------------------------------------------------------------------
@@ -166,7 +166,7 @@ namespace ob::graphic {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        GeometryShader(const Blob& binary, StringView name = TC("GeometryShader"));
+        GeometryShader(const Blob& binary);
 
     };
 
@@ -194,7 +194,7 @@ namespace ob::graphic {
         //! @param code     シェーダコード
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        HullShader(const String& code, StringView name = TC("HullShader"));
+        HullShader(const String& code);
 
 
         //@―---------------------------------------------------------------------------
@@ -203,7 +203,7 @@ namespace ob::graphic {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        HullShader(const Blob& binary, StringView name = TC("HullShader"));
+        HullShader(const Blob& binary);
 
     };
 
@@ -231,7 +231,7 @@ namespace ob::graphic {
         //! @param code     シェーダコード
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        DomainShader(const String& code, StringView name = TC("DomainShader"));
+        DomainShader(const String& code);
 
 
         //@―---------------------------------------------------------------------------
@@ -240,7 +240,7 @@ namespace ob::graphic {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        DomainShader(const Blob& binary, StringView name = TC("DomainShader"));
+        DomainShader(const Blob& binary);
 
     };
 

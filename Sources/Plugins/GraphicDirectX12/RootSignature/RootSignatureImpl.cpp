@@ -11,10 +11,10 @@
 
 namespace ob::graphic::dx12 {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ
-    //@―---------------------------------------------------------------------------
-    RootSignatureImpl::RootSignatureImpl(DeviceImpl& rDevice, const RootSignatureDesc& desc)
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	RootSignatureImpl::RootSignatureImpl(DeviceImpl& rDevice, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		// パラメータ
@@ -38,8 +38,8 @@ namespace ob::graphic::dx12 {
 				);
 				descriptors.push_back(range);
 
-				elm.DescriptorTable.NumDescriptorRanges=1;
-				elm.DescriptorTable.pDescriptorRanges= descriptors.data()+ descriptors.size()-1;
+				elm.DescriptorTable.NumDescriptorRanges = 1;
+				elm.DescriptorTable.pDescriptorRanges = descriptors.data() + descriptors.size() - 1;
 				break;
 			}
 			case RootParameterType::RootConstants:
@@ -53,7 +53,6 @@ namespace ob::graphic::dx12 {
 				break;
 			}
 			parameters.push_back(elm);
-			parameters.back();
 		}
 
 
@@ -61,10 +60,10 @@ namespace ob::graphic::dx12 {
 		// TODO テクスチャごとのサンプラーを定義するか検討
 		Array<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
 		samplerDescs.reserve(desc.samplers.size());
-		for (auto& params: desc.samplers) {
+		for (auto& params : desc.samplers) {
 			CD3DX12_STATIC_SAMPLER_DESC sampler(
 				params.registerNo,
-				TypeConverter::convert(params.sampler.filter, params.sampler.filter, params.sampler.mipFilter, params.sampler.anisotropy!=Anisotropy::None),
+				TypeConverter::convert(params.sampler.filter, params.sampler.filter, params.sampler.mipFilter, params.sampler.anisotropy != Anisotropy::None),
 				TypeConverter::convert(params.sampler.addressU),
 				TypeConverter::convert(params.sampler.addressV),
 				TypeConverter::convert(params.sampler.addressW),
@@ -76,7 +75,7 @@ namespace ob::graphic::dx12 {
 				params.sampler.mipLodRange.max,
 				TypeConverter::convert(params.visibility),
 				params.registerSpace
-				);
+			);
 			samplerDescs.push_back(sampler);
 		}
 
@@ -115,30 +114,38 @@ namespace ob::graphic::dx12 {
 			return;
 		}
 
-    }
+	}
 
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  デストラクタ
-    //@―---------------------------------------------------------------------------
-    RootSignatureImpl::~RootSignatureImpl() {
+	//@―---------------------------------------------------------------------------
+	//! @brief  デストラクタ
+	//@―---------------------------------------------------------------------------
+	RootSignatureImpl::~RootSignatureImpl() {
 
-    }
+	}
 
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  妥当なオブジェクトか
-    //@―---------------------------------------------------------------------------
-    bool RootSignatureImpl::isValid()const {
+	//@―---------------------------------------------------------------------------
+	//! @brief  妥当なオブジェクトか
+	//@―---------------------------------------------------------------------------
+	bool RootSignatureImpl::isValid()const {
 		return m_rootSignature;
-    }
+	}
 
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  定義を取得
-    //@―---------------------------------------------------------------------------
-    const RootSignatureDesc& RootSignatureImpl::getDesc()const noexcept {
-        return m_desc;
-    }
+	//@―---------------------------------------------------------------------------
+	//! @brief  定義を取得
+	//@―---------------------------------------------------------------------------
+	const RootSignatureDesc& RootSignatureImpl::getDesc()const noexcept {
+		return m_desc;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void RootSignatureImpl::onNameChanged() {
+		Utility::setName(m_rootSignature.Get(), getName());
+	}
 
 }// namespace ob

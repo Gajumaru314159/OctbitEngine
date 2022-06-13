@@ -86,6 +86,10 @@ namespace ob::graphic::dx12 {
         D3D12_VIEWPORT getViewport()const;
         D3D12_RECT getScissorRect()const;
 
+    private:
+
+        void onNameChanged()override;
+
 
     private:
 

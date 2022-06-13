@@ -19,12 +19,11 @@ namespace ob::graphic {
     //! @param desc テクスチャ定義
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
-    Texture::Texture(const TextureDesc& desc, StringView name) {
+    Texture::Texture(const TextureDesc& desc) {
         m_pImpl = Device::Get()->createTexture(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "テクスチャの生成に失敗");
             release();
         }
     }
@@ -35,12 +34,11 @@ namespace ob::graphic {
     //! @param desc テクスチャ定義
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
-    Texture::Texture(BlobView blob, StringView name){
+    Texture::Texture(BlobView blob){
         m_pImpl = Device::Get()->createTexture(blob);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "テクスチャの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "テクスチャの生成に失敗");
             release();
         }
     }

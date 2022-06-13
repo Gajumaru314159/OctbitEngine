@@ -43,6 +43,12 @@ namespace ob::graphic::dx12 {
         //@―---------------------------------------------------------------------------
         static D3D12_SRV_DIMENSION getSrvDimention(const D3D12_RESOURCE_DESC& desc);
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ID3D12Objectに名前を設定
+        //@―---------------------------------------------------------------------------
+        static void setName(ID3D12Object* pObject,StringView name);
+
     };
 
 }// namespcae ob::graphic::dx12

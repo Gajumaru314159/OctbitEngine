@@ -84,6 +84,7 @@ int main() {
 				SwapchainDesc desc;
 				desc.window = &window;
 				swapChain = SwapChain(desc);
+				swapChain.setName(TC("MainWindow"));
 				OB_CHECK_ASSERT_EXPR(swapChain);
 			}
 
@@ -101,6 +102,7 @@ int main() {
 				};
 
 				rt = RenderTarget(desc);
+				rt.setName(TC("メインレンダ―ターゲット"));
 				OB_CHECK_ASSERT_EXPR(rt);
 			}
 			Texture tex;
@@ -109,7 +111,8 @@ int main() {
 				if (fs) {
 					Blob blob(fs.size());
 					fs.read(blob.data(), blob.size());
-					tex = Texture(blob, TC("TestTex"));
+					tex = Texture(blob);
+					tex.setName(TC("test.dds"));
 				}
 
 				OB_CHECK_ASSERT_EXPR(tex);
@@ -119,14 +122,15 @@ int main() {
 			{
 				RootSignatureDesc desc(
 					{
-						RootParameter::Range(DescriptorRangeType::CBV,1,0),
 						RootParameter::Range(DescriptorRangeType::SRV,1,0),
+						RootParameter::Range(DescriptorRangeType::CBV,1,0),
 					},
 					{
 						StaticSamplerDesc(SamplerDesc(),0),
 					}
 					);
 				signature = RootSignature(desc);
+				signature.setName(TC("TestRootSignature"));
 				OB_CHECK_ASSERT_EXPR(signature);
 			}
 
@@ -149,7 +153,7 @@ int main() {
 				pssrc.append(TC("\nTexture2D g_mainTex:register(t0);							"));
 				pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	"));
 				pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{						"));
-				pssrc.append(TC("\n    return color;//g_mainTex.Sample(g_mainSampler,i.uv);				"));
+				pssrc.append(TC("\n    return g_mainTex.Sample(g_mainSampler,i.uv)*color;		"));
 				pssrc.append(TC("\n}															"));
 
 				vs = VertexShader(vssrc);
@@ -172,6 +176,7 @@ int main() {
 				desc.rasterizer.cullMode = CullMode::None;
 
 				pipeline = PipelineState(desc);
+				pipeline.setName(TC("TestPipeline"));
 				OB_CHECK_ASSERT_EXPR(pipeline);
 			}
 
@@ -187,6 +192,7 @@ int main() {
 				desc.bindFlags = BindFlag::PixelShaderResource;      //!< バインドフラグ
 
 				buffer = Buffer(desc);
+				buffer.setName(TC("TestBuffer"));
 				OB_CHECK_ASSERT_EXPR(buffer);
 
 				Color color = Color::red;
@@ -204,6 +210,7 @@ int main() {
 				CommandListDesc desc;
 				desc.type = CommandListType::Graphic;
 				cmdList = CommandList(desc);
+				cmdList.setName(TC("TestCommandList"));
 				OB_CHECK_ASSERT_EXPR(cmdList);
 			}
 
@@ -216,6 +223,7 @@ int main() {
 			);
 
 			MeshBuffer meshBuffer(mesh);
+			meshBuffer.setName(TC("Mesh1"));
 
 			Mesh<Vert> mesh2;
 			mesh2.appendQuad(
@@ -226,6 +234,7 @@ int main() {
 			);
 
 			MeshBuffer meshBuffer2(mesh2);
+			meshBuffer2.setName(TC("Mesh2"));
 
 
 			static s32 flag = 0;
@@ -252,7 +261,7 @@ int main() {
 					SetDescriptorTableParam(dt,0),
 					SetDescriptorTableParam(dt2,1),
 				};
-				cmdList.setRootDesciptorTable(params, 1);
+				cmdList.setRootDesciptorTable(params, 2);
 
 				{
 					DrawParam param{};
@@ -279,7 +288,7 @@ int main() {
 					break;
 				}
 
-
+				
 				Color color(random.get0_1(), random.get0_1(), random.get0_1(), 1);
 				buffer.updateDirect(sizeof(color), &color);
 

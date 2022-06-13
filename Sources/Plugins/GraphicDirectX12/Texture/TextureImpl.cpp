@@ -296,4 +296,12 @@ namespace ob::graphic::dx12 {
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
 	}
 
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void TextureImpl::onNameChanged() {
+		Utility::setName(m_resource.Get(), getName());
+	}
+
 }// ob::graphic::dx12

@@ -27,6 +27,12 @@ namespace ob::graphic {
 
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  名前を設定
+		//@―---------------------------------------------------------------------------
+		void setName(StringView name);
+
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  頂点バッファを取得
 		//@―---------------------------------------------------------------------------
 		const Buffer& getVertexBuffer()const noexcept;
@@ -62,6 +68,15 @@ namespace ob::graphic {
 		: MeshBuffer(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(),mesh.indices.data(), sizeof(TIndex),mesh.indices.size())
 	{
 
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前を設定
+	//@―---------------------------------------------------------------------------
+	inline void MeshBuffer::setName(StringView name) {
+		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(fmt::format(TC("{}_Vertex"), name)));
+		OB_DEBUG_CONTEXT(m_indexBuffer.setName(fmt::format(TC("{}_Index"),name)));
 	}
 
 

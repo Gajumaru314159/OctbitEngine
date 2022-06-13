@@ -49,6 +49,7 @@ namespace ob::graphic {
             m_name[i] = name[i];
         }
         m_name[name.size()] = TC('\0');
+        onNameChanged();
 #endif
     }
 

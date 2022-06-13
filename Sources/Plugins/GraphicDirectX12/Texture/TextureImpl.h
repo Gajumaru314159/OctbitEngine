@@ -72,6 +72,11 @@ namespace ob::graphic::dx12 {
 
     private:
 
+        void onNameChanged()override;
+
+
+    private:
+
         class DeviceImpl& m_device;
 
         TextureDesc                 m_desc;         //!< 定義

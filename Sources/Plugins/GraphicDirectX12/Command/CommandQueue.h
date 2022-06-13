@@ -32,6 +32,8 @@ namespace ob::graphic::dx12 {
             return m_commandQueue;
         }
 
+        void setName(StringView name);
+
     private:
 
         ComPtr<ID3D12CommandQueue> m_commandQueue;

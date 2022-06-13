@@ -56,8 +56,8 @@ namespace ob::graphic::dx12 {
 			return;
 		}
 
-		m_buffer = buffer;
-		m_buffer->SetName(L"Buffer");
+		m_resource = buffer;
+		m_resource->SetName(L"Buffer");
 	}
 
 
@@ -79,7 +79,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  妥当な状態か
 	//@―---------------------------------------------------------------------------
 	bool BufferImpl::isValid()const {
-		return m_buffer;
+		return m_resource;
 	}
 
 
@@ -111,14 +111,14 @@ namespace ob::graphic::dx12 {
 
 		HRESULT result;
 		byte* ptr = nullptr;
-		result = m_buffer->Map(0, nullptr, (void**)&ptr);
+		result = m_resource->Map(0, nullptr, (void**)&ptr);
 		if (FAILED(result))
 		{
 			Utility::outputFatalLog(result, TC("ID3D12Resource::Map()"));
 			return;
 		}
 		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
-		m_buffer->Unmap(0, nullptr);
+		m_resource->Unmap(0, nullptr);
 
 	}
 
@@ -129,11 +129,19 @@ namespace ob::graphic::dx12 {
 	void BufferImpl::createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-		cbvDesc.BufferLocation = m_buffer->GetGPUVirtualAddress();
+		cbvDesc.BufferLocation = m_resource->GetGPUVirtualAddress();
 		cbvDesc.SizeInBytes = (UINT)m_desc.bufferSize;
 
 		m_device.getNative()->CreateConstantBufferView(&cbvDesc, handle);
 
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void BufferImpl::onNameChanged() {
+		Utility::setName(m_resource.Get(), getName());
 	}
 
 }// ob::graphic::dx12 

@@ -21,12 +21,11 @@ namespace ob::graphic {
     //! @param depth    デプス・ステンシル・テクスチャの定義
     //! @param name     オブジェクト名
     //@―---------------------------------------------------------------------------
-    RenderTarget::RenderTarget(const RenderTargetDesc& desc, StringView name) {
+    RenderTarget::RenderTarget(const RenderTargetDesc& desc) {
         m_pImpl = Device::Get()->createRenderTarget(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "RenderTargetの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "RenderTargetの生成に失敗");
             release();
         }
     }

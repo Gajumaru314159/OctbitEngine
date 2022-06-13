@@ -72,4 +72,11 @@ namespace ob::graphic::dx12 {
 		}
 	}
 
+	void CommandQueue::setName(StringView name) {
+		Utility::setName(m_commandQueue.Get(), name);
+
+		String fenceName = fmt::format(TC("{}_Fence"), name);
+		Utility::setName(m_fence.Get(), fenceName);
+	}
+
 }// ob::graphic::dx12 

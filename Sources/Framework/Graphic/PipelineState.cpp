@@ -24,12 +24,11 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	PipelineState::PipelineState(const PipelineStateDesc& desc, StringView name) {
+	PipelineState::PipelineState(const PipelineStateDesc& desc) {
 		m_pImpl = Device::Get()->createPipelineState(desc);
 		OB_CHECK_ASSERT_EXPR(m_pImpl);
-		m_pImpl->setName(name);
 		if (!m_pImpl->isValid()) {
-			LOG_ERROR_EX("Graphic", "PipelineStateの生成に失敗 [name={}]", name);
+			LOG_FATAL_EX("Graphic", "PipelineStateの生成に失敗");
 			release();
 		}
 	}

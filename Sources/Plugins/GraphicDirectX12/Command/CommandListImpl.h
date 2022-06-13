@@ -148,6 +148,7 @@ namespace ob::graphic::dx12 {
     private:
 
         void clearDescriptorHandle();
+        void onNameChanged()override;
 
     private:
 

@@ -275,6 +275,13 @@ namespace ob::graphic::dx12 {
     }
 
 
-
+    //@―---------------------------------------------------------------------------
+    //! @brief  名前変更時
+    //@―---------------------------------------------------------------------------
+    void SwapChainImpl::onNameChanged() {
+        for (auto& resource : m_buffers) {
+            Utility::setName(resource.Get(), getName());
+        }
+    }
 
 }// namespace ob::graphic::dx12

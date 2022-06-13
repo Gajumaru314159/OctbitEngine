@@ -369,6 +369,14 @@ namespace ob::graphic::dx12 {
 #pragma endregion
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  名前変更時
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::onNameChanged(){
+		Utility::setName(m_cmdAllocator.Get(), getName());
+		Utility::setName(m_cmdList.Get(), getName());
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタハンドルのキャッシュをクリア
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDescriptorHandle() {

@@ -29,7 +29,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        RootSignature(const RootSignatureDesc& desc, StringView name = TC("RootSignature"));
+        RootSignature(const RootSignatureDesc& desc);
 
     };
 

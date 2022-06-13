@@ -55,12 +55,11 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const String& code, StringView name) {
+    VertexShader::VertexShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code,ShaderStage::Vertex);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -72,12 +71,11 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const Blob& binary, StringView name) {
+    VertexShader::VertexShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Vertex);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -100,12 +98,11 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const String& code, StringView name) {
+    PixelShader::PixelShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Pixel);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -117,12 +114,11 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const Blob& binary, StringView name) {
+    PixelShader::PixelShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Pixel);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -145,12 +141,11 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    GeometryShader::GeometryShader(const String& code, StringView name) {
+    GeometryShader::GeometryShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Geometry);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -162,12 +157,11 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    GeometryShader::GeometryShader(const Blob& binary, StringView name) {
+    GeometryShader::GeometryShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Geometry);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -190,12 +184,11 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    HullShader::HullShader(const String& code, StringView name) {
+    HullShader::HullShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Hull);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -207,12 +200,11 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    HullShader::HullShader(const Blob& binary, StringView name) {
+    HullShader::HullShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Hull);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -235,12 +227,11 @@ namespace ob::graphic {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    DomainShader::DomainShader(const String& code, StringView name) {
+    DomainShader::DomainShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Domain);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }
@@ -252,12 +243,11 @@ namespace ob::graphic {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    DomainShader::DomainShader(const Blob& binary, StringView name) {
+    DomainShader::DomainShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Domain);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
-        m_pImpl->setName(name);
         if (!m_pImpl->isValid()) {
-            LOG_ERROR_EX("Graphic", "シェーダの生成に失敗 [name={}]", name);
+            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
         }
     }

@@ -44,7 +44,7 @@ namespace ob::graphic {
         //! @param desc     定義
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        RenderTarget(const RenderTargetDesc& desc, StringView name=TC("RenderTexture"));
+        RenderTarget(const RenderTargetDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

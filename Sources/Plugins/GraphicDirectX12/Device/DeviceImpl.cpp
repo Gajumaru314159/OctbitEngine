@@ -202,6 +202,9 @@ namespace ob::graphic::dx12 {
 	}
 
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  SetDescriptorHeaps コマンドを積む
+	//@―---------------------------------------------------------------------------
 	void DeviceImpl::setDescriptorHeaps(CommandListImpl& cmdList) {
 		ID3D12DescriptorHeap* pHeaps[] = {
 			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->getNative().Get(),
@@ -219,6 +222,7 @@ namespace ob::graphic::dx12 {
 		if (!initializeDXGIDevice())return false;
 
 		m_commandQueue = std::make_unique<CommandQueue>(*this);
+		OB_DEBUG_CONTEXT(m_commandQueue->setName(TC("SystemCommandQueue")));
 
 		//if (!initializeCommand())return false;
 		//if (!initializeFence())return false;
@@ -292,6 +296,7 @@ namespace ob::graphic::dx12 {
 			Utility::outputFatalLog(result, TC("D3D12CreateDevice()"));
 			return false;
 		}
+		OB_DEBUG_CONTEXT(m_device->SetName(L"System Device"));
 
 
 
@@ -390,7 +395,8 @@ namespace ob::graphic::dx12 {
 	//! @brief  デスクリプタヒープを初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeDescriptorHeaps() {
-		m_descriptorHeaps.resize(enum_cast(DescriptorHeapType::DSV)+1);
+		m_descriptorHeaps.resize(enum_cast(DescriptorHeapType::DSV)+1u);
+
 		m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
 		m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)] =
@@ -399,6 +405,13 @@ namespace ob::graphic::dx12 {
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 100);
 		m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 100);
+
+		OB_DEBUG_CONTEXT(
+			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->setName(TC("SystemCBV_SRV_UAVHeap"));
+			m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->setName(TC("SystemSamplerHeap"));
+			m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)]->setName(TC("SystemRTVHeap"));
+			m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)]->setName(TC("SystemDSVHeap"));
+		);
 		return true;
 	}
 

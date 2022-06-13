@@ -24,12 +24,11 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	RootSignature::RootSignature(const RootSignatureDesc& desc, StringView name) {
+	RootSignature::RootSignature(const RootSignatureDesc& desc) {
 		m_pImpl = Device::Get()->createRootSignature(desc);
 		OB_CHECK_ASSERT_EXPR(m_pImpl);
-		m_pImpl->setName(name);
 		if (!m_pImpl->isValid()) {
-			LOG_ERROR_EX("Graphic", "RootSignatureの生成に失敗 [name={}]", name);
+			LOG_FATAL_EX("Graphic", "RootSignatureの生成に失敗");
 			release();
 		}
 	}

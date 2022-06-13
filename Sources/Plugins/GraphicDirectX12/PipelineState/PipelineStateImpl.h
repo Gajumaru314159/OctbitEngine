@@ -59,6 +59,8 @@ namespace ob::graphic::dx12 {
         void setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src);
         void setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
 
+        void onNameChanged()override;
+
     private:
 
         const PipelineStateDesc m_desc;
