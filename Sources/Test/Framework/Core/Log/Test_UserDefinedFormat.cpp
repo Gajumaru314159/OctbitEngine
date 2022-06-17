@@ -22,11 +22,11 @@ TEST(UserDefinedFormat, DataTime) {
 	Rot rot(Math::PI, Math::EPSILON,Math::HALF_PI);
 	
 	DateTime dt = DateTime::Now();
-	TimeSpan ts1 = TimeSpan::Days(23.12534573);
-	TimeSpan ts2 = TimeSpan::Hours(23.12534573);
-	TimeSpan ts3 = TimeSpan::Minutes(23.12534573);
-	TimeSpan ts4 = TimeSpan::Seconds(23.12534573);
-	TimeSpan ts5 = TimeSpan::MilliSeconds(23.12534573);
+	Duration ts1 = Duration::Days(23.12534573);
+	Duration ts2 = Duration::Hours(23.12534573);
+	Duration ts3 = Duration::Minutes(23.12534573);
+	Duration ts4 = Duration::Seconds(23.12534573);
+	Duration ts5 = Duration::MilliSeconds(23.12534573);
 	
 	auto s = fmt::format(TC("{}"), dt);
 

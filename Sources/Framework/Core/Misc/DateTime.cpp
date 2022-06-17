@@ -38,7 +38,7 @@ namespace ob::core {
 		auto msec = duration_cast<milliseconds>(tp.time_since_epoch()).count();
 		dt.milliSeconds = milliseconds(msec).count() % 1000;
 #else
-		static_assert("TimeSpan::Now() is not implemented in this platform.");
+		static_assert("Duration::Now() is not implemented in this platform.");
 #endif
 		return dt;
 	}

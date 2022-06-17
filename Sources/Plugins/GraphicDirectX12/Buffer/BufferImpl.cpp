@@ -21,6 +21,7 @@ namespace ob::graphic::dx12 {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
+		m_desc.bufferSize = align_up(m_desc.bufferSize, 256);
 		HRESULT result;
 
 		// リソースの生成
@@ -28,7 +29,7 @@ namespace ob::graphic::dx12 {
 		
 		D3D12_RESOURCE_DESC resdesc = {};
 		resdesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		resdesc.Width = desc.bufferSize;
+		resdesc.Width = m_desc.bufferSize;
 		resdesc.Height = 1;
 		resdesc.DepthOrArraySize = 1;
 		resdesc.MipLevels = 1;
@@ -36,7 +37,7 @@ namespace ob::graphic::dx12 {
 		resdesc.SampleDesc.Count = 1;
 		resdesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 		resdesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		resdesc = CD3DX12_RESOURCE_DESC::Buffer(desc.bufferSize);
+		resdesc = CD3DX12_RESOURCE_DESC::Buffer(align_up(m_desc.bufferSize,256));
 
 
 		ComPtr<ID3D12Resource> buffer;

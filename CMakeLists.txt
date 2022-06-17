@@ -80,6 +80,7 @@ add_subdirectory ("Sources/Framework/Core")
 add_subdirectory ("Sources/Framework/Platform")
 add_subdirectory ("Sources/Framework/Graphic")
 add_subdirectory ("Sources/Framework/Rendering")
+add_subdirectory ("Sources/Framework/Input")
 
 # Pluginsプロジェクト読み込み
 if(WIN32)

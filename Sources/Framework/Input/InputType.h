@@ -5,7 +5,23 @@
 //***********************************************************
 #pragma once
 
-namespace ob {
+namespace ob::input {
+
+	using ButtonNotifier = EventNotifier<>;
+	using ButtonHandle = ButtonNotifier::Handle;
+	using ButtonDelegate = ButtonNotifier::delegate_type;
+
+	using AxisNotifier = EventNotifier<Vec2>;
+	using AxisHandle = AxisNotifier::Handle;
+	using AxisDelegate = AxisNotifier::delegate_type;
+
+
+
+	enum class TriggerType {
+		Down=0,
+		Up,
+		MAX,
+	};
 
     //@―---------------------------------------------------------------------------
     //! @brief  キーコード
@@ -14,7 +30,7 @@ namespace ob {
 	//! @ref		MouseButton
 	//! @ref		PadButtton
     //@―---------------------------------------------------------------------------
-    enum class KeyCode {
+    enum class Key :u32 {
 		Unknown = 0,		//!< 不明
 
 		F1,					//!< F1
@@ -46,7 +62,6 @@ namespace ob {
 		KeypadMinus,		//!< テンキー-
 		KeypadPlus,			//!< テンキー+
 		KeypadEnter,		//!< テンキーEnter
-		KeypadEquals,		//!< テンキー=
 
 		Alpha0,				//!< 数字キー0
 		Alpha1,				//!< 数字キー1
@@ -173,7 +188,7 @@ namespace ob {
 	//@―---------------------------------------------------------------------------
 	//! @brief		修飾キー
 	//@―---------------------------------------------------------------------------
-	enum class ModifierKey{
+	enum class ModifierKey :u32 {
 		None	= 0x0000,	//!< なし
 		Alt		= 0x0001,	//!< Altキー
 		Shift	= 0x0002,	//!< Shiftキー
@@ -184,8 +199,8 @@ namespace ob {
 	//@―---------------------------------------------------------------------------
 	//! @brief		マウスボタン
 	//@―---------------------------------------------------------------------------
-	enum class MouseButton {
-		None,		//!< なし
+	enum class MouseButton:u32 {
+		None=0,		//!< なし
 		Left,		//!< 左ボタン
 		Right,		//!< 右ボタン
 		Middle,		//!< 中ボタン
@@ -193,5 +208,7 @@ namespace ob {
 		X2,			//!< 拡張ボタン2
 		X3,			//!< 拡張ボタン3
 		X4,			//!< 拡張ボタン4
+
+		MAX,
 	};
 }// namespcae ob

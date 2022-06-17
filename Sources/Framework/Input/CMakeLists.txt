@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.21)
-project (Rendering)
+project (Input)
 message("Load project [${PROJECT_NAME}]")
 
 #------------------------------------------------------------------------------
@@ -23,7 +23,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB
     Core
-    Graphic
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 

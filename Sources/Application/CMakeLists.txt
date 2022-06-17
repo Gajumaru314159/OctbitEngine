@@ -27,6 +27,7 @@ set(OB_PROJECT_INCLUDE_LIB
     Platform
     Graphic
     GraphicDirectX12
+    Input
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE ${OB_PROJECT_INCLUDE_LIB})
 

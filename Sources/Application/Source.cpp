@@ -24,20 +24,15 @@
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Misc/DateTime.h>
-#include <Framework/Core/Misc/TimeSpan.h>
+#include <Framework/Core/Misc/Duration.h>
 #include <Framework/Core/Misc/UUID.h>
+#include <Framework/Core/Math/Periodic.h>
+
+#include <Framework/Input/InputManager.h>
+#include <Framework/Input/Keyboard.h>
+#include <Framework/Input/Mouse.h>
 
 using namespace ob;
-
-struct Vert {
-	Vec4 pos;
-	Vec2 uv;
-};
-
-struct ShaderData {
-
-};
-
 
 int main() {
 	using namespace ob::graphic;
@@ -56,11 +51,11 @@ int main() {
 			LOG_INFO("Quat     :{}", Quat::identity);
 			LOG_INFO("Rot      :{}", Rot(Math::PI, Math::EPSILON, Math::HALF_PI));
 			LOG_INFO("DateTime :{}", DateTime::Now());
-			LOG_INFO("TimeSpan :{}", TimeSpan::Days(23.12534573));
-			LOG_INFO("TimeSpan :{}", TimeSpan::Hours(23.12534573));
-			LOG_INFO("TimeSpan :{}", TimeSpan::Minutes(23.12534573));
-			LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
-			LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
+			LOG_INFO("Duration :{}", Duration::Days(23.12534573));
+			LOG_INFO("Duration :{}", Duration::Hours(23.12534573));
+			LOG_INFO("Duration :{}", Duration::Minutes(23.12534573));
+			LOG_INFO("Duration :{}", Duration::Seconds(23.12534573));
+			LOG_INFO("Duration :{}", Duration::MilliSeconds(23.12534573));
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
 		}
 
@@ -94,7 +89,7 @@ int main() {
 				RenderTargetDesc desc;
 				desc.size = { 640,480 };
 				desc.colors = {
-					ColorTextureDesc{swapChain.getDesc().format,Color::red},
+					ColorTextureDesc{swapChain.getDesc().format,Color::grey},
 				};
 
 				desc.depth = {
@@ -138,28 +133,34 @@ int main() {
 			PixelShader ps;
 			{
 				String vssrc;
+				vssrc.append(TC("\ncbuffer Param : register(b0) {								"));
+				vssrc.append(TC("\n  float2 g_pos;												"));
+				vssrc.append(TC("\n};															"));
 				vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
 				vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
 				vssrc.append(TC("\n    Output o;"));
-				vssrc.append(TC("\n    o.pos = pos;"));
+				vssrc.append(TC("\n    o.pos = pos+float4(g_pos,0,0);"));
 				vssrc.append(TC("\n    o.uv = uv;"));
 				vssrc.append(TC("\n    return o;"));
 				vssrc.append(TC("\n}"));
 				String pssrc;
-				pssrc.append(TC("\ncbuffer Param : register(b0) {								"));
-				pssrc.append(TC("\n  float4 color;												"));
-				pssrc.append(TC("\n};															"));
 				pssrc.append(TC("\nSamplerState g_mainSampler:register(s0);						"));
 				pssrc.append(TC("\nTexture2D g_mainTex:register(t0);							"));
 				pssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	"));
 				pssrc.append(TC("\nfloat4 PS_Main(Output i) : SV_TARGET{						"));
-				pssrc.append(TC("\n    return g_mainTex.Sample(g_mainSampler,i.uv)*color;		"));
+				pssrc.append(TC("\n    return g_mainTex.Sample(g_mainSampler,i.uv);				"));
 				pssrc.append(TC("\n}															"));
 
 				vs = VertexShader(vssrc);
 				ps = PixelShader(pssrc);
 				OB_CHECK_ASSERT_EXPR(vs && ps);
 			}
+
+
+			struct Vert {
+				Vec4 pos;
+				Vec2 uv;
+			};
 
 			PipelineState pipeline;
 			{
@@ -186,7 +187,7 @@ int main() {
 
 				desc.bufferType = BufferType::ConstantBuffer;     //!< バッファタイプ
 				desc.usage = ResourceUsage::Dynamic;          //!< リソース使用法
-				desc.bufferSize = 256;     //!< バッファサイズ
+				desc.bufferSize = 101;     //!< バッファサイズ
 				desc.bufferStride = 0;   //!< ストライブ幅
 				desc.bufferFlags;    //!< バッファフラグ
 				desc.bindFlags = BindFlag::PixelShaderResource;      //!< バインドフラグ
@@ -225,21 +226,12 @@ int main() {
 			MeshBuffer meshBuffer(mesh);
 			meshBuffer.setName(TC("Mesh1"));
 
-			Mesh<Vert> mesh2;
-			mesh2.appendQuad(
-				{ Vec4(0.3f,0,0,1),Vec2(0,0) },
-				{ Vec4(0.5f,0,0,1),Vec2(1,0) },
-				{ Vec4(0,0.5f,0,1),Vec2(0,1) },
-				{ Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
-			);
 
-			MeshBuffer meshBuffer2(mesh2);
-			meshBuffer2.setName(TC("Mesh2"));
-
-
-			static s32 flag = 0;
+			Vec2 pos(0.0f, 0.0f);
 			Random random;
 			MSG msg = {};
+
+
 			while (true) {
 
 				cmdList.begin();
@@ -249,13 +241,8 @@ int main() {
 				cmdList.setRootSignature(signature);
 				cmdList.setPipelineState(pipeline);
 
-				if ((flag / 60) % 2) {
-					cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
-					cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
-				} else {
-					cmdList.setVertexBuffer(meshBuffer2.getVertexBuffer());
-					cmdList.setIndexBuffer(meshBuffer2.getIndexBuffer());
-				}
+				cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
+				cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
 
 				SetDescriptorTableParam params[] = {
 					SetDescriptorTableParam(dt,0),
@@ -288,11 +275,21 @@ int main() {
 					break;
 				}
 
-				
-				Color color(random.get0_1(), random.get0_1(), random.get0_1(), 1);
-				buffer.updateDirect(sizeof(color), &color);
 
-				flag++;
+				buffer.updateDirect(sizeof(pos), &pos);
+
+
+				using namespace ob::input;
+				InputManager::Instance().update();
+
+				if (Keyboard::W.down()) {
+					pos.setZero();
+				}
+
+				{
+					using namespace ob::input;
+					pos += Mouse::Left.value()/Vec2(640,-480)*2;
+				}
 
 			}
 		}

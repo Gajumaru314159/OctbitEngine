@@ -80,7 +80,7 @@ namespace ob::graphic::dx12 {
 	private:
 
 		class DeviceImpl& m_device;
-		const BufferDesc m_desc;
+		BufferDesc m_desc;
 
 		ComPtr<ID3D12Resource> m_resource;
 
