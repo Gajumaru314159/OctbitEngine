@@ -39,7 +39,7 @@ int main() {
 
 
 	Logger::Instance();
-	platform::PlatformSystem::Instance().startup();
+	platform::PlatformSystem::Instance();
 	{
 		if (false) {
 			LOG_INFO("Vec2     :{}", Vec2(1, 2));
@@ -72,6 +72,7 @@ int main() {
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
 			window.show();
+
 
 			// スワップチェイン
 			SwapChain swapChain;
@@ -231,8 +232,13 @@ int main() {
 			Random random;
 			MSG msg = {};
 
+			auto prev = DateTime::Now();
 
 			while (true) {
+
+				auto next = DateTime::Now();
+				//LOG_INFO("{}", 1.0f/Duration(prev,next).secondsF());
+				prev = next;
 
 				cmdList.begin();
 
@@ -288,11 +294,16 @@ int main() {
 
 				{
 					using namespace ob::input;
-					pos += Mouse::Left.value()/Vec2(640,-480)*2;
+					auto winSize = window.getSize();
+					pos += Mouse::Pos.value()/Vec2(winSize.width*0.5f,winSize.height*-0.5f);
 				}
-
 			}
+
+			// グラフィックオブジェクトはここで全て解放予約
 		}
+		// ModuleManager / graphic::System / platform::System が解放されるが順序が固定でないので要修正
+		// graphic::System -> ModuleManager -> platform::System の順に解放する必要がある
+		// 現状Singletonのstatic変数の解放順に依存している
 	}
 
 

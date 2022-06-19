@@ -8,7 +8,7 @@
 
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 
-namespace ob::platform::detail {
+namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ

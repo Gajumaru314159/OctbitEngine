@@ -7,7 +7,7 @@
 #include "PlatformSystemImpl.h"
 #include <Windows.h>
 
-namespace ob::platform::detail {
+namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
     //! @brief  システム言語を取得

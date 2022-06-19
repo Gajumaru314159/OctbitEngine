@@ -38,12 +38,11 @@ namespace ob::platform {
         auto moduleLoader = std::make_unique<ModuleLoader>(moduleName);
         if (auto pModule = moduleLoader->getInterface()) {
             pModule->startup(&MemorySystem::GetHeapAllocator());
-            m_moduleMap[moduleName] = std::move(moduleLoader);
+            m_moduleMap.emplace(moduleName,std::move(moduleLoader));
+            return pModule;
         } else {
             return nullptr;
         }
-        
-        return m_moduleMap[moduleName]->getInterface();
     }
 
 

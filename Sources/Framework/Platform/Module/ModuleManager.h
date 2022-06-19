@@ -95,7 +95,7 @@ namespace ob::platform {
 
     private:
 
-        Map<StringView, UPtr<ModuleLoader>> m_moduleMap;
+        Map<String, UPtr<ModuleLoader>,std::less<>> m_moduleMap;
 
     };
 

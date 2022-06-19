@@ -9,16 +9,6 @@
 #include <Framework/Platform/Type/WindowCreationParams.h>
 #include <Framework/Platform/Window/WindowState.h>
 
-
-//===============================================================
-// 前方宣言
-//===============================================================
-namespace ob::platform {
-    class WindowImpl;
-    class WindowNativeAccessor;
-}
-
-
 //===============================================================
 // クラス宣言
 //===============================================================
@@ -201,7 +191,7 @@ namespace ob::platform {
 
     private:
 
-        std::shared_ptr<WindowImpl> m_impl;
+        SPtr<class WindowImpl> m_impl;
 
     };
 

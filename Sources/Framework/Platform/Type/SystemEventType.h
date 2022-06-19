@@ -7,6 +7,12 @@
 
 namespace ob::platform {
 
+    enum class Ev {
+        Create,// ウィンドウ生成
+        Destroy,// ウィンドウ破棄仕様としている
+        Move,//
+    };
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント・タイプ
@@ -17,7 +23,7 @@ namespace ob::platform {
         Activate,   //! アクティブ状態に変更
         Deactivate, //! 非アクティブ状態に変更
         Focus,      //! フォーカスを取得
-        close,      //! 終了時
+        Close,      //! 終了時
         Destroy,    //! 破棄
         Minimize,   //! 最小化
         Maximize,   //! 最大か

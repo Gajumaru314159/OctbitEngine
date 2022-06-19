@@ -12,11 +12,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     class Arguments {
     public:
-
-        using container_type = Array<String>;                      //!< 引数コンテナ
+        using container_type = Array<String>;                       //!< 引数コンテナ
         using iterator = container_type::iterator;                  //!< イテレータ
         using const_iterator = container_type::const_iterator;      //!< constイテレータ
-
     public:
 
         //@―---------------------------------------------------------------------------

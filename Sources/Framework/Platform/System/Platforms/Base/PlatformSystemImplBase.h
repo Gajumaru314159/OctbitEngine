@@ -7,7 +7,7 @@
 #include <Framework/Platform/Type/Language.h>
 #include <Framework/Platform/Window/Window.h>
 
-namespace ob::platform::detail {
+namespace ob::platform{
 
     //@―---------------------------------------------------------------------------
     //! @brief  プラットフォーム・システム実装基底

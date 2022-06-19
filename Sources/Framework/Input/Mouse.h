@@ -28,8 +28,10 @@ namespace ob::input {
 		MouseButton m_button;
 	};
 
-	namespace Mouse {
-		inline constexpr MouseInput Left{ MouseButton::Left };
+	class Mouse {
+	public:
+		static constexpr MouseInput DeltaPos{ MouseButton::Left };
+		static constexpr MouseInput Pos{ MouseButton::Left };
 	};
 
 }// namespcae ob::input

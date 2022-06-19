@@ -28,6 +28,9 @@ namespace ob::input {
 
         bool Down(Key);				// 押している間
 
+        // Keyboard& getKeyboard();
+        // Mouse& getMouse();
+
     public:
 
         Pimpl<class KeyboardImpl> m_impl;

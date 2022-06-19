@@ -42,7 +42,7 @@ namespace ob::graphic {
         if (desc.api == GraphicAPI::D3D12) {
 
 #if defined(OS_WINDOWS)
-            if (auto pModule = platform::ModuleManager::Instance().loadModule<IGraphicModule>(TC("D:/My/Productions/C++/OctbitEngine/build/Sources/Plugins/GraphicDirectX12/Debug/GraphicDirectX12"))) {
+            if (auto pModule = platform::ModuleManager::Instance().loadModule<IGraphicModule>(TC("GraphicDirectX12"))) {
 
                 if (pModule->magicCode() == IGraphicModule::graphicMagicCode()) {
                     pDevice = pModule->createDevice(FeatureLevel::Default);

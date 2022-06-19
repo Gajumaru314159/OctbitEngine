@@ -20,6 +20,8 @@ namespace ob::input {
 	enum class TriggerType {
 		Down=0,
 		Up,
+		Pressed,
+		Released,
 		MAX,
 	};
 

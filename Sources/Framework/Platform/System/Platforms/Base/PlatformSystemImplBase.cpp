@@ -6,9 +6,4 @@
 #include "PlatformSystemImplBase.h"
 
 namespace ob::platform {
-    namespace detail {
-
-
-
-    }// namespace detail
 }// namespace ob::platform

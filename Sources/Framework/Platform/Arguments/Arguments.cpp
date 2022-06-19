@@ -7,7 +7,6 @@
 #include "Arguments.h"
 #include <Framework/Core/String/StringEncoder.h>
 
-
 #ifdef OS_WINDOWS
 
 #include <Windows.h>
@@ -39,30 +38,45 @@ namespace ob::platform {
         ::GetCommandLineForWindows(m_args);
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  引数取得
+    //@―---------------------------------------------------------------------------
     const String& Arguments::at(s32 index)const {
         return m_args.at(index);
     }
 
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  開始イテレータ(const)
+    //@―---------------------------------------------------------------------------
     Arguments::const_iterator Arguments::cbegin()const noexcept {
         return m_args.cbegin();
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  終了イテレータ(const)
+    //@―---------------------------------------------------------------------------
     Arguments::const_iterator Arguments::cend()const noexcept {
         return m_args.cend();
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  引数サイズ
+    //@―---------------------------------------------------------------------------
     s32 Arguments::size()const noexcept {
         return static_cast<s32>(m_args.size());
     }
 
+
     //@―---------------------------------------------------------------------------
-    //! @brief          空か
+    //! @brief  空か
     //@―---------------------------------------------------------------------------
     bool Arguments::empty()const noexcept {
         return m_args.empty();
     }
-
 
 }// namespace ob::platform
 

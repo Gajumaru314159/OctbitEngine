@@ -7,7 +7,7 @@
 #ifdef OS_WINDOWS
 #include "../Base/PlatformSystemImplBase.h"
 
-namespace ob::platform::detail {
+namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
     //! @brief  プラットフォーム・システム実装(Windows)

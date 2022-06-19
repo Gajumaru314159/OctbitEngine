@@ -69,7 +69,7 @@ namespace ob::platform {
         ChineseTraditional,	// 中国語繁体字
         Hungarian,          // ハンガリー語
         */
-        Max,                // 言語数
+        MAX,                // 言語数
     };
 
 }// namespace ob::platform
