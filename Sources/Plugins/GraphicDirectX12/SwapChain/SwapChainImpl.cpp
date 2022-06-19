@@ -8,7 +8,7 @@
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 #include <Framework/Graphic/Interface/ITexture.h>
-#include <Framework/Platform/Window/WindowNativaAccessor.h>
+#include <Framework/Platform/Window/WindowNativeAccessor.h>
 
 namespace {
     int static const s_maxSwapChainCount = 4;
