@@ -6,6 +6,7 @@
 #ifdef OS_WINDOWS
 #include "WindowImpl.h"
 #include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Platform/Window/WindowNativeAccessor.h>
 
 namespace ob::platform {
 
@@ -20,8 +21,13 @@ namespace ob::platform {
 	//! @details    生成情報を指定してウィンドウを生成する。
 	//@―---------------------------------------------------------------------------
 	WindowImpl::WindowImpl(const WindowCreationDesc& desc)
-		:m_className(fmt::format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum)) {
-		m_hWnd = nullptr;
+		:m_className(fmt::format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum)) 
+		, m_hWnd(nullptr)
+		, m_hParentWnd(nullptr)
+	{
+		m_hParentWnd = reinterpret_cast<HWND>(WindowNativeAccessor::getHWND(Window::getMainWindow()));
+		const bool hasParent = m_hParentWnd !=nullptr;
+
 		m_windowID = m_windowNum++;
 
 		// TODO ウィンドウモードを設定
@@ -39,7 +45,7 @@ namespace ob::platform {
 		wcex.hInstance = ::GetModuleHandle(nullptr);
 		wcex.hIcon = NULL;
 		wcex.hCursor = ::LoadCursor(NULL, IDC_ARROW);
-		wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+		wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 		wcex.lpszMenuName = NULL;
 		wcex.lpszClassName = m_className.c_str();
 		wcex.hIconSm = NULL;
@@ -50,9 +56,14 @@ namespace ob::platform {
 
 
 		// ウィンドウモードのときのウィンドウスタイルの選択
+		//						タイトルバー　コントロールメニュー　最小化ボタン
 		DWORD mWindowedStyle = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
 		if (desc.resizable) {
+			//					リサイズ用のフレーム　最大化ボタン
 			mWindowedStyle |= WS_THICKFRAME | WS_MAXIMIZEBOX;
+		}
+		if (hasParent) {
+			//mWindowedStyle |= WS_CHILD;
 		}
 
 		DWORD dwExStyle = 0;
@@ -73,6 +84,8 @@ namespace ob::platform {
 		WString titleW;
 		StringEncoder::Encode(desc.title, titleW);
 
+
+
 		// ウィンドウの作成
 		m_hWnd = ::CreateWindowEx(
 			dwExStyle,
@@ -83,7 +96,7 @@ namespace ob::platform {
 			CW_USEDEFAULT,                      // Y
 			clientRect.right - clientRect.left, // Width
 			clientRect.bottom - clientRect.top, // Height
-			NULL,                               // 親
+			m_hParentWnd,                       // 親
 			NULL,                               // メニュー
 			hInst,
 			NULL);
@@ -403,6 +416,10 @@ namespace ob::platform {
 		case WM_CLOSE:
 			// クローズコマンドが呼ばれた
 			//Close();
+			if (m_hParentWnd) {
+				CloseWindow(hwnd);
+				return 0;
+			}
 			break;
 		case WM_SIZE:
 			// ウィンドウサイズが変更された

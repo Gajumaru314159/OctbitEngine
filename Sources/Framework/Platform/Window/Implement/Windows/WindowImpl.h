@@ -97,6 +97,7 @@ namespace ob::platform {
         WindowMode m_mode;
 
         HWND    m_hWnd;                             //!< ウィンドウハンドル
+        HWND    m_hParentWnd;                       //!< ウィンドウハンドル
         const StringBase<TCHAR> m_className;        //!< ウィンドウクラス名
         s32     m_windowID;                         //!< ウィンドウごとに割り当てられるID
 

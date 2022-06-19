@@ -189,6 +189,16 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         void addEventListener(WindowEventType type, const WindowEvent& e);
 
+    public:
+
+        static Window getMainWindow();
+
+    private:
+
+        Window();
+
+        static SPtr<class WindowImpl> s_mainWindow;
+
     private:
 
         SPtr<class WindowImpl> m_impl;

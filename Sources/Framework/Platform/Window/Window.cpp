@@ -17,6 +17,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     Window::Window(const WindowCreationDesc& desc) {
         m_impl = std::make_shared<WindowImpl>(desc);
+        if (!s_mainWindow) {
+            s_mainWindow = m_impl;
+        }
     }
 
 
@@ -220,6 +223,22 @@ namespace ob::platform {
     void Window::addEventListener(WindowEventType type, const WindowEvent& e) {
         if (!m_impl)return;
         m_impl->addEventListener(type, e);
+    }
+
+
+
+
+    SPtr<WindowImpl> Window::s_mainWindow=nullptr;
+
+    Window::Window() {
+
+    }
+
+
+    Window Window::getMainWindow() {
+        Window mainWindow;
+        mainWindow.m_impl = s_mainWindow;
+        return mainWindow;
     }
 
 }// namespace ob::platform

@@ -71,7 +71,14 @@ int main() {
 			platform::WindowCreationDesc windowDesc;
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
-			window.show();
+
+
+			// ウィンドウ生成
+			platform::WindowCreationDesc windowDesc2;
+			windowDesc2.title = TC("Graphic Test Sub");
+			platform::Window window2(windowDesc2);
+
+			LOG_INFO("Main Window={}",platform::Window::getMainWindow().getTitle());
 
 
 			// スワップチェイン
