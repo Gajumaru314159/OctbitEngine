@@ -4,14 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#if defined(OS_WINDOWS)
-#include <Windows.h>
-#elif defined(OS_LINUX)
-
-#endif
-
-#include "Window.h"
-
+#include <Framework/Platform/Window/Window.h>
 namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
