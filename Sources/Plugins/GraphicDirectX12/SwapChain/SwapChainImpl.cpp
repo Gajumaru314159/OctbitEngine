@@ -23,13 +23,13 @@ namespace ob::graphic::dx12 {
         : m_desc(desc)
     {
 
-        if (desc.window == nullptr) {
-            LOG_ERROR_EX("Graphic","SwapchainDesc::windowがnullptrです。");
+        if (!desc.window.isValid()) {
+            LOG_ERROR_EX("Graphic","Windowが設定されていません。");
             return;
         }
 
         // サイズが指定されていない場合はウィンドウサイズを使用
-        if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window->getSize();
+        if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window.getSize();
 
         m_syncInterval = desc.vsync ? 1 : 0;
 
@@ -48,7 +48,7 @@ namespace ob::graphic::dx12 {
 
         UINT sampleQuarity = 0;
         UINT sampleCount = 1;
-        HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(*window));
+        HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(window));
         {
             D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
             auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
@@ -99,12 +99,12 @@ namespace ob::graphic::dx12 {
         }
 
 
-        if (window->isMainWindow()) {
+        if (window.isMainWindow()) {
 
             // Alt + Enter でウィンドウモードに変わらないようにする 
             rDevice.getFactory()->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
-            if (window->getMode() == platform::WindowMode::FullScreen) {
+            if (window.getMode() == platform::WindowMode::FullScreen) {
                 // TODO フルスクリーンの場合バックバッファをリサイズ
             }
         }
@@ -221,6 +221,8 @@ namespace ob::graphic::dx12 {
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
     void SwapChainImpl::update() {
+        
+        if (!m_desc.window.isValid())return;
 
         auto result = m_swapchain->Present(m_syncInterval, 0);
 

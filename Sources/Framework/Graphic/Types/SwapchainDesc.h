@@ -16,7 +16,7 @@ namespace ob::graphic {
     //! @details フォーマットに指定可能なフォーマットはRGBA8またはRGB16です。
     //@―---------------------------------------------------------------------------
     struct SwapchainDesc {
-        platform::Window*   window=nullptr;             //!< 描画ウィンドウ
+        platform::Window    window;                     //!< 描画ウィンドウ
         TextureFormat       format=TextureFormat::RGBA8;//!< フォーマット
         f32                 refleshRate=60.0f;          //!< リフレッシュ・レート
         Size                size = {0,0};               //!< バックバッファのサイズ(0の場合ウィンドウサイズを使用)

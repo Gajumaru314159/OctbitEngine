@@ -418,6 +418,7 @@ namespace ob::platform {
 			//Close();
 			if (m_hParentWnd) {
 				CloseWindow(hwnd);
+				m_hWnd = nullptr;
 				return 0;
 			}
 			break;

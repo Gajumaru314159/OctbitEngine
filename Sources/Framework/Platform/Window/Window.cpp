@@ -90,7 +90,8 @@ namespace ob::platform {
     //! @brief              妥当な状態か
     //@―---------------------------------------------------------------------------
     bool Window::isValid()const noexcept {
-        return static_cast<bool>(m_impl);
+        if (m_impl == nullptr)return false;
+        return m_impl->isValid();
     }
 
 

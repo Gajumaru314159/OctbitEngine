@@ -26,6 +26,8 @@ namespace ob::platform {
         // コンストラクタ / デストラクタ
         //===============================================================
 
+        Window();
+
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //! 
@@ -194,8 +196,6 @@ namespace ob::platform {
         static Window getMainWindow();
 
     private:
-
-        Window();
 
         static SPtr<class WindowImpl> s_mainWindow;
 
