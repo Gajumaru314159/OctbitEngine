@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.21)
+﻿cmake_minimum_required (VERSION 3.11)
 project (Graphic)
 message("Load project [${PROJECT_NAME}]")
 
