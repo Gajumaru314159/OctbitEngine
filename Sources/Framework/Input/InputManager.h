@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/InputType.h>
+#include <Framework/Input/Input.h>
 
 namespace ob::input {
 
@@ -25,15 +26,11 @@ namespace ob::input {
         //@―---------------------------------------------------------------------------
         void update();
 
-
-        bool Down(Key);				// 押している間
-
-        // Keyboard& getKeyboard();
-        // Mouse& getMouse();
+        IInputDevice* findDevice(u32 guid,u32 user);
 
     public:
 
-        Pimpl<class KeyboardImpl> m_impl;
+        Pimpl<class KeyboardDevice> m_impl;
         Pimpl<class MouseImpl> m_mouse;
 
     };

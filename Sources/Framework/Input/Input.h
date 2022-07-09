@@ -5,12 +5,107 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Misc/Duration.h>
+#include <Framework/Input/InputType.h>
+
+namespace ob::input {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  入力デバイス・インターフェイス
+	//@―---------------------------------------------------------------------------
+	class IInputDevice {
+	public:
+		virtual InputStates getInputStates(u32 code)const { return {}; }
+		virtual f32  getF32(u32 code) const { return 0.0f; }
+		virtual Vec2 getVec2(u32 code) const { return { 0.0f,0.0f }; }
+		virtual Vec3 getVec3(u32 code) const { return { 0.0f,0.0f,0.0f }; }
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	ボタンをバインド
+		//@―---------------------------------------------------------------------------
+		virtual bool bind(u32 code,InputHandle& handle, const InputDelegate& func) { return false; }
+
+	};
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  入力オブジェクト
+	//@―---------------------------------------------------------------------------
+	class Input {
+	public:
+
+		Input() = default;
+
+		constexpr Input(u32 type, u32 code, u32 user = 0) :m_code(code), m_type(type), m_user(user) {}
+
+		template<typename T>
+		constexpr Input(u32 type, T code, u32 user = 0) : Input(type, enum_cast(code), user) {}
+
+		constexpr u32 deviceType()const noexcept { return m_type; }
+		constexpr u32 code()const noexcept { return m_code; }
+		constexpr u32 user()const noexcept { return m_user; }
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	状態が state か
+		//@―---------------------------------------------------------------------------
+		bool is(InputState state)const;
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	押されているか
+		//@―---------------------------------------------------------------------------
+		bool down()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	離されているか
+		//@―---------------------------------------------------------------------------
+		bool up()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	押された瞬間か
+		//@―---------------------------------------------------------------------------
+		bool pressed()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	離された瞬間か
+		//@―---------------------------------------------------------------------------
+		bool released()const;
+
+		f32  value() const;
+		Vec2 xy() const;
+		Vec3 xyz() const;
+		/*
+		//@―---------------------------------------------------------------------------
+		//! @berif	バインド
+		//@―---------------------------------------------------------------------------
+		bool bindDown(InputHandle& handle, Delegate<void()> func)const;
+		bool bindUp(InputHandle& handle, Delegate<void()> func)const;
+		bool bindPressed(InputHandle& handle, Delegate<void()> func)const;
+		bool bindReleased(InputHandle& handle, Delegate<void()> func)const;
+
+
+		bool bind(InputState state,InputHandle& handle, Delegate<void()> func)const;
+		bool bind(InputHandle& handle, Delegate<void(f32)> func)const;
+		bool bind(InputHandle& handle, Delegate<void(Vec2)> func)const;
+		bool bind(InputHandle& handle, Delegate<void(Vec3)> func)const;
+
+		*/
+	private:
+
+		bool bindImpl(InputHandle&, const InputDelegate&)const;
+
+	private:
+		u32 m_type;
+		u32 m_user;
+		u32 m_code;
+	};
+
+}
+
+
 /*
 namespace ob::input {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		入力インターフェイス
-	//! 
+	//!
 	//! @details	このインターフェイスは「Aキー」や「左クリック」など、1入力ごとに割り当てられます。
 	//@―---------------------------------------------------------------------------
 	class IInput{

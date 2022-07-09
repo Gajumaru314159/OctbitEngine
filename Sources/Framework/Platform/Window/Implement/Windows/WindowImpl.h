@@ -106,6 +106,7 @@ namespace ob::platform {
         bool    m_isActive;
         bool    m_isMinimized;
 
+        EventNotifier<WindowEventType> m_notifier;
 
     };
 

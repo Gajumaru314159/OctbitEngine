@@ -7,24 +7,6 @@
 
 namespace ob::input {
 
-	using ButtonNotifier = EventNotifier<>;
-	using ButtonHandle = ButtonNotifier::Handle;
-	using ButtonDelegate = ButtonNotifier::delegate_type;
-
-	using AxisNotifier = EventNotifier<Vec2>;
-	using AxisHandle = AxisNotifier::Handle;
-	using AxisDelegate = AxisNotifier::delegate_type;
-
-
-
-	enum class TriggerType {
-		Down=0,
-		Up,
-		Pressed,
-		Released,
-		MAX,
-	};
-
     //@―---------------------------------------------------------------------------
     //! @brief  キーコード
 	//! 
@@ -211,6 +193,42 @@ namespace ob::input {
 		X3,			//!< 拡張ボタン3
 		X4,			//!< 拡張ボタン4
 
+		Wheel,
+		Position,
+		Move,
+
 		MAX,
 	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		入力状態
+	//@―---------------------------------------------------------------------------
+	enum class InputState {
+		Down		= get_bit(0),
+		Up			= get_bit(1),
+		Pressed		= get_bit(2),
+		Released	= get_bit(3),
+	};
+	using InputStates = BitFlags<InputState>;
+
+	//! @cond
+	namespace detail {
+		using InputData = std::variant<InputStates, f32, Vec2, Vec3>;
+	}
+	//! @endcond
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		入力イベント・ノティファイア
+	//@―---------------------------------------------------------------------------
+	using InputNotifier = EventNotifier<detail::InputData>;
+	//@―---------------------------------------------------------------------------
+	//! @brief		入力イベント・ハンドル
+	//@―---------------------------------------------------------------------------
+	using InputHandle = InputNotifier::Handle;
+	//@―---------------------------------------------------------------------------
+	//! @brief		入力イベント・デリゲート
+	//@―---------------------------------------------------------------------------
+	using InputDelegate = InputNotifier::delegate_type;
+
 }// namespcae ob

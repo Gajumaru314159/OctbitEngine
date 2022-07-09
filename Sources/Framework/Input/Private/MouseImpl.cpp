@@ -4,12 +4,15 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Input/Private/MouseImpl.h>
+#include <Framework/Platform/Window/Window.h>
+#include <Framework/Platform/Window/WindowNativeAccessor.h>
 
 namespace ob::input
 {
 	MouseImpl::MouseImpl()
 		: m_position{}
 	{
+		platform::Window::getMainWindow();
 	}
 
 
@@ -43,13 +46,13 @@ namespace ob::input
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	void MouseImpl::bindButton(TriggerType type, MouseButton button, ButtonHandle& handle, const ButtonDelegate& func) {
-		auto index = enum_cast(button);
-		if (is_in_range(index, m_notifiers)) {
-			m_notifiers[index].add(handle, func);
-		} else {
-			handle.remove();
-		}
-	}
+	//void MouseImpl::bindButton(TriggerType type, MouseButton button, ButtonHandle& handle, const ButtonDelegate& func) {
+	//	auto index = enum_cast(button);
+	//	if (is_in_range(index, m_notifiers)) {
+	//		m_notifiers[index].add(handle, func);
+	//	} else {
+	//		handle.remove();
+	//	}
+	//}
 
 }// namespace ob

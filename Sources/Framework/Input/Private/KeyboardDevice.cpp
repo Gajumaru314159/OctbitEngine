@@ -1,37 +1,39 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		キーボードデバイス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Input/Private/KeyboardImpl.h>
+#include <Framework/Input/Private/KeyboardDevice.h>
 #include <Framework/Platform/Window/Window.h>
 
-namespace ob::input
-{
+namespace ob::input {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
-    KeyboardImpl::KeyboardImpl() :
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	KeyboardDevice::KeyboardDevice() :
 		m_state{}
 	{
-        m_hWnd = nullptr;
-    }
+		m_hWnd = nullptr;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief	更新
 	//@―---------------------------------------------------------------------------
-    void KeyboardImpl::update() {
+	void KeyboardDevice::update() {
 
+		u8 buf[256] = {};
+		if (::GetKeyboardState(buf)) {
 
-        u8 buf[256] = {};
-        if (::GetKeyboardState(buf)) {
-
-			auto set = [this,&buf](Key key,int id) {
+			auto set = [this, &buf](Key key, int id) {
 				u8 flag = buf[id];
 				auto& state = m_state[enum_cast(key)];
-				state.down = (flag & get_bit(7)) != 0;
-				state.up = !state.down;
+				state.prevStates = state.states;
+				state.states.clear();
+				state.states.set(InputState::Down, flag & 0x80);
+				state.states.set(InputState::Up, state.states[InputState::Down]);
+				state.states.set(InputState::Pressed, state.prevStates[InputState::Up] && state.states[InputState::Down]);
+				state.states.set(InputState::Released, state.prevStates[InputState::Down] && state.states[InputState::Up]);
 			};
 
 			set(Key::F1, VK_F1);
@@ -43,9 +45,9 @@ namespace ob::input
 			set(Key::F7, VK_F7);					//!< F7
 			set(Key::F8, VK_F8);					//!< F8
 			set(Key::F9, VK_F9);					//!< F9
-			set(Key::F10, VK_F10);				//!< F10
-			set(Key::F11, VK_F11);				//!< F11
-			set(Key::F12, VK_F12);				//!< F12
+			set(Key::F10, VK_F10);					//!< F10
+			set(Key::F11, VK_F11);					//!< F11
+			set(Key::F12, VK_F12);					//!< F12
 			set(Key::Keypad0, VK_NUMPAD0);			//!< テンキー0
 			set(Key::Keypad1, VK_NUMPAD1);			//!< テンキー1
 			set(Key::Keypad2, VK_NUMPAD2);			//!< テンキー2
@@ -58,7 +60,7 @@ namespace ob::input
 			set(Key::Keypad9, VK_NUMPAD9);			//!< テンキー9
 			set(Key::KeypadPeriod, VK_DECIMAL);		//!< テンキー.
 			set(Key::KeypadDivide, VK_DIVIDE);		//!< テンキー/
-			set(Key::KeypadMultiply, VK_MULTIPLY);		//!< テンキー*
+			set(Key::KeypadMultiply, VK_MULTIPLY);	//!< テンキー*
 			set(Key::KeypadMinus, VK_SUBTRACT);		//!< テンキー-
 			set(Key::KeypadPlus, VK_ADD);			//!< テンキー+
 			set(Key::KeypadEnter, VK_RETURN);		//!< テンキーEnter
@@ -98,11 +100,11 @@ namespace ob::input
 			set(Key::X, 'X');					//!< X
 			set(Key::Y, 'Y');					//!< Y
 			set(Key::Z, 'Z');					//!< Z
-			set(Key::Exclaim, '!');			//!< !
+			set(Key::Exclaim, '!');				//!< !
 			set(Key::DoubleQuote, '\"');		//!< "
 			set(Key::Hash, '#');				//!< #
 			set(Key::Dollar, '$');				//!< $
-			set(Key::Percent, '%');			//!< %
+			set(Key::Percent, '%');				//!< %
 			set(Key::Ampersand, '&');			//!< &
 			set(Key::Quote, '\'');				//!< '
 			set(Key::LeftParen, '(');			//!< (
@@ -117,7 +119,7 @@ namespace ob::input
 			set(Key::Semicolon, ';');			//!< ;
 			set(Key::Less, '<');				//!< <
 			set(Key::Equals, '=');				//!< =
-			set(Key::Greater, '>');			//!< >
+			set(Key::Greater, '>');				//!< >
 			set(Key::Question, '?');			//!< ?
 			set(Key::At, '@');					//!< @
 			set(Key::LeftBracke, '[');			//!< [
@@ -131,34 +133,34 @@ namespace ob::input
 			set(Key::RightCurlyBracket, '}');	//!< }
 			set(Key::Tilde, '~');				//!< ~
 			set(Key::UpArrow, VK_UP);			//!< ↑
-			set(Key::DownArrow, VK_DOWN);			//!< ↓
-			set(Key::RightArrow, VK_RIGHT);			//!< →
-			set(Key::LeftArrow, VK_LEFT);			//!< ←
-			set(Key::Escape, VK_ESCAPE);				//!< Escape
-			set(Key::Space, VK_SPACE);				//!< Space
+			set(Key::DownArrow, VK_DOWN);		//!< ↓
+			set(Key::RightArrow, VK_RIGHT);		//!< →
+			set(Key::LeftArrow, VK_LEFT);		//!< ←
+			set(Key::Escape, VK_ESCAPE);		//!< Escape
+			set(Key::Space, VK_SPACE);			//!< Space
 			set(Key::Tab, VK_TAB);				//!< Tab
-			set(Key::Backspace, VK_BACK);			//!< Backspace
-			set(Key::Delete, VK_DELETE);				//!< Delete
-			set(Key::Enter, VK_RETURN);				//!< Enter / Return
-			set(Key::Insert, VK_INSERT);				//!< Insert
-			set(Key::CapsLosk, VK_CAPITAL);			//!< CapsLock
-			set(Key::PrintScreen, VK_SNAPSHOT);		//!< PrintScreen
-			set(Key::ScrollLock, VK_SCROLL);			//!< ScrollLock
-			set(Key::Pause, VK_PAUSE);				//!< Pause / Break
-			set(Key::Home, VK_HOME);				//!< Home
+			set(Key::Backspace, VK_BACK);		//!< Backspace
+			set(Key::Delete, VK_DELETE);		//!< Delete
+			set(Key::Enter, VK_RETURN);			//!< Enter / Return
+			set(Key::Insert, VK_INSERT);		//!< Insert
+			set(Key::CapsLosk, VK_CAPITAL);		//!< CapsLock
+			set(Key::PrintScreen, VK_SNAPSHOT);	//!< PrintScreen
+			set(Key::ScrollLock, VK_SCROLL);	//!< ScrollLock
+			set(Key::Pause, VK_PAUSE);			//!< Pause / Break
+			set(Key::Home, VK_HOME);			//!< Home
 			set(Key::End, VK_END);				//!< End
 			//set(Key::PageUp, );				//!< PageUp
 			//set(Key::PageDown, '');			//!< PageDown
-			set(Key::Numlock, VK_NUMLOCK);			//!< NumLock
+			set(Key::Numlock, VK_NUMLOCK);		//!< NumLock
 			//set(Key::Shift, );				//!< Shift
-			set(Key::LeftShilt, VK_LSHIFT);			//!< 左Shift
-			set(Key::RightShift, VK_RSHIFT);			//!< 右Shift
+			set(Key::LeftShilt, VK_LSHIFT);		//!< 左Shift
+			set(Key::RightShift, VK_RSHIFT);	//!< 右Shift
 			//set(Key::Ctrl, VK_);				//!< Ctrl
-			set(Key::LeftCtrl, VK_LCONTROL);//!< 左Ctrl
-			set(Key::RightCtrl, VK_RCONTROL);			//!< 右Ctrl
+			set(Key::LeftCtrl, VK_LCONTROL);	//!< 左Ctrl
+			set(Key::RightCtrl, VK_RCONTROL);	//!< 右Ctrl
 			//set(Key::Alt, '');				//!< Alt
-			set(Key::LeftAlt, VK_LMENU);//!< 左Alt
-			set(Key::RightAlt, VK_RMENU);			//!< 右Alt
+			set(Key::LeftAlt, VK_LMENU);		//!< 左Alt
+			set(Key::RightAlt, VK_RMENU);		//!< 右Alt
 			//set(Key::Command, VK_LCONTROL);			//!< Command
 			//set(Key::LeftCommand, VK_LCONTROL);		//!< 左Command
 			//set(Key::RightCommand, VK_RCONTROL);		//!< 右Command
@@ -167,30 +169,33 @@ namespace ob::input
 			//set(Key::RightApple, '');			//!< 右Appleキー
 			//set(Key::Windows, '');			//!< Windowsキー
 			set(Key::LeftWindows, VK_LWIN);		//!< 左Windowsキー
-			set(Key::RightWindows, VK_RWIN);		//!< 右Windowsキー
+			set(Key::RightWindows, VK_RWIN);	//!< 右Windowsキー
 
-        }
-        // TODO ウィンドウにフォーカスしているかで入力を切り替える
+		}
+		// TODO ウィンドウにフォーカスしているかで入力を切り替える
 
 
 		for (s32 i = 0; i < std::size(m_state); ++i) {
 			auto& state = m_state[i];
-			if(state.down)m_notifiers[i][enum_cast(TriggerType::Down)].invoke();
-		}
-    }
-
-	//@―---------------------------------------------------------------------------
-	//! @brief	キー入力イベントをバインド
-	//@―---------------------------------------------------------------------------
-	void KeyboardImpl::bindButton(TriggerType type, Key key, ButtonHandle& handle, const ButtonDelegate& func) {
-		auto keyIndex = enum_cast(key);
-		auto typeIndex = enum_cast(type);
-		if (is_in_range(keyIndex, m_notifiers) &&is_in_range(typeIndex, m_notifiers[0])) {
-			m_notifiers[keyIndex][typeIndex].add(handle, func);
-		} else {
-			handle.remove();
+			m_state[i].notifier.invoke(state.states);
 		}
 	}
 
+	InputStates KeyboardDevice::getInputStates(u32 code)const {
+		if (is_in_range(code, m_state)) {
+			return m_state[code].states;
+		}
+		return {};
+	}
+
+	bool KeyboardDevice::bind(u32 code, InputHandle& handle, const InputDelegate& func) {
+		if (is_in_range(code, m_state)) {
+			//m_state[code].add(handle, func);
+			return true;
+		} else {
+			handle.remove();
+			return false;
+		}
+	}
 
 }// namespace ob

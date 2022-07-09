@@ -72,15 +72,6 @@ int main() {
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
 
-
-			// ウィンドウ生成
-			platform::WindowCreationDesc windowDesc2;
-			windowDesc2.title = TC("Graphic Test Sub");
-			platform::Window window2(windowDesc2);
-
-			LOG_INFO("Main Window={}",platform::Window::getMainWindow().getTitle());
-
-
 			// スワップチェイン
 			SwapChain swapChain;
 			{
@@ -91,24 +82,11 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(swapChain);
 			}
 
-
-			// スワップチェイン
-			SwapChain swapChain2;
-			{
-				SwapchainDesc desc;
-				desc.window = window2;
-				swapChain2 = SwapChain(desc);
-				swapChain2.setName(TC("SubWindow"));
-				OB_CHECK_ASSERT_EXPR(swapChain2);
-			}
-
-
 			RenderTarget rt;
 			{
 				RenderTargetDesc desc;
 				desc.size = { 640,480 };
 				desc.colors = {
-					ColorTextureDesc{swapChain.getDesc().format,Color::grey},
 					ColorTextureDesc{swapChain.getDesc().format,Color::grey},
 				};
 
@@ -169,14 +147,11 @@ int main() {
 				pssrc.append(TC("\nstruct PsInput {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	"));
 				pssrc.append(TC("\nstruct PsOutput {											"));
 				pssrc.append(TC("\n		float4 color0:SV_TARGET0;								"));
-				pssrc.append(TC("\n		float4 color1:SV_TARGET1;								"));
 				pssrc.append(TC("\n};															"));
 				pssrc.append(TC("\nPsOutput PS_Main(PsInput i){									"));
 				pssrc.append(TC("\n    PsOutput o=(PsOutput)0;								"));
 				pssrc.append(TC("\n    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		"));
 				pssrc.append(TC("\n    o.color0 = color;										"));
-				pssrc.append(TC("\n    float gray = (color.x+color.y+color.z)/3.0f;				"));
-				pssrc.append(TC("\n    o.color1 = float4(gray,gray,gray,1.0f);				"));
 				pssrc.append(TC("\n    return o;												"));
 				pssrc.append(TC("\n}															"));
 
@@ -291,7 +266,6 @@ int main() {
 				}
 
 				cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
-				cmdList.applySwapChain(swapChain2, rt.getColorTexture(1));
 				cmdList.end();
 
 				// TODO コマンドの個別実行を許可する？
@@ -301,7 +275,6 @@ int main() {
 
 				// 表示を更新(Present)
 				swapChain.update();
-				swapChain2.update();
 
 				if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 					TranslateMessage(&msg);
@@ -318,14 +291,11 @@ int main() {
 				using namespace ob::input;
 				InputManager::Instance().update();
 
-				if (Keyboard::W.down()) {
-					pos.setZero();
+				if (Keyboard::W.pressed()) {
+					pos.y += 0.01f;
 				}
-
-				{
-					using namespace ob::input;
-					auto winSize = window.getSize();
-					pos += Mouse::Pos.value()/Vec2(winSize.width*0.5f,winSize.height*-0.5f);
+				if (Keyboard::S.down()) {
+					pos.y -= 0.01f;
 				}
 			}
 

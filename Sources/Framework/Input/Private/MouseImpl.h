@@ -9,6 +9,7 @@
 
 namespace ob::input {
 
+
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
@@ -25,8 +26,8 @@ namespace ob::input {
 
         Vec2 position();
         bool down(MouseButton);
-
-        void bindButton(TriggerType,MouseButton, ButtonHandle&, const ButtonDelegate&);
+        
+        //void bindButton(TriggerType,MouseButton, ButtonHandle&, const ButtonDelegate&);
     private:
         StaticArray<ButtonNotifier, enum_cast(MouseButton::MAX)> m_notifiers;
         Vec2 m_position;

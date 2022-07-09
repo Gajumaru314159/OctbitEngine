@@ -393,8 +393,8 @@ namespace ob::platform {
 		POINT point;
 		point.x = screenPoint.x;
 		point.y = screenPoint.y;
-		::ScreenToClient(m_hWnd, &point);
-		return Point();
+		if (!::ScreenToClient(m_hWnd, &point))return Point{};
+		return Point(point.x, point.y);
 	}
 
 
