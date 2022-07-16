@@ -78,80 +78,107 @@ namespace ob::input
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	void MouseDevice::update() {
-		// マウス座標取得
-		if (POINT point; ::GetCursorPos(&point)) {
-			Vec2 newPos(point.x,point.y);
-			m_deltaPos = newPos - m_position;
-			m_position = newPos;
-		}
 
-		m_state.rgbButtons[0] = 0;
-		m_state.rgbButtons[1] = 0;
-		m_state.rgbButtons[2] = 0;
 
 		// 値の更新
+		m_mouseState={};
 		if (m_mouse) {
-			if (FAILED(m_mouse->GetDeviceState(sizeof(DIMOUSESTATE2), &m_state))) {
+			if (FAILED(m_mouse->GetDeviceState(sizeof(DIMOUSESTATE2), &m_mouseState))) {
 				m_mouse->Acquire(); // １発目や２発目にエラーが出るが無視してよい。
 			}
 		}
 
+		// マウス座標取得
+		Vec2 pos(0.0f, 0.0f);
+		Vec2 deltaPos(0.0f,0.0f);
+		if (POINT point; ::GetCursorPos(&point)) {
+			pos.set(point.x, point.y);
+			deltaPos = pos - m_position;
+		}
+		m_position = pos;
 
+		// ボタン更新
 		auto set = [this](MouseButton key, int id) {
-			u8 flag = m_state.rgbButtons[id];
-			auto& state = m_states[enum_cast(key)];
-			state.prevStates = state.states;
-			state.states.clear();
-			state.states.set(InputState::Pressed, flag & 0x80);
-			state.states.set(InputState::Released, !state.states[InputState::Pressed]);
-			state.states.set(InputState::Down, state.prevStates[InputState::Released] && state.states[InputState::Pressed]);
-			state.states.set(InputState::Up, state.prevStates[InputState::Pressed] && state.states[InputState::Released]);
+			u8 flag = m_mouseState.rgbButtons[id];
+			auto& state = m_states[key];
+			state.prev= state.next;
+			state.next.clear();
+			state.next.set(ButtonState::Pressed, flag & 0x80);
+			state.next.set(ButtonState::Released, !(flag & 0x80));
+			state.next.set(ButtonState::Down, state.prev[ButtonState::Released] && state.next[ButtonState::Pressed]);
+			state.next.set(ButtonState::Up, state.prev[ButtonState::Pressed] && state.next[ButtonState::Released]);
 		};
 
 		set(MouseButton::Left, 0);
 		set(MouseButton::Right, 1);
 		set(MouseButton::Middle, 2);
 
-		if (m_states[enum_cast(MouseButton::Left)].states[InputState::Down]) {
-			LOG_INFO("左クリック");
-		}
-		if (m_states[enum_cast(MouseButton::Left)].states[InputState::Up]) {
-			LOG_INFO("左クリックEnd");
-		};
 
-		if (m_states[enum_cast(MouseButton::Right)].states[InputState::Down]) {
-			LOG_INFO("右クリック");
+		// 軸更新
+		for (auto& [key, state] : m_axisStates) {
+			state.prev = state.next;
 		}
-		if (m_states[enum_cast(MouseButton::Right)].states[InputState::Up]) {
-			LOG_INFO("右クリックEnd");
+		m_axisStates[MouseAxis::X].next = pos.x;
+		m_axisStates[MouseAxis::Y].next = pos.y;
+		m_axisStates[MouseAxis::DeltaX].next = deltaPos.x;
+		m_axisStates[MouseAxis::DeltaY].next = deltaPos.y;
+
+
+		// バインドしているイベントを呼び出し
+		for (auto& [key, state] : m_states) {
+			const auto caller = [](KeyState& state, ButtonState buttonState) {
+				if (state.prev[buttonState])state.notifiers[buttonState].invoke();
+			};
+			caller(state, ButtonState::Down);
+			caller(state, ButtonState::Up);
+			caller(state, ButtonState::Pressed);
+			caller(state, ButtonState::Released);
 		}
+
+		// バインドしているイベントを呼び出し
+		for (auto& [key, state] : m_axisStates) {
+			if(state.prev!=state.next)state.notifier.invoke(state.next);
+		}
+
 	}
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  説明
+	//! @brief  ボタンの入力状態を取得
 	//@―---------------------------------------------------------------------------
-	Vec2 MouseDevice::position() {
-		return m_deltaPos;
+	ButtonStates MouseDevice::getButtonStates(u32 code)const {
+		auto key = static_cast<MouseButton>(code);
+		auto found = m_states.find(key);
+		if (found == m_states.end())return {};
+		return found->second.next;
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  説明
+	//! @brief  軸の入力状態を取得
 	//@―---------------------------------------------------------------------------
-	bool MouseDevice::down(MouseButton) {
-		return {};
+	f32 MouseDevice::getAxisValue(u32 code)const {
+		auto key = static_cast<MouseAxis>(code);
+		auto found = m_axisStates.find(key);
+		if (found == m_axisStates.end())return 0.0f;
+		return found->second.next;
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  説明
+	//! @brief  ボタン入力イベントをバインド
 	//@―---------------------------------------------------------------------------
-	//void MouseDevice::bindButton(TriggerType type, MouseButton button, ButtonHandle& handle, const ButtonDelegate& func) {
-	//	auto index = enum_cast(button);
-	//	if (is_in_range(index, m_notifiers)) {
-	//		m_notifiers[index].add(handle, func);
-	//	} else {
-	//		handle.remove();
-	//	}
-	//}
+	bool MouseDevice::bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) {
+		auto key = static_cast<MouseButton>(code);
+		m_states[key].notifiers[state].add(handle, func);
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  ボタン入力イベントをバインド
+	//@―---------------------------------------------------------------------------
+	bool MouseDevice::bindAxis(u32 code, AxisHandle& handle, const AxisDelegate& func) {
+		auto key = static_cast<MouseAxis>(code);
+		m_axisStates[key].notifier.add(handle, func);
+		return true;
+	}
 
 }// namespace ob

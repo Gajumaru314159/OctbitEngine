@@ -1,63 +1,57 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		キーボード・デバイス
+//! @brief		入力系のタイプ宣言
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/IInputDevice.h>
-#include <Framework/Core/Platform/WindowsHeaders.h>
+#include <Framework/Core/Misc/Duration.h>
+#include <Framework/Input/InputType.h>
 
 namespace ob::input {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  キーボード・デバイス
+	//! @brief  軸
 	//@―---------------------------------------------------------------------------
-	class KeyboardDevice:public IInputDevice {
+	class Axis {
 	public:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ
+		//! @berif	デフォルトコンストラクタ
 		//@―---------------------------------------------------------------------------
-		KeyboardDevice();
+		Axis() = default;
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  デストラクタ
+		//! @brief			コンストラクタ
+		//! @param deviceID	デバイスタイプ
+		//! @param code		コード
+		//! @param user		ユーザ番号
 		//@―---------------------------------------------------------------------------
-		~KeyboardDevice();
+		constexpr Axis(u32 deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID), m_code(code), m_user(user) {}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  デバイスID
+		//! @berif	コンストラクタ
 		//@―---------------------------------------------------------------------------
-		u32 getDeviceId()const override { return OB_FNV32("Keyboard"); };
+		template<typename T>
+		constexpr Axis(u32 type, T code, u32 user = 0) : Axis(type, enum_cast(code), user) {}
+
+	public:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  更新
+		//! @berif	値
 		//@―---------------------------------------------------------------------------
-		void update();
+		f32  value() const;
 
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  ボタンの入力状態を取得
-		//@―---------------------------------------------------------------------------
-		ButtonStates getButtonStates(u32 code)const override;
+	public:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  ボタン入力イベントをバインド
+		//! @berif	バインド
 		//@―---------------------------------------------------------------------------
-		bool bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) override;
+		bool bind(AxisHandle& handle, const AxisDelegate& func)const;
 
 	private:
-		struct KeyState {
-			HashMap<ButtonState,ButtonNotifier> notifiers;
-			ButtonStates prev;
-			ButtonStates next;
-		};
-	private:
-
-		HWND m_hWnd = nullptr;
-		HashMap<Key, KeyState> m_states;;
-
+		u32 m_deviceId;
+		u32 m_user;
+		u32 m_code;
 	};
 
-
-}// namespcae ob::input
+}

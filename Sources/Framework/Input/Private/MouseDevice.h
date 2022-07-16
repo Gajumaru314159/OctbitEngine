@@ -1,60 +1,85 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		マウスデバイス
+//! @brief		マウス・デバイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/Input.h>
+#include <Framework/Input/IInputDevice.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #ifdef OS_WINDOWS
 #include <dinput.h>
 #endif
 namespace ob::input {
 
-
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  マウス・デバイス
     //@―---------------------------------------------------------------------------
     class MouseDevice:public IInputDevice {
     public:
-        using ButtonNotifier  = EventNotifier<>;
-        using ButtonHandle    = ButtonNotifier::Handle;
-        using ButtonDelegate  = ButtonNotifier::delegate_type;
-    public:
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  コンストラクタ
+        //@―---------------------------------------------------------------------------
         MouseDevice();
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  デストラクタ
+        //@―---------------------------------------------------------------------------
         ~MouseDevice();
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  デバイスID
+        //@―---------------------------------------------------------------------------
         u32 getDeviceId()const override { return OB_FNV32("Mouse"); };
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  更新
+        //@―---------------------------------------------------------------------------
         void update()override;
 
-        InputStates getInputStates(u32 code)const override{ return {}; }
-        f32  getF32(u32 code) const override{ return 0.0f; }
-        Vec2 getVec2(u32 code) const override{ return { 0.0f,0.0f }; }
-        Vec3 getVec3(u32 code) const override{ return { 0.0f,0.0f,0.0f }; }
+        //@―---------------------------------------------------------------------------
+        //! @brief  ボタンの入力状態を取得
+        //@―---------------------------------------------------------------------------
+        ButtonStates getButtonStates(u32 code)const override;
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  軸の入力状態を取得
+        //@―---------------------------------------------------------------------------
+        f32 getAxisValue(u32 code)const override;
 
-        Vec2 position();
-        bool down(MouseButton);
-        
-        //void bindButton(TriggerType,MouseButton, ButtonHandle&, const ButtonDelegate&);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ボタン入力イベントをバインド
+        //@―---------------------------------------------------------------------------
+        bool bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) override;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ボタン入力イベントをバインド
+        //@―---------------------------------------------------------------------------
+        bool bindAxis(u32 code, AxisHandle& handle, const AxisDelegate& func) override;
+
     private:
 
-        struct State {
-            InputNotifier notifier;
-            InputStates states;
-            InputStates prevStates;
+        struct KeyState {
+            HashMap<ButtonState, ButtonNotifier> notifiers;
+            ButtonStates prev;
+            ButtonStates next;
+        };
+        struct AxisState {
+            AxisNotifier notifier;
+            f32 prev{0.0f};
+            f32 next{0.0f};
         };
 
+        DIMOUSESTATE m_mouseState;
         LPDIRECTINPUT8 m_interface;
         LPDIRECTINPUTDEVICE8 m_mouse;
-        DIMOUSESTATE m_state;
 
+        HashMap<MouseButton, KeyState> m_states;
+        HashMap<MouseAxis,AxisState> m_axisStates;
 
-        StaticArray<State, enum_cast(MouseButton::MAX)> m_states;
         Vec2 m_position;
         Vec2 m_deltaPos;
+
     };
 
 

@@ -1,63 +1,50 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		キーボード・デバイス
+//! @brief		入力デバイス・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/IInputDevice.h>
-#include <Framework/Core/Platform/WindowsHeaders.h>
+#include <Framework/Input/InputType.h>
+#include <Framework/Core/Hash/crc32.h>
 
 namespace ob::input {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  キーボード・デバイス
+	//! @brief  入力デバイス・インターフェイス
 	//@―---------------------------------------------------------------------------
-	class KeyboardDevice:public IInputDevice {
+	class IInputDevice {
 	public:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ
+		//! @berif	デバイスタイプを取得
 		//@―---------------------------------------------------------------------------
-		KeyboardDevice();
+		virtual u32 getDeviceId()const = 0;
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  デストラクタ
+		//! @berif	更新
 		//@―---------------------------------------------------------------------------
-		~KeyboardDevice();
+		virtual void update() {}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  デバイスID
+		//! @berif	ボタンの入力状態を取得
 		//@―---------------------------------------------------------------------------
-		u32 getDeviceId()const override { return OB_FNV32("Keyboard"); };
+		virtual ButtonStates getButtonStates(u32 code)const { return {}; }
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  更新
+		//! @berif	軸の入力状態を取得
 		//@―---------------------------------------------------------------------------
-		void update();
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  ボタンの入力状態を取得
-		//@―---------------------------------------------------------------------------
-		ButtonStates getButtonStates(u32 code)const override;
+		virtual f32  getAxisValue(u32 code) const { return 0.0f; }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  ボタン入力イベントをバインド
 		//@―---------------------------------------------------------------------------
-		bool bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) override;
+		virtual bool bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) { return false; }
 
-	private:
-		struct KeyState {
-			HashMap<ButtonState,ButtonNotifier> notifiers;
-			ButtonStates prev;
-			ButtonStates next;
-		};
-	private:
-
-		HWND m_hWnd = nullptr;
-		HashMap<Key, KeyState> m_states;;
+		//@―---------------------------------------------------------------------------
+		//! @brief  軸入力イベントをバインド
+		//@―---------------------------------------------------------------------------
+		virtual bool bindAxis(u32 code,AxisHandle& handle, const AxisDelegate& func) { return false; }
 
 	};
 
-
-}// namespcae ob::input
+}// namespcae ob

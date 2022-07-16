@@ -5,16 +5,22 @@
 //***********************************************************
 #include <Framework/Input/Private/KeyboardDevice.h>
 #include <Framework/Platform/Window/Window.h>
+#include <magic_enum.hpp>
 
 namespace ob::input {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	KeyboardDevice::KeyboardDevice() :
-		m_state{}
-	{
+	KeyboardDevice::KeyboardDevice() {
 		m_hWnd = nullptr;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  デストラクタ
+	//@―---------------------------------------------------------------------------
+	KeyboardDevice::~KeyboardDevice() {
+
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -27,13 +33,13 @@ namespace ob::input {
 
 			auto set = [this, &buf](Key key, int id) {
 				u8 flag = buf[id];
-				auto& state = m_state[enum_cast(key)];
-				state.prevStates = state.states;
-				state.states.clear();
-				state.states.set(InputState::Down, flag & 0x80);
-				state.states.set(InputState::Up, !state.states[InputState::Down]);
-				state.states.set(InputState::Pressed, state.prevStates[InputState::Up] && state.states[InputState::Down]);
-				state.states.set(InputState::Released, state.prevStates[InputState::Down] && state.states[InputState::Up]);
+				auto& state = m_states[key];
+				state.prev = state.next;
+				state.next.clear();
+				state.next.set(ButtonState::Pressed, flag & 0x80);
+				state.next.set(ButtonState::Released, !(flag & 0x80));
+				state.next.set(ButtonState::Down, state.prev[ButtonState::Released] && state.next[ButtonState::Pressed]);
+				state.next.set(ButtonState::Up, state.prev[ButtonState::Pressed] && state.next[ButtonState::Released]);
 			};
 
 			set(Key::F1, VK_F1);
@@ -174,28 +180,35 @@ namespace ob::input {
 		}
 		// TODO ウィンドウにフォーカスしているかで入力を切り替える
 
-
-		for (s32 i = 0; i < std::size(m_state); ++i) {
-			auto& state = m_state[i];
-			m_state[i].notifier.invoke(state.states);
+		// バインドしているイベントを呼び出し
+		for (auto& [key,state]:m_states) {
+			const auto caller = [](KeyState& state,ButtonState buttonState) {
+				if (state.prev[buttonState])state.notifiers[buttonState].invoke();
+			};
+			caller(state,ButtonState::Down);
+			caller(state,ButtonState::Up);
+			caller(state,ButtonState::Pressed);
+			caller(state,ButtonState::Released);
 		}
 	}
 
-	InputStates KeyboardDevice::getInputStates(u32 code)const {
-		if (is_in_range(code, m_state)) {
-			return m_state[code].states;
-		}
-		return {};
+	//@―---------------------------------------------------------------------------
+	//! @brief  ボタンの入力状態を取得
+	//@―---------------------------------------------------------------------------
+	ButtonStates KeyboardDevice::getButtonStates(u32 code)const {
+		auto key = static_cast<Key>(code);
+		auto found = m_states.find(key);
+		if (found == m_states.end())return {};
+		return found->second.next;
 	}
 
-	bool KeyboardDevice::bind(u32 code, InputHandle& handle, const InputDelegate& func) {
-		if (is_in_range(code, m_state)) {
-			//m_state[code].add(handle, func);
-			return true;
-		} else {
-			handle.remove();
-			return false;
-		}
+	//@―---------------------------------------------------------------------------
+	//! @brief  ボタン入力イベントをバインド
+	//@―---------------------------------------------------------------------------
+	bool KeyboardDevice::bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) {
+		auto key = static_cast<Key>(code);
+		m_states[key].notifiers[state].add(handle, func);
+		return true;
 	}
 
 }// namespace ob

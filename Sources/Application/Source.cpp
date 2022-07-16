@@ -41,7 +41,7 @@ int main() {
 	Logger::Instance();
 	platform::PlatformSystem::Instance();
 	{
-		if (false) {
+		if (true) {
 			LOG_INFO("Vec2     :{}", Vec2(1, 2));
 			LOG_INFO("Vec3     :{}", Vec3(1.5235223f, 2.11f, -0.01f));
 			LOG_INFO("Vec4     :{}", Vec4(3.1415f, 2.235e6f, -0.01f, -123.5e-5f));
@@ -226,6 +226,31 @@ int main() {
 			MSG msg = {};
 
 
+			input::ButtonHandle hClick;
+			input::Mouse::Right.bindDown(
+				hClick,
+				[]() {
+					LOG_ERROR("クリック");
+				}
+			);
+
+			input::ButtonHandle hW;
+			input::Keyboard::W.bindPressed(
+				hW,
+				[&pos]() {
+					pos.y += 0.001f;
+				}
+			);
+			input::ButtonHandle hS;
+			input::Keyboard::S.bindPressed(
+				hS,
+				[&pos]() {
+					pos.y -= 0.001f;
+				}
+			);
+
+
+
 			while (true) {
 
 				cmdList.begin();
@@ -275,13 +300,6 @@ int main() {
 
 				using namespace ob::input;
 				InputManager::Instance().update();
-
-				if (Keyboard::W.pressed()) {
-					pos.y += 0.01f;
-				}
-				if (Keyboard::S.down()) {
-					pos.y -= 0.01f;
-				}
 			}
 
 			// グラフィックオブジェクトはここで全て解放予約

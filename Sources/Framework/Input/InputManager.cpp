@@ -6,7 +6,6 @@
 #include <Framework/Input/InputManager.h>
 #include <Framework/Input/Private/KeyboardDevice.h>
 #include <Framework/Input/Private/MouseDevice.h>
-#include <Framework/Core/Hash/crc32.h>
 
 namespace ob::input{
 
@@ -17,15 +16,25 @@ namespace ob::input{
     public:
 
         InputManagerImpl() {
-            m_deviceList.emplace_back(std::make_unique<KeyboardDevice>());
-            m_deviceList.emplace_back(std::make_unique<MouseDevice>());
+            // キーボード
+            {
+                auto device = std::make_unique<KeyboardDevice>();
+                DeviceKey key{ device->getDeviceId() ,0};
+                m_devices[key] = std::move(device);
+            }
+            // マウス
+            {
+                auto device = std::make_unique<MouseDevice>();
+                DeviceKey key{ device->getDeviceId() ,0 };
+                m_devices[key] = std::move(device);
+            }
         }
 
         //@―---------------------------------------------------------------------------
         //! @brief  更新
         //@―---------------------------------------------------------------------------
         void update() {
-            for (auto& device : m_deviceList) {
+            for (auto& [id,device] : m_devices) {
                 device->update();
             }
         }
@@ -34,17 +43,28 @@ namespace ob::input{
         //! @brief  デバイスを取得
         //@―---------------------------------------------------------------------------
         IInputDevice* findDevice(u32 guid, u32 user) {
-            for (auto& device : m_deviceList) {
-                if (device->getDeviceId() == guid) {
-                    return device.get();
-                }
-            }
-            return nullptr;
+            auto found = m_devices.find({ guid,user });
+            if (found == m_devices.end())return nullptr;
+            return found->second.get();
         }
 
     private:
 
-        List<std::unique_ptr<IInputDevice>> m_deviceList;
+        struct DeviceKey {
+            u32 type{0};
+            u32 user{0};
+            bool operator==(const DeviceKey& rhs) const { return type == rhs.type && user == rhs.user; }
+            bool operator!=(const DeviceKey& rhs) const { return !(*this == rhs); }
+        };
+        struct Hash {
+            typedef std::size_t result_type;
+            std::size_t operator()(const DeviceKey& key) const {
+                return static_cast<size_t>(key.type ^ (key.user<<28));
+            }
+        };
+
+        using DevicePtr = UPtr<IInputDevice>;
+        HashMap<DeviceKey, DevicePtr, Hash> m_devices;
 
     };
 

@@ -4,8 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/InputType.h>
-#include <Framework/Input/Input.h>
+#include <Framework/Input/IInputDevice.h>
 
 namespace ob::input {
 
