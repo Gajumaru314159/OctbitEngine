@@ -31,7 +31,7 @@ namespace ob::input {
 				state.prevStates = state.states;
 				state.states.clear();
 				state.states.set(InputState::Down, flag & 0x80);
-				state.states.set(InputState::Up, state.states[InputState::Down]);
+				state.states.set(InputState::Up, !state.states[InputState::Down]);
 				state.states.set(InputState::Pressed, state.prevStates[InputState::Up] && state.states[InputState::Down]);
 				state.states.set(InputState::Released, state.prevStates[InputState::Down] && state.states[InputState::Up]);
 			};

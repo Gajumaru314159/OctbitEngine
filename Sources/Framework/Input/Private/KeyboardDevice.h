@@ -23,6 +23,8 @@ namespace ob::input {
 
 		KeyboardDevice();
 
+		u32 getDeviceId()const override { return OB_FNV32("Keyboard"); };
+
 		void update();
 
 		InputStates getInputStates(u32 code)const;

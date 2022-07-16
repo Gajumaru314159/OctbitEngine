@@ -12,7 +12,7 @@ namespace ob::input
 	//! @berif	状態が state か
 	//@―---------------------------------------------------------------------------
 	bool Input::is(InputState state)const {
-		if (auto device = InputManager::Instance().findDevice(m_type, m_user)) {
+		if (auto device = InputManager::Instance().findDevice(m_deviceId, m_user)) {
 			return device->getInputStates(m_code)[state];
 		}
 		return false;

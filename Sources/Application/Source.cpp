@@ -37,6 +37,7 @@ using namespace ob;
 int main() {
 	using namespace ob::graphic;
 
+	input::InputManager::Instance();
 
 	Logger::Instance();
 	platform::PlatformSystem::Instance();
@@ -86,13 +87,8 @@ int main() {
 			{
 				RenderTargetDesc desc;
 				desc.size = { 640,480 };
-				desc.colors = {
-					ColorTextureDesc{swapChain.getDesc().format,Color::grey},
-				};
-
-				desc.depth = {
-					DepthTextureDesc{TextureFormat::D32,0,0},
-				};
+				desc.colors.push_back({ swapChain.getDesc().format, Color::grey });
+				desc.depth.push_back({ TextureFormat::D32, 0, 0 });
 
 				rt = RenderTarget(desc);
 				rt.setName(TC("メインレンダ―ターゲット"));
@@ -121,7 +117,7 @@ int main() {
 					{
 						StaticSamplerDesc(SamplerDesc(),0),
 					}
-					);
+				);
 				signature = RootSignature(desc);
 				signature.setName(TC("TestRootSignature"));
 				OB_CHECK_ASSERT_EXPR(signature);
@@ -131,29 +127,29 @@ int main() {
 			PixelShader ps;
 			{
 				String vssrc;
-				vssrc.append(TC("\ncbuffer Param : register(b0) {								"));
-				vssrc.append(TC("\n  float2 g_pos;												"));
-				vssrc.append(TC("\n};															"));
-				vssrc.append(TC("\nstruct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};"));
-				vssrc.append(TC("\nOutput VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {"));
-				vssrc.append(TC("\n    Output o;"));
-				vssrc.append(TC("\n    o.pos = pos+float4(g_pos,0,0);"));
-				vssrc.append(TC("\n    o.uv = uv;"));
-				vssrc.append(TC("\n    return o;"));
-				vssrc.append(TC("\n}"));
+				vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
+				vssrc.append(TC("  float2 g_pos;												\n"));
+				vssrc.append(TC("};																\n"));
+				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	\n"));
+				vssrc.append(TC("Output VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {	\n"));
+				vssrc.append(TC("    Output o;													\n"));
+				vssrc.append(TC("    o.pos = pos+float4(g_pos,0,0);								\n"));
+				vssrc.append(TC("    o.uv = uv;													\n"));
+				vssrc.append(TC("    return o;													\n"));
+				vssrc.append(TC("}																\n"));
 				String pssrc;
-				pssrc.append(TC("\nSamplerState g_mainSampler:register(s0);						"));
-				pssrc.append(TC("\nTexture2D g_mainTex:register(t0);							"));
-				pssrc.append(TC("\nstruct PsInput {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	"));
-				pssrc.append(TC("\nstruct PsOutput {											"));
-				pssrc.append(TC("\n		float4 color0:SV_TARGET0;								"));
-				pssrc.append(TC("\n};															"));
-				pssrc.append(TC("\nPsOutput PS_Main(PsInput i){									"));
-				pssrc.append(TC("\n    PsOutput o=(PsOutput)0;								"));
-				pssrc.append(TC("\n    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		"));
-				pssrc.append(TC("\n    o.color0 = color;										"));
-				pssrc.append(TC("\n    return o;												"));
-				pssrc.append(TC("\n}															"));
+				pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+				pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
+				pssrc.append(TC("struct PsInput {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	\n"));
+				pssrc.append(TC("struct PsOutput {												\n"));
+				pssrc.append(TC("		float4 color0:SV_TARGET0;								\n"));
+				pssrc.append(TC("};																\n"));
+				pssrc.append(TC("PsOutput PS_Main(PsInput i){									\n"));
+				pssrc.append(TC("    PsOutput o=(PsOutput)0;									\n"));
+				pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
+				pssrc.append(TC("    o.color0 = color;											\n"));
+				pssrc.append(TC("    return o;													\n"));
+				pssrc.append(TC("}																\n"));
 
 				vs = VertexShader(vssrc);
 				ps = PixelShader(pssrc);
@@ -187,21 +183,13 @@ int main() {
 
 			Buffer buffer;
 			{
-				BufferDesc desc;
-
-				desc.bufferType = BufferType::ConstantBuffer;     //!< バッファタイプ
-				desc.usage = ResourceUsage::Dynamic;          //!< リソース使用法
-				desc.bufferSize = 101;     //!< バッファサイズ
-				desc.bufferStride = 0;   //!< ストライブ幅
-				desc.bufferFlags;    //!< バッファフラグ
-				desc.bindFlags = BindFlag::PixelShaderResource;      //!< バインドフラグ
-
+				BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
 				buffer = Buffer(desc);
 				buffer.setName(TC("TestBuffer"));
 				OB_CHECK_ASSERT_EXPR(buffer);
 
 				Color color = Color::red;
-				buffer.updateDirect(sizeof(color), &color);
+				buffer.updateDirect(color);
 			}
 
 			DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
@@ -235,36 +223,31 @@ int main() {
 			Random random;
 			MSG msg = {};
 
-			auto prev = DateTime::Now();
 
 			while (true) {
-
-				auto next = DateTime::Now();
-				//LOG_INFO("{}", 1.0f/Duration(prev,next).secondsF());
-				prev = next;
 
 				cmdList.begin();
 
 				cmdList.beginRender(rt);
 				cmdList.clearColors();
-				cmdList.setRootSignature(signature);
-				cmdList.setPipelineState(pipeline);
-
-				cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
-				cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
-
-				SetDescriptorTableParam params[] = {
-					SetDescriptorTableParam(dt,0),
-					SetDescriptorTableParam(dt2,1),
-				};
-				cmdList.setRootDesciptorTable(params, 2);
-
 				{
+					cmdList.setRootSignature(signature);
+					cmdList.setPipelineState(pipeline);
+
+					cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
+					cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
+
+					SetDescriptorTableParam params[] = {
+						SetDescriptorTableParam(dt,0),
+						SetDescriptorTableParam(dt2,1),
+					};
+					cmdList.setRootDesciptorTable(params, 2);
+
 					DrawIndexedParam param{};
 					param.indexCount = 6;
 					cmdList.drawIndexed(param);
 				}
-
+				cmdList.endRender();
 				cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
 				cmdList.end();
 

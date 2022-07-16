@@ -79,10 +79,15 @@ namespace ob::graphic {
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      バッファを更新(直接更新)
-		//! 
-		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 		//@―---------------------------------------------------------------------------
 		void updateDirect(size_t size, const void* pData, size_t offset = 0);
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      バッファを更新(直接更新)
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		void updateDirect(const T& value, size_t offset = 0);
 
 
 	private:
@@ -93,4 +98,16 @@ namespace ob::graphic {
 	};
 
 
-}// namespace pb::graphic
+}// namespace ob::graphic
+
+namespace ob::graphic {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      バッファを更新(直接更新)
+	//@―---------------------------------------------------------------------------
+	template<class T>
+	void Buffer::updateDirect(const T& value, size_t offset ) {
+		updateDirect(sizeof(T), &value, offset);
+	}
+
+}

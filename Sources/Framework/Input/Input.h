@@ -6,25 +6,10 @@
 #pragma once
 #include <Framework/Core/Misc/Duration.h>
 #include <Framework/Input/InputType.h>
+#include <Framework/Input/Interface/IInputDevice.h>
+#include <Framework/Core/Hash/crc32.h>
 
 namespace ob::input {
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  入力デバイス・インターフェイス
-	//@―---------------------------------------------------------------------------
-	class IInputDevice {
-	public:
-		virtual InputStates getInputStates(u32 code)const { return {}; }
-		virtual f32  getF32(u32 code) const { return 0.0f; }
-		virtual Vec2 getVec2(u32 code) const { return { 0.0f,0.0f }; }
-		virtual Vec3 getVec3(u32 code) const { return { 0.0f,0.0f,0.0f }; }
-
-		//@―---------------------------------------------------------------------------
-		//! @berif	ボタンをバインド
-		//@―---------------------------------------------------------------------------
-		virtual bool bind(u32 code,InputHandle& handle, const InputDelegate& func) { return false; }
-
-	};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  入力オブジェクト
@@ -34,13 +19,33 @@ namespace ob::input {
 
 		Input() = default;
 
-		constexpr Input(u32 type, u32 code, u32 user = 0) :m_code(code), m_type(type), m_user(user) {}
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ
+		//! @param deviceID	デバイスタイプ
+		//! @param code		コード
+		//! @param user		ユーザ番号
+		//@―---------------------------------------------------------------------------
+		constexpr Input(u32 deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID),m_code(code), m_user(user) {}
 
+		//@―---------------------------------------------------------------------------
+		//! @berif	コンストラクタ
+		//@―---------------------------------------------------------------------------
 		template<typename T>
 		constexpr Input(u32 type, T code, u32 user = 0) : Input(type, enum_cast(code), user) {}
 
-		constexpr u32 deviceType()const noexcept { return m_type; }
+		//@―---------------------------------------------------------------------------
+		//! @berif	デバイスタイプを取得
+		//@―---------------------------------------------------------------------------
+		constexpr u32 deviceId()const noexcept { return m_deviceId; }
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	
+		//@―---------------------------------------------------------------------------
 		constexpr u32 code()const noexcept { return m_code; }
+
+		//@―---------------------------------------------------------------------------
+		//! @berif	ユーザ番号を取得
+		//@―---------------------------------------------------------------------------
 		constexpr u32 user()const noexcept { return m_user; }
 
 		//@―---------------------------------------------------------------------------
@@ -92,7 +97,7 @@ namespace ob::input {
 		bool bindImpl(InputHandle&, const InputDelegate&)const;
 
 	private:
-		u32 m_type;
+		u32 m_deviceId;
 		u32 m_user;
 		u32 m_code;
 	};

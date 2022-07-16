@@ -70,7 +70,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  バッファ・フラグ・セット
 	//@―---------------------------------------------------------------------------
-	using BufferFags = BitFlags<BufferFlag>;
+	using BufferFlags = BitFlags<BufferFlag>;
 
 #pragma endregion
 
@@ -83,7 +83,7 @@ namespace ob::graphic {
 		ResourceUsage   usage;          //!< リソース使用法
 		u64             bufferSize;     //!< バッファサイズ
 		u32             bufferStride;   //!< ストライブ幅
-		BufferFags      bufferFlags;    //!< バッファフラグ
+		BufferFlags      bufferFlags;    //!< バッファフラグ
 		BindFlags       bindFlags;      //!< バインドフラグ
 
 	public:
@@ -102,7 +102,7 @@ namespace ob::graphic {
 			ResourceUsage   usage,
 			u64             bufferSize,
 			u32             bufferStride,
-			BufferFags      bufferFlags,
+			BufferFlags      bufferFlags,
 			BindFlags       bindFlags)
 			: bufferType(bufferType)
 			, usage(usage)
@@ -111,6 +111,26 @@ namespace ob::graphic {
 			, bufferFlags(bufferFlags)
 			, bindFlags(bindFlags)
 		{}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  定数バッファ用初期化
+		//@―---------------------------------------------------------------------------
+		static BufferDesc Constant(
+			u64             bufferSize,
+			BindFlags       bindFlags,
+			ResourceUsage   usage = ResourceUsage::Dynamic,
+			BufferFlags      bufferFlags = {}
+		)
+		{
+			return BufferDesc(
+				BufferType::ConstantBuffer,
+				usage,
+				bufferSize,
+				0,
+				bufferFlags,
+				bindFlags
+			);
+		}
 	};
 
 }// namespcae ob::graphic

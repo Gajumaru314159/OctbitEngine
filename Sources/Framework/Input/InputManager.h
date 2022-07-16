@@ -30,8 +30,7 @@ namespace ob::input {
 
     public:
 
-        Pimpl<class KeyboardDevice> m_impl;
-        Pimpl<class MouseImpl> m_mouse;
+        Pimpl<class InputManagerImpl> m_impl;
 
     };
 

@@ -1,10 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		マウスデバイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/InputType.h>
+#include <Framework/Input/Input.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 
 namespace ob::input {
@@ -13,14 +13,16 @@ namespace ob::input {
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class MouseImpl {
+    class MouseDevice:public IInputDevice {
     public:
         using ButtonNotifier  = EventNotifier<>;
         using ButtonHandle    = ButtonNotifier::Handle;
         using ButtonDelegate  = ButtonNotifier::delegate_type;
     public:
 
-        MouseImpl();
+        MouseDevice();
+
+        u32 getDeviceId()const override { return OB_FNV32("Mouse"); };
 
         void update();
 

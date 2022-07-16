@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Framework/Input/Mouse.h>
 #include <Framework/Input/InputManager.h>
-#include <Framework/Input/Private/MouseImpl.h>
 
 namespace ob::input {
 

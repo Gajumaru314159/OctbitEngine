@@ -1,15 +1,15 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		マウスデバイス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Input/Private/MouseImpl.h>
+#include <Framework/Input/Private/MouseDevice.h>
 #include <Framework/Platform/Window/Window.h>
 #include <Framework/Platform/Window/WindowNativeAccessor.h>
 
 namespace ob::input
 {
-	MouseImpl::MouseImpl()
+	MouseDevice::MouseDevice()
 		: m_position{}
 	{
 		platform::Window::getMainWindow();
@@ -19,7 +19,7 @@ namespace ob::input
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
-	void MouseImpl::update() {
+	void MouseDevice::update() {
 		// マウス座標取得
 		if (POINT point; ::GetCursorPos(&point)) {
 			Vec2 newPos(point.x,point.y);
@@ -32,21 +32,21 @@ namespace ob::input
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	Vec2 MouseImpl::position() {
+	Vec2 MouseDevice::position() {
 		return m_deltaPos;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	bool MouseImpl::down(MouseButton) {
+	bool MouseDevice::down(MouseButton) {
 		return {};
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	//void MouseImpl::bindButton(TriggerType type, MouseButton button, ButtonHandle& handle, const ButtonDelegate& func) {
+	//void MouseDevice::bindButton(TriggerType type, MouseButton button, ButtonHandle& handle, const ButtonDelegate& func) {
 	//	auto index = enum_cast(button);
 	//	if (is_in_range(index, m_notifiers)) {
 	//		m_notifiers[index].add(handle, func);
