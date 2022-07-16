@@ -205,11 +205,15 @@ namespace ob::input {
 	//! @brief		入力状態
 	//@―---------------------------------------------------------------------------
 	enum class InputState {
-		Down		= get_bit(0),
-		Up			= get_bit(1),
-		Pressed		= get_bit(2),
-		Released	= get_bit(3),
+		Down		= get_bit(0),	//!< 押された瞬間か
+		Up			= get_bit(1),	//!< 離された瞬間か
+		Pressed		= get_bit(2),	//!< 押されているか
+		Released	= get_bit(3),	//!< 離されているか
 	};
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		入力状態フラグ
+	//@―---------------------------------------------------------------------------
 	using InputStates = BitFlags<InputState>;
 
 	//! @cond

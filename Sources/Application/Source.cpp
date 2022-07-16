@@ -37,7 +37,6 @@ using namespace ob;
 int main() {
 	using namespace ob::graphic;
 
-	input::InputManager::Instance();
 
 	Logger::Instance();
 	platform::PlatformSystem::Instance();
@@ -72,6 +71,9 @@ int main() {
 			platform::WindowCreationDesc windowDesc;
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
+
+
+			input::InputManager::Instance();
 
 			// スワップチェイン
 			SwapChain swapChain;
