@@ -6,6 +6,7 @@
 #include <Framework/Input/InputManager.h>
 #include <Framework/Input/Private/KeyboardDevice.h>
 #include <Framework/Input/Private/MouseDevice.h>
+#include <Framework/Input/Private/DirectInputDevice.h>
 
 namespace ob::input{
 
@@ -28,6 +29,12 @@ namespace ob::input{
                 DeviceKey key{ device->getDeviceId() ,0 };
                 m_devices[key] = std::move(device);
             }
+            //// ゲームパッド
+            //{
+            //    auto device = std::make_unique<DirectInputDevice>();
+            //    DeviceKey key{ device->getDeviceId() ,0 };
+            //    m_devices[key] = std::move(device);
+            //}
         }
 
         //@―---------------------------------------------------------------------------
