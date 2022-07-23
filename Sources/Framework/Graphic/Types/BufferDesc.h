@@ -83,7 +83,7 @@ namespace ob::graphic {
 		ResourceUsage   usage;          //!< リソース使用法
 		u64             bufferSize;     //!< バッファサイズ
 		u32             bufferStride;   //!< ストライブ幅
-		BufferFlags      bufferFlags;    //!< バッファフラグ
+		BufferFlags     bufferFlags;    //!< バッファフラグ
 		BindFlags       bindFlags;      //!< バインドフラグ
 
 	public:
@@ -131,6 +131,49 @@ namespace ob::graphic {
 				bindFlags
 			);
 		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  頂点バッファ用初期化
+		//@―---------------------------------------------------------------------------
+		template<typename TVertex>
+		static BufferDesc Vertex(
+			u64             count,
+			BindFlags       bindFlags,
+			ResourceUsage   usage = ResourceUsage::Dynamic,
+			BufferFlags      bufferFlags = {}
+		)
+		{
+			return BufferDesc(
+				BufferType::VertexBuffer,
+				usage,
+				sizeof(TVertex)* count,
+				sizeof(TVertex),
+				bufferFlags,
+				bindFlags
+			);
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  インデックスバッファ用初期化
+		//@―---------------------------------------------------------------------------
+		template<typename TIndex>
+		static BufferDesc Vertex(
+			u64             count,
+			BindFlags       bindFlags,
+			ResourceUsage   usage = ResourceUsage::Dynamic,
+			BufferFlags      bufferFlags = {}
+		)
+		{
+			return BufferDesc(
+				BufferType::IndexBuffer,
+				usage,
+				sizeof(TIndex) * count,
+				sizeof(TIndex),
+				bufferFlags,
+				bindFlags
+			);
+		}
+
 	};
 
 }// namespcae ob::graphic
