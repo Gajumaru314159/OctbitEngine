@@ -16,17 +16,19 @@ namespace ob::graphic {
 	struct Mesh {
 	public:
 
-		using this_type = Mesh<TVertex, TIndex>;		//!< 型
-		using vertex_type = TVertex;					//!< 頂点型
-		using index_type = TIndex;						//!< インデックス型
-		using vertices_type = Array<TVertex>;          //!< 頂点列型
-		using indices_type = Array<TIndex>;			//!< インデックス列型
+		using this_type = Mesh<TVertex, TIndex>;	//!< 型
+		using vertex_type = TVertex;				//!< 頂点型
+		using index_type = TIndex;					//!< インデックス型
+		using VertexArray = Array<TVertex>;			//!< 頂点列型
+		using IndexArray = Array<TIndex>;			//!< インデックス列型
+
+		static_assert(std::is_same_v<TIndex, u16> || std::is_same_v<TIndex, u32>, "Invalid index type.");
 
 	public:
 
-		Topology        topology;   //!< トポロジー
-		vertices_type   vertices;   //!< 頂点列
-		indices_type    indices;    //!< インデックス列
+		const Topology	topology;   //!< トポロジー
+		VertexArray		vertices;   //!< 頂点列
+		IndexArray		indices;    //!< インデックス列
 
 	public:
 
@@ -55,14 +57,6 @@ namespace ob::graphic {
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief		メッシュをマージ
-		//! 
-		//! @param mesh	マージするメッシュ
-		//@―---------------------------------------------------------------------------
-		void merge(const this_type& mesh);
-
-
-		//@―---------------------------------------------------------------------------
 		//! @brief			事前確保
 		//@―---------------------------------------------------------------------------
 		void reserve(size_t vertex, size_t index);
@@ -71,7 +65,16 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief			頂点とインデックスを追加
 		//@―---------------------------------------------------------------------------
-		void append(const vertex_type& vertex, u32 index);
+		void append(const TVertex& vertex, TIndex index);
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			三角形を追加
+		//! 
+		//! @details		頂点の追加とインデックスを追加します。
+		//!					topology が Topology::TriangleListでない場合スキップされます。
+		//@―---------------------------------------------------------------------------
+		void append(const TVertex& v0, const TVertex& v1, const TVertex& v2);
 
 
 		//@―---------------------------------------------------------------------------
@@ -80,24 +83,16 @@ namespace ob::graphic {
 		//! @details		頂点の追加とインデックスを追加します。
 		//!					topology が Topology::TriangleListでない場合スキップされます。
 		//@―---------------------------------------------------------------------------
-		void appendQuad(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2, const vertex_type& v3);
+		void append(const TVertex& v0, const TVertex& v1, const TVertex& v2, const TVertex& v3);
 
 
-		/*
+		//@―---------------------------------------------------------------------------
+		//! @brief		メッシュをマージ
+		//! 
+		//! @param mesh	マージするメッシュ
+		//@―---------------------------------------------------------------------------
+		void merge(const this_type& mesh);
 
-		Geometry(VertexLayout layout, Topology topology=Topology::TriangleList)
-			:layout(layout),topology(topology){}
-		Geometry(VertexLayout layout, Array<TVertex> vertices, Topology topology = Topology::TriangleList)
-			:layout(layout), vertices(vertices), topology(topology) {}
-
-		void addTriangle(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2);
-		void addQuad(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2, const vertex_type& v3);
-
-		Topology            getTopology()const noexcept;
-		const VertexLayout& getLayout()const noexcept;
-		size_t              getVertexArrayCount()
-
-		*/
 	};
 
 
@@ -151,21 +146,6 @@ namespace ob::graphic {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief		メッシュをマージ
-	//! 
-	//! @param mesh	マージするメッシュ
-	//@―---------------------------------------------------------------------------
-	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::merge(const this_type& mesh) {
-		vertices.reserve(vertices.size() + mesh.vertices.size());
-		indices.reserve(indices.size() + mesh.indices.size());
-		vertices.insert(vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
-		auto base = indices.size();
-		for (auto& i : mesh.indices)indices.push_back(base + i);
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief			事前確保
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
@@ -179,9 +159,52 @@ namespace ob::graphic {
 	//! @brief			頂点とインデックスを追加
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::append(const vertex_type& vertex, u32 index){
+	inline void Mesh<TVertex, TIndex>::append(const TVertex& vertex, TIndex index){
 		vertices.push_back(vertex);
 		indices.push_back(indices.size()+1);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			三角形を追加
+	//! 
+	//! @param dettails	頂点の追加とインデックスを追加します。
+	//!					topology が Topology::TriangleListでない場合スキップされます。
+	//@―---------------------------------------------------------------------------
+	template<typename TVertex, typename TIndex>
+	inline void Mesh<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2) {
+		const auto base = (TIndex)indices.size();
+
+		switch (topology) {
+		case Topology::PointList:
+			indices.reserve(indices.size() + 3);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			break;
+		case Topology::LineList:
+			indices.reserve(indices.size() + 6);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			indices.push_back(base + 2);
+			indices.push_back(base + 0);
+			break;
+		case Topology::TriangleList:
+			indices.reserve(indices.size() + 3);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			break;
+		default:
+			return;
+		}
+
+		vertices.reserve(vertices.size() + 3);
+		vertices.push_back(v0);
+		vertices.push_back(v1);
+		vertices.push_back(v2);
 	}
 
 
@@ -192,21 +215,61 @@ namespace ob::graphic {
 	//!					topology が Topology::TriangleListでない場合スキップされます。
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::appendQuad(const vertex_type& v0, const vertex_type& v1, const vertex_type& v2, const vertex_type& v3) {
-		if (topology != Topology::TriangleList)return;
+	inline void Mesh<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2, const TVertex& v3) {
+		const auto base = (TIndex)indices.size();
+
+		switch (topology) {
+		case Topology::PointList:
+			indices.reserve(indices.size() + 4);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			indices.push_back(base + 3);
+			break;
+		case Topology::LineList:
+			indices.reserve(indices.size() + 8);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			indices.push_back(base + 2);
+			indices.push_back(base + 3);
+			indices.push_back(base + 3);
+			indices.push_back(base + 0);
+			break;
+		case Topology::TriangleList:
+			indices.reserve(indices.size() + 3);
+			indices.push_back(base + 0);
+			indices.push_back(base + 1);
+			indices.push_back(base + 2);
+			indices.push_back(base + 1);
+			indices.push_back(base + 3);
+			indices.push_back(base + 2);
+			break;
+		default:
+			return;
+		}
+
 		vertices.reserve(vertices.size() + 4);
-		indices.reserve(indices.size() + 6);
-		auto base = (TIndex)indices.size();
 		vertices.push_back(v0);
 		vertices.push_back(v1);
 		vertices.push_back(v2);
 		vertices.push_back(v3);
-		indices.push_back(base + 0);
-		indices.push_back(base + 1);
-		indices.push_back(base + 2);
-		indices.push_back(base + 1);
-		indices.push_back(base + 3);
-		indices.push_back(base + 2);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		メッシュをマージ
+	//! 
+	//! @param mesh	マージするメッシュ
+	//@―---------------------------------------------------------------------------
+	template<typename TVertex, typename TIndex>
+	inline void Mesh<TVertex, TIndex>::merge(const this_type& mesh) {
+		vertices.reserve(vertices.size() + mesh.vertices.size());
+		indices.reserve(indices.size() + mesh.indices.size());
+		vertices.insert(vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
+		auto base = indices.size();
+		for (auto& i : mesh.indices)indices.push_back(base + i);
 	}
 
 	//! @endcond
