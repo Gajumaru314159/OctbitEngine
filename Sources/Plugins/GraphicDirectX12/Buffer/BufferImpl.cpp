@@ -21,28 +21,15 @@ namespace ob::graphic::dx12 {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
-		m_desc.bufferSize = align_up(m_desc.bufferSize, 256);
+		m_desc.bufferSize = std::max<size_t>(m_desc.bufferSize, 1);
+
 		HRESULT result;
 
 		// リソースの生成
-		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-		
-		D3D12_RESOURCE_DESC resdesc = {};
-		resdesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		resdesc.Width = m_desc.bufferSize;
-		resdesc.Height = 1;
-		resdesc.DepthOrArraySize = 1;
-		resdesc.MipLevels = 1;
-		resdesc.Format = DXGI_FORMAT_UNKNOWN;
-		resdesc.SampleDesc.Count = 1;
-		resdesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-		resdesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-		resdesc = CD3DX12_RESOURCE_DESC::Buffer(align_up(m_desc.bufferSize,256));
-
+		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);		
+		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.bufferSize);
 
 		ComPtr<ID3D12Resource> buffer;
-
-		//UPLOAD(確保は可能)
 		result = rDevice.getNative()->CreateCommittedResource(
 			&heapprop,
 			D3D12_HEAP_FLAG_NONE,
