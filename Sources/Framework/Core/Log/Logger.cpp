@@ -60,10 +60,13 @@ namespace ob::core {
                 // 出力
                 ::OutputDebugLog(ws.c_str());
 
+                bool outputLine = false;
+                if (outputLine) {
+                    auto msg2 = fmt::format(TC("{}({})\n"), log.sourceLocation.filePath, log.sourceLocation.line);
+                    StringEncoder::Encode(msg2, ws);
+                    ::OutputDebugLog(ws.c_str());
+                }
 
-                auto msg2 = fmt::format(TC("{}({})\n"), log.sourceLocation.filePath, log.sourceLocation.line);
-                StringEncoder::Encode(msg2, ws);
-                ::OutputDebugLog(ws.c_str());
 
                 // エラーダイアログ表示
                 if (log.level == LogLevel::Fatal) {
