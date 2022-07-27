@@ -7,6 +7,7 @@
 #include <Framework/Input/IInputDevice.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #ifdef OS_WINDOWS
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #endif
 namespace ob::input {
