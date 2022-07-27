@@ -10,7 +10,7 @@
 #include <Framework/Graphic/DescriptorTable.h>
 #include <Framework/Graphic/CommandList.h>
 #include <Framework/Graphic/MeshBuffer.h>
-#include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/MeshData.h>
 #include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Core/File/FileStream.h>
 #include <Framework/Core/File/BinaryReader.h>
@@ -209,8 +209,8 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(cmdList);
 			}
 
-			Mesh<Vert> mesh;
-			mesh.appendQuad(
+			MeshData<Vert> mesh;
+			mesh.append(
 				{ Vec4(0,0,0,1),Vec2(0,0) },
 				{ Vec4(0.5f,0,0,1),Vec2(1,0) },
 				{ Vec4(0,0.5f,0,1),Vec2(0,1) },

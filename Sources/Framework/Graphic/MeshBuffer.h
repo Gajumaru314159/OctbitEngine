@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Buffer.h>
-#include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/MeshData.h>
 
 namespace ob::graphic {
 
@@ -23,7 +23,7 @@ namespace ob::graphic {
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<typename TVertex, typename TIndex>
-		MeshBuffer(const Mesh<TVertex, TIndex>& mesh);
+		MeshBuffer(const MeshData<TVertex, TIndex>& mesh);
 
 
 		//@―---------------------------------------------------------------------------
@@ -64,7 +64,7 @@ namespace ob::graphic {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline MeshBuffer::MeshBuffer(const Mesh<TVertex, TIndex>& mesh)
+	inline MeshBuffer::MeshBuffer(const MeshData<TVertex, TIndex>& mesh)
 		: MeshBuffer(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(),mesh.indices.data(), sizeof(TIndex),mesh.indices.size())
 	{
 

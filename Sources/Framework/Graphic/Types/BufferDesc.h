@@ -49,6 +49,7 @@ namespace ob::graphic {
 	enum class BindFlag {
 		NonPixelShaderResource	= get_bit(0),   //!< ピクセルシェーダ以外でのバインド許可
 		PixelShaderResource		= get_bit(1),   //!< ピクセルシェーダのバインド許可
+		AllShaderResource		= NonPixelShaderResource | PixelShaderResource, //!< 全てのシェーダでバインド許可
 		UnorderedAccess			= get_bit(2),   //!< UnorderedAccessのバインド許可
 		RenderTarget			= get_bit(3),   //!< レンダーターゲットビューの作成許可
 		CopySource				= get_bit(4),   //!< コピー元許可
@@ -157,7 +158,7 @@ namespace ob::graphic {
 		//! @brief  インデックスバッファ用初期化
 		//@―---------------------------------------------------------------------------
 		template<typename TIndex>
-		static BufferDesc Vertex(
+		static BufferDesc Index(
 			u64             count,
 			BindFlags       bindFlags,
 			ResourceUsage   usage = ResourceUsage::Dynamic,

@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		メッシュ
+//! @brief		メッシュデータ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,15 +8,14 @@
 
 namespace ob::graphic {
 
-
 	//@―---------------------------------------------------------------------------
-	//! @brief  ジオメトリ
+	//! @brief  メッシュデータ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex = u16>
-	struct Mesh {
+	struct MeshData {
 	public:
 
-		using this_type = Mesh<TVertex, TIndex>;	//!< 型
+		using this_type = MeshData<TVertex, TIndex>;	//!< 型
 		using vertex_type = TVertex;				//!< 頂点型
 		using index_type = TIndex;					//!< インデックス型
 		using VertexArray = Array<TVertex>;			//!< 頂点列型
@@ -35,7 +34,7 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief	コンストラクタ
 		//@―---------------------------------------------------------------------------
-		Mesh(Topology topology = Topology::TriangleList);
+		MeshData(Topology topology = Topology::TriangleList);
 
 
 		//@―---------------------------------------------------------------------------
@@ -110,7 +109,7 @@ namespace ob::graphic {
 	//! @brief	コンストラクタ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline Mesh<TVertex, TIndex>::Mesh(Topology topology)
+	inline MeshData<TVertex, TIndex>::MeshData(Topology topology)
 		: topology(topology)
 	{
 
@@ -121,7 +120,7 @@ namespace ob::graphic {
 	//! @brief  全ての頂点のバイトサイズを取得
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline size_t Mesh<TVertex, TIndex>::verticesByteSize()const noexcept {
+	inline size_t MeshData<TVertex, TIndex>::verticesByteSize()const noexcept {
 		return sizeof(TVertex) * vertices.size();
 	}
 
@@ -130,7 +129,7 @@ namespace ob::graphic {
 	//! @brief  全てのインデックスのバイトサイズを取得
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline size_t Mesh<TVertex, TIndex>::indicesByteSize()const noexcept {
+	inline size_t MeshData<TVertex, TIndex>::indicesByteSize()const noexcept {
 		return sizeof(TIndex) * indices.size();
 	}
 
@@ -139,7 +138,7 @@ namespace ob::graphic {
 	//! @brief  全ての頂点とインデックスを削除
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::clear() {
+	inline void MeshData<TVertex, TIndex>::clear() {
 		vertices.clear();
 		indices.clear();
 	}
@@ -149,7 +148,7 @@ namespace ob::graphic {
 	//! @brief			事前確保
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::reserve(size_t vertex, size_t index) {
+	inline void MeshData<TVertex, TIndex>::reserve(size_t vertex, size_t index) {
 		vertices.reserve(vertex);
 		indices.reserve(index);
 	}
@@ -159,7 +158,7 @@ namespace ob::graphic {
 	//! @brief			頂点とインデックスを追加
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::append(const TVertex& vertex, TIndex index){
+	inline void MeshData<TVertex, TIndex>::append(const TVertex& vertex, TIndex index){
 		vertices.push_back(vertex);
 		indices.push_back(indices.size()+1);
 	}
@@ -172,7 +171,7 @@ namespace ob::graphic {
 	//!					topology が Topology::TriangleListでない場合スキップされます。
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2) {
+	inline void MeshData<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2) {
 		const auto base = (TIndex)indices.size();
 
 		switch (topology) {
@@ -215,7 +214,7 @@ namespace ob::graphic {
 	//!					topology が Topology::TriangleListでない場合スキップされます。
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2, const TVertex& v3) {
+	inline void MeshData<TVertex, TIndex>::append(const TVertex& v0, const TVertex& v1, const TVertex& v2, const TVertex& v3) {
 		const auto base = (TIndex)indices.size();
 
 		switch (topology) {
@@ -264,7 +263,7 @@ namespace ob::graphic {
 	//! @param mesh	マージするメッシュ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline void Mesh<TVertex, TIndex>::merge(const this_type& mesh) {
+	inline void MeshData<TVertex, TIndex>::merge(const this_type& mesh) {
 		vertices.reserve(vertices.size() + mesh.vertices.size());
 		indices.reserve(indices.size() + mesh.indices.size());
 		vertices.insert(vertices.end(), mesh.vertices.begin(), mesh.vertices.end());
