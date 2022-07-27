@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/InputType.h>
-#include <Framework/Core/Hash/crc32.h>
+#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
 

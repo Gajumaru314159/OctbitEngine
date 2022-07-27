@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Input/Button.h>
 #include <Framework/Input/Axis.h>
-#include <Framework/Core/Hash/crc32.h>
+#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
 
@@ -15,7 +15,7 @@ namespace ob::input {
 	
 	class Mouse {
 	public:
-		static constexpr u32 Code{ OB_FNV32("Mouse") };
+		static constexpr u32 Code{ OB_HASH32("Mouse") };
 	public:
 
 		OB_DECL_BUTTON(Left);		//!< 左ボタン

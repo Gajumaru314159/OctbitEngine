@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/Button.h>
-#include <Framework/Core/Hash/crc32.h>
+#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
 
@@ -14,7 +14,7 @@ namespace ob::input {
 	class Keyboard {
 	public:
 
-		static constexpr u32 Code{ OB_FNV32("Keyboard")};	//!< デバイスコード
+		static constexpr u32 Code{ OB_HASH32("Keyboard")};	//!< デバイスコード
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      ボタン取得
