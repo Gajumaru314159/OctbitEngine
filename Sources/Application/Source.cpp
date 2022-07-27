@@ -27,6 +27,7 @@
 #include <Framework/Core/Misc/Duration.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Math/Periodic.h>
+#include <Framework/Core/Graphic/HSV.h>
 
 #include <Framework/Input/InputManager.h>
 #include <Framework/Input/Keyboard.h>
@@ -57,6 +58,9 @@ int main() {
 			LOG_INFO("Duration :{}", Duration::Seconds(23.12534573));
 			LOG_INFO("Duration :{}", Duration::MilliSeconds(23.12534573));
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
+			LOG_INFO("Color    :{}", Color::cyan);
+			LOG_INFO("IntColor :{}", IntColor::cyan);
+			LOG_INFO("HSV      :{}", HSV(Color::cyan));
 		}
 
 		platform::ModuleManager::Instance();
@@ -238,14 +242,14 @@ int main() {
 			input::Keyboard::W.bindPressed(
 				hW,
 				[&pos]() {
-					pos.y += 0.001f;
+					pos.y += 0.01f;
 				}
 			);
 			input::ButtonHandle hS;
 			input::Keyboard::S.bindPressed(
 				hS,
 				[&pos]() {
-					pos.y -= 0.001f;
+					pos.y -= 0.01f;
 				}
 			);
 
@@ -283,8 +287,12 @@ int main() {
 
 				graphic::System::Instance().update();
 
+				// CommandBufferにコマンドが積まれているとSwapChain解放に失敗する
+				if (input::Keyboard::GetButton(input::Key::Escape).down())break;
+
 				// 表示を更新(Present)
 				swapChain.update();
+
 
 				if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 					TranslateMessage(&msg);
@@ -300,6 +308,8 @@ int main() {
 
 				using namespace ob::input;
 				InputManager::Instance().update();
+
+
 			}
 
 			// グラフィックオブジェクトはここで全て解放予約

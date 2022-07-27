@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Graphic/ColorTypes.h>
 #include <Framework/Core/Template/include.h>
 
@@ -328,3 +329,21 @@ namespace ob::core {
 
     //! @endcond
 }// namespcae ob
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
+    template<typename ParseContext>
+    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template<typename FormatContext>
+    auto format(ob::core::IntColor value, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), TC("({},{},{},{})"), value.r, value.g, value.b, value.a);
+    }
+};
+//! @endcond

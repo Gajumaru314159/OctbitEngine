@@ -315,3 +315,21 @@ namespace ob::core {
 
     //! @endcond
 }// namespace ob
+
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct fmt::formatter<ob::core::HSV, ob::core::Char> {
+    template<typename ParseContext>
+    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template<typename FormatContext>
+    auto format(ob::core::HSV value, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), TC("({},{},{})"), value.h, value.s, value.v);
+    }
+};
+//! @endcond
