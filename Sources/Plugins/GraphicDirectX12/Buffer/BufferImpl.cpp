@@ -21,7 +21,7 @@ namespace ob::graphic::dx12 {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
-		m_desc.bufferSize = std::max<size_t>(m_desc.bufferSize, 1);
+		m_desc.bufferSize = align_up(std::max<size_t>(m_desc.bufferSize, 1), 256);
 
 		HRESULT result;
 
