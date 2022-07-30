@@ -95,15 +95,15 @@ namespace ob::core {
 		static Duration NanoSeconds(f64 nanoSeconds) noexcept;	//!< ナノ秒から Duration を構築
 		static Duration MicroSeconds(f64 microSeconds) noexcept;//!< マイクロ秒から Duration を構築
 
-		static Duration Max()noexcept;	//!< 2^63
-		static Duration Min()noexcept;  //!< -(2^63)-1
+		static Duration Max()noexcept;	//!< 2^63 Tick
+		static Duration Min()noexcept;  //!< -(2^63)-1 Tick
 
 
 		//===============================================================
 		// static関数
 		//===============================================================
-		static Duration FromSystemLaunch();
-		static Duration FromAppLaunch();
+		static Duration FromSystemLaunch();						//!< システム起動時からの時間
+		static Duration FromAppLaunch();						//!< アプリケーション起動時からの時間
 
 
 		//===============================================================
