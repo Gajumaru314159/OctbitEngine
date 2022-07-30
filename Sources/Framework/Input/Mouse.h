@@ -16,6 +16,10 @@ namespace ob::input {
 	class Mouse {
 	public:
 		static constexpr u32 Code{ OB_HASH32("Mouse") };
+
+		static Vec2 GetPos();
+		static Vec2 GetDeltaPos();
+
 	public:
 
 		OB_DECL_BUTTON(Left);		//!< 左ボタン

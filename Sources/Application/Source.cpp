@@ -123,7 +123,7 @@ int main() {
 					{
 						StaticSamplerDesc(SamplerDesc(),0),
 					}
-				);
+					);
 				signature = RootSignature(desc);
 				signature.setName(TC("TestRootSignature"));
 				OB_CHECK_ASSERT_EXPR(signature);
@@ -227,7 +227,6 @@ int main() {
 
 			Vec2 pos(0.0f, 0.0f);
 			Random random;
-			MSG msg = {};
 
 
 			input::ButtonHandle hClick;
@@ -238,23 +237,24 @@ int main() {
 				}
 			);
 
-			input::ButtonHandle hW;
-			input::Keyboard::W.bindPressed(
-				hW,
-				[&pos]() {
-					pos.y += 0.01f;
-				}
-			);
-			input::ButtonHandle hS;
-			input::Keyboard::S.bindPressed(
-				hS,
-				[&pos]() {
-					pos.y -= 0.01f;
-				}
-			);
+			input::AxisHandle hPosX;
+			input::AxisHandle hPosY;
+
+			auto posFunc = [&pos, &window](f32 value) {
+				auto screenPos = input::Mouse::GetPos();
+				auto clientPos = window.getClientPoint({ (s32)screenPos.x,(s32)screenPos.y });
+				pos.x = clientPos.x * 2.0f / window.getSize().width - 1;
+				pos.y = -clientPos.y * 2.0f / window.getSize().height + 1;
+				LOG_INFO("{}", pos);
+			};
+
+			input::Mouse::X.bind(hPosX, posFunc);
+			input::Mouse::Y.bind(hPosY, posFunc);
 
 
 
+
+			MSG msg = {};
 			while (true) {
 
 				cmdList.begin();
