@@ -57,7 +57,8 @@ FUNCTION(SET_PCH header source)
 	if(MSVC)
 		# プリコンパイル済みヘッダの使用(/Yu)を全体に設定
 		add_definitions(/FI${CMAKE_CURRENT_SOURCE_DIR}/${header})
-		#set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/${source} PROPERTIES COMPILE_FLAGS "/Yc")
+		set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "/Yu${CMAKE_CURRENT_SOURCE_DIR}/${header}")
+		set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/${source} PROPERTIES COMPILE_FLAGS "/Yc${CMAKE_CURRENT_SOURCE_DIR}/${header}")
 	else()
 		# GCC or Clang
 		add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/${header})
