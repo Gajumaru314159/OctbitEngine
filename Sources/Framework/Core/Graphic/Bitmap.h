@@ -41,7 +41,7 @@ namespace ob::core {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
         Bitmap() = default;
-        Bitmap(s32 width, s32 height, IntColor color = IntColor::white);
+        Bitmap(s32 width, s32 height, IntColor color = IntColor::White);
         template<class TGen>
         Bitmap(s32 width, s32 height,TGen generator);
         Bitmap(const Path& path,ImageFormat fotrmat = ImageFormat::Unspecified);

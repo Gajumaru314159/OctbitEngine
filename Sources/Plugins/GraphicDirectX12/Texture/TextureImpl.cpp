@@ -217,7 +217,7 @@ namespace ob::graphic::dx12 {
 		m_desc.format = convertDXGIFormat(metadata.format);
 		m_desc.arrayNum = metadata.arraySize;
 		m_desc.mipLevel = metadata.mipLevels;
-		m_desc.color = Color::white;
+		m_desc.color = Color::White;
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 		m_resource = resource;

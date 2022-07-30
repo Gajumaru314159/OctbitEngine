@@ -58,9 +58,9 @@ int main() {
 			LOG_INFO("Duration :{}", Duration::Seconds(23.12534573));
 			LOG_INFO("Duration :{}", Duration::MilliSeconds(23.12534573));
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
-			LOG_INFO("Color    :{}", Color::cyan);
-			LOG_INFO("IntColor :{}", IntColor::cyan);
-			LOG_INFO("HSV      :{}", HSV(Color::cyan));
+			LOG_INFO("Color    :{}", Color::Cyan);
+			LOG_INFO("IntColor :{}", IntColor::Cyan);
+			LOG_INFO("HSV      :{}", HSV(Color::Cyan));
 		}
 
 		platform::ModuleManager::Instance();
@@ -93,7 +93,7 @@ int main() {
 			{
 				RenderTargetDesc desc;
 				desc.size = { 640,480 };
-				desc.colors.push_back({ swapChain.getDesc().format, Color::grey });
+				desc.colors.push_back({ swapChain.getDesc().format, Color::Gray });
 				desc.depth.push_back({ TextureFormat::D32, 0, 0 });
 
 				rt = RenderTarget(desc);
@@ -194,7 +194,7 @@ int main() {
 				buffer.setName(TC("TestBuffer"));
 				OB_CHECK_ASSERT_EXPR(buffer);
 
-				Color color = Color::red;
+				Color color = Color::Red;
 				buffer.updateDirect(color);
 			}
 

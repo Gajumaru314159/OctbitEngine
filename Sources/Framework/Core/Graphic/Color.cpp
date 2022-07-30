@@ -12,27 +12,17 @@
 
 namespace ob::core {
 
-    const Color Color::white = { 1,1,1,1 };
-    const Color Color::grey = { 0.5,0.5,0.5,1 };
-    const Color Color::black = { 0,0,0,1 };
-    const Color Color::clear = { 0,0,0,0 };
-    const Color Color::red = { 1,0,0,1 };
-    const Color Color::yellow = { 1,1,0,1 };
-    const Color Color::green = { 0,1,0,1 };
-    const Color Color::cyan = { 0,1,1,1 };
-    const Color Color::blue = { 0,0,1,1 };
-    const Color Color::magenta = { 1,0,1,1 };
-
-    const IntColor IntColor::white = { 255,255,255,255 };
-    const IntColor IntColor::grey = { 128,128,128,255 };
-    const IntColor IntColor::black = { 0,0,0,255 };
-    const IntColor IntColor::clear = { 0,0,0,0 };
-    const IntColor IntColor::red = { 255,0,0,255 };
-    const IntColor IntColor::yellow = { 255,255,0,255 };
-    const IntColor IntColor::green = { 0,255,0,255 };
-    const IntColor IntColor::cyan = { 0,255,255,255 };
-    const IntColor IntColor::blue = { 0,0,255,255 };
-    const IntColor IntColor::magenta = { 255,0,255,255 };
+    const Color Color::White = { 1,1,1,1 };
+    const Color Color::Gray = { 0.5,0.5,0.5,1 };
+    const Color Color::Black = { 0,0,0,1 };
+    const Color Color::Clear = { 0,0,0,0 };
+    const Color Color::Red = { 1,0,0,1 };
+    const Color Color::Yellow = { 1,1,0,1 };
+    const Color Color::Green = { 0,1,0,1 };
+    const Color Color::Cyan = { 0,1,1,1 };
+    const Color Color::Blue = { 0,0,1,1 };
+    const Color Color::Magenta = { 1,0,1,1 };
+    const Color Color::Normal = { 0.5f,1.0f,0.5f,1 };
 
 
     //@―---------------------------------------------------------------------------
@@ -150,10 +140,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Color Color::FromCode(StringView code) noexcept {
         auto size = code.size();
-        if (size <= 1)return Color::white;
-        if (code[0] == TC('#'))return Color::white;
+        if (size <= 1)return Color::White;
+        if (code[0] == TC('#'))return Color::White;
 
-        return Color::white;
+        return Color::White;
     }
 
 }// namespace ob

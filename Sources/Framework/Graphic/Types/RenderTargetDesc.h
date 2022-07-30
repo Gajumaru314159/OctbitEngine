@@ -16,7 +16,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     struct ColorTextureDesc {
         TextureFormat   format          = TextureFormat::RGBA8;     //!< テクスチャフォーマット
-        Color           clearColor      = Color::black;             //!< クリア・カラー
+        Color           clearColor      = Color::Black;             //!< クリア・カラー
     };
 
 
@@ -37,7 +37,7 @@ namespace ob::graphic {
     //! @details    デプスを使用しない場合はdepthを空にしてください。
     //@―---------------------------------------------------------------------------
     struct RenderTargetDesc {
-        Size                        size = { 0,0 };                 //!< サイズ
+        Size                       size = { 0,0 };                 //!< サイズ
         Array<ColorTextureDesc>    colors;                         //!< カラー書き込み先
         Array<DepthTextureDesc>    depth;                          //!< デプス書き込み先
     };

@@ -309,16 +309,17 @@ namespace ob::core {
 
     public:
 
-        static const Color white;		//!< Color(1,1,1,1)
-        static const Color grey;		//!< Color(0.5,0.5,0.5,1)
-        static const Color black;		//!< Color(0,0,0,1)
-        static const Color clear;		//!< Color(0,0,0,0)
-        static const Color red;			//!< Color(1,0,0,1)
-        static const Color yellow;		//!< Color(1,1,0,1)
-        static const Color green;		//!< Color(0,1,0,1)
-        static const Color cyan;		//!< Color(0,1,1,1)
-        static const Color blue;		//!< Color(0,0,1,1)
-        static const Color magenta;		//!< Color(1,0,1,1)
+        static const Color White;		//!< Color(1,1,1,1)
+        static const Color Gray;		//!< Color(0.5,0.5,0.5,1)
+        static const Color Black;		//!< Color(0,0,0,1)
+        static const Color Clear;		//!< Color(0,0,0,0)
+        static const Color Red;			//!< Color(1,0,0,1)
+        static const Color Yellow;		//!< Color(1,1,0,1)
+        static const Color Green;		//!< Color(0,1,0,1)
+        static const Color Cyan;		//!< Color(0,1,1,1)
+        static const Color Blue;		//!< Color(0,0,1,1)
+        static const Color Magenta;		//!< Color(1,0,1,1)
+        static const Color Normal;		//!< Color(0.5,1,0.5,1)
 
     public:
 
