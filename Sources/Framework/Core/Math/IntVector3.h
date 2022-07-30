@@ -297,8 +297,16 @@ namespace ob::core {
 
     public:
 
-        static const IntVec3 zero;    //!< ( 0, 0, 0)
-        static const IntVec3 one;     //!< ( 1, 1, 1)
+        static const IntVec3 Left;    //!< (-1, 0, 0)
+        static const IntVec3 Right;   //!< ( 1, 0, 0)
+        static const IntVec3 Down;    //!< ( 0,-1, 0)
+        static const IntVec3 Up;      //!< ( 0, 1, 0)
+        static const IntVec3 Back;    //!< ( 0, 0,-1)
+        static const IntVec3 Front;   //!< ( 0, 0, 1)
+        static const IntVec3 Zero;    //!< ( 0, 0, 0)
+        static const IntVec3 One;     //!< ( 1, 1, 1)
+        static const IntVec3 Minimum; //!< (-inf,-inf,-inf)
+        static const IntVec3 Maximum; //!< ( inf, inf, inf)
 
     public:
 

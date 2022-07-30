@@ -561,14 +561,16 @@ namespace ob::core {
 
     public:
 
-        static const Vec3 up;      //!< ( 0.0f, 1.0f, 0.0f)
-        static const Vec3 down;    //!< ( 0.0f,-1.0f, 0.0f)
-        static const Vec3 left;    //!< (-1.0f, 0.0f, 0.0f)
-        static const Vec3 right;   //!< ( 1.0f, 0.0f, 0.0f)
-        static const Vec3 front;   //!< ( 0.0f, 0.0f, 1.0f)
-        static const Vec3 back;    //!< ( 0.0f, 0.0f,-1.0f)
-        static const Vec3 zero;    //!< ( 0.0f, 0.0f, 0.0f)
-        static const Vec3 one;     //!< ( 1.0f, 1.0f, 1.0f)
+        static const Vec3 Left;    //!< (-1.0f, 0.0f, 0.0f)
+        static const Vec3 Right;   //!< ( 1.0f, 0.0f, 0.0f)
+        static const Vec3 Down;    //!< ( 0.0f,-1.0f, 0.0f)
+        static const Vec3 Up;      //!< ( 0.0f, 1.0f, 0.0f)
+        static const Vec3 Back;    //!< ( 0.0f, 0.0f,-1.0f)
+        static const Vec3 Front;   //!< ( 0.0f, 0.0f, 1.0f)
+        static const Vec3 Zero;    //!< ( 0.0f, 0.0f, 0.0f)
+        static const Vec3 One;     //!< ( 1.0f, 1.0f, 1.0f)
+        static const Vec3 Minimum; //!< ( -inf, -inf, -inf)
+        static const Vec3 Maximum; //!< (  inf,  inf,  inf)
 
     public:
 
@@ -598,7 +600,7 @@ namespace ob::core {
     //! @brief      コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
     inline Vec3::Vec3(EForceInit) noexcept {
-        setZero(); Vec3::zero;
+        setZero(); Vec3::Zero;
     }
 
 
@@ -946,7 +948,7 @@ namespace ob::core {
         }
         outLen = length();
         if (outLen < Math::TOLERANCE) {
-            outDir = Vec3::zero;
+            outDir = Vec3::Zero;
         } else {
             outDir = (*this) / outLen;
         }

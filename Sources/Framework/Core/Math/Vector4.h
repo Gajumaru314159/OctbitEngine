@@ -439,8 +439,10 @@ namespace ob::core {
 
     public:
 
-        static const Vec4 zero;    //!< ( 0.0f, 0.0f, 0.0f, 0.0f)
-        static const Vec4 one;     //!< ( 1.0f, 1.0f, 1.0f, 1.0f)
+        static const Vec4 Zero;    //!< ( 0.0f, 0.0f, 0.0f, 0.0f)
+        static const Vec4 One;     //!< ( 1.0f, 1.0f, 1.0f, 1.0f)
+        static const Vec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
+        static const Vec4 Maximum; //!< (  inf,  inf,  inf,  inf)
 
     public:
 
@@ -823,7 +825,7 @@ namespace ob::core {
         }
         outLen = sqrLength();
         if (outLen < Math::TOLERANCE) {
-            outDir = Vec4::zero;
+            outDir = Vec4::Zero;
         } else {
             outDir = (*this) / outLen;
         }

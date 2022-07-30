@@ -101,7 +101,7 @@ namespace ob::core {
     //! @brief 回転後の前ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getFront()const noexcept {
-        return (*this) * Vec3::front;
+        return (*this) * Vec3::Front;
     }
 
 
@@ -109,7 +109,7 @@ namespace ob::core {
     //! @brief 回転後の後ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getBack()const noexcept {
-        return (*this) * Vec3::back;
+        return (*this) * Vec3::Back;
     }
 
 
@@ -117,7 +117,7 @@ namespace ob::core {
     //! @brief 回転後の上ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getUp()const noexcept {
-        return (*this) * Vec3::up;
+        return (*this) * Vec3::Up;
     }
 
 
@@ -125,7 +125,7 @@ namespace ob::core {
     //! @brief 回転後の下ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getDown()const noexcept {
-        return (*this) * Vec3::down;
+        return (*this) * Vec3::Down;
     }
 
 
@@ -133,7 +133,7 @@ namespace ob::core {
     //! @brief 回転後の左ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getLeft()const noexcept {
-        return (*this) * Vec3::left;
+        return (*this) * Vec3::Left;
     }
 
 
@@ -141,7 +141,7 @@ namespace ob::core {
     //! @brief 回転後の右ベクトル取得
     //@―---------------------------------------------------------------------------
     Vec3 Quat::getRight()const noexcept {
-        return (*this) * Vec3::right;
+        return (*this) * Vec3::Right;
     }
 
 
@@ -206,7 +206,7 @@ namespace ob::core {
         f32 sin = Math::Sqrt(1.0f - w * w);
         if (sin <= Math::EPSILON) {
             angle = 0.0f;
-            axis = Vec3::up;
+            axis = Vec3::Up;
         }
         f32 div = 1.0f / sin;
 

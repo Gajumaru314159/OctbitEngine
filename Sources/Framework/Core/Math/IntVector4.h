@@ -297,8 +297,10 @@ namespace ob::core {
 
     public:
 
-        static const IntVec4 zero;    //!< ( 0, 0, 0, 0)
-        static const IntVec4 one;     //!< ( 1, 1, 1, 1)
+        static const IntVec4 Zero;    //!< ( 0, 0, 0, 0)
+        static const IntVec4 One;     //!< ( 1, 1, 1, 1)
+        static const IntVec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
+        static const IntVec4 Maximum; //!< (  inf,  inf,  inf,  inf)
 
     public:
 

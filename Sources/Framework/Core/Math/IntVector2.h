@@ -297,8 +297,14 @@ namespace ob::core {
 
     public:
 
-        static const IntVec2 zero;    //!< ( 0, 0)
-        static const IntVec2 one;     //!< ( 1, 1)
+        static const IntVec2 Left;    //!< (-1, 0)
+        static const IntVec2 Right;   //!< ( 1, 0)
+        static const IntVec2 Down;    //!< ( 0,-1)
+        static const IntVec2 Up;      //!< ( 0, 1)
+        static const IntVec2 Zero;    //!< ( 0, 0)
+        static const IntVec2 One;     //!< ( 1, 1)
+        static const IntVec2 Minimum; //!< ( -inf, -inf)
+        static const IntVec2 Maximum; //!< (  inf,  inf)
 
     public:
 

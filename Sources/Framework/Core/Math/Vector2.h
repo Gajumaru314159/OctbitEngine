@@ -432,12 +432,14 @@ namespace ob::core {
 
     public:
 
-        static const Vec2 up;      //!< ( 0.0f, 1.0f)
-        static const Vec2 down;    //!< ( 0.0f,-1.0f)
-        static const Vec2 left;    //!< (-1.0f, 0.0f)
-        static const Vec2 right;   //!< ( 1.0f, 0.0f)
-        static const Vec2 zero;    //!< ( 0.0f, 0.0f)
-        static const Vec2 one;     //!< ( 1.0f, 1.0f)
+        static const Vec2 Left;    //!< (-1.0f, 0.0f)
+        static const Vec2 Right;   //!< ( 1.0f, 0.0f)
+        static const Vec2 Down;    //!< ( 0.0f,-1.0f)
+        static const Vec2 Up;      //!< ( 0.0f, 1.0f)
+        static const Vec2 Zero;    //!< ( 0.0f, 0.0f)
+        static const Vec2 One;     //!< ( 1.0f, 1.0f)
+        static const Vec2 Minimum; //!< ( -inf, -inf)
+        static const Vec2 Maximum; //!< (  inf,  inf)
 
     public:
 
@@ -806,7 +808,7 @@ namespace ob::core {
         }
         outLen = sqrLength();
         if (outLen < Math::TOLERANCE) {
-            outDir = Vec2::zero;
+            outDir = Vec2::Zero;
         } else {
             outDir = (*this) / outLen;
         }

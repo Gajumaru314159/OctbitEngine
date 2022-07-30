@@ -216,7 +216,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline Vec3 Triangle::normal()const {
         auto tmp = Vec3::Cross(p1 - p0, p2 - p0);
-        if (tmp.isZero())return Vec3::zero;
+        if (tmp.isZero())return Vec3::Zero;
         return tmp.unitVec();
     }
 

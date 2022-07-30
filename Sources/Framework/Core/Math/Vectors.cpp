@@ -13,24 +13,30 @@
 
 namespace ob::core {
 
-    const Vec2 Vec2::up(0.0f, 1.0f);
-    const Vec2 Vec2::down(0.0f, -1.0f);
-    const Vec2 Vec2::left(-1.0f, 0.0f);
-    const Vec2 Vec2::right(1.0f, 0.0f);
-    const Vec2 Vec2::zero(0.0f, 0.0f);
-    const Vec2 Vec2::one(1.0f, 1.0f);
+    const Vec2 Vec2::Left(-1.0f, 0.0f);
+    const Vec2 Vec2::Right(1.0f, 0.0f);
+    const Vec2 Vec2::Down(0.0f, -1.0f);
+    const Vec2 Vec2::Up(0.0f, 1.0f);
+    const Vec2 Vec2::Zero(0.0f, 0.0f);
+    const Vec2 Vec2::One(1.0f, 1.0f);
+    const Vec2 Vec2::Minimum(std::numeric_limits<f32>::min());
+    const Vec2 Vec2::Maximum(std::numeric_limits<f32>::max());
 
-    const Vec3 Vec3::up(0.0f, 1.0f, 0.0f);
-    const Vec3 Vec3::down(0.0f, -1.0f, 0.0f);
-    const Vec3 Vec3::left(-1.0f, 0.0f, 0.0f);
-    const Vec3 Vec3::right(1.0f, 0.0f, 0.0f);
-    const Vec3 Vec3::front(0.0f, 0.0f, 1.0f);
-    const Vec3 Vec3::back(0.0f, 0.0f, -1.0f);
-    const Vec3 Vec3::zero(0.0f, 0.0f, 0.0f);
-    const Vec3 Vec3::one(1.0f, 1.0f, 1.0f);
+    const Vec3 Vec3::Left(-1.0f, 0.0f, 0.0f);
+    const Vec3 Vec3::Right(1.0f, 0.0f, 0.0f);
+    const Vec3 Vec3::Down(0.0f, -1.0f, 0.0f);
+    const Vec3 Vec3::Up(0.0f, 1.0f, 0.0f);
+    const Vec3 Vec3::Back(0.0f, 0.0f, -1.0f);
+    const Vec3 Vec3::Front(0.0f, 0.0f, 1.0f);
+    const Vec3 Vec3::Zero(0.0f, 0.0f, 0.0f);
+    const Vec3 Vec3::One(1.0f, 1.0f, 1.0f);
+    const Vec3 Vec3::Minimum(std::numeric_limits<f32>::min());
+    const Vec3 Vec3::Maximum(std::numeric_limits<f32>::max());
 
-    const Vec4 Vec4::zero(0.0f, 0.0f, 0.0f, 0.0f);
-    const Vec4 Vec4::one(1.0f, 1.0f, 1.0f, 1.0f);
+    const Vec4 Vec4::Zero(0.0f, 0.0f, 0.0f, 0.0f);
+    const Vec4 Vec4::One(1.0f, 1.0f, 1.0f, 1.0f);
+    const Vec4 Vec4::Minimum(std::numeric_limits<f32>::min());
+    const Vec4 Vec4::Maximum(std::numeric_limits<f32>::max());
 
 
 

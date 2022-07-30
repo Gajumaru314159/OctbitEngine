@@ -12,6 +12,32 @@
 #include <Framework/Core/Math/Vector4.h>
 namespace ob::core {
 
+    const IntVec2 IntVec2::Left(-1, 0);
+    const IntVec2 IntVec2::Right(1, 0);
+    const IntVec2 IntVec2::Down(0, -1);
+    const IntVec2 IntVec2::Up(0, 1);
+    const IntVec2 IntVec2::Zero(0, 0);
+    const IntVec2 IntVec2::One(1, 1);
+    const IntVec2 IntVec2::Minimum(std::numeric_limits<s32>::min());
+    const IntVec2 IntVec2::Maximum(std::numeric_limits<s32>::max());
+
+    const IntVec3 IntVec3::Left(-1, 0, 0);
+    const IntVec3 IntVec3::Right(1, 0, 0);
+    const IntVec3 IntVec3::Down(0, -1, 0);
+    const IntVec3 IntVec3::Up(0, 1, 0);
+    const IntVec3 IntVec3::Back(0, 0, -1);
+    const IntVec3 IntVec3::Front(0, 0, 1);
+    const IntVec3 IntVec3::Zero(0, 0, 0);
+    const IntVec3 IntVec3::One(1, 1, 1);
+    const IntVec3 IntVec3::Minimum(std::numeric_limits<s32>::min());
+    const IntVec3 IntVec3::Maximum(std::numeric_limits<s32>::max());
+
+    const IntVec4 IntVec4::Zero(0, 0, 0, 0);
+    const IntVec4 IntVec4::One(1, 1, 1, 1);
+    const IntVec4 IntVec4::Minimum(std::numeric_limits<s32>::min());
+    const IntVec4 IntVec4::Maximum(std::numeric_limits<s32>::max());
+
+
     //===============================================================
     //  IntVec2
     //===============================================================

@@ -36,7 +36,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          コンストラクタ(サイズ/中心指定)
         //@―---------------------------------------------------------------------------
-        Box(const Vec3& size, const Vec3& center = Vec3::zero)noexcept;
+        Box(const Vec3& size, const Vec3& center = Vec3::Zero)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -93,7 +93,7 @@ namespace ob::core {
         //! 
         //! @details        点群を含む最小の Box に設定する
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& center, const Vec3& size = Vec3::zero)noexcept;
+        void set(const Vec3& center, const Vec3& size = Vec3::Zero)noexcept;
 
 
         //@―---------------------------------------------------------------------------
