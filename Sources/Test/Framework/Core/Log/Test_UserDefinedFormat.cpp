@@ -28,6 +28,6 @@ TEST(UserDefinedFormat, DataTime) {
 	Duration ts4 = Duration::Seconds(23.12534573);
 	Duration ts5 = Duration::MilliSeconds(23.12534573);
 	
-	auto s = fmt::format(TC("{}"), dt);
+	auto s = Format(TC("{}"), dt);
 
 }

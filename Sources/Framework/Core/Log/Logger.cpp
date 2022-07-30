@@ -33,7 +33,7 @@ namespace ob::core {
                 default:                typeName = TC("\033[37m[Unknown]\033[m"); break;
                 }
                 // フォーマット
-                auto msg = fmt::format(TC("{} {}"), typeName, log.message);
+                auto msg = Format (TC("{} {}"), typeName, log.message);
                 WString ws;
                 StringEncoder::Encode(msg, ws);
 
@@ -53,7 +53,7 @@ namespace ob::core {
                 default:                typeName = TC("[Unknown]"); break;
                 }
                 // フォーマット
-                auto msg = fmt::format(TC("{} {}"), typeName, log.message);
+                auto msg = Format(TC("{} {}"), typeName, log.message);
                 WString ws;
                 StringEncoder::Encode(msg, ws);
 
@@ -62,7 +62,7 @@ namespace ob::core {
 
                 bool outputLine = false;
                 if (outputLine) {
-                    auto msg2 = fmt::format(TC("{}({})\n"), log.sourceLocation.filePath, log.sourceLocation.line);
+                    auto msg2 = Format(TC("{}({})\n"), log.sourceLocation.filePath, log.sourceLocation.line);
                     StringEncoder::Encode(msg2, ws);
                     ::OutputDebugLog(ws.c_str());
                 }

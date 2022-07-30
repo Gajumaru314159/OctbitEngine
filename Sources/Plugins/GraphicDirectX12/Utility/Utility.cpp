@@ -33,7 +33,7 @@ namespace ob::graphic::dx12 {
         String message;
         StringEncoder::Encode(buffer, message);
         if (2 <= message.size())message.resize(message.size() - 2);
-        String error = fmt::format(TC("{0}"), message.c_str());
+        String error = Format(TC("{0}"), message.c_str());
 
         return move(error);
     }

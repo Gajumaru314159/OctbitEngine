@@ -75,8 +75,8 @@ namespace ob::graphic {
 	//! @brief  名前を設定
 	//@―---------------------------------------------------------------------------
 	inline void MeshBuffer::setName(StringView name) {
-		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(fmt::format(TC("{}_Vertex"), name)));
-		OB_DEBUG_CONTEXT(m_indexBuffer.setName(fmt::format(TC("{}_Index"),name)));
+		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(Format(TC("{}_Vertex"), name)));
+		OB_DEBUG_CONTEXT(m_indexBuffer.setName(Format(TC("{}_Index"),name)));
 	}
 
 

@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/String/String.h>
+#include <utility>
 
 #pragma warning(push,0)
 #ifdef OS_WINDOWS
@@ -19,7 +20,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  文字列をフォーマット
 	//@―---------------------------------------------------------------------------
-	template <typename S, typename TChar = fmt::char_t<S>, std::enable_if_t<!std::is_same<TChar, TChar>::value>, typename... Args>
+	template <typename S, typename TChar = fmt::char_t<S>, typename... Args>
 	auto Format(const S& fmt, Args&&... args) -> StringBase<TChar> {
 		return fmt::format(fmt, std::forward<Args>(args)...);
 	}
@@ -48,26 +49,13 @@ namespace ob::core {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief		エラーコード表示用構造体
-	//! 
-	//! @details	u32 で表せるエラーコードを16進数表記でフォーマットする。
+	//! @brief  文字列をフォーマットして保存するのに必要な文字数を返す
 	//@―---------------------------------------------------------------------------
-	struct ErrorCode {
-		ErrorCode(u32 code)
-			:code(code) {}
-		u32 code;
-	};
+	template <typename S, typename TChar = fmt::char_t<S>,
+		std::enable_if_t<fmt::detail::is_exotic_char<TChar>::value>, 
+		typename... Args>
+	inline auto FormattedSize(const S& fmt, const Args&... args) -> size_t {
+		return fmt::formatted_size(fmt, args...);
+	}
 
 }// namespcae ob
-
-//! @cond
-template<> struct fmt::formatter<ob::core::ErrorCode> {
-	constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
-		return ctx.end();
-	}
-	template <typename TFormatContext>
-	auto format(ob::core::ErrorCode core, TFormatContext& ctx) -> decltype(ctx.out()) {
-		return fmt::format_to(ctx.out(), TC("0x{:08X}"),code.Value)
-	}
-};
-//! @endcond

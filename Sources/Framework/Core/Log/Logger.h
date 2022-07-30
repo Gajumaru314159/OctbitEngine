@@ -78,7 +78,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename... Args>
         void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
-            const String message = fmt::format(StringView(pFormat), std::forward<Args>(args)...);
+            const String message = Format(pFormat, std::forward<Args>(args)...);
             addLog(level, sourceLocation, category, message.c_str());
         }
 

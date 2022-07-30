@@ -203,12 +203,12 @@ namespace ob::graphic::dx12 {
 	void RenderTargetImpl::onNameChanged() {
 		s32 index = 0;
 		for (auto& texture : m_textures) {
-			String childName = fmt::format(TC("{}_Color{}"), getName(), index);
+			String childName = Format(TC("{}_Color{}"), getName(), index);
 			texture.setName(childName);
 			index++;
 		}
 		{
-			String childName = fmt::format(TC("{}_Depth"), getName());
+			String childName = Format(TC("{}_Depth"), getName());
 			m_depth.setName(childName);
 		}
 	}
