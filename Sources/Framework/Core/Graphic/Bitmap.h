@@ -7,6 +7,7 @@
 #include <Framework/Core/Geometory/Size.h>
 #include <Framework/Core/Geometory/IntRect.h>
 #include <Framework/Core/Graphic/Color.h>
+#include <Framework/Core/File/Path.h>
 
 namespace ob::core {
 
