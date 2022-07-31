@@ -77,7 +77,7 @@ TEST(Quat, Rotate) {
     EXPECT_EQ(q4, q4_2);
 }
 
-TEST(Quat, get) {
+TEST(Quat, Get) {
     Quat q(90, 90, 0);
 
     EXPECT_EQ(q.getFront(), Vec3::Down);
