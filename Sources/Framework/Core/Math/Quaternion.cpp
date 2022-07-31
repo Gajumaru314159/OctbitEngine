@@ -182,7 +182,7 @@ namespace ob::core {
             tz = Math::Atan2(2 * (x * y + w * z), w * w - x * x + y * y - z * z);
         }
 
-        return Rot(Math::Degrees(tx), Math::Degrees(ty), Math::Degrees(tz));
+        return Rot(Math::Radians(tx), Math::Radians(ty), Math::Radians(tz));
     }
 
 
