@@ -21,9 +21,10 @@ include(Common.cmake)
 
 # パス設定
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
-set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Sources")
+set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
+set(OCTBIT_INCLUDE_PATH "${OCTBIT_ROOT_PATH}/Source/Public")
 set(OCTBIT_FRAMEWORK_PATH "${OCTBIT_SOURCE_PATH}/Framework")
-set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
+set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/Public/ThirdParty")
 set(OCTBIT_DLL_PATH "${OCTBIT_ROOT_PATH}/Build/Libray")
 
 set(OB_CONFIGURATION "Debug")
@@ -75,23 +76,23 @@ endif()
 
 
 # Frameworkプロジェクト読み込み
-add_subdirectory ("Sources/Framework/Singleton")
-add_subdirectory ("Sources/Framework/Core")
-add_subdirectory ("Sources/Framework/Platform")
-add_subdirectory ("Sources/Framework/Graphic")
-add_subdirectory ("Sources/Framework/Rendering")
-add_subdirectory ("Sources/Framework/Input")
-add_subdirectory ("Sources/Framework/Engine")
-add_subdirectory ("Sources/Framework/Model")
+add_subdirectory ("Source/Public/Framework/Singleton")
+add_subdirectory ("Source/Public/Framework/Core")
+add_subdirectory ("Source/Public/Framework/Platform")
+add_subdirectory ("Source/Public/Framework/Graphic")
+add_subdirectory ("Source/Public/Framework/Rendering")
+add_subdirectory ("Source/Public/Framework/Input")
+add_subdirectory ("Source/Public/Framework/Engine")
+add_subdirectory ("Source/Public/Framework/Model")
 
 # Pluginsプロジェクト読み込み
 if(WIN32)
-    add_subdirectory ("Sources/Plugins/GraphicDirectX12")
+    add_subdirectory ("Source/Public/Plugins/GraphicDirectX12")
 endif()
-#add_subdirectory ("Sources/Plugins/GraphicVulkan")
+#add_subdirectory ("Source/Public/Plugins/GraphicVulkan")
 
 # テストプロジェクト読み込み
-add_subdirectory ("Sources/Test/Framework/Core")
+#add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み
-add_subdirectory ("Sources/Application")
+add_subdirectory ("Source/Public/Application")
