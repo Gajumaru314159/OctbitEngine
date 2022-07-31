@@ -10,7 +10,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  RootSignatureFlags を D3D12_ROOT_SIGNATURE_FLAGS に変換
     //@―---------------------------------------------------------------------------
-    D3D12_ROOT_SIGNATURE_FLAGS TypeConverter::convert(RootSignatureFlags value) {
+    D3D12_ROOT_SIGNATURE_FLAGS TypeConverter::Convert(RootSignatureFlags value) {
         D3D12_ROOT_SIGNATURE_FLAGS result = D3D12_ROOT_SIGNATURE_FLAG_NONE;
         if (value[RootSignatureFlag::AllowInputAssemblerInputLayout])   result |= D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
         if (value[RootSignatureFlag::DenyVertexShaderAccess])   result |= D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS;
@@ -28,7 +28,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_ROOT_PARAMETER_TYPE TypeConverter::convert(RootParameterType value) {
+    D3D12_ROOT_PARAMETER_TYPE TypeConverter::Convert(RootParameterType value) {
         switch (value) {
         case RootParameterType::CBV:                return D3D12_ROOT_PARAMETER_TYPE_CBV;
         case RootParameterType::SRV:                return D3D12_ROOT_PARAMETER_TYPE_SRV;
@@ -44,7 +44,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::convert(DescriptorRangeType value) {
+    D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::Convert(DescriptorRangeType value) {
         switch (value) {
         case DescriptorRangeType::CBV:              return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
         case DescriptorRangeType::SRV:              return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
@@ -59,7 +59,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  ShaderStages を D3D12_SHADER_VISIBILITY に変換
     //@―---------------------------------------------------------------------------
-    D3D12_SHADER_VISIBILITY TypeConverter::convert(ShaderStage value) {
+    D3D12_SHADER_VISIBILITY TypeConverter::Convert(ShaderStage value) {
         switch (value) {
         case ShaderStage::Vertex:           return D3D12_SHADER_VISIBILITY_VERTEX;
         case ShaderStage::Hull:             return D3D12_SHADER_VISIBILITY_HULL;
@@ -79,7 +79,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  TextureFillter を D3D12_FILTER_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_FILTER_TYPE TypeConverter::convert(TextureFillter value){
+    D3D12_FILTER_TYPE TypeConverter::Convert(TextureFillter value){
         switch (value) {
         case TextureFillter::Point:         return D3D12_FILTER_TYPE_POINT;
         case TextureFillter::Linear:        return D3D12_FILTER_TYPE_LINEAR;
@@ -93,7 +93,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  MipFillter を D3D12_DESCRIPTOR_RANGE_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_FILTER_TYPE TypeConverter::convert(MipFillter value){
+    D3D12_FILTER_TYPE TypeConverter::Convert(MipFillter value){
         switch (value) {
         case MipFillter::Point:             return D3D12_FILTER_TYPE_POINT;
         case MipFillter::Linear:            return D3D12_FILTER_TYPE_LINEAR;
@@ -106,12 +106,12 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  D3D12_FILTER に変換
     //@―---------------------------------------------------------------------------
-    D3D12_FILTER TypeConverter::convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic) {
+    D3D12_FILTER TypeConverter::Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic) {
         if (anisotropic)return D3D12_FILTER_ANISOTROPIC;
         return D3D12_ENCODE_BASIC_FILTER(
-            convert(down),  //!< 縮小時
-            convert(up),    //!< 拡大時
-            convert(mip),   //!< ミップ
+            Convert(down),  //!< 縮小時
+            Convert(up),    //!< 拡大時
+            Convert(mip),   //!< ミップ
             D3D12_FILTER_REDUCTION_TYPE_STANDARD    // 1次元カラーのみ変更可能
         );
     }
@@ -120,7 +120,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  Anisotropy を UINT に変換
     //@―---------------------------------------------------------------------------
-    UINT TypeConverter::convert(Anisotropy value){
+    UINT TypeConverter::Convert(Anisotropy value){
         switch (value)
         {
         case Anisotropy::None:      return 0;
@@ -138,7 +138,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  TextureAddress を D3D12_TEXTURE_ADDRESS_MODE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_TEXTURE_ADDRESS_MODE TypeConverter::convert(TextureAddress value){
+    D3D12_TEXTURE_ADDRESS_MODE TypeConverter::Convert(TextureAddress value){
         switch (value)
         {
         case TextureAddress::Repeat:   return D3D12_TEXTURE_ADDRESS_MODE_WRAP;
@@ -153,7 +153,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  FillMode を D3D12_FILL_MODE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_FILL_MODE TypeConverter::convert(FillMode value) {
+    D3D12_FILL_MODE TypeConverter::Convert(FillMode value) {
         switch (value)
         {
         case FillMode::Wireframe:       return D3D12_FILL_MODE_WIREFRAME;
@@ -170,7 +170,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  CullMode を D3D12_CULL_MODE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_CULL_MODE TypeConverter::convert(CullMode value) {
+    D3D12_CULL_MODE TypeConverter::Convert(CullMode value) {
         switch (value)
         {
         case CullMode::None:            return D3D12_CULL_MODE_NONE;
@@ -185,7 +185,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  TextureFormat を DXGI_FORMAT に変換
     //@―---------------------------------------------------------------------------
-    DXGI_FORMAT TypeConverter::convert(TextureFormat value) {
+    DXGI_FORMAT TypeConverter::Convert(TextureFormat value) {
         switch (value) {
         case TextureFormat::RGBA32:         return DXGI_FORMAT_R32G32B32A32_FLOAT;
         case TextureFormat::RGBA16:         return DXGI_FORMAT_R16G16B16A16_FLOAT;
@@ -231,7 +231,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  BlendFactor を D3D12_BLEND に変換
     //@―---------------------------------------------------------------------------
-    D3D12_BLEND TypeConverter::convert(BlendFactor value) {
+    D3D12_BLEND TypeConverter::Convert(BlendFactor value) {
         switch (value)
         {
         case BlendFactor::Zero:                     return D3D12_BLEND_ZERO;
@@ -253,7 +253,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  BlendOp を D3D12_BLEND_OP に変換
     //@―---------------------------------------------------------------------------
-    D3D12_BLEND_OP TypeConverter::convert(BlendOp value) {
+    D3D12_BLEND_OP TypeConverter::Convert(BlendOp value) {
         switch (value)
         {
         case BlendOp::Add:     return D3D12_BLEND_OP_ADD;
@@ -270,7 +270,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  BlendFactor を UINT8 に変換
     //@―---------------------------------------------------------------------------
-    UINT8 TypeConverter::convert(ColorMask value) {
+    UINT8 TypeConverter::Convert(ColorMask value) {
         UINT8 result = 0;
         if (value[ColorCompoent::R])result |= D3D12_COLOR_WRITE_ENABLE_RED;
         if (value[ColorCompoent::G])result |= D3D12_COLOR_WRITE_ENABLE_GREEN;
@@ -283,7 +283,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  LogicOp を D3D12_LOGIC_OP に変換
     //@―---------------------------------------------------------------------------
-    D3D12_LOGIC_OP TypeConverter::convert(LogicOp value) {
+    D3D12_LOGIC_OP TypeConverter::Convert(LogicOp value) {
         switch (value)
         {
         case LogicOp::Clear:           return D3D12_LOGIC_OP_CLEAR;
@@ -311,7 +311,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  Topology を D3D12_PRIMITIVE_TOPOLOGY に変換
     //@―---------------------------------------------------------------------------
-    D3D12_PRIMITIVE_TOPOLOGY TypeConverter::convert(Topology value) {
+    D3D12_PRIMITIVE_TOPOLOGY TypeConverter::Convert(Topology value) {
         switch (value)
         {
         case Topology::PointList:      return D3D_PRIMITIVE_TOPOLOGY_POINTLIST;
@@ -326,7 +326,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  Type を DXGI_FORMAT に変換
     //@―---------------------------------------------------------------------------
-    DXGI_FORMAT TypeConverter::convert(Type value, s32 dimension) {
+    DXGI_FORMAT TypeConverter::Convert(Type value, s32 dimension) {
         if (dimension == 1) {
             switch (value)
             {
@@ -383,7 +383,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  Semantic を LPCSTR に変換
     //@―---------------------------------------------------------------------------
-    LPCSTR TypeConverter::convert(Semantic value) {
+    LPCSTR TypeConverter::Convert(Semantic value) {
         switch (value)
         {
         case Semantic::Position:       return "POSITION";
@@ -404,7 +404,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  StencilOp を D3D12_STENCIL_OP に変換
     //@―---------------------------------------------------------------------------
-    D3D12_STENCIL_OP TypeConverter::convert(StencilOp value) {
+    D3D12_STENCIL_OP TypeConverter::Convert(StencilOp value) {
         switch (value)
         {
         case StencilOp::Keep:              return D3D12_STENCIL_OP_KEEP;
@@ -424,7 +424,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  ComparisonFunc を D3D12_COMPARISON_FUNC に変換
     //@―---------------------------------------------------------------------------
-    D3D12_COMPARISON_FUNC TypeConverter::convert(ComparisonFunc value) {
+    D3D12_COMPARISON_FUNC TypeConverter::Convert(ComparisonFunc value) {
         switch (value)
         {
         case ComparisonFunc::Never:        return D3D12_COMPARISON_FUNC_NEVER;
@@ -444,7 +444,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_DESCRIPTOR_HEAP_TYPE TypeConverter::convert(DescriptorHeapType value) {
+    D3D12_DESCRIPTOR_HEAP_TYPE TypeConverter::Convert(DescriptorHeapType value) {
         switch (value)
         {
         case DescriptorHeapType::CBV_SRV_UAV:  return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
@@ -461,7 +461,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_COMMAND_LIST_TYPE TypeConverter::convert(CommandListType value) {
+    D3D12_COMMAND_LIST_TYPE TypeConverter::Convert(CommandListType value) {
         switch (value)
         {
         case CommandListType::Graphic: return D3D12_COMMAND_LIST_TYPE_DIRECT;
@@ -476,7 +476,7 @@ namespace ob::graphic::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
     //@―---------------------------------------------------------------------------
-    D3D12_HEAP_TYPE TypeConverter::convert(ResourceUsage value) {
+    D3D12_HEAP_TYPE TypeConverter::Convert(ResourceUsage value) {
         switch (value)
         {
         case ResourceUsage::Default: return D3D12_HEAP_TYPE_DEFAULT;

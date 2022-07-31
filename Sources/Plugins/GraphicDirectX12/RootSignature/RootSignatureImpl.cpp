@@ -24,14 +24,14 @@ namespace ob::graphic::dx12 {
 		descriptors.reserve(desc.parameters.size());
 		for (const auto& param : desc.parameters) {
 			D3D12_ROOT_PARAMETER elm;
-			elm.ParameterType = TypeConverter::convert(param.type);
-			elm.ShaderVisibility = TypeConverter::convert(param.visibility);
+			elm.ParameterType = TypeConverter::Convert(param.type);
+			elm.ShaderVisibility = TypeConverter::Convert(param.visibility);
 			switch (param.type)
 			{
 			case RootParameterType::Range:
 			{
 				CD3DX12_DESCRIPTOR_RANGE range(
-					TypeConverter::convert(param.range.type),
+					TypeConverter::Convert(param.range.type),
 					param.range.num,
 					param.range.baseRegister,
 					param.range.registerSpace
@@ -63,17 +63,17 @@ namespace ob::graphic::dx12 {
 		for (auto& params : desc.samplers) {
 			CD3DX12_STATIC_SAMPLER_DESC sampler(
 				params.registerNo,
-				TypeConverter::convert(params.sampler.filter, params.sampler.filter, params.sampler.mipFilter, params.sampler.anisotropy != Anisotropy::None),
-				TypeConverter::convert(params.sampler.addressU),
-				TypeConverter::convert(params.sampler.addressV),
-				TypeConverter::convert(params.sampler.addressW),
+				TypeConverter::Convert(params.sampler.filter, params.sampler.filter, params.sampler.mipFilter, params.sampler.anisotropy != Anisotropy::None),
+				TypeConverter::Convert(params.sampler.addressU),
+				TypeConverter::Convert(params.sampler.addressV),
+				TypeConverter::Convert(params.sampler.addressW),
 				params.sampler.mipLodBias,
-				TypeConverter::convert(params.sampler.anisotropy),
+				TypeConverter::Convert(params.sampler.anisotropy),
 				D3D12_COMPARISON_FUNC_LESS_EQUAL,
 				D3D12_STATIC_BORDER_COLOR_OPAQUE_WHITE,
 				params.sampler.mipLodRange.min,
 				params.sampler.mipLodRange.max,
-				TypeConverter::convert(params.visibility),
+				TypeConverter::Convert(params.visibility),
 				params.registerSpace
 			);
 			samplerDescs.push_back(sampler);
@@ -84,7 +84,7 @@ namespace ob::graphic::dx12 {
 		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
 			(UINT)parameters.size(), parameters.data(),
 			(UINT)samplerDescs.size(), samplerDescs.data(),
-			TypeConverter::convert(desc.flags)
+			TypeConverter::Convert(desc.flags)
 		);
 
 

@@ -51,7 +51,7 @@ namespace ob::graphic::dx12 {
 		capacity = std::max(capacity, s_linearManagementSize);
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-			descHeapDesc.Type = TypeConverter::convert(type);
+			descHeapDesc.Type = TypeConverter::Convert(type);
 			descHeapDesc.NumDescriptors = (UINT)capacity;
 			descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			descHeapDesc.NodeMask = 0;

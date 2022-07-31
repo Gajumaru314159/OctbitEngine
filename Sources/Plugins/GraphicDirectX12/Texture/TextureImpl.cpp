@@ -55,7 +55,7 @@ namespace ob::graphic::dx12 {
 		, m_desc(desc)
 	{
 
-		auto format = TypeConverter::convert(desc.format);
+		auto format = TypeConverter::Convert(desc.format);
 		D3D12_CLEAR_VALUE* pClearValue=nullptr;
 
 		const FLOAT clearColor[4] = { desc.color.r,desc.color.g,desc.color.b,desc.color.a};

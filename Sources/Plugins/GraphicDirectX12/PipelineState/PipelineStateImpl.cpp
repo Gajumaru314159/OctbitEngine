@@ -95,7 +95,7 @@ namespace ob::graphic::dx12 {
 
 		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature).getNative();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
-		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::convert(desc.topology);
+		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::Convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
 		gpsd.SampleDesc.Quality = desc.sample.qualitty;
 		gpsd.NodeMask = 0;
@@ -125,10 +125,10 @@ namespace ob::graphic::dx12 {
 		dst.NumRenderTargets = src.target.getColorTextureCount();
 		for (s32 i = 0; i < dst.NumRenderTargets; ++i) {
 			auto& tex = src.target.getColorTexture(i);
-			dst.RTVFormats[i] = TypeConverter::convert(tex.format());
+			dst.RTVFormats[i] = TypeConverter::Convert(tex.format());
 		}
 		auto depthTex = src.target.getDepthTexture();
-		if (depthTex)dst.DSVFormat = TypeConverter::convert(depthTex.format());
+		if (depthTex)dst.DSVFormat = TypeConverter::Convert(depthTex.format());
 	}
 
 
@@ -148,13 +148,13 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src) {
 		dst.BlendEnable = src.blendEnable;
-		dst.SrcBlend = TypeConverter::convert(src.srcColorFactor);
-		dst.DestBlend = TypeConverter::convert(src.dstColorFactor);
-		dst.BlendOp = TypeConverter::convert(src.colorOp);
-		dst.SrcBlendAlpha = TypeConverter::convert(src.srcAlphaFactor);
-		dst.DestBlendAlpha = TypeConverter::convert(src.dstAlphaFactor);
-		dst.BlendOpAlpha = TypeConverter::convert(src.alphaOp);
-		dst.RenderTargetWriteMask = TypeConverter::convert(src.mask);
+		dst.SrcBlend = TypeConverter::Convert(src.srcColorFactor);
+		dst.DestBlend = TypeConverter::Convert(src.dstColorFactor);
+		dst.BlendOp = TypeConverter::Convert(src.colorOp);
+		dst.SrcBlendAlpha = TypeConverter::Convert(src.srcAlphaFactor);
+		dst.DestBlendAlpha = TypeConverter::Convert(src.dstAlphaFactor);
+		dst.BlendOpAlpha = TypeConverter::Convert(src.alphaOp);
+		dst.RenderTargetWriteMask = TypeConverter::Convert(src.mask);
 	}
 
 
@@ -162,9 +162,9 @@ namespace ob::graphic::dx12 {
 	//! @brief  頂点レイアウト設定
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src) {
-		dst.SemanticName = TypeConverter::convert(src.semantic);
+		dst.SemanticName = TypeConverter::Convert(src.semantic);
 		dst.SemanticIndex = src.index;
-		dst.Format = TypeConverter::convert(src.type, src.dimention);
+		dst.Format = TypeConverter::Convert(src.type, src.dimention);
 		dst.InputSlot = 0;
 		dst.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 		dst.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
@@ -178,8 +178,8 @@ namespace ob::graphic::dx12 {
 	void PipelineStateImpl::setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src) {
 
 		dst = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		dst.FillMode = TypeConverter::convert(src.fillMode);
-		dst.CullMode = TypeConverter::convert(src.cullMode);
+		dst.FillMode = TypeConverter::Convert(src.fillMode);
+		dst.CullMode = TypeConverter::Convert(src.cullMode);
 		//FrontCounterClockwise = FALSE;
 		//DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
 		//DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
@@ -199,16 +199,16 @@ namespace ob::graphic::dx12 {
 		dst = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 		dst.DepthEnable = src.depth.enable;
 		dst.DepthWriteMask = src.depth.write ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;
-		dst.DepthFunc = TypeConverter::convert(src.depth.func);
+		dst.DepthFunc = TypeConverter::Convert(src.depth.func);
 
 		dst.StencilEnable = src.stencil.enable;
 		dst.StencilReadMask = src.stencil.read_mask;
 		dst.StencilWriteMask = src.stencil.write_mask;
 
-		dst.FrontFace.StencilFailOp = TypeConverter::convert(src.stencil.failOp);
-		dst.FrontFace.StencilDepthFailOp = TypeConverter::convert(src.stencil.depthFailOp);
-		dst.FrontFace.StencilPassOp = TypeConverter::convert(src.stencil.passOp);
-		dst.FrontFace.StencilFunc = TypeConverter::convert(src.stencil.func);
+		dst.FrontFace.StencilFailOp = TypeConverter::Convert(src.stencil.failOp);
+		dst.FrontFace.StencilDepthFailOp = TypeConverter::Convert(src.stencil.depthFailOp);
+		dst.FrontFace.StencilPassOp = TypeConverter::Convert(src.stencil.passOp);
+		dst.FrontFace.StencilFunc = TypeConverter::Convert(src.stencil.func);
 		dst.BackFace = dst.FrontFace;
 	}
 

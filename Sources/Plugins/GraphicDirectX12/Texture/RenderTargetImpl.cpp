@@ -34,7 +34,7 @@ namespace ob::graphic::dx12 {
 		s32 index = 0;
 		for (auto& element : m_desc.colors) {
 
-			auto format = TypeConverter::convert(element.format);
+			auto format = TypeConverter::Convert(element.format);
 
 			TextureDesc tdesc;
 			tdesc.size = m_desc.size;
@@ -64,7 +64,7 @@ namespace ob::graphic::dx12 {
 		if (0 < depthCount) {
 
 			auto& element = m_desc.depth[0];
-			auto format = TypeConverter::convert(element.format);
+			auto format = TypeConverter::Convert(element.format);
 
 			TextureDesc tdesc;
 			tdesc.size = m_desc.size;

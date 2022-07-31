@@ -40,7 +40,7 @@ namespace ob::graphic::dx12 {
 		, m_desc(desc)
 	{
 		HRESULT result;
-		auto type = TypeConverter::convert(desc.type);
+		auto type = TypeConverter::Convert(desc.type);
 
 		// アロケータ生成
 		result = device.getNative()->CreateCommandAllocator(type, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
@@ -323,7 +323,7 @@ namespace ob::graphic::dx12 {
 	void CommandListImpl::setPipelineState(const PipelineState& pipeline) {
 		auto& rPipeline = Device::GetImpl<PipelineStateImpl>(pipeline);
 		m_cmdList->SetPipelineState(rPipeline.getNative());
-		//auto topology = TypeConverter::convert(pPipeline->getDesc().topology);
+		//auto topology = TypeConverter::Convert(pPipeline->getDesc().topology);
 		// TODO IASetPrimitiveTopology
 		m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}

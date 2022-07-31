@@ -63,7 +63,7 @@ namespace ob::graphic::dx12 {
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
         swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
         swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
-        swapChainDesc.BufferDesc.Format = TypeConverter::convert(m_desc.format);            // ピクセルフォーマット
+        swapChainDesc.BufferDesc.Format = TypeConverter::Convert(m_desc.format);            // ピクセルフォーマット
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母
         swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
@@ -134,7 +134,7 @@ namespace ob::graphic::dx12 {
 
         // レンダーターゲットビュー生成
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-        rtvDesc.Format = TypeConverter::convert(m_desc.format);
+        rtvDesc.Format = TypeConverter::Convert(m_desc.format);
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
         for (s32 i = 0; i < m_desc.bufferCount; ++i) {
