@@ -79,10 +79,10 @@ add_subdirectory ("Sources/Framework/Singleton")
 add_subdirectory ("Sources/Framework/Core")
 add_subdirectory ("Sources/Framework/Platform")
 add_subdirectory ("Sources/Framework/Graphic")
-#add_subdirectory ("Sources/Framework/Rendering")
+add_subdirectory ("Sources/Framework/Rendering")
 add_subdirectory ("Sources/Framework/Input")
-#add_subdirectory ("Sources/Framework/Engine")
-#add_subdirectory ("Sources/Framework/Model")
+add_subdirectory ("Sources/Framework/Engine")
+add_subdirectory ("Sources/Framework/Model")
 
 # Pluginsプロジェクト読み込み
 if(WIN32)
