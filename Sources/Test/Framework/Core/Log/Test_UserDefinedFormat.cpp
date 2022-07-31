@@ -8,7 +8,7 @@ using namespace ob;
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Misc/DateTime.h>
-#include <Framework/Core/Misc/TimeSpan.h>
+#include <Framework/Core/Misc/Duration.h>
 
 TEST(UserDefinedFormat, DataTime) {
 	Vec2 vec2(1, 2);

@@ -80,12 +80,12 @@ TEST(Quat, Rotate) {
 TEST(Quat, get) {
     Quat q(90, 90, 0);
 
-    EXPECT_EQ(q.getFront(), Vec3::down);
-    EXPECT_EQ(q.getBack(), Vec3::up);
-    EXPECT_EQ(q.getUp(), Vec3::right);
-    EXPECT_EQ(q.getDown(), Vec3::left);
-    EXPECT_EQ(q.getRight(), Vec3::back);
-    EXPECT_EQ(q.getLeft(), Vec3::front);
+    EXPECT_EQ(q.getFront(), Vec3::Down);
+    EXPECT_EQ(q.getBack(), Vec3::Up);
+    EXPECT_EQ(q.getUp(), Vec3::Right);
+    EXPECT_EQ(q.getDown(), Vec3::Left);
+    EXPECT_EQ(q.getRight(), Vec3::Back);
+    EXPECT_EQ(q.getLeft(), Vec3::Front);
 
     EXPECT_EQ(q.getAxis(), Vec3(1, 1, -1).unitVec());
     f32 ang = q.getAngle();

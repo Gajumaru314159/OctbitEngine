@@ -104,7 +104,7 @@ TEST(Vector, set) {
     EXPECT_EQ(v2, v);
 
     v.setZero();
-    EXPECT_EQ(v, Vec3::zero);
+    EXPECT_EQ(v, Vec3::Zero);
 
     v.setAll(1);
     EXPECT_EQ(v, Vec3(1, 1, 1));

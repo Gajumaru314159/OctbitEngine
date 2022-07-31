@@ -11,8 +11,8 @@ using namespace ob;
 TEST(Box, Construct) {
     {
         Box box(EForceInit::Force);
-        EXPECT_EQ(box.center, Vec3::zero);
-        EXPECT_EQ(box.size, Vec3::zero);
+        EXPECT_EQ(box.center, Vec3::Zero);
+        EXPECT_EQ(box.size, Vec3::Zero);
     }
 
     // サイズ / 中心
@@ -43,7 +43,7 @@ TEST(Box, Construct) {
 
 TEST(Box, Operator) {
     {
-        Box box(Vec3::one);
+        Box box(Vec3::One);
         box += Vec3(4, 4, 4);
         EXPECT_EQ(box.center, Vec3(1.75f, 1.75f, 1.75f));
         EXPECT_EQ(box.size, Vec3(4.5f, 4.5f, 4.5f));
@@ -71,8 +71,8 @@ TEST(Box, Getter) {
 
 TEST(Box, IsEmpty) {
     {
-        Box boxA(Vec3::zero);
-        Box boxB(Vec3::one, Vec3::zero);
+        Box boxA(Vec3::Zero);
+        Box boxB(Vec3::One, Vec3::Zero);
         EXPECT_TRUE(boxA.empty());
         EXPECT_FALSE(boxB.empty());
     }
