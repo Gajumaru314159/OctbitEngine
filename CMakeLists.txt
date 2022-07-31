@@ -91,7 +91,7 @@ endif()
 #add_subdirectory ("Sources/Plugins/GraphicVulkan")
 
 # テストプロジェクト読み込み
-#add_subdirectory ("Sources/Test/Framework/Core")
+add_subdirectory ("Sources/Test/Framework/Core")
 
 # アプリケーションプロジェクト読み込み
 add_subdirectory ("Sources/Application")

@@ -26,11 +26,12 @@ namespace ob::core {
             {
                 StringView typeName;
                 switch (log.level) {
-                case LogLevel::Info:    typeName = TC("\033[36m[Info]   \033[m"); break;// シアン
-                case LogLevel::Warning: typeName = TC("\033[33m[Warning]\033[m"); break;// 黄色
-                case LogLevel::Error:   typeName = TC("\033[31m[Error]  \033[m"); break;// 赤
-                case LogLevel::Fatal:   typeName = TC("\033[35m[Fatal]  \033[m"); break;// ピンク
-                default:                typeName = TC("\033[37m[Unknown]\033[m"); break;
+                case LogLevel::Fatal:   typeName = TC("\033[35m[Fatal]  \033[0m"); break;// マゼンタ
+                case LogLevel::Error:   typeName = TC("\033[31m[Error]  \033[0m"); break;// 赤
+                case LogLevel::Warning: typeName = TC("\033[33m[Warning]\033[0m"); break;// 黄色
+                case LogLevel::Info:    typeName = TC("\033[36m[Info]   \033[0m"); break;// シアン
+                case LogLevel::Trace:   typeName = TC("\033[38;2;128;128;128m[Trace]  "); break;// グレー
+                default:                typeName = TC("\033[32m[Unknown]\033[0m"); break;// 緑
                 }
                 // フォーマット
                 auto msg = Format (TC("{} {}"), typeName, log.message);
@@ -46,10 +47,11 @@ namespace ob::core {
             {
                 StringView typeName;
                 switch (log.level) {
-                case LogLevel::Info:    typeName = TC("[Info]   "); break;// シアン
-                case LogLevel::Warning: typeName = TC("[Warning]"); break;// 黄色
-                case LogLevel::Error:   typeName = TC("[Error]  "); break;// 赤
-                case LogLevel::Fatal:   typeName = TC("[Fatal]  "); break;// ピンク
+                case LogLevel::Fatal:   typeName = TC("[Fatal]  "); break;
+                case LogLevel::Error:   typeName = TC("[Error]  "); break;
+                case LogLevel::Warning: typeName = TC("[Warning]"); break;
+                case LogLevel::Info:    typeName = TC("[Info]   "); break;
+                case LogLevel::Trace:   typeName = TC("[Trace]  "); break;
                 default:                typeName = TC("[Unknown]"); break;
                 }
                 // フォーマット

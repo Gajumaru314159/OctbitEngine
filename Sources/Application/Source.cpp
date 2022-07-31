@@ -233,7 +233,7 @@ int main() {
 			input::Mouse::Right.bindDown(
 				hClick,
 				[]() {
-					LOG_ERROR("クリック");
+					LOG_INFO("クリック");
 				}
 			);
 
@@ -245,7 +245,7 @@ int main() {
 				auto clientPos = window.getClientPoint({ (s32)screenPos.x,(s32)screenPos.y });
 				pos.x = clientPos.x * 2.0f / window.getSize().width - 1;
 				pos.y = -clientPos.y * 2.0f / window.getSize().height + 1;
-				LOG_INFO("{}", pos);
+				LOG_TRACE("{}", pos);
 			};
 
 			input::Mouse::X.bind(hPosX, posFunc);

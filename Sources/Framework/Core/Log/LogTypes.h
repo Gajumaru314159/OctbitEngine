@@ -34,6 +34,7 @@ namespace ob::core {
         Error,		//!< エラー
         Warning,	//!< 警告表示
         Info,		//!< 情報表示
+        Trace,		//!< デバッグ用トレース
     };
 
 
