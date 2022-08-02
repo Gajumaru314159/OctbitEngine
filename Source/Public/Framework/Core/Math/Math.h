@@ -216,18 +216,18 @@ namespace ob::core {
 
     public:
 
-        static const f32 PI;			//!< 円周率
-        static const f32 TWO_PI;		//!< 円周率の2倍
-        static const f32 HALF_PI;		//!< 円周率の半分
-        static const f32 INV_PI;		//!< 円周率の逆数
-        static const f32 INV_TWO_PI;	//!< 円周率の2倍の逆数
-        static const f32 INV_HALF_PI;	//!< 円周率の半分の逆数
-        static const f32 EPSILON;		//!< ごくわずかな浮動小数点の値
-        static const f32 NAPIER;		//!< ネイピア数
-        static const f32 GOLDEN_RATIO;	//!< 黄金比
-        static const f32 INF;			//!< 無限
-        static const f32 NaN;			//!< 無効値
-        static const f32 TOLERANCE;		//!< 誤差許容値
+        static constexpr f32 PI             = 3.1415926535897932384626433832795f;   //!< 円周率
+        static constexpr f32 TWO_PI         = Math::PI * 2.0f;                      //!< 円周率の2倍
+        static constexpr f32 HALF_PI        = Math::PI * 0.5f;                      //!< 円周率の半分
+        static constexpr f32 INV_PI         = 1.0f / Math::PI;                      //!< 円周率の逆数
+        static constexpr f32 INV_TWO_PI     = 1.0f / Math::TWO_PI;                  //!< 円周率の2倍の逆数
+        static constexpr f32 INV_HALF_PI    = 1.0f / Math::HALF_PI;                 //!< 円周率の半分の逆数
+        static constexpr f32 EPSILON        = FLT_EPSILON;                          //!< ごくわずかな浮動小数点の値
+        static constexpr f32 NAPIER         = 2.71828182845904523536f;              //!< ネイピア数
+        static constexpr f32 GOLDEN_RATIO   = 1.6180339887498948482045868343656381f;//!< 黄金比
+        static constexpr f32 INF            = std::numeric_limits<f32>::infinity(); //!< 無限
+        static constexpr f32 NaN            = std::numeric_limits<f32>::quiet_NaN();//!< 無効値
+        static constexpr f32 TOLERANCE      = 0.00001f;                             //!< 誤差許容値
 
     };
 
