@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <math.h>
+#include <limits>
 #include <gsl/gsl>
 #include <Framework/Core/CorePrivate.h>
 

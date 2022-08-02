@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -19,17 +19,37 @@ namespace ob::core {
 		//===============================================================
 
 		//@―---------------------------------------------------------------------------
-		//! @brief デフォルトコンストラクタ(初期化なし)
+		//! @brief デフォルトコンストラクタ(ゼロ初期化)
 		//@―---------------------------------------------------------------------------
-		Range()noexcept = default;
+		constexpr Range()noexcept
+			: Range(std::numeric_limits<f32>::lowest(), std::numeric_limits<f32>::max())
+		{
+		}
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief コンストラクタ(Identityで初期化)
+		//! @brief コンストラクタ(初期化なし)
 		//@―---------------------------------------------------------------------------
-		explicit Range(EForceInit)noexcept
-			:Range(0.f, 0.f)
+		Range(EForceInit)noexcept
 		{}
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief 論理積
+		//@―---------------------------------------------------------------------------
+		constexpr Range operator & (const Range & rhs)noexcept {
+			return Range(*this)&=rhs;
+		}
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief 論理積
+		//@―---------------------------------------------------------------------------
+		constexpr Range& operator &= (const Range& rhs)noexcept {
+			min = Math::Max(min, rhs.min);
+			max = Math::Min(max, rhs.max);
+			return *this;
+		}
 
 
 		//@―---------------------------------------------------------------------------
@@ -38,7 +58,7 @@ namespace ob::core {
 		//! @param min  最小値
 		//! @param max  最大値
 		//@―---------------------------------------------------------------------------
-		Range(f32 min, f32 max)noexcept
+		constexpr Range(f32 min, f32 max)noexcept
 			:min(min), max(max)
 		{}
 
@@ -46,7 +66,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		[min,max]がvalueを含むか
 		//@―---------------------------------------------------------------------------
-		bool contains(f32 value)const noexcept
+		constexpr bool contains(f32 value)const noexcept
 		{
 			return min < value&& value < max;
 		}
@@ -55,7 +75,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		(min,max)がvalueを含むか
 		//@―---------------------------------------------------------------------------
-		bool containsOO(f32 value)const noexcept
+		constexpr bool containsOO(f32 value)const noexcept
 		{
 			return min <= value && value <= max;
 		}
@@ -64,7 +84,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		[min,max)がvalueを含むか
 		//@―---------------------------------------------------------------------------
-		bool containsCO(f32 value)const noexcept
+		constexpr bool containsCO(f32 value)const noexcept
 		{
 			return min < value&& value <= max;
 		}
@@ -73,7 +93,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		(min,max]がvalueを含むか
 		//@―---------------------------------------------------------------------------
-		bool containsOC(f32 value)const noexcept
+		constexpr bool containsOC(f32 value)const noexcept
 		{
 			return min <= value&& value < max;
 		}

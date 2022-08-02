@@ -4,7 +4,6 @@
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Math.h>
-#include <limits>
 
 namespace ob::core {
 
