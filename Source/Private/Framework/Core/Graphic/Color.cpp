@@ -64,10 +64,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     IntColor Color::toIntColor()const noexcept {
         return IntColor(
-            static_cast<s32>(ob::core::clamp01(r) * 255),
-            static_cast<s32>(ob::core::clamp01(g) * 255),
-            static_cast<s32>(ob::core::clamp01(b) * 255),
-            static_cast<s32>(ob::core::clamp01(a) * 255));
+            static_cast<s32>(Math::Clamp01(r) * 255),
+            static_cast<s32>(Math::Clamp01(g) * 255),
+            static_cast<s32>(Math::Clamp01(b) * 255),
+            static_cast<s32>(Math::Clamp01(a) * 255));
     }
 
 
@@ -102,20 +102,6 @@ namespace ob::core {
         linear.b = convert(b);
         linear.a = a;
         return linear;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief		色の線形補完
-    //! 
-    //! @details	t が0のとき a を返し、 t が1のとき b を返す。
-    //! @param a    色1
-    //! @param b    色2
-    //! @param t	補完パラメータ
-    //! @return		補完された色オブジェクト
-    //@―---------------------------------------------------------------------------
-    Color Color::Lerp(const Color& a, const Color& b, f32 t) noexcept {
-        return (a * t) + (b * (1.0f - t));
     }
 
 

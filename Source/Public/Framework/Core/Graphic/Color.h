@@ -25,15 +25,15 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief デフォルトコンストラクタ(初期化なし)
-        //@―---------------------------------------------------------------------------
-        Color()noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief コンストラクタ(白で初期化)
+        //! @brief デフォルトコンストラクタ
         //! 
         //! @details		色を白(1,1,1,1)で初期化します。
+        //@―---------------------------------------------------------------------------
+        constexpr Color()noexcept;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         Color(EForceInit)noexcept;
 
@@ -47,7 +47,7 @@ namespace ob::core {
         //! @param b		青成分
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        Color(f32 r, f32 g, f32 b, f32 a = 1.0f)noexcept;
+        constexpr Color(f32 r, f32 g, f32 b, f32 a = 1.0f)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace ob::core {
         //! @param grey	    輝度
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        Color(f32 grey, f32 a = 1.0f)noexcept;
+        constexpr Color(f32 grey, f32 a = 1.0f)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -85,85 +85,85 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator == (const Color& another) const noexcept;
+        constexpr bool operator == (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator != (const Color& another) const noexcept;
+        constexpr bool operator != (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子
         //@―---------------------------------------------------------------------------
-        Color operator + (const Color& another) const noexcept;
+        constexpr Color operator + (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子
         //@―---------------------------------------------------------------------------
-        Color operator - (const Color& another) const noexcept;
+        constexpr Color operator - (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子
         //@―---------------------------------------------------------------------------
-        Color operator * (const Color& another) const noexcept;
+        constexpr Color operator * (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Color operator * (f32 f) const noexcept;
+        constexpr Color operator * (f32 f) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子
         //@―---------------------------------------------------------------------------
-        Color operator / (const Color& another) const noexcept;
+        constexpr Color operator / (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Color operator / (f32 f) const noexcept;
+        constexpr Color operator / (f32 f) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator += (const Color& another) noexcept;
+        constexpr Color& operator += (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator -= (const Color& another) noexcept;
+        constexpr Color& operator -= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator *= (const Color& another) noexcept;
+        constexpr Color& operator *= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Color& operator *= (f32 f) noexcept;
+        constexpr Color& operator *= (f32 f) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子
         //@―---------------------------------------------------------------------------
-        Color& operator /= (const Color& another) noexcept;
+        constexpr Color& operator /= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Color& operator /= (f32 f) noexcept;
+        constexpr Color& operator /= (f32 f) noexcept;
 
 
         //===============================================================
@@ -178,7 +178,7 @@ namespace ob::core {
         //! @param b	青成分
         //! @param a	アルファ
         //@―---------------------------------------------------------------------------
-        void set(f32 r, f32 g, f32 b, f32 a = 1.0) noexcept;
+        constexpr void set(f32 r, f32 g, f32 b, f32 a = 1.0) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -187,19 +187,19 @@ namespace ob::core {
         //! @param grey	    輝度
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        void set(f32 grey, f32 a = 1.0) noexcept;
+        constexpr void set(f32 grey, f32 a = 1.0) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～にクランプ
         //@―---------------------------------------------------------------------------
-        void clamp() noexcept;
+        constexpr void clamp() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～1.0にクランプ
         //@―---------------------------------------------------------------------------
-        void clamp01() noexcept;
+        constexpr void clamp01() noexcept;
 
 
         //===============================================================
@@ -209,13 +209,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      RGBのうち最小の値を取得
         //@―---------------------------------------------------------------------------
-        f32 minComponent()const noexcept;
+        constexpr f32 minComponent()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      RGBのうち最大の値を取得
         //@―---------------------------------------------------------------------------
-        f32 maxComponent()const noexcept;
+        constexpr f32 maxComponent()const noexcept;
 
 
         //===============================================================
@@ -237,19 +237,19 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          Vec4 に変換
         //@―---------------------------------------------------------------------------
-        Vec4 toVec4()const noexcept;
+        constexpr Vec4 toVec4()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief           グレイスケールに変換
         //@―---------------------------------------------------------------------------
-        Color toGrayscale()const noexcept;
+        constexpr Color toGrayscale()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          セピアカラーに変換
         //@―---------------------------------------------------------------------------
-        Color toSepia()const noexcept;
+        constexpr Color toSepia()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      等価判定(許容誤差指定)
         //@―---------------------------------------------------------------------------
-        bool equals(const Color& another, f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool equals(const Color& another, f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
     public:
@@ -292,7 +292,7 @@ namespace ob::core {
         //! @param t	補完パラメータ
         //! @return		補完された色オブジェクト
         //@―---------------------------------------------------------------------------
-        static Color Lerp(const Color& a, const Color& b, f32 t) noexcept;
+        static constexpr Color Lerp(const Color& a, const Color& b, f32 t) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -343,7 +343,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief デフォルトコンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
-    inline Color::Color() noexcept {
+    constexpr  Color::Color() noexcept
+        : Color(1,1,1,1)
+    {
     }
 
 
@@ -353,7 +355,6 @@ namespace ob::core {
     //! @details		色を白(1,1,1,1)で初期化します。
     //@―---------------------------------------------------------------------------
     inline Color::Color(EForceInit) noexcept {
-        set(1, 1, 1, 1);
     }
 
 
@@ -366,8 +367,9 @@ namespace ob::core {
     //! @param b		青成分
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline Color::Color(f32 r, f32 g, f32 b, f32 a) noexcept {
-        set(r, g, b, a);
+    constexpr Color::Color(f32 _r, f32 _g, f32 _b, f32 _a) noexcept
+        : r(_r),g(_g),b(_b),a(_a)
+    {
     }
 
 
@@ -378,15 +380,16 @@ namespace ob::core {
     //! @param grey	    輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline Color::Color(f32 grey, f32 a) noexcept {
-        set(grey, grey, grey, a);
+    constexpr Color::Color(f32 gray, f32 a) noexcept 
+        : Color(gray,gray,gray,a)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Color::operator == (const Color& another) const noexcept {
+    constexpr bool Color::operator == (const Color& another) const noexcept {
         return
             Math::IsNearEquals(r, another.r) &&
             Math::IsNearEquals(g, another.g) &&
@@ -398,7 +401,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Color::operator != (const Color& another) const noexcept {
+    constexpr bool Color::operator != (const Color& another) const noexcept {
         return !(operator==(another));
     }
 
@@ -406,7 +409,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator + (const Color& another) const noexcept {
+    constexpr Color Color::operator + (const Color& another) const noexcept {
         return Color(*this) += another;
     }
 
@@ -414,7 +417,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator - (const Color& another) const noexcept {
+    constexpr Color Color::operator - (const Color& another) const noexcept {
         return Color(*this) -= another;
     }
 
@@ -422,7 +425,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator * (f32 f) const noexcept {
+    constexpr Color Color::operator * (f32 f) const noexcept {
         return Color(*this) *= f;
     }
 
@@ -430,7 +433,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator * (const Color& another) const noexcept {
+    constexpr Color Color::operator * (const Color& another) const noexcept {
         return Color(*this)*=another;
     }
 
@@ -438,7 +441,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator / (f32 f) const noexcept {
+    constexpr Color Color::operator / (f32 f) const noexcept {
         return Color(*this) /= f;
     }
 
@@ -446,7 +449,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子
     //@―---------------------------------------------------------------------------
-    inline Color Color::operator / (const Color& another) const noexcept {
+    constexpr Color Color::operator / (const Color& another) const noexcept {
         return Color(*this) / another;
     }
 
@@ -454,7 +457,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator += (const Color& another) noexcept {
+    constexpr Color& Color::operator += (const Color& another) noexcept {
         set(r + another.r, g + another.g, b + another.b, a + another.a);
         return *this;
     }
@@ -463,7 +466,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator -= (const Color& another) noexcept {
+    constexpr Color& Color::operator -= (const Color& another) noexcept {
         set(r - another.r, g - another.g, b - another.b, a - another.a);
         return *this;
     }
@@ -472,7 +475,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator *= (f32 f) noexcept {
+    constexpr Color& Color::operator *= (f32 f) noexcept {
         r *= f;
         g *= f;
         b *= f;
@@ -483,7 +486,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator *= (const Color& another) noexcept {
+    constexpr Color& Color::operator *= (const Color& another) noexcept {
         r *= another.r;
         g *= another.g;
         b *= another.b;
@@ -495,7 +498,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator /= (f32 f) noexcept {
+    constexpr Color& Color::operator /= (f32 f) noexcept {
         r /= f;
         g /= f;
         b /= f;
@@ -506,7 +509,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Color& Color::operator /= (const Color& another) noexcept {
+    constexpr Color& Color::operator /= (const Color& another) noexcept {
         r /= another.r;
         g /= another.g;
         b /= another.b;
@@ -523,7 +526,7 @@ namespace ob::core {
     //! @param b	青成分
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
-    inline void Color::set(f32 r, f32 g, f32 b, f32 a) noexcept {
+    constexpr void Color::set(f32 r, f32 g, f32 b, f32 a) noexcept {
         this->r = r;
         this->g = g;
         this->b = b;
@@ -537,7 +540,7 @@ namespace ob::core {
     //! @param grey	    輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline void Color::set(f32 grey, f32 a) noexcept {
+    constexpr void Color::set(f32 grey, f32 a) noexcept {
         r = grey;
         g = grey;
         b = grey;
@@ -548,7 +551,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～にクランプ
     //@―---------------------------------------------------------------------------
-    inline void Color::clamp() noexcept {
+    constexpr void Color::clamp() noexcept {
         r = Math::Max(r, 0.0f);
         g = Math::Max(g, 0.0f);
         b = Math::Max(b, 0.0f);
@@ -558,7 +561,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～1.0にクランプ
     //@―---------------------------------------------------------------------------
-    inline void Color::clamp01() noexcept {
+    constexpr void Color::clamp01() noexcept {
         r = Math::Clamp01(r);
         g = Math::Clamp01(g);
         b = Math::Clamp01(b);
@@ -569,7 +572,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Color::minComponent()const noexcept {
+    constexpr f32 Color::minComponent()const noexcept {
         return Math::Min(r, g, b);
     }
 
@@ -577,7 +580,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Color::maxComponent()const noexcept {
+    constexpr f32 Color::maxComponent()const noexcept {
         return Math::Max(r, g, b);
     }
 
@@ -585,7 +588,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          Vec4 に変換
     //@―---------------------------------------------------------------------------
-    inline Vec4 Color::toVec4()const noexcept {
+    constexpr Vec4 Color::toVec4()const noexcept {
         return Vec4(r, g, b, a);
     }
 
@@ -593,7 +596,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     // @brief      グレイスケールに変換
     //@―---------------------------------------------------------------------------
-    inline Color Color::toGrayscale()const noexcept {
+    constexpr Color Color::toGrayscale()const noexcept {
         f32 gray = r * 0.29f + g * 0.57f + b * 0.14f;
         return Color(gray, a);
     }
@@ -602,7 +605,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      セピアカラーに変換
     //@―---------------------------------------------------------------------------
-    inline Color Color::toSepia()const noexcept {
+    constexpr Color Color::toSepia()const noexcept {
         Color sepia = this->toGrayscale();
         sepia.r *= 1.351f;
         sepia.g *= 1.2f;
@@ -615,12 +618,26 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      等価判定(許容誤差指定)
     //@―---------------------------------------------------------------------------
-    inline bool Color::equals(const Color& another, f32 tolerance)const noexcept {
+    constexpr bool Color::equals(const Color& another, f32 tolerance)const noexcept {
         return
             Math::IsNearEquals(r, another.r, tolerance) &&
             Math::IsNearEquals(g, another.g, tolerance) &&
             Math::IsNearEquals(b, another.b, tolerance) &&
             Math::IsNearEquals(a, another.a, tolerance);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief		色の線形補完
+    //! 
+    //! @details	t が0のとき a を返し、 t が1のとき b を返す。
+    //! @param a    色1
+    //! @param b    色2
+    //! @param t	補完パラメータ
+    //! @return		補完された色オブジェクト
+    //@―---------------------------------------------------------------------------
+    constexpr Color Color::Lerp(const Color& a, const Color& b, f32 t) noexcept {
+        return (a * t) + (b * (1.0f - t));
     }
 
     //! @endcond

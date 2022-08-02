@@ -23,15 +23,15 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief			デフォルトコンストラクタ(初期化なし)
-        //@―---------------------------------------------------------------------------
-        IntColor() noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief			コンストラクタ(白で初期化)
+        //! @brief			デフォルトコンストラクタ
         //! 
         //! @details		色を白(255,255,255,255)で初期化します。
+        //@―---------------------------------------------------------------------------
+        constexpr IntColor() noexcept;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief			コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         IntColor(EForceInit) noexcept;
 
@@ -45,7 +45,7 @@ namespace ob::core {
         //! @param b		青成分
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        IntColor(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
+        constexpr IntColor(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ namespace ob::core {
         //! @param grey	    輝度
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        IntColor(s32 grey, s32 a = 255) noexcept;
+        constexpr IntColor(s32 grey, s32 a = 255) noexcept;
 
 
         //===============================================================
@@ -65,36 +65,36 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief			加算演算子
         //@―---------------------------------------------------------------------------
-        IntColor operator + (const IntColor& another) const noexcept;
+        constexpr IntColor operator + (const IntColor& another) const noexcept;
 
         //@―---------------------------------------------------------------------------
         //! @brief			減算演算子
         //@―---------------------------------------------------------------------------
-        IntColor operator - (const IntColor& another) const noexcept;
+        constexpr IntColor operator - (const IntColor& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief			加算代入演算子
         //@―---------------------------------------------------------------------------
-        IntColor& operator += (const IntColor& another) noexcept;
+        constexpr IntColor& operator += (const IntColor& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief			減算代入演算子
         //@―---------------------------------------------------------------------------
-        IntColor& operator -= (const IntColor& another) noexcept;
+        constexpr IntColor& operator -= (const IntColor& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子
         //@―---------------------------------------------------------------------------
-        IntColor operator * (const IntColor& another) const noexcept;
+        constexpr IntColor operator * (const IntColor& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          乗算代入演算子
         //@―---------------------------------------------------------------------------
-        IntColor& operator *= (const IntColor& another) noexcept;
+        constexpr IntColor& operator *= (const IntColor& another) noexcept;
 
 
         //===============================================================
@@ -109,7 +109,7 @@ namespace ob::core {
         //! @param b	    青成分
         //! @param a	    アルファ
         //@―---------------------------------------------------------------------------
-        void set(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
+        constexpr void set(s32 r, s32 g, s32 b, s32 a = 255) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ namespace ob::core {
         //! @param grey     輝度
         //! @param a	    アルファ
         //@―---------------------------------------------------------------------------
-        void set(s32 grey, s32 a = 255) noexcept;
+        constexpr void set(s32 grey, s32 a = 255) noexcept;
 
 
         //===============================================================
@@ -128,13 +128,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          RGBのうち最小の値を取得
         //@―---------------------------------------------------------------------------
-        u8 minComponent()const noexcept;
+        constexpr u8 minComponent()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          RGBのうち最大の値を取得
         //@―---------------------------------------------------------------------------
-        u8 maxComponent()const noexcept;
+        constexpr u8 maxComponent()const noexcept;
 
 
         //===============================================================
@@ -146,7 +146,7 @@ namespace ob::core {
         //! 
         //! @param          format  カラーフォーマット(色の並び)
         //@―---------------------------------------------------------------------------
-        u32 toCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
+        constexpr u32 toCode(ColorCodeFormat format = ColorCodeFormat::Default)const noexcept;
 
     public:
 
@@ -186,7 +186,9 @@ namespace ob::core {
     //! 
     //! @details		色を白(255,255,255,255)で初期化します。
     //@―---------------------------------------------------------------------------
-    inline IntColor::IntColor() noexcept {
+    constexpr IntColor::IntColor() noexcept
+        : IntColor(255,255,255,255)
+    {
     }
 
 
@@ -196,7 +198,6 @@ namespace ob::core {
     //! @details		色を白(255,255,255,255)で初期化します。
     //@―---------------------------------------------------------------------------
     inline IntColor::IntColor(EForceInit) noexcept {
-        set(1, 1, 1, 1);
     }
 
 
@@ -209,8 +210,9 @@ namespace ob::core {
     //! @param b		青成分
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline IntColor::IntColor(s32 r, s32 g, s32 b, s32 a) noexcept {
-        set(r, g, b, a);
+    constexpr IntColor::IntColor(s32 _r, s32 _g, s32 _b, s32 _a) noexcept
+        : r(_r),g(_g),b(_b),a(_a)
+    {
     }
 
 
@@ -221,15 +223,16 @@ namespace ob::core {
     //! @param grey	輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline IntColor::IntColor(s32 grey, s32 a) noexcept {
-        set(grey, grey, grey, a);
+    constexpr IntColor::IntColor(s32 gray, s32 a) noexcept
+        : IntColor(gray,gray,gray,a)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief			加算演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor IntColor::operator + (const IntColor& another) const noexcept {
+    constexpr IntColor IntColor::operator + (const IntColor& another) const noexcept {
         return IntColor(*this) += another;
     }
 
@@ -237,7 +240,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief			減算演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor IntColor::operator - (const IntColor& another) const noexcept {
+    constexpr IntColor IntColor::operator - (const IntColor& another) const noexcept {
         return IntColor(*this) -= another;
     }
 
@@ -245,7 +248,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief			乗算演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor IntColor::operator * (const IntColor& another) const noexcept {
+    constexpr IntColor IntColor::operator * (const IntColor& another) const noexcept {
         return IntColor(*this) *= another;
     }
 
@@ -253,7 +256,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief			加算代入演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor& IntColor::operator += (const IntColor& another) noexcept {
+    constexpr IntColor& IntColor::operator += (const IntColor& another) noexcept {
         set(r + another.r, g + another.g, b + another.b, a);
         return *this;
     }
@@ -262,7 +265,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief			減算代入演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor& IntColor::operator -= (const IntColor& another) noexcept {
+    constexpr IntColor& IntColor::operator -= (const IntColor& another) noexcept {
         set(r - another.r, g - another.g, b - another.b, a);
         return *this;
     }
@@ -271,7 +274,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief			乗算代入演算子
     //@―---------------------------------------------------------------------------
-    inline IntColor& IntColor::operator *= (const IntColor& another) noexcept {
+    constexpr IntColor& IntColor::operator *= (const IntColor& another) noexcept {
         set((s32)r * another.r / 255,
             (s32)g * another.g / 255,
             (s32)b * another.b / 255,
@@ -288,7 +291,7 @@ namespace ob::core {
     //! @param b	青成分
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
-    inline void IntColor::set(s32 r, s32 g, s32 b, s32 a) noexcept {
+    constexpr void IntColor::set(s32 r, s32 g, s32 b, s32 a) noexcept {
         this->r = (u8)std::clamp(r, 0, 255);
         this->g = (u8)std::clamp(g, 0, 255);
         this->b = (u8)std::clamp(b, 0, 255);
@@ -302,7 +305,7 @@ namespace ob::core {
     //! @param grey	輝度
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline void IntColor::set(s32 grey, s32 a) noexcept {
+    constexpr void IntColor::set(s32 grey, s32 a) noexcept {
         set(grey, grey, grey, a);
     }
 
@@ -310,7 +313,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最小の値を取得
     //@―---------------------------------------------------------------------------
-    inline u8 IntColor::minComponent()const noexcept {
+    constexpr u8 IntColor::minComponent()const noexcept {
         return std::min({ r, g, b });
     }
 
@@ -318,8 +321,29 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      RGBのうち最大の値を取得
     //@―---------------------------------------------------------------------------
-    inline u8 IntColor::maxComponent()const noexcept {
+    constexpr u8 IntColor::maxComponent()const noexcept {
         return std::min({ r, g, b });
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief          色をカラーコードに変換
+    //! 
+    //! @param format   カラーフォーマット(色の並び)
+    //@―---------------------------------------------------------------------------
+    constexpr u32 IntColor::toCode(ColorCodeFormat format)const noexcept {
+        switch (format) {
+        case ColorCodeFormat::ARGB:
+            return (a << 24) | (r << 16) | (g << 8) | (b);
+        case ColorCodeFormat::ABGR:
+            return (a << 24) | (b << 16) | (g << 8) | (r);
+        case ColorCodeFormat::RGBA:
+            return (r << 24) | (g << 16) | (b << 8) | (a);
+        case ColorCodeFormat::BGRA:
+            return (b << 24) | (g << 16) | (r << 8) | (a);
+        default:break;
+        }
+        return 0xFFFFFFFF;
     }
 
     //! @endcond

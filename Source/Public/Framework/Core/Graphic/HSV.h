@@ -23,15 +23,15 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief デフォルトコンストラクタ(初期化なし)
-        //@―---------------------------------------------------------------------------
-        HSV()noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief コンストラクタ(白で初期化)
+        //! @brief          デフォルトコンストラクタ
         //! 
         //! @details		色を白(0,0,1,1)で初期化します。
+        //@―---------------------------------------------------------------------------
+        constexpr HSV()noexcept;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         HSV(EForceInit)noexcept;
 
@@ -45,7 +45,7 @@ namespace ob::core {
         //! @param v		明度成分
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        HSV(f32 h, f32 s, f32 v, f32 a = 1.0f)noexcept;
+        constexpr HSV(f32 h, f32 s, f32 v, f32 a = 1.0f)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -75,13 +75,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator == (const HSV& another) const noexcept;
+        constexpr bool operator == (const HSV& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator != (const HSV& another) const noexcept;
+        constexpr bool operator != (const HSV& another) const noexcept;
 
 
         //===============================================================
@@ -96,7 +96,7 @@ namespace ob::core {
         //! @param v		明度成分
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        void set(f32 h, f32 s, f32 v, f32 a = 1.0) noexcept;
+        constexpr void set(f32 h, f32 s, f32 v, f32 a = 1.0) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -110,13 +110,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～にクランプ
         //@―---------------------------------------------------------------------------
-        void clamp() noexcept;
+        constexpr void clamp() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～1.0にクランプ
         //@―---------------------------------------------------------------------------
-        void clamp01() noexcept;
+        constexpr void clamp01() noexcept;
 
 
         //===============================================================
@@ -136,7 +136,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      等価判定(許容誤差指定)
         //@―---------------------------------------------------------------------------
-        bool equals(const HSV& another, f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool equals(const HSV& another, f32 tolerance = Math::TOLERANCE)const noexcept;
 
     public:
 
@@ -149,7 +149,7 @@ namespace ob::core {
         //! @param t	補完パラメータ
         //! @return		補完された色オブジェクト
         //@―---------------------------------------------------------------------------
-        static HSV Lerp(const HSV& a, const HSV& b, f32 t) noexcept;
+        static constexpr HSV Lerp(const HSV& a, const HSV& b, f32 t) noexcept;
 
 
     public:
@@ -185,19 +185,20 @@ namespace ob::core {
     //! @cond
 
     //@―---------------------------------------------------------------------------
-    //! @brief デフォルトコンストラクタ(初期化なし)
+    //! @brief デフォルトコンストラクタ
+    //! 
+    //! @details		色を白(0,0,1,1)で初期化します。
     //@―---------------------------------------------------------------------------
-    inline HSV::HSV() noexcept {
+    constexpr HSV::HSV() noexcept 
+        : HSV(0,0,1,1)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief コンストラクタ(白で初期化)
-    //! 
-    //! @details		色を白(1,1,1,1)で初期化します。
+    //! @brief コンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
     inline HSV::HSV(EForceInit) noexcept {
-        set(1, 1, 1, 1);
     }
 
 
@@ -210,8 +211,9 @@ namespace ob::core {
     //! @param v		明度成分
     //! @param a		アルファ
     //@―---------------------------------------------------------------------------
-    inline HSV::HSV(f32 h, f32 s, f32 v, f32 a) noexcept {
-        set(h, s, v, a);
+    constexpr HSV::HSV(f32 _h, f32 _s, f32 _v, f32 _a) noexcept
+        : h(_h),s(_s),v(_v),a(_a)
+    {
     }
 
 
@@ -228,7 +230,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool HSV::operator == (const HSV& another) const noexcept {
+    constexpr bool HSV::operator == (const HSV& another) const noexcept {
         return
             Math::IsNearEquals(h, another.h) &&
             Math::IsNearEquals(s, another.s) &&
@@ -240,7 +242,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool HSV::operator != (const HSV& another) const noexcept {
+    constexpr bool HSV::operator != (const HSV& another) const noexcept {
         return !(operator==(another));
     }
 
@@ -254,7 +256,7 @@ namespace ob::core {
     //! @param v	明度成分
     //! @param a	アルファ
     //@―---------------------------------------------------------------------------
-    inline void HSV::set(f32 h, f32 s, f32 v, f32 a) noexcept {
+    constexpr void HSV::set(f32 h, f32 s, f32 v, f32 a) noexcept {
         this->h = h;
         this->s = s;
         this->v = v;
@@ -265,7 +267,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～にクランプ
     //@―---------------------------------------------------------------------------
-    inline void HSV::clamp() noexcept {
+    constexpr void HSV::clamp() noexcept {
         h = Math::Max(h, 0.0f);
         s = Math::Max(s, 0.0f);
         v = Math::Max(v, 0.0f);
@@ -275,7 +277,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      カラー要素を0.0～1.0にクランプ
     //@―---------------------------------------------------------------------------
-    inline void HSV::clamp01() noexcept {
+    constexpr void HSV::clamp01() noexcept {
         h = Math::Clamp01(h);
         s = Math::Clamp01(s);
         v = Math::Clamp01(v);
@@ -286,7 +288,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      等価判定(許容誤差指定)
     //@―---------------------------------------------------------------------------
-    inline bool HSV::equals(const HSV& another, f32 tolerance)const noexcept {
+    constexpr bool HSV::equals(const HSV& another, f32 tolerance)const noexcept {
         return
             Math::IsNearEquals(h, another.h, tolerance) &&
             Math::IsNearEquals(s, another.s, tolerance) &&
@@ -304,7 +306,7 @@ namespace ob::core {
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
     //@―---------------------------------------------------------------------------
-    inline HSV HSV::Lerp(const HSV& a, const HSV& b, f32 t) noexcept {
+    constexpr HSV HSV::Lerp(const HSV& a, const HSV& b, f32 t) noexcept {
         return HSV(
             Math::Lerp(a.h, b.h, t),
             Math::Lerp(a.s, b.s, t),
