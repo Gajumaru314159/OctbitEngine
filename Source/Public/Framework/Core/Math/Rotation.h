@@ -24,15 +24,15 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ(初期化なし)
+        //! @brief  コンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        Rot() = default;
+        constexpr Rot()noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ(roll/pitch/yaw指定)
+        //! @brief  コンストラクタ(x/y/z指定)
         //@―---------------------------------------------------------------------------
-        Rot(f32 roll, f32 pitch, f32 yaw)noexcept;
+        constexpr Rot(f32 x, f32 y, f32 z)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -54,13 +54,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator == (const Rot& rhs)const noexcept;
+        constexpr bool operator == (const Rot& rhs)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator != (const Rot& rhs)const noexcept;
+        constexpr bool operator != (const Rot& rhs)const noexcept;
 
 
         //===============================================================
@@ -68,9 +68,9 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ(roll/pitch/yaw指定)
+        //! @brief  コンストラクタ(x/y/z指定)
         //@―---------------------------------------------------------------------------
-        void set(f32 roll, f32 pitch, f32 yaw)noexcept;
+        constexpr void set(f32 x, f32 y, f32 z)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -147,9 +147,9 @@ namespace ob::core {
 
     public:
 
-        f32 roll;       //!< Z軸回転量
-        f32 pitch;      //!< X軸回転量
-        f32 yaw;        //!< Y軸回転量
+        f32 x;      //!< X軸回転量
+        f32 y;      //!< Y軸回転量
+        f32 z;      //!< Z軸回転量
 
     };
 
@@ -164,20 +164,21 @@ namespace ob::core {
     //! @cond
 
     //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ(roll/pitch/yaw指定)
+    //! @brief  コンストラクタ(x/y/z指定)
     //@―---------------------------------------------------------------------------
-    inline Rot::Rot(f32 roll, f32 pitch, f32 yaw)noexcept {
-        set(roll, pitch, yaw);
+    constexpr Rot::Rot(f32 _x, f32 _y, f32 _z)noexcept
+        : x(_x),y(_y),z(_z)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ(roll/pitch/yaw指定)
+    //! @brief  コンストラクタ(x/y/z指定)
     //@―---------------------------------------------------------------------------
-    inline void Rot::set(f32 roll, f32 pitch, f32 yaw)noexcept {
-        this->roll = roll;
-        this->pitch = pitch;
-        this->yaw = yaw;
+    constexpr void Rot::set(f32 x, f32 y, f32 z)noexcept {
+        this->x = x;
+        this->y = y;
+        this->z = z;
     }
 
     //===============================================================
@@ -187,18 +188,18 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Rot::operator == (const Rot& rhs)const noexcept {
+    constexpr bool Rot::operator == (const Rot& rhs)const noexcept {
         return
-            Math::IsNearEquals(roll, rhs.roll) &&
-            Math::IsNearEquals(pitch, rhs.pitch) &&
-            Math::IsNearEquals(yaw, rhs.yaw);
+            Math::IsNearEquals(x, rhs.x) &&
+            Math::IsNearEquals(y, rhs.y) &&
+            Math::IsNearEquals(z, rhs.z);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Rot::operator != (const Rot& rhs)const noexcept {
+    constexpr bool Rot::operator != (const Rot& rhs)const noexcept {
         return !(*this == rhs);
     }
 
@@ -207,12 +208,12 @@ namespace ob::core {
     //! @brief  正規化
     //@―---------------------------------------------------------------------------
     inline Rot& Rot::normalize() {
-        roll = Math::Mod(roll, Math::PI);
-        pitch = Math::Mod(pitch, Math::PI);
-        yaw = Math::Mod(yaw, Math::PI);
-        if (roll < 0.0f)roll += Math::TWO_PI;
-        if (pitch < 0.0f)pitch += Math::TWO_PI;
-        if (yaw < 0.0f)yaw += Math::TWO_PI;
+        x = Math::Mod(x, Math::PI);
+        y = Math::Mod(y, Math::PI);
+        z = Math::Mod(z, Math::PI);
+        if (x < 0.0f)x += Math::TWO_PI;
+        if (y < 0.0f)y += Math::TWO_PI;
+        if (z < 0.0f)z += Math::TWO_PI;
         return *this;
     }
 
@@ -222,9 +223,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline bool Rot::isNaN() {
         return
-            Math::IsNaN(roll) ||
-            Math::IsNaN(pitch) ||
-            Math::IsNaN(yaw);
+            Math::IsNaN(x) ||
+            Math::IsNaN(y) ||
+            Math::IsNaN(z);
     }
 
     //! @endcond
@@ -243,7 +244,7 @@ template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> {
 
     template<typename FormatContext>
     auto format(ob::core::Rot value, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), TC("({},{},{})"), ob::Math::Degrees(value.roll), ob::Math::Degrees(value.pitch), ob::Math::Degrees(value.yaw));
+        return format_to(ctx.out(), TC("({},{},{})"), ob::Math::Degrees(value.x), ob::Math::Degrees(value.y), ob::Math::Degrees(value.z));
     }
 };
 //! @endcond

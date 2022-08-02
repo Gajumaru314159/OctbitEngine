@@ -247,7 +247,7 @@ namespace ob::core {
     //! @param eulerAngles 回転量
     //@―---------------------------------------------------------------------------
     void Matrix::rotate(const Rot& rotation) {
-        rotate(rotation.roll, rotation.pitch, rotation.yaw);
+        rotate(rotation.x, rotation.y, rotation.z);
     }
 
 

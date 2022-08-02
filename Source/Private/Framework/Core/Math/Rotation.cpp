@@ -36,7 +36,7 @@ namespace ob::core {
     //! @brief  Quatに変換
     //@―---------------------------------------------------------------------------
     Vec3 Rot::toVec3()const {
-        return Vec3(roll, pitch, yaw);
+        return Vec3(x, y, z);
     }
 
 
@@ -44,7 +44,7 @@ namespace ob::core {
     //! @brief  Quatに変換
     //@―---------------------------------------------------------------------------
     inline Quat Rot::toQuat()const {
-        return Quat(roll, pitch, yaw);
+        return Quat(x, y, z);
     }
 
 
