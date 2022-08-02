@@ -114,28 +114,36 @@ namespace ob::core {
         //===============================================================
 
         //! @brief 2つの値から小さい値を返す
-        static constexpr f32 Min(f32 a, f32 b)noexcept { return ((a) < (b)) ? (a) : (b); }
+        template<typename T>
+        static constexpr f32 Min(T a, T b)noexcept { return ((a) < (b)) ? (a) : (b); }
 
         //! @brief 3つの値から一番小さい値を返す
-        static constexpr f32 Min(f32 a, f32 b, f32 c)noexcept;
+        template<typename T>
+        static constexpr f32 Min(T a, T b, T c)noexcept { return Min(Min(a, b), c); }
 
         //! @brief 4つの値から一番小さい値を返す
-        static constexpr f32 Min(f32 a, f32 b, f32 c, f32 d)noexcept;
+        template<typename T>
+        static constexpr f32 Min(T a, T b, T c, T d)noexcept { return Min(Min(a, b), Min(c, d)); }
 
         //! @brief 配列の中から一番小さい値を返す
-        static constexpr f32 Min(gsl::span<const f32> values)noexcept;
+        template<typename T>
+        static constexpr T Min(gsl::span<const T> values)noexcept;
 
         //! @brief 2つの値から大きい値を返す
-        static constexpr f32 Max(f32 a, f32 b)noexcept { return ((a) < (b)) ? (b) : (a); }
+        template<typename T>
+        static constexpr T Max(T a, T b)noexcept { return ((a) < (b)) ? (b) : (a); }
 
         //! @brief 3つの値から一番大きい値を返す
-        static constexpr f32 Max(f32 a, f32 b, f32 c)noexcept;
+        template<typename T>
+        static constexpr T Max(T a, T b, T c)noexcept { return Max(Max(a, b), c); }
 
         //! @brief 4つの値から一番大きい値を返す
-        static constexpr f32 Max(f32 a, f32 b, f32 c, f32 d)noexcept;
+        template<typename T>
+        static constexpr T Max(T a, T b, T c, T d)noexcept { return Max(Max(a, b), Max(c, d)); }
 
         //! @brief 配列の中から一番大きい値を返す
-        static constexpr f32 Max(gsl::span<const f32> values)noexcept;
+        template<typename T>
+        static constexpr T Max(gsl::span<const T> values)noexcept;
 
 
         //===============================================================
@@ -160,13 +168,16 @@ namespace ob::core {
         //===============================================================
 
         //! @brief fの絶対値を返す
-        static constexpr f32 Abs(f32 f)noexcept { return f < 0 ? -f : f; }
+        template<typename T>
+        static constexpr T Abs(T f)noexcept { return f < 0 ? -f : f; }
 
         //! @brief fをminimumとmaximumの間に収まるように返す
-        static constexpr f32 Clamp(f32 f, f32 minimum, f32 maximum)noexcept { return std::clamp(f, maximum, minimum); }
+        template<typename T>
+        static constexpr T Clamp(T f, T minimum, T maximum)noexcept { return std::clamp(f, maximum, minimum); }
 
         //! @brief fを0と1の間に収まるように返す
-        static constexpr f32 Clamp01(f32 f)noexcept { return Math::Clamp(f, 0, 1); }
+        template<typename T>
+        static constexpr T Clamp01(T f)noexcept { return std::clamp<T>(f,0,1); }
 
         //! @brief toとfromの間の角度をラジアンで返す
         static f32 BetweenAngle(f32 to, f32 from) { return abs(fmodf(from - to, TWO_PI)); }
@@ -190,10 +201,12 @@ namespace ob::core {
         static f32 Pow(f32 f, f32 p) { return powf(f, p); }
 
         //! @brief fの符号を返す
-        static constexpr f32 Sign(f32 f)noexcept { if (f == 0.0f)return 0; return 0.0f < f ? 1.0f : -1.0f; }
+        template<typename T,std::enable_if_t<std::is_signed_v<T>>>
+        static constexpr T Sign(T f)noexcept { if (f == 0)return 0; return 0 < f ? 1 : -1; }
 
         //! @brief fの二乗を返す
-        static constexpr f32 Square(f32 f)noexcept { return f * f; }
+        template<typename T>
+        static constexpr T Square(T f)noexcept { return f * f; }
 
         //! @brief fの根(ルート)を返す
         static f32 Sqrt(f32 f) { return sqrtf(f); }
@@ -272,27 +285,9 @@ namespace ob::core {
     }
 
 
-    // @brief 3つの値から一番大きい値を返す
-    constexpr f32 Math::Max(f32 a, f32 b, f32 c)noexcept {
-        f32 result = a;
-        if (result < b)result = b;
-        if (result < c)result = c;
-        return result;
-    }
-
-
-    // @brief 4つの値から一番大きい値を返す
-    constexpr f32 Math::Max(f32 a, f32 b, f32 c, f32 d)noexcept {
-        f32 result = a;
-        if (result < b)result = b;
-        if (result < c)result = c;
-        if (result < d)result = d;
-        return result;
-    }
-
-
     // @brief 配列の中から一番大きい値を返す
-    constexpr f32 Math::Max(gsl::span<const f32> values)noexcept {
+    template<typename T>
+    constexpr T Math::Max(gsl::span<const T> values)noexcept {
         f32 ans = values.front();
         for (f32 value : values) {
             ans = Math::Max(ans, value);
@@ -301,27 +296,9 @@ namespace ob::core {
     }
 
 
-    // @brief 3つの値から一番小さい値を返す
-    constexpr f32 Math::Min(f32 a, f32 b, f32 c)noexcept {
-        f32 result = a;
-        if (b < result)result = b;
-        if (c < result)result = c;
-        return result;
-    }
-
-
-    // @brief 4つの値から一番小さい値を返す
-    constexpr f32 Math::Min(f32 a, f32 b, f32 c, f32 d)noexcept {
-        f32 result = a;
-        if (b < result)result = b;
-        if (c < result)result = c;
-        if (d < result)result = d;
-        return result;
-    }
-
-
     // @brief 配列の中から一番小さい値を返す
-    constexpr f32 Math::Min(gsl::span<const f32> values)noexcept {
+    template<typename T>
+    constexpr T Math::Min(gsl::span<const T> values)noexcept {
         f32 ans = values.front();
         for (f32 value : values) {
             ans = Math::Min(ans, value);

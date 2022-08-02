@@ -27,13 +27,13 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief デフォルトコンストラクタ(初期化なし)
+        //! @brief デフォルトコンストラクタ(Identityで初期化)
         //@―---------------------------------------------------------------------------
-        Quat()noexcept = default;
+        constexpr Quat()noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief コンストラクタ(Identityで初期化)
+        //! @brief コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         explicit Quat(EForceInit)noexcept;
 
@@ -44,7 +44,7 @@ namespace ob::core {
         //! @details	与えられた x、y、z、w 成分で新規のクォータニオンを作成します。
         //! @deprecated	成分は複素数に基づいているため、通常は使用しない関数です。
         //@―---------------------------------------------------------------------------
-        Quat(f32 _x, f32 _y, f32 _z, f32 _w)noexcept;
+        constexpr Quat(f32 x, f32 y, f32 z, f32 w)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -78,13 +78,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      乗算演算子
         //@―---------------------------------------------------------------------------
-        Quat operator *  (const Quat& quat) const noexcept;
+        constexpr Quat operator *  (const Quat& quat) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      乗算代入演算子
         //@―---------------------------------------------------------------------------
-        Quat operator *= (const Quat& quat) noexcept;
+        constexpr Quat operator *= (const Quat& quat) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -102,25 +102,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子
         //@―---------------------------------------------------------------------------
-        Quat operator /  (const Quat& quat) const noexcept;
+        constexpr Quat operator /  (const Quat& quat) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子
         //@―---------------------------------------------------------------------------
-        Quat operator /= (const Quat& quat) noexcept;
+        constexpr Quat operator /= (const Quat& quat) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator == (const Quat& rhs)const noexcept;
+        constexpr bool operator == (const Quat& rhs)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator != (const Quat& rhs)const noexcept;
+        constexpr bool operator != (const Quat& rhs)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -134,9 +134,9 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief ロール・ピッチ・ヨー設定
+        //! @brief 要素設定
         //@―---------------------------------------------------------------------------
-        void set(f32 x, f32 y, f32 z, f32 w) noexcept;
+        constexpr void set(f32 x, f32 y, f32 z, f32 w) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -160,7 +160,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 回転なし状態に設定
         //@―---------------------------------------------------------------------------
-        void setIdentity() noexcept;
+        constexpr void setIdentity() noexcept;
 
 
         //===============================================================
@@ -214,7 +214,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの二乗を取得
         //@―---------------------------------------------------------------------------
-        f32     getSqrMag() const noexcept;
+        constexpr f32 getSqrMag() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -254,7 +254,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 逆回転を表すQuaternionを取得
         //@―---------------------------------------------------------------------------
-        Quat    getInverse() const noexcept;
+        constexpr Quat getInverse() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -336,7 +336,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 回転を逆回転にする
         //@―---------------------------------------------------------------------------
-        void invert() noexcept;
+        constexpr void invert() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -357,7 +357,7 @@ namespace ob::core {
         //! @param v            比較対象
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool equals(const Quat& v, f32 tolerance = Math::TOLERANCE)const noexcept;         // 等価判定(許容誤差指定)
+        constexpr bool equals(const Quat& v, f32 tolerance = Math::TOLERANCE)const noexcept;         // 等価判定(許容誤差指定)
 
 
     public:
@@ -389,7 +389,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 内積
         //@―---------------------------------------------------------------------------
-        static f32 Dot(const Quat& a, const Quat& b) noexcept;
+        static constexpr f32 Dot(const Quat& a, const Quat& b) noexcept;
 
     public:
 
@@ -417,8 +417,17 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(Identityで初期化)
     //@―---------------------------------------------------------------------------
-    inline Quat::Quat(EForceInit)noexcept {
-        setIdentity();
+    constexpr  Quat::Quat()noexcept
+        : Quat(0, 0, 0, 1)
+    {
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief コンストラクタ(初期化なし)
+    //@―---------------------------------------------------------------------------
+    inline Quat::Quat(EForceInit)noexcept
+    {
     }
 
 
@@ -428,7 +437,7 @@ namespace ob::core {
     //! @details	与えられた x、y、z、w 成分で新規のクォータニオンを作成します。
     //! @deprecated	成分は複素数に基づいているため、通常は使用しない関数です。
     //@―---------------------------------------------------------------------------
-    inline Quat::Quat(f32 _x, f32 _y, f32 _z, f32 _w)  noexcept
+    constexpr Quat::Quat(f32 _x, f32 _y, f32 _z, f32 _w)  noexcept
         :x(_x), y(_y), z(_z), w(_w) {
     };
 
@@ -458,7 +467,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      乗算演算子
     //@―---------------------------------------------------------------------------
-    inline Quat Quat::operator * (const Quat& quat) const noexcept {
+    constexpr Quat Quat::operator * (const Quat& quat) const noexcept {
         return Quat(*this) *= quat;
     }
 
@@ -466,7 +475,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      乗算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Quat Quat::operator *= (const Quat& quat) noexcept {
+    constexpr Quat Quat::operator *= (const Quat& quat) noexcept {
         f32 x = this->x;
         f32 y = this->y;
         f32 z = this->z;
@@ -483,7 +492,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子
     //@―---------------------------------------------------------------------------
-    inline Quat Quat::operator / (const Quat& quat) const noexcept {
+    constexpr Quat Quat::operator / (const Quat& quat) const noexcept {
         return (*this) * quat.getInverse();
     }
 
@@ -491,7 +500,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Quat Quat::operator /= (const Quat& quat) noexcept {
+    constexpr Quat Quat::operator /= (const Quat& quat) noexcept {
         (*this) *= quat.getInverse();
         return *this;
     }
@@ -500,7 +509,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Quat::operator == (const Quat& quat)const noexcept {
+    constexpr bool Quat::operator == (const Quat& quat)const noexcept {
         return
             Math::IsNearEquals(x, quat.x) &&
             Math::IsNearEquals(y, quat.y) &&
@@ -512,7 +521,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Quat::operator != (const Quat& quat)const noexcept {
+    constexpr bool Quat::operator != (const Quat& quat)const noexcept {
         return !(operator==(quat));
     }
 
@@ -584,7 +593,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 逆回転を表すQuaternionを取得
     //@―---------------------------------------------------------------------------
-    inline Quat Quat::getInverse() const noexcept {
+    constexpr Quat Quat::getInverse() const noexcept {
         return Quat(-x, -y, -z, w);
     }
 
@@ -592,7 +601,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ロール・ピッチ・ヨー設定
     //@―---------------------------------------------------------------------------
-    inline void Quat::set(f32 x_, f32 y_, f32 z_, f32 w_) noexcept {
+    constexpr void Quat::set(f32 x_, f32 y_, f32 z_, f32 w_) noexcept {
         x = x_;
         y = y_;
         z = z_;
@@ -621,7 +630,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 回転なし状態に設定
     //@―---------------------------------------------------------------------------
-    inline void Quat::setIdentity() noexcept {
+    constexpr void Quat::setIdentity() noexcept {
         set(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
@@ -638,7 +647,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの長さの二乗を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Quat::getSqrMag() const noexcept {
+    constexpr f32 Quat::getSqrMag() const noexcept {
         return x * x + y * y + z * z + w * w;
     }
 
@@ -679,7 +688,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 内積
     //@―---------------------------------------------------------------------------
-    inline f32 Quat::Dot(const Quat& a, const Quat& b) noexcept {
+    constexpr f32 Quat::Dot(const Quat& a, const Quat& b) noexcept {
         return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
     }
 
@@ -689,7 +698,7 @@ namespace ob::core {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline bool Quat::equals(const Quat& v, f32 tolerance)const noexcept {
+    constexpr bool Quat::equals(const Quat& v, f32 tolerance)const noexcept {
         return
             Math::Abs(x - v.x) <= tolerance &&
             Math::Abs(y - v.y) <= tolerance &&
@@ -701,7 +710,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 回転を逆回転にする
     //@―---------------------------------------------------------------------------
-    inline void Quat::invert() noexcept {
+    constexpr void Quat::invert() noexcept {
         x *= -1.0f;
         y *= -1.0f;
         z *= -1.0f;

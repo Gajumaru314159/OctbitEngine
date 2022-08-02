@@ -22,13 +22,13 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief      デフォルトコンストラクタ(初期化なし)
+        //! @brief      デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        IntVec2()noexcept;
+        constexpr IntVec2()noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ(ゼロ初期化)
+        //! @brief      コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         explicit IntVec2(EForceInit)noexcept;
 
@@ -36,13 +36,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
         //@―---------------------------------------------------------------------------
-        explicit IntVec2(s32 scalar)noexcept;
+        constexpr explicit IntVec2(s32 scalar)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(要素を指定して初期化)
         //@―---------------------------------------------------------------------------
-        IntVec2(s32 x, s32 y)noexcept;
+        constexpr IntVec2(s32 x, s32 y)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -58,115 +58,115 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator == (const IntVec2& v) const noexcept;
+        constexpr bool operator == (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator != (const IntVec2& v) const noexcept;
+        constexpr bool operator != (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子
         //@―---------------------------------------------------------------------------
-        IntVec2 operator + (const IntVec2& v) const noexcept;
+        constexpr IntVec2 operator + (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2 operator + (s32 scalar) const noexcept;
+        constexpr IntVec2 operator + (s32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子
         //@―---------------------------------------------------------------------------
-        IntVec2 operator - (const IntVec2& v) const noexcept;
+        constexpr IntVec2 operator - (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2 operator - (s32 scalar) const noexcept;
+        constexpr IntVec2 operator - (s32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子
         //@―---------------------------------------------------------------------------
-        IntVec2 operator * (const IntVec2& v) const noexcept;
+        constexpr IntVec2 operator * (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2 operator * (s32 scalar) const noexcept;
+        constexpr IntVec2 operator * (s32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子
         //@―---------------------------------------------------------------------------
-        IntVec2 operator / (const IntVec2& v) const noexcept;
+        constexpr IntVec2 operator / (const IntVec2& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2 operator / (s32 scalar) const noexcept;
+        constexpr IntVec2 operator / (s32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子
         //@―---------------------------------------------------------------------------
-        IntVec2& operator += (const IntVec2& v) noexcept;
+        constexpr IntVec2& operator += (const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2& operator += (s32 scalar) noexcept;
+        constexpr IntVec2& operator += (s32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子 
         //@―---------------------------------------------------------------------------
-        IntVec2& operator -= (const IntVec2& v) noexcept;
+        constexpr IntVec2& operator -= (const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2& operator -= (s32 scalar) noexcept;
+        constexpr IntVec2& operator -= (s32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 
         //@―---------------------------------------------------------------------------
-        IntVec2& operator *= (const IntVec2& v) noexcept;
+        constexpr IntVec2& operator *= (const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 (スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2& operator *= (s32 scalar) noexcept;
+        constexpr IntVec2& operator *= (s32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子 
         //@―---------------------------------------------------------------------------
-        IntVec2& operator /= (const IntVec2& v) noexcept;
+        constexpr IntVec2& operator /= (const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        IntVec2& operator /= (s32 scalar) noexcept;
+        constexpr IntVec2& operator /= (s32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 単項マイナス演算子
         //@―---------------------------------------------------------------------------
-        IntVec2 operator - () const noexcept;
+        constexpr IntVec2 operator - () const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -186,7 +186,7 @@ namespace ob::core {
         //! 
         //! @details    範囲外の場合は0を返します。  
         //@―---------------------------------------------------------------------------
-        s32 operator [](size_t index) const noexcept;
+        constexpr s32 operator [](size_t index) const noexcept;
 
 
         //===============================================================
@@ -196,25 +196,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(s32 x, s32 y) noexcept;
+        constexpr void set(s32 x, s32 y) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(const IntVec2& v) noexcept;
+        constexpr void set(const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を全て0に設定
         //@―---------------------------------------------------------------------------
-        void    setZero() noexcept;
+        constexpr void setZero() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 全ての要素を同じ値で設定
         //@―---------------------------------------------------------------------------
-        void    setAll(s32 scalar) noexcept;
+        constexpr void setAll(s32 scalar) noexcept;
 
 
         //===============================================================
@@ -224,19 +224,19 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最大を取得
         //@―---------------------------------------------------------------------------
-        s32     maxComponent() const noexcept;
+        constexpr s32 maxComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最大を取得
         //@―---------------------------------------------------------------------------
-        s32     maxAbsComponent() const noexcept;
+        constexpr s32 maxAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最小を取得
         //@―---------------------------------------------------------------------------
-        s32     minComponent() const noexcept;
+        constexpr s32 minComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -252,13 +252,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief すべての要素が同じ値か判定
         //@―---------------------------------------------------------------------------
-        bool    allComponentsEqual()const noexcept;
+        constexpr bool allComponentsEqual()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ゼロベクトルか判定
         //@―---------------------------------------------------------------------------
-        bool    isZero()const noexcept;
+        constexpr bool isZero()const noexcept;
 
 
     public:
@@ -270,37 +270,37 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの各要素の絶対値からベクトルを作成
         //@―---------------------------------------------------------------------------
-        static IntVec2  Abs(const IntVec2& v) noexcept;
+        static constexpr IntVec2 Abs(const IntVec2& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 内積
         //@―---------------------------------------------------------------------------
-        static s32      Dot(const IntVec2& a, const IntVec2& b) noexcept;
+        static constexpr s32 Dot(const IntVec2& a, const IntVec2& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 外積
         //@―---------------------------------------------------------------------------
-        static s32      Cross(const IntVec2& a, const IntVec2& b) noexcept;
+        static constexpr s32 Cross(const IntVec2& a, const IntVec2& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  二つのベクトルのマンハッタン距離を計算
         //@―---------------------------------------------------------------------------
-        static s32      MDist(const IntVec2& a, const IntVec2& b) noexcept;
+        static constexpr s32 MDist(const IntVec2& a, const IntVec2& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static IntVec2  Max(const IntVec2& a, const IntVec2& b) noexcept;
+        static constexpr IntVec2 Max(const IntVec2& a, const IntVec2& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static IntVec2  Min(const IntVec2& a, const IntVec2& b) noexcept;
+        static constexpr IntVec2 Min(const IntVec2& a, const IntVec2& b) noexcept;
 
 
     public:
@@ -332,24 +332,27 @@ namespace ob::core {
     //! @cond
 
     //@―---------------------------------------------------------------------------
-    //! @brief      デフォルトコンストラクタ(初期化なし)
+    //! @brief      デフォルトコンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
-    inline IntVec2::IntVec2() noexcept {
+    constexpr IntVec2::IntVec2() noexcept
+        : IntVec2(0)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      コンストラクタ(ゼロ初期化)
+    //! @brief      コンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
     inline IntVec2::IntVec2(EForceInit)noexcept {
-        setZero();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
     //@―---------------------------------------------------------------------------
-    inline IntVec2::IntVec2(s32 scalar) noexcept {
+    constexpr IntVec2::IntVec2(s32 scalar) noexcept
+        : IntVec2(scalar,scalar)
+    {
         set(scalar, scalar);
     }
 
@@ -357,8 +360,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(要素を指定して初期化)
     //@―---------------------------------------------------------------------------
-    inline IntVec2::IntVec2(s32 x, s32 y) noexcept {
-        set(x, y);
+    constexpr IntVec2::IntVec2(s32 _x, s32 _y) noexcept 
+        : x(_x),y(_y)
+    {
     }
 
 
@@ -370,7 +374,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool IntVec2::operator == (const IntVec2& v) const noexcept {
+    constexpr bool IntVec2::operator == (const IntVec2& v) const noexcept {
         return
             x == v.x &&
             y == v.y;
@@ -380,7 +384,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool IntVec2::operator != (const IntVec2& v) const noexcept {
+    constexpr bool IntVec2::operator != (const IntVec2& v) const noexcept {
         return !(operator==(v));
     }
 
@@ -388,7 +392,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator + (const IntVec2& v) const noexcept {
+    constexpr IntVec2 IntVec2::operator + (const IntVec2& v) const noexcept {
         return IntVec2(*this) += v;
     }
 
@@ -396,7 +400,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator + (s32 scalar) const noexcept {
+    constexpr IntVec2 IntVec2::operator + (s32 scalar) const noexcept {
         return IntVec2(*this) += scalar;
     }
 
@@ -404,7 +408,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator - (const IntVec2& v) const noexcept {
+    constexpr IntVec2 IntVec2::operator - (const IntVec2& v) const noexcept {
         return IntVec2(*this) -= v;
     }
 
@@ -412,7 +416,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator - (s32 scalar) const noexcept {
+    constexpr IntVec2 IntVec2::operator - (s32 scalar) const noexcept {
         return IntVec2(*this) -= scalar;
     }
 
@@ -420,7 +424,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator * (const IntVec2& v) const noexcept {
+    constexpr IntVec2 IntVec2::operator * (const IntVec2& v) const noexcept {
         return IntVec2(*this) *= v;
     }
 
@@ -428,7 +432,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator * (s32 scalar) const noexcept {
+    constexpr IntVec2 IntVec2::operator * (s32 scalar) const noexcept {
         return IntVec2(*this) *= scalar;
     }
 
@@ -436,7 +440,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator / (const IntVec2& v) const noexcept {
+    constexpr IntVec2 IntVec2::operator / (const IntVec2& v) const noexcept {
         return IntVec2(*this) /= v;
     }
 
@@ -444,7 +448,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator / (s32 scalar) const noexcept {
+    constexpr IntVec2 IntVec2::operator / (s32 scalar) const noexcept {
         return IntVec2(*this) /= scalar;
     }
 
@@ -452,7 +456,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator += (const IntVec2& v) noexcept {
+    constexpr IntVec2& IntVec2::operator += (const IntVec2& v) noexcept {
         x += v.x;
         y += v.y;
         return *this;
@@ -462,7 +466,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator += (s32 scalar) noexcept {
+    constexpr IntVec2& IntVec2::operator += (s32 scalar) noexcept {
         x += scalar;
         y += scalar;
         return *this;
@@ -472,7 +476,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator -= (const IntVec2& v) noexcept {
+    constexpr IntVec2& IntVec2::operator -= (const IntVec2& v) noexcept {
         x -= v.x;
         y -= v.y;
         return *this;
@@ -482,7 +486,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator -= (s32 scalar) noexcept {
+    constexpr IntVec2& IntVec2::operator -= (s32 scalar) noexcept {
         x -= scalar;
         y -= scalar;
         return *this;
@@ -492,7 +496,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator *= (const IntVec2& v) noexcept {
+    constexpr IntVec2& IntVec2::operator *= (const IntVec2& v) noexcept {
         x *= v.x;
         y *= v.y;
         return *this;
@@ -502,7 +506,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 (スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator *= (s32 scalar) noexcept {
+    constexpr IntVec2& IntVec2::operator *= (s32 scalar) noexcept {
         x *= scalar;
         y *= scalar;
         return *this;
@@ -512,7 +516,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator /= (const IntVec2& v) noexcept {
+    constexpr IntVec2& IntVec2::operator /= (const IntVec2& v) noexcept {
         x /= v.x;
         y /= v.y;
         return *this;
@@ -522,7 +526,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline IntVec2& IntVec2::operator /= (s32 scalar) noexcept {
+    constexpr IntVec2& IntVec2::operator /= (s32 scalar) noexcept {
         x /= scalar;
         y /= scalar;
         return *this;
@@ -532,7 +536,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 単項マイナス演算子
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::operator - () const noexcept {
+    constexpr IntVec2 IntVec2::operator - () const noexcept {
         return IntVec2(-x, -y);
     }
 
@@ -542,7 +546,7 @@ namespace ob::core {
     //! 
     //! @details    範囲外の場合は0を返します。  
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::operator [](size_t index) const noexcept {
+    constexpr s32 IntVec2::operator [](size_t index) const noexcept {
         switch (index) {
         case 0:return x;
         case 1:return y;
@@ -558,7 +562,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec2::set(s32 x, s32 y) noexcept {
+    constexpr void IntVec2::set(s32 x, s32 y) noexcept {
         this->x = x;
         this->y = y;
     }
@@ -567,7 +571,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec2::set(const IntVec2& v) noexcept {
+    constexpr void IntVec2::set(const IntVec2& v) noexcept {
         set(v.x, v.y);
     }
 
@@ -575,7 +579,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を全て0に設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec2::setZero() noexcept {
+    constexpr void IntVec2::setZero() noexcept {
         set(0, 0);
     }
 
@@ -583,7 +587,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 全ての要素を同じ値で設定
     //@―---------------------------------------------------------------------------
-    inline void IntVec2::setAll(s32 scalar) noexcept {
+    constexpr void IntVec2::setAll(s32 scalar) noexcept {
         set(scalar, scalar);
     }
 
@@ -595,7 +599,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::maxComponent() const noexcept {
+    constexpr s32 IntVec2::maxComponent() const noexcept {
         return  std::max(x, y);
     }
 
@@ -603,7 +607,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最大を取得
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::maxAbsComponent() const noexcept {
+    constexpr s32 IntVec2::maxAbsComponent() const noexcept {
         return std::max(abs(x), abs(y));
     }
 
@@ -611,7 +615,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::minComponent() const noexcept {
+    constexpr s32 IntVec2::minComponent() const noexcept {
         return std::min(x, y);
     }
 
@@ -623,7 +627,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief すべての要素が同じ値か判定
     //@―---------------------------------------------------------------------------
-    inline bool IntVec2::allComponentsEqual()const noexcept {
+    constexpr bool IntVec2::allComponentsEqual()const noexcept {
         return x == y;
     }
 
@@ -631,7 +635,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ゼロベクトルか判定
     //@―---------------------------------------------------------------------------
-    inline bool IntVec2::isZero()const noexcept {
+    constexpr bool IntVec2::isZero()const noexcept {
         return x == 0 && y == 0;
     }
 
@@ -643,15 +647,15 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの各要素の絶対値からベクトルを作成
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::Abs(const IntVec2& v) noexcept {
-        return IntVec2(abs(v.x), abs(v.y));
+    constexpr IntVec2 IntVec2::Abs(const IntVec2& v) noexcept {
+        return IntVec2(Math::Abs(v.x), Math::Abs(v.y));
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 内積
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::Dot(const IntVec2& a, const IntVec2& b) noexcept {
+    constexpr s32 IntVec2::Dot(const IntVec2& a, const IntVec2& b) noexcept {
         return a.x * b.x + a.y * b.y;
     }
 
@@ -659,7 +663,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 外積
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::Cross(const IntVec2& a, const IntVec2& b) noexcept {
+    constexpr s32 IntVec2::Cross(const IntVec2& a, const IntVec2& b) noexcept {
         return a.x * b.y - a.y * b.x;
     }
 
@@ -667,17 +671,17 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  二つのベクトルのマンハッタン距離を計算
     //@―---------------------------------------------------------------------------
-    inline s32 IntVec2::MDist(const IntVec2& a, const IntVec2& b) noexcept {
+    constexpr s32 IntVec2::MDist(const IntVec2& a, const IntVec2& b) noexcept {
         return
-            abs(a.x - b.x) +
-            abs(a.y - b.y);
+            Math::Abs(a.x - b.x) +
+            Math::Abs(a.y - b.y);
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::Max(const IntVec2& a, const IntVec2& b) noexcept {
+    constexpr IntVec2 IntVec2::Max(const IntVec2& a, const IntVec2& b) noexcept {
         return IntVec2(std::max(a.x, b.x), std::max(a.y, b.y));
     }
 
@@ -685,7 +689,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntVec2::Min(const IntVec2& a, const IntVec2& b) noexcept {
+    constexpr IntVec2 IntVec2::Min(const IntVec2& a, const IntVec2& b) noexcept {
         return IntVec2(std::min(a.x, b.x), std::min(a.y, b.y));
     }
 
