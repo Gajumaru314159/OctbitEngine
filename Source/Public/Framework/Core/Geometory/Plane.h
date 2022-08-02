@@ -62,7 +62,7 @@ namespace ob::core {
     public:
 
         Vec3    normal;         //!< 面の法線
-        f32     distance;       //!< 原点と面の距離
+        f32     distance=0;     //!< 原点と面の距離
 
     };
 

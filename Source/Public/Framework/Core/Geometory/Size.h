@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -67,9 +67,9 @@ namespace ob::core {
         //! @brief  体積
         //@―---------------------------------------------------------------------------
         Size& normalize()noexcept {
-            width = abs(width);
-            height = abs(height);
-            depth = abs(depth);
+            width = Math::Abs(width);
+            height = Math::Abs(height);
+            depth = Math::Abs(depth);
         }
 
     public:

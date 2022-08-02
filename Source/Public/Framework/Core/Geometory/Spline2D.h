@@ -113,8 +113,8 @@ namespace ob::core {
 
     public:
 
-        points_type points; //!< ポイントリスト
-        bool        closed; //!< 閉じているか
+        points_type points;         //!< ポイントリスト
+        bool        closed{false};  //!< 閉じているか
 
     };
 
@@ -140,7 +140,7 @@ namespace ob::core {
     //! @brief  ポイントリストから構築
     //@―---------------------------------------------------------------------------
     inline Spline2D::Spline2D(const points_type&& another) {
-        points = move(another);
+        points = std::move(another);
     }
 
 
