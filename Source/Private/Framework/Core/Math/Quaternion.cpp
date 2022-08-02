@@ -11,7 +11,7 @@
 
 namespace ob::core {
 
-    const Quat Quat::identity = Quat(EForceInit::Force);
+    const Quat Quat::identity = Quat(EForceInit::None);
 
 
     //@―---------------------------------------------------------------------------

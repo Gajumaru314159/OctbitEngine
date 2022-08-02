@@ -23,7 +23,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      デフォルトコンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
-        Vec4()noexcept;
+        constexpr Vec4()noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -35,13 +35,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
         //@―---------------------------------------------------------------------------
-        explicit Vec4(f32 scalar)noexcept;
+        constexpr explicit Vec4(f32 scalar)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(要素を指定して初期化)
         //@―---------------------------------------------------------------------------
-        Vec4(f32 x, f32 y, f32 z, f32 w)noexcept;
+        constexpr Vec4(f32 x, f32 y, f32 z, f32 w)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ob::core {
         //! @details    2つのベクトルの差が Math::TOLERANCE より小さい場合、2つのベクトルは等しいと
         //!             見なされます。
         //@―---------------------------------------------------------------------------
-        bool operator == (const Vec4& v) const noexcept;
+        constexpr bool operator == (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -69,109 +69,109 @@ namespace ob::core {
         //! @details    2つのベクトルの差が Math::TOLERANCE より大きい場合、2つのベクトルは異なると
         //!             見なされます。
         //@―---------------------------------------------------------------------------
-        bool operator != (const Vec4& v) const noexcept;
+        constexpr bool operator != (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子
         //@―---------------------------------------------------------------------------
-        Vec4 operator + (const Vec4& v) const noexcept;
+        constexpr Vec4 operator + (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4 operator + (f32 scalar) const noexcept;
+        constexpr Vec4 operator + (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子
         //@―---------------------------------------------------------------------------
-        Vec4 operator - (const Vec4& v) const noexcept;
+        constexpr Vec4 operator - (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4 operator - (f32 scalar) const noexcept;
+        constexpr Vec4 operator - (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子
         //@―---------------------------------------------------------------------------
-        Vec4 operator * (const Vec4& v) const noexcept;
+        constexpr Vec4 operator * (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4 operator * (f32 scalar) const noexcept;
+        constexpr Vec4 operator * (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子
         //@―---------------------------------------------------------------------------
-        Vec4 operator / (const Vec4& v) const noexcept;
+        constexpr Vec4 operator / (const Vec4& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4 operator / (f32 scalar) const noexcept;
+        constexpr Vec4 operator / (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子
         //@―---------------------------------------------------------------------------
-        Vec4& operator += (const Vec4& v) noexcept;
+        constexpr Vec4& operator += (const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4& operator += (f32 scalar) noexcept;
+        constexpr Vec4& operator += (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec4& operator -= (const Vec4& v) noexcept;
+        constexpr Vec4& operator -= (const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4& operator -= (f32 scalar) noexcept;
+        constexpr Vec4& operator -= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec4& operator *= (const Vec4& v) noexcept;
+        constexpr Vec4& operator *= (const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 (スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4& operator *= (f32 scalar) noexcept;
+        constexpr Vec4& operator *= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec4& operator /= (const Vec4& v) noexcept;
+        constexpr Vec4& operator /= (const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec4& operator /= (f32 scalar) noexcept;
+        constexpr Vec4& operator /= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 単項マイナス演算子
         //@―---------------------------------------------------------------------------
-        Vec4 operator - () const noexcept;
+        constexpr Vec4 operator - () const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -191,7 +191,7 @@ namespace ob::core {
         //! 
         //! @details    範囲外の場合は0を返します。  
         //@―---------------------------------------------------------------------------
-        f32 operator [](size_t index) const noexcept;
+        constexpr f32 operator [](size_t index) const noexcept;
 
 
         //===============================================================
@@ -201,25 +201,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(f32 x, f32 y, f32 z, f32 w) noexcept;
+        constexpr void set(f32 x, f32 y, f32 z, f32 w) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(const Vec4& v) noexcept;
+        constexpr void set(const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を全て0に設定
         //@―---------------------------------------------------------------------------
-        void    setZero() noexcept;
+        constexpr void setZero() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 全ての要素を同じ値で設定
         //@―---------------------------------------------------------------------------
-        void    setAll(f32 scalar) noexcept;
+        constexpr void setAll(f32 scalar) noexcept;
 
 
         //===============================================================
@@ -229,25 +229,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     maxComponent() const noexcept;
+        constexpr f32 maxComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     maxAbsComponent() const noexcept;
+        constexpr f32 maxAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     minComponent() const noexcept;
+        constexpr f32 minComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     minAbsComponent() const noexcept;
+        constexpr f32 minAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -261,7 +261,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの二乗を取得
         //@―---------------------------------------------------------------------------
-        f32     sqrLength() const noexcept;
+        constexpr f32 sqrLength() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -323,7 +323,7 @@ namespace ob::core {
         //! @param v            比較対象
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool    equals(const Vec4& v, f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool equals(const Vec4& v, f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -331,13 +331,13 @@ namespace ob::core {
         //! 
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool    allComponentsEqual(f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool allComponentsEqual(f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ゼロベクトルか判定
         //@―---------------------------------------------------------------------------
-        bool    isZero(f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool isZero(f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -366,19 +366,19 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの各要素の絶対値からベクトルを作成
         //@―---------------------------------------------------------------------------
-        static Vec4 Abs(const Vec4& v) noexcept;
+        static constexpr Vec4 Abs(const Vec4& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 内積
         //@―---------------------------------------------------------------------------
-        static f32  Dot(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr f32  Dot(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 外積
         //@―---------------------------------------------------------------------------
-        static Vec4 Cross(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr Vec4 Cross(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -390,13 +390,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  二つのベクトルの距離の二乗を計算
         //@―---------------------------------------------------------------------------
-        static f32  SqrDist(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr f32  SqrDist(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  二つのベクトルのマンハッタン距離を計算
         //@―---------------------------------------------------------------------------
-        static f32  MDist(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr f32  MDist(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -407,7 +407,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Vec4 Lerp(const Vec4& a, const Vec4& b, f32 t) noexcept;
+        static constexpr Vec4 Lerp(const Vec4& a, const Vec4& b, f32 t) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -424,13 +424,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static Vec4 Max(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr Vec4 Max(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static Vec4 Min(const Vec4& a, const Vec4& b) noexcept;
+        static constexpr Vec4 Min(const Vec4& a, const Vec4& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -479,30 +479,29 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      デフォルトコンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
-    inline Vec4::Vec4() noexcept {}
+    constexpr Vec4::Vec4() noexcept : Vec4(0.0f) {}
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
     inline Vec4::Vec4(EForceInit) noexcept {
-        setZero();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
     //@―---------------------------------------------------------------------------
-    inline Vec4::Vec4(f32 scalar) noexcept {
-        set(scalar, scalar, scalar, scalar);
+    constexpr Vec4::Vec4(f32 scalar) noexcept:Vec4(scalar, scalar, scalar, scalar) {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(要素を指定して初期化)
     //@―---------------------------------------------------------------------------
-    inline Vec4::Vec4(f32 x, f32 y, f32 z, f32 w) noexcept {
-        set(x, y, z, w);
+    constexpr Vec4::Vec4(f32 _x, f32 _y, f32 _z, f32 _w) noexcept
+        : x(_x),y(_y),z(_z),w(_w) 
+    {
     }
 
 
@@ -516,7 +515,7 @@ namespace ob::core {
     //! @details    2つのベクトルの差が Math::TOLERANCE より小さい場合、2つのベクトルは等しいと
     //!             見なされます。
     //@―---------------------------------------------------------------------------
-    inline bool Vec4::operator == (const Vec4& v) const noexcept {
+    constexpr bool Vec4::operator == (const Vec4& v) const noexcept {
         return Math::IsNearEquals(x, v.x) &&
             Math::IsNearEquals(y, v.y) &&
             Math::IsNearEquals(z, v.z) &&
@@ -530,7 +529,7 @@ namespace ob::core {
     //! @details    2つのベクトルの差が Math::TOLERANCE より大きい場合、2つのベクトルは異なると
     //!             見なされます。
     //@―---------------------------------------------------------------------------
-    inline bool Vec4::operator != (const Vec4& v) const noexcept {
+    constexpr bool Vec4::operator != (const Vec4& v) const noexcept {
         return !(operator==(v));
     }
 
@@ -538,7 +537,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator + (const Vec4& v) const noexcept {
+    constexpr Vec4 Vec4::operator + (const Vec4& v) const noexcept {
         return Vec4(*this) += v;
     }
 
@@ -546,7 +545,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator + (f32 scalar) const noexcept {
+    constexpr Vec4 Vec4::operator + (f32 scalar) const noexcept {
         return Vec4(*this) += scalar;
     }
 
@@ -554,7 +553,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator - (const Vec4& v) const noexcept {
+    constexpr Vec4 Vec4::operator - (const Vec4& v) const noexcept {
         return Vec4(*this) -= v;
     }
 
@@ -562,7 +561,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator - (f32 scalar) const noexcept {
+    constexpr Vec4 Vec4::operator - (f32 scalar) const noexcept {
         return Vec4(*this) -= scalar;
     }
 
@@ -570,7 +569,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator * (const Vec4& v) const noexcept {
+    constexpr Vec4 Vec4::operator * (const Vec4& v) const noexcept {
         return Vec4(*this) *= v;
     }
 
@@ -578,7 +577,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator * (f32 scalar) const noexcept {
+    constexpr Vec4 Vec4::operator * (f32 scalar) const noexcept {
         return Vec4(*this) *= scalar;
     }
 
@@ -586,7 +585,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator / (const Vec4& v) const noexcept {
+    constexpr Vec4 Vec4::operator / (const Vec4& v) const noexcept {
         return Vec4(*this) /= v;
     }
 
@@ -594,7 +593,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator / (f32 scalar) const noexcept {
+    constexpr Vec4 Vec4::operator / (f32 scalar) const noexcept {
         return Vec4(*this) /= scalar;
     }
 
@@ -602,7 +601,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator += (const Vec4& v) noexcept {
+    constexpr Vec4& Vec4::operator += (const Vec4& v) noexcept {
         x += v.x;
         y += v.y;
         z += v.z;
@@ -614,7 +613,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator += (f32 scalar) noexcept {
+    constexpr Vec4& Vec4::operator += (f32 scalar) noexcept {
         x += scalar;
         y += scalar;
         z += scalar;
@@ -626,7 +625,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator -= (const Vec4& v) noexcept {
+    constexpr Vec4& Vec4::operator -= (const Vec4& v) noexcept {
         x -= v.x;
         y -= v.y;
         z -= v.z;
@@ -638,7 +637,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator -= (f32 scalar) noexcept {
+    constexpr Vec4& Vec4::operator -= (f32 scalar) noexcept {
         x -= scalar;
         y -= scalar;
         z -= scalar;
@@ -650,7 +649,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator *= (const Vec4& v) noexcept {
+    constexpr Vec4& Vec4::operator *= (const Vec4& v) noexcept {
         x *= v.x;
         y *= v.y;
         z *= v.z;
@@ -662,7 +661,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 (スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator *= (f32 scalar) noexcept {
+    constexpr Vec4& Vec4::operator *= (f32 scalar) noexcept {
         x *= scalar;
         y *= scalar;
         z *= scalar;
@@ -674,7 +673,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator /= (const Vec4& v) noexcept {
+    constexpr Vec4& Vec4::operator /= (const Vec4& v) noexcept {
         x /= v.x;
         y /= v.y;
         z /= v.z;
@@ -686,7 +685,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 除算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec4& Vec4::operator /= (f32 scalar) noexcept {
+    constexpr Vec4& Vec4::operator /= (f32 scalar) noexcept {
         x /= scalar;
         y /= scalar;
         z /= scalar;
@@ -698,7 +697,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 単項マイナス演算子
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::operator - () const noexcept {
+    constexpr Vec4 Vec4::operator - () const noexcept {
         return Vec4(-x, -y, -z, -w);
     }
 
@@ -708,7 +707,7 @@ namespace ob::core {
     //! 
     //! @details    範囲外の場合は0を返します。  
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::operator [](size_t index) const noexcept {
+    constexpr f32 Vec4::operator [](size_t index) const noexcept {
         switch (index) {
         case 0:return x;
         case 1:return y;
@@ -726,7 +725,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::set(f32 x, f32 y, f32 z, f32 w) noexcept {
+    constexpr void Vec4::set(f32 x, f32 y, f32 z, f32 w) noexcept {
         this->x = x;
         this->y = y;
         this->z = z;
@@ -737,7 +736,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::set(const Vec4& v) noexcept {
+    constexpr void Vec4::set(const Vec4& v) noexcept {
         set(v.x, v.y, v.z, v.w);
     }
 
@@ -745,7 +744,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を全て0に設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::setZero() noexcept {
+    constexpr void Vec4::setZero() noexcept {
         set(0.0f, 0.0f, 0.0f, 0.0f);
     }
 
@@ -753,7 +752,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 全ての要素を同じ値で設定
     //@―---------------------------------------------------------------------------
-    inline void Vec4::setAll(f32 scalar) noexcept {
+    constexpr void Vec4::setAll(f32 scalar) noexcept {
         set(scalar, scalar, scalar, scalar);
     }
 
@@ -765,7 +764,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::maxComponent() const noexcept {
+    constexpr f32 Vec4::maxComponent() const noexcept {
         return Math::Max(x, y, z, w);
     }
 
@@ -773,7 +772,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::maxAbsComponent() const noexcept {
+    constexpr f32 Vec4::maxAbsComponent() const noexcept {
         return Math::Max(Math::Abs(x), Math::Abs(y), Math::Abs(z), Math::Abs(w));
     }
 
@@ -781,7 +780,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::minComponent() const noexcept {
+    constexpr f32 Vec4::minComponent() const noexcept {
         return Math::Min(x, y, z, w);
     }
 
@@ -789,7 +788,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::minAbsComponent() const noexcept {
+    constexpr f32 Vec4::minAbsComponent() const noexcept {
         return Math::Min(Math::Abs(x), Math::Abs(y), Math::Abs(z), Math::Abs(w));
     }
 
@@ -807,7 +806,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの長さの二乗を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::sqrLength() const noexcept {
+    constexpr f32 Vec4::sqrLength() const noexcept {
         return x * x + y * y + z * z + w * w;
     }
 
@@ -903,7 +902,7 @@ namespace ob::core {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline bool Vec4::equals(const Vec4& v, f32 tolerance)const noexcept {
+    constexpr bool Vec4::equals(const Vec4& v, f32 tolerance)const noexcept {
         return
             Math::Abs(x - v.x) <= tolerance &&
             Math::Abs(y - v.y) <= tolerance &&
@@ -917,7 +916,7 @@ namespace ob::core {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline bool Vec4::allComponentsEqual(f32 tolerance)const noexcept {
+    constexpr bool Vec4::allComponentsEqual(f32 tolerance)const noexcept {
         if (tolerance < Math::Abs(x - y))return false;
         if (tolerance < Math::Abs(y - z))return false;
         if (tolerance < Math::Abs(z - w))return false;
@@ -931,7 +930,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ゼロベクトルか判定
     //@―---------------------------------------------------------------------------
-    inline bool Vec4::isZero(f32 tolerance)const noexcept {
+    constexpr bool Vec4::isZero(f32 tolerance)const noexcept {
         if (tolerance < Math::Abs(x))return false;
         if (tolerance < Math::Abs(y))return false;
         if (tolerance < Math::Abs(z))return false;
@@ -979,7 +978,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの各要素の絶対値からベクトルを作成
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::Abs(const Vec4& v) noexcept {
+    constexpr Vec4 Vec4::Abs(const Vec4& v) noexcept {
         return Vec4(Math::Abs(v.x), Math::Abs(v.y), Math::Abs(v.z), Math::Abs(v.w));
     }
 
@@ -987,7 +986,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 内積
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::Dot(const Vec4& a, const Vec4& b) noexcept {
+    constexpr f32 Vec4::Dot(const Vec4& a, const Vec4& b) noexcept {
         return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
     }
 
@@ -995,7 +994,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 外積
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::Cross(const Vec4& a, const Vec4& b) noexcept {
+    constexpr Vec4 Vec4::Cross(const Vec4& a, const Vec4& b) noexcept {
         return Vec4(a.y * b.z - a.z * b.y, a.z * b.w - a.w * b.z, a.w * b.x - a.x * b.w, a.x * b.y - a.y * b.x);
     }
 
@@ -1011,7 +1010,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  二つのベクトルの距離の二乗を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::SqrDist(const Vec4& a, const Vec4& b) noexcept {
+    constexpr f32 Vec4::SqrDist(const Vec4& a, const Vec4& b) noexcept {
         return (b - a).sqrLength();
     }
 
@@ -1019,7 +1018,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  二つのベクトルのマンハッタン距離を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec4::MDist(const Vec4& a, const Vec4& b) noexcept {
+    constexpr f32 Vec4::MDist(const Vec4& a, const Vec4& b) noexcept {
         return Math::Abs(a.x - b.x) + Math::Abs(a.y - b.y) + Math::Abs(a.z - b.z) + Math::Abs(a.w - b.w);
     }
 
@@ -1032,7 +1031,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::Lerp(const Vec4& a, const Vec4& b, f32 t) noexcept {
+    constexpr Vec4 Vec4::Lerp(const Vec4& a, const Vec4& b, f32 t) noexcept {
         return Vec4(
             a.x + (b.x - a.x) * t,
             a.y + (b.y - a.y) * t,
@@ -1072,7 +1071,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::Max(const Vec4& a, const Vec4& b) noexcept {
+    constexpr Vec4 Vec4::Max(const Vec4& a, const Vec4& b) noexcept {
         return Vec4(Math::Max(a.x, b.x), Math::Max(a.y, b.y), Math::Max(a.z, b.z), Math::Max(a.w, b.w));
     }
 
@@ -1080,7 +1079,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline Vec4 Vec4::Min(const Vec4& a, const Vec4& b) noexcept {
+    constexpr Vec4 Vec4::Min(const Vec4& a, const Vec4& b) noexcept {
         return Vec4(Math::Min(a.x, b.x), Math::Min(a.y, b.y), Math::Min(a.z, b.z), Math::Min(a.w, b.w));
     }
 

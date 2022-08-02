@@ -142,10 +142,10 @@ namespace ob::core {
         //===============================================================
 
         //! @brief 2つの浮動小数点値を比較し近似している場合はtrueを返す
-        static bool IsNearEquals(f32 a, f32 b, f32 tolerance = Math::TOLERANCE)noexcept { return Abs(a - b) < tolerance; }
+        static constexpr bool IsNearEquals(f32 a, f32 b, f32 tolerance = Math::TOLERANCE)noexcept { return Abs(a - b) < tolerance; }
 
         //! @brief 値が0に近い場合はtrueを返す
-        static bool IsNearZero(f32 a, f32 tolerance = Math::TOLERANCE)noexcept { return IsNearEquals(a, 0.0f, tolerance); }
+        static constexpr bool IsNearZero(f32 a, f32 tolerance = Math::TOLERANCE)noexcept { return IsNearEquals(a, 0.0f, tolerance); }
 
         //! @brief 値が無効な数字か判定する
         static bool IsNaN(f32 value);
@@ -162,10 +162,10 @@ namespace ob::core {
         static constexpr f32 Abs(f32 f)noexcept { return f < 0 ? -f : f; }
 
         //! @brief fをminimumとmaximumの間に収まるように返す
-        static f32 Clamp(f32 f, f32 minimum, f32 maximum)noexcept { return std::clamp(f, maximum, minimum); }
+        static constexpr f32 Clamp(f32 f, f32 minimum, f32 maximum)noexcept { return std::clamp(f, maximum, minimum); }
 
         //! @brief fを0と1の間に収まるように返す
-        static f32 Clamp01(f32 f)noexcept { return Math::Clamp(f, 0, 1); }
+        static constexpr f32 Clamp01(f32 f)noexcept { return Math::Clamp(f, 0, 1); }
 
         //! @brief toとfromの間の角度をラジアンで返す
         static f32 BetweenAngle(f32 to, f32 from) { return abs(fmodf(from - to, TWO_PI)); }
@@ -189,16 +189,16 @@ namespace ob::core {
         static f32 Pow(f32 f, f32 p) { return powf(f, p); }
 
         //! @brief fの符号を返す
-        static f32 Sign(f32 f)noexcept { if (f == 0.0f)return 0; return 0.0f < f ? 1.0f : -1.0f; }
+        static constexpr f32 Sign(f32 f)noexcept { if (f == 0.0f)return 0; return 0.0f < f ? 1.0f : -1.0f; }
 
         //! @brief fの二乗を返す
-        static f32 Square(f32 f)noexcept { return f * f; }
+        static constexpr f32 Square(f32 f)noexcept { return f * f; }
 
         //! @brief fの根(ルート)を返す
         static f32 Sqrt(f32 f) { return sqrtf(f); }
 
         //! @brief fの根(ルート)を返す(高速版)
-        static f32 SqrtFast(f32 f)noexcept {
+        static constexpr f32 SqrtFast(f32 f)noexcept {
             f32 xHalf = 0.5f * f;
             s32   tmp = 0x5F3759DF - (*(s32*)&f >> 1);
             f32 xRes = *(f32*)&tmp;
@@ -272,7 +272,7 @@ namespace ob::core {
 
 
     // @brief 3つの値から一番大きい値を返す
-    inline constexpr f32 Math::Max(f32 a, f32 b, f32 c)noexcept {
+    constexpr f32 Math::Max(f32 a, f32 b, f32 c)noexcept {
         f32 result = a;
         if (result < b)result = b;
         if (result < c)result = c;
@@ -281,7 +281,7 @@ namespace ob::core {
 
 
     // @brief 4つの値から一番大きい値を返す
-    inline constexpr f32 Math::Max(f32 a, f32 b, f32 c, f32 d)noexcept {
+    constexpr f32 Math::Max(f32 a, f32 b, f32 c, f32 d)noexcept {
         f32 result = a;
         if (result < b)result = b;
         if (result < c)result = c;
@@ -291,7 +291,7 @@ namespace ob::core {
 
 
     // @brief 配列の中から一番大きい値を返す
-    inline constexpr f32 Math::Max(gsl::span<const f32> values)noexcept {
+    constexpr f32 Math::Max(gsl::span<const f32> values)noexcept {
         f32 ans = values.front();
         for (f32 value : values) {
             ans = Math::Max(ans, value);
@@ -301,7 +301,7 @@ namespace ob::core {
 
 
     // @brief 3つの値から一番小さい値を返す
-    inline constexpr f32 Math::Min(f32 a, f32 b, f32 c)noexcept {
+    constexpr f32 Math::Min(f32 a, f32 b, f32 c)noexcept {
         f32 result = a;
         if (b < result)result = b;
         if (c < result)result = c;
@@ -310,7 +310,7 @@ namespace ob::core {
 
 
     // @brief 4つの値から一番小さい値を返す
-    inline constexpr f32 Math::Min(f32 a, f32 b, f32 c, f32 d)noexcept {
+    constexpr f32 Math::Min(f32 a, f32 b, f32 c, f32 d)noexcept {
         f32 result = a;
         if (b < result)result = b;
         if (c < result)result = c;
@@ -320,7 +320,7 @@ namespace ob::core {
 
 
     // @brief 配列の中から一番小さい値を返す
-    inline constexpr f32 Math::Min(gsl::span<const f32> values)noexcept {
+    constexpr f32 Math::Min(gsl::span<const f32> values)noexcept {
         f32 ans = values.front();
         for (f32 value : values) {
             ans = Math::Min(ans, value);

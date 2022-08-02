@@ -56,7 +56,7 @@ namespace ob::core {
     //! @brief 行列演算子
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator * (const Matrix& other) const {
-        Matrix result(EForceInit::Force);
+        Matrix result(EForceInit::None);
         result.m[0][0] = 0;
         result.m[1][1] = 0;
         result.m[2][2] = 0;
@@ -78,7 +78,7 @@ namespace ob::core {
     //! @brief 行列演算代入演算子 
     //@―---------------------------------------------------------------------------
     Matrix Matrix::operator *= (const Matrix& other) {
-        Matrix result(EForceInit::Force);
+        Matrix result(EForceInit::None);
         result.m[0][0] = 0;
         result.m[1][1] = 0;
         result.m[2][2] = 0;

@@ -22,13 +22,13 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief          デフォルトコンストラクタ(初期化なし)
+        //! @brief          デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        Box()noexcept;
+        constexpr Box()noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief          コンストラクタ( ゼロ初期化 )
+        //! @brief          コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
         Box(EForceInit)noexcept;
 
@@ -36,7 +36,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          コンストラクタ(サイズ/中心指定)
         //@―---------------------------------------------------------------------------
-        Box(const Vec3& size, const Vec3& center = Vec3::Zero)noexcept;
+        constexpr Box(const Vec3& size, const Vec3& center = Vec3::Zero)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -55,13 +55,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const Box& other)const noexcept;
+        constexpr bool operator==(const Box& other)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator!=(const Box& other)const noexcept;
+        constexpr bool operator!=(const Box& other)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ namespace ob::core {
         //!                 元のボックスが空の場合は何もしない。
         //! @param point    ポイント
         //@―---------------------------------------------------------------------------
-        Box  operator+(const Vec3& point)const noexcept;
+        constexpr Box  operator+(const Vec3& point)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ namespace ob::core {
         //!                 元のボックスが空の場合は何もしない。
         //! @param point    ポイント
         //@―---------------------------------------------------------------------------
-        Box& operator+=(const Vec3& point)noexcept;
+        constexpr Box& operator+=(const Vec3& point)noexcept;
 
 
         //===============================================================
@@ -93,7 +93,7 @@ namespace ob::core {
         //! 
         //! @details        点群を含む最小の Box に設定する
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& center, const Vec3& size = Vec3::Zero)noexcept;
+        constexpr void set(const Vec3& center, const Vec3& size = Vec3::Zero)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -108,18 +108,18 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          構造体をゼロ初期化する
         //@―---------------------------------------------------------------------------
-        void reset()noexcept;
+        constexpr void reset()noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          size を絶対値に更新
         //@―---------------------------------------------------------------------------
-        void normalize()noexcept;
+        constexpr void normalize()noexcept;
 
         //@―---------------------------------------------------------------------------
         //! @brief          size を絶対値に更新
         //@―---------------------------------------------------------------------------
-        void setStartEnd(const Vec3& start, const Vec3& end)noexcept;
+        constexpr void setStartEnd(const Vec3& start, const Vec3& end)noexcept;
 
 
         //===============================================================
@@ -131,7 +131,7 @@ namespace ob::core {
         //! 
         //! @see        start()
         //@―---------------------------------------------------------------------------
-        Vec3 start()const noexcept;
+        constexpr Vec3 start()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -139,13 +139,13 @@ namespace ob::core {
         //! 
         //! @see        start()
         //@―---------------------------------------------------------------------------
-        Vec3 end()const noexcept;
+        constexpr Vec3 end()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      体積を取得
         //@―---------------------------------------------------------------------------
-        f32 volume()const noexcept;
+        constexpr f32 volume()const noexcept;
 
 
         //===============================================================
@@ -155,7 +155,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0
         //@―---------------------------------------------------------------------------
-        bool empty()const noexcept;
+        constexpr bool empty()const noexcept;
 
 
     public:
@@ -168,7 +168,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Box Lerp(const Box& a, const Box& b, f32 t)noexcept;
+        static constexpr Box Lerp(const Box& a, const Box& b, f32 t)noexcept;
 
 
     public:
@@ -189,23 +189,24 @@ namespace ob::core {
     //! @cond
 
     //@―---------------------------------------------------------------------------
-    //! @brief          デフォルトコンストラクタ(初期化なし)
+    //! @brief          デフォルトコンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
-    inline Box::Box()noexcept {}
+    constexpr Box::Box()noexcept 
+    {
+    }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief          コンストラクタ( ゼロ初期化 )
+    //! @brief          コンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
     inline Box::Box(EForceInit)noexcept {
-        reset();
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
-    inline Box::Box(const Vec3& size, const Vec3& center)noexcept {
+    constexpr Box::Box(const Vec3& size, const Vec3& center)noexcept {
         set(size, center);
     }
 
@@ -213,7 +214,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Box::operator==(const Box& other)const noexcept {
+    constexpr bool Box::operator==(const Box& other)const noexcept {
         return (center == other.center) && (size == other.size);
     }
 
@@ -221,7 +222,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Box::operator!=(const Box& other)const noexcept {
+    constexpr bool Box::operator!=(const Box& other)const noexcept {
         return !(*this == other);
     }
 
@@ -233,7 +234,7 @@ namespace ob::core {
     //!                 元のボックスが空の場合は何もしない。
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
-    inline Box Box::operator+(const Vec3& point)const noexcept {
+    constexpr Box Box::operator+(const Vec3& point)const noexcept {
         return Box(*this) += point;
     }
 
@@ -244,7 +245,7 @@ namespace ob::core {
     //! @details        ポイントを含むようにボックスを拡大する。
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
-    inline Box& Box::operator+=(const Vec3& point)noexcept {
+    constexpr Box& Box::operator+=(const Vec3& point)noexcept {
         if (empty()) {
             return *this;
         }
@@ -267,7 +268,7 @@ namespace ob::core {
     //! 
     //! @detail     点群を含む最小の Box に設定する
     //@―---------------------------------------------------------------------------
-    inline void Box::set(const Vec3& size, const Vec3& center)noexcept {
+    constexpr void Box::set(const Vec3& size, const Vec3& center)noexcept {
         this->size = size;
         this->center = center;
     }
@@ -276,7 +277,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体をゼロ初期化する
     //@―---------------------------------------------------------------------------
-    inline void Box::reset()noexcept {
+    constexpr void Box::reset()noexcept {
         center.setZero();
         size.setZero();
     }
@@ -285,7 +286,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      size を絶対値に更新
     //@―---------------------------------------------------------------------------
-    inline void Box::normalize()noexcept {
+    constexpr void Box::normalize()noexcept {
         size = Vec3::Abs(size);
     }
 
@@ -293,7 +294,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      2点を指定して Box を設定
     //@―---------------------------------------------------------------------------
-    inline void Box::setStartEnd(const Vec3& start, const Vec3& end) noexcept {
+    constexpr void Box::setStartEnd(const Vec3& start, const Vec3& end) noexcept {
         center = (start + end) * 0.5f;
         size = Vec3::Abs(start - end);
     }
@@ -304,7 +305,7 @@ namespace ob::core {
     //! 
     //! @see        GetEnd()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::start()const noexcept {
+    constexpr Vec3 Box::start()const noexcept {
         return center + size * 0.5f;
     }
 
@@ -314,7 +315,7 @@ namespace ob::core {
     //! 
     //! @see        GetStart()
     //@―---------------------------------------------------------------------------
-    inline Vec3 Box::end()const noexcept {
+    constexpr Vec3 Box::end()const noexcept {
         return center - size * 0.5f;
     }
 
@@ -322,7 +323,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      体積を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Box::volume()const noexcept {
+    constexpr f32 Box::volume()const noexcept {
         return size.x * size.y * size.z;
     }
 
@@ -330,7 +331,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0
     //@―---------------------------------------------------------------------------
-    inline bool Box::empty()const noexcept {
+    constexpr bool Box::empty()const noexcept {
         return size.isZero();
     }
 
@@ -342,7 +343,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Box Box::Lerp(const Box& a, const Box& b, f32 t)noexcept {
+    constexpr Box Box::Lerp(const Box& a, const Box& b, f32 t)noexcept {
         return Box(Vec3::Lerp(a.size, b.size, t), Vec3::Lerp(a.center, b.center, t));
     }
 

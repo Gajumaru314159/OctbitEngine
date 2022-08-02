@@ -19,27 +19,27 @@ namespace ob::core {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
-        //! @brief      デフォルトコンストラクタ(初期化なし)
+        //! @brief      デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        Vec3()noexcept;
+        constexpr Vec3()noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ(ゼロ初期化)
+        //! @brief      コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
-        explicit Vec3(EForceInit)noexcept;
+        inline explicit Vec3(EForceInit)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(すべての要素を同じ値で初期化)
         //@―---------------------------------------------------------------------------
-        explicit Vec3(f32 scalar)noexcept;
+        constexpr explicit Vec3(f32 scalar)noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(要素を指定して初期化)
         //@―---------------------------------------------------------------------------
-        Vec3(f32 x, f32 y, f32 z)noexcept;
+        constexpr Vec3(f32 x, f32 y, f32 z)noexcept;
 
 
         //===============================================================
@@ -52,7 +52,7 @@ namespace ob::core {
         //! @details    2つのベクトルの差が Math::TOLERANCE より小さい場合、2つのベクトルは等しいと
         //!             見なされます。
         //@―---------------------------------------------------------------------------
-        bool operator == (const Vec3& v) const noexcept;
+        constexpr bool operator == (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -61,109 +61,109 @@ namespace ob::core {
         //! @details    2つのベクトルの差が Math::TOLERANCE より大きい場合、2つのベクトルは異なると
         //!             見なされます。
         //@―---------------------------------------------------------------------------
-        bool operator != (const Vec3& v) const noexcept;
+        constexpr bool operator != (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子
         //@―---------------------------------------------------------------------------
-        Vec3 operator + (const Vec3& v) const noexcept;
+        constexpr Vec3 operator + (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3 operator + (f32 scalar) const noexcept;
+        constexpr Vec3 operator + (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子
         //@―---------------------------------------------------------------------------
-        Vec3 operator - (const Vec3& v) const noexcept;
+        constexpr Vec3 operator - (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3 operator - (f32 scalar) const noexcept;
+        constexpr Vec3 operator - (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子
         //@―---------------------------------------------------------------------------
-        Vec3 operator * (const Vec3& v) const noexcept;
+        constexpr Vec3 operator * (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3 operator * (f32 scalar) const noexcept;
+        constexpr Vec3 operator * (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子
         //@―---------------------------------------------------------------------------
-        Vec3 operator / (const Vec3& v) const noexcept;
+        constexpr Vec3 operator / (const Vec3& v) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3 operator / (f32 scalar) const noexcept;
+        constexpr Vec3 operator / (f32 scalar) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子
         //@―---------------------------------------------------------------------------
-        Vec3& operator += (const Vec3& v) noexcept;
+        constexpr Vec3& operator += (const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 加算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3& operator += (f32 scalar) noexcept;
+        constexpr Vec3& operator += (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec3& operator -= (const Vec3& v) noexcept;
+        constexpr Vec3& operator -= (const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 減算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3& operator -= (f32 scalar) noexcept;
+        constexpr Vec3& operator -= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec3& operator *= (const Vec3& v) noexcept;
+        constexpr Vec3& operator *= (const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 乗算代入演算子 (スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3& operator *= (f32 scalar) noexcept;
+        constexpr Vec3& operator *= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子 
         //@―---------------------------------------------------------------------------
-        Vec3& operator /= (const Vec3& v) noexcept;
+        constexpr Vec3& operator /= (const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 除算代入演算子(スカラー)
         //@―---------------------------------------------------------------------------
-        Vec3& operator /= (f32 scalar) noexcept;
+        constexpr Vec3& operator /= (f32 scalar) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 単項マイナス演算子
         //@―---------------------------------------------------------------------------
-        Vec3 operator - () const noexcept;
+        constexpr Vec3 operator - () const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace ob::core {
         //! 
         //! @details    範囲外の場合は0を返します。  
         //@―---------------------------------------------------------------------------
-        f32 operator [](size_t index) const noexcept;
+        constexpr f32 operator [](size_t index) const noexcept;
 
 
         //===============================================================
@@ -193,25 +193,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(f32 x, f32 y, f32 z) noexcept;
+        constexpr void set(f32 x, f32 y, f32 z) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を設定
         //@―---------------------------------------------------------------------------
-        void    set(const Vec3& v) noexcept;
+        constexpr void set(const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素を全て0に設定
         //@―---------------------------------------------------------------------------
-        void    setZero() noexcept;
+        constexpr void setZero() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 全ての要素を同じ値で設定
         //@―---------------------------------------------------------------------------
-        void    setAll(f32 scalar) noexcept;
+        constexpr void setAll(f32 scalar) noexcept;
 
 
         //===============================================================
@@ -221,25 +221,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     maxComponent() const noexcept;
+        constexpr f32 maxComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最大を取得
         //@―---------------------------------------------------------------------------
-        f32     maxAbsComponent() const noexcept;
+        constexpr f32 maxAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     minComponent() const noexcept;
+        constexpr f32 minComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 要素の絶対値の最小を取得
         //@―---------------------------------------------------------------------------
-        f32     minAbsComponent() const noexcept;
+        constexpr f32 minAbsComponent() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -247,13 +247,13 @@ namespace ob::core {
         //! 
         //! @details 二つのベクトルの長さを比較する場合はSqrMagのほうが高速です。
         //@―---------------------------------------------------------------------------
-        f32     length() const;
+        inline f32 length() const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの長さの二乗を取得
         //@―---------------------------------------------------------------------------
-        f32     sqrLength() const noexcept;
+        constexpr f32 sqrLength() const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -262,13 +262,13 @@ namespace ob::core {
         //! @details            0ベクトルの場合は0ベクトルを返す。
         //! @param tolerance    ゼロベクトル判定の誤差の許容誤差
         //@―---------------------------------------------------------------------------
-        Vec3    unitVec(f32 tolerance = Math::TOLERANCE)const;
+        Vec3 unitVec(f32 tolerance = Math::TOLERANCE)const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief              単位ベクトルを取得(ゼロチェックなし)
         //@―---------------------------------------------------------------------------
-        Vec3    getUnitVecUnsafe()const;
+        Vec3 getUnitVecUnsafe()const;
 
 
         //@―---------------------------------------------------------------------------
@@ -277,7 +277,7 @@ namespace ob::core {
         //! @param[out] outDir  方向ベクトルの出力
         //! @param[out] outLen  ベクトルの大きさ
         //@―---------------------------------------------------------------------------
-        void    toDirectionAndLength(Vec3& outDir, f32& outLen)const;
+        void toDirectionAndLength(Vec3& outDir, f32& outLen)const;
 
 
         //===========================================================
@@ -302,13 +302,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      移動
         //@―---------------------------------------------------------------------------
-        Vec3& translate(f32 x, f32 y, f32 z) noexcept;
+        constexpr Vec3& translate(f32 x, f32 y, f32 z) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      移動
         //@―---------------------------------------------------------------------------
-        Vec3& translate(const Vec3& add) noexcept;
+        constexpr Vec3& translate(const Vec3& add) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -361,19 +361,19 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        Vec3& scale(f32 scale) noexcept;
+        constexpr Vec3& scale(f32 scale) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        Vec3& scale(f32 sx, f32 sy, f32 sz) noexcept;
+        constexpr Vec3& scale(f32 sx, f32 sy, f32 sz) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      拡大
         //@―---------------------------------------------------------------------------
-        Vec3& scale(const Vec3& scale) noexcept;
+        constexpr Vec3& scale(const Vec3& scale) noexcept;
 
 
         //===============================================================
@@ -392,7 +392,7 @@ namespace ob::core {
         //! @param v            比較対象
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool    equals(const Vec3& v, f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool equals(const Vec3& v, f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -400,13 +400,13 @@ namespace ob::core {
         //! 
         //! @param tolerance    許容誤差
         //@―---------------------------------------------------------------------------
-        bool    allComponentsEqual(f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool allComponentsEqual(f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief ゼロベクトルか判定
         //@―---------------------------------------------------------------------------
-        bool    isZero(f32 tolerance = Math::TOLERANCE)const noexcept;
+        constexpr bool isZero(f32 tolerance = Math::TOLERANCE)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -435,31 +435,31 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief ベクトルの各要素の絶対値からベクトルを作成
         //@―---------------------------------------------------------------------------
-        static Vec3 Abs(const Vec3& v) noexcept;
+        static constexpr Vec3 Abs(const Vec3& v) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 内積
         //@―---------------------------------------------------------------------------
-        static f32  Dot(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  Dot(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 外積
         //@―---------------------------------------------------------------------------
-        static Vec3 Cross(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr Vec3 Cross(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  二つのベクトルの距離を計算
         //@―---------------------------------------------------------------------------
-        static f32  Dist(const Vec3& a, const Vec3& b);
+        static inline f32  Dist(const Vec3& a, const Vec3& b);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  二つのベクトルの距離の二乗を計算
         //@―---------------------------------------------------------------------------
-        static f32  SqrDist(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  SqrDist(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -471,7 +471,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      XY平面上の距離の二乗を計算
         //@―---------------------------------------------------------------------------
-        static f32  SqrDistXY(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  SqrDistXY(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -483,7 +483,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      YZ平面上の距離の二乗を計算
         //@―---------------------------------------------------------------------------
-        static f32  SqrDistYZ(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  SqrDistYZ(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -495,13 +495,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      XZ平面上の距離の二乗を計算
         //@―---------------------------------------------------------------------------
-        static f32  SqrDistXZ(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  SqrDistXZ(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      二つのベクトルのマンハッタン距離を計算
         //@―---------------------------------------------------------------------------
-        static f32  MDist(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr f32  MDist(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -512,7 +512,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Vec3 Lerp(const Vec3& a, const Vec3& b, f32 t) noexcept;
+        static constexpr Vec3 Lerp(const Vec3& a, const Vec3& b, f32 t) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -529,13 +529,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      二つのベクトルの各要素の大きいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static Vec3 Max(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr Vec3 Max(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      二つのベクトルの各要素の小さいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
-        static Vec3 Min(const Vec3& a, const Vec3& b) noexcept;
+        static constexpr Vec3 Min(const Vec3& a, const Vec3& b) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -556,7 +556,7 @@ namespace ob::core {
         //! @param inDir    入力ベクトル
         //! @param normal   衝突面の法線
         //@―---------------------------------------------------------------------------
-        static Vec3 Mirror(const Vec3& inDir, const Vec3& normal) noexcept;
+        static constexpr Vec3 Mirror(const Vec3& inDir, const Vec3& normal) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -565,7 +565,7 @@ namespace ob::core {
         //! @param inDir    入力ベクトル
         //! @param normal   衝突面の法線
         //@―---------------------------------------------------------------------------
-        static Vec3 Projection(const Vec3& inDir, const Vec3& normal) noexcept;
+        static constexpr Vec3 Projection(const Vec3& inDir, const Vec3& normal) noexcept;
 
     public:
 
@@ -601,30 +601,30 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      デフォルトコンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
-    inline Vec3::Vec3() noexcept {}
+    constexpr Vec3::Vec3() noexcept:Vec3(0.0f) {
+    }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(ゼロ初期化)
     //@―---------------------------------------------------------------------------
     inline Vec3::Vec3(EForceInit) noexcept {
-        setZero(); Vec3::Zero;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(1要素指定)
     //@―---------------------------------------------------------------------------
-    inline Vec3::Vec3(f32 scaler) noexcept {
-        set(scaler, scaler, scaler);
+    constexpr Vec3::Vec3(f32 scalar) noexcept:Vec3(scalar, scalar, scalar) {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(要素を指定して初期化)
     //@―---------------------------------------------------------------------------
-    inline Vec3::Vec3(f32 x, f32 y, f32 z) noexcept {
-        set(x, y, z);
+    constexpr Vec3::Vec3(f32 _x, f32 _y, f32 _z) noexcept
+        : x(_x),y(_y),z(_z)
+    {
     }
 
 
@@ -638,7 +638,7 @@ namespace ob::core {
     //! 
     //! @details    2つのベクトルの差が Math::TOLERANCE より小さい場合、2つのベクトルは等しいと見なされます。
     //@―---------------------------------------------------------------------------
-    inline bool Vec3::operator == (const Vec3& v) const noexcept {
+    constexpr bool Vec3::operator == (const Vec3& v) const noexcept {
         return Math::IsNearEquals(x, v.x) &&
             Math::IsNearEquals(y, v.y) &&
             Math::IsNearEquals(z, v.z);
@@ -650,7 +650,7 @@ namespace ob::core {
     //! 
     //! @details    2つのベクトルの差が Math::TOLERANCE より大きい場合、2つのベクトルは異なると見なされます。
     //@―---------------------------------------------------------------------------
-    inline bool Vec3::operator != (const Vec3& v) const noexcept {
+    constexpr bool Vec3::operator != (const Vec3& v) const noexcept {
         return !(operator==(v));
     }
 
@@ -658,7 +658,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator + (const Vec3& v) const noexcept {
+    constexpr Vec3 Vec3::operator + (const Vec3& v) const noexcept {
         return Vec3(*this) += v;
     }
 
@@ -666,7 +666,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator + (f32 scalar) const noexcept {
+    constexpr Vec3 Vec3::operator + (f32 scalar) const noexcept {
         return Vec3(*this) += scalar;
     }
 
@@ -674,7 +674,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator - (const Vec3& v) const noexcept {
+    constexpr Vec3 Vec3::operator - (const Vec3& v) const noexcept {
         return Vec3(*this) -= v;
     }
 
@@ -682,7 +682,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator - (f32 scalar) const noexcept {
+    constexpr Vec3 Vec3::operator - (f32 scalar) const noexcept {
         return Vec3(*this) -= scalar;
     }
 
@@ -690,7 +690,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator * (const Vec3& v) const noexcept {
+    constexpr Vec3 Vec3::operator * (const Vec3& v) const noexcept {
         return Vec3(*this) *= v;
     }
 
@@ -698,7 +698,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator * (f32 scalar) const noexcept {
+    constexpr Vec3 Vec3::operator * (f32 scalar) const noexcept {
         return Vec3(*this) *= scalar;
     }
 
@@ -708,7 +708,7 @@ namespace ob::core {
     //! 
     //! @note   0除算は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator / (const Vec3& v) const noexcept {
+    constexpr Vec3 Vec3::operator / (const Vec3& v) const noexcept {
         return Vec3(*this) /= v;
     }
 
@@ -718,7 +718,7 @@ namespace ob::core {
     //! 
     //! @note   0除算は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator / (f32 scalar) const noexcept {
+    constexpr Vec3 Vec3::operator / (f32 scalar) const noexcept {
         return Vec3(*this) /= scalar;
     }
 
@@ -726,7 +726,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator += (const Vec3& v) noexcept {
+    constexpr Vec3& Vec3::operator += (const Vec3& v) noexcept {
         x += v.x;
         y += v.y;
         z += v.z;
@@ -737,7 +737,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 加算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator += (f32 scalar) noexcept {
+    constexpr Vec3& Vec3::operator += (f32 scalar) noexcept {
         x += scalar;
         y += scalar;
         z += scalar;
@@ -748,7 +748,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator -= (const Vec3& v) noexcept {
+    constexpr Vec3& Vec3::operator -= (const Vec3& v) noexcept {
         x -= v.x;
         y -= v.y;
         z -= v.z;
@@ -759,7 +759,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 減算代入演算子(スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator -= (f32 scalar) noexcept {
+    constexpr Vec3& Vec3::operator -= (f32 scalar) noexcept {
         x -= scalar;
         y -= scalar;
         z -= scalar;
@@ -770,7 +770,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator *= (const Vec3& v) noexcept {
+    constexpr Vec3& Vec3::operator *= (const Vec3& v) noexcept {
         x *= v.x;
         y *= v.y;
         z *= v.z;
@@ -781,7 +781,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 乗算代入演算子 (スカラー)
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator *= (f32 scalar) noexcept {
+    constexpr Vec3& Vec3::operator *= (f32 scalar) noexcept {
         x *= scalar;
         y *= scalar;
         z *= scalar;
@@ -794,7 +794,7 @@ namespace ob::core {
     //! 
     //! @note   0除算は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator /= (const Vec3& v) noexcept {
+    constexpr Vec3& Vec3::operator /= (const Vec3& v) noexcept {
         x /= v.x;
         y /= v.y;
         z /= v.z;
@@ -807,7 +807,7 @@ namespace ob::core {
     //! 
     //! @note   0除算は未定義動作です。
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::operator /= (f32 scalar) noexcept {
+    constexpr Vec3& Vec3::operator /= (f32 scalar) noexcept {
         x /= scalar;
         y /= scalar;
         z /= scalar;
@@ -818,7 +818,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 単項マイナス演算子
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::operator - () const noexcept {
+    constexpr Vec3 Vec3::operator - () const noexcept {
         return Vec3(-x, -y, -z);
     }
 
@@ -828,7 +828,7 @@ namespace ob::core {
     //! 
     //! @details    範囲外の場合は0を返します。  
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::operator [](size_t index) const noexcept {
+    constexpr f32 Vec3::operator [](size_t index) const noexcept {
         switch (index) {
         case 0:return x;
         case 1:return y;
@@ -845,7 +845,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void Vec3::set(f32 x, f32 y, f32 z) noexcept {
+    constexpr void Vec3::set(f32 x, f32 y, f32 z) noexcept {
         this->x = x;
         this->y = y;
         this->z = z;
@@ -855,7 +855,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を設定
     //@―---------------------------------------------------------------------------
-    inline void Vec3::set(const Vec3& v) noexcept {
+    constexpr void Vec3::set(const Vec3& v) noexcept {
         set(v.x, v.y, v.z);
     }
 
@@ -863,7 +863,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素を全て0に設定
     //@―---------------------------------------------------------------------------
-    inline void Vec3::setZero() noexcept {
+    constexpr void Vec3::setZero() noexcept {
         setAll(0.0f);
     }
 
@@ -871,7 +871,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 全ての要素を同じ値で設定
     //@―---------------------------------------------------------------------------
-    inline void Vec3::setAll(f32 scalar) noexcept {
+    constexpr void Vec3::setAll(f32 scalar) noexcept {
         set(scalar, scalar, scalar);
     }
 
@@ -883,7 +883,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::maxComponent() const noexcept {
+    constexpr f32 Vec3::maxComponent() const noexcept {
         return Math::Max(x, y, z);
     }
 
@@ -891,7 +891,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最大を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::maxAbsComponent() const noexcept {
+    constexpr f32 Vec3::maxAbsComponent() const noexcept {
         return Math::Max(Math::Abs(x), Math::Abs(y), Math::Abs(z));
     }
 
@@ -899,7 +899,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::minComponent() const noexcept {
+    constexpr f32 Vec3::minComponent() const noexcept {
         return Math::Min(x, y, z);
     }
 
@@ -907,7 +907,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 要素の絶対値の最小を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::minAbsComponent() const noexcept {
+    constexpr f32 Vec3::minAbsComponent() const noexcept {
         return Math::Min(Math::Abs(x), Math::Abs(y), Math::Abs(z));
     }
 
@@ -925,7 +925,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの長さの二乗を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::sqrLength() const noexcept {
+    constexpr f32 Vec3::sqrLength() const noexcept {
         return x * x + y * y + z * z;
     }
 
@@ -1012,7 +1012,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      移動
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::translate(f32 x, f32 y, f32 z) noexcept {
+    constexpr Vec3& Vec3::translate(f32 x, f32 y, f32 z) noexcept {
         this->x += x;
         this->y += y;
         this->z += z;
@@ -1023,7 +1023,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      移動
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::translate(const Vec3& v) noexcept {
+    constexpr Vec3& Vec3::translate(const Vec3& v) noexcept {
         return translate(v.x, v.y, v.z);
     }
 
@@ -1102,7 +1102,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::scale(f32 s) noexcept {
+    constexpr Vec3& Vec3::scale(f32 s) noexcept {
         return scale(s, s, s);
     }
 
@@ -1110,7 +1110,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::scale(f32 sx, f32 sy, f32 sz) noexcept {
+    constexpr Vec3& Vec3::scale(f32 sx, f32 sy, f32 sz) noexcept {
         x *= sx;
         y *= sy;
         z *= sz;
@@ -1121,7 +1121,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      拡大
     //@―---------------------------------------------------------------------------
-    inline Vec3& Vec3::scale(const Vec3& s) noexcept {
+    constexpr Vec3& Vec3::scale(const Vec3& s) noexcept {
         return scale(s.x, s.y, s.z);
     }
 
@@ -1144,7 +1144,7 @@ namespace ob::core {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline bool Vec3::equals(const Vec3& v, f32 tolerance)const noexcept {
+    constexpr bool Vec3::equals(const Vec3& v, f32 tolerance)const noexcept {
         return
             Math::Abs(x - v.x) <= tolerance &&
             Math::Abs(y - v.y) <= tolerance &&
@@ -1157,7 +1157,7 @@ namespace ob::core {
     //! 
     //! @param tolerance    許容誤差
     //@―---------------------------------------------------------------------------
-    inline bool Vec3::allComponentsEqual(f32 tolerance)const noexcept {
+    constexpr bool Vec3::allComponentsEqual(f32 tolerance)const noexcept {
         if (tolerance < Math::Abs(x - y))return false;
         if (tolerance < Math::Abs(y - z))return false;
         if (tolerance < Math::Abs(z - x))return false;
@@ -1168,7 +1168,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ゼロベクトルか判定
     //@―---------------------------------------------------------------------------
-    inline bool Vec3::isZero(f32 tolerance)const noexcept {
+    constexpr bool Vec3::isZero(f32 tolerance)const noexcept {
         if (tolerance < Math::Abs(x))return false;
         if (tolerance < Math::Abs(y))return false;
         if (tolerance < Math::Abs(z))return false;
@@ -1213,7 +1213,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief ベクトルの各要素の絶対値からベクトルを作成
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Abs(const Vec3& v) noexcept {
+    constexpr Vec3 Vec3::Abs(const Vec3& v) noexcept {
         return Vec3(Math::Abs(v.x), Math::Abs(v.y), Math::Abs(v.z));
     }
 
@@ -1221,7 +1221,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 内積
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::Dot(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::Dot(const Vec3& a, const Vec3& b) noexcept {
         return a.x * b.x + a.y * b.y + a.z * b.z;
     }
 
@@ -1229,7 +1229,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 外積
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Cross(const Vec3& a, const Vec3& b) noexcept {
+    constexpr Vec3 Vec3::Cross(const Vec3& a, const Vec3& b) noexcept {
         return Vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
     }
 
@@ -1245,7 +1245,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  二つのベクトルの距離の二乗を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::SqrDist(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::SqrDist(const Vec3& a, const Vec3& b) noexcept {
         return (b - a).sqrLength();
     }
 
@@ -1261,7 +1261,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      XY平面上の距離の二乗を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::SqrDistXY(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::SqrDistXY(const Vec3& a, const Vec3& b) noexcept {
         return Math::Square(a.x - b.x) + Math::Square(a.y - b.y);
     }
 
@@ -1277,7 +1277,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      XZ平面上の距離の二乗を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::SqrDistXZ(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::SqrDistXZ(const Vec3& a, const Vec3& b) noexcept {
         return Math::Square(a.x - b.x) + Math::Square(a.z - b.z);
     }
 
@@ -1293,7 +1293,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      YZ平面上の距離の二乗を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::SqrDistYZ(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::SqrDistYZ(const Vec3& a, const Vec3& b) noexcept {
         return Math::Square(a.y - b.y) + Math::Square(a.z - b.z);
     }
 
@@ -1301,7 +1301,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  二つのベクトルのマンハッタン距離を計算
     //@―---------------------------------------------------------------------------
-    inline f32 Vec3::MDist(const Vec3& a, const Vec3& b) noexcept {
+    constexpr f32 Vec3::MDist(const Vec3& a, const Vec3& b) noexcept {
         return Math::Abs(a.x - b.x) + Math::Abs(a.y - b.y) + Math::Abs(a.z - b.z);
     }
 
@@ -1314,7 +1314,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Lerp(const Vec3& a, const Vec3& b, f32 t) noexcept {
+    constexpr Vec3 Vec3::Lerp(const Vec3& a, const Vec3& b, f32 t) noexcept {
         return Vec3(
             a.x + (b.x - a.x) * t,
             a.y + (b.y - a.y) * t,
@@ -1352,7 +1352,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Max(const Vec3& a, const Vec3& b) noexcept {
+    constexpr Vec3 Vec3::Max(const Vec3& a, const Vec3& b) noexcept {
         return Vec3(Math::Max(a.x, b.x), Math::Max(a.y, b.y), Math::Max(a.z, b.z));
     }
 
@@ -1360,7 +1360,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Min(const Vec3& a, const Vec3& b) noexcept {
+    constexpr Vec3 Vec3::Min(const Vec3& a, const Vec3& b) noexcept {
         return Vec3(Math::Min(a.x, b.x), Math::Min(a.y, b.y), Math::Min(a.z, b.z));
     }
 
@@ -1387,7 +1387,7 @@ namespace ob::core {
     //! @param inDir    入力ベクトル
     //! @param normal   衝突面の法線
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Mirror(const Vec3& inDir, const Vec3& normal) noexcept {
+    constexpr Vec3 Vec3::Mirror(const Vec3& inDir, const Vec3& normal) noexcept {
         return inDir - 2.0f * Vec3::Dot(inDir, normal) * normal;
     }
 
@@ -1398,7 +1398,7 @@ namespace ob::core {
     //! @param inDir    入力ベクトル
     //! @param normal   衝突面の法線
     //@―---------------------------------------------------------------------------
-    inline Vec3 Vec3::Projection(const Vec3& inDir, const Vec3& normal) noexcept {
+    constexpr Vec3 Vec3::Projection(const Vec3& inDir, const Vec3& normal) noexcept {
         return inDir - Vec3::Dot(inDir, normal) * normal;
     }
 
