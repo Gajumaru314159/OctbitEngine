@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/core/String/String.h>
+#include <Framework/Core/String/String.h>
 
 namespace ob::core {
 
