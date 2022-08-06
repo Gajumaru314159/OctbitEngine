@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <filesystem>
-#include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Core/String/Format.h>
 
 namespace ob::core {
 
