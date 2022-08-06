@@ -96,18 +96,16 @@ namespace ob::core {
 	//! @brief  最上位ビットのインデックスを取得(Most Significant Bit)
 	//@―---------------------------------------------------------------------------
 	constexpr s32 BitOp::getMSB(u8  value) {
-		u8 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u8 temp = value;
 		temp |= temp >> 1;
 		temp |= temp >> 2;
 		temp |= temp >> 4;
 		return getBitCount(temp) - 1;
 	}
 	constexpr s32 BitOp::getMSB(u16 value) {
-		u16 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u16 temp = value;
 		temp |= temp >> 1;
 		temp |= temp >> 2;
 		temp |= temp >> 4;
@@ -115,9 +113,8 @@ namespace ob::core {
 		return getBitCount(temp) - 1;
 	}
 	constexpr s32 BitOp::getMSB(u32 value) {
-		u32 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u32 temp = value;
 		temp |= temp >> 1;
 		temp |= temp >> 2;
 		temp |= temp >> 4;
@@ -126,9 +123,8 @@ namespace ob::core {
 		return getBitCount(temp) - 1;
 	}
 	constexpr s32 BitOp::getMSB(u64 value) {
-		u64 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u64 temp = value;
 		temp |= temp >> 1;
 		temp |= temp >> 2;
 		temp |= temp >> 4;
@@ -142,18 +138,16 @@ namespace ob::core {
 	//! @brief 最下位ビットのインデックスを取得(Least Significant Bit)
 	//@―---------------------------------------------------------------------------
 	constexpr s32 BitOp::getLSB(u8  value) {
-		u8 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u8 temp = value;
 		temp |= temp << 1;
 		temp |= temp << 2;
 		temp |= temp << 4;
 		return 8 - getBitCount(temp);
 	}
 	constexpr s32 BitOp::getLSB(u16 value) {
-		u16 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u16 temp = value;
 		temp |= temp << 1;
 		temp |= temp << 2;
 		temp |= temp << 4;
@@ -161,9 +155,8 @@ namespace ob::core {
 		return 16 - getBitCount(temp);
 	}
 	constexpr s32 BitOp::getLSB(u32 value) {
-		u32 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u32 temp = value;
 		temp |= temp << 1;
 		temp |= temp << 2;
 		temp |= temp << 4;
@@ -172,9 +165,8 @@ namespace ob::core {
 		return 32 - getBitCount(temp);
 	}
 	constexpr s32 BitOp::getLSB(u64 value) {
-		u64 temp;
 		if (value == 0)return -1;
-		temp = value;
+		u64 temp = value;
 		temp |= temp << 1;
 		temp |= temp << 2;
 		temp |= temp << 4;

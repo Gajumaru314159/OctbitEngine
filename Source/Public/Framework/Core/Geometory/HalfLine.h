@@ -30,7 +30,7 @@ namespace ob::core {
         //! @param p0 始点
         //! @param p1 半直線状のもう1点
         //@―---------------------------------------------------------------------------
-        HalfLine(const Vec3& p0, const Vec3& p1)noexcept;
+        constexpr HalfLine(const Vec3& p0, const Vec3& p1)noexcept;
 
 
         //===============================================================
@@ -43,7 +43,7 @@ namespace ob::core {
         //! @param p0 始点
         //! @param p1 半直線状のもう1点
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& p0, const Vec3& p1)noexcept;
+        constexpr void set(const Vec3& p0, const Vec3& p1)noexcept;
 
     public:
 
@@ -65,15 +65,16 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(2点指定)
     //@―---------------------------------------------------------------------------
-    inline HalfLine::HalfLine(const Vec3& p0, const Vec3& p1)noexcept {
-        set(p0, p1);
+    constexpr HalfLine::HalfLine(const Vec3& p0, const Vec3& p1)noexcept
+        : p0(p0),p1(p1)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(2点指定)
     //@―---------------------------------------------------------------------------
-    inline void HalfLine::set(const Vec3& p0, const Vec3& p1)noexcept {
+    constexpr void HalfLine::set(const Vec3& p0, const Vec3& p1)noexcept {
         this->p0 = p0;
         this->p1 = p1;
     }

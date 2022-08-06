@@ -21,20 +21,20 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        Size() = default;
+        constexpr Size()noexcept:Size(0,0,0) {}
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        Size(s32 width, s32 height)noexcept
+        constexpr Size(s32 width, s32 height)noexcept
             : Size(width, height, 0) {}
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        Size(s32 width, s32 height, s32 depth)noexcept
+        constexpr Size(s32 width, s32 height, s32 depth)noexcept
             :width(width), height(height), depth(depth) {}
 
 
@@ -45,7 +45,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  面積
         //@―---------------------------------------------------------------------------
-        s32 area()const noexcept {
+        constexpr s32 area()const noexcept {
             return width * height;
         }
 
@@ -53,7 +53,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  体積
         //@―---------------------------------------------------------------------------
-        s32 volume()const noexcept {
+        constexpr s32 volume()const noexcept {
             return width * height * depth;
         }
 
@@ -66,7 +66,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  体積
         //@―---------------------------------------------------------------------------
-        Size& normalize()noexcept {
+        inline Size& normalize()noexcept {
             width = Math::Abs(width);
             height = Math::Abs(height);
             depth = Math::Abs(depth);

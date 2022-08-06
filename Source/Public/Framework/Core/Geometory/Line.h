@@ -27,7 +27,7 @@ namespace ob::core {
         //! @param p0 直線上の点1
         //! @param p1 直線上の点2
         //@―---------------------------------------------------------------------------
-        Line(const Vec3& p0, const Vec3& p1)noexcept;
+        constexpr Line(const Vec3& p0, const Vec3& p1)noexcept;
 
 
         //===============================================================
@@ -40,7 +40,7 @@ namespace ob::core {
         //! @param p0 始点
         //! @param p1 半直線状のもう1点
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& p0, const Vec3& p1)noexcept;
+        constexpr void set(const Vec3& p0, const Vec3& p1)noexcept;
 
     public:
 
@@ -62,8 +62,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(2点指定)
     //@―---------------------------------------------------------------------------
-    inline Line::Line(const Vec3& p0, const Vec3& p1)noexcept {
-        set(p0, p1);
+    constexpr Line::Line(const Vec3& p0, const Vec3& p1)noexcept
+        : p0(p0),p1(p1)
+    {
     }
 
 
@@ -73,7 +74,7 @@ namespace ob::core {
     //! @param p0 直線上の点1
     //! @param p1 直線上の点2
     //@―---------------------------------------------------------------------------
-    inline void Line::set(const Vec3& p0, const Vec3& p1)noexcept {
+    constexpr void Line::set(const Vec3& p0, const Vec3& p1)noexcept {
         this->p0 = p0;
         this->p1 = p1;
     }

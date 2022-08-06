@@ -21,13 +21,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ( ゼロ初期化 )
         //@―---------------------------------------------------------------------------
-        Circle() = default;
+        constexpr Circle() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ(初期化なし)
         //@―---------------------------------------------------------------------------
-        Circle(const Vec2& center, f32 radius)noexcept :center(center), radius(radius) {};
+        constexpr Circle(const Vec2& center, f32 radius)noexcept :center(center), radius(radius) {};
 
 
         //===============================================================
@@ -37,13 +37,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const Circle& other)const noexcept;
+        constexpr bool operator==(const Circle& other)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator!=(const Circle& other)const noexcept;
+        constexpr bool operator!=(const Circle& other)const noexcept;
 
 
         //===============================================================
@@ -56,7 +56,7 @@ namespace ob::core {
         //! @param center   中心座標
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        void set(const Vec2& center, f32 radius)noexcept;
+        constexpr void set(const Vec2& center, f32 radius)noexcept;
 
 
         //===============================================================
@@ -66,13 +66,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          面積を取得
         //@―---------------------------------------------------------------------------
-        f32 area()const noexcept;
+        constexpr f32 area()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          円周の長さを取得
         //@―---------------------------------------------------------------------------
-        f32 perimeter()const noexcept;
+        constexpr f32 perimeter()const noexcept;
 
 
     public:
@@ -85,7 +85,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Circle Lerp(const Circle& a, const Circle& b, f32 t)noexcept;
+        static constexpr Circle Lerp(const Circle& a, const Circle& b, f32 t)noexcept;
 
 
     public:
@@ -108,16 +108,16 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline Circle::Circle()noexcept {
-        center.setZero();
-        radius = 0.0f;
+    constexpr Circle::Circle()noexcept 
+        : center(Vec2::Zero),radius(0)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Circle::operator==(const Circle& other)const noexcept {
+    constexpr bool Circle::operator==(const Circle& other)const noexcept {
         return center == other.center && radius == other.radius;
     }
 
@@ -125,7 +125,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Circle::operator!=(const Circle& other)const noexcept {
+    constexpr bool Circle::operator!=(const Circle& other)const noexcept {
         return !(*this == other);
     }
 
@@ -136,7 +136,7 @@ namespace ob::core {
     //! @param center   中心座標
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline void Circle::set(const Vec2& center, f32 radius)noexcept {
+    constexpr void Circle::set(const Vec2& center, f32 radius)noexcept {
         this->center = center;
         this->radius = radius;
     }
@@ -145,7 +145,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          面積を取得
     //@―---------------------------------------------------------------------------
-    inline f32 Circle::area()const noexcept {
+    constexpr f32 Circle::area()const noexcept {
         return radius * radius * Math::PI;
     }
 
@@ -153,7 +153,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          円周の長さを取得
     //@―---------------------------------------------------------------------------
-    inline f32 Circle::perimeter()const noexcept {
+    constexpr f32 Circle::perimeter()const noexcept {
         return 2.0f * Math::PI;
     }
 
@@ -166,7 +166,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
+    constexpr Circle Circle::Lerp(const Circle& a, const Circle& b, f32 t)noexcept {
         return Circle(Vec2::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t));
     }
 

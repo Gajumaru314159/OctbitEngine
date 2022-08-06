@@ -193,8 +193,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ(サイズ/中心指定)
     //@―---------------------------------------------------------------------------
-    constexpr Box::Box(const Vec3& size, const Vec3& center)noexcept {
-        set(size, center);
+    constexpr Box::Box(const Vec3& size, const Vec3& center)noexcept
+        : size(size),center(center)
+    {
     }
 
 

@@ -24,13 +24,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        IntRect() noexcept;
+        constexpr IntRect() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ(要素指定)
         //@―---------------------------------------------------------------------------
-        IntRect(s32 left, s32 top, s32 right, s32 bottom) noexcept;
+        constexpr IntRect(s32 left, s32 top, s32 right, s32 bottom) noexcept;
 
 
         //===============================================================
@@ -40,7 +40,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      比較演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const IntRect& other)const noexcept;
+        constexpr bool operator==(const IntRect& other)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace ob::core {
         //! 
         //! @param point    ポイント
         //@―---------------------------------------------------------------------------
-        IntRect operator+(const IntVec2& point)const noexcept;
+        constexpr IntRect operator+(const IntVec2& point)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ob::core {
         //! 
         //! @param point    ポイント
         //@―---------------------------------------------------------------------------
-        IntRect& operator+=(const IntVec2& point) noexcept;
+        constexpr IntRect& operator+=(const IntVec2& point) noexcept;
 
 
         //===============================================================
@@ -66,13 +66,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      構造体の初期化
         //@―---------------------------------------------------------------------------
-        void reset() noexcept;
+        constexpr void reset() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      LTRB を設定
         //@―---------------------------------------------------------------------------
-        void set(s32 left, s32 top, s32 right, s32 bottom) noexcept;
+        constexpr void set(s32 left, s32 top, s32 right, s32 bottom) noexcept;
 
 
         //===============================================================
@@ -82,85 +82,85 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      左上
         //@―---------------------------------------------------------------------------
-        IntVec2 tl()const noexcept;
+        constexpr IntVec2 tl()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      左上
         //@―---------------------------------------------------------------------------
-        IntVec2 tr()const noexcept;
+        constexpr IntVec2 tr()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      左下
         //@―---------------------------------------------------------------------------
-        IntVec2 bl()const noexcept;
+        constexpr IntVec2 bl()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      右下
         //@―---------------------------------------------------------------------------
-        IntVec2 br()const noexcept;
+        constexpr IntVec2 br()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      中央
         //@―---------------------------------------------------------------------------
-        Vec2 center()const noexcept;
+        constexpr Vec2 center()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      上辺の中央
         //@―---------------------------------------------------------------------------
-        Vec2 topCenter()const noexcept;
+        constexpr Vec2 topCenter()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      下辺の中央
         //@―---------------------------------------------------------------------------
-        Vec2 bottomCenter()const noexcept;
+        constexpr Vec2 bottomCenter()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      左辺の中央
         //@―---------------------------------------------------------------------------
-        Vec2 leftCenter()const noexcept;
+        constexpr Vec2 leftCenter()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      右辺の中央
         //@―---------------------------------------------------------------------------
-        Vec2 rightCenter()const noexcept;
+        constexpr Vec2 rightCenter()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      サイズ
         //@―---------------------------------------------------------------------------
-        IntVec2 size()const noexcept;
+        constexpr IntVec2 size()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      幅
         //@―---------------------------------------------------------------------------
-        s32 width()const noexcept;
+        constexpr s32 width()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      高さ
         //@―---------------------------------------------------------------------------
-        s32 height()const noexcept;
+        constexpr s32 height()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      面積
         //@―---------------------------------------------------------------------------
-        s32 area()const noexcept;
+        constexpr s32 area()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      外周の長さ
         //@―---------------------------------------------------------------------------
-        s32 perimeter()const noexcept;
+        constexpr s32 perimeter()const noexcept;
 
 
         //===============================================================
@@ -170,7 +170,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      サイズが0以下であるか
         //@―---------------------------------------------------------------------------
-        bool empty()const noexcept;
+        constexpr bool empty()const noexcept;
 
 
     public:
@@ -196,23 +196,25 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      デフォルトコンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline IntRect::IntRect() noexcept {
-        reset();
+    constexpr IntRect::IntRect() noexcept 
+        : IntRect(0,0,0,0)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(LTRB指定)
     //@―---------------------------------------------------------------------------
-    inline IntRect::IntRect(s32 left, s32 top, s32 right, s32 bottom) noexcept {
-        set(left, top, right, bottom);
+    constexpr IntRect::IntRect(s32 left, s32 top, s32 right, s32 bottom) noexcept 
+        : left(left),top(top),right(right),bottom(bottom)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief      比較演算子
     //@―---------------------------------------------------------------------------
-    inline bool IntRect::operator==(const IntRect& other)const noexcept {
+    constexpr bool IntRect::operator==(const IntRect& other)const noexcept {
         return
             left == other.left &&
             top == other.top &&
@@ -226,7 +228,7 @@ namespace ob::core {
     //! 
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
-    inline IntRect IntRect::operator+(const IntVec2& point)const noexcept {
+    constexpr IntRect IntRect::operator+(const IntVec2& point)const noexcept {
         return IntRect(*this) += point;
     }
 
@@ -236,7 +238,7 @@ namespace ob::core {
     //! 
     //! @param point    ポイント
     //@―---------------------------------------------------------------------------
-    inline IntRect& IntRect::operator+=(const IntVec2& point) noexcept {
+    constexpr IntRect& IntRect::operator+=(const IntVec2& point) noexcept {
         left = std::min(point.x, left);
         right = std::max(point.x, right);
         top = std::min(point.y, top);
@@ -248,7 +250,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
-    inline void IntRect::reset() noexcept {
+    constexpr void IntRect::reset() noexcept {
         set(0, 0, 0, 0);
     }
 
@@ -256,7 +258,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      要素を設定
     //@―---------------------------------------------------------------------------
-    inline void IntRect::set(s32 left, s32 top, s32 right, s32 bottom) noexcept {
+    constexpr void IntRect::set(s32 left, s32 top, s32 right, s32 bottom) noexcept {
         this->left = left;
         this->top = top;
         this->right = right;
@@ -267,7 +269,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      左上
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntRect::tl()const noexcept {
+    constexpr IntVec2 IntRect::tl()const noexcept {
         return IntVec2(left, top);
     }
 
@@ -275,7 +277,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      右上
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntRect::tr()const noexcept {
+    constexpr IntVec2 IntRect::tr()const noexcept {
         return IntVec2(right, top);
     }
 
@@ -283,7 +285,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      左下
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntRect::bl()const noexcept {
+    constexpr IntVec2 IntRect::bl()const noexcept {
         return IntVec2(left, bottom);
     }
 
@@ -291,7 +293,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      右下
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntRect::br()const noexcept {
+    constexpr IntVec2 IntRect::br()const noexcept {
         return IntVec2(right, bottom);
     }
 
@@ -299,7 +301,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      中央
     //@―---------------------------------------------------------------------------
-    inline Vec2 IntRect::center()const noexcept {
+    constexpr Vec2 IntRect::center()const noexcept {
         return Vec2((left + right) * 0.5f, (top + bottom) * 0.5f);
     }
 
@@ -307,7 +309,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      上辺の中央
     //@―---------------------------------------------------------------------------
-    inline Vec2 IntRect::topCenter()const noexcept {
+    constexpr Vec2 IntRect::topCenter()const noexcept {
         return Vec2((left + right) * 0.5f, 1.0f * top);
     }
 
@@ -315,7 +317,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      下辺の中央
     //@―---------------------------------------------------------------------------
-    inline Vec2 IntRect::bottomCenter()const noexcept {
+    constexpr Vec2 IntRect::bottomCenter()const noexcept {
         return Vec2((left + right) * 0.5f, 1.0f * bottom);
     }
 
@@ -323,7 +325,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      左辺の中央
     //@―---------------------------------------------------------------------------
-    inline Vec2 IntRect::leftCenter()const noexcept {
+    constexpr Vec2 IntRect::leftCenter()const noexcept {
         return Vec2(1.0f * left, (top + bottom) * 0.5f);
     }
 
@@ -331,7 +333,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      右辺の中央
     //@―---------------------------------------------------------------------------
-    inline Vec2 IntRect::rightCenter()const noexcept {
+    constexpr Vec2 IntRect::rightCenter()const noexcept {
         return Vec2(1.0f * right, (top + bottom) * 0.5f);
     }
 
@@ -339,7 +341,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズ
     //@―---------------------------------------------------------------------------
-    inline IntVec2 IntRect::size()const noexcept {
+    constexpr IntVec2 IntRect::size()const noexcept {
         return IntVec2(width(), height());
     }
 
@@ -347,7 +349,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      幅
     //@―---------------------------------------------------------------------------
-    inline s32 IntRect::width()const noexcept {
+    constexpr s32 IntRect::width()const noexcept {
         return right - left;
     }
 
@@ -355,7 +357,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      高さ
     //@―---------------------------------------------------------------------------
-    inline s32 IntRect::height()const noexcept {
+    constexpr s32 IntRect::height()const noexcept {
         return bottom - top;
     }
 
@@ -363,7 +365,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      面積
     //@―---------------------------------------------------------------------------
-    inline s32 IntRect::area()const noexcept {
+    constexpr s32 IntRect::area()const noexcept {
         return width() * height();
     }
 
@@ -371,7 +373,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      外周の長さ
     //@―---------------------------------------------------------------------------
-    inline s32 IntRect::perimeter()const noexcept {
+    constexpr s32 IntRect::perimeter()const noexcept {
         return (width() + height()) * 2;
     }
 
@@ -379,7 +381,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サイズが0以下であるか
     //@―---------------------------------------------------------------------------
-    inline bool IntRect::empty()const noexcept {
+    constexpr bool IntRect::empty()const noexcept {
         return area() == 0;
     }
 

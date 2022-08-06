@@ -24,7 +24,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
-        Capsule() noexcept;
+        constexpr Capsule() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace ob::core {
         //! @param pos2     終点
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
+        constexpr Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          構造体を-初期化する
         //@―---------------------------------------------------------------------------
-        void reset() noexcept;
+        constexpr void reset() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace ob::core {
         //! @param pos2     終点
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        void set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
+        constexpr void set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -150,10 +150,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule() noexcept {
-        pos1.setZero();
-        pos2.setZero();
-        radius = 0.0f;
+    constexpr  Capsule::Capsule() noexcept 
+        : Capsule(Vec3::Zero,Vec3::Zero,0)
+    {
     }
 
 
@@ -164,8 +163,9 @@ namespace ob::core {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline Capsule::Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
-        set(pos1, pos2, radius);
+    constexpr Capsule::Capsule(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept
+        : pos1(pos1),pos2(pos2),radius(radius)
+    {
     }
 
 
@@ -198,7 +198,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体を-初期化する
     //@―---------------------------------------------------------------------------
-    inline void Capsule::reset() noexcept {
+    constexpr void Capsule::reset() noexcept {
         pos1.setZero();
         pos2.setZero();
         radius = 0.5f;
@@ -212,7 +212,7 @@ namespace ob::core {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline void Capsule::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
+    constexpr void Capsule::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
         this->pos1 = pos1;
         this->pos2 = pos2;
         this->radius = radius;

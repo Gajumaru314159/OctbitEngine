@@ -28,13 +28,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ(Vec3)
         //@―---------------------------------------------------------------------------
-        Triangle(Vec3 p0, Vec3 p1, Vec3 p2);
+        constexpr Triangle(Vec3 p0, Vec3 p1, Vec3 p2);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ(Vec2)
         //@―---------------------------------------------------------------------------
-        Triangle(Vec2 p0, Vec2 p1, Vec2 p2);
+        constexpr Triangle(Vec2 p0, Vec2 p1, Vec2 p2);
 
 
         //===============================================================
@@ -44,13 +44,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const Triangle& another)const noexcept;
+        constexpr bool operator==(const Triangle& another)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief          否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator!=(const Triangle& another)const noexcept;
+        constexpr bool operator!=(const Triangle& another)const noexcept;
 
 
         //===============================================================
@@ -60,13 +60,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  要点を設定
         //@―---------------------------------------------------------------------------
-        void set(Vec2 p0, Vec2 p1, Vec2 p2);
+        constexpr void set(Vec2 p0, Vec2 p1, Vec2 p2);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  要点を設定
         //@―---------------------------------------------------------------------------
-        void set(Vec3 p0, Vec3 p1, Vec3 p2);
+        constexpr void set(Vec3 p0, Vec3 p1, Vec3 p2);
 
 
         //===============================================================
@@ -84,7 +84,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  重心を計算
         //@―---------------------------------------------------------------------------
-        Vec3 centerOfGravity()const noexcept;
+        constexpr Vec3 centerOfGravity()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -133,7 +133,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Triangle Lerp(const Triangle& a, const Triangle& b, f32 t)noexcept;
+        static constexpr Triangle Lerp(const Triangle& a, const Triangle& b, f32 t)noexcept;
 
 
     public:
@@ -157,23 +157,25 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(Vec3)
     //@―---------------------------------------------------------------------------
-    inline Triangle::Triangle(Vec3 p0, Vec3 p1, Vec3 p2) {
-        set(p0, p1, p2);
+    constexpr Triangle::Triangle(Vec3 p0, Vec3 p1, Vec3 p2) 
+        : p0(p0),p1(p1),p2(p2)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(Vec2)
     //@―---------------------------------------------------------------------------
-    inline Triangle::Triangle(Vec2 p0, Vec2 p1, Vec2 p2) {
-        set(p0, p1, p2);
+    constexpr Triangle::Triangle(Vec2 p0, Vec2 p1, Vec2 p2)
+        : p0(p0.x,p0.y,0), p1(p1.x, p1.y, 0), p2(p2.x, p2.y, 0)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief          等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Triangle::operator==(const Triangle& another)const noexcept {
+    constexpr bool Triangle::operator==(const Triangle& another)const noexcept {
         return
             p0 == another.p0 &&
             p1 == another.p1 &&
@@ -184,7 +186,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Triangle::operator!=(const Triangle& another)const noexcept {
+    constexpr bool Triangle::operator!=(const Triangle& another)const noexcept {
         return !(*this == another);
     }
 
@@ -192,7 +194,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  要点を設定
     //@―---------------------------------------------------------------------------
-    inline void Triangle::set(Vec2 p0, Vec2 p1, Vec2 p2) {
+    constexpr void Triangle::set(Vec2 p0, Vec2 p1, Vec2 p2) {
         p0.set(p0.x, p0.y);
         p1.set(p1.x, p1.y);
         p2.set(p2.x, p2.y);
@@ -202,7 +204,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  要点を設定
     //@―---------------------------------------------------------------------------
-    inline void Triangle::set(Vec3 p0, Vec3 p1, Vec3 p2) {
+    constexpr void Triangle::set(Vec3 p0, Vec3 p1, Vec3 p2) {
         this->p0 = p0;
         this->p1 = p1;
         this->p2 = p2;
@@ -224,7 +226,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  重心を計算
     //@―---------------------------------------------------------------------------
-    inline Vec3 Triangle::centerOfGravity()const noexcept {
+    constexpr Vec3 Triangle::centerOfGravity()const noexcept {
         return (p0 + p1 + p2) / 3.0f;
     }
 
@@ -291,7 +293,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Triangle Triangle::Lerp(const Triangle& a, const Triangle& b, f32 t)noexcept {
+    constexpr Triangle Triangle::Lerp(const Triangle& a, const Triangle& b, f32 t)noexcept {
         return Triangle(
             Vec3::Lerp(a.p0, b.p0, t),
             Vec3::Lerp(a.p1, b.p1, t),

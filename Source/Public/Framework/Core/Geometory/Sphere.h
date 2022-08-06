@@ -23,13 +23,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
-        Sphere() noexcept;
+        constexpr Sphere() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ(中心/サイズ指定)
         //@―---------------------------------------------------------------------------
-        Sphere(const Vec3& center, f32 radius) noexcept;
+        constexpr Sphere(const Vec3& center, f32 radius) noexcept;
 
 
         //===============================================================
@@ -39,13 +39,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const Sphere& other)const noexcept;
+        constexpr bool operator==(const Sphere& other)const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator!=(const Sphere& other)const noexcept;
+        constexpr bool operator!=(const Sphere& other)const noexcept;
 
 
         //===============================================================
@@ -55,13 +55,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 構造体のゼロ初期化
         //@―---------------------------------------------------------------------------
-        void reset() noexcept;
+        constexpr void reset() noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 構造体のゼロ初期化
         //@―---------------------------------------------------------------------------
-        void set(const Vec3& center, f32 radius) noexcept;
+        constexpr void set(const Vec3& center, f32 radius) noexcept;
 
 
     public:
@@ -74,7 +74,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static Sphere Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept;
+        static constexpr Sphere Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept;
 
 
     public:
@@ -97,23 +97,26 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief デフォルトコンストラクタ(初期化なし)
     //@―---------------------------------------------------------------------------
-    inline Sphere::Sphere() noexcept {
-        reset();
+    constexpr Sphere::Sphere() noexcept
+        : radius(0.0f)
+    {
+
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ(中心/サイズ指定)
     //@―---------------------------------------------------------------------------
-    inline Sphere::Sphere(const Vec3& center, f32 radius) noexcept {
-        set(center, radius);
+    constexpr Sphere::Sphere(const Vec3& center, f32 radius) noexcept
+        : center(center),radius(radius)
+    {
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Sphere::operator==(const Sphere& other)const noexcept {
+    constexpr bool Sphere::operator==(const Sphere& other)const noexcept {
         return center == other.center && Math::IsNearEquals(radius, other.radius);
     }
 
@@ -121,7 +124,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool Sphere::operator!=(const Sphere& other)const noexcept {
+    constexpr bool Sphere::operator!=(const Sphere& other)const noexcept {
         return  !(operator==(other));
     }
 
@@ -129,7 +132,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
-    inline void Sphere::reset() noexcept {
+    constexpr void Sphere::reset() noexcept {
         center.setZero();
         radius = 0.5f;
     }
@@ -138,7 +141,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 構造体のゼロ初期化
     //@―---------------------------------------------------------------------------
-    inline void Sphere::set(const Vec3& center, f32 radius) noexcept {
+    constexpr void Sphere::set(const Vec3& center, f32 radius) noexcept {
         this->center = center;
         this->radius = radius;
     }
@@ -152,7 +155,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    inline Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
+    constexpr Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
         return Sphere(Vec3::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t));
     }
 

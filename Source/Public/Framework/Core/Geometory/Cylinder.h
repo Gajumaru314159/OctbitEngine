@@ -24,7 +24,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
-        Cylinder() noexcept;
+        constexpr Cylinder() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace ob::core {
         //! @param pos2     終点
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
+        constexpr Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          構造体を-初期化する
         //@―---------------------------------------------------------------------------
-        void reset() noexcept;
+        constexpr void reset() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace ob::core {
         //! @param pos2     終点
         //! @param radius   半径
         //@―---------------------------------------------------------------------------
-        void set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
+        constexpr void set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -122,7 +122,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief           体積を取得
         //@―---------------------------------------------------------------------------
-        f32 volume()const noexcept;
+        inline f32 volume()const noexcept;
 
     public:
 
@@ -146,10 +146,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief          コンストラクタ( ゼロ初期化 )
     //@―---------------------------------------------------------------------------
-    inline Cylinder::Cylinder() noexcept {
-        pos1.setZero();
-        pos2.setZero();
-        radius = 0.0f;
+    constexpr Cylinder::Cylinder() noexcept
+        : Cylinder(Vec3::Zero,Vec3::Zero,0.0f)
+    {
     }
 
 
@@ -160,8 +159,9 @@ namespace ob::core {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline Cylinder::Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
-        set(pos1, pos2, radius);
+    constexpr Cylinder::Cylinder(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept
+        : pos1(pos1),pos2(pos2),radius(radius)
+    {
     }
 
 
@@ -194,7 +194,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      構造体を-初期化する
     //@―---------------------------------------------------------------------------
-    inline void Cylinder::reset() noexcept {
+    constexpr void Cylinder::reset() noexcept {
         pos1.setZero();
         pos2.setZero();
         radius = 0.5f;
@@ -208,7 +208,7 @@ namespace ob::core {
     //! @param pos2     終点
     //! @param radius   半径
     //@―---------------------------------------------------------------------------
-    inline void Cylinder::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
+    constexpr void Cylinder::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
         this->pos1 = pos1;
         this->pos2 = pos2;
         this->radius = radius;
