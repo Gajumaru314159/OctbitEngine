@@ -127,16 +127,16 @@ namespace ob::core {
 
     public:
 
-        static const HSV white;		//!< HSV(0      ,0,1,1)
-        static const HSV grey;		//!< HSV(0      ,0,0.5,1)
-        static const HSV black;		//!< HSV(0      ,0,0,1)
-        static const HSV clear;		//!< HSV(0      ,0,1,0)
-        static const HSV red;		//!< HSV(0      ,1,1,1)
-        static const HSV yellow;	//!< HSV(0.16667,1,1,1)
-        static const HSV green;		//!< HSV(0.33333,1,1,1)
-        static const HSV cyan;		//!< HSV(0.5    ,1,1,1)
-        static const HSV blue;		//!< HSV(0.66667,1,1,1)
-        static const HSV magenta;	//!< HSV(0.83333,1,1,1)
+        static const HSV White;		//!< HSV(0      ,0,1,1)
+        static const HSV Gray;		//!< HSV(0      ,0,0.5,1)
+        static const HSV Black;		//!< HSV(0      ,0,0,1)
+        static const HSV Clear;		//!< HSV(0      ,0,1,0)
+        static const HSV Red;		//!< HSV(0      ,1,1,1)
+        static const HSV Yellow;	//!< HSV(0.16667,1,1,1)
+        static const HSV Green;		//!< HSV(0.33333,1,1,1)
+        static const HSV Cyan;		//!< HSV(0.5    ,1,1,1)
+        static const HSV Blue;		//!< HSV(0.66667,1,1,1)
+        static const HSV Magenta;	//!< HSV(0.83333,1,1,1)
 
     public:
 
