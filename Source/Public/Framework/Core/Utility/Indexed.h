@@ -20,10 +20,10 @@ namespace ob::core {
 		struct Iterator
 		{
 			size_t index;
-			TItr it;
-			constexpr bool operator != (const Iterator& other) const { return it != other.it; }
-			constexpr void operator ++() { ++index; ++it; }
-			constexpr auto operator *() const { return std::tie(index, *it); }
+			TItr itr;
+			constexpr bool operator != (const Iterator& other) const { return itr != other.itr; }
+			constexpr void operator ++() { ++index; ++itr; }
+			constexpr auto operator *() const { return std::tie(index, *itr); }
 		};
 
 		struct IterableWrapper
@@ -61,10 +61,10 @@ namespace ob::core {
 		struct Iterator
 		{
 			size_t index;
-			TItr it;
-			constexpr bool operator != (const Iterator& other) const { return it != other.it; }
-			constexpr void operator ++() { --index; ++it; }
-			constexpr auto operator *() const { return std::tie(index, *it); }
+			TItr itr;
+			constexpr bool operator != (const Iterator& other) const { return itr != other.itr; }
+			constexpr void operator ++() { --index; ++itr; }
+			constexpr auto operator *() const { return std::tie(index, *itr); }
 		};
 
 		struct IterableWrapper
