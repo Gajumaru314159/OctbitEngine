@@ -14,6 +14,22 @@ namespace ob::core {
     struct OB_API Vec2 {
     public:
 
+        f32 x;    //!< ベクトルのX成分
+        f32 y;    //!< ベクトルのY成分
+
+    public:
+
+        static const Vec2 Zero;    //!< ( 0.0f, 0.0f)
+        static const Vec2 One;     //!< ( 1.0f, 1.0f)
+        static const Vec2 Left;    //!< (-1.0f, 0.0f)
+        static const Vec2 Right;   //!< ( 1.0f, 0.0f)
+        static const Vec2 Down;    //!< ( 0.0f,-1.0f)
+        static const Vec2 Up;      //!< ( 0.0f, 1.0f)
+        static const Vec2 Minimum; //!< ( -inf, -inf)
+        static const Vec2 Maximum; //!< (  inf,  inf)
+
+    public:
+
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -435,23 +451,6 @@ namespace ob::core {
         //! @brief 二つのベクトルのなす角を取得
         //@―---------------------------------------------------------------------------
         static f32 Angle(const Vec2& a, const Vec2& b);
-
-
-    public:
-
-        static const Vec2 Left;    //!< (-1.0f, 0.0f)
-        static const Vec2 Right;   //!< ( 1.0f, 0.0f)
-        static const Vec2 Down;    //!< ( 0.0f,-1.0f)
-        static const Vec2 Up;      //!< ( 0.0f, 1.0f)
-        static const Vec2 Zero;    //!< ( 0.0f, 0.0f)
-        static const Vec2 One;     //!< ( 1.0f, 1.0f)
-        static const Vec2 Minimum; //!< ( -inf, -inf)
-        static const Vec2 Maximum; //!< (  inf,  inf)
-
-    public:
-
-        f32 x;    //!< ベクトルのX成分
-        f32 y;    //!< ベクトルのY成分
 
     };
 

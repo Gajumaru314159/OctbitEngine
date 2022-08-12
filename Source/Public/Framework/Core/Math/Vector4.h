@@ -14,6 +14,19 @@ namespace ob::core {
     //! @brief 四次元ベクトル
     //@―---------------------------------------------------------------------------
     struct OB_API Vec4 {
+
+        f32 x;    //!< ベクトルのX成分
+        f32 y;    //!< ベクトルのY成分
+        f32 z;    //!< ベクトルのZ成分
+        f32 w;    //!< ベクトルのW成分
+
+    public:
+
+        static const Vec4 Zero;    //!< ( 0.0f, 0.0f, 0.0f, 0.0f)
+        static const Vec4 One;     //!< ( 1.0f, 1.0f, 1.0f, 1.0f)
+        static const Vec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
+        static const Vec4 Maximum; //!< (  inf,  inf,  inf,  inf)
+
     public:
 
         //===============================================================
@@ -443,26 +456,6 @@ namespace ob::core {
         //! @brief 二つのベクトルのなす角を取得
         //@―---------------------------------------------------------------------------
         static f32  Angle(const Vec4& a, const Vec4& b);
-
-
-    public:
-
-        static const Vec4 Zero;    //!< ( 0.0f, 0.0f, 0.0f, 0.0f)
-        static const Vec4 One;     //!< ( 1.0f, 1.0f, 1.0f, 1.0f)
-        static const Vec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
-        static const Vec4 Maximum; //!< (  inf,  inf,  inf,  inf)
-
-    public:
-
-        union {
-            struct {
-                f32 x;    //!< ベクトルのX成分
-                f32 y;    //!< ベクトルのY成分
-                f32 z;    //!< ベクトルのZ成分
-                f32 w;    //!< ベクトルのW成分
-            };
-            f32 data[4];  //!< ベクトルの成分
-        };
 
     };
 

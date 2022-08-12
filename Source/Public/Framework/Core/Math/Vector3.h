@@ -14,6 +14,25 @@ namespace ob::core {
     struct OB_API Vec3 {
     public:
 
+        f32 x;    //!< ベクトルのX成分
+        f32 y;    //!< ベクトルのY成分
+        f32 z;    //!< ベクトルのZ成分
+
+    public:
+
+        static const Vec3 Zero;    //!< ( 0.0f, 0.0f, 0.0f)
+        static const Vec3 One;     //!< ( 1.0f, 1.0f, 1.0f)
+        static const Vec3 Left;    //!< (-1.0f, 0.0f, 0.0f)
+        static const Vec3 Right;   //!< ( 1.0f, 0.0f, 0.0f)
+        static const Vec3 Down;    //!< ( 0.0f,-1.0f, 0.0f)
+        static const Vec3 Up;      //!< ( 0.0f, 1.0f, 0.0f)
+        static const Vec3 Back;    //!< ( 0.0f, 0.0f,-1.0f)
+        static const Vec3 Front;   //!< ( 0.0f, 0.0f, 1.0f)
+        static const Vec3 Minimum; //!< ( -inf, -inf, -inf)
+        static const Vec3 Maximum; //!< (  inf,  inf,  inf)
+
+    public:
+
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -334,10 +353,10 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          任意軸回転
         //! 
-        //! @param angle    回転量(Degrees)
         //! @param axis     回転軸
+        //! @param angle    回転量(Degrees)
         //@―---------------------------------------------------------------------------
-        Vec3& rotate(f32 angle, const Vec3& axis);
+        Vec3& rotate(Vec3 axis, f32 angle);
 
 
         //@―---------------------------------------------------------------------------
@@ -566,25 +585,6 @@ namespace ob::core {
         //! @param normal   衝突面の法線
         //@―---------------------------------------------------------------------------
         static constexpr Vec3 Projection(const Vec3& inDir, const Vec3& normal) noexcept;
-
-    public:
-
-        static const Vec3 Left;    //!< (-1.0f, 0.0f, 0.0f)
-        static const Vec3 Right;   //!< ( 1.0f, 0.0f, 0.0f)
-        static const Vec3 Down;    //!< ( 0.0f,-1.0f, 0.0f)
-        static const Vec3 Up;      //!< ( 0.0f, 1.0f, 0.0f)
-        static const Vec3 Back;    //!< ( 0.0f, 0.0f,-1.0f)
-        static const Vec3 Front;   //!< ( 0.0f, 0.0f, 1.0f)
-        static const Vec3 Zero;    //!< ( 0.0f, 0.0f, 0.0f)
-        static const Vec3 One;     //!< ( 1.0f, 1.0f, 1.0f)
-        static const Vec3 Minimum; //!< ( -inf, -inf, -inf)
-        static const Vec3 Maximum; //!< (  inf,  inf,  inf)
-
-    public:
-
-        f32 x;    //!< ベクトルのX成分
-        f32 y;    //!< ベクトルのY成分
-        f32 z;    //!< ベクトルのZ成分
 
     };
 

@@ -16,20 +16,20 @@ namespace ob::core {
     class Transform {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
+        Vec3    position;   //!< 位置
+        Rot     rotation;   //!< 回転
+        Vec3    scale;      //!< 拡縮
+
+    public:
+
+        static const Transform Identity;  //!< 初期状態
+
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief  Matrix に変換
         //@―---------------------------------------------------------------------------
-        Matrix getMatrix()const;
-
-    public:
-
-        Vec3    position;   //!< 位置
-        Rot     rotation;   //!< 回転
-        Vec3    scale;      //!< 拡縮
+        Matrix toMatrix()const;
 
     };
 

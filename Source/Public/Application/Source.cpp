@@ -49,7 +49,7 @@ int main() {
 			LOG_INFO("IntVec2  :{}", IntVec2(4, 12));
 			LOG_INFO("IntVec3  :{}", IntVec3(474, 124, 12));
 			LOG_INFO("IntVec4  :{}", IntVec4(45, 1472, 313, 1444));
-			LOG_INFO("Quat     :{}", Quat::identity);
+			LOG_INFO("Quat     :{}", Quat::Identity);
 			LOG_INFO("Rot      :{}", Rot(Math::PI, Math::EPSILON, Math::HALF_PI));
 			LOG_INFO("DateTime :{}", DateTime::Now());
 			LOG_INFO("Duration :{}", Duration::Days(23.12534573));

@@ -225,7 +225,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     inline void Cylinder::set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept {
         this->radius = radius;
-        const Vec3 half = quat.getUp() * (height * 0.5f);
+        const Vec3 half = quat.up() * (height * 0.5f);
         pos1 = center + half;
         pos2 = center - half;
     }

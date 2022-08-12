@@ -44,7 +44,6 @@
 #include <Framework/Core/Geometory/Triangle.h>
 
 #include <Framework/Core/Math/Vectors.h>
-#include <Framework/Core/Math/Affine.h>
 #include <Framework/Core/Math/Axis.h>
 #include <Framework/Core/Math/FloatCompression.h>
 #include <Framework/Core/Math/Math.h>

@@ -8,16 +8,13 @@
 
 namespace ob::core {
 
+    const Transform Transform::Identity = { Vec3::Zero,Rot::Identity,Vec3::One };
+
     //@―---------------------------------------------------------------------------
     //! @brief  Matrix に変換
     //@―---------------------------------------------------------------------------
-    Matrix Transform::getMatrix()const {
-        Matrix matrix;
-        matrix.setIdentity();
-        matrix.translate(position);
-        matrix.rotate(rotation);
-        matrix.scale(scale);
-        return matrix;
+    Matrix Transform::toMatrix()const {
+        return Matrix::TRS(position,rotation,scale);
     }
 
 }// namespace ob

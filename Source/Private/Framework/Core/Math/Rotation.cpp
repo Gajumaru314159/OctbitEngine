@@ -12,8 +12,9 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ(Vec3指定)
     //@―---------------------------------------------------------------------------
-    Rot::Rot(const Vec3& vec)noexcept {
-        set(vec);
+    Rot::Rot(const Vec3& vec)noexcept
+        : x(vec.x),y(vec.y),z(vec.z)
+    {
     }
 
 
@@ -21,14 +22,7 @@ namespace ob::core {
     //! @brief  コンストラクタ(Quat指定)
     //@―---------------------------------------------------------------------------
     Rot::Rot(const Quat& quat) {
-        *this = quat.getRot();
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ(Vec3指定)
-    //@―---------------------------------------------------------------------------
-    void Rot::set(const Vec3& vec)noexcept {
-        set(vec.x, vec.y, vec.z);
+        *this = quat.toRot();
     }
 
 
@@ -52,7 +46,7 @@ namespace ob::core {
     //! @brief  正面ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::front()const {
-        return toQuat().getFront();
+        return toQuat().front();
     }
 
 
@@ -60,7 +54,7 @@ namespace ob::core {
     //! @brief  背面ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::back()const {
-        return toQuat().getBack();
+        return toQuat().back();
     }
 
 
@@ -68,7 +62,7 @@ namespace ob::core {
     //! @brief  上ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::up()const {
-        return toQuat().getUp();
+        return toQuat().up();
     }
 
 
@@ -76,7 +70,7 @@ namespace ob::core {
     //! @brief  下ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::down()const {
-        return toQuat().getDown();
+        return toQuat().down();
     }
 
 
@@ -84,7 +78,7 @@ namespace ob::core {
     //! @brief  左ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::left()const {
-        return toQuat().getLeft();
+        return toQuat().left();
     }
 
 
@@ -92,7 +86,7 @@ namespace ob::core {
     //! @brief  右ベクトルを取得
     //@―---------------------------------------------------------------------------
     inline Vec3 Rot::right()const {
-        return toQuat().getRight();
+        return toQuat().right();
     }
 
 

@@ -13,23 +13,23 @@
 
 namespace ob::core {
 
+    const Vec2 Vec2::Zero(0.0f, 0.0f);
+    const Vec2 Vec2::One(1.0f, 1.0f);
     const Vec2 Vec2::Left(-1.0f, 0.0f);
     const Vec2 Vec2::Right(1.0f, 0.0f);
     const Vec2 Vec2::Down(0.0f, -1.0f);
     const Vec2 Vec2::Up(0.0f, 1.0f);
-    const Vec2 Vec2::Zero(0.0f, 0.0f);
-    const Vec2 Vec2::One(1.0f, 1.0f);
     const Vec2 Vec2::Minimum(std::numeric_limits<f32>::min());
     const Vec2 Vec2::Maximum(std::numeric_limits<f32>::max());
 
+    const Vec3 Vec3::Zero(0.0f, 0.0f, 0.0f);
+    const Vec3 Vec3::One(1.0f, 1.0f, 1.0f);
     const Vec3 Vec3::Left(-1.0f, 0.0f, 0.0f);
     const Vec3 Vec3::Right(1.0f, 0.0f, 0.0f);
     const Vec3 Vec3::Down(0.0f, -1.0f, 0.0f);
     const Vec3 Vec3::Up(0.0f, 1.0f, 0.0f);
     const Vec3 Vec3::Back(0.0f, 0.0f, -1.0f);
     const Vec3 Vec3::Front(0.0f, 0.0f, 1.0f);
-    const Vec3 Vec3::Zero(0.0f, 0.0f, 0.0f);
-    const Vec3 Vec3::One(1.0f, 1.0f, 1.0f);
     const Vec3 Vec3::Minimum(std::numeric_limits<f32>::min());
     const Vec3 Vec3::Maximum(std::numeric_limits<f32>::max());
 
@@ -89,8 +89,8 @@ namespace ob::core {
     //! @param angle    回転量
     //! @param axis     回転軸
     //@―---------------------------------------------------------------------------
-    Vec3& Vec3::rotate(f32 angle, const Vec3& axis) {
-        Quat q(angle, axis);
+    Vec3& Vec3::rotate(Vec3 axis, f32 angle) {
+        Quat q(axis, angle);
         *this = axis * (*this);
         return *this;
     }
