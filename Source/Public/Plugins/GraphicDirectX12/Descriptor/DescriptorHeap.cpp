@@ -231,10 +231,10 @@ namespace ob::graphic::dx12 {
 			}
 
 			// ビットマスクから割り当て可能なレベルを再計算
-			firstLevel = BitOp::getLSB(flMap);
+			firstLevel = BitOp::GetLSB(flMap);
 			slMap = m_freeSLI[firstLevel];
 			OB_CHECK_ASSERT(slMap, "内部エラー。割り当て可能なブロックがない状態で処理が継続されています。ロジックを見直してください。");
-			secondLevel = BitOp::getLSB((u32)slMap);
+			secondLevel = BitOp::GetLSB((u32)slMap);
 		}
 
 		s32 blockIndex = getFreeBlockIndex(firstLevel, secondLevel);
@@ -407,7 +407,7 @@ namespace ob::graphic::dx12 {
 			firstLevel = 0;
 			secondLevel = size >> s_secondLevelShift;
 		} else {
-			firstLevel = std::max(0, BitOp::getMSB((u32)size) - s_linearManagementSizeLog2);
+			firstLevel = std::max(0, BitOp::GetMSB((u32)size) - s_linearManagementSizeLog2);
 			secondLevel = size >> (firstLevel - s_maxSecondLevel);
 			secondLevel &= (s_maxSecondLevel - 1);
 		}
