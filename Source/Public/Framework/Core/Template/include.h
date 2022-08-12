@@ -16,6 +16,7 @@
 //============================================
 #include "Utility/Memory.h"
 #include "Utility/Utility.h"
+#include "Utility/GSL.h"
 
 
 //============================================
@@ -46,4 +47,3 @@
 // イベント
 //============================================
 #include "Event/EventNotifier.h"
-

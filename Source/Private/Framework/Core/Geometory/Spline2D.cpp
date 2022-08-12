@@ -39,9 +39,9 @@ namespace ob::core {
     //! 
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
-    Spline2D::point_type Spline2D::position(f32 t)const {
+    Vec2 Spline2D::position(f32 t)const {
         OB_NOTIMPLEMENTED();
-        return point_type();
+        return Vec2();
     }
 
 
@@ -50,9 +50,9 @@ namespace ob::core {
     //! 
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
-    Spline2D::point_type Spline2D::velocity(f32 t)const {
+    Vec2 Spline2D::velocity(f32 t)const {
         OB_NOTIMPLEMENTED();
-        return point_type();
+        return Vec2();
     }
 
 
@@ -61,9 +61,9 @@ namespace ob::core {
     //! 
     //! @params t 時間[0,1]
     //@―---------------------------------------------------------------------------
-    Spline2D::point_type Spline2D::acceleration(f32 t)const {
+    Vec2 Spline2D::acceleration(f32 t)const {
         OB_NOTIMPLEMENTED();
-        return point_type();
+        return Vec2();
     }
 
 

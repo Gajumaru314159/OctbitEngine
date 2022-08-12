@@ -24,7 +24,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief          デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
-        constexpr Cylinder() noexcept;
+        inline Cylinder() noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -57,48 +57,6 @@ namespace ob::core {
         //! @param direction カプセルの上方向
         //@―---------------------------------------------------------------------------
         Cylinder(const Vec3& center, f32 height, f32 radius, const Vec3& direction);
-
-
-        //===============================================================
-        //  セッター
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief          構造体を-初期化する
-        //@―---------------------------------------------------------------------------
-        constexpr void reset() noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief          セッター(2点指定)
-        //! 
-        //! @param pos1     始点
-        //! @param pos2     終点
-        //! @param radius   半径
-        //@―---------------------------------------------------------------------------
-        constexpr void set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief          セッター(中心/Quat指定)
-        //! 
-        //! @param center   中心点
-        //! @param radius   半径
-        //! @param height   カプセルの高さ
-        //! @param quat     カプセルの回転(無回転でY-up方向)
-        //@―---------------------------------------------------------------------------
-        void set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief           セッター(中心/方向指定)
-        //!                  
-        //! @param center    中心点
-        //! @param radius    半径
-        //! @param height    カプセルの高さ
-        //! @param direction カプセルの上方向
-        //@―---------------------------------------------------------------------------
-        void set(const Vec3& center, f32 radius, f32 height, const Vec3& direction);
 
 
         //===============================================================
@@ -144,10 +102,9 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief          コンストラクタ( ゼロ初期化 )
+    //! @brief          デフォルトコンストラクタ
     //@―---------------------------------------------------------------------------
-    constexpr Cylinder::Cylinder() noexcept
-        : Cylinder(Vec3::Zero,Vec3::Zero,0.0f)
+    inline Cylinder::Cylinder() noexcept
     {
     }
 
@@ -174,7 +131,10 @@ namespace ob::core {
     //! @param quat     カプセルの回転(無回転でY-up方向)
     //@―---------------------------------------------------------------------------
     inline Cylinder::Cylinder(const Vec3& center, f32 height, f32 radius, const Quat& quat)noexcept {
-        set(center, radius, height, quat);
+        this->radius = radius;
+        const Vec3 half = quat.up() * (height * 0.5f);
+        pos1 = center + half;
+        pos2 = center - half;
     }
 
 
@@ -187,58 +147,6 @@ namespace ob::core {
     //! @param direction カプセルの上方向
     //@―---------------------------------------------------------------------------
     inline Cylinder::Cylinder(const Vec3& center, f32 height, f32 radius, const Vec3& direction) {
-        set(center, radius, height, direction);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      構造体を-初期化する
-    //@―---------------------------------------------------------------------------
-    constexpr void Cylinder::reset() noexcept {
-        pos1.setZero();
-        pos2.setZero();
-        radius = 0.5f;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief          セッター(2点指定)
-    //! 
-    //! @param pos1     始点
-    //! @param pos2     終点
-    //! @param radius   半径
-    //@―---------------------------------------------------------------------------
-    constexpr void Cylinder::set(const Vec3 pos1, const Vec3 pos2, f32 radius) noexcept {
-        this->pos1 = pos1;
-        this->pos2 = pos2;
-        this->radius = radius;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief          セッター(中心/Quat指定)
-    //! 
-    //! @param center   中心点
-    //! @param radius   半径
-    //! @param height   カプセルの高さ
-    //! @param quat     カプセルの回転(無回転でY-up方向)
-    //@―---------------------------------------------------------------------------
-    inline void Cylinder::set(const Vec3& center, f32 radius, f32 height, const Quat& quat) noexcept {
-        this->radius = radius;
-        const Vec3 half = quat.up() * (height * 0.5f);
-        pos1 = center + half;
-        pos2 = center - half;
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief           セッター(中心/方向指定)
-    //!                  
-    //! @param center    中心点
-    //! @param radius    半径
-    //! @param height    カプセルの高さ
-    //! @param direction カプセルの上方向
-    //@―---------------------------------------------------------------------------
-    inline void Cylinder::set(const Vec3& center, f32 radius, f32 height, const Vec3& direction) {
         this->radius = radius;
         const Vec3 half = direction.unitVec() * (height * 0.5f);
         pos1 = center + half;

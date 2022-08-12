@@ -92,40 +92,6 @@ namespace ob::core {
 
 
         //===============================================================
-        //  セッター
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      構造体の初期化
-        //@―---------------------------------------------------------------------------
-        constexpr void reset() noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      LTRB を設定
-        //@―---------------------------------------------------------------------------
-        constexpr void set(f32 left, f32 top, f32 right, f32 bottom) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      2点を指定して Rect を設定
-        //@―---------------------------------------------------------------------------
-        constexpr void set(const Vec2& start, const Vec2& end) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      中央座標を設定
-        //@―---------------------------------------------------------------------------
-        constexpr void setCenter(const Vec2& center) noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      中央座標を設定
-        //@―---------------------------------------------------------------------------
-        constexpr void setSize(const Vec2& size) noexcept;
-
-
-        //===============================================================
         //  ゲッター
         //===============================================================
 
@@ -228,7 +194,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      2点を指定して Rect を作成する
         //@―---------------------------------------------------------------------------
-        static constexpr Rect FromTo(const Vec2& start, const Vec2& end) noexcept;
+        static constexpr Rect FromTo(Vec2 start, Vec2 end) noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -239,7 +205,7 @@ namespace ob::core {
         //! @param t    補間係数
         //! @return     t=0のときa、t=1の時bを返す。
         //@―---------------------------------------------------------------------------
-        static constexpr Rect Lerp(const Rect& a, const Rect& b, f32 t) noexcept;
+        static constexpr Rect Lerp(Rect a, Rect b, f32 t) noexcept;
 
 
     public:
@@ -342,57 +308,6 @@ namespace ob::core {
     constexpr Rect& Rect::operator&=(const Rect& rhs) noexcept {
         *this = rhs;
         return *this;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      構造体のゼロ初期化
-    //@―---------------------------------------------------------------------------
-    constexpr void Rect::reset() noexcept {
-        set(0.0f, 0.0f, 0.0f, 0.0f);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      LTRB を設定
-    //@―---------------------------------------------------------------------------
-    constexpr void Rect::set(f32 left, f32 top, f32 right, f32 bottom) noexcept {
-        this->left = left;
-        this->top = top;
-        this->right = right;
-        this->bottom = bottom;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      2点を指定して Rect を設定
-    //@―---------------------------------------------------------------------------
-    constexpr void Rect::set(const Vec2& center, const Vec2& size) noexcept {
-        set(center.x - size.x * 0.5f, center.y - size.y * 0.5f, center.x + size.x * 0.5f, center.y * size.y * 0.5f);
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      中央座標を設定
-    //@―---------------------------------------------------------------------------
-    constexpr void Rect::setCenter(const Vec2& center) noexcept {
-        auto dt = center - this->center();
-        left += dt.x;
-        right += dt.x;
-        top += dt.y;
-        bottom += dt.y;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      中央座標を設定
-    //@―---------------------------------------------------------------------------
-    constexpr void Rect::setSize(const Vec2& size) noexcept {
-        auto dt = size - this->size();
-        left -= dt.x * 0.5f;
-        right += dt.x * 0.5f;
-        top -= dt.y * 0.5f;
-        bottom += dt.y * 0.5f;
     }
 
 
@@ -519,7 +434,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      2点を指定して Rect を作成する
     //@―---------------------------------------------------------------------------
-    constexpr Rect Rect::FromTo(const Vec2& start, const Vec2& end) noexcept {
+    constexpr Rect Rect::FromTo(Vec2 start, Vec2 end) noexcept {
         return Rect(start - end, (start + end) * 0.5f);
     }
 
@@ -532,7 +447,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     //@―---------------------------------------------------------------------------
-    constexpr Rect Lerp(const Rect& a, const Rect& b, f32 t) noexcept {
+    constexpr Rect Lerp(Rect a, Rect b, f32 t) noexcept {
         return Rect(
             Math::Lerp(a.left, b.left, t),
             Math::Lerp(a.top, b.top, t),
