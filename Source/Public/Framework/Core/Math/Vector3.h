@@ -14,25 +14,6 @@ namespace ob::core {
     struct OB_API Vec3 {
     public:
 
-        f32 x;    //!< ベクトルのX成分
-        f32 y;    //!< ベクトルのY成分
-        f32 z;    //!< ベクトルのZ成分
-
-    public:
-
-        static const Vec3 Zero;    //!< ( 0.0f, 0.0f, 0.0f)
-        static const Vec3 One;     //!< ( 1.0f, 1.0f, 1.0f)
-        static const Vec3 Left;    //!< (-1.0f, 0.0f, 0.0f)
-        static const Vec3 Right;   //!< ( 1.0f, 0.0f, 0.0f)
-        static const Vec3 Down;    //!< ( 0.0f,-1.0f, 0.0f)
-        static const Vec3 Up;      //!< ( 0.0f, 1.0f, 0.0f)
-        static const Vec3 Back;    //!< ( 0.0f, 0.0f,-1.0f)
-        static const Vec3 Front;   //!< ( 0.0f, 0.0f, 1.0f)
-        static const Vec3 Minimum; //!< ( -inf, -inf, -inf)
-        static const Vec3 Maximum; //!< (  inf,  inf,  inf)
-
-    public:
-
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -40,13 +21,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        constexpr Vec3()noexcept;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ(初期化なし)
-        //@―---------------------------------------------------------------------------
-        inline explicit Vec3(EForceInit)noexcept;
+        Vec3()noexcept = default;
 
 
         //@―---------------------------------------------------------------------------
@@ -586,6 +561,25 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         static constexpr Vec3 Projection(const Vec3& inDir, const Vec3& normal) noexcept;
 
+    public:
+
+        static const Vec3 Zero;    //!< ( 0.0f, 0.0f, 0.0f)
+        static const Vec3 One;     //!< ( 1.0f, 1.0f, 1.0f)
+        static const Vec3 Left;    //!< (-1.0f, 0.0f, 0.0f)
+        static const Vec3 Right;   //!< ( 1.0f, 0.0f, 0.0f)
+        static const Vec3 Down;    //!< ( 0.0f,-1.0f, 0.0f)
+        static const Vec3 Up;      //!< ( 0.0f, 1.0f, 0.0f)
+        static const Vec3 Back;    //!< ( 0.0f, 0.0f,-1.0f)
+        static const Vec3 Front;   //!< ( 0.0f, 0.0f, 1.0f)
+        static const Vec3 Minimum; //!< ( -inf, -inf, -inf)
+        static const Vec3 Maximum; //!< (  inf,  inf,  inf)
+
+    public:
+
+        f32 x;    //!< ベクトルのX成分
+        f32 y;    //!< ベクトルのY成分
+        f32 z;    //!< ベクトルのZ成分
+
     };
 
 
@@ -597,20 +591,6 @@ namespace ob::core {
     // インライン関数
     //===============================================================
     //! @cond
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      デフォルトコンストラクタ(初期化なし)
-    //@―---------------------------------------------------------------------------
-    constexpr Vec3::Vec3() noexcept:Vec3(0.0f) {
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      コンストラクタ(ゼロ初期化)
-    //@―---------------------------------------------------------------------------
-    inline Vec3::Vec3(EForceInit) noexcept {
-    }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ(1要素指定)

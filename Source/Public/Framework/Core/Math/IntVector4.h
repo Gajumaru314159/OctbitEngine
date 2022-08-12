@@ -17,20 +17,6 @@ namespace ob::core {
     struct OB_API IntVec4 {
     public:
 
-        s32 x;    //!< ベクトルのX成分
-        s32 y;    //!< ベクトルのY成分
-        s32 z;    //!< ベクトルのZ成分
-        s32 w;    //!< ベクトルのW成分
-
-    public:
-
-        static const IntVec4 Zero;    //!< ( 0, 0, 0, 0)
-        static const IntVec4 One;     //!< ( 1, 1, 1, 1)
-        static const IntVec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
-        static const IntVec4 Maximum; //!< (  inf,  inf,  inf,  inf)
-
-    public:
-
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -285,6 +271,20 @@ namespace ob::core {
         //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
         static constexpr IntVec4 Min(const IntVec4& a, const IntVec4& b) noexcept;
+
+    public:
+
+        static const IntVec4 Zero;    //!< ( 0, 0, 0, 0)
+        static const IntVec4 One;     //!< ( 1, 1, 1, 1)
+        static const IntVec4 Minimum; //!< ( -inf, -inf, -inf, -inf)
+        static const IntVec4 Maximum; //!< (  inf,  inf,  inf,  inf)
+
+    public:
+
+        s32 x;    //!< ベクトルのX成分
+        s32 y;    //!< ベクトルのY成分
+        s32 z;    //!< ベクトルのZ成分
+        s32 w;    //!< ベクトルのW成分
 
     };
 

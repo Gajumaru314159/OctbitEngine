@@ -16,20 +16,19 @@ namespace ob::core {
     class Transform {
     public:
 
-        Vec3    position;   //!< 位置
-        Rot     rotation;   //!< 回転
-        Vec3    scale;      //!< 拡縮
-
+        //@―---------------------------------------------------------------------------
+        //! @brief  Matrix に変換
+        //@―---------------------------------------------------------------------------
+        Matrix toMatrix()const;
     public:
 
         static const Transform Identity;  //!< 初期状態
 
     public:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  Matrix に変換
-        //@―---------------------------------------------------------------------------
-        Matrix toMatrix()const;
+        Vec3    position;   //!< 位置
+        Rot     rotation;   //!< 回転
+        Vec3    scale;      //!< 拡縮
 
     };
 

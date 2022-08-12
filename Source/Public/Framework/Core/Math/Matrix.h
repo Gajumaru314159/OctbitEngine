@@ -36,22 +36,6 @@ namespace ob::core {
 	struct OB_API Matrix {
 	public:
 
-		union {
-			struct {
-				f32 m00, m01, m02, m03;
-				f32 m10, m11, m12, m13;
-				f32 m20, m21, m22, m23;
-				f32 m30, m31, m32, m33;
-			};
-			f32 m[4][4];//!< 内部データ
-		};
-
-	public:
-
-		static const Matrix Identity;   //!< 単位行列
-
-	public:
-
 		//===============================================================
 		//  コンストラクタ / デストラクタ
 		//===============================================================
@@ -356,6 +340,22 @@ namespace ob::core {
 
 		static const s32 COL;//! 4
 		static const s32 ROW;//! 4
+
+	public:
+
+		static const Matrix Identity;   //!< 単位行列
+
+	public:
+
+		union {
+			struct {
+				f32 m00, m01, m02, m03;
+				f32 m10, m11, m12, m13;
+				f32 m20, m21, m22, m23;
+				f32 m30, m31, m32, m33;
+			};
+			f32 m[4][4];//!< 内部データ
+		};
 
 	};
 

@@ -22,17 +22,6 @@ namespace ob::core {
     struct OB_API Quat {
     public:
 
-        f32 x;//!< X成分
-        f32 y;//!< Y成分
-        f32 z;//!< Z成分
-        f32 w;//!< W成分
-
-    public:
-
-        static const Quat Identity;     //!< 単位元
-
-    public:
-
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -354,6 +343,17 @@ namespace ob::core {
         //! @brief 内積
         //@―---------------------------------------------------------------------------
         static constexpr f32 Dot(const Quat& a, const Quat& b) noexcept;
+
+    public:
+
+        static const Quat Identity;     //!< 単位元
+
+    public:
+
+        f32 x;//!< X成分
+        f32 y;//!< Y成分
+        f32 z;//!< Z成分
+        f32 w;//!< W成分
 
     };
 

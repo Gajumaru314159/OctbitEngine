@@ -19,16 +19,6 @@ namespace ob::core {
 	struct OB_API Rot {
 	public:
 
-		f32 x;      //!< X軸回転量(Deg)
-		f32 y;      //!< Y軸回転量(Deg)
-		f32 z;      //!< Z軸回転量(Deg)
-
-	public:
-
-		static const Rot Identity;  //!< 無回転
-
-	public:
-
 		//===============================================================
 		//  コンストラクタ / デストラクタ
 		//===============================================================
@@ -148,6 +138,16 @@ namespace ob::core {
 		//! @brief  NaNを含むか
 		//@―---------------------------------------------------------------------------
 		bool isNaN();
+
+	public:
+
+		static const Rot Identity;  //!< 無回転
+
+	public:
+
+		f32 x;      //!< X軸回転量(Deg)
+		f32 y;      //!< Y軸回転量(Deg)
+		f32 z;      //!< Z軸回転量(Deg)
 
 	};
 

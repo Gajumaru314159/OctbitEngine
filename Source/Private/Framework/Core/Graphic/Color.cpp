@@ -30,7 +30,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Color::Color(const IntColor& another) noexcept {
         const f32 div = 1.0f / 255.0f;
-        set(another.r * div, another.g * div, another.b * div, another.a * div);
+        *this = Color(another.r * div, another.g * div, another.b * div, another.a * div);
     }
 
 
@@ -38,7 +38,7 @@ namespace ob::core {
     //! @brief Vec3 を変換して初期化(アルファは1.0)
     //@―---------------------------------------------------------------------------
     Color::Color(const Vec3& another) noexcept {
-        set(another.x, another.y, another.z);
+        *this = Color(another.x, another.y, another.z);
     }
 
 
@@ -46,7 +46,7 @@ namespace ob::core {
     //! @brief Vec4 を変換して初期化
     //@―---------------------------------------------------------------------------
     Color::Color(const Vec4& another) noexcept {
-        set(another.x, another.y, another.z, another.w);
+        *this = Color(another.x, another.y, another.z, another.w);
     }
 
 
@@ -116,20 +116,6 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Color Color::LerpHSV(const Color& a, const Color& b, f32 t) noexcept {
         return HSV::Lerp(HSV(a), HSV(b), t).toColor();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief		カラーコードから色を生成する
-    //! 
-    //! @return		色オブジェクト
-    //@―---------------------------------------------------------------------------
-    Color Color::FromCode(StringView code) noexcept {
-        auto size = code.size();
-        if (size <= 1)return Color::White;
-        if (code[0] == TC('#'))return Color::White;
-
-        return Color::White;
     }
 
 }// namespace ob

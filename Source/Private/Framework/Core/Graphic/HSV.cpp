@@ -12,13 +12,31 @@
 
 namespace ob::core {
 
+
+
 	//@―---------------------------------------------------------------------------
-	//! @brief			RGBAカラーから設定
+	//! @brief Vec3 を変換して初期化(アルファは1.0)
+	//@―---------------------------------------------------------------------------
+	HSV::HSV(const Vec3& another)noexcept {
+		OB_NOTIMPLEMENTED();
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief Vec4 を変換して初期化
+	//@―---------------------------------------------------------------------------
+	HSV::HSV(const Vec4& another)noexcept {
+		OB_NOTIMPLEMENTED();
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief コンストラクタ(Colorで初期化)
 	//! 
-	//! @param color    色
+	//! @param color    RGBA色
 	//@―---------------------------------------------------------------------------
-	void HSV::set(const Color& color) noexcept {
-		// TODO HSV::set
+	HSV::HSV(const Color& color) noexcept {
+		OB_NOTIMPLEMENTED();
 	}
 
 
@@ -26,6 +44,7 @@ namespace ob::core {
 	//! @brief      Color型に変換
 	//@―---------------------------------------------------------------------------
 	Color  HSV::toColor()const {
+		OB_NOTIMPLEMENTED();
 		// TODO HSV::toColor
 		return Color::White;
 	}

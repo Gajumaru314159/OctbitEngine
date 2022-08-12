@@ -17,25 +17,6 @@ namespace ob::core {
     struct OB_API IntVec3 {
     public:
 
-        s32 x;    //!< ベクトルのX成分
-        s32 y;    //!< ベクトルのY成分
-        s32 z;    //!< ベクトルのZ成分
-
-    public:
-
-        static const IntVec3 Zero;    //!< ( 0, 0, 0)
-        static const IntVec3 One;     //!< ( 1, 1, 1)
-        static const IntVec3 Left;    //!< (-1, 0, 0)
-        static const IntVec3 Right;   //!< ( 1, 0, 0)
-        static const IntVec3 Down;    //!< ( 0,-1, 0)
-        static const IntVec3 Up;      //!< ( 0, 1, 0)
-        static const IntVec3 Back;    //!< ( 0, 0,-1)
-        static const IntVec3 Front;   //!< ( 0, 0, 1)
-        static const IntVec3 Minimum; //!< (-inf,-inf,-inf)
-        static const IntVec3 Maximum; //!< ( inf, inf, inf)
-
-    public:
-
         //===============================================================
         //  コンストラクタ / デストラクタ
         //===============================================================
@@ -291,6 +272,25 @@ namespace ob::core {
         //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
         //@―---------------------------------------------------------------------------
         static constexpr IntVec3 Min(const IntVec3& a, const IntVec3& b) noexcept;
+
+    public:
+
+        static const IntVec3 Zero;    //!< ( 0, 0, 0)
+        static const IntVec3 One;     //!< ( 1, 1, 1)
+        static const IntVec3 Left;    //!< (-1, 0, 0)
+        static const IntVec3 Right;   //!< ( 1, 0, 0)
+        static const IntVec3 Down;    //!< ( 0,-1, 0)
+        static const IntVec3 Up;      //!< ( 0, 1, 0)
+        static const IntVec3 Back;    //!< ( 0, 0,-1)
+        static const IntVec3 Front;   //!< ( 0, 0, 1)
+        static const IntVec3 Minimum; //!< (-inf,-inf,-inf)
+        static const IntVec3 Maximum; //!< ( inf, inf, inf)
+
+    public:
+
+        s32 x;    //!< ベクトルのX成分
+        s32 y;    //!< ベクトルのY成分
+        s32 z;    //!< ベクトルのZ成分
 
     };
 

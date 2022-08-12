@@ -60,7 +60,6 @@ int main() {
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
 			LOG_INFO("Color    :{}", Color::Cyan);
 			LOG_INFO("IntColor :{}", IntColor::Cyan);
-			LOG_INFO("HSV      :{}", HSV(Color::Cyan));
 		}
 
 		platform::ModuleManager::Instance();
