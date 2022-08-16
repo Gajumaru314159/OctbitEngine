@@ -15,6 +15,7 @@ add_library(${PROJECT_NAME} STATIC ${out_sources} ${gsl_sources})
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR 
     "${OCTBIT_SOURCE_PATH}"
+    "${OCTBIT_SOURCE_PATH}/Private"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 
