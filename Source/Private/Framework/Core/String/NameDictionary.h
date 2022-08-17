@@ -56,7 +56,7 @@ namespace ob::core {
 
     private:
 
-        SpinLock m_lock;
+        mutable SpinLock m_lock;
         HashMap<Name::Hash, detail::NameData> m_dict;
 
     };

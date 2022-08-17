@@ -28,6 +28,7 @@ namespace ob::core {
     class Name {
     public:
         using Hash = u32;
+        friend struct std::hash<Name>;
     public:
 
         //@―---------------------------------------------------------------------------
@@ -121,3 +122,16 @@ namespace ob::core {
 
     //! @endcond
 }// namespcae ob
+
+
+namespace std {
+    
+    template<>
+    struct hash<ob::core::Name> {
+    public:
+        size_t operator()(const ob::core::Name& name)const {
+            return name.m_hash;
+        }
+    };
+
+}
