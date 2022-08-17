@@ -14,7 +14,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief      オイラー回転を表す構造体
 	//! 
-	//! @details    回転はZXYの順に行われる。
+	//! @details    回転はZXYの順に行われる。内部の値は度数法で表される。
 	//@―---------------------------------------------------------------------------
 	struct OB_API Rot {
 	public:
@@ -222,15 +222,43 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> {
+template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> : fmt::formatter<ob::core::f32, ob::core::Char> {
+	using base = fmt::formatter<ob::core::f32, ob::core::Char>;
+	bool isRad = false;
 	template<typename ParseContext>
-	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-		return ctx.end();
+	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {		
+		auto itr = ctx.begin();
+		if (itr == ctx.end())return ctx.end();
+		auto mode = *ctx.begin();
+		if (mode == TC('r') || mode == TC('R')) {
+			isRad = true;
+			itr++;
+		}else if (mode == TC('d') || mode == TC('D')) {
+			isRad = false;
+			itr++;
+		}
+		ctx.advance_to(itr);
+		return base::parse(ctx);
 	}
-
 	template<typename FormatContext>
-	auto format(ob::core::Rot value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("({},{},{})"), ob::Math::Degrees(value.x), ob::Math::Degrees(value.y), ob::Math::Degrees(value.z));
+	auto format(const ob::core::Rot& value, FormatContext& ctx) -> decltype(ctx.out()) {
+		auto x = value.x;
+		auto y = value.y;
+		auto z = value.z;
+		if (isRad) {
+			x = ob::core::Math::Degrees(x);
+			y = ob::core::Math::Degrees(y);
+			z = ob::core::Math::Degrees(z);
+		}
+		ctx.advance_to(format_to(ctx.out(), TC("(")));
+		ctx.advance_to(base::format(x, ctx));
+		ctx.advance_to(format_to(ctx.out(), TC(",")));
+		ctx.advance_to(base::format(y, ctx));
+		ctx.advance_to(format_to(ctx.out(), TC(",")));
+		ctx.advance_to(base::format(z, ctx));
+		ctx.advance_to(format_to(ctx.out(), TC(")")));
+		return ctx.out();
 	}
 };
+
 //! @endcond

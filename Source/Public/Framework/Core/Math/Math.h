@@ -71,10 +71,10 @@ namespace ob::core {
         static f32 Atan2D(f32 y, f32 x) { return Math::Radians(atan2f(y, x)); }
 
 
-        //! @brief ディグリーをラジアンに変換する
+        //! @brief 度数法をラジアンに変換する
         static constexpr f32 Degrees(f32 degrees)noexcept { return degrees * PI / 180.0f; }
 
-        //! @brief ラジアンをディグリーに変換する
+        //! @brief ラジアンを度数法に変換する
         static constexpr f32 Radians(f32 radians)noexcept { return radians * 180.0f / PI; }
 
 

@@ -124,17 +124,18 @@ namespace ob::core {
 }// namespcae ob
 
 
-namespace std {
-    
-    template<>
-    struct hash<ob::core::Name> {
-    public:
-        size_t operator()(const ob::core::Name& name)const {
-            return name.m_hash;
-        }
-    };
-
-}
+//===============================================================
+// ハッシュ化
+//===============================================================
+//! @cond
+template<>
+struct std::hash<ob::core::Name> {
+public:
+    size_t operator()(const ob::core::Name& name)const {
+        return name.m_hash;
+    }
+};
+//! @endcond
 
 
 //===============================================================

@@ -277,14 +277,25 @@ namespace ob::core {
 //===============================================================
 //! @cond
 template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
+	bool isCode=false;
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-		return ctx.end();
+		auto itr = ctx.begin();
+		if (itr == ctx.end())return itr;
+		if (*itr == TC('#')) {
+			isCode = true;
+			++itr;
+		}
+		return itr;
 	}
 
 	template<typename FormatContext>
 	auto format(ob::core::IntColor value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("({},{},{},{})"), value.r, value.g, value.b, value.a);
+		if (isCode) {
+			return format_to(ctx.out(), TC("{:08X}"), value.toCode());
+		} else {
+			return format_to(ctx.out(), TC("({:>3},{:>3},{:>3},{:>3})"), value.r, value.g, value.b, value.a);
+		}
 	}
 };
 //! @endcond

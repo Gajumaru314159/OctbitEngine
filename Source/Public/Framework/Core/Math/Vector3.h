@@ -1390,15 +1390,18 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Vec3, ob::core::Char> {
-    template<typename ParseContext>
-    constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-        return ctx.end();
-    }
-
+template <> struct fmt::formatter<ob::core::Vec3, ob::core::Char> : fmt::formatter<ob::core::f32, ob::core::Char> {
+    using base = fmt::formatter<ob::core::f32, ob::core::Char>;
     template<typename FormatContext>
-    auto format(ob::core::Vec3 value, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), TC("({},{},{})"), value.x, value.y,value.z);
+    auto format(const ob::core::Vec3& value, FormatContext& ctx) -> decltype(ctx.out()) {
+        ctx.advance_to(format_to(ctx.out(), TC("(")));
+        ctx.advance_to(base::format(value.x, ctx));
+        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(base::format(value.y, ctx));
+        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(base::format(value.z, ctx));
+        ctx.advance_to(format_to(ctx.out(), TC(")")));
+        return ctx.out();
     }
 };
 //! @endcond
