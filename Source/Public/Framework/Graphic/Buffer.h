@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Graphic/Utility/GraphicObjectHolder.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
-#include <Framework/Core/Misc/Blob.h>
+#include <Framework/Core/Misc/BlobView.h>
 
 namespace ob::graphic {
 
@@ -54,7 +54,7 @@ namespace ob::graphic {
 		//! @param blob 初期化データ
 		//! @param name 名前
 		//@―---------------------------------------------------------------------------
-		Buffer(const BufferDesc& desc, const Blob& blob);
+		Buffer(const BufferDesc& desc, BlobView blob);
 
 
 		//@―---------------------------------------------------------------------------

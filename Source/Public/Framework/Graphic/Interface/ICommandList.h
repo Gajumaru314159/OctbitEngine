@@ -53,7 +53,7 @@ namespace ob::graphic {
         virtual void clearColors(u32 mask) = 0;                         //!< カラーをクリア
         virtual void clearDepthStencil() = 0;                           //!< 深度値をクリア
 
-        virtual void setVertexBuffer(const Buffer&) = 0;                //!< 頂点バッファ設定
+        virtual void setVertexBuffers(Span<const Buffer*>) = 0;         //!< 頂点バッファ設定
         virtual void setIndexBuffer(const Buffer&) = 0;                 //!< インデックスバッファ設定
 
 

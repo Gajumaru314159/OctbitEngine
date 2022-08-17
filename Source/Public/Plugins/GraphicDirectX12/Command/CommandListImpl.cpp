@@ -285,13 +285,29 @@ namespace ob::graphic::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setVertexBuffer(const Buffer& buffer) {
-		auto& rBuffer = Device::GetImpl<BufferImpl>(buffer);
-		D3D12_VERTEX_BUFFER_VIEW view;
-		view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
-		view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
-		view.StrideInBytes = rBuffer.getDesc().bufferStride;
-		m_cmdList->IASetVertexBuffers(0, 1, &view);
+	void CommandListImpl::setVertexBuffers(Span<const Buffer*> buffers) {
+		StaticArray<D3D12_VERTEX_BUFFER_VIEW,16> views;
+		if (views.size() <= buffers.size()) {
+			LOG_ERROR("頂点バッファは{}以下である必要があります。[size={}]",views.size(),buffers.size());
+			return;
+		}
+
+		size_t size = 0;
+		for (auto buffer : buffers) {
+			if (buffer == nullptr) {
+				LOG_ERROR("頂点バッファがnullです。");
+				return;
+			}
+
+			auto& rBuffer = Device::GetImpl<BufferImpl>(*buffer);
+			auto& view=views[size];
+			view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
+			view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
+			view.StrideInBytes = rBuffer.getDesc().bufferStride;
+			size++;
+		}
+
+		m_cmdList->IASetVertexBuffers(0, size, views.data());
 	}
 
 

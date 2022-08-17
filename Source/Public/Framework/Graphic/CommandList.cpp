@@ -140,7 +140,20 @@ namespace ob::graphic {
 	void CommandList::setVertexBuffer(const Buffer& buffer) {
 		CHECK_IMPL();
 		// TODO パラメータ指定
-		m_pImpl->setVertexBuffer(buffer);
+		StaticArray<const Buffer*, 1> buffers = {
+			&buffer
+		};
+		const Buffer* pBuffer = &buffer;
+		setVertexBuffers(buffers);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      頂点バッファを設定
+	//@―---------------------------------------------------------------------------
+	void CommandList::setVertexBuffers(Span<const Buffer*> buffers) {
+		CHECK_IMPL();
+		// TODO パラメータ指定
+		m_pImpl->setVertexBuffers(buffers);
 	}
 
 	//@―---------------------------------------------------------------------------

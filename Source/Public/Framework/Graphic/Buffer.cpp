@@ -40,7 +40,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    Buffer::Buffer(const BufferDesc& desc, const Blob& blob) {
+    Buffer::Buffer(const BufferDesc& desc, BlobView blob) {
         m_pImpl = Device::Get()->createBuffer(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
