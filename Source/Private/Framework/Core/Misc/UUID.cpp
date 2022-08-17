@@ -101,11 +101,11 @@ namespace ob::core {
     //! @brief			バイト列から固有のUUIDを生成
     //! @param bytes	バイト列
     //@―---------------------------------------------------------------------------
-    UUID UUID::FromByte(const byte* bytes) {
-        OB_CHECK_ASSERT_EXPR(bytes != nullptr);
+    UUID UUID::FromByte(Span<byte> bytes) {
+        OB_CHECK_ASSERT_EXPR(bytes.size()==16);
         UUID result;
         for (s32 i = 0; i < 16; i++) {
-            result.m_data[i] = *(bytes + i);
+            result.m_data[i] = bytes[i];
         }
         return result;
     }

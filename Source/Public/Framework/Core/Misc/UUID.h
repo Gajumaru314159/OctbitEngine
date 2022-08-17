@@ -94,7 +94,7 @@ namespace ob::core {
         //! 
         //! @param bytes	バイト列
         //@―---------------------------------------------------------------------------
-        static UUID FromByte(const byte* bytes);
+        static UUID FromByte(Span<byte> bytes);
 
 
     private:
