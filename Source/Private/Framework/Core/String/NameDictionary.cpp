@@ -37,7 +37,7 @@ namespace ob::core{
             // 新規追加
             if (itr == m_dict.end()) {
                 auto& item = m_dict.emplace(hash, detail::NameData(nameSV, hash));
-                return Name(item.second);
+                return Name(item.first->second);
             }
 
             // 追加済み(Hashは変更済み)
