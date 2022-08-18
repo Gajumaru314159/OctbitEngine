@@ -3,7 +3,7 @@
 //! @brief		マウスデバイス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Input/MouseDevice.h>
+#include <Framework/Input/Device/MouseDevice.h>
 #include <Framework/Platform/Window/Window.h>
 #include <Framework/Platform/Window/WindowNativeAccessor.h>
 

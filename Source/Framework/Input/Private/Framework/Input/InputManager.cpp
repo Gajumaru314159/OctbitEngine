@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Input/InputManager.h>
-#include <Framework/Input/KeyboardDevice.h>
-#include <Framework/Input/MouseDevice.h>
-#include <Framework/Input/DirectInputDevice.h>
+#include <Framework/Input/Device/KeyboardDevice.h>
+#include <Framework/Input/Device/MouseDevice.h>
+#include <Framework/Input/Device/DirectInputDevice.h>
 
 namespace ob::input{
 

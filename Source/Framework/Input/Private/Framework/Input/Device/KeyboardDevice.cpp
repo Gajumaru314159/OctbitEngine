@@ -3,7 +3,7 @@
 //! @brief		キーボードデバイス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Input/KeyboardDevice.h>
+#include <Framework/Input/Device/KeyboardDevice.h>
 #include <Framework/Platform/Window/Window.h>
 #include <magic_enum.hpp>
 

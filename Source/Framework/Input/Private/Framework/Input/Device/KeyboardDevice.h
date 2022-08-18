@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Input/IInputDevice.h>
+#include <Framework/Input/Interface/IInputDevice.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 
 namespace ob::input {
