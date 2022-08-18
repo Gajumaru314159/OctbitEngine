@@ -10,7 +10,7 @@
 //@―---------------------------------------------------------------------------
 //! @berif	ボタン定義マクロ
 //@―---------------------------------------------------------------------------
-#define OB_DECL_AXIS(type,name) static constexpr Axis name{ Code,type::name };
+#define OB_DECL_AXIS(type,name) static constexpr Axis name{ ID,type::name };
 
 namespace ob::input {
 

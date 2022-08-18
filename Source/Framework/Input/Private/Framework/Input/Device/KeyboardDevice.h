@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
+#include <Framework/Input/Keyboard.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 
 namespace ob::input {
@@ -28,7 +29,7 @@ namespace ob::input {
 		//@―---------------------------------------------------------------------------
 		//! @brief  デバイスID
 		//@―---------------------------------------------------------------------------
-		DeviceID getDeviceId()const override { return OB_DEVICE_ID("Keyboard"); }
+		DeviceID getDeviceId()const override { return Keyboard::ID; }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  更新

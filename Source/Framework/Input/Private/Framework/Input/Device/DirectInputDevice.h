@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
+#include <Framework/Input/DirectInput.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 
 #ifdef OS_WINDOWS
@@ -33,7 +34,7 @@ namespace ob::input {
         //@―---------------------------------------------------------------------------
         //! @brief  デバイスID
         //@―---------------------------------------------------------------------------
-        DeviceID getDeviceId()const override { return OB_DEVICE_ID("DirectInput"); }
+        DeviceID getDeviceId()const override { return DirectInput::ID; }
 
         //@―---------------------------------------------------------------------------
         //! @brief  更新

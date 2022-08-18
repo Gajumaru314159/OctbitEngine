@@ -13,7 +13,7 @@ namespace ob::input {
 	//@―---------------------------------------------------------------------------
 	enum class DeviceID : u32;
 #define	OB_DEVICE_ID(name) DeviceID{OB_HASH32(name)}
-#define OB_DECL_INPUT_DEVICE_ID(name) static constexpr DeviceID Code{ OB_DEVICE_ID(name) }
+#define OB_DECL_INPUT_DEVICE_ID(name) static constexpr DeviceID ID{ OB_DEVICE_ID(name) }
 
     //@―---------------------------------------------------------------------------
     //! @brief  キーコード

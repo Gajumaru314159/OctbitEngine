@@ -10,13 +10,13 @@
 namespace ob::input {
 
 	class Keyboard {
-		OB_DECL_INPUT_DEVICE_ID("Keyboard");
 	public:
+		OB_DECL_INPUT_DEVICE_ID("Keyboard");
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      ボタン取得
 		//@―---------------------------------------------------------------------------
-		static constexpr Button GetButton(Key key) { return {Code,key}; }
+		static constexpr Button GetButton(Key key) { return {ID,key}; }
 
 	public:
 		OB_DECL_BUTTON(Key,A);

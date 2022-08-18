@@ -10,7 +10,7 @@
 //@―---------------------------------------------------------------------------
 //! @berif	ボタン定義マクロ
 //@―---------------------------------------------------------------------------
-#define OB_DECL_BUTTON(type,name) static constexpr Button name{ Code,type::name };
+#define OB_DECL_BUTTON(type,name) static constexpr Button name{ ID,type::name };
 
 namespace ob::input {
 
