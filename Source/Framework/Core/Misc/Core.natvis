@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	
+	<!--String-->
+	<Type Name="std::basic_string&lt;char,*&gt;">
+		<Intrinsic Name="size" Expression="_Mypair._Myval2._Mysize" />
+		<Intrinsic Name="capacity" Expression="_Mypair._Myval2._Myres" />
+		<Intrinsic Name="bufSize" Expression="16" />
+		<Intrinsic Name="isShortString" Expression="capacity() &lt; bufSize()" />
+		<Intrinsic Name="isLongString" Expression="capacity() &gt;= bufSize()" />
+		<DisplayString Condition="isShortString()">{_Mypair._Myval2._Bx._Buf,u8}</DisplayString>
+		<DisplayString Condition="isLongString()">{_Mypair._Myval2._Bx._Ptr,u8}</DisplayString>
+		<StringView Condition="isShortString()">_Mypair._Myval2._Bx._Buf,u8</StringView>
+		<StringView Condition="isLongString()">_Mypair._Myval2._Bx._Ptr,u8</StringView>
+		<Expand>
+			<Item Name="[size]" ExcludeView="simple">size()</Item>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+			<ArrayItems>
+				<Size>_Mypair._Myval2._Mysize</Size>
+				<ValuePointer Condition="isShortString()">_Mypair._Myval2._Bx._Buf</ValuePointer>
+				<ValuePointer Condition="isLongString()">_Mypair._Myval2._Bx._Ptr</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+
+	<!--Pimpl-->
+	<Type Name="ob::core::Pimpl&lt;*&gt;">
+		<DisplayString>value = {*m_impl}</DisplayString>
+	</Type>
+	
+</AutoVisualizer>
