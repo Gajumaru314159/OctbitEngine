@@ -62,6 +62,8 @@ int main() {
 			LOG_INFO("Color    :{}", Color::Cyan);
 			LOG_INFO("IntColor :{}", IntColor::Cyan);
 			LOG_INFO("IntColor :{:#}", IntColor::Cyan);
+			LOG_INFO("HSV	   :{}", HSV(Color::Cyan));
+			LOG_INFO("HSV	   :{}", HSV::Cyan.toColor());
 		}
 
 		platform::ModuleManager::Instance();

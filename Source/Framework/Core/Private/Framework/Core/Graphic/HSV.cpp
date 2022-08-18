@@ -10,18 +10,32 @@
 #include <Framework/Core/Math/Math.h>
 #include <Framework/Core/Math/Vectors.h>
 
+namespace {
+
+	inline constexpr int HSVConvTable[6][3] =
+	{
+		{ 3, 2, 0 },
+		{ 1, 3, 0 },
+		{ 0, 3, 2 },
+		{ 0, 1, 3 },
+		{ 2, 0, 3 },
+		{ 3, 0, 1 },
+	};
+
+}
+
 namespace ob::core {
 
-	const HSV HSV::White = { 0,0,1,1 };
-	const HSV HSV::Gray = { 0,0,0.5,1 };
-	const HSV HSV::Black = { 0,0,0,1 };
-	const HSV HSV::Clear = { 0,0,0,0 };
-	const HSV HSV::Red = { 0,1,1,1 };
-	const HSV HSV::Yellow = { 0.25,1,1,1 };
-	const HSV HSV::Green = { 0.5,1,1,1 };
-	const HSV HSV::Cyan = { 0.5,1,1,1 };
-	const HSV HSV::Blue = { 0.75,1,1,1 };
-	const HSV HSV::Magenta = { 1,1,1,1 };// TODO
+	const HSV HSV::White	= {   0,0,1,1 };
+	const HSV HSV::Gray		= {   0,0,0.5,1 };
+	const HSV HSV::Black	= {   0,0,0,1 };
+	const HSV HSV::Clear	= {   0,0,0,0 };
+	const HSV HSV::Red		= {   0,1,1,1 };
+	const HSV HSV::Yellow	= {  60,1,1,1 };
+	const HSV HSV::Green	= { 120,1,1,1 };
+	const HSV HSV::Cyan		= { 180,1,1,1 };
+	const HSV HSV::Blue		= { 240,1,1,1 };
+	const HSV HSV::Magenta	= { 300,1,1,1 };
 
 
 	//@―---------------------------------------------------------------------------
@@ -52,7 +66,29 @@ namespace ob::core {
 	//! @param color    RGBA色
 	//@―---------------------------------------------------------------------------
 	HSV::HSV(const Color& color) noexcept {
-		OB_NOTIMPLEMENTED();
+		auto r = color.r;
+		auto g = color.g;
+		auto b = color.b;
+
+		f32 k = 0.0;
+
+		if (g < b) {
+			std::swap(g, b);
+			k = -360.0;
+		}
+
+		if (r < g) {
+			std::swap(r, g);
+			k = -720.0 / 6.0 - k;
+		}
+
+		const f32 delta = (g - b) * (360.0 / 6.0);
+		const f32 chroma = r - Math::Min(g, b);
+		
+		h = Math::Abs(k + delta / (chroma + 1e-20));
+		s = chroma / (r + 1e-20);
+		v = r;
+		a = color.a;
 	}
 
 
@@ -60,9 +96,23 @@ namespace ob::core {
 	//! @brief      Color型に変換
 	//@―---------------------------------------------------------------------------
 	Color  HSV::toColor()const {
-		OB_NOTIMPLEMENTED();
-		// TODO HSV::toColor
-		return Color::White;
+		const f32 hue01 = Math::Fract(h / 360.0);
+		const f32 hueF = (hue01 * 6.0);
+		const s32 hueI = static_cast<s32>(hueF);
+		const f32 fr = (hueF - hueI);
+		const f32 vals[4] = {
+			v * (1.0f - s),
+			v * (1.0f - s * fr),
+			v * (1.0f - s * (1.0f - fr)),
+			v
+		};
+
+		return{ 
+			vals[HSVConvTable[hueI][0]],
+			vals[HSVConvTable[hueI][1]],
+			vals[HSVConvTable[hueI][2]],
+			a
+		};
 	}
 	
 }// namespace ob

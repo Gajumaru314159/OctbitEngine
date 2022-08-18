@@ -12,8 +12,6 @@ namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief		HSVカラー
-    //! 
-    //! @details	各色要素は、0〜1の範囲のf32型で表現されます。アルファ(a)は透過度を表し、0で完全な透明、1で完全な不透明を表します。
     //@―---------------------------------------------------------------------------
     struct OB_API HSV {
     public:
@@ -45,7 +43,7 @@ namespace ob::core {
         //! 
         //! @param color    RGBA色
         //@―---------------------------------------------------------------------------
-        HSV(const Color& color)noexcept;
+        explicit HSV(const Color& color)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -127,23 +125,23 @@ namespace ob::core {
 
     public:
 
-        static const HSV White;		//!< HSV(0      ,0,1,1)
-        static const HSV Gray;		//!< HSV(0      ,0,0.5,1)
-        static const HSV Black;		//!< HSV(0      ,0,0,1)
-        static const HSV Clear;		//!< HSV(0      ,0,1,0)
-        static const HSV Red;		//!< HSV(0      ,1,1,1)
-        static const HSV Yellow;	//!< HSV(0.16667,1,1,1)
-        static const HSV Green;		//!< HSV(0.33333,1,1,1)
-        static const HSV Cyan;		//!< HSV(0.5    ,1,1,1)
-        static const HSV Blue;		//!< HSV(0.66667,1,1,1)
-        static const HSV Magenta;	//!< HSV(0.83333,1,1,1)
+        static const HSV White;		//!< HSV(  0,0,1,1)
+        static const HSV Gray;		//!< HSV(  0,0,0.5,1)
+        static const HSV Black;		//!< HSV(  0,0,0,1)
+        static const HSV Clear;		//!< HSV(  0,0,0,0)
+        static const HSV Red;		//!< HSV(  0,1,1,1)
+        static const HSV Yellow;	//!< HSV( 60,1,1,1)
+        static const HSV Green;		//!< HSV(120,1,1,1)
+        static const HSV Cyan;		//!< HSV(180,1,1,1)
+        static const HSV Blue;		//!< HSV(240,1,1,1)
+        static const HSV Magenta;	//!< HSV(300,1,1,1)
 
     public:
 
-        f32 h;      //!< 色相成分
-        f32 s;      //!< 彩度成分
-        f32 v;      //!< 明度成分
-        f32 a;      //!< アルファ成分
+        f32 h;      //!< 色相成分 [0, 360)
+        f32 s;      //!< 彩度成分 [0, 1]
+        f32 v;      //!< 明度成分 [0, 1]
+        f32 a;      //!< アルファ成分 [0, 1]
 
     };
 
