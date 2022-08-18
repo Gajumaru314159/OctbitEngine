@@ -57,7 +57,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<class T>
         explicit BlobView(const Array<T>& data) {
-            m_pData = static_cast<const byte*>(data.data());
+            m_pData = reinterpret_cast<const byte*>(data.data());
             m_size = data.size()*sizeof(T);
         }
 

@@ -1,82 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		メッシュバッファ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/MeshData.h>
 #include <Framework/Graphic/Buffer.h>
-
-namespace ob::graphic {
-	//struct MeshData;
-}
-
+#include <Framework/Graphic/MeshData.h>
 
 namespace ob::rendering {
 
-	class Mesh {
-	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  デフォルトコンストラクタ
-		//@―---------------------------------------------------------------------------
-		Mesh() = default;
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ(MeshDataから)
-		//@―---------------------------------------------------------------------------
-		template<typename TVertex, typename TIndex = u16>
-		Mesh(const ob::graphic::MeshData<TVertex, TIndex>& meshData)
-			: Mesh(BlobView(meshData.vertices), sizeof(TVertex), BlobView(meshData.indices), sizeof(TIndex))
-		{
-		}
-
-		Mesh(const Mesh&) = default;
-		Mesh(Mesh&&) = default;
-		Mesh& operator = (const Mesh&) = default;
-		Mesh& operator = (Mesh&&) = default;
-
-
-		size_t vertexCount()const;
-		size_t indexCount()const;
-
-	private:
-
-		Mesh(BlobView vertices, size_t vertexSize, BlobView indices, size_t indexSize);
-
-	private:
-		graphic::Buffer m_indexBuffer;
-		graphic::Buffer m_vertexBuffer;
-		size_t m_vertexCount = 0;
-		size_t m_indexCount = 0;
-
-	};
-
-
-
-
-
 	//@―---------------------------------------------------------------------------
-	//! @brief  頂点数
+	//! @brief  メッシュバッファ
 	//@―---------------------------------------------------------------------------
-	inline size_t Mesh::vertexCount()const {
-		return m_vertexCount;
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  インデックス数
-	//@―---------------------------------------------------------------------------
-	inline size_t Mesh::indexCount()const {
-		return m_indexCount;
-	}
-
-	/*
-	//@―---------------------------------------------------------------------------
-	//! @brief  説明
-	//@―---------------------------------------------------------------------------
-	class Mesh {
-	public:
-		using MeshData = ob::graphic::MeshData;
+	class MeshBuffer {
 	public:
 
 		//===============================================================
@@ -84,25 +20,79 @@ namespace ob::rendering {
 		//===============================================================
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  説明
+		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		Mesh();
-		explicit Mesh(const MeshData& meshData);
+		template<typename TVertex, typename TIndex>
+		MeshBuffer(const graphic::MeshData<TVertex, TIndex>& mesh);
 
-		size_t num_vertices()const;
-		size_t num_triangles()const;
-		Box boundingBox()const;
-		Sphere boundingSphere()const;
 
-		void draw()const;
+		//@―---------------------------------------------------------------------------
+		//! @brief  名前を設定
+		//@―---------------------------------------------------------------------------
+		void setName(StringView name);
 
-		// Transform / Color / Subset / Instancing
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  頂点バッファを取得
+		//@―---------------------------------------------------------------------------
+		const graphic::Buffer& getVertexBuffer()const noexcept;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  インデックスバッファを取得
+		//@―---------------------------------------------------------------------------
+		const graphic::Buffer& getIndexBuffer()const noexcept;
+
 
 	private:
 
-		SPtr<class MeshImpl> m_impl;
+		//@―---------------------------------------------------------------------------
+		//! @brief  コンストラクタ
+		//@―---------------------------------------------------------------------------
+		MeshBuffer(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount);
+
+
+	private:
+
+		graphic::Buffer m_vertexBuffer;
+		graphic::Buffer m_indexBuffer;
 
 	};
-	*/
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	template<typename TVertex, typename TIndex>
+	inline MeshBuffer::MeshBuffer(const graphic::MeshData<TVertex, TIndex>& mesh)
+		: MeshBuffer(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(), mesh.indices.data(), sizeof(TIndex), mesh.indices.size())
+	{
+
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  名前を設定
+	//@―---------------------------------------------------------------------------
+	inline void MeshBuffer::setName(StringView name) {
+		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(Format(TC("{}_Vertex"), name)));
+		OB_DEBUG_CONTEXT(m_indexBuffer.setName(Format(TC("{}_Index"), name)));
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  頂点バッファを取得
+	//@―---------------------------------------------------------------------------
+	inline const graphic::Buffer& MeshBuffer::getVertexBuffer()const noexcept {
+		return m_vertexBuffer;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  インデックスバッファを取得
+	//@―---------------------------------------------------------------------------
+	inline const graphic::Buffer& MeshBuffer::getIndexBuffer()const noexcept {
+		return m_indexBuffer;
+	}
 
 }// namespcae ob

@@ -5,11 +5,11 @@
 #include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/RenderTarget.h>
 #include <Framework/Graphic/RootSignature.h>
+#include <Framework/Graphic/Buffer.h>
 #include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/PipelineState.h>
 #include <Framework/Graphic/DescriptorTable.h>
 #include <Framework/Graphic/CommandList.h>
-#include <Framework/Graphic/MeshBuffer.h>
 #include <Framework/Graphic/MeshData.h>
 #include <Framework/Graphic/Types/CommandParam.h>
 #include <Framework/Core/File/FileStream.h>
@@ -224,9 +224,18 @@ int main() {
 				{ Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
 			);
 
-			MeshBuffer meshBuffer(mesh);
-			meshBuffer.setName(TC("Mesh1"));
-
+			Buffer vertexBuffer;
+			Buffer indexBuffer;
+			{
+				auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
+				vertexBuffer = Buffer(desc, BlobView(mesh.vertices));
+				OB_CHECK_ASSERT_EXPR(vertexBuffer);
+			}
+			{
+				auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
+				indexBuffer = Buffer(desc, BlobView(mesh.indices));
+				OB_CHECK_ASSERT_EXPR(indexBuffer);
+			}
 
 			Vec2 pos(0.0f, 0.0f);
 			Random random;
@@ -268,8 +277,8 @@ int main() {
 					cmdList.setRootSignature(signature);
 					cmdList.setPipelineState(pipeline);
 
-					cmdList.setVertexBuffer(meshBuffer.getVertexBuffer());
-					cmdList.setIndexBuffer(meshBuffer.getIndexBuffer());
+					cmdList.setVertexBuffer(vertexBuffer);
+					cmdList.setIndexBuffer(indexBuffer);
 
 					SetDescriptorTableParam params[] = {
 						SetDescriptorTableParam(dt,0),

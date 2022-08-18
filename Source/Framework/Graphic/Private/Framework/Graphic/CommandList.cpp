@@ -7,8 +7,6 @@
 #include <Framework/Graphic/Interface/ICommandList.h>
 #include <Framework/Graphic/Device.h>
 #include <Framework/Graphic/Types/CommandListDesc.h>
-#include <Framework/Graphic/VertexBuffer.h>
-#include <Framework/Graphic/IndexBuffer.h>
 
 namespace ob::graphic {
 

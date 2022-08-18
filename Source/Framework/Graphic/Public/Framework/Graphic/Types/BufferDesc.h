@@ -139,7 +139,7 @@ namespace ob::graphic {
 		template<typename TVertex>
 		static BufferDesc Vertex(
 			u64             count,
-			BindFlags       bindFlags,
+			BindFlags       bindFlags = {},
 			ResourceUsage   usage = ResourceUsage::Dynamic,
 			BufferFlags      bufferFlags = {}
 		)
@@ -160,7 +160,7 @@ namespace ob::graphic {
 		template<typename TIndex>
 		static BufferDesc Index(
 			u64             count,
-			BindFlags       bindFlags,
+			BindFlags       bindFlags = {},
 			ResourceUsage   usage = ResourceUsage::Dynamic,
 			BufferFlags      bufferFlags = {}
 		)
