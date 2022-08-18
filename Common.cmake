@@ -49,6 +49,7 @@ FUNCTION(ADD_SOURCES result filter root)
 			GLOB
 			files
 			ABSOLUTE
+			"${abs_dir}/*.md"
 			"${abs_dir}/*.natvis"
 			"${abs_dir}/*.h"
 			"${abs_dir}/*.cpp")

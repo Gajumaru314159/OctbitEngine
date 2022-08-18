@@ -94,7 +94,7 @@ add_subdirectory ("Source/Framework/Graphic")
 add_subdirectory ("Source/Framework/Rendering")
 add_subdirectory ("Source/Framework/Input")
 add_subdirectory ("Source/Framework/Engine")
-#add_subdirectory ("Source/Public/Framework/Model")
+add_subdirectory ("Source/Framework/Model")
 
 # Plugins
 if(WIN32)

@@ -4,29 +4,29 @@ project (Model)
 #------------------------------------------------------------------------------
 # ソースコードの登録
 #------------------------------------------------------------------------------
-LOAD_FILES(out_sources "Framework/Platform")
+LOAD_FILES(out_sources "Framework/Model")
 add_library(${PROJECT_NAME} STATIC ${out_sources})
 
-SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
+SET_PCH("Framework/Model/PCH/stdafx.h")
+
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
 #------------------------------------------------------------------------------
 
-# 定義
-target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
-
-# インクルードディレクトリ設定
+# 追加のインクルードディレクトリ
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs Core)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
+set(OB_PROJECT_INCLUDE_LIB
+    Core
+    Platform
+)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 
-# ランタイムライブラリ設定
 set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-# フィルタ設定
+# プロジェクトのフィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")
