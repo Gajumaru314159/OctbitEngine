@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/InputType.h>
-#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
 
@@ -23,7 +22,7 @@ namespace ob::input {
 		//@―---------------------------------------------------------------------------
 		//! @berif	デバイスタイプを取得
 		//@―---------------------------------------------------------------------------
-		virtual u32 getDeviceId()const = 0;
+		virtual DeviceID getDeviceId()const = 0;
 
 		//@―---------------------------------------------------------------------------
 		//! @berif	更新

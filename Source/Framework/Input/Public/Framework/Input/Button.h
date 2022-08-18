@@ -1,11 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		入力系のタイプ宣言
+//! @brief		ボタン入力
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Misc/Duration.h>
 #include <Framework/Input/InputType.h>
+
+
+//@―---------------------------------------------------------------------------
+//! @berif	ボタン定義マクロ
+//@―---------------------------------------------------------------------------
+#define OB_DECL_BUTTON(type,name) static constexpr Button name{ Code,type::name };
 
 namespace ob::input {
 
@@ -28,13 +33,13 @@ namespace ob::input {
 		//! @param code		コード
 		//! @param user		ユーザ番号
 		//@―---------------------------------------------------------------------------
-		constexpr Button(u32 deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID),m_code(code), m_user(user) {}
+		constexpr Button(DeviceID deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID),m_code(code), m_user(user) {}
 
 		//@―---------------------------------------------------------------------------
 		//! @berif	コンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<typename T>
-		constexpr Button(u32 type, T code, u32 user = 0) : Button(type, enum_cast(code), user) {}
+		constexpr Button(DeviceID type, T code, u32 user = 0) : Button(type, enum_cast(code), user) {}
 
 	public:
 
@@ -92,7 +97,7 @@ namespace ob::input {
 		bool bind(ButtonState state, ButtonHandle& handle, const ButtonDelegate& func)const;
 
 	private:
-		u32 m_deviceId;
+		DeviceID m_deviceId;
 		u32 m_user;
 		u32 m_code;
 	};

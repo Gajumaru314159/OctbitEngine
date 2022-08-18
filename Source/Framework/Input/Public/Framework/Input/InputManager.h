@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		入力マネージャ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -25,7 +25,7 @@ namespace ob::input {
         //@―---------------------------------------------------------------------------
         void update();
 
-        IInputDevice* findDevice(u32 guid,u32 user);
+        IInputDevice* findDevice(DeviceID id,u32 user);
 
     public:
 

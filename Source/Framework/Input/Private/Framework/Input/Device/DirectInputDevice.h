@@ -1,15 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		マウス・デバイス
+//! @brief		DirectInputデバイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
+
 #ifdef OS_WINDOWS
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #endif
+
 namespace ob::input {
 
     //@―---------------------------------------------------------------------------
@@ -31,7 +33,7 @@ namespace ob::input {
         //@―---------------------------------------------------------------------------
         //! @brief  デバイスID
         //@―---------------------------------------------------------------------------
-        u32 getDeviceId()const override { return OB_FNV32("DirectInput"); };
+        DeviceID getDeviceId()const override { return OB_DEVICE_ID("DirectInput"); }
 
         //@―---------------------------------------------------------------------------
         //! @brief  更新

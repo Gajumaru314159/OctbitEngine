@@ -1,44 +1,44 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		入力系のタイプ宣言
+//! @brief		マウス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Input/Button.h>
 #include <Framework/Input/Axis.h>
-#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
 
-#define OB_DECL_BUTTON(name) static constexpr Button name{ Code,MouseButton::name };
-#define OB_DECL_AXIS(name) static constexpr Axis name{ Code,MouseAxis::name };
-	
 	class Mouse {
+		OB_DECL_INPUT_DEVICE_ID("Mouse");
 	public:
-		static constexpr u32 Code{ OB_HASH32("Mouse") };
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  マウスポインタの座標を取得
+		//@―---------------------------------------------------------------------------
 		static Vec2 GetPos();
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  マウスポインタの移動量を取得
+		//@―---------------------------------------------------------------------------
 		static Vec2 GetDeltaPos();
 
 	public:
 
-		OB_DECL_BUTTON(Left);		//!< 左ボタン
-		OB_DECL_BUTTON(Right);		//!< 右ボタン
-		OB_DECL_BUTTON(Middle);		//!< 中ボタン
-		OB_DECL_BUTTON(X1);			//!< 拡張1ボタン
-		OB_DECL_BUTTON(X2);			//!< 拡張21ボタン
-		OB_DECL_BUTTON(X3);			//!< 拡張3ボタン
-		OB_DECL_BUTTON(X4);			//!< 拡張4ボタン
-		OB_DECL_AXIS(Wheel);		//!< ホイール
-		OB_DECL_AXIS(WheelX);		//!< ホイールX
-		OB_DECL_AXIS(X);			//!< 座標X
-		OB_DECL_AXIS(Y);			//!< 座標Y
-		OB_DECL_AXIS(DeltaX);		//!< 移動量X
-		OB_DECL_AXIS(DeltaY);		//!< 移動量Y
+		OB_DECL_BUTTON(MouseButton,Left);	//!< 左ボタン
+		OB_DECL_BUTTON(MouseButton,Right);	//!< 右ボタン
+		OB_DECL_BUTTON(MouseButton,Middle);	//!< 中ボタン
+		OB_DECL_BUTTON(MouseButton,X1);		//!< 拡張1ボタン
+		OB_DECL_BUTTON(MouseButton,X2);		//!< 拡張21ボタン
+		OB_DECL_BUTTON(MouseButton,X3);		//!< 拡張3ボタン
+		OB_DECL_BUTTON(MouseButton,X4);		//!< 拡張4ボタン
+		OB_DECL_AXIS(MouseAxis,Wheel);		//!< ホイール
+		OB_DECL_AXIS(MouseAxis,WheelX);		//!< ホイールX
+		OB_DECL_AXIS(MouseAxis,X);			//!< 座標X
+		OB_DECL_AXIS(MouseAxis,Y);			//!< 座標Y
+		OB_DECL_AXIS(MouseAxis,DeltaX);		//!< 移動量X
+		OB_DECL_AXIS(MouseAxis,DeltaY);		//!< 移動量Y
 
 	};
-
-#undef OB_DECL_BUTTON
-#undef OB_DECL_AXIS
 
 }// namespcae ob::input

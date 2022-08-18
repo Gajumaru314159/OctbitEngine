@@ -1,11 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		入力系のタイプ宣言
+//! @brief		軸入力
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Misc/Duration.h>
 #include <Framework/Input/InputType.h>
+
+
+//@―---------------------------------------------------------------------------
+//! @berif	ボタン定義マクロ
+//@―---------------------------------------------------------------------------
+#define OB_DECL_AXIS(type,name) static constexpr Axis name{ Code,type::name };
 
 namespace ob::input {
 
@@ -26,13 +31,13 @@ namespace ob::input {
 		//! @param code		コード
 		//! @param user		ユーザ番号
 		//@―---------------------------------------------------------------------------
-		constexpr Axis(u32 deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID), m_code(code), m_user(user) {}
+		constexpr Axis(DeviceID deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID), m_code(code), m_user(user) {}
 
 		//@―---------------------------------------------------------------------------
 		//! @berif	コンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<typename T>
-		constexpr Axis(u32 type, T code, u32 user = 0) : Axis(type, enum_cast(code), user) {}
+		constexpr Axis(DeviceID type, T code, u32 user = 0) : Axis(type, enum_cast(code), user) {}
 
 	public:
 
@@ -49,7 +54,7 @@ namespace ob::input {
 		bool bind(AxisHandle& handle, const AxisDelegate& func)const;
 
 	private:
-		u32 m_deviceId;
+		DeviceID m_deviceId;
 		u32 m_user;
 		u32 m_code;
 	};

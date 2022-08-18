@@ -4,8 +4,16 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Hash/Hash.h>
 
 namespace ob::input {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief	デバイスID
+	//@―---------------------------------------------------------------------------
+	enum class DeviceID : u32;
+#define	OB_DEVICE_ID(name) DeviceID{OB_HASH32(name)}
+#define OB_DECL_INPUT_DEVICE_ID(name) static constexpr DeviceID Code{ OB_DEVICE_ID(name) }
 
     //@―---------------------------------------------------------------------------
     //! @brief  キーコード

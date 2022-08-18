@@ -28,7 +28,7 @@ namespace ob::input {
 		//@―---------------------------------------------------------------------------
 		//! @brief  デバイスID
 		//@―---------------------------------------------------------------------------
-		u32 getDeviceId()const override { return OB_HASH32("Keyboard"); };
+		DeviceID getDeviceId()const override { return OB_DEVICE_ID("Keyboard"); }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  更新

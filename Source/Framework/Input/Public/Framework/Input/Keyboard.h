@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		入力系のタイプ宣言
+//! @brief		キーボード
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -9,12 +9,9 @@
 
 namespace ob::input {
 
-#define OB_DECL_BUTTON(name) static constexpr Button name{ Code,Key::name };
-
 	class Keyboard {
+		OB_DECL_INPUT_DEVICE_ID("Keyboard");
 	public:
-
-		static constexpr u32 Code{ OB_HASH32("Keyboard")};	//!< デバイスコード
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      ボタン取得
@@ -22,39 +19,37 @@ namespace ob::input {
 		static constexpr Button GetButton(Key key) { return {Code,key}; }
 
 	public:
-		OB_DECL_BUTTON(A);
-		OB_DECL_BUTTON(B);
-		OB_DECL_BUTTON(C);
-		OB_DECL_BUTTON(D);
-		OB_DECL_BUTTON(E);
-		OB_DECL_BUTTON(F);
-		OB_DECL_BUTTON(G);
-		OB_DECL_BUTTON(H);
-		OB_DECL_BUTTON(I);
-		OB_DECL_BUTTON(J);
-		OB_DECL_BUTTON(K);
-		OB_DECL_BUTTON(L);
-		OB_DECL_BUTTON(M);
-		OB_DECL_BUTTON(N);
-		OB_DECL_BUTTON(O);
-		OB_DECL_BUTTON(P);
-		OB_DECL_BUTTON(Q);
-		OB_DECL_BUTTON(R);
-		OB_DECL_BUTTON(S);
-		OB_DECL_BUTTON(T);
-		OB_DECL_BUTTON(U);
-		OB_DECL_BUTTON(V);
-		OB_DECL_BUTTON(W);
-		OB_DECL_BUTTON(X);
-		OB_DECL_BUTTON(Y);
-		OB_DECL_BUTTON(Z);
-		OB_DECL_BUTTON(LeftArrow);
-		OB_DECL_BUTTON(RightArrow);
-		OB_DECL_BUTTON(UpArrow);
-		OB_DECL_BUTTON(DownArrow);
-		OB_DECL_BUTTON(Escape);
+		OB_DECL_BUTTON(Key,A);
+		OB_DECL_BUTTON(Key,B);
+		OB_DECL_BUTTON(Key,C);
+		OB_DECL_BUTTON(Key,D);
+		OB_DECL_BUTTON(Key,E);
+		OB_DECL_BUTTON(Key,F);
+		OB_DECL_BUTTON(Key,G);
+		OB_DECL_BUTTON(Key,H);
+		OB_DECL_BUTTON(Key,I);
+		OB_DECL_BUTTON(Key,J);
+		OB_DECL_BUTTON(Key,K);
+		OB_DECL_BUTTON(Key,L);
+		OB_DECL_BUTTON(Key,M);
+		OB_DECL_BUTTON(Key,N);
+		OB_DECL_BUTTON(Key,O);
+		OB_DECL_BUTTON(Key,P);
+		OB_DECL_BUTTON(Key,Q);
+		OB_DECL_BUTTON(Key,R);
+		OB_DECL_BUTTON(Key,S);
+		OB_DECL_BUTTON(Key,T);
+		OB_DECL_BUTTON(Key,U);
+		OB_DECL_BUTTON(Key,V);
+		OB_DECL_BUTTON(Key,W);
+		OB_DECL_BUTTON(Key,X);
+		OB_DECL_BUTTON(Key,Y);
+		OB_DECL_BUTTON(Key,Z);
+		OB_DECL_BUTTON(Key,LeftArrow);
+		OB_DECL_BUTTON(Key,RightArrow);
+		OB_DECL_BUTTON(Key,UpArrow);
+		OB_DECL_BUTTON(Key,DownArrow);
+		OB_DECL_BUTTON(Key,Escape);
 	};
-
-#undef OB_DECL_BUTTON
 
 }// namespcae ob::input
