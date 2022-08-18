@@ -33,6 +33,10 @@
 #include <Framework/Input/Keyboard.h>
 #include <Framework/Input/Mouse.h>
 
+#include <OBJ_Loader.h>
+#include <iostream>
+#include <fstream>
+
 using namespace ob;
 
 int main() {
@@ -142,7 +146,7 @@ int main() {
 				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	\n"));
 				vssrc.append(TC("Output VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {	\n"));
 				vssrc.append(TC("    Output o;													\n"));
-				vssrc.append(TC("    o.pos = pos+float4(g_pos,0,0);								\n"));
+				vssrc.append(TC("    o.pos = float4(pos.xy+g_pos,0,1);								\n"));
 				vssrc.append(TC("    o.uv = uv;													\n"));
 				vssrc.append(TC("    return o;													\n"));
 				vssrc.append(TC("}																\n"));
@@ -216,13 +220,49 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(cmdList);
 			}
 
+
 			MeshData<Vert> mesh;
-			mesh.append(
-				{ Vec4(0,0,0,1),Vec2(0,0) },
-				{ Vec4(0.5f,0,0,1),Vec2(1,0) },
-				{ Vec4(0,0.5f,0,1),Vec2(0,1) },
-				{ Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
-			);
+			{
+				// Initialize Loader
+				objl::Loader Loader;
+
+				// Load .obj File
+				if (Loader.LoadFile("D:/My/Temp/monky.obj")) {
+					for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
+					{
+						objl::Mesh& curMesh = Loader.LoadedMeshes[i];
+
+						String name;
+						StringEncoder::Encode(curMesh.MeshName, name);
+
+						LOG_INFO("name={}",name);
+
+						for (int j = 0; j < curMesh.Vertices.size(); j++)
+						{
+							auto pos = curMesh.Vertices[j].Position;
+							auto uv = curMesh.Vertices[j].TextureCoordinate;
+							auto& vert = mesh.vertices.emplace_back();
+							vert.pos = Vec4(pos.X,pos.Y,pos.Z,1.0f);
+							vert.uv = Vec2(uv.X,uv.Y);
+						}
+						
+						for (int j = 0; j < curMesh.Indices.size(); j ++)
+						{
+							mesh.indices.push_back(curMesh.Indices[j]);
+						}
+						break;
+					}
+				}
+			}
+
+
+			//MeshData<Vert> mesh;
+			//mesh.append(
+			//	{ Vec4(0,0,0,1),Vec2(0,0) },
+			//	{ Vec4(0.5f,0,0,1),Vec2(1,0) },
+			//	{ Vec4(0,0.5f,0,1),Vec2(0,1) },
+			//	{ Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
+			//);
 
 			Buffer vertexBuffer;
 			Buffer indexBuffer;
@@ -257,7 +297,7 @@ int main() {
 				auto clientPos = window.getClientPoint({ (s32)screenPos.x,(s32)screenPos.y });
 				pos.x = clientPos.x * 2.0f / window.getSize().width - 1;
 				pos.y = -clientPos.y * 2.0f / window.getSize().height + 1;
-				LOG_TRACE("{}", pos);
+				//LOG_TRACE("{}", pos);
 			};
 
 			input::Mouse::X.bind(hPosX, posFunc);
@@ -287,7 +327,7 @@ int main() {
 					cmdList.setRootDesciptorTable(params, 2);
 
 					DrawIndexedParam param{};
-					param.indexCount = 6;
+					param.indexCount = mesh.indices.size();
 					cmdList.drawIndexed(param);
 				}
 				cmdList.endRender();
