@@ -34,8 +34,6 @@
 #include <Framework/Input/Mouse.h>
 
 #include <OBJ_Loader.h>
-#include <iostream>
-#include <fstream>
 
 using namespace ob;
 
@@ -101,7 +99,7 @@ int main() {
 				RenderTargetDesc desc;
 				desc.size = { 640,480 };
 				desc.colors.push_back({ swapChain.getDesc().format, Color::Gray });
-				desc.depth.push_back({ TextureFormat::D32, 0, 0 });
+				desc.depth.push_back({ TextureFormat::D32, 1, 0 });
 
 				rt = RenderTarget(desc);
 				rt.setName(TC("メインレンダ―ターゲット"));
@@ -141,25 +139,28 @@ int main() {
 			{
 				String vssrc;
 				vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
-				vssrc.append(TC("  float2 g_pos;												\n"));
+				vssrc.append(TC("  float4x4 g_mtx;												\n"));
+				vssrc.append(TC("  float4 g_col;												\n"));
 				vssrc.append(TC("};																\n"));
-				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	\n"));
-				vssrc.append(TC("Output VS_Main(float4 pos : POSITION ,float2 uv : TEXCOORD) {	\n"));
+				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float4 normal:NORMAL;float2 uv:TEXCOORD;};	\n"));
+				vssrc.append(TC("Output VS_Main(float4 pos : POSITION ,float4 normal : NORMAL,float2 uv : TEXCOORD) {	\n"));
 				vssrc.append(TC("    Output o;													\n"));
-				vssrc.append(TC("    o.pos = float4(pos.xy+g_pos,0,1);								\n"));
+				vssrc.append(TC("    o.pos = mul(g_mtx,pos);									\n"));
 				vssrc.append(TC("    o.uv = uv;													\n"));
+				vssrc.append(TC("    o.normal = normal;													\n"));
 				vssrc.append(TC("    return o;													\n"));
 				vssrc.append(TC("}																\n"));
 				String pssrc;
 				pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
 				pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-				pssrc.append(TC("struct PsInput {float4 pos:SV_POSITION;float2 uv:TEXCOORD;};	\n"));
+				pssrc.append(TC("struct PsInput {float4 pos:SV_POSITION;float4 normal:NORMAL;float2 uv:TEXCOORD;};	\n"));
 				pssrc.append(TC("struct PsOutput {												\n"));
 				pssrc.append(TC("		float4 color0:SV_TARGET0;								\n"));
 				pssrc.append(TC("};																\n"));
 				pssrc.append(TC("PsOutput PS_Main(PsInput i){									\n"));
 				pssrc.append(TC("    PsOutput o=(PsOutput)0;									\n"));
 				pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
+				pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));											\n"));
 				pssrc.append(TC("    o.color0 = color;											\n"));
 				pssrc.append(TC("    return o;													\n"));
 				pssrc.append(TC("}																\n"));
@@ -172,6 +173,7 @@ int main() {
 
 			struct Vert {
 				Vec4 pos;
+				Vec4 normal;
 				Vec2 uv;
 			};
 
@@ -183,26 +185,33 @@ int main() {
 				desc.ps = ps;
 				desc.vertexLayout.attributes = {
 					VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
+					VertexAttribute(Semantic::Normal,offsetof(Vert,normal),Type::Float,4),
 					VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
 				};
 				desc.target = rt;
 				desc.blend[0] = BlendDesc::AlphaBlend;
 				desc.rasterizer.cullMode = CullMode::None;
+				desc.depthStencil.depth.enable = true;
 
 				pipeline = PipelineState(desc);
 				pipeline.setName(TC("TestPipeline"));
 				OB_CHECK_ASSERT_EXPR(pipeline);
 			}
 
+			struct CBuf {
+				Matrix matrix=Matrix::Identity;
+				Color color = Color::Red;
+			} cbuf;
 			Buffer buffer;
 			{
+				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(Vec3(0, 0, 10), Rot(0, 0, 0), Vec3::One).transposed();
+
+
 				BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
 				buffer = Buffer(desc);
 				buffer.setName(TC("TestBuffer"));
 				OB_CHECK_ASSERT_EXPR(buffer);
-
-				Color color = Color::Red;
-				buffer.updateDirect(color);
+				buffer.updateDirect(cbuf);
 			}
 
 			DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
@@ -241,8 +250,10 @@ int main() {
 						{
 							auto pos = curMesh.Vertices[j].Position;
 							auto uv = curMesh.Vertices[j].TextureCoordinate;
+							auto normal = curMesh.Vertices[j].Normal;
 							auto& vert = mesh.vertices.emplace_back();
-							vert.pos = Vec4(pos.X,pos.Y,pos.Z,1.0f);
+							vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
+							vert.normal = Vec4(normal.X, normal.Y, normal.Z,1.0f);
 							vert.uv = Vec2(uv.X,uv.Y);
 						}
 						
@@ -305,7 +316,7 @@ int main() {
 
 
 
-
+			f32 t = 0.0f;
 			MSG msg = {};
 			while (true) {
 
@@ -313,6 +324,7 @@ int main() {
 
 				cmdList.beginRender(rt);
 				cmdList.clearColors();
+				cmdList.clearDepthStencil();
 				{
 					cmdList.setRootSignature(signature);
 					cmdList.setPipelineState(pipeline);
@@ -355,13 +367,12 @@ int main() {
 				}
 
 
-				buffer.updateDirect(sizeof(pos), &pos);
-
-
 				using namespace ob::input;
 				InputManager::Instance().update();
 
-
+				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(Vec3(0, 0, 10), Rot(0, 0, 0), Vec3::One).transposed() * Matrix::Rotate(0, t, 0).transposed();
+				buffer.updateDirect(cbuf);
+				t += 2.f;
 			}
 
 			// グラフィックオブジェクトはここで全て解放予約
