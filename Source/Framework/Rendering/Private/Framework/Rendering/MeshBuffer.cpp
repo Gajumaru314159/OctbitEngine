@@ -3,9 +3,9 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/MeshBuffer.h>
+#include <Framework/Rendering/Mesh.h>
 
-namespace ob::graphic {
+namespace ob::rendering {
 
 
 	//@―---------------------------------------------------------------------------
@@ -13,6 +13,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	MeshBuffer::MeshBuffer(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount)
 	{
+		using namespace ob::graphic;
 		OB_CHECK_ASSERT(pVertexData, "頂点データがnullです。");
 
 		// 頂点
