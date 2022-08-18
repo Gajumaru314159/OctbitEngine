@@ -42,4 +42,15 @@ material.record(recorder,model.getInputLayout());
 
 ```
 
-# いつPipelineState
+# いつPipelineStateをつくるか
+
+
+# 描画オブジェクト
+MeshBuffer
+
+```
+class Mesh{
+public:
+
+}
+```

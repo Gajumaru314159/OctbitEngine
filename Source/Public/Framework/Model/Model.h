@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Rendering/Mesh.h>
 
 namespace ob::model {
 
@@ -27,6 +28,14 @@ namespace ob::model {
     private:
 
 
+
+    };
+
+    class MeshObject {
+    public:
+
+    private:
+        rendering::Mesh m_mesh;
 
     };
 

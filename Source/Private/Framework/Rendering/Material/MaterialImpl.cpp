@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Rendering/Material/Implement/MaterialImpl.h>
+#include <Framework/Rendering/Material/MaterialImpl.h>
 
 namespace ob::rendering {
 

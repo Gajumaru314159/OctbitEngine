@@ -50,7 +50,8 @@ int main() {
 			LOG_INFO("IntVec3  :{}", IntVec3(474, 124, 12));
 			LOG_INFO("IntVec4  :{}", IntVec4(45, 1472, 313, 1444));
 			LOG_INFO("Quat     :{}", Quat::Identity);
-			LOG_INFO("Rot      :{}", Rot(Math::PI, Math::EPSILON, Math::HALF_PI));
+			LOG_INFO("Rot(Deg) :{}", Rot(180, 90, 45));
+			LOG_INFO("Rot(Rad) :{:.3}", Rot(180, 90, 45));
 			LOG_INFO("DateTime :{}", DateTime::Now());
 			LOG_INFO("Duration :{}", Duration::Days(23.12534573));
 			LOG_INFO("Duration :{}", Duration::Hours(23.12534573));
@@ -60,6 +61,7 @@ int main() {
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
 			LOG_INFO("Color    :{}", Color::Cyan);
 			LOG_INFO("IntColor :{}", IntColor::Cyan);
+			LOG_INFO("IntColor :{:#}", IntColor::Cyan);
 		}
 
 		platform::ModuleManager::Instance();

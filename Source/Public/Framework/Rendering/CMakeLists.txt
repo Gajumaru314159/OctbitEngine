@@ -16,7 +16,7 @@ SET_PCH("PCH/stdafx.h" "PCH/stdafx.cpp")
 
 # 追加のインクルードディレクトリ
 set(OB_PROJECT_INCLUDE_DIR 
-    "${OCTBIT_SOURCE_PATH}"
+    "${OCTBIT_SOURCE_PATH}/Private"
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_DIR})
 

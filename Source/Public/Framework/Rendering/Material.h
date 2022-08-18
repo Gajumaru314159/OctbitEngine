@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Texture.h>
-#include <Framework/Rendering/Material/MaterialDesc.h>
+#include <Framework/Rendering/MaterialDesc.h>
 
 namespace ob::graphic {
     class CommandList;
@@ -24,6 +24,8 @@ namespace ob::rendering {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
+
+        Material() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief  説明

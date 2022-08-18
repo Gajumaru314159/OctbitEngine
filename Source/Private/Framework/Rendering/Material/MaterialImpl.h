@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Rendering/Material/MaterialDesc.h>
+#include <Framework/Rendering/MaterialDesc.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/Graphic/Texture.h>
 #include <Framework/Graphic/Buffer.h>

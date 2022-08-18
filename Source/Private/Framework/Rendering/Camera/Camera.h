@@ -5,18 +5,12 @@
 //***********************************************************
 #pragma once
 
-namespace ob::graphic {
-    struct MeshData;
-}
-
 namespace ob::rendering {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class MeshImpl {
-    public:
-        using MeshData = ob::graphic::MeshData;
+    class Camera {
     public:
 
         //===============================================================
@@ -27,32 +21,10 @@ namespace ob::rendering {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
 
-        explicit MeshImpl(const MeshData& meshData);
-
-        size_t num_vertices()const;
-        size_t num_triangles()const;
-        Box boundingBox()const;
-        Sphere boundingSphere()const;
-
-        void draw()const;
-
     private:
 
 
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob

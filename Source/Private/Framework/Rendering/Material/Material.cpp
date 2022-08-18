@@ -3,8 +3,8 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Rendering/Material/Material.h>
-#include <Framework/Rendering/Material/Implement/MaterialImpl.h>
+#include <Framework/Rendering/Material.h>
+#include <Framework/Rendering/Material/MaterialImpl.h>
 
 namespace {
 
