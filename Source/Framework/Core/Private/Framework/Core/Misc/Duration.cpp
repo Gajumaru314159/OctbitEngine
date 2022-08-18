@@ -41,17 +41,4 @@ namespace ob::core {
 #endif
 	}
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  アプリを起動してからの時間
-	//@―---------------------------------------------------------------------------
-	Duration Duration::FromAppLaunch() {
-#ifdef OS_WINDOWS
-		//TODO アプリ起動からの時間
-		return FromSystemLaunch();
-#else
-		static_assert("Duration::FromSystemLaunch() is not implemented in this platform.");
-#endif
-	}
-
 }// namespace ob
