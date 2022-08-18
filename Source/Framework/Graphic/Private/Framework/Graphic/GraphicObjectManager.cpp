@@ -64,7 +64,7 @@ namespace ob::graphic {
     //! @brief  登録
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::registerObject(GraphicObject& object) {
-        // TODO 登録済みならアサート
+        OB_CHECK_ASSERT_EXPR(object.getReferenceCount() == 1);
         m_objects.push_back(&object);
     }
 

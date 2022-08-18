@@ -35,7 +35,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Duration Duration::FromSystemLaunch() {
 #ifdef OS_WINDOWS
-		return Duration::MilliSeconds(GetTickCount());
+		return Duration::MilliSeconds(GetTickCount64());
 #else
 		static_assert("Duration::FromSystemLaunch() is not implemented in this platform.");
 #endif
@@ -48,7 +48,7 @@ namespace ob::core {
 	Duration Duration::FromAppLaunch() {
 #ifdef OS_WINDOWS
 		//TODO アプリ起動からの時間
-		return Duration::MilliSeconds(0);
+		return FromSystemLaunch();
 #else
 		static_assert("Duration::FromSystemLaunch() is not implemented in this platform.");
 #endif

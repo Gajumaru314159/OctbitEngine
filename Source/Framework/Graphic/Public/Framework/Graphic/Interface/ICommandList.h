@@ -45,7 +45,6 @@ namespace ob::graphic {
         virtual void applySwapChain(const class SwapChain& swapChain, const class Texture& texture)=0;
         virtual void beginRender(const class RenderTarget& target) = 0; //!< 描画開始
         virtual void endRender() = 0;                                   //!< 描画終了
-        // TODO endRender
 
         virtual void setViewport(const Viewport* pViewport,s32 num)=0;  //!< ビューポートを設定
         virtual void setScissorRect(const IntRect* pRect,s32 num)=0;    //!< シザー矩形を設定

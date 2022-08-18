@@ -106,6 +106,12 @@ namespace ob::core {
 	//!	@brief	月の日数を計算
 	//@―---------------------------------------------------------------------------
 	inline s32 DateTime::DayInMonth(s32  month, s32 year) {
+		if (12 < month) {
+			year += (month + 11) / 12;
+			month = (month + 11) % 12 + 1;
+		}
+
+
 		switch (month) {
 		case 2:
 			return IsLerpYear(year) ? 29 : 28;

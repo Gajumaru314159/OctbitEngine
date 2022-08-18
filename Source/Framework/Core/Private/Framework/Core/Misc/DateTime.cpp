@@ -13,7 +13,49 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 
 	DateTime& DateTime::normalize() {
-		//TODO DataTimeの正規化
+		year = 0;
+		month = 1;
+		day = 1;
+		hour = 0;
+		minute = 0;
+		second = 0;
+		milliSeconds = 0;
+
+		if (1000 <= milliSeconds) {
+			second += milliSeconds / 1000;
+			milliSeconds %= 1000;
+		}
+
+		if (60 <= second) {
+			minute += second / 60;
+			second %= 60;
+		}
+
+		if (60 <= minute) {
+			hour += minute / 60;
+			minute %= 60;
+		}
+
+		if (24 <= hour) {
+			day += hour / 24;
+			hour %= 24;
+		}
+
+		// 閏年があるため月から計算
+		if (12 < month) {
+			year += (month - 1) / 12;
+			month = (month - 1) % 12 + 1;
+		}
+
+		for (auto dom = 1; dom = DayInMonth(month, year), dom < day;) {
+			month++;
+			if (12 < month) {
+				month = 1;
+				year++;
+			}
+			day -= dom;
+		}
+		
 		return *this;
 	}
 

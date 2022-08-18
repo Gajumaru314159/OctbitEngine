@@ -4,7 +4,7 @@
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Random.h>
-
+#include <Framework/Core/Misc/DateTime.h>
 
 namespace ob::core {
 
@@ -17,8 +17,7 @@ namespace ob::core {
         z = 521288629;
         w = 88675123;
 
-        // TODO Timeクラスができたら現在の時間から乱数のシード生成
-        setSeed(0);
+        setSeed(static_cast<u32>(DateTime::Now().milliSeconds));
     }
 
 

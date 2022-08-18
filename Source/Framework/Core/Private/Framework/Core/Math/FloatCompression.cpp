@@ -51,7 +51,7 @@ namespace ob::core {
         if (exp == 0)return result;         // 0の場合はそのまま返す
         if (decimal == 0)return result;     // 2の乗数の場合はそのまま返す
 
-        // TODO
+        // TODO FloatCompression::F32ToU16
         return 0;
     }
 
