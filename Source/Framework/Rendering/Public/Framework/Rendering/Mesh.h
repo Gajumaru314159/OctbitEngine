@@ -12,7 +12,7 @@ namespace ob::rendering {
 	//@―---------------------------------------------------------------------------
 	//! @brief  メッシュバッファ
 	//@―---------------------------------------------------------------------------
-	class MeshBuffer {
+	class Mesh {
 	public:
 
 		//===============================================================
@@ -23,7 +23,7 @@ namespace ob::rendering {
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<typename TVertex, typename TIndex>
-		MeshBuffer(const graphic::MeshData<TVertex, TIndex>& mesh);
+		Mesh(const graphic::MeshData<TVertex, TIndex>& mesh);
 
 
 		//@―---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace ob::rendering {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		MeshBuffer(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount);
+		Mesh(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount);
 
 
 	private:
@@ -64,8 +64,8 @@ namespace ob::rendering {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline MeshBuffer::MeshBuffer(const graphic::MeshData<TVertex, TIndex>& mesh)
-		: MeshBuffer(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(), mesh.indices.data(), sizeof(TIndex), mesh.indices.size())
+	inline Mesh::Mesh(const graphic::MeshData<TVertex, TIndex>& mesh)
+		: Mesh(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(), mesh.indices.data(), sizeof(TIndex), mesh.indices.size())
 	{
 
 	}
@@ -74,7 +74,7 @@ namespace ob::rendering {
 	//@―---------------------------------------------------------------------------
 	//! @brief  名前を設定
 	//@―---------------------------------------------------------------------------
-	inline void MeshBuffer::setName(StringView name) {
+	inline void Mesh::setName(StringView name) {
 		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(Format(TC("{}_Vertex"), name)));
 		OB_DEBUG_CONTEXT(m_indexBuffer.setName(Format(TC("{}_Index"), name)));
 	}
@@ -83,7 +83,7 @@ namespace ob::rendering {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点バッファを取得
 	//@―---------------------------------------------------------------------------
-	inline const graphic::Buffer& MeshBuffer::getVertexBuffer()const noexcept {
+	inline const graphic::Buffer& Mesh::getVertexBuffer()const noexcept {
 		return m_vertexBuffer;
 	}
 
@@ -91,7 +91,7 @@ namespace ob::rendering {
 	//@―---------------------------------------------------------------------------
 	//! @brief  インデックスバッファを取得
 	//@―---------------------------------------------------------------------------
-	inline const graphic::Buffer& MeshBuffer::getIndexBuffer()const noexcept {
+	inline const graphic::Buffer& Mesh::getIndexBuffer()const noexcept {
 		return m_indexBuffer;
 	}
 
