@@ -27,6 +27,7 @@
 #include <Framework/Core/Misc/Duration.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Math/Periodic.h>
+#include <Framework/Core/Math/Float4x4.h>
 #include <Framework/Core/Graphic/HSV.h>
 
 #include <Framework/Input/InputManager.h>
@@ -200,8 +201,7 @@ int main() {
 			}
 
 			struct CBuf {
-				Matrix matrix = Matrix::Identity;
-				Matrix matrix2=Matrix::Identity;
+				float4x4 matrix = Matrix::Identity;
 				Color color = Color::Red;
 			} cbuf;
 			Buffer buffer;
@@ -374,8 +374,7 @@ int main() {
 				using namespace ob::input;
 				InputManager::Instance().update();
 
-				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f)* Matrix::Translate(0, 0, 10) * Matrix::Translate(0, 0, 10)* Matrix::Rotate(0, t, 0);
-				cbuf.matrix.transpose();
+				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f)*Matrix::Translate(0, 0, 10)* Matrix::Rotate(0, t, 0);
 				buffer.updateDirect(cbuf);
 				t += 2.f;
 			}

@@ -14,9 +14,6 @@
 
 namespace ob::core {
 
-	const s32 Matrix::COL = 4;
-	const s32 Matrix::ROW = 4;
-
 	const Matrix Matrix::Identity = Matrix(
 		1, 0, 0, 0,
 		0, 1, 0, 0,
@@ -295,31 +292,6 @@ namespace ob::core {
 		temp.m33 = invDet * (m00 * m11 * m22 + m01 * m12 * m20 + m02 * m10 * m21 - m00 * m12 * m21 - m01 * m10 * m22 - m02 * m11 * m20);
 
 		return temp;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      転置行列の計算
-	//! 
-	//! @note       直交行列の転置行列は逆行列となる。
-	//@―---------------------------------------------------------------------------
-	Matrix Matrix::transposed()const {
-		Matrix ret;
-		for (s32 i = 0; i < COL; i++) {
-			for (s32 j = 0; j < ROW; j++) {
-				ret.m[i][j] = m[j][i];
-			}
-		}
-		return ret;
-	}
-
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief 行列を転置する
-	//@―---------------------------------------------------------------------------
-	Matrix& Matrix::transpose() {
-		return *this = transposed();
 	}
 
 

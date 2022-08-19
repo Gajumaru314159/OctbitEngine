@@ -28,5 +28,22 @@
 	<Type Name="ob::core::Pimpl&lt;*&gt;">
 		<DisplayString>value = {*m_impl}</DisplayString>
 	</Type>
-	
+
+	<!--Matrix-->
+	<Type Name="ob::core::Matrix">
+		<DisplayString>[4, 4]</DisplayString>
+		<Expand>
+			<CustomListItems>
+				<Variable Name="i" InitialValue="0"/>
+				<Loop Condition="i  &lt; 4">
+					<Item Name="{i}">&amp;m[i],na</Item>
+					<Exec>++i</Exec>
+				</Loop>
+			</CustomListItems>
+			<Synthetic Name="[translation]">
+				<DisplayString>({m03} ,{m13} ,{m23})</DisplayString>
+			</Synthetic>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>
