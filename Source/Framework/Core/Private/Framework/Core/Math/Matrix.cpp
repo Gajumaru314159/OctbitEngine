@@ -393,29 +393,10 @@ namespace ob::core {
 	}
 
 
-
-
-	//==============================================================================
-	// MatrixHelper
-	//==============================================================================
-
-	//@―---------------------------------------------------------------------------
-	//! @brief 視錐台からビュー行列の生成
-	//@―---------------------------------------------------------------------------
-	Matrix MatrixHelper::CreateFrustum(Frustum frustum) {
-		return Matrix(
-			2 * frustum.zNear / (frustum.right - frustum.left), 0, (frustum.right + frustum.left) / (frustum.right - frustum.left), 0,
-			0, 2 * frustum.zNear / (frustum.top - frustum.bottom), (frustum.top + frustum.bottom) / (frustum.top - frustum.bottom), 0,
-			0, 0, -(frustum.zFar + frustum.zNear) / (frustum.zFar - frustum.zNear), -2 * frustum.zFar * frustum.zNear / (frustum.zFar - frustum.zNear),
-			0, 0, -1, 0
-		);
-	}
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief 透視投影行列の生成
 	//@―---------------------------------------------------------------------------
-	Matrix MatrixHelper::CreatePerspective(const f32 fov, const f32 aspect, const f32 zNear, const f32 zFar) {
+	Matrix Matrix::Perspective(f32 fov, f32 aspect, f32 zNear, f32 zFar) {
 		Matrix matrix = Matrix::Identity;
 		f32 f = 1.0f / Math::Tan(Math::Degrees(fov * 0.5f));
 		f32 dz = zFar - zNear;
@@ -433,7 +414,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  平行投影行列の生成
 	//@―---------------------------------------------------------------------------
-	Matrix MatrixHelper::CreateOrtho(const f32 left, const f32 right, const f32 bottom, const f32 top, const f32 zNear, const f32 zFar) {
+	Matrix Matrix::Orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 zNear, f32 zFar) {
 		Matrix ret(
 			2 / (right - left), 0, 0, -(right + left) / (right - left),
 			0, 2 / (top - bottom), 0, -(top + bottom) / (top - bottom),
