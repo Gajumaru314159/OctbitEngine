@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Math/Transform.h>
 
 namespace ob::rendering {
 
@@ -23,7 +24,7 @@ namespace ob::rendering {
 
     private:
 
-
+        Transform m_transform;
 
     };
 

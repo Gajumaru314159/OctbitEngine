@@ -47,22 +47,7 @@ namespace ob::core {
 	//! @brief 行列演算子
 	//@―---------------------------------------------------------------------------
 	Matrix Matrix::operator * (const Matrix& other) const {
-
-		Matrix result(
-			0, 0, 0, 0,
-			0, 0, 0, 0,
-			0, 0, 0, 0,
-			0, 0, 0, 0);
-
-		for (s32 x = 0; x < COL; x++) {
-			for (s32 y = 0; y < ROW; y++) {
-				for (s32 i = 0; i < ROW; i++) {
-					result.m[y][x] += m[i][x] * other.m[y][i];
-				}
-			}
-		}
-
-		return result;
+		return Matrix(*this)*=other;
 	}
 
 
@@ -80,7 +65,7 @@ namespace ob::core {
 		for (s32 x = 0; x < COL; x++) {
 			for (s32 y = 0; y < ROW; y++) {
 				for (s32 i = 0; i < ROW; i++) {
-					result.m[y][x] += m[i][x] * other.m[y][i];
+					result.m[y][x] += m[y][i] * other.m[i][x];
 				}
 			}
 		}
@@ -110,9 +95,9 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Vec3 Matrix::operator* (const Vec3& v)const {
 		return Vec3(
-			v.x * m00 + v.y * m10 + v.z * m20 + m30,
-			v.x * m01 + v.y * m11 + v.z * m21 + m31,
-			v.x * m02 + v.y * m12 + v.z * m22 + m32);
+			v.x * m00 + v.y * m01 + v.z * m02 + m03,
+			v.x * m10 + v.y * m11 + v.z * m12 + m13,
+			v.x * m20 + v.y * m21 + v.z * m22 + m23);
 	}
 
 #pragma warning( disable : 6385 )
@@ -462,12 +447,13 @@ namespace ob::core {
 		Matrix matrix = Matrix::Identity;
 		f32 f = 1.0f / Math::Tan(Math::Degrees(fov * 0.5f));
 		f32 dz = zFar - zNear;
-		matrix.m00 = f / aspect;
-		matrix.m11 = f;
+		matrix.m00 = f;
+		matrix.m11 = f * aspect;
 		matrix.m22 = (zFar + zNear) / dz;
-		matrix.m23 = -2.0f * zFar * zNear / dz;
-		matrix.m32 = 1.0f;
 		matrix.m33 = 0.0f;
+
+		matrix.m32 = 1.0f;
+		matrix.m23 = -2.0f * zFar * zNear / dz;
 		return matrix;
 	}
 

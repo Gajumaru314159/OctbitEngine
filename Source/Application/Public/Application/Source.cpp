@@ -140,6 +140,7 @@ int main() {
 				String vssrc;
 				vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
 				vssrc.append(TC("  float4x4 g_mtx;												\n"));
+				vssrc.append(TC("  float4x4 g_mtx2;												\n"));
 				vssrc.append(TC("  float4 g_col;												\n"));
 				vssrc.append(TC("};																\n"));
 				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float4 normal:NORMAL;float2 uv:TEXCOORD;};	\n"));
@@ -199,14 +200,12 @@ int main() {
 			}
 
 			struct CBuf {
-				Matrix matrix=Matrix::Identity;
+				Matrix matrix = Matrix::Identity;
+				Matrix matrix2=Matrix::Identity;
 				Color color = Color::Red;
 			} cbuf;
 			Buffer buffer;
 			{
-				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(Vec3(0, 0, 10), Rot(0, 0, 0), Vec3::One).transposed();
-
-
 				BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
 				buffer = Buffer(desc);
 				buffer.setName(TC("TestBuffer"));
@@ -365,12 +364,18 @@ int main() {
 				if (msg.message == WM_QUIT) {
 					break;
 				}
-
+				auto r = Matrix::Rotate(0, 90, 0);
+				auto tr = Matrix::Translate(0, 0, 1);
+				auto a = tr*r;
+				auto p = a * Vec3(1, 0, 0);
+				auto p2 = a * Vec3(0, 0, 1);
+				auto p3 = a * Vec3(0,0,0);
 
 				using namespace ob::input;
 				InputManager::Instance().update();
 
-				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(Vec3(0, 0, 10), Rot(0, 0, 0), Vec3::One).transposed() * Matrix::Rotate(0, t, 0).transposed();
+				cbuf.matrix = MatrixHelper::CreatePerspective(60, 8.f / 6.f, 0.01f, 100.0f)* Matrix::Translate(0, 0, 10) * Matrix::Translate(0, 0, 10)* Matrix::Rotate(0, t, 0);
+				cbuf.matrix.transpose();
 				buffer.updateDirect(cbuf);
 				t += 2.f;
 			}
