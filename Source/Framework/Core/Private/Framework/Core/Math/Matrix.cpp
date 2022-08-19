@@ -59,10 +59,10 @@ namespace ob::core {
 			0, 0, 0, 0,
 			0, 0, 0, 0);
 
-		for (s32 x = 0; x < COL; x++) {
-			for (s32 y = 0; y < ROW; y++) {
+		for (s32 y = 0; y < ROW; y++) {
+			for (s32 x = 0; x < COL; x++) {
 				for (s32 i = 0; i < ROW; i++) {
-					result.m[y][x] += m[y][i] * other.m[i][x];
+					result.m[x][y] += m[i][y] * other.m[x][i];
 				}
 			}
 		}
@@ -106,7 +106,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Vec4 Matrix::getColumn(const s32 index)const {
 		OB_CHECK_ASSERT_EXPR(0 <= index && index < 4);
-		return Vec4(m[0][index], m[1][index], m[2][index], m[3][index]);
+		return Vec4(m[index][0], m[index][1], m[index][2], m[index][3]);
 	}
 
 
@@ -118,7 +118,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Vec4 Matrix::getRow(const s32 index)const {
 		OB_CHECK_ASSERT_EXPR(0 <= index && index < 4);
-		return Vec4(m[index][0], m[index][1], m[index][2], m[index][3]);
+		return Vec4(m[0][index], m[1][index], m[2][index], m[3][index]);
 	}
 #pragma warning( default : 6385)
 
@@ -131,10 +131,10 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Matrix& Matrix::setColumn(s32 index, Vec4 column) {
 		if (index < 0 || COL <= index)return *this;
-		m[0][index] = column.x;
-		m[1][index] = column.y;
-		m[2][index] = column.z;
-		m[3][index] = column.w;
+		m[index][0] = column.x;
+		m[index][1] = column.y;
+		m[index][2] = column.z;
+		m[index][3] = column.w;
 		return *this;
 	}
 
@@ -147,10 +147,10 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Matrix& Matrix::setRow(s32 index, Vec4 column) {
 		if (index < 0 || ROW <= index)return *this;
-		m[index][0] = column.x;
-		m[index][1] = column.y;
-		m[index][2] = column.z;
-		m[index][3] = column.w;
+		m[0][index] = column.x;
+		m[1][index] = column.y;
+		m[2][index] = column.z;
+		m[3][index] = column.w;
 		return *this;
 	}
 

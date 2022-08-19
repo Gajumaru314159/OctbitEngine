@@ -33,13 +33,18 @@
 	<Type Name="ob::core::Matrix">
 		<DisplayString>[4, 4]</DisplayString>
 		<Expand>
-			<CustomListItems>
-				<Variable Name="i" InitialValue="0"/>
-				<Loop Condition="i  &lt; 4">
-					<Item Name="{i}">&amp;m[i],na</Item>
-					<Exec>++i</Exec>
-				</Loop>
-			</CustomListItems>
+			<Synthetic Name="0">
+				<DisplayString>({m00} ,{m01} ,{m02} ,{m03})</DisplayString>
+			</Synthetic>
+			<Synthetic Name="1">
+				<DisplayString>({m10} ,{m11} ,{m12} ,{m13})</DisplayString>
+			</Synthetic>
+			<Synthetic Name="2">
+				<DisplayString>({m20} ,{m21} ,{m22} ,{m23})</DisplayString>
+			</Synthetic>
+			<Synthetic Name="3">
+				<DisplayString>({m30} ,{m31} ,{m32} ,{m33})</DisplayString>
+			</Synthetic>
 			<Synthetic Name="[translation]">
 				<DisplayString>({m03} ,{m13} ,{m23})</DisplayString>
 			</Synthetic>

@@ -27,7 +27,6 @@
 #include <Framework/Core/Misc/Duration.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Math/Periodic.h>
-#include <Framework/Core/Math/Float4x4.h>
 #include <Framework/Core/Graphic/HSV.h>
 
 #include <Framework/Input/InputManager.h>
@@ -200,8 +199,9 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(pipeline);
 			}
 
+			// 定数バッファ
 			struct CBuf {
-				float4x4 matrix = Matrix::Identity;
+				Matrix matrix = Matrix::Identity;
 				Color color = Color::Red;
 			} cbuf;
 			Buffer buffer;
@@ -265,14 +265,6 @@ int main() {
 				}
 			}
 
-
-			//MeshData<Vert> mesh;
-			//mesh.append(
-			//	{ Vec4(0,0,0,1),Vec2(0,0) },
-			//	{ Vec4(0.5f,0,0,1),Vec2(1,0) },
-			//	{ Vec4(0,0.5f,0,1),Vec2(0,1) },
-			//	{ Vec4(0.5f,0.5f,0,1),Vec2(1,1) }
-			//);
 
 			Buffer vertexBuffer;
 			Buffer indexBuffer;
