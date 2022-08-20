@@ -26,12 +26,12 @@ namespace ob::core {
     //! @param z		Z軸回転(Deg)
     //@―---------------------------------------------------------------------------
     Quat::Quat(f32 x, f32 y, f32 z) {
-        f32 sx = Math::Sin(Math::Degrees(x * 0.5f));
-        f32 cx = Math::Cos(Math::Degrees(x * 0.5f));
-        f32 sy = Math::Sin(Math::Degrees(y * 0.5f));
-        f32 cy = Math::Cos(Math::Degrees(y * 0.5f));
-        f32 sz = Math::Sin(Math::Degrees(z * 0.5f));
-        f32 cz = Math::Cos(Math::Degrees(z * 0.5f));
+        f32 sx = Math::SinD(x * 0.5f);
+        f32 cx = Math::CosD(x * 0.5f);
+        f32 sy = Math::SinD(y * 0.5f);
+        f32 cy = Math::CosD(y * 0.5f);
+        f32 sz = Math::SinD(z * 0.5f);
+        f32 cz = Math::CosD(z * 0.5f);
         *this = Quat(0, sy, 0, cy) * Quat(sx, 0, 0, cx) * Quat(0, 0, sz, cz);
     }
 
