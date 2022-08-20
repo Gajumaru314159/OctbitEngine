@@ -143,25 +143,38 @@ int main() {
 				vssrc.append(TC("  float4x4 g_mtx2;												\n"));
 				vssrc.append(TC("  float4 g_col;												\n"));
 				vssrc.append(TC("};																\n"));
-				vssrc.append(TC("struct Output {float4 pos:SV_POSITION;float4 normal:NORMAL;float2 uv:TEXCOORD;};	\n"));
-				vssrc.append(TC("Output VS_Main(float4 pos : POSITION ,float4 normal : NORMAL,float2 uv : TEXCOORD) {	\n"));
-				vssrc.append(TC("    Output o;													\n"));
-				vssrc.append(TC("    o.pos = mul(g_mtx,pos);									\n"));
-				vssrc.append(TC("    o.uv = uv;													\n"));
-				vssrc.append(TC("    o.normal = normal;													\n"));
+				vssrc.append(TC("struct VsIn {													\n"));
+				vssrc.append(TC("  float4 pos:POSITION;											\n"));
+				vssrc.append(TC("  float4 normal:NORMAL;										\n"));
+				vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
+				vssrc.append(TC("};																\n"));
+				vssrc.append(TC("struct VsOut {													\n"));
+				vssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
+				vssrc.append(TC("  float4 normal:NORMAL;										\n"));
+				vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
+				vssrc.append(TC("};																\n"));
+				vssrc.append(TC("VsOut VS_Main(VsIn i) {										\n"));
+				vssrc.append(TC("    VsOut o;													\n"));
+				vssrc.append(TC("    o.pos = mul(g_mtx,i.pos);									\n"));
+				vssrc.append(TC("    o.uv = i.uv;												\n"));
+				vssrc.append(TC("    o.normal = i.normal;										\n"));
 				vssrc.append(TC("    return o;													\n"));
 				vssrc.append(TC("}																\n"));
 				String pssrc;
 				pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
 				pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-				pssrc.append(TC("struct PsInput {float4 pos:SV_POSITION;float4 normal:NORMAL;float2 uv:TEXCOORD;};	\n"));
-				pssrc.append(TC("struct PsOutput {												\n"));
-				pssrc.append(TC("		float4 color0:SV_TARGET0;								\n"));
+				pssrc.append(TC("struct PsIn {													\n"));
+				pssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
+				pssrc.append(TC("  float4 normal:NORMAL;										\n"));
+				pssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
 				pssrc.append(TC("};																\n"));
-				pssrc.append(TC("PsOutput PS_Main(PsInput i){									\n"));
-				pssrc.append(TC("    PsOutput o=(PsOutput)0;									\n"));
+				pssrc.append(TC("struct PsOut {													\n"));
+				pssrc.append(TC("	float4 color0:SV_TARGET0;									\n"));
+				pssrc.append(TC("};																\n"));
+				pssrc.append(TC("PsOut PS_Main(PsIn i){											\n"));
+				pssrc.append(TC("    PsOut o;													\n"));
 				pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
-				pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));											\n"));
+				pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
 				pssrc.append(TC("    o.color0 = color;											\n"));
 				pssrc.append(TC("    return o;													\n"));
 				pssrc.append(TC("}																\n"));
@@ -279,32 +292,11 @@ int main() {
 				OB_CHECK_ASSERT_EXPR(indexBuffer);
 			}
 
-			Vec2 pos(0.0f, 0.0f);
-			Random random;
 
+			//------ループ-----
 
-			input::ButtonHandle hClick;
-			input::Mouse::Right.bindDown(
-				hClick,
-				[]() {
-					LOG_INFO("クリック");
-				}
-			);
-
-			input::AxisHandle hPosX;
-			input::AxisHandle hPosY;
-
-			auto posFunc = [&pos, &window](f32 value) {
-				auto screenPos = input::Mouse::GetPos();
-				auto clientPos = window.getClientPoint({ (s32)screenPos.x,(s32)screenPos.y });
-				pos.x = clientPos.x * 2.0f / window.getSize().width - 1;
-				pos.y = -clientPos.y * 2.0f / window.getSize().height + 1;
-				//LOG_TRACE("{}", pos);
-			};
-
-			input::Mouse::X.bind(hPosX, posFunc);
-			input::Mouse::Y.bind(hPosY, posFunc);
-
+			Vec3 pos(0,0,-10);
+			Rot rot = Rot::Identity;
 
 
 			f32 t = 0.0f;
@@ -356,17 +348,45 @@ int main() {
 				if (msg.message == WM_QUIT) {
 					break;
 				}
-				auto r = Matrix::Rotate(0, 90, 0);
-				auto tr = Matrix::Translate(0, 0, 1);
-				auto a = tr*r;
-				auto p = a * Vec3(1, 0, 0);
-				auto p2 = a * Vec3(0, 0, 1);
-				auto p3 = a * Vec3(0,0,0);
 
 				using namespace ob::input;
 				InputManager::Instance().update();
 
-				cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f)*Matrix::Translate(0, 0, 10)* Matrix::Rotate(0, t, 0);
+				auto speed = 4 / 60.f;
+				if (input::Keyboard::K.pressed()) {
+					speed *= 0.5f;
+				}
+				
+				const auto rspd = 90 / 60.f;
+				Rot r2(0, rot.y, 0);
+				if (input::Keyboard::W.pressed()) {
+					pos += r2.front() * speed;
+				}
+				if (input::Keyboard::S.pressed()) {
+					pos -= r2.front() * speed;
+				}
+				if (input::Keyboard::D.pressed()) {
+					pos += r2.right() * speed;
+				}
+				if (input::Keyboard::A.pressed()) {
+					pos -= r2.right() * speed;
+				}
+				if (input::Keyboard::LeftArrow.pressed()) {
+					rot.y -= rspd;
+				}
+				if (input::Keyboard::RightArrow.pressed()) {
+					rot.y += rspd;
+				}
+				if (input::Keyboard::UpArrow.pressed()) {
+					rot.x -= rspd;
+				}
+				if (input::Keyboard::DownArrow.pressed()) {
+					rot.x += rspd;
+				}
+				rot.x = Math::Clamp(rot.x,-90.f,90.f);
+
+
+				cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos,rot,Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
 				buffer.updateDirect(cbuf);
 				t += 2.f;
 			}
