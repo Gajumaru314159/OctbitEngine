@@ -6,17 +6,21 @@
 #include <Framework/Core/Template/Container/HandleForwardList.h>
 using namespace ob;
 
-struct Hoge {
-    Hoge(int a, int b) :val(a* b) {}
-    Hoge(const Hoge&) = default;
-    Hoge& operator=(const Hoge&) = default;
-    Hoge(Hoge&&) = default;
-    Hoge& operator=(Hoge&&) = default;
-    int val = 0;
-};
+namespace {
+    struct Hoge {
+        Hoge(int a, int b) :val(a* b) {}
+        Hoge(const Hoge&) = default;
+        Hoge& operator=(const Hoge&) = default;
+        Hoge(Hoge&&) = default;
+        Hoge& operator=(Hoge&&) = default;
+        int val = 0;
+    };
 
-using HList = HandleForwardList<Hoge>;
-using Handle = HList::Handle;
+    using HList = HandleForwardList<Hoge>;
+    using Handle = HList::Handle;
+}
+
+
 TEST(HandleForwardList, Construct) {
 
     // ムーブ・コンストラクタ
