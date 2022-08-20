@@ -1,7 +1,6 @@
 ﻿cmake_minimum_required (VERSION 3.15)
 project ("OctbitEngine")
 
-
 #------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
@@ -22,10 +21,7 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関�
 #------------------------------------------------------------------------------
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
-set(OCTBIT_INCLUDE_PATH "${OCTBIT_ROOT_PATH}/Source/Public")
-set(OCTBIT_FRAMEWORK_PATH "${OCTBIT_SOURCE_PATH}/Framework")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
-set(OCTBIT_DLL_PATH "${OCTBIT_ROOT_PATH}/Build/Libray")
 
 set(OB_CONFIGURATION "Debug")
 
@@ -45,14 +41,10 @@ add_compile_options(/wd26495)
 #------------------------------------------------------------------------------
 # ThirdPartyオプション設定
 #------------------------------------------------------------------------------
-set(build_tests OFF)
-set(build_namespace_tests OFF)
-set(TESTS OFF)
-set(EXTENSIONS OFF)
-set(VERBOSE_CONFIG OFF)
-set(MEMORY_LEAK_DETECTION OFF)
+# DirectXTex
+set(BUILD_TOOLS OFF)
 # GoogleTest
-set(BUILD_GMOCK CACHE BOOL OFF "")
+set(BUILD_GMOCK OFF)
 set(INSTALL_GTEST CACHE BOOL OFF "")
 if(WIN32)
   set(gtest_force_shared_crt ON CACHE BOOL "")
