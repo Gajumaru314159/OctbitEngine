@@ -42,7 +42,7 @@ add_compile_options(/wd26495)
 
 
 #------------------------------------------------------------------------------
-# ThirdPartyライブラリ
+# ThirdPartyオプション設定
 #------------------------------------------------------------------------------
 set(build_tests OFF)
 set(build_namespace_tests OFF)
@@ -51,6 +51,9 @@ set(EXTENSIONS OFF)
 set(VERBOSE_CONFIG OFF)
 set(MEMORY_LEAK_DETECTION OFF)
 
+#------------------------------------------------------------------------------
+# ThirdPartyライブラリ
+#------------------------------------------------------------------------------
 include(FetchContent)
 FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TAG "8.1.1")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
@@ -59,31 +62,12 @@ FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_
 FetchContent_Declare(CppUTest GIT_REPOSITORY https://github.com/cpputest/cpputest.git GIT_TAG "v4.0")
 FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum cpputest)
 
-set_target_properties(fmt PROPERTIES FOLDER "ThirdParty")
-set_target_properties(GSL PROPERTIES FOLDER "ThirdParty")
-set_target_properties(utf8cpp PROPERTIES FOLDER "ThirdParty")
-set_target_properties(magic_enum PROPERTIES FOLDER "ThirdParty")
-set_target_properties(CppUTest PROPERTIES FOLDER "ThirdParty")
-#set_target_properties(CppUTestExt PROPERTIES FOLDER "ThirdParty")
-
-set_property(TARGET fmt PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET GSL PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET utf8cpp PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET magic_enum PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET CppUTest PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-#set_property(TARGET CppUTestExt PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 if(WIN32)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
     FetchContent_MakeAvailable(DirectXTex)
-    
-    set_target_properties(DirectXTex PROPERTIES FOLDER "ThirdParty")
-    set_target_properties(texconv PROPERTIES FOLDER "ThirdParty")
-    set_target_properties(texdiag PROPERTIES FOLDER "ThirdParty")
-    set_target_properties(texassemble PROPERTIES FOLDER "ThirdParty")
-    set_property(TARGET DirectXTex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
+include(ThirdParty.cmake)
 
 
 #------------------------------------------------------------------------------
