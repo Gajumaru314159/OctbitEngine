@@ -44,7 +44,7 @@ namespace ob::core {
 	//! @brief 行列演算子
 	//@―---------------------------------------------------------------------------
 	Matrix Matrix::operator * (const Matrix& other) const {
-		return Matrix(*this)*=other;
+		return Matrix(*this) *= other;
 	}
 
 
@@ -201,7 +201,7 @@ namespace ob::core {
 
 		if (elem[biggestIndex] < 0.0f) {
 			// 引数の行列に間違いあり
-			return Quat::Identity; 
+			return Quat::Identity;
 		}
 
 		// 最大要素の値を算出
@@ -378,18 +378,19 @@ namespace ob::core {
 	//! @param z Z軸の回転量
 	//@―---------------------------------------------------------------------------
 	Matrix Matrix::Rotate(f32 x, f32 y, f32 z) {
-		const f32 sr = Math::SinD(x);
-		const f32 cr = Math::CosD(x);
-		const f32 sp = Math::SinD(y);
-		const f32 cp = Math::CosD(y);
-		const f32 sy = Math::SinD(z);
-		const f32 cy = Math::CosD(z);
+		const f32 sx = Math::SinD(x);
+		const f32 cx = Math::CosD(x);
+		const f32 sy = Math::SinD(y);
+		const f32 cy = Math::CosD(y);
+		const f32 sz = Math::SinD(z);
+		const f32 cz = Math::CosD(z);
 
 		return Matrix(
-			cy * cp, sy * cp, -sp, 0,
-			cy * sp * sr - sy * cr, sy * sp * sr + cy * cr, sp * sr, 0,
-			cy * sp * cr + sy * sr, sy * sp * cr - cy * sr, cp * cr, 0,
-			0, 0, 0, 1);
+			sx *  sy *  sz  + cz *  cy , sx *  cz *  sy  - sz *  cy , cx *  sy,0, 
+			cx *  sz , cx *  cz , -sx,0, 
+			sx *  sz *  cy - cz *  sy , sx *  cz *  cy + sy *  sz , cx *  cy,0, 
+			0, 0, 0, 1
+		);
 	}
 
 
