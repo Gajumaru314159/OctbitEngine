@@ -30,7 +30,7 @@ TEST(HandleForwardList, Test) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        CHECK_EQUAL(sum2, 2 * 3 + 5 * 7);
     }
 
     // ムーブ代入
@@ -45,7 +45,7 @@ TEST(HandleForwardList, Test) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        CHECK_EQUAL(sum2, 2 * 3 + 5 * 7);
     }
 
     // begin() / end()
@@ -59,7 +59,7 @@ TEST(HandleForwardList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        CHECK_EQUAL(val, 357);
     }
 
     // cbegin() / cend()
@@ -73,14 +73,14 @@ TEST(HandleForwardList, Test) {
         int val = 0;
         std::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        CHECK_EQUAL(val, 357);
     }
 
     // empty() / size()
     {
         List lst;
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        CHECK_EQUAL(lst.empty());
+        CHECK_EQUAL(lst.size(), 0);
 
         Handle h1, h2, h3;
         lst.emplace_front(h1, 1, 3);
@@ -88,7 +88,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h3, 1, 7);
 
         EXPECT_FALSE(lst.empty());
-        EXPECT_EQ(lst.size(), 3);
+        CHECK_EQUAL(lst.size(), 3);
     }
 
     // front() / back()
@@ -99,7 +99,7 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h2, 2, 5);
         lst.emplace_front(h3, 2, 7);
 
-        EXPECT_EQ(lst.front().val, 2 * 7);
+        CHECK_EQUAL(lst.front().val, 2 * 7);
     }
 
     // push_front() / emplace_front()
@@ -115,7 +115,7 @@ TEST(HandleForwardList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 9753);
+        CHECK_EQUAL(val, 9753);
     }
 
     // insert() / emplace()
@@ -134,7 +134,7 @@ TEST(HandleForwardList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 451263);
+        CHECK_EQUAL(val, 451263);
     }
 
     // pop_front() / pop_back()
@@ -151,7 +151,7 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 34);
+        CHECK_EQUAL(val, 34);
     }
 
     // erase_after()
@@ -167,7 +167,7 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 124);
+        CHECK_EQUAL(val, 124);
     }
 
     // erase()
@@ -183,7 +183,7 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 124);
+        CHECK_EQUAL(val, 124);
     }
 
     // clear()
@@ -196,15 +196,15 @@ TEST(HandleForwardList, Test) {
         lst.emplace_front(h1, 1, 1);
 
         lst.clear();
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        CHECK_EQUAL(lst.empty());
+        CHECK_EQUAL(lst.size(), 0);
 
         lst.emplace_front(h2, 1, 3);
         lst.emplace_front(h1, 1, 1);
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 13);
+        CHECK_EQUAL(val, 13);
     }
 
     // swap()
@@ -223,11 +223,11 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4);
+        CHECK_EQUAL(val, 4);
 
         val = 0;
         std::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 123);
+        CHECK_EQUAL(val, 123);
     }
 
     // remove()
@@ -243,13 +243,13 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 234);
+        CHECK_EQUAL(val, 234);
 
         h3.remove();
 
         val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 24);
+        CHECK_EQUAL(val, 24);
     }
 
     // remove_if()
@@ -265,7 +265,7 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 13);
+        CHECK_EQUAL(val, 13);
     }
 
     // reverse()
@@ -281,7 +281,7 @@ TEST(HandleForwardList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4321);
+        CHECK_EQUAL(val, 4321);
     }
 
     // scope
@@ -300,7 +300,7 @@ TEST(HandleForwardList, Test) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 21);
+                CHECK_EQUAL(val, 21);
             }
             {
                 Handle h3, h4;
@@ -310,14 +310,14 @@ TEST(HandleForwardList, Test) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 21);
+                CHECK_EQUAL(val, 21);
             }
         }
 
         {
             int val = 0;
             std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-            EXPECT_EQ(val, 1);
+            CHECK_EQUAL(val, 1);
         }
 
     }

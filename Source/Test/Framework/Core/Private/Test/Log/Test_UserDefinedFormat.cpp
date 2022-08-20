@@ -10,6 +10,9 @@ using namespace ob;
 #include <Framework/Core/Misc/DateTime.h>
 #include <Framework/Core/Misc/Duration.h>
 
+TEST_GROUP(UserDefinedFormat) {
+};
+
 TEST(UserDefinedFormat, DataTime) {
 	Vec2 vec2(1, 2);
 	Vec3 vec3(1.5235223f, 2.11f, -0.01f);
@@ -18,7 +21,7 @@ TEST(UserDefinedFormat, DataTime) {
 	IntVec3 ivec3(474, 124,12);
 	IntVec4 ivec4(45, 1472,313,1444);
 
-	Quat quat=Quat::identity;
+	Quat quat=Quat::Identity;
 	Rot rot(Math::PI, Math::EPSILON,Math::HALF_PI);
 	
 	DateTime dt = DateTime::Now();

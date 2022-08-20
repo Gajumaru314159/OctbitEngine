@@ -5,7 +5,6 @@
 //***********************************************************
 using namespace ob;
 
-
 static LogLevel s_logType;
 static String s_message;
 
@@ -42,26 +41,27 @@ public:
     }
 };
 
+TEST_GROUP(Logger) {
+};
 
 TEST(Logger, AddLogEvent) {
-    Logger::EventDelegateType event = LogEvent;
-
+    
     // ログイベントを登録
     Logger::EventHandle handle;
-    Logger::Instance().addEvent(handle, event);
+    Logger::Instance().addEvent(handle, {LogEvent});
 
     // ログ追加
     const Char message1[] = TC("Hoge");
     LOG_INFO("{0}",message1);
 
-    EXPECT_EQ(s_logType, LogLevel::Info);
-    EXPECT_TRUE(s_message, message1);
+    CHECK_TRUE(s_logType == LogLevel::Info);
+    CHECK_TRUE(s_message == message1);
 
     // ログ追加
     LOG_WARNING("Hoge{0}{1}",2,TC("A"));
 
-    EXPECT_EQ(s_logType, LogLevel::Warning);
-    EXPECT_TRUE(s_message, TC("Hoge2A"));
+    CHECK_TRUE(s_logType == LogLevel::Warning);
+    CHECK_TRUE(s_message == TC("Hoge2A"));
 
     // ログイベントの削除
     Logger::Instance().removeEvent(handle);
@@ -70,7 +70,7 @@ TEST(Logger, AddLogEvent) {
     const Char message2[] = TC("Fuga");
     LOG_ERROR("{0}",message2);
 
-    EXPECT_FALSE(s_logType == LogLevel::Error);
-    EXPECT_TRUE(s_message, message2);
+    CHECK_FALSE(s_logType == LogLevel::Error);
+    CHECK_FALSE(s_message == message2);
 
 }

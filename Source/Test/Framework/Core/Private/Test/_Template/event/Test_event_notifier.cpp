@@ -55,23 +55,23 @@ TEST(EventNotifier, Test) {
         // invokeテスト
         s_num = 1;
         en.invoke(2);
-        EXPECT_EQ(s_num, 5 * 7 * 11 * 13 * 17);
+        CHECK_EQUAL(s_num, 5 * 7 * 11 * 13 * 17);
     }
     // Handleスコープテスト
     s_num = 1;
     en.invoke(1);
-    EXPECT_EQ(s_num, 3 * 5 * 7 * 11);
+    CHECK_EQUAL(s_num, 3 * 5 * 7 * 11);
 
 
     en.remove(funcHandle);
     // removeテスト
     s_num = 1;
     en.invoke(0);
-    EXPECT_EQ(s_num, 3 * 5 * 7);
+    CHECK_EQUAL(s_num, 3 * 5 * 7);
 
     constMethodHandle.remove();
     // ハンドルremoveテスト
     s_num = 1;
     en.invoke(0);
-    EXPECT_EQ(s_num, 3 * 7);
+    CHECK_EQUAL(s_num, 3 * 7);
 }

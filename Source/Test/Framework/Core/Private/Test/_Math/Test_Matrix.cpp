@@ -1,6 +1,6 @@
 //***********************************************************
 //! @file
-//! @brief		Matrix ‚ÌƒeƒXƒg
+//! @brief		Matrix ï¿½Ìƒeï¿½Xï¿½g
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Matrix.h>
@@ -16,7 +16,7 @@ TEST(Matrix, OperatorSet) {
         0, 2, 0, 3);
 
     Matrix mtxB = mtxA;
-    EXPECT_EQ(mtxA, mtxB);
+    CHECK_EQUAL(mtxA, mtxB);
 }
 
 
@@ -29,7 +29,7 @@ TEST(Matrix, OperatorMul) {
 
     Matrix mtxB(EForceInit::Force);
     mtxB = mtxA * mtxB;
-    EXPECT_EQ(mtxA, mtxB);
+    CHECK_EQUAL(mtxA, mtxB);
 }
 
 TEST(Matrix, OperatorMulSet) {
@@ -41,7 +41,7 @@ TEST(Matrix, OperatorMulSet) {
 
     Matrix mtxB(EForceInit::Force);
     mtxB *= mtxA;
-    EXPECT_EQ(mtxA, mtxB);
+    CHECK_EQUAL(mtxA, mtxB);
 }
 
 TEST(Matrix, GetColumn) {
@@ -52,7 +52,7 @@ TEST(Matrix, GetColumn) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getColumn(1);
-    EXPECT_EQ(vec, Vec4(1, 0, 0, 2));
+    CHECK_EQUAL(vec, Vec4(1, 0, 0, 2));
 }
 
 TEST(Matrix, GetRow) {
@@ -63,7 +63,7 @@ TEST(Matrix, GetRow) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getRow(3);
-    EXPECT_EQ(vec, Vec4(0, 2, 0, 3));
+    CHECK_EQUAL(vec, Vec4(0, 2, 0, 3));
 }
 
 TEST(Matrix, Translate) {
@@ -72,7 +72,7 @@ TEST(Matrix, Translate) {
 
     Matrix mtx2;
     mtx2.translate(1, 2, 3);
-    EXPECT_EQ(mtx2, mtx2);
+    CHECK_EQUAL(mtx2, mtx2);
 }
 
 TEST(Matrix, Rotate) {
@@ -88,5 +88,5 @@ TEST(Matrix, Rotate) {
     Vec3 v(1, 2, 3);
     auto a = mtx*v;
     auto a2 = mtx2*v;
-    EXPECT_EQ(mtx*v, mtx2*v);
+    CHECK_EQUAL(mtx*v, mtx2*v);
 }

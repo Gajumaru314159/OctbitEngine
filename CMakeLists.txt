@@ -41,33 +41,38 @@ endif()
 add_compile_options(/wd26495)
 
 
+
 #------------------------------------------------------------------------------
 # ThirdPartyライブラリ
 #------------------------------------------------------------------------------
 set(build_tests OFF)
 set(build_namespace_tests OFF)
+set(TESTS OFF)
+set(EXTENSIONS OFF)
+set(VERBOSE_CONFIG OFF)
+set(MEMORY_LEAK_DETECTION OFF)
 
 include(FetchContent)
 FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TAG "8.1.1")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v3.2.1")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
-FetchContent_Declare(iutest  GIT_REPOSITORY https://github.com/srz-zumix/iutest.git GIT_TAG "v1.17.1")
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum iutest)
+FetchContent_Declare(CppUTest GIT_REPOSITORY https://github.com/cpputest/cpputest.git GIT_TAG "v4.0")
+FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum cpputest)
 
 set_target_properties(fmt PROPERTIES FOLDER "ThirdParty")
 set_target_properties(GSL PROPERTIES FOLDER "ThirdParty")
 set_target_properties(utf8cpp PROPERTIES FOLDER "ThirdParty")
 set_target_properties(magic_enum PROPERTIES FOLDER "ThirdParty")
-set_target_properties(iutest PROPERTIES FOLDER "ThirdParty")
-set_target_properties(iutest_main PROPERTIES FOLDER "ThirdParty")
-set_target_properties(iutest_sample PROPERTIES FOLDER "ThirdParty")
+set_target_properties(CppUTest PROPERTIES FOLDER "ThirdParty")
+#set_target_properties(CppUTestExt PROPERTIES FOLDER "ThirdParty")
 
 set_property(TARGET fmt PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET GSL PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET utf8cpp PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set_property(TARGET magic_enum PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set_property(TARGET iutest PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+set_property(TARGET CppUTest PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+#set_property(TARGET CppUTestExt PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 if(WIN32)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
@@ -79,6 +84,7 @@ if(WIN32)
     set_target_properties(texassemble PROPERTIES FOLDER "ThirdParty")
     set_property(TARGET DirectXTex PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
+
 
 
 #------------------------------------------------------------------------------
@@ -103,7 +109,7 @@ endif()
 #add_subdirectory ("Source/Public/Plugins/GraphicVulkan")
 
 # Test
-#add_subdirectory ("Sources/Test/Framework/Core")
+add_subdirectory ("Source/Test/Framework/Core")
 
 # Application
 add_subdirectory ("Source/Application")

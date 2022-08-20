@@ -19,7 +19,7 @@ TEST(BitFlags, HasFlag) {
 
     flag.on(Flags::A);
 
-    EXPECT_TRUE(flag.has(Flags::A));
+    CHECK_EQUAL(flag.has(Flags::A));
     EXPECT_FALSE(flag.has(Flags::B));
 
     flag.off(Flags::A);
@@ -30,7 +30,7 @@ TEST(BitFlags, HasFlag) {
     flag.set(Flags::B, TRUE);
 
     EXPECT_FALSE(flag.has(Flags::A));
-    EXPECT_TRUE(flag.has(Flags::B));
+    CHECK_EQUAL(flag.has(Flags::B));
 }
 
 
@@ -38,7 +38,7 @@ TEST(BitFlags, HasFlag) {
 TEST(BitFlags, Cast) {
     ob::BitFlags<Flags> flag(3);
 
-    EXPECT_TRUE(flag.has(Flags::A));
-    EXPECT_TRUE(flag.has(Flags::B));
+    CHECK_EQUAL(flag.has(Flags::A));
+    CHECK_EQUAL(flag.has(Flags::B));
     EXPECT_FALSE(flag.has(Flags::C));
 }
