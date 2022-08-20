@@ -5,6 +5,7 @@ project (Core-test)
 # ソースコードの登録
 #------------------------------------------------------------------------------
 LOAD_FILES(out_sources "Test")
+enable_testing()
 add_executable(${PROJECT_NAME} ${out_sources})
 
 SET_PCH("Test/PCH/stdafx.h")
@@ -21,7 +22,7 @@ set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs Core CppUTest)
+set(public_libs Core GTest::gtest_main)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
 # ランタイムライブラリ設定
@@ -34,3 +35,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Core-test>
     )
+
+# GoogleTest
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME})

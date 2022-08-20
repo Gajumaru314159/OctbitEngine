@@ -1,6 +1,7 @@
 ﻿cmake_minimum_required (VERSION 3.15)
 project ("OctbitEngine")
 
+
 #------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
@@ -50,6 +51,13 @@ set(TESTS OFF)
 set(EXTENSIONS OFF)
 set(VERBOSE_CONFIG OFF)
 set(MEMORY_LEAK_DETECTION OFF)
+# GoogleTest
+set(BUILD_GMOCK CACHE BOOL OFF "")
+set(INSTALL_GTEST CACHE BOOL OFF "")
+if(WIN32)
+  set(gtest_force_shared_crt ON CACHE BOOL "")
+endif()
+
 
 #------------------------------------------------------------------------------
 # ThirdPartyライブラリ
@@ -59,8 +67,8 @@ FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TA
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v3.2.1")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
-FetchContent_Declare(CppUTest GIT_REPOSITORY https://github.com/cpputest/cpputest.git GIT_TAG "v4.0")
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum cpputest)
+FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
+FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest)
 
 if(WIN32)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
@@ -80,10 +88,10 @@ add_subdirectory ("Source/Framework/Singleton")
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
 add_subdirectory ("Source/Framework/Graphic")
-add_subdirectory ("Source/Framework/Rendering")
+#add_subdirectory ("Source/Framework/Rendering")
 add_subdirectory ("Source/Framework/Input")
-add_subdirectory ("Source/Framework/Engine")
-add_subdirectory ("Source/Framework/Model")
+#add_subdirectory ("Source/Framework/Engine")
+#add_subdirectory ("Source/Framework/Model")
 
 # Plugins
 if(WIN32)

@@ -13,25 +13,23 @@ enum class Flags
     C= get_bit(2),
 };
 
-TEST_GROUP(BitFlags) {};
-
 TEST(BitFlags, HasFlag) {
     ob::BitFlags<Flags> flag;
 
     flag.on(Flags::A);
 
-    CHECK_TRUE(flag.has(Flags::A));
-    CHECK_FALSE(flag.has(Flags::B));
+    EXPECT_TRUE(flag.has(Flags::A));
+    EXPECT_FALSE(flag.has(Flags::B));
 
     flag.off(Flags::A);
 
-    CHECK_FALSE(flag.has(Flags::A));
-    CHECK_FALSE(flag.has(Flags::B));
+    EXPECT_FALSE(flag.has(Flags::A));
+    EXPECT_FALSE(flag.has(Flags::B));
 
     flag.set(Flags::B, true);
 
-    CHECK_FALSE(flag.has(Flags::A));
-    CHECK_TRUE(flag.has(Flags::B));
+    EXPECT_FALSE(flag.has(Flags::A));
+    EXPECT_TRUE(flag.has(Flags::B));
 }
 
 
@@ -39,7 +37,7 @@ TEST(BitFlags, HasFlag) {
 TEST(BitFlags, Cast) {
     ob::BitFlags<Flags> flag(3);
 
-    CHECK_TRUE(flag.has(Flags::A));
-    CHECK_TRUE(flag.has(Flags::B));
-    CHECK_FALSE(flag.has(Flags::C));
+    EXPECT_TRUE(flag.has(Flags::A));
+    EXPECT_TRUE(flag.has(Flags::B));
+    EXPECT_FALSE(flag.has(Flags::C));
 }

@@ -7,9 +7,6 @@
 #include <Framework/Core/Math/Vectors.h>
 using namespace ob;
 
-TEST_GROUP(Matrix) {
-};
-
 TEST(Matrix, OperatorSet) {
     Matrix mtxA(
         0, 1, 0, 0,
@@ -18,9 +15,8 @@ TEST(Matrix, OperatorSet) {
         0, 2, 0, 3);
 
     Matrix mtxB = mtxA;
-    CHECK_TRUE(mtxA == mtxB);
+    EXPECT_EQ(mtxA, mtxB);
 }
-
 
 TEST(Matrix, OperatorMul) {
     Matrix mtxA(
@@ -31,7 +27,7 @@ TEST(Matrix, OperatorMul) {
 
     Matrix mtxB = Matrix::Identity;
     mtxB = mtxA * mtxB;
-    CHECK_TRUE(mtxA == mtxB);
+    EXPECT_EQ(mtxA, mtxB);
 }
 
 TEST(Matrix, OperatorMulSet) {
@@ -43,7 +39,7 @@ TEST(Matrix, OperatorMulSet) {
 
     Matrix mtxB = Matrix::Identity;
     mtxB *= mtxA;
-    CHECK_TRUE(mtxA == mtxB);
+    EXPECT_EQ(mtxA, mtxB);
 }
 
 TEST(Matrix, GetColumn) {
@@ -54,7 +50,7 @@ TEST(Matrix, GetColumn) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getColumn(1);
-    CHECK_TRUE(vec == Vec4(1, 0, 0, 2));
+    EXPECT_EQ(vec, Vec4(1, 0, 0, 2));
 }
 
 TEST(Matrix, GetRow) {
@@ -65,7 +61,7 @@ TEST(Matrix, GetRow) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getRow(3);
-    CHECK_TRUE(vec == Vec4(0, 2, 0, 3));
+    EXPECT_EQ(vec, Vec4(0, 2, 0, 3));
 }
 
 TEST(Matrix, Translate) {
@@ -74,7 +70,7 @@ TEST(Matrix, Translate) {
 
     Matrix mtx2;
     mtx2.translate(1, 2, 3);
-    CHECK_TRUE(mtx2 == mtx2);
+    EXPECT_EQ(mtx2, mtx2);
 }
 
 TEST(Matrix, Rotate) {
@@ -90,5 +86,5 @@ TEST(Matrix, Rotate) {
     Vec3 v(1, 2, 3);
     auto a = mtx*v;
     auto a2 = mtx2*v;
-    CHECK_TRUE(mtx*v == mtx2*v);
+    EXPECT_EQ(mtx*v, mtx2*v);
 }
