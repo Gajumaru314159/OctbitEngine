@@ -9,9 +9,23 @@
 
 using namespace ob;
 
+SimpleString StringFrom(const Vec4& quat) {
+    return fmt::format("{},{},{},{}", quat.x, quat.y, quat.z,quat.w).c_str();
+}
+
+SimpleString StringFrom(const Vec3& quat) {
+    return fmt::format("{},{},{}", quat.x, quat.y, quat.z).c_str();
+}
+
+SimpleString StringFrom(const Vec2& quat) {
+    return fmt::format("{},{}", quat.x, quat.y).c_str();
+}
+
+TEST_GROUP(Vector) {};
+
 TEST(Vector, ConstructorArg) {
     Vec2 v(1.0f, 2.0f);
-    CHECK_EQUAL(v.x == 1.0f && v.y == 2.0f);
+    CHECK_TRUE(v.x == 1.0f && v.y == 2.0f);
 
     Vec4    vf(4.0f, 5.0f, 6.0f, 7.0f);
     IntVec4 vi(1, 2, 3, 4);
@@ -20,7 +34,7 @@ TEST(Vector, ConstructorArg) {
     IntVec4 vf2i(vf);
 
     CHECK_EQUAL(vi2f, Vec4(1.0f, 2.0f, 3.0f, 4.0f));
-    CHECK_EQUAL(vf2i, IntVec4(4,5,6,7));
+    CHECK_TRUE(vf2i== IntVec4(4,5,6,7));
 }
 
 
@@ -37,10 +51,10 @@ TEST(Vector, OpAdd) {
     CHECK_EQUAL(v1, v2);
 }
 
-TEST(Vec3, Op) {
+TEST(Vector, Op) {
     // 等価演算子
-    CHECK_EQUAL(Vec3(1, 2, 3) == Vec3(1, 2, 3));
-    EXPECT_FALSE(Vec3(1, 2, 3) == Vec3(3, 2, 1));
+    CHECK_TRUE(Vec3(1, 2, 3) == Vec3(1, 2, 3));
+    CHECK_FALSE(Vec3(1, 2, 3) == Vec3(3, 2, 1));
 
 
     // 加算(ベクトル)
@@ -178,23 +192,23 @@ TEST(Vector, Transform) {
 
 TEST(Vector, Judge) {
     Vec3 v(1, 0, 0);
-    CHECK_EQUAL(v.isUnit());
+    CHECK_TRUE(v.isUnit());
 
     Vec3 v2(0.91f, 0, 0);
-    CHECK_EQUAL(v.equals(v2, 0.1f));
+    CHECK_TRUE(v.equals(v2, 0.1f));
 
 
-    EXPECT_FALSE(v.allComponentsEqual());
+    CHECK_FALSE(v.allComponentsEqual());
     v.set(3, 3, 3);
-    CHECK_EQUAL(v.allComponentsEqual());
+    CHECK_TRUE(v.allComponentsEqual());
 
-    EXPECT_FALSE(v.isZero());
+    CHECK_FALSE(v.isZero());
     v *= 0;
-    CHECK_EQUAL(v.isZero());
+    CHECK_TRUE(v.isZero());
 
-    EXPECT_FALSE(v.isNaN());
+    CHECK_FALSE(v.isNaN());
     v /= 0;
-    CHECK_EQUAL(v.isNaN());
+    CHECK_TRUE(v.isNaN());
 }
 
 

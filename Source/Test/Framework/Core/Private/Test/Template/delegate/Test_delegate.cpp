@@ -34,7 +34,9 @@ auto lamda = [](int arg) {s_calledNo = arg; };
 
 using delegate_type = Delegate<void(int)>;
 
-TEST(delegate, Construct) {
+TEST_GROUP(Delegate) {};
+
+TEST(Delegate, Construct) {
     LogTest lt;
 
     // 関数
@@ -87,7 +89,7 @@ TEST(delegate, Construct) {
 }
 
 
-TEST(delegate, Op) {
+TEST(Delegate, Op) {
     LogTest lt;
 
     //　等価
@@ -97,10 +99,10 @@ TEST(delegate, Op) {
         delegate_type d2(lamda);
         delegate_type d3(lt, &LogTest::LogEventConst);
 
-        CHECK_EQUAL(d1, d1);
-        CHECK_EQUAL(d1, d1_2);
-        EXPECT_NE(d1, d2);
-        EXPECT_NE(d1, d3);
+        CHECK_TRUE(d1 == d1);
+        CHECK_TRUE(d1 == d1_2);
+        CHECK_FALSE(d1 == d2);
+        CHECK_FALSE(d1 == d3);
     }
     // コピー代入
     {
@@ -123,7 +125,7 @@ TEST(delegate, Op) {
     }
 }
 
-TEST(delegate, Assign) {
+TEST(Delegate, Assign) {
     LogTest lt;
 
     // 関数
@@ -163,7 +165,7 @@ TEST(delegate, Assign) {
     }
 }
 
-TEST(delegate, Misc) {
+TEST(Delegate, Misc) {
     // 未登録テスト
     {
         s_calledNo = 0;
@@ -174,10 +176,10 @@ TEST(delegate, Misc) {
     // empty()
     {
         delegate_type d;
-        CHECK_EQUAL(d.empty());
+        CHECK_TRUE(d.empty());
         d.assign(LogEvent);
-        EXPECT_FALSE(d.empty());
+        CHECK_FALSE(d.empty());
         d.clear();
-        CHECK_EQUAL(d.empty());
+        CHECK_TRUE(d.empty());
     }
 }

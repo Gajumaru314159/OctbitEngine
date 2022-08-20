@@ -7,6 +7,8 @@
 #include <Framework/Core/Math/Vectors.h>
 using namespace ob;
 
+TEST_GROUP(Matrix) {
+};
 
 TEST(Matrix, OperatorSet) {
     Matrix mtxA(
@@ -16,7 +18,7 @@ TEST(Matrix, OperatorSet) {
         0, 2, 0, 3);
 
     Matrix mtxB = mtxA;
-    CHECK_EQUAL(mtxA, mtxB);
+    CHECK_TRUE(mtxA == mtxB);
 }
 
 
@@ -27,9 +29,9 @@ TEST(Matrix, OperatorMul) {
         0, 0, 0, 2,
         0, 2, 0, 3);
 
-    Matrix mtxB(EForceInit::Force);
+    Matrix mtxB = Matrix::Identity;
     mtxB = mtxA * mtxB;
-    CHECK_EQUAL(mtxA, mtxB);
+    CHECK_TRUE(mtxA == mtxB);
 }
 
 TEST(Matrix, OperatorMulSet) {
@@ -39,9 +41,9 @@ TEST(Matrix, OperatorMulSet) {
         0, 0, 0, 2,
         0, 2, 0, 3);
 
-    Matrix mtxB(EForceInit::Force);
+    Matrix mtxB = Matrix::Identity;
     mtxB *= mtxA;
-    CHECK_EQUAL(mtxA, mtxB);
+    CHECK_TRUE(mtxA == mtxB);
 }
 
 TEST(Matrix, GetColumn) {
@@ -52,7 +54,7 @@ TEST(Matrix, GetColumn) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getColumn(1);
-    CHECK_EQUAL(vec, Vec4(1, 0, 0, 2));
+    CHECK_TRUE(vec == Vec4(1, 0, 0, 2));
 }
 
 TEST(Matrix, GetRow) {
@@ -63,7 +65,7 @@ TEST(Matrix, GetRow) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getRow(3);
-    CHECK_EQUAL(vec, Vec4(0, 2, 0, 3));
+    CHECK_TRUE(vec == Vec4(0, 2, 0, 3));
 }
 
 TEST(Matrix, Translate) {
@@ -72,21 +74,21 @@ TEST(Matrix, Translate) {
 
     Matrix mtx2;
     mtx2.translate(1, 2, 3);
-    CHECK_EQUAL(mtx2, mtx2);
+    CHECK_TRUE(mtx2 == mtx2);
 }
 
 TEST(Matrix, Rotate) {
-    Matrix mtx(EForceInit::Force);
+    Matrix mtx = Matrix::Identity;
     mtx.rotate(0.0f, 90.0f, 0.0f);
 
     Matrix mtx2(
-        0, 0, -1, 0,
+        0, 0, 1, 0,
         0, 1, 0, 0,
-        1, 0, 0, 0,
+        -1, 0, 0, 0,
         0, 0, 0, 1);
 
     Vec3 v(1, 2, 3);
     auto a = mtx*v;
     auto a2 = mtx2*v;
-    CHECK_EQUAL(mtx*v, mtx2*v);
+    CHECK_TRUE(mtx*v == mtx2*v);
 }

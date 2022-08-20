@@ -27,6 +27,8 @@ public:
     }
 };
 
+TEST_GROUP(EventNotifier) {};
+
 TEST(EventNotifier, Test) {
 
     using Notifier = EventNotifier<size_t>;

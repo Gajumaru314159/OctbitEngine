@@ -1,10 +1,10 @@
-//***********************************************************
+﻿//***********************************************************
 //! @file
-//! @brief		handle_list�e�X�g
+//! @brief		handle_forward_listテスト
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Core/Template/Container/HandleForwardList.h>
 using namespace ob;
-#include <Framework/Core/Template/Container/HandleList.h>
 
 struct Hoge {
     Hoge(int a, int b) :val(a* b) {}
@@ -15,16 +15,18 @@ struct Hoge {
     int val = 0;
 };
 
-TEST(HandleList, Test) {
-    using List = HandleList<Hoge>;
+TEST_GROUP(HandleForwardList) {};
+
+TEST(HandleForwardList, Test) {
+    using List = HandleForwardList<Hoge>;
     using Handle = List::Handle;
 
-    // ���[�u�E�R���X�g���N�^
+    // ムーブ・コンストラクタ
     {
         List lst;
         Handle h1, h2;
-        lst.emplace_back(h1, 2, 3);
-        lst.emplace_back(h2, 5, 7);
+        lst.emplace_front(h1, 2, 3);
+        lst.emplace_front(h2, 5, 7);
 
         List lst2 = std::move(lst);
 
@@ -33,12 +35,12 @@ TEST(HandleList, Test) {
         CHECK_EQUAL(sum2, 2 * 3 + 5 * 7);
     }
 
-    // ���[�u���
+    // ムーブ代入
     {
         List lst;
         Handle h1, h2;
-        lst.emplace_back(h1, 2, 3);
-        lst.emplace_back(h2, 5, 7);
+        lst.emplace_front(h1, 2, 3);
+        lst.emplace_front(h2, 5, 7);
 
         List lst2;
         lst2 = std::move(lst);
@@ -52,9 +54,9 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 3);
-        lst.emplace_back(h2, 1, 5);
-        lst.emplace_back(h3, 1, 7);
+        lst.emplace_front(h3, 1, 7);
+        lst.emplace_front(h2, 1, 5);
+        lst.emplace_front(h1, 1, 3);
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
@@ -66,9 +68,9 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 3);
-        lst.emplace_back(h2, 1, 5);
-        lst.emplace_back(h3, 1, 7);
+        lst.emplace_front(h3, 1, 7);
+        lst.emplace_front(h2, 1, 5);
+        lst.emplace_front(h1, 1, 3);
 
         int val = 0;
         std::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
@@ -76,46 +78,18 @@ TEST(HandleList, Test) {
         CHECK_EQUAL(val, 357);
     }
 
-    // rbegin() / rend()
-    {
-        List lst;
-        Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 3);
-        lst.emplace_back(h2, 1, 5);
-        lst.emplace_back(h3, 1, 7);
-
-        int val = 0;
-        std::for_each(lst.rbegin(), lst.rend(), [&val](auto& x) {val *= 10; val += x.val; });
-
-        CHECK_EQUAL(val, 753);
-    }
-
-    // crbegin() / crend()
-    {
-        List lst;
-        Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 3);
-        lst.emplace_back(h2, 1, 5);
-        lst.emplace_back(h3, 1, 7);
-
-        int val = 0;
-        std::for_each(lst.crbegin(), lst.crend(), [&val](const auto& x) {val *= 10; val += x.val; });
-
-        CHECK_EQUAL(val, 753);
-    }
-
     // empty() / size()
     {
         List lst;
-        CHECK_EQUAL(lst.empty());
+        CHECK_TRUE(lst.empty());
         CHECK_EQUAL(lst.size(), 0);
 
         Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 3);
-        lst.emplace_back(h2, 1, 5);
-        lst.emplace_back(h3, 1, 7);
+        lst.emplace_front(h1, 1, 3);
+        lst.emplace_front(h2, 1, 5);
+        lst.emplace_front(h3, 1, 7);
 
-        EXPECT_FALSE(lst.empty());
+        CHECK_FALSE(lst.empty());
         CHECK_EQUAL(lst.size(), 3);
     }
 
@@ -123,19 +97,18 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3;
-        lst.emplace_back(h1, 2, 3);
-        lst.emplace_back(h2, 2, 5);
-        lst.emplace_back(h3, 2, 7);
+        lst.emplace_front(h1, 2, 3);
+        lst.emplace_front(h2, 2, 5);
+        lst.emplace_front(h3, 2, 7);
 
-        CHECK_EQUAL(lst.front().val, 2 * 3);
-        CHECK_EQUAL(lst.back().val, 2 * 7);
+        CHECK_EQUAL(lst.front().val, 2 * 7);
     }
 
     // push_front() / emplace_front()
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 3);
+        lst.emplace_front(h1, 1, 3);
         lst.push_front(h2, Hoge(1, 5));
         Hoge hoge(1, 7);
         lst.push_front(h3, hoge);
@@ -147,106 +120,89 @@ TEST(HandleList, Test) {
         CHECK_EQUAL(val, 9753);
     }
 
-    // push_back() / emplace_back()
-    {
-        List lst;
-        Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 3);
-        lst.push_back(h2, Hoge(1, 5));
-        Hoge hoge(1, 7);
-        lst.push_back(h3, hoge);
-        lst.emplace_back(h4, 1, 9);
-
-        int val = 0;
-        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-
-        CHECK_EQUAL(val, 3579);
-    }
-
     // insert() / emplace()
     {
         List lst;
         Handle h1, h2, h3, h4, h5, h6;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
-        lst.insert(h4, lst.begin(), Hoge(1, 4));
+        lst.insert_after(h4, lst.begin_before(), Hoge(1, 4));
         Hoge hoge(1, 5);
-        lst.insert(h5, (++lst.begin()), hoge);
-        lst.emplace(h6, --(--lst.end()), 1, 6);
+        lst.insert_after(h5, (lst.begin()), hoge);
+        lst.emplace_after(h6, ++(++(++lst.begin())), 1, 6);
 
         int val = 0;
-        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10;val += x.val; });
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        CHECK_EQUAL(val, 451623);
+        CHECK_EQUAL(val, 451263);
     }
 
     // pop_front() / pop_back()
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
-        lst.pop_back();
         lst.pop_front();
         lst.pop_front();
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        CHECK_EQUAL(val, 3);
+        CHECK_EQUAL(val, 34);
+    }
+
+    // erase_after()
+    {
+        List lst;
+        Handle h1, h2, h3, h4;
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
+
+        lst.erase_after(++lst.begin());
+
+        int val = 0;
+        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
+        CHECK_EQUAL(val, 124);
     }
 
     // erase()
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
-        lst.erase(++lst.begin());
-
-        int val = 0;
-        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        CHECK_EQUAL(val, 134);
-    }
-
-    // erase()
-    {
-        List lst;
-        Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
-
-        lst.erase(++lst.begin(), ++(++lst.begin()));
+        lst.erase_after(++lst.begin(), ++(++lst.begin()));
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        CHECK_EQUAL(val, 134);
+        CHECK_EQUAL(val, 124);
     }
 
     // clear()
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
         lst.clear();
-        CHECK_EQUAL(lst.empty());
+        CHECK_TRUE(lst.empty());
         CHECK_EQUAL(lst.size(), 0);
 
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 3);
+        lst.emplace_front(h2, 1, 3);
+        lst.emplace_front(h1, 1, 1);
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
@@ -257,13 +213,13 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
         List lst2;
         Handle h4;
-        lst2.emplace_back(h4, 1, 4);
+        lst2.emplace_front(h4, 1, 4);
 
         lst.swap(lst2);
 
@@ -280,10 +236,10 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
         lst.remove(h1);
 
@@ -302,12 +258,12 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
-        lst.remove_if([](const Hoge& pred) {return pred.val % 2==0; });
+        lst.remove_if([](const Hoge& pred) {return pred.val % 2 == 0; });
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
@@ -318,10 +274,10 @@ TEST(HandleList, Test) {
     {
         List lst;
         Handle h1, h2, h3, h4;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-        lst.emplace_back(h4, 1, 4);
+        lst.emplace_front(h4, 1, 4);
+        lst.emplace_front(h3, 1, 3);
+        lst.emplace_front(h2, 1, 2);
+        lst.emplace_front(h1, 1, 1);
 
         lst.reverse();
 
@@ -335,28 +291,28 @@ TEST(HandleList, Test) {
         List lst;
 
         Handle h1;
-        lst.emplace_back(h1, 1, 1);
+        lst.emplace_front(h1, 1, 1);
         {
             Handle h2;
-            lst.emplace_back(h2, 1, 2);
+            lst.emplace_front(h2, 1, 2);
             {
                 Handle h3;
-                lst.emplace_back(h3, 1, 3);
+                lst.emplace_front(h3, 1, 3);
             }
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                CHECK_EQUAL(val, 12);
+                CHECK_EQUAL(val, 21);
             }
             {
-                Handle h3,h4;
-                lst.emplace_back(h3, 1, 3);
-                lst.emplace_back(h4, 1, 4);
+                Handle h3, h4;
+                lst.emplace_front(h3, 1, 3);
+                lst.emplace_front(h4, 1, 4);
             }
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                CHECK_EQUAL(val, 12);
+                CHECK_EQUAL(val, 21);
             }
         }
 
