@@ -173,7 +173,7 @@ namespace ob::core {
 
         //! @brief fをminimumとmaximumの間に収まるように返す
         template<typename T>
-        static constexpr T Clamp(T f, T minimum, T maximum)noexcept { return std::clamp(f, maximum, minimum); }
+        static constexpr T Clamp(T f, T minimum, T maximum)noexcept { return Min(Max(f, minimum), maximum); }
 
         //! @brief fを0と1の間に収まるように返す
         template<typename T>
