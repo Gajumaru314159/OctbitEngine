@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		handle_forward_listテスト
+//! @brief		HandleForwardList のテスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Container/HandleForwardList.h>
@@ -34,7 +34,7 @@ TEST(HandleForwardList, Construct) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
     // ムーブ代入
@@ -49,7 +49,7 @@ TEST(HandleForwardList, Construct) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
 }
@@ -67,7 +67,7 @@ TEST(HandleForwardList, Iterator) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        ASSERT_EQ(val, 357);
     }
 
     // cbegin() / cend()
@@ -81,7 +81,7 @@ TEST(HandleForwardList, Iterator) {
         int val = 0;
         std::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        ASSERT_EQ(val, 357);
     }
 
 }
@@ -91,16 +91,16 @@ TEST(HandleForwardList, Func) {
     // empty() / size()
     {
         HList lst;
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        ASSERT_TRUE(lst.empty());
+        ASSERT_EQ(lst.size(), 0);
 
         Handle h1, h2, h3;
         lst.emplace_front(h1, 1, 3);
         lst.emplace_front(h2, 1, 5);
         lst.emplace_front(h3, 1, 7);
 
-        EXPECT_FALSE(lst.empty());
-        EXPECT_EQ(lst.size(), 3);
+        ASSERT_FALSE(lst.empty());
+        ASSERT_EQ(lst.size(), 3);
     }
 
     // front() / back()
@@ -111,7 +111,7 @@ TEST(HandleForwardList, Func) {
         lst.emplace_front(h2, 2, 5);
         lst.emplace_front(h3, 2, 7);
 
-        EXPECT_EQ(lst.front().val, 2 * 7);
+        ASSERT_EQ(lst.front().val, 2 * 7);
     }
 
     // swap()
@@ -130,11 +130,11 @@ TEST(HandleForwardList, Func) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4);
+        ASSERT_EQ(val, 4);
 
         val = 0;
         std::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 123);
+        ASSERT_EQ(val, 123);
     }
 
     // reverse()
@@ -150,7 +150,7 @@ TEST(HandleForwardList, Func) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4321);
+        ASSERT_EQ(val, 4321);
     }
 
 }
@@ -170,7 +170,7 @@ TEST(HandleForwardList, AddRemove) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 9753);
+        ASSERT_EQ(val, 9753);
     }
 
     // insert() / emplace()
@@ -189,7 +189,7 @@ TEST(HandleForwardList, AddRemove) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 451263);
+        ASSERT_EQ(val, 451263);
     }
 
     // pop_front() / pop_back()
@@ -206,7 +206,7 @@ TEST(HandleForwardList, AddRemove) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 34);
+        ASSERT_EQ(val, 34);
     }
 
 }
@@ -226,7 +226,7 @@ TEST(HandleForwardList, Erase) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 124);
+        ASSERT_EQ(val, 124);
     }
 
     // erase()
@@ -242,7 +242,7 @@ TEST(HandleForwardList, Erase) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 124);
+        ASSERT_EQ(val, 124);
     }
 
     // clear()
@@ -255,15 +255,15 @@ TEST(HandleForwardList, Erase) {
         lst.emplace_front(h1, 1, 1);
 
         lst.clear();
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        ASSERT_TRUE(lst.empty());
+        ASSERT_EQ(lst.size(), 0);
 
         lst.emplace_front(h2, 1, 3);
         lst.emplace_front(h1, 1, 1);
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 13);
+        ASSERT_EQ(val, 13);
     }
 
     // remove()
@@ -279,13 +279,13 @@ TEST(HandleForwardList, Erase) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 234);
+        ASSERT_EQ(val, 234);
 
         h3.remove();
 
         val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 24);
+        ASSERT_EQ(val, 24);
     }
 
     // remove_if()
@@ -301,7 +301,7 @@ TEST(HandleForwardList, Erase) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 24);
+        ASSERT_EQ(val, 24);
     }
 
 }
@@ -324,7 +324,7 @@ TEST(HandleForwardList, Scope) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 21);
+                ASSERT_EQ(val, 21);
             }
             {
                 Handle h3, h4;
@@ -334,14 +334,14 @@ TEST(HandleForwardList, Scope) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 21);
+                ASSERT_EQ(val, 21);
             }
         }
 
         {
             int val = 0;
             std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-            EXPECT_EQ(val, 1);
+            ASSERT_EQ(val, 1);
         }
 
     }

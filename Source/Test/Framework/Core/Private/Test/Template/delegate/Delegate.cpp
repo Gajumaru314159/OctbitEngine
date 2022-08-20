@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		delegateテスト
+//! @brief		Delegate テスト
 //! @author		Gajumaru
 //***********************************************************
 using namespace ob;
@@ -41,31 +41,31 @@ TEST(Delegate, Construct) {
     {
         delegate_type d(LogEvent);
         d(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
     // ラムダ式
     {
         delegate_type d(lamda);
         d(2);
-        EXPECT_EQ(s_calledNo, 2);
+        ASSERT_EQ(s_calledNo, 2);
     }
     // メソッド
     {
         delegate_type d(lt, &LogTest::LogEvent);
         d(3);
-        EXPECT_EQ(s_calledNo, 3);
+        ASSERT_EQ(s_calledNo, 3);
     }
     // constメソッド
     {
         delegate_type d(lt, &LogTest::LogEventConst);
         d(4);
-        EXPECT_EQ(s_calledNo, 4);
+        ASSERT_EQ(s_calledNo, 4);
     }
     // static関数
     {
         delegate_type d(&LogTest::LogEventStatic);
         d(5);
-        EXPECT_EQ(s_calledNo, 5);
+        ASSERT_EQ(s_calledNo, 5);
     }
     // コピー
     {
@@ -74,7 +74,7 @@ TEST(Delegate, Construct) {
         d.clear();
         s_calledNo = 0;
         d2(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
     // ムーブ
     {
@@ -82,7 +82,7 @@ TEST(Delegate, Construct) {
         delegate_type d2 = std::move(d);
         s_calledNo = 0;
         d2(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
 }
 
@@ -97,10 +97,10 @@ TEST(Delegate, Op) {
         delegate_type d2(lamda);
         delegate_type d3(lt, &LogTest::LogEventConst);
 
-        EXPECT_EQ(d1, d1);
-        EXPECT_EQ(d1, d1_2);
-        EXPECT_NE(d1, d2);
-        EXPECT_NE(d1, d3);
+        ASSERT_EQ(d1, d1);
+        ASSERT_EQ(d1, d1_2);
+        ASSERT_NE(d1, d2);
+        ASSERT_NE(d1, d3);
     }
     // コピー代入
     {
@@ -110,7 +110,7 @@ TEST(Delegate, Op) {
         d.clear();
         s_calledNo = 0;
         d2(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
     // ムーブ代入
     {
@@ -119,7 +119,7 @@ TEST(Delegate, Op) {
         d2 = std::move(d);
         s_calledNo = 0;
         d2(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
 }
 
@@ -131,35 +131,35 @@ TEST(Delegate, Assign) {
         delegate_type d;
         d.assign(LogEvent);
         d(1);
-        EXPECT_EQ(s_calledNo, 1);
+        ASSERT_EQ(s_calledNo, 1);
     }
     // ラムダ式
     {
         delegate_type d;
         d.assign(lamda);
         d(2);
-        EXPECT_EQ(s_calledNo, 2);
+        ASSERT_EQ(s_calledNo, 2);
     }
     // メソッド
     {
         delegate_type d;
         d.assign(lt, &LogTest::LogEvent);
         d(3);
-        EXPECT_EQ(s_calledNo, 3);
+        ASSERT_EQ(s_calledNo, 3);
     }
     // constメソッド
     {
         delegate_type d;
         d.assign(lt, &LogTest::LogEventConst);
         d(4);
-        EXPECT_EQ(s_calledNo, 4);
+        ASSERT_EQ(s_calledNo, 4);
     }
     // static関数
     {
         delegate_type d;
         d.assign(&LogTest::LogEventStatic);
         d(5);
-        EXPECT_EQ(s_calledNo, 5);
+        ASSERT_EQ(s_calledNo, 5);
     }
 }
 
@@ -169,15 +169,15 @@ TEST(Delegate, Misc) {
         s_calledNo = 0;
         delegate_type d;
         d(1);
-        EXPECT_EQ(s_calledNo, 0);
+        ASSERT_EQ(s_calledNo, 0);
     }
     // empty()
     {
         delegate_type d;
-        EXPECT_TRUE(d.empty());
+        ASSERT_TRUE(d.empty());
         d.assign(LogEvent);
-        EXPECT_FALSE(d.empty());
+        ASSERT_FALSE(d.empty());
         d.clear();
-        EXPECT_TRUE(d.empty());
+        ASSERT_TRUE(d.empty());
     }
 }

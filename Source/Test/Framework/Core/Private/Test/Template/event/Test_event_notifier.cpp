@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		event_notifierテスト
+//! @brief		EventNotifier テスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Event/EventNotifier.h>
@@ -55,23 +55,23 @@ TEST(EventNotifier, Test) {
         // invokeテスト
         s_num = 1;
         en.invoke(2);
-        EXPECT_EQ(s_num, 5 * 7 * 11 * 13 * 17);
+        ASSERT_EQ(s_num, 5 * 7 * 11 * 13 * 17);
     }
     // Handleスコープテスト
     s_num = 1;
     en.invoke(1);
-    EXPECT_EQ(s_num, 3 * 5 * 7 * 11);
+    ASSERT_EQ(s_num, 3 * 5 * 7 * 11);
 
 
     en.remove(funcHandle);
     // removeテスト
     s_num = 1;
     en.invoke(0);
-    EXPECT_EQ(s_num, 3 * 5 * 7);
+    ASSERT_EQ(s_num, 3 * 5 * 7);
 
     constMethodHandle.remove();
     // ハンドルremoveテスト
     s_num = 1;
     en.invoke(0);
-    EXPECT_EQ(s_num, 3 * 7);
+    ASSERT_EQ(s_num, 3 * 7);
 }

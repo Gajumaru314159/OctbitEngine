@@ -1,6 +1,6 @@
 //***********************************************************
 //! @file
-//! @brief		Matrix �̃e�X�g
+//! @brief		Matrix のテスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Matrix.h>
@@ -15,7 +15,7 @@ TEST(Matrix, OperatorSet) {
         0, 2, 0, 3);
 
     Matrix mtxB = mtxA;
-    EXPECT_EQ(mtxA, mtxB);
+    ASSERT_EQ(mtxA, mtxB);
 }
 
 TEST(Matrix, OperatorMul) {
@@ -27,7 +27,7 @@ TEST(Matrix, OperatorMul) {
 
     Matrix mtxB = Matrix::Identity;
     mtxB = mtxA * mtxB;
-    EXPECT_EQ(mtxA, mtxB);
+    ASSERT_EQ(mtxA, mtxB);
 }
 
 TEST(Matrix, OperatorMulSet) {
@@ -39,7 +39,7 @@ TEST(Matrix, OperatorMulSet) {
 
     Matrix mtxB = Matrix::Identity;
     mtxB *= mtxA;
-    EXPECT_EQ(mtxA, mtxB);
+    ASSERT_EQ(mtxA, mtxB);
 }
 
 TEST(Matrix, GetColumn) {
@@ -50,7 +50,7 @@ TEST(Matrix, GetColumn) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getColumn(1);
-    EXPECT_EQ(vec, Vec4(1, 0, 0, 2));
+    ASSERT_EQ(vec, Vec4(1, 0, 0, 2));
 }
 
 TEST(Matrix, GetRow) {
@@ -61,7 +61,7 @@ TEST(Matrix, GetRow) {
         0, 2, 0, 3);
 
     Vec4 vec = mtxA.getRow(3);
-    EXPECT_EQ(vec, Vec4(0, 2, 0, 3));
+    ASSERT_EQ(vec, Vec4(0, 2, 0, 3));
 }
 
 TEST(Matrix, Translate) {
@@ -70,7 +70,7 @@ TEST(Matrix, Translate) {
 
     Matrix mtx2;
     mtx2.translate(1, 2, 3);
-    EXPECT_EQ(mtx2, mtx2);
+    ASSERT_EQ(mtx2, mtx2);
 }
 
 TEST(Matrix, Rotate) {
@@ -86,5 +86,5 @@ TEST(Matrix, Rotate) {
     Vec3 v(1, 2, 3);
     auto a = mtx*v;
     auto a2 = mtx2*v;
-    EXPECT_EQ(mtx*v, mtx2*v);
+    ASSERT_EQ(mtx*v, mtx2*v);
 }

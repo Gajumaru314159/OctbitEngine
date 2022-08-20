@@ -1,6 +1,6 @@
 //***********************************************************
 //! @file
-//! @brief		handle_list?e?X?g
+//! @brief		HandleList のテスト
 //! @author		Gajumaru
 //***********************************************************
 using namespace ob;
@@ -19,7 +19,7 @@ TEST(HandleList, Test) {
     using List = HandleList<Hoge>;
     using Handle = List::Handle;
 
-    // ???[?u?E?R???X?g???N?^
+    // ムーブコンストラクタ
     {
         List lst;
         Handle h1, h2;
@@ -30,10 +30,10 @@ TEST(HandleList, Test) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
-    // ???[?u???
+    // ムーブ代入
     {
         List lst;
         Handle h1, h2;
@@ -45,7 +45,7 @@ TEST(HandleList, Test) {
 
         int sum2 = 0;
         std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        EXPECT_EQ(sum2, 2 * 3 + 5 * 7);
+        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
     }
 
     // begin() / end()
@@ -59,7 +59,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        ASSERT_EQ(val, 357);
     }
 
     // cbegin() / cend()
@@ -73,7 +73,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.cbegin(), lst.cend(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 357);
+        ASSERT_EQ(val, 357);
     }
 
     // rbegin() / rend()
@@ -87,7 +87,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.rbegin(), lst.rend(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 753);
+        ASSERT_EQ(val, 753);
     }
 
     // crbegin() / crend()
@@ -101,22 +101,22 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.crbegin(), lst.crend(), [&val](const auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 753);
+        ASSERT_EQ(val, 753);
     }
 
     // empty() / size()
     {
         List lst;
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        ASSERT_TRUE(lst.empty());
+        ASSERT_EQ(lst.size(), 0);
 
         Handle h1, h2, h3;
         lst.emplace_back(h1, 1, 3);
         lst.emplace_back(h2, 1, 5);
         lst.emplace_back(h3, 1, 7);
 
-        EXPECT_FALSE(lst.empty());
-        EXPECT_EQ(lst.size(), 3);
+        ASSERT_FALSE(lst.empty());
+        ASSERT_EQ(lst.size(), 3);
     }
 
     // front() / back()
@@ -127,8 +127,8 @@ TEST(HandleList, Test) {
         lst.emplace_back(h2, 2, 5);
         lst.emplace_back(h3, 2, 7);
 
-        EXPECT_EQ(lst.front().val, 2 * 3);
-        EXPECT_EQ(lst.back().val, 2 * 7);
+        ASSERT_EQ(lst.front().val, 2 * 3);
+        ASSERT_EQ(lst.back().val, 2 * 7);
     }
 
     // push_front() / emplace_front()
@@ -144,7 +144,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 9753);
+        ASSERT_EQ(val, 9753);
     }
 
     // push_back() / emplace_back()
@@ -160,7 +160,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
 
-        EXPECT_EQ(val, 3579);
+        ASSERT_EQ(val, 3579);
     }
 
     // insert() / emplace()
@@ -179,7 +179,7 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10;val += x.val; });
 
-        EXPECT_EQ(val, 451623);
+        ASSERT_EQ(val, 451623);
     }
 
     // pop_front() / pop_back()
@@ -197,7 +197,7 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 3);
+        ASSERT_EQ(val, 3);
     }
 
     // erase()
@@ -213,7 +213,7 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 134);
+        ASSERT_EQ(val, 134);
     }
 
     // erase()
@@ -229,7 +229,7 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 134);
+        ASSERT_EQ(val, 134);
     }
 
     // clear()
@@ -242,15 +242,15 @@ TEST(HandleList, Test) {
         lst.emplace_back(h4, 1, 4);
 
         lst.clear();
-        EXPECT_TRUE(lst.empty());
-        EXPECT_EQ(lst.size(), 0);
+        ASSERT_TRUE(lst.empty());
+        ASSERT_EQ(lst.size(), 0);
 
         lst.emplace_back(h1, 1, 1);
         lst.emplace_back(h2, 1, 3);
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 13);
+        ASSERT_EQ(val, 13);
     }
 
     // swap()
@@ -269,11 +269,11 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4);
+        ASSERT_EQ(val, 4);
 
         val = 0;
         std::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 123);
+        ASSERT_EQ(val, 123);
     }
 
     // remove()
@@ -289,13 +289,13 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 234);
+        ASSERT_EQ(val, 234);
 
         h3.remove();
 
         val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 24);
+        ASSERT_EQ(val, 24);
     }
 
     // remove_if()
@@ -311,7 +311,7 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 13);
+        ASSERT_EQ(val, 13);
     }
 
     // reverse()
@@ -327,7 +327,7 @@ TEST(HandleList, Test) {
 
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        EXPECT_EQ(val, 4321);
+        ASSERT_EQ(val, 4321);
     }
 
     // scope
@@ -346,7 +346,7 @@ TEST(HandleList, Test) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 12);
+                ASSERT_EQ(val, 12);
             }
             {
                 Handle h3,h4;
@@ -356,14 +356,14 @@ TEST(HandleList, Test) {
             {
                 int val = 0;
                 std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-                EXPECT_EQ(val, 12);
+                ASSERT_EQ(val, 12);
             }
         }
 
         {
             int val = 0;
             std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-            EXPECT_EQ(val, 1);
+            ASSERT_EQ(val, 1);
         }
 
     }

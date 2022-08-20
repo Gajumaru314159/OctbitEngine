@@ -63,15 +63,15 @@ namespace ob {
             String message = TC("Infoログチェック");
             LOG_INFO("[{0}]", message);
 
-            EXPECT_EQ(s_logType, LogLevel::Info);
-            EXPECT_EQ(s_message, TC("[Infoログチェック]"));
+            ASSERT_EQ(s_logType, LogLevel::Info);
+            ASSERT_EQ(s_message, TC("[Infoログチェック]"));
         }
         {
             String message = TC("Warningログチェック");
             LOG_WARNING("[{0}]", message);
 
-            EXPECT_EQ(s_logType, LogLevel::Warning);
-            EXPECT_EQ(s_message, TC("[Warningログチェック]"));
+            ASSERT_EQ(s_logType, LogLevel::Warning);
+            ASSERT_EQ(s_message, TC("[Warningログチェック]"));
         }
 
         // ログイベントの削除
@@ -82,8 +82,8 @@ namespace ob {
             String message = TC("Infoログチェック");
             LOG_INFO("[{0}]", message);
 
-            EXPECT_NE(s_logType , LogLevel::Info);
-            EXPECT_NE(s_message, TC("[Infoログチェック]"));
+            ASSERT_NE(s_logType , LogLevel::Info);
+            ASSERT_NE(s_message, TC("[Infoログチェック]"));
         }
 
     }
