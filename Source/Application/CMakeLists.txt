@@ -29,6 +29,7 @@ set(public_libs
     Graphic
     GraphicDirectX12
     Input
+    Engine
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 

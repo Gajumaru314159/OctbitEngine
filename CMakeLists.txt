@@ -80,10 +80,10 @@ add_subdirectory ("Source/Framework/Singleton")
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
 add_subdirectory ("Source/Framework/Graphic")
-#add_subdirectory ("Source/Framework/Rendering")
+add_subdirectory ("Source/Framework/Rendering")
 add_subdirectory ("Source/Framework/Input")
-#add_subdirectory ("Source/Framework/Engine")
-#add_subdirectory ("Source/Framework/Model")
+add_subdirectory ("Source/Framework/Engine")
+add_subdirectory ("Source/Framework/Model")
 
 # Plugins
 if(WIN32)

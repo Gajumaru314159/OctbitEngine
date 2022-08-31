@@ -77,10 +77,14 @@ FUNCTION(LOAD_FILES result root)
 	# ファイルを列挙
 	ADD_SOURCES(public_files "Public" ${root})
 	ADD_SOURCES(private_files "Private" ${root})
+	ADD_SOURCES(test_files "Test" ${root})
 	ADD_SOURCES(misc_files "Misc" ".")
 	
 	# PublicとPrivateを結合
-	SET(files ${public_files} ${private_files} ${misc_files})
+	SET(files ${public_files})
+	LIST(APPEND files ${private_files})
+	LIST(APPEND files ${test_files})
+	LIST(APPEND files ${misc_files})
 	# resultに格納
 	SET(${result} ${files} PARENT_SCOPE)
 

@@ -33,15 +33,17 @@
 #include <Framework/Input/Keyboard.h>
 #include <Framework/Input/Mouse.h>
 
+#include <Framework/Engine/Engine.h>
+
 #include <OBJ_Loader.h>
 
 using namespace ob;
 
 int main() {
 	using namespace ob::graphic;
+		
+	engine::Engine engine;
 
-
-	Logger::Instance();
 	platform::PlatformSystem::Instance();
 	{
 		if (true) {

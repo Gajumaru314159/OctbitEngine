@@ -4,10 +4,10 @@ project (Engine)
 #------------------------------------------------------------------------------
 # ソースコードの登録
 #------------------------------------------------------------------------------
-LOAD_FILES(out_sources "Framework/Platform")
+LOAD_FILES(out_sources "Framework/Engine")
 add_library(${PROJECT_NAME} STATIC ${out_sources})
 
-SET_PCH("Framework/Private/PCH/stdafx.h")
+SET_PCH("Framework/Engine/PCH/stdafx.h")
 
 
 #------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ SET_PCH("Framework/Private/PCH/stdafx.h")
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${CMAKE_CURRENT_SOURCE_DIR}/Test")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
