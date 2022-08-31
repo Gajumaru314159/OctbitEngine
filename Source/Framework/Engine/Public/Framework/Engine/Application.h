@@ -18,14 +18,23 @@ namespace ob::engine {
         // コンストラクタ / デストラクタ
         //===============================================================
 
+    protected:
+
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
         ApplicationBase();
 
+        virtual void onStarted();
+
     private:
 
-        
+        bool startup();
+        void addRequierModuule();
+
+    private:
+
+        Pimpl<class Engine> m_engine;
 
     };
 

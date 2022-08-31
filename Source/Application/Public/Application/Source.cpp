@@ -38,6 +38,7 @@
 #include <OBJ_Loader.h>
 
 #include <Framework/Engine/Main.h>
+#include <Application/Application.h>
 
 using namespace ob;
 
@@ -48,6 +49,9 @@ void OctbitInit(ob::EngineSettings& settings) {
 int OctbitMain() {
 	using namespace ob::graphic;
 
+	Application application;
+
+	/*
 	engine::Engine engine;
 
 	platform::PlatformSystem::Instance();
@@ -406,6 +410,7 @@ int OctbitMain() {
 		// 現状Singletonのstatic変数の解放順に依存している
 	}
 
+	*/
 
 	return 0;
 }
