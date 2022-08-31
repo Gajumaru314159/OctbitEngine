@@ -39,9 +39,15 @@
 
 using namespace ob;
 
-int main() {
+#include <Framework/Engine/Main.h>
+
+void OctbitInit(ob::EngineSettings& settings) {
+	settings.consoleEnabled = true;
+}
+
+int OctbitMain() {
 	using namespace ob::graphic;
-		
+
 	engine::Engine engine;
 
 	platform::PlatformSystem::Instance();
@@ -258,7 +264,7 @@ int main() {
 						String name;
 						StringEncoder::Encode(curMesh.MeshName, name);
 
-						LOG_INFO("name={}",name);
+						LOG_INFO("name={}", name);
 
 						for (int j = 0; j < curMesh.Vertices.size(); j++)
 						{
@@ -267,11 +273,11 @@ int main() {
 							auto normal = curMesh.Vertices[j].Normal;
 							auto& vert = mesh.vertices.emplace_back();
 							vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
-							vert.normal = Vec4(normal.X, normal.Y, normal.Z,1.0f);
-							vert.uv = Vec2(uv.X,uv.Y);
+							vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
+							vert.uv = Vec2(uv.X, uv.Y);
 						}
-						
-						for (int j = 0; j < curMesh.Indices.size(); j ++)
+
+						for (int j = 0; j < curMesh.Indices.size(); j++)
 						{
 							mesh.indices.push_back(curMesh.Indices[j]);
 						}
@@ -297,7 +303,7 @@ int main() {
 
 			//------ループ-----
 
-			Vec3 pos(0,0,-10);
+			Vec3 pos(0, 0, -10);
 			Rot rot = Rot::Identity;
 
 
@@ -358,7 +364,7 @@ int main() {
 				if (input::Keyboard::K.pressed()) {
 					speed *= 0.5f;
 				}
-				
+
 				const auto rspd = 90 / 60.f;
 				Rot r2(0, rot.y, 0);
 				if (input::Keyboard::W.pressed()) {
@@ -385,10 +391,10 @@ int main() {
 				if (input::Keyboard::DownArrow.pressed()) {
 					rot.x += rspd;
 				}
-				rot.x = Math::Clamp(rot.x,-90.f,90.f);
+				rot.x = Math::Clamp(rot.x, -90.f, 90.f);
 
 
-				cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos,rot,Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
+				cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
 				buffer.updateDirect(cbuf);
 				t += 2.f;
 			}

@@ -71,6 +71,7 @@ namespace ob::engine {
 
 	private:
 
+
 		Array<UPtr<IModule>> m_modules;
 		HashMap<Name, size_t> m_indices;
 		Atomic<bool> m_terminate;
