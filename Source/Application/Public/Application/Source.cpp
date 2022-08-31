@@ -37,9 +37,9 @@
 
 #include <OBJ_Loader.h>
 
-using namespace ob;
-
 #include <Framework/Engine/Main.h>
+
+using namespace ob;
 
 void OctbitInit(ob::EngineSettings& settings) {
 	settings.consoleEnabled = true;

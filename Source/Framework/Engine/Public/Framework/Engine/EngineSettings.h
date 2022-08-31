@@ -13,10 +13,10 @@ namespace ob {
     //! @see    OctbitInit()
     //@―---------------------------------------------------------------------------
     struct EngineSettings {
-        bool consoleEnabled;
+        bool consoleEnabled = false;    //!< コンソールウィンドウを表示するか
 
-        std::string engineDirectory;
-        std::string assetDirectory;
+        std::string engineDirectory;    //!<
+        std::string assetDirectory;     //!< アセットルートディレクトリ
     };
 
 }// namespcae ob
