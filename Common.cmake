@@ -77,7 +77,8 @@ FUNCTION(LOAD_FILES result root)
 	# ファイルを列挙
 	ADD_SOURCES(public_files "Public" ${root})
 	ADD_SOURCES(private_files "Private" ${root})
-	ADD_SOURCES(test_files "Test" ${root})
+	ADD_SOURCES(test_files "Source" ".")
+	ADD_SOURCES(test_files "Test" "Test")
 	ADD_SOURCES(misc_files "Misc" ".")
 	
 	# PublicとPrivateを結合

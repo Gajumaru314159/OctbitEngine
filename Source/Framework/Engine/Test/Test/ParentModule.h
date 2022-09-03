@@ -5,7 +5,8 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/IModule.h>
-#include <Framework/Engine/TestModule.h>
+#include <Framework/Engine/Engine.h>
+#include <Test/TestModule.h>
 
 namespace ob::engine::test {
 

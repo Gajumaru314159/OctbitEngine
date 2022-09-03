@@ -8,7 +8,7 @@
 namespace ob::rendering {
 
 	class RenderContext;
-	class CommandBuffer;
+	class Camera;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
@@ -19,7 +19,7 @@ namespace ob::rendering {
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
-		virtual void render(CommandBuffer& command,const RenderContext& context) = 0;
+		virtual void render(const RenderContext& context,const Camera& camera) = 0;
 
 	};
 

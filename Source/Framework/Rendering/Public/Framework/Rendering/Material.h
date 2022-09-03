@@ -44,7 +44,7 @@ namespace ob::rendering {
         void setTexture(StringView name, const graphic::Texture& value);
         //void setFloatArray(StringView name, Span<f32> values);
         //void setColorArray(StringView name, Span<Color> values);
-        //void setTextureArray(StringView name, Span<const graphic::Texture> value);
+        //void setBuffer(StringView name, Buffer );
 
     public:
 

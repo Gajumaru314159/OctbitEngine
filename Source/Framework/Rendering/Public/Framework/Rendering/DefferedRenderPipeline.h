@@ -4,37 +4,28 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Rendering/IRenderPipeline.h>
+
+namespace ob::rendering {
 
 
-namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class ApplicationBase {
+    class DeferredRenderPipeline: public IRenderPipeline{
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
 
-    protected:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  説明
+        //! @brief  描画処理
         //@―---------------------------------------------------------------------------
-        ApplicationBase();
-
-        virtual void onStarted();
+		void render(const RenderContext& context, const Camera& camera) override;
 
     private:
 
-        bool startup();
-        void addRequierModuule();
 
-    private:
-
-        Pimpl<class Engine> m_engine;
 
     };
 
