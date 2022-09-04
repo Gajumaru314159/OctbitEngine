@@ -1,17 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		動的ライブラリ
 //! @author		Gajumaru
 //***********************************************************
 #ifdef OS_WINDOWS
 
-#include <Framework/Platform/DynamicLibrary.h>
+#include <Framework/Platform/DLL.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #include <Framework/Core/String/StringEncoder.h>
 
 
-namespace ob::platform
-{
+namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
@@ -19,12 +18,12 @@ namespace ob::platform
     //! @details    読み込むパスの拡張子はぷらっとふぉーむ
     //! @path       読み込む動的ライブラリのパス
     //@―---------------------------------------------------------------------------
-    DynamicLibrary::DynamicLibrary(const Path& path) {
+    DLL::DLL(const Path& path) {
         m_handle = nullptr;
-        m_path = path / ".dll";
+        auto pathWithExt = path / ".dll";
         
         StringBase<wchar_t> fileNameW;
-        StringEncoder::Encode(m_path.c_str(), fileNameW);
+        StringEncoder::Encode(pathWithExt.c_str(), fileNameW);
         HMODULE dll = ::LoadLibrary(fileNameW.c_str());
 
         if (dll == nullptr) {
@@ -35,12 +34,13 @@ namespace ob::platform
         }
 
         m_handle = dll;
+        m_path = pathWithExt;
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
-    DynamicLibrary::~DynamicLibrary() {
+    DLL::~DLL() {
         if (m_handle) {
             ::FreeLibrary((HMODULE)m_handle);
         }
@@ -49,20 +49,19 @@ namespace ob::platform
     //@―---------------------------------------------------------------------------
     //! @brief  関数取得
     //@―---------------------------------------------------------------------------
-    DynamicLibrary::Function DynamicLibrary::getFunction(StringView name) {
+    DLL::Function DLL::getFunction(StringView name) {
     
         if (m_handle == nullptr) {
-            LOG_WARNING("関数取得に失敗。DynamicLibraryが空です。");
+            LOG_WARNING("関数取得に失敗。DLLが空です。");
             return {};
         }
 
+        StringBase<char> nameANSI;
+        StringEncoder::Encode(name, nameANSI);
 
-        StringBase<wchar_t> nameW;
-        StringEncoder::Encode(name, nameW);
-
-        FARPROC proc = GetProcAddress((HMODULE)m_handle, "GetModule");
+        FARPROC proc = GetProcAddress((HMODULE)m_handle, nameANSI.c_str());
         if (proc == nullptr) {
-            LOG_ERROR_EX("System", "DynamicLibraryに関数{}が含まれていません。", name);
+            LOG_ERROR_EX("System", "DLLに関数{}が含まれていません。", name);
             return {};
         }
 
@@ -71,6 +70,12 @@ namespace ob::platform
         return function;
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      読み込み中の動的ライブラリのパスを取得
+    //@―---------------------------------------------------------------------------
+    const Path& DLL::getPath()const {
+        return m_path;
+    }
 
 }// namespace ob
 

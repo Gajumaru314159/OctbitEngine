@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include "Arguments.h"
+#include <Framework/Platform/Arguments.h>
 #include <Framework/Core/String/StringEncoder.h>
 
 #ifdef OS_WINDOWS

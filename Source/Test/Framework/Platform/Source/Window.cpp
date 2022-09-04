@@ -57,7 +57,4 @@ TEST(Window, PosSize) {
     window.setPosition({ 456,250 });
     ASSERT_EQ(window.getPosition(), Point(456, 250));
 
-    //window.setSize(1024,256);
-    //ASSERT_EQ(window.getSize(), Size(1024, 256));
-
 }
