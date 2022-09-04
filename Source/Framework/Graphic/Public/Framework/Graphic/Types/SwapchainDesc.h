@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-#include <Framework/Platform/Window/Window.h>
+#include <Framework/Platform/Window.h>
 #include <Framework/Graphic/Types/TextureFormat.h>
 
 namespace ob::graphic {
