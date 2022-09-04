@@ -6,7 +6,6 @@
 #include <Framework/Core/Misc/Noise.h>
 #include <Framework/Core/Math/Math.h>
 
-
 namespace ob::core {
 
     namespace {

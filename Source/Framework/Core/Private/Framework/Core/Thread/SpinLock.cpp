@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Thread/SpinLock.h>
-#include <atomic>
 #include <Framework/core/Thread/Thread.h>
+#include <atomic>
 
 #ifdef OB_DEBUG_SPIN_LOCK
 #	define OB_DEBUG_SPIN_LOCK_CONTEX(context)	context

@@ -10,6 +10,13 @@ namespace ob::engine {
 
     class Engine;
 
+    enum class ModuleType {
+        Require,
+        Either,
+        Optional,
+    };
+
+
     //@―---------------------------------------------------------------------------
     //! @brief      モジュール・インターフェイス
     //! 
@@ -18,6 +25,10 @@ namespace ob::engine {
     //!             依存するモジュールはデフォルト設定で追加されますが、生成オプションを持たせる場合は 
     //@―---------------------------------------------------------------------------
     class IModule {
+    public:
+
+        // static void Create();
+
     public:
 
         //===============================================================
@@ -32,16 +43,15 @@ namespace ob::engine {
         {
         }
 
+        virtual void start() {}
         virtual void update(){}
+        virtual void stop() {}
 
     private:
 
         Engine& m_engine;
 
     };
-
-
-
 
 
 

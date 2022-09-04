@@ -3,15 +3,17 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Engine/Application.h>
+#include <Framework/Engine/App.h>
 #include <Framework/Engine/Engine.h>
+#include <Framework/Core/File/FileStream.h>
+#include <Framework/Core/File/BinaryReader.h>
 
 namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    ApplicationBase::ApplicationBase() {
+    AppBase::AppBase() {
 
         if (startup()) {
 
@@ -23,15 +25,27 @@ namespace ob::engine {
     //@―---------------------------------------------------------------------------
     //! @brief  必須モジュールを追加
     //@―---------------------------------------------------------------------------
-    bool ApplicationBase::startup() {
-        addRequierModuule();
+    bool AppBase::startup() {
+
+        //FileStream stream("module.txt");
+        //BinaryReader reader(stream);
+        //if (stream) {
+        //    reader.read()
+        //}
+
+        // モジュールオプション設定
+
+        //m_engine->set<
+
+        //m_engine->add<SceneModule>();
+        return true;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  必須モジュールを追加
     //@―---------------------------------------------------------------------------
-    void ApplicationBase::addRequierModuule() {
+    void AppBase::addRequierModuule() {
 
         // OS
         // File

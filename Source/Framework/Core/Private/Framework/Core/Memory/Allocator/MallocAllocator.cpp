@@ -4,11 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Memory/Allocator/MallocAllocator.h>
-
-#include <cstdlib>
-#include <Windows.h>
-#include <assert.h>
-
 #include <Framework/core/Memory/Utility/MemoryUtility.h>
 
 namespace ob::core {
@@ -48,8 +43,6 @@ namespace ob::core {
 
         const size_t allocSize = sizeof(BlockHeader) + size + alignment;
 
-        DWORD flags = 0;
-        if (zeroClear)flags |= HEAP_ZERO_MEMORY;
         void* pRaw;
         if (zeroClear) {
             pRaw = calloc(1, allocSize);

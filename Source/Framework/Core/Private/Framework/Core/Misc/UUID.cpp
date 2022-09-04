@@ -5,7 +5,9 @@
 //***********************************************************
 #include <Framework/Core/Misc/UUID.h>
 
+#ifdef OS_WINDOWS
 #include <objbase.h>
+#endif
 
 #include <Framework/Core/Misc/CRCHash.h>
 
@@ -45,6 +47,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     UUID UUID::Generate() {
         GUID guid;
+#ifdef OS_WINDOWS
         HRESULT r = CoCreateGuid(&guid);
 
         UUID result;
@@ -64,6 +67,9 @@ namespace ob::core {
         result.m_data[13] = guid.Data4[5];
         result.m_data[14] = guid.Data4[6];
         result.m_data[15] = guid.Data4[7];
+#else
+#pragma error("UUID::Generate() is not supported in this platform.")
+#endif
 
         return result;
     }

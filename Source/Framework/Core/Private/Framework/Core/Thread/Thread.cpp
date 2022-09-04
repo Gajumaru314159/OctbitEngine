@@ -19,6 +19,8 @@ namespace ob::core {
 	};
 
 }
+#else
+#pragma error("Thread is not supported in this platform.")
 #endif
 
 namespace ob::core {

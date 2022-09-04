@@ -37,7 +37,7 @@ namespace ob::core {
 #ifdef OS_WINDOWS
 		return Duration::MilliSeconds(GetTickCount64());
 #else
-		static_assert("Duration::FromSystemLaunch() is not implemented in this platform.");
+#pragma error("Duration::FromSystemLaunch() is not supported in this platform.")
 #endif
 	}
 

@@ -25,7 +25,7 @@ namespace ob::engine {
         //@―---------------------------------------------------------------------------
         AppBase();
 
-        virtual void onStarted();
+        virtual void onStarted() {}
 
     private:
 
