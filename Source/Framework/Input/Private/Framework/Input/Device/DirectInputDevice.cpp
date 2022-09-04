@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Input/Device/DirectInputDevice.h>
-#include <Framework/Platform/Window/Window.h>
-#include <Framework/Platform/Window/WindowNativeAccessor.h>
+#include <Framework/Platform/Window.h>
+#include <Framework/Platform/WindowNativeAccessor.h>
 
 namespace ob::input
 {
