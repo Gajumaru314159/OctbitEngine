@@ -39,7 +39,8 @@ namespace ob::platform {
     //!                     を返すようになります。
     //@―---------------------------------------------------------------------------
     Window::operator bool()const {
-        return (bool)m_impl;
+        if (m_impl == nullptr)return false;
+        return m_impl->isValid();
     }
 
 
