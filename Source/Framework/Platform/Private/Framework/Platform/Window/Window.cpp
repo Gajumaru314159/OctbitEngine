@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include "Window.h"
+#include <Framework/Platform/Window.h>
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 #include <Framework/Platform/Window/Implement/Linux/WindowImpl.h>
 

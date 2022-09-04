@@ -6,7 +6,7 @@
 #ifdef OS_WINDOWS
 #include "WindowImpl.h"
 #include <Framework/Core/String/StringEncoder.h>
-#include <Framework/Platform/Window/WindowNativeAccessor.h>
+#include <Framework/Platform/WindowNativeAccessor.h>
 
 namespace ob::platform {
 

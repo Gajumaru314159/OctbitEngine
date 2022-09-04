@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include "WindowNativeAccessor.h"
+#include <Framework/Platform/WindowNativeAccessor.h>
 
 #include "Implement/Windows/WindowImpl.h"
 #include "Implement/Linux/WindowImpl.h"

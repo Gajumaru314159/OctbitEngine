@@ -4,16 +4,37 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Platform/Window/Window.h>
+#include <Framework/Core/File/Path.h>
+
 namespace ob::platform {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      ウィンドウのネイティブ機能アクセサ
-    //! 
-    //! @details    プラットフォーム固有の機能にアクセスする場合はこのクラスを通して
-    //!             アクセスします。
+    //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class WindowNativeAccessor {
+    class DynamicLibrary {
+
+        class Function {
+            friend class DynamicLibrary;
+        public:
+
+            Function() = default;
+
+            operator bool()const {
+                return m_ptr != nullptr;
+            }
+
+            template<typename Ret = void,typename... Args>
+            Ret call(Args... args)const {
+                OB_CHECK_ASSERT(m_ptr, "関数オブジェクトが空です。");
+                typedef Ret (*Func)(Args...);
+                Func func = reinterpret_cast<Func>(m_ptr);
+                return func(std::forward(args)...);
+            }
+
+        private:
+            const void* m_ptr=nullptr;
+        };
+
     public:
 
         //===============================================================
@@ -23,11 +44,15 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        static void* getHWND(Window& window);
+        DynamicLibrary(const Path& path);
+
+        Function getFunction(StringView name);
 
     private:
 
-
+        Path m_path;
+        // WindowsではHMODULE
+        const void* m_handle;
 
     };
 
@@ -44,5 +69,4 @@ namespace ob::platform {
 
 
     //! @endcond
-
-}// namespace ob::platform
+}// namespcae ob

@@ -35,7 +35,7 @@ if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
 endif()
 
 # 警告抑制
-add_compile_options(/wd26495)
+add_compile_options(/wd26495)   # メンバの未初期化
 
 
 #------------------------------------------------------------------------------
