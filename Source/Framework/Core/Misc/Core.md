@@ -6,5 +6,5 @@ Coreモジュール
 
 ```mermaid
 graph TD
-    Logger->Thread->Template->HAL
+    Logger-->Thread-->Template-->HAL
 ```
