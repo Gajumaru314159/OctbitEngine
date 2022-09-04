@@ -49,6 +49,7 @@ namespace ob::platform {
         void setPosition(Point position) override;
         Point getPosition()const noexcept override;
 
+        void setSize(Size size) override;
         Size getSize()const override;
 
         void setMode(WindowMode mode) override;

@@ -257,6 +257,23 @@ namespace ob::platform {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief      ウィンドウのサイズを設定する
+	//@―---------------------------------------------------------------------------
+	void WindowImpl::setSize(Size size) {
+		if (!m_hWnd)return;
+
+		RECT rw, rc;
+		::GetWindowRect(m_hWnd, &rw);
+		::GetClientRect(m_hWnd, &rc);
+
+		int newWidth = (rw.right - rw.left) - (rc.right - rc.left) + size.width;
+		int newHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top) + size.height;
+
+		::SetWindowPos(m_hWnd, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  ウィンドウサイズを取得
 	//@―---------------------------------------------------------------------------
 	Size WindowImpl::getSize()const {
