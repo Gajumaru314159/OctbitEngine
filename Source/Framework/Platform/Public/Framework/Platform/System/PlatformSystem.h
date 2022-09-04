@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Platform/Window/Window.h>
 #include <Framework/Platform/Type/Language.h>
 
 //============================================

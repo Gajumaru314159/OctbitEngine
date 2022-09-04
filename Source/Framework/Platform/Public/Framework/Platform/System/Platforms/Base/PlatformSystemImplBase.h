@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Type/Language.h>
-#include <Framework/Platform/Window/Window.h>
+#include <Framework/Platform/Window.h>
 
 namespace ob::platform{
 

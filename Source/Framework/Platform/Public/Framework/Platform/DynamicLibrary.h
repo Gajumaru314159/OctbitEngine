@@ -45,6 +45,7 @@ namespace ob::platform {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
         DynamicLibrary(const Path& path);
+        ~DynamicLibrary();
 
         Function getFunction(StringView name);
 

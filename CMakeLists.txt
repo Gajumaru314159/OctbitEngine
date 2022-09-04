@@ -93,6 +93,7 @@ endif()
 
 # Test
 add_subdirectory ("Source/Test/Framework/Core")
+add_subdirectory ("Source/Test/Framework/Platform")
 
 # Application
 add_subdirectory ("Source/Application")

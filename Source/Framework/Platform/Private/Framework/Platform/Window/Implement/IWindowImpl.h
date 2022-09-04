@@ -6,8 +6,8 @@
 #pragma once
 #include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/Platform/Type/CursorType.h>
-#include <Framework/Platform/Type/WindowCreationParams.h>
-#include <Framework/Platform/WindowState.h>
+#include <Framework/Platform/Type/WindowDesc.h>
+#include <Framework/Platform/Type/WindowState.h>
 
 namespace ob::platform {
 

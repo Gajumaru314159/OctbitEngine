@@ -6,8 +6,8 @@
 #pragma once
 #include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/Platform/Type/CursorType.h>
-#include <Framework/Platform/Type/WindowCreationParams.h>
-#include <Framework/Platform/WindowState.h>
+#include <Framework/Platform/Type/WindowDesc.h>
+#include <Framework/Platform/Type/WindowState.h>
 
 //===============================================================
 // クラス宣言
@@ -26,6 +26,9 @@ namespace ob::platform {
         // コンストラクタ / デストラクタ
         //===============================================================
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      デフォルトコンストラクタ
+        //@―---------------------------------------------------------------------------
         Window();
 
         //@―---------------------------------------------------------------------------
@@ -33,7 +36,7 @@ namespace ob::platform {
         //! 
         //! @details    生成情報を指定してウィンドウを生成する。
         //@―---------------------------------------------------------------------------
-        Window(const WindowCreationDesc& desc);
+        Window(const WindowDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

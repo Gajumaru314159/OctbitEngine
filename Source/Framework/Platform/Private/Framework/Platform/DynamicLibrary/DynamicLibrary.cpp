@@ -68,6 +68,7 @@ namespace ob::platform
 
         Function function;
         function.m_ptr = proc;
+        return function;
     }
 
 

@@ -15,7 +15,7 @@ namespace ob::platform {
     //! 
     //! @details    生成情報を指定してウィンドウを生成する。
     //@―---------------------------------------------------------------------------
-    Window::Window(const WindowCreationDesc& desc) {
+    Window::Window(const WindowDesc& desc) {
         m_impl = std::make_shared<WindowImpl>(desc);
         if (!s_mainWindow) {
             s_mainWindow = m_impl;
@@ -55,7 +55,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     void Window::moveToCenter() {
         if (!m_impl)return;
-        m_impl->close();
+        m_impl->moveToCenter();
     }
 
 

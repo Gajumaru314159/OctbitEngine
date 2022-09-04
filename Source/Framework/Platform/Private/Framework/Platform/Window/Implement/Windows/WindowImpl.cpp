@@ -20,7 +20,7 @@ namespace ob::platform {
 	//! 
 	//! @details    生成情報を指定してウィンドウを生成する。
 	//@―---------------------------------------------------------------------------
-	WindowImpl::WindowImpl(const WindowCreationDesc& desc)
+	WindowImpl::WindowImpl(const WindowDesc& desc)
 		:m_className(Format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum)) 
 		, m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)

@@ -16,7 +16,7 @@ namespace ob::platform {
     class WindowImpl : public IWindowImpl {
     public:
 
-        WindowImpl(const WindowCreationDesc& params);
+        WindowImpl(const WindowDesc& params);
         virtual ~WindowImpl()override;
 
 

@@ -15,7 +15,7 @@ namespace ob {
         //@―---------------------------------------------------------------------------
         class WindowImpl :public Window {
         public:
-            WindowImpl(const WindowCreationParams& params);
+            WindowImpl(const WindowDescParams& params);
             ~WindowImpl()override;
 
             virtual void setTitle(const Char* pTitle) override;

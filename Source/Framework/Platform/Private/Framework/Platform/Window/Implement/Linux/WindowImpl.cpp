@@ -19,7 +19,7 @@ namespace ob {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
 
-        WindowsWindow::WindowsWindow(const WindowCreationParams& params) :Window(params) {
+        WindowsWindow::WindowsWindow(const WindowDesc& params) :Window(params) {
             m_hWnd = nullptr;
             m_accelerator = nullptr;
 
