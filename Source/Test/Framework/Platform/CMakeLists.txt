@@ -1,10 +1,10 @@
 ﻿cmake_minimum_required (VERSION 3.15)
-project (Core-test)
+project (Platform-test)
 
 #------------------------------------------------------------------------------
 # ソースコードの登録
 #------------------------------------------------------------------------------
-LOAD_FILES(out_sources "Test")
+LOAD_FILES(out_sources "PlatformTest")
 enable_testing()
 add_executable(${PROJECT_NAME} ${out_sources})
 
@@ -22,7 +22,7 @@ set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 target_include_directories(${PROJECT_NAME} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs Core GTest::gtest_main)
+set(public_libs Core Platform GTest::gtest_main)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
 # ランタイムライブラリ設定
@@ -33,7 +33,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
 
 # カスタムコマンド
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Core-test>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Platform-test>
     )
 
 # GoogleTest
