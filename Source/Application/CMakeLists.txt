@@ -18,7 +18,7 @@ SET_PCH("Application/PCH/stdafx.h")
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${OCTBIT_THIRD_PARTY_PATH}/ObjLoader/include")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${CMAKE_CURRENT_SOURCE_DIR}/Source" "${OCTBIT_THIRD_PARTY_PATH}/ObjLoader/include")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 

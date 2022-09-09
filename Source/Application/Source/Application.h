@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Application.h>
+#include <Framework/Engine/App.h>
 
-class Application :public ob::engine::ApplicationBase {
+class App :public ob::engine::AppBase {
 public:
-	Application(){}
+	App(){}
 
 };

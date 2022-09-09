@@ -38,7 +38,8 @@
 #include <OBJ_Loader.h>
 
 #include <Framework/Engine/Main.h>
-#include <Application/Application.h>
+#include <Framework/Platform/DynamicLibrary.h>
+#include <Application.h>
 
 using namespace ob;
 
@@ -49,7 +50,14 @@ void OctbitInit(ob::EngineSettings& settings) {
 int OctbitMain() {
 	using namespace ob::graphic;
 
-	Application application;
+	App app;
+
+	platform::DynamicLibrary dll("");
+	auto func = dll.getFunction(TC("CreateModule"));
+	if (func) {
+		auto resultt = func.call<int>(12, 13);
+	}
+
 
 	/*
 	engine::Engine engine;
