@@ -18,7 +18,7 @@ namespace ob::core{
         if (nameSV.empty())return Name();
 
         // ハッシュ値計算
-        auto hash = CRCHash::Compute(nameSV.data(), nameSV.size());
+        auto hash = CRCHash::Compute(nameSV.data(), (s32)nameSV.size());
 
         // 追加済みかチェック
         // ※重複でハッシュが違うものは後で検出

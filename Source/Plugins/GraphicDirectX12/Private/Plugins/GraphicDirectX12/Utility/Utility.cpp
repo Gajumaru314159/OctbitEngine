@@ -21,7 +21,7 @@ namespace ob::graphic::dx12 {
             errorCode,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
             buffer,
-            std::size(buffer),
+            (DWORD)std::size(buffer),
             nullptr
         );
 

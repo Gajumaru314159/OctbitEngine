@@ -15,7 +15,7 @@
 int main(int argc, const char* argv[]) {
 
     WCHAR exePath[MAX_PATH];
-    ::GetModuleFileNameW(NULL, exePath, std::size(exePath));
+    ::GetModuleFileNameW(NULL, exePath, (DWORD)std::size(exePath));
 
     CommonMain();
 

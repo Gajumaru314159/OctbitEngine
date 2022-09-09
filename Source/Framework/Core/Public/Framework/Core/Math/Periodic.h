@@ -42,7 +42,7 @@ namespace ob::core {
         //! @brief  矩形波に従って周期的に[0,1]の値を返す
         //@―---------------------------------------------------------------------------
         static constexpr f32 Square0_1(f32 period, f32 t)noexcept {
-            return static_cast<s32>(t / period * 0.5f) % 2;
+            return (f32)(static_cast<s32>(t / period * 0.5f) % 2);
         }
 
 

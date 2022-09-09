@@ -92,7 +92,7 @@ namespace ob::input
 		Vec2 pos(0.0f, 0.0f);
 		Vec2 deltaPos(0.0f,0.0f);
 		if (POINT point; ::GetCursorPos(&point)) {
-			pos.set(point.x, point.y);
+			pos.set((f32)point.x, (f32)point.y);
 			deltaPos = pos - m_position;
 		}
 		m_position = pos;

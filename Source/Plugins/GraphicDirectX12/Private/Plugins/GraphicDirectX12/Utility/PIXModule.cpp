@@ -38,7 +38,7 @@ namespace {
 		if (newestVersionFound.empty())
 		{
 			// Error, no PIX installation found
-			//LOG_WARNING_EX("Graphic","PIXがインストールされていません。");
+			LOG_WARNING_EX("Graphic","PIXがインストールされていません。");
 		}
 
 		return pixInstallationPath / newestVersionFound / L"WinPixGpuCapturer.dll";

@@ -108,10 +108,10 @@ namespace ob::core {
 	//! @brief      コンストラクタ(サイズ/中心指定)
 	//@―---------------------------------------------------------------------------
 	constexpr Viewport::Viewport(const Vec2& center, const Vec2& size) noexcept
-		: left(center.x - size.x * 0.5)
-		, top(center.y - size.y * 0.5)
-		, right(center.x + size.x * 0.5)
-		, bottom(center.y + size.y * 0.5)
+		: left(center.x - size.x * 0.5f)
+		, top(center.y - size.y * 0.5f)
+		, right(center.x + size.x * 0.5f)
+		, bottom(center.y + size.y * 0.5f)
 		, nearZ(0), farZ(1)
 	{
 

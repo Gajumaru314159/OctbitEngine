@@ -7,7 +7,7 @@ project (Application)
 LOAD_FILES(out_sources "Application")
 add_executable(${PROJECT_NAME} ${out_sources})
 
-SET_PCH("Application/PCH/stdafx.h")
+SET_PCH("PCH/stdafx.h")
 
 
 #------------------------------------------------------------------------------

@@ -35,7 +35,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	Duration Duration::FromSystemLaunch() {
 #ifdef OS_WINDOWS
-		return Duration::MilliSeconds(GetTickCount64());
+		return Duration::MilliSeconds(gsl::narrow_cast<f64>(GetTickCount64()));
 #else
 #pragma error("Duration::FromSystemLaunch() is not supported in this platform.")
 #endif
