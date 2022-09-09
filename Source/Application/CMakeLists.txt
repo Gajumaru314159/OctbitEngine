@@ -43,5 +43,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Application")
 # カスタムコマンド
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:GraphicDirectX12> $<TARGET_FILE_DIR:Application>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE_DIR:GraphicDirectX12>/GraphicDirectX12.pdb $<TARGET_FILE_DIR:Application>
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Application>
     )

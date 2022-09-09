@@ -127,7 +127,7 @@ int OctbitMain() {
 			}
 			Texture tex;
 			{
-				FileStream fs(L"D:/Users/Gajumaru/Pictures/test.dds");
+				FileStream fs(L"../../../Asset/Texture/test.dds");
 				if (fs) {
 					Blob blob(fs.size());
 					fs.read(blob.data(), blob.size());
@@ -268,7 +268,7 @@ int OctbitMain() {
 				objl::Loader Loader;
 
 				// Load .obj File
-				if (Loader.LoadFile("D:/My/Temp/monky.obj")) {
+				if (Loader.LoadFile("../../../Asset/Model/monky.obj")) {
 					for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
 					{
 						objl::Mesh& curMesh = Loader.LoadedMeshes[i];
