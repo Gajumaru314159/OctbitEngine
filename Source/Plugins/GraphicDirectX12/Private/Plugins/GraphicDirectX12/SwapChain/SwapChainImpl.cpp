@@ -8,7 +8,6 @@
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
 #include <Framework/Graphic/Interface/ITexture.h>
-#include <Framework/Platform/WindowNativeAccessor.h>
 
 namespace {
     int static const s_maxSwapChainCount = 4;
@@ -48,7 +47,7 @@ namespace ob::graphic::dx12 {
 
         UINT sampleQuarity = 0;
         UINT sampleCount = 1;
-        HWND hWnd = static_cast<HWND>(ob::platform::WindowNativeAccessor::getHWND(window));
+        HWND hWnd = (HWND)window.getHandle();
         {
             D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
             auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));

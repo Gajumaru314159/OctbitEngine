@@ -58,6 +58,8 @@ namespace ob::platform {
         WindowStyle getStyle()const override;
         void setStyle(WindowStyle style) override;
 
+        void* getHandle()const override;
+
 
         //===============================================================
         // イベント

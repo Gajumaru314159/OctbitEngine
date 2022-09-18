@@ -12,10 +12,10 @@ namespace ob::platform
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    //PlatformModule::PlatformModule(engine::Engine& engine) 
-    //    : IModule(engine)
-    //{
-    //    m_impl = std::make_unique<PlatformModuleImpl>();
-    //}
+    PlatformModule::PlatformModule(engine::Engine& engine) 
+        : IModule(engine)
+    {
+        //m_impl = std::make_unique<PlatformModuleImpl>();
+    }
 
 }// namespace ob

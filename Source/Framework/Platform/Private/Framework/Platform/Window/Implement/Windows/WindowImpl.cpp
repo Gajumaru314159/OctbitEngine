@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #ifdef OS_WINDOWS
-#include "WindowImpl.h"
+#include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
+#include <Framework/Platform/Window.h>
 #include <Framework/Core/String/StringEncoder.h>
-#include <Framework/Platform/WindowNativeAccessor.h>
 
 namespace ob::platform {
 
@@ -25,7 +25,7 @@ namespace ob::platform {
 		, m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)
 	{
-		m_hParentWnd = reinterpret_cast<HWND>(WindowNativeAccessor::getHWND(Window::getMainWindow()));
+		m_hParentWnd = (HWND)Window::getMainWindow().getHandle();
 		const bool hasParent = m_hParentWnd !=nullptr;
 
 		m_windowID = m_windowNum++;
@@ -328,6 +328,14 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	void WindowImpl::setStyle(WindowStyle style) {
 		// TODO ウィンドウスタイル設定
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      ウィンドウのハンドルを取得
+	//@―---------------------------------------------------------------------------
+	void* WindowImpl::getHandle() const{
+		return m_hWnd;
 	}
 
 

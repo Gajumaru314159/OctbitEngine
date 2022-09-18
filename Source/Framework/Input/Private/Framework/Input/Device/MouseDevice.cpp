@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Framework/Input/Device/MouseDevice.h>
 #include <Framework/Platform/Window.h>
-#include <Framework/Platform/WindowNativeAccessor.h>
 
 namespace ob::input
 {
@@ -15,7 +14,7 @@ namespace ob::input
 		, m_mouse(nullptr)
 	{
 		auto& window = platform::Window::getMainWindow();
-		HWND hWnd = (HWND)platform::WindowNativeAccessor::getHWND(window);
+		HWND hWnd = (HWND)window.getHandle();
 
 		HRESULT result;
 		result = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_interface, NULL);

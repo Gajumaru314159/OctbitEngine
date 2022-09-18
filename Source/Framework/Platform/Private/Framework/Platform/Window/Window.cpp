@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Window.h>
+#include <Framework/Platform/Window/WindowManager.h>
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 #include <Framework/Platform/Window/Implement/Linux/WindowImpl.h>
 
@@ -19,8 +20,9 @@ namespace ob::platform {
 
         m_impl = std::make_shared<WindowImpl>(desc);
 
-        // TODO シングルトンにメインウィンドウ登録
-
+        if (!WindowManager::Instance().getMainWindow()) {
+            WindowManager::Instance().setMainWindow(*this);
+        }
     }
 
 
@@ -242,11 +244,29 @@ namespace ob::platform {
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウのハンドルを取得
+    //@―---------------------------------------------------------------------------
+    void* Window::getHandle() const{
+        if (!m_impl)return nullptr;
+        return m_impl->getHandle();
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
     void Window::addEventListener(WindowEventType type, const WindowEvent& e) {
         if (!m_impl)return;
         m_impl->addEventListener(type, e);
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      メインウィンドウを取得
+    //@―---------------------------------------------------------------------------
+    Window Window::getMainWindow() {
+        // static変数を直接使用するとDLL間で共有できない
+        return WindowManager::Instance().getMainWindow();
     }
 
 }// namespace ob::platform
