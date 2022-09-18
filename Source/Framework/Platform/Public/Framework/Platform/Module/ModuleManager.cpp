@@ -2,8 +2,9 @@
 //! @file
 //! @brief		モジュール・マネージャ
 //! @author		Gajumaru
-//***********************************************************
-#include "ModuleManager.h"
+//***********************************************************]
+#include <Framework/Platform/Module/ModuleManager.h>
+#include <Framework/Core/Memory/System/MemorySystem.h>
 
 #include "Implement/Windows/ModuleLoader.h"
 

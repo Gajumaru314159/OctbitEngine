@@ -1,44 +1,22 @@
-﻿#include <Framework/Platform/Window.h>
+﻿#include <Windows.h>
+
+#include <Framework/Core/Core.h>
+#include <Framework/Graphic/All.h>
+
+#include <Framework/Graphic/MeshData.h>
+
+#include <Framework/Platform/Window.h>
 #include <Framework/Platform/Module/ModuleManager.h>
 #include <Framework/Platform/System/PlatformSystem.h>
-#include <Framework/Graphic/System.h>
-#include <Framework/Graphic/SwapChain.h>
-#include <Framework/Graphic/RenderTarget.h>
-#include <Framework/Graphic/RootSignature.h>
-#include <Framework/Graphic/Buffer.h>
-#include <Framework/Graphic/Shader.h>
-#include <Framework/Graphic/PipelineState.h>
-#include <Framework/Graphic/DescriptorTable.h>
-#include <Framework/Graphic/CommandList.h>
-#include <Framework/Graphic/MeshData.h>
-#include <Framework/Graphic/Types/CommandParam.h>
-#include <Framework/Core/File/FileStream.h>
-#include <Framework/Core/File/BinaryReader.h>
-#include <Windows.h>
 
-#include <Framework/Core/String/Format.h>
-#include <Framework/Core/String/StringEncoder.h>
-#include <Framework/Core/Misc/DateTime.h>
-
-#include <Framework/Core/Math/Vectors.h>
-#include <Framework/Core/Math/Quaternion.h>
-#include <Framework/Core/Math/Rotation.h>
-#include <Framework/Core/Misc/DateTime.h>
-#include <Framework/Core/Misc/Duration.h>
-#include <Framework/Core/Misc/UUID.h>
-#include <Framework/Core/Math/Periodic.h>
-#include <Framework/Core/Graphic/HSV.h>
-
+#include <Framework/Input/All.h>
 #include <Framework/Input/InputManager.h>
-#include <Framework/Input/Keyboard.h>
-#include <Framework/Input/Mouse.h>
 
 #include <Framework/Engine/Engine.h>
+#include <Framework/Engine/Main.h>
 
 #include <OBJ_Loader.h>
-
-#include <Framework/Engine/Main.h>
-//#include <Framework/Platform/DynamicLibrary.h>
+//-----------------------------------------------------------------
 #include <Application.h>
 
 using namespace ob;

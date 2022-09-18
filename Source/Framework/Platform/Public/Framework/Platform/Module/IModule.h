@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Memory/Allocator/Allocator.h>
+#include <Framework/Core/Memory/System/MemorySystem.h>
 
 namespace ob::platform {
 

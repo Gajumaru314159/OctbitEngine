@@ -41,7 +41,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  構築済みか
 		//@―---------------------------------------------------------------------------
-		bool operator()const noexcept {
+		operator bool()const noexcept {
 			return m_constructed;
 		}
 

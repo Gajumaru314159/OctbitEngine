@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/core/String/String.h>
+#include <Framework/Core/String/String.h>
 #include <Framework/Core/String/Format.h>
-#include "ExceptionType.h"
+#include <Framework/Core/Exception/ExceptionType.h>
 #include <utility>
 
 #undef GetMessage
