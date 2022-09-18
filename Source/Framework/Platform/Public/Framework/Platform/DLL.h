@@ -96,6 +96,26 @@ namespace ob::platform {
         Function getFunction(StringView name);
 
         //@―---------------------------------------------------------------------------
+        //! @brief      関数実行
+        //! 
+        //! @details    戻り値のない関数を名前を指定して実行します。
+        //!             呼び出すたびに関数の検索がされるので、何度も使用する場合は
+        //!             getFunction() を使用して関数オブジェクトを取得してください。
+        //! @param name 関数名
+        //! @param ...args 引数
+        //! @retval true 成功
+        //! @retval false 失敗
+        //@―---------------------------------------------------------------------------
+        template<typename... Args>
+        bool tryCall(StringView name, Args&&... args) {
+            if (auto func = getFunction(name)) {
+                func.call<void(Args...)>(std::forward(args)...);
+                return true;
+            }
+            return false;
+        }
+
+        //@―---------------------------------------------------------------------------
         //! @brief      読み込み中の動的ライブラリのパスを取得
         //! 
         //! @detilas    拡張子付きのパスを返します。読み込み失敗している場合は空のパスを返します。
