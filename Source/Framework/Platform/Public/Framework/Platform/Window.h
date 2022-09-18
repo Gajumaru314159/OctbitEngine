@@ -29,7 +29,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief      デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
-        Window();
+        Window() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
@@ -214,14 +214,6 @@ namespace ob::platform {
         void addEventListener(WindowEventType type, const WindowEvent& e);
 
     public:
-
-        static Window getMainWindow();
-
-    private:
-
-        static SPtr<class WindowImpl> s_mainWindow;
-
-    private:
 
         SPtr<class WindowImpl> m_impl;
 
