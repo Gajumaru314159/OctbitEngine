@@ -7,14 +7,15 @@
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/IModule.h>
 #include <Framework/Core/Misc/DateTime.h>
-#include <Windows.h>
 
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Engine::Engine() {
+	Engine::Engine() 
+		:m_moduleManager(*this)
+	{
 		Logger::Instance();
 	}
 
@@ -22,12 +23,6 @@ namespace ob::engine {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	Engine::~Engine() {
-
-		// モジュール開放
-		while (!m_modules.empty()) {
-			m_modules.back().reset();
-			m_modules.pop_back();
-		}
 
 		LOG_INFO("[Shutdown OctbitEngine]");
 	}
@@ -37,9 +32,14 @@ namespace ob::engine {
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
-		for (auto& rModule : m_modules) {
-			rModule->update();
-		}
+
+		// モジュール更新
+		m_moduleManager.visit(
+			[](IModule& m) {
+				m.update();
+			}
+		);
+
 		return m_terminate;
 	}
 

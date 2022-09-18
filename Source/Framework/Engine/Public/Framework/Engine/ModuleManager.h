@@ -4,121 +4,177 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/String/Name.h>
+#include <Framework/Engine/IModule.h>
 
 namespace ob::engine {
 
-	class IModule;
+	namespace detail {
 
-	class ModuleConstructorBase {
+		//@―---------------------------------------------------------------------------
+		//! @brief  モジュールのファクトリ基底クラス
+		//@―---------------------------------------------------------------------------
+		class ModuleFactoryBase {
+		public:
+			virtual IModule* construct(Engine&)const = 0;
+			virtual size_t type()const = 0;
+		};
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  モジュールのファクトリクラス
+		//@―---------------------------------------------------------------------------
+		template<class T,
+			std::enable_if<
+			/**/std::is_base_of_v<T, IModule>&		// IModuleの派生クラス
+			/**/std::is_constructible_v<T, Engine&>	// 生成可能
+			>
+		>
+		class ModuleFactory :public ModuleFactoryBase {
+		public:
+			IModule* construct(Engine& engine)const override {
+				return ob::construct_at<T>(engine);
+			}
+			size_t type()const override {
+				return typeid(T).hash_code();
+			}
+		};
+	}
+
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		モジュール管理クラス
+	//@―---------------------------------------------------------------------------
+	class ModuleManager {
 	public:
-		virtual IModule* construct() {};
-	};
 
-	template<class T, std::enable_if<std::is_base_of_v<T, IModule>>>
-	class ModuleConstructor :public ModuleConstructorBase {
-	public:
-		IModule* construct()override {
-			return ob::construct_at<T>();
-		}
-	};
+		//@―---------------------------------------------------------------------------
+		//! @brief		コンストラクタ
+		//@―---------------------------------------------------------------------------
+		ModuleManager(Engine& engine):m_engine(engine){}
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
-    class ModuleManager {
-    public:
+		//@―---------------------------------------------------------------------------
+		//! @brief				生成可能なモジュールを追加
+		//! 
+		//! @tparam TModule		生成されるモジュール型
+		//! @tparam TBase		基底型
+		//@―---------------------------------------------------------------------------
+		template<class TModule, class TBase = TModule>
+		void add();
 
-		template<class TModule,class TBase=TModule>
-		void add() {
-			auto hash = typeid(TBase).hash_code();
-			auto& factoryArray = m_factories[hash];
-			factoryArray.push_back(std::make_unique<ModuleConstructor<TModule>>());
-		}
-
+		//@―---------------------------------------------------------------------------
+		//! @brief				モジュール生成
+		//! 
+		//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
+		//! @retval true		成功
+		//! @retval false		失敗
+		//@―---------------------------------------------------------------------------
 		template<class TModule>
-		void create() {
-			auto hash = typeid(TBase).hash_code();
-
-		}
-
+		bool create();
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  設定追加
-		//@―---------------------------------------------------------------------------
-		template<class TSettings>
-		void addSettings(TSettings&& settings);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  設定追加
-		//@―---------------------------------------------------------------------------
-		template<class TSettings>
-		const TSettings& getSettings();
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  モジュールを追加
-		//@―---------------------------------------------------------------------------
-		template<class TModule, class TSettings = TModule::Settings>
-		TModule* add();
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  モジュールを取得
+		//! @brief				モジュールを取得
+		//! 
+		//! @deitals			add()でTModule、またはTBaseで指定した型でのみ取得できます。
 		//@―---------------------------------------------------------------------------
 		template<class TModule>
 		TModule* get()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief				モジュールを持っているか
+		//! 
+		//! @deitals			add()でTModule、またはTBaseで指定した型でのみ取得できます。
+		//@―---------------------------------------------------------------------------
+		template<class TModule>
+		bool has()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief				モジュール走査
+		//@―---------------------------------------------------------------------------
+		template<class TFunc=void(IModule&)>
+		void visit(TFunc);
 
 	private:
 
 		using TypeHash = size_t;
 
-		HashMap<TypeHash, Array<UPtr<ModuleConstructorBase>>> m_factories;
+		Engine& m_engine;
 
+		HashMap<TypeHash, Array<UPtr<detail::ModuleFactoryBase>>> m_factories;
 
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeHash, size_t> m_indices;
-		HashMap<TypeHash, std::any> m_settings;
-    };
+
+	};
 
 
 
 
 
 
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
+	//===============================================================
+	// インライン関数
+	//===============================================================
+	//! @cond
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  設定追加
+	//! @brief				生成可能なモジュールを追加
+	//! 
+	//! @tparam TModule		生成されるモジュール型
+	//! @tparam TBase		基底型
 	//@―---------------------------------------------------------------------------
-	template<class TSettings>
-	void ModuleManager::addSettings(TSettings&& settings) {
-		m_settings[typeid(TSettings).hash_code()] = std::forward(settings);
+	template<class TModule, class TBase>
+	void ModuleManager::add() {
+		auto hash = typeid(TBase).hash_code();
+		auto& factory = m_factories[hash];
+		factory.push_back(std::make_unique<detail::ModuleFactory<TModule>>());
 	}
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  モジュールを追加
+	//! @brief				モジュール生成
+	//! 
+	//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
 	//@―---------------------------------------------------------------------------
-	template<class TModule, class TSettings>
-	inline TModule* ModuleManager::add() {
+	template<class TModule>
+	bool ModuleManager::create() {
+
+		auto hash = typeid(TModule).hash_code();
 
 		// 登録済みかチェック
 		if (auto found = get<TModule>()) {
-			return found;
+			return true;
 		}
 
-		// モジュール名取得
-		TypeHash hash = typeid(TModule).hash_code();
+		// ファクトリが存在するか
+		auto& factories = m_factories[hash];
+		if (factories.empty()) {
+			return false;
+		}
 
-		// モジュール生成
-		m_indices[hash] = m_modules.size();
-		auto& rModule = m_modules.emplace_back(std::make_unique<TModule>(*this);
-		//LOG_TRACE_EX("Engine", "モジュール追加 [{}]", name);
+		// 生成
+		detail::ModuleFactoryBase pFactory = nullptr;
+		TModule* pModule = nullptr;
+		for (auto& factory : factories) {
+			if (auto tmp = factory->construct(m_engine)) {
+				if (tmp->isValid() == false) {
+					delete tmp;
+				} else {
+					pFactory = &factory;
+					pModule = tmp;
+					break;
+				}
+			}
+		}
 
-		return reinterpret_cast<TModule*>(rModule.get());
+		// 登録
+		if (pModule && pFactory) {
+			auto index = m_modules.size();
+			m_indices[hash] = m_indices[pFactory->type()] = index;
+			m_modules.emplace_back(pModule);
+			return reinterpret_cast<TModule*>(pModule);
+		}
 
+		return nullptr;
 	}
 
 
@@ -128,7 +184,6 @@ namespace ob::engine {
 	template<class TModule>
 	inline TModule* ModuleManager::get()const {
 
-		// モジュール名取得
 		TypeHash hash = typeid(TModule).hash_code();
 
 		auto found = m_indices.find(hash);
@@ -140,5 +195,25 @@ namespace ob::engine {
 	}
 
 
-    //! @endcond
+	//@―---------------------------------------------------------------------------
+	//! @brief  モジュールを持っているか
+	//@―---------------------------------------------------------------------------
+	template<class TModule>
+	inline bool ModuleManager::has()const {
+		return get<TModule>() != nullptr;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief	モジュール走査
+	//@―---------------------------------------------------------------------------
+	template<class TFunc>
+	inline void ModuleManager::visit(TFunc func) {
+		for (auto& m : m_modules) {
+			func(*m.get());
+		}
+	}
+
+
+	//! @endcond
 }// namespcae ob
