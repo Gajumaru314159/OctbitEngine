@@ -7,7 +7,7 @@
 
 #include <Framework/Platform/Window.h>
 #include <Framework/Platform/Module/ModuleManager.h>
-#include <Framework/Platform/System/PlatformSystem.h>
+#include <Framework/Platform/System.h>
 
 #include <Framework/Input/All.h>
 #include <Framework/Input/InputManager.h>
@@ -40,9 +40,9 @@ int OctbitMain() {
 	
 	//engine::Engine engine;
 
-	platform::PlatformSystem::Instance();
 	{
 		if (true) {
+			LOG_INFO("Language :{}", (int)platform::System::GetLanguage());
 			LOG_INFO("Vec2     :{}", Vec2(1, 2));
 			LOG_INFO("Vec3     :{}", Vec3(1.5235223f, 2.11f, -0.01f));
 			LOG_INFO("Vec4     :{}", Vec4(3.1415f, 2.235e6f, -0.01f, -123.5e-5f));
