@@ -55,7 +55,7 @@ namespace ob::core {
                 default:                typeName = TC("[Unknown]"); break;
                 }
                 // フォーマット
-                auto msg = Format(TC("{} {}"), typeName, log.message);
+                auto msg = Format(TC("{} {}\n{}({})\n"), typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
                 WString ws;
                 StringEncoder::Encode(msg, ws);
 

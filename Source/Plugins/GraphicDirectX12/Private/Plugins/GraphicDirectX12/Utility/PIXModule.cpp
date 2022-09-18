@@ -21,24 +21,19 @@ namespace {
 
 		std::filesystem::path pixInstallationPath = programFilesPath;
 		pixInstallationPath /= "Microsoft PIX";
-
+		return {};
 		std::wstring newestVersionFound;
-
-		for (auto const& directory_entry : std::filesystem::directory_iterator(pixInstallationPath))
-		{
-			if (directory_entry.is_directory())
+		if (std::filesystem::exists(pixInstallationPath)) {
+			for (auto const& directory_entry : std::filesystem::directory_iterator(pixInstallationPath))
 			{
-				if (newestVersionFound.empty() || newestVersionFound < directory_entry.path().filename().c_str())
+				if (directory_entry.is_directory())
 				{
-					newestVersionFound = directory_entry.path().filename().c_str();
+					if (newestVersionFound.empty() || newestVersionFound < directory_entry.path().filename().c_str())
+					{
+						newestVersionFound = directory_entry.path().filename().c_str();
+					}
 				}
 			}
-		}
-
-		if (newestVersionFound.empty())
-		{
-			// Error, no PIX installation found
-			//LOG_WARNING_EX("Graphic","PIXがインストールされていません。");
 		}
 
 		return pixInstallationPath / newestVersionFound / L"WinPixGpuCapturer.dll";
@@ -53,13 +48,16 @@ namespace ob::graphic::dx12 {
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
 
-	PIXModule::PIXModule() {
+	PIXModule::PIXModule() 
+		: m_hModule(nullptr)
+	{
 		auto pixPath = GetLatestWinPixGpuCapturerPath_Cpp17();
 
 		if (GetModuleHandle((LPCWSTR)"WinPixGpuCapture.dll") != 0) {
 			goto ERROR_END;
 		}
 		if (!pixPath.empty()) {
+			LOG_TRACE_EX("Graphic", "PIXを起動");
 			m_hModule = LoadLibraryW(pixPath.c_str());
 		}
 		if (m_hModule == nullptr) {
@@ -76,6 +74,7 @@ namespace ob::graphic::dx12 {
 
 	void PIXModule::release() {
 		if (m_hModule) {
+			LOG_TRACE_EX("Graphic", "PIXを終了");
 			::FreeLibrary(m_hModule);
 		}
 		m_hModule = nullptr;

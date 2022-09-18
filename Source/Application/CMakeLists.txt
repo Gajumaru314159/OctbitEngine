@@ -7,7 +7,7 @@ project (Application)
 LOAD_FILES(out_sources "Application")
 add_executable(${PROJECT_NAME} ${out_sources})
 
-SET_PCH("Application/PCH/stdafx.h")
+SET_PCH("PCH/stdafx.h")
 
 
 #------------------------------------------------------------------------------
@@ -43,5 +43,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Application")
 # カスタムコマンド
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:GraphicDirectX12> $<TARGET_FILE_DIR:Application>
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE_DIR:GraphicDirectX12>/GraphicDirectX12.pdb $<TARGET_FILE_DIR:Application>
     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Singleton> $<TARGET_FILE_DIR:Application>
     )

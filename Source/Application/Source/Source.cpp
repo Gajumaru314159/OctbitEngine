@@ -1,4 +1,4 @@
-﻿#include <Framework/Platform/Window/Window.h>
+﻿#include <Framework/Platform/Window.h>
 #include <Framework/Platform/Module/ModuleManager.h>
 #include <Framework/Platform/System/PlatformSystem.h>
 #include <Framework/Graphic/System.h>
@@ -38,7 +38,7 @@
 #include <OBJ_Loader.h>
 
 #include <Framework/Engine/Main.h>
-#include <Framework/Platform/DynamicLibrary.h>
+//#include <Framework/Platform/DynamicLibrary.h>
 #include <Application.h>
 
 using namespace ob;
@@ -52,15 +52,15 @@ int OctbitMain() {
 
 	App app;
 
-	platform::DynamicLibrary dll("");
-	auto func = dll.getFunction(TC("CreateModule"));
-	if (func) {
-		auto resultt = func.call<int>(12, 13);
-	}
+	//platform::DynamicLibrary dll("");
+	//auto func = dll.getFunction(TC("CreateModule"));
+	//if (func) {
+	//	auto resultt = func.call<int>(12, 13);
+	//}
 
 
-	/*
-	engine::Engine engine;
+	
+	//engine::Engine engine;
 
 	platform::PlatformSystem::Instance();
 	{
@@ -97,7 +97,7 @@ int OctbitMain() {
 			graphic::System::Instance().initialize(sysDesc);
 
 			// ウィンドウ生成
-			platform::WindowCreationDesc windowDesc;
+			platform::WindowDesc windowDesc;
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
 
@@ -127,7 +127,7 @@ int OctbitMain() {
 			}
 			Texture tex;
 			{
-				FileStream fs(L"D:/Users/Gajumaru/Pictures/test.dds");
+				FileStream fs(L"../../../Asset/Texture/test.dds");
 				if (fs) {
 					Blob blob(fs.size());
 					fs.read(blob.data(), blob.size());
@@ -268,7 +268,7 @@ int OctbitMain() {
 				objl::Loader Loader;
 
 				// Load .obj File
-				if (Loader.LoadFile("D:/My/Temp/monky.obj")) {
+				if (Loader.LoadFile("../../../Asset/Model/monky.obj")) {
 					for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
 					{
 						objl::Mesh& curMesh = Loader.LoadedMeshes[i];
@@ -418,7 +418,7 @@ int OctbitMain() {
 		// 現状Singletonのstatic変数の解放順に依存している
 	}
 
-	*/
+	
 
 	return 0;
 }
