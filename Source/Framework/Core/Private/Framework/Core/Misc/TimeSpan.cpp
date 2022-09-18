@@ -3,7 +3,7 @@
 //! @brief		時間間隔
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Misc/Duration.h>
+#include <Framework/Core/Misc/TimeSpan.h>
 
 #ifdef OS_WINDOWS
 #include <Windows.h>
@@ -14,14 +14,14 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
 	//@―---------------------------------------------------------------------------
-	Duration::Duration(const DateTime& from, const DateTime& to) noexcept {
+	TimeSpan::TimeSpan(const DateTime& from, const DateTime& to) noexcept {
 
 		auto getDays = [](const DateTime& dt) {
 			return dt.year * 365 + (dt.year/4) - (dt.year / 100) + (dt.year / 400);
 		};
 
 		*this = 			
-		Duration(
+		TimeSpan(
 			getDays(to) - getDays(from),
 			to.hour - from.hour,
 			to.minute - from.minute,
@@ -33,11 +33,11 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
 	//@―---------------------------------------------------------------------------
-	Duration Duration::FromSystemLaunch() {
+	TimeSpan TimeSpan::FromSystemLaunch() {
 #ifdef OS_WINDOWS
-		return Duration::MilliSeconds(gsl::narrow_cast<f64>(GetTickCount64()));
+		return TimeSpan::MilliSeconds(gsl::narrow_cast<f64>(GetTickCount64()));
 #else
-#pragma error("Duration::FromSystemLaunch() is not supported in this platform.")
+#pragma error("TimeSpan::FromSystemLaunch() is not supported in this platform.")
 #endif
 	}
 

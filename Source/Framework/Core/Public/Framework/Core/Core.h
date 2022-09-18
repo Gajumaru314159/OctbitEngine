@@ -61,7 +61,7 @@
 #include <Framework/Core/Misc/Compression.h>
 #include <Framework/Core/Misc/CRCHash.h>
 #include <Framework/Core/Misc/DateTime.h>
-#include <Framework/Core/Misc/Duration.h>
+#include <Framework/Core/Misc/TimeSpan.h>
 #include <Framework/Core/Misc/Noise.h>
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Misc/YesNo.h>

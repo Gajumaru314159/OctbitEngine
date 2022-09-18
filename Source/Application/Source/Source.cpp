@@ -53,11 +53,11 @@ int OctbitMain() {
 			LOG_INFO("Rot(Deg) :{}", Rot(180, 90, 45));
 			LOG_INFO("Rot(Rad) :{:.3}", Rot(180, 90, 45));
 			LOG_INFO("DateTime :{}", DateTime::Now());
-			LOG_INFO("Duration :{}", Duration::Days(23.12534573));
-			LOG_INFO("Duration :{}", Duration::Hours(23.12534573));
-			LOG_INFO("Duration :{}", Duration::Minutes(23.12534573));
-			LOG_INFO("Duration :{}", Duration::Seconds(23.12534573));
-			LOG_INFO("Duration :{}", Duration::MilliSeconds(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Days(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Hours(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Minutes(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::Seconds(23.12534573));
+			LOG_INFO("TimeSpan :{}", TimeSpan::MilliSeconds(23.12534573));
 			LOG_INFO("UUID     :{}", ob::UUID::Generate());
 			LOG_INFO("Color    :{}", Color::Cyan);
 			LOG_INFO("IntColor :{}", IntColor::Cyan);
