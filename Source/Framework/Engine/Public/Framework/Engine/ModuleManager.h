@@ -17,25 +17,34 @@ namespace ob::engine {
 		public:
 			virtual IModule* construct(Engine&)const = 0;
 			virtual size_t type()const = 0;
+			virtual StringView name()const = 0;
 		};
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  モジュールのファクトリクラス
 		//@―---------------------------------------------------------------------------
 		template<class T,
-			std::enable_if<
-			/**/std::is_base_of_v<T, IModule>&		// IModuleの派生クラス
-			/**/std::is_constructible_v<T, Engine&>	// 生成可能
+			typename = std::enable_if_t<
+			/**/std::is_base_of<IModule,T>::value &&		// IModuleの派生クラス
+			/**/std::is_constructible<T, Engine&>::value	// 生成可能
 			>
 		>
 		class ModuleFactory :public ModuleFactoryBase {
 		public:
+			ModuleFactory() {
+				StringEncoder::Encode(typeid(T).name(), m_name);
+			}
 			IModule* construct(Engine& engine)const override {
-				return ob::construct_at<T>(engine);
+				return new T(engine);
 			}
 			size_t type()const override {
 				return typeid(T).hash_code();
 			}
+			StringView name()const override {
+				return m_name;
+			}
+		private:
+			String m_name;
 		};
 	}
 
@@ -44,7 +53,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		モジュール管理クラス
 	//@―---------------------------------------------------------------------------
-	class ModuleManager {
+	class ModuleManager:Noncopyable {
 	public:
 
 		//@―---------------------------------------------------------------------------
@@ -99,7 +108,7 @@ namespace ob::engine {
 
 		Engine& m_engine;
 
-		HashMap<TypeHash, Array<UPtr<detail::ModuleFactoryBase>>> m_factories;
+		HashMap<TypeHash, Array<UPtr<detail::ModuleFactoryBase>>> m_factoryMap;
 
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeHash, size_t> m_indices;
@@ -125,8 +134,10 @@ namespace ob::engine {
 	template<class TModule, class TBase>
 	void ModuleManager::add() {
 		auto hash = typeid(TBase).hash_code();
-		auto& factory = m_factories[hash];
-		factory.push_back(std::make_unique<detail::ModuleFactory<TModule>>());
+		auto& factories = m_factoryMap[hash];
+		auto& factory= factories.emplace_back(std::make_unique<detail::ModuleFactory<TModule>>());
+
+		LOG_TRACE_EX("ModuleManager", "ModuleManagerに[{}]を追加", factory->name());
 	}
 
 
@@ -146,20 +157,20 @@ namespace ob::engine {
 		}
 
 		// ファクトリが存在するか
-		auto& factories = m_factories[hash];
+		auto& factories = m_factoryMap[hash];
 		if (factories.empty()) {
 			return false;
 		}
 
 		// 生成
-		detail::ModuleFactoryBase pFactory = nullptr;
-		TModule* pModule = nullptr;
+		detail::ModuleFactoryBase* pFactory = nullptr;
+		IModule* pModule = nullptr;
 		for (auto& factory : factories) {
 			if (auto tmp = factory->construct(m_engine)) {
 				if (tmp->isValid() == false) {
 					delete tmp;
 				} else {
-					pFactory = &factory;
+					pFactory = factory.get();
 					pModule = tmp;
 					break;
 				}
@@ -171,10 +182,13 @@ namespace ob::engine {
 			auto index = m_modules.size();
 			m_indices[hash] = m_indices[pFactory->type()] = index;
 			m_modules.emplace_back(pModule);
-			return reinterpret_cast<TModule*>(pModule);
+
+			LOG_TRACE_EX("ModuleManager", "Module[{}]を生成", pFactory->name());
+
+			return true;
 		}
 
-		return nullptr;
+		return false;
 	}
 
 

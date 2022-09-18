@@ -29,15 +29,8 @@ int OctbitMain() {
 	using namespace ob::graphic;
 
 	App app;
-
-	//platform::DynamicLibrary dll("");
-	//auto func = dll.getFunction(TC("CreateModule"));
-	//if (func) {
-	//	auto resultt = func.call<int>(12, 13);
-	//}
-
-
-	
+	app.startup();
+		
 	//engine::Engine engine;
 
 	{

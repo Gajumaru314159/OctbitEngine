@@ -57,7 +57,7 @@ namespace ob::platform {
                 OB_CHECK_ASSERT(m_ptr, "関数オブジェクトが空です。");
                 typedef Ret (*Func)(Args...);
                 Func func = reinterpret_cast<Func>(m_ptr);
-                return func(std::forward(args)...);
+                return func(args...);
             }
 
         private:
@@ -69,6 +69,8 @@ namespace ob::platform {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
+
+        DLL() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
@@ -109,7 +111,7 @@ namespace ob::platform {
         template<typename... Args>
         bool tryCall(StringView name, Args&&... args) {
             if (auto func = getFunction(name)) {
-                func.call<void(Args...)>(std::forward(args)...);
+                func.call<void>(std::forward(args)...);
                 return true;
             }
             return false;

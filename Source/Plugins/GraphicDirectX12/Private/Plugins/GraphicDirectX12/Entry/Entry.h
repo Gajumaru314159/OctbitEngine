@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Module/IModule.h>
+#include <Framework/Engine/ModuleManager.h>
 
 //============================================
 // DLL Import / Export
@@ -19,5 +20,8 @@
 extern"C" {
 
     ob::platform::IModule OB_GRAPHIC_DIRECTX12_API *GetModule();
+
+
+    void OB_GRAPHIC_DIRECTX12_API RegisterModule(ob::engine::ModuleManager&);
 
 }

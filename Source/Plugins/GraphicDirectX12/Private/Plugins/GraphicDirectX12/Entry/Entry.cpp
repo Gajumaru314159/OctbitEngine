@@ -35,10 +35,28 @@ namespace ob::graphic::dx12 {
             return new DeviceImpl(featureLevel);
         }
     };
+
+
+    class TestGraphicModule :public ob::graphic::IGraphicModule2 {
+    public:
+        TestGraphicModule(ob::engine::Engine& engine)
+            : ob::graphic::IGraphicModule2(engine)
+        {
+            LOG_INFO("Module Created.");
+        }
+
+    };
+
 }// namespace ob::graphic::dx12
 
 ob::platform::IModule* GetModule() {
     static ob::graphic::dx12::GraphicModule module;
     static ob::Logger logger;
     return &module;
+}
+
+
+
+void RegisterModule(ob::engine::ModuleManager& manager) {
+    manager.add<ob::graphic::dx12::TestGraphicModule, ob::graphic::IGraphicModule2>();
 }

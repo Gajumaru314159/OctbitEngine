@@ -27,6 +27,8 @@ namespace ob::engine {
     class IModule {
     public:
 
+        virtual ~IModule() {}
+
         //@―---------------------------------------------------------------------------
         //! @brief      生成に成功したか
         //! 

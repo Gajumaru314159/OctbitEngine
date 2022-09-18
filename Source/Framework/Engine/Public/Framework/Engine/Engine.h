@@ -14,7 +14,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	class Engine {
+	class Engine:Noncopyable {
 	public:
 
 		//===============================================================
@@ -29,6 +29,8 @@ namespace ob::engine {
 
 		bool update();
 		void terminate();
+
+		auto getModuleManager()->ModuleManager& { return m_moduleManager; }
 
 	private:
 

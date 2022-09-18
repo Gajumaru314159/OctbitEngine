@@ -135,7 +135,7 @@ namespace ob::core {
     //! @brief  ポイントリストから構築
     //@―---------------------------------------------------------------------------
     inline Spline2D::Spline2D(const Array<Vec2>&& another) {
-        points = std::move(another);
+        points = another;
     }
 
 

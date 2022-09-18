@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Platform/Module/IModule.h>
 #include <Framework/Graphic/Types/FeatureLevel.h>
+#include <Framework/Engine/IModule.h>
 
 namespace ob::graphic {
     class IDevice;
@@ -45,7 +46,12 @@ namespace ob::graphic {
     };
 
 
-
+    class IGraphicModule2 :public engine::IModule {
+    protected:
+        IGraphicModule2(engine::Engine& engine)
+            :engine::IModule(engine)
+        {}
+    };
 
 
 

@@ -20,7 +20,8 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     DLL::DLL(const Path& path) {
         m_handle = nullptr;
-        auto pathWithExt = path / ".dll";
+        auto pathWithExt = path;
+        pathWithExt.replace_extension(".dll");
         
         StringBase<wchar_t> fileNameW;
         StringEncoder::Encode(pathWithExt.c_str(), fileNameW);
@@ -29,7 +30,7 @@ namespace ob::platform {
         if (dll == nullptr) {
             String pathString;
             StringEncoder::Encode(fileNameW, pathString);
-            LOG_ERROR_EX("System", "{0}が見つかりませんでした。", pathString);
+            LOG_ERROR_EX("System", "DLL[{0}]が見つかりませんでした。", pathString);
             return;
         }
 
