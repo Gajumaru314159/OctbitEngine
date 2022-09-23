@@ -13,7 +13,7 @@
 #include <Framework/Input/InputManager.h>
 
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/Main.h>
+#include <Framework/Engine/EngineSettings.h>
 
 #include <OBJ_Loader.h>
 //-----------------------------------------------------------------

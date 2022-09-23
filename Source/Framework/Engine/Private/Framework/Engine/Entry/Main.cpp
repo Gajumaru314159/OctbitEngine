@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Log/Logger.h>
-#include <Framework/Engine/Main.h>
+#include <Framework/Engine/Entry/Main.h>
 
 //@―---------------------------------------------------------------------------
 //! @brief  プラットフォーム共通のエントリ
