@@ -8,7 +8,7 @@
 #include <memory>
 
 namespace ob::core {
-    namespace detail {
+    namespace internal {
 
         //@―---------------------------------------------------------------------------
         //! @brief ファンクタ

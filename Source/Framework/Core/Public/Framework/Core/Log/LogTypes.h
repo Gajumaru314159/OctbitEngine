@@ -11,7 +11,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief このマクロの呼び出し位置の SourceLocation オブジェクトを作成する
     //@―---------------------------------------------------------------------------
-#define CURRENT_SOURCE_LOCATION ob::core::SourceLocation{TC(__FILE__),TC( __FUNC_NAME__ ),__LINE__}
+#define CURRENT_SOURCE_LOCATION ob::core::SourceLocation{TC(__FILE__),TC( FUNC_NAME ),__LINE__}
 
 
     //@―---------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 #pragma once
 #include <type_traits>
 #include <utility>
-#include "Details/DelegateBase.h"
+#include <Framework/Core/Template/Delegate/DelegateInternal.h>
 
 namespace ob::core {
 
@@ -22,7 +22,7 @@ namespace ob::core {
 	//! @details    インスタンスへの参照をメソッドへの参照をペアにしてカプセル化する。
 	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
-	class Delegate<Ret(Args...)> :public detail::DelegateBase
+	class Delegate<Ret(Args...)> :public internal::DelegateBase
 	{
 	public:
 
@@ -35,8 +35,8 @@ namespace ob::core {
 
 	private:
 
-		using base_type = detail::DelegateBase;
-		using functor_type = detail::Functor;
+		using base_type = internal::DelegateBase;
+		using functor_type = internal::Functor;
 		using invoke_type = Ret(const functor_type&, Args...);
 
 	public:

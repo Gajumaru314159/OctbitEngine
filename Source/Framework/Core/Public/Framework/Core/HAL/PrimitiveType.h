@@ -32,11 +32,10 @@ namespace ob::core {
     using Char = char16_t;  //!< 文字型
 
 #undef TC
-#undef TC_BASE
     //! @cond
-#define TC_BASE(x) u ## x
+#define _internal_TC(x) u ## x
     //! @endcond
-#define TC(x) TC_BASE(x)
+#define TC(x) _internal_TC(x)
     //@―---------------------------------------------------------------------------
     //! @def        TC
     //! @brief      文字/文字列リテラルをエンジン既定のエンコーディングに変更する。

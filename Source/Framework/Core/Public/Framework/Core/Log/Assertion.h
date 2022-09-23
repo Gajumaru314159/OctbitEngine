@@ -18,7 +18,7 @@
 //@―---------------------------------------------------------------------------
 //! @brief      アサーションの基底マクロ
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_BASE(expr,format,...)                                     \
+#define _internal_OB_ASSERT_BASE(expr,format,...)                                     \
 if(UNLIKELY(!(expr))){                                                      \
     OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);   \
 }
@@ -28,7 +28,7 @@ if(UNLIKELY(!(expr))){                                                      \
 //! 
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_CHECK_ASSERT(expr,format,...)				OB_ASSERT_BASE(expr,format,__VA_ARGS__)
+#define OB_CHECK_ASSERT(expr,format,...)				_internal_OB_ASSERT_BASE(expr,format,__VA_ARGS__)
 //! @copydoc OB_ASSERT
 #define OB_CHECK_ASSERT_EXPR(expr)					    OB_CHECK_ASSERT(expr,#expr)
 

@@ -114,7 +114,7 @@ namespace ob::graphic{
 
 
 
-命名規則Markdown Preview Enhanced 
+命名規則
 --------
 
 |種別|命名規則|
@@ -130,9 +130,12 @@ namespace ob::graphic{
 |static変数|s_sampleName|
 |列挙型|Enum::SampleName|
 |マクロ|SAMPLE_NAME|
+|マクロ(内部)|_internal_SAMPLE_NAME|
 
+内部で使用する機能は```namespace *::internal```に実装してください
 ```c++
-#define ADD(a,b) (a+b)
+#define _internal_ADD(a,b) (a+b)
+#define ADD(a,b) _internal_ADD(a,b)
 enum class Type{
   Open,
   Close
