@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 //! @cond
-#include <Framework/core/Base/Platform.h>
+#include <Framework/Core/HAL/Platform.h>
 #if defined(OS_LINUX)
 
 //@―---------------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #define CALL_BREAK_POINT_IMPL           /**/                                                // 特定のコード行にブレークポイントを設定する
 #define DLL_EXPORT_IMPL                 /**/                                                // DLL出力
 #define DLL_IMPORT_IMPL                 /**/                                                // DLL入力
-#define __FUNC_NAME__IMPL               __PRETTY_FUNCTION__                                 // 関数名
+#define _internal_FUNC_NAME             __PRETTY_FUNCTION__                                 // 関数名
 
 #endif
 //! @endcond
