@@ -2,6 +2,11 @@
 project ("OctbitEngine")
 
 #------------------------------------------------------------------------------
+# オプション定義
+#------------------------------------------------------------------------------
+option(DirectX "Enable DirectX RHI" ON)
+
+#------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
 set(CMAKE_CXX_STANDARD 17)                      # C++17を使用
@@ -87,7 +92,9 @@ add_subdirectory ("Source/Framework/Model")
 
 # Plugins
 if(WIN32)
-    add_subdirectory ("Source/Plugins/GraphicDirectX12")
+    if(DirectX)
+        add_subdirectory ("Source/Plugins/GraphicDirectX12")
+    endif()
 endif()
 #add_subdirectory ("Source/Public/Plugins/GraphicVulkan")
 
