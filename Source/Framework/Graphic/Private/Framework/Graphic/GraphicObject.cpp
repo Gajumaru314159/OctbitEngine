@@ -3,8 +3,9 @@
 //! @brief		グラフィック・オブジェクト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/System.h>
+#include <Framework/Graphic/GraphicObject.h>
+#include <Framework/Graphic/IGraphicModule.h>
+#include <Framework/Engine/Engine.h>
 
 namespace ob::graphic {
 
@@ -15,7 +16,13 @@ namespace ob::graphic {
         : m_referenceCount(1){
         m_name[0] = TC('\0');
 
-        System::Get().registerObject(*this);
+        static GraphicModule* pModule = nullptr;
+        if (pModule == nullptr) {
+            pModule = GEngine->get<GraphicModule>();
+        }
+        OB_CHECK_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
+
+        pModule->getObjectManager().registerObject(*this);
     }
 
     //@―---------------------------------------------------------------------------
@@ -70,8 +77,16 @@ namespace ob::graphic {
             return m_referenceCount;
         }
         OB_CHECK_ASSERT(m_referenceCount == 0, "参照カウントエラー");
+        
         // デバイスの削除スタックに追加
-        System::Get().requestRelease(*this);
+        static GraphicModule* pModule = nullptr;
+        if (pModule == nullptr) {
+            pModule = GEngine->get<GraphicModule>();
+        }
+        OB_CHECK_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
+
+        pModule->getObjectManager().requestRelease(*this);
+
         return m_referenceCount;
     }
 

@@ -76,13 +76,16 @@ FUNCTION(LOAD_FILES result root)
 
 	# ファイルを列挙
 	ADD_SOURCES(public_files "Public" ${root})
+	ADD_SOURCES(protected_files "Protected" ${root})
 	ADD_SOURCES(private_files "Private" ${root})
 	ADD_SOURCES(sources_files "Source" ".")
 	ADD_SOURCES(test_files "Test" "Test")
 	ADD_SOURCES(misc_files "Misc" ".")
 	
 	# PublicとPrivateを結合
-	SET(files ${public_files})
+	SET(files "")
+	LIST(APPEND files ${public_files})
+	LIST(APPEND files ${protected_files})
 	LIST(APPEND files ${private_files})
 	LIST(APPEND files ${sources_files})
 	LIST(APPEND files ${test_files})

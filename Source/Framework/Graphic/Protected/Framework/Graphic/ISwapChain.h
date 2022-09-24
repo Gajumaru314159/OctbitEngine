@@ -1,19 +1,19 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		レンダーターゲット・インターフェイス
+//! @brief		スワップチェーン・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/RenderTargetDesc.h>
+#include <Framework/Graphic/GraphicObject.h>
+#include <Framework/Graphic/Types/SwapchainDesc.h>
 
 //===============================================================
 // 前方宣言
 //===============================================================
 namespace ob::graphic {
     class Texture;
+    class IRenderTexture;
 }
-
 
 //===============================================================
 // クラス宣言
@@ -21,9 +21,12 @@ namespace ob::graphic {
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      レンダーパス・インターフェイス
+    //! @brief      スワップチェーン・インターフェイス
+    //! 
+    //! @details    モニターに表示するバッファを複数のバッファから切り替えることで
+    //!             表示のちらつきを解決する。
     //@―---------------------------------------------------------------------------
-    class IRenderTarget :public GraphicObject {
+    class ISwapChain :public GraphicObject {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -33,36 +36,42 @@ namespace ob::graphic {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      定義を取得
+        //! @brief  定義を取得
         //@―---------------------------------------------------------------------------
-        virtual const RenderTargetDesc& getDesc()const = 0;
+        virtual const SwapchainDesc& getDesc()const noexcept = 0;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      カラー・テクスチャを取得
-        //! 
-        //! @param index    マルチレンダーターゲットのインデックス
+        //! @brief  バックバッファのサイズを変更
         //@―---------------------------------------------------------------------------
-        virtual Texture getColorTexture(s32 index = 0)const = 0;
+        virtual bool resizeBackBuffer(const Size& size) = 0;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      デプス・テクスチャを取得
+        //! @brief      更新
         //@―---------------------------------------------------------------------------
-        virtual Texture getDepthTexture()const = 0;
+        virtual void update() = 0;
 
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      描画ターゲット枚数を取得
-        //! 
-        //! @details    デプス・ステンシルテクスチャは含まれません。
-        //@―---------------------------------------------------------------------------
-        virtual s32 getColorTextureCount()const = 0;
 
     protected:
 
-        virtual ~IRenderTarget() = default;
+        virtual ~ISwapChain() = default;
+
+
+
+
+        // メインディスプレイを初期化
+        // 更新
+        // 表示
+        // ディスプレイ情報を取得
+        // 描画フォーマットを取得
+        // 同期タイプを取得
+        // スワップチェインを取得
+        // ウィンドウイベントを追加
+        // ウィンドウハンドルを取得
+        //  ウィンドウ取得
 
     };
+
 
 }// namespace pb::graphic

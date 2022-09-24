@@ -1,36 +1,48 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		グラフィック・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/Interface/IGraphicModule.h>
+#include <Framework/Graphic/IGraphicModule.h>
 #include <Framework/Engine/ModuleFactory.h>
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 
-namespace ob::graphic::dx12
-{
+namespace ob::graphic::dx12 {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
-    class DirectXRHIModule :public GraphicModule {
-    public:
+	class DirectX12GraphicModule :public ob::graphic::GraphicModule {
+	public:
+		DirectX12GraphicModule(engine::Engine& engine)
+			: GraphicModule(engine)
+			, m_objectManager(2)
+			, m_device(FeatureLevel::Default)
+		{
 
-        DirectXRHIModule(ob::engine::Engine& engine)
-            : GraphicModule(engine)
-        {
+		}
 
-        }
+		IDevice* getDevice()override {
+			return &m_device;
+		}
+		GraphicObjectManager& getObjectManager() override {
+			return m_objectManager;
+		}
 
-        IDevice* createDevice(FeatureLevel featureLevel) override
-        {
-            return new DeviceImpl(featureLevel);
-        }
+		//@―---------------------------------------------------------------------------
+		//! @brief  ゲーム更新イベント
+		//@―---------------------------------------------------------------------------
+		void update()override {
+			m_device.update();
+			m_objectManager.update();
+		}
 
-    };
+	private:
+		DeviceImpl m_device;// DeviceImpl内にGraphicObjectはないので後から解放
+		GraphicObjectManager m_objectManager;
+	};
 
+}// namespace ob::graphic::dx12
 
+REGISTER_MODULE_DERIVE(ob::graphic::dx12::DirectX12GraphicModule, ob::graphic::GraphicModule);
 
-}// namespace ob
+void Link_DirectX12() {
 
-REGISTER_MODULE_DERIVE(ob::graphic::dx12::DirectXRHIModule, ob::graphic::GraphicModule);
+}

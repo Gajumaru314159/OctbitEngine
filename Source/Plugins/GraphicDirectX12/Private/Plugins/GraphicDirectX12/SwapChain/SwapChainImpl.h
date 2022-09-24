@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/ISwapChain.h>
+#include <Framework/Graphic/ISwapChain.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 //===============================================================

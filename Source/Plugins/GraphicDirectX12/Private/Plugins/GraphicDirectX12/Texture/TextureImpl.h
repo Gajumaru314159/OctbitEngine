@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/ITexture.h>
+#include <Framework/Graphic/ITexture.h>
 #include <Framework/Graphic/Types/TextureDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>

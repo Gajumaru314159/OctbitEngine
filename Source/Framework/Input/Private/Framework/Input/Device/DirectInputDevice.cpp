@@ -42,7 +42,7 @@ namespace ob::input
 		, m_interface(nullptr)
 		, m_mouse(nullptr)
 	{
-		auto& window = platform::Window::getMainWindow();
+		auto& window = platform::Window::Main();
 		HWND hWnd = (HWND)window.getHandle();
 
 		HRESULT result;

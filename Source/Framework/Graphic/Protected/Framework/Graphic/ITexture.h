@@ -1,11 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ルートシグネチャ・インターフェイス
+//! @brief		テクスチャ・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/RootSignatureDesc.h>
+#include <Framework/Graphic/GraphicObject.h>
+#include <Framework/Graphic/Types/TextureDesc.h>
+
+//===============================================================
+// 前方宣言
+//===============================================================
+namespace ob::graphic {
+}
 
 //===============================================================
 // クラス宣言
@@ -13,9 +19,9 @@
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      ルートシグネチャ・インターフェイス
+    //! @brief      テクスチャ・インターフェイス
     //@―---------------------------------------------------------------------------
-    class IRootSignature :public GraphicObject {
+    class ITexture :public GraphicObject {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -23,18 +29,16 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         virtual bool isValid()const = 0;
 
+
         //@―---------------------------------------------------------------------------
-        //! @brief      定義を取得
+        //! @brief  定義を取得
         //@―---------------------------------------------------------------------------
-        virtual const RootSignatureDesc& getDesc()const = 0;
-        /*
-        //@―---------------------------------------------------------------------------
-        //! @brief      ルートシグネチャに対応するディスクリプタプール、セットを作成するのに必要なプールサイズを取得。
-        //! 
-        //! @param[out] 
-        //@―---------------------------------------------------------------------------
-        virtual const u32& getDescriptorPoolSizes(s32 desc)const = 0;
-        */
+        virtual const TextureDesc& getDesc()const = 0;
+
+    protected:
+
+        virtual ~ITexture() = default;
+
     };
 
 }// namespace pb::graphic

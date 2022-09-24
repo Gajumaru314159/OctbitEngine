@@ -12,42 +12,22 @@
 #include <Framework/Input/InputManager.h>
 
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/EngineSettings.h>
+
+#include <Framework/Engine/InitContext.h>
 
 #include <OBJ_Loader.h>
 //-----------------------------------------------------------------
-#include <Application.h>
-
 using namespace ob;
 
-void OctbitInit(ob::EngineSettings& settings) {
-	settings.consoleEnabled = true;
+void Link_DirectX12();
+
+void OctbitInit(ob::engine::InitContext& context) {
+	Link_DirectX12();
 }
 
 int OctbitMain() {
 
 	using namespace ob::graphic;
-
-	App app;
-	app.startup();
-
-	using namespace ob::graphic;
-
-	Texture tex;
-	{
-		FileStream fs(L"../../../Asset/Texture/test.dds");
-		if (fs) {
-			Blob blob(fs.size());
-			fs.read(blob.data(), blob.size());
-			tex = Texture(blob);
-			tex.setName(TC("test.dds"));
-		}
-
-		OB_CHECK_ASSERT_EXPR(tex);
-	}
-
-	/*
-	//engine::Engine engine;
 
 	{
 		if (true) {
@@ -76,18 +56,13 @@ int OctbitMain() {
 		}
 
 		{
-			// グラフィックシステム初期化
-			SystemDesc sysDesc;
-			sysDesc.api = graphic::GraphicAPI::D3D12;
-			sysDesc.bufferCount = 2;
-			graphic::System::Get().initialize(sysDesc);
 
 			// ウィンドウ生成
 			platform::WindowDesc windowDesc;
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
 
-
+			
 			// スワップチェイン
 			SwapChain swapChain;
 			{
@@ -336,7 +311,8 @@ int OctbitMain() {
 				// TODO コマンドの個別実行を許可する？
 				cmdList.flush();
 
-				graphic::System::Get().update();
+				//graphic::System::Get().update();
+				GEngine->visit([](engine::IModule& m) {m.update(); });
 
 				// CommandBufferにコマンドが積まれているとSwapChain解放に失敗する
 				if (input::Keyboard::GetButton(input::Key::Escape).down())break;
@@ -394,7 +370,7 @@ int OctbitMain() {
 				buffer.updateDirect(cbuf);
 				t += 2.f;
 			}
-
+			
 			// グラフィックオブジェクトはここで全て解放予約
 		}
 		// ModuleManager / graphic::System / platform::System が解放されるが順序が固定でないので要修正
@@ -402,7 +378,6 @@ int OctbitMain() {
 		// 現状Singletonのstatic変数の解放順に依存している
 	}
 
-	*/
 
 	return 0;
 }

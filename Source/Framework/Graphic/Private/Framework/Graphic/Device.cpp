@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/System.h>
 #include <Framework/Graphic/SwapChain.h>
 #include <Framework/Graphic/CommandList.h>
 #include <Framework/Graphic/RootSignature.h>
@@ -15,6 +14,9 @@
 #include <Framework/Graphic/Buffer.h>
 #include <Framework/Graphic/DescriptorTable.h>
 
+#include <Framework/Graphic/IGraphicModule.h>
+#include <Framework/Engine/Engine.h>
+
 namespace ob::graphic
 {
 
@@ -22,7 +24,12 @@ namespace ob::graphic
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     IDevice* Device::Get() {
-        auto pDevice = System::Get().getDevice();
+        static IDevice* pDevice = nullptr;
+        if (pDevice == nullptr) {
+            if (auto pModule = GEngine->get<GraphicModule>()) {
+                pDevice = pModule->getDevice();
+            }
+        }
         OB_CHECK_ASSERT(pDevice, "ob::graphic::Systemが初期化されていないためデバイスの取得に失敗しました。");
         return pDevice;
     }

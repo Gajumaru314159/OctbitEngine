@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IPipelineState.h>
+#include <Framework/Graphic/IPipelineState.h>
 #include <Framework/Graphic/Types/PipelineStateDesc.h>
 
 //===============================================================

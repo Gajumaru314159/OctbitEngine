@@ -6,8 +6,8 @@
 #include <Framework/Graphic/ResourceBarrier.h>
 #include <Framework/Graphic/Device.h>
 #include <Framework/Graphic/RenderTarget.h>
-#include <Framework/Graphic/Interface/ISwapchain.h>
-#include <Framework/Graphic/Interface/ITexture.h>
+#include <Framework/Graphic/ISwapchain.h>
+#include <Framework/Graphic/ITexture.h>
 
 namespace ob::graphic {
 

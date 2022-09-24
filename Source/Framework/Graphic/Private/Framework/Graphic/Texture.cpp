@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Texture.h>
-#include <Framework/Graphic/Interface/ITexture.h>
+#include <Framework/Graphic/ITexture.h>
 #include <Framework/Graphic/Device.h>
 
 namespace ob::graphic {

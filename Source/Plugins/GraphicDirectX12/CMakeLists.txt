@@ -27,13 +27,15 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${p
 set(public_libs 
     Core
     Graphic
+)
+set(private_libs 
     DirectXTex
     d3d12.lib
     dxgi.lib
     dxguid.lib
     d3dcompiler.lib
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
 
 # ランタイムライブラリ設定
 set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

@@ -20,6 +20,7 @@ namespace ob::platform {
 
         m_impl = std::make_shared<WindowImpl>(desc);
 
+        // メインウィンドはマネージャに登録しなくてもいい?
         if (!WindowManager::Get().getMainWindow()) {
             WindowManager::Get().setMainWindow(*this);
         }
@@ -264,7 +265,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      メインウィンドウを取得
     //@―---------------------------------------------------------------------------
-    Window Window::getMainWindow() {
+    Window Window::Main() {
         // static変数を直接使用するとDLL間で共有できない
         return WindowManager::Get().getMainWindow();
     }

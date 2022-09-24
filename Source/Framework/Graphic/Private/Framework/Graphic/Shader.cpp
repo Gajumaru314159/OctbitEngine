@@ -5,7 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/Shader.h>
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/Interface/IShader.h>
+#include <Framework/Graphic/IShader.h>
 
 namespace ob::graphic {
 

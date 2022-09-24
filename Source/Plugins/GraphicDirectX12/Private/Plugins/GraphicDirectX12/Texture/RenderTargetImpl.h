@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IRenderTarget.h>
+#include <Framework/Graphic/IRenderTarget.h>
 #include <Framework/Graphic/Types/RenderTargetDesc.h>
 #include <Framework/Graphic/Texture.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>

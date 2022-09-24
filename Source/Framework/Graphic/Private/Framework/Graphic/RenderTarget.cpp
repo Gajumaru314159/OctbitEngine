@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/RenderTarget.h>
-#include <Framework/Graphic/Interface/IRenderTarget.h>
+#include <Framework/Graphic/IRenderTarget.h>
 #include <Framework/Graphic/Device.h>
 
 namespace ob::graphic {

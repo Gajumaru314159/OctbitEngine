@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/CommandList.h>
-#include <Framework/Graphic/Interface/ICommandList.h>
+#include <Framework/Graphic/ICommandList.h>
 #include <Framework/Graphic/Device.h>
 #include <Framework/Graphic/Types/CommandListDesc.h>
 

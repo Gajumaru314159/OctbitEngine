@@ -25,7 +25,7 @@ namespace ob::platform {
 		, m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)
 	{
-		m_hParentWnd = (HWND)Window::getMainWindow().getHandle();
+		m_hParentWnd = (HWND)Window::Main().getHandle();
 		const bool hasParent = m_hParentWnd !=nullptr;
 
 		m_windowID = m_windowNum++;

@@ -3,8 +3,8 @@
 //! @brief		グラフィック・オブジェクト・マネージャ
 //! @author		Gajumaru
 //***********************************************************
-#include "GraphicObjectManager.h"
-#include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Graphic/GraphicObjectManager.h>
+#include <Framework/Graphic/GraphicObject.h>
 
 namespace ob::graphic {
 
@@ -13,10 +13,12 @@ namespace ob::graphic {
     //! 
     //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
     //@―---------------------------------------------------------------------------
-    GraphicObjectManager::GraphicObjectManager(s32 frameCount) {
-        OB_CHECK_ASSERT_EXPR(0 < frameCount);
-        m_deleteStackList.resize(frameCount);
-        m_index = 0;
+    GraphicObjectManager::GraphicObjectManager(s32 frameCount) 
+        : m_deleteStackList(std::max(frameCount,1))
+    {
+        if (frameCount < 1) {
+            LOG_WARNING("フレーム数が不正です。1以上にしてください。[frameCount={}]",frameCount);
+        }
     }
 
 
@@ -37,6 +39,7 @@ namespace ob::graphic {
 #endif
             delete pObject;
         }
+
     }
 
 
@@ -46,10 +49,10 @@ namespace ob::graphic {
     void GraphicObjectManager::update() {
 
         // インデックスを更新
-        m_index = (m_index + 1) % std::size(m_deleteStackList);
+        m_deleteStackList.next();
 
         // グラフィック・オブジェクトを削除
-        auto& deleteStack = m_deleteStackList[m_index];
+        auto& deleteStack = m_deleteStackList.current();
         while (!deleteStack.empty()) {
             auto pObject = deleteStack.front();
             deleteStack.pop();
@@ -74,9 +77,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
         OB_CHECK_ASSERT_EXPR(object.getReferenceCount()==0);
-
-        auto& nowStack = m_deleteStackList[m_index];
-        nowStack.emplace(&object);
+        m_deleteStackList.current().emplace(&object);
     }
 
 

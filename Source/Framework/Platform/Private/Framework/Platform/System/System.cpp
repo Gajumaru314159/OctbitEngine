@@ -7,12 +7,12 @@
 #include <Framework/Platform/System.h>
 #include <Windows.h>
 
-namespace ob::platform {
+namespace ob::platform::System {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  プラットフォームの言語を取得
 	//@―---------------------------------------------------------------------------
-	Language System::GetLanguage() {
+	Language GetLanguage() {
 		LANGID langID = GetSystemDefaultLangID();
 		switch (langID) {
 		case 0x0411:

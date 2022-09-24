@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IDevice.h>
+#include <Framework/Graphic/IDevice.h>
 //! @cond
 
 namespace ob::graphic {

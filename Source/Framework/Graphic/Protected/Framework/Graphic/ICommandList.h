@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Graphic/GraphicObject.h>
 #include <Framework/Core/Geometory/Viewport.h>
 
 //===============================================================

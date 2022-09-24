@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Graphic/DescriptorTable.h>
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/Interface/IDescriptorTable.h>
+#include <Framework/Graphic/IDescriptorTable.h>
 
 namespace ob::graphic {
 

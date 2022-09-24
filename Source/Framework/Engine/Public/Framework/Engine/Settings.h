@@ -1,18 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		エンジン起動設定
+//! @brief		エンジン設定
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <string>
 
-namespace ob {
+namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  エンジン起動設定
+    //! @brief  エンジン設定
     //! @see    OctbitInit()
     //@―---------------------------------------------------------------------------
-    struct EngineSettings {
+    struct Settings {
         bool consoleEnabled = false;    //!< コンソールウィンドウを表示するか
 
         std::string engineDirectory;    //!<

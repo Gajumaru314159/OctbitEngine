@@ -5,7 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/PipelineState.h>
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/Interface/IPipelineState.h>
+#include <Framework/Graphic/IPipelineState.h>
 
 namespace ob::graphic {
 

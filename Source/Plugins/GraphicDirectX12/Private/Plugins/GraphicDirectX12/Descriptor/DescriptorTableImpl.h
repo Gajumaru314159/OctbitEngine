@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IDescriptorTable.h>
+#include <Framework/Graphic/IDescriptorTable.h>
 #include <Plugins/GraphicDirectX12/Descriptor/DescriptorHandle.h>
 
 //===============================================================

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IRootSignature.h>
+#include <Framework/Graphic/IRootSignature.h>
 
 //===============================================================
 // 前方宣言

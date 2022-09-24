@@ -7,7 +7,7 @@
 #include <Plugins/GraphicDirectX12/Device/DeviceImpl.h>
 #include <Plugins/GraphicDirectX12/Utility/Utility.h>
 #include <Plugins/GraphicDirectX12/Utility/TypeConverter.h>
-#include <Framework/Graphic/Interface/ITexture.h>
+#include <Framework/Graphic/ITexture.h>
 
 namespace {
     int static const s_maxSwapChainCount = 4;

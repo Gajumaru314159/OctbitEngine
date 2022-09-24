@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IShader.h>
+#include <Framework/Graphic/IShader.h>
 #include <Framework/Core/Misc/Blob.h>
 
 //===============================================================

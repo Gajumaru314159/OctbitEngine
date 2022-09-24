@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/ICommandList.h>
+#include <Framework/Graphic/ICommandList.h>
 #include <Framework/Graphic/Types/CommandListDesc.h>
 #include <Framework/Graphic/Constants.h>
 #include <Framework/Core/Utility/Swapper.h>

@@ -5,7 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/RootSignature.h>
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/Interface/IRootSignature.h>
+#include <Framework/Graphic/IRootSignature.h>
 
 namespace ob::graphic {
 

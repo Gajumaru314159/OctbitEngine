@@ -1,12 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		バッファ・インターフェイス
+//! @brief		デスクリプタ・テーブル・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/GraphicObject.h>
-#include <Framework/Graphic/Types/BufferDesc.h>
-#include <Framework/Core/Misc/Blob.h>
+#include <Framework/Graphic/GraphicObject.h>
+
+//===============================================================
+//	前方宣言
+//===============================================================
+namespace ob::graphic {
+	class Texture;
+}
+
 
 //===============================================================
 // クラス宣言
@@ -14,9 +20,9 @@
 namespace ob::graphic {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      バッファ・インターフェイス
+	//! @brief      デスクリプタ・テーブル
 	//@―---------------------------------------------------------------------------
-	class IBuffer :public GraphicObject {
+	class IDescriptorTable :public GraphicObject {
 	public:
 
 		//@―---------------------------------------------------------------------------
@@ -26,25 +32,29 @@ namespace ob::graphic {
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  定義を取得
+		//! @brief  リソースを設定
 		//@―---------------------------------------------------------------------------
-		virtual const BufferDesc& getDesc()const = 0;
+		//! @{
+		virtual bool setResource(s32 index, class Buffer& resource) = 0;
+		virtual bool setResource(s32 index, Texture& resource) = 0;
+		//virtual bool setResource(s32 index, class Sampler& resource) = 0;
+		//! @}
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      バッファを更新
-		//! 
-		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+		//! @brief  リソースのバインドを解除
 		//@―---------------------------------------------------------------------------
-		virtual void update(size_t size, const void* pData, size_t offset) = 0;
+		virtual void clear() = 0;
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      バッファを更新(直接更新)
-		//! 
-		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+		//! @brief  指定したインデックスのリソースのバインドを解除
 		//@―---------------------------------------------------------------------------
-		virtual void updateDirect(size_t size, const void* pData, size_t offset) = 0;
+		virtual void clearAt(s32 index) = 0;
+
+	protected:
+
+		virtual ~IDescriptorTable() = default;
 
 	};
 

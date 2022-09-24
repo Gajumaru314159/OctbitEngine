@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IBuffer.h>
+#include <Framework/Graphic/IBuffer.h>
 #include <Framework/Graphic/Types/BufferDesc.h>
 
 namespace ob::graphic::dx12 {

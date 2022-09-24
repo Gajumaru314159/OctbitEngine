@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IDevice.h>
+#include <Framework/Graphic/IDevice.h>
 #include <Framework/Graphic/Types/FeatureLevel.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
 
@@ -24,6 +24,11 @@ namespace ob::graphic::dx12 {
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
 		DeviceImpl(FeatureLevel featureLevel);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  デストラクタ
+		//@―---------------------------------------------------------------------------
+		~DeviceImpl();
 
 
 		//@―---------------------------------------------------------------------------

@@ -34,9 +34,16 @@ namespace ob::graphic::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  デストラクタ
+	//@―---------------------------------------------------------------------------
+	DeviceImpl::~DeviceImpl() {
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
 	//@―---------------------------------------------------------------------------
-	bool DeviceImpl::isValid()const{
+	bool DeviceImpl::isValid()const {
 		return m_device && m_commandQueue;
 	}
 
@@ -98,7 +105,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  ルートシグネチャを生成
 	//@―---------------------------------------------------------------------------
 	IRootSignature* DeviceImpl::createRootSignature(const RootSignatureDesc& desc) {
-		return new RootSignatureImpl(*this,desc);
+		return new RootSignatureImpl(*this, desc);
 	}
 
 
@@ -138,7 +145,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  バッファーを生成
 	//@―---------------------------------------------------------------------------
 	ob::graphic::IBuffer* DeviceImpl::createBuffer(const BufferDesc& desc) {
-		return new BufferImpl(*this,desc);
+		return new BufferImpl(*this, desc);
 	}
 
 
@@ -164,7 +171,7 @@ namespace ob::graphic::dx12 {
 	ob::graphic::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
 		auto index = enum_cast(type);
 		if (!is_in_range(index, m_descriptorHeaps))return nullptr;
-		return new DescriptorTableImpl(*m_descriptorHeaps[index],type,elementNum);
+		return new DescriptorTableImpl(*m_descriptorHeaps[index], type, elementNum);
 	}
 
 
@@ -396,7 +403,7 @@ namespace ob::graphic::dx12 {
 	//! @brief  デスクリプタヒープを初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeDescriptorHeaps() {
-		m_descriptorHeaps.resize((size_t)enum_cast(DescriptorHeapType::DSV)+1u);
+		m_descriptorHeaps.resize((size_t)enum_cast(DescriptorHeapType::DSV) + 1u);
 
 		m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
@@ -409,9 +416,9 @@ namespace ob::graphic::dx12 {
 
 		OB_DEBUG_CONTEXT(
 			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->setName(TC("SystemCBV_SRV_UAVHeap"));
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->setName(TC("SystemSamplerHeap"));
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)]->setName(TC("SystemRTVHeap"));
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)]->setName(TC("SystemDSVHeap"));
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->setName(TC("SystemSamplerHeap"));
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)]->setName(TC("SystemRTVHeap"));
+		m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)]->setName(TC("SystemDSVHeap"));
 		);
 		return true;
 	}

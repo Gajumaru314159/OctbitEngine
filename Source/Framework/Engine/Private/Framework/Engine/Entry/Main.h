@@ -4,14 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/EngineSettings.h>
+#include <Framework/Engine/InitContext.h>
 
 //@―---------------------------------------------------------------------------
 //! @brief		エンジン起動設定
 //! 
 //! @details	アプリケーション起動直後に呼び出されます。
 //@―---------------------------------------------------------------------------
-void OctbitInit(ob::EngineSettings& settings);
+void OctbitInit(ob::engine::InitContext& context);
 
 //@―---------------------------------------------------------------------------
 //! @brief		エンジンエントリ関数

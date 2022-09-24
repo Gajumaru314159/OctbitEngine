@@ -141,23 +141,24 @@ namespace ob::engine {
 
 			// ファクトリが存在するか
 			auto& constructors = m_constructorMap[hash];
-			if (constructors.empty()) {
-				return false;
-			}
+			if (!constructors.empty()) {
 
-			// 生成
-			for (auto& constructor : constructors) {
-				if (auto pModule = constructor->construct(engine)) {
-					if (pModule->isValid() == false) {
-						delete tmp;
-					} else {
-						LOG_TRACE_EX("Module", "Module[{}]を生成", constructor->name());
-						return { pModule ,constructor->type() };
+				// 生成
+				for (auto& constructor : constructors) {
+					if (auto pModule = constructor->construct(engine)) {
+						if (pModule->isValid() == false) {
+							delete pModule;
+						} else {
+							LOG_TRACE_EX("Module", "Module[{}]を生成", constructor->name());
+							return { reinterpret_cast<TModule*>(pModule) ,constructor->type() };
+						}
 					}
 				}
+
 			}
 
 			return { nullptr ,0 };
+
 		}
 
 

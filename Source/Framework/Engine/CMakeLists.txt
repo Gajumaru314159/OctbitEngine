@@ -18,7 +18,8 @@ SET_PCH("Framework/Engine/PCH/stdafx.h")
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${CMAKE_CURRENT_SOURCE_DIR}/Test")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${CMAKE_CURRENT_SOURCE_DIR}/Protected" "${CMAKE_CURRENT_SOURCE_DIR}/Test")
+set(protected_includes "${CMAKE_CURRENT_SOURCE_DIR}/Protected")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 

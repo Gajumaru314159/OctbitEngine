@@ -16,8 +16,9 @@ SET_PCH("Framework/Graphic/PCH/stdafx.h")
 
 # 追加のインクルードディレクトリ
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${OCTBIT_THIRD_PARTY_PATH}/stb/include")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
-target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
+set(protected_includes "${CMAKE_CURRENT_SOURCE_DIR}/Protected")
+set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "${CMAKE_CURRENT_SOURCE_DIR}/Protected")
+target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} INTERFACE ${protected_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
 set(OB_PROJECT_INCLUDE_LIB

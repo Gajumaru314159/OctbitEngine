@@ -1,35 +1,49 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		設定コンテキスト
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/IModule.h>
-#include <Framework/Platform/Type/Language.h>
 
-
-namespace ob::platform {
+namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  設定コンテキスト
     //@―---------------------------------------------------------------------------
-    class PlatformModule : public ob::engine::IModule {
+    class InitContext {
     public:
-    
+
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-    
-        //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
-        //@―---------------------------------------------------------------------------
-        PlatformModule(engine::Engine& engine);
 
-    
+        //@―---------------------------------------------------------------------------
+        //! @brief  設定追加
+        //@―---------------------------------------------------------------------------
+        template<typename T>
+        void set(const T& setting) {
+            auto hash = typeid(T).hash_code();
+            m_settings[hash] = settings;
+        }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  設定取得
+        //@―---------------------------------------------------------------------------
+        template<typename T>
+        T get() const{
+            auto hash = typeid(T).hash_code();
+            auto found = m_settings.find(hash);
+            if (found == m_settings.end()) {
+                return T{};
+            }
+            return std::any_cast<T>(found->second);
+        }
+
     private:
-    
-        //Pimpl<class PlatformModuleImpl> m_impl;
-    
+
+        using TypeHash = size_t;
+        HashMap<TypeHash, std::any> m_settings;
+
     };
 
 

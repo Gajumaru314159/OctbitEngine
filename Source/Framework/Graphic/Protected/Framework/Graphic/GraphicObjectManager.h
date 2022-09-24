@@ -4,7 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/GraphicObject.h>
+#include <Framework/Graphic/GraphicObject.h>
+#include <Framework/Core/Utility/Swapper.h>
 
 namespace ob::graphic {
 
@@ -53,26 +54,11 @@ namespace ob::graphic {
 
     private:
 
-        List<GraphicObject*> m_objects;
-
         using ObjectQueue = Queue<GraphicObject*>;
-        Array<ObjectQueue>    m_deleteStackList;
 
-        s32 m_index;
+        List<GraphicObject*>    m_objects;
+        Swapper<ObjectQueue>    m_deleteStackList;
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob::graphic

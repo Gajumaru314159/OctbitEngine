@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/IModule.h>
-#include <Framework/Graphic/Types/FeatureLevel.h>
+#include <Framework/Graphic/GraphicObjectManager.h>
 
 namespace ob::graphic {
 	class IDevice;
@@ -25,16 +25,16 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief      デバイス生成
 		//@―---------------------------------------------------------------------------
-		virtual IDevice* createDevice(FeatureLevel featureLevel = FeatureLevel::Default) = 0;
+		virtual IDevice* getDevice() = 0;
+
+		virtual GraphicObjectManager& getObjectManager() = 0;
 
 	protected:
 		GraphicModule(engine::Engine& engine)
-			:engine::IModule(engine)
+			: engine::IModule(engine)
 		{
 		}
 
 	};
-
-
 
 }// namespace pb::graphic

@@ -5,7 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/Buffer.h>
 #include <Framework/Graphic/Device.h>
-#include <Framework/Graphic/Interface/IBuffer.h>
+#include <Framework/Graphic/IBuffer.h>
 
 namespace ob::graphic {
 
