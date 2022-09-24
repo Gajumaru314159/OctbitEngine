@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphic/Settings.h>
 #include <Framework/Graphic/Buffer.h>
 #include <Framework/Graphic/CommandList.h>
 #include <Framework/Graphic/Constants.h>

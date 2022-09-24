@@ -23,7 +23,7 @@ namespace ob::engine {
         template<typename T>
         void set(const T& setting) {
             auto hash = typeid(T).hash_code();
-            m_settings[hash] = settings;
+            m_settings[hash] = setting;
         }
 
         //@―---------------------------------------------------------------------------
