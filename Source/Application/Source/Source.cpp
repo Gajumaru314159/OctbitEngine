@@ -6,6 +6,7 @@
 #include <Framework/Platform/Window.h>
 
 #include <Framework/Input/All.h>
+#include <Framework/Input/Settings.h>
 
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/InitContext.h>
@@ -21,6 +22,11 @@ void OctbitInit(ob::engine::InitContext& context) {
 	{
 		graphic::Settings settings;
 		settings.frameBufferCount = 3;
+		context.set(settings);
+	}
+	{
+		input::Settings settings;
+		//settings.useKeyboard = false;
 		context.set(settings);
 	}
 

@@ -20,7 +20,7 @@ int CommonMain() {
 
     LOG_TRACE("エンジン生成");
     // エンジン初期化
-    ob::engine::Engine engine;
+    ob::engine::Engine engine(std::move(context));
     GEngine = &engine;
 
     LOG_INFO("Entry OctbitMain()");
