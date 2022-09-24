@@ -9,7 +9,6 @@
 #include <Framework/Platform/System.h>
 
 #include <Framework/Input/All.h>
-#include <Framework/Input/InputManager.h>
 
 #include <Framework/Engine/Engine.h>
 
@@ -20,9 +19,11 @@
 using namespace ob;
 
 void Link_DirectX12();
+void Link_Input();
 
 void OctbitInit(ob::engine::InitContext& context) {
 	Link_DirectX12();
+	Link_Input();
 }
 
 int OctbitMain() {
@@ -30,7 +31,7 @@ int OctbitMain() {
 	using namespace ob::graphic;
 
 	{
-		if (true) {
+		if (false) {
 			LOG_INFO("Language :{}", (int)platform::System::GetLanguage());
 			LOG_INFO("Vec2     :{}", Vec2(1, 2));
 			LOG_INFO("Vec3     :{}", Vec3(1.5235223f, 2.11f, -0.01f));
@@ -330,7 +331,6 @@ int OctbitMain() {
 				}
 
 				using namespace ob::input;
-				InputManager::Get().update();
 
 				auto speed = 4 / 60.f;
 				if (input::Keyboard::K.pressed()) {

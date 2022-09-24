@@ -5,20 +5,21 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
+#include <Framework/Engine/IModule.h>
 
 namespace ob::input {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class InputManager:public Singleton<InputManager> {
+    class InputModule:public engine::IModule{
     public:
 
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        InputManager();
-        ~InputManager();
+        InputModule(engine::Engine& engine);
+        ~InputModule();
 
         //@―---------------------------------------------------------------------------
         //! @brief  説明
@@ -29,7 +30,21 @@ namespace ob::input {
 
     public:
 
-        Pimpl<class InputManagerImpl> m_impl;
+        struct DeviceKey {
+            DeviceID id{ 0 };
+            u32 user{ 0 };
+            bool operator==(const DeviceKey& rhs) const { return id == rhs.id && user == rhs.user; }
+            bool operator!=(const DeviceKey& rhs) const { return !(*this == rhs); }
+        };
+        struct Hash {
+            typedef std::size_t result_type;
+            std::size_t operator()(const DeviceKey& key) const {
+                return static_cast<size_t>(static_cast<size_t>(key.id) ^ (key.user << 28));
+            }
+        };
+
+        using DevicePtr = UPtr<IInputDevice>;
+        HashMap<DeviceKey, DevicePtr, Hash> m_devices;
 
     };
 

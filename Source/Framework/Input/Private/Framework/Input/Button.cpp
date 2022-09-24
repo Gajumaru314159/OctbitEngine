@@ -5,6 +5,8 @@
 //***********************************************************
 #include <Framework/Input/Button.h>
 #include <Framework/Input/InputManager.h>
+#include <Framework/Engine/Engine.h>
+
 
 namespace ob::input {
 
@@ -12,10 +14,11 @@ namespace ob::input {
 	//! @berif	状態が state か
 	//@―---------------------------------------------------------------------------
 	bool Button::is(ButtonState state)const {
-		if (auto device = InputManager::Get().findDevice(m_deviceId, m_user)) {
+		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
 			return device->getButtonStates(m_code)[state];
 		}
 		return false;
+
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -66,10 +69,11 @@ namespace ob::input {
 	//! @berif	バインド
 	//@―---------------------------------------------------------------------------
 	bool Button::bind(ButtonState state, ButtonHandle& handle, const ButtonDelegate& func)const {
-		if (auto device = InputManager::Get().findDevice(m_deviceId, m_user)) {
+		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
 			return device->bindButton(m_code, state, handle, func);
 		}
 		return false;
+
 	}
 
 }// namespace ob

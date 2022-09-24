@@ -125,8 +125,6 @@ namespace ob::engine {
 			auto hash = typeid(TBase).hash_code();
 			auto& constructors = m_constructorMap[hash];
 			auto& constructor = constructors.emplace_back(std::make_unique<internal::ModuleConstructor<TModule>>());
-
-			LOG_TRACE_EX("Module", "ModuleFactoryに[{}]を追加", constructor->name());
 		}
 
 		//@―---------------------------------------------------------------------------
