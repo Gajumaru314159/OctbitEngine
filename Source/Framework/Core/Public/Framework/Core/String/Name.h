@@ -8,7 +8,7 @@
 
 namespace ob::core {
 
-    namespace detail {
+    namespace internal {
         class NameData;
     }
 
@@ -75,7 +75,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  NameData から生成(NameDictionary用)
         //@―---------------------------------------------------------------------------
-        Name(const detail::NameData& nameData);
+        Name(const internal::NameData& nameData);
 
     private:
         void setName(StringView name);

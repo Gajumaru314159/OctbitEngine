@@ -21,7 +21,6 @@ namespace ob::engine {
     //! @brief  必須モジュールを追加
     //@―---------------------------------------------------------------------------
     bool AppBase::startup() {
-        onModuleSetup(m_engine->getModuleManager());
         return true;
     }
 

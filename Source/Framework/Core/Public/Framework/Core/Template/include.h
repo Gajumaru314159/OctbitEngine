@@ -17,6 +17,7 @@
 #include "Utility/Memory.h"
 #include "Utility/Utility.h"
 #include "Utility/GSL.h"
+#include "Utility/Singleton.h"
 
 
 //============================================

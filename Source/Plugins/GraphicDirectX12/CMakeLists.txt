@@ -5,7 +5,7 @@ project (GraphicDirectX12)
 # ソースコードの登録
 #------------------------------------------------------------------------------
 LOAD_FILES(out_sources "Plugins/GraphicDirectX12")
-add_library(${PROJECT_NAME} SHARED ${out_sources})
+add_library(${PROJECT_NAME} STATIC ${out_sources})
 
 SET_PCH("Plugins/GraphicDirectX12/PCH/stdafx.h")
 

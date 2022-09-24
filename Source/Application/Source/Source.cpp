@@ -6,7 +6,6 @@
 #include <Framework/Graphic/MeshData.h>
 
 #include <Framework/Platform/Window.h>
-#include <Framework/Platform/Module/ModuleManager.h>
 #include <Framework/Platform/System.h>
 
 #include <Framework/Input/All.h>
@@ -26,11 +25,28 @@ void OctbitInit(ob::EngineSettings& settings) {
 }
 
 int OctbitMain() {
+
 	using namespace ob::graphic;
 
 	App app;
 	app.startup();
-		
+
+	using namespace ob::graphic;
+
+	Texture tex;
+	{
+		FileStream fs(L"../../../Asset/Texture/test.dds");
+		if (fs) {
+			Blob blob(fs.size());
+			fs.read(blob.data(), blob.size());
+			tex = Texture(blob);
+			tex.setName(TC("test.dds"));
+		}
+
+		OB_CHECK_ASSERT_EXPR(tex);
+	}
+
+	/*
 	//engine::Engine engine;
 
 	{
@@ -59,21 +75,18 @@ int OctbitMain() {
 			LOG_INFO("HSV	   :{}", HSV::Cyan.toColor());
 		}
 
-		platform::ModuleManager::Instance();
 		{
 			// グラフィックシステム初期化
 			SystemDesc sysDesc;
 			sysDesc.api = graphic::GraphicAPI::D3D12;
 			sysDesc.bufferCount = 2;
-			graphic::System::Instance().initialize(sysDesc);
+			graphic::System::Get().initialize(sysDesc);
 
 			// ウィンドウ生成
 			platform::WindowDesc windowDesc;
 			windowDesc.title = TC("Graphic Test");
 			platform::Window window(windowDesc);
 
-
-			input::InputManager::Instance();
 
 			// スワップチェイン
 			SwapChain swapChain;
@@ -323,7 +336,7 @@ int OctbitMain() {
 				// TODO コマンドの個別実行を許可する？
 				cmdList.flush();
 
-				graphic::System::Instance().update();
+				graphic::System::Get().update();
 
 				// CommandBufferにコマンドが積まれているとSwapChain解放に失敗する
 				if (input::Keyboard::GetButton(input::Key::Escape).down())break;
@@ -341,7 +354,7 @@ int OctbitMain() {
 				}
 
 				using namespace ob::input;
-				InputManager::Instance().update();
+				InputManager::Get().update();
 
 				auto speed = 4 / 60.f;
 				if (input::Keyboard::K.pressed()) {
@@ -389,7 +402,7 @@ int OctbitMain() {
 		// 現状Singletonのstatic変数の解放順に依存している
 	}
 
-	
+	*/
 
 	return 0;
 }

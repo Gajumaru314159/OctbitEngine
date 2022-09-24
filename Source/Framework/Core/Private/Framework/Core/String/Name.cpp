@@ -29,13 +29,13 @@ namespace ob::core
     //! @details    ハッシュ値の計算は内部実装に依存します。
     //@―---------------------------------------------------------------------------
     Name::Name(Hash hash) {
-        *this = NameDictionary::Instance().findName(hash);
+        *this = NameDictionary::Get().findName(hash);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  NameData から生成(NameDictionary用)
     //@―---------------------------------------------------------------------------
-    Name::Name(const detail::NameData& nameData) 
+    Name::Name(const internal::NameData& nameData) 
         : m_view(nameData.getName())
         , m_hash(nameData.getHash())
     {
@@ -56,7 +56,7 @@ namespace ob::core
         if (name.empty()) {
             clear();
         } else {
-            *this = std::move(NameDictionary::Instance().makeName(name));
+            *this = std::move(NameDictionary::Get().makeName(name));
         }
     }
 

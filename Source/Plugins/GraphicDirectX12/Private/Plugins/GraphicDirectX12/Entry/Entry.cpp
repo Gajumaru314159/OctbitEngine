@@ -45,6 +45,9 @@ namespace ob::graphic::dx12 {
             LOG_INFO("Module Created.");
         }
 
+        IDevice* createDevice(FeatureLevel featureLevel = FeatureLevel::Default)override {
+            return new DeviceImpl(featureLevel);
+        }
     };
 
 }// namespace ob::graphic::dx12

@@ -4,12 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Singleton/Singleton.h>
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Log/LogTypes.h>
-
+#include <Framework/Core/Template/Utility/Singleton.h>
 #include <Framework/Core/Template/Event/EventNotifier.h>
 
 

@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/RenderTarget.h>
-#include <Framework/Graphic/System.h>
 #include <Framework/Graphic/Interface/IRenderTarget.h>
 #include <Framework/Graphic/Device.h>
 

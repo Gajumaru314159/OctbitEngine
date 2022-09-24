@@ -1,10 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		アプリケーション基底
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-
 
 namespace ob::engine {
 
@@ -30,7 +29,6 @@ namespace ob::engine {
 
 
         virtual void onStarted() {}
-        virtual void onModuleSetup(ModuleManager&){}
 
 
     private:

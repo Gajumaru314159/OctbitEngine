@@ -14,9 +14,8 @@ namespace ob::engine {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	Engine::Engine() 
-		:m_moduleManager(*this)
+		: m_manager(*this)
 	{
-		Logger::Instance();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -34,7 +33,7 @@ namespace ob::engine {
 	bool Engine::update() {
 
 		// モジュール更新
-		m_moduleManager.visit(
+		m_manager.visit(
 			[](IModule& m) {
 				m.update();
 			}

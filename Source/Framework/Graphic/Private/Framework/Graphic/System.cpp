@@ -5,7 +5,8 @@
 //***********************************************************
 #include <Framework/Graphic/System.h>
 
-#include <Framework/Platform/Module/ModuleManager.h>
+#include <Framework/Engine/ModuleManager.h>
+
 #include <Framework/Graphic/GraphicObjectManager.h>
 
 #include <Framework/Graphic/Interface/IGraphicModule.h>
@@ -17,7 +18,9 @@
 
 namespace ob::graphic {
 
-    System::System() = default;
+    System::System() {
+        m_objectManager = std::make_unique<GraphicObjectManager>(2);
+    }
     System::~System() = default;
 
     //@―---------------------------------------------------------------------------
@@ -31,47 +34,6 @@ namespace ob::graphic {
     //! @retval false   失敗
     //@―---------------------------------------------------------------------------
     bool System::initialize(SystemDesc desc) {
-
-        if (m_device) {
-            LOG_FATAL_EX("Graphic", "グラフィック・システムは初期化済みです。");
-            return false;
-        }
-
-        IDevice* pDevice = nullptr;
-
-        if (desc.api == GraphicAPI::D3D12) {
-
-#if defined(OS_WINDOWS)
-            if (auto pModule = platform::ModuleManager::Instance().loadModule<IGraphicModule>(TC("GraphicDirectX12"))) {
-
-                if (pModule->magicCode() == IGraphicModule::graphicMagicCode()) {
-                    pDevice = pModule->createDevice(FeatureLevel::Default);
-                }
-
-            }
-#endif
-
-        } else if (desc.api == GraphicAPI::Vulkan) {
-
-        }
-
-        if (pDevice == nullptr) {
-            auto rawName = magic_enum::enum_name(desc.api);
-            String name;
-            StringEncoder::Encode(rawName, name);
-
-            LOG_ERROR_EX("Graphic","無効なグラフィックモジュール[GraphicAPI={0}]", name.c_str());
-            return false;
-        }
-
-        if (!pDevice->isValid()) {
-            LOG_ERROR_EX("Graphic", "グラフィックデバイスの初期化に失敗");
-            delete pDevice;
-            return false;
-        }
-
-        m_device = UPtr<IDevice>(pDevice);
-        m_objectManager = std::make_unique<GraphicObjectManager>(desc.bufferCount);
         return true;
     }
 
@@ -118,6 +80,12 @@ namespace ob::graphic {
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     IDevice* System::getDevice() {
+        if (m_device == nullptr) {
+            engine::ModuleManager::Get().create<GraphicModule>();
+            if (auto pMod = engine::ModuleManager::Get().get<GraphicModule>()) {
+                m_device.reset(pMod->createDevice());
+            }
+        }
         OB_CHECK_ASSERT_EXPR(m_device);
         return m_device.get();
     }

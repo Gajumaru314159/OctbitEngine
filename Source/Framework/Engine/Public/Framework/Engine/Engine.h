@@ -30,12 +30,13 @@ namespace ob::engine {
 		bool update();
 		void terminate();
 
-		auto getModuleManager()->ModuleManager& { return m_moduleManager; }
+		auto getModuleManager()->ModuleManager&{return m_manager; }
+
 
 	private:
 
 		Atomic<bool> m_terminate;
-		ModuleManager m_moduleManager;
+		ModuleManager m_manager;
 
 	};
 

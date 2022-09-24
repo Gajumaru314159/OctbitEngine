@@ -11,8 +11,6 @@
 //@―---------------------------------------------------------------------------
 int CommonMain() {
 
-    ob::Logger::Instance();
-
     LOG_INFO("Entry OctbitMain()");
     auto result = OctbitMain();
     LOG_INFO("Leave OctbitMain()");

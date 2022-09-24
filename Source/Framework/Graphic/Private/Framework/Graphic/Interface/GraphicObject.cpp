@@ -15,7 +15,7 @@ namespace ob::graphic {
         : m_referenceCount(1){
         m_name[0] = TC('\0');
 
-        System::Instance().registerObject(*this);
+        System::Get().registerObject(*this);
     }
 
     //@―---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ namespace ob::graphic {
         }
         OB_CHECK_ASSERT(m_referenceCount == 0, "参照カウントエラー");
         // デバイスの削除スタックに追加
-        System::Instance().requestRelease(*this);
+        System::Get().requestRelease(*this);
         return m_referenceCount;
     }
 

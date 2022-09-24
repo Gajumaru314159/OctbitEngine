@@ -4,15 +4,15 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Singleton/Singleton.h>
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/String/Name.h>
 #include <Framework/Core/Thread/SpinLock.h>
+#include <Framework/Core/Template/Utility/Singleton.h>
 
 namespace ob::core {
 
     //! @cond
-    namespace detail{
+    namespace internal{
 
         class NameData {
         public:
@@ -57,7 +57,7 @@ namespace ob::core {
     private:
 
         mutable SpinLock m_lock;
-        HashMap<Name::Hash, detail::NameData> m_dict;
+        HashMap<Name::Hash, internal::NameData> m_dict;
 
     };
 

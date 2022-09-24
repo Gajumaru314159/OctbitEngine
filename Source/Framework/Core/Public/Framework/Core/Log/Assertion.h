@@ -18,9 +18,9 @@
 //@―---------------------------------------------------------------------------
 //! @brief      アサーションの基底マクロ
 //@―---------------------------------------------------------------------------
-#define _internal_OB_ASSERT_BASE(expr,format,...)                                     \
-if(UNLIKELY(!(expr))){                                                      \
-    OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);   \
+#define _internal_OB_ASSERT_BASE(expr,format,...)                                       \
+if(UNLIKELY(!(expr))){                                                                  \
+    _internal_OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);    \
 }
 
 //@―---------------------------------------------------------------------------

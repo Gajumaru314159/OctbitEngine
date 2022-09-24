@@ -33,7 +33,7 @@ namespace ob::engine::test {
         ParentModule(Engine& engine)
             : IModule(engine)
         {
-            engine.<TestModule>();
+            //engine.<TestModule>();
         }
 
     private:

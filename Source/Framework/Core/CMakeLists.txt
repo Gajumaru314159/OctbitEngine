@@ -21,7 +21,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${p
 
 # 依存ライブラリ設定
 set(public_libs
-    Singleton
     fmt
     GSL
     utf8cpp

@@ -81,7 +81,6 @@ include(ThirdParty.cmake)
 include(Common.cmake)
 
 # Framework
-add_subdirectory ("Source/Framework/Singleton")
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
 add_subdirectory ("Source/Framework/Graphic")

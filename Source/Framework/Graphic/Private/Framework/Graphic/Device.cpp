@@ -22,7 +22,7 @@ namespace ob::graphic
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     IDevice* Device::Get() {
-        auto pDevice = System::Instance().getDevice();
+        auto pDevice = System::Get().getDevice();
         OB_CHECK_ASSERT(pDevice, "ob::graphic::Systemが初期化されていないためデバイスの取得に失敗しました。");
         return pDevice;
     }

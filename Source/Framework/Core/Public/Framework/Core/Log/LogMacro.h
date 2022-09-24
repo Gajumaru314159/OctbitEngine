@@ -18,7 +18,7 @@
 //@―---------------------------------------------------------------------------
 //! @brief      基底のログ出力マクロ
 //@―---------------------------------------------------------------------------
-#define _internal_OB_LOG_BASE(level,category,format,...) ob::core::Logger::Instance().addLog(level,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__);\
+#define _internal_OB_LOG_BASE(level,category,format,...) ob::core::Logger::Get().addLog(level,CURRENT_SOURCE_LOCATION,TC(category),TC(format), __VA_ARGS__);\
                                                 if(level==ob::core::LogLevel::Fatal){assert(false);}
 
 

@@ -12,7 +12,7 @@ namespace ob::input {
 	//! @brief  マウスポインタの座標を取得
 	//@―---------------------------------------------------------------------------
 	Vec2 Mouse::GetPos() {
-		if (auto device = InputManager::Instance().findDevice(ID, 0)) {
+		if (auto device = InputManager::Get().findDevice(ID, 0)) {
 			return {
 				device->getAxisValue(enum_cast(MouseAxis::X)),
 				device->getAxisValue(enum_cast(MouseAxis::Y))
@@ -25,7 +25,7 @@ namespace ob::input {
 	//! @brief  マウスポインタの移動量を取得
 	//@―---------------------------------------------------------------------------
 	Vec2 Mouse::GetDeltaPos() {
-		if (auto device = InputManager::Instance().findDevice(ID, 0)) {
+		if (auto device = InputManager::Get().findDevice(ID, 0)) {
 			return {
 				device->getAxisValue(enum_cast(MouseAxis::DeltaX)),
 				device->getAxisValue(enum_cast(MouseAxis::DeltaY))

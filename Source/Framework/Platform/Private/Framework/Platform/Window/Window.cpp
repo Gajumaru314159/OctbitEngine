@@ -20,8 +20,8 @@ namespace ob::platform {
 
         m_impl = std::make_shared<WindowImpl>(desc);
 
-        if (!WindowManager::Instance().getMainWindow()) {
-            WindowManager::Instance().setMainWindow(*this);
+        if (!WindowManager::Get().getMainWindow()) {
+            WindowManager::Get().setMainWindow(*this);
         }
     }
 
@@ -266,7 +266,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     Window Window::getMainWindow() {
         // static変数を直接使用するとDLL間で共有できない
-        return WindowManager::Instance().getMainWindow();
+        return WindowManager::Get().getMainWindow();
     }
 
 }// namespace ob::platform
