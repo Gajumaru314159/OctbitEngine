@@ -11,9 +11,8 @@ namespace ob::graphic::dx12 {
 
 	class DirectX12GraphicModule :public ob::graphic::GraphicModule {
 	public:
-		DirectX12GraphicModule(engine::Engine& engine)
-			: GraphicModule(engine)
-			, m_objectManager(2)
+		DirectX12GraphicModule()
+			: m_objectManager(2)
 			, m_device(FeatureLevel::Default)
 		{
 

@@ -13,8 +13,7 @@
 
 namespace ob::input{
 
-    InputModule::InputModule(engine::Engine& engine)
-        : engine::IModule(engine)
+    InputModule::InputModule()
     {
         // キーボード
         {

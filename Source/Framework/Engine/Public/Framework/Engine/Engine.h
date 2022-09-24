@@ -107,7 +107,7 @@ namespace ob::engine {
 		}
 
 		// 生成
-		auto [pModule, baseTypeHash] = internal::ModuleFactory::Get().create<TModule>(*this);
+		auto [pModule, baseTypeHash] = internal::ModuleFactory::Get().create<TModule>();
 		if (pModule) {
 
 			auto index = m_modules.size();

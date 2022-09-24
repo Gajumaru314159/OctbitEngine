@@ -16,7 +16,7 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		class ModuleConstructorBase {
 		public:
-			virtual IModule* construct(Engine&)const = 0;
+			virtual IModule* construct()const = 0;
 			virtual size_t type()const = 0;
 			virtual StringView name()const = 0;
 		};
@@ -27,7 +27,7 @@ namespace ob::engine {
 		template<class T,
 			typename = std::enable_if_t<
 			/**/std::is_base_of<IModule, T>::value&&		// IModuleの派生クラス
-			/**/std::is_constructible<T, Engine&>::value	// 生成可能
+			/**/std::is_constructible<T>::value				// 生成可能
 			>
 		>
 		class ModuleConstructor :public ModuleConstructorBase {
@@ -35,8 +35,8 @@ namespace ob::engine {
 			ModuleConstructor() {
 				StringEncoder::Encode(typeid(T).name(), m_name);
 			}
-			IModule* construct(Engine& engine)const override {
-				return new T(engine);
+			IModule* construct()const override {
+				return new T();
 			}
 			size_t type()const override {
 				return typeid(T).hash_code();
@@ -75,7 +75,7 @@ namespace ob::engine {
 			//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
 			//@―---------------------------------------------------------------------------
 			template<class TModule>
-			std::pair<TModule*, size_t> create(Engine&);
+			std::pair<TModule*, size_t> create();
 
 		private:
 
@@ -133,7 +133,7 @@ namespace ob::engine {
 		//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
 		//@―---------------------------------------------------------------------------
 		template<class TModule>
-		std::pair<TModule*, size_t> ModuleFactory::create(Engine& engine) {
+		std::pair<TModule*, size_t> ModuleFactory::create() {
 
 			auto hash = typeid(TModule).hash_code();
 
@@ -143,7 +143,7 @@ namespace ob::engine {
 
 				// 生成
 				for (auto& constructor : constructors) {
-					if (auto pModule = constructor->construct(engine)) {
+					if (auto pModule = constructor->construct()) {
 						if (pModule->isValid() == false) {
 							delete pModule;
 						} else {

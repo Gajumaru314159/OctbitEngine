@@ -27,13 +27,10 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		virtual IDevice* getDevice() = 0;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      
+		//@―---------------------------------------------------------------------------
 		virtual GraphicObjectManager& getObjectManager() = 0;
-
-	protected:
-		GraphicModule(engine::Engine& engine)
-			: engine::IModule(engine)
-		{
-		}
 
 	};
 

@@ -267,7 +267,7 @@ int OctbitMain() {
 		if (msg.message == WM_QUIT) {
 			break;
 		}
-		if (input::Keyboard::GetButton(input::Key::Escape).down())break;
+		if (input::Keyboard::Escape.down())break;
 
 		// 表示を更新(Present)
 		swapChain.update();
