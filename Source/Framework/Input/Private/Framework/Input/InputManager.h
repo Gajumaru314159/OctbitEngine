@@ -40,7 +40,6 @@ namespace ob::input {
             bool operator!=(const DeviceKey& rhs) const { return !(*this == rhs); }
         };
         struct Hash {
-            typedef std::size_t result_type;
             std::size_t operator()(const DeviceKey& key) const {
                 return static_cast<size_t>(static_cast<size_t>(key.id) ^ ((size_t)key.user << 28));
             }
