@@ -19,7 +19,7 @@ namespace ob::engine {
         //! @brief  設定追加
         //@―---------------------------------------------------------------------------
         template<typename T>
-        void set(const T& setting);
+        void set(T&& setting);
 
         //@―---------------------------------------------------------------------------
         //! @brief  設定取得
@@ -58,10 +58,10 @@ namespace ob::engine {
     //! @brief  設定追加
     //@―---------------------------------------------------------------------------
     template<typename T>
-    inline void EngineConfig::set(const T& setting) {
+    inline void EngineConfig::set(T&& setting) {
         ScopeLock lock(m_lock);
         auto hash = typeid(T).hash_code();
-        m_configs[hash] = setting;
+        m_configs[hash] = std::forward<T>(setting);
     }
 
     //@―---------------------------------------------------------------------------
