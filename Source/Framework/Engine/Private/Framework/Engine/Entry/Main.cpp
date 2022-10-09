@@ -15,6 +15,7 @@ int CommonMain() {
 
     LOG_INFO("OctbitInit()");
 
+    // カレントパスを変更
     auto path = std::filesystem::current_path();
     while (path.has_parent_path()) {
         auto rootMarkPath = path / "EngineRootMark";

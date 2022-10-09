@@ -18,7 +18,7 @@ namespace ob::input{
 
     InputModule::InputModule()
     {
-        auto& config = GEngine->ini().get<Config>();
+        auto& config = GEngine->config().get<Config>();
 
         // キーボード
         if(config.useKeyboard) {

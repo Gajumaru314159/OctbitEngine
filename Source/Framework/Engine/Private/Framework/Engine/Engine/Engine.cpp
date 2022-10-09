@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		エンジン
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Core.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/IModule.h>
-#include <Framework/Core/Misc/DateTime.h>
 
 namespace ob::engine {
 
@@ -26,6 +25,14 @@ namespace ob::engine {
 		LOG_INFO("[Shutdown OctbitEngine]");
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  更新
+	//@―---------------------------------------------------------------------------
+	bool Engine::update() {
+		visit([](engine::IModule& m) {m.update(); });
+	}
+
 }// namespace ob
 
+// グローバルオブジェクト
 ob::engine::Engine* GEngine=nullptr;

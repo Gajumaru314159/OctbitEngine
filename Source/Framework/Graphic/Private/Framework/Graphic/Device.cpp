@@ -24,6 +24,7 @@ namespace ob::graphic
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     IDevice* Device::Get() {
+        // 高速取得のためキャッシュ
         static IDevice* pDevice = nullptr;
         if (pDevice == nullptr) {
             if (auto pModule = GEngine->get<GraphicModule>()) {
