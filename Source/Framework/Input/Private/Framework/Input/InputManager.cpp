@@ -9,7 +9,7 @@
 #include <Framework/Input/Device/MouseDevice.h>
 #include <Framework/Input/Device/DirectInputDevice.h>
 
-#include <Framework/Input/Settings.h>
+#include <Framework/Input/Config.h>
 
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/ModuleFactory.h>
@@ -18,16 +18,16 @@ namespace ob::input{
 
     InputModule::InputModule()
     {
-        auto& settings = GEngine->ini().get<Settings>();
+        auto& config = GEngine->ini().get<Config>();
 
         // キーボード
-        if(settings.useKeyboard) {
+        if(config.useKeyboard) {
             auto device = std::make_unique<KeyboardDevice>();
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);
         }
         // マウス
-        if (settings.useMouse) {
+        if (config.useMouse) {
             auto device = std::make_unique<MouseDevice>();
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);

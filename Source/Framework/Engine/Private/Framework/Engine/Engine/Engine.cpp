@@ -13,8 +13,8 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Engine::Engine(InitContext&& settings)
-		: m_settings(settings)
+	Engine::Engine(EngineConfig&& config)
+		: m_config(config)
 	{
 	}
 

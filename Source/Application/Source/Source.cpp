@@ -6,28 +6,30 @@
 #include <Framework/Platform/Window.h>
 
 #include <Framework/Input/All.h>
-#include <Framework/Input/Settings.h>
+#include <Framework/Input/Config.h>
 
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/InitContext.h>
+#include <Framework/Engine/EngineConfig.h>
 
+#pragma warning(push, 0)
 #include <OBJ_Loader.h>
+#pragma warning(pop)
 //-----------------------------------------------------------------
 using namespace ob;
 
 void Link_DirectX12();
 void Link_Input();
 
-void OctbitInit(ob::engine::InitContext& context) {
+void OctbitInit(ob::engine::EngineConfig& config) {
 	{
-		graphic::Settings settings;
-		settings.frameBufferCount = 3;
-		context.set(settings);
+		graphic::Config c;
+		c.frameBufferCount = 3;
+		config.set(c);
 	}
 	{
-		input::Settings settings;
+		input::Config c;
 		//settings.useKeyboard = false;
-		context.set(settings);
+		config.set(c);
 	}
 
 	Link_DirectX12();

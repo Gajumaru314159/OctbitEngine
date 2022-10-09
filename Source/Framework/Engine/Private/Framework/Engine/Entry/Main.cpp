@@ -29,12 +29,12 @@ int CommonMain() {
     }
 
     // 設定
-    ob::engine::InitContext context;
-    OctbitInit(context);
+    ob::engine::EngineConfig config;
+    OctbitInit(config);
 
     LOG_TRACE("エンジン生成");
     // エンジン初期化
-    ob::engine::Engine engine(std::move(context));
+    ob::engine::Engine engine(std::move(config));
     GEngine = &engine;
 
     LOG_INFO("Entry OctbitMain()");

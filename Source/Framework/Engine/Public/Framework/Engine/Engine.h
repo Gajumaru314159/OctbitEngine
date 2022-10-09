@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/ModuleFactory.h>
-#include <Framework/Engine/InitContext.h>
+#include <Framework/Engine/EngineConfig.h>
 
 namespace ob::engine {
 
@@ -24,7 +24,7 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		Engine(InitContext&&);
+		Engine(EngineConfig&&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		デストラクタ
@@ -63,7 +63,7 @@ namespace ob::engine {
 		template<class TFunc = void(IModule&)>
 		void visit(TFunc);
 
-		InitContext& ini() { return m_settings; }
+		EngineConfig& ini() { return m_config; }
 
 	private:
 
@@ -80,7 +80,7 @@ namespace ob::engine {
 
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeHash, size_t> m_indices;
-		InitContext m_settings;
+		EngineConfig m_config;
 
 	};
 

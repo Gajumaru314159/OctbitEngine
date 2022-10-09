@@ -14,7 +14,7 @@ REGISTER_MODULE(DirectXRHIModule,RHIModule);
 ```
 
 ```cpp
-void OctbitInit(InitContext& context){
+void OctbitInit(EngineConfig& context){
 
 	IniReader ini(path);
 

@@ -12,7 +12,7 @@ namespace ob::engine {
     //! @brief  エンジン設定
     //! @see    OctbitInit()
     //@―---------------------------------------------------------------------------
-    struct Settings {
+    struct Config {
         bool consoleEnabled = false;    //!< コンソールウィンドウを表示するか
 
         std::string engineDirectory;    //!<
