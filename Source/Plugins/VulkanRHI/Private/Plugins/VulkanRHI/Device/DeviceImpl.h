@@ -4,9 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Interface/IDevice.h>
+#include <Framework/Graphic/IDevice.h>
 #include <Framework/Graphic/Types/FeatureLevel.h>
 #include <Framework/Graphic/Types/DescriptorDesc.h>
+
+#include <Plugins/VulkanRHI/Device/DebugReportCallBack.h>
+#include <Plugins/VulkanRHI/Device/Instance.h>
+#include <Plugins/VulkanRHI/Device/PhysicalDevice.h>
 
 //===============================================================
 // クラス定義
@@ -76,6 +80,12 @@ namespace ob::graphic::vulkan {
 
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  テクスチャを生成
+		//@―---------------------------------------------------------------------------
+		ob::graphic::ITexture* createTexture(BlobView desc)override;
+
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  レンダーターゲットを生成
 		//@―---------------------------------------------------------------------------
 		ob::graphic::IRenderTarget* createRenderTarget(const RenderTargetDesc& desc)override;
@@ -118,7 +128,9 @@ namespace ob::graphic::vulkan {
 
 		FeatureLevel                        m_featureLevel;             // フィーチャーレベル
 
-		VkInstance	m_instance = nullptr;
+		UPtr<Instance> m_instance;
+		//UPtr<DebugReportCallback> m_callback;
+
 		VkPhysicalDevice m_physicalDevice = nullptr;
 		VkPhysicalDeviceMemoryProperties m_physMemProps;
 		VkDevice m_device;

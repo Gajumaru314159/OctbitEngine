@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/String/Name.h>
+#include <Framework/Graphic/Buffer.h>
 
 namespace ob::rendering {
 
@@ -19,11 +20,20 @@ namespace ob::rendering {
     //@―---------------------------------------------------------------------------
     class CommandBuffer {
     public:
+        void clear();
         void blit(const Texture& source, Texture& dest, const Material& mat);// scale/offset/TextureArrayIndex
         // void copyTexture(src,dest);// フォーマット/サイズが違う場合はレンダー   領域
 
         void drawMesh(const Mesh& mesh, const Matrix&, const Material&, Name shaderPass);
         void drawMeshInstanced(const Mesh& mesh, Span<Matrix>, const Material&, Name shaderPass);
+
+        void drawMesh(Span<graphic::Buffer> streams,const graphic::Buffer& indices, const Matrix&, const Material&, Name shaderPass);
+
+
+        void getTemporaryRT();
+
+    private:
+        Pimpl<class CommandBufferImpl> m_impl;
     };
 
 

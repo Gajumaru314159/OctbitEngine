@@ -19,7 +19,7 @@ namespace ob::rendering {
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
-		virtual void render(const RenderContext& context,const Camera& camera) = 0;
+		virtual void render(RenderContext& context, Span<Camera> cameras) = 0;
 
 	};
 

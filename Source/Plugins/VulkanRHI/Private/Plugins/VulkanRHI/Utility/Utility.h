@@ -4,14 +4,33 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Math/Transform.h>
 
-namespace ob::rendering {
+namespace ob::graphic::vulkan {
+
+    inline bool Failed(::VkResult res)
+    {
+        if (res < 0)
+        {
+            LOG_ERROR("Vulkanエラー{}",static_cast<s32>(res));
+            return true;
+        }
+        return false;
+    }
+
+
+    inline ::VkResult ThrowIfFailed(::VkResult res)
+    {
+        if (res < 0)
+        {
+            throw std::runtime_error("Error Vulkan");
+        }
+        return res;
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class Camera {
+    class Utility {
     public:
 
         //===============================================================
@@ -24,8 +43,21 @@ namespace ob::rendering {
 
     private:
 
-        Transform m_transform;
+
 
     };
 
+
+
+
+
+
+    //===============================================================
+    // インライン関数
+    //===============================================================
+    //! @cond
+
+
+
+    //! @endcond
 }// namespcae ob

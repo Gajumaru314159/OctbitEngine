@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Rendering/Camera/CameraType.h>
+#include <Framework/Rendering/CameraType.h>
 
 namespace ob::rendering {
 
@@ -76,7 +76,7 @@ namespace ob::rendering {
 
         f32 getAspect()const;
 
-        CameraType getCameraType()const;
+        CameraType getType()const;
 
         auto getPriority()const->CameraPriority;
         void setPriority(CameraPriority priority);
@@ -92,7 +92,7 @@ namespace ob::rendering {
 
     private:
 
-
+        Transform m_transform;
 
     };
 

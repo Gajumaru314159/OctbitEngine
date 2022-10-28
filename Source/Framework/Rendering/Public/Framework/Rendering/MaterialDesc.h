@@ -14,7 +14,7 @@ namespace ob::rendering {
     };
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  マテリアル定義
     //@―---------------------------------------------------------------------------
     struct MaterialDesc{
         Array<MaterialPropertyDesc> floatProperties;

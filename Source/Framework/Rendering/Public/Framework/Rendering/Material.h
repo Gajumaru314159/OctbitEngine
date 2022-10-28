@@ -48,7 +48,7 @@ namespace ob::rendering {
 
     public:
 
-        void record(graphic::CommandList&);
+        void record(graphic::CommandList&,Name pass)const;
 
     private:
 

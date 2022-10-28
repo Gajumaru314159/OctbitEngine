@@ -5,6 +5,7 @@ project ("OctbitEngine")
 # オプション定義
 #------------------------------------------------------------------------------
 option(DirectX "Enable DirectX RHI" ON)
+option(Vulkan "Enable Vulkan RHI" ON)
 
 #------------------------------------------------------------------------------
 # ソリューション設定
@@ -94,8 +95,10 @@ if(WIN32)
     if(DirectX)
         add_subdirectory ("Source/Plugins/GraphicDirectX12")
     endif()
+    if(Vulkan)
+        add_subdirectory ("Source/Plugins/VulkanRHI")
+    endif()
 endif()
-#add_subdirectory ("Source/Public/Plugins/GraphicVulkan")
 
 # Test
 add_subdirectory ("Source/Test/Framework/Core")

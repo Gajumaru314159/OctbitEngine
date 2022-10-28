@@ -1,18 +1,14 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
+//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Misc/YesNo.h>
+#include <Framework/Rendering/RenderContext.h>
+#include <Framework/Graphic/CommandList.h>
+#include <Framework/Rendering/Camera.h>
 
 namespace ob::rendering {
-
-    class CommandBuffer;
-    class Camera;
-    class Attachment;
-
-    
 
     //@―---------------------------------------------------------------------------
     //! @brief  
@@ -20,7 +16,7 @@ namespace ob::rendering {
     //! @details    内部的にCommandBufferを持っています。独自の描画方法を使用する場合は
     //! CommandBufferに直接コマンドを記録し、executeCommandBuffer()を記録してください。
     //@―---------------------------------------------------------------------------
-    class RenderContext {
+    class RenderContextImpl:public RenderContext{
     public:
 
         //===============================================================
@@ -28,25 +24,31 @@ namespace ob::rendering {
         //===============================================================
 
         //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        RenderContextImpl();
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief      RenderPass を開始
         //@―---------------------------------------------------------------------------
-        virtual void beginRenderPass(s32 width,s32 height,Span<Attachment> attachments,s32 depthIndex = -1) = 0;
+        void beginRenderPass(s32 width, s32 height)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      サブパスを開始
         //@―---------------------------------------------------------------------------
-        virtual void beginSubPass(/*colors,inputs*/) = 0;
+        void beginSubPass(/*colors,inputs*/)override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      カメラのプロパティをグローバル変数に書き込む
         //@―---------------------------------------------------------------------------
-        virtual void setCamera(const Camera& camera) = 0;
+        void setCamera(const Camera& camera)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        virtual void draw(/*tag,sort,filter*/) = 0;// Debug / Shadow / UI
+        void draw(/*tag,sort,filter*/)override;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      カスタムコマンドバッファーを記録
@@ -54,30 +56,34 @@ namespace ob::rendering {
         //! @details    この関数を呼び出すと、RenderContext内部のCommandBufferにカスタムCommandBufferの内容がコピーされます。
         //!             呼出し後にカスタムCommandBufferを再利用しない場合はCommandBufferをクリアしてください。
         //@―---------------------------------------------------------------------------
-        virtual void executeCustomCommand(const CommandBuffer&) = 0;
+        void executeCustomCommand(const CommandBuffer&)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      
         //@―---------------------------------------------------------------------------
-        virtual void invokeOnRenderObjectCallBack() = 0;
+        void invokeOnRenderObjectCallBack()override;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      サブパスを終了
         //@―---------------------------------------------------------------------------
-        virtual void endSubPass() = 0;
+        void endSubPass()override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      RenderPass を終了
         //@―---------------------------------------------------------------------------
-        virtual void endRenderPass() = 0;
+        void endRenderPass()override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      記録された全てのコマンドを実行
         //! 
         //! @details    記録されているコマンドを即時実行し、実行が終わるまで待機します。
         //@―---------------------------------------------------------------------------
-        virtual void submit() = 0;
+        void submit()override;
+
+    private:
+
+        graphic::CommandList m_commandList;
 
     };
 

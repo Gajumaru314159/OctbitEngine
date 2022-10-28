@@ -30,6 +30,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
 		visit([](engine::IModule& m) {m.update(); });
+		return true;
 	}
 
 }// namespace ob

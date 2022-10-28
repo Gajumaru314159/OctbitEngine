@@ -17,7 +17,8 @@
 //-----------------------------------------------------------------
 using namespace ob;
 
-void Link_DirectX12();
+//void Link_DirectX12();
+void Link_Vulkan();
 void Link_Input();
 
 void OctbitInit(ob::engine::EngineConfig& config) {
@@ -32,7 +33,8 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 		config.set(c);
 	}
 
-	Link_DirectX12();
+	//Link_DirectX12();
+	Link_Vulkan();
 	Link_Input();
 }
 

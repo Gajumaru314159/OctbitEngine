@@ -92,7 +92,8 @@ namespace ob::rendering {
     //@―---------------------------------------------------------------------------
     //! @brief  描画コマンドを記録
     //@―---------------------------------------------------------------------------
-    void Material::record(graphic::CommandList& recorder) {
+    void Material::record(graphic::CommandList& recorder, Name pass) const{
+        OB_NOTIMPLEMENTED();
         //safeGet(m_impl).record(recorder);
     }
 
