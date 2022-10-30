@@ -7,7 +7,7 @@
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Device/Device.h>
 
-namespace ob::graphic::vulkan {
+namespace ob::rhi::vulkan {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明

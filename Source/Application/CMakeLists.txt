@@ -26,9 +26,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${p
 set(public_libs 
     Core
     Platform
-    Graphic
-    #GraphicDirectX12
-    VulkanRHI
+    RHI
+    DirectX12RHI
+    #VulkanRHI
     Input
     Engine
 )

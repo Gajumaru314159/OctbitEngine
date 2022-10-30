@@ -57,7 +57,7 @@ namespace {
 
 }
 
-namespace ob::graphic::vulkan {
+namespace ob::rhi::vulkan {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
@@ -136,7 +136,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::ITexture* DeviceImpl::createTexture(const TextureDesc& desc) {
+	ob::rhi::ITexture* DeviceImpl::createTexture(const TextureDesc& desc) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -145,7 +145,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::ITexture* DeviceImpl::createTexture(BlobView blob) {
+	ob::rhi::ITexture* DeviceImpl::createTexture(BlobView blob) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -154,7 +154,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {
+	ob::rhi::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -163,7 +163,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  バッファーを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::IBuffer* DeviceImpl::createBuffer(const BufferDesc& desc) {
+	ob::rhi::IBuffer* DeviceImpl::createBuffer(const BufferDesc& desc) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -172,7 +172,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点シェーダを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::IShader* DeviceImpl::createShader(const String& code, ShaderStage stage) {
+	ob::rhi::IShader* DeviceImpl::createShader(const String& code, ShaderStage stage) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -181,7 +181,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点シェーダを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::IShader* DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
+	ob::rhi::IShader* DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -190,7 +190,7 @@ namespace ob::graphic::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタ・テーブルを生成
 	//@―---------------------------------------------------------------------------
-	ob::graphic::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
+	ob::rhi::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
 		OB_NOTIMPLEMENTED();
 		return nullptr;
 	}
@@ -353,4 +353,4 @@ namespace ob::graphic::vulkan {
 			//::vkDestroyDebugReportCallbackEXT(m_instance, m_callback, nullptr);
 		}
 	}
-}// namespace ob::graphic::vulkan
+}// namespace ob::rhi::vulkan

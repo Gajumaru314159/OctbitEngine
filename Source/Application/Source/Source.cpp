@@ -1,7 +1,7 @@
 ﻿#include <Windows.h>
 
-#include <Framework/Graphic/All.h>
-#include <Framework/Graphic/MeshData.h>
+#include <Framework/RHI/All.h>
+#include <Framework/RHI/MeshData.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -17,13 +17,13 @@
 //-----------------------------------------------------------------
 using namespace ob;
 
-//void Link_DirectX12();
+void Link_DirectX12();
 void Link_Vulkan();
 void Link_Input();
 
 void OctbitInit(ob::engine::EngineConfig& config) {
 	{
-		graphic::Config c;
+		rhi::Config c;
 		c.frameBufferCount = 3;
 		config.set(c);
 	}
@@ -33,14 +33,14 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 		config.set(c);
 	}
 
-	//Link_DirectX12();
-	Link_Vulkan();
+	Link_DirectX12();
+	//Link_Vulkan();
 	Link_Input();
 }
 
 int OctbitMain() {
 
-	using namespace ob::graphic;
+	using namespace ob::rhi;
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;

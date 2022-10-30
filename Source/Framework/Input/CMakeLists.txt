@@ -22,7 +22,7 @@ set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs Core Graphic)
+set(public_libs Core Engine Platform)
 set(private_libs dinput8.lib dxguid.lib)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
 

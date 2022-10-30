@@ -1,81 +1,136 @@
-Graphicモジュール
-====================
+﻿Graphic
+=========
 
-## 概要
-GraphicモジュールではDirectXやVulkanなどの異なる描画APIの共通化を行います。
+構成要素
+----------
+* Camera
+* Model
+* Material
+* Cubemap
+* FrustumCulling
+* Renderer
+* Light
+* LOD
+* Particle
+* Decal
+* Skybox
+* Terrein
 
-## 構成
-### System
-異なる描画APIを生成するシングルトンです。
-起動時に描画APIを指定することで対応するグラフィック・モジュールを読み込み、各描画APIで実装されたDeviceを取得します。
 
-### Device
-グラフィック・オブジェクトを生成するファクトリクラスです。
-実装はプラグインで行い、各種グラフィック・オブジェクトを実装した派生オブジェクトを生成します。
-Device事態はGraphicModuleから生成されます。
+概要
+----
 
-## 使用例
-プラットフォーム(OS)ごとに起動方法が異なるため、識別マクロを使用して個別の起動処理を実装する必要があります。
+
 ```c++
-graphic::System::Ref()::startup(GraphicAPI::DirectX);
-auto pDevice=graphic::System::Ref()::getDevice();
-auto buffer=pDevice->createBuffer(0x1000,TC("TestBuffer"));
-```
 
-## リソース
-リソースは大別して三種類あります。
-### Read
-* 頂点
-* インデックス
-* テクスチャ
-### ReadWrite
-* レンダーターゲット
-### ReadWrite
-* Unoredered Access
-
-```cpp
-Window window(WindowDesc());
-
-SystemDesc sysDesc;
-sysDesc.api = GraphicAPI::DirectX12;
-sysDesc.bufferNum = 2;
-System::Get().initialize(sysDesc);
-
-SwapChain swapChain;
-{
-	SwapchainDesc desc;
-	desc.window=window;
-	swapChain=SwapChain(desc);
-}
-
-RenderTexture rt;
-{
-	TextureDesc colorDescs[1];
-	colorDescs.size=window.getSize();
-	rt=RenderTexture(colorDesc);
-}
-
-RenderPass renderPass;
-FrameBuffer frameBuffer;
-
-PipelineState pipeline;
-RootDescriptorTable;
-
-CommandList cmdList;
-
-while(true){
-	
-	cmdList.beginRenderPass(frameBuffer);
-	cmdList.setPipelineState(pipelineState);
-	cmdList.setRootDescriptorTable(rdt);
-	cmdList.setVertexBuffer();
-	cmdList.setIndexBuffer();
-	cmdList.draw();
-
-
-	swapChain.update(rt);
-}
+Material material(shader);
+material.setFloat("Scale",12.0f);
+context.setMaterial(material);
+context.draw(mesh);
 
 ```
 
-## エンジンと描画機能
+# いつPipelineStateをつくるか
+## 必要な情報
+* 書き込み時に決まるもの
+    * 書き込み先フォーマット
+	* 頂点レイアウト
+* 事前決定
+	* ルートシグネチャ
+	* シェーダ
+	* ブレンドモード
+	* ラスタライズ
+	* デプス
+
+
+```
+Material
+	MaterialPass[]
+		Shader[]
+		Tag
+	Buffer
+	Texture[]
+```
+* プロパティのBufferとトランスフォームのバッファは別になる
+* トランスフォーム/色→モデルごと
+* 
+
+
+
+# Shader
+## HLSLレベルに追加される概念
+* マルチパス
+* 描画タグ
+* サブシェーダ(フォールバック)
+* ブレンドモード
+
+
+# 定義済み変数
+```
+// 共通
+時間
+フォグ
+
+// モデル
+モデル行列
+
+// カメラ
+ビュー行列
+プロジェクション行列
+スクリーンサイズ
+```
+
+# 描画パス
+```c++
+class RenderPipeline{
+public:
+	RenderPipeline(const Camera& camera)
+		: base(camera)
+	{
+		// RT生成
+		m_gbufferRT = camera.createRT();
+		m_accumulateRT = camera.createRT();
+		m_downsampleRT = camera.createRT();		
+	}
+
+	void render(RenderContet& context){
+		// カメラごとのRTをつくる必要がある
+		// サイズの更新はどこでする？
+
+		// Unityではカメラのリストを受け取るが理由は？
+
+		// マルチスレッドで描画するには？
+		
+		// 複数カメラの依存関係は？
+		//		カメラの描画先のレンダーターゲットは1フレーム遅延(描画完了後にSwap)
+
+		switch(camera.getType()){
+		case CameraType::Reflection:
+		case CameraType::Voxelize:
+			break;
+		default:
+			// Rendererを描画する場合
+			context.setCamera(camera);
+			context.draw();
+			// 独自コマンドを実行する場合(PostProcess)
+			PostProcessManager::Instance().setPostProcess(camera);
+			m_cmdBuffer.clear();
+			m_cmdBuffer.drawMesh();
+			// 最終描画先はcameraに設定されている
+			m_cmdBuffer.copyTexture(m_accumulateRT,getFinalRT());
+			context.executeCommandBuffer(m_cmdBuffer);
+			// 実行
+			context.submit();
+			break;
+		}
+	}
+
+private:
+	CommandBuffer m_cmdBuffer;
+	RenderTexture m_gbufferRT;
+}
+
+
+```
+* 描画のソート単位はDrawItem
+* DrawItem::render()

@@ -6,7 +6,7 @@
 #pragma once
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 
-namespace ob::graphic::vulkan {
+namespace ob::rhi::vulkan {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明

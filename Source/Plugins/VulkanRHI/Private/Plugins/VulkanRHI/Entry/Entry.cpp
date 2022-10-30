@@ -3,13 +3,13 @@
 //! @brief		グラフィック・モジュール(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/IGraphicModule.h>
+#include <Framework/RHI/IGraphicModule.h>
 #include <Framework/Engine/ModuleFactory.h>
 #include <Plugins/VulkanRHI/Device/DeviceImpl.h>
 
-namespace ob::graphic::vulkan {
+namespace ob::rhi::vulkan {
 
-	class VulkanRHIModule :public ob::graphic::GraphicModule {
+	class VulkanRHIModule :public ob::rhi::GraphicModule {
 	public:
 		VulkanRHIModule()
 			: m_objectManager(2)
@@ -39,9 +39,9 @@ namespace ob::graphic::vulkan {
 		GraphicObjectManager m_objectManager;
 	};
 
-}// namespace ob::graphic::dx12
+}// namespace ob::rhi::dx12
 
-REGISTER_MODULE_DERIVE(ob::graphic::vulkan::VulkanRHIModule, ob::graphic::GraphicModule);
+REGISTER_MODULE_DERIVE(ob::rhi::vulkan::VulkanRHIModule, ob::rhi::GraphicModule);
 
 void Link_Vulkan() {
 

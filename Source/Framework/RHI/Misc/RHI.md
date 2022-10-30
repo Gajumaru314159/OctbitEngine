@@ -1,0 +1,81 @@
+RHIモジュール
+====================
+
+## 概要
+RHIモジュールではDirectXやVulkanなどの異なる描画APIの共通化を行います。
+
+## 構成
+### IGraphicModule
+異なる描画APIを生成するシングルトンです。
+起動時に描画APIを指定することで対応するグラフィック・モジュールを読み込み、各描画APIで実装されたDeviceを取得します。
+
+### Device
+グラフィック・オブジェクトを生成するファクトリクラスです。
+実装はプラグインで行い、各種グラフィック・オブジェクトを実装した派生オブジェクトを生成します。
+Device事態はGraphicModuleから生成されます。
+
+## 使用例
+プラットフォーム(OS)ごとに起動方法が異なるため、識別マクロを使用して個別の起動処理を実装する必要があります。
+```c++
+rhi::System::Ref()::startup(GraphicAPI::DirectX);
+auto pDevice=rhi::System::Ref()::getDevice();
+auto buffer=pDevice->createBuffer(0x1000,TC("TestBuffer"));
+```
+
+## リソース
+リソースは大別して三種類あります。
+### Read
+* 頂点
+* インデックス
+* テクスチャ
+### ReadWrite
+* レンダーターゲット
+### ReadWrite
+* Unoredered Access
+
+```cpp
+Window window(WindowDesc());
+
+SystemDesc sysDesc;
+sysDesc.api = GraphicAPI::DirectX12;
+sysDesc.bufferNum = 2;
+System::Get().initialize(sysDesc);
+
+SwapChain swapChain;
+{
+	SwapchainDesc desc;
+	desc.window=window;
+	swapChain=SwapChain(desc);
+}
+
+RenderTexture rt;
+{
+	TextureDesc colorDescs[1];
+	colorDescs.size=window.getSize();
+	rt=RenderTexture(colorDesc);
+}
+
+RenderPass renderPass;
+FrameBuffer frameBuffer;
+
+PipelineState pipeline;
+RootDescriptorTable;
+
+CommandList cmdList;
+
+while(true){
+	
+	cmdList.beginRenderPass(frameBuffer);
+	cmdList.setPipelineState(pipelineState);
+	cmdList.setRootDescriptorTable(rdt);
+	cmdList.setVertexBuffer();
+	cmdList.setIndexBuffer();
+	cmdList.draw();
+
+
+	swapChain.update(rt);
+}
+
+```
+
+## エンジンと描画機能

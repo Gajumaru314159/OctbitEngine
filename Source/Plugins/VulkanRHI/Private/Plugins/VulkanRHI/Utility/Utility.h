@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-namespace ob::graphic::vulkan {
+namespace ob::rhi::vulkan {
 
     inline bool Failed(::VkResult res)
     {

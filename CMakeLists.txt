@@ -84,19 +84,19 @@ include(Common.cmake)
 # Framework
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
+add_subdirectory ("Source/Framework/RHI")
 add_subdirectory ("Source/Framework/Graphic")
-add_subdirectory ("Source/Framework/Rendering")
 add_subdirectory ("Source/Framework/Input")
 add_subdirectory ("Source/Framework/Engine")
-add_subdirectory ("Source/Framework/Model")
+#add_subdirectory ("Source/Framework/Model")
 
 # Plugins
 if(WIN32)
     if(DirectX)
-        add_subdirectory ("Source/Plugins/GraphicDirectX12")
+        add_subdirectory ("Source/Plugins/DirectX12RHI")
     endif()
     if(Vulkan)
-        add_subdirectory ("Source/Plugins/VulkanRHI")
+        #add_subdirectory ("Source/Plugins/VulkanRHI")
     endif()
 endif()
 
