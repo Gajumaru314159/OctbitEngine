@@ -48,7 +48,7 @@ namespace ob::graphic {
 					Attachment depth(rhi::DepthTextureFormat::D32, 0.f);
 					context.beginRenderPass(width, height, colors);
 					{
-						StaticArray<s32> indices{ 0};
+						s32 indices[]{ 0};
 						context.beginSubPass(indices);
 
 						context.setCamera(camera);

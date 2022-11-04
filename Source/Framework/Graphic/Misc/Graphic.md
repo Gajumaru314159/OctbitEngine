@@ -134,3 +134,15 @@ private:
 ```
 * 描画のソート単位はDrawItem
 * DrawItem::render()
+
+
+
+RenderPass
+* 実際の書き込み先は必要ない
+
+
+RenderPass
+* ほしいテクスチャのフォーマットとその扱い方のみもつ
+
+FrameBuffer
+* RenderPassに使用する実際のImageを持つ
