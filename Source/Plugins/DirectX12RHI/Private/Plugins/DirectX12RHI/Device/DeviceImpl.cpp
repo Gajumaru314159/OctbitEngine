@@ -86,6 +86,24 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  レンダーパスを生成を生成
+	//@―---------------------------------------------------------------------------
+	ob::rhi::IRenderPass* DeviceImpl::createRenderPass(const RenderPassDesc& desc) {
+		OB_NOTIMPLEMENTED();
+		return nullptr;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  フレームバッファを生成
+	//@―---------------------------------------------------------------------------
+	ob::rhi::IFrameBuffer* DeviceImpl::createFrameBuffer(const FrameBufferDesc& desc) {
+		OB_NOTIMPLEMENTED();
+		return nullptr;
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  スワップ・チェーンを生成
 	//@―---------------------------------------------------------------------------
 	ISwapChain* DeviceImpl::createSwapChain(const SwapchainDesc& desc) {

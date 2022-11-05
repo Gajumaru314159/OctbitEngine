@@ -49,6 +49,11 @@ namespace ob::rhi::dx12 {
 		// 生成
 		//===============================================================
 
+
+
+		ob::rhi::IRenderPass* createRenderPass(const RenderPassDesc& desc)override;
+		ob::rhi::IFrameBuffer* createFrameBuffer(const FrameBufferDesc& desc)override;
+
 		//@―---------------------------------------------------------------------------
 		//! @brief  スワップ・チェーンを生成
 		//@―---------------------------------------------------------------------------

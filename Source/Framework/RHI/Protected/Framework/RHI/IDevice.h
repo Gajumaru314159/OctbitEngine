@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Types/RenderPassDesc.h>
+#include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/Types/SwapchainDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
@@ -19,6 +21,8 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
+    class IRenderPass;
+    class IFrameBuffer;
     class ISwapChain;
     class ICommandList;
     class IRootSignature;
@@ -83,6 +87,10 @@ namespace ob::rhi {
         virtual void endRender()=0;
         virtual void flip()=0;
         */
+
+        virtual IRenderPass*        createRenderPass(const RenderPassDesc& desc) = 0;
+        virtual IFrameBuffer*       createFrameBuffer(const FrameBufferDesc& desc) = 0;
+
 
         virtual ISwapChain*         createSwapChain(const SwapchainDesc& desc) = 0;
 
