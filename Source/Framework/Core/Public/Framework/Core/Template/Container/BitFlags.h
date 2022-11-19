@@ -192,7 +192,7 @@ namespace ob::core {
 	//! @brief OR結合演算子
 	//@―---------------------------------------------------------------------------
 	template<typename TEnum>
-	auto operator|(TEnum left, TEnum right) -> std::enable_if_t<std::is_enum_v<TEnum>, BitFlags<TEnum>> {
+	auto operator|(TEnum left, TEnum right) -> std::enable_if_t<std::is_enum_v<TEnum>&&!std::is_convertible_v<TEnum,int>, BitFlags<TEnum>> {
 		return BitFlags<TEnum>(left) | right;
 	}
 

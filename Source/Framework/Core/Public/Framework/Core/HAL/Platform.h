@@ -106,23 +106,23 @@
 //============================================
 // OS_WINDOWS
 #ifdef OS_WINDOWS
-#	define OS_WINDOWS_CONTEXT(context)	context
+#	define OS_WINDOWS_CONTEXT(...)		__VA_ARGS__
 #else
-#	define OS_WINDOWS_CONTEXT(context)	/**/
+#	define OS_WINDOWS_CONTEXT(...)		/**/
 #endif
 
 // OS_LINUX
 #ifdef OS_LINUX
-#	define OS_LINUX_CONTEXT(context)		context
+#	define OS_LINUX_CONTEXT(...)		__VA_ARGS__
 #else
-#	define OS_LINUX_CONTEXT(context)		/**/
+#	define OS_LINUX_CONTEXT(...)		/**/
 #endif
 
 // OB_DEBUG
 #ifdef OB_DEBUG
-#	define OB_DEBUG_CONTEXT(context)		context
+#	define OB_DEBUG_CONTEXT(...)		__VA_ARGS__
 #else
-#	define OB_DEBUG_CONTEXT(context)		/**/
+#	define OB_DEBUG_CONTEXT(...)		/**/
 #endif
 
 //! @endcond

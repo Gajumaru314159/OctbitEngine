@@ -9,6 +9,6 @@
 namespace ob::core {
 
 	template<typename... Types>
-	using Tupple = std::tuple<Types...>;
+	using Tuple = std::tuple<Types...>;
 
 }// namespcae ob

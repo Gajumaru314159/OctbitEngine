@@ -33,8 +33,8 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 		config.set(c);
 	}
 
-	Link_DirectX12();
-	//Link_Vulkan();
+	//Link_DirectX12();
+	Link_Vulkan();
 	Link_Input();
 }
 
@@ -47,6 +47,22 @@ int OctbitMain() {
 	windowDesc.title = TC("Graphic Test");
 	platform::Window window(windowDesc);
 
+
+	// レンダーパス生成
+	RenderPass renderPass;
+	{
+		//RenderPassDesc desc;
+		//// アタッチメント
+		//desc.attachments.emplace_back()
+		//	.setOp(AttachmentLoadOp::NotCare, AttachmentStoreOp::NotCare)
+		//	.setState(ResourceState::Common, ResourceState::AllShaderResource);
+		//// サブパス
+		//desc.subpasses.emplace_back()
+		//	.colors.emplace_back(0);
+		//// 依存
+		//desc.dependencies.emplace_back();
+	}
+
 			
 	// スワップチェイン
 	SwapChain swapChain;
@@ -56,6 +72,74 @@ int OctbitMain() {
 		swapChain = SwapChain(desc);
 		swapChain.setName(TC("MainWindow"));
 		OB_CHECK_ASSERT_EXPR(swapChain);
+	}
+	VertexShader vs;
+	PixelShader ps;
+	{
+#if 0
+		String vssrc;
+		vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
+		vssrc.append(TC("  float4x4 g_mtx;												\n"));
+		vssrc.append(TC("  float4x4 g_mtx2;												\n"));
+		vssrc.append(TC("  float4 g_col;												\n"));
+		vssrc.append(TC("};																\n"));
+		vssrc.append(TC("struct VsIn {													\n"));
+		vssrc.append(TC("  float4 pos:POSITION;											\n"));
+		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
+		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
+		vssrc.append(TC("};																\n"));
+		vssrc.append(TC("struct VsOut {													\n"));
+		vssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
+		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
+		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
+		vssrc.append(TC("};																\n"));
+		vssrc.append(TC("VsOut VS_Main(VsIn i) {										\n"));
+		vssrc.append(TC("    VsOut o;													\n"));
+		vssrc.append(TC("    o.pos = mul(g_mtx,i.pos);									\n"));
+		vssrc.append(TC("    o.uv = i.uv;												\n"));
+		vssrc.append(TC("    o.normal = i.normal;										\n"));
+		vssrc.append(TC("    return o;													\n"));
+		vssrc.append(TC("}																\n"));
+		String pssrc;
+		pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+		pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
+		pssrc.append(TC("struct PsIn {													\n"));
+		pssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
+		pssrc.append(TC("  float4 normal:NORMAL;										\n"));
+		pssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
+		pssrc.append(TC("};																\n"));
+		pssrc.append(TC("struct PsOut {													\n"));
+		pssrc.append(TC("	float4 color0:SV_TARGET0;									\n"));
+		pssrc.append(TC("};																\n"));
+		pssrc.append(TC("PsOut PS_Main(PsIn i){											\n"));
+		pssrc.append(TC("    PsOut o;													\n"));
+		pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
+		pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
+		pssrc.append(TC("    o.color0 = color;											\n"));
+		pssrc.append(TC("    return o;													\n"));
+		pssrc.append(TC("}																\n"));
+#endif
+		String vssrc;
+		vssrc.append(TC("#version 450													\n"));
+		vssrc.append(TC("vec2 positions[3] = vec2](										\n"));
+		vssrc.append(TC("	vec2(0.0,-0.5),												\n"));
+		vssrc.append(TC("	vec2(0.5,0.5),												\n"));
+		vssrc.append(TC("	vec2(-0.5,0.5)												\n"));
+		vssrc.append(TC("};																\n"));
+		vssrc.append(TC("void main() {													\n"));
+		vssrc.append(TC("	gl_Position = vec4(positions[gl_VertexIndex],0.0,1.0);		\n"));
+		vssrc.append(TC("}																\n"));
+		String pssrc;
+		pssrc.append(TC("#version 450													\n"));
+		pssrc.append(TC("#extension GL_ARB_separate_shader_objects : enable				\n"));
+		pssrc.append(TC("layout(location = 0)out vec4 outColor;							\n"));
+		pssrc.append(TC("void main(){													\n"));
+		pssrc.append(TC("    outColor = vec4(0.0, 1.0, 0.0, 1.0);						\n"));
+		pssrc.append(TC("}																\n"));
+
+		vs = VertexShader(vssrc);
+		ps = PixelShader(pssrc);
+		OB_CHECK_ASSERT_EXPR(vs && ps);
 	}
 
 	RenderTarget rt;
@@ -98,55 +182,6 @@ int OctbitMain() {
 		OB_CHECK_ASSERT_EXPR(signature);
 	}
 
-	VertexShader vs;
-	PixelShader ps;
-	{
-		String vssrc;
-		vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
-		vssrc.append(TC("  float4x4 g_mtx;												\n"));
-		vssrc.append(TC("  float4x4 g_mtx2;												\n"));
-		vssrc.append(TC("  float4 g_col;												\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("struct VsIn {													\n"));
-		vssrc.append(TC("  float4 pos:POSITION;											\n"));
-		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("struct VsOut {													\n"));
-		vssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
-		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("VsOut VS_Main(VsIn i) {										\n"));
-		vssrc.append(TC("    VsOut o;													\n"));
-		vssrc.append(TC("    o.pos = mul(g_mtx,i.pos);									\n"));
-		vssrc.append(TC("    o.uv = i.uv;												\n"));
-		vssrc.append(TC("    o.normal = i.normal;										\n"));
-		vssrc.append(TC("    return o;													\n"));
-		vssrc.append(TC("}																\n"));
-		String pssrc;
-		pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-		pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-		pssrc.append(TC("struct PsIn {													\n"));
-		pssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
-		pssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		pssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		pssrc.append(TC("};																\n"));
-		pssrc.append(TC("struct PsOut {													\n"));
-		pssrc.append(TC("	float4 color0:SV_TARGET0;									\n"));
-		pssrc.append(TC("};																\n"));
-		pssrc.append(TC("PsOut PS_Main(PsIn i){											\n"));
-		pssrc.append(TC("    PsOut o;													\n"));
-		pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
-		pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
-		pssrc.append(TC("    o.color0 = color;											\n"));
-		pssrc.append(TC("    return o;													\n"));
-		pssrc.append(TC("}																\n"));
-
-		vs = VertexShader(vssrc);
-		ps = PixelShader(pssrc);
-		OB_CHECK_ASSERT_EXPR(vs && ps);
-	}
 
 
 	struct Vert {

@@ -17,6 +17,8 @@ namespace ob::rhi {
     class RootSignature;
     class PipelineState;
     class ResourceBarrier;
+    class RenderTarget;
+    class Texture;
     class Buffer;
     struct SetDescriptorTableParam;
     struct DrawParam;
@@ -42,8 +44,8 @@ namespace ob::rhi {
         virtual void begin()=0;
         virtual void end()=0;
 
-        virtual void applySwapChain(const class SwapChain& swapChain, const class Texture& texture)=0;
-        virtual void beginRender(const class RenderTarget& target) = 0; //!< 描画開始
+        virtual void applySwapChain(const SwapChain& swapChain, const Texture& texture)=0;
+        virtual void beginRender(const RenderTarget& target) = 0; //!< 描画開始
         virtual void endRender() = 0;                                   //!< 描画終了
 
         virtual void setViewport(const Viewport* pViewport,s32 num)=0;  //!< ビューポートを設定

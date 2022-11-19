@@ -27,8 +27,8 @@ set(public_libs
     Core
     Platform
     RHI
-    DirectX12RHI
-    #VulkanRHI
+    #DirectX12RHI
+    VulkanRHI
     Input
     Engine
 )

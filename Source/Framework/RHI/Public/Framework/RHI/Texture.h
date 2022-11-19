@@ -83,10 +83,6 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         auto type()const->TextureType;
 
-    public:
-
-
-
     };
 
 }// namespace pb::rhi

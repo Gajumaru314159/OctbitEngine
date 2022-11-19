@@ -154,28 +154,16 @@ namespace ob::rhi::dx12 {
 
         class DeviceImpl& m_device;
         const CommandListDesc m_desc;
+
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
         ComPtr<ID3D12GraphicsCommandList5> m_cmdList;
 
         D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
         D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
 
-        const class RenderTarget* m_pRenderTarget=nullptr;
-
-
+        const class RenderTarget* m_pRenderTarget = nullptr;
 
         Array<D3D12_RESOURCE_BARRIER> m_barriers;
-
-        //// class DepthStencilView
-        //s32 m_listIndex;
-        //bool m_depthReadOnly;
-        //
-        //class FrameBufferImpl*    m_pFrameBuffer;
-        //s32                 m_subpassIndex;
-        //Array<ResourceState> m_atttachmentLayout;
-
-        //D3D12_RECT m_renderArea;
-        //bool m_bRenderArea;
 
     };
 

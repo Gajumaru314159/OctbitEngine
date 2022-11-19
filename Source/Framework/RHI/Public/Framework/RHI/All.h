@@ -16,3 +16,5 @@
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/FrameBuffer.h>

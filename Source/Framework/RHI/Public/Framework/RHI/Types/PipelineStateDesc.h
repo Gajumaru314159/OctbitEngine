@@ -125,7 +125,7 @@ namespace ob::rhi {
 		RasterizerDesc		rasterizer;					//!< ラスタライズ定義
 		DepthStencilDesc	depthStencil;				//!< デプス・ステンシル定義
 
-		Topology			topology=Topology::TriangleList;//!< トポロジー
+		Topology			topology=Topology::TriangleList;//!< GeometoryShaderでのトポロジー
 		u32					sampleMask=-1;				//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 

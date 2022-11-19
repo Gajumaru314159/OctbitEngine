@@ -114,10 +114,21 @@ namespace ob::rhi {
 		CopyWrite			= get_bit(12),	//!< コピー先
 		AllRead				= get_bit(13),	//!< 全ての読み取り操作		移行先には指定しないでください
 		AllWrite			= get_bit(14),	//!< 全ての書き込み操作
+
+		// 未対応
+		// StreamOutputWrite
+		// StreamOutputCounterRead
+		// StreamOutputCounterWrite
+		// AccelerationStructureRead
+		// AccelerationStructureWrite
+		// ShadingRateAttachmentRead	VRS
+		// Present
 	};
 	using ResourceAccessFlags = BitFlags<ResourceAccessFlag>;
 	
 #pragma endregion
+
+	/*
 
 	struct AttachmentReference {
 		s32				index;	//!< RenderPassDesc::attachmentsのインデックス
@@ -167,24 +178,74 @@ namespace ob::rhi {
 	//! @details	* ステンシル操作はテクスチャフォーマットが深度ステンシルフォーマットの場合に使用されます。
 	//@―---------------------------------------------------------------------------
 	struct AttachmentDesc {
-		AttachmentDescFlags				flags;			//!< フラグ
+	public:
 		TextureFormat					format;			//!< テクスチャフォーマット
 		AttachmentLoadOp				loadOp;			//!< レンダーパス開始時の操作
 		AttachmentStoreOp				storeOp;		//!< レンダーパス終了時の操作
 		AttachmentLoadOp				stencilLoadOp;	//!< レンダーパス開始時の操作(ステンシル)
 		AttachmentStoreOp				stencilStoreOp;	//!< レンダーパス終了時の操作(ステンシル)
-		ResourceState					initialLayout;	//!< レンダーパス開始時のリソース状態
-		ResourceState					finalLayout;	//!< レンダーパス終了時のリソース状態
+		ResourceState					initialState;	//!< レンダーパス開始時のリソース状態
+		ResourceState					finalState;		//!< レンダーパス終了時のリソース状態
 		MultiSampling					sampling;		//!< マルチサンプリング
+		AttachmentDescFlags				flags;			//!< フラグ
+		// TextureUsages usages;
+	public:
+		AttachmentDesc& setOp(AttachmentLoadOp load, AttachmentStoreOp store) {
+			loadOp = load;
+			storeOp = store;
+			return *this;
+		}
+		AttachmentDesc& setStencilOp(AttachmentLoadOp load, AttachmentStoreOp store) {
+			stencilLoadOp = load;
+			stencilStoreOp = store;
+			return *this;
+		}
+		AttachmentDesc& setState(ResourceState _initial, ResourceState _final) {
+			initialState = _initial;
+			finalState = _final;
+			return *this;
+		}
 	};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		レンダーパス定義
+	//! @details	事前にリソースの状態を指定することでGPU処理を最適化することができます。
+	//!				DirectXでのCommandList:::ResourceBarrier()でリソースの状態を設定する代わりに
+	//!				RenderPass開始時に事前に設定しておくことで効率的な描画が見込めます。
 	//@―---------------------------------------------------------------------------
 	struct RenderPassDesc {
 		Array<AttachmentDesc>			attachments;
-		Array<SubpassDesc>				subpassCount;
+		Array<SubpassDesc>				subpasses;
 		Array<SubpassDependency>		dependencies;
+	};
+	*/
+
+
+
+	struct BeginEndOp {
+		AttachmentLoadOp	load;		// clearValue
+		AttachmentStoreOp	store;		// resolve params
+	};
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		カラーターゲットの操作
+	//@―---------------------------------------------------------------------------
+	struct RenderPassColorTargetDesc {
+		TextureFormat	format;
+		BeginEndOp		colorOp;
+	};
+	//@―---------------------------------------------------------------------------
+	//! @brief		デプスターゲットの操作
+	//@―---------------------------------------------------------------------------
+	struct RenderPassDepthTargetDesc {
+		TextureFormat	format;
+		BeginEndOp		depthOp;
+		BeginEndOp		stencilOp;
+	};
+
+	struct RenderPassDesc {
+		Array<RenderPassColorTargetDesc> colors;
+		Optional<RenderPassDepthTargetDesc> depth;
 	};
 
 }// namespcae ob::rhi

@@ -41,6 +41,16 @@ namespace ob::rhi {
         CopySource,                         //!< コピー元
         CopyDest,                           //!< コピー先
         RaytracingAccelerationStructure,    //!< RaytracingAccelerationStructure
+
+        // 未対応
+        // D3D12_PREDICATION
+        // InputAttachment
+        // ColorAttachment RW
+        // DepthStencilAttachment
+        // Resolve
+        // Host
+        // ShadingRate
+        // Present
     };
 
 }// namespcae ob::rhi

@@ -1,20 +1,21 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ定義
+//! @brief		バリア定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/RenderPass.h>
 
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  ディスクリプタ・タイプ
+    //! @brief  説明
     //@―---------------------------------------------------------------------------
-    struct FrameBufferDesc {
-        RenderPass renderPass;
-        // Array<ImageView> attachments;
-        Size size;
+    enum class BarrierMask:u32 {
+        None        = 0,
+        Raster      = get_bit(0),
+        Compute     = get_bit(1),
+        Copy        = get_bit(2),
+        All         = ~None,
     };
 
-}// namespcae ob::rhi
+}// namespcae ob
