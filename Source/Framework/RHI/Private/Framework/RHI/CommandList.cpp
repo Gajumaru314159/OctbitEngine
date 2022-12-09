@@ -62,9 +62,9 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーパス開始
 	//@―---------------------------------------------------------------------------
-	void CommandList::beginRenderPass(const RenderPass& renderPass) {
+	void CommandList::beginRenderPass(const FrameBuffer& frameBuffer) {
 		CHECK_IMPL();
-		m_pImpl->beginRenderPass(renderPass);
+		m_pImpl->beginRenderPass(frameBuffer);
 	}
 
 	//@―---------------------------------------------------------------------------

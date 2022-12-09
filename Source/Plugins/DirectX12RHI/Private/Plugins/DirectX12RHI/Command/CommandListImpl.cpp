@@ -114,7 +114,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーパス開始
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::beginRenderPass(const RenderPass& renderPass) {
+	void CommandListImpl::beginRenderPass(const FrameBuffer& frameBuffer) {
 		OB_NOTIMPLEMENTED();
 	}
 

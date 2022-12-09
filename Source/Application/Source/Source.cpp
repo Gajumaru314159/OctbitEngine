@@ -172,6 +172,7 @@ int TestDirectX12() {
 		auto pass0 = desc.addSubpassXCX({ color });
 
 		renderPass = RenderPass(desc);
+		OB_CHECK_ASSERT_EXPR(renderPass);
 	}
 
 	FrameBuffer frameBuffer;
@@ -181,6 +182,7 @@ int TestDirectX12() {
 		desc.attachments.push_back(colorRT);
 
 		frameBuffer = FrameBuffer(desc);
+		OB_CHECK_ASSERT_EXPR(frameBuffer);
 	}
 
 
@@ -321,7 +323,7 @@ int TestDirectX12() {
 		display.update();
 
 		cmdList.begin();
-
+		cmdList.beginRenderPass(frameBuffer);
 		cmdList.beginRender(rt);
 		cmdList.clearColors();
 		cmdList.clearDepthStencil();

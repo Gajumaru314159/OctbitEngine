@@ -37,7 +37,7 @@ namespace ob::rhi {
         virtual void begin()=0;
         virtual void end()=0;
 
-        virtual void beginRenderPass(const RenderPass& renderPass) = 0; //!< レンダーパス開始
+        virtual void beginRenderPass(const FrameBuffer& frameBuffer) = 0; //!< レンダーパス開始
         virtual void nextSubpass() = 0;                                 //!< 次のサブパスに進める
         virtual void endRenderPass() = 0;                               //!< レンダーパス終了
 
