@@ -4,22 +4,15 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/GraphicObject.h>
 #include <Framework/Core/Geometory/Viewport.h>
+#include <Framework/RHI/GraphicObject.h>
+#include <Framework/RHI/Forward.h>
+
 
 //===============================================================
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class Display;
-    class VertexBuffer;
-    class IndexBuffer;
-    class RootSignature;
-    class PipelineState;
-    class ResourceBarrier;
-    class RenderTarget;
-    class Texture;
-    class Buffer;
     struct SetDescriptorTableParam;
     struct DrawParam;
     struct DrawIndexedParam;
@@ -43,6 +36,11 @@ namespace ob::rhi {
 
         virtual void begin()=0;
         virtual void end()=0;
+
+        virtual void beginRenderPass(const RenderPass& renderPass) = 0; //!< レンダーパス開始
+        virtual void nextSubpass() = 0;                                 //!< 次のサブパスに進める
+        virtual void endRenderPass() = 0;                               //!< レンダーパス終了
+
 
         virtual void applyDisplay(const Display& display, const Texture& texture)=0;
         virtual void beginRender(const RenderTarget& target) = 0; //!< 描画開始

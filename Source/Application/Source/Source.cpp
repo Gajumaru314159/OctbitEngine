@@ -20,6 +20,8 @@ using namespace ob;
 void Link_DirectX12();
 void Link_Vulkan();
 void Link_Input();
+int TestDirectX12();
+int TestVullkan();
 
 void OctbitInit(ob::engine::EngineConfig& config) {
 	{
@@ -38,6 +40,13 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 	Link_Input();
 }
 
+int OctbitMain() {
+
+	TestDirectX12();
+
+	return 0;
+}
+
 int TestDirectX12() {
 
 	using namespace ob::rhi;
@@ -47,7 +56,7 @@ int TestDirectX12() {
 	windowDesc.title = TC("Graphic Test");
 	platform::Window window(windowDesc);
 
-	// スワップチェイン
+	// ディスプレイ
 	Display display;
 	{
 		DisplayDesc desc;
@@ -59,7 +68,6 @@ int TestDirectX12() {
 	VertexShader vs;
 	PixelShader ps;
 	{
-#if 0
 		String vssrc;
 		vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
 		vssrc.append(TC("  float4x4 g_mtx;												\n"));
@@ -101,24 +109,6 @@ int TestDirectX12() {
 		pssrc.append(TC("    o.color0 = color;											\n"));
 		pssrc.append(TC("    return o;													\n"));
 		pssrc.append(TC("}																\n"));
-#endif
-		String vssrc;
-		vssrc.append(TC("#version 450													\n"));
-		vssrc.append(TC("layout(location = 0) in vec3 aPosition;						\n"));
-		vssrc.append(TC("layout(location = 1) in vec4 aColor;							\n"));
-		vssrc.append(TC("layout(location = 0) out vec4 vColor;							\n"));
-		vssrc.append(TC("void main()													\n"));
-		vssrc.append(TC("{																\n"));
-		vssrc.append(TC("	gl_Position = vec4(aPosition, 1.0);							\n"));
-		vssrc.append(TC("	vColor = aColor;											\n"));
-		vssrc.append(TC("}																\n"));
-		String pssrc;
-		pssrc.append(TC("#version 450													\n"));
-		pssrc.append(TC("layout(location = 0) in vec4 vColor;							\n"));
-		pssrc.append(TC("layout(location = 0) out vec4 oColor;							\n"));
-		pssrc.append(TC("void main(){													\n"));
-		pssrc.append(TC("    oColor = vColor;											\n"));
-		pssrc.append(TC("}																\n"));
 
 		vs = VertexShader(vssrc);
 		ps = PixelShader(pssrc);
@@ -149,6 +139,16 @@ int TestDirectX12() {
 		OB_CHECK_ASSERT_EXPR(tex);
 	}
 
+	RenderTexture colorRT;
+	{
+		RenderTextureDesc desc;
+		desc.size = display.getDesc().size;
+		desc.format = TextureFormat::RGBA8;
+		desc.clear.color = Color::Gray;
+
+		colorRT = RenderTexture(desc);
+	}
+
 	RootSignature signature;
 	{
 		RootSignatureDesc desc(
@@ -163,6 +163,24 @@ int TestDirectX12() {
 		signature = RootSignature(desc);
 		signature.setName(TC("TestRootSignature"));
 		OB_CHECK_ASSERT_EXPR(signature);
+	}
+
+	RenderPass renderPass;
+	{
+		RenderPassDescHelper desc;
+		auto color = desc.addAttachment(TextureFormat::RGBA8);
+		auto pass0 = desc.addSubpassXCX({ color });
+
+		renderPass = RenderPass(desc);
+	}
+
+	FrameBuffer frameBuffer;
+	{
+		FrameBufferDesc desc;
+		desc.renderPass = renderPass;
+		desc.attachments.push_back(colorRT);
+
+		frameBuffer = FrameBuffer(desc);
 	}
 
 
@@ -405,9 +423,9 @@ int TestVullkan() {
 	// フレームバッファ生成
 	FrameBuffer frameBuffer;
 	{
-		FrameBufferDescHelper desc;
+		FrameBufferDesc desc;
 		desc.renderPass = renderPass;
-		desc.addAttachment(colorRT);
+		desc.attachments.push_back(colorRT);
 
 	}
 
@@ -438,13 +456,6 @@ int TestVullkan() {
 		cmdList.applyDisplay(display, colorRT);
 
 	}
-
-	return 0;
-}
-
-int OctbitMain() {
-	
-	TestVullkan();
 
 	return 0;
 }
