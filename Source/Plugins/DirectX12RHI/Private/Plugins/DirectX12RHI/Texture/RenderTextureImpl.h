@@ -1,21 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		テクスチャ実装(DirectX12)
+//! @brief		レンダーテクスチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/ITexture.h>
-#include <Framework/RHI/Types/TextureDesc.h>
-#include <Framework/Core/Misc/BlobView.h>
+#include <Framework/RHI/IRenderTexture.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
-
-
 
 //===============================================================
 // 前方宣言
 //===============================================================
 namespace ob::rhi::dx12 {
     class DeviceImpl;
+    class TextureImpl;
 }
 
 
@@ -24,24 +21,24 @@ namespace ob::rhi::dx12 {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-    class TextureImpl :public rhi::ITexture {
+    //@―---------------------------------------------------------------------------
+    //! @brief      レンダーテクスチャ実装(DirectX12)
+    //! 
+    //! @details    描画可能なテクスチャ。
+    //@―---------------------------------------------------------------------------
+    class RenderTextureImpl :public rhi::IRenderTexture {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ
-        //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, BlobView blob);
+        RenderTextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      デストラクタ
         //@―---------------------------------------------------------------------------
-        ~TextureImpl();
+        ~RenderTextureImpl();
 
 
         //@―---------------------------------------------------------------------------
@@ -68,25 +65,13 @@ namespace ob::rhi::dx12 {
         s32 mipLevels()const override;
 
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      定義を取得
-        //@―---------------------------------------------------------------------------
-        const TextureDesc& getDesc() const;
-
-
     public:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      リソースを取得
-        //@―---------------------------------------------------------------------------
-        ID3D12Resource* getResource()const;
+        D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle()const;
+        D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle()const;
 
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      シェーダリソースビューを生成
-        //@―---------------------------------------------------------------------------
-        void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
-
+        D3D12_VIEWPORT getViewport()const;
+        D3D12_RECT getScissorRect()const;
 
     private:
 
@@ -95,36 +80,17 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        class DeviceImpl& m_device;
+        const RenderTextureDesc     m_desc;
 
-        TextureDesc                 m_desc;         //!< 定義
         ComPtr<ID3D12Resource>      m_resource;     //!< リソース
         DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
+        DescriptorHandle            m_hRTV;         //!< デスクリプタハンドル
 
+
+        D3D12_VIEWPORT m_viewport;                      //!< ビューポート
+        D3D12_RECT m_scissorRect;                       //!< シザー矩形
+
+        bool m_initialized =false;
     };
-
-}// namespace ob::rhi::dx12
-
-
-
-//===============================================================
-// インライン
-//===============================================================
-namespace ob::rhi::dx12 {
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      リソースを取得
-    //@―---------------------------------------------------------------------------
-    inline ID3D12Resource* TextureImpl::getResource() const {
-        return m_resource.Get();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      定義を取得
-    //@―---------------------------------------------------------------------------
-    inline const TextureDesc& TextureImpl::getDesc() const {
-        return m_desc;
-    }
 
 }// namespace ob::rhi::dx12

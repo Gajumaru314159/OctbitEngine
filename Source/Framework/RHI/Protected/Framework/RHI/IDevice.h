@@ -13,6 +13,7 @@
 #include <Framework/RHI/Types/ShaderStage.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/RenderTargetDesc.h>
+#include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
@@ -22,6 +23,7 @@
 //===============================================================
 namespace ob::rhi {
     class IRenderPass;
+    class IRenderTexture;
     class IFrameBuffer;
     class IDisplay;
     class ICommandList;
@@ -103,7 +105,8 @@ namespace ob::rhi {
 
         virtual ITexture*           createTexture(const TextureDesc& desc) = 0;
         virtual ITexture*           createTexture(BlobView blob) = 0;
-        virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc)=0;
+        virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc) = 0;
+        virtual IRenderTexture*     createRenderTexture(const RenderTextureDesc& desc)=0;
         
         virtual IShader*            createShader(const String& code,ShaderStage stage) = 0;
         virtual IShader*            createShader(const Blob& binary, ShaderStage stage) = 0;

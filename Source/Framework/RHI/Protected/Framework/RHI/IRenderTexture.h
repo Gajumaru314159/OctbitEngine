@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/Types/RenderTargetDesc.h>
+#include <Framework/RHI/ITexture.h>
+#include <Framework/RHI/Types/RenderTextureDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -23,7 +23,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief      レンダーパス・インターフェイス
     //@―---------------------------------------------------------------------------
-    class IRenderTexture :public GraphicObject {
+    class IRenderTexture :public ITexture {
     public:
 
         //@―---------------------------------------------------------------------------

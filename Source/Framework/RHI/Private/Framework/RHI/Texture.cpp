@@ -45,20 +45,11 @@ namespace ob::rhi {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      テクスチャ定義を取得
-    //@―---------------------------------------------------------------------------
-    const TextureDesc& Texture::desc()const {
-        CHECK_IMPL();
-        return m_pImpl->getDesc();
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ・サイズを取得
     //@―---------------------------------------------------------------------------
     Size Texture::size()const {
         CHECK_IMPL();
-        return m_pImpl->getDesc().size;
+        return m_pImpl->size();
     }
 
 
@@ -83,7 +74,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     auto Texture::format()const->TextureFormat {
         CHECK_IMPL();
-        return m_pImpl->getDesc().format;
+        return m_pImpl->format();
     }
 
 
@@ -92,16 +83,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     s32 Texture::mipLevels()const {
         CHECK_IMPL();
-        return m_pImpl->getDesc().mipLevel;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      テクスチャタイプを取得
-    //@―---------------------------------------------------------------------------
-    TextureType Texture::type()const {
-        CHECK_IMPL();
-        return m_pImpl->getDesc().type;
+        return m_pImpl->mipLevels();
     }
 
 }// namespace ob::rhi

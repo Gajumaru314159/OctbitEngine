@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/IRenderTexture.h>
+#include <Framework/RHI/Device.h>
 
 namespace ob::rhi
 {
@@ -21,7 +22,12 @@ namespace ob::rhi
     //! @param name     オブジェクト名
     //@―---------------------------------------------------------------------------
     RenderTexture::RenderTexture(const RenderTextureDesc& desc) {
-
+        m_pImpl = Device::Get()->createRenderTexture(desc);
+        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        if (!m_pImpl->isValid()) {
+            LOG_FATAL_EX("Graphic", "RenderTextureの生成に失敗");
+            release();
+        }
     }
 
 }// namespace ob

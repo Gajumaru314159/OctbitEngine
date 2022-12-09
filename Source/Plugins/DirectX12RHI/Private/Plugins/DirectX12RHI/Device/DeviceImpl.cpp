@@ -11,7 +11,10 @@
 #include<Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include<Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include<Plugins/DirectX12RHI/Texture/TextureImpl.h>
+#include<Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
+#include<Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
 #include<Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
+#include<Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include<Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include<Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include<Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
@@ -89,8 +92,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  レンダーパスを生成を生成
 	//@―---------------------------------------------------------------------------
 	ob::rhi::IRenderPass* DeviceImpl::createRenderPass(const RenderPassDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
+		return new RenderPassImpl(*this, desc);
 	}
 
 
@@ -98,8 +100,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  フレームバッファを生成
 	//@―---------------------------------------------------------------------------
 	ob::rhi::IFrameBuffer* DeviceImpl::createFrameBuffer(const FrameBufferDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
+		return new FrameBufferImpl(*this, desc);
 	}
 
 
@@ -156,6 +157,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	ob::rhi::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {
 		return new RenderTargetImpl(*this, desc);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  レンダーテクスチャを生成
+	//@―---------------------------------------------------------------------------
+	ob::rhi::IRenderTexture* DeviceImpl::createRenderTexture(const RenderTextureDesc& desc) {
+		return new RenderTextureImpl(*this, desc);
 	}
 
 
