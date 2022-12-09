@@ -33,12 +33,12 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 		config.set(c);
 	}
 
-	//Link_DirectX12();
-	Link_Vulkan();
+	Link_DirectX12();
+	//Link_Vulkan();
 	Link_Input();
 }
 
-int OctbitMain() {
+int TestDirectX12() {
 
 	using namespace ob::rhi;
 
@@ -47,31 +47,14 @@ int OctbitMain() {
 	windowDesc.title = TC("Graphic Test");
 	platform::Window window(windowDesc);
 
-
-	// レンダーパス生成
-	RenderPass renderPass;
-	{
-		//RenderPassDesc desc;
-		//// アタッチメント
-		//desc.attachments.emplace_back()
-		//	.setOp(AttachmentLoadOp::NotCare, AttachmentStoreOp::NotCare)
-		//	.setState(ResourceState::Common, ResourceState::AllShaderResource);
-		//// サブパス
-		//desc.subpasses.emplace_back()
-		//	.colors.emplace_back(0);
-		//// 依存
-		//desc.dependencies.emplace_back();
-	}
-
-			
 	// スワップチェイン
-	SwapChain swapChain;
+	Display display;
 	{
-		SwapchainDesc desc;
+		DisplayDesc desc;
 		desc.window = window;
-		swapChain = SwapChain(desc);
-		swapChain.setName(TC("MainWindow"));
-		OB_CHECK_ASSERT_EXPR(swapChain);
+		display = Display(desc);
+		display.setName(TC("MainWindow"));
+		OB_CHECK_ASSERT_EXPR(display);
 	}
 	VertexShader vs;
 	PixelShader ps;
@@ -121,20 +104,20 @@ int OctbitMain() {
 #endif
 		String vssrc;
 		vssrc.append(TC("#version 450													\n"));
-		vssrc.append(TC("vec2 positions[3] = vec2](										\n"));
-		vssrc.append(TC("	vec2(0.0,-0.5),												\n"));
-		vssrc.append(TC("	vec2(0.5,0.5),												\n"));
-		vssrc.append(TC("	vec2(-0.5,0.5)												\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("void main() {													\n"));
-		vssrc.append(TC("	gl_Position = vec4(positions[gl_VertexIndex],0.0,1.0);		\n"));
+		vssrc.append(TC("layout(location = 0) in vec3 aPosition;						\n"));
+		vssrc.append(TC("layout(location = 1) in vec4 aColor;							\n"));
+		vssrc.append(TC("layout(location = 0) out vec4 vColor;							\n"));
+		vssrc.append(TC("void main()													\n"));
+		vssrc.append(TC("{																\n"));
+		vssrc.append(TC("	gl_Position = vec4(aPosition, 1.0);							\n"));
+		vssrc.append(TC("	vColor = aColor;											\n"));
 		vssrc.append(TC("}																\n"));
 		String pssrc;
 		pssrc.append(TC("#version 450													\n"));
-		pssrc.append(TC("#extension GL_ARB_separate_shader_objects : enable				\n"));
-		pssrc.append(TC("layout(location = 0)out vec4 outColor;							\n"));
+		pssrc.append(TC("layout(location = 0) in vec4 vColor;							\n"));
+		pssrc.append(TC("layout(location = 0) out vec4 oColor;							\n"));
 		pssrc.append(TC("void main(){													\n"));
-		pssrc.append(TC("    outColor = vec4(0.0, 1.0, 0.0, 1.0);						\n"));
+		pssrc.append(TC("    oColor = vColor;											\n"));
 		pssrc.append(TC("}																\n"));
 
 		vs = VertexShader(vssrc);
@@ -146,7 +129,7 @@ int OctbitMain() {
 	{
 		RenderTargetDesc desc;
 		desc.size = { 640,480 };
-		desc.colors.push_back({ swapChain.getDesc().format, Color::Gray });
+		desc.colors.push_back({ display.getDesc().format, Color::Gray });
 		desc.depth.push_back({ TextureFormat::D32, 1, 0 });
 
 		rt = RenderTarget(desc);
@@ -317,7 +300,7 @@ int OctbitMain() {
 		if (input::Keyboard::Escape.down())break;
 
 		// 表示を更新(Present)
-		swapChain.update();
+		display.update();
 
 		cmdList.begin();
 
@@ -342,7 +325,7 @@ int OctbitMain() {
 			cmdList.drawIndexed(param);
 		}
 		cmdList.endRender();
-		cmdList.applySwapChain(swapChain, rt.getColorTexture(0));
+		cmdList.applyDisplay(display, rt.getColorTexture(0));
 		cmdList.end();
 
 		// TODO コマンドの個別実行を許可する？
@@ -368,6 +351,100 @@ int OctbitMain() {
 		buffer.updateDirect(cbuf);
 		t += 2.f;
 	}
+
+	return 0;
+}
+
+int TestVullkan() {
+
+	using namespace ob::rhi;
+
+	// ウィンドウ生成
+	platform::WindowDesc windowDesc;
+	windowDesc.title = TC("Graphic Test");
+	platform::Window window(windowDesc);
+
+	// スワップチェイン
+	Display display;
+	{
+		DisplayDesc desc;
+		desc.window = window;
+		desc.format = TextureFormat::RGBA8;
+
+		display = Display(desc);
+		display.setName(TC("MainWindow"));
+		OB_CHECK_ASSERT_EXPR(display);
+	}
+
+	// レンダーパス生成
+	RenderPass renderPass;
+	{
+		RenderPassDescHelper desc;
+		auto color = desc.addAttachment(TextureFormat::RGBA8);
+
+		auto colorPass = desc.addSubpassXCX({ color });
+
+		desc.addDependeny(-1, colorPass);
+
+		RenderPass renderPass(desc);
+
+	}
+
+	//描画ターゲット生成
+	RenderTexture colorRT;
+	Size screenSize = window.getSize();
+	{
+		RenderTextureDesc desc;
+		desc.format = TextureFormat::RGBA8;
+		desc.size = Size(1280,720);
+
+		colorRT = RenderTexture(desc);
+		OB_CHECK_ASSERT_EXPR(colorRT);
+	}
+
+	// フレームバッファ生成
+	FrameBuffer frameBuffer;
+	{
+		FrameBufferDescHelper desc;
+		desc.renderPass = renderPass;
+		desc.addAttachment(colorRT);
+
+	}
+
+	// コマンドリスト生成
+	CommandList cmdList;
+	{
+		CommandListDesc desc;
+		desc.type = CommandListType::Graphic;
+		cmdList = CommandList(desc);
+	}
+
+
+	MSG msg = {};
+	while (true) {
+
+		//graphic::System::Get().update();
+		GEngine->visit([](engine::IModule& m) {m.update(); });
+
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		if (msg.message == WM_QUIT) {
+			break;
+		}
+		if (input::Keyboard::Escape.down())break;
+
+		cmdList.applyDisplay(display, colorRT);
+
+	}
+
+	return 0;
+}
+
+int OctbitMain() {
+	
+	TestVullkan();
 
 	return 0;
 }

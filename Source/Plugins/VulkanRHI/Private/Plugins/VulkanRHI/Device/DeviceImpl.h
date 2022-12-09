@@ -8,10 +8,6 @@
 #include <Framework/RHI/Types/FeatureLevel.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
-#include <Plugins/VulkanRHI/Device/DebugReportCallBack.h>
-#include <Plugins/VulkanRHI/Device/Instance.h>
-#include <Plugins/VulkanRHI/Device/PhysicalDevice.h>
-
 //===============================================================
 // クラス定義
 //===============================================================
@@ -50,9 +46,19 @@ namespace ob::rhi::vulkan {
 		//===============================================================
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  レンダーパスを生成
+		//@―---------------------------------------------------------------------------
+		ob::rhi::IRenderPass* createRenderPass(const RenderPassDesc& desc)override;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  フレームバッファを生成
+		//@―---------------------------------------------------------------------------
+		ob::rhi::IFrameBuffer* createFrameBuffer(const FrameBufferDesc& desc)override;
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  スワップ・チェーンを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::ISwapChain* createSwapChain(const SwapchainDesc& desc)override;
+		ob::rhi::IDisplay* createDisplay(const SwapchainDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
@@ -114,26 +120,27 @@ namespace ob::rhi::vulkan {
 		//@―---------------------------------------------------------------------------
 		ob::rhi::IDescriptorTable* createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
 
-	public:
-
-		//===============================================================
-		// ゲッター
-		//===============================================================
 
 	private:
 
-		bool initialize();
+		void createInstance();
+		void createPhysicalDevice();
+		void createLogicalDevice();
+		void createQueue();
 
 	private:
 
-		FeatureLevel                        m_featureLevel;             // フィーチャーレベル
+		FeatureLevel		m_featureLevel;
 
-		UPtr<Instance> m_instance;
-		//UPtr<DebugReportCallback> m_callback;
+		VkInstance			m_instance			= nullptr;
+		VkPhysicalDevice	m_physicalDevice	= nullptr;
+		VkDevice			m_logicalDevice		= nullptr;
+		VkQueue				m_queue				= nullptr;
+		VkCommandPool		m_commandPool		= nullptr;
 
-		VkPhysicalDevice m_physicalDevice = nullptr;
-		VkPhysicalDeviceMemoryProperties m_physMemProps;
-		VkDevice m_device;
+		u32					m_queueFamilyIndex;
+		u32					m_queueCount;
+
 	};
 }// namespace ob::rhi::dx12
 

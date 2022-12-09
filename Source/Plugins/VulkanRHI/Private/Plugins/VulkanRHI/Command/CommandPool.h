@@ -1,20 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート
+//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
-#include <Framework/RHI/Types/RenderPassDesc.h>
-#include <Framework/RHI/Types/RenderPassDescHelper.h>
+#include <Framework/RHI/CommandList.h>
 
-namespace ob::rhi {
+namespace ob::rhi::vulkan {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  パイプラインステート
+    //! @brief  コマンドキュー
     //@―---------------------------------------------------------------------------
-    class RenderPass {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderPass);
+    class CommandPool {
     public:
 
         //===============================================================
@@ -24,14 +21,14 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        RenderPass();
+        CommandPool(VkDevice device,u32 familyIndex);
 
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  デストラクタ
-        //@―---------------------------------------------------------------------------
-        RenderPass(const RenderPassDesc& desc);
+    private:
+
+        VkDevice        m_device = nullptr;
+        VkCommandPool   m_commandPool = nullptr;
 
     };
 
-}// namespcae ob::rhi
+}// ob::rhi::dx12 

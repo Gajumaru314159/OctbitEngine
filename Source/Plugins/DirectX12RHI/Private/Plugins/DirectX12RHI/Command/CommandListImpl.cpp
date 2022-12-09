@@ -10,7 +10,7 @@
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
-#include <Plugins/DirectX12RHI/SwapChain/SwapChainImpl.h>
+#include <Plugins/DirectX12RHI/Display/DisplayImpl.h>
 #include <Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
@@ -115,14 +115,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::applySwapChain(const SwapChain& swapChain, const Texture& texture)
+	void CommandListImpl::applyDisplay(const Display& display, const Texture& texture)
 	{
-		auto& rSwapChain = Device::GetImpl<SwapChainImpl>(swapChain);
+		auto& rDisplay = Device::GetImpl<DisplayImpl>(display);
 		auto& rTexture = Device::GetImpl<TextureImpl>(texture);
 
 		{
 			D3D12_RESOURCE_BARRIER barrier[2] = {
-				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
+				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
 				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE),
 			};
 			m_cmdList->ResourceBarrier((UINT)std::size(barrier), barrier);
@@ -130,7 +130,7 @@ namespace ob::rhi::dx12 {
 
 		{
 			auto desc = rTexture.getResource()->GetDesc();
-			auto desc2 = rSwapChain.getResource()->GetDesc();
+			auto desc2 = rDisplay.getResource()->GetDesc();
 
 			const int maxSubresources = 100;
 			D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprints[maxSubresources];
@@ -140,7 +140,7 @@ namespace ob::rhi::dx12 {
 			m_device.getNative()->GetCopyableFootprints(&desc,0,1,0, footprints, numRows, rowSizeInBytes, &uploadSize);
 
 			m_cmdList->CopyTextureRegion(
-				&CD3DX12_TEXTURE_COPY_LOCATION(rSwapChain.getResource(), 0),
+				&CD3DX12_TEXTURE_COPY_LOCATION(rDisplay.getResource(), 0),
 				0, 0, 0,
 				&CD3DX12_TEXTURE_COPY_LOCATION(rTexture.getResource(),0),
 				nullptr);
@@ -149,7 +149,7 @@ namespace ob::rhi::dx12 {
 
 		{
 			D3D12_RESOURCE_BARRIER barrier[2] = {
-				CD3DX12_RESOURCE_BARRIER::Transition(rSwapChain.getResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT),
+				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT),
 				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET),
 			};
 			m_cmdList->ResourceBarrier((UINT)std::size(barrier), barrier);

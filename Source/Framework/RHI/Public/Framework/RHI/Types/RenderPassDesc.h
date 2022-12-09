@@ -12,29 +12,12 @@ namespace ob::rhi {
 #pragma region Enum
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  アタッチメントのロード操作
+	//! @brief		アタッチメントのクリア方法
 	//@―---------------------------------------------------------------------------
-	enum class AttachmentLoadOp {
-		Load,		//!< そのまま使用
-		Clear,		//!< 特定の値でクリア
-		NotCare,	//!< ドライバやハードウェアに任せる
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  アタッチメントの保存操作
-	//@―---------------------------------------------------------------------------
-	enum class AttachmentStoreOp {
-		Store,		//!< メモリに保存
-		NotCare,	//!< ドライバやハードウェアに任せる
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  アタッチメントのサンプル数
-	//@―---------------------------------------------------------------------------
-	enum class MultiSampling {
-		x01,		//!< マルチサンプリング x1
-		x02,		//!< マルチサンプリング x2
-		x04,		//!< マルチサンプリング x4
+	enum class AttachmentClear {
+		None,		//!< RenderPass開始時にクリアしない
+		Clear,		//!< RenderPass開始時にTextureに指定された初期値でクリア
+		DontCare,	//!< ハードウェアに任せる
 	};
 	
 #pragma endregion
@@ -42,21 +25,12 @@ namespace ob::rhi {
 #pragma region Flag
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  アタッチメントのフラグ
-	//@―---------------------------------------------------------------------------
-	enum class AttachmentDescFlag {
-		None		= get_bit(0),
-		MayAlias	= get_bit(1),
-	};
-	using AttachmentDescFlags = BitFlags<AttachmentDescFlag>;
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  パイプラインステージ・フラグ
+	//! @brief		実行依存関係に関係するフラグ
 	//@―---------------------------------------------------------------------------
 	enum class PipelineStageFlag {
 		None					= 0,			//!< 指定なし	
 		TopOfPipe				= get_bit(0),	//!< 
+
 		DrawIndirect			= get_bit(1),	//!< 
 		VertexInput				= get_bit(2),	//!< 頂点バッファとインデックスバッファを消費するステージ
 		VertexShader			= get_bit(3),	//!< 頂点シェーダステージ
@@ -67,8 +41,11 @@ namespace ob::rhi {
 		EarlyDepthStencilTest	= get_bit(8),	//!< 
 		LateDepthStencilTest	= get_bit(9),	//!< 
 		ColorAttachmentOutput	= get_bit(10),	//!< ピクセルシェーダの結果ブレンド後のステージ
+
 		ComputeShader			= get_bit(11),	//!< コンピュートシェーダステージ
+
 		CopyResolve				= get_bit(12),	//!< コピー、クリア、リゾルブ、クエリコピーなどのコマンド
+
 		BottomOfPipe			= get_bit(13),	//!< 
 		Host					= get_bit(14),	//!< 
 		AllGraphics				= get_bit(15),	//!< 全てのグラフィック操作
@@ -128,51 +105,6 @@ namespace ob::rhi {
 	
 #pragma endregion
 
-	/*
-
-	struct AttachmentReference {
-		s32				index;	//!< RenderPassDesc::attachmentsのインデックス
-		ResourceState	state;	//!< サブパスで使用するリソースの状態
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  サブパスの依存グラフの辺
-	//@―---------------------------------------------------------------------------
-	struct SubpassDependency {
-		s32					srcSubpass;		//!< 依存元(-1の場合依存元なし)
-		s32					dstSubpass;		//!< 依存先(-1の場合依存先なし)
-		PipelineStageFlags	srcStageMask;	//!< 実行依存性
-		PipelineStageFlags	dstStageMask;	//!< 
-		ResourceAccessFlag	srcAccessMask;	//!< メモリ依存性
-		ResourceAccessFlag	dstAccessMask;	//!< 
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		サブパス定義
-	//! @details	* 入力アタッチメントは他パスの出力を加工する場合に使用します
-	//!				* 色アタッチメントは色情報の出力先です
-	//!				* リゾルブアタッチメントは出力をマルチサンプルして出力する先です
-	//!					* 要素数は色アタッチメントと同じにしてください
-	//!				* デプスステンシルアタッチメントはデプスの出力先です
-	//!				* 保持アタッチメントは出力をメモリに書き戻さず保持する場合に使用します
-	//!					* サブパスが2つ以下の場合使用しません
-	//!					* サブパスで未使用のアタッチメントは未定義になるので保持マークを付けます
-	//!				| 種類		| 説明								|
-	//!				|-----------|-----------------------------------|
-	//!				| inputs	| 他サブパスの結果読み取り			|
-	//!				| colors	| 書き込み先						|
-	//!				| resolve	| 書き込み先(マルチサンプル)		|
-	//!				| depth		| デプス							|
-	//!				| preserve	| 保持(上記で使用していないもの)	|
-	//@―---------------------------------------------------------------------------
-	struct SubpassDesc {
-		Array<AttachmentReference>		inputs;		//!< 入力アタッチメントの参照
-		Array<AttachmentReference>		colors;		//!< カラーアタッチメントの参照
-		Array<AttachmentReference>		resolves;	//!< リゾル部アタッチメントの参照
-		Optional<AttachmentReference>	depth;		//!< デプスアタッチメントの参照
-		Array<AttachmentReference>		preserve;	//!< 保持アタッチメントの参照
-	};
-
 	//@―---------------------------------------------------------------------------
 	//! @brief		アタッチメント定義
 	//! @details	* ステンシル操作はテクスチャフォーマットが深度ステンシルフォーマットの場合に使用されます。
@@ -180,32 +112,53 @@ namespace ob::rhi {
 	struct AttachmentDesc {
 	public:
 		TextureFormat					format;			//!< テクスチャフォーマット
-		AttachmentLoadOp				loadOp;			//!< レンダーパス開始時の操作
-		AttachmentStoreOp				storeOp;		//!< レンダーパス終了時の操作
-		AttachmentLoadOp				stencilLoadOp;	//!< レンダーパス開始時の操作(ステンシル)
-		AttachmentStoreOp				stencilStoreOp;	//!< レンダーパス終了時の操作(ステンシル)
-		ResourceState					initialState;	//!< レンダーパス開始時のリソース状態
+		AttachmentClear					clear;			//!< レンダーパス開始時のクリア方式
 		ResourceState					finalState;		//!< レンダーパス終了時のリソース状態
-		MultiSampling					sampling;		//!< マルチサンプリング
-		AttachmentDescFlags				flags;			//!< フラグ
-		// TextureUsages usages;
-	public:
-		AttachmentDesc& setOp(AttachmentLoadOp load, AttachmentStoreOp store) {
-			loadOp = load;
-			storeOp = store;
-			return *this;
-		}
-		AttachmentDesc& setStencilOp(AttachmentLoadOp load, AttachmentStoreOp store) {
-			stencilLoadOp = load;
-			stencilStoreOp = store;
-			return *this;
-		}
-		AttachmentDesc& setState(ResourceState _initial, ResourceState _final) {
-			initialState = _initial;
-			finalState = _final;
-			return *this;
-		}
 	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		アタッチメント参照
+	//@―---------------------------------------------------------------------------
+	struct AttachmentReference {
+		s32				index;	//!< RenderPassDesc::attachmentsのインデックス
+		ResourceState	state;	//!< サブパスで使用するリソースの状態
+	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		サブパス定義
+	//! @details	* 入力アタッチメントは他パスの出力を加工する場合に使用します
+	//!				* 色アタッチメントは色情報の出力先です
+	//!				* デプスステンシルアタッチメントはデプスの出力先です
+	//!					* 処理の共通化のためArrayを使用していますが割り当て可能な最大数は1です
+	//!				| 種類		| 説明								|
+	//!				|-----------|-----------------------------------|
+	//!				| inputs	| 他サブパスの結果読み取り			|
+	//!				| colors	| 書き込み先						|
+	//!				| depth		| デプス							|
+	//@―---------------------------------------------------------------------------
+	struct SubpassDesc {
+		Array<AttachmentReference>		inputs;		//!< 入力アタッチメントの参照
+		Array<AttachmentReference>		colors;		//!< カラーアタッチメントの参照
+		Array<AttachmentReference>		depth;		//!< デプスアタッチメントの参照
+	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		サブパスの依存グラフの辺
+	//! @details	* stageMaskは通常ColorAttachmentOutputを使用します
+	//!				* accessMaskは通常ColorWriteを使用します
+	//@―---------------------------------------------------------------------------
+	struct SubpassDependency {
+		s32					srcSubpass;		//!< 依存元(-1の場合依存元なし)
+		s32					dstSubpass;		//!< 依存先(-1の場合依存先なし)
+		//PipelineStageFlags	srcStageMask;	//!< 依存元サブパスの全てのコマンドがどのステージまで進めばサブパスを開始できるか
+		//PipelineStageFlags	dstStageMask;	//!< 全てのコマンドがどのステージまで進めば依存元サブパスを開始できるか
+		//ResourceAccessFlag	srcAccessMask;	//!< メモリ依存性
+		//ResourceAccessFlag	dstAccessMask;	//!< 
+	};
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		レンダーパス定義
@@ -217,35 +170,6 @@ namespace ob::rhi {
 		Array<AttachmentDesc>			attachments;
 		Array<SubpassDesc>				subpasses;
 		Array<SubpassDependency>		dependencies;
-	};
-	*/
-
-
-
-	struct BeginEndOp {
-		AttachmentLoadOp	load;		// clearValue
-		AttachmentStoreOp	store;		// resolve params
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		カラーターゲットの操作
-	//@―---------------------------------------------------------------------------
-	struct RenderPassColorTargetDesc {
-		TextureFormat	format;
-		BeginEndOp		colorOp;
-	};
-	//@―---------------------------------------------------------------------------
-	//! @brief		デプスターゲットの操作
-	//@―---------------------------------------------------------------------------
-	struct RenderPassDepthTargetDesc {
-		TextureFormat	format;
-		BeginEndOp		depthOp;
-		BeginEndOp		stencilOp;
-	};
-
-	struct RenderPassDesc {
-		Array<RenderPassColorTargetDesc> colors;
-		Optional<RenderPassDepthTargetDesc> depth;
 	};
 
 }// namespcae ob::rhi

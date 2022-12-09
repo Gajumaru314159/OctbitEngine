@@ -9,7 +9,7 @@
 #include <Framework/RHI/Constants.h>
 #include <Framework/Core/Utility/Swapper.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi::vulkan {
 
     //@―---------------------------------------------------------------------------
     //! @brief  コマンドリスト実装(DirectX12)
@@ -143,27 +143,8 @@ namespace ob::rhi::dx12 {
 
     public:
 
-        ID3D12GraphicsCommandList5* getNative()const { return m_cmdList.Get(); }
-
-    private:
-
-        void clearDescriptorHandle();
-        void onNameChanged()override;
-
-    private:
-
-        class DeviceImpl& m_device;
         const CommandListDesc m_desc;
-
-        ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
-        ComPtr<ID3D12GraphicsCommandList5> m_cmdList;
-
-        D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
-        D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
-
-        const class RenderTarget* m_pRenderTarget = nullptr;
-
-        Array<D3D12_RESOURCE_BARRIER> m_barriers;
+        VkCommandBuffer m_commandBuffer;
 
     };
 

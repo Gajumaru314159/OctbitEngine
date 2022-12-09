@@ -19,3 +19,4 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <vulkan/vk_layer.h>
 #include <vulkan/vulkan_win32.h>
+#include <vulkan/vulkan.h>

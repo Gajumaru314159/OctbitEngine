@@ -14,14 +14,6 @@ RHIモジュールではDirectXやVulkanなどの異なる描画APIの共通化�
 実装はプラグインで行い、各種グラフィック・オブジェクトを実装した派生オブジェクトを生成します。
 Device事態はGraphicModuleから生成されます。
 
-## 使用例
-プラットフォーム(OS)ごとに起動方法が異なるため、識別マクロを使用して個別の起動処理を実装する必要があります。
-```c++
-rhi::System::Ref()::startup(GraphicAPI::DirectX);
-auto pDevice=rhi::System::Ref()::getDevice();
-auto buffer=pDevice->createBuffer(0x1000,TC("TestBuffer"));
-```
-
 ## リソース
 リソースは大別して三種類あります。
 ### Read
@@ -41,11 +33,11 @@ sysDesc.api = GraphicAPI::DirectX12;
 sysDesc.bufferNum = 2;
 System::Get().initialize(sysDesc);
 
-SwapChain swapChain;
+Display display;
 {
 	SwapchainDesc desc;
 	desc.window=window;
-	swapChain=SwapChain(desc);
+	display=Display(desc);
 }
 
 RenderTexture rt;
@@ -64,18 +56,37 @@ RootDescriptorTable;
 CommandList cmdList;
 
 while(true){
+
+	// GraphicModule::update()
+	//		SystemCommandQueue
+
+	// Thread 0
+	{
+		cmdList.beginRenderPass(frameBuffer);
 	
-	cmdList.beginRenderPass(frameBuffer);
-	cmdList.setPipelineState(pipelineState);
-	cmdList.setRootDescriptorTable(rdt);
-	cmdList.setVertexBuffer();
-	cmdList.setIndexBuffer();
-	cmdList.draw();
+		cmdList.setPipelineState(pipelineState);
+		cmdList.setRootDescriptorTable(table);
+		cmdList.setVertexBuffer(vertex);
+		cmdList.setIndexBuffer(index);
+		cmdList.draw(param);
 
+		cmdList.endRenderPass();
 
-	swapChain.update(rt);
+		cmdList.applySwapchain(swapchain,rt);
+	}
+	// Thread 1
+	{
+		cmdList1.draw();
+	}
+	cmdList.end();
+	cmdList1.end();
 }
 
 ```
 
-## エンジンと描画機能
+## テクスチャ
+```mermaid
+graph
+	Texture-->Texture2D
+	Texture-->RenderTarget2D
+```

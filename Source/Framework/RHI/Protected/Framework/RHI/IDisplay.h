@@ -1,11 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スワップチェーン・インターフェイス
+//! @brief		ディスプレイ・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/Types/SwapchainDesc.h>
+#include <Framework/RHI/Types/DisplayDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -21,12 +21,12 @@ namespace ob::rhi {
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      スワップチェーン・インターフェイス
+    //! @brief      ディスプレイ・インターフェイス
     //! 
     //! @details    モニターに表示するバッファを複数のバッファから切り替えることで
     //!             表示のちらつきを解決する。
     //@―---------------------------------------------------------------------------
-    class ISwapChain :public GraphicObject {
+    class IDisplay :public GraphicObject {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  定義を取得
         //@―---------------------------------------------------------------------------
-        virtual const SwapchainDesc& getDesc()const noexcept = 0;
+        virtual const DisplayDesc& getDesc()const noexcept = 0;
 
 
         //@―---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ namespace ob::rhi {
 
     protected:
 
-        virtual ~ISwapChain() = default;
+        virtual ~IDisplay() = default;
 
 
 

@@ -57,7 +57,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  スワップ・チェーンを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::ISwapChain* createSwapChain(const SwapchainDesc& desc)override;
+		ob::rhi::IDisplay* createDisplay(const DisplayDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------

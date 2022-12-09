@@ -57,7 +57,7 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief      スワップチェーンにテクスチャを適用
         //@―---------------------------------------------------------------------------
-        void applySwapChain(const class SwapChain& swapChain,const class Texture& texture);
+        void applyDisplay(const class Display& display,const class Texture& texture);
 
         //@―---------------------------------------------------------------------------
         //! @brief      描画開始

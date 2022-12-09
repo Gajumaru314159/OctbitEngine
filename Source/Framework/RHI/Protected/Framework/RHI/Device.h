@@ -8,7 +8,7 @@
 //! @cond
 
 namespace ob::rhi {
-	class SwapChain;		class ISwapChain;
+	class Display;		class IDisplay;
 	class CommandList;		class ICommandList;
 	class RootSignature;	class IRootSignature;
 	class PipelineState;	class IPipelineState;
@@ -56,10 +56,10 @@ namespace ob::rhi {
 	private:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  SwapChain の実装を取得
+		//! @brief  Display の実装を取得
 		//@―---------------------------------------------------------------------------
-		static const ISwapChain* GetImpl(const SwapChain&);
-		GRAPHIC_DECLEAR_GET_IMPL(SwapChain);
+		static const IDisplay* GetImpl(const Display&);
+		GRAPHIC_DECLEAR_GET_IMPL(Display);
 
 
 		//@―---------------------------------------------------------------------------

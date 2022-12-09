@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スワップチェーン定義
+//! @brief		ディスプレイ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -11,13 +11,11 @@
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  スワップチェーン定義
-    //! 
-    //! @details フォーマットに指定可能なフォーマットはRGBA8またはRGB16です。
+    //! @brief      ディスプレイ定義
     //@―---------------------------------------------------------------------------
-    struct SwapchainDesc {
+    struct DisplayDesc {
         platform::Window    window;                     //!< 描画ウィンドウ
-        TextureFormat       format=TextureFormat::RGBA8;//!< フォーマット
+        TextureFormat       format=TextureFormat::RGBA8;//!< フォーマット(RGBA8/RGB16)
         f32                 refleshRate=60.0f;          //!< リフレッシュ・レート
         Size                size = {0,0};               //!< バックバッファのサイズ(0の場合ウィンドウサイズを使用)
         s32                 bufferCount=2;              //!< バックバッファの数

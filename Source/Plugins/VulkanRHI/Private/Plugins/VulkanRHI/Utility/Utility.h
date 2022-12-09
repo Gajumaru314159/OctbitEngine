@@ -17,6 +17,16 @@ namespace ob::rhi::vulkan {
         return false;
     }
 
+    inline bool Success(::VkResult res)
+    {
+        if (res < 0)
+        {
+            LOG_ERROR("Vulkanエラー{}", static_cast<s32>(res));
+            return false;
+        }
+        return true;
+    }
+
 
     inline ::VkResult ThrowIfFailed(::VkResult res)
     {

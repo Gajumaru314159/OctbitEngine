@@ -5,7 +5,7 @@
 //***********************************************************
 #include "DeviceImpl.h"
 #include<Plugins/DirectX12RHI/Utility/Utility.h>
-#include<Plugins/DirectX12RHI/SwapChain/SwapChainImpl.h>
+#include<Plugins/DirectX12RHI/Display/DisplayImpl.h>
 #include<Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include<Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include<Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
@@ -106,8 +106,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  スワップ・チェーンを生成
 	//@―---------------------------------------------------------------------------
-	ISwapChain* DeviceImpl::createSwapChain(const SwapchainDesc& desc) {
-		return new SwapChainImpl(*this, desc);
+	IDisplay* DeviceImpl::createDisplay(const DisplayDesc& desc) {
+		return new DisplayImpl(*this, desc);
 	}
 
 

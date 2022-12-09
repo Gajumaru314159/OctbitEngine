@@ -62,10 +62,10 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandList::applySwapChain(const class SwapChain& swapChain, const class Texture& texture)
+	void CommandList::applyDisplay(const class Display& display, const class Texture& texture)
 	{
 		CHECK_IMPL();
-		m_pImpl->applySwapChain(swapChain,texture);
+		m_pImpl->applyDisplay(display,texture);
 	}
 
 	//@―---------------------------------------------------------------------------

@@ -1,20 +1,31 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート
+//! @brief		レンダー・ターゲット
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Utility/GraphicObjectHolder.h>
-#include <Framework/RHI/Types/RenderPassDesc.h>
-#include <Framework/RHI/Types/RenderPassDescHelper.h>
+#include <Framework/RHI/Types/RenderTextureDesc.h>
+#include <Framework/RHI/Texture.h>
 
+//===============================================================
+// 前方宣言
+//===============================================================
+namespace ob::rhi {
+    class Texture;
+}
+
+
+//===============================================================
+// クラス宣言
+//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  パイプラインステート
+    //! @brief  レンダー・ターゲット
     //@―---------------------------------------------------------------------------
-    class RenderPass {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderPass);
+    class RenderTexture : public Texture {
+        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderTexture);
     public:
 
         //===============================================================
@@ -24,13 +35,16 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        RenderPass();
+        RenderTexture()=default;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  デストラクタ
+        //! @brief  コンストラクタ
+        //! 
+        //! @param desc     定義
+        //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        RenderPass(const RenderPassDesc& desc);
+        RenderTexture(const RenderTextureDesc& desc);
 
     };
 

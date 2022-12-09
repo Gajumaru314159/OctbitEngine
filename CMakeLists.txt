@@ -5,7 +5,7 @@ project ("OctbitEngine")
 # オプション定義
 #------------------------------------------------------------------------------
 option(DirectX "Enable DirectX RHI" ON)
-option(Vulkan "Enable Vulkan RHI" ON)
+option(Vulkan "Enable Vulkan RHI" OFF)
 
 #------------------------------------------------------------------------------
 # ソリューション設定
@@ -56,6 +56,9 @@ if(WIN32)
   set(gtest_force_shared_crt ON CACHE BOOL "")
 endif()
 
+# glslang
+set(BUILD_SHARED_LIBS OFF)
+
 
 #------------------------------------------------------------------------------
 # ThirdPartyライブラリ
@@ -68,9 +71,15 @@ FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
 FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest)
 
-if(WIN32)
+if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
     FetchContent_MakeAvailable(DirectXTex)
+endif()
+
+if(Vulkan)
+    FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
+    FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
+    FetchContent_MakeAvailable(glslang spirv)
 endif()
 
 include(ThirdParty.cmake)

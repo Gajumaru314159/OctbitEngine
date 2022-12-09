@@ -6,7 +6,6 @@
 #include <Framework/RHI/ResourceBarrier.h>
 #include <Framework/RHI/Device.h>
 #include <Framework/RHI/RenderTarget.h>
-#include <Framework/RHI/ISwapchain.h>
 #include <Framework/RHI/ITexture.h>
 
 namespace ob::rhi {

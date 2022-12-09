@@ -13,13 +13,13 @@ namespace ob::rhi::vulkan {
 	public:
 		VulkanRHIModule()
 			: m_objectManager(2)
-			, m_device(FeatureLevel::Default)
+			, m_logicalDevice(FeatureLevel::Default)
 		{
 
 		}
 
 		IDevice* getDevice()override {
-			return &m_device;
+			return &m_logicalDevice;
 		}
 
 		GraphicObjectManager& getObjectManager() override {
@@ -30,12 +30,12 @@ namespace ob::rhi::vulkan {
 		//! @brief  ゲーム更新イベント
 		//@―---------------------------------------------------------------------------
 		void update()override {
-			m_device.update();
+			m_logicalDevice.update();
 			m_objectManager.update();
 		}
 
 	private:
-		DeviceImpl m_device;// DeviceImpl内にGraphicObjectはないので後から解放
+		DeviceImpl m_logicalDevice;// DeviceImpl内にGraphicObjectはないので後から解放
 		GraphicObjectManager m_objectManager;
 	};
 

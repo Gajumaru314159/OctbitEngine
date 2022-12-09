@@ -29,6 +29,8 @@ set(public_libs
 )
 set(private_libs 
     ${Vulkan_LIBRARIES} 
+    glslang
+    #spirv
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
 

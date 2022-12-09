@@ -1,25 +1,25 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スワップ・チェーン
+//! @brief		ディスプレイ
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/SwapChain.h>
+#include <Framework/RHI/Display.h>
 #include <Framework/RHI/Device.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/ISwapchain.h>
+#include <Framework/RHI/IDisplay.h>
 #include <Framework/RHI/ITexture.h>
 
 namespace ob::rhi {
 
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(SwapChain);
+    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(Display);
 
-#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のSwapChainへアクセス")
+#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のDisplayへアクセス")
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    SwapChain::SwapChain(const SwapchainDesc& desc) {
-        m_pImpl = Device::Get()->createSwapChain(desc);
+    Display::Display(const DisplayDesc& desc) {
+        m_pImpl = Device::Get()->createDisplay(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "スワップチェインの生成に失敗");
@@ -31,7 +31,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  定義を取得
     //@―---------------------------------------------------------------------------
-    const SwapchainDesc& SwapChain::getDesc()const {
+    const DisplayDesc& Display::getDesc()const {
         CHECK_IMPL();
         return m_pImpl->getDesc();
     }
@@ -40,7 +40,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  バックバッファの数を取得
     //@―---------------------------------------------------------------------------
-    s32 SwapChain::getBackBufferCount()const {
+    s32 Display::getBackBufferCount()const {
         CHECK_IMPL();
         return m_pImpl->getDesc().bufferCount;
     }
@@ -49,7 +49,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  VSyncが有効か
     //@―---------------------------------------------------------------------------
-    s32 SwapChain::isVSyncEnabled()const {
+    s32 Display::isVSyncEnabled()const {
         CHECK_IMPL();
         return m_pImpl->getDesc().vsync;
     }
@@ -58,7 +58,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  HDRが有効か
     //@―---------------------------------------------------------------------------
-    s32 SwapChain::isHdrEnabled()const {
+    s32 Display::isHdrEnabled()const {
         CHECK_IMPL();
         return m_pImpl->getDesc().hdr;
     }
@@ -67,7 +67,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  バックバッファのサイズを変更
     //@―---------------------------------------------------------------------------
-    bool SwapChain::resizeBackBuffer(const Size& size) {
+    bool Display::resizeBackBuffer(const Size& size) {
         CHECK_IMPL();
         return m_pImpl->resizeBackBuffer(size);
     }
@@ -78,7 +78,7 @@ namespace ob::rhi {
     //! 
     //! @details    表示するテクスチャを次のバックバッファにします。
     //@―---------------------------------------------------------------------------
-    void SwapChain::update() {
+    void Display::update() {
         CHECK_IMPL();
         m_pImpl->update();
     }

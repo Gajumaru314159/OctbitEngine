@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/Device.h>
-#include <Framework/RHI/SwapChain.h>
+#include <Framework/RHI/Display.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/PipelineState.h>
@@ -37,10 +37,10 @@ namespace ob::rhi
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  SwapChain の実装を取得
+    //! @brief  Display の実装を取得
     //@―---------------------------------------------------------------------------
-    const ISwapChain* Device::GetImpl(const SwapChain& obj) {
-        OB_CHECK_ASSERT(obj.m_pImpl, "空のSwapChainにアクセスしました。");
+    const IDisplay* Device::GetImpl(const Display& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のDisplayにアクセスしました。");
         return obj.m_pImpl;
     }
 

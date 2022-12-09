@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
-#include <Framework/RHI/Types/SwapchainDesc.h>
+#include <Framework/RHI/Types/DisplayDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
@@ -23,7 +23,7 @@
 namespace ob::rhi {
     class IRenderPass;
     class IFrameBuffer;
-    class ISwapChain;
+    class IDisplay;
     class ICommandList;
     class IRootSignature;
     class IPipelineState;
@@ -92,7 +92,7 @@ namespace ob::rhi {
         virtual IFrameBuffer*       createFrameBuffer(const FrameBufferDesc& desc) = 0;
 
 
-        virtual ISwapChain*         createSwapChain(const SwapchainDesc& desc) = 0;
+        virtual IDisplay*           createDisplay(const DisplayDesc& desc) = 0;
 
         virtual ICommandList*       createCommandList(const CommandListDesc& desc) = 0;
 

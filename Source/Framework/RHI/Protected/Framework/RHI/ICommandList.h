@@ -11,7 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class SwapChain;
+    class Display;
     class VertexBuffer;
     class IndexBuffer;
     class RootSignature;
@@ -44,7 +44,7 @@ namespace ob::rhi {
         virtual void begin()=0;
         virtual void end()=0;
 
-        virtual void applySwapChain(const SwapChain& swapChain, const Texture& texture)=0;
+        virtual void applyDisplay(const Display& display, const Texture& texture)=0;
         virtual void beginRender(const RenderTarget& target) = 0; //!< 描画開始
         virtual void endRender() = 0;                                   //!< 描画終了
 

@@ -1,10 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スワップ・チェーン実装(DirectX12)
+//! @brief		ディスプレイ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/ISwapChain.h>
+#include <Framework/RHI/IDisplay.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 //===============================================================
@@ -24,7 +24,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class SwapChainImpl :public rhi::ISwapChain{
+    class DisplayImpl :public rhi::IDisplay {
     public:
 
         //===============================================================
@@ -34,13 +34,13 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        SwapChainImpl(DeviceImpl& rDevice, const SwapchainDesc& desc);
+        DisplayImpl(DeviceImpl& rDevice, const DisplayDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ
         //@―---------------------------------------------------------------------------
-        ~SwapChainImpl();
+        ~DisplayImpl();
 
 
         //@―---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  バックバッファの数を取得
         //@―---------------------------------------------------------------------------
-        const SwapchainDesc& getDesc()const noexcept override;
+        const DisplayDesc& getDesc()const noexcept override;
 
 
         //===============================================================
@@ -111,7 +111,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      レンダーテクスチャを初期化
         //@―---------------------------------------------------------------------------
-        bool createSwapChain(DeviceImpl& rDevice);
+        bool createDisplay(DeviceImpl& rDevice);
 
 
         //@―---------------------------------------------------------------------------
@@ -134,9 +134,9 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        SwapchainDesc m_desc;
+        DisplayDesc m_desc;
 
-        ComPtr<IDXGISwapChain4> m_swapchain;            //!< スワップチェイン
+        ComPtr<IDXGISwapChain4> m_swapChain;            //!< スワップチェイン
         Array<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
