@@ -33,4 +33,9 @@ namespace ob::rhi {
 		}
 	}
 
+	const RenderPassDesc& RenderPass::desc()const {
+		CHECK_IMPL();
+		return m_pImpl->desc();
+	}
+
 }// namespace ob

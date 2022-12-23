@@ -31,6 +31,8 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         FrameBuffer(const FrameBufferDesc& desc);
 
+        const FrameBufferDesc& desc()const;
+
     };
 
 }// namespcae ob::rhi

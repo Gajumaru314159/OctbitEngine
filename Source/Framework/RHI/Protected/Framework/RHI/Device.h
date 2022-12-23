@@ -7,18 +7,6 @@
 #include <Framework/RHI/IDevice.h>
 //! @cond
 
-namespace ob::rhi {
-	class Display;		class IDisplay;
-	class CommandList;		class ICommandList;
-	class RootSignature;	class IRootSignature;
-	class PipelineState;	class IPipelineState;
-	class RenderTexture;	class IRenderTexture;
-	class Texture;			class ITexture;
-	class Shader;			class IShader;
-	class Buffer;			class IBuffer;
-	class DescriptorTable;	class IDescriptorTable;
-}
-
 #define GRAPHIC_DECLEAR_GET_IMPL(type)																	\
 	public:																								\
     template<class T>																					\
@@ -70,6 +58,20 @@ namespace ob::rhi {
 
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  RenderPass の実装を取得
+		//@―---------------------------------------------------------------------------
+		static const IRenderPass* GetImpl(const RenderPass&);
+		GRAPHIC_DECLEAR_GET_IMPL(RenderPass);
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  FrameBuffer の実装を取得
+		//@―---------------------------------------------------------------------------
+		static const IFrameBuffer* GetImpl(const FrameBuffer&);
+		GRAPHIC_DECLEAR_GET_IMPL(FrameBuffer);
+
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  RootSignature の実装を取得
 		//@―---------------------------------------------------------------------------
 		static const IRootSignature* GetImpl(const RootSignature&);
@@ -104,8 +106,8 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief  RenderTexture の実装を取得
 		//@―---------------------------------------------------------------------------
-		static const IRenderTarget* GetImpl(const RenderTarget&);
-		GRAPHIC_DECLEAR_GET_IMPL(RenderTarget);
+		static const IRenderTexture* GetImpl(const RenderTexture&);
+		GRAPHIC_DECLEAR_GET_IMPL(RenderTexture);
 
 
 		//@―---------------------------------------------------------------------------

@@ -29,7 +29,7 @@ namespace ob::rhi::dx12 {
 
 			result = device.getNative()->CreateCommandQueue(&desc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::outputFatalLog(result, TC("ID3D12Device::CreatteCommandQueue()"));
+				Utility::OutputFatalLog(result, TC("ID3D12Device::CreatteCommandQueue()"));
 				return;
 			}
 		}
@@ -37,7 +37,7 @@ namespace ob::rhi::dx12 {
 		{
 			result = device.getNative()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::outputFatalLog(result, TC("ID3D12Device::CreateFence()"));
+				Utility::OutputFatalLog(result, TC("ID3D12Device::CreateFence()"));
 				return;
 			}
 		}

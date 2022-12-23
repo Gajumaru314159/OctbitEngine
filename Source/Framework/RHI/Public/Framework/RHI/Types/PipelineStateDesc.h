@@ -7,7 +7,7 @@
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
-#include <Framework/RHI/RenderTarget.h>
+#include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/Types/BlendDesc.h>
 #include <Framework/RHI/Types/DepthStencilDesc.h>
 #include <Framework/RHI/Types/RasterizerDesc.h>
@@ -109,7 +109,8 @@ namespace ob::rhi {
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
-		RenderTarget		target;						//!< 描画先
+		RenderPass			renderPass;					//!< レンダーパス
+		s32					subpass;					//!< サブパスインデックス
 
 		RootSignature		rootSignature;				//!< ルートシグネチャ
 		VertexLayout		vertexLayout;				//!< 頂点レイアウト

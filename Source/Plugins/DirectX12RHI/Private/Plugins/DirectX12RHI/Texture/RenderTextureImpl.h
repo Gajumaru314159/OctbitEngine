@@ -67,11 +67,14 @@ namespace ob::rhi::dx12 {
 
     public:
 
-        D3D12_CPU_DESCRIPTOR_HANDLE getCPUHandle()const;
-        D3D12_GPU_DESCRIPTOR_HANDLE getGPUHandle()const;
+        const DescriptorHandle& getSRV()const { return m_hSRV; }
+        const DescriptorHandle& getRTV()const { return m_hRTV; }
+        const DescriptorHandle& getDSV()const { return m_hDSV; }
 
         D3D12_VIEWPORT getViewport()const;
         D3D12_RECT getScissorRect()const;
+
+        auto& getResource()const { return m_resource; }
 
     private:
 
@@ -85,6 +88,7 @@ namespace ob::rhi::dx12 {
         ComPtr<ID3D12Resource>      m_resource;     //!< リソース
         DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
         DescriptorHandle            m_hRTV;         //!< デスクリプタハンドル
+        DescriptorHandle            m_hDSV;         //!< デスクリプタハンドル
 
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート

@@ -13,7 +13,6 @@ namespace ob::rhi {
 	class FrameBuffer;
 	class PipelineState;
 	class RenderPass;
-	class RenderTarget;
 	class RenderTexture;
 	class ResourceBarrier;
 	class RootSignature;

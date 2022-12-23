@@ -113,7 +113,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  HRESULTのFatalログを出力
     //@―---------------------------------------------------------------------------
-    void Utility::outputFatalLog(HRESULT result, StringView message) {
+    void Utility::OutputFatalLog(HRESULT result, StringView message) {
         LOG_FATAL_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::getErrorMessage(result));
     }
 

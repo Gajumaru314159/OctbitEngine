@@ -33,4 +33,13 @@ namespace ob::rhi {
 		}
 	}
 
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  でスクリプタ取得
+	//@―---------------------------------------------------------------------------
+	const FrameBufferDesc& FrameBuffer::desc()const {
+		CHECK_IMPL();
+		return m_pImpl->desc();
+	}
+
 }// namespace ob

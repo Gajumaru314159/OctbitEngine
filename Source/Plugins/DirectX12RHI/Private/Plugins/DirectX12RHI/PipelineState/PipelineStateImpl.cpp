@@ -25,8 +25,8 @@ namespace ob::rhi::dx12 {
 			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
 			return;
 		}
-		if (!desc.target) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderTargetが設定されていません。");
+		if (!desc.renderPass) {
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
 			return;
 		}
 
@@ -39,7 +39,12 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		const auto targetCount = desc.target.getColorTextureCount();
+		if (!is_in_range(desc.subpass, desc.renderPass.desc().subpasses)) {
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass.desc().subpasses.size());
+		}
+
+		auto& subpass = desc.renderPass.desc().subpasses[desc.subpass];
+		const auto targetCount = subpass.colors.size();
 		if (8 < targetCount) {
 			LOG_FATAL_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
 			return;
@@ -107,7 +112,7 @@ namespace ob::rhi::dx12 {
 		ComPtr<ID3D12PipelineState> pipelineState;
 		result = rDevice.getNative()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
+			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
 			return;
 		}
 
@@ -122,13 +127,37 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
 
-		dst.NumRenderTargets = src.target.getColorTextureCount();
-		for (s32 i = 0; i < dst.NumRenderTargets; ++i) {
-			auto& tex = src.target.getColorTexture(i);
-			dst.RTVFormats[i] = TypeConverter::Convert(tex.format());
+		auto& subpass = src.renderPass.desc().subpasses[src.subpass];
+		auto& attachments = src.renderPass.desc().attachments;
+
+		dst.NumRenderTargets = (UINT)subpass.colors.size();
+
+		for (auto [i, ref] : Indexed(subpass.colors)) {
+
+			auto index = ref.index;
+
+			if (is_in_range(index, attachments)) {
+				auto format = TypeConverter::Convert(attachments[index].format);
+				dst.RTVFormats[i] = format;
+			} else {
+				LOG_ERROR("無効なカラーアタッチメントインデックス[index={},max={}]", index, attachments.size());
+			}
+
 		}
-		auto depthTex = src.target.getDepthTexture();
-		if (depthTex)dst.DSVFormat = TypeConverter::Convert(depthTex.format());
+
+		if (!subpass.depth.empty()) {
+
+			auto index = subpass.depth[0].index;
+
+			if (is_in_range(index, attachments)) {
+				auto format = TypeConverter::Convert(attachments[index].format);
+				dst.DSVFormat = format;
+			} else {
+				LOG_ERROR("無効なデプスアタッチメントインデックス[index={},max={}]", index, attachments.size());
+			}
+
+		}
+
 	}
 
 

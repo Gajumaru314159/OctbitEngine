@@ -46,7 +46,7 @@ namespace ob::core {
 	//!				}
 	//!				```
 	//@―---------------------------------------------------------------------------
-	template <class Type, class TItr = decltype(std::cbegin(std::declval<Type>())), class = decltype(std::cend(std::declval<Type>()))>
+	template <class Type, class TItr = decltype(std::begin(std::declval<Type>())), class = decltype(std::end(std::declval<Type>()))>
 	inline constexpr auto Indexed(Type&& iterable)
 	{
 		return IndexedRef<Type, TItr>(std::forward<Type>(iterable));

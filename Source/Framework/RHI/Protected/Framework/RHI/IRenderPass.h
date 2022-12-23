@@ -28,6 +28,8 @@ namespace ob::rhi {
 		//! @brief  妥当な状態か
 		//@―---------------------------------------------------------------------------
 		virtual bool isValid()const = 0;
+
+        virtual const RenderPassDesc& desc()const = 0;
             
     };
 

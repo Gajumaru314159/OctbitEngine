@@ -47,6 +47,8 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
 
+        const RenderPassDesc& desc()const override{ return m_desc; }
+
     private:
         const RenderPassDesc m_desc;
     };

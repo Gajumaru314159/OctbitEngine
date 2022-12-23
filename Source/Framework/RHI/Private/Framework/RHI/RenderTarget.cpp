@@ -21,7 +21,7 @@ namespace ob::rhi {
     //! @param name     オブジェクト名
     //@―---------------------------------------------------------------------------
     RenderTarget::RenderTarget(const RenderTargetDesc& desc) {
-        m_pImpl = Device::Get()->createRenderTarget(desc);
+        m_pImpl = nullptr;// Device::Get()->createRenderTarget(desc);
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "RenderTargetの生成に失敗");

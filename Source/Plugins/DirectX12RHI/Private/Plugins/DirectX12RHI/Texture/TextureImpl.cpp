@@ -127,7 +127,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result,TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::OutputFatalLog(result,TC("ID3D12Device::CreateCommittedResource()"));
 		}
 
 #ifdef OB_DEBUG

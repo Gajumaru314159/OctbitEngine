@@ -35,7 +35,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  HRESULTのFatalログを出力
         //@―---------------------------------------------------------------------------
-        static void outputFatalLog(HRESULT result, StringView message = TC(""));
+        static void OutputFatalLog(HRESULT result, StringView message = TC(""));
 
         
         //@―---------------------------------------------------------------------------

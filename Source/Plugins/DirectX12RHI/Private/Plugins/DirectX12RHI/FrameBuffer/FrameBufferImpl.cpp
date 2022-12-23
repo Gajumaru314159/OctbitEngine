@@ -16,7 +16,17 @@ namespace ob::rhi::dx12 {
     FrameBufferImpl::FrameBufferImpl(DeviceImpl& rDevice, const FrameBufferDesc& desc)
         : m_desc(desc)
     {
-        
+        auto& a = m_desc.renderPass.desc().attachments;
+        auto& b = m_desc.attachments;
+
+        bool ok = std::equal(a.begin(), a.end(), b.begin(),
+            [&](const AttachmentDesc& ai,const RenderTexture& bi) {
+                return ai.format == bi.format();
+            }
+        );
+
+        OB_CHECK_ASSERT(ok, "RenderPassのアタッチメントフォーマットに不一致");
+
     }
 
     //@―---------------------------------------------------------------------------

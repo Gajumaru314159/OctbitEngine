@@ -10,9 +10,11 @@
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/RenderTarget.h>
+#include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/DescriptorTable.h>
+#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/FrameBuffer.h>
 
 #include <Framework/RHI/IGraphicModule.h>
 #include <Framework/Engine/Engine.h>
@@ -73,6 +75,15 @@ namespace ob::rhi
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief  FrameBuffer の実装を取得
+    //@―---------------------------------------------------------------------------
+    const IFrameBuffer* Device::GetImpl(const FrameBuffer& obj) {
+        OB_CHECK_ASSERT(obj.m_pImpl, "空のFrameBufferにアクセスしました。");
+        return obj.m_pImpl;
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief  Shader の実装を取得
     //@―---------------------------------------------------------------------------
     const IShader* Device::GetImpl(const Shader& obj) {
@@ -91,9 +102,9 @@ namespace ob::rhi
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  RenderTarget の実装を取得
+    //! @brief  RenderTexture の実装を取得
     //@―---------------------------------------------------------------------------
-    const IRenderTarget* Device::GetImpl(const RenderTarget& obj) {
+    const IRenderTexture* Device::GetImpl(const RenderTexture& obj) {
         OB_CHECK_ASSERT(obj.m_pImpl, "空のRenderTargetにアクセスしました。");
         return obj.m_pImpl;
     }

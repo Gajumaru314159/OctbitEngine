@@ -32,6 +32,8 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         RenderPass(const RenderPassDesc& desc);
 
+        const RenderPassDesc& desc()const;
+
     };
 
 }// namespcae ob::rhi

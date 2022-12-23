@@ -155,14 +155,6 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {
-		return new RenderTargetImpl(*this, desc);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  レンダーテクスチャを生成
-	//@―---------------------------------------------------------------------------
 	ob::rhi::IRenderTexture* DeviceImpl::createRenderTexture(const RenderTextureDesc& desc) {
 		return new RenderTextureImpl(*this, desc);
 	}
@@ -277,7 +269,7 @@ namespace ob::rhi::dx12 {
 			ComPtr<ID3D12Debug>	debugController;
 			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
-				Utility::outputFatalLog(result, TC("D3D12GetDebugInterface()"));
+				Utility::OutputFatalLog(result, TC("D3D12GetDebugInterface()"));
 				return false;
 			}
 			debugController->EnableDebugLayer();
@@ -287,7 +279,7 @@ namespace ob::rhi::dx12 {
 		// ファクトリの生成
 		result = ::CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result, TC("CreateDXGIFactory2()"));
+			Utility::OutputFatalLog(result, TC("CreateDXGIFactory2()"));
 			return false;
 		}
 
@@ -327,7 +319,7 @@ namespace ob::rhi::dx12 {
 			}
 		}
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result, TC("D3D12CreateDevice()"));
+			Utility::OutputFatalLog(result, TC("D3D12CreateDevice()"));
 			return false;
 		}
 		OB_DEBUG_CONTEXT(m_device->SetName(L"System Device"));
@@ -370,19 +362,19 @@ namespace ob::rhi::dx12 {
 		// コマンドアロケータを生成
 		//auto result = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_commandAllocator.ReleaseAndGetAddressOf()));
 		//if (FAILED(result)) {
-		//	Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
+		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
 		//
 		//	// DeviceRemoved
 		//	if (result == 0x887a0005) {
 		//		result = m_device->GetDeviceRemovedReason();
-		//		Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
+		//		Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
 		//	}
 		//}
 		//
 		//// システム・コマンドリストを生成
 		//result = m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator.Get(), nullptr, IID_PPV_ARGS(m_systemCmdList.ReleaseAndGetAddressOf()));
 		//if (FAILED(result)) {
-		//	Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
+		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
 		//	return false;
 		//}
 		//
@@ -396,7 +388,7 @@ namespace ob::rhi::dx12 {
 		//
 		//result = m_device->CreateCommandQueue(&cmdQueueDesc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
 		//if (FAILED(result)) {
-		//	Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandQueue()"));
+		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandQueue()"));
 		//	return false;
 		//}
 		//
@@ -411,7 +403,7 @@ namespace ob::rhi::dx12 {
 		//m_fenceVal = 0;
 		//auto result = m_device->CreateFence(m_fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
 		//if (FAILED(result)) {
-		//	Utility::outputFatalLog(result, TC("ID3D12Device::CreateFence()"));
+		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateFence()"));
 		//	return false;
 		//}
 		return true;

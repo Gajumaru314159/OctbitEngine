@@ -7,7 +7,9 @@
 #include <Framework/RHI/ICommandList.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Constants.h>
+#include <Framework/RHI/FrameBuffer.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 
 namespace ob::rhi::dx12 {
 
@@ -68,16 +70,6 @@ namespace ob::rhi::dx12 {
         //! @brief      スワップチェーンにテクスチャを適用
         //@―---------------------------------------------------------------------------
         void applyDisplay(const Display& display, const Texture& texture) override;
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      描画開始
-        //@―---------------------------------------------------------------------------
-        void beginRender(const class rhi::RenderTarget& target) override;
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      描画終了
-        //@―---------------------------------------------------------------------------
-        void endRender() override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      シザー矩形を設定
@@ -162,6 +154,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
+        void setSubpass();
         void clearDescriptorHandle();
         void onNameChanged()override;
 
@@ -171,14 +164,17 @@ namespace ob::rhi::dx12 {
         const CommandListDesc m_desc;
 
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
-        ComPtr<ID3D12GraphicsCommandList5> m_cmdList;
+        ComPtr<ID3D12GraphicsCommandList6> m_cmdList;
 
         D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
         D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
 
-        const class RenderTarget* m_pRenderTarget = nullptr;
-
         Array<D3D12_RESOURCE_BARRIER> m_barriers;
+
+        FrameBuffer m_frameBuffer;
+        s32         m_subpassIndex;
+
+        ResourceStateCache m_cache;
 
     };
 

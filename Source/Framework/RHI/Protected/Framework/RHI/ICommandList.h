@@ -41,10 +41,7 @@ namespace ob::rhi {
         virtual void nextSubpass() = 0;                                 //!< 次のサブパスに進める
         virtual void endRenderPass() = 0;                               //!< レンダーパス終了
 
-
         virtual void applyDisplay(const Display& display, const Texture& texture)=0;
-        virtual void beginRender(const RenderTarget& target) = 0; //!< 描画開始
-        virtual void endRender() = 0;                                   //!< 描画終了
 
         virtual void setViewport(const Viewport* pViewport,s32 num)=0;  //!< ビューポートを設定
         virtual void setScissorRect(const IntRect* pRect,s32 num)=0;    //!< シザー矩形を設定

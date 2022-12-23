@@ -23,6 +23,7 @@ namespace ob::rhi
     //@―---------------------------------------------------------------------------
     RenderTexture::RenderTexture(const RenderTextureDesc& desc) {
         m_pImpl = Device::Get()->createRenderTexture(desc);
+        Texture::m_pImpl = m_pImpl;
         OB_CHECK_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "RenderTextureの生成に失敗");

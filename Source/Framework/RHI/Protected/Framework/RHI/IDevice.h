@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
@@ -31,7 +32,6 @@ namespace ob::rhi {
     class IPipelineState;
     class ITexture;
     class IRenderTexture;
-    class IRenderTarget;
     class IShader;
     class IBuffer;
     class IDescriptorTable;
@@ -105,7 +105,6 @@ namespace ob::rhi {
 
         virtual ITexture*           createTexture(const TextureDesc& desc) = 0;
         virtual ITexture*           createTexture(BlobView blob) = 0;
-        virtual IRenderTarget*      createRenderTarget(const RenderTargetDesc& desc) = 0;
         virtual IRenderTexture*     createRenderTexture(const RenderTextureDesc& desc)=0;
         
         virtual IShader*            createShader(const String& code,ShaderStage stage) = 0;

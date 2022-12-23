@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/RenderPass.h>
-#include <Framework/RHI/Texture.h>
+#include <Framework/RHI/RenderTexture.h>
 
 namespace ob::rhi {
 
@@ -14,7 +14,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct FrameBufferDesc {
         RenderPass renderPass;
-        Array<Texture> attachments;
+        Array<RenderTexture> attachments;
     };
 
 }// namespcae ob::rhi

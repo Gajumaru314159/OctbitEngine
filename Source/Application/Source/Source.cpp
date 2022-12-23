@@ -47,6 +47,18 @@ int OctbitMain() {
 	return 0;
 }
 
+
+struct Vert {
+	Vec4 pos;
+	Vec4 normal;
+	Vec2 uv;
+};
+
+struct CBuf {
+	Matrix matrix = Matrix::Identity;
+	Color color = Color::Red;
+};
+
 int TestDirectX12() {
 
 	using namespace ob::rhi;
@@ -65,67 +77,147 @@ int TestDirectX12() {
 		display.setName(TC("MainWindow"));
 		OB_CHECK_ASSERT_EXPR(display);
 	}
+
+	RenderPass renderPass;
+	{
+		RenderPassDescHelper desc;
+		auto color = desc.addAttachment(TextureFormat::RGBA8);
+		auto depth = desc.addAttachment(TextureFormat::D32);
+		auto pass0 = desc.addSubpassXCD({ color },depth);
+
+		renderPass = RenderPass(desc);
+		OB_CHECK_ASSERT_EXPR(renderPass);
+	}
+
+	RenderTexture colorRT;
+	{
+		RenderTextureDesc desc;
+		desc.size = display.getDesc().size;
+		desc.format = TextureFormat::RGBA8;
+		desc.clear.color = Color::Gray;
+
+		colorRT = RenderTexture(desc);
+		OB_CHECK_ASSERT_EXPR(colorRT);
+	}
+	RenderTexture depthRT;
+	{
+		RenderTextureDesc desc;
+		desc.size = display.getDesc().size;
+		desc.format = TextureFormat::D32;
+		desc.clear.depth = 0;
+
+		depthRT = RenderTexture(desc);
+		OB_CHECK_ASSERT_EXPR(depthRT);
+	}
+
+	FrameBuffer frameBuffer;
+	{
+		FrameBufferDesc desc;
+		desc.renderPass = renderPass;
+		desc.attachments.push_back(colorRT);
+		desc.attachments.push_back(depthRT);
+
+		frameBuffer = FrameBuffer(desc);
+		OB_CHECK_ASSERT_EXPR(frameBuffer);
+	}
+
+
 	VertexShader vs;
 	PixelShader ps;
 	{
-		String vssrc;
-		vssrc.append(TC("cbuffer Param : register(b0) {									\n"));
-		vssrc.append(TC("  float4x4 g_mtx;												\n"));
-		vssrc.append(TC("  float4x4 g_mtx2;												\n"));
-		vssrc.append(TC("  float4 g_col;												\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("struct VsIn {													\n"));
-		vssrc.append(TC("  float4 pos:POSITION;											\n"));
-		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("struct VsOut {													\n"));
-		vssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
-		vssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		vssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		vssrc.append(TC("};																\n"));
-		vssrc.append(TC("VsOut VS_Main(VsIn i) {										\n"));
-		vssrc.append(TC("    VsOut o;													\n"));
-		vssrc.append(TC("    o.pos = mul(g_mtx,i.pos);									\n"));
-		vssrc.append(TC("    o.uv = i.uv;												\n"));
-		vssrc.append(TC("    o.normal = i.normal;										\n"));
-		vssrc.append(TC("    return o;													\n"));
-		vssrc.append(TC("}																\n"));
-		String pssrc;
-		pssrc.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-		pssrc.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-		pssrc.append(TC("struct PsIn {													\n"));
-		pssrc.append(TC("  float4 pos:SV_POSITION;										\n"));
-		pssrc.append(TC("  float4 normal:NORMAL;										\n"));
-		pssrc.append(TC("  float2 uv:TEXCOORD;											\n"));
-		pssrc.append(TC("};																\n"));
-		pssrc.append(TC("struct PsOut {													\n"));
-		pssrc.append(TC("	float4 color0:SV_TARGET0;									\n"));
-		pssrc.append(TC("};																\n"));
-		pssrc.append(TC("PsOut PS_Main(PsIn i){											\n"));
-		pssrc.append(TC("    PsOut o;													\n"));
-		pssrc.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
-		pssrc.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
-		pssrc.append(TC("    o.color0 = color;											\n"));
-		pssrc.append(TC("    return o;													\n"));
-		pssrc.append(TC("}																\n"));
+		String code;
+		code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+		code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
+		code.append(TC("cbuffer Param : register(b0) {									\n"));
+		code.append(TC("  float4x4 g_mtx;												\n"));
+		code.append(TC("  float4x4 g_mtx2;												\n"));
+		code.append(TC("  float4 g_col;													\n"));
+		code.append(TC("};																\n"));
+		code.append(TC("// IN / OUT														\n"));
+		code.append(TC("struct VsIn {													\n"));
+		code.append(TC("  float4 pos	:POSITION;										\n"));
+		code.append(TC("  float4 normal	:NORMAL;										\n"));
+		code.append(TC("  float2 uv		:TEXCOORD;										\n"));
+		code.append(TC("};																\n"));
+		code.append(TC("struct PsIn {													\n"));
+		code.append(TC("  float4 pos	:SV_POSITION;									\n"));
+		code.append(TC("  float4 normal	:NORMAL;										\n"));
+		code.append(TC("  float2 uv		:TEXCOORD;										\n"));
+		code.append(TC("};																\n"));
+		code.append(TC("struct PsOut {													\n"));
+		code.append(TC("  float4 color0	:SV_TARGET0;									\n"));
+		code.append(TC("};																\n"));
+		code.append(TC("// エントリ														\n"));
+		code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
+		code.append(TC("    PsIn o;														\n"));
+		code.append(TC("    o.pos = mul(g_mtx,i.pos);									\n"));
+		code.append(TC("    o.uv = i.uv;												\n"));
+		code.append(TC("    o.normal = i.normal;										\n"));
+		code.append(TC("    return o;													\n"));
+		code.append(TC("}																\n"));
+		code.append(TC("PsOut PS_Main(PsIn i){											\n"));
+		code.append(TC("    PsOut o;													\n"));
+		code.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
+		code.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
+		code.append(TC("    o.color0 = color;											\n"));
+		code.append(TC("    return o;													\n"));
+		code.append(TC("}																\n"));
 
-		vs = VertexShader(vssrc);
-		ps = PixelShader(pssrc);
-		OB_CHECK_ASSERT_EXPR(vs && ps);
+		vs = VertexShader(code);
+		ps = PixelShader(code);
+		OB_CHECK_ASSERT_EXPR(vs&&ps);
 	}
 
-	RenderTarget rt;
+	RootSignature signature;
 	{
-		RenderTargetDesc desc;
-		desc.size = { 640,480 };
-		desc.colors.push_back({ display.getDesc().format, Color::Gray });
-		desc.depth.push_back({ TextureFormat::D32, 1, 0 });
-
-		rt = RenderTarget(desc);
-		rt.setName(TC("メインレンダ―ターゲット"));
-		OB_CHECK_ASSERT_EXPR(rt);
+		RootSignatureDesc desc(
+			{
+				RootParameter::Range(DescriptorRangeType::SRV,1,0),
+				RootParameter::Range(DescriptorRangeType::CBV,1,0),
+			},
+			{
+				StaticSamplerDesc(SamplerDesc(),0),
+			}
+		);
+		signature = RootSignature(desc);
+		signature.setName(TC("TestRootSignature"));
+		OB_CHECK_ASSERT_EXPR(signature);
 	}
+
+	PipelineState pipeline;
+	{
+		PipelineStateDesc desc;
+		desc.renderPass = renderPass;
+		desc.subpass = 0;
+
+		desc.rootSignature = signature;
+		desc.vs = vs;
+		desc.ps = ps;
+		desc.vertexLayout.attributes = {
+			VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
+			VertexAttribute(Semantic::Normal,offsetof(Vert,normal),Type::Float,4),
+			VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
+		};
+		desc.blend[0] = BlendDesc::AlphaBlend;
+		desc.rasterizer.cullMode = CullMode::None;
+		desc.depthStencil.depth.enable = true;
+		desc.depthStencil.stencil.enable = false;
+
+		pipeline = PipelineState(desc);
+		pipeline.setName(TC("TestPipeline"));
+		OB_CHECK_ASSERT_EXPR(pipeline);
+	}
+
+	Buffer buffer;
+	CBuf cbuf;
+	{
+		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
+		buffer = Buffer(desc);
+		buffer.setName(TC("TestBuffer"));
+		OB_CHECK_ASSERT_EXPR(buffer);
+		buffer.updateDirect(cbuf);
+	}
+
 	Texture tex;
 	{
 		FileStream fs(TC("Asset/Texture/test.dds"));
@@ -139,109 +231,11 @@ int TestDirectX12() {
 		OB_CHECK_ASSERT_EXPR(tex);
 	}
 
-	RenderTexture colorRT;
-	{
-		RenderTextureDesc desc;
-		desc.size = display.getDesc().size;
-		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::Gray;
-
-		colorRT = RenderTexture(desc);
-	}
-
-	RootSignature signature;
-	{
-		RootSignatureDesc desc(
-			{
-				RootParameter::Range(DescriptorRangeType::SRV,1,0),
-				RootParameter::Range(DescriptorRangeType::CBV,1,0),
-			},
-			{
-				StaticSamplerDesc(SamplerDesc(),0),
-			}
-			);
-		signature = RootSignature(desc);
-		signature.setName(TC("TestRootSignature"));
-		OB_CHECK_ASSERT_EXPR(signature);
-	}
-
-	RenderPass renderPass;
-	{
-		RenderPassDescHelper desc;
-		auto color = desc.addAttachment(TextureFormat::RGBA8);
-		auto pass0 = desc.addSubpassXCX({ color });
-
-		renderPass = RenderPass(desc);
-		OB_CHECK_ASSERT_EXPR(renderPass);
-	}
-
-	FrameBuffer frameBuffer;
-	{
-		FrameBufferDesc desc;
-		desc.renderPass = renderPass;
-		desc.attachments.push_back(colorRT);
-
-		frameBuffer = FrameBuffer(desc);
-		OB_CHECK_ASSERT_EXPR(frameBuffer);
-	}
-
-
-
-	struct Vert {
-		Vec4 pos;
-		Vec4 normal;
-		Vec2 uv;
-	};
-
-	PipelineState pipeline;
-	{
-		PipelineStateDesc desc;
-		desc.rootSignature = signature;
-		desc.vs = vs;
-		desc.ps = ps;
-		desc.vertexLayout.attributes = {
-			VertexAttribute(Semantic::Position,offsetof(Vert,pos),Type::Float,4),
-			VertexAttribute(Semantic::Normal,offsetof(Vert,normal),Type::Float,4),
-			VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
-		};
-		desc.target = rt;
-		desc.blend[0] = BlendDesc::AlphaBlend;
-		desc.rasterizer.cullMode = CullMode::None;
-		desc.depthStencil.depth.enable = true;
-
-		pipeline = PipelineState(desc);
-		pipeline.setName(TC("TestPipeline"));
-		OB_CHECK_ASSERT_EXPR(pipeline);
-	}
-
-	// 定数バッファ
-	struct CBuf {
-		Matrix matrix = Matrix::Identity;
-		Color color = Color::Red;
-	} cbuf;
-	Buffer buffer;
-	{
-		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
-		buffer = Buffer(desc);
-		buffer.setName(TC("TestBuffer"));
-		OB_CHECK_ASSERT_EXPR(buffer);
-		buffer.updateDirect(cbuf);
-	}
-
 	DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
 	dt.setResource(0, tex);
 
 	DescriptorTable dt2(DescriptorHeapType::CBV_SRV_UAV, 1);
 	dt2.setResource(0, buffer);
-
-	CommandList cmdList;
-	{
-		CommandListDesc desc;
-		desc.type = CommandListType::Graphic;
-		cmdList = CommandList(desc);
-		cmdList.setName(TC("TestCommandList"));
-		OB_CHECK_ASSERT_EXPR(cmdList);
-	}
 
 
 	MeshData<Vert> mesh;
@@ -282,18 +276,29 @@ int TestDirectX12() {
 		}
 	}
 
-
 	Buffer vertexBuffer;
-	Buffer indexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
 		vertexBuffer = Buffer(desc, BlobView(mesh.vertices));
 		OB_CHECK_ASSERT_EXPR(vertexBuffer);
 	}
+
+	Buffer indexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
 		indexBuffer = Buffer(desc, BlobView(mesh.indices));
 		OB_CHECK_ASSERT_EXPR(indexBuffer);
+	}
+
+
+
+	CommandList cmdList;
+	{
+		CommandListDesc desc;
+		desc.type = CommandListType::Graphic;
+		cmdList = CommandList(desc);
+		cmdList.setName(TC("TestCommandList"));
+		OB_CHECK_ASSERT_EXPR(cmdList);
 	}
 
 
@@ -302,8 +307,6 @@ int TestDirectX12() {
 	Vec3 pos(0, 0, -10);
 	Rot rot = Rot::Identity;
 
-
-	f32 t = 0.0f;
 	MSG msg = {};
 	while (true) {
 
@@ -324,9 +327,8 @@ int TestDirectX12() {
 
 		cmdList.begin();
 		cmdList.beginRenderPass(frameBuffer);
-		cmdList.beginRender(rt);
-		cmdList.clearColors();
-		cmdList.clearDepthStencil();
+		//cmdList.clearColors();
+		//cmdList.clearDepthStencil();
 		{
 			cmdList.setRootSignature(signature);
 			cmdList.setPipelineState(pipeline);
@@ -344,8 +346,8 @@ int TestDirectX12() {
 			param.indexCount = mesh.indices.size();
 			cmdList.drawIndexed(param);
 		}
-		cmdList.endRender();
-		cmdList.applyDisplay(display, rt.getColorTexture(0));
+		cmdList.endRenderPass();
+		cmdList.applyDisplay(display, colorRT);
 		cmdList.end();
 
 		// TODO コマンドの個別実行を許可する？
@@ -369,7 +371,6 @@ int TestDirectX12() {
 		// カメラバッファ更新
 		cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
 		buffer.updateDirect(cbuf);
-		t += 2.f;
 	}
 
 	return 0;

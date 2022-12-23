@@ -47,6 +47,8 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
 
+        const FrameBufferDesc& desc()const override { return m_desc; }
+
     private:
         const FrameBufferDesc m_desc;
     };

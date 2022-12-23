@@ -16,7 +16,10 @@
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
+#include <Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
+#include <Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
 #include <Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
+#include <Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
@@ -45,7 +48,7 @@ namespace ob::rhi::dx12 {
 		// アロケータ生成
 		result = device.getNative()->CreateCommandAllocator(type, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
+			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
 			return;
 		}
 
@@ -53,7 +56,7 @@ namespace ob::rhi::dx12 {
 		UINT nodeMask = 0;
 		result = device.getNative()->CreateCommandList(nodeMask, type, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::outputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
+			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
 			return;
 		}
 
@@ -79,7 +82,6 @@ namespace ob::rhi::dx12 {
 
 		HRESULT result;
 
-		m_pRenderTarget = nullptr;
 		clearDescriptorHandle();
 
 		// コマンドアロケータをリセット
@@ -87,7 +89,7 @@ namespace ob::rhi::dx12 {
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandAllocator::Reset()\n");
 			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
-			Utility::outputFatalLog(result, message);
+			Utility::OutputFatalLog(result, message);
 		}
 
 		// コマンドリストをリセット
@@ -95,11 +97,12 @@ namespace ob::rhi::dx12 {
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandList::Reset()\n");
 			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
-			Utility::outputFatalLog(result, message);
+			Utility::OutputFatalLog(result, message);
 		}
 
 		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);
+
 	}
 
 
@@ -107,7 +110,6 @@ namespace ob::rhi::dx12 {
 	//! @brief  描画終了
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::end() {
-		// リソースバリア設定
 		m_cmdList->Close();
 	}
 
@@ -115,21 +117,104 @@ namespace ob::rhi::dx12 {
 	//! @brief      レンダーパス開始
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::beginRenderPass(const FrameBuffer& frameBuffer) {
-		OB_NOTIMPLEMENTED();
+
+		m_frameBuffer = frameBuffer;
+		m_subpassIndex = 0;
+
+		setSubpass();
+
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      サブパス設定
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::setSubpass() {
+		
+		if (!m_frameBuffer)return;
+
+		auto& frameBufferDesc = m_frameBuffer.desc();
+		auto& attachments = frameBufferDesc.attachments;
+		auto& renderPassDesc = frameBufferDesc.renderPass.desc();
+
+		if (!is_in_range(m_subpassIndex, renderPassDesc.subpasses)){
+			LOG_WARNING("サブパスが範囲外です。[index={},size={}]",m_subpassIndex, renderPassDesc.subpasses.size());
+			return;
+		}
+
+		auto& subpass= renderPassDesc.subpasses[m_subpassIndex];
+
+		D3D12_CPU_DESCRIPTOR_HANDLE colors[8];
+		D3D12_CPU_DESCRIPTOR_HANDLE depth;
+
+		// レンダーターゲットビュー設定
+		for (auto [i, ref] : Indexed(subpass.colors)) {
+
+			auto& rRenderTexture = Device::GetImpl<RenderTextureImpl>(attachments.at(ref.index));
+			auto& color = colors[i];
+
+			color = rRenderTexture.getRTV().getCpuHandle();
+
+			m_cache.addTexture(rRenderTexture.getResource().Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET,0);
+
+		}
+
+		// 深度ステンシルビュー設定
+		for (auto [index, d] : Indexed(subpass.depth)) {
+
+			auto& rRenderTexture = Device::GetImpl<RenderTextureImpl>(attachments.at(d.index));
+			
+			depth = rRenderTexture.getDSV().getCpuHandle();
+
+			m_cache.addTexture(rRenderTexture.getResource().Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
+
+		}
+
+		// リソースバリア
+		m_cache.recordCommand(*m_cmdList.Get());
+
+		// レンダーターゲット設定
+		m_cmdList->OMSetRenderTargets(
+			(UINT)subpass.colors.size(),
+			colors,
+			FALSE,
+			subpass.depth.empty() ? NULL : &depth
+		);
+
+		//auto viewport = rTarget.getViewport();
+		//auto rect = rTarget.getScissorRect();
+		//m_cmdList->RSSetViewports(1, &viewport);
+		//m_cmdList->RSSetScissorRects(1, &rect);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      次のサブパスに進める
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::nextSubpass() {
-		OB_NOTIMPLEMENTED();
+		m_subpassIndex++;
+		setSubpass();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーパス終了
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::endRenderPass() {
-		OB_NOTIMPLEMENTED();
+		
+		if (!m_frameBuffer)return;
+
+		auto& frameBufferDesc = m_frameBuffer.desc();
+		auto& attachments = frameBufferDesc.attachments;
+		auto& renderPassDesc = frameBufferDesc.renderPass.desc();
+
+		for (auto [index,desc]: Indexed(renderPassDesc.attachments)) {
+
+			auto& texture = attachments[index];
+
+			// attachment.finalStateへのステート変更
+			// subresourceの扱い要チェック
+		}
+
+		m_frameBuffer.release();
+
 	}
 
 
@@ -177,7 +262,7 @@ namespace ob::rhi::dx12 {
 		}
 	}
 
-
+	/*
 	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーターゲットを設定
 	//@―---------------------------------------------------------------------------
@@ -220,7 +305,7 @@ namespace ob::rhi::dx12 {
 	void CommandListImpl::endRender() {
 		m_pRenderTarget = nullptr;
 	}
-
+	*/
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  シザー矩形を設定
@@ -263,26 +348,28 @@ namespace ob::rhi::dx12 {
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearColors(u32 mask) {
-		if (m_pRenderTarget == nullptr)return;
 
-		auto& desc = m_pRenderTarget->getDesc();
-		for (s32 i = 0, ie = m_pRenderTarget->getColorTextureCount(); i < ie; ++i) {
-			if (mask & (1 << i)) {
-				if (m_hRTV[i].ptr) {
-					auto texture = m_pRenderTarget->getColorTexture(i);
-
-					auto color = desc.colors[i].clearColor;
-
-					FLOAT values[4];
-					values[0] = color.r;
-					values[1] = color.g;
-					values[2] = color.b;
-					values[3] = color.a;
-
-					m_cmdList->ClearRenderTargetView(m_hRTV[i], values, 0, nullptr);
-				}
-			}
-		}
+		OB_NOTIMPLEMENTED();
+		//if (m_pRenderTarget == nullptr)return;
+		//
+		//auto& desc = m_pRenderTarget->getDesc();
+		//for (s32 i = 0, ie = m_pRenderTarget->getColorTextureCount(); i < ie; ++i) {
+		//	if (mask & (1 << i)) {
+		//		if (m_hRTV[i].ptr) {
+		//			auto texture = m_pRenderTarget->getColorTexture(i);
+		//
+		//			auto color = desc.colors[i].clearColor;
+		//
+		//			FLOAT values[4];
+		//			values[0] = color.r;
+		//			values[1] = color.g;
+		//			values[2] = color.b;
+		//			values[3] = color.a;
+		//
+		//			m_cmdList->ClearRenderTargetView(m_hRTV[i], values, 0, nullptr);
+		//		}
+		//	}
+		//}
 
 	}
 
@@ -291,15 +378,18 @@ namespace ob::rhi::dx12 {
 	//! @brief      レンダーターゲットのデプスとステンシルをクリア
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDepthStencil() {
-		auto& desc = m_pRenderTarget->getDesc();
-		if (desc.depth.empty())return;
-		if (m_hDSV.ptr != 0) {
-			FLOAT depth = desc.depth[0].clearDepth;
-			UINT8 stencil = (UINT8)desc.depth[0].clearDepth;
+		
+		OB_NOTIMPLEMENTED();
 
-			D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
-			m_cmdList->ClearDepthStencilView(m_hDSV, clearFlags, depth, stencil, 0, nullptr);
-		}
+		//auto& desc = m_pRenderTarget->getDesc();
+		//if (desc.depth.empty())return;
+		//if (m_hDSV.ptr != 0) {
+		//	FLOAT depth = desc.depth[0].clearDepth;
+		//	UINT8 stencil = (UINT8)desc.depth[0].clearDepth;
+		//
+		//	D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
+		//	m_cmdList->ClearDepthStencilView(m_hDSV, clearFlags, depth, stencil, 0, nullptr);
+		//}
 	}
 
 

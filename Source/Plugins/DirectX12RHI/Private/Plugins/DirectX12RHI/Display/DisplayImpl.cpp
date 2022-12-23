@@ -93,7 +93,7 @@ namespace ob::rhi::dx12 {
             (IDXGISwapChain**)m_swapChain.ReleaseAndGetAddressOf());
 
         if (FAILED(result)) {
-            Utility::outputFatalLog(result, TC("IDXGIFactory::CreateSwapChain()"));
+            Utility::OutputFatalLog(result, TC("IDXGIFactory::CreateSwapChain()"));
             return false;
         }
 
@@ -141,7 +141,7 @@ namespace ob::rhi::dx12 {
             result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
                 // 生成が正しければ呼ばれないはず
-                Utility::outputFatalLog(result, TC("IDXGIDisplay::GetBuffer()"));
+                Utility::OutputFatalLog(result, TC("IDXGIDisplay::GetBuffer()"));
                 return false;
             }
             rDevice.getNative()->CreateRenderTargetView(buffer.Get(), &rtvDesc, m_hRTV.getCpuHandle(i));
@@ -166,14 +166,14 @@ namespace ob::rhi::dx12 {
 
         auto result = m_swapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
         if (FAILED(result)) {
-            Utility::outputFatalLog(result, TC("IDXGIDisplay::CheckColorSpaceSupport()"));
+            Utility::OutputFatalLog(result, TC("IDXGIDisplay::CheckColorSpaceSupport()"));
             return false;
         }
 
         if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
             result = m_swapChain->SetColorSpace1(colorSpace);
             if (FAILED(result)) {
-                Utility::outputFatalLog(result, TC("IDXGIDisplay::SetColorSpace1()"));
+                Utility::OutputFatalLog(result, TC("IDXGIDisplay::SetColorSpace1()"));
                 return false;
             }
         }
@@ -226,7 +226,7 @@ namespace ob::rhi::dx12 {
         auto result = m_swapChain->Present(m_syncInterval, 0);
 
         if (FAILED(result)) {
-            Utility::outputFatalLog(result, TC("IDXGUIDisplay::Present()"));
+            Utility::OutputFatalLog(result, TC("IDXGUIDisplay::Present()"));
             LOG_FATAL_EX("Graphic","スワップチェーンの更新に失敗")
             return;
         }

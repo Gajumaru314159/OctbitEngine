@@ -65,7 +65,7 @@ namespace ob::rhi::dx12 {
 			HRESULT result;
 			result = device.getNative()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::outputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
+				Utility::OutputFatalLog(result, TC("ID3D12Device::CreateDescriptorHeap()"));
 				return;
 			}
 		}
