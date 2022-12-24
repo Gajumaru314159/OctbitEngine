@@ -180,7 +180,7 @@ namespace ob::rhi::dx12 {
 	//! @brief          CPUハンドルを取得
 	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::getCpuHandle(u32 index) {
-		OB_ASSERT_RANGE(index, 0, m_capacity);
+		OB_ASSERT_RANGE(index, 0, m_capacity-1);
 		OB_ASSERT(m_heap,"ヒープが空です。");
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_heap->GetCPUDescriptorHandleForHeapStart();
 		handle.ptr += index * m_descriptorSize;
@@ -192,7 +192,7 @@ namespace ob::rhi::dx12 {
 	//! @brief          CPUハンドルを取得
 	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::getGpuHandle(u32 index) {
-		OB_ASSERT_RANGE(index, 0, m_capacity);
+		OB_ASSERT_RANGE(index, 0, m_capacity-1);
 		OB_ASSERT(m_heap, "ヒープが空です。");
 		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_heap->GetGPUDescriptorHandleForHeapStart();
 		handle.ptr += index * m_descriptorSize;

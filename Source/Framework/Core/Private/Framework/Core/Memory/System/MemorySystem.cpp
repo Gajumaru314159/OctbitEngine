@@ -47,7 +47,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     void MemorySystem::SetHeapAllocator(HeapUsage HeapUsage, Allocator* pAllocator) {
         const s32 index = static_cast<s32>(HeapUsage);
-        OB_ASSERT_RANGE(index,0,enum_cast(HeapUsage::Max));
+        OB_ASSERT_RANGE(index,0,enum_cast(HeapUsage::Max)-1);
         if (s_heaps[index] != nullptr) {
             //LOG_WARNING_EX("Memory", "初期化済みのヒープを差し替えました。");
             assert(false);
@@ -64,7 +64,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     void MemorySystem::SetDebugHeapAllocator(HeapUsage HeapUsage, Allocator* pAllocator) {
         const s32 index = enum_cast(HeapUsage);
-        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max));
+        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
         OB_ASSERT(s_debugHeaps[index]==nullptr,"デバッグヒープが割り当て済みです。");
         if (s_debugHeaps[index] != nullptr) {
             //LOG_WARNING_EX("Memory", "初期化済みのデバッグヒープを差し替えました。");
@@ -82,7 +82,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Allocator& MemorySystem::GetHeapAllocator(HeapUsage HeapUsage) {
         const s32 index = enum_cast(HeapUsage);
-        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max));
+        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
         auto pHeap = s_heaps[index];
 
         if (pHeap == nullptr) {
@@ -102,7 +102,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     Allocator& MemorySystem::GetDebugHeapAllocator(HeapUsage HeapUsage) {
         const s32 index = enum_cast(HeapUsage);
-        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max));
+        OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
         auto pHeap = s_debugHeaps[index];
 
         if (pHeap == nullptr) {
