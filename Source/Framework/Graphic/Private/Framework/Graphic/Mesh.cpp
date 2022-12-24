@@ -14,7 +14,7 @@ namespace ob::graphic {
 	Mesh::Mesh(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount)
 	{
 		using namespace ob::rhi;
-		OB_CHECK_ASSERT(pVertexData, "頂点データがnullです。");
+		OB_ASSERT(pVertexData, "頂点データがnullです。");
 
 		// 頂点
 		if (vertexCount && pVertexData) {

@@ -35,7 +35,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template<class... Args>
 		Swapper(size_t size,Args&... args):Swapper(){
-			OB_CHECK_ASSERT(size, "Swapperのサイズは0にできません。");
+			OB_ASSERT(size, "Swapperのサイズは0にできません。");
 			m_instances.reserve(size);
 			for (size_t i = 0; i < size; ++i) {
 				m_instances.emplace_back(args...);
@@ -186,7 +186,7 @@ namespace ob::core {
 		//! @brief		インデックスを変更
 		//@―---------------------------------------------------------------------------
 		void setIndex(size_t index)const noexcept {
-			OB_CHECK_ASSERT(index<size(),"範囲外です。");
+			OB_ASSERT(index<size(),"範囲外です。");
 			m_index = index;
 		}
 

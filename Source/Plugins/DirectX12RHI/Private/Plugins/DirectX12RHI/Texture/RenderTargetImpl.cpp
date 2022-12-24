@@ -24,7 +24,7 @@ namespace ob::rhi::dx12 {
 		const s32 colorCount = (s32)std::size(m_desc.colors);
 		const s32 depthCount = m_desc.depth.empty() ? 0 : 1;
 		auto& nativeDevice = rDevice.getNative();
-		OB_CHECK_ASSERT(0 < colorCount && colorCount <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", colorCount);
+		OB_ASSERT(0 < colorCount && colorCount <= 8, "マルチターゲットの数が不正です。1以上8以下にしてください。[{}]", colorCount);
 
 		// ハンドルを生成
 		if(colorCount)rDevice.allocateHandle(rhi::DescriptorHeapType::RTV, m_hRTV, colorCount);

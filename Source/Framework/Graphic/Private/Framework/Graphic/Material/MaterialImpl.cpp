@@ -29,13 +29,13 @@ namespace ob::graphic {
 		{
 			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize,rhi::BindFlag::AllShaderResource);
 			m_buffer = rhi::Buffer(bufferDesc);
-			OB_CHECK_ASSERT_EXPR(m_buffer);
+			OB_ASSERT_EXPR(m_buffer);
 			m_bufferBlob.resize(bufferSize);
 		}
 
 		{
 			m_bufferTable = rhi::DescriptorTable(DescriptorHeapType::CBV_SRV_UAV, 1);
-			OB_CHECK_ASSERT_EXPR(m_bufferTable);
+			OB_ASSERT_EXPR(m_bufferTable);
 			m_bufferTable.setResource(0, m_buffer);
 		}
 

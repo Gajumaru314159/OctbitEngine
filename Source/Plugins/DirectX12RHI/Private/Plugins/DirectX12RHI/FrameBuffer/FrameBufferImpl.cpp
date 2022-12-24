@@ -25,7 +25,7 @@ namespace ob::rhi::dx12 {
             }
         );
 
-        OB_CHECK_ASSERT(ok, "RenderPassのアタッチメントフォーマットに不一致");
+        OB_ASSERT(ok, "RenderPassのアタッチメントフォーマットに不一致");
 
     }
 

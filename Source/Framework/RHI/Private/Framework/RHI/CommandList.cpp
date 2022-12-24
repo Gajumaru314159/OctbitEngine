@@ -12,7 +12,7 @@ namespace ob::rhi {
 
 	OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(CommandList);
 
-#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のCommandListへアクセス")
+#define CHECK_IMPL() OB_ASSERT(m_pImpl,"未初期化のCommandListへアクセス")
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
@@ -27,7 +27,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	CommandList::CommandList(const CommandListDesc& desc) {
 		m_pImpl = Device::Get()->createCommandList(desc);
-		OB_CHECK_ASSERT_EXPR(m_pImpl);
+		OB_ASSERT_EXPR(m_pImpl);
 		if (!m_pImpl->isValid()) {
 			LOG_FATAL_EX("Graphic", "CommandListの生成に失敗");
 			release();

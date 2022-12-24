@@ -36,7 +36,7 @@ namespace ob::rhi::dx12 {
 
 		if (isColor) {
 
-			OB_CHECK_ASSERT(!TextureFormatUtility::HasDepth(desc.format), "カラーに非対応なフォーマットです。");
+			OB_ASSERT(!TextureFormatUtility::HasDepth(desc.format), "カラーに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 			resourceStates = D3D12_RESOURCE_STATE_RENDER_TARGET;
 			pClearValue = &colorClearValue;
@@ -44,7 +44,7 @@ namespace ob::rhi::dx12 {
 		} 
 		if(isDepth){
 
-			OB_CHECK_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
+			OB_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 			resourceStates = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 			pClearValue = &depthClearValue;

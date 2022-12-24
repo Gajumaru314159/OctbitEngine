@@ -20,7 +20,7 @@ namespace ob::rhi {
         if (pModule == nullptr) {
             pModule = GEngine->get<GraphicModule>();
         }
-        OB_CHECK_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
+        OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
 
         pModule->getObjectManager().registerObject(*this);
     }
@@ -29,7 +29,7 @@ namespace ob::rhi {
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObject::~GraphicObject() {
-        OB_CHECK_ASSERT(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
+        OB_ASSERT(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
     }
 
 
@@ -50,7 +50,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     void GraphicObject::setName(StringView name) {
 #ifdef OB_DEBUG
-        OB_CHECK_ASSERT(name.size() < std::size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", std::size(m_name), name.data());
+        OB_ASSERT(name.size() < std::size(m_name), "グラフィック・オブジェクトに設定する名前は{0}文字以下にしてください。[ name={1} ]", std::size(m_name), name.data());
         for (s32 i = 0; i < std::size(m_name) && i < name.size(); ++i) {
             m_name[i] = name[i];
         }
@@ -76,14 +76,14 @@ namespace ob::rhi {
         if (0 < m_referenceCount) {
             return m_referenceCount;
         }
-        OB_CHECK_ASSERT(m_referenceCount == 0, "参照カウントエラー");
+        OB_ASSERT(m_referenceCount == 0, "参照カウントエラー");
         
         // デバイスの削除スタックに追加
         static GraphicModule* pModule = nullptr;
         if (pModule == nullptr) {
             pModule = GEngine->get<GraphicModule>();
         }
-        OB_CHECK_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
+        OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
 
         pModule->getObjectManager().requestRelease(*this);
 

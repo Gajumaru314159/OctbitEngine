@@ -54,7 +54,7 @@ namespace ob::platform {
             //@―---------------------------------------------------------------------------
             template<typename Ret = void,typename... Args>
             Ret call(Args... args)const {
-                OB_CHECK_ASSERT(m_ptr, "関数オブジェクトが空です。");
+                OB_ASSERT(m_ptr, "関数オブジェクトが空です。");
                 typedef Ret (*Func)(Args...);
                 Func func = reinterpret_cast<Func>(m_ptr);
                 return func(args...);

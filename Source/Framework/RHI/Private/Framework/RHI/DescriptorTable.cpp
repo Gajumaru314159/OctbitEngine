@@ -12,7 +12,7 @@ namespace ob::rhi {
 
     OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(DescriptorTable);
 
-#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のDescriptorTableへアクセス")
+#define CHECK_IMPL() OB_ASSERT(m_pImpl,"未初期化のDescriptorTableへアクセス")
 
     //@―---------------------------------------------------------------------------
     //! @brief              コンストラクタ
@@ -23,7 +23,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     DescriptorTable::DescriptorTable(DescriptorHeapType type, s32 elementNum) {
         m_pImpl = Device::Get()->createDescriptorTable(type,elementNum);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "DescriptorTableの生成に失敗");
             release();

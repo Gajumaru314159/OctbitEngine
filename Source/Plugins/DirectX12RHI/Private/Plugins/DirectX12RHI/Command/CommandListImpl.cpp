@@ -312,7 +312,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setScissorRect(const IntRect* pRect, s32 num) {
 
-		OB_CHECK_ASSERT(num <= SCISSOR_RECT_MAX, "シザー矩形の最大数を超えました。[value={0},max={1}]", num, SCISSOR_RECT_MAX);
+		OB_ASSERT(num <= SCISSOR_RECT_MAX, "シザー矩形の最大数を超えました。[value={0},max={1}]", num, SCISSOR_RECT_MAX);
 		D3D12_RECT rects[SCISSOR_RECT_MAX];
 		for (s32 i = 0; i < num; ++i) {
 			rects[i].left = pRect[i].left;
@@ -330,7 +330,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setViewport(const Viewport* pViewport, s32 num) {
 
-		OB_CHECK_ASSERT(num <= VIEWPORT_MAX, "ビューポートの最大数を超えました。[value={0},max={1}]", num, VIEWPORT_MAX);
+		OB_ASSERT(num <= VIEWPORT_MAX, "ビューポートの最大数を超えました。[value={0},max={1}]", num, VIEWPORT_MAX);
 		D3D12_VIEWPORT viewports[VIEWPORT_MAX];
 		for (s32 i = 0; i < num; ++i) {
 			viewports[i].TopLeftX = pViewport[i].left;

@@ -19,7 +19,7 @@ namespace ob::core {
 		: m_stream(stream)
 	{
 		setByteOrder(byteOrder);
-		OB_CHECK_ASSERT(stream.canRead(),"読み取り可能なストリームを設定してください。");
+		OB_ASSERT(stream.canRead(),"読み取り可能なストリームを設定してください。");
 	}
 
 	//@―---------------------------------------------------------------------------

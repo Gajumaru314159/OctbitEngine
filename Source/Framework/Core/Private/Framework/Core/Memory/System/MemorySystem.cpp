@@ -65,7 +65,7 @@ namespace ob::core {
     void MemorySystem::SetDebugHeapAllocator(HeapUsage HeapUsage, Allocator* pAllocator) {
         const s32 index = enum_cast(HeapUsage);
         OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max));
-        OB_CHECK_ASSERT(s_debugHeaps[index]==nullptr,"デバッグヒープが割り当て済みです。");
+        OB_ASSERT(s_debugHeaps[index]==nullptr,"デバッグヒープが割り当て済みです。");
         if (s_debugHeaps[index] != nullptr) {
             //LOG_WARNING_EX("Memory", "初期化済みのデバッグヒープを差し替えました。");
             assert(false);

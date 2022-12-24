@@ -221,9 +221,9 @@ namespace ob::rhi::dx12 {
 	void DeviceImpl::allocateHandle(DescriptorHeapType type, DescriptorHandle& handle, s32 size) {
 		auto index = enum_cast(type);
 		if (!is_in_range(index, m_descriptorHeaps)) {
-			OB_ASSERT("不正なDescriptorHeapType");
+			OB_ABORT("不正なDescriptorHeapType");
 		}
-		OB_CHECK_ASSERT(m_descriptorHeaps[index], "DescriptorHeapが生成されていません。");
+		OB_ASSERT(m_descriptorHeaps[index], "DescriptorHeapが生成されていません。");
 		m_descriptorHeaps[index]->allocateHandle(handle, size);
 	}
 

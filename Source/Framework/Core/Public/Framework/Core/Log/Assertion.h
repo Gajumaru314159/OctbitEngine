@@ -3,7 +3,7 @@
 //! @brief		アサーション定義
 //! @author		Gajumaru
 //! 
-//! @details    OB_ASSERT や OB_ASSERT はリリース版でプログラムに含まれません。
+//! @details    OB_ABORT や OB_ABORT はリリース版でプログラムに含まれません。
 //!             アサーションは主にプログラムの前提条件を表すために使用されます。
 //!             エラー処理には適切に対処してエラーログを出力するか、例外を発生させてください。
 //***********************************************************
@@ -24,20 +24,23 @@ if(UNLIKELY(!(expr))){                                                          
 }
 
 //@―---------------------------------------------------------------------------
-//! @brief      式を評価してアサートを発生させる
+//! @brief      プログラムの前提条件を定義する
 //! 
 //! @details    式がfalseである場合エラーログを出力しプログラムを停止する。
+//! @param expr 式
+//! @param format ログフォーマット
 //@―---------------------------------------------------------------------------
-#define OB_CHECK_ASSERT(expr,format,...)				_internal_OB_ASSERT_BASE(expr,format,__VA_ARGS__)
-//! @copydoc OB_ASSERT
-#define OB_CHECK_ASSERT_EXPR(expr)					    OB_CHECK_ASSERT(expr,#expr)
+#define OB_ASSERT(expr,format,...)			_internal_OB_ASSERT_BASE(expr,format,__VA_ARGS__)
+//! @copydoc OB_ABORT
+#define OB_ASSERT_EXPR(expr)				OB_ASSERT(expr,#expr)
 
 //@―---------------------------------------------------------------------------
-//! @brief      アサートを出力する
+//! @brief      プログラムを中断する。
 //! 
 //! @details    エラーログを出力しプログラムを停止する。
+//! @param format ログフォーマット
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT(format,...)				OB_CHECK_ASSERT(false,format,__VA_ARGS__)
+#define OB_ABORT(format,...)				OB_ASSERT(false,format,__VA_ARGS__)
 
 
 //============================================
@@ -49,7 +52,7 @@ if(UNLIKELY(!(expr))){                                                          
 //! 
 //! @details    min<value<max でない場合エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_CHECK_ASSERT(minVal <= value && value < maxVal,"範囲外アクセス[{},{}) value = {}]",minVal,maxVal,value)
+#define OB_ASSERT_RANGE(value, minVal, maxVal)		            OB_ASSERT(minVal <= value && value < maxVal,"範囲外アクセス[{},{}) value = {}]",minVal,maxVal,value)
 
 
 //@―---------------------------------------------------------------------------
@@ -57,7 +60,7 @@ if(UNLIKELY(!(expr))){                                                          
 //!
 //! @details    式が呼び出された場合、エラーログを出力しプログラムを停止する。
 //@―---------------------------------------------------------------------------
-#define OB_UNREACHABLE()                                        OB_ASSERT("到達不能コード")
+#define OB_UNREACHABLE()                                        OB_ABORT("到達不能コード")
 
 
 //@―---------------------------------------------------------------------------
@@ -65,7 +68,7 @@ if(UNLIKELY(!(expr))){                                                          
 //! 
 //! @details    式が呼び出された場合、Warningログを出力する。
 //@―---------------------------------------------------------------------------
-#define OB_NOTIMPLEMENTED()                                     OB_ASSERT("未実装の機能")
+#define OB_NOTIMPLEMENTED()                                     OB_ABORT("未実装の機能")
 
 
 //============================================

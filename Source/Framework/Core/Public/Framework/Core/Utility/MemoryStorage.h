@@ -76,7 +76,7 @@ namespace ob::core {
 		//! @brief  ポインタアクセス
 		//@―---------------------------------------------------------------------------
 		T* operator ->() {
-			OB_ASSERT(empty(), "空のMemoryStorageにアクセスしました。");
+			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
 			return reinterpret_cast<T*>(&m_data);
 		}
 
@@ -84,7 +84,7 @@ namespace ob::core {
 		//! @brief  ポインタアクセス(const)
 		//@―---------------------------------------------------------------------------
 		const T* operator ->()const {
-			OB_ASSERT(empty(), "空のMemoryStorageにアクセスしました。");
+			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
 			return reinterpret_cast<const T*>(&m_data);
 		}
 
@@ -92,7 +92,7 @@ namespace ob::core {
 		//! @brief  参照アクセス
 		//@―---------------------------------------------------------------------------
 		T& operator *() const {
-			OB_ASSERT(empty(), "空のMemoryStorageにアクセスしました。");
+			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
 			return *reinterpret_cast<T*>(&m_data);
 		}
 
@@ -100,7 +100,7 @@ namespace ob::core {
 		//! @brief  参照アクセス(const)
 		//@―---------------------------------------------------------------------------
 		const T& operator *()const noexcept {
-			OB_ASSERT(empty(), "空のMemoryStorageにアクセスしました。");
+			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
 			return *reinterpret_cast<const T*>(&m_data);
 		}
 

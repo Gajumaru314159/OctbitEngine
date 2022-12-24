@@ -277,7 +277,7 @@ namespace ob::platform {
 	//! @brief  ウィンドウサイズを取得
 	//@―---------------------------------------------------------------------------
 	Size WindowImpl::getSize()const {
-		OB_CHECK_ASSERT_EXPR(m_hWnd);
+		OB_ASSERT_EXPR(m_hWnd);
 		RECT rect;
 		::GetClientRect(m_hWnd, &rect);
 		return Size{
@@ -372,7 +372,7 @@ namespace ob::platform {
 	//! @brief  ウィンドウのタイトルを設定する
 	//@―---------------------------------------------------------------------------
 	void WindowImpl::setTitle(StringView title) {
-		OB_CHECK_ASSERT_EXPR(m_hWnd);
+		OB_ASSERT_EXPR(m_hWnd);
 		m_windowTitle = title;
 		WString titleW;
 		StringEncoder::Encode(m_windowTitle, titleW);
@@ -397,7 +397,7 @@ namespace ob::platform {
 	//! @return             スクリーン座標
 	//@―---------------------------------------------------------------------------
 	Point WindowImpl::getScreenPoint(const Point& clientPoint) const {
-		OB_CHECK_ASSERT_EXPR(m_hWnd);
+		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
 		point.x = clientPoint.x;
 		point.y = clientPoint.y;
@@ -414,7 +414,7 @@ namespace ob::platform {
 	//! @return             クライアント座標
 	//@―---------------------------------------------------------------------------
 	Point WindowImpl::getClientPoint(const Point& screenPoint) const {
-		OB_CHECK_ASSERT_EXPR(m_hWnd);
+		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
 		point.x = screenPoint.x;
 		point.y = screenPoint.y;

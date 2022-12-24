@@ -69,7 +69,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  タイプを取得
 	//@―---------------------------------------------------------------------------
 	DescriptorHeapType DescriptorHandle::getHeapType()const {
-		OB_CHECK_ASSERT(m_pBlock, "空のハンドルです。");
+		OB_ASSERT(m_pBlock, "空のハンドルです。");
 		return m_pBlock->pHeap->getHeapType();
 	}
 
@@ -78,7 +78,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  CPUハンドルを取得
 	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHandle::getCpuHandle(s32 index)const {
-		OB_CHECK_ASSERT(m_pBlock, "空のハンドルです。");
+		OB_ASSERT(m_pBlock, "空のハンドルです。");
 		return m_pBlock->pHeap->getCpuHandle(m_pBlock->index + index);
 	}
 
@@ -87,7 +87,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  GPUハンドルを取得
 	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHandle::getGpuHandle(s32 index)const {
-		OB_CHECK_ASSERT(m_pBlock, "空のハンドルです。");
+		OB_ASSERT(m_pBlock, "空のハンドルです。");
 		return m_pBlock->pHeap->getGpuHandle(m_pBlock->index + index);
 	}
 

@@ -35,7 +35,7 @@ namespace ob::rhi {
         // メモリリーク検知
         for (auto& pObject : m_objects) {
 #ifdef OB_DEBUG
-            OB_ASSERT("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
+            OB_ABORT("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
 #endif
             delete pObject;
         }
@@ -67,7 +67,7 @@ namespace ob::rhi {
     //! @brief  登録
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::registerObject(GraphicObject& object) {
-        OB_CHECK_ASSERT_EXPR(object.getReferenceCount() == 1);
+        OB_ASSERT_EXPR(object.getReferenceCount() == 1);
         m_objects.push_back(&object);
     }
 
@@ -76,7 +76,7 @@ namespace ob::rhi {
     //! @brief  解放
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
-        OB_CHECK_ASSERT_EXPR(object.getReferenceCount()==0);
+        OB_ASSERT_EXPR(object.getReferenceCount()==0);
         m_deleteStackList.current().emplace(&object);
     }
 

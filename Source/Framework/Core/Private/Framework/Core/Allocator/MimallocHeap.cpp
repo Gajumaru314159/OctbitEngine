@@ -11,7 +11,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     MimallocHeap::MimallocHeap(void* pBuffer, size_t size) {
         m_pName = TC("MimallocHeap");
-        OB_CHECK_ASSERT_EXPR(pBuffer != nullptr);
+        OB_ASSERT_EXPR(pBuffer != nullptr);
     }
 
     MimallocHeap::~MimallocHeap() {

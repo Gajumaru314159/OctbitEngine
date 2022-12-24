@@ -108,7 +108,7 @@ namespace ob::core {
     //! @param bytes	バイト列
     //@―---------------------------------------------------------------------------
     UUID UUID::FromByte(Span<byte> bytes) {
-        OB_CHECK_ASSERT_EXPR(bytes.size()==16);
+        OB_ASSERT_EXPR(bytes.size()==16);
         UUID result;
         for (s32 i = 0; i < 16; i++) {
             result.m_data[i] = bytes[i];

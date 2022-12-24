@@ -9,7 +9,7 @@
 
 namespace ob::rhi {
 
-#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のShaderへアクセス")
+#define CHECK_IMPL() OB_ASSERT(m_pImpl,"未初期化のShaderへアクセス")
 
     //@―---------------------------------------------------------------------------
     //! @brief      シェーダのエントリ関数名を取得
@@ -57,7 +57,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     VertexShader::VertexShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code,ShaderStage::Vertex);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -73,7 +73,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     VertexShader::VertexShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Vertex);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -100,7 +100,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     PixelShader::PixelShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Pixel);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -116,7 +116,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     PixelShader::PixelShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Pixel);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -143,7 +143,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     GeometryShader::GeometryShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Geometry);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -159,7 +159,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     GeometryShader::GeometryShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Geometry);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -186,7 +186,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     HullShader::HullShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Hull);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -202,7 +202,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     HullShader::HullShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Hull);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -229,7 +229,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     DomainShader::DomainShader(const String& code) {
         m_pImpl = Device::Get()->createShader(code, ShaderStage::Domain);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();
@@ -245,7 +245,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     DomainShader::DomainShader(const Blob& binary) {
         m_pImpl = Device::Get()->createShader(binary, ShaderStage::Domain);
-        OB_CHECK_ASSERT_EXPR(m_pImpl);
+        OB_ASSERT_EXPR(m_pImpl);
         if (!m_pImpl->isValid()) {
             LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
             release();

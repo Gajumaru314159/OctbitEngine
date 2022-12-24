@@ -38,7 +38,7 @@ namespace ob::core {
         {
             m_pData = blob.data();
             m_size = blob.size();
-            OB_CHECK_ASSERT_EXPR(m_pData != nullptr);
+            OB_ASSERT_EXPR(m_pData != nullptr);
         }
 
         //@―---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace ob::core {
         {
             m_pData = reinterpret_cast<const byte*>(pData);
             m_size = size;
-            OB_CHECK_ASSERT_EXPR(m_pData !=nullptr);
+            OB_ASSERT_EXPR(m_pData !=nullptr);
         }
 
 

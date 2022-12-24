@@ -94,7 +94,7 @@ namespace ob::rhi::dx12 {
 			break;
 
 		case TextureType::DepthStencil:
-			OB_CHECK_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
+			OB_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 			resourceStates |= D3D12_RESOURCE_STATE_DEPTH_WRITE;
@@ -297,7 +297,7 @@ namespace ob::rhi::dx12 {
 			break;
 		case TextureType::Texture3D:
 			if (1 < m_desc.arrayNum) {
-				OB_ASSERT("Texture3Dは配列にできません。");
+				OB_ABORT("Texture3Dは配列にできません。");
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
 				texDesc.Texture3D.MipLevels = 1;
@@ -313,7 +313,7 @@ namespace ob::rhi::dx12 {
 			}
 			break;
 		default:
-			OB_ASSERT("不明なテクスチャタイプ");
+			OB_ABORT("不明なテクスチャタイプ");
 			break;
 		}
 

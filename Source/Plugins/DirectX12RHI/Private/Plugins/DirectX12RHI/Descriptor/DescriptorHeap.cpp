@@ -108,7 +108,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::~DescriptorHeap() {
 		// m_blocks の最上位に1つ残っているのが正常
-		OB_CHECK_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。");
+		OB_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。");
 	}
 
 
@@ -181,7 +181,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::getCpuHandle(u32 index) {
 		OB_ASSERT_RANGE(index, 0, m_capacity);
-		OB_CHECK_ASSERT(m_heap,"ヒープが空です。");
+		OB_ASSERT(m_heap,"ヒープが空です。");
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_heap->GetCPUDescriptorHandleForHeapStart();
 		handle.ptr += index * m_descriptorSize;
 		return handle;
@@ -193,7 +193,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::getGpuHandle(u32 index) {
 		OB_ASSERT_RANGE(index, 0, m_capacity);
-		OB_CHECK_ASSERT(m_heap, "ヒープが空です。");
+		OB_ASSERT(m_heap, "ヒープが空です。");
 		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_heap->GetGPUDescriptorHandleForHeapStart();
 		handle.ptr += index * m_descriptorSize;
 		return handle;
@@ -233,14 +233,14 @@ namespace ob::rhi::dx12 {
 			// ビットマスクから割り当て可能なレベルを再計算
 			firstLevel = BitOp::GetLSB(flMap);
 			slMap = m_freeSLI[firstLevel];
-			OB_CHECK_ASSERT(slMap, "内部エラー。割り当て可能なブロックがない状態で処理が継続されています。ロジックを見直してください。");
+			OB_ASSERT(slMap, "内部エラー。割り当て可能なブロックがない状態で処理が継続されています。ロジックを見直してください。");
 			secondLevel = BitOp::GetLSB((u32)slMap);
 		}
 
 		s32 blockIndex = getFreeBlockIndex(firstLevel, secondLevel);
 		auto pBlock = m_blocks.at(blockIndex);
-		OB_CHECK_ASSERT(pBlock, "内部エラー。allocateFreeBlock()にバグがあります。");
-		OB_CHECK_ASSERT(size <= pBlock->capacity, "内部エラー。allocateFreeBlock()にバグがあります。");
+		OB_ASSERT(pBlock, "内部エラー。allocateFreeBlock()にバグがあります。");
+		OB_ASSERT(size <= pBlock->capacity, "内部エラー。allocateFreeBlock()にバグがあります。");
 
 		separateFreeList(*pBlock);
 		returnSurplusBlock(*pBlock, size);
@@ -255,14 +255,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::returnSurplusBlock(BBlock& block, s32 size) {
 
-		OB_CHECK_ASSERT(size, "サイズ0で分割できません。");
-		OB_CHECK_ASSERT(!block.allocated, "アロケート済みのブロックは分割できません。");
-		OB_CHECK_ASSERT(!block.pFreePrev, "フリーブロックに接続されています。");
-		OB_CHECK_ASSERT(!block.pFreeNext, "フリーブロックに接続されています。");
+		OB_ASSERT(size, "サイズ0で分割できません。");
+		OB_ASSERT(!block.allocated, "アロケート済みのブロックは分割できません。");
+		OB_ASSERT(!block.pFreePrev, "フリーブロックに接続されています。");
+		OB_ASSERT(!block.pFreeNext, "フリーブロックに接続されています。");
 
 		if (block.capacity == size)return;
 
-		OB_CHECK_ASSERT(!m_freeList.empty(), "DescriptorHeaoの容量が不足しています。");
+		OB_ASSERT(!m_freeList.empty(), "DescriptorHeaoの容量が不足しています。");
 
 		auto pRemain = m_freeList.back();
 		m_freeList.pop_back();
@@ -288,7 +288,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::separateFreeList(BBlock& block) {
 
-		OB_CHECK_ASSERT(!block.allocated, "フリーリストにないブロックは分離できません。");
+		OB_ASSERT(!block.allocated, "フリーリストにないブロックは分離できません。");
 
 		// フリーリストの前後をつなげる
 		auto pFreePrev = block.pFreePrev;
@@ -321,9 +321,9 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	BBlock* DescriptorHeap::mergeFreeBlocks(BBlock& block1, BBlock& block2) {
 
-		OB_CHECK_ASSERT(!block1.allocated, "アロケート済みのブロックはマージできません。");
-		OB_CHECK_ASSERT(!block2.allocated, "アロケート済みのブロックはマージできません。");
-		OB_CHECK_ASSERT(block1.pNext == &block2 && &block1 == block2.pPrev, "連続していないブロックはマージできません。");
+		OB_ASSERT(!block1.allocated, "アロケート済みのブロックはマージできません。");
+		OB_ASSERT(!block2.allocated, "アロケート済みのブロックはマージできません。");
+		OB_ASSERT(block1.pNext == &block2 && &block1 == block2.pPrev, "連続していないブロックはマージできません。");
 
 		separateFreeList(block1);
 		separateFreeList(block2);
@@ -354,8 +354,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::addFreeBlock(BBlock& block) {
 
-		OB_CHECK_ASSERT(!block.allocated, "アロケート済みのブロックはフリーリストに追加できません。");
-		OB_CHECK_ASSERT(!block.pFreePrev && !block.pFreeNext, "連結されているブロックはフリーリストに追加できません。");
+		OB_ASSERT(!block.allocated, "アロケート済みのブロックはフリーリストに追加できません。");
+		OB_ASSERT(!block.pFreePrev && !block.pFreeNext, "連結されているブロックはフリーリストに追加できません。");
 
 		s32 firstLevel, secondLevel, blockIndex;
 		getLevelAndIndex(block.capacity, firstLevel, secondLevel, blockIndex);

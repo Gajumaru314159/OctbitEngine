@@ -75,7 +75,7 @@ int TestDirectX12() {
 		desc.window = window;
 		display = Display(desc);
 		display.setName(TC("MainWindow"));
-		OB_CHECK_ASSERT_EXPR(display);
+		OB_ASSERT_EXPR(display);
 	}
 
 	RenderPass renderPass;
@@ -86,7 +86,7 @@ int TestDirectX12() {
 		auto pass0 = desc.addSubpassXCD({ color },depth);
 
 		renderPass = RenderPass(desc);
-		OB_CHECK_ASSERT_EXPR(renderPass);
+		OB_ASSERT_EXPR(renderPass);
 	}
 
 	RenderTexture colorRT;
@@ -97,7 +97,7 @@ int TestDirectX12() {
 		desc.clear.color = Color::Gray;
 
 		colorRT = RenderTexture(desc);
-		OB_CHECK_ASSERT_EXPR(colorRT);
+		OB_ASSERT_EXPR(colorRT);
 	}
 	RenderTexture depthRT;
 	{
@@ -107,7 +107,7 @@ int TestDirectX12() {
 		desc.clear.depth = 0;
 
 		depthRT = RenderTexture(desc);
-		OB_CHECK_ASSERT_EXPR(depthRT);
+		OB_ASSERT_EXPR(depthRT);
 	}
 
 	FrameBuffer frameBuffer;
@@ -118,7 +118,7 @@ int TestDirectX12() {
 		desc.attachments.push_back(depthRT);
 
 		frameBuffer = FrameBuffer(desc);
-		OB_CHECK_ASSERT_EXPR(frameBuffer);
+		OB_ASSERT_EXPR(frameBuffer);
 	}
 
 
@@ -165,7 +165,7 @@ int TestDirectX12() {
 
 		vs = VertexShader(code);
 		ps = PixelShader(code);
-		OB_CHECK_ASSERT_EXPR(vs&&ps);
+		OB_ASSERT_EXPR(vs&&ps);
 	}
 
 	RootSignature signature;
@@ -181,7 +181,7 @@ int TestDirectX12() {
 		);
 		signature = RootSignature(desc);
 		signature.setName(TC("TestRootSignature"));
-		OB_CHECK_ASSERT_EXPR(signature);
+		OB_ASSERT_EXPR(signature);
 	}
 
 	PipelineState pipeline;
@@ -205,7 +205,7 @@ int TestDirectX12() {
 
 		pipeline = PipelineState(desc);
 		pipeline.setName(TC("TestPipeline"));
-		OB_CHECK_ASSERT_EXPR(pipeline);
+		OB_ASSERT_EXPR(pipeline);
 	}
 
 	Buffer buffer;
@@ -214,7 +214,7 @@ int TestDirectX12() {
 		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
 		buffer = Buffer(desc);
 		buffer.setName(TC("TestBuffer"));
-		OB_CHECK_ASSERT_EXPR(buffer);
+		OB_ASSERT_EXPR(buffer);
 		buffer.updateDirect(cbuf);
 	}
 
@@ -228,7 +228,7 @@ int TestDirectX12() {
 			tex.setName(TC("test.dds"));
 		}
 
-		OB_CHECK_ASSERT_EXPR(tex);
+		OB_ASSERT_EXPR(tex);
 	}
 
 	DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
@@ -280,14 +280,14 @@ int TestDirectX12() {
 	{
 		auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
 		vertexBuffer = Buffer(desc, BlobView(mesh.vertices));
-		OB_CHECK_ASSERT_EXPR(vertexBuffer);
+		OB_ASSERT_EXPR(vertexBuffer);
 	}
 
 	Buffer indexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
 		indexBuffer = Buffer(desc, BlobView(mesh.indices));
-		OB_CHECK_ASSERT_EXPR(indexBuffer);
+		OB_ASSERT_EXPR(indexBuffer);
 	}
 
 
@@ -298,7 +298,7 @@ int TestDirectX12() {
 		desc.type = CommandListType::Graphic;
 		cmdList = CommandList(desc);
 		cmdList.setName(TC("TestCommandList"));
-		OB_CHECK_ASSERT_EXPR(cmdList);
+		OB_ASSERT_EXPR(cmdList);
 	}
 
 
@@ -394,7 +394,7 @@ int TestVullkan() {
 
 		display = Display(desc);
 		display.setName(TC("MainWindow"));
-		OB_CHECK_ASSERT_EXPR(display);
+		OB_ASSERT_EXPR(display);
 	}
 
 	// レンダーパス生成
@@ -420,7 +420,7 @@ int TestVullkan() {
 		desc.size = Size(1280,720);
 
 		colorRT = RenderTexture(desc);
-		OB_CHECK_ASSERT_EXPR(colorRT);
+		OB_ASSERT_EXPR(colorRT);
 	}
 
 	// フレームバッファ生成

@@ -10,12 +10,12 @@ namespace {
 
     template<class T>
     T& safeGet(ob::UPtr<T>& ptr) {
-        OB_CHECK_ASSERT_EXPR(prt != nullptr);
+        OB_ASSERT_EXPR(prt != nullptr);
         return *ptr.get();
     }
     template<class T>
     T& safeGet(const ob::UPtr<T>& ptr) {
-        OB_CHECK_ASSERT_EXPR(prt != nullptr);
+        OB_ASSERT_EXPR(prt != nullptr);
         return *ptr.get();
     }
 

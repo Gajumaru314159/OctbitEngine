@@ -11,7 +11,7 @@ namespace ob::rhi {
 
 	OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(RenderPass);
 
-#define CHECK_IMPL() OB_CHECK_ASSERT(m_pImpl,"未初期化のRenderPassへアクセス")
+#define CHECK_IMPL() OB_ASSERT(m_pImpl,"未初期化のRenderPassへアクセス")
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
@@ -26,7 +26,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	RenderPass::RenderPass(const RenderPassDesc& desc) {
 		m_pImpl = Device::Get()->createRenderPass(desc);
-		OB_CHECK_ASSERT_EXPR(m_pImpl);
+		OB_ASSERT_EXPR(m_pImpl);
 		if (!m_pImpl->isValid()) {
 			LOG_FATAL_EX("Graphic", "RenderPassの生成に失敗");
 			release();
