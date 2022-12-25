@@ -46,6 +46,15 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		virtual void updateDirect(size_t size, const void* pData, size_t offset) = 0;
 
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      バッファを更新(直接更新)
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		void updateDirect(const T& value, size_t offset = 0) {
+			updateDirect(sizeof(T), &value, offset);
+		}
+
 	};
 
 }// namespace pb::rhi
