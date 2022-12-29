@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/RHI/RenderTexture.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
-#include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 
 //===============================================================
 // 前方宣言
@@ -27,7 +26,7 @@ namespace ob::rhi::dx12 {
     //! 
     //! @details    描画可能なテクスチャ。
     //@―---------------------------------------------------------------------------
-    class RenderTextureImpl :public TextureImpl, rhi::RenderTexture {
+    class RenderTextureImpl :public RenderTexture {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -65,6 +64,8 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         s32 mipLevels()const override;
 
+        auto& desc()const { return m_desc; }
+
 
     public:
 
@@ -86,13 +87,16 @@ namespace ob::rhi::dx12 {
 
         const RenderTextureDesc     m_desc;
 
+        ComPtr<ID3D12Resource>      m_resource;     //!< リソース
+        DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
         DescriptorHandle            m_hRTV;         //!< デスクリプタハンドル
         DescriptorHandle            m_hDSV;         //!< デスクリプタハンドル
+
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorRect;                       //!< シザー矩形
 
-        bool m_initialized =false;
+        bool m_initialized = false;
     };
 
 }// namespace ob::rhi::dx12

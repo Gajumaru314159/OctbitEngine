@@ -92,23 +92,23 @@ int TestDirectX12() {
 	Ref<RenderTexture> colorRT;
 	{
 		RenderTextureDesc desc;
+		desc.name = TC("Color");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Gray;
 
 		colorRT = RenderTexture::Create(desc);
-		colorRT->setName(TC("Albedo"));
 		OB_ASSERT_EXPR(colorRT);
 	}
 	Ref<RenderTexture> depthRT;
 	{
 		RenderTextureDesc desc;
+		desc.name = TC("Depth");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::D32;
-		desc.clear.depth = 0;
+		desc.clear.depth = 1.0f;
 
 		depthRT = RenderTexture::Create(desc);
-		depthRT->setName(TC("Depth"));
 		OB_ASSERT_EXPR(depthRT);
 	}
 

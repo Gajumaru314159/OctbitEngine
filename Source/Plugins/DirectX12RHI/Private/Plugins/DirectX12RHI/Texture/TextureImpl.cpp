@@ -86,20 +86,6 @@ namespace ob::rhi::dx12 {
 			OB_NOTIMPLEMENTED();
 			break;
 
-		case TextureType::RenderTarget:
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
-			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-			resourceStates |= D3D12_RESOURCE_STATE_RENDER_TARGET;
-			pClearValue = &colorClearValue;
-			break;
-
-		case TextureType::DepthStencil:
-			OB_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
-			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-			resourceStates |= D3D12_RESOURCE_STATE_DEPTH_WRITE;
-			pClearValue = &depthClearValue;
-			break;
 		default:
 			OB_NOTIMPLEMENTED();
 			break;
@@ -285,8 +271,6 @@ namespace ob::rhi::dx12 {
 			}
 			break;
 		case TextureType::Texture2D:
-		case TextureType::RenderTarget:
-		case TextureType::DepthStencil:
 			if (1<m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
 				texDesc.Texture2DArray.MipLevels = 1;

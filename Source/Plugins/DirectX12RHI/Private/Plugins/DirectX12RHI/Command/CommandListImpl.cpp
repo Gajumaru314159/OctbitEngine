@@ -144,10 +144,14 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		auto& subpass= renderPassDesc.subpasses[m_subpassIndex];
+		auto& subpass = renderPassDesc.subpasses[m_subpassIndex];
+		auto& attachmentDescs = renderPassDesc.attachments;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE colors[8]{};
 		D3D12_CPU_DESCRIPTOR_HANDLE depth{};
+
+		D3D12_VIEWPORT viewport{};
+		D3D12_RECT scissor{};
 
 		// レンダーターゲットビュー設定
 		for (auto [i, ref] : Indexed(subpass.colors)) {
@@ -157,7 +161,10 @@ namespace ob::rhi::dx12 {
 
 				color = texture->getRTV().getCpuHandle();
 
-				m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET, 0);
+				//m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET, 0);
+
+				viewport = texture->getViewport();
+				scissor = texture->getScissorRect();
 
 			} else {
 				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]",m_frameBuffer->getName(),m_subpassIndex);
@@ -172,7 +179,7 @@ namespace ob::rhi::dx12 {
 
 				depth = texture->getDSV().getCpuHandle();
 
-				m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
+				//m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
 
 			} else {
 				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]", m_frameBuffer->getName(), m_subpassIndex);
@@ -191,10 +198,33 @@ namespace ob::rhi::dx12 {
 			subpass.depth.empty() ? NULL : &depth
 		);
 
-		//auto viewport = rTarget.getViewport();
-		//auto rect = rTarget.getScissorRect();
-		//m_cmdList->RSSetViewports(1, &viewport);
-		//m_cmdList->RSSetScissorRects(1, &rect);
+		m_cmdList->RSSetViewports(1, &viewport);
+		m_cmdList->RSSetScissorRects(1, &scissor);
+
+		for (auto [index,attachmentDesc] : Indexed(attachmentDescs)) {
+
+			if (auto texture = attachments[index].cast<RenderTextureImpl>()) {
+
+				bool isDepth = TextureFormatUtility::HasDepth(texture->format());
+
+				if(attachmentDesc.clear == AttachmentClear::Clear) {
+					if (isDepth) {
+						FLOAT depth = texture->desc().clear.depth;
+						UINT8 stencil = texture->desc().clear.stencil;
+
+						D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
+						m_cmdList->ClearDepthStencilView(texture->getDSV().getCpuHandle(), clearFlags, depth, stencil, 0, nullptr);
+					} else {
+						auto t = texture->desc().clear.color;
+						FLOAT clearColor[4] = { t.r,t.g,t.b,t.a };
+						m_cmdList->ClearRenderTargetView(texture->getRTV().getCpuHandle(), clearColor, 0, nullptr);
+					}
+				}
+
+			}
+
+		}
+
 	}
 
 	//@―---------------------------------------------------------------------------

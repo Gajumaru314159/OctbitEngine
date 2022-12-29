@@ -12,6 +12,7 @@ namespace ob::rhi {
     //! @brief  説明
     //@―---------------------------------------------------------------------------
     struct RenderTextureDesc {
+        String          name;
         TextureFormat   format = TextureFormat::RGBA8;   //!< テクスチャフォーマット
         Size            size = { 0,0,0 };                //!< サイズ
 

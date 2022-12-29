@@ -18,8 +18,7 @@ namespace ob::rhi::dx12 {
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc)
-		: TextureImpl(rDevice)
-		, m_desc(desc)
+		: m_desc(desc)
 	{
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { desc.clear.color.r,desc.clear.color.g,desc.clear.color.b,desc.clear.color.a };
@@ -42,8 +41,8 @@ namespace ob::rhi::dx12 {
 			resourceStates = D3D12_RESOURCE_STATE_RENDER_TARGET;
 			pClearValue = &colorClearValue;
 
-		} 
-		if(isDepth){
+		}
+		if (isDepth) {
 
 			OB_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -96,8 +95,8 @@ namespace ob::rhi::dx12 {
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hRTV.getCpuHandle();
 			rDevice.getNative()->CreateRenderTargetView(resource.Get(), &viewDesc, handle);
 
-		} 
-		if(isDepth){
+		}
+		if (isDepth) {
 
 			D3D12_DEPTH_STENCIL_VIEW_DESC viewDesc = {};
 			viewDesc.Format = format;
@@ -117,8 +116,9 @@ namespace ob::rhi::dx12 {
 		m_resource = resource;
 
 		{
-			TextureDesc baseDesc;
-			//TextureImpl::m_desc.
+			std::wstring wname;
+			StringEncoder::Encode(m_desc.name, wname);
+			m_resource->SetName(wname.c_str());
 		}
 
 	}
@@ -183,7 +183,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  名前変更時
 	//@―---------------------------------------------------------------------------
 	void RenderTextureImpl::onNameChanged() {
-		Utility::setName(m_resource.Get(), getName());
+		//Utility::setName(m_resource.Get(), getName());
 	}
 
 }// namespace ob::rhi::dx12

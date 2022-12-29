@@ -21,7 +21,7 @@ namespace {
 
 		std::filesystem::path pixInstallationPath = programFilesPath;
 		pixInstallationPath /= "Microsoft PIX";
-		return {};
+
 		std::wstring newestVersionFound;
 		if (std::filesystem::exists(pixInstallationPath)) {
 			for (auto const& directory_entry : std::filesystem::directory_iterator(pixInstallationPath))

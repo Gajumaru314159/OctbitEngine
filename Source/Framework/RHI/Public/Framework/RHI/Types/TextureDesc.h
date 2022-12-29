@@ -19,8 +19,6 @@ namespace ob::rhi {
         //Texture1DArray,          //!< 1Dテクスチャ配列
         //Texture2DArray,          //!< 2Dテクスチャ配列
         //CubeArray,               //!< キューブテクスチャ配列
-        RenderTarget,       //!< レンダーターゲット(Texture2D)
-        DepthStencil,       //!< デプス・ステンシル(Texture2D)
     };
     // TODO RenderTarget/DepthStencilを別管轄にする
 
@@ -43,11 +41,12 @@ namespace ob::rhi {
     //! @brief  テクスチャ定義
     //@―---------------------------------------------------------------------------
     struct TextureDesc {
+        String          name;
         TextureType     type        = TextureType::Texture2D;   //!< テクスチャタイプ
         TextureFormat   format      = TextureFormat::RGBA8;     //!< テクスチャフォーマット
         Size            size        = { 0,0,0 };                //!< サイズ
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数
-        s32             mipLevels    = 0;                       //!< ミップ生成レベル
+        s32             mipLevels   = 0;                        //!< ミップ生成レベル
         // TextureUsages usages;
     };
 
