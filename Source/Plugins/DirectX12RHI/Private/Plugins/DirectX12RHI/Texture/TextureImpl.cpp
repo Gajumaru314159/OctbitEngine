@@ -108,8 +108,8 @@ namespace ob::rhi::dx12 {
 		if (0 < desc.arrayNum) {
 			resourceDesc.DepthOrArraySize = desc.arrayNum;
 		}
-		if (0 < desc.mipLevel) {
-			resourceDesc.MipLevels = desc.mipLevel;
+		if (0 < desc.mipLevels) {
+			resourceDesc.MipLevels = desc.mipLevels;
 		}
 
 
@@ -216,7 +216,7 @@ namespace ob::rhi::dx12 {
 		m_desc.type = convertType(metadata.dimension);
 		m_desc.format = convertDXGIFormat(metadata.format);
 		m_desc.arrayNum = (s32)metadata.arraySize;
-		m_desc.mipLevel = (s32)metadata.mipLevels;
+		m_desc.mipLevels = (s32)metadata.mipLevels;
 		m_desc.color = Color::White;
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
@@ -261,7 +261,7 @@ namespace ob::rhi::dx12 {
 	//! @brief      ミップレベルを取得
 	//@―---------------------------------------------------------------------------
 	s32 TextureImpl::mipLevels()const {
-		return m_desc.mipLevel;
+		return m_desc.mipLevels;
 	}
 
 
