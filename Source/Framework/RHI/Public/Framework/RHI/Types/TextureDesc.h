@@ -48,7 +48,6 @@ namespace ob::rhi {
         Size            size        = { 0,0,0 };                //!< サイズ
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数
         s32             mipLevels    = 0;                       //!< ミップ生成レベル
-        Color           color;                                  //!< 初期化色
         // TextureUsages usages;
     };
 

@@ -58,7 +58,7 @@ namespace ob::rhi::dx12 {
 		auto format = TypeConverter::Convert(desc.format);
 		D3D12_CLEAR_VALUE* pClearValue=nullptr;
 
-		const FLOAT clearColor[4] = { desc.color.r,desc.color.g,desc.color.b,desc.color.a};
+		const FLOAT clearColor[4] = { 1.f,1.f,1.f,1.f};
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, 1.0f, 0);
 		
@@ -212,12 +212,12 @@ namespace ob::rhi::dx12 {
 		};
 		resource->SetName(L"aaaa");
 
+		// Desc設定
 		m_desc.size = {(s32)metadata.width,(s32)metadata.height,(s32)metadata.depth};
 		m_desc.type = convertType(metadata.dimension);
 		m_desc.format = convertDXGIFormat(metadata.format);
 		m_desc.arrayNum = (s32)metadata.arraySize;
 		m_desc.mipLevels = (s32)metadata.mipLevels;
-		m_desc.color = Color::White;
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 		m_resource = resource;
