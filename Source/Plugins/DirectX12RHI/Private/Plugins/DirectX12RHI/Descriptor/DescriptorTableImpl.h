@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IDescriptorTable.h>
+#include <Framework/RHI/DescriptorTable.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 //===============================================================
@@ -15,7 +15,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  デスクリプタ・テーブル実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class DescriptorTableImpl :public IDescriptorTable {
+    class DescriptorTableImpl :public DescriptorTable {
     public:
 
         //===============================================================
@@ -42,22 +42,10 @@ namespace ob::rhi::dx12 {
 		//! @brief  リソースを設定
 		//@―---------------------------------------------------------------------------
 		//! @{
-		bool setResource(s32 index, class Buffer& resource) override;
-		bool setResource(s32 index, Texture& resource) override;
+		bool setResource(s32 index, class Ref<Buffer>& resource) override;
+		bool setResource(s32 index, Ref<Texture>& resource) override;
 		//bool setResource(s32 index, class Sampler& resource) override;
 		//! @}
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  リソースのバインドを解除
-		//@―---------------------------------------------------------------------------
-		void clear() override;
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  指定したインデックスのリソースのバインドを解除
-		//@―---------------------------------------------------------------------------
-		void clearAt(s32 index) override;
 
 		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const {
 			return m_handle.getCpuHandle(index);

@@ -4,39 +4,20 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
+#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/BufferDesc.h>
-#include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/Misc/Blob.h>
 
+//===============================================================
+// クラス宣言
+//===============================================================
 namespace ob::rhi {
-
-	//! @cond
-	enum class MapMode {
-		Read,
-		Write,
-	};
-
-	struct UpdateResourceParameter {
-		void* pData;
-		size_t offset;
-	};
-	//! @endcond
-
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      バッファ
-	//! 
-	//! @details	バッファサイズは描画APIのアライメントに合わせて自動調整されます。
 	//@―---------------------------------------------------------------------------
-	class Buffer {
-		OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Buffer);
+	class Buffer :public GraphicObject {
 	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ
-		//@―---------------------------------------------------------------------------
-		Buffer();
-
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
@@ -44,7 +25,7 @@ namespace ob::rhi {
 		//! @param desc バッファ定義
 		//! @param name 名前
 		//@―---------------------------------------------------------------------------
-		Buffer(const BufferDesc& desc);
+		static Ref<Buffer> Create(const BufferDesc& desc);
 
 
 		//@―---------------------------------------------------------------------------
@@ -54,19 +35,14 @@ namespace ob::rhi {
 		//! @param blob 初期化データ
 		//! @param name 名前
 		//@―---------------------------------------------------------------------------
-		Buffer(const BufferDesc& desc, BlobView blob);
+		static Ref<Buffer> Create(const BufferDesc& desc, BlobView blob);
 
+	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  定義を取得
 		//@―---------------------------------------------------------------------------
-		const BufferDesc& getDesc()const;
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  バッファサイズを取得
-		//@―---------------------------------------------------------------------------
-		size_t size()const;
+		virtual const BufferDesc& getDesc()const = 0;
 
 
 		//@―---------------------------------------------------------------------------
@@ -74,40 +50,25 @@ namespace ob::rhi {
 		//! 
 		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 		//@―---------------------------------------------------------------------------
-		void update(size_t size, const void* pData, size_t offset = 0);
+		virtual void update(size_t size, const void* pData, size_t offset = 0) = 0;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      バッファを更新(直接更新)
+		//! 
+		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 		//@―---------------------------------------------------------------------------
-		void updateDirect(size_t size, const void* pData, size_t offset = 0);
+		virtual void updateDirect(size_t size, const void* pData, size_t offset = 0) = 0;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      バッファを更新(直接更新)
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		void updateDirect(const T& value, size_t offset = 0);
-
-
-	private:
-
-		void beginUpdate(UpdateResourceParameter&);
-		void endUpdate(UpdateResourceParameter&);
+		void updateDirect(const T& value, size_t offset = 0) {
+			updateDirect(sizeof(T), &value, offset);
+		}
 
 	};
 
-
-}// namespace ob::rhi
-
-namespace ob::rhi {
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      バッファを更新(直接更新)
-	//@―---------------------------------------------------------------------------
-	template<class T>
-	void Buffer::updateDirect(const T& value, size_t offset ) {
-		updateDirect(sizeof(T), &value, offset);
-	}
-
-}
+}// namespace pb::rhi

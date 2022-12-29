@@ -67,7 +67,6 @@ namespace ob::rhi {
     //! @brief  登録
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::registerObject(GraphicObject& object) {
-        OB_ASSERT_EXPR(object.getReferenceCount() == 1);
         m_objects.push_back(&object);
     }
 
@@ -76,7 +75,6 @@ namespace ob::rhi {
     //! @brief  解放
     //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
-        OB_ASSERT_EXPR(object.getReferenceCount()==0);
         m_deleteStackList.current().emplace(&object);
     }
 

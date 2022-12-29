@@ -88,5 +88,5 @@ while(true){
 ```mermaid
 graph
 	Texture-->Texture2D
-	Texture-->RenderTarget2D
+	Texture-->RenderTexture2D
 ```

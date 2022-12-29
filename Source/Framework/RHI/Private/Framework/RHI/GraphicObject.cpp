@@ -13,7 +13,7 @@ namespace ob::rhi {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObject::GraphicObject()
-        : m_referenceCount(1){
+    {
         m_name[0] = TC('\0');
 
         static GraphicModule* pModule = nullptr;
@@ -29,7 +29,6 @@ namespace ob::rhi {
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicObject::~GraphicObject() {
-        OB_ASSERT(m_referenceCount == 0, "グラフィック・オブジェクトの参照カウンタが不正です。[ name = {0}]", getName());
     }
 
 
@@ -59,26 +58,12 @@ namespace ob::rhi {
 #endif
     }
 
-    
-    //@―---------------------------------------------------------------------------
-    //! @brief  参照を追加
-    //@―---------------------------------------------------------------------------
-    void GraphicObject::addReference() {
-        m_referenceCount.fetch_add(1);
-    }
-
 
     //@―---------------------------------------------------------------------------
-    //! @brief  参照を解放
+    //! @brief      終了処理
     //@―---------------------------------------------------------------------------
-    s32 GraphicObject::releaseReference() {
-        m_referenceCount.fetch_sub(1);
-        if (0 < m_referenceCount) {
-            return m_referenceCount;
-        }
-        OB_ASSERT(m_referenceCount == 0, "参照カウントエラー");
-        
-        // デバイスの削除スタックに追加
+    void GraphicObject::finalize() {
+
         static GraphicModule* pModule = nullptr;
         if (pModule == nullptr) {
             pModule = GEngine->get<GraphicModule>();
@@ -87,18 +72,6 @@ namespace ob::rhi {
 
         pModule->getObjectManager().requestRelease(*this);
 
-        return m_referenceCount;
     }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  参照カウントを取得
-    //@―---------------------------------------------------------------------------
-    s32 GraphicObject::getReferenceCount()const {
-        return m_referenceCount;
-    }
-    
-
-
 
 }// namespace ob::rhi

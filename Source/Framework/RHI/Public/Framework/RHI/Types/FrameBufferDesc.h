@@ -13,8 +13,8 @@ namespace ob::rhi {
     //! @brief  ディスクリプタ・タイプ
     //@―---------------------------------------------------------------------------
     struct FrameBufferDesc {
-        RenderPass renderPass;
-        Array<RenderTexture> attachments;
+        Ref<RenderPass> renderPass;
+        Array<Ref<RenderTexture>> attachments;
     };
 
 }// namespcae ob::rhi

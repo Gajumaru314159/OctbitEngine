@@ -4,34 +4,32 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
+#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
 
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  パイプラインステート
+    //! @brief      フレームバッファ
     //@―---------------------------------------------------------------------------
-    class FrameBuffer {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(FrameBuffer);
+    class FrameBuffer :public GraphicObject {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief  生成
+        //@―---------------------------------------------------------------------------
+        static Ref<FrameBuffer> Create(const FrameBufferDesc& desc);
+
+    public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
+        //! @brief  デスクリプタ取得
         //@―---------------------------------------------------------------------------
-        FrameBuffer();
+        virtual const FrameBufferDesc& desc()const = 0;
 
+    protected:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  デストラクタ
-        //@―---------------------------------------------------------------------------
-        FrameBuffer(const FrameBufferDesc& desc);
-
-        const FrameBufferDesc& desc()const;
+        virtual ~FrameBuffer() = default;
 
     };
 

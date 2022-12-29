@@ -4,21 +4,17 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "CommandListImpl.h"
-#include <Framework/RHI/Device.h>
-#include <Framework/RHI/Constants.h>
-#include <Framework/RHI/RenderTarget.h>
-#include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/Constants.h>
+#include <Framework/RHI/Types/CommandParam.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Display/DisplayImpl.h>
-#include <Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
 #include <Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
-#include <Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
 #include <Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -114,11 +110,18 @@ namespace ob::rhi::dx12 {
 	}
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  コマンドをシステムキューに追加
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::flush() {
+		Device::Get()->entryCommandList(*this);
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーパス開始
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::beginRenderPass(const FrameBuffer& frameBuffer) {
+	void CommandListImpl::beginRenderPass(const Ref<FrameBuffer>& frameBuffer) {
 
-		m_frameBuffer = frameBuffer;
+		m_frameBuffer = frameBuffer.get();
 		m_subpassIndex = 0;
 
 		setSubpass();
@@ -132,9 +135,9 @@ namespace ob::rhi::dx12 {
 		
 		if (!m_frameBuffer)return;
 
-		auto& frameBufferDesc = m_frameBuffer.desc();
+		auto& frameBufferDesc = m_frameBuffer->desc();
 		auto& attachments = frameBufferDesc.attachments;
-		auto& renderPassDesc = frameBufferDesc.renderPass.desc();
+		auto& renderPassDesc = frameBufferDesc.renderPass->desc();
 
 		if (!is_in_range(m_subpassIndex, renderPassDesc.subpasses)){
 			LOG_WARNING("サブパスが範囲外です。[index={},size={}]",m_subpassIndex, renderPassDesc.subpasses.size());
@@ -143,29 +146,37 @@ namespace ob::rhi::dx12 {
 
 		auto& subpass= renderPassDesc.subpasses[m_subpassIndex];
 
-		D3D12_CPU_DESCRIPTOR_HANDLE colors[8];
-		D3D12_CPU_DESCRIPTOR_HANDLE depth;
+		D3D12_CPU_DESCRIPTOR_HANDLE colors[8]{};
+		D3D12_CPU_DESCRIPTOR_HANDLE depth{};
 
 		// レンダーターゲットビュー設定
 		for (auto [i, ref] : Indexed(subpass.colors)) {
 
-			auto& rRenderTexture = Device::GetImpl<RenderTextureImpl>(attachments.at(ref.index));
-			auto& color = colors[i];
+			if (auto texture = attachments.at(ref.index).cast<RenderTextureImpl>()) {
+				auto& color = colors[i];
 
-			color = rRenderTexture.getRTV().getCpuHandle();
+				color = texture->getRTV().getCpuHandle();
 
-			m_cache.addTexture(rRenderTexture.getResource().Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET,0);
+				m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET, 0);
+
+			} else {
+				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]",m_frameBuffer->getName(),m_subpassIndex);
+			}
 
 		}
 
 		// 深度ステンシルビュー設定
 		for (auto [index, d] : Indexed(subpass.depth)) {
 
-			auto& rRenderTexture = Device::GetImpl<RenderTextureImpl>(attachments.at(d.index));
-			
-			depth = rRenderTexture.getDSV().getCpuHandle();
+			if (auto texture = attachments.at(d.index).cast<RenderTextureImpl>()) {
 
-			m_cache.addTexture(rRenderTexture.getResource().Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
+				depth = texture->getDSV().getCpuHandle();
+
+				m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
+
+			} else {
+				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]", m_frameBuffer->getName(), m_subpassIndex);
+			}
 
 		}
 
@@ -201,9 +212,9 @@ namespace ob::rhi::dx12 {
 		
 		if (!m_frameBuffer)return;
 
-		auto& frameBufferDesc = m_frameBuffer.desc();
+		auto& frameBufferDesc = m_frameBuffer->desc();
 		auto& attachments = frameBufferDesc.attachments;
-		auto& renderPassDesc = frameBufferDesc.renderPass.desc();
+		auto& renderPassDesc = frameBufferDesc.renderPass->desc();
 
 		for (auto [index,desc]: Indexed(renderPassDesc.attachments)) {
 
@@ -213,7 +224,7 @@ namespace ob::rhi::dx12 {
 			// subresourceの扱い要チェック
 		}
 
-		m_frameBuffer.release();
+		m_frameBuffer = nullptr;
 
 	}
 
@@ -221,14 +232,17 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::applyDisplay(const Display& display, const Texture& texture)
+	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
 	{
-		auto& rDisplay = Device::GetImpl<DisplayImpl>(display);
-		auto& rTexture = Device::GetImpl<TextureImpl>(texture);
+		if (!display || !texture)
+			return;
+
+		auto& rDisplay = *display.cast<DisplayImpl>();
+		auto& rTexture = *texture.cast<RenderTextureImpl>();
 
 		{
 			D3D12_RESOURCE_BARRIER barrier[2] = {
-				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST),
+				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_COPY_DEST),
 				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE),
 			};
 			m_cmdList->ResourceBarrier((UINT)std::size(barrier), barrier);
@@ -396,7 +410,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setVertexBuffers(Span<const Buffer*> buffers) {
+	void CommandListImpl::setVertexBuffers(Span<const Ref<Buffer>*> buffers) {
 		StaticArray<D3D12_VERTEX_BUFFER_VIEW,16> views;
 		if (views.size() <= buffers.size()) {
 			LOG_ERROR("頂点バッファは{}以下である必要があります。[size={}]",views.size(),buffers.size());
@@ -409,12 +423,15 @@ namespace ob::rhi::dx12 {
 				LOG_ERROR("頂点バッファがnullです。");
 				return;
 			}
-
-			auto& rBuffer = Device::GetImpl<BufferImpl>(*buffer);
-			auto& view=views[size];
-			view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
-			view.StrideInBytes = rBuffer.getDesc().bufferStride;
+			
+			if (auto pBuffer = buffer->cast<BufferImpl>()) {
+				auto& view = views[size];
+				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
+				view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
+				view.StrideInBytes = pBuffer->getDesc().bufferStride;
+			} else {
+				LOG_ERROR("空の頂点バッファが含まれています");
+			}
 			size++;
 		}
 
@@ -425,34 +442,40 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      インデックスバッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setIndexBuffer(const Buffer& buffer) {
-		auto& rBuffer = Device::GetImpl<BufferImpl>(buffer);
-		D3D12_INDEX_BUFFER_VIEW view;
-		view.BufferLocation = rBuffer.getNative()->GetGPUVirtualAddress();
-		view.SizeInBytes = (UINT)rBuffer.getDesc().bufferSize;
-		view.Format = rBuffer.getDesc().bufferStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
-		m_cmdList->IASetIndexBuffer(&view);
+	void CommandListImpl::setIndexBuffer(const Ref<Buffer>& buffer) {
+		if (auto pBuffer = buffer.cast<BufferImpl>()) {
+			D3D12_INDEX_BUFFER_VIEW view;
+			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
+			view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
+			view.Format = pBuffer->getDesc().bufferStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+			m_cmdList->IASetIndexBuffer(&view);
+		} else {
+
+		}
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ルートシグネチャを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRootSignature(const RootSignature& signature) {
-		auto& rSignature = Device::GetImpl<RootSignatureImpl>(signature);
-		m_cmdList->SetGraphicsRootSignature(rSignature.getNative());
+	void CommandListImpl::setRootSignature(const Ref<RootSignature>& signature) {
+		if (auto p = signature.cast<RootSignatureImpl>()) {
+			m_cmdList->SetGraphicsRootSignature(p->getNative());
+		} else {
+			LOG_ERROR("RootSignatureが空です");
+		}
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      パイプラインステートを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setPipelineState(const PipelineState& pipeline) {
-		auto& rPipeline = Device::GetImpl<PipelineStateImpl>(pipeline);
-		m_cmdList->SetPipelineState(rPipeline.getNative());
-		//auto topology = TypeConverter::Convert(pPipeline->getDesc().topology);
-		// TODO IASetPrimitiveTopology
-		m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	void CommandListImpl::setPipelineState(const Ref<PipelineState>& pipeline) {
+		if (auto p = pipeline.cast<PipelineStateImpl>()) {
+			m_cmdList->SetPipelineState(p->getNative());
+			// TODO Geometryシェーダでのプリミティブ設定対応
+			m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		}
 	}
 
 
@@ -478,8 +501,11 @@ namespace ob::rhi::dx12 {
 	void CommandListImpl::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
-			auto& rTable = Device::GetImpl<DescriptorTableImpl>(param.table);
-			m_cmdList->SetGraphicsRootDescriptorTable(param.slot,rTable.getGpuHandle());
+			if (auto pTable = param.table.cast<DescriptorTableImpl>()) {
+				m_cmdList->SetGraphicsRootDescriptorTable(param.slot, pTable->getGpuHandle());
+			} else {
+				LOG_ERROR("空のDescriptorTableを含んでいます。");
+			}
 		}
 	}
 

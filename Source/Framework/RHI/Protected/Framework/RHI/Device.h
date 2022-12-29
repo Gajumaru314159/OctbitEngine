@@ -1,131 +1,99 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デバイス
+//! @brief		デバイス・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IDevice.h>
-//! @cond
+#include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
+#include <Framework/RHI/Types/FrameBufferDesc.h>
+#include <Framework/RHI/Types/DisplayDesc.h>
+#include <Framework/RHI/Types/CommandListDesc.h>
+#include <Framework/RHI/Types/RootSignatureDesc.h>
+#include <Framework/RHI/Types/PipelineStateDesc.h>
+#include <Framework/RHI/Types/ShaderStage.h>
+#include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Types/RenderTextureDesc.h>
+#include <Framework/RHI/Types/BufferDesc.h>
+#include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/Utility/Ref.h>
 
-#define GRAPHIC_DECLEAR_GET_IMPL(type)																	\
-	public:																								\
-    template<class T>																					\
-    static auto GetImpl(const type& obj)->std::enable_if_t<std::is_base_of_v<I##type, T>, const T&> {	\
-        return *reinterpret_cast<const T*>(GetImpl(obj));												\
-    }       																							\
-	private:
-
-#define GRAPHIC_DECLEAR_GET_IMPL_EX(type,base)															\
-	public:																								\
-    template<class T>																					\
-    static auto GetImpl(const base& obj)->std::enable_if_t<std::is_base_of_v<I##type, T>, const T&> {	\
-        return *reinterpret_cast<const T*>(GetImpl(obj));												\
-    }       																							\
-	private:
-
+//===============================================================
+// クラス宣言
+//===============================================================
 namespace ob::rhi {
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      デバイス
-	//! 
-	//! @details    デバイスは内部でのみ使用されるクラスです。
-	//!             よって、System から直接取得できないようフレンドクラス指定された
-	//!             このクラスから取得します。
-	//@―---------------------------------------------------------------------------
-	class Device {
-	public:
+    //@―---------------------------------------------------------------------------
+    //! @brief      デバイス・インターフェイス
+    //@―---------------------------------------------------------------------------
+    class Device {
+    public:
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  デバイスを取得
-		//@―---------------------------------------------------------------------------
-		static IDevice* Get();
+        static Device* Get();
 
+    public:
 
-	private:
+        //===============================================================
+        // コンストラクタ / デストラクタ
+        //===============================================================
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  Display の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IDisplay* GetImpl(const Display&);
-		GRAPHIC_DECLEAR_GET_IMPL(Display);
+        //@―---------------------------------------------------------------------------
+        //! @brief  デストラクタ
+        //@―---------------------------------------------------------------------------
+        virtual ~Device() = default;
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  CommandList の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const ICommandList* GetImpl(const CommandList&);
-		GRAPHIC_DECLEAR_GET_IMPL(CommandList);
+        //@―---------------------------------------------------------------------------
+        //! @brief  妥当な状態か
+        //@―---------------------------------------------------------------------------
+        virtual bool isValid()const = 0;
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  RenderPass の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IRenderPass* GetImpl(const RenderPass&);
-		GRAPHIC_DECLEAR_GET_IMPL(RenderPass);
+        //===============================================================
+        // 更新
+        //===============================================================
+        virtual void entryCommandList(const class CommandList&) = 0;
+
+        virtual void update() = 0;
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  FrameBuffer の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IFrameBuffer* GetImpl(const FrameBuffer&);
-		GRAPHIC_DECLEAR_GET_IMPL(FrameBuffer);
+        //@―---------------------------------------------------------------------------
+        //! @brief  説明
+        //@―---------------------------------------------------------------------------
+
+        virtual Ref<RenderPass>     createRenderPass(const RenderPassDesc& desc) = 0;
+        virtual Ref<FrameBuffer>    createFrameBuffer(const FrameBufferDesc& desc) = 0;
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  RootSignature の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IRootSignature* GetImpl(const RootSignature&);
-		GRAPHIC_DECLEAR_GET_IMPL(RootSignature);
+        virtual Ref<Display>        createDisplay(const DisplayDesc& desc) = 0;
+
+        virtual Ref<CommandList>    createCommandList(const CommandListDesc& desc) = 0;
+
+        virtual Ref<RootSignature>  createRootSignature(const RootSignatureDesc& desc) = 0;
+        virtual Ref<PipelineState>  createPipelineState(const PipelineStateDesc& desc) = 0;
+
+        virtual Ref<Buffer>         createBuffer(const BufferDesc& desc) = 0;
+
+        virtual Ref<Texture>        createTexture(const TextureDesc& desc) = 0;
+        virtual Ref<Texture>        createTexture(BlobView blob) = 0;
+        virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) = 0;
+
+        virtual Ref<Shader>         createShader(const String& code, ShaderStage stage) = 0;
+        virtual Ref<Shader>         createShader(const Blob& binary, ShaderStage stage) = 0;
+
+        virtual Ref<DescriptorTable>createDescriptorTable(DescriptorHeapType type, s32 elementNum) = 0;
+
+        //virtual IFence*           createFence(const FenceDesc&);
+
+        //void changeSyncType(SyncType)=0;
+        // virtual virtual bool isHdrSupported()const=0;
+        // virtual bool isMultiDrawSupported()const=0;
+        // virtual bool isAsyncComputeSupported()const=0;
+        // virtual bool isRaytracingSupported()const=0;
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  PipelineState の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IPipelineState* GetImpl(const PipelineState&);
-		GRAPHIC_DECLEAR_GET_IMPL(PipelineState);
+    };
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  Shader の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IShader* GetImpl(const Shader&);
-		GRAPHIC_DECLEAR_GET_IMPL_EX(Shader, VertexShader);
-		GRAPHIC_DECLEAR_GET_IMPL_EX(Shader, PixelShader);
-		GRAPHIC_DECLEAR_GET_IMPL_EX(Shader, GeometryShader);
-		GRAPHIC_DECLEAR_GET_IMPL_EX(Shader, HullShader);
-		GRAPHIC_DECLEAR_GET_IMPL_EX(Shader, DomainShader);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  Texture の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const ITexture* GetImpl(const Texture&);
-		GRAPHIC_DECLEAR_GET_IMPL(Texture);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  RenderTexture の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IRenderTexture* GetImpl(const RenderTexture&);
-		GRAPHIC_DECLEAR_GET_IMPL(RenderTexture);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  Buffer の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IBuffer* GetImpl(const Buffer&);
-		GRAPHIC_DECLEAR_GET_IMPL(Buffer);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  Buffer の実装を取得
-		//@―---------------------------------------------------------------------------
-		static const IDescriptorTable* GetImpl(const DescriptorTable&);
-		GRAPHIC_DECLEAR_GET_IMPL(DescriptorTable);
-	};
-
-}// namespcae ob
-
-#undef GRAPHIC_DECLEAR_GET_IMPL
-#undef GRAPHIC_DECLEAR_GET_IMPL_EX
-//! @endcond
+}// namespace pb::rhi

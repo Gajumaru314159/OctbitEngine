@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IPipelineState.h>
+#include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 
 //===============================================================
@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class PipelineStateImpl :public IPipelineState {
+    class PipelineStateImpl :public PipelineState {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace ob::rhi::dx12 {
 
         const PipelineStateDesc m_desc;
 
-        RootSignature   m_rootSignature;
+        Ref<RootSignature>   m_rootSignature;
         ComPtr<ID3D12PipelineState> m_pipelineState;    //!< パイプラインステート
             
     };

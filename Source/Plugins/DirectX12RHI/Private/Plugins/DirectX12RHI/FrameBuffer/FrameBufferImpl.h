@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IFrameBuffer.h>
+#include <Framework/RHI/FrameBuffer.h>
 
 //===============================================================
 // 前方宣言
@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  レンダーパス(DirectX12)
     //@―---------------------------------------------------------------------------
-    class FrameBufferImpl :public rhi::IFrameBuffer{
+    class FrameBufferImpl :public rhi::FrameBuffer{
     public:
 
         //===============================================================

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 
-RGBA32,     //!< RGBA(32bit)
+RGBA32 = 0, //!< RGBA(32bit)
 RGBA16,     //!< RGBA(16bit)
 RGBA8,      //!< RGBA(8bit)
 RGB32,      //!< RGB(32bit)

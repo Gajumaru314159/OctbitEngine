@@ -1,39 +1,40 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート
+//! @brief		レンダーパス・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
+#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/RenderPassDescHelper.h>
 
+//===============================================================
+// クラス宣言
+//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  パイプラインステート
+    //! @brief      レンダーパス・インターフェイス
     //@―---------------------------------------------------------------------------
-    class RenderPass {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderPass);
+    class RenderPass :public GraphicObject {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief  生成
+        //@―---------------------------------------------------------------------------
+        static Ref<RenderPass> Create(const RenderPassDesc& desc);
+
+    public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
+        //! @brief  定義取得
         //@―---------------------------------------------------------------------------
-        RenderPass();
+        virtual const RenderPassDesc& desc()const = 0;
 
+    protected:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  デストラクタ
-        //@―---------------------------------------------------------------------------
-        RenderPass(const RenderPassDesc& desc);
-
-        const RenderPassDesc& desc()const;
+        virtual ~RenderPass() = default;
 
     };
 
-}// namespcae ob::rhi
+}// namespace pb::rhi

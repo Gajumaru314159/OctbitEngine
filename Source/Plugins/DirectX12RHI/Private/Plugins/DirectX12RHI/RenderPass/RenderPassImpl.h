@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IRenderPass.h>
+#include <Framework/RHI/RenderPass.h>
 
 //===============================================================
 // 前方宣言
@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  レンダーパス(DirectX12)
     //@―---------------------------------------------------------------------------
-    class RenderPassImpl :public rhi::IRenderPass {
+    class RenderPassImpl :public rhi::RenderPass {
     public:
 
         //===============================================================
@@ -47,7 +47,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
 
-        const RenderPassDesc& desc()const override{ return m_desc; }
+        const RenderPassDesc& desc()const override;
 
     private:
         const RenderPassDesc m_desc;

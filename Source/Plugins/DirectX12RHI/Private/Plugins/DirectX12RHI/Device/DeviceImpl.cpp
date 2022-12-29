@@ -13,7 +13,6 @@
 #include<Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include<Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
 #include<Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
-#include<Plugins/DirectX12RHI/Texture/RenderTargetImpl.h>
 #include<Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include<Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include<Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
@@ -24,6 +23,14 @@
 #ifdef OB_DEBUG
 #include <Plugins/DirectX12RHI/Utility/PIXModule.h>
 #endif
+
+#define SAFE_CREATE(type,...)			\
+	auto p = new type(__VA_ARGS__);		\
+	if(p->isValid() == false) {			\
+		delete p;						\
+		return {};						\
+	}									\
+	return p;							
 
 namespace ob::rhi::dx12 {
 
@@ -91,106 +98,106 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーパスを生成を生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IRenderPass* DeviceImpl::createRenderPass(const RenderPassDesc& desc) {
-		return new RenderPassImpl(*this, desc);
+	Ref<RenderPass> DeviceImpl::createRenderPass(const RenderPassDesc& desc) {
+		SAFE_CREATE(RenderPassImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  フレームバッファを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IFrameBuffer* DeviceImpl::createFrameBuffer(const FrameBufferDesc& desc) {
-		return new FrameBufferImpl(*this, desc);
+	Ref<FrameBuffer> DeviceImpl::createFrameBuffer(const FrameBufferDesc& desc) {
+		SAFE_CREATE(FrameBufferImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  スワップ・チェーンを生成
 	//@―---------------------------------------------------------------------------
-	IDisplay* DeviceImpl::createDisplay(const DisplayDesc& desc) {
-		return new DisplayImpl(*this, desc);
+	Ref<Display> DeviceImpl::createDisplay(const DisplayDesc& desc) {
+		SAFE_CREATE(DisplayImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドリストを生成
 	//@―---------------------------------------------------------------------------
-	ICommandList* DeviceImpl::createCommandList(const CommandListDesc& desc) {
-		return new CommandListImpl(*this, desc);
+	Ref<CommandList> DeviceImpl::createCommandList(const CommandListDesc& desc) {
+		SAFE_CREATE(CommandListImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ルートシグネチャを生成
 	//@―---------------------------------------------------------------------------
-	IRootSignature* DeviceImpl::createRootSignature(const RootSignatureDesc& desc) {
-		return new RootSignatureImpl(*this, desc);
+	Ref<RootSignature> DeviceImpl::createRootSignature(const RootSignatureDesc& desc) {
+		SAFE_CREATE(RootSignatureImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインステートを生成
 	//@―---------------------------------------------------------------------------
-	IPipelineState* DeviceImpl::createPipelineState(const PipelineStateDesc& desc) {
-		return new PipelineStateImpl(*this, desc);
+	Ref<PipelineState> DeviceImpl::createPipelineState(const PipelineStateDesc& desc) {
+		SAFE_CREATE(PipelineStateImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::ITexture* DeviceImpl::createTexture(const TextureDesc& desc) {
-		return new TextureImpl(*this, desc);
+	Ref<Texture> DeviceImpl::createTexture(const TextureDesc& desc) {
+		SAFE_CREATE(TextureImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::ITexture* DeviceImpl::createTexture(BlobView blob) {
-		return new TextureImpl(*this, blob);
+	Ref<Texture> DeviceImpl::createTexture(BlobView blob) {
+		SAFE_CREATE(TextureImpl,*this, blob);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IRenderTexture* DeviceImpl::createRenderTexture(const RenderTextureDesc& desc) {
-		return new RenderTextureImpl(*this, desc);
+	Ref<RenderTexture> DeviceImpl::createRenderTexture(const RenderTextureDesc& desc) {
+		SAFE_CREATE(RenderTextureImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  バッファーを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IBuffer* DeviceImpl::createBuffer(const BufferDesc& desc) {
-		return new BufferImpl(*this, desc);
+	Ref<Buffer> DeviceImpl::createBuffer(const BufferDesc& desc) {
+		SAFE_CREATE(BufferImpl,*this, desc);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点シェーダを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IShader* DeviceImpl::createShader(const String& code, ShaderStage stage) {
-		return new ShaderImpl(code, stage);
+	Ref<Shader> DeviceImpl::createShader(const String& code, ShaderStage stage) {
+		SAFE_CREATE(ShaderImpl,code, stage);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点シェーダを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IShader* DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
-		return new ShaderImpl(binary, stage);
+	Ref<Shader> DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
+		SAFE_CREATE(ShaderImpl,binary, stage);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタ・テーブルを生成
 	//@―---------------------------------------------------------------------------
-	ob::rhi::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
+	Ref<DescriptorTable> DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
 		auto index = enum_cast(type);
 		if (!is_in_range(index, m_descriptorHeaps))return nullptr;
-		return new DescriptorTableImpl(*m_descriptorHeaps[index], type, elementNum);
+		SAFE_CREATE(DescriptorTableImpl,*m_descriptorHeaps[index], type, elementNum);
 	}
 
 

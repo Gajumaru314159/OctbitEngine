@@ -8,7 +8,7 @@
 #include <Framework/RHI/GraphicObjectManager.h>
 
 namespace ob::rhi {
-	class IDevice;
+	class Device;
 }
 
 namespace ob::rhi {
@@ -25,7 +25,7 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief      デバイス生成
 		//@―---------------------------------------------------------------------------
-		virtual IDevice* getDevice() = 0;
+		virtual Device* getDevice() = 0;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      

@@ -11,7 +11,7 @@ namespace ob::rhi {
     //! @brief  テクスチャ・フォーマット
     //@―---------------------------------------------------------------------------
     enum class TextureFormat {
-        Unknown,    //!< 不明なフォーマット
+        Unknown = -1,    //!< 不明なフォーマット
 #include "TextureFormat_Color.h"
 #include "TextureFormat_Depth.h"
     };
@@ -21,7 +21,7 @@ namespace ob::rhi {
     //! @brief  カラー・テクスチャ・フォーマット
     //@―---------------------------------------------------------------------------
     enum class ColorTextureFormat {
-        Unknown,    //!< 不明なフォーマット
+        Unknown = -1,    //!< 不明なフォーマット
 #include "TextureFormat_Color.h"
     };
 
@@ -30,7 +30,7 @@ namespace ob::rhi {
     //! @brief  デプス・テクスチャ・フォーマット
     //@―---------------------------------------------------------------------------
     enum class DepthTextureFormat {
-        Unknown,    //!< 不明なフォーマット
+        Unknown = -1,    //!< 不明なフォーマット
 #include "TextureFormat_Depth.h"
     };
 

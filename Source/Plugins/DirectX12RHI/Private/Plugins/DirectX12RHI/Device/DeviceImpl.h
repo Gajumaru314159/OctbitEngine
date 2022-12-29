@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IDevice.h>
+#include <Framework/RHI/Device.h>
 #include <Framework/RHI/Types/FeatureLevel.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
@@ -13,7 +13,7 @@
 //===============================================================
 namespace ob::rhi::dx12 {
 
-	class DeviceImpl :public IDevice {
+	class DeviceImpl :public Device {
 	public:
 
 		//===============================================================
@@ -41,7 +41,7 @@ namespace ob::rhi::dx12 {
 		// 更新
 		//===============================================================
 
-		void entryCommandList(const class CommandList&) override;
+		void entryCommandList(const CommandList&) override;
 		void update()override;
 
 
@@ -52,77 +52,77 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  レンダーパス生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IRenderPass* createRenderPass(const RenderPassDesc& desc)override;
+		Ref<RenderPass> createRenderPass(const RenderPassDesc& desc)override;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  フレームバッファを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IFrameBuffer* createFrameBuffer(const FrameBufferDesc& desc)override;
+		Ref<FrameBuffer> createFrameBuffer(const FrameBufferDesc& desc)override;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  スワップ・チェーンを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IDisplay* createDisplay(const DisplayDesc& desc)override;
+		Ref<Display> createDisplay(const DisplayDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コマンドリスト生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::ICommandList* createCommandList(const CommandListDesc& desc)override;
+		Ref<CommandList> createCommandList(const CommandListDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  ルートシグネチャを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IRootSignature* createRootSignature(const RootSignatureDesc& desc)override;
+		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  パイプラインステートを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IPipelineState* createPipelineState(const PipelineStateDesc& desc)override;
+		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  テクスチャを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::ITexture* createTexture(const TextureDesc& desc)override;
+		Ref<Texture> createTexture(const TextureDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  テクスチャを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::ITexture* createTexture(BlobView blob)override;
+		Ref<Texture> createTexture(BlobView blob)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  レンダーテクスチャを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IRenderTexture* createRenderTexture(const RenderTextureDesc& desc)override;
+		Ref<RenderTexture> createRenderTexture(const RenderTextureDesc& desc)override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  バッファーを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IBuffer* createBuffer(const BufferDesc& desc) override;
+		Ref<Buffer> createBuffer(const BufferDesc& desc) override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  シェーダを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IShader* createShader(const String&, ShaderStage) override;
+		Ref<Shader> createShader(const String&, ShaderStage) override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  シェーダを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IShader* createShader(const Blob&, ShaderStage) override;
+		Ref<Shader> createShader(const Blob&, ShaderStage) override;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  デスクリプタ・テーブルを生成
 		//@―---------------------------------------------------------------------------
-		ob::rhi::IDescriptorTable* createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
+		Ref<DescriptorTable> createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
 
 	public:
 

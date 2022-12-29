@@ -1,26 +1,22 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・テーブル
+//! @brief		デスクリプタ・テーブル・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
+#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
+//===============================================================
+// クラス宣言
+//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  デスクリプタ・テーブル
+    //! @brief      デスクリプタ・テーブル
     //@―---------------------------------------------------------------------------
-    class DescriptorTable {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(DescriptorTable);
+    class DescriptorTable :public GraphicObject {
     public:
-
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
-        DescriptorTable() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief              コンストラクタ
@@ -29,60 +25,23 @@ namespace ob::rhi {
         //! @param elementNum   要素数
         //! @param name         デバッグ名
         //@―---------------------------------------------------------------------------
-        DescriptorTable(DescriptorHeapType type, s32 elementNum);
+        static Ref<DescriptorTable> Create(DescriptorHeapType type, s32 elementNum);
 
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief  リソースを設定
         //@―---------------------------------------------------------------------------
         //! @{
-        bool setResource(s32 index, class Buffer& resource);  // CBV / UAV
-        bool setResource(s32 index, class Texture& resource); // SRV / RTV / DSV
-        bool setResource(s32 index, class Sampler& resource); // Sampler
+        virtual bool setResource(s32 index, Ref<class Buffer>& resource) = 0;
+        virtual bool setResource(s32 index, Ref<class Texture>& resource) = 0;
+        //virtual bool setResource(s32 index, class Sampler& resource) = 0;
         //! @}
 
-        
-        //@―---------------------------------------------------------------------------
-        //! @brief  リソースのバインドを解除
-        //@―---------------------------------------------------------------------------
-        void clear();
+    protected:
 
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  指定したインデックスのリソースのバインドを解除
-        //@―---------------------------------------------------------------------------
-        void clearAt(s32 index);
-
-    private:
-
-
+        virtual ~DescriptorTable() = default;
 
     };
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  デスクリプタ
-    //@―---------------------------------------------------------------------------
-    class Descriptor {
-    public:
-
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-        bool setResource(class Buffer& buffer);  // CBV / UAV
-        bool setResource(class Texture& buffer); // SRV / RTV / DSV
-        bool setResource(class Sampler& buffer); // Sampler
-
-        void clear();
-
-    private:
-
-
-
-    };
-
-}// namespcae ob::rhi
+}// namespace pb::rhi

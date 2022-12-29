@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		レンダー・ターゲット
+//! @brief		レンダーターゲット・インターフェイス
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Utility/GraphicObjectHolder.h>
-#include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Types/RenderTextureDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -22,21 +21,10 @@ namespace ob::rhi {
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  レンダー・ターゲット
+    //! @brief      レンダーパス・インターフェイス
     //@―---------------------------------------------------------------------------
-    class RenderTexture : public Texture {
-        OB_DEFINE_GRAPHIC_OBJECT_HOLDER(RenderTexture);
+    class RenderTexture :public Texture {
     public:
-
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  コンストラクタ
-        //@―---------------------------------------------------------------------------
-        RenderTexture()=default;
-
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
@@ -44,8 +32,15 @@ namespace ob::rhi {
         //! @param desc     定義
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        RenderTexture(const RenderTextureDesc& desc);
+        static Ref<RenderTexture> Create(const RenderTextureDesc& desc);
+
+    public:
+
+
+    protected:
+
+        virtual ~RenderTexture() = default;
 
     };
 
-}// namespcae ob::rhi
+}// namespace pb::rhi

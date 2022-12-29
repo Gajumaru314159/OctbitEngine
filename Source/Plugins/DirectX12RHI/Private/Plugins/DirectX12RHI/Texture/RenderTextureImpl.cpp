@@ -18,7 +18,8 @@ namespace ob::rhi::dx12 {
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderTextureImpl::RenderTextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc)
-		: m_desc(desc)
+		: TextureImpl(rDevice)
+		, m_desc(desc)
 	{
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { desc.clear.color.r,desc.clear.color.g,desc.clear.color.b,desc.clear.color.a };
@@ -114,6 +115,11 @@ namespace ob::rhi::dx12 {
 		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
 		m_resource = resource;
+
+		{
+			TextureDesc baseDesc;
+			//TextureImpl::m_desc.
+		}
 
 	}
 

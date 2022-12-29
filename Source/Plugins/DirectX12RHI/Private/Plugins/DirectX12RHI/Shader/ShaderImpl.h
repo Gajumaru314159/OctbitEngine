@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IShader.h>
+#include <Framework/RHI/Shader.h>
 #include <Framework/Core/Misc/Blob.h>
 
 //===============================================================
@@ -24,7 +24,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  シェーダ実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class ShaderImpl :public IShader {
+    class ShaderImpl :public Shader {
     public:
 
         //===============================================================

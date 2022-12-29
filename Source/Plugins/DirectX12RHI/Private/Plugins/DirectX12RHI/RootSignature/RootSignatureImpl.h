@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IRootSignature.h>
+#include <Framework/RHI/RootSignature.h>
 
 //===============================================================
 // 前方宣言
@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  ルートシグネチャ実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class RootSignatureImpl :public rhi::IRootSignature {
+    class RootSignatureImpl :public rhi::RootSignature {
     public:
 
         //===============================================================

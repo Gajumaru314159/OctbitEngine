@@ -5,18 +5,15 @@
 //***********************************************************
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/Device.h>
-#include <Framework/RHI/IShader.h>
 
 namespace ob::rhi {
-
-#define CHECK_IMPL() OB_ASSERT(m_pImpl,"未初期化のShaderへアクセス")
 
     //@―---------------------------------------------------------------------------
     //! @brief      シェーダのエントリ関数名を取得
     //! 
     //! @details    無効な値の場合は空白文字列を返します。
     //@―---------------------------------------------------------------------------
-    const char* Shader::getEntryName(ShaderStage stage) {
+    const char* Shader::GetEntryName(ShaderStage stage) {
         switch (stage)
         {
         case ob::rhi::ShaderStage::Vertex:          return "VS_Main";
@@ -38,30 +35,14 @@ namespace ob::rhi {
         return "";
     }
 
-
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(VertexShader);
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader() {
-
-    }
-
-
     //@―---------------------------------------------------------------------------
     //! @brief              コンストラクタ
     //! 
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const String& code) {
-        m_pImpl = Device::Get()->createShader(code,ShaderStage::Vertex);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
+    Ref<Shader> VertexShader::Create(const String& code) {
+        return Device::Get()->createShader(code,ShaderStage::Vertex);
     }
 
 
@@ -71,26 +52,10 @@ namespace ob::rhi {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    VertexShader::VertexShader(const Blob& binary) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderStage::Vertex);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
+    Ref<Shader> VertexShader::Create(const Blob& binary) {
+        return Device::Get()->createShader(binary, ShaderStage::Vertex);
     }
-
-
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(PixelShader);
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader() {
-
-    }
-
+    
 
     //@―---------------------------------------------------------------------------
     //! @brief              コンストラクタ
@@ -98,13 +63,8 @@ namespace ob::rhi {
     //! @param codeSet      シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const String& code) {
-        m_pImpl = Device::Get()->createShader(code, ShaderStage::Pixel);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
+    Ref<Shader> PixelShader::Create(const String& code) {
+        return Device::Get()->createShader(code, ShaderStage::Pixel);
     }
 
 
@@ -114,142 +74,8 @@ namespace ob::rhi {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    PixelShader::PixelShader(const Blob& binary) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderStage::Pixel);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(GeometryShader);
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //@―---------------------------------------------------------------------------
-    GeometryShader::GeometryShader() {
-
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param codeSet      シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    GeometryShader::GeometryShader(const String& code) {
-        m_pImpl = Device::Get()->createShader(code, ShaderStage::Geometry);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param binarySet    シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    GeometryShader::GeometryShader(const Blob& binary) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderStage::Geometry);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(HullShader);
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //@―---------------------------------------------------------------------------
-    HullShader::HullShader() {
-
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param codeSet      シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    HullShader::HullShader(const String& code) {
-        m_pImpl = Device::Get()->createShader(code, ShaderStage::Hull);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param binarySet    シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    HullShader::HullShader(const Blob& binary) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderStage::Hull);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    OB_IMPLEMENT_GRAPHIC_OBJECT_HOLDER(DomainShader);
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //@―---------------------------------------------------------------------------
-    DomainShader::DomainShader() {
-
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param codeSet      シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    DomainShader::DomainShader(const String& code) {
-        m_pImpl = Device::Get()->createShader(code, ShaderStage::Domain);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param binarySet    シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    DomainShader::DomainShader(const Blob& binary) {
-        m_pImpl = Device::Get()->createShader(binary, ShaderStage::Domain);
-        OB_ASSERT_EXPR(m_pImpl);
-        if (!m_pImpl->isValid()) {
-            LOG_FATAL_EX("Graphic", "シェーダの生成に失敗");
-            release();
-        }
+    Ref<Shader> PixelShader::Create(const Blob& binary) {
+        return Device::Get()->createShader(binary, ShaderStage::Pixel);
     }
 
 }// namespace ob::rhi

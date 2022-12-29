@@ -39,11 +39,15 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		if (!is_in_range(desc.subpass, desc.renderPass.desc().subpasses)) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass.desc().subpasses.size());
+		if (!desc.renderPass) {
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
 		}
 
-		auto& subpass = desc.renderPass.desc().subpasses[desc.subpass];
+		if (!is_in_range(desc.subpass, desc.renderPass->desc().subpasses)) {
+			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass->desc().subpasses.size());
+		}
+
+		auto& subpass = desc.renderPass->desc().subpasses[desc.subpass];
 		const auto targetCount = subpass.colors.size();
 		if (8 < targetCount) {
 			LOG_FATAL_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
@@ -57,23 +61,23 @@ namespace ob::rhi::dx12 {
 		// シェーダ
 		{
 			if (m_desc.vs) {
-				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.vs);
+				auto& shader = *m_desc.vs.cast<ShaderImpl>();
 				gpsd.VS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
-			if (m_desc.gs) {
-				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.gs);
-				gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			}
-			if (m_desc.hs) {
-				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.hs);
-				gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			}
-			if (m_desc.ds) {
-				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.ds);
-				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			}
+			//if (m_desc.gs) {
+			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
+			//	gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			//}
+			//if (m_desc.hs) {
+			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
+			//	gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			//}
+			//if (m_desc.ds) {
+			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
+			//	gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			//}
 			if (m_desc.ps) {
-				auto& shader = Device::GetImpl<ShaderImpl>(m_desc.ps);
+				auto& shader = *m_desc.ps.cast<ShaderImpl>();
 				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
 		}
@@ -98,7 +102,7 @@ namespace ob::rhi::dx12 {
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 
-		gpsd.pRootSignature = Device::GetImpl<RootSignatureImpl>(desc.rootSignature).getNative();
+		gpsd.pRootSignature = desc.rootSignature.cast<RootSignatureImpl>()->getNative();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::Convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
@@ -127,8 +131,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
 
-		auto& subpass = src.renderPass.desc().subpasses[src.subpass];
-		auto& attachments = src.renderPass.desc().attachments;
+		auto& subpass = src.renderPass->desc().subpasses[src.subpass];
+		auto& attachments = src.renderPass->desc().attachments;
 
 		dst.NumRenderTargets = (UINT)subpass.colors.size();
 

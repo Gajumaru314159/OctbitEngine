@@ -137,7 +137,7 @@ namespace ob::rhi::dx12 {
             NULL,                           // ソース名
             NULL,                           // Define
             NULL,                           // インクルード
-            Shader::getEntryName(stage),    // エントリ
+            Shader::GetEntryName(stage),    // エントリ
             getTargetName(stage),           // ターゲット
             D3DCOMPILE_PREFER_FLOW_CONTROL, // フラグ1
             0,                              // フラグ2

@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
-#include <Framework/RHI/Device.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -45,14 +44,13 @@ namespace ob::rhi::dx12 {
 	}
 
 	void CommandQueue::entryCommandList(const CommandList& commandList) {
-		m_entriedCommandList.push_back(commandList);
+		m_entriedCommandList.push_back(&commandList);
 	}
 
 	void CommandQueue::execute() {
 		m_entriedNativeCommandList.clear();
 		for (auto& cmdList : m_entriedCommandList) {
-			auto& rCmdList = Device::GetImpl<CommandListImpl>(cmdList);
-			m_entriedNativeCommandList.push_back(rCmdList.getNative());
+			m_entriedNativeCommandList.push_back(static_cast<const CommandListImpl*>(cmdList)->getNative());
 		}
 		m_entriedCommandList.clear();
 		m_commandQueue->ExecuteCommandLists((UINT)m_entriedNativeCommandList.size(), m_entriedNativeCommandList.data());

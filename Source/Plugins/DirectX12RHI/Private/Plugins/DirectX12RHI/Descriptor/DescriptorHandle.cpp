@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include "DescriptorHandle.h"
-#include "DescriptorHeap.h"
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
 namespace ob::rhi::dx12 {
 

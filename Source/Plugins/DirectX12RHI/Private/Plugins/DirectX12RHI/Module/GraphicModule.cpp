@@ -18,7 +18,7 @@ namespace ob::rhi::dx12 {
 
 		}
 
-		IDevice* getDevice()override {
+		Device* getDevice()override {
 			return &m_device;
 		}
 		GraphicObjectManager& getObjectManager() override {

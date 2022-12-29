@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/ITexture.h>
+#include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
@@ -24,7 +24,7 @@ namespace ob::rhi::dx12 {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-    class TextureImpl :public rhi::ITexture {
+    class TextureImpl :public rhi::Texture {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -87,13 +87,20 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
+    protected:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        TextureImpl(DeviceImpl& rDevice);
+
 
     private:
 
         void onNameChanged()override;
 
 
-    private:
+    protected:
 
         class DeviceImpl& m_device;
 

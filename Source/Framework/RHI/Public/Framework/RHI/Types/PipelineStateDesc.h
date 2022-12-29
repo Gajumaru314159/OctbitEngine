@@ -109,25 +109,25 @@ namespace ob::rhi {
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
-		RenderPass			renderPass;					//!< レンダーパス
-		s32					subpass;					//!< サブパスインデックス
+		Ref<RenderPass>		renderPass;						//!< レンダーパス
+		s32					subpass;						//!< サブパスインデックス
 
-		RootSignature		rootSignature;				//!< ルートシグネチャ
-		VertexLayout		vertexLayout;				//!< 頂点レイアウト
+		Ref<RootSignature>	rootSignature;					//!< ルートシグネチャ
+		VertexLayout		vertexLayout;					//!< 頂点レイアウト
 
-		VertexShader		vs;							//!< 頂点シェーダ
-		GeometryShader		gs;							//!< ジオメトリシェーダ
-		HullShader			hs;							//!< ハルシェーダ
-		DomainShader		ds;							//!< ドメインシェーダ
-		PixelShader			ps;							//!< ピクセルシェーダ
+		Ref<Shader>			vs;								//!< 頂点シェーダ
+		//Ref<GeometryShader>	gs;								//!< ジオメトリシェーダ
+		//Ref<HullShader>		hs;								//!< ハルシェーダ
+		//Ref<DomainShader>	ds;								//!< ドメインシェーダ
+		Ref<Shader>			ps;								//!< ピクセルシェーダ
 
-		SampleDesc			sample;						//!< サンプル定義
-		BlendDesc			blend[RENDER_TARGET_MAX];	//!< ブレンド定義
-		RasterizerDesc		rasterizer;					//!< ラスタライズ定義
-		DepthStencilDesc	depthStencil;				//!< デプス・ステンシル定義
+		SampleDesc			sample;							//!< サンプル定義
+		BlendDesc			blend[RENDER_TARGET_MAX];		//!< ブレンド定義
+		RasterizerDesc		rasterizer;						//!< ラスタライズ定義
+		DepthStencilDesc	depthStencil;					//!< デプス・ステンシル定義
 
 		Topology			topology=Topology::TriangleList;//!< GeometoryShaderでのトポロジー
-		u32					sampleMask=-1;				//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
+		u32					sampleMask=-1;					//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 
 }// namespcae ob::rhi

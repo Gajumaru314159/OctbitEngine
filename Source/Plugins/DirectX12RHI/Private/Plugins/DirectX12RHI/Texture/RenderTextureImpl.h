@@ -4,8 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IRenderTexture.h>
+#include <Framework/RHI/RenderTexture.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+#include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 
 //===============================================================
 // 前方宣言
@@ -26,7 +27,7 @@ namespace ob::rhi::dx12 {
     //! 
     //! @details    描画可能なテクスチャ。
     //@―---------------------------------------------------------------------------
-    class RenderTextureImpl :public rhi::IRenderTexture {
+    class RenderTextureImpl :public TextureImpl, rhi::RenderTexture {
     public:
 
         //@―---------------------------------------------------------------------------
@@ -74,7 +75,7 @@ namespace ob::rhi::dx12 {
         D3D12_VIEWPORT getViewport()const;
         D3D12_RECT getScissorRect()const;
 
-        auto& getResource()const { return m_resource; }
+        auto getResource()const { return m_resource.Get(); }
 
     private:
 
@@ -85,11 +86,8 @@ namespace ob::rhi::dx12 {
 
         const RenderTextureDesc     m_desc;
 
-        ComPtr<ID3D12Resource>      m_resource;     //!< リソース
-        DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
         DescriptorHandle            m_hRTV;         //!< デスクリプタハンドル
         DescriptorHandle            m_hDSV;         //!< デスクリプタハンドル
-
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorRect;                       //!< シザー矩形

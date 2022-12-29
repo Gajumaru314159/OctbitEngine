@@ -5,7 +5,6 @@
 //***********************************************************
 #include "DescriptorTableImpl.h"
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Device.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
@@ -42,10 +41,11 @@ namespace ob::rhi::dx12
 	//@―---------------------------------------------------------------------------
 	//! @brief  バッファリソースを設定
 	//@―---------------------------------------------------------------------------
-	bool DescriptorTableImpl::setResource(s32 index, Buffer& resource) {
-		auto& rBuffer = Device::GetImpl<BufferImpl>(resource);
-		auto handle = m_handle.getCpuHandle(index);
-		rBuffer.createCBV(handle);
+	bool DescriptorTableImpl::setResource(s32 index, Ref<Buffer>& resource) {
+		if (auto p = resource.cast<BufferImpl>()) {
+			auto handle = m_handle.getCpuHandle(index);
+			p->createCBV(handle);
+		}
 		return true;
 	}
 
@@ -53,27 +53,15 @@ namespace ob::rhi::dx12
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャリソースを設定
 	//@―---------------------------------------------------------------------------
-	bool DescriptorTableImpl::setResource(s32 index, Texture& resource) {
-		auto& rTexture = Device::GetImpl<TextureImpl>(resource);
-		auto handle = m_handle.getCpuHandle(index);
-		rTexture.createSRV(handle);
+	bool DescriptorTableImpl::setResource(s32 index, Ref<Texture>& resource) {
+		if (auto p = resource.cast<TextureImpl>()) {
+			auto handle = m_handle.getCpuHandle(index);
+			p->createSRV(handle);
+		}
 		return true;
 	}
 	//bool setResource(s32 index, class Sampler& resource) override{}
 	//! @}
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  リソースのバインドを解除
-	//@―---------------------------------------------------------------------------
-	void DescriptorTableImpl::clear() {
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  指定したインデックスのリソースのバインドを解除
-	//@―---------------------------------------------------------------------------
-	void DescriptorTableImpl::clearAt(s32 index) {
-	}
 
 }// namespace ob::rhi::dx12

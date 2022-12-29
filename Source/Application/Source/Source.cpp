@@ -69,61 +69,63 @@ int TestDirectX12() {
 	platform::Window window(windowDesc);
 
 	// ディスプレイ
-	Display display;
+	Ref<Display> display;
 	{
 		DisplayDesc desc;
 		desc.window = window;
-		display = Display(desc);
-		display.setName(TC("MainWindow"));
+		display = Display::Create(desc);
+		display->setName(TC("MainWindow"));
 		OB_ASSERT_EXPR(display);
 	}
 
-	RenderPass renderPass;
+	Ref<RenderPass> renderPass;
 	{
 		RenderPassDescHelper desc;
 		auto color = desc.addAttachment(TextureFormat::RGBA8);
 		auto depth = desc.addAttachment(TextureFormat::D32);
 		auto pass0 = desc.addSubpassXCD({ color },depth);
 
-		renderPass = RenderPass(desc);
+		renderPass = RenderPass::Create(desc);
 		OB_ASSERT_EXPR(renderPass);
 	}
 
-	RenderTexture colorRT;
+	Ref<RenderTexture> colorRT;
 	{
 		RenderTextureDesc desc;
-		desc.size = display.getDesc().size;
+		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Gray;
 
-		colorRT = RenderTexture(desc);
+		colorRT = RenderTexture::Create(desc);
+		colorRT->setName(TC("Albedo"));
 		OB_ASSERT_EXPR(colorRT);
 	}
-	RenderTexture depthRT;
+	Ref<RenderTexture> depthRT;
 	{
 		RenderTextureDesc desc;
-		desc.size = display.getDesc().size;
+		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::D32;
 		desc.clear.depth = 0;
 
-		depthRT = RenderTexture(desc);
+		depthRT = RenderTexture::Create(desc);
+		depthRT->setName(TC("Depth"));
 		OB_ASSERT_EXPR(depthRT);
 	}
 
-	FrameBuffer frameBuffer;
+	Ref<FrameBuffer> frameBuffer;
 	{
 		FrameBufferDesc desc;
 		desc.renderPass = renderPass;
 		desc.attachments.push_back(colorRT);
 		desc.attachments.push_back(depthRT);
 
-		frameBuffer = FrameBuffer(desc);
+		frameBuffer = FrameBuffer::Create(desc);
 		OB_ASSERT_EXPR(frameBuffer);
 	}
 
 
-	VertexShader vs;
-	PixelShader ps;
+	Ref<Shader> vs;
+	Ref<Shader> ps;
 	{
 		String code;
 		code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
@@ -163,12 +165,12 @@ int TestDirectX12() {
 		code.append(TC("    return o;													\n"));
 		code.append(TC("}																\n"));
 
-		vs = VertexShader(code);
-		ps = PixelShader(code);
+		vs = VertexShader::Create(code);
+		ps = PixelShader::Create(code);
 		OB_ASSERT_EXPR(vs&&ps);
 	}
 
-	RootSignature signature;
+	Ref<RootSignature> signature;
 	{
 		RootSignatureDesc desc(
 			{
@@ -179,12 +181,12 @@ int TestDirectX12() {
 				StaticSamplerDesc(SamplerDesc(),0),
 			}
 		);
-		signature = RootSignature(desc);
-		signature.setName(TC("TestRootSignature"));
+		signature = RootSignature::Create(desc);
+		signature->setName(TC("TestRootSignature"));
 		OB_ASSERT_EXPR(signature);
 	}
 
-	PipelineState pipeline;
+	Ref<PipelineState> pipeline;
 	{
 		PipelineStateDesc desc;
 		desc.renderPass = renderPass;
@@ -203,39 +205,39 @@ int TestDirectX12() {
 		desc.depthStencil.depth.enable = true;
 		desc.depthStencil.stencil.enable = false;
 
-		pipeline = PipelineState(desc);
-		pipeline.setName(TC("TestPipeline"));
+		pipeline = PipelineState::Create(desc);
+		pipeline->setName(TC("TestPipeline"));
 		OB_ASSERT_EXPR(pipeline);
 	}
 
-	Buffer buffer;
+	Ref<Buffer> buffer;
 	CBuf cbuf;
 	{
 		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
-		buffer = Buffer(desc);
-		buffer.setName(TC("TestBuffer"));
+		buffer = Buffer::Create(desc);
+		buffer->setName(TC("TestBuffer"));
 		OB_ASSERT_EXPR(buffer);
-		buffer.updateDirect(cbuf);
+		buffer->updateDirect(cbuf);
 	}
 
-	Texture tex;
+	Ref<Texture> tex;
 	{
 		FileStream fs(TC("Asset/Texture/test.dds"));
 		if (fs) {
 			Blob blob(fs.size());
 			fs.read(blob.data(), blob.size());
-			tex = Texture(blob);
-			tex.setName(TC("test.dds"));
+			tex = Texture::Create(blob);
+			tex->setName(TC("test.dds"));
 		}
 
 		OB_ASSERT_EXPR(tex);
 	}
 
-	DescriptorTable dt(DescriptorHeapType::CBV_SRV_UAV, 1);
-	dt.setResource(0, tex);
+	auto dt = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+	dt->setResource(0, tex);
 
-	DescriptorTable dt2(DescriptorHeapType::CBV_SRV_UAV, 1);
-	dt2.setResource(0, buffer);
+	auto dt2 = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+	dt2->setResource(0, buffer);
 
 
 	MeshData<Vert> mesh;
@@ -276,28 +278,28 @@ int TestDirectX12() {
 		}
 	}
 
-	Buffer vertexBuffer;
+	Ref<Buffer> vertexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
-		vertexBuffer = Buffer(desc, BlobView(mesh.vertices));
+		vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
 		OB_ASSERT_EXPR(vertexBuffer);
 	}
 
-	Buffer indexBuffer;
+	Ref<Buffer> indexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
-		indexBuffer = Buffer(desc, BlobView(mesh.indices));
+		indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
 		OB_ASSERT_EXPR(indexBuffer);
 	}
 
 
 
-	CommandList cmdList;
+	Ref<CommandList> cmdList;
 	{
 		CommandListDesc desc;
 		desc.type = CommandListType::Graphic;
-		cmdList = CommandList(desc);
-		cmdList.setName(TC("TestCommandList"));
+		cmdList = CommandList::Create(desc);
+		cmdList->setName(TC("TestCommandList"));
 		OB_ASSERT_EXPR(cmdList);
 	}
 
@@ -323,35 +325,36 @@ int TestDirectX12() {
 		if (input::Keyboard::Escape.down())break;
 
 		// 表示を更新(Present)
-		display.update();
+		display->update();
 
-		cmdList.begin();
-		cmdList.beginRenderPass(frameBuffer);
+		cmdList->begin();
+		cmdList->beginRenderPass(frameBuffer);
 		//cmdList.clearColors();
 		//cmdList.clearDepthStencil();
 		{
-			cmdList.setRootSignature(signature);
-			cmdList.setPipelineState(pipeline);
+			cmdList->setRootSignature(signature);
+			cmdList->setPipelineState(pipeline);
 
-			cmdList.setVertexBuffer(vertexBuffer);
-			cmdList.setIndexBuffer(indexBuffer);
+
+			cmdList->setVertexBuffer(vertexBuffer);
+			cmdList->setIndexBuffer(indexBuffer);
 
 			SetDescriptorTableParam params[] = {
 				SetDescriptorTableParam(dt,0),
 				SetDescriptorTableParam(dt2,1),
 			};
-			cmdList.setRootDesciptorTable(params, 2);
+			cmdList->setRootDesciptorTable(params, 2);
 
 			DrawIndexedParam param{};
 			param.indexCount = mesh.indices.size();
-			cmdList.drawIndexed(param);
+			cmdList->drawIndexed(param);
 		}
-		cmdList.endRenderPass();
-		cmdList.applyDisplay(display, colorRT);
-		cmdList.end();
+		cmdList->endRenderPass();
+		cmdList->applyDisplay(display, colorRT);
+		cmdList->end();
 
 		// TODO コマンドの個別実行を許可する？
-		cmdList.flush();
+		cmdList->flush();
 
 		// 入力更新
 		const auto rspd = 90 / 60.f;
@@ -370,14 +373,14 @@ int TestDirectX12() {
 
 		// カメラバッファ更新
 		cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
-		buffer.updateDirect(cbuf);
+		buffer->updateDirect(cbuf);
 	}
 
 	return 0;
 }
 
 int TestVullkan() {
-
+	/*
 	using namespace ob::rhi;
 
 	// ウィンドウ生成
@@ -459,6 +462,6 @@ int TestVullkan() {
 		cmdList.applyDisplay(display, colorRT);
 
 	}
-
+	*/
 	return 0;
 }

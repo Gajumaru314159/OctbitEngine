@@ -16,12 +16,16 @@ namespace ob::rhi::dx12 {
     FrameBufferImpl::FrameBufferImpl(DeviceImpl& rDevice, const FrameBufferDesc& desc)
         : m_desc(desc)
     {
-        auto& a = m_desc.renderPass.desc().attachments;
+        OB_ASSERT(m_desc.renderPass, "FraeBufferのRenderPassが空です");
+
+        auto d = m_desc.renderPass.get();// ->desc();
+        auto& a = d->desc().attachments;
         auto& b = m_desc.attachments;
 
         bool ok = std::equal(a.begin(), a.end(), b.begin(),
-            [&](const AttachmentDesc& ai,const RenderTexture& bi) {
-                return ai.format == bi.format();
+            [&](const AttachmentDesc& ai, const Ref<RenderTexture>& bi) {
+                if (!bi)return false;
+                return ai.format == bi->format();
             }
         );
 

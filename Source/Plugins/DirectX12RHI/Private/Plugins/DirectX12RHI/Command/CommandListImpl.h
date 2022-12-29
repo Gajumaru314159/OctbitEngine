@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/ICommandList.h>
+#include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/FrameBuffer.h>
@@ -16,7 +16,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コマンドリスト実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class CommandListImpl:public ICommandList {
+    class CommandListImpl:public CommandList {
     public:
 
         //===============================================================
@@ -49,12 +49,17 @@ namespace ob::rhi::dx12 {
          //@―---------------------------------------------------------------------------
          //! @brief      記録終了
          //@―---------------------------------------------------------------------------
-        void end() override;
+         void end() override;
+
+         //@―---------------------------------------------------------------------------
+         //! @brief      記録終了
+         //@―---------------------------------------------------------------------------
+         void flush() override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      レンダーパス開始
         //@―---------------------------------------------------------------------------
-        void beginRenderPass(const class FrameBuffer& frameBuffer);
+        void beginRenderPass(const Ref<FrameBuffer>& frameBuffer);
 
         //@―---------------------------------------------------------------------------
         //! @brief      次のサブパスに進める
@@ -69,7 +74,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      スワップチェーンにテクスチャを適用
         //@―---------------------------------------------------------------------------
-        void applyDisplay(const Display& display, const Texture& texture) override;
+        void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      シザー矩形を設定
@@ -94,22 +99,22 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      頂点バッファを設定
         //@―---------------------------------------------------------------------------
-        void setVertexBuffers(Span<const Buffer*>)override;
+        void setVertexBuffers(Span<const Ref<Buffer>*>)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      インデックスバッファを設定
         //@―---------------------------------------------------------------------------
-        void setIndexBuffer(const Buffer&)override;
+        void setIndexBuffer(const Ref<Buffer>&)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      ルートシグネチャを設定
         //@―---------------------------------------------------------------------------
-        void setRootSignature(const RootSignature&) override;
+        void setRootSignature(const Ref<RootSignature>&) override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      パイプラインステートを設定
         //@―---------------------------------------------------------------------------
-        void setPipelineState(const PipelineState&) override;
+        void setPipelineState(const Ref<PipelineState>&) override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      描画
@@ -171,7 +176,7 @@ namespace ob::rhi::dx12 {
 
         Array<D3D12_RESOURCE_BARRIER> m_barriers;
 
-        FrameBuffer m_frameBuffer;
+        FrameBuffer* m_frameBuffer;
         s32         m_subpassIndex;
 
         ResourceStateCache m_cache;

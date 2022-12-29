@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IBuffer.h>
+#include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 
 namespace ob::rhi::dx12 {
@@ -12,7 +12,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      バッファ
 	//@―---------------------------------------------------------------------------
-	class BufferImpl:public IBuffer {
+	class BufferImpl:public Buffer {
 	public:
 
 		//@―---------------------------------------------------------------------------

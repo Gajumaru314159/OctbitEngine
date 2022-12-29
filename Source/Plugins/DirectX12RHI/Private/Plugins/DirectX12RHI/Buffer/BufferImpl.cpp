@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
-#include <Framework/RHI/Device.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IDisplay.h>
+#include <Framework/RHI/Display.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 //===============================================================
@@ -24,7 +24,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class DisplayImpl :public rhi::IDisplay {
+    class DisplayImpl :public rhi::Display {
     public:
 
         //===============================================================

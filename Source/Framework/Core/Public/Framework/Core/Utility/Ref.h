@@ -59,8 +59,8 @@ namespace ob::core {
 		RefObject(const RefObject&) = delete;
 		void operator=(const RefObject&) = delete;
 
-		void retain(){}
-		void release(){}
+		void retain();
+		void release();
 
 	private:
 		Atomic<s32> m_referenceCount{ 0 };
@@ -173,6 +173,12 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		operator T* () const;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief	派生クラスへキャスト
+		//@―---------------------------------------------------------------------------
+		template<class Y>
+		auto cast() const->std::enable_if_t<std::is_base_of<T, Y>::value, Y*>;
+
 	private:
 		RefObject* m_ptr = nullptr;
 	};
@@ -272,10 +278,10 @@ namespace ob::core {
 	template<class T>
 	Ref<T>& Ref<T>::operator=(const Ref<T>& ref) noexcept
 	{
-		if (a != b) {
-			OB_SAFE_RETAIN(b);
-			OB_SAFE_RELEASE(a);
-			a = b;
+		if (m_ptr != ref.m_ptr) {
+			OB_SAFE_RETAIN(ref.m_ptr);
+			OB_SAFE_RELEASE(m_ptr);
+			m_ptr = ref.m_ptr;
 		}
 		return *this;
 	}
@@ -288,10 +294,10 @@ namespace ob::core {
 	Ref<T>& Ref<T>::operator=(const Ref<Y>& ref) noexcept
 	{
 		T* t = ref.get();   // 暗黙変換チェック
-		if (a != b) {
-			OB_SAFE_RETAIN(b);
-			OB_SAFE_RELEASE(a);
-			a = b;
+		if (m_ptr != ref.m_ptr) {
+			OB_SAFE_RETAIN(m_ref.m_ptr);
+			OB_SAFE_RELEASE(m_ptr);
+			m_ptr = ref.m_ptr;
 		}
 		return *this;
 	}
@@ -390,6 +396,15 @@ namespace ob::core {
 	template<class T>
 	Ref<T>::operator T* () const {
 		return static_cast<T*>(m_ptr);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief	派生クラスへキャスト
+	//@―---------------------------------------------------------------------------
+	template<class T>
+	template<class Y>
+	auto Ref<T>::cast() const->std::enable_if_t<std::is_base_of<T, Y>::value, Y*> {
+		return static_cast<Y*>(m_ptr);
 	}
 
 	// 以下比較関数

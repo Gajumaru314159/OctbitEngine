@@ -5,8 +5,7 @@
 //***********************************************************
 #include <Framework/RHI/ResourceBarrier.h>
 #include <Framework/RHI/Device.h>
-#include <Framework/RHI/RenderTarget.h>
-#include <Framework/RHI/ITexture.h>
+#include <Framework/RHI/Texture.h>
 
 namespace ob::rhi {
 

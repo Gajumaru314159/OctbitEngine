@@ -12,11 +12,11 @@ namespace ob::rhi {
 	//! @brief  デスクリプタ・テーブル・コマンドパラメータ
 	//@―---------------------------------------------------------------------------
 	struct SetDescriptorTableParam {
-		DescriptorTable table;
+		Ref<DescriptorTable> table;
 		s32				slot;
 	public:
 		SetDescriptorTableParam() = default;
-		SetDescriptorTableParam(DescriptorTable table,s32 slot)
+		SetDescriptorTableParam(const Ref<DescriptorTable> table,s32 slot)
 			:table(table),slot(slot)
 		{}
 	};

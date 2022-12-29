@@ -7,7 +7,6 @@
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-#include <Framework/RHI/ITexture.h>
 
 namespace {
     int static const s_maxDisplayCount = 4;
