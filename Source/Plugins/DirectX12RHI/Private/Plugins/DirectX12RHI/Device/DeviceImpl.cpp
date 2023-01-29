@@ -40,6 +40,91 @@ namespace ob::rhi::dx12 {
 	DeviceImpl::DeviceImpl(FeatureLevel featureLevel)
 		:m_featureLevel(featureLevel) {
 		initialize();
+
+		/*
+
+
+		Ref<RenderPass> renderPass;
+		{
+			RenderPassDescHelper desc;
+			auto color = desc.addAttachment(TextureFormat::RGBA8);
+			auto pass0 = desc.addSubpassXCX({ color });
+
+			renderPass = RenderPass::Create(desc);
+			OB_ASSERT_EXPR(renderPass);
+		}
+
+		Ref<Shader> copyVS;
+		Ref<Shader> copyPS;
+		{
+			String code;
+			code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+			code.append(TC("Texture2D    g_mainTex    :register(t0);						\n"));
+			code.append(TC("// IN / OUT														\n"));
+			code.append(TC("struct VsIn {													\n"));
+			code.append(TC("  float2 pos	:POSITION;										\n"));
+			code.append(TC("};																\n"));
+			code.append(TC("struct PsIn {													\n"));
+			code.append(TC("  float2 pos	:SV_POSITION;									\n"));
+			code.append(TC("};																\n"));
+			code.append(TC("struct PsOut {													\n"));
+			code.append(TC("  float4 color0	:SV_TARGET0;									\n"));
+			code.append(TC("};																\n"));
+			code.append(TC("// エントリ														\n"));
+			code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
+			code.append(TC("    PsIn o;														\n"));
+			code.append(TC("    o.pos = i.pos;												\n"));
+			code.append(TC("    return o;													\n"));
+			code.append(TC("}																\n"));
+			code.append(TC("PsOut PS_Main(PsIn i){											\n"));
+			code.append(TC("    PsOut o;													\n"));
+			code.append(TC("    o.color0 = g_mainTex.Sample(g_mainSampler,i.pos *0.5 + 0.5);\n"));
+			code.append(TC("    return o;													\n"));
+			code.append(TC("}																\n"));
+
+			copyVS = VertexShader::Create(code);
+			copyPS = PixelShader::Create(code);
+			OB_ASSERT_EXPR(copyVS && copyPS);
+		}
+
+		Ref<RootSignature> signature;
+		{
+			RootSignatureDesc desc(
+				{
+					RootParameter::Range(DescriptorRangeType::SRV,1,0)
+				},
+				{
+					StaticSamplerDesc(SamplerDesc(),0),
+				}
+			);
+			signature = RootSignature::Create(desc);
+			signature->setName(TC("CopyRootSignature"));
+			OB_ASSERT_EXPR(signature);
+		}
+
+		Ref<PipelineState> pipeline;
+		{
+			PipelineStateDesc desc;
+			desc.renderPass = renderPass;
+			desc.subpass = 0;
+
+			desc.rootSignature = signature;
+			desc.vs = copyVS;
+			desc.ps = copyPS;
+			desc.vertexLayout.attributes = {
+				VertexAttribute(Semantic::Position,0.0f,Type::Float,2),
+			};
+			desc.blend[0] = BlendDesc::AlphaBlend;
+			desc.rasterizer.cullMode = CullMode::None;
+			desc.depthStencil.depth.enable = false;
+			desc.depthStencil.stencil.enable = false;
+
+			pipeline = PipelineState::Create(desc);
+			pipeline->setName(TC("TestPipeline"));
+			OB_ASSERT_EXPR(pipeline);
+		}
+		*/
+
 	}
 
 
@@ -65,33 +150,13 @@ namespace ob::rhi::dx12 {
 		m_commandQueue->entryCommandList(commandList);
 	}
 
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	void DeviceImpl::update() {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
-
-		// 
-
-		// コマンドをGPUに送信
-
-		//m_commandQueue->ExecuteCommandLists((UINT)cmdlists.size(), cmdlists.data());
-		//m_commandQueue->Signal(m_fence.Get(), ++m_fenceVal);
-		//if (m_fence->GetCompletedValue() < m_fenceVal)
-		//{
-		//	auto event = CreateEvent(nullptr, false, false, nullptr);
-		//	m_fence->SetEventOnCompletion(m_fenceVal, event);
-		//	WaitForSingleObject(event, INFINITE);
-		//	CloseHandle(event);
-		//}
-		//
-		//
-		//m_cmdAllocator->Reset();
-		//m_cmdList->Reset(m_cmdAllocator.Get(), nullptr);
-		//
-		//// 描画結果を画面に反映
-		//m_swapchain->Present(1, 0);
 	}
 
 
@@ -195,11 +260,9 @@ namespace ob::rhi::dx12 {
 	//! @brief  デスクリプタ・テーブルを生成
 	//@―---------------------------------------------------------------------------
 	Ref<DescriptorTable> DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
-		auto index = enum_cast(type);
-		if (!is_in_range(index, m_descriptorHeaps))return nullptr;
-		SAFE_CREATE(DescriptorTableImpl,*m_descriptorHeaps[index], type, elementNum);
+		if (m_descriptorHeaps.find(type)==m_descriptorHeaps.end())return nullptr;
+		SAFE_CREATE(DescriptorTableImpl,*m_descriptorHeaps[type], type, elementNum);
 	}
-
 
 
 	//@―---------------------------------------------------------------------------
@@ -211,14 +274,6 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  システム・コマンド・リストを取得
-	//@―---------------------------------------------------------------------------
-	//ComPtr<ID3D12GraphicsCommandList>& DeviceImpl::getSystemCommandList() {
-	//	return m_systemCmdList;
-	//}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルをアロケート
 	//! 
 	//! @param type     ヒープタイプ
@@ -226,12 +281,10 @@ namespace ob::rhi::dx12 {
 	//! @param size     割り当て個数
 	//@―---------------------------------------------------------------------------
 	void DeviceImpl::allocateHandle(DescriptorHeapType type, DescriptorHandle& handle, s32 size) {
-		auto index = enum_cast(type);
-		if (!is_in_range(index, m_descriptorHeaps)) {
+		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end()) {
 			OB_ABORT("不正なDescriptorHeapType");
 		}
-		OB_ASSERT(m_descriptorHeaps[index], "DescriptorHeapが生成されていません。");
-		m_descriptorHeaps[index]->allocateHandle(handle, size);
+		m_descriptorHeaps[type]->allocateHandle(handle, size);
 	}
 
 
@@ -240,8 +293,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void DeviceImpl::setDescriptorHeaps(CommandListImpl& cmdList) {
 		ID3D12DescriptorHeap* pHeaps[] = {
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->getNative().Get(),
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->getNative().Get(),
+			m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->getNative().Get(),
+			m_descriptorHeaps[DescriptorHeapType::Sampler]->getNative().Get(),
 		};
 		cmdList.getNative()->SetDescriptorHeaps((UINT)std::size(pHeaps), pHeaps);
 	}
@@ -257,8 +310,6 @@ namespace ob::rhi::dx12 {
 		m_commandQueue = std::make_unique<CommandQueue>(*this);
 		OB_DEBUG_CONTEXT(m_commandQueue->setName(TC("SystemCommandQueue")));
 
-		//if (!initializeCommand())return false;
-		//if (!initializeFence())return false;
 		if (!initializeDescriptorHeaps())return false;
 		return true;
 	}
@@ -362,62 +413,6 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  コマンドの初期化
-	//@―---------------------------------------------------------------------------
-	bool DeviceImpl::initializeCommand() {
-
-		// コマンドアロケータを生成
-		//auto result = m_device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(m_commandAllocator.ReleaseAndGetAddressOf()));
-		//if (FAILED(result)) {
-		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
-		//
-		//	// DeviceRemoved
-		//	if (result == 0x887a0005) {
-		//		result = m_device->GetDeviceRemovedReason();
-		//		Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
-		//	}
-		//}
-		//
-		//// システム・コマンドリストを生成
-		//result = m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator.Get(), nullptr, IID_PPV_ARGS(m_systemCmdList.ReleaseAndGetAddressOf()));
-		//if (FAILED(result)) {
-		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
-		//	return false;
-		//}
-		//
-		//
-		//// コマンドキューの生成
-		//D3D12_COMMAND_QUEUE_DESC cmdQueueDesc = {};
-		//cmdQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;				// コマンドリストと合わせる
-		//cmdQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;				// タイムアウトなし
-		//cmdQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;	// コマンドキューの優先度
-		//cmdQueueDesc.NodeMask = 0;										// GPUが1つの時は0、複数の時は識別用のbitを指定
-		//
-		//result = m_device->CreateCommandQueue(&cmdQueueDesc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
-		//if (FAILED(result)) {
-		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandQueue()"));
-		//	return false;
-		//}
-		//
-		return true;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  フェンスを初期化
-	//@―---------------------------------------------------------------------------
-	bool DeviceImpl::initializeFence() {
-		//m_fenceVal = 0;
-		//auto result = m_device->CreateFence(m_fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
-		//if (FAILED(result)) {
-		//	Utility::OutputFatalLog(result, TC("ID3D12Device::CreateFence()"));
-		//	return false;
-		//}
-		return true;
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief  ビデオカード情報を初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeVideoCardInfo() {
@@ -429,23 +424,21 @@ namespace ob::rhi::dx12 {
 	//! @brief  デスクリプタヒープを初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initializeDescriptorHeaps() {
-		m_descriptorHeaps.resize((size_t)enum_cast(DescriptorHeapType::DSV) + 1u);
 
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)] =
+		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)] =
+		m_descriptorHeaps[DescriptorHeapType::Sampler] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 100);
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)] =
+		m_descriptorHeaps[DescriptorHeapType::RTV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 100);
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)] =
+		m_descriptorHeaps[DescriptorHeapType::DSV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 100);
 
-		OB_DEBUG_CONTEXT(
-			m_descriptorHeaps[enum_cast(DescriptorHeapType::CBV_SRV_UAV)]->setName(TC("SystemCBV_SRV_UAVHeap"));
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::Sampler)]->setName(TC("SystemSamplerHeap"));
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::RTV)]->setName(TC("SystemRTVHeap"));
-		m_descriptorHeaps[enum_cast(DescriptorHeapType::DSV)]->setName(TC("SystemDSVHeap"));
-		);
+		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName(TC("SystemCBV_SRV_UAVHeap"));
+		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName(TC("SystemSamplerHeap"));
+		m_descriptorHeaps[DescriptorHeapType::RTV]->setName(TC("SystemRTVHeap"));
+		m_descriptorHeaps[DescriptorHeapType::DSV]->setName(TC("SystemDSVHeap"));
+
 		return true;
 	}
 

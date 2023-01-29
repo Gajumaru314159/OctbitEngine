@@ -196,7 +196,12 @@ namespace ob::rhi::dx12 {
 		UINT64                              m_fenceVal;
 
 
-		Array<std::unique_ptr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
+		HashMap<DescriptorHeapType,UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
+
+		// システムリソース
+		Ref<PipelineState> m_copyPipeline;
+		Ref<FrameBuffer> m_copyFrameBuffer;
+
 
 #ifdef OB_DEBUG
 		Pimpl<class PIXModule> m_pixModule;
