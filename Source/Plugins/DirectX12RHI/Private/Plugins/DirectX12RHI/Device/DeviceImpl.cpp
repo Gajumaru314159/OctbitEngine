@@ -250,7 +250,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点シェーダを生成
 	//@―---------------------------------------------------------------------------
-	Ref<Shader> DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
+	Ref<Shader> DeviceImpl::createShader(BlobView binary, ShaderStage stage) {
 		SAFE_CREATE(ShaderImpl,binary, stage);
 	}
 

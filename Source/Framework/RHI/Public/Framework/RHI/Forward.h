@@ -6,6 +6,12 @@
 #pragma once
 
 namespace ob::rhi {
+
+	struct SetDescriptorTableParam;
+	struct DrawParam;
+	struct DrawIndexedParam;
+
+	class Device;
 	class Buffer;
 	class CommandList;
 	class DescriptorTable;
@@ -23,4 +29,5 @@ namespace ob::rhi {
 	class HullShader;
 	class DomainShader;
 	class Texture;
+
 }

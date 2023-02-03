@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/Utility/Ref.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
@@ -16,8 +18,6 @@
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
-#include <Framework/Core/Misc/BlobView.h>
-#include <Framework/Core/Utility/Ref.h>
 
 //===============================================================
 // クラス宣言
@@ -80,7 +80,7 @@ namespace ob::rhi {
         virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) = 0;
 
         virtual Ref<Shader>         createShader(const String& code, ShaderStage stage) = 0;
-        virtual Ref<Shader>         createShader(const Blob& binary, ShaderStage stage) = 0;
+        virtual Ref<Shader>         createShader(BlobView binary, ShaderStage stage) = 0;
 
         virtual Ref<DescriptorTable>createDescriptorTable(DescriptorHeapType type, s32 elementNum) = 0;
 

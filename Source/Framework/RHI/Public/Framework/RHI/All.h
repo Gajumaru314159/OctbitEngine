@@ -12,7 +12,6 @@
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/RenderTexture.h>
-#include <Framework/RHI/ResourceBarrier.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/Display.h>

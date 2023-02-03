@@ -1,23 +1,14 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドリスト・インターフェイス
+//! @brief		コマンドリスト
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Core/Geometory/Viewport.h>
-#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Forward.h>
+#include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/CommandParam.h>
-
-//===============================================================
-// 前方宣言
-//===============================================================
-namespace ob::rhi {
-    struct SetDescriptorTableParam;
-    struct DrawParam;
-    struct DrawIndexedParam;
-}
 
 //===============================================================
 // クラス宣言
@@ -25,7 +16,7 @@ namespace ob::rhi {
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      コマンドリスト・インターフェイス
+    //! @brief      コマンドリスト
     //@―---------------------------------------------------------------------------
     class CommandList :public GraphicObject {
     public:

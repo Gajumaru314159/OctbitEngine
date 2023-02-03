@@ -4,15 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Misc/BlobView.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/ShaderStage.h>
-
-//===============================================================
-// クラス定義
-//===============================================================
-namespace ob::core{
-    class Blob;
-}
 
 //===============================================================
 // クラス定義
@@ -85,7 +79,7 @@ namespace ob::rhi {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        static Ref<Shader> Create(const Blob& binary);
+        static Ref<Shader> Create(BlobView binary);
 
     };
 
@@ -111,7 +105,7 @@ namespace ob::rhi {
         //! @param binary   シェーダ・バイナリ
         //! @param name     オブジェクト名
         //@―---------------------------------------------------------------------------
-        static Ref<Shader> Create(const Blob& binary);
+        static Ref<Shader> Create(BlobView binary);
 
     };
 

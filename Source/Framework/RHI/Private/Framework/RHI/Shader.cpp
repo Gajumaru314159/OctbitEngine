@@ -52,7 +52,7 @@ namespace ob::rhi {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    Ref<Shader> VertexShader::Create(const Blob& binary) {
+    Ref<Shader> VertexShader::Create(BlobView binary) {
         return Device::Get()->createShader(binary, ShaderStage::Vertex);
     }
     
@@ -74,7 +74,7 @@ namespace ob::rhi {
     //! @param binarySet    シェーダ・バイナリ
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
-    Ref<Shader> PixelShader::Create(const Blob& binary) {
+    Ref<Shader> PixelShader::Create(BlobView binary) {
         return Device::Get()->createShader(binary, ShaderStage::Pixel);
     }
 

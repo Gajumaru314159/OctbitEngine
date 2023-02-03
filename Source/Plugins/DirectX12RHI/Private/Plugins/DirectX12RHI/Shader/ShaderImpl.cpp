@@ -77,7 +77,7 @@ namespace ob::rhi::dx12 {
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const Blob& blob, ShaderStage stage, StringView name)
+    ShaderImpl::ShaderImpl(BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
     {
         // チャンクタイプをチェック
@@ -85,7 +85,7 @@ namespace ob::rhi::dx12 {
         if (!isShaderBlob) {
             LOG_ERROR_EX("Graphic", "シェーダではないバイナリファイルから構築しようとしました。");
         }
-        m_shaderBlob = blob;
+        m_shaderBlob = Blob(blob.data(),blob.size());
     }
 
 
