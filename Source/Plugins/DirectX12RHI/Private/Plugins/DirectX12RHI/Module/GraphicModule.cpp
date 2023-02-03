@@ -13,7 +13,7 @@ namespace ob::rhi::dx12 {
 	public:
 		DirectX12GraphicModule()
 			: m_objectManager(2)
-			, m_device(FeatureLevel::Default)
+			, m_device()
 		{
 
 		}

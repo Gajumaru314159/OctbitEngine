@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		DeviceImpl(FeatureLevel featureLevel);
+		DeviceImpl();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  デストラクタ
@@ -180,7 +180,6 @@ namespace ob::rhi::dx12 {
 
 	private:
 
-		FeatureLevel                        m_featureLevel;             // フィーチャーレベル
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
 

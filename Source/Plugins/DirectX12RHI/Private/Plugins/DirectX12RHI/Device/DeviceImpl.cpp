@@ -36,8 +36,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DeviceImpl::DeviceImpl(FeatureLevel featureLevel)
-		:m_featureLevel(featureLevel) {
+	DeviceImpl::DeviceImpl()
+	{
 		initialize();
 
 		/*
