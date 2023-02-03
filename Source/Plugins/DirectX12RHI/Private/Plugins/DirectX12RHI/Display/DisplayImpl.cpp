@@ -35,105 +35,9 @@ namespace ob::rhi::dx12 {
 
         m_syncInterval = desc.vsync ? 1 : 0;
 
-
-        // レンダーパス
-        {
-            RenderPassDescHelper rdesc;
-            auto color = rdesc.addAttachment(m_desc.format);
-            auto pass0 = rdesc.addSubpassXCX({ color });
-
-            m_renderPass = RenderPass::Create(rdesc);
-            OB_ASSERT_EXPR(m_renderPass);
-        }
-
-        {            
-            Vec2 vertices[] = {
-                {-1,-1},
-                {+1,-1},
-                {-1,+1},
-                {+1,-1},
-                {+1,+1},
-                {-1,+1},
-            };
-            BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
-            bdesc.name = desc.name + TC("_Vertices");
-            m_verices = Buffer::Create(bdesc);
-            m_verices->updateDirect(bdesc.bufferSize, vertices);
-        }
-
-        Ref<Shader> vs;
-        Ref<Shader> ps;
-        {
-            String code;
-            code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-            code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-            code.append(TC("// IN / OUT														\n"));
-            code.append(TC("struct VsIn {													\n"));
-            code.append(TC("  float2 pos	:POSITION;										\n"));
-            code.append(TC("};																\n"));
-            code.append(TC("struct PsIn {													\n"));
-            code.append(TC("  float4 pos	:SV_POSITION;									\n"));
-            code.append(TC("  float2 uv	    :TEXCOORD;									    \n"));
-            code.append(TC("};																\n"));
-            code.append(TC("// エントリ														\n"));
-            code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
-            code.append(TC("    PsIn o;														\n"));
-            code.append(TC("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n"));
-            code.append(TC("    o.uv = i.pos.xy;								            \n"));
-            code.append(TC("    return o;													\n"));
-            code.append(TC("}																\n"));
-            code.append(TC("float4 PS_Main(PsIn i):SV_TARGET0{								\n"));
-            code.append(TC("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n"));
-            code.append(TC("}																\n"));
-
-            vs = VertexShader::Create(code);
-            ps = PixelShader::Create(code);
-            OB_ASSERT_EXPR(vs && ps);
-        }
-
-        Ref<RootSignature> signature;
-        {
-            RootSignatureDesc desc(
-                {
-                    RootParameter::Range(DescriptorRangeType::SRV,1,0),
-                },
-                {
-                    StaticSamplerDesc(SamplerDesc(),0),
-                }
-            );
-            desc.name = m_desc.name;
-            signature = RootSignature::Create(desc);
-            OB_ASSERT_EXPR(signature);
-        }
-
-        Ref<PipelineState> pipeline;
-        {
-            PipelineStateDesc desc;
-            desc.name = m_desc.name;
-            desc.renderPass = m_renderPass;
-            desc.subpass = 0;
-
-            desc.rootSignature = signature;
-            desc.vs = vs;
-            desc.ps = ps;
-            desc.vertexLayout.attributes = {
-                VertexAttribute(Semantic::Position,0,Type::Float,2),
-            };
-            desc.blend[0] = BlendDesc::AlphaBlend;
-            desc.rasterizer.cullMode = CullMode::None;
-            desc.depthStencil.depth.enable = false;
-            desc.depthStencil.stencil.enable = false;
-
-            pipeline = PipelineState::Create(desc);
-            OB_ASSERT_EXPR(pipeline);
-        }
-
-        m_signature = signature;
-        m_pipeline = pipeline;
-
-
         if (!createDisplay(rDevice))return;
-        if (!createBuffer(rDevice))return;
+        if (!createResources(rDevice))return;
+        if (!createBuffers(rDevice))return;
 
         m_initialized = true;
 
@@ -149,7 +53,7 @@ namespace ob::rhi::dx12 {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ
+    //! @brief  スワップチェーン生成
     //@―---------------------------------------------------------------------------
     bool DisplayImpl::createDisplay(DeviceImpl& rDevice) {
         auto& window = m_desc.window;
@@ -217,8 +121,6 @@ namespace ob::rhi::dx12 {
             }
         }
 
-        m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
-
         return true;
     }
 
@@ -226,7 +128,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      レンダーテクスチャを初期化
     //@―---------------------------------------------------------------------------
-    bool DisplayImpl::createBuffer(DeviceImpl& rDevice) {
+    bool DisplayImpl::createBuffers(DeviceImpl& rDevice) {
 
         if (!is_in_range(m_desc.bufferCount, 1, s_maxDisplayCount)) {
             LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxDisplayCount, m_desc.bufferCount);
@@ -236,10 +138,8 @@ namespace ob::rhi::dx12 {
         HRESULT result;
 
         // バッファを生成
-        m_textures.resize(m_desc.bufferCount);
-        m_buffers.resize(m_desc.bufferCount);
-
-        rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV, m_desc.bufferCount);
+        m_textures.reserve(m_desc.bufferCount);
+        m_buffers.reserve(m_desc.bufferCount);
 
         // レンダーターゲットビュー生成
         D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
@@ -256,20 +156,123 @@ namespace ob::rhi::dx12 {
                 return false;
             }
 
-            m_textures[i] = new TextureImpl(rDevice,resource,D3D12_RESOURCE_STATE_PRESENT);
+            auto& texture = m_textures.emplace_back(new TextureImpl(rDevice,resource,D3D12_RESOURCE_STATE_PRESENT));
 
             {
                 FrameBufferDesc bdesc;
                 bdesc.renderPass = m_renderPass;
-                bdesc.attachments.push_back(m_textures[i]);
+                bdesc.attachments.push_back(texture);
 
-                m_buffers[i] = FrameBuffer::Create(bdesc);
-                OB_ASSERT_EXPR(m_buffers[i]);
+                auto& buffer = m_buffers.emplace_back(FrameBuffer::Create(bdesc));
+                OB_ASSERT_EXPR(buffer);
             }
 
             m_viewport = CD3DX12_VIEWPORT(resource.Get());
             m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
         }
+
+        return true;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //@―---------------------------------------------------------------------------
+    bool DisplayImpl::createResources(DeviceImpl& rDevice) {
+        // レンダーパス
+        {
+            RenderPassDescHelper rdesc;
+            auto color = rdesc.addAttachment(m_desc.format);
+            auto pass0 = rdesc.addSubpassXCX({ color });
+
+            m_renderPass = RenderPass::Create(rdesc);
+            OB_ASSERT_EXPR(m_renderPass);
+        }
+
+        {
+            Vec2 vertices[] = {
+                {-1,-1},
+                {+1,-1},
+                {-1,+1},
+                {+1,-1},
+                {+1,+1},
+                {-1,+1},
+            };
+            BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
+            bdesc.name = m_desc.name + TC("_Vertices");
+            m_verices = Buffer::Create(bdesc);
+            m_verices->updateDirect(bdesc.bufferSize, vertices);
+        }
+
+        Ref<Shader> vs;
+        Ref<Shader> ps;
+        {
+            String code;
+            code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+            code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
+            code.append(TC("// IN / OUT														\n"));
+            code.append(TC("struct VsIn {													\n"));
+            code.append(TC("  float2 pos	:POSITION;										\n"));
+            code.append(TC("};																\n"));
+            code.append(TC("struct PsIn {													\n"));
+            code.append(TC("  float4 pos	:SV_POSITION;									\n"));
+            code.append(TC("  float2 uv	    :TEXCOORD;									    \n"));
+            code.append(TC("};																\n"));
+            code.append(TC("// エントリ														\n"));
+            code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
+            code.append(TC("    PsIn o;														\n"));
+            code.append(TC("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n"));
+            code.append(TC("    o.uv = i.pos.xy;								            \n"));
+            code.append(TC("    return o;													\n"));
+            code.append(TC("}																\n"));
+            code.append(TC("float4 PS_Main(PsIn i):SV_TARGET0{								\n"));
+            code.append(TC("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n"));
+            code.append(TC("}																\n"));
+
+            vs = VertexShader::Create(code);
+            ps = PixelShader::Create(code);
+            OB_ASSERT_EXPR(vs && ps);
+        }
+
+        Ref<RootSignature> signature;
+        {
+            RootSignatureDesc desc(
+                {
+                    RootParameter::Range(DescriptorRangeType::SRV,1,0),
+                },
+                {
+                    StaticSamplerDesc(SamplerDesc(),0),
+                }
+                );
+            desc.name = m_desc.name;
+            signature = RootSignature::Create(desc);
+            OB_ASSERT_EXPR(signature);
+        }
+
+        Ref<PipelineState> pipeline;
+        {
+            PipelineStateDesc desc;
+            desc.name = m_desc.name;
+            desc.renderPass = m_renderPass;
+            desc.subpass = 0;
+
+            desc.rootSignature = signature;
+            desc.vs = vs;
+            desc.ps = ps;
+            desc.vertexLayout.attributes = {
+                VertexAttribute(Semantic::Position,0,Type::Float,2),
+            };
+            desc.blend[0] = BlendDesc::AlphaBlend;
+            desc.rasterizer.cullMode = CullMode::None;
+            desc.depthStencil.depth.enable = false;
+            desc.depthStencil.stencil.enable = false;
+
+            pipeline = PipelineState::Create(desc);
+            OB_ASSERT_EXPR(pipeline);
+        }
+
+        m_signature = signature;
+        m_pipeline = pipeline;
 
         return true;
     }
@@ -363,7 +366,9 @@ namespace ob::rhi::dx12 {
             return;
         }
 
-        m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+        auto index = m_swapChain->GetCurrentBackBufferIndex();
+        m_textures.setIndex(index);
+        m_buffers.setIndex(index);
 
     }
 
@@ -372,7 +377,7 @@ namespace ob::rhi::dx12 {
     //! @brief      デスクリプタCPUハンドルを取得
     //@―---------------------------------------------------------------------------
     D3D12_CPU_DESCRIPTOR_HANDLE DisplayImpl::getCpuHandle()const {
-        return m_hRTV.getCpuHandle(m_frameIndex);
+        return m_textures.current().cast<TextureImpl>()->getRTV().getCpuHandle();
     }
 
 
@@ -380,7 +385,7 @@ namespace ob::rhi::dx12 {
     //! @brief      デスクリプタGPUハンドルを取得
     //@―---------------------------------------------------------------------------
     D3D12_GPU_DESCRIPTOR_HANDLE DisplayImpl::getGpuHandle()const {
-        return m_hRTV.getGpuHandle(m_frameIndex);
+        return m_textures.current().cast<TextureImpl>()->getRTV().getGpuHandle();
     }
 
 
@@ -405,7 +410,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     ID3D12Resource* DisplayImpl::getResource()const {
 
-        return m_textures[m_frameIndex].cast<TextureImpl>()->getResource();
+        return m_textures.current().cast<TextureImpl>()->getResource();
     }
 
 
@@ -417,7 +422,7 @@ namespace ob::rhi::dx12 {
         if (!m_bindedTexture)
             return;
 
-        cmdList.beginRenderPass(m_buffers[m_frameIndex]);
+        cmdList.beginRenderPass(m_buffers.current());
         cmdList.setRootSignature(m_signature);
         cmdList.setPipelineState(m_pipeline);
 
@@ -434,7 +439,7 @@ namespace ob::rhi::dx12 {
         }
 
 
-        if (auto texture = m_textures[m_frameIndex].cast<TextureImpl>()) {
+        if (auto texture = m_textures.current().cast<TextureImpl>()) {
 
             D3D12_RESOURCE_BARRIER barrier;
             if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {

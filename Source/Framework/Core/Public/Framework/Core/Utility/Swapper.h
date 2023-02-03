@@ -155,7 +155,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template <class... Args>
 		T& emplace_back(Args&&... args) {
-			m_instances.emplace_back(forward(args...));
+			return m_instances.emplace_back(args...);
 		}
 
 
@@ -185,7 +185,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		インデックスを変更
 		//@―---------------------------------------------------------------------------
-		void setIndex(size_t index)const noexcept {
+		void setIndex(size_t index){
 			OB_ASSERT(index<size(),"範囲外です。");
 			m_index = index;
 		}

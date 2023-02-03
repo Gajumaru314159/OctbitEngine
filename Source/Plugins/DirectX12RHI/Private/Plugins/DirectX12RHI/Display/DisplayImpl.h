@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Utility/Swapper.h>
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/RenderPass.h>
@@ -124,44 +125,31 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      レンダーテクスチャを初期化
-        //@―---------------------------------------------------------------------------
         bool createDisplay(DeviceImpl& rDevice);
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      レンダーテクスチャを初期化
-        //@―---------------------------------------------------------------------------
-        bool createBuffer(DeviceImpl& rDevice);
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      カラースペースを設定
-        //@―---------------------------------------------------------------------------
+        bool createResources(DeviceImpl& rDevice);
+        bool createBuffers(DeviceImpl& rDevice);
+        
         bool setColorSpace();
 
 
     private:
 
         DisplayDesc m_desc;
+        
+        ComPtr<IDXGISwapChain4>     m_swapChain;
+        Swapper<Ref<RenderTexture>> m_textures;         
+        Swapper<Ref<FrameBuffer>>   m_buffers;
 
-        ComPtr<IDXGISwapChain4>     m_swapChain;        
-        Array<Ref<RenderTexture>>   m_textures;         
-        Array<Ref<FrameBuffer>>     m_buffers;          
+        // 描画リソース
         Ref<RenderPass>             m_renderPass;       
         Ref<RootSignature>          m_signature;
         Ref<PipelineState>          m_pipeline;
-
         Ref<Buffer>                 m_verices;
         Ref<Texture>                m_bindedTexture;
         Ref<DescriptorTable>        m_bindedTextureTable;
 
-        D3D12_VIEWPORT m_viewport;                      //!< ビューポート
-        D3D12_RECT m_scissorRect;                       //!< シザー矩形
-
-        DescriptorHandle m_hRTV;
-        s32 m_frameIndex;
+        D3D12_VIEWPORT              m_viewport;
+        D3D12_RECT                  m_scissorRect;
 
         UINT m_syncInterval;
 
