@@ -160,8 +160,7 @@ namespace ob::rhi::dx12 {
 
 				color = texture->getRTV().getCpuHandle();
 
-				// TODO
-				//m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET, 0);
+				m_cache.addTexture(*texture,D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 				viewport = texture->getViewport();
 				scissor = texture->getScissorRect();
@@ -179,7 +178,7 @@ namespace ob::rhi::dx12 {
 
 				depth = texture->getDSV().getCpuHandle();
 
-				//m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE, 0);
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 
 			} else {
 				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]", m_frameBuffer->getName(), m_subpassIndex);
@@ -201,6 +200,7 @@ namespace ob::rhi::dx12 {
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &scissor);
 
+		// 描画対象をクリア
 		for (auto [index,attachmentDesc] : Indexed(attachmentDescs)) {
 
 			if (auto texture = attachments[index].cast<TextureImpl>()) {
@@ -239,9 +239,14 @@ namespace ob::rhi::dx12 {
 		for (auto [index,desc]: Indexed(renderPassDesc.attachments)) {
 
 			auto& texture = attachments[index];
+			if (auto pTexture = texture.cast<TextureImpl>()) {
+				
+				auto finalState = renderPassDesc.attachments[index].finalState;
+				m_cache.addTexture(*pTexture, TypeConverter::Convert(finalState));
 
-			// attachment.finalStateへのステート変更
-			// subresourceの扱い要チェック
+			}
+
+			// TODO subresourceの扱いチェック
 		}
 
 		m_frameBuffer = nullptr;
@@ -250,7 +255,7 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      スワップチェーンにテクスチャを適用
+	//! @brief      ディスプレイにテクスチャを適用
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
 	{
@@ -260,42 +265,7 @@ namespace ob::rhi::dx12 {
 		auto& rDisplay = *display.cast<DisplayImpl>();
 		auto& rTexture = *texture.cast<TextureImpl>();
 
-		//rDisplay.recordApplyDisplay(*this);
-		//return;
-		{
-			D3D12_RESOURCE_BARRIER barrier[2] = {
-				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_COPY_DEST),
-				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_COPY_SOURCE),
-			};
-			m_cmdList->ResourceBarrier((UINT)std::size(barrier), barrier);
-		}
-
-		{
-			auto desc = rTexture.getResource()->GetDesc();
-			auto desc2 = rDisplay.getResource()->GetDesc();
-
-			const int maxSubresources = 100;
-			D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprints[maxSubresources];
-			UINT numRows[maxSubresources];
-			UINT64 rowSizeInBytes[maxSubresources], uploadSize;
-			
-			m_device.getNative()->GetCopyableFootprints(&desc,0,1,0, footprints, numRows, rowSizeInBytes, &uploadSize);
-
-			m_cmdList->CopyTextureRegion(
-				&CD3DX12_TEXTURE_COPY_LOCATION(rDisplay.getResource(), 0),
-				0, 0, 0,
-				&CD3DX12_TEXTURE_COPY_LOCATION(rTexture.getResource(),0),
-				nullptr);
-		}
-
-
-		{
-			D3D12_RESOURCE_BARRIER barrier[2] = {
-				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PRESENT),
-				CD3DX12_RESOURCE_BARRIER::Transition(rTexture.getResource(), D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET),
-			};
-			m_cmdList->ResourceBarrier((UINT)std::size(barrier), barrier);
-		}
+		rDisplay.recordApplyDisplay(*this);
 	}
 
 

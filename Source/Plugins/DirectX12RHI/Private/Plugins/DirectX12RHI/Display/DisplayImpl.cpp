@@ -57,6 +57,7 @@ namespace ob::rhi::dx12 {
             };
             BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
             m_verices = Buffer::Create(bdesc);
+            m_verices->updateDirect(bdesc.bufferSize, vertices);
         }
 
         Ref<Shader> vs;
@@ -76,7 +77,7 @@ namespace ob::rhi::dx12 {
             code.append(TC("// エントリ														\n"));
             code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
             code.append(TC("    PsIn o;														\n"));
-            code.append(TC("    o.pos = float4(i.pos*2-1,0,1);						        \n"));
+            code.append(TC("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n"));
             code.append(TC("    o.uv = i.pos.xy;								            \n"));
             code.append(TC("    return o;													\n"));
             code.append(TC("}																\n"));
@@ -118,7 +119,7 @@ namespace ob::rhi::dx12 {
             };
             desc.blend[0] = BlendDesc::AlphaBlend;
             desc.rasterizer.cullMode = CullMode::None;
-            desc.depthStencil.depth.enable = true;
+            desc.depthStencil.depth.enable = false;
             desc.depthStencil.stencil.enable = false;
 
             pipeline = PipelineState::Create(desc);
@@ -126,6 +127,7 @@ namespace ob::rhi::dx12 {
             OB_ASSERT_EXPR(pipeline);
         }
 
+        m_signature = signature;
         m_pipeline = pipeline;
 
 
@@ -245,7 +247,7 @@ namespace ob::rhi::dx12 {
                 return false;
             }
 
-            m_textures[i] = new TextureImpl(rDevice,resource);
+            m_textures[i] = new TextureImpl(rDevice,resource,D3D12_RESOURCE_STATE_PRESENT);
 
             {
                 FrameBufferDesc bdesc;
@@ -407,6 +409,7 @@ namespace ob::rhi::dx12 {
             return;
 
         cmdList.beginRenderPass(m_buffers[m_frameIndex]);
+        cmdList.setRootSignature(m_signature);
         cmdList.setPipelineState(m_pipeline);
 
         {
@@ -420,6 +423,17 @@ namespace ob::rhi::dx12 {
             param.vertexCount = 6;
             cmdList.draw(param);
         }
+
+
+        if (auto texture = m_textures[m_frameIndex].cast<TextureImpl>()) {
+
+            D3D12_RESOURCE_BARRIER barrier;
+            if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
+                cmdList.getNative()->ResourceBarrier(1, &barrier);
+            }
+
+        }
+
     }
 
     //@―---------------------------------------------------------------------------

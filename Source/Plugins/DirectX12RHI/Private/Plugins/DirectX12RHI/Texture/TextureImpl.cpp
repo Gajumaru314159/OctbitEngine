@@ -7,6 +7,7 @@
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
+#include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 #include <DirectXTex.h>
 
 
@@ -21,10 +22,13 @@ namespace ob::rhi::dx12 {
 	{
 
 		auto format = TypeConverter::Convert(desc.format);
+
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 		
 		// 定義生成
 		D3D12_RESOURCE_DESC resourceDesc{};
-		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
+		resourceDesc.DepthOrArraySize = std::max(desc.arrayNum, 1);
+		resourceDesc.MipLevels = std::max(desc.mipLevels, 0);
 		
 		switch (desc.type) {
 		case TextureType::Texture1D:
@@ -48,20 +52,17 @@ namespace ob::rhi::dx12 {
 			break;
 		}
 
-		resourceDesc.DepthOrArraySize = std::max(desc.arrayNum, 1);
-		resourceDesc.MipLevels = std::max(desc.mipLevels,0);
-
+		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
 		const FLOAT color[4] = { 1.f,1.f,1.f,1.f };
 		auto clearValue = CD3DX12_CLEAR_VALUE(format, color);
 
-		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-
+		// リソース生成
 		auto result = rDevice.getNative()->CreateCommittedResource(
 			&heapProps,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			m_state,
 			&clearValue,
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
@@ -107,13 +108,16 @@ namespace ob::rhi::dx12 {
 			(UINT16)metadata.arraySize,
 			(UINT16)metadata.mipLevels);
 		
+
+		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+
 		ComPtr<ID3D12Resource> resource;
 		
 		result = m_device.getNative()->CreateCommittedResource(
 			&texHeapProp,
 			D3D12_HEAP_FLAG_NONE,
 			&resDesc,
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			m_state,
 			nullptr,
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 		
@@ -177,7 +181,7 @@ namespace ob::rhi::dx12 {
 
 		// 定義生成
 		D3D12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
-		D3D12_RESOURCE_STATES resourceStates = D3D12_RESOURCE_STATE_COMMON;
+		m_state = D3D12_RESOURCE_STATE_COMMON;
 
 		D3D12_CLEAR_VALUE* clearValue = nullptr;
 		const bool isColor = !TextureFormatUtility::HasDepth(desc.format);
@@ -187,7 +191,7 @@ namespace ob::rhi::dx12 {
 
 			OB_ASSERT(!TextureFormatUtility::HasDepth(desc.format), "カラーに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
-			resourceStates = D3D12_RESOURCE_STATE_RENDER_TARGET;
+			m_state = D3D12_RESOURCE_STATE_RENDER_TARGET;
 			clearValue = &colorClearValue;
 
 		}
@@ -195,7 +199,7 @@ namespace ob::rhi::dx12 {
 
 			OB_ASSERT(TextureFormatUtility::HasDepth(desc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-			resourceStates = D3D12_RESOURCE_STATE_DEPTH_WRITE;
+			m_state = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 			clearValue = &depthClearValue;
 
 		}
@@ -211,7 +215,7 @@ namespace ob::rhi::dx12 {
 			&texHeapProp,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
-			resourceStates,
+			m_state,
 			clearValue,
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
@@ -288,9 +292,10 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource)
+	TextureImpl::TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state)
 		: m_device(rDevice)
 		, m_resource(resource)
+		, m_state(state)
 	{
 
 		if (!resource)
@@ -336,6 +341,7 @@ namespace ob::rhi::dx12 {
 		m_renderDesc.format = m_desc.format;
 		m_renderDesc.size = m_desc.size;
 		m_renderDesc.clear.color = Color::White;
+
 	}
 
 
@@ -424,6 +430,22 @@ namespace ob::rhi::dx12 {
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
 	}
 
+	bool TextureImpl::addResourceTransition(D3D12_RESOURCE_BARRIER& barrier,D3D12_RESOURCE_STATES state,s32 subresource) {
+
+		if (m_state == state)
+			return false;
+
+		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		barrier.Transition.pResource = m_resource.Get();
+		barrier.Transition.Subresource = subresource==-1?D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES:subresource;
+		barrier.Transition.StateBefore = m_state;
+		barrier.Transition.StateAfter = state;
+
+		m_state = state;
+
+		return true;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  名前変更時

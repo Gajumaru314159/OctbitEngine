@@ -150,6 +150,7 @@ namespace ob::rhi::dx12 {
         Array<Ref<RenderTexture>>   m_textures;         
         Array<Ref<FrameBuffer>>     m_buffers;          
         Ref<RenderPass>             m_renderPass;       
+        Ref<RootSignature>          m_signature;
         Ref<PipelineState>          m_pipeline;
 
         Ref<Buffer>                 m_verices;

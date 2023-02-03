@@ -115,6 +115,10 @@ namespace ob::rhi::dx12 {
         //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
         //@―---------------------------------------------------------------------------
         static D3D12_HEAP_TYPE Convert(ResourceUsage value);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
+        //@―---------------------------------------------------------------------------
+        static D3D12_RESOURCE_STATES Convert(ResourceState value);
 
         //@―---------------------------------------------------------------------------
         //! @brief  DXGI_FORMAT を TextureFormat に変換

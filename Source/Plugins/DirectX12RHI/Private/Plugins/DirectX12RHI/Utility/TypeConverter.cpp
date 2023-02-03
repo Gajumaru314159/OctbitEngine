@@ -491,6 +491,24 @@ namespace ob::rhi::dx12
     }
 
     //@―---------------------------------------------------------------------------
+    //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
+    //@―---------------------------------------------------------------------------
+    D3D12_RESOURCE_STATES TypeConverter::Convert(ResourceState value) {
+        switch (value)
+        {
+        case ResourceState::Common:                 return D3D12_RESOURCE_STATE_COMMON;
+        case ResourceState::PixelShadeResource:     return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        case ResourceState::ColorAttachment:        return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        case ResourceState::DepthAttachment:        return D3D12_RESOURCE_STATE_DEPTH_WRITE;
+        case ResourceState::DepthStencilAttachment: return D3D12_RESOURCE_STATE_DEPTH_WRITE;
+        case ResourceState::Present:                return D3D12_RESOURCE_STATE_PRESENT;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なResourceState[value={}]", enum_cast(value));
+        return D3D12_RESOURCE_STATE_COMMON;
+    }
+
+    //@―---------------------------------------------------------------------------
     //! @brief  DXGI_FORMAT を TextureFormat に変換
     //@―---------------------------------------------------------------------------
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
@@ -521,6 +539,9 @@ namespace ob::rhi::dx12
         case DXGI_FORMAT_BC2_UNORM_SRGB:		return TextureFormat::BC2_SRGB;
         case DXGI_FORMAT_BC3_UNORM_SRGB:		return TextureFormat::BC3_SRGB;
         case DXGI_FORMAT_BC7_UNORM_SRGB:		return TextureFormat::BC7_SRGB;
+
+        case DXGI_FORMAT_B8G8R8A8_UNORM:		return TextureFormat::RGBA8;
+
         }
         LOG_WARNING_EX("Graphic", "不正なDXGI_FORMAT[value={}]", enum_cast(value));
         return TextureFormat::Unknown;

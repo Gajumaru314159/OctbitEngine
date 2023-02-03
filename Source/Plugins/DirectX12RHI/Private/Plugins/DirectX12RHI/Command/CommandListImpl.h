@@ -72,7 +72,7 @@ namespace ob::rhi::dx12 {
         void endRenderPass();
         
         //@―---------------------------------------------------------------------------
-        //! @brief      スワップチェーンにテクスチャを適用
+        //! @brief      ディスプレイにテクスチャを適用
         //@―---------------------------------------------------------------------------
         void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) override;
 

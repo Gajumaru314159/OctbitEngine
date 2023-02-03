@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
+#include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 
 namespace ob::rhi::dx12 {
 
@@ -24,15 +26,24 @@ namespace ob::rhi::dx12 {
 
         }
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  バッファの遷移追加
+        //@―---------------------------------------------------------------------------
         void addBuffer(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after) {
 
             OB_NOTIMPLEMENTED();
 
         }
 
-        void addTexture(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, s32 subresourceIndex) {
+        //@―---------------------------------------------------------------------------
+        //! @brief  テクスチャの遷移追加
+        //@―---------------------------------------------------------------------------
+        void addTexture(TextureImpl& texture, D3D12_RESOURCE_STATES after, s32 subresource = -1) {
 
-            addTransition(resource, before, after);
+            D3D12_RESOURCE_BARRIER barrier{};
+            if (texture.addResourceTransition(barrier, after, subresource)) {
+                m_barriers.push_back(barrier);
+            }
 
         }
 

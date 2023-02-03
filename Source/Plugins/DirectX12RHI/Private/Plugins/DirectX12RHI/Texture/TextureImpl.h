@@ -17,6 +17,7 @@
 //===============================================================
 namespace ob::rhi::dx12 {
     class DeviceImpl;
+    class ResourceStateCache;
 }
 
 
@@ -80,7 +81,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      SwapChainのリソースからRenderTextureを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource);
+        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state);
 
 
     public:
@@ -109,6 +110,11 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      遷移バリアを追加
+        //@―---------------------------------------------------------------------------
+        bool addResourceTransition(D3D12_RESOURCE_BARRIER& barrier, D3D12_RESOURCE_STATES state,s32 subresource=-1);
+
 
     private:
 
@@ -129,6 +135,8 @@ namespace ob::rhi::dx12 {
 
         D3D12_VIEWPORT          m_viewport{};   //!< ビューポート
         D3D12_RECT              m_scissorRect{};//!< シザー矩形
+
+        D3D12_RESOURCE_STATES   m_state = D3D12_RESOURCE_STATE_COMMON;
 
     };
 
