@@ -13,7 +13,6 @@
 #include<Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include<Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
 #include<Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
-#include<Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include<Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include<Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include<Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
@@ -228,7 +227,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<RenderTexture> DeviceImpl::createRenderTexture(const RenderTextureDesc& desc) {
-		SAFE_CREATE(RenderTextureImpl,*this, desc);
+		SAFE_CREATE(TextureImpl,*this, desc);
 	}
 
 

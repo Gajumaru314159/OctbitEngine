@@ -490,4 +490,40 @@ namespace ob::rhi::dx12
         return D3D12_HEAP_TYPE_DEFAULT;
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  DXGI_FORMAT を TextureFormat に変換
+    //@―---------------------------------------------------------------------------
+    TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
+        switch (static_cast<DXGI_FORMAT>(value)) {
+        case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;
+        case DXGI_FORMAT_R16G16B16A16_FLOAT:	return TextureFormat::RGBA16;
+        case DXGI_FORMAT_R8G8B8A8_UNORM:		return TextureFormat::RGBA8;
+        case DXGI_FORMAT_R32G32B32_FLOAT:		return TextureFormat::RGB32;
+        case DXGI_FORMAT_R32G32_FLOAT:			return TextureFormat::RG32;
+        case DXGI_FORMAT_R16G16_FLOAT:			return TextureFormat::RG16;
+        case DXGI_FORMAT_R8G8_UNORM:			return TextureFormat::RG8;
+        case DXGI_FORMAT_R32_FLOAT:				return TextureFormat::R32;
+        case DXGI_FORMAT_R16_FLOAT:				return TextureFormat::R16;
+        case DXGI_FORMAT_R8_UNORM:				return TextureFormat::R8;
+        case DXGI_FORMAT_R10G10B10A2_UNORM:		return TextureFormat::R10G10B10A2;
+        case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:	return TextureFormat::D32S8;
+        case DXGI_FORMAT_D32_FLOAT:				return TextureFormat::D32;
+        case DXGI_FORMAT_D24_UNORM_S8_UINT:		return TextureFormat::D24S8;
+        case DXGI_FORMAT_D16_UNORM:				return TextureFormat::D16;
+        case DXGI_FORMAT_BC1_UNORM:				return TextureFormat::BC1;
+        case DXGI_FORMAT_BC2_UNORM:				return TextureFormat::BC2;
+        case DXGI_FORMAT_BC3_UNORM:				return TextureFormat::BC3;
+        case DXGI_FORMAT_BC4_UNORM:				return TextureFormat::BC4;
+        case DXGI_FORMAT_BC5_UNORM:				return TextureFormat::BC5;
+        case DXGI_FORMAT_BC6H_UF16:				return TextureFormat::BC6H;
+        case DXGI_FORMAT_BC7_UNORM:				return TextureFormat::BC7;
+        case DXGI_FORMAT_BC1_UNORM_SRGB:		return TextureFormat::BC1_SRGB;
+        case DXGI_FORMAT_BC2_UNORM_SRGB:		return TextureFormat::BC2_SRGB;
+        case DXGI_FORMAT_BC3_UNORM_SRGB:		return TextureFormat::BC3_SRGB;
+        case DXGI_FORMAT_BC7_UNORM_SRGB:		return TextureFormat::BC7_SRGB;
+        }
+        LOG_WARNING_EX("Graphic", "不正なDXGI_FORMAT[value={}]", enum_cast(value));
+        return TextureFormat::Unknown;
+    }
+
 }// namespace ob

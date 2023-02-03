@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
@@ -24,34 +25,28 @@ namespace ob::rhi::dx12 {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-    class TextureImpl :public rhi::Texture {
+    class TextureImpl :public rhi::RenderTexture {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ
+        //! @brief      TextureDesc から空のテクスチャを生成
         //@―---------------------------------------------------------------------------
         TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ
+        //! @brief      テクスチャバイナリから生成
         //@―---------------------------------------------------------------------------
         TextureImpl(DeviceImpl& rDevice, BlobView blob);
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      デストラクタ
-        //@―---------------------------------------------------------------------------
-        ~TextureImpl();
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  妥当な状態か
+        //! @brief      妥当な状態か
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  サイズ
+        //! @brief      サイズ
         //@―---------------------------------------------------------------------------
         Size size()const override;
 
@@ -77,22 +72,42 @@ namespace ob::rhi::dx12 {
     public:
 
         //@―---------------------------------------------------------------------------
+        //! @brief      RenderTextureDesc からRenderTextureを生成
+        //@―---------------------------------------------------------------------------
+        TextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      SwapChainのリソースからRenderTextureを生成
+        //@―---------------------------------------------------------------------------
+        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource);
+
+
+    public:
+
+        //@―---------------------------------------------------------------------------
         //! @brief      リソースを取得
         //@―---------------------------------------------------------------------------
         ID3D12Resource* getResource()const;
 
 
         //@―---------------------------------------------------------------------------
+        //! @brief      Viewを取得
+        //@―---------------------------------------------------------------------------
+        const DescriptorHandle& getSRV()const { return m_hSRV; }
+        const DescriptorHandle& getRTV()const { return m_hRTV; }
+        const DescriptorHandle& getDSV()const { return m_hDSV; }
+
+        const D3D12_VIEWPORT& getViewport()const { return m_viewport; }
+        const D3D12_RECT& getScissorRect()const { return m_scissorRect; }
+
+
+        void clear(ID3D12GraphicsCommandList* cmdList);
+
+        //@―---------------------------------------------------------------------------
         //! @brief      シェーダリソースビューを生成
         //@―---------------------------------------------------------------------------
         void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
-
-    protected:
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      コンストラクタ
-        //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice);
 
 
     private:
@@ -104,9 +119,16 @@ namespace ob::rhi::dx12 {
 
         class DeviceImpl& m_device;
 
-        TextureDesc                 m_desc;         //!< 定義
-        ComPtr<ID3D12Resource>      m_resource;     //!< リソース
-        DescriptorHandle            m_hSRV;         //!< デスクリプタハンドル
+        TextureDesc             m_desc;         //!< 定義
+        RenderTextureDesc       m_renderDesc;   //!< 定義
+
+        ComPtr<ID3D12Resource>  m_resource;     //!< リソース
+        DescriptorHandle        m_hSRV;         //!< デスクリプタハンドル
+        DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル
+        DescriptorHandle        m_hDSV;         //!< デスクリプタハンドル
+
+        D3D12_VIEWPORT          m_viewport{};   //!< ビューポート
+        D3D12_RECT              m_scissorRect{};//!< シザー矩形
 
     };
 

@@ -116,5 +116,11 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         static D3D12_HEAP_TYPE Convert(ResourceUsage value);
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  DXGI_FORMAT を TextureFormat に変換
+        //@―---------------------------------------------------------------------------
+        static TextureFormat Convert(DXGI_FORMAT dxgi);
+
+
     };
 }// namespcae ob

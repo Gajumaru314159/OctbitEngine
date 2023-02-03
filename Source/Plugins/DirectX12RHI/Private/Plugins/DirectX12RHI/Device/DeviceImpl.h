@@ -175,8 +175,6 @@ namespace ob::rhi::dx12 {
 		bool initialize();
 
 		bool initializeDXGIDevice();
-		bool initializeCommand();
-		bool initializeFence();
 		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
 
@@ -187,8 +185,6 @@ namespace ob::rhi::dx12 {
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
 
 		ComPtr<ID3D12CommandAllocator>      m_commandAllocator;         // コマンドアロケータ
-		//ComPtr<ID3D12CommandQueue>          m_commandQueue;             // コマンドキュー
-		//ComPtr<ID3D12GraphicsCommandList>   m_systemCmdList;            // システムコマンドリスト
 
 		UPtr<class CommandQueue>			m_commandQueue;
 

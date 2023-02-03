@@ -5,6 +5,12 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Display.h>
+#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/FrameBuffer.h>
+#include <Framework/RHI/DescriptorTable.h>
+#include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 //===============================================================
@@ -12,6 +18,7 @@
 //===============================================================
 namespace ob::rhi::dx12 {
     class DeviceImpl;
+    class CommandListImpl;
     class ITexture;
 }
 
@@ -44,6 +51,12 @@ namespace ob::rhi::dx12 {
 
 
         //@―---------------------------------------------------------------------------
+        //! @brief      表示するテクスチャをバインド
+        //@―---------------------------------------------------------------------------
+        void bindTexture(const Ref<Texture> texture) override;
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief  妥当なオブジェクトか
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
@@ -62,12 +75,6 @@ namespace ob::rhi::dx12 {
         //===============================================================
         // 更新
         //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  バックバッファのサイズを変更
-        //@―---------------------------------------------------------------------------
-        bool resizeBackBuffer(const Size& size) override;
-
 
         //@―---------------------------------------------------------------------------
         //! @brief      更新
@@ -106,6 +113,9 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         ID3D12Resource* getResource()const;
 
+
+        void recordApplyDisplay(CommandListImpl&);
+
     private:
 
         //@―---------------------------------------------------------------------------
@@ -136,8 +146,15 @@ namespace ob::rhi::dx12 {
 
         DisplayDesc m_desc;
 
-        ComPtr<IDXGISwapChain4> m_swapChain;            //!< スワップチェイン
-        Array<ComPtr<ID3D12Resource>> m_buffers;       //!< バックバッファ
+        ComPtr<IDXGISwapChain4>     m_swapChain;        
+        Array<Ref<RenderTexture>>   m_textures;         
+        Array<Ref<FrameBuffer>>     m_buffers;          
+        Ref<RenderPass>             m_renderPass;       
+        Ref<PipelineState>          m_pipeline;
+
+        Ref<Buffer>                 m_verices;
+        Ref<Texture>                m_bindedTexture;
+        Ref<DescriptorTable>        m_bindedTextureTable;
 
         D3D12_VIEWPORT m_viewport;                      //!< ビューポート
         D3D12_RECT m_scissorRect;                       //!< シザー矩形

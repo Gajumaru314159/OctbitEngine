@@ -25,6 +25,8 @@ namespace ob::rhi::dx12 {
         DescriptorHandle(DescriptorHandle&&);
         DescriptorHandle& operator = (DescriptorHandle&&);
 
+        operator bool()const noexcept;
+
         bool empty()const noexcept;
         void release();
         DescriptorHeapType getHeapType()const;

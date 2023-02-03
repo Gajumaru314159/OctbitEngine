@@ -34,8 +34,6 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         static Ref<RenderTexture> Create(const RenderTextureDesc& desc);
 
-    public:
-
 
     protected:
 

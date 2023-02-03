@@ -112,6 +112,8 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(depthRT);
 	}
 
+	display->bindTexture(colorRT);
+
 	Ref<FrameBuffer> frameBuffer;
 	{
 		FrameBufferDesc desc;

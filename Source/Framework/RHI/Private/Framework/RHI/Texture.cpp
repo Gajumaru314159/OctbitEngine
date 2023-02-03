@@ -28,4 +28,21 @@ namespace ob::rhi {
         return Device::Get()->createTexture(blob);
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      パスからテクスチャを読み込み
+    //! 
+    //! @param path ファイルパス
+    //@―---------------------------------------------------------------------------
+    Ref<Texture> Texture::Load(const Path& path) {
+
+        FileStream fs(path);
+        if (fs) {
+            Blob blob(fs.size());
+            fs.read(blob.data(), blob.size());
+            return Texture::Create(blob);
+        }
+
+        return nullptr;
+    }
+
 }// namespace ob::rhi

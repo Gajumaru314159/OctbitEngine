@@ -4,9 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DisplayImpl.h"
+#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/FrameBuffer.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
+#include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 
 namespace {
     int static const s_maxDisplayCount = 4;
@@ -31,10 +35,35 @@ namespace ob::rhi::dx12 {
 
         m_syncInterval = desc.vsync ? 1 : 0;
 
+
+        // レンダーパス
+        {
+            RenderPassDescHelper rdesc;
+            auto color = rdesc.addAttachment(m_desc.format);
+            auto pass0 = rdesc.addSubpassXCX({ color });
+
+            m_renderPass = RenderPass::Create(rdesc);
+            OB_ASSERT_EXPR(m_renderPass);
+        }
+
+        {            
+            Vec2 vertices[] = {
+                {-1,-1},
+                {+1,-1},
+                {-1,+1},
+                {+1,-1},
+                {+1,+1},
+                {-1,+1},
+            };
+            BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
+            m_verices = Buffer::Create(bdesc);
+        }
+
         if (!createDisplay(rDevice))return;
         if (!createBuffer(rDevice))return;
 
         m_initialized = true;
+
     }
 
 
@@ -126,6 +155,7 @@ namespace ob::rhi::dx12 {
         HRESULT result;
 
         // バッファを生成
+        m_textures.resize(m_desc.bufferCount);
         m_buffers.resize(m_desc.bufferCount);
 
         rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV, m_desc.bufferCount);
@@ -136,18 +166,30 @@ namespace ob::rhi::dx12 {
         rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
         for (s32 i = 0; i < m_desc.bufferCount; ++i) {
-            auto& buffer = m_buffers[i];
-            result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
+
+            ComPtr<ID3D12Resource> resource;
+            result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
             if (FAILED(result)) {
                 // 生成が正しければ呼ばれないはず
                 Utility::OutputFatalLog(result, TC("IDXGIDisplay::GetBuffer()"));
                 return false;
             }
-            rDevice.getNative()->CreateRenderTargetView(buffer.Get(), &rtvDesc, m_hRTV.getCpuHandle(i));
+
+            m_textures[i] = new TextureImpl(rDevice,resource);
+
+            {
+                FrameBufferDesc bdesc;
+                bdesc.renderPass = m_renderPass;
+                bdesc.attachments.push_back(m_textures[i]);
+
+                m_buffers[i] = FrameBuffer::Create(bdesc);
+                OB_ASSERT_EXPR(m_buffers[i]);
+            }
+
+            m_viewport = CD3DX12_VIEWPORT(resource.Get());
+            m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
         }
 
-        m_viewport = CD3DX12_VIEWPORT(m_buffers[0].Get());
-        m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
         return true;
     }
 
@@ -189,6 +231,25 @@ namespace ob::rhi::dx12 {
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief      表示するテクスチャをバインド
+    //@―---------------------------------------------------------------------------
+    void DisplayImpl::bindTexture(const Ref<Texture> texture) {
+
+        if (m_bindedTexture == texture)
+            return;
+
+        m_bindedTextureTable.reset();
+        m_bindedTexture = texture;
+        
+        if (m_bindedTexture) {
+            m_bindedTextureTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV,1);
+            m_bindedTextureTable->setResource(0,m_bindedTexture);
+        }
+
+    }
+
+
+    //@―---------------------------------------------------------------------------
     //! @brief  妥当なオブジェクトか
     //@―---------------------------------------------------------------------------
     bool DisplayImpl::isValid()const {
@@ -201,15 +262,6 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     const DisplayDesc& DisplayImpl::getDesc()const noexcept {
         return m_desc;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  バックバッファのサイズを変更
-    //@―---------------------------------------------------------------------------
-    bool DisplayImpl::resizeBackBuffer(const Size& size) {
-        OB_NOTIMPLEMENTED();
-        return false;
     }
 
 
@@ -271,16 +323,41 @@ namespace ob::rhi::dx12 {
     //! @brief      リソース取得
     //@―---------------------------------------------------------------------------
     ID3D12Resource* DisplayImpl::getResource()const {
-        return m_buffers[m_frameIndex].Get();
+
+        return m_textures[m_frameIndex].cast<TextureImpl>()->getResource();
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      バッファへコピー
+    //@―---------------------------------------------------------------------------
+    void DisplayImpl::recordApplyDisplay(CommandListImpl& cmdList) {
+        
+        if (!m_bindedTexture)
+            return;
+
+        cmdList.beginRenderPass(m_buffers[m_frameIndex]);
+        cmdList.setPipelineState(m_pipeline);
+
+        {
+            SetDescriptorTableParam param(m_bindedTextureTable, 0);
+            cmdList.setRootDesciptorTable(&param, 1);
+        }
+        cmdList.setVertexBuffer(m_verices);
+        {
+            DrawParam param;
+            param.startVertex = 0;
+            param.vertexCount = 6;
+            cmdList.draw(param);
+        }
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  名前変更時
     //@―---------------------------------------------------------------------------
     void DisplayImpl::onNameChanged() {
-        for (auto& resource : m_buffers) {
-            Utility::setName(resource.Get(), getName());
+        for (auto& resource : m_textures) {
+            //Utility::setName(resource.Get(), getName());
         }
     }
 

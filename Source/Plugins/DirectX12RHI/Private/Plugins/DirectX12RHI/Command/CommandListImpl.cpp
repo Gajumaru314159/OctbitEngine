@@ -15,7 +15,6 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
 #include <Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
-#include <Plugins/DirectX12RHI/Texture/RenderTextureImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
@@ -156,11 +155,12 @@ namespace ob::rhi::dx12 {
 		// レンダーターゲットビュー設定
 		for (auto [i, ref] : Indexed(subpass.colors)) {
 
-			if (auto texture = attachments.at(ref.index).cast<RenderTextureImpl>()) {
+			if (auto texture = attachments.at(ref.index).cast<TextureImpl>()) {
 				auto& color = colors[i];
 
 				color = texture->getRTV().getCpuHandle();
 
+				// TODO
 				//m_cache.addTexture(texture->getResource(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_RENDER_TARGET, 0);
 
 				viewport = texture->getViewport();
@@ -175,7 +175,7 @@ namespace ob::rhi::dx12 {
 		// 深度ステンシルビュー設定
 		for (auto [index, d] : Indexed(subpass.depth)) {
 
-			if (auto texture = attachments.at(d.index).cast<RenderTextureImpl>()) {
+			if (auto texture = attachments.at(d.index).cast<TextureImpl>()) {
 
 				depth = texture->getDSV().getCpuHandle();
 
@@ -203,22 +203,12 @@ namespace ob::rhi::dx12 {
 
 		for (auto [index,attachmentDesc] : Indexed(attachmentDescs)) {
 
-			if (auto texture = attachments[index].cast<RenderTextureImpl>()) {
-
-				bool isDepth = TextureFormatUtility::HasDepth(texture->format());
+			if (auto texture = attachments[index].cast<TextureImpl>()) {
 
 				if(attachmentDesc.clear == AttachmentClear::Clear) {
-					if (isDepth) {
-						FLOAT depth = texture->desc().clear.depth;
-						UINT8 stencil = texture->desc().clear.stencil;
 
-						D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
-						m_cmdList->ClearDepthStencilView(texture->getDSV().getCpuHandle(), clearFlags, depth, stencil, 0, nullptr);
-					} else {
-						auto t = texture->desc().clear.color;
-						FLOAT clearColor[4] = { t.r,t.g,t.b,t.a };
-						m_cmdList->ClearRenderTargetView(texture->getRTV().getCpuHandle(), clearColor, 0, nullptr);
-					}
+					texture->clear(m_cmdList.Get());
+
 				}
 
 			}
@@ -268,8 +258,10 @@ namespace ob::rhi::dx12 {
 			return;
 
 		auto& rDisplay = *display.cast<DisplayImpl>();
-		auto& rTexture = *texture.cast<RenderTextureImpl>();
+		auto& rTexture = *texture.cast<TextureImpl>();
 
+		//rDisplay.recordApplyDisplay(*this);
+		//return;
 		{
 			D3D12_RESOURCE_BARRIER barrier[2] = {
 				CD3DX12_RESOURCE_BARRIER::Transition(rDisplay.getResource(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_COPY_DEST),
@@ -306,50 +298,6 @@ namespace ob::rhi::dx12 {
 		}
 	}
 
-	/*
-	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーターゲットを設定
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::beginRender(const RenderTarget& target) {
-		auto count = target.getColorTextureCount();
-		auto& rTarget = Device::GetImpl<RenderTargetImpl>(target);
-
-		clearDescriptorHandle();
-		m_pRenderTarget = &target;
-
-
-		// RTV更新
-		for (s32 i = 0; i < count; ++i) {
-			m_hRTV[i] = rTarget.getColorCpuHandle(i);
-		}
-
-		// DSV更新
-		if (target.hasDepth()) {
-			m_hDSV = rTarget.getDepthCpuHandle();
-		}
-
-		// コマンド発行
-		const D3D12_CPU_DESCRIPTOR_HANDLE* pRTV = nullptr;
-		const D3D12_CPU_DESCRIPTOR_HANDLE* pDSV = nullptr;
-		if (count)pRTV = m_hRTV;
-		if (target.hasDepth())pDSV = &m_hDSV;
-
-		m_cmdList->OMSetRenderTargets(count, pRTV, false, pDSV);
-
-		auto viewport= rTarget.getViewport();
-		auto rect = rTarget.getScissorRect();
-		m_cmdList->RSSetViewports(1, &viewport);
-		m_cmdList->RSSetScissorRects(1, &rect);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      描画終了
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::endRender() {
-		m_pRenderTarget = nullptr;
-	}
-	*/
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  シザー矩形を設定
