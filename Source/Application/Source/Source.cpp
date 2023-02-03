@@ -346,7 +346,6 @@ int TestDirectX12() {
 		//cmdList.clearColors();
 		//cmdList.clearDepthStencil();
 		{
-			cmdList->setRootSignature(signature);
 			cmdList->setPipelineState(pipeline);
 
 

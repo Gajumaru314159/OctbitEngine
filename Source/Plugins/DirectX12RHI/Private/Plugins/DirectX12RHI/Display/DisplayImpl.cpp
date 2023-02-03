@@ -423,7 +423,6 @@ namespace ob::rhi::dx12 {
             return;
 
         cmdList.beginRenderPass(m_buffers.current());
-        cmdList.setRootSignature(m_signature);
         cmdList.setPipelineState(m_pipeline);
 
         {

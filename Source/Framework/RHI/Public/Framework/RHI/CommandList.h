@@ -55,7 +55,6 @@ namespace ob::rhi {
         virtual void setIndexBuffer(const Ref<Buffer>&) = 0;                 //!< インデックスバッファ設定
 
 
-        virtual void setRootSignature(const Ref<RootSignature>&) = 0;// TODO 削除
         virtual void setPipelineState(const Ref<PipelineState>&) = 0;        //!< パイプライン設定
         //virtual void setComputePipelineState(const ComputePipelineState&) = 0;
 

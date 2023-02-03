@@ -111,6 +111,8 @@ namespace ob::rhi::dx12 {
 		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);
 
+		m_rootSignature = nullptr;
+		m_frameBuffer = nullptr;
 	}
 
 
@@ -417,25 +419,24 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      ルートシグネチャを設定
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRootSignature(const Ref<RootSignature>& signature) {
-		if (auto p = signature.cast<RootSignatureImpl>()) {
-			m_cmdList->SetGraphicsRootSignature(p->getNative());
-		} else {
-			LOG_ERROR("RootSignatureが空です");
-		}
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief      パイプラインステートを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setPipelineState(const Ref<PipelineState>& pipeline) {
 		if (auto p = pipeline.cast<PipelineStateImpl>()) {
-			m_cmdList->SetPipelineState(p->getNative());
-			// TODO Geometryシェーダでのプリミティブ設定対応
-			m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			if (auto rootSignature = p->getRootSignature()) {
+
+				if (m_rootSignature != rootSignature) {
+					m_cmdList->SetGraphicsRootSignature(rootSignature);
+					m_rootSignature = rootSignature;
+				}
+				m_cmdList->SetPipelineState(p->getNative());
+
+				// TODO Geometryシェーダでのプリミティブ設定対応
+				m_cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			}
+
 		}
 	}
 

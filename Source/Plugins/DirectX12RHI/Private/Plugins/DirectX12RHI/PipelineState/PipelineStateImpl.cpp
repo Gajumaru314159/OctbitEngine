@@ -122,7 +122,6 @@ namespace ob::rhi::dx12 {
 
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
-		m_rootSignature = m_rootSignature;
 		Utility::setName(m_pipelineState.Get(), getName());
 	}
 

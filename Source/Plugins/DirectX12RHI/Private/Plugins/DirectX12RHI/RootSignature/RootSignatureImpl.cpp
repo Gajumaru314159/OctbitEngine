@@ -57,7 +57,6 @@ namespace ob::rhi::dx12 {
 
 
 		// 静的サンプラー
-		// TODO テクスチャごとのサンプラーを定義するか検討
 		Array<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
 		samplerDescs.reserve(desc.samplers.size());
 		for (auto& params : desc.samplers) {

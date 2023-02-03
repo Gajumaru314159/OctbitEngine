@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
+#include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 
 //===============================================================
 // 前方宣言
@@ -55,6 +56,12 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         ID3D12PipelineState* getNative()const noexcept { return m_pipelineState.Get(); }
 
+        ID3D12RootSignature* getRootSignature()const { 
+            if (auto p = m_desc.rootSignature.cast<RootSignatureImpl>()) {
+                return p->getNative();
+            }
+            return nullptr;        
+        }
 
     private:
         
@@ -69,8 +76,6 @@ namespace ob::rhi::dx12 {
     private:
 
         const PipelineStateDesc m_desc;
-
-        Ref<RootSignature>   m_rootSignature;
         ComPtr<ID3D12PipelineState> m_pipelineState;    //!< パイプラインステート
             
     };

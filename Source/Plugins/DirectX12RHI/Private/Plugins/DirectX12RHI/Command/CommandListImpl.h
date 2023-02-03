@@ -113,11 +113,6 @@ namespace ob::rhi::dx12 {
         void setIndexBuffer(const Ref<Buffer>&)override;
 
         //@―---------------------------------------------------------------------------
-        //! @brief      ルートシグネチャを設定
-        //@―---------------------------------------------------------------------------
-        void setRootSignature(const Ref<RootSignature>&) override;
-
-        //@―---------------------------------------------------------------------------
         //! @brief      パイプラインステートを設定
         //@―---------------------------------------------------------------------------
         void setPipelineState(const Ref<PipelineState>&) override;
@@ -179,9 +174,9 @@ namespace ob::rhi::dx12 {
         D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
         D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
 
-        Array<D3D12_RESOURCE_BARRIER> m_barriers;
+        FrameBuffer* m_frameBuffer = nullptr;
+        ID3D12RootSignature* m_rootSignature = nullptr;
 
-        FrameBuffer* m_frameBuffer;
         s32         m_subpassIndex;
 
         ResourceStateCache m_cache;
