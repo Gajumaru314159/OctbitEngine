@@ -8,9 +8,9 @@
 #include <Framework/RHI/FrameBuffer.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
+#include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-#include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 
 namespace {
     int static const s_maxDisplayCount = 4;
@@ -58,6 +58,76 @@ namespace ob::rhi::dx12 {
             BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
             m_verices = Buffer::Create(bdesc);
         }
+
+        Ref<Shader> vs;
+        Ref<Shader> ps;
+        {
+            String code;
+            code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
+            code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
+            code.append(TC("// IN / OUT														\n"));
+            code.append(TC("struct VsIn {													\n"));
+            code.append(TC("  float2 pos	:POSITION;										\n"));
+            code.append(TC("};																\n"));
+            code.append(TC("struct PsIn {													\n"));
+            code.append(TC("  float4 pos	:SV_POSITION;									\n"));
+            code.append(TC("  float2 uv	    :TEXCOORD;									    \n"));
+            code.append(TC("};																\n"));
+            code.append(TC("// エントリ														\n"));
+            code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
+            code.append(TC("    PsIn o;														\n"));
+            code.append(TC("    o.pos = float4(i.pos*2-1,0,1);						        \n"));
+            code.append(TC("    o.uv = i.pos.xy;								            \n"));
+            code.append(TC("    return o;													\n"));
+            code.append(TC("}																\n"));
+            code.append(TC("float4 PS_Main(PsIn i):SV_TARGET0{								\n"));
+            code.append(TC("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n"));
+            code.append(TC("}																\n"));
+
+            vs = VertexShader::Create(code);
+            ps = PixelShader::Create(code);
+            OB_ASSERT_EXPR(vs && ps);
+        }
+
+        Ref<RootSignature> signature;
+        {
+            RootSignatureDesc desc(
+                {
+                    RootParameter::Range(DescriptorRangeType::SRV,1,0),
+                },
+            {
+                StaticSamplerDesc(SamplerDesc(),0),
+            }
+            );
+            signature = RootSignature::Create(desc);
+            signature->setName(TC("CopyRootSignature"));
+            OB_ASSERT_EXPR(signature);
+        }
+
+        Ref<PipelineState> pipeline;
+        {
+            PipelineStateDesc desc;
+            desc.renderPass = m_renderPass;
+            desc.subpass = 0;
+
+            desc.rootSignature = signature;
+            desc.vs = vs;
+            desc.ps = ps;
+            desc.vertexLayout.attributes = {
+                VertexAttribute(Semantic::Position,0,Type::Float,2),
+            };
+            desc.blend[0] = BlendDesc::AlphaBlend;
+            desc.rasterizer.cullMode = CullMode::None;
+            desc.depthStencil.depth.enable = true;
+            desc.depthStencil.stencil.enable = false;
+
+            pipeline = PipelineState::Create(desc);
+            pipeline->setName(TC("TestPipeline"));
+            OB_ASSERT_EXPR(pipeline);
+        }
+
+        m_pipeline = pipeline;
+
 
         if (!createDisplay(rDevice))return;
         if (!createBuffer(rDevice))return;

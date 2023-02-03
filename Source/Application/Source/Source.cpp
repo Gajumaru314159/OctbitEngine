@@ -82,8 +82,9 @@ int TestDirectX12() {
 	{
 		RenderPassDescHelper desc;
 		auto color = desc.addAttachment(TextureFormat::RGBA8);
+		auto color2 = desc.addAttachment(TextureFormat::RGBA8);
 		auto depth = desc.addAttachment(TextureFormat::D32);
-		auto pass0 = desc.addSubpassXCD({ color },depth);
+		auto pass0 = desc.addSubpassXCD({ color,color2 },depth);
 
 		renderPass = RenderPass::Create(desc);
 		OB_ASSERT_EXPR(renderPass);
@@ -99,6 +100,17 @@ int TestDirectX12() {
 
 		colorRT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(colorRT);
+	}
+	Ref<RenderTexture> color2RT;
+	{
+		RenderTextureDesc desc;
+		desc.name = TC("Color");
+		desc.size = display->getDesc().size;
+		desc.format = TextureFormat::RGBA8;
+		desc.clear.color = Color::White;
+
+		color2RT = RenderTexture::Create(desc);
+		OB_ASSERT_EXPR(color2RT);
 	}
 	Ref<RenderTexture> depthRT;
 	{
@@ -119,6 +131,7 @@ int TestDirectX12() {
 		FrameBufferDesc desc;
 		desc.renderPass = renderPass;
 		desc.attachments.push_back(colorRT);
+		desc.attachments.push_back(color2RT);
 		desc.attachments.push_back(depthRT);
 
 		frameBuffer = FrameBuffer::Create(desc);
@@ -150,6 +163,7 @@ int TestDirectX12() {
 		code.append(TC("};																\n"));
 		code.append(TC("struct PsOut {													\n"));
 		code.append(TC("  float4 color0	:SV_TARGET0;									\n"));
+		code.append(TC("  float4 color1	:SV_TARGET1;									\n"));
 		code.append(TC("};																\n"));
 		code.append(TC("// エントリ														\n"));
 		code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
@@ -162,6 +176,7 @@ int TestDirectX12() {
 		code.append(TC("PsOut PS_Main(PsIn i){											\n"));
 		code.append(TC("    PsOut o;													\n"));
 		code.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
+		code.append(TC("    o.color1 = color;											\n"));
 		code.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
 		code.append(TC("    o.color0 = color;											\n"));
 		code.append(TC("    return o;													\n"));
@@ -253,30 +268,30 @@ int TestDirectX12() {
 			{
 				objl::Mesh& curMesh = Loader.LoadedMeshes[i];
 
-				String name;
-				StringEncoder::Encode(curMesh.MeshName, name);
+String name;
+StringEncoder::Encode(curMesh.MeshName, name);
 
-				LOG_INFO("name={}", name);
+LOG_INFO("name={}", name);
 
-				for (int j = 0; j < curMesh.Vertices.size(); j++)
-				{
-					auto pos = curMesh.Vertices[j].Position;
-					auto uv = curMesh.Vertices[j].TextureCoordinate;
-					auto normal = curMesh.Vertices[j].Normal;
-					auto& vert = mesh.vertices.emplace_back();
-					vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
-					vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
-					vert.uv = Vec2(uv.X, uv.Y);
-				}
+for (int j = 0; j < curMesh.Vertices.size(); j++)
+{
+	auto pos = curMesh.Vertices[j].Position;
+	auto uv = curMesh.Vertices[j].TextureCoordinate;
+	auto normal = curMesh.Vertices[j].Normal;
+	auto& vert = mesh.vertices.emplace_back();
+	vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
+	vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
+	vert.uv = Vec2(uv.X, uv.Y);
+}
 
-				for (int j = 0; j < curMesh.Indices.size(); j++)
-				{
-					mesh.indices.push_back(curMesh.Indices[j]);
-				}
-				break;
+for (int j = 0; j < curMesh.Indices.size(); j++)
+{
+	mesh.indices.push_back(curMesh.Indices[j]);
+}
+break;
 			}
-		} else {
-			LOG_INFO("モデルファイルが見つかりませんでした。");
+			} else {
+				LOG_INFO("モデルファイルが見つかりませんでした。");
 		}
 	}
 
@@ -352,7 +367,13 @@ int TestDirectX12() {
 			cmdList->drawIndexed(param);
 		}
 		cmdList->endRenderPass();
-		cmdList->applyDisplay(display, colorRT);
+
+		if (input::Keyboard::Z.pressed()){
+			cmdList->applyDisplay(display, color2RT);
+		} else {
+			cmdList->applyDisplay(display, colorRT);
+		}
+
 		cmdList->end();
 
 		// TODO コマンドの個別実行を許可する？
