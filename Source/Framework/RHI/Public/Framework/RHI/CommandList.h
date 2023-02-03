@@ -42,7 +42,7 @@ namespace ob::rhi {
         virtual void clearDepthStencil() = 0;                           //!< 深度値をクリア
 
                 void setVertexBuffer(const Ref<Buffer>&);         //!< 頂点バッファ設定
-        virtual void setVertexBuffers(Span<const Ref<Buffer>*>) = 0;         //!< 頂点バッファ設定
+        virtual void setVertexBuffers(Span<Ref<Buffer>>) = 0;         //!< 頂点バッファ設定
         virtual void setIndexBuffer(const Ref<Buffer>&) = 0;                 //!< インデックスバッファ設定
 
 
@@ -87,7 +87,8 @@ namespace ob::rhi {
 
 
     inline void CommandList::setVertexBuffer(const Ref<Buffer>& buffer) {
-        StaticArray<const Ref<Buffer>*,1> buffers = { &buffer };
+        Ref<Buffer> buffers[1];
+        buffers[0] = buffer;
         setVertexBuffers(buffers);
     }
 

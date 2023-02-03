@@ -17,5 +17,6 @@ namespace ob::rhi {
 	static const s32 VIEWPORT_MAX			= 16;		//!< ビューポート最大数
 	static const s32 SCISSOR_RECT_MAX		= 4;		//!< シザー矩形最大数
 	static const s32 MIPMAP__MAX			= 16;		//!< ミップマップ最大数
+	static const s32 VERTEX_BUFFER_MAX		= 16;		//!< 頂点バッファのストーリム最大数
 
 }// namespcae ob::rhi

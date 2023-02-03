@@ -373,21 +373,21 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setVertexBuffers(Span<const Ref<Buffer>*> buffers) {
-		StaticArray<D3D12_VERTEX_BUFFER_VIEW,16> views;
+	void CommandListImpl::setVertexBuffers(Span<Ref<Buffer>> buffers) {
+		StaticArray<D3D12_VERTEX_BUFFER_VIEW, VERTEX_BUFFER_MAX> views;
 		if (views.size() <= buffers.size()) {
 			LOG_ERROR("頂点バッファは{}以下である必要があります。[size={}]",views.size(),buffers.size());
 			return;
 		}
 
 		size_t size = 0;
-		for (auto buffer : buffers) {
+		for (auto& buffer : buffers) {
 			if (buffer == nullptr) {
 				LOG_ERROR("頂点バッファがnullです。");
 				return;
 			}
 			
-			if (auto pBuffer = buffer->cast<BufferImpl>()) {
+			if (auto pBuffer = buffer.cast<BufferImpl>()) {
 				auto& view = views[size];
 				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
 				view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
