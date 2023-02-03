@@ -56,7 +56,7 @@ namespace ob {
 
         // ログイベントを登録
         Logger::EventHandle handle;
-        Logger::Instance().addEvent(handle, { LogEvent });
+        Logger::Get().addEvent(handle, { LogEvent });
 
         // ログ追加
         {
@@ -75,7 +75,7 @@ namespace ob {
         }
 
         // ログイベントの削除
-        Logger::Instance().removeEvent(handle);
+        Logger::Get().removeEvent(handle);
 
         // ログ追加
         {
