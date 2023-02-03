@@ -48,4 +48,12 @@ namespace ob::rhi::dx12 {
         return true;
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      名前を取得
+    //@―---------------------------------------------------------------------------
+    const String& FrameBufferImpl::getName()const {
+        return m_desc.name;
+    }
+
 }// namespace ob::rhi::dx12

@@ -47,6 +47,13 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      名前を取得
+        //@―---------------------------------------------------------------------------
+        const String& getName()const override;
+
+
         const FrameBufferDesc& desc()const override { return m_desc; }
 
     private:

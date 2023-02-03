@@ -39,6 +39,12 @@ namespace ob::rhi::dx12 {
 
 
         //@―---------------------------------------------------------------------------
+        //! @brief      名前を取得
+        //@―---------------------------------------------------------------------------
+        const String& getName()const override;
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief      定義を取得
         //@―---------------------------------------------------------------------------
         //const PipelineStateDesc& getDesc()const override { return m_desc; };
@@ -59,7 +65,6 @@ namespace ob::rhi::dx12 {
         void setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src);
         void setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
 
-        void onNameChanged()override;
 
     private:
 

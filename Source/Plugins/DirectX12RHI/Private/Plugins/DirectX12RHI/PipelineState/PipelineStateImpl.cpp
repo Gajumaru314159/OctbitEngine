@@ -123,6 +123,7 @@ namespace ob::rhi::dx12 {
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
 		m_rootSignature = m_rootSignature;
+		Utility::setName(m_pipelineState.Get(), getName());
 	}
 
 
@@ -245,11 +246,12 @@ namespace ob::rhi::dx12 {
 		dst.BackFace = dst.FrontFace;
 	}
 
+
 	//@―---------------------------------------------------------------------------
-	//! @brief  名前変更時
+	//! @brief      名前を取得
 	//@―---------------------------------------------------------------------------
-	void PipelineStateImpl::onNameChanged() {
-		Utility::setName(m_pipelineState.Get(), getName());
+	const String& PipelineStateImpl::getName()const {
+		return m_desc.name;
 	}
 
 }// namespace ob::rhi::dx12

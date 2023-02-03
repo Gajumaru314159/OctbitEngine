@@ -41,6 +41,9 @@ namespace ob::rhi::dx12 {
 			}
 		}
 
+		Utility::setName(m_commandQueue.Get(), TC("System Command Queue"));
+		Utility::setName(m_fence.Get(), TC("System Fence"));
+
 	}
 
 	void CommandQueue::entryCommandList(const CommandList& commandList) {

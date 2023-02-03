@@ -32,7 +32,7 @@ namespace ob::rhi {
         //! 
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Create(BlobView blob);
+        static Ref<Texture> Create(BlobView blob,StringView name);
 
 
         //@―---------------------------------------------------------------------------

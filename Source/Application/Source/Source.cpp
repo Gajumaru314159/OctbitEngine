@@ -72,9 +72,9 @@ int TestDirectX12() {
 	Ref<Display> display;
 	{
 		DisplayDesc desc;
+		desc.name = TC("MainDisplay");
 		desc.window = window;
 		display = Display::Create(desc);
-		display->setName(TC("MainWindow"));
 		OB_ASSERT_EXPR(display);
 	}
 
@@ -87,13 +87,14 @@ int TestDirectX12() {
 		auto pass0 = desc.addSubpassXCD({ color,color2 },depth);
 
 		renderPass = RenderPass::Create(desc);
+		desc.name = TC("Forward");
 		OB_ASSERT_EXPR(renderPass);
 	}
 
 	Ref<RenderTexture> colorRT;
 	{
 		RenderTextureDesc desc;
-		desc.name = TC("Color");
+		desc.name = TC("Color0");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Gray;
@@ -104,7 +105,7 @@ int TestDirectX12() {
 	Ref<RenderTexture> color2RT;
 	{
 		RenderTextureDesc desc;
-		desc.name = TC("Color");
+		desc.name = TC("Color1");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::White;
@@ -129,6 +130,7 @@ int TestDirectX12() {
 	Ref<FrameBuffer> frameBuffer;
 	{
 		FrameBufferDesc desc;
+		desc.name = TC("Test");
 		desc.renderPass = renderPass;
 		desc.attachments.push_back(colorRT);
 		desc.attachments.push_back(color2RT);
@@ -198,14 +200,15 @@ int TestDirectX12() {
 				StaticSamplerDesc(SamplerDesc(),0),
 			}
 		);
+		desc.name = TC("Common");
 		signature = RootSignature::Create(desc);
-		signature->setName(TC("TestRootSignature"));
 		OB_ASSERT_EXPR(signature);
 	}
 
 	Ref<PipelineState> pipeline;
 	{
 		PipelineStateDesc desc;
+		desc.name = TC("ModelDraw");
 		desc.renderPass = renderPass;
 		desc.subpass = 0;
 
@@ -223,7 +226,6 @@ int TestDirectX12() {
 		desc.depthStencil.stencil.enable = false;
 
 		pipeline = PipelineState::Create(desc);
-		pipeline->setName(TC("TestPipeline"));
 		OB_ASSERT_EXPR(pipeline);
 	}
 
@@ -231,22 +233,15 @@ int TestDirectX12() {
 	CBuf cbuf;
 	{
 		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
+		desc.name = TC("TestConstant");
 		buffer = Buffer::Create(desc);
-		buffer->setName(TC("TestBuffer"));
 		OB_ASSERT_EXPR(buffer);
 		buffer->updateDirect(cbuf);
 	}
 
 	Ref<Texture> tex;
 	{
-		FileStream fs(TC("Asset/Texture/test.dds"));
-		if (fs) {
-			Blob blob(fs.size());
-			fs.read(blob.data(), blob.size());
-			tex = Texture::Create(blob);
-			tex->setName(TC("test.dds"));
-		}
-
+		tex = Texture::Load(TC("Asset/Texture/test.dds"));
 		OB_ASSERT_EXPR(tex);
 	}
 
@@ -268,36 +263,37 @@ int TestDirectX12() {
 			{
 				objl::Mesh& curMesh = Loader.LoadedMeshes[i];
 
-String name;
-StringEncoder::Encode(curMesh.MeshName, name);
+				String name;
+				StringEncoder::Encode(curMesh.MeshName, name);
 
-LOG_INFO("name={}", name);
+				LOG_INFO("name={}", name);
 
-for (int j = 0; j < curMesh.Vertices.size(); j++)
-{
-	auto pos = curMesh.Vertices[j].Position;
-	auto uv = curMesh.Vertices[j].TextureCoordinate;
-	auto normal = curMesh.Vertices[j].Normal;
-	auto& vert = mesh.vertices.emplace_back();
-	vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
-	vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
-	vert.uv = Vec2(uv.X, uv.Y);
-}
+				for (int j = 0; j < curMesh.Vertices.size(); j++)
+				{
+					auto pos = curMesh.Vertices[j].Position;
+					auto uv = curMesh.Vertices[j].TextureCoordinate;
+					auto normal = curMesh.Vertices[j].Normal;
+					auto& vert = mesh.vertices.emplace_back();
+					vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
+					vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
+					vert.uv = Vec2(uv.X, uv.Y);
+				}
 
-for (int j = 0; j < curMesh.Indices.size(); j++)
-{
-	mesh.indices.push_back(curMesh.Indices[j]);
-}
-break;
+				for (int j = 0; j < curMesh.Indices.size(); j++)
+				{
+					mesh.indices.push_back(curMesh.Indices[j]);
+				}
+				break;
 			}
-			} else {
-				LOG_INFO("モデルファイルが見つかりませんでした。");
+		} else {
+			LOG_INFO("モデルファイルが見つかりませんでした。");
 		}
 	}
 
 	Ref<Buffer> vertexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
+		desc.name = TC("ModelVertices");
 		vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
 		OB_ASSERT_EXPR(vertexBuffer);
 	}
@@ -305,6 +301,7 @@ break;
 	Ref<Buffer> indexBuffer;
 	{
 		auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
+		desc.name = TC("ModelIndices");
 		indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
 		OB_ASSERT_EXPR(indexBuffer);
 	}
@@ -314,9 +311,9 @@ break;
 	Ref<CommandList> cmdList;
 	{
 		CommandListDesc desc;
+		desc.name = TC("MainCommandList");
 		desc.type = CommandListType::Graphic;
 		cmdList = CommandList::Create(desc);
-		cmdList->setName(TC("TestCommandList"));
 		OB_ASSERT_EXPR(cmdList);
 	}
 

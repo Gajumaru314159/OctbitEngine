@@ -109,6 +109,9 @@ namespace ob::rhi {
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
+		
+		String				name;							//!< 名前
+
 		Ref<RenderPass>		renderPass;						//!< レンダーパス
 		s32					subpass;						//!< サブパスインデックス
 

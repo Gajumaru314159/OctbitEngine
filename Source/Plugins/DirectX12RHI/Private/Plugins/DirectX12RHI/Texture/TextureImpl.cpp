@@ -78,13 +78,14 @@ namespace ob::rhi::dx12 {
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 
+		Utility::setName(m_resource.Get(), getName());
     }
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, BlobView blob)
+	TextureImpl::TextureImpl(DeviceImpl& rDevice, BlobView blob,StringView name)
 		: m_device(rDevice)
 	{
 		// 拡張子に合わせて読み込み
@@ -151,9 +152,9 @@ namespace ob::rhi::dx12 {
 			}
 			return TextureType::Texture2D;
 		};
-		resource->SetName(L"aaaa");
-
+		
 		// Desc設定
+		m_desc.name = name;
 		m_desc.size = {(s32)metadata.width,(s32)metadata.height,(s32)metadata.depth};
 		m_desc.type = convertType(metadata.dimension);
 		m_desc.format = TypeConverter::Convert(metadata.format);
@@ -163,6 +164,7 @@ namespace ob::rhi::dx12 {
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 		m_resource = resource;
 
+		Utility::setName(m_resource.Get(), getName());
 	}
 
 
@@ -280,12 +282,14 @@ namespace ob::rhi::dx12 {
 			m_resource->SetName(wname.c_str());
 		}
 
+		m_desc.name = desc.name;
 		m_desc.size = desc.size;
 		m_desc.type = TextureType::Texture2D;
 		m_desc.format = desc.format;
 		m_desc.arrayNum = 0;
 		m_desc.mipLevels = 0;
 
+		Utility::setName(m_resource.Get(), getName());
 	}
 
 
@@ -332,6 +336,7 @@ namespace ob::rhi::dx12 {
 
 		auto resourceDesc = m_resource->GetDesc();
 
+		m_desc.name = TC("SwapChain or Internal");
 		m_desc.size = { (s32)resourceDesc.Width,(s32)resourceDesc.Height, 0};
 		m_desc.type = TextureType::Texture2D;
 		m_desc.format = TypeConverter::Convert(resourceDesc.Format);
@@ -342,6 +347,7 @@ namespace ob::rhi::dx12 {
 		m_renderDesc.size = m_desc.size;
 		m_renderDesc.clear.color = Color::White;
 
+		Utility::setName(m_resource.Get(), getName());
 	}
 
 
@@ -350,6 +356,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	bool TextureImpl::isValid()const{
 		return !!m_resource;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      名前を取得
+	//@―---------------------------------------------------------------------------
+	const String& TextureImpl::getName()const {
+		return m_desc.name;
 	}
 
 
@@ -430,6 +444,9 @@ namespace ob::rhi::dx12 {
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  リソース遷移を追加
+	//@―---------------------------------------------------------------------------
 	bool TextureImpl::addResourceTransition(D3D12_RESOURCE_BARRIER& barrier,D3D12_RESOURCE_STATES state,s32 subresource) {
 
 		if (m_state == state)
@@ -445,13 +462,6 @@ namespace ob::rhi::dx12 {
 		m_state = state;
 
 		return true;
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  名前変更時
-	//@―---------------------------------------------------------------------------
-	void TextureImpl::onNameChanged() {
-		Utility::setName(m_resource.Get(), getName());
 	}
 
 

@@ -159,10 +159,12 @@ namespace ob::rhi::dx12 {
     //! @brief  ID3D12Objectに名前を設定
     //@―---------------------------------------------------------------------------
     void Utility::setName(ID3D12Object* pObject, StringView name) {
+#ifdef  OB_DEBUG
         if (pObject == nullptr)return;
         WString wname;
         StringEncoder::Encode(name, wname);
         pObject->SetName(wname.c_str());
+#endif //  OB_DEBUG
     }
 
 }// namespace ob::rhi::dx12

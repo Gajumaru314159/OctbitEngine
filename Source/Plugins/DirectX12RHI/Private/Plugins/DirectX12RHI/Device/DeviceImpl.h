@@ -92,7 +92,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  テクスチャを生成
 		//@―---------------------------------------------------------------------------
-		Ref<Texture> createTexture(BlobView blob)override;
+		Ref<Texture> createTexture(BlobView blob,StringView name)override;
 
 
 		//@―---------------------------------------------------------------------------
@@ -183,8 +183,6 @@ namespace ob::rhi::dx12 {
 		FeatureLevel                        m_featureLevel;             // フィーチャーレベル
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
-
-		ComPtr<ID3D12CommandAllocator>      m_commandAllocator;         // コマンドアロケータ
 
 		UPtr<class CommandQueue>			m_commandQueue;
 

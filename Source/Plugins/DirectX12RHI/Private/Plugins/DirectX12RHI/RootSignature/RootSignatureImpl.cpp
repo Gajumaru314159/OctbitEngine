@@ -114,6 +114,8 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
+		Utility::setName(m_rootSignature.Get(), getName());
+
 	}
 
 
@@ -132,20 +134,20 @@ namespace ob::rhi::dx12 {
 		return m_rootSignature;
 	}
 
+	
+	//@―---------------------------------------------------------------------------
+	//! @brief      名前を取得
+	//@―---------------------------------------------------------------------------
+	const String& RootSignatureImpl::getName()const {
+		return m_desc.name;
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  定義を取得
 	//@―---------------------------------------------------------------------------
 	const RootSignatureDesc& RootSignatureImpl::getDesc()const noexcept {
 		return m_desc;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  名前変更時
-	//@―---------------------------------------------------------------------------
-	void RootSignatureImpl::onNameChanged() {
-		Utility::setName(m_rootSignature.Get(), getName());
 	}
 
 }// namespace ob

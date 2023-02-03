@@ -80,6 +80,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	struct BufferDesc {
 
+		String			name;			//!< 名前
 		BufferType      bufferType;     //!< バッファタイプ
 		ResourceUsage   usage;          //!< リソース使用法
 		u64             bufferSize;     //!< バッファサイズ

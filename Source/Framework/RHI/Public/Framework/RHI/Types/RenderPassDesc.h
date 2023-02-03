@@ -167,6 +167,7 @@ namespace ob::rhi {
 	//!				RenderPass開始時に事前に設定しておくことで効率的な描画が見込めます。
 	//@―---------------------------------------------------------------------------
 	struct RenderPassDesc {
+		String							name;			//!< 名前
 		Array<AttachmentDesc>			attachments;
 		Array<SubpassDesc>				subpasses;
 		Array<SubpassDependency>		dependencies;

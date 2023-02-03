@@ -56,6 +56,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct SamplerDesc {
 
+        String			name;			    //!< 名前
         TextureFillter  filter;             //!< 拡縮時のフィルタ
         MipFillter      mipFilter;          //!< ミップ時のフィルタ
         bool            zFilter;            //!< 3DテクスチャのZ軸フィルタを設定するか

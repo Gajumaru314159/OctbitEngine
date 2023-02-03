@@ -27,6 +27,7 @@ namespace ob::rhi {
     //! @brief  コマンドリスト定義
     //@―---------------------------------------------------------------------------
     struct CommandListDesc{
+        String			name;	//!< 名前
         CommandListType type;   //!< 種類
     };
 

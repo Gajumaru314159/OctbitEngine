@@ -58,6 +58,8 @@ namespace ob::rhi::dx12 {
 		// 初期状態で記録モードなのでクローズ
 		m_cmdList->Close();
 
+		Utility::setName(m_cmdAllocator.Get(), getName());
+		Utility::setName(m_cmdList.Get(), getName());
 	}
 
 
@@ -66,6 +68,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	bool CommandListImpl::isValid()const {
 		return m_cmdList;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      名前を取得
+	//@―---------------------------------------------------------------------------
+	const String& CommandListImpl::getName()const {
+		return m_desc.name;
 	}
 
 #pragma endregion Command
@@ -94,6 +104,9 @@ namespace ob::rhi::dx12 {
 			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
 			Utility::OutputFatalLog(result, message);
 		}
+
+		Utility::setName(m_cmdAllocator.Get(), getName());
+		Utility::setName(m_cmdList.Get(), getName());
 
 		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);
@@ -468,14 +481,6 @@ namespace ob::rhi::dx12 {
 	}
 
 #pragma endregion
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  名前変更時
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::onNameChanged(){
-		Utility::setName(m_cmdAllocator.Get(), getName());
-		Utility::setName(m_cmdList.Get(), getName());
-	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタハンドルのキャッシュをクリア

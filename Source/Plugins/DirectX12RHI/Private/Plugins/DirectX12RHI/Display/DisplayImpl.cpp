@@ -56,6 +56,7 @@ namespace ob::rhi::dx12 {
                 {-1,+1},
             };
             BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
+            bdesc.name = desc.name + TC("_Vertices");
             m_verices = Buffer::Create(bdesc);
             m_verices->updateDirect(bdesc.bufferSize, vertices);
         }
@@ -96,18 +97,19 @@ namespace ob::rhi::dx12 {
                 {
                     RootParameter::Range(DescriptorRangeType::SRV,1,0),
                 },
-            {
-                StaticSamplerDesc(SamplerDesc(),0),
-            }
+                {
+                    StaticSamplerDesc(SamplerDesc(),0),
+                }
             );
+            desc.name = m_desc.name;
             signature = RootSignature::Create(desc);
-            signature->setName(TC("CopyRootSignature"));
             OB_ASSERT_EXPR(signature);
         }
 
         Ref<PipelineState> pipeline;
         {
             PipelineStateDesc desc;
+            desc.name = m_desc.name;
             desc.renderPass = m_renderPass;
             desc.subpass = 0;
 
@@ -123,7 +125,6 @@ namespace ob::rhi::dx12 {
             desc.depthStencil.stencil.enable = false;
 
             pipeline = PipelineState::Create(desc);
-            pipeline->setName(TC("TestPipeline"));
             OB_ASSERT_EXPR(pipeline);
         }
 
@@ -136,6 +137,14 @@ namespace ob::rhi::dx12 {
 
         m_initialized = true;
 
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      名前を取得
+    //@―---------------------------------------------------------------------------
+    const String& DisplayImpl::getName()const {
+        return m_desc.name;
     }
 
 
@@ -434,15 +443,6 @@ namespace ob::rhi::dx12 {
 
         }
 
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  名前変更時
-    //@―---------------------------------------------------------------------------
-    void DisplayImpl::onNameChanged() {
-        for (auto& resource : m_textures) {
-            //Utility::setName(resource.Get(), getName());
-        }
     }
 
 }// namespace ob::rhi::dx12

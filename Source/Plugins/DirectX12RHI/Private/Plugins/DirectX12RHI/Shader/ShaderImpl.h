@@ -38,7 +38,7 @@ namespace ob::rhi::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const String& code, ShaderStage stage);
+        ShaderImpl(const String& code, ShaderStage stage, StringView name=TC("Shader"));
 
 
         //@―---------------------------------------------------------------------------
@@ -48,13 +48,19 @@ namespace ob::rhi::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const Blob& blob, ShaderStage stage);
+        ShaderImpl(const Blob& blob, ShaderStage stage, StringView name=TC("Shader"));
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  妥当な状態か
         //@―---------------------------------------------------------------------------
         bool isValid()const;
+
+        
+        //@―---------------------------------------------------------------------------
+        //! @brief      名前を取得
+        //@―---------------------------------------------------------------------------
+        const String& getName()const override;
 
 
         //@―---------------------------------------------------------------------------
@@ -85,6 +91,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
+        String              m_name;
         ShaderStage         m_stage;                        //!< シェーダ・ステージ
         Blob                m_shaderBlob;                   //!< シェーダ・バイナリ
         ComPtr<ID3DBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ

@@ -44,7 +44,7 @@ namespace ob::rhi::dx12 {
 		}
 
 		m_resource = buffer;
-		m_resource->SetName(L"Buffer");
+		Utility::setName(m_resource.Get(), getName());
 	}
 
 
@@ -67,6 +67,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	bool BufferImpl::isValid()const {
 		return m_resource;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      名前を取得
+	//@―---------------------------------------------------------------------------
+	const String& BufferImpl::getName()const {
+		return m_desc.name;
 	}
 
 
@@ -121,14 +129,6 @@ namespace ob::rhi::dx12 {
 
 		m_device.getNative()->CreateConstantBufferView(&cbvDesc, handle);
 
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  名前変更時
-	//@―---------------------------------------------------------------------------
-	void BufferImpl::onNameChanged() {
-		Utility::setName(m_resource.Get(), getName());
 	}
 
 }// ob::rhi::dx12 

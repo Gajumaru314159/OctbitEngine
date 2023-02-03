@@ -232,8 +232,9 @@ namespace ob::rhi {
 	//! @brief      ルートシグネチャ定義
 	//@―---------------------------------------------------------------------------
 	struct RootSignatureDesc {
-		Array<RootParameter>       parameters;	//!< ルートパラメータ
-		Array<StaticSamplerDesc>   samplers;	//!< 固定サンプラー
+		String						name;		//!< 名前
+		Array<RootParameter>		parameters;	//!< ルートパラメータ
+		Array<StaticSamplerDesc>	samplers;	//!< 固定サンプラー
 		RootSignatureFlags          flags;		//!< フラグ
 	public:
 		//@―---------------------------------------------------------------------------

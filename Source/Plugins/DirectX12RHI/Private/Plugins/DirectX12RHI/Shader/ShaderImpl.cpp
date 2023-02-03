@@ -57,13 +57,15 @@ namespace ob::rhi::dx12 {
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const String& code, ShaderStage stage)
+    ShaderImpl::ShaderImpl(const String& code, ShaderStage stage, StringView name)
+        : m_name(name)
     {
         // コンパイルできるようにUTF-8にコンバート
         StringBase<char> utfCode;
         StringEncoder::Encode(code, utfCode);
 
         compile(utfCode, stage);
+
     }
 
 
@@ -75,7 +77,8 @@ namespace ob::rhi::dx12 {
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const Blob& blob, ShaderStage stage)
+    ShaderImpl::ShaderImpl(const Blob& blob, ShaderStage stage, StringView name)
+        : m_name(name)
     {
         // チャンクタイプをチェック
         bool isShaderBlob = *reinterpret_cast<const u32*>(blob.data()) == 0x43425844;
@@ -93,6 +96,14 @@ namespace ob::rhi::dx12 {
         if (!m_shaderBlob.empty())return true;
         if (m_shaderBolb2)return true;
         return false;
+    }
+
+    
+    //@―---------------------------------------------------------------------------
+    //! @brief      名前を取得
+    //@―---------------------------------------------------------------------------
+    const String& ShaderImpl::getName()const {
+        return m_name;
     }
 
 
