@@ -24,6 +24,14 @@ namespace ob::graphic {
 	public:
 
 		ForwardRenderPipeline() {
+
+			Ref<rhi::RenderPass> renderPass;
+
+			MaterialSystem::Get().registerRenderPass(Name(TC("EarlyDepth"), renderPass, 0));
+			MaterialSystem::Get().registerRenderPass(Name(TC("Opaque"), renderPass, 1));
+			MaterialSystem::Get().registerRenderPass(Name(TC("Transpaternt"),renderPass,2));
+
+
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -46,6 +54,8 @@ namespace ob::graphic {
 						Attachment(rhi::ColorTextureFormat::RG16,Color::Normal)
 					};
 					Attachment depth(rhi::DepthTextureFormat::D32, 0.f);
+
+
 					context.beginRenderPass(width, height, colors);
 					{
 						s32 indices[]{ 0};
@@ -55,6 +65,20 @@ namespace ob::graphic {
 
 						// Renderer描画
 						//context.draw(/**/);
+
+						Name renderTag(TC("EarlyDepth"));
+
+
+						// 指定したレンダータグのRendererを収集
+						// RenderPassは設定済み
+						// 実行順はSubpassに合わせる必要がある
+						auto renderers = context.getRenderers(renderTag);
+
+						renderers
+							.cull(options)
+							// .filter()
+							.sort(options)
+							.draw(options);
 
 						context.endSubPass();
 					}

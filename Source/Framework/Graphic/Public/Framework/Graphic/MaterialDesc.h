@@ -11,6 +11,8 @@ namespace ob::graphic {
 
     struct MaterialPass {
         Name renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
+        //  RenderPass/Subpass
+
         // リソース
         // Shader vs;
     };
