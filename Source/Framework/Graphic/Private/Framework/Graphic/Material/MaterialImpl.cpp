@@ -4,6 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Material/MaterialImpl.h>
+#include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/DescriptorTable.h>
 
 namespace ob::graphic {
 
@@ -28,15 +32,22 @@ namespace ob::graphic {
 		//m_textures
 		{
 			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize,rhi::BindFlag::AllShaderResource);
-			m_buffer = rhi::Buffer(bufferDesc);
+			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
 			m_bufferBlob.resize(bufferSize);
 		}
 
 		{
-			m_bufferTable = rhi::DescriptorTable(DescriptorHeapType::CBV_SRV_UAV, 1);
+			m_bufferTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
 			OB_ASSERT_EXPR(m_bufferTable);
-			m_bufferTable.setResource(0, m_buffer);
+			m_bufferTable->setResource(0, m_buffer);
+		}
+
+		{
+			m_textureTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, desc.textureProperties.size());
+			m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, desc.textureProperties.size());
+			OB_ASSERT_EXPR(m_textureTable);
+			OB_ASSERT_EXPR(m_samplerTable);
 		}
 
 	}
@@ -82,7 +93,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::setTexture(StringView name, const rhi::Texture& value) {
+	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 
 			auto& desc = found->second;
@@ -91,10 +102,12 @@ namespace ob::graphic {
 
 			m_textures[desc.offset] = value;
 
+			m_textureTable->setResource(desc.offset, value);
+
 		}
 	}
 
-	void MaterialImpl::record(rhi::CommandList&) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定
@@ -104,18 +117,26 @@ namespace ob::graphic {
 		// 複数パス → パスを引数に取る
 		// シェーダ設定 → 
 		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
-		
 
-		/*
+		auto found = m_passMap.find(pass);
+		if (found == m_passMap.end())
+			return;
+
+		// TODO 頂点レイアウト
+		auto& pipeline = found->second;
+		
+		cmdList->setPipelineState(pipeline);
 		
 		
-		m_pipeline->record(recorder);
+		// TODO スロット
+		rhi::SetDescriptorTableParam params[] = {
+			{m_bufferTable, 0},
+			{m_textureTable, 1},
+			//{m_samplerTable, 1},
+			//{m_bufferTable, 1},
+		};
+		cmdList->setRootDesciptorTable(params, std::size(params));
 
-		recorder->setDescriptor();
-
-
-		
-		*/
 	}
 
 

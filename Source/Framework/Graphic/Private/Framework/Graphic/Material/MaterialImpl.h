@@ -6,9 +6,7 @@
 #pragma once
 #include <Framework/Graphic/MaterialDesc.h>
 #include <Framework/Core/Misc/Blob.h>
-#include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/DescriptorTable.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::rhi {
 	class CommandList;
@@ -29,6 +27,15 @@ namespace ob::graphic {
 		PropertyType type;
 		s32 offset = -1;
 	};
+
+
+	class MaterialPass {
+	public:
+
+	private:
+		Ref<rhi::PipelineState> m_pipeline;
+	};
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
@@ -52,11 +59,11 @@ namespace ob::graphic {
 		void setColor(StringView name, Color value);
 		void setVector(StringView name, Vec4 value);
 		void setMatrix(StringView name, const Matrix& value);
-		void setTexture(StringView name, const Texture& value);
+		void setTexture(StringView name, const Ref<Texture>& value);
 
 	public:
 
-		void record(rhi::CommandList&);
+		void record(Ref<rhi::CommandList>&,Name pass);
 
 	private:
 
@@ -76,12 +83,16 @@ namespace ob::graphic {
 
 
 		Map<String, ValuePropertyDesc, std::less<>> m_propertyMap;
+		HashMap<Name, Ref<rhi::PipelineState>> m_passMap;
 
 		Blob m_bufferBlob;
-		Array<Texture> m_textures;
+		Array<Ref<Texture>> m_textures;
 
-		rhi::Buffer m_buffer;
-		rhi::DescriptorTable m_bufferTable;
+		Ref<rhi::Buffer> m_buffer;
+
+		Ref<rhi::DescriptorTable> m_bufferTable;
+		Ref<rhi::DescriptorTable> m_textureTable;
+		Ref<rhi::DescriptorTable> m_samplerTable;
 
 	};
 

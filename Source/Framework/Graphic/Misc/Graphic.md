@@ -17,19 +17,6 @@
 * Terrein
 
 
-概要
-----
-
-
-```c++
-
-Material material(shader);
-material.setFloat("Scale",12.0f);
-context.setMaterial(material);
-context.draw(mesh);
-
-```
-
 # いつPipelineStateをつくるか
 ## 必要な情報
 * 書き込み時に決まるもの

@@ -49,7 +49,7 @@ namespace ob::rhi::dx12
 	//@―---------------------------------------------------------------------------
 	//! @brief  バッファリソースを設定
 	//@―---------------------------------------------------------------------------
-	bool DescriptorTableImpl::setResource(s32 index, Ref<Buffer>& resource) {
+	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
 		if (auto p = resource.cast<BufferImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createCBV(handle);
@@ -61,7 +61,7 @@ namespace ob::rhi::dx12
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャリソースを設定
 	//@―---------------------------------------------------------------------------
-	bool DescriptorTableImpl::setResource(s32 index, Ref<Texture>& resource) {
+	bool DescriptorTableImpl::setResource(s32 index, const Ref<Texture>& resource) {
 		if (auto p = resource.cast<TextureImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createSRV(handle);

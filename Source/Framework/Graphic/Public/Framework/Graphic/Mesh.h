@@ -23,39 +23,37 @@ namespace ob::graphic {
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<typename TVertex, typename TIndex>
-		Mesh(const rhi::MeshData<TVertex, TIndex>& mesh);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  名前を設定
-		//@―---------------------------------------------------------------------------
-		void setName(StringView name);
+		Mesh(const rhi::MeshData<TVertex, TIndex>& mesh,StringView name);
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  頂点バッファを取得
 		//@―---------------------------------------------------------------------------
-		const rhi::Buffer& getVertexBuffer()const noexcept;
+		const Ref<rhi::Buffer>& getVertexBuffer()const noexcept;
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  インデックスバッファを取得
 		//@―---------------------------------------------------------------------------
-		const rhi::Buffer& getIndexBuffer()const noexcept;
+		const Ref<rhi::Buffer>& getIndexBuffer()const noexcept;
 
+		size_t getVertexCount()const noexcept { return m_vertexCount; }
+		size_t getIndexCount()const noexcept { return m_indexCount; }
 
 	private:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		Mesh(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount);
+		Mesh(const void* pVertexData, size_t vertexStribe, size_t vertexCount, const void* pIndexData, size_t indexStribe, size_t indexCount,StringView name);
 
 
 	private:
 
-		rhi::Buffer m_vertexBuffer;
-		rhi::Buffer m_indexBuffer;
+		Ref<rhi::Buffer> m_vertexBuffer;
+		Ref<rhi::Buffer> m_indexBuffer;
+		size_t m_vertexCount;
+		size_t m_indexCount;
 
 	};
 
@@ -64,26 +62,17 @@ namespace ob::graphic {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	template<typename TVertex, typename TIndex>
-	inline Mesh::Mesh(const rhi::MeshData<TVertex, TIndex>& mesh)
-		: Mesh(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(), mesh.indices.data(), sizeof(TIndex), mesh.indices.size())
+	inline Mesh::Mesh(const rhi::MeshData<TVertex, TIndex>& mesh,StringView name)
+		: Mesh(mesh.vertices.data(), sizeof(TVertex), mesh.vertices.size(), mesh.indices.data(), sizeof(TIndex), mesh.indices.size(),name)
 	{
 
 	}
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  名前を設定
-	//@―---------------------------------------------------------------------------
-	inline void Mesh::setName(StringView name) {
-		OB_DEBUG_CONTEXT(m_vertexBuffer.setName(Format(TC("{}_Vertex"), name)));
-		OB_DEBUG_CONTEXT(m_indexBuffer.setName(Format(TC("{}_Index"), name)));
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief  頂点バッファを取得
 	//@―---------------------------------------------------------------------------
-	inline const rhi::Buffer& Mesh::getVertexBuffer()const noexcept {
+	inline const Ref<rhi::Buffer>& Mesh::getVertexBuffer()const noexcept {
 		return m_vertexBuffer;
 	}
 
@@ -91,7 +80,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  インデックスバッファを取得
 	//@―---------------------------------------------------------------------------
-	inline const rhi::Buffer& Mesh::getIndexBuffer()const noexcept {
+	inline const Ref<rhi::Buffer>& Mesh::getIndexBuffer()const noexcept {
 		return m_indexBuffer;
 	}
 

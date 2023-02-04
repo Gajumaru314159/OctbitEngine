@@ -20,6 +20,8 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class Material {
     public:
+        using Texture = rhi::Texture;
+    public:
 
         //===============================================================
         // コンストラクタ / デストラクタ
@@ -41,14 +43,21 @@ namespace ob::graphic {
         void setFloat(StringView name, f32 value);
         void setColor(StringView name, Color value);
         void setMatrix(StringView name, const Matrix& value);
-        void setTexture(StringView name, const rhi::Texture& value);
+        void setTexture(StringView name, const Ref<Texture>& value);
         //void setFloatArray(StringView name, Span<f32> values);
         //void setColorArray(StringView name, Span<Color> values);
         //void setBuffer(StringView name, Buffer );
 
     public:
 
-        void record(rhi::CommandList&,Name pass)const;
+        static void SetGlobalFloat(StringView name, f32 value);
+        static void SetGlobalColor(StringView name, Color value);
+        static void SetGlobalMatrix(StringView name, const Matrix& value);
+        static void SetGlobalTexture(StringView name, const Ref<Texture>& value);
+
+    public:
+
+        void record(Ref<rhi::CommandList>&,Name pass)const;
 
     private:
 

@@ -84,17 +84,42 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  Textureプロパティを設定する
     //@―---------------------------------------------------------------------------
-    void Material::setTexture(StringView name, const rhi::Texture& value){
+    void Material::setTexture(StringView name, const Ref<rhi::Texture>& value){
         return safeGet(m_impl).setTexture(name, value);
     }
 
 
     //@―---------------------------------------------------------------------------
+    //! @brief  グローバルFloatプロパティを設定する
+    //@―---------------------------------------------------------------------------
+    void Material::SetGlobalFloat(StringView name, f32 value) {
+        OB_NOTIMPLEMENTED();
+    }
+    //@―---------------------------------------------------------------------------
+    //! @brief  グローバルColorプロパティを設定する
+    //@―---------------------------------------------------------------------------
+    void Material::SetGlobalColor(StringView name, Color value) {
+        OB_NOTIMPLEMENTED();
+    }
+    //@―---------------------------------------------------------------------------
+    //! @brief  グローバルMatrixプロパティを設定する
+    //@―---------------------------------------------------------------------------
+    void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
+        OB_NOTIMPLEMENTED();
+    }
+    //@―---------------------------------------------------------------------------
+    //! @brief  グローバルTextureプロパティを設定する
+    //@―---------------------------------------------------------------------------
+    void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
+        OB_NOTIMPLEMENTED();
+    }
+
+    //@―---------------------------------------------------------------------------
     //! @brief  描画コマンドを記録
     //@―---------------------------------------------------------------------------
-    void Material::record(rhi::CommandList& recorder, Name pass) const{
+    void Material::record(Ref<rhi::CommandList>& recorder, Name pass) const{
         OB_NOTIMPLEMENTED();
-        //safeGet(m_impl).record(recorder);
+        safeGet(m_impl).record(recorder,pass);
     }
 
 }// namespace ob

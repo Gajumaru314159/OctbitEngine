@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/CameraType.h>
+#include <Framework/RHI/RenderTexture.h>
 
 namespace ob::graphic {
 
@@ -31,12 +32,6 @@ namespace ob::graphic {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-        void render();
-
 
     public:
 
@@ -69,9 +64,9 @@ namespace ob::graphic {
         Rect getVieportRect();
         void setVieportRect(Rect rect);
 
-        void setRenderTarget(const RenderTexture&);
-        auto getRenderTarget()const -> const RenderTexture&;
-        void setRenderTarget();
+        void setRenderTarget(s32 displayNo);
+        void setRenderTarget(const Ref<rhi::RenderTexture>&);
+        auto getRenderTarget()const -> const Ref<rhi::RenderTexture>&;
 
 
         f32 getAspect()const;

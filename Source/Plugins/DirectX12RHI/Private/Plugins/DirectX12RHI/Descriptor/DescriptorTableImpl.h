@@ -48,8 +48,8 @@ namespace ob::rhi::dx12 {
 		//! @brief  リソースを設定
 		//@―---------------------------------------------------------------------------
 		//! @{
-		bool setResource(s32 index, class Ref<Buffer>& resource) override;
-		bool setResource(s32 index, Ref<Texture>& resource) override;
+		bool setResource(s32 index, const Ref<Buffer>& resource) override;
+		bool setResource(s32 index, const Ref<Texture>& resource) override;
 		//bool setResource(s32 index, class Sampler& resource) override;
 		//! @}
 

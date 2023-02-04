@@ -33,8 +33,8 @@ namespace ob::rhi {
         //! @brief  リソースを設定
         //@―---------------------------------------------------------------------------
         //! @{
-        virtual bool setResource(s32 index, Ref<class Buffer>& resource) = 0;
-        virtual bool setResource(s32 index, Ref<class Texture>& resource) = 0;
+        virtual bool setResource(s32 index, const Ref<class Buffer>& resource) = 0;
+        virtual bool setResource(s32 index, const Ref<class Texture>& resource) = 0;
         //virtual bool setResource(s32 index, class Sampler& resource) = 0;
         //! @}
 

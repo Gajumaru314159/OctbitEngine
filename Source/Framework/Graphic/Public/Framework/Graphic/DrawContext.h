@@ -15,13 +15,13 @@ namespace ob::graphic {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief      説明
     //! 
     //! @details    モデル描画のようなソート単位の描画処理。複数パスで描画される場合は同じ数だけ生成されます。
     //@―---------------------------------------------------------------------------
     class DrawItem {
     public:
-        const Name& getTag()const;
+        virtual const Name& getTag()const=0;
         virtual void render()const =0;
     };
 
@@ -46,12 +46,18 @@ namespace ob::graphic {
             return itr->second;
         }
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  説明
+        //@―---------------------------------------------------------------------------
         template<class T>
         T* allocateDrawItem(const Name& name) {
-            // auto buffer = m_linearAllocator.alloc(sizeof(T));
-            // auto pItem = new(buffer)T();
-            // m_item[name].push_back(pItem);
-            // return pItem;
+
+            static_assert(std::is_base_of<DrawItem, T>::value == true, "T is not DrawItem");
+
+            auto buffer = m_linearAllocator.alloc(sizeof(T));
+            auto pItem = new(buffer)T();
+            m_itemMap[name].push_back(pItem);
+            return pItem;
         }
 
     private:

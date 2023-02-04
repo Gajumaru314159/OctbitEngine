@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/String/Name.h>
 #include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::graphic {
 
@@ -27,13 +28,15 @@ namespace ob::graphic {
         void drawMesh(const Mesh& mesh, const Matrix&, const Material&, Name shaderPass);
         void drawMeshInstanced(const Mesh& mesh, Span<Matrix>, const Material&, Name shaderPass);
 
-        void drawMesh(Span<rhi::Buffer> streams,const rhi::Buffer& indices, const Matrix&, const Material&, Name shaderPass);
+        void drawMesh(Span<Ref<rhi::Buffer>> streams,const Ref<rhi::Buffer>& indices, const Matrix&, const Material&, Name shaderPass);
 
 
         void getTemporaryRT();
 
     private:
         Pimpl<class CommandBufferImpl> m_impl;
+
+        Ref<rhi::CommandList> m_cmdList;
     };
 
 

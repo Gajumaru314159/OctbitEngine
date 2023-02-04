@@ -8,7 +8,7 @@
 #include <Framework/Graphic/CommandBuffer.h>
 #include <Framework/Graphic/RenderContext.h>
 #include <Framework/Graphic/Camera.h>
-#include <Framework/RHI/RenderTarget.h>
+#include <Framework/RHI/RenderTexture.h>
 
 namespace ob::graphic {
 
@@ -31,12 +31,12 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		void render(RenderContext& context, Span<Camera> cameras) override {
 
-
 			for (auto& camera : cameras) {
 
 				context.setCamera(camera);
 
-				s32 width, height;
+				s32 width;// = camera.getRenderTarget().width();
+				s32 height;// = camera.getRenderTarget().height();
 
 
 				// デプスあり
@@ -49,7 +49,7 @@ namespace ob::graphic {
 					context.beginRenderPass(width, height, colors);
 					{
 						s32 indices[]{ 0};
-						context.beginSubPass(indices);
+						context.beginSubPass(indices, {});
 
 						context.setCamera(camera);
 
@@ -79,7 +79,7 @@ namespace ob::graphic {
 	private:
 
 		CommandBuffer m_cmd;
-		rhi::RenderTarget m_color;
+		Ref<RenderTexture> m_color;
 
 
 	};

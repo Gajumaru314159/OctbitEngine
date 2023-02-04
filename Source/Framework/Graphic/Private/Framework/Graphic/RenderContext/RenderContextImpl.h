@@ -85,7 +85,7 @@ namespace ob::graphic {
 
     private:
 
-        rhi::CommandList m_commandList;
+        Ref<rhi::CommandList> m_commandList;
 
     };
 
