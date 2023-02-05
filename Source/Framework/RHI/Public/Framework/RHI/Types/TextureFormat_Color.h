@@ -26,6 +26,7 @@ BC5,        //!< 2成分(ATI2N)                    @n 圧縮率1/2
 BC6H,       //!< HDR                             @n 圧縮率1/6
 BC7,        //!< BPTC                            @n 圧縮率1/4
 
+RGBA8_SRGB, //!< RGBA(8bit)
 BC1_SRGB,   //!< 2値アルファ(DXT1)               @n 圧縮率1/6
 BC2_SRGB,   //!< 16階調アルファ(DXT2/DXT3)       @n 圧縮率1/4
 BC3_SRGB,   //!< 多階調アルファ(DXT4/DXT5)       @n 圧縮率1/4

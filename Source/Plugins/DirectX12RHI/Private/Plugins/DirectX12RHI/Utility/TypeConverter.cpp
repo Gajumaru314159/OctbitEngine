@@ -217,6 +217,7 @@ namespace ob::rhi::dx12
         case TextureFormat::BC6H:           return DXGI_FORMAT_BC6H_UF16;
         case TextureFormat::BC7:            return DXGI_FORMAT_BC7_UNORM;
 
+        case TextureFormat::RGBA8_SRGB:     return DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
         case TextureFormat::BC1_SRGB:       return DXGI_FORMAT_BC1_UNORM_SRGB;
         case TextureFormat::BC2_SRGB:       return DXGI_FORMAT_BC2_UNORM_SRGB;
         case TextureFormat::BC3_SRGB:       return DXGI_FORMAT_BC3_UNORM_SRGB;
@@ -516,6 +517,7 @@ namespace ob::rhi::dx12
         case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;
         case DXGI_FORMAT_R16G16B16A16_FLOAT:	return TextureFormat::RGBA16;
         case DXGI_FORMAT_R8G8B8A8_UNORM:		return TextureFormat::RGBA8;
+        case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:	return TextureFormat::RGBA8;
         case DXGI_FORMAT_R32G32B32_FLOAT:		return TextureFormat::RGB32;
         case DXGI_FORMAT_R32G32_FLOAT:			return TextureFormat::RG32;
         case DXGI_FORMAT_R16G16_FLOAT:			return TextureFormat::RG16;
