@@ -67,8 +67,8 @@ namespace ob::input {
 			set(Key::KeypadPeriod, VK_DECIMAL);		//!< テンキー.
 			set(Key::KeypadDivide, VK_DIVIDE);		//!< テンキー/
 			set(Key::KeypadMultiply, VK_MULTIPLY);	//!< テンキー*
-			set(Key::KeypadMinus, VK_SUBTRACT);		//!< テンキー-
-			set(Key::KeypadPlus, VK_ADD);			//!< テンキー+
+			set(Key::KeypadSubstract, VK_SUBTRACT);		//!< テンキー-
+			set(Key::KeypadAdd, VK_ADD);			//!< テンキー+
 			set(Key::KeypadEnter, VK_RETURN);		//!< テンキーEnter
 			set(Key::Alpha0, '0');				//!< 数字キー0
 			set(Key::Alpha1, '1');				//!< 数字キー1
@@ -128,7 +128,7 @@ namespace ob::input {
 			set(Key::Greater, '>');				//!< >
 			set(Key::Question, '?');			//!< ?
 			set(Key::At, '@');					//!< @
-			set(Key::LeftBracke, '[');			//!< [
+			set(Key::LeftBracket, '[');			//!< [
 			set(Key::Backslash, '\\');			//!< \ または ＼
 			set(Key::RightBracket, ']');		//!< ]
 			set(Key::Caret, '^');				//!< ^
@@ -149,7 +149,7 @@ namespace ob::input {
 			set(Key::Delete, VK_DELETE);		//!< Delete
 			set(Key::Enter, VK_RETURN);			//!< Enter / Return
 			set(Key::Insert, VK_INSERT);		//!< Insert
-			set(Key::CapsLosk, VK_CAPITAL);		//!< CapsLock
+			set(Key::CapsLock, VK_CAPITAL);		//!< CapsLock
 			set(Key::PrintScreen, VK_SNAPSHOT);	//!< PrintScreen
 			set(Key::ScrollLock, VK_SCROLL);	//!< ScrollLock
 			set(Key::Pause, VK_PAUSE);			//!< Pause / Break
@@ -157,9 +157,9 @@ namespace ob::input {
 			set(Key::End, VK_END);				//!< End
 			//set(Key::PageUp, );				//!< PageUp
 			//set(Key::PageDown, '');			//!< PageDown
-			set(Key::Numlock, VK_NUMLOCK);		//!< NumLock
+			set(Key::NumLock, VK_NUMLOCK);		//!< NumLock
 			//set(Key::Shift, );				//!< Shift
-			set(Key::LeftShilt, VK_LSHIFT);		//!< 左Shift
+			set(Key::LeftShift, VK_LSHIFT);		//!< 左Shift
 			set(Key::RightShift, VK_RSHIFT);	//!< 右Shift
 			//set(Key::Ctrl, VK_);				//!< Ctrl
 			set(Key::LeftCtrl, VK_LCONTROL);	//!< 左Ctrl

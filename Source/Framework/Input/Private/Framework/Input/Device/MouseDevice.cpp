@@ -111,6 +111,7 @@ namespace ob::input
 		set(MouseButton::Left, 0);
 		set(MouseButton::Right, 1);
 		set(MouseButton::Middle, 2);
+		set(MouseButton::X1, 3);
 
 
 		// 軸更新
@@ -121,6 +122,8 @@ namespace ob::input
 		m_axisStates[MouseAxis::Y].next = pos.y;
 		m_axisStates[MouseAxis::DeltaX].next = deltaPos.x;
 		m_axisStates[MouseAxis::DeltaY].next = deltaPos.y;
+
+		m_axisStates[MouseAxis::Wheel].next = m_mouseState.lZ;
 
 
 		// バインドしているイベントを呼び出し

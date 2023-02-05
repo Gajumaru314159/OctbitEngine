@@ -323,10 +323,7 @@ int TestDirectX12() {
 	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 	ImGui::StyleColorsClassic();
 
-	imgui::ImGui_Init(window);
-	imgui::ImGui_DrawInit(renderPass, 0);
-
-
+	imgui::Startup(window, renderPass);
 
 	//------ループ-----
 
@@ -374,18 +371,15 @@ int TestDirectX12() {
 		}
 
 
+		{
+			imgui::BeginFrame();
 
-		imgui::ImGui_NewFrame();
-		imgui::ImGui_DrawNewFrame();
+			ImGui::NewFrame();
+			ImGui::ShowDemoWindow();
+			ImGui::Render();
 
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		ImGui::Render();
-
-		//cmdList->nextSubpass();
-		imgui::ImGui_RenderDrawData(cmdList);
-
-		cmdList->endRenderPass();
+			imgui::EndFrame(cmdList);
+		}
 
 
 		cmdList->endRenderPass();
@@ -421,8 +415,7 @@ int TestDirectX12() {
 		cbuf.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
 		buffer->updateDirect(cbuf,0);
 	}
-	imgui::ImGui_Shutdown();
-	imgui::ImGui_DrawShutdown();
+	imgui::Shutdown();
 	ImGui::DestroyContext();
 
 	return 0;

@@ -51,8 +51,8 @@ namespace ob::input {
 		KeypadPeriod,		//!< テンキー.
 		KeypadDivide,		//!< テンキー/
 		KeypadMultiply,		//!< テンキー*
-		KeypadMinus,		//!< テンキー-
-		KeypadPlus,			//!< テンキー+
+		KeypadSubstract,		//!< テンキー-
+		KeypadAdd,			//!< テンキー+
 		KeypadEnter,		//!< テンキーEnter
 
 		Alpha0,				//!< 数字キー0
@@ -115,7 +115,7 @@ namespace ob::input {
 		Greater,			//!< >
 		Question,			//!< ?
 		At,					//!< @
-		LeftBracke,			//!< [
+		LeftBracket,			//!< [
 		Backslash,			//!< \ または ＼
 		RightBracket,		//!< ]
 		Caret,				//!< ^
@@ -138,7 +138,7 @@ namespace ob::input {
 		Delete,				//!< Delete
 		Enter,				//!< Enter / Return
 		Insert,				//!< Insert
-		CapsLosk,			//!< CapsLock
+		CapsLock,			//!< CapsLock
 		PrintScreen,		//!< PrintScreen
 		ScrollLock,			//!< ScrollLock
 
@@ -147,10 +147,10 @@ namespace ob::input {
 		End,				//!< End
 		PageUp,				//!< PageUp
 		PageDown,			//!< PageDown
-		Numlock,			//!< NumLock
+		NumLock,			//!< NumLock
 		
 		Shift,				//!< Shift
-		LeftShilt,			//!< 左Shift
+		LeftShift,			//!< 左Shift
 		RightShift,			//!< 右Shift
 
 		Ctrl,				//!< Ctrl

@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 #include "Library/imgui.h"
 #include <Framework/Core/Core.h>
 #include <Framework/Core/Utility/Ref.h>
@@ -12,22 +13,9 @@
 
 namespace ob::imgui {
 
-	bool ImGui_Init(const ob::platform::Window& window);
-	void ImGui_Shutdown();
-	void ImGui_NewFrame();
-
-	//void     ImGui_EnableDpiAwareness();
-	//float    ImGui_GetDpiScaleForHwnd(void* hwnd);       // HWND hwnd
-	//float    ImGui_GetDpiScaleForMonitor(void* monitor); // HMONITOR monitor
-	//
-	//void     ImGui_EnableAlphaCompositing(void* hwnd);   // HWND hwnd
-
-
-
-	bool ImGui_DrawInit(const Ref<rhi::RenderPass>& renderPass,s32 subpass=0);
-	void ImGui_DrawShutdown();
-	void ImGui_DrawNewFrame();
-	void ImGui_RenderDrawData(const Ref<rhi::CommandList>& commandList);
-
+	bool Startup(const ob::platform::Window& window, const Ref<rhi::RenderPass>& renderPass, s32 subpass = 0);
+	void Shutdown();
+	void BeginFrame();
+	void EndFrame(const Ref<rhi::CommandList>& commandList);
 
 }// namespcae ob

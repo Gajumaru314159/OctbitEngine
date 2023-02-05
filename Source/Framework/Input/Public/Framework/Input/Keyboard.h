@@ -45,8 +45,8 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, KeypadPeriod);		//!< テンキー.
         OB_DECL_BUTTON(Key, KeypadDivide);		//!< テンキー/
         OB_DECL_BUTTON(Key, KeypadMultiply);	//!< テンキー*
-        OB_DECL_BUTTON(Key, KeypadMinus);		//!< テンキー-
-        OB_DECL_BUTTON(Key, KeypadPlus);		//!< テンキー+
+        OB_DECL_BUTTON(Key, KeypadSubstract);		//!< テンキー-
+        OB_DECL_BUTTON(Key, KeypadAdd);		//!< テンキー+
         OB_DECL_BUTTON(Key, KeypadEnter);		//!< テンキーEnter
 
         OB_DECL_BUTTON(Key, Alpha0);			//!< 数字キー0
@@ -109,7 +109,7 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, Greater);			//!< >
         OB_DECL_BUTTON(Key, Question);			//!< ?
         OB_DECL_BUTTON(Key, At);				//!< @
-        OB_DECL_BUTTON(Key, LeftBracke);		//!< [
+        OB_DECL_BUTTON(Key, LeftBracket);		//!< [
         OB_DECL_BUTTON(Key, Backslash);			//!< \ 
         OB_DECL_BUTTON(Key, RightBracket);		//!< ]
         OB_DECL_BUTTON(Key, Caret);				//!< ^
@@ -132,7 +132,7 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, Delete);			//!< Delete
         OB_DECL_BUTTON(Key, Enter);				//!< Enter / Return
         OB_DECL_BUTTON(Key, Insert);			//!< Insert
-        OB_DECL_BUTTON(Key, CapsLosk);			//!< CapsLock
+        OB_DECL_BUTTON(Key, CapsLock);			//!< CapsLock
         OB_DECL_BUTTON(Key, PrintScreen);		//!< PrintScreen
         OB_DECL_BUTTON(Key, ScrollLock);		//!< ScrollLock
 
@@ -141,10 +141,10 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, End);				//!< End
         OB_DECL_BUTTON(Key, PageUp);				//!< PageUp
         OB_DECL_BUTTON(Key, PageDown);			//!< PageDown
-        OB_DECL_BUTTON(Key, Numlock);			//!< NumLock
+        OB_DECL_BUTTON(Key, NumLock);			//!< NumLock
 
         OB_DECL_BUTTON(Key, Shift);				//!< Shift
-        OB_DECL_BUTTON(Key, LeftShilt);			//!< 左Shift
+        OB_DECL_BUTTON(Key, LeftShift);			//!< 左Shift
         OB_DECL_BUTTON(Key, RightShift);		//!< 右Shift
 
         OB_DECL_BUTTON(Key, Ctrl);				//!< Ctrl
