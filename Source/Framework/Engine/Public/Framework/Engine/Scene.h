@@ -22,7 +22,7 @@ namespace ob::engine {
 	public:
 
 		static Ref<Scene> Create();
-		static Ref<Scene> Load();
+		//static Ref<Scene> Load();
 
 	public:
 

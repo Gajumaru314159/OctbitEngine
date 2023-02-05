@@ -9,7 +9,6 @@ namespace ob::engine {
 
 	class Engine;
 	class World;
-	class Scene;
 	class Entity;
 	class Component;
 

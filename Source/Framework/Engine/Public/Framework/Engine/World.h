@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Forward.h>
-
+#include <Framework/Engine/Scene.h>
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace ob::engine {
 
 	private:
 
-		//UPtr<Scene> m_scene;
+		UPtr<Scene> m_scene;
 
 	};
 

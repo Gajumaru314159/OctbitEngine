@@ -47,7 +47,7 @@ namespace ob::imgui {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画データ取得(描画用)
 	//@―---------------------------------------------------------------------------
-	static ImGuiDrawData* GeDrawData()
+	static ImGuiDrawData* GetDrawData()
 	{
 		return ImGui::GetCurrentContext() ? (ImGuiDrawData*)ImGui::GetIO().BackendRendererUserData : nullptr;
 	}
@@ -408,7 +408,7 @@ namespace ob::imgui {
 	static bool CreateFontsTexture()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		ImGuiDrawData* bd = GeDrawData();
+		ImGuiDrawData* bd = GetDrawData();
 		unsigned char* pixels;
 
 		// テクスチャサイズ取得
@@ -448,7 +448,7 @@ namespace ob::imgui {
 	//! @brief		描画ステートを設定    
 	//@―---------------------------------------------------------------------------
 	static void SetupRenderState(ImDrawData* draw_data, const Ref<rhi::CommandList>& commandList) {
-		ImGuiDrawData* bd = GeDrawData();
+		ImGuiDrawData* bd = GetDrawData();
 
 		// ビューポート
 		{
@@ -527,8 +527,11 @@ namespace ob::imgui {
 		ImGuiIO& io = ImGui::GetIO();
 
 		ImGui::GetIO().Fonts->SetTexID(nullptr);
-		SafeDelete(io.BackendPlatformUserData);
-		SafeDelete(io.BackendRendererUserData);
+
+		if (auto data = GetBackendData())delete data;
+		if (auto data = GetDrawData())delete data;
+		io.BackendRendererUserData = nullptr;
+		io.BackendPlatformUserData= nullptr;
 
 	}
 
@@ -543,7 +546,7 @@ namespace ob::imgui {
 		ImGuiData* bd = GetBackendData();
 		OB_ASSERT(bd != nullptr, "初期化されていません。ImGui_Init()の呼び出しを確認してください。");
 
-		ImGuiDrawData* drawData = GeDrawData();
+		ImGuiDrawData* drawData = GetDrawData();
 		OB_ASSERT(drawData != nullptr, "初期化されていません。ImGui_Init()の呼び出しを確認してください。");
 
 		// 時間更新
@@ -580,7 +583,7 @@ namespace ob::imgui {
 		using namespace ob::rhi;
 
 		ImDrawData* draw_data = ImGui::GetDrawData();
-		ImGuiDrawData* bd = GeDrawData();
+		ImGuiDrawData* bd = GetDrawData();
 
 		if (!draw_data || !bd)
 			return;
