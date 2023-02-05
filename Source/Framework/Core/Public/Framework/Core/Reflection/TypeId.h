@@ -50,6 +50,8 @@ namespace ob::core {
 
 	}
 
+#define OB_RTTI()	virtual TypeId getTypeId()const{return TypeId::Get<std::remove_reference_t<decltype(*this)>>();}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  型ID

@@ -102,7 +102,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct BlendDesc{
 
-        bool        blendEnable;        //!< ブレンドの有効設定
+        bool        blendEnable{false}; //!< ブレンドの有効設定
         BlendFactor srcColorFactor;     //!< ソースカラー係数
         BlendFactor dstColorFactor;     //!< デストカラー係数
         BlendOp     colorOp;            //!< カラーブレンド方法
@@ -125,7 +125,7 @@ namespace ob::rhi {
         //! @brief      デフォルトコンストラクタ
         //@―---------------------------------------------------------------------------
         BlendDesc() {
-            *this = AlphaBlend;
+            *this = None;
         }
 
         //@―---------------------------------------------------------------------------

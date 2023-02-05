@@ -369,9 +369,9 @@ namespace ob::rhi::dx12
             case Type::Int8:   return DXGI_FORMAT_R8G8B8A8_SINT;
             case Type::Int16:  return DXGI_FORMAT_R16G16B16A16_SINT;
             case Type::Int32:  return DXGI_FORMAT_R32G32B32A32_SINT;
-            case Type::UInt8:  return DXGI_FORMAT_R8G8B8A8_UINT;
-            case Type::UInt16: return DXGI_FORMAT_R16G16B16A16_UINT;
-            case Type::UInt32: return DXGI_FORMAT_R32G32B32A32_UINT;
+            case Type::UInt8:  return DXGI_FORMAT_R8G8B8A8_UNORM;
+            case Type::UInt16: return DXGI_FORMAT_R16G16B16A16_UNORM;
+            case Type::UInt32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
             case Type::Float:  return DXGI_FORMAT_R32G32B32A32_FLOAT;
             }
         }

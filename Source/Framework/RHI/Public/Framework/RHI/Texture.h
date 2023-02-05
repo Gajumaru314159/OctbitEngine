@@ -7,6 +7,7 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
+#include <Framework/Core/Graphic/Bitmap.h>
 
 //===============================================================
 // クラス宣言
@@ -25,6 +26,22 @@ namespace ob::rhi {
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
         static Ref<Texture> Create(const TextureDesc& desc);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  コンストラクタ
+        //! 
+        //! @param desc テクスチャ定義
+        //@―---------------------------------------------------------------------------
+        static Ref<Texture> Create(const Bitmap& bitmap);
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  コンストラクタ
+        //! 
+        //! @param desc テクスチャ定義
+        //@―---------------------------------------------------------------------------
+        static Ref<Texture> Create(Size size,Span<IntColor> colors);
 
 
         //@―---------------------------------------------------------------------------

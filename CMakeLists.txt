@@ -109,6 +109,8 @@ if(WIN32)
     endif()
 endif()
 
+add_subdirectory ("Source/Plugins/ImGui")
+
 # Test
 add_subdirectory ("Source/Test/Framework/Core")
 add_subdirectory ("Source/Test/Framework/Platform")

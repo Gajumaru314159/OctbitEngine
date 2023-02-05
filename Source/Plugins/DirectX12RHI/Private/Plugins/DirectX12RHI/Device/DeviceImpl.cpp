@@ -218,6 +218,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
+	Ref<Texture> DeviceImpl::createTexture(Size size,Span<IntColor> colors) {
+		SAFE_CREATE(TextureImpl, *this, size,colors);
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  テクスチャを生成
+	//@―---------------------------------------------------------------------------
 	Ref<Texture> DeviceImpl::createTexture(BlobView blob,StringView name) {
 		SAFE_CREATE(TextureImpl,*this, blob,name);
 	}

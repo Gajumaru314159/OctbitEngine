@@ -10,7 +10,7 @@
 
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/EngineConfig.h>
-
+#include <Plugins/ImGui/ImGui.h>
 #pragma warning(push, 0)
 #include <OBJ_Loader.h>
 #pragma warning(pop)
@@ -97,7 +97,7 @@ int TestDirectX12() {
 		desc.name = TC("Color0");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::Gray;
+		desc.clear.color = Color::Black;
 
 		colorRT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(colorRT);
@@ -108,7 +108,7 @@ int TestDirectX12() {
 		desc.name = TC("Color1");
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::White;
+		desc.clear.color = Color::Green;
 
 		color2RT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(color2RT);
@@ -220,7 +220,8 @@ int TestDirectX12() {
 			VertexAttribute(Semantic::Normal,offsetof(Vert,normal),Type::Float,4),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vert,uv),Type::Float,2),
 		};
-		desc.blend[0] = BlendDesc::AlphaBlend;
+		desc.blend[0] = BlendDesc::None;
+		desc.blend[1] = BlendDesc::None;
 		desc.rasterizer.cullMode = CullMode::None;
 		desc.depthStencil.depth.enable = true;
 		desc.depthStencil.stencil.enable = false;
@@ -236,7 +237,7 @@ int TestDirectX12() {
 		desc.name = TC("TestConstant");
 		buffer = Buffer::Create(desc);
 		OB_ASSERT_EXPR(buffer);
-		buffer->updateDirect(cbuf);
+		buffer->updateDirect(cbuf,0);
 	}
 
 	Ref<Texture> tex;
@@ -317,6 +318,15 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(cmdList);
 	}
 
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+	ImGui::StyleColorsClassic();
+
+	imgui::ImGui_Init(window);
+	imgui::ImGui_DrawInit(renderPass, 0);
+
+
 
 	//------ループ-----
 
@@ -362,6 +372,22 @@ int TestDirectX12() {
 			param.indexCount = mesh.indices.size();
 			cmdList->drawIndexed(param);
 		}
+
+
+
+		imgui::ImGui_NewFrame();
+		imgui::ImGui_DrawNewFrame();
+
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
+		ImGui::Render();
+
+		//cmdList->nextSubpass();
+		imgui::ImGui_RenderDrawData(cmdList);
+
+		cmdList->endRenderPass();
+
+
 		cmdList->endRenderPass();
 
 		if (input::Keyboard::Z.pressed()){
@@ -390,10 +416,14 @@ int TestDirectX12() {
 		if (input::Keyboard::DownArrow.pressed())rot.x += rspd;
 		rot.x = Math::Clamp(rot.x, -90.f, 90.f);
 
+
 		// カメラバッファ更新
-		cbuf.matrix = Matrix::Perspective(60, 8.f / 6.f, 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
-		buffer->updateDirect(cbuf);
+		cbuf.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
+		buffer->updateDirect(cbuf,0);
 	}
+	imgui::ImGui_Shutdown();
+	imgui::ImGui_DrawShutdown();
+	ImGui::DestroyContext();
 
 	return 0;
 }

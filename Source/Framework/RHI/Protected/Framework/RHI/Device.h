@@ -76,7 +76,8 @@ namespace ob::rhi {
         virtual Ref<Buffer>         createBuffer(const BufferDesc& desc) = 0;
 
         virtual Ref<Texture>        createTexture(const TextureDesc& desc) = 0;
-        virtual Ref<Texture>        createTexture(BlobView blob,StringView name) = 0;
+        virtual Ref<Texture>        createTexture(BlobView blob, StringView name) = 0;
+        virtual Ref<Texture>        createTexture(Size size,Span<IntColor> colors) = 0;
         virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) = 0;
 
         virtual Ref<Shader>         createShader(const String& code, ShaderStage stage) = 0;

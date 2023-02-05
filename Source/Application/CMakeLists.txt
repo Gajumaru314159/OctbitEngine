@@ -31,6 +31,7 @@ set(public_libs
     #VulkanRHI
     Input
     Engine
+    ImGui
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 

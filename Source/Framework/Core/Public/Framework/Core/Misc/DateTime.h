@@ -38,6 +38,13 @@ namespace ob::core {
 		s32			milliSeconds = 0;				//!< ミリ秒
 	public:
 
+		bool operator==(const DateTime& rhs)const noexcept;			//!< 等価演算子
+		bool operator!=(const DateTime& rhs)const noexcept;			//!< 否等価演算子
+		bool operator<(const DateTime& rhs)const noexcept;			//!< 比較演算子
+		bool operator<=(const DateTime& rhs)const noexcept;			//!< 比較演算子
+		bool operator>(const DateTime& rhs)const noexcept;			//!< 比較演算子
+		bool operator>=(const DateTime& rhs)const noexcept;			//!< 比較演算子
+
 		//@―---------------------------------------------------------------------------
 		//!	@brief	正規化
 		//@―---------------------------------------------------------------------------
@@ -87,6 +94,58 @@ namespace ob::core {
 	// インライン関数
 	//===============================================================
 	//! @cond
+
+	//===============================================================
+	// 比較
+	//===============================================================
+	inline bool DateTime::operator==(const DateTime& rhs)const noexcept {
+		return
+			year == rhs.year &&
+			month == rhs.month &&
+			day == rhs.day &&
+			hour == rhs.hour &&
+			minute == rhs.minute &&
+			second == rhs.second &&
+			milliSeconds == rhs.milliSeconds;
+	}
+	inline bool DateTime::operator!=(const DateTime& rhs)const noexcept {
+		return !(*this == rhs);
+	}
+	inline bool DateTime::operator<(const DateTime& rhs)const noexcept {
+		auto l = *this; l.normalize();
+		auto r = rhs; r.normalize();
+
+		if (year < r.year)return true;
+		if (month < r.month)return true;
+		if (day < r.day)return true;
+		if (hour < r.hour)return true;
+		if (minute < r.minute)return true;
+		if (second < r.second)return true;
+		if (milliSeconds < r.milliSeconds)return true;
+
+		return false;
+	}
+	inline bool DateTime::operator<=(const DateTime& rhs)const noexcept {
+		auto l = *this; l.normalize();
+		auto r = rhs; r.normalize();
+
+		if (year <= r.year)return true;
+		if (month <= r.month)return true;
+		if (day <= r.day)return true;
+		if (hour <= r.hour)return true;
+		if (minute <= r.minute)return true;
+		if (second <= r.second)return true;
+		if (milliSeconds <= r.milliSeconds)return true;
+
+		return false;
+	}
+	inline bool DateTime::operator>(const DateTime& rhs)const noexcept {
+		return !(*this <= rhs);
+	}
+	inline bool DateTime::operator>=(const DateTime& rhs)const noexcept {
+		return !(*this < rhs);
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief	午前か

@@ -89,6 +89,9 @@ namespace ob::rhi::dx12 {
 		Ref<Texture> createTexture(const TextureDesc& desc)override;
 
 
+		Ref<Texture> createTexture(Size size, Span<IntColor> colors) override;
+
+
 		//@―---------------------------------------------------------------------------
 		//! @brief  テクスチャを生成
 		//@―---------------------------------------------------------------------------

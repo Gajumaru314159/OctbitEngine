@@ -18,6 +18,8 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	class Buffer :public GraphicObject {
 	public:
+		using CopyFunc = std::function<void(void*)>;
+	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
@@ -63,9 +65,17 @@ namespace ob::rhi {
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      バッファを更新(直接更新)
+		//! 
+		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+		//@―---------------------------------------------------------------------------
+		virtual void updateDirect(const CopyFunc& func) = 0;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      バッファを更新(直接更新)
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		void updateDirect(const T& value, size_t offset = 0) {
+		void updateDirect(const T& value, size_t offset) {
 			updateDirect(sizeof(T), &value, offset);
 		}
 

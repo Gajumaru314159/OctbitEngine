@@ -35,6 +35,11 @@ namespace ob::rhi::dx12 {
         TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
 
         //@―---------------------------------------------------------------------------
+        //! @brief      TextureDesc から空のテクスチャを生成
+        //@―---------------------------------------------------------------------------
+        TextureImpl(DeviceImpl& rDevice, Size size,Span<IntColor> colors);
+
+        //@―---------------------------------------------------------------------------
         //! @brief      テクスチャバイナリから生成
         //@―---------------------------------------------------------------------------
         TextureImpl(DeviceImpl& rDevice, BlobView blob,StringView name);

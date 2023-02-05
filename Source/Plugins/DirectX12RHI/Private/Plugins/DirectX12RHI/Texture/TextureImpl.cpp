@@ -54,16 +54,13 @@ namespace ob::rhi::dx12 {
 
 		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
-		const FLOAT color[4] = { 1.f,1.f,1.f,1.f };
-		auto clearValue = CD3DX12_CLEAR_VALUE(format, color);
-
 		// リソース生成
 		auto result = rDevice.getNative()->CreateCommittedResource(
 			&heapProps,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
 			m_state,
-			&clearValue,
+			nullptr,
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
@@ -81,6 +78,80 @@ namespace ob::rhi::dx12 {
 		Utility::setName(m_resource.Get(), getName());
     }
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      コンストラクタ
+	//@―---------------------------------------------------------------------------
+	TextureImpl::TextureImpl(DeviceImpl& rDevice, Size size, Span<IntColor> colors)
+		: m_device(rDevice)
+	{
+		auto format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+
+		// 定義生成
+		D3D12_RESOURCE_DESC resourceDesc{};
+		resourceDesc.DepthOrArraySize = 1;
+		resourceDesc.MipLevels = 0;
+
+		if (size.height == 0) {
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex1D(format, size.width);
+		} else if (size.depth == 0) {
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, size.width, size.height);
+		} else {
+			resourceDesc = CD3DX12_RESOURCE_DESC::Tex3D(format, size.width, size.height, size.depth);
+		}
+
+		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+
+		// リソース生成
+		auto result = rDevice.getNative()->CreateCommittedResource(
+			&heapProps,
+			D3D12_HEAP_FLAG_NONE,
+			&resourceDesc,
+			m_state,
+			nullptr,
+			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
+
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommittedResource()"));
+		}
+
+		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
+
+
+		result = m_resource->WriteToSubresource(
+			0,
+			nullptr,
+			colors.data(),
+			sizeof(IntColor)*size.width,
+			sizeof(IntColor) * size.width*size.height
+		);
+		if (FAILED(result)) {
+			Utility::outputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
+			return;
+		}
+
+
+		auto convertType = [](D3D12_RESOURCE_DIMENSION dimension) {
+			switch (dimension) {
+			case D3D12_RESOURCE_DIMENSION_TEXTURE1D:return TextureType::Texture1D;
+			case D3D12_RESOURCE_DIMENSION_TEXTURE2D:return TextureType::Texture2D;
+			case D3D12_RESOURCE_DIMENSION_TEXTURE3D:return TextureType::Texture3D;
+			}
+			return TextureType::Texture2D;
+		};
+
+		// Desc設定
+		m_desc.name = TC("Generated From IntColor");
+		m_desc.size = size;
+		m_desc.type = convertType(resourceDesc.Dimension);
+		m_desc.format = TypeConverter::Convert(format);
+		m_desc.arrayNum = 1;
+		m_desc.mipLevels = 0;
+
+
+		Utility::setName(m_resource.Get(), getName());
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ

@@ -119,6 +119,30 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief      バッファを更新(直接更新)
+	//! 
+	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
+	//@―---------------------------------------------------------------------------
+	void BufferImpl::updateDirect(const CopyFunc& func){
+		if (!func)
+			return;
+
+		HRESULT result;
+		byte* ptr = nullptr;
+		result = m_resource->Map(0, nullptr, (void**)&ptr);
+		if (FAILED(result))
+		{
+			Utility::OutputFatalLog(result, TC("ID3D12Resource::Map()"));
+			return;
+		}
+
+		func(ptr);
+
+		m_resource->Unmap(0, nullptr);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief      定数バッファ―ビューを生成
 	//@―---------------------------------------------------------------------------
 	void BufferImpl::createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {

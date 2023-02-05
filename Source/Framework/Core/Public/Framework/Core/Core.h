@@ -66,6 +66,8 @@
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Misc/YesNo.h>
 
+#include <Framework/Core/Reflection/TypeId.h>
+
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/String/StringEncoder.h>

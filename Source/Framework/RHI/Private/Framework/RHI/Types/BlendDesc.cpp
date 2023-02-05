@@ -25,33 +25,45 @@ namespace ob::rhi {
     const BlendDesc BlendDesc::AlphaBlend = {
         true,
         BlendFactor::One,
-        BlendFactor::Zero,
+        BlendFactor::OneMinusSrcAlpha,
         BlendOp::Add,
-        SHARED_STATE
+        BlendFactor::One,
+        BlendFactor::OneMinusSrcAlpha,
+        BlendOp::Add,
+        ColorCompoent::All,
     };
 
     const BlendDesc BlendDesc::Addition = {
         true,
+        BlendFactor::SrcAlpha,
         BlendFactor::One,
-        BlendFactor::Zero,
         BlendOp::Add,
-        SHARED_STATE
+        BlendFactor::SrcAlpha,
+        BlendFactor::One,
+        BlendOp::Add,
+        ColorCompoent::All,
     };
 
     const BlendDesc BlendDesc::AdditionAlpha = {
         true,
+        BlendFactor::SrcAlpha,
         BlendFactor::One,
-        BlendFactor::Zero,
         BlendOp::Add,
-        SHARED_STATE
+        BlendFactor::SrcAlpha,
+        BlendFactor::One,
+        BlendOp::Add,
+        ColorCompoent::All,
     };
 
     const BlendDesc BlendDesc::Subtraction = {
         true,
+        BlendFactor::SrcAlpha,
         BlendFactor::One,
-        BlendFactor::Zero,
-        BlendOp::Add,
-        SHARED_STATE
+        BlendOp::Sub,
+        BlendFactor::SrcAlpha,
+        BlendFactor::One,
+        BlendOp::Sub,
+        ColorCompoent::All,
     };
 
 }// namespace ob

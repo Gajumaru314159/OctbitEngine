@@ -280,6 +280,7 @@ namespace ob::rhi::dx12 {
 		auto& rDisplay = *display.cast<DisplayImpl>();
 		auto& rTexture = *texture.cast<TextureImpl>();
 
+		rDisplay.bindTexture(texture);
 		rDisplay.recordApplyDisplay(*this);
 	}
 

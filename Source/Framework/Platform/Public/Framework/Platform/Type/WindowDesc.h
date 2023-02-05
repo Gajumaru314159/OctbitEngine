@@ -21,7 +21,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     struct WindowDesc {
         String      title = TC("NONAME");			//!< ウィンドウタイトル
-        Size		clientSize{ 640, 480 };	        //!< クライアント領域のピクセルサイズ
+        Size		clientSize{ 1280, 720};	        //!< クライアント領域のピクセルサイズ
         WindowMode	mode = WindowMode::Window;      //!< フルスクリーンモードで作成するかどうか
         bool		resizable = true;				//!< 可変ウィンドウとして作成するかどうか
     };

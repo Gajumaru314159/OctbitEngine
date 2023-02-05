@@ -28,6 +28,18 @@ namespace ob::rhi {
         return Device::Get()->createTexture(blob,name);
     }
 
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  コンストラクタ
+    //! 
+    //! @param desc テクスチャ定義
+    //@―---------------------------------------------------------------------------
+    Ref<Texture> Texture::Create(Size size, Span<IntColor> colors) {
+        return Device::Get()->createTexture(size, colors);
+    }
+
+
     //@―---------------------------------------------------------------------------
     //! @brief      パスからテクスチャを読み込み
     //! 
