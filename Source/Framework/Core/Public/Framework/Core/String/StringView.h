@@ -240,7 +240,7 @@ template <> struct fmt::formatter<ob::core::StringView, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::StringView& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{}"), ob::core::StringView(value.data(),value.size()));
+		return format_to(ctx.out(), TC("{}"), std::basic_string_view<ob::core::Char>(value.data(),value.size()));
 	}
 };
 //! @endcond
