@@ -11,11 +11,12 @@
 namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief		文字列ビュー基底
 	//@―---------------------------------------------------------------------------
 	template<class TChar>
 	class StringViewBase {
 	public:
+		//! @cond 
 		using string_view_type = std::basic_string_view<TChar>;
 		using traits_type = typename string_view_type::traits_type;
 		using value_type = typename string_view_type::value_type;
@@ -33,9 +34,12 @@ namespace ob::core {
 		static constexpr size_type npos{ string_view_type::npos };
 	public:
 
-		//@―---------------------------------------------------------------------------
-		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
+		//===============================================================
+		// コンストラクタ / デストラクタ
+		// 
+		// StringBase<TChar>, std::basic_string<TChar>, std::basic_string_view<TChar>,const TChar*
+		// などから構築可能です。
+		//===============================================================
 		constexpr StringViewBase() = default;
 		constexpr StringViewBase(const StringViewBase&) = default;
 		constexpr StringViewBase(const std::basic_string<TChar>& s) noexcept : m_view(s) {}
@@ -43,12 +47,26 @@ namespace ob::core {
 		constexpr StringViewBase(const value_type* s, size_type length) noexcept :m_view(s, length) {}
 		constexpr StringViewBase(const value_type* s) noexcept :m_view(s) {}
 
+
+		//===============================================================
+		// 代入演算子
+		// 
+		// StringBase<TChar>, std::basic_string<TChar>, std::basic_string_view<TChar>,const TChar*
+		// などから代入可能です。
+		//===============================================================
 		constexpr StringViewBase& operator =(const StringViewBase&) = default;
 
-		operator std::basic_string_view<TChar>() const noexcept { return m_view; }
 
+		//===============================================================
+		// 変換
+		//===============================================================
+		operator std::basic_string_view<TChar>() const noexcept { return m_view; }
 		explicit constexpr operator bool() const noexcept { return !m_view.empty(); }
 
+
+		//===============================================================
+		// イテレータ
+		//===============================================================
 		const_iterator begin() const noexcept { return m_view.begin(); }
 		const_iterator end() const noexcept { return m_view.begin(); }
 		const_iterator cbegin() const noexcept { return m_view.cbegin(); }
@@ -58,12 +76,20 @@ namespace ob::core {
 		const_reverse_iterator crbegin() const noexcept { return m_view.crbegin(); }
 		const_reverse_iterator crend() const noexcept { return m_view.crend(); }
 
+
+		//===============================================================
+		// 領域
+		//===============================================================
 		constexpr size_type size() const noexcept { return m_view.size(); }
 		constexpr size_type size_bytes() const noexcept { return m_view.size() * sizeof(TChar); }
 		constexpr size_type length() const noexcept { return m_view.length(); }
 		constexpr size_type max_size() const noexcept { return m_view.max_size(); }
 		constexpr bool empty() const noexcept { return m_view.empty(); }
 
+
+		//===============================================================
+		// 要素アクセス
+		//===============================================================
 		constexpr const_reference operator [](size_type index) const noexcept { return m_view[index]; }
 		constexpr const_reference at(size_type index) const { return m_view.at(index); }
 
@@ -72,16 +98,42 @@ namespace ob::core {
 
 		constexpr const_pointer data() const noexcept { return m_view.data(); }
 
-		constexpr void remove_prefix(size_type n) noexcept { m_view = m_view.substr(n); }
-		constexpr void remove_suffix(size_type n) noexcept { m_view = m_view.substr(0, size() - n); }
 
+		//===============================================================
+		// 文字列の入れ替え
+		//===============================================================
 		constexpr void swap(StringViewBase& other) noexcept { m_view.swap(other); }
 
-		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_view.copy(dst, n, pos); }
+
+		//===============================================================
+		// 文字列の切り出し
+		//===============================================================
+		constexpr void remove_prefix(size_type n) noexcept { m_view = m_view.substr(n); }
+		constexpr void remove_suffix(size_type n) noexcept { m_view = m_view.substr(0, size() - n); }
 		constexpr StringViewBase substr(size_type pos = 0, size_type n = npos) const { return m_view.substr(pos, n); }
+		constexpr StringViewBase rsubstr(size_type pos = 0, size_type n = npos) const { return m_str.substr(size() - pos - n - 1, n); }
+		constexpr StringViewBase substr_range(size_type first = 0, size_type last = npos) const { return m_str.substr(first, last - first); }
+		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_view.copy(dst, n, pos); }
 
-		constexpr void clear() noexcept { return m_view = {}; }
 
+		//===============================================================
+		// 文字列の検索
+		//===============================================================
+		constexpr size_type find(StringViewBase s, size_type pos = 0) const noexcept { return m_view.find(s.m_view, pos); }
+		constexpr size_type find(value_type ch, size_type pos = 0) const noexcept { return m_view.find(ch, pos); }
+		constexpr size_type find(const value_type* s, size_type pos, size_type count) const noexcept { return m_view.find(s, pos, count); }
+		constexpr size_type find(const value_type* s, size_type pos = 0) const noexcept { return m_view.find(s, pos); }
+		constexpr size_type find_first_not_of(value_type ch, size_type pos = 0) const noexcept { return m_view.find_first_not_of(ch, pos); }
+		constexpr size_type rfind(StringViewBase s, size_type pos = npos) const noexcept { return m_view.rfind(s.m_view, pos); }
+		constexpr size_type rfind(value_type ch, size_type pos = npos) const noexcept { return m_view.rfind(ch, pos); }
+		constexpr size_type rfind(const value_type* s, size_type pos, size_type count) const noexcept { return m_view.rfind(s, pos, count); }
+		constexpr size_type rfind(const value_type* s, size_type pos = npos) const noexcept { return m_view.rfind(s, pos); }
+		constexpr size_type find_last_not_of(value_type ch, size_type pos = npos) const noexcept { return m_view.find_last_not_of(ch, pos); }
+
+
+		//===============================================================
+		// 文字列の比較
+		//===============================================================
 		constexpr s32 compare(StringViewBase s) const noexcept { return m_view.compare(s.m_view); }
 		constexpr s32 compare(size_type pos1, size_type n1, StringViewBase s) const noexcept { return m_view.compare(pos1, n1, s.m_view); }
 		constexpr s32 compare(size_type pos1, size_type n1, StringViewBase s, size_type pos2, size_type n2) const noexcept { return m_view.compare(pos1, n1, s.m_view, pos2, n2); }
@@ -111,69 +163,15 @@ namespace ob::core {
 		constexpr bool contains(const value_type* s) const noexcept { return m_view.find(s) != m_view.npos; }
 
 
-		constexpr size_type find(StringViewBase s, size_type pos = 0) const noexcept { return m_view.find(s.m_view, pos); }
-
-
-		constexpr size_type find(value_type ch, size_type pos = 0) const noexcept { return m_view.find(ch, pos); }
-
-
-		constexpr size_type find(const value_type* s, size_type pos, size_type count) const noexcept { return m_view.find(s, pos,count); }
-
-
-		constexpr size_type find(const value_type* s, size_type pos = 0) const noexcept { return m_view.find(s, pos); }
-
-
-		constexpr size_t find_first_not_of(value_type ch, size_t pos = 0) const noexcept { return m_view.find_first_not_of(ch,pos); }
-
-
-		constexpr size_type rfind(StringViewBase s, size_type pos = npos) const noexcept { return m_view.rfind(s.m_view, pos); }
-
-
-		constexpr size_type rfind(value_type ch, size_type pos = npos) const noexcept { return m_view.rfind(ch, pos); }
-
-
-		constexpr size_type rfind(const value_type* s, size_type pos, size_type count) const noexcept { return m_view.rfind(s, pos,count); }
-
-
-		constexpr size_type rfind(const value_type* s, size_type pos = npos) const noexcept { return m_view.rfind(s, pos); }
-
-
-		constexpr size_t find_last_not_of(value_type ch, size_t pos = npos) const noexcept { return m_view.find_last_not_of(ch,pos); }
-
-		friend constexpr bool operator ==(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) == 0);
-		}
-
-
-		friend constexpr bool operator !=(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) != 0);
-		}
-
-
-		friend constexpr bool operator <(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) < 0);
-		}
-
-
-		friend constexpr bool operator <=(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) <= 0);
-		}
-
-
-		friend constexpr bool operator >(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) > 0);
-		}
-
-
-		friend constexpr bool operator >=(StringViewBase lhs, StringViewBase rhs) noexcept
-		{
-			return (lhs.compare(rhs) >= 0);
-		}
+		//===============================================================
+		// 比較
+		//===============================================================
+		friend constexpr bool operator ==(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) == 0); }
+		friend constexpr bool operator !=(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) != 0); }
+		friend constexpr bool operator <(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) < 0); }
+		friend constexpr bool operator <=(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) <= 0); }
+		friend constexpr bool operator >(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) > 0); }
+		friend constexpr bool operator >=(StringViewBase lhs, StringViewBase rhs) noexcept { return (lhs.compare(rhs) >= 0); }
 
 	private:
 		string_view_type m_view;
@@ -240,7 +238,7 @@ template <> struct fmt::formatter<ob::core::StringView, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::StringView& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{}"), std::basic_string_view<ob::core::Char>(value.data(),value.size()));
+		return format_to(ctx.out(), TC("{}"), std::basic_string_view<ob::core::Char>(value.data(), value.size()));
 	}
 };
 //! @endcond
