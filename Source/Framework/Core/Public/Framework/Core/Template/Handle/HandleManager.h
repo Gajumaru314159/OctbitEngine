@@ -5,14 +5,13 @@
 //***********************************************************
 #pragma once
 
-/*
 namespace ob::core
 {
-
+    /*/
     //@―---------------------------------------------------------------------------
     //! @brief 可変長ハンドルマネージャ
     //@―---------------------------------------------------------------------------
-    template<typename T, class TAllocator = std::STLAllocator<T>>
+    template<typename T>
     class handle_manager
     {
     public:
@@ -82,8 +81,6 @@ namespace ob::core
         handle_manager(const allocator_type& STLAllocator = allocator_type());
         ~handle_manager();
 
-        OB_DISALLOW_COPY(handle_manager);
-        OB_DISALLOW_MOVE(handle_manager);
 
     private:
 
@@ -91,7 +88,7 @@ namespace ob::core
 
     };
 
-
+    */
 
 
 
@@ -104,5 +101,3 @@ namespace ob::core
 
 
 }// namespcae ob
-
-*/

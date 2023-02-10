@@ -93,6 +93,7 @@
 #include <Framework/Core/Utility/Nonmovable.h>
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Framework/Core/Utility/Scope.h>
+#include <Framework/Core/Utility/Ref.h>
 
 namespace ob{
     using namespace core;

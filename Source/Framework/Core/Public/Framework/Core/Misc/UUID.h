@@ -13,6 +13,7 @@ namespace ob::core {
     //! @brief UUIDクラス
     //@―---------------------------------------------------------------------------
     class OB_API UUID {
+        friend class std::hash<UUID>;
     public:
 
         //===============================================================
@@ -32,13 +33,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator==(const UUID& other)const;
+        constexpr bool operator==(const UUID& other)const;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
         //@―---------------------------------------------------------------------------
-        bool operator!=(const UUID& other)const;
+        constexpr bool operator!=(const UUID& other)const;
 
 
         //@―---------------------------------------------------------------------------
@@ -116,7 +117,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool UUID::operator==(const UUID& other) const {
+    constexpr bool UUID::operator==(const UUID& other) const {
         for (s32 i = 0; i < 16; i++)if (m_data[i] != other.m_data[i])return false;
         return true;
     }
@@ -125,7 +126,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
     //@―---------------------------------------------------------------------------
-    inline bool UUID::operator!=(const UUID& other) const {
+    constexpr bool UUID::operator!=(const UUID& other) const {
         return !(operator==(other));
     }
 
@@ -161,6 +162,27 @@ template <> struct fmt::formatter<ob::core::UUID, ob::core::Char> {
 };
 //! @endcond
 
+
+namespace std {
+
+    template<>
+    struct hash<ob::core::UUID> {
+        constexpr size_t operator()(const ob::core::UUID& value)const {
+
+            constexpr ob::u64 offset_basis = 14695981039346656037u;
+            constexpr ob::u64 fnv_prime = 1099511628211u;
+            ob::u64 result = offset_basis;
+
+            for (size_t i = 0; i < std::size(value.m_data); ++i) {
+                result ^= static_cast<ob::u64>(value.m_data[i]);
+                result *= fnv_prime;
+            }
+
+            return result;
+        }
+    };
+
+}
 
 
  //==============================================================================

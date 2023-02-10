@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/EntityHandle.h>
 
 namespace ob::engine {
 
@@ -64,8 +65,7 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-
-		const UUID uuid()const;
+		const EntityHandle handle()const { return m_handle; }
 
 		const String& name()const;
 		void setName(StringView);
@@ -103,6 +103,9 @@ namespace ob::engine {
 		void setActive(bool);
 		bool isActive()const;
 
+		// Hierarchy
+		void addChild(Entity*);
+
 	private:
 
 		Entity();
@@ -119,7 +122,7 @@ namespace ob::engine {
 		String					m_name;
 		Set<String,std::less<>>	m_tags;
 		List<UPtr<Component>>	m_components;
-		UUID					m_uuid;
+		EntityHandle			m_handle;
 		Layer					m_layer;
 
 		bool	m_active : 1;

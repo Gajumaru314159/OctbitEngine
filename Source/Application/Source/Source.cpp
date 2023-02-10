@@ -11,6 +11,10 @@
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/EngineConfig.h>
 #include <Plugins/ImGui/ImGui.h>
+
+#include <Framework/Engine/Scene.h>
+#include <Framework/Engine/Entity.h>
+
 #pragma warning(push, 0)
 #include <OBJ_Loader.h>
 #pragma warning(pop)
@@ -22,6 +26,7 @@ void Link_Vulkan();
 void Link_Input();
 int TestDirectX12();
 int TestVullkan();
+void Link_Entity();
 
 void OctbitInit(ob::engine::EngineConfig& config) {
 	{
@@ -38,6 +43,8 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 	Link_DirectX12();
 	//Link_Vulkan();
 	Link_Input();
+
+	Link_Entity();
 }
 
 int OctbitMain() {
@@ -324,6 +331,26 @@ int TestDirectX12() {
 	ImGui::StyleColorsClassic();
 
 	imgui::Startup(window, renderPass);
+
+	auto scene = engine::Scene::Create(TC("Sample"));
+	auto entity = engine::Entity::Create();
+	if(entity)
+		entity->setName(TC("Entity"));
+
+	auto child = engine::Entity::Create();
+	if(child)
+		child->setName(TC("Child"));
+
+	scene->addEntity(entity);
+	entity->addChild(child);
+
+	auto handle = entity->handle();
+	if (auto ent = handle.get()) {
+		LOG_INFO("Handle => {}",ent->name());
+	} else {
+		LOG_ERROR("Handle failed");
+	}
+
 
 	//------ループ-----
 

@@ -6,11 +6,19 @@
 #pragma once
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/Engine.h>
+#include <Framework/Engine/Entity/EntityManager.h>
 
 namespace ob::engine {
 
 	Entity* Entity::Create() {
-		OB_NOTIMPLEMENTED();
+
+		if (auto manager = GEngine->get<EntityManager>()) {
+			auto entity = new Entity();
+			manager->add(*entity);
+			return entity;
+		}
+
 		return nullptr;
 	}
 
@@ -22,10 +30,6 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-
-	const UUID Entity::uuid()const {
-		return m_uuid;
-	}
 
 	const String& Entity::name()const {
 		return m_name;
@@ -109,5 +113,7 @@ namespace ob::engine {
 			}
 		}
 	}
+	void Entity::addChild(Entity*) {
 
+	}
 }// namespcae ob

@@ -10,6 +10,7 @@ namespace ob::engine {
 	class Engine;
 	class World;
 	class Entity;
+	class EntityHandle;
 	class Component;
 
 	class IModule;

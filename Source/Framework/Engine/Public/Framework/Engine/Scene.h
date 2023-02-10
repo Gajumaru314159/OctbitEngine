@@ -21,7 +21,7 @@ namespace ob::engine {
 	class Scene : public RefObject {
 	public:
 
-		static Ref<Scene> Create();
+		static Ref<Scene> Create(StringView name);
 		//static Ref<Scene> Load();
 
 	public:

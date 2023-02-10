@@ -8,8 +8,13 @@
 
 namespace ob::engine {
 
-	Ref<Scene> Scene::Create() {
-		return nullptr;
+	Ref<Scene> Scene::Create(StringView name) {
+
+		auto scene = new Scene();
+
+		scene->m_name = name;
+
+		return scene;
 	}
 
 
