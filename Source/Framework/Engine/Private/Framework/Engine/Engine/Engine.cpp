@@ -7,6 +7,9 @@
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/IModule.h>
 
+#include <Framework/Engine/Entity/EntityManager.h>
+#include <Framework/Engine/Name/NameDictionary.h>
+
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
@@ -26,9 +29,18 @@ namespace ob::engine {
 	}
 
 	//@―---------------------------------------------------------------------------
+	//! @brief				起動
+	//@―---------------------------------------------------------------------------
+	void Engine::startup() {
+		EntityManager::Get();
+		NameDictionary::Get();
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
+
 		visit([](engine::IModule& m) {m.update(); });
 		return true;
 	}

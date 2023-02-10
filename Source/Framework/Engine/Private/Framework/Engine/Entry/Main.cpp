@@ -37,6 +37,7 @@ int CommonMain() {
     // エンジン初期化
     ob::engine::Engine engine(std::move(config));
     GEngine = &engine;
+    engine.startup();
 
     LOG_INFO("Entry OctbitMain()");
     auto result = OctbitMain();
