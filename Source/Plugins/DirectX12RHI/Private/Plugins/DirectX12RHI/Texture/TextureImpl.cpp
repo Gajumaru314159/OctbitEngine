@@ -348,7 +348,7 @@ namespace ob::rhi::dx12 {
 
 		// リソース名設定
 		{
-			std::wstring wname;
+			WString wname;
 			StringEncoder::Encode(m_desc.name, wname);
 			m_resource->SetName(wname.c_str());
 		}

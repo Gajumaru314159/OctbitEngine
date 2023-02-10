@@ -75,7 +75,7 @@ namespace ob::core {
 		StringBase& operator=(const StringBase& rhs) { m_str = rhs.m_str; return *this; }
 		StringBase& operator=(const string_type& rhs) { m_str = rhs; return *this; }
 		StringBase& operator=(StringBase&& rhs) noexcept { m_str = rhs.m_str; return *this; }
-		StringBase& operator=(string_type&& rhs) noexcept { m_str = m_str; return *this; }
+		StringBase& operator=(string_type&& rhs) noexcept { m_str = rhs; return *this; }
 		StringBase& operator=(const value_type* s) { m_str = s; return *this; }
 		StringBase& operator=(value_type c) { m_str = c; return *this; }
 		StringBase& operator=(std::initializer_list<value_type> il) { m_str = il; return *this; }

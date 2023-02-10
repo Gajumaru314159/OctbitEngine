@@ -35,7 +35,7 @@ namespace ob::rhi::dx12 {
         if (2 <= message.size())message.resize(message.size() - 2);
         String error = Format(TC("{0}"), message.c_str());
 
-        return move(error);
+        return std::move(error);
     }
 
     //@―---------------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace ob::rhi::dx12 {
         }
 #endif
 
-        return move(message);
+        return std::move(message);
     }
 
     //@―---------------------------------------------------------------------------
