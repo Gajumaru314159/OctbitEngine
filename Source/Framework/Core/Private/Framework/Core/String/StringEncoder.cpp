@@ -90,11 +90,11 @@ namespace ob::core {
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 dest.reserve(size8to16(src.size()));
-                utf8::utf8to16(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.reserve(size8to32(src.size()));
-                utf8::utf8to32(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dest));
             }
         } catch (utf8::exception) {
             dest.clear();
@@ -152,7 +152,7 @@ namespace ob::core {
         try {
             if (sizeof(wchar_t) == sizeof(char)) {
                 dest.reserve(size16to8(src.size()));
-                utf8::utf16to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 dest.resize(src.size());
@@ -161,7 +161,7 @@ namespace ob::core {
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.reserve(size16to32(src.size()));
                 auto tmp = utf8::utf16to8(src);
-                utf8::utf8to32(tmp.begin(),tmp.end(),back_inserter(dest));
+                utf8::utf8to32(tmp.begin(),tmp.end(),std::back_inserter(dest));
             }
         } catch (utf8::exception) {
             dest.clear();
@@ -220,12 +220,12 @@ namespace ob::core {
         try {
             if (sizeof(wchar_t) == sizeof(char)) {
                 dest.reserve(size32to8(src.size()));
-                utf8::utf32to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 dest.reserve(size32to16(src.size()));
                 auto tmp = utf8::utf32to8(src);
-                utf8::utf8to16(tmp.begin(), tmp.end(), back_inserter(dest));
+                utf8::utf8to16(tmp.begin(), tmp.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.resize(src.size());
@@ -254,11 +254,11 @@ namespace ob::core {
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 dest.reserve(size16to8(src.size()));
-                utf8::utf16to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.reserve(size32to8(src.size()));
-                utf8::utf32to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dest));
             }
         } catch (utf8::exception) {
             dest.clear();
@@ -277,7 +277,7 @@ namespace ob::core {
             if (sizeof(wchar_t) == sizeof(char)) {
                 return false;
                 //dest.reserve(size8to16(src.size()));
-                //utf8::utf8to16(src.begin(), src.end(), back_inserter(dest));
+                //utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 dest.resize(src.size());
@@ -285,7 +285,7 @@ namespace ob::core {
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.reserve(size32to16(src.size()));
-                utf8::utf32to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf32to8(src.begin(), src.end(), std::back_inserter(dest));
             }
         } catch (utf8::exception) {
             dest.clear();
@@ -303,12 +303,12 @@ namespace ob::core {
             if (sizeof(wchar_t) == sizeof(char)) {
                 return false;
                 //dest.reserve(size8to32(src.size()));
-                //utf8::utf8to16(src.begin(), src.end(), back_inserter(dest));
+                //utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 StringBase<char> tmp;
                 tmp.resize(size16to8(src.size()));
-                utf8::utf16to8(src.begin(), src.end(), back_inserter(dest));
+                utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dest));
                 dest = utf8::utf8to32(tmp);
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
@@ -343,7 +343,7 @@ namespace ob::core {
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char>& dest) {
         if (sizeof(wchar_t) == sizeof(char16_t)) {
 
-            utf8::utf8to16(src.begin(), src.end(), back_inserter(dest));
+            utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dest));
 
         } else {
             dest.clear();

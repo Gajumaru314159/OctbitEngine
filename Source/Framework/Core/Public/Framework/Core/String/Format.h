@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/String/String.h>
+#include <string>
 #include <utility>
 
 #pragma warning(push,0)
@@ -15,13 +15,15 @@
 #include <fmt/xchar.h>
 #pragma warning(pop)
 
+#include <Framework/Core/CoreTypes.h>
+
 namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  文字列をフォーマット
 	//@―---------------------------------------------------------------------------
 	template <typename S, typename TChar = fmt::char_t<S>, typename... Args>
-	auto Format(const S& fmt, Args&&... args) -> StringBase<TChar> {
+	auto Format(const S& fmt, Args&&... args) -> std::basic_string<TChar> {
 		return fmt::format(fmt, std::forward<Args>(args)...);
 	}
 

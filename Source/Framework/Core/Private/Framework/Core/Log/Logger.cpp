@@ -39,7 +39,7 @@ namespace ob::core {
                 StringEncoder::Encode(msg, ws);
 
                 // 標準出力
-                std::wcout << ws << std::endl;
+                std::wcout << ws.data() << std::endl;
             }
 
 #ifdef OS_WINDOWS
