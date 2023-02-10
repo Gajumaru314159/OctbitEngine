@@ -4,11 +4,21 @@
 //***********************************************************
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Engine/Entity.h>
+#include <Framework/Engine/Engine.h>
 #include <Framework/Engine/ModuleFactory.h>
 
 REGISTER_MODULE(ob::engine::EntityManager);
 
 namespace ob::engine {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		取得
+	//@―---------------------------------------------------------------------------
+	EntityManager& EntityManager::Get() {
+		auto manager = GEngine->get<EntityManager>();
+		OB_ASSERT_EXPR(manager);
+		return *manager;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ

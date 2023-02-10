@@ -26,10 +26,7 @@ namespace ob::engine {
 	//! @brief		Entityを取得
 	//@―---------------------------------------------------------------------------
 	Entity* EntityHandle::get()const {
-		if (auto manager = GEngine->get<EntityManager>()) {
-			return manager->find(m_uuid);
-		}
-		return nullptr;
+		return EntityManager::Get().find(*this);
 	}
 
 }// namespcae ob
