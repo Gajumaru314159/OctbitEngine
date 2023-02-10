@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 
-namespace ob::core {
+namespace ob::engine {
 
     namespace internal {
         class NameData;
@@ -87,6 +87,9 @@ namespace ob::core {
 
 
 
+
+
+
     //===============================================================
     // インライン関数
     //===============================================================
@@ -129,9 +132,9 @@ namespace ob::core {
 //===============================================================
 //! @cond
 template<>
-struct std::hash<ob::core::Name> {
+struct std::hash<ob::engine::Name> {
 public:
-    size_t operator()(const ob::core::Name& name)const {
+    size_t operator()(const ob::engine::Name& name)const {
         return name.m_hash;
     }
 };
@@ -142,14 +145,14 @@ public:
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Name, ob::core::Char> {
+template <> struct fmt::formatter<ob::engine::Name, ob::core::Char> {
     template<typename ParseContext>
     constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }
 
     template<typename FormatContext>
-    auto format(const ob::core::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(const ob::engine::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
         return format_to(ctx.out(), TC("{}"), value.toSV());
     }
 };

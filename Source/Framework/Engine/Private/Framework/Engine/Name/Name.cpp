@@ -3,11 +3,10 @@
 //! @brief		識別用名前クラス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/String/Name.h>
-#include <Framework/Core/String/NameDictionary.h>
+#include <Framework/Engine/Name.h>
+#include <Framework/Engine/Name/NameDictionary.h>
 
-namespace ob::core
-{
+namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
     //! @brief  デフォルトコンストラクタ

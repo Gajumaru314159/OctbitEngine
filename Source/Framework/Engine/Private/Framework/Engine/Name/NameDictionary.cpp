@@ -3,10 +3,20 @@
 //! @brief		識別用名辞書
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/String/NameDictionary.h>
+#include <Framework/Engine/Name/NameDictionary.h>
+#include <Framework/Engine/Engine.h>
 #include <Framework/Core/Misc/CRCHash.h>
 
-namespace ob::core{
+namespace ob::engine{
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      取得
+    //@―---------------------------------------------------------------------------
+    NameDictionary& NameDictionary::Get() {
+        auto manager = GEngine->get<NameDictionary>();
+        OB_ASSERT_EXPR(manager);
+        return *manager;
+    }
     
     //@―---------------------------------------------------------------------------
     //! @brief      Nameを作成して辞書に追加

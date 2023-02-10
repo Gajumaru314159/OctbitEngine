@@ -4,12 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/String/Name.h>
-#include <Framework/Core/Thread/SpinLock.h>
-#include <Framework/Core/Template/Utility/Singleton.h>
+#include <Framework/Engine/IModule.h>
+#include <Framework/Engine/Name.h>
 
-namespace ob::core {
+namespace ob::engine {
 
     //! @cond
     namespace internal{
@@ -37,7 +35,12 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  識別用名辞書
     //@―---------------------------------------------------------------------------
-    class NameDictionary:public Singleton<NameDictionary> {
+    class NameDictionary:public IModule {
+    public:
+        //@―---------------------------------------------------------------------------
+        //! @brief      取得
+        //@―---------------------------------------------------------------------------
+        static NameDictionary& Get();
     public:
 
         //@―---------------------------------------------------------------------------

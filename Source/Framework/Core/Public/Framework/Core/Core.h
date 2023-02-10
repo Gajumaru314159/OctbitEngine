@@ -71,7 +71,6 @@
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/String/StringEncoder.h>
-#include <Framework/Core/String/Name.h>
 
 #include <Framework/Core/Template/Container/BitFlags.h>
 #include <Framework/Core/Template/Container/HandleForwardList.h>
