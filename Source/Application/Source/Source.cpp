@@ -185,8 +185,8 @@ int TestDirectX12() {
 		code.append(TC("PsOut PS_Main(PsIn i){											\n"));
 		code.append(TC("    PsOut o;													\n"));
 		code.append(TC("    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);		\n"));
-		code.append(TC("    o.color1 = color;											\n"));
-		code.append(TC("    color.xyz*=abs(dot(i.normal.xyz,float3(0,0,1)));			\n"));
+		code.append(TC("    o.color1 = i.normal;										\n"));
+		//code.append(TC("    color.xyz*=dot((i.normal.xyz-0.5)*2,float3(1,0,0))*0.5+1.5;	\n"));
 		code.append(TC("    o.color0 = color;											\n"));
 		code.append(TC("    return o;													\n"));
 		code.append(TC("}																\n"));
@@ -249,7 +249,7 @@ int TestDirectX12() {
 
 	Ref<Texture> tex;
 	{
-		tex = Texture::Load(TC("Asset/Texture/test.dds"));
+		tex = Texture::Load(TC("Asset/Texture/sky.dds"));
 		OB_ASSERT_EXPR(tex);
 	}
 
@@ -260,15 +260,18 @@ int TestDirectX12() {
 	dt2->setResource(0, buffer);
 
 
-	MeshData<Vert> mesh;
+
+	Array<Tuple<Ref<Buffer>, Ref<Buffer>,size_t>> meshes;
 	{
 		// Initialize Loader
 		objl::Loader Loader;
 
 		// Load .obj File
-		if (Loader.LoadFile("Asset/Model/monky.obj")) {
+		if (Loader.LoadFile("Asset/Model/sky.obj")) {
 			for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
 			{
+
+				MeshData<Vert> mesh;
 				objl::Mesh& curMesh = Loader.LoadedMeshes[i];
 
 				String name;
@@ -291,27 +294,27 @@ int TestDirectX12() {
 				{
 					mesh.indices.push_back(curMesh.Indices[j]);
 				}
-				break;
+
+				Ref<Buffer> vertexBuffer;
+				{
+					auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
+					desc.name = Format(TC("Model[{}]"),i);
+					vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
+					OB_ASSERT_EXPR(vertexBuffer);
+				}
+
+				Ref<Buffer> indexBuffer;
+				{
+					auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
+					desc.name = Format(TC("Model[{}]"), i);
+					indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
+					OB_ASSERT_EXPR(indexBuffer);
+				}
+				meshes.emplace_back(vertexBuffer, indexBuffer,mesh.indices.size());
 			}
 		} else {
 			LOG_INFO("モデルファイルが見つかりませんでした。");
 		}
-	}
-
-	Ref<Buffer> vertexBuffer;
-	{
-		auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
-		desc.name = TC("ModelVertices");
-		vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
-		OB_ASSERT_EXPR(vertexBuffer);
-	}
-
-	Ref<Buffer> indexBuffer;
-	{
-		auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
-		desc.name = TC("ModelIndices");
-		indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
-		OB_ASSERT_EXPR(indexBuffer);
 	}
 
 
@@ -382,19 +385,21 @@ int TestDirectX12() {
 		{
 			cmdList->setPipelineState(pipeline);
 
-
-			cmdList->setVertexBuffer(vertexBuffer);
-			cmdList->setIndexBuffer(indexBuffer);
-
 			SetDescriptorTableParam params[] = {
 				SetDescriptorTableParam(dt,0),
 				SetDescriptorTableParam(dt2,1),
 			};
 			cmdList->setRootDesciptorTable(params, 2);
 
-			DrawIndexedParam param{};
-			param.indexCount = mesh.indices.size();
-			cmdList->drawIndexed(param);
+			for (auto& [vert, index,count] : meshes) {
+				cmdList->setVertexBuffer(vert);
+				cmdList->setIndexBuffer(index);
+
+				DrawIndexedParam param{};
+				param.indexCount = count;
+				cmdList->drawIndexed(param);
+			}
+
 		}
 
 
@@ -424,7 +429,7 @@ int TestDirectX12() {
 
 		// 入力更新
 		const auto rspd = 90 / 60.f;
-		Rot r2(0, rot.y, 0);
+		Rot r2(rot.x, rot.y, 0);
 		auto speed = 4 / 60.f;
 		if (input::Keyboard::K.pressed()) speed *= 0.5f;
 		if (input::Keyboard::W.pressed())pos += r2.front() * speed;
@@ -435,11 +440,18 @@ int TestDirectX12() {
 		if (input::Keyboard::RightArrow.pressed())rot.y += rspd;
 		if (input::Keyboard::UpArrow.pressed())rot.x -= rspd;
 		if (input::Keyboard::DownArrow.pressed())rot.x += rspd;
-		rot.x = Math::Clamp(rot.x, -90.f, 90.f);
+
+		if (input::Mouse::Left.pressed()) {
+			auto md = input::Mouse::GetDeltaPos() * 0.1f;
+			rot.y += md.x;
+			rot.x += md.y;
+		}
+		rot.x = Math::Clamp(rot.x, -85.f, 85.f);
 
 
 		// カメラバッファ更新
-		cbuf.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 100.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0);
+		auto modelScale = 100.0f;
+		cbuf.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0) * Matrix::Scale(Vec3(1,-1,1)* modelScale);
 		buffer->updateDirect(cbuf,0);
 	}
 	imgui::Shutdown();
