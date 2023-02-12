@@ -144,7 +144,7 @@ namespace ob::engine {
 	template<class TModule>
 	inline TModule& Engine::ref() {
 		auto pModule = get<TModule>();
-		OB_ASSERT(pModule, "モジュールが生成されていません。");
+		OB_ASSERT(pModule, "モジュールが登録されていません。[{}]", TypeId::Get<TModule>().name());
 		return *pModule;
 	}
 
