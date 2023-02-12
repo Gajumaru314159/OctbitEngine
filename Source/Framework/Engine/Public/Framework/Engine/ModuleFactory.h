@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/IModule.h>
+#include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::engine {
 
@@ -17,8 +18,7 @@ namespace ob::engine {
 		class ModuleConstructorBase {
 		public:
 			virtual IModule* construct()const = 0;
-			virtual size_t type()const = 0;
-			virtual StringView name()const = 0;
+			virtual TypeId getTypeId()const = 0;
 		};
 
 		//@―---------------------------------------------------------------------------
@@ -33,19 +33,13 @@ namespace ob::engine {
 		class ModuleConstructor :public ModuleConstructorBase {
 		public:
 			ModuleConstructor() {
-				StringEncoder::Encode(typeid(T).name(), m_name);
 			}
 			IModule* construct()const override {
 				return new T();
 			}
-			size_t type()const override {
-				return typeid(T).hash_code();
+			TypeId getTypeId()const override {
+				return TypeId::Get<T>();
 			}
-			StringView name()const override {
-				return m_name;
-			}
-		private:
-			String m_name;
 		};
 
 
@@ -75,12 +69,11 @@ namespace ob::engine {
 			//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
 			//@―---------------------------------------------------------------------------
 			template<class TModule>
-			std::pair<TModule*, size_t> create();
+			std::pair<TModule*, TypeId> create();
 
 		private:
 
-			using TypeHash = size_t;
-			HashMap<TypeHash, Array<UPtr<ModuleConstructorBase>>> m_constructorMap;
+			HashMap<TypeId, Array<UPtr<ModuleConstructorBase>>> m_constructorMap;
 
 		};
 
@@ -122,7 +115,7 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		template<class TModule, class TBase>
 		void ModuleFactory::add() {
-			auto hash = typeid(TBase).hash_code();
+			auto hash = TypeId::Get<TBase>();
 			auto& constructors = m_constructorMap[hash];
 			auto& constructor = constructors.emplace_back(std::make_unique<internal::ModuleConstructor<TModule>>());
 		}
@@ -133,12 +126,12 @@ namespace ob::engine {
 		//! @details			生成可能なモジュールが複数ある場合、指定した優先度順に生成を試みます。
 		//@―---------------------------------------------------------------------------
 		template<class TModule>
-		std::pair<TModule*, size_t> ModuleFactory::create() {
+		std::pair<TModule*, TypeId> ModuleFactory::create() {
 
-			auto hash = typeid(TModule).hash_code();
+			auto typeId = TypeId::Get<TModule>();
 
 			// ファクトリが存在するか
-			auto& constructors = m_constructorMap[hash];
+			auto& constructors = m_constructorMap[typeId];
 			if (!constructors.empty()) {
 
 				// 生成
@@ -147,15 +140,15 @@ namespace ob::engine {
 						if (pModule->isValid() == false) {
 							delete pModule;
 						} else {
-							LOG_TRACE_EX("Module", "Module[{}]を生成", constructor->name());
-							return { reinterpret_cast<TModule*>(pModule) ,constructor->type() };
+							LOG_TRACE_EX("Module", "Module[{}]を生成", constructor->getTypeId().name());
+							return { reinterpret_cast<TModule*>(pModule) ,constructor->getTypeId() };
 						}
 					}
 				}
 
 			}
 
-			return { nullptr ,0 };
+			return { nullptr ,TypeId()};
 
 		}
 

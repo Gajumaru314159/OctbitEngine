@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/EngineConfig.h>
+#include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::engine {
 
@@ -89,10 +90,8 @@ namespace ob::engine {
 
 	private:
 
-		using TypeHash = size_t;
-
 		Array<UPtr<IModule>> m_modules;
-		HashMap<TypeHash, size_t> m_indices;
+		HashMap<TypeId, size_t> m_indices;
 		EngineConfig m_config;
 
 	};
@@ -116,7 +115,7 @@ namespace ob::engine {
 	template<class TModule>
 	inline TModule* Engine::get() {
 
-		auto hash = typeid(TModule).hash_code();
+		auto typeId = TypeId::Get<TModule>();
 
 		// 登録済みかチェック
 		if (auto found = this->getInternal<TModule>()) {
@@ -128,7 +127,7 @@ namespace ob::engine {
 		if (pModule) {
 
 			auto index = m_modules.size();
-			m_indices[hash] = m_indices[baseTypeHash] = index;
+			m_indices[typeId] = m_indices[baseTypeHash] = index;
 			m_modules.emplace_back(pModule);
 
 		}
@@ -156,9 +155,9 @@ namespace ob::engine {
 	template<class TModule>
 	inline TModule* Engine::getInternal()const {
 
-		TypeHash hash = typeid(TModule).hash_code();
+		TypeId typeId = TypeId::Get<TModule>();
 
-		auto found = m_indices.find(hash);
+		auto found = m_indices.find(typeId);
 		if (found != m_indices.end()) {
 			return reinterpret_cast<TModule*>(m_modules[found->second].get());
 		}
