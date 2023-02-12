@@ -16,6 +16,12 @@ namespace ob::core {
     class Transform {
     public:
 
+        bool operator==(const Transform&)const noexcept;
+        bool operator!=(const Transform&)const noexcept;
+
+        Transform operator*(const Transform&)const;
+        Transform operator*=(const Transform&);
+
         //@―---------------------------------------------------------------------------
         //! @brief  Matrix に変換
         //@―---------------------------------------------------------------------------

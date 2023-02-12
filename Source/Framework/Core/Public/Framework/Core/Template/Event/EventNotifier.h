@@ -30,6 +30,20 @@ namespace ob::core {
 
         using Handle = typename HandleList<delegate_type>::Handle;                  //!< イベントハンドル型
 
+    public:
+
+        class Proxy {
+        public:
+            Proxy(this_type& notifier):m_notifier(notifier){}
+
+            void add(Handle& handle, const delegate_type& delegate) { m_notifier.add(handle,delegate); }
+            void add(Handle& handle, function_type& function) { m_notifier.add(handle, function); }
+            template<class T> void add(Handle& handle, T& instance, method_type<T> pMethod) { m_notifier.add(handle, instance, pMethod); }
+            template<class T> void add(Handle& handle, const T& instance, const_method_type<T> pMethod) { m_notifier.add(handle, instance,pMethod); }
+        private:
+            this_type& m_notifier;
+        };
+
     private:
 
         using handle_list_type = HandleList<delegate_type>;

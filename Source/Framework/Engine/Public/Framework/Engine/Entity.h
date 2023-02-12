@@ -49,11 +49,15 @@ namespace ob::engine {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  シーン
+	//! @brief		Entity
+	//! @details	
 	//@―---------------------------------------------------------------------------
 	class Entity {
 	public:
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		Entityを生成
+		//@―---------------------------------------------------------------------------
 		static Entity* Create();
 
 	public:
@@ -63,23 +67,36 @@ namespace ob::engine {
 		//===============================================================
 
 		//@―---------------------------------------------------------------------------
-		//! @brief		コンストラクタ
+		//! @brief		EntityHandle を取得
 		//@―---------------------------------------------------------------------------
 		const EntityHandle handle()const { return m_handle; }
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		名前を取得
+		//@―---------------------------------------------------------------------------
 		const String& name()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		名前を設定
+		//@―---------------------------------------------------------------------------
 		void setName(StringView);
 
 		// Transform
 
 		// Component
-		Component* addComponent(TypeId typeId);
-		void removeComponent(Component*);
-		Component* findComponent(TypeId typeId, s32 index = 0)const;
-		template<class T>T* addComponent(){ return reinterpret_cast<T*>(addComponent(new T)); }
-		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(TypeId::Get<T>(), index)); }
-		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 
+		//! @brief TypeIdからComponentを追加 
+		Component* addComponent(TypeId typeId);
+		//! @brief Componentを削除
+		void removeComponent(Component*);
+		//! @brief TypeIdからComponentを取得 
+		Component* findComponent(TypeId typeId, s32 index = 0)const;
+		//! @brief Comoponentを追加 
+		template<class T>T* addComponent(){ return reinterpret_cast<T*>(addComponent(new T)); }
+		//! @brief Componentを取得
+		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(TypeId::Get<T>(), index)); }
+		//! @brief 特定の型のComponentに対して処理
+		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 			for (auto& component : componens()) {
 				// TODO DynamicCast
 				if (component->getTypeId() == TypeId::Get<T>()) {
@@ -87,15 +104,24 @@ namespace ob::engine {
 				}
 			}
 		}
-
+		//! @brief Componentのリストを取得 
 		const ComponentList& componets()const;
 
 		// Tag
+		
+		//! @brief タグを追加
 		void addTag(StringView);
+		//! @brief タグを削除 
 		void removeTag(StringView);
+		//! @brief タグを持っているか 
 		bool hasTag(StringView);
 
 		// Create
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		破棄する
+		//! @details	Entityを破棄すると子Entityも再帰的に破棄されます。
+		//@―---------------------------------------------------------------------------
 		void destroy();
 		bool destoyed()const;
 

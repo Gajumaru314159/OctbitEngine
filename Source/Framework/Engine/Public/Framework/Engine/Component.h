@@ -17,9 +17,9 @@ namespace ob::engine {
 		friend class Entity;
 	public:
 
-		~Component();
-
 		OB_RTTI();
+
+		~Component();
 
 		Entity& getEntity()const;
 

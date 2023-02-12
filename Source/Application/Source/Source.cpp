@@ -15,6 +15,7 @@
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
 
+#include <Framework/Engine/Component/TransformComponent.h>
 #include <Test/ComponentTest.h>
 
 
@@ -249,6 +250,15 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(buffer);
 		buffer->updateDirect(cbuf,0);
 	}
+	Ref<Buffer> buffer2;
+	CBuf cbuf2;
+	{
+		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
+		desc.name = TC("TestConstant");
+		buffer2 = Buffer::Create(desc);
+		OB_ASSERT_EXPR(buffer);
+		buffer2->updateDirect(cbuf2, 0);
+	}
 
 	Ref<Texture> tex;
 	{
@@ -261,16 +271,21 @@ int TestDirectX12() {
 
 	auto dt2 = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
 	dt2->setResource(0, buffer);
+	auto dt3 = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+	dt3->setResource(0, buffer2);
 
 
 
-	Array<Tuple<Ref<Buffer>, Ref<Buffer>,size_t>> meshes;
-	{
+	auto loadMesh = [](std::string path) {
+
+		Array<Tuple<Ref<Buffer>, Ref<Buffer>, size_t>> meshes;
+
 		// Initialize Loader
 		objl::Loader Loader;
 
 		// Load .obj File
-		if (Loader.LoadFile("Asset/Model/sky.obj")) {
+		if (Loader.LoadFile(path)) {
+			LOG_INFO("モデル読み込み");
 			for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
 			{
 
@@ -280,7 +295,7 @@ int TestDirectX12() {
 				String name;
 				StringEncoder::Encode(curMesh.MeshName, name);
 
-				LOG_INFO("name={}", name);
+				LOG_INFO("    mesh={}", name);
 
 				for (int j = 0; j < curMesh.Vertices.size(); j++)
 				{
@@ -301,7 +316,7 @@ int TestDirectX12() {
 				Ref<Buffer> vertexBuffer;
 				{
 					auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
-					desc.name = Format(TC("Model[{}]"),i);
+					desc.name = Format(TC("Model[{}]"), i);
 					vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
 					OB_ASSERT_EXPR(vertexBuffer);
 				}
@@ -313,14 +328,17 @@ int TestDirectX12() {
 					indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
 					OB_ASSERT_EXPR(indexBuffer);
 				}
-				meshes.emplace_back(vertexBuffer, indexBuffer,mesh.indices.size());
+				meshes.emplace_back(vertexBuffer, indexBuffer, mesh.indices.size());
 			}
 		} else {
 			LOG_INFO("モデルファイルが見つかりませんでした。");
 		}
-	}
 
+		return std::move(meshes);
+	};
 
+	auto skyMesh = loadMesh("Asset/Model/sky.obj");
+	auto monkyMesh = loadMesh("Asset/Model/monky.obj");
 
 	Ref<CommandList> cmdList;
 	{
@@ -350,11 +368,11 @@ int TestDirectX12() {
 			entity->addChild(child);
 		}
 
-		entity->addComponent<test::ComponentTest>();
+		//entity->addComponent<engine::TransformComponent>();
 
-		if (auto c = entity->findComponent<test::ComponentTest>()) {
-			LOG_ERROR("{}が追加されています",c->getTypeId().name());
-		}
+		//if (auto c = entity->findComponent<test::ComponentTest>()) {
+		//	LOG_INFO("{}が追加されています",c->getTypeId().name());
+		//}
 
 		auto handle = entity->handle();
 		if (auto ent = handle.get()) {
@@ -363,14 +381,6 @@ int TestDirectX12() {
 			LOG_ERROR("Handle failed");
 		}
 	}
-
-	LOG_INFO("{}", TypeId::Get<decltype(entity)>().name());
-	LOG_INFO("{}", TypeId::Get<decltype(io)>().name());
-	LOG_INFO("{}", TypeId::Get<decltype("")>().name());
-	LOG_INFO("{}", TypeId::Get<std::string>().name());
-	LOG_INFO("{}", TypeId::Get<s32>().name());
-	LOG_INFO("{}", TypeId::Get<ob::rhi::Anisotropy>().name());
-	LOG_INFO("{}",TypeId::Get<ob::rhi::DepthStencilDesc>().name());
 
 	//------ループ-----
 
@@ -408,7 +418,21 @@ int TestDirectX12() {
 			};
 			cmdList->setRootDesciptorTable(params, 2);
 
-			for (auto& [vert, index,count] : meshes) {
+			for (auto& [vert, index, count] : skyMesh) {
+				cmdList->setVertexBuffer(vert);
+				cmdList->setIndexBuffer(index);
+
+				DrawIndexedParam param{};
+				param.indexCount = count;
+				cmdList->drawIndexed(param);
+			}
+
+
+			SetDescriptorTableParam params2[] = {
+				SetDescriptorTableParam(dt3,1),
+			};
+			cmdList->setRootDesciptorTable(params2, 1);
+			for (auto& [vert, index, count] : monkyMesh) {
 				cmdList->setVertexBuffer(vert);
 				cmdList->setIndexBuffer(index);
 
@@ -425,6 +449,12 @@ int TestDirectX12() {
 
 			ImGui::NewFrame();
 			ImGui::ShowDemoWindow();
+
+			//auto pos = cbuf.matrix* Vec3(0, 0, 0);
+			//pos.y *= -1;
+			//pos = pos * 0.5f + 0.5;
+			//ImGui::GetWindowDrawList()->AddCircle({ pos.x * window.getSize().width ,pos.y * window.getSize().height},10,0xFFFFFFFF);
+
 			ImGui::Render();
 
 			imgui::EndFrame(cmdList);
@@ -447,8 +477,9 @@ int TestDirectX12() {
 		// 入力更新
 		const auto rspd = 90 / 60.f;
 		Rot r2(rot.x, rot.y, 0);
-		auto speed = 4 / 60.f;
-		if (input::Keyboard::K.pressed()) speed *= 0.5f;
+		static auto speed = 4 / 60.f;
+		speed += input::Mouse::Wheel.value()*0.0001f;
+
 		if (input::Keyboard::W.pressed())pos += r2.front() * speed;
 		if (input::Keyboard::S.pressed())pos -= r2.front() * speed;
 		if (input::Keyboard::D.pressed())pos += r2.right() * speed;
@@ -468,8 +499,10 @@ int TestDirectX12() {
 
 		// カメラバッファ更新
 		auto modelScale = 100.0f;
-		cbuf.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0) * Matrix::Scale(Vec3(1,-1,1)* modelScale);
-		buffer->updateDirect(cbuf,0);
+		cbuf.matrix = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0) * Matrix::Scale(Vec3(1, -1, 1) * modelScale);
+		cbuf2.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0) * Matrix::Scale(Vec3(1,1,1)* 1.0f);
+		buffer->updateDirect(cbuf, 0);
+		buffer2->updateDirect(cbuf2,0);
 	}
 	imgui::Shutdown();
 	ImGui::DestroyContext();
