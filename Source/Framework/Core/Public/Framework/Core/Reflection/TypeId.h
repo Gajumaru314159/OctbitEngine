@@ -66,7 +66,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		constexpr TypeId() :m_hash(OB_FNV64("[Empty]")) {}
+		constexpr TypeId() : TypeId( TypeId::Get<Invalid>().name() ){}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		空か
@@ -96,6 +96,10 @@ namespace ob::core {
 		//! @endcond
 
 	private:
+
+		class Invalid {
+
+		};
 
 		constexpr TypeId(StringView name) 
 			: m_name(name)
