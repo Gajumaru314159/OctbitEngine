@@ -42,6 +42,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void EntityManager::add(Entity& entity) {
 		ScopeLock lock(m_lock);
+		// TODO マルチスレッド用のロックなし追加対応
 		m_entities[entity.handle()] = &entity;
 	}
 
