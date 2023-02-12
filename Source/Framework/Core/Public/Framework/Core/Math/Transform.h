@@ -20,6 +20,12 @@ namespace ob::core {
         //! @brief  Matrix に変換
         //@―---------------------------------------------------------------------------
         Matrix toMatrix()const;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  反転
+        //@―---------------------------------------------------------------------------
+        Transform inverse()const;
+
     public:
 
         static const Transform Identity;  //!< 初期状態
@@ -27,7 +33,7 @@ namespace ob::core {
     public:
 
         Vec3    position;   //!< 位置
-        Rot     rotation;   //!< 回転
+        Quat    rotation;   //!< 回転
         Vec3    scale;      //!< 拡縮
 
     };

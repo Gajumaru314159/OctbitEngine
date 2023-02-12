@@ -319,7 +319,13 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief トランスフォーム行列
 		//@―---------------------------------------------------------------------------
-		static constexpr Matrix TRS(Vec3 trans,Rot rot,Vec3 scale);
+		static constexpr Matrix TRS(Vec3 trans, Rot rot, Vec3 scale);
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief トランスフォーム行列
+		//@―---------------------------------------------------------------------------
+		static constexpr Matrix TRS(Vec3 trans, Quat rot, Vec3 scale);
 
 
 		//@―---------------------------------------------------------------------------
@@ -528,6 +534,13 @@ namespace ob::core {
 	//! @brief トランスフォーム行列
 	//@―---------------------------------------------------------------------------
 	constexpr Matrix Matrix::TRS(Vec3 trans, Rot rot, Vec3 scale) {
+		return Translate(trans) * Rotate(rot) * Scale(scale);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief トランスフォーム行列
+	//@―---------------------------------------------------------------------------
+	constexpr Matrix Matrix::TRS(Vec3 trans, Quat rot, Vec3 scale) {
 		return Translate(trans) * Rotate(rot) * Scale(scale);
 	}
 
