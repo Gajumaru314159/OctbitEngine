@@ -23,7 +23,7 @@ namespace ob::core {
         auto func = [](const Log& log) {
 
             // 標準出力
-            {
+            if(log.level!=LogLevel::Trace){
                 StringView typeName;
                 switch (log.level) {
                 case LogLevel::Fatal:   typeName = TC("\033[35m[Fatal]  \033[0m"); break;// マゼンタ
@@ -44,7 +44,7 @@ namespace ob::core {
 
 #ifdef OS_WINDOWS
             // Visual Studio
-            {
+            if (log.level != LogLevel::Trace) {
                 StringView typeName;
                 switch (log.level) {
                 case LogLevel::Fatal:   typeName = TC("[Fatal]  "); break;
