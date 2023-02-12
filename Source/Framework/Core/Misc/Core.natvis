@@ -51,4 +51,9 @@
 		</Expand>
 	</Type>
 
+	<!--StringView-->
+	<Type Name="ob::core::StringViewBase&lt;ob::core::Char&gt;">
+		<DisplayString>aaa</DisplayString>
+	</Type>
+	
 </AutoVisualizer>

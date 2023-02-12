@@ -15,6 +15,9 @@
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
 
+#include <Test/ComponentTest.h>
+
+
 #pragma warning(push, 0)
 #include <OBJ_Loader.h>
 #pragma warning(pop)
@@ -337,21 +340,28 @@ int TestDirectX12() {
 
 	auto scene = engine::Scene::Create(TC("Sample"));
 	auto entity = engine::Entity::Create();
-	if(entity)
+	if (entity && scene) {
 		entity->setName(TC("Entity"));
+		scene->addEntity(entity);
 
-	auto child = engine::Entity::Create();
-	if(child)
-		child->setName(TC("Child"));
+		auto child = engine::Entity::Create();
+		if (child) {
+			child->setName(TC("Child"));
+			entity->addChild(child);
+		}
 
-	scene->addEntity(entity);
-	entity->addChild(child);
+		entity->addComponent<test::ComponentTest>();
 
-	auto handle = entity->handle();
-	if (auto ent = handle.get()) {
-		LOG_INFO("Handle => {}",ent->name());
-	} else {
-		LOG_ERROR("Handle failed");
+		if (auto c = entity->findComponent<test::ComponentTest>()) {
+			LOG_ERROR("{}が追加されています",c->getTypeId().name());
+		}
+
+		auto handle = entity->handle();
+		if (auto ent = handle.get()) {
+			LOG_INFO("Handle => {}", ent->name());
+		} else {
+			LOG_ERROR("Handle failed");
+		}
 	}
 
 

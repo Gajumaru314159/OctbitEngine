@@ -42,8 +42,22 @@ namespace ob::engine {
 	// Transform
 
 	// Component
-	void Entity::addComponent(TypeId typeId) {
-		OB_NOTIMPLEMENTED();
+	Component* Entity::addComponent(TypeId typeId) {
+
+		// リフレクションで生成
+		Component* component = nullptr;
+
+		// TODO 依存順に生成
+		if (component) {
+
+			component->m_entity = this;
+			component->startup();
+
+		} else {
+
+		}
+
+		return component;
 	}
 	void Entity::removeComponent(Component* component) {
 		//auto found = std::find(m_components.begin(), m_components.end(), component);
@@ -103,6 +117,13 @@ namespace ob::engine {
 	Entity::Entity() {
 		m_active = false;
 		m_visible = false;
+	}
+
+	Component* Entity::addComponent(Component* component) {
+		if (component) {
+			m_components.emplace_back(component);
+		}
+		return component;
 	}
 
 	void Entity::visitComponents(const Delegate<void(Component*)>& func, TypeId typeId)const {

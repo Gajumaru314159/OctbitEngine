@@ -73,11 +73,11 @@ namespace ob::engine {
 		// Transform
 
 		// Component
-		void addComponent(TypeId typeId);
+		Component* addComponent(TypeId typeId);
 		void removeComponent(Component*);
 		Component* findComponent(TypeId typeId, s32 index = 0)const;
-		template<class T>T* addComponent(){ return addComponent(TypeId::Get<T>()); }
-		template<class T>T* findComponent(s32 index = 0)const { return findComponent(TypeId::Get<T>(), index); }
+		template<class T>T* addComponent(){ return reinterpret_cast<T*>(addComponent(new T)); }
+		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(TypeId::Get<T>(), index)); }
 		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 
 			for (auto& component : componens()) {
@@ -109,6 +109,8 @@ namespace ob::engine {
 	private:
 
 		Entity();
+
+		Component* addComponent(Component*);
 
 		void visitComponents(const Delegate<void(Component*)>& func,TypeId)const;
 

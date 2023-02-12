@@ -50,8 +50,7 @@ namespace ob::core {
 
 	}
 
-#define OB_RTTI()	virtual TypeId getTypeId()const{return TypeId::Get<std::remove_reference_t<decltype(*this)>>();}
-
+#define OB_RTTI()	virtual TypeId getTypeId()const{return TypeId::Get<std::remove_cv_t<std::remove_reference_t<decltype(*this)>>>();}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  型ID
@@ -125,3 +124,17 @@ namespace ob::core {
 
 
 }// namespcae ob
+
+
+//===============================================================
+// ハッシュ化
+//===============================================================
+//! @cond
+template<>
+struct std::hash<ob::core::TypeId> {
+public:
+	size_t operator()(const ob::core::TypeId& value)const {
+		return value.hash();
+	}
+};
+//! @endcond
