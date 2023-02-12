@@ -364,6 +364,13 @@ int TestDirectX12() {
 		}
 	}
 
+	LOG_INFO("{}", TypeId::Get<decltype(entity)>().name());
+	LOG_INFO("{}", TypeId::Get<decltype(io)>().name());
+	LOG_INFO("{}", TypeId::Get<decltype("")>().name());
+	LOG_INFO("{}", TypeId::Get<std::string>().name());
+	LOG_INFO("{}", TypeId::Get<s32>().name());
+	LOG_INFO("{}", TypeId::Get<ob::rhi::Anisotropy>().name());
+	LOG_INFO("{}",TypeId::Get<ob::rhi::DepthStencilDesc>().name());
 
 	//------ループ-----
 

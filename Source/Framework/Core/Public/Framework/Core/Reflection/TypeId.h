@@ -12,13 +12,6 @@ namespace ob::core {
 	namespace internal::type_id {
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  文字列がある文字を含むか
-		//@―---------------------------------------------------------------------------
-		constexpr bool HasChar(StringView s, Char c) {
-			return s.find(c) != s.npos;
-		}
-
-		//@―---------------------------------------------------------------------------
 		//! @brief  関数名のPrefixを取得
 		//@―---------------------------------------------------------------------------
 		constexpr StringView GetTypeNamePrefix(void) {
@@ -35,15 +28,18 @@ namespace ob::core {
 
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
-			constexpr size_t prefix = GetTypeNamePrefix().size() - std::size("Prefix(void)") + std::size("<class ");
+			constexpr size_t prefix2 = GetTypeNamePrefix().size() - std::size("Prefix(void)") + std::size("<");
 			constexpr size_t suffix = StringView(TC(">(void)")).size();
+			constexpr size_t prefix = prefix2 +
+				(
+					signature.substr(prefix2).starts_with(TC("enum ")) ? std::size("enum") :
+					signature.substr(prefix2).starts_with(TC("class ")) ? std::size("class") :
+					signature.substr(prefix2).starts_with(TC("struct ")) ? std::size("struct") : 0
+				);
 
 			constexpr StringView name = signature.substr(prefix, signature.size() - prefix - suffix);
 			
 			static_assert(!std::is_volatile_v<T>, "TypeId does not support volatile.");
-			static_assert(!HasChar(name, '*'), "TypeId does not support pointer.");
-			static_assert(!HasChar(name, '&'), "TypeId does not support reference.");
-			static_assert(!HasChar(name, '<'), "TypeId does not support template.");
 			
 			return name;
 		}
@@ -62,7 +58,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template<class T>
 		static constexpr TypeId Get() {
-			auto name = internal::type_id::GetTypeName<T>();
+			auto name = internal::type_id::GetTypeName<std::remove_cv_t<std::remove_reference_t<T>>>();
 			return name;
 		}
 	public:
