@@ -68,6 +68,17 @@ namespace ob::imgui {
 		io.BackendRendererName = "OctbitEngine";
 		io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // 大きなメッシュを使用できるようにする
 
+		FileStream file(TC("Asset/Font/ipaexg.ttf"));
+		Blob blob(file);
+		if (blob) {
+			ImFontConfig config;
+			config.OversampleH = 1;
+			config.RasterizerMultiply = 1.2f;
+			void* ptr = ImGui::MemAlloc(blob.size());
+			memcpy_s(ptr, blob.size(), blob.data(), blob.size());
+			io.Fonts->AddFontFromMemoryTTF(ptr,blob.size(),13.0f,&config,io.Fonts->GetGlyphRangesJapanese());
+		}
+
 		Ref<Shader> vs;
 		Ref<Shader> ps;
 		{
