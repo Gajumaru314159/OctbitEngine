@@ -68,7 +68,7 @@ namespace ob::core {
 		// イテレータ
 		//===============================================================
 		const_iterator begin() const noexcept { return m_view.begin(); }
-		const_iterator end() const noexcept { return m_view.begin(); }
+		const_iterator end() const noexcept { return m_view.end(); }
 		const_iterator cbegin() const noexcept { return m_view.cbegin(); }
 		const_iterator cend() const noexcept { return m_view.cend(); }
 		const_reverse_iterator rbegin() const noexcept { return m_view.rbegin(); }
