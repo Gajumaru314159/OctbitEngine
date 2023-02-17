@@ -29,11 +29,11 @@ namespace ob::core {
     using byte = u8;	    //!< バイト値
 
 
-    using Char = char16_t;  //!< 文字型
+    using Char = char;  //!< 文字型
 
 #undef TC
     //! @cond
-#define _internal_TC(x) u ## x
+#define _internal_TC(x) u8 ## x
     //! @endcond
 #define TC(x) _internal_TC(x)
     //@―---------------------------------------------------------------------------
