@@ -144,7 +144,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      マーカーを挿入
         //@―---------------------------------------------------------------------------
-        void pushMarker(const char* pName) override;
+        void pushMarker(StringView name) override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      マーカーを終了
@@ -180,6 +180,8 @@ namespace ob::rhi::dx12 {
         s32         m_subpassIndex;
 
         ResourceStateCache m_cache;
+
+        StringBase<char> m_markerNameCache;
 
     };
 

@@ -32,6 +32,7 @@ set(public_libs
     Input
     Engine
     ImGui
+    Graphic
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
@@ -40,3 +41,9 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded
 
 # フィルタ設定
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Application")
+
+
+# カスタムコマンド
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:Application>
+    )

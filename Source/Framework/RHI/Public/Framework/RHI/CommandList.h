@@ -76,7 +76,7 @@ namespace ob::rhi {
         virtual void insertResourceBarrier(const ResourceBarrier&) = 0;
 
 #ifdef OB_DEBUG
-        virtual void pushMarker(const char* pName) = 0;
+        virtual void pushMarker(StringView name) = 0;
         virtual void popMarker() = 0;
 #endif
     protected:

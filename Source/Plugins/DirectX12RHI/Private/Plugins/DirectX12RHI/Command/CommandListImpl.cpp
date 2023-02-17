@@ -18,6 +18,7 @@
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
+
 #include <pix3.h>
 
 //===============================================================
@@ -497,11 +498,12 @@ namespace ob::rhi::dx12 {
 
 
 #ifdef OB_DEBUG
-	void CommandListImpl::pushMarker(const char* pName) {
-		//::PIXBeginEvent(m_cmdList.Get(),PIX_COLOR_DEFAULT, pName);
+	void CommandListImpl::pushMarker(StringView name) {
+		StringEncoder::Encode(name, m_markerNameCache);
+		::PIXBeginEvent(m_cmdList.Get(),PIX_COLOR_DEFAULT, m_markerNameCache.data());
 	}
 	void CommandListImpl::popMarker() {
-		//::PIXEndEvent();
+		::PIXEndEvent(m_cmdList.Get());
 	}
 #endif
 
