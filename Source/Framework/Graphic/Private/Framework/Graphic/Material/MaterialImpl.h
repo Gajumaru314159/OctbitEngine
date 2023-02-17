@@ -7,6 +7,7 @@
 #include <Framework/Graphic/MaterialDesc.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Forward.h>
+#include <Framework/Engine/Name.h>
 
 namespace ob::rhi {
 	class CommandList;
@@ -23,18 +24,6 @@ namespace ob::graphic {
 		Texture
 	};
 
-	struct ValuePropertyDesc {
-		PropertyType type;
-		s32 offset = -1;
-	};
-
-
-	class MaterialPass {
-	public:
-
-	private:
-		Ref<rhi::PipelineState> m_pipeline;
-	};
 
 
 	//@―---------------------------------------------------------------------------
@@ -63,32 +52,44 @@ namespace ob::graphic {
 
 	public:
 
-		void record(Ref<rhi::CommandList>&,Name pass);
+		void record(Ref<rhi::CommandList>&,engine::Name pass);
 
 	private:
 
-		template<typename T>
+		template<typename T,typename TEq = std::equal_to<T>>
 		void setValueProprty(StringView name, PropertyType type, const T& value) {
 			if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 				auto& desc = found->second;
 				if (desc.type == type)return;
 				if (!is_in_range(desc.offset,m_bufferBlob))return;
+				if (TEq()(value, dest))return;
 
 				auto& dest = *GetOffsetPtr<T>(m_buffer.data(), desc.offset);
 				dest = value;
 			}
 		}
 
+		void creaePipeline();
+
 	private:
 
+		struct ValuePropertyDesc {
+			PropertyType type;
+			s32 offset = -1;
+		};
 
-		Map<String, ValuePropertyDesc, std::less<>> m_propertyMap;
-		HashMap<Name, Ref<rhi::PipelineState>> m_passMap;
+		using PassMap = HashMap<engine::Name, Ref<rhi::PipelineState>>;
+		using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
-		Blob m_bufferBlob;
+		MaterialDesc		m_desc;
+
+		PassMap				m_passMap;
+		PropertyMap			m_propertyMap;
+
+		Blob				m_bufferBlob;
+
+		Ref<rhi::Buffer>	m_buffer;
 		Array<Ref<Texture>> m_textures;
-
-		Ref<rhi::Buffer> m_buffer;
 
 		Ref<rhi::DescriptorTable> m_bufferTable;
 		Ref<rhi::DescriptorTable> m_textureTable;

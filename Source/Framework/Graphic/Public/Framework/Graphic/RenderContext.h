@@ -5,12 +5,16 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Misc/YesNo.h>
+#include <Framework/Engine/Name.h>
+
+#include <Framework/Graphic/RendererGroup.h>
 
 namespace ob::graphic {
 
     class CommandBuffer;
     class Camera;
     class Attachment;
+    class IRenderer;
 
     
 
@@ -38,6 +42,11 @@ namespace ob::graphic {
         //! @brief      カメラのプロパティをグローバル変数に書き込む
         //@―---------------------------------------------------------------------------
         virtual void setCamera(const Camera& camera) = 0;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      特定の描画タグを持つ描画アイテムを描画する
+        //@―---------------------------------------------------------------------------
+        virtual RenderGroup getRendererGroup(engine::Name renderTag) const;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する

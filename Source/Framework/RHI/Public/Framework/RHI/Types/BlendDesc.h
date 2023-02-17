@@ -152,4 +152,10 @@ namespace ob::rhi {
 
     };
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      BlendDescのリスト
+    //! @details    固定長配列なので別定義しています。
+    //@―---------------------------------------------------------------------------
+    using BlendDescList = StaticArray<BlendDesc,RENDER_TARGET_MAX>;
+
 }// namespcae ob::rhi

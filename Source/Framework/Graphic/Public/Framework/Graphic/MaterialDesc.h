@@ -6,20 +6,28 @@
 #pragma once
 #include <Framework/RHI/PipelineState.h>
 
-
 namespace ob::graphic {
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  マテリアルパス定義
+    //@―---------------------------------------------------------------------------
     struct MaterialPass {
-        Name renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
-        //  RenderPass/Subpass
+        engine::Name            renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
 
-        // リソース
-        // Shader vs;
+        Ref<rhi::Shader>        vs;
+        Ref<rhi::Shader>        ps;
+
+        rhi::BlendDescList		blends;
+        rhi::RasterizerDesc		rasterizer;
+        rhi::DepthStencilDesc	depthStencil;
     };
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  マテリアルプロパティ定義
+    //@―---------------------------------------------------------------------------
     struct MaterialPropertyDesc {
-        String name;
-        u32 offset;
+        String  name;
+        s32     offset;
     };
 
     //@―---------------------------------------------------------------------------
@@ -27,7 +35,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     struct MaterialDesc{
         
-        HashMap<Name, MaterialPass> passes;
+        HashMap<engine::Name, MaterialPass> passes;
         
         Array<MaterialPropertyDesc> floatProperties;
         Array<MaterialPropertyDesc> colorProperties;
@@ -35,6 +43,10 @@ namespace ob::graphic {
         Array<MaterialPropertyDesc> textureProperties;
     };
 
+
+    struct MaterialUser {
+        rhi::VertexLayout       vertexLayout;
+    };
 
 
 

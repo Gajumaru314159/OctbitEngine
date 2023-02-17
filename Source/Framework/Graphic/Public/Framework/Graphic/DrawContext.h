@@ -4,9 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/String/Name.h>
+#include <Framework/Engine/Name.h>
 
 namespace ob::graphic {
+
+    using Name = engine::Name;
 
     struct DrawTag {
         Name name;

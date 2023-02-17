@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Texture.h>
 #include <Framework/Graphic/MaterialDesc.h>
+#include <Framework/Engine/Name.h>
 
 namespace ob::rhi {
     class CommandList;
@@ -57,7 +58,10 @@ namespace ob::graphic {
 
     public:
 
-        void record(Ref<rhi::CommandList>&,Name pass)const;
+        //@―---------------------------------------------------------------------------
+        //! @brief  描画コマンドを記録
+        //@―---------------------------------------------------------------------------
+        void record(Ref<rhi::CommandList>&,engine::Name pass)const;
 
     private:
 

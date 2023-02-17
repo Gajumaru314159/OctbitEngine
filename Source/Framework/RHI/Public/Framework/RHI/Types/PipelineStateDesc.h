@@ -125,7 +125,7 @@ namespace ob::rhi {
 		Ref<Shader>			ps;								//!< ピクセルシェーダ
 
 		SampleDesc			sample;							//!< サンプル定義
-		BlendDesc			blend[RENDER_TARGET_MAX];		//!< ブレンド定義
+		BlendDescList		blend;							//!< ブレンド定義
 		RasterizerDesc		rasterizer;						//!< ラスタライズ定義
 		DepthStencilDesc	depthStencil;					//!< デプス・ステンシル定義
 

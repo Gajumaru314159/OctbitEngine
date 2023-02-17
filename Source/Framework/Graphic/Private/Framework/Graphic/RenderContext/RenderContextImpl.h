@@ -53,6 +53,11 @@ namespace ob::graphic {
         void draw(/*tag,sort,filter*/)override;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
+        //! @brief      特定の描画タグを持つ描画アイテムを描画する
+        //@―---------------------------------------------------------------------------
+        RenderGroup getRendererGroup(engine::Name renderTag) const override;// Debug / Shadow / UI
+
+        //@―---------------------------------------------------------------------------
         //! @brief      カスタムコマンドバッファーを記録
         //! 
         //! @details    この関数を呼び出すと、RenderContext内部のCommandBufferにカスタムCommandBufferの内容がコピーされます。

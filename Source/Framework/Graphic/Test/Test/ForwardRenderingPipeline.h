@@ -8,6 +8,7 @@
 #include <Framework/Graphic/CommandBuffer.h>
 #include <Framework/Graphic/RenderContext.h>
 #include <Framework/Graphic/Camera.h>
+#include <Framework/Engine/Name.h>
 #include <Framework/RHI/RenderTexture.h>
 
 namespace ob::graphic {
@@ -66,19 +67,19 @@ namespace ob::graphic {
 						// Renderer描画
 						//context.draw(/**/);
 
-						Name renderTag(TC("EarlyDepth"));
+						engine::Name names[]{
+							engine::Name(TC("Opaque")),
+							engine::Name(TC("HairOpaque")),
+						};
+
+						engine::Name renderTag(TC("EarlyDepth"));
 
 
 						// 指定したレンダータグのRendererを収集
 						// RenderPassは設定済み
 						// 実行順はSubpassに合わせる必要がある
-						auto renderers = context.getRenderers(renderTag);
-
-						renderers
-							.cull(options)
-							// .filter()
-							.sort(options)
-							.draw(options);
+						context.getRendererGroup(renderTag)
+							.draw();
 
 						context.endSubPass();
 					}

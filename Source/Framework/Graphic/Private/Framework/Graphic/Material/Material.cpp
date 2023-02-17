@@ -117,8 +117,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief  描画コマンドを記録
     //@―---------------------------------------------------------------------------
-    void Material::record(Ref<rhi::CommandList>& recorder, Name pass) const{
-        OB_NOTIMPLEMENTED();
+    void Material::record(Ref<rhi::CommandList>& recorder, engine::Name pass) const{
         safeGet(m_impl).record(recorder,pass);
     }
 

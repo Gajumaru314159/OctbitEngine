@@ -11,7 +11,17 @@
 
 namespace ob::graphic {
 
-	MaterialImpl::MaterialImpl(const MaterialDesc& desc) {
+	enum class MaterialRootSignatureSlot {
+		Camera,
+		Buffer,
+		Texture,
+		Sampler,
+	};
+
+
+	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
+		: m_desc(desc)
+	{
 		using namespace ob::rhi;
 		s32 bufferSize = 0;
 		s32 paramSize = 0;
@@ -52,6 +62,45 @@ namespace ob::graphic {
 
 	}
 
+	void MaterialImpl::creaePipeline() {
+
+
+		using namespace ob::rhi;
+
+		PipelineStateDesc desc;
+
+		desc.name = Format(TC("Material_Pass"));
+
+		for (auto& [name,pass] : m_desc.passes) {
+
+			//auto [renderPass,subpass] = Material::FindRenderPass(name);
+			Ref<RenderPass> renderPass;
+			s32 subpass;
+
+			desc.renderPass = renderPass;
+			desc.subpass = subpass;
+
+			//desc.rootSignature = ;
+			//desc.vertexLayout = TryCreate(m_desc.inputLayout);
+
+			desc.vs = pass.vs;
+			desc.ps = pass.ps;
+
+			std::copy(
+				std::begin(desc.blends), std::end(desc.blends),
+				std::begin(pass.blends)
+			);
+
+
+			desc.rasterizer = pass.rasterizer;
+			desc.depthStencil = pass.depthStencil;
+
+			m_passMap[name] = PipelineState::Create(desc);
+
+		}
+
+	}
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
@@ -86,8 +135,14 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
-		setValueProprty(name, PropertyType::Matrix, value);
+	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {		
+		setValueProprty(name, PropertyType::Matrix,
+#if 1
+			value
+#else
+			value.transposed()
+#endif
+		);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -107,7 +162,10 @@ namespace ob::graphic {
 		}
 	}
 
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,Name pass) {
+	//@―---------------------------------------------------------------------------
+	//! @brief  
+	//@―---------------------------------------------------------------------------
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,engine::Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定
@@ -117,6 +175,9 @@ namespace ob::graphic {
 		// 複数パス → パスを引数に取る
 		// シェーダ設定 → 
 		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
+
+
+		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
 
 		auto found = m_passMap.find(pass);
 		if (found == m_passMap.end())
@@ -130,10 +191,9 @@ namespace ob::graphic {
 		
 		// TODO スロット
 		rhi::SetDescriptorTableParam params[] = {
-			{m_bufferTable, 0},
-			{m_textureTable, 1},
-			//{m_samplerTable, 1},
-			//{m_bufferTable, 1},
+			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::Buffer)},
+			{m_textureTable, enum_cast(MaterialRootSignatureSlot::Texture)},
+			{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
 		};
 		cmdList->setRootDesciptorTable(params, std::size(params));
 

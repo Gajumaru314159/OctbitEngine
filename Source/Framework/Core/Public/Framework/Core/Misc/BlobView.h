@@ -56,9 +56,19 @@ namespace ob::core {
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
         template<class T>
-        explicit BlobView(const Array<T>& data) {
+        BlobView(const Array<T>& data) {
             m_pData = reinterpret_cast<const byte*>(data.data());
-            m_size = data.size()*sizeof(T);
+            m_size = data.size() * sizeof(T);
+        }
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ(配列指定)
+        //@―---------------------------------------------------------------------------
+        template<class T,size_t N>
+        BlobView(const T(&data)[N]) {
+            m_pData = reinterpret_cast<const byte*>(data);
+            m_size = N * sizeof(T);
         }
 
 

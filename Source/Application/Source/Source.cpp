@@ -32,6 +32,26 @@ int TestDirectX12();
 int TestVullkan();
 void Link_Entity();
 
+
+//@―---------------------------------------------------------------------------
+//! @brief  コンポーネント
+//@―---------------------------------------------------------------------------
+class GraphicTest : public ob::engine::Component {
+	friend class Entity;
+public:
+
+	OB_RTTI();
+
+	GraphicTest() {
+
+	}
+private:
+
+	Ref<rhi::Buffer> m_buffer;
+
+};
+
+
 void OctbitInit(ob::engine::EngineConfig& config) {
 	{
 		rhi::Config c;

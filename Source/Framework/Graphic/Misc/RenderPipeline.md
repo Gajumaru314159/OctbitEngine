@@ -138,3 +138,12 @@ public:
 }
 
 ```
+
+## Rendererの描画
+RendererはDrawContext内部にRenderTag毎に登録されている。
+
+1. 特定のRenderTagを持つRendererを集める ※複数指定可
+2. 描画条件に一致するものだけにフィルタ ※カリング
+3. 描画順にソート ※距離順
+
+## RenderスレッドとGameスレッド
