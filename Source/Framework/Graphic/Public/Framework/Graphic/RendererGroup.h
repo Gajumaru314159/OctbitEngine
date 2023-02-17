@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/MeshData.h>
 
 namespace ob::graphic {
 
@@ -26,8 +25,8 @@ namespace ob::graphic {
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
 
-		RenderGroup& cull();
-		RenderGroup& sort();
+		//RenderGroup& cull();
+		//RenderGroup& sort();
 
 		void draw() {
 

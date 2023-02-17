@@ -5,8 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/CommandBuffer/CommandBufferImpl.h>
 #include <Framework/Graphic/Material/MaterialImpl.h>
-#include <Framework/Graphic/Material.h>
-#include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/Mesh/MeshImpl.h>
 
 namespace ob::graphic
 {
@@ -15,7 +14,7 @@ namespace ob::graphic
     //! @brief          バッファのすべてのコマンドをクリア
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::clear() {
-
+        OB_NOTIMPLEMENTED();
     }
 
     //@―---------------------------------------------------------------------------
@@ -26,7 +25,7 @@ namespace ob::graphic
     //! @param pass     マテリアルパス名
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) {
-
+        OB_NOTIMPLEMENTED();
     }
 
     //@―---------------------------------------------------------------------------
@@ -37,9 +36,11 @@ namespace ob::graphic
     //! @param submesh  描画するサブメッシュのインデックス
     //! @param pass     使用するマテリアルのパス名
     //@―---------------------------------------------------------------------------
-    void CommandBufferImpl::drawMesh(const Ref<Mesh>& mesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) {
+    void CommandBufferImpl::drawMesh(const Ref<Mesh>& mesh, s32 submesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) {
         
-        auto mat = material.cast<MaterialImpl>();
+        if (auto pMat = material.cast<MaterialImpl>()) {
+            pMat->record(m_cmdList, matrix,mesh,submesh, pass);
+        }
 
     }
 
@@ -51,8 +52,8 @@ namespace ob::graphic
     //! @param submesh  描画するサブメッシュのインデックス
     //! @param pass     使用するマテリアルのパス名
     //@―---------------------------------------------------------------------------
-    void CommandBufferImpl::drawMeshInstanced(const Ref<Mesh>& mesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {}) {
-
+    void CommandBufferImpl::drawMeshInstanced(const Ref<Mesh>& mesh, s32 submesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {}) {
+        OB_NOTIMPLEMENTED();
     }
 
     //@―---------------------------------------------------------------------------

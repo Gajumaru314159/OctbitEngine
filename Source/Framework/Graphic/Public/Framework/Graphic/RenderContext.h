@@ -10,7 +10,7 @@
 #include <Framework/Graphic/RendererGroup.h>
 
 namespace ob::graphic {
-
+    /*
     class CommandBuffer;
     class Camera;
     class Attachment;
@@ -51,7 +51,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        virtual void draw(/*tag,sort,filter*/) = 0;// Debug / Shadow / UI
+        virtual void draw() = 0;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      カスタムコマンドバッファーを記録
@@ -85,5 +85,7 @@ namespace ob::graphic {
         virtual void submit() = 0;
 
     };
+
+*/
 
 }// namespcae ob

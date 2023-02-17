@@ -28,7 +28,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	class MaterialImpl:public Material {
+	class MaterialImpl :public Material {
 	private:
 		using Texture = rhi::Texture;
 	public:
@@ -44,7 +44,7 @@ namespace ob::graphic {
 
 		bool hasProprty(StringView name, PropertyType type)const;
 
-		bool hasInt(StringView name)const override{ return hasProprty(name,PropertyType::Int); }
+		bool hasInt(StringView name)const override { return hasProprty(name, PropertyType::Int); }
 		bool hasFloat(StringView name)const override { return hasProprty(name, PropertyType::Float); }
 		bool hasColor(StringView name)const override { return hasProprty(name, PropertyType::Color); }
 		bool hasMatrix(StringView name)const override { return hasProprty(name, PropertyType::Matrix); }
@@ -57,19 +57,22 @@ namespace ob::graphic {
 
 	public:
 
-		void record(Ref<rhi::CommandList>&, const Ref<Mesh>& mesh,engine::Name pass);
+		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, engine::Name pass);
+		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, engine::Name pass);
 
 	private:
 
-		template<typename T,typename TEq = std::equal_to<T>>
+		template<typename T, typename TEq = std::equal_to<T>>
 		void setValueProprty(StringView name, PropertyType type, const T& value) {
 			if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 				auto& desc = found->second;
 				if (desc.type == type)return;
-				if (!is_in_range(desc.offset,m_bufferBlob))return;
-				if (TEq()(value, dest))return;
+				if (!is_in_range(desc.offset, m_bufferBlob))return;
 
-				auto& dest = *GetOffsetPtr<T>(m_buffer.data(), desc.offset);
+				auto& dest = *GetOffsetPtr<T>(m_bufferBlob.data(), desc.offset);
+
+				if (TEq()(value, dest))return;
+				
 				dest = value;
 			}
 		}

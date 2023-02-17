@@ -9,7 +9,7 @@
 #include <Framework/Graphic/Camera.h>
 
 namespace ob::graphic {
-
+    /*
     //@―---------------------------------------------------------------------------
     //! @brief  
     //! 
@@ -34,12 +34,12 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief      RenderPass を開始
         //@―---------------------------------------------------------------------------
-        void beginRenderPass(s32 width, s32 height, Span<Attachment> attachments, s32 depthIndex )override;
+        void beginRenderPass(s32 width, s32 height, Span<Attachment> attachments, std::optional<Attachment> depth)override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      サブパスを開始
         //@―---------------------------------------------------------------------------
-        void beginSubPass(/*colors,inputs*/)override;
+        void beginSubPass(Span<s32> colors, Span<s32> inputs)override;
 
 
         //@―---------------------------------------------------------------------------
@@ -50,7 +50,7 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        void draw(/*tag,sort,filter*/)override;// Debug / Shadow / UI
+        void draw()override;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
@@ -93,5 +93,6 @@ namespace ob::graphic {
         Ref<rhi::CommandList> m_commandList;
 
     };
+*/
 
 }// namespcae ob

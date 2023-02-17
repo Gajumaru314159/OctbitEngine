@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/PipelineState.h>
+#include <Framework/Engine/Name.h>
 
 namespace ob::graphic {
 

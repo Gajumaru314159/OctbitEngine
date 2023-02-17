@@ -46,7 +46,7 @@ namespace ob::graphic {
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        virtual void drawMesh(const Ref<Mesh>& mesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) = 0;
+        virtual void drawMesh(const Ref<Mesh>& mesh, s32 submesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画
@@ -56,7 +56,7 @@ namespace ob::graphic {
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        virtual void drawMeshInstanced(const Ref<Mesh>& mesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {}) = 0;
+        virtual void drawMeshInstanced(const Ref<Mesh>& mesh, s32 submesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass ={}) = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief          GPUプロファイラ用のマーカを追加

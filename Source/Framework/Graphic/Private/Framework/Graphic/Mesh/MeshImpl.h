@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Mesh.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::graphic {
 
@@ -58,6 +59,9 @@ namespace ob::graphic {
 
 
 		void initLayoutFromMeshData(const MeshData&);
+
+
+		void record(Ref<rhi::CommandList>&,s32 submesh);
 
 	private:
 

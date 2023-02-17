@@ -1,7 +1,6 @@
 ﻿#include <Windows.h>
 
 #include <Framework/RHI/All.h>
-#include <Framework/RHI/MeshData.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -308,8 +307,8 @@ int TestDirectX12() {
 			LOG_INFO("モデル読み込み");
 			for (int i = 0; i < Loader.LoadedMeshes.size(); i++)
 			{
-
-				MeshData<Vert> mesh;
+				Array<Vert> vertices;
+				Array<u16> indices;
 				objl::Mesh& curMesh = Loader.LoadedMeshes[i];
 
 				String name;
@@ -322,7 +321,7 @@ int TestDirectX12() {
 					auto pos = curMesh.Vertices[j].Position;
 					auto uv = curMesh.Vertices[j].TextureCoordinate;
 					auto normal = curMesh.Vertices[j].Normal;
-					auto& vert = mesh.vertices.emplace_back();
+					auto& vert = vertices.emplace_back();
 					vert.pos = Vec4(pos.X, pos.Y, pos.Z, 1.0f);
 					vert.normal = Vec4(normal.X, normal.Y, normal.Z, 1.0f);
 					vert.uv = Vec2(uv.X, uv.Y);
@@ -330,25 +329,25 @@ int TestDirectX12() {
 
 				for (int j = 0; j < curMesh.Indices.size(); j++)
 				{
-					mesh.indices.push_back(curMesh.Indices[j]);
+					indices.push_back(curMesh.Indices[j]);
 				}
 
 				Ref<Buffer> vertexBuffer;
 				{
-					auto desc = BufferDesc::Vertex<Vert>(mesh.vertices.size());
+					auto desc = BufferDesc::Vertex<Vert>(vertices.size());
 					desc.name = Format(TC("Model[{}]"), i);
-					vertexBuffer = Buffer::Create(desc, BlobView(mesh.vertices));
+					vertexBuffer = Buffer::Create(desc, BlobView(vertices));
 					OB_ASSERT_EXPR(vertexBuffer);
 				}
 
 				Ref<Buffer> indexBuffer;
 				{
-					auto desc = BufferDesc::Vertex<decltype(mesh)::index_type>(mesh.indices.size());
+					auto desc = BufferDesc::Vertex<u16>(indices.size());
 					desc.name = Format(TC("Model[{}]"), i);
-					indexBuffer = Buffer::Create(desc, BlobView(mesh.indices));
+					indexBuffer = Buffer::Create(desc, BlobView(indices));
 					OB_ASSERT_EXPR(indexBuffer);
 				}
-				meshes.emplace_back(vertexBuffer, indexBuffer, mesh.indices.size());
+				meshes.emplace_back(vertexBuffer, indexBuffer, indices.size());
 			}
 		} else {
 			LOG_INFO("モデルファイルが見つかりませんでした。");
@@ -425,7 +424,11 @@ int TestDirectX12() {
 		// 表示を更新(Present)
 		display->update();
 
+
 		cmdList->begin();
+
+		cmdList->pushMarker(TC("My"));
+		
 		cmdList->beginRenderPass(frameBuffer);
 		//cmdList.clearColors();
 		//cmdList.clearDepthStencil();
@@ -462,8 +465,10 @@ int TestDirectX12() {
 			}
 
 		}
+		cmdList->popMarker();
 
 
+		cmdList->pushMarker(TC("ImGui"));
 		{
 			imgui::BeginFrame();
 
@@ -479,6 +484,7 @@ int TestDirectX12() {
 
 			imgui::EndFrame(cmdList);
 		}
+		cmdList->popMarker();
 
 
 		cmdList->endRenderPass();

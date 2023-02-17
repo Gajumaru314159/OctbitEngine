@@ -29,7 +29,7 @@ namespace ob::graphic
         //! @param mat      マテリアル
         //! @param pass     マテリアルパス名
         //@―---------------------------------------------------------------------------
-        void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {})  override;
+        void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat, Name name)  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画
@@ -39,7 +39,7 @@ namespace ob::graphic
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        void drawMesh(const Ref<Mesh>& mesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {})  override;
+        void drawMesh(const Ref<Mesh>& mesh,s32 submesh, const Matrix& matrix, const Ref<Material>& material, Name pass)  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画
@@ -49,7 +49,7 @@ namespace ob::graphic
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        void drawMeshInstanced(const Ref<Mesh>& mesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {})  override;
+        void drawMeshInstanced(const Ref<Mesh>& mesh, s32 submesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass)  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          GPUプロファイラ用のマーカを追加
@@ -63,7 +63,7 @@ namespace ob::graphic
 
     private:
 
-        Ref<CommandBuffer> m_cmdList;
+        Ref<rhi::CommandList> m_cmdList;
 
     };
 

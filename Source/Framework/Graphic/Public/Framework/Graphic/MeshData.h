@@ -4,8 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/MeshData.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 
 namespace ob::graphic {

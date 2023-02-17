@@ -8,6 +8,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/DescriptorTable.h>
+#include <Framework/Graphic/Mesh/MeshImpl.h>
 
 namespace ob::graphic {
 
@@ -159,7 +160,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,const Ref<Mesh>& mesh,engine::Name pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh,s32 submeshIndex, engine::Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定
@@ -170,19 +171,36 @@ namespace ob::graphic {
 		// シェーダ設定 → 
 		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
 
+		auto pMesh = mesh.cast<MeshImpl>();
 
+		if (!pMesh) {
+			return;
+		}
+
+		auto submesh = pMesh->getSubMesh(submeshIndex);
+
+		if (submesh.indexCount <= 0) {
+			return;
+		}
+
+		// TODO 複数パスある場合は余計なので別途更新関数を回す
 		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
+
+
+
+		// 以下の情報でPipeline検索
+		pass;
+		pMesh->getVertexLayout();
 
 		auto found = m_passMap.find(pass);
 		if (found == m_passMap.end())
 			return;
 
-		// TODO 頂点レイアウト
 		auto& pipeline = found->second;
-		
+
 		cmdList->setPipelineState(pipeline);
-		
-		
+
+
 		// TODO スロット
 		rhi::SetDescriptorTableParam params[] = {
 			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::Buffer)},
@@ -191,6 +209,16 @@ namespace ob::graphic {
 		};
 		cmdList->setRootDesciptorTable(params, std::size(params));
 
+		pMesh->record(cmdList,submeshIndex);
+
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  
+	//@―---------------------------------------------------------------------------
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh,s32 submesh, engine::Name pass) {
+
+		OB_NOTIMPLEMENTED();
 	}
 
 

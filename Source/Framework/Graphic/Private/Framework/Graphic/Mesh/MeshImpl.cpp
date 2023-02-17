@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Mesh/MeshImpl.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::graphic {
 
@@ -232,6 +233,29 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	const Array<SubMesh>& MeshImpl::getSubMeshes()const {
 		return m_meshData.submeshes;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//!	@brief			描画コマンドを記録
+	//@―---------------------------------------------------------------------------
+	void MeshImpl::record(Ref<rhi::CommandList>& cmdList, s32 submeshIndex) {
+
+		if (m_indexBuffer) {
+			cmdList->setIndexBuffer(m_indexBuffer);
+		}
+		if (m_vertexBuffer) {
+			
+			auto submesh = getSubMesh(submeshIndex);
+
+			rhi::DrawIndexedParam param{};
+			param.startVertex = submesh.baseVertex;
+			param.startIndex = submesh.indexStart;
+			param.indexCount = submesh.indexCount;
+
+			cmdList->setVertexBuffer(m_vertexBuffer);
+			cmdList->drawIndexed(param);
+
+		}
 	}
 
 

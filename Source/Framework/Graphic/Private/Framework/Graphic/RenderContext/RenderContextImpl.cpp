@@ -7,6 +7,8 @@
 
 namespace ob::graphic {
 
+    /*
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
@@ -17,11 +19,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      RenderPass を開始
     //@―---------------------------------------------------------------------------
-    void RenderContextImpl::beginRenderPass(s32 width, s32 height, Span<Attachment> attachments, s32 depthIndex) {
-        if (m_renderPassCache) {
-            endRenderPass();
-        }
-        m_renderPassCache = createRenderPassCache(width,height,attachments,depthIndex);
+    void RenderContextImpl::beginRenderPass(s32 width, s32 height, Span<Attachment> attachments, std::optional<Attachment> depth) {
+        //if (m_renderPassCache) {
+        //    endRenderPass();
+        //}
+        //m_renderPassCache = createRenderPassCache(width,height,attachments,depthIndex);
 
         OB_NOTIMPLEMENTED();
     }
@@ -29,11 +31,11 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     //! @brief      サブパスを開始
     //@―---------------------------------------------------------------------------
-    void RenderContextImpl::beginSubPass(/*colors,inputs*/) {
-        if (!m_renderPassCache)
-            return:
-
-        m_renderPassCache->addSubpass(colors,inputs);
+    void RenderContextImpl::beginSubPass(Span<s32> colors, Span<s32> inputs) {
+        //if (!m_renderPassCache)
+        //    return:
+        //
+        //m_renderPassCache->addSubpass(colors,inputs);
         OB_NOTIMPLEMENTED();
     }
 
@@ -49,15 +51,13 @@ namespace ob::graphic {
     //! @brief      特定の描画タグを持つ描画アイテムを描画する
     //@―---------------------------------------------------------------------------
     RenderGroup RenderContextImpl::getRendererGroup(engine::Name renderTag) const {
-
-
-
+        return {};
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief      特定の描画タグを持つ描画アイテムを描画する
     //@―---------------------------------------------------------------------------
-    void RenderContextImpl::draw(/*tag,sort,filter*/) {
+    void RenderContextImpl::draw(tag,sort,filter) {
 
         //auto& items = m_itemMap[tag]{}
         //
@@ -102,7 +102,7 @@ namespace ob::graphic {
     //! @brief      RenderPass を終了
     //@―---------------------------------------------------------------------------
     void RenderContextImpl::endRenderPass() {
-        m_renderPassCache->flush();
+        //m_renderPassCache->flush();
         OB_NOTIMPLEMENTED();
     }
 
@@ -114,6 +114,6 @@ namespace ob::graphic {
     void RenderContextImpl::submit() {
         OB_NOTIMPLEMENTED();
     }
-
+    */
 
 }// namespace ob
