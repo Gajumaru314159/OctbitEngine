@@ -8,46 +8,38 @@
 #include <Framework/Graphic/MaterialDesc.h>
 #include <Framework/Engine/Name.h>
 
-namespace ob::rhi {
-    class CommandList;
-}
-
-namespace ob::graphic {
-
-    
+namespace ob::graphic {   
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief  マテリアル
     //@―---------------------------------------------------------------------------
-    class Material {
+    class Material:public RefObject {
     public:
         using Texture = rhi::Texture;
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
-        Material() = default;
-
         //@―---------------------------------------------------------------------------
-        //! @brief  説明
+        //! @brief  マテリアルを生成
         //@―---------------------------------------------------------------------------
-        Material(const MaterialDesc& desc);
+        static Ref<Material> Create(const MaterialDesc& desc);
 
-        bool hasInt(StringView name)const;
-        bool hasFloat(StringView name)const;
-        bool hasColor(StringView name)const;
-        bool hasMatrix(StringView name)const;
-        bool hasTexture(StringView name)const;
+    public:
 
-        void setFloat(StringView name, f32 value);
-        void setColor(StringView name, Color value);
-        void setMatrix(StringView name, const Matrix& value);
-        void setTexture(StringView name, const Ref<Texture>& value);
-        //void setFloatArray(StringView name, Span<f32> values);
-        //void setColorArray(StringView name, Span<Color> values);
-        //void setBuffer(StringView name, Buffer );
+        virtual ~Material() = default;
+
+        virtual bool hasInt(StringView name)const = 0;
+        virtual bool hasFloat(StringView name)const = 0;
+        virtual bool hasColor(StringView name)const = 0;
+        virtual bool hasMatrix(StringView name)const = 0;
+        virtual bool hasTexture(StringView name)const = 0;
+
+        virtual void setFloat(StringView name, f32 value) = 0;
+        virtual void setColor(StringView name, Color value) = 0;
+        virtual void setMatrix(StringView name, const Matrix& value) = 0;
+        virtual void setTexture(StringView name, const Ref<Texture>& value) = 0;
+        //virtual void setFloatArray(StringView name, Span<f32> values);
+        //virtual void setColorArray(StringView name, Span<Color> values);
+        //virtual void setBuffer(StringView name, Buffer );
 
     public:
 
@@ -55,17 +47,6 @@ namespace ob::graphic {
         static void SetGlobalColor(StringView name, Color value);
         static void SetGlobalMatrix(StringView name, const Matrix& value);
         static void SetGlobalTexture(StringView name, const Ref<Texture>& value);
-
-    public:
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  描画コマンドを記録
-        //@―---------------------------------------------------------------------------
-        void record(Ref<rhi::CommandList>&,engine::Name pass)const;
-
-    private:
-
-        UPtr<class MaterialImpl> m_impl;
 
     };
 

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/MaterialDesc.h>
+#include <Framework/Graphic/Material.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/Engine/Name.h>
@@ -15,21 +15,20 @@ namespace ob::rhi {
 
 namespace ob::graphic {
 
+	class Mesh;
+
 	enum class PropertyType {
 		Int,
 		Float,
-		Vector,
 		Color,
 		Matrix,
 		Texture
 	};
 
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	class MaterialImpl {
+	class MaterialImpl:public Material {
 	private:
 		using Texture = rhi::Texture;
 	public:
@@ -42,17 +41,23 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		//! @brief  説明
 		//@―---------------------------------------------------------------------------
-		bool hasProprty(StringView name, PropertyType type);
 
-		void setFloat(StringView name, f32 value);
-		void setColor(StringView name, Color value);
-		void setVector(StringView name, Vec4 value);
-		void setMatrix(StringView name, const Matrix& value);
-		void setTexture(StringView name, const Ref<Texture>& value);
+		bool hasProprty(StringView name, PropertyType type)const;
+
+		bool hasInt(StringView name)const override{ return hasProprty(name,PropertyType::Int); }
+		bool hasFloat(StringView name)const override { return hasProprty(name, PropertyType::Float); }
+		bool hasColor(StringView name)const override { return hasProprty(name, PropertyType::Color); }
+		bool hasMatrix(StringView name)const override { return hasProprty(name, PropertyType::Matrix); }
+		bool hasTexture(StringView name)const override { return hasProprty(name, PropertyType::Texture); }
+
+		void setFloat(StringView name, f32 value) override;
+		void setColor(StringView name, Color value) override;
+		void setMatrix(StringView name, const Matrix& value) override;
+		void setTexture(StringView name, const Ref<Texture>& value) override;
 
 	public:
 
-		void record(Ref<rhi::CommandList>&,engine::Name pass);
+		void record(Ref<rhi::CommandList>&, const Ref<Mesh>& mesh,engine::Name pass);
 
 	private:
 

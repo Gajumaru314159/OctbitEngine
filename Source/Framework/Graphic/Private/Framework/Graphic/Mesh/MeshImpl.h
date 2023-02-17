@@ -18,107 +18,56 @@ namespace ob::graphic {
 	class MeshImpl : public Mesh {
 	public:
 
-		MeshImpl(StringView name);
-
-		//===============================================================
-		// 設定
-		//===============================================================
+		//@―---------------------------------------------------------------------------
+		//!	@brief			コンストラクタ
+		//@―---------------------------------------------------------------------------
+		MeshImpl(const MeshData&);
+		MeshImpl(MeshData&&);
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			頂点レイアウトを設定
 		//! @details		setVertices で設定されるBlobの解釈方法を設定します。
 		//@―---------------------------------------------------------------------------
-		void setInputLayout(const rhi::VertexLayout& layout) override;
+		const VertexLayout& getVertexLayout()const override;
 
 		//@―---------------------------------------------------------------------------
-		//!	@brief			頂点を設定
+		//!	@brief			メッシュデータを持っているか
 		//@―---------------------------------------------------------------------------
-		void setVertices(BlobView blob, s32 stribe, s32 start) override;
+		bool hasMeshData()const override;
 
 		//@―---------------------------------------------------------------------------
-		//! @brief			インデックスバッファを設定
-		//! @param blob		頂点データのバイナリオブジェクト
-		//! @param start	頂点データの書き込み先
-		//! @param is32bit	32bitインデックスを使用するか
+		//!	@brief			メッシュデータを取得
+		//! @details		```hasMeshData() == false```の場合空のMeshDataを返す。
 		//@―---------------------------------------------------------------------------
-		void setIndices(BlobView blob, s32 start, bool is32bit) override;
+		const MeshData& getMeshData()const override;
 
 		//@―---------------------------------------------------------------------------
-		//!	@brief			
+		//!	@brief			サブメッシュの数を取得
 		//@―---------------------------------------------------------------------------
-		void setSubMeshes(Span<SubMesh> submeshes) override;
-
-		//@―---------------------------------------------------------------------------
-		//!	@brief			CPU上のメッシュデータを整形してGPUに転送
-		//@―---------------------------------------------------------------------------
-		void apply() override;
+		s32 getSubMeshCount()const override;
 
 		//@―---------------------------------------------------------------------------
-		//!	@brief			CPU上のメッシュのコピーを解放
-		//! @details		この関数を呼び出すと positions() や colors() からメッシュの情報に
-		//!					アクセスできなくなります。
+		//!	@brief			指定したインデックスのサブメッシュを取得
 		//@―---------------------------------------------------------------------------
-		void clear() override;
-
-		
-		//===============================================================
-		// 再計算
-		//===============================================================
-		
-		//@―---------------------------------------------------------------------------
-		//!	@brief			頂点からメッシュのバウンディングボリュームを再計算します。
-		//@―---------------------------------------------------------------------------
-		void recalculateBounds() override;
+		SubMesh getSubMesh(s32 index)const override;
 
 		//@―---------------------------------------------------------------------------
-		//!	@brief			三角形と頂点からメッシュの法線を再計算
-		//! @brief			頂点を変更した後、変更を反映させるために法線を更新することがしばしば必要です。
-		//!					法線はすべての共有される頂点によって計算されます。
+		//!	@brief			サブメッシュのリストを取得
 		//@―---------------------------------------------------------------------------
-		void recalculateNormals() override;
-
-		//@―---------------------------------------------------------------------------
-		//!	@brief			法線とテクスチャ座標からメッシュの接線を再計算
-		//! @brief			メッシュの頂点と法線を変更した後、法線マップを参照する
-		//!					シェーダーを使用してメッシュをレンダリングする場合は、
-		//!					接線を更新する必要があります。
-		//!					接線は、メッシュの頂点位置、法線、およびテクスチャ座標を使用して計算されます。
-		//@―---------------------------------------------------------------------------
-		void recalculateTangents() override;
+		const Array<SubMesh>& getSubMeshes()const override;
 
 
-		//===============================================================
-		// 取得
-		//===============================================================
+		void initLayoutFromMeshData(const MeshData&);
 
-		//s32 blendShapeCount() override;
-		//Bounds bounds() override;
-		// indefFormat
-		// isReadable
-		// subMeshCount
-		// attributeCount
-		// bufferCount
-
-
-		//Array<Vec4> posiions() override;
-		//Array<s32> indices();
-
-
-
-		//s32 getIndexCount(s32 submesh)const override;
-		//s32 getIndexStart(s32 submesh)const override;
-		//Array<s32> getIndices(s32 submesh)const override;
-		//SubMesh getSubMesh(s32 index)const override;
 	private:
 
-		String m_name;
-		rhi::VertexLayout m_layout;
-		s32 m_stribe;
+		rhi::VertexLayout	m_layout;
 
-		Array<SubMesh> m_submeshes;
+		MeshData			m_meshData;
+		bool				m_initByMeshData = false;
 
-		Ref<rhi::Buffer> m_vertexBuffer;
-		Ref<rhi::Buffer> m_indexBuffer;
+		Ref<rhi::Buffer>	m_vertexBuffer;
+		Ref<rhi::Buffer>	m_indexBuffer;
 	};
 
 }// namespcae ob

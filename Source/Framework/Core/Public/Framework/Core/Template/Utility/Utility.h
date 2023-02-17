@@ -131,4 +131,42 @@ namespace ob::core {
         return !((size_t)val & (alignment - 1));
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値が大きい場合のみ値を更新する
+    //! 
+    //! @param out              出力先
+    //! @param val              比較値
+    //! @retval true            更新あり
+    //! @retval false           更新なし
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr bool update_max(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
+        if (out < val)
+            return false;
+
+        out = val;
+
+        return true;
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  値が小さい場合のみ値を更新する
+    //! 
+    //! @param out              出力先
+    //! @param val              比較値
+    //! @retval true            更新あり
+    //! @retval false           更新なし
+    //@―---------------------------------------------------------------------------
+    template<typename T>
+    inline constexpr bool update_min(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
+        if (out > val)
+            return false;
+
+        out = val;
+
+        return true;
+    }
+
 }// namespcae ob

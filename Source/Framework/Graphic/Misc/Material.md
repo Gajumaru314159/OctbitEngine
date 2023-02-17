@@ -49,7 +49,18 @@ TimeなどのBuilt-in変数はインデックスではなく専用の構造体�
 
 ## インスタンス変数
 モデル行列のようなインスタンスごとの値はインスタンス変数として定義される。  
-```DrawInstanced```で
+マテリアル毎にMaterialInstancePropertyとして設定すると一度の描画命令で異なる情報を描画できる。
+```hlsl
+struct InstanceProperties{
+	float4x4	matrix;
+	float4		color;
+}
+cbuffer Buffer : register(b0) {	
+	InstanceProperties ips[1024];				
+};
+```
+
+
 ## カメラ変数
 カメラ行列やビュー行列など
 

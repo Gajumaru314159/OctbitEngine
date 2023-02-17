@@ -3,31 +3,24 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
-#include <Framework/Engine/Name.h>
-#include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/CommandList.h>
+#include <Framework/Graphic/CommandBuffer.h>
 
-namespace ob::graphic {
+namespace ob::graphic
+{
 
-    class Texture;
-    class Material;
-    class Mesh;
-
-    using Name = engine::Name;
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //! 
     //! @details    
     //@―---------------------------------------------------------------------------
-    class CommandBuffer:public RefObject {
+    class CommandBufferImpl :public CommandBuffer {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief          バッファのすべてのコマンドをクリア
         //@―---------------------------------------------------------------------------
-        virtual void clear();
+        void clear() override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          カスタムシェーダを使用しテクスチャを別のものにコピー
@@ -36,7 +29,7 @@ namespace ob::graphic {
         //! @param mat      マテリアル
         //! @param pass     マテリアルパス名
         //@―---------------------------------------------------------------------------
-        virtual void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) = 0;
+        void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {})  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画
@@ -46,7 +39,7 @@ namespace ob::graphic {
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        virtual void drawMesh(const Ref<Mesh>& mesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) = 0;
+        void drawMesh(const Ref<Mesh>& mesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {})  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画
@@ -56,19 +49,22 @@ namespace ob::graphic {
         //! @param submesh  描画するサブメッシュのインデックス
         //! @param pass     使用するマテリアルのパス名
         //@―---------------------------------------------------------------------------
-        virtual void drawMeshInstanced(const Ref<Mesh>& mesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {}) = 0;
+        void drawMeshInstanced(const Ref<Mesh>& mesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {})  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          GPUプロファイラ用のマーカを追加
         //@―---------------------------------------------------------------------------
-        virtual void pushMarker(StringView) = 0;
+        void pushMarker(StringView)  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          GPUプロファイラ用のマーカを追加
         //@―---------------------------------------------------------------------------
-        virtual void popMarker() = 0;
+        void popMarker()  override;
+
+    private:
+
+        Ref<CommandBuffer> m_cmdList;
 
     };
 
-
-}// namespcae ob
+}// namespace ob

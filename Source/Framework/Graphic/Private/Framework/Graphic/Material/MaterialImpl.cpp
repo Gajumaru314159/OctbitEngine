@@ -19,6 +19,7 @@ namespace ob::graphic {
 	};
 
 
+
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
 	{
@@ -87,7 +88,7 @@ namespace ob::graphic {
 			desc.ps = pass.ps;
 
 			std::copy(
-				std::begin(desc.blends), std::end(desc.blends),
+				std::begin(desc.blend), std::end(desc.blend),
 				std::begin(pass.blends)
 			);
 
@@ -104,7 +105,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	bool MaterialImpl::hasProprty(StringView name, PropertyType type) {
+	bool MaterialImpl::hasProprty(StringView name, PropertyType type) const {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 			return found->second.type == type;
 		}
@@ -123,13 +124,6 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setColor(StringView name, Color value) {
 		setValueProprty(name, PropertyType::Color, value);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  
-	//@―---------------------------------------------------------------------------
-	void MaterialImpl::setVector(StringView name, Vec4 value) {
-		setValueProprty(name, PropertyType::Vector, value);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -165,7 +159,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,engine::Name pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList,const Ref<Mesh>& mesh,engine::Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定

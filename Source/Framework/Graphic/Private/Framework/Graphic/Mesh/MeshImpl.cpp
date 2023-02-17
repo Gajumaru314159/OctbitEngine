@@ -1,136 +1,237 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		メッシュ実装
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Mesh/MeshImpl.h>
 
 namespace ob::graphic {
 
+
 	//@―---------------------------------------------------------------------------
 	//!	@brief			生成
 	//@―---------------------------------------------------------------------------
-	Ref<Mesh> Mesh::Create(StringView name) {
-		return new MeshImpl(name);
+	Ref<Mesh> Mesh::Create(const MeshData& meshData) {
+		return new MeshImpl(meshData);
+	}
+	//@―---------------------------------------------------------------------------
+	//!	@brief			生成
+	//@―---------------------------------------------------------------------------
+	Ref<Mesh> Mesh::Create(MeshData&& meshData) {
+		return new MeshImpl(meshData);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			コンストラクタ
 	//@―---------------------------------------------------------------------------
-	MeshImpl::MeshImpl(StringView name) {
-		m_name = name;
+	MeshImpl::MeshImpl(const MeshData& meshData) {
+		m_initByMeshData = true;
+		m_meshData = meshData;
+		initLayoutFromMeshData(meshData);
 	}
 
-	//===============================================================
-	// 設定
-	//===============================================================
+	MeshImpl::MeshImpl(MeshData&& meshData) {
+		m_initByMeshData = true;
+		m_meshData = std::move(meshData);
+		initLayoutFromMeshData(meshData);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//!	@brief			MeshDataから頂点レイアウトを再設定
+	//@―---------------------------------------------------------------------------
+	void MeshImpl::initLayoutFromMeshData(const MeshData& meshData) {
+
+		using namespace ob::rhi;
+
+		size_t offset = 0;
+		m_layout = {};
+
+		if (meshData.positions.empty()) {
+			LOG_ERROR("Meshの生成に失敗。MeshDataにpositionsが含まれていません。");
+			return;
+		}
+
+
+#define ADD_VERTEX_ATTRIBUTE(type,container,semantic,...)\
+		if (!meshData.container.empty()) {\
+			update_max(vertexCount, meshData.container.size());\
+			m_layout.attributes.emplace_back(Semantic::semantic, offset, __VA_ARGS__);\
+			offset += sizeof(type);\
+		}
+
+		size_t vertexCount = 0;
+
+		ADD_VERTEX_ATTRIBUTE(Vec3, positions, Position, Type::Float, 3);
+
+		if (!meshData.colors.empty()) {
+			offset += sizeof(f32);
+			ADD_VERTEX_ATTRIBUTE(Color, colors, Color, Type::Float, 4);
+		} else if (!meshData.intColors.empty()) {
+			ADD_VERTEX_ATTRIBUTE(IntColor, intColors, Color, Type::UInt32, 1);
+		} else {
+			offset += sizeof(f32);
+		}
+
+		ADD_VERTEX_ATTRIBUTE(Vec4, normals	, Normal	, Type::Float, 3);
+		ADD_VERTEX_ATTRIBUTE(Vec4, tangents	, Tangent	, Type::Float, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs		, TexCoord	, Type::Float, 2, 0);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs1		, TexCoord	, Type::Float, 2, 1);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs2		, TexCoord	, Type::Float, 2, 2);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs3		, TexCoord	, Type::Float, 2, 3);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs4		, TexCoord	, Type::Float, 2, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs5		, TexCoord	, Type::Float, 2, 5);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs6		, TexCoord	, Type::Float, 2, 6);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs7		, TexCoord	, Type::Float, 2, 7);
+
+		auto stribe = align_up(offset, 16);
+
+		// 頂点バッファ生成
+		{
+			auto desc = BufferDesc::Vertex<s32>(0);
+			desc.name = meshData.name;
+			desc.bufferSize = stribe * vertexCount;
+			desc.bufferStride = stribe;
+
+			m_vertexBuffer = Buffer::Create(desc);
+		}
+
+		// インデックスバッファ生成
+		{
+			size_t indexStribe = 0;
+			size_t indexCount = 0;
+			if (!meshData.indices.empty()) {
+				indexStribe = sizeof(u16);
+				indexCount = meshData.indices.size();
+			} else if (!meshData.indices32.empty()) {
+				indexStribe = sizeof(u32);
+				indexCount = meshData.indices32.size();
+			}
+
+			if (0 < indexStribe) {
+
+				auto desc = BufferDesc::Index<s32>(0);
+				desc.name = meshData.name;
+				desc.bufferSize = indexStribe * indexCount;
+				desc.bufferStride = indexStribe;
+
+				m_indexBuffer = Buffer::Create(desc);
+
+			}
+		}
+
+		// 頂点バッファ更新
+		if (m_vertexBuffer) {
+			m_vertexBuffer->update(
+				[&meshData, stribe, vertexCount](void* ptr) {
+
+					size_t offset = 0;
+
+#define				COPY_VERTEX_ELEMENT(type,container)\
+					static_assert(std::is_same_v < type, decltype(meshData.container)::value_type>);\
+					if (!meshData.container.empty()) {\
+						for (size_t i = 0; i < vertexCount; ++i) {\
+							*GetOffsetPtr<type>(ptr, i * stribe + offset) = meshData.container[i];\
+						}\
+						offset+=sizeof(type);\
+					}
+
+					COPY_VERTEX_ELEMENT(Vec3, positions);
+
+					if (!meshData.colors.empty()) {
+						offset += sizeof(f32);
+						COPY_VERTEX_ELEMENT(Color, colors);
+					} else if (!meshData.intColors.empty()) {
+						COPY_VERTEX_ELEMENT(IntColor, intColors);
+					} else {
+						offset += sizeof(f32);
+					}
+
+					COPY_VERTEX_ELEMENT(Vec3, normals, Normal, Type::Float, 3);
+					if (!meshData.normals.empty()) {
+						offset += sizeof(f32);
+					}
+
+					COPY_VERTEX_ELEMENT(Vec4, tangents);
+					COPY_VERTEX_ELEMENT(Vec2, uvs);
+					COPY_VERTEX_ELEMENT(Vec2, uvs1);
+					COPY_VERTEX_ELEMENT(Vec2, uvs2);
+					COPY_VERTEX_ELEMENT(Vec2, uvs3);
+					COPY_VERTEX_ELEMENT(Vec2, uvs4);
+					COPY_VERTEX_ELEMENT(Vec2, uvs5);
+					COPY_VERTEX_ELEMENT(Vec2, uvs6);
+					COPY_VERTEX_ELEMENT(Vec2, uvs7);
+
+				}
+			);
+		}
+
+		// インデックスバッファ更新
+		if (m_indexBuffer) {
+			m_indexBuffer->update(
+				[&meshData](void* ptr) {
+					if (!meshData.indices.empty()) {
+						size_t size = sizeof(u16) * meshData.indices.size();
+						memcpy_s(ptr, size, meshData.indices.data(), size);
+						return;
+					}
+					if (!meshData.indices32.empty()) {
+						size_t size = sizeof(u32) * meshData.indices32.size();
+						memcpy_s(ptr, size, meshData.indices32.data(), size);
+						return;
+					}
+				}
+			);
+
+		}
+
+	}
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			頂点レイアウトを設定
 	//! @details		setVertices で設定されるBlobの解釈方法を設定します。
 	//@―---------------------------------------------------------------------------
-	void MeshImpl::setInputLayout(const rhi::VertexLayout& layout) {
-		m_layout = layout;
-
-		m_stribe = 0;
-
+	const Mesh::VertexLayout& MeshImpl::getVertexLayout()const {
+		return m_layout;
 	}
 
 	//@―---------------------------------------------------------------------------
-	//!	@brief			頂点を設定
+	//!	@brief			メッシュデータを持っているか
 	//@―---------------------------------------------------------------------------
-	void MeshImpl::setVertices(BlobView blob, s32 stribe, s32 start) {
-		auto offset = (size_t)stribe * start;
-		auto size = blob.size() + offset;
-		if (!m_vertexBuffer || m_vertexBuffer->getDesc().bufferSize < offset) {
-			auto desc = rhi::BufferDesc::Vertex<f32>(0);
+	bool MeshImpl::hasMeshData()const {
+		return m_initByMeshData;
+	}
 
-			desc.name = m_name;
-			desc.bufferSize = size;
-			desc.bufferStride = stribe;
+	//@―---------------------------------------------------------------------------
+	//!	@brief			メッシュデータを取得
+	//! @details		```hasMeshData() == false```の場合空のMeshDataを返す。
+	//@―---------------------------------------------------------------------------
+	const MeshData& MeshImpl::getMeshData()const {
+		return m_meshData;
+	}
 
-			m_vertexBuffer = rhi::Buffer::Create(desc);
+	//@―---------------------------------------------------------------------------
+	//!	@brief			サブメッシュの数を取得
+	//@―---------------------------------------------------------------------------
+	s32 MeshImpl::getSubMeshCount()const {
+		return m_meshData.submeshes.size();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//!	@brief			指定したインデックスのサブメッシュを取得
+	//@―---------------------------------------------------------------------------
+	SubMesh MeshImpl::getSubMesh(s32 index)const {
+		if (is_in_range(index,m_meshData.submeshes)) {
+			return m_meshData.submeshes[index];
 		}
-		m_vertexBuffer->update(blob.size(), blob.data(), offset);
+		return {};
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief			インデックスバッファを設定
-	//! @param blob		頂点データのバイナリオブジェクト
-	//! @param start	頂点データの書き込み先
-	//! @param is32bit	32bitインデックスを使用するか
+	//!	@brief			サブメッシュのリストを取得
 	//@―---------------------------------------------------------------------------
-	void MeshImpl::setIndices(BlobView blob, s32 start, bool is32bit) {
-		auto stribe = is32bit ? sizeof(u32) : sizeof(u16);
-		auto offset = start * stribe;
-		auto size = blob.size() + offset;
-		if (!m_indexBuffer || m_indexBuffer->getDesc().bufferSize < offset) {
-			auto desc = rhi::BufferDesc::Index<u16>(0);
-
-			desc.name = m_name;
-			desc.bufferSize = size;
-			desc.bufferStride = stribe;
-
-			m_indexBuffer = rhi::Buffer::Create(desc);
-		}
-		m_indexBuffer->update(blob.size(), blob.data(), offset);
-
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::setSubMeshes(Span<SubMesh> submeshes) {
-		m_submeshes = Array<SubMesh>(submeshes.begin(), submeshes.end());
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			CPU上のメッシュデータを整形してGPUに転送
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::apply() {
-		OB_NOTIMPLEMENTED();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			CPU上のメッシュのコピーを解放
-	//! @details		この関数を呼び出すと positions() や colors() からメッシュの情報に
-	//!					アクセスできなくなります。
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::clear() {
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//===============================================================
-	// 再計算
-	//===============================================================
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			頂点からメッシュのバウンディングボリュームを再計算します。
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::recalculateBounds() {
-		OB_NOTIMPLEMENTED();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			三角形と頂点からメッシュの法線を再計算
-	//! @brief			頂点を変更した後、変更を反映させるために法線を更新することがしばしば必要です。
-	//!					法線はすべての共有される頂点によって計算されます。
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::recalculateNormals() {
-		OB_NOTIMPLEMENTED();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			法線とテクスチャ座標からメッシュの接線を再計算
-	//! @brief			メッシュの頂点と法線を変更した後、法線マップを参照する
-	//!					シェーダーを使用してメッシュをレンダリングする場合は、
-	//!					接線を更新する必要があります。
-	//!					接線は、メッシュの頂点位置、法線、およびテクスチャ座標を使用して計算されます。
-	//@―---------------------------------------------------------------------------
-	void MeshImpl::recalculateTangents() {
-		OB_NOTIMPLEMENTED();
+	const Array<SubMesh>& MeshImpl::getSubMeshes()const {
+		return m_meshData.submeshes;
 	}
 
 
