@@ -9,6 +9,12 @@
 
 namespace ob::graphic {
 
+	// TODO Types.hに移動
+	enum class VertexLayoutId : s32 {
+
+	};
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief		メッシュ
 	//! @details	メッシュには複数のサブメッシュが含まれます。
@@ -24,6 +30,8 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		MeshImpl(const MeshData&);
 		MeshImpl(MeshData&&);
+
+		VertexLayoutId getvertexLayoutId()const;
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			頂点レイアウトを設定
@@ -57,15 +65,22 @@ namespace ob::graphic {
 		//@―---------------------------------------------------------------------------
 		const Array<SubMesh>& getSubMeshes()const override;
 
-
-		void initLayoutFromMeshData(const MeshData&);
-
-
+		//@―---------------------------------------------------------------------------
+		//!	@brief			メッシュの描画コマンドを記録
+		//@―---------------------------------------------------------------------------
 		void record(Ref<rhi::CommandList>&,s32 submesh);
 
 	private:
 
+		//@―---------------------------------------------------------------------------
+		//!	@brief			MeshDataから初期化
+		//@―---------------------------------------------------------------------------
+		void initLayoutFromMeshData(const MeshData&);
+
+	private:
+
 		rhi::VertexLayout	m_layout;
+		VertexLayoutId		m_layoutId;
 
 		MeshData			m_meshData;
 		bool				m_initByMeshData = false;

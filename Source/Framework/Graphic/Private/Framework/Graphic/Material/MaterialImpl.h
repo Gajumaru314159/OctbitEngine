@@ -17,12 +17,16 @@ namespace ob::graphic {
 
 	class Mesh;
 
-	enum class PropertyType {
-		Int,
-		Float,
-		Color,
-		Matrix,
-		Texture
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  頂点属性
+	//! @see    VertexLayout
+	//@―---------------------------------------------------------------------------
+	struct VertexAttributeKey {
+		rhi::Semantic	semantic;	//!< 0x000F
+		rhi::Type		type;		//!< 0x00F0
+		s32				dimention;	//!< 0x0F00
+		s32				index;		//!< 0xF000
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -31,6 +35,15 @@ namespace ob::graphic {
 	class MaterialImpl :public Material {
 	private:
 		using Texture = rhi::Texture;
+
+		enum class PropertyType {
+			Int,
+			Float,
+			Color,
+			Matrix,
+			Texture
+		};
+
 	public:
 
 		//===============================================================
@@ -77,7 +90,7 @@ namespace ob::graphic {
 			}
 		}
 
-		void creaePipeline();
+		Ref<rhi::PipelineState> createPipeline(engine::Name pass,const rhi::VertexLayout& layout, VertexLayoutId id);
 
 	private:
 
@@ -86,18 +99,26 @@ namespace ob::graphic {
 			s32 offset = -1;
 		};
 
-		using PassMap = HashMap<engine::Name, Ref<rhi::PipelineState>>;
+		struct PipelineKey {
+			engine::Name pass;
+			rhi::VertexLayout layout;
+		};
+
+		using PipelineMap = HashMap<VertexLayoutId, Ref<rhi::PipelineState>>;
 		using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
 		MaterialDesc		m_desc;
 
-		PassMap				m_passMap;
+		PipelineMap			m_pipelineMap;
 		PropertyMap			m_propertyMap;
 
 		Blob				m_bufferBlob;
 
 		Ref<rhi::Buffer>	m_buffer;
 		Array<Ref<Texture>> m_textures;
+
+		Ref<rhi::RootSignature> m_rootSignature;
+
 
 		Ref<rhi::DescriptorTable> m_bufferTable;
 		Ref<rhi::DescriptorTable> m_textureTable;

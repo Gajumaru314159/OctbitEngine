@@ -21,6 +21,8 @@ namespace ob::graphic {
         rhi::BlendDescList		blends;
         rhi::RasterizerDesc		rasterizer;
         rhi::DepthStencilDesc	depthStencil;
+
+        rhi::VertexLayout       layout;
     };
 
     //@―---------------------------------------------------------------------------

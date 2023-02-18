@@ -6,14 +6,30 @@
 #include <Framework/Graphic/CommandBuffer/CommandBufferImpl.h>
 #include <Framework/Graphic/Material/MaterialImpl.h>
 #include <Framework/Graphic/Mesh/MeshImpl.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::graphic
 {
+
+    Ref<CommandBuffer> CommandBuffer::Create() {
+        return new CommandBufferImpl();
+    }
+
+    CommandBufferImpl::CommandBufferImpl() {
+        rhi::CommandListDesc desc;
+        desc.name = TC("CommandBuffer");
+        desc.type = rhi::CommandListType::Graphic;
+        m_cmdList = rhi::CommandList::Create(desc);
+    }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief          バッファのすべてのコマンドをクリア
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::clear() {
+        if (!m_cmdList)
+            return;
+        // いらない？
         OB_NOTIMPLEMENTED();
     }
 
@@ -24,7 +40,16 @@ namespace ob::graphic
     //! @param mat      マテリアル
     //! @param pass     マテリアルパス名
     //@―---------------------------------------------------------------------------
-    void CommandBufferImpl::blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) {
+    void CommandBufferImpl::blit(const Ref<rhi::Texture>& src, const Ref<rhi::Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) {
+        if (!m_cmdList)
+            return;
+        // BuiltInMaterial::Blit
+
+        //auto table = rhi::DescriptorTable::Create(rhi::DescriptorHeapType::CBV_SRV_UAV, 1);
+        //table->setResource(0, src);
+
+        //m_cmdList->
+
         OB_NOTIMPLEMENTED();
     }
 
@@ -37,7 +62,9 @@ namespace ob::graphic
     //! @param pass     使用するマテリアルのパス名
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::drawMesh(const Ref<Mesh>& mesh, s32 submesh, const Matrix& matrix, const Ref<Material>& material, Name pass = {}) {
-        
+        if (!m_cmdList)
+            return;
+
         if (auto pMat = material.cast<MaterialImpl>()) {
             pMat->record(m_cmdList, matrix,mesh,submesh, pass);
         }
@@ -53,6 +80,8 @@ namespace ob::graphic
     //! @param pass     使用するマテリアルのパス名
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::drawMeshInstanced(const Ref<Mesh>& mesh, s32 submesh, Span<Matrix> matrices, const Ref<Material>& material, Name pass = {}) {
+        if (!m_cmdList)
+            return;
         OB_NOTIMPLEMENTED();
     }
 
@@ -60,6 +89,8 @@ namespace ob::graphic
     //! @brief          GPUプロファイラ用のマーカを追加
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::pushMarker(StringView name) {
+        if (!m_cmdList)
+            return;
         m_cmdList->pushMarker(name);
     }
 
@@ -67,6 +98,8 @@ namespace ob::graphic
     //! @brief          GPUプロファイラ用のマーカを追加
     //@―---------------------------------------------------------------------------
     void CommandBufferImpl::popMarker() {
+        if (!m_cmdList)
+            return;
         m_cmdList->popMarker();
     }
 

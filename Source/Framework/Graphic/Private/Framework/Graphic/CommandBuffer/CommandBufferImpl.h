@@ -17,6 +17,8 @@ namespace ob::graphic
     class CommandBufferImpl :public CommandBuffer {
     public:
 
+        CommandBufferImpl();
+
         //@―---------------------------------------------------------------------------
         //! @brief          バッファのすべてのコマンドをクリア
         //@―---------------------------------------------------------------------------
@@ -29,7 +31,7 @@ namespace ob::graphic
         //! @param mat      マテリアル
         //! @param pass     マテリアルパス名
         //@―---------------------------------------------------------------------------
-        void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat, Name name)  override;
+        void blit(const Ref<rhi::Texture>& src, const Ref<rhi::Texture>& dst, const Ref<Material>& mat, Name name)  override;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画

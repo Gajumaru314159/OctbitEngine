@@ -14,6 +14,9 @@
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
 
+#include <Framework/Graphic/Material.h>
+#include <Framework/Graphic/Mesh.h>
+
 #include <Framework/Engine/Component/TransformComponent.h>
 #include <Test/ComponentTest.h>
 
@@ -92,6 +95,7 @@ struct CBuf {
 int TestDirectX12() {
 
 	using namespace ob::rhi;
+	using namespace ob::graphic;
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
@@ -107,6 +111,28 @@ int TestDirectX12() {
 		display = Display::Create(desc);
 		OB_ASSERT_EXPR(display);
 	}
+
+	{
+		MeshData meshData;
+		SubMesh submesh;
+		submesh.indexCount=10;
+		meshData.submeshes.emplace_back(submesh);
+		meshData.positions.resize(10);
+		auto mesh = Mesh::Create(meshData);
+		LOG_INFO("{}", mesh->getSubMeshCount());
+	}
+	{
+		MeshData meshData;
+		SubMesh submesh;
+		submesh.indexCount = 10;
+		meshData.submeshes.emplace_back(submesh);
+		meshData.positions.resize(10);
+		meshData.uvs.resize(10);
+		auto mesh =  Mesh::Create(meshData);
+		LOG_INFO("{}", mesh->getSubMeshCount());
+	}
+
+
 
 	Ref<RenderPass> renderPass;
 	{
@@ -368,6 +394,20 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(cmdList);
 	}
 
+
+	{
+		MaterialDesc desc;
+		MaterialPass pass;
+		pass.renderTag = TC("TestPass");
+		
+		desc.passes.emplace(pass.renderTag,pass);
+		
+		auto& p1 = desc.floatProperties.emplace_back();
+		p1.name = TC("F0");
+		p1.offset = 0.0f;
+
+		auto material = Material::Create(desc);
+	}
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;

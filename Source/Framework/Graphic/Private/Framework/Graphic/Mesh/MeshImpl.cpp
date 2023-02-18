@@ -5,9 +5,11 @@
 //***********************************************************
 #include <Framework/Graphic/Mesh/MeshImpl.h>
 #include <Framework/RHI/CommandList.h>
+#include <Framework/Graphic/Mesh/VertexLayoutManager.h>
 
 namespace ob::graphic {
-
+		
+	VertexLayoutManager s_vlm;
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			生成
@@ -30,12 +32,21 @@ namespace ob::graphic {
 		m_initByMeshData = true;
 		m_meshData = meshData;
 		initLayoutFromMeshData(meshData);
+
+		m_layoutId = s_vlm.getVertexLayoutId(m_layout);
+
 	}
 
 	MeshImpl::MeshImpl(MeshData&& meshData) {
 		m_initByMeshData = true;
 		m_meshData = std::move(meshData);
 		initLayoutFromMeshData(meshData);
+
+		m_layoutId = s_vlm.getVertexLayoutId(m_layout);
+	}
+
+	VertexLayoutId MeshImpl::getvertexLayoutId()const {
+		return m_layoutId;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -57,7 +68,7 @@ namespace ob::graphic {
 #define ADD_VERTEX_ATTRIBUTE(type,container,semantic,...)\
 		if (!meshData.container.empty()) {\
 			update_max(vertexCount, meshData.container.size());\
-			m_layout.attributes.emplace_back(Semantic::semantic, offset, __VA_ARGS__);\
+			m_layout.attributes.emplace_back(Semantic::semantic, (s32)offset, __VA_ARGS__);\
 			offset += sizeof(type);\
 		}
 
@@ -148,7 +159,7 @@ namespace ob::graphic {
 						offset += sizeof(f32);
 					}
 
-					COPY_VERTEX_ELEMENT(Vec3, normals, Normal, Type::Float, 3);
+					COPY_VERTEX_ELEMENT(Vec3, normals);
 					if (!meshData.normals.empty()) {
 						offset += sizeof(f32);
 					}

@@ -15,6 +15,17 @@ namespace ob::graphic {
         return new MaterialImpl(desc);
     }
 
+
+    void Material::RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass) {
+
+    }
+
+    Pair<const Ref<rhi::RenderPass>, s32> Material::FindRenderPass(engine::Name renderTag) {
+        // TODO
+
+        return { nullptr,0 };
+    }
+
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルFloatプロパティを設定する
     //@―---------------------------------------------------------------------------

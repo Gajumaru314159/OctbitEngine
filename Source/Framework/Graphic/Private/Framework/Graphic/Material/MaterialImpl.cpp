@@ -27,12 +27,15 @@ namespace ob::graphic {
 		using namespace ob::rhi;
 		s32 bufferSize = 0;
 		s32 paramSize = 0;
-		
+
 		// 最大サイズチェック関数
-		auto checkSize = [&bufferSize,&paramSize](const MaterialPropertyDesc& param) {
-			bufferSize = std::max<s32>(bufferSize, param.offset+ paramSize);
+		auto checkSize = [&bufferSize, &paramSize](const MaterialPropertyDesc& param) {
+			bufferSize = std::max<s32>(bufferSize, param.offset + paramSize);
 		};
-		auto checkSize2 = [&checkSize,&paramSize](size_t size,const Array<MaterialPropertyDesc> params) {
+		auto checkSize2 = [&bufferSize, &checkSize, &paramSize](size_t size, const Array<MaterialPropertyDesc> params) {
+			if (params.empty())
+				return;
+			bufferSize = align_up(bufferSize, size);
 			paramSize = size;
 			std::for_each(params.begin(), params.end(), checkSize);
 		};
@@ -41,64 +44,24 @@ namespace ob::graphic {
 		checkSize2(sizeof(Color), desc.colorProperties);
 		checkSize2(sizeof(Matrix), desc.matrixProperties);
 
-		//m_textures
-		{
-			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize,rhi::BindFlag::AllShaderResource);
+		if (bufferSize) {
+			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BindFlag::AllShaderResource);
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
 			m_bufferBlob.resize(bufferSize);
 		}
 
-		{
+		if (bufferSize) {
 			m_bufferTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
 			OB_ASSERT_EXPR(m_bufferTable);
 			m_bufferTable->setResource(0, m_buffer);
 		}
 
-		{
+		if (desc.textureProperties.size()) {
 			m_textureTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, desc.textureProperties.size());
 			m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, desc.textureProperties.size());
 			OB_ASSERT_EXPR(m_textureTable);
 			OB_ASSERT_EXPR(m_samplerTable);
-		}
-
-	}
-
-	void MaterialImpl::creaePipeline() {
-
-
-		using namespace ob::rhi;
-
-		PipelineStateDesc desc;
-
-		desc.name = Format(TC("Material_Pass"));
-
-		for (auto& [name,pass] : m_desc.passes) {
-
-			//auto [renderPass,subpass] = Material::FindRenderPass(name);
-			Ref<RenderPass> renderPass;
-			s32 subpass;
-
-			desc.renderPass = renderPass;
-			desc.subpass = subpass;
-
-			//desc.rootSignature = ;
-			//desc.vertexLayout = TryCreate(m_desc.inputLayout);
-
-			desc.vs = pass.vs;
-			desc.ps = pass.ps;
-
-			std::copy(
-				std::begin(desc.blend), std::end(desc.blend),
-				std::begin(pass.blends)
-			);
-
-
-			desc.rasterizer = pass.rasterizer;
-			desc.depthStencil = pass.depthStencil;
-
-			m_passMap[name] = PipelineState::Create(desc);
-
 		}
 
 	}
@@ -130,7 +93,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {		
+	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
 		setValueProprty(name, PropertyType::Matrix,
 #if 1
 			value
@@ -160,7 +123,7 @@ namespace ob::graphic {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh,s32 submeshIndex, engine::Name pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, engine::Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定
@@ -171,35 +134,31 @@ namespace ob::graphic {
 		// シェーダ設定 → 
 		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
 
-		auto pMesh = mesh.cast<MeshImpl>();
-
-		if (!pMesh) {
-			return;
-		}
-
-		auto submesh = pMesh->getSubMesh(submeshIndex);
-
-		if (submesh.indexCount <= 0) {
-			return;
-		}
 
 		// TODO 複数パスある場合は余計なので別途更新関数を回す
 		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
 
 
 
-		// 以下の情報でPipeline検索
-		pass;
-		pMesh->getVertexLayout();
+		auto pMesh = mesh.cast<MeshImpl>();
+		if (!pMesh) return;
 
-		auto found = m_passMap.find(pass);
-		if (found == m_passMap.end())
+		auto submesh = pMesh->getSubMesh(submeshIndex);
+		if (submesh.indexCount <= 0) return;
+
+		Ref<rhi::PipelineState> pipeline;
+
+		auto pipelineItr = m_pipelineMap.find(pMesh->getvertexLayoutId());
+		if (pipelineItr == m_pipelineMap.end()) {
+			pipeline = createPipeline(pass, pMesh->getVertexLayout());
+		} else {
+			pipeline = pipelineItr->second;
+		}
+
+		if (!pipeline)
 			return;
 
-		auto& pipeline = found->second;
-
 		cmdList->setPipelineState(pipeline);
-
 
 		// TODO スロット
 		rhi::SetDescriptorTableParam params[] = {
@@ -209,16 +168,98 @@ namespace ob::graphic {
 		};
 		cmdList->setRootDesciptorTable(params, std::size(params));
 
-		pMesh->record(cmdList,submeshIndex);
+		pMesh->record(cmdList, submeshIndex);
 
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh,s32 submesh, engine::Name pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh, s32 submesh, engine::Name pass) {
 
 		OB_NOTIMPLEMENTED();
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  パイプラインを生成
+	//@―---------------------------------------------------------------------------
+	Ref<rhi::PipelineState> MaterialImpl::createPipeline(engine::Name pass, const rhi::VertexLayout& layout,VertexLayoutId id) {
+
+		using namespace ob::rhi;
+
+		Ref<rhi::PipelineState> pipeline;
+
+		// マテリアルパス取得
+		auto passItr = m_desc.passes.find(pass);
+
+		if (passItr == m_desc.passes.end())
+			return;
+
+		auto& materialPass = passItr->second;
+
+		// レンダーパス取得
+		auto [renderPass, subpass] = Material::FindRenderPass(materialPass.renderTag);
+
+		if (!renderPass)
+			return;
+
+		if (!is_in_range(subpass, renderPass->desc().subpasses))
+			return;
+
+		// 頂点レイアウト
+		rhi::VertexLayout mapped;
+
+		for (auto& a1 : materialPass.layout.attributes) {
+
+			bool ok = false;
+			for (auto& a2 : layout.attributes) {
+
+				if (
+					a1.semantic == a2.semantic &&
+					a1.type == a2.type &&
+					a1.dimention == a2.dimention &&
+					a1.index == a2.index
+					)
+				{
+					mapped.attributes.push_back(a2);
+					ok = true;
+					break;
+				}
+
+			}
+			if (ok == false) {
+				LOG_ERROR("PipelineStateの生成に失敗。マテリアルに必要な頂点情報が足りません。");
+				return nullptr;
+			}
+
+		}
+
+		// パイプライン
+		{
+			PipelineStateDesc desc;
+
+			desc.name = TC("Material");
+			desc.renderPass = renderPass;
+			desc.subpass = subpass;
+			desc.rootSignature = m_rootSignature;
+			desc.vertexLayout = layout; // TODO
+			desc.vs = materialPass.vs;
+			desc.ps = materialPass.ps;
+			desc.blend = materialPass.blends;
+			desc.rasterizer = materialPass.rasterizer;
+			desc.depthStencil = materialPass.depthStencil;
+
+			pipeline = PipelineState::Create(desc);
+
+			if (pipeline) {
+				m_pipelineMap[id] = pipeline;
+			}
+		}
+
+
+		return pipeline;
+
 	}
 
 

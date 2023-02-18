@@ -5,15 +5,13 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Name.h>
-#include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::graphic {
 
-    class Texture;
     class Material;
     class Mesh;
-
+    
     using Name = engine::Name;
 
     //@―---------------------------------------------------------------------------
@@ -24,10 +22,13 @@ namespace ob::graphic {
     class CommandBuffer:public RefObject {
     public:
 
+        static Ref<CommandBuffer> Create();
+    public:
+
         //@―---------------------------------------------------------------------------
         //! @brief          バッファのすべてのコマンドをクリア
         //@―---------------------------------------------------------------------------
-        virtual void clear();
+        virtual void clear()=0;
 
         //@―---------------------------------------------------------------------------
         //! @brief          カスタムシェーダを使用しテクスチャを別のものにコピー
@@ -36,7 +37,7 @@ namespace ob::graphic {
         //! @param mat      マテリアル
         //! @param pass     マテリアルパス名
         //@―---------------------------------------------------------------------------
-        virtual void blit(const Ref<Texture>& src, const Ref<Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) = 0;
+        virtual void blit(const Ref<rhi::Texture>& src, const Ref<rhi::Texture>& dst, const Ref<Material>& mat = {}, Name name = {}) = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief          メッシュを描画

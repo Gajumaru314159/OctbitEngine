@@ -23,6 +23,10 @@ namespace ob::graphic {
         //@―---------------------------------------------------------------------------
         static Ref<Material> Create(const MaterialDesc& desc);
 
+        static void RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass);
+        static Pair<const Ref<rhi::RenderPass>,s32> FindRenderPass(engine::Name renderTag);
+
+
     public:
 
         virtual ~Material() = default;
