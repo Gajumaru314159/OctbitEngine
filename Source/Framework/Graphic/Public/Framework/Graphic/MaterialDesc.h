@@ -15,6 +15,7 @@ namespace ob::graphic {
     struct MaterialPass {
         engine::Name            renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
 
+        Ref<rhi::RootSignature> rootSignature;
         Ref<rhi::Shader>        vs;
         Ref<rhi::Shader>        ps;
 
@@ -31,6 +32,11 @@ namespace ob::graphic {
     struct MaterialPropertyDesc {
         String  name;
         s32     offset;
+    public:
+        MaterialPropertyDesc() = default;
+        MaterialPropertyDesc(StringView name,s32 offset)
+            :name(name),offset(offset)
+        {}
     };
 
     //@―---------------------------------------------------------------------------

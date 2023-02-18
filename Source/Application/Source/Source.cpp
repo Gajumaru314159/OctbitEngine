@@ -20,6 +20,7 @@
 #include <Framework/Engine/Component/TransformComponent.h>
 #include <Test/ComponentTest.h>
 
+#include <Model.h>
 
 #pragma warning(push, 0)
 #include <OBJ_Loader.h>
@@ -33,6 +34,7 @@ void Link_Input();
 int TestDirectX12();
 int TestVullkan();
 void Link_Entity();
+void Link_GraphicModule();
 
 
 //@―---------------------------------------------------------------------------
@@ -71,6 +73,7 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 	Link_Input();
 
 	Link_Entity();
+	Link_GraphicModule();
 }
 
 int OctbitMain() {
@@ -112,38 +115,16 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(display);
 	}
 
-	{
-		MeshData meshData;
-		SubMesh submesh;
-		submesh.indexCount=10;
-		meshData.submeshes.emplace_back(submesh);
-		meshData.positions.resize(10);
-		auto mesh = Mesh::Create(meshData);
-		LOG_INFO("{}", mesh->getSubMeshCount());
-	}
-	{
-		MeshData meshData;
-		SubMesh submesh;
-		submesh.indexCount = 10;
-		meshData.submeshes.emplace_back(submesh);
-		meshData.positions.resize(10);
-		meshData.uvs.resize(10);
-		auto mesh =  Mesh::Create(meshData);
-		LOG_INFO("{}", mesh->getSubMeshCount());
-	}
-
-
-
 	Ref<RenderPass> renderPass;
 	{
 		RenderPassDescHelper desc;
+		desc.name = TC("Forward");
 		auto color = desc.addAttachment(TextureFormat::RGBA8);
 		auto color2 = desc.addAttachment(TextureFormat::RGBA8);
 		auto depth = desc.addAttachment(TextureFormat::D32);
 		auto pass0 = desc.addSubpassXCD({ color,color2 },depth);
 
 		renderPass = RenderPass::Create(desc);
-		desc.name = TC("Forward");
 		OB_ASSERT_EXPR(renderPass);
 	}
 
@@ -320,7 +301,6 @@ int TestDirectX12() {
 	dt3->setResource(0, buffer2);
 
 
-
 	auto loadMesh = [](std::string path) {
 
 		Array<Tuple<Ref<Buffer>, Ref<Buffer>, size_t>> meshes;
@@ -395,19 +375,10 @@ int TestDirectX12() {
 	}
 
 
-	{
-		MaterialDesc desc;
-		MaterialPass pass;
-		pass.renderTag = TC("TestPass");
-		
-		desc.passes.emplace(pass.renderTag,pass);
-		
-		auto& p1 = desc.floatProperties.emplace_back();
-		p1.name = TC("F0");
-		p1.offset = 0.0f;
+	Model model("Asset/Model/monky.obj");
+	Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 0);
+	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 
-		auto material = Material::Create(desc);
-	}
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
@@ -501,10 +472,13 @@ int TestDirectX12() {
 
 				DrawIndexedParam param{};
 				param.indexCount = count;
-				cmdList->drawIndexed(param);
+				//cmdList->drawIndexed(param);
 			}
 
 		}
+
+		model.draw(cmdBuf);
+
 		cmdList->popMarker();
 
 
@@ -569,6 +543,8 @@ int TestDirectX12() {
 		cbuf2.matrix = Matrix::Perspective(60,1.0f*color2RT->width()/ color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse() * Matrix::Rotate(0, 180, 0) * Matrix::Scale(Vec3(1,1,1)* 1.0f);
 		buffer->updateDirect(cbuf, 0);
 		buffer2->updateDirect(cbuf2,0);
+
+		model.setMatrix(cbuf2.matrix);
 	}
 	imgui::Shutdown();
 	ImGui::DestroyContext();

@@ -23,6 +23,7 @@ namespace ob::graphic {
     public:
 
         static Ref<CommandBuffer> Create();
+        static Ref<CommandBuffer> Create(Ref<rhi::CommandList>& cmdList);
     public:
 
         //@―---------------------------------------------------------------------------

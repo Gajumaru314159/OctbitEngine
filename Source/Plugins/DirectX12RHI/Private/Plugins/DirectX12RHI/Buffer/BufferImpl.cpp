@@ -92,7 +92,7 @@ namespace ob::rhi::dx12 {
 	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 	//@―---------------------------------------------------------------------------
 	void BufferImpl::update(size_t size, const void* pData, size_t offset) {
-		OB_NOTIMPLEMENTED();
+		updateDirect(size,pData,offset);
 	}
 
 

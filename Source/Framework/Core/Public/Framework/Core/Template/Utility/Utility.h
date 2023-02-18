@@ -142,7 +142,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr bool update_max(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
-        if (out < val)
+        if (val <= out)
             return false;
 
         out = val;
@@ -161,7 +161,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline constexpr bool update_min(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
-        if (out > val)
+        if (out <= val)
             return false;
 
         out = val;

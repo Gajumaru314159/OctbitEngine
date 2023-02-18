@@ -13,7 +13,6 @@
 namespace ob::graphic {
 
 	enum class MaterialRootSignatureSlot {
-		Camera,
 		Buffer,
 		Texture,
 		Sampler,
@@ -27,10 +26,15 @@ namespace ob::graphic {
 		using namespace ob::rhi;
 		s32 bufferSize = 0;
 		s32 paramSize = 0;
+		
+		PropertyType type;
 
 		// 最大サイズチェック関数
-		auto checkSize = [&bufferSize, &paramSize](const MaterialPropertyDesc& param) {
+		//TODO offsetを配列インデックスに変更
+		// できればオフセットも隠蔽
+		auto checkSize = [this,&type, &bufferSize, &paramSize](const MaterialPropertyDesc& param) {
 			bufferSize = std::max<s32>(bufferSize, param.offset + paramSize);
+			m_propertyMap.emplace(param.name, ValuePropertyDesc{type,param.offset});
 		};
 		auto checkSize2 = [&bufferSize, &checkSize, &paramSize](size_t size, const Array<MaterialPropertyDesc> params) {
 			if (params.empty())
@@ -40,8 +44,11 @@ namespace ob::graphic {
 			std::for_each(params.begin(), params.end(), checkSize);
 		};
 
-		checkSize2(sizeof(f32), desc.floatProperties);
+		type = PropertyType::Float;
+		checkSize2(sizeof(f32)*4, desc.floatProperties);
+		type = PropertyType::Color;
 		checkSize2(sizeof(Color), desc.colorProperties);
+		type = PropertyType::Matrix;
 		checkSize2(sizeof(Matrix), desc.matrixProperties);
 
 		if (bufferSize) {
@@ -49,6 +56,7 @@ namespace ob::graphic {
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
 			m_bufferBlob.resize(bufferSize);
+			memset(m_bufferBlob.data(), 0, m_bufferBlob.size());
 		}
 
 		if (bufferSize) {
@@ -164,7 +172,7 @@ namespace ob::graphic {
 		rhi::SetDescriptorTableParam params[] = {
 			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::Buffer)},
 			{m_textureTable, enum_cast(MaterialRootSignatureSlot::Texture)},
-			{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
+			//{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
 		};
 		cmdList->setRootDesciptorTable(params, std::size(params));
 
@@ -242,8 +250,9 @@ namespace ob::graphic {
 			desc.name = TC("Material");
 			desc.renderPass = renderPass;
 			desc.subpass = subpass;
-			desc.rootSignature = m_rootSignature;
-			desc.vertexLayout = layout; // TODO
+			//TODO RootSignatureをマテリアル内部に閉じ込める
+			desc.rootSignature = materialPass.rootSignature;
+			desc.vertexLayout = layout;
 			desc.vs = materialPass.vs;
 			desc.ps = materialPass.ps;
 			desc.blend = materialPass.blends;

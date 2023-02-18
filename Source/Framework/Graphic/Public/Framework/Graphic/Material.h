@@ -7,6 +7,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/Graphic/MaterialDesc.h>
 #include <Framework/Engine/Name.h>
+#include <Framework/RHI/Types/SubPass.h>
 
 namespace ob::graphic {   
 
@@ -24,7 +25,7 @@ namespace ob::graphic {
         static Ref<Material> Create(const MaterialDesc& desc);
 
         static void RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass);
-        static Pair<const Ref<rhi::RenderPass>,s32> FindRenderPass(engine::Name renderTag);
+        static rhi::SubPass FindRenderPass(engine::Name renderTag);
 
 
     public:

@@ -11,15 +11,36 @@
 namespace ob::graphic
 {
 
+    //@―---------------------------------------------------------------------------
+    //! @brief          生成
+    //@―---------------------------------------------------------------------------
     Ref<CommandBuffer> CommandBuffer::Create() {
         return new CommandBufferImpl();
     }
+    //@―---------------------------------------------------------------------------
+    //! @brief          生成
+    //@―---------------------------------------------------------------------------
+    Ref<CommandBuffer> CommandBuffer::Create(Ref<rhi::CommandList>& cmdList) {
+        return new CommandBufferImpl(cmdList);
+    }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief          コンストラクタ
+    //@―---------------------------------------------------------------------------
     CommandBufferImpl::CommandBufferImpl() {
         rhi::CommandListDesc desc;
         desc.name = TC("CommandBuffer");
         desc.type = rhi::CommandListType::Graphic;
         m_cmdList = rhi::CommandList::Create(desc);
+
+        m_cmdList->begin();
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief          コンストラクタ
+    //@―---------------------------------------------------------------------------
+    CommandBufferImpl::CommandBufferImpl(Ref<rhi::CommandList>& cmdList) {
+        m_cmdList = cmdList;
     }
 
 

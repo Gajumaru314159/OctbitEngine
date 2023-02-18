@@ -5,12 +5,10 @@
 //***********************************************************
 #include <Framework/Graphic/Mesh/MeshImpl.h>
 #include <Framework/RHI/CommandList.h>
-#include <Framework/Graphic/Mesh/VertexLayoutManager.h>
+#include <Framework/Graphic/Material/MaterialManager.h>
 
 namespace ob::graphic {
-		
-	VertexLayoutManager s_vlm;
-
+	
 	//@―---------------------------------------------------------------------------
 	//!	@brief			生成
 	//@―---------------------------------------------------------------------------
@@ -33,18 +31,24 @@ namespace ob::graphic {
 		m_meshData = meshData;
 		initLayoutFromMeshData(meshData);
 
-		m_layoutId = s_vlm.getVertexLayoutId(m_layout);
+		m_layoutId = MaterialManager::Get().getVertexLayoutId(m_layout);
 
 	}
 
+	//@―---------------------------------------------------------------------------
+	//!	@brief			コンストラクタ
+	//@―---------------------------------------------------------------------------
 	MeshImpl::MeshImpl(MeshData&& meshData) {
 		m_initByMeshData = true;
 		m_meshData = std::move(meshData);
-		initLayoutFromMeshData(meshData);
+		initLayoutFromMeshData(m_meshData);
 
-		m_layoutId = s_vlm.getVertexLayoutId(m_layout);
+		m_layoutId = MaterialManager::Get().getVertexLayoutId(m_layout);
 	}
 
+	//@―---------------------------------------------------------------------------
+	//!	@brief			頂点レイアウトIDを取得
+	//@―---------------------------------------------------------------------------
 	VertexLayoutId MeshImpl::getvertexLayoutId()const {
 		return m_layoutId;
 	}

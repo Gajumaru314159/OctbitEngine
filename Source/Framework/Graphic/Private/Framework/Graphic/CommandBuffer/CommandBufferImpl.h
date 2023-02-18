@@ -8,7 +8,6 @@
 namespace ob::graphic
 {
 
-
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //! 
@@ -18,6 +17,7 @@ namespace ob::graphic
     public:
 
         CommandBufferImpl();
+        CommandBufferImpl(Ref<rhi::CommandList>& cmdList);
 
         //@―---------------------------------------------------------------------------
         //! @brief          バッファのすべてのコマンドをクリア

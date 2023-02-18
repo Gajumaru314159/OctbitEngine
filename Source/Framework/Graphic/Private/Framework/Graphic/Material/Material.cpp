@@ -5,7 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/Material.h>
 #include <Framework/Graphic/Material/MaterialImpl.h>
-
+#include <Framework/Graphic/Material/MaterialManager.h>
 namespace ob::graphic {
 
     //@―---------------------------------------------------------------------------
@@ -15,15 +15,18 @@ namespace ob::graphic {
         return new MaterialImpl(desc);
     }
 
-
-    void Material::RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass) {
-
+    //@―---------------------------------------------------------------------------
+    //! @brief  
+    //@―---------------------------------------------------------------------------
+    void Material::RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
+        MaterialManager::Get().registerRenderPass(name, renderPass, subpass);
     }
 
-    Pair<const Ref<rhi::RenderPass>, s32> Material::FindRenderPass(engine::Name renderTag) {
-        // TODO
-
-        return { nullptr,0 };
+    //@―---------------------------------------------------------------------------
+    //! @brief  
+    //@―---------------------------------------------------------------------------
+    rhi::SubPass Material::FindRenderPass(engine::Name renderTag) {
+        return MaterialManager::Get().FindRenderPass(renderTag);
     }
 
     //@―---------------------------------------------------------------------------

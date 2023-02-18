@@ -80,7 +80,7 @@ namespace ob::graphic {
 		void setValueProprty(StringView name, PropertyType type, const T& value) {
 			if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 				auto& desc = found->second;
-				if (desc.type == type)return;
+				if (desc.type != type)return;
 				if (!is_in_range(desc.offset, m_bufferBlob))return;
 
 				auto& dest = *GetOffsetPtr<T>(m_bufferBlob.data(), desc.offset);
@@ -117,9 +117,6 @@ namespace ob::graphic {
 
 		Ref<rhi::Buffer>	m_buffer;
 		Array<Ref<Texture>> m_textures;
-
-		Ref<rhi::RootSignature> m_rootSignature;
-
 
 		Ref<rhi::DescriptorTable> m_bufferTable;
 		Ref<rhi::DescriptorTable> m_textureTable;

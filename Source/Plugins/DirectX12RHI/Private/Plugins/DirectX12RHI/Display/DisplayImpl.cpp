@@ -182,6 +182,7 @@ namespace ob::rhi::dx12 {
         // レンダーパス
         {
             RenderPassDescHelper rdesc;
+            rdesc.name = TC("DisplayCopy");
             auto color = rdesc.addAttachment(m_desc.format);
             auto pass0 = rdesc.addSubpassXCX({ color });
 
@@ -422,6 +423,8 @@ namespace ob::rhi::dx12 {
         if (!m_bindedTexture)
             return;
 
+        cmdList.pushMarker(TC("Apply Display"));
+
         cmdList.beginRenderPass(m_buffers.current());
         cmdList.setPipelineState(m_pipeline);
 
@@ -446,6 +449,8 @@ namespace ob::rhi::dx12 {
             }
 
         }
+
+        cmdList.popMarker();
 
     }
 
