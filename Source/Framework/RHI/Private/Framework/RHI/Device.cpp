@@ -16,7 +16,7 @@
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/FrameBuffer.h>
 
-#include <Framework/RHI/IGraphicModule.h>
+#include <Framework/RHI/RHIModule.h>
 #include <Framework/Engine/Engine.h>
 
 namespace ob::rhi
@@ -29,7 +29,7 @@ namespace ob::rhi
         // 高速取得のためキャッシュ
         static Device* pDevice = nullptr;
         if (pDevice == nullptr) {
-            if (auto pModule = GEngine->get<GraphicModule>()) {
+            if (auto pModule = GEngine->get<RHIModule>()) {
                 pDevice = pModule->getDevice();
             }
         }

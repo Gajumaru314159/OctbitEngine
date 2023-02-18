@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/IGraphicModule.h>
+#include <Framework/RHI/RHIModule.h>
 #include <Framework/Engine/Engine.h>
 
 namespace ob::rhi {
@@ -14,9 +14,9 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     GraphicObject::GraphicObject()
     {
-        static GraphicModule* pModule = nullptr;
+        static RHIModule* pModule = nullptr;
         if (pModule == nullptr) {
-            pModule = GEngine->get<GraphicModule>();
+            pModule = GEngine->get<RHIModule>();
         }
         OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
 
@@ -35,9 +35,9 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     void GraphicObject::finalize() {
 
-        static GraphicModule* pModule = nullptr;
+        static RHIModule* pModule = nullptr;
         if (pModule == nullptr) {
-            pModule = GEngine->get<GraphicModule>();
+            pModule = GEngine->get<RHIModule>();
         }
         OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
 

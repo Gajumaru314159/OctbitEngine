@@ -1,4 +1,5 @@
-﻿#include <Windows.h>
+﻿/*
+#include <Windows.h>
 
 #include <Framework/RHI/All.h>
 
@@ -93,7 +94,7 @@ void TestMaterial() {
 		MaterialDesc desc;
 		MaterialPass pass;
 		//pass.vs = ;
-		auto& pass = desc.passes.emplace(TC("Opaque"));
+		//auto& pass = desc.passes.emplace(TC("Opaque"));
 		//pass->
 	}
 
@@ -105,3 +106,4 @@ void TestMaterial() {
 
 
 }
+*/

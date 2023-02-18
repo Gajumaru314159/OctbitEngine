@@ -1,17 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		グラフィック・モジュール(DirectX12)
+//! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/IGraphicModule.h>
+#include <Framework/RHI/RHIModule.h>
 #include <Framework/Engine/ModuleFactory.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 
 namespace ob::rhi::dx12 {
 
-	class DirectX12GraphicModule :public ob::rhi::GraphicModule {
+	class DirectX12RHIModule :public ob::rhi::RHIModule {
 	public:
-		DirectX12GraphicModule()
+		DirectX12RHIModule()
 			: m_objectManager(2)
 			, m_device()
 		{
@@ -40,7 +40,7 @@ namespace ob::rhi::dx12 {
 
 }// namespace ob::rhi::dx12
 
-REGISTER_MODULE_DERIVE(ob::rhi::dx12::DirectX12GraphicModule, ob::rhi::GraphicModule);
+REGISTER_MODULE_DERIVE(ob::rhi::dx12::DirectX12RHIModule, ob::rhi::RHIModule);
 
 void Link_DirectX12() {
 

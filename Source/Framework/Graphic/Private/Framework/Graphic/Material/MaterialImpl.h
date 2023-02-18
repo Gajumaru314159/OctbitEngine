@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Material.h>
+#include <Framework/Graphic/Material/MaterialInternalTypes.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/Engine/Name.h>

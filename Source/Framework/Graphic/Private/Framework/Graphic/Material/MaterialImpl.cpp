@@ -150,7 +150,7 @@ namespace ob::graphic {
 
 		auto pipelineItr = m_pipelineMap.find(pMesh->getvertexLayoutId());
 		if (pipelineItr == m_pipelineMap.end()) {
-			pipeline = createPipeline(pass, pMesh->getVertexLayout());
+			pipeline = createPipeline(pass, pMesh->getVertexLayout(),pMesh->getvertexLayoutId());
 		} else {
 			pipeline = pipelineItr->second;
 		}
@@ -194,7 +194,7 @@ namespace ob::graphic {
 		auto passItr = m_desc.passes.find(pass);
 
 		if (passItr == m_desc.passes.end())
-			return;
+			return nullptr;
 
 		auto& materialPass = passItr->second;
 
@@ -202,10 +202,10 @@ namespace ob::graphic {
 		auto [renderPass, subpass] = Material::FindRenderPass(materialPass.renderTag);
 
 		if (!renderPass)
-			return;
+			return nullptr;
 
 		if (!is_in_range(subpass, renderPass->desc().subpasses))
-			return;
+			return nullptr;
 
 		// 頂点レイアウト
 		rhi::VertexLayout mapped;

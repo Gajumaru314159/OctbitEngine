@@ -5,14 +5,11 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/Mesh.h>
+#include <Framework/Graphic/Material/MaterialInternalTypes.h>
 #include <Framework/RHI/Forward.h>
 
 namespace ob::graphic {
 
-	// TODO Types.hに移動
-	enum class VertexLayoutId : s32 {
-
-	};
 
 
 	//@―---------------------------------------------------------------------------
