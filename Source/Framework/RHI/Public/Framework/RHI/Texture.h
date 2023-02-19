@@ -22,6 +22,7 @@ namespace ob::rhi {
         Gray,
         Black,
         Normal,
+        Check,
     };
 
     //@―---------------------------------------------------------------------------
@@ -36,6 +37,7 @@ namespace ob::rhi {
         static Ref<Texture> Gray();
         static Ref<Texture> Black();
         static Ref<Texture> Normal();
+        static Ref<Texture> Check();
 
     public:
 

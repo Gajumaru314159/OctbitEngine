@@ -30,6 +30,9 @@ namespace ob::rhi {
     Ref<Texture> Texture::Normal() {
         return Preset(PresetTexture::Normal);
     }
+    Ref<Texture> Texture::Check() {
+        return Preset(PresetTexture::Check);
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ

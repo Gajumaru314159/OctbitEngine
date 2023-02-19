@@ -126,7 +126,7 @@ private:
 					//RootParameter::Range(DescriptorRangeType::Sampler,1,0),	// サンプラー
 				},
 			{
-				StaticSamplerDesc(SamplerDesc(),0),
+				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),
 			}
 			);
 			desc.name = TC("Common");
@@ -204,7 +204,7 @@ PsOut PS_Main(PsIn i){
 
 			m_material->setColor(TC("Color"), Color::Red);
 			m_material->setMatrix(TC("Matrix"), Matrix::Identity);
-			m_material->setTexture(TC("Main"), Texture::Normal());
+			m_material->setTexture(TC("Main"), Texture::Preset(PresetTexture::Check));
 		}
 	}
 
