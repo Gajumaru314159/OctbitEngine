@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphic/RenderContext/RenderContextImpl.h>
+//#include <Framework/Graphic/RenderContext/RenderContextImpl.h>
 
 namespace ob::graphic {
 

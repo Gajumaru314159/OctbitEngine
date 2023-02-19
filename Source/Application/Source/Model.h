@@ -77,6 +77,7 @@ private:
 					auto normal = curMesh.Vertices[j].Normal;
 
 					meshData.positions.emplace_back(pos.X, pos.Y, pos.Z);
+					meshData.tangents.emplace_back(normal.X, normal.Y, normal.Z,0.f);
 					meshData.normals.emplace_back(normal.X, normal.Y, normal.Z);
 					meshData.uvs.emplace_back(uv.X, 1-uv.Y);
 				}

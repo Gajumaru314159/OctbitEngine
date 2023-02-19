@@ -8,8 +8,11 @@
 #include <Framework/Graphic/CommandBuffer.h>
 #include <Framework/Graphic/RenderContext.h>
 #include <Framework/Graphic/Camera.h>
+#include <Framework/Graphic/Material.h>
 #include <Framework/Engine/Name.h>
 #include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/Types/RenderPassDescHelper.h>
 
 namespace ob::graphic {
 
@@ -25,13 +28,29 @@ namespace ob::graphic {
 	public:
 
 		ForwardRenderPipeline() {
+			using namespace ob::rhi;
 
-			Ref<rhi::RenderPass> renderPass;
+			{
+				RenderPassDescHelper desc;
+				desc.name = TC("Forward");
+				auto albedo = desc.addAttachment(TextureFormat::RGBA8);
+				auto gbuffer0 = desc.addAttachment(TextureFormat::RGBA8);
+				auto depth = desc.addAttachment(TextureFormat::D32);
+				auto accumulate = desc.addAttachment(TextureFormat::RGBA8);
 
-			MaterialSystem::Get().registerRenderPass(Name(TC("EarlyDepth"), renderPass, 0));
-			MaterialSystem::Get().registerRenderPass(Name(TC("Opaque"), renderPass, 1));
-			MaterialSystem::Get().registerRenderPass(Name(TC("Transpaternt"),renderPass,2));
+				desc.addSubpassXXD(depth);
+				desc.addSubpassXCD({ albedo,gbuffer0 }, depth);
+				desc.addSubpassXCD({ albedo,gbuffer0 }, depth);
+				desc.addSubpassICX({ albedo,gbuffer0 }, { accumulate });
 
+				auto renderPass = RenderPass::Create(desc);
+				OB_ASSERT_EXPR(renderPass);
+
+				Material::RegisterRenderPass(engine::Name(TC("EarlyDepth")), renderPass, 0);
+				Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 1);
+				Material::RegisterRenderPass(engine::Name(TC("Transpaternt")), renderPass, 2);
+				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), renderPass, 2);
+			}
 
 		}
 
@@ -44,8 +63,8 @@ namespace ob::graphic {
 
 				context.setCamera(camera);
 
-				s32 width;// = camera.getRenderTarget().width();
-				s32 height;// = camera.getRenderTarget().height();
+				s32 width = camera.getRenderTarget()->width();
+				s32 height = camera.getRenderTarget()->height();
 
 
 				// デプスあり
@@ -103,7 +122,7 @@ namespace ob::graphic {
 
 	private:
 
-		CommandBuffer m_cmd;
+		Ref<CommandBuffer> m_cmd;
 		Ref<RenderTexture> m_color;
 
 

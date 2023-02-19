@@ -7,10 +7,10 @@
 #include <Framework/Core/Misc/YesNo.h>
 #include <Framework/Engine/Name.h>
 
-#include <Framework/Graphic/RendererGroup.h>
+//#include <Framework/Graphic/RendererGroup.h>
 
 namespace ob::graphic {
-    /*
+    
     class CommandBuffer;
     class Camera;
     class Attachment;
@@ -85,7 +85,5 @@ namespace ob::graphic {
         virtual void submit() = 0;
 
     };
-
-*/
 
 }// namespcae ob
