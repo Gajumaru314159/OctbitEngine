@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/TextureDesc.h>
-#include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/Core/Graphic/Bitmap.h>
 
 //===============================================================
