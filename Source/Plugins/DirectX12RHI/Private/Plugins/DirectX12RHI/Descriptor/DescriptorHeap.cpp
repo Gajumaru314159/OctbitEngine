@@ -78,8 +78,8 @@ namespace ob::rhi::dx12 {
 
 		// アロケート
 		m_freeFLI = 0;
-		m_freeSLI.resize(firstLevel+1, 0);
-		m_blocks.resize(blockIndex+1, nullptr);
+		m_freeSLI.resize((size_t)firstLevel+1, 0);
+		m_blocks.resize((size_t)blockIndex+1, nullptr);
 
 		// フリーリスト確保
 		m_freeList.reserve(capacity);
@@ -224,6 +224,7 @@ namespace ob::rhi::dx12 {
 		// 割り当て可能なブロックがあるかチェック
 		u32 slMap = m_freeSLI[firstLevel] & (~0U << secondLevel);
 		if (!slMap) {
+			// 上位レベルに空きが存在するか
 			u32 flMap = m_freeFLI & (~0U << (firstLevel + 1));
 			if (!flMap) {
 				// 割り当て可能なブロックがない
@@ -234,6 +235,9 @@ namespace ob::rhi::dx12 {
 			firstLevel = BitOp::GetLSB(flMap);
 			slMap = m_freeSLI[firstLevel];
 			OB_ASSERT(slMap, "内部エラー。割り当て可能なブロックがない状態で処理が継続されています。ロジックを見直してください。");
+			secondLevel = BitOp::GetLSB((u32)slMap);
+		}else if (!(slMap & (1 << secondLevel))) {
+			// SecondLevelの対象から検索
 			secondLevel = BitOp::GetLSB((u32)slMap);
 		}
 
@@ -408,7 +412,7 @@ namespace ob::rhi::dx12 {
 			secondLevel = size >> s_secondLevelShift;
 		} else {
 			firstLevel = std::max(0, BitOp::GetMSB((u32)size) - s_linearManagementSizeLog2);
-			secondLevel = size >> (firstLevel - s_maxSecondLevel);
+			secondLevel = size >> (firstLevel + s_maxSecondLevel);
 			secondLevel &= (s_maxSecondLevel - 1);
 		}
 	}
