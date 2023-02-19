@@ -84,7 +84,7 @@ namespace ob::rhi::dx12 {
 	TextureImpl::TextureImpl(DeviceImpl& rDevice, Size size, Span<IntColor> colors)
 		: m_device(rDevice)
 	{
-		auto format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		auto format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
 
@@ -142,7 +142,7 @@ namespace ob::rhi::dx12 {
 		};
 
 		// Desc設定
-		m_desc.name = TC("Generated From IntColor");
+		m_desc.name = Format(TC("Generated {}"), colors.empty()?IntColor::Black : colors[0]);
 		m_desc.size = size;
 		m_desc.type = convertType(resourceDesc.Dimension);
 		m_desc.format = TypeConverter::Convert(format);

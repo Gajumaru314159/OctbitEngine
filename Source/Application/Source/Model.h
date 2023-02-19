@@ -204,7 +204,7 @@ PsOut PS_Main(PsIn i){
 
 			m_material->setColor(TC("Color"), Color::Red);
 			m_material->setMatrix(TC("Matrix"), Matrix::Identity);
-			m_material->setTexture(TC("Main"), m_texture);
+			m_material->setTexture(TC("Main"), Texture::Normal());
 		}
 	}
 

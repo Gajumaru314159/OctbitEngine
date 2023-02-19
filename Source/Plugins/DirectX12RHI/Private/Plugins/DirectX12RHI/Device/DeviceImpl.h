@@ -128,11 +128,6 @@ namespace ob::rhi::dx12 {
 		Ref<DescriptorTable> createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
 
 
-		//===============================================================
-		// システムリソース
-		//===============================================================
-		Ref<Texture> getPresetTexture(PresetTexture) override;
-
 	public:
 
 		//===============================================================
@@ -179,12 +174,6 @@ namespace ob::rhi::dx12 {
 		void setDescriptorHeaps(class CommandListImpl& cmdList);
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief          システムリソースを解放
-		//@―---------------------------------------------------------------------------
-		void releaseSystemResource();
-
-
 	private:
 
 		bool initialize();
@@ -192,7 +181,6 @@ namespace ob::rhi::dx12 {
 		bool initializeDXGIDevice();
 		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
-		bool initializePresetTexture();
 
 	private:
 
@@ -207,8 +195,6 @@ namespace ob::rhi::dx12 {
 
 		HashMap<DescriptorHeapType,UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 
-		// システムリソース
-		HashMap<PresetTexture,Ref<Texture>> m_presetTextures;
 
 
 #ifdef OB_DEBUG

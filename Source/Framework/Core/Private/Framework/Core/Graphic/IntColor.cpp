@@ -18,6 +18,6 @@ namespace ob::core {
     const IntColor IntColor::Cyan = { 0,255,255,255 };
     const IntColor IntColor::Blue = { 0,0,255,255 };
     const IntColor IntColor::Magenta = { 255,0,255,255 };
-    const IntColor IntColor::Normal = { 128,255,128,255 };
+    const IntColor IntColor::Normal = { 128,128,255,255 };
 
 }// namespace ob

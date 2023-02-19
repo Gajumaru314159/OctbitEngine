@@ -18,10 +18,6 @@ namespace ob::rhi::dx12 {
 
 		}
 
-		~DirectX12RHIModule() {
-			m_device.releaseSystemResource();
-		}
-
 		Device* getDevice()override {
 			return &m_device;
 		}

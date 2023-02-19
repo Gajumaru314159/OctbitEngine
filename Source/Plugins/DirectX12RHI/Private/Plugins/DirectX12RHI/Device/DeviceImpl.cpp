@@ -224,29 +224,6 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief          システムリソースを解放
-	//@―---------------------------------------------------------------------------
-	void DeviceImpl::releaseSystemResource() {
-		m_presetTextures.clear();
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  プリセットテクスチャ取得
-	//@―---------------------------------------------------------------------------
-	Ref<Texture> DeviceImpl::getPresetTexture(PresetTexture type)  {
-
-		if (m_presetTextures.empty())
-			initializePresetTexture();
-
-		auto found = m_presetTextures.find(type);
-		if (found == m_presetTextures.end())
-			return nullptr;
-		return found->second;
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initialize() {
@@ -385,24 +362,6 @@ namespace ob::rhi::dx12 {
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName(TC("SystemSamplerHeap"));
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName(TC("SystemRTVHeap"));
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName(TC("SystemDSVHeap"));
-
-		return true;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  デスクリプタヒープを初期化
-	//@―---------------------------------------------------------------------------
-	bool DeviceImpl::initializePresetTexture() {
-
-		auto creator = [this](IntColor color) {
-			Array<IntColor> colors(32 * 32, IntColor::Black);
-			return Texture::Create(Size(32, 32), colors);
-		};
-		m_presetTextures[PresetTexture::White] = creator(IntColor::White);
-		m_presetTextures[PresetTexture::Gray] = creator(IntColor::Gray);
-		m_presetTextures[PresetTexture::Black] = creator(IntColor::Black);
-		m_presetTextures[PresetTexture::Normal] = creator(IntColor::Normal);
 
 		return true;
 	}

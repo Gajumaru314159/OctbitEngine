@@ -5,12 +5,18 @@
 //***********************************************************
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Device.h>
+#include <Framework/RHI/SystemResourceModule.h>
 
 namespace ob::rhi {
 
-
     Ref<Texture> Texture::Preset(PresetTexture type) {
-        return Device::Get()->getPresetTexture(type);
+        // 高速取得のためキャッシュ
+        static SystemResourceModule* pModule = nullptr;
+        if (pModule == nullptr) {
+            pModule = GEngine->get<SystemResourceModule>();
+        }
+        OB_ASSERT(pModule, "ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
+        return pModule->getPresetTexture(type);
     }
     Ref<Texture> Texture::White() {
         return Preset(PresetTexture::White);

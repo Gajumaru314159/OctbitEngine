@@ -93,13 +93,6 @@ namespace ob::rhi {
         // virtual bool isAsyncComputeSupported()const=0;
         // virtual bool isRaytracingSupported()const=0;
 
-
-        //===============================================================
-        // システムリソース
-        //===============================================================
-        virtual Ref<Texture> getPresetTexture(PresetTexture) = 0;
-
-
     };
 
 
