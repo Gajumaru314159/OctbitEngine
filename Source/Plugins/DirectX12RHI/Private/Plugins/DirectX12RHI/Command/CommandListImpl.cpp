@@ -275,14 +275,9 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
 	{
-		if (!display || !texture)
-			return;
-
-		auto& rDisplay = *display.cast<DisplayImpl>();
-		auto& rTexture = *texture.cast<TextureImpl>();
-
-		rDisplay.bindTexture(texture);
-		rDisplay.recordApplyDisplay(*this);
+		if (auto pDisplay = display.cast<DisplayImpl>()) {
+			pDisplay->recordApplyDisplay(*this, texture);
+		}
 	}
 
 

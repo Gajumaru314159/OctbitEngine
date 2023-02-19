@@ -503,6 +503,8 @@ namespace ob::imgui {
 	//@―---------------------------------------------------------------------------
 	bool Startup(const ob::platform::Window& window, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
 
+		ImGui::CreateContext();
+
 		ImGuiIO& io = ImGui::GetIO();
 		OB_ASSERT(io.BackendPlatformUserData == nullptr, "初期化済みです");
 
@@ -634,6 +636,8 @@ namespace ob::imgui {
 		if (!bd->window) return;
 		auto size = bd->window.getSize();
 		io.DisplaySize = ImVec2(size.width, size.height);
+
+		ImGui::NewFrame();
 	}
 
 
@@ -643,6 +647,8 @@ namespace ob::imgui {
 	void EndFrame(const Ref<rhi::CommandList>& commandList) {
 
 		using namespace ob::rhi;
+
+		ImGui::Render();
 
 		ImDrawData* draw_data = ImGui::GetDrawData();
 		ImGuiDrawData* bd = GetDrawData();

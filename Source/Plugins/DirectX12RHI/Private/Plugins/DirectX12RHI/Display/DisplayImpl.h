@@ -52,12 +52,6 @@ namespace ob::rhi::dx12 {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      表示するテクスチャをバインド
-        //@―---------------------------------------------------------------------------
-        void bindTexture(const Ref<Texture> texture) override;
-
-
-        //@―---------------------------------------------------------------------------
         //! @brief  妥当なオブジェクトか
         //@―---------------------------------------------------------------------------
         bool isValid()const override;
@@ -121,7 +115,7 @@ namespace ob::rhi::dx12 {
         ID3D12Resource* getResource()const;
 
 
-        void recordApplyDisplay(CommandListImpl&);
+        void recordApplyDisplay(CommandListImpl&, const Ref<Texture>& texture);
 
     private:
 

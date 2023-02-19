@@ -318,25 +318,6 @@ namespace ob::rhi::dx12 {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief      表示するテクスチャをバインド
-    //@―---------------------------------------------------------------------------
-    void DisplayImpl::bindTexture(const Ref<Texture> texture) {
-
-        if (m_bindedTexture == texture)
-            return;
-
-        m_bindedTextureTable.reset();
-        m_bindedTexture = texture;
-        
-        if (m_bindedTexture) {
-            m_bindedTextureTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV,1);
-            m_bindedTextureTable->setResource(0,m_bindedTexture);
-        }
-
-    }
-
-
-    //@―---------------------------------------------------------------------------
     //! @brief  妥当なオブジェクトか
     //@―---------------------------------------------------------------------------
     bool DisplayImpl::isValid()const {
@@ -420,39 +401,53 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      バッファへコピー
     //@―---------------------------------------------------------------------------
-    void DisplayImpl::recordApplyDisplay(CommandListImpl& cmdList) {
-        
-        if (!m_bindedTexture)
-            return;
+    void DisplayImpl::recordApplyDisplay(CommandListImpl& cmdList, const Ref<Texture>& texture) {
 
-        cmdList.pushMarker(TC("Apply Display"));
+        // テクスチャが違う場合再バインド
+        if (m_bindedTexture != texture) {
 
-        cmdList.beginRenderPass(m_buffers.current());
-        cmdList.setPipelineState(m_pipeline);
+            m_bindedTextureTable.reset();
+            m_bindedTexture = texture;
 
-        {
-            SetDescriptorTableParam param(m_bindedTextureTable, 0);
-            cmdList.setRootDesciptorTable(&param, 1);
-        }
-        cmdList.setVertexBuffer(m_verices);
-        {
-            DrawParam param;
-            param.startVertex = 0;
-            param.vertexCount = 6;
-            cmdList.draw(param);
-        }
-
-
-        if (auto texture = m_textures.current().cast<TextureImpl>()) {
-
-            D3D12_RESOURCE_BARRIER barrier;
-            if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
-                cmdList.getNative()->ResourceBarrier(1, &barrier);
+            if (m_bindedTexture) {
+                m_bindedTextureTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+                m_bindedTextureTable->setResource(0, m_bindedTexture);
             }
 
         }
 
-        cmdList.popMarker();
+        // バインドされていなければスキップ
+        if (!m_bindedTextureTable)
+            return;
+
+        {
+            cmdList.pushMarker(TC("Apply Display"));
+
+            cmdList.beginRenderPass(m_buffers.current());
+            cmdList.setPipelineState(m_pipeline);
+
+            SetDescriptorTableParam tableParam(m_bindedTextureTable, 0);
+            cmdList.setRootDesciptorTable(&tableParam, 1);
+
+            cmdList.setVertexBuffer(m_verices);
+
+            DrawParam drawParam;
+            drawParam.startVertex = 0;
+            drawParam.vertexCount = 6;
+            cmdList.draw(drawParam);
+
+            // Present準備
+            if (auto texture = m_textures.current().cast<TextureImpl>()) {
+
+                D3D12_RESOURCE_BARRIER barrier;
+                if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
+                    cmdList.getNative()->ResourceBarrier(1, &barrier);
+                }
+
+            }
+
+            cmdList.popMarker();
+        }
 
     }
 

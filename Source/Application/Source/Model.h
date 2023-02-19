@@ -46,8 +46,6 @@ public:
 
 	void setMatrix(const Matrix& matrix) {
 		m_material->setMatrix(TC("Matrix"), matrix);
-
-		m_material->setColor(TC("Color"), Color::White);// HSV(DateTime::Now().milliSeconds * 0.36f, 0.5f, 1.0f).toColor());
 	}
 
 private:
@@ -202,9 +200,9 @@ PsOut PS_Main(PsIn i){
 
 			m_material = Material::Create(desc);
 
-			m_material->setColor(TC("Color"), Color::Red);
+			m_material->setColor(TC("Color"), Color::White);
 			m_material->setMatrix(TC("Matrix"), Matrix::Identity);
-			m_material->setTexture(TC("Main"), Texture::Preset(PresetTexture::Check));
+			m_material->setTexture(TC("Main"), m_texture);
 		}
 	}
 
