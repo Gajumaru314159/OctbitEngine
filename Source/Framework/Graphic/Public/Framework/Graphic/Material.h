@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Texture.h>
-#include <Framework/Graphic/MaterialDesc.h>
-#include <Framework/Engine/Name.h>
+#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/SubPass.h>
+#include <Framework/Engine/Name.h>
+#include <Framework/Graphic/MaterialDesc.h>
 
 namespace ob::graphic {   
 
@@ -16,7 +16,7 @@ namespace ob::graphic {
     //@―---------------------------------------------------------------------------
     class Material:public RefObject {
     public:
-        using Texture = rhi::Texture;
+        using Texture = ob::rhi::Texture;
     public:
 
         //@―---------------------------------------------------------------------------

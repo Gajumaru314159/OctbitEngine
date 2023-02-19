@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphic/CameraType.h>
-#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::graphic {
 
