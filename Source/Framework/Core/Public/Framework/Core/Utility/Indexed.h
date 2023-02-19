@@ -80,7 +80,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  インデックス付き逆Enumlator
 	//@―---------------------------------------------------------------------------
-	template <class Type, class TItr = decltype(std::crbegin(std::declval<Type>())), class = decltype(std::crend(std::declval<Type>()))>
+	template <class Type, class TItr = decltype(std::rbegin(std::declval<Type>())), class = decltype(std::rend(std::declval<Type>()))>
 	inline constexpr auto ReverseIndexed(Type&& iterable)
 	{
 		return ReverseIndexedRef<Type, TItr>(std::forward<Type>(iterable));

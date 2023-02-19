@@ -44,7 +44,8 @@ public:
 
 	void setMatrix(const Matrix& matrix) {
 		m_material->setMatrix(TC("Matrix"), matrix);
-		m_material->setColor(TC("Color"), Color::Red);
+
+		m_material->setColor(TC("Color"), HSV(DateTime::Now().milliSeconds * 0.36f, 0.5f, 1.0f).toColor());
 	}
 
 private:
@@ -138,9 +139,10 @@ private:
 			String code=TC(R"(
 SamplerState g_mainSampler:register(s0);					
 Texture2D g_mainTex:register(t0);							
-cbuffer Param : register(b0) {								
-  float4 g_col;
-  float4x4 g_mtx;
+cbuffer Param : register(b0) {		
+  //floatg_scalars[4];						
+  float4 g_colors[1];
+  float4x4 g_matrices[1];
 };															
 // IN / OUT													
 struct VsIn {												
@@ -160,14 +162,14 @@ struct PsOut {
 // エントリ													
 PsIn VS_Main(VsIn i) {										
     PsIn o;													
-    o.pos = mul(g_mtx,float4(i.pos.xyz,1));								
+    o.pos = mul(g_matrices[0],float4(i.pos.xyz,1));								
     o.uv = i.uv;											
     o.normal = i.normal;									
     return o;												
 }															
 PsOut PS_Main(PsIn i){										
     PsOut o;												
-    float4 color = g_mainTex.Sample(g_mainSampler,i.uv);	
+    float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];	
     o.color1 = i.normal;									
     o.color0 = color;										
     return o;												

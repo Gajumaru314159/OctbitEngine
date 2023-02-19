@@ -24,6 +24,10 @@ namespace ob::engine {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	Engine::~Engine() {
+		
+		for (auto& [index,m] : ReverseIndexed(m_modules)) {
+			m.reset();
+		}
 
 		LOG_INFO("[Shutdown OctbitEngine]");
 	}

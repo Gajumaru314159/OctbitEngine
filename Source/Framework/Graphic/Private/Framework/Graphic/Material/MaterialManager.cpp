@@ -20,7 +20,9 @@ namespace ob::graphic {
 
 
 	MaterialManager::MaterialManager() = default;
-	MaterialManager::~MaterialManager() = default;
+	MaterialManager::~MaterialManager() {
+		LOG_INFO("~MaterialManager()");
+	}
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			描画タグにRenderPassを登録
