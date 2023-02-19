@@ -107,7 +107,7 @@ namespace ob::rhi::dx12
     //! @brief  D3D12_FILTER に変換
     //@―---------------------------------------------------------------------------
     D3D12_FILTER TypeConverter::Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic) {
-        if (anisotropic)return D3D12_FILTER_ANISOTROPIC;
+        if (anisotropic && up != TextureFillter::Point && down != TextureFillter::Point)return D3D12_FILTER_ANISOTROPIC;
         return D3D12_ENCODE_BASIC_FILTER(
             Convert(down),  //!< 縮小時
             Convert(up),    //!< 拡大時
