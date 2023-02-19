@@ -137,44 +137,49 @@ private:
 		Ref<Shader> ps;
 		{
 			String code=TC(R"(
-SamplerState g_mainSampler:register(s0);					
-Texture2D g_mainTex:register(t0);							
-cbuffer Param : register(b0) {		
-  //floatg_scalars[4];						
-  float4 g_colors[1];
+SamplerState g_mainSampler:register(s0);
+Texture2D g_mainTex:register(t0);
+cbuffer Param : register(b0) {
+  //float    g_scalars[4];
+  float4   g_colors[1];
   float4x4 g_matrices[1];
-};															
-// IN / OUT													
-struct VsIn {												
-  float4 pos	:POSITION;									
-  float4 normal	:NORMAL;									
-  float2 uv		:TEXCOORD;									
-};															
-struct PsIn {												
-  float4 pos	:SV_POSITION;								
-  float4 normal	:NORMAL;									
-  float2 uv		:TEXCOORD;									
-};															
-struct PsOut {												
-  float4 color0	:SV_TARGET0;								
-  float4 color1	:SV_TARGET1;								
-};															
-// エントリ													
-PsIn VS_Main(VsIn i) {										
-    PsIn o;													
-    o.pos = mul(g_matrices[0],float4(i.pos.xyz,1));								
-    o.uv = i.uv;											
-    o.normal = i.normal;									
-    return o;												
-}															
-PsOut PS_Main(PsIn i){										
-    PsOut o;												
+};
+//cbuffer Param : register(b1) { 
+//  //float    s_scalars[4];
+//  float4   s_colors[1];
+//  float4x4 s_matrices[1];
+//};
+// IN / OUT
+struct VsIn {
+  float4 pos	:POSITION;
+  float4 normal	:NORMAL;
+  float2 uv		:TEXCOORD;
+};
+struct PsIn {
+  float4 pos	:SV_POSITION;
+  float4 normal	:NORMAL;
+  float2 uv		:TEXCOORD;
+};
+struct PsOut {
+  float4 color0	:SV_TARGET0;
+  float4 color1	:SV_TARGET1;
+};
+// エントリ
+PsIn VS_Main(VsIn i) {
+    PsIn o;
+    o.pos = mul(g_matrices[0],float4(i.pos.xyz,1));
+    o.uv = i.uv;
+    o.normal = i.normal;
+    return o;
+}
+PsOut PS_Main(PsIn i){
+    PsOut o;
     float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
 	color.rgb *= (dot(i.normal.xyz,float3(1,-1,1))*0.25+0.25+0.5);
-    o.color1 = i.normal;									
-    o.color0 = color;										
-    return o;												
-}								
+    o.color1 = i.normal;
+    o.color0 = color;
+    return o;
+}
 			)");
 
 			vs = VertexShader::Create(code);

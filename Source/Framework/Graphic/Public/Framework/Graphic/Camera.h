@@ -24,14 +24,17 @@ namespace ob::graphic {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief      カメラ
+    //! @details    CameraCompoentとは異なりReflectionCaptureやShadowCaptureでも
+    //!             使用されます。
     //@―---------------------------------------------------------------------------
-    class Camera {
+    class Camera:public RefObject {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
+        static Ref<Camera> Create();
+
+        static Ref<Camera> GetMain();
+        static Array<Ref<Camera>> GetAll();
 
     public:
 
@@ -80,14 +83,29 @@ namespace ob::graphic {
         // Range
 
         // 位置情報はTransform?
-    public:
-
-        static std::optional<Camera> GetMain();
-        static Span<Camera> GetAll();
 
     private:
 
-        Transform m_transform;
+        Camera();
+
+    private:
+
+        CameraState m_state;
+
+        Transform   m_transform;
+        Viewport    m_viewport;
+        f32         m_fovY;
+        CameraType  m_type;
+        LayerMask   m_layerMask;
+        Rect        m_rect;
+        CameraPriority m_priority;
+
+        Optional<s32> m_display;
+        Ref<rhi::RenderTexture> m_renderTexture;
+
+        Matrix      m_viewMatrix;
+        Matrix      m_projMatrix;
+        Matrix      m_viewprojMatrix;
 
     };
 

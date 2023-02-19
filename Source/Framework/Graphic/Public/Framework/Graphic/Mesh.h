@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/Graphic/MeshData.h>
 

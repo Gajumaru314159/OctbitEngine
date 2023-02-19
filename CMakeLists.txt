@@ -77,9 +77,9 @@ if(DirectX)
 endif()
 
 if(Vulkan)
-    FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
-    FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
-    FetchContent_MakeAvailable(glslang spirv)
+    # FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
+    # FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
+    # FetchContent_MakeAvailable(glslang spirv)
 endif()
 
 include(ThirdParty.cmake)
