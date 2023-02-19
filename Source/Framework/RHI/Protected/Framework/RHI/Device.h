@@ -94,6 +94,12 @@ namespace ob::rhi {
         // virtual bool isRaytracingSupported()const=0;
 
 
+        //===============================================================
+        // システムリソース
+        //===============================================================
+        virtual Ref<Texture> getPresetTexture(PresetTexture) = 0;
+
+
     };
 
 

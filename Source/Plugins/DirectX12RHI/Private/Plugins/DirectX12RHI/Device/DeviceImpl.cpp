@@ -39,91 +39,6 @@ namespace ob::rhi::dx12 {
 	DeviceImpl::DeviceImpl()
 	{
 		initialize();
-
-		/*
-
-
-		Ref<RenderPass> renderPass;
-		{
-			RenderPassDescHelper desc;
-			auto color = desc.addAttachment(TextureFormat::RGBA8);
-			auto pass0 = desc.addSubpassXCX({ color });
-
-			renderPass = RenderPass::Create(desc);
-			OB_ASSERT_EXPR(renderPass);
-		}
-
-		Ref<Shader> copyVS;
-		Ref<Shader> copyPS;
-		{
-			String code;
-			code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-			code.append(TC("Texture2D    g_mainTex    :register(t0);						\n"));
-			code.append(TC("// IN / OUT														\n"));
-			code.append(TC("struct VsIn {													\n"));
-			code.append(TC("  float2 pos	:POSITION;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsIn {													\n"));
-			code.append(TC("  float2 pos	:SV_POSITION;									\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsOut {													\n"));
-			code.append(TC("  float4 color0	:SV_TARGET0;									\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// エントリ														\n"));
-			code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
-			code.append(TC("    PsIn o;														\n"));
-			code.append(TC("    o.pos = i.pos;												\n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
-			code.append(TC("PsOut PS_Main(PsIn i){											\n"));
-			code.append(TC("    PsOut o;													\n"));
-			code.append(TC("    o.color0 = g_mainTex.Sample(g_mainSampler,i.pos *0.5 + 0.5);\n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
-
-			copyVS = VertexShader::Create(code);
-			copyPS = PixelShader::Create(code);
-			OB_ASSERT_EXPR(copyVS && copyPS);
-		}
-
-		Ref<RootSignature> signature;
-		{
-			RootSignatureDesc desc(
-				{
-					RootParameter::Range(DescriptorRangeType::SRV,1,0)
-				},
-				{
-					StaticSamplerDesc(SamplerDesc(),0),
-				}
-			);
-			signature = RootSignature::Create(desc);
-			signature->setName(TC("CopyRootSignature"));
-			OB_ASSERT_EXPR(signature);
-		}
-
-		Ref<PipelineState> pipeline;
-		{
-			PipelineStateDesc desc;
-			desc.renderPass = renderPass;
-			desc.subpass = 0;
-
-			desc.rootSignature = signature;
-			desc.vs = copyVS;
-			desc.ps = copyPS;
-			desc.vertexLayout.attributes = {
-				VertexAttribute(Semantic::Position,0.0f,Type::Float,2),
-			};
-			desc.blend[0] = BlendDesc::AlphaBlend;
-			desc.rasterizer.cullMode = CullMode::None;
-			desc.depthStencil.depth.enable = false;
-			desc.depthStencil.stencil.enable = false;
-
-			pipeline = PipelineState::Create(desc);
-			pipeline->setName(TC("TestPipeline"));
-			OB_ASSERT_EXPR(pipeline);
-		}
-		*/
-
 	}
 
 
@@ -131,6 +46,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	DeviceImpl::~DeviceImpl() {
+		LOG_INFO("Device削除");
 	}
 
 
@@ -308,6 +224,29 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief          システムリソースを解放
+	//@―---------------------------------------------------------------------------
+	void DeviceImpl::releaseSystemResource() {
+		m_presetTextures.clear();
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  プリセットテクスチャ取得
+	//@―---------------------------------------------------------------------------
+	Ref<Texture> DeviceImpl::getPresetTexture(PresetTexture type)  {
+
+		if (m_presetTextures.empty())
+			initializePresetTexture();
+
+		auto found = m_presetTextures.find(type);
+		if (found == m_presetTextures.end())
+			return nullptr;
+		return found->second;
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
 	//@―---------------------------------------------------------------------------
 	bool DeviceImpl::initialize() {
@@ -318,6 +257,7 @@ namespace ob::rhi::dx12 {
 		OB_DEBUG_CONTEXT(m_commandQueue->setName(TC("SystemCommandQueue")));
 
 		if (!initializeDescriptorHeaps())return false;
+
 		return true;
 	}
 
@@ -445,6 +385,24 @@ namespace ob::rhi::dx12 {
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName(TC("SystemSamplerHeap"));
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName(TC("SystemRTVHeap"));
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName(TC("SystemDSVHeap"));
+
+		return true;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  デスクリプタヒープを初期化
+	//@―---------------------------------------------------------------------------
+	bool DeviceImpl::initializePresetTexture() {
+
+		auto creator = [this](IntColor color) {
+			Array<IntColor> colors(32 * 32, IntColor::Black);
+			return Texture::Create(Size(32, 32), colors);
+		};
+		m_presetTextures[PresetTexture::White] = creator(IntColor::White);
+		m_presetTextures[PresetTexture::Gray] = creator(IntColor::Gray);
+		m_presetTextures[PresetTexture::Black] = creator(IntColor::Black);
+		m_presetTextures[PresetTexture::Normal] = creator(IntColor::Normal);
 
 		return true;
 	}

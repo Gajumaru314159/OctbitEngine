@@ -1,0 +1,16 @@
+# Blender MTL File: 'ウクレレ.blend'
+# Material Count: 1
+
+newmtl Ukulele
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.073235 0.073235 0.073235
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_nrm.png
+map_Kd D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_col.png
+map_Ns D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_rgh.png
+refl D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_mtl.png

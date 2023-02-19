@@ -32,20 +32,22 @@ using namespace ob::graphic;
 class Model {
 public:
 
-	Model(const char* name) {
+	Model(const char* name,StringView tex) {
 		initMesh(name);
-		initTexture();
+		initTexture(tex);
 		initMaterial();
 	}
 
 	void draw(Ref<CommandBuffer> cmdBuf) {
-		cmdBuf->drawMesh(m_mesh, 0, Matrix::Identity, m_material, engine::Name(TC("Opaque")));
+		for (s32 i = 0; i < m_mesh->getSubMeshCount(); ++i) {
+			cmdBuf->drawMesh(m_mesh, i, Matrix::Identity, m_material, engine::Name(TC("Opaque")));
+		}
 	}
 
 	void setMatrix(const Matrix& matrix) {
 		m_material->setMatrix(TC("Matrix"), matrix);
 
-		m_material->setColor(TC("Color"), HSV(DateTime::Now().milliSeconds * 0.36f, 0.5f, 1.0f).toColor());
+		m_material->setColor(TC("Color"), Color::White);// HSV(DateTime::Now().milliSeconds * 0.36f, 0.5f, 1.0f).toColor());
 	}
 
 private:
@@ -78,7 +80,7 @@ private:
 
 					meshData.positions.emplace_back(pos.X, pos.Y, pos.Z);
 					meshData.normals.emplace_back(normal.X, normal.Y, normal.Z);
-					meshData.uvs.emplace_back(uv.X, uv.Y);
+					meshData.uvs.emplace_back(uv.X, 1-uv.Y);
 				}
 
 				for (int j = 0; j < curMesh.Indices.size(); j++)
@@ -106,9 +108,9 @@ private:
 		}
 
 	}
-	void initTexture() {
+	void initTexture(StringView name) {
 
-		m_texture = Texture::Load(TC("Asset/Texture/sky.dds"));
+		m_texture = Texture::Load(name.data());
 		OB_ASSERT_EXPR(m_texture);
 
 	}

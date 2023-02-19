@@ -373,9 +373,17 @@ int TestDirectX12() {
 		cmdList = CommandList::Create(desc);
 		OB_ASSERT_EXPR(cmdList);
 	}
+	{
+		auto t0 = Texture::Load("Asset/Texture/test.dds");
+		auto t1 = Texture::Load("Asset/Texture/test.dds");
+		auto t2 = Texture::Load("Asset/Texture/test.dds");
+		auto t3 = Texture::Load("Asset/Texture/test.dds");
+		auto t4 = Texture::Load("Asset/Texture/test.dds");
+	}
 
 
-	Model model("Asset/Model/monky.obj");
+	//Model model("Asset/Model/monky.obj", TC("Asset/Texture/sky.dds"));
+	Model ukulele("Asset/Model/Ukulele.obj",TC("Asset/Model/Ukulele_col.dds"));
 	Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 0);
 	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 
@@ -412,6 +420,7 @@ int TestDirectX12() {
 		}
 	}
 
+	Texture::White();
 	//------ループ-----
 
 	Vec3 pos(0, 0, -10);
@@ -477,7 +486,8 @@ int TestDirectX12() {
 
 		}
 
-		model.draw(cmdBuf);
+		//model.draw(cmdBuf);
+		ukulele.draw(cmdBuf);
 
 		cmdList->popMarker();
 
@@ -544,7 +554,8 @@ int TestDirectX12() {
 		buffer->updateDirect(cbuf, 0);
 		buffer2->updateDirect(cbuf2,0);
 
-		model.setMatrix(cbuf2.matrix);
+		//model.setMatrix(cbuf2.matrix);
+		ukulele.setMatrix(cbuf2.matrix);
 	}
 	imgui::Shutdown();
 	ImGui::DestroyContext();

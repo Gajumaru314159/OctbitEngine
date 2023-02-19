@@ -21,7 +21,6 @@ namespace ob::graphic {
 
 	MaterialManager::MaterialManager() = default;
 	MaterialManager::~MaterialManager() {
-		LOG_INFO("~MaterialManager()");
 	}
 
 	//@―---------------------------------------------------------------------------

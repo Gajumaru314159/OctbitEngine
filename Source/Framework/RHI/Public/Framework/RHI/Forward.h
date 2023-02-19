@@ -7,6 +7,8 @@
 
 namespace ob::rhi {
 
+	enum class PresetTexture;
+
 	struct SetDescriptorTableParam;
 	struct DrawParam;
 	struct DrawIndexedParam;

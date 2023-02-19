@@ -15,9 +15,28 @@
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
+    //! @brief      プリセットテクスチャ
+    //@―---------------------------------------------------------------------------
+    enum class PresetTexture{
+        White,
+        Gray,
+        Black,
+        Normal,
+    };
+
+    //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ・インターフェイス
     //@―---------------------------------------------------------------------------
     class Texture :public GraphicObject {
+    public:
+
+        static Ref<Texture> Preset(PresetTexture);
+
+        static Ref<Texture> White();
+        static Ref<Texture> Gray();
+        static Ref<Texture> Black();
+        static Ref<Texture> Normal();
+
     public:
 
         //@―---------------------------------------------------------------------------

@@ -8,6 +8,23 @@
 
 namespace ob::rhi {
 
+
+    Ref<Texture> Texture::Preset(PresetTexture type) {
+        return Device::Get()->getPresetTexture(type);
+    }
+    Ref<Texture> Texture::White() {
+        return Preset(PresetTexture::White);
+    }
+    Ref<Texture> Texture::Gray() {
+        return Preset(PresetTexture::Gray);
+    }
+    Ref<Texture> Texture::Black() {
+        return Preset(PresetTexture::Black);
+    }
+    Ref<Texture> Texture::Normal() {
+        return Preset(PresetTexture::Normal);
+    }
+
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //! 
