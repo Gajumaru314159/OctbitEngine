@@ -9,6 +9,7 @@
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
+#include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/Device.h>
 
 namespace ob::rhi::dx12 {

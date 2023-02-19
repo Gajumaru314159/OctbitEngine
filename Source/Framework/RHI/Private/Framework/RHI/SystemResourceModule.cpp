@@ -28,12 +28,12 @@ namespace ob::rhi {
 			m_presetTextures[PresetTexture::Normal] = creator(IntColor::Normal);
 		}
 		{
-			s32 size = 32;
-			Array<IntColor> colors((size_t)size*size);
+			size_t size = 32;
+			Array<IntColor> colors(size*size);
 			for (s32 y = 0; y < size; ++y) {
 				for (s32 x = 0; x < size; ++x) {
 					bool f = (x % 2) ^ (y % 2);
-					colors[(size_t)y * size + x] = f ? IntColor::White : IntColor::Gray;
+					colors[y * size + x] = f ? IntColor::White : IntColor::Gray;
 				}
 			}
 			m_presetTextures[PresetTexture::Check] = Texture::Create(Size(size, size), colors);

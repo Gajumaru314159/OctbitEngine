@@ -4,8 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/Engine/Name.h>
+
+// HashMap<engine::Name, MaterialPass> で使用するためインクルード
+#include <Framework/RHI/RootSignature.h>
+#include <Framework/RHI/Shader.h>
 
 namespace ob::graphic {
 
@@ -39,21 +44,4 @@ namespace ob::graphic {
         Array<String> textureProperties;
     };
 
-
-    struct MaterialUser {
-        rhi::VertexLayout       vertexLayout;
-    };
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }// namespcae ob

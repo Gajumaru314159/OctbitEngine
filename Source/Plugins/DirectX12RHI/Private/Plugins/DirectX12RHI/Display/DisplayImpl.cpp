@@ -4,8 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DisplayImpl.h"
+#include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/FrameBuffer.h>
+#include <Framework/RHI/Shader.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>

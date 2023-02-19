@@ -6,6 +6,8 @@
 #include <Framework/Graphic/Material/MaterialImpl.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/Graphic/Mesh/MeshImpl.h>

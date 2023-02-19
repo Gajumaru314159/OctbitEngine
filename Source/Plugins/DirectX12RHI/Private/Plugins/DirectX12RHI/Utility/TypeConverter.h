@@ -10,6 +10,7 @@
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
+#include <Framework/RHI/Types/ResourceState.h>
 
 namespace ob::rhi::dx12 {
 

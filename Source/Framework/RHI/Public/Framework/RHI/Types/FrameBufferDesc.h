@@ -4,8 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/RenderPass.h>
-#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::rhi {
 
