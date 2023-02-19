@@ -27,29 +27,16 @@ namespace ob::graphic {
     };
 
     //@―---------------------------------------------------------------------------
-    //! @brief  マテリアルプロパティ定義
-    //@―---------------------------------------------------------------------------
-    struct MaterialPropertyDesc {
-        String  name;
-        s32     offset;
-    public:
-        MaterialPropertyDesc() = default;
-        MaterialPropertyDesc(StringView name,s32 offset)
-            :name(name),offset(offset)
-        {}
-    };
-
-    //@―---------------------------------------------------------------------------
     //! @brief  マテリアル定義
     //@―---------------------------------------------------------------------------
     struct MaterialDesc{
         
         HashMap<engine::Name, MaterialPass> passes;
         
-        Array<MaterialPropertyDesc> floatProperties;
-        Array<MaterialPropertyDesc> colorProperties;
-        Array<MaterialPropertyDesc> matrixProperties;
-        Array<MaterialPropertyDesc> textureProperties;
+        Array<String> floatProperties;
+        Array<String> colorProperties;
+        Array<String> matrixProperties;
+        Array<String> textureProperties;
     };
 
 

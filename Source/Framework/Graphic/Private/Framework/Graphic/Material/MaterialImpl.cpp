@@ -24,32 +24,26 @@ namespace ob::graphic {
 		: m_desc(desc)
 	{
 		using namespace ob::rhi;
-		s32 bufferSize = 0;
-		s32 paramSize = 0;
-		
-		PropertyType type;
+		s32 bufferSize = 0;	
+		for (auto& name : desc.floatProperties) {
+			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Float,bufferSize });
+			bufferSize += sizeof(f32);
+		}
+		bufferSize += align_up(bufferSize, 16);
+		for (auto& name : desc.colorProperties) {
+			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Color,bufferSize });
+			bufferSize += sizeof(Color);
+		}
+		for (auto& name : desc.matrixProperties) {
+			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Matrix,bufferSize });
+			bufferSize += sizeof(Matrix);
+		}
 
-		// 最大サイズチェック関数
-		//TODO offsetを配列インデックスに変更
-		// できればオフセットも隠蔽
-		auto checkSize = [this,&type, &bufferSize, &paramSize](const MaterialPropertyDesc& param) {
-			bufferSize = std::max<s32>(bufferSize, param.offset + paramSize);
-			m_propertyMap.emplace(param.name, ValuePropertyDesc{type,param.offset});
-		};
-		auto checkSize2 = [&bufferSize, &checkSize, &paramSize](size_t size, const Array<MaterialPropertyDesc> params) {
-			if (params.empty())
-				return;
-			bufferSize = align_up(bufferSize, size);
-			paramSize = size;
-			std::for_each(params.begin(), params.end(), checkSize);
-		};
 
-		type = PropertyType::Float;
-		checkSize2(sizeof(f32)*4, desc.floatProperties);
-		type = PropertyType::Color;
-		checkSize2(sizeof(Color), desc.colorProperties);
-		type = PropertyType::Matrix;
-		checkSize2(sizeof(Matrix), desc.matrixProperties);
+		for (auto& [index,name] : Indexed(desc.textureProperties)) {
+			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Texture,(s32)index});
+		}
+		m_textures.resize(desc.textureProperties.size());
 
 		if (bufferSize) {
 			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BindFlag::AllShaderResource);
@@ -118,7 +112,7 @@ namespace ob::graphic {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 
 			auto& desc = found->second;
-			if (desc.type == PropertyType::Texture)return;
+			if (desc.type != PropertyType::Texture)return;
 			if (!is_in_range(desc.offset, m_textures))return;
 
 			m_textures[desc.offset] = value;

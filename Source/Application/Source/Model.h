@@ -160,7 +160,7 @@ struct PsOut {
 // エントリ													
 PsIn VS_Main(VsIn i) {										
     PsIn o;													
-    o.pos = mul(g_mtx,i.pos);								
+    o.pos = mul(g_mtx,float4(i.pos.xyz,1));								
     o.uv = i.uv;											
     o.normal = i.normal;									
     return o;												
@@ -181,9 +181,9 @@ PsOut PS_Main(PsIn i){
 		
 		{
 			MaterialDesc desc;
-			desc.colorProperties.emplace_back(TC("Color"), 0);
-			desc.matrixProperties.emplace_back(TC("Matrix"), 16);
-			desc.textureProperties.emplace_back(TC("Main"), 0);
+			desc.colorProperties.emplace_back(TC("Color"));
+			desc.matrixProperties.emplace_back(TC("Matrix"));
+			desc.textureProperties.emplace_back(TC("Main"));
 
 			MaterialPass pass;
 			pass.renderTag = TC("Opaque");

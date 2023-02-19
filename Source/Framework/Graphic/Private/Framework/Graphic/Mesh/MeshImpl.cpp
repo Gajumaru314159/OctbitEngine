@@ -78,18 +78,16 @@ namespace ob::graphic {
 
 		size_t vertexCount = 0;
 
-		ADD_VERTEX_ATTRIBUTE(Vec3, positions, Position, Type::Float, 3);
+		ADD_VERTEX_ATTRIBUTE(Vec4, positions, Position, Type::Float, 4);
 
 		if (!meshData.colors.empty()) {
-			offset += sizeof(f32);
 			ADD_VERTEX_ATTRIBUTE(Color, colors, Color, Type::Float, 4);
 		} else if (!meshData.intColors.empty()) {
+			offset -= sizeof(f32);
 			ADD_VERTEX_ATTRIBUTE(IntColor, intColors, Color, Type::UInt32, 1);
-		} else {
-			offset += sizeof(f32);
 		}
 
-		ADD_VERTEX_ATTRIBUTE(Vec4, normals	, Normal	, Type::Float, 3);
+		ADD_VERTEX_ATTRIBUTE(Vec4, normals	, Normal	, Type::Float, 4);
 		ADD_VERTEX_ATTRIBUTE(Vec4, tangents	, Tangent	, Type::Float, 4);
 		ADD_VERTEX_ATTRIBUTE(Vec2, uvs		, TexCoord	, Type::Float, 2, 0);
 		ADD_VERTEX_ATTRIBUTE(Vec2, uvs1		, TexCoord	, Type::Float, 2, 1);
@@ -143,40 +141,42 @@ namespace ob::graphic {
 
 					size_t offset = 0;
 
-#define				COPY_VERTEX_ELEMENT(type,container)\
-					static_assert(std::is_same_v < type, decltype(meshData.container)::value_type>);\
-					if (!meshData.container.empty()) {\
-						for (size_t i = 0; i < vertexCount; ++i) {\
-							*GetOffsetPtr<type>(ptr, i * stribe + offset) = meshData.container[i];\
+#define				COPY_VERTEX_ELEMENT(container)\
+					{\
+						using type = std::remove_const_t<decltype(meshData.container)::value_type>;\
+						if (!meshData.container.empty()) {\
+							for (size_t i = 0; i < vertexCount; ++i) {\
+								*GetOffsetPtr<type>(ptr, i * stribe + offset) = meshData.container[i];\
+							}\
+							offset+=sizeof(type);\
 						}\
-						offset+=sizeof(type);\
 					}
 
-					COPY_VERTEX_ELEMENT(Vec3, positions);
+					COPY_VERTEX_ELEMENT(positions);
 
 					if (!meshData.colors.empty()) {
 						offset += sizeof(f32);
-						COPY_VERTEX_ELEMENT(Color, colors);
+						COPY_VERTEX_ELEMENT(colors);
 					} else if (!meshData.intColors.empty()) {
-						COPY_VERTEX_ELEMENT(IntColor, intColors);
+						COPY_VERTEX_ELEMENT(intColors);
 					} else {
 						offset += sizeof(f32);
 					}
 
-					COPY_VERTEX_ELEMENT(Vec3, normals);
+					COPY_VERTEX_ELEMENT(normals);
 					if (!meshData.normals.empty()) {
 						offset += sizeof(f32);
 					}
 
-					COPY_VERTEX_ELEMENT(Vec4, tangents);
-					COPY_VERTEX_ELEMENT(Vec2, uvs);
-					COPY_VERTEX_ELEMENT(Vec2, uvs1);
-					COPY_VERTEX_ELEMENT(Vec2, uvs2);
-					COPY_VERTEX_ELEMENT(Vec2, uvs3);
-					COPY_VERTEX_ELEMENT(Vec2, uvs4);
-					COPY_VERTEX_ELEMENT(Vec2, uvs5);
-					COPY_VERTEX_ELEMENT(Vec2, uvs6);
-					COPY_VERTEX_ELEMENT(Vec2, uvs7);
+					COPY_VERTEX_ELEMENT(tangents);
+					COPY_VERTEX_ELEMENT(uvs);
+					COPY_VERTEX_ELEMENT(uvs1);
+					COPY_VERTEX_ELEMENT(uvs2);
+					COPY_VERTEX_ELEMENT(uvs3);
+					COPY_VERTEX_ELEMENT(uvs4);
+					COPY_VERTEX_ELEMENT(uvs5);
+					COPY_VERTEX_ELEMENT(uvs6);
+					COPY_VERTEX_ELEMENT(uvs7);
 
 				}
 			);
