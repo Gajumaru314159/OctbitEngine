@@ -169,7 +169,8 @@ PsIn VS_Main(VsIn i) {
 }															
 PsOut PS_Main(PsIn i){										
     PsOut o;												
-    float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];	
+    float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
+	color.rgb *= (dot(i.normal.xyz,float3(1,-1,1))*0.25+0.25+0.5);
     o.color1 = i.normal;									
     o.color0 = color;										
     return o;												

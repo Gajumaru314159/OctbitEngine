@@ -5,17 +5,16 @@
 #include <Framework/Platform/Window.h>
 
 #include <Framework/Input/All.h>
-#include <Framework/Input/Config.h>
 
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/EngineConfig.h>
-#include <Plugins/ImGui/ImGui.h>
-
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
 
 #include <Framework/Graphic/Material.h>
 #include <Framework/Graphic/Mesh.h>
+
+#include <Plugins/ImGui/ImGui.h>
 
 #include <Framework/Engine/Component/TransformComponent.h>
 #include <Test/ComponentTest.h>
@@ -36,35 +35,10 @@ int TestVullkan();
 void Link_Entity();
 void Link_GraphicModule();
 
-
-//@―---------------------------------------------------------------------------
-//! @brief  コンポーネント
-//@―---------------------------------------------------------------------------
-class GraphicTest : public ob::engine::Component {
-	friend class Entity;
-public:
-
-	OB_RTTI();
-
-	GraphicTest() {
-
-	}
-private:
-
-	Ref<rhi::Buffer> m_buffer;
-
-};
-
-
 void OctbitInit(ob::engine::EngineConfig& config) {
 	{
 		rhi::Config c;
 		c.frameBufferCount = 3;
-		config.set(c);
-	}
-	{
-		input::Config c;
-		//settings.useKeyboard = false;
 		config.set(c);
 	}
 
@@ -79,21 +53,10 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 int OctbitMain() {
 
 	TestDirectX12();
+	//TestVulkan();
 
 	return 0;
 }
-
-
-struct Vert {
-	Vec4 pos;
-	Vec4 normal;
-	Vec2 uv;
-};
-
-struct CBuf {
-	Matrix matrix = Matrix::Identity;
-	Color color = Color::Red;
-};
 
 int TestDirectX12() {
 
@@ -244,8 +207,34 @@ int TestDirectX12() {
 			}
 		}
 
-
 		if (input::Keyboard::Escape.down())break;
+
+		// 入力更新
+		const auto rspd = 90 / 60.f;
+		Rot r2(rot.x, rot.y, 0);
+		static auto speed = 4 / 60.f;
+		speed += input::Mouse::Wheel.value() * 0.0001f;
+
+		pos += r2.front() * speed * (input::Keyboard::W.pressed() - input::Keyboard::S.pressed());
+		pos += r2.right() * speed * (input::Keyboard::D.pressed() - input::Keyboard::A.pressed());
+
+		if (input::Mouse::Left.pressed()) {
+			auto md = input::Mouse::GetDeltaPos() * 0.1f;
+			rot.y += md.x;
+			rot.x += md.y;
+		}
+		rot.x = Math::Clamp(rot.x, -85.f, 85.f);
+
+		// 行列更新
+		auto modelScale = 100.0f;
+		auto viewMtx = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse();
+		auto skyMtx = viewMtx * Matrix::Scale(Vec3(1, 1, 1) * modelScale);
+		auto ukuleleMtx = viewMtx * Matrix::Scale(Vec3(1, 1, 1) * 1.0f);
+
+		sky.setMatrix(skyMtx);
+		ukulele.setMatrix(ukuleleMtx);
+
+
 
 		// 表示を更新(Present)
 		display->update();
@@ -289,37 +278,6 @@ int TestDirectX12() {
 		// TODO コマンドの個別実行を許可する？
 		cmdList->flush();
 
-		// 入力更新
-		const auto rspd = 90 / 60.f;
-		Rot r2(rot.x, rot.y, 0);
-		static auto speed = 4 / 60.f;
-		speed += input::Mouse::Wheel.value()*0.0001f;
-
-		if (input::Keyboard::W.pressed())pos += r2.front() * speed;
-		if (input::Keyboard::S.pressed())pos -= r2.front() * speed;
-		if (input::Keyboard::D.pressed())pos += r2.right() * speed;
-		if (input::Keyboard::A.pressed())pos -= r2.right() * speed;
-		if (input::Keyboard::LeftArrow.pressed())rot.y -= rspd;
-		if (input::Keyboard::RightArrow.pressed())rot.y += rspd;
-		if (input::Keyboard::UpArrow.pressed())rot.x -= rspd;
-		if (input::Keyboard::DownArrow.pressed())rot.x += rspd;
-
-		if (input::Mouse::Left.pressed()) {
-			auto md = input::Mouse::GetDeltaPos() * 0.1f;
-			rot.y += md.x;
-			rot.x += md.y;
-		}
-		rot.x = Math::Clamp(rot.x, -85.f, 85.f);
-
-
-		// カメラバッファ更新
-		auto modelScale = 100.0f;
-		auto viewMtx = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse();
-		auto skyMtx = viewMtx * Matrix::Scale(Vec3(1, 1, 1) * modelScale);
-		auto ukuleleMtx = viewMtx * Matrix::Scale(Vec3(1,1,1)* 1.0f);
-
-		sky.setMatrix(skyMtx);
-		ukulele.setMatrix(ukuleleMtx);
 	}
 	imgui::Shutdown();
 	ImGui::DestroyContext();
