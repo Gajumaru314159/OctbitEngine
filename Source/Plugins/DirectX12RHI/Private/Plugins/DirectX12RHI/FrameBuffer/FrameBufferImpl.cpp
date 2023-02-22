@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "FrameBufferImpl.h"
+#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/RenderPass.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>

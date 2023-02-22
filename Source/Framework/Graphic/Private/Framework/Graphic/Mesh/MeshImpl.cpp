@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Graphic/Mesh/MeshImpl.h>
 #include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/Buffer.h>
 #include <Framework/Graphic/Material/MaterialManager.h>
 
 namespace ob::graphic {
