@@ -30,6 +30,7 @@ namespace ob::graphic {
 		ForwardRenderPipeline() {
 			using namespace ob::rhi;
 
+			// PBR
 			{
 				RenderPassDescHelper desc;
 				desc.name = TC("Forward");
@@ -43,13 +44,13 @@ namespace ob::graphic {
 				desc.addSubpassXCD({ albedo,gbuffer0 }, depth);
 				desc.addSubpassICX({ albedo,gbuffer0 }, { accumulate });
 
-				auto renderPass = RenderPass::Create(desc);
-				OB_ASSERT_EXPR(renderPass);
+				m_pbrRenderPass = RenderPass::Create(desc);
+				OB_ASSERT_EXPR(m_pbrRenderPass);
 
-				Material::RegisterRenderPass(engine::Name(TC("EarlyDepth")), renderPass, 0);
-				Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 1);
-				Material::RegisterRenderPass(engine::Name(TC("Transpaternt")), renderPass, 2);
-				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), renderPass, 2);
+				Material::RegisterRenderPass(engine::Name(TC("EarlyDepth")), m_pbrRenderPass, 0);
+				Material::RegisterRenderPass(engine::Name(TC("Opaque")), m_pbrRenderPass, 1);
+				Material::RegisterRenderPass(engine::Name(TC("Transpaternt")), m_pbrRenderPass, 2);
+				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), m_pbrRenderPass, 2);
 			}
 
 		}
@@ -58,13 +59,44 @@ namespace ob::graphic {
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
 		void render(RenderContext& context, Span<Camera> cameras) override {
+			using namespace ob::rhi;
 
 			for (auto& camera : cameras) {
 
-				context.setCamera(camera);
-
+				auto size = camera.getRenderTarget()->size();
 				s32 width = camera.getRenderTarget()->width();
 				s32 height = camera.getRenderTarget()->height();
+				/*
+
+				Ref<RenderTexture> albedoRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
+				Ref<RenderTexture> gbuffer0RT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
+				Ref<RenderTexture> depthRT = context.allocateRenderTexture(size, TextureFormat::D32);
+				Ref<RenderTexture> accumulateRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
+				auto cameraRT = camera.getRenderTexture();
+
+				FrameBufferDesc desc;
+				desc.renderPass = m_pbrRenderPass;
+				desc.attachments = {
+					albedoRT,
+					gbuffer0RT,
+					depthRT,
+					cameraRT,
+				};
+				Ref<FrameBuffer> frameBuffer = FrameBuffer::Create();
+
+				context.beginRenderPass(frameBuffer);
+
+				//
+
+				context.nextSubPass();
+
+				//
+
+				context.endRenderPass();
+
+				*/
+				context.setCamera(camera);
+
 
 
 				// デプスあり
@@ -122,9 +154,7 @@ namespace ob::graphic {
 
 	private:
 
-		Ref<CommandBuffer> m_cmd;
-		Ref<RenderTexture> m_color;
-
+		Ref<rhi::RenderPass> m_pbrRenderPass;
 
 	};
 

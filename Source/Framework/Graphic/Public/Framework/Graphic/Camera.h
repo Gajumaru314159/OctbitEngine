@@ -84,6 +84,8 @@ namespace ob::graphic {
 
         // 位置情報はTransform?
 
+        Ref<rhi::RenderTexture> allocateRenderTexture();
+
     private:
 
         Camera();
