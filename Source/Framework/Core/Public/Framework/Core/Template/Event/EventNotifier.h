@@ -82,6 +82,9 @@ namespace ob::core {
 
     };
 
+    template<typename... Args>
+    using EventProxty = EventNotifier<Args...>::Proxy;
+
 
 
 
