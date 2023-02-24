@@ -8,28 +8,31 @@ using namespace ob;
 
 static int s_calledNo = 0;
 
-void LogEvent(int arg) {
+static void LogEvent(int arg) {
     s_calledNo = arg;
 }
 
-class LogTest {
-public:
-    LogTest() = default;
+namespace {
 
-    void LogEvent(int arg)     {
-        s_calledNo = arg;
-    }
+    class LogTest {
+    public:
+        LogTest() = default;
 
-    void LogEventConst(int arg)const     {
-        s_calledNo = arg;
-    }
+        void LogEvent(int arg) {
+            s_calledNo = arg;
+        }
 
-    static void LogEventStatic(int arg)     {
-        s_calledNo = arg;
-    }
-};
+        void LogEventConst(int arg)const {
+            s_calledNo = arg;
+        }
 
-auto lamda = [](int arg) {s_calledNo = arg; };
+        static void LogEventStatic(int arg) {
+            s_calledNo = arg;
+        }
+    };
+}
+
+static auto lamda = [](int arg) {s_calledNo = arg; };
 
 
 using delegate_type = Delegate<void(int)>;
