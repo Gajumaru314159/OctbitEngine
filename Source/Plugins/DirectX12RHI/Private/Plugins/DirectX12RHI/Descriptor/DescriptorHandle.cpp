@@ -68,6 +68,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void DescriptorHandle::release() {
 		if (m_pBlock)m_pBlock->pHeap->releaseHandle(*this);
+		m_pBlock = nullptr;
 	}
 
 

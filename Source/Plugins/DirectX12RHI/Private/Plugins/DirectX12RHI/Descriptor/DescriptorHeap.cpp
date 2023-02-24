@@ -243,9 +243,8 @@ namespace ob::rhi::dx12 {
 
 		s32 blockIndex = getFreeBlockIndex(firstLevel, secondLevel);
 		auto pBlock = m_blocks.at(blockIndex);
-		OB_ASSERT(pBlock, "内部エラー。allocateFreeBlock()にバグがあります。");
-		OB_ASSERT(size <= pBlock->capacity, "内部エラー。allocateFreeBlock()にバグがあります。");
-
+		OB_ASSERT(pBlock, "内部エラー。allocateFreeBlock()にバグがあります。[pBlock==null]");
+		OB_ASSERT(size <= pBlock->capacity, "内部エラー。allocateFreeBlock()にバグがあります。[{}<={}]", size, pBlock->capacity);
 		separateFreeList(*pBlock);
 		returnSurplusBlock(*pBlock, size);
 
@@ -264,7 +263,10 @@ namespace ob::rhi::dx12 {
 		OB_ASSERT(!block.pFreePrev, "フリーブロックに接続されています。");
 		OB_ASSERT(!block.pFreeNext, "フリーブロックに接続されています。");
 
-		if (block.capacity == size)return;
+		if (block.capacity == size) {
+			block.allocated = true;
+			return;
+		}
 
 		OB_ASSERT(!m_freeList.empty(), "DescriptorHeaoの容量が不足しています。");
 
@@ -370,6 +372,10 @@ namespace ob::rhi::dx12 {
 		}
 		pTop = &block;
 
+		if (block.capacity == 0) {
+			::CallBreakPoint();
+		}
+
 		entryFreeListBitState(firstLevel, secondLevel);
 
 	}
@@ -411,7 +417,7 @@ namespace ob::rhi::dx12 {
 			firstLevel = 0;
 			secondLevel = size >> s_secondLevelShift;
 		} else {
-			firstLevel = std::max(0, BitOp::GetMSB((u32)size) - s_linearManagementSizeLog2);
+			firstLevel = std::max(0, BitOp::GetMSB((u32)size) + 1 - s_linearManagementSizeLog2);
 			secondLevel = size >> (firstLevel + s_maxSecondLevel);
 			secondLevel &= (s_maxSecondLevel - 1);
 		}
