@@ -7,78 +7,56 @@
 
 namespace ob::platform {
 
-    enum class Ev {
-        Create,// ウィンドウ生成
-        Destroy,// ウィンドウ破棄仕様としている
-        Move,//
-    };
-
-
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント・タイプ
     //@―---------------------------------------------------------------------------
     enum class WindowEventType {
-        Move,       //! ウィンドウが移動
-        Size,       //! サイズ変更
-        Activate,   //! アクティブ状態に変更
-        Deactivate, //! 非アクティブ状態に変更
-        Focus,      //! フォーカスを取得
-        Close,      //! 終了時
-        Destroy,    //! 破棄
-        Minimize,   //! 最小化
-        Maximize,   //! 最大か
+        Unknown,    //!< 不明
+        Move,       //!< ウィンドウが移動
+        Size,       //!< サイズ変更
+        Activate,   //!< アクティブ状態に変更
+        Deactivate, //!< 非アクティブ状態に変更
+        Focus,      //!< フォーカスを取得
+        Close,      //!< 終了時
+        Destroy,    //!< 破棄
+        Minimize,   //!< 最小化
+        Maximize,   //!< 最大化
+        DragEnter,  //!< ドラッグアイテムがウィンドウ内に入った
+        DragDrop,   //!< ドラッグアイテムがドロップされた
     };
 
+    class Draggable;
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  システム・イベント・タイプ
-    //@―---------------------------------------------------------------------------
-    enum class SystemEventType {
-        Unknown,                //! 不明
+    struct WindowEventArgs {
 
-        Quit,                   //! アプリケーションの終了
-        close,                  //! ウィンドウを閉じようとした
-        WindowActivate,         //! ウィンドウがアクティブ化
-        WindowsDeactivate,      //! ウィンドウが非アクティブ化
+        WindowEventType type;
 
-        MouseDown,              //! マウスボタンが押された
-        MouseUp,                //! マウスボタンが離された
-        MouseMove,              //! マウスが移動した
-        MouseWheel,             //! マウスのホイールが動かされた
+        // Move
+        union {
+            Vec2 oldPos;
+            Vec2 newPos;
+        };
 
-        KeyDown,                //! キーが押された
-        KeyUp,                  //! キーが離された
-        KeyChar,                //! 文字入力
+        // Size
+        union {
+            Vec2 oldSize;
+            Vec2 newSize;
+        };
 
-        WindowSizeChanged,      //! ウィンドウサイズが変わった
-
-        DragEnter,              //! ドラッグアイテムがウィンドウ内に入った
-        DragDrop,               //! ドラッグアイテムがドロップされた
+        // Drag
+        union {
+            Draggable* item;
+        };
     };
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  マウスボタン
-    //@―---------------------------------------------------------------------------
-    enum class MouseButton {
-        None,
-        Left,
-        Right,
-        Middle,
-        X1,
-        X2,
-    };
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント
     //@―---------------------------------------------------------------------------
-    using WindowEvent = Delegate<void(WindowEventType)>;
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
-    using MouseMoveEvent = Delegate<void(void)>;
+    //! @{
+    using WindowEventNotifier = EventNotifier<const WindowEventArgs&>;
+    using WindowEventHandle = typename WindowEventNotifier::Handle;
+    //! @}
 
 }// namespace ob::platform

@@ -119,16 +119,16 @@ namespace ob {
         void WindowsWindow::setTitle(const Char* pTitle) {
         }
 
-        Size WindowsWindow::size() {
-            return Size();
+        Vec2 WindowsWindow::size() {
+            return Vec2();
         }
 
-        Point WindowsWindow::getScreenPoint(const Point& clientPoint) {
-            return Point();
+        Vec2 WindowsWindow::getScreenPoint(const Vec2& clientPoint) {
+            return Vec2();
         }
 
-        Point WindowsWindow::getClientPoint(const Point& screenPoint) {
-            return Point();
+        Vec2 WindowsWindow::getClientPoint(const Vec2& screenPoint) {
+            return Vec2();
         }
 
         void WindowsWindow::setCursor() {

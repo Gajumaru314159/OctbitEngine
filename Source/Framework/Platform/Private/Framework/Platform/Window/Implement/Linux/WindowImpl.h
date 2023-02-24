@@ -19,9 +19,9 @@ namespace ob {
             ~WindowImpl()override;
 
             virtual void setTitle(const Char* pTitle) override;
-            virtual Size size() override;
-            virtual Point getScreenPoint(const Point& clientPoint) override;
-            virtual Point getClientPoint(const Point& screenPoint) override;
+            virtual Vec2 size() override;
+            virtual Vec2 getScreenPoint(const Vec2& clientPoint) override;
+            virtual Vec2 getClientPoint(const Vec2& screenPoint) override;
             virtual void setCursor() override;
             virtual bool isValid();
 

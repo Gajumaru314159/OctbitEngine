@@ -33,8 +33,10 @@ namespace ob::rhi::dx12 {
         }
 
         // サイズが指定されていない場合はウィンドウサイズを使用
-        if (m_desc.size.width == 0 || m_desc.size.height == 0)m_desc.size = m_desc.window.getSize();
-
+        if (m_desc.size.width == 0 || m_desc.size.height == 0) {
+            auto size = m_desc.window.getSize();
+            m_desc.size = Size(size.x,size.y);
+        }
         m_syncInterval = desc.vsync ? 1 : 0;
 
         if (!createDisplay(rDevice))return;

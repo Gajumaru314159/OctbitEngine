@@ -140,7 +140,7 @@ namespace ob::platform {
         //! @param clientPoint  クライアント座標
         //! @return             スクリーン座標
         //@―---------------------------------------------------------------------------
-        Point getScreenPoint(const Point& clientPoint)const;
+        Vec2 getScreenPoint(const Vec2& clientPoint)const;
 
 
         //@―---------------------------------------------------------------------------
@@ -150,7 +150,7 @@ namespace ob::platform {
         //! @param screenPoint  スクリーン座標  
         //! @return             クライアント座標
         //@―---------------------------------------------------------------------------
-        Point getClientPoint(const Point& screenPoint)const;
+        Vec2 getClientPoint(const Vec2& screenPoint)const;
 
 
         //@―---------------------------------------------------------------------------
@@ -168,25 +168,25 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウの位置を設定する
         //@―---------------------------------------------------------------------------
-        void setPosition(Point position);
+        void setPosition(Vec2 position);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウの位置を取得する
         //@―---------------------------------------------------------------------------
-        Point getPosition()const noexcept;
+        Vec2 getPosition()const noexcept;
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウのサイズを設定する
         //@―---------------------------------------------------------------------------
-        void setSize(Size size);
+        void setSize(Vec2 size);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウサイズを取得
         //@―---------------------------------------------------------------------------
-        Size getSize()const;
+        Vec2 getSize()const;
 
 
         //@―---------------------------------------------------------------------------
@@ -231,7 +231,7 @@ namespace ob::platform {
         //@―---------------------------------------------------------------------------
         //! @brief      ウィンドウ・イベントのリスナを追加する
         //@―---------------------------------------------------------------------------
-        void addEventListener(WindowEventType type, const WindowEvent& e);
+        void addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func);
 
 
     public:

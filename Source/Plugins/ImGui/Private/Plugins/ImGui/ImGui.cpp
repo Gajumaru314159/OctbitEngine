@@ -237,7 +237,7 @@ namespace ob::imgui {
 		{
 			// カーソル位置更新
 			auto pos = input::Mouse::GetPos();
-			auto cpos = bd->window.getClientPoint(Point{ (s32)pos.x,(s32)pos.y });
+			auto cpos = bd->window.getClientPoint({pos.x,pos.y });
 			io.AddMousePosEvent((float)cpos.x, (float)cpos.y);
 	
 
@@ -635,7 +635,7 @@ namespace ob::imgui {
 		// ディスプレイサイズ更新
 		if (!bd->window) return;
 		auto size = bd->window.getSize();
-		io.DisplaySize = ImVec2(size.width, size.height);
+		io.DisplaySize = ImVec2(size.x, size.y);
 
 		ImGui::NewFrame();
 	}

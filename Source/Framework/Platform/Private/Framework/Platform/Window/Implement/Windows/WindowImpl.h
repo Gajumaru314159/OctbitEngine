@@ -40,17 +40,17 @@ namespace ob::platform {
         bool isMainWindow()const override;
         WindowStates getState()const override;
 
-        Point getScreenPoint(const Point& clientPoint)const override;
-        Point getClientPoint(const Point& screenPoint)const override;
+        Vec2 getScreenPoint(const Vec2& clientPoint)const override;
+        Vec2 getClientPoint(const Vec2& screenPoint)const override;
 
         void setTitle(StringView getTitle) override;
         const String& getTitle()const override;
 
-        void setPosition(Point position) override;
-        Point getPosition()const noexcept override;
+        void setPosition(Vec2 position) override;
+        Vec2 getPosition()const noexcept override;
 
-        void setSize(Size size) override;
-        Size getSize()const override;
+        void setSize(Vec2 size) override;
+        Vec2 getSize()const override;
 
         void setMode(WindowMode mode) override;
         WindowMode getMode()const override;
@@ -65,7 +65,7 @@ namespace ob::platform {
         // イベント
         //===============================================================
 
-        void addEventListener(WindowEventType type, const WindowEvent& e) override;
+        void addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) override;
 
     public:
 
@@ -109,7 +109,7 @@ namespace ob::platform {
         bool    m_isActive;
         bool    m_isMinimized;
 
-        EventNotifier<WindowEventType> m_notifier;
+        WindowEventNotifier m_notifier;
 
     };
 

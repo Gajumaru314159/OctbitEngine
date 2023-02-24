@@ -137,7 +137,7 @@ namespace ob::platform {
     //! @patam clientPoint  クライアント座標
     //! @return             スクリーン座標
     //@―---------------------------------------------------------------------------
-    Point Window::getScreenPoint(const Point& clientPoint)const {
+    Vec2 Window::getScreenPoint(const Vec2& clientPoint)const {
         if (!m_impl)return { 0, 0 };
         return m_impl->getScreenPoint(clientPoint);
     }
@@ -150,7 +150,7 @@ namespace ob::platform {
     //! @patam screenPoint  スクリーン座標  
     //! @return             クライアント座標
     //@―---------------------------------------------------------------------------
-    Point Window::getClientPoint(const Point& screenPoint)const {
+    Vec2 Window::getClientPoint(const Vec2& screenPoint)const {
         if (!m_impl)return { 0, 0 };
         return m_impl->getClientPoint(screenPoint);
     }
@@ -177,7 +177,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウの位置を設定する
     //@―---------------------------------------------------------------------------
-    void Window::setPosition(Point position) {
+    void Window::setPosition(Vec2 position) {
         if (!m_impl)return;
         m_impl->setPosition(position);
     }
@@ -186,7 +186,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウの位置を取得する
     //@―---------------------------------------------------------------------------
-    Point Window::getPosition()const noexcept {
+    Vec2 Window::getPosition()const noexcept {
         if (!m_impl)return {0,0};
         return m_impl->getPosition();
     }
@@ -195,7 +195,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウのサイズを設定する
     //@―---------------------------------------------------------------------------
-    void Window::setSize(Size size) {
+    void Window::setSize(Vec2 size) {
         if (!m_impl)return;
         m_impl->setSize(size);
     }
@@ -203,7 +203,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウサイズを取得
     //@―---------------------------------------------------------------------------
-    Size Window::getSize()const {
+    Vec2 Window::getSize()const {
         OB_ASSERT_EXPR(m_impl);
         return m_impl->getSize();
     }
@@ -256,9 +256,9 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する
     //@―---------------------------------------------------------------------------
-    void Window::addEventListener(WindowEventType type, const WindowEvent& e) {
+    void Window::addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) {
         if (!m_impl)return;
-        m_impl->addEventListener(type, e);
+        m_impl->addEventListener(handle, func);
     }
 
 

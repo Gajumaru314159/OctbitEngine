@@ -21,12 +21,12 @@ namespace ob::platform {
 	//! @details    生成情報を指定してウィンドウを生成する。
 	//@―---------------------------------------------------------------------------
 	WindowImpl::WindowImpl(const WindowDesc& desc)
-		:m_className(Format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum)) 
+		:m_className(Format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum))
 		, m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)
 	{
 		m_hParentWnd = (HWND)Window::Main().getHandle();
-		const bool hasParent = m_hParentWnd !=nullptr;
+		const bool hasParent = m_hParentWnd != nullptr;
 
 		m_windowID = m_windowNum++;
 
@@ -75,8 +75,8 @@ namespace ob::platform {
 		RECT clientRect;
 		clientRect.left = 0;
 		clientRect.top = 0;
-		clientRect.right = desc.clientSize.width;
-		clientRect.bottom = desc.clientSize.height;
+		clientRect.right = desc.clientSize.x;
+		clientRect.bottom = desc.clientSize.y;
 		::AdjustWindowRect(&clientRect, mWindowedStyle, FALSE);
 
 		// 文字コードを変換
@@ -238,36 +238,36 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	//! @brief      ウィンドウの位置を設定する
 	//@―---------------------------------------------------------------------------
-	void WindowImpl::setPosition(Point position) {
+	void WindowImpl::setPosition(Vec2 position) {
 		if (!m_hWnd)return;
 		auto size = getSize();
-		::MoveWindow(m_hWnd, position.x, position.y, size.width, size.height, TRUE);
+		::MoveWindow(m_hWnd, (int)position.x, (int)position.y, (int)size.x, (int)size.y, TRUE);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ウィンドウの位置を取得する
 	//@―---------------------------------------------------------------------------
-	Point WindowImpl::getPosition()const noexcept {
+	Vec2 WindowImpl::getPosition()const noexcept {
 		if (!m_hWnd)return{ 0,0 };
 		RECT rect;
 		::GetWindowRect(m_hWnd, &rect);
-		return { rect.left,rect.top };
+		return Vec2((f32)rect.left,(f32)rect.top);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ウィンドウのサイズを設定する
 	//@―---------------------------------------------------------------------------
-	void WindowImpl::setSize(Size size) {
+	void WindowImpl::setSize(Vec2 size) {
 		if (!m_hWnd)return;
 
 		RECT rw, rc;
 		::GetWindowRect(m_hWnd, &rw);
 		::GetClientRect(m_hWnd, &rc);
 
-		int newWidth = (rw.right - rw.left) - (rc.right - rc.left) + size.width;
-		int newHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top) + size.height;
+		int newWidth = (rw.right - rw.left) - (rc.right - rc.left) + (int)size.x;
+		int newHeight = (rw.bottom - rw.top) - (rc.bottom - rc.top) + (int)size.y;
 
 		::SetWindowPos(m_hWnd, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
 	}
@@ -276,13 +276,13 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	//! @brief  ウィンドウサイズを取得
 	//@―---------------------------------------------------------------------------
-	Size WindowImpl::getSize()const {
+	Vec2 WindowImpl::getSize()const {
 		OB_ASSERT_EXPR(m_hWnd);
 		RECT rect;
 		::GetClientRect(m_hWnd, &rect);
-		return Size{
-			static_cast<s32>(rect.right - rect.left),
-			static_cast<s32>(rect.bottom - rect.top)
+		return Vec2{
+			static_cast<f32>(rect.right - rect.left),
+			static_cast<f32>(rect.bottom - rect.top)
 		};
 	}
 
@@ -334,7 +334,7 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	//! @brief      ウィンドウのハンドルを取得
 	//@―---------------------------------------------------------------------------
-	void* WindowImpl::getHandle() const{
+	void* WindowImpl::getHandle() const {
 		return m_hWnd;
 	}
 
@@ -342,29 +342,8 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	//! @brief      ウィンドウ・イベントのリスナを追加する
 	//@―---------------------------------------------------------------------------
-	void WindowImpl::addEventListener(WindowEventType type, const WindowEvent& e) {
-		switch (type) {
-		case WindowEventType::Move:
-			break;
-		case WindowEventType::Size:
-			break;
-		case WindowEventType::Activate:
-			break;
-		case WindowEventType::Deactivate:
-			break;
-		case WindowEventType::Focus:
-			break;
-		case WindowEventType::Close:
-			break;
-		case WindowEventType::Destroy:
-			break;
-		case WindowEventType::Minimize:
-			break;
-		case WindowEventType::Maximize:
-			break;
-		default:
-			break;
-		}
+	void WindowImpl::addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) {
+		m_notifier.add(handle, func);
 	}
 
 
@@ -396,13 +375,13 @@ namespace ob::platform {
 	//! @patam clientPoint  クライアント座標
 	//! @return             スクリーン座標
 	//@―---------------------------------------------------------------------------
-	Point WindowImpl::getScreenPoint(const Point& clientPoint) const {
+	Vec2 WindowImpl::getScreenPoint(const Vec2& clientPoint) const {
 		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
 		point.x = clientPoint.x;
 		point.y = clientPoint.y;
-		::ClientToScreen(m_hWnd, &point);
-		return Point();
+		if (!::ClientToScreen(m_hWnd, &point))return Vec2::Zero;
+		return Vec2(point.x,point.y);
 	}
 
 
@@ -413,13 +392,13 @@ namespace ob::platform {
 	//! @patam screenPoint  スクリーン座標  
 	//! @return             クライアント座標
 	//@―---------------------------------------------------------------------------
-	Point WindowImpl::getClientPoint(const Point& screenPoint) const {
+	Vec2 WindowImpl::getClientPoint(const Vec2& screenPoint) const {
 		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
 		point.x = screenPoint.x;
 		point.y = screenPoint.y;
-		if (!::ScreenToClient(m_hWnd, &point))return Point{};
-		return Point(point.x, point.y);
+		if (!::ScreenToClient(m_hWnd, &point))return Vec2::Zero;
+		return Vec2(point.x, point.y);
 	}
 
 
@@ -452,24 +431,60 @@ namespace ob::platform {
 			break;
 		}
 
+		WindowEventArgs args;
+		args.type = WindowEventType::Unknown;
 
 		switch (msg) {
-		case WM_CREATE: break;//	ウインドウが作成されていることを示します。
-		case WM_DESTROY: break;//	ウインドウが破棄されようとしていることを示します。
-		case WM_MOVE: break;//	ウインドウの位置が変更されたことを示します。
-		case WM_SIZE: break;//	ウインドウのサイズが変更されていることを示します。
-		case WM_ACTIVATE: break;//	アクティブ状態が変更されていることを示します。
-		case WM_SETFOCUS: break;//	ウインドウがキーボード・フォーカスを取得したことを示します。
-		case WM_ENABLE: break;//	ウインドウの有効または無効の状態が変更されていることを示します。
-		case WM_CLOSE: break;//	コントロール・メニューの[クローズ]コマンドが選ばれました。デフォルトでWM_QUITを呼び出します。
-		case WM_QUIT: break;//	アプリケーションを強制終了するよう要求します。
-		case WM_SHOWWINDOW: break;//	ウインドウの表示または非表示の状態が変更されようとしていることを示します。
-		case WM_WININICHANGE: break;//	WIN.INIが変更されたことをアプリケーションに通知します。
-		case WM_SETCURSOR: break;//	マウス カーソルの形状を設定するようウインドウに促します。
-		case WM_MOUSEACTIVATE: break;//	非アクティブ ウインドウ内でマウスがクリックされたことを示します。
-		case WM_CHILDACTIVATE: break;//	子ウインドウにアクティブであることを通知します。
-		case WM_DISPLAYCHANGE: break;//	ディスプレイの解像度が変更されたことを示します。
-		case WM_INPUT: break;//	RAW Input Device (キーボード/マウス/リモコン等) からの入力があったことを示します。
+		case WM_CREATE:
+			//	ウインドウが作成されていることを示します。
+			break;
+		case WM_DESTROY:
+			//	ウインドウが破棄されようとしていることを示します。
+			break;
+		case WM_MOVE:
+			//	ウインドウの位置が変更されたことを示します。
+			args.type = WindowEventType::Move;
+			args.oldPos = getPosition();
+			break;
+		case WM_SIZE:
+			//	ウインドウのサイズが変更されていることを示します。
+			break;
+		case WM_ACTIVATE:
+			//	アクティブ状態が変更されていることを示します。
+			break;
+		case WM_SETFOCUS:
+			//	ウインドウがキーボード・フォーカスを取得したことを示します。
+			break;
+		case WM_ENABLE:
+			//	ウインドウの有効または無効の状態が変更されていることを示します。
+			break;
+		case WM_CLOSE:
+			//	コントロール・メニューの[クローズ]コマンドが選ばれました。デフォルトでWM_QUITを呼び出します。
+			break;
+		case WM_QUIT:
+			//	アプリケーションを強制終了するよう要求します。
+			break;
+		case WM_SHOWWINDOW:
+			//	ウインドウの表示または非表示の状態が変更されようとしていることを示します。
+			break;
+		case WM_WININICHANGE:
+			//	WIN.INIが変更されたことをアプリケーションに通知します。
+			break;
+		case WM_SETCURSOR:
+			//	マウス カーソルの形状を設定するようウインドウに促します。
+			break;
+		case WM_MOUSEACTIVATE:
+			//	非アクティブ ウインドウ内でマウスがクリックされたことを示します。
+			break;
+		case WM_CHILDACTIVATE:
+			//	子ウインドウにアクティブであることを通知します。
+			break;
+		case WM_DISPLAYCHANGE:
+			//	ディスプレイの解像度が変更されたことを示します。
+			break;
+		case WM_INPUT:
+			//	RAW Input Device (キーボード/マウス/リモコン等) からの入力があったことを示します。
+			break;
 		default:break;
 		}
 
