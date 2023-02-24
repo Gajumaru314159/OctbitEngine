@@ -198,8 +198,9 @@ namespace ob::core {
     void EventNotifier<Args...>::invoke(Args... args)const {
         ScopeLock lock(m_mutex);
         for (auto& e : m_handleList) {
-            if (e.empty())continue;
-            e(args...);
+            if (e) {
+                e(args...);
+            }
         }
     }
 

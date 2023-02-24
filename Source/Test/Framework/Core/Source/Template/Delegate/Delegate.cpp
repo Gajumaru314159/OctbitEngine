@@ -74,7 +74,7 @@ TEST(Delegate, Construct) {
     {
         delegate_type d(LogEvent);
         delegate_type d2 = d;
-        d.clear();
+        d = {};
         s_calledNo = 0;
         d2(1);
         ASSERT_EQ(s_calledNo, 1);
@@ -110,7 +110,7 @@ TEST(Delegate, Op) {
         delegate_type d(LogEvent);
         delegate_type d2;
         d2 = d;
-        d.clear();
+        d = {};
         s_calledNo = 0;
         d2(1);
         ASSERT_EQ(s_calledNo, 1);
@@ -126,46 +126,6 @@ TEST(Delegate, Op) {
     }
 }
 
-TEST(Delegate, Assign) {
-    LogTest lt;
-
-    // 関数
-    {
-        delegate_type d;
-        d.assign(LogEvent);
-        d(1);
-        ASSERT_EQ(s_calledNo, 1);
-    }
-    // ラムダ式
-    {
-        delegate_type d;
-        d.assign(lamda);
-        d(2);
-        ASSERT_EQ(s_calledNo, 2);
-    }
-    // メソッド
-    {
-        delegate_type d;
-        d.assign(lt, &LogTest::LogEvent);
-        d(3);
-        ASSERT_EQ(s_calledNo, 3);
-    }
-    // constメソッド
-    {
-        delegate_type d;
-        d.assign(lt, &LogTest::LogEventConst);
-        d(4);
-        ASSERT_EQ(s_calledNo, 4);
-    }
-    // static関数
-    {
-        delegate_type d;
-        d.assign(&LogTest::LogEventStatic);
-        d(5);
-        ASSERT_EQ(s_calledNo, 5);
-    }
-}
-
 TEST(Delegate, Misc) {
     // 未登録テスト
     {
@@ -174,13 +134,13 @@ TEST(Delegate, Misc) {
         d(1);
         ASSERT_EQ(s_calledNo, 0);
     }
-    // empty()
+    // operator bool()
     {
         delegate_type d;
-        ASSERT_TRUE(d.empty());
-        d.assign(LogEvent);
-        ASSERT_FALSE(d.empty());
-        d.clear();
-        ASSERT_TRUE(d.empty());
+        ASSERT_TRUE(!d);
+        d = LogEvent;
+        ASSERT_FALSE(!d);
+        d = {};
+        ASSERT_TRUE(!d);
     }
 }

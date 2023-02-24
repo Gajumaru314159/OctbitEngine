@@ -36,8 +36,11 @@ namespace ob::core {
 
 		template <class StringViewIsh>
 		using is_string_view = std::enable_if_t<
-			std::conjunction_v<std::is_convertible<const StringViewIsh&, StringViewBase<TChar>>,
-			std::negation<std::is_convertible<const StringViewIsh&, const TChar*>>>>;
+			std::conjunction_v<
+				std::is_convertible<const StringViewIsh&, StringViewBase<TChar>>,
+				std::negation<std::is_convertible<const StringViewIsh&, const TChar*>>
+			>
+		>;
 	public:
 		static constexpr size_type npos{ string_type::npos };
 	public:
