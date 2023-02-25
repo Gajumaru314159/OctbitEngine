@@ -19,9 +19,9 @@ namespace ob::rhi {
         Display*        display = nullptr;              //!< リサイズ追従するDisplay [Optional]
 
         struct Clear {
-            Color color;
-            f32 depth;
-            u32 stencil;
+            Color color = Color::White;
+            f32 depth = 0.0f;
+            u32 stencil = 0;
         } clear;
     };
 
