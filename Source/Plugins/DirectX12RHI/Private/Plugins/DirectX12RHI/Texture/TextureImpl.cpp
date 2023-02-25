@@ -75,7 +75,7 @@ namespace ob::rhi::dx12 {
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
     }
 
 	//@―---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ namespace ob::rhi::dx12 {
 			sizeof(IntColor) * size.width*size.height
 		);
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
+			Utility::OutputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
 			return;
 		}
 
@@ -159,7 +159,7 @@ namespace ob::rhi::dx12 {
 		m_desc.mipLevels = 0;
 
 
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -176,7 +176,7 @@ namespace ob::rhi::dx12 {
 		result = DirectX::LoadFromDDSMemory(blob.data(), blob.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
 		
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			Utility::OutputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
 			return;
 		}
 		
@@ -203,7 +203,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 		
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			Utility::OutputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
 			return;
 		}
 		
@@ -219,7 +219,7 @@ namespace ob::rhi::dx12 {
 			(UINT)img->slicePitch  
 		);
 		if (FAILED(result)) {
-			Utility::outputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
+			Utility::OutputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
 			return;
 		}
 		
@@ -244,7 +244,7 @@ namespace ob::rhi::dx12 {
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 		m_resource = resource;
 
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
 	}
 
 
@@ -324,7 +324,7 @@ namespace ob::rhi::dx12 {
 		m_renderDesc.size = m_desc.size;
 		m_renderDesc.clear.color = Color::White;
 
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
 
 	}
 
@@ -441,7 +441,7 @@ namespace ob::rhi::dx12 {
 			m_resource->SetName(wname.c_str());
 		}
 
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
 
 	}
 

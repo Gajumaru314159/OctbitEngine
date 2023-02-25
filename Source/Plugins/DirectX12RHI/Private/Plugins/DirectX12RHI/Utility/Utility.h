@@ -18,18 +18,18 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  デバッグレイヤメッセージを取得
         //@―---------------------------------------------------------------------------
-        static String getDebugLayerLastString(ID3D12Device* pDevice,s32 count=3);
+        static String GetDebugLayerLastString(ID3D12Device* pDevice,s32 count=3);
 
         //@―---------------------------------------------------------------------------
         //! @brief  エラーメッセージを取得
         //@―---------------------------------------------------------------------------
-        static String getErrorMessage(DWORD errorCode);
+        static String GetErrorMessage(DWORD errorCode);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  HRESULTのエラーログを出力
         //@―---------------------------------------------------------------------------
-        static void outputErrorLog(HRESULT result, StringView message = TC(""));
+        static void OutputErrorLog(HRESULT result, StringView message = TC(""));
 
 
         //@―---------------------------------------------------------------------------
@@ -41,13 +41,13 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
         //@―---------------------------------------------------------------------------
-        static D3D12_SRV_DIMENSION getSrvDimention(const D3D12_RESOURCE_DESC& desc);
+        static D3D12_SRV_DIMENSION GetSrvDimention(const D3D12_RESOURCE_DESC& desc);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  ID3D12Objectに名前を設定
         //@―---------------------------------------------------------------------------
-        static void setName(ID3D12Object* pObject,StringView name);
+        static void SetName(ID3D12Object* pObject,StringView name);
 
     };
 

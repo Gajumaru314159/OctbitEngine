@@ -12,7 +12,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  エラーメッセージを取得
     //@―---------------------------------------------------------------------------
-    String Utility::getErrorMessage(DWORD errorCode) {
+    String Utility::GetErrorMessage(DWORD errorCode) {
         WCHAR buffer[256];
         DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
         auto result = ::FormatMessageW(
@@ -41,7 +41,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  デバッグレイヤメッセージを取得
     //@―---------------------------------------------------------------------------
-    String Utility::getDebugLayerLastString(ID3D12Device* pDevice, s32 count) {
+    String Utility::GetDebugLayerLastString(ID3D12Device* pDevice, s32 count) {
 
         String message;
 
@@ -105,8 +105,8 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  HRESULTのエラーログを出力
     //@―---------------------------------------------------------------------------
-    void Utility::outputErrorLog(HRESULT result, StringView message) {
-        LOG_ERROR_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::getErrorMessage(result));
+    void Utility::OutputErrorLog(HRESULT result, StringView message) {
+        LOG_ERROR_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::GetErrorMessage(result));
     }
 
 
@@ -114,14 +114,14 @@ namespace ob::rhi::dx12 {
     //! @brief  HRESULTのFatalログを出力
     //@―---------------------------------------------------------------------------
     void Utility::OutputFatalLog(HRESULT result, StringView message) {
-        LOG_FATAL_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::getErrorMessage(result));
+        LOG_FATAL_EX("Graphic", "{0}[{1:#X}:{2}]", message, result, Utility::GetErrorMessage(result));
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
     //@―---------------------------------------------------------------------------
-    D3D12_SRV_DIMENSION Utility::getSrvDimention(const D3D12_RESOURCE_DESC& desc) {
+    D3D12_SRV_DIMENSION Utility::GetSrvDimention(const D3D12_RESOURCE_DESC& desc) {
         switch (desc.Dimension) {
         case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
             if (desc.DepthOrArraySize == 0) {
@@ -158,7 +158,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  ID3D12Objectに名前を設定
     //@―---------------------------------------------------------------------------
-    void Utility::setName(ID3D12Object* pObject, StringView name) {
+    void Utility::SetName(ID3D12Object* pObject, StringView name) {
 #ifdef  OB_DEBUG
         if (pObject == nullptr)return;
         WString wname;

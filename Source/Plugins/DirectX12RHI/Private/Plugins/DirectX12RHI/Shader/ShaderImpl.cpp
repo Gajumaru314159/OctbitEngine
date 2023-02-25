@@ -155,7 +155,7 @@ namespace ob::rhi::dx12 {
             m_shaderBolb2.ReleaseAndGetAddressOf(), errorBlob.ReleaseAndGetAddressOf());
 
         if (FAILED(result)) {
-            Utility::outputErrorLog(result, TC("シェーダコンパイルエラー"));
+            Utility::OutputErrorLog(result, TC("シェーダコンパイルエラー"));
 
             // エラー内容取得
             StringBase<char> error;

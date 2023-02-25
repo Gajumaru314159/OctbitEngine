@@ -59,8 +59,8 @@ namespace ob::rhi::dx12 {
 		// 初期状態で記録モードなのでクローズ
 		m_cmdList->Close();
 
-		Utility::setName(m_cmdAllocator.Get(), getName());
-		Utility::setName(m_cmdList.Get(), getName());
+		Utility::SetName(m_cmdAllocator.Get(), getName());
+		Utility::SetName(m_cmdList.Get(), getName());
 	}
 
 
@@ -94,7 +94,7 @@ namespace ob::rhi::dx12 {
 		result = m_cmdAllocator->Reset();
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandAllocator::Reset()\n");
-			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
+			message += Utility::GetDebugLayerLastString(m_device.getNative().Get());
 			Utility::OutputFatalLog(result, message);
 		}
 
@@ -102,12 +102,12 @@ namespace ob::rhi::dx12 {
 		result = m_cmdList->Reset(m_cmdAllocator.Get(), nullptr);
 		if (FAILED(result)) {
 			String message = TC("ID3D12CommandList::Reset()\n");
-			message += Utility::getDebugLayerLastString(m_device.getNative().Get());
+			message += Utility::GetDebugLayerLastString(m_device.getNative().Get());
 			Utility::OutputFatalLog(result, message);
 		}
 
-		Utility::setName(m_cmdAllocator.Get(), getName());
-		Utility::setName(m_cmdList.Get(), getName());
+		Utility::SetName(m_cmdAllocator.Get(), getName());
+		Utility::SetName(m_cmdList.Get(), getName());
 
 		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);

@@ -510,7 +510,7 @@ namespace ob::rhi::dx12 {
                 // リサイズ
                 auto result = m_swapChain->ResizeBuffers(m_desc.bufferCount, 0, 0, desc.BufferDesc.Format, desc.Flags);
                 if (FAILED(result)) {
-                    Utility::outputErrorLog(result, TC("IDXGISwapChain::ResizeBuffersに失敗"));
+                    Utility::OutputErrorLog(result, TC("IDXGISwapChain::ResizeBuffersに失敗"));
                     return;
                 }
 

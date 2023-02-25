@@ -44,7 +44,7 @@ namespace ob::rhi::dx12 {
 		}
 
 		m_resource = buffer;
-		Utility::setName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), getName());
 	}
 
 

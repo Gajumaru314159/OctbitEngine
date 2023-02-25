@@ -116,7 +116,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  名前を設定
 	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::setName(StringView name) {
-		Utility::setName(m_heap.Get(), name);
+		Utility::SetName(m_heap.Get(), name);
 	}
 
 

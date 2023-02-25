@@ -113,7 +113,7 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		Utility::setName(m_rootSignature.Get(), getName());
+		Utility::SetName(m_rootSignature.Get(), getName());
 
 	}
 

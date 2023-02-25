@@ -41,8 +41,8 @@ namespace ob::rhi::dx12 {
 			}
 		}
 
-		Utility::setName(m_commandQueue.Get(), TC("System Command Queue"));
-		Utility::setName(m_fence.Get(), TC("System Fence"));
+		Utility::SetName(m_commandQueue.Get(), TC("System Command Queue"));
+		Utility::SetName(m_fence.Get(), TC("System Fence"));
 
 	}
 
@@ -74,10 +74,10 @@ namespace ob::rhi::dx12 {
 	}
 
 	void CommandQueue::setName(StringView name) {
-		Utility::setName(m_commandQueue.Get(), name);
+		Utility::SetName(m_commandQueue.Get(), name);
 
 		String fenceName = Format(TC("{}_Fence"), name);
-		Utility::setName(m_fence.Get(), fenceName);
+		Utility::SetName(m_fence.Get(), fenceName);
 	}
 
 }// ob::rhi::dx12 

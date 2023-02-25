@@ -123,7 +123,7 @@ namespace ob::rhi::dx12 {
 
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
-		Utility::setName(m_pipelineState.Get(), getName());
+		Utility::SetName(m_pipelineState.Get(), getName());
 	}
 
 
