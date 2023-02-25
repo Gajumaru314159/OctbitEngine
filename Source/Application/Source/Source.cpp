@@ -39,6 +39,7 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 	{
 		rhi::Config c;
 		c.frameBufferCount = 3;
+		c.enablePIX = true;
 		config.set(c);
 	}
 

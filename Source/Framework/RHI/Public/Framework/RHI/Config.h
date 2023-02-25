@@ -12,6 +12,8 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct Config {
         s32 frameBufferCount = 2;   //!< ダブルバッファリング
+
+        bool enablePIX = false;
     };
 
 }// namespace pb::rhi

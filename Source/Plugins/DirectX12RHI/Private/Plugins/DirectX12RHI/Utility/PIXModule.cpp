@@ -5,6 +5,8 @@
 //***********************************************************
 #ifdef OB_DEBUG
 #include "PIXModule.h"
+#include <Framework/Engine/Engine.h>
+#include <Framework/RHI/Config.h>
 #include <filesystem>
 #include <shlobj.h>
 
@@ -51,9 +53,14 @@ namespace ob::rhi::dx12 {
 	PIXModule::PIXModule() 
 		: m_hModule(nullptr)
 	{
+		if (GEngine->config().get<Config>().enablePIX == false)
+			return;
+
+		LOG_INFO("PIXを有効化");
+
 		auto pixPath = GetLatestWinPixGpuCapturerPath_Cpp17();
 
-		if (GetModuleHandle((LPCWSTR)"WinPixGpuCapture.dll") != 0) {
+		if (GetModuleHandleW((LPCWSTR)L"WinPixGpuCapture.dll") != 0) {
 			goto ERROR_END;
 		}
 		if (!pixPath.empty()) {
