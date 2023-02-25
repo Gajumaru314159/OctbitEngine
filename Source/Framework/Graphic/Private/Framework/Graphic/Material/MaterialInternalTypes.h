@@ -6,6 +6,18 @@
 #pragma once
 
 namespace ob::graphic {
+
+	enum class MaterialRootSignatureSlot {
+		BufferGlobal ,
+		TextureGlobal,
+		//SamplerGlobal,
+		BufferLocal,
+		TextureLocal,
+		//SamplerLocal,
+	};
+
+
+
 	
 	enum class VertexLayoutId : s32 {};
 

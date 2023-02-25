@@ -33,25 +33,25 @@ namespace ob::graphic {
     //! @brief  グローバルFloatプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalFloat(StringView name, f32 value) {
-        OB_NOTIMPLEMENTED();
+        MaterialManager::Get().setFloat(name, value);
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルColorプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalColor(StringView name, Color value) {
-        OB_NOTIMPLEMENTED();
+        MaterialManager::Get().setColor(name, value);
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルMatrixプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
-        OB_NOTIMPLEMENTED();
+        MaterialManager::Get().setMatrix(name, value);
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルTextureプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
-        OB_NOTIMPLEMENTED();
+        MaterialManager::Get().setTexture(name, value);
     }
 
 }// namespace ob

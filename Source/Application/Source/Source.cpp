@@ -229,12 +229,17 @@ int TestDirectX12() {
 		}
 		rot.x = Math::Clamp(rot.x, -85.f, 85.f);
 
+
+		static f32 t = 1.0f;
+		t += 1.0f;
 		// 行列更新
 		auto modelScale = 100.0f;
 		auto viewMtx = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse();
-		auto skyMtx = viewMtx * Matrix::Scale(Vec3(1, 1, 1) * modelScale);
-		auto ukuleleMtx = viewMtx * Matrix::Scale(Vec3(1, 1, 1) * 1.0f);
+		auto skyMtx = Matrix::Scale(Vec3(1, 1, 1) * modelScale);
+		auto ukuleleMtx = Matrix::TRS(Vec3::Zero,Quat(0,t,70),Vec3::One);
 
+		graphic::Material::SetGlobalColor(TC("LightDir"), Color(1,1,1));
+		graphic::Material::SetGlobalMatrix(TC("Matrix"), viewMtx);
 		sky.setMatrix(skyMtx);
 		ukulele.setMatrix(ukuleleMtx);
 

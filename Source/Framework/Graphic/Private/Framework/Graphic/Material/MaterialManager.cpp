@@ -65,6 +65,8 @@ namespace ob::graphic {
 				m_textureTable->setResource(i, rhi::Texture::White());
 			}
 		}
+		m_propertyMap.emplace(TC("LightDir"), ValuePropertyDesc{ PropertyType::Color,0 });
+		m_propertyMap.emplace(TC("Matrix"), ValuePropertyDesc{ PropertyType::Matrix,sizeof(Color)});
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -168,9 +170,12 @@ namespace ob::graphic {
 
 		if (!cmdList)return;
 
+		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
+
 		rhi::SetDescriptorTableParam params[]{
-			{m_bufferTable,0},
-			{m_textureTable,1},
+			{m_bufferTable,enum_cast(MaterialRootSignatureSlot::BufferGlobal)},
+			{m_textureTable,enum_cast(MaterialRootSignatureSlot::TextureGlobal)},
+			//{m_textureTable,1},
 			//{m_samplerTable,2},
 		};
 		cmdList->setRootDesciptorTable(params,std::size(params));

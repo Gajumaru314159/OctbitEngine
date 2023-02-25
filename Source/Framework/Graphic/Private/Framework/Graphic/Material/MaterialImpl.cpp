@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphic/Material/MaterialImpl.h>
+#include <Framework/Graphic/Material/MaterialManager.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/PipelineState.h>
@@ -13,14 +14,6 @@
 #include <Framework/Graphic/Mesh/MeshImpl.h>
 
 namespace ob::graphic {
-
-	enum class MaterialRootSignatureSlot {
-		Buffer,
-		Texture,
-		Sampler,
-	};
-
-
 
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
@@ -164,10 +157,15 @@ namespace ob::graphic {
 
 		cmdList->setPipelineState(pipeline);
 
+
+		// グローバル変数設定
+		MaterialManager::Get().recordGlobalShaderProperties(cmdList);
+
+
 		// TODO スロット
 		rhi::SetDescriptorTableParam params[] = {
-			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::Buffer)},
-			{m_textureTable, enum_cast(MaterialRootSignatureSlot::Texture)},
+			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::BufferLocal)},
+			{m_textureTable, enum_cast(MaterialRootSignatureSlot::TextureLocal)},
 			//{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
 		};
 		cmdList->setRootDesciptorTable(params, std::size(params));

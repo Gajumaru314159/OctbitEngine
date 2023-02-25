@@ -123,6 +123,9 @@ private:
 					RootParameter::Range(DescriptorRangeType::CBV,1,0),		// バッファ
 					RootParameter::Range(DescriptorRangeType::SRV,1,0),		// テクスチャ
 					//RootParameter::Range(DescriptorRangeType::Sampler,1,0),	// サンプラー
+					RootParameter::Range(DescriptorRangeType::CBV,1,1),		// バッファ
+					RootParameter::Range(DescriptorRangeType::SRV,1,1),		// テクスチャ
+					//RootParameter::Range(DescriptorRangeType::Sampler,1,1),	// サンプラー
 				},
 			{
 				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),
@@ -138,18 +141,25 @@ private:
 		Ref<Shader> ps;
 		{
 			String code=TC(R"(
+
 SamplerState g_mainSampler:register(s0);
-Texture2D g_mainTex:register(t0);
+
+// Global
+Texture2D s_skyTex:register(t0);
 cbuffer Param : register(b0) {
+  //float    s_scalars[4];
+  float4   s_colors[1];
+  float4x4 s_matrices[1];
+};
+
+// Local
+Texture2D g_mainTex:register(t1);
+cbuffer Param : register(b1) { 
   //float    g_scalars[4];
   float4   g_colors[1];
   float4x4 g_matrices[1];
 };
-//cbuffer Param : register(b1) { 
-//  //float    s_scalars[4];
-//  float4   s_colors[1];
-//  float4x4 s_matrices[1];
-//};
+
 // IN / OUT
 struct VsIn {
   float4 pos	:POSITION;
@@ -168,7 +178,7 @@ struct PsOut {
 // エントリ
 PsIn VS_Main(VsIn i) {
     PsIn o;
-    o.pos = mul(g_matrices[0],float4(i.pos.xyz,1));
+    o.pos = mul(s_matrices[0],mul(g_matrices[0],float4(i.pos.xyz,1)));
     o.uv = i.uv;
     o.normal = i.normal;
     return o;
@@ -176,7 +186,7 @@ PsIn VS_Main(VsIn i) {
 PsOut PS_Main(PsIn i){
     PsOut o;
     float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
-	color.rgb *= (dot(i.normal.xyz,float3(1,-1,1))*0.25+0.25+0.5);
+	color.rgb *= (dot(i.normal.xyz,s_colors[0].xyz)*0.25+0.25+0.5);
     o.color1 = i.normal;
     o.color0 = color;
     return o;
