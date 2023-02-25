@@ -7,6 +7,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Display.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
@@ -35,7 +36,7 @@ namespace ob::rhi::dx12 {
         TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      TextureDesc から空のテクスチャを生成
+        //! @brief      IntColorの配列 から空のテクスチャを生成
         //@―---------------------------------------------------------------------------
         TextureImpl(DeviceImpl& rDevice, Size size,Span<IntColor> colors);
 
@@ -58,28 +59,15 @@ namespace ob::rhi::dx12 {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      サイズ
+        //! @brief      定義取得
         //@―---------------------------------------------------------------------------
-        Size size()const override;
+        const TextureDesc& desc()const override;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief      テクスチャ・フォーマットを取得
+        //! @brief      イベントリスナ追加
         //@―---------------------------------------------------------------------------
-        TextureFormat format()const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      ミップレベルを取得
-        //@―---------------------------------------------------------------------------
-        s32 mipLevels()const override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      定義を取得
-        //@―---------------------------------------------------------------------------
-        const TextureDesc& getDesc() const;
-
+        void addEventListener(TextureEventHandle& handle, TextureEventDelegate func)override;
 
     public:
 
@@ -92,7 +80,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      SwapChainのリソースからRenderTextureを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state);
+        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
 
 
     public:
@@ -104,16 +92,32 @@ namespace ob::rhi::dx12 {
 
 
         //@―---------------------------------------------------------------------------
+        //! @brief      ネイティブリソースを解放
+        //! @details    Displayのリサイズ用
+        //@―---------------------------------------------------------------------------
+        void releaseNative() { m_resource = nullptr; }
+
+
+        //@―---------------------------------------------------------------------------
         //! @brief      Viewを取得
         //@―---------------------------------------------------------------------------
         const DescriptorHandle& getSRV()const { return m_hSRV; }
         const DescriptorHandle& getRTV()const { return m_hRTV; }
         const DescriptorHandle& getDSV()const { return m_hDSV; }
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      Viewportを取得
+        //@―---------------------------------------------------------------------------
         const D3D12_VIEWPORT& getViewport()const { return m_viewport; }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      Rectを取得
+        //@―---------------------------------------------------------------------------
         const D3D12_RECT& getScissorRect()const { return m_scissorRect; }
 
-
+        //@―---------------------------------------------------------------------------
+        //! @brief      クリアコマンドを記録
+        //@―---------------------------------------------------------------------------
         void clear(ID3D12GraphicsCommandList* cmdList);
 
         //@―---------------------------------------------------------------------------
@@ -126,6 +130,11 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         bool addResourceTransition(D3D12_RESOURCE_BARRIER& barrier, D3D12_RESOURCE_STATES state,s32 subresource=-1);
 
+
+    private:
+
+        void createRenderTexture();
+        void onUpdateDisplay();
 
     protected:
 
@@ -143,7 +152,9 @@ namespace ob::rhi::dx12 {
         D3D12_RECT              m_scissorRect{};//!< シザー矩形
 
         D3D12_RESOURCE_STATES   m_state = D3D12_RESOURCE_STATE_COMMON;
+        DisplayEventHandle      m_hUpdateDisplay;
 
+        TextureEventNotifier    m_notifier;
     };
 
 }// namespace ob::rhi::dx12
@@ -160,14 +171,6 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     inline ID3D12Resource* TextureImpl::getResource() const {
         return m_resource.Get();
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      定義を取得
-    //@―---------------------------------------------------------------------------
-    inline const TextureDesc& TextureImpl::getDesc() const {
-        return m_desc;
     }
 
 }// namespace ob::rhi::dx12

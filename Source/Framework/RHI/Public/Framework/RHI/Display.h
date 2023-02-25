@@ -12,6 +12,12 @@
 //===============================================================
 namespace ob::rhi {
 
+
+    using DisplayEventNotifier = EventNotifier<>;
+    using DisplayEventHandle = typename DisplayEventNotifier::Handle;
+    using DisplayEventDelegate = typename DisplayEventNotifier::delegate_type;
+
+
     //@―---------------------------------------------------------------------------
     //! @brief      ディスプレイ
     //! 
@@ -38,6 +44,12 @@ namespace ob::rhi {
         //! @brief      更新
         //@―---------------------------------------------------------------------------
         virtual void update() = 0;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      イベントリスナ追加
+        //@―---------------------------------------------------------------------------
+        virtual void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) = 0;
 
 
     protected:

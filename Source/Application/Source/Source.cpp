@@ -100,6 +100,7 @@ int TestDirectX12() {
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
+		desc.display = display;
 
 		colorRT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(colorRT);
@@ -111,6 +112,7 @@ int TestDirectX12() {
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Green;
+		desc.display = display;
 
 		color2RT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(color2RT);
@@ -122,6 +124,7 @@ int TestDirectX12() {
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::D32;
 		desc.clear.depth = 1.0f;
+		desc.display = display;
 
 		depthRT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(depthRT);

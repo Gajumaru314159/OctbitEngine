@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Utility/Swapper.h>
+#include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/RenderPass.h>
@@ -63,19 +64,11 @@ namespace ob::rhi::dx12 {
         const String& getName()const override;
 
 
-        //===============================================================
-        // ゲッター
-        //===============================================================
-
         //@―---------------------------------------------------------------------------
         //! @brief  バックバッファの数を取得
         //@―---------------------------------------------------------------------------
         const DisplayDesc& getDesc()const noexcept override;
 
-
-        //===============================================================
-        // 更新
-        //===============================================================
 
         //@―---------------------------------------------------------------------------
         //! @brief      更新
@@ -84,6 +77,14 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         void update() override;
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      イベントリスナ追加
+        //@―---------------------------------------------------------------------------
+        void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func)override;
+
+
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      デスクリプタCPUハンドルを取得
@@ -115,7 +116,14 @@ namespace ob::rhi::dx12 {
         ID3D12Resource* getResource()const;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      テクスチャをディスプレイにコピー
+        //@―---------------------------------------------------------------------------
         void recordApplyDisplay(CommandListImpl&, const Ref<Texture>& texture);
+
+    private:
+
+        void onWindowChanged(const platform::WindowEventArgs& args);
 
     private:
 
@@ -128,7 +136,11 @@ namespace ob::rhi::dx12 {
 
     private:
 
+        DeviceImpl& m_device;
+
         DisplayDesc m_desc;
+
+        platform::WindowEventHandle m_hEvent;
         
         ComPtr<IDXGISwapChain4>     m_swapChain;
         Swapper<Ref<RenderTexture>> m_textures;         
@@ -147,10 +159,8 @@ namespace ob::rhi::dx12 {
 
         UINT m_syncInterval;
 
-        bool m_initialized = false;
-
-
-
+        DisplayEventNotifier        m_notifier;
+        bool m_visible=true;
     };
 
 }// namespcae ob::rhi::dx12

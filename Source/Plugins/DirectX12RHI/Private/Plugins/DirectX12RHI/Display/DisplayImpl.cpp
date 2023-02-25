@@ -13,7 +13,7 @@
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-
+#include <magic_enum.hpp>
 namespace {
     int static const s_maxDisplayCount = 4;
 }
@@ -24,7 +24,8 @@ namespace ob::rhi::dx12 {
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
     DisplayImpl::DisplayImpl(DeviceImpl& rDevice, const DisplayDesc& desc)
-        : m_desc(desc)
+        : m_device(rDevice)
+        , m_desc(desc)
     {
 
         if (!desc.window.isValid()) {
@@ -43,8 +44,8 @@ namespace ob::rhi::dx12 {
         if (!createResources(rDevice))return;
         if (!createBuffers(rDevice))return;
 
-        m_initialized = true;
-
+        m_desc.window.addEventListener(m_hEvent, platform::WindowEventNotifier::delegate_type{*this,&DisplayImpl::onWindowChanged });
+        
     }
 
 
@@ -62,18 +63,23 @@ namespace ob::rhi::dx12 {
     bool DisplayImpl::createDisplay(DeviceImpl& rDevice) {
         auto& window = m_desc.window;
 
+        BOOL allowTearing = false;
         UINT sampleQuarity = 0;
         UINT sampleCount = 1;
         HWND hWnd = (HWND)window.getHandle();
         {
-            D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
-            auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
-            if (SUCCEEDED(result)) {
-                LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
-                LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
-                //sampleQuarity = feature.SampleCount;
-                //sampleCount = feature.NumQualityLevels;
+            {
+                D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
+                auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
+                if (SUCCEEDED(result)) {
+                    LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
+                    LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
+                    //sampleQuarity = feature.SampleCount;
+                    //sampleCount = feature.NumQualityLevels;
+                }
             }
+
+            rDevice.getFactory()->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
         }
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -95,6 +101,7 @@ namespace ob::rhi::dx12 {
         swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;                           // Present後破棄
 
         swapChainDesc.Flags =
+            (allowTearing?DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING:0) |
             //DXGI_SWAP_CHAIN_FLAG_NONPREROTATED |                  // フルスクリーン時自動回転
             DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH |                // ResizeTargetでサイズ変更許可
             //DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY |                   // リモートアクセス禁止
@@ -112,6 +119,14 @@ namespace ob::rhi::dx12 {
         if (FAILED(result)) {
             Utility::OutputFatalLog(result, TC("IDXGIFactory::CreateSwapChain()"));
             return false;
+        }
+
+
+        if (allowTearing)
+        {
+            // When tearing support is enabled we will handle ALT+Enter key presses in the
+            // window message loop rather than let DXGI handle it by calling SetFullscreenState.
+            //rDevice.getFactory()->MakeWindowAssociation((HWND)m_desc.window.getHandle(), DXGI_MWA_NO_ALT_ENTER);
         }
 
 
@@ -142,6 +157,8 @@ namespace ob::rhi::dx12 {
         HRESULT result;
 
         // バッファを生成
+        m_textures.clear();
+        m_buffers.clear();
         m_textures.reserve(m_desc.bufferCount);
         m_buffers.reserve(m_desc.bufferCount);
 
@@ -160,10 +177,13 @@ namespace ob::rhi::dx12 {
                 return false;
             }
 
-            auto& texture = m_textures.emplace_back(new TextureImpl(rDevice,resource,D3D12_RESOURCE_STATE_PRESENT));
+            auto name = Format(TC("{}_{}"), m_desc.name, i);
+
+            auto& texture = m_textures.emplace_back(new TextureImpl(rDevice,resource,D3D12_RESOURCE_STATE_PRESENT, name));
 
             {
                 FrameBufferDesc bdesc;
+                bdesc.name = name;
                 bdesc.renderPass = m_renderPass;
                 bdesc.attachments.push_back(texture);
 
@@ -323,7 +343,7 @@ namespace ob::rhi::dx12 {
     //! @brief  妥当なオブジェクトか
     //@―---------------------------------------------------------------------------
     bool DisplayImpl::isValid()const {
-        return m_initialized;
+        return !m_buffers.empty();
     }
 
 
@@ -343,6 +363,7 @@ namespace ob::rhi::dx12 {
     void DisplayImpl::update() {
         
         if (!m_desc.window.isValid())return;
+        if (!m_visible)return;
 
         auto result = m_swapChain->Present(m_syncInterval, 0);
 
@@ -357,6 +378,15 @@ namespace ob::rhi::dx12 {
         m_buffers.setIndex(index);
 
     }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      イベントリスナ追加
+    //@―---------------------------------------------------------------------------
+    void DisplayImpl::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
+        m_notifier.add(handle, func);
+    }
+
 
 
     //@―---------------------------------------------------------------------------
@@ -450,6 +480,56 @@ namespace ob::rhi::dx12 {
 
             cmdList.popMarker();
         }
+
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      ウィンドウの更新イベント
+    //@―---------------------------------------------------------------------------
+    void DisplayImpl::onWindowChanged(const platform::WindowEventArgs& args) {
+
+        if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
+            if (!args.isSizing) {
+
+                DXGI_SWAP_CHAIN_DESC desc = {};
+                m_swapChain->GetDesc(&desc);
+
+                if (desc.BufferDesc.Width == args.newSize.x && desc.BufferDesc.Height == args.newSize.y)
+                    return;
+
+                m_desc.size.width = (s32)args.newSize.x;
+                m_desc.size.height = (s32)args.newSize.y;
+
+                for (s32 i = 0; i < m_desc.bufferCount; ++i) {
+                    // リソースが使用中だとResizeBuffersに失敗する。
+                    // TODO 無効なメモリを描画に使用しそうだがいったん保留
+                    m_textures.at(i).cast<TextureImpl>()->releaseNative();
+                }
+
+                // リサイズ
+                auto result = m_swapChain->ResizeBuffers(m_desc.bufferCount, 0, 0, desc.BufferDesc.Format, desc.Flags);
+                if (FAILED(result)) {
+                    Utility::outputErrorLog(result, TC("IDXGISwapChain::ResizeBuffersに失敗"));
+                    return;
+                }
+
+                createBuffers(m_device);
+
+                LOG_TRACE("ディスプレイをリサイズ ({},{}) → ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height,m_desc.size.width,m_desc.size.height);
+
+                m_notifier.invoke();
+            }
+        }
+
+        if (args.type == platform::WindowEventType::Minimize) {
+            m_visible = false;
+        }
+        if (args.type == platform::WindowEventType::Maximize || args.type == platform::WindowEventType::Move) {
+            m_visible = true;
+        }
+
+        auto a = magic_enum::enum_name(args.type);
 
     }
 

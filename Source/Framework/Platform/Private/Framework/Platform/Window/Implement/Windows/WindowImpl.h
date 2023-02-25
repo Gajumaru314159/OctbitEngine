@@ -92,22 +92,20 @@ namespace ob::platform {
 
     private:
 
-        static const TCHAR* WINDOW_CLASS_NAME;      //!< WNDCLASSEXに登録するウィンドウクラス名
-        static const TCHAR* PROPERTY_NAME;          //!< HWNDに結びつけるプロパティ名
+        static Atomic<s32>      m_windowNum;        //!< 生成されたウィンドウの数
 
-        static Atomic<s32> m_windowNum;             //!< 生成されたウィンドウの数
+        WindowMode              m_mode;             //!< 表示モード
 
-        WindowMode m_mode;
-
-        HWND    m_hWnd;                             //!< ウィンドウハンドル
-        HWND    m_hParentWnd;                       //!< ウィンドウハンドル
+        String                  m_title;            //!< タイトル
+        HWND                    m_hWnd;             //!< ウィンドウハンドル
+        HWND                    m_hParentWnd;       //!< 親ウィンドウハンドル
         const StringBase<TCHAR> m_className;        //!< ウィンドウクラス名
-        s32     m_windowID;                         //!< ウィンドウごとに割り当てられるID
+        s32                     m_windowID;         //!< ウィンドウごとに割り当てられるID
 
-        String  m_windowTitle;
 
-        bool    m_isActive;
-        bool    m_isMinimized;
+        Vec2    m_lastSize;
+        bool    m_isSizing = false;
+        bool    m_handled = false;
 
         WindowEventNotifier m_notifier;
 

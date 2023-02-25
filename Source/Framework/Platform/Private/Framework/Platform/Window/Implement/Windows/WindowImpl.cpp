@@ -10,8 +10,8 @@
 
 namespace ob::platform {
 
-	const TCHAR* WindowImpl::WINDOW_CLASS_NAME = TEXT("OctbitWindow");
-	const TCHAR* WindowImpl::PROPERTY_NAME = TEXT("OctbitWindowProp");
+	static TCHAR WINDOW_CLASS_NAME[] = TEXT("OctbitWindow");//!< WNDCLASSEXに登録するウィンドウクラス名
+	static TCHAR PROPERTY_NAME[] = TEXT("OctbitWindowProp");//!< HWNDに結びつけるプロパティ名
 
 	Atomic<s32> WindowImpl::m_windowNum = 0;
 
@@ -80,7 +80,7 @@ namespace ob::platform {
 		::AdjustWindowRect(&clientRect, mWindowedStyle, FALSE);
 
 		// 文字コードを変換
-		m_windowTitle = desc.title;
+		m_title = desc.title;
 		WString titleW;
 		StringEncoder::Encode(desc.title, titleW);
 
@@ -252,7 +252,7 @@ namespace ob::platform {
 		if (!m_hWnd)return{ 0,0 };
 		RECT rect;
 		::GetWindowRect(m_hWnd, &rect);
-		return Vec2((f32)rect.left,(f32)rect.top);
+		return Vec2((f32)rect.left, (f32)rect.top);
 	}
 
 
@@ -352,9 +352,9 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	void WindowImpl::setTitle(StringView title) {
 		OB_ASSERT_EXPR(m_hWnd);
-		m_windowTitle = title;
+		m_title = title;
 		WString titleW;
-		StringEncoder::Encode(m_windowTitle, titleW);
+		StringEncoder::Encode(m_title, titleW);
 		::SetWindowTextW(m_hWnd, titleW.c_str());
 	}
 
@@ -363,7 +363,7 @@ namespace ob::platform {
 	//! @brief  ウィンドウのタイトルを取得する
 	//@―---------------------------------------------------------------------------
 	const String& WindowImpl::getTitle() const {
-		return m_windowTitle;
+		return m_title;
 	}
 
 
@@ -381,7 +381,7 @@ namespace ob::platform {
 		point.x = clientPoint.x;
 		point.y = clientPoint.y;
 		if (!::ClientToScreen(m_hWnd, &point))return Vec2::Zero;
-		return Vec2(point.x,point.y);
+		return Vec2(point.x, point.y);
 	}
 
 
@@ -407,29 +407,9 @@ namespace ob::platform {
 	//@―---------------------------------------------------------------------------
 	LRESULT WindowImpl::wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 
-		switch (msg) {
-		case WM_DESTROY:
-			// ウインドウの破棄
-			PostQuitMessage(0);
-			return 0;
-		case WM_ACTIVATE:
-			// ウィンドウのアクティブ化・非アクティブ化
-			m_isActive = wparam & 0xFFFF;
-			m_isMinimized = (wparam >> 16) & 0xFFFF;
-			break;
-		case WM_CLOSE:
-			// クローズコマンドが呼ばれた
-			//Close();
-			if (m_hParentWnd) {
-				CloseWindow(hwnd);
-				m_hWnd = nullptr;
-				return 0;
-			}
-			break;
-		case WM_SIZE:
-			// ウィンドウサイズが変更された
-			break;
-		}
+		bool maximized = false;
+		bool minimized = false;
+		bool restored = false;
 
 		WindowEventArgs args;
 		args.type = WindowEventType::Unknown;
@@ -440,32 +420,55 @@ namespace ob::platform {
 			break;
 		case WM_DESTROY:
 			//	ウインドウが破棄されようとしていることを示します。
+			PostQuitMessage(0);
+			args.type = WindowEventType::Destroy;
 			break;
 		case WM_MOVE:
 			//	ウインドウの位置が変更されたことを示します。
 			args.type = WindowEventType::Move;
 			args.oldPos = getPosition();
+			args.newPos = { (f32)LOWORD(lparam),(f32)HIWORD(lparam) };
+			break;
+		case WM_ENTERSIZEMOVE:
+			m_isSizing = true;
+			break;
+		case WM_EXITSIZEMOVE:
+			m_isSizing = false;
+			args.type = WindowEventType::Size;
 			break;
 		case WM_SIZE:
 			//	ウインドウのサイズが変更されていることを示します。
+			m_lastSize = { (f32)LOWORD(lparam),(f32)HIWORD(lparam) };
+			if (wparam == SIZE_RESTORED)args.type = WindowEventType::Size;
+			if (wparam == SIZE_MAXIMIZED)args.type = WindowEventType::Maximize;
+			if (wparam == SIZE_MINIMIZED)args.type = WindowEventType::Minimize;
 			break;
 		case WM_ACTIVATE:
 			//	アクティブ状態が変更されていることを示します。
-			break;
-		case WM_SETFOCUS:
-			//	ウインドウがキーボード・フォーカスを取得したことを示します。
+			if (wparam)args.type = WindowEventType::Activate;
+			if (!wparam)args.type = WindowEventType::Deactivate;
 			break;
 		case WM_ENABLE:
-			//	ウインドウの有効または無効の状態が変更されていることを示します。
+			//	ウインドウの有効または無効の状態(デバイス入力)が変更されていることを示します。
+			if (wparam)args.type = WindowEventType::Enable;
+			if (!wparam)args.type = WindowEventType::Disable;
 			break;
 		case WM_CLOSE:
 			//	コントロール・メニューの[クローズ]コマンドが選ばれました。デフォルトでWM_QUITを呼び出します。
+			args.type = WindowEventType::Close;
 			break;
 		case WM_QUIT:
 			//	アプリケーションを強制終了するよう要求します。
 			break;
 		case WM_SHOWWINDOW:
 			//	ウインドウの表示または非表示の状態が変更されようとしていることを示します。
+			if (wparam)args.type = WindowEventType::Show;
+			if (!wparam)args.type = WindowEventType::Hide;
+			break;
+
+
+		case WM_SETFOCUS:
+			//	ウインドウがキーボード・フォーカスを取得したことを示します。
 			break;
 		case WM_WININICHANGE:
 			//	WIN.INIが変更されたことをアプリケーションに通知します。
@@ -486,6 +489,24 @@ namespace ob::platform {
 			//	RAW Input Device (キーボード/マウス/リモコン等) からの入力があったことを示します。
 			break;
 		default:break;
+		}
+
+		args.newSize = m_lastSize;
+		args.isSizing = m_isSizing;
+
+		if (args.type != WindowEventType::Unknown) {
+			if (!m_handled) {
+				ScopeValue sv(m_handled, true);
+				m_notifier.invoke(args);
+			}
+		}
+
+		if (msg == WM_CLOSE) {
+			if (m_hParentWnd) {
+				CloseWindow(hwnd);
+				m_hWnd = nullptr;
+				return 0;
+			}
 		}
 
 		return DefWindowProc(hwnd, msg, wparam, lparam);

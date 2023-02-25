@@ -5,6 +5,7 @@
 //***********************************************************
 #include "DescriptorTableImpl.h"
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
@@ -21,6 +22,9 @@ namespace ob::rhi::dx12
 	//@―---------------------------------------------------------------------------
 	DescriptorTableImpl::DescriptorTableImpl(DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum) {
 		heap.allocateHandle(m_handle,elementNum);
+		
+		m_elemetns.resize(elementNum);
+		for (auto& element : m_elemetns)element = std::make_unique<Element>();
 	}
 
 
@@ -50,7 +54,15 @@ namespace ob::rhi::dx12
 	//! @brief  バッファリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
-		if (auto p = resource.cast<BufferImpl>()) {
+		if (!is_in_range(index, m_elemetns)) {
+			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
+			return false;
+		}
+
+		m_elemetns[index]->clear();
+		m_elemetns[index]->buffer = resource;
+
+		if (auto p = m_elemetns[index]->buffer.cast<BufferImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createCBV(handle);
 		}
@@ -62,14 +74,29 @@ namespace ob::rhi::dx12
 	//! @brief  テクスチャリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Texture>& resource) {
+		if (!is_in_range(index, m_elemetns)) {
+			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]",index);
+			return false;
+		}
+
+		m_elemetns[index]->clear();
+		m_elemetns[index]->texture = resource;
+		
 		if (auto p = resource.cast<TextureImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createSRV(handle);
+			p->addEventListener(m_elemetns[index]->hTextureUpdate,
+				[this,index]() {
+					if (auto p = m_elemetns[index]->texture.cast<TextureImpl>()) {
+						auto handle = m_handle.getCpuHandle(index);
+						p->createSRV(handle);
+					}
+				}
+			);
 		}
 		return true;
 	}
 	//bool setResource(s32 index, class Sampler& resource) override{}
 	//! @}
-
 
 }// namespace ob::rhi::dx12

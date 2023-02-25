@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::rhi {
 
@@ -13,8 +14,9 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct RenderTextureDesc {
         String          name;
-        TextureFormat   format = TextureFormat::RGBA8;   //!< テクスチャフォーマット
-        Size            size = { 0,0,0 };                //!< サイズ
+        TextureFormat   format = TextureFormat::RGBA8;  //!< テクスチャフォーマット
+        Size            size = { 0,0,0 };               //!< サイズ
+        Display*        display = nullptr;              //!< リサイズ追従するDisplay [Optional]
 
         struct Clear {
             Color color;

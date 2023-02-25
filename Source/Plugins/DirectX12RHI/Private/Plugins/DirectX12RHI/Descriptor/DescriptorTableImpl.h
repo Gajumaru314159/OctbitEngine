@@ -5,7 +5,17 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/DescriptorTable.h>
+#include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+
+//===============================================================
+// クラス定義
+//===============================================================
+namespace ob::rhi{
+	class Texture;
+	class Buffer;
+}
 
 //===============================================================
 // クラス定義
@@ -53,10 +63,16 @@ namespace ob::rhi::dx12 {
 		//bool setResource(s32 index, class Sampler& resource) override;
 		//! @}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  CPUハンドル取得
+		//@―---------------------------------------------------------------------------
 		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const {
 			return m_handle.getCpuHandle(index);
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  GPUハンドル取得
+		//@―---------------------------------------------------------------------------
 		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0)const {
 			return m_handle.getGpuHandle(index);
 		}
@@ -65,6 +81,21 @@ namespace ob::rhi::dx12 {
 
 		String				m_name;
         DescriptorHandle	m_handle;
+
+		struct Element {
+			Ref<Buffer> buffer;
+
+			Ref<Texture> texture;
+			TextureEventHandle hTextureUpdate;
+
+			void clear() {
+				buffer.reset();
+				texture.reset();
+				hTextureUpdate.remove();
+			}
+		};
+
+		Array<UPtr<Element>> m_elemetns;
 
     };
 

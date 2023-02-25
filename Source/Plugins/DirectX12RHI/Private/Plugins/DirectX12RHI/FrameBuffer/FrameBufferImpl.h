@@ -54,6 +54,9 @@ namespace ob::rhi::dx12 {
         const String& getName()const override;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      定義取得
+        //@―---------------------------------------------------------------------------
         const FrameBufferDesc& desc()const override { return m_desc; }
 
     private:
