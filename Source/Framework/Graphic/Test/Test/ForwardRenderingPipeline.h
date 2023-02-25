@@ -66,6 +66,8 @@ namespace ob::graphic {
 				auto size = camera.getRenderTarget()->size();
 				s32 width = camera.getRenderTarget()->width();
 				s32 height = camera.getRenderTarget()->height();
+
+				camera.allocateRenderTexture();
 				/*
 
 				Ref<RenderTexture> albedoRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);

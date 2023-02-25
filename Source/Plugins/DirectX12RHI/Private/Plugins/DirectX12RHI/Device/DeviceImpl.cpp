@@ -351,11 +351,11 @@ namespace ob::rhi::dx12 {
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
 		m_descriptorHeaps[DescriptorHeapType::Sampler] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 100);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256);
 		m_descriptorHeaps[DescriptorHeapType::RTV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 100);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 256);
 		m_descriptorHeaps[DescriptorHeapType::DSV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 100);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256);
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName(TC("SystemCBV_SRV_UAVHeap"));
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName(TC("SystemSamplerHeap"));

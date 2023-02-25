@@ -37,14 +37,6 @@ namespace ob::graphic {
 	private:
 		using Texture = rhi::Texture;
 
-		enum class PropertyType {
-			Int,
-			Float,
-			Color,
-			Matrix,
-			Texture
-		};
-
 	public:
 
 		//===============================================================
@@ -95,10 +87,6 @@ namespace ob::graphic {
 
 	private:
 
-		struct ValuePropertyDesc {
-			PropertyType type;
-			s32 offset = -1;
-		};
 
 		struct PipelineKey {
 			engine::Name pass;
