@@ -10,6 +10,8 @@
 #include <Framework/Core/Utility/Ref.h>
 #include <Framework/Platform/Window.h>
 #include <Framework/RHI/Forward.h>
+#include <Plugins/ImGui/ImGuiWidgets.h>
+#include <Plugins/ImGui/ImGuiRAII.h>
 
 namespace ob::imgui {
 
