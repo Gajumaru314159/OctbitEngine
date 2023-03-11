@@ -43,18 +43,18 @@ TEST(Window, PosSize) {
 
     using namespace ob::platform;
     WindowDesc desc;
-    desc.clientSize = Size(512, 256);
+    desc.clientSize = { 512, 256 };
     Window window = Window(desc);
-    ASSERT_EQ(window.getSize(), Size(512,256));
+    ASSERT_EQ(window.getSize(), Vec2(512,256));
 
-    window.setSize(Size(800, 600));
-    ASSERT_EQ(window.getSize(), Size(800,600));
+    window.setSize({ 800, 600 });
+    ASSERT_EQ(window.getSize(), Vec2(800,600));
 
 
     window.setPosition({ 123,250 });
-    ASSERT_EQ(window.getPosition(), Point(123, 250));
+    ASSERT_EQ(window.getPosition(), Vec2(123, 250));
 
     window.setPosition({ 456,250 });
-    ASSERT_EQ(window.getPosition(), Point(456, 250));
+    ASSERT_EQ(window.getPosition(), Vec2(456, 250));
 
 }
