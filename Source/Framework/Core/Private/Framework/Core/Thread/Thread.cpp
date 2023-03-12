@@ -14,8 +14,6 @@ namespace ob::core {
 	class ThreadImpl {
 	public:
 		std::thread th;
-		//HANDLE handle = NULL;
-		//std::function<void()> entryPoint = nullptr;
 	};
 
 }
@@ -24,6 +22,13 @@ namespace ob::core {
 #endif
 
 namespace ob::core {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief				デフォルトコンストラクタ
+	//@―---------------------------------------------------------------------------
+	Thread::Thread() {
+
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief				コンストラクタ
