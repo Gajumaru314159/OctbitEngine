@@ -49,7 +49,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Entityを管理から外す予約
 	//@―---------------------------------------------------------------------------
-	void EntityManager::remove(const Entity& entity) {
+	void EntityManager::requestRemove(const Entity& entity) {
 		ScopeLock lock(m_lock);
 		m_removeEntities.emplace_back(entity.handle());
 	}
@@ -73,9 +73,31 @@ namespace ob::engine {
 		for (auto& handle : m_removeEntities) {
 			auto found = m_entities.find(handle);
 			if (found != m_entities.end()) {
+
+				deleteEnitiyRecursively(found->second);
+
+				delete found->second;
 				m_entities.erase(found);
 			}
 		}
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		再帰的にウィジェットを削除する
+	//@―---------------------------------------------------------------------------
+	void EntityManager::deleteEnitiyRecursively(Entity* entity) {
+
+		if (entity) {
+
+			for (auto& child : entity->getChildren()) {
+				deleteEnitiyRecursively(child);
+			}
+
+			m_entities.erase(entity->handle());
+			delete entity;
+
+		}
+
 	}
 
 }

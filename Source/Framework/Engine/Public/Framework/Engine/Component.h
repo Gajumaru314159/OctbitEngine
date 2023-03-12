@@ -5,16 +5,15 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Engine/Forward.h>
+#include <Framework/Engine/INotifyPropertyChanged.h>
 
 namespace ob::engine {
-
-	class Entity;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネント
 	//@―---------------------------------------------------------------------------
-	class Component {
-		friend class Entity;
+	class Component:public NotificationObject {
 	public:
 
 		OB_RTTI();
@@ -33,10 +32,16 @@ namespace ob::engine {
 		Component();
 
 		//@―---------------------------------------------------------------------------
-		//! @brief		起動
+		//! @brief		初期化
 		//! @details	この関数は Entity ツリーの構築後に一度だけ呼び出されます。
 		//!				初期化に Entity や他の Componentを利用する場合に使用します。
-		//!				イベントの購読処理などもここで行います。
+		//!				非同期で実行されます。
+		//@―---------------------------------------------------------------------------
+		virtual void initialize() {};
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		起動
+		//! @details	シーンの構築完了後に一度だけ呼び出されます。
 		//@―---------------------------------------------------------------------------
 		virtual void startup() {};
 
@@ -59,7 +64,10 @@ namespace ob::engine {
 		
 	private:
 
-		class Entity* m_entity;
+		// 構築直後にEntityから設定する用
+		friend class Entity;
+
+		Entity* m_entity = nullptr;
 
 	};
 

@@ -10,13 +10,16 @@
 
 namespace ob::engine {
 
-	using SceneList = List<UPtr<class Scene>>;
+	OB_EVENT_NOTIFIER(SceneEvent, const Ref<Scene>&);
+
+	using SceneList = List<Ref<Scene>>;
 
 	DEFINE_YES_NO(Recursive);
 	DEFINE_YES_NO(Async);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  シーン
+	//! @ref	https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ULevel/
 	//@―---------------------------------------------------------------------------
 	class Scene : public RefObject {
 	public:
@@ -36,20 +39,33 @@ namespace ob::engine {
 		Scene();
 		~Scene();
 
-		void load();
-
-		const String& name()const;
-		Scene* parent()const;
+		const String& getName()const;
+		Scene* getParent()const;
 
 		bool isActive()const;
 
-		const SceneList& children()const;
-		void addSubScene(Scene*);
+		//===============================================================
+		// Scene
+		//===============================================================
+		const SceneList& getChildren()const;
+		void addSubScene(const Ref<Scene>&);
 		Scene* findScene(StringView name, Recursive recursive = Recursive::No);
 
-		const EntityList& entities()const;
+		void setGlobalOffset(Vec3 offset);
+		Vec3 getGlobalOffset()const;
+		void setLocalOffset(Vec3 offset);
+		Vec3 getLocalOffset()const;
+
+		//===============================================================
+		// Entity
+		//===============================================================
+		const EntityList& getEntities()const;
 		void addEntity(Entity*);
 		Entity* findEntity(StringView name, Recursive recursive = Recursive::No);
+
+	private:
+
+		void updateGlobalOffset();
 
 	private:
 
@@ -57,13 +73,14 @@ namespace ob::engine {
 		bool		m_active;
 		f32			m_timeScale = 1.0f;
 
-		Scene*		m_parent;
+		Vec3		m_localOffset;
+
+		Scene*		m_parent = nullptr;
 		SceneList	m_children;
 		EntityList	m_entities;
 
 
 		SpinLock	m_lock;
-		SceneList	m_appendedChildren;
 
 	};
 

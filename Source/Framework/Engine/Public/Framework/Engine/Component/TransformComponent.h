@@ -58,27 +58,6 @@ namespace ob::engine {
 
 	};
 
-	template<typename... Args>
-	class EventProxy {
-		using notifier_type = EventNotifier <Args...>;                                  //!< 型
-
-		using delegate_type = typename notifier_type::delegate_type;                          //!< デリゲート型
-		using function_type = typename notifier_type::function_type;                                        //!< 関数型
-		using method_type = typename notifier_type::mothod_type;                //!< メンバ関数ポインタ型
-		using const_method_type = typename notifier_type::const_method_type;     //!< constメンバ関数ポインタ型
-
-		using Handle = typename HandleList<delegate_type>::Handle;                  //!< イベントハンドル型
-	public:
-
-		EventProxy(notifier_type& notifier):m_notifier(notifier){}
-
-		template<class TFunc>
-		void add(Handle& handle, TFunc func) { m_notifier.add(handle,func); }
-
-	private:
-		notifier_type& m_notifier;
-	};
-
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネント
@@ -103,6 +82,12 @@ namespace ob::engine {
 		void				setParent(const EntityHandle&);
 		ITransformComponent* getParentTransform()const noexcept override;
 		void				setParentRelative(const EntityHandle&);
+
+	public:
+
+		void	setLocalPosition(const Vec3&);
+		void	setLocalScale(const Vec3&);
+		void	setLocalRotation(const Rot&);
 
 	private:
 

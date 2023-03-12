@@ -39,7 +39,7 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		//! @brief		Entityを管理から外す予約
 		//@―---------------------------------------------------------------------------
-		void remove(const Entity& entity);
+		void requestRemove(const Entity& entity);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		Entityを管理に追加
@@ -50,6 +50,10 @@ namespace ob::engine {
 		//! @brief		更新
 		//@―---------------------------------------------------------------------------
 		void update()override;
+
+	private:
+
+		void deleteEnitiyRecursively(Entity*);
 
 	private:
 		

@@ -11,10 +11,13 @@
 
 namespace ob::engine {
 
-	Entity* Entity::Create() {
+	//@―---------------------------------------------------------------------------
+	//! @brief		生成
+	//@―---------------------------------------------------------------------------
+	Entity* Entity::Create(StringView name) {
 
 		if (auto manager = GEngine->get<EntityManager>()) {
-			auto entity = new Entity();
+			auto entity = new Entity(name);
 			manager->add(*entity);
 			return entity;
 		}
@@ -22,26 +25,35 @@ namespace ob::engine {
 		return nullptr;
 	}
 
-
-	//===============================================================
-	// コンストラクタ / デストラクタ
-	//===============================================================
-
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
+	Entity::Entity(StringView name) {
+		m_name = name;
+		m_active = false;
+		m_visible = false;
 
+		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		名前設定
+	//@―---------------------------------------------------------------------------
 	const String& Entity::name()const {
 		return m_name;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		名前取得
+	//@―---------------------------------------------------------------------------
 	void Entity::setName(StringView name) {
-		m_name = name;
+		setProperty(m_name, name, TC("Name"));
 	}
 
-	// Transform
-
-	// Component
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネント追加
+	//@―---------------------------------------------------------------------------
 	Component* Entity::addComponent(TypeId typeId) {
 
 		// リフレクションで生成
@@ -53,19 +65,50 @@ namespace ob::engine {
 			component->m_entity = this;
 			component->startup();
 
-		} else {
-
 		}
+
+		raisePropertyChanged(TC("Components"));
 
 		return component;
 	}
-	void Entity::removeComponent(Component* component) {
-		//auto found = std::find(m_components.begin(), m_components.end(), component);
-		//if (found != m_components.end()) {
-		//	OB_NOTIMPLEMENTED();
-		//}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネント削除
+	//@―---------------------------------------------------------------------------
+	bool Entity::removeComponent(TypeId typeId,s32 index) {
+
+		Component* found = nullptr;
+		for (auto& component : m_components) {
+			if (component->getTypeId() == typeId) {
+				if (index <= 0) {
+					found = component.get();
+					break;
+				}
+				index--;
+			}
+		}
+		return removeComponent(found);
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネント削除
+	//@―---------------------------------------------------------------------------
+	bool Entity::removeComponent(Component* component) {
+
+		for (auto itr = m_components.begin(); itr != m_components.end(); itr++) {
+			if (itr->get() == component) {
+				m_components.erase(itr);
+				raisePropertyChanged(TC("Components"));
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネント検索
+	//@―---------------------------------------------------------------------------
 	Component* Entity::findComponent(TypeId typeId, s32 index)const {
 		s32 count = 0;
 		for (auto& component : m_components) {
@@ -79,62 +122,189 @@ namespace ob::engine {
 		return nullptr;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネントリスト取得
+	//@―---------------------------------------------------------------------------
 	const ComponentList& Entity::componets()const {
 		return m_components;
 	}
 
-	// Tag
+	//@―---------------------------------------------------------------------------
+	//! @brief		コンポーネント追加
+	//@―---------------------------------------------------------------------------
+	Component* Entity::addComponent(Component* component) {
+		if (component) {
+			m_components.emplace_back(component);
+			raisePropertyChanged("Components");
+		}
+		return component;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			コンポーネント走査
+	//! @param func		走査関数
+	//! @param typeId	走査するコンポーネントの型 (TypeId::Invalid()の場合全て走査)
+	//@―---------------------------------------------------------------------------
+	void Entity::visitComponents(const Delegate<void(Component*)>& func, TypeId typeId)const {
+		for (auto& component : m_components) {
+			// TODO DynamicCast
+			if (component->getTypeId() == typeId || typeId == TypeId::Invalid()) {
+				func(component.get());
+			}
+		}
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		タグ追加
+	//@―---------------------------------------------------------------------------
 	void Entity::addTag(StringView tag) {
 		m_tags.emplace(tag);
 	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		タグ削除
+	//@―---------------------------------------------------------------------------
 	void Entity::removeTag(StringView tag) {
 		auto found = m_tags.find(tag);
 		if (found != m_tags.end()) {
 			m_tags.erase(found);
 		}
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		タグを持っているか
+	//@―---------------------------------------------------------------------------
 	bool Entity::hasTag(StringView tag) {
 		return m_tags.count(tag);
 	}
 
-	// Create
-	void Entity::destroy() {
-		OB_NOTIMPLEMENTED();
-	}
-	bool Entity::destoyed()const {
-		OB_NOTIMPLEMENTED();
-		return false;
+	//@―---------------------------------------------------------------------------
+	//! @brief		解放予約
+	//@―---------------------------------------------------------------------------
+	void Entity::requestRelease() {
+		EntityManager::Get().requestRemove(*this);
 	}
 
-	// Activity
+	//@―---------------------------------------------------------------------------
+	//! @brief		アクティブ設定
+	//@―---------------------------------------------------------------------------
 	void Entity::setActive(bool value) {
 		m_active = value;
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		アクティブ取得
+	//@―---------------------------------------------------------------------------
 	bool Entity::isActive()const {
 		return m_active;
 	}
 
-	Entity::Entity() {
-		m_active = false;
-		m_visible = false;
-	}
-
-	Component* Entity::addComponent(Component* component) {
-		if (component) {
-			m_components.emplace_back(component);
+	//@―---------------------------------------------------------------------------
+	//! @brief		子Entity追加
+	//@―---------------------------------------------------------------------------
+	void Entity::addChild(Entity* child) {
+		if (child) {
+			child->setParent(this);
 		}
-		return component;
 	}
 
-	void Entity::visitComponents(const Delegate<void(Component*)>& func, TypeId typeId)const {
-		for (auto& component : m_components) {
-			// TODO DynamicCast
-			if (component->getTypeId() == typeId) {
-				func(component.get());
+	//@―---------------------------------------------------------------------------
+	//! @brief		子Entity追加
+	//@―---------------------------------------------------------------------------
+	void Entity::setParent(Entity* newParent,s32 index) {
+
+		Entity* oldParent = nullptr;
+
+		{
+			// ロック
+			ScopeLock lock(m_childrenLock);
+			if (oldParent = m_parent.load()) {
+				oldParent->m_childrenLock.lock();
+
+				// 取り外し
+				oldParent->m_children.remove(this);
+			}
+
+			if (newParent) {
+
+				// 再設定
+				{
+					ScopeLock lock(newParent->m_childrenLock);
+
+					if (index < 0)index = m_children.size();
+					update_min<s32>(index, m_children.size());
+
+					auto pos = newParent->m_children.begin();
+					for (s32 i = 0; i < index; ++i)++pos;
+
+					newParent->m_children.insert(pos, this);
+				}
+
+			}
+
+			m_parent = newParent;
+
+			if (oldParent) {
+				oldParent->m_childrenLock.unlock();
 			}
 		}
-	}
-	void Entity::addChild(Entity*) {
 
+		if(oldParent)oldParent->raisePropertyChanged("Children");
+		if(newParent)newParent->raisePropertyChanged("Children");
+		raisePropertyChanged(TC("Parent"));
+		
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		アクティブ取得
+	//@―---------------------------------------------------------------------------
+	const List<Entity*>& Entity::getChildren()const {
+		return m_children;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		所属シーン取得
+	//@―---------------------------------------------------------------------------
+	Scene* Entity::getScene()const {
+		return m_scene;
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		別Entityからのアクセスを許可
+	//@―---------------------------------------------------------------------------
+	void Entity::raisePropertyChanged(StringView name) {
+		NotificationObject::raisePropertyChanged(name);
+	}
+
+
+	//===============================================================
+	// EntityAccessor
+	//===============================================================
+	EntityAccessor::EntityAccessor(Entity* value) :m_entity(value) {}
+	EntityAccessor::EntityAccessor(const EntityHandle& value) :m_entity(value.get()) {}
+	EntityAccessor::EntityAccessor(Entity& value):m_entity(&value){}
+	Entity* EntityAccessor::value()const {return m_entity;}
+
+
+
+	//===============================================================
+	// EntityUtil
+	//===============================================================
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		子のハンドルのリストを取得
+	//@―---------------------------------------------------------------------------
+	Array<EntityHandle> EntityUtil::GetChildHandeles(EntityAccessor src) {
+		Array<EntityHandle> handles;
+		if (src.value()) {
+			for (auto& child : src.value()->getChildren()) {
+				handles.emplace_back(child->handle());
+			}
+		}
+		return std::move(handles);
+	}
+
+
 }// namespcae ob

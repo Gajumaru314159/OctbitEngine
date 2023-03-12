@@ -10,8 +10,10 @@
 namespace ob::engine {
 
 
+	Component::Component() {
+		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
+	}
 	Component::~Component() = default;
-	Component::Component() = default;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  エンティティ取得

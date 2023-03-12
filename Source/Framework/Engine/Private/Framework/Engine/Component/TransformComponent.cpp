@@ -40,6 +40,20 @@ namespace ob::engine {
 
 	}
 
+
+	void TransformComponent::setLocalPosition(const Vec3& value) {
+		m_local.position = value;
+		computeWorldTransform();
+	}
+	void TransformComponent::setLocalScale(const Vec3& value) {
+		m_local.scale = value;
+		computeWorldTransform();
+	}
+	void TransformComponent::setLocalRotation(const Rot& value) {
+		m_local.rotation = value.toQuat();
+		computeWorldTransform();
+	}
+
 	void TransformComponent::computeLocalTransform() {
 		//if (m_parentTM) {
 		//	m_local = m_prenttTTM->getWorldTM().inverse() * m_local;
