@@ -61,14 +61,26 @@ int OctbitMain() {
 	return 0;
 }
 
+engine::Entity* s_selectedEntity = nullptr;
+engine::Scene* s_selectedScene = nullptr;
+
 void drawOutliner_Entity(engine::Entity* entity) {
 	if (!entity)return;
 	auto name = ImGui::ToImChars(entity->name());
 	bool empty = entity->getChildren().empty();
-	
-	auto flag = empty?ImGuiTreeNodeFlags_Leaf:0;
-	flag |= ImGuiTreeNodeFlags_DefaultOpen;
-	if (ImGui::TreeNodeEx(name,flag,name)) {
+
+	auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
+	if (s_selectedEntity == entity)flag |= ImGuiTreeNodeFlags_Selected;
+	flag |= ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
+
+	bool opend = ImGui::TreeNodeEx(name, flag, name);
+
+	if (ImGui::IsItemClicked()) {
+		s_selectedScene = nullptr;
+		s_selectedEntity = entity;
+	}
+
+	if (opend) {
 
 		for (auto& child : entity->getChildren()) {
 
@@ -79,16 +91,24 @@ void drawOutliner_Entity(engine::Entity* entity) {
 		ImGui::TreePop();
 
 	}
-
 }
 void drawOutliner_Scene(const Ref<engine::Scene>& scene) {
 	if (!scene)return;
 	auto name = ImGui::ToImChars(scene->getName());
-	bool empty = scene->getChildren().empty()&& scene->getEntities().empty();
+	bool empty = scene->getChildren().empty() && scene->getEntities().empty();
 
 	auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
-	flag |= ImGuiTreeNodeFlags_DefaultOpen;
-	if (ImGui::TreeNodeEx(name, flag, name)) {
+	if (s_selectedScene == scene.get())flag |= ImGuiTreeNodeFlags_Selected;
+	flag |= ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
+
+	bool opend = ImGui::TreeNodeEx(name, flag, name);
+
+	if (ImGui::IsItemClicked()) {
+		s_selectedScene = scene.get();
+		s_selectedEntity = nullptr;
+	}
+
+	if (opend) {
 
 		for (auto& child : scene->getChildren()) {
 
@@ -118,59 +138,68 @@ void drawOutliner(const Ref<engine::Scene>& scene) {
 }
 
 
-void drawComponents(engine::Entity& entity) {
-	for (auto& component : entity.componets()) {
-		StringBase<char> name;
-		StringEncoder::Encode(component->getTypeId().name(), name);
-		if (ImGui::CollapsingHeader(name.c_str())) {
+void drawComponents(engine::Entity* pEntity) {
 
-			ImGui::ScopedIndent indent;
+	if (ImGui::Begin("Inspector")) {
+		if (pEntity) {
+			auto& entity = *pEntity;
+			ImGui::Text(ImGui::ToImChars(entity.name()));
 
-			if (component->getTypeId() == TypeId::Get<engine::TransformComponent>()) {
-				auto c = reinterpret_cast<engine::TransformComponent*>(component.get());
-				{
-					Vec3 value = c->getLocal().position;
-					if (ImGui::DragFloat3("Position", value)) {
-						c->setLocalPosition(value);
+			for (auto& component : entity.componets()) {
+				auto cmpname = ImGui::ToImChars(component->getTypeId().name());
+				if (ImGui::CollapsingHeader(cmpname)) {
+
+					ImGui::ScopedIndent indent;
+
+					if (component->getTypeId() == TypeId::Get<engine::TransformComponent>()) {
+						auto c = reinterpret_cast<engine::TransformComponent*>(component.get());
+						{
+							Vec3 value = c->getLocal().position;
+							if (ImGui::DragFloat3("Position", value)) {
+								c->setLocalPosition(value);
+							}
+						}
+						{
+							auto eulerAngles = c->getLocal().rotation.toRot();
+							f32 xyz[] = { eulerAngles.x,eulerAngles.y,eulerAngles.z };
+							ImGui::DragFloat3("Rotation", xyz);
+						}
+						{
+							Vec3 value = c->getLocal().scale;
+							if (ImGui::DragFloat3("Scale", value)) {
+								c->setLocalScale(value);
+							}
+						}
 					}
-				}
-				{
-					auto eulerAngles = c->getLocal().rotation.toRot();
-					f32 xyz[] = { eulerAngles.x,eulerAngles.y,eulerAngles.z };
-					ImGui::DragFloat3("Rotation", xyz);
-				}
-				{
-					Vec3 value = c->getLocal().scale;
-					if (ImGui::DragFloat3("Scale", value)) {
-						c->setLocalScale(value);
+					if (component->getTypeId() == TypeId::Get<graphic::CameraComponent>()) {
+						auto c = reinterpret_cast<graphic::CameraComponent*>(component.get());
+						{
+							f32 value[] = { c->getFov() };
+							if (ImGui::SliderFloat("FovY", value, 0, 180)) {
+								c->setFov(value[0]);
+							}
+						}
+						{
+							auto rect = c->getVieportRect();
+							f32 values[] = { rect.left,rect.top,rect.right,rect.bottom };
+							if (ImGui::DragFloat4("ViewportRect", values, 0.01f, 0.0f, 1.0f)) {
+								c->setVieportRect({ values[0] ,values[1],values[2] ,values[3] });
+							}
+						}
+						{
+							auto value = c->getClearColor();
+							if (ImGui::ColorEdit3("ClearColor", value)) {
+								c->setClearColor(value);
+							}
+						}
 					}
+
 				}
 			}
-			if (component->getTypeId() == TypeId::Get<graphic::CameraComponent>()) {
-				auto c = reinterpret_cast<graphic::CameraComponent*>(component.get());
-				{
-					f32 value[] = { c->getFov() };
-					if (ImGui::SliderFloat("FovY", value,0,180)) {
-						c->setFov(value[0]);
-					}
-				}
-				{
-					auto rect = c->getVieportRect();
-					f32 values[] = { rect.left,rect.top,rect.right,rect.bottom };
-					if (ImGui::DragFloat4("ViewportRect", values,0.01f,0.0f,1.0f)) {
-						c->setVieportRect({ values[0] ,values[1],values[2] ,values[3] });
-					}
-				}
-				{
-					auto value = c->getClearColor();
-					if (ImGui::ColorEdit3("ClearColor", value)) {
-						c->setClearColor(value);
-					}
-				}
-			}
-
 		}
+
 	}
+	ImGui::End();
 }
 
 int TestDirectX12() {
@@ -201,7 +230,7 @@ int TestDirectX12() {
 		auto color = desc.addAttachment(TextureFormat::RGBA8);
 		auto color2 = desc.addAttachment(TextureFormat::RGBA8);
 		auto depth = desc.addAttachment(TextureFormat::D32);
-		auto pass0 = desc.addSubpassXCD({ color,color2 },depth);
+		auto pass0 = desc.addSubpassXCD({ color,color2 }, depth);
 
 		renderPass = RenderPass::Create(desc);
 		OB_ASSERT_EXPR(renderPass);
@@ -268,7 +297,7 @@ int TestDirectX12() {
 	}
 
 	Model sky("Asset/Model/sky.obj", TC("Asset/Texture/sky.dds"));
-	Model ukulele("Asset/Model/Ukulele.obj",TC("Asset/Model/Ukulele_col.dds"));
+	Model ukulele("Asset/Model/Ukulele.obj", TC("Asset/Model/Ukulele_col.dds"));
 
 	Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 0);
 
@@ -280,35 +309,21 @@ int TestDirectX12() {
 
 
 	// シーン生成テスト
-	auto world = engine::World::Create(TC("Test"));
-	auto scene = engine::Scene::Create(TC("Sample"));
-	auto entity = engine::Entity::Create(TC("Test"));
+	auto world = engine::World::Create(TC("TestWorld"));
+	auto scene = engine::Scene::Create(TC("SampleScene"));
+	auto entity = engine::Entity::Create(TC("Parent"));
+	auto child = engine::Entity::Create(TC("CHild"));
+	entity->addChild(child);
+	scene->addEntity(entity);
 
 	world->getRootScene()->addSubScene(scene);
 
 	if (entity && scene) {
-		entity->setName(TC("Entity"));
-		scene->addEntity(entity);
 
-		auto child = engine::Entity::Create(TC("Child"));
-		if (child) {
-			child->setName(TC("Child"));
-			entity->addChild(child);
-		}
 
 		entity->addComponent<engine::TransformComponent>();
 		entity->addComponent<graphic::CameraComponent>();
 
-		//if (auto c = entity->findComponent<test::ComponentTest>()) {
-		//	LOG_INFO("{}が追加されています",c->getTypeId().name());
-		//}
-
-		auto handle = entity->handle();
-		if (auto ent = handle.get()) {
-			LOG_INFO("Handle => {}", ent->name());
-		} else {
-			LOG_ERROR("Handle failed");
-		}
 	}
 
 	Texture::White();
@@ -359,9 +374,9 @@ int TestDirectX12() {
 		auto modelScale = 100.0f;
 		auto viewMtx = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse();
 		auto skyMtx = Matrix::Scale(Vec3(1, 1, 1) * modelScale);
-		auto ukuleleMtx = Matrix::TRS(Vec3::Zero,Quat(0,t,70),Vec3::One);
+		auto ukuleleMtx = Matrix::TRS(Vec3::Zero, Quat(0, t, 70), Vec3::One);
 
-		graphic::Material::SetGlobalColor(TC("LightDir"), Color(1,1,1));
+		graphic::Material::SetGlobalColor(TC("LightDir"), Color(1, 1, 1));
 		graphic::Material::SetGlobalMatrix(TC("Matrix"), viewMtx);
 		sky.setMatrix(skyMtx);
 		ukulele.setMatrix(ukuleleMtx);
@@ -384,7 +399,7 @@ int TestDirectX12() {
 			cmdList->popMarker();
 		}
 
-		if(true){
+		if (true) {
 			cmdList->pushMarker(TC("ImGui"));
 			ImGui::BeginFrame();
 
@@ -396,13 +411,13 @@ int TestDirectX12() {
 			static bool bShowComponents = true;
 			ImGui::MenuItem("Components", 0, &bShowComponents);
 
-			static bool bShowOutliner= true;
+			static bool bShowOutliner = true;
 			ImGui::MenuItem("Outliner", 0, &bShowOutliner);
 
 			ImGui::EndMainMenuBar();
 
 
-			if(bShowDemo)ImGui::ShowDemoWindow();
+			if (bShowDemo)ImGui::ShowDemoWindow();
 
 			if (ImGui::Begin("MaterialEdirot")) {
 				ImGui::SliderFloat("Speed", &modelRotSpeed, -2.0f, 2.0f);
@@ -410,9 +425,7 @@ int TestDirectX12() {
 			ImGui::End();
 
 			if (bShowComponents) {
-				if (entity) {
-					drawComponents(*entity);
-				}
+				drawComponents(s_selectedEntity);
 			}
 			if (bShowOutliner) {
 				drawOutliner(world->getRootScene());
@@ -427,7 +440,7 @@ int TestDirectX12() {
 		cmdList->endRenderPass();
 
 		// ディスプレイ更新
-		if (!input::Keyboard::Z.pressed()){
+		if (!input::Keyboard::Z.pressed()) {
 
 			// ディスプレイにバインド
 			cmdList->applyDisplay(display, colorRT);

@@ -33,6 +33,21 @@ namespace ob::engine {
 		m_active = false;
 		m_visible = false;
 
+		for (s32 i = 100; 0<=i; --i) {
+
+			if (i == 0) {
+				LOG_FATAL("Entityの新規UUID割り当てに失敗。");
+			}
+
+			EntityHandle handle = UUID::Generate();
+			if (auto existance = handle.get()) {
+				continue;
+			}
+
+			m_handle = handle;
+			break;
+		}
+
 		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
 	}
 
@@ -213,15 +228,20 @@ namespace ob::engine {
 	//! @brief		子Entity追加
 	//@―---------------------------------------------------------------------------
 	void Entity::setParent(Entity* newParent,s32 index) {
-		if (this == newParent) {
-			// TODO 再帰チェック
-			LOG_ERROR("Entityの親子付けに失敗。自身を親に設定できません。 [{}]", m_name);
-			return;
-		}
 		if (m_parent == newParent) {
 			OB_NOTIMPLEMENTED();
 		}
 		Entity* oldParent = nullptr;
+
+		{
+			auto ancestor = newParent;
+			while (ancestor) {
+				if (ancestor == this) {
+					LOG_ERROR("Entityの親子設定に失敗。循環を検知しました。 [parent={},this={}]", newParent->name(), m_name);
+				}
+				ancestor = ancestor->m_parent.load();
+			}
+		}
 
 		{
 			// ロック
@@ -239,8 +259,8 @@ namespace ob::engine {
 				{
 					ScopeLock lock(newParent->m_childrenLock);
 
-					if (index < 0)index = m_children.size();
-					update_min<s32>(index, m_children.size());
+					if (index < 0)index = newParent->m_children.size();
+					update_min<s32>(index, newParent->m_children.size());
 
 					auto pos = newParent->m_children.begin();
 					for (s32 i = 0; i < index; ++i)++pos;
