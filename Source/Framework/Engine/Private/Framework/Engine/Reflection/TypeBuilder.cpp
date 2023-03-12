@@ -138,7 +138,7 @@ namespace ob::engine::rtti::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
 	//@―---------------------------------------------------------------------------
-	void ClassBuilder::tag(StringView key, StringView value) {
+	void ClassBuilder::tag(StringView key, StringView value ) {
 		m_info.tags.emplace(key, value);
 	}
 

@@ -8,9 +8,6 @@
 
 namespace ob::engine {
 
-	class Entity;
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief		Entity識別子
 	//! @details	EntityHandle は Entity を一位に識別するために
@@ -64,6 +61,11 @@ namespace ob::engine {
 	private:
 		UUID m_uuid;
 	};
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			EntityHandleのリスト
+	//@―---------------------------------------------------------------------------
+	using EntityHandleList = List<EntityHandle>;
 
 }// namespcae ob
 

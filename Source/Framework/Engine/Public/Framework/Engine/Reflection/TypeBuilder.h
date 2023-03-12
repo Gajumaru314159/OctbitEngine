@@ -249,17 +249,17 @@ namespace type_info_builder {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報生成
 	//@―---------------------------------------------------------------------------
-	ob::engine::rtti::EnumInfo& CreateEnumInfo(ob::TypeId);
+	::ob::engine::rtti::EnumInfo& CreateEnumInfo(::ob::TypeId);
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報生成
 	//@―---------------------------------------------------------------------------
-	ob::engine::rtti::ClassInfo& CreateClassInfo(ob::TypeId);
+	::ob::engine::rtti::ClassInfo& CreateClassInfo(::ob::TypeId);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報ビルダー
 	//@―---------------------------------------------------------------------------
 	template<class T>
-	class EnumBuilderTemplate :public ob::engine::rtti::internal::EnumBuilder {
+	class EnumBuilderTemplate :public ::ob::engine::rtti::internal::EnumBuilder {
 	public:
 		EnumBuilderTemplate() : ::ob::engine::rtti::internal::EnumBuilder(CreateEnumInfo(::ob::TypeId::Get<T>())) {}
 		void Register() {}
@@ -274,7 +274,7 @@ namespace type_info_builder {
 		ClassBuilderTemplate() : ::ob::engine::rtti::internal::ClassBuilder(CreateClassInfo(::ob::TypeId::Get<T>())) {}
 
 		template<class TBase,class = std::enable_if_t<std::is_base_of_v<TBase,T>>>
-		void base() { baseImpl(TypeId::Get<TBase>()); }
+		void base() { baseImpl(::ob::TypeId::Get<TBase>()); }
 		void Register() {}
 	};
 

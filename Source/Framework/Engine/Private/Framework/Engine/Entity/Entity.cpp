@@ -55,7 +55,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		名前設定
 	//@―---------------------------------------------------------------------------
-	const String& Entity::name()const {
+	const String& Entity::getName()const {
 		return m_name;
 	}
 
@@ -92,9 +92,10 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	bool Entity::removeComponent(TypeId typeId,s32 index) {
 
+		// TODO Componentの取得をインターフェイスで行う
 		Component* found = nullptr;
 		for (auto& component : m_components) {
-			if (component->getTypeId() == typeId) {
+			if (component->getComponentTypeId() == typeId) {
 				if (index <= 0) {
 					found = component.get();
 					break;
@@ -125,9 +126,10 @@ namespace ob::engine {
 	//! @brief		コンポーネント検索
 	//@―---------------------------------------------------------------------------
 	Component* Entity::findComponent(TypeId typeId, s32 index)const {
+		// TODO Componentの取得をインターフェイスで行う
 		s32 count = 0;
 		for (auto& component : m_components) {
-			if (component->getTypeId() == typeId) {
+			if (component->getComponentTypeId() == typeId) {
 				if (count == index) {
 					return component.get();
 				}
@@ -163,7 +165,7 @@ namespace ob::engine {
 	void Entity::visitComponents(const Delegate<void(Component*)>& func, TypeId typeId)const {
 		for (auto& component : m_components) {
 			// TODO DynamicCast
-			if (component->getTypeId() == typeId || typeId == TypeId::Invalid()) {
+			if (component->getComponentTypeId() == typeId || typeId == TypeId::Invalid()) {
 				func(component.get());
 			}
 		}
@@ -237,7 +239,7 @@ namespace ob::engine {
 			auto ancestor = newParent;
 			while (ancestor) {
 				if (ancestor == this) {
-					LOG_ERROR("Entityの親子設定に失敗。循環を検知しました。 [parent={},this={}]", newParent->name(), m_name);
+					LOG_ERROR("Entityの親子設定に失敗。循環を検知しました。 [parent={},this={}]", newParent->getName(), m_name);
 				}
 				ancestor = ancestor->m_parent.load();
 			}
@@ -280,7 +282,8 @@ namespace ob::engine {
 		if(oldParent)oldParent->raisePropertyChanged("Children");
 		if(newParent)newParent->raisePropertyChanged("Children");
 		raisePropertyChanged(TC("Parent"));
-		
+
+		m_parentChangedNotifier.invoke(oldParent, newParent);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -289,6 +292,14 @@ namespace ob::engine {
 	const List<Entity*>& Entity::getChildren()const {
 		return m_children;
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		親変更イベントを購読
+	//@―---------------------------------------------------------------------------
+	void Entity::subscribeParentChanged(ParentChangedHandle& handle, ParentChangedDelegate event) {
+		m_parentChangedNotifier.add(handle, event);
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		所属シーン取得
@@ -304,34 +315,5 @@ namespace ob::engine {
 	void Entity::raisePropertyChanged(StringView name) {
 		NotificationObject::raisePropertyChanged(name);
 	}
-
-
-	//===============================================================
-	// EntityAccessor
-	//===============================================================
-	EntityAccessor::EntityAccessor(Entity* value) :m_entity(value) {}
-	EntityAccessor::EntityAccessor(const EntityHandle& value) :m_entity(value.get()) {}
-	EntityAccessor::EntityAccessor(Entity& value):m_entity(&value){}
-	Entity* EntityAccessor::value()const {return m_entity;}
-
-
-
-	//===============================================================
-	// EntityUtil
-	//===============================================================
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		子のハンドルのリストを取得
-	//@―---------------------------------------------------------------------------
-	Array<EntityHandle> EntityUtil::GetChildHandeles(EntityAccessor src) {
-		Array<EntityHandle> handles;
-		if (src.value()) {
-			for (auto& child : src.value()->getChildren()) {
-				handles.emplace_back(child->handle());
-			}
-		}
-		return std::move(handles);
-	}
-
 
 }// namespcae ob

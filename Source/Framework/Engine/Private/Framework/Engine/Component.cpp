@@ -9,29 +9,28 @@
 
 namespace ob::engine {
 
-
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
 	Component::Component() {
 		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  デストラクタ
+	//@―---------------------------------------------------------------------------
 	Component::~Component() = default;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  エンティティ取得
 	//@―---------------------------------------------------------------------------
 	Entity& Component::getEntity()const {
-		OB_ASSERT(m_entity, "EntityにはComponent::startup()前にアクセスできません。");
+		OB_ASSERT(m_entity, "EntityにはComponent::initialize()前にアクセスできません。");
 		return *m_entity;
 	}
 
 
 }// namespcae ob
-
-namespace test {
-	enum class Test {
-		A,
-		B,
-	};
-}
 
 OB_DEFINE_CLASS_TYPE_INFO(ob::engine::Component) {
 

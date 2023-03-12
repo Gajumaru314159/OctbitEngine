@@ -1,53 +1,18 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シーン
+//! @brief		Entity
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/ECSTypes.h>
 #include <Framework/Engine/EntityHandle.h>
 #include <Framework/Engine/INotifyPropertyChanged.h>
 
 namespace ob::engine {
 
-	class Scene;
-	class Component;
-
-	enum class EntityFlag {
-		Active,
-		Visible,
-	};
-	using EntityFlags = BitFlags<EntityFlag>;
-
-	enum class StaticFlag {
-		GI,
-		Occluder,
-		Occludee,
-		Batching,
-		Navigation,
-		ReflectionProbe,
-	};
-	using StaticFlags = BitFlags<EntityFlag>;
-
-
-
-	class Layer {
-	public:
-		Layer() = default;
-		Layer(s32 index);
-		s32 index()const;
-		StringView name()const;
-	public:
-		static Layer FromName(StringView name);
-	private:
-		s32 m_index;
-	};
-
-	using ComponentList = List<UPtr<Component>>;
-
-	using EntityHandleList = List<EntityHandle>;
-
+	OB_EVENT_NOTIFIER(ParentChanged, Entity*, Entity*);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Entity
@@ -63,25 +28,59 @@ namespace ob::engine {
 
 	public:
 
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		EntityHandle を取得
-		//@―---------------------------------------------------------------------------
-		const EntityHandle handle()const { return m_handle; }
+		//===============================================================
+		// Info
+		//===============================================================
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		名前を取得
 		//@―---------------------------------------------------------------------------
-		const String& name()const;
+		const String& getName()const;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		名前を設定
 		//@―---------------------------------------------------------------------------
 		void setName(StringView);
 
-		// Transform
+		//@―---------------------------------------------------------------------------
+		//! @brief		EntityHandle を取得
+		//@―---------------------------------------------------------------------------
+		const EntityHandle& getHandle()const { return m_handle; }
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		アクティブ設定
+		//@―---------------------------------------------------------------------------
+		void setActive(bool);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		アクティブ取得
+		//@―---------------------------------------------------------------------------
+		bool isActive()const;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		破棄予約
+		//! @details	Entityを破棄すると子Entityも再帰的に破棄されます。
+		//@―---------------------------------------------------------------------------
+		void requestRelease();
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		所属シーン取得
+		//@―---------------------------------------------------------------------------
+		Scene* getScene()const;
+
+
+		//===============================================================
+		// Hierarchy
+		//===============================================================
+		void addChild(Entity*);
+		void setParent(Entity* newParent, s32 index = -1);
+		const List<Entity*>& getChildren()const;
+
+		void subscribeParentChanged(ParentChangedHandle&, ParentChangedDelegate);
+
+		//===============================================================
 		// Component
+		//===============================================================
 
 		//! @brief TypeIdからComponentを追加 
 		Component* addComponent(TypeId typeId);
@@ -101,7 +100,7 @@ namespace ob::engine {
 		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 			for (auto& component : componens()) {
 				// TODO DynamicCast
-				if (component->getTypeId() == TypeId::Get<T>()) {
+				if (component->getComponentTypeId() == TypeId::Get<T>()) {
 					func(*reinterpret_cast<T*>(component.get()));
 				}
 			}
@@ -109,7 +108,10 @@ namespace ob::engine {
 		//! @brief Componentのリストを取得 
 		const ComponentList& componets()const;
 
+
+		//===============================================================
 		// Tag
+		//===============================================================
 		
 		//! @brief タグを追加
 		void addTag(StringView);
@@ -117,29 +119,6 @@ namespace ob::engine {
 		void removeTag(StringView);
 		//! @brief タグを持っているか 
 		bool hasTag(StringView);
-
-		// Create
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		破棄する
-		//! @details	Entityを破棄すると子Entityも再帰的に破棄されます。
-		//@―---------------------------------------------------------------------------
-		void requestRelease();
-
-
-		// Activity
-		void setActive(bool);
-		bool isActive()const;
-
-		// Hierarchy
-		void addChild(Entity*);
-		void setParent(Entity* newParent,s32 index=-1);
-
-		const List<Entity*>& getChildren()const;
-
-
-		// Scene
-		Scene* getScene()const;
 
 	private:
 
@@ -158,40 +137,24 @@ namespace ob::engine {
 
 	private:
 
-
-		Scene* m_scene = nullptr;
+		std::atomic<Scene*>		m_scene = nullptr;
 		std::atomic<Entity*>	m_parent = nullptr;
 
 		String					m_name;
-		Set<String,std::less<>>	m_tags;
-		List<UPtr<Component>>	m_components;
-		EntityHandle			m_handle;
-		Layer					m_layer;
+		TagSet					m_tags;
+		//LayerMask				m_layerMask;
 
+		EntityHandle			m_handle;
 		SpinLock				m_childrenLock;
 		List<Entity*>			m_children;
 
+		ParentChangedNotifier	m_parentChangedNotifier;
+
+		ComponentList			m_components;
+
+
 		bool	m_active : 1;
 		bool	m_visible : 1;
-
-	};
-
-
-	class EntityAccessor{
-	public:
-		EntityAccessor() = default;
-		EntityAccessor(Entity&);
-		EntityAccessor(Entity*);
-		EntityAccessor(const EntityHandle&);
-		Entity* value()const;
-	private:
-		Entity* m_entity=nullptr;
-	};
-
-	class EntityUtil {
-	public:
-
-		static Array<EntityHandle> GetChildHandeles(EntityAccessor);
 
 	};
 

@@ -17,7 +17,7 @@
 
 #include <Plugins/ImGui/ImGui.h>
 
-#include <Framework/Engine/Component/TransformComponent.h>
+#include <Framework/Engine/Component/TransformComponentImpl.h>
 #include <Framework/Graphic/Component/CameraComponent.h>
 #include <Test/ComponentTest.h>
 
@@ -66,7 +66,7 @@ engine::Scene* s_selectedScene = nullptr;
 
 void drawOutliner_Entity(engine::Entity* entity) {
 	if (!entity)return;
-	auto name = ImGui::ToImChars(entity->name());
+	auto name = ImGui::ToImChars(entity->getName());
 	bool empty = entity->getChildren().empty();
 
 	auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
@@ -143,10 +143,10 @@ void drawComponents(engine::Entity* pEntity) {
 	if (ImGui::Begin("Inspector")) {
 		if (pEntity) {
 			auto& entity = *pEntity;
-			ImGui::Text(ImGui::ToImChars(entity.name()));
+			ImGui::Text(ImGui::ToImChars(entity.getName()));
 
 			for (auto& component : entity.componets()) {
-				auto cmpname = ImGui::ToImChars(component->getTypeId().name());
+				auto cmpname = ImGui::ToImChars(component->getComponentTypeId().name());
 				if (ImGui::CollapsingHeader(cmpname)) {
 
 					ImGui::ScopedIndent indent;
@@ -321,7 +321,7 @@ int TestDirectX12() {
 	if (entity && scene) {
 
 
-		entity->addComponent<engine::TransformComponent>();
+		entity->addComponent<engine::TransformComponentImpl>();
 		entity->addComponent<graphic::CameraComponent>();
 
 	}

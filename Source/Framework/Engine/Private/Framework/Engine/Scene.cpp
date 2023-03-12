@@ -23,7 +23,7 @@ namespace ob::engine {
 	Scene::Scene(StringView name) {
 		m_name = name;
 		if (auto entity = Entity::Create(Format(TC("Root({})"),name))) {
-			m_hRootEntity = entity->handle();
+			m_hRootEntity = entity->getHandle();
 		}
 
 	}
@@ -167,7 +167,7 @@ namespace ob::engine {
 	void Scene::addEntity(Entity* entity) {
 		if (auto root = m_hRootEntity.get()) {
 			root->addChild(entity);
-			m_entities.emplace_back(entity->handle());
+			m_entities.emplace_back(entity->getHandle());
 		} else {
 			LOG_ERROR("ルートウィジェットが削除されています。 [this={}]",m_name);
 		}

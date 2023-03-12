@@ -43,7 +43,7 @@ namespace ob::engine {
 	void EntityManager::add(Entity& entity) {
 		ScopeLock lock(m_lock);
 		// TODO マルチスレッド用のロックなし追加対応
-		m_entities[entity.handle()] = &entity;
+		m_entities[entity.getHandle()] = &entity;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void EntityManager::requestRemove(const Entity& entity) {
 		ScopeLock lock(m_lock);
-		m_removeEntities.emplace_back(entity.handle());
+		m_removeEntities.emplace_back(entity.getHandle());
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -73,11 +73,7 @@ namespace ob::engine {
 		for (auto& handle : m_removeEntities) {
 			auto found = m_entities.find(handle);
 			if (found != m_entities.end()) {
-
 				deleteEnitiyRecursively(found->second);
-
-				delete found->second;
-				m_entities.erase(found);
 			}
 		}
 	}
@@ -93,7 +89,7 @@ namespace ob::engine {
 				deleteEnitiyRecursively(child);
 			}
 
-			m_entities.erase(entity->handle());
+			m_entities.erase(entity->getHandle());
 			delete entity;
 
 		}
