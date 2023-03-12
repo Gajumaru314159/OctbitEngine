@@ -213,7 +213,14 @@ namespace ob::engine {
 	//! @brief		子Entity追加
 	//@―---------------------------------------------------------------------------
 	void Entity::setParent(Entity* newParent,s32 index) {
-
+		if (this == newParent) {
+			// TODO 再帰チェック
+			LOG_ERROR("Entityの親子付けに失敗。自身を親に設定できません。 [{}]", m_name);
+			return;
+		}
+		if (m_parent == newParent) {
+			OB_NOTIMPLEMENTED();
+		}
 		Entity* oldParent = nullptr;
 
 		{

@@ -46,7 +46,7 @@ namespace ob::engine {
 
 	using ComponentList = List<UPtr<Component>>;
 
-	using EntityList = List<UPtr<class Entity>>;
+	using EntityHandleList = List<EntityHandle>;
 
 
 	//@―---------------------------------------------------------------------------

@@ -10,9 +10,7 @@ namespace ob::engine {
 
 	Ref<Scene> Scene::Create(StringView name) {
 
-		auto scene = new Scene();
-
-		scene->m_name = name;
+		auto scene = new Scene(name);
 
 		return scene;
 	}
@@ -22,14 +20,19 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Scene::Scene() {
+	Scene::Scene(StringView name) {
+		m_name = name;
+		if (auto entity = Entity::Create(Format(TC("Root({})"),name))) {
+			m_hRootEntity = entity->handle();
+		}
 
 	}
+
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
 	Scene::~Scene() {
-		for (auto& entity : m_entities) {
+		if (auto entity=m_hRootEntity.get()) {
 			entity->requestRelease();
 		}
 	}
@@ -155,15 +158,19 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		エンティティを取得
 	//@―---------------------------------------------------------------------------
-	const EntityList& Scene::getEntities()const {
-		OB_NOTIMPLEMENTED();
+	const EntityHandleList& Scene::getEntities()const {
 		return m_entities;
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		エンティティを追加
 	//@―---------------------------------------------------------------------------
-	void Scene::addEntity(Entity*) {
-
+	void Scene::addEntity(Entity* entity) {
+		if (auto root = m_hRootEntity.get()) {
+			root->addChild(entity);
+			m_entities.emplace_back(entity->handle());
+		} else {
+			LOG_ERROR("ルートウィジェットが削除されています。 [this={}]",m_name);
+		}
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		エンティティを検索

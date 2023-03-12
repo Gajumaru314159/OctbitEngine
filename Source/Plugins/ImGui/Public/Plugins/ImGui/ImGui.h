@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コンポーネント
+//! @brief		ImGui
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -13,11 +13,44 @@
 #include <Plugins/ImGui/ImGuiWidgets.h>
 #include <Plugins/ImGui/ImGuiRAII.h>
 
-namespace ob::imgui {
+namespace ImGui {
+	inline namespace ob {
 
-	bool Startup(const ob::platform::Window& window, const Ref<rhi::RenderPass>& renderPass, s32 subpass = 0);
-	void Shutdown();
-	void BeginFrame();
-	void EndFrame(const Ref<rhi::CommandList>& commandList);
+		using namespace ::ob;
 
-}// namespcae ob
+		//@―---------------------------------------------------------------------------
+		//! @brief  ImGuiで使用する形式のString
+		//@―---------------------------------------------------------------------------
+		using ImString = StringBase<char>;
+		using ImStringView = StringViewBase<char>;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  起動
+		//@―---------------------------------------------------------------------------
+		bool Startup(const ob::platform::Window& window, const Ref<rhi::RenderPass>& renderPass, s32 subpass = 0);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  終了
+		//@―---------------------------------------------------------------------------
+		void Shutdown();
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  フレーム開始
+		//@―---------------------------------------------------------------------------
+		void BeginFrame();
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  フレーム終了
+		//@―---------------------------------------------------------------------------
+		void EndFrame(const Ref<rhi::CommandList>& commandList);
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		StringViewをImStringに変換
+		//! @details	ImGuiはシングルスレッドで使用されることを前提にしています。
+		//@―---------------------------------------------------------------------------
+		const char* ToImChars(StringView text,s32* out_len = nullptr);
+
+	}
+}

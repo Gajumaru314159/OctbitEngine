@@ -36,7 +36,6 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		Scene();
 		~Scene();
 
 		const String& getName()const;
@@ -59,11 +58,13 @@ namespace ob::engine {
 		//===============================================================
 		// Entity
 		//===============================================================
-		const EntityList& getEntities()const;
+		const EntityHandleList& getEntities()const;
 		void addEntity(Entity*);
 		Entity* findEntity(StringView name, Recursive recursive = Recursive::No);
 
 	private:
+
+		Scene(StringView name);
 
 		void updateGlobalOffset();
 
@@ -77,10 +78,12 @@ namespace ob::engine {
 
 		Scene*		m_parent = nullptr;
 		SceneList	m_children;
-		EntityList	m_entities;
+		EntityHandleList	m_entities;
 
 
 		SpinLock	m_lock;
+
+		EntityHandle m_hRootEntity;
 
 	};
 
