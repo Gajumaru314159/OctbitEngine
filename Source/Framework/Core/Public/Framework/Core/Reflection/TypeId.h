@@ -61,12 +61,18 @@ namespace ob::core {
 			auto name = internal::type_id::GetTypeName<std::remove_cv_t<std::remove_reference_t<T>>>();
 			return name;
 		}
+		//@―---------------------------------------------------------------------------
+		//! @brief  無効なTypeId取得
+		//@―---------------------------------------------------------------------------
+		static constexpr TypeId Invalid() {
+			return TypeId();
+		}
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		constexpr TypeId() : TypeId( TypeId::Get<Invalid>().name() ){}
+		constexpr TypeId() : TypeId( TypeId::Get<InvalidType>().name() ){}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		空か
@@ -97,7 +103,7 @@ namespace ob::core {
 
 	private:
 
-		class Invalid {
+		class InvalidType {
 
 		};
 
