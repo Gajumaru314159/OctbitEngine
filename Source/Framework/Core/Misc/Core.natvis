@@ -8,10 +8,10 @@
 		<Intrinsic Name="bufSize" Expression="16" />
 		<Intrinsic Name="isShortString" Expression="capacity() &lt; bufSize()" />
 		<Intrinsic Name="isLongString" Expression="capacity() &gt;= bufSize()" />
-		<DisplayString Condition="isShortString()">{_Mypair._Myval2._Bx._Buf,u8}</DisplayString>
-		<DisplayString Condition="isLongString()">{_Mypair._Myval2._Bx._Ptr,u8}</DisplayString>
-		<StringView Condition="isShortString()">_Mypair._Myval2._Bx._Buf,u8</StringView>
-		<StringView Condition="isLongString()">_Mypair._Myval2._Bx._Ptr,u8</StringView>
+		<DisplayString Condition="isShortString()">{_Mypair._Myval2._Bx._Buf,s8}</DisplayString>
+		<DisplayString Condition="isLongString()">{_Mypair._Myval2._Bx._Ptr,s8}</DisplayString>
+		<StringView Condition="isShortString()">_Mypair._Myval2._Bx._Buf,s8</StringView>
+		<StringView Condition="isLongString()">_Mypair._Myval2._Bx._Ptr,s8</StringView>
 		<Expand>
 			<Item Name="[size]" ExcludeView="simple">size()</Item>
 			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
@@ -22,6 +22,11 @@
 				<ValuePointer Condition="isLongString()">_Mypair._Myval2._Bx._Ptr</ValuePointer>
 			</ArrayItems>
 		</Expand>
+	</Type>
+	
+	<!--String-->
+	<Type Name="ob::core::StringBase&lt;char&gt;">
+		<DisplayString>{m_str,sb}</DisplayString>
 	</Type>
 
 	<!--Pimpl-->
@@ -49,11 +54,6 @@
 				<DisplayString>({m03} ,{m13} ,{m23})</DisplayString>
 			</Synthetic>
 		</Expand>
-	</Type>
-
-	<!--StringView-->
-	<Type Name="ob::core::StringViewBase&lt;ob::core::Char&gt;">
-		<DisplayString>aaa</DisplayString>
 	</Type>
 	
 </AutoVisualizer>
