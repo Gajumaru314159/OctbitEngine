@@ -12,7 +12,7 @@ namespace ob::core {
 	//! @brief  曜日
 	//@―---------------------------------------------------------------------------
 	enum class DayOfWeek {
-		Sunday,     //!< 日曜日
+		Sunday = 0, //!< 日曜日
 		Monday,     //!< 月曜日 
 		Tuesday,    //!< 火曜日
 		Wednesday,  //!< 水曜日
@@ -61,12 +61,51 @@ namespace ob::core {
 		bool isAfternoon()const;
 
 		//@―---------------------------------------------------------------------------
+		//!	@brief	曜日
+		//@―---------------------------------------------------------------------------
+		DayOfWeek dayOfWeek()const;
+
+		//@―---------------------------------------------------------------------------
 		//!	@brief		1月1日から数えて何日目か
 		//! 
 		//! @details	1月1日を1として何日目かを返す。
 		//!				閏年の場合3月以降の日数がずれる。
 		//@―---------------------------------------------------------------------------
-		s32 daysInYear();
+		s32 daysInYear()const;
+
+		//@―---------------------------------------------------------------------------
+		//!	@brief		日時を文字列に変換
+		//! 
+		//! @details	使用可能なフォーマットは以下の通りです。
+		//!				必要に応じてエスケープ文字を使用してください。
+		//!				* yyyyy	年 (5 桁の数値)
+		//!				* yyyy	年 (4 桁の数値)
+		//!				* yy	年 (00 ～ 99)
+		//!				* y		年 ( 0 ～ 99)
+		//!				* MMMM	英語の月名 (January-Febuarty)
+		//!				* MMM	英語の月名の略称 (Jan-Feb)
+		//!				* MM	月 (01 ～ 12)
+		//!				* M		月 ( 1 ～ 12)
+		//!				* dddd	英語の曜日 (Sunday-Saturday)
+		//!				* ddd	英語の曜日の略称 (Sun-Sat)
+		//!				* dd	月の日にち (1 ～ 31)
+		//!				* d		月の日にち (01 ～ 31)
+		//!				* tt	AM / PM
+		//!				* t		A / P
+		//!				* HH	24 時間形式の時間 (00 ～ 23)
+		//!				* H		24 時間形式の時間 (0 ～ 23)
+		//!				* hh	12 時間形式の時間 (01 ～ 12)
+		//!				* h		12 時間形式の時間 (1 ～ 12)
+		//!				* mm	分 (00 ～ 59)
+		//!				* m		分 ( 0 ～ 59)
+		//!				* ss	秒 (00 ～ 59)
+		//!				* s		秒 ( 0 ～ 59)
+		//!				* fff	小数点以下3桁の秒
+		//!				* ff	小数点以下2桁の秒
+		//!				* f		小数点以下1桁の秒
+		//! @ref		https://learn.microsoft.com/ja-jp/dotnet/standard/base-types/custom-date-and-time-format-strings
+		//@―---------------------------------------------------------------------------
+		String toString(StringView format = TC("yyyy-MM-dd HH:mm:ss.ff"))const;
 
 	public:
 
@@ -202,7 +241,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//!	@brief	1月1日から数えて何日目か
 	//@―---------------------------------------------------------------------------
-	inline s32 DateTime::daysInYear() {
+	inline s32 DateTime::daysInYear()const {
 		s32 sum = day;
 		for (s32 m = 1; m < month; ++m) {
 			sum += DayInMonth(m, year);
@@ -227,7 +266,7 @@ template <> struct fmt::formatter<ob::core::DateTime, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::DateTime& dt, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{:>4}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2},{:0>2}"), dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.milliSeconds / 10);
+		return format_to(ctx.out(), dt.toString());
 	}
 };
 //! @endcond

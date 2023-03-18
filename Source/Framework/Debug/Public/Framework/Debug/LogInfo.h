@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Log/Logger.h>
+#include <Plugins/ImGui/ImGui.h>
 
 namespace ob::debug {
 
@@ -29,6 +30,7 @@ namespace ob::debug {
 		size_t		m_maxLogCount;
 		HashMap<LogLevel, bool> m_levelFilter;
 		HashMap<LogLevel, Color> m_levelColors;
+		ImGuiTextFilter m_filter;
 
 	};
 

@@ -48,12 +48,16 @@ namespace ob::debug {
 
 			ImGui::Checkbox("AutoWrap", &m_bAutoWrap);
 
-			{
-				//ImGui::ScopedButtonColor sbc1(Color::Magenta);
-				//ImGui::PushStyleColor(ImGuiCol_Button, ImGui::ToIm);
-				//ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 7.0f, 0.7f, 0.7f));
-				//ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 7.0f, 0.8f, 0.8f));
+			if (ImGui::Button("Clear")) {
+				FormatTo(m_filter.InputBuf, "mesh");
+				m_filter.Build();
+				//m_logs.clear();
+			}
 
+			ImGui::SameLine();
+			m_filter.Draw();
+			if (ImGui::IsItemHovered()) {
+				ImGui::SetTooltip("format: aaa[,bbb][,-ccc]\nex: rhi,graphic,-mesh");
 			}
 
 			auto drawLevelFilter = [this](LogLevel level, const char* label) {
@@ -93,9 +97,12 @@ namespace ob::debug {
 				ImGui::TableSetupScrollFreeze(0, 1);
 				ImGui::TableHeadersRow();
 
-				for (auto& [index, log] : Indexed(m_logs)) {
+				for (auto& [index, log] : ReverseIndexed(m_logs)) {
 
 					if (m_levelFilter[log.level] == false)
+						continue;
+
+					if(!m_filter.PassFilter(log.message.c_str()))
 						continue;
 
 
@@ -124,7 +131,7 @@ namespace ob::debug {
 					}
 
 					ImGui::TableNextColumn();
-					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime)));
+					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime.toString("HH:mm:ss.ff"))));
 
 					ImGui::TableNextColumn();
 					ImGui::TextUnformatted(ImGui::ToImChars(log.file));
