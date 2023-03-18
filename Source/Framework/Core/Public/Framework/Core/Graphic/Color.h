@@ -554,7 +554,7 @@ namespace ob::core {
     //! @return		補完された色オブジェクト
     //@―---------------------------------------------------------------------------
     constexpr Color Color::Lerp(const Color& a, const Color& b, f32 t) noexcept {
-        return (a * t) + (b * (1.0f - t));
+        return (b * t) + (a * (1.0f - t));
     }
 
     //! @endcond

@@ -12,6 +12,7 @@
 #include <Framework/RHI/Forward.h>
 #include <Plugins/ImGui/ImGuiWidgets.h>
 #include <Plugins/ImGui/ImGuiRAII.h>
+#include <Plugins/ImGui/ImGuiUtil.h>
 
 namespace ImGui {
 	inline namespace ob {

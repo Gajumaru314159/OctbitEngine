@@ -46,6 +46,14 @@ namespace ImGui {
         public:
             ScopedButtonColor(const ob::Color& col) :ScopedStyleColor(ImGuiCol_Button, col) {}
         };
+        class ScopedButtonHoveredColor :public ScopedStyleColor {
+        public:
+            ScopedButtonHoveredColor(const ob::Color& col) :ScopedStyleColor(ImGuiCol_ButtonHovered, col) {}
+        };
+        class ScopedButtonActiveColor :public ScopedStyleColor {
+        public:
+            ScopedButtonActiveColor(const ob::Color& col) :ScopedStyleColor(ImGuiCol_ButtonActive, col) {}
+        };
 
         //@―---------------------------------------------------------------------------
         //! @brief  ImGui::PushStyleVarのRAII対応
@@ -135,7 +143,7 @@ namespace ImGui {
                 ::ImGui::PushID(int_id);
             }
             ~ScopedID() {
-                ::ImGui::PopFont();
+                ::ImGui::PopID();
             }
         };
 

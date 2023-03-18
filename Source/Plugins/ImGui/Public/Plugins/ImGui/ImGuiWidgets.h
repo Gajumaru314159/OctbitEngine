@@ -6,6 +6,7 @@
 #pragma once
 #include "Library/imgui.h"
 #include <Framework/Core/Core.h>
+#include <Plugins/ImGui/ImGuiRAII.h>
 
 namespace ImGui {
     inline namespace ob {
@@ -281,6 +282,23 @@ namespace ImGui {
             return false;
         }
         //! @}
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  ボタン式ラジオボタン
+        //@―---------------------------------------------------------------------------
+        //! @{
+        inline bool ColorRadioButton(const char* label, bool active, Color color, const ImVec2& size = ImVec2(0, 0)) {
+
+            Color hovered = Color::Lerp(color, Color::White, 0.2);
+            if (active == false) {
+                color *= Color(0.2);
+            }
+
+            ScopedButtonColor sbc(color);
+            ScopedButtonHoveredColor sbhc(hovered);
+
+            return ImGui::Button(label, size);
+        }
 
     }
 }
