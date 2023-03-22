@@ -12,6 +12,9 @@ namespace ob::engine::rtti {
 		class ClassBuilder;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  タグ情報
+	//@―---------------------------------------------------------------------------
 	struct TaggedInfo {
 		Map<String, String, std::less<>> tags;
 
@@ -28,7 +31,7 @@ namespace ob::engine::rtti {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  Enum要素
+	//! @brief  Enum要素情報
 	//@―---------------------------------------------------------------------------
 	struct ElementInfo:TaggedInfo {
 		String	name;
@@ -54,8 +57,6 @@ namespace ob::engine::rtti {
 	};
 
 
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  プロパティ情報
 	//@―---------------------------------------------------------------------------
@@ -71,12 +72,14 @@ namespace ob::engine::rtti {
 	};
 
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  関数情報
+	//@―---------------------------------------------------------------------------
 	struct FunctionInfo:TaggedInfo {
 	public:
 		String name;
 		//std::function
 	};
-
 
 
 	//@―---------------------------------------------------------------------------
@@ -85,6 +88,8 @@ namespace ob::engine::rtti {
 	class ClassInfo :public TaggedInfo {
 		friend class ob::engine::rtti::internal::ClassBuilder;
 	public:
+
+		// 名前で検索できるようにする
 		struct PropertyInfoPred {
 			bool operator()(const PropertyInfo& left, const PropertyInfo& right) const noexcept {
 				return left.name < right.name;
@@ -122,9 +127,9 @@ namespace ob::engine::rtti {
 	private:
 
 		HashSet<TypeId> m_baseClasses;
-
 		PropertyInfoSet m_properties;
 		FunctionInfoSet m_functions;
+
 	};
 
 

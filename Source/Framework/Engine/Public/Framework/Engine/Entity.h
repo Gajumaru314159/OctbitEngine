@@ -91,7 +91,7 @@ namespace ob::engine {
 		//! @brief TypeIdからComponentを取得 
 		Component* findComponent(TypeId typeId, s32 index = 0)const;
 		//! @brief Comoponentを追加 
-		template<class T>T* addComponent() { return reinterpret_cast<T*>(addComponent(new T)); }
+		template<class T>T* addComponent();
 		//! @brief Comoponentを削除 
 		template<class T>bool removeComponent(s32 index = 0) { return removeComponent(TypeId::Get<T>(),index); }
 		//! @brief Componentを取得
@@ -157,5 +157,11 @@ namespace ob::engine {
 		bool	m_visible : 1;
 
 	};
+
+
+	template<class T>
+	inline T* Entity::addComponent() {
+		return reinterpret_cast<T*>(addComponent(TypeId::Get<T>()));
+	}
 
 }// namespcae ob

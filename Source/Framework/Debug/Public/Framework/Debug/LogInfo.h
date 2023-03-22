@@ -30,6 +30,7 @@ namespace ob::debug {
 		size_t		m_maxLogCount;
 		HashMap<LogLevel, bool> m_levelFilter;
 		HashMap<LogLevel, Color> m_levelColors;
+		HashMap<LogLevel, String> m_levelNames;
 		ImGuiTextFilter m_filter;
 
 	};

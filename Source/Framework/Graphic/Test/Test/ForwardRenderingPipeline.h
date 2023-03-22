@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/IRenderPipeline.h>
+#include <Framework/Graphic/RenderPipeline.h>
 #include <Framework/Graphic/CommandBuffer.h>
 #include <Framework/Graphic/RenderContext.h>
 #include <Framework/Graphic/Camera.h>
@@ -13,6 +13,7 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/Types/RenderPassDescHelper.h>
+#include <Framework/RHI/FrameBuffer.h>
 
 namespace ob::graphic {
 
@@ -24,7 +25,7 @@ namespace ob::graphic {
 	};
 
 
-	class ForwardRenderPipeline : public IRenderPipeline {
+	class ForwardRenderPipeline : public RenderPipeline {
 	public:
 
 		ForwardRenderPipeline() {
@@ -50,7 +51,7 @@ namespace ob::graphic {
 				Material::RegisterRenderPass(engine::Name(TC("EarlyDepth")), m_pbrRenderPass, 0);
 				Material::RegisterRenderPass(engine::Name(TC("Opaque")), m_pbrRenderPass, 1);
 				Material::RegisterRenderPass(engine::Name(TC("Transpaternt")), m_pbrRenderPass, 2);
-				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), m_pbrRenderPass, 2);
+				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), m_pbrRenderPass, 3);
 			}
 
 		}
@@ -61,7 +62,18 @@ namespace ob::graphic {
 		void render(RenderContext& context, Span<Camera> cameras) override {
 			using namespace ob::rhi;
 
+			// グローバル変数設定
+
+
+
 			for (auto& camera : cameras) {
+
+				// カメラごとにフレームバッファが必要
+				// カメラの描画対象がリサイズされた場合はFrameBufferもリサイズする必要がある
+				// 描画はイミュータブルな操作であるためカメラごとに並列処理することが可能
+				// ただしCommandBufferの実行自体はcamerasの順番に従って送信する必要がある
+
+
 
 				auto size = camera.getRenderTarget()->size();
 				s32 width = camera.getRenderTarget()->width();
@@ -157,6 +169,78 @@ namespace ob::graphic {
 	private:
 
 		Ref<rhi::RenderPass> m_pbrRenderPass;
+
+	};
+
+
+	class DepthPrepassFeature : public RenderFeature{
+	public:
+
+		DepthPrepassFeature(RenderFeatureGroup& group) {
+
+			using namespace ob::rhi;
+			// RenderPass生成
+			{
+				RenderPassDescHelper desc;
+				desc.name = TC("DepthPrepass");
+				auto depth = desc.addAttachment(TextureFormat::D32);
+
+				desc.addSubpassXXD(depth);
+
+				m_renderPass = RenderPass::Create(desc);
+				OB_ASSERT_EXPR(m_renderPass);
+
+				Material::RegisterRenderPass(engine::Name(TC("DepthPrepass")), m_renderPass, 0);
+			}
+
+			auto size = group.getCamera()->getRenderTarget()->size();
+
+			// サイズ連動テクスチャ生成
+			{
+				// 生成or他パスで生成済みであれば取得
+				// 同名で同フォーマットがある場合のみ取得
+				group.addRenderTexture();
+			}
+
+
+			{
+				rhi::FrameBufferDesc desc;
+				// Cameraのリサイズに合わせてテクスチャ生成
+				desc.name = TC("DepthPrepassFeature");
+				desc.renderPass = m_renderPass;
+
+				// desc.attachments = {camera.getRenderTexture()};
+
+				m_frameBuffer = FrameBuffer::Create(desc);
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画処理
+		//@―---------------------------------------------------------------------------
+		virtual void render(RenderContext& context, const Ref<Camera>& camera) {
+
+			if (!m_frameBuffer)
+				return;
+
+			context.beginRenderPass(m_frameBuffer);
+
+			// RenderTagごとのRendererを集める
+			// camera情報をもとにソートとフィルタ
+			// 描画
+			context.getRendererGroup();
+
+
+		}
+
+	private:
+
+		Ref<rhi::RenderPass> m_renderPass;
+
+		Ref<rhi::RenderTexture> m_depthTexture;
+		Ref<rhi::FrameBuffer> m_frameBuffer;
+
+
 
 	};
 

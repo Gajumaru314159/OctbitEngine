@@ -33,6 +33,7 @@ set(public_libs
     Engine
     ImGui
     Graphic
+    Debug
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 

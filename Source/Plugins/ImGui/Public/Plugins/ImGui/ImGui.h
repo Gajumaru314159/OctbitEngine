@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #define IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+#define IMGUI_DISABLE_OBSOLETE_KEYIO
 #include "Library/imgui.h"
 #include <Framework/Core/Core.h>
 #include <Framework/Core/Utility/Ref.h>

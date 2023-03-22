@@ -75,6 +75,25 @@ namespace ob::core {
 		constexpr TypeId() : TypeId( TypeId::Get<InvalidType>().name() ){}
 
 		//@―---------------------------------------------------------------------------
+		//! @brief		名前からTypeIdを生成
+		//@―---------------------------------------------------------------------------
+		constexpr TypeId(StringView name)
+			: m_name(name)
+			, m_hash(0)
+		{
+			// FNV64
+			constexpr u64 offset_basis = 14695981039346656037u;
+			constexpr u64 fnv_prime = 1099511628211u;
+			u64 result = offset_basis;
+
+			for (size_t i = 0; i < name.size(); ++i) {
+				result ^= static_cast<u64>(name[i]);
+				result *= fnv_prime;
+			}
+			m_hash = result;
+		}
+
+		//@―---------------------------------------------------------------------------
 		//! @brief		空か
 		//@―---------------------------------------------------------------------------
 		constexpr bool empty()const { return m_name.empty(); }
@@ -106,22 +125,6 @@ namespace ob::core {
 		class InvalidType {
 
 		};
-
-		constexpr TypeId(StringView name) 
-			: m_name(name)
-			, m_hash(0)
-		{
-			// FNV64
-			constexpr u64 offset_basis = 14695981039346656037u;
-			constexpr u64 fnv_prime = 1099511628211u;
-			u64 result = offset_basis;
-
-			for (size_t i = 0; i < name.size(); ++i) {
-				result ^= static_cast<u64>(name[i]);
-				result *= fnv_prime;
-			}
-			m_hash = result;
-		}
 
 	private:
 		StringView	m_name;

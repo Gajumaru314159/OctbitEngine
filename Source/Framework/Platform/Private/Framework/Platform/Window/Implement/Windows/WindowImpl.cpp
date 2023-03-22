@@ -447,6 +447,7 @@ namespace ob::platform {
 			//	アクティブ状態が変更されていることを示します。
 			if (wparam)args.type = WindowEventType::Activate;
 			if (!wparam)args.type = WindowEventType::Deactivate;
+			// 記入力をリセットする必要がある？
 			break;
 		case WM_ENABLE:
 			//	ウインドウの有効または無効の状態(デバイス入力)が変更されていることを示します。
@@ -488,6 +489,15 @@ namespace ob::platform {
 		case WM_INPUT:
 			//	RAW Input Device (キーボード/マウス/リモコン等) からの入力があったことを示します。
 			break;
+		case WM_CHAR:
+		{
+			// 文字入力
+			std::wstring c(1,static_cast<wchar_t>(wparam));
+			String tmp;
+			StringEncoder::Encode(c, tmp);
+			m_inputText += tmp;
+			break;
+		}
 		default:break;
 		}
 

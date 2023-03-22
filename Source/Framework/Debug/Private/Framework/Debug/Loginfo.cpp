@@ -18,6 +18,12 @@ namespace ob::debug {
 		m_levelColors[LogLevel::Info] = Color::Cyan;
 		m_levelColors[LogLevel::Trace] = Color::Gray;
 
+		m_levelNames[LogLevel::Fatal] = TC("Fatal");
+		m_levelNames[LogLevel::Error] = TC("Error");
+		m_levelNames[LogLevel::Warning] = TC("Warning");
+		m_levelNames[LogLevel::Info] = TC("Info");
+		m_levelNames[LogLevel::Trace] = TC("Trace");
+
 		m_levelFilter[LogLevel::Fatal] = true;
 		m_levelFilter[LogLevel::Error] = true;
 		m_levelFilter[LogLevel::Warning] = true;
@@ -49,9 +55,7 @@ namespace ob::debug {
 			ImGui::Checkbox("AutoWrap", &m_bAutoWrap);
 
 			if (ImGui::Button("Clear")) {
-				FormatTo(m_filter.InputBuf, "mesh");
-				m_filter.Build();
-				//m_logs.clear();
+				m_logs.clear();
 			}
 
 			ImGui::SameLine();
@@ -60,7 +64,7 @@ namespace ob::debug {
 				ImGui::SetTooltip("format: aaa[,bbb][,-ccc]\nex: rhi,graphic,-mesh");
 			}
 
-			auto drawLevelFilter = [this](LogLevel level, const char* label) {
+			auto drawLevelFilter = [this](LogLevel level) {
 				Color color = m_levelColors[level];
 				Color hovered = Color::Lerp(color, Color::White, 0.1);
 				if (m_levelFilter[level] == false) {
@@ -70,32 +74,33 @@ namespace ob::debug {
 				ImGui::ScopedButtonColor sbc(color);
 				ImGui::ScopedButtonHoveredColor sbhc(hovered);
 
-				if (ImGui::Button(label)) {
+				if (ImGui::Button(ImGui::ToImChars(m_levelNames[level]))) {
 					m_levelFilter[level] = !m_levelFilter[level];
 				}
 
 				ImGui::SameLine();
 			};
 
-			drawLevelFilter(LogLevel::Fatal, "Fatal");
-			drawLevelFilter(LogLevel::Error, "Error");
-			drawLevelFilter(LogLevel::Warning, "Warning");
-			drawLevelFilter(LogLevel::Info, "Info");
-			drawLevelFilter(LogLevel::Trace, "Trace");
+			drawLevelFilter(LogLevel::Fatal);
+			drawLevelFilter(LogLevel::Error);
+			drawLevelFilter(LogLevel::Warning);
+			drawLevelFilter(LogLevel::Info);
+			drawLevelFilter(LogLevel::Trace);
 
 			ImGui::NewLine();
 
 			ImGuiTableFlags flags = ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Hideable | ImGuiTableFlags_ScrollY;
 
-			if (ImGui::BeginTable("LogTable", 4,flags)) {
+			if (ImGui::BeginTable("LogTable",4,flags)) {
 
 				// ヘッダ
 				ImGui::TableSetupColumn("Level", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoResize,60);
 				ImGui::TableSetupColumn("Message", ImGuiTableColumnFlags_WidthStretch);
 				ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed,100);
-				ImGui::TableSetupColumn("Location", ImGuiTableColumnFlags_WidthFixed,100);
+				ImGui::TableSetupColumn("Location", ImGuiTableColumnFlags_WidthFixed, 100);
 				ImGui::TableSetupScrollFreeze(0, 1);
 				ImGui::TableHeadersRow();
+
 
 				for (auto& [index, log] : ReverseIndexed(m_logs)) {
 
@@ -105,59 +110,47 @@ namespace ob::debug {
 					if(!m_filter.PassFilter(log.message.c_str()))
 						continue;
 
+					auto rowHeight = ImGui::GetTextLineHeight();
 
 					ImGui::TableNextRow();
 
 					ImGui::TableSetColumnIndex(0);
 					{
 						ImGui::ScopedTextColor stc(m_levelColors[log.level]);
-						switch (log.level) {
-						case LogLevel::Fatal:   ImGui::Text("Fatal"); break;
-						case LogLevel::Error:   ImGui::Text("Error"); break;
-						case LogLevel::Warning: ImGui::Text("Warning"); break;
-						case LogLevel::Info:    ImGui::Text("Info"); break;
-						case LogLevel::Trace:   ImGui::Text("Trace"); break;
-						default:                ImGui::Text("Unknown"); break;
-						}
+						ImGui::Text(ImGui::ToImChars(m_levelNames[log.level]));
 					}
 
 					ImGui::TableNextColumn();
 					if (m_bAutoWrap) {
 						ImGui::PushTextWrapPos(0.0f);
 						ImGui::TextUnformatted(ImGui::ToImChars(log.message));
+						auto width = ImGui::GetContentRegionAvail().x;
+						update_max(rowHeight,ImGui::CalcTextSize(ImGui::ToImChars(log.message),0,false, width).y);
 						ImGui::PopTextWrapPos();
 					} else {
 						ImGui::TextUnformatted(ImGui::ToImChars(log.message));
 					}
 
 					ImGui::TableNextColumn();
-					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime.toString("HH:mm:ss.ff"))));
+					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime.toString(TC("HH:mm:ss.ff")))));
 
 					ImGui::TableNextColumn();
 					ImGui::TextUnformatted(ImGui::ToImChars(log.file));
 
+					{
+						ImGui::ScopedID sid(index);
+						ImGui::SameLine();
+						ImGui::Selectable("##Row", false, ImGuiSelectableFlags_SpanAllColumns, { 0,rowHeight });
+						if (ImGui::BeginPopupContextItem("##Popup"))
+						{
+							if (ImGui::Selectable("Copy")) {
+								ImGui::SetClipboardText(ImGui::ToImChars(Format(TC("[{}]\n{}\n{}\n{}"), m_levelNames[log.level],log.message, log.line, log.datetime.toString(TC("HH:mm:ss.ff")))));
+							}
+							ImGui::EndPopup();
+						}
+					}
 				}
 
-				//s32 hovered_column = -1;
-				//for (auto& [index, log] : Indexed(m_logs)) {
-				//
-				//	ImGui::ScopedID sid(index);
-				//	if (ImGui::TableGetColumnFlags(index) & ImGuiTableColumnFlags_IsHovered)
-				//		hovered_column = index;
-				//	if (hovered_column == index && !ImGui::IsAnyItemHovered() && ImGui::IsMouseReleased(1))
-				//		ImGui::OpenPopup("MyPopup");
-				//	if (ImGui::BeginPopup("MyPopup"))
-				//	{
-				//		// TODO ログコピー機能
-				//		if (index < m_logs.size())
-				//			ImGui::Text("Copy");
-				//
-				//		if (ImGui::Button("Close"))
-				//			ImGui::CloseCurrentPopup();
-				//
-				//		ImGui::EndPopup();
-				//	}
-				//}
 				ImGui::EndTable();
 			}
 

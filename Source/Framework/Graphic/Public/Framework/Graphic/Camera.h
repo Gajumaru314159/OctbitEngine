@@ -6,22 +6,12 @@
 #pragma once
 #include <Framework/Graphic/CameraType.h>
 #include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Texture.h>
 
 namespace ob::graphic {
 
-
-    enum class Layer {
-
-    };
-
-    using LayerMask = BitFlags<Layer>;
-
-    using CameraPriority = s32;
-
-
     class RenderTexture;
     class Display;
-
 
     //@―---------------------------------------------------------------------------
     //! @brief      カメラ
@@ -38,57 +28,60 @@ namespace ob::graphic {
 
     public:
 
-        //===============================================================
-        // プロパティ
-        //===============================================================
-        f32 getFov()const;
-        void setFov(f32 value);
+        virtual ~Camera() = default;
 
-        Range getClipRange()const;
-        void setClipRange(Range range);
+        virtual f32 getFov()const = 0;
+        virtual void setFov(f32 value) = 0;
 
-        CameraType getCameraType()const;
-        void setCameraType(CameraType value);
+        virtual Range getClipRange()const = 0;
+        virtual void setClipRange(Range range) = 0;
 
-        const Matrix& getViewMatrix()const;
-        const Matrix& getProjectionMatrix()const;
-        const Matrix& getViewProjectionMatrix()const;
+        virtual CameraType getCameraType()const = 0;
+        virtual void setCameraType(CameraType value) = 0;
 
-        Vec3 worldToScreen(const Vec3& position)const;
-        Vec3 screenToWorld(const Vec3& position)const;
+        virtual const Matrix& getViewMatrix()const = 0;
+        virtual const Matrix& getProjectionMatrix()const = 0;
+        virtual const Matrix& getViewProjectionMatrix()const = 0;
+
+        virtual Vec3 worldToScreen(const Vec3& position)const = 0;
+        virtual Vec3 screenToWorld(const Vec3& position)const = 0;
         
 
+        // WorldMatrix
+        // CameraMatrix
+        // Rect
 
 
-
-        LayerMask getLayerMask()const;
-        void setLayerMask(LayerMask mask);
+        //virtual LayerMask getLayerMask()const;
+        //virtual void setLayerMask(LayerMask mask);
         
-        Rect getVieportRect();
-        void setVieportRect(Rect rect);
+        virtual Rect getVieportRect();
+        virtual void setVieportRect(Rect rect);
 
-        void setRenderTarget(s32 displayNo);
-        void setRenderTarget(const Ref<rhi::RenderTexture>&);
-        auto getRenderTarget()const -> const Ref<rhi::RenderTexture>&;
+        virtual void setRenderTarget(s32 displayNo);
+        virtual void setRenderTarget(const Ref<rhi::RenderTexture>&);
+        virtual auto getRenderTarget()const -> const Ref<rhi::RenderTexture>&;
 
 
-        f32 getAspect()const;
+        virtual f32 getAspect()const;
 
-        CameraType getType()const;
+        virtual CameraType getType()const;
 
-        auto getPriority()const->CameraPriority;
-        void setPriority(CameraPriority priority);
+        //virtual auto getPriority()const->CameraPriority;
+        //virtual void setPriority(CameraPriority priority);
 
         // Frustum
         // Range
 
         // 位置情報はTransform?
 
-        Ref<rhi::RenderTexture> allocateRenderTexture();
+        virtual Ref<rhi::RenderTexture> allocateRenderTexture();
 
-    private:
+        virtual void addRenderTargetEvent(rhi::TextureEventHandle& handle,rhi::TextureEventDelegate func);
 
-        Camera();
+    protected:
+
+        Camera() = default;
 
     private:
 
@@ -98,16 +91,18 @@ namespace ob::graphic {
         Viewport    m_viewport;
         f32         m_fovY;
         CameraType  m_type;
-        LayerMask   m_layerMask;
         Rect        m_rect;
-        CameraPriority m_priority;
+        //LayerMask   m_layerMask;
+        //CameraPriority m_priority;
 
         Optional<s32> m_display;
         Ref<rhi::RenderTexture> m_renderTexture;
 
         Matrix      m_viewMatrix;
         Matrix      m_projMatrix;
+
         Matrix      m_viewprojMatrix;
+
 
     };
 

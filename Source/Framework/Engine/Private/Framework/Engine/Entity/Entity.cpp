@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 
@@ -71,20 +72,26 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	Component* Entity::addComponent(TypeId typeId) {
 
-		// リフレクションで生成
-		Component* component = nullptr;
-
-		// TODO 依存順に生成
-		if (component) {
-
-			component->m_entity = this;
-			component->startup();
-
+		if (32 < m_components.size()) {
+			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,typeId.name());
+			return nullptr;
 		}
 
-		raisePropertyChanged(TC("Components"));
+		if (auto desc = ComponentFactory::Get().findCreator(typeId)) {
 
-		return component;
+			// 依存コンポーネントを生成
+			for (auto& depType : desc->getDependentComponentTypes()) {
+				if (findComponent(depType) == nullptr) {
+					if (addComponent(depType) == nullptr) {
+						LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", typeId.name(), depType.name());
+					}
+				}
+			}
+
+			raisePropertyChanged(TC("Components"));
+		}
+
+		return nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -152,6 +159,7 @@ namespace ob::engine {
 	Component* Entity::addComponent(Component* component) {
 		if (component) {
 			m_components.emplace_back(component);
+			component->initialize();
 			raisePropertyChanged("Components");
 		}
 		return component;

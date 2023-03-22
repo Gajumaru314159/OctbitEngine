@@ -59,7 +59,11 @@ namespace ob::platform {
         void setStyle(WindowStyle style) override;
 
         void* getHandle()const override;
-
+        String getTextInput() {
+            auto a = std::move(m_inputText);
+            m_inputText.clear();
+            return std::move(a);
+        }
 
         //===============================================================
         // イベント
@@ -101,7 +105,7 @@ namespace ob::platform {
         HWND                    m_hParentWnd;       //!< 親ウィンドウハンドル
         const StringBase<TCHAR> m_className;        //!< ウィンドウクラス名
         s32                     m_windowID;         //!< ウィンドウごとに割り当てられるID
-
+        String                  m_inputText;        //!< 入力テキストバッファ
 
         Vec2    m_lastSize;
         bool    m_isSizing = false;

@@ -9,7 +9,9 @@
 #include <Framework/Engine/Reflection/TypeBuilder.h>
 
 namespace ob::engine {
-	
+
+	OB_COMPONENT_CPP(TransformComponent, TransformComponentImpl);
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
@@ -116,7 +118,7 @@ OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponentImpl) {
 
 	using Type = ::ob::engine::Component;
 
-	tag(TC("DisallowMultipleComponent"));
+	tag(TC("DisallowMultiple"));
 
 	function(TC("getEntity"), &Type::getEntity);
 

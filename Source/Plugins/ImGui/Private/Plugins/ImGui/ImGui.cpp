@@ -11,6 +11,9 @@
 #include <Framework/RHI/All.h>
 
 
+// テスト
+#include <Windows.h>
+
 namespace ImGui {
 	inline namespace ob {
 
@@ -23,6 +26,8 @@ namespace ImGui {
 			ImString					stringConvertBuffer;
 			Array<char>					stringBuffer;
 			size_t						stringIndex;
+
+			ImString					clipboardBuffer;
 		};
 
 		struct DrawData
@@ -285,17 +290,17 @@ namespace ImGui {
 			ImGuiIO& io = ::ImGui::GetIO();
 
 			// 同時押し対応？
-			//// Left & right Shift keys: when both are pressed together, Windows tend to not generate the WM_KEYUP event for the first released one.
+			// Left & right Shift keys: when both are pressed together, Windows tend to not generate the WM_KEYUP event for the first released one.
 			//if (::ImGui::IsKeyDown(ImGuiKey_LeftShift) && !Keyboard::LeftShift.down())
-			//	ImGui_AddKeyEvent(ImGuiKey_LeftShift, false, Key::LeftShift);
+			//	io.AddKeyEvent(ImGuiKey_LeftShift, false, Key::LeftShift);
 			//if (::ImGui::IsKeyDown(ImGuiKey_RightShift) && !Keyboard::RightShift.down())
-			//	ImGui_AddKeyEvent(ImGuiKey_RightShift, false, Key::RightShift);
+			//	io.AddKeyEvent(ImGuiKey_RightShift, false, Key::RightShift);
 			//
 			//// Sometimes WM_KEYUP for Win key is not passed down to the app (e.g. for Win+V on some setups, according to GLFW).
 			//if (::ImGui::IsKeyDown(ImGuiKey_LeftSuper) && !Keyboard::LeftWindows.down())
-			//	ImGui_AddKeyEvent(ImGuiKey_LeftSuper, false, Key::LeftWindows);
+			//	io.AddKeyEvent(ImGuiKey_LeftSuper, false, Key::LeftWindows);
 			//if (::ImGui::IsKeyDown(ImGuiKey_RightSuper) && !Keyboard::RightWindows.down())
-			//	ImGui_AddKeyEvent(ImGuiKey_RightSuper, false, Key::RightWindows);
+			//	io.AddKeyEvent(ImGuiKey_RightSuper, false, Key::RightWindows);
 
 
 			struct KeyMap {
@@ -409,14 +414,107 @@ namespace ImGui {
 				{Key::KeypadAdd,      ImGuiKey_KeypadAdd},
 				{Key::KeypadEnter,    ImGuiKey_KeypadEnter},
 				//{Key::KeypadEquals,   ImGuiKey_KeypadEqual},
+
+
+				{ Key::LeftCtrl,       ImGuiMod_Ctrl },
+				{ Key::LeftAlt,       ImGuiMod_Alt },
+				{ Key::LeftShift,       ImGuiMod_Shift },
 			};
 
 			for (auto& [from, to] : keyMap) {
 				if (Keyboard::GetButton(from).down())io.AddKeyEvent(to, true);
 				if (Keyboard::GetButton(from).up())io.AddKeyEvent(to, false);
 			}
+
+			// 
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      IME更新
+		//@―---------------------------------------------------------------------------
+		static void UpdateImeData(ImGuiViewport*, ImGuiPlatformImeData* data)
+		{
+			if (data->WantVisible) {
+				// TODO ウィンドウごとにIMEコンテキストが異なる
+				HIMC hIMC = ImmGetContext((HWND)platform::Window::Main().getHandle());
+				COMPOSITIONFORM d;
+				d.dwStyle = CFS_POINT;
+				d.ptCurrentPos.x = data->InputPos.x;
+				d.ptCurrentPos.y = data->InputPos.y;
+				ImmSetCompositionWindow(hIMC, &d);
+			} else {
+
+			}
+
+			//if (data->WantVisible)
+			//{
+			//	SDL_Rect r;
+			//	r.x = (int)data->InputPos.x;
+			//	r.y = (int)data->InputPos.y;
+			//	r.w = 1;
+			//	r.h = (int)data->InputLineHeight;
+			//	SDL_SetTextInputRect(&r);
+			//	SDL_StartTextInput();
+			//} else
+			//{
+			//	SDL_StopTextInput();
+			//}
+		}
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      クリップボードにテキストをコピー
+		//@―---------------------------------------------------------------------------
+		static void ImGui_ImplSDL2_SetClipboardText(void*, const char* text)
+		{
+			HGLOBAL hText;
+
+			StringBase<char> text8 = text? text:"";
+			WString wtext;
+			StringEncoder::Encode(text8, wtext);
+
+			auto bufferSize = sizeof(wchar_t)*(wtext.size() + 1);
+
+			hText = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, bufferSize);
+			auto pText = static_cast<wchar_t*>(GlobalLock(hText));
+
+			memcpy_s(pText,bufferSize, wtext.data(), bufferSize);
+
+			GlobalUnlock(hText);
+
+			OpenClipboard(NULL);
+			EmptyClipboard();
+			SetClipboardData(CF_UNICODETEXT, hText);
+			CloseClipboard();
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      クリップボードからテキストを取得
+		//@―---------------------------------------------------------------------------
+		static const char* ImGui_ImplSDL2_GetClipboardText(void*)
+		{
+			if (auto bd = GetObBackendData()) {
+				if (IsClipboardFormatAvailable(CF_UNICODETEXT)) {
+
+					::OpenClipboard(NULL);
+
+					HANDLE hData;
+					hData = ::GetClipboardData(CF_UNICODETEXT);
+
+					wchar_t* pText = (wchar_t*)GlobalLock(hData);
+
+					WString wtext = pText? pText:L"";
+					StringEncoder::Encode(wtext,bd->clipboardBuffer);
+
+					GlobalUnlock(hData);
+
+					::CloseClipboard();
+
+				}
+				return bd->clipboardBuffer.c_str();
+			}
+			return "Pasted";
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      フォント画像生成
@@ -508,6 +606,8 @@ namespace ImGui {
 		//@―---------------------------------------------------------------------------
 		bool Startup(const ob::platform::Window& window, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
 
+			//::ImGui::SetAllocatorFunctions()
+
 			::ImGui::CreateContext();
 
 			ImGuiIO& io = ::ImGui::GetIO();
@@ -522,6 +622,11 @@ namespace ImGui {
 			io.BackendPlatformUserData = (void*)bd;
 			io.BackendPlatformName = "OctbitEngine";
 			io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;	// GetMouseCursor()の値を尊重することができる(オプション)
+
+			io.SetClipboardTextFn = ImGui_ImplSDL2_SetClipboardText;
+			io.GetClipboardTextFn = ImGui_ImplSDL2_GetClipboardText;
+			io.ClipboardUserData = nullptr;
+			io.SetPlatformImeDataFn = UpdateImeData;
 
 			//io.SetPlatformImeDataFn = IME::
 
@@ -644,6 +749,11 @@ namespace ImGui {
 			auto size = bd->window.getSize();
 			io.DisplaySize = ImVec2(size.x, size.y);
 
+			auto inputText = platform::Window::Main().getTextInput();
+			if (inputText.empty()==false) {
+				io.AddInputCharactersUTF8(inputText.c_str());
+			}
+
 			::ImGui::NewFrame();
 		}
 
@@ -670,7 +780,7 @@ namespace ImGui {
 			// バッファ生成
 			if (!bd->vertexBuffer || bd->vertexCount < draw_data->TotalVtxCount)
 			{
-				bd->vertexCount = draw_data->TotalVtxCount + 5000;
+				bd->vertexCount = (u64)draw_data->TotalVtxCount + 5000;
 
 				BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(bd->vertexCount);
 				desc.name = TC("::ImGui");
@@ -681,7 +791,7 @@ namespace ImGui {
 			}
 			if (!bd->indexBuffer || bd->indexCount < draw_data->TotalIdxCount)
 			{
-				bd->indexCount = draw_data->TotalIdxCount + 10000;
+				bd->indexCount = (u64)draw_data->TotalIdxCount + 10000;
 
 				BufferDesc desc = BufferDesc::Index<ImDrawIdx>(bd->indexCount);
 				desc.name = TC("::ImGui");

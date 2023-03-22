@@ -252,6 +252,10 @@ namespace ob::platform {
         return m_impl->getHandle();
     }
 
+    String Window::getTextInput() {
+        if (!m_impl)return TC("");
+        return m_impl->getTextInput();
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief      ウィンドウ・イベントのリスナを追加する

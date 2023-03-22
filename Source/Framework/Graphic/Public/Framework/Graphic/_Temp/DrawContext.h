@@ -28,16 +28,11 @@ namespace ob::graphic {
     };
 
 
-
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
     class DrawContext {
     public:
-
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
 
         //@―---------------------------------------------------------------------------
         //! @brief  説明
@@ -52,7 +47,7 @@ namespace ob::graphic {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
         template<class T>
-        T* allocateDrawItem(const Name& name) {
+        T* createDrawItem(const Name& name) {
 
             static_assert(std::is_base_of<DrawItem, T>::value == true, "T is not DrawItem");
 
@@ -66,34 +61,25 @@ namespace ob::graphic {
 
         void end() {
             for (auto& [tag, container] : m_itemMap) {
+                for(auto& item*container){
+                    item->~DrawItem();
+                }
                 container.clear();
             }
         }
 
     private:
-
         HashMap<Name,Array<const DrawItem*>> m_itemMap;
-
     };
-
-
-
 
     class DrawGroup {
     public:
-        virtual ~DrawGroup(){}
-    protected:
-        virtual void render(DrawContext&) {
-
+        DrawGroupTest(Span<Name> renderTags) {
+            // 描画グループのタグ設定
+            for(auto& tag:renderTags){
+                m_tags.push_back(tag);
+            }
         }
-    };
-
-    class DrawGroupTest :public DrawGroup {
-    public:
-        DrawGroupTest() {
-            m_tags.push_back(Name(TC("Opaque")));
-        }
-
     private:
         void render(DrawContext& context) override{
 
@@ -102,15 +88,16 @@ namespace ob::graphic {
             for (const auto& tag : m_tags) {
                 for (auto item : context.getDrawItems(tag)) {
                     // フィルタ
-                    // if(fillter)continue;
-                    m_items.push_back(item);
+                    if(!m_filter||m_filter(item)){
+                        m_items.push_back(item);
+                    }
                 }
             }
 
             // ソート
-            std::sort(m_items.begin(), m_items.end(), [](const DrawItem* a, const DrawItem* b) {
-
-            });
+            if(m_sorter){
+                std::sort(m_items.begin(), m_items.end(),m_sorter);
+            }
 
             // 描画
             for (auto item : m_items) {
@@ -120,25 +107,18 @@ namespace ob::graphic {
     private:
         Array<Name> m_tags;
         Array<const DrawItem*> m_items;
-
+        using Filter = std::function<bool(const DrawItem*)>;
+        using Sorter = std::function<bool(const DrawItem*,const DrawItem*)>;
+        Filer m_filter;
+        Sorter m_sorter;
     };
 
 
     class DrawItemTest :public DrawItem {
     public:
-
         void render()const override {
 
         }
     };
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
+    
 }// namespcae ob

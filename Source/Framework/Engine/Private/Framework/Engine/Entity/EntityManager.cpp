@@ -6,6 +6,7 @@
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/ModuleFactory.h>
+#include <Framework/Engine/Component/ComponentFactory.h>
 
 REGISTER_MODULE(ob::engine::EntityManager);
 
@@ -24,7 +25,11 @@ namespace ob::engine {
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
 	EntityManager::EntityManager() {
+
+		GEngine->get<ComponentFactory>();
+
 		m_entities.reserve(10000);
+
 	}
 
 	//@―---------------------------------------------------------------------------

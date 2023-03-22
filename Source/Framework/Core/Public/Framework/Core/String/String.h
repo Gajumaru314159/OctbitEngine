@@ -124,7 +124,7 @@ namespace ob::core {
 		void shrink_to_fit() { m_str.shrink_to_fit(); }
 		void clear() noexcept { m_str.clear(); }
 		bool empty() const noexcept { return m_str.empty(); }
-		size_type size_bytes() const noexcept { return m_size() * sizeof(value_type); }
+		size_type size_bytes() const noexcept { return size() * sizeof(value_type); }
 
 		explicit operator bool() const noexcept { return !m_str.empty(); }
 

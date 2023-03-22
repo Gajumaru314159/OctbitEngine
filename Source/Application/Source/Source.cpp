@@ -17,9 +17,11 @@
 
 #include <Plugins/ImGui/ImGui.h>
 
-#include <Framework/Engine/Component/TransformComponentImpl.h>
+#include <Framework/Engine/Component/TransformComponent.h>
 #include <Framework/Graphic/Component/CameraComponent.h>
 #include <Test/ComponentTest.h>
+
+#include <Framework/Debug/LogInfo.h>
 
 #include <Model.h>
 
@@ -207,6 +209,9 @@ int TestDirectX12() {
 	using namespace ob::rhi;
 	using namespace ob::graphic;
 
+	debug::LogInfo logInfo;
+
+
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
 	windowDesc.title = TC("Graphic Test");
@@ -321,8 +326,8 @@ int TestDirectX12() {
 	if (entity && scene) {
 
 
-		entity->addComponent<engine::TransformComponentImpl>();
-		entity->addComponent<graphic::CameraComponent>();
+		entity->addComponent<engine::TransformComponent>();
+		//entity->addComponent<graphic::CameraComponent>();
 
 	}
 
@@ -431,6 +436,7 @@ int TestDirectX12() {
 				drawOutliner(world->getRootScene());
 			}
 
+			logInfo.update();
 
 
 			ImGui::EndFrame(cmdList);
@@ -440,7 +446,7 @@ int TestDirectX12() {
 		cmdList->endRenderPass();
 
 		// ディスプレイ更新
-		if (!input::Keyboard::Z.pressed()) {
+		if (!input::Keyboard::R.pressed()) {
 
 			// ディスプレイにバインド
 			cmdList->applyDisplay(display, colorRT);

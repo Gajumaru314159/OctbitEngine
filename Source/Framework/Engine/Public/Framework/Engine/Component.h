@@ -11,9 +11,21 @@
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  コンポーネントをインターフェイスとして使用
+	//! @brief  コンポーネント定義マクロ
 	//@―---------------------------------------------------------------------------
-#define OB_USE_COMPONENT_AS_INTERFACE() virtual TypeId getComponentTypeId() const{return TypeId::Get<std::remove_cv_t<std::remove_reference_t<decltype(*this)>>>();}
+#define OB_COMPONENT(type)\
+	public:\
+		OB_RTTI();\
+		static type* Create();\
+		virtual TypeId getComponentTypeId() const{return TypeId::Get<type>();}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンポーネント実装マクロ
+	//@―---------------------------------------------------------------------------
+#define OB_COMPONENT_CPP(type,gen)\
+	type* type::Create() { return new gen; }
+
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネントのリスト
@@ -55,6 +67,7 @@ namespace ob::engine {
 		//! @details	この関数は Entity ツリーの構築後に一度だけ呼び出されます。
 		//!				初期化に Entity や他の Componentを利用する場合に使用します。
 		//!				非同期で実行されます。
+		//!				依存コンポ―ネントは初期化前です。
 		//@―---------------------------------------------------------------------------
 		virtual void initialize() {};
 

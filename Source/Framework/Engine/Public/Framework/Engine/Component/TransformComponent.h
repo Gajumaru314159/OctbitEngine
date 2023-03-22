@@ -12,7 +12,7 @@ namespace ob::engine {
 	class TransformComponent :public Component {
 	public:
 
-		OB_USE_COMPONENT_AS_INTERFACE();
+		OB_COMPONENT(TransformComponent);
 
 		virtual ~TransformComponent() = default;
 
