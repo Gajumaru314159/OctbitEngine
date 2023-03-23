@@ -14,6 +14,39 @@
 // テスト
 #include <Windows.h>
 
+
+ImFileHandle ImFileOpen(const char* filename, const char* mode) {
+	using namespace ob::core;
+	BitFlags<FileOpenMode> modes;
+	if (strchr(mode, 'r'))modes.on(FileOpenMode::Read);
+	if (strchr(mode, 'w'))modes.on(FileOpenMode::Write);
+	if (strchr(mode, 'a'))modes.on(FileOpenMode::Append);
+	if (strchr(mode, 'b')==nullptr)modes.on(FileOpenMode::Text);
+	if (strchr(mode, '+'))LOG_FATAL("Not supported");// modes.on(FileOpenMode::Append);
+	Path path = filename;
+	return new ob::core::FileStream(path, modes.get_enum());
+}
+bool ImFileClose(ImFileHandle file) {
+	if (file!=nullptr)delete file;
+	return file!=nullptr;
+}
+ob::u64 ImFileGetSize(ImFileHandle file) {
+	return file ? file->size() : 0;
+}
+ob::u64 ImFileRead(void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
+	if (!file)return 0;
+	if (file->canRead() == false)return 0;
+	file->read(data, size * count);
+	return size * count;
+}
+ImU64 ImFileWrite(const void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
+	if (!file)return 0;
+	if (file->canWrite() == false)return 0;
+	file->write(data, size * count);
+	return size * count;
+}
+
+
 namespace ImGui {
 	inline namespace ob {
 
