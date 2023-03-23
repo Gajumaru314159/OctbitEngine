@@ -10,6 +10,19 @@
 
 namespace ob::core {
 
+	static String GetErrnoString() {
+		std::string errorStr = strerror(errno);
+		String errorStr2;
+		StringEncoder::Encode(errorStr, errorStr2);
+		return errorStr;
+	}
+
+	static String GetPathString(const Path& path) {
+		String path2;
+		StringEncoder::Encode(path.wstring(), path2);
+		return path2;
+	}
+
 	class FileStreamImpl {
 	public:
 
@@ -22,30 +35,31 @@ namespace ob::core {
 			, m_path(path)
 			, m_size(0)
 		{
+			BitFlags modes(mode);
 			const wchar_t* pMode = L"";
-			switch (mode) {
-			case ob::core::FileOpenMode::Read:		pMode = L"rb"; break;
-			case ob::core::FileOpenMode::Write:		pMode = L"wb"; break;
-			case ob::core::FileOpenMode::Append:	pMode = L"ab"; break;
-			default:LOG_WARNING("不正なFileOpenMode[value={}]", enum_cast(mode)); break;
+			if (modes.has(FileOpenMode::Text)) {
+				if (modes.has(FileOpenMode::Read))pMode = L"r";
+				if (modes.has(FileOpenMode::Write))pMode = L"w";
+				if (modes.has(FileOpenMode::Append))pMode = L"a";
+			} else {
+				if (modes.has(FileOpenMode::Read))pMode = L"rb";
+				if (modes.has(FileOpenMode::Write))pMode = L"wb";
+				if (modes.has(FileOpenMode::Append))pMode = L"ab";
 			}
 			auto wpath = path.wstring();
-			if (_wfopen_s(&m_fp, wpath.c_str(), pMode) == 0) {
+			auto err = _wfopen_s(&m_fp, wpath.c_str(), pMode);
+			if (err== 0) {
 				std::error_code code;
 				auto s = file_size(m_path, code);
 				if (s != static_cast<std::uintmax_t>(-1)) {
 					m_size = (size_t)s;
 				} else {
-					String path2;
-					StringEncoder::Encode(path.wstring(), path2);
-					LOG_WARNING("サイズの取得に失敗[{}]", path2);
-					m_fp = nullptr;
+					LOG_WARNING("サイズの取得に失敗[{}]\n{}", GetPathString(path), GetErrnoString());
+					close();
 				}
 			} else {
-				String path2;
-				StringEncoder::Encode(path.wstring(), path2);
-				LOG_WARNING("ファイルを開けませんでした[{}]", path2);
-				m_fp = nullptr;
+				LOG_WARNING("ファイルを開けませんでした[{}]\n{}", GetPathString(path), GetErrnoString());
+				close();
 			}
 
 		}
@@ -55,6 +69,17 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		~FileStreamImpl() {
 			flush();
+			close();
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  クローズ
+		//@―---------------------------------------------------------------------------
+		void close() {
+			if (m_fp) {
+				fclose(m_fp);
+				m_fp = nullptr;
+			}
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -101,6 +126,7 @@ namespace ob::core {
 			fpos_t pos;
 			if (m_fp == nullptr)return 0;
 			if (fgetpos(m_fp, &pos)) {
+				LOG_WARNING("読み取り位置の取得に失敗[{}]\n{}", GetPathString(m_path), GetErrnoString());
 				return 0;
 			}
 			return (size_t)pos;
@@ -113,6 +139,7 @@ namespace ob::core {
 			checkOpen();
 			offset_t readCount = fread_s(buffer, byteCount, sizeof(byte), byteCount, m_fp);
 			if(readCount!=byteCount) {
+				LOG_WARNING("読み取り失敗[{}]\n{}", GetPathString(m_path), GetErrnoString());
 				// readCount 読めなかったら戻す
 				seek(-readCount, SeekOrigin::Current);
 				return false;
@@ -128,9 +155,7 @@ namespace ob::core {
 			offset_t writeCount = fwrite(buffer, sizeof(byte), byteCount, m_fp);
 			m_size = std::max(m_size,position()+writeCount);
 			if (writeCount != byteCount) {
-				String path;
-				StringEncoder::Encode(m_path.wstring(), path);
-				LOG_ERROR("ファイルの書き込みに失敗[{}]", path);
+				LOG_WARNING("読み取り位置の取得に失敗[{}]\n{}", GetPathString(m_path), GetErrnoString());
 				return false;
 			}
 			return true;
@@ -156,9 +181,8 @@ namespace ob::core {
 			}
 
 			if (fseek(m_fp, (long)offset, convert(origin)) != 0) {
-				String path;
-				StringEncoder::Encode(m_path.wstring(), path);
-				LOG_ERROR("ファイルのシークに失敗[{}]", path);
+				LOG_WARNING("ファイルのシークに失敗[{}]\n{}", GetPathString(m_path), GetErrnoString());
+
 				return false;
 			}
 			return true;
@@ -169,7 +193,9 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		void flush() {
 			if (m_fp) {
-				fflush(m_fp);
+				if (fflush(m_fp) == EOF) {
+					LOG_WARNING("ファイルのフラッシュに失敗[{}]\n{}", GetPathString(m_path), GetErrnoString());
+				}
 			}
 		}
 

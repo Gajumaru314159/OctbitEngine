@@ -37,6 +37,8 @@ namespace ob::core {
 		Read = get_bit(0),	//!< 読み取り
 		Write = get_bit(1),	//!< 書き込み
 		Append = get_bit(2),	//!< 追記
+
+		Text = get_bit(3),
 	};
 
 }// namespcae ob
