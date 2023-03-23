@@ -18,10 +18,12 @@
 //@―---------------------------------------------------------------------------
 //! @brief      アサーションの基底マクロ
 //@―---------------------------------------------------------------------------
-#define _internal_OB_ASSERT_BASE(expr,format,...)                                       \
-if(UNLIKELY(!(expr))){                                                                  \
-    _internal_OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);    \
-}
+#define _internal_OB_ASSERT_BASE(expr,format,...)                                           \
+do{                                                                                           \
+    if(UNLIKELY(!(expr))){                                                                  \
+        _internal_OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);    \
+    }                                                                                       \
+}while(0)
 
 //@―---------------------------------------------------------------------------
 //! @brief      プログラムの前提条件を定義する
