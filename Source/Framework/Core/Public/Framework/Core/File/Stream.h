@@ -58,7 +58,7 @@ namespace ob::core {
 		//! @param byteCount 書き込むバイト数
 		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		virtual bool write(void* buffer, size_t byteCount) = 0;
+		virtual bool write(const void* buffer, size_t byteCount) = 0;
 
 
 		//@―---------------------------------------------------------------------------

@@ -123,7 +123,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  書き込み
 		//@―---------------------------------------------------------------------------
-		bool write(void* buffer, size_t byteCount) {
+		bool write(const void* buffer, size_t byteCount) {
 			checkOpen();
 			offset_t writeCount = fwrite(buffer, sizeof(byte), byteCount, m_fp);
 			m_size = std::max(m_size,position()+writeCount);
@@ -217,7 +217,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  書き込み
 	//@―---------------------------------------------------------------------------
-	bool FileStream::write(void* buffer, size_t byteCount) { return m_impl->write(buffer, byteCount); }
+	bool FileStream::write(const void* buffer, size_t byteCount) { return m_impl->write(buffer, byteCount); }
 	//@―---------------------------------------------------------------------------
 	//! @brief  シーク
 	//@―---------------------------------------------------------------------------

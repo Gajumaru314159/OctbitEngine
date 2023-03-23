@@ -68,7 +68,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  書き込み
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::write(void* buffer, size_t byteCount) {
+	bool BlobStream::write(const void* buffer, size_t byteCount) {
 		auto needSize = m_position + byteCount;
 		m_blob.resize(needSize);
 		std::memcpy(m_blob.data() + m_position, buffer, byteCount);

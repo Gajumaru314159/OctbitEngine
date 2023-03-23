@@ -77,7 +77,7 @@ namespace ob::core {
 		//! @param byteCount 書き込むバイト数
 		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		bool write(void* buffer, size_t byteCount) override;
+		bool write(const void* buffer, size_t byteCount) override;
 
 
 		//@―---------------------------------------------------------------------------
