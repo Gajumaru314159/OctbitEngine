@@ -15,6 +15,9 @@
 #include <Windows.h>
 
 
+//@―---------------------------------------------------------------------------
+//! @brief      ファイルオープン
+//@―---------------------------------------------------------------------------
 ImFileHandle ImFileOpen(const char* filename, const char* mode) {
 	using namespace ob::core;
 	BitFlags<FileOpenMode> modes;
@@ -26,19 +29,31 @@ ImFileHandle ImFileOpen(const char* filename, const char* mode) {
 	Path path = filename;
 	return new ob::core::FileStream(path, modes.get_enum());
 }
+//@―---------------------------------------------------------------------------
+//! @brief      ファイルクローズ
+//@―---------------------------------------------------------------------------
 bool ImFileClose(ImFileHandle file) {
 	if (file!=nullptr)delete file;
 	return file!=nullptr;
 }
+//@―---------------------------------------------------------------------------
+//! @brief      ファイルサイズ取得
+//@―---------------------------------------------------------------------------
 ob::u64 ImFileGetSize(ImFileHandle file) {
 	return file ? file->size() : 0;
 }
+//@―---------------------------------------------------------------------------
+//! @brief      ファイル読み込み
+//@―---------------------------------------------------------------------------
 ob::u64 ImFileRead(void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	if (!file)return 0;
 	if (file->canRead() == false)return 0;
 	file->read(data, size * count);
 	return size * count;
 }
+//@―---------------------------------------------------------------------------
+//! @brief      ファイル書き込み
+//@―---------------------------------------------------------------------------
 ImU64 ImFileWrite(const void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	if (!file)return 0;
 	if (file->canWrite() == false)return 0;
