@@ -309,7 +309,7 @@ int TestDirectX12() {
 	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 
 	// ImGui初期化
-	ImGui::Startup(window, renderPass);
+	ImGui::StartupImGui(window, renderPass);
 
 
 
@@ -460,8 +460,7 @@ int TestDirectX12() {
 		cmdList->flush();
 
 	}
-	ImGui::Shutdown();
-	ImGui::DestroyContext();
+	ImGui::ShutdownImGui();
 
 	return 0;
 }
