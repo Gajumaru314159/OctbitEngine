@@ -44,14 +44,6 @@ namespace ob {
         };
     }
 
-    TEST(Logger, OutputLog) {
-        //LOG_FATAL("FATALログ");
-        LOG_ERROR("ERRORログ");
-        LOG_WARNING("WARNINGエラー");
-        LOG_INFO("INFOログ");
-        LOG_TRACE("TRACEログ");
-    }
-
     TEST(Logger, Subscribe) {
 
         // ログイベントを登録
@@ -59,6 +51,13 @@ namespace ob {
         Logger::Get().addEvent(handle, { LogEvent });
 
         // ログ追加
+        {
+            String message = TC("Traceログチェック");
+            LOG_TRACE("[{0}]", message);
+
+            ASSERT_EQ(s_logType, LogLevel::Trace);
+            ASSERT_EQ(s_message, TC("[Traceログチェック]"));
+        }
         {
             String message = TC("Infoログチェック");
             LOG_INFO("[{0}]", message);
@@ -73,17 +72,31 @@ namespace ob {
             ASSERT_EQ(s_logType, LogLevel::Warning);
             ASSERT_EQ(s_message, TC("[Warningログチェック]"));
         }
+        {
+            String message = TC("Errorログチェック");
+            LOG_ERROR("[{0}]", message);
+
+            ASSERT_EQ(s_logType, LogLevel::Error);
+            ASSERT_EQ(s_message, TC("[Errorログチェック]"));
+        }
+        if(false){
+            String message = TC("Fatalログチェック");
+            LOG_FATAL("[{0}]", message);
+
+            ASSERT_EQ(s_logType, LogLevel::Fatal);
+            ASSERT_EQ(s_message, TC("[Fatalログチェック]"));
+        }
 
         // ログイベントの削除
         Logger::Get().removeEvent(handle);
 
         // ログ追加
         {
-            String message = TC("Infoログチェック");
+            String message = TC("購読解除");
             LOG_INFO("[{0}]", message);
 
             ASSERT_NE(s_logType , LogLevel::Info);
-            ASSERT_NE(s_message, TC("[Infoログチェック]"));
+            ASSERT_NE(s_message, TC("[購読解除]"));
         }
 
     }
