@@ -7,7 +7,7 @@
 
 using namespace ob;
 
-TEST(PathTest, Constructors)
+TEST(Path, Constructors)
 {
     Path emptyPath;
     EXPECT_TRUE(emptyPath.empty());
@@ -22,7 +22,7 @@ TEST(PathTest, Constructors)
     EXPECT_EQ(pathFromPath.string(), pathFromCString.string());
 }
 
-TEST(PathTest, Assignment)
+TEST(Path, Assignment)
 {
     Path emptyPath;
     Path path("C:/Windows");
@@ -34,7 +34,7 @@ TEST(PathTest, Assignment)
     EXPECT_EQ(emptyPath.string(), "C:/Program Files");
 }
 
-TEST(PathTest, Concatenation)
+TEST(Path, Concatenation)
 {
     Path path("C:/Program Files");
     path /= "MyApp";
@@ -45,7 +45,7 @@ TEST(PathTest, Concatenation)
     EXPECT_EQ(newPath.string(), "C:/Program Files/MyApp/bin");
 }
 
-TEST(PathTest, Extension)
+TEST(Path, Extension)
 {
     Path path("C:/Users/Public/image.png");
     EXPECT_EQ(path.extension(), "png");
@@ -61,7 +61,7 @@ TEST(PathTest, Extension)
     EXPECT_FALSE(path.hasExtension(".png"));
 }
 
-TEST(PathTest, Accessor)
+TEST(Path, Accessor)
 {
     Path path("C:/Users/Public/image.png");
     EXPECT_EQ(path.fileName(), "image.png");
@@ -74,7 +74,7 @@ TEST(PathTest, Accessor)
     EXPECT_EQ(path.fileName(), "icon.jpg");
 }
 
-TEST(PathTest, Directory)
+TEST(Path, Directory)
 {
     Path path("C:/Users/Public/image.png");
     EXPECT_FALSE(path.isDirectory());
@@ -88,7 +88,7 @@ TEST(PathTest, Directory)
     EXPECT_EQ(directoryPath.string(), "C:/Users/Public/pictures");
 }
 
-TEST(PathTest, Root)
+TEST(Path, Root)
 {
     Path path("C:/Program Files");
     EXPECT_FALSE(path.isRoot());
