@@ -19,7 +19,7 @@ namespace ob::core {
 
 	static String GetPathString(const Path& path) {
 		String path2;
-		StringEncoder::Encode(path.wstring(), path2);
+		StringEncoder::Encode(path.string(), path2);
 		return path2;
 	}
 
@@ -46,11 +46,13 @@ namespace ob::core {
 				if (modes.has(FileOpenMode::Write))pMode = L"wb";
 				if (modes.has(FileOpenMode::Append))pMode = L"ab";
 			}
-			auto wpath = path.wstring();
+			WString wpath;
+			StringEncoder::Encode(path.string(), wpath);
 			auto err = _wfopen_s(&m_fp, wpath.c_str(), pMode);
 			if (err== 0) {
 				std::error_code code;
-				auto s = file_size(m_path, code);
+				std::filesystem::path fspath = wpath.c_str();
+				auto s = file_size(fspath, code);
 				if (s != static_cast<std::uintmax_t>(-1)) {
 					m_size = (size_t)s;
 				} else {

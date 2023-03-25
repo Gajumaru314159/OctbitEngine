@@ -75,13 +75,9 @@ namespace ob::rhi {
 
         FileStream fs(path);
         if (fs) {
-
-            String name;
-            StringEncoder::Encode(path.native(),name);
-
             Blob blob(fs.size());
             fs.read(blob.data(), blob.size());
-            return Texture::Create(blob,name);
+            return Texture::Create(blob, path.string());
         }
 
         return nullptr;

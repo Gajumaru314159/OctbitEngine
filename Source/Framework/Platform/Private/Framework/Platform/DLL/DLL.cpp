@@ -20,12 +20,13 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     DLL::DLL(const Path& path) {
         m_handle = nullptr;
+
         auto pathWithExt = path;
-        pathWithExt.replace_extension(".dll");
+        pathWithExt.replaceExtension(TC(".dll"));
         
-        StringBase<wchar_t> fileNameW;
-        StringEncoder::Encode(pathWithExt.c_str(), fileNameW);
-        HMODULE dll = ::LoadLibrary(fileNameW.c_str());
+        WString fileNameW;
+        StringEncoder::Encode(pathWithExt.string(), fileNameW);
+        HMODULE dll = ::LoadLibraryW(fileNameW.c_str());
 
         if (dll == nullptr) {
             String pathString;

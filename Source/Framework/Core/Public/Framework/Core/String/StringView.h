@@ -61,7 +61,6 @@ namespace ob::core {
 		// 変換
 		//===============================================================
 		operator std::basic_string_view<TChar>() const noexcept { return m_view; }
-		explicit constexpr operator bool() const noexcept { return !m_view.empty(); }
 
 
 		//===============================================================
@@ -152,7 +151,7 @@ namespace ob::core {
 
 		bool ends_with(value_type ch) const noexcept {
 			if (empty())return false;
-			return m_view.back() == c;
+			return m_view.back() == ch;
 		}
 		constexpr bool ends_with(StringViewBase s) const noexcept {
 			if (size() < s.size())return false;

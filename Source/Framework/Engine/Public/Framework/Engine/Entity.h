@@ -137,25 +137,23 @@ namespace ob::engine {
 
 	private:
 
-		std::atomic<Scene*>		m_scene = nullptr;
-		std::atomic<Entity*>	m_parent = nullptr;
-
 		String					m_name;
+		List<Entity*>			m_children;
+		std::atomic<Entity*>	m_parent = nullptr;
+		ComponentList			m_components;
 		TagSet					m_tags;
+		
+		bool					m_active : 1;
+		bool					m_visible : 1;
+
 		//LayerMask				m_layerMask;
 
 		EntityHandle			m_handle;
-		SpinLock				m_childrenLock;
-		List<Entity*>			m_children;
 
 		ParentChangedNotifier	m_parentChangedNotifier;
 
-		ComponentList			m_components;
-
-
-		bool	m_active : 1;
-		bool	m_visible : 1;
-
+		std::atomic<Scene*>		m_scene = nullptr;
+		SpinLock				m_childrenLock;
 	};
 
 

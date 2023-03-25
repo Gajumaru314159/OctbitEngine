@@ -266,7 +266,7 @@ template <> struct fmt::formatter<ob::core::DateTime, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::DateTime& dt, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), dt.toString());
+		return format_to(ctx.out(), dt.toString().c_str());
 	}
 };
 //! @endcond

@@ -126,8 +126,6 @@ namespace ob::core {
 		bool empty() const noexcept { return m_str.empty(); }
 		size_type size_bytes() const noexcept { return size() * sizeof(value_type); }
 
-		explicit operator bool() const noexcept { return !m_str.empty(); }
-
 
 		//===============================================================
 		// 要素アクセス
@@ -213,7 +211,7 @@ namespace ob::core {
 		void pop_front() { m_str.pop_front(); }
 		void pop_front_n(size_type n) { for (size_type i = 0; i < n; ++i)m_str.push_front(); }
 		void pop_back() noexcept { m_str.pop_back(); }
-		void pop_back_n(size_type n) noexcept { for (size_type i = 0; i < n; ++i)m_str.push_back(); }
+		void pop_back_n(size_type n) noexcept { for (size_type i = 0; i < n; ++i)m_str.pop_back(); }
 
 		StringBase& remove(value_type c) {
 			size_type i, n;
@@ -292,9 +290,9 @@ namespace ob::core {
 		//===============================================================
 		// 文字列の切り出し
 		//===============================================================
-		StringViewBase<TChar> substr(size_type pos = 0, size_type n = npos) const { return m_str.substr(pos, n); }
-		StringViewBase<TChar> rsubstr(size_type pos = 0, size_type n = npos) const { return m_str.substr(size() - pos - n - 1, n); }
-		StringViewBase<TChar> substr_range(size_type first = 0, size_type last = npos) const { return m_str.substr(first, last - first); }
+		StringViewBase<TChar> substr(size_type pos = 0, size_type n = npos) const { return StringViewBase<TChar>(m_str).substr(pos, n); }
+		StringViewBase<TChar> rsubstr(size_type pos = 0, size_type n = npos) const { return StringViewBase<TChar>(m_str).substr(size() - pos - n - 1, n); }
+		StringViewBase<TChar> substr_range(size_type first = 0, size_type last = npos) const { return StringViewBase<TChar>(m_str).substr(first, last - first); }
 
 
 		//===============================================================
@@ -398,9 +396,29 @@ namespace ob::core {
 	using String = StringBase<Char>;
 
 	//@―---------------------------------------------------------------------------
+	//! @brief			ネイティブ文字列
+	//@―---------------------------------------------------------------------------
+	using NativeString = StringBase<NativeChar>;
+
+	//@―---------------------------------------------------------------------------
 	//! @brief			ワイド文字列
 	//@―---------------------------------------------------------------------------
 	using WString = StringBase<wchar_t>;
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			UTF-8文字列
+	//@―---------------------------------------------------------------------------
+	using U8String = StringBase<char>;
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			UTF-16文字列
+	//@―---------------------------------------------------------------------------
+	using U16String = StringBase<char16_t>;
+
+	//@―---------------------------------------------------------------------------
+	//! @brief			UTF-16文字列
+	//@―---------------------------------------------------------------------------
+	using U32String = StringBase<char32_t>;
 
 }
 

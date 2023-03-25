@@ -23,10 +23,15 @@
 			</ArrayItems>
 		</Expand>
 	</Type>
-	
+
 	<!--String-->
 	<Type Name="ob::core::StringBase&lt;char&gt;">
-		<DisplayString>{m_str,sb}</DisplayString>
+		<DisplayString>{m_str}</DisplayString>
+	</Type>
+	
+	<!--StringView-->
+	<Type Name="ob::core::StringViewBase&lt;*&gt;">
+		<DisplayString>{m_view,sb}</DisplayString>
 	</Type>
 
 	<!--Pimpl-->
@@ -54,6 +59,11 @@
 				<DisplayString>({m03} ,{m13} ,{m23})</DisplayString>
 			</Synthetic>
 		</Expand>
+	</Type>
+
+	<!--TypeId-->
+	<Type Name="ob::core::TypeId">
+		<DisplayString>{m_name.m_view,sb}</DisplayString>
 	</Type>
 	
 </AutoVisualizer>

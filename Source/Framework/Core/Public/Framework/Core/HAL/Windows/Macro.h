@@ -34,5 +34,10 @@
 #define DLL_IMPORT_IMPL                 __declspec(dllimport)                               // DLL入力
 #define _internal_FUNC_NAME             __FUNCSIG__                                         // 関数名
 
+//@―---------------------------------------------------------------------------
+// 型定義
+//@―---------------------------------------------------------------------------
+using NativeChar = wchar_t;
+
 #endif
 //! @endcond

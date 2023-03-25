@@ -1,4 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?> 
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<!--Entity-->
+	<!--<Type Name="ob::engine::Entity">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="parent">m_parent</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="components">m_components</Item>
+			<Item Name="tags">m_tags</Item>
+			<Item Name="active">m_active</Item>
+			<Item Name="visible">m_visible</Item>
+		</Expand>
+	</Type>-->
 	
 </AutoVisualizer>

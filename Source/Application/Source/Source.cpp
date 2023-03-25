@@ -1,33 +1,24 @@
-﻿#include <Windows.h>
-
-#include <Framework/RHI/All.h>
-
-#include <Framework/Platform/Window.h>
-
+﻿#include <Framework/RHI/All.h>
 #include <Framework/Input/All.h>
+#include <Framework/Platform/Window.h>
 
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/EngineConfig.h>
 #include <Framework/Engine/World.h>
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
+#include <Framework/Engine/Component/TransformComponent.h>
 
 #include <Framework/Graphic/Material.h>
 #include <Framework/Graphic/Mesh.h>
-
-#include <Plugins/ImGui/ImGui.h>
-
-#include <Framework/Engine/Component/TransformComponent.h>
 #include <Framework/Graphic/Component/CameraComponent.h>
-#include <Test/ComponentTest.h>
 
 #include <Framework/Debug/LogInfo.h>
 
+#include <Plugins/ImGui/ImGui.h>
+
 #include <Model.h>
 
-#pragma warning(push, 0)
-#include <OBJ_Loader.h>
-#pragma warning(pop)
 //-----------------------------------------------------------------
 using namespace ob;
 
@@ -138,8 +129,6 @@ void drawOutliner(const Ref<engine::Scene>& scene) {
 	ImGui::End();
 
 }
-
-
 void drawComponents(engine::Entity* pEntity) {
 
 	if (ImGui::Begin("Inspector")) {

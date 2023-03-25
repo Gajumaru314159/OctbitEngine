@@ -39,7 +39,7 @@ namespace ob::debug {
 				cache.datetime = DateTime::Now();
 				cache.level = log.level;
 				cache.message = log.message;
-				cache.file = Format(TC("{}({})"), Path(log.sourceLocation.filePath).filename().u8string().c_str(), log.sourceLocation.line);
+				cache.file = Format(TC("{}({})"), Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
 				cache.line = Format(TC("{}({})"),log.sourceLocation.filePath, log.sourceLocation.line);
 				m_logs.emplace_back(std::move(cache));
 			}
