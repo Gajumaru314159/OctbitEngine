@@ -10,15 +10,15 @@ option(Vulkan "Enable Vulkan RHI" OFF)
 #------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
-set(CMAKE_CXX_STANDARD 17)                      # C++17を使用
-set(CMAKE_CXX_STANDARD_REQUIRED ON)             # 古いSTLにフォールバックしない
-set(CMAKE_CXX_EXTENSIONS OFF)                   # GNU拡張オフ
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release" ) # DebugとReleaseのみ使用(MinSizeRel等を使わない)
-set(CMAKE_DEBUG_POSTFIX "")                     # 
+set(CMAKE_CXX_STANDARD 17)                                          # C++17を使用
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                                 # 古いSTLにフォールバックしない
+set(CMAKE_CXX_EXTENSIONS OFF)                                       # GNU拡張オフ
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                     # DebugとReleaseのみ使用(MinSizeRel等を使わない)
+set(CMAKE_DEBUG_POSTFIX "")                                         # 
 
-add_definitions(-D_UNICODE -DUNICODE)           # 文字リテラルをユニコードとする
-add_definitions(/Zc:__cplusplus)                # __cplusplusを使えるようにする
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)    # フィルタを使用する
+add_definitions(-D_UNICODE -DUNICODE)                               # 文字リテラルをユニコードとする
+add_definitions(/Zc:__cplusplus)                                    # __cplusplusを使えるようにする
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
 
 #------------------------------------------------------------------------------
@@ -29,6 +29,7 @@ set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
 
 set(OB_CONFIGURATION "Debug")
+
 
 #------------------------------------------------------------------------------
 # プラットフォームごとの設定
@@ -81,13 +82,17 @@ if(Vulkan)
     # FetchContent_MakeAvailable(glslang spirv)
 endif()
 
-include(ThirdParty.cmake)
+
+#------------------------------------------------------------------------------
+# 汎用機能
+#------------------------------------------------------------------------------
+include("ThirdParty.cmake")
+include("Source/CMake/Common.cmake")
 
 
 #------------------------------------------------------------------------------
 # プロジェクト読み込み
 #------------------------------------------------------------------------------
-include(Common.cmake)
 
 # Framework
 add_subdirectory ("Source/Framework/Core")

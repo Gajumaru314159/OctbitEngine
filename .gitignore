@@ -1,6 +1,8 @@
 /Build/
+/Insall/
 /Docs/html
 /Memo/
+/.vs
 
 .zip
-/imgui.ini
+imgui.ini
