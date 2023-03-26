@@ -1,0 +1,76 @@
+﻿//***********************************************************
+//! @file
+//! @brief		BitOpテスト
+//! @author		Gajumaru
+//***********************************************************
+#include <Framework/Core/Math/BitOp.h>
+
+using namespace ob;
+
+TEST(BitOp, GetBitCount) {
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u8>(0b00000000)), 0);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u8>(0b00100101)), 3);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u8>(0b11101101)), 6);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u8>(0b11111111)), 8);
+
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u16>(0b0000000000000000)), 0);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u16>(0b0010101110110101)), 9);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u16>(0b1010101010101010)), 8);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u16>(0b1111111111111111)), 16);
+
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u32>(0b00000000000000000000000000000000)), 0);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u32>(0b10000100001000001100011100001011)), 11);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u32>(0b10101010101010101010101010101010)), 16);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u32>(0b11111111111111111111111111111111)), 32);
+
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u64>(0b0000000000000000000000000000000000000000000000000000000000000000)), 0);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u64>(0b1000000011010001001000110000000111000000001100000000110000000001)), 16);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u64>(0b1010101010101010101010101010101010101010101010101010101010101010)), 32);
+    EXPECT_EQ(BitOp::GetBitCount(static_cast<u64>(0b1111111111111111111111111111111111111111111111111111111111111111)), 64);
+}
+
+TEST(BitOp, GetLSB)
+{
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u8>(0b00000000)), -1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u8>(0b00100101)), 0);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u8>(0b11101100)), 2);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u8>(0b11111111)), 0);
+                        
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u16>(0b0000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u16>(0b0010101110110101)), 0);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u16>(0b1010101010101010)), 1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u16>(0b1111111111111111)), 0);
+                        
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u32>(0b00000000000000000000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u32>(0b10000100001000001100011100001011)), 0);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u32>(0b10101010101010100000000000000000)), 17);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u32>(0b11111111111111111111111111111111)), 0);
+                        
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u64>(0b0000000000000000000000000000000000000000000000000000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u64>(0b1000000011010001001000110000000111000000001100000000110000000001)), 0);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u64>(0b1010101010101010101010101010101010101010101010101010101010101010)), 1);
+    EXPECT_EQ(BitOp::GetLSB(static_cast<u64>(0b1111111111111111111111111111111111111111111111111111111111111111)), 0);
+}
+
+TEST(BitOp, GetMSB)
+{
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u8>(0b00000000)), -1);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u8>(0b00100101)), 5);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u8>(0b11101100)), 7);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u8>(0b11111111)), 7);
+                        
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u16>(0b0000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u16>(0b0010101110110101)), 13);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u16>(0b1010101010101010)), 15);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u16>(0b1111111111111111)), 15);
+                        
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u32>(0b00000000000000000000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u32>(0b00000100001000001100011100001011)), 26);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u32>(0b00101010101010100000000000000000)), 29);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u32>(0b11111111111111111111111111111111)), 31);
+                        
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u64>(0b0000000000000000000000000000000000000000000000000000000000000000)), -1);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u64>(0b1000000011010001001000110000000111000000001100000000110000000001)), 63);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u64>(0b0010101010101010101010101010101010101010101010101010101010101010)), 61);
+    EXPECT_EQ(BitOp::GetMSB(static_cast<u64>(0b1111111111111111111111111111111111111111111111111111111111111111)), 63);
+}
