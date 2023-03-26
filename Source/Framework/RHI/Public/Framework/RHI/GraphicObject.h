@@ -18,24 +18,6 @@ namespace ob::rhi {
 	//!             システムの遅延開放スタックに積まれます。
 	//!             システムのスタックに積まれている間は破棄されていないことが保証できるため
 	//!             GPUからのアクセスにも対応できます。
-	//!```          
-	//!             class ITexture:public GraphicObject{
-	//!             }
-	//! 
-	//!             class Texture{
-	//!             public:
-	//!                 OB_DEFINE_GRAPHIC_OBJECT_HOLDER(Texture);
-	//!             private:
-	//!                 ITexture* m_pImpl;
-	//!             }
-	//! 
-	//!             class System:public Singleton(System){
-	//!             public:
-	//!                 void stackDelayDelete(GraphicObject* pObject){
-	//!                     m_delayDeleteStack.push_back(pObject);               
-	//!                 }
-	//!             }
-	//! ```
 	//@―---------------------------------------------------------------------------
 	class GraphicObject : public RefObject {
 	public:
