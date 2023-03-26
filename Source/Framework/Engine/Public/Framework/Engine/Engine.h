@@ -7,6 +7,7 @@
 #include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/EngineConfig.h>
 #include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Utility/DI.h>
 
 namespace ob::engine {
 
@@ -26,6 +27,11 @@ namespace ob::engine {
 		//! @brief				コンストラクタ
 		//@―---------------------------------------------------------------------------
 		Engine(EngineConfig&&);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief				コンストラクタ
+		//@―---------------------------------------------------------------------------
+		Engine(EngineConfig&&,const DependencyGraph& graph);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				デストラクタ
@@ -93,6 +99,7 @@ namespace ob::engine {
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeId, size_t> m_indices;
 		EngineConfig m_config;
+		ServiceContainer m_container;
 
 	};
 

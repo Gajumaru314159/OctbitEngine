@@ -105,6 +105,26 @@ namespace test {
 
 TEST(DI, Constructors)
 {
+
+    {
+        DependencyGraph graph;
+
+        graph.add<test::Calculator>()
+            .require<test::Operator>()
+            .optional<test::Logger>();
+
+        graph.add<test::Adder>()
+            .as<test::Operator>();
+        test::Logger::Register(graph);
+
+        graph.add<test::Logger>();
+
+        ServiceContainer container{ graph };
+        container.ref<test::Calculator>().calc(2, 3);
+
+        EXPECT_EQ(test::s_log, 5);
+    }
+
     {
         DependencyGraph graph;
         test::Calculator::Register(graph);
@@ -116,6 +136,7 @@ TEST(DI, Constructors)
         container.ref<test::Calculator>().calc(2, 3);
         EXPECT_EQ(test::s_log, 5);
     }
+
     {
         DependencyGraph graph;
         test::Calculator::Register(graph);
