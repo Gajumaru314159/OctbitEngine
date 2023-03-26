@@ -21,7 +21,6 @@ add_definitions(/Zc:__cplusplus)                # __cplusplusを使えるよう�
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)    # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
 
-
 #------------------------------------------------------------------------------
 # パス設定
 #------------------------------------------------------------------------------

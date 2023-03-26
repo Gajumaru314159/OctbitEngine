@@ -180,7 +180,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template<typename T>
 		ServiceBuilderNew<T>& add() {
-			auto& builder = m_builders[TypeId::Get<T>()] = std::make_unique<ServiceBuilderNew<T>>();
+			auto& builder = m_builders[TypeId::Get<T>()] = std::make_shared<ServiceBuilderNew<T>>();
 			return *reinterpret_cast<ServiceBuilderNew<T>*>(builder.get());
 		}
 
@@ -189,13 +189,13 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template<typename T>
 		ServiceBuilderRef<T>& add(T& instance) {
-			auto& builder = m_builders[TypeId::Get<T>()] = std::make_unique<ServiceBuilderRef<T>>(instance);
+			auto& builder = m_builders[TypeId::Get<T>()] = std::make_shared<ServiceBuilderRef<T>>(instance);
 			return *reinterpret_cast<ServiceBuilderRef<T>*>(builder.get());
 		}
 
 	private:
 		friend class ServiceContainer;
-		HashMap<TypeId, UPtr<detail::ServiceBuilderBase>>  m_builders;
+		HashMap<TypeId, SPtr<detail::ServiceBuilderBase>>  m_builders;
 	};
 
 
