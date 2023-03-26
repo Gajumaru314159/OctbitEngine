@@ -66,10 +66,11 @@ namespace ob::rhi::dx12 {
 		auto b = m_fence->GetCompletedValue();
 		if (m_fence->GetCompletedValue() < m_fenceVal)
 		{
-			auto event = CreateEvent(nullptr, false, false, nullptr);
-			m_fence->SetEventOnCompletion(m_fenceVal, event);
-			WaitForSingleObject(event, INFINITE);
-			CloseHandle(event);
+			if (auto event = CreateEvent(nullptr, false, false, nullptr)) {
+				m_fence->SetEventOnCompletion(m_fenceVal, event);
+				WaitForSingleObject(event, INFINITE);
+				CloseHandle(event);
+			}
 		}
 	}
 
