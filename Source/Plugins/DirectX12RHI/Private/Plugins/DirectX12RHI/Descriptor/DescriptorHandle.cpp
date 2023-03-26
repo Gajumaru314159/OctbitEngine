@@ -30,7 +30,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  ムーブコンストラクタ
 	//@―---------------------------------------------------------------------------
-	DescriptorHandle::DescriptorHandle(DescriptorHandle&& rhs) {
+	DescriptorHandle::DescriptorHandle(DescriptorHandle&& rhs)noexcept {
 		m_pBlock = rhs.m_pBlock;
 		rhs.m_pBlock = nullptr;
 	}
@@ -39,7 +39,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  ムーブ代入演算子
 	//@―---------------------------------------------------------------------------
-	DescriptorHandle& DescriptorHandle::operator = (DescriptorHandle&& rhs) {
+	DescriptorHandle& DescriptorHandle::operator = (DescriptorHandle&& rhs)noexcept {
 		if (this != &rhs) {
 			release();
 			m_pBlock = rhs.m_pBlock;

@@ -22,8 +22,8 @@ namespace ob::rhi::dx12 {
         DescriptorHandle();
         ~DescriptorHandle();
 
-        DescriptorHandle(DescriptorHandle&&);
-        DescriptorHandle& operator = (DescriptorHandle&&);
+        DescriptorHandle(DescriptorHandle&&)noexcept;
+        DescriptorHandle& operator = (DescriptorHandle&&)noexcept;
 
         operator bool()const noexcept;
 
