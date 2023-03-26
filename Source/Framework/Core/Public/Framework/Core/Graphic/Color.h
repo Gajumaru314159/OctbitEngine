@@ -49,7 +49,7 @@ namespace ob::core {
         //! @param grey	    輝度
         //! @param a		アルファ
         //@―---------------------------------------------------------------------------
-        constexpr Color(f32 grey, f32 a = 1.0f)noexcept;
+        explicit constexpr Color(f32 grey, f32 a = 1.0f)noexcept;
 
 
         //@―---------------------------------------------------------------------------
@@ -87,73 +87,73 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 加算演算子
+        //! @brief 加算演算子(RGB)
         //@―---------------------------------------------------------------------------
         constexpr Color operator + (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 減算演算子
+        //! @brief 減算演算子(RGB)
         //@―---------------------------------------------------------------------------
         constexpr Color operator - (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 乗算演算子
+        //! @brief 乗算演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color operator * (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 乗算演算子(スカラー)
+        //! @brief スカラー乗算演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color operator * (f32 f) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 除算演算子
+        //! @brief 除算演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color operator / (const Color& another) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 除算演算子(スカラー)
+        //! @brief スカラー除算演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color operator / (f32 f) const noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 加算代入演算子
+        //! @brief 加算代入演算子(RGB)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator += (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 減算代入演算子
+        //! @brief 減算代入演算子(RGB)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator -= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 乗算代入演算子
+        //! @brief 乗算代入演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator *= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 乗算代入演算子(スカラー)
+        //! @brief スカラー乗算代入演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator *= (f32 f) noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 除算代入演算子
+        //! @brief 除算代入演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator /= (const Color& another) noexcept;
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 除算代入演算子(スカラー)
+        //! @brief スカラー除算代入演算子(RGBA)
         //@―---------------------------------------------------------------------------
         constexpr Color& operator /= (f32 f) noexcept;
 
@@ -164,6 +164,7 @@ namespace ob::core {
 
         //@―---------------------------------------------------------------------------
         //! @brief      カラー要素を0.0～にクランプ
+        //! @details    アルファ要素は0.0～1.0にクランプされます。
         //@―---------------------------------------------------------------------------
         constexpr Color& clamp() noexcept;
 
@@ -272,6 +273,35 @@ namespace ob::core {
         static Color LerpHSV(const Color& a, const Color& b, f32 t) noexcept;
 
 
+        //@―---------------------------------------------------------------------------
+        //! @brief		色のアルファブレンド
+        //! 
+        //! @details	```
+        //!             out.a   = src.a + dst.a*(1-src.a);
+        //!             out.rgb = (src.rgb*src.a + dst.rgb*dst.a * (1-src.a)) / out.a;
+        //!             out.a   = 0 => out.rgb = 0
+        //!             ```
+        //! @param a    色1
+        //! @param b    色2
+        //! @return		ブレンドされた色オブジェクト
+        //@―---------------------------------------------------------------------------
+        static constexpr Color AlphaBlend(const Color& dst, const Color& src) noexcept;
+
+
+        //@―---------------------------------------------------------------------------
+        //! @brief		色の事前乗算アルファブレンド
+        //! 
+        //! @details	```
+        //!             out.a   = src.a + dst.a*(1-src.a);
+        //!             out.rgb = src.rgb + dst.rgb * (1-src.a);
+        //!             ```
+        //! @param a    色1
+        //! @param b    色2
+        //! @return		ブレンドされた色オブジェクト
+        //@―---------------------------------------------------------------------------
+        static constexpr Color PremultipliedAlphaBlend(const Color& dst, const Color& src) noexcept;
+
+
     public:
 
         static const Color White;		//!< Color(1,1,1,1)
@@ -354,7 +384,7 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 加算演算子
+    //! @brief 加算演算子(RGB)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator + (const Color& another) const noexcept {
         return Color(*this) += another;
@@ -362,7 +392,7 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 減算演算子
+    //! @brief 減算演算子(RGB)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator - (const Color& another) const noexcept {
         return Color(*this) -= another;
@@ -370,7 +400,7 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 乗算演算子(スカラー)
+    //! @brief スカラー乗算演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator * (f32 f) const noexcept {
         return Color(*this) *= f;
@@ -378,7 +408,7 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 乗算演算子
+    //! @brief 乗算演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator * (const Color& another) const noexcept {
         return Color(*this)*=another;
@@ -386,7 +416,7 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 除算演算子(スカラー)
+    //! @briefスカラー除算演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator / (f32 f) const noexcept {
         return Color(*this) /= f;
@@ -394,42 +424,43 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 除算演算子
+    //! @brief 除算演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color Color::operator / (const Color& another) const noexcept {
-        return Color(*this) / another;
+        return Color(*this) /= another;
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 加算代入演算子
+    //! @brief 加算代入演算子(RGB)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator += (const Color& another) noexcept {
-        return *this = Color(r + another.r, g + another.g, b + another.b, a + another.a);
+        return *this = Color(r + another.r, g + another.g, b + another.b, a);
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 減算代入演算子
+    //! @brief 減算代入演算子(RGB)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator -= (const Color& another) noexcept {
-        return *this = Color(r - another.r, g - another.g, b - another.b, a - another.a);
+        return *this = Color(r - another.r, g - another.g, b - another.b, a);
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 乗算代入演算子(スカラー)
+    //! @brief スカラー乗算代入演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator *= (f32 f) noexcept {
         r *= f;
         g *= f;
         b *= f;
+        a *= f;
         return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 乗算代入演算子
+    //! @brief 乗算代入演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator *= (const Color& another) noexcept {
         r *= another.r;
@@ -441,24 +472,26 @@ namespace ob::core {
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 除算代入演算子(スカラー)
+    //! @brief スカラー除算代入演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator /= (f32 f) noexcept {
+        update_max(f, Math::EPSILON);
         r /= f;
         g /= f;
         b /= f;
+        a /= f;
         return *this;
     }
 
 
     //@―---------------------------------------------------------------------------
-    //! @brief 除算代入演算子
+    //! @brief 除算代入演算子(RGBA)
     //@―---------------------------------------------------------------------------
     constexpr Color& Color::operator /= (const Color& another) noexcept {
-        r /= another.r;
-        g /= another.g;
-        b /= another.b;
-        a /= another.a;
+        r /= Math::Max(another.r,Math::EPSILON);
+        g /= Math::Max(another.g,Math::EPSILON);
+        b /= Math::Max(another.b,Math::EPSILON);
+        a /= Math::Max(another.a,Math::EPSILON);
         return *this;
     }
 
@@ -555,6 +588,43 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     constexpr Color Color::Lerp(const Color& a, const Color& b, f32 t) noexcept {
         return (b * t) + (a * (1.0f - t));
+    }
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief		色のアルファブレンド
+    //! 
+    //! @details	```
+    //!             out.a   = src.a + dst.a*(1-src.a);
+    //!             out.rgb = (src.rgb*src.a + dst.rgb*dst.a * (1-src.a)) / out.a;
+    //!             out.a   = 0 => out.rgb = 0
+    //!             ```
+    //! @param a    色1
+    //! @param b    色2
+    //! @return		ブレンドされた色オブジェクト
+    //@―---------------------------------------------------------------------------
+    constexpr Color Color::AlphaBlend(const Color& dst, const Color& src) noexcept {
+        auto a = src.a + dst.a * (1 - src.a);
+        auto rgb = (src * src.a + dst * dst.a * (1 - src.a)) / a;
+        if (Math::IsNearZero(a))rgb = Color(0);
+        return Color(rgb.r, rgb.g, rgb.a, a);
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief		色の事前乗算アルファブレンド
+    //! 
+    //! @details	```
+    //!             out.a   = src.a + dst.a*(1-src.a);
+    //!             out.rgb = src.rgb + dst.rgb * (1-src.a);
+    //!             ```
+    //! @param a    色1
+    //! @param b    色2
+    //! @return		ブレンドされた色オブジェクト
+    //@―---------------------------------------------------------------------------
+    constexpr Color Color::PremultipliedAlphaBlend(const Color& dst, const Color& src) noexcept {
+        auto a = src.a + dst.a * (1 - src.a);
+        auto rgb = src + dst * (1 - src.a);
+        return Color(rgb.r, rgb.g, rgb.a, a);
     }
 
     //! @endcond
