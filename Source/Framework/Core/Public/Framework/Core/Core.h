@@ -75,7 +75,6 @@
 #include <Framework/Core/Template/Container/HandleList.h>
 #include <Framework/Core/Template/Delegate/Delegate.h>
 #include <Framework/Core/Template/Event/EventNotifier.h>
-#include <Framework/Core/Template/Handle/HandleManager.h>
 
 #include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Thread/Mutex.h>
