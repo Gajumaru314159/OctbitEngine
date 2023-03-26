@@ -26,6 +26,20 @@ void Func(){
 }
 ```
 
+ディレクトリ構造
+------------------
+|フォルダ名|用途|
+|-|-|
+|Public|上位モジュールから使用されるクラスのヘッダ|
+|Protected|派生モジュールで実装するインターフェイス|
+|Private|cppファイルとモジュール内だけで使用するクラスのヘッダ|
+|Test|モジュールのテスト実装|
+|Misc|natvisやドキュメントなど|
+
+上記フォルダをモジュールのルートフォルダに配置し各フォルダの内部にインクルードパスとして使用するフォルダを作成してください。例えばCoreモジュールのファイルは以下のパスに保存します。
+* ```Source/Framework/Core/Private/Framework/Core/Graphic/Color.cpp```
+* ```Source/Framework/Core/Public/Framework/Core/Graphic/Color.h```
+
 ファイルの命名規則
 ------------------
 * ファイル名はクラス名と一致するようにしてください。
@@ -57,7 +71,7 @@ void Func(){
 
 ```c++
 #pragma once
-#include "Hoge.h"
+#include <Framework/Core/Hoge.h>
 
 #include <d3d12.h>
 
@@ -69,24 +83,13 @@ void Func(){
 名前空間
 --------
 * 名前空間はすべて小文字にし、一単語で記述するようにしてください。
-* 名前空間の最後には```// namespace ob```のようにコメントをつけてください。
 * 全てのエンジンコードは```namespace ob```内に記述してください。
 * モジュールごとに名前空間を分けるようにしてください。
 * ネストした名前空間は```namespace ob::graphic{}```のような表記します。
-  * 前方宣言げ別の名前空間を使用する場合はスコープを分けて記述します。
-```c++
-namespace ob::platform{
-    // 前方宣言
-}// namespace ob::graphic
-namespace ob::graphic{
-    // モジュールのコード
-}// namespace ob::graphic
-```
 
 構造体
 ------
 * 全てのメンバ変数がpublicの場合のみstructを使用できます。
-* 状態をもつ場合は構造体にしてはいけません。
 * メンバ変数には接頭辞をつけません。
 * デフォルトコンストラクタでは初期化せず、EForceInitを指定した場合に初期化するようにしてください。
 
@@ -100,9 +103,10 @@ namespace ob::graphic{
 ------------
 クラス宣言は
 1. タイプ宣言
-2. インナークラス宣言
-3. メンバ関数
-4. メンバ変数
+2. ファクトリ
+3. インナークラス宣言
+4. メンバ関数
+5. メンバ変数
 
 の順で記述します。  
 各項目内では
@@ -123,7 +127,8 @@ namespace ob::graphic{
 |ファイル名|SampleName.cpp|
 |クラス名|SampleName|
 |構造体名|SampleName|
-|メンバ関数|SampleName()|
+|メンバ関数|sampleName()|
+|メンバStatic関数|SampleName()|
 |メンバ変数|m_sampleName|
 |構造体変数|sampleName|
 |ローカル変数|sampleName|
@@ -145,6 +150,8 @@ struct Point{
   float y;
 }
 class Line{
+public:
+  static Line Create();
 public:
   Line():m_type(Type::Open){}
   void Set(const Point& start,const Point& end){

@@ -1,44 +1,43 @@
 Engineモジュール
 ================
 Coreモジュールが特定のマネージャに依存しないクラスが集められているのに対して、Engineモジュールでは
-ゲームループやモジュールの更新など、システムの基幹部分が実装されています。  
-```mermaid
-flowchart LR
-	AppBase-->Engine-->ModuleManager
-```
+ゲームループやモジュールの更新など、システムの基幹部分が実装されています。 
 
-## モジュールの設定
+# 関数エントリ
+Engineモジュールはプラットフォームごとのエントリ関数をラップし以下のエントリ関数を提供します。
+* ```void OctbitInit(ob::engine::EngineConfig&);```
+  * エンジン初期化前の処理
+* ```void OctbitMain();```
+  * Engine初期化後のメイン処理
+
+## GEngine
+GEngineはアプリケーション内で唯一のEngineクラスのインスタンスです。Engineクラスは内部にDIコンテナを持っており、入力システムやグラフィックシステムなどはこのコンテナに格納されています。各システムはGEngineを経由してほかのシステムへアクセスします。
 ```cpp
-// GEngine::Register<RHIModule>();
-REGISTER_MODULE(DirectXRHIModule,RHIModule);
+auto system = GEngine->get<SampleSystem>();
 ```
-
-```cpp
-void OctbitInit(EngineConfig& context){
-
-	IniReader ini(path);
-
-	context.setModulePriority<DirectX12RHIModule>(0);
-
+## システムの登録
+入力システムやグラフィックシステムなど全てのシステムはOptionalな機能として実装されます。各プロジェクトで必要な機能はOctbitInit関数内でDependencyGraphに登録してください。またシステムのコンフィグが存在する場合も同様にOctbitInit内で設定してください。
+```c++
+void OctbitInit(EngineConfig& config){
 	{
-		graphic::Settings settings;
-		settings.api = ini.get("graphic","api");
-		settings.bufferSize = 2;
-		settings.debugHeapSize = 0x10000;
-		context.set(settings);
+		DependencyGraph graph;
+		InputSystem::Register(graph);
+		GraphicSystem::Register(graph);
+		config.set(graph);
 	}
 	{
-		platform::Settings settings;
-		settings.procHock = MyWindProc;
-		context.set(settings);
+		InputConfig c;
+		c.enableKeyboard = true;
+		config.set(c);
+	}
+	{
+		RHIConfig c;
+		c.rhiPriorities = {
+			TC("DirectX12"),
+			TC("Vulkan"),
+		};
+		c.enablePIX = true;
+		config.set(c);
 	}
 }
-
-void OctbitMain(){
-	graphic::Texture texture("test.dds");
-}
-
 ```
-## マルチスレッド
-モジュールの生成を複数スレッドから行えるようにするとEngine内でロックを書ける必要が出てくる。
-しかしモジュールの生成は各モジュールに対して1回だけなので、事前にシングルスレッドで生成すればロックなしにできる。
