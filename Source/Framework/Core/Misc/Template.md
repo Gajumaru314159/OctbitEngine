@@ -2,7 +2,7 @@ Template
 ============
 
 ## 言語標準のSTLを使用する
-```Template/STL.h```で対象のヘッダをインクルードしてください。
+```Template/STL.h```で対象のヘッダをインクルードしてください。  
 STLのクラスオブジェクトを使用する場合は今後の実装の変更を考慮してusingで別名をつけるかラッパークラスや独自実装のクラスを作成してください。
 ```
 namespace ob{
@@ -17,7 +17,3 @@ namespace ob{
 ```Template/```フォルダ以下で実装してください。
 拡張for文への対応やコードの互換性の観点から関数の命名は言語標準に準拠してください。
 [cppference](https://en.cppreference.com/w/cpp/named_req)
-
-## 例外
-### std::make_unique / std::make_shared
-Visual Studioのインテリセンスが効かないため例外として直接使用することを許容します。

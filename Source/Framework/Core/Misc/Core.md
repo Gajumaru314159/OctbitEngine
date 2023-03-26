@@ -1,10 +1,4 @@
-Coreモジュール
-====================
+# Coreモジュール
+
 ## 概要
-
-## 構成
-
-```mermaid
-graph TD
-    Logger-->Thread-->Template-->HAL
-```
+Coreモジュールは、MathやContainerなどの特定のマネージャーの状態に依存しない、基本的な機能を提供するクラスを実装しています。
