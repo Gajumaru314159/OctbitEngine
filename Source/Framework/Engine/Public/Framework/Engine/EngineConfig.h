@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::engine {
 
@@ -37,10 +38,10 @@ namespace ob::engine {
         //! @endcond 
     private:
 
-        using TypeHash = size_t;
-
         mutable SpinLock m_lock;
-        mutable HashMap<TypeHash, std::any> m_configs;
+
+        // TODO TypeIdを使用したAnyを実装する
+        mutable HashMap<TypeId, std::any> m_configs;
 
     };
 
@@ -60,8 +61,7 @@ namespace ob::engine {
     template<typename T>
     inline void EngineConfig::set(T&& setting) {
         ScopeLock lock(m_lock);
-        auto hash = typeid(T).hash_code();
-        m_configs[hash] = std::forward<T>(setting);
+        m_configs[TypeId::Get<T>()] = std::forward<T>(setting);
     }
 
     //@―---------------------------------------------------------------------------
@@ -70,8 +70,7 @@ namespace ob::engine {
     template<typename T>
     inline const T& EngineConfig::get() const {
         ScopeLock lock(m_lock);
-        auto hash = typeid(T).hash_code();
-        auto& item = m_configs[hash];
+        auto& item = m_configs[TypeId::Get<T>()];
         if (item.has_value() == false) {
             item = T{};
         }
