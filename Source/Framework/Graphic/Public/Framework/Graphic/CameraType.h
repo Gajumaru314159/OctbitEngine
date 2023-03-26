@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Geometory/Viewport.h>
+#include <Framework/Core/Geometry/Viewport.h>
 
 namespace ob::graphic {
     

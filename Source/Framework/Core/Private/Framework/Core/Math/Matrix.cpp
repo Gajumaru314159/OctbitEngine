@@ -9,7 +9,7 @@
 #include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Quaternion.h>
 #include <Framework/Core/Math/Rotation.h>
-#include <Framework/Core/Geometory/Frustum.h>
+#include <Framework/Core/Geometry/Frustum.h>
 #include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {

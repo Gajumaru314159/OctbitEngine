@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Vector2.h>
-#include <Framework/Core/Geometory/Rect.h>
+#include <Framework/Core/Geometry/Rect.h>
 
 namespace ob::core {
 

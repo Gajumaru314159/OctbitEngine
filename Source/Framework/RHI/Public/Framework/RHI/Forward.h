@@ -27,7 +27,7 @@ namespace ob::rhi {
 	class Shader;
 	class VertexShader;
 	class PixelShader;
-	class GeometoryShader;
+	class GeometryShader;
 	class HullShader;
 	class DomainShader;
 	class Texture;

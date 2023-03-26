@@ -3,7 +3,7 @@
 //! @brief		Box のテスト
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Geometory/Box.h>
+#include <Framework/Core/Geometry/Box.h>
 
 using namespace ob;
 

@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Vector3.h>
-#include <Framework/Core/Geometory/Triangle.h>
+#include <Framework/Core/Geometry/Triangle.h>
 
 namespace ob::core {
 

@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Geometory/Size.h>
-#include <Framework/Core/Geometory/IntRect.h>
+#include <Framework/Core/Geometry/Size.h>
+#include <Framework/Core/Geometry/IntRect.h>
 #include <Framework/Core/Graphic/Color.h>
 #include <Framework/Core/File/Path.h>
 

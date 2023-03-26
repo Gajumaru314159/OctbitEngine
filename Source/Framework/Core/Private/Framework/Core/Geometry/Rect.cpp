@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Geometory/Rect.h>
+#include <Framework/Core/Geometry/Rect.h>
 
 namespace ob::core {
 

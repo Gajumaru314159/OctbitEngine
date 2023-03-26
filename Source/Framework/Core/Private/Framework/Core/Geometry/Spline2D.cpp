@@ -3,7 +3,7 @@
 //! @brief		スプラインカーブ2D
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Geometory/Spline2D.h>
+#include <Framework/Core/Geometry/Spline2D.h>
 #include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {

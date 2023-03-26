@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Geometory/Viewport.h>
+#include <Framework/Core/Geometry/Viewport.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/CommandListDesc.h>

@@ -3,7 +3,7 @@
 //! @brief		スフィア
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Geometory/Sphere.h>
+#include <Framework/Core/Geometry/Sphere.h>
 
 namespace ob::core {
 

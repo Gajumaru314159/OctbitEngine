@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 
-#include <Framework/Core/Geometory/Box.h>
+#include <Framework/Core/Geometry/Box.h>
 
 namespace ob::core {
 
