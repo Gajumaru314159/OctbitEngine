@@ -5,8 +5,19 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Window/WindowManager.h>
+#include <Framework/Engine/ModuleFactory.h>
+#include <Framework/Engine/Engine.h>
 
 namespace ob::platform {
+
+    WindowManager& WindowManager::Get() {
+        static WindowManager* manager = nullptr;
+        if (manager == nullptr) {
+            manager = GEngine->get<WindowManager>();
+        }
+        OB_ASSERT_EXPR(manager);
+        return *manager;
+    }
 
     WindowManager::WindowManager() = default;
     WindowManager::~WindowManager() = default;
@@ -32,3 +43,9 @@ namespace ob::platform {
 
 }// namespace ob::platform
 
+
+REGISTER_MODULE(ob::platform::WindowManager);
+
+void Link_Window() {
+
+}
