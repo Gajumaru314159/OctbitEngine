@@ -91,6 +91,8 @@
 #include <Framework/Core/Utility/Scope.h>
 #include <Framework/Core/Utility/Ref.h>
 
+#include <Framework/Core/CoreForward.h>
+
 namespace ob{
     using namespace core;
 }

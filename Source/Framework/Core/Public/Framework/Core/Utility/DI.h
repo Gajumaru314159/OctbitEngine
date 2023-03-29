@@ -178,7 +178,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  サービスを追加
 		//@―---------------------------------------------------------------------------
-		template<typename T>
+		template<typename T,typename = std::enable_if_t<std::is_constructible_v<T,ServiceContainer&>>>
 		ServiceBuilderNew<T>& add() {
 			auto& builder = m_builders[TypeId::Get<T>()] = std::make_shared<ServiceBuilderNew<T>>();
 			return *reinterpret_cast<ServiceBuilderNew<T>*>(builder.get());
@@ -280,6 +280,7 @@ namespace ob::core {
 						m_indices[asTypeId] = m_services.size();
 					}
 
+					LOG_INFO("[DI] {}を生成",typeId.name());
 					m_services.emplace_back(builder.create(*this));
 
 				}
