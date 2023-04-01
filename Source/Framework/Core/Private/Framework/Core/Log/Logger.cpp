@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Log/Logger.h>
+#include <Framework/Core/Log/StackTrace.h>
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Thread/ScopeLock.h>
 #include <Framework/Core/Utility/Scope.h>
@@ -74,6 +75,20 @@ namespace ob::core {
                 if (log.level == LogLevel::Fatal) {
                     ::ShowMessageBox(ws.c_str());
                     ::CallBreakPoint();
+                }
+            }
+
+            if (log.level == LogLevel::Fatal) {
+
+                ::OutputDebugLog(L"********************");
+                ::OutputDebugLog(L"* スタックトレース *");
+                ::OutputDebugLog(L"********************");
+                StackTrace stack;
+                for (auto& s : stack.elements()) {
+                    auto msg2 = Format(TC("{}\n{}({})\n"), s.name,s.filename, s.line);
+                    WString ws;
+                    StringEncoder::Encode(msg2, ws);
+                    ::OutputDebugLog(ws.c_str());
                 }
             }
 #endif
