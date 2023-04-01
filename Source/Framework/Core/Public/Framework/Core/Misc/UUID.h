@@ -12,40 +12,51 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief UUIDクラス
     //@―---------------------------------------------------------------------------
-    class OB_API UUID {
-        friend class std::hash<UUID>;
+    struct UUID {
+    public:
+        u32 data[4];
+
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief ランダムなUUIDを生成
+        //@―---------------------------------------------------------------------------
+        static UUID Generate();
+
+        //@―---------------------------------------------------------------------------
+        //! @brief			UUID文字列からUUIDオブジェクトを生成
+        //! 
+        //! @details		XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される16進数の並び
+        //! @param uuidText UUIDの文字列表現
+        //@―--------------------------------------------------------------------
+        static Optional<UUID> FromString(const StringView& uuidText);
 
         //@―---------------------------------------------------------------------------
         //! @brief デフォルトコンストラクタ(ゼロ初期化)
         //@―---------------------------------------------------------------------------
-        UUID();
+        constexpr UUID();
+
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ(要素指定)
+        //@―---------------------------------------------------------------------------
+        constexpr UUID(u32 data0,u32 data1,u32 data2,u32 data3);
 
 
         //===============================================================
         // オペレータ
         //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief 等価演算子
-        //@―---------------------------------------------------------------------------
-        constexpr bool operator==(const UUID& other)const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief 否等価演算子
-        //@―---------------------------------------------------------------------------
-        constexpr bool operator!=(const UUID& other)const;
+        constexpr bool operator==(const UUID& other)const;  //!< 等価演算子
+        constexpr bool operator!=(const UUID& other)const;  //!< 否等価演算子
+        constexpr bool operator<=(const UUID& other)const;  //!< 比較演算子
+        constexpr bool operator<(const UUID& other)const;   //!< 比較演算子
+        constexpr bool operator>=(const UUID& other)const;  //!< 比較演算子
+        constexpr bool operator>(const UUID& other)const;   //!< 比較演算子
 
 
         //@―---------------------------------------------------------------------------
         //! @brief 文字列表現で取得
         //! 
-        //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
+        //! @return XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
         //@―---------------------------------------------------------------------------
         void  toString(Char(&dest)[37])const;
 
@@ -53,7 +64,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief 文字列表現で取得
         //! 
-        //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
+        //! @return XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
         //@―---------------------------------------------------------------------------
         String  toString()const;
 
@@ -64,43 +75,20 @@ namespace ob::core {
         //! @retval true	空
         //! @retval false	空ではない
         //@―---------------------------------------------------------------------------
-        bool     empty() const;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief 内部表現をバイト列として取得
-        //@―---------------------------------------------------------------------------
-        const byte* data() const;
-
-
-    public:
-
-        //@―---------------------------------------------------------------------------
-        //! @brief 新しいUUIDを生成
-        //@―---------------------------------------------------------------------------
-        static UUID Generate();
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief			UUID文字列からUUIDオブジェクトを生成
-        //! 
-        //! @details		XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される16進数の並び
-        //! @param uuidText UUIDの文字列表現
-        //@―---------------------------------------------------------------------------
-        static UUID FromText(const StringView& uuidText);
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief			バイト列から固有のUUIDを生成
-        //! 
-        //! @param bytes	バイト列
-        //@―---------------------------------------------------------------------------
-        static UUID FromByte(Span<byte> bytes);
-
+        constexpr bool empty() const;
 
     private:
 
-        byte m_data[16];//!< 内部データ
+        friend class std::hash<UUID>;
+
+        constexpr s32 compare(const UUID& b)const {
+            for (s32 i = 0; i < 4; i++) {
+                if (data[i] == b.data[i])continue;
+                if (data[i] > b.data[i])return 1;
+                if (data[i] < b.data[i])return -1;
+            }
+            return 0;
+        }
 
     };
 
@@ -113,31 +101,45 @@ namespace ob::core {
     // インライン関数
     //===============================================================
     //! @cond
+    
+    //@―---------------------------------------------------------------------------
+    //! @brief デフォルトコンストラクタ(ゼロ初期化)
+    //@―---------------------------------------------------------------------------
+    constexpr UUID::UUID():UUID(0,0,0,0) {
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief コンストラクタ(要素指定)
+    //@―---------------------------------------------------------------------------
+    constexpr UUID::UUID(u32 data0, u32 data1, u32 data2, u32 data3)
+        : data{data0,data1,data2,data3}
+    {
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
     //@―---------------------------------------------------------------------------
-    constexpr bool UUID::operator==(const UUID& other) const {
-        for (s32 i = 0; i < 16; i++)if (m_data[i] != other.m_data[i])return false;
-        return true;
+    constexpr bool UUID::operator==(const UUID& other) const { return compare(other) == 0; }
+    constexpr bool UUID::operator!=(const UUID& other) const { return compare(other) != 0; }
+    constexpr bool UUID::operator<(const UUID& other) const { return compare(other) < 0; }
+    constexpr bool UUID::operator<=(const UUID& other) const { return compare(other) <= 0; }
+    constexpr bool UUID::operator>=(const UUID& other) const { return compare(other) >= 0; }
+    constexpr bool UUID::operator>(const UUID& other) const { return compare(other) > 0;}
+
+
+    //@―---------------------------------------------------------------------------
+    //! @brief 空のUUIDか判定
+    //! 
+    //! @retval true	空
+    //! @retval false	空ではない
+    //@―---------------------------------------------------------------------------
+    constexpr bool UUID::empty() const {
+        return
+            data[0] == 0 &&
+            data[1] == 0 &&
+            data[2] == 0 &&
+            data[3] == 0;
     }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief 否等価演算子
-    //@―---------------------------------------------------------------------------
-    constexpr bool UUID::operator!=(const UUID& other) const {
-        return !(operator==(other));
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief 内部表現をバイト列として取得
-    //@―---------------------------------------------------------------------------
-    inline const byte* UUID::data() const {
-        return m_data;
-    }
-
 
     //! @endcond
 }// namespace ob::core
@@ -160,44 +162,25 @@ template <> struct fmt::formatter<ob::core::UUID, ob::core::Char> {
         return format_to(ctx.out(), TC("{}"), text);
     }
 };
-//! @endcond
 
+//===============================================================
+// ハッシュ化
+//===============================================================
+template<>
+struct std::hash<ob::core::UUID> {
+    constexpr size_t operator()(const ob::core::UUID& value)const {
 
-namespace std {
+        constexpr ob::u64 offset_basis = 14695981039346656037u;
+        constexpr ob::u64 fnv_prime = 1099511628211u;
+        ob::u64 result = offset_basis;
 
-    template<>
-    struct hash<ob::core::UUID> {
-        constexpr size_t operator()(const ob::core::UUID& value)const {
-
-            constexpr ob::u64 offset_basis = 14695981039346656037u;
-            constexpr ob::u64 fnv_prime = 1099511628211u;
-            ob::u64 result = offset_basis;
-
-            for (size_t i = 0; i < std::size(value.m_data); ++i) {
-                result ^= static_cast<ob::u64>(value.m_data[i]);
-                result *= fnv_prime;
-            }
-
-            return result;
+        for (size_t i = 0; i < 4; ++i) {
+            result ^= static_cast<ob::u64>(value.data[i]);
+            result *= fnv_prime;
         }
-    };
 
-}
+        return result;
+    }
+};
 
-
- //==============================================================================
-
-
-
-//! @cond
-// for unordered_map key
-//namespace eastl
-//{
-//    //! @brief ハッシュクラス
-//    template <> struct hash<ob::UUID>
-//    {
-//        //! @brief UUIDをハッシュ値に変換
-//        size_t operator()(const ob::UUID& p) const;
-//    };
-//}// namespace eastl
 //! @endcond
