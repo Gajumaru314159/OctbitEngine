@@ -332,7 +332,7 @@ namespace ob::core {
 
     private:
 
-        mutable SpinLock m_mutex;
+        mutable SpinLock m_lock;
         HandleBase m_header;
 
     };
@@ -351,7 +351,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline bool operator==(HandleList<T> const& a, HandleList<T> const& b)noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         return (a.size() == b.size()) && ob::equal(a.begin(), a.end(), b.begin());
     }
 
@@ -392,7 +392,7 @@ namespace ob::core {
     inline HandleList<T>& HandleList<T>::operator=(this_type&& rhs)noexcept {
         if (this != &rhs) {
             clear();
-            ScopeLock lock(m_mutex);
+            ScopeLock lock(m_lock);
             move_impl(std::move(rhs));
         }
         return *this;
@@ -521,7 +521,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline bool HandleList<T>::empty()const noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         return m_header.pNext == &m_header;
     }
 
@@ -533,7 +533,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::size_type HandleList<T>::size()const noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         return std::distance(begin(), end());
     }
 
@@ -545,7 +545,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reference HandleList<T>::front() {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         assert(m_header.pNext != &m_header);
         return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
@@ -558,7 +558,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reference HandleList<T>::front() const {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         assert(m_header.pNext != &m_header);
         return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
@@ -571,7 +571,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reference HandleList<T>::back() {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         assert(m_header.pPrev != &m_header);
         return *(static_cast<Handle*>(m_header.pPrev)->get_ptr());
     }
@@ -584,7 +584,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reference HandleList<T>::back() const {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         assert(m_header.pPrev != &m_header);
         return *(static_cast<Handle*>(m_header.pPrev)->get_ptr());
     }
@@ -595,7 +595,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_front(Handle& h, const T& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         *h.get_ptr() = x;
     }
@@ -606,7 +606,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_front(Handle& h, T&& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         *h.get_ptr() = std::move(x);
     }
@@ -618,7 +618,7 @@ namespace ob::core {
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::reference HandleList<T>::emplace_front(Handle& h, Args&&... args) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
@@ -630,7 +630,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_back(Handle& h, const T& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_back_impl(h);
         *h.get_ptr() = x;
     }
@@ -641,7 +641,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_back(Handle& h, T&& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_back_impl(h);
         *h.get_ptr() = std::move(x);
     }
@@ -655,7 +655,7 @@ namespace ob::core {
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::reference HandleList<T>::emplace_back(Handle& h, Args&&... args) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_back_impl(h);
         ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
@@ -669,7 +669,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::insert(Handle& h, const_iterator position, const T& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         *h.get_ptr() = x;
         return &h;
@@ -683,7 +683,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::insert(Handle& h, const_iterator position, T&& x) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         *h.get_ptr() = x;
         return &h;
@@ -698,7 +698,7 @@ namespace ob::core {
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::iterator HandleList<T>::emplace(Handle& h, const_iterator position, Args&&... args) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return &h;
@@ -712,7 +712,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::pop_front()noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         if (m_header.pNext == &m_header)return;
         erase_impl(static_cast<Handle*>(m_header.pNext));
     }
@@ -725,7 +725,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::pop_back()noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         if (m_header.pPrev == &m_header)return;
         erase_impl(static_cast<Handle*>(m_header.pPrev));
     }
@@ -736,7 +736,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::erase(const_iterator position) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         return erase_impl(position.pHandle);
     }
 
@@ -748,7 +748,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::erase(const_iterator position, const_iterator last) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         auto itr = position;
         while (position != last) {
             auto pHandle = position.pHandle;
@@ -764,7 +764,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::clear()noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         auto itr = begin();
         while (itr != end()) {
             auto pHandle = itr.pHandle;
@@ -789,7 +789,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::remove(Handle& h) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         erase_impl(&h);
     }
 
@@ -803,7 +803,7 @@ namespace ob::core {
     template<typename T>
     template<class Predicate>
     inline void HandleList<T>::remove_if(Predicate pred) {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
         auto itr = begin();
         const auto itrEnd = end();
         while (itr != itrEnd) {
@@ -821,7 +821,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::reverse()noexcept {
-        ScopeLock lock(m_mutex);
+        ScopeLock lock(m_lock);
 
         auto itr = begin();
         const auto itrEnd = end();
