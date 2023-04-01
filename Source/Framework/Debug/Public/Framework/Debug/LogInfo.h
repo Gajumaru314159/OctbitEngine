@@ -22,6 +22,7 @@ namespace ob::debug {
 			String message;
 			String file;
 			String line;
+			s32 count;
 		};
 
 		bool m_bAutoWrap = false;

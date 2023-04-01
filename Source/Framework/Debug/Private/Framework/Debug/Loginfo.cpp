@@ -35,13 +35,23 @@ namespace ob::debug {
 				if (m_maxLogCount < m_logs.size()) {
 					m_logs.pop_front();
 				}
+
+				if (!m_logs.empty()) {
+					auto& last = m_logs.back();
+					if (last.level == log.level && last.message == log.message) {
+						last.count++;
+						return;
+					}
+				}
+
 				auto& cache = m_logs.emplace_back();
 				cache.datetime = DateTime::Now();
 				cache.level = log.level;
 				cache.message = log.message;
 				cache.file = Format(TC("{}({})"), Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
 				cache.line = Format(TC("{}({})"),log.sourceLocation.filePath, log.sourceLocation.line);
-				m_logs.emplace_back(std::move(cache));
+				cache.count = 1;
+				
 			}
 		);
 	}
@@ -91,11 +101,12 @@ namespace ob::debug {
 
 			ImGuiTableFlags flags = ImGuiTableFlags_Borders | ImGuiTableFlags_Resizable | ImGuiTableFlags_Hideable | ImGuiTableFlags_ScrollY;
 
-			if (ImGui::BeginTable("LogTable",4,flags)) {
+			if (ImGui::BeginTable("LogTable",5,flags)) {
 
 				// ヘッダ
 				ImGui::TableSetupColumn("Level", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoResize,60);
 				ImGui::TableSetupColumn("Message", ImGuiTableColumnFlags_WidthStretch);
+				ImGui::TableSetupColumn("Count", ImGuiTableColumnFlags_WidthFixed, 20);
 				ImGui::TableSetupColumn("Time", ImGuiTableColumnFlags_WidthFixed,100);
 				ImGui::TableSetupColumn("Location", ImGuiTableColumnFlags_WidthFixed, 100);
 				ImGui::TableSetupScrollFreeze(0, 1);
@@ -130,6 +141,9 @@ namespace ob::debug {
 					} else {
 						ImGui::TextUnformatted(ImGui::ToImChars(log.message));
 					}
+
+					ImGui::TableNextColumn();
+					ImGui::Text("%d", log.count);
 
 					ImGui::TableNextColumn();
 					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime.toString(TC("HH:mm:ss.ff")))));
