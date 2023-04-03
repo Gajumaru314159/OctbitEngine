@@ -8,97 +8,97 @@ DI (Dependency Injection)
 
 ```mermaid
 graph LR
-    Graphic-->RHI & Engine
-
-    RHI-->|impl| DX12RHI & VulkanRHI & MetalRHI
-    
+    Engine-->Graphic-->RHI-->|impl| DX12RHI & VulkanRHI
     DX12RHI-->Platform
-    DX12RHI-.-> Profiler
-
-    Profiler-->|impl| PIXProfiler & RenderDocProfiler
+    DX12RHI-.-> Profiler -->|impl| PIXProfiler & RenderDocProfiler
 ```
-
-```mermaid
-graph LR
-    Calculator-->Operator-->|impl|Adder
-    Calculator-.->Logger
-```
-モジュールの依存関係はDependencyGraphに登録します。DependencyGraphには構築可能なクラスと構築済みのインスタンスのみ登録できます。
-
+モジュールの依存関係はコンストラクタから判定されます。
 
 ```c++
+// Singletonは参照型でのみ受け取る (T&, const T&)
+//
+// UniqueはSPtrで受け取る (SPtr<T>,SPtr<const T>)
+// ※参照管理するため
+//
+// Instanceは非対応(T)
+class RHI{};
+class DX12RHI:public RHI{
+public:
+    DX12RHI(SPtr<Platform>,SPtr<Profiler>);
+};
 
-class DX12RHI{
+class Profiler{};
+class PIXProfiler:public Profiler{
 public:
-    static void Register(DependencyGraph& graph){
-        graph.add<DX12RHI>()
-            .as<RHI>()
-            .require<Engine>()
-            .require<Platform>()
-            .optional<Profiler>();
+    PIXProfier(){
+
     }
+};
+
+class Grahic{
 public:
-    DX12RHI(ServiceContainer& container);
-}
+    Graphic(SPtr<RHI>){
+
+    }
+};
 
 
 class Engine{
 public:
+    Engine(SPtr<Graphic>,SPtr<Sound>){
 
-    void startup(){
-
-        DependencyGraph graph;
-        graph.add(*this);
-        DX12RHI::Register(graph);
-        
-        m_container = {graph};
     }
-
 private:
-    ServiceContainer m_container;
+
+};
+
+int main(){
+
+    // 全ての依存物はcreate毎に生成
+    // シングルトンとして追加する場合はインスタンスを指定
+    // => シングルトンが非シングルトンに依存してはいけないため
+    // 
+    FileLogger logger;
+
+    ServiceInjector injector;
+    injector.add<RHI>().to<DX12RHI>();
+    injector.add<RHI>().to<VulkanRHI>();
+    injector.add<Profiler>().to<PIXProfiler>();
+    injector.add<Graphic>();
+    injector.add(logger);
+    
+    auto engine1 = injector.create<Engine>();
+
+    // Engineを起点に生成すると依存先をエンジンより後に解放しないといけない
+
+    // ユーティリティを使用する場合どこかにインスタンスを保持する必要がある
+    Texture::White();
+
+
+    return 0;
 }
 
 ```
 
-
-# App
-
-EngineからアクセスするのでなくEngineが必要とする者だけが作られる。  
-作成可能なものをすべて登録はするが実際に生成されるのはEngineが参照しているもののみ。
-```mermaid
-graph LR
-
-    Engine-->GUI & Animation
-
-    GUI-->Input-->Graphic
-    Input-->Platform
-    Model-->Graphic-->RHI-->|or|DX12 & Vulkan -->Platform
-    Animation-->Model
-
-    Engine-->Physics
-    Physics-.->|or| Havox & PhysX & Bullet
-```
-
 ```cpp
-DependencyGraph graph;
-graph.add<RHI>().with<DX12RHI>();
-graph.add<RHI>().with<VulkanRHI>();
-graph.add<Graphic>();
+class RHI{
+public:
+    static RHI* Get(){
+        return s_rhi;
+    }
 
-Engine engine{graph};
-GEngine = &engine;
+    RHI(){
+        s_rhi = this;
+    }
+};
 
-auto texture = Texture::White();
+class Texture{
+public:
+    static Ref<Texture> White(){
 
+        GEngine->get<RHI>()
 
-DependencyGraph graph;
-// add interface to implement
+    }
+};
+
 ```
-boost::diでコンストラクタが例外を出した場合に別の実装を使用させることはできますか？
-例えば
-auto injector = boost::di::make_injector(
-    boost::di::bind<Interface>.to<Implementation1>(),
-    boost::di::bind<Interface>.to<Implementation2>(),
-);
-auto obj = injector.create<std::unique_ptr<Interface>>();
-としたときにImplementation2の生成に失敗した場合にImplementation1を使用するようにしたいです。
