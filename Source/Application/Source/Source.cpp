@@ -17,8 +17,10 @@
 
 #include <Plugins/ImGui/ImGui.h>
 
+#include <Framework/Core/Log/StackTrace.h>
 #include <Model.h>
 
+#include <Framework/Core/Utility/DI2.h>
 //-----------------------------------------------------------------
 using namespace ob;
 
@@ -30,7 +32,38 @@ int TestVullkan();
 void Link_Entity();
 void Link_GraphicModule();
 
+struct ii {
+	virtual ~ii() noexcept = default;
+	virtual int get() const = 0;
+};
+
+class implementation : public ii {
+public:
+	int get() const override { return 12; }
+};
+class implementation2 : public ii {
+public:
+	int get() const override { return 42; }
+};
+
+struct example {
+	example(SPtr<ii> ii):ii(ii){}
+	std::shared_ptr<ii> ii;
+};
+
+
 void OctbitInit(ob::engine::EngineConfig& config) {
+
+	di::ServiceContainer c;
+
+	c.bind<example>().toSelf();
+	c.bind<ii>().to<implementation2>();
+	c.bind<ii>().to<implementation>();
+
+	auto ex = c.get<example>();
+
+	LOG_INFO("=>{}", ex->ii->get());
+
 	{
 		rhi::Config c;
 		c.frameBufferCount = 3;
@@ -44,6 +77,7 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 
 	Link_Entity();
 	Link_GraphicModule();
+
 }
 
 int OctbitMain() {

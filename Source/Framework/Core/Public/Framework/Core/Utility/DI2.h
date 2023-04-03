@@ -40,13 +40,15 @@
 
 // コンストラクタ定義用マクロ
 #define CINJECT(constructorFunction) \
-	using ConstructorTypedef ::ob::core::di::ConstructorType<constructorFunction>; \
+	using ConstructorTypedef = ::ob::core::di::ConstructorType<constructorFunction>; \
 	constructorFunction
 
 namespace ob::core::di {
 
-	// コンストラクタ定義用マーカー
-	template<typename T> struct ConstructorType { typedef T Type; };
+	// 実装に使用するのは以下の2つのクラスです。
+	template<typename ... TService>
+	class ServiceBuilder;
+	class ServiceContainer;
 
 
 	//============================================
@@ -71,6 +73,9 @@ namespace ob::core::di {
 	// Arrayの要素
 	template<typename T> struct trim_vector;
 	template<typename T> struct trim_vector<std::vector<T>> { typedef T type; };
+
+	// ConstructorTypedef定義用マーカー
+	template<typename T> struct ConstructorType { typedef T Type; };
 
 	// ConstructorTypedefをメンバに持つか
 	template<typename T> struct has_constructor_injection {
@@ -164,14 +169,14 @@ namespace ob::core::di {
 	// InjectionContext
 	//============================================
 
-	class Container;
+	class ServiceContainer;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief	依存追加済みの型情報を持つクラス
 	//@―---------------------------------------------------------------------------
 	class InjectionContext {
 	public:
-		InjectionContext(Container& container, component_type requesterComponent) :
+		InjectionContext(ServiceContainer& container, component_type requesterComponent) :
 			m_container(container)
 		{
 			pushType(requesterComponent);
@@ -181,7 +186,7 @@ namespace ob::core::di {
 			popType();
 		}
 
-		Container& getContainer() { 
+		ServiceContainer& getContainer() { 
 			return m_container; 
 		}
 
@@ -212,7 +217,7 @@ namespace ob::core::di {
 		void operator=(const InjectionContext&) = delete;
 		void operator=(const InjectionContext&&) = delete;
 	private:
-		Container& m_container;
+		ServiceContainer& m_container;
 		std::vector<component_type> m_componentStack;
 	};
 
@@ -307,7 +312,7 @@ namespace ob::core::di {
 	//!             class Foo : public IFoo {};
 	//!             
 	//!             void smaple(){
-	//!                 Container container;
+	//!                 ServiceContainer container;
 	//!                 container.bind<IFoo>().to<Foo>();
 	//!                 
 	//!                 SPtr<IFoo> foo = container.get<IFoo>();
@@ -315,18 +320,18 @@ namespace ob::core::di {
 	//!             ```
 	//! @note		宣言順的にファイル後方で実装しています。
 	//@―---------------------------------------------------------------------------
-	class Container {
+	class ServiceContainer {
 	public:
 
 		//! @brief デフォルトコンストラクタ
-		Container() = default;
+		ServiceContainer() = default;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			親コンテナを指定して構築
 		//!	@details		```
-		//!					Container c;
+		//!					ServiceContainer c;
 		//!					c.bind<City>().toSelf().inSingletonScope();
-		//!					Container child(&c);
+		//!					ServiceContainer child(&c);
 		//!					child.bind<Building>().toSelf().inSingletonScope();
 		//!					
 		//!					auto building = child.get<Building>();
@@ -334,7 +339,7 @@ namespace ob::core::di {
 		//!					```
 		//! @param parent
 		//@―---------------------------------------------------------------------------
-		explicit Container(const Container* parent) : m_parent(parent) {}
+		explicit ServiceContainer(const ServiceContainer* parent) : m_parent(parent) {}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				バインディング開始
@@ -423,7 +428,7 @@ namespace ob::core::di {
 		};
 		using RetrieverMap = std::unordered_map<component_type, std::vector<SPtr<IInstanceRetriever>>, ComponentTypeHasher>;
 
-		const Container* m_parent = nullptr;
+		const ServiceContainer* m_parent = nullptr;
 		RetrieverMap m_retrievers;
 	};
 
@@ -551,7 +556,7 @@ namespace ob::core::di {
 	template<typename TInstance, typename ... TConstructorArgs>
 	struct ConstructorInvoker<TInstance(TConstructorArgs...)> {
 		static SPtr<TInstance> invoke(InjectionContext* context) {
-			Container& container = context->getContainer();
+			ServiceContainer& container = context->getContainer();
 			return std::make_shared<TInstance>(container.get<TConstructorArgs>(context)...);
 		}
 	};
@@ -729,7 +734,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief		インターフェースと実装の間のバインディングを構築する。
 	//!	@details	```
-	//!				Container c;
+	//!				ServiceContainer c;
 	//!				c.bind<IFirst>().to<Implementation>(
 	//!				c.bind<IFirst>().toFunction<Cheetah>
 	//!				c.bind<IFirst>().toContainer(cheetah
@@ -741,7 +746,7 @@ namespace ob::core::di {
 	public:
 
 		//! @brief  @cond
-		explicit ServiceBuilderBase(Container* container) : m_container(container) {}
+		explicit ServiceBuilderBase(ServiceContainer* container) : m_container(container) {}
 		//! @brief  @endcond
 
 		//@―---------------------------------------------------------------------------
@@ -831,7 +836,7 @@ namespace ob::core::di {
 		}
 
 	private:
-		Container* m_container;
+		ServiceContainer* m_container;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -842,7 +847,7 @@ namespace ob::core::di {
 	class ServiceBuilder : public ServiceBuilderBase<TService...> {
 	public:
 		//! @cond
-		explicit ServiceBuilder(Container* container) : ServiceBuilderBase<TService...>(container) {}
+		explicit ServiceBuilder(ServiceContainer* container) : ServiceBuilderBase<TService...>(container) {}
 		//! @endcond
 	};
 
@@ -854,7 +859,7 @@ namespace ob::core::di {
 	class ServiceBuilder<TService> : public ServiceBuilderBase<TService> {
 	public:
 		//! @cond
-		explicit ServiceBuilder(Container* container) : ServiceBuilderBase<TService>(container) {}
+		explicit ServiceBuilder(ServiceContainer* container) : ServiceBuilderBase<TService>(container) {}
 		//! @endcond
 
 		//@―---------------------------------------------------------------------------
@@ -879,7 +884,7 @@ namespace ob::core::di {
 	//! @brief	バインディング開始
 	//@―---------------------------------------------------------------------------
 	template<typename... TInterface>
-	ServiceBuilder<TInterface...> Container::bind() {
+	ServiceBuilder<TInterface...> ServiceContainer::bind() {
 		return ServiceBuilder<TInterface...>(this);
 	}
 
@@ -893,7 +898,7 @@ namespace ob::core::di {
 		!std::is_reference<TVectorWithInterface>::value,
 		std::vector<SPtr<typename trim_vector<TVectorWithInterface>::type>>
 	> 
-		Container::get(InjectionContext* context)
+		ServiceContainer::get(InjectionContext* context)
 	{
 		using InterfaceType = typename trim_vector<TVectorWithInterface>::type;
 
@@ -933,7 +938,7 @@ namespace ob::core::di {
 		!std::is_reference<TVectorWithInterfaceWithSharedPtr>::value,
 		std::vector<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>
 	>
-		Container::get(InjectionContext* context)
+		ServiceContainer::get(InjectionContext* context)
 	{
 		// Array<T>に変換
 		return get<std::vector<typename trim_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::type>>(context);
@@ -949,7 +954,7 @@ namespace ob::core::di {
 		!std::is_reference<TInterfaceWithSharedPtr>::value,
 		TInterfaceWithSharedPtr
 	>
-		Container::get(InjectionContext* context)
+		ServiceContainer::get(InjectionContext* context)
 	{
 		// Tに変換
 		return get<typename trim_shared_ptr<TInterfaceWithSharedPtr>::type>(context);
@@ -965,7 +970,7 @@ namespace ob::core::di {
 		!std::is_reference<TInterface>::value,
 		SPtr<TInterface>
 	>
-		Container::get(InjectionContext* context)
+		ServiceContainer::get(InjectionContext* context)
 	{
 		std::unique_ptr<InjectionContext> contextPtr;
 
@@ -1004,7 +1009,7 @@ namespace ob::core::di {
 		std::is_const<std::remove_reference_t<TInterface>>::value,
 		std::remove_reference_t<TInterface>
 	>
-		Container::get(InjectionContext* context)
+		ServiceContainer::get(InjectionContext* context)
 	{
 		// Tに変換
 		return get<std::remove_const_t<std::remove_reference_t<TInterface>>>(context);
@@ -1013,7 +1018,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief	InstanceRetrieversを検索
 	//@―---------------------------------------------------------------------------
-	inline void Container::findInstanceRetrievers(std::vector<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const {
+	inline void ServiceContainer::findInstanceRetrievers(std::vector<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const {
 
 		auto itr = m_retrievers.find(type);
 
