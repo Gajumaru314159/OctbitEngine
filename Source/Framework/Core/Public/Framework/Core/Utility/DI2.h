@@ -595,7 +595,7 @@ namespace ob::core::di {
 		}
 
 	private:
-		SPtr<TImpl> m_instance;
+		SPtr<TImpl> m_instance;	// Injectorが参照するインスタンス
 		TFactory	m_factory;
 		bool		m_isSingleton = false;
 		String		m_name;
