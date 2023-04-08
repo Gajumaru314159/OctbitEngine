@@ -698,7 +698,7 @@ namespace ob::core::di {
 			(std::is_base_of_v<TService, TImpl> && ...),
 			StorageConfig<InstanceStorage<TImpl, FunctionFactory<TImpl>>>
 		>		
-			toFunction(typename FunctionFactory<TImpl>::FactoryMethodType factoryMethod)
+			to(typename FunctionFactory<TImpl>::FactoryMethodType factoryMethod)
 		{
 			using InstanceStorageType = InstanceStorage<TImpl, FunctionFactory<TImpl>>;
 
@@ -719,7 +719,7 @@ namespace ob::core::di {
 			(std::is_base_of_v<TService, TImpl> && ...),
 			StorageConfig<InstanceStorage<TImpl, ReferenceFactory<TImpl>>>
 		>
-			toConstant(SPtr<TImpl> instance)
+			to(SPtr<TImpl> instance)
 		{
 			using InstanceStorageType = InstanceStorage<TImpl, ReferenceFactory<TImpl>>;
 
