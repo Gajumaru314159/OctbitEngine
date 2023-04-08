@@ -15,63 +15,25 @@ graph LR
 モジュールの依存関係はコンストラクタから判定されます。
 
 ```c++
-// Singletonは参照型でのみ受け取る (T&, const T&)
-//
-// UniqueはSPtrで受け取る (SPtr<T>,SPtr<const T>)
-// ※参照管理するため
-//
-// Instanceは非対応(T)
 class RHI{};
-class DX12RHI:public RHI{
-public:
-    DX12RHI(SPtr<Platform>,SPtr<Profiler>);
-};
-
-class Profiler{};
-class PIXProfiler:public Profiler{
-public:
-    PIXProfier(){
-
-    }
-};
-
-class Grahic{
-public:
-    Graphic(SPtr<RHI>){
-
-    }
-};
-
-
-class Engine{
-public:
-    Engine(SPtr<Graphic>,SPtr<Sound>){
-
-    }
-private:
-
-};
+class DX12RHI:public RHI{   public: DX12RHI(SPtr<Platform>,SPtr<Profiler>); };
+class Grahic{   public: Graphic(SPtr<RHI>); };
+class Engine{   public: Engine(SPtr<Graphic>,SPtr<Sound>);  };
 
 int main(){
 
-    // 全ての依存物はcreate毎に生成
-    // シングルトンとして追加する場合はインスタンスを指定
-    // => シングルトンが非シングルトンに依存してはいけないため
-    // 
-    FileLogger logger;
-
     ServiceInjector injector;
+
+    FileLogger logger;
     injector.add<RHI>().to<DX12RHI>();
-    injector.add<RHI>().to<VulkanRHI>();
-    injector.add<Profiler>().to<PIXProfiler>();
     injector.add<Graphic>();
     injector.add(logger);
     
-    auto engine1 = injector.create<Engine>();
+    ServiceContainer container;
+    auto engine = injector.create<Engine>(container);
+    engine->setServiceContainer(container);
 
-    // Engineを起点に生成すると依存先をエンジンより後に解放しないといけない
-
-    // ユーティリティを使用する場合どこかにインスタンスを保持する必要がある
+    // 最後に生成されたRHIを使用して生成
     Texture::White();
 
 
@@ -79,26 +41,103 @@ int main(){
 }
 
 ```
-
+# ServiceInjectorへの登録
+必須依存のサービスをServiceInjectorに登録する責務はそのサービスにあります。
+登録用の関数を使用すると内部的に必要なサービスが登録されます。
 ```cpp
-class RHI{
-public:
-    static RHI* Get(){
-        return s_rhi;
-    }
+void func(){
+    ServiceInjector injector;
+    ob::graphic::Register(injector);
 
-    RHI(){
-        s_rhi = this;
+    ob::rhi::dx12::Register(injector);
+}
+//-----------------------------------------------------
+void ob::graphics::Register(ServiceInjector& injector){
+    injector.bind<Graphics>();
+    injector.bind<EmptyRHI>();
+}
+void ob::rhi::dx12::Register(ServiceInjector& injector){
+    injector.bind<DX12RHI>();
+    injector.bind<Platform>();
+}
+```
+
+
+# サービスの生成キャンセル
+必須のサービスが生成されていない場合はコンストラクタから例外を送信することで生成をキャンセルすることができます。  
+```cpp
+struct Base{};
+struct A:Base{
+    A(SPtr<Req> req){
+        if(!req){
+            throw Exception();
+        }
     }
 };
-
-class Texture{
-public:
-    static Ref<Texture> White(){
-
-        GEngine->get<RHI>()
+struct B:Base{
+    B(){
 
     }
 };
+struct C{
+    C(SPtr<Base>);
+}
+
+void func(){
+    ServiceInjector injector;
+    injector.bind<Base>.to<A>();
+    injector.bind<Base>.to<B>();
+    injector.bind<C>.toSelf();
+    injector.create<C>();
+    // Cに渡されるのはB
+}
+
 
 ```
+
+# 生成単位
+```
+Engine
+    Editor
+        Tool[]
+            World
+    Game
+        World
+```
+## Engine
+* シングルトンです。
+
+```
+Engine::GetService<T>();
+```
+
+## Editor
+* シングルトンです。  
+* エディタ起動の場合のみ生成されます。
+
+```
+Editor::GetService<T>();
+```
+
+## Game
+* シングルトンです。
+* ランタイム起動の場合のみ生成されます。
+  * スタンドアロン起動
+  * プレビュー
+* ゲームプレビューとカットシーンプレビューは併用できません。
+
+```
+GameInstance::GetService<T>();
+```
+
+## World
+* ワールドの数だけ生成されます
+  
+```
+entity->getWorld()->getService<T>();
+```
+
+# エディタツールの扱い
+* 複数アセットを同時編集する場合はツールごとにWorldが生成されます
+  * ツール内で複数のWorldが生成される場合もあります
+* エディタ起動の場合はGameのサービスは生成されません

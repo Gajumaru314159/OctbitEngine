@@ -31,7 +31,7 @@
 	
 	<!--StringView-->
 	<Type Name="ob::core::StringViewBase&lt;*&gt;">
-		<DisplayString>{m_view,sb}</DisplayString>
+		<DisplayString>{m_view,s}</DisplayString>
 	</Type>
 
 	<!--Pimpl-->

@@ -1,14 +1,13 @@
 ﻿cmake_minimum_required (VERSION 3.15)
-project (Application)
+project (Graphics)
 
 #------------------------------------------------------------------------------
 # ソースコードの登録
 #------------------------------------------------------------------------------
-LOAD_FILES(out_sources "Application")
-add_executable(${PROJECT_NAME} ${out_sources})
+LOAD_FILES(out_sources "Framework/Graphics")
+add_library(${PROJECT_NAME} STATIC ${out_sources})
 
-SET_PCH("PCH/stdafx.h")
-
+SET_PCH("Framework/Graphics/PCH/stdafx.h")
 
 #------------------------------------------------------------------------------
 # プロジェクト設定
@@ -18,33 +17,16 @@ SET_PCH("PCH/stdafx.h")
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${CMAKE_CURRENT_SOURCE_DIR}/Source" "${OCTBIT_THIRD_PARTY_PATH}/ObjLoader/include")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs 
-    Core
-    Platform
-    RHI
-    DirectX12RHI
-    #VulkanRHI
-    Input
-    Engine
-    ImGui
-    Graphics
-    Debug
-)
+set(public_libs Core RHI)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
 # ランタイムライブラリ設定
 set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # フィルタ設定
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Application")
-
-
-# カスタムコマンド
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:Application>
-    )
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")

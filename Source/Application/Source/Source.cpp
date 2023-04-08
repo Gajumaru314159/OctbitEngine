@@ -9,9 +9,9 @@
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component/TransformComponent.h>
 
-#include <Framework/Graphic/Material.h>
-#include <Framework/Graphic/Mesh.h>
-#include <Framework/Graphic/Component/CameraComponent.h>
+#include <Framework/Graphics/Material.h>
+#include <Framework/Graphics/Mesh.h>
+#include <Framework/Graphics/Component/CameraComponent.h>
 
 #include <Framework/Debug/LogInfo.h>
 
@@ -32,23 +32,34 @@ int TestVullkan();
 void Link_Entity();
 void Link_GraphicModule();
 
-struct ii {
-	virtual ~ii() noexcept = default;
-	virtual int get() const = 0;
+
+struct IEngineObject {
+	OB_RTTI();
+};
+struct Platform : IEngineObject {
+	OB_RTTI();
+	Platform() {
+		LOG_INFO("生成{}",getTypeId().name());
+	}
+};
+struct RHI : IEngineObject {
+	RHI(SPtr<Platform>) {
+		LOG_INFO("生成{}", getTypeId().name());
+	}
+	OB_RTTI();
+};
+struct Graphic :IEngineObject {
+	Graphic(SPtr<RHI>) {
+		LOG_INFO("生成{}", getTypeId().name());
+	}
+	OB_RTTI();
 };
 
-class implementation : public ii {
-public:
-	int get() const override { return 12; }
-};
-class implementation2 : public ii {
-public:
-	int get() const override { return 42; }
-};
 
-struct example {
-	example(SPtr<ii> ii):ii(ii){}
-	std::shared_ptr<ii> ii;
+
+struct App {
+	App(SPtr<Graphic>, Array<SPtr<IEngineObject>> is):m_objects(is){}
+	Array<SPtr<IEngineObject>> m_objects;
 };
 
 
@@ -56,13 +67,17 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 
 	di::ServiceContainer c;
 
-	c.bind<example>().toSelf();
-	c.bind<ii>().to<implementation2>();
-	c.bind<ii>().to<implementation>();
+	c.bind<IEngineObject,RHI>().to<RHI>();
+	c.bind<IEngineObject, Platform>().to<Platform>();
+	c.bind<IEngineObject, Graphic>().to<Graphic>();
+	c.bind<App>().toSelf();
 
-	auto ex = c.get<example>();
+	auto ex = c.get<App>();
 
-	LOG_INFO("=>{}", ex->ii->get());
+	for (auto& i : ex->m_objects) {
+		LOG_INFO("=>{}", i->getTypeId().name());
+	}
+
 
 	{
 		rhi::Config c;
@@ -196,8 +211,8 @@ void drawComponents(engine::Entity* pEntity) {
 							}
 						}
 					}
-					if (component->getTypeId() == TypeId::Get<graphic::CameraComponent>()) {
-						auto c = reinterpret_cast<graphic::CameraComponent*>(component.get());
+					if (component->getTypeId() == TypeId::Get<graphics::CameraComponent>()) {
+						auto c = reinterpret_cast<graphics::CameraComponent*>(component.get());
 						{
 							f32 value[] = { c->getFov() };
 							if (ImGui::SliderFloat("FovY", value, 0, 180)) {
@@ -230,7 +245,7 @@ void drawComponents(engine::Entity* pEntity) {
 int TestDirectX12() {
 
 	using namespace ob::rhi;
-	using namespace ob::graphic;
+	using namespace ob::graphics;
 
 	debug::LogInfo logInfo;
 
@@ -350,7 +365,7 @@ int TestDirectX12() {
 
 
 		entity->addComponent<engine::TransformComponent>();
-		//entity->addComponent<graphic::CameraComponent>();
+		//entity->addComponent<graphics::CameraComponent>();
 
 	}
 
@@ -404,8 +419,8 @@ int TestDirectX12() {
 		auto skyMtx = Matrix::Scale(Vec3(1, 1, 1) * modelScale);
 		auto ukuleleMtx = Matrix::TRS(Vec3::Zero, Quat(0, t, 70), Vec3::One);
 
-		graphic::Material::SetGlobalColor(TC("LightDir"), Color(1, 1, 1));
-		graphic::Material::SetGlobalMatrix(TC("Matrix"), viewMtx);
+		graphics::Material::SetGlobalColor(TC("LightDir"), Color(1, 1, 1));
+		graphics::Material::SetGlobalMatrix(TC("Matrix"), viewMtx);
 		sky.setMatrix(skyMtx);
 		ukulele.setMatrix(ukuleleMtx);
 
@@ -556,7 +571,7 @@ int TestVullkan() {
 	MSG msg = {};
 	while (true) {
 
-		//graphic::System::Get().update();
+		//graphics::System::Get().update();
 		GEngine->visit([](engine::IModule& m) {m.update(); });
 
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {

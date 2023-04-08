@@ -14,9 +14,9 @@
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
 
-#include <Framework/Graphic/Material.h>
-#include <Framework/Graphic/Mesh.h>
-#include <Framework/Graphic/CommandBuffer.h>
+#include <Framework/Graphics/Material.h>
+#include <Framework/Graphics/Mesh.h>
+#include <Framework/Graphics/CommandBuffer.h>
 
 
 #pragma warning(push, 0)
@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------
 using namespace ob;
 using namespace ob::rhi;
-using namespace ob::graphic;
+using namespace ob::graphics;
 
 
 class Model {

@@ -37,9 +37,14 @@
 #include <Framework/Core/Template/include.h>
 #include <Framework/Core/Reflection/TypeId.h>
 
-
-// コンストラクタ定義用マクロ
-#define CINJECT(constructorFunction) \
+//@―---------------------------------------------------------------------------
+//! @brief		DependencyInjectionに使用するコンストラクタをマークするためのマクロ
+//! @details	DependencyInjectionに使用するコンストラクタをSERVICE_INJECTマクロで囲んでください。
+//!				```
+//!				SERVICE_INJECT(Sample(SPtr<Clazz> clazz)):m_clazz(clazz){}
+//!				```
+//@―---------------------------------------------------------------------------
+#define SERVICE_INJECT(constructorFunction) \
 	using ConstructorTypedef = ::ob::core::di::ConstructorType<constructorFunction>; \
 	constructorFunction
 
@@ -49,6 +54,8 @@ namespace ob::core::di {
 	template<typename ... TService>
 	class ServiceBuilder;
 	class ServiceContainer;
+
+	// 最大依存数はConstructorFactory::createInstanceで設定します。
 
 
 	//============================================
@@ -68,11 +75,11 @@ namespace ob::core::di {
 
 	// Arrayか
 	template<typename T> struct is_vector : public std::false_type {};
-	template<typename T> struct is_vector<std::vector<T>> : public std::true_type {};
+	template<typename T> struct is_vector<Array<T>> : public std::true_type {};
 
 	// Arrayの要素
 	template<typename T> struct trim_vector;
-	template<typename T> struct trim_vector<std::vector<T>> { typedef T type; };
+	template<typename T> struct trim_vector<Array<T>> { typedef T type; };
 
 	// ConstructorTypedef定義用マーカー
 	template<typename T> struct ConstructorType { typedef T Type; };
@@ -198,7 +205,7 @@ namespace ob::core::di {
 			m_componentStack.pop_back();
 		}
 
-		const std::vector<component_type>& getComponentStack() {
+		const Array<component_type>& getComponentStack() {
 			return m_componentStack;
 		}
 
@@ -218,7 +225,7 @@ namespace ob::core::di {
 		void operator=(const InjectionContext&&) = delete;
 	private:
 		ServiceContainer& m_container;
-		std::vector<component_type> m_componentStack;
+		Array<component_type> m_componentStack;
 	};
 
 
@@ -244,7 +251,7 @@ namespace ob::core::di {
 
 		void ensureNoCycle() {
 			// スタック内に重複あり
-			const std::vector<component_type>& stack = m_context->getComponentStack();
+			const Array<component_type>& stack = m_context->getComponentStack();
 			for (size_t i = 0; i < stack.size() - 1; ++i)
 			{
 				if (stack[i] == stack.back())
@@ -268,7 +275,10 @@ namespace ob::core::di {
 	//! @brief	InstanceRetrieverインターフェイス
 	//@―---------------------------------------------------------------------------
 	struct IInstanceRetriever {
+		IInstanceRetriever(TypeId interfaceType,HashSet<TypeId> castableTypes) : interfaceType(interfaceType), castableTypes(std::move(castableTypes)) {}
 		virtual ~IInstanceRetriever() = default;
+		TypeId interfaceType;
+		HashSet<TypeId> castableTypes;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -276,6 +286,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	template<typename TInterface>
 	struct InstanceRetriever : IInstanceRetriever {
+		InstanceRetriever(HashSet<TypeId> castableTypes):IInstanceRetriever(TypeId::Get<TInterface>(),std::move(castableTypes)) {}
 		virtual SPtr<TInterface> forwardInstance(InjectionContext* context) = 0;
 	};
 
@@ -283,15 +294,14 @@ namespace ob::core::di {
 	//! @brief	InstanceRetrieverの実装
 	//@―---------------------------------------------------------------------------
 	template<typename TImpl, typename TInterface, typename TStorage>
-	struct CastInstanceRetriever : public InstanceRetriever<TInterface> {
-		explicit CastInstanceRetriever(SPtr<TStorage> storage) 
-			: m_storage(storage) 
+	struct CastInstanceRetriever : InstanceRetriever<TInterface> {
+		explicit CastInstanceRetriever(SPtr<TStorage> storage, HashSet<TypeId> castableTypes)
+			: InstanceRetriever<TInterface>(std::move(castableTypes))
+			, m_storage(storage) 
 		{}
 		//! @brief インスタンスを転送
 		SPtr<TInterface> forwardInstance(InjectionContext* context) override {
-			// TODO 動的キャストを解決
-			// TImplementをTInterfaceに変換できるかチェック
-			return std::dynamic_pointer_cast<TInterface>(m_storage->getOrCreateInstance(context));
+			return m_storage->getOrCreateInstance(context);
 		}
 		SPtr<TStorage> m_storage;
 	};
@@ -358,7 +368,7 @@ namespace ob::core::di {
 			!is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
 			!std::is_reference<TVectorWithInterface>::value,
 			// 戻り値 Array<SPtr<T>>
-			std::vector<SPtr<typename trim_vector<TVectorWithInterface>::type>>
+			Array<SPtr<typename trim_vector<TVectorWithInterface>::type>>
 		>
 			get(InjectionContext* context = nullptr);
 
@@ -371,7 +381,7 @@ namespace ob::core::di {
 			is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
 			!std::is_reference<TVectorWithInterface>::value,
 			// 戻り値 Array<SPtr<T>>
-			std::vector<typename trim_vector<TVectorWithInterface>::type>
+			Array<typename trim_vector<TVectorWithInterface>::type>
 		>
 			get(InjectionContext* context = nullptr);
 
@@ -415,7 +425,7 @@ namespace ob::core::di {
 
 	private:
 		
-		void findInstanceRetrievers(std::vector<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const;
+		void findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const;
 
 	private:
 
@@ -426,7 +436,7 @@ namespace ob::core::di {
 				return type.typeId.hash();
 			}
 		};
-		using RetrieverMap = std::unordered_map<component_type, std::vector<SPtr<IInstanceRetriever>>, ComponentTypeHasher>;
+		using RetrieverMap = HashMap<component_type, Array<SPtr<IInstanceRetriever>>, ComponentTypeHasher>;
 
 		const ServiceContainer* m_parent = nullptr;
 		RetrieverMap m_retrievers;
@@ -499,6 +509,7 @@ namespace ob::core::di {
 	class ConstructorFactory<TInstance, std::enable_if_t<!has_constructor_injection<TInstance>::value && !std::is_constructible<TInstance>::value>> {
 	public:
 		SPtr<TInstance> createInstance(InjectionContext* context) {
+			// Resolverの数 = バインド可能な最大の数です。
 			return try_instantiate(
 				CtorArgResolver(context),
 				CtorArgResolver(context),
@@ -544,7 +555,8 @@ namespace ob::core::di {
 		std::enable_if_t<!std::is_constructible<TInstance, TArg>::value, SPtr<TInstance>>
 			try_instantiate(TArg arg)
 		{
-			// インジェクションに適したコンストラクタが見つかりませんでした。CINJECTマクロを使用してコンストラクタを明示的にマークしてみてください。
+			// コンストラクタが複数存在するか、インジェクションに適したコンストラクタが見つかりませんでした。
+			// SERVICE_INJECTマクロを使用してコンストラクタを明示的にマークしてください。
 			static_assert(always_false<TInstance>::value, "Could not find any suitable constructor for injection. Try explicitly mark the constructor using CINJECT macro");
 		}
 	};
@@ -629,8 +641,9 @@ namespace ob::core::di {
 	template<typename TImpl, typename TFactory>
 	class InstanceStorage {
 	public:
-		explicit InstanceStorage(TFactory factory)
+		explicit InstanceStorage(TFactory factory,HashSet<TypeId> castableTypes)
 			: m_factory(factory)
+			, m_castableTypes(std::move(castableTypes))
 		{}
 
 		void setSingleton(bool value) { m_isSingleton = value; }
@@ -645,6 +658,11 @@ namespace ob::core::di {
 				m_instance = createInstance(context);
 
 			return m_instance;
+		}
+
+		template<class T>
+		bool isCastableTo()const {
+			return m_castableTypes.count(TypeId::Get<T>());
 		}
 
 	private:
@@ -672,6 +690,7 @@ namespace ob::core::di {
 		TFactory	m_factory;
 		bool		m_isSingleton = false;
 		String		m_name;
+		HashSet<TypeId> m_castableTypes;
 	};
 
 
@@ -753,13 +772,16 @@ namespace ob::core::di {
 		//! @brief		TServiceを実装する型TImplにバインド
 		//@―---------------------------------------------------------------------------
 		template<typename TImpl>
-		StorageConfig<InstanceStorage<TImpl, ConstructorFactory<TImpl>>>
+		std::enable_if_t<
+			(std::is_base_of_v<TService,TImpl> && ...),
+			StorageConfig<InstanceStorage<TImpl, ConstructorFactory<TImpl>>>
+		>
 			to()
 		{
 			using InstanceStorageType = InstanceStorage<TImpl, ConstructorFactory<TImpl>>;
 
 			// インスタンスホルダを生成
-			auto instanceStorage = std::make_shared<InstanceStorageType>(ConstructorFactory<TImpl>());
+			auto instanceStorage = std::make_shared<InstanceStorageType>(ConstructorFactory<TImpl>(), createCastableTypes());
 
 			// 登録
 			registerType<TImpl, InstanceStorageType, TService...>(instanceStorage);
@@ -771,13 +793,16 @@ namespace ob::core::di {
 		//! @brief		TServiceを実装する型TImplを返す関数にバインド
 		//@―---------------------------------------------------------------------------
 		template<typename TImpl>
-		StorageConfig<InstanceStorage<TImpl, FunctionFactory<TImpl>>>
+		std::enable_if_t<
+			(std::is_base_of_v<TService, TImpl> && ...),
+			StorageConfig<InstanceStorage<TImpl, FunctionFactory<TImpl>>>
+		>		
 			toFunction(typename FunctionFactory<TImpl>::FactoryMethodType factoryMethod)
 		{
 			using InstanceStorageType = InstanceStorage<TImpl, FunctionFactory<TImpl>>;
 
 			// インスタンスホルダを生成
-			auto instanceStorage = std::make_shared<InstanceStorageType>(factoryMethod);
+			auto instanceStorage = std::make_shared<InstanceStorageType>(factoryMethod, createCastableTypes());
 
 			// 登録
 			registerType<TImpl, InstanceStorageType, TService...>(instanceStorage);
@@ -789,13 +814,16 @@ namespace ob::core::di {
 		//! @brief		TServiceを実装する型TImplの参照にバインド
 		//@―---------------------------------------------------------------------------
 		template<typename TImpl>
-		StorageConfig<InstanceStorage<TImpl, ReferenceFactory<TImpl>>>
+		std::enable_if_t<
+			(std::is_base_of_v<TService, TImpl> && ...),
+			StorageConfig<InstanceStorage<TImpl, ReferenceFactory<TImpl>>>
+		>
 			toConstant(SPtr<TImpl> instance)
 		{
 			using InstanceStorageType = InstanceStorage<TImpl, ReferenceFactory<TImpl>>;
 
 			// インスタンスホルダを生成
-			auto instanceStorage = std::make_shared<InstanceStorageType>(instance);
+			auto instanceStorage = std::make_shared<InstanceStorageType>(instance, createCastableTypes());
 
 			// 登録
 			registerType<TImpl, InstanceStorageType, TService...>(instanceStorage);
@@ -804,6 +832,18 @@ namespace ob::core::di {
 		}
 
 	private:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		変換可能な型のセットを生成
+		//@―---------------------------------------------------------------------------
+		HashSet<TypeId> createCastableTypes()const {
+			Array<TypeId> types{ TypeId::Get<TService>()...};
+			HashSet<TypeId> castableTypes;
+			for (auto& typeId : types) {
+				castableTypes.emplace(typeId);
+			}
+			return std::move(castableTypes);
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型登録ヘルパ
@@ -832,7 +872,7 @@ namespace ob::core::di {
 			static_assert(std::is_convertible<TImpl*, TService*>::value, "No conversion exists from TImpl* to TService*");
 
 			m_container->m_retrievers[make_component_type<TService>()]
-				.emplace_back(std::make_shared<CastInstanceRetriever<TImpl, TService, TStorage>>(instanceStorage));
+				.emplace_back(std::make_shared<CastInstanceRetriever<TImpl, TService, TStorage>>(instanceStorage,createCastableTypes()));
 		}
 
 	private:
@@ -896,7 +936,7 @@ namespace ob::core::di {
 		is_vector<TVectorWithInterface>::value &&
 		!is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
 		!std::is_reference<TVectorWithInterface>::value,
-		std::vector<SPtr<typename trim_vector<TVectorWithInterface>::type>>
+		Array<SPtr<typename trim_vector<TVectorWithInterface>::type>>
 	> 
 		ServiceContainer::get(InjectionContext* context)
 	{
@@ -911,17 +951,18 @@ namespace ob::core::di {
 		}
 
 		// 生成可能なサービスのRetrieverを取得
-		std::vector<SPtr<IInstanceRetriever>> retrievers;
+		Array<SPtr<IInstanceRetriever>> retrievers;
 		findInstanceRetrievers(retrievers, make_component_type<InterfaceType>());
 
 		// contextからサービスを生成
-		std::vector<SPtr<InterfaceType>> instances;
-		for (SPtr<IInstanceRetriever> retrieverInterface : retrievers) 		{
-			// TODO dynamic_pointer_cast解決
-			// IInstanceRetrieverをInstanceRetriever<InterfaceType>に変換可能かチェック
-			SPtr<InstanceRetriever<InterfaceType>> retriever = std::dynamic_pointer_cast<InstanceRetriever<InterfaceType>>(retrieverInterface);
+		Array<SPtr<InterfaceType>> instances;
+		for (SPtr<IInstanceRetriever> retriever : retrievers) {
 
-			instances.emplace_back(retriever->forwardInstance(context));
+			if (retriever->interfaceType == TypeId::Get<InterfaceType>()) {
+				instances.emplace_back(
+					reinterpret_cast<InstanceRetriever<InterfaceType>*>(retriever.get())->forwardInstance(context)
+				);
+			}
 		}
 
 		return instances;
@@ -936,12 +977,12 @@ namespace ob::core::di {
 		is_vector<TVectorWithInterfaceWithSharedPtr>::value&&
 		is_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::value &&
 		!std::is_reference<TVectorWithInterfaceWithSharedPtr>::value,
-		std::vector<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>
+		Array<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
 		// Array<T>に変換
-		return get<std::vector<typename trim_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::type>>(context);
+		return get<Array<typename trim_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::type>>(context);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -983,7 +1024,7 @@ namespace ob::core::di {
 		const component_type type = make_component_type<TInterface>();
 
 		// 生成可能なサービスのRetrieverを取得
-		std::vector<SPtr<IInstanceRetriever>> retrievers;
+		Array<SPtr<IInstanceRetriever>> retrievers;
 		findInstanceRetrievers(retrievers, type);
 
 		// 生成可能なサービスがない場合
@@ -993,11 +1034,12 @@ namespace ob::core::di {
 		}
 
 		// 最初の実装を生成
-		// TODO dynamic_pointer_cast解決
-		// IInstanceRetrieverをInstanceRetriever<TInterface>に変換可能かチェック
-		SPtr<InstanceRetriever<TInterface>> retriever = std::dynamic_pointer_cast<InstanceRetriever<TInterface>>(retrievers[0]);
 
-		return retriever->forwardInstance(context);
+		if (retrievers[0]->interfaceType == TypeId::Get<TInterface>()) {
+			return reinterpret_cast<InstanceRetriever<TInterface>*>(retrievers[0].get())->forwardInstance(context);
+		}
+
+		return nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -1018,7 +1060,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief	InstanceRetrieversを検索
 	//@―---------------------------------------------------------------------------
-	inline void ServiceContainer::findInstanceRetrievers(std::vector<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const {
+	inline void ServiceContainer::findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const {
 
 		auto itr = m_retrievers.find(type);
 
