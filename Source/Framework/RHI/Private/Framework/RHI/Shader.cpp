@@ -42,7 +42,10 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> VertexShader::Create(const String& code) {
-        return Device::Get()->createShader(code,ShaderStage::Vertex);
+        if (auto device = Device::Get()) {
+            return device->createShader(code, ShaderStage::Vertex);
+        }
+        return nullptr;
     }
 
 
@@ -53,7 +56,10 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> VertexShader::Create(BlobView binary) {
-        return Device::Get()->createShader(binary, ShaderStage::Vertex);
+        if (auto device = Device::Get()) {
+            return device->createShader(binary, ShaderStage::Vertex);
+        }
+        return nullptr;
     }
     
 
@@ -64,7 +70,10 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> PixelShader::Create(const String& code) {
-        return Device::Get()->createShader(code, ShaderStage::Pixel);
+        if (auto device = Device::Get()) {
+            return device->createShader(code, ShaderStage::Pixel);
+        }
+        return nullptr;
     }
 
 
@@ -75,7 +84,10 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> PixelShader::Create(BlobView binary) {
-        return Device::Get()->createShader(binary, ShaderStage::Pixel);
+        if (auto device = Device::Get()) {
+            return device->createShader(binary, ShaderStage::Pixel);
+        }
+        return nullptr;
     }
 
 }// namespace ob::rhi

@@ -33,7 +33,9 @@ namespace ob::rhi
                 pDevice = pModule->getDevice();
             }
         }
-        OB_ASSERT(pDevice, "ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
+        if (pDevice == nullptr) {
+            LOG_ERROR("ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
+        }
         return pDevice;
     }
 

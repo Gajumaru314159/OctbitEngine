@@ -12,7 +12,10 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<RenderPass> RenderPass::Create(const RenderPassDesc& desc) {
-		return Device::Get()->createRenderPass(desc);
+		if (auto device = Device::Get()) {
+			return device->createRenderPass(desc);
+		}
+		return nullptr;
 	}
 
 }// namespace ob

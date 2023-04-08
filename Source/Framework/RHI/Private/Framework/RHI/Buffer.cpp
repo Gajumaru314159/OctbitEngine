@@ -13,7 +13,10 @@ namespace ob::rhi {
     //! @param desc バッファ定義
     //@―---------------------------------------------------------------------------
     Ref<Buffer> Buffer::Create(const BufferDesc& desc) {
-        return Device::Get()->createBuffer(desc);
+        if (auto device = Device::Get()) {
+            return device->createBuffer(desc);
+        }
+        return nullptr;
     }
 
 

@@ -12,7 +12,10 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<FrameBuffer> FrameBuffer::Create(const FrameBufferDesc& desc) {
-		return Device::Get()->createFrameBuffer(desc);
+		if (auto device = Device::Get()) {
+			return device->createFrameBuffer(desc);
+		}
+		return nullptr;
 	}
 
 }// namespace ob

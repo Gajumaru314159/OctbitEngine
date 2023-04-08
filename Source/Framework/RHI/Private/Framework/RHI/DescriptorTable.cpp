@@ -17,7 +17,10 @@ namespace ob::rhi {
     //! @param name         デバッグ名
     //@―---------------------------------------------------------------------------
     Ref<DescriptorTable> DescriptorTable::Create(DescriptorHeapType type, s32 elementNum) {
-        return Device::Get()->createDescriptorTable(type, elementNum);
+        if (auto device = Device::Get()) {
+            return device->createDescriptorTable(type, elementNum);
+        }
+        return nullptr;
     }
 
 }// namespace ob

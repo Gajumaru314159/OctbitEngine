@@ -12,7 +12,10 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<RootSignature> RootSignature::Create(const RootSignatureDesc& desc) {
-		return Device::Get()->createRootSignature(desc);
+		if (auto device = Device::Get()) {
+			return device->createRootSignature(desc);
+		}
+		return nullptr;
 	}
 
 }// namespace ob

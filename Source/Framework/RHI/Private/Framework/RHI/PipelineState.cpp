@@ -12,7 +12,10 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<PipelineState> PipelineState::Create(const PipelineStateDesc& desc) {
-		return Device::Get()->createPipelineState(desc);
+		if (auto device = Device::Get()) {
+			return device->createPipelineState(desc);
+		}
+		return nullptr;
 	}
 
 }// namespace ob

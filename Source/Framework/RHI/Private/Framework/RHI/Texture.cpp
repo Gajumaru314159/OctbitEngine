@@ -15,8 +15,13 @@ namespace ob::rhi {
         if (pModule == nullptr) {
             pModule = GEngine->get<SystemResourceModule>();
         }
-        OB_ASSERT(pModule, "ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
-        return pModule.load()->getPresetTexture(type);
+
+        if (pModule) {
+            return pModule.load()->getPresetTexture(type);
+        } else {
+            LOG_ERROR("ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
+        }
+        return nullptr;
     }
     Ref<Texture> Texture::White() {
         return Preset(PresetTexture::White);
@@ -41,7 +46,10 @@ namespace ob::rhi {
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(const TextureDesc& desc) {
-        return Device::Get()->createTexture(desc);
+        if (auto device = Device::Get()) {
+            return device->createTexture(desc);
+        }
+        return nullptr;
     }
 
     //@―---------------------------------------------------------------------------
@@ -51,7 +59,10 @@ namespace ob::rhi {
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(BlobView blob,StringView name){
-        return Device::Get()->createTexture(blob,name);
+        if (auto device = Device::Get()) {
+            return device->createTexture(blob, name);
+        }
+        return nullptr;
     }
 
 
@@ -62,7 +73,10 @@ namespace ob::rhi {
     //! @param desc テクスチャ定義
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(Size size, Span<IntColor> colors) {
-        return Device::Get()->createTexture(size, colors);
+        if (auto device = Device::Get()) {
+            return device->createTexture(size, colors);
+        }
+        return nullptr;
     }
 
 

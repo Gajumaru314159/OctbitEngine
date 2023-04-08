@@ -13,7 +13,10 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<CommandList> CommandList::Create(const CommandListDesc& desc) {
-		return Device::Get()->createCommandList(desc);;
+		if (auto device = Device::Get()) {
+			return device->createCommandList(desc);
+		}
+		return nullptr;
 	}
 
 }// namespace ob
