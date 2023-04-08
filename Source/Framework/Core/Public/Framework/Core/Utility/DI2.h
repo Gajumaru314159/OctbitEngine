@@ -655,9 +655,9 @@ namespace ob::core::di {
 	//! @brief		インターフェースと実装の間のバインディングを構築する。
 	//!	@details	```
 	//!				ServiceContainer c;
-	//!				c.bind<IFirst>().to<Implementation>(
-	//!				c.bind<IFirst>().toFunction<Cheetah>
-	//!				c.bind<IFirst>().toContainer(cheetah
+	//!				c.bind<IFirst>().to<Implementation>;
+	//!				c.bind<IFirst>().to(factory);
+	//!				c.bind<IFirst>().to(instance);
 	//!				c.bind<Cheetah>().toSelf();
 	//!				```
 	//@―---------------------------------------------------------------------------
