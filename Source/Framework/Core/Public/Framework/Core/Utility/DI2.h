@@ -165,15 +165,6 @@ namespace ob::core::di {
 			return m_componentStack;
 		}
 
-		//! @brief 依存元の型情報取得
-		const TypeId& getRequester() {
-			// 未使用？
-			if (m_componentStack.size() < 2) {
-				throw InvalidOperationException("Context not valid.");
-			}
-			return m_componentStack[m_componentStack.size() - 2];
-		}
-
 	public:
 		InjectionContext(const InjectionContext&) = delete;
 		InjectionContext(const InjectionContext&&) = delete;
@@ -314,19 +305,6 @@ namespace ob::core::di {
 		ServiceBuilder<TInterface...> bind();
 
 		//@―---------------------------------------------------------------------------
-		//! @brief				依存を解決してインスタンスを取得 (Array<T>版)
-		//@―---------------------------------------------------------------------------
-		template<typename T>
-		std::enable_if_t<
-			is_vector<T>::value &&
-			!is_shared_ptr<typename trim_vector<T>::type>::value &&
-			!std::is_reference<T>::value,
-			// 戻り値 Array<SPtr<T>>
-			Array<SPtr<typename trim_vector<T>::type>>
-		>
-			get(InjectionContext* context = nullptr);
-
-		//@―---------------------------------------------------------------------------
 		//! @brief				依存を解決してインスタンスを取得 (Array<SPtr<T>>版)
 		//@―---------------------------------------------------------------------------
 		template<typename T>
@@ -362,18 +340,6 @@ namespace ob::core::di {
 			!std::is_reference<TInterface>::value,
 			// 戻り値 SPtr<T>
 			SPtr<TInterface>
-		>
-			get(InjectionContext* context = nullptr);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief				依存を解決してインスタンスを取得 (const T&版)
-		//@―---------------------------------------------------------------------------
-		template<typename TInterface>
-		std::enable_if_t<
-			std::is_reference<TInterface>::value&& 
-			std::is_const<std::remove_reference_t<TInterface>>::value,
-			// 戻り値 const T&
-			std::remove_reference_t<TInterface>
 		>
 			get(InjectionContext* context = nullptr);
 
@@ -864,21 +830,21 @@ namespace ob::core::di {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief	Array<T>用
+	//! @brief	Array<SPtr<T>>用
 	//@―---------------------------------------------------------------------------
 	template<typename T>
 	std::enable_if_t<
-		is_vector<T>::value &&
-		!is_shared_ptr<typename trim_vector<T>::type>::value &&
+		is_vector<T>::value&&
+		is_shared_ptr<trim_vector_t<T>>::value &&
 		!std::is_reference<T>::value,
-		Array<SPtr<trim_vector_t<T>>>
-	> 
+		Array<trim_vector_t<T>>
+	>
 		ServiceContainer::get(InjectionContext* context)
 	{
-		using InterfaceType = trim_vector_t<T>;
+		using InterfaceType = trim_shared_ptr_t<trim_vector_t<T>>;
 
 		std::unique_ptr<InjectionContext> contextPtr;
-		
+
 		// 最初のgetではInjecttionContextが指定されていないのでこのタイミングで生成
 		if (context == nullptr) {
 			contextPtr = std::make_unique<InjectionContext>(*this, TypeId::Get<InterfaceType>());
@@ -903,23 +869,6 @@ namespace ob::core::di {
 		return instances;
 	}
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief	Array<SPtr<T>>用
-	//@―---------------------------------------------------------------------------
-	template<typename T>
-	std::enable_if_t<
-		is_vector<T>::value&&
-		is_shared_ptr<trim_vector_t<T>>::value &&
-		!std::is_reference<T>::value,
-		Array<trim_vector_t<T>>
-	>
-		ServiceContainer::get(InjectionContext* context)
-	{
-		// Array<T>に変換
-		return get<Array<trim_shared_ptr_t<trim_vector_t<T>>>>(context);
-	}
-
 	//@―---------------------------------------------------------------------------
 	//! @brief	SPtr<T>用
 	//@―---------------------------------------------------------------------------
@@ -932,8 +881,33 @@ namespace ob::core::di {
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
-		// Tに変換
-		return get<trim_shared_ptr_t<T>>(context);
+		using InterfaceType = trim_shared_ptr_t<T>;
+
+		std::unique_ptr<InjectionContext> contextPtr;
+
+		// 最初のgetではInjecttionContextが指定されていないのでこのタイミングで生成
+		if (context == nullptr) {
+			contextPtr = std::make_unique<InjectionContext>(*this, TypeId::Invalid());
+			context = contextPtr.get();
+		}
+
+		// 生成可能なサービスのRetrieverを取得
+		Array<SPtr<IInstanceRetriever>> retrievers;
+		findInstanceRetrievers(retrievers, TypeId::Get<InterfaceType>());
+
+		// contextからサービスを生成
+		for (auto& retriever : retrievers) {
+			if (retriever->interfaceType == TypeId::Get<InterfaceType>()) {
+				try {
+					return reinterpret_cast<InstanceRetriever<InterfaceType>*>(retriever.get())->forwardInstance(context);
+				}
+				catch (Exception e) {
+
+				}
+			}
+		}
+
+		return nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -948,48 +922,7 @@ namespace ob::core::di {
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
-		std::unique_ptr<InjectionContext> contextPtr;
-
-		// 最初のgetではInjecttionContextが指定されていないのでこのタイミングで生成
-		if (context == nullptr) {
-			contextPtr = std::make_unique<InjectionContext>(*this, TypeId::Invalid() );
-			context = contextPtr.get();
-		}
-
-		const auto type = TypeId::Get<T>();
-
-		// 生成可能なサービスのRetrieverを取得
-		Array<SPtr<IInstanceRetriever>> retrievers;
-		findInstanceRetrievers(retrievers, type);
-
-		// 生成可能なサービスがない場合
-		if (retrievers.empty()) {
-			return nullptr;
-			//throw ServiceNotFoundException(type);
-		}
-
-		// 最初の実装を生成
-
-		if (retrievers[0]->interfaceType == type) {
-			return reinterpret_cast<InstanceRetriever<T>*>(retrievers[0].get())->forwardInstance(context);
-		}
-
-		return nullptr;
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief	const T&用
-	//@―---------------------------------------------------------------------------
-	template<typename TInterface>
-	std::enable_if_t<
-		std::is_reference<TInterface>::value &&
-		std::is_const<std::remove_reference_t<TInterface>>::value,
-		std::remove_reference_t<TInterface>
-	>
-		ServiceContainer::get(InjectionContext* context)
-	{
-		// Tに変換
-		return get<std::remove_const_t<std::remove_reference_t<TInterface>>>(context);
+		return get<SPtr<T>>(context);
 	}
 
 	//@―---------------------------------------------------------------------------
