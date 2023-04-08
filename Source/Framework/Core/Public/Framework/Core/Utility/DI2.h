@@ -65,13 +65,14 @@ namespace ob::core::di {
 	// false (static_assert型名出力用)
 	template<typename T> struct always_false { enum { value = false }; };
 
-	// SPtrの要素取得
-	template<typename T> struct trim_shared_ptr;
-	template<typename T> struct trim_shared_ptr<SPtr<T>> { typedef T type; };
-
 	// SPtrか
 	template<typename T> struct is_shared_ptr : public std::false_type {};
 	template<typename T> struct is_shared_ptr<SPtr<T>> : public std::true_type {};
+
+	// SPtrの要素取得
+	template<typename T> struct trim_shared_ptr;
+	template<typename T> struct trim_shared_ptr<SPtr<T>> { typedef T type; };
+	template<typename T> using  trim_shared_ptr_t = typename trim_shared_ptr<T>::type;
 
 	// Arrayか
 	template<typename T> struct is_vector : public std::false_type {};
@@ -80,6 +81,7 @@ namespace ob::core::di {
 	// Arrayの要素
 	template<typename T> struct trim_vector;
 	template<typename T> struct trim_vector<Array<T>> { typedef T type; };
+	template<typename T> using  trim_vector_t = typename trim_vector<T>::type;
 
 	// ConstructorTypedef定義用マーカー
 	template<typename T> struct ConstructorType { typedef T Type; };
@@ -98,59 +100,13 @@ namespace ob::core::di {
 
 
 	//============================================
-	// 型情報ヘルパー
-	//============================================
-
-	// 未規定型用ダミークラス
-	struct unspecified_service {};
-
-	// コンポーネント型情報
-	struct component_type {
-	public:
-		const TypeId typeId;
-		const String customName;
-	public:
-		explicit component_type(const TypeId& t, StringView customName = TC("")) 
-			: typeId(t)
-			, customName(customName) 
-		{}
-
-		bool operator==(const component_type& other) const {
-			return typeId == other.typeId;
-		}
-
-		StringView name() const {
-			return customName.empty() ? typeId.name() : customName;
-		}
-
-		bool specified() const {
-			return typeId != TypeId::Get<unspecified_service>();
-		}
-	};
-
-	// component_type生成
-	template<typename T>
-	static component_type make_component_type(StringView customName = TC("")) {
-		return component_type(TypeId::Get<T>(), customName);
-	}
-
-	// 型名取得
-	template<typename T, class Enable = void>
-	struct type_name {
-		static const char* value() {
-			return TypeId::Get<T>().name().data();
-		}
-	};
-
-
-	//============================================
 	// 例外
 	//============================================
 
 	//! @brief 循環依存例外
 	class CircularDependencyFoundException : public Exception {
 	public:
-		explicit CircularDependencyFoundException(const component_type& type) 
+		explicit CircularDependencyFoundException(const TypeId& type) 
 			: Exception(Format(TC("Found circular dependency on object '{}'"), type.name()))
 		{}
 	};
@@ -158,7 +114,7 @@ namespace ob::core::di {
 	//! @brief コンポーネント未登録例外
 	class ServiceNotFoundException : public Exception {
 	public:
-		explicit ServiceNotFoundException(const component_type& type)
+		explicit ServiceNotFoundException(const TypeId& type)
 			: Exception(Format(TC("Component for interface '{}' not found"), type.name()))
 		{}
 	};
@@ -183,7 +139,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	class InjectionContext {
 	public:
-		InjectionContext(ServiceContainer& container, component_type requesterComponent) :
+		InjectionContext(ServiceContainer& container, TypeId requesterComponent) :
 			m_container(container)
 		{
 			pushType(requesterComponent);
@@ -197,7 +153,7 @@ namespace ob::core::di {
 			return m_container; 
 		}
 
-		void pushType(component_type& type) {
+		void pushType(const TypeId& type) {
 			m_componentStack.emplace_back(type);
 		}
 
@@ -205,12 +161,12 @@ namespace ob::core::di {
 			m_componentStack.pop_back();
 		}
 
-		const Array<component_type>& getComponentStack() {
+		const Array<TypeId>& getComponentStack() {
 			return m_componentStack;
 		}
 
 		//! @brief 依存元の型情報取得
-		const component_type& getRequester() {
+		const TypeId& getRequester() {
 			// 未使用？
 			if (m_componentStack.size() < 2) {
 				throw InvalidOperationException("Context not valid.");
@@ -225,7 +181,7 @@ namespace ob::core::di {
 		void operator=(const InjectionContext&&) = delete;
 	private:
 		ServiceContainer& m_container;
-		Array<component_type> m_componentStack;
+		Array<TypeId> m_componentStack;
 	};
 
 
@@ -238,9 +194,9 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	class ContextGuard {
 	public:
-		ContextGuard(InjectionContext* context, component_type type) :
-			m_context(context),
-			m_type(type)
+		ContextGuard(InjectionContext* context, const TypeId type) 
+			: m_context(context)
+			, m_type(type)
 		{
 			m_context->pushType(type);
 		}
@@ -251,11 +207,9 @@ namespace ob::core::di {
 
 		void ensureNoCycle() {
 			// スタック内に重複あり
-			const Array<component_type>& stack = m_context->getComponentStack();
-			for (size_t i = 0; i < stack.size() - 1; ++i)
-			{
-				if (stack[i] == stack.back())
-				{
+			const Array<TypeId>& stack = m_context->getComponentStack();
+			for (size_t i = 0; i < stack.size() - 1; ++i) {
+				if (stack[i] == stack.back()) {
 					throw CircularDependencyFoundException(stack.back());
 				}
 			}
@@ -263,7 +217,7 @@ namespace ob::core::di {
 
 	private:
 		InjectionContext* m_context;
-		component_type m_type;
+		TypeId m_type;
 	};
 
 
@@ -362,39 +316,39 @@ namespace ob::core::di {
 		//@―---------------------------------------------------------------------------
 		//! @brief				依存を解決してインスタンスを取得 (Array<T>版)
 		//@―---------------------------------------------------------------------------
-		template<typename TVectorWithInterface>
+		template<typename T>
 		std::enable_if_t<
-			is_vector<TVectorWithInterface>::value &&
-			!is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
-			!std::is_reference<TVectorWithInterface>::value,
+			is_vector<T>::value &&
+			!is_shared_ptr<typename trim_vector<T>::type>::value &&
+			!std::is_reference<T>::value,
 			// 戻り値 Array<SPtr<T>>
-			Array<SPtr<typename trim_vector<TVectorWithInterface>::type>>
+			Array<SPtr<typename trim_vector<T>::type>>
 		>
 			get(InjectionContext* context = nullptr);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				依存を解決してインスタンスを取得 (Array<SPtr<T>>版)
 		//@―---------------------------------------------------------------------------
-		template<typename TVectorWithInterface>
+		template<typename T>
 		std::enable_if_t<
-			is_vector<TVectorWithInterface>::value&&
-			is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
-			!std::is_reference<TVectorWithInterface>::value,
+			is_vector<T>::value&&
+			is_shared_ptr<typename trim_vector<T>::type>::value &&
+			!std::is_reference<T>::value,
 			// 戻り値 Array<SPtr<T>>
-			Array<typename trim_vector<TVectorWithInterface>::type>
+			Array<typename trim_vector<T>::type>
 		>
 			get(InjectionContext* context = nullptr);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				依存を解決してインスタンスを取得 (SPtr<T>版)
 		//@―---------------------------------------------------------------------------
-		template<typename TInterfaceWithSharedPtr>
+		template<typename T>
 		std::enable_if_t<
-			!is_vector<TInterfaceWithSharedPtr>::value&&
-			is_shared_ptr<TInterfaceWithSharedPtr>::value &&
-			!std::is_reference<TInterfaceWithSharedPtr>::value,
+			!is_vector<T>::value&&
+			is_shared_ptr<T>::value &&
+			!std::is_reference<T>::value,
 			// 戻り値　SPtr<T>
-			TInterfaceWithSharedPtr
+			T
 		>
 			get(InjectionContext* context = nullptr);
 
@@ -425,18 +379,13 @@ namespace ob::core::di {
 
 	private:
 		
-		void findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const;
+		void findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const TypeId& type) const;
 
 	private:
 
 		template<typename... TService> friend class ServiceBuilderBase;
 
-		struct ComponentTypeHasher {
-			size_t operator()(const component_type& type) const {
-				return type.typeId.hash();
-			}
-		};
-		using RetrieverMap = HashMap<component_type, Array<SPtr<IInstanceRetriever>>, ComponentTypeHasher>;
+		using RetrieverMap = HashMap<TypeId, Array<SPtr<IInstanceRetriever>>>;
 
 		const ServiceContainer* m_parent = nullptr;
 		RetrieverMap m_retrievers;
@@ -648,8 +597,6 @@ namespace ob::core::di {
 
 		void setSingleton(bool value) { m_isSingleton = value; }
 
-		void setName(StringView name) { m_name = name; }
-
 		virtual SPtr<TImpl> getOrCreateInstance(InjectionContext* context) {
 			if (m_isSingleton == false)
 				return createInstance(context);
@@ -672,11 +619,7 @@ namespace ob::core::di {
 			// 型と名前を指定してContextGuardを生成
 			ContextGuard guard(
 				context, 
-				make_component_type<TImpl>( 
-					(!m_name.empty()) 
-					? m_name 
-					: type_name<TImpl>::value()
-				)
+				TypeId::Get<TImpl>()
 			);
 
 			// 循環チェック
@@ -718,14 +661,6 @@ namespace ob::core::di {
 		//@―---------------------------------------------------------------------------
 		StorageConfig& inSingletonScope() {
 			m_storage->setSingleton(true);
-			return *this;
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		インスタンス名を設定
-		//@―---------------------------------------------------------------------------
-		StorageConfig& alias(StringView name) {
-			m_storage->setName(name);
 			return *this;
 		}
 
@@ -871,7 +806,7 @@ namespace ob::core::di {
 			// TImpl は を実装していない
 			static_assert(std::is_convertible<TImpl*, TService*>::value, "No conversion exists from TImpl* to TService*");
 
-			m_container->m_retrievers[make_component_type<TService>()]
+			m_container->m_retrievers[TypeId::Get<TService>()]
 				.emplace_back(std::make_shared<CastInstanceRetriever<TImpl, TService, TStorage>>(instanceStorage,createCastableTypes()));
 		}
 
@@ -931,28 +866,28 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief	Array<T>用
 	//@―---------------------------------------------------------------------------
-	template<typename TVectorWithInterface>
+	template<typename T>
 	std::enable_if_t<
-		is_vector<TVectorWithInterface>::value &&
-		!is_shared_ptr<typename trim_vector<TVectorWithInterface>::type>::value &&
-		!std::is_reference<TVectorWithInterface>::value,
-		Array<SPtr<typename trim_vector<TVectorWithInterface>::type>>
+		is_vector<T>::value &&
+		!is_shared_ptr<typename trim_vector<T>::type>::value &&
+		!std::is_reference<T>::value,
+		Array<SPtr<trim_vector_t<T>>>
 	> 
 		ServiceContainer::get(InjectionContext* context)
 	{
-		using InterfaceType = typename trim_vector<TVectorWithInterface>::type;
+		using InterfaceType = trim_vector_t<T>;
 
 		std::unique_ptr<InjectionContext> contextPtr;
 		
 		// 最初のgetではInjecttionContextが指定されていないのでこのタイミングで生成
 		if (context == nullptr) {
-			contextPtr = std::make_unique<InjectionContext>(*this, make_component_type<InterfaceType>());
+			contextPtr = std::make_unique<InjectionContext>(*this, TypeId::Get<InterfaceType>());
 			context = contextPtr.get();
 		}
 
 		// 生成可能なサービスのRetrieverを取得
 		Array<SPtr<IInstanceRetriever>> retrievers;
-		findInstanceRetrievers(retrievers, make_component_type<InterfaceType>());
+		findInstanceRetrievers(retrievers, TypeId::Get<InterfaceType>());
 
 		// contextからサービスを生成
 		Array<SPtr<InterfaceType>> instances;
@@ -972,44 +907,44 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief	Array<SPtr<T>>用
 	//@―---------------------------------------------------------------------------
-	template<typename TVectorWithInterfaceWithSharedPtr>
+	template<typename T>
 	std::enable_if_t<
-		is_vector<TVectorWithInterfaceWithSharedPtr>::value&&
-		is_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::value &&
-		!std::is_reference<TVectorWithInterfaceWithSharedPtr>::value,
-		Array<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>
+		is_vector<T>::value&&
+		is_shared_ptr<trim_vector_t<T>>::value &&
+		!std::is_reference<T>::value,
+		Array<trim_vector_t<T>>
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
 		// Array<T>に変換
-		return get<Array<typename trim_shared_ptr<typename trim_vector<TVectorWithInterfaceWithSharedPtr>::type>::type>>(context);
+		return get<Array<trim_shared_ptr_t<trim_vector_t<T>>>>(context);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief	SPtr<T>用
 	//@―---------------------------------------------------------------------------
-	template<typename TInterfaceWithSharedPtr>
+	template<typename T>
 	std::enable_if_t<
-		!is_vector<TInterfaceWithSharedPtr>::value&&
-		is_shared_ptr<TInterfaceWithSharedPtr>::value &&
-		!std::is_reference<TInterfaceWithSharedPtr>::value,
-		TInterfaceWithSharedPtr
+		!is_vector<T>::value&&
+		is_shared_ptr<T>::value &&
+		!std::is_reference<T>::value,
+		T
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
 		// Tに変換
-		return get<typename trim_shared_ptr<TInterfaceWithSharedPtr>::type>(context);
+		return get<trim_shared_ptr_t<T>>(context);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief	T用
 	//@―---------------------------------------------------------------------------
-	template<typename TInterface>
+	template<typename T>
 	std::enable_if_t<
-		!is_vector<TInterface>::value &&
-		!is_shared_ptr<TInterface>::value &&
-		!std::is_reference<TInterface>::value,
-		SPtr<TInterface>
+		!is_vector<T>::value &&
+		!is_shared_ptr<T>::value &&
+		!std::is_reference<T>::value,
+		SPtr<T>
 	>
 		ServiceContainer::get(InjectionContext* context)
 	{
@@ -1017,11 +952,11 @@ namespace ob::core::di {
 
 		// 最初のgetではInjecttionContextが指定されていないのでこのタイミングで生成
 		if (context == nullptr) {
-			contextPtr = std::make_unique<InjectionContext>(*this, make_component_type<unspecified_service>("Unspecified"));
+			contextPtr = std::make_unique<InjectionContext>(*this, TypeId::Invalid() );
 			context = contextPtr.get();
 		}
 
-		const component_type type = make_component_type<TInterface>();
+		const auto type = TypeId::Get<T>();
 
 		// 生成可能なサービスのRetrieverを取得
 		Array<SPtr<IInstanceRetriever>> retrievers;
@@ -1035,8 +970,8 @@ namespace ob::core::di {
 
 		// 最初の実装を生成
 
-		if (retrievers[0]->interfaceType == TypeId::Get<TInterface>()) {
-			return reinterpret_cast<InstanceRetriever<TInterface>*>(retrievers[0].get())->forwardInstance(context);
+		if (retrievers[0]->interfaceType == type) {
+			return reinterpret_cast<InstanceRetriever<T>*>(retrievers[0].get())->forwardInstance(context);
 		}
 
 		return nullptr;
@@ -1060,7 +995,7 @@ namespace ob::core::di {
 	//@―---------------------------------------------------------------------------
 	//! @brief	InstanceRetrieversを検索
 	//@―---------------------------------------------------------------------------
-	inline void ServiceContainer::findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const component_type& type) const {
+	inline void ServiceContainer::findInstanceRetrievers(Array<SPtr<IInstanceRetriever>>& instanceRetrievers, const TypeId& type) const {
 
 		auto itr = m_retrievers.find(type);
 
