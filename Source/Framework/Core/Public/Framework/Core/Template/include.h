@@ -21,6 +21,8 @@
 #include "Utility/Variant.h"
 #include "Utility/Tupple.h"
 #include "Utility/Pair.h"
+#include "Utility/Function.h"
+#include "Utility/Delegate.h"
 
 
 //============================================
@@ -39,12 +41,6 @@
 #include "Container/Set.h"
 #include "Container/Stack.h"
 #include "Container/StaticArray.h"
-
-
-//============================================
-// デリゲート
-//============================================
-#include "Delegate/Delegate.h"
 
 
 //============================================

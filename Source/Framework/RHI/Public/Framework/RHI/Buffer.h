@@ -18,7 +18,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	class Buffer :public GraphicObject {
 	public:
-		using CopyFunc = std::function<void(void*)>;
+		using CopyFunc = Func<void(void*)>;
 	public:
 
 		//@―---------------------------------------------------------------------------

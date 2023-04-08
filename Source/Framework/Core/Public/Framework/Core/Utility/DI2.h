@@ -597,7 +597,7 @@ namespace ob::core::di {
 	template<typename TInstance>
 	struct FunctionFactory {
 
-		using FactoryMethodType = std::function<SPtr<TInstance>(InjectionContext*)>;
+		using FactoryMethodType = Func<SPtr<TInstance>(InjectionContext*)>;
 
 		FunctionFactory(FactoryMethodType factoryMethod)
 			: m_factoryMethod(factoryMethod)

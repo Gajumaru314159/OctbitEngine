@@ -107,8 +107,8 @@ namespace ob::graphics {
     private:
         Array<Name> m_tags;
         Array<const DrawItem*> m_items;
-        using Filter = std::function<bool(const DrawItem*)>;
-        using Sorter = std::function<bool(const DrawItem*,const DrawItem*)>;
+        using Filter = Func<bool(const DrawItem*)>;
+        using Sorter = Func<bool(const DrawItem*,const DrawItem*)>;
         Filer m_filter;
         Sorter m_sorter;
     };

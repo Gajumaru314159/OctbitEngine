@@ -47,9 +47,10 @@ int main(){
 ```cpp
 void func(){
     ServiceInjector injector;
-    ob::graphic::Register(injector);
-
+    ob::graphics::Register(injector);
     ob::rhi::dx12::Register(injector);
+
+    auto graphics = injector.create<Graphics>();
 }
 //-----------------------------------------------------
 void ob::graphics::Register(ServiceInjector& injector){

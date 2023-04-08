@@ -62,8 +62,8 @@ namespace ob::engine::rtti {
 	//@―---------------------------------------------------------------------------
 	struct PropertyInfo:TaggedInfo {
 
-		using Setter = std::function<void(void*, const void*)>;
-		using Getter = std::function<const void*(void*)>;
+		using Setter = Func<void(void*, const void*)>;
+		using Getter = Func<const void*(void*)>;
 
 		String name;
 		TypeId type;
@@ -78,7 +78,7 @@ namespace ob::engine::rtti {
 	struct FunctionInfo:TaggedInfo {
 	public:
 		String name;
-		//std::function
+		//Func
 	};
 
 

@@ -70,11 +70,7 @@
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/String/StringEncoder.h>
 
-#include <Framework/Core/Template/Container/BitFlags.h>
-#include <Framework/Core/Template/Container/HandleForwardList.h>
-#include <Framework/Core/Template/Container/HandleList.h>
-#include <Framework/Core/Template/Delegate/Delegate.h>
-#include <Framework/Core/Template/Event/EventNotifier.h>
+#include <Framework/Core/Template/include.h>
 
 #include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Thread/Mutex.h>

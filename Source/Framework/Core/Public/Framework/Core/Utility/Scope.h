@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <functional>
+#include <Framework/Core/Template/Utility/Function.h>
 
 namespace ob::core {
 
@@ -131,7 +131,7 @@ namespace ob::core {
 		}
 
 	private:
-		std::function<void()> m_proc;
+		Func<void()> m_proc;
 	};
 
 }// namespcae ob::core

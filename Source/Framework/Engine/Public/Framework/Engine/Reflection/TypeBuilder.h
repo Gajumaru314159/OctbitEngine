@@ -210,7 +210,7 @@ namespace ob::engine::rtti::internal {
 		//! @brief			型変更
 		//@―---------------------------------------------------------------------------
 		//template <class TFrom, class TTo>
-		//ClassBuilder& typeChange(StringView fieldName, s32 fromVersion, s32 toVersion, std::function<TTo(const TFrom&)> upgradeFunc);
+		//ClassBuilder& typeChange(StringView fieldName, s32 fromVersion, s32 toVersion, Func<TTo(const TFrom&)> upgradeFunc);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			名前変更

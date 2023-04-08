@@ -30,8 +30,8 @@ namespace ob::core {
 		static DirectoryInfo CreateDirectory(Path path);
 		static void Delete(Path path, Recrusive recrusive = Recrusive::Yes);
 
-		using VisitDirectoryFunc = const std::function<void(const DirectoryInfo&)>&;
-		using VisitFileFunc = const std::function<void(const FileInfo&)>&;
+		using VisitDirectoryFunc = const Func<void(const DirectoryInfo&)>&;
+		using VisitFileFunc = const Func<void(const FileInfo&)>&;
 
 		static void VisitDirectories(Path path, VisitDirectoryFunc func);
 		static void VisitFiles(Path path, VisitFileFunc func);

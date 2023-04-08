@@ -21,7 +21,7 @@ namespace ob::engine {
 			m_path = std::move(path);
 			m_loaded = std::move(loaded);
 
-			std::function<void(SceneLoader&)> f = &SceneLoader::load;
+			Func<void(SceneLoader&)> f = &SceneLoader::load;
 
 			Thread loadThread(Format(TC("SceneLoader [{}]"), path), std::bind(f, *this));
 

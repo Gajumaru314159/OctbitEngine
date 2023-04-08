@@ -51,7 +51,7 @@ namespace ob::core {
 		//! @param name			スレッド名
 		//! @param entryPoint	実行する関数オブジェクト
 		//@―---------------------------------------------------------------------------
-		Thread(StringView name, const std::function<void()>& entryPoint)
+		Thread(StringView name, const Func<void()>& entryPoint)
 			: Thread(name, ThreadDesc{},entryPoint){}
 
 		//@―---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace ob::core {
 		//! @param priority		実行優先順序
 		//! @param entryPoint	実行する関数オブジェクト
 		//@―---------------------------------------------------------------------------
-		Thread(StringView name, ThreadPriority priority, const std::function<void()>& entryPoint)
+		Thread(StringView name, ThreadPriority priority, const Func<void()>& entryPoint)
 			: Thread(name, ThreadDesc(priority), entryPoint) {}
 
 		//@―---------------------------------------------------------------------------
@@ -71,7 +71,7 @@ namespace ob::core {
 		//! @param desc			定義
 		//! @param entryPoint	実行する関数オブジェクト
 		//@―---------------------------------------------------------------------------
-		Thread(StringView name, ThreadDesc desc, const std::function<void()>& entryPoint);
+		Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				デストラクタ

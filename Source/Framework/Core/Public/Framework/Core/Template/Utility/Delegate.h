@@ -6,7 +6,7 @@
 #pragma once
 #include <type_traits>
 #include <utility>
-#include <Framework/Core/Template/Delegate/DelegateInternal.h>
+#include <Framework/Core/Template/Utility/DelegateInternal.h>
 
 namespace ob::core {
 

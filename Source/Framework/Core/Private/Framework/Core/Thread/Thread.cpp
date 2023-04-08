@@ -3,7 +3,7 @@
 //! @brief		スレッド
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/core/Thread/Thread.h>
+#include <Framework/Core/Thread/Thread.h>
 #include <functional>
 
 #ifdef OS_WINDOWS
@@ -37,7 +37,7 @@ namespace ob::core {
 	//! @param desc			定義
 	//! @param entryPoint	実行する関数オブジェクト
 	//@―---------------------------------------------------------------------------
-	Thread::Thread(StringView name, ThreadDesc desc, const std::function<void()>& entryPoint) 
+	Thread::Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint) 
 	{
 		m_impl->th = std::thread(entryPoint);
 	}
