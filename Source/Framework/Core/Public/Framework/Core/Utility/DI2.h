@@ -49,97 +49,101 @@ namespace ob::core::di {
         HashMap<TypeId, Array<TypeId>>          m_builderMap;
     };
 
-
-    // remove_cvr_t
-    template<class T>
-    using base_type = std::remove_cv_t<std::remove_reference_t<T>>;
-
-    // T(Impl) -> U(Interface) 変換
-    template<class T>
-    struct arg_resolver {
-        const ServiceInjector& injector;
-        ServiceContainer& container;
-
-        // コピーコンストラクタの場合無効化
-        template<class U> using is_copy_constructor = std::is_same<base_type<T>, base_type<U>>;
-        template<class U> using no_copy_constructor = std::enable_if_t<is_copy_constructor<U>::value == false>;
-
-        // 型変換(参照)
-        template<class U, class = no_copy_constructor<U>>
-        operator U& () const {
-            return *injector.create<U>(container);
-        }
-        // 型変換(ポインタ)
-        template<class U, class = no_copy_constructor<U>>
-        operator U* () const {
-            return injector.create<U>(container);
-        }
-    };
-
-    // arg_types
-    template<class...>
-    struct arg_types {};
-
-    // arg_resolver
-    template<class T, int... ArgIndex>   // template<class T,int ArgIndex> ?
-    using arg_type = arg_resolver<T>;
+    namespace detail {
 
 
-    // sizeof...(ArgIndex) の引数で構築可能か
-    template<class T, int... ArgIndex>
-    using can_construct = std::is_constructible<T, arg_type<T, ArgIndex>...>;
+        // remove_cvr_t
+        template<class T>
+        using base_type = std::remove_cv_t<std::remove_reference_t<T>>;
 
-    // 構築可能
-    template<class T, int... ArgIndex>
-    using can_construct_true = std::enable_if_t<can_construct<T, ArgIndex...>::value == true>;
+        // T(Impl) -> U(Interface) 変換
+        template<class T>
+        struct arg_resolver {
+            const ServiceInjector& injector;
+            ServiceContainer& container;
 
-    // 構築不可能
-    template<class T, int... ArgIndex>
-    using can_construct_false = std::enable_if_t<can_construct<T, ArgIndex...>::value == false>;
+            // コピーコンストラクタの場合無効化
+            template<class U> using is_copy_constructor = std::is_same<base_type<T>, base_type<U>>;
+            template<class U> using no_copy_constructor = std::enable_if_t<is_copy_constructor<U>::value == false>;
 
+            // 型変換(参照)
+            template<class U, class = no_copy_constructor<U>>
+            operator U& () const {
+                return *injector.create<U>(container);
+            }
+            // 型変換(ポインタ)
+            template<class U, class = no_copy_constructor<U>>
+            operator U* () const {
+                return injector.create<U>(container);
+            }
+        };
 
+        // arg_types
+        template<class...>
+        struct arg_types {};
 
-    // ベース
-    template <class T, class ArgsSequence, class Constructable = void>
-    struct constructor {};
-
-    // つくれる場合
-    template <class T, int... ArgIndex>
-    struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_true<T, ArgIndex...>> {
-        using args = arg_types<arg_type<T, ArgIndex>...>;
-        //static constexpr size_t arg_size = sizeof...(ArgIndex);
-    };
-
-    // つくれない場合
-    template <class T, int... ArgIndex>
-    struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_false<T, ArgIndex...>> {
-        using next = constructor<T, std::make_index_sequence<sizeof...(ArgIndex) - 1>>;
-        using args = typename next::args;
-    };
-
-
-    // 構築可能なコンストラクタの引数情報
-    // arg_list<T> = arg_types<arg_type<T,0>,...>;
-    template<class T>
-    using arg_list = typename constructor<T, std::make_index_sequence<MAX_INJECTION>>::args;
+        // arg_resolver
+        template<class T, int... ArgIndex>   // template<class T,int ArgIndex> ?
+        using arg_type = arg_resolver<T>;
 
 
-    // ファクトリべース
-    template<class T, class>
-    struct FactoryBase;
+        // sizeof...(ArgIndex) の引数で構築可能か
+        template<class T, int... ArgIndex>
+        using can_construct = std::is_constructible<T, arg_type<T, ArgIndex>...>;
 
-    // 引数の数を取り出したファクトリ
-    // Args = arg_array<U,0>;
-    template<class T, class... Args>
-    struct FactoryBase<T, arg_types<Args...>> {
-        static void* Create(const ServiceInjector& injector, ServiceContainer& container) {
-            return (void*)new T(Args{ injector,container }...);
-        }
-    };
+        // 構築可能
+        template<class T, int... ArgIndex>
+        using can_construct_true = std::enable_if_t<can_construct<T, ArgIndex...>::value == true>;
 
-    // ファクトリ
-    template<class T>
-    using Factory = FactoryBase<T, arg_list<T>>;
+        // 構築不可能
+        template<class T, int... ArgIndex>
+        using can_construct_false = std::enable_if_t<can_construct<T, ArgIndex...>::value == false>;
+
+
+
+        // ベース
+        template <class T, class ArgsSequence, class Constructable = void>
+        struct constructor {};
+
+        // つくれる場合
+        template <class T, int... ArgIndex>
+        struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_true<T, ArgIndex...>> {
+            using args = arg_types<arg_type<T, ArgIndex>...>;
+            //static constexpr size_t arg_size = sizeof...(ArgIndex);
+        };
+
+        // つくれない場合
+        template <class T, int... ArgIndex>
+        struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_false<T, ArgIndex...>> {
+            using next = constructor<T, std::make_index_sequence<sizeof...(ArgIndex) - 1>>;
+            using args = typename next::args;
+        };
+
+
+        // 構築可能なコンストラクタの引数情報
+        // arg_list<T> = arg_types<arg_type<T,0>,...>;
+        template<class T>
+        using arg_list = typename constructor<T, std::make_index_sequence<MAX_INJECTION>>::args;
+
+
+        // ファクトリべース
+        template<class T, class>
+        struct FactoryBase;
+
+        // 引数の数を取り出したファクトリ
+        // Args = arg_array<U,0>;
+        template<class T, class... Args>
+        struct FactoryBase<T, arg_types<Args...>> {
+            static void* Create(const ServiceInjector& injector, ServiceContainer& container) {
+                return (void*)new T(Args{ injector,container }...);
+            }
+        };
+
+        // ファクトリ
+        template<class T>
+        using Factory = FactoryBase<T, arg_list<T>>;
+
+    }
 
 
 
@@ -221,7 +225,7 @@ namespace ob::core::di {
         //@―---------------------------------------------------------------------------
         void* create(ServiceContainer& container) {
             // 生成
-            auto holder = new ServiceHolderTemplate<T>(reinterpret_cast<T*>(Factory<T>::Create(m_injector, container)));
+            auto holder = new detail::ServiceHolderTemplate<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)));
             if (holder->get() == nullptr) {
                 delete holder;
                 return nullptr;
@@ -238,36 +242,39 @@ namespace ob::core::di {
         HashSet<TypeId> m_bases;
     };
 
+    namespace detail {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief      サービスホルダー基底
-    //@―---------------------------------------------------------------------------
-    struct ServiceHolder {
-        virtual ~ServiceHolder() = default;
-        virtual void* get()const = 0;
-    };
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスホルダー基底
+        //@―---------------------------------------------------------------------------
+        struct ServiceHolder {
+            virtual ~ServiceHolder() = default;
+            virtual void* get()const = 0;
+        };
 
-    //@―---------------------------------------------------------------------------
-    //! @brief      サービスホルダー
-    //@―--------------------------------------------------------------------------- 
-    template<class T>
-    class ServiceHolderTemplate : public ServiceHolder{
-    public:
-        ServiceHolderTemplate(T* instance) {
-            m_instance = instance;
-        }
-        ~ServiceHolderTemplate() {
-            if (m_instance) {
-                delete m_instance;
-                m_instance = nullptr;
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスホルダー
+        //@―--------------------------------------------------------------------------- 
+        template<class T>
+        class ServiceHolderTemplate : public ServiceHolder {
+        public:
+            ServiceHolderTemplate(T* instance) {
+                m_instance = instance;
             }
-        }
-        void* get()const override{ 
-            return m_instance; 
-        }
-    private:
-        T* m_instance = nullptr;
-    };
+            ~ServiceHolderTemplate() {
+                if (m_instance) {
+                    delete m_instance;
+                    m_instance = nullptr;
+                }
+            }
+            void* get()const override {
+                return m_instance;
+            }
+        private:
+            T* m_instance = nullptr;
+        };
+
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief      サービス管理クラス
@@ -299,7 +306,7 @@ namespace ob::core::di {
         }
     private:
         template<class T> friend class ServiceBuilderTemplate;
-        Array<UPtr<ServiceHolder>>  m_services;
+        Array<UPtr<detail::ServiceHolder>>  m_services;
         HashMap<TypeId, size_t>		m_indices;
     };
 
