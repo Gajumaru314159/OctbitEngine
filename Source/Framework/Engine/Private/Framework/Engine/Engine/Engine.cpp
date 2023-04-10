@@ -10,12 +10,20 @@
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Engine/Name/NameDictionary.h>
 
+// DI完了後削除
+namespace ob {
+	namespace platform {
+		class WindowManager;
+	}
+}
+
 namespace ob::engine {
 
 	struct EngineDependency {
 		EngineDependency(
 			NameDictionary&,
-			EntityManager&
+			EntityManager&,
+			platform::WindowManager&
 		) {}
 	};
 
@@ -23,10 +31,9 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Engine::Engine(EngineConfig&& config)
+	Engine::Engine(EngineConfig&& config,ServiceInjector& injector)
 		: m_config(config)
 	{
-		ServiceInjector injector;
 		injector.bind<NameDictionary>();
 		injector.bind<EntityManager>();
 		injector.bind<EngineDependency>();

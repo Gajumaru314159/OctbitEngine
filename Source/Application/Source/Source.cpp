@@ -21,7 +21,7 @@
 
 #include <Model.h>
 
-
+#include <Framework/Platform/WindowManager.h>
 #include <Framework/Core/Utility/DI.h>
 
 //-----------------------------------------------------------------
@@ -35,61 +35,9 @@ int TestVullkan();
 void Link_Entity();
 void Link_GraphicModule();
 
+void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
-struct IEngineObject {
-	OB_RTTI();
-	int aa = 12;
-};
-struct Platform : IEngineObject {
-	OB_RTTI();
-	Platform() {
-		LOG_INFO("生成{}",getTypeId().name());
-		t = TypeId::Get<decltype(this)>();
-	}
-	TypeId t;
-};
-struct RHI : IEngineObject {
-	RHI(Platform&) {
-		LOG_INFO("生成{}", getTypeId().name());
-		t = TypeId::Get<decltype(this)>();
-	}
-	TypeId t;
-	OB_RTTI();
-};
-struct Graphic :IEngineObject {
-	Graphic(RHI&) {
-		LOG_INFO("生成{}", getTypeId().name());
-		t = TypeId::Get<decltype(this)>();
-		//throw Exception(TC(""));
-	}
-	TypeId t;
-	OB_RTTI();
-};
-
-
-
-struct App {
-	App(Graphic& graphic, IEngineObject& obj):graphic(&graphic),obj(obj){
-	}
-	Graphic* graphic;
-	IEngineObject& obj;
-};
-
-
-void OctbitInit(ob::engine::EngineConfig& config) {
-
-	ServiceInjector injector;
-
-	injector.bind<Graphic>().as<IEngineObject>();
-	injector.bind<RHI>().as<IEngineObject>();
-	injector.bind<Platform>().as<IEngineObject>();
-	injector.bind<App>();
-
-	ServiceContainer container;
-	auto ex = injector.create<App>(container);
-
-	LOG_INFO("=>{}", ex->obj.getTypeId().name());
-
+	injector.bind<platform::WindowManager>();
 
 	{
 		rhi::Config c;
@@ -102,7 +50,6 @@ void OctbitInit(ob::engine::EngineConfig& config) {
 	//Link_Vulkan();
 	Link_Input();
 
-	Link_Entity();
 	Link_GraphicModule();
 
 }

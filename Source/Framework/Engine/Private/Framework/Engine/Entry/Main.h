@@ -11,7 +11,7 @@
 //! 
 //! @details	アプリケーション起動直後に呼び出されます。
 //@―---------------------------------------------------------------------------
-void OctbitInit(ob::engine::EngineConfig& config);
+void OctbitInit(ob::engine::EngineConfig& config,ob::core::ServiceInjector& engineInjector);
 
 //@―---------------------------------------------------------------------------
 //! @brief		エンジンエントリ関数

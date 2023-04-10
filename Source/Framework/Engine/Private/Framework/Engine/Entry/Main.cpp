@@ -7,6 +7,7 @@
 #include <Framework/Engine/Entry/Main.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Core/Utility/DI.h>
 
 //@―---------------------------------------------------------------------------
 //! @brief  プラットフォーム共通のエントリ
@@ -31,11 +32,13 @@ int CommonMain() {
 
     // 設定
     ob::engine::EngineConfig config;
-    OctbitInit(config);
+    ob::core::ServiceInjector engineInjector;
+
+    OctbitInit(config, engineInjector);
 
     LOG_TRACE("エンジン生成");
     // エンジン初期化
-    ob::engine::Engine engine(std::move(config));
+    ob::engine::Engine engine(std::move(config), engineInjector);
     GEngine = &engine;
     engine.startup();
 

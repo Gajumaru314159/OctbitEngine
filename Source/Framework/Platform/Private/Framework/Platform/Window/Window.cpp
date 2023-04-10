@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Window.h>
-#include <Framework/Platform/Window/WindowManager.h>
+#include <Framework/Platform/WindowManager.h>
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 #include <Framework/Platform/Window/Implement/Linux/WindowImpl.h>
 

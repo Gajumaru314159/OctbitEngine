@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Platform/Window/WindowManager.h>
+#include <Framework/Platform/WindowManager.h>
 #include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/Engine.h>
 
@@ -42,9 +42,6 @@ namespace ob::platform {
     }
 
 }// namespace ob::platform
-
-
-REGISTER_MODULE(ob::platform::WindowManager);
 
 void Link_Window() {
 
