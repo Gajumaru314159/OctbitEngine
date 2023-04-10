@@ -19,7 +19,6 @@
 
 #include <Plugins/ImGui/ImGui.h>
 
-#include <Framework/Core/Log/StackTrace.h>
 #include <Model.h>
 
 

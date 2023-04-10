@@ -3,29 +3,32 @@
 //! @brief		Dependency Injection
 //! @author		Gajumaru
 //***********************************************************
-
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Exception/Exception.h>
-#include <Framework/Core/Template/include.h>
 #include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::core {
 
+    constexpr size_t MAX_INJECTION = 16;    // サービスのコンストラクタ引数の最大数
 
-    constexpr size_t MAX_INJECTION = 16;
-
-    class ServiceInjector;                  // 依存関係定義
-    class ServiceContainer;                 // 生成ごとのインスタンス管理
+    class ServiceInjector;      // 依存関係定義
+    class ServiceContainer;     // 生成ごとのインスタンス管理
     
-    class ServiceBuilder;
-    template<class T>class ServiceBuilderTemplate;
-
-
+    template<class T>
+    class ServiceBuilder;       // 生成情報登録
+    class ServiceBuilderBase;   // 生成情報登録(基底)
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  サービス依存注入クラス
+    //! @details ```cpp
+    //!         ServiceInjector injector;
+    //!         injector.bind<Hoge>();
+    //!         injector.bind<Fuga>().as<IFuga>();
+    //!         ServiceContainer container;
+    //!         auto hoge = container.create<Hoge>(container);
+    //!         ```
     //@―---------------------------------------------------------------------------
     class ServiceInjector {
     public:
@@ -34,7 +37,7 @@ namespace ob::core {
         //! @brief  生成可能なクラスTをバインド
         //@―---------------------------------------------------------------------------
         template<class T>
-        typename ServiceBuilderTemplate<T>& bind();
+        typename ServiceBuilder<T>& bind();
 
         //@―---------------------------------------------------------------------------
         //! @brief  サービスを生成
@@ -44,10 +47,11 @@ namespace ob::core {
         T* create(ServiceContainer& container)const;
 
     private:
-        template<class T> friend class ServiceBuilderTemplate;  // for m_builders
-        HashMap<TypeId, UPtr<ServiceBuilder>>   m_builders;
+        template<class T> friend class ServiceBuilder;  // for m_builders
+        HashMap<TypeId, UPtr<ServiceBuilderBase>>   m_builders;
         HashMap<TypeId, Array<TypeId>>          m_builderMap;
     };
+
 
     namespace detail {
 
@@ -146,16 +150,16 @@ namespace ob::core {
     }
 
 
-
     //@―---------------------------------------------------------------------------
     //! @brief  生成可能なクラスTをバインド
     //@―---------------------------------------------------------------------------
     template<class T>
-    ServiceBuilderTemplate<T>& ServiceInjector::bind() {
-        auto builder = new ServiceBuilderTemplate<T>(*this);
+    ServiceBuilder<T>& ServiceInjector::bind() {
+        auto builder = new ServiceBuilder<T>(*this);
         m_builders[TypeId::Get<T>()].reset(builder);
         return *builder;
     }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  サービスを生成
@@ -185,25 +189,26 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief      サービスビルダー基底
     //@―---------------------------------------------------------------------------
-    class ServiceBuilder {
+    class ServiceBuilderBase {
     public:
-        virtual ~ServiceBuilder() = default;
+        virtual ~ServiceBuilderBase() = default;
     private:
         friend class ServiceInjector;
         virtual void* create(ServiceContainer&) = 0;
     };
 
+
     //@―---------------------------------------------------------------------------
     //! @brief      サービスビルダー
     //@―---------------------------------------------------------------------------
     template<class T>
-    class ServiceBuilderTemplate :public ServiceBuilder {
+    class ServiceBuilder :public ServiceBuilderBase {
     public:
         //@―---------------------------------------------------------------------------
         //! @brief      キャスト可能な基底クラスを追加
         //@―---------------------------------------------------------------------------
         template<class... U>
-        ServiceBuilderTemplate& as() {
+        ServiceBuilder& as() {
             static_assert((std::is_base_of_v<U, T> && ...), "U must be a base class of T.");
             TypeId types[] = { TypeId::Get<U>() ... };
             for (auto& type : types) {
@@ -213,8 +218,10 @@ namespace ob::core {
             return *this;
         }
     private:
-        friend class ServiceInjector;
-        ServiceBuilderTemplate(ServiceInjector& injector)
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        ServiceBuilder(ServiceInjector& injector)
             : m_injector(injector)
         {
             m_bases.emplace(TypeId::Get<T>());
@@ -225,7 +232,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         void* create(ServiceContainer& container) {
             // 生成
-            auto holder = new detail::ServiceHolderTemplate<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)));
+            auto holder = new detail::ServiceHolder<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)));
             if (holder->get() == nullptr) {
                 delete holder;
                 return nullptr;
@@ -238,17 +245,19 @@ namespace ob::core {
             return container.m_services.emplace_back(holder)->get();
         }
     private:
+        friend class ServiceInjector;
         ServiceInjector& m_injector;
         HashSet<TypeId> m_bases;
     };
+
 
     namespace detail {
 
         //@―---------------------------------------------------------------------------
         //! @brief      サービスホルダー基底
         //@―---------------------------------------------------------------------------
-        struct ServiceHolder {
-            virtual ~ServiceHolder() = default;
+        struct ServiceHolderBase {
+            virtual ~ServiceHolderBase() = default;
             virtual void* get()const = 0;
         };
 
@@ -256,12 +265,12 @@ namespace ob::core {
         //! @brief      サービスホルダー
         //@―--------------------------------------------------------------------------- 
         template<class T>
-        class ServiceHolderTemplate : public ServiceHolder {
+        class ServiceHolder : public ServiceHolderBase {
         public:
-            ServiceHolderTemplate(T* instance) {
+            ServiceHolder(T* instance) {
                 m_instance = instance;
             }
-            ~ServiceHolderTemplate() {
+            ~ServiceHolder() {
                 if (m_instance) {
                     delete m_instance;
                     m_instance = nullptr;
@@ -275,6 +284,7 @@ namespace ob::core {
         };
 
     }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief      サービス管理クラス
@@ -295,6 +305,7 @@ namespace ob::core {
                 itr->reset();
             }
         }
+
         //@―---------------------------------------------------------------------------
         //! @brief      サービス取得
         //@―---------------------------------------------------------------------------
@@ -304,10 +315,11 @@ namespace ob::core {
             if (found == m_indices.end()) return nullptr;
             return reinterpret_cast<T*>(m_services.at(found->second)->get());
         }
+
     private:
-        template<class T> friend class ServiceBuilderTemplate;
-        Array<UPtr<detail::ServiceHolder>>  m_services;
-        HashMap<TypeId, size_t>		m_indices;
+        template<class T> friend class ServiceBuilder;
+        Array<UPtr<detail::ServiceHolderBase>> m_services;
+        HashMap<TypeId, size_t> m_indices;
     };
 
 }
