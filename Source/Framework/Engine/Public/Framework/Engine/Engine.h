@@ -29,11 +29,6 @@ namespace ob::engine {
 		Engine(EngineConfig&&);
 
 		//@―---------------------------------------------------------------------------
-		//! @brief				コンストラクタ
-		//@―---------------------------------------------------------------------------
-		Engine(EngineConfig&&,const DependencyGraph& graph);
-
-		//@―---------------------------------------------------------------------------
 		//! @brief				デストラクタ
 		//@―---------------------------------------------------------------------------
 		~Engine();
@@ -99,7 +94,6 @@ namespace ob::engine {
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeId, size_t> m_indices;
 		EngineConfig m_config;
-		ServiceContainer m_container;
 
 	};
 

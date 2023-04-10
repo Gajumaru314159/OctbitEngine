@@ -1,4 +1,6 @@
-﻿#include <Framework/RHI/All.h>
+﻿#include <Windows.h>
+
+#include <Framework/RHI/All.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Window.h>
 
@@ -20,7 +22,9 @@
 #include <Framework/Core/Log/StackTrace.h>
 #include <Model.h>
 
-#include <Framework/Core/Utility/DI2.h>
+
+#include <Framework/Core/Utility/DI.h>
+
 //-----------------------------------------------------------------
 using namespace ob;
 
@@ -57,7 +61,7 @@ struct Graphic :IEngineObject {
 	Graphic(RHI&) {
 		LOG_INFO("生成{}", getTypeId().name());
 		t = TypeId::Get<decltype(this)>();
-		throw Exception(TC(""));
+		//throw Exception(TC(""));
 	}
 	TypeId t;
 	OB_RTTI();
@@ -66,22 +70,23 @@ struct Graphic :IEngineObject {
 
 
 struct App {
-	App(RHI&, IEngineObject& obj):obj(obj){
+	App(Graphic& graphic, IEngineObject& obj):graphic(&graphic),obj(obj){
 	}
+	Graphic* graphic;
 	IEngineObject& obj;
 };
 
 
 void OctbitInit(ob::engine::EngineConfig& config) {
 
-	di::ServiceInjector injector;
+	ServiceInjector injector;
 
 	injector.bind<Graphic>().as<IEngineObject>();
 	injector.bind<RHI>().as<IEngineObject>();
 	injector.bind<Platform>().as<IEngineObject>();
 	injector.bind<App>();
 
-	di::ServiceContainer container;
+	ServiceContainer container;
 	auto ex = injector.create<App>(container);
 
 	LOG_INFO("=>{}", ex->obj.getTypeId().name());

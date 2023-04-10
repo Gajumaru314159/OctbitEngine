@@ -3,341 +3,311 @@
 //! @brief		Dependency Injection
 //! @author		Gajumaru
 //***********************************************************
+
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Exception/Exception.h>
+#include <Framework/Core/Template/include.h>
 #include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::core {
 
-	class ServiceContainer;
 
-	namespace detail {
+    constexpr size_t MAX_INJECTION = 16;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスを保持するクラス
-		//@―---------------------------------------------------------------------------
-		class ServiceHolderBase {
-		public:
-			ServiceHolderBase(TypeId typeId, void* instance) :m_typeId(typeId), m_instance(instance) {}
-			virtual ~ServiceHolderBase() {}
-			void* get()const { return m_instance; }
-		protected:
-			TypeId m_typeId;
-			void* m_instance = nullptr;
-		};
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスを保持するクラス
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		class ServiceHolder : public ServiceHolderBase {
-		public:
-			template<class = std::enable_if_t<std::is_constructible_v<T,ServiceContainer&>>>
-			ServiceHolder(ServiceContainer& container) : ServiceHolderBase(TypeId::Get<T>(), new T(container)) {}
-
-			ServiceHolder(T* instance) : ServiceHolderBase(TypeId::Get<T>(), instance), m_constructed(false) {}
-
-			~ServiceHolder() {
-				if (m_constructed) {
-					delete reinterpret_cast<T*>(m_instance);
-				}
-				m_instance = nullptr;
-			}
-		private:
-			bool m_constructed = true;
-		};
+    class ServiceInjector;                  // 依存関係定義
+    class ServiceContainer;                 // 生成ごとのインスタンス管理
+    
+    class ServiceBuilder;
+    template<class T>class ServiceBuilderTemplate;
 
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスビルダーの基底
-		//@―---------------------------------------------------------------------------
-		class ServiceBuilderBase {
-		public:
-			virtual ~ServiceBuilderBase() = default;
-		protected:
-			ServiceBuilderBase() = default;
-		private:
-			virtual UPtr<ServiceHolderBase> create(ServiceContainer&) = 0;
-		protected:
-			friend class ServiceContainer;
-			HashSet<TypeId> m_bases;
-			HashSet<TypeId> m_requires;
-			HashSet<TypeId> m_optionals;
-			HashSet<TypeId> m_dependencies;
-		};
 
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief  サービス依存注入クラス
+    //@―---------------------------------------------------------------------------
+    class ServiceInjector {
+    public:
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  サービスビルダー
-	//@―---------------------------------------------------------------------------
-	template<class T>
-	class ServiceBuilderNew :public detail::ServiceBuilderBase {
-	public:
-		//@―---------------------------------------------------------------------------
-		//! @brief  生成
-		//@―---------------------------------------------------------------------------
-		ServiceBuilderNew() {}
+        //@―---------------------------------------------------------------------------
+        //! @brief  生成可能なクラスTをバインド
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        typename ServiceBuilderTemplate<T>& bind();
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  デストラクタ
-		//@―---------------------------------------------------------------------------
-		~ServiceBuilderNew(){}
+        //@―---------------------------------------------------------------------------
+        //! @brief  サービスを生成
+        //! @param container 生成されたサービスを管理させるコンテナの参照
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        T* create(ServiceContainer& container)const;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスのインターフェイスを登録
-		//@―---------------------------------------------------------------------------
-		template<class U>
-		ServiceBuilderNew& as() {
-			static_assert(std::is_base_of_v<U, T>, "U must be a base class of T.");
-			if (!std::is_same_v<U, T>) {
-				m_bases.emplace(TypeId::Get<U>());
-			}
-			return *this;
-		}
+    private:
+        template<class T> friend class ServiceBuilderTemplate;  // for m_builders
+        HashMap<TypeId, UPtr<ServiceBuilder>>   m_builders;
+        HashMap<TypeId, Array<TypeId>>          m_builderMap;
+    };
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスの必須依存先を追加
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		ServiceBuilderNew& require() {
-			m_requires.emplace(TypeId::Get<T>());
-			m_dependencies.emplace(TypeId::Get<T>());
-			return *this;
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスの任意依存先を追加
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		ServiceBuilderNew& optional() {
-			m_optionals.emplace(TypeId::Get<T>());
-			m_dependencies.emplace(TypeId::Get<T>());
-			return *this;
-		}
-	private:
-		//@―---------------------------------------------------------------------------
-		//! @brief  ホルダーを生成
-		//@―---------------------------------------------------------------------------
-		UPtr<detail::ServiceHolderBase> create(ServiceContainer& container) {
-			return std::make_unique<detail::ServiceHolder<T>>(container);
-		}
-	};
+    namespace detail {
 
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  サービスビルダー
-	//@―---------------------------------------------------------------------------
-	template<class T>
-	class ServiceBuilderRef :public detail::ServiceBuilderBase {
-	public:
+        // remove_cvr_t
+        template<class T>
+        using base_type = std::remove_cv_t<std::remove_reference_t<T>>;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  生成
-		//@―---------------------------------------------------------------------------
-		ServiceBuilderRef(T& instance) : m_instance(&instance) {}
+        // T(Impl) -> U(Interface) 変換
+        template<class T>
+        struct arg_resolver {
+            const ServiceInjector& injector;
+            ServiceContainer& container;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  デストラクタ
-		//@―---------------------------------------------------------------------------
-		~ServiceBuilderRef() {}
+            // コピーコンストラクタの場合無効化
+            template<class U> using is_copy_constructor = std::is_same<base_type<T>, base_type<U>>;
+            template<class U> using no_copy_constructor = std::enable_if_t<is_copy_constructor<U>::value == false>;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスのインターフェイスを登録
-		//@―---------------------------------------------------------------------------
-		template<class U>
-		ServiceBuilderRef& as() {
-			static_assert(std::is_base_of_v<U, T>, "U must be a base class of T.");
-			if (!std::is_same_v<U, T>) {
-				m_bases.emplace(TypeId::Get<U>());
-			}
-			return *this;
-		}
+            // 型変換(参照)
+            template<class U, class = no_copy_constructor<U>>
+            operator U& () const {
+                return *injector.create<U>(container);
+            }
+            // 型変換(ポインタ)
+            template<class U, class = no_copy_constructor<U>>
+            operator U* () const {
+                return injector.create<U>(container);
+            }
+        };
 
-	private:
-		//@―---------------------------------------------------------------------------
-		//! @brief  ホルダーを生成
-		//@―---------------------------------------------------------------------------
-		UPtr<detail::ServiceHolderBase> create(ServiceContainer& container) {
-			return std::make_unique<detail::ServiceHolder<T>>(m_instance);
-		}
-	private:
-		T* m_instance = nullptr;
-	};
+        // arg_types
+        template<class...>
+        struct arg_types {};
+
+        // arg_resolver
+        template<class T, int... ArgIndex>   // template<class T,int ArgIndex> ?
+        using arg_type = arg_resolver<T>;
 
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      依存グラフ
-	//! @details    依存グラフは有向非巡回グラフ（directed acyclic graph, DAG）
-	//!             である必要があります。つまり依存が循環してはいけません。
-	//@―---------------------------------------------------------------------------
-	class DependencyGraph {
-	public:
+        // sizeof...(ArgIndex) の引数で構築可能か
+        template<class T, int... ArgIndex>
+        using can_construct = std::is_constructible<T, arg_type<T, ArgIndex>...>;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスを追加
-		//@―---------------------------------------------------------------------------
-		template<typename T,typename = std::enable_if_t<std::is_constructible_v<T,ServiceContainer&>>>
-		ServiceBuilderNew<T>& add() {
-			auto& builder = m_builders[TypeId::Get<T>()] = std::make_shared<ServiceBuilderNew<T>>();
-			return *reinterpret_cast<ServiceBuilderNew<T>*>(builder.get());
-		}
+        // 構築可能
+        template<class T, int... ArgIndex>
+        using can_construct_true = std::enable_if_t<can_construct<T, ArgIndex...>::value == true>;
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  サービスを追加
-		//@―---------------------------------------------------------------------------
-		template<typename T>
-		ServiceBuilderRef<T>& add(T& instance) {
-			auto& builder = m_builders[TypeId::Get<T>()] = std::make_shared<ServiceBuilderRef<T>>(instance);
-			return *reinterpret_cast<ServiceBuilderRef<T>*>(builder.get());
-		}
-
-	private:
-		friend class ServiceContainer;
-		HashMap<TypeId, SPtr<detail::ServiceBuilderBase>>  m_builders;
-	};
+        // 構築不可能
+        template<class T, int... ArgIndex>
+        using can_construct_false = std::enable_if_t<can_construct<T, ArgIndex...>::value == false>;
 
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  DIサービスを格納するコンテナ
-	//@―---------------------------------------------------------------------------
-	class ServiceContainer {
-	public:
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  デフォルトコンストラクタ
-		//@―---------------------------------------------------------------------------
-		ServiceContainer() = default;
+        // ベース
+        template <class T, class ArgsSequence, class Constructable = void>
+        struct constructor {};
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  依存グラフを指定して生成
-		//@―---------------------------------------------------------------------------
-		ServiceContainer(const DependencyGraph& graph) {
+        // つくれる場合
+        template <class T, int... ArgIndex>
+        struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_true<T, ArgIndex...>> {
+            using args = arg_types<arg_type<T, ArgIndex>...>;
+            //static constexpr size_t arg_size = sizeof...(ArgIndex);
+        };
 
-			HashMap<TypeId, HashSet<TypeId>> nodes;
+        // つくれない場合
+        template <class T, int... ArgIndex>
+        struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_false<T, ArgIndex...>> {
+            using next = constructor<T, std::make_index_sequence<sizeof...(ArgIndex) - 1>>;
+            using args = typename next::args;
+        };
 
-			// 全ノードをリストアップ
-			for (auto& [typeId, builder] : graph.m_builders) {
-				auto& node = nodes[typeId];
-				// 依存方向
-				for (auto& dependency : builder->m_dependencies) {
-					node.emplace(dependency);
-					nodes[dependency];
-				}
-				// as は反対方向
-				for (auto& base : builder->m_bases) {
-					nodes[base].emplace(typeId);
-				}
-			}
 
-			// 入力次数をカウント
-			HashMap<TypeId, s32> indegree;
-			for (auto& [typeId, builder] : graph.m_builders) {
-				for (auto& dependency : builder->m_dependencies) {
-					indegree[dependency] += 1;
-				}
-				for (auto& base : builder->m_bases) {
-					indegree[typeId] += 1;
-				}
-			}
+        // 構築可能なコンストラクタの引数情報
+        // arg_list<T> = arg_types<arg_type<T,0>,...>;
+        template<class T>
+        using arg_list = typename constructor<T, std::make_index_sequence<MAX_INJECTION>>::args;
 
-			// 誰からも参照されていないノードをキューに追加
-			Queue<TypeId> que;
-			for (auto& [typeId,node]: nodes) {
-				if (indegree[typeId] == 0) {
-					que.push(typeId);
-				}
-			}
 
-			// トポロジカルソート
-			Array<TypeId> orders;
-			while (que.empty() == false) {
-				TypeId typeId = que.front();
-				que.pop();
+        // ファクトリべース
+        template<class T, class>
+        struct FactoryBase;
 
-				for (auto& node: nodes[typeId]) {
-					indegree[node]--;
-					if (indegree[node] == 0) {
-						que.push(node);
-					}
-				}
-				orders.push_back(typeId);
-			}
+        // 引数の数を取り出したファクトリ
+        // Args = arg_array<U,0>;
+        template<class T, class... Args>
+        struct FactoryBase<T, arg_types<Args...>> {
+            static void* Create(const ServiceInjector& injector, ServiceContainer& container) {
+                return (void*)new T(Args{ injector,container }...);
+            }
+        };
 
-			// 構築
-			std::reverse(orders.begin(), orders.end());
-			for (auto& typeId : orders) {
+        // ファクトリ
+        template<class T>
+        using Factory = FactoryBase<T, arg_list<T>>;
 
-				auto found = graph.m_builders.find(typeId);
-				if (found != graph.m_builders.end()) {
+    }
 
-					auto& builder = *(found->second);
 
-					m_indices[typeId] = m_services.size();
 
-					for (auto& asTypeId : builder.m_bases) {
-						m_indices[asTypeId] = m_services.size();
-					}
+    //@―---------------------------------------------------------------------------
+    //! @brief  生成可能なクラスTをバインド
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    ServiceBuilderTemplate<T>& ServiceInjector::bind() {
+        auto builder = new ServiceBuilderTemplate<T>(*this);
+        m_builders[TypeId::Get<T>()].reset(builder);
+        return *builder;
+    }
 
-					LOG_INFO("[DI] {}を生成",typeId.name());
-					m_services.emplace_back(builder.create(*this));
+    //@―---------------------------------------------------------------------------
+    //! @brief  サービスを生成
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    T* ServiceInjector::create(ServiceContainer& container)const {
+        // 生成済み
+        if (auto instance = container.get<T>())
+            return instance;
+        // 抽象->具象
+        Array<TypeId> fallback;
+        auto& concretes = try_find(m_builderMap, TypeId::Get<T>(), fallback);
+        // 生成
+        for (auto& concrete : concretes) {
+            auto& builder = m_builders.find(concrete)->second;
+            try {
+                return reinterpret_cast<T*>(builder->create(container));
+            } catch (Exception e) {
+                // 生成キャンセル
+            }
+        }
+        return nullptr;
+    }
 
-				}
 
-			}
-		}
+    //@―---------------------------------------------------------------------------
+    //! @brief      サービスビルダー基底
+    //@―---------------------------------------------------------------------------
+    class ServiceBuilder {
+    public:
+        virtual ~ServiceBuilder() = default;
+    private:
+        friend class ServiceInjector;
+        virtual void* create(ServiceContainer&) = 0;
+    };
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  デストラクタ
-		//@―---------------------------------------------------------------------------
-		~ServiceContainer() {
-			// 逆順に解放
-			std::reverse(m_services.begin(), m_services.end());
-			for (auto& service : m_services) {
-				service = {};
-			}
-		}
+    //@―---------------------------------------------------------------------------
+    //! @brief      サービスビルダー
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    class ServiceBuilderTemplate :public ServiceBuilder {
+    public:
+        //@―---------------------------------------------------------------------------
+        //! @brief      キャスト可能な基底クラスを追加
+        //@―---------------------------------------------------------------------------
+        template<class... U>
+        ServiceBuilderTemplate& as() {
+            static_assert((std::is_base_of_v<U, T> && ...), "U must be a base class of T.");
+            TypeId types[] = { TypeId::Get<U>() ... };
+            for (auto& type : types) {
+                m_bases.emplace(type);
+                m_injector.m_builderMap[type].emplace_back(TypeId::Get<T>());
+            }
+            return *this;
+        }
+    private:
+        friend class ServiceInjector;
+        ServiceBuilderTemplate(ServiceInjector& injector)
+            : m_injector(injector)
+        {
+            m_bases.emplace(TypeId::Get<T>());
+            m_injector.m_builderMap[TypeId::Get<T>()].emplace_back(TypeId::Get<T>());
+        }
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービス生成
+        //@―---------------------------------------------------------------------------
+        void* create(ServiceContainer& container) {
+            // 生成
+            auto holder = new detail::ServiceHolderTemplate<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)));
+            if (holder->get() == nullptr) {
+                delete holder;
+                return nullptr;
+            }
+            // 基底クラスをマッピング
+            auto index = container.m_services.size();
+            for (auto& type : m_bases) {
+                container.m_indices.emplace(type, index);
+            }
+            return container.m_services.emplace_back(holder)->get();
+        }
+    private:
+        ServiceInjector& m_injector;
+        HashSet<TypeId> m_bases;
+    };
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  ムーブコンストラクタ
-		//@―---------------------------------------------------------------------------
-		ServiceContainer(ServiceContainer&&) = default;
+    namespace detail {
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  ムーブ代入
-		//@―---------------------------------------------------------------------------
-		ServiceContainer& operator=(ServiceContainer&&) = default;
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスホルダー基底
+        //@―---------------------------------------------------------------------------
+        struct ServiceHolder {
+            virtual ~ServiceHolder() = default;
+            virtual void* get()const = 0;
+        };
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  取得
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		T* get()const {
-			auto found = m_indices.find(TypeId::Get<T>());
-			if (found == m_indices.end()) {
-				return nullptr;
-			}
-			return reinterpret_cast<T*>(m_services.at(found->second)->get());
-		}
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスホルダー
+        //@―--------------------------------------------------------------------------- 
+        template<class T>
+        class ServiceHolderTemplate : public ServiceHolder {
+        public:
+            ServiceHolderTemplate(T* instance) {
+                m_instance = instance;
+            }
+            ~ServiceHolderTemplate() {
+                if (m_instance) {
+                    delete m_instance;
+                    m_instance = nullptr;
+                }
+            }
+            void* get()const override {
+                return m_instance;
+            }
+        private:
+            T* m_instance = nullptr;
+        };
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  参照
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		T& ref()const {
-			auto instance = get<T>();
-			OB_ASSERT(instance, "{}が未生成です。DependencyGraphの設定を確認してください。", TypeId::Get<T>().name());
-			return *instance;
-		}
+    }
 
-	public:
-		// コピー禁止
-		ServiceContainer(const ServiceContainer&) = delete;
-		ServiceContainer& operator=(const ServiceContainer&) = delete;
-	private:
-		Array<UPtr<detail::ServiceHolderBase>>  m_services;
-		HashMap<TypeId, size_t>					m_indices;
-	};
+    //@―---------------------------------------------------------------------------
+    //! @brief      サービス管理クラス
+    //@―---------------------------------------------------------------------------
+    class ServiceContainer {
+    public:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        ServiceContainer() = default;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~ServiceContainer() {
+            for (auto itr = m_services.rbegin(); itr != m_services.rend(); ++itr) {
+                itr->reset();
+            }
+        }
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービス取得
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        T* get()const {
+            auto found = m_indices.find(TypeId::Get<T>());
+            if (found == m_indices.end()) return nullptr;
+            return reinterpret_cast<T*>(m_services.at(found->second)->get());
+        }
+    private:
+        template<class T> friend class ServiceBuilderTemplate;
+        Array<UPtr<detail::ServiceHolder>>  m_services;
+        HashMap<TypeId, size_t>		m_indices;
+    };
 
 }

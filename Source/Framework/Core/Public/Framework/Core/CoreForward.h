@@ -6,6 +6,6 @@
 #pragma once
 
 namespace ob::core{
-    class DependencyGraph;
+    class ServiceInjector;
     class ServiceContainer;
 }

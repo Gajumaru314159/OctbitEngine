@@ -1,6 +1,4 @@
-﻿#include <Windows.h>
-
-#include <Framework/RHI/All.h>
+﻿#include <Framework/RHI/All.h>
 
 #include <Framework/Platform/Window.h>
 
