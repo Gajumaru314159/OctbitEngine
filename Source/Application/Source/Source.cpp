@@ -35,48 +35,56 @@ void Link_GraphicModule();
 
 struct IEngineObject {
 	OB_RTTI();
+	int aa = 12;
 };
 struct Platform : IEngineObject {
 	OB_RTTI();
 	Platform() {
 		LOG_INFO("生成{}",getTypeId().name());
+		t = TypeId::Get<decltype(this)>();
 	}
+	TypeId t;
 };
 struct RHI : IEngineObject {
-	RHI(SPtr<Platform>) {
+	RHI(Platform&) {
 		LOG_INFO("生成{}", getTypeId().name());
+		t = TypeId::Get<decltype(this)>();
 	}
+	TypeId t;
 	OB_RTTI();
 };
 struct Graphic :IEngineObject {
-	Graphic(SPtr<RHI>) {
+	Graphic(RHI&) {
 		LOG_INFO("生成{}", getTypeId().name());
+		t = TypeId::Get<decltype(this)>();
+		throw Exception(TC(""));
 	}
+	TypeId t;
 	OB_RTTI();
 };
 
 
 
 struct App {
-	App(SPtr<Graphic>, Array<SPtr<IEngineObject>> is):m_objects(is){}
-	Array<SPtr<IEngineObject>> m_objects;
+	App(RHI&, IEngineObject& obj):obj(obj){
+	}
+	IEngineObject& obj;
 };
 
 
 void OctbitInit(ob::engine::EngineConfig& config) {
 
-	di::ServiceContainer c;
+	di::ServiceInjector injector;
 
-	c.bind<IEngineObject,RHI>().to<RHI>();
-	c.bind<IEngineObject, Platform>().to<Platform>();
-	c.bind<IEngineObject, Graphic>().to<Graphic>();
-	c.bind<App>().toSelf();
+	injector.bind<Graphic>().as<IEngineObject>();
+	injector.bind<RHI>().as<IEngineObject>();
+	injector.bind<Platform>().as<IEngineObject>();
+	injector.bind<App>();
 
-	auto ex = c.get<App>();
+	di::ServiceContainer container;
+	auto ex = injector.create<App>(container);
 
-	for (auto& i : ex->m_objects) {
-		LOG_INFO("=>{}", i->getTypeId().name());
-	}
+	LOG_INFO("=>{}", ex->obj.getTypeId().name());
 
 
 	{

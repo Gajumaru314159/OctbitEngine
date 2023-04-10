@@ -1,10 +1,11 @@
 DI (Dependency Injection)
 ============
-各モジュールは依存するモジュールをRequireかOptionalから選択して設定します。  
+## 概要
+各サービス(システム)は依存するサービスをRequireかOptionalから選択して設定します。  
 * Require：必須依存
 * Optional：任意依存
 
-モジュールはインターフェイス化することもでき、複数の実装がある場合はプライオリティの高いモジュールが選択されます。インターフェイスはRequire/Optionalどちらでも使用可能です。
+サービスはインターフェイス化することもでき、複数の実装がある場合はプライオリティの高いサービスが選択されます。インターフェイスはRequire/Optionalどちらでも使用可能です。
 
 ```mermaid
 graph LR
@@ -12,53 +13,81 @@ graph LR
     DX12RHI-->Platform
     DX12RHI-.-> Profiler -->|impl| PIXProfiler & RenderDocProfiler
 ```
-モジュールの依存関係はコンストラクタから判定されます。
+サービスの依存関係はコンストラクタの引数から判定されます。
+|型|意味|
+|-|-|
+|T&|必須依存|
+|T*|任意依存|
 
-```c++
+## 実装例
+
+```cpp
 class RHI{};
-class DX12RHI:public RHI{   public: DX12RHI(SPtr<Platform>,SPtr<Profiler>); };
-class Grahic{   public: Graphic(SPtr<RHI>); };
-class Engine{   public: Engine(SPtr<Graphic>,SPtr<Sound>);  };
+class DX12RHI:public RHI{   public: DX12RHI(Platform&,Profiler*); };
+class Grahic{   public: Graphic(RHI&); };
+class Engine{   public: Engine(Graphic&,Sound&);  };
 
 int main(){
 
     ServiceInjector injector;
-
-    FileLogger logger;
-    injector.add<RHI>().to<DX12RHI>();
-    injector.add<Graphic>();
-    injector.add(logger);
+    // 中略
+    injector.bind<DX12RHI>().as<RHI>();
+    injector.bind<Graphic>();
+    injector.bind<Engine>();
     
     ServiceContainer container;
     auto engine = injector.create<Engine>(container);
-    engine->setServiceContainer(container);
-
+    
     // 最後に生成されたRHIを使用して生成
     Texture::White();
 
 
     return 0;
 }
+```
+Engineがコンテナを持つ場合、依存定義用の内部クラスを登録/生成してください。  
+```cpp
+class Engine{
+private:
+    class EngineService{
+        EngineService(Model&,Sound&){}
+    };
+public:
+
+    Engine(ServiceInjector& injector){
+        injector.bind<EngineService>();
+        injector.create<EngineService>(m_container);
+    }
+
+    template<class T>
+    T* getService()const{
+        return m_container.get<T>();
+    }
+
+private:
+    ServiceContainer m_container;
+};
 
 ```
+
 # ServiceInjectorへの登録
-必須依存のサービスをServiceInjectorに登録する責務はそのサービスにあります。
+必須依存のサービスをServiceInjectorに登録する責務はそのサービスにあります。  
 登録用の関数を使用すると内部的に必要なサービスが登録されます。
 ```cpp
 void func(){
     ServiceInjector injector;
-    ob::graphics::Register(injector);
     ob::rhi::dx12::Register(injector);
+    ob::graphics::Register(injector);
 
     auto graphics = injector.create<Graphics>();
 }
 //-----------------------------------------------------
 void ob::graphics::Register(ServiceInjector& injector){
     injector.bind<Graphics>();
-    injector.bind<EmptyRHI>();
+    injector.bind<EmptyRHI>().as<RHI>();
 }
 void ob::rhi::dx12::Register(ServiceInjector& injector){
-    injector.bind<DX12RHI>();
+    injector.bind<DX12RHI>().as<RHI>();
     injector.bind<Platform>();
 }
 ```
@@ -142,3 +171,4 @@ entity->getWorld()->getService<T>();
 * 複数アセットを同時編集する場合はツールごとにWorldが生成されます
   * ツール内で複数のWorldが生成される場合もあります
 * エディタ起動の場合はGameのサービスは生成されません
+* 

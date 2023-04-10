@@ -23,6 +23,7 @@
 #include "Utility/Pair.h"
 #include "Utility/Function.h"
 #include "Utility/Delegate.h"
+#include "Utility/TypeTraits.h"
 
 
 //============================================
