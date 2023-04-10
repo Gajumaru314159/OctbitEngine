@@ -46,6 +46,8 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		template<class TModule>
 		TModule* get();
+		template<class TModule>
+		TModule* get2();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief				モジュール取得
@@ -94,6 +96,7 @@ namespace ob::engine {
 		Array<UPtr<IModule>> m_modules;
 		HashMap<TypeId, size_t> m_indices;
 		EngineConfig m_config;
+		ServiceContainer m_container;
 
 	};
 
@@ -116,6 +119,10 @@ namespace ob::engine {
 	template<class TModule>
 	inline TModule* Engine::get() {
 
+		if (auto service = m_container.get<TModule>()) {
+			return service;
+		}
+
 		auto typeId = TypeId::Get<TModule>();
 
 		// 登録済みかチェック
@@ -134,6 +141,14 @@ namespace ob::engine {
 		}
 
 		return pModule;
+	}
+	template<class TModule>
+	inline TModule* Engine::get2() {
+
+		if (auto service = m_container.get<TModule>()) {
+			return service;
+		}
+		return nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------

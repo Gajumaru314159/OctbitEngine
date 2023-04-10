@@ -12,12 +12,28 @@
 
 namespace ob::engine {
 
+	struct EngineDependency {
+		EngineDependency(
+			NameDictionary&,
+			EntityManager&
+		) {}
+	};
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	Engine::Engine(EngineConfig&& config)
 		: m_config(config)
 	{
+		ServiceInjector injector;
+		injector.bind<NameDictionary>();
+		injector.bind<EntityManager>();
+		injector.bind<EngineDependency>();
+
+		if (injector.create<EngineDependency>(m_container) == nullptr) {
+			LOG_FATAL("依存関係の構築に失敗");
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -40,10 +56,20 @@ namespace ob::engine {
 		NameDictionary::Get();
 	}
 
+
+	template<class T>
+	void update_debug(T* instance) {
+		if (instance) {
+			instance->update();
+		}
+	}
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
+
+		update_debug(get2<EntityManager>());
 
 		visit([](engine::IModule& m) {m.update(); });
 		return true;

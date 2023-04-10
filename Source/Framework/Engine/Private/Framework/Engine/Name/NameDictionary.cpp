@@ -7,8 +7,6 @@
 #include <Framework/Engine/Engine.h>
 #include <Framework/Core/Misc/CRCHash.h>
 
-REGISTER_MODULE(ob::engine::NameDictionary);
-
 namespace ob::engine{
 
     //@―---------------------------------------------------------------------------

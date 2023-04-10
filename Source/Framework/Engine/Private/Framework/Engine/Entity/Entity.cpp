@@ -16,13 +16,11 @@ namespace ob::engine {
 	//! @brief		生成
 	//@―---------------------------------------------------------------------------
 	Entity* Entity::Create(StringView name) {
-
-		if (auto manager = GEngine->get<EntityManager>()) {
+		if (auto manager = EntityManager::Get()) {
 			auto entity = new Entity(name);
 			manager->add(*entity);
 			return entity;
 		}
-
 		return nullptr;
 	}
 
@@ -208,7 +206,11 @@ namespace ob::engine {
 	//! @brief		解放予約
 	//@―---------------------------------------------------------------------------
 	void Entity::requestRelease() {
-		EntityManager::Get().requestRemove(*this);
+		if (auto manager = EntityManager::Get()) {
+			manager->requestRemove(*this);
+		} else {
+			LOG_WARNING("EntityManagerが解放済みのため解放予約に失敗しました。");
+		}		
 	}
 
 	//@―---------------------------------------------------------------------------

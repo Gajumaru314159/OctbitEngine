@@ -8,25 +8,20 @@
 #include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/Component/ComponentFactory.h>
 
-REGISTER_MODULE(ob::engine::EntityManager);
-
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		取得
 	//@―---------------------------------------------------------------------------
-	EntityManager& EntityManager::Get() {
-		auto manager = GEngine->get<EntityManager>();
-		OB_ASSERT_EXPR(manager);
-		return *manager;
+	EntityManager* EntityManager::Get() {
+		auto manager = GEngine->get2<EntityManager>();
+		return manager;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	EntityManager::EntityManager() {
-
-		GEngine->get<ComponentFactory>();
+	EntityManager::EntityManager(ComponentFactory&) {
 
 		m_entities.reserve(10000);
 

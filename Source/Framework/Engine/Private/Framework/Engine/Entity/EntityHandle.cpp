@@ -26,7 +26,10 @@ namespace ob::engine {
 	//! @brief		Entityを取得
 	//@―---------------------------------------------------------------------------
 	Entity* EntityHandle::get()const {
-		return EntityManager::Get().find(*this);
+		if (auto manager = EntityManager::Get()) {
+			return manager->find(*this);
+		}
+		return nullptr;
 	}
 
 }// namespcae ob

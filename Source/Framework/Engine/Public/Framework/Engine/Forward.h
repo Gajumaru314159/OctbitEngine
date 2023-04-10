@@ -12,7 +12,9 @@ namespace ob::engine {
 	class Scene;
 	class Entity;
 	class EntityHandle;
+	class EntityManager;
 	class Component;
+	class ComponentFactory;
 
 	class IModule;
 
