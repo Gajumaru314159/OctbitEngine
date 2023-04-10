@@ -14,8 +14,10 @@ namespace ob::input {
 	//! @brief	状態が state か
 	//@―---------------------------------------------------------------------------
 	bool Button::is(ButtonState state)const {
-		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
-			return device->getButtonStates(m_code)[state];
+		if (auto m = InputModule::Get()) {
+			if (auto device = m->findDevice(m_deviceId, m_user)) {
+				return device->getButtonStates(m_code)[state];
+			}
 		}
 		return false;
 
@@ -69,8 +71,10 @@ namespace ob::input {
 	//! @brief	バインド
 	//@―---------------------------------------------------------------------------
 	bool Button::bind(ButtonState state, ButtonHandle& handle, const ButtonDelegate& func)const {
-		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
-			return device->bindButton(m_code, state, handle, func);
+		if (auto m = InputModule::Get()) {
+			if (auto device = m->findDevice(m_deviceId, m_user)) {
+				return device->bindButton(m_code, state, handle, func);
+			}
 		}
 		return false;
 

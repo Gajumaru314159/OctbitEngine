@@ -6,6 +6,8 @@
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
 #include <Framework/Input/Mouse.h>
+#include <Framework/Platform/Window.h>
+
 
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #ifdef OS_WINDOWS
@@ -24,7 +26,7 @@ namespace ob::input {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        MouseDevice();
+        MouseDevice(platform::Window&);
 
         //@―---------------------------------------------------------------------------
         //! @brief  デストラクタ

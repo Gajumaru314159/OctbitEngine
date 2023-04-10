@@ -16,6 +16,9 @@ namespace ob {
 	namespace platform {
 		class WindowManager;
 	}
+	namespace input {
+		class InputModule;
+	}
 }
 
 namespace ob::engine {
@@ -24,7 +27,8 @@ namespace ob::engine {
 		EngineDependency(
 			NameDictionary&,
 			EntityManager&,
-			platform::WindowManager&
+			platform::WindowManager&,
+			input::InputModule&
 		) {}
 	};
 

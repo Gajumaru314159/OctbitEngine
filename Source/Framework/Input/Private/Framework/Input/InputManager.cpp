@@ -11,27 +11,37 @@
 
 #include <Framework/Input/Config.h>
 
+#include <Framework/Platform/WindowManager.h>
+
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/ModuleFactory.h>
 
 namespace ob::input{
+    
+    InputModule* InputModule::Get() {
+        if (auto m = GEngine->get2<InputModule>()) {
+            return m;
+        }
+        return nullptr;
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    InputModule::InputModule()
+    InputModule::InputModule(platform::WindowManager& windowManager)
     {
-        auto& config = GEngine->config().get<Config>();
+        //auto& config = GEngine->config().get<Config>();
 
         // キーボード
-        if(config.useKeyboard) {
+        //if(config.useKeyboard) {
+        {
             auto device = std::make_unique<KeyboardDevice>();
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);
         }
         // マウス
-        if (config.useMouse) {
-            auto device = std::make_unique<MouseDevice>();
+        //if (config.useMouse) {
+        {
+            auto device = std::make_unique<MouseDevice>(windowManager.getMainWindow());
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);
         }
@@ -67,9 +77,3 @@ namespace ob::input{
     }
 
 }// namespace ob
-
-REGISTER_MODULE(ob::input::InputModule);
-
-void Link_Input() {
-
-}

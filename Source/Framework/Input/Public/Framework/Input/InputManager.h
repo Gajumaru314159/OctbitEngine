@@ -5,26 +5,31 @@
 //***********************************************************
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
-#include <Framework/Engine/IModule.h>
+
+namespace ob::platform {
+    class WindowManager;
+}
 
 namespace ob::input {
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class InputModule:public engine::IModule{
+    class InputModule{
+    public:
+        static InputModule* Get();
     public:
 
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        InputModule();
+        InputModule(platform::WindowManager&);
         ~InputModule();
 
         //@―---------------------------------------------------------------------------
         //! @brief  更新
         //@―---------------------------------------------------------------------------
-        void update()override;
+        void update();
 
         //@―---------------------------------------------------------------------------
         //! @brief  入力デバイスを生成

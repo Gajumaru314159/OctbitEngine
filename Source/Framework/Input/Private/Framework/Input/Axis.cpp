@@ -13,8 +13,10 @@ namespace ob::input {
 	//! @berif	値
 	//@―---------------------------------------------------------------------------
 	f32 Axis::value()const {
-		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
-			return device->getAxisValue(m_code);
+		if (auto m = InputModule::Get()) {
+			if (auto device = m->findDevice(m_deviceId, m_user)) {
+				return device->getAxisValue(m_code);
+			}
 		}
 		return false;
 	}
@@ -23,8 +25,10 @@ namespace ob::input {
 	//! @berif	バインド
 	//@―---------------------------------------------------------------------------
 	bool Axis::bind(AxisHandle& handle, const AxisDelegate& func)const {
-		if (auto device = GEngine->ref<InputModule>().findDevice(m_deviceId, m_user)) {
-			return device->bindAxis(m_code, handle, func);
+		if (auto m = InputModule::Get()) {
+			if (auto device = m->findDevice(m_deviceId, m_user)) {
+				return device->bindAxis(m_code, handle, func);
+			}
 		}
 		return false;
 	}

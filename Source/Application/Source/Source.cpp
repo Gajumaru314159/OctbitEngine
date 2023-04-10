@@ -21,23 +21,24 @@
 
 #include <Model.h>
 
-#include <Framework/Platform/WindowManager.h>
 #include <Framework/Core/Utility/DI.h>
+
+#include <Framework/Platform/WindowManager.h>
+#include <Framework/Input/InputManager.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
 
 void Link_DirectX12();
 void Link_Vulkan();
-void Link_Input();
 int TestDirectX12();
 int TestVullkan();
-void Link_Entity();
 void Link_GraphicModule();
 
 void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
 	injector.bind<platform::WindowManager>();
+	injector.bind<input::InputModule>();
 
 	{
 		rhi::Config c;
@@ -48,7 +49,6 @@ void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
 	Link_DirectX12();
 	//Link_Vulkan();
-	Link_Input();
 
 	Link_GraphicModule();
 
@@ -341,6 +341,7 @@ int TestDirectX12() {
 		// TODO アプリ更新内部にモジュール更新とメッセージ処理を隠ぺい
 		{
 			GEngine->visit([](engine::IModule& m) {m.update(); });
+			GEngine->get2<input::InputModule>()->update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);

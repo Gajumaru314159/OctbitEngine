@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Input/Device/KeyboardDevice.h>
-#include <Framework/Platform/Window.h>
 #include <magic_enum.hpp>
 
 namespace ob::input {

@@ -8,12 +8,11 @@
 
 namespace ob::input
 {
-	MouseDevice::MouseDevice()
+	MouseDevice::MouseDevice(platform::Window&window)
 		: m_position{}
 		, m_interface(nullptr)
 		, m_mouse(nullptr)
 	{
-		auto& window = platform::Window::Main();
 		HWND hWnd = (HWND)window.getHandle();
 
 		HRESULT result;
