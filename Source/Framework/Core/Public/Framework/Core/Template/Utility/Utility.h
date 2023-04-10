@@ -169,4 +169,21 @@ namespace ob::core {
         return true;
     }
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  Fallback値を指定してマップから値を検索
+    //! 
+    //! @param container        コンテナ
+    //! @param key              検索キー
+    //! @param fallback         要素が見つからない場合のFallback値
+    //@―---------------------------------------------------------------------------
+    template <typename Container, typename Key, typename Fallback>
+    auto try_find(const Container& container, const Key& key, const Fallback& fallback) -> decltype(container.at(key)) {
+        auto iter = container.find(key);
+        if (iter != container.end()) {
+            return iter->second;
+        }
+        return fallback;
+    }
+
 }// namespcae ob
