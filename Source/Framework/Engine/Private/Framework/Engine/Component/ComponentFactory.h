@@ -7,7 +7,6 @@
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/ComponentCreator.h>
 #include <Framework/Engine/Entity.h>
-#include <Framework/Engine/IModule.h>
 #include <Framework/Engine/Reflection/TypeBuilder.h>
 
 namespace ob::engine {
@@ -15,7 +14,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	class ComponentFactory :public IModule {
+	class ComponentFactory {
 	public:
 
 		//@―---------------------------------------------------------------------------

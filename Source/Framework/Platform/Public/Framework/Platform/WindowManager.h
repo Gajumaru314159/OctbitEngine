@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Window.h>
-#include <Framework/Engine/IModule.h>
 
 //============================================
 // クラス宣言
@@ -15,7 +14,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウマネージャ
     //@―---------------------------------------------------------------------------
-    class WindowManager :public engine::IModule{
+    class WindowManager {
     public:
         static WindowManager& Get();
     public:

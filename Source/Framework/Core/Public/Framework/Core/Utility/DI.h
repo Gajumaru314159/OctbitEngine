@@ -73,7 +73,11 @@ namespace ob::core {
             // 型変換(参照)
             template<class U, class = no_copy_constructor<U>>
             operator U& () const {
-                return *injector.create<U>(container);
+                auto instance = injector.create<U>(container);
+                if (instance == nullptr) {
+                    throw Exception();
+                }
+                return *instance;
             }
             // 型変換(ポインタ)
             template<class U, class = no_copy_constructor<U>>

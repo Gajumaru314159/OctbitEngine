@@ -5,7 +5,6 @@
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/Component/ComponentFactory.h>
 
 namespace ob::engine {
@@ -21,7 +20,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	EntityManager::EntityManager(ComponentFactory&) {
+	EntityManager::EntityManager(ComponentFactory& c) {
 
 		m_entities.reserve(10000);
 
@@ -95,10 +94,5 @@ namespace ob::engine {
 		}
 
 	}
-
-}
-
-
-void Link_Entity() {
 
 }

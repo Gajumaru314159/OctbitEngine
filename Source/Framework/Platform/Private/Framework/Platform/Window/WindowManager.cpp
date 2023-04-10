@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/WindowManager.h>
-#include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/Engine.h>
 
 namespace ob::platform {
@@ -13,7 +12,7 @@ namespace ob::platform {
     WindowManager& WindowManager::Get() {
         static WindowManager* manager = nullptr;
         if (manager == nullptr) {
-            manager = GEngine->get<WindowManager>();
+            manager = GEngine->get2<WindowManager>();
         }
         OB_ASSERT_EXPR(manager);
         return *manager;
@@ -28,7 +27,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     void WindowManager::setMainWindow(const Window& window) {
         if (m_mainWindow) {
-            LOG_WARNING("ウィンドウ[{}]が既にメインウィンドウに設定されているためメインウィンドウを変更できませんでした。",m_mainWindow.getTitle());
+            LOG_WARNING("ウィンドウ[{}]が既にメインウィンドウに設定されているためメインウィンドウを変更できませんでした。", m_mainWindow.getTitle());
         } else {
             m_mainWindow = window;
         }
@@ -40,9 +39,5 @@ namespace ob::platform {
     auto WindowManager::getMainWindow()->Window& {
         return m_mainWindow;
     }
-
-}// namespace ob::platform
-
-void Link_Window() {
 
 }

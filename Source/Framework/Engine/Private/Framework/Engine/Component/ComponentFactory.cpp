@@ -1,14 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		TransformComponentImpl
+//! @brief		ComponentFactory
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/ModuleFactory.h>
-
-REGISTER_MODULE(ob::engine::ComponentFactory);
 
 namespace ob::engine {
 
@@ -18,7 +15,7 @@ namespace ob::engine {
 	ComponentFactory& ComponentFactory::Get() {
 		static std::atomic<ComponentFactory*> m = nullptr;
 		if (m == nullptr) {
-			m = GEngine->get<ComponentFactory>();
+			m = GEngine->get2<ComponentFactory>();
 		}
 		OB_ASSERT_EXPR(m);
 		return *m;

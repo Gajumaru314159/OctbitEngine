@@ -7,6 +7,7 @@
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/IModule.h>
 
+#include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Engine/Name/NameDictionary.h>
 
@@ -36,6 +37,7 @@ namespace ob::engine {
 	{
 		injector.bind<NameDictionary>();
 		injector.bind<EntityManager>();
+		injector.bind<ComponentFactory>();
 		injector.bind<EngineDependency>();
 
 		if (injector.create<EngineDependency>(m_container) == nullptr) {
