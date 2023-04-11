@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール(DirectX12)
+//! @brief		RHIシステム(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
