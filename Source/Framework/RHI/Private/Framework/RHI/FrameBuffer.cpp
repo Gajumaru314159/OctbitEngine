@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/FrameBuffer.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -12,8 +12,8 @@ namespace ob::rhi {
 	//! @brief  生成
 	//@―---------------------------------------------------------------------------
 	Ref<FrameBuffer> FrameBuffer::Create(const FrameBufferDesc& desc) {
-		if (auto device = Device::Get()) {
-			return device->createFrameBuffer(desc);
+		if (auto rhi= RHI::Get()) {
+			return rhi->createFrameBuffer(desc);
 		}
 		return nullptr;
 	}

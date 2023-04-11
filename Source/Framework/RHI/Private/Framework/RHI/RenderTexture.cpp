@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/RenderTexture.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -12,8 +12,8 @@ namespace ob::rhi {
     //! @brief          生成
     //@―---------------------------------------------------------------------------
     Ref<RenderTexture> RenderTexture::Create(const RenderTextureDesc& desc) {
-        if (auto device = Device::Get()) {
-            return device->createRenderTexture(desc);;
+        if (auto rhi= RHI::Get()) {
+            return rhi->createRenderTexture(desc);;
         }
         return nullptr;
     }

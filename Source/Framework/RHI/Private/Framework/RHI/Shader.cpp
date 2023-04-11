@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/Shader.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -42,8 +42,8 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> VertexShader::Create(const String& code) {
-        if (auto device = Device::Get()) {
-            return device->createShader(code, ShaderStage::Vertex);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createShader(code, ShaderStage::Vertex);
         }
         return nullptr;
     }
@@ -56,8 +56,8 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> VertexShader::Create(BlobView binary) {
-        if (auto device = Device::Get()) {
-            return device->createShader(binary, ShaderStage::Vertex);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createShader(binary, ShaderStage::Vertex);
         }
         return nullptr;
     }
@@ -70,8 +70,8 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> PixelShader::Create(const String& code) {
-        if (auto device = Device::Get()) {
-            return device->createShader(code, ShaderStage::Pixel);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createShader(code, ShaderStage::Pixel);
         }
         return nullptr;
     }
@@ -84,8 +84,8 @@ namespace ob::rhi {
     //! @param name         オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Shader> PixelShader::Create(BlobView binary) {
-        if (auto device = Device::Get()) {
-            return device->createShader(binary, ShaderStage::Pixel);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createShader(binary, ShaderStage::Pixel);
         }
         return nullptr;
     }

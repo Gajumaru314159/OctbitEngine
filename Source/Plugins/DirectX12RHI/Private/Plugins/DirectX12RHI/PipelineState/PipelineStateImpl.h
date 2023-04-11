@@ -12,7 +12,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi::dx12 {
-    class DeviceImpl;
+    class DirectX12RHI;
 }
 
 
@@ -30,7 +30,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
         //@―---------------------------------------------------------------------------
-        PipelineStateImpl(DeviceImpl&, const PipelineStateDesc& desc);
+        PipelineStateImpl(DirectX12RHI&, const PipelineStateDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

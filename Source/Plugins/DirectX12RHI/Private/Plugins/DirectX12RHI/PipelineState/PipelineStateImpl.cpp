@@ -4,13 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Framework/RHI/RenderPass.h>
-#include <Framework/RHI/Device.h>
 
 namespace ob::rhi::dx12 {
 
@@ -18,7 +17,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	PipelineStateImpl::PipelineStateImpl(DeviceImpl& rDevice, const PipelineStateDesc& desc)
+	PipelineStateImpl::PipelineStateImpl(DirectX12RHI& rDevice, const PipelineStateDesc& desc)
 		: m_desc(desc)
 	{
 

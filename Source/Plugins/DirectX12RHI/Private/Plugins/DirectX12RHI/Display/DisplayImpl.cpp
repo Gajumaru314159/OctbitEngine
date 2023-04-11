@@ -8,7 +8,7 @@
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/FrameBuffer.h>
 #include <Framework/RHI/Shader.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -23,7 +23,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    DisplayImpl::DisplayImpl(DeviceImpl& rDevice, const DisplayDesc& desc)
+    DisplayImpl::DisplayImpl(DirectX12RHI& rDevice, const DisplayDesc& desc)
         : m_device(rDevice)
         , m_desc(desc)
     {
@@ -60,7 +60,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  スワップチェーン生成
     //@―---------------------------------------------------------------------------
-    bool DisplayImpl::createDisplay(DeviceImpl& rDevice) {
+    bool DisplayImpl::createDisplay(DirectX12RHI& rDevice) {
         auto& window = m_desc.window;
 
         BOOL allowTearing = false;
@@ -147,7 +147,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      レンダーテクスチャを初期化
     //@―---------------------------------------------------------------------------
-    bool DisplayImpl::createBuffers(DeviceImpl& rDevice) {
+    bool DisplayImpl::createBuffers(DirectX12RHI& rDevice) {
 
         if (!is_in_range(m_desc.bufferCount, 1, s_maxDisplayCount)) {
             LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxDisplayCount, m_desc.bufferCount);
@@ -202,7 +202,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    bool DisplayImpl::createResources(DeviceImpl& rDevice) {
+    bool DisplayImpl::createResources(DirectX12RHI& rDevice) {
         // レンダーパス
         {
             RenderPassDescHelper rdesc;

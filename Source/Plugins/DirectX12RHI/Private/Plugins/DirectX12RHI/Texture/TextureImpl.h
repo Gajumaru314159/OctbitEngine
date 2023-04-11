@@ -17,7 +17,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi::dx12 {
-    class DeviceImpl;
+    class DirectX12RHI;
     class ResourceStateCache;
 }
 
@@ -33,17 +33,17 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      TextureDesc から空のテクスチャを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc);
+        TextureImpl(DirectX12RHI& rDevice, const TextureDesc& desc);
 
         //@―---------------------------------------------------------------------------
         //! @brief      IntColorの配列 から空のテクスチャを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, Size size,Span<IntColor> colors);
+        TextureImpl(DirectX12RHI& rDevice, Size size,Span<IntColor> colors);
 
         //@―---------------------------------------------------------------------------
         //! @brief      テクスチャバイナリから生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, BlobView blob,StringView name);
+        TextureImpl(DirectX12RHI& rDevice, BlobView blob,StringView name);
 
 
         //@―---------------------------------------------------------------------------
@@ -74,13 +74,13 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      RenderTextureDesc からRenderTextureを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc);
+        TextureImpl(DirectX12RHI& rDevice, const RenderTextureDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
         //! @brief      SwapChainのリソースからRenderTextureを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
+        TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
 
 
     public:
@@ -138,7 +138,7 @@ namespace ob::rhi::dx12 {
 
     protected:
 
-        class DeviceImpl& m_device;
+        class DirectX12RHI& m_device;
 
         TextureDesc             m_desc;         //!< 定義
         RenderTextureDesc       m_renderDesc;   //!< 定義

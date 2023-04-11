@@ -19,7 +19,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi::dx12 {
-    class DeviceImpl;
+    class DirectX12RHI;
     class CommandListImpl;
     class ITexture;
 }
@@ -43,7 +43,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        DisplayImpl(DeviceImpl& rDevice, const DisplayDesc& desc);
+        DisplayImpl(DirectX12RHI& rDevice, const DisplayDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
@@ -127,16 +127,16 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        bool createDisplay(DeviceImpl& rDevice);
-        bool createResources(DeviceImpl& rDevice);
-        bool createBuffers(DeviceImpl& rDevice);
+        bool createDisplay(DirectX12RHI& rDevice);
+        bool createResources(DirectX12RHI& rDevice);
+        bool createBuffers(DirectX12RHI& rDevice);
         
         bool setColorSpace();
 
 
     private:
 
-        DeviceImpl& m_device;
+        DirectX12RHI& m_device;
 
         DisplayDesc m_desc;
 

@@ -26,7 +26,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        CommandListImpl(class DeviceImpl& device, const CommandListDesc& desc);
+        CommandListImpl(class DirectX12RHI& device, const CommandListDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
@@ -165,7 +165,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        class DeviceImpl& m_device;
+        class DirectX12RHI& m_device;
         const CommandListDesc m_desc;
 
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;

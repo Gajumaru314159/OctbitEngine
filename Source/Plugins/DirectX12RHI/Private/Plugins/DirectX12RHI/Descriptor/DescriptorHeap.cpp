@@ -6,7 +6,7 @@
 #pragma once
 #include "DescriptorHeap.h"
 #include <Framework/Core/Math/BitOp.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
@@ -44,7 +44,7 @@ namespace ob::rhi::dx12 {
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
 	//@―---------------------------------------------------------------------------
-	DescriptorHeap::DescriptorHeap(DeviceImpl& device, DescriptorHeapType type, s32 capacity)
+	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
 		: m_capacity(0)
 		, m_type(type)
 	{

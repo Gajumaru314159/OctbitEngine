@@ -21,7 +21,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        CommandQueue(class DeviceImpl& device);
+        CommandQueue(class DirectX12RHI& device);
 
         void entryCommandList(const CommandList& commandList);
 

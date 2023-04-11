@@ -10,7 +10,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi::dx12 {
-    class DeviceImpl;
+    class DirectX12RHI;
     class ITexture;
 }
 
@@ -33,7 +33,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        RootSignatureImpl(DeviceImpl& rDevice, const RootSignatureDesc& desc);
+        RootSignatureImpl(DirectX12RHI& rDevice, const RootSignatureDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

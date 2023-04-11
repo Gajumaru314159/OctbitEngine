@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include "RootSignatureImpl.h"
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
@@ -14,7 +14,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	RootSignatureImpl::RootSignatureImpl(DeviceImpl& rDevice, const RootSignatureDesc& desc)
+	RootSignatureImpl::RootSignatureImpl(DirectX12RHI& rDevice, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		// パラメータ

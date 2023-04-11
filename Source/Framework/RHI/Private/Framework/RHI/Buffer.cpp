@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -13,8 +13,8 @@ namespace ob::rhi {
     //! @param desc バッファ定義
     //@―---------------------------------------------------------------------------
     Ref<Buffer> Buffer::Create(const BufferDesc& desc) {
-        if (auto device = Device::Get()) {
-            return device->createBuffer(desc);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createBuffer(desc);
         }
         return nullptr;
     }

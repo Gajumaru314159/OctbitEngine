@@ -6,7 +6,7 @@
 #pragma once
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 namespace ob::rhi::dx12 {
@@ -15,7 +15,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandQueue::CommandQueue(DeviceImpl& device) 
+	CommandQueue::CommandQueue(DirectX12RHI& device) 
 		:m_fenceVal(0)
 	{
 		HRESULT result;

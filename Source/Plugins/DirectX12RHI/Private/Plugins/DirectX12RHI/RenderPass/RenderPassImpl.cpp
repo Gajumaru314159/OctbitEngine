@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "RenderPassImpl.h"
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
@@ -13,7 +13,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    RenderPassImpl::RenderPassImpl(DeviceImpl& rDevice, const RenderPassDesc& desc)
+    RenderPassImpl::RenderPassImpl(DirectX12RHI& rDevice, const RenderPassDesc& desc)
         : m_desc(desc)
     {
         

@@ -20,7 +20,7 @@ namespace ob::rhi::dx12 {
 		//! 
 		//! @param desc バッファ定義
 		//@―---------------------------------------------------------------------------
-		BufferImpl(class DeviceImpl& rDevice,const BufferDesc& desc);
+		BufferImpl(class DirectX12RHI& rDevice,const BufferDesc& desc);
 
 
 		//@―---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace ob::rhi::dx12 {
 		//! @param desc バッファ定義
 		//! @param data 初期化データ
 		//@―---------------------------------------------------------------------------
-		BufferImpl(class DeviceImpl& rDevice, const BufferDesc& desc, const Blob& blob);
+		BufferImpl(class DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob);
 
 
 		//@―---------------------------------------------------------------------------
@@ -94,7 +94,7 @@ namespace ob::rhi::dx12 {
 
 	private:
 
-		class DeviceImpl& m_device;
+		class DirectX12RHI& m_device;
 		BufferDesc m_desc;
 
 		ComPtr<ID3D12Resource> m_resource;

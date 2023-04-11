@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
@@ -16,7 +16,7 @@ namespace ob::rhi::dx12 {
 	//! 
 	//! @param desc バッファ定義
 	//@―---------------------------------------------------------------------------
-	BufferImpl::BufferImpl(DeviceImpl& rDevice, const BufferDesc& desc)
+	BufferImpl::BufferImpl(DirectX12RHI& rDevice, const BufferDesc& desc)
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
@@ -54,7 +54,7 @@ namespace ob::rhi::dx12 {
 	//! @param desc バッファ定義
 	//! @param data 初期化データ
 	//@―---------------------------------------------------------------------------
-	BufferImpl::BufferImpl(DeviceImpl& rDevice, const BufferDesc& desc, const Blob& blob)
+	BufferImpl::BufferImpl(DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob)
 		: m_device(rDevice)
 		, m_desc(desc)
 	{

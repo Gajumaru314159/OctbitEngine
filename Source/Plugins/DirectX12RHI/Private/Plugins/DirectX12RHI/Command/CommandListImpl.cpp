@@ -7,7 +7,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/CommandParam.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Display/DisplayImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
@@ -34,7 +34,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandListImpl::CommandListImpl(class DeviceImpl& device, const CommandListDesc& desc)
+	CommandListImpl::CommandListImpl(class DirectX12RHI& device, const CommandListDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
 	{
@@ -128,7 +128,9 @@ namespace ob::rhi::dx12 {
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::flush() {
-		Device::Get()->entryCommandList(*this);
+		if (auto rhi = RHI::Get()) {
+			rhi->entryCommandList(*this);
+		}
 	}
 
 	//@―---------------------------------------------------------------------------

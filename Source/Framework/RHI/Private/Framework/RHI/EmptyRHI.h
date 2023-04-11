@@ -21,16 +21,6 @@ namespace ob::rhi {
 
 		}
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      デバイス生成
-		//@―---------------------------------------------------------------------------
-		Device* getDevice() override { return nullptr; }
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      
-		//@―---------------------------------------------------------------------------
-		GraphicObjectManager& getObjectManager() { return m_graphicObjectManager; }
-
 	private:
 
 		GraphicObjectManager m_graphicObjectManager;

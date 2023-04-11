@@ -5,7 +5,7 @@
 //***********************************************************
 #include "TextureImpl.h"
 #include <Framework/RHI/Display.h>
-#include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
@@ -17,7 +17,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief      TextureDesc から空のテクスチャを生成
     //@―---------------------------------------------------------------------------
-    TextureImpl::TextureImpl(DeviceImpl& rDevice, const TextureDesc& desc)
+    TextureImpl::TextureImpl(DirectX12RHI& rDevice, const TextureDesc& desc)
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
@@ -81,7 +81,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      IntColorの配列 から空のテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, Size size, Span<IntColor> colors)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, Size size, Span<IntColor> colors)
 		: m_device(rDevice)
 	{
 		if (size.width <= 0 || size.height <= 0) {
@@ -165,7 +165,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      テクスチャバイナリから生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, BlobView blob,StringView name)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, BlobView blob,StringView name)
 		: m_device(rDevice)
 	{
 		// 拡張子に合わせて読み込み
@@ -251,7 +251,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief       RenderTextureDesc からRenderTextureを生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, const RenderTextureDesc& desc)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const RenderTextureDesc& desc)
 		: m_device(rDevice)
 		, m_renderDesc(desc)
 	{
@@ -273,7 +273,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      SwapChainのリソースからRenderTextureを生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DeviceImpl& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
 		: m_device(rDevice)
 		, m_resource(resource)
 		, m_state(state)

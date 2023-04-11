@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/Display.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -12,8 +12,8 @@ namespace ob::rhi {
     //! @brief  生成
     //@―---------------------------------------------------------------------------
     Ref<Display> Display::Create(const DisplayDesc& desc) {
-        if (auto device = Device::Get()) {
-            return device->createDisplay(desc);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createDisplay(desc);
         }
         return nullptr;
     }

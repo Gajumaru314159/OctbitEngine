@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/DescriptorTable.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
@@ -17,8 +17,8 @@ namespace ob::rhi {
     //! @param name         デバッグ名
     //@―---------------------------------------------------------------------------
     Ref<DescriptorTable> DescriptorTable::Create(DescriptorHeapType type, s32 elementNum) {
-        if (auto device = Device::Get()) {
-            return device->createDescriptorTable(type, elementNum);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createDescriptorTable(type, elementNum);
         }
         return nullptr;
     }

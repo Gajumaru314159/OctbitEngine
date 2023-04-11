@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Device.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/RHI/SystemResourceModule.h>
 
 namespace ob::rhi {
@@ -38,8 +38,8 @@ namespace ob::rhi {
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(const TextureDesc& desc) {
-        if (auto device = Device::Get()) {
-            return device->createTexture(desc);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createTexture(desc);
         }
         return nullptr;
     }
@@ -51,8 +51,8 @@ namespace ob::rhi {
     //! @param name オブジェクト名
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(BlobView blob,StringView name){
-        if (auto device = Device::Get()) {
-            return device->createTexture(blob, name);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createTexture(blob, name);
         }
         return nullptr;
     }
@@ -65,8 +65,8 @@ namespace ob::rhi {
     //! @param desc テクスチャ定義
     //@―---------------------------------------------------------------------------
     Ref<Texture> Texture::Create(Size size, Span<IntColor> colors) {
-        if (auto device = Device::Get()) {
-            return device->createTexture(size, colors);
+        if (auto rhi= RHI::Get()) {
+            return rhi->createTexture(size, colors);
         }
         return nullptr;
     }
