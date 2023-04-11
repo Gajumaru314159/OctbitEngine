@@ -523,7 +523,7 @@ namespace ob::rhi::dx12 {
 
                 createBuffers(m_device);
 
-                LOG_TRACE("ディスプレイをリサイズ ({},{}) → ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
+                LOG_TRACE("ディスプレイをリサイズ ({},{}) -> ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
 
                 m_notifier.invoke();
                 
