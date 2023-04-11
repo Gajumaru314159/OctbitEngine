@@ -498,6 +498,13 @@ namespace ob::rhi::dx12 {
                 if (desc.BufferDesc.Width == args.newSize.x && desc.BufferDesc.Height == args.newSize.y)
                     return;
 
+                m_newSize = args.newSize;
+
+                m_resizeCountDown = 2;
+
+                m_device.clearCommands();
+
+                
                 m_desc.size.width = (s32)args.newSize.x;
                 m_desc.size.height = (s32)args.newSize.y;
 
@@ -516,9 +523,10 @@ namespace ob::rhi::dx12 {
 
                 createBuffers(m_device);
 
-                LOG_TRACE("ディスプレイをリサイズ ({},{}) → ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height,m_desc.size.width,m_desc.size.height);
+                LOG_TRACE("ディスプレイをリサイズ ({},{}) → ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
 
                 m_notifier.invoke();
+                
             }
         }
 

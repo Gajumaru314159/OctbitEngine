@@ -374,4 +374,11 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
+	void DirectX12RHI::clearCommands() {
+
+		m_commandQueue->execute();
+		m_commandQueue->wait();
+	}
+
+
 }// namespace ob::rhi::dx12

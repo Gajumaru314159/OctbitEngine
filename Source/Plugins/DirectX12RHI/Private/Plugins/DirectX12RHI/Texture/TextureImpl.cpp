@@ -545,6 +545,10 @@ namespace ob::rhi::dx12 {
 		barrier.Transition.StateBefore = m_state;
 		barrier.Transition.StateAfter = state;
 
+		if (m_state == D3D12_RESOURCE_STATE_RENDER_TARGET && state == D3D12_RESOURCE_STATE_DEPTH_WRITE) {
+			CallBreakPoint();
+		}
+
 		m_state = state;
 
 		return true;
@@ -585,7 +589,8 @@ namespace ob::rhi::dx12 {
 
 		if (m_renderDesc.display) {
 
-			format = m_renderDesc.display->getDesc().format;
+			// TODO HDR変更対応
+			//format = m_renderDesc.display->getDesc().format;
 
 			newSize = m_renderDesc.display->getDesc().size;
 

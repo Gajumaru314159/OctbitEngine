@@ -161,6 +161,9 @@ namespace ob::rhi::dx12 {
 
         DisplayEventNotifier        m_notifier;
         bool m_visible=true;
+
+        s32                         m_resizeCountDown = -1;
+        Vec2                        m_newSize;
     };
 
 }// namespcae ob::rhi::dx12

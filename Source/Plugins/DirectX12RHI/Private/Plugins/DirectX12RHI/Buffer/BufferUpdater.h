@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Buffer.h>
 
 namespace ob::rhi::dx12 {
 
@@ -23,21 +24,8 @@ namespace ob::rhi::dx12 {
 
     private:
 
-
+        Ref<Buffer> m_buffer;
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
-}// namespcae ob::rhi::dx12
+}
