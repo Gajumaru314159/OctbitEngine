@@ -171,8 +171,8 @@ namespace ob::imgui {
 			code.append(TC("    return o;											        \n"));
 			code.append(TC("}																\n"));
 
-			vs = VertexShader::Create(code);
-			ps = PixelShader::Create(code);
+			vs = Shader::CreateVS(code);
+			ps = Shader::CreatePS(code);
 			OB_ASSERT_EXPR(vs && ps);
 		}
 

@@ -191,8 +191,8 @@ PsOut PS_Main(PsIn i){
 }
 			)");
 
-			vs = VertexShader::Create(code);
-			ps = PixelShader::Create(code);
+			vs = Shader::CreateVS(code);
+			ps = Shader::CreatePS(code);
 			OB_ASSERT_EXPR(vs && ps);
 		}
 		

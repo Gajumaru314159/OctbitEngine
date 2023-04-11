@@ -39,13 +39,19 @@ namespace ob::rhi {
     //! @brief              コンストラクタ
     //! 
     //! @param codeSet      シェーダ・バイナリ
-    //! @param name         オブジェクト名
+    //! @param stage        シェーダステージ
     //@―---------------------------------------------------------------------------
-    Ref<Shader> VertexShader::Create(const String& code) {
-        if (auto rhi= RHI::Get()) {
-            return rhi->createShader(code, ShaderStage::Vertex);
+    Ref<Shader> Shader::Create(const String& code,ShaderStage stage) {
+        if (auto rhi = RHI::Get()) {
+            return rhi->createShader(code, stage);
         }
         return nullptr;
+    }
+    Ref<Shader> Shader::CreateVS(const String& code) {
+        return Shader::Create(code, ShaderStage::Vertex);
+    }
+    Ref<Shader> Shader::CreatePS(const String& code) {
+        return Shader::Create(code, ShaderStage::Pixel);
     }
 
 
@@ -53,41 +59,19 @@ namespace ob::rhi {
     //! @brief              コンストラクタ
     //! 
     //! @param binarySet    シェーダ・バイナリ
-    //! @param name         オブジェクト名
+    //! @param stage        シェーダステージ
     //@―---------------------------------------------------------------------------
-    Ref<Shader> VertexShader::Create(BlobView binary) {
-        if (auto rhi= RHI::Get()) {
-            return rhi->createShader(binary, ShaderStage::Vertex);
+    Ref<Shader> Shader::Create(BlobView binary, ShaderStage stage) {
+        if (auto rhi = RHI::Get()) {
+            return rhi->createShader(binary, stage);
         }
         return nullptr;
     }
-    
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param codeSet      シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    Ref<Shader> PixelShader::Create(const String& code) {
-        if (auto rhi= RHI::Get()) {
-            return rhi->createShader(code, ShaderStage::Pixel);
-        }
-        return nullptr;
+    Ref<Shader> Shader::CreateVS(BlobView binary) {
+        return Shader::Create(binary, ShaderStage::Vertex);
     }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief              コンストラクタ
-    //! 
-    //! @param binarySet    シェーダ・バイナリ
-    //! @param name         オブジェクト名
-    //@―---------------------------------------------------------------------------
-    Ref<Shader> PixelShader::Create(BlobView binary) {
-        if (auto rhi= RHI::Get()) {
-            return rhi->createShader(binary, ShaderStage::Pixel);
-        }
-        return nullptr;
+    Ref<Shader> Shader::CreatePS(BlobView binary) {
+        return Shader::Create(binary, ShaderStage::Vertex);
     }
 
 }// namespace ob::rhi
