@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Material/MaterialManager.h>
-#include <Framework/Graphics/Module/GraphicModule.h>
+#include <Framework/Graphics/GraphicModule.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
@@ -17,7 +17,7 @@ namespace ob::graphics {
 	//!	@brief			取得
 	//@―---------------------------------------------------------------------------
 	MaterialManager& MaterialManager::Get() {
-		static auto module = GEngine->get<GraphicModule>();
+		static auto module = GEngine->get2<GraphicModule>();
 		OB_ASSERT_EXPR(module);
 		return module->getMaterialManager();
 	}

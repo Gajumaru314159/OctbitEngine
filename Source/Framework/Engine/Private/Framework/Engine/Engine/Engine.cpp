@@ -19,6 +19,12 @@ namespace ob {
 	namespace input {
 		class InputModule;
 	}
+	namespace graphics {
+		class GraphicModule;
+	}
+	namespace rhi {
+		class SystemResourceModule;
+	}
 }
 
 namespace ob::engine {
@@ -28,7 +34,9 @@ namespace ob::engine {
 			NameDictionary&,
 			EntityManager&,
 			platform::WindowManager&,
-			input::InputModule&
+			input::InputModule&,
+			graphics::GraphicModule&,
+			rhi::SystemResourceModule&
 		) {}
 	};
 

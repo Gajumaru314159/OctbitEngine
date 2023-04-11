@@ -8,6 +8,13 @@
 
 namespace ob::rhi {
 
+
+    static GraphicObjectManager* s_graphicObjectManager = nullptr;
+
+    GraphicObjectManager* GraphicObjectManager::Get() {
+        return s_graphicObjectManager;
+    }
+
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //! 
@@ -19,6 +26,9 @@ namespace ob::rhi {
         if (frameCount < 1) {
             LOG_WARNING("フレーム数が不正です。1以上にしてください。[frameCount={}]",frameCount);
         }
+        
+        OB_ASSERT_EXPR(s_graphicObjectManager == nullptr);
+        s_graphicObjectManager = this;
     }
 
 
@@ -40,6 +50,7 @@ namespace ob::rhi {
             delete pObject;
         }
 
+        s_graphicObjectManager = nullptr;
     }
 
 

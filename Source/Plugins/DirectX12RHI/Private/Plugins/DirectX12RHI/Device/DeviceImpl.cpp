@@ -3,7 +3,7 @@
 //! @brief		デバイス実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include "DeviceImpl.h"
+#include<Plugins/DirectX12RHI/Device/DeviceImpl.h>
 #include<Plugins/DirectX12RHI/Utility/Utility.h>
 #include<Plugins/DirectX12RHI/Display/DisplayImpl.h>
 #include<Plugins/DirectX12RHI/Command/CommandListImpl.h>

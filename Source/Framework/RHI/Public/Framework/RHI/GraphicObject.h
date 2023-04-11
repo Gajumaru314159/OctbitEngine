@@ -53,6 +53,10 @@ namespace ob::rhi {
 
 		void finalize()override;
 
+	private:
+
+		bool m_managed;
+
 	};
 
 }// namespcae ob::rhi

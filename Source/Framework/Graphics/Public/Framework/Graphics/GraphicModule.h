@@ -4,27 +4,32 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/IModule.h>
-#include <Framework/Graphics/Material/MaterialManager.h>
+#include <Framework/Core/Utility/Pimpl.h>
+
+namespace ob::rhi {
+    class RHIModule;
+}
 
 namespace ob::graphics {
+
+    class MaterialManager;
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
     //@―---------------------------------------------------------------------------
-    class GraphicModule:public engine::IModule{
+    class GraphicModule{
     public:
 
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        GraphicModule();
+        GraphicModule(rhi::RHIModule&);
         ~GraphicModule();
 
-        MaterialManager& getMaterialManager() { return m_materialManager; }
+        MaterialManager& getMaterialManager();
 
     private:
-        MaterialManager m_materialManager;
+        UPtr<MaterialManager> m_materialManager;
 
     };
 

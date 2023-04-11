@@ -14,13 +14,13 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     GraphicObject::GraphicObject()
     {
-        static RHIModule* pModule = nullptr;
-        if (pModule == nullptr) {
-            pModule = GEngine->get<RHIModule>();
+        if (auto manager = GraphicObjectManager::Get()) {
+            manager->registerObject(*this);
+            m_managed = true;
+        } else {
+            m_managed = false;
         }
-        OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
 
-        pModule->getObjectManager().registerObject(*this);
     }
 
     //@―---------------------------------------------------------------------------
@@ -34,15 +34,11 @@ namespace ob::rhi {
     //! @brief      終了処理
     //@―---------------------------------------------------------------------------
     void GraphicObject::finalize() {
-
-        static RHIModule* pModule = nullptr;
-        if (pModule == nullptr) {
-            pModule = GEngine->get<RHIModule>();
+        if (m_managed) {
+            if (auto manager = GraphicObjectManager::Get()) {
+                manager->requestRelease(*this);
+            }
         }
-        OB_ASSERT(pModule != nullptr, "Graphicモジュールがありません");
-
-        pModule->getObjectManager().requestRelease(*this);
-
     }
 
 }// namespace ob::rhi

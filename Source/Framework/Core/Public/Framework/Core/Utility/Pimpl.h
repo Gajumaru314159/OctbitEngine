@@ -73,7 +73,7 @@ namespace ob::core {
 
     private:
 
-        UPtr<T> m_impl;
+        UPtr<T> m_impl{nullptr};
 
     };
 

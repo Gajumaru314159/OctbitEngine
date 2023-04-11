@@ -18,9 +18,16 @@
 
 #include <Framework/RHI/RHIModule.h>
 #include <Framework/Engine/Engine.h>
+#include <Framework/Core/Utility/DI.h>
+
+#include <Framework/RHI/SystemResourceModule.h>
 
 namespace ob::rhi
 {
+
+    void Register(ServiceInjector& injector) {
+        injector.bind<SystemResourceModule>();
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  デバイスを取得
@@ -29,7 +36,7 @@ namespace ob::rhi
         // 高速取得のためキャッシュ
         static Device* pDevice = nullptr;
         if (pDevice == nullptr) {
-            if (auto pModule = GEngine->get<RHIModule>()) {
+            if (auto pModule = GEngine->get2<RHIModule>()) {
                 pDevice = pModule->getDevice();
             }
         }
@@ -38,5 +45,7 @@ namespace ob::rhi
         }
         return pDevice;
     }
+
+    Device::~Device() = default;
 
 }// namespace ob

@@ -5,18 +5,17 @@
 //***********************************************************
 #include <Framework/RHI/RHIModule.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/Engine/ModuleFactory.h>
 #include <Framework/Engine/Engine.h>
 
 namespace ob::rhi {
 
-	class SystemResourceModule :public ob::engine::IModule {
+	class SystemResourceModule {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		SystemResourceModule();
+		SystemResourceModule(RHIModule&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  プリセットテクスチャ取得

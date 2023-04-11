@@ -5,7 +5,8 @@
 //***********************************************************
 #include <Framework/RHI/SystemResourceModule.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/Engine/ModuleFactory.h>
+#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/Device.h>
 #include <Framework/Engine/Engine.h>
 
 namespace ob::rhi {
@@ -13,14 +14,15 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	SystemResourceModule::SystemResourceModule()
-	{
-		GEngine->ref<RHIModule>();
+	SystemResourceModule::SystemResourceModule(RHIModule& rhi) {
 		{
 			// テクスチャ
-			auto creator = [this](IntColor color) {
+			auto creator = [this,&rhi](IntColor color) {
 				Array<IntColor> colors(32 * 32, color);
-				return Texture::Create(Size(32, 32), colors);
+				if (auto device = rhi.getDevice()) {
+					return rhi.getDevice()->createTexture(Size(32, 32), colors);
+				}
+				return Ref<Texture>();
 			};
 			m_presetTextures[PresetTexture::White] = creator(IntColor::White);
 			m_presetTextures[PresetTexture::Gray] = creator(IntColor::Gray);
@@ -28,15 +30,17 @@ namespace ob::rhi {
 			m_presetTextures[PresetTexture::Normal] = creator(IntColor::Normal);
 		}
 		{
-			size_t size = 32;
-			Array<IntColor> colors(size*size);
-			for (s32 y = 0; y < size; ++y) {
-				for (s32 x = 0; x < size; ++x) {
-					bool f = (x % 2) ^ (y % 2);
-					colors[y * size + x] = f ? IntColor::White : IntColor::Gray;
+			if (auto device = rhi.getDevice()) {
+				size_t size = 32;
+				Array<IntColor> colors(size * size);
+				for (s32 y = 0; y < size; ++y) {
+					for (s32 x = 0; x < size; ++x) {
+						bool f = (x % 2) ^ (y % 2);
+						colors[y * size + x] = f ? IntColor::White : IntColor::Gray;
+					}
 				}
+				m_presetTextures[PresetTexture::Check] = device->createTexture(Size(size, size), colors);
 			}
-			m_presetTextures[PresetTexture::Check] = Texture::Create(Size(size, size), colors);
 		}
 	}
 
@@ -51,6 +55,3 @@ namespace ob::rhi {
 	}
 
 }// namespace ob::rhi
-
-REGISTER_MODULE(ob::rhi::SystemResourceModule);
-

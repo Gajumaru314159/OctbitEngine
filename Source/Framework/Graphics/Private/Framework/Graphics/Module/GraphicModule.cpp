@@ -3,9 +3,9 @@
 //! @brief		入力マネージャ
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Module/GraphicModule.h>
+#include <Framework/Graphics/GraphicModule.h>
+#include <Framework/Graphics/Material/MaterialManager.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/ModuleFactory.h>
 #include <Framework/RHI/RHIModule.h>
 
 namespace ob::graphics{
@@ -13,9 +13,8 @@ namespace ob::graphics{
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    GraphicModule::GraphicModule()
+    GraphicModule::GraphicModule(rhi::RHIModule&)
     {
-        GEngine->get<rhi::RHIModule>();
     }
 
 
@@ -23,13 +22,14 @@ namespace ob::graphics{
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicModule::~GraphicModule() = default;
+    MaterialManager& GraphicModule::getMaterialManager() { 
+        
+        if (!m_materialManager) {
+            m_materialManager = std::make_unique<MaterialManager>();
+        }
+        
+        return *m_materialManager.get(); }
 
 
 
 }// namespace ob
-
-REGISTER_MODULE(ob::graphics::GraphicModule);
-
-void Link_GraphicModule() {
-
-}

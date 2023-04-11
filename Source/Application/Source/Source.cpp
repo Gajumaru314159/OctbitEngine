@@ -25,11 +25,12 @@
 
 #include <Framework/Platform/WindowManager.h>
 #include <Framework/Input/InputManager.h>
+#include <Framework/Graphics/GraphicModule.h>
+#include <Plugins/DirectX12RHI/Module/RHIModule.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
 
-void Link_DirectX12();
 void Link_Vulkan();
 int TestDirectX12();
 int TestVullkan();
@@ -39,6 +40,10 @@ void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
 	injector.bind<platform::WindowManager>();
 	injector.bind<input::InputModule>();
+	injector.bind<graphics::GraphicModule>();
+	injector.bind<rhi::dx12::DirectX12RHIModule>().as<rhi::RHIModule>();
+
+	rhi::Register(injector);
 
 	{
 		rhi::Config c;
@@ -47,10 +52,7 @@ void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 		config.set(c);
 	}
 
-	Link_DirectX12();
 	//Link_Vulkan();
-
-	Link_GraphicModule();
 
 }
 
@@ -342,6 +344,7 @@ int TestDirectX12() {
 		{
 			GEngine->visit([](engine::IModule& m) {m.update(); });
 			GEngine->get2<input::InputModule>()->update();
+			GEngine->get2<rhi::dx12::DirectX12RHIModule>()->update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);

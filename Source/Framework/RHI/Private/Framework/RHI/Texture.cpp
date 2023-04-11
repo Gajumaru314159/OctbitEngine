@@ -13,7 +13,7 @@ namespace ob::rhi {
         // 高速取得のためキャッシュ
         static std::atomic<SystemResourceModule*> pModule = nullptr;
         if (pModule == nullptr) {
-            pModule = GEngine->get<SystemResourceModule>();
+            pModule = GEngine->get2<SystemResourceModule>();
         }
 
         if (pModule) {

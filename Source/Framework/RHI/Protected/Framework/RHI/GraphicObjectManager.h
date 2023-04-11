@@ -15,6 +15,10 @@ namespace ob::rhi {
     class GraphicObjectManager {
     public:
 
+        static GraphicObjectManager* Get();
+
+    public:
+
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //! 

@@ -53,8 +53,8 @@ namespace ob::rhi::dx12 {
 	PIXModule::PIXModule() 
 		: m_hModule(nullptr)
 	{
-		if (GEngine->config().get<Config>().enablePIX == false)
-			return;
+		//if (GEngine->config().get<Config>().enablePIX == false)
+		//	return;
 
 		LOG_INFO("PIXを有効化");
 

@@ -16,4 +16,6 @@ namespace ob::rhi {
         bool enablePIX = false;
     };
 
+    void Register(ServiceInjector&);
+
 }// namespace pb::rhi
