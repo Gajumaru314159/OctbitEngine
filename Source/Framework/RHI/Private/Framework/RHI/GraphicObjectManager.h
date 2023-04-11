@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
+#include <Framework/RHI/Config.h>
 #include <Framework/Core/Utility/Swapper.h>
 
 namespace ob::rhi {
@@ -24,7 +25,7 @@ namespace ob::rhi {
         //! 
         //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
         //@―---------------------------------------------------------------------------
-        GraphicObjectManager(s32 frameCount);
+        GraphicObjectManager(Config*);
 
 
         //@―---------------------------------------------------------------------------
@@ -52,10 +53,17 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         void requestRelease(GraphicObject&);
 
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      フレームバッファ数
+        //@―---------------------------------------------------------------------------
+        s32 getFrameBufferCount()const { return m_config.frameBufferCount; }
+
+
     private:
 
         using ObjectQueue = Queue<GraphicObject*>;
-
+        Config                  m_config;
         List<GraphicObject*>    m_objects;
         Swapper<ObjectQueue>    m_deleteStackList;
 

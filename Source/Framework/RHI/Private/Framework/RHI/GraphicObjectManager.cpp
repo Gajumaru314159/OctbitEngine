@@ -20,11 +20,12 @@ namespace ob::rhi {
     //! 
     //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
     //@―---------------------------------------------------------------------------
-    GraphicObjectManager::GraphicObjectManager(s32 frameCount) 
-        : m_deleteStackList(std::max(frameCount,1))
+    GraphicObjectManager::GraphicObjectManager(Config* config) 
+        : m_config(config ? *config : Config{})
+        , m_deleteStackList(std::max(m_config.frameBufferCount,1))
     {
-        if (frameCount < 1) {
-            LOG_WARNING("フレーム数が不正です。1以上にしてください。[frameCount={}]",frameCount);
+        if (m_config.frameBufferCount < 1) {
+            LOG_WARNING("フレーム数が不正です。1以上にしてください。[frameCount={}]", m_config.frameBufferCount);
         }
         
         OB_ASSERT_EXPR(s_graphicObjectManager == nullptr);

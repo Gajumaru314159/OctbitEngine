@@ -35,7 +35,6 @@ using namespace ob;
 void Link_Vulkan();
 int TestDirectX12();
 int TestVullkan();
-void Link_GraphicModule();
 
 void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 

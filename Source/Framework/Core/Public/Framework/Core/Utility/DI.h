@@ -80,7 +80,7 @@ namespace ob::core {
             operator U& () const {
                 auto instance = injector.create<U>(container);
                 if (instance == nullptr) {
-                    throw Exception();
+                    throw Exception(Format(TC("{} => {}"), TypeId::Get<U>().name(), TypeId::Get<T>().name()));
                 }
                 return *instance;
             }
@@ -197,6 +197,7 @@ namespace ob::core {
             try {
                 return reinterpret_cast<T*>(builder->create(container));
             } catch (Exception e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",TypeId::Get<T>().name(),e.message());
                 // 生成キャンセル
             }
         }

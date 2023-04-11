@@ -45,7 +45,7 @@ namespace ob::core {
 
 #ifdef OS_WINDOWS
             // Visual Studio
-            if (log.level != LogLevel::Trace) {
+            if (log.level != LogLevel::Trace || true) {
                 StringView typeName;
                 switch (log.level) {
                 case LogLevel::Fatal:   typeName = TC("[Fatal]  "); break;

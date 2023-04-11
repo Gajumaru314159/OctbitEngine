@@ -15,15 +15,11 @@ namespace ob::rhi {
 	class EmptyRHI : public RHI {
 	public:
 
-		EmptyRHI()
-			: m_graphicObjectManager(2)
+		EmptyRHI(GraphicObjectManager& manager)
+			: RHI(manager)
 		{
 
 		}
-
-	private:
-
-		GraphicObjectManager m_graphicObjectManager;
 
 	};
 

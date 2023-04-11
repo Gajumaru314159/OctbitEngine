@@ -13,6 +13,8 @@ namespace ob::rhi {
 	struct DrawParam;
 	struct DrawIndexedParam;
 
+	class GraphicObjectManager;
+
 	class Buffer;
 	class CommandList;
 	class DescriptorTable;

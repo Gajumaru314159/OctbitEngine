@@ -35,9 +35,9 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DirectX12RHI::DirectX12RHI(ob::rhi::Config* config, platform::WindowManager&)
+	DirectX12RHI::DirectX12RHI(ob::rhi::Config* config, GraphicObjectManager& objectManager, platform::WindowManager&)
 		: m_config(config ? *config : ob::rhi::Config{})
-		, m_objectManager(m_config.frameBufferCount)
+		, RHI(objectManager)
 	{
 		OB_DEBUG_CONTEXT(
 			if (m_config.enablePIX) {
@@ -52,6 +52,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	DirectX12RHI::~DirectX12RHI() {
+		finalize();
 	}
 
 
@@ -78,7 +79,7 @@ namespace ob::rhi::dx12 {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 
-		m_objectManager->update();
+		RHI::update();
 	}
 
 

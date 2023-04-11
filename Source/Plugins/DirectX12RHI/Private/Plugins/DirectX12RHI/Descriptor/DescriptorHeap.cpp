@@ -108,7 +108,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::~DescriptorHeap() {
 		// m_blocks の最上位に1つ残っているのが正常
-		OB_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。");
+		OB_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。RHI::finalize()の呼び出しを確認してください。");
 	}
 
 

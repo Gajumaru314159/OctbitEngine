@@ -16,7 +16,7 @@ namespace ob::rhi::dx12 {
 
 	class DirectX12RHI : public RHI{
 	public:
-		DirectX12RHI(ob::rhi::Config*,ob::platform::WindowManager&);
+		DirectX12RHI(ob::rhi::Config*, GraphicObjectManager&,ob::platform::WindowManager&);
 		~DirectX12RHI();
 
 		//@―---------------------------------------------------------------------------
@@ -196,8 +196,6 @@ namespace ob::rhi::dx12 {
 		UPtr<class PIXModule> m_pixModule;
 #endif
 
-		//Pimpl<DirectX12RHI> m_device;// DirectX12RHI内にGraphicObjectはないので後から解放
-		Pimpl<GraphicObjectManager> m_objectManager;
 	};
 
 }

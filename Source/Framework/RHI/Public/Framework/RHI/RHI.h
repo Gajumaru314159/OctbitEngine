@@ -5,11 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/GraphicObjectManager.h>
-
-#include <Framework/Core/Misc/BlobView.h>
-#include <Framework/Core/Utility/Ref.h>
-#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
@@ -21,6 +16,8 @@
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/Utility/Ref.h>
 
 namespace ob::rhi {
 
@@ -35,16 +32,13 @@ namespace ob::rhi {
 		static RHI* Get();
 	public:
 
-		RHI();
+		RHI(GraphicObjectManager&);
 		virtual ~RHI();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      
 		//@―---------------------------------------------------------------------------
-		virtual void update() {}
-
-
-
+        virtual void update();
 
 
         //@―---------------------------------------------------------------------------
@@ -94,6 +88,16 @@ namespace ob::rhi {
         // virtual bool isAsyncComputeSupported()const=0;
         // virtual bool isRaytracingSupported()const=0;
 
+    protected:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      終了処理
+        //! @details    GraphicObjectの解放が遅延する影響で派生クラスのデストラクタの最初で呼び出す必要があります。
+        //@―---------------------------------------------------------------------------
+        void finalize();
+
+    private:
+        GraphicObjectManager& m_objectManager;
 	};
 
 }// namespace pb::rhi
