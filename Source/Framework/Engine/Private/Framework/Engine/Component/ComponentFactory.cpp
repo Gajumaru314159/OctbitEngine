@@ -15,7 +15,7 @@ namespace ob::engine {
 	ComponentFactory& ComponentFactory::Get() {
 		static std::atomic<ComponentFactory*> m = nullptr;
 		if (m == nullptr) {
-			m = GEngine->get2<ComponentFactory>();
+			m = GEngine->get<ComponentFactory>();
 		}
 		OB_ASSERT_EXPR(m);
 		return *m;

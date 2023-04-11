@@ -18,7 +18,7 @@
 namespace ob::input{
     
     InputModule* InputModule::Get() {
-        if (auto m = GEngine->get2<InputModule>()) {
+        if (auto m = GEngine->get<InputModule>()) {
             return m;
         }
         return nullptr;

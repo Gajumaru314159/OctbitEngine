@@ -15,7 +15,5 @@ namespace ob::engine {
 	class EntityManager;
 	class Component;
 	class ComponentFactory;
-
-	class IModule;
-
+	
 }// namespcae ob

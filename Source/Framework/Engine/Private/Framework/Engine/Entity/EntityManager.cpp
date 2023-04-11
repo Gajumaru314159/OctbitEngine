@@ -13,7 +13,7 @@ namespace ob::engine {
 	//! @brief		取得
 	//@―---------------------------------------------------------------------------
 	EntityManager* EntityManager::Get() {
-		auto manager = GEngine->get2<EntityManager>();
+		auto manager = GEngine->get<EntityManager>();
 		return manager;
 	}
 

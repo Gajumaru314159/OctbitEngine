@@ -342,9 +342,9 @@ int TestDirectX12() {
 
 		// TODO アプリ更新内部にモジュール更新とメッセージ処理を隠ぺい
 		{
-			GEngine->visit([](engine::IModule& m) {m.update(); });
-			GEngine->get2<input::InputModule>()->update();
-			GEngine->get2<rhi::dx12::DirectX12RHIModule>()->update();
+			GEngine->update();
+			GEngine->get<input::InputModule>()->update();
+			GEngine->get<rhi::dx12::DirectX12RHIModule>()->update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);
@@ -535,7 +535,7 @@ int TestVullkan() {
 	while (true) {
 
 		//graphics::System::Get().update();
-		GEngine->visit([](engine::IModule& m) {m.update(); });
+		GEngine->update();
 
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);

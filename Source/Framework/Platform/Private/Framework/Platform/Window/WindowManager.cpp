@@ -12,7 +12,7 @@ namespace ob::platform {
     WindowManager& WindowManager::Get() {
         static WindowManager* manager = nullptr;
         if (manager == nullptr) {
-            manager = GEngine->get2<WindowManager>();
+            manager = GEngine->get<WindowManager>();
         }
         OB_ASSERT_EXPR(manager);
         return *manager;

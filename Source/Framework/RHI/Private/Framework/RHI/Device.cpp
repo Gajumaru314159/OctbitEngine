@@ -36,7 +36,7 @@ namespace ob::rhi
         // 高速取得のためキャッシュ
         static Device* pDevice = nullptr;
         if (pDevice == nullptr) {
-            if (auto pModule = GEngine->get2<RHIModule>()) {
+            if (auto pModule = GEngine->get<RHIModule>()) {
                 pDevice = pModule->getDevice();
             }
         }

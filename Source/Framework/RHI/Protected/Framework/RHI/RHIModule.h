@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/IModule.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObjectManager.h>
 

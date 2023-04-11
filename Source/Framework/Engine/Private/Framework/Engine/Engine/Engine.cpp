@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Framework/Core/Core.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/IModule.h>
 
 #include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Entity/EntityManager.h>
@@ -61,11 +60,6 @@ namespace ob::engine {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	Engine::~Engine() {
-		
-		for (auto& [index,m] : ReverseIndexed(m_modules)) {
-			m.reset();
-		}
-
 		LOG_INFO("[Shutdown OctbitEngine]");
 	}
 
@@ -90,9 +84,8 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
 
-		update_debug(get2<EntityManager>());
+		update_debug(get<EntityManager>());
 
-		visit([](engine::IModule& m) {m.update(); });
 		return true;
 	}
 

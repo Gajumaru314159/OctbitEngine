@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/IModule.h>
 #include <Framework/Engine/Name.h>
 
 namespace ob::engine {
@@ -35,7 +34,7 @@ namespace ob::engine {
     //@―---------------------------------------------------------------------------
     //! @brief  識別用名辞書
     //@―---------------------------------------------------------------------------
-    class NameDictionary:public IModule {
+    class NameDictionary {
     public:
         //@―---------------------------------------------------------------------------
         //! @brief      取得
