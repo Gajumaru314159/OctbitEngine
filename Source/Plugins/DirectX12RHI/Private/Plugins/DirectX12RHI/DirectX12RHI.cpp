@@ -172,17 +172,17 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  頂点シェーダを生成
+	//! @brief  シェーダをコンパイル
 	//@―---------------------------------------------------------------------------
-	Ref<Shader> DirectX12RHI::createShader(const String& code, ShaderStage stage) {
+	Ref<Shader> DirectX12RHI::compileShader(const String& code, ShaderStage stage) {
 		SAFE_CREATE(ShaderImpl, code, stage);
 	}
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  頂点シェーダを生成
+	//! @brief  シェーダをロード
 	//@―---------------------------------------------------------------------------
-	Ref<Shader> DirectX12RHI::createShader(BlobView binary, ShaderStage stage) {
+	Ref<Shader> DirectX12RHI::loadShader(BlobView binary, ShaderStage stage) {
 		SAFE_CREATE(ShaderImpl, binary, stage);
 	}
 

@@ -191,8 +191,8 @@ PsOut PS_Main(PsIn i){
 }
 			)");
 
-			vs = Shader::CreateVS(code);
-			ps = Shader::CreatePS(code);
+			vs = Shader::CompileVS(code);
+			ps = Shader::CompilePS(code);
 			OB_ASSERT_EXPR(vs && ps);
 		}
 		

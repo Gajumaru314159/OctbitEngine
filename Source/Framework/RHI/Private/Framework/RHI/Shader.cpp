@@ -41,17 +41,17 @@ namespace ob::rhi {
     //! @param codeSet      シェーダ・バイナリ
     //! @param stage        シェーダステージ
     //@―---------------------------------------------------------------------------
-    Ref<Shader> Shader::Create(const String& code,ShaderStage stage) {
+    Ref<Shader> Shader::Compile(const String& code,ShaderStage stage) {
         if (auto rhi = RHI::Get()) {
-            return rhi->createShader(code, stage);
+            return rhi->compileShader(code, stage);
         }
         return nullptr;
     }
-    Ref<Shader> Shader::CreateVS(const String& code) {
-        return Shader::Create(code, ShaderStage::Vertex);
+    Ref<Shader> Shader::CompileVS(const String& code) {
+        return Shader::Compile(code, ShaderStage::Vertex);
     }
-    Ref<Shader> Shader::CreatePS(const String& code) {
-        return Shader::Create(code, ShaderStage::Pixel);
+    Ref<Shader> Shader::CompilePS(const String& code) {
+        return Shader::Compile(code, ShaderStage::Pixel);
     }
 
 
@@ -61,17 +61,17 @@ namespace ob::rhi {
     //! @param binarySet    シェーダ・バイナリ
     //! @param stage        シェーダステージ
     //@―---------------------------------------------------------------------------
-    Ref<Shader> Shader::Create(BlobView binary, ShaderStage stage) {
+    Ref<Shader> Shader::Load(BlobView binary, ShaderStage stage) {
         if (auto rhi = RHI::Get()) {
-            return rhi->createShader(binary, stage);
+            return rhi->loadShader(binary, stage);
         }
         return nullptr;
     }
-    Ref<Shader> Shader::CreateVS(BlobView binary) {
-        return Shader::Create(binary, ShaderStage::Vertex);
+    Ref<Shader> Shader::LoadVS(BlobView binary) {
+        return Shader::Load(binary, ShaderStage::Vertex);
     }
-    Ref<Shader> Shader::CreatePS(BlobView binary) {
-        return Shader::Create(binary, ShaderStage::Vertex);
+    Ref<Shader> Shader::LoadPS(BlobView binary) {
+        return Shader::Load(binary, ShaderStage::Vertex);
     }
 
 }// namespace ob::rhi

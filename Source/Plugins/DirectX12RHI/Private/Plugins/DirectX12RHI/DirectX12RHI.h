@@ -104,15 +104,15 @@ namespace ob::rhi::dx12 {
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  シェーダを生成
+		//! @brief  シェーダをコンパイル
 		//@―---------------------------------------------------------------------------
-		Ref<Shader> createShader(const String&, ShaderStage) override;
+		Ref<Shader> compileShader(const String&, ShaderStage) override;
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  シェーダを生成
+		//! @brief  シェーダをロード
 		//@―---------------------------------------------------------------------------
-		Ref<Shader> createShader(BlobView, ShaderStage) override;
+		Ref<Shader> loadShader(BlobView, ShaderStage) override;
 
 
 		//@―---------------------------------------------------------------------------

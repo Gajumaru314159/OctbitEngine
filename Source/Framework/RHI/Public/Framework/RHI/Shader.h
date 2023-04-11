@@ -45,25 +45,25 @@ namespace ob::rhi {
         static const char* GetEntryName(ShaderStage stage);
 
         //@―---------------------------------------------------------------------------
-        //! @brief          コンストラクタ
+        //! @brief          シェーダコードをコンパイル
         //! 
         //! @param code     シェーダコード
         //! @param stage    シェーダステージ
         //@―---------------------------------------------------------------------------
-        static Ref<Shader> Create(const String& code, ShaderStage stage);
-        static Ref<Shader> CreateVS(const String& code);
-        static Ref<Shader> CreatePS(const String& code);
+        static Ref<Shader> Compile(const String& code, ShaderStage stage);
+        static Ref<Shader> CompileVS(const String& code);
+        static Ref<Shader> CompilePS(const String& code);
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief          コンストラクタ
+        //! @brief          シェーダバイナリをロード
         //! 
         //! @param binary   シェーダ・バイナリ
         //! @param stage    シェーダステージ
         //@―---------------------------------------------------------------------------
-        static Ref<Shader> Create(BlobView binary, ShaderStage stage);
-        static Ref<Shader> CreateVS(BlobView binary);
-        static Ref<Shader> CreatePS(BlobView binary);
+        static Ref<Shader> Load(BlobView binary, ShaderStage stage);
+        static Ref<Shader> LoadVS(BlobView binary);
+        static Ref<Shader> LoadPS(BlobView binary);
 
     public:
 

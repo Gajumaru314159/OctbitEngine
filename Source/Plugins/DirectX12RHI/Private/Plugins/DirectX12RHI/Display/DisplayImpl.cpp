@@ -254,8 +254,8 @@ namespace ob::rhi::dx12 {
             code.append(TC("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n"));
             code.append(TC("}																\n"));
 
-            vs = Shader::CreateVS(code);
-            ps = Shader::CreatePS(code);
+            vs = Shader::CompileVS(code);
+            ps = Shader::CompilePS(code);
             OB_ASSERT_EXPR(vs && ps);
         }
 

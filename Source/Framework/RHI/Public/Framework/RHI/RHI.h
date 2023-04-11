@@ -75,8 +75,8 @@ namespace ob::rhi {
         virtual Ref<Texture>        createTexture(Size size, Span<IntColor> colors) { return nullptr; }
         virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) { return nullptr; }
 
-        virtual Ref<Shader>         createShader(const String& code, ShaderStage stage) { return nullptr; }
-        virtual Ref<Shader>         createShader(BlobView binary, ShaderStage stage) { return nullptr; }
+        virtual Ref<Shader>         compileShader(const String& code, ShaderStage stage) { return nullptr; }
+        virtual Ref<Shader>         loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
 
         virtual Ref<DescriptorTable>createDescriptorTable(DescriptorHeapType type, s32 elementNum) { return nullptr; }
 
