@@ -3,7 +3,7 @@
 //! @brief		グラフィック・モジュール(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/Engine/ModuleFactory.h>
 #include <Plugins/VulkanRHI/Device/DeviceImpl.h>
 

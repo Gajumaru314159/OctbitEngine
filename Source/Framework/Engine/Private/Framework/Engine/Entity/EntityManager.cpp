@@ -9,12 +9,13 @@
 
 namespace ob::engine {
 
+	static EntityManager* s_instance = nullptr;
+
 	//@―---------------------------------------------------------------------------
 	//! @brief		取得
 	//@―---------------------------------------------------------------------------
 	EntityManager* EntityManager::Get() {
-		auto manager = GEngine->get<EntityManager>();
-		return manager;
+		return s_instance;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -24,6 +25,8 @@ namespace ob::engine {
 
 		m_entities.reserve(10000);
 
+		OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+		s_instance = this;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -34,6 +37,7 @@ namespace ob::engine {
 			delete entity;
 		}
 		m_entities.clear();
+		s_instance = nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------

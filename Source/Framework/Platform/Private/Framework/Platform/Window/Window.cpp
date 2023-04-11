@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Window.h>
-#include <Framework/Platform/WindowManager.h>
+#include <Framework/Platform/Window/WindowManager.h>
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 #include <Framework/Platform/Window/Implement/Linux/WindowImpl.h>
 
@@ -20,9 +20,10 @@ namespace ob::platform {
 
         m_impl = std::make_shared<WindowImpl>(desc);
 
-        // メインウィンドはマネージャに登録しなくてもいい?
-        if (!WindowManager::Get().getMainWindow()) {
-            WindowManager::Get().setMainWindow(*this);
+        if (auto manager = WindowManager::Get()) {
+            if (!manager->getMainWindow()) {
+                manager->setMainWindow(*this);
+            }
         }
     }
 
@@ -271,7 +272,10 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     Window Window::Main() {
         // static変数を直接使用するとDLL間で共有できない
-        return WindowManager::Get().getMainWindow();
+        if (auto manager = WindowManager::Get()) {
+            return manager->getMainWindow();
+        }
+        return {};
     }
 
 }// namespace ob::platform

@@ -3,19 +3,25 @@
 //! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/Engine/Engine.h>
 
 namespace ob::rhi {
 
 	class SystemResourceModule {
 	public:
+		static SystemResourceModule* Get();
+	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		SystemResourceModule(RHIModule&);
+		SystemResourceModule(RHI&);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  デストラクタ
+		//@―---------------------------------------------------------------------------
+		~SystemResourceModule();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  プリセットテクスチャ取得

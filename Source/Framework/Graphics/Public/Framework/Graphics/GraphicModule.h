@@ -7,7 +7,7 @@
 #include <Framework/Core/Utility/Pimpl.h>
 
 namespace ob::rhi {
-    class RHIModule;
+    class RHI;
 }
 
 namespace ob::graphics {
@@ -23,7 +23,7 @@ namespace ob::graphics {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        GraphicModule(rhi::RHIModule&);
+        GraphicModule(rhi::RHI&);
         ~GraphicModule();
 
         MaterialManager& getMaterialManager();

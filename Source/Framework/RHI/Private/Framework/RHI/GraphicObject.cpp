@@ -4,8 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/RHIModule.h>
-#include <Framework/Engine/Engine.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 

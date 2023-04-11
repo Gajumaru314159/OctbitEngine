@@ -11,23 +11,18 @@
 
 #include <Framework/Input/Config.h>
 
-#include <Framework/Platform/WindowManager.h>
-
-#include <Framework/Engine/Engine.h>
-
 namespace ob::input{
+
+    static InputModule* s_instance = nullptr;
     
     InputModule* InputModule::Get() {
-        if (auto m = GEngine->get<InputModule>()) {
-            return m;
-        }
-        return nullptr;
+        return s_instance;
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    InputModule::InputModule(platform::WindowManager& windowManager)
+    InputModule::InputModule(platform::WindowManager&)
     {
         //auto& config = GEngine->config().get<Config>();
 
@@ -41,17 +36,22 @@ namespace ob::input{
         // マウス
         //if (config.useMouse) {
         {
-            auto device = std::make_unique<MouseDevice>(windowManager.getMainWindow());
+            auto device = std::make_unique<MouseDevice>(platform::Window::Main());
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);
         }
+
+        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+        s_instance = this;
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
-    InputModule::~InputModule() = default;
+    InputModule::~InputModule() {
+        s_instance = nullptr;
+    }
 
 
     //@―---------------------------------------------------------------------------

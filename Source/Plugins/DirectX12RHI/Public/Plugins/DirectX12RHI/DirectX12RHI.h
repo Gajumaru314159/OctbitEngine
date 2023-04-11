@@ -3,7 +3,7 @@
 //! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/Core/Utility/Pimpl.h>
 
 namespace ob::platform {
@@ -14,10 +14,10 @@ namespace ob::rhi::dx12 {
 
 	class DeviceImpl;
 
-	class DirectX12RHIModule : public RHIModule{
+	class DirectX12RHI : public RHI{
 	public:
-		DirectX12RHIModule(ob::platform::WindowManager&);
-		~DirectX12RHIModule();
+		DirectX12RHI(ob::platform::WindowManager&);
+		~DirectX12RHI();
 
 		Device* getDevice()override;
 		GraphicObjectManager& getObjectManager() override {

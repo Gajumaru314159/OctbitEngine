@@ -9,13 +9,28 @@
 
 namespace ob::engine{
 
+    static NameDictionary* s_instance = nullptr;
+
     //@―---------------------------------------------------------------------------
     //! @brief      取得
     //@―---------------------------------------------------------------------------
-    NameDictionary& NameDictionary::Get() {
-        auto manager = GEngine->get<NameDictionary>();
-        OB_ASSERT_EXPR(manager);
-        return *manager;
+    NameDictionary* NameDictionary::Get() {
+        return s_instance;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      コンストラクタ
+    //@―---------------------------------------------------------------------------
+    NameDictionary::NameDictionary() {
+        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+        s_instance = this;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      デストラクタ
+    //@―---------------------------------------------------------------------------
+    NameDictionary::~NameDictionary() {
+        s_instance = nullptr;
     }
     
     //@―---------------------------------------------------------------------------

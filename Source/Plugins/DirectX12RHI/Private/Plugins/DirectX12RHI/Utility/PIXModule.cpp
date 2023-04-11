@@ -5,7 +5,6 @@
 //***********************************************************
 #ifdef OB_DEBUG
 #include "PIXModule.h"
-#include <Framework/Engine/Engine.h>
 #include <Framework/RHI/Config.h>
 #include <filesystem>
 #include <shlobj.h>

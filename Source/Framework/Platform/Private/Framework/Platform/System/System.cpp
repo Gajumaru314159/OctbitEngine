@@ -5,7 +5,20 @@
 //***********************************************************
 #ifdef OS_WINDOWS
 #include <Framework/Platform/System.h>
-#include <Windows.h>
+#include <Framework/Platform/Window/WindowManager.h>
+#include <Framework/Core/Utility/DI.h>
+#include <Framework/Core/Platform/WindowsHeaders.h>
+
+namespace ob::platform {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      システムをServiceInjectorに登録
+	//@―---------------------------------------------------------------------------
+	void Register(ServiceInjector& injector) {
+		injector.bind<WindowManager>();
+	}
+
+}
 
 namespace ob::platform::System {
 

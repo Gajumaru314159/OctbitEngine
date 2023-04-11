@@ -6,14 +6,14 @@
 #include <Framework/Graphics/GraphicModule.h>
 #include <Framework/Graphics/Material/MaterialManager.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/RHI.h>
 
 namespace ob::graphics{
 
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    GraphicModule::GraphicModule(rhi::RHIModule&)
+    GraphicModule::GraphicModule(rhi::RHI&)
     {
     }
 

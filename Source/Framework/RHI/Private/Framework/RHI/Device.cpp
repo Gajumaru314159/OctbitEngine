@@ -16,34 +16,38 @@
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/FrameBuffer.h>
 
-#include <Framework/RHI/RHIModule.h>
-#include <Framework/Engine/Engine.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/Core/Utility/DI.h>
 
 #include <Framework/RHI/SystemResourceModule.h>
 
 namespace ob::rhi
 {
+    static RHI* s_instance = nullptr;
 
-    void Register(ServiceInjector& injector) {
-        injector.bind<SystemResourceModule>();
+    RHI* RHI::Get() {
+        return s_instance;
     }
+
+    RHI::RHI() {
+        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+        s_instance = this;
+    }
+    RHI::~RHI() {
+        s_instance = nullptr;
+    }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  デバイスを取得
     //@―---------------------------------------------------------------------------
     Device* Device::Get() {
-        // 高速取得のためキャッシュ
-        static Device* pDevice = nullptr;
-        if (pDevice == nullptr) {
-            if (auto pModule = GEngine->get<RHIModule>()) {
-                pDevice = pModule->getDevice();
-            }
+
+        if (auto rhi = RHI::Get()) {
+            return rhi->getDevice();
         }
-        if (pDevice == nullptr) {
-            LOG_ERROR("ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
-        }
-        return pDevice;
+
+        return nullptr;
     }
 
     Device::~Device() = default;

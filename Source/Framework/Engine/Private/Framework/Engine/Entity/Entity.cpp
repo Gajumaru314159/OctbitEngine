@@ -75,18 +75,22 @@ namespace ob::engine {
 			return nullptr;
 		}
 
-		if (auto desc = ComponentFactory::Get().findCreator(typeId)) {
+		if (auto factory = ComponentFactory::Get()) {
+			if (auto desc = factory->findCreator(typeId)) {
 
-			// 依存コンポーネントを生成
-			for (auto& depType : desc->getDependentComponentTypes()) {
-				if (findComponent(depType) == nullptr) {
-					if (addComponent(depType) == nullptr) {
-						LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", typeId.name(), depType.name());
+				// 依存コンポーネントを生成
+				for (auto& depType : desc->getDependentComponentTypes()) {
+					if (findComponent(depType) == nullptr) {
+						if (addComponent(depType) == nullptr) {
+							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", typeId.name(), depType.name());
+						}
 					}
 				}
-			}
 
-			raisePropertyChanged(TC("Components"));
+				raisePropertyChanged(TC("Components"));
+			}
+		} else {
+			LOG_WARNING("{}が生成されていません。", TypeId::Get<decltype(this)>().name());
 		}
 
 		return nullptr;

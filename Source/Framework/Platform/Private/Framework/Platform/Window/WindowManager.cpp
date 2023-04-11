@@ -4,22 +4,24 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Platform/WindowManager.h>
-#include <Framework/Engine/Engine.h>
+#include <Framework/Platform/Window/WindowManager.h>
 
 namespace ob::platform {
 
-    WindowManager& WindowManager::Get() {
-        static WindowManager* manager = nullptr;
-        if (manager == nullptr) {
-            manager = GEngine->get<WindowManager>();
-        }
-        OB_ASSERT_EXPR(manager);
-        return *manager;
+    static WindowManager* s_instance = nullptr;
+
+    WindowManager* WindowManager::Get() {
+        return s_instance;
     }
 
-    WindowManager::WindowManager() = default;
-    WindowManager::~WindowManager() = default;
+    WindowManager::WindowManager() {
+        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<WindowManager>().name());
+        s_instance = this;
+    }
+
+    WindowManager::~WindowManager() {
+        s_instance = nullptr;
+    }
 
 
     //@―---------------------------------------------------------------------------

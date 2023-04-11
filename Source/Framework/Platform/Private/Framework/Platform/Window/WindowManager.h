@@ -16,7 +16,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     class WindowManager {
     public:
-        static WindowManager& Get();
+        static WindowManager* Get();
     public:
 
         //@―---------------------------------------------------------------------------

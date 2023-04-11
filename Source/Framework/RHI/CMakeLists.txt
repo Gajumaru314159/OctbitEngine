@@ -24,7 +24,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} INTERFACE $
 set(OB_PROJECT_INCLUDE_LIB
     Core
     Platform
-    Engine
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 

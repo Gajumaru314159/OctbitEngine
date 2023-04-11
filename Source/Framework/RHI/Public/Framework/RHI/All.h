@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Config.h>
+#include <Framework/RHI/System.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Constants.h>

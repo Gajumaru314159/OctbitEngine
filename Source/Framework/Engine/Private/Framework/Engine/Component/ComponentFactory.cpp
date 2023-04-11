@@ -9,23 +9,28 @@
 
 namespace ob::engine {
 
+	static ComponentFactory* s_instance = nullptr;
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      取得
 	//@―---------------------------------------------------------------------------
-	ComponentFactory& ComponentFactory::Get() {
-		static std::atomic<ComponentFactory*> m = nullptr;
-		if (m == nullptr) {
-			m = GEngine->get<ComponentFactory>();
-		}
-		OB_ASSERT_EXPR(m);
-		return *m;
+	ComponentFactory* ComponentFactory::Get() {
+		return s_instance;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	ComponentFactory::ComponentFactory() {
+		OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+		s_instance = this;
+	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      デストラクタ
+	//@―---------------------------------------------------------------------------
+	ComponentFactory::~ComponentFactory() {
+		s_instance = nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------

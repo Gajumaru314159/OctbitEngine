@@ -28,7 +28,11 @@ namespace ob::engine {
     //! @details    ハッシュ値の計算は内部実装に依存します。
     //@―---------------------------------------------------------------------------
     Name::Name(Hash hash) {
-        *this = NameDictionary::Get().findName(hash);
+        if (auto system = NameDictionary::Get()) {
+            *this = system->findName(hash);
+        } else {
+            clear();
+        }
     }
 
     //@―---------------------------------------------------------------------------
@@ -55,7 +59,11 @@ namespace ob::engine {
         if (name.empty()) {
             clear();
         } else {
-            *this = std::move(NameDictionary::Get().makeName(name));
+            if (auto system = NameDictionary::Get()) {
+                *this = system->makeName(name);
+            } else {
+                clear();
+            }
         }
     }
 

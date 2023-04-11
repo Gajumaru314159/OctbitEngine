@@ -10,16 +10,8 @@
 namespace ob::rhi {
 
     Ref<Texture> Texture::Preset(PresetTexture type) {
-        // 高速取得のためキャッシュ
-        static std::atomic<SystemResourceModule*> pModule = nullptr;
-        if (pModule == nullptr) {
-            pModule = GEngine->get<SystemResourceModule>();
-        }
-
-        if (pModule) {
-            return pModule.load()->getPresetTexture(type);
-        } else {
-            LOG_ERROR("ob::rhi::Systemが初期化されていないためデバイスの取得に失敗しました。");
+        if (auto instance = SystemResourceModule::Get()) {
+            return instance->getPresetTexture(type);
         }
         return nullptr;
     }

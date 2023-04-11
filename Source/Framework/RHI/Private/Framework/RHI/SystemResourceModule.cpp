@@ -5,16 +5,21 @@
 //***********************************************************
 #include <Framework/RHI/SystemResourceModule.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/RHIModule.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Device.h>
-#include <Framework/Engine/Engine.h>
 
 namespace ob::rhi {
+
+	static SystemResourceModule* s_instance = nullptr;
+
+	SystemResourceModule* SystemResourceModule::Get() {
+		return s_instance;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	SystemResourceModule::SystemResourceModule(RHIModule& rhi) {
+	SystemResourceModule::SystemResourceModule(RHI& rhi) {
 		{
 			// テクスチャ
 			auto creator = [this,&rhi](IntColor color) {
@@ -42,6 +47,15 @@ namespace ob::rhi {
 				m_presetTextures[PresetTexture::Check] = device->createTexture(Size(size, size), colors);
 			}
 		}
+		OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
+		s_instance = this;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	SystemResourceModule::~SystemResourceModule() {
+		s_instance = nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------

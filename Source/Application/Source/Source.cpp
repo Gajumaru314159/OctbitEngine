@@ -23,10 +23,10 @@
 
 #include <Framework/Core/Utility/DI.h>
 
-#include <Framework/Platform/WindowManager.h>
+#include <Framework/Platform/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/GraphicModule.h>
-#include <Plugins/DirectX12RHI/Module/RHIModule.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -38,11 +38,11 @@ void Link_GraphicModule();
 
 void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
-	injector.bind<platform::WindowManager>();
 	injector.bind<input::InputModule>();
 	injector.bind<graphics::GraphicModule>();
-	injector.bind<rhi::dx12::DirectX12RHIModule>().as<rhi::RHIModule>();
+	injector.bind<rhi::dx12::DirectX12RHI>().as<rhi::RHI>();
 
+	platform::Register(injector);
 	rhi::Register(injector);
 
 	{
@@ -344,7 +344,7 @@ int TestDirectX12() {
 		{
 			GEngine->update();
 			GEngine->get<input::InputModule>()->update();
-			GEngine->get<rhi::dx12::DirectX12RHIModule>()->update();
+			GEngine->get<rhi::dx12::DirectX12RHI>()->update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);
