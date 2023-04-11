@@ -3,7 +3,7 @@
 //! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Device/DeviceImpl.h>
 
 namespace ob::rhi::dx12 {

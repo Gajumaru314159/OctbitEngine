@@ -1,21 +1,14 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		システム
+//! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/System.h>
-#include <Framework/RHI/EmptyRHI.h>
-#include <Framework/RHI/SystemResourceModule.h>
-#include <Framework/Core/Utility/DI.h>
 
-namespace ob::rhi {
+namespace ob::rhi::dx12 {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      システムをServiceInjectorに登録
 	//@―---------------------------------------------------------------------------
-	void Register(ServiceInjector& injector) {
-		injector.bind<SystemResourceModule>();
-		injector.bind<EmptyRHI>().as<RHI>();
-	}
+	void Register(ServiceInjector&);
 
-}// namespace ob::rhi
+}

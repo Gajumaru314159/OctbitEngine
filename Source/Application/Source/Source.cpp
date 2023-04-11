@@ -27,7 +27,7 @@
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/GraphicModule.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/System.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -40,11 +40,12 @@ void Link_GraphicModule();
 void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
 	injector.bind<graphics::GraphicModule>();
-	injector.bind<rhi::dx12::DirectX12RHI>().as<rhi::RHI>();
 
 	input::
 		Register(injector);
 	platform::
+		Register(injector);
+	rhi::dx12::
 		Register(injector);
 	rhi::
 		Register(injector);
@@ -354,7 +355,7 @@ int TestDirectX12() {
 		{
 			GEngine->update();
 			GEngine->get<input::InputModule>()->update();
-			GEngine->get<rhi::dx12::DirectX12RHI>()->update();
+			GEngine->get<rhi::RHI>()->update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);
