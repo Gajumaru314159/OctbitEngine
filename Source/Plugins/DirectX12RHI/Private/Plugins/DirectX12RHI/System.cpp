@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 
 namespace ob::rhi::dx12 {
 

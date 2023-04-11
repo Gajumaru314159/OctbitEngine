@@ -6,7 +6,7 @@
 #include "DescriptorTableImpl.h"
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>

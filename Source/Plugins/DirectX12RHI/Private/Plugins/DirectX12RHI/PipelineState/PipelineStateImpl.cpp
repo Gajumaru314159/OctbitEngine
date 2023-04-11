@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>

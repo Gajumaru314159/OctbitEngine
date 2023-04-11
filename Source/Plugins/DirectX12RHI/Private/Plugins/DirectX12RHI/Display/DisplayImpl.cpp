@@ -8,7 +8,7 @@
 #include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/FrameBuffer.h>
 #include <Framework/RHI/Shader.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>

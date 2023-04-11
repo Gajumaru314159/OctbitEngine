@@ -5,7 +5,7 @@
 //***********************************************************
 #include "TextureImpl.h"
 #include <Framework/RHI/Display.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>

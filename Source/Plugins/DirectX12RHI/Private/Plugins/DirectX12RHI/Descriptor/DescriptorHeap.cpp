@@ -6,7 +6,7 @@
 #pragma once
 #include "DescriptorHeap.h"
 #include <Framework/Core/Math/BitOp.h>
-#include <Plugins/DirectX12RHI/Module/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
