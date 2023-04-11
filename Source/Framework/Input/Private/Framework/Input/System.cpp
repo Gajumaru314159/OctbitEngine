@@ -1,18 +1,19 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コンフィグ
+//! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+#include <Framework/Input/System.h>
+#include <Framework/Input/InputManager.h>
+#include <Framework/Core/Utility/DI.h>
 
 namespace ob::input {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  コンフィグ
+    //! @brief      システムをServiceInjectorに登録
     //@―---------------------------------------------------------------------------
-    struct Config {
-        bool useKeyboard = true;
-        bool useMouse = true;
-    };
+    void Register(ServiceInjector& injector) {
+        injector.bind<InputModule>();
+    }
 
-}
+}// namespace ob

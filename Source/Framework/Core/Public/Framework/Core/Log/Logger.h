@@ -9,7 +9,6 @@
 #include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Log/LogTypes.h>
-#include <Framework/Core/Template/Utility/Singleton.h>
 #include <Framework/Core/Template/Event/EventNotifier.h>
 
 
@@ -23,7 +22,7 @@ namespace ob::core {
     //!             出力やログファイルへの保存をする場合は別途実装し登録する必要があ
     //!             る。
     //@―---------------------------------------------------------------------------
-    class Logger :public Singleton<Logger> {
+    class Logger {
     public:
 
         using EventNotifier = EventNotifier<const Log&>;       //!< イベント・通知型
@@ -37,8 +36,17 @@ namespace ob::core {
             MESSAGE_MAX = 2048, //! メッセージの最大バイト数
         };
 
-
     public:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      インスタンスを取得
+        //@―---------------------------------------------------------------------------
+        static Logger& Get()noexcept {
+            static Logger instance;
+            return instance;
+        }
+
+    private:
 
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ
@@ -51,6 +59,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         ~Logger();
 
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief                  ログの追加

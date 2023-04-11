@@ -4,13 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Reflection/TypeId.h>
 
 namespace ob::core {
 
     //@―---------------------------------------------------------------------------
     //! @brief          シングルトン・パターン
-    //! 
-    //! @details        解放順は制御できません。解放順に依存関係がある場合は使用できません。
     //@―---------------------------------------------------------------------------
     template<class T>
     class Singleton {
@@ -19,15 +19,26 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      インスタンスを取得
         //@―---------------------------------------------------------------------------
-        static T& Get()noexcept {
-            static T instance;
-            return instance;
+        static T* Get()noexcept {
+            return s_instance;
+        }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        virtual ~Singleton() {
+            s_instance = nullptr;
         }
 
     protected:
 
-        Singleton() = default;
-        virtual ~Singleton() = default;
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        Singleton() {
+            OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<T>().name());
+            s_instance = reinterpret_cast<T*>(this);
+        }
 
     private:
 
@@ -38,6 +49,11 @@ namespace ob::core {
         Singleton& operator = (Singleton&&) = delete;
         //! @endcond  
 
+        static T* s_instance;
+
     };
+
+    template<class T>
+    T* Singleton<T>::s_instance = nullptr;
 
 }// namespcae ob

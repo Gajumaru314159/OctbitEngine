@@ -13,44 +13,28 @@
 
 namespace ob::input{
 
-    static InputModule* s_instance = nullptr;
-    
-    InputModule* InputModule::Get() {
-        return s_instance;
-    }
-
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    InputModule::InputModule(platform::WindowManager&)
-    {
-        //auto& config = GEngine->config().get<Config>();
+    InputModule::InputModule(Config* config, platform::WindowManager&) {
+
+        if (config) {
+            m_config = *config;
+        }
 
         // キーボード
-        //if(config.useKeyboard) {
-        {
+        if(m_config.useKeyboard) {
             auto device = std::make_unique<KeyboardDevice>();
             DeviceKey key{ device->getDeviceId() ,0 };
             m_devices[key] = std::move(device);
         }
-        // マウス
-        //if (config.useMouse) {
-        {
-            auto device = std::make_unique<MouseDevice>(platform::Window::Main());
-            DeviceKey key{ device->getDeviceId() ,0 };
-            m_devices[key] = std::move(device);
-        }
 
-        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
-        s_instance = this;
     }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     InputModule::~InputModule() {
-        s_instance = nullptr;
     }
 
 
@@ -58,6 +42,16 @@ namespace ob::input{
     //! @brief  更新
     //@―---------------------------------------------------------------------------
     void InputModule::update() {
+        if (m_mouseAdded == false && m_config.useMouse) {
+            if (auto window = platform::Window::Main()) {
+
+                auto device = std::make_unique<MouseDevice>(window);
+                DeviceKey key{ device->getDeviceId() ,0 };
+                m_devices[key] = std::move(device);
+                
+                m_mouseAdded = true;
+            }
+        }
 
         for (auto& [id, device] : m_devices) {
             device->update();

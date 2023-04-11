@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Device.h>
+#include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
 //===============================================================
@@ -22,7 +23,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		DeviceImpl();
+		DeviceImpl(const ob::rhi::Config&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  デストラクタ
@@ -183,6 +184,8 @@ namespace ob::rhi::dx12 {
 
 	private:
 
+		Config								m_config;
+
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
 
@@ -197,7 +200,7 @@ namespace ob::rhi::dx12 {
 
 
 #ifdef OB_DEBUG
-		Pimpl<class PIXModule> m_pixModule;
+		UPtr<class PIXModule> m_pixModule;
 #endif
 	};
 }// namespace ob::rhi::dx12

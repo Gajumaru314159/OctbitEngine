@@ -24,6 +24,7 @@
 #include <Framework/Core/Utility/DI.h>
 
 #include <Framework/Platform/System.h>
+#include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/GraphicModule.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
@@ -38,18 +39,27 @@ void Link_GraphicModule();
 
 void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
 
-	injector.bind<input::InputModule>();
 	injector.bind<graphics::GraphicModule>();
 	injector.bind<rhi::dx12::DirectX12RHI>().as<rhi::RHI>();
 
-	platform::Register(injector);
-	rhi::Register(injector);
+	input::
+		Register(injector);
+	platform::
+		Register(injector);
+	rhi::
+		Register(injector);
+
+	{
+		input::Config c;
+		//c.useKeyboard = false;
+		injector.bind(c);
+	}
 
 	{
 		rhi::Config c;
-		c.frameBufferCount = 3;
+		c.frameBufferCount = 2;
 		//c.enablePIX = true;
-		config.set(c);
+		injector.bind(c);
 	}
 
 	//Link_Vulkan();

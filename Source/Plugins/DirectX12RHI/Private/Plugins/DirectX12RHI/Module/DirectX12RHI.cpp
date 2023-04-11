@@ -8,9 +8,10 @@
 
 namespace ob::rhi::dx12 {
 
-	DirectX12RHI::DirectX12RHI(platform::WindowManager&)
-		: m_device()
-		, m_objectManager(2)
+	DirectX12RHI::DirectX12RHI(ob::rhi::Config* config, platform::WindowManager&)
+		: m_config(config ? *config : ob::rhi::Config{})
+		, m_device(m_config)
+		, m_objectManager(m_config.frameBufferCount)
 	{
 
 	}

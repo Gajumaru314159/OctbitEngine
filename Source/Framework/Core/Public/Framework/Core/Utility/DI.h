@@ -40,6 +40,12 @@ namespace ob::core {
         typename ServiceBuilder<T>& bind();
 
         //@―---------------------------------------------------------------------------
+        //! @brief  インスタンスTをバインド
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        typename ServiceBuilder<T>& bind(T& instance);
+
+        //@―---------------------------------------------------------------------------
         //! @brief  サービスを生成
         //! @param container 生成されたサービスを管理させるコンテナの参照
         //@―---------------------------------------------------------------------------
@@ -54,7 +60,6 @@ namespace ob::core {
 
 
     namespace detail {
-
 
         // remove_cvr_t
         template<class T>
@@ -164,6 +169,15 @@ namespace ob::core {
         return *builder;
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  インスタンスTをバインド
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    ServiceBuilder<T>& ServiceInjector::bind(T& instance) {
+        auto builder = new ServiceBuilder<T>(*this,instance);
+        m_builders[TypeId::Get<T>()].reset(builder);
+        return *builder;
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief  サービスを生成
@@ -232,11 +246,31 @@ namespace ob::core {
             m_injector.m_builderMap[TypeId::Get<T>()].emplace_back(TypeId::Get<T>());
         }
         //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        ServiceBuilder(ServiceInjector& injector,T& instance)
+            : m_injector(injector)
+        {
+            m_bases.emplace(TypeId::Get<T>());
+            m_injector.m_builderMap[TypeId::Get<T>()].emplace_back(TypeId::Get<T>());
+
+            // コピー
+            m_getter = [instance]() {
+                return (T*)(&instance);
+            };
+        }
+        //@―---------------------------------------------------------------------------
         //! @brief      サービス生成
         //@―---------------------------------------------------------------------------
         void* create(ServiceContainer& container) {
             // 生成
-            auto holder = new detail::ServiceHolder<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)));
+            detail::ServiceHolder<T>* holder = nullptr;
+            if (m_getter) {
+                holder = new detail::ServiceHolder<T>(m_getter(), false);
+            } else {
+                holder = new detail::ServiceHolder<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)), true);
+            }
+            // 無効
             if (holder->get() == nullptr) {
                 delete holder;
                 return nullptr;
@@ -252,6 +286,7 @@ namespace ob::core {
         friend class ServiceInjector;
         ServiceInjector& m_injector;
         HashSet<TypeId> m_bases;
+        Func<T*()>      m_getter;
     };
 
 
@@ -271,19 +306,21 @@ namespace ob::core {
         template<class T>
         class ServiceHolder : public ServiceHolderBase {
         public:
-            ServiceHolder(T* instance) {
+            ServiceHolder(T* instance,bool destructible) {
                 m_instance = instance;
+                m_destructible = destructible;
             }
             ~ServiceHolder() {
-                if (m_instance) {
+                if (m_instance && m_destructible) {
                     delete m_instance;
-                    m_instance = nullptr;
                 }
+                m_instance = nullptr;
             }
             void* get()const override {
                 return m_instance;
             }
         private:
+            bool m_destructible;
             T* m_instance = nullptr;
         };
 

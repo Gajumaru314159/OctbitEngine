@@ -8,9 +8,7 @@
 
 namespace ob::rhi {
 
-	class SystemResourceModule {
-	public:
-		static SystemResourceModule* Get();
+	class SystemResourceModule : public Singleton<SystemResourceModule> {
 	public:
 
 		//@―---------------------------------------------------------------------------

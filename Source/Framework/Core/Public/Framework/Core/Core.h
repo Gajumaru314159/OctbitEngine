@@ -88,6 +88,7 @@
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Framework/Core/Utility/Scope.h>
 #include <Framework/Core/Utility/Ref.h>
+#include <Framework/Core/Utility/Singleton.h>
 
 #include <Framework/Core/CoreForward.h>
 

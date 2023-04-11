@@ -36,8 +36,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DeviceImpl::DeviceImpl()
+	DeviceImpl::DeviceImpl(const ob::rhi::Config& config)
+		: m_config(config)
 	{
+		OB_DEBUG_CONTEXT(
+			if (m_config.enablePIX) {
+				m_pixModule = std::make_unique<PIXModule>();
+			}
+		);
 		initialize();
 	}
 

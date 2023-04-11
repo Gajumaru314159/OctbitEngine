@@ -10,12 +10,6 @@
 
 namespace ob::rhi {
 
-	static SystemResourceModule* s_instance = nullptr;
-
-	SystemResourceModule* SystemResourceModule::Get() {
-		return s_instance;
-	}
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
@@ -47,15 +41,12 @@ namespace ob::rhi {
 				m_presetTextures[PresetTexture::Check] = device->createTexture(Size(size, size), colors);
 			}
 		}
-		OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<decltype(this)>().name());
-		s_instance = this;
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  コンストラクタ
+	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	SystemResourceModule::~SystemResourceModule() {
-		s_instance = nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------
