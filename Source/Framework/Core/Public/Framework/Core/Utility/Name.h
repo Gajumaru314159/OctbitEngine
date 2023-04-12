@@ -5,8 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/CoreForward.h>
 
-namespace ob::engine {
+namespace ob::core {
 
     namespace internal {
         class NameData;
@@ -31,6 +32,8 @@ namespace ob::engine {
     public:
         using Hash = u32;
         friend struct std::hash<Name>;
+    public:
+        static void Register(ServiceInjector&);
     public:
 
         //@―---------------------------------------------------------------------------
@@ -134,9 +137,9 @@ namespace ob::engine {
 //===============================================================
 //! @cond
 template<>
-struct std::hash<ob::engine::Name> {
+struct std::hash<ob::core::Name> {
 public:
-    size_t operator()(const ob::engine::Name& name)const {
+    size_t operator()(const ob::core::Name& name)const {
         return name.m_hash;
     }
 };
@@ -147,14 +150,14 @@ public:
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::engine::Name, ob::core::Char> {
+template <> struct fmt::formatter<ob::core::Name, ob::core::Char> {
     template<typename ParseContext>
     constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }
 
     template<typename FormatContext>
-    auto format(const ob::engine::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(const ob::core::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
         return format_to(ctx.out(), TC("{}"), value.toSV());
     }
 };

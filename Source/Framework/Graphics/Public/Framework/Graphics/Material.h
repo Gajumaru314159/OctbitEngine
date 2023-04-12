@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/SubPass.h>
-#include <Framework/Engine/Name.h>
 #include <Framework/Graphics/MaterialDesc.h>
 
 namespace ob::graphics {   
@@ -24,8 +23,8 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         static Ref<Material> Create(const MaterialDesc& desc);
 
-        static void RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass);
-        static rhi::SubPass FindRenderPass(engine::Name renderTag);
+        static void RegisterRenderPass(Name name, const Ref<rhi::RenderPass>&, s32 subpass);
+        static rhi::SubPass FindRenderPass(Name renderTag);
 
 
     public:

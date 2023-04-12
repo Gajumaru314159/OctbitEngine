@@ -78,14 +78,14 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//!	@brief			描画タグにRenderPassを登録
 	//@―---------------------------------------------------------------------------
-	void MaterialManager::registerRenderPass(engine::Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
+	void MaterialManager::registerRenderPass(Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
 		m_renderPassMap.emplace(name, rhi::SubPass{ renderPass, subpass });
 	}
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			描画タグからRenderPassを登録
 	//@―---------------------------------------------------------------------------
-	rhi::SubPass MaterialManager::FindRenderPass(engine::Name renderTag) {
+	rhi::SubPass MaterialManager::FindRenderPass(Name renderTag) {
 		auto found = m_renderPassMap.find(renderTag);
 		if (found == m_renderPassMap.end())
 			return {nullptr,0};

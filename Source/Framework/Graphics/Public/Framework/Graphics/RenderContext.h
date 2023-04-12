@@ -46,7 +46,7 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        virtual RenderGroup getRendererGroup(engine::Name renderTag) const;// Debug / Shadow / UI
+        virtual RenderGroup getRendererGroup(Name renderTag) const;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する

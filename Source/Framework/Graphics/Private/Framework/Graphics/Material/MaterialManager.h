@@ -8,7 +8,6 @@
 #include <Framework/RHI/Types/SubPass.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/RHI/RenderPass.h>
-#include <Framework/Engine/Name.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 
 namespace ob::graphics {
@@ -32,12 +31,12 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//!	@brief			描画タグにRenderPassを登録
 		//@―---------------------------------------------------------------------------
-		void registerRenderPass(engine::Name name, const Ref<rhi::RenderPass>&, s32 subpass);
+		void registerRenderPass(Name name, const Ref<rhi::RenderPass>&, s32 subpass);
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			描画タグからRenderPassを登録
 		//@―---------------------------------------------------------------------------
-		rhi::SubPass FindRenderPass(engine::Name renderTag);
+		rhi::SubPass FindRenderPass(Name renderTag);
 
 
 		//@―---------------------------------------------------------------------------
@@ -110,7 +109,7 @@ namespace ob::graphics {
 
 	private:
 
-		HashMap<engine::Name, rhi::SubPass> m_renderPassMap;
+		HashMap<Name, rhi::SubPass> m_renderPassMap;
 
 		SpinLock m_lock;
 		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_map;

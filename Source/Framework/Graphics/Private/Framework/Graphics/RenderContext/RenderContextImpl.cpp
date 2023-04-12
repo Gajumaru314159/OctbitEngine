@@ -50,7 +50,7 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     //! @brief      特定の描画タグを持つ描画アイテムを描画する
     //@―---------------------------------------------------------------------------
-    RenderGroup RenderContextImpl::getRendererGroup(engine::Name renderTag) const {
+    RenderGroup RenderContextImpl::getRendererGroup(Name renderTag) const {
         return {};
     }
 

@@ -37,7 +37,7 @@ public:
 
 	void draw(Ref<CommandBuffer> cmdBuf) {
 		for (s32 i = 0; i < m_mesh->getSubMeshCount(); ++i) {
-			cmdBuf->drawMesh(m_mesh, i, Matrix::Identity, m_material, engine::Name(TC("Opaque")));
+			cmdBuf->drawMesh(m_mesh, i, Matrix::Identity, m_material, Name(TC("Opaque")));
 		}
 	}
 

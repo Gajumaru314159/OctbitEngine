@@ -25,6 +25,7 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
+#include <Framework/Graphics/System.h>
 #include <Framework/Graphics/GraphicModule.h>
 #include <Plugins/DirectX12RHI/System.h>
 
@@ -46,6 +47,8 @@ void OctbitInit(ServiceInjector& injector) {
 	rhi::dx12::
 		Register(injector);
 	rhi::
+		Register(injector);
+	graphic::
 		Register(injector);
 
 	{
@@ -312,7 +315,7 @@ int TestDirectX12() {
 	Model sky("Asset/Model/sky.obj", TC("Asset/Texture/sky.dds"));
 	Model ukulele("Asset/Model/Ukulele.obj", TC("Asset/Model/Ukulele_col.dds"));
 
-	Material::RegisterRenderPass(engine::Name(TC("Opaque")), renderPass, 0);
+	Material::RegisterRenderPass(Name(TC("Opaque")), renderPass, 0);
 
 	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 

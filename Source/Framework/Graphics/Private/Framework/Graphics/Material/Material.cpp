@@ -18,14 +18,14 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     //! @brief  
     //@―---------------------------------------------------------------------------
-    void Material::RegisterRenderPass(engine::Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
+    void Material::RegisterRenderPass(Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
         MaterialManager::Get().registerRenderPass(name, renderPass, subpass);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  
     //@―---------------------------------------------------------------------------
-    rhi::SubPass Material::FindRenderPass(engine::Name renderTag) {
+    rhi::SubPass Material::FindRenderPass(Name renderTag) {
         return MaterialManager::Get().FindRenderPass(renderTag);
     }
 

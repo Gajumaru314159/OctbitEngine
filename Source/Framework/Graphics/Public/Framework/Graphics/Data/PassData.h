@@ -8,7 +8,7 @@
 
 namespace ob::graphics {
 
-    using Name = engine::Name;
+    using Name = Name;
 
     enum class SlotType {
         Input,
@@ -37,7 +37,7 @@ namespace ob::graphics {
 
 
     struct Slot {
-        engine::Name name;      // Albedo
+        Name name;      // Albedo
         String shaderInputName; // m_mainTex
         SlotType slotType;
         // usage
@@ -47,7 +47,7 @@ namespace ob::graphics {
     };
 
     struct PassRequest {
-        engine::Name name;
+        Name name;
 
     };
 
@@ -58,7 +58,7 @@ namespace ob::graphics {
     };
 
     struct ImageAttachment{
-        engine::Name name;
+        Name name;
         f32 lifetime;
         PassAttachmentSizeSource sizeSource;
 

@@ -3,10 +3,19 @@
 //! @brief		識別用名前クラス
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Engine/Name.h>
-#include <Framework/Engine/Name/NameDictionary.h>
+#include <Framework/Core/Utility/Name.h>
+#include <Framework/Core/Utility/NameDictionary.h>
+#include <Framework/Core/Utility/DI.h>
 
-namespace ob::engine {
+namespace ob::core {
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  ServiceInjectorに登録
+    //@―---------------------------------------------------------------------------
+    void Name::Register(ServiceInjector& injector) {
+        injector.bind<NameDictionary>();
+    }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  デフォルトコンストラクタ

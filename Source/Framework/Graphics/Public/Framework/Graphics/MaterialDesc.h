@@ -6,9 +6,8 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
-#include <Framework/Engine/Name.h>
 
-// HashMap<engine::Name, MaterialPass> で使用するためインクルード
+// HashMap<Name, MaterialPass> で使用するためインクルード
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
 
@@ -18,7 +17,7 @@ namespace ob::graphics {
     //! @brief  マテリアルパス定義
     //@―---------------------------------------------------------------------------
     struct MaterialPass {
-        engine::Name            renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
+        Name            renderTag;     // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
 
         Ref<rhi::RootSignature> rootSignature;
         Ref<rhi::Shader>        vs;
@@ -36,7 +35,7 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     struct MaterialDesc{
         
-        HashMap<engine::Name, MaterialPass> passes;
+        HashMap<Name, MaterialPass> passes;
         
         Array<String> floatProperties;
         Array<String> colorProperties;

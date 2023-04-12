@@ -48,10 +48,10 @@ namespace ob::graphics {
 				m_pbrRenderPass = RenderPass::Create(desc);
 				OB_ASSERT_EXPR(m_pbrRenderPass);
 
-				Material::RegisterRenderPass(engine::Name(TC("EarlyDepth")), m_pbrRenderPass, 0);
-				Material::RegisterRenderPass(engine::Name(TC("Opaque")), m_pbrRenderPass, 1);
-				Material::RegisterRenderPass(engine::Name(TC("Transpaternt")), m_pbrRenderPass, 2);
-				Material::RegisterRenderPass(engine::Name(TC("Accumulate")), m_pbrRenderPass, 3);
+				Material::RegisterRenderPass(Name(TC("EarlyDepth")), m_pbrRenderPass, 0);
+				Material::RegisterRenderPass(Name(TC("Opaque")), m_pbrRenderPass, 1);
+				Material::RegisterRenderPass(Name(TC("Transpaternt")), m_pbrRenderPass, 2);
+				Material::RegisterRenderPass(Name(TC("Accumulate")), m_pbrRenderPass, 3);
 			}
 
 		}
@@ -132,12 +132,12 @@ namespace ob::graphics {
 						// Renderer描画
 						//context.draw(/**/);
 
-						engine::Name names[]{
-							engine::Name(TC("Opaque")),
-							engine::Name(TC("HairOpaque")),
+						Name names[]{
+							Name(TC("Opaque")),
+							Name(TC("HairOpaque")),
 						};
 
-						engine::Name renderTag(TC("EarlyDepth"));
+						Name renderTag(TC("EarlyDepth"));
 
 
 						// 指定したレンダータグのRendererを収集
@@ -190,7 +190,7 @@ namespace ob::graphics {
 				m_renderPass = RenderPass::Create(desc);
 				OB_ASSERT_EXPR(m_renderPass);
 
-				Material::RegisterRenderPass(engine::Name(TC("DepthPrepass")), m_renderPass, 0);
+				Material::RegisterRenderPass(Name(TC("DepthPrepass")), m_renderPass, 0);
 			}
 
 			auto size = group.getCamera()->getRenderTarget()->size();

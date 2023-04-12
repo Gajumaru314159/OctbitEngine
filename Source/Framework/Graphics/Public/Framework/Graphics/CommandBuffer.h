@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Name.h>
 #include <Framework/RHI/Forward.h>
 
 namespace ob::graphics {
@@ -12,7 +11,7 @@ namespace ob::graphics {
     class Material;
     class Mesh;
     
-    using Name = engine::Name;
+    using Name = Name;
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明

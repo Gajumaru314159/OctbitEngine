@@ -8,7 +8,6 @@
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Forward.h>
-#include <Framework/Engine/Name.h>
 
 namespace ob::rhi {
 	class CommandList;
@@ -63,8 +62,8 @@ namespace ob::graphics {
 
 	public:
 
-		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, engine::Name pass);
-		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, engine::Name pass);
+		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, Name pass);
+		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, Name pass);
 
 	private:
 
@@ -83,13 +82,13 @@ namespace ob::graphics {
 			}
 		}
 
-		Ref<rhi::PipelineState> createPipeline(engine::Name pass,const rhi::VertexLayout& layout, VertexLayoutId id);
+		Ref<rhi::PipelineState> createPipeline(Name pass,const rhi::VertexLayout& layout, VertexLayoutId id);
 
 	private:
 
 
 		struct PipelineKey {
-			engine::Name pass;
+			Name pass;
 			rhi::VertexLayout layout;
 		};
 

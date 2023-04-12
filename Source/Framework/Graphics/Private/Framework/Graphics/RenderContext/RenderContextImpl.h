@@ -55,7 +55,7 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        RenderGroup getRendererGroup(engine::Name renderTag) const override;// Debug / Shadow / UI
+        RenderGroup getRendererGroup(Name renderTag) const override;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      カスタムコマンドバッファーを記録

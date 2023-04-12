@@ -3,11 +3,10 @@
 //! @brief		識別用名辞書
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Engine/Name/NameDictionary.h>
-#include <Framework/Engine/Engine.h>
+#include <Framework/Core/Utility/NameDictionary.h>
 #include <Framework/Core/Misc/CRCHash.h>
 
-namespace ob::engine{
+namespace ob::core{
 
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ

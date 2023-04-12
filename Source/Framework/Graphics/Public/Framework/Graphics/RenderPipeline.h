@@ -65,7 +65,7 @@ namespace ob::graphics {
 
         }
 
-        Ref<rhi::RenderTexture> findRenderTexture(engine::Name name) {
+        Ref<rhi::RenderTexture> findRenderTexture(Name name) {
             auto found = m_renderTextureMap.find(name);
             if (found == m_renderTextureMap.end())return nullptr;
             return found->second;
@@ -74,7 +74,7 @@ namespace ob::graphics {
     private:
 
         Ref<Camera> m_camera;
-        HashMap<engine::Name, Ref<rhi::RenderTexture>> m_renderTextureMap;
+        HashMap<Name, Ref<rhi::RenderTexture>> m_renderTextureMap;
 
     };
 
@@ -88,7 +88,7 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      マテリアルを使用してCommandBufferに入力テクスチャを出力テクスチャにコピーします。
         //@―---------------------------------------------------------------------------
-        static void blit(Ref<CommandBuffer>& cmd, Ref<rhi::Texture> src, Ref<rhi::RenderTexture> dst, Ref<Material> material, engine::Name pass) {
+        static void blit(Ref<CommandBuffer>& cmd, Ref<rhi::Texture> src, Ref<rhi::RenderTexture> dst, Ref<Material> material, Name pass) {
             // TODO setTexture()では対応できないのでPropertyBlockを用意する必要がある
         }
 

@@ -8,7 +8,6 @@
 
 #include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Entity/EntityManager.h>
-#include <Framework/Engine/Name/NameDictionary.h>
 
 // DI完了後削除
 namespace ob {
@@ -30,7 +29,6 @@ namespace ob::engine {
 
 	struct EngineDependency {
 		EngineDependency(
-			NameDictionary&,
 			EntityManager&,
 			platform::WindowManager&,
 			input::InputModule&,
@@ -45,7 +43,6 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	Engine::Engine(ServiceInjector& injector)
 	{
-		injector.bind<NameDictionary>();
 		injector.bind<EntityManager>();
 		injector.bind<ComponentFactory>();
 		injector.bind<EngineDependency>();
@@ -66,8 +63,6 @@ namespace ob::engine {
 	//! @brief				起動
 	//@―---------------------------------------------------------------------------
 	void Engine::startup() {
-		EntityManager::Get();
-		NameDictionary::Get();
 	}
 
 

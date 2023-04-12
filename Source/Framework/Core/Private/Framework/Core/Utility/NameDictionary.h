@@ -4,9 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Name.h>
+#include <Framework/Core/Utility/Name.h>
+#include <Framework/Core/Utility/Singleton.h>
 
-namespace ob::engine {
+namespace ob::core {
 
     //! @cond
     namespace internal{

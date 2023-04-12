@@ -8,7 +8,7 @@
 
 namespace ob::graphics {
 
-    using Name = engine::Name;
+    using Name = Name;
 
     struct DrawTag {
         Name name;
