@@ -17,7 +17,7 @@ namespace ob::graphics {
 	//!	@brief			取得
 	//@―---------------------------------------------------------------------------
 	MaterialManager& MaterialManager::Get() {
-		static auto module = GEngine->get<GraphicModule>();
+		static auto module = engine::Engine::Get()->get<GraphicModule>();
 		OB_ASSERT_EXPR(module);
 		return module->getMaterialManager();
 	}

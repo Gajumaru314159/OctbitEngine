@@ -18,17 +18,15 @@ auto system = GEngine->get<SampleSystem>();
 ## システムの登録
 入力システムやグラフィックシステムなど全てのシステムはOptionalな機能として実装されます。各プロジェクトで必要な機能はOctbitInit関数内でDependencyGraphに登録してください。またシステムのコンフィグが存在する場合も同様にOctbitInit内で設定してください。
 ```c++
-void OctbitInit(EngineConfig& config){
+void OctbitInit(ServiceInjector& injector){
 	{
-		DependencyGraph graph;
-		InputSystem::Register(graph);
-		GraphicSystem::Register(graph);
-		config.set(graph);
+		input::Register(injector);
+		rhi::Register(injector);
 	}
 	{
 		InputConfig c;
 		c.enableKeyboard = true;
-		config.set(c);
+		injector.bind(c);
 	}
 	{
 		RHIConfig c;
@@ -37,7 +35,7 @@ void OctbitInit(EngineConfig& config){
 			TC("Vulkan"),
 		};
 		c.enablePIX = true;
-		config.set(c);
+		injector.bind(c);
 	}
 }
 ```

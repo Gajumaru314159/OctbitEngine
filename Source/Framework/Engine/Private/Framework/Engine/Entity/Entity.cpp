@@ -327,7 +327,7 @@ namespace ob::engine {
 	//! @brief		別Entityからのアクセスを許可
 	//@―---------------------------------------------------------------------------
 	void Entity::raisePropertyChanged(StringView name) {
-		NotificationObject::raisePropertyChanged(name);
+		PropertyNotifier::raisePropertyChanged(name);
 	}
 
 }

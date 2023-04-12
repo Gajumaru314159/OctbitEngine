@@ -7,6 +7,7 @@
 
 namespace ob::engine {
 
+	// クラス
 	class Engine;
 	class World;
 	class Scene;

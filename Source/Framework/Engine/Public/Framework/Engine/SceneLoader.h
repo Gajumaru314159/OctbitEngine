@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Core.h>
 #include <Framework/Engine/Scene.h>
 
 namespace ob::engine {

@@ -5,7 +5,6 @@
 #include <Framework/Platform/Window.h>
 
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/EngineConfig.h>
 #include <Framework/Engine/World.h>
 #include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Entity.h>
@@ -36,7 +35,7 @@ void Link_Vulkan();
 int TestDirectX12();
 int TestVullkan();
 
-void OctbitInit(ob::engine::EngineConfig& config,ServiceInjector& injector) {
+void OctbitInit(ServiceInjector& injector) {
 
 	injector.bind<graphics::GraphicModule>();
 
@@ -352,9 +351,11 @@ int TestDirectX12() {
 
 		// TODO アプリ更新内部にモジュール更新とメッセージ処理を隠ぺい
 		{
-			GEngine->update();
-			GEngine->get<input::InputModule>()->update();
-			GEngine->get<rhi::RHI>()->update();
+			if (auto engine = engine::Engine::Get()) {
+				engine->update();
+				engine->get<input::InputModule>()->update();
+				engine->get<rhi::RHI>()->update();
+			}
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 				TranslateMessage(&msg);

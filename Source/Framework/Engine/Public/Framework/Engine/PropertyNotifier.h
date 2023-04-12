@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		プロパティ変更通知
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -12,18 +12,18 @@ namespace ob::engine {
     //@―---------------------------------------------------------------------------
     //! @brief  プロパティ変更通知
     //@―---------------------------------------------------------------------------
-    class NotificationObject {
+    class PropertyNotifier {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief          デストラクタ
         //@―---------------------------------------------------------------------------
-        virtual ~NotificationObject() = default;
+        virtual ~PropertyNotifier() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief          プロパティ変更イベントを購読
         //@―---------------------------------------------------------------------------
-        void subscribePropertyChanged(PropertyChangedHandle& handle, PropertyChangedDelegate func) {
+        void addPropertyChanged(PropertyChangedHandle& handle, PropertyChangedDelegate func) {
             m_propertyChanged.add(handle, func);
         }
 

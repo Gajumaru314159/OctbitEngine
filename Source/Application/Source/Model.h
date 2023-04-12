@@ -6,7 +6,6 @@
 #include <Framework/Input/Config.h>
 
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/EngineConfig.h>
 #include <Plugins/ImGui/ImGui.h>
 
 #include <Framework/Engine/Scene.h>

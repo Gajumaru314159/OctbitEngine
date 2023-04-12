@@ -4,10 +4,30 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Log/Logger.h>
+#include <Framework/Core/Utility/DI.h>
 #include <Framework/Engine/Entry/Main.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Core/String/StringEncoder.h>
-#include <Framework/Core/Utility/DI.h>
+
+
+//@―---------------------------------------------------------------------------
+//! @brief  作業ディレクトリを設定
+//@―---------------------------------------------------------------------------
+static void SetupWorkingDirectory() {
+    // EngineRootMarkがあるフォルダをカレントパスに変更
+    auto path = std::filesystem::current_path();
+    while (path.has_parent_path()) {
+        auto rootMarkPath = path / "EngineRootMark";
+        if (std::filesystem::exists(rootMarkPath)) {
+            std::filesystem::current_path(path);
+            ob::String t;
+            ob::StringEncoder::Encode(path.u16string(), t);
+            LOG_INFO("カレントパスを{}に設定", t);
+            break;
+        }
+        path = path.parent_path();
+    }
+}
+
 
 //@―---------------------------------------------------------------------------
 //! @brief  プラットフォーム共通のエントリ
@@ -16,30 +36,14 @@ int CommonMain() {
 
     LOG_INFO("OctbitInit()");
 
-    // EngineRootMarkがあるフォルダをカレントパスに変更
-    auto path = std::filesystem::current_path();
-    while (path.has_parent_path()) {
-        auto rootMarkPath = path / "EngineRootMark";
-        if (std::filesystem::exists(rootMarkPath)) {
-            std::filesystem::current_path(path);
-            ob::String t;
-            ob::StringEncoder::Encode(path.c_str(),t);
-            LOG_INFO("カレントパスを{}に設定",t);
-            break;
-        }
-        path = path.parent_path();
-    }
+    SetupWorkingDirectory();
 
-    // 設定
-    ob::engine::EngineConfig config;
+    // 初期化
     ob::core::ServiceInjector engineInjector;
+    OctbitInit(engineInjector);
 
-    OctbitInit(config, engineInjector);
-
-    LOG_TRACE("エンジン生成");
-    // エンジン初期化
-    ob::engine::Engine engine(std::move(config), engineInjector);
-    GEngine = &engine;
+    // エンジン生成
+    ob::engine::Engine engine(engineInjector);
     engine.startup();
 
     LOG_INFO("Entry OctbitMain()");

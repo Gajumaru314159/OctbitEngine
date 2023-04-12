@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Reflection/TypeId.h>
 #include <Framework/Engine/Forward.h>
-#include <Framework/Engine/INotifyPropertyChanged.h>
+#include <Framework/Engine/PropertyNotifier.h>
 
 namespace ob::engine {
 

@@ -12,10 +12,12 @@ namespace ob::engine {
 
 	OB_EVENT_NOTIFIER(SceneEvent, const Ref<Scene>&);
 
-	using SceneList = List<Ref<Scene>>;
-
 	DEFINE_YES_NO(Recursive);
 	DEFINE_YES_NO(Async);
+
+	using SceneList = List<Ref<Scene>>;
+
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  シーン
@@ -24,14 +26,12 @@ namespace ob::engine {
 	class Scene : public RefObject {
 	public:
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		生成
+		//@―---------------------------------------------------------------------------
 		static Ref<Scene> Create(StringView name);
-		//static Ref<Scene> Load();
 
 	public:
-
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ

@@ -43,8 +43,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Engine::Engine(EngineConfig&& config,ServiceInjector& injector)
-		: m_config(config)
+	Engine::Engine(ServiceInjector& injector)
 	{
 		injector.bind<NameDictionary>();
 		injector.bind<EntityManager>();
@@ -90,6 +89,3 @@ namespace ob::engine {
 	}
 
 }
-
-// グローバルオブジェクト
-ob::engine::Engine* GEngine=nullptr;

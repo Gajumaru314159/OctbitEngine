@@ -7,7 +7,7 @@
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/EntityHandle.h>
-#include <Framework/Engine/INotifyPropertyChanged.h>
+#include <Framework/Engine/PropertyNotifier.h>
 
 namespace ob::engine {
 

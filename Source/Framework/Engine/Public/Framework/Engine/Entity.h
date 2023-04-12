@@ -8,7 +8,7 @@
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/ECSTypes.h>
 #include <Framework/Engine/EntityHandle.h>
-#include <Framework/Engine/INotifyPropertyChanged.h>
+#include <Framework/Engine/PropertyNotifier.h>
 
 namespace ob::engine {
 
@@ -18,7 +18,7 @@ namespace ob::engine {
 	//! @brief		Entity
 	//! @details	
 	//@―---------------------------------------------------------------------------
-	class Entity:public NotificationObject {
+	class Entity:public PropertyNotifier {
 	public:
 
 		//@―---------------------------------------------------------------------------

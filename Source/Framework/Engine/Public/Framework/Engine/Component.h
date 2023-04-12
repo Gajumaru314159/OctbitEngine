@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Reflection/TypeId.h>
 #include <Framework/Engine/Forward.h>
-#include <Framework/Engine/INotifyPropertyChanged.h>
+#include <Framework/Engine/PropertyNotifier.h>
 
 namespace ob::engine {
 
@@ -35,7 +35,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネント
 	//@―---------------------------------------------------------------------------
-	class Component:public NotificationObject {
+	class Component:public PropertyNotifier {
 	public:
 
 		OB_RTTI();

@@ -9,8 +9,8 @@
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief		Entity識別子
-	//! @details	EntityHandle は Entity を一位に識別するために
+	//! @brief		EntityHandle
+	//! @details	Entityの弱参照ハンドル
 	//@―---------------------------------------------------------------------------
 	class EntityHandle {
 		friend class std::hash<class EntityHandle>;
