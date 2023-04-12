@@ -188,7 +188,7 @@ namespace ob::rhi::dx12
     DXGI_FORMAT TypeConverter::Convert(TextureFormat value) {
         switch (value) {
         case TextureFormat::RGBA32:         return DXGI_FORMAT_R32G32B32A32_FLOAT;
-        case TextureFormat::RGBA16:         return DXGI_FORMAT_R16G16B16A16_FLOAT;
+        case TextureFormat::RGBA16:         return DXGI_FORMAT_R16G16B16A16_UNORM;
         case TextureFormat::RGBA8:          return DXGI_FORMAT_R8G8B8A8_UNORM;
 
         case TextureFormat::RGB32:          return DXGI_FORMAT_R32G32B32_FLOAT;
@@ -515,7 +515,7 @@ namespace ob::rhi::dx12
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
         switch (static_cast<DXGI_FORMAT>(value)) {
         case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;
-        case DXGI_FORMAT_R16G16B16A16_FLOAT:	return TextureFormat::RGBA16;
+        case DXGI_FORMAT_R16G16B16A16_UNORM:	return TextureFormat::RGBA16;
         case DXGI_FORMAT_R8G8B8A8_UNORM:		return TextureFormat::RGBA8;
         case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:	return TextureFormat::RGBA8;
         case DXGI_FORMAT_R32G32B32_FLOAT:		return TextureFormat::RGB32;
