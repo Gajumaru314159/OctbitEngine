@@ -32,4 +32,4 @@ namespace ob::rhi {
 
 	};
 
-}// namespace ob::rhi::dx12
+}

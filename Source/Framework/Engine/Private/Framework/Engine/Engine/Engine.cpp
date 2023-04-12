@@ -89,7 +89,7 @@ namespace ob::engine {
 		return true;
 	}
 
-}// namespace ob
+}
 
 // グローバルオブジェクト
 ob::engine::Engine* GEngine=nullptr;

@@ -31,4 +31,4 @@ namespace ob::rhi {
             m_objectManager.update();
         }
     }
-}// namespace ob::rhi
+}

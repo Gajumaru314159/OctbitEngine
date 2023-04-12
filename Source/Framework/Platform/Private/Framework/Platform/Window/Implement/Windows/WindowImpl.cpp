@@ -537,5 +537,5 @@ namespace ob::platform {
 		}
 	}
 
-}// namespace ob::platform
+}
 #endif // OS_WINDOWS

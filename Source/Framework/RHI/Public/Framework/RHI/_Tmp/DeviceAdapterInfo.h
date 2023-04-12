@@ -22,4 +22,4 @@ namespace ob::rhi {
         s32     nodeCount;              //!< アダプタが抽象化している物理的なGPUの数
     };
 
-}// namespace pb::rhi
+}

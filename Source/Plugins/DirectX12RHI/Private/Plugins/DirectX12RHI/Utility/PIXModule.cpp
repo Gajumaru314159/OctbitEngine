@@ -86,6 +86,6 @@ namespace ob::rhi::dx12 {
 		m_hModule = nullptr;
 	}
 
-}// namespace ob
+}
 
 #endif// OB_DEBUG

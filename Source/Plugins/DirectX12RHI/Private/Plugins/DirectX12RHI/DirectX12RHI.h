@@ -221,4 +221,4 @@ namespace ob::rhi::dx12 {
 		return m_dxgiFactory;
 	}
 
-}// namespace ob::rhi::dx12
+}

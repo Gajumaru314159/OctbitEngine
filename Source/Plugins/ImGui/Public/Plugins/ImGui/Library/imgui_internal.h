@@ -194,7 +194,7 @@ namespace ImStb
 #define STB_TEXTEDIT_UNDOCHARCOUNT      999
 #include "imstb_textedit.h"
 
-} // namespace ImStb
+} 
 
 //-----------------------------------------------------------------------------
 // [SECTION] Macros
@@ -3191,7 +3191,7 @@ namespace ImGui
     inline bool     IsKeyPressedMap(ImGuiKey key, bool repeat = true)                   { IM_ASSERT(IsNamedKey(key)); return IsKeyPressed(key, repeat); } // Removed in 1.87: Mapping from named key is always identity!
 #endif
 
-} // namespace ImGui
+} 
 
 
 //-----------------------------------------------------------------------------

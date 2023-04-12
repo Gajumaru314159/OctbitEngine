@@ -943,7 +943,7 @@ namespace ImGui
     IMGUI_API void*         MemAlloc(size_t size);
     IMGUI_API void          MemFree(void* ptr);
 
-} // namespace ImGui
+} 
 
 //-----------------------------------------------------------------------------
 // [SECTION] Flags & Enumerations

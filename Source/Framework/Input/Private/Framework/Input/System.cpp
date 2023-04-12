@@ -18,4 +18,4 @@ namespace ob::input {
         platform::Register(injector);
     }
 
-}// namespace ob
+}

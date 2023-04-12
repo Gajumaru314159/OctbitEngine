@@ -176,7 +176,7 @@ namespace ob {
             }
         }
 
-    }// namespace platform
-}// namespace ob
+    }
+}
 
 #endif // OS_LINUX

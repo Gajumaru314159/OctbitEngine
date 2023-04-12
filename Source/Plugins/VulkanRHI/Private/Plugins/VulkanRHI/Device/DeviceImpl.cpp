@@ -505,4 +505,4 @@ namespace ob::rhi::vulkan {
 	}
 
 
-}// namespace ob::rhi::vulkan
+}

@@ -48,4 +48,4 @@ namespace ob::core {
         return false;
     }
 
-}// namespace ob
+}

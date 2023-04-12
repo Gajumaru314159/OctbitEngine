@@ -149,4 +149,4 @@ namespace ob::rhi::dx12 {
 		return m_desc;
 	}
 
-}// namespace ob
+}

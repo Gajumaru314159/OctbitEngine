@@ -26,4 +26,4 @@ namespace ob::platform {
         bool		resizable = true;				//!< 可変ウィンドウとして作成するかどうか
     };
 
-}// namespace ob::platform
+}

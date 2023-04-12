@@ -167,4 +167,4 @@ namespace ob::rhi::dx12 {
 #endif //  OB_DEBUG
     }
 
-}// namespace ob::rhi::dx12
+}

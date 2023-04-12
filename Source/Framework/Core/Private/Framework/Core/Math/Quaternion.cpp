@@ -372,4 +372,4 @@ namespace ob::core {
         return Quat(x, y, z, w);
     }
 
-}// namespace ob
+}

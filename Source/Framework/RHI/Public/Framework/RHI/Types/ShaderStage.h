@@ -39,4 +39,4 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     using ShaderStages = BitFlags<ShaderStage>;
 
-}// namespace pb::rhi
+}

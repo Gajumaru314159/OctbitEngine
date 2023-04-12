@@ -54,4 +54,4 @@ namespace ob::rhi {
 		return found->second;
 	}
 
-}// namespace ob::rhi
+}

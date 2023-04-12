@@ -54,4 +54,4 @@ namespace ob::graphics {
         MaterialManager::Get().setTexture(name, value);
     }
 
-}// namespace ob
+}

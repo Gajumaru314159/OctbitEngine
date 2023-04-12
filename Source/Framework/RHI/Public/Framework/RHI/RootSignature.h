@@ -43,4 +43,4 @@ namespace ob::rhi {
         virtual ~RootSignature() = default;
     };
 
-}// namespace pb::rhi
+}

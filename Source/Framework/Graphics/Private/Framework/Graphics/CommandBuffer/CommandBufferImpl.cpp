@@ -124,4 +124,4 @@ namespace ob::graphics
         m_cmdList->popMarker();
     }
 
-}// namespace ob
+}

@@ -158,4 +158,4 @@ public:										\
 
 #pragma endregion
 
-}// namespace ob::core
+}

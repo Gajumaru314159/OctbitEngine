@@ -15,4 +15,4 @@ namespace ob::rhi {
         s32 subpassIndex;
     };
 
-}// namespace pb::rhi
+}

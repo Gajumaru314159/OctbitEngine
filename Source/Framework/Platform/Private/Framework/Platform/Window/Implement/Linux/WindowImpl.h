@@ -44,6 +44,6 @@ namespace ob {
 
         };
 
-    }// namespace platform
+    }
 }// namespcae ob
 #endif OS_LINUX

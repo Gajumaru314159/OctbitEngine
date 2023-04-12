@@ -378,4 +378,4 @@ namespace ob::core {
 		return ret;
 	}
 
-}// namespace ob
+}

@@ -32,4 +32,4 @@ namespace ob::input {
 		return false;
 	}
 
-}// namespace ob
+}

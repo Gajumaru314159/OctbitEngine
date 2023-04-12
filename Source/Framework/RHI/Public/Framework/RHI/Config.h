@@ -16,4 +16,4 @@ namespace ob::rhi {
         bool enablePIX = false;
     };
 
-}// namespace pb::rhi
+}

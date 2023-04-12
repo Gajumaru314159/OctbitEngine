@@ -118,4 +118,4 @@ namespace ob::core {
         return HSV::Lerp(HSV(a), HSV(b), t).toColor();
     }
 
-}// namespace ob
+}

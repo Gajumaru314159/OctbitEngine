@@ -78,6 +78,6 @@ namespace ob::platform {
         return m_args.empty();
     }
 
-}// namespace ob::platform
+}
 
 

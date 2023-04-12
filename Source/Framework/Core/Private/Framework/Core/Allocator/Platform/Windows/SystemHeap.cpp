@@ -112,4 +112,4 @@ namespace ob::core {
         return true;
     }
 
-}// namespace ob
+}

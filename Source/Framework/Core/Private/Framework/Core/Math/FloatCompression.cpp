@@ -82,4 +82,4 @@ namespace ob::core {
 
     //u32 FloatCompression::Vec3ToU32(const Vec3& value);   // Vec3 を[11,11,10]の32bitに圧縮
     //Vec3 FloatCompression::U32ToVec3(u32  value);          // [11,11,10]の32bitを Vec3 に展開
-}// namespace ob
+}

@@ -28,4 +28,4 @@ namespace ob::core {
         return Math::Lerp(minValue, maxValue, rate);
     }
 
-}// namespace ob
+}

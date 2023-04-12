@@ -66,4 +66,4 @@ namespace ob::rhi {
         ColorCompoent::All,
     };
 
-}// namespace ob
+}

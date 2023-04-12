@@ -3735,7 +3735,7 @@ static void stb_textedit_replace(ImGuiInputTextState* str, STB_TexteditState* st
     IM_ASSERT(0); // Failed to insert character, normally shouldn't happen because of how we currently use stb_textedit_replace()
 }
 
-} // namespace ImStb
+} 
 
 void ImGuiInputTextState::OnKeyPressed(int key)
 {

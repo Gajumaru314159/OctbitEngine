@@ -522,4 +522,4 @@ namespace ob::rhi::vulkan
 		return VK_IMAGE_LAYOUT_UNDEFINED;
 	}
 
-}// namespace ob
+}

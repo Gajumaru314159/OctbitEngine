@@ -39,7 +39,7 @@ namespace ob::rhi::vulkan {
 		GraphicObjectManager m_objectManager;
 	};
 
-}// namespace ob::rhi::dx12
+}
 
 REGISTER_MODULE_DERIVE(ob::rhi::vulkan::VulkanRHIModule, ob::rhi::GraphicModule);
 

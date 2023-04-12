@@ -175,4 +175,4 @@ namespace ob::core {
 		return (m_stream.position() >= m_stream.size());
 	}
 
-}// namespace ob
+}

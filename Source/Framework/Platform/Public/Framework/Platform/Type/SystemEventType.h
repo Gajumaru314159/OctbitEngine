@@ -64,4 +64,4 @@ namespace ob::platform {
     using WindowEventHandle = typename WindowEventNotifier::Handle;
     //! @}
 
-}// namespace ob::platform
+}

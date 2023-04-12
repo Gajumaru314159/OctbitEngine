@@ -61,7 +61,7 @@ namespace ob::core {
             static const unsigned* GetCRCTable();
         };
 
-    } // namespace detail
+    } 
     //! @endcond
 
-} // namespace ob::core
+} 

@@ -255,4 +255,4 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	void FileStream::flush() { return m_impl->flush(); }
 
-}// namespace ob
+}

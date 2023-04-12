@@ -14,4 +14,4 @@ namespace ob::platform {
         Arrow,
     };
 
-}// namespace ob::platform
+}

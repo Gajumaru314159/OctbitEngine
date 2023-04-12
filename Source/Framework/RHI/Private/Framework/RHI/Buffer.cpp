@@ -31,4 +31,4 @@ namespace ob::rhi {
         return buffer;
     }
 
-}// namespace ob
+}

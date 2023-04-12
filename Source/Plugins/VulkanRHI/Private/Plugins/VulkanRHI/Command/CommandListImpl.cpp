@@ -223,4 +223,4 @@ namespace ob::rhi::vulkan {
 
 #pragma endregion
 
-}// namespace ob
+}

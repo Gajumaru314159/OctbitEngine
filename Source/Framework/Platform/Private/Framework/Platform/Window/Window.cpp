@@ -278,4 +278,4 @@ namespace ob::platform {
         return {};
     }
 
-}// namespace ob::platform
+}

@@ -196,4 +196,4 @@ namespace ob::core {
 		return BitFlags<TEnum>(left) | right;
 	}
 
-}// namespace ob::core
+}

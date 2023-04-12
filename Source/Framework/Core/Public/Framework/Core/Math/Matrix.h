@@ -545,4 +545,4 @@ namespace ob::core {
 	}
 
 	//! @endcond
-}// namespace ob
+}

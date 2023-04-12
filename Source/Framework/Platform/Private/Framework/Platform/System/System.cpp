@@ -94,5 +94,5 @@ namespace ob::platform::System {
 		return Language::Unknown;
 	}
 
-}// namespace ob::platform
+}
 #endif

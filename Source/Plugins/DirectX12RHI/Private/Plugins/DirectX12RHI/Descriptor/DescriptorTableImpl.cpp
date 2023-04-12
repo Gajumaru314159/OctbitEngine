@@ -99,4 +99,4 @@ namespace ob::rhi::dx12
 	//bool setResource(s32 index, class Sampler& resource) override{}
 	//! @}
 
-}// namespace ob::rhi::dx12
+}

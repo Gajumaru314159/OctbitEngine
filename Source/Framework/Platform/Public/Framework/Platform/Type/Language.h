@@ -72,4 +72,4 @@ namespace ob::platform {
         MAX,                // 言語数
     };
 
-}// namespace ob::platform
+}

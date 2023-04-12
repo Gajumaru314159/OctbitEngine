@@ -40,4 +40,4 @@ namespace ob::input {
 		return { 0,0 };
 	}
 
-}// namespace ob
+}

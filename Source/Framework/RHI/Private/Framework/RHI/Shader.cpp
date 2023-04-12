@@ -74,4 +74,4 @@ namespace ob::rhi {
         return Shader::Load(binary, ShaderStage::Vertex);
     }
 
-}// namespace ob::rhi
+}

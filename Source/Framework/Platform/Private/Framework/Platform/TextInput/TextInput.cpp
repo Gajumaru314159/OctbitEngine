@@ -23,4 +23,4 @@ namespace ob::platform {
     }
 
 
-}// namespace ob::platform
+}

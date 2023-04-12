@@ -18,4 +18,4 @@ namespace ob::rhi {
         return nullptr;
     }
 
-}// namespace ob::rhi
+}

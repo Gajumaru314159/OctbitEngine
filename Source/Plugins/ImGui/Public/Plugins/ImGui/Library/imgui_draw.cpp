@@ -163,7 +163,7 @@ namespace IMGUI_STB_NAMESPACE
 #endif
 
 #ifdef IMGUI_STB_NAMESPACE
-} // namespace ImStb
+} 
 using namespace IMGUI_STB_NAMESPACE;
 #endif
 

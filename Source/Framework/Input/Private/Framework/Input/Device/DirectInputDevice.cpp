@@ -196,4 +196,4 @@ namespace ob::input
 		return true;
 	}
 
-}// namespace ob
+}

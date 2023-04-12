@@ -86,4 +86,4 @@ namespace ob::core {
         return minimum + result * (maximum - minimum);
     }
 
-} // namespace ob
+} 

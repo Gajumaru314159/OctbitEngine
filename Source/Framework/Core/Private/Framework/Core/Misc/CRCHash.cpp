@@ -145,7 +145,7 @@ namespace ob::core {
             return g_crctab;
         }
 
-    } // namespace detail
+    } 
     //! @endcond
     //! 
-} // namespace ob::core
+} 

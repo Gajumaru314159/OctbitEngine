@@ -142,7 +142,7 @@ namespace ob::rhi::vulkan {
 		u32					m_queueCount;
 
 	};
-}// namespace ob::rhi::dx12
+}
 
 
 
@@ -154,4 +154,4 @@ namespace ob::rhi::vulkan {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-}// namespace ob::rhi::dx12
+}

@@ -113,7 +113,7 @@ namespace ob::core {
         return *pHeap;
     }
 
-}// namespace ob::core::core
+}
 
 
 #if !defined(OB_BUILD)

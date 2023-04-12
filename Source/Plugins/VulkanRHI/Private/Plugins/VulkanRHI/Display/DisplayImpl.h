@@ -66,7 +66,7 @@ namespace ob::rhi::vulkan {
 		//vulkan::Device* m_device;
 
 	};
-}// namespace ob::rhi::dx12
+}
 
 
 
@@ -78,4 +78,4 @@ namespace ob::rhi::vulkan {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-}// namespace ob::rhi::dx12
+}

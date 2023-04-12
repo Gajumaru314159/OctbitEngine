@@ -27,4 +27,4 @@ namespace ob::core {
         pHeader->pHeap->deallocate(pHeader->pRaw);
     }
 
-}// namespace ob::core
+}

@@ -77,4 +77,4 @@ namespace ob::core {
         return 0.0f;
     }
 
-}// namespace ob
+}

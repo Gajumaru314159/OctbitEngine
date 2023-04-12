@@ -504,4 +504,4 @@ namespace ob::rhi::dx12 {
 	}
 #endif
 
-}// namespace ob
+}

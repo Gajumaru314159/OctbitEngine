@@ -266,4 +266,4 @@ namespace ob::graphics {
 	}
 
 
-}// namespace ob
+}

@@ -100,4 +100,4 @@ namespace ob::rhi {
         GraphicObjectManager& m_objectManager;
 	};
 
-}// namespace pb::rhi
+}

@@ -143,4 +143,4 @@ namespace ob::core {
         return this;
     }
 
-}// namespace ob
+}

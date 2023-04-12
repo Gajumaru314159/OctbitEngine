@@ -155,4 +155,4 @@ namespace ob::core {
         return Vec4(1.0f * x, 1.0f * y, 1.0f * z, 1.0f * w);
     }
 
-}// namespace ob
+}

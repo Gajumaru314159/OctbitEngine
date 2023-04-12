@@ -157,7 +157,7 @@ namespace ob::rhi::dx12 {
         TextureEventNotifier    m_notifier;
     };
 
-}// namespace ob::rhi::dx12
+}
 
 
 
@@ -173,4 +173,4 @@ namespace ob::rhi::dx12 {
         return m_resource.Get();
     }
 
-}// namespace ob::rhi::dx12
+}

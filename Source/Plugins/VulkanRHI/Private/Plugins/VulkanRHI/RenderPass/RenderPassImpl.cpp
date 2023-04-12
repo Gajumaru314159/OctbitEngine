@@ -140,4 +140,4 @@ namespace ob::rhi::vulkan {
 		return m_renderPass != nullptr;
 	}
 
-}// namespace ob::rhi::vulkan
+}

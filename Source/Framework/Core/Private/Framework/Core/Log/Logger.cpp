@@ -161,4 +161,4 @@ namespace ob::core {
         m_notifier.remove(handle);
     }
 
-}// namespace ob::core
+}

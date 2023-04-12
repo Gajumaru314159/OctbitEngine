@@ -79,6 +79,6 @@ namespace ob::platform {
         return m_path;
     }
 
-}// namespace ob
+}
 
 #endif

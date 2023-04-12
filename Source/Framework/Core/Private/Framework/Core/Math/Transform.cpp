@@ -66,4 +66,4 @@ namespace ob::core {
         return out;
     }
 
-}// namespace ob
+}

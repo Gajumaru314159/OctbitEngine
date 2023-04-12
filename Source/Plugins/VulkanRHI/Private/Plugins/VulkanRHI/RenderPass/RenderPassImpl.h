@@ -38,7 +38,7 @@ namespace ob::rhi::vulkan {
 		VkRenderPass	m_renderPass = nullptr;
 
 	};
-}// namespace ob::rhi::dx12
+}
 
 
 
@@ -50,4 +50,4 @@ namespace ob::rhi::vulkan {
 //===============================================================
 namespace ob::rhi::dx12 {
 
-}// namespace ob::rhi::dx12
+}

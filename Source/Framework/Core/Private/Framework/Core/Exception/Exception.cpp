@@ -42,4 +42,4 @@ namespace ob::core {
         return m_message;
     }
 
-}// namespace ob::core
+}

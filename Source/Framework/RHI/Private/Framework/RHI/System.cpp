@@ -20,4 +20,4 @@ namespace ob::rhi {
 		injector.bind<EmptyRHI>().as<RHI>();
 	}
 
-}// namespace ob::rhi
+}

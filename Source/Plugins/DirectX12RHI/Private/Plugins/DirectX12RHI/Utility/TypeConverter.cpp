@@ -549,4 +549,4 @@ namespace ob::rhi::dx12
         return TextureFormat::Unknown;
     }
 
-}// namespace ob
+}

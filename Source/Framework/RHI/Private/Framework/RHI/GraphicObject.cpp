@@ -41,4 +41,4 @@ namespace ob::rhi {
         }
     }
 
-}// namespace ob::rhi
+}
