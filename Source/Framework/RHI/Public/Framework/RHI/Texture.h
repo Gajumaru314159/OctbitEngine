@@ -4,30 +4,17 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/Core/Graphic/Bitmap.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
-
-    using TextureEventNotifier = EventNotifier<>;
-    using TextureEventHandle = typename TextureEventNotifier::Handle;
-    using TextureEventDelegate = typename TextureEventNotifier::delegate_type;
-
     //@―---------------------------------------------------------------------------
-    //! @brief      プリセットテクスチャ
+    //! @brief      テクスチャイベント
     //@―---------------------------------------------------------------------------
-    enum class PresetTexture{
-        White,
-        Gray,
-        Black,
-        Normal,
-        Check,
-    };
+    OB_EVENT_NOTIFIER(TextureEvent);
 
     //@―---------------------------------------------------------------------------
     //! @brief      テクスチャ・インターフェイス
@@ -35,13 +22,11 @@ namespace ob::rhi {
     class Texture :public GraphicObject {
     public:
 
-        static Ref<Texture> Preset(PresetTexture);
-
-        static Ref<Texture> White();
-        static Ref<Texture> Gray();
-        static Ref<Texture> Black();
-        static Ref<Texture> Normal();
-        static Ref<Texture> Check();
+        static Ref<Texture> White();    //!< 白テクスチャ
+        static Ref<Texture> Gray();     //!< 灰テクスチャ
+        static Ref<Texture> Black();    //!< 黒テクスチャ
+        static Ref<Texture> Normal();   //!< 法線テクスチャ
+        static Ref<Texture> Check();    //!< チェックテクスチャ
 
     public:
 

@@ -9,26 +9,27 @@
 
 namespace ob::rhi {
 
-    Ref<Texture> Texture::Preset(PresetTexture type) {
+    static Ref<Texture> GetPreset(PresetTexture type) {
         if (auto instance = SystemResourceModule::Get()) {
             return instance->getPresetTexture(type);
         }
         return nullptr;
     }
+
     Ref<Texture> Texture::White() {
-        return Preset(PresetTexture::White);
+        return GetPreset(PresetTexture::White);
     }
     Ref<Texture> Texture::Gray() {
-        return Preset(PresetTexture::Gray);
+        return GetPreset(PresetTexture::Gray);
     }
     Ref<Texture> Texture::Black() {
-        return Preset(PresetTexture::Black);
+        return GetPreset(PresetTexture::Black);
     }
     Ref<Texture> Texture::Normal() {
-        return Preset(PresetTexture::Normal);
+        return GetPreset(PresetTexture::Normal);
     }
     Ref<Texture> Texture::Check() {
-        return Preset(PresetTexture::Check);
+        return GetPreset(PresetTexture::Check);
     }
 
     //@―---------------------------------------------------------------------------

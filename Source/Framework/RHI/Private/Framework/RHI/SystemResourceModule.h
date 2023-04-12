@@ -8,6 +8,17 @@
 
 namespace ob::rhi {
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      プリセットテクスチャ
+	//@―---------------------------------------------------------------------------
+	enum class PresetTexture {
+		White,
+		Gray,
+		Black,
+		Normal,
+		Check,
+	};
+
 	class SystemResourceModule : public Singleton<SystemResourceModule> {
 	public:
 
