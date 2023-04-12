@@ -12,6 +12,7 @@
 
 namespace ob::engine {
 
+	// ParentChangedEvent (Entity* oldValue,Entity* newValue)
 	OB_EVENT_NOTIFIER(ParentChanged, Entity*, Entity*);
 
 	//@―---------------------------------------------------------------------------
@@ -76,7 +77,7 @@ namespace ob::engine {
 		void setParent(Entity* newParent, s32 index = -1);
 		const List<Entity*>& getChildren()const;
 
-		void subscribeParentChanged(ParentChangedHandle&, ParentChangedDelegate);
+		void addParentChangedEvent(ParentChangedHandle&, ParentChangedDelegate);
 
 		//===============================================================
 		// Component

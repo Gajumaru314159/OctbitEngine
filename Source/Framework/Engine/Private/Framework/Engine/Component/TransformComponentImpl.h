@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component/TransformComponent.h>
+#include <Framework/Engine/Forward.h>
 
 namespace ob::engine {
 	
@@ -17,6 +18,11 @@ namespace ob::engine {
 		OB_RTTI();
 		
 		TransformComponentImpl();
+
+		// Transform変更イベント
+		void addTransformChangedEvent(TransformChangedHandle&, TransformChangedDelegate)override;
+		// Parent変更イベント
+		void addParentChangedEvent(ParentChangedHandle&, ParentChangedDelegate)override;
 
 		const Transform&	getLocal()const noexcept { return m_local; }
 		void				setLocal(const Transform&);
@@ -34,6 +40,9 @@ namespace ob::engine {
 		void onParentChanged(Entity* oldParent, Entity* newParent);
 		
 	private:
+
+		TransformChangedNotifier m_transformChangedNotifier;
+		ParentChangedNotifier m_parentChangedNotifier;
 
 		ParentChangedHandle m_hParentChanged;
 		TransformComponent* m_parent=nullptr;

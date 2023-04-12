@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コンポーネント
+//! @brief		Transformコンポーネント
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -9,6 +9,12 @@
 
 namespace ob::engine {
 
+	class TransformComponent;
+	OB_EVENT_NOTIFIER(TransformChanged, TransformComponent&);
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  Transformコンポーネント
+	//@―---------------------------------------------------------------------------
 	class TransformComponent :public Component {
 	public:
 
@@ -22,7 +28,9 @@ namespace ob::engine {
 		//===============================================================
 
 		// Transform変更イベント
+		virtual void addTransformChangedEvent(TransformChangedHandle&, TransformChangedDelegate) = 0;
 		// Parent変更イベント
+		virtual void addParentChangedEvent(ParentChangedHandle&, ParentChangedDelegate) = 0;
 		// Child変更イベント
 		// Static変更イベント
 

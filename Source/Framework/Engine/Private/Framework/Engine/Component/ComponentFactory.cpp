@@ -1,11 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ComponentFactory
+//! @brief		コンポーネント・ファクトリ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component/ComponentFactory.h>
-#include <Framework/Engine/Engine.h>
 
 namespace ob::engine {
 

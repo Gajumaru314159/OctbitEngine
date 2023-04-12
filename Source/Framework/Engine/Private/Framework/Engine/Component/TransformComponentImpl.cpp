@@ -6,7 +6,20 @@
 #pragma once
 #include <Framework/Engine/Component/TransformComponentImpl.h>
 #include <Framework/Engine/Entity.h>
+
+
 #include <Framework/Engine/Reflection/TypeBuilder.h>
+
+OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponentImpl) {
+
+	using Type = ::ob::engine::Component;
+
+	tag(TC("DisallowMultiple"));
+
+	function(TC("getEntity"), &Type::getEntity);
+
+};
+
 
 namespace ob::engine {
 
@@ -20,11 +33,26 @@ namespace ob::engine {
 		m_world = Transform::Identity;
 	}
 
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
 	//@―---------------------------------------------------------------------------
 	void TransformComponentImpl::initialize(){
-		getEntity().subscribeParentChanged(m_hParentChanged, {*this,&TransformComponentImpl::onParentChanged});
+		getEntity().addParentChangedEvent(m_hParentChanged, {*this,&TransformComponentImpl::onParentChanged});
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  Transform変更イベント
+	//@―---------------------------------------------------------------------------
+	void TransformComponentImpl::addTransformChangedEvent(TransformChangedHandle& handle, TransformChangedDelegate func) {
+		m_transformChangedNotifier.add(handle, func);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  Parent変更イベント
+	//@―---------------------------------------------------------------------------
+	void TransformComponentImpl::addParentChangedEvent(ParentChangedHandle& handle, ParentChangedDelegate func) {
+		m_parentChangedNotifier.add(handle, func);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -35,6 +63,7 @@ namespace ob::engine {
 		computeWorldTransform();
 	}
 
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  ワールドTransform設定
 	//@―---------------------------------------------------------------------------
@@ -42,6 +71,7 @@ namespace ob::engine {
 		m_world = value;
 		computeLocalTransform();
 	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ローカルTransformを計算
@@ -53,8 +83,9 @@ namespace ob::engine {
 			m_local = m_world;
 		}
 		// 変更通知
-
+		m_transformChangedNotifier.invoke(*this);
 	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ワールドTransformを計算
@@ -66,6 +97,7 @@ namespace ob::engine {
 			m_world = m_local;
 		}
 		// 変更通知
+		m_transformChangedNotifier.invoke(*this);
 	}
 
 
@@ -113,13 +145,3 @@ namespace ob::engine {
 	}
 
 }
-
-OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponentImpl) {
-
-	using Type = ::ob::engine::Component;
-
-	tag(TC("DisallowMultiple"));
-
-	function(TC("getEntity"), &Type::getEntity);
-
-};

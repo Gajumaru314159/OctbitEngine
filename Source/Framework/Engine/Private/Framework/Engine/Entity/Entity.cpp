@@ -310,7 +310,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		親変更イベントを購読
 	//@―---------------------------------------------------------------------------
-	void Entity::subscribeParentChanged(ParentChangedHandle& handle, ParentChangedDelegate event) {
+	void Entity::addParentChangedEvent(ParentChangedHandle& handle, ParentChangedDelegate event) {
 		m_parentChangedNotifier.add(handle, event);
 	}
 
