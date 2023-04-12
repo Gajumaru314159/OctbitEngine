@@ -1,4 +1,4 @@
-# Module Dependency
+# DependencyGraph
 
 |線|依存性|説明|
 |--|-----|----|
@@ -9,12 +9,9 @@
 ```mermaid
 
 graph LR
-    App-->Engine
     Engine-.->Model & Input
     Model==>Graphic==>RHI
     Input==>Platform==>Core
 
     RHI-->DX12RHI & VulkanRHI ==>Platform
 ```
-
-モジュールの依存関係は各モジュールのCMakeLists.txtで設定されています。public_libsの設定を確認してください。

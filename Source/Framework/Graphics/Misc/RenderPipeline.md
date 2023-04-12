@@ -13,7 +13,7 @@ CameraStackに積まれたカメラの描画はPostProcessとの依存関係を�
 PBRとNPBRを両方使用する場合はカメラごとにRenderPipelineを構築する必要があります。  
 RenderPipelineが異なる場合RenderPassも異なるのでMaterialはPRBとNPRBの両方に対応する必要があります。
 具体的にはRenderTagに```PBR_Opaque```と```NPBR_Opaque```それぞれのシェーダを含める必要があります。
-```cpp
+```c++
 if(IsPBR(camera)){
 	context.getRenderers(TC("PBR_Opaque"))
 		.draw();
@@ -41,7 +41,7 @@ Engine実装で実現できないものがある場合は別のRenderTagを用�
 
 ### GlobalRenderPipeline
 
-```cpp
+```c++
 
 class GlobalRenderPipeliene{
 public:
@@ -104,7 +104,7 @@ public:
 
 
 
-```cpp
+```c++
 
 class SampleRenderPipeliene{
 public:

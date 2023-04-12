@@ -1,20 +1,19 @@
 # Scene
 
 ## 構成
-```
-World
-	Scene
-		Entity(WorldObject)
-			Component
-		Level[]
-```
+* Engine
+    * World[]
+    	* Scene
+    		* Entity[]
+    			* Component[]
+            * Scene[]
 
 ## World
 * 通常1つだけ存在します。エディタから実行される場合は複数生成されます。
 * 異なるWorld同士で情報をやり取りすることはできません。
 	* RenderTextureを経由することで別Worldのテクスチャに描画することが可能です。
 * Worldごとのシステムを持ちます
-    * VFX
+    * ShadowManager
 	* GI
 
 ## Scene
@@ -23,16 +22,16 @@ World
 * Sceneのタイムスケールは子Sceneに継承されます。
 
 ## Entity
-* Levelの構成要素です。
+* Sceneの構成要素です。
 * Entity自体は機能を持たせずComponentを追加していきます。
 
 ## Compoent
-
+* Entityに追加する機能です。
 
 
 ## 使用例
 ### 構築
-```
+```c++
 Ref<World> world = World::Create();
 
 // シーン構築
@@ -61,7 +60,7 @@ auto renderer = WorldRenderer::Create();
 renderer->setScene(scene);
 ```
 ### Component実装
-```
+```c++
 class ModelComponent : public Component{
 public:
 	
@@ -100,5 +99,3 @@ private:
 	
 }
 ```
-### WorldRenderer
-ワールドごとにEntityが独立しているのでお互いの描画結果に影響を与えない。

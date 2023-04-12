@@ -2,38 +2,23 @@
 
 Materialは内部に複数のPassを持つ。  
 複数のPassがある場合でもプロパティは共通。
-
-```
-Material
-	ShaderCode
-	Property[]
-		Name
-		Value
-	Pass[]
-		RenderTag -> RenderPass/Subpass
-		Map<ShaderStage,EntryPoint>
-
-```
-通常はビルド済みのシェーダバイナリを使用するので以下のような構造となる。
-```
-Material
-	Property[]
-		Name
-		Value
-	Pass[]
-		RenderTag -> RenderPass/Subpass
-		Map<ShaderStage,Shader>
-```
+* Material
+	* Property[]
+		* Name
+		* Value
+	* Pass[]
+		* Map<RenderTag,Subpass>
+		* Map<ShaderStage,Shader>
 
 ## ローカル変数とグローバル変数
 * ローカル変数　：マテリアルごとに設定できる値
 * グローバル変数：全てのマテリアルで共通の値
-```cpp
+```c++
 Material::SetGlobalFloat(TC("Time"),Time::Now().toSeconds());
 Material::SetGlobalColor(TC("LightColor"),Color(1,1,0.8f));
 ```
 内部的には新しくグローバル変数が追加されるたびにインデックスが追加される。
-```cpp
+```c++
 void SetGlobalFloat(StringView name,f32 value){
 	if(m_scalarNames.count(name)==0){
 		m_scalarNames.emplace_back(name,m_scalarNames.size());
@@ -54,7 +39,7 @@ TimeなどのBuilt-in変数はインデックスではなく専用の構造体�
 struct InstanceProperties{
 	float4x4	matrix;
 	float4		color;
-}
+};
 cbuffer Buffer : register(b0) {	
 	InstanceProperties ips[1024];				
 };

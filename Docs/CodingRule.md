@@ -14,13 +14,11 @@ public:
   // C++17で導入済みの機能はマクロを使用して置き換えません
   // __forceinline__ void Func() NOEXCEPT;
   
-}
+};
 ```
 最新の言語バージョンで廃止されている機能や非推奨機能は避けるようにしてください。
 ```c++
 void Func(){
-  std::unique_ptr<Hoge> aptr;
-  
   // 非推奨機能や削除される機能の使用は避けてください
   // std::auto_ptr<Hoge> aptr;
 }
@@ -31,14 +29,16 @@ void Func(){
 |フォルダ名|用途|
 |-|-|
 |Public|上位モジュールから使用されるクラスのヘッダ|
-|Protected|派生モジュールで実装するインターフェイス|
+|Protected|派生モジュールで実装するインターフェイス(非推奨)|
 |Private|cppファイルとモジュール内だけで使用するクラスのヘッダ|
 |Test|モジュールのテスト実装|
 |Misc|natvisやドキュメントなど|
 
 上記フォルダをモジュールのルートフォルダに配置し各フォルダの内部にインクルードパスとして使用するフォルダを作成してください。例えばCoreモジュールのファイルは以下のパスに保存します。
-* ```Source/Framework/Core/Private/Framework/Core/Graphic/Color.cpp```
-* ```Source/Framework/Core/Public/Framework/Core/Graphic/Color.h```
+* ```Source/Framework/Core/Private/Framework/Core/Graphics/Color.cpp```
+* ```Source/Framework/Core/Public/Framework/Core/Graphics/Color.h```
+
+ディレクトリ名は単数形での表記を基準とします。ただし妥当な理由があれば複数形のディレクトリ名でも構いません。例えばGraphicsはGraphicのコードの集合ではなく**Graphics**に関するコードの集合です。
 
 ファイルの命名規則
 ------------------
@@ -59,26 +59,8 @@ void Func(){
 * ヘッダの依存が増える場合は関数ん定義が短い場合でもインライン関数を使用しないでください。
 * インライン関数の定義はファイルの下部にまとめて書いてください。
   * ゲッターやセッターのような非常に短い関数はクラス宣言内に定義を記述しても構いません。
-
-インクルードの順序
-------------------
-可読性を保つために以下の順序でインクルードし、まとまりごとに辞書順になるように並べてください。
-1. 自身の宣言ヘッダ
-2. 空行
-3. 他ライブラリのヘッダ
-4. 空行
-5. プロジェクトの他ヘッダ
-
-```c++
-#pragma once
-#include <Framework/Core/Hoge.h>
-
-#include <d3d12.h>
-
-#include <Framework/Core/Math/Random.h>
-#include <Framework/Platform/Types/Language.h>
-#include <Framework/Platform/Window/Window.h>
-```
+* 初期実装段階ではインライン化せずcppに実装することを推奨します。
+    * 設計が固まった段階でインライン化し、頻繁にヘッダが書き変わらないようにしてください。
 
 名前空間
 --------
@@ -91,12 +73,10 @@ void Func(){
 ------
 * 全てのメンバ変数がpublicの場合のみstructを使用できます。
 * メンバ変数には接頭辞をつけません。
-* デフォルトコンストラクタでは初期化せず、EForceInitを指定した場合に初期化するようにしてください。
 
 クラス
 -----
 * RAII（Resource Acquisition Is Initialization）を意識し、```startup()```や```shutdown()```などの関数を使用しないでください。
-    * 例外としてシングルトンを利用するクラスは使用できます。
 * ```initialize()```は初期化/再初期化の機能として実装してください。遅延初期化のために実装してはいけません。
 
 クラスの構造
@@ -109,33 +89,26 @@ void Func(){
 5. メンバ変数
 
 の順で記述します。  
-各項目内では
-1. public
-2. protected
-3. private
-
-の順で記述します。
-
-
+構造体は先頭にメンバ変数を置く場合もあります。
 
 命名規則
 --------
 
 |種別|命名規則|
 |:--|---|
-|フォルダ名|SampleName|
-|ファイル名|SampleName.cpp|
-|クラス名|SampleName|
-|構造体名|SampleName|
-|メンバ関数|sampleName()|
-|メンバStatic関数|SampleName()|
-|メンバ変数|m_sampleName|
-|構造体変数|sampleName|
-|ローカル変数|sampleName|
-|static変数|s_sampleName|
-|列挙型|Enum::SampleName|
-|マクロ|SAMPLE_NAME|
-|マクロ(内部)|_internal_SAMPLE_NAME|
+|フォルダ名|SampleID|
+|ファイル名|SampleID.cpp|
+|クラス名|SampleID|
+|構造体名|SampleID|
+|メンバ関数|sampleID()|
+|メンバStatic関数|SampleID()|
+|メンバ変数|m_sampleID|
+|構造体変数|sampleID|
+|ローカル変数|sampleID|
+|static変数|s_sampleID|
+|列挙型|Enum::SampleID|
+|マクロ|SAMPLE_ID|
+|マクロ(内部)|_internal_SAMPLE_ID|
 
 内部で使用する機能は```namespace *::internal```に実装してください
 ```c++

@@ -21,32 +21,28 @@ graph LR
 
 ## 実装例
 
-```cpp
+```c++
 class RHI{};
 class DX12RHI:public RHI{   public: DX12RHI(Platform&,Profiler*); };
-class Grahic{   public: Graphic(RHI&); };
-class Engine{   public: Engine(Graphic&,Sound&);  };
+class Grahics{   public: Graphics(RHI&); };
+class Engine{   public: Engine(Graphics&,Sound&);  };
 
 int main(){
 
     ServiceInjector injector;
     // 中略
     injector.bind<DX12RHI>().as<RHI>();
-    injector.bind<Graphic>();
+    injector.bind<Graphics>();
     injector.bind<Engine>();
     
     ServiceContainer container;
     auto engine = injector.create<Engine>(container);
     
-    // 最後に生成されたRHIを使用して生成
-    Texture::White();
-
-
     return 0;
 }
 ```
 Engineがコンテナを持つ場合、依存定義用の内部クラスを登録/生成してください。  
-```cpp
+```c++
 class Engine{
 private:
     class EngineService{
@@ -73,7 +69,7 @@ private:
 # ServiceInjectorへの登録
 必須依存のサービスをServiceInjectorに登録する責務はそのサービスにあります。  
 登録用の関数を使用すると内部的に必要なサービスが登録されます。
-```cpp
+```c++
 void func(){
     ServiceInjector injector;
     ob::rhi::dx12::Register(injector);
@@ -95,7 +91,7 @@ void ob::rhi::dx12::Register(ServiceInjector& injector){
 
 # サービスの生成キャンセル
 必須のサービスが生成されていない場合はコンストラクタから例外を送信することで生成をキャンセルすることができます。  
-```cpp
+```c++
 struct Base{};
 struct A:Base{
     A(SPtr<Req> req){
@@ -157,11 +153,12 @@ Editor::GetService<T>();
 * ゲームプレビューとカットシーンプレビューは併用できません。
 
 ```
-GameInstance::GetService<T>();
+Game::GetService<T>();
 ```
 
 ## World
 * ワールドの数だけ生成されます
+* ライティングや時間制御などが独立しています。
   
 ```
 entity->getWorld()->getService<T>();
@@ -171,4 +168,3 @@ entity->getWorld()->getService<T>();
 * 複数アセットを同時編集する場合はツールごとにWorldが生成されます
   * ツール内で複数のWorldが生成される場合もあります
 * エディタ起動の場合はGameのサービスは生成されません
-* 
