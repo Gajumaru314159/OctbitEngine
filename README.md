@@ -136,4 +136,4 @@ Assetモジュールではゲームアセット単位でのファイル管理を
 
 ThirdParty Libraries
 =====================
-[別ページ](./Docs/ThirdPartyLibrary.mb)
+[別ページ](Source/ThirdParty/ThirdPartyLibrary.mb)
