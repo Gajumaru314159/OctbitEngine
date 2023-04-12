@@ -9,7 +9,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/Engine/Component.h>
 
-namespace ob::graphics {
+namespace ob::engine {
 
     //@―---------------------------------------------------------------------------
     //! @brief      カメラ
@@ -32,8 +32,8 @@ namespace ob::graphics {
         void        setClipRange(Range range);
 
         // カメラ形式
-        CameraType  getCameraType()const;
-        void        setCameraType(CameraType value);
+        graphics::CameraType  getCameraType()const;
+        void        setCameraType(graphics::CameraType value);
 
         // Viewport Rect
         Rect        getVieportRect();
@@ -70,7 +70,7 @@ namespace ob::graphics {
 
     private:
 
-        CameraType  m_type;
+        graphics::CameraType  m_type;
         Rect        m_rect;
         f32         m_fovY;
         Range       m_clipRange;

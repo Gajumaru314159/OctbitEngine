@@ -101,43 +101,21 @@ public:
 };
 
 ```
-
-
-
+## RenderPipelineの登録
 ```c++
-
-class SampleRenderPipeliene{
+class Sample{
 public:
-	void render(RenderContext& context, Span<Camera> cameras) override {
-		
-		// カメラ由来では内処理(例：GI/GPGPU)
 
+	Sample(Graphics& graphics){
 
-		// Camera.depthが小さい順に描画
-		// RenderTextureの描画順はユーザ制御
-		for(auto& camera:cameras){
-			
-			// 内部でViewportの設定など
-			context.setCamera(camera);
+		graphics.setRenderPipeline(m_renderPipeline);
 
-			// 描画
-			context.draw();
-
-			// PostProcess
-			{
-				auto commandBuffer = context.allocateCommandBuffer();
-				commandBuffer.beginRenderPass(blur0);
-				commandBuffer.blit(material,TC("BlurPass0"));
-			}
-
-			// カメラの描画対象にコピー
-			context.blit(blur0,camera.target);
-		}
 	}
-
-}
-
+private:
+	SampleRenderPipeline m_renderPipeline;
+};
 ```
+
 
 ## Rendererの描画
 RendererはDrawContext内部にRenderTag毎に登録されている。

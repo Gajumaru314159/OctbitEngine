@@ -1,7 +1,7 @@
 ﻿#include <Framework/Core/Core.h>
 #include <Framework/Engine/All.h>
 #include <Plugins/ImGui/ImGui.h>
-#include <Framework/Graphics/Component/CameraComponent.h>
+#include <Framework/Engine/Component/CameraComponent.h>
 
 using namespace ob;
 
@@ -117,8 +117,8 @@ void drawComponents(engine::Entity* pEntity) {
 							}
 						}
 					}
-					if (component->getTypeId() == TypeId::Get<graphics::CameraComponent>()) {
-						auto c = reinterpret_cast<graphics::CameraComponent*>(component.get());
+					if (component->getTypeId() == TypeId::Get<engine::CameraComponent>()) {
+						auto c = reinterpret_cast<engine::CameraComponent*>(component.get());
 						{
 							f32 value[] = { c->getFov() };
 							if (ImGui::SliderFloat("FovY", value, 0, 180)) {

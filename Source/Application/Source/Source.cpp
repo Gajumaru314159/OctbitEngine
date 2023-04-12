@@ -10,7 +10,7 @@
 
 #include <Framework/Graphics/Material.h>
 #include <Framework/Graphics/Mesh.h>
-#include <Framework/Graphics/Component/CameraComponent.h>
+#include <Framework/Engine/Component/CameraComponent.h>
 
 #include <Framework/Debug/LogInfo.h>
 

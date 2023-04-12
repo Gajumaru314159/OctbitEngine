@@ -4,14 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/Component/CameraComponent.h>
+#include <Framework/Engine/Component/CameraComponent.h>
 
-namespace ob::graphics {
+namespace ob::engine {
 
 
 	CameraComponent::CameraComponent() {
 
-		m_type = CameraType::Perspective;
+		m_type = graphics::CameraType::Perspective;
 		m_rect = Rect(0,0,1,1);
 		m_fovY = 60.f;
 		m_clipRange = Range(0.001f,10000.0f);
@@ -38,10 +38,10 @@ namespace ob::graphics {
 	}
 
 	// カメラ形式
-	CameraType CameraComponent::getCameraType()const {
+	graphics::CameraType CameraComponent::getCameraType()const {
 		return m_type;
 	}
-	void CameraComponent::setCameraType(CameraType value) {
+	void CameraComponent::setCameraType(graphics::CameraType value) {
 		setProperty(m_type, value, TC("CameraType"));
 	}
 
