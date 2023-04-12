@@ -19,39 +19,52 @@ namespace ob::graphics {
     //! @brief  
     //@―---------------------------------------------------------------------------
     void Material::RegisterRenderPass(Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
-        MaterialManager::Get().registerRenderPass(name, renderPass, subpass);
+        if (auto manager = MaterialManager::Get()) {
+            manager->registerRenderPass(name, renderPass, subpass);
+        }
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  
     //@―---------------------------------------------------------------------------
     rhi::SubPass Material::FindRenderPass(Name renderTag) {
-        return MaterialManager::Get().FindRenderPass(renderTag);
+        if (auto manager = MaterialManager::Get()) {
+            return manager->FindRenderPass(renderTag);
+        }
+        return {};
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルFloatプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalFloat(StringView name, f32 value) {
-        MaterialManager::Get().setFloat(name, value);
+        if (auto manager = MaterialManager::Get()) {
+            manager->setFloat(name, value);
+        }
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルColorプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalColor(StringView name, Color value) {
-        MaterialManager::Get().setColor(name, value);
+        if (auto manager = MaterialManager::Get()) {
+            manager->setColor(name, value);
+        }
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルMatrixプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
-        MaterialManager::Get().setMatrix(name, value);
+        if (auto manager = MaterialManager::Get()) {
+            manager->setMatrix(name, value);
+        }
     }
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルTextureプロパティを設定する
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
-        MaterialManager::Get().setTexture(name, value);
+        if (auto manager = MaterialManager::Get()) {
+            manager->setTexture(name, value);
+        }
     }
 
 }

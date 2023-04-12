@@ -15,17 +15,10 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	class MaterialManager{
+	class MaterialManager : public Singleton<MaterialManager> {
 	public:
 
-		//@―---------------------------------------------------------------------------
-		//!	@brief			取得
-		//@―---------------------------------------------------------------------------
-		static MaterialManager& Get();
-
-	public:
-
-		MaterialManager();
+		MaterialManager(rhi::RHI&, NameDictionary&);
 		~MaterialManager();
 
 		//@―---------------------------------------------------------------------------

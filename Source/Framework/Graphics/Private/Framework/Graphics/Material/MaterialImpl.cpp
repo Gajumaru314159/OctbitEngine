@@ -159,8 +159,11 @@ namespace ob::graphics {
 
 
 		// グローバル変数設定
-		MaterialManager::Get().recordGlobalShaderProperties(cmdList);
-
+		if (auto manager = MaterialManager::Get()) {
+			manager->recordGlobalShaderProperties(cmdList);
+		} else {
+			LOG_ERROR("MaterialManagerが未初期化です。");
+		}
 
 		// TODO スロット
 		rhi::SetDescriptorTableParam params[] = {

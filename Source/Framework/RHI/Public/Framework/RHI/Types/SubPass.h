@@ -12,7 +12,7 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     struct SubPass {
         Ref<class RenderPass> renderPass;
-        s32 subpassIndex;
+        s32 subpassIndex = -1;
     };
 
 }

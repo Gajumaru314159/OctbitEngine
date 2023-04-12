@@ -13,7 +13,7 @@ namespace ob::graphics{
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    GraphicModule::GraphicModule(rhi::RHI&)
+    GraphicModule::GraphicModule(rhi::RHI&, MaterialManager&)
     {
     }
 
@@ -22,14 +22,5 @@ namespace ob::graphics{
     //! @brief  デストラクタ
     //@―---------------------------------------------------------------------------
     GraphicModule::~GraphicModule() = default;
-    MaterialManager& GraphicModule::getMaterialManager() { 
-        
-        if (!m_materialManager) {
-            m_materialManager = std::make_unique<MaterialManager>();
-        }
-        
-        return *m_materialManager.get(); }
-
-
 
 }

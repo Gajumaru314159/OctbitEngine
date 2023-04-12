@@ -28,11 +28,17 @@ namespace ob::graphics {
 	//!	@brief			コンストラクタ
 	//@―---------------------------------------------------------------------------
 	MeshImpl::MeshImpl(const MeshData& meshData) {
+
+		if (auto manager = MaterialManager::Get()) {
+			m_layoutId = manager->getVertexLayoutId(m_layout);
+		} else {
+			LOG_ERROR("MaterialManagerが未初期化です");
+			return;
+		}
+
 		m_initByMeshData = true;
 		m_meshData = meshData;
 		initLayoutFromMeshData(meshData);
-
-		m_layoutId = MaterialManager::Get().getVertexLayoutId(m_layout);
 
 	}
 
@@ -40,11 +46,22 @@ namespace ob::graphics {
 	//!	@brief			コンストラクタ
 	//@―---------------------------------------------------------------------------
 	MeshImpl::MeshImpl(MeshData&& meshData) {
+		
+		if (auto manager = MaterialManager::Get()) {
+			m_layoutId = manager->getVertexLayoutId(m_layout);
+		} else {
+			LOG_ERROR("MaterialManagerが未初期化です");
+			return;
+		}
+
 		m_initByMeshData = true;
 		m_meshData = std::move(meshData);
 		initLayoutFromMeshData(m_meshData);
 
-		m_layoutId = MaterialManager::Get().getVertexLayoutId(m_layout);
+		if (auto manager = MaterialManager::Get()) {
+
+		}
+
 	}
 
 	//@―---------------------------------------------------------------------------

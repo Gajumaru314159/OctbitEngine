@@ -42,7 +42,7 @@ void OctbitInit(ServiceInjector& injector) {
 		Register(injector);
 	rhi::
 		Register(injector);
-	graphic::
+	graphics::
 		Register(injector);
 
 }

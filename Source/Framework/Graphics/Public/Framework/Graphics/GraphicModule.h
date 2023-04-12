@@ -23,13 +23,10 @@ namespace ob::graphics {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        GraphicModule(rhi::RHI&);
+        GraphicModule(rhi::RHI&, MaterialManager&);
         ~GraphicModule();
 
-        MaterialManager& getMaterialManager();
-
     private:
-        UPtr<MaterialManager> m_materialManager;
 
     };
 

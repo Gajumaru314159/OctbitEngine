@@ -14,19 +14,9 @@
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//!	@brief			取得
-	//@―---------------------------------------------------------------------------
-	MaterialManager& MaterialManager::Get() {
-		static auto module = engine::Engine::Get()->get<GraphicModule>();
-		OB_ASSERT_EXPR(module);
-		return module->getMaterialManager();
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//!	@brief			コンストラクタ
 	//@―---------------------------------------------------------------------------
-	MaterialManager::MaterialManager() {
+	MaterialManager::MaterialManager(rhi::RHI&, NameDictionary&) {
 		// グローバル変数用のリソース生成
 		constexpr size_t GLOBAL_TEXTURE_MAX = 256;
 		constexpr size_t GLOBAL_FLOAT_MAX = 256;

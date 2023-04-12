@@ -8,4 +8,6 @@
 namespace ob::core{
     class ServiceInjector;
     class ServiceContainer;
+
+    class NameDictionary;
 }
