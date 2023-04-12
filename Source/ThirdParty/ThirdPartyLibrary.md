@@ -4,7 +4,7 @@
 |Name|Version|Description|Licence|
 |-|-|-|-|
 |[\{fmt\}](https://github.com/fmtlib/fmt)|8.1.1|文字列フォーマット|MIT licence|
-|[GSL](https://github.com/microsoft/GSL)|v4.0.0|Guidline Supported Library|MIT licence|
+|[GSL](https://github.com/microsoft/GSL)|v4.0.0|Guidelines Support Library|MIT licence|
 |[utfcpp](https://github.com/nemtrif/utfcpp)|v4.0.0|Unicodeライブラリ|Boost Software License 1.0|
 |[Magic Enum C++](https://github.com/Neargye/magic_enum)|v3.2.1|enumリフレクション|MIT licence|
 |[Google Test](https://github.com/google/googletest)|v0.8.0|単体テスト|BSD 3-Clause "New" or "Revised" License|
