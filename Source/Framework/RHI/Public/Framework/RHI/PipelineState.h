@@ -20,10 +20,6 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         static Ref<PipelineState> Create(const PipelineStateDesc& desc);
 
-    protected:
-
-        virtual ~PipelineState() = default;
-
     };
 
 }// namespcae ob::rhi

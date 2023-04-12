@@ -8,9 +8,6 @@
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/RenderPassDescHelper.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
@@ -34,10 +31,6 @@ namespace ob::rhi {
         //! @brief  定義取得
         //@―---------------------------------------------------------------------------
         virtual const RenderPassDesc& desc()const = 0;
-
-    protected:
-
-        virtual ~RenderPass() = default;
 
     };
 

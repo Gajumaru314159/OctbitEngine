@@ -1,20 +1,21 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Graphicインクルード
+//! @brief		RHI前方宣言
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 
 namespace ob::rhi {
 
+	// 列挙型
 	enum class PresetTexture;
 
+	// 構造体
 	struct SetDescriptorTableParam;
 	struct DrawParam;
 	struct DrawIndexedParam;
 
-	class GraphicObjectManager;
-
+	// クラス
 	class Buffer;
 	class CommandList;
 	class DescriptorTable;
@@ -32,5 +33,8 @@ namespace ob::rhi {
 	class HullShader;
 	class DomainShader;
 	class Texture;
+
+	// 内部クラス
+	class GraphicObjectManager;
 
 }

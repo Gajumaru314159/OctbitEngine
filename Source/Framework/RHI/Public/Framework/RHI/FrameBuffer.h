@@ -27,10 +27,6 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         virtual const FrameBufferDesc& desc()const = 0;
 
-    protected:
-
-        virtual ~FrameBuffer() = default;
-
     };
 
 }// namespcae ob::rhi

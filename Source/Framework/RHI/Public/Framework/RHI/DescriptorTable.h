@@ -1,19 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・テーブル・インターフェイス
+//! @brief		デスクリプタテーブル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      デスクリプタ・テーブル
+    //! @brief      デスクリプタテーブル
     //@―---------------------------------------------------------------------------
     class DescriptorTable :public GraphicObject {
     public:
@@ -37,10 +34,6 @@ namespace ob::rhi {
         virtual bool setResource(s32 index, const Ref<class Texture>& resource) = 0;
         //virtual bool setResource(s32 index, class Sampler& resource) = 0;
         //! @}
-
-    protected:
-
-        virtual ~DescriptorTable() = default;
 
     };
 

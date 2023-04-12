@@ -7,9 +7,6 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
@@ -38,9 +35,6 @@ namespace ob::rhi {
         virtual const u32& getDescriptorPoolSizes(s32 desc)const = 0;
         */
 
-    protected:
-
-        virtual ~RootSignature() = default;
     };
 
 }

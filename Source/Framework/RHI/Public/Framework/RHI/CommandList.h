@@ -10,9 +10,6 @@
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/CommandParam.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
@@ -79,9 +76,6 @@ namespace ob::rhi {
         virtual void pushMarker(StringView name) = 0;
         virtual void popMarker() = 0;
 #endif
-    protected:
-
-        virtual ~CommandList() = default;
 
     };
 

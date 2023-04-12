@@ -7,15 +7,12 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
-
-    using DisplayEventNotifier = EventNotifier<>;
-    using DisplayEventHandle = typename DisplayEventNotifier::Handle;
-    using DisplayEventDelegate = typename DisplayEventNotifier::delegate_type;
+    //@―---------------------------------------------------------------------------
+    //! @brief  ディスプレイイベント
+    //@―---------------------------------------------------------------------------
+    OB_EVENT_NOTIFIER(DisplayEvent);
 
 
     //@―---------------------------------------------------------------------------
@@ -28,14 +25,14 @@ namespace ob::rhi {
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  生成
+        //! @brief      生成
         //@―---------------------------------------------------------------------------
         static Ref<Display> Create(const DisplayDesc& desc);
 
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  定義を取得
+        //! @brief      定義を取得
         //@―---------------------------------------------------------------------------
         virtual const DisplayDesc& getDesc()const noexcept = 0;
 
@@ -50,11 +47,6 @@ namespace ob::rhi {
         //! @brief      イベントリスナ追加
         //@―---------------------------------------------------------------------------
         virtual void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) = 0;
-
-
-    protected:
-
-        virtual ~Display() = default;
 
     };
 

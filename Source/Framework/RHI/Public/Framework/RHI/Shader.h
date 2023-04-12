@@ -8,13 +8,10 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/ShaderStage.h>
 
-//===============================================================
-// クラス定義
-//===============================================================
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      頂点シェーダ
+    //! @brief      シェーダ
     //@―---------------------------------------------------------------------------
     class Shader :public GraphicObject {
     public:
@@ -50,10 +47,11 @@ namespace ob::rhi {
         //! @param code     シェーダコード
         //! @param stage    シェーダステージ
         //@―---------------------------------------------------------------------------
+        //! @{
         static Ref<Shader> Compile(const String& code, ShaderStage stage);
         static Ref<Shader> CompileVS(const String& code);
         static Ref<Shader> CompilePS(const String& code);
-
+        //! @}
 
         //@―---------------------------------------------------------------------------
         //! @brief          シェーダバイナリをロード
@@ -61,21 +59,18 @@ namespace ob::rhi {
         //! @param binary   シェーダ・バイナリ
         //! @param stage    シェーダステージ
         //@―---------------------------------------------------------------------------
+        //! @{
         static Ref<Shader> Load(BlobView binary, ShaderStage stage);
         static Ref<Shader> LoadVS(BlobView binary);
         static Ref<Shader> LoadPS(BlobView binary);
+        //! @}        
 
     public:
 
         //@―---------------------------------------------------------------------------
-        //! @brief  シェーダステージを取得
+        //! @brief          シェーダステージを取得
         //@―---------------------------------------------------------------------------
         virtual ShaderStage getStage()const = 0;
-
-
-    protected:
-
-        virtual ~Shader() = default;
 
     };
 
