@@ -70,4 +70,4 @@ namespace ob::rhi::vulkan {
 
 
     //! @endcond
-}// namespcae ob
+}

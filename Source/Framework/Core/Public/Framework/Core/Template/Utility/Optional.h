@@ -12,4 +12,4 @@ namespace ob::core {
 	template <class T>
 	using Optional = std::optional<T>;
 
-}// namespcae ob
+}

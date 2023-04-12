@@ -28,4 +28,4 @@ namespace ob::core {
         Default = ARGB
     };
 
-}// namespcae ob
+}

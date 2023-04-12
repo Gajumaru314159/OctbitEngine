@@ -29,4 +29,4 @@ namespace ob::core {
         bottom = max.y;
     }
 
-}// namespcae ob
+}

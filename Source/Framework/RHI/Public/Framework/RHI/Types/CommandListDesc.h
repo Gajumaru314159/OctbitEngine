@@ -31,4 +31,4 @@ namespace ob::rhi {
         CommandListType type;   //!< 種類
     };
 
-}// namespcae ob::rhi
+}

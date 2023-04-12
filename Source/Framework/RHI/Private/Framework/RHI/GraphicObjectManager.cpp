@@ -8,13 +8,6 @@
 
 namespace ob::rhi {
 
-
-    static GraphicObjectManager* s_graphicObjectManager = nullptr;
-
-    GraphicObjectManager* GraphicObjectManager::Get() {
-        return s_graphicObjectManager;
-    }
-
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //! 
@@ -27,9 +20,6 @@ namespace ob::rhi {
         if (m_config.frameBufferCount < 1) {
             LOG_WARNING("フレーム数が不正です。1以上にしてください。[frameCount={}]", m_config.frameBufferCount);
         }
-        
-        OB_ASSERT_EXPR(s_graphicObjectManager == nullptr);
-        s_graphicObjectManager = this;
     }
 
 
@@ -44,14 +34,13 @@ namespace ob::rhi {
         }
 
         // メモリリーク検知
+        bool hasMemoryLeak = false;
         for (auto& pObject : m_objects) {
-#ifdef OB_DEBUG
-            OB_ABORT("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
-#endif
+            LOG_ERROR("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
             delete pObject;
         }
+        OB_ASSERT(m_objects.empty(), "未開放のグラフィックオブジェクトがあります。");
 
-        s_graphicObjectManager = nullptr;
     }
 
 

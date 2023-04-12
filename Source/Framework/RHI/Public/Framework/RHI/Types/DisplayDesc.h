@@ -24,4 +24,4 @@ namespace ob::rhi {
         bool                hdr=false;                  //!< HDRが有効か
     };
 
-}// namespcae ob::rhi
+}

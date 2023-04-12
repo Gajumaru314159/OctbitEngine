@@ -24,4 +24,4 @@ namespace ob::core {
         //! @endvond
     };
 
-}// namespcae ob::core
+}

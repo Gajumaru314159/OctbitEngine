@@ -41,4 +41,4 @@ namespace ob::rhi {
         FenceFlags flags;   //!< フラグ
     };
 
-}// namespcae ob::rhi
+}

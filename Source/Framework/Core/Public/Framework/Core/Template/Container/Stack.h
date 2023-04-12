@@ -14,4 +14,4 @@ namespace ob::core {
     template <class T,class TContainer = Deque<T>>
     using Stack = std::stack<T, TContainer>;
 
-}// namespcae ob
+}

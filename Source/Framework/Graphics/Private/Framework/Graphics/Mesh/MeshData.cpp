@@ -63,4 +63,4 @@ namespace ob::graphics {
 		OB_NOTIMPLEMENTED();
 	}
 
-}// namespcae ob
+}

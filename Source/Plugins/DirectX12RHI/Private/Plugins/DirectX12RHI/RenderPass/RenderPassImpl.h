@@ -59,4 +59,4 @@ namespace ob::rhi::dx12 {
         const RenderPassDesc m_desc;
     };
 
-}// namespcae ob::rhi::dx12
+}

@@ -69,4 +69,4 @@ namespace ob::core {
 
     static_assert(sizeof(byte) == 1, "byte type size test failed.");
 
-}// namespcae ob
+}

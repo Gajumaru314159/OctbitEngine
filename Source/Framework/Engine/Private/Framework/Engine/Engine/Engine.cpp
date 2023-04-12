@@ -22,7 +22,7 @@ namespace ob {
 		class GraphicModule;
 	}
 	namespace rhi {
-		class SystemResourceModule;
+		class SystemResource;
 	}
 }
 
@@ -35,7 +35,7 @@ namespace ob::engine {
 			platform::WindowManager&,
 			input::InputModule&,
 			graphics::GraphicModule&,
-			rhi::SystemResourceModule&
+			rhi::SystemResource&
 		) {}
 	};
 

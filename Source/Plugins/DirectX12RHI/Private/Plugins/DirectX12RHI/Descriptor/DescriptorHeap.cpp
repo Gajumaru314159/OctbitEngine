@@ -432,4 +432,4 @@ namespace ob::rhi::dx12 {
 		index = getFreeBlockIndex(firstLevel, secondLevel);
 	}
 
-}// namespcae ob::rhi::dx12
+}

@@ -16,4 +16,4 @@ namespace ob::core {
 		Warning,	//!< プログラムの実行中に発生した軽微な例外。プログラムの継続が可能である。
 	};
 
-}// namespcae ob
+}

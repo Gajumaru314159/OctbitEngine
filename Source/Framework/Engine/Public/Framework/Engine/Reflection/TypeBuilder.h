@@ -228,7 +228,7 @@ namespace ob::engine::rtti::internal {
 		ClassInfo& m_info;
 	};
 
-}// namespcae ob
+}
 
 
 

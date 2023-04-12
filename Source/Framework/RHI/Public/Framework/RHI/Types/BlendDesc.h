@@ -159,4 +159,4 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     using BlendDescList = StaticArray<BlendDesc,RENDER_TARGET_MAX>;
 
-}// namespcae ob::rhi
+}

@@ -98,4 +98,4 @@ namespace ob::rhi::dx12 {
 
     };
 
-}// namespcae ob::rhi::dx12
+}

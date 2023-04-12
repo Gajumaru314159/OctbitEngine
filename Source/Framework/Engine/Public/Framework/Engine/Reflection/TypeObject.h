@@ -109,4 +109,4 @@ namespace ob::engine::rtti {
 	private:
 	};
 
-}// namespcae ob
+}

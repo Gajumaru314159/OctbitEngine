@@ -68,4 +68,4 @@ namespace ob::graphics {
 
 
     //! @endcond
-}// namespcae ob
+}

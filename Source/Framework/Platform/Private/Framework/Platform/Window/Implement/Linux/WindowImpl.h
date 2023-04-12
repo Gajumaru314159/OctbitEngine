@@ -45,5 +45,5 @@ namespace ob {
         };
 
     }
-}// namespcae ob
+}
 #endif OS_LINUX

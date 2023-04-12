@@ -51,4 +51,4 @@ namespace ob::core {
 
 
 	//! @endcond
-}// namespcae ob
+}

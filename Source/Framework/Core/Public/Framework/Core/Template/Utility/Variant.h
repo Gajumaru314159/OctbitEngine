@@ -12,4 +12,4 @@ namespace ob::core {
 	template <class... Types>
 	using Variant = std::variant<Types...>;
 
-}// namespcae ob
+}

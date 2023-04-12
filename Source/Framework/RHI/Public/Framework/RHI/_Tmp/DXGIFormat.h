@@ -135,4 +135,4 @@ namespace ob::rhi {
         DXGI_FORMAT_FORCE_UINT = 0xffffffff
     };
 
-}// namespcae ob
+}

@@ -22,4 +22,4 @@ namespace ob::rhi {
 
     };
 
-}// namespcae ob::rhi
+}

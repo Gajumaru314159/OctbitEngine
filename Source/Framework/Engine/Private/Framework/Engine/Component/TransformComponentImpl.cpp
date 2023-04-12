@@ -112,7 +112,7 @@ namespace ob::engine {
 		setLocal(local);
 	}
 
-}// namespcae ob
+}
 
 OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponentImpl) {
 

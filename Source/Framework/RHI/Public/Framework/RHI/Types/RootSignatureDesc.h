@@ -249,4 +249,4 @@ namespace ob::rhi {
 			: parameters(parameters), samplers(samplers), flags(flags) {}
 	};
 
-}// namespcae ob
+}

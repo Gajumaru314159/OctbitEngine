@@ -162,4 +162,4 @@ namespace ob::engine {
 		return reinterpret_cast<T*>(addComponent(TypeId::Get<T>()));
 	}
 
-}// namespcae ob
+}

@@ -40,4 +40,4 @@ namespace ob::rhi {
 		CullMode cullMode{ CullMode::Back };	//!< カリング方法
 	};
 
-}// namespcae ob::rhi
+}

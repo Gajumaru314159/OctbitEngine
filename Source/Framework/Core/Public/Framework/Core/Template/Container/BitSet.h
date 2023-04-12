@@ -12,4 +12,4 @@ namespace ob::core {
     template<size_t N>
     using BitSet = std::bitset<N>;
 
-}// namespcae ob
+}

@@ -51,4 +51,4 @@ namespace ob::core {
         SourceLocation  sourceLocation;     //!< ログが発生したソースコード上の位置
     };
 
-}// namespcae ob::core
+}

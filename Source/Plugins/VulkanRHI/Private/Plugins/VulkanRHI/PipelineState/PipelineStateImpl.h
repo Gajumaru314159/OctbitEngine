@@ -61,4 +61,4 @@ namespace ob::rhi::vulkan {
     //! @cond
 
     //! @endcond
-}// namespcae ob::rhi::vulkan
+}

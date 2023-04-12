@@ -15,4 +15,4 @@ namespace ob::core {
 	template <class T>
 	using remove_cvr_t = typename remove_cvr<T>::type;
 
-}// namespcae ob
+}

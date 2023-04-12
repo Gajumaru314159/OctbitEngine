@@ -73,4 +73,4 @@ namespace ob::core {
 #define DEFINE_YES_NO(name) using name = YesNo<struct name##_tag>;
 
 
-}// namespcae ob
+}

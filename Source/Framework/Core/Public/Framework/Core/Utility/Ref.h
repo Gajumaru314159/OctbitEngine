@@ -518,7 +518,7 @@ namespace ob::core {
 	}
 
 	//! @endcond
-}// namespcae ob
+}
 
 #undef OB_SAFE_RETAIN
 #undef OB_SAFE_RELEASE

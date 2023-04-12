@@ -8,7 +8,7 @@
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief      リソース使用法
+    //! @brief      リソース状態
     //! 
     //! @details    D3D12_RESOURCE_STATE VkImageLayout VkAccessFlagBits参照
     //!             | ResourceState                     | D3D12_RESOURCE_STATE              | VkImageLayout                 |
@@ -58,4 +58,4 @@ namespace ob::rhi {
         // Present
     };
 
-}// namespcae ob::rhi
+}

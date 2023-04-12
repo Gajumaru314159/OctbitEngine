@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ定義
+//! @brief		フレームバッファ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -9,12 +9,12 @@
 namespace ob::rhi {
 
     //@―---------------------------------------------------------------------------
-    //! @brief  ディスクリプタ・タイプ
+    //! @brief  フレームバッファ定義
     //@―---------------------------------------------------------------------------
     struct FrameBufferDesc {
-        String			name;			//!< 名前
-        Ref<RenderPass> renderPass;
-        Array<Ref<RenderTexture>> attachments;
+        String			            name;
+        Ref<RenderPass>             renderPass;
+        Array<Ref<RenderTexture>>   attachments;
     };
 
-}// namespcae ob::rhi
+}

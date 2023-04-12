@@ -26,4 +26,4 @@ namespace ob::core {
 	template <class T, class THasher = std::hash<T>, class TKeyEq = std::equal_to<T>, class TAlloc = ob::core::STLAllocator<T>>
 	using HashMultiSet = std::unordered_multiset<T, THasher, TKeyEq, TAlloc>;
 
-}// namespcae ob
+}

@@ -168,4 +168,4 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, RightWindows);		//!< 右Windowsキー
 	};
 
-}// namespcae ob::input
+}

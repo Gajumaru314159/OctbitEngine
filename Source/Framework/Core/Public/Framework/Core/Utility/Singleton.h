@@ -56,4 +56,4 @@ namespace ob::core {
     template<class T>
     T* Singleton<T>::s_instance = nullptr;
 
-}// namespcae ob
+}

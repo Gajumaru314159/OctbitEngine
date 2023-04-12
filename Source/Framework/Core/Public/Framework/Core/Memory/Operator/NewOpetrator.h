@@ -8,7 +8,7 @@
 
 namespace ob::core {
     class Allocator;
-}// namespcae ob
+}
 
 #pragma warning(push)
 #pragma warning(disable : 28251)

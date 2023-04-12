@@ -63,4 +63,4 @@ namespace ob::rhi::dx12 {
         const FrameBufferDesc m_desc;
     };
 
-}// namespcae ob::rhi::dx12
+}

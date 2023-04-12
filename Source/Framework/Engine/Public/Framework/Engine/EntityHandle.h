@@ -67,7 +67,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	using EntityHandleList = List<EntityHandle>;
 
-}// namespcae ob
+}
 
 
 

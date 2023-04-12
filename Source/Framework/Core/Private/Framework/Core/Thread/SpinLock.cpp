@@ -76,6 +76,6 @@ namespace ob::core {
 		m_impl->m_lock.store(false,std::memory_order_release);
 	}
 
-}// namespcae ob::core
+}
 
 #undef OB_DEBUG_SPIN_LOCK_CONTEX

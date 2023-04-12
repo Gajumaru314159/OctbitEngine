@@ -50,4 +50,4 @@ namespace ob::rhi::vulkan {
 		::VkInstance		m_instance;
 	};
 
-}// namespcae ob
+}

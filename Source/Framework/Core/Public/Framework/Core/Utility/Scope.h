@@ -134,4 +134,4 @@ namespace ob::core {
 		Func<void()> m_proc;
 	};
 
-}// namespcae ob::core
+}

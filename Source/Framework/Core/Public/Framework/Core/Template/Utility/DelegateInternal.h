@@ -154,5 +154,5 @@ namespace ob::core {
     }
 
 
-}// namespcae ob
+}
 //! @endcond

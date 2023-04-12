@@ -49,7 +49,7 @@ namespace ob::core {
 
 	};
 
-}// namespcae ob
+}
 
 
 
@@ -177,5 +177,5 @@ namespace ob::core {
 	}
 
 
-}// namespcae ob
+}
 //! @endcond

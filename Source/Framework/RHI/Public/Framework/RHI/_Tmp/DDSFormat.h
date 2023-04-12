@@ -136,4 +136,4 @@ namespace ob::rhi {
         u32                 miscFlags2;         //!< DDS_MISC_FLAGS2
     };
 
-}// namespcae ob
+}

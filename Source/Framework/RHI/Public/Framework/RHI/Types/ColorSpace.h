@@ -28,4 +28,4 @@ namespace ob::rhi {
         HDR10= BT2020_G2084,    //!< BT2020_G2084 のエイリアス
     };
 
-}// namespcae ob::rhi
+}

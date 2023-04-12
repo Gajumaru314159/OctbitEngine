@@ -6,7 +6,7 @@
 #include <Framework/RHI/System.h>
 #include <Framework/RHI/EmptyRHI.h>
 #include <Framework/RHI/GraphicObjectManager.h>
-#include <Framework/RHI/SystemResourceModule.h>
+#include <Framework/RHI/SystemResource.h>
 #include <Framework/Core/Utility/DI.h>
 
 namespace ob::rhi {
@@ -16,7 +16,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	void Register(ServiceInjector& injector) {
 		injector.bind<GraphicObjectManager>();
-		injector.bind<SystemResourceModule>();
+		injector.bind<SystemResource>();
 		injector.bind<EmptyRHI>().as<RHI>();
 	}
 

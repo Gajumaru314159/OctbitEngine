@@ -1430,7 +1430,7 @@ static int stbtt_InitFont_internal(stbtt_fontinfo *info, unsigned char *data, in
 
       // @TODO the name INDEX could list multiple fonts,
       // but we just use the first one.
-      stbtt__cff_get_index(&b);  // name INDEX
+      stbtt__cff_get_index(&b);  
       topdictidx = stbtt__cff_get_index(&b);
       topdict = stbtt__cff_index_get(topdictidx, 0);
       stbtt__cff_get_index(&b);  // string INDEX

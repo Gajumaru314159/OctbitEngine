@@ -19,4 +19,4 @@ namespace ob::rhi {
 	static const s32 MIPMAP__MAX			= 16;		//!< ミップマップ最大数
 	static const s32 VERTEX_BUFFER_MAX		= 16;		//!< 頂点バッファのストーリム最大数
 
-}// namespcae ob::rhi
+}

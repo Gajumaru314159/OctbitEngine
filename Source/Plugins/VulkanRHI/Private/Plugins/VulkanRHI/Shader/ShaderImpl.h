@@ -84,4 +84,4 @@ namespace ob::rhi::vulkan {
 
     };
 
-}// namespcae ob::rhi::dx12
+}

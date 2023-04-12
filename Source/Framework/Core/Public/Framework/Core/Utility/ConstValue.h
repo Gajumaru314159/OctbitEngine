@@ -12,4 +12,4 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     template <typename T, T N> struct ConstValue { static const T value = N; };
 
-}// namespcae ob
+}

@@ -5,12 +5,12 @@
 //***********************************************************
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/RHI.h>
-#include <Framework/RHI/SystemResourceModule.h>
+#include <Framework/RHI/SystemResource.h>
 
 namespace ob::rhi {
 
     static Ref<Texture> GetPreset(PresetTexture type) {
-        if (auto instance = SystemResourceModule::Get()) {
+        if (auto instance = SystemResource::Get()) {
             return instance->getPresetTexture(type);
         }
         return nullptr;

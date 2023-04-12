@@ -36,4 +36,4 @@ namespace ob::graphics {
 
 	using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
-}// namespcae ob
+}

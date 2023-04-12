@@ -11,4 +11,4 @@ namespace ob::core {
 	template<typename T,typename U>
 	using Pair = std::pair<T,U>;
 
-}// namespcae ob
+}

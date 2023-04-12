@@ -98,4 +98,4 @@ namespace ob::graphics {
         Array<ImageAttachment> attachments;
     };
 
-}// namespcae ob
+}

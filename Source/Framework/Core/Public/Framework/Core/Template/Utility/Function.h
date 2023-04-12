@@ -26,4 +26,4 @@ namespace ob::core {
 	template<class T>
 	using ReferenceWrapper = std::reference_wrapper<T>;
 
-}// namespcae ob
+}

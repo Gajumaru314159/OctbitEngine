@@ -98,4 +98,4 @@ namespace ob::rhi::dx12 {
 		return m_pBlock->pHeap->getGpuHandle(m_pBlock->index + index);
 	}
 
-}// namespcae ob::rhi::dx12
+}

@@ -12,4 +12,4 @@ namespace ob::core {
 	template<class T, size_t N>
 	using StaticArray = std::array<T, N>;
 
-}// namespcae ob
+}

@@ -33,6 +33,6 @@ namespace ob::rhi::dx12 {
 
     };
 
-}// namespcae ob
+}
 
 #endif// OB_DEBUG

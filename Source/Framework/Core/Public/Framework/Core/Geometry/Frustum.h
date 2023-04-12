@@ -20,4 +20,4 @@ namespace ob::core {
         f32 zFar;	//!< ファークリッピング面
     };
 
-}// namespcae ob
+}

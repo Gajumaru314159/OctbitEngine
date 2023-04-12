@@ -13,4 +13,4 @@ namespace ob::core {
     template <class T, class TAlloc = ob::core::STLAllocator<T>>
     using List = std::list<T, TAlloc>;
 
-}// namespcae ob
+}

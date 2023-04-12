@@ -19,4 +19,4 @@ namespace ob::core {
     template <class T, class TContainer = Array<T>, class TPr = std::less<typename TContainer::value_type>>
     using PriorityQueue = std::priority_queue<T,TContainer,TPr>;
 
-}// namespcae ob
+}

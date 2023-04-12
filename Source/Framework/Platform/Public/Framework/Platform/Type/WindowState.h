@@ -31,4 +31,4 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     using WindowStates = BitFlags<WindowState>;
 
-}// namespcae ob::platform
+}

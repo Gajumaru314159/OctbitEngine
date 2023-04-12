@@ -12,4 +12,4 @@ namespace ob::input {
     //@―---------------------------------------------------------------------------
     void Register(ServiceInjector&);
 
-}// namespcae ob
+}

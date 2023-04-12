@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		コマンド定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -69,4 +69,4 @@ namespace ob::rhi {
 		TextureSubresource dest;	//!< コピー先
 	};
 
-}// namespcae ob::rhi
+}

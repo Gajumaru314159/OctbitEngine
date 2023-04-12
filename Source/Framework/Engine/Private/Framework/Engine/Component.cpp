@@ -30,7 +30,7 @@ namespace ob::engine {
 	}
 
 
-}// namespcae ob
+}
 
 OB_DEFINE_CLASS_TYPE_INFO(ob::engine::Component) {
 

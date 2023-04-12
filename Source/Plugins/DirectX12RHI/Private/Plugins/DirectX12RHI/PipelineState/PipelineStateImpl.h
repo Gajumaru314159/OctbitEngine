@@ -91,4 +91,4 @@ namespace ob::rhi::dx12 {
     //! @cond
 
     //! @endcond
-}// namespcae ob::rhi::dx12
+}

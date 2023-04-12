@@ -20,4 +20,4 @@ namespace ob::core {
     template<typename T>
     using NotNull = gsl::not_null<T>;
 
-}// namespcae ob
+}

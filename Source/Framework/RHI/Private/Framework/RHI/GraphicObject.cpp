@@ -12,16 +12,15 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    GraphicObject::GraphicObject()
-    {
+    GraphicObject::GraphicObject() {
         if (auto manager = GraphicObjectManager::Get()) {
             manager->registerObject(*this);
             m_managed = true;
         } else {
             m_managed = false;
         }
-
     }
+
 
     //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ

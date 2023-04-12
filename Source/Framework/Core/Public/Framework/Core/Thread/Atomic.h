@@ -14,4 +14,4 @@ namespace ob::core {
     template<typename T>
     using Atomic = std::atomic<T>;
 
-}// namespcae ob::core
+}

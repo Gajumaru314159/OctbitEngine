@@ -330,4 +330,4 @@ namespace ob::engine {
 		NotificationObject::raisePropertyChanged(name);
 	}
 
-}// namespcae ob
+}

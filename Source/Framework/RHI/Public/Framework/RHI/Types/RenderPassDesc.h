@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RenderPass定義
+//! @brief		レンダーパス定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -173,4 +173,4 @@ namespace ob::rhi {
 		Array<SubpassDependency>		dependencies;
 	};
 
-}// namespcae ob::rhi
+}

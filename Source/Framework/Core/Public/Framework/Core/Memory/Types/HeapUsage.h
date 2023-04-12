@@ -20,4 +20,4 @@ namespace ob::core {
 		Max,					//!< 最大値
 	};
 
-}// namespcae ob
+}

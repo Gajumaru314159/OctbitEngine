@@ -56,4 +56,4 @@ namespace ob::core {
 		return fmt::formatted_size(format, std::forward<TArgs>(args)...);
 	}
 
-}// namespcae ob
+}

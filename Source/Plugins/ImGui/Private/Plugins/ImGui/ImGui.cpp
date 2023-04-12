@@ -970,4 +970,4 @@ namespace ImGui {
 		return "初期化前";
 	}
 
-}// namespcae ob
+}

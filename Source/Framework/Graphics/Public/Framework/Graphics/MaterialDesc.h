@@ -44,4 +44,4 @@ namespace ob::graphics {
         Array<String> textureProperties;
     };
 
-}// namespcae ob
+}

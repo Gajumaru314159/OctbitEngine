@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シェーダ・ステージ
+//! @brief		シェーダ定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -12,14 +12,17 @@ namespace ob::rhi {
     //@―---------------------------------------------------------------------------
     enum class ShaderStage :u32{
         Unknown         = 0,
+
         // グラフィック
         Vertex          = get_bit(0),
         Hull            = get_bit(1),
         Domain          = get_bit(2),
         Geometry        = get_bit(3),
         Pixel           = get_bit(4),
+
         // コンピュート
         Compute         = get_bit(5),
+
         // レイトレーシング
         Task            = get_bit(6),
         Mesh            = get_bit(7),

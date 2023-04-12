@@ -16,4 +16,4 @@ namespace ob::rhi {
 		TriangleList,	//!< 三角形リスト
 	};
 
-}// namespcae ob::rhi
+}

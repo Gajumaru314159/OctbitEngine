@@ -54,4 +54,4 @@ namespace ob::rhi {
 
 
     //! @endcond
-}// namespcae ob
+}

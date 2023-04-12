@@ -258,4 +258,4 @@ namespace ob::input {
 	//@―---------------------------------------------------------------------------
 	using AxisDelegate = AxisNotifier::delegate_type;
 
-}// namespcae ob
+}

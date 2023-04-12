@@ -28,4 +28,4 @@ namespace ob::graphics {
         f32         fov;        //!< 画角
     };
 
-}// namespcae ob
+}

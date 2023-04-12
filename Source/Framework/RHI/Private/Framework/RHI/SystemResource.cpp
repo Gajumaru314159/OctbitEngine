@@ -1,11 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール(DirectX12)
+//! @brief		システムリソース
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/SystemResourceModule.h>
+#include <Framework/RHI/SystemResource.h>
 #include <Framework/RHI/Texture.h>
-#include <Framework/RHI/RHI.h>
 #include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
@@ -13,7 +12,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	SystemResourceModule::SystemResourceModule(RHI& rhi) {
+	SystemResource::SystemResource(RHI& rhi) {
 		{
 			// テクスチャ
 			auto creator = [this,&rhi](IntColor color) {
@@ -41,13 +40,13 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-	SystemResourceModule::~SystemResourceModule() {
+	SystemResource::~SystemResource() {
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  プリセットテクスチャ取得
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> SystemResourceModule::getPresetTexture(PresetTexture type) {
+	Ref<Texture> SystemResource::getPresetTexture(PresetTexture type) {
 		auto found = m_presetTextures.find(type);
 		if (found == m_presetTextures.end())
 			return nullptr;

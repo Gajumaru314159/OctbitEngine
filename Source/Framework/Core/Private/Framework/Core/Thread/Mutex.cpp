@@ -78,6 +78,6 @@ namespace ob::core {
 		m_impl->m_mutex.unlock();
 	}
 
-}// namespcae ob::core
+}
 
 #undef OB_DEBUG_MUTEX_CONTEX

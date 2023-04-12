@@ -27,4 +27,4 @@ namespace ob::core {
 	template <class TKey, class TValue, class THasher = std::hash<TKey>, class TKeyEq = std::equal_to<TKey>, class TAlloc = ob::core::STLAllocator<std::pair<const TKey, TValue>>>
 	using HashMultiMap = std::unordered_multimap<TKey, TValue, THasher, TKeyEq, TAlloc>;
 
-}// namespcae ob
+}

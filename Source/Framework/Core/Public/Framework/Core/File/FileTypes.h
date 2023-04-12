@@ -41,4 +41,4 @@ namespace ob::core {
 		Text = get_bit(3),
 	};
 
-}// namespcae ob
+}

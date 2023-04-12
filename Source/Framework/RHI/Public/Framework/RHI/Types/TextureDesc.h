@@ -16,12 +16,13 @@ namespace ob::rhi {
         Texture2D,          //!< 2Dテクスチャ
         Texture3D,          //!< 3Dテクスチャ
         Cube,               //!< キューブテクスチャ
-        //Texture1DArray,          //!< 1Dテクスチャ配列
-        //Texture2DArray,          //!< 2Dテクスチャ配列
-        //CubeArray,               //!< キューブテクスチャ配列
     };
     // TODO RenderTarget/DepthStencilを別管轄にする
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  テクスチャ使用法
+    //@―---------------------------------------------------------------------------
     enum class TextureUsage {
         Sampling,
         ColorAttachment,
@@ -50,4 +51,4 @@ namespace ob::rhi {
         // TextureUsages usages;
     };
 
-}// namespcae ob::rhi
+}

@@ -84,4 +84,4 @@ namespace ob::graphics {
 		Ref<rhi::Buffer>	m_indexBuffer;
 	};
 
-}// namespcae ob
+}

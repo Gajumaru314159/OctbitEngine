@@ -166,4 +166,4 @@ namespace ob::rhi::dx12 {
         Vec2                        m_newSize;
     };
 
-}// namespcae ob::rhi::dx12
+}
