@@ -139,6 +139,7 @@ namespace ob::rhi {
 	//!				| depth		| デプス							|
 	//@―---------------------------------------------------------------------------
 	struct SubpassDesc {
+		String							name;		//!< サブパス名
 		Array<AttachmentReference>		inputs;		//!< 入力アタッチメントの参照
 		Array<AttachmentReference>		colors;		//!< カラーアタッチメントの参照
 		Array<AttachmentReference>		depth;		//!< デプスアタッチメントの参照
