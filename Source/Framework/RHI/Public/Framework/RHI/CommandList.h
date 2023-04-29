@@ -51,7 +51,7 @@ namespace ob::rhi {
 
         virtual void setRootDesciptorTable(const SetDescriptorTableParam*, s32 num) = 0;
         // void setRootDescriptor();
-        // void setRootConstant();
+        virtual void setRootConstant(const SetRootConstantsParam&) = 0;
 
 
         virtual void draw(const DrawParam& param) = 0;

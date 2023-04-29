@@ -472,6 +472,19 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief      ルート定数を設定
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::setRootConstant(const SetRootConstantsParam& param) {
+		if (param.blob.size() % 4) {
+			LOG_WARNING("ルート定数のサイズが4の倍数ではありません。");
+		}
+		if (param.blob.size()) {
+			m_cmdList->SetGraphicsRoot32BitConstants(param.slot, param.blob.size() / sizeof(s32), param.blob.data(), param.offset);
+		}
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  リソースバリアを挿入
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::insertResourceBarrier(const ResourceBarrier& resourceBarrier) {
