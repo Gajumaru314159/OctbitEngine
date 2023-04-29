@@ -6,6 +6,7 @@
 #include <Framework/Graphics/Material.h>
 #include <Framework/Graphics/Material/MaterialImpl.h>
 #include <Framework/Graphics/Material/MaterialManager.h>
+
 namespace ob::graphics {
 
     //@―---------------------------------------------------------------------------
@@ -16,26 +17,29 @@ namespace ob::graphics {
     }
 
     //@―---------------------------------------------------------------------------
-    //! @brief  
+    //! @brief  マテリアルが使用するRenderPassを登録
     //@―---------------------------------------------------------------------------
-    void Material::RegisterRenderPass(Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
+    Ref<rhi::RenderPass> Material::AddRenderPass(const rhi::RenderPassDesc& desc) {
         if (auto manager = MaterialManager::Get()) {
-            manager->registerRenderPass(name, renderPass, subpass);
+            return manager->addRenderPass(desc);
         }
+        return nullptr;
     }
 
     //@―---------------------------------------------------------------------------
-    //! @brief  
+    //! @brief  レンダーパスを検索
     //@―---------------------------------------------------------------------------
-    rhi::SubPass Material::FindRenderPass(Name renderTag) {
+    rhi::SubPass Material::FindSubpass(Name renderTag) {
         if (auto manager = MaterialManager::Get()) {
-            return manager->FindRenderPass(renderTag);
+            return manager->findSubpass(renderTag);
         }
         return {};
     }
 
+
+
     //@―---------------------------------------------------------------------------
-    //! @brief  グローバルFloatプロパティを設定する
+    //! @brief  グローバルマテリアルパラメータを設定
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalFloat(StringView name, f32 value) {
         if (auto manager = MaterialManager::Get()) {
@@ -43,7 +47,7 @@ namespace ob::graphics {
         }
     }
     //@―---------------------------------------------------------------------------
-    //! @brief  グローバルColorプロパティを設定する
+    //! @brief  グローバルマテリアルパラメータを設定
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalColor(StringView name, Color value) {
         if (auto manager = MaterialManager::Get()) {
@@ -51,7 +55,7 @@ namespace ob::graphics {
         }
     }
     //@―---------------------------------------------------------------------------
-    //! @brief  グローバルMatrixプロパティを設定する
+    //! @brief  グローバルマテリアルパラメータを設定
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
         if (auto manager = MaterialManager::Get()) {
@@ -59,7 +63,7 @@ namespace ob::graphics {
         }
     }
     //@―---------------------------------------------------------------------------
-    //! @brief  グローバルTextureプロパティを設定する
+    //! @brief  グローバルマテリアルパラメータを設定
     //@―---------------------------------------------------------------------------
     void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
         if (auto manager = MaterialManager::Get()) {

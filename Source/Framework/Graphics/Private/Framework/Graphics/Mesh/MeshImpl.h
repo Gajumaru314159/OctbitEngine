@@ -26,7 +26,7 @@ namespace ob::graphics {
 		MeshImpl(const MeshData&);
 		MeshImpl(MeshData&&);
 
-		VertexLayoutId getvertexLayoutId()const;
+		VertexLayoutId getVertexLayoutId()const;
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			頂点レイアウトを設定
@@ -75,7 +75,7 @@ namespace ob::graphics {
 	private:
 
 		rhi::VertexLayout	m_layout;
-		VertexLayoutId		m_layoutId;
+		VertexLayoutId		m_layoutId{ -1 };
 
 		MeshData			m_meshData;
 		bool				m_initByMeshData = false;

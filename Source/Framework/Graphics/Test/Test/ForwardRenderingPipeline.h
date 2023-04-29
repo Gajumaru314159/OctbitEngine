@@ -73,19 +73,16 @@ namespace ob::graphics {
 				// 描画はイミュータブルな操作であるためカメラごとに並列処理することが可能
 				// ただしCommandBufferの実行自体はcamerasの順番に従って送信する必要がある
 
-
+				// テンポラリのアロケートは定義だけ作りFrameBufferは使用時に作る
+				// 使われずに数フレーム経過したものは削除
 
 				auto size = camera.getRenderTarget()->size();
-				s32 width = camera.getRenderTarget()->width();
-				s32 height = camera.getRenderTarget()->height();
 
-				camera.allocateRenderTexture();
-				/*
+				Ref<rhi::RenderTexture> albedoRT = context.get(size, TextureFormat::RGBA8);
+				Ref<rhi::RenderTexture> gbuffer0RT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
+				Ref<rhi::RenderTexture> depthRT = context.allocateRenderTexture(size, TextureFormat::D32);
+				Ref<rhi::RenderTexture> accumulateRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
 
-				Ref<RenderTexture> albedoRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
-				Ref<RenderTexture> gbuffer0RT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
-				Ref<RenderTexture> depthRT = context.allocateRenderTexture(size, TextureFormat::D32);
-				Ref<RenderTexture> accumulateRT = context.allocateRenderTexture(size, TextureFormat::RGBA8);
 				auto cameraRT = camera.getRenderTexture();
 
 				FrameBufferDesc desc;

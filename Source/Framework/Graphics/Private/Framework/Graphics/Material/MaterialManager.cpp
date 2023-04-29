@@ -67,16 +67,44 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//!	@brief			描画タグにRenderPassを登録
 	//@―---------------------------------------------------------------------------
-	void MaterialManager::registerRenderPass(Name name, const Ref<rhi::RenderPass>& renderPass, s32 subpass) {
-		m_renderPassMap.emplace(name, rhi::SubPass{ renderPass, subpass });
+	Ref<rhi::RenderPass> MaterialManager::addRenderPass(const rhi::RenderPassDesc& desc) {
+
+		// 登録済み
+		if (auto found = m_renderPassMap.find(desc);found!=m_renderPassMap.end()) {
+			return found->second;
+		}
+
+		// 未登録チェック
+		for (auto& subpass : desc.subpasses) {
+			if (m_subpassMap.count(Name(subpass.name))) {
+				LOG_ERROR("RenderPassの登録に失敗。マテリアルに登録済みのサブパスが含まれています。[renderPass={}, subpass={}]",desc.name,subpass.name);
+				return nullptr;
+			}
+		}
+
+		// 生成
+		auto renderPass = rhi::RenderPass::Create(desc);
+
+		if (!renderPass) {
+			return nullptr;
+		}
+
+		m_renderPassMap[desc] = renderPass;
+
+		// サブパス登録
+		for (auto [index,subpass] : Indexed(desc.subpasses)) {
+			m_subpassMap.emplace(subpass.name, rhi::SubPass{ renderPass, (s32)index });
+		}
+
+		return renderPass;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//!	@brief			描画タグからRenderPassを登録
 	//@―---------------------------------------------------------------------------
-	rhi::SubPass MaterialManager::FindRenderPass(Name renderTag) {
-		auto found = m_renderPassMap.find(renderTag);
-		if (found == m_renderPassMap.end())
+	rhi::SubPass MaterialManager::findSubpass(Name renderTag) {
+		auto found = m_subpassMap.find(renderTag);
+		if (found == m_subpassMap.end())
 			return {nullptr,0};
 		return found->second;
 	}

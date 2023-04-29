@@ -7,5 +7,9 @@
 
 namespace ob::graphics {
 
+	class Camera;
+	class CommandBuffer;
+	class RenderContext;
+	class RenderPipeline;
 
 }

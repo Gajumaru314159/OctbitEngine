@@ -87,9 +87,9 @@ int TestDirectX12() {
 		auto color = desc.addAttachment(TextureFormat::RGBA8);
 		auto color2 = desc.addAttachment(TextureFormat::RGBA8);
 		auto depth = desc.addAttachment(TextureFormat::D32);
-		auto pass0 = desc.addSubpassXCD({ color,color2 }, depth);
+		auto pass0 = desc.addSubpassXCD(TC("Opaque"), {color,color2}, depth);
 
-		renderPass = RenderPass::Create(desc);
+		renderPass = Material::AddRenderPass(desc);
 		OB_ASSERT_EXPR(renderPass);
 	}
 
@@ -156,7 +156,6 @@ int TestDirectX12() {
 	Model sky("Asset/Model/sky.obj", TC("Asset/Texture/sky.dds"));
 	Model ukulele("Asset/Model/Ukulele.obj", TC("Asset/Model/Ukulele_col.dds"));
 
-	Material::RegisterRenderPass(Name(TC("Opaque")), renderPass, 0);
 
 	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 

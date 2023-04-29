@@ -67,7 +67,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//!	@brief			頂点レイアウトIDを取得
 	//@―---------------------------------------------------------------------------
-	VertexLayoutId MeshImpl::getvertexLayoutId()const {
+	VertexLayoutId MeshImpl::getVertexLayoutId()const {
 		return m_layoutId;
 	}
 

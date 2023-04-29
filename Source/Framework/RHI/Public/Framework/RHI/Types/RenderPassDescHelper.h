@@ -37,10 +37,11 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpass(const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors, Optional<AttachmentID> depth) {
+        s32 addSubpass(StringView name,const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors, Optional<AttachmentID> depth) {
 
             // サブパス設定
             auto& subpass = subpasses.emplace_back();
+            subpass.name = name;
 
             for (auto& inputID : inputs) {
                 auto& ref = subpass.inputs.emplace_back();
@@ -71,32 +72,32 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpassICD(const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors, AttachmentID depth ) {
-            return addSubpass(inputs, colors, depth);
+        s32 addSubpassICD(StringView name, const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors, AttachmentID depth ) {
+            return addSubpass(name,inputs, colors, depth);
         }
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpassXCD(const Array<AttachmentID>& colors, AttachmentID depth) {
-            return addSubpass({}, colors, depth);
+        s32 addSubpassXCD(StringView name, const Array<AttachmentID>& colors, AttachmentID depth) {
+            return addSubpass(name,{}, colors, depth);
         }
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpassXXD(AttachmentID depth) {
-            return addSubpass({}, {}, depth);
+        s32 addSubpassXXD(StringView name, AttachmentID depth) {
+            return addSubpass(name,{}, {}, depth);
         }
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpassXCX(const Array<AttachmentID>& colors) {
-            return addSubpass({}, colors, std::nullopt);
+        s32 addSubpassXCX(StringView name, const Array<AttachmentID>& colors) {
+            return addSubpass(name,{}, colors, std::nullopt);
         }
         //@―---------------------------------------------------------------------------
         //! @brief  サブパス追加
         //@―---------------------------------------------------------------------------
-        s32 addSubpassICX(const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors) {
-            return addSubpass(inputs, colors, std::nullopt);
+        s32 addSubpassICX(StringView name, const Array<AttachmentID>& inputs, const Array<AttachmentID>& colors) {
+            return addSubpass(name,inputs, colors, std::nullopt);
         }
 
         //@―---------------------------------------------------------------------------

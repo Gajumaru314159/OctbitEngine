@@ -14,8 +14,10 @@ PBRとNPBRを両方使用する場合はカメラごとにRenderPipelineを構�
 RenderPipelineが異なる場合RenderPassも異なるのでMaterialはPRBとNPRBの両方に対応する必要があります。
 具体的にはRenderTagに```PBR_Opaque```と```NPBR_Opaque```それぞれのシェーダを含める必要があります。
 ```c++
-if(IsPBR(camera)){
+if(camera.hasTag(TC("PBR"))){
 	context.getRenderers(TC("PBR_Opaque"))
+		.sort(soptions)
+		.cull(coptions)
 		.draw();
 	// ...
 }else{
@@ -27,7 +29,8 @@ if(IsPBR(camera)){
 
 ### Camera情報
 一般的なパラメータはCameraコンポーネントが持つ。
-カスタムRenderPipelineで必要なパラメータはCameraと同じEntityにコンポーネントとして追加する。
+カスタムRenderPipelineで必要なパラメータはCameraと同じEntityにコンポーネントとして追加する。  
+例：AdditionalCameraDataComponent
 
 
 ### Engine実装とGame実装
@@ -39,89 +42,54 @@ Engine実装で実現できないものがある場合は別のRenderTagを用�
 * ```drawWireframe()```
 * ```drawGizmo()```
 
-### GlobalRenderPipeline
+### サンプル
 
 ```c++
 
-class GlobalRenderPipeliene{
+class SampleRenderPipeliene : public RenderPipeline{
 public:
 	// システム的なGPGPU処理はrender前に実行される
 	// IMGUIなどのデバッグ描画はrender後に実行される
 	void render(RenderContext& context, Span<Camera> cameras) override {
 		
-		// カメラ由来では内処理(例：GI/Sea)
-		{
-			auto commandBuffer = context.allocateCommandBuffer();
-			commandBuffer.dispatchCompute(giShader);
-			context.executeCommandBuffer(commandBuffer);
-		}
-
-		// Camera.depthが小さい順に描画
-		// RenderTextureの描画順はユーザ制御
+		// カメラ由来ではない処理(例：GI/Sea)
+		
+		// カメラごとの描画
 		for(auto& camera:cameras){
 			
+			auto size = camera.getRenderTexture().size();
+
 			context.setCamera(camera);
-			camera.renderPipeline(context,camera);
+
+			static Name opaqueName(TC("Opaque"));
+			context.beginRenderPass(opaqueName,size,);
+			camera.renderPipeline(context,camera,);
+
+			context
+				.getRenderers("Opaque","Cutoff")
+				.cull()
+				.sort()
+				.draw();
 
 		}
 	}
 
 };
-
-class ToonRenderPipeliene{
-public:
-	// システム的なGPGPU処理はrender前に実行される
-	// IMGUIなどのデバッグ描画はrender後に実行される
-	void render(RenderContext& context, Camera& camera) override {
-		
-		// カメラパラメータ取得
-		CustomCameraParam param{};
-		if(auto comp = camera.entity().findComponent<CameraDataComponent>()){
-			param = comp.param();
-		}
-		
-		// 内部でViewportの設定など
-		context.setCamera(camera);
-
-		// 描画
-		context.draw();
-
-		// PostProcess
-		{
-			auto commandBuffer = context.allocateCommandBuffer();
-			commandBuffer.beginRenderPass(blur0);
-			commandBuffer.blit(material,TC("BlurPass0"));
-		}
-
-		// カメラの描画対象にコピー
-		context.blit(blur0,camera.target);
-
-	}
-
-};
-
 ```
-## RenderPipelineの登録
+
+## 描画リソースの管理
+* 描画テクスチャはRenderer(Camera)毎に名前で管理する
+* RenderPassは全体で共通
+	* RenderPassの登録はRendererの生成とは分離する必要がある
+	* FrameBufferはRendererFeatureの組み換えで変わる場合がある？
 ```c++
-class Sample{
+class Renderer{
 public:
-
-	Sample(Graphics& graphics){
-
-		graphics.setRenderPipeline(m_renderPipeline);
-
+	Ref<RenderTexture> findRenderTexture(Name name){
+		Ref<RenderTexture> fallback;
+		return try_find(m_renderTextures,fallback);
 	}
 private:
-	SampleRenderPipeline m_renderPipeline;
+	Map<Name,Ref<RenderTexture>> m_renderTextures;
 };
 ```
-
-
-## Rendererの描画
-RendererはDrawContext内部にRenderTag毎に登録されている。
-
-1. 特定のRenderTagを持つRendererを集める ※複数指定可
-2. 描画条件に一致するものだけにフィルタ ※カリング
-3. 描画順にソート ※距離順
-
-## RenderスレッドとGameスレッド

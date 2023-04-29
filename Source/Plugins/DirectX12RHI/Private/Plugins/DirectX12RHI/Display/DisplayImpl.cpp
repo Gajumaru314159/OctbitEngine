@@ -208,7 +208,7 @@ namespace ob::rhi::dx12 {
             RenderPassDescHelper rdesc;
             rdesc.name = TC("DisplayCopy");
             auto color = rdesc.addAttachment(m_desc.format);
-            auto pass0 = rdesc.addSubpassXCX({ color });
+            auto pass0 = rdesc.addSubpassXCX("DisplayCopy",{ color });
 
             m_renderPass = RenderPass::Create(rdesc);
             OB_ASSERT_EXPR(m_renderPass);

@@ -19,6 +19,8 @@ namespace ob::graphics {
 		: m_desc(desc)
 	{
 		using namespace ob::rhi;
+
+		// プロパティ名とバッファ対応
 		s32 bufferSize = 0;	
 		for (auto& name : desc.floatProperties) {
 			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Float,bufferSize });
@@ -34,13 +36,14 @@ namespace ob::graphics {
 			bufferSize += sizeof(Matrix);
 		}
 
-
+		// プロパティ名とテクスチャ番号対応
 		for (auto& [index,name] : Indexed(desc.textureProperties)) {
 			m_propertyMap.emplace(name, ValuePropertyDesc{ PropertyType::Texture,(s32)index});
 		}
 		m_textures.resize(desc.textureProperties.size());
 
-		if (bufferSize) {
+		// バッファ生成
+		if (0 < bufferSize) {
 			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BindFlag::AllShaderResource);
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
@@ -48,12 +51,14 @@ namespace ob::graphics {
 			memset(m_bufferBlob.data(), 0, m_bufferBlob.size());
 		}
 
-		if (bufferSize) {
+		// テーブル生成(バッファ)
+		if (0 < bufferSize) {
 			m_bufferTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
 			OB_ASSERT_EXPR(m_bufferTable);
 			m_bufferTable->setResource(0, m_buffer);
 		}
 
+		// テーブル生成(テクスチャ)
 		if (desc.textureProperties.size()) {
 			m_textureTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, desc.textureProperties.size());
 			m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, desc.textureProperties.size());
@@ -64,7 +69,7 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  プロパティがあるか
 	//@―---------------------------------------------------------------------------
 	bool MaterialImpl::hasProprty(StringView name, PropertyType type) const {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
@@ -74,21 +79,21 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  Floatプロパティを設定
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setFloat(StringView name, f32 value) {
 		setValueProprty(name, PropertyType::Float, value);
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  Colorプロパティを設定
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setColor(StringView name, Color value) {
 		setValueProprty(name, PropertyType::Color, value);
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  Matrixプロパティを設定
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
 		setValueProprty(name, PropertyType::Matrix,
@@ -101,7 +106,7 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  Textureプロパティを設定
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
@@ -118,7 +123,7 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  
+	//! @brief  描画コマンドを記録
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, Name pass) {
 		// 1. 定数バッファのデスクリプタ設定
@@ -143,20 +148,24 @@ namespace ob::graphics {
 		auto submesh = pMesh->getSubMesh(submeshIndex);
 		if (submesh.indexCount <= 0) return;
 
+
 		Ref<rhi::PipelineState> pipeline;
 
-		auto pipelineItr = m_pipelineMap.find(pMesh->getvertexLayoutId());
-		if (pipelineItr == m_pipelineMap.end()) {
-			pipeline = createPipeline(pass, pMesh->getVertexLayout(),pMesh->getvertexLayoutId());
+		PipelineKey key{
+			pass,
+			pMesh->getVertexLayoutId()
+		};
+
+		if (auto found = m_pipelineMap.find(key); found != m_pipelineMap.end()) {
+			pipeline = found->second;
 		} else {
-			pipeline = pipelineItr->second;
+			pipeline = createPipeline(pass, pMesh->getVertexLayout(),pMesh->getVertexLayoutId());
 		}
 
 		if (!pipeline)
 			return;
 
 		cmdList->setPipelineState(pipeline);
-
 
 		// グローバル変数設定
 		if (auto manager = MaterialManager::Get()) {
@@ -171,6 +180,7 @@ namespace ob::graphics {
 			{m_textureTable, enum_cast(MaterialRootSignatureSlot::TextureLocal)},
 			//{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
 		};
+
 		cmdList->setRootDesciptorTable(params, std::size(params));
 
 		pMesh->record(cmdList, submeshIndex);
@@ -198,19 +208,24 @@ namespace ob::graphics {
 		// マテリアルパス取得
 		auto passItr = m_desc.passes.find(pass);
 
-		if (passItr == m_desc.passes.end())
+		if (passItr == m_desc.passes.end()) {
+			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。",pass,m_desc.name);
 			return nullptr;
+		}
 
 		auto& materialPass = passItr->second;
 
 		// レンダーパス取得
-		auto [renderPass, subpass] = Material::FindRenderPass(materialPass.renderTag);
+		auto [renderPass, subpass] = Material::FindSubpass(materialPass.renderTag);
 
-		if (!renderPass)
+		if (!renderPass) {
+			LOG_ERROR("PipelineStateの生成に失敗。{}は登録されていないMaterialTagです。[material={}]", materialPass.renderTag,m_desc.name);
 			return nullptr;
+		}
 
-		if (!is_in_range(subpass, renderPass->desc().subpasses))
-			return nullptr;
+		if (!is_in_range(subpass, renderPass->desc().subpasses)) {
+			LOG_ERROR("PipelineStateの生成に失敗。{}は範囲外のSubpassです。[material={}]", subpass, m_desc.name);
+		}
 
 		// 頂点レイアウト
 		rhi::VertexLayout mapped;
@@ -259,7 +274,11 @@ namespace ob::graphics {
 			pipeline = PipelineState::Create(desc);
 
 			if (pipeline) {
-				m_pipelineMap[id] = pipeline;
+				PipelineKey key{
+					pass,
+					id
+				};
+				m_pipelineMap[key] = pipeline;
 			}
 		}
 

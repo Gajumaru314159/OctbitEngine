@@ -4,12 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphics/Forward.h>
 
 namespace ob::graphics {
-
-    class RenderContext;
-    class CommandRecorder;
-    class Camera;
 
     //@―---------------------------------------------------------------------------
     //! @brief  説明
@@ -17,14 +14,10 @@ namespace ob::graphics {
     class IRenderer {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-        virtual void render(CommandRecorder&,const RenderContext&, const Camera&) = 0;
+        virtual void render(const RenderContext&, const Camera&) = 0;
 
     private:
 
@@ -32,17 +25,4 @@ namespace ob::graphics {
 
     };
 
-
-
-
-
-
-    //===============================================================
-    // インライン関数
-    //===============================================================
-    //! @cond
-
-
-
-    //! @endcond
 }

@@ -34,6 +34,7 @@ namespace ob::graphics {
     //! @brief  マテリアル定義
     //@―---------------------------------------------------------------------------
     struct MaterialDesc{
+        Name            name;
         
         HashMap<Name, MaterialPass> passes;
         

@@ -5,18 +5,15 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Misc/YesNo.h>
-#include <Framework/Engine/Name.h>
-
-//#include <Framework/Graphics/RendererGroup.h>
+#include <Framework/RHI/Forward.h>
 
 namespace ob::graphics {
     
     class CommandBuffer;
     class Camera;
-    class Attachment;
     class IRenderer;
 
-    
+    class RenderGroup;
 
     //@―---------------------------------------------------------------------------
     //! @brief  
@@ -30,12 +27,26 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      RenderPass を開始
         //@―---------------------------------------------------------------------------
-        virtual void beginRenderPass(s32 width,s32 height,Span<Attachment> attachments,std::optional<Attachment> depth = std::nullopt) = 0;
+        virtual void beginRenderPass(const Ref<rhi::FrameBuffer>&) = 0;
 
         //@―---------------------------------------------------------------------------
-        //! @brief      サブパスを開始
+        //! @brief      RenderPass を終了
         //@―---------------------------------------------------------------------------
-        virtual void beginSubPass(Span<s32> colors,Span<s32> inputs) = 0;
+        virtual void endRenderPass() = 0;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      次のサブパスを開始
+        //@―---------------------------------------------------------------------------
+        virtual void nextSubpass() = 0;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      カスタムコマンドバッファーを記録
+        //! 
+        //! @details    この関数を呼び出すと、RenderContext内部のCommandBufferにカスタムCommandBufferの内容がコピーされます。
+        //!             呼出し後にカスタムCommandBufferを再利用しない場合はCommandBufferをクリアしてください。
+        //@―---------------------------------------------------------------------------
+        virtual void executeCustomCommand(const CommandBuffer&) = 0; 
+        // TODO ComputeAsync版
 
 
         //@―---------------------------------------------------------------------------
@@ -46,36 +57,12 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
-        virtual RenderGroup getRendererGroup(Name renderTag) const;// Debug / Shadow / UI
+        //virtual RenderGroup getRendererGroup(Name renderTag) const;// Debug / Shadow / UI
 
         //@―---------------------------------------------------------------------------
         //! @brief      特定の描画タグを持つ描画アイテムを描画する
         //@―---------------------------------------------------------------------------
         virtual void draw() = 0;// Debug / Shadow / UI
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      カスタムコマンドバッファーを記録
-        //! 
-        //! @details    この関数を呼び出すと、RenderContext内部のCommandBufferにカスタムCommandBufferの内容がコピーされます。
-        //!             呼出し後にカスタムCommandBufferを再利用しない場合はCommandBufferをクリアしてください。
-        //@―---------------------------------------------------------------------------
-        virtual void executeCustomCommand(const CommandBuffer&) = 0;
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      
-        //@―---------------------------------------------------------------------------
-        virtual void invokeOnRenderObjectCallBack() = 0;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      サブパスを終了
-        //@―---------------------------------------------------------------------------
-        virtual void endSubPass() = 0;
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      RenderPass を終了
-        //@―---------------------------------------------------------------------------
-        virtual void endRenderPass() = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief      記録された全てのコマンドを実行

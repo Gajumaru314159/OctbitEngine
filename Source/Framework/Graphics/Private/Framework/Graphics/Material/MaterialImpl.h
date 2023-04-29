@@ -29,6 +29,19 @@ namespace ob::graphics {
 		s32				index;		//!< 0xF000
 	};
 
+
+	struct PipelineKey {
+		Name pass;
+		VertexLayoutId layout;
+
+		bool operator==(const PipelineKey& rhs)const {
+			return pass == rhs.pass && layout == rhs.layout;
+		}
+		bool operator!=(const PipelineKey& rhs)const {
+			return !(*this==rhs);
+		}
+	};
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
@@ -86,13 +99,14 @@ namespace ob::graphics {
 
 	private:
 
-
-		struct PipelineKey {
-			Name pass;
-			rhi::VertexLayout layout;
+		struct PipelineKeyHasher {
+		public:
+			size_t operator()(const ob::graphics::PipelineKey& v)const {
+				return std::hash<decltype(v.pass)>{}(v.pass) ^ std::hash<decltype(v.layout)>{}(v.layout);
+			}
 		};
 
-		using PipelineMap = HashMap<VertexLayoutId, Ref<rhi::PipelineState>>;
+		using PipelineMap = HashMap<PipelineKey, Ref<rhi::PipelineState>, PipelineKeyHasher>;
 		using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
 		MaterialDesc		m_desc;

@@ -24,13 +24,12 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//!	@brief			描画タグにRenderPassを登録
 		//@―---------------------------------------------------------------------------
-		void registerRenderPass(Name name, const Ref<rhi::RenderPass>&, s32 subpass);
+		Ref<rhi::RenderPass> addRenderPass(const rhi::RenderPassDesc& desc);
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			描画タグからRenderPassを登録
 		//@―---------------------------------------------------------------------------
-		rhi::SubPass FindRenderPass(Name renderTag);
-
+		rhi::SubPass findSubpass(Name renderTag);
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			レイアウトID取得
@@ -102,7 +101,8 @@ namespace ob::graphics {
 
 	private:
 
-		HashMap<Name, rhi::SubPass> m_renderPassMap;
+		Map<rhi::RenderPassDesc, Ref<rhi::RenderPass>> m_renderPassMap;
+		HashMap<Name, rhi::SubPass> m_subpassMap;
 
 		SpinLock m_lock;
 		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_map;

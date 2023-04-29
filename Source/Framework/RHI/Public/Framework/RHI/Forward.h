@@ -14,6 +14,7 @@ namespace ob::rhi {
 	struct SetDescriptorTableParam;
 	struct DrawParam;
 	struct DrawIndexedParam;
+	struct RenderPassDesc;
 
 	// クラス
 	class RHI;
