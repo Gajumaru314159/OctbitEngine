@@ -9,6 +9,10 @@
 #include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 
+#include <Framework/Input/InputManager.h>
+#include <Framework/RHI/RHI.h>
+#include <Framework/Graphics/Graphics.h>
+
 // DI完了後削除
 namespace ob {
 	namespace platform {
@@ -31,11 +35,11 @@ namespace ob::engine {
 	struct EngineDependency {
 		EngineDependency(
 			EntityManager&,
-			platform::WindowManager&,
-			input::InputModule&,
-			graphics::Graphics&,
-			graphics::MaterialManager&,
-			rhi::SystemResource&
+			platform::WindowManager*,
+			input::InputModule*,
+			graphics::Graphics*,
+			graphics::MaterialManager*,
+			rhi::SystemResource*
 		) {}
 	};
 
@@ -61,16 +65,9 @@ namespace ob::engine {
 		LOG_INFO("[Shutdown OctbitEngine]");
 	}
 
-	//@―---------------------------------------------------------------------------
-	//! @brief				起動
-	//@―---------------------------------------------------------------------------
-	void Engine::startup() {
-	}
-
-
 	template<class T>
-	void update_debug(T* instance) {
-		if (instance) {
+	void update_debug() {
+		if (auto instance = T::Get()) {
 			instance->update();
 		}
 	}
@@ -80,7 +77,11 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	bool Engine::update() {
 
-		update_debug(get<EntityManager>());
+		update_debug<EntityManager>();
+
+		update_debug<input::InputModule>();
+		update_debug<rhi::RHI>();
+		update_debug<graphics::Graphics>();
 
 		return true;
 	}

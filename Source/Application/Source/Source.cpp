@@ -29,31 +29,6 @@
 //-----------------------------------------------------------------
 using namespace ob;
 
-void Link_Vulkan();
-int TestDirectX12();
-int TestVullkan();
-
-void OctbitInit(ServiceInjector& injector) {
-
-	input::
-		Register(injector);
-	platform::
-		Register(injector);
-	rhi::dx12::
-		Register(injector);
-	rhi::
-		Register(injector);
-	graphics::
-		Register(injector);
-
-}
-
-int OctbitMain() {
-	TestDirectX12();
-	//TestVulkan();
-	return 0;
-}
-
 void drawOutliner(const Ref<engine::Scene>& scene);
 void drawComponents(engine::Entity* pEntity = nullptr);
 
@@ -158,8 +133,8 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(cmdList);
 	}
 
-	Model sky("Asset/Model/sky.obj", TC("Asset/Texture/sky.dds"));
-	Model ukulele("Asset/Model/Ukulele.obj", TC("Asset/Model/Ukulele_col.dds"));
+	Model sky(TC("Asset/Model/sky.obj"), TC("Asset/Texture/sky.dds"));
+	Model ukulele(TC("Asset/Model/Ukulele.obj"), TC("Asset/Model/Ukulele_col.dds"));
 
 
 	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
@@ -201,9 +176,6 @@ int TestDirectX12() {
 		{
 			if (auto engine = engine::Engine::Get()) {
 				engine->update();
-				engine->get<input::InputModule>()->update();
-				engine->get<rhi::RHI>()->update();
-				engine->get<graphics::Graphics>()->update();
 			}
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -326,89 +298,19 @@ int TestDirectX12() {
 	return 0;
 }
 
-int TestVullkan() {
-	/*
-	using namespace ob::rhi;
+void OctbitInit(ServiceInjector& injector) {
 
-	// ウィンドウ生成
-	platform::WindowDesc windowDesc;
-	windowDesc.title = TC("Graphic Test");
-	platform::Window window(windowDesc);
+	input::
+		Register(injector);
+	rhi::dx12::
+		Register(injector);
+	graphics::
+		Register(injector);
 
-	// スワップチェイン
-	Display display;
-	{
-		DisplayDesc desc;
-		desc.window = window;
-		desc.format = TextureFormat::RGBA8;
+}
 
-		display = Display(desc);
-		display.setName(TC("MainWindow"));
-		OB_ASSERT_EXPR(display);
-	}
-
-	// レンダーパス生成
-	RenderPass renderPass;
-	{
-		RenderPassDescHelper desc;
-		auto color = desc.addAttachment(TextureFormat::RGBA8);
-
-		auto colorPass = desc.addSubpassXCX({ color });
-
-		desc.addDependeny(-1, colorPass);
-
-		RenderPass renderPass(desc);
-
-	}
-
-	//描画ターゲット生成
-	RenderTexture colorRT;
-	Size screenSize = window.getSize();
-	{
-		RenderTextureDesc desc;
-		desc.format = TextureFormat::RGBA8;
-		desc.size = Size(1280,720);
-
-		colorRT = RenderTexture(desc);
-		OB_ASSERT_EXPR(colorRT);
-	}
-
-	// フレームバッファ生成
-	FrameBuffer frameBuffer;
-	{
-		FrameBufferDesc desc;
-		desc.renderPass = renderPass;
-		desc.attachments.push_back(colorRT);
-
-	}
-
-	// コマンドリスト生成
-	CommandList cmdList;
-	{
-		CommandListDesc desc;
-		desc.type = CommandListType::Graphic;
-		cmdList = CommandList(desc);
-	}
-
-
-	MSG msg = {};
-	while (true) {
-
-		//graphics::System::Get().update();
-		GEngine->update();
-
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		if (msg.message == WM_QUIT) {
-			break;
-		}
-		if (input::Keyboard::Escape.down())break;
-
-		cmdList.applyDisplay(display, colorRT);
-
-	}
-	*/
+int OctbitMain() {
+	TestDirectX12();
+	//TestVulkan();
 	return 0;
 }

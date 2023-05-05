@@ -29,8 +29,8 @@ using namespace ob::graphics;
 class Model {
 public:
 
-	Model(const char* name,StringView tex) {
-		initMesh(name);
+	Model(StringView obj,StringView tex) {
+		initMesh(obj);
 		initTexture(tex);
 		initMaterial();
 	}
@@ -46,13 +46,16 @@ public:
 	}
 
 private:
-	void initMesh(const char* name) {
+	void initMesh(StringView obj) {
 		
 		objl::Loader Loader;
-		
-		if (Loader.LoadFile(name)) {
-			LOG_INFO("モデル読み込み");
 
+		U8String path;
+		StringEncoder::Encode(obj, path);
+		
+		if (Loader.LoadFile(path.c_str())) {
+
+			LOG_INFO("モデル読み込み [{}]",obj);
 
 			MeshData meshData;
 			size_t indexStart = 0;
@@ -95,12 +98,12 @@ private:
 
 			}
 
-			meshData.name = TC("Monky");
+			meshData.name = path;
 			m_mesh = Mesh::Create(meshData);
 
 
 		} else {
-			LOG_INFO("モデルファイルが見つかりませんでした。");
+			LOG_INFO("モデルファイルが見つかりませんでした。[{}]", obj);
 		}
 
 	}

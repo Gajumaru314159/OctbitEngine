@@ -44,7 +44,6 @@ int CommonMain() {
 
     // エンジン生成
     ob::engine::Engine engine(engineInjector);
-    engine.startup();
 
     LOG_INFO("Entry OctbitMain()");
     auto result = OctbitMain();
