@@ -3,6 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
+#if 0
 #include <Framework/RHI/TextureData.h>
 #include <Framework/RHI/Private/DDSFormat.h>
 #include <Framework/RHI/Private/DXGIFormat.h>
@@ -207,3 +208,4 @@ namespace ob::rhi
 
 
 }// namespace ob
+#endif
