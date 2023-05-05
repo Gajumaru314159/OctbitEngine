@@ -11,6 +11,13 @@ FeatureRenderPipelineは取り外し可能な描画機能を組み合わせる�
 			* ScriptableRendererFeature[]
 			* ScriptableRenderPass[]
 
+* Graphics
+	* RenderPipeline
+	* Camera[]
+		* Renderer
+			* RendererFeature[]
+			* RendererPass[]
+
 ## クラス説明
 |クラス|機能|
 |-|-|
@@ -140,9 +147,10 @@ public:
 		context.beginRenderPass(m_frameBuffer);
 
 		context
-			.draw("DepthPrepass")
+			.getRenderers("DepthPrepass","DepthPrepass2")
 			.cull()
-			.sort();
+			.sort()
+			.draw();
 	}
 private:
 	Ref<FrameBuffer> m_frameBuffer;

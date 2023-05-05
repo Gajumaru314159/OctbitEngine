@@ -16,6 +16,9 @@ namespace ob::graphics
     class CommandBufferImpl :public CommandBuffer {
     public:
 
+        //@―---------------------------------------------------------------------------
+        //! @brief          コンストラクタ
+        //@―---------------------------------------------------------------------------
         CommandBufferImpl();
         CommandBufferImpl(Ref<rhi::CommandList>& cmdList);
 

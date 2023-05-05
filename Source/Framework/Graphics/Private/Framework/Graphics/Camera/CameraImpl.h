@@ -36,7 +36,7 @@ namespace ob::graphics {
         const Matrix& getViewProjectionMatrix()const override;
 
         Vec3 worldToScreen(const Vec3& position)const override;
-        Vec3 screenToWorld(const Vec3& position)const override;
+        Vec3 screenToWorld(const Vec3& position,f32 distance)const override;
 
 
 
@@ -65,7 +65,6 @@ namespace ob::graphics {
 
         // 位置情報はTransform?
 
-        Ref<rhi::RenderTexture> allocateRenderTexture()override;
 
         void addRenderTargetEvent(rhi::TextureEventHandle& handle, rhi::TextureEventDelegate func)override;
 

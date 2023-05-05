@@ -18,7 +18,7 @@ namespace ob {
 		class InputModule;
 	}
 	namespace graphics {
-		class GraphicModule;
+		class Graphics;
 		class MaterialManager;
 	}
 	namespace rhi {
@@ -33,7 +33,7 @@ namespace ob::engine {
 			EntityManager&,
 			platform::WindowManager&,
 			input::InputModule&,
-			graphics::GraphicModule&,
+			graphics::Graphics&,
 			graphics::MaterialManager&,
 			rhi::SystemResource&
 		) {}

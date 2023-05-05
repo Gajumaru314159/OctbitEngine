@@ -22,7 +22,8 @@
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
-#include <Framework/Graphics/GraphicModule.h>
+#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/Sample/Universal/UniversalRenderPipeline.h>
 #include <Plugins/DirectX12RHI/System.h>
 
 //-----------------------------------------------------------------
@@ -62,6 +63,10 @@ int TestDirectX12() {
 	using namespace ob::graphics;
 
 	debug::LogInfo logInfo;
+
+	if (auto g = graphics::Graphics::Get()) {
+		g->setRenderPipeline<graphics::UniversalRenderPipeline>();
+	}
 
 
 	// ウィンドウ生成
@@ -198,6 +203,7 @@ int TestDirectX12() {
 				engine->update();
 				engine->get<input::InputModule>()->update();
 				engine->get<rhi::RHI>()->update();
+				engine->get<graphics::Graphics>()->update();
 			}
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {

@@ -6,22 +6,22 @@
 #pragma once
 #include <Framework/Core/Misc/YesNo.h>
 #include <Framework/RHI/Forward.h>
+#include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/CommandBuffer.h>
 
 namespace ob::graphics {
-    
-    class CommandBuffer;
-    class Camera;
-    class IRenderer;
-
-    class RenderGroup;
 
     //@―---------------------------------------------------------------------------
-    //! @brief  
+    //! @brief      描画コンテキスト
     //! 
     //! @details    内部的にCommandBufferを持っています。独自の描画方法を使用する場合は
-    //! CommandBufferに直接コマンドを記録し、executeCommandBuffer()を記録してください。
+    //!             CommandBufferに直接コマンドを記録し、executeCommandBuffer()を記録してください。
     //@―---------------------------------------------------------------------------
-    class RenderContext {
+    class RenderContext : public RefObject {
+    public:
+
+        static Ref<RenderContext> Create();
+
     public:
 
         //@―---------------------------------------------------------------------------

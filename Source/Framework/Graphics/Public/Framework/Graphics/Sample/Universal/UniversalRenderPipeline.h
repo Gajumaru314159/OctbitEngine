@@ -1,24 +1,33 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		UniversalRenderPipeline
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/RenderPipeline.h>
+#include <Framework/Graphics/CameraType.h>
+#include <Framework/Graphics/RenderView.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      描画パイプライン
-    //! @details    描画呼び出しの基底となるクラスです。プログラム内で1つだけ存在します。
+	//! @brief      UniversalRenderPipeline
 	//@―---------------------------------------------------------------------------
-	class SampleRenderPipeline : public RenderPipeline {
+	class UniversalRenderPipeline : public RenderPipeline {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
-		void render(RenderContext& context, Span<const Ref<Camera>> cameras) override;
+		void render(RenderContext& context, Span<CameraData>  cameras) override {
+
+			for (auto& camera : cameras) {
+				if (camera.renderView) {
+					camera.renderView->render(context, camera);
+				}
+			}
+
+		}
 
 	};
 

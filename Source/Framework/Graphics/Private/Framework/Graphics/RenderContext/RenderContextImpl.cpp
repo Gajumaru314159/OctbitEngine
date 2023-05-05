@@ -13,6 +13,10 @@
 
 namespace ob::graphics {
 
+    Ref<RenderContext> RenderContext::Create() {
+        return new RenderContextImpl();
+    }
+
     //@―---------------------------------------------------------------------------
     //! @brief      コンストラクタ
     //@―---------------------------------------------------------------------------
@@ -56,6 +60,7 @@ namespace ob::graphics {
     void RenderContextImpl::executeCustomCommand(const CommandBuffer&) {
 
         // CommandListを分割して挿入？
+        OB_NOTIMPLEMENTED();
 
     }
 
@@ -84,6 +89,7 @@ namespace ob::graphics {
     void RenderContextImpl::draw() {
 
         // TODO 設計
+        OB_NOTIMPLEMENTED();
 
     }
 

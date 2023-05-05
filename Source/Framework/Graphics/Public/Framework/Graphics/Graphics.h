@@ -15,6 +15,8 @@ namespace ob::graphics {
     class Graphics : public Singleton<Graphics>{
     public:
 
+        Graphics();
+
         template<class T,class... Args>
         void setRenderPipeline(Args&&... args) {
             m_renderPipeline = std::make_unique<T>(args...);
@@ -23,6 +25,7 @@ namespace ob::graphics {
         void update();
 
     public:
+        Ref<RenderContext> m_renderContext;
         UPtr<RenderPipeline> m_renderPipeline;
     };
 

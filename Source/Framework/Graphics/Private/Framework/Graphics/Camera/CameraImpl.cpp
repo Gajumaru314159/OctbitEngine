@@ -13,14 +13,6 @@ namespace ob::graphics {
 		return nullptr;// new Camera();
 	}
 
-	Ref<Camera> Camera::GetMain() {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-	Array<Ref<Camera>> Camera::GetAll() {
-		OB_NOTIMPLEMENTED();
-		return {};
-	}
 
 	CameraImpl::CameraImpl() {
 		m_fovY = 60.0f;
@@ -75,7 +67,7 @@ namespace ob::graphics {
 		return Vec3::Zero;
 	}
 
-	Vec3 CameraImpl::screenToWorld(const Vec3& position)const {
+	Vec3 CameraImpl::screenToWorld(const Vec3& position,f32 distance)const {
 		OB_NOTIMPLEMENTED();
 		return Vec3::Zero;
 	}

@@ -5,6 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Geometry/Viewport.h>
+#include <Framework/RHI/Forward.h>
+
+#include <Framework/Graphics/RenderView.h>
 
 namespace ob::graphics {
     
@@ -26,6 +29,23 @@ namespace ob::graphics {
         Quat        rotation;   //!< カメラの回転
         Viewport    viewport;   //!< ビューポートサイズ
         f32         fov;        //!< 画角
+    };
+
+
+    class RenderView;
+
+    struct CameraData {
+        CameraType  type;
+        Vec3        position;   //!< カメラのワールド座標
+        Quat        rotation;   //!< カメラの回転
+        f32         fov;        //!< 画角
+        Viewport    viewport;   //!< ビューポートサイズ
+        Ref<rhi::RenderTexture> renderTexture;
+        UPtr<RenderView> renderView;
+
+        Matrix      viewMatrix;
+        Matrix      projMatrix;
+        Matrix      viewprojMatrix;
     };
 
 }

@@ -6,11 +6,9 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/TextureFormat.h>
+#include <Framework/Graphics/Forward.h>
 
 namespace ob::graphics {
-
-    class Material;
-    class Mesh;
 
     //@―---------------------------------------------------------------------------
     //! @brief      テクスチャコピー領域

@@ -17,6 +17,7 @@ namespace ob::graphics
     Ref<CommandBuffer> CommandBuffer::Create() {
         return new CommandBufferImpl();
     }
+
     //@―---------------------------------------------------------------------------
     //! @brief          生成
     //@―---------------------------------------------------------------------------

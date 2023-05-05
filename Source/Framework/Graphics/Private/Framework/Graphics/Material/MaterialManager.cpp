@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Material/MaterialManager.h>
-#include <Framework/Graphics/GraphicModule.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/DescriptorTable.h>

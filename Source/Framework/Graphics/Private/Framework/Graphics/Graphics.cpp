@@ -6,18 +6,26 @@
 #include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/RenderPipeline.h>
 
+#include <Framework/Graphics/RenderContext.h>
+
 namespace ob::graphics {
+
+    Graphics::Graphics() {
+        m_renderContext = RenderContext::Create();
+    }
 
     //@―---------------------------------------------------------------------------
     //! @brief      システムをServiceInjectorに登録
     //@―---------------------------------------------------------------------------
     void Graphics::update() {
 
-        if (m_renderPipeline) {
+        if (!m_renderContext)return;
+        if (!m_renderPipeline)return;
 
-            //m_renderPipeline->render();
+        CameraData cameras[1];
 
-        }
+
+        m_renderPipeline->render(*m_renderContext, cameras);
 
     }
 
