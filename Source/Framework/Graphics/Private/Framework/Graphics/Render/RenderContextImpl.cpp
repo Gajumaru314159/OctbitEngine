@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/RenderContext/RenderContextImpl.h>
+#include <Framework/Graphics/Render/RenderContextImpl.h>
 #include <Framework/Graphics/Material.h>
 #include <Framework/Graphics/Camera.h>
 

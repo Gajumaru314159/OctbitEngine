@@ -23,7 +23,7 @@
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
 #include <Framework/Graphics/Graphics.h>
-#include <Framework/Graphics/Sample/Universal/UniversalRenderPipeline.h>
+#include <Framework/Graphics/Render/Sample/Universal/UniversalRenderPipeline.h>
 #include <Plugins/DirectX12RHI/System.h>
 
 //-----------------------------------------------------------------

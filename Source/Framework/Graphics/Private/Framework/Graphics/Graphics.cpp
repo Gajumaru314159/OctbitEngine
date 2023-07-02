@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Graphics.h>
-#include <Framework/Graphics/RenderPipeline.h>
+#include <Framework/Graphics/Render/RenderPipeline.h>
 
-#include <Framework/Graphics/RenderContext.h>
+#include <Framework/Graphics/Render/RenderContext.h>
 
 namespace ob::graphics {
 

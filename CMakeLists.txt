@@ -104,6 +104,7 @@ add_subdirectory ("Source/Framework/Input")
 add_subdirectory ("Source/Framework/Engine")
 #add_subdirectory ("Source/Framework/Model")
 add_subdirectory ("Source/Framework/Debug")
+add_subdirectory ("Source/Framework/Asset")
 
 # Plugins
 if(WIN32)

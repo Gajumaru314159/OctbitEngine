@@ -199,21 +199,24 @@ PsOut PS_Main(PsIn i){
 		}
 		
 		{
-			MaterialDesc desc;
-			desc.colorProperties.emplace_back(TC("Color"));
-			desc.matrixProperties.emplace_back(TC("Matrix"));
-			desc.textureProperties.emplace_back(TC("Main"));
 
 			MaterialPass pass;
 			pass.renderTag = TC("Opaque");
-			pass.layout = m_mesh->getVertexLayout();
+
 			pass.rasterizer.cullMode = CullMode::None;
 			pass.depthStencil.depth.enable = true;
 			pass.depthStencil.stencil.enable = false;
 			pass.vs = vs;
 			pass.ps = ps;
+
+			pass.layout = m_mesh->getVertexLayout();
 			pass.rootSignature = signature;
-			desc.passes.emplace(pass.renderTag, pass);
+
+			MaterialDesc desc;
+			desc.colorProperties = { TC("Color") };
+			desc.matrixProperties = { TC("Matrix") };
+			desc.textureProperties = { TC("Main") };
+			desc.passes[pass.renderTag] = pass;
 
 			m_material = Material::Create(desc);
 

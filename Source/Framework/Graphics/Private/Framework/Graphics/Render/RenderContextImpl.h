@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/RenderContext.h>
+#include <Framework/Graphics/Render/RenderContext.h>
 #include <Framework/RHI/Forward.h>
 
 namespace ob::graphics {

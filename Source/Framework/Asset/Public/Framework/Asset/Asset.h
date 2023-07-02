@@ -1,25 +1,19 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		カメラ
+//! @brief		アセットアイテム
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/RenderPipeline.h>
 #include <Framework/Core/Utility/Ref.h>
 
-namespace ob::graphics {
+namespace ob::asset {
 
-	class RenderPipelineAsset {
+	class Asset : public RefObject {
 	public:
 
-		Ref<RenderPipeline> create() {
-			return nullptr;
-		}
-	};
-
-
-	class RenderPipelineStepAsset {
+		const String& getFilePath();
 
 	};
+
 
 }

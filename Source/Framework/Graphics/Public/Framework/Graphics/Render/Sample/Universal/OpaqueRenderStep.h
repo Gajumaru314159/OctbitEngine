@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/RenderStep.h>
+#include <Framework/Graphics/Render/RenderStep.h>
 
 #include <Framework/Graphics/TextureManager.h>
 #include <Framework/Graphics/RenderContext.h>
