@@ -45,7 +45,7 @@ namespace ob::graphics {
         //LayerMask getLayerMask()const override;
         //void setLayerMask(LayerMask mask) override;
 
-        Rect getVieportRect() override;
+        Rect getVieportRect()const override;
         void setVieportRect(Rect rect) override;
 
         void setRenderTarget(s32 displayNo) override;

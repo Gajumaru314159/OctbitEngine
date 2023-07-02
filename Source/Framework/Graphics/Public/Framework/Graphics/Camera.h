@@ -85,20 +85,20 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      カメラの描画範囲矩形を[0,1]で指定します。
         //@―---------------------------------------------------------------------------
-        virtual Rect getVieportRect();
-        virtual void setVieportRect(Rect rect);
+        virtual Rect getVieportRect()const = 0;
+        virtual void setVieportRect(Rect rect) = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief      カメラの描画先
         //@―---------------------------------------------------------------------------
-        virtual void setRenderTarget(s32 displayNo);
-        virtual void setRenderTarget(const Ref<rhi::RenderTexture>&);
-        virtual auto getRenderTarget()const -> const Ref<rhi::RenderTexture>&;
+        virtual void setRenderTarget(s32 displayNo) = 0;
+        virtual void setRenderTarget(const Ref<rhi::RenderTexture>&) = 0;
+        virtual auto getRenderTarget()const -> const Ref<rhi::RenderTexture>& = 0;
 
 
-        virtual f32 getAspect()const;
+        virtual f32 getAspect()const = 0;
 
-        virtual CameraType getType()const;
+        virtual CameraType getType()const = 0;
 
         //virtual auto getPriority()const->CameraPriority;
         //virtual void setPriority(CameraPriority priority);
@@ -108,7 +108,7 @@ namespace ob::graphics {
 
         // 位置情報はTransform?
 
-        virtual void addRenderTargetEvent(rhi::TextureEventHandle& handle,rhi::TextureEventDelegate func);
+        virtual void addRenderTargetEvent(rhi::TextureEventHandle& handle,rhi::TextureEventDelegate func) = 0;
 
 
     protected:

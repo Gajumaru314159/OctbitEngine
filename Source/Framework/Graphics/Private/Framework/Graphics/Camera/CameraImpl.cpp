@@ -16,10 +16,10 @@ namespace ob::graphics {
 
 	CameraImpl::CameraImpl() {
 		m_fovY = 60.0f;
-		CameraManager::Get().add(this);
+		//CameraManager::Get().add(this);
 	}
 	CameraImpl::~CameraImpl() {
-		CameraManager::Get().remove(this);
+		//CameraManager::Get().remove(this);
 	}
 
 
@@ -74,7 +74,7 @@ namespace ob::graphics {
 
 
 
-	Rect CameraImpl::getVieportRect() {
+	Rect CameraImpl::getVieportRect() const{
 		return m_rect;
 	}
 	void CameraImpl::setVieportRect(Rect rect) {
@@ -101,6 +101,9 @@ namespace ob::graphics {
 	}
 
 
+	void CameraImpl::addRenderTargetEvent(rhi::TextureEventHandle& handle, rhi::TextureEventDelegate func) {
+
+	}
 
 
 	//LayerMask CameraImpl::getLayerMask()const {

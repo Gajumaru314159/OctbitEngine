@@ -15,7 +15,7 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     class CameraManager {
     public:
-        static CameraManager& Get();
+        //static CameraManager* Get();
     public:
 
         CameraManager() {

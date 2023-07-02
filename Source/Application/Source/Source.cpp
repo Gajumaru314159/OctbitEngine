@@ -176,7 +176,7 @@ int TestDirectX12() {
 	auto world = engine::World::Create(TC("TestWorld"));
 	auto scene = engine::Scene::Create(TC("SampleScene"));
 	auto entity = engine::Entity::Create(TC("Parent"));
-	auto child = engine::Entity::Create(TC("CHild"));
+	auto child = engine::Entity::Create(TC("Child"));
 	entity->addChild(child);
 	scene->addEntity(entity);
 
@@ -184,9 +184,9 @@ int TestDirectX12() {
 
 	if (entity && scene) {
 
-
 		entity->addComponent<engine::TransformComponent>();
-		//entity->addComponent<graphics::CameraComponent>();
+		child->addComponent<engine::TransformComponent>();
+		child->addComponent<engine::CameraComponent>();
 
 	}
 

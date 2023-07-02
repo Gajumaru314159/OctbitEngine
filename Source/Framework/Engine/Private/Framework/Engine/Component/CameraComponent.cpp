@@ -5,10 +5,13 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component/CameraComponent.h>
+#include <Framework/Graphics/Camera.h>
 
 namespace ob::engine {
 
-
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
 	CameraComponent::CameraComponent() {
 
 		m_type = graphics::CameraType::Perspective;
@@ -19,41 +22,60 @@ namespace ob::engine {
 		m_clearColor = Color::Black;
 		m_renderTexture = nullptr;
 
+		m_camera = graphics::Camera::Create();
 	}
 
-	// Field of View
+	//@―---------------------------------------------------------------------------
+	//! @brief  Field of View
+	//@―---------------------------------------------------------------------------
 	f32 CameraComponent::getFov()const {
 		return m_fovY;
 	}
 	void CameraComponent::setFov(f32 value) {
-		setProperty(m_fovY, value, TC("FovY"));
+		if (setProperty(m_fovY, value, TC("FovY"))) {
+			m_camera->setFov(value);
+		}
 	}
 
-	// クリップ範囲
+	//@―---------------------------------------------------------------------------
+	//! @brief  クリップ範囲
+	//@―---------------------------------------------------------------------------
 	Range CameraComponent::getClipRange()const {
 		return m_clipRange;
 	}
 	void CameraComponent::setClipRange(Range value) {
-		setProperty(m_clipRange, value, TC("ClipRange"));
+		if (setProperty(m_clipRange, value, TC("ClipRange"))) {
+			m_camera->setClipRange(value);
+		}
 	}
 
-	// カメラ形式
+	//@―---------------------------------------------------------------------------
+	//! @brief  カメラ形式
+	//@―---------------------------------------------------------------------------
 	graphics::CameraType CameraComponent::getCameraType()const {
 		return m_type;
 	}
 	void CameraComponent::setCameraType(graphics::CameraType value) {
-		setProperty(m_type, value, TC("CameraType"));
+		if (setProperty(m_type, value, TC("CameraType"))) {
+			m_camera->setCameraType(value);
+		}
 	}
 
-	// Viewport Rect
+	//@―---------------------------------------------------------------------------
+	//! @brief  Viewport Rect
+	//@―---------------------------------------------------------------------------
 	Rect CameraComponent::getVieportRect() {
 		return m_rect;
 	}
 	void CameraComponent::setVieportRect(Rect value) {
-		setProperty(m_rect, value, TC("ViewportRect"));
+		if (setProperty(m_rect, value, TC("ViewportRect"))) {
+			m_camera->setVieportRect(m_rect);
+		}
 	}
 
-
+	//@―---------------------------------------------------------------------------
+	//! @brief  背景色
+	//@―---------------------------------------------------------------------------
 	Color CameraComponent::getClearColor()const {
 		return m_clearColor;
 	}
@@ -61,7 +83,9 @@ namespace ob::engine {
 		setProperty(m_clearColor, value, TC("ClearColor"));
 	}
 
-	// 描画先(ディスプレイ)
+	//@―---------------------------------------------------------------------------
+	//! @brief  描画先(ディスプレイ)
+	//@―---------------------------------------------------------------------------
 	s32 CameraComponent::getDisplay()const {
 		return m_display;
 	}
@@ -69,7 +93,9 @@ namespace ob::engine {
 		setProperty(m_display, displayNo, TC("Display"));
 	}
 
-	// 描画先(RenderTexture)
+	//@―---------------------------------------------------------------------------
+	//! @brief  描画先(RenderTexture)
+	//@―---------------------------------------------------------------------------
 	auto CameraComponent::getRenderTarget()const -> const Ref<rhi::RenderTexture>& {
 		return m_renderTexture;
 	}
@@ -77,25 +103,40 @@ namespace ob::engine {
 		m_renderTexture = value;
 	}
 
-
+	//@―---------------------------------------------------------------------------
+	//! @brief  ビュー行列
+	//@―---------------------------------------------------------------------------
 	const Matrix& CameraComponent::getViewMatrix()const {
 		OB_NOTIMPLEMENTED();
 		return Matrix::Identity;
 	}
+	//@―---------------------------------------------------------------------------
+	//! @brief  プロジェクション行列
+	//@―---------------------------------------------------------------------------
 	const Matrix& CameraComponent::getProjectionMatrix()const {
 		OB_NOTIMPLEMENTED();
 		return Matrix::Identity;
 	}
+	//@―---------------------------------------------------------------------------
+	//! @brief  ビュー・プロジェクション行列
+	//@―---------------------------------------------------------------------------
 	const Matrix& CameraComponent::getViewProjectionMatrix()const {
 		OB_NOTIMPLEMENTED();
 		return Matrix::Identity;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  ワールド座標をスクリーン座標に変換
+	//@―---------------------------------------------------------------------------
 	Vec3 CameraComponent::worldToScreen(const Vec3& position)const {
 		OB_NOTIMPLEMENTED();
 		return Vec3::Zero;
 	}
-	Vec3 CameraComponent::screenToWorld(const Vec3& position)const {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  スクリーン座標をワールド座標に変換
+	//@―---------------------------------------------------------------------------
+	Vec3 CameraComponent::screenToWorld(const Vec3& position, f32 distance)const {
 
 		OB_NOTIMPLEMENTED();
 		return Vec3::Zero;

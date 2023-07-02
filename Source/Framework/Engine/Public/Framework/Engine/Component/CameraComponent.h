@@ -16,7 +16,7 @@ namespace ob::engine {
     //! @details    CameraCompoentとは異なりReflectionCaptureやShadowCaptureでも
     //!             使用されます。
     //@―---------------------------------------------------------------------------
-    class CameraComponent : public engine::Component{
+    class CameraComponent : public Component{
     public:
 
         OB_RTTI();
@@ -38,8 +38,6 @@ namespace ob::engine {
         // Viewport Rect
         Rect        getVieportRect();
         void        setVieportRect(Rect rect);
-
-
 
         // クリアカラー
         Color       getClearColor()const;
@@ -66,7 +64,7 @@ namespace ob::engine {
         const Matrix& getViewProjectionMatrix()const;
 
         Vec3        worldToScreen(const Vec3& position)const;
-        Vec3        screenToWorld(const Vec3& position)const;
+        Vec3        screenToWorld(const Vec3& position,f32 distance)const;
 
     private:
 
@@ -79,6 +77,8 @@ namespace ob::engine {
         //CameraPriority m_priority;
         Color       m_clearColor;
         s32         m_display;
+
+        Ref<graphics::Camera> m_camera;
         Ref<rhi::RenderTexture> m_renderTexture;
 
 

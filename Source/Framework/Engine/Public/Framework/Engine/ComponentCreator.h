@@ -21,9 +21,10 @@ namespace ob::engine {
 	template<class T>
 	class ComponentCreatorTemplate : public ComponentCreator {
 	public:
-		//Component* createComponent() override {
-		//	return new T;
-		//}
+		ComponentCreatorTemplate() = default;
+		Component* createComponent() override {
+			return new T;
+		}
 		TypeId getComponentTypeId()const override {
 			return TypeId::Get<T>();
 		}

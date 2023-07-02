@@ -108,7 +108,9 @@ void drawComponents(engine::Entity* pEntity) {
 						{
 							auto eulerAngles = c->getLocal().rotation.toRot();
 							f32 xyz[] = { eulerAngles.x,eulerAngles.y,eulerAngles.z };
-							ImGui::DragFloat3("Rotation", xyz);
+							if (ImGui::DragFloat3("Rotation", xyz)) {
+								c->setLocalRotation({ xyz[0] ,xyz[1] ,xyz[2] });
+							}
 						}
 						{
 							Vec3 value = c->getLocal().scale;
@@ -123,6 +125,12 @@ void drawComponents(engine::Entity* pEntity) {
 							f32 value[] = { c->getFov() };
 							if (ImGui::SliderFloat("FovY", value, 0, 180)) {
 								c->setFov(value[0]);
+							}
+						}
+						{
+							f32 value[] = { c->getClipRange().min,c->getClipRange().max };
+							if (ImGui::SliderFloat2("ClipRange", value, 0, 10000)) {
+								c->setClipRange({ value[0],value[1] });
 							}
 						}
 						{

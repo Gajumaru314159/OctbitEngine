@@ -15,7 +15,7 @@ namespace ob::engine {
 	class TransformComponentImpl : public TransformComponent {
 	public:
 
-		OB_RTTI();
+		//OB_RTTI();
 		
 		TransformComponentImpl();
 

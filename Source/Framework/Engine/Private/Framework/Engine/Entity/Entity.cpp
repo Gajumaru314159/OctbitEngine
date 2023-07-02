@@ -87,6 +87,8 @@ namespace ob::engine {
 					}
 				}
 
+				m_components.emplace_back(desc->createComponent());
+
 				raisePropertyChanged(TC("Components"));
 			}
 		} else {
