@@ -27,22 +27,17 @@ namespace ob::graphics {
 	class UniversalRenderView : public RenderView {
 	public:
 
-		UniversalRenderView() {
-
-
-		}
+		UniversalRenderView();
+		~UniversalRenderView();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
-		void render(RenderContext& context, const CameraData& camera) override{
-			for (auto& step : m_steps) {
-				step
-			}
-		}
+		void render(RenderContext& context, const CameraData& camera) override;
 
 	private:
 
+		TextureManager m_textureManager;
 		Array<UPtr<RenderStep>> m_steps;
 
 	};

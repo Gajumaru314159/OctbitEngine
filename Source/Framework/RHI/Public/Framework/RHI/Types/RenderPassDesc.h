@@ -180,45 +180,41 @@ namespace ob::rhi {
 	//! @brief		AttachmentDesc の大小比較
 	//@―---------------------------------------------------------------------------
 	inline bool operator<(const ob::rhi::AttachmentDesc& a, const ob::rhi::AttachmentDesc& b) noexcept {
-		if (a.format < b.format)return true;
-		if (a.clear < b.clear)return true;
-		if (a.finalState < b.finalState)return true;
-		return false;
+		return
+			std::tie(a.format, a.clear, a.finalState) <
+			std::tie(b.format, b.clear, b.finalState);
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		AttachmentReference の大小比較
 	//@―---------------------------------------------------------------------------
 	inline bool operator<(const ob::rhi::AttachmentReference& a, const ob::rhi::AttachmentReference& b) noexcept {
-		if (a.index < b.index)return true;
-		if (a.state < b.state)return true;
-		return false;
+		return
+			std::tie(a.index, a.state) <
+			std::tie(b.index, b.state);
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		SubpassDesc の大小比較
 	//@―---------------------------------------------------------------------------
 	inline bool operator<(const ob::rhi::SubpassDesc& a, const ob::rhi::SubpassDesc& b) noexcept {
-		if (a.name < b.name)return true;
-		if (a.inputs < b.inputs)return true;
-		if (a.colors < b.colors)return true;
-		if (a.depth < b.depth)return true;
-		return false;
+		return
+			std::tie(a.name, a.inputs, a.colors, a.depth) <
+			std::tie(b.name, b.inputs, b.colors, b.depth);
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		SubpassDependency の大小比較
 	//@―---------------------------------------------------------------------------
 	inline bool operator<(const ob::rhi::SubpassDependency& a, const ob::rhi::SubpassDependency& b) noexcept {
-		if (a.srcSubpass < b.srcSubpass)return true;
-		if (a.dstSubpass < b.dstSubpass)return true;
-		return false;
+		return
+			std::tie(a.srcSubpass, a.dstSubpass) <
+			std::tie(b.srcSubpass, b.dstSubpass);
 	}
 	//@―---------------------------------------------------------------------------
 	//! @brief		RenderPassDesc の大小比較
 	//@―---------------------------------------------------------------------------
 	inline bool operator<(const ob::rhi::RenderPassDesc& a, const ob::rhi::RenderPassDesc& b) noexcept {
-		return a.name < b.name;
-		if (a.attachments < b.attachments)return true;
-		if (a.subpasses < b.subpasses)return true;
-		if (a.dependencies < b.dependencies)return true;
+		return
+			std::tie(a.name, a.attachments, a.subpasses, a.dependencies) <
+			std::tie(b.name, b.attachments, b.subpasses, b.dependencies);
 	}
 
 }

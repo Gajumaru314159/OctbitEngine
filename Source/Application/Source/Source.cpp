@@ -26,6 +26,24 @@
 #include <Framework/Graphics/Render/Sample/Universal/UniversalRenderPipeline.h>
 #include <Plugins/DirectX12RHI/System.h>
 
+struct StructA {
+	std::vector<int> elements;
+};
+
+struct StructB {
+	std::vector<StructA> elements;
+};
+
+inline bool operator<(const StructA& a, const StructA& b) noexcept {
+	if (a.elements < b.elements) return true;
+	return false;
+}
+
+inline bool operator<(const StructB& a, const StructB& b) noexcept {
+	if (a.elements < b.elements) return true;
+	return false;
+}
+
 //-----------------------------------------------------------------
 using namespace ob;
 
@@ -33,6 +51,16 @@ void drawOutliner(const Ref<engine::Scene>& scene);
 void drawComponents(engine::Entity* pEntity = nullptr);
 
 int TestDirectX12() {
+
+
+	StructB b0;
+	b0.elements.emplace_back().elements = {1,2,3};
+	StructB b1;
+	b1.elements.emplace_back().elements.emplace_back(1);
+
+	if (b0 < b1) {
+		std::cout << "<";
+	}
 
 	using namespace ob::rhi;
 	using namespace ob::graphics;

@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Graphics/Render/Sample/Universal/UniversalRenderView.h>
 #include <Framework/Graphics/CameraType.h>
 
 namespace ob::graphics {
@@ -43,6 +44,12 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	class UniversalRenderPipeline : public RenderPipeline {
 	public:
+
+		UniversalRenderPipeline() {
+
+			auto renderViewTest = std::make_unique< UniversalRenderView>();
+
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理

@@ -18,7 +18,7 @@ namespace ob::graphics {
     class RenderStep {
     public:
 
-        ~RenderStep() = default;
+        virtual ~RenderStep() = default;
 
         virtual void execute(RenderContext& context, const CameraData& camera) = 0;
 

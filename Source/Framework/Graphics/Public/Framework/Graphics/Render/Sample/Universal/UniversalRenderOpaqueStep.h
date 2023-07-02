@@ -7,9 +7,11 @@
 #include <Framework/Graphics/Render/RenderStep.h>
 
 #include <Framework/Graphics/TextureManager.h>
-#include <Framework/Graphics/RenderContext.h>
+#include <Framework/Graphics/Material.h>
+#include <Framework/Graphics/Render/RenderContext.h>
 #include <Framework/RHI/FrameBuffer.h>
 #include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/RenderTexture.h>
 
 namespace ob::graphics {
 
@@ -30,16 +32,16 @@ namespace ob::graphics {
 
 			RenderPassDescHelper rdesc;
 			rdesc.name = TC("Forward");
-			auto gbuffer0Idx = rdesc.addAttachment(TextureFormat::RGBA8);
-			auto gbuffer1Idx = rdesc.addAttachment(TextureFormat::RGBA8);
-			auto gbuffer2Idx = rdesc.addAttachment(TextureFormat::RGBA8);
+			auto gbuffer0Idx = rdesc.addAttachment(TextureFormat::RGB8);
+			auto gbuffer1Idx = rdesc.addAttachment(TextureFormat::RGB8);
+			auto gbuffer2Idx = rdesc.addAttachment(TextureFormat::RGB8);
 			auto depthIdx = rdesc.addAttachment(TextureFormat::D32);
-			rdesc.addSubpassXCD({ gbuffer0Idx,gbuffer1Idx,gbuffer2Idx }, depth);
+			rdesc.addSubpassXCD(TC("Forward"), {gbuffer0Idx,gbuffer1Idx,gbuffer2Idx}, depthIdx);
 
 			FrameBufferDesc fdesc;
 			fdesc.name = TC("Forword");
 			fdesc.renderPass = Material::AddRenderPass(rdesc);
-			fdessc.attachment = {
+			fdesc.attachments = {
 				gbuffer0,
 				gbuffer1,
 				gbuffer2,

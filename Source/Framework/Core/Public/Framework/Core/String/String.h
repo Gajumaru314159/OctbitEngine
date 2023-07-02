@@ -355,19 +355,19 @@ namespace ob::core {
 		friend inline bool operator ==(const value_type* lhs, const StringBase& rhs) { return rhs == lhs; }
 		friend inline bool operator !=(const StringBase& lhs, const StringBase& rhs) noexcept { return lhs.m_str.compare(rhs.m_str) != 0; }
 		friend inline bool operator !=(const StringBase& lhs, const value_type* rhs) { return lhs.m_str.compare(rhs) != 0; }
-		friend inline bool operator !=(const value_type* lhs, const StringBase& rhs) { return rhs != lhs; }
+		friend inline bool operator !=(const value_type* lhs, const StringBase& rhs) { return lhs != rhs; }
 		friend inline bool operator <(const StringBase& lhs, const StringBase& rhs) noexcept { return lhs.m_str.compare(rhs.m_str) < 0; }
 		friend inline bool operator <(const StringBase& lhs, const value_type* rhs) { return lhs.m_str.compare(rhs) < 0; }
-		friend inline bool operator <(const value_type* lhs, const StringBase& rhs) { return !(rhs <= lhs); }
+		friend inline bool operator <(const value_type* lhs, const StringBase& rhs) { return !(lhs >= rhs); }
 		friend inline bool operator >(const StringBase& lhs, const StringBase& rhs) noexcept { return lhs.m_str.compare(rhs.m_str) > 0; }
 		friend inline bool operator >(const StringBase& lhs, const value_type* rhs) { return lhs.m_str.compare(rhs) > 0; }
-		friend inline bool operator >(const value_type* lhs, const StringBase& rhs) { return !(rhs <= lhs); }
+		friend inline bool operator >(const value_type* lhs, const StringBase& rhs) { return !(lhs <= rhs); }
 		friend inline bool operator <=(const StringBase& lhs, const StringBase& rhs) noexcept { return lhs.m_str.compare(rhs.m_str) <= 0; }
 		friend inline bool operator <=(const StringBase& lhs, const value_type* rhs) { return lhs.m_str.compare(rhs) <= 0; }
-		friend inline bool operator <=(const value_type* lhs, const StringBase& rhs) { return !(rhs > lhs); }
+		friend inline bool operator <=(const value_type* lhs, const StringBase& rhs) { return !(lhs > rhs); }
 		friend inline bool operator >=(const StringBase& lhs, const StringBase& rhs) noexcept { return lhs.m_str.compare(rhs.m_str) >= 0; }
 		friend inline bool operator >=(const StringBase& lhs, const value_type* rhs) { return lhs.m_str.compare(rhs) >= 0; }
-		friend inline bool operator >=(const value_type* lhs, const StringBase& rhs) { return !(rhs < lhs); }
+		friend inline bool operator >=(const value_type* lhs, const StringBase& rhs) { return !(lhs < rhs); }
 		friend inline StringBase operator +(const value_type lhs, const StringBase& rhs) { return StringBase(rhs).push_front(lhs); }
 		friend inline StringBase operator +(const value_type lhs, StringBase&& rhs) { return StringBase(rhs).push_front(lhs); }
 		friend inline StringBase operator +(const value_type* lhs, const StringBase& rhs) { return StringBase(lhs) + StringBase(rhs); }
