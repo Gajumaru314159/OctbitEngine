@@ -172,9 +172,13 @@ namespace ob::graphics {
 			pMesh->getVertexLayoutId()
 		};
 
-		if (auto found = m_pipelineMap.find(key); found != m_pipelineMap.end()) {
-			pipeline = found->second;
-		} else {
+		{
+			ScopeLock lock(m_lock);
+			if (auto found = m_pipelineMap.find(key); found != m_pipelineMap.end()) {
+				pipeline = found->second;
+			}
+		}
+		if(!pipeline) {
 			pipeline = createPipeline(pass, pMesh->getVertexLayout(),pMesh->getVertexLayoutId());
 		}
 
@@ -294,6 +298,7 @@ namespace ob::graphics {
 					pass,
 					id
 				};
+				ScopeLock lock(m_lock);
 				m_pipelineMap[key] = pipeline;
 			}
 		}

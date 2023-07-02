@@ -116,6 +116,8 @@ namespace ob::graphics {
 
 		const MaterialDesc	m_desc;
 
+		SpinLock			m_lock;
+
 		PipelineMap			m_pipelineMap;
 		PropertyMap			m_propertyMap;
 
