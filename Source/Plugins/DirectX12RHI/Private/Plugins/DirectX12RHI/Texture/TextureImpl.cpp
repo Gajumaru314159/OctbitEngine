@@ -81,7 +81,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      IntColorの配列 から空のテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DirectX12RHI& rDevice, Size size, Span<IntColor> colors)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<IntColor> colors)
 		: m_device(rDevice)
 	{
 		if (size.width <= 0 || size.height <= 0) {
@@ -151,7 +151,7 @@ namespace ob::rhi::dx12 {
 		};
 
 		// Desc設定
-		m_desc.name = Format(TC("Generated {}"), colors.empty()?IntColor::Black : colors[0]);
+		m_desc.name = name;
 		m_desc.size = size;
 		m_desc.type = convertType(resourceDesc.Dimension);
 		m_desc.format = TypeConverter::Convert(format);
@@ -165,7 +165,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      テクスチャバイナリから生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DirectX12RHI& rDevice, BlobView blob,StringView name)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob)
 		: m_device(rDevice)
 	{
 		// 拡張子に合わせて読み込み

@@ -142,16 +142,16 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> DirectX12RHI::createTexture(Size size, Span<IntColor> colors) {
-		SAFE_CREATE(TextureImpl, *this, size, colors);
+	Ref<Texture> DirectX12RHI::createTexture(StringView name, Size size, Span<IntColor> colors) {
+		SAFE_CREATE(TextureImpl, *this, name, size, colors);
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> DirectX12RHI::createTexture(BlobView blob, StringView name) {
-		SAFE_CREATE(TextureImpl, *this, blob, name);
+	Ref<Texture> DirectX12RHI::createTexture(StringView name, BlobView blob) {
+		SAFE_CREATE(TextureImpl, *this, name, blob);
 	}
 
 

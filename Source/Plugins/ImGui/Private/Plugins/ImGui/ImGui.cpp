@@ -609,7 +609,7 @@ namespace ob::imgui {
 		}
 
 		// 生成
-		bd->fontTexture = rhi::Texture::Create(Size(width, height), colors);
+		bd->fontTexture = rhi::Texture::Create(TC("ImGuiFont"), Size(width, height), colors);
 		if (!bd->fontTexture)
 			return false;
 

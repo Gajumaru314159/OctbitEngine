@@ -49,14 +49,14 @@ namespace ob::rhi {
         //! 
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Create(Size size,Span<IntColor> colors);
+        static Ref<Texture> Create(StringView name,Size size,Span<IntColor> colors);
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //! 
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Create(BlobView blob,StringView name);
+        static Ref<Texture> Create(StringView name,BlobView blob);
 
         //@―---------------------------------------------------------------------------
         //! @brief      パスからテクスチャを読み込み
