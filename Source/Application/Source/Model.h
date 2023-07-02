@@ -209,7 +209,7 @@ PsOut PS_Main(PsIn i){
 			pass.vs = vs;
 			pass.ps = ps;
 
-			pass.layout = m_mesh->getVertexLayout();
+			pass.requiredLayout = m_mesh->getVertexLayout();
 			pass.rootSignature = signature;
 
 			MaterialDesc desc;
@@ -219,7 +219,7 @@ PsOut PS_Main(PsIn i){
 			desc.passes[pass.renderTag] = pass;
 
 			m_material = Material::Create(desc);
-
+			m_material->reserve(m_mesh);
 			m_material->setColor(TC("Color"), Color::White);
 			m_material->setMatrix(TC("Matrix"), Matrix::Identity);
 			m_material->setTexture(TC("Main"), m_texture);

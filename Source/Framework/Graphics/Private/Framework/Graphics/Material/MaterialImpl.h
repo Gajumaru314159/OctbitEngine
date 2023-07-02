@@ -73,6 +73,11 @@ namespace ob::graphics {
 		void setMatrix(StringView name, const Matrix& value) override;
 		void setTexture(StringView name, const Ref<Texture>& value) override;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  GPUリソースの事前生成
+		//@―---------------------------------------------------------------------------
+		bool reserve(const Ref<Mesh>& mesh);
+
 	public:
 
 		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, Name pass);
@@ -109,7 +114,7 @@ namespace ob::graphics {
 		using PipelineMap = HashMap<PipelineKey, Ref<rhi::PipelineState>, PipelineKeyHasher>;
 		using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
-		MaterialDesc		m_desc;
+		const MaterialDesc	m_desc;
 
 		PipelineMap			m_pipelineMap;
 		PropertyMap			m_propertyMap;

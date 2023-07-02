@@ -123,6 +123,22 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  GPUリソースの事前生成
+	//@―---------------------------------------------------------------------------
+	bool MaterialImpl::reserve(const Ref<Mesh>& mesh) {
+
+		auto pMesh = mesh.cast<MeshImpl>();
+		if (!pMesh) return false;
+
+		auto& layout = mesh->getVertexLayout();
+		for (auto& pass : m_desc.passes) {
+			createPipeline(pass.first, layout, pMesh->getVertexLayoutId());
+		}
+
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  描画コマンドを記録
 	//@―---------------------------------------------------------------------------
 	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, Name pass) {
@@ -230,7 +246,7 @@ namespace ob::graphics {
 		// 頂点レイアウト
 		rhi::VertexLayout mapped;
 
-		for (auto& a1 : materialPass.layout.attributes) {
+		for (auto& a1 : materialPass.requiredLayout.attributes) {
 
 			bool ok = false;
 			for (auto& a2 : layout.attributes) {

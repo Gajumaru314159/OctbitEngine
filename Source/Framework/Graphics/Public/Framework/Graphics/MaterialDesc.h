@@ -32,7 +32,7 @@ namespace ob::graphics {
         rhi::RasterizerDesc		rasterizer;
         rhi::DepthStencilDesc	depthStencil;
 
-        rhi::VertexLayout       layout;
+        rhi::VertexLayout       requiredLayout;
     };
 
     //@―---------------------------------------------------------------------------

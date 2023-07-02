@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/SubPass.h>
+#include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/MaterialDesc.h>
 
 namespace ob::graphics {   
@@ -59,6 +60,13 @@ namespace ob::graphics {
         //virtual void setFloatArray(StringView name, Span<f32> values);
         //virtual void setColorArray(StringView name, Span<Color> values);
         //virtual void setBuffer(StringView name, Buffer );
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  GPUリソースの事前生成
+        //! @details GPUリソースを事前生成しておくことで描画時のスパイクを回避することができます。
+        //@―---------------------------------------------------------------------------
+        virtual bool reserve(const Ref<Mesh>& mesh) = 0;
+
     public:
 
         //@―---------------------------------------------------------------------------
