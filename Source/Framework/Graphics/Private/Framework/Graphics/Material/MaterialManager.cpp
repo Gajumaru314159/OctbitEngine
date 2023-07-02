@@ -67,6 +67,7 @@ namespace ob::graphics {
 	//!	@brief			描画タグにRenderPassを登録
 	//@―---------------------------------------------------------------------------
 	Ref<rhi::RenderPass> MaterialManager::addRenderPass(const rhi::RenderPassDesc& desc) {
+		ScopeLock lock(m_lock);
 
 		// 登録済み
 		if (auto found = m_renderPassMap.find(desc);found!=m_renderPassMap.end()) {
@@ -102,6 +103,7 @@ namespace ob::graphics {
 	//!	@brief			描画タグからRenderPassを登録
 	//@―---------------------------------------------------------------------------
 	rhi::SubPass MaterialManager::findSubpass(Name renderTag) {
+		ScopeLock lock(m_lock);
 		auto found = m_subpassMap.find(renderTag);
 		if (found == m_subpassMap.end())
 			return {nullptr,0};
