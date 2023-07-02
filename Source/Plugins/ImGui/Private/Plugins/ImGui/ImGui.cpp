@@ -167,7 +167,8 @@ namespace ob::imgui {
 			code.append(TC("}																\n"));
 			code.append(TC("PsOut PS_Main(PsIn i){											\n"));
 			code.append(TC("	PsOut o;													\n"));
-			code.append(TC("	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv).a*i.color;	\n"));
+			code.append(TC("	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"));
+			code.append(TC("	o.color1 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"));
 			code.append(TC("    return o;											        \n"));
 			code.append(TC("}																\n"));
 
@@ -186,7 +187,7 @@ namespace ob::imgui {
 				{
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
-			);
+				);
 			desc.name = TC("::ImGui");
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
@@ -540,11 +541,10 @@ namespace ob::imgui {
 		auto bufferSize = sizeof(wchar_t) * (wtext.size() + 1);
 
 		hText = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, bufferSize);
-		wchar_t* pText = hText?(wchar_t*)(GlobalLock(hText)):L"";
+		wchar_t* pText = hText ? (wchar_t*)(GlobalLock(hText)) : L"";
 
 		memcpy_s(pText, bufferSize, wtext.data(), bufferSize);
-
-		GlobalUnlock(hText);
+		if (hText) GlobalUnlock(hText);
 
 		OpenClipboard(NULL);
 		EmptyClipboard();

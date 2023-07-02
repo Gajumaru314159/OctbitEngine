@@ -24,7 +24,7 @@ namespace ob::rhi {
 
     const BlendDesc BlendDesc::AlphaBlend = {
         true,
-        BlendFactor::One,
+        BlendFactor::SrcAlpha,
         BlendFactor::OneMinusSrcAlpha,
         BlendOp::Add,
         BlendFactor::One,
