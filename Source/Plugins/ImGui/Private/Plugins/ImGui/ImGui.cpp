@@ -800,6 +800,7 @@ namespace ImGui {
 		//::ImGui::SetAllocatorFunctions()
 
 		::ImGui::CreateContext();
+		::ImPlot::CreateContext();
 
 		ImGuiIO& io = ::ImGui::GetIO();
 		OB_ASSERT(io.BackendPlatformUserData == nullptr, "初期化済みです");
@@ -844,6 +845,7 @@ namespace ImGui {
 		io.BackendRendererUserData = nullptr;
 		io.BackendPlatformUserData = nullptr;
 
+		ImPlot::DestroyContext();
 		ImGui::DestroyContext();
 	}
 

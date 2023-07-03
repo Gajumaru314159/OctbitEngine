@@ -13,6 +13,7 @@
 #include <Framework/Engine/Component/CameraComponent.h>
 
 #include <Framework/Debug/LogInfo.h>
+#include <Framework/Debug/Profiler.h>
 
 #include <Plugins/ImGui/ImGui.h>
 
@@ -66,6 +67,7 @@ int TestDirectX12() {
 	using namespace ob::graphics;
 
 	debug::LogInfo logInfo;
+	debug::Profiler profiler;
 
 	if (auto g = graphics::Graphics::Get()) {
 		g->setRenderPipeline<graphics::UniversalRenderPipeline>();
@@ -283,7 +285,12 @@ int TestDirectX12() {
 			ImGui::EndMainMenuBar();
 
 
-			if (bShowDemo)ImGui::ShowDemoWindow();
+			if (bShowDemo) {
+				ImGui::ShowDemoWindow();
+			}
+			if (bShowDemo) {
+				ImPlot::ShowDemoWindow();
+			}
 
 			if (ImGui::Begin("MaterialEdirot")) {
 				ImGui::SliderFloat("Speed", &modelRotSpeed, -2.0f, 2.0f);
@@ -298,6 +305,7 @@ int TestDirectX12() {
 			}
 
 			logInfo.update();
+			profiler.update();
 
 
 			ImGui::EndFrame(cmdList);
