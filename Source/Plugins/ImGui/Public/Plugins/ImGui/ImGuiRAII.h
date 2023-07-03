@@ -64,7 +64,7 @@ namespace ImGui {
                 ::ImGui::PushStyleVar(idx, val);
             }
             virtual ~ScopedStyleVar() {
-                ::ImGui::PopStyleColor();
+                ::ImGui::PopStyleVar();
             }
         };
 
@@ -78,7 +78,7 @@ namespace ImGui {
                 ::ImGui::PushStyleVar(idx, v);
             }
             virtual ~ScopedStyleVec2Var() {
-                ::ImGui::PopStyleColor();
+                ::ImGui::PopStyleVar();
             }
         };
 

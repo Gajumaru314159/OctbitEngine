@@ -16,7 +16,7 @@ namespace ob::debug {
 		m_levelColors[LogLevel::Error] = Color::Red;
 		m_levelColors[LogLevel::Warning] = Color(1,0.8,0);
 		m_levelColors[LogLevel::Info] = Color::Cyan;
-		m_levelColors[LogLevel::Trace] = Color::Gray;
+		m_levelColors[LogLevel::Trace] = Color(0.7f);
 
 		m_levelNames[LogLevel::Fatal] = TC("Fatal");
 		m_levelNames[LogLevel::Error] = TC("Error");
@@ -81,6 +81,7 @@ namespace ob::debug {
 					color = Color::Lerp(color, Color(0.2), 0.8);
 				}
 				ImGui::ScopedTextColor stc(Color::Black);
+				ImGui::ScopedStyleVar ssv(ImGuiStyleVar_FrameRounding,12);
 				ImGui::ScopedButtonColor sbc(color);
 				ImGui::ScopedButtonHoveredColor sbhc(hovered);
 

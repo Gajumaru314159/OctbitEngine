@@ -126,8 +126,6 @@ namespace ob::imgui {
 		Blob blob(file);
 		if (blob) {
 			ImFontConfig config;
-			config.OversampleH = 1;
-			config.RasterizerMultiply = 1.2f;
 			void* ptr = ::ImGui::MemAlloc(blob.size());
 			memcpy_s(ptr, blob.size(), blob.data(), blob.size());
 			io.Fonts->AddFontFromMemoryTTF(ptr, blob.size(), 13.0f, &config, io.Fonts->GetGlyphRangesJapanese());
@@ -750,8 +748,8 @@ namespace ob::imgui {
 		colors[ImGuiCol_Button] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
 		colors[ImGuiCol_ButtonHovered] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
 		colors[ImGuiCol_ButtonActive] = ImVec4(0.67f, 0.67f, 0.67f, 0.39f);
-		colors[ImGuiCol_Header] = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
-		colors[ImGuiCol_HeaderHovered] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+		colors[ImGuiCol_Header] = ImVec4(0.35f, 0.35f, 0.35f, 1.00f);
+		colors[ImGuiCol_HeaderHovered] = ImVec4(0.29f, 0.29f, 0.29f, 1.00f);
 		colors[ImGuiCol_HeaderActive] = ImVec4(0.67f, 0.67f, 0.67f, 0.39f);
 		colors[ImGuiCol_Separator] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);
 		colors[ImGuiCol_SeparatorHovered] = ImVec4(0.41f, 0.42f, 0.44f, 1.00f);
