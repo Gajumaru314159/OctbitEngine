@@ -14,8 +14,8 @@ namespace test {
     // ログ
     class Logger {
     public:
-        static void Register(DependencyGraph& graph) {
-            graph.add<Logger>();
+        static void Register(ServiceInjector& injector) {
+            injector.bind<Logger>();
         }
     public:
         Logger(ServiceContainer& container) {
@@ -34,8 +34,8 @@ namespace test {
     // +
     class Adder :public Operator {
     public:
-        static void Register(DependencyGraph& graph) {
-            graph.add<Adder>()
+        static void Register(ServiceInjector& injector) {
+            injector.bind<Adder>()
                 .as<Operator>();
         }
     public:
@@ -49,8 +49,8 @@ namespace test {
     // *
     class Multiplier :public Operator {
     public:
-        static void Register(DependencyGraph& graph) {
-            graph.add<Multiplier>()
+        static void Register(ServiceInjector& injector) {
+            injector.bind<Multiplier>()
                 .as<Operator>();
         }
     public:
@@ -64,8 +64,8 @@ namespace test {
     // %
     class Modder :public Operator {
     public:
-        static void Register(DependencyGraph& graph) {
-            graph.add<Adder>()
+        static void Register(ServiceInjector& injector) {
+            injector.bind<Adder>()
                 .as<Operator>();
         }
     public:
@@ -79,8 +79,8 @@ namespace test {
     // 計算機
     class Calculator {
     public:
-        static void Register(DependencyGraph& graph) {
-            graph.add<Calculator>()
+        static void Register(ServiceInjector& injector) {
+            injector.bind<Calculator>()
                 .require<Operator>()
                 .optional<Logger>();
         }

@@ -94,7 +94,8 @@ namespace ob::core {
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
     void UUID::toString(Char(&dest)[37])const {
-        FormatTo(dest,TC("{:08x}-{:04x}-{:04x}-{:08x}{:8x}"), data[0], data[1] >> 16, data[1] & 0xFFFF, data[2] >> 16, data[2] & 0xFFFF, data[3]);
+        FormatTo(dest,TC("{:08x}-{:04x}-{:04x}-{:04x}-{:04x}{:08x}"), data[0], data[1] >> 16, data[1] & 0xFFFF, data[2] >> 16, data[2] & 0xFFFF, data[3]);
+        dest[36] = TC('\0');
     }
 
 
@@ -106,7 +107,6 @@ namespace ob::core {
     String UUID::toString() const {
         Char text[37];
         toString(text);
-        text[36] = TC('\0');
         return String(text);
     }
 

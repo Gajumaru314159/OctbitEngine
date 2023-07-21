@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 using namespace ob;
-#include <Framework/Core/Template/Delegate/Delegate.h>
+#include <Framework/Core/Template/Utility/Delegate.h>
 
 static int s_calledNo = 0;
 
