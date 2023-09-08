@@ -7,25 +7,32 @@
 #include <Framework/Core/Utility/Ref.h>
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Camera.h>
+#include <Framework/Graphics/Render/RenderStep.h>
+#include <Framework/Graphics/Render/RenderStepList.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      描画パイプライン
-    //! @details    描画呼び出しの基底となるクラスです。プログラム内で1つだけ存在します。
-	//!				Unityでは
-	//!				* ビルトイン
-	//!				* UniversalRenderPipeline
-	//!				* HeighDefinitionRenderPipeline
-	//!				などに当たります。
+	//! @brief      描画機能
+	//! @details    O3DEでいうところのFeatureProcessor。
+	//!				初期状態は非アクティブです。
 	//@―---------------------------------------------------------------------------
-	class RenderPipeline {
+	class RenderFeature {
 	public:
 
+		RenderFeature();
+		virtual ~RenderFeature();
+
 		//@―---------------------------------------------------------------------------
-		//! @brief  描画処理
+		//! @brief      必要なRenderStepをRenderStepListに追加する
 		//@―---------------------------------------------------------------------------
-        virtual void render(RenderContext& context, Span<CameraData> cameras) {}
+		virtual void setupView(RenderView&) {}
+
+		virtual void activate() {}
+		virtual void deactivate() {}
+
+		virtual void simulate() {}
+		virtual void render() {}
 
 	};
 

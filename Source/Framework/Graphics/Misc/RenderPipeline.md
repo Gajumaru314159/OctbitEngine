@@ -93,3 +93,29 @@ private:
 	Map<Name,Ref<RenderTexture>> m_renderTextures;
 };
 ```
+
+# RenderPipelineの構造
+```
+RenderScene
+    RenderPipeline[]
+        RenderFeature[]
+        RenderStep[]
+            RenderPass	
+	RenderView[]
+		Texturemanager
+			RenderTexture[]
+    RenderItem[]
+    Light[]
+```
+
+# 参考
+## O3DEでの構造
+https://www.docs.o3de.org/docs/atom-guide/dev-guide/rpi/rpi-system/
+```
+Scene
+	FeatureProcessor[]
+	RenderPipeline[]
+		PipelineViews[]
+			View[]
+	PipelineState[]
+```

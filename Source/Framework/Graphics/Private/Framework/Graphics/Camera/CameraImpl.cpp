@@ -6,15 +6,31 @@
 #pragma once
 #include <Framework/Graphics/Camera/CameraImpl.h>
 #include <Framework/Graphics/Camera/CameraManager.h>
+#include <Framework/Graphics/Graphics.h>
 
 namespace ob::graphics {
 
-	Ref<Camera> Camera::Create() {
-		return nullptr;// new Camera();
+
+	Camera::~Camera() = default;
+
+	Ref<Camera> Camera::Create(UPtr<RenderView> renderView) {
+		if (!renderView)return nullptr;
+		//Ref<Camera> camera = new CameraImpl(std::move(renderView));
+		//
+		//if (auto manager = Graphics::Get()) {
+		//	manager->addCamera(camera);
+		//}
+		//
+		//return camera;
+		return nullptr;
 	}
 
 
-	CameraImpl::CameraImpl() {
+	CameraImpl::CameraImpl(UPtr<RenderView> renderView)
+		: m_renderView(std::move(renderView))
+	{
+		OB_ASSERT_EXPR(m_renderView);
+
 		m_fovY = 60.0f;
 		//CameraManager::Get().add(this);
 	}

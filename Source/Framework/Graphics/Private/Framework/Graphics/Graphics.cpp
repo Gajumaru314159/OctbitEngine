@@ -22,12 +22,11 @@ namespace ob::graphics {
         if (!m_renderContext)return;
         if (!m_renderPipeline)return;
 
-        CameraData cameras[1];
-
-
-        m_renderPipeline->render(*m_renderContext, cameras);
+        
 
     }
 
-
+    void Graphics::addCamera(const Ref<Camera>& camera) {
+        //m_cameras.push_back(camera);
+    }
 }

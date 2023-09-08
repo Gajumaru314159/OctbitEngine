@@ -5,29 +5,31 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/CameraType.h>
+#include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Texture.h>
 
 namespace ob::graphics {
-
-    class ScriptableRenderPass;
 
     //@―---------------------------------------------------------------------------
     //! @brief      カメラ
     //! @details    CameraCompoentとは異なりReflectionCaptureやShadowCaptureでも
     //!             使用されます。
     //@―---------------------------------------------------------------------------
-    class Camera:public RefObject {
+    class Camera: public RefObject {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      生成
         //@―---------------------------------------------------------------------------
-        static Ref<Camera> Create();
+        template<class T,class... TArgs>
+        static Ref<Camera> Create(TArgs&&...);
+
+        static Ref<Camera> Create(UPtr<RenderView>);
 
     public:
 
-        virtual ~Camera() = default;
+        virtual ~Camera();
 
         //@―---------------------------------------------------------------------------
         //! @brief      Field of View 取得
@@ -137,5 +139,11 @@ namespace ob::graphics {
 
 
     };
+
+
+    template<class T,class... TArgs>
+    Ref<Camera> Camera::Create(TArgs&&... args) {
+        return Camera::Create(new T(args...));
+    }
 
 }

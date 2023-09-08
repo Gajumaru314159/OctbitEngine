@@ -19,6 +19,7 @@ namespace ob::graphics {
 		TextureManager(Size size);
 
 		Size getSize()const;
+		void setSize(Size size);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      テクスチャ生成

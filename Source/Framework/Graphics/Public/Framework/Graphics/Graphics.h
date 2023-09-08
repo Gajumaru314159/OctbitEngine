@@ -17,6 +17,7 @@ namespace ob::graphics {
 
         Graphics();
 
+        // TODO Scene生成
         template<class T,class... Args>
         void setRenderPipeline(Args&&... args) {
             m_renderPipeline = std::make_unique<T>(args...);
@@ -24,9 +25,12 @@ namespace ob::graphics {
 
         void update();
 
+        void addCamera(const Ref<Camera>&);
+
     public:
         Ref<RenderContext> m_renderContext;
         UPtr<RenderPipeline> m_renderPipeline;
+        //Array<Ref<Camera>> m_cameras;
     };
 
 }

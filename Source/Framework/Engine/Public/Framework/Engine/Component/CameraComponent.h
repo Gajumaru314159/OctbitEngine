@@ -59,6 +59,10 @@ namespace ob::engine {
 
     public:
 
+        void        setRenderView(UPtr<graphics::RenderView>);
+
+    public:
+
         const Matrix& getViewMatrix()const;
         const Matrix& getProjectionMatrix()const;
         const Matrix& getViewProjectionMatrix()const;

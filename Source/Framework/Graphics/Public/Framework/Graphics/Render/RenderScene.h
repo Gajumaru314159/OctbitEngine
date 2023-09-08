@@ -10,69 +10,48 @@
 
 namespace ob::graphics {
 
-	/*
-	
-	DrawPacket
-	MeshDrawPacket
-	ModelDataInstance
-	
-	RenderScene
-		RenderPipeline
-		RenderItem
-	
-
-	class RenderFeature {
-
-	};
-	struct MeshObject {
-		Transform	transform;
-		Bound		bound;
-		SortKey		sortkey;
-
-	};
-
-	class MeshRenderFeature : public RenderFeature{
-	public:
-		virtual Ref<Mesh> acquireMesh() = 0;
-	};
-
-
-	*/
-
-	struct RenderSceneDesc {
-		String			name;
-		Array<String>	features;
-	};
-
+	enum class RenderPipelineId{};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーン
 	//! @details	GraphicsにおけるWorld。
 	//@―---------------------------------------------------------------------------
-	class RenderScene : public RefObject{
+	class RenderScene final : public RefObject{
 	public:
 
-		static Ref<RenderScene> Create(const RenderSceneDesc&);
+		RenderScene(StringView name);
+
+		StringView getName()const { return ""; }
+
+		template<class T,class... TArgs>
+		RenderPipelineId createRenderPipeline(TArgs&&... args);
+		
+		void simulate();
+		void render();
+
+
+	public:
+		
+		static Ref<RenderScene> Create(StringView name);
+		
 
 	private:
 
-		RenderScene(const RenderSceneDesc&);
+		RenderPipelineId addRenderPipeline(UPtr<RenderPipeline>);
 
-		template<class T, class... Args>
-		void setRenderPipeline(Args&&... args) {
-			m_renderPipeline = std::make_unique<T>(args...);
-		}
-
-		void upadte();
 
 	private:
-
-		UPtr<RenderPipeline> m_renderPipeline;
-		RenderSceneDesc m_desc;
-
-		//Array <Ref<RenderFeature>> m_features;
-
+		String m_name;
+		HashMap<RenderPipelineId,UPtr<RenderPipeline>> m_pipelines;
 
 	};
+
+
+	template<class T, class... TArgs>
+	RenderPipelineId RenderScene::createRenderPipeline(TArgs&&... args) {
+		std::make_unique<T>(std::move(args)...);
+		return RenderPipelineId{ 0 };// addRenderPipeline(std::make_unique<T>(args...));
+	}
+
 
 }

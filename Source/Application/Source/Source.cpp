@@ -24,8 +24,12 @@
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
 #include <Framework/Graphics/Graphics.h>
-#include <Framework/Graphics/Render/Sample/Universal/UniversalRenderPipeline.h>
 #include <Plugins/DirectX12RHI/System.h>
+
+#include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Render/RenderPipeline.h>
+#include <Framework/Graphics/Render/RenderPipelineDesc.h>
+#include <Framework/Graphics/Feature/ForwardRenderFeature.h>
 
 struct StructA {
 	std::vector<int> elements;
@@ -69,9 +73,18 @@ int TestDirectX12() {
 	debug::LogInfo logInfo;
 	debug::Profiler profiler;
 
-	if (auto g = graphics::Graphics::Get()) {
-		g->setRenderPipeline<graphics::UniversalRenderPipeline>();
+
+	auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
+	{
+		graphics::RenderPipelineDesc rdesc;
+		rdesc.name = TC("TestPipeline");
+		//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
+
+		auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
 	}
+
+	//scene->addRenderPipeline();
+	//renderScene->addRenderPipeline
 
 
 	// ウィンドウ生成
@@ -188,7 +201,10 @@ int TestDirectX12() {
 
 		entity->addComponent<engine::TransformComponent>();
 		child->addComponent<engine::TransformComponent>();
-		child->addComponent<engine::CameraComponent>();
+		if (auto camera = child->addComponent<engine::CameraComponent>()) {
+			//auto renderView = std::make_unique<UniversalRenderView>();
+			//camera->setRenderView(std::move(renderView));
+		}
 
 	}
 

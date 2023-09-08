@@ -16,7 +16,7 @@ namespace ob::graphics {
     class CameraImpl :public Camera {
     public:
 
-        CameraImpl();
+        CameraImpl(UPtr<RenderView>);
         ~CameraImpl();
 
         //===============================================================
@@ -69,6 +69,8 @@ namespace ob::graphics {
         void addRenderTargetEvent(rhi::TextureEventHandle& handle, rhi::TextureEventDelegate func)override;
 
     private:
+
+        UPtr<RenderView> m_renderView;
 
         CameraState m_state;
 

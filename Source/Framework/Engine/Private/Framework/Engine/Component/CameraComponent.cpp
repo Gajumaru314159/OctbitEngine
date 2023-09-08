@@ -22,7 +22,13 @@ namespace ob::engine {
 		m_clearColor = Color::Black;
 		m_renderTexture = nullptr;
 
-		m_camera = graphics::Camera::Create();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  RenderViewを設定
+	//@―---------------------------------------------------------------------------
+	void CameraComponent::setRenderView(UPtr<graphics::RenderView> renderView) {
+		m_camera = graphics::Camera::Create(std::move(renderView));
 	}
 
 	//@―---------------------------------------------------------------------------

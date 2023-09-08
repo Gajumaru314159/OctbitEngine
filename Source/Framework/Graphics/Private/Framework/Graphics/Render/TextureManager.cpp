@@ -3,7 +3,7 @@
 //! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/TextureManager.h>
+#include <Framework/Graphics/Render/TextureManager.h>
 #include <Framework/RHI/RenderTexture.h>
 
 namespace ob::graphics {
@@ -23,6 +23,14 @@ namespace ob::graphics {
 	Size TextureManager::getSize()const {
 		return m_size;
 	}
+
+	void TextureManager::setSize(Size size) {
+		for (auto& [name, texture] : m_textures) {
+			// TODO 画面のリサイズ対応
+			// texture->resize(size);
+		}
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      テクスチャ生成

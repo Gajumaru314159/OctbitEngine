@@ -8,20 +8,19 @@
 
 namespace ob::graphics {
 
-    class RenderContext;
-    class CameraData;
-
 	//@―---------------------------------------------------------------------------
-	//! @brief      描画パイプライン
-    //! @details    描画呼び出しの基底となるクラスです。プログラム内で1つだけ存在します。
+	//! @brief      描画ステップ
+	//! @detailas   カメラごとに持ちます。
 	//@―---------------------------------------------------------------------------
-    class RenderStep {
-    public:
+	class RenderStep {
+	public:
 
-        virtual ~RenderStep() = default;
+		RenderStep();
+		virtual ~RenderStep();
 
-        virtual void execute(RenderContext& context, const CameraData& camera) = 0;
+		virtual void setup(TextureManager&) {}
+		virtual void render(RenderView&) {};
 
-    };
+	};
 
 }

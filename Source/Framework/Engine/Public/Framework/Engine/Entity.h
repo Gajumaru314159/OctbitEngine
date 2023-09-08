@@ -69,6 +69,11 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		Scene* getScene()const;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		所属ワールド取得
+		//@―---------------------------------------------------------------------------
+		World* getWorld()const;
+
 
 		//===============================================================
 		// Hierarchy
@@ -153,6 +158,7 @@ namespace ob::engine {
 
 		ParentChangedNotifier	m_parentChangedNotifier;
 
+		World*					m_world = nullptr;
 		std::atomic<Scene*>		m_scene = nullptr;
 		SpinLock				m_childrenLock;
 	};

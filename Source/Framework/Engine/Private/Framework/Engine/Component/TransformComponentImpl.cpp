@@ -10,13 +10,18 @@
 
 #include <Framework/Engine/Reflection/TypeBuilder.h>
 
-OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponentImpl) {
+OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponent
+) {
 
-	using Type = ::ob::engine::Component;
+	using Type = ::ob::engine::TransformComponent;
 
 	tag(TC("DisallowMultiple"));
 
 	function(TC("getEntity"), &Type::getEntity);
+
+	property(TC("Translation"), &Type::setLocalPosition, &Type::setLocalPosition);
+	property(TC("Scaling"), &Type::setLocalScale, &Type::setLocalScale);
+	property(TC("Rotation"), &Type::setLocalRotation, &Type::setLocalRotation);
 
 };
 

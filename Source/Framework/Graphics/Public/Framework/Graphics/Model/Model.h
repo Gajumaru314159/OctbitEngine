@@ -4,25 +4,28 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Types/SubPass.h>
 #include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/MaterialDesc.h>
 
 namespace ob::graphics {
 
+    class Bone {
+
+    };
+
     //@―---------------------------------------------------------------------------
-    //! @brief  説明
+    //! @brief      モデル
     //@―---------------------------------------------------------------------------
-    class IRenderer {
+    class Model:public RefObject {
     public:
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-        virtual void render(const RenderContext&, const Camera&) = 0;
-
-    private:
+        Bone* findBone(StringView name)const;
+        Ref<Material> findMaterial(StringView name)const;
 
 
-
+        
     };
 
 }
