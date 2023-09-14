@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Reflection/TypeBuilder.h>
 
 namespace ob::engine {
@@ -29,6 +30,19 @@ namespace ob::engine {
 		return *m_entity;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		所属シーン取得
+	//@―---------------------------------------------------------------------------
+	Scene* Component::getScene()const {
+		return getEntity().getScene();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		所属ワールド取得
+	//@―---------------------------------------------------------------------------
+	World* Component::getWorld()const {
+		return getEntity().getWorld();
+	}
 
 }
 
