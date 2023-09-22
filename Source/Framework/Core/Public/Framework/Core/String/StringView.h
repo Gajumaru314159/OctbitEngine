@@ -114,6 +114,13 @@ namespace ob::core {
 		constexpr StringViewBase substr_range(size_type first = 0, size_type last = npos) const { return m_str.substr(first, last - first); }
 		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_view.copy(dst, n, pos); }
 
+		StringViewBase trim() {
+			const auto whiteSpaceDelimiters = TC(" \t\n\r\f\v");
+			auto start = m_view.find_first_not_of(whiteSpaceDelimiters);
+			auto end = m_view.find_last_not_of(whiteSpaceDelimiters);
+			if (start == npos) start = 0;
+			return substr(start,end-start+1);
+		}
 
 		//===============================================================
 		// 文字列の検索

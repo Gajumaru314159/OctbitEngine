@@ -243,6 +243,15 @@ namespace ob::core {
 			return *this;
 		}
 
+		StringBase& trim() {
+			const auto whiteSpaceDelimiters = TC(" \t\n\r\f\v");
+			auto start = m_str.find_first_not_of(whiteSpaceDelimiters);
+			auto end = m_str.find_last_not_of(whiteSpaceDelimiters);
+			if (start == npos) start = 0;
+			*this = substr(start, end - start + 1);
+			return *this;
+		}
+
 
 		//===============================================================
 		// 文字列の置換
@@ -303,14 +312,20 @@ namespace ob::core {
 		constexpr size_type find(value_type ch, size_type pos = 0) const noexcept { return m_str.find(ch, pos); }
 		constexpr size_type find(const value_type* s, size_type pos, size_type count) const noexcept { return m_str.find(s, pos, count); }
 		constexpr size_type find(const value_type* s, size_type pos = 0) const noexcept { return m_str.find(s, pos); }
-		constexpr size_type find_first_not_of(value_type ch, size_type pos = 0) const noexcept { return m_str.find_first_not_of(ch, pos); }
+		template<class TStringView>
+		constexpr size_type find_first_not_of(TStringView str, size_type pos = npos) const noexcept { return m_str.find_first_not_of(str, pos); }
+		template<class TStringView>
+		constexpr size_type find_first_not_of(TStringView str, size_type pos,size_type n) const noexcept { return m_str.find_first_not_of(str, pos,n); }
 
 		template <class TStringView, class = is_string_view<TStringView>>
 		constexpr size_type rfind(TStringView s, size_type pos = npos) const noexcept { return m_str.rfind(s.m_str, pos); }
 		constexpr size_type rfind(value_type ch, size_type pos = npos) const noexcept { return m_str.rfind(ch, pos); }
 		constexpr size_type rfind(const value_type* s, size_type pos, size_type count) const noexcept { return m_str.rfind(s, pos, count); }
 		constexpr size_type rfind(const value_type* s, size_type pos = npos) const noexcept { return m_str.rfind(s, pos); }
-		constexpr size_type find_last_not_of(value_type ch, size_type pos = npos) const noexcept { return m_str.find_last_not_of(ch, pos); }
+		template<class TStringView>
+		constexpr size_type find_last_not_of(TStringView str, size_type pos = npos) const noexcept { return m_str.find_last_not_of(str, pos); }
+		template<class TStringView>
+		constexpr size_type find_last_not_of(TStringView str, size_type pos,size_type n) const noexcept { return m_str.find_last_not_of(str, pos,n); }
 
 
 		//===============================================================

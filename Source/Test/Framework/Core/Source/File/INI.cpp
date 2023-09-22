@@ -33,3 +33,37 @@ TEST(INI, Test)
         }
     }
 }
+
+TEST(INITest, BasicOperations) {
+    INI ini;
+
+    // セクションとキーを指定して値を設定
+    ini["section1"]["key1"] = "value1";
+    ini["section1"]["key2"] = "value2";
+    ini["section2"]["key3"] = "value3";
+
+    // セクションとキーが存在するかテスト
+    ASSERT_TRUE(ini.has("section1"));
+    ASSERT_TRUE(ini.has("section2"));
+    ASSERT_TRUE(ini.has("section1", "key1"));
+    ASSERT_TRUE(ini.has("section2", "key3"));
+    ASSERT_FALSE(ini.has("section3"));
+    ASSERT_FALSE(ini.has("section1", "key3"));
+
+    // セクションとキーを指定して値を取得
+    ASSERT_EQ(ini.get("section1", "key1"), "value1");
+    ASSERT_EQ(ini.get("section2", "key3", "default_value"), "value3");
+    ASSERT_EQ(ini.get("section2", "key4", "default_value"), "default_value");
+
+    // セクションを削除して存在しないことを確認
+    ini.remove("section1");
+    ASSERT_FALSE(ini.has("section1"));
+
+    // セクションとキーを指定して値を削除して存在しないことを確認
+    ini.remove("section2", "key3");
+    ASSERT_FALSE(ini.has("section2", "key3"));
+
+    // INIをクリアして空であることを確認
+    ini.clear();
+    ASSERT_TRUE(ini.empty());
+}

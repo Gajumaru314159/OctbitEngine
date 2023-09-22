@@ -170,7 +170,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	String INI::get(String section, String key, String fallback)const {
 		if (has(section)) {
-			m_container.at(section).get(key, fallback);
+			return m_container.at(section).get(key, fallback);
 		}
 		return fallback;
 	}
