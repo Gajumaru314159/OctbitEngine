@@ -67,3 +67,32 @@ TEST(INITest, BasicOperations) {
     ini.clear();
     ASSERT_TRUE(ini.empty());
 }
+
+
+TEST(INITest, Parse) {
+
+    INI ini;
+    ini.parse(
+        R"(
+; これはコメント行です
+
+[Section1]
+Key1 = Value1
+Key2 = Value2
+
+[ Section2 ]
+Key3 = Value3
+Key4 = Value4
+
+[EmptySection]
+
+        )"
+    );
+
+    ASSERT_EQ(ini["Section1"]["Key1"], "Value1");
+    ASSERT_EQ(ini["Section1"]["Key2"], "Value2");
+
+    ASSERT_EQ(ini["Section2"]["Key3"], "Value3");
+    ASSERT_EQ(ini["Section2"]["Key4"], "Value4");
+
+}

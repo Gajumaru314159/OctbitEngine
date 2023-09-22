@@ -86,37 +86,7 @@ namespace ob::core {
 		std::basic_stringstream<Char> ss;
 		ss << ifs.rdbuf();
 
-		std::basic_string<Char> buf;
-		String section;
-
-
-		while (std::getline(ss, buf)) {
-
-			String str(buf);
-			str.trim();
-
-			// 空行
-			if (str.empty())continue;
-
-			// コメント
-			if (str.starts_with(TC(';')) || str.starts_with(TC('#'))) continue;
-
-			// セクション
-			if (str.starts_with(TC('[')) && str.ends_with(TC(']'))) {
-				section = str.substr(1, str.size() - 2);
-				continue;
-			}
-
-			auto equalPos = str.find(TC('='));
-
-			if (equalPos == str.npos)continue;
-
-			String key{ str.substr(0, equalPos).trim() };
-			String value{ str.substr(equalPos + 1).trim() };
-
-			(*this)[section][key] = value;
-
-		}
+		parse(ss.str());
 
 		return true;
 	}
@@ -137,6 +107,48 @@ namespace ob::core {
 
 		return fs.write(str.data(), str.size());
 
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  ファイルから設定をロード
+	//@―---------------------------------------------------------------------------
+	bool INI::parse(String str) {
+
+		std::basic_stringstream<Char> ss;
+		ss << str.c_str();
+
+		std::basic_string<Char> buf;
+		String section;
+
+		while (std::getline(ss, buf)) {
+
+			String str(buf);
+			str.trim();
+
+			// 空行
+			if (str.empty())continue;
+
+			// コメント
+			if (str.starts_with(TC(';')) || str.starts_with(TC('#'))) continue;
+
+			// セクション
+			if (str.starts_with(TC('[')) && str.ends_with(TC(']'))) {
+				section = str.substr(1, str.size() - 2).trim();
+				continue;
+			}
+
+			auto equalPos = str.find(TC('='));
+
+			if (equalPos == str.npos)continue;
+
+			String key{ str.substr(0, equalPos).trim() };
+			String value{ str.substr(equalPos + 1).trim() };
+
+			(*this)[section][key] = value;
+
+		}
+
+		return true;
 	}
 
 	//@―---------------------------------------------------------------------------
