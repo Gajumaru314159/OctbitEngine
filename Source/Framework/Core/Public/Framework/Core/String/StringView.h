@@ -7,6 +7,7 @@
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/Format.h>
 #include <string_view>
+#include <ostream>
 
 namespace ob::core {
 
@@ -247,4 +248,14 @@ template <> struct fmt::formatter<ob::core::StringView, ob::core::Char> {
 		return format_to(ctx.out(), TC("{}"), std::basic_string_view<ob::core::Char>(value.data(), value.size()));
 	}
 };
+
+
+//===============================================================
+// ストリーム
+//===============================================================
+inline std::ostream& operator<<(std::ostream& stream, const ob::core::StringView& value) {
+	stream << std::string_view(value.data(), value.size());
+	return stream;
+}
+
 //! @endcond

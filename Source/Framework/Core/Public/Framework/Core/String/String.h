@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <string>
+#include <ostream>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/StringView.h>
 
@@ -487,4 +488,15 @@ template <> struct fmt::formatter<ob::core::String, ob::core::Char> {
 		return format_to(ctx.out(), TC("{}"), ob::core::StringView(value.data(), value.size()));
 	}
 };
+
+
+//===============================================================
+// ストリーム
+//===============================================================
+inline std::ostream& operator<<(std::ostream& stream, const ob::core::String& value) {
+	stream << std::string_view(value.data(), value.size());
+	return stream;
+}
+
+
 //! @endcond
