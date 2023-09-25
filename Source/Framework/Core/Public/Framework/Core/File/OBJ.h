@@ -9,29 +9,16 @@
 namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief		Wavefront Obj
-	//! @details	Vertex/Texcoord/Normal
+	//! @brief		Wavefront OBJ Writer
 	//@―---------------------------------------------------------------------------
 	class OBJ {
-	public:
-		struct Vertex {
-			Vec3 position;
-			Vec3 normal;
-			Vec2 uv;
-		};
-		enum class VFormat {
-			P,
-			PT,
-			PN,
-			PTN,
-		};
 	public:
 		OBJ() = default;
 
 		void save(StringView);
 
 		void comment(StringView comment);
-		void mtl(StringView filename);
+		void mtllib(StringView filename);
 		void material(StringView name);
 		void group(StringView);
 		void name(StringView);
@@ -148,12 +135,10 @@ namespace ob::core {
 	};
 
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		Material Template Library Writer
+	//@―---------------------------------------------------------------------------
 	class MTL {
-	public:
-		struct TextureOption {
-			Vec2 offset{0,0};
-			Vec2 scale{1,1};
-		};
 	public:
 		void save(StringView);
 

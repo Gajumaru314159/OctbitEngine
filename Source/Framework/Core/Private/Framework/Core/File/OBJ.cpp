@@ -26,7 +26,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  マテリアル参照を追加
 	//@―---------------------------------------------------------------------------
-	void OBJ::mtl(StringView filename) {
+	void OBJ::mtllib(StringView filename) {
 		m_ss << "mtllib " << filename << std::endl;
 	}
 
