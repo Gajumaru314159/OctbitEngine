@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/Render/RenderTask.h>
 
 namespace ob::graphics {
 
@@ -29,9 +30,7 @@ namespace ob::graphics {
     class RPI {
     public:
 
-        virtual void addScene(Ref<RenderScene>) = 0;
-        virtual void removeScene(Ref<RenderScene>) = 0;
-        virtual Ref<RenderScene> findScene(StringView name)const = 0;
+        virtual void addRenderTask(RenderTask::RenderTaskDelegate func) = 0;
 
         //@―---------------------------------------------------------------------------
         //! @brief      ゲームループごとの更新を実行する
@@ -42,6 +41,18 @@ namespace ob::graphics {
         //! @brief      描画ループの更新をする
         //@―---------------------------------------------------------------------------
         virtual void render() = 0;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderFeatureを取得する
+        //@―---------------------------------------------------------------------------
+        virtual RenderFeature* findFeature(const TypeId&)const = 0;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderFeatureを取得する(Template版)
+        //@―---------------------------------------------------------------------------
+        template<class T> T* findFeature()const { return reinterpret_cast<T*>(findFeature(TypeId::Get<T>())); }
+                
+
     };
 
 }

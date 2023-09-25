@@ -29,29 +29,6 @@ namespace ob::graphics {
         void setPriority(s32 priority);
         s32 getPriority()const;
 
-        void addStep(UPtr<RenderStep>);
-
-        template<class T,class... Args>
-        void addStep(Args&&... args) {
-            addStep(std::make_unique<T>(args...));
-        }
-
-        void startup();
-
-        void resize();
-
-        void render();
-
-
-        auto getRenderContext()const->RenderContext&;
-
-    public:
-
-        void addDrawPacket();
-        void addDrawItem();
-
-        //DrawListView getDrawList(DrawListTag);
-
     private:
 
         Name        m_name;
@@ -59,10 +36,6 @@ namespace ob::graphics {
         RenderViewDesc m_desc;
 
         TextureManager m_textureManager;
-        Array<UPtr<RenderStep>> m_steps;
-
-
-        Ref<RenderContext> m_context;
 
     };
 

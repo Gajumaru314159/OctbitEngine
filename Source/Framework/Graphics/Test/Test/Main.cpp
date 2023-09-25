@@ -45,15 +45,29 @@ int OctbitMain() {
 	windowDesc.title = TC("Graphic Test");
 	platform::Window window(windowDesc);
 
+	RenderFeatureSet set;
+	set->addDefaultFeature();
+	set->addFeature<MeshRenderFeature>();
+	set->addFeature<TransformRenderFeature>();
+
+	auto scene = RenderScene::Create(TC("TestScene"),set);
+
+	auto view = scene->createView();
+
+	if (auto feature = scene->findFeature<MeshRenderFeature>()) {
+		auto id = feature->addModel();
+		feature->setAsset();
+	}
+
+	while (true) {
+
+		scene->beginRender();
+
+		// jog->update();
 
 
-	auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
-	{
-		graphics::RenderPipelineDesc rdesc;
-		rdesc.name = TC("TestPipeline");
-		//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
+		scene->waitRender();
 
-		auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
 	}
 
 	return 0;

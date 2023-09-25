@@ -1,8 +1,6 @@
 ﻿RenderPipeline
 ---------------
-1フレーム中の描画処理にはカメラ描画前の共通処理とカメラごとの描画処理が必要。
-カメラ毎にRenderPipelineを設定可能だが、そのRenderPipelineが共通処理で描画されたTextureに依存する場合がある。
-その場合は何らかの方法で共通処理の結果を受け取る必要がある。
+1フレーム中の描画処理はカメラに依存するものとそうでないものに分けられる。
 
 ### CameraStack
 別カメラの映像を背景を描画せずにオーバーレイさせるシステムです。  
@@ -108,6 +106,21 @@ RenderScene
     Light[]
 ```
 
+```
+RPI
+    RenderFeature[]
+		MeshRenderFeature
+		LightRenderFeature
+		ShadowRenderFeature
+		ImGuiRenderFeature	
+	RenderView[]
+		Texturemanager
+		RenderStep[]
+	RenderTaskList
+		RenderTask[]
+```
+
+
 # 参考
 ## O3DEでの構造
 https://www.docs.o3de.org/docs/atom-guide/dev-guide/rpi/rpi-system/
@@ -118,4 +131,63 @@ Scene
 		PipelineViews[]
 			View[]
 	PipelineState[]
+```
+
+```mermaid
+flowchart LR
+
+	Transfer-->Light0 & Light1 & Light2 --> Reflection --> Camera0 & Camera1 --> o
+
+
+```
+
+```cpp
+class LightRenderFeature{
+public:
+	void render(){
+		for(auto& light:m_lights){
+			light.render();
+		}
+	}
+};
+class ReflectionRenderFeature{
+public:
+	void render(){
+		for(auto& probe:m_probe){
+			probe.render();
+		}
+	}
+};
+class CameraRenderFeature{
+public:
+
+	CameraRenderFeature(LightRenderFeature* lightRF,ReflectionRenderFeature* reflectionRF){
+
+	}
+
+public:
+	void render(){
+		auto baseId = std::max({lightRF->getLastPathId(),reflectionRF->getLastPathId()});
+
+		for(auto& camera:m_cameras){
+			camera.render(baseId++);
+		}
+	}
+};
+
+class RenderPath{
+public:
+	void render(){
+		for(auto& task:taskList){
+			task.execute();
+		}
+	}
+}
+
+struct SortKey{
+	u16  pathID;
+	u8   renderTag;
+	u8   ofset;
+	u32  priority;
+}
 ```

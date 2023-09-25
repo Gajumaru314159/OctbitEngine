@@ -15,25 +15,22 @@ namespace ob::graphics {
 	//! @details    O3DEでいうところのFeatureProcessor。
 	//!				初期状態は非アクティブです。
 	//@―---------------------------------------------------------------------------
-	class RenderFeature {
+	class RenderTask {
 	public:
+		using RenderTaskDelegate = Delegate<void()>;
+	public:
+		RenderTask(RenderTaskDelegate delegate) 
+			: m_delegate(delegate)
+		{
 
-		OB_RTTI();
-
-		RenderFeature();
-		virtual ~RenderFeature();
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      必要なRenderStepをRenderStepListに追加する
-		//@―---------------------------------------------------------------------------
-		virtual void setupView(RenderView&) {}
-
-		virtual void activate() {}
-		virtual void deactivate() {}
-
-		virtual void simulate() {}
-		virtual void render() {}
-
+		}
+		void execute() {
+			if (m_delegate) {
+				m_delegate();
+			}
+		}
+	private:
+		RenderTaskDelegate m_delegate;
 	};
 
 }

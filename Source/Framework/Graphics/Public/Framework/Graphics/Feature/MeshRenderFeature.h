@@ -24,8 +24,21 @@ namespace ob::graphics {
 
 		Ref<Model> getModel(MeshHandle);
 
+
+		template<class T>
+		static MeshRenderFeature* Of(T& owner) {
+			return owner.findService<MeshRenderFeature>();
+		}
+
 	private:
 
+		void simulate() override {
+
+		}
+
+	private:
+
+		HashMap<MeshHandle, UPtr<ModelInstance>> m_instances;
 
 	};
 

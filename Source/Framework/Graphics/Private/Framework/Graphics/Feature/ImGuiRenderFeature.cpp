@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Framework/Graphics/Feature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Material.h>
-#include <Framework/Graphics/Render/RenderContext.h>
 #include <Framework/RHI/Types/RenderPassDescHelper.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/RenderTexture.h>
@@ -66,9 +65,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画処理
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderStep::render(RenderView& view) {
-
-		auto& context = view.getRenderContext();
+	void Render_ImGui() {
 
 		context.beginRenderPass(m_frameBuffer);
 		
