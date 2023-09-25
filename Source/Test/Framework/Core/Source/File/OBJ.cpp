@@ -19,7 +19,7 @@ TEST(OBJ, Test)
 
 	OBJ obj;
 	obj.comment(u8"テスト出力");
-	obj.mtl("test.mtl");
+	obj.mtllib("test.mtl");
 	obj.material("test0");
 	obj.poly_pn(
 		Vec3(0, 0, 0), Vec3(0, 1, -1),
