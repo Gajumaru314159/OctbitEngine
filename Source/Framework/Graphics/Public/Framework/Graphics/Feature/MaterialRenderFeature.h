@@ -1,25 +1,39 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
+//! @brief		UniversalRenderPipeline
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
-#include <Framework/Graphics/Command/OnetimeAllocator.h>
+#include <Framework/Graphics/Render/RenderFeature.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  メンバに持つ値はイミュータブルである必要がある。
+	//! @brief      
 	//@―---------------------------------------------------------------------------
-	class ICommand {
+	class MaterialRenderFeature : public RenderFeature {
 	public:
-		using CommandList = rhi::CommandList;
-	public:
-		virtual ~ICommand() = default;
-		virtual void execute(CommandList&) = 0;
-	protected:
-		ICommand() = default;
+
+		MaterialRenderFeature();
+
+
+		void render() {
+		
+
+		
+		}
+
+
+	private:
+
+		void simulate() override {
+
+		}
+
+	private:
+
+		HashMap<String, Array<DrawItem>> m_map;
+
 	};
 
 }

@@ -11,19 +11,19 @@
 
 namespace ob::graphics {
 
-
 	//@―---------------------------------------------------------------------------
-	//! @brief      UniversalRenderPipeline
+	//! @brief      ImGui描画機能
 	//@―---------------------------------------------------------------------------
 	class ImGuiRenderFeature : public RenderFeature {
 	public:
 
-		ImGuiRenderFeature();
+		ImGuiRenderFeature(RenderScene&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  RenderStepを登録するための初期化処理
 		//@―---------------------------------------------------------------------------
-		void setupView(RenderView& view) override;
+		void setupView(RenderStepSet&) override{}
+
 
 	private:
 
@@ -31,7 +31,7 @@ namespace ob::graphics {
 	};
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      UniversalRenderPipeline
+	//! @brief      ImGui描画ステップ
 	//@―---------------------------------------------------------------------------
 	class ImGuiRenderStep : public RenderStep {
 	public:
@@ -46,7 +46,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief  描画処理
 		//@―---------------------------------------------------------------------------
-		void render(RenderView& view) override;
+		void render(CommandRecorder&, const RenderArgs& args) override;
 
 	private:
 

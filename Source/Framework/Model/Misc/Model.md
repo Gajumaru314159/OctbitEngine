@@ -6,6 +6,7 @@
 classDiagram
     Model <-- StaticModel
     Model <-- SkeletalModel
+    Model <-- SplineModel
 
     Model : ModelMesh meshes
     Model : Bounding bounding

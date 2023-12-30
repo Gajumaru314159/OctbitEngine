@@ -11,9 +11,16 @@
 
 namespace ob::graphics {
 
+    enum class RenderViewType {
+        Camera,
+        Shadow,
+        ReflectionCube,
+    };
+
     struct RenderViewDesc {
-        String  name;
-        Size    size;
+        String          name;
+        Size            size;
+        RenderViewType  type;
     };
 
     
@@ -24,18 +31,26 @@ namespace ob::graphics {
     public:
 
         RenderView(RenderViewDesc& desc);
-        ~RenderView();
+        virtual ~RenderView();
 
         void setPriority(s32 priority);
         s32 getPriority()const;
 
-    private:
+        void render(CommandRecorder&);
 
-        Name        m_name;
+        template<class T>
+        void addStep();
+        void addStep(UPtr<RenderStep>);
+        // addDrawPacket
+        // addDrawItem
+
+    private:
 
         RenderViewDesc m_desc;
 
-        TextureManager m_textureManager;
+        UPtr<TextureManager> m_textureManager;
+
+        Array<UPtr<RenderStep>> m_steps;
 
     };
 

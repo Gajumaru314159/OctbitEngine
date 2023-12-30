@@ -1,35 +1,40 @@
 ﻿RenderPipeline
 ---------------
-1フレーム中の描画処理はカメラに依存するものとそうでないものに分けられる。
 
-### CameraStack
-別カメラの映像を背景を描画せずにオーバーレイさせるシステムです。  
-CameraStackに積まれたカメラの描画はPostProcessとの依存関係を考慮して描画されます。
-オーバーレイ描画のポストプロセスはベースカメラと同一です。
+### 複数のRenderPipeline
+PBRとNPBRを両方使用する場合はカメラごとにRenderPipelineを選択することができます。  
+RenderViewにはIDが割り振られており、RenderSceneから対応するRenderPipelineを取得できます。
 
-### カメラごとのRenderPipeline
-PBRとNPBRを両方使用する場合はカメラごとにRenderPipelineを構築する必要があります。  
-RenderPipelineが異なる場合RenderPassも異なるのでMaterialはPRBとNPRBの両方に対応する必要があります。
-具体的にはRenderTagに```PBR_Opaque```と```NPBR_Opaque```それぞれのシェーダを含める必要があります。
-```c++
-if(camera.hasTag(TC("PBR"))){
-	context.getRenderers(TC("PBR_Opaque"))
-		.sort(soptions)
-		.cull(coptions)
-		.draw();
-	// ...
-}else{
-	context.getRenderers(TC("NPBR_Opaque"))
-		.draw();
-	// ...
-}
+### RenderView情報
+RenderViewごとのRenderPipelineに依存する情報はRenderPipelineが保持しています。
+```
+RenderScene
+	SPtr<RenderPipeline>[]
+	RenderView[]
+		WPtr<RenderPipeline>
 ```
 
-### Camera情報
-一般的なパラメータはCameraコンポーネントが持つ。
-カスタムRenderPipelineで必要なパラメータはCameraと同じEntityにコンポーネントとして追加する。  
-例：AdditionalCameraDataComponent
+### 生成方法
+```cpp
+class RenderPipelineAsset{
+public:
+	virtual RenderPipeline* Create(){
 
+	}
+};
+
+```
+
+### RenderStep
+DeferredRenderFeatureは以下の4つのRenderStepを生成します。
+* EalryZ
+* DeferredOpaque
+* DeferredMask
+* DeferredLighting
+
+RenderStepは同種の描画をまとめる描画単位です。
+通常RenderStepは1つのFrameBufferを持ち、beginRenderPassから始まりendRenderPassで終わります。
+RenderPassはRenderView毎に生成され、内部状態を保持することができます。
 
 ### Engine実装とGame実装
 RenderPipelineにはシステム予約してあるRenderTagの描画を用意しておく。  
@@ -96,19 +101,17 @@ private:
 ```
 RenderScene
     RenderPipeline[]
-        RenderFeature[]
-        RenderStep[]
-            RenderPass	
+    RenderFeature[]
 	RenderView[]
 		Texturemanager
 			RenderTexture[]
-    RenderItem[]
-    Light[]
+		RenderStep[]
+			RenderPass
 ```
 
 ```
 RPI
-    RenderFeature[]
+	RenderFeature[]
 		MeshRenderFeature
 		LightRenderFeature
 		ShadowRenderFeature
@@ -118,6 +121,9 @@ RPI
 		RenderStep[]
 	RenderTaskList
 		RenderTask[]
+	RenderPipeline[]
+        RenderViewData[]
+
 ```
 
 

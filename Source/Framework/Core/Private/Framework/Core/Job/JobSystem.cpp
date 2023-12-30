@@ -1,34 +1,41 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		関数
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <functional>
+#include <Framework/Core/Job/JobSystem.h>
+#include <Framework/Core/Job/JobExecutor.h>
+#include <Framework/Core/Job/JobGroup.h>
 
-namespace ob::core {
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      関数オブジェクト
-	//@―---------------------------------------------------------------------------
-	template<class SIGNATURE>
-	using Func = std::function<SIGNATURE>;
+namespace ob {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      評価関数オブジェクト
+	//! @brief コンストラクタ
 	//@―---------------------------------------------------------------------------
-	template<class... TArgs>
-	using Pred = std::function<bool(TArgs...)>;
+	JobSystem::JobSystem() {
+		
+	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      評価関数オブジェクト
+	//! @brief ルートJobGroupを取得
 	//@―---------------------------------------------------------------------------
-	using Action = Func<void()>;
+	auto JobSystem::getRootGroup() -> JobGroup& {
+		return *m_rootGroup;
+	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      参照オブジェクト
+	//! @brief 実行
 	//@―---------------------------------------------------------------------------
-	template<class T>
-	using ReferenceWrapper = std::reference_wrapper<T>;
+	void JobSystem::execute() {
+		m_executor->execute();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief 待機
+	//@―---------------------------------------------------------------------------
+	void JobSystem::wait() {
+		m_executor->wait();
+	}
 
 }

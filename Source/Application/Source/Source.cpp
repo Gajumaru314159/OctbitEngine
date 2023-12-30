@@ -23,13 +23,8 @@
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
-#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/RPI.h>
 #include <Plugins/DirectX12RHI/System.h>
-
-#include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Render/RenderPipelineDesc.h>
-#include <Framework/Graphics/Feature/ForwardRenderFeature.h>
 
 //-----------------------------------------------------------------
 using namespace ob;

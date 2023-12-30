@@ -24,14 +24,6 @@ namespace ob::graphics {
 		return m_size;
 	}
 
-	void TextureManager::setSize(Size size) {
-		for (auto& [name, texture] : m_textures) {
-			// TODO 画面のリサイズ対応
-			// texture->resize(size);
-		}
-	}
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief      テクスチャ生成
 	//@―---------------------------------------------------------------------------

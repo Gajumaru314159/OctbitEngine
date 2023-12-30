@@ -62,3 +62,5 @@ cbuffer Buffer : register(b0) {
 
 ## RenderPipelineからみたMaterial
 * RenderTagから描画するマテリアルを取得
+
+## MaterialLOD

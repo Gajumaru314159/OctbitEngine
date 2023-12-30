@@ -11,21 +11,24 @@
 #include <Framework/RHI/FrameBuffer.h>
 
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Graphics/Command/CommandRecorder.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	ImGuiRenderFeature::ImGuiRenderFeature() {
+	ImGuiRenderFeature::ImGuiRenderFeature(RenderScene& scene)
+		: RenderFeature(scene)
+	{
 
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ビュー設定
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderFeature::setupView(RenderView& view) {
-		view.addStep<ImGuiRenderStep>();
+	void ImGuiRenderFeature::setupView(RenderStepSet& set) {
+		set.add<ImGuiRenderStep>();
 	}
 
 
@@ -65,14 +68,16 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画処理
 	//@―---------------------------------------------------------------------------
-	void Render_ImGui() {
+	void ImGuiRenderStep::render(CommandRecorder& recorder, const RenderArgs& args) {
 
-		context.beginRenderPass(m_frameBuffer);
+		recorder.beginRenderPass(m_frameBuffer);
 		
+		// TODO ImGuiをRHIではなくRPI依存にする
+
 		//context.executeCustomCommand();
 		//context.draw("Forward");
 
-		context.endRenderPass();
+		recorder.endRenderPass();
 
 	}
 }

@@ -17,19 +17,23 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	class OnetimeAllocator {
 	public:
-		OnetimeAllocator(const OnetimeAllocatorDesc& desc) {
-			m_storage.resize(desc.blockSize);
-			reset();
+		OnetimeAllocator(const OnetimeAllocatorDesc& desc)
+			: m_desc(desc)
+		{
 		}
 
 		void* allocate(size_t n) {
 
-			auto top = m_top.fetch_add(n);
+			if (m_storage.front().size() <= m_top + n) {
+				m_storage.emplace_front(std::max(m_desc.blockSize,n));
+				m_top = 0;
+			}
 
-			// TODO 自動再確保する
-			OB_ASSERT(top + n < m_top.size(), "OnetimeAllocatorの最大容量を超えました。");
+			auto top = m_top;
+			auto result = m_storage.front().data() + top;
+			m_top += n;
 
-			return m_storage.data() + top;
+			return result;
 		}
 
 		template<class T>
@@ -43,13 +47,23 @@ namespace ob::graphics {
 		}
 
 		void reset() {
+
+			size_t size = 0;
+			for (auto& blob : m_storage) {
+				size += blob.size();
+			}
+
+			m_storage.clear();
+			m_storage.emplace_front(size);
+
 			m_top = 0;
 		}
 
 	private:
+		OnetimeAllocatorDesc m_desc;
 
-		Array<u8> m_storage;
-		Atomic<size_t> m_top;
+		List<Blob>	m_storage;
+		size_t		m_top;
 
 	};
 

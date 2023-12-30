@@ -8,19 +8,19 @@
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  コマンドの実行優先
+	//! @brief		コマンドの実行優先
+	//! @details	CommandListにコマンドが積まれる優先順序です。
+	//!				CommandRecorderにコマンドを並列に積んだ後、正しい順序でコマンドを
+	//!				実行するために使用されます。
 	//@―---------------------------------------------------------------------------
 	struct CommandPriority {
-		u16  pathID;		//!< カメラやライトなどの描画パスごとに異なる値
-		u8   renderTag;		//!< RenderTagのインデックス
-		u8   offset;		//!< RenderTag内での実行優先度
-		// u32  priority;		//!< 距離など
+		u32	group;		//!< カメラやライトなどの描画パスごとに異なる値
+		u32 offset;		//!< RenderTag内での実行優先度
 	};
 
 
 	bool operator <(const CommandPriority& a, const CommandPriority& b) {
-		if (b.pathID > a.pathId) return false;
-		if (b.renderTag > a.renderTag) return false;
+		if (b.group > a.group) return false;
 		if (b.offset > a.offset) return false;
 		return true;
 	}

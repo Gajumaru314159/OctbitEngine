@@ -18,7 +18,7 @@ namespace ob::graphics {
 
 		MeshRenderFeature();
 
-		MeshHandle acquireMesh();
+		MeshHandle createMesh();
 		bool releaseMesh(MeshHandle);
 		MeshHandle cloneMesh(MeshHandle);
 
@@ -39,6 +39,21 @@ namespace ob::graphics {
 	private:
 
 		HashMap<MeshHandle, UPtr<ModelInstance>> m_instances;
+
+		struct MeshSubset {
+			s32 indexOffset;
+			s32 indexCount;
+			s32 materialIndex;
+		};
+
+		struct Data {
+			Ref<Mesh> mesh;
+			Array<MeshSubset> subsets;
+			AABB aabb;
+		};
+
+
+
 
 	};
 

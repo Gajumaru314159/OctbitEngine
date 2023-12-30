@@ -4,12 +4,15 @@
 * GameThread
 * RenderThread
 * RHIThread
-
-## MainThread
-各スレッドの起動と、同期的に処理する必要のある処理を実行します。
-
+* 
 ## GameThread
 フレーム内の所定のタイミングで描画に必要なGPUリソースをRenderThread用にコピーします。
+
+* 描画する可能性のある全てのリソースをSwapする
+    * RenderThreadでRenderPipelineを処理する
+* 描画アイテム単位でパケットを生成
+* 描画コマンドのラッパーをスタック
+    * RenderThreadではソートとネイティブのコマンド変換
 ```cpp
 graphics.addTask(
 	[this](Recorder& recorder){
