@@ -1,10 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コンポーネント
+//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+#include <Framework/Graphics/Command/CommandStorage.h>
 
-namespace ob::engine {
+namespace ob::graphics
+{
 
 }

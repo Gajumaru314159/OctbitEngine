@@ -1,175 +1,52 @@
 ﻿# RenderFeature
-FeatureRenderPipelineは取り外し可能な描画機能を組み合わせることで描画パイプラインを構築します。  
-各RenderFeatureは複数のRenderPassと複数の1次テクスチャを定義します。
-
-
-## クラス構成
-* Graphics
-	* UniversalRenderPipeline
-	* Camera[]
-		* ScriptableRenderer
-			* ScriptableRendererFeature[]
-			* ScriptableRenderPass[]
-
-* Graphics
-	* RenderPipeline
-	* Camera[]
-		* Renderer
-			* RendererFeature[]
-			* RendererPass[]
-
-## クラス説明
-|クラス|機能|
-|-|-|
-|UniversalRenderPipelie|ScriptableXXX系の機能を使えるようにしたRenderPipeline|
-|Camera|カメラごとに使用するScriptableRendererを設定できる|
-|ScriptableRenderer|ToonRendererやPBRRendererなど1カメラに対する一連の描画パイプライン<br>ScriptableRenderPassの配列を持つ|
-|ScriptableRendererFeature|着脱可能な描画機能(Tonemap/Vintage)<br>必要なScriptableRenderPassを生成|
-|ScriptableRenderPass|rhi::RenderPass単位の描画処理|
-
-## 実装例
-```c++
-
-class UniversalRenderPipeline : public RenderPipeline {
-public:
-	void render(RenderContext& contex, Span<Ref<Camera>> cameras) {
-
-		for(auto& feature:m_postFeatures){
-			feature->execure(contex);
-		}
-
-		for(auto& camera:cameras){
-			camera->renderer->execute(contex,camera);
-		}
-
-	}
-};
+RenderFeatureは付け外し可能な描画機能のモジュールです。  
+RenderFeature内では描画機能の提供のみを行い、実際に描画に使用するかはRenderPipelineで決定します。
+Engine層から使用する場合はComponentからRenderFeatureにアクセスし描画要素を生成します。
 
 ```
-
-```c++
-class PRBRenderer: public ScriptableRenderer{
-public:
-	PRBRenderer(){
-		m_passes.clear();
-		for(auto& feature:m_features){
-			feature->addRenderPass(m_passes);
-		}
-		std:sort(m_passes.begin(),m_pases.end(),
-			[](const auto& a,const auto& b){
-				return a->getPriority() < b->getPriority();
-			}
-		);
-	}
-	void execute(RenderContext& context,Camera& camera) {
-		for(auto& pass:m_passes){
-			pass.execute(context,camera,*this);
-		}
-	}
-private:
-	Array<UPtr<ScriptableRenderFeature>> m_features;
-	Array<UPtr<ScriptableRenderPass>> m_passes;
-}
-
+MeshRenderFeature
+ImGuiRenderFeature
+LightRenderFeature
+TerrainRenderFeature
+VFXRenderFeature
+UIRenderFeature
 ```
-
-```c++
-class BlurRenderPass : public ScriptableRenderPass{
+アクセス例
+```cpp
+class MeshRendererComponent : public Component {
 public:
-	BlurRenderPass() {
-
-		auto accumulate = manager.getTexture("Accumulate");
-
-		m_material1 = Asset::Load<Material>(TC("System/Blur1"));
-		m_material2 = Asset::Load<Material>(TC("System/Blur2"));
-
-		RenderPassDesc rdesc;
-		auto renderPass = manager.getRenderPass(rdesc);
-
-		FrameBufferDesc fdesc;
-		fdesc.renderPass = renderPass;
-		fdessc.attachment = {
-			gbuffer0,
-			gbuffer1,
-			gbuffer2,
-			depth,
-		};
-
-		m_frameBuffer = FrameBuffer::Create(fdesc);
+	void onActivate(){
+		if(auto feature = MeshRenderFeature::Of(getEntity())){
+			m_meshId = feature->createItem();
+		}	
 	}
-
-	void execute(RenderContext& context,Camera& camera,Renderer& renderer){
-
-		context.beginRenderPass(m_frameBuffer);
-		context.blit(accumulate,m_passTex,m_material1);
-
-		context.nextSubpass();
-		context.blit(m_passTex,accumulate,m_material2);
+	void onDisactivate(){
+		if(auto feature = MeshRenderFeature::Of(getEntity())){
+			feature->releaseItem(m_meshId);
+		}	
 	}
-private:
-	Ref<FrameBuffer> m_frameBuffer;
-	Ref<Material> m_material1;
-	Ref<Material> m_material2;
-};
-```
-```c++
-class OpaqueRenderPass : public ScriptableRenderPass{
-public:
-	OpaqueRenderPass(TextureManager& manager) {
-		
-		auto gbuffer0 = manager.getTexture("GBuffer0",TextureFormat::RGB8);	// Diffuse	Flag
-		auto gbuffer1 = manager.getTexture("GBuffer1",TextureFormat::RGB8);	// Metallic	Occlusion
-		auto gbuffer2 = manager.getTexture("GBuffer2",TextureFormat::RGB8);	// Normal	Smoothness
-		auto depth    = manager.getTexture("Depth"   ,TextureFormat::D32);	// Depth
-
-		RenderPassDescHelper rdesc;
-		rdesc.name = TC("Forward");
-		auto gbuffer0Idx = rdesc.addAttachment(TextureFormat::RGBA8);
-		auto gbuffer1Idx = rdesc.addAttachment(TextureFormat::RGBA8);
-		auto gbuffer2Idx = rdesc.addAttachment(TextureFormat::RGBA8);
-		auto depthIdx = rdesc.addAttachment(TextureFormat::D32);
-		rdesc.addSubpassXCD({ gbuffer0Idx,gbuffer1Idx,gbuffer2Idx }, depth);
-
-		FrameBufferDesc fdesc;
-		fdesc.renderPass = Material::AddRenderPass(rdesc);
-		fdessc.attachment = {
-			gbuffer0,
-			gbuffer1,
-			gbuffer2,
-			depth,
-		};
-
-		m_frameBuffer = FrameBuffer::Create(fdesc);
+	void setMesh(const Ref<Mesh>& mesh){
+		if(auto feature = MeshRenderFeature::Of(getEntity())){
+			feature->setMesh(m_meshId,mesh);
+		}	
 	}
-
-	void execute(RenderContext& context,Camera& camera,Renderer& renderer) {
-
-		context.beginRenderPass(m_frameBuffer);
-
-		context
-			.getRenderers("DepthPrepass","DepthPrepass2")
-			.cull()
-			.sort()
-			.draw();
-	}
-private:
-	Ref<FrameBuffer> m_frameBuffer;
 };
 ```
 
-## RenderQueue
-|名前|値|対象|
-|-|-|-|
-|Background|1000|背景|
-|Geometry|2000|不透明|
-|AlphaTest|2450|アルファテスト|
-|Transparent|3000|半透明|
-|Overlay|4000||
+## RenderFeatureの依存関係
+RenderFeatureの中には描画機能を他のRenderFeatureに任せている場合があります。
+* MeshRenderFeatureはMaterialRenderFeatureに依存
 
-### テクスチャ/FrameBufferの生成
-* 再生成が必要
-	* Texture
-	* FrameBuffer
-* 共通
-	* RenderPass
-	* Material
+RenderPipelineからはMaterialRenderFeatureを実行するだけでMeshRenderFeatureに関連する描画が実行されます。
+
+
+## エディタ上のワークフロー
+Unityのワークフローを参考にしてください
+1. RenderPipelineAssetを作成
+2. RenderPipelineのパラメータを設定
+3. RenderPipelineAssetのリストをGraphicsSetting設定
+4. Cameraの使用するRenderPipelineを設定
+
+## ポストプロセスの実行順序
+ベースのRenderStage(PostProcess)からのオフセットで制御されます。
+Materialで制御してください。

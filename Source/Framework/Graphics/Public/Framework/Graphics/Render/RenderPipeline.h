@@ -1,55 +1,43 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		描画パイプライン
+//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
 
-#include <Framework/Graphics/Render/RenderStep.h>
-#include <Framework/Graphics/Render/RenderView.h>
-
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      描画パイプライン
-	//! @details    描画呼び出しの基底となるクラスです。プログラム内で1つだけ存在します。
-	//!				Unityでは
-	//!				* ビルトイン
-	//!				* UniversalRenderPipeline
-	//!				* HeighDefinitionRenderPipeline
-	//!				などに当たります。
+	//! @brief      描画ステップ
+	//! @detailas   カメラごとに持ちます。
 	//@―---------------------------------------------------------------------------
 	class RenderPipeline {
 	public:
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ
-		//@―---------------------------------------------------------------------------
-		RenderPipeline(RenderPipelineDesc&& desc);
-		~RenderPipeline();
-
+		virtual ~RenderPipeline() = default;
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  Viewを追加
+		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		void createView(String name);
+		virtual void render(CommandRecorder&) {};
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  描画処理
+		//! @brief      ビューを生成
 		//@―---------------------------------------------------------------------------
-		void render();
+		virtual UPtr<RenderView> createView() = 0;
 
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      所属シーンを取得する
+		//@―---------------------------------------------------------------------------
+		RenderScene& getScene()const { return m_scene; }
+
+	protected:
+		RenderPipeline(RenderScene& scene) :m_scene(scene) {}
 	private:
-
-		String m_name;
-
-		Array<UPtr<RenderFeature>>	m_features;
-		Array<UPtr<RenderView>>		m_views;
-		Array<UPtr<RenderStep>>		m_steps;
-
-		Ref<RenderContext> m_globalContext;
-
+		RenderScene& m_scene;
 	};
 
 }

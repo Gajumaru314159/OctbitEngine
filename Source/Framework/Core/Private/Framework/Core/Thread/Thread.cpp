@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Thread/Thread.h>
+#include <Framework/Core/String/StringEncoder.h>
 #include <functional>
 
 #ifdef OS_WINDOWS
@@ -40,6 +41,16 @@ namespace ob::core {
 	Thread::Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint) 
 	{
 		m_impl->th = std::thread(entryPoint);
+#ifdef OS_WINDOWS
+		WString wname;
+		StringEncoder::Encode(name, wname);
+		auto hr = ::SetThreadDescription(m_impl->th.native_handle(), wname.c_str());
+		if (FAILED(hr)) {
+			LOG_WARNING("スレッド名の設定に失敗 [{}]",name);
+		}
+#else
+		static_assert(false, "Thread::Thread()が実装されていません。");
+#endif
 	}
 
 	//@―---------------------------------------------------------------------------

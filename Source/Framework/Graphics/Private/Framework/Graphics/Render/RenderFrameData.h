@@ -1,19 +1,19 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Graphics/Command/CommandRecorder.h>
 
 namespace ob::graphics {
-
+    
     //@―---------------------------------------------------------------------------
-    //! @brief      モデル
+    //! @brief RenderThreadを実行するクラス 
     //@―---------------------------------------------------------------------------
-    class ModelRenderHandle {
-    public:
-
-    private:
+    struct RenderFrameData{
+        CommandStorage storage;
     };
+
 
 }

@@ -134,6 +134,13 @@ Assetモジュール
 --------------
 Assetモジュールではゲームアセット単位でのファイル管理をします。アセット間の依存解決や、アンロード処理を行います。
 
+Engineモジュール
+--------------
+EntityやComponentの仕組みを実装します。ModelやPhysicsをComponentとして使用する場合はこのモジュールにComponentを実装します。
+
+※ModelやPhysicsからはEntityやComponentへアクセスできません。
+
+
 ThirdParty Libraries
 =====================
 [別ページ](Source/ThirdParty/ThirdPartyLibrary.mb)

@@ -86,4 +86,60 @@ namespace ob::rhi {
         setVertexBuffers(buffers);
     }
 
+
+
+#if 0
+    enum class TextureAspect {
+        Color,
+        Depth,
+        Stencil,
+    };
+
+    struct TextureSubresource {
+        u16 mipSlice = 0;
+        u16 arraySlice = 0;
+        TextureAspect aspect;
+    };
+
+
+    struct CopyBufferParam {
+        Ref<Buffer> source;
+        Ref<Buffer> target;
+        s32 sourceOffset = 0;
+        s32 targetOffset = 0;
+        s32 size = 0;
+    };
+    struct CopyTextureParam {
+        Ref<Texture> source;
+        Ref<Texture> target;
+        TextureSubresource sourceSubresource;
+        TextureSubresource targetSubresource;
+        Point sourceOrigin;
+        Point targetOrigin;
+        Size size;
+    };
+    struct CopyBufferToTextureParam {};
+    struct CopyTextureToBufferParam {};
+
+    using CopyItemParam = Variant<CopyBufferParam, CopyTextureParam, CopyBufferToTextureParam, CopyTextureToBufferParam>;
+
+
+    struct DrawItemParam {};
+    struct DispatchItemParam {};
+
+
+    class CommandListSimple {
+    public:
+        virtual void setViewports(const Viewport* viewports, s32 num) = 0;  //!< ビューポートを設定
+        virtual void setScissors(const IntRect* scissors, s32 num) = 0;    //!< シザー矩形を設定
+                void setViewport(const Viewport& viewport) { setViewports(&viewport, 1); }
+                void setScissors(const IntRect& scissor) { setScissors(&scissor, 1); }
+
+        virtual void submit(const CopyItemParam& param) = 0;
+        virtual void submit(const DrawItemParam& param) = 0;
+        virtual void submit(const DispatchItemParam& param) = 0;
+        virtual void submit(const DispatchItemParam& param) = 0;
+    };
+#endif
+
 }

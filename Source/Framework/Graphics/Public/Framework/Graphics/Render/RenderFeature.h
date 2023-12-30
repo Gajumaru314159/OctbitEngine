@@ -1,14 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		描画パイプライン
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Core/Utility/Ref.h>
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Camera.h>
-#include <Framework/Graphics/Render/RenderStep.h>
-#include <Framework/Graphics/Render/RenderStepList.h>
 
 namespace ob::graphics {
 
@@ -20,20 +18,49 @@ namespace ob::graphics {
 	class RenderFeature {
 	public:
 
-		RenderFeature();
-		virtual ~RenderFeature();
+		OB_RTTI();
+
+		virtual ~RenderFeature(){}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      必要なRenderStepをRenderStepListに追加する
+		//! @details	描画処理は登録されたステップ順に行われます。
 		//@―---------------------------------------------------------------------------
-		virtual void setupView(RenderView&) {}
+		virtual void setupView(RenderStepSet&) {}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      アクティブにする
+		//@―---------------------------------------------------------------------------
 		virtual void activate() {}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      非アクティブにする
+		//@―---------------------------------------------------------------------------
 		virtual void deactivate() {}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      シミュレートする
+		//! @details	パーティクルの更新やアニメーションの更新などCPU上での更新処理を実行します。
+		//@―---------------------------------------------------------------------------
 		virtual void simulate() {}
-		virtual void render() {}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画コマンドをCommandRecorderに記録します。
+		//! @details	毎フレーム実行されます。
+		//@―---------------------------------------------------------------------------
+		virtual void render(CommandRecorder&) {}
+
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      所属シーンを取得する
+		//@―---------------------------------------------------------------------------
+		RenderScene& getScene()const { return m_scene; }
+
+	protected:
+		RenderFeature(RenderScene& scene) :m_scene(scene) {}
+	private:
+		RenderScene& m_scene;
 	};
 
 }

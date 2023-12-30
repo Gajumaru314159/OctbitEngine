@@ -4,48 +4,112 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Graphics/Render/RenderPipeline.h>
+#include <Framework/Graphics/Render/RenderExecutor.h>
+#include <Framework/Graphics/Command/CommandRecorder.h>
+#include <Framework/Graphics/RPI.h>
 
 namespace ob::graphics {
 
-	Ref<RenderScene> RenderScene::Create(StringView name) {
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画シーンを生成
+	//@―---------------------------------------------------------------------------
+	Ref<RenderScene> RenderScene::Create(const RenderSceneDesc& desc) {
+		if (auto system = RPI::Get()) {
+			Ref<RenderScene> scene = new RenderScene(desc);
+			system->addScene(scene);
+			return scene;
+		}
 		return nullptr;
 	}
 
-	RenderScene::RenderScene(StringView name) 
-		: m_name(name)
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画シーンを生成
+	//@―---------------------------------------------------------------------------
+	RenderScene::RenderScene(const RenderSceneDesc& desc)
+		: m_name(desc.name)
 	{
-
-	}
-
-	void RenderScene::simulate() {
-
-		// TODO ジョブ分割
-		for (auto& [id,pipeline]: m_pipelines) {
-			//pipeline->simulate();
+		// RenderFeature生成
+		auto features = desc.features.create(*this);
+		for (auto& feature : features) {
+			m_features[feature->getTypeId()] = std::move(feature);
 		}
 
-	}
-
-	void RenderScene::render() {
-
-		// TODO ジョブ分割
-		for (auto& [id, pipeline] : m_pipelines) {
-			pipeline->render();
+		// RenderPipeline生成
+		auto pipelines = desc.pipelines.create(*this);
+		for (auto& pipeline : pipelines) {
+			m_pipelines.push_back(std::move(pipeline));
 		}
 
+		// RenderExecutor生成
+		{
+			RenderExecutorDesc desc;
+			m_executor = std::make_unique<RenderExecutor>(desc);
+		}
 	}
 
-	RenderPipelineId RenderScene::addRenderPipeline(UPtr<RenderPipeline> pipeline) {
-		static Atomic<s32> s_renderPipelineId = 0;
-		auto id = static_cast<RenderPipelineId>(s_renderPipelineId.load());
-		m_pipelines[id] = std::move(pipeline);
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画
+	//@―---------------------------------------------------------------------------
+	void RenderScene::render(CommandStorage& commandStorage) {
+
+		JobContext* ctx = nullptr;
 		
-		m_pipelines[id]->createView(TC("TetView"));
-		
-		return id;
+		CommandRecorder recorder{ commandStorage };
+
+		// RenderPipeline毎のコマンドを記録
+		for (auto& pipeline : m_pipelines) {
+			pipeline->render(recorder);
+		}
+
+		// RenderFeature毎のコマンドを記録
+		for (auto& [typeId, feature] : m_features) {
+			feature->render(recorder);
+		}
+
+		// RenderView毎の描画コマンドを記録
+		for (auto& view : m_views) {
+			view->render(recorder);
+		}
+
+		// ctx->dispatch();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      RenderFeatureを見つける
+	//@―---------------------------------------------------------------------------
+	RenderFeature* RenderScene::findFeature(TypeId typId)const {
+		auto found = m_features.find(typId);
+		if (found == m_features.end())return nullptr;
+		return found->second.get();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      RenderFeatureを走査する
+	//@―---------------------------------------------------------------------------
+	void RenderScene::visitFeatures(Func<void(RenderFeature&)>&& visitor) {
+		if (!visitor)return;
+		for (auto& [typeId,feature] : m_features) {
+			visitor(*feature);
+		}
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      全てのRenderFeatureを有効にする
+	//@―---------------------------------------------------------------------------
+	void RenderScene::activateAllFeature() {
+		for (auto& [typeId, feature] : m_features) {
+			feature->activate();
+		}
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      RenderFeatureを見つける
+	//@―---------------------------------------------------------------------------
+	void RenderScene::addView(Ref<RenderView> view) {
+		m_views.push_back(view);
 	}
 
 }

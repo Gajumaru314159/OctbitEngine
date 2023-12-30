@@ -23,31 +23,8 @@
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
-#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/RPI.h>
 #include <Plugins/DirectX12RHI/System.h>
-
-#include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Render/RenderPipelineDesc.h>
-#include <Framework/Graphics/Feature/ForwardRenderFeature.h>
-
-struct StructA {
-	std::vector<int> elements;
-};
-
-struct StructB {
-	std::vector<StructA> elements;
-};
-
-inline bool operator<(const StructA& a, const StructA& b) noexcept {
-	if (a.elements < b.elements) return true;
-	return false;
-}
-
-inline bool operator<(const StructB& a, const StructB& b) noexcept {
-	if (a.elements < b.elements) return true;
-	return false;
-}
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -57,16 +34,6 @@ void drawComponents(engine::Entity* pEntity = nullptr);
 
 int TestDirectX12() {
 
-
-	StructB b0;
-	b0.elements.emplace_back().elements = {1,2,3};
-	StructB b1;
-	b1.elements.emplace_back().elements.emplace_back(1);
-
-	if (b0 < b1) {
-		std::cout << "<";
-	}
-
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 
@@ -74,14 +41,14 @@ int TestDirectX12() {
 	debug::Profiler profiler;
 
 
-	auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
-	{
-		graphics::RenderPipelineDesc rdesc;
-		rdesc.name = TC("TestPipeline");
-		//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
-
-		auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
-	}
+	//auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
+	//{
+	//	graphics::RenderPipelineDesc rdesc;
+	//	rdesc.name = TC("TestPipeline");
+	//	//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
+	//
+	//	auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
+	//}
 
 	//scene->addRenderPipeline();
 	//renderScene->addRenderPipeline

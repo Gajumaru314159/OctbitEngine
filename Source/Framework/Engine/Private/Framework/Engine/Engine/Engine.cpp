@@ -11,7 +11,7 @@
 
 #include <Framework/Input/InputManager.h>
 #include <Framework/RHI/RHI.h>
-#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/RPI.h>
 
 // DI完了後削除
 namespace ob {
@@ -22,7 +22,7 @@ namespace ob {
 		class InputModule;
 	}
 	namespace graphics {
-		class Graphics;
+		class RPI;
 		class MaterialManager;
 	}
 	namespace rhi {
@@ -37,7 +37,7 @@ namespace ob::engine {
 			EntityManager&,
 			platform::WindowManager*,
 			input::InputModule*,
-			graphics::Graphics*,
+			graphics::RPI*,
 			graphics::MaterialManager*,
 			rhi::SystemResource*
 		) {}
@@ -81,7 +81,7 @@ namespace ob::engine {
 
 		update_debug<input::InputModule>();
 		update_debug<rhi::RHI>();
-		update_debug<graphics::Graphics>();
+		update_debug<graphics::RPI>();
 
 		return true;
 	}

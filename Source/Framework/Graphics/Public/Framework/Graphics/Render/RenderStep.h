@@ -14,13 +14,52 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	class RenderStep {
 	public:
+		OB_RTTI();
 
-		RenderStep();
-		virtual ~RenderStep();
+		virtual ~RenderStep() = default;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		初期設定をする
+		//! @details	RenderStepで使用するテクスチャの生成やFrameBufferの生成を行います。
+		//!				setupは描画先のサイズが変更された場合にも呼び出されることに注意してください。
+		//@―---------------------------------------------------------------------------
 		virtual void setup(TextureManager&) {}
-		virtual void render(RenderView&) {};
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画
+		//@―---------------------------------------------------------------------------
+		virtual void render(CommandRecorder&, const RenderArgs& args) {};
+
+	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画ステップグループ
+	//@―---------------------------------------------------------------------------
+	class RenderStepSet {
+	public:
+
+		RenderStepSet() = default;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      RenderStepを追加する
+		//@―---------------------------------------------------------------------------
+		template<class T, class... Args> 
+		void add(Args&& ...args) {
+			add(std::make_unique<T>(args...));
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      RenderStepを追加する
+		//@―---------------------------------------------------------------------------
+		void add(UPtr<RenderStep>&& step) {
+			m_indices[step->getTypeId()] = m_steps.size();
+			m_steps.push_back(step);
+		}
+
+	private:
+		Array<UPtr<RenderStep>> m_steps;
+		HashMap<TypeId, s32> m_indices;
 	};
 
 }

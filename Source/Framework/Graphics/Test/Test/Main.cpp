@@ -6,33 +6,41 @@
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Window.h>
 
-#include <Framework/Graphics/Material.h>
-#include <Framework/Graphics/Mesh.h>
-
-#include <Framework/Platform/System.h>
-#include <Framework/Input/System.h>
-#include <Framework/Input/InputManager.h>
 #include <Framework/Graphics/System.h>
-#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/RPI.h>
 #include <Plugins/DirectX12RHI/System.h>
 
 #include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Feature/MeshRenderFeature.h>
+#include <Framework/Graphics/Feature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Render/RenderPipelineDesc.h>
-#include <Framework/Graphics/Feature/ForwardRenderFeature.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
 
 void OctbitInit(ServiceInjector& injector) {
 
-	input::
-		Register(injector);
 	rhi::dx12::
 		Register(injector);
 	graphics::
 		Register(injector);
 
+}
+
+class UniversalRenderPipeline :public graphics::RenderPipeline {
+
+};
+
+ob::graphics::RenderFeatureInjector ReflectRenderFeatureInjector() {
+	ob::graphics::RenderFeatureInjector injector;
+
+	//TypeInfo::Visit(TypeId::Get<ob::graphics::RenderFeature>(),
+	//	[injector](const TypeInfo& info) {
+	//		injector.add(info.typeId, [](ob::graphics::RenderScene& scene) {return typeInfo.create<RenderFeature*>(scene); });
+	//	}
+	//);
+
+	return std::move(injector);
 }
 
 int OctbitMain() {
@@ -46,14 +54,33 @@ int OctbitMain() {
 	platform::Window window(windowDesc);
 
 
+	// TODO リフレクション登録対応
+	RenderSceneDesc sdesc;
+	sdesc.name = TC("Default");
+	sdesc.features.add<MeshRenderFeature>();
+	sdesc.features.add<ImGuiRenderFeature>();
+	// sdesc.pipelines.add<ForwardRenderingPipeline>();
 
-	auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
-	{
-		graphics::RenderPipelineDesc rdesc;
-		rdesc.name = TC("TestPipeline");
-		//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
+	auto scene = RenderScene::Create(sdesc);
 
-		auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
+	// TODO アセットから生成対応
+	auto view = scene->createView<UniversalRenderPipeline>();
+
+	if (auto feature = scene->findFeature<MeshRenderFeature>()) {
+		auto id = feature->createMesh();
+	}
+
+	while (true) {
+
+		// Job
+
+		auto& rpi = *RPI::Get();
+
+		rpi.update();
+
+		rpi.wait();
+		rpi.execute();
+		
 	}
 
 	return 0;

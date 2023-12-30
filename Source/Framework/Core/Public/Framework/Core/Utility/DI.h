@@ -52,6 +52,13 @@ namespace ob::core {
         template<class T>
         T* create(ServiceContainer& container)const;
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      全てのサービスを生成
+        //! @details    抽象クラスに対して
+        //! @param container 生成されたサービスを管理させるコンテナの参照
+        //@―---------------------------------------------------------------------------
+        void createAll(ServiceContainer& container)const;
+
     private:
         template<class T> friend class ServiceBuilder;  // for m_builders
         HashMap<TypeId, UPtr<ServiceBuilderBase>>   m_builders;
@@ -202,6 +209,20 @@ namespace ob::core {
             }
         }
         return nullptr;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  サービスを生成
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    //@―---------------------------------------------------------------------------
+    void ServiceInjector::createAll(ServiceContainer& container)const {
+        for (auto& [typeId, builder] : m_builders) {
+            try {
+                builder->create(container);
+            } catch (Exception e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
+            }
+        }
     }
 
 

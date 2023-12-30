@@ -5,28 +5,30 @@
 //***********************************************************
 #include <Framework/Graphics/Feature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Material.h>
-#include <Framework/Graphics/Render/RenderContext.h>
 #include <Framework/RHI/Types/RenderPassDescHelper.h>
 #include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/FrameBuffer.h>
 
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Graphics/Command/CommandRecorder.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	ImGuiRenderFeature::ImGuiRenderFeature() {
+	ImGuiRenderFeature::ImGuiRenderFeature(RenderScene& scene)
+		: RenderFeature(scene)
+	{
 
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ビュー設定
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderFeature::setupView(RenderView& view) {
-		view.addStep<ImGuiRenderStep>();
+	void ImGuiRenderFeature::setupView(RenderStepSet& set) {
+		set.add<ImGuiRenderStep>();
 	}
 
 
@@ -66,16 +68,16 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画処理
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderStep::render(RenderView& view) {
+	void ImGuiRenderStep::render(CommandRecorder& recorder, const RenderArgs& args) {
 
-		auto& context = view.getRenderContext();
-
-		context.beginRenderPass(m_frameBuffer);
+		recorder.beginRenderPass(m_frameBuffer);
 		
+		// TODO ImGuiをRHIではなくRPI依存にする
+
 		//context.executeCustomCommand();
 		//context.draw("Forward");
 
-		context.endRenderPass();
+		recorder.endRenderPass();
 
 	}
 }

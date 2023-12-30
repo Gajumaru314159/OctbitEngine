@@ -23,7 +23,17 @@ namespace ob::graphics {
 	class RenderPipeline;
 	class RenderFeature;
 	class RenderView;
+	class RenderStepSet;
 	class RenderStep;
+	class RenderExecutor;
 	class TextureManager;
+
+	struct RenderArgs;
+	class CommandRecorder;
+	class CommandStorage;
+
+	class RenderFeatureInjector;
+
+	class RenderFrameData;
 
 }

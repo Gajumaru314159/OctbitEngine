@@ -10,4 +10,5 @@ namespace ob::core{
     class ServiceContainer;
 
     class NameDictionary;
+    class JobContext;
 }
