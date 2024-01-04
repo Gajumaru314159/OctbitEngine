@@ -211,20 +211,6 @@ namespace ob::core {
         return nullptr;
     }
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  サービスを生成
-    //! @param container 生成されたサービスを管理させるコンテナの参照
-    //@―---------------------------------------------------------------------------
-    void ServiceInjector::createAll(ServiceContainer& container)const {
-        for (auto& [typeId, builder] : m_builders) {
-            try {
-                builder->create(container);
-            } catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
-            }
-        }
-    }
-
 
     //@―---------------------------------------------------------------------------
     //! @brief      サービスビルダー基底
@@ -311,6 +297,21 @@ namespace ob::core {
         Func<T*()>      m_getter;
     };
 
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  サービスを生成
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    //@―---------------------------------------------------------------------------
+    inline void ServiceInjector::createAll(ServiceContainer& container)const {
+        for (auto& [typeId, builder] : m_builders) {
+            try {
+                builder->create(container);
+            }
+            catch (Exception e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
+            }
+        }
+    }
 
     namespace detail {
 
