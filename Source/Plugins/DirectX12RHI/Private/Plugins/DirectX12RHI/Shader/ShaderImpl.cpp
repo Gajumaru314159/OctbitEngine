@@ -81,7 +81,7 @@ namespace ob::rhi::dx12 {
         : m_name(name)
     {
         // チャンクタイプをチェック
-        bool isShaderBlob = *reinterpret_cast<const u32*>(blob.data()) == 0x43425844;
+        bool isShaderBlob = (!blob.empty()) && *reinterpret_cast<const u32*>(blob.data()) == 0x43425844;
         if (!isShaderBlob) {
             LOG_ERROR_EX("Graphic", "シェーダではないバイナリファイルから構築しようとしました。");
         }

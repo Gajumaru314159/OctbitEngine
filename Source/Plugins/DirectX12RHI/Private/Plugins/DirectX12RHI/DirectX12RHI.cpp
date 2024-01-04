@@ -22,12 +22,9 @@
 #include <Plugins/DirectX12RHI/Utility/PIXModule.h>
 #endif
 
-#define SAFE_CREATE(type,...)			\
-	auto p = new type(__VA_ARGS__);		\
-	if(p->isValid() == false) {			\
-		delete p;						\
-		return {};						\
-	}									\
+#define SAFE_CREATE(type,type_impl,...)			\
+	Ref<type> p = new type_impl(__VA_ARGS__);	\
+	if(p->isValid() == false) p = {};			\
 	return p;							
 
 namespace ob::rhi::dx12 {
@@ -88,7 +85,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  レンダーパスを生成を生成
 	//@―---------------------------------------------------------------------------
 	Ref<RenderPass> DirectX12RHI::createRenderPass(const RenderPassDesc& desc) {
-		SAFE_CREATE(RenderPassImpl, *this, desc);
+		SAFE_CREATE(RenderPass, RenderPassImpl, *this, desc);
 	}
 
 
@@ -96,7 +93,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  フレームバッファを生成
 	//@―---------------------------------------------------------------------------
 	Ref<FrameBuffer> DirectX12RHI::createFrameBuffer(const FrameBufferDesc& desc) {
-		SAFE_CREATE(FrameBufferImpl, *this, desc);
+		SAFE_CREATE(FrameBuffer, FrameBufferImpl, *this, desc);
 	}
 
 
@@ -104,7 +101,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  スワップ・チェーンを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Display> DirectX12RHI::createDisplay(const DisplayDesc& desc) {
-		SAFE_CREATE(DisplayImpl, *this, desc);
+		SAFE_CREATE(Display, DisplayImpl, *this, desc);
 	}
 
 
@@ -112,7 +109,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  コマンドリストを生成
 	//@―---------------------------------------------------------------------------
 	Ref<CommandList> DirectX12RHI::createCommandList(const CommandListDesc& desc) {
-		SAFE_CREATE(CommandListImpl, *this, desc);
+		SAFE_CREATE(CommandList, CommandListImpl, *this, desc);
 	}
 
 
@@ -120,7 +117,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  ルートシグネチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<RootSignature> DirectX12RHI::createRootSignature(const RootSignatureDesc& desc) {
-		SAFE_CREATE(RootSignatureImpl, *this, desc);
+		SAFE_CREATE(RootSignature, RootSignatureImpl, *this, desc);
 	}
 
 
@@ -128,7 +125,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  パイプラインステートを生成
 	//@―---------------------------------------------------------------------------
 	Ref<PipelineState> DirectX12RHI::createPipelineState(const PipelineStateDesc& desc) {
-		SAFE_CREATE(PipelineStateImpl, *this, desc);
+		SAFE_CREATE(PipelineState, PipelineStateImpl, *this, desc);
 	}
 
 
@@ -136,7 +133,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(const TextureDesc& desc) {
-		SAFE_CREATE(TextureImpl, *this, desc);
+		SAFE_CREATE(Texture, TextureImpl, *this, desc);
 	}
 
 
@@ -144,7 +141,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(StringView name, Size size, Span<IntColor> colors) {
-		SAFE_CREATE(TextureImpl, *this, name, size, colors);
+		SAFE_CREATE(Texture, TextureImpl, *this, name, size, colors);
 	}
 
 
@@ -152,7 +149,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(StringView name, BlobView blob) {
-		SAFE_CREATE(TextureImpl, *this, name, blob);
+		SAFE_CREATE(Texture, TextureImpl, *this, name, blob);
 	}
 
 
@@ -160,7 +157,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  レンダーテクスチャを生成
 	//@―---------------------------------------------------------------------------
 	Ref<RenderTexture> DirectX12RHI::createRenderTexture(const RenderTextureDesc& desc) {
-		SAFE_CREATE(TextureImpl, *this, desc);
+		SAFE_CREATE(RenderTexture, TextureImpl, *this, desc);
 	}
 
 
@@ -168,7 +165,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  バッファーを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Buffer> DirectX12RHI::createBuffer(const BufferDesc& desc) {
-		SAFE_CREATE(BufferImpl, *this, desc);
+		SAFE_CREATE(Buffer, BufferImpl, *this, desc);
 	}
 
 
@@ -176,7 +173,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  シェーダをコンパイル
 	//@―---------------------------------------------------------------------------
 	Ref<Shader> DirectX12RHI::compileShader(const String& code, ShaderStage stage) {
-		SAFE_CREATE(ShaderImpl, code, stage);
+		SAFE_CREATE(Shader, ShaderImpl, code, stage);
 	}
 
 
@@ -184,7 +181,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  シェーダをロード
 	//@―---------------------------------------------------------------------------
 	Ref<Shader> DirectX12RHI::loadShader(BlobView binary, ShaderStage stage) {
-		SAFE_CREATE(ShaderImpl, binary, stage);
+		SAFE_CREATE(Shader, ShaderImpl, binary, stage);
 	}
 
 
@@ -193,7 +190,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
 		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTableImpl, *m_descriptorHeaps[type], type, elementNum);
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *m_descriptorHeaps[type], type, elementNum);
 	}
 
 

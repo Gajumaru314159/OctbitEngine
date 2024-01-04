@@ -61,6 +61,7 @@ namespace ob::rhi::dx12 {
 
     private:
         const FrameBufferDesc m_desc;
+        bool m_isValid = false;
     };
 
 }

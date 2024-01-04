@@ -18,7 +18,10 @@ namespace ob::rhi::dx12 {
     FrameBufferImpl::FrameBufferImpl(DirectX12RHI& rDevice, const FrameBufferDesc& desc)
         : m_desc(desc)
     {
-        OB_ASSERT(m_desc.renderPass, "FraeBufferのRenderPassが空です");
+        if (!m_desc.renderPass) {
+            LOG_ERROR("FraeBuffer {} のRenderPassが空です",desc.name);
+            return;
+        }
 
         auto d = m_desc.renderPass.get();// ->desc();
         auto& a = d->desc().attachments;
@@ -31,8 +34,12 @@ namespace ob::rhi::dx12 {
             }
         );
 
-        OB_ASSERT(ok, "RenderPassのアタッチメントフォーマットに不一致");
+        if (ok == false) {
+            LOG_ERROR("FraeBuffer {} のRenderPassのアタッチメントフォーマットに不一致",desc.name);
+            return;
+        }
 
+        m_isValid = true;
     }
 
     //@―---------------------------------------------------------------------------
@@ -47,7 +54,7 @@ namespace ob::rhi::dx12 {
     //! @brief  妥当なオブジェクトか
     //@―---------------------------------------------------------------------------
     bool FrameBufferImpl::isValid()const {
-        return true;
+        return m_isValid;
     }
 
 

@@ -22,35 +22,35 @@ namespace ob::rhi::dx12 {
 	{
 
 		if (!desc.rootSignature) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
 			return;
 		}
 		if (!desc.renderPass) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
 			return;
 		}
 
 		if (!m_desc.vs) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
 			return;
 		}
 		if (!m_desc.ps) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。ピクセルシェーダが設定されていません。");
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。ピクセルシェーダが設定されていません。");
 			return;
 		}
 
 		if (!desc.renderPass) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
 		}
 
 		if (!is_in_range(desc.subpass, desc.renderPass->desc().subpasses)) {
-			LOG_FATAL_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass->desc().subpasses.size());
+			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass->desc().subpasses.size());
 		}
 
 		auto& subpass = desc.renderPass->desc().subpasses[desc.subpass];
 		const auto targetCount = subpass.colors.size();
 		if (8 < targetCount) {
-			LOG_FATAL_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
+			LOG_ERROR_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
 			return;
 		}
 
