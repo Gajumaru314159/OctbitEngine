@@ -98,13 +98,13 @@ include("Source/CMake/Common.cmake")
 # Framework
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
-add_subdirectory ("Source/Framework/RHI")
-add_subdirectory ("Source/Framework/Graphics")
 add_subdirectory ("Source/Framework/Input")
-add_subdirectory ("Source/Framework/Engine")
+add_subdirectory ("Source/Framework/RHI")
+#add_subdirectory ("Source/Framework/Graphics")
+#add_subdirectory ("Source/Framework/Engine")
 #add_subdirectory ("Source/Framework/Model")
-add_subdirectory ("Source/Framework/Debug")
-add_subdirectory ("Source/Framework/Asset")
+#add_subdirectory ("Source/Framework/Debug")
+#add_subdirectory ("Source/Framework/Asset")
 
 # Plugins
 if(WIN32)
@@ -116,11 +116,12 @@ if(WIN32)
     endif()
 endif()
 
-add_subdirectory ("Source/Plugins/ImGui")
+#add_subdirectory ("Source/Plugins/ImGui")
 
 # Test
 add_subdirectory ("Source/Test/Framework/Core")
 add_subdirectory ("Source/Test/Framework/Platform")
+add_subdirectory ("Source/Test/Framework/RHI")
 
 # Application
 add_subdirectory ("Source/Application")
