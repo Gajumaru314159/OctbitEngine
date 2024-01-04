@@ -11,7 +11,33 @@
 
 using namespace ob;
 
-void CommonStartup() {
+TEST(RHI, CreateEmpty) {
+
+	using namespace ob::rhi;
+
+	ServiceInjector injector;
+	ServiceContainer container;
+	rhi::dx12::Register(injector);
+	rhi::Register(injector);
+
+	injector.create<RHI>(container);
+
+	ASSERT_TRUE(RenderPass::Create({}));
+	ASSERT_FALSE(FrameBuffer::Create({}));
+	ASSERT_FALSE(Display::Create({}));
+	ASSERT_TRUE(CommandList::Create({}));
+	ASSERT_TRUE(RootSignature::Create({}));
+	ASSERT_FALSE(PipelineState::Create({}));
+	ASSERT_TRUE(Buffer::Create({}));
+	ASSERT_FALSE(Texture::Create(TC("Texture"), {}));
+	ASSERT_FALSE(RenderTexture::Create({}));
+	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));
+	ASSERT_FALSE(Shader::CompileVS(TC("")));
+
+}
+
+
+TEST(RHI, ShowHide) {
 
 	using namespace ob::rhi;
 
@@ -44,7 +70,7 @@ void CommonStartup() {
 			RenderPassDescHelper desc;
 			desc.name = TC("Forward");
 			auto color = desc.addAttachment(TextureFormat::RGBA8);
-			auto pass0 = desc.addSubpassXCX(TC("Opaque"), {color});
+			auto pass0 = desc.addSubpassXCX(TC("Opaque"), { color });
 
 			renderPass = RenderPass::Create(desc);
 			OB_ASSERT_EXPR(renderPass);
@@ -79,36 +105,37 @@ void CommonStartup() {
 		Ref<Shader> vs;
 		Ref<Shader> ps;
 		{
-			String code;
-			code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-			code.append(TC("cbuffer Param : register(b0) {									\n"));
-			code.append(TC("  float4 g_col;													\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// IN / OUT														\n"));
-			code.append(TC("struct VsIn {													\n"));
-			code.append(TC("  float4 pos	:POSITION;										\n"));
-			code.append(TC("  float2 uv		:TEXCOORD;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsIn {													\n"));
-			code.append(TC("  float4 pos	:SV_POSITION;									\n"));
-			code.append(TC("  float2 uv		:TEXCOORD;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsOut {													\n"));
-			code.append(TC("  float4 color	:SV_TARGET0;									\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// エントリ														\n"));
-			code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
-			code.append(TC("    PsIn o;														\n"));
-			code.append(TC("    o.pos = i.pos;												\n"));
-			code.append(TC("    o.uv = i.uv;												\n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
-			code.append(TC("PsOut PS_Main(PsIn i){											\n"));
-			code.append(TC("    PsOut o;													\n"));
-			code.append(TC("    float4 color = g_col;										\n"));
-			code.append(TC("    o.color = color;											\n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
+			String code = TC(R"(
+SamplerState g_mainSampler : register(s0);
+cbuffer Param : register(b0) {
+	float4 g_col;
+};
+// IN / OUT														
+struct VsIn {
+	float4 pos : POSITION;
+	float2 uv : TEXCOORD;
+};
+struct PsIn {
+	float4 pos : SV_POSITION;
+	float2 uv : TEXCOORD;
+};
+struct PsOut {
+	float4 color : SV_TARGET0;
+};
+// エントリ														
+PsIn VS_Main(VsIn i) {
+	PsIn o;
+	o.pos = i.pos;
+	o.uv = i.uv;
+	return o;
+}
+PsOut PS_Main(PsIn i) {
+	PsOut o;
+	float4 color = g_col;
+	o.color = color;
+	return o;
+}
+)");
 
 			vs = Shader::CompileVS(code);
 			ps = Shader::CompilePS(code);
@@ -124,7 +151,7 @@ void CommonStartup() {
 				{
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
-			);
+				);
 			desc.name = TC("Common");
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
@@ -170,7 +197,7 @@ void CommonStartup() {
 			desc.name = TC("TestConstant");
 			buffer = Buffer::Create(desc);
 			OB_ASSERT_EXPR(buffer);
-			buffer->updateDirect(cbuf,0);
+			buffer->updateDirect(cbuf, 0);
 		}
 
 
@@ -216,7 +243,7 @@ void CommonStartup() {
 		//------ループ-----
 
 		MSG msg = {};
-		for (s32 i = 0; i < 60;++i) {
+		for (s32 i = 0; i < 60; ++i) {
 
 			cbuf.color = HSV(i * 6, 1, 1).toColor();
 			buffer->updateDirect(cbuf, 0);
@@ -246,7 +273,7 @@ void CommonStartup() {
 				cmdList->setVertexBuffer(vertexBuffer);
 				cmdList->setIndexBuffer(indexBuffer);
 
-				StaticArray<SetDescriptorTableParam,1> params = {
+				StaticArray<SetDescriptorTableParam, 1> params = {
 					SetDescriptorTableParam(dt,0),
 				};
 				cmdList->setRootDesciptorTable(params.data(), params.size());
@@ -266,10 +293,4 @@ void CommonStartup() {
 
 		}
 	}
-}
-
-TEST(RHI, ShowHide) {
-
-	CommonStartup();
-
 }
