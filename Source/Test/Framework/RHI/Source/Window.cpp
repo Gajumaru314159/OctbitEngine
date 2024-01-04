@@ -17,6 +17,29 @@ TEST(RHI, CreateEmpty) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
+	rhi::Register(injector);
+
+	injector.create<RHI>(container);
+
+	ASSERT_FALSE(RenderPass::Create({}));
+	ASSERT_FALSE(FrameBuffer::Create({}));
+	ASSERT_FALSE(Display::Create({}));
+	ASSERT_FALSE(CommandList::Create({}));
+	ASSERT_FALSE(RootSignature::Create({}));
+	ASSERT_FALSE(PipelineState::Create({}));
+	ASSERT_FALSE(Buffer::Create({}));
+	ASSERT_FALSE(Texture::Create(TC("Texture"), {}));
+	ASSERT_FALSE(RenderTexture::Create({}));
+	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));
+	ASSERT_FALSE(Shader::CompileVS(TC("")));
+
+}
+TEST(RHI, CreateEmptyDX12) {
+
+	using namespace ob::rhi;
+
+	ServiceInjector injector;
+	ServiceContainer container;
 	rhi::dx12::Register(injector);
 	rhi::Register(injector);
 
