@@ -52,6 +52,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	DirectX12RHI::~DirectX12RHI() {
+		clearCommands();
 		finalize();
 	}
 
