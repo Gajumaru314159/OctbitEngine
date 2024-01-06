@@ -3,17 +3,19 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+/*
 #include <Framework/Core/Job/JobGroup.h>
 #include <Framework/Core/Job/JobExecutor.h>
 #include <Framework/Core/Job/Job.h>
+#include <Framework/Core/Job/JobSystem.h>
 
 namespace ob {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief コンストラクタ
 	//@―---------------------------------------------------------------------------
-	JobGroup::JobGroup(JobGroup& parent, StringView name) 
+	JobGroup::JobGroup(JobSystem& system, StringView name) 
+		: m_system(system)
 	{
 		m_name = name;
 	}
@@ -243,3 +245,4 @@ namespace ob {
 	}
 
 }
+*/

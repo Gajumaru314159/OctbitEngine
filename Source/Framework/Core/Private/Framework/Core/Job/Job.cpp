@@ -3,7 +3,7 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+/*
 #include <Framework/Core/Job/Job.h>
 #include <Framework/Core/Job/JobGroup.h>
 
@@ -49,3 +49,4 @@ namespace ob {
     }
 
 }
+*/

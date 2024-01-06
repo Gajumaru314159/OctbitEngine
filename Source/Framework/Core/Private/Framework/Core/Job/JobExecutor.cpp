@@ -3,7 +3,7 @@
 //! @brief		ハードウェア共通デファイン
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+/*
 #include <Framework/Core/Job/JobExecutor.h>
 
 namespace ob::core {
@@ -131,3 +131,4 @@ namespace ob::core {
 	}
 
 }
+*/

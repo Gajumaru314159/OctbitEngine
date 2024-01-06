@@ -55,8 +55,8 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	void RenderScene::render(CommandStorage& commandStorage) {
 
-		JobContext* ctx = nullptr;
-		
+		// TODO 描画タスクを小分けにして単位ごとにCommadListを作成して描画コマンドを記録
+
 		CommandRecorder recorder{ commandStorage };
 
 		// RenderPipeline毎のコマンドを記録

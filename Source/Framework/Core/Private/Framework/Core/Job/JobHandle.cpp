@@ -3,7 +3,7 @@
 //! @brief		ハードウェア共通デファイン
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+/*
 #include <Framework/Core/Job/JobHandle.h>
 #include <Framework/Core/Job/Job.h>
 #include <Framework/Core/Job/JobExecutor.h>
@@ -74,3 +74,4 @@ namespace ob {
     }
 
 }
+*/

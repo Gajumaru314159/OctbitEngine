@@ -72,14 +72,31 @@ int OctbitMain() {
 
 	while (true) {
 
-		// Job
+		// Job Execute
 
+		// Render Execute
 		auto& rpi = *RPI::Get();
 
-		rpi.update();
+		bool bSingleThread = true;
 
+		if (bSingleThread) {
+			
+			rpi.update();
+
+		} else {
+			
+			s32 threadNum = 4;
+
+			rpi.updateForParallel(threadNum);
+			rpi.cleanupForParallel();
+			
+		}
+
+		// Job Wait
+		// 
+		// Render Wait
 		rpi.wait();
-		rpi.execute();
+
 		
 	}
 

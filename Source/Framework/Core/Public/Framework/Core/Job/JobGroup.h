@@ -13,42 +13,7 @@ namespace ob::core {
 
     class JobExecutor;
     class Job;
-
-    template<class T>
-    class SyncContainer {
-    public:
-
-        void update() {
-            ScopeLock lock(m_lock);
-            // 追加
-            for (auto& item : m_entryItems) {
-                m_items.push_back(std::move(item));
-            }
-            // 削除
-            for (auto itr = m_items.begin(); itr != m_items.end(); ) {
-                if (m_leaveItems.count(itr->get())) {
-                    itr = m_items.erase(itr);
-                } else {
-                    itr++;
-                }
-            }
-        }
-
-        void entry(UPtr<T>&& item) {
-            ScopeLock lock(m_lock);
-            m_entryItems.push_back(item);
-        }
-
-        void leave(const T* item) {
-            ScopeLock lock(m_lock);
-            m_leaveItems.emplace(item);
-        }
-
-        SpinLock            m_lock;
-        Array<const T*>     m_items;
-        Array<const T*>     m_entryItems;
-        HashSet<const T*>   m_leaveItems;
-    };
+    class JobSystem;
 
     //@―---------------------------------------------------------------------------
     //! @brief		ジョブ・グループ
@@ -56,12 +21,27 @@ namespace ob::core {
     //!             同期ポイントはEntryとLeaveがあります。
     //@―---------------------------------------------------------------------------
     class JobGroup {
+        friend class JobSystem;
     public:
 
+        //@―---------------------------------------------------------------------------
+        //! @brief コンストラクタ
+        //@―---------------------------------------------------------------------------
+        JobGroup(JobSystem& sys, StringView name);
+
+        //@―---------------------------------------------------------------------------
+        //! @brief デストラクタ
+        //@―---------------------------------------------------------------------------
         ~JobGroup();
 
+        //@―---------------------------------------------------------------------------
+        //! @brief 名前を取得
+        //@―---------------------------------------------------------------------------
         auto getName()const->const String&;
 
+        //@―---------------------------------------------------------------------------
+        //! @brief サブ JobGroup を作成
+        //@―---------------------------------------------------------------------------
         auto createSub(StringView name) -> Ref<JobGroup>;
         auto createChild(StringView name) -> Ref<JobGroup>;
         void addChild(Ref<JobGroup>& group);
@@ -79,7 +59,7 @@ namespace ob::core {
         void requestRelease();
 
     private:
-        JobGroup(JobGroup& parent,StringView name);
+        JobGroup(JobSystem& system,StringView name);
         void onLeaveSubGroup(JobExecutor& executor);
 
         s32 countLeafGroup()const;
@@ -87,9 +67,7 @@ namespace ob::core {
     private:
 
         String                  m_name;
-
-        SyncContainer<Job>      m_syncJobs;
-        SyncContainer<JobGroup> m_syncGroups;
+        JobSystem& m_system;
 
         // 所有
         Array<Job*>        m_jobs;
