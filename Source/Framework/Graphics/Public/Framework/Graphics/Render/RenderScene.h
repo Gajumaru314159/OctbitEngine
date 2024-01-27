@@ -10,12 +10,17 @@
 #include <Framework/Graphics/Render/RenderSceneDesc.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
 
+#include <Framework/Graphics/Render/RenderPipeline.h>
+
 namespace ob::graphics {
+
+	enum class RenderViewId : u32 {};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーン
 	//@―---------------------------------------------------------------------------
-	class RenderScene {
+	class RenderScene : public RefObject {
+		friend class Graphics;
 	public:
 
 		//@―---------------------------------------------------------------------------
@@ -28,10 +33,9 @@ namespace ob::graphics {
 	public:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      RenderSceneを生成する
-		//! @details	生成されたRenderSceneはRPIに登録する必要があります。
+		//! @brief      デストラクタ
 		//@―---------------------------------------------------------------------------
-		RenderScene(const RenderSceneDesc& desc);
+		~RenderScene();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      名前を取得
@@ -41,16 +45,16 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画タスクを記録する
 		//@―---------------------------------------------------------------------------
-		void render(CommandStorage&);
+		void render(FG&);
 
+		
+        void addView(Ref<RenderView>&);
+        void removeView(Ref<RenderView>&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      RenderFeatureを見つける
 		//@―---------------------------------------------------------------------------
 		template<class T> T* findFeature()const;
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderFeatureを見つける
-		//@―---------------------------------------------------------------------------
 		RenderFeature* findFeature(TypeId typId)const;
 
 		//@―---------------------------------------------------------------------------
@@ -63,43 +67,30 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		void activateAllFeature();
 
+	private:
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      ビューを生成する 
+		//! @brief      RenderSceneを生成する
+		//! @details	生成されたRenderSceneはRPIに登録する必要があります。
 		//@―---------------------------------------------------------------------------
-		template<class T>
-		Ref<RenderView> createView();
-		void addView(Ref<RenderView>);
+		RenderScene(const RenderSceneDesc& desc);
 
 	private:
-		String m_name;
 
-		HashMap<TypeId,UPtr<RenderFeature>> m_features;
-		Array<UPtr<RenderPipeline>>			m_pipelines;
-		Array<Ref<RenderView>>				m_views;
+		String									m_name;
 
-		// CullingScene
-		UPtr<RenderExecutor>				m_executor;
+		HashMap<TypeId, UPtr<RenderPipeline>>	m_pipelines;
+		HashMap<TypeId, UPtr<RenderFeature>>	m_features;
+		Array<Ref<RenderView>>					m_views;
 
-		// RenderItem[]
-		// RenderView[]
-		// RenderPipeline[]
+		Graphics*								m_graphics = nullptr;
 
 	};
 
 
 	template<class T>
-	Ref<RenderView> RenderScene::createView() {
-		static_assert(std::is_base_of<RenderPipeline, T>::value,"T is not RenderPipeline");
-		static_assert(false);
-		return nullptr;
-		//return createView(TypeId::Get())
-	}
-
-
-	template<class T>
 	T* RenderScene::findFeature()const {
-		return reinterpret_cast<T*>(findFeature(TypeId::Get<T>());
+		return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
 	}
 
 }

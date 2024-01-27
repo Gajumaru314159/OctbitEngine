@@ -10,6 +10,8 @@ LightRenderFeature
 TerrainRenderFeature
 VFXRenderFeature
 UIRenderFeature
+ReflectionCubeRenderFeature
+ShadowRenderFeature
 ```
 アクセス例
 ```cpp

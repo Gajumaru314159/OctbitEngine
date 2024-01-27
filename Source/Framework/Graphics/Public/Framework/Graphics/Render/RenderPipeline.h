@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/Render/RenderScene.h>
 
 namespace ob::graphics {
 
@@ -15,17 +16,17 @@ namespace ob::graphics {
 	class RenderPipeline {
 	public:
 
+		OB_RTTI();
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      デストラクタ
+		//@―---------------------------------------------------------------------------
 		virtual ~RenderPipeline() = default;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		virtual void render(CommandRecorder&) {};
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      ビューを生成
-		//@―---------------------------------------------------------------------------
-		virtual UPtr<RenderView> createView() = 0;
+		virtual void render(FG&,const Array<Ref<RenderView>>&) {};
 
 	public:
 
@@ -33,6 +34,12 @@ namespace ob::graphics {
 		//! @brief      所属シーンを取得する
 		//@―---------------------------------------------------------------------------
 		RenderScene& getScene()const { return m_scene; }
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      RenderFeatureを見つける
+		//@―---------------------------------------------------------------------------
+		template<class T> T* findFeature()const { return m_scene.findFeature<T>(); }
+		RenderFeature* findFeature(TypeId typId)const { return m_scene.findFeature(typId); }
 
 	protected:
 		RenderPipeline(RenderScene& scene) :m_scene(scene) {}

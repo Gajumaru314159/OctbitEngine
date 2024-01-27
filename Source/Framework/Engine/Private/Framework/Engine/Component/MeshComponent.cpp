@@ -27,7 +27,7 @@ namespace ob::engine {
 	}
 
 	void MeshComponent::deactivate() {
-		m_handle = {};
+		// m_handle = {};
 	}
 
 	void MeshComponent::updateModel() {

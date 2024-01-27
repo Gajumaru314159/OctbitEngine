@@ -8,6 +8,8 @@
 
 #include <Framework/Engine/All.h>
 
+#include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Material.h>
 #include <Framework/Graphics/Mesh.h>
 #include <Framework/Engine/Component/CameraComponent.h>
@@ -22,9 +24,11 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Input/System.h>
 #include <Framework/Input/InputManager.h>
-#include <Framework/Graphics/System.h>
-#include <Framework/Graphics/RPI.h>
 #include <Plugins/DirectX12RHI/System.h>
+
+#include <Framework/Graphics/Feature/ImGuiRenderFeature.h>
+
+#include "BuildinRenderPipeline.h"
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -41,18 +45,15 @@ int TestDirectX12() {
 	debug::Profiler profiler;
 
 
-	//auto renderScene = graphics::RenderScene::Create(TC("TestScene"));
-	//{
-	//	graphics::RenderPipelineDesc rdesc;
-	//	rdesc.name = TC("TestPipeline");
-	//	//rdesc.features.push_back(std::move(std::make_unique<graphics::ForwardRenderFeature>()));
-	//
-	//	auto pip = renderScene->createRenderPipeline<graphics::RenderPipeline>(std::move(rdesc));
-	//}
+	Ref<RenderScene> renderScene;
+	{
+		RenderSceneDesc desc;
+		desc.name = TC("Test");
+		desc.pipelines.add<BuiltinRenderPipeline>();
+		desc.features.add<TestRenderFeature>();
 
-	//scene->addRenderPipeline();
-	//renderScene->addRenderPipeline
-
+		renderScene = RenderScene::Create(desc);
+	}
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
@@ -146,8 +147,6 @@ int TestDirectX12() {
 	Model sky(TC("Asset/Model/sky.obj"), TC("Asset/Texture/sky.dds"));
 	Model ukulele(TC("Asset/Model/Ukulele.obj"), TC("Asset/Model/Ukulele_col.dds"));
 
-
-	Ref<CommandBuffer> cmdBuf = CommandBuffer::Create(cmdList);
 
 	// ImGui初期化
 	ImGui::StartupImGui(window, renderPass);
@@ -243,9 +242,6 @@ int TestDirectX12() {
 
 		{
 			cmdList->pushMarker(TC("My"));
-
-			sky.draw(cmdBuf);
-			ukulele.draw(cmdBuf);
 
 			cmdList->popMarker();
 		}

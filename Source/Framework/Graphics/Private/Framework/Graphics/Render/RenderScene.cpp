@@ -7,9 +7,7 @@
 #include <Framework/Graphics/Render/RenderFeature.h>
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Render/RenderExecutor.h>
-#include <Framework/Graphics/Command/CommandRecorder.h>
-#include <Framework/Graphics/RPI.h>
+#include <Framework/Graphics/Graphics.h>
 
 namespace ob::graphics {
 
@@ -17,16 +15,11 @@ namespace ob::graphics {
 	//! @brief      描画シーンを生成
 	//@―---------------------------------------------------------------------------
 	Ref<RenderScene> RenderScene::Create(const RenderSceneDesc& desc) {
-		if (auto system = RPI::Get()) {
-			Ref<RenderScene> scene = new RenderScene(desc);
-			system->addScene(scene);
-			return scene;
-		}
-		return nullptr;
+		return new RenderScene(desc);
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      描画シーンを生成
+	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderScene::RenderScene(const RenderSceneDesc& desc)
 		: m_name(desc.name)
@@ -36,46 +29,78 @@ namespace ob::graphics {
 		for (auto& feature : features) {
 			m_features[feature->getTypeId()] = std::move(feature);
 		}
-
 		// RenderPipeline生成
 		auto pipelines = desc.pipelines.create(*this);
 		for (auto& pipeline : pipelines) {
-			m_pipelines.push_back(std::move(pipeline));
+			m_pipelines[pipeline->getTypeId()] = std::move(pipeline);
 		}
+	}
 
-		// RenderExecutor生成
-		{
-			RenderExecutorDesc desc;
-			m_executor = std::make_unique<RenderExecutor>(desc);
-		}
+	//@―---------------------------------------------------------------------------
+	//! @brief      デストラクタ
+	//@―---------------------------------------------------------------------------
+	RenderScene::~RenderScene() {
+		OB_ASSERT_EXPR(m_graphics == nullptr);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	void RenderScene::render(CommandStorage& commandStorage) {
-
-		// TODO 描画タスクを小分けにして単位ごとにCommadListを作成して描画コマンドを記録
-
-		CommandRecorder recorder{ commandStorage };
-
-		// RenderPipeline毎のコマンドを記録
-		for (auto& pipeline : m_pipelines) {
-			pipeline->render(recorder);
+	void RenderScene::render(FG& fg) {
+		for (auto& [typeId,pipeline] : m_pipelines) {
+			pipeline->render(fg,m_views);
 		}
-
-		// RenderFeature毎のコマンドを記録
-		for (auto& [typeId, feature] : m_features) {
-			feature->render(recorder);
-		}
-
-		// RenderView毎の描画コマンドを記録
-		for (auto& view : m_views) {
-			view->render(recorder);
-		}
-
-		// ctx->dispatch();
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      シーンを追加
+	//@―---------------------------------------------------------------------------
+	void RenderScene::addView(Ref<RenderView>& view) {
+
+		if (!view) {
+			LOG_WARNING("空のRenderViewは追加できません");
+			return;
+		}
+
+		if (view->m_scene != nullptr) {
+			LOG_WARNING("{}は他のRenderSceneで追加済みのRenderViewです", view->getName());
+			return;
+		}
+
+		for (auto& item : m_views) {
+			if (item == view) {
+				LOG_WARNING("{}は追加済みのRenderViewです", view->getName());
+				return;
+			}
+		}
+
+		view->m_scene = this;
+
+		m_views.push_back(view);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      シーンを削除
+	//@―---------------------------------------------------------------------------
+	void RenderScene::removeView(Ref<RenderView>& view) {
+
+		if (!view) {
+			LOG_WARNING("空のRenderViewは削除できません");
+			return;
+		}
+
+		auto found = std::find(m_views.begin(), m_views.end(), [&](Ref<RenderView>& item) {return view == item; });
+
+		if (found == m_views.end()) {
+			LOG_WARNING("{}はこのRenderSceneに追加されていないRenderViewです", view->getName());
+		}
+
+		OB_ASSERT_EXPR(found->get() != nullptr);
+
+		found->get()->m_scene = nullptr;
+
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      RenderFeatureを見つける
@@ -103,13 +128,6 @@ namespace ob::graphics {
 		for (auto& [typeId, feature] : m_features) {
 			feature->activate();
 		}
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      RenderFeatureを見つける
-	//@―---------------------------------------------------------------------------
-	void RenderScene::addView(Ref<RenderView> view) {
-		m_views.push_back(view);
 	}
 
 }

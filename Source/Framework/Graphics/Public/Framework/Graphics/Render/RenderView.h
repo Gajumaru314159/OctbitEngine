@@ -6,15 +6,13 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/CommandBuffer.h>
-#include <Framework/Graphics/Render/TextureManager.h>
 
 namespace ob::graphics {
 
     enum class RenderViewType {
         Camera,
         Shadow,
-        ReflectionCube,
+        ReflectionProbe,
     };
 
     struct RenderViewDesc {
@@ -23,34 +21,37 @@ namespace ob::graphics {
         RenderViewType  type;
     };
 
+    enum class RenderViewId{};
+
     
     //@―---------------------------------------------------------------------------
     //! @brief  
     //@―---------------------------------------------------------------------------
     class RenderView {
+        friend class RenderScene;
     public:
 
         RenderView(RenderViewDesc& desc);
         virtual ~RenderView();
 
+        auto getId()const->RenderViewId;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      名前を取得
+        //@―---------------------------------------------------------------------------
+        auto& getName()const { return m_desc.name; }
+
         void setPriority(s32 priority);
         s32 getPriority()const;
 
-        void render(CommandRecorder&);
-
-        template<class T>
-        void addStep();
-        void addStep(UPtr<RenderStep>);
-        // addDrawPacket
-        // addDrawItem
+        // RenderTexture指定
+        // Display設定
 
     private:
-
+        RenderScene* m_scene;
         RenderViewDesc m_desc;
-
-        UPtr<TextureManager> m_textureManager;
-
-        Array<UPtr<RenderStep>> m_steps;
+        RenderViewId m_id;
+        s32 m_priority;
 
     };
 

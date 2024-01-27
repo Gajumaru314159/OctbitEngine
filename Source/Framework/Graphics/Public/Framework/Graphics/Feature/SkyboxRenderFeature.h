@@ -4,9 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Utility/Ref.h>
-#include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/Camera.h>
+#include <Framework/Graphics/Render/RenderFeature.h>
+
+#include <Framework/Graphics/FrameGraph/FG.h>
+
+#include <Framework/RHI/CommandList.h>
+
+#include <Framework/Graphics/Render/RenderPipeline.h>
+#include <Framework/Graphics/Render/RenderScene.h>
 
 namespace ob::graphics {
 
@@ -15,12 +20,10 @@ namespace ob::graphics {
 	//! @details    O3DEでいうところのFeatureProcessor。
 	//!				初期状態は非アクティブです。
 	//@―---------------------------------------------------------------------------
-	class RenderFeature {
+	class SkyBoxRenderFeature : public RenderFeature {
 	public:
 
 		OB_RTTI();
-
-		virtual ~RenderFeature(){}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      アクティブにする
@@ -38,17 +41,42 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		virtual void simulate() {}
 
-	public:
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画
+		//@―---------------------------------------------------------------------------
+		void render(FG& fg, FrameGraphResource target) {
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      所属シーンを取得する
-		//@―---------------------------------------------------------------------------
-		RenderScene& getScene()const { return m_scene; }
+			struct ImGuiData {
+				FrameGraphResource target;
+			};
+
+			fg.addCallbackPass<ImGuiData>(
+				"Sky",
+				[=](FrameGraph::Builder& builder, ImGuiData& data) {
+					data.target = builder.write(target);
+				},
+				[](const ImGuiData& data, FrameGraphPassResources& resources, void* ctx) {
+					auto& cmd = *static_cast<rhi::CommandList*>(ctx);
+					/*
+					cmd.beginRenderPass();
+
+					ImGui::BeginFrame();
+
+					task
+
+					ImGui::EndFrame(cmd);
+
+					cmd.endRenderPass();
+
+					*/
+				}
+			);
+		}
+
 
 	protected:
-		RenderFeature(RenderScene& scene) :m_scene(scene) {}
-	private:
-		RenderScene& m_scene;
+		SkyBoxRenderFeature(RenderScene& scene) :RenderFeature(scene) {}
+
 	};
 
 }

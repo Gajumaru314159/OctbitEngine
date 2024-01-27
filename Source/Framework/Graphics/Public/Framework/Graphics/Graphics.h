@@ -7,50 +7,29 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Framework/Core/Utility/HandleManager.h>
+
+#include <Framework/Graphics/FrameGraph/FGResourcePool.h>
 
 namespace ob::graphics {
 
-    struct RPIDesc {
-        struct ImageSystemDesc {
-            u64 streamingImagePoolSize = 128 * 1024 * 1024;
-            u64 attachmentImagePoolSize = 512 * 1024 * 1024;
-        } image;
-
-        struct GPUQuerySystemDesc {
-            u32 occlusionQueryCount;
-        } gpuQuery;
-
-        struct DynamicDrawSystemDesc {
-            u32 dynamicBufferPoolSize = 3 * 16 * 1024 * 1024;
-        } dynamicDraw;
-    };
+    //@―---------------------------------------------------------------------------
+    //! @brief      システムをServiceInjectorに登録
+    //@―---------------------------------------------------------------------------
+    void Register(ServiceInjector&);
 
     //@―---------------------------------------------------------------------------
-    //! @brief      RenderPipelineInterface
+    //! @brief      グラフィック
     //@―---------------------------------------------------------------------------
-    class RPI :public Singleton<RPI> {
+    class Graphics :public Singleton<Graphics> {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        RPI(rhi::RHI& rhi);
+        Graphics(rhi::RHI& rhi);
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      デストラクタ
-        //@―---------------------------------------------------------------------------
-        ~RPI();
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      シーンを登録
-        //! @details    登録したシーンはRPIの更新対象に含まれるようになります。
-        //@―---------------------------------------------------------------------------
-        void addScene(const Ref<RenderScene>& scene);
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      シーンの登録を解除
-        //@―---------------------------------------------------------------------------
-        void removeScene(const Ref<RenderScene>& scene);
+        //Ref<RenderScene> createScene();
 
         //@―---------------------------------------------------------------------------
         //! @brief      ゲームループごとの更新を実行する
@@ -71,11 +50,24 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         void wait();
 
+
+        void addScene(Ref<RenderScene>&);
+        void removeScene(Ref<RenderScene>&);
+        
+
     private:
 
         rhi::RHI& m_rhi;
+
+        UPtr<FG> m_fg{ nullptr };
+
+        Swapper<Ref<rhi::CommandList>> m_commandLists;
+
         Array<Ref<RenderScene>> m_scenes;
-        Swapper<UPtr<RenderFrameData>> m_frameDataList;
+
+        FGResourcePool m_fgResourcePool;
+
+        HandleManager<RenderScene> m_renderSceneManager;
 
     };
 

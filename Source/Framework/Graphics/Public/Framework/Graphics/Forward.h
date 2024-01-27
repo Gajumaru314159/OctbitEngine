@@ -8,32 +8,25 @@
 namespace ob::graphics {
 
 	struct RenderPipelineDesc;
+	struct RenderSceneDesc;
 
 	class Material;
 	class Mesh;
 
 	class Camera;
-	class CommandBuffer;
-	class RenderContext;
 
 	class IRenderer;
 
 
+	class RenderView;
 	class RenderScene;
 	class RenderPipeline;
 	class RenderFeature;
-	class RenderView;
-	class RenderStepSet;
-	class RenderStep;
-	class RenderExecutor;
-	class TextureManager;
 
-	struct RenderArgs;
-	class CommandRecorder;
-	class CommandStorage;
+	using RenderScenePtr = SPtr<RenderScene>;
 
 	class RenderFeatureInjector;
 
-	class RenderFrameData;
+	class FG;
 
 }

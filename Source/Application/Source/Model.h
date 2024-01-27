@@ -13,7 +13,6 @@
 
 #include <Framework/Graphics/Material.h>
 #include <Framework/Graphics/Mesh.h>
-#include <Framework/Graphics/CommandBuffer.h>
 
 
 #pragma warning(push, 0)
@@ -33,12 +32,6 @@ public:
 		initMesh(obj);
 		initTexture(tex);
 		initMaterial();
-	}
-
-	void draw(Ref<CommandBuffer> cmdBuf) {
-		for (s32 i = 0; i < m_mesh->getSubMeshCount(); ++i) {
-			cmdBuf->drawMesh(m_mesh, i, Matrix::Identity, m_material, Name(TC("Opaque")));
-		}
 	}
 
 	void setMatrix(const Matrix& matrix) {

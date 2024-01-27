@@ -1,58 +1,67 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		UniversalRenderPipeline
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Render/RenderFeature.h>
-#include <Framework/Graphics/Render/RenderStep.h>
 
-#include <Framework/Graphics/Render/TextureManager.h>
+#include <Framework/Graphics/FrameGraph/FG.h>
+
+#include <Framework/RHI/CommandList.h>
+#include <Plugins/ImGui/ImGui.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      ImGui描画機能
+	//! @brief      描画機能
+	//! @details    O3DEでいうところのFeatureProcessor。
+	//!				初期状態は非アクティブです。
 	//@―---------------------------------------------------------------------------
-	class ImGuiRenderFeature : public RenderFeature {
+	class ImGuiRenderFeature : public RenderFeature{
 	public:
 
-		ImGuiRenderFeature(RenderScene&);
+		OB_RTTI();
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  RenderStepを登録するための初期化処理
-		//@―---------------------------------------------------------------------------
-		void setupView(RenderStepSet&) override{}
+		ImGuiRenderFeature(RenderScene& scene);
 
+		~ImGuiRenderFeature();
+
+		void render(FG& fg, FrameGraphResource target, u32 id);
 
 	private:
 
+		void prepareView(u32 id);
 
-	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      ImGui描画ステップ
-	//@―---------------------------------------------------------------------------
-	class ImGuiRenderStep : public RenderStep {
 	public:
 
-		ImGuiRenderStep();
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  セットアップ
-		//@―---------------------------------------------------------------------------
-		void setup(TextureManager&) override;
+		struct DrawCommand {
+			IntRect		rect;
+			ImTextureID texture;
+			rhi::DrawIndexedParam param;
+		};
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  描画処理
-		//@―---------------------------------------------------------------------------
-		void render(CommandRecorder&, const RenderArgs& args) override;
+		struct DrawContext {
+			ImGuiContext* context;
+			Array<DrawCommand> commands;
 
-	private:
+			Ref<rhi::RenderPass> renderPass;
+			Ref<rhi::PipelineState> pipeline;
+			Ref<rhi::Buffer>   vertexBuffer;
+			Ref<rhi::Buffer>   indexBuffer;
 
-		Ref<rhi::FrameBuffer> m_frameBuffer;
+			Ref<rhi::Buffer>            constantBuffer;
+			Ref<rhi::DescriptorTable>   constantTable;
+		};
+
+
+		Ref<rhi::RootSignature> m_signature;
+		Ref<rhi::Shader>		m_vs;
+		Ref<rhi::Shader>		m_ps;
+
+		HashMap<u32,DrawContext> m_contextLists;
 
 	};
-
 
 }

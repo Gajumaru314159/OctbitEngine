@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component.h>
-#include <Framework/Graphics/Model/ModelRenderHandle.h>
+// #include <Framework/Graphics/Model/ModelRenderHandle.h>
 
 namespace ob::engine {
 
@@ -32,7 +32,7 @@ namespace ob::engine {
 	private:
 		void updateModel();
 	private:
-		graphics::ModelRenderHandle m_handle;
+		//graphics::ModelRenderHandle m_handle;
 	};
 
 }

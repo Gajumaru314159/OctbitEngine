@@ -56,6 +56,7 @@ set(INSTALL_GTEST CACHE BOOL OFF "")
 if(WIN32)
   set(gtest_force_shared_crt ON CACHE BOOL "")
 endif()
+set(FG_BUILD_TEST OFF)
 
 # glslang
 set(BUILD_SHARED_LIBS OFF)
@@ -70,7 +71,8 @@ FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v3.2.1")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest)
+FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
+FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph)
 
 if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
@@ -101,10 +103,10 @@ add_subdirectory ("Source/Framework/Platform")
 add_subdirectory ("Source/Framework/Input")
 add_subdirectory ("Source/Framework/RHI")
 add_subdirectory ("Source/Framework/Graphics")
-#add_subdirectory ("Source/Framework/Engine")
 #add_subdirectory ("Source/Framework/Model")
-#add_subdirectory ("Source/Framework/Debug")
 #add_subdirectory ("Source/Framework/Asset")
+add_subdirectory ("Source/Framework/Debug")
+add_subdirectory ("Source/Framework/Engine")
 
 # Plugins
 if(WIN32)
@@ -116,12 +118,13 @@ if(WIN32)
     endif()
 endif()
 
-#add_subdirectory ("Source/Plugins/ImGui")
+add_subdirectory ("Source/Plugins/ImGui")
 
 # Test
 add_subdirectory ("Source/Test/Framework/Core")
 add_subdirectory ("Source/Test/Framework/Platform")
 add_subdirectory ("Source/Test/Framework/RHI")
+add_subdirectory ("Source/Test/Framework/Graphics")
 
 # Application
 add_subdirectory ("Source/Application")

@@ -23,6 +23,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${p
 set(OB_PROJECT_INCLUDE_LIB
     Core
     Platform
+    Graphics
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 

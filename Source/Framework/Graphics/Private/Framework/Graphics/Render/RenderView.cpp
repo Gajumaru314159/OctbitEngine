@@ -4,38 +4,28 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Render/RenderView.h>
-#include <Framework/Graphics/Render/RenderStep.h>
-#include <Framework/Graphics/Command/CommandRecorder.h>
 
 namespace ob::graphics {
 
-    RenderView::RenderView(RenderViewDesc& desc) 
-    {
-        m_textureManager = std::make_unique<TextureManager>(desc.size);
-    }
+	static std::atomic<s32> s_renderViewId{ 1 };
 
-    RenderView::~RenderView() {
+	RenderView::RenderView(RenderViewDesc& desc) {
+		m_id = static_cast<RenderViewId>(s_renderViewId.fetch_add(1));
+		m_priority = 0;
+	}
 
-    }
 
-    //@―---------------------------------------------------------------------------
-    //! @brief      プライオリティ取得
-    //@―---------------------------------------------------------------------------
-    s32 RenderView::getPriority()const {
-        return 0;
-    }
+	auto RenderView::getId()const->RenderViewId {
+		return m_id;
+	}
 
-    //@―---------------------------------------------------------------------------
-    //! @brief      描画
-    //@―---------------------------------------------------------------------------
-    void RenderView::render(CommandRecorder& recorder) {
+	void RenderView::setPriority(s32 priority) {
+		m_priority = priority;
+	}
+	s32 RenderView::getPriority()const {
+		return m_priority;
+	}
 
-        RenderArgs args{ *this };
 
-        for (auto& step : m_steps) {
-            step->render(recorder,args);
-        }
-
-    }
 
 }

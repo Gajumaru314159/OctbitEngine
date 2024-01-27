@@ -77,6 +77,14 @@ namespace ob::rhi {
         virtual void popMarker() = 0;
 #endif
 
+        // virtual void setViewports(const Viewport* pViewport, s32 num) = 0;  //!< ビューポートを設定
+        // virtual void setScissors(const IntRect* pRect, s32 num) = 0;    //!< シザー矩形を設定
+        // virtual void setShaderResourceGroup(const ShaderResourceGroup&);
+        // virtual void submit(const CopyItem&);
+        // virtual void submit(const DrawItem&);
+        // virtual void submit(const DispatchItem&);
+        // virtual void submit(const CopyItem&);
+
     };
 
 
