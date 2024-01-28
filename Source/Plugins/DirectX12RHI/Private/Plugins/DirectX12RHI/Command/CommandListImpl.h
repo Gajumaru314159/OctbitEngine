@@ -7,7 +7,6 @@
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Constants.h>
-#include <Framework/RHI/FrameBuffer.h>
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 
@@ -62,21 +61,11 @@ namespace ob::rhi::dx12 {
          //@―---------------------------------------------------------------------------
          void flush() override;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      レンダーパス開始
-        //@―---------------------------------------------------------------------------
-        void beginRenderPass(const Ref<FrameBuffer>& frameBuffer);
+         //@―---------------------------------------------------------------------------
+         //! @brief      描画先設定
+         //@―---------------------------------------------------------------------------
+         void setRenderTargets(const Array<Ref<RenderTexture>>& targets, const Ref<RenderTexture>& depth) override;
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      次のサブパスに進める
-        //@―---------------------------------------------------------------------------
-        void nextSubpass();
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      レンダーパス終了
-        //@―---------------------------------------------------------------------------
-        void endRenderPass();
-        
         //@―---------------------------------------------------------------------------
         //! @brief      ディスプレイにテクスチャを適用
         //@―---------------------------------------------------------------------------
@@ -166,7 +155,6 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        void setSubpass();
         void clearDescriptorHandle();
 
     private:
@@ -180,7 +168,6 @@ namespace ob::rhi::dx12 {
         D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
         D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
 
-        FrameBuffer* m_frameBuffer = nullptr;
         ID3D12RootSignature* m_rootSignature = nullptr;
 
         s32         m_subpassIndex;

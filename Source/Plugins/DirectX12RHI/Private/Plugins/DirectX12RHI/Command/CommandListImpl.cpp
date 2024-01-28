@@ -5,6 +5,7 @@
 //***********************************************************
 #include "CommandListImpl.h"
 #include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
@@ -13,8 +14,6 @@
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
-#include <Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
-#include <Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
@@ -113,7 +112,6 @@ namespace ob::rhi::dx12 {
 		m_device.setDescriptorHeaps(*this);
 
 		m_rootSignature = nullptr;
-		m_frameBuffer = nullptr;
 	}
 
 
@@ -134,72 +132,41 @@ namespace ob::rhi::dx12 {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーパス開始
+	//! @brief      描画先設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::beginRenderPass(const Ref<FrameBuffer>& frameBuffer) {
+	void CommandListImpl::setRenderTargets(const Array<Ref<RenderTexture>>& colors, const Ref<RenderTexture>& depth) {
 
-		m_frameBuffer = frameBuffer.get();
-		m_subpassIndex = 0;
-
-		setSubpass();
-
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      サブパス設定
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setSubpass() {
-		
-		if (!m_frameBuffer)return;
-
-		auto& frameBufferDesc = m_frameBuffer->desc();
-		auto& attachments = frameBufferDesc.attachments;
-		auto& renderPassDesc = frameBufferDesc.renderPass->desc();
-
-		if (!is_in_range(m_subpassIndex, renderPassDesc.subpasses)){
-			LOG_WARNING("サブパスが範囲外です。[index={},size={}]",m_subpassIndex, renderPassDesc.subpasses.size());
-			return;
-		}
-
-		auto& subpass = renderPassDesc.subpasses[m_subpassIndex];
-		auto& attachmentDescs = renderPassDesc.attachments;
-
-		D3D12_CPU_DESCRIPTOR_HANDLE colors[8]{};
-		D3D12_CPU_DESCRIPTOR_HANDLE depth{};
+		D3D12_CPU_DESCRIPTOR_HANDLE hColors[8]{};
+		D3D12_CPU_DESCRIPTOR_HANDLE hDepth{};
 
 		D3D12_VIEWPORT viewport{};
 		D3D12_RECT scissor{};
 
 		// レンダーターゲットビュー設定
-		for (auto [i, ref] : Indexed(subpass.colors)) {
+		for (auto [i, color] : Indexed(colors)) {
 
-			if (auto texture = attachments.at(ref.index).cast<TextureImpl>()) {
-				auto& color = colors[i];
-
-				color = texture->getRTV().getCpuHandle();
-
+			if (auto texture = color.cast<TextureImpl>()) {
+				
 				m_cache.addTexture(*texture,D3D12_RESOURCE_STATE_RENDER_TARGET);
+				hColors[i] = texture->getRTV().getCpuHandle();
 
 				viewport = texture->getViewport();
 				scissor = texture->getScissorRect();
 
 			} else {
-				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]",m_frameBuffer->getName(),m_subpassIndex);
+				LOG_ERROR("無効なレンダーターゲットが設定されています。");
+				return;
 			}
 
 		}
 
 		// 深度ステンシルビュー設定
-		for (auto [index, d] : Indexed(subpass.depth)) {
+		{
 
-			if (auto texture = attachments.at(d.index).cast<TextureImpl>()) {
-
-				depth = texture->getDSV().getCpuHandle();
+			if (auto texture = depth.cast<TextureImpl>()) {
 
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-
-			} else {
-				LOG_ERROR("無効なアタッチメントが設定されています。 [frameBuffer={},subpass={}]", m_frameBuffer->getName(), m_subpassIndex);
+				hDepth = texture->getDSV().getCpuHandle();
 			}
 
 		}
@@ -209,68 +176,28 @@ namespace ob::rhi::dx12 {
 
 		// レンダーターゲット設定
 		m_cmdList->OMSetRenderTargets(
-			(UINT)subpass.colors.size(),
-			colors,
+			colors.size(),
+			hColors,
 			FALSE,
-			subpass.depth.empty() ? NULL : &depth
+			depth ? &hDepth : NULL
 		);
 
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &scissor);
 
-		// 描画対象をクリア
-		for (auto [index,attachmentDesc] : Indexed(attachmentDescs)) {
 
-			if (auto texture = attachments[index].cast<TextureImpl>()) {
-
-				if(attachmentDesc.clear == AttachmentClear::Clear) {
-
-					texture->clear(m_cmdList.Get());
-
-				}
-
+		for (auto& color : colors) {
+			if (auto texture = color.cast<TextureImpl>()) {
+				texture->clear(m_cmdList.Get());
 			}
+		}
 
+		if (auto texture = depth.cast<TextureImpl>()) {
+			texture->clear(m_cmdList.Get());
 		}
 
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      次のサブパスに進める
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::nextSubpass() {
-		m_subpassIndex++;
-		setSubpass();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーパス終了
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::endRenderPass() {
-		
-		if (!m_frameBuffer)return;
-
-		auto& frameBufferDesc = m_frameBuffer->desc();
-		auto& attachments = frameBufferDesc.attachments;
-		auto& renderPassDesc = frameBufferDesc.renderPass->desc();
-
-		for (auto [index,desc]: Indexed(renderPassDesc.attachments)) {
-
-			auto& texture = attachments[index];
-			if (auto pTexture = texture.cast<TextureImpl>()) {
-				
-				auto finalState = renderPassDesc.attachments[index].finalState;
-				m_cache.addTexture(*pTexture, TypeConverter::Convert(finalState));
-
-			}
-
-			// TODO subresourceの扱いチェック
-		}
-
-		m_frameBuffer = nullptr;
-
-	}
-
+	
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ディスプレイにテクスチャを適用

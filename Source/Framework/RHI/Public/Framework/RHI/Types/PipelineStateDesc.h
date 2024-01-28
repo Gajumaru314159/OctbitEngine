@@ -10,6 +10,7 @@
 #include <Framework/RHI/Types/DepthStencilDesc.h>
 #include <Framework/RHI/Types/RasterizerDesc.h>
 #include <Framework/RHI/Types/Topology.h>
+#include <Framework/RHI/Types/TextureFormat.h>
 
 namespace ob::rhi {
 
@@ -108,27 +109,27 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
 		
-		String				name;							//!< 名前
+		String					name;							//!< 名前
 
-		Ref<RenderPass>		renderPass;						//!< レンダーパス
-		s32					subpass;						//!< サブパスインデックス
+		Array<TextureFormat>	colors;							//!< 描画先フォーマット
+		Optional<TextureFormat>	depth;
 
-		Ref<RootSignature>	rootSignature;					//!< ルートシグネチャ
-		VertexLayout		vertexLayout;					//!< 頂点レイアウト
+		Ref<RootSignature>		rootSignature;					//!< ルートシグネチャ
+		VertexLayout			vertexLayout;					//!< 頂点レイアウト
 
-		Ref<Shader>			vs;								//!< 頂点シェーダ
-		//Ref<GeometryShader>	gs;								//!< ジオメトリシェーダ
-		//Ref<HullShader>		hs;								//!< ハルシェーダ
-		//Ref<DomainShader>	ds;								//!< ドメインシェーダ
-		Ref<Shader>			ps;								//!< ピクセルシェーダ
+		Ref<Shader>				vs;								//!< 頂点シェーダ
+		Ref<Shader>				gs;								//!< ジオメトリシェーダ
+		Ref<Shader>				hs;								//!< ハルシェーダ
+		Ref<Shader>				ds;								//!< ドメインシェーダ
+		Ref<Shader>				ps;								//!< ピクセルシェーダ
 
-		SampleDesc			sample;							//!< サンプル定義
-		BlendDescList		blend;							//!< ブレンド定義
-		RasterizerDesc		rasterizer;						//!< ラスタライズ定義
-		DepthStencilDesc	depthStencil;					//!< デプス・ステンシル定義
+		SampleDesc				sample;							//!< サンプル定義
+		BlendDescList			blend;							//!< ブレンド定義
+		RasterizerDesc			rasterizer;						//!< ラスタライズ定義
+		DepthStencilDesc		depthStencil;					//!< デプス・ステンシル定義
 
-		Topology			topology=Topology::TriangleList;//!< GeometryShaderでのトポロジー
-		u32					sampleMask=~u32(0);					//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
+		Topology				topology=Topology::TriangleList;//!< GeometryShaderでのトポロジー
+		u32						sampleMask=~u32(0);				//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 
 }

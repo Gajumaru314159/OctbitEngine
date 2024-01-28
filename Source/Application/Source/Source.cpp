@@ -70,20 +70,6 @@ int TestDirectX12() {
 		OB_ASSERT_EXPR(display);
 	}
 
-	// レンダーパス
-	Ref<RenderPass> renderPass;
-	{
-		RenderPassDescHelper desc;
-		desc.name = TC("Forward");
-		auto color = desc.addAttachment(TextureFormat::RGBA8);
-		auto color2 = desc.addAttachment(TextureFormat::RGBA8);
-		auto depth = desc.addAttachment(TextureFormat::D32);
-		auto pass0 = desc.addSubpassXCD(TC("Opaque"), {color,color2}, depth);
-
-		renderPass = Material::AddRenderPass(desc);
-		OB_ASSERT_EXPR(renderPass);
-	}
-
 	// 描画先生成
 	Ref<RenderTexture> colorRT;
 	{
@@ -120,19 +106,6 @@ int TestDirectX12() {
 
 		depthRT = RenderTexture::Create(desc);
 		OB_ASSERT_EXPR(depthRT);
-	}
-
-	Ref<FrameBuffer> frameBuffer;
-	{
-		FrameBufferDesc desc;
-		desc.name = TC("Test");
-		desc.renderPass = renderPass;
-		desc.attachments.push_back(colorRT);
-		desc.attachments.push_back(color2RT);
-		desc.attachments.push_back(depthRT);
-
-		frameBuffer = FrameBuffer::Create(desc);
-		OB_ASSERT_EXPR(frameBuffer);
 	}
 
 	Ref<CommandList> cmdList;

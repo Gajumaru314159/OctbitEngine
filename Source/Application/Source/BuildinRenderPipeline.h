@@ -4,7 +4,7 @@
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Graphics/FrameGraph/FG.h>
 
-#include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/All.h>
 
 using namespace ob;
 using namespace ob::rhi;
@@ -22,6 +22,23 @@ public:
 	OB_RTTI();
 
 
+	TestRenderFeature(RenderScene& scene) :RenderFeature(scene) {
+
+
+		using namespace ob::rhi;
+		RootSignatureDesc rdesc;
+		rdesc.name = TC("Test");
+
+		PipelineStateDesc pdesc;
+		pdesc.name = TC("Test");
+		pdesc.colors = {TextureFormat::RGBA8};
+		pdesc.blend = BlendDesc::AlphaBlend;
+		pdesc.ps:
+
+		RootSignature::Create(rdesc);
+	}
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
@@ -35,31 +52,23 @@ public:
 		fg.addCallbackPass<ImGuiData>(
 			"Test",
 			[=](FrameGraph::Builder& builder, ImGuiData& data) {
-
-				FGFrameBuffer::Desc desc;
-				desc.name = TC("");
-				desc.attachments = {
-					// texture
-				};
-				desc.renderPass;
-
-
-				builder.create<FGFrameBuffer>("",desc);
 				data.target = builder.write(target);
 			},
-			[](const ImGuiData& data, FrameGraphPassResources& resources, void* ctx) {
+			[this](const ImGuiData& data, FrameGraphPassResources& resources, void* ctx) {
 				auto& cmd = *static_cast<rhi::CommandList*>(ctx);
 
-				resources.get<FGTexture>(data.target).instance;
+				auto target = resources.get<FGTexture>(data.target).instance;
 
-				cmd.beginRenderPass();
+				cmd.setRenderTargets({ target });
+				cmd.setPipelineState(m_pipeline);
+
+				cmd.draw();
+
 			}
 		);
 	}
-
-
-protected:
-	TestRenderFeature(RenderScene& scene) :RenderFeature(scene) {}
+private:
+	Ref<rhi::PipelineState> m_pipeline;
 };
 
 

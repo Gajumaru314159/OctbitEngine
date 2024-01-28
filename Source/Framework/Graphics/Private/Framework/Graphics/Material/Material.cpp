@@ -16,27 +16,6 @@ namespace ob::graphics {
         return new MaterialImpl(desc);
     }
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  マテリアルが使用するRenderPassを登録
-    //@―---------------------------------------------------------------------------
-    Ref<rhi::RenderPass> Material::AddRenderPass(const rhi::RenderPassDesc& desc) {
-        if (auto manager = MaterialManager::Get()) {
-            return manager->addRenderPass(desc);
-        }
-        return nullptr;
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  レンダーパスを検索
-    //@―---------------------------------------------------------------------------
-    rhi::SubPass Material::FindSubpass(Name renderTag) {
-        if (auto manager = MaterialManager::Get()) {
-            return manager->findSubpass(renderTag);
-        }
-        return {};
-    }
-
-
 
     //@―---------------------------------------------------------------------------
     //! @brief  グローバルマテリアルパラメータを設定

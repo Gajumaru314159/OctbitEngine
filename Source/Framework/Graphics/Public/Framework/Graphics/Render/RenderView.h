@@ -46,6 +46,7 @@ namespace ob::graphics {
 
         // RenderTexture指定
         // Display設定
+        auto getRenderTarget()const->const Ref<rhi::RenderTexture>;
 
     private:
         RenderScene* m_scene;

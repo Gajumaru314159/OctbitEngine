@@ -8,8 +8,6 @@
 #include <Framework/Platform/Type/SystemEventType.h>
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/RenderTexture.h>
-#include <Framework/RHI/RenderPass.h>
-#include <Framework/RHI/FrameBuffer.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Buffer.h>
@@ -143,11 +141,9 @@ namespace ob::rhi::dx12 {
         platform::WindowEventHandle m_hEvent;
         
         ComPtr<IDXGISwapChain4>     m_swapChain;
-        Swapper<Ref<RenderTexture>> m_textures;         
-        Swapper<Ref<FrameBuffer>>   m_buffers;
+        Swapper<Ref<RenderTexture>> m_textures;
 
-        // 描画リソース
-        Ref<RenderPass>             m_renderPass;       
+        // 描画リソース    
         Ref<RootSignature>          m_signature;
         Ref<PipelineState>          m_pipeline;
         Ref<Buffer>                 m_verices;

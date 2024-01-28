@@ -5,8 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/RenderPassDesc.h>
-#include <Framework/RHI/Types/FrameBufferDesc.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
@@ -61,10 +59,6 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  説明
         //@―---------------------------------------------------------------------------
-
-        virtual Ref<RenderPass>     createRenderPass(const RenderPassDesc& desc) { return nullptr; }
-        virtual Ref<FrameBuffer>    createFrameBuffer(const FrameBufferDesc& desc) { return nullptr; }
-
 
         virtual Ref<Display>        createDisplay(const DisplayDesc& desc) { return nullptr; }
 

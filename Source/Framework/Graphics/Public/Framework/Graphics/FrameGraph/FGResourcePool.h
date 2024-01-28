@@ -7,7 +7,6 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/FrameGraph/FGTexture.h>
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
-#include <Framework/Graphics/FrameGraph/FGFrameBuffer.h>
 
 namespace ob::graphics {
 
@@ -22,11 +21,9 @@ namespace ob::graphics {
 
 		auto createTexture(const FGTexture::Desc& desc) -> Ref<RenderTexture>;
 		auto createBuffer(const FGBuffer::Desc& desc) -> Ref<Buffer>;
-		auto createFrameBuffer(const FGFrameBuffer::Desc& desc) -> Ref<FrameBuffer>;
 
 		void destroyTexture(const FGTexture::Desc& desc, const Ref<rhi::RenderTexture>& texture);
 		void destroyBuffer(const FGBuffer::Desc& desc, const Ref<rhi::Buffer>& buffer);
-		void destroyFrameBuffer(const FGFrameBuffer::Desc& desc, const Ref<rhi::FrameBuffer>& frameBuffer);
 
 	private:
 
@@ -38,7 +35,6 @@ namespace ob::graphics {
 
 		HashMap<size_t, ResourcePool<RenderTexture>>	m_texturePools;
 		HashMap<size_t, ResourcePool<Buffer>>			m_bufferPools;
-		HashMap<size_t, ResourcePool<FrameBuffer>>		m_frameBufferPools;
 	};
 
 }

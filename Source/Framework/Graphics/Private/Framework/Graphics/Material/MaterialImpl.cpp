@@ -8,13 +8,15 @@
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/PipelineState.h>
-#include <Framework/RHI/RenderPass.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/Graphics/Mesh/MeshImpl.h>
 
 namespace ob::graphics {
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
 	{
@@ -131,8 +133,8 @@ namespace ob::graphics {
 		if (!pMesh) return false;
 
 		auto& layout = mesh->getVertexLayout();
-		for (auto& pass : m_desc.passes) {
-			createPipeline(pass.first, layout, pMesh->getVertexLayoutId());
+		for (auto& [name,pass] : m_desc.passes) {
+			createPipeline(name, layout, pMesh->getVertexLayoutId());
 		}
 
 		return true;
@@ -235,34 +237,22 @@ namespace ob::graphics {
 
 		auto& materialPass = passItr->second;
 
-		// レンダーパス取得
-		auto [renderPass, subpass] = Material::FindSubpass(materialPass.renderTag);
-
-		if (!renderPass) {
-			LOG_ERROR("PipelineStateの生成に失敗。{}は登録されていないMaterialTagです。[material={}]", materialPass.renderTag,m_desc.name);
-			return nullptr;
-		}
-
-		if (!is_in_range(subpass, renderPass->desc().subpasses)) {
-			LOG_ERROR("PipelineStateの生成に失敗。{}は範囲外のSubpassです。[material={}]", subpass, m_desc.name);
-		}
-
 		// 頂点レイアウト
 		rhi::VertexLayout mapped;
 
-		for (auto& a1 : materialPass.requiredLayout.attributes) {
+		for (auto& attr1 : materialPass.requiredLayout.attributes) {
 
 			bool ok = false;
-			for (auto& a2 : layout.attributes) {
+			for (auto& attr2 : layout.attributes) {
 
 				if (
-					a1.semantic == a2.semantic &&
-					a1.type == a2.type &&
-					a1.dimention == a2.dimention &&
-					a1.index == a2.index
+					attr1.semantic == attr2.semantic &&
+					attr1.type == attr2.type &&
+					attr1.dimention == attr2.dimention &&
+					attr1.index == attr2.index
 					)
 				{
-					mapped.attributes.push_back(a2);
+					mapped.attributes.push_back(attr2);
 					ok = true;
 					break;
 				}
@@ -280,8 +270,8 @@ namespace ob::graphics {
 			PipelineStateDesc desc;
 
 			desc.name = TC("Material");
-			desc.renderPass = renderPass;
-			desc.subpass = subpass;
+			desc.colors = materialPass.colors;
+			desc.depth = materialPass.depth;
 			//TODO RootSignatureをマテリアル内部に閉じ込める
 			desc.rootSignature = materialPass.rootSignature;
 			desc.vertexLayout = layout;
@@ -294,10 +284,7 @@ namespace ob::graphics {
 			pipeline = PipelineState::Create(desc);
 
 			if (pipeline) {
-				PipelineKey key{
-					pass,
-					id
-				};
+				PipelineKey key{pass,id};
 				ScopeLock lock(m_lock);
 				m_pipelineMap[key] = pipeline;
 			}

@@ -11,8 +11,6 @@
 #include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
-#include <Plugins/DirectX12RHI/RenderPass/RenderPassImpl.h>
-#include <Plugins/DirectX12RHI/FrameBuffer/FrameBufferImpl.h>
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
@@ -82,23 +80,7 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  レンダーパスを生成を生成
-	//@―---------------------------------------------------------------------------
-	Ref<RenderPass> DirectX12RHI::createRenderPass(const RenderPassDesc& desc) {
-		SAFE_CREATE(RenderPass, RenderPassImpl, *this, desc);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  フレームバッファを生成
-	//@―---------------------------------------------------------------------------
-	Ref<FrameBuffer> DirectX12RHI::createFrameBuffer(const FrameBufferDesc& desc) {
-		SAFE_CREATE(FrameBuffer, FrameBufferImpl, *this, desc);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  スワップ・チェーンを生成
+	//! @brief  コマンドリストを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Display> DirectX12RHI::createDisplay(const DisplayDesc& desc) {
 		SAFE_CREATE(Display, DisplayImpl, *this, desc);

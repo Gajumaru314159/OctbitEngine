@@ -21,8 +21,6 @@ TEST(RHI, CreateEmpty) {
 
 	injector.create<RHI>(container);
 
-	ASSERT_FALSE(RenderPass::Create({}));
-	ASSERT_FALSE(FrameBuffer::Create({}));
 	ASSERT_FALSE(Display::Create({}));
 	ASSERT_FALSE(CommandList::Create({}));
 	ASSERT_FALSE(RootSignature::Create({}));
@@ -45,8 +43,6 @@ TEST(RHI, CreateEmptyDX12) {
 
 	injector.create<RHI>(container);
 
-	ASSERT_TRUE(RenderPass::Create({}));
-	ASSERT_FALSE(FrameBuffer::Create({}));
 	ASSERT_FALSE(Display::Create({}));
 	ASSERT_TRUE(CommandList::Create({}));
 	ASSERT_TRUE(RootSignature::Create({}));
@@ -87,18 +83,6 @@ TEST(RHI, ShowHide) {
 			OB_ASSERT_EXPR(display);
 		}
 
-		// レンダーパス
-		Ref<RenderPass> renderPass;
-		{
-			RenderPassDescHelper desc;
-			desc.name = TC("Forward");
-			auto color = desc.addAttachment(TextureFormat::RGBA8);
-			auto pass0 = desc.addSubpassXCX(TC("Opaque"), { color });
-
-			renderPass = RenderPass::Create(desc);
-			OB_ASSERT_EXPR(renderPass);
-		}
-
 		// 描画先生成
 		Ref<RenderTexture> colorRT;
 		{
@@ -112,18 +96,6 @@ TEST(RHI, ShowHide) {
 			colorRT = RenderTexture::Create(desc);
 			OB_ASSERT_EXPR(colorRT);
 		}
-
-		Ref<FrameBuffer> frameBuffer;
-		{
-			FrameBufferDesc desc;
-			desc.name = TC("Test");
-			desc.renderPass = renderPass;
-			desc.attachments.push_back(colorRT);
-
-			frameBuffer = FrameBuffer::Create(desc);
-			OB_ASSERT_EXPR(frameBuffer);
-		}
-
 
 		Ref<Shader> vs;
 		Ref<Shader> ps;
@@ -194,8 +166,7 @@ PsOut PS_Main(PsIn i) {
 		{
 			PipelineStateDesc desc;
 			desc.name = TC("ModelDraw");
-			desc.renderPass = renderPass;
-			desc.subpass = 0;
+			desc.colors = { TextureFormat::RGBA8 };
 
 			desc.rootSignature = signature;
 			desc.vs = vs;
@@ -287,7 +258,7 @@ PsOut PS_Main(PsIn i) {
 			display->update();
 
 			cmdList->begin();
-			cmdList->beginRenderPass(frameBuffer);
+			cmdList->setRenderTargets({colorRT});
 
 			{
 				cmdList->setPipelineState(pipeline);
@@ -305,7 +276,6 @@ PsOut PS_Main(PsIn i) {
 				param.indexCount = indices.size();
 				cmdList->drawIndexed(param);
 			}
-			cmdList->endRenderPass();
 
 			cmdList->applyDisplay(display, colorRT);
 

@@ -14,7 +14,6 @@ namespace ob::rhi {
 	struct SetDescriptorTableParam;
 	struct DrawParam;
 	struct DrawIndexedParam;
-	struct RenderPassDesc;
 
 	// クラス
 	class RHI;
@@ -22,18 +21,11 @@ namespace ob::rhi {
 	class CommandList;
 	class DescriptorTable;
 	class Display;
-	class FrameBuffer;
 	class PipelineState;
-	class RenderPass;
 	class RenderTexture;
 	class ResourceBarrier;
 	class RootSignature;
 	class Shader;
-	class VertexShader;
-	class PixelShader;
-	class GeometryShader;
-	class HullShader;
-	class DomainShader;
 	class Texture;
 
 	// 内部クラス

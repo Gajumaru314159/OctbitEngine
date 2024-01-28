@@ -9,7 +9,6 @@
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-#include <Framework/RHI/RenderPass.h>
 
 namespace ob::rhi::dx12 {
 
@@ -25,10 +24,6 @@ namespace ob::rhi::dx12 {
 			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RootSignatureが設定されていません。");
 			return;
 		}
-		if (!desc.renderPass) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
-			return;
-		}
 
 		if (!m_desc.vs) {
 			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。頂点シェーダが設定されていません。");
@@ -39,18 +34,8 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		if (!desc.renderPass) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。RenderPassが設定されていません。");
-		}
-
-		if (!is_in_range(desc.subpass, desc.renderPass->desc().subpasses)) {
-			LOG_ERROR_EX("Graphic", "パイプラインステートの構築に失敗。サブパスが範囲外です。[index={},max={}]", desc.subpass, desc.renderPass->desc().subpasses.size());
-		}
-
-		auto& subpass = desc.renderPass->desc().subpasses[desc.subpass];
-		const auto targetCount = subpass.colors.size();
-		if (8 < targetCount) {
-			LOG_ERROR_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", targetCount);
+		if (8 < desc.colors.size()) {
+			LOG_ERROR_EX("Graphic", "PipelineStateの構築に失敗。描画先枚数が8以上です。[num={}]", desc.colors.size());
 			return;
 		}
 
@@ -64,18 +49,18 @@ namespace ob::rhi::dx12 {
 				auto& shader = *m_desc.vs.cast<ShaderImpl>();
 				gpsd.VS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
-			//if (m_desc.gs) {
-			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
-			//	gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			//}
-			//if (m_desc.hs) {
-			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
-			//	gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			//}
-			//if (m_desc.ds) {
-			//	auto& shader = *m_desc.vs.cast<ShaderImpl>();
-			//	gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
-			//}
+			if (m_desc.gs) {
+				auto& shader = *m_desc.vs.cast<ShaderImpl>();
+				gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.hs) {
+				auto& shader = *m_desc.vs.cast<ShaderImpl>();
+				gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
+			if (m_desc.ds) {
+				auto& shader = *m_desc.vs.cast<ShaderImpl>();
+				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
+			}
 			if (m_desc.ps) {
 				auto& shader = *m_desc.ps.cast<ShaderImpl>();
 				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
@@ -131,35 +116,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
 
-		auto& subpass = src.renderPass->desc().subpasses[src.subpass];
-		auto& attachments = src.renderPass->desc().attachments;
+		dst.NumRenderTargets = (UINT)src.colors.size();
 
-		dst.NumRenderTargets = (UINT)subpass.colors.size();
-
-		for (auto [i, ref] : Indexed(subpass.colors)) {
-
-			auto index = ref.index;
-
-			if (is_in_range(index, attachments)) {
-				auto format = TypeConverter::Convert(attachments[index].format);
-				dst.RTVFormats[i] = format;
-			} else {
-				LOG_ERROR("無効なカラーアタッチメントインデックス[index={},max={}]", index, attachments.size());
-			}
-
+		for (auto [i, format] : Indexed(src.colors)) {
+			dst.RTVFormats[i] = TypeConverter::Convert(format);
 		}
 
-		if (!subpass.depth.empty()) {
-
-			auto index = subpass.depth[0].index;
-
-			if (is_in_range(index, attachments)) {
-				auto format = TypeConverter::Convert(attachments[index].format);
-				dst.DSVFormat = format;
-			} else {
-				LOG_ERROR("無効なデプスアタッチメントインデックス[index={},max={}]", index, attachments.size());
-			}
-
+		if (src.depth) {
+			dst.DSVFormat = TypeConverter::Convert(src.depth.value());
 		}
 
 	}

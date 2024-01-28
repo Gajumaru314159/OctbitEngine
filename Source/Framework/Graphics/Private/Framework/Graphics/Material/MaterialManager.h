@@ -7,7 +7,6 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/SubPass.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
-#include <Framework/RHI/RenderPass.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 
 namespace ob::graphics {
@@ -20,16 +19,6 @@ namespace ob::graphics {
 
 		MaterialManager(rhi::RHI&, NameDictionary&);
 		~MaterialManager();
-
-		//@―---------------------------------------------------------------------------
-		//!	@brief			描画タグにRenderPassを登録
-		//@―---------------------------------------------------------------------------
-		Ref<rhi::RenderPass> addRenderPass(const rhi::RenderPassDesc& desc);
-
-		//@―---------------------------------------------------------------------------
-		//!	@brief			描画タグからRenderPassを登録
-		//@―---------------------------------------------------------------------------
-		rhi::SubPass findSubpass(Name renderTag);
 
 		//@―---------------------------------------------------------------------------
 		//!	@brief			レイアウトID取得
@@ -101,11 +90,8 @@ namespace ob::graphics {
 
 	private:
 
-		Map<rhi::RenderPassDesc, Ref<rhi::RenderPass>> m_renderPassMap;
-		HashMap<Name, rhi::SubPass> m_subpassMap;
-
 		SpinLock m_lock;
-		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_map;
+		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_vertexLayoutCache;
 
 
 		PropertyMap					m_propertyMap;

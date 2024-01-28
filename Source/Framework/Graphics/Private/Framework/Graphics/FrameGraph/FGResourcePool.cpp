@@ -8,7 +8,6 @@
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Buffer.h>
-#include <Framework/RHI/FrameBuffer.h>
 #include <Framework/Graphics/FrameGraph/FGTexture.h>
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
 
@@ -39,14 +38,6 @@ namespace std {
 		}
 	};
 
-	template<>
-	struct hash<::ob::rhi::FrameBufferDesc> {
-		size_t operator()(const ::ob::rhi::FrameBufferDesc& desc) {
-			size_t h = 0;
-			//hashCombine(h, desc.bufferType, desc.usage, desc.bufferSize, desc.bufferStride, desc.bufferFlags, desc.bindFlags);
-			return h;
-		}
-	};
 }
 
 
@@ -87,19 +78,6 @@ namespace ob::graphics {
 			}
 		}
 
-		for (auto& [hash, pool] : m_frameBufferPools) {
-			for (auto& [frameBuffer, life] : pool) {
-				life++;
-			}
-			for (auto itr = pool.begin(); itr != pool.end();) {
-				if (s_idleFrame < itr->life) {
-					itr = pool.erase(itr);
-				} else {
-					itr++;
-				}
-			}
-		}
-
 	}
 
 	auto FGResourcePool::createTexture(const FGTexture::Desc& desc) ->Ref<::ob::rhi::RenderTexture> {
@@ -124,18 +102,7 @@ namespace ob::graphics {
 			return resource;
 		}
 	}
-	auto FGResourcePool::createFrameBuffer(const FGFrameBuffer::Desc& desc) -> Ref<::ob::rhi::FrameBuffer> {
-		const auto hash = std::hash<FGFrameBuffer::Desc>{}(desc);
-		auto& pool = m_frameBufferPools[hash];
-		if (pool.empty()) {
-			return FrameBuffer::Create(desc);
-		} else {
-			auto resource = pool.back().resource;
-			pool.pop_back();
-			return resource;
-		}
-	}
-
+	
 	void FGResourcePool::destroyTexture(const FGTexture::Desc& desc, const Ref<rhi::RenderTexture>& texture) {
 		const auto h = std::hash<FGTexture::Desc>{}(desc);
 		m_texturePools[h].push_back({ texture, 0 });
@@ -143,10 +110,6 @@ namespace ob::graphics {
 	void FGResourcePool::destroyBuffer(const FGBuffer::Desc& desc, const Ref<rhi::Buffer>& buffer) {
 		const auto h = std::hash<FGBuffer::Desc>{}(desc);
 		m_bufferPools[h].push_back({ buffer, 0 });
-	}
-	void FGResourcePool::destroyFrameBuffer(const FGFrameBuffer::Desc& desc, const Ref<rhi::FrameBuffer>& frameBuffer) {
-		const auto h = std::hash<FGFrameBuffer::Desc>{}(desc);
-		m_frameBufferPools[h].push_back({ frameBuffer, 0 });
 	}
 
 }

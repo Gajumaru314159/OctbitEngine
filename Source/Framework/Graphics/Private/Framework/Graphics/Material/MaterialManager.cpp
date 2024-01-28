@@ -64,61 +64,13 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//!	@brief			描画タグにRenderPassを登録
-	//@―---------------------------------------------------------------------------
-	Ref<rhi::RenderPass> MaterialManager::addRenderPass(const rhi::RenderPassDesc& desc) {
-		ScopeLock lock(m_lock);
-
-		// 登録済み
-		if (auto found = m_renderPassMap.find(desc);found!=m_renderPassMap.end()) {
-			return found->second;
-		}
-
-		// 未登録チェック
-		for (auto& subpass : desc.subpasses) {
-			if (m_subpassMap.count(Name(subpass.name))) {
-				LOG_ERROR("RenderPassの登録に失敗。マテリアルに登録済みのサブパスが含まれています。[renderPass={}, subpass={}]",desc.name,subpass.name);
-				return nullptr;
-			}
-		}
-
-		// 生成
-		auto renderPass = rhi::RenderPass::Create(desc);
-
-		if (!renderPass) {
-			return nullptr;
-		}
-
-		m_renderPassMap[desc] = renderPass;
-
-		// サブパス登録
-		for (auto [index,subpass] : Indexed(desc.subpasses)) {
-			m_subpassMap.emplace(subpass.name, rhi::SubPass{ renderPass, (s32)index });
-		}
-
-		return renderPass;
-	}
-
-	//@―---------------------------------------------------------------------------
-	//!	@brief			描画タグからRenderPassを登録
-	//@―---------------------------------------------------------------------------
-	rhi::SubPass MaterialManager::findSubpass(Name renderTag) {
-		ScopeLock lock(m_lock);
-		auto found = m_subpassMap.find(renderTag);
-		if (found == m_subpassMap.end())
-			return {nullptr,0};
-		return found->second;
-	}
-
-
-	//@―---------------------------------------------------------------------------
 	//!	@brief			レイアウトID取得
 	//@―---------------------------------------------------------------------------
 	VertexLayoutId MaterialManager::getVertexLayoutId(const rhi::VertexLayout& layout) {
 		ScopeLock lock(m_lock);
-		auto found = m_map.find(layout);
-		if (found == m_map.end()) {
-			return m_map[layout] = static_cast<VertexLayoutId>(m_map.size());
+		auto found = m_vertexLayoutCache.find(layout);
+		if (found == m_vertexLayoutCache.end()) {
+			return m_vertexLayoutCache[layout] = static_cast<VertexLayoutId>(m_vertexLayoutCache.size());
 		} else {
 			return found->second;
 		}
