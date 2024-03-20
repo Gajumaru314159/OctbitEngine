@@ -45,6 +45,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Application")
 
 
 # カスタムコマンド
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:Application>
     )

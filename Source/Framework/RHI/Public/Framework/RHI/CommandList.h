@@ -9,6 +9,7 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/CommandParam.h>
+#include <Framework/RHI/RenderTexture.h>
 
 namespace ob::rhi {
 
