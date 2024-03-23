@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Platform/Window.h>
+#include <Framework/RHI/Display.h>
 
 namespace ob::graphics {
 
@@ -30,7 +31,7 @@ namespace ob::graphics {
 	}
 
 
-	void RenderView::setRenderTarget(const platform::Window& window) {
+	void RenderView::setRenderTarget(const Ref<rhi::Display>& display);
 
 	}
 

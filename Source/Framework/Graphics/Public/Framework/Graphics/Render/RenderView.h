@@ -46,7 +46,8 @@ namespace ob::graphics {
         s32 getPriority()const;
 
         // RenderTexture指定
-        void setRenderTarget(const platform::Window& window);
+        void setRenderTarget(const Ref<rhi::Display>& display);
+
         // Display設定
         auto getRenderTarget()const->const Ref<rhi::RenderTexture>;
 
