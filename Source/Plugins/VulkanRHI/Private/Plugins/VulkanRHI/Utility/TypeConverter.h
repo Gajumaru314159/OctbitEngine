@@ -10,7 +10,6 @@
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
-#include <Framework/RHI/Types/RenderPassDesc.h>
 
 namespace ob::rhi::vulkan {
 

@@ -17,9 +17,11 @@ namespace ob::graphics {
 
 	class IRenderer;
 
+	class RenderStepInjector;
 
 	class RenderView;
 	class RenderScene;
+	class RenderStep;
 	class RenderPipeline;
 	class RenderFeature;
 

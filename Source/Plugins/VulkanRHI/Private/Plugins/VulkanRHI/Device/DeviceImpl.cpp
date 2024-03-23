@@ -6,7 +6,6 @@
 #include <Plugins/VulkanRHI/Device/DeviceImpl.h>
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
 #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
-#include <Plugins/VulkanRHI/RenderPass/RenderPassImpl.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -390,14 +389,6 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void DeviceImpl::update() {
 		//OB_NOTIMPLEMENTED();
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  レンダーパスを生成
-	//@―---------------------------------------------------------------------------
-	IRenderPass* DeviceImpl::createRenderPass(const RenderPassDesc& desc) {
-		return new RenderPassImpl(m_logicalDevice, desc);
 	}
 
 	//@―---------------------------------------------------------------------------

@@ -14,15 +14,18 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーンを生成
 	//@―---------------------------------------------------------------------------
-	Ref<RenderScene> RenderScene::Create(const RenderSceneDesc& desc) {
-		return new RenderScene(desc);
+	Ref<RenderScene> RenderScene::Create(const RenderSceneDesc& desc, Graphics* graphics) {
+		if (graphics == nullptr) graphics = Graphics::Get();
+		if (graphics == nullptr) return nullptr;
+		return graphics->createScene(desc);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	RenderScene::RenderScene(const RenderSceneDesc& desc)
-		: m_name(desc.name)
+	RenderScene::RenderScene(const RenderSceneDesc& desc, Graphics& graphics)
+		: m_graphics(graphics)
+		, m_name(desc.name)
 	{
 		// RenderFeature生成
 		auto features = desc.features.create(*this);
@@ -40,67 +43,34 @@ namespace ob::graphics {
 	//! @brief      デストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderScene::~RenderScene() {
-		OB_ASSERT_EXPR(m_graphics == nullptr);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      破棄予約状態か
+	//@―---------------------------------------------------------------------------
+	bool RenderScene::isDisposeRequested()const {
+		return m_disposeRequested;
+	}
+
+	void RenderScene::requestDispose() {
+		m_disposeRequested = true;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
 	void RenderScene::render(FG& fg) {
-		for (auto& [typeId,pipeline] : m_pipelines) {
-			pipeline->render(fg,m_views);
+		for (auto& [typeId, pipeline] : m_pipelines) {
+			pipeline->render(fg, m_views);
 		}
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを追加
+	//! @brief      RenderView を生成する
 	//@―---------------------------------------------------------------------------
-	void RenderScene::addView(Ref<RenderView>& view) {
-
-		if (!view) {
-			LOG_WARNING("空のRenderViewは追加できません");
-			return;
-		}
-
-		if (view->m_scene != nullptr) {
-			LOG_WARNING("{}は他のRenderSceneで追加済みのRenderViewです", view->getName());
-			return;
-		}
-
-		for (auto& item : m_views) {
-			if (item == view) {
-				LOG_WARNING("{}は追加済みのRenderViewです", view->getName());
-				return;
-			}
-		}
-
-		view->m_scene = this;
-
-		m_views.push_back(view);
+	auto RenderScene::createView(const RenderViewDesc& desc) -> Ref<RenderView> {
+		return new RenderView(desc,*this);
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを削除
-	//@―---------------------------------------------------------------------------
-	void RenderScene::removeView(Ref<RenderView>& view) {
-
-		if (!view) {
-			LOG_WARNING("空のRenderViewは削除できません");
-			return;
-		}
-
-		auto found = std::find(m_views.begin(), m_views.end(), [&](Ref<RenderView>& item) {return view == item; });
-
-		if (found == m_views.end()) {
-			LOG_WARNING("{}はこのRenderSceneに追加されていないRenderViewです", view->getName());
-		}
-
-		OB_ASSERT_EXPR(found->get() != nullptr);
-
-		found->get()->m_scene = nullptr;
-
-	}
-
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      RenderFeatureを見つける
@@ -116,7 +86,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	void RenderScene::visitFeatures(Func<void(RenderFeature&)>&& visitor) {
 		if (!visitor)return;
-		for (auto& [typeId,feature] : m_features) {
+		for (auto& [typeId, feature] : m_features) {
 			visitor(*feature);
 		}
 	}

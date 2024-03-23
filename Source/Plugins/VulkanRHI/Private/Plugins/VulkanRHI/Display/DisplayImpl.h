@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/IDisplay.h>
-#include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Plugins/VulkanRHI/Display/Surface.h>
 
 //===============================================================

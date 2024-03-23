@@ -28,7 +28,7 @@ namespace ob::graphics {
 		//! @details	生成されたRenderSceneはデフォルトのRPIに自動登録されます。
 		//!				登録先のRPIを変更する場合は通常のコンストラクタを使用してください。
 		//@―---------------------------------------------------------------------------
-		static Ref<RenderScene> Create(const RenderSceneDesc& desc);
+		static Ref<RenderScene> Create(const RenderSceneDesc& desc,Graphics* graphics = nullptr);
 
 	public:
 
@@ -36,6 +36,16 @@ namespace ob::graphics {
 		//! @brief      デストラクタ
 		//@―---------------------------------------------------------------------------
 		~RenderScene();
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      シーンの削除をリクエスト
+		//! @details	シーンの削除は即時は行われません。
+		//!				Graphicsからは次フレームの開始時に登録解除されますが、RenderScene
+		//!				への参照が残っている場合はオブジェクトの解放はさらに遅延されます。
+		//@―---------------------------------------------------------------------------
+		void requestDispose();
+
+		bool isDisposeRequested()const;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      名前を取得
@@ -47,10 +57,11 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		void render(FG&);
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      RenderView を生成する
+		//@―---------------------------------------------------------------------------
+		auto createView(const RenderViewDesc& desc) -> Ref<RenderView>;
 		
-        void addView(Ref<RenderView>&);
-        void removeView(Ref<RenderView>&);
-
 		//@―---------------------------------------------------------------------------
 		//! @brief      RenderFeatureを見つける
 		//@―---------------------------------------------------------------------------
@@ -67,23 +78,25 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		void activateAllFeature();
 
+
 	private:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      RenderSceneを生成する
 		//! @details	生成されたRenderSceneはRPIに登録する必要があります。
 		//@―---------------------------------------------------------------------------
-		RenderScene(const RenderSceneDesc& desc);
+		RenderScene(const RenderSceneDesc& desc, Graphics& graphics);
 
 	private:
+
+		Graphics&								m_graphics;
+		bool									m_disposeRequested = false;
 
 		String									m_name;
 
 		HashMap<TypeId, UPtr<RenderPipeline>>	m_pipelines;
 		HashMap<TypeId, UPtr<RenderFeature>>	m_features;
 		Array<Ref<RenderView>>					m_views;
-
-		Graphics*								m_graphics = nullptr;
 
 	};
 

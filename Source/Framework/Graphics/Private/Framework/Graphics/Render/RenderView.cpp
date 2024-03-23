@@ -4,12 +4,15 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Platform/Window.h>
 
 namespace ob::graphics {
 
 	static std::atomic<s32> s_renderViewId{ 1 };
 
-	RenderView::RenderView(RenderViewDesc& desc) {
+	RenderView::RenderView(const RenderViewDesc& desc,RenderScene& scene) 
+		: m_scene(scene)
+	{
 		m_id = static_cast<RenderViewId>(s_renderViewId.fetch_add(1));
 		m_priority = 0;
 	}
@@ -27,5 +30,18 @@ namespace ob::graphics {
 	}
 
 
+	void RenderView::setRenderTarget(const platform::Window& window) {
+
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      RenderFeatureを見つける
+	//@―---------------------------------------------------------------------------
+	RenderStep* RenderView::findStep(TypeId typId)const {
+		auto found = m_steps.find(typId);
+		if (found == m_steps.end())return nullptr;
+		return found->second.get();
+	}
 
 }

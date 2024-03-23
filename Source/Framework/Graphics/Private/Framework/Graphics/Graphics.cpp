@@ -28,7 +28,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Graphics::Graphics(rhi::RHI& rhi) 
+	Graphics::Graphics(rhi::RHI& rhi)
 		: m_rhi(rhi)
 		, m_fgResourcePool(rhi)
 	{
@@ -88,10 +88,10 @@ namespace ob::graphics {
 	void Graphics::updateForParallel(s32 threadIndex) {
 
 		if (threadIndex != 0)return;
-		
+
 		auto commandList = m_commandLists.current();
 
-		m_fg->execute(*commandList,m_fgResourcePool);
+		m_fg->execute(*commandList, m_fgResourcePool);
 
 	}
 
@@ -118,52 +118,24 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを追加
+	//! @brief      シーンを生成
 	//@―---------------------------------------------------------------------------
-	void Graphics::addScene(Ref<RenderScene>& scene) {
+	auto Graphics::createScene(const RenderSceneDesc& desc) -> Ref<RenderScene> {
+		return m_scenes.emplace_back(new RenderScene(desc, *this));
+	}
 
-		if (!scene) {
-			LOG_WARNING("空のRenderSceneは追加できません");
-			return;
-		}
+	//@―---------------------------------------------------------------------------
+	//! @brief      シーンを破棄
+	//@―---------------------------------------------------------------------------
+	void Graphics::destroyScenes() {
 
-		if (scene->m_graphics != nullptr) {
-			LOG_WARNING("{}は他のGraphicsで追加済みのRenderSceneです", scene->getName());
-			return;
-		}
-
-		for (auto& item : m_scenes) {
-			if (item == scene) {
-				LOG_WARNING("{}は追加済みのRenderSceneです", scene->getName());
-				return;
+		std::remove_if(m_scenes.begin(), m_scenes.end(),
+			[](const Ref<RenderScene>& scene) {
+				return scene->isDisposeRequested(); 
 			}
-		}
-
-		scene->m_graphics = this;
-
-		m_scenes.push_back(scene);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを削除
-	//@―---------------------------------------------------------------------------
-	void Graphics::removeScene(Ref<RenderScene>& scene) {
-
-		if (!scene) {
-			LOG_WARNING("空のRenderSceneは削除できません");
-			return;
-		}
-
-		auto found = std::find(m_scenes.begin(), m_scenes.end(), [&](Ref<RenderScene>& item) {return scene == item; });
-
-		if (found == m_scenes.end()) {
-			LOG_WARNING("{}はこのGraphicsに追加されていないシーンです", scene->getName());
-		}
-
-		OB_ASSERT_EXPR(found->get() != nullptr);
-
-		found->get()->m_graphics = nullptr;
+		);
 
 	}
+
 
 }
