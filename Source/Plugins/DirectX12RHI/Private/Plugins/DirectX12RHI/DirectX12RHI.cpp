@@ -219,7 +219,7 @@ namespace ob::rhi::dx12 {
 		if (!initializeDXGIDevice())return false;
 
 		m_commandQueue = std::make_unique<CommandQueue>(*this);
-		OB_DEBUG_CONTEXT(m_commandQueue->setName(TC("SystemCommandQueue")));
+		OB_DEBUG_CONTEXT(m_commandQueue->setName("SystemCommandQueue"));
 
 		if (!initializeDescriptorHeaps())return false;
 
@@ -239,7 +239,7 @@ namespace ob::rhi::dx12 {
 			ComPtr<ID3D12Debug>	debugController;
 			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, TC("D3D12GetDebugInterface()"));
+				Utility::OutputFatalLog(result, "D3D12GetDebugInterface()");
 				return false;
 			}
 			debugController->EnableDebugLayer();
@@ -249,7 +249,7 @@ namespace ob::rhi::dx12 {
 		// ファクトリの生成
 		result = ::CreateDXGIFactory2(flagsDXGI, IID_PPV_ARGS(m_dxgiFactory.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("CreateDXGIFactory2()"));
+			Utility::OutputFatalLog(result, "CreateDXGIFactory2()");
 			return false;
 		}
 
@@ -289,7 +289,7 @@ namespace ob::rhi::dx12 {
 			}
 		}
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("D3D12CreateDevice()"));
+			Utility::OutputFatalLog(result, "D3D12CreateDevice()");
 			return false;
 		}
 		OB_DEBUG_CONTEXT(m_device->SetName(L"System Device"));
@@ -346,10 +346,10 @@ namespace ob::rhi::dx12 {
 		m_descriptorHeaps[DescriptorHeapType::DSV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256);
 
-		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName(TC("SystemCBV_SRV_UAVHeap"));
-		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName(TC("SystemSamplerHeap"));
-		m_descriptorHeaps[DescriptorHeapType::RTV]->setName(TC("SystemRTVHeap"));
-		m_descriptorHeaps[DescriptorHeapType::DSV]->setName(TC("SystemDSVHeap"));
+		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName("SystemCBV_SRV_UAVHeap");
+		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
+		m_descriptorHeaps[DescriptorHeapType::RTV]->setName("SystemRTVHeap");
+		m_descriptorHeaps[DescriptorHeapType::DSV]->setName("SystemDSVHeap");
 
 		return true;
 	}

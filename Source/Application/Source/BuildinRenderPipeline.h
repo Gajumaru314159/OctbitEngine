@@ -27,10 +27,10 @@ public:
 
 		using namespace ob::rhi;
 		RootSignatureDesc rdesc;
-		rdesc.name = TC("Test");
+		rdesc.name = "Test";
 
 		PipelineStateDesc pdesc;
-		pdesc.name = TC("Test");
+		pdesc.name = "Test";
 		pdesc.colors = {TextureFormat::RGBA8};
 		pdesc.blend = BlendDesc::AlphaBlend;
 		pdesc.ps:
@@ -114,10 +114,10 @@ public:
 
 			FGTexture::Desc desc;
 
-			desc.name = TC("Target");
+			desc.name = "Target";
 			// desc.size = 
 
-			FrameGraphResource finalTarget = fg.import(TC("Target"),desc,resource);
+			FrameGraphResource finalTarget = fg.import("Target",desc,resource);
 
 			if (auto feature = findFeature<TestRenderFeature>()) {
 				feature->render(fg, finalTarget, viewId);

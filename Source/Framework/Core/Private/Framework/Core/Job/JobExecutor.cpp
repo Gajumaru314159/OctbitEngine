@@ -40,7 +40,7 @@ namespace ob::core {
 		for (s32 i = 0; i < num; ++i) {
 			m_threads.emplace_back(
 				Thread(
-					Format(TC("JobThread{:02}"), i),
+					Format("JobThread{:02}", i),
 					[this, i]() { executeThread(i); }
 				),
 				0

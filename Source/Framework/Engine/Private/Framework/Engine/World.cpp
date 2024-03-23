@@ -37,7 +37,7 @@ namespace ob::engine {
 	void World::createRootScene() {
 		if (m_scene)return;
 
-		m_scene = Scene::Create(Format(TC("Root({})"),m_name));
+		m_scene = Scene::Create(Format("Root({})",m_name));
 
 	}
 

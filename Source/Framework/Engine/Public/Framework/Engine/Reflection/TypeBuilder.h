@@ -53,7 +53,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = TC(""));
+		void tag(StringView key, StringView value = "");
 
 	private:
 		ElementInfo& m_info;
@@ -74,7 +74,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = TC(""));
+		void tag(StringView key, StringView value = "");
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		要素追加
@@ -106,7 +106,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = TC(""));
+		void tag(StringView key, StringView value = "");
 
 	private:
 		PropertyInfo& m_info;
@@ -127,7 +127,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = TC(""));
+		void tag(StringView key, StringView value = "");
 
 	private:
 		FunctionInfo& m_info;
@@ -148,7 +148,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = TC(""));
+		void tag(StringView key, StringView value = "");
 
 
 		//@―---------------------------------------------------------------------------

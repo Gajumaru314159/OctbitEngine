@@ -14,8 +14,8 @@ Materialは内部に複数のPassを持つ。
 * ローカル変数　：マテリアルごとに設定できる値
 * グローバル変数：全てのマテリアルで共通の値
 ```c++
-Material::SetGlobalFloat(TC("Time"),Time::Now().toSeconds());
-Material::SetGlobalColor(TC("LightColor"),Color(1,1,0.8f));
+Material::SetGlobalFloat("Time",Time::Now().toSeconds());
+Material::SetGlobalColor("LightColor",Color(1,1,0.8f));
 ```
 内部的には新しくグローバル変数が追加されるたびにインデックスが追加される。
 ```c++

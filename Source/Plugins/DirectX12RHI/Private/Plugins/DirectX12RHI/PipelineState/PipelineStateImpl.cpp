@@ -101,7 +101,7 @@ namespace ob::rhi::dx12 {
 		ComPtr<ID3D12PipelineState> pipelineState;
 		result = rDevice.getNative()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateGraphicsPipelineState()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateGraphicsPipelineState()");
 			return;
 		}
 

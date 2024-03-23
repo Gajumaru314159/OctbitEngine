@@ -269,7 +269,7 @@ namespace ob::graphics {
 		{
 			PipelineStateDesc desc;
 
-			desc.name = TC("Material");
+			desc.name = "Material";
 			desc.colors = materialPass.colors;
 			desc.depth = materialPass.depth;
 			//TODO RootSignatureをマテリアル内部に閉じ込める

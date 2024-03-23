@@ -10,7 +10,7 @@
 namespace ob::platform {
 
     String TextInput::GetText() {
-        return TC("");
+        return "";
     }
     size_t TextInput::UpdateText(StringView text, size_t cursor, TextInputMode mode) {
         return 0;
@@ -19,7 +19,7 @@ namespace ob::platform {
         return 0;
     }
     String TextInput::GetEditingText() {
-        return TC("");
+        return "";
     }
 
 

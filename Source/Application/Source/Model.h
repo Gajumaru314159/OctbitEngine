@@ -35,7 +35,7 @@ public:
 	}
 
 	void setMatrix(const Matrix& matrix) {
-		m_material->setMatrix(TC("Matrix"), matrix);
+		m_material->setMatrix("Matrix", matrix);
 	}
 
 private:
@@ -124,7 +124,7 @@ private:
 				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),
 			}
 			);
-			desc.name = TC("Common");
+			desc.name = "Common";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
 		}
@@ -194,7 +194,7 @@ PsOut PS_Main(PsIn i){
 		{
 
 			MaterialPass pass;
-			pass.renderTag = TC("Opaque");
+			pass.renderTag = "Opaque";
 
 			pass.rasterizer.cullMode = CullMode::None;
 			pass.depthStencil.depth.enable = true;
@@ -206,16 +206,16 @@ PsOut PS_Main(PsIn i){
 			pass.rootSignature = signature;
 
 			MaterialDesc desc;
-			desc.colorProperties = { TC("Color") };
-			desc.matrixProperties = { TC("Matrix") };
-			desc.textureProperties = { TC("Main") };
+			desc.colorProperties = { "Color" };
+			desc.matrixProperties = { "Matrix" };
+			desc.textureProperties = { "Main" };
 			desc.passes[pass.renderTag] = pass;
 
 			m_material = Material::Create(desc);
 			m_material->reserve(m_mesh);
-			m_material->setColor(TC("Color"), Color::White);
-			m_material->setMatrix(TC("Matrix"), Matrix::Identity);
-			m_material->setTexture(TC("Main"), m_texture);
+			m_material->setColor("Color", Color::White);
+			m_material->setMatrix("Matrix", Matrix::Identity);
+			m_material->setTexture("Main", m_texture);
 		}
 	}
 

@@ -86,7 +86,7 @@ namespace ob::core {
         auto pHeap = s_heaps[index];
 
         if (pHeap == nullptr) {
-            static MallocAllocator systemHeap(TC("Default Allocator"));
+            static MallocAllocator systemHeap("Default Allocator");
             return systemHeap;
         }
 
@@ -106,7 +106,7 @@ namespace ob::core {
         auto pHeap = s_debugHeaps[index];
 
         if (pHeap == nullptr) {
-            static MallocAllocator systemHeap(TC("Default Debug Allocator"));
+            static MallocAllocator systemHeap("Default Debug Allocator");
             return systemHeap;
         }
 

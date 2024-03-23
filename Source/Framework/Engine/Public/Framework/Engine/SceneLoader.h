@@ -24,7 +24,7 @@ namespace ob::engine {
 
 			Func<void(SceneLoader&)> f = &SceneLoader::load;
 
-			Thread loadThread(Format(TC("SceneLoader [{}]"), path), std::bind(f, *this));
+			Thread loadThread(Format("SceneLoader [{}]", path), std::bind(f, *this));
 
 		}
 

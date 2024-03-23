@@ -24,7 +24,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	Scene::Scene(StringView name) {
 		m_name = name;
-		if (auto entity = Entity::Create(Format(TC("Root({})"),name))) {
+		if (auto entity = Entity::Create(Format("Root({})",name))) {
 			m_hRootEntity = entity->getHandle();
 		}
 

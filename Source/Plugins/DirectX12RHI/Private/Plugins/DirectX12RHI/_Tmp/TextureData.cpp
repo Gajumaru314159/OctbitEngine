@@ -154,7 +154,7 @@ namespace ob::rhi
 				unsigned int  b_mask = header.ddspf.BBitMask;
 				unsigned int  a_mask = header.ddspf.ABitMask;
 			} else {
-				LOG_ERROR("不正なDDSファイル[fourCC={}, path={}]", TC("aa"), path);
+				LOG_ERROR("不正なDDSファイル[fourCC={}, path={}]", "aa", path);
 				return;
 			}
 

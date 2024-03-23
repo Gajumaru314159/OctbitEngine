@@ -129,15 +129,15 @@ namespace ob::core {
 			if (str.empty())continue;
 
 			// コメント
-			if (str.starts_with(TC(';')) || str.starts_with(TC('#'))) continue;
+			if (str.starts_with(';') || str.starts_with('#')) continue;
 
 			// セクション
-			if (str.starts_with(TC('[')) && str.ends_with(TC(']'))) {
+			if (str.starts_with('[') && str.ends_with(']')) {
 				section = str.substr(1, str.size() - 2).trim();
 				continue;
 			}
 
-			auto equalPos = str.find(TC('='));
+			auto equalPos = str.find('=');
 
 			if (equalPos == str.npos)continue;
 

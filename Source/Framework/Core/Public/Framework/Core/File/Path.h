@@ -229,7 +229,7 @@ template <> struct fmt::formatter<ob::core::Path, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::Path& path, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{}"), path.string());
+		return format_to(ctx.out(), "{}", path.string());
 	}
 };
 //! @endcond

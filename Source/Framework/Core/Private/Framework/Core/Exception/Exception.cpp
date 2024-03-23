@@ -12,7 +12,7 @@ namespace ob::core {
     //! @brief	コンストラクタ
     //@―---------------------------------------------------------------------------
     Exception::Exception()
-        :Exception(TC("")) {
+        :Exception("") {
 
     }
 

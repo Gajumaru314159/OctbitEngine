@@ -122,7 +122,7 @@ namespace ob::imgui {
 		io.BackendRendererName = "OctbitEngine";
 		io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;  // 大きなメッシュを使用できるようにする
 
-		FileStream file(TC("Asset/Font/ipaexg.ttf"));
+		FileStream file("Asset/Font/ipaexg.ttf");
 		Blob blob(file);
 		if (blob) {
 			ImFontConfig config;
@@ -135,40 +135,40 @@ namespace ob::imgui {
 		Ref<Shader> ps;
 		{
 			String code;
-			code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-			code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-			code.append(TC("cbuffer vertexBuffer : register(b0) {							\n"));
-			code.append(TC("	float4x4 proj;												\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// IN / OUT														\n"));
-			code.append(TC("struct VsIn {													\n"));
-			code.append(TC("  float2 pos	:POSITION;										\n"));
-			code.append(TC("  float2 uv	    :TEXCOORD0;										\n"));
-			code.append(TC("  float4 color	:COLOR0;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsIn {													\n"));
-			code.append(TC("  float4 pos	:SV_POSITION;									\n"));
-			code.append(TC("  float2 uv	    :TEXCOORD0;										\n"));
-			code.append(TC("  float4 color	:COLOR0;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// エントリ														\n"));
-			code.append(TC("struct PsOut {													\n"));
-			code.append(TC("  float4 color0	:SV_TARGET0;									\n"));
-			code.append(TC("  float4 color1	:SV_TARGET1;									\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
-			code.append(TC("    PsIn o;														\n"));
-			code.append(TC("    o.pos = mul( proj, float4(i.pos.xy, 0, 1));					\n"));
-			code.append(TC("    o.color = i.color;								            \n"));
-			code.append(TC("    o.uv  = i.uv;				                                \n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
-			code.append(TC("PsOut PS_Main(PsIn i){											\n"));
-			code.append(TC("	PsOut o;													\n"));
-			code.append(TC("	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"));
-			code.append(TC("	o.color1 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"));
-			code.append(TC("    return o;											        \n"));
-			code.append(TC("}																\n"));
+			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("Texture2D g_mainTex:register(t0);								\n");
+			code.append("cbuffer vertexBuffer : register(b0) {							\n");
+			code.append("	float4x4 proj;												\n");
+			code.append("};																\n");
+			code.append("// IN / OUT														\n");
+			code.append("struct VsIn {													\n");
+			code.append("  float2 pos	:POSITION;										\n");
+			code.append("  float2 uv	    :TEXCOORD0;										\n");
+			code.append("  float4 color	:COLOR0;										\n");
+			code.append("};																\n");
+			code.append("struct PsIn {													\n");
+			code.append("  float4 pos	:SV_POSITION;									\n");
+			code.append("  float2 uv	    :TEXCOORD0;										\n");
+			code.append("  float4 color	:COLOR0;										\n");
+			code.append("};																\n");
+			code.append("// エントリ														\n");
+			code.append("struct PsOut {													\n");
+			code.append("  float4 color0	:SV_TARGET0;									\n");
+			code.append("  float4 color1	:SV_TARGET1;									\n");
+			code.append("};																\n");
+			code.append("PsIn VS_Main(VsIn i) {											\n");
+			code.append("    PsIn o;														\n");
+			code.append("    o.pos = mul( proj, float4(i.pos.xy, 0, 1));					\n");
+			code.append("    o.color = i.color;								            \n");
+			code.append("    o.uv  = i.uv;				                                \n");
+			code.append("    return o;													\n");
+			code.append("}																\n");
+			code.append("PsOut PS_Main(PsIn i){											\n");
+			code.append("	PsOut o;													\n");
+			code.append("	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n");
+			code.append("	o.color1 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n");
+			code.append("    return o;											        \n");
+			code.append("}																\n");
 
 			vs = Shader::CompileVS(code);
 			ps = Shader::CompilePS(code);
@@ -186,14 +186,14 @@ namespace ob::imgui {
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
 				);
-			desc.name = TC("::ImGui");
+			desc.name = "::ImGui";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
 		}
 
 		{
 			PipelineStateDesc desc;
-			desc.name = TC("::ImGui");
+			desc.name = "::ImGui";
 			desc.renderPass = renderPass;
 			desc.subpass = subpass;
 
@@ -607,7 +607,7 @@ namespace ob::imgui {
 		}
 
 		// 生成
-		bd->fontTexture = rhi::Texture::Create(TC("ImGuiFont"), Size(width, height), colors);
+		bd->fontTexture = rhi::Texture::Create("ImGuiFont", Size(width, height), colors);
 		if (!bd->fontTexture)
 			return false;
 
@@ -674,7 +674,7 @@ namespace ob::imgui {
 			bd->vertexCount = (u64)draw_data->TotalVtxCount + 5000;
 
 			BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(bd->vertexCount);
-			desc.name = TC("::ImGui");
+			desc.name = "::ImGui";
 			bd->vertexBuffer = Buffer::Create(desc);
 
 			if (bd->vertexBuffer)
@@ -685,7 +685,7 @@ namespace ob::imgui {
 			bd->indexCount = (u64)draw_data->TotalIdxCount + 10000;
 
 			BufferDesc desc = BufferDesc::Index<ImDrawIdx>(bd->indexCount);
-			desc.name = TC("::ImGui");
+			desc.name = "::ImGui";
 			bd->indexBuffer = Buffer::Create(desc);
 
 			if (bd->indexBuffer)

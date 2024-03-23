@@ -16,7 +16,7 @@ namespace ob::core {
     //! @brief	                コンストラクタ
     //@―---------------------------------------------------------------------------
     SystemHeap::SystemHeap() {
-        m_pName = TC("SystemHeap");
+        m_pName = "SystemHeap";
         m_handle = ::HeapCreate(NULL, 0, 0);
     }
 

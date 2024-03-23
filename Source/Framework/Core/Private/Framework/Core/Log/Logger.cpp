@@ -27,15 +27,15 @@ namespace ob::core {
             if(log.level!=LogLevel::Trace){
                 StringView typeName;
                 switch (log.level) {
-                case LogLevel::Fatal:   typeName = TC("\033[35m[Fatal]  \033[0m"); break;// マゼンタ
-                case LogLevel::Error:   typeName = TC("\033[31m[Error]  \033[0m"); break;// 赤
-                case LogLevel::Warning: typeName = TC("\033[33m[Warning]\033[0m"); break;// 黄色
-                case LogLevel::Info:    typeName = TC("\033[36m[Info]   \033[0m"); break;// シアン
-                case LogLevel::Trace:   typeName = TC("\033[38;2;128;128;128m[Trace]  "); break;// グレー
-                default:                typeName = TC("\033[32m[Unknown]\033[0m"); break;// 緑
+                case LogLevel::Fatal:   typeName = "\033[35m[Fatal]  \033[0m"; break;// マゼンタ
+                case LogLevel::Error:   typeName = "\033[31m[Error]  \033[0m"; break;// 赤
+                case LogLevel::Warning: typeName = "\033[33m[Warning]\033[0m"; break;// 黄色
+                case LogLevel::Info:    typeName = "\033[36m[Info]   \033[0m"; break;// シアン
+                case LogLevel::Trace:   typeName = "\033[38;2;128;128;128m[Trace]  "; break;// グレー
+                default:                typeName = "\033[32m[Unknown]\033[0m"; break;// 緑
                 }
                 // フォーマット
-                auto msg = Format (TC("{} {}"), typeName, log.message);
+                auto msg = Format ("{} {}", typeName, log.message);
                 WString ws;
                 StringEncoder::Encode(msg, ws);
 
@@ -48,15 +48,15 @@ namespace ob::core {
             if (log.level != LogLevel::Trace || true) {
                 StringView typeName;
                 switch (log.level) {
-                case LogLevel::Fatal:   typeName = TC("[Fatal]  "); break;
-                case LogLevel::Error:   typeName = TC("[Error]  "); break;
-                case LogLevel::Warning: typeName = TC("[Warning]"); break;
-                case LogLevel::Info:    typeName = TC("[Info]   "); break;
-                case LogLevel::Trace:   typeName = TC("[Trace]  "); break;
-                default:                typeName = TC("[Unknown]"); break;
+                case LogLevel::Fatal:   typeName = "[Fatal]  "; break;
+                case LogLevel::Error:   typeName = "[Error]  "; break;
+                case LogLevel::Warning: typeName = "[Warning]"; break;
+                case LogLevel::Info:    typeName = "[Info]   "; break;
+                case LogLevel::Trace:   typeName = "[Trace]  "; break;
+                default:                typeName = "[Unknown]"; break;
                 }
                 // フォーマット
-                auto msg = Format(TC("{} {}\n{}({})\n"), typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
+                auto msg = Format("{} {}\n{}({})\n", typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
                 WString ws;
                 StringEncoder::Encode(msg, ws);
 
@@ -65,7 +65,7 @@ namespace ob::core {
 
                 bool outputLine = false;
                 if (outputLine) {
-                    auto msg2 = Format(TC("{}({})\n"), log.sourceLocation.filePath, log.sourceLocation.line);
+                    auto msg2 = Format("{}({})\n", log.sourceLocation.filePath, log.sourceLocation.line);
                     StringEncoder::Encode(msg2, ws);
                     ::OutputDebugLog(ws.c_str());
                 }
@@ -85,7 +85,7 @@ namespace ob::core {
                 ::OutputDebugLog(L"********************");
                 StackTrace stack;
                 for (auto& s : stack.elements()) {
-                    auto msg2 = Format(TC("{}\n{}({})\n"), s.name,s.filename, s.line);
+                    auto msg2 = Format("{}\n{}({})\n", s.name,s.filename, s.line);
                     WString ws;
                     StringEncoder::Encode(msg2, ws);
                     ::OutputDebugLog(ws.c_str());

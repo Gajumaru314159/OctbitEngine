@@ -28,7 +28,7 @@ namespace ob::rhi::dx12 {
 
 			result = device.getNative()->CreateCommandQueue(&desc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, TC("ID3D12Device::CreatteCommandQueue()"));
+				Utility::OutputFatalLog(result, "ID3D12Device::CreatteCommandQueue()");
 				return;
 			}
 		}
@@ -36,13 +36,13 @@ namespace ob::rhi::dx12 {
 		{
 			result = device.getNative()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(m_fence.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, TC("ID3D12Device::CreateFence()"));
+				Utility::OutputFatalLog(result, "ID3D12Device::CreateFence()");
 				return;
 			}
 		}
 
-		Utility::SetName(m_commandQueue.Get(), TC("System Command Queue"));
-		Utility::SetName(m_fence.Get(), TC("System Fence"));
+		Utility::SetName(m_commandQueue.Get(), "System Command Queue");
+		Utility::SetName(m_fence.Get(), "System Fence");
 
 	}
 
@@ -77,7 +77,7 @@ namespace ob::rhi::dx12 {
 	void CommandQueue::setName(StringView name) {
 		Utility::SetName(m_commandQueue.Get(), name);
 
-		String fenceName = Format(TC("{}_Fence"), name);
+		String fenceName = Format("{}_Fence", name);
 		Utility::SetName(m_fence.Get(), fenceName);
 	}
 

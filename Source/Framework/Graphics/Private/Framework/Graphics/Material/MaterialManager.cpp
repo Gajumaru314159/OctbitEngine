@@ -53,8 +53,8 @@ namespace ob::graphics {
 				m_textureTable->setResource(i, rhi::Texture::White());
 			}
 		}
-		m_propertyMap.emplace(TC("LightDir"), ValuePropertyDesc{ PropertyType::Color,0 });
-		m_propertyMap.emplace(TC("Matrix"), ValuePropertyDesc{ PropertyType::Matrix,sizeof(Color)});
+		m_propertyMap.emplace("LightDir", ValuePropertyDesc{ PropertyType::Color,0 });
+		m_propertyMap.emplace("Matrix", ValuePropertyDesc{ PropertyType::Matrix,sizeof(Color)});
 	}
 
 	//@―---------------------------------------------------------------------------

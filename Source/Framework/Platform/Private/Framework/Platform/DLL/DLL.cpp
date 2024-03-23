@@ -22,7 +22,7 @@ namespace ob::platform {
         m_handle = nullptr;
 
         auto pathWithExt = path;
-        pathWithExt.replaceExtension(TC(".dll"));
+        pathWithExt.replaceExtension(".dll");
         
         WString fileNameW;
         StringEncoder::Encode(pathWithExt.string(), fileNameW);

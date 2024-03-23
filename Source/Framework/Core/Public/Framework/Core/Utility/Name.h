@@ -158,7 +158,7 @@ template <> struct fmt::formatter<ob::core::Name, ob::core::Char> {
 
     template<typename FormatContext>
     auto format(const ob::core::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), TC("{}"), value.toSV());
+        return format_to(ctx.out(), "{}", value.toSV());
     }
 };
 //! @endcond

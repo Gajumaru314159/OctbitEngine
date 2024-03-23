@@ -33,7 +33,7 @@ namespace ob::rhi {
 					colors[y * size + x] = f ? IntColor::White : IntColor::Gray;
 				}
 			}
-			m_presetTextures[PresetTexture::Check] = rhi.createTexture(TC("Check"), Size(size, size), colors);
+			m_presetTextures[PresetTexture::Check] = rhi.createTexture("Check", Size(size, size), colors);
 		}
 	}
 

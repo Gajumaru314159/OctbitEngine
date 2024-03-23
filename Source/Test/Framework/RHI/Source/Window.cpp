@@ -26,10 +26,10 @@ TEST(RHI, CreateEmpty) {
 	ASSERT_FALSE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
 	ASSERT_FALSE(Buffer::Create({}));
-	ASSERT_FALSE(Texture::Create(TC("Texture"), {}));
+	ASSERT_FALSE(Texture::Create("Texture", {}));
 	ASSERT_FALSE(RenderTexture::Create({}));
 	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));
-	ASSERT_FALSE(Shader::CompileVS(TC("")));
+	ASSERT_FALSE(Shader::CompileVS(""));
 
 }
 TEST(RHI, CreateEmptyDX12) {
@@ -48,10 +48,10 @@ TEST(RHI, CreateEmptyDX12) {
 	ASSERT_TRUE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
 	ASSERT_TRUE(Buffer::Create({}));
-	ASSERT_FALSE(Texture::Create(TC("Texture"), {}));
+	ASSERT_FALSE(Texture::Create("Texture", {}));
 	ASSERT_FALSE(RenderTexture::Create({}));
 	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));
-	ASSERT_FALSE(Shader::CompileVS(TC("")));
+	ASSERT_FALSE(Shader::CompileVS(""));
 
 }
 
@@ -70,14 +70,14 @@ TEST(RHI, ShowHide) {
 
 		// ウィンドウ生成
 		platform::WindowDesc windowDesc;
-		windowDesc.title = TC("Graphic Test");
+		windowDesc.title = "Graphic Test";
 		platform::Window window(windowDesc);
 
 		// ディスプレイ
 		Ref<Display> display;
 		{
 			DisplayDesc desc;
-			desc.name = TC("MainDisplay");
+			desc.name = "MainDisplay";
 			desc.window = window;
 			display = Display::Create(desc);
 			OB_ASSERT_EXPR(display);
@@ -87,7 +87,7 @@ TEST(RHI, ShowHide) {
 		Ref<RenderTexture> colorRT;
 		{
 			RenderTextureDesc desc;
-			desc.name = TC("ColorRT");
+			desc.name = "ColorRT";
 			desc.size = display->getDesc().size;
 			desc.format = TextureFormat::RGBA8;
 			desc.clear.color = Color::Black;
@@ -100,7 +100,7 @@ TEST(RHI, ShowHide) {
 		Ref<Shader> vs;
 		Ref<Shader> ps;
 		{
-			String code = TC(R"(
+			String code = R"(
 SamplerState g_mainSampler : register(s0);
 cbuffer Param : register(b0) {
 	float4 g_col;
@@ -130,7 +130,7 @@ PsOut PS_Main(PsIn i) {
 	o.color = color;
 	return o;
 }
-)");
+)";
 
 			vs = Shader::CompileVS(code);
 			ps = Shader::CompilePS(code);
@@ -147,7 +147,7 @@ PsOut PS_Main(PsIn i) {
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
 				);
-			desc.name = TC("Common");
+			desc.name = "Common";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
 		}
@@ -165,7 +165,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<PipelineState> pipeline;
 		{
 			PipelineStateDesc desc;
-			desc.name = TC("ModelDraw");
+			desc.name = "ModelDraw";
 			desc.colors = { TextureFormat::RGBA8 };
 
 			desc.rootSignature = signature;
@@ -188,7 +188,7 @@ PsOut PS_Main(PsIn i) {
 		CBuf cbuf;
 		{
 			BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
-			desc.name = TC("TestConstant");
+			desc.name = "TestConstant";
 			buffer = Buffer::Create(desc);
 			OB_ASSERT_EXPR(buffer);
 			buffer->updateDirect(cbuf, 0);
@@ -208,7 +208,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<Buffer> vertexBuffer;
 		{
 			auto desc = BufferDesc::Vertex<Vert>(vertices.size());
-			desc.name = TC("ModelVertices");
+			desc.name = "ModelVertices";
 			vertexBuffer = Buffer::Create(desc, BlobView(vertices));
 			OB_ASSERT_EXPR(vertexBuffer);
 		}
@@ -216,7 +216,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<Buffer> indexBuffer;
 		{
 			auto desc = BufferDesc::Vertex<u16>(indices.size());
-			desc.name = TC("ModelIndices");
+			desc.name = "ModelIndices";
 			indexBuffer = Buffer::Create(desc, BlobView(indices));
 			OB_ASSERT_EXPR(indexBuffer);
 		}
@@ -224,7 +224,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<CommandList> cmdList;
 		{
 			CommandListDesc desc;
-			desc.name = TC("MainCommandList");
+			desc.name = "MainCommandList";
 			desc.type = CommandListType::Graphic;
 			cmdList = CommandList::Create(desc);
 			OB_ASSERT_EXPR(cmdList);

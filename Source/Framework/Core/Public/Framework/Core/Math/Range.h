@@ -129,7 +129,7 @@ template <> struct fmt::formatter<ob::core::Range, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(ob::core::Range value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("({:.5},{:.5})"), value.min,value.max);
+		return format_to(ctx.out(), "({:.5},{:.5})", value.min,value.max);
 	}
 };
 //! @endcond

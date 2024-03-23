@@ -15,7 +15,7 @@ namespace ob::core {
 		//! @brief  関数名のPrefixを取得
 		//@―---------------------------------------------------------------------------
 		constexpr StringView GetTypeNamePrefix(void) {
-			return TC(FUNC_NAME);
+			return FUNC_NAME;
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -24,17 +24,17 @@ namespace ob::core {
 		template<class T>
 		constexpr StringView GetTypeName() {
 
-			constexpr StringView signature = TC(FUNC_NAME);
+			constexpr StringView signature = FUNC_NAME;
 
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
 			constexpr size_t prefix2 = GetTypeNamePrefix().size() - std::size("Prefix(void)") + std::size("<");
-			constexpr size_t suffix = StringView(TC(">(void)")).size();
+			constexpr size_t suffix = StringView(">(void)").size();
 			constexpr size_t prefix = prefix2 +
 				(
-					signature.substr(prefix2).starts_with(TC("enum ")) ? std::size("enum") :
-					signature.substr(prefix2).starts_with(TC("class ")) ? std::size("class") :
-					signature.substr(prefix2).starts_with(TC("struct ")) ? std::size("struct") : 0
+					signature.substr(prefix2).starts_with("enum ") ? std::size("enum") :
+					signature.substr(prefix2).starts_with("class ") ? std::size("class") :
+					signature.substr(prefix2).starts_with("struct ") ? std::size("struct") : 0
 				);
 
 			constexpr StringView name = signature.substr(prefix, signature.size() - prefix - suffix);

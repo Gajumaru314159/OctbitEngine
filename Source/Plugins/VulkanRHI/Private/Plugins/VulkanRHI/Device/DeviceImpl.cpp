@@ -19,25 +19,25 @@ namespace ob::rhi::vulkan {
 	{
 		if ((flags & VK_DEBUG_REPORT_INFORMATION_BIT_EXT) != 0)
 		{
-			return TC("INFO");
+			return "INFO";
 		}
 		if ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) != 0)
 		{
-			return TC("WARNING");
+			return "WARNING";
 		}
 		if ((flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) != 0)
 		{
-			return TC("PERFORMANCE_WARNING");
+			return "PERFORMANCE_WARNING";
 		}
 		if ((flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) != 0)
 		{
-			return TC("ERROR");
+			return "ERROR";
 		}
 		if ((flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) != 0)
 		{
-			return TC("DEBUG");
+			return "DEBUG";
 		}
-		return TC("OTHER");
+		return "OTHER";
 	}
 
 	//@―---------------------------------------------------------------------------

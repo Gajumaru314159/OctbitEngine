@@ -29,13 +29,13 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  HRESULTのエラーログを出力
         //@―---------------------------------------------------------------------------
-        static void OutputErrorLog(HRESULT result, StringView message = TC(""));
+        static void OutputErrorLog(HRESULT result, StringView message = "");
 
 
         //@―---------------------------------------------------------------------------
         //! @brief  HRESULTのFatalログを出力
         //@―---------------------------------------------------------------------------
-        static void OutputFatalLog(HRESULT result, StringView message = TC(""));
+        static void OutputFatalLog(HRESULT result, StringView message = "");
 
         
         //@―---------------------------------------------------------------------------

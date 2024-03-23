@@ -41,8 +41,8 @@ void OctbitInit(ServiceInjector& injector){
 	{
 		RHIConfig c;
 		c.rhiPriorities = {
-			TC("DirectX12"),
-			TC("Vulkan"),
+			"DirectX12",
+			"Vulkan",
 		};
 		c.enablePIX = true;
 		injector.bind(c);

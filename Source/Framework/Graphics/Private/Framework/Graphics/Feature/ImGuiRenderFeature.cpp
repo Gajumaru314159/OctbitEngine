@@ -403,7 +403,7 @@ namespace ob::graphics {
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
 				);
-				desc.name = TC("::ImGui");
+				desc.name = "::ImGui";
 				signature = RootSignature::Create(desc);
 				OB_ASSERT_EXPR(signature);
 			}
@@ -412,40 +412,40 @@ namespace ob::graphics {
 			Ref<Shader> ps;
 			{
 				String code =
-					TC("SamplerState g_mainSampler:register(s0);						\n")
-					TC("Texture2D g_mainTex:register(t0);								\n")
-					TC("cbuffer vertexBuffer : register(b0) {							\n")
-					TC("	float4x4 proj;												\n")
-					TC("};																\n")
-					TC("// IN / OUT														\n")
-					TC("struct VsIn {													\n")
-					TC("  float2 pos	:POSITION;										\n")
-					TC("  float2 uv	    :TEXCOORD0;										\n")
-					TC("  float4 color	:COLOR0;										\n")
-					TC("};																\n")
-					TC("struct PsIn {													\n")
-					TC("  float4 pos	:SV_POSITION;									\n")
-					TC("  float2 uv	    :TEXCOORD0;										\n")
-					TC("  float4 color	:COLOR0;										\n")
-					TC("};																\n")
-					TC("// エントリ														\n")
-					TC("struct PsOut {													\n")
-					TC("  float4 color0	:SV_TARGET0;									\n")
-					TC("  float4 color1	:SV_TARGET1;									\n")
-					TC("};																\n")
-					TC("PsIn VS_Main(VsIn i) {											\n")
-					TC("    PsIn o;														\n")
-					TC("    o.pos = mul( proj, float4(i.pos.xy, 0, 1));					\n")
-					TC("    o.color = i.color;								            \n")
-					TC("    o.uv  = i.uv;				                                \n")
-					TC("    return o;													\n")
-					TC("}																\n")
-					TC("PsOut PS_Main(PsIn i){											\n")
-					TC("	PsOut o;													\n")
-					TC("	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n")
-					TC("	o.color1 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n")
-					TC("    return o;											        \n")
-					TC("}																\n");
+					"SamplerState g_mainSampler:register(s0);						\n"
+					"Texture2D g_mainTex:register(t0);								\n"
+					"cbuffer vertexBuffer : register(b0) {							\n"
+					"	float4x4 proj;												\n"
+					"};																\n"
+					"// IN / OUT														\n"
+					"struct VsIn {													\n"
+					"  float2 pos	:POSITION;										\n"
+					"  float2 uv	    :TEXCOORD0;										\n"
+					"  float4 color	:COLOR0;										\n"
+					"};																\n"
+					"struct PsIn {													\n"
+					"  float4 pos	:SV_POSITION;									\n"
+					"  float2 uv	    :TEXCOORD0;										\n"
+					"  float4 color	:COLOR0;										\n"
+					"};																\n"
+					"// エントリ														\n"
+					"struct PsOut {													\n"
+					"  float4 color0	:SV_TARGET0;									\n"
+					"  float4 color1	:SV_TARGET1;									\n"
+					"};																\n"
+					"PsIn VS_Main(VsIn i) {											\n"
+					"    PsIn o;														\n"
+					"    o.pos = mul( proj, float4(i.pos.xy, 0, 1));					\n"
+					"    o.color = i.color;								            \n"
+					"    o.uv  = i.uv;				                                \n"
+					"    return o;													\n"
+					"}																\n"
+					"PsOut PS_Main(PsIn i){											\n"
+					"	PsOut o;													\n"
+					"	o.color0 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"
+					"	o.color1 = g_mainTex.Sample(g_mainSampler,i.uv)*i.color;	\n"
+					"    return o;											        \n"
+					"}																\n";
 
 				vs = Shader::CompileVS(code);
 				ps = Shader::CompilePS(code);
@@ -454,7 +454,7 @@ namespace ob::graphics {
 
 			{
 				PipelineStateDesc desc;
-				desc.name = TC("::ImGui");
+				desc.name = "::ImGui";
 				desc.colors = {};
 
 				desc.rootSignature = signature;
@@ -485,7 +485,7 @@ namespace ob::graphics {
 
 			// フォント読み込み
 			// TODO ビューごとにリソースを生成する必要はないのでImGuiFeatureに共有リソースを登録しておく
-			FileStream file(TC("Asset/Font/ipaexg.ttf"));
+			FileStream file("Asset/Font/ipaexg.ttf");
 			if (Blob blob(file); blob) {
 				ImFontConfig config;
 				m_fontBlod = ::ImGui::MemAlloc(blob.size());
@@ -512,7 +512,7 @@ namespace ob::graphics {
 			}
 
 			// グラフィックリソース生成
-			m_fontTexture = rhi::Texture::Create(TC("ImGuiFont"), Size(width, height), colors);
+			m_fontTexture = rhi::Texture::Create("ImGuiFont", Size(width, height), colors);
 			m_fontTextureTable = rhi::DescriptorTable::Create(rhi::DescriptorHeapType::CBV_SRV_UAV, 1);
 			m_fontTextureTable->setResource(0, m_fontTexture);
 
@@ -731,7 +731,7 @@ namespace ob::graphics {
 				auto newSize = (u64)draw_data->TotalVtxCount + overAllocVertexSize;
 
 				BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(newSize);
-				desc.name = TC("::ImGui");
+				desc.name = "::ImGui";
 				m_vertexBuffer = Buffer::Create(desc);
 				m_vertexCount = newSize;
 			}
@@ -742,7 +742,7 @@ namespace ob::graphics {
 				auto newSize = (u64)draw_data->TotalIdxCount + overAllocIndexSize;
 
 				BufferDesc desc = BufferDesc::Index<ImDrawIdx>(m_indexCount);
-				desc.name = TC("::ImGui");
+				desc.name = "::ImGui";
 				m_indexBuffer = Buffer::Create(desc);
 				m_indexCount = newSize;
 			}

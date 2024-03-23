@@ -20,7 +20,7 @@ namespace ob::platform {
     //! @brief  ウィンドウ生成設定
     //@―---------------------------------------------------------------------------
     struct WindowDesc {
-        String      title = TC("NONAME");			//!< ウィンドウタイトル
+        String      title = "NONAME";			//!< ウィンドウタイトル
         Vec2		clientSize{ 1280, 720};	        //!< クライアント領域のピクセルサイズ
         WindowMode	mode = WindowMode::Window;      //!< フルスクリーンモードで作成するかどうか
         bool		resizable = true;				//!< 可変ウィンドウとして作成するかどうか

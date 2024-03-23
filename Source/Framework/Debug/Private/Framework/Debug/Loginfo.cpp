@@ -18,11 +18,11 @@ namespace ob::debug {
 		m_levelColors[LogLevel::Info] = Color::Cyan;
 		m_levelColors[LogLevel::Trace] = Color(0.7f);
 
-		m_levelNames[LogLevel::Fatal] = TC("Fatal");
-		m_levelNames[LogLevel::Error] = TC("Error");
-		m_levelNames[LogLevel::Warning] = TC("Warning");
-		m_levelNames[LogLevel::Info] = TC("Info");
-		m_levelNames[LogLevel::Trace] = TC("Trace");
+		m_levelNames[LogLevel::Fatal] = "Fatal";
+		m_levelNames[LogLevel::Error] = "Error";
+		m_levelNames[LogLevel::Warning] = "Warning";
+		m_levelNames[LogLevel::Info] = "Info";
+		m_levelNames[LogLevel::Trace] = "Trace";
 
 		m_levelFilter[LogLevel::Fatal] = true;
 		m_levelFilter[LogLevel::Error] = true;
@@ -48,8 +48,8 @@ namespace ob::debug {
 				cache.datetime = DateTime::Now();
 				cache.level = log.level;
 				cache.message = log.message;
-				cache.file = Format(TC("{}({})"), Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
-				cache.line = Format(TC("{}({})"),log.sourceLocation.filePath, log.sourceLocation.line);
+				cache.file = Format("{}({})", Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
+				cache.line = Format("{}({})",log.sourceLocation.filePath, log.sourceLocation.line);
 				cache.count = 1;
 				
 			}
@@ -147,7 +147,7 @@ namespace ob::debug {
 					ImGui::Text("%d", log.count);
 
 					ImGui::TableNextColumn();
-					ImGui::TextUnformatted(ImGui::ToImChars(Format(TC("{}"), log.datetime.toString(TC("HH:mm:ss.ff")))));
+					ImGui::TextUnformatted(ImGui::ToImChars(Format("{}", log.datetime.toString("HH:mm:ss.ff"))));
 
 					ImGui::TableNextColumn();
 					ImGui::TextUnformatted(ImGui::ToImChars(log.file));
@@ -159,7 +159,7 @@ namespace ob::debug {
 						if (ImGui::BeginPopupContextItem("##Popup"))
 						{
 							if (ImGui::Selectable("Copy")) {
-								ImGui::SetClipboardText(ImGui::ToImChars(Format(TC("[{}]\n{}\n{}\n{}"), m_levelNames[log.level],log.message, log.line, log.datetime.toString(TC("HH:mm:ss.ff")))));
+								ImGui::SetClipboardText(ImGui::ToImChars(Format("[{}]\n{}\n{}\n{}", m_levelNames[log.level],log.message, log.line, log.datetime.toString("HH:mm:ss.ff"))));
 							}
 							ImGui::EndPopup();
 						}

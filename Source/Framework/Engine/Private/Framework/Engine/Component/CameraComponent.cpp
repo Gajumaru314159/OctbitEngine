@@ -38,7 +38,7 @@ namespace ob::engine {
 		return m_fovY;
 	}
 	void CameraComponent::setFov(f32 value) {
-		if (setProperty(m_fovY, value, TC("FovY"))) {
+		if (setProperty(m_fovY, value, "FovY")) {
 			m_camera->setFov(value);
 		}
 	}
@@ -50,7 +50,7 @@ namespace ob::engine {
 		return m_clipRange;
 	}
 	void CameraComponent::setClipRange(Range value) {
-		if (setProperty(m_clipRange, value, TC("ClipRange"))) {
+		if (setProperty(m_clipRange, value, "ClipRange")) {
 			m_camera->setClipRange(value);
 		}
 	}
@@ -62,7 +62,7 @@ namespace ob::engine {
 		return m_type;
 	}
 	void CameraComponent::setCameraType(graphics::CameraType value) {
-		if (setProperty(m_type, value, TC("CameraType"))) {
+		if (setProperty(m_type, value, "CameraType")) {
 			m_camera->setCameraType(value);
 		}
 	}
@@ -74,7 +74,7 @@ namespace ob::engine {
 		return m_rect;
 	}
 	void CameraComponent::setVieportRect(Rect value) {
-		if (setProperty(m_rect, value, TC("ViewportRect"))) {
+		if (setProperty(m_rect, value, "ViewportRect")) {
 			m_camera->setVieportRect(m_rect);
 		}
 	}
@@ -86,7 +86,7 @@ namespace ob::engine {
 		return m_clearColor;
 	}
 	void CameraComponent::setClearColor(const Color& value) {
-		setProperty(m_clearColor, value, TC("ClearColor"));
+		setProperty(m_clearColor, value, "ClearColor");
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ namespace ob::engine {
 		return m_display;
 	}
 	void CameraComponent::setDisplay(s32 displayNo) {
-		setProperty(m_display, displayNo, TC("Display"));
+		setProperty(m_display, displayNo, "Display");
 	}
 
 	//@―---------------------------------------------------------------------------

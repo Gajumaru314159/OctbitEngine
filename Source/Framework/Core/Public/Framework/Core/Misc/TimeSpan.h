@@ -356,11 +356,11 @@ template <> struct fmt::formatter<ob::core::TimeSpan, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::TimeSpan& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		if (value.days())return format_to(ctx.out(), TC("{}d{:0>2}h{:0>2}m"), value.days(), value.hours(), value.minutes());
-		if (value.hours())return format_to(ctx.out(), TC("{:0>2}h{:0>2}m{:0>2}s"), value.hours(), value.minutes(), value.seconds());
-		if (value.minutes())return format_to(ctx.out(), TC("{:0>2}m{:.5}s"), value.minutes(), value.secondsF());
-		if (value.seconds())return format_to(ctx.out(), TC("{:.5}s"), value.secondsF());
-		return format_to(ctx.out(), TC("{}ticks"), value.totalTicks());
+		if (value.days())return format_to(ctx.out(), "{}d{:0>2}h{:0>2}m", value.days(), value.hours(), value.minutes());
+		if (value.hours())return format_to(ctx.out(), "{:0>2}h{:0>2}m{:0>2}s", value.hours(), value.minutes(), value.seconds());
+		if (value.minutes())return format_to(ctx.out(), "{:0>2}m{:.5}s", value.minutes(), value.secondsF());
+		if (value.seconds())return format_to(ctx.out(), "{:.5}s", value.secondsF());
+		return format_to(ctx.out(), "{}ticks", value.totalTicks());
 	}
 };
 //! @endcond

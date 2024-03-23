@@ -39,7 +39,7 @@ namespace ob::rhi::dx12 {
 
 		if (FAILED(result))
 		{
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
 			return;
 		}
 
@@ -120,7 +120,7 @@ namespace ob::rhi::dx12 {
 		result = m_resource->Map(0, nullptr, (void**)&ptr);
 		if (FAILED(result))
 		{
-			Utility::OutputFatalLog(result, TC("ID3D12Resource::Map()"));
+			Utility::OutputFatalLog(result, "ID3D12Resource::Map()");
 			return;
 		}
 		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
@@ -143,7 +143,7 @@ namespace ob::rhi::dx12 {
 		result = m_resource->Map(0, nullptr, (void**)&ptr);
 		if (FAILED(result))
 		{
-			Utility::OutputFatalLog(result, TC("ID3D12Resource::Map()"));
+			Utility::OutputFatalLog(result, "ID3D12Resource::Map()");
 			return;
 		}
 

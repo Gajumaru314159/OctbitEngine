@@ -20,6 +20,7 @@ add_definitions(-D_UNICODE -DUNICODE)                               # 文字リ�
 add_definitions(/Zc:__cplusplus)                                    # __cplusplusを使えるようにする
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")            # UTF-8を強制する
 
 #------------------------------------------------------------------------------
 # パス設定

@@ -115,7 +115,7 @@ namespace ob::rhi::dx12 {
 			(IDXGISwapChain**)m_swapChain.ReleaseAndGetAddressOf());
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("IDXGIFactory::CreateSwapChain()"));
+			Utility::OutputFatalLog(result, "IDXGIFactory::CreateSwapChain()");
 			return false;
 		}
 
@@ -169,11 +169,11 @@ namespace ob::rhi::dx12 {
 			result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				// 生成が正しければ呼ばれないはず
-				Utility::OutputFatalLog(result, TC("IDXGIDisplay::GetBuffer()"));
+				Utility::OutputFatalLog(result, "IDXGIDisplay::GetBuffer()");
 				return false;
 			}
 
-			auto name = Format(TC("{}_{}"), m_desc.name, i);
+			auto name = Format("{}_{}", m_desc.name, i);
 
 			auto& texture = m_textures.emplace_back(new TextureImpl(rDevice, resource, D3D12_RESOURCE_STATE_PRESENT, name));
 
@@ -200,7 +200,7 @@ namespace ob::rhi::dx12 {
 				{-1,+1},
 			};
 			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
-			bdesc.name = m_desc.name + TC("_Vertices");
+			bdesc.name = m_desc.name + "_Vertices";
 			m_verices = Buffer::Create(bdesc);
 			m_verices->updateDirect(bdesc.bufferSize, vertices);
 		}
@@ -209,26 +209,26 @@ namespace ob::rhi::dx12 {
 		Ref<Shader> ps;
 		{
 			String code;
-			code.append(TC("SamplerState g_mainSampler:register(s0);						\n"));
-			code.append(TC("Texture2D g_mainTex:register(t0);								\n"));
-			code.append(TC("// IN / OUT														\n"));
-			code.append(TC("struct VsIn {													\n"));
-			code.append(TC("  float2 pos	:POSITION;										\n"));
-			code.append(TC("};																\n"));
-			code.append(TC("struct PsIn {													\n"));
-			code.append(TC("  float4 pos	:SV_POSITION;									\n"));
-			code.append(TC("  float2 uv	    :TEXCOORD;									    \n"));
-			code.append(TC("};																\n"));
-			code.append(TC("// エントリ														\n"));
-			code.append(TC("PsIn VS_Main(VsIn i) {											\n"));
-			code.append(TC("    PsIn o;														\n"));
-			code.append(TC("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n"));
-			code.append(TC("    o.uv = i.pos.xy;								            \n"));
-			code.append(TC("    return o;													\n"));
-			code.append(TC("}																\n"));
-			code.append(TC("float4 PS_Main(PsIn i):SV_TARGET0{								\n"));
-			code.append(TC("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n"));
-			code.append(TC("}																\n"));
+			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("Texture2D g_mainTex:register(t0);								\n");
+			code.append("// IN / OUT														\n");
+			code.append("struct VsIn {													\n");
+			code.append("  float2 pos	:POSITION;										\n");
+			code.append("};																\n");
+			code.append("struct PsIn {													\n");
+			code.append("  float4 pos	:SV_POSITION;									\n");
+			code.append("  float2 uv	    :TEXCOORD;									    \n");
+			code.append("};																\n");
+			code.append("// エントリ														\n");
+			code.append("PsIn VS_Main(VsIn i) {											\n");
+			code.append("    PsIn o;														\n");
+			code.append("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n");
+			code.append("    o.uv = i.pos.xy;								            \n");
+			code.append("    return o;													\n");
+			code.append("}																\n");
+			code.append("float4 PS_Main(PsIn i):SV_TARGET0{								\n");
+			code.append("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n");
+			code.append("}																\n");
 
 			vs = Shader::CompileVS(code);
 			ps = Shader::CompilePS(code);
@@ -291,14 +291,14 @@ namespace ob::rhi::dx12 {
 
 		auto result = m_swapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("IDXGIDisplay::CheckColorSpaceSupport()"));
+			Utility::OutputFatalLog(result, "IDXGIDisplay::CheckColorSpaceSupport()");
 			return false;
 		}
 
 		if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
 			result = m_swapChain->SetColorSpace1(colorSpace);
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, TC("IDXGIDisplay::SetColorSpace1()"));
+				Utility::OutputFatalLog(result, "IDXGIDisplay::SetColorSpace1()");
 				return false;
 			}
 		}
@@ -343,7 +343,7 @@ namespace ob::rhi::dx12 {
 		auto result = m_swapChain->Present(m_syncInterval, 0);
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("IDXGUIDisplay::Present()"));
+			Utility::OutputFatalLog(result, "IDXGUIDisplay::Present()");
 			LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗")
 				return;
 		}
@@ -427,7 +427,7 @@ namespace ob::rhi::dx12 {
 			return;
 
 		{
-			cmdList.pushMarker(TC("Apply Display"));
+			cmdList.pushMarker("Apply Display");
 
 			cmdList.setRenderTargets({ m_textures.current() }, {});
 
@@ -492,7 +492,7 @@ namespace ob::rhi::dx12 {
 				// リサイズ
 				auto result = m_swapChain->ResizeBuffers(m_desc.bufferCount, 0, 0, desc.BufferDesc.Format, desc.Flags);
 				if (FAILED(result)) {
-					Utility::OutputErrorLog(result, TC("IDXGISwapChain::ResizeBuffersに失敗"));
+					Utility::OutputErrorLog(result, "IDXGISwapChain::ResizeBuffersに失敗");
 					return;
 				}
 

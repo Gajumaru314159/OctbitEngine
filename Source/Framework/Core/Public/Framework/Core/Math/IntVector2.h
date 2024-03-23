@@ -630,11 +630,11 @@ template <> struct fmt::formatter<ob::core::IntVec2, ob::core::Char> : fmt::form
     using base = fmt::formatter<ob::core::s32, ob::core::Char>;
     template<typename FormatContext>
     auto format(const ob::core::IntVec2& value, FormatContext& ctx) -> decltype(ctx.out()) {
-        ctx.advance_to(format_to(ctx.out(), TC("(")));
+        ctx.advance_to(format_to(ctx.out(), "("));
         ctx.advance_to(base::format(value.x, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(format_to(ctx.out(), ","));
         ctx.advance_to(base::format(value.y, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(")")));
+        ctx.advance_to(format_to(ctx.out(), ")"));
         return ctx.out();
     }
 };

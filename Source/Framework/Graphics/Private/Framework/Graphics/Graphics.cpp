@@ -35,7 +35,7 @@ namespace ob::graphics {
 
 		for (s32 i = 0; i < 3; ++i) {
 			rhi::CommandListDesc desc;
-			desc.name = Format(TC("SystemCommanList_{}"), i);
+			desc.name = Format("SystemCommanList_{}", i);
 			desc.type = rhi::CommandListType::Graphic;
 			m_commandLists.emplace_back(rhi::CommandList::Create(desc));
 		}

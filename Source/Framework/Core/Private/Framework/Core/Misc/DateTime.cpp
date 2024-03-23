@@ -75,54 +75,54 @@ namespace ob::core {
 
 		static constexpr StringView MONTH_TEXT[]
 		{
-			TC("January"),
-			TC("February"),
-			TC("March"),
-			TC("April"),
-			TC("May"),
-			TC("June"),
-			TC("July"),
-			TC("August"),
-			TC("September"),
-			TC("October"),
-			TC("November"),
-			TC("December"),
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
 		};
 		static constexpr StringView MONTH_SHORT_TEXT[]
 		{
-			TC("Jan"),
-			TC("Feb"),
-			TC("Mar"),
-			TC("Apr"),
-			TC("May"),
-			TC("Jun"),
-			TC("Jul"),
-			TC("Aug"),
-			TC("Sep"),
-			TC("Oct"),
-			TC("Nov"),
-			TC("Dec"),
+			"Jan",
+			"Feb",
+			"Mar",
+			"Apr",
+			"May",
+			"Jun",
+			"Jul",
+			"Aug",
+			"Sep",
+			"Oct",
+			"Nov",
+			"Dec",
 		};
 
 		static constexpr StringView DAY_OF_WEEK_TEXT[]
 		{
-			TC("Sunday"),
-			TC("Monday"),
-			TC("Tuesday"),
-			TC("Wednesday"),
-			TC("Thursday"),
-			TC("Friday"),
-			TC("Saturday"),
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
 		};
 		static constexpr StringView DAY_OF_WEEK_SHORT_TEXT[]
 		{
-			TC("Sun"),
-			TC("Mon"),
-			TC("Tue"),
-			TC("Wed"),
-			TC("Thu"),
-			TC("Fri"),
-			TC("Sat"),
+			"Sun",
+			"Mon",
+			"Tue",
+			"Wed",
+			"Thu",
+			"Fri",
+			"Sat",
 		};
 
 
@@ -139,7 +139,7 @@ namespace ob::core {
 		String out;
 		for (; i < format.size();) {
 
-			if (format[i] == TC('\\')) {
+			if (format[i] == '\\') {
 				++i;
 				if (i < format.size()) {
 					out.append(1,format[i++]);
@@ -148,31 +148,31 @@ namespace ob::core {
 			}
 
 			if (false);
-			else if (read("yyyyy"))out += Format(TC("{:05}"), year);
-			else if (read("yyyy"))out += Format(TC("{:04}"), year);
-			else if (read("yy"))out += Format(TC("{:02}"), year % 100);
-			else if (read("y"))out += Format(TC("{}"), year % 100);
+			else if (read("yyyyy"))out += Format("{:05}", year);
+			else if (read("yyyy"))out += Format("{:04}", year);
+			else if (read("yy"))out += Format("{:02}", year % 100);
+			else if (read("y"))out += Format("{}", year % 100);
 			else if (read("MMMM"))out += MONTH_TEXT[((u32)month + 11) % 12];
 			else if (read("MMM"))out += MONTH_SHORT_TEXT[((u32)month + 11) % 12];
-			else if (read("MM"))out += Format(TC("{:02}"), month);
-			else if (read("M"))out += Format(TC("{:}"), month);
+			else if (read("MM"))out += Format("{:02}", month);
+			else if (read("M"))out += Format("{:}", month);
 			else if (read("dddd"))out += DAY_OF_WEEK_TEXT[((u32)enum_cast(dayOfWeek())) % 7];
 			else if (read("ddd"))out += DAY_OF_WEEK_SHORT_TEXT[((u32)enum_cast(dayOfWeek())) % 7];
-			else if (read("dd"))out += Format(TC("{:02}"), day);
-			else if (read("d"))out += Format(TC("{:}"), day);
-			else if (read("tt"))out += isMorning() ? TC("AM") : TC("PM");
-			else if (read("t"))out += isMorning() ? TC("A") : TC("P");
-			else if (read("HH"))out += Format(TC("{:02}"), hour);
-			else if (read("H"))out += Format(TC("{:}"), hour);
-			else if (read("hh"))out += Format(TC("{:02}"), (hour + 23) % 12 + 1);
-			else if (read("h"))out += Format(TC("{}"), (hour + 23) % 12 + 1);
-			else if (read("mm"))out += Format(TC("{:02}"), minute);
-			else if (read("m"))out += Format(TC("{}"), minute);
-			else if (read("ss"))out += Format(TC("{:02}"), second);
-			else if (read("s"))out += Format(TC("{}"), second);
-			else if (read("fff"))out += Format(TC("{:03}"), milliSeconds);
-			else if (read("ff"))out += Format(TC("{:02}"), milliSeconds / 10);
-			else if (read("f"))out += Format(TC("{:01}"), milliSeconds / 100);
+			else if (read("dd"))out += Format("{:02}", day);
+			else if (read("d"))out += Format("{:}", day);
+			else if (read("tt"))out += isMorning() ? "AM" : "PM";
+			else if (read("t"))out += isMorning() ? "A" : "P";
+			else if (read("HH"))out += Format("{:02}", hour);
+			else if (read("H"))out += Format("{:}", hour);
+			else if (read("hh"))out += Format("{:02}", (hour + 23) % 12 + 1);
+			else if (read("h"))out += Format("{}", (hour + 23) % 12 + 1);
+			else if (read("mm"))out += Format("{:02}", minute);
+			else if (read("m"))out += Format("{}", minute);
+			else if (read("ss"))out += Format("{:02}", second);
+			else if (read("s"))out += Format("{}", second);
+			else if (read("fff"))out += Format("{:03}", milliSeconds);
+			else if (read("ff"))out += Format("{:02}", milliSeconds / 10);
+			else if (read("f"))out += Format("{:01}", milliSeconds / 100);
 			else out.append(1,format[i++]);
 
 		}

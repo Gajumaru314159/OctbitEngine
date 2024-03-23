@@ -287,7 +287,7 @@ template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
 	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
 		auto itr = ctx.begin();
 		if (itr == ctx.end())return itr;
-		if (*itr == TC('#')) {
+		if (*itr == '#') {
 			isCode = true;
 			++itr;
 		}
@@ -297,9 +297,9 @@ template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
 	template<typename FormatContext>
 	auto format(ob::core::IntColor value, FormatContext& ctx) -> decltype(ctx.out()) {
 		if (isCode) {
-			return format_to(ctx.out(), TC("{:08X}"), value.toCode());
+			return format_to(ctx.out(), "{:08X}", value.toCode());
 		} else {
-			return format_to(ctx.out(), TC("({:>3},{:>3},{:>3},{:>3})"), value.r, value.g, value.b, value.a);
+			return format_to(ctx.out(), "({:>3},{:>3},{:>3},{:>3})", value.r, value.g, value.b, value.a);
 		}
 	}
 };

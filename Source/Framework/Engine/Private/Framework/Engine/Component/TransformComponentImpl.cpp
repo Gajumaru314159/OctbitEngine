@@ -15,13 +15,13 @@ OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponent
 
 	using Type = ::ob::engine::TransformComponent;
 
-	tag(TC("DisallowMultiple"));
+	tag("DisallowMultiple");
 
-	function(TC("getEntity"), &Type::getEntity);
+	function("getEntity", &Type::getEntity);
 
-	property(TC("Translation"), &Type::setLocalPosition, &Type::setLocalPosition);
-	property(TC("Scaling"), &Type::setLocalScale, &Type::setLocalScale);
-	property(TC("Rotation"), &Type::setLocalRotation, &Type::setLocalRotation);
+	property("Translation", &Type::setLocalPosition, &Type::setLocalPosition);
+	property("Scaling", &Type::setLocalScale, &Type::setLocalScale);
+	property("Rotation", &Type::setLocalRotation, &Type::setLocalRotation);
 
 };
 

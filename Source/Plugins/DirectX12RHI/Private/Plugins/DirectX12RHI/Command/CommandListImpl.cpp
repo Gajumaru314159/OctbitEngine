@@ -43,7 +43,7 @@ namespace ob::rhi::dx12 {
 		// アロケータ生成
 		result = device.getNative()->CreateCommandAllocator(type, IID_PPV_ARGS(m_cmdAllocator.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandAllocator()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommandAllocator()");
 			return;
 		}
 
@@ -51,7 +51,7 @@ namespace ob::rhi::dx12 {
 		UINT nodeMask = 0;
 		result = device.getNative()->CreateCommandList(nodeMask, type, m_cmdAllocator.Get(), nullptr, IID_PPV_ARGS(m_cmdList.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommandList()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommandList()");
 			return;
 		}
 
@@ -92,7 +92,7 @@ namespace ob::rhi::dx12 {
 		// コマンドアロケータをリセット
 		result = m_cmdAllocator->Reset();
 		if (FAILED(result)) {
-			String message = TC("ID3D12CommandAllocator::Reset()\n");
+			String message = "ID3D12CommandAllocator::Reset()\n";
 			message += Utility::GetDebugLayerLastString(m_device.getNative().Get());
 			Utility::OutputFatalLog(result, message);
 		}
@@ -100,7 +100,7 @@ namespace ob::rhi::dx12 {
 		// コマンドリストをリセット
 		result = m_cmdList->Reset(m_cmdAllocator.Get(), nullptr);
 		if (FAILED(result)) {
-			String message = TC("ID3D12CommandList::Reset()\n");
+			String message = "ID3D12CommandList::Reset()\n";
 			message += Utility::GetDebugLayerLastString(m_device.getNative().Get());
 			Utility::OutputFatalLog(result, message);
 		}

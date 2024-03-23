@@ -2,8 +2,8 @@ String
 ====================
 
 StringクラスはChar型の可変長配列として定義されています。
-内部表現はUTF-8を使用していますが、将来的にエンコーディング方法を変更できるように文字列リテラルを記述する場合は```TC()```マクロを使用して記述します。
-UTF-8環境下では```TC("Text")```は```u8"Text"```へ変換されます。
+内部表現はUTF-8を使用していますが、将来的にエンコーディング方法を変更できるように文字列リテラルを記述する場合は``````マクロを使用して記述します。
+UTF-8環境下では```"Text"```は```u8"Text"```へ変換されます。
 
 文字列を扱う場合はString型を使用することを推奨します。ただし外部ライブラリと連携できるように以下の文字列型も定義してあります。
 
@@ -27,7 +27,7 @@ NativeStringはプラットフォームごとに異なります。
 
 各文字列はStringEncoderを使用することで相互変換が可能です。
 ```c++
-String string = TC("Sample Text");
+String string = "Sample Text";
 WString wstring;
 StringEncoder::Encode(string,wstring);
 ```
@@ -37,12 +37,12 @@ charのエンコーディングはUTF-8を使用します。
 ## フォーマット
 文字列をフォーマットする場合は```Format()```を使用します。内部的にはfmtlibを使用しています。
 ```c++
-auto text = Format(TC("{}+{}={}",1,2,3);
-OB_ASSERT(text,TC("1+2=3"));
+auto text = Format("{}+{}={}",1,2,3;
+OB_ASSERT(text,"1+2=3");
 ```
 Vec3やColorなど基本的な型はformatterに対応しています。
 ```c++
-auto text = Format(TC("{}"),Color::Red);
+auto text = Format("{}",Color::Red);
 ```
 書式文字列の詳細は[std::format](https://cpprefjp.github.io/reference/format/format.html)を参考にしてください。
 ### formatter対応
@@ -56,7 +56,7 @@ template <> struct fmt::formatter<ob::core::Range, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(ob::core::Range value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("({},{})"), value.min,value.max);
+		return format_to(ctx.out(), "({},{})", value.min,value.max);
 	}
 };
 ```

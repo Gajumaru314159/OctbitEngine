@@ -257,7 +257,7 @@ template <> struct fmt::formatter<ob::core::HSV, ob::core::Char> {
 
     template<typename FormatContext>
     auto format(ob::core::HSV value, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), TC("({},{},{},{})"), value.h, value.s, value.v, value.a);
+        return format_to(ctx.out(), "({},{},{},{})", value.h, value.s, value.v, value.a);
     }
 };
 //! @endcond

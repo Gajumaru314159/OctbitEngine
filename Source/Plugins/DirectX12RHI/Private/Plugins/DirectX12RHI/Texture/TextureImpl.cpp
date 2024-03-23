@@ -70,7 +70,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result,TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::OutputFatalLog(result,"ID3D12Device::CreateCommittedResource()");
 		}
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
@@ -122,7 +122,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
 		}
 
 		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
@@ -136,7 +136,7 @@ namespace ob::rhi::dx12 {
 			sizeof(IntColor) * size.width*size.height
 		);
 		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
+			Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
 			return;
 		}
 
@@ -176,7 +176,7 @@ namespace ob::rhi::dx12 {
 		result = DirectX::LoadFromDDSMemory(blob.data(), blob.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
 		
 		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
 		
@@ -203,7 +203,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 		
 		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, TC("DirectX::LoadFromDDSMemory()"));
+			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
 		
@@ -219,7 +219,7 @@ namespace ob::rhi::dx12 {
 			(UINT)img->slicePitch  
 		);
 		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, TC("ID3D12Resource::WriteToSubresource()"));
+			Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
 			return;
 		}
 		
@@ -381,7 +381,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, TC("ID3D12Device::CreateCommittedResource()"));
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
 		}
 
 

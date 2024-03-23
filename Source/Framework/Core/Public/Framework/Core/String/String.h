@@ -245,7 +245,7 @@ namespace ob::core {
 		}
 
 		StringBase& trim() {
-			const auto whiteSpaceDelimiters = TC(" \t\n\r\f\v");
+			const auto whiteSpaceDelimiters = " \t\n\r\f\v";
 			auto start = m_str.find_first_not_of(whiteSpaceDelimiters);
 			auto end = m_str.find_last_not_of(whiteSpaceDelimiters);
 			if (start == npos) start = 0;
@@ -485,7 +485,7 @@ template <> struct fmt::formatter<ob::core::String, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::String& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{}"), ob::core::StringView(value.data(), value.size()));
+		return format_to(ctx.out(), "{}", ob::core::StringView(value.data(), value.size()));
 	}
 };
 

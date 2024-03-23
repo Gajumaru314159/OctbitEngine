@@ -639,15 +639,15 @@ template <> struct fmt::formatter<ob::core::Color, ob::core::Char> : fmt::format
     using base = fmt::formatter<ob::core::f32, ob::core::Char>;
     template<typename FormatContext>
     auto format(const ob::core::Color& value, FormatContext& ctx) -> decltype(ctx.out()) {
-        ctx.advance_to(format_to(ctx.out(), TC("(")));
+        ctx.advance_to(format_to(ctx.out(), "("));
         ctx.advance_to(base::format(value.r, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(format_to(ctx.out(), ","));
         ctx.advance_to(base::format(value.g, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(format_to(ctx.out(), ","));
         ctx.advance_to(base::format(value.b, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(",")));
+        ctx.advance_to(format_to(ctx.out(), ","));
         ctx.advance_to(base::format(value.a, ctx));
-        ctx.advance_to(format_to(ctx.out(), TC(")")));
+        ctx.advance_to(format_to(ctx.out(), ")"));
         return ctx.out();
     }
 };

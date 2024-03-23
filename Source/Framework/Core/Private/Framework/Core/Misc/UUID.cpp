@@ -71,15 +71,15 @@ namespace ob::core {
         UUID result;
         auto ptr = reinterpret_cast<u8*>(&result.data);
         for (auto& [i,c] : Indexed(uuidText)) {
-            if (c == TC('-')) {
+            if (c == '-') {
                 if (i == 8 || i == 12 || i == 17 || i == 22) {
                     continue;
                 } else {
                     return std::nullopt;
                 }
-                if (TC('0') <= c && c <= TC('9'))(*ptr) = c - '0';
-                if (TC('a') <= c && c <= TC('f'))(*ptr) = c - 'a';
-                if (TC('A') <= c && c <= TC('F'))(*ptr) = c - 'A';
+                if ('0' <= c && c <= '9')(*ptr) = c - '0';
+                if ('a' <= c && c <= 'f')(*ptr) = c - 'a';
+                if ('A' <= c && c <= 'F')(*ptr) = c - 'A';
                 else return std::nullopt;
                 ++ptr;
             }
@@ -94,8 +94,8 @@ namespace ob::core {
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
     //@―---------------------------------------------------------------------------
     void UUID::toString(Char(&dest)[37])const {
-        FormatTo(dest,TC("{:08x}-{:04x}-{:04x}-{:04x}-{:04x}{:08x}"), data[0], data[1] >> 16, data[1] & 0xFFFF, data[2] >> 16, data[2] & 0xFFFF, data[3]);
-        dest[36] = TC('\0');
+        FormatTo(dest,"{:08x}-{:04x}-{:04x}-{:04x}-{:04x}{:08x}", data[0], data[1] >> 16, data[1] & 0xFFFF, data[2] >> 16, data[2] & 0xFFFF, data[3]);
+        dest[36] = '\0';
     }
 
 

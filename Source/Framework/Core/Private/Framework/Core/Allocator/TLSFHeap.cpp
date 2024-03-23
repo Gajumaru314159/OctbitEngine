@@ -29,7 +29,7 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
 
     TLSFHeap::TLSFHeap(size_t size)
-        : m_pName(TC(""))
+        : m_pName("")
         , m_allSize(size)
         , m_allAlocSize(0)
         , m_maxDivideNum(0)

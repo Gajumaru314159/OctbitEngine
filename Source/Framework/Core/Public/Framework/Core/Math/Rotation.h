@@ -230,10 +230,10 @@ template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> : fmt::formatte
 		auto itr = ctx.begin();
 		if (itr == ctx.end())return ctx.end();
 		auto mode = *ctx.begin();
-		if (mode == TC('r') || mode == TC('R')) {
+		if (mode == 'r' || mode == 'R') {
 			isRad = true;
 			itr++;
-		}else if (mode == TC('d') || mode == TC('D')) {
+		}else if (mode == 'd' || mode == 'D') {
 			isRad = false;
 			itr++;
 		}
@@ -250,13 +250,13 @@ template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> : fmt::formatte
 			y = ob::core::Math::Degrees(y);
 			z = ob::core::Math::Degrees(z);
 		}
-		ctx.advance_to(format_to(ctx.out(), TC("(")));
+		ctx.advance_to(format_to(ctx.out(), "("));
 		ctx.advance_to(base::format(x, ctx));
-		ctx.advance_to(format_to(ctx.out(), TC(",")));
+		ctx.advance_to(format_to(ctx.out(), ","));
 		ctx.advance_to(base::format(y, ctx));
-		ctx.advance_to(format_to(ctx.out(), TC(",")));
+		ctx.advance_to(format_to(ctx.out(), ","));
 		ctx.advance_to(base::format(z, ctx));
-		ctx.advance_to(format_to(ctx.out(), TC(")")));
+		ctx.advance_to(format_to(ctx.out(), ")"));
 		return ctx.out();
 	}
 };

@@ -13,7 +13,7 @@ namespace ob::core {
     //! @brief	                コンストラクタ
     //@―---------------------------------------------------------------------------
     MallocAllocator::MallocAllocator(const Char* pName) {
-        m_pName = pName ? pName : TC("MallocAllocator");
+        m_pName = pName ? pName : "MallocAllocator";
     }
 
 

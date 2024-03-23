@@ -62,7 +62,7 @@ namespace ob::engine {
 	//! @brief		名前取得
 	//@―---------------------------------------------------------------------------
 	void Entity::setName(StringView name) {
-		setProperty(m_name, name, TC("Name"));
+		setProperty(m_name, name, "Name");
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -89,7 +89,7 @@ namespace ob::engine {
 
 				m_components.emplace_back(desc->createComponent());
 
-				raisePropertyChanged(TC("Components"));
+				raisePropertyChanged("Components");
 			}
 		} else {
 			LOG_WARNING("{}が生成されていません。", TypeId::Get<decltype(this)>().name());
@@ -125,7 +125,7 @@ namespace ob::engine {
 		for (auto itr = m_components.begin(); itr != m_components.end(); itr++) {
 			if (itr->get() == component) {
 				m_components.erase(itr);
-				raisePropertyChanged(TC("Components"));
+				raisePropertyChanged("Components");
 				return true;
 			}
 		}
@@ -297,7 +297,7 @@ namespace ob::engine {
 
 		if(oldParent)oldParent->raisePropertyChanged("Children");
 		if(newParent)newParent->raisePropertyChanged("Children");
-		raisePropertyChanged(TC("Parent"));
+		raisePropertyChanged("Parent");
 
 		m_parentChangedNotifier.invoke(oldParent, newParent);
 	}

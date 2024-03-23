@@ -254,7 +254,7 @@ namespace ob::platform {
     }
 
     String Window::getTextInput() {
-        if (!m_impl)return TC("");
+        if (!m_impl)return "";
         return m_impl->getTextInput();
     }
 

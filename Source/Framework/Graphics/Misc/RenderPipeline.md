@@ -64,7 +64,7 @@ public:
 
 			context.setCamera(camera);
 
-			static Name opaqueName(TC("Opaque"));
+			static Name opaqueName("Opaque");
 			context.beginRenderPass(opaqueName,size,);
 			camera.renderPipeline(context,camera,);
 

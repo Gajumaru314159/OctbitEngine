@@ -30,12 +30,12 @@ TEST(Window, Title) {
 
     using namespace ob::platform;
     WindowDesc desc;
-    desc.title = TC("AAA");
+    desc.title = "AAA";
     Window window = Window(desc);
-    ASSERT_EQ(window.getTitle(), TC("AAA"));
+    ASSERT_EQ(window.getTitle(), "AAA");
 
-    window.setTitle(TC("BBB"));
-    ASSERT_EQ(window.getTitle(), TC("BBB"));
+    window.setTitle("BBB");
+    ASSERT_EQ(window.getTitle(), "BBB");
 
 }
 

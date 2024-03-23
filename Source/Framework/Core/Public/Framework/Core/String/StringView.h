@@ -116,7 +116,7 @@ namespace ob::core {
 		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_view.copy(dst, n, pos); }
 
 		StringViewBase trim() {
-			const auto whiteSpaceDelimiters = TC(" \t\n\r\f\v");
+			const auto whiteSpaceDelimiters = " \t\n\r\f\v";
 			auto start = m_view.find_first_not_of(whiteSpaceDelimiters);
 			auto end = m_view.find_last_not_of(whiteSpaceDelimiters);
 			if (start == npos) start = 0;
@@ -245,7 +245,7 @@ template <> struct fmt::formatter<ob::core::StringView, ob::core::Char> {
 
 	template<typename FormatContext>
 	auto format(const ob::core::StringView& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), TC("{}"), std::basic_string_view<ob::core::Char>(value.data(), value.size()));
+		return format_to(ctx.out(), "{}", std::basic_string_view<ob::core::Char>(value.data(), value.size()));
 	}
 };
 

@@ -87,7 +87,7 @@ namespace ob::core {
             operator U& () const {
                 auto instance = injector.create<U>(container);
                 if (instance == nullptr) {
-                    throw Exception(Format(TC("{} => {}"), TypeId::Get<U>().name(), TypeId::Get<T>().name()));
+                    throw Exception(Format("{} => {}", TypeId::Get<U>().name(), TypeId::Get<T>().name()));
                 }
                 return *instance;
             }

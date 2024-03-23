@@ -39,7 +39,7 @@ namespace ob::core {
 	//! @brief		区切り文字を取得
 	//@―---------------------------------------------------------------------------
 	Char Path::Separator() {
-		return TC('/');
+		return '/';
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -93,10 +93,10 @@ namespace ob::core {
 	Path& Path::replaceExtension(StringView extension) {
 		removeExtension();
 		if (!extension.empty()) {
-			if (extension.starts_with(TC("."))) {
+			if (extension.starts_with(".")) {
 				m_string += extension;
 			} else {
-				m_string = m_string + TC(".") + extension;
+				m_string = m_string + "." + extension;
 			}
 		}
 		validate();
@@ -171,7 +171,7 @@ namespace ob::core {
 
 #ifdef OS_WINDOWS
 		// UNCパス
-		if (m_string.starts_with(StringView(TC("//")))) {
+		if (m_string.starts_with(StringView("//"))) {
 			return true;
 		}
 		// DOSパス C:
@@ -184,7 +184,7 @@ namespace ob::core {
 			}
 		}
 #else
-		if (m_string.starts_with(TC('/')))) {
+		if (m_string.starts_with('/'))) {
 			return true;
 		}
 #endif
@@ -214,8 +214,8 @@ namespace ob::core {
 
 #ifdef OS_WINDOWS
 		// UNCパス
-		if (m_string.starts_with(StringView(TC("//")))) {
-			if (m_string.find(TC('/'), 2) == m_string.npos) {
+		if (m_string.starts_with(StringView("//"))) {
+			if (m_string.find('/', 2) == m_string.npos) {
 				return true;
 			} else {
 				return false;
@@ -224,19 +224,19 @@ namespace ob::core {
 		// DOSパス
 		if (2 <= m_string.size()) {
 			auto volume = m_string[0];
-			if ('A' <= volume && volume <= 'Z' && m_string[1] == TC(':')) {
+			if ('A' <= volume && volume <= 'Z' && m_string[1] == ':') {
 				// C:
 				if (m_string.size() == 2) {
 					return true;
 				}
 				// C:/
-				if (m_string.size()==3 && m_string[2] == TC('/')) {
+				if (m_string.size()==3 && m_string[2] == '/') {
 					return true;
 				}
 			}
 		}
 #else
-		if (m_string == TC("/")) {
+		if (m_string == "/") {
 			return true;
 		}
 #endif
@@ -248,7 +248,7 @@ namespace ob::core {
 	//! @details	パスが区切り文字で終わっているかルートの場合trueを返します。
 	//@―---------------------------------------------------------------------------
 	bool Path::isDirectory()const {
-		if (m_string.ends_with(TC('/')))return true;
+		if (m_string.ends_with('/'))return true;
 		if (isRoot())return true;
 		return false;
 	}
@@ -278,7 +278,7 @@ namespace ob::core {
 			return {};
 		}
 
-		auto pos = m_string.rfind(TC('/'));
+		auto pos = m_string.rfind('/');
 		if (pos == m_string.npos) {
 			return m_string;
 		}
@@ -293,7 +293,7 @@ namespace ob::core {
 	StringView Path::stem()const {
 
 		auto name = fileName();
-		auto pos = name.rfind(TC('.'));
+		auto pos = name.rfind('.');
 		if (pos == m_string.npos) {
 			return name;
 		} else {
@@ -311,7 +311,7 @@ namespace ob::core {
 	StringView Path::extension(WithDot withDot)const {
 
 		auto name = fileName();
-		auto pos = name.rfind(TC('.'));
+		auto pos = name.rfind('.');
 		if (pos == m_string.npos) {
 			return {};
 		}
@@ -334,11 +334,11 @@ namespace ob::core {
 		}
 
 		size_t offset = 0;
-		if (m_string.ends_with(TC('/'))) {
+		if (m_string.ends_with('/')) {
 			offset++;
 		}
 
-		auto pos = m_string.rfind(TC('/'), m_string.size() - offset);
+		auto pos = m_string.rfind('/', m_string.size() - offset);
 		if (pos == m_string.npos) {
 			return *this;
 		}
@@ -351,7 +351,7 @@ namespace ob::core {
 	//! @brief		正規化
 	//@―---------------------------------------------------------------------------
 	void Path::validate() {
-		m_string.replace(TC('\\'), TC('/'));
+		m_string.replace('\\', '/');
 	}
 
 }

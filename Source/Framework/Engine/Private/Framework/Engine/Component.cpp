@@ -50,8 +50,8 @@ OB_DEFINE_CLASS_TYPE_INFO(ob::engine::Component) {
 
 	using Type = ::ob::engine::Component;
 
-	tag(TC(""), TC(""));
+	tag("", "");
 
-	function(TC("getEntity"), &Type::getEntity);
+	function("getEntity", &Type::getEntity);
 
 };

@@ -28,12 +28,12 @@ namespace ob::rhi::dx12 {
         if (0 == result) {
             String message;
             StringEncoder::Encode(buffer, message);
-            return TC("不明なエラー");
+            return "不明なエラー";
         }
         String message;
         StringEncoder::Encode(buffer, message);
         if (2 <= message.size())message.resize(message.size() - 2);
-        String error = Format(TC("{0}"), message.c_str());
+        String error = Format("{0}", message.c_str());
 
         return std::move(error);
     }
@@ -66,33 +66,33 @@ namespace ob::rhi::dx12 {
                     continue;
                 }
 
-                message = TC("DebugLayer: ");
+                message = "DebugLayer: ";
                 switch (pMessage->Severity)
                 {
-                case D3D12_MESSAGE_SEVERITY_CORRUPTION: message += TC("[CORRUPTION]"); break;
-                case D3D12_MESSAGE_SEVERITY_ERROR:      message += TC("[ERROR]"); break;
-                case D3D12_MESSAGE_SEVERITY_WARNING:    message += TC("[WARNING]"); break;
+                case D3D12_MESSAGE_SEVERITY_CORRUPTION: message += "[CORRUPTION]"; break;
+                case D3D12_MESSAGE_SEVERITY_ERROR:      message += "[ERROR]"; break;
+                case D3D12_MESSAGE_SEVERITY_WARNING:    message += "[WARNING]"; break;
                 }
                 switch (pMessage->Category)
                 {
-                case D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED:    message += TC("[APPLICATION_DEFINED]"); break;
-                case D3D12_MESSAGE_CATEGORY_MISCELLANEOUS:          message += TC("[MISCELLANEOUS]"); break;
-                case D3D12_MESSAGE_CATEGORY_INITIALIZATION:         message += TC("[INITIALIZATION]"); break;
-                case D3D12_MESSAGE_CATEGORY_CLEANUP:                message += TC("[CLEANUP]"); break;
-                case D3D12_MESSAGE_CATEGORY_COMPILATION:            message += TC("[COMPILATION]"); break;
-                case D3D12_MESSAGE_CATEGORY_STATE_CREATION:         message += TC("[STATE_CREATION]"); break;
-                case D3D12_MESSAGE_CATEGORY_STATE_SETTING:          message += TC("[STATE_SETTING]"); break;
-                case D3D12_MESSAGE_CATEGORY_STATE_GETTING:          message += TC("[STATE_GETTING]"); break;
-                case D3D12_MESSAGE_CATEGORY_RESOURCE_MANIPULATION:  message += TC("[RESOURCE_MANIPULATION]"); break;
-                case D3D12_MESSAGE_CATEGORY_EXECUTION:              message += TC("[EXECUTION]"); break;
-                case D3D12_MESSAGE_CATEGORY_SHADER:                 message += TC("[SHADER]"); break;
-                default:                                            message += TC("[UNKNOWN]"); break;
+                case D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED:    message += "[APPLICATION_DEFINED]"; break;
+                case D3D12_MESSAGE_CATEGORY_MISCELLANEOUS:          message += "[MISCELLANEOUS]"; break;
+                case D3D12_MESSAGE_CATEGORY_INITIALIZATION:         message += "[INITIALIZATION]"; break;
+                case D3D12_MESSAGE_CATEGORY_CLEANUP:                message += "[CLEANUP]"; break;
+                case D3D12_MESSAGE_CATEGORY_COMPILATION:            message += "[COMPILATION]"; break;
+                case D3D12_MESSAGE_CATEGORY_STATE_CREATION:         message += "[STATE_CREATION]"; break;
+                case D3D12_MESSAGE_CATEGORY_STATE_SETTING:          message += "[STATE_SETTING]"; break;
+                case D3D12_MESSAGE_CATEGORY_STATE_GETTING:          message += "[STATE_GETTING]"; break;
+                case D3D12_MESSAGE_CATEGORY_RESOURCE_MANIPULATION:  message += "[RESOURCE_MANIPULATION]"; break;
+                case D3D12_MESSAGE_CATEGORY_EXECUTION:              message += "[EXECUTION]"; break;
+                case D3D12_MESSAGE_CATEGORY_SHADER:                 message += "[SHADER]"; break;
+                default:                                            message += "[UNKNOWN]"; break;
                 }
 
                 
                 StringEncoder::Encode(pMessage->pDescription, desc);
                 message += desc;
-                message += TC("\n");
+                message += "\n";
             }
             infoQueue->ClearStoredMessages();
             infoQueue->Release();

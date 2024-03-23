@@ -48,7 +48,7 @@ int TestDirectX12() {
 	Ref<RenderScene> renderScene;
 	{
 		RenderSceneDesc desc;
-		desc.name = TC("Test");
+		desc.name = "Test";
 		desc.pipelines.add<BuiltinRenderPipeline>();
 		desc.features.add<TestRenderFeature>();
 
@@ -57,14 +57,14 @@ int TestDirectX12() {
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
-	windowDesc.title = TC("Graphic Test");
+	windowDesc.title = "Graphic Test";
 	platform::Window window(windowDesc);
 
 	// ディスプレイ
 	Ref<Display> display;
 	{
 		DisplayDesc desc;
-		desc.name = TC("MainDisplay");
+		desc.name = "MainDisplay";
 		desc.window = window;
 		display = Display::Create(desc);
 		OB_ASSERT_EXPR(display);
@@ -74,7 +74,7 @@ int TestDirectX12() {
 	Ref<RenderTexture> colorRT;
 	{
 		RenderTextureDesc desc;
-		desc.name = TC("Color0");
+		desc.name = "Color0";
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
@@ -86,7 +86,7 @@ int TestDirectX12() {
 	Ref<RenderTexture> color2RT;
 	{
 		RenderTextureDesc desc;
-		desc.name = TC("Color1");
+		desc.name = "Color1";
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Green;
@@ -98,7 +98,7 @@ int TestDirectX12() {
 	Ref<RenderTexture> depthRT;
 	{
 		RenderTextureDesc desc;
-		desc.name = TC("Depth");
+		desc.name = "Depth";
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::D32;
 		desc.clear.depth = 1.0f;
@@ -111,14 +111,14 @@ int TestDirectX12() {
 	Ref<CommandList> cmdList;
 	{
 		CommandListDesc desc;
-		desc.name = TC("MainCommandList");
+		desc.name = "MainCommandList";
 		desc.type = CommandListType::Graphic;
 		cmdList = CommandList::Create(desc);
 		OB_ASSERT_EXPR(cmdList);
 	}
 
-	Model sky(TC("Asset/Model/sky.obj"), TC("Asset/Texture/sky.dds"));
-	Model ukulele(TC("Asset/Model/Ukulele.obj"), TC("Asset/Model/Ukulele_col.dds"));
+	Model sky("Asset/Model/sky.obj", "Asset/Texture/sky.dds");
+	Model ukulele("Asset/Model/Ukulele.obj", "Asset/Model/Ukulele_col.dds");
 
 
 	// ImGui初期化
@@ -127,10 +127,10 @@ int TestDirectX12() {
 
 
 	// シーン生成テスト
-	auto world = engine::World::Create(TC("TestWorld"));
-	auto scene = engine::Scene::Create(TC("SampleScene"));
-	auto entity = engine::Entity::Create(TC("Parent"));
-	auto child = engine::Entity::Create(TC("Child"));
+	auto world = engine::World::Create("TestWorld");
+	auto scene = engine::Scene::Create("SampleScene");
+	auto entity = engine::Entity::Create("Parent");
+	auto child = engine::Entity::Create("Child");
 	entity->addChild(child);
 	scene->addEntity(entity);
 
@@ -199,8 +199,8 @@ int TestDirectX12() {
 		auto skyMtx = Matrix::Scale(Vec3(1, 1, 1) * modelScale);
 		auto ukuleleMtx = Matrix::TRS(Vec3::Zero, Quat(0, t, 70), Vec3::One);
 
-		graphics::Material::SetGlobalColor(TC("LightDir"), Color(1, 1, 1));
-		graphics::Material::SetGlobalMatrix(TC("Matrix"), viewMtx);
+		graphics::Material::SetGlobalColor("LightDir", Color(1, 1, 1));
+		graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 		sky.setMatrix(skyMtx);
 		ukulele.setMatrix(ukuleleMtx);
 
@@ -214,13 +214,13 @@ int TestDirectX12() {
 		cmdList->beginRenderPass(frameBuffer);
 
 		{
-			cmdList->pushMarker(TC("My"));
+			cmdList->pushMarker("My");
 
 			cmdList->popMarker();
 		}
 
 		if (true) {
-			cmdList->pushMarker(TC("ImGui"));
+			cmdList->pushMarker("ImGui");
 			ImGui::BeginFrame();
 
 			ImGui::BeginMainMenuBar();

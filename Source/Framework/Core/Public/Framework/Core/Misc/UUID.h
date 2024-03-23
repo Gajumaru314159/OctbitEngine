@@ -159,7 +159,7 @@ template <> struct fmt::formatter<ob::core::UUID, ob::core::Char> {
     auto format(ob::core::UUID value, FormatContext& ctx) -> decltype(ctx.out()) {
         ob::core::Char text[37];
         value.toString(text);
-        return format_to(ctx.out(), TC("{}"), text);
+        return format_to(ctx.out(), "{}", text);
     }
 };
 

@@ -38,7 +38,7 @@ namespace ob::rhi::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const String& code, ShaderStage stage, StringView name=TC("Shader"));
+        ShaderImpl(const String& code, ShaderStage stage, StringView name="Shader");
 
 
         //@―---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace ob::rhi::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(BlobView blob, ShaderStage stage, StringView name=TC("Shader"));
+        ShaderImpl(BlobView blob, ShaderStage stage, StringView name="Shader");
 
 
         //@―---------------------------------------------------------------------------

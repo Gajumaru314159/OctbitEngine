@@ -33,7 +33,7 @@ public:
 			FGTexture::Desc desc;
 			FGTexture target{ view->getRenderTarget() };
 
-			auto resource = fg.import(TC("Target"),desc,std::move(target));
+			auto resource = fg.import("Target",desc,std::move(target));
 
 			render<ImGuiStep>(view,fg, resource);
 		}
@@ -68,7 +68,7 @@ TEST(Graphis, Create) {
 
 	Ref<RenderScene> scene = [&]{
 		RenderSceneDesc desc;
-		desc.name = TC("Test");
+		desc.name = "Test";
 		desc.features.add<ImGuiRenderFeature>();
 		desc.pipelines.add<SampleRenderPipeline>();
 		return RenderScene::Create(desc);
@@ -76,7 +76,7 @@ TEST(Graphis, Create) {
 
 	Ref<RenderView> view = [&] {
 		RenderViewDesc desc;
-		desc.name = TC("MainCamera");
+		desc.name = "MainCamera";
 		desc.size = { 1280,720 };
 		desc.type = RenderViewType::Camera;
 		desc.window = platform::Window::Main();

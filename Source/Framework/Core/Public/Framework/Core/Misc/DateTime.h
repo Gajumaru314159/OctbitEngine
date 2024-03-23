@@ -105,7 +105,7 @@ namespace ob::core {
 		//!				* f		小数点以下1桁の秒
 		//! @ref		https://learn.microsoft.com/ja-jp/dotnet/standard/base-types/custom-date-and-time-format-strings
 		//@―---------------------------------------------------------------------------
-		String toString(StringView format = TC("yyyy-MM-dd HH:mm:ss.ff"))const;
+		String toString(StringView format = "yyyy-MM-dd HH:mm:ss.ff")const;
 
 	public:
 
