@@ -24,7 +24,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${p
 # 追加の依存ライブラリ
 set(public_libs 
     Core
-    Engine
     Platform
     RHI
     Input

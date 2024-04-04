@@ -8,6 +8,8 @@
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Platform/Window.h>
 
+#include <Framework/Graphics/Render/RenderStep.h>
+
 namespace ob::graphics {
 
     enum class RenderViewType {
@@ -20,22 +22,16 @@ namespace ob::graphics {
         String          name;
         Size            size;
         RenderViewType  type;
-        Ref<rhi::Display> display;
     };
-
-    enum class RenderViewId{};
-
-    
+        
     //@―---------------------------------------------------------------------------
     //! @brief  
     //@―---------------------------------------------------------------------------
-    class RenderView {
+    class RenderView : public RefObject {
         friend class RenderScene;
     public:
 
-        virtual ~RenderView();
-
-        auto getId()const->RenderViewId;
+        virtual ~RenderView() = default;
 
         //@―---------------------------------------------------------------------------
         //! @brief      名前を取得
@@ -51,24 +47,29 @@ namespace ob::graphics {
         // Display設定
         auto getRenderTarget()const->const Ref<rhi::RenderTexture>;
 
-
         //@―---------------------------------------------------------------------------
         //! @brief      RenderFeatureを見つける
         //@―---------------------------------------------------------------------------
         template<class T> T* findStep()const;
         RenderStep* findStep(TypeId typId)const;
 
+        auto& getScene() { return m_scene; }
+        auto& getScene()const { return m_scene; }
+
+        void applyDisplay(FG&);
+
     private:
 
-        RenderView(const RenderViewDesc& desc,RenderScene& scene);
+        RenderView(const RenderViewDesc& desc,RenderScene& scene, RenderStepInjector& injector);
 
     private:
         RenderScene& m_scene;
         RenderViewDesc m_desc;
-        RenderViewId m_id;
-        s32 m_priority;
+        Ref<rhi::Display> m_display;
+        Ref<rhi::RenderTexture> m_texture;
 
-        HashMap<u32, UPtr<RenderStep>> m_steps;
+        s32 m_priority;
+        HashMap<TypeId,UPtr<RenderStep>> m_steps;
 
     };
 

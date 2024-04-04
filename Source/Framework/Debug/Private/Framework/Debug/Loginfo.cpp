@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Debug/LogInfo.h>
 #include <Plugins/ImGui/ImGui.h>
+#include <Plugins/ImGui/ImGuiRAII.h>
 
 namespace ob::debug {
 
@@ -49,7 +50,10 @@ namespace ob::debug {
 				cache.level = log.level;
 				cache.message = log.message;
 				cache.file = Format("{}({})", Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
-				cache.line = Format("{}({})",log.sourceLocation.filePath, log.sourceLocation.line);
+				cache.path = log.sourceLocation.filePath;
+				cache.path.replace('\\', '/');
+				cache.line = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
+				cache.line2 = log.sourceLocation.line;
 				cache.count = 1;
 				
 			}
@@ -85,7 +89,7 @@ namespace ob::debug {
 				ImGui::ScopedButtonColor sbc(color);
 				ImGui::ScopedButtonHoveredColor sbhc(hovered);
 
-				if (ImGui::Button(ImGui::ToImChars(m_levelNames[level]))) {
+				if (ImGui::Button(m_levelNames[level].c_str())) {
 					m_levelFilter[level] = !m_levelFilter[level];
 				}
 
@@ -129,28 +133,32 @@ namespace ob::debug {
 					ImGui::TableSetColumnIndex(0);
 					{
 						ImGui::ScopedTextColor stc(m_levelColors[log.level]);
-						ImGui::Text(ImGui::ToImChars(m_levelNames[log.level]));
+						ImGui::Text(m_levelNames[log.level].c_str());
 					}
 
 					ImGui::TableNextColumn();
 					if (m_bAutoWrap) {
 						ImGui::PushTextWrapPos(0.0f);
-						ImGui::TextUnformatted(ImGui::ToImChars(log.message));
+						ImGui::TextUnformatted(log.message.c_str());
 						auto width = ImGui::GetContentRegionAvail().x;
-						update_max(rowHeight,ImGui::CalcTextSize(ImGui::ToImChars(log.message),0,false, width).y);
+						update_max(rowHeight,ImGui::CalcTextSize(log.message.c_str(), 0, false, width).y);
 						ImGui::PopTextWrapPos();
 					} else {
-						ImGui::TextUnformatted(ImGui::ToImChars(log.message));
+						ImGui::TextUnformatted(log.message.c_str());
 					}
 
 					ImGui::TableNextColumn();
 					ImGui::Text("%d", log.count);
 
 					ImGui::TableNextColumn();
-					ImGui::TextUnformatted(ImGui::ToImChars(Format("{}", log.datetime.toString("HH:mm:ss.ff"))));
+					ImGui::TextUnformatted(Format("{}", log.datetime.toString("HH:mm:ss.ff")).c_str());
 
 					ImGui::TableNextColumn();
-					ImGui::TextUnformatted(ImGui::ToImChars(log.file));
+					ImGui::TextUnformatted(log.file.c_str());
+					if (ImGui::IsItemClicked()) {
+						String cmd = Format("call \"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/devenv.exe\" /edit \"{}\" /l {}", log.path, log.line2);
+						system(cmd.c_str());
+					}
 
 					{
 						ImGui::ScopedID sid(index);
@@ -159,7 +167,7 @@ namespace ob::debug {
 						if (ImGui::BeginPopupContextItem("##Popup"))
 						{
 							if (ImGui::Selectable("Copy")) {
-								ImGui::SetClipboardText(ImGui::ToImChars(Format("[{}]\n{}\n{}\n{}", m_levelNames[log.level],log.message, log.line, log.datetime.toString("HH:mm:ss.ff"))));
+								ImGui::SetClipboardText(ImGui::Format("[{}]\n{}\n{}\n{}", m_levelNames[log.level],log.message, log.line, log.datetime.toString("HH:mm:ss.ff")).c_str());
 							}
 							ImGui::EndPopup();
 						}

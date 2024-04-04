@@ -14,6 +14,7 @@ namespace ob::rhi {
         s32 frameBufferCount = 2;   //!< ダブルバッファリング
 
         bool enablePIX = false;
+        bool breakWithWarning = false;
     };
 
 }

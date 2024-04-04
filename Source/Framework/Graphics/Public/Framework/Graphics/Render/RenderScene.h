@@ -14,8 +14,6 @@
 
 namespace ob::graphics {
 
-	enum class RenderViewId : u32 {};
-
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーン
 	//@―---------------------------------------------------------------------------
@@ -97,6 +95,8 @@ namespace ob::graphics {
 		HashMap<TypeId, UPtr<RenderPipeline>>	m_pipelines;
 		HashMap<TypeId, UPtr<RenderFeature>>	m_features;
 		Array<Ref<RenderView>>					m_views;
+
+		RenderStepInjector						m_stepInjector;
 
 	};
 

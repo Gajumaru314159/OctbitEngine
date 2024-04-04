@@ -23,7 +23,8 @@ namespace ob::core {
     static const int MAX_FRAMES_TO_CAPTURE = 256;
     static const int MAX_SYMBOL_NAME_LEN = MAX_PATH;
 
-	StackTrace::StackTrace() {
+	StackTrace::StackTrace(bool capture) {
+        if (capture == false)return;
 
 #ifdef OB_DEBUG
 

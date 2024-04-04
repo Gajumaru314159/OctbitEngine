@@ -83,7 +83,7 @@ namespace ob::core {
                 ::OutputDebugLog(L"********************");
                 ::OutputDebugLog(L"* スタックトレース *");
                 ::OutputDebugLog(L"********************");
-                StackTrace stack;
+                StackTrace stack(true);
                 for (auto& s : stack.elements()) {
                     auto msg2 = Format("{}\n{}({})\n", s.name,s.filename, s.line);
                     WString ws;

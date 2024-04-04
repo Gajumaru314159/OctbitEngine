@@ -36,7 +36,7 @@ namespace ob::graphics {
 
 	private:
 
-		Array<UPtr<RenderFeature>>&& create(RenderScene& scene)const {
+		Array<UPtr<RenderFeature>> create(RenderScene& scene)const {
 			Array<UPtr<RenderFeature>> features;
 			for (auto& creator : m_creators) {
 				if (auto feature = creator(scene)) {
@@ -76,7 +76,7 @@ namespace ob::graphics {
 
 	private:
 
-		Array<UPtr<RenderPipeline>>&& create(RenderScene& scene)const {
+		Array<UPtr<RenderPipeline>> create(RenderScene& scene)const {
 			Array<UPtr<RenderPipeline>> features;
 			for (auto& creator : m_creators) {
 				if (auto feature = creator(scene)) {

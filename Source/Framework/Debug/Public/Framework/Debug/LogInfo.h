@@ -21,7 +21,9 @@ namespace ob::debug {
 			LogLevel level;
 			String message;
 			String file;
+			String path;
 			String line;
+			s32 line2;
 			s32 count;
 		};
 

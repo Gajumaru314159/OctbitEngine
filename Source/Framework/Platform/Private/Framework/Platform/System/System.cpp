@@ -94,5 +94,22 @@ namespace ob::platform::System {
 		return Language::Unknown;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  プラットフォーム更新
+	//@―---------------------------------------------------------------------------
+	bool Update() {
+#ifdef OS_WINDOWS
+		MSG msg;
+
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		return msg.message != WM_QUIT;
+#else
+		return false;
+#endif
+	}
 }
 #endif

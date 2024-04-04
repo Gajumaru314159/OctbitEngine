@@ -14,6 +14,12 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	class RenderStep {
 	public:
+		OB_RTTI();
+		virtual ~RenderStep() = default;
+	protected:
+		RenderStep(RenderView& view) : m_view(view) {}
+	protected:
+		RenderView& m_view;
 	};
 
 
@@ -37,23 +43,23 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		template<class T,class = std::enable_if_t<std::is_base_of<RenderStep,T>::value>>
 		void add() {
-			add([](RenderScene& scene) {return new T(scene); });
+			add([](RenderView& scene) {return new T(scene); });
 		}
 
 	private:
 
-		Array<UPtr<RenderStep>>&& create(RenderView& view)const {
+		Array<UPtr<RenderStep>> create(RenderView& view)const {
 			Array<UPtr<RenderStep>> features;
 			for (auto& creator : m_creators) {
-				if (auto feature = creator(view)) {
-					features.emplace_back(feature);
+				if (auto step = creator(view)) {
+					features.emplace_back(step);
 				}
 			}
 			return std::move(features);
 		}
 
-	private:
-		friend class RenderScene;
+	protected:
+		friend class RenderView;
 		Array<CreateFunc> m_creators;
 	};
 

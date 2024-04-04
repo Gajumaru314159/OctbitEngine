@@ -317,6 +317,7 @@ namespace ob::rhi::dx12 {
 
 
 			// D3D12 エラー発生時にブレーク
+			if(m_config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
 		}
 

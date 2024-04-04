@@ -108,6 +108,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::~DescriptorHeap() {
 		// m_blocks の最上位に1つ残っているのが正常
+		Array<BBlock*> blocks;
+		if (m_freeList.size() + 1 != m_capacity) {
+			for (auto& item : m_buffer) {
+				if (item.allocated) {
+					blocks.push_back(&item);
+				}
+			}
+		}
 		OB_ASSERT(m_freeList.size()+1 == m_capacity, "未開放のDescriptorHandleがあります。RHI::finalize()の呼び出しを確認してください。");
 	}
 
@@ -139,6 +147,7 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
+		pBlock->stack = StackTrace(true);
 		handle.m_pBlock = pBlock;
 
 	}

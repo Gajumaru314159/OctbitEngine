@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
-
+#include <Framework/Core/Log/StackTrace.h>
 namespace ob::rhi::dx12 {
 
 	//@―---------------------------------------------------------------------------
@@ -22,6 +22,8 @@ namespace ob::rhi::dx12 {
 		s32     index;      //!< 割り当て位置
 		s32     capacity;   //!< 割り当て可能容量
 		bool    allocated;  //!< 確保済みか
+
+		StackTrace stack;
 	};
 
 

@@ -20,7 +20,7 @@ namespace ob::rhi {
         f32                 refleshRate=60.0f;          //!< リフレッシュ・レート
         Size                size = {0,0};               //!< バックバッファのサイズ(0の場合ウィンドウサイズを使用)
         s32                 bufferCount=2;              //!< バックバッファの数
-        bool                vsync=true;                 //!< VSyncが有効か
+        bool                vsync=false;                //!< VSyncが有効か
         bool                hdr=false;                  //!< HDRが有効か
     };
 

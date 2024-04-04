@@ -10,9 +10,12 @@
 #include <Framework/Graphics/Render/RenderStep.h>
 
 #include <Framework/RHI/CommandList.h>
-#include <Plugins/ImGui/ImGui.h>
+#include <Plugins/ImGui/Library/imgui.h>
+#include <Plugins/ImGui/Library/implot.h>
 
 namespace ob::graphics {
+
+	OB_EVENT_NOTIFIER(ImGui);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ImGui描画機能
@@ -23,22 +26,21 @@ namespace ob::graphics {
 		OB_RTTI();
 
 		ImGuiRenderFeature(RenderScene& scene);
-		~ImGuiRenderFeature();
-
-		void update();
-
-		void render(FG& fg, RenderViewId id,FrameGraphResource target);
+		virtual ~ImGuiRenderFeature();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      RenderViewごとに必要な描画ステップを追加する
 		//@―---------------------------------------------------------------------------
-		void createSteps(RenderStepInjector& injector) override{}
+		void createSteps(RenderStepInjector& injector) override;
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		描画タスクを追加
+		//@―---------------------------------------------------------------------------
+		void addTask(ImGuiHandle& handle,ImGuiDelegate func);
 
 	private:
-
-		void prepareView(u32 id);
-
-
+		ImGuiNotifier m_notifier;
 	};
 
 
@@ -48,11 +50,12 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	class ImGuiStep : public RenderStep {
 	public:
+		OB_RTTI();
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		ImGuiStep();
+		ImGuiStep(RenderView& view,Action draw);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		デストラクタ
@@ -60,7 +63,7 @@ namespace ob::graphics {
 		~ImGuiStep();
 
 		//@―---------------------------------------------------------------------------
-		//! @brief		コンストラクタ
+		//! @brief		描画
 		//@―---------------------------------------------------------------------------
 		void render(FG& fg, FrameGraphResource target);
 
@@ -110,6 +113,8 @@ namespace ob::graphics {
 		void updateCommand();
 
 	private:
+
+		Action m_draw;
 
 		struct DrawCommand {
 			IntRect					rect;

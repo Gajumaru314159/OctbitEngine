@@ -52,6 +52,7 @@ namespace ob::graphics {
 	//! @brief      ゲームループごとの更新を実行する
 	//@―---------------------------------------------------------------------------
 	void Graphics::update() {
+
 		beginForParallel(1);
 		updateForParallel(0);
 	}
@@ -91,7 +92,10 @@ namespace ob::graphics {
 
 		auto commandList = m_commandLists.current();
 
+		commandList->begin();
 		m_fg->execute(*commandList, m_fgResourcePool);
+		commandList->end();
+		commandList->flush();
 
 	}
 
@@ -129,10 +133,13 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	void Graphics::destroyScenes() {
 
-		std::remove_if(m_scenes.begin(), m_scenes.end(),
-			[](const Ref<RenderScene>& scene) {
-				return scene->isDisposeRequested(); 
-			}
+		m_scenes.erase(
+			std::remove_if(m_scenes.begin(), m_scenes.end(),
+				[](const Ref<RenderScene>& scene) {
+					return scene->isDisposeRequested();
+				}
+			),
+			m_scenes.end()
 		);
 
 	}

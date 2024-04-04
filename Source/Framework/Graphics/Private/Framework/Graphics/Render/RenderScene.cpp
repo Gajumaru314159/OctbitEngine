@@ -30,7 +30,8 @@ namespace ob::graphics {
 		// RenderFeature生成
 		auto features = desc.features.create(*this);
 		for (auto& feature : features) {
-			m_features[feature->getTypeId()] = std::move(feature);
+			auto& f = m_features[feature->getTypeId()] = std::move(feature);
+			f->createSteps(m_stepInjector);
 		}
 		// RenderPipeline生成
 		auto pipelines = desc.pipelines.create(*this);
@@ -63,13 +64,16 @@ namespace ob::graphics {
 		for (auto& [typeId, pipeline] : m_pipelines) {
 			pipeline->render(fg, m_views);
 		}
+		for (auto& view : m_views) {
+			view->applyDisplay(fg);
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      RenderView を生成する
 	//@―---------------------------------------------------------------------------
 	auto RenderScene::createView(const RenderViewDesc& desc) -> Ref<RenderView> {
-		return new RenderView(desc,*this);
+		return m_views.emplace_back(new RenderView(desc, *this, m_stepInjector));
 	}
 
 	//@―---------------------------------------------------------------------------

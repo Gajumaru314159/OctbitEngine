@@ -154,6 +154,7 @@ namespace ob::rhi::dx12 {
         D3D12_RECT                  m_scissorRect;
 
         UINT m_syncInterval;
+        UINT m_flags;
 
         DisplayEventNotifier        m_notifier;
         bool m_visible=true;

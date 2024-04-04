@@ -33,7 +33,7 @@ namespace ob::graphics {
 			U8String u8name;
 			StringEncoder::Encode(name, u8name);
 
-			return m_fg.addCallbackPass(
+			return m_fg.addCallbackPass<Data>(
 				u8name.str(),
 				setup,
 				[=](const Data& data, FrameGraphPassResources& resources, void* ctx) {

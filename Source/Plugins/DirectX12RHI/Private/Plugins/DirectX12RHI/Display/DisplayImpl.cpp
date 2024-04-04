@@ -37,6 +37,7 @@ namespace ob::rhi::dx12 {
 			m_desc.size = Size(size.x, size.y);
 		}
 		m_syncInterval = desc.vsync ? 1 : 0;
+		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
 
 		if (!createDisplay(rDevice))return;
 		if (!createResources(rDevice))return;
@@ -84,8 +85,8 @@ namespace ob::rhi::dx12 {
 		swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
 		swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
 		swapChainDesc.BufferDesc.Format = TypeConverter::Convert(m_desc.format);            // ピクセルフォーマット
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60000;                             // リフレッシュ・レート分子
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = 1000;                            // リフレッシュ・レート分母
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;                             // リフレッシュ・レート分子
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 00;                            // リフレッシュ・レート分母
 		swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
 		swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;                     //解像度に合うように同補正するか => 拡大
 
@@ -93,13 +94,13 @@ namespace ob::rhi::dx12 {
 		swapChainDesc.SampleDesc.Count = sampleCount;                                       // マルチサンプル・カウント
 
 		swapChainDesc.BufferCount = m_desc.bufferCount;						                // バッファの数
-		swapChainDesc.BufferUsage = DXGI_USAGE_BACK_BUFFER;						            // バックバッファとして使用
+		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;			            // バックバッファとして使用
 		swapChainDesc.OutputWindow = hWnd;                                                  // ウィンドウ
 		swapChainDesc.Windowed = TRUE;                                                      // ※公式リファレンスによるとフルスクリーン指定は別ので行う
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;                           // Present後破棄
 
 		swapChainDesc.Flags =
-			(allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0) |
+			// (allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0) |
 			//DXGI_SWAP_CHAIN_FLAG_NONPREROTATED |                  // フルスクリーン時自動回転
 			DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH |                // ResizeTargetでサイズ変更許可
 			//DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY |                   // リモートアクセス禁止
@@ -340,7 +341,7 @@ namespace ob::rhi::dx12 {
 		if (!m_desc.window.isValid())return;
 		if (!m_visible)return;
 
-		auto result = m_swapChain->Present(m_syncInterval, 0);
+		auto result = m_swapChain->Present(m_syncInterval, m_flags);
 
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "IDXGUIDisplay::Present()");
