@@ -12,14 +12,14 @@ namespace ob::core {
     //! @brief  入力ポインタからオフセットバイト進んだポインタを取得
     //@―---------------------------------------------------------------------------
     template<typename T>
-    constexpr T* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept {
+    constexpr T* GetOffsetPtr(const void* pBuffer, size_t offset)noexcept {
         return reinterpret_cast<T*>(reinterpret_cast<byte*>(const_cast<void*>(pBuffer)) + offset);
     }
 
     //@―---------------------------------------------------------------------------
     //! @brief  入力ポインタからオフセットバイト進んだポインタを取得
     //@―---------------------------------------------------------------------------
-    constexpr void* GetOffsetPtr(const void* pBuffer, s32 offset)noexcept {
+    constexpr void* GetOffsetPtr(const void* pBuffer, size_t offset)noexcept {
         return GetOffsetPtr<byte>(pBuffer, offset);
     }
 
