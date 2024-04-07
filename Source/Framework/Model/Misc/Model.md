@@ -8,7 +8,11 @@ classDiagram
     Model <-- SkeletalModel
     Model <-- SplineModel
 
-    Model : ModelMesh meshes
+    Mesh <-- Model
+    MeshData <-- Model
+    Material <-- Model
+
+    Model : Mesh meshes
     Model : Bounding bounding
 ```
 
@@ -30,3 +34,29 @@ class StaticMesh{
 * 色
 * 各ボーンのトランスフォーム
 * ブレンドシェイプのウェイト
+
+
+# クラス概要
+### Model
+* マテリアル配列を持つ
+* メッシュを持つ
+* マテリアルはメッシュのサブメッシュに対応する
+
+### Mesh
+* 頂点フォーマットを決める
+* サブメッシュを持つ
+
+### Submesh
+* マテリアルと対応する
+
+
+|OctbitEngine|Blender|
+|-|-|
+|Scene/Prefab|Scene|
+|Model|Object|
+|Mesh|Mesh|
+|Material|Material|
+
+fbxはModelとして読み込むことはできない。
+fbx自体がシーングラフとして扱われるためシーン、ないしはプレハブとしてインポートされる。
+オプションとしてマージして1つのMeshとしてインポートすることは可能。
