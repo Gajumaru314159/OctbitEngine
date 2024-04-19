@@ -74,7 +74,6 @@ namespace ob::core {
                 // エラーダイアログ表示
                 if (log.level == LogLevel::Fatal) {
                     ::ShowMessageBox(ws.c_str());
-                    ::CallBreakPoint();
                 }
             }
 
@@ -85,7 +84,8 @@ namespace ob::core {
                 ::OutputDebugLog(L"********************");
                 StackTrace stack(true);
                 for (auto& s : stack.elements()) {
-                    auto msg2 = Format("{}\n{}({})\n", s.name,s.filename, s.line);
+                    // auto msg2 = Format("{}\n{}({})\n", s.name, s.filename, s.line);
+                    auto msg2 = Format("{}({})",s.filename, s.line);
                     WString ws;
                     StringEncoder::Encode(msg2, ws);
                     ::OutputDebugLog(ws.c_str());
@@ -136,11 +136,6 @@ namespace ob::core {
 
         // 登録されたすべてのリスナに通知
         m_notifier.invoke(log);
-
-        if (log.level == LogLevel::Fatal) {
-            ::CallBreakPoint();
-            assert(false);
-        }
 
         m_logged = false;
     }
