@@ -82,8 +82,8 @@ namespace ob::core {
                 ::OutputDebugLog(L"********************");
                 ::OutputDebugLog(L"* スタックトレース *");
                 ::OutputDebugLog(L"********************");
-                StackTrace stack(true);
-                for (auto& s : stack.elements()) {
+                
+                for (auto& s : StackTrace::Capture().elements()) {
                     // auto msg2 = Format("{}\n{}({})\n", s.name, s.filename, s.line);
                     auto msg2 = Format("{}({})",s.filename, s.line);
                     WString ws;

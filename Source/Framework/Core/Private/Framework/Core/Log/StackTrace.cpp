@@ -10,6 +10,7 @@
 #ifdef OB_DEBUG
 
 #ifdef OS_WINDOWS
+#define NOMINMAX
 #include <Windows.h>
 #include <DbgHelp.h>
 #pragma comment(lib, "DbgHelp.lib")
@@ -20,63 +21,60 @@
 
 namespace ob::core {
 
-    static const int MAX_FRAMES_TO_CAPTURE = 256;
-    static const int MAX_SYMBOL_NAME_LEN = MAX_PATH;
+#ifdef OS_WINDOWS
 
-	StackTrace::StackTrace(bool capture) {
-        if (capture == false)return;
+	StackTrace StackTrace::Capture(s32 frameToSkip) {
+		StackTrace result;
+#ifdef OB_DEBUG
+		result.depth = ::RtlCaptureStackBackTrace(frameToSkip + 1, std::size(result.stack), result.stack, NULL);
+#endif
+		return result;
+	}
+
+	auto StackTrace::elements()const->Array<StackTraceElement> {
+
+		Array<StackTraceElement> result;
 
 #ifdef OB_DEBUG
 
-#ifdef OS_WINDOWS
+		u8* symbol[sizeof(SYMBOL_INFO) + MAX_PATH];
+		{
+			auto& symbolInfo = *reinterpret_cast<SYMBOL_INFO*>(symbol);
+			symbolInfo.SizeOfStruct = sizeof(SYMBOL_INFO);
+			symbolInfo.MaxNameLen = MAX_PATH;
+		}
 
-		auto process = ::GetCurrentProcess();
-        auto success = ::SymInitialize(process, NULL, TRUE);
+		HANDLE process = ::GetCurrentProcess();
 
+		auto limit = std::min<s32>(depth, std::size(stack));
 
-        u8* symbol[sizeof(SYMBOL_INFO) + MAX_SYMBOL_NAME_LEN];
-        {
-            auto& symbolInfo = *reinterpret_cast<SYMBOL_INFO*>(symbol);
-            symbolInfo.SizeOfStruct = sizeof(SYMBOL_INFO);
-            symbolInfo.MaxNameLen = MAX_SYMBOL_NAME_LEN;
-        }
+		DWORD disp = 0;
+		IMAGEHLP_LINE64 line{};
 
-        std::string result;
+		for (s32 i = 0; i < limit; ++i) {
+			if (!::SymFromAddr(process, (DWORD64)(stack[i]), 0, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
+				continue;
+			}
+			if (!::SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &disp, &line)) {
+				continue;
+			}
 
-        void* stack[MAX_FRAMES_TO_CAPTURE];
-        const WORD frames = ::RtlCaptureStackBackTrace(1, MAX_FRAMES_TO_CAPTURE, stack, NULL);
+			auto& symbolInfo = *reinterpret_cast<SYMBOL_INFO*>(symbol);
 
-        for (WORD i = 0; i < frames; i++)
-        {
-
-            if (!::SymFromAddr(process, (DWORD64)(stack[i]), 0, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
-                continue;
-            }
-
-            DWORD disp = 0;
-            IMAGEHLP_LINE64 line{};
-            if (!::SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &disp, &line)) {
-                continue;
-            }
-
-            auto& symbolInfo = *reinterpret_cast<SYMBOL_INFO*>(symbol);
-
-            auto& element = m_stack.emplace_back();
-            StringEncoder::Encode(StringViewBase<CHAR>(&symbolInfo.Name[0], symbolInfo.NameLen), element.name);
-            StringEncoder::Encode(line.FileName, element.filename);
-            element.line = line.LineNumber;
-        }
-
-        if (success) {
-            ::SymCleanup(process);
-        }
-
-#else
-#pragma error("Unsupported")
+			auto& element = result.emplace_back();
+			StringEncoder::Encode(StringViewBase<CHAR>(&symbolInfo.Name[0], symbolInfo.NameLen), element.name);
+			StringEncoder::Encode(line.FileName, element.filename);
+			element.line = line.LineNumber;
+		}
 #endif
-
-#endif
+		return result;
 	}
 
+
+#else
+
+#pragma error("Unsupported")
+
+#endif
 
 }

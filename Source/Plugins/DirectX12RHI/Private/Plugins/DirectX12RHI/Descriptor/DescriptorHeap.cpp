@@ -147,7 +147,7 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		pBlock->stack = StackTrace(true);
+		pBlock->stack = StackTrace::Capture();
 		handle.m_pBlock = pBlock;
 
 	}
