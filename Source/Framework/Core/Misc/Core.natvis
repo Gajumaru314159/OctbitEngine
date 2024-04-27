@@ -65,5 +65,18 @@
 	<Type Name="ob::core::TypeId">
 		<DisplayString>{m_name.m_view,sb}</DisplayString>
 	</Type>
-	
+
+
+	<!--HandeManager<T>::Handle-->
+	<Type Name="ob::core::HandleManager&lt;*&gt;::Handle">
+		<DisplayString Condition="m_owner!=nullptr &amp; m_owner->m_nodes[m_index].version == m_version">{*m_owner->m_nodes[m_index].instance}</DisplayString>
+		<DisplayString>Empty</DisplayString>
+
+		<Expand>
+			<Item Name="[instance]" Condition="m_owner!=nullptr &amp; m_owner->m_nodes[m_index].version == m_version">*m_owner->m_nodes[m_index].instance</Item>
+
+		</Expand>
+	</Type>
+
+
 </AutoVisualizer>
