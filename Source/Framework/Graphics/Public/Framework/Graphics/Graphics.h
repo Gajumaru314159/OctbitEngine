@@ -30,6 +30,11 @@ namespace ob::graphics {
         Graphics(rhi::RHI& rhi);
 
         //@―---------------------------------------------------------------------------
+        //! @brief      デストラクタ
+        //@―---------------------------------------------------------------------------
+        ~Graphics();
+
+        //@―---------------------------------------------------------------------------
         //! @brief      ゲームループごとの更新を実行する
         //@―---------------------------------------------------------------------------
         void update();
@@ -49,13 +54,10 @@ namespace ob::graphics {
         void wait();
 
         //@―---------------------------------------------------------------------------
-        //! @brief      シーンオブジェクトを生成する
+        //! @brief      シーンを作成
         //@―---------------------------------------------------------------------------
-        auto createScene(const RenderSceneDesc& desc)->Ref<RenderScene>;
-
-    private:
-
-        void destroyScenes();
+        auto createScene(const RenderSceneDesc& desc) -> UPtr<RenderScene>;
+        void removeScene(RenderScene*);
 
     private:
 
@@ -65,11 +67,10 @@ namespace ob::graphics {
 
         Swapper<Ref<rhi::CommandList>> m_commandLists;
 
-        Array<Ref<RenderScene>> m_scenes;
-
         FGResourcePool m_fgResourcePool;
 
-        HandleManager<RenderScene> m_renderSceneManager;
+        Array<RenderScene*> m_scenes;
+
 
     };
 

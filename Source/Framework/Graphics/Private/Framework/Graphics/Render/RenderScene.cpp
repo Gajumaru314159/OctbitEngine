@@ -14,17 +14,17 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーンを生成
 	//@―---------------------------------------------------------------------------
-	Ref<RenderScene> RenderScene::Create(const RenderSceneDesc& desc, Graphics* graphics) {
-		if (graphics == nullptr) graphics = Graphics::Get();
-		if (graphics == nullptr) return nullptr;
-		return graphics->createScene(desc);
+	UPtr<RenderScene> RenderScene::Create(const RenderSceneDesc& desc, Graphics* owner) {
+		if (owner == nullptr) owner = Graphics::Get();
+		if (owner == nullptr) return nullptr;
+		return owner->createScene(desc);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderScene::RenderScene(const RenderSceneDesc& desc, Graphics& graphics)
-		: m_graphics(graphics)
+		: m_graphics(&graphics)
 		, m_name(desc.name)
 	{
 		// RenderFeature生成
@@ -44,18 +44,21 @@ namespace ob::graphics {
 	//! @brief      デストラクタ
 	//@―---------------------------------------------------------------------------
 	RenderScene::~RenderScene() {
+		if (m_graphics) {
+			m_graphics->removeScene(this);
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      破棄予約状態か
+	//! @brief      Graphicsから切り離す
 	//@―---------------------------------------------------------------------------
-	bool RenderScene::isDisposeRequested()const {
-		return m_disposeRequested;
+	void RenderScene::release() {
+		// TODO Pipeline
+		m_graphics = nullptr;
+		m_pipelines.clear();
+		m_features.clear();
 	}
 
-	void RenderScene::requestDispose() {
-		m_disposeRequested = true;
-	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画

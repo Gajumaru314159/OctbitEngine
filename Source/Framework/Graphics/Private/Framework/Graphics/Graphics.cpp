@@ -42,11 +42,14 @@ namespace ob::graphics {
 
 	}
 
-	//Ref<RenderScene> Graphics::createScene() {
-	//	return nullptr;
-	//}
-
-
+	//@―---------------------------------------------------------------------------
+	//! @brief      デストラクタ
+	//@―---------------------------------------------------------------------------
+	Graphics::~Graphics() {
+		for (auto scene : m_scenes) {
+			removeScene(scene);
+		}
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ゲームループごとの更新を実行する
@@ -74,8 +77,8 @@ namespace ob::graphics {
 
 		m_fg = std::make_unique<FG>();
 
+		//
 		for (auto& scene : m_scenes) {
-			OB_ASSERT_EXPR(scene);
 			scene->render(*m_fg);
 		}
 
@@ -122,27 +125,26 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを生成
+	//! @brief      シーンを作成
 	//@―---------------------------------------------------------------------------
-	auto Graphics::createScene(const RenderSceneDesc& desc) -> Ref<RenderScene> {
-		return m_scenes.emplace_back(new RenderScene(desc, *this));
+	auto Graphics::createScene(const RenderSceneDesc& desc) -> UPtr<RenderScene> {
+		auto scene = new RenderScene(desc, *this);
+		m_scenes.push_back(scene);
+		return UPtr<RenderScene>(scene);
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを破棄
+	//! @brief      シーンを登録解除
 	//@―---------------------------------------------------------------------------
-	void Graphics::destroyScenes() {
+	void Graphics::removeScene(RenderScene* scene) {
 
-		m_scenes.erase(
-			std::remove_if(m_scenes.begin(), m_scenes.end(),
-				[](const Ref<RenderScene>& scene) {
-					return scene->isDisposeRequested();
-				}
-			),
-			m_scenes.end()
-		);
+		for (auto itr = m_scenes.begin(); itr != m_scenes.end(); ++itr) {
+			if (*itr == scene) {
+				scene->m_graphics = nullptr;
+				m_scenes.erase(itr);
+				return;
+			}
+		}
 
 	}
-
-
 }

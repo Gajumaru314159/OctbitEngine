@@ -17,7 +17,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーン
 	//@―---------------------------------------------------------------------------
-	class RenderScene : public RefObject {
+	class RenderScene : public RefObject{
 		friend class Graphics;
 	public:
 
@@ -26,7 +26,7 @@ namespace ob::graphics {
 		//! @details	生成されたRenderSceneはデフォルトのRPIに自動登録されます。
 		//!				登録先のRPIを変更する場合は通常のコンストラクタを使用してください。
 		//@―---------------------------------------------------------------------------
-		static Ref<RenderScene> Create(const RenderSceneDesc& desc,Graphics* graphics = nullptr);
+		static UPtr<RenderScene> Create(const RenderSceneDesc& desc,Graphics* owner = nullptr);
 
 	public:
 
@@ -34,16 +34,6 @@ namespace ob::graphics {
 		//! @brief      デストラクタ
 		//@―---------------------------------------------------------------------------
 		~RenderScene();
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      シーンの削除をリクエスト
-		//! @details	シーンの削除は即時は行われません。
-		//!				Graphicsからは次フレームの開始時に登録解除されますが、RenderScene
-		//!				への参照が残っている場合はオブジェクトの解放はさらに遅延されます。
-		//@―---------------------------------------------------------------------------
-		void requestDispose();
-
-		bool isDisposeRequested()const;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      名前を取得
@@ -83,12 +73,16 @@ namespace ob::graphics {
 		//! @brief      RenderSceneを生成する
 		//! @details	生成されたRenderSceneはRPIに登録する必要があります。
 		//@―---------------------------------------------------------------------------
-		RenderScene(const RenderSceneDesc& desc, Graphics& graphics);
+		RenderScene(const RenderSceneDesc& desc,Graphics& scene);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      Graphicsから切り離す
+		//@―---------------------------------------------------------------------------
+		void release();
 
 	private:
 
-		Graphics&								m_graphics;
-		bool									m_disposeRequested = false;
+		Graphics*								m_graphics = nullptr;
 
 		String									m_name;
 

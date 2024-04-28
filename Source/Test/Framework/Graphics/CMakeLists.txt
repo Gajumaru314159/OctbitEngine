@@ -22,7 +22,7 @@ set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 target_include_directories(${PROJECT_NAME} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(public_libs Core Platform RHI DirectX12RHI Graphics Debug GTest::gtest_main)
+set(public_libs Core Platform Input RHI DirectX12RHI Graphics Debug GTest::gtest_main)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
 # ランタイムライブラリ設定

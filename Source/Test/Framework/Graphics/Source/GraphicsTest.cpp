@@ -71,27 +71,9 @@ TEST(Graphis, Create) {
 	using namespace ob::graphics;
 	using namespace ob::platform;
 
-	// EngineRootMarkがあるフォルダをカレントパスに変更
-	auto path = std::filesystem::current_path();
-	while (path.has_parent_path()) {
-		auto rootMarkPath = path / "EngineRootMark";
-		if (std::filesystem::exists(rootMarkPath)) {
-			std::filesystem::current_path(path);
-			ob::String t;
-			ob::StringEncoder::Encode(path.u16string(), t);
-			LOG_INFO("カレントパスを{}に設定", t);
-			break;
-		}
-		path = path.parent_path();
-	}
+	System::Setup();
 	
 	ServiceInjector injector;
-	{
-		rhi::Config config;
-		config.enablePIX = false;
-		//config.breakWithWarning = true;
-		injector.bind(config);
-	}
 
 	rhi::dx12::Register(injector);
 	rhi::Register(injector);
@@ -122,7 +104,7 @@ TEST(Graphis, Create) {
 		return Display::Create(desc);
 	}();
 
-	Ref<RenderScene> scene = [&]{
+	auto scene = [&]{
 		RenderSceneDesc desc;
 		desc.name = "Test";
 		desc.features.add<ImGuiRenderFeature>();
@@ -130,7 +112,7 @@ TEST(Graphis, Create) {
 		return RenderScene::Create(desc);
 	}();
 
-	Ref<RenderView> view = [&] {
+	auto view = [&] {
 		RenderViewDesc desc;
 		desc.name = "MainCamera";
 		desc.size = { 1280,720 };
@@ -138,8 +120,6 @@ TEST(Graphis, Create) {
 		return scene->createView(desc);
 	}();
 	view->setRenderTarget(display);
-
-
 
 	ImGuiHandle handle;
 	scene->findFeature<ImGuiRenderFeature>()->addTask(handle,
@@ -149,9 +129,7 @@ TEST(Graphis, Create) {
 		}
 	);
 
-	MSG msg = {};
-
-	for (s32 i = 0; i < 10000; ++i) {
+	for (s32 i = 0; i < 1000; ++i) {
 
 		if (System::Update() == false)break;
 
@@ -164,12 +142,6 @@ TEST(Graphis, Create) {
 			graphics->update();
 		}
 
-	}
-
-	scene->requestDispose();
-
-	if (auto graphics = container.get<Graphics>()) {
-		graphics->update();
 	}
 
 }

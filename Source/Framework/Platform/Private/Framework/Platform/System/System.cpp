@@ -97,6 +97,28 @@ namespace ob::platform::System {
 	//@―---------------------------------------------------------------------------
 	//! @brief  プラットフォーム更新
 	//@―---------------------------------------------------------------------------
+	bool Setup() {
+
+		// EngineRootMarkがあるフォルダをカレントパスに変更
+		auto path = std::filesystem::current_path();
+		while (path.has_parent_path()) {
+			auto rootMarkPath = path / "EngineRootMark";
+			if (std::filesystem::exists(rootMarkPath)) {
+				std::filesystem::current_path(path);
+				ob::String t;
+				ob::StringEncoder::Encode(path.u16string(), t);
+				LOG_INFO("カレントパスを{}に設定", t);
+				break;
+			}
+			path = path.parent_path();
+		}
+
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  プラットフォーム更新
+	//@―---------------------------------------------------------------------------
 	bool Update() {
 #ifdef OS_WINDOWS
 		MSG msg;
