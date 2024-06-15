@@ -3,10 +3,10 @@
 //! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/Utility/DI.h>
 #include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 
+#include <Framework/Graphics/Material/MaterialManager.h>
 #include <Framework/RHI/System.h>
 #include <Framework/RHI/CommandList.h>
 
@@ -19,7 +19,7 @@ namespace ob::graphics {
 	//! @brief      システムをServiceInjectorに登録
 	//@―---------------------------------------------------------------------------
 	void Register(ServiceInjector& injector) {
-		// injector.bind<MaterialManager>();
+		injector.bind<MaterialManager>();
 		injector.bind<Graphics>();
 		rhi::Register(injector);
 		Name::Register(injector);
@@ -46,7 +46,9 @@ namespace ob::graphics {
 	//! @brief      デストラクタ
 	//@―---------------------------------------------------------------------------
 	Graphics::~Graphics() {
-		OB_ASSERT(m_scenes.empty(), "削除されていないRenderSceneが存在します");
+		for (auto scene : m_scenes) {
+			removeScene(scene);
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -123,34 +125,26 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを追加
-	//! @note       追加したシーンはGraphicsの終了までに removeScene で削除される必要があります。
+	//! @brief      シーンを作成
 	//@―---------------------------------------------------------------------------
-	void Graphics::addScene(RenderScene* scene) {
-		if (scene == nullptr) {
-			LOG_WARNING("無効なRenderSceneは追加できません");
-			return;
-		}
-		if (contains_item(m_scenes, scene)) {
-			LOG_WARNING("RenderSceneの多重追加はできません");
-			return;
-		}
+	auto Graphics::createScene(const RenderSceneDesc& desc) -> UPtr<RenderScene> {
+		auto scene = new RenderScene(desc, *this);
 		m_scenes.push_back(scene);
+		return UPtr<RenderScene>(scene);
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シーンを削除
+	//! @brief      シーンを登録解除
 	//@―---------------------------------------------------------------------------
 	void Graphics::removeScene(RenderScene* scene) {
-		if (scene == nullptr) {
-			LOG_WARNING("無効なRenderSceneは削除できません");
-			return;
-		}
-		m_scenes.erase(std::remove(m_scenes.begin(), m_scenes.end(), scene), m_scenes.end());
-		//if (!erase_all_item(m_scenes, scene)) {
-		//	LOG_WARNING("追加されていないRenderSceneを削除しようとしました");
-		//	return;
-		//}
-	}
 
+		for (auto itr = m_scenes.begin(); itr != m_scenes.end(); ++itr) {
+			if (*itr == scene) {
+				scene->m_graphics = nullptr;
+				m_scenes.erase(itr);
+				return;
+			}
+		}
+
+	}
 }

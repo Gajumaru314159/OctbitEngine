@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/Utility/Ref.h>
 #include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/Camera.h>
 
 namespace ob::graphics {
 
@@ -32,10 +33,21 @@ namespace ob::graphics {
 		virtual void deactivate() {}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief      描画
-		//@―---------------------------------------------------------------------------		
-		virtual void render(FG& fg) {}
-		
+		//! @brief      RenderViewごとに必要な描画ステップを追加する
+		//@―---------------------------------------------------------------------------
+		virtual void createSteps(RenderStepInjector& injector) {}
+
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      所属シーンを取得する
+		//@―---------------------------------------------------------------------------
+		RenderScene& getScene()const { return m_scene; }
+
+	protected:
+		RenderFeature(RenderScene& scene) :m_scene(scene) {}
+	private:
+		RenderScene& m_scene;
 	};
 
 }

@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
+//! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +10,6 @@
 #include <Framework/Core/Utility/HandleManager.h>
 
 #include <Framework/Graphics/FrameGraph/FGResourcePool.h>
-
 
 namespace ob::graphics {
 
@@ -55,15 +54,11 @@ namespace ob::graphics {
         void wait();
 
         //@―---------------------------------------------------------------------------
-        //! @brief      シーンを追加
-        //! @note       追加したシーンはGraphicsの終了までに removeScene で削除される必要があります。
+        //! @brief      シーンを作成
         //@―---------------------------------------------------------------------------
-        void addScene(RenderScene* scene);
+        auto createScene(const RenderSceneDesc& desc) -> UPtr<RenderScene>;
+        void removeScene(RenderScene*);
 
-        //@―---------------------------------------------------------------------------
-        //! @brief      シーンを削除
-        //@―---------------------------------------------------------------------------
-        void removeScene(RenderScene* scene);
     private:
 
         rhi::RHI& m_rhi;
@@ -75,6 +70,8 @@ namespace ob::graphics {
         FGResourcePool m_fgResourcePool;
 
         Array<RenderScene*> m_scenes;
+
+
     };
 
 }

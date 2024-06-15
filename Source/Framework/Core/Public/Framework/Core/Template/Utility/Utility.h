@@ -186,4 +186,26 @@ namespace ob::core {
         return fallback;
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief                  コンテナに特定の要素が含まれるか調べる
+    //! 
+    //! @param container        コンテナ
+    //! @param key              検索キー
+    //@―---------------------------------------------------------------------------
+    template <typename Container, typename Key>
+    bool contains_item(const Container& container, const Key& key) {
+        return std::find(container.begin(), container.end(), key) != container.end();
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief                  コンテナに特定の要素が含まれるか調べる
+    //! 
+    //! @param container        コンテナ
+    //! @param key              検索キー
+    //@―---------------------------------------------------------------------------
+    template <typename Container, typename Key>
+    bool erase_all_item(const Container& container, const Key& key) {
+        return container.erase(std::remove(container.begin(), container.end(), key), container.end()) != container.end();
+    }
+
 }

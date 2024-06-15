@@ -5,99 +5,81 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
-#include <Framework/Core/Utility/Ref.h>
-#include <Framework/Core/Utility/DI.h>
-#include <Framework/Graphics/Render/RenderSceneDesc.h>
+#include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
-
-#include <Framework/Graphics/Render/RenderPipeline.h>
 
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画シーン
 	//@―---------------------------------------------------------------------------
-	class RenderScene : public RefObject{
-		friend class Graphics;
+	class RenderScene{
 	public:
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderSceneを生成する
-		//! @details	生成されたRenderSceneはデフォルトのRPIに自動登録されます。
-		//!				登録先のRPIを変更する場合は通常のコンストラクタを使用してください。
-		//@―---------------------------------------------------------------------------
-		static UPtr<RenderScene> Create(const RenderSceneDesc& desc,Graphics* owner = nullptr);
+        RenderScene();
+        ~RenderScene();
 
-	public:
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderFeatureを追加する
+        //@―---------------------------------------------------------------------------
+        template<class T,class... Args>
+        void addFeature(Args&& ...args);
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      デストラクタ
-		//@―---------------------------------------------------------------------------
-		~RenderScene();
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      名前を取得
-		//@―---------------------------------------------------------------------------
-		auto& getName()const { return m_name; }
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      描画タスクを記録する
-		//@―---------------------------------------------------------------------------
-		void render(FG&);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderView を生成する
-		//@―---------------------------------------------------------------------------
-		auto createView(const RenderViewDesc& desc) -> Ref<RenderView>;
-		
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderFeatureを見つける
-		//@―---------------------------------------------------------------------------
-		template<class T> T* findFeature()const;
-		RenderFeature* findFeature(TypeId typId)const;
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderFeatureを走査する
-		//@―---------------------------------------------------------------------------
-		void visitFeatures(Func<void(RenderFeature&)>&&);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      全てのRenderFeatureを有効化する
-		//@―---------------------------------------------------------------------------
-		void activateAllFeature();
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderFeatureを見つける
+        //@―---------------------------------------------------------------------------
+        template<class T> T* findFeature()const;
+        RenderFeature* findFeature(TypeId typeId)const;
 
 
-	private:
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderViewを追加する
+        //@―---------------------------------------------------------------------------
+        void addView(RenderView* view);
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderSceneを生成する
-		//! @details	生成されたRenderSceneはRPIに登録する必要があります。
-		//@―---------------------------------------------------------------------------
-		RenderScene(const RenderSceneDesc& desc,Graphics& scene);
+        //@―---------------------------------------------------------------------------
+        //! @brief      RenderViewを削除する
+        //@―---------------------------------------------------------------------------
+        void removeView(RenderView* view);
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      Graphicsから切り離す
-		//@―---------------------------------------------------------------------------
-		void release();
 
-	private:
+        //@―---------------------------------------------------------------------------
+        //! @brief      解放時イベント
+        //@―---------------------------------------------------------------------------
+        void addReleasedEvent(RenderSceneEventHandle& handle, RenderSceneEventDelegate func);
+        void addFeatureAddedEvent(RenderFeatureEventHandle& handle, RenderFeatureEventDelegate func);
 
-		Graphics*								m_graphics = nullptr;
+        //@―---------------------------------------------------------------------------
+        //! @brief      描画
+        //@―---------------------------------------------------------------------------
+        void render(FG& fg);
 
-		String									m_name;
-
-		HashMap<TypeId, UPtr<RenderPipeline>>	m_pipelines;
-		HashMap<TypeId, UPtr<RenderFeature>>	m_features;
-		Array<Ref<RenderView>>					m_views;
-
-		RenderStepInjector						m_stepInjector;
-
+    private:
+        void onFeatureAdded(RenderFeature& feature);
+    private:
+        HashMap<TypeId, UPtr<RenderFeature>> m_features;
+        Array<RenderView*> m_views;
+        RenderSceneEventNotifier    m_releasedNotifier;
+        RenderFeatureEventNotifier  m_featureAddedNotifier;
 	};
 
 
-	template<class T>
-	T* RenderScene::findFeature()const {
-		return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      RenderFeatureを追加する
+    //@―---------------------------------------------------------------------------
+    template<class T, class... Args>
+    void RenderScene::addFeature(Args&& ...args) {
+        auto& feature = m_features[TypeId::Get<T>()] = std::make_unique<T>(args...);
+        onFeatureAdded(*feature);
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief      RenderFeatureを見つける
+    //@―---------------------------------------------------------------------------
+    template<class T>
+    T* RenderScene::findFeature()const {
+        return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
+    }
+
 
 }

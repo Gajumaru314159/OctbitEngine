@@ -26,25 +26,8 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		virtual void render(FG&,const Array<Ref<RenderView>>&) {};
+		virtual void render(FG&) {};
 
-	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      所属シーンを取得する
-		//@―---------------------------------------------------------------------------
-		RenderScene& getScene()const { return m_scene; }
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      RenderFeatureを見つける
-		//@―---------------------------------------------------------------------------
-		template<class T> T* findFeature()const { return findFeature(TypeId::Get<T>()); }
-		RenderFeature* findFeature(TypeId typId)const;
-
-	protected:
-		RenderPipeline(RenderScene& scene) :m_scene(scene) {}
-	private:
-		RenderScene& m_scene;
 	};
 
 }

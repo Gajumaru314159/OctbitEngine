@@ -1,34 +1,23 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Graphic前方宣言
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 
 namespace ob::graphics {
 
-	struct RenderPipelineDesc;
-	struct RenderSceneDesc;
-
-	class Material;
-	class Mesh;
-
-	class Camera;
-
-	class IRenderer;
-
-	class RenderStepInjector;
-
-	class RenderView;
-	class RenderScene;
-	class RenderStep;
-	class RenderPipeline;
-	class RenderFeature;
-
-	using RenderScenePtr = SPtr<RenderScene>;
-
-	class RenderFeatureInjector;
-
 	class FG;
+
+	class RenderFeature;
+	class RenderPipeline;
+	class RenderScene;
+	class RenderView;
+
+	OB_EVENT_NOTIFIER(RenderFeatureEvent, RenderFeature&);
+	OB_EVENT_NOTIFIER(RenderPipelineEvent, RenderPipeline&);
+	OB_EVENT_NOTIFIER(RenderSceneEvent, RenderScene&);
+	OB_EVENT_NOTIFIER(RenderViewEvent, RenderView&);
 
 }

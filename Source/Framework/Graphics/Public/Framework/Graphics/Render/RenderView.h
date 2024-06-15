@@ -5,78 +5,64 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
-#include <Framework/Graphics/Forward.h>
-#include <Framework/Platform/Window.h>
-
-#include <Framework/Graphics/Render/RenderStep.h>
+#include <Framework/Graphics/Render/RenderScene.h>
 
 namespace ob::graphics {
 
-    enum class RenderViewType {
-        Camera,
-        Shadow,
-        ReflectionProbe,
-    };
 
-    struct RenderViewDesc {
-        String          name;
-        Size            size;
-        RenderViewType  type;
-    };
-        
-    //@―---------------------------------------------------------------------------
-    //! @brief  
-    //@―---------------------------------------------------------------------------
-    class RenderView : public RefObject {
-        friend class RenderScene;
+    class RenderView {
     public:
+        RenderView(RenderScene& scene, StringView name);
+        ~RenderView();
 
-        virtual ~RenderView() = default;
+        void setDisplay(const Ref<Display>& display);
+        auto getDisplay()const -> const Ref<rhi::Display>;
+        void setRenderTexture(const Ref<RenderTexture>& renderTexture);
+        auto getRenderTexture()const->const Ref<rhi::RenderTexture>;
+
+        template<class T, class... Args>
+        void setPipeline(Args&&... args) {
+            m_pipeline = std::make_unique<T>(args...);
+        }
+
+        template<class T>
+        T* getPipeline() {
+            if (!m_pipeline)return nullptr;
+            if (m_pipeline->getTypeId() != TypeId::Get<T>())return;
+            return reinterpret_cast<T*>(m_pipeline.get());
+        }
+
+        void render(FG& fg);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      名前を取得
+        //! @brief      解放時イベント
         //@―---------------------------------------------------------------------------
-        auto& getName()const { return m_desc.name; }
+        void addReleasedEvent(RenderViewEventHandle& handle, RenderViewEventDelegate func);
 
-        void setPriority(s32 priority);
-        s32 getPriority()const;
-
-        // RenderTexture指定
-        void setRenderTarget(const Ref<rhi::Display>& display);
-
-        // Display設定
-        auto getRenderTarget()const->const Ref<rhi::RenderTexture>;
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      RenderFeatureを見つける
         //@―---------------------------------------------------------------------------
-        template<class T> T* findStep()const;
-        RenderStep* findStep(TypeId typId)const;
-
-        auto& getScene() { return m_scene; }
-        auto& getScene()const { return m_scene; }
-
-        void applyDisplay(FG&);
+        template<class T> T* findFeature()const;
+        RenderFeature* findFeature(TypeId typeId)const;
 
     private:
-
-        RenderView(const RenderViewDesc& desc,RenderScene& scene, RenderStepInjector& injector);
-
+        void clearTarget();
+        void onSceneReleased(RenderScene& scene);
     private:
-        RenderScene& m_scene;
-        RenderViewDesc m_desc;
-        Ref<rhi::Display> m_display;
-        Ref<rhi::RenderTexture> m_texture;
-
-        s32 m_priority;
-        HashMap<TypeId,UPtr<RenderStep>> m_steps;
-
+        String                  m_name;
+        RenderScene&            m_scene;
+        Ref<Display>            m_display;
+        Ref<RenderTexture>      m_renderTexture;
+        UPtr<RenderPipeline>    m_pipeline;
+        RenderSceneEventHandle  m_hRelease;
+        RenderViewEventNotifier m_releasedNotifier;
     };
 
-
     template<class T>
-    T* RenderView::findStep()const {
-        return reinterpret_cast<T*>(findStep(TypeId::Get<T>()));
+    T* RenderView::findFeature()const {
+        return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
     }
 
 }

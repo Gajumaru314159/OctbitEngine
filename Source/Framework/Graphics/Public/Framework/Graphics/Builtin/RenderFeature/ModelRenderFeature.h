@@ -4,8 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Utility/Ref.h>
-#include <Framework/Graphics/Forward.h>
+#include <Framework/Graphics/Render/RenderFeature.h>
+
+#include <Framework/Graphics/FrameGraph/FG.h>
+
+#include <Framework/RHI/CommandList.h>
+
+#include <Framework/Graphics/Render/RenderPipeline.h>
+#include <Framework/Graphics/Render/RenderScene.h>
 
 namespace ob::graphics {
 
@@ -14,28 +20,38 @@ namespace ob::graphics {
 	//! @details    O3DEでいうところのFeatureProcessor。
 	//!				初期状態は非アクティブです。
 	//@―---------------------------------------------------------------------------
-	class RenderFeature {
+	class ModelRenderFeature : public RenderFeature {
 	public:
 
 		OB_RTTI();
 
-		virtual ~RenderFeature(){}
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画
+		//@―---------------------------------------------------------------------------
+		void addModel() {
+			// Mesh/Material単位でインスタンシング化
+			// 
+		
+		}
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画
+		//@―---------------------------------------------------------------------------
+		void removeModel() {}
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      アクティブにする
-		//@―---------------------------------------------------------------------------
-		virtual void activate() {}
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      非アクティブにする
-		//@―---------------------------------------------------------------------------
-		virtual void deactivate() {}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
-		//@―---------------------------------------------------------------------------		
-		virtual void render(FG& fg) {}
-		
+		//@―---------------------------------------------------------------------------
+		void render(FG& fg, FrameGraphResource target) {
+
+		}
+
+
+	protected:
+		ModelRenderFeature(RenderScene& scene) :RenderFeature(scene) {}
+	private:
+
 	};
 
 }

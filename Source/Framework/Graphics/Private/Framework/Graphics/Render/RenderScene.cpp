@@ -1,110 +1,102 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
+//! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Render/RenderFeature.h>
-#include <Framework/Graphics/Render/RenderView.h>
-#include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/Render/RenderFeature.h>
+#include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Render/RenderView.h>
 
 namespace ob::graphics {
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      描画シーンを生成
-	//@―---------------------------------------------------------------------------
-	UPtr<RenderScene> RenderScene::Create(const RenderSceneDesc& desc, Graphics* owner) {
-		if (owner == nullptr) owner = Graphics::Get();
-		if (owner == nullptr) return nullptr;
-		return owner->createScene(desc);
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      コンストラクタ
+    //@―---------------------------------------------------------------------------
+    RenderScene::RenderScene() {
+        Graphics::Get()->addScene(this);
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      コンストラクタ
-	//@―---------------------------------------------------------------------------
-	RenderScene::RenderScene(const RenderSceneDesc& desc, Graphics& graphics)
-		: m_graphics(&graphics)
-		, m_name(desc.name)
-	{
-		// RenderFeature生成
-		auto features = desc.features.create(*this);
-		for (auto& feature : features) {
-			auto& f = m_features[feature->getTypeId()] = std::move(feature);
-			f->createSteps(m_stepInjector);
-		}
-		// RenderPipeline生成
-		auto pipelines = desc.pipelines.create(*this);
-		for (auto& pipeline : pipelines) {
-			m_pipelines[pipeline->getTypeId()] = std::move(pipeline);
-		}
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      デストラクタ
+    //@―---------------------------------------------------------------------------
+    RenderScene::~RenderScene() {
+        m_releasedNotifier.invoke(*this);
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      デストラクタ
-	//@―---------------------------------------------------------------------------
-	RenderScene::~RenderScene() {
-		if (m_graphics) {
-			m_graphics->removeScene(this);
-		}
-	}
+        OB_ASSERT(m_views.empty(), "削除されていないRenderViewが存在します");
+        Graphics::Get()->removeScene(this);
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      Graphicsから切り離す
-	//@―---------------------------------------------------------------------------
-	void RenderScene::release() {
-		// TODO Pipeline
-		m_graphics = nullptr;
-		m_pipelines.clear();
-		m_features.clear();
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      RenderFeatureを見つける
+    //@―---------------------------------------------------------------------------
+    RenderFeature* RenderScene::findFeature(TypeId typeId)const {
+        auto found = m_features.find(typeId);
+        if (found == m_features.end())return nullptr;
+        return found->second.get();
+    }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      ビューを追加
+    //@―---------------------------------------------------------------------------
+    void RenderScene::addView(RenderView* view) {
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      描画
-	//@―---------------------------------------------------------------------------
-	void RenderScene::render(FG& fg) {
-		for (auto& [typeId, pipeline] : m_pipelines) {
-			pipeline->render(fg, m_views);
-		}
-		for (auto& view : m_views) {
-			view->applyDisplay(fg);
-		}
-	}
+        if (view == nullptr) {
+            LOG_WARNING("無効なRenderViewは追加できません");
+            return;
+        }
+        if (contains_item(m_views, view)) {
+            LOG_WARNING("RenderViewの多重追加はできません");
+            return;
+        }
+        m_views.push_back(view);
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      RenderView を生成する
-	//@―---------------------------------------------------------------------------
-	auto RenderScene::createView(const RenderViewDesc& desc) -> Ref<RenderView> {
-		return m_views.emplace_back(new RenderView(desc, *this, m_stepInjector));
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      ビューを削除
+    //@―---------------------------------------------------------------------------
+    void RenderScene::removeView(RenderView* view) {
+        if (view == nullptr) {
+            LOG_WARNING("無効なRenderViewは削除できません");
+            return;
+        }
+        m_views.erase(std::remove(m_views.begin(), m_views.end(), view), m_views.end());
+        //if (!erase_all_item(m_views, view)) {
+        //    LOG_WARNING("追加されていないRenderViewを削除しようとしました");
+        //    return;
+        //}
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      RenderFeatureを見つける
-	//@―---------------------------------------------------------------------------
-	RenderFeature* RenderScene::findFeature(TypeId typId)const {
-		auto found = m_features.find(typId);
-		if (found == m_features.end())return nullptr;
-		return found->second.get();
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      解放時イベントを追加
+    //@―---------------------------------------------------------------------------
+    void RenderScene::addReleasedEvent(RenderSceneEventHandle& handle, RenderSceneEventDelegate func) {
+        m_releasedNotifier.add(handle, func);
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      RenderFeatureを走査する
-	//@―---------------------------------------------------------------------------
-	void RenderScene::visitFeatures(Func<void(RenderFeature&)>&& visitor) {
-		if (!visitor)return;
-		for (auto& [typeId, feature] : m_features) {
-			visitor(*feature);
-		}
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      RenderFeatureの追加イベントを追加
+    //@―---------------------------------------------------------------------------
+    void RenderScene::addFeatureAddedEvent(RenderFeatureEventHandle& handle, RenderFeatureEventDelegate func) {
+        m_featureAddedNotifier.add(handle, func);
+    }
 
-	//@―---------------------------------------------------------------------------
-	//! @brief      全てのRenderFeatureを有効にする
-	//@―---------------------------------------------------------------------------
-	void RenderScene::activateAllFeature() {
-		for (auto& [typeId, feature] : m_features) {
-			feature->activate();
-		}
-	}
+    //@―---------------------------------------------------------------------------
+    //! @brief      描画
+    //@―---------------------------------------------------------------------------
+    void RenderScene::render(FG& fg) {
+        for (auto& [typeId, feature] : m_features) {
+            feature->render(fg);
+        }
+        for (auto view : m_views) {
+            view->render(fg);
+        }
+    }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief      RenderFeature追加時
+    //@―---------------------------------------------------------------------------
+    void RenderScene::onFeatureAdded(RenderFeature& feature) {
+        m_featureAddedNotifier.invoke(feature);
+    }
 }
