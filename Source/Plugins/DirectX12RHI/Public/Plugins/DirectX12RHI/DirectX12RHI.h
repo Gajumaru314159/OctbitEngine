@@ -16,7 +16,7 @@ namespace ob::rhi::dx12 {
 
 	class DirectX12RHI : public RHI{
 	public:
-		DirectX12RHI(ob::rhi::Config*, GraphicObjectManager&,ob::platform::WindowManager&);
+		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::Config*);
 		~DirectX12RHI();
 
 		//@―---------------------------------------------------------------------------

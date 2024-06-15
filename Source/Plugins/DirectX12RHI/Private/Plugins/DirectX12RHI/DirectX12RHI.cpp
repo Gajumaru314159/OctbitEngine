@@ -30,7 +30,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DirectX12RHI::DirectX12RHI(ob::rhi::Config* config, GraphicObjectManager& objectManager, platform::WindowManager&)
+	DirectX12RHI::DirectX12RHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::Config* config)
 		: m_config(config ? *config : ob::rhi::Config{})
 		, RHI(objectManager)
 	{
