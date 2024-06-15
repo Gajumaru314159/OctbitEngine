@@ -240,7 +240,7 @@ namespace ob::graphics {
 		// 頂点レイアウト
 		rhi::VertexLayout mapped;
 
-		for (auto& attr1 : materialPass.requiredLayout.attributes) {
+		for (auto& attr1 : materialPass.requiredLayout) {
 
 			bool ok = false;
 			for (auto& attr2 : layout.attributes) {

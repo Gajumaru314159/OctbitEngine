@@ -9,7 +9,9 @@
 #include <Framework/Graphics/Material/MaterialManager.h>
 
 namespace ob::graphics {
-	
+
+	std::atomic<s64> MeshImpl::s_id = 0;
+
 	//@―---------------------------------------------------------------------------
 	//!	@brief			生成
 	//@―---------------------------------------------------------------------------
@@ -29,6 +31,8 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	MeshImpl::MeshImpl(const MeshData& meshData) {
 
+		m_id = s_id.fetch_add(1);
+
 		if (auto manager = MaterialManager::Get()) {
 			m_layoutId = manager->getVertexLayoutId(m_layout);
 		} else {
@@ -46,6 +50,8 @@ namespace ob::graphics {
 	//!	@brief			コンストラクタ
 	//@―---------------------------------------------------------------------------
 	MeshImpl::MeshImpl(MeshData&& meshData) {
+
+		m_id = s_id.fetch_add(1);
 		
 		if (auto manager = MaterialManager::Get()) {
 			m_layoutId = manager->getVertexLayoutId(m_layout);

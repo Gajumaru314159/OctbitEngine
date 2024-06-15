@@ -65,7 +65,7 @@ namespace ob::rhi::dx12 {
         StringEncoder::Encode(code, utfCode);
 
         compile(utfCode, stage);
-
+        reflectInputLayout();
     }
 
 
@@ -86,6 +86,7 @@ namespace ob::rhi::dx12 {
             LOG_ERROR_EX("Graphic", "シェーダではないバイナリファイルから構築しようとしました。");
         }
         m_shaderBlob = Blob(blob.data(),blob.size());
+        reflectInputLayout();
     }
 
 
@@ -169,6 +170,80 @@ namespace ob::rhi::dx12 {
 
             return;
         }
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  リフレクション
+    //@―---------------------------------------------------------------------------
+    void ShaderImpl::reflectInputLayout()
+    {
+        ComPtr<ID3D12ShaderReflection> reflection;
+        D3DReflect(getBinaryData(), getBinarySize(), IID_ID3D12ShaderReflection, (void**)reflection.ReleaseAndGetAddressOf());
+
+        if (!reflection)return;
+
+        D3D12_SHADER_DESC shaderDesc;
+        reflection->GetDesc(&shaderDesc);
+
+        const auto name2Semantics = [](StringView name) {
+            if (name == "SV_POSITION") return Semantic::Position;
+            if (name == "POSITION") return Semantic::Position;
+            if (name == "NORMAL")   return Semantic::Normal;
+            if (name == "BINORMAL") return Semantic::Binormal;
+            if (name == "TANGENT")  return Semantic::Tangent;
+            if (name == "COLOR")    return Semantic::Color;
+            if (name == "TEXCOORD") return Semantic::TexCoord;
+            // if (name == "BLENDINDICES") return Semantic::BlendIndices;
+            // if (name == "BLENDWEIGHTS") return Semantic::BlendWeights;
+            // if (name == "POINTSIZE")    return Semantic::PointSize;
+            LOG_ERROR("Unsupported semantic [{}]",name);
+            return Semantic::Position;
+        };
+
+        //m_inputLayoutNames.resize(shaderDesc.InputParameters);
+        for (s32 i = 0; i < shaderDesc.InputParameters; i++)
+        {
+            D3D12_SIGNATURE_PARAMETER_DESC paramDesc;
+            reflection->GetInputParameterDesc(i, &paramDesc);
+
+            auto& attribute = m_attributes.emplace_back();
+            attribute.offset = 0; // 不必要
+            attribute.semantic = name2Semantics(paramDesc.SemanticName);
+            attribute.index = paramDesc.SemanticIndex;
+
+
+            D3D12_INPUT_ELEMENT_DESC elementDesc;
+            elementDesc.SemanticName = paramDesc.SemanticName;
+            elementDesc.SemanticIndex = paramDesc.SemanticIndex;
+            elementDesc.InputSlot = 0;
+            elementDesc.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+            elementDesc.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+            elementDesc.InstanceDataStepRate = 0;
+
+            if (paramDesc.Mask == 1)
+            {
+                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
+            } else if (paramDesc.Mask <= 3)
+            {
+                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
+            } else if (paramDesc.Mask <= 7)
+            {
+                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
+            } else if (paramDesc.Mask <= 15)
+            {
+                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+            }
+
+        }
+
     }
 
 }

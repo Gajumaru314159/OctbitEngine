@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Shader.h>
 #include <Framework/Core/Misc/Blob.h>
+#include <Framework/RHI/Types/PipelineStateDesc.h>
 
 //===============================================================
 // 前方宣言
@@ -88,6 +89,11 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         void compile(const StringBase<char>& blob,ShaderStage stage);
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  リフレクション
+        //@―---------------------------------------------------------------------------
+        void reflectInputLayout();
+
 
     private:
 
@@ -95,6 +101,8 @@ namespace ob::rhi::dx12 {
         ShaderStage         m_stage;                        //!< シェーダ・ステージ
         Blob                m_shaderBlob;                   //!< シェーダ・バイナリ
         ComPtr<ID3DBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ
+        
+        Array<VertexAttribute> m_attributes;
 
     };
 

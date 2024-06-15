@@ -10,6 +10,26 @@
 
 namespace ob::rhi {
 
+    struct ShaderEntryDesc{
+        String vs;
+        String ps;
+    };
+    enum class ShaderPropertyType {
+        Color,
+        Vector,
+        Float,
+        Texture,
+        Int
+    };
+    struct ShaderPropertyDesc {
+        ShaderPropertyType  type;
+        String              name;
+
+    };
+    struct ShaderDesc {
+        ShaderEntryDesc entry;
+    };
+
     //@―---------------------------------------------------------------------------
     //! @brief      シェーダ
     //@―---------------------------------------------------------------------------

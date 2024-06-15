@@ -74,6 +74,9 @@ namespace ob::graphics {
 
 	private:
 
+		static std::atomic<s64> s_id;
+		s64					m_id;
+
 		rhi::VertexLayout	m_layout;
 		VertexLayoutId		m_layoutId{ -1 };
 

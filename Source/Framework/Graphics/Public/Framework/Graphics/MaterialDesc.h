@@ -13,17 +13,36 @@
 
 namespace ob::graphics {
 
-    struct ShaderGroup {
-        Ref<rhi::Shader>        vs;
-        Ref<rhi::Shader>        ps;
+    //@―---------------------------------------------------------------------------
+    //! @brief  頂点属性
+    //! @see    VertexLayout
+    //@―---------------------------------------------------------------------------
+    struct InputLayout {
+
+        rhi::Semantic	semantic;	//!< セマンティクス
+        rhi::Type		type;		//!< コンポーネント型
+        s32			    dimention;	//!< 次元数
+        s32			    index;		//!< セマンティクス内インデックス
+
+    public:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        InputLayout() = default;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      コンストラクタ
+        //@―---------------------------------------------------------------------------
+        InputLayout(rhi::Semantic semantic, rhi::Type type, s32 dimention = 1, s32 index = 0)
+            :semantic(semantic), type(type), dimention(dimention), index(index) {}
+
     };
 
     //@―---------------------------------------------------------------------------
     //! @brief  マテリアルパス定義
     //@―---------------------------------------------------------------------------
     struct MaterialPass {
-        Name                            renderTag;          // 異なるマテリアルで共通 事前にRenderPassを設定する必要あり
-
         Array<rhi::TextureFormat>	    colors;			    //!< 描画先フォーマット
         Optional<rhi::TextureFormat>	depth;
 
@@ -35,7 +54,7 @@ namespace ob::graphics {
         rhi::RasterizerDesc		        rasterizer;
         rhi::DepthStencilDesc	        depthStencil;
 
-        rhi::VertexLayout               requiredLayout;
+        Array<InputLayout>              requiredLayout;
     };
 
     //@―---------------------------------------------------------------------------
