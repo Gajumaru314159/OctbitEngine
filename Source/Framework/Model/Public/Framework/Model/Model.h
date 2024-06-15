@@ -12,52 +12,6 @@
 
 namespace ob::model {
 
-	class ModelRenderFeature : public graphics::RenderFeature{
-	public:
-		void addModel(Model* model);
-		void removeModel(Model* model);
-	};
-
-	struct ModelData;
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  説明
-	//@―---------------------------------------------------------------------------
-	class ModelPart {
-	public:
-
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  説明
-		//@―---------------------------------------------------------------------------
-		ModelPart();
-
-	private:
-
-
-
-	};
-
-	class MeshObject {
-	public:
-
-	private:
-		Ref<graphics::Mesh> m_mesh;
-
-	};
-
-	enum class ShadowCastingMode {
-		Off,
-		On,
-		TwoSided,
-		ShadowOnly,
-	};
-
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
@@ -68,11 +22,11 @@ namespace ob::model {
 	public:
 
 		static Ref<Model> Create(StringView name);
-		static Ref<Model> Load(Path path);
+		static Ref<Model> Load(StringView path);
 
 	public:
 
-		void join(const Ref<RenderScene>&);
+		void join(RenderScene*);
 		void leaveScene();
 
 		auto getMesh()const->Ref<graphics::Mesh>;
@@ -91,28 +45,6 @@ namespace ob::model {
 		auto findMaterial(StringView name)const->Ref<Material>;
 		void setMaterial(StringView name,const Ref<Material>&);
 
-		bool getReceiveShadow()const;
-		void setReceiveShadow(bool);
-
-		void setScene(const Ref<RenderScene>& scene) {
-			if (m_scene == scene)return;
-
-			if (m_scene) {
-				if (auto feature = m_scene->findFeature<ModelRenderFeature>()) {
-					feature->removeModel(this);
-				}
-			}
-
-			m_scene = scene;
-
-			if (m_scene) {
-				if (auto feature = m_scene->findFeature<ModelRenderFeature>()) {
-					feature->addModel(this);
-				}
-			}
-		}
-
-		// RenderingLayerMask
 	private:
 
 		Model();
@@ -120,7 +52,7 @@ namespace ob::model {
 
 	private:
 		
-		Ref<graphics::RenderScene>		m_scene;
+		graphics::RenderScene*			m_scene = nullptr;
 		Ref<graphics::Mesh>				m_mesh;
 		Array<Ref<graphics::Material>>	m_materials;
 		Map<String, s32,std::less<>>	m_materialMap;

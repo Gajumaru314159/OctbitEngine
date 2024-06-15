@@ -17,7 +17,6 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                     # DebugとRe
 set(CMAKE_DEBUG_POSTFIX "")                                         # 
 
 add_definitions(-D_UNICODE -DUNICODE)                               # 文字リテラルをユニコードとする
-add_definitions(/Zc:__cplusplus)                                    # __cplusplusを使えるようにする
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")            # UTF-8を強制する
@@ -30,7 +29,6 @@ set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
 
 set(OB_CONFIGURATION "Debug")
-
 
 #------------------------------------------------------------------------------
 # プラットフォームごとの設定
@@ -62,6 +60,8 @@ set(FG_BUILD_TEST OFF)
 # glslang
 set(BUILD_SHARED_LIBS OFF)
 
+# assimp
+set(ASSIMP_BUILD_TESTS OFF)
 
 #------------------------------------------------------------------------------
 # ThirdPartyライブラリ
@@ -73,7 +73,8 @@ FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.gi
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph)
+FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.4.0")
+FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
@@ -86,7 +87,6 @@ if(Vulkan)
     # FetchContent_MakeAvailable(glslang spirv)
 endif()
 
-
 #------------------------------------------------------------------------------
 # 汎用機能
 #------------------------------------------------------------------------------
@@ -98,13 +98,15 @@ include("Source/CMake/Common.cmake")
 # プロジェクト読み込み
 #------------------------------------------------------------------------------
 
+add_definitions(/Zc:__cplusplus)                                    # __cplusplusを使えるようにする
+
 # Framework
 add_subdirectory ("Source/Framework/Core")
 add_subdirectory ("Source/Framework/Platform")
 add_subdirectory ("Source/Framework/Input")
 add_subdirectory ("Source/Framework/RHI")
 add_subdirectory ("Source/Framework/Graphics")
-#add_subdirectory ("Source/Framework/Model")
+add_subdirectory ("Source/Framework/Model")
 #add_subdirectory ("Source/Framework/Asset")
 add_subdirectory ("Source/Framework/Debug")
 #add_subdirectory ("Source/Framework/Engine")

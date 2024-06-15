@@ -24,6 +24,7 @@ set(OB_PROJECT_INCLUDE_LIB
     Core
     Platform
     Graphics
+    assimp
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
 
