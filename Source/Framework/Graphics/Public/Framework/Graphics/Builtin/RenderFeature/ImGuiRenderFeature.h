@@ -37,6 +37,14 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		void executeTasks();
 
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		タスクを追加
+		//@―---------------------------------------------------------------------------
+		static void AddTask(RenderScene& scene, ImGuiHandle& handle, ImGuiDelegate func);
+		static void AddTask(RenderView& view,ImGuiHandle& handle, ImGuiDelegate func);
+
 	private:
 		ImGuiNotifier m_notifier;
 	};

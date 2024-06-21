@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 
-#include <Framework/Graphics/Mesh.h>
+#include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 
 #include <Framework/Graphics/Render/RenderFeature.h>
@@ -26,7 +26,7 @@ namespace ob::model {
 
 	public:
 
-		void join(RenderScene*);
+		void join(RenderScene&);
 		void leaveScene();
 
 		auto getMesh()const->Ref<graphics::Mesh>;
@@ -49,6 +49,8 @@ namespace ob::model {
 
 		Model();
 		void finalize()override;
+
+		void createRenderUnit();
 
 	private:
 		

@@ -25,6 +25,10 @@ namespace ob::graphics {
 
 		OB_RTTI();
 
+		ModelRenderFeature() {
+
+		}
+
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
@@ -47,9 +51,6 @@ namespace ob::graphics {
 
 		}
 
-
-	protected:
-		ModelRenderFeature(RenderScene& scene) :RenderFeature(scene) {}
 	private:
 
 	};

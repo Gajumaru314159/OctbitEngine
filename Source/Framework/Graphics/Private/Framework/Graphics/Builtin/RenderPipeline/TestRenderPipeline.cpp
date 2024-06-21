@@ -14,15 +14,16 @@ namespace ob::graphics {
     TestRenderPipeline::TestRenderPipeline(RenderView& view)
         : m_view(view)
         , m_imgui(view)
+        , m_material(view)
     {
 
     }
     void TestRenderPipeline::render(FG& fg) {
 
-        FGTexture::Desc desc;
-        FGTexture target{ m_view.getRenderTexture() };
+        auto resource = fg.import(m_view.getRenderTexture());
 
-        auto resource = fg.import("Target", desc, std::move(target));
+
+        resource = m_material.render(fg, "Opaque", resource);
 
         m_imgui.render(fg, resource);
 

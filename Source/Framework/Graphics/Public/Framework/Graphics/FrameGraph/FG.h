@@ -4,11 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/Graphics/FrameGraph/FGTexture.h>
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
 #include <Framework/Graphics/FrameGraph/FGFrameBuffer.h>
 #include <fg/FrameGraph.hpp>
+#include <fstream>
 
 namespace ob::graphics {
 
@@ -28,7 +31,7 @@ namespace ob::graphics {
 		FG() = default;
 
 		template <typename Data = NoData, typename Setup, typename Execute>
-		const Data& addCallbackPass(StringView name, Setup&& setup, Execute&& execute) {
+		const Data& addPass(StringView name, Setup&& setup, Execute&& execute) {
 
 			U8String u8name;
 			StringEncoder::Encode(name, u8name);
@@ -48,13 +51,15 @@ namespace ob::graphics {
 			return m_fg.getDescriptor(id);
 		}
 
-		template <class T>
-		FrameGraphResource import(StringView name, const typename T::Desc& desc, T&& resource) {
 
-			U8String u8name;
-			StringEncoder::Encode(name, u8name);
+		FrameGraphResource import(const Ref<rhi::RenderTexture> & texture) {
+			if (!texture)return {};
+			return m_fg.import(texture->desc().name.str(), texture->descOfRenderTexture(), FGTexture{ texture });
+		}
 
-			return m_fg.import(u8name.str(), desc, std::forward<T>(resource));
+		FrameGraphResource import(const Ref<rhi::Buffer> & buffer) {
+			if (!buffer)return {};
+			return m_fg.import(buffer->getDesc().name.str(), buffer->getDesc(), FGBuffer{ buffer });
 		}
 
 		bool isValid(FrameGraphResource id) const {
@@ -69,10 +74,19 @@ namespace ob::graphics {
 			m_fg.execute(&cmd, &pool);
 		}
 
+		void debugOutput(StringView name) {
+			std::ofstream f{name.data()};
+			f << m_fg;
+		}
+
 	private:
 
 		FrameGraph m_fg;
 
 	};
+
+	using FGBuilder = FrameGraph::Builder;
+	using FGResources = FrameGraphPassResources;
+	using FGResourceId = FrameGraphResource;
 
 }

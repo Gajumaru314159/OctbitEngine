@@ -6,20 +6,20 @@
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Material/MaterialManager.h>
 
 #include <Framework/RHI/System.h>
 #include <Framework/RHI/CommandList.h>
 
-
 #include <Framework/Graphics/FrameGraph/FG.h>
-
+#include <fstream>
 namespace ob::graphics {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      システムをServiceInjectorに登録
 	//@―---------------------------------------------------------------------------
 	void Register(ServiceInjector& injector) {
-		// injector.bind<MaterialManager>();
+		injector.bind<MaterialManager>();
 		injector.bind<Graphics>();
 		rhi::Register(injector);
 		Name::Register(injector);
@@ -28,7 +28,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Graphics::Graphics(rhi::RHI& rhi)
+	Graphics::Graphics(rhi::RHI& rhi,MaterialManager&)
 		: m_rhi(rhi)
 		, m_fgResourcePool(rhi)
 	{
@@ -71,6 +71,8 @@ namespace ob::graphics {
 
 		// TODO 実行準備
 
+		// NOTE ENQUEUE_RENDER_COMMANDのようなカスタムコマンド実行を仕込む？そもそものFrameGraphもENQUEUE_RENDER_COMMANDで追加しても良いかも
+
 		m_fgResourcePool.update();
 
 		m_fg = std::make_unique<FG>();
@@ -81,6 +83,7 @@ namespace ob::graphics {
 		}
 
 		m_fg->compile();
+
 
 	}
 
@@ -153,4 +156,11 @@ namespace ob::graphics {
 		//}
 	}
 
+
+	void Graphics::saveFrameGraph(StringView path) {
+		if (m_fg) {
+			m_fg->debugOutput(path);
+		}
+
+	}
 }

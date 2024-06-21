@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/MeshData.h>
+#include <Framework/Graphic/Mesh/MeshData.h>
 
 namespace ob::model {
 

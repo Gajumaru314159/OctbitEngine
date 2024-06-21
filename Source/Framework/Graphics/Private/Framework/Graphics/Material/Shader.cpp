@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
+//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Builtin/RenderFeature/ModelRenderFeature.h>

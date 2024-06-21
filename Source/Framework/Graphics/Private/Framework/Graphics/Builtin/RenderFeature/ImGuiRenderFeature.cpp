@@ -243,6 +243,17 @@ namespace ob::graphics {
 	void ImGuiRenderFeature::addTask(ImGuiHandle& handle, ImGuiDelegate func) {
 		m_notifier.add(handle, func);
 	}
+	//@―---------------------------------------------------------------------------
+	//! @brief		タスクを追加
+	//@―---------------------------------------------------------------------------
+	void ImGuiRenderFeature::AddTask(RenderScene& scene, ImGuiHandle& handle, ImGuiDelegate func) {
+		if (auto feature = scene.findFeature<ImGuiRenderFeature>()) {
+			feature->addTask(handle, func);
+		}
+	}
+	void ImGuiRenderFeature::AddTask(RenderView& view, ImGuiHandle& handle, ImGuiDelegate func) {
+		AddTask(view.getScene(), handle, func);
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		タスクを実行
@@ -279,7 +290,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderer::render(FG& fg, FrameGraphResource target) {
+	void ImGuiRenderer::render(FG& fg, FGResourceId target) {
 
 		auto display = m_view.getDisplay();
 		if (display == nullptr)return;
@@ -314,20 +325,24 @@ namespace ob::graphics {
 
 
 		struct ImGuiData {
-			FrameGraphResource target;
+			FGResourceId target;
+			Size size;
 		};
 
-		fg.addCallbackPass<ImGuiData>(
+		fg.addPass<ImGuiData>(
 			"ImGui",
-			[=](FrameGraph::Builder& builder, ImGuiData& data) {
+			[&](FGBuilder& builder, ImGuiData& data) {
 				data.target = builder.write(target);
+				data.size = m_view.getRenderSize();
 			},
-			[this, displaySize](const ImGuiData& data, FrameGraphPassResources& resources, rhi::CommandList& cmdList) {
+			[this, displaySize](const ImGuiData& data, FGResources& resources, rhi::CommandList& cmdList) {
 
 				using namespace ob::rhi;
 
-				Viewport vp(0, 0, displaySize.x, displaySize.y, 0, 1);
+				Viewport vp(0, 0, data.size.width, data.size.height, 0, 1);
 				auto texture = resources.get<FGTexture>(data.target).instance;
+
+				cmdList.pushMarker("ImGui");
 
 				cmdList.setRenderTarget(texture);
 				cmdList.setPipelineState(m_pipeline);
@@ -354,6 +369,7 @@ namespace ob::graphics {
 					cmdList.drawIndexed(cmd.param);
 				}
 
+				cmdList.popMarker();
 			}
 		);
 

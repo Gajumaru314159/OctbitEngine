@@ -8,9 +8,9 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 
-#include <Framework/Graphics/MeshData.h>
-#include <Framework/Graphics/Feature/ModelRenderFeature.h>
-#include <Framework/Graphics/Material.h>
+#include <Framework/Graphics/Mesh/MeshData.h>
+#include <Framework/Graphics/Builtin/RenderFeature/ModelRenderFeature.h>
+#include <Framework/Graphics/Material/Material.h>
 
 namespace ob::model {
 
@@ -126,11 +126,11 @@ namespace ob::model {
 		delete this;
 	}
 
-	void Model::join(RenderScene* scene) {
+	void Model::join(RenderScene& scene) {
 
 		leaveScene();
 
-		m_scene = scene;
+		m_scene = &scene;
 
 		if (m_scene) {
 			if (auto feature = m_scene->findFeature<graphics::ModelRenderFeature>()) {
@@ -186,6 +186,10 @@ namespace ob::model {
 		auto found = m_materialMap.find(name);
 		if (found == m_materialMap.end())return;
 		m_materials.at(found->second) = material;
+	}
+
+	void Model::createRenderUnit() {
+
 	}
 
 }

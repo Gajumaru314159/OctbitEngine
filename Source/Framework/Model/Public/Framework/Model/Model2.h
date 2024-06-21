@@ -5,27 +5,12 @@
 //***********************************************************
 #pragma once
 
-#include <Framework/Graphics/Mesh.h>
+#include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 
 #include <Framework/Graphics/Render/RenderFeature.h>
 
 namespace ob::model2 {
-
-	struct Texture {
-
-	};
-
-
-	struct Material {
-		HashMap<String, f32>		scalars;
-		HashMap<String, Vec4>		vectors;
-		HashMap<String, Matrix>		matrices;
-		HashMap<String, Color>		colors;
-		HashMap<String, Texture>	textures;
-	};
-
-
 
 	struct SubMesh {
 		s64 start;

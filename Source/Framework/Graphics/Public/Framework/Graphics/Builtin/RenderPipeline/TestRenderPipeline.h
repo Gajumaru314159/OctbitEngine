@@ -7,6 +7,7 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
+#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 
 namespace ob::graphics {
 
@@ -17,6 +18,7 @@ namespace ob::graphics {
     private:
         RenderView& m_view;
         ImGuiRenderer m_imgui;
+        MaterialRenderer m_material;
     };
 
 }

@@ -21,6 +21,7 @@ namespace ob::graphics {
 		: m_scene(scene)
 		, m_name(name)
 	{
+		setRect({ 0,0,1,1 });
 		scene.addReleasedEvent(m_hRelease, {*this,&RenderView::onSceneReleased});
 		scene.addView(this);
 	}
@@ -33,6 +34,43 @@ namespace ob::graphics {
 		m_scene.removeView(this);
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画矩形を設定
+	//@―---------------------------------------------------------------------------
+	void RenderView::setRect(const Rect& rect) {
+		m_rect = rect;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画矩形を取得
+	//@―---------------------------------------------------------------------------
+	auto RenderView::getRect()const->const Rect& {
+		return m_rect;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画サイズを取得
+	//@―---------------------------------------------------------------------------
+	auto RenderView::getRenderSize()const->Size {
+		if (!m_renderTexture) return { 0,0 };
+		return m_renderTexture->size();
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画矩形を取得
+	//@―---------------------------------------------------------------------------
+	auto RenderView::getScaledRect()const->IntRect {
+		auto size = getRenderSize();
+
+		IntRect rect{
+			(s32)(m_rect.left* size.width),
+			(s32)(m_rect.top* size.height),
+			(s32)(m_rect.right* size.width),
+			(s32)(m_rect.bottom* size.height),
+		};
+
+		return rect;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      RenderFeatureを見つける
@@ -90,12 +128,12 @@ namespace ob::graphics {
 
 		// TODO 登録順序に依存を持たせないと最初に描画される？
 		if (m_display && m_renderTexture) {
-			fg.addCallbackPass<FG::NoData>(
-				"AppluDisplay",
-				[](FrameGraph::Builder& builder, FG::NoData& data) {
+			fg.addPass<FG::NoData>(
+				"ApplyDisplay",
+				[](FGBuilder& builder, FG::NoData& data) {
 					builder.setSideEffect();
 				},
-				[this](const FG::NoData& data, FrameGraphPassResources& resources, rhi::CommandList& cmdList) {
+				[this](const FG::NoData& data, FGResources& resources, rhi::CommandList& cmdList) {
 					cmdList.applyDisplay(m_display, m_renderTexture);
 				}
 			);

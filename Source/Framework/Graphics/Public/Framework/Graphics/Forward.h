@@ -15,6 +15,9 @@ namespace ob::graphics {
 	class RenderScene;
 	class RenderView;
 
+	class Mesh;
+	class Material;
+
 	OB_EVENT_NOTIFIER(RenderFeatureEvent, RenderFeature&);
 	OB_EVENT_NOTIFIER(RenderPipelineEvent, RenderPipeline&);
 	OB_EVENT_NOTIFIER(RenderSceneEvent, RenderScene&);

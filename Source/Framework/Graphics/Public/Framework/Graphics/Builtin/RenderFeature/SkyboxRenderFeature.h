@@ -25,37 +25,25 @@ namespace ob::graphics {
 
 		OB_RTTI();
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      アクティブにする
-		//@―---------------------------------------------------------------------------
-		virtual void activate() {}
+		SkyBoxRenderFeature() {
 
-		//@―---------------------------------------------------------------------------
-		//! @brief      非アクティブにする
-		//@―---------------------------------------------------------------------------
-		virtual void deactivate() {}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief      シミュレートする
-		//! @details	パーティクルの更新やアニメーションの更新などCPU上での更新処理を実行します。
-		//@―---------------------------------------------------------------------------
-		virtual void simulate() {}
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
 		void render(FG& fg, FrameGraphResource target) {
 
-			struct ImGuiData {
+			struct Data {
 				FrameGraphResource target;
 			};
 
-			fg.addCallbackPass<ImGuiData>(
+			fg.addPass<Data>(
 				"Sky",
-				[=](FrameGraph::Builder& builder, ImGuiData& data) {
+				[=](FrameGraph::Builder& builder, Data& data) {
 					data.target = builder.write(target);
 				},
-				[](const ImGuiData& data, FrameGraphPassResources& resources, void* ctx) {
+				[](const Data& data, FrameGraphPassResources& resources, void* ctx) {
 					auto& cmd = *static_cast<rhi::CommandList*>(ctx);
 					/*
 					cmd.beginRenderPass();
@@ -73,9 +61,8 @@ namespace ob::graphics {
 			);
 		}
 
+	private:
 
-	protected:
-		SkyBoxRenderFeature(RenderScene& scene) :RenderFeature(scene) {}
 
 	};
 

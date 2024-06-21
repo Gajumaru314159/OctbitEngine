@@ -47,7 +47,7 @@ namespace ob::rhi {
 		struct {
 			bool            enable{ false };					//!< デプステストを有効にする
 			bool            write{ true };						//!< デプスを書き込む
-			ComparisonFunc  func{ ComparisonFunc::Less };		//!< デプステストの比較関数
+			ComparisonFunc  func{ ComparisonFunc::Greater };	//!< デプステストの比較関数
 		} depth;//!< デプス設定
 
 		struct {

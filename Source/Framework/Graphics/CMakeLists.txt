@@ -22,7 +22,7 @@ set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
-set(private_libs DirectX12RHI)
+set(private_libs DirectX12RHI assimp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${private_libs})
 set(public_libs Core RHI ImGui FrameGraph)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
