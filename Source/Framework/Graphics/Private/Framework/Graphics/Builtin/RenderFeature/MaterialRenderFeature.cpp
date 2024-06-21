@@ -34,7 +34,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	FGResourceId MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGResourceId targets) {
+	FGTexture MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGTexture targets) {
 
 		auto itr = m_renderablesMap.find(pass);
 		if (itr == m_renderablesMap.end())return {};
@@ -42,8 +42,8 @@ namespace ob::graphics {
 		auto& renderables = itr->second;
 
 		struct Data {
-			Array<FGResourceId> targets;
-			FGResourceId depth;
+			Array<FGTexture> targets;
+			FGTexture depth;
 			IntRect rect;
 		};
 
@@ -52,14 +52,14 @@ namespace ob::graphics {
 			pass,
 			[&](FGBuilder& builder, Data& data) {
 
-				FGTexture::Desc depthDesc;
+				FGTextureInstance::Desc depthDesc;
 				depthDesc.format = TextureFormat::D32;
 				depthDesc.name = "Depth";
 				depthDesc.size = view.getRenderSize();
 
 				data.targets.push_back(builder.write(targets));
 				
-				data.depth = builder.create<FGTexture>("Depth", depthDesc);
+				data.depth = builder.create(depthDesc);
 				data.rect = view.getScaledRect();
 			},
 			// 仮
@@ -70,14 +70,14 @@ namespace ob::graphics {
 				s32 targetNum = data.targets.size();
 				StaticArray<Ref<rhi::RenderTexture>, 8> targets;
 				for (auto& [i, resource] : Indexed(data.targets)) {
-					targets[i] = resources.get<FGTexture>(data.targets[i]).instance;
+					targets[i] = resources.get(data.targets[i]);
 				}
 
 				cmdList.pushMarker(pass);
 
 				Viewport vp(data.rect.left, data.rect.top, data.rect.right, data.rect.bottom, 1, 0);
-				auto texture = resources.get<FGTexture>(data.targets.front()).instance;
-				auto depth = resources.get<FGTexture>(data.depth).instance;
+				auto texture = resources.get(data.targets.front());
+				auto depth = resources.get(data.depth);
 				cmdList.setRenderTarget(texture,depth);
 				cmdList.clearColors(-1);
 				cmdList.clearDepthStencil();

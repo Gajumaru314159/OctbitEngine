@@ -80,8 +80,8 @@ namespace ob::graphics {
 
 	}
 
-	auto FGResourcePool::createTexture(const FGTexture::Desc& desc) ->Ref<::ob::rhi::RenderTexture> {
-		const auto hash = std::hash<FGTexture::Desc>{}(desc);
+	auto FGResourcePool::createTexture(const FGTextureInstance::Desc& desc) ->Ref<::ob::rhi::RenderTexture> {
+		const auto hash = std::hash<FGTextureInstance::Desc>{}(desc);
 		auto& pool = m_texturePools[hash];
 		if (pool.empty()) {
 			return RenderTexture::Create(desc);
@@ -91,8 +91,8 @@ namespace ob::graphics {
 			return resource;
 		}
 	}
-	auto FGResourcePool::createBuffer(const FGBuffer::Desc& desc) -> Ref<::ob::rhi::Buffer> {
-		const auto hash = std::hash<FGBuffer::Desc>{}(desc);
+	auto FGResourcePool::createBuffer(const FGBufferInstance::Desc& desc) -> Ref<::ob::rhi::Buffer> {
+		const auto hash = std::hash<FGBufferInstance::Desc>{}(desc);
 		auto& pool = m_bufferPools[hash];
 		if (pool.empty()) {
 			return Buffer::Create(desc);
@@ -103,12 +103,12 @@ namespace ob::graphics {
 		}
 	}
 	
-	void FGResourcePool::destroyTexture(const FGTexture::Desc& desc, const Ref<rhi::RenderTexture>& texture) {
-		const auto h = std::hash<FGTexture::Desc>{}(desc);
+	void FGResourcePool::destroyTexture(const FGTextureInstance::Desc& desc, const Ref<rhi::RenderTexture>& texture) {
+		const auto h = std::hash<FGTextureInstance::Desc>{}(desc);
 		m_texturePools[h].push_back({ texture, 0 });
 	}
-	void FGResourcePool::destroyBuffer(const FGBuffer::Desc& desc, const Ref<rhi::Buffer>& buffer) {
-		const auto h = std::hash<FGBuffer::Desc>{}(desc);
+	void FGResourcePool::destroyBuffer(const FGBufferInstance::Desc& desc, const Ref<rhi::Buffer>& buffer) {
+		const auto h = std::hash<FGBufferInstance::Desc>{}(desc);
 		m_bufferPools[h].push_back({ buffer, 0 });
 	}
 

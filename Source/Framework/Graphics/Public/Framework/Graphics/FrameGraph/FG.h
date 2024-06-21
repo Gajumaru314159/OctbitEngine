@@ -17,76 +17,191 @@ namespace ob::graphics {
 
 	class FGResourcePool;
 
+	enum class FGTexture : s32;
+	enum class FGBuffer : s32;
+
 	//@―---------------------------------------------------------------------------
-	//! @brief      FrameGraph中間テクスチャ
+	//! @brief      FrameGraph
 	//@―---------------------------------------------------------------------------
 	class FG : Noncopyable, Nonmovable {
-	public:
-		
-		using Builder = FrameGraph::Builder;
-		struct NoData { };
-
 	public:
 
 		FG() = default;
 
-		template <typename Data = NoData, typename Setup, typename Execute>
+		//@―---------------------------------------------------------------------------
+		//! @brief      パスを追加
+		//@―---------------------------------------------------------------------------
+		template <typename Data, typename Setup, typename Execute>
 		const Data& addPass(StringView name, Setup&& setup, Execute&& execute) {
-
-			U8String u8name;
-			StringEncoder::Encode(name, u8name);
-
 			return m_fg.addCallbackPass<Data>(
-				u8name.str(),
-				setup,
-				[=](const Data& data, FrameGraphPassResources& resources, void* ctx) {
+				name,
+				[&](FrameGraph::Builder& nativeBuilder, Data& data) {
+					FGBuilder builder(nativeBuilder);
+					setup(builder, data);
+				},
+				[=](const Data& data, FrameGraphPassResources& nativeResources, void* ctx) {
 					auto& cmd = *static_cast<rhi::CommandList*>(ctx);
+					FGResources resources(nativeResources);
 					execute(data, resources, cmd);
 				}
 			);
 		}
 
-		template <class T>
-		const typename T::Desc& getDescriptor(FrameGraphResource id) const {
-			return m_fg.getDescriptor(id);
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGTextureのRenderTextureDescを取得する
+		//@―---------------------------------------------------------------------------
+		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
+			return m_fg.getDescriptor<FGTextureInstance>(static_cast<FrameGraphResource>(texture));
 		}
 
-
-		FrameGraphResource import(const Ref<rhi::RenderTexture> & texture) {
-			if (!texture)return {};
-			return m_fg.import(texture->desc().name.str(), texture->descOfRenderTexture(), FGTexture{ texture });
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGBufferのBufferDescを取得する
+		//@―---------------------------------------------------------------------------
+		const rhi::BufferDesc& getDesc(FGBuffer buffer) {
+			return m_fg.getDescriptor<FGBufferInstance>(static_cast<FrameGraphResource>(buffer));
 		}
 
-		FrameGraphResource import(const Ref<rhi::Buffer> & buffer) {
-			if (!buffer)return {};
-			return m_fg.import(buffer->getDesc().name.str(), buffer->getDesc(), FGBuffer{ buffer });
+		//@―---------------------------------------------------------------------------
+		//! @brief      RenderTextureをインポートする
+		//@―---------------------------------------------------------------------------
+		FGTexture import(const Ref<rhi::RenderTexture> & texture) {
+			if (!texture)return FGTexture{-1};
+			return static_cast<FGTexture>(m_fg.import(texture->desc().name.str(), texture->descOfRenderTexture(), FGTextureInstance{ texture }));
 		}
 
-		bool isValid(FrameGraphResource id) const {
-			return m_fg.isValid(id);
+		//@―---------------------------------------------------------------------------
+		//! @brief      Bufferをインポートする
+		//@―---------------------------------------------------------------------------
+		FGBuffer import(const Ref<rhi::Buffer> & buffer) {
+			if (!buffer)return FGBuffer{-1};
+			return static_cast<FGBuffer>(m_fg.import(buffer->getDesc().name.str(), buffer->getDesc(), FGBufferInstance{ buffer }));
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGTextureが有効な値か
+		//@―---------------------------------------------------------------------------
+		bool isValid(FGTexture id) const {
+			return m_fg.isValid(static_cast<FrameGraphResource>(id));
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGBufferが有効な値か
+		//@―---------------------------------------------------------------------------
+		bool isValid(FGBuffer id) const {
+			return m_fg.isValid(static_cast<FrameGraphResource>(id));
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FrameGraphをコンパイルして実行可能な状態にする
+		//! @details	追加されたパスの依存関係を考慮してソートし、必要なパスのみを実行します
+		//@―---------------------------------------------------------------------------
 		void compile() {
 			m_fg.compile();
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief     コンパイルされたパスを実行する
+		//@―---------------------------------------------------------------------------
 		void execute(rhi::CommandList& cmd, FGResourcePool& pool) {
 			m_fg.execute(&cmd, &pool);
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief      dot形式でFrameGraphの依存関係を出力する
+		//@―---------------------------------------------------------------------------
 		void debugOutput(StringView name) {
 			std::ofstream f{name.data()};
 			f << m_fg;
 		}
 
 	private:
-
 		FrameGraph m_fg;
-
 	};
 
-	using FGBuilder = FrameGraph::Builder;
-	using FGResources = FrameGraphPassResources;
-	using FGResourceId = FrameGraphResource;
+	//@―---------------------------------------------------------------------------
+	//! @brief		FrameGraphのリソース管理クラス
+	//! @details	FGTextureやFGBufferからRenderTextureやBufferへのアクセスする手段を
+	//!				提供します。
+	//@―---------------------------------------------------------------------------
+	class FGResources {
+		friend class FrameGraph;
+
+	public:
+		FGResources(FrameGraphPassResources& resources)
+			: m_resources(resources)
+		{
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGTextureからRenderTextureのインスタンスを取得する
+		//@―---------------------------------------------------------------------------
+		Ref<rhi::RenderTexture> get(FGTexture texture) {
+			return m_resources.get<FGTextureInstance>(static_cast<FrameGraphResource>(texture)).instance;
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGBufferからBufferのインスタンスを取得する
+		//@―---------------------------------------------------------------------------
+		Ref<rhi::Buffer> get(FGBuffer buffer) {
+			return m_resources.get<FGBufferInstance>(static_cast<FrameGraphResource>(buffer)).instance;
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGTextureのRenderTextureDescを取得する
+		//@―---------------------------------------------------------------------------
+		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
+			return m_resources.getDescriptor<FGTextureInstance>(static_cast<FrameGraphResource>(texture));
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      FGBufferのBufferDescを取得する
+		//@―---------------------------------------------------------------------------
+		const rhi::BufferDesc& getDesc(FGBuffer buffer) {
+			return m_resources.getDescriptor<FGBufferInstance>(static_cast<FrameGraphResource>(buffer));
+		}
+
+	private:
+		FrameGraphPassResources& m_resources;
+	};
+
+	class FGBuilder {
+	public:
+		FGBuilder(FrameGraph::Builder& builder) 
+			: m_builder(builder)
+		{
+		}
+
+		FGTexture create(const rhi::RenderTextureDesc& desc) {
+			return static_cast<FGTexture>(m_builder.create<FGTextureInstance>(std::string_view(desc.name.data(), desc.name.size()), desc));
+		}
+
+		FGBuffer create(const rhi::BufferDesc& desc) {
+			return static_cast<FGBuffer>(m_builder.create<FGBufferInstance>(std::string_view(desc.name.data(), desc.name.size()), desc));
+		}
+
+		FGTexture read(FGTexture id, u32 flags = 0) {
+			return static_cast<FGTexture>(m_builder.read(static_cast<FrameGraphResource>(id), flags));
+		}
+
+		FGBuffer read(FGBuffer id, u32 flags = 0) {
+			return static_cast<FGBuffer>(m_builder.read(static_cast<FrameGraphResource>(id), flags));
+		}
+
+		FGTexture write(FGTexture id, u32 flags = 0) {
+			return static_cast<FGTexture>(m_builder.write(static_cast<FrameGraphResource>(id), flags));
+		}
+
+		FGBuffer write(FGBuffer id, u32 flags = 0) {
+			return static_cast<FGBuffer>(m_builder.write(static_cast<FrameGraphResource>(id), flags));
+		}
+
+		FGBuilder& setSideEffect() {
+			m_builder.setSideEffect();
+			return *this;
+		}
+
+	private:
+		FrameGraph::Builder& m_builder;
+	};
 
 }

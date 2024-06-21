@@ -290,7 +290,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderer::render(FG& fg, FGResourceId target) {
+	void ImGuiRenderer::render(FG& fg, FGTexture target) {
 
 		auto display = m_view.getDisplay();
 		if (display == nullptr)return;
@@ -325,7 +325,7 @@ namespace ob::graphics {
 
 
 		struct ImGuiData {
-			FGResourceId target;
+			FGTexture target;
 			Size size;
 		};
 
@@ -340,7 +340,7 @@ namespace ob::graphics {
 				using namespace ob::rhi;
 
 				Viewport vp(0, 0, data.size.width, data.size.height, 0, 1);
-				auto texture = resources.get<FGTexture>(data.target).instance;
+				auto texture = resources.get(data.target);
 
 				cmdList.pushMarker("ImGui");
 

@@ -36,7 +36,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		FrameGraphResource render(FG& fg, RenderView& view,String pass, FrameGraphResource targets);
+		FGTexture render(FG& fg, RenderView& view,String pass, FGTexture targets);
 
 	private:
 
@@ -52,7 +52,7 @@ namespace ob::graphics {
 
 		}
 
-		FrameGraphResource render(FG& fg, String pass, FrameGraphResource targets) {
+		FGTexture render(FG& fg, String pass, FGTexture targets) {
 			if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 				return feature->render(fg, m_view,pass, targets);
 			}

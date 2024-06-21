@@ -128,12 +128,15 @@ namespace ob::graphics {
 
 		// TODO 登録順序に依存を持たせないと最初に描画される？
 		if (m_display && m_renderTexture) {
-			fg.addPass<FG::NoData>(
+
+			struct Data{};
+
+			fg.addPass<Data>(
 				"ApplyDisplay",
-				[](FGBuilder& builder, FG::NoData& data) {
+				[](FGBuilder& builder, Data& data) {
 					builder.setSideEffect();
 				},
-				[this](const FG::NoData& data, FGResources& resources, rhi::CommandList& cmdList) {
+				[this](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
 					cmdList.applyDisplay(m_display, m_renderTexture);
 				}
 			);

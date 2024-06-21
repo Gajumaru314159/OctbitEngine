@@ -19,11 +19,11 @@ namespace ob::graphics {
 
 		void update();
 
-		auto createTexture(const FGTexture::Desc& desc) -> Ref<RenderTexture>;
-		auto createBuffer(const FGBuffer::Desc& desc) -> Ref<Buffer>;
+		auto createTexture(const FGTextureInstance::Desc& desc) -> Ref<RenderTexture>;
+		auto createBuffer(const FGBufferInstance::Desc& desc) -> Ref<Buffer>;
 
-		void destroyTexture(const FGTexture::Desc& desc, const Ref<rhi::RenderTexture>& texture);
-		void destroyBuffer(const FGBuffer::Desc& desc, const Ref<rhi::Buffer>& buffer);
+		void destroyTexture(const FGTextureInstance::Desc& desc, const Ref<rhi::RenderTexture>& texture);
+		void destroyBuffer(const FGBufferInstance::Desc& desc, const Ref<rhi::Buffer>& buffer);
 
 	private:
 
