@@ -68,7 +68,7 @@ namespace ob::graphics {
         Array<String>   matrixProperties;
         Array<String>   textureProperties;
 
-        HashMap<String, MaterialPass> passes;
+        Map<String, MaterialPass,std::less<>> passes;
     };
 
 }

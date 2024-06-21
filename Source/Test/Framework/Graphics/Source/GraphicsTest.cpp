@@ -204,7 +204,7 @@ TEST(Graphis, Create) {
 		MaterialPass opaque;
 		opaque.depthStencil.depth.enable = true;
 		opaque.depthStencil.stencil.enable = false;
-		opaque.colors = {TextureFormat::RGBA8};	// Shaderに情報を持たせたい
+		opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
 		opaque.depth = TextureFormat::D32;
 		opaque.vs = Shader::CompileVS(code.value());
 		opaque.ps = Shader::CompilePS(code.value());

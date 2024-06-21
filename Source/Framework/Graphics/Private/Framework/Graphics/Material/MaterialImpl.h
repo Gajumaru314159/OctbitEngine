@@ -31,7 +31,7 @@ namespace ob::graphics {
 
 
 	struct PipelineKey {
-		String pass;
+		StringView pass;
 		VertexLayoutId layout;
 
 		bool operator==(const PipelineKey& rhs)const {
@@ -82,8 +82,8 @@ namespace ob::graphics {
 
 	public:
 
-		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, String pass);
-		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, String pass);
+		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, StringView pass);
+		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, StringView pass);
 
 	private:
 
@@ -102,7 +102,7 @@ namespace ob::graphics {
 			}
 		}
 
-		Ref<rhi::PipelineState> createPipeline(String pass,const rhi::VertexLayout& layout, VertexLayoutId id);
+		Ref<rhi::PipelineState> createPipeline(StringView pass,const rhi::VertexLayout& layout, VertexLayoutId id);
 
 	private:
 

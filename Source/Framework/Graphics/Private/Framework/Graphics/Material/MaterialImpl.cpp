@@ -161,7 +161,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画コマンドを記録
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, String pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, StringView pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
 		// 3. サンプラーのデスクリプタ設定
@@ -230,7 +230,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  
 	//@―---------------------------------------------------------------------------
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh, s32 submesh, String pass) {
+	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh, s32 submesh, StringView pass) {
 
 		OB_NOTIMPLEMENTED();
 	}
@@ -239,7 +239,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインを生成
 	//@―---------------------------------------------------------------------------
-	Ref<rhi::PipelineState> MaterialImpl::createPipeline(String pass, const rhi::VertexLayout& layout,VertexLayoutId id) {
+	Ref<rhi::PipelineState> MaterialImpl::createPipeline(StringView pass, const rhi::VertexLayout& layout,VertexLayoutId id) {
 
 		using namespace ob::rhi;
 

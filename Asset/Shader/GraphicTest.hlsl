@@ -29,7 +29,8 @@ struct PsIn {
   float2 uv		:TEXCOORD;
 };
 struct PsOut {
-  float4 color0	:SV_TARGET0;
+  float4 albedo	:SV_TARGET0;
+  float4 normal	:SV_TARGET1;
 };
 // ƒGƒ“ƒgƒŠ
 PsIn VS_Main(VsIn i) {
@@ -41,8 +42,7 @@ PsIn VS_Main(VsIn i) {
 }
 PsOut PS_Main(PsIn i){
     PsOut o;
-    float4 color = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
-	color.rgb *= (dot(i.normal.xyz,s_colors[0].xyz)*0.25+0.25+0.5);
-    o.color0 = color;
+    o.albedo = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
+    o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
     return o;
 }

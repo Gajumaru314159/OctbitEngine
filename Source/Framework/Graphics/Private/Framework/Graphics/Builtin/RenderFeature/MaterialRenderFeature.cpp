@@ -34,7 +34,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	bool MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGTexture& targets) {
+	bool MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGTexture& targets)const {
 
 		auto itr = m_renderablesMap.find(pass);
 		if (itr == m_renderablesMap.end())return false;
@@ -95,6 +95,27 @@ namespace ob::graphics {
 		);
 
 		targets = data.targets.front();
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画
+	//@―---------------------------------------------------------------------------
+	bool MaterialRenderFeature::render(StringView pass, rhi::CommandList& cmdList)const {
+
+		auto itr = m_renderablesMap.find(pass);
+		if (itr == m_renderablesMap.end())return false;
+
+		auto& renderables = itr->second;
+
+		for (auto& renderable : renderables) {
+			Matrix matrix;
+			Ref<rhi::CommandList> cmdList2 = &cmdList;
+			renderable.material->record(cmdList2, matrix, renderable.mesh, renderable.submesh, pass);
+		}
+
+		cmdList.popMarker();
+
 		return true;
 	}
 

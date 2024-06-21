@@ -18,7 +18,7 @@ namespace ob::graphics {
     private:
         RenderView& m_view;
         ImGuiRenderer m_imgui;
-        MaterialRenderer m_material;
+        GBufferRenderer m_gbuffer;
     };
 
 }

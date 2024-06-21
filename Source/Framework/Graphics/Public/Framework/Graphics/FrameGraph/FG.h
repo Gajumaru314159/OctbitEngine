@@ -11,14 +11,17 @@
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
 #include <Framework/Graphics/FrameGraph/FGFrameBuffer.h>
 #include <fg/FrameGraph.hpp>
+#include <fg/Blackboard.hpp>
 #include <fstream>
 
 namespace ob::graphics {
 
 	class FGResourcePool;
 
-	enum class FGTexture : s32;
-	enum class FGBuffer : s32;
+	enum class FGTexture : s32 {};
+	enum class FGBuffer : s32 {};
+
+	using FGBlackboard = FrameGraphBlackboard;
 
 	struct FGData {
 

@@ -59,8 +59,8 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         virtual bool reserve(const Ref<Mesh>& mesh) = 0;
 
-        virtual void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, String pass)=0;
-        virtual void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, String pass)=0;
+        virtual void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, StringView pass)=0;
+        virtual void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, StringView pass)=0;
 
     public:
 
