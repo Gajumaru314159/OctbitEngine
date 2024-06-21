@@ -12,19 +12,27 @@
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
 
 namespace std {
+	
+	inline void hash_combine(std::size_t& seed) { }
 
 	template <typename T, typename... Rest>
-	static inline void hashCombine(std::size_t& seed, const T& v, const Rest &...rest) {
-		// https://stackoverflow.com/questions/2590677/how-do-i-combine-hash-values-in-c0x
-		seed ^= std::hash<T>{}(v)+0x9e3779b9 + (seed << 6) + (seed >> 2);
-		(hashCombine(seed, rest), ...);
+	inline void hash_combine(std::size_t& seed, const T& v, Rest... rest) {
+		std::hash<T> hasher;
+		seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+		hash_combine(seed, rest...);
 	}
 
 	template<>
 	struct hash<::ob::rhi::RenderTextureDesc> {
 		size_t operator()(const ::ob::rhi::RenderTextureDesc& desc) {
 			size_t h = 0;
-			//hashCombine(h, desc.format, desc.size.width, desc.size.height, desc.size.depth);
+			hash_combine(
+				h, 
+				desc.format, 
+				desc.size.width, 
+				desc.size.height, 
+				desc.size.depth
+			);
 			return h;
 		}
 	};
@@ -33,7 +41,15 @@ namespace std {
 	struct hash<::ob::rhi::BufferDesc> {
 		size_t operator()(const ::ob::rhi::BufferDesc& desc) {
 			size_t h = 0;
-			//hashCombine(h, desc.bufferType, desc.usage, desc.bufferSize, desc.bufferStride, desc.bufferFlags, desc.bindFlags);
+			hash_combine(
+				h, 
+				ob::enum_cast(desc.bufferType),
+				ob::enum_cast(desc.usage),
+				desc.bufferSize, 
+				desc.bufferStride, 
+				(ob::u32)desc.bufferFlags,
+				(ob::u32)desc.bindFlags
+			);
 			return h;
 		}
 	};
