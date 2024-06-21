@@ -59,7 +59,7 @@ namespace ob::graphics {
 
 				data.targets.push_back(builder.write(targets));
 				
-				data.depth = builder.create(depthDesc);
+				data.depth = builder.write(builder.create(depthDesc));
 				data.rect = view.getScaledRect();
 			},
 			// 仮

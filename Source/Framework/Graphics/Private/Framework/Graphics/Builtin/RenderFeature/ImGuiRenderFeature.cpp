@@ -290,10 +290,10 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderer::render(FG& fg, FGTexture target) {
+	FGTexture ImGuiRenderer::render(FG& fg, FGTexture target) {
 
 		auto display = m_view.getDisplay();
-		if (display == nullptr)return;
+		if (display == nullptr)return FGTexture{-1};
 		auto window = display->getDesc().window;
 
 
@@ -326,21 +326,19 @@ namespace ob::graphics {
 
 		struct ImGuiData {
 			FGTexture target;
-			Size size;
 		};
 
-		fg.addPass<ImGuiData>(
+		auto& data = fg.addPass<ImGuiData>(
 			"ImGui",
 			[&](FGBuilder& builder, ImGuiData& data) {
 				data.target = builder.write(target);
-				data.size = m_view.getRenderSize();
 			},
 			[this, displaySize](const ImGuiData& data, FGResources& resources, rhi::CommandList& cmdList) {
 
 				using namespace ob::rhi;
 
-				Viewport vp(0, 0, data.size.width, data.size.height, 0, 1);
 				auto texture = resources.get(data.target);
+				Viewport vp(0, 0, texture->width(), texture->height(), 0, 1);
 
 				cmdList.pushMarker("ImGui");
 
@@ -373,6 +371,7 @@ namespace ob::graphics {
 			}
 		);
 
+		return data.target;
 	}
 
 	//@―---------------------------------------------------------------------------

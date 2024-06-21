@@ -14,7 +14,7 @@ namespace ob::graphics {
     class TestRenderPipeline : public RenderPipeline{
     public:
         TestRenderPipeline(RenderView& view);
-        void render(FG& fg);
+        FGTexture render(FG& fg);
     private:
         RenderView& m_view;
         ImGuiRenderer m_imgui;

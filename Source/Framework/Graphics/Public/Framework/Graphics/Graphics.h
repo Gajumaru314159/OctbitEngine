@@ -10,6 +10,7 @@
 #include <Framework/Core/Utility/HandleManager.h>
 
 #include <Framework/Graphics/FrameGraph/FGResourcePool.h>
+#include <Framework/Graphics/FrameGraph/FG.h>
 
 
 namespace ob::graphics {
@@ -67,7 +68,7 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         void removeScene(RenderScene* scene);
 
-        void saveFrameGraph(StringView paht);
+        FGData getFGData()const;
     private:
 
         rhi::RHI& m_rhi;

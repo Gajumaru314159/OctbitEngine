@@ -156,11 +156,13 @@ namespace ob::graphics {
 		//}
 	}
 
-
-	void Graphics::saveFrameGraph(StringView path) {
+	FGData Graphics::getFGData()const {
+		FGData data;
 		if (m_fg) {
-			m_fg->debugOutput(path);
+			FGDataWriter writer(data);
+			m_fg->debugOutput(writer);
 		}
-
+		return data;
 	}
+
 }

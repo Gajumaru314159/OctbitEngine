@@ -18,15 +18,16 @@ namespace ob::graphics {
     {
 
     }
-    void TestRenderPipeline::render(FG& fg) {
+    FGTexture TestRenderPipeline::render(FG& fg) {
 
-        auto resource = fg.import(m_view.getRenderTexture());
+        auto rt = fg.import(m_view.getRenderTexture());
 
 
-        resource = m_material.render(fg, "Opaque", resource);
+        rt = m_material.render(fg, "Opaque", rt);
 
-        m_imgui.render(fg, resource);
+        rt = m_imgui.render(fg, rt);
 
+        return rt;
     }
 
 }

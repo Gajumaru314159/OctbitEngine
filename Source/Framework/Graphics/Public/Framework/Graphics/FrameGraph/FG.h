@@ -20,6 +20,87 @@ namespace ob::graphics {
 	enum class FGTexture : s32;
 	enum class FGBuffer : s32;
 
+	struct FGData {
+
+		struct Pass {
+			u32 id;
+			String name;
+			bool culled;
+		};
+		struct Resource {
+			u32 id;
+			String name;
+			String desc;
+			bool transient;
+			u32 createdPassId;
+			Array<u32> readers;
+			Array<u32> writers;
+		};
+
+		Array<Pass> passes;
+		Array<u32> reads;
+		Array<u32> writes;
+		Map<u32, Resource> resources;
+	};
+
+	class FGDataWriter{
+	public:
+		FGDataWriter(FGData& data) 
+			: m_data(data)
+		{
+
+		}
+
+		void operator()(const PassNode& node,const std::vector<ResourceNode>& resourceNodes) {
+			m_data.passes.push_back(
+				FGData::Pass{
+					node.getId(),
+					node.getName().data(),
+					!node.canExecute()
+				}
+			);
+			const auto getResourceIds = [&](const auto type) {
+				Array<u32> ids;
+				ids.reserve(resourceNodes.size());
+				for (const auto [id, _] : node.each(type)) {
+					ids.emplace_back(resourceNodes[id].getResourceId());
+				}
+				return ids;
+			};
+			m_data.reads = getResourceIds(PassNode::Read{});
+			m_data.writes = getResourceIds(PassNode::Write{});
+		}
+		void operator()(const ResourceNode& node, const ResourceEntry& entry,const std::vector<PassNode>& passNodes) {
+			
+			auto [itr,added] = m_data.resources.try_emplace(entry.getId());
+			auto& obj = itr->second;
+
+			if (added) {
+				obj = {
+					entry.getId(),
+					String(node.getName().data()),
+					entry.toString(),
+					entry.isTransient()
+				};
+			}
+			for (const auto& p : passNodes) {
+				if (p.creates(node.getId())) {
+					obj.createdPassId = p.getId();
+				}
+				if (p.reads(node.getId())) {
+					obj.readers.emplace_back(p.getId());
+				}
+				if (p.writes(node.getId())) {
+					obj.writers.emplace_back(p.getId());
+				}
+			}
+		}
+		void flush(std::ostream& os) const { }
+	private:
+		FGData& m_data;
+	};
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      FrameGraph
 	//@―---------------------------------------------------------------------------
@@ -109,9 +190,15 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      dot形式でFrameGraphの依存関係を出力する
 		//@―---------------------------------------------------------------------------
-		void debugOutput(StringView name) {
+		void save(StringView name) {
 			std::ofstream f{name.data()};
 			f << m_fg;
+		}
+
+		template<class Writer>
+		void debugOutput(Writer&& writer) {
+			std::stringstream s;
+			m_fg.debugOutput<Writer>(s,writer);
 		}
 
 	private:

@@ -88,7 +88,7 @@ namespace ob::graphics {
 
 		m_display = display;
 		RenderTextureDesc desc;
-		desc.name = m_name;
+		desc.name = Format("Display_{}",m_name);
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
@@ -124,23 +124,26 @@ namespace ob::graphics {
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
 	void RenderView::render(FG& fg) {
-		if (m_pipeline)m_pipeline->render(fg);
+		if (!m_pipeline) return;
+		if (!m_display || !m_renderTexture)return;
+		
+		FGTexture target = m_pipeline->render(fg);
 
-		// TODO 登録順序に依存を持たせないと最初に描画される？
-		if (m_display && m_renderTexture) {
+		struct Data {
+			FGTexture target;
+		};
 
-			struct Data{};
-
-			fg.addPass<Data>(
-				"ApplyDisplay",
-				[](FGBuilder& builder, Data& data) {
-					builder.setSideEffect();
-				},
-				[this](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
-					cmdList.applyDisplay(m_display, m_renderTexture);
-				}
-			);
-		}
+		fg.addPass<Data>(
+			"ApplyDisplay",
+			[&](FGBuilder& builder, Data& data) {
+				data.target = builder.read(target);
+				builder.setSideEffect();
+			},
+			[this](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
+				auto texture = resources.get(data.target);
+				cmdList.applyDisplay(m_display, texture);
+			}
+		);
 	}
 
 	//@―---------------------------------------------------------------------------

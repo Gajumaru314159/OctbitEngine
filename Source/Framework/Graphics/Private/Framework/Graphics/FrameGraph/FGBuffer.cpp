@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
 #include <Framework/Graphics/FrameGraph/FGResourcePool.h>
+#include <magic_enum.hpp>
 
 namespace ob::graphics {
 
@@ -17,10 +18,20 @@ namespace ob::graphics {
 		OB_ASSERT_EXPR(instance);
 		static_cast<FGResourcePool*>(allocator)->destroyBuffer(desc, instance);
 	}
-	std::string FGBufferInstance::toStringt(const Desc& desc) {
-		U8String name;
-		StringEncoder::Encode(desc.name, name);
-		return name.str();
+	std::string FGBufferInstance::toString(const Desc& desc) {
+		auto str = Format(
+			"Name  :{}\n"
+			"Type  :{}\n"
+			"Usaege:{}\n"
+			"Size  :{}\n"
+			"Stride:{}",
+			desc.name,
+			magic_enum::enum_name(desc.bufferType),
+			magic_enum::enum_name(desc.usage),
+			desc.bufferSize,
+			desc.bufferStride
+		);
+		return std::move(str);
 	}
 
 }
