@@ -127,6 +127,10 @@ namespace ob::graphics {
 		friend class FrameGraph;
 
 	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      コンストラクタ
+		//@―---------------------------------------------------------------------------
 		FGResources(FrameGraphPassResources& resources)
 			: m_resources(resources)
 		{
@@ -164,6 +168,9 @@ namespace ob::graphics {
 		FrameGraphPassResources& m_resources;
 	};
 
+	//@―---------------------------------------------------------------------------
+	//! @brief      FrameGraphで使用するリソースを生成するクラス
+	//@―---------------------------------------------------------------------------
 	class FGBuilder {
 	public:
 		FGBuilder(FrameGraph::Builder& builder) 
