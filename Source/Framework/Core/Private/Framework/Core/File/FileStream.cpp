@@ -10,6 +10,17 @@
 
 namespace ob::core {
 
+
+	Optional<String> ReadFile(StringView path) {
+		FileStream stream(path);
+		if (!stream.canRead())return std::nullopt;
+
+		String result;
+		result.resize(stream.size());
+		stream.read(result.data(), result.size());
+		return result;
+	}
+
 	static String GetErrnoString() {
 		std::string errorStr = strerror(errno);
 		String errorStr2;
