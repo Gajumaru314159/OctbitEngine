@@ -4,6 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Input/System.h>
+#include <Framework/Input/InputManager.h>
 #include <Framework/Input/Config.h>
 #include <Framework/Input/Axis.h>
 #include <Framework/Input/Button.h>
