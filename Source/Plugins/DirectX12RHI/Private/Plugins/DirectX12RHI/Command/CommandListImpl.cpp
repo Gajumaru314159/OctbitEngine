@@ -139,6 +139,9 @@ namespace ob::rhi::dx12 {
 		D3D12_CPU_DESCRIPTOR_HANDLE hColors[8]{};
 		D3D12_CPU_DESCRIPTOR_HANDLE hDepth{};
 
+		Ref<RenderTexture> tColors[8]{};
+		Ref<RenderTexture> tDepth{};
+
 		D3D12_VIEWPORT viewport{};
 		D3D12_RECT scissor{};
 
@@ -149,6 +152,7 @@ namespace ob::rhi::dx12 {
 				
 				m_cache.addTexture(*texture,D3D12_RESOURCE_STATE_RENDER_TARGET);
 				hColors[i] = texture->getRTV().getCpuHandle();
+				tColors[i] = texture;
 
 				viewport = texture->getViewport();
 				scissor = texture->getScissorRect();
@@ -167,6 +171,7 @@ namespace ob::rhi::dx12 {
 
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
 				hDepth = texture->getDSV().getCpuHandle();
+				tDepth = texture;
 			}
 
 		}
@@ -185,16 +190,10 @@ namespace ob::rhi::dx12 {
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &scissor);
 
-
-		for (auto& color : colors) {
-			if (auto texture = color.cast<TextureImpl>()) {
-				texture->clear(m_cmdList.Get());
-			}
-		}
-
-		if (auto texture = depth.cast<TextureImpl>()) {
-			texture->clear(m_cmdList.Get());
-		}
+		for (auto& [i, item] : Indexed(hColors))m_hRTVs[i] = item;
+		m_hDSV = hDepth;
+		for (auto& [i, item] : Indexed(tColors))m_colorTextures[i] = item;
+		m_depthTexture = tDepth;
 
 	}
 	
@@ -252,27 +251,20 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearColors(u32 mask) {
 
-		OB_NOTIMPLEMENTED();
-		//if (m_pRenderTarget == nullptr)return;
-		//
-		//auto& desc = m_pRenderTarget->getDesc();
-		//for (s32 i = 0, ie = m_pRenderTarget->getColorTextureCount(); i < ie; ++i) {
-		//	if (mask & (1 << i)) {
-		//		if (m_hRTV[i].ptr) {
-		//			auto texture = m_pRenderTarget->getColorTexture(i);
-		//
-		//			auto color = desc.colors[i].clearColor;
-		//
-		//			FLOAT values[4];
-		//			values[0] = color.r;
-		//			values[1] = color.g;
-		//			values[2] = color.b;
-		//			values[3] = color.a;
-		//
-		//			m_cmdList->ClearRenderTargetView(m_hRTV[i], values, 0, nullptr);
-		//		}
-		//	}
-		//}
+		for (auto [i, handle] : Indexed(m_hRTVs)) {
+			if (!(mask & (1 << i)))continue;
+			if (!handle.ptr) continue;
+			if (!m_colorTextures[i]) continue;
+			
+			auto color = m_colorTextures[i]->descOfRenderTexture().clear.color;
+
+			FLOAT values[4];
+			values[0] = color.r;
+			values[1] = color.g;
+			values[2] = color.b;
+			values[3] = color.a;
+			m_cmdList->ClearRenderTargetView(handle, values, 0, nullptr);
+		}
 
 	}
 
@@ -282,17 +274,14 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDepthStencil() {
 		
-		OB_NOTIMPLEMENTED();
-
-		//auto& desc = m_pRenderTarget->getDesc();
-		//if (desc.depth.empty())return;
-		//if (m_hDSV.ptr != 0) {
-		//	FLOAT depth = desc.depth[0].clearDepth;
-		//	UINT8 stencil = (UINT8)desc.depth[0].clearDepth;
-		//
-		//	D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
-		//	m_cmdList->ClearDepthStencilView(m_hDSV, clearFlags, depth, stencil, 0, nullptr);
-		//}
+		if (m_hDSV.ptr != 0 && m_depthTexture) {
+			auto& desc = m_depthTexture->descOfRenderTexture();
+			FLOAT depth = desc.clear.depth;
+			UINT8 stencil = desc.clear.stencil;
+		
+			D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
+			m_cmdList->ClearDepthStencilView(m_hDSV, clearFlags, depth, stencil, 0, nullptr);
+		}
 	}
 
 
@@ -427,21 +416,24 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDescriptorHandle() {
 		m_hDSV.ptr = 0;
-		for (s32 i = 0; i < std::size(m_hRTV); ++i) {
-			m_hRTV[i].ptr = 0;
+		for (s32 i = 0; i < std::size(m_hRTVs); ++i) {
+			m_hRTVs[i].ptr = 0;
 		}
 	}
 
-
-
-#ifdef OB_DEBUG
+	//@―---------------------------------------------------------------------------
+	//! @brief  GPUマーカーをプッシュ
+	//@―---------------------------------------------------------------------------
 	void CommandListImpl::pushMarker(StringView name) {
 		StringEncoder::Encode(name, m_markerNameCache);
 		::PIXBeginEvent(m_cmdList.Get(),PIX_COLOR_DEFAULT, m_markerNameCache.data());
 	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  GPUマーカーをポップ
+	//@―---------------------------------------------------------------------------
 	void CommandListImpl::popMarker() {
 		::PIXEndEvent(m_cmdList.Get());
 	}
-#endif
 
 }

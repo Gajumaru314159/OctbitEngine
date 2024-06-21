@@ -134,18 +134,15 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         void insertResourceBarrier(const ResourceBarrier&) override;
 
-
-#ifdef OB_DEBUG
         //@―---------------------------------------------------------------------------
-        //! @brief      マーカーを挿入
+        //! @brief      GPUマーカーをプッシュ
         //@―---------------------------------------------------------------------------
         void pushMarker(StringView name) override;
 
         //@―---------------------------------------------------------------------------
-        //! @brief      マーカーを終了
+        //! @brief      GPUマーカーをポップ
         //@―---------------------------------------------------------------------------
         void popMarker() override;
-#endif
 
 #pragma endregion
 
@@ -165,16 +162,17 @@ namespace ob::rhi::dx12 {
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
         ComPtr<ID3D12GraphicsCommandList6> m_cmdList;
 
-        D3D12_CPU_DESCRIPTOR_HANDLE m_hRTV[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
+        D3D12_CPU_DESCRIPTOR_HANDLE m_hRTVs[RENDER_TARGET_MAX]; // 現在の描画ターゲット(クリア用)
         D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
 
-        ID3D12RootSignature* m_rootSignature = nullptr;
+        Ref<RenderTexture> m_colorTextures[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
+        Ref<RenderTexture>m_depthTexture;                       // 現在の描画ターゲット(クリア用)
 
-        s32         m_subpassIndex;
+        ID3D12RootSignature* m_rootSignature = nullptr;         // 最後に設定されたPipelineStateのRootSignature
 
-        ResourceStateCache m_cache;
+        ResourceStateCache m_cache;                             // リソースバリア用ステートキャッシュ
 
-        StringBase<char> m_markerNameCache;
+        StringBase<WCHAR> m_markerNameCache;                    // マーカー名用文字列キャッシュ
 
     };
 

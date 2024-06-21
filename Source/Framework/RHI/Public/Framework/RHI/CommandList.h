@@ -72,10 +72,8 @@ namespace ob::rhi {
 
         virtual void insertResourceBarrier(const ResourceBarrier&) = 0;
 
-#ifdef OB_DEBUG
         virtual void pushMarker(StringView name) = 0;
         virtual void popMarker() = 0;
-#endif
 
         // virtual void setViewports(const Viewport* pViewport, s32 num) = 0;  //!< ビューポートを設定
         // virtual void setScissors(const IntRect* pRect, s32 num) = 0;    //!< シザー矩形を設定
