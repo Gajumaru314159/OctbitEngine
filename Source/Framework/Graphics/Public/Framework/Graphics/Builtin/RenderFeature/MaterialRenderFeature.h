@@ -36,7 +36,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		FGTexture render(FG& fg, RenderView& view,String pass, FGTexture targets);
+		bool render(FG& fg, RenderView& view,String pass, FGTexture& targets);
 
 	private:
 
@@ -52,14 +52,15 @@ namespace ob::graphics {
 
 		}
 
-		FGTexture render(FG& fg, String pass, FGTexture targets) {
+		bool render(FG& fg, String pass, FGTexture& targets) {
 			if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 				return feature->render(fg, m_view,pass, targets);
 			}
-			return {};
+			return false;
 		}
 
 	private:
 		RenderView& m_view;
 	};
+
 }

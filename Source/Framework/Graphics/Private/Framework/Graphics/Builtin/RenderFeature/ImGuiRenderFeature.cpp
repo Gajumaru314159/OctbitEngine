@@ -290,10 +290,10 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	FGTexture ImGuiRenderer::render(FG& fg, FGTexture target) {
+	bool ImGuiRenderer::render(FG& fg, FGTexture& target) {
 
 		auto display = m_view.getDisplay();
-		if (display == nullptr)return FGTexture{-1};
+		if (display == nullptr)return false;
 		auto window = display->getDesc().window;
 
 
@@ -371,7 +371,8 @@ namespace ob::graphics {
 			}
 		);
 
-		return data.target;
+		target = data.target;
+		return true;
 	}
 
 	//@―---------------------------------------------------------------------------

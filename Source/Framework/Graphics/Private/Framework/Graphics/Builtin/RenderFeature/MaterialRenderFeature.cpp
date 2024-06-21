@@ -34,10 +34,10 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	FGTexture MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGTexture targets) {
+	bool MaterialRenderFeature::render(FG& fg, RenderView& view,String pass, FGTexture& targets) {
 
 		auto itr = m_renderablesMap.find(pass);
-		if (itr == m_renderablesMap.end())return {};
+		if (itr == m_renderablesMap.end())return false;
 
 		auto& renderables = itr->second;
 
@@ -94,7 +94,8 @@ namespace ob::graphics {
 			}
 		);
 
-		return data.targets.front();
+		targets = data.targets.front();
+		return true;
 	}
 
 }

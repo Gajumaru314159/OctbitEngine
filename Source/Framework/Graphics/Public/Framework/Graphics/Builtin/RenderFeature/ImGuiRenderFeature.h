@@ -71,7 +71,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief		描画
 		//@―---------------------------------------------------------------------------
-		FGTexture render(FG& fg, FGTexture target);
+		bool render(FG& fg, FGTexture& target);
 
 	private:
 
