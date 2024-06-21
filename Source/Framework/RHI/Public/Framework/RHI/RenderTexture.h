@@ -23,6 +23,13 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         static Ref<RenderTexture> Create(const RenderTextureDesc& desc);
 
+    public:
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      定義取得
+        //@―---------------------------------------------------------------------------
+        virtual const RenderTextureDesc& descOfRenderTexture()const = 0;
+
     };
 
 }
