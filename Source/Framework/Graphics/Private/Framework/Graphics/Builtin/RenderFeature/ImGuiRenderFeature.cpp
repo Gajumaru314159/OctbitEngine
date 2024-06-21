@@ -812,8 +812,8 @@ namespace ob::graphics {
 		size_t globalIndexOffset = 0;
 		size_t globalVertexOffset = 0;
 
-		for (auto& cmdList : Span<ImDrawList*>(drawData->CmdLists, drawData->CmdListsCount)) {
-			for (auto& cmdBuf : Span<ImDrawCmd>(cmdList->CmdBuffer.Data, cmdList->CmdBuffer.Size)) {
+		for (auto& cmdList : drawData->CmdLists) {
+			for (auto& cmdBuf : cmdList->CmdBuffer) {
 
 				// シザー/クリッピングの矩形をフレームバッファ空間に投影する
 				ImVec2 clip = drawData->DisplayPos;

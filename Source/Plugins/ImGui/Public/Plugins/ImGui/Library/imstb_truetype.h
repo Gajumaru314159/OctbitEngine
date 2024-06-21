@@ -656,7 +656,7 @@ STBTT_DEF void stbtt_PackSetOversampling(stbtt_pack_context *spc, unsigned int h
 STBTT_DEF void stbtt_PackSetSkipMissingCodepoints(stbtt_pack_context *spc, int skip);
 // If skip != 0, this tells stb_truetype to skip any codepoints for which
 // there is no corresponding glyph. If skip=0, which is the default, then
-// codepoints without a glyph recived the font's "missing character" glyph,
+// codepoints without a glyph received the font's "missing character" glyph,
 // typically an empty box by convention.
 
 STBTT_DEF void stbtt_GetPackedQuad(const stbtt_packedchar *chardata, int pw, int ph,  // same data as above
@@ -1430,7 +1430,7 @@ static int stbtt_InitFont_internal(stbtt_fontinfo *info, unsigned char *data, in
 
       // @TODO the name INDEX could list multiple fonts,
       // but we just use the first one.
-      stbtt__cff_get_index(&b);  
+      stbtt__cff_get_index(&b);  // name INDEX
       topdictidx = stbtt__cff_get_index(&b);
       topdict = stbtt__cff_index_get(topdictidx, 0);
       stbtt__cff_get_index(&b);  // string INDEX
