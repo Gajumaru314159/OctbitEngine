@@ -67,7 +67,11 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  TextureFormat を DXGI_FORMAT に変換
         //@―---------------------------------------------------------------------------
-        static DXGI_FORMAT Convert(TextureFormat value);
+        static DXGI_FORMAT Convert(TextureFormat value, bool useTypeless = false);
+        //@―---------------------------------------------------------------------------
+        //! @brief  TextureFormat を DXGI_FORMAT に変換
+        //@―---------------------------------------------------------------------------
+        static DXGI_FORMAT ConvertDepthAsColor(TextureFormat value);
         //@―---------------------------------------------------------------------------
         //! @brief  BlendFactor を D3D12_BLEND に変換
         //@―---------------------------------------------------------------------------

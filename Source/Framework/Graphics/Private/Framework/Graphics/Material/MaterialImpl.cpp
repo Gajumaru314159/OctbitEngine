@@ -283,6 +283,26 @@ namespace ob::graphics {
 
 		}
 
+		// RootSignature(仮)
+		Ref<RootSignature> signature = [&](){
+
+			// TODO テクスチャの複数枚対応
+			RootSignatureDesc desc(
+				{
+					RootParameter::Range(DescriptorRangeType::CBV,1,0),		// グローバルプロパティ(バッファ)
+					RootParameter::Range(DescriptorRangeType::SRV,1,0),		// グローバルプロパティ(テクスチャ)
+					RootParameter::Range(DescriptorRangeType::CBV,1,1),		// ローカルプロパティ(バッファ)
+					RootParameter::Range(DescriptorRangeType::SRV,m_desc.textureProperties.size(),1),		// ローカルプロパティ(テクスチャ)
+				},
+			{
+				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),	// グローバルプロパティ(サンプラー)
+			}
+			);
+			desc.name = "Common";
+
+			return RootSignature::Create(desc);
+		}();
+
 		// パイプライン
 		{
 			PipelineStateDesc desc;
@@ -291,7 +311,7 @@ namespace ob::graphics {
 			desc.colors = materialPass.colors;
 			desc.depth = materialPass.depth;
 			//TODO RootSignatureをマテリアル内部に閉じ込める
-			desc.rootSignature = MaterialManager::Get()->getSignature();// materialPass.rootSignature;
+			desc.rootSignature = signature;// MaterialManager::Get()->getSignature();// materialPass.rootSignature;
 			desc.vertexLayout = layout;
 			desc.vs = materialPass.vs;
 			desc.ps = materialPass.ps;

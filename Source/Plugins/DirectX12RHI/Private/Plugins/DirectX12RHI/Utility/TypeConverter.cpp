@@ -185,7 +185,7 @@ namespace ob::rhi::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  TextureFormat を DXGI_FORMAT に変換
     //@―---------------------------------------------------------------------------
-    DXGI_FORMAT TypeConverter::Convert(TextureFormat value) {
+    DXGI_FORMAT TypeConverter::Convert(TextureFormat value,bool useTypeless ) {
         switch (value) {
         case TextureFormat::RGBA32:         return DXGI_FORMAT_R32G32B32A32_FLOAT;
         case TextureFormat::RGBA16:         return DXGI_FORMAT_R16G16B16A16_UNORM;
@@ -204,10 +204,11 @@ namespace ob::rhi::dx12
 
         case TextureFormat::R10G10B10A2:    return DXGI_FORMAT_R10G10B10A2_UNORM;
 
-        case TextureFormat::D32S8:          return DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-        case TextureFormat::D32:            return DXGI_FORMAT_D32_FLOAT;
-        case TextureFormat::D24S8:          return DXGI_FORMAT_D24_UNORM_S8_UINT;
-        case TextureFormat::D16:            return DXGI_FORMAT_D16_UNORM;
+        // Depthはシェーダーリソースとしても使えるようにTYPELESSにする
+        case TextureFormat::D32S8:          return useTypeless?DXGI_FORMAT_R32G8X24_TYPELESS: DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+        case TextureFormat::D32:            return useTypeless?DXGI_FORMAT_R32_TYPELESS: DXGI_FORMAT_D32_FLOAT;
+        case TextureFormat::D24S8:          return useTypeless?DXGI_FORMAT_R32_TYPELESS: DXGI_FORMAT_D24_UNORM_S8_UINT;
+        case TextureFormat::D16:            return useTypeless?DXGI_FORMAT_R16_TYPELESS: DXGI_FORMAT_D16_UNORM;
 
         case TextureFormat::BC1:            return DXGI_FORMAT_BC1_UNORM;
         case TextureFormat::BC2:            return DXGI_FORMAT_BC2_UNORM;
@@ -222,6 +223,20 @@ namespace ob::rhi::dx12
         case TextureFormat::BC2_SRGB:       return DXGI_FORMAT_BC2_UNORM_SRGB;
         case TextureFormat::BC3_SRGB:       return DXGI_FORMAT_BC3_UNORM_SRGB;
         case TextureFormat::BC7_SRGB:       return DXGI_FORMAT_BC7_UNORM_SRGB;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なTextureFormat[value={}]", enum_cast(value));
+        return DXGI_FORMAT_UNKNOWN;
+    }
+
+    //@―---------------------------------------------------------------------------
+    //! @brief  TextureFormat を DXGI_FORMAT に変換
+    //@―---------------------------------------------------------------------------
+    DXGI_FORMAT TypeConverter::ConvertDepthAsColor(TextureFormat value) {
+        // Depthはシェーダーリソースとしても使えるようにTYPELESSにする
+        switch (value) {
+        case TextureFormat::D32:            return DXGI_FORMAT_R32_FLOAT;
+        case TextureFormat::D16:            return DXGI_FORMAT_R16_UNORM;
         }
 
         LOG_WARNING_EX("Graphic", "不正なTextureFormat[value={}]", enum_cast(value));

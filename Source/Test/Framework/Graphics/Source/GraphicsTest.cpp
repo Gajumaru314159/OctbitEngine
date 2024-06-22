@@ -37,6 +37,7 @@ TEST(Graphis, Create) {
 
 	rhi::Config config;
 	config.enablePIX = true;
+	config.breakWithWarning = true;
 	injector.bind(config);
 
 	struct Dependency {

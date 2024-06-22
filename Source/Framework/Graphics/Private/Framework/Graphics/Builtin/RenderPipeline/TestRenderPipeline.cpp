@@ -32,14 +32,14 @@ namespace ob::graphics {
 
     TestRenderPipeline::TestRenderPipeline(RenderView& view)
         : m_view(view)
+        , m_opaque(view)
+        , m_masked(view)
+        , m_defferedLight(view)
         , m_imgui(view)
-        , m_gbuffer(view)
     {
 
     }
     FGTexture TestRenderPipeline::render(FG& fg) {
-
-        auto target = fg.import(m_view.getRenderTexture());
 
         // ソート設定
         
@@ -49,13 +49,16 @@ namespace ob::graphics {
         FGBlackboard blackboard;
 
         {
-			blackboard.add<GBufferData>() = fg.addPass<GBufferData>(
+			auto& data = blackboard.add<GBufferData>() = fg.addPass<GBufferData>(
 				"Prepare",
 				[&](FGBuilder& builder, GBufferData& data) {
 					rhi::RenderTextureDesc desc;
 					desc.size = m_view.getRenderSize();
 					{
-						data.albedo = target;
+                        desc.name = "Albedo";
+                        desc.format = rhi::TextureFormat::RGBA8;
+                        desc.clear.color = Color::Black;
+                        data.albedo = builder.write(builder.create(desc));
 					}
 					{
 						desc.name = "Normal";
@@ -74,13 +77,13 @@ namespace ob::graphics {
 			);
         }
 
-        m_gbuffer.render(fg, blackboard);
+        m_opaque.render(fg, blackboard);
+        m_masked.render(fg, blackboard);
 
-        GBufferData& gbuffer = blackboard.get<GBufferData>();
-        target = gbuffer.albedo;
+        auto target = fg.import(m_view.getRenderTexture());
+        m_defferedLight.render(fg, blackboard,target);
 
         m_imgui.render(fg, target);
-
 
         return target;
     }

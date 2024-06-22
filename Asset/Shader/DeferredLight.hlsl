@@ -18,35 +18,38 @@ cbuffer Param : register(b1) {
 
 
 
-Texture2D s_skyTex : register(t0);
-Texture2D g_mainTex:register(t1);
+
+Texture2D s_dummy : register(t0);
+Texture2D g_albedo : register(t1);
+Texture2D g_normal : register(t2);
+Texture2D g_depth : register(t3);
 
 // IN / OUT
 struct VsIn {
   float4 pos	:POSITION;
-  float4 normal	:NORMAL;
   float2 uv		:TEXCOORD;
 };
 struct PsIn {
   float4 pos	:SV_POSITION;
-  float4 normal	:NORMAL;
   float2 uv		:TEXCOORD;
 };
 struct PsOut {
-  float4 albedo	:SV_TARGET0;
-  float4 normal	:SV_TARGET1;
+  float4 color	:SV_TARGET0;
 };
 // ƒGƒ“ƒgƒŠ
 PsIn VS_Main(VsIn i) {
     PsIn o;
-    o.pos = mul(s_matrices[0],mul(g_matrices[0],float4(i.pos.xyz,1)));
+    o.pos = i.pos;
+    o.pos.w = 1.0;
     o.uv = i.uv;
-    o.normal = i.normal;
     return o;
 }
 PsOut PS_Main(PsIn i){
     PsOut o;
-    o.albedo = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
-    o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
+    float4 albedo = g_albedo.Sample(g_mainSampler,i.uv);
+    float4 normal = g_normal.Sample(g_mainSampler,i.uv)*0.5+0.5;
+    float4 depth = g_depth.Sample(g_mainSampler,i.uv) / 0.003;
+    o.color = lerp(normal,depth,step(i.uv.y,0.5));
+    o.color = lerp(albedo,o.color,step(i.uv.x,0.5));
     return o;
 }

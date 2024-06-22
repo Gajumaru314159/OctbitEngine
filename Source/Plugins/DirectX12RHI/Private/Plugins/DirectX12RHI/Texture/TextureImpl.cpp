@@ -73,8 +73,6 @@ namespace ob::rhi::dx12 {
 			Utility::OutputFatalLog(result,"ID3D12Device::CreateCommittedResource()");
 		}
 
-		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
-
 		Utility::SetName(m_resource.Get(), getName());
     }
 
@@ -124,9 +122,6 @@ namespace ob::rhi::dx12 {
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
 		}
-
-		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
-
 
 		result = m_resource->WriteToSubresource(
 			0,
@@ -241,7 +236,6 @@ namespace ob::rhi::dx12 {
 		m_desc.arrayNum = (s32)metadata.arraySize;
 		m_desc.mipLevels = (s32)metadata.mipLevels;
 
-		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
 		m_resource = resource;
 
 		Utility::SetName(m_resource.Get(), getName());
@@ -281,20 +275,6 @@ namespace ob::rhi::dx12 {
 
 		if (!resource)
 			return;
-
-		// SRV生成
-		{
-			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
-
-			D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
-			viewDesc.Format = resource->GetDesc().Format;
-			viewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-			viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-			viewDesc.Texture2D.MipLevels = 1;
-
-			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hSRV.getCpuHandle();
-			rDevice.getNative()->CreateShaderResourceView(resource.Get(), &viewDesc, handle);
-		}
 
 		// RTV生成
 		{
@@ -337,7 +317,7 @@ namespace ob::rhi::dx12 {
 
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { m_renderDesc.clear.color.r,m_renderDesc.clear.color.g,m_renderDesc.clear.color.b,m_renderDesc.clear.color.a };
-		auto format = TypeConverter::Convert(m_renderDesc.format);
+		auto format = TypeConverter::Convert(m_renderDesc.format,true);
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, m_renderDesc.clear.depth, m_renderDesc.clear.stencil);
 
@@ -377,27 +357,11 @@ namespace ob::rhi::dx12 {
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
 			m_state,
-			clearValue,
+			NULL,
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
-		}
-
-
-		// SRV生成
-
-		if (isColor) {
-			m_device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_hSRV, 1);
-
-			D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
-			viewDesc.Format = resource->GetDesc().Format;
-			viewDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-			viewDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-			viewDesc.Texture2D.MipLevels = 1;
-
-			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hSRV.getCpuHandle();
-			m_device.getNative()->CreateShaderResourceView(resource.Get(), &viewDesc, handle);
 		}
 
 		// RTV生成
@@ -420,7 +384,7 @@ namespace ob::rhi::dx12 {
 			m_device.allocateHandle(DescriptorHeapType::DSV, m_hDSV, 1);
 
 			D3D12_DEPTH_STENCIL_VIEW_DESC viewDesc = {};
-			viewDesc.Format = format;
+			viewDesc.Format = TypeConverter::Convert(m_renderDesc.format);
 			viewDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 			viewDesc.Flags = D3D12_DSV_FLAG_NONE;
 
@@ -492,6 +456,10 @@ namespace ob::rhi::dx12 {
 		D3D12_SHADER_RESOURCE_VIEW_DESC texDesc = {};
 		texDesc.Format = m_resource->GetDesc().Format;
 		texDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+		if (TextureFormatUtility::HasDepth(m_desc.format)) {
+			texDesc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
+		}
 
 		switch (m_desc.type) {
 		case TextureType::Texture1D:

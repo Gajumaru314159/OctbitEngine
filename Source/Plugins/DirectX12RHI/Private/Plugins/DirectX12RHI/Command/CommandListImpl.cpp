@@ -145,6 +145,25 @@ namespace ob::rhi::dx12 {
 		D3D12_VIEWPORT viewport{};
 		D3D12_RECT scissor{};
 
+
+
+		for (auto [i, color] : Indexed(m_colorTextures)) {
+
+			if (auto texture = color.cast<TextureImpl>()) {
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			}
+			m_colorTextures[i] = {};
+			hColors[i] = {};
+		}
+		if (auto texture = m_depthTexture.cast<TextureImpl>()) {
+
+			m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			m_depthTexture = {};
+			m_hDSV = {};
+		}
+		// リソースバリア
+		m_cache.recordCommand(*m_cmdList.Get());
+
 		// レンダーターゲットビュー設定
 		for (auto [i, color] : Indexed(colors)) {
 

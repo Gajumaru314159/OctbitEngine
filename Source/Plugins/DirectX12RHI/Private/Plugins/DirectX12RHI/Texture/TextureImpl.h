@@ -106,7 +106,6 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      Viewを取得
         //@―---------------------------------------------------------------------------
-        const DescriptorHandle& getSRV()const { return m_hSRV; }
         const DescriptorHandle& getRTV()const { return m_hRTV; }
         const DescriptorHandle& getDSV()const { return m_hDSV; }
 
@@ -149,7 +148,6 @@ namespace ob::rhi::dx12 {
         RenderTextureDesc       m_renderDesc;   //!< 定義
 
         ComPtr<ID3D12Resource>  m_resource;     //!< リソース
-        DescriptorHandle        m_hSRV;         //!< デスクリプタハンドル
         DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル
         DescriptorHandle        m_hDSV;         //!< デスクリプタハンドル
 

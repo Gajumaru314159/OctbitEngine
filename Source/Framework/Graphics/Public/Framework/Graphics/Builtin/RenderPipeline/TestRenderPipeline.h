@@ -8,6 +8,7 @@
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
 
 namespace ob::graphics {
 
@@ -18,7 +19,9 @@ namespace ob::graphics {
     private:
         RenderView& m_view;
         ImGuiRenderer m_imgui;
-        GBufferRenderer m_gbuffer;
+        OpaqueRenderer m_opaque;
+        MaskedRenderer m_masked;
+        DefferedLightRenderer m_defferedLight;
     };
 
 }
