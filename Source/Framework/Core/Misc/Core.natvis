@@ -26,12 +26,14 @@
 
 	<!--String-->
 	<Type Name="ob::core::StringBase&lt;char&gt;">
-		<DisplayString>{m_str}</DisplayString>
+		<DisplayString>{m_str,s8}</DisplayString>
+		<StringView>m_str</StringView>
 	</Type>
 	
 	<!--StringView-->
 	<Type Name="ob::core::StringViewBase&lt;*&gt;">
-		<DisplayString>{m_view,s}</DisplayString>
+		<DisplayString>{m_view,s8}</DisplayString>
+		<StringView>m_view</StringView>
 	</Type>
 
 	<!--Pimpl-->

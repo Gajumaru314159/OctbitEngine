@@ -26,6 +26,9 @@ TEST(Graphis, Create) {
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
+	ob::debug::Profiler profiler;
+	ob::debug::LogInfo loginfo;
+	ob::debug::FrameGraphDebugger fgdebugger;
 
 	System::Setup();
 	
@@ -49,9 +52,6 @@ TEST(Graphis, Create) {
 		injector.create<Dependency>(container);
 	}
 
-	ob::debug::Profiler profiler;
-	ob::debug::LogInfo loginfo;
-	ob::debug::FrameGraphDebugger fgdebugger;
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
