@@ -93,25 +93,21 @@ TEST(Graphis, Create) {
 
 		MaterialDesc desc;
 		desc.name = "Default";
-		desc.colorProperties = { "Color" , "Color2"};
 		desc.matrixProperties = { "Matrix" };
 		desc.textureProperties = { "Main" };
 
-		MaterialPass opaque;
+		MaterialPass& opaque = desc.passes["Opaque"];
 		opaque.depthStencil.depth.enable = true;
-		opaque.depthStencil.stencil.enable = false;
 		opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
 		opaque.depth = TextureFormat::D32;
 		opaque.vs = Shader::CompileVS(code.value());
 		opaque.ps = Shader::CompilePS(code.value());
-		opaque.blends = { BlendDesc::AlphaBlend };
 		opaque.requiredLayout = {
 			{Semantic::Position,Type::Float,4},
 			{Semantic::Normal,Type::Float,4},
 			{Semantic::TexCoord,Type::Float,2},
 		};
 
-		desc.passes.emplace("Opaque",opaque);
 		return Material::Create(desc);
 	}();
 	auto skyMat = Material::Create(material->getDesc());
@@ -122,11 +118,9 @@ TEST(Graphis, Create) {
 	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
 	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
 
-	material->setColor("Color", Color::White);
 	material->setMatrix("Matrix", Matrix::Identity);
 	material->setTexture("Main", texture);
 
-	skyMat->setColor("Color", Color::White);
 	skyMat->setMatrix("Matrix", Matrix::Identity);
 	skyMat->setTexture("Main", skyTexture);
 
@@ -137,8 +131,14 @@ TEST(Graphis, Create) {
 
 	Vec3 pos(0, 0, -10);
 	Rot rot = Rot::Identity;
-	f32 modelRotSpeed = 30.0f;
 	auto now = DateTime::Now();
+
+
+	auto size = display->getDesc().size;
+	auto viewMtx =
+		Matrix::Perspective(60, size.width, size.height, 0.01f, 10000.0f) *
+		Matrix::TRS(pos, rot, Vec3::One).inverse();
+	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 
 	for (s32 i = 0; i < 100000; ++i) {
 
@@ -146,26 +146,13 @@ TEST(Graphis, Create) {
 
 		RHI::Get()->update();
 		input::InputModule::Get()->update();
-
 		display->update();
 
 
-
-		// 入力更新
-		const auto rspd = 90 / 60.f;
-		Rot r2(rot.x, rot.y, 0);
-		static auto speed = 4 / 60.f;
-		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
 		// 行列更新
-		auto size = display->getDesc().size;
-		auto viewMtx =
-			Matrix::Perspective(60, size.width,size.height, 0.01f, 10000.0f) * 
-			Matrix::TRS(pos, rot, Vec3::One).inverse();
-		auto ukuleleMtx = Matrix::TRS(Vec3::Zero, Quat(0, t*modelRotSpeed, 70), Vec3::One);
-
-		graphics::Material::SetGlobalColor("LightDir", Color(1, 1, 1));
-		graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
-		material->setMatrix("Matrix",ukuleleMtx);
+		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
+		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t*30.0f, 70), Vec3::One);
+		material->setMatrix("Matrix",mtx);
 		material->setColor("Color", Color::White);
 
 
