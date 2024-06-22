@@ -41,12 +41,19 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      インスタンスを取得
         //@―---------------------------------------------------------------------------
-        static Logger& Get()noexcept {
-            static Logger instance;
-            return instance;
+        static Logger* Get()noexcept {
+            return s_instance;
         }
 
-    private:
+        //@―---------------------------------------------------------------------------
+        //! @brief      インスタンスを取得
+        //@―---------------------------------------------------------------------------
+        static Logger& Instance()noexcept {
+            assert(s_instance);
+            return *s_instance;
+        }
+
+    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief コンストラクタ
@@ -58,8 +65,6 @@ namespace ob::core {
         //! @brief デストラクタ
         //@―---------------------------------------------------------------------------
         ~Logger();
-
-    public:
 
         //@―---------------------------------------------------------------------------
         //! @brief                  ログの追加
@@ -108,8 +113,9 @@ namespace ob::core {
 
         Mutex           m_mutex;
         EventNotifier   m_notifier;
+        EventHandle     m_hDebugEvent;
         Atomic<bool>    m_logged = false;
-
+        static Logger*  s_instance;
     };
 
 

@@ -11,14 +11,17 @@
 
 #include <iostream>
 
-static ob::core::Logger::EventHandle s_debugLogEvent;
-
 namespace ob::core {
+
+    Logger* Logger::s_instance = nullptr;
 
     //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ
     //@―---------------------------------------------------------------------------
     Logger::Logger() {
+
+        assert(s_instance == nullptr);
+        s_instance = this;
 
         // デフォルトログイベント
         auto func = [](const Log& log) {
@@ -99,7 +102,7 @@ namespace ob::core {
         setlocale(LC_ALL, "Japanese");
 
 
-        addEvent(s_debugLogEvent, func);
+        addEvent(m_hDebugEvent, func);
     }
 
 
@@ -107,7 +110,8 @@ namespace ob::core {
     //! @brief デストラクタ
     //@―---------------------------------------------------------------------------
     Logger::~Logger() {
-        s_debugLogEvent.remove();
+        m_hDebugEvent.remove();
+        s_instance = nullptr;
     }
 
 

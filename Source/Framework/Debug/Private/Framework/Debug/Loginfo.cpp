@@ -31,33 +31,35 @@ namespace ob::debug {
 		m_levelFilter[LogLevel::Info] = true;
 		m_levelFilter[LogLevel::Trace] = true;
 
-		Logger::Get().addEvent(m_hLogged,
-			[this](const Log& log) {
-				if (m_maxLogCount < m_logs.size()) {
-					m_logs.pop_front();
-				}
-
-				if (!m_logs.empty()) {
-					auto& last = m_logs.back();
-					if (last.level == log.level && last.message == log.message) {
-						last.count++;
-						return;
+		if (auto logger = Logger::Get()) {
+			logger->addEvent(m_hLogged,
+				[this](const Log& log) {
+					if (m_maxLogCount < m_logs.size()) {
+						m_logs.pop_front();
 					}
-				}
 
-				auto& cache = m_logs.emplace_back();
-				cache.datetime = DateTime::Now();
-				cache.level = log.level;
-				cache.message = log.message;
-				cache.file = Format("{}({})", Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
-				cache.path = log.sourceLocation.filePath;
-				cache.path.replace('\\', '/');
-				cache.line = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
-				cache.line2 = log.sourceLocation.line;
-				cache.count = 1;
-				
-			}
-		);
+					if (!m_logs.empty()) {
+						auto& last = m_logs.back();
+						if (last.level == log.level && last.message == log.message) {
+							last.count++;
+							return;
+						}
+					}
+
+					auto& cache = m_logs.emplace_back();
+					cache.datetime = DateTime::Now();
+					cache.level = log.level;
+					cache.message = log.message;
+					cache.file = Format("{}({})", Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
+					cache.path = log.sourceLocation.filePath;
+					cache.path.replace('\\', '/');
+					cache.line = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
+					cache.line2 = log.sourceLocation.line;
+					cache.count = 1;
+
+				}
+			);
+		}
 	}
 
 	void LogInfo::draw() {

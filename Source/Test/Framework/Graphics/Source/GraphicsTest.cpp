@@ -26,6 +26,9 @@ TEST(Graphis, Create) {
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
+
+	ob::core::Logger log;
+
 	ob::debug::Profiler profiler;
 	ob::debug::LogInfo loginfo;
 	ob::debug::FrameGraphDebugger fgdebugger;
