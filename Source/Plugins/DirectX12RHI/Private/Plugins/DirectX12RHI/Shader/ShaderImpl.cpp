@@ -29,12 +29,12 @@ namespace ob::rhi::dx12 {
     const char* getTargetName(ShaderStage stage) {
         switch (stage)
         {
-        case ShaderStage::Vertex:          return "vs_5_0";
-        case ShaderStage::Hull:            return "hs_5_0";
-        case ShaderStage::Domain:          return "ds_5_0";
-        case ShaderStage::Geometry:        return "gs_5_0";
-        case ShaderStage::Pixel:           return "ps_5_0";
-        case ShaderStage::Compute:         return "cs_5_0";
+        case ShaderStage::Vertex:          return "vs_5_1";
+        case ShaderStage::Hull:            return "hs_5_1";
+        case ShaderStage::Domain:          return "ds_5_1";
+        case ShaderStage::Geometry:        return "gs_5_1";
+        case ShaderStage::Pixel:           return "ps_5_1";
+        case ShaderStage::Compute:         return "cs_5_1";
 
         //case ob::rhi::ShaderStage::Task:            return "vs_5_0";
         //case ob::rhi::ShaderStage::Mesh:            return "vs_5_0";
