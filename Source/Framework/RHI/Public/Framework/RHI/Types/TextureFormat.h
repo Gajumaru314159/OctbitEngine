@@ -68,6 +68,13 @@ namespace ob::rhi {
                 format == TextureFormat::D32S8 ||
                 format == TextureFormat::D24S8;
         }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief  カラーを持っているか
+        //@―---------------------------------------------------------------------------
+        static bool HasColor(TextureFormat format) {
+            return !(HasDepth(format) || HasStencil(format));
+        }
     };
 
 }
