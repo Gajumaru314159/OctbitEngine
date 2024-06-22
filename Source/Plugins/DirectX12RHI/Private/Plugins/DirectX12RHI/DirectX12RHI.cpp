@@ -339,7 +339,7 @@ namespace ob::rhi::dx12 {
 	bool DirectX12RHI::initializeDescriptorHeaps() {
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 10'000);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 1'000'000);
 		m_descriptorHeaps[DescriptorHeapType::Sampler] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256);
 		m_descriptorHeaps[DescriptorHeapType::RTV] =
