@@ -60,7 +60,7 @@ namespace ob::debug {
 		);
 	}
 
-	void LogInfo::update() {
+	void LogInfo::draw() {
 
 		String buffer;
 

@@ -13,7 +13,7 @@ namespace ob::debug {
 	class LogInfo {
 	public:
 		LogInfo();
-		void update();
+		void draw();
 	private:
 
 		struct LogCache {

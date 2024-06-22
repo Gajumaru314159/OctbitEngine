@@ -14,6 +14,7 @@
 
 #include <Framework/Debug/LogInfo.h>
 #include <Framework/Debug/Profiler.h>
+#include <Framework/Debug/FrameGraphDebugger.h>
 
 #include <Framework/Graphics/Material/Material.h>
 
@@ -29,28 +30,28 @@ TEST(Graphis, Create) {
 	System::Setup();
 	
 	ServiceInjector injector;
-
-	rhi::dx12::Register(injector);
-	rhi::Register(injector);
-	input::Register(injector);
-	graphics::Register(injector);
-
-	rhi::Config config;
-	config.enablePIX = true;
-	config.breakWithWarning = true;
-	injector.bind(config);
-
-	struct Dependency {
-		Dependency(ob::graphics::Graphics&,ob::input::InputModule&){}
-	};
-	injector.bind<Dependency>();
-
 	ServiceContainer container;
-	injector.create<Dependency>(container);
+	{
+		rhi::dx12::Register(injector);
+		input::Register(injector);
+		graphics::Register(injector);
 
+		rhi::Config config;
+		config.enablePIX = true;
+		config.breakWithWarning = true;
+		injector.bind(config);
+
+		struct Dependency {
+			Dependency(ob::graphics::Graphics&, ob::input::InputModule&) {}
+		};
+		injector.bind<Dependency>();
+
+		injector.create<Dependency>(container);
+	}
 
 	ob::debug::Profiler profiler;
 	ob::debug::LogInfo loginfo;
+	ob::debug::FrameGraphDebugger fgdebugger;
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
@@ -79,115 +80,9 @@ TEST(Graphis, Create) {
 	ImGuiRenderFeature::AddTask(
 		scene, handle,
 		[&] {
-			profiler.update();
-			loginfo.update();
-		}
-	);
-
-
-	FGData fgdata;
-	bool captureRequested = false;
-
-	ImGuiRenderFeature::AddTask(
-		scene, handle2,
-		[&] {
-			if (ImGui::Begin("Graphisc")) {
-				if (ImGui::Button("Capture")) {
-					captureRequested = true;
-				}
-
-				static ImGuiTableFlags table_flags = 
-					ImGuiTableFlags_SizingFixedFit | 
-					ImGuiTableFlags_ScrollX | 
-					ImGuiTableFlags_ScrollY | 
-					ImGuiTableFlags_BordersOuter | 
-					ImGuiTableFlags_BordersInner | 
-					ImGuiTableFlags_HighlightHoveredColumn;
-
-				if (!fgdata.passes.empty()) {
-					if (ImGui::BeginTable("FrameGraph", fgdata.passes.size()+1, table_flags))
-					{
-						ImGui::TableSetupColumn("##Resources", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder);
-
-						for (auto [index, pass] : Indexed(fgdata.passes)) {
-							if (pass.culled) ImGui::PushStyleColor(ImGuiCol_Text, Color::Gray.toVec4());
-							ImGui::TableSetupColumn(pass.name.c_str(), ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoResize);
-							if (pass.culled) ImGui::PopStyleColor();
-							// if (ImGui::IsItemHovered()) {
-							// 	ImGui::SetTooltip(
-							// 		Format(
-							// 			"{}\n"
-							// 			"Culled:{}",
-							// 			pass.name,
-							// 			pass.culled?"〇":"×"
-							// 		).c_str()
-							// 	);
-							// }
-						}
-
-						ImGui::TableSetupScrollFreeze(1, 1);
-						ImGui::TableAngledHeadersRow();
-
-						for (auto& [id, resource] : fgdata.resources)
-						{
-							HashMap<u32, u32> rw;
-							for (auto& writer : resource.writers) {
-								rw[writer]++;
-							}
-							for (auto& reader : resource.readers) {
-								rw[reader]++;
-							}
-
-							ImColor bgColor = ImColor(ImGui::GetStyleColorVec4(ImGuiCol_TableHeaderBg));
-							if (resource.transient) bgColor.Value.x *= 0.5f;
-
-							ImGui::PushID(id);
-							ImGui::TableNextRow();
-							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, bgColor, 0);
-							ImGui::TableSetColumnIndex(0);
-							ImGui::Text(resource.name.c_str());
-
-							if (ImGui::IsItemHovered()) {
-								ImGui::SetTooltip(
-									Format(
-										"{}\n"
-										"Transient:{}",
-										resource.desc,
-										resource.transient? "〇" : "×"
-									).c_str()
-								);
-							}
-
-							for (auto& writer : resource.writers) {
-								if (rw[writer] == 2)continue;
-								if (ImGui::TableSetColumnIndex(writer + 1))
-								{
-									ImGui::Text("W");
-								}
-							}
-							for (auto& reader : resource.readers) {
-								if (rw[reader] == 2)continue;
-								if (ImGui::TableSetColumnIndex(reader + 1))
-								{
-									ImGui::Text("R");
-								}
-							}
-							for (auto [id,count] : rw) {
-								if (count != 2)continue;
-								if (ImGui::TableSetColumnIndex(id + 1))
-								{
-									ImGui::Text("M");
-								}
-							}
-							ImGui::PopID();
-						}
-						ImGui::EndTable();
-					}
-				}
-
-			}
-			ImGui::End();
-
+			profiler.draw();
+			loginfo.draw();
+			fgdebugger.draw();
 		}
 	);
 
@@ -275,15 +170,10 @@ TEST(Graphis, Create) {
 
 
 		if (auto graphics = container.get<Graphics>()) {
-			if (captureRequested) {
-				fgdata = graphics->getFGData();
-				captureRequested = false;
-			}
 			graphics->update();
-		
 		}
 
-
+		fgdebugger.update();
 
 	}
 

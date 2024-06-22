@@ -14,7 +14,7 @@ namespace ob::debug {
 
 	}
 
-	void Profiler::update() {
+	void Profiler::draw() {
 
 		if (ImGui::Begin("Profiler")) {
 

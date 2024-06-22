@@ -14,7 +14,7 @@ namespace ob::debug {
 	class Profiler {
 	public:
 		Profiler();
-		void update();
+		void draw();
 
 	private:
 
