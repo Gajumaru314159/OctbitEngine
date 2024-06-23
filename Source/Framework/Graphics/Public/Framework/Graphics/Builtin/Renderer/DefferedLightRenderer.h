@@ -15,6 +15,7 @@ namespace ob::graphics {
 		FGTexture albedo;
 		FGTexture normal;
 		FGTexture depth;
+		FGTexture uv;
 	};
 
 

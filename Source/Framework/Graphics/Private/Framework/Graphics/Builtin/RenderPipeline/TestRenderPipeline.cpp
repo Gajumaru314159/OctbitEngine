@@ -66,11 +66,16 @@ namespace ob::graphics {
 						desc.clear.color = Color::Normal;
 						data.normal =builder.write(builder.create(desc));
 					}
-					{
-						desc.name = "Depth";
-						desc.format = rhi::TextureFormat::D32;
-						data.depth = builder.write(builder.create(desc));
-					}
+                    {
+                        desc.name = "Depth";
+                        desc.format = rhi::TextureFormat::D32;
+                        data.depth = builder.write(builder.create(desc));
+                    }
+                    {
+                        desc.name = "UV";
+                        desc.format = rhi::TextureFormat::RGBA8;
+                        data.uv = builder.write(builder.create(desc));
+                    }
 				},
 				[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
 				}

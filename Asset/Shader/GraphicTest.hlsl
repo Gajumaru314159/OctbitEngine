@@ -35,6 +35,7 @@ struct PsIn {
 struct PsOut {
   float4 albedo	:SV_TARGET0;
   float4 normal	:SV_TARGET1;
+  float4 uv	    :SV_TARGET2;
 };
 // ƒGƒ“ƒgƒŠ
 PsIn VS_Main(VsIn i) {
@@ -48,5 +49,6 @@ PsOut PS_Main(PsIn i){
     PsOut o;
     o.albedo = g_mainTex.Sample(g_mainSampler,i.uv);
     o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
+    o.uv = float4(i.uv,0,1);
     return o;
 }

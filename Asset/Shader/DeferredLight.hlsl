@@ -20,9 +20,10 @@ cbuffer Param : register(b1) {
 
 
 Texture2D s_dummy : register(t0);
-Texture2D g_albedo : register(t1);
-Texture2D g_normal : register(t2);
-Texture2D g_depth : register(t3);
+Texture2D g_textures[] : register(t1);
+//Texture2D g_albedo : register(t1);
+//Texture2D g_normal : register(t2);
+//Texture2D g_depth : register(t3);
 
 // IN / OUT
 struct VsIn {
@@ -46,10 +47,18 @@ PsIn VS_Main(VsIn i) {
 }
 PsOut PS_Main(PsIn i){
     PsOut o;
+
+    Texture2D g_albedo = g_textures[0];
+    Texture2D g_normal = g_textures[1];
+    Texture2D g_depth = g_textures[2];
+    Texture2D g_uv = g_textures[3];
+
     float4 albedo = g_albedo.Sample(g_mainSampler,i.uv);
     float4 normal = g_normal.Sample(g_mainSampler,i.uv)*0.5+0.5;
     float4 depth = g_depth.Sample(g_mainSampler,i.uv) / 0.003;
-    o.color = lerp(normal,depth,step(i.uv.y,0.5));
-    o.color = lerp(albedo,o.color,step(i.uv.x,0.5));
+    float4 uv = g_uv.Sample(g_mainSampler,i.uv);
+    float4 l = lerp(normal,depth,step(i.uv.y,0.5));
+    float4 r = lerp(albedo,uv,step(i.uv.y,0.5));
+    o.color = lerp(l,r,step(i.uv.x,0.5));
     return o;
 }

@@ -31,6 +31,7 @@ namespace ob::graphics {
 				data.albedo = builder.write(gbuffer.albedo);
 				data.normal = builder.write(gbuffer.normal);
 				data.depth = builder.write(gbuffer.depth);
+				data.uv = builder.write(gbuffer.uv);
 
 			},
 			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
@@ -41,7 +42,7 @@ namespace ob::graphics {
 					Viewport vp(rect.left, rect.top, rect.right, rect.bottom, 1, 0);
 
 					cmdList.setRenderTargets(
-						{ resources.get(data.albedo) ,resources.get(data.normal) },
+						{ resources.get(data.albedo) ,resources.get(data.normal) ,resources.get(data.uv) },
 						resources.get(data.depth)
 					);
 
@@ -83,6 +84,7 @@ namespace ob::graphics {
 				data.albedo = builder.write(gbuffer.albedo);
 				data.normal = builder.write(gbuffer.normal);
 				data.depth = builder.write(gbuffer.depth);
+				data.uv = builder.write(gbuffer.uv);
 
 			},
 			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
@@ -124,7 +126,7 @@ namespace ob::graphics {
 			desc.name = "DefferedLight";
 			desc.colorProperties = { "Color" };
 			desc.matrixProperties = { "Matrix" };
-			desc.textureProperties = { "Main" ,"Normal","Depth"};
+			desc.textureProperties = { "Main" ,"Normal","Depth" ,"UV" };
 
 			MaterialPass lighting;
 			lighting.colors = { TextureFormat::RGBA8};
@@ -176,6 +178,7 @@ namespace ob::graphics {
 			FGTexture albedo;
 			FGTexture normal;
 			FGTexture depth;
+			FGTexture uv;
 			// out
 			FGTexture accumulate;
 		};
@@ -189,6 +192,7 @@ namespace ob::graphics {
 				data.albedo = builder.read(gbuffer.albedo);
 				data.normal = builder.read(gbuffer.normal);
 				data.depth = builder.read(gbuffer.depth);
+				data.uv = builder.read(gbuffer.uv);
 				data.accumulate = builder.write(accumulate);
 			},
 			[=](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
@@ -202,9 +206,11 @@ namespace ob::graphics {
 				auto albedo = resources.get(data.albedo);
 				auto normal = resources.get(data.normal);
 				auto depth = resources.get(data.depth);
+				auto uv = resources.get(data.uv);
 				m_material->setTexture("Main", albedo);
 				m_material->setTexture("Normal", normal);
 				m_material->setTexture("Depth", depth);
+				m_material->setTexture("UV", uv);
 
 				cmdList.setRenderTarget(resources.get(data.accumulate));
 
