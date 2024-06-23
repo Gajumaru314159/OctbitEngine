@@ -86,6 +86,9 @@ namespace ob::rhi::dx12 {
 			TypeConverter::Convert(desc.flags)
 		);
 
+		// Bindless設定(ShaderModel6.6～)
+		// rootSignatureDesc.Flags |= D3D12_ROOT_SIGNATURE_FLAG_CBV_SRV_UAV_HEAP_DIRECTLY_INDEXED;
+		// rootSignatureDesc.Flags |= D3D12_ROOT_SIGNATURE_FLAG_SAMPLER_HEAP_DIRECTLY_INDEXED;
 
 
 		// バイナリデータの作成

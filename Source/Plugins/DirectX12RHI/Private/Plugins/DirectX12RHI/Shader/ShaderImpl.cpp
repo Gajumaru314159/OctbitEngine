@@ -8,6 +8,7 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Shader.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 namespace ob::rhi::dx12 {
@@ -49,6 +50,32 @@ namespace ob::rhi::dx12 {
         return "";
     }
 
+    const wchar_t* getEntryW(ShaderStage stage) {
+        switch (stage)
+        {
+        case ShaderStage::Vertex:          return L"VS_Main";
+        case ShaderStage::Hull:            return L"HS_Main";
+        case ShaderStage::Domain:          return L"DS_Main";
+        case ShaderStage::Geometry:        return L"GS_Main";
+        case ShaderStage::Pixel:           return L"PS_Main";
+        case ShaderStage::Compute:         return L"CS_Main";
+        }
+        return L"";
+    }
+    const wchar_t* getShadingModelW(ShaderStage stage) {
+        switch (stage)
+        {
+        case ShaderStage::Vertex:          return L"vs_6_0";
+        case ShaderStage::Hull:            return L"hs_6_0";
+        case ShaderStage::Domain:          return L"ds_6_0";
+        case ShaderStage::Geometry:        return L"gs_6_0";
+        case ShaderStage::Pixel:           return L"ps_6_0";
+        case ShaderStage::Compute:         return L"cs_6_0";
+        }
+        return L"";
+    }
+
+
 
     //@―---------------------------------------------------------------------------
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
@@ -57,15 +84,14 @@ namespace ob::rhi::dx12 {
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(const String& code, ShaderStage stage, StringView name)
+    ShaderImpl::ShaderImpl(DirectX12RHI& device,const String& code, ShaderStage stage, StringView name)
         : m_name(name)
     {
         // コンパイルできるようにUTF-8にコンバート
         StringBase<char> utfCode;
         StringEncoder::Encode(code, utfCode);
 
-        compile(utfCode, stage);
-        reflectInputLayout();
+        compile(device,utfCode, stage);
     }
 
 
@@ -86,7 +112,6 @@ namespace ob::rhi::dx12 {
             LOG_ERROR_EX("Graphic", "シェーダではないバイナリファイルから構築しようとしました。");
         }
         m_shaderBlob = Blob(blob.data(),blob.size());
-        reflectInputLayout();
     }
 
 
@@ -139,109 +164,56 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief				初期化
     //@―---------------------------------------------------------------------------
-    void ShaderImpl::compile(const StringBase<char>& code, ShaderStage stage) {
+    void ShaderImpl::compile(DirectX12RHI& device, const StringBase<char>& code, ShaderStage stage) {
 
-        ComPtr<ID3DBlob> errorBlob;
+        HRESULT result;
 
-        // シェーダコードをコンパイル
-        auto result = D3DCompile(
-            code.data(), code.size(),
-            NULL,                           // ソース名
-            NULL,                           // Define
-            NULL,                           // インクルード
-            Shader::GetEntryName(stage),    // エントリ
-            getTargetName(stage),           // ターゲット
-            D3DCOMPILE_PREFER_FLOW_CONTROL, // フラグ1
-            0,                              // フラグ2
-            m_shaderBolb2.ReleaseAndGetAddressOf(), errorBlob.ReleaseAndGetAddressOf());
+        // シェーダーコード
+        DxcBuffer buffer;
+        buffer.Ptr = code.data();
+        buffer.Size = code.size();
+        buffer.Encoding = 0;
 
-        if (FAILED(result)) {
-            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
-
-            // エラー内容取得
-            StringBase<char> error;
-            error.resize(errorBlob->GetBufferSize());
-            copy_n((char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), error.begin());
-
-            // 変換
-            String errorDest;
-            StringEncoder::Encode(error, errorDest);
-            LOG_ERROR_EX("Graphic", "{}", errorDest);
-
-            return;
-        }
-    }
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  リフレクション
-    //@―---------------------------------------------------------------------------
-    void ShaderImpl::reflectInputLayout()
-    {
-        ComPtr<ID3D12ShaderReflection> reflection;
-        D3DReflect(getBinaryData(), getBinarySize(), IID_ID3D12ShaderReflection, (void**)reflection.ReleaseAndGetAddressOf());
-
-        if (!reflection)return;
-
-        D3D12_SHADER_DESC shaderDesc;
-        reflection->GetDesc(&shaderDesc);
-
-        const auto name2Semantics = [](StringView name) {
-            if (name == "SV_POSITION") return Semantic::Position;
-            if (name == "POSITION") return Semantic::Position;
-            if (name == "NORMAL")   return Semantic::Normal;
-            if (name == "BINORMAL") return Semantic::Binormal;
-            if (name == "TANGENT")  return Semantic::Tangent;
-            if (name == "COLOR")    return Semantic::Color;
-            if (name == "TEXCOORD") return Semantic::TexCoord;
-            // if (name == "BLENDINDICES") return Semantic::BlendIndices;
-            // if (name == "BLENDWEIGHTS") return Semantic::BlendWeights;
-            // if (name == "POINTSIZE")    return Semantic::PointSize;
-            LOG_ERROR("Unsupported semantic [{}]",name);
-            return Semantic::Position;
+        // コンパイル引数
+        const wchar_t* args[] = {
+            L"-E",
+            getEntryW(stage),
+            L"-T",
+            getShadingModelW(stage)
         };
 
-        //m_inputLayoutNames.resize(shaderDesc.InputParameters);
-        for (s32 i = 0; i < shaderDesc.InputParameters; i++)
-        {
-            D3D12_SIGNATURE_PARAMETER_DESC paramDesc;
-            reflection->GetInputParameterDesc(i, &paramDesc);
+        // コンパイル
+        ComPtr<IDxcResult> resultBlob;
+        result = device.getShaderCompiler()->Compile(
+            &buffer,
+            args,
+            std::size(args),
+            NULL,
+            IID_PPV_ARGS(&resultBlob)
+        );
+        if (FAILED(result)) {
+            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            return;
+        }
 
-            auto& attribute = m_attributes.emplace_back();
-            attribute.offset = 0; // 不必要
-            attribute.semantic = name2Semantics(paramDesc.SemanticName);
-            attribute.index = paramDesc.SemanticIndex;
+        // エラーチェック
+        ComPtr<IDxcBlobUtf8> errors{};
+        ComPtr<IDxcBlobUtf16> outputName{};
+        result = resultBlob->GetOutput(DXC_OUT_ERRORS,IID_PPV_ARGS(&errors),&outputName);
+        if (FAILED(result)) {
+            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            return;
+        }
+        if (errors->GetBufferSize() != 0) {
+            LOG_ERROR_EX("Graphic", "{}", StringView(errors->GetStringPointer(), errors->GetStringLength()));
+            return;
+        }
 
-
-            D3D12_INPUT_ELEMENT_DESC elementDesc;
-            elementDesc.SemanticName = paramDesc.SemanticName;
-            elementDesc.SemanticIndex = paramDesc.SemanticIndex;
-            elementDesc.InputSlot = 0;
-            elementDesc.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-            elementDesc.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
-            elementDesc.InstanceDataStepRate = 0;
-
-            if (paramDesc.Mask == 1)
-            {
-                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32_UINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32_SINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32_FLOAT;
-            } else if (paramDesc.Mask <= 3)
-            {
-                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32_UINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32_SINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32_FLOAT;
-            } else if (paramDesc.Mask <= 7)
-            {
-                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_UINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_SINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-            } else if (paramDesc.Mask <= 15)
-            {
-                if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_UINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_UINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_SINT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
-                else if (paramDesc.ComponentType == D3D_REGISTER_COMPONENT_FLOAT32) elementDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-            }
-
+        // バイナリ取得
+        result = resultBlob->GetResult(m_shaderBolb2.ReleaseAndGetAddressOf());
+        if (FAILED(result)) {
+            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            return;
         }
 
     }

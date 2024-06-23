@@ -155,7 +155,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  シェーダをコンパイル
 	//@―---------------------------------------------------------------------------
 	Ref<Shader> DirectX12RHI::compileShader(const String& code, ShaderStage stage) {
-		SAFE_CREATE(Shader, ShaderImpl, code, stage);
+		SAFE_CREATE(Shader, ShaderImpl, *this, code, stage);
 	}
 
 
@@ -222,6 +222,8 @@ namespace ob::rhi::dx12 {
 		OB_DEBUG_CONTEXT(m_commandQueue->setName("SystemCommandQueue"));
 
 		if (!initializeDescriptorHeaps())return false;
+
+		if (!initializeShaderCompiler())return false;
 
 		return true;
 	}
@@ -351,6 +353,22 @@ namespace ob::rhi::dx12 {
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName("SystemRTVHeap");
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName("SystemDSVHeap");
+
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  シェーダコンパイラーを初期化
+	//@―---------------------------------------------------------------------------
+	bool DirectX12RHI::initializeShaderCompiler() {
+
+		HRESULT result;
+
+		result = ::DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&m_shaderCompiler));
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "D3D12CreateDevice()");
+			return false;
+		}
 
 		return true;
 	}

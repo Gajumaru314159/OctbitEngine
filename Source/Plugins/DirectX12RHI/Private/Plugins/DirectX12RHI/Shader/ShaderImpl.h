@@ -39,7 +39,7 @@ namespace ob::rhi::dx12 {
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(const String& code, ShaderStage stage, StringView name="Shader");
+        ShaderImpl(DirectX12RHI& device,const String& code, ShaderStage stage, StringView name="Shader");
 
 
         //@―---------------------------------------------------------------------------
@@ -87,20 +87,14 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンパイル
         //@―---------------------------------------------------------------------------
-        void compile(const StringBase<char>& blob,ShaderStage stage);
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  リフレクション
-        //@―---------------------------------------------------------------------------
-        void reflectInputLayout();
-
+        void compile(DirectX12RHI& device, const StringBase<char>& blob,ShaderStage stage);
 
     private:
 
         String              m_name;
         ShaderStage         m_stage;                        //!< シェーダ・ステージ
         Blob                m_shaderBlob;                   //!< シェーダ・バイナリ
-        ComPtr<ID3DBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ
+        ComPtr<IDxcBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ
         
         Array<VertexAttribute> m_attributes;
 

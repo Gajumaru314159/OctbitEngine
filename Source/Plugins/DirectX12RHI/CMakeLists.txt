@@ -33,7 +33,7 @@ set(private_libs
     d3d12.lib
     dxgi.lib
     dxguid.lib
-    d3dcompiler.lib
+    dxcompiler.lib
     "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.lib"
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})

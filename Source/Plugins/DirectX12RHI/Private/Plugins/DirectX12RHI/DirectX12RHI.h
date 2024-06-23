@@ -132,6 +132,12 @@ namespace ob::rhi::dx12 {
 
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  シェーダーコンパイラ―を取得
+		//@―---------------------------------------------------------------------------
+		ComPtr<IDxcCompiler3>& getShaderCompiler();
+
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  システム・コマンド・キューを取得
 		//@―---------------------------------------------------------------------------
 		ComPtr<ID3D12CommandQueue>& getCommandQueue();
@@ -166,6 +172,7 @@ namespace ob::rhi::dx12 {
 		bool initializeDXGIDevice();
 		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
+		bool initializeShaderCompiler();
 
 	private:
 
@@ -173,6 +180,7 @@ namespace ob::rhi::dx12 {
 
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
+		ComPtr<IDxcCompiler3>				m_shaderCompiler;
 
 		UPtr<class CommandQueue>			m_commandQueue;
 
@@ -209,6 +217,13 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	inline ComPtr<IDXGIFactory7>& DirectX12RHI::getFactory() {
 		return m_dxgiFactory;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  シェーダーコンパイラ―を取得
+	//@―---------------------------------------------------------------------------
+	inline ComPtr<IDxcCompiler3>& DirectX12RHI::getShaderCompiler() {
+		return m_shaderCompiler;
 	}
 
 }
