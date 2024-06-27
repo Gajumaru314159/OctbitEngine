@@ -320,10 +320,12 @@ namespace ob::rhi::dx12 {
 		getLevelAndIndex(block.capacity, firstIndex, secondIndex, blockIndex);
 		if (m_blocks.at(blockIndex) == &block) {
 			m_blocks.at(blockIndex) = pFreeNext;
-		}
 
-		// ビット更新
-		removeFreeListBitState(firstIndex, secondIndex);
+			// カテゴリのフリーリストの先頭が空の場合はビット更新が必要
+			if (pFreeNext == nullptr) {
+				removeFreeListBitState(firstIndex, secondIndex);
+			}
+		}
 
 	}
 
