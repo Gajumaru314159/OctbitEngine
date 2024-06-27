@@ -21,7 +21,7 @@ namespace ob::rhi::dx12 {
 	//! @param capacity 容量
 	//@―---------------------------------------------------------------------------
 	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
-		: m_mapper(capacity,"DescriptorHeap")
+		: m_mapper(capacity)
 		, m_type(type)
 	{
 		{

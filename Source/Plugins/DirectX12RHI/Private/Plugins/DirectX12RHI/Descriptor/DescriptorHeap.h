@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
-#include <Framework/Core/Allocator/Utility/TLSFHeap.h>
+#include <Framework/Core/Allocator/Utility/TLSFMapper.h>
 
 namespace ob::rhi::dx12 {
 
