@@ -67,7 +67,7 @@ namespace ob::rhi::dx12 {
 	//! @brief  解放
 	//@―---------------------------------------------------------------------------
 	void DescriptorHandle::release() {
-		if (m_pBlock)m_pBlock->pHeap->releaseHandle(*this);
+		if (m_pBlock)static_cast<DescriptorHeap*>(m_pBlock->pUser)->releaseHandle(*this);
 		m_pBlock = nullptr;
 	}
 
@@ -77,7 +77,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	DescriptorHeapType DescriptorHandle::getHeapType()const {
 		OB_ASSERT(m_pBlock, "空のハンドルです。");
-		return m_pBlock->pHeap->getHeapType();
+		return static_cast<DescriptorHeap*>(m_pBlock->pUser)->getHeapType();
 	}
 
 
@@ -86,7 +86,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHandle::getCpuHandle(s32 index)const {
 		OB_ASSERT(m_pBlock, "空のハンドルです。");
-		return m_pBlock->pHeap->getCpuHandle(m_pBlock->index + index);
+		return static_cast<DescriptorHeap*>(m_pBlock->pUser)->getCpuHandle(m_pBlock->index + index);
 	}
 
 
@@ -95,7 +95,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHandle::getGpuHandle(s32 index)const {
 		OB_ASSERT(m_pBlock, "空のハンドルです。");
-		return m_pBlock->pHeap->getGpuHandle(m_pBlock->index + index);
+		return static_cast<DescriptorHeap*>(m_pBlock->pUser)->getGpuHandle(m_pBlock->index + index);
 	}
 
 }

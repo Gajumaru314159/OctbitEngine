@@ -5,27 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
-#include <Framework/Core/Log/StackTrace.h>
+#include <Framework/Core/Allocator/Utility/TLSFHeap.h>
+
 namespace ob::rhi::dx12 {
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      BoundaryBlock
-	//! 
-	//! @details    ヒープの分割された範囲を表す構造体
-	//@―---------------------------------------------------------------------------
-	struct BBlock {
-		class DescriptorHeap* pHeap;//!< 確保元ヒープ
-		BBlock* pPrev;      //!< 前のポインタ(ブロックヒープ内)
-		BBlock* pNext;      //!< 次のポインタ(ブロックヒープ内)
-		BBlock* pFreePrev;  //!< 前のポインタ(フリーブロック内)
-		BBlock* pFreeNext;  //!< 次のポインタ(フリーブロック内)
-		s32     index;      //!< 割り当て位置
-		s32     capacity;   //!< 割り当て可能容量
-		bool    allocated;  //!< 確保済みか
-
-		StackTrace stack;
-	};
-
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      デスクリプタのアロケータ
@@ -100,46 +82,13 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		const auto& getNative()const { return m_heap; };
 
-
 	private:
 
-		BBlock* allocateFreeBlock(s32 size);							//!< ブロックをアロケート
-		void	returnSurplusBlock(BBlock& block, s32 size);            //!< 余分なブロックを分割してフリーリストに戻す
-		BBlock* mergeFreeBlocks(BBlock& block1, BBlock& block2);        //!< 2つのブロックをマージして2つめをフリーブロックに戻す
-
-		void addFreeBlock(BBlock& block);                               //!< フリーブロックをリストに追加
-		void separateFreeList(BBlock& block);                           //!< ブロックをフリーブロックから分離
-
-		void entryFreeListBitState(s32 firstLevel, s32 secondLevel);    //!< フリーリストビットへ登録
-		void removeFreeListBitState(s32 firstLevel, s32 secondLevel);   //!< フリーリストビットから削除
-
-		s32  getFreeBlockIndex(s32 firstLevel, s32 secondLevel)const noexcept;							//!< レベルからフリーブロックリストのインデックスを計算
-		void getLevelIndex(s32 size, s32& firstLevel, s32& secondLevel)const noexcept;					//!< サイズから各レベルのカテゴリを計算
-		void getLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index)const noexcept;	//!< サイズからレベルとブロックインデックスを計算
-
-
-	private:
-
-		ComPtr<ID3D12DescriptorHeap> m_heap;
-		u32	m_descriptorSize;
-
-		Mutex			m_mutex;		//!< ミューテックス
-
-		const DescriptorHeapType m_type;
-		s32				m_capacity;     //!< 最大容量
-
-		u32				m_freeFLI;      //!< First Level のフリー・ビットフラグ
-		Array<u32>		m_freeSLI;      //!< Second Level のフリー・ビットフラグ
-
-		Array<BBlock>  	m_buffer;		//!< バッファ(ブロック実体)
-		Array<BBlock*> 	m_freeList;		//!< ブロックリスト(実体)
-		Array<BBlock*> 	m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
-
-		static s32 s_maxSecondLevelLog2;
-		static s32 s_maxSecondLevel;
-		static s32 s_linearManagementSize;
-		static s32 s_linearManagementSizeLog2;
-		static s32 s_secondLevelShift;
+		Mutex							m_mutex;		//!< ミューテックス
+		DescriptorHeapType				m_type;
+		ComPtr<ID3D12DescriptorHeap>	m_heap;
+		TLSFMapper						m_mapper;
+		u32								m_descriptorSize;
 
 	};
 

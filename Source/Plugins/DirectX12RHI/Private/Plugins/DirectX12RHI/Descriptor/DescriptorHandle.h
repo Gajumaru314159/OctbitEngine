@@ -6,6 +6,10 @@
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
 
+namespace ob::core {
+    struct TLSFBlock;
+}
+
 namespace ob::rhi::dx12 {
 
     //@―---------------------------------------------------------------------------
@@ -36,7 +40,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        struct BBlock* m_pBlock;
+        const TLSFBlock* m_pBlock;
 
     };
 
