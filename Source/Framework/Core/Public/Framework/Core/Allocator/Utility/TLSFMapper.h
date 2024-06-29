@@ -103,11 +103,11 @@ namespace ob::core {
 		s32					m_capacity;     //!< 最大容量
 
 		u32					m_freeFLI;      //!< First Level のフリー・ビットフラグ
-		Array<u32>			m_freeSLI;      //!< Second Level のフリー・ビットフラグ
+		Vector<u32>			m_freeSLI;      //!< Second Level のフリー・ビットフラグ
 
-		Array<TLSFBlock>  	m_buffer;		//!< バッファ(ブロック実体)
-		Array<TLSFBlock*> 	m_freeList;		//!< ブロックリスト(実体)
-		Array<TLSFBlock*> 	m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
+		Vector<TLSFBlock>  	m_buffer;		//!< バッファ(ブロック実体)
+		Vector<TLSFBlock*> 	m_freeList;		//!< ブロックリスト(実体)
+		Vector<TLSFBlock*> 	m_blocks;       //!< カテゴリに属するブロックの先頭ポインタ
 
 	};
 

@@ -71,7 +71,7 @@ namespace ob::rhi::vulkan {
 	{
 		uint32_t propertyCount;
 		::vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
-		Array<::VkLayerProperties> properties(propertyCount);
+		Vector<::VkLayerProperties> properties(propertyCount);
 		::vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
 
 		Set<std::string> names;
@@ -91,7 +91,7 @@ namespace ob::rhi::vulkan {
 		auto enumarate = [](Set<std::string>& names, const char* layerName) {
 			uint32_t propertyCount;
 			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-			Array<::VkExtensionProperties> properties(propertyCount);
+			Vector<::VkExtensionProperties> properties(propertyCount);
 			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
 			for (auto& name : properties)names.emplace(name.extensionName);
 		};
@@ -110,13 +110,13 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  利用可能なGPUのリストを取得
 	//@―---------------------------------------------------------------------------
-	static Array<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
+	static Vector<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
 	{
 		OB_CHECK_ASSERT_EXPR(instance != nullptr);
 
 		uint32_t physicalDeviceCount = 0;
 		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
-		Array<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+		Vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
 		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
 
 		return std::move(physicalDevices);
@@ -226,7 +226,7 @@ namespace ob::rhi::vulkan {
 		};
 
 		// 利用可能なレイヤーでフィルタ
-		Array<const char*> validLayerNames;
+		Vector<const char*> validLayerNames;
 		const auto existLayerNames = EnumerateInstanceLayerNames();
 		for (const auto& name : layerNames)
 		{
@@ -236,7 +236,7 @@ namespace ob::rhi::vulkan {
 		}
 
 		// 利用可能な拡張機能でフィルタ
-		Array<const char*> validExtensionNames;
+		Vector<const char*> validExtensionNames;
 		const auto existExtensionNames = EnumerateInstanceExtensionNames(validLayerNames);
 		for (const auto& name : extensionNames)
 		{
@@ -289,7 +289,7 @@ namespace ob::rhi::vulkan {
 			// キューチェック
 			uint32_t familyCount = 0;
 			::vkGetPhysicalDeviceQueueFamilyProperties(device, &familyCount, nullptr);
-			Array<VkQueueFamilyProperties> familyPropertyList(familyCount);
+			Vector<VkQueueFamilyProperties> familyPropertyList(familyCount);
 			::vkGetPhysicalDeviceQueueFamilyProperties(device, &familyCount, familyPropertyList.data());
 
 			u32 index = 0;
@@ -335,7 +335,7 @@ namespace ob::rhi::vulkan {
 		};
 
 		// デバイスキューのパラメータ
-		Array<float> queuePriorities(m_queueCount, 0.0f);
+		Vector<float> queuePriorities(m_queueCount, 0.0f);
 		::VkDeviceQueueCreateInfo queueInfo{};
 		queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueInfo.queueCount = 1;

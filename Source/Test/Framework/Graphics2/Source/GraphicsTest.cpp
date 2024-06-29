@@ -43,7 +43,7 @@ public:
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	void render(FG& fg, const Array<Ref<RenderView>>& views) {
+	void render(FG& fg, const Vector<Ref<RenderView>>& views) {
 
 		// RenderFeature更新
 		// 例：Shadow/GI

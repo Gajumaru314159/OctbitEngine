@@ -59,7 +59,7 @@ namespace ob::rhi::vulkan {
 
 		::VkSurfaceKHR		m_surface;
 		::VkSwapchainKHR    m_swapchain;
-		Array<VkImageView>	m_imageViews;
+		Vector<VkImageView>	m_imageViews;
 		//std::vector<vulkan::ImageView> m_image_views;
 		//std::unique_ptr<vulkan::Queue> m_present_queue;
 		//vulkan::Device* m_device;

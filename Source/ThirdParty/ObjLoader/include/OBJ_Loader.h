@@ -5,7 +5,7 @@
 // Iostream - STD I/O Library
 #include <iostream>
 
-// Vector - STD Vector/Array Library
+// Vector - STD Vector/Vector Library
 #include <vector>
 
 // String - STD String Library

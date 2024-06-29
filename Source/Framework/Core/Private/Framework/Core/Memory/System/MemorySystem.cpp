@@ -10,8 +10,8 @@
 
 namespace ob::core {
     //! @cond
-    static StaticArray<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
-    static StaticArray<Allocator*, enum_cast(HeapUsage::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
+    static Array<Allocator*, enum_cast(HeapUsage::Max)> s_heaps;          //!< ヒープリスト
+    static Array<Allocator*, enum_cast(HeapUsage::Max)> s_debugHeaps;     //!< デバッグ・ヒープリスト
     //! @endcond
 
 

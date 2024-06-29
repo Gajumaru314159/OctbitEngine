@@ -58,7 +58,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		template<typename T,typename std::enable_if_t<std::is_arithmetic_v<T>>>
 		static constexpr T Swap(T value) {
-			StaticArray<byte, sizeof(T)> bytes;
+			Array<byte, sizeof(T)> bytes;
 			reinterpret_cast<T*>(bytes.data()) = value;
 			std::reverse(bytes.begin(), bytes.end());
 			return *static_cast<T*>(bytes.data())

@@ -117,7 +117,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        Array<D3D12_RESOURCE_BARRIER> m_barriers;
+        Vector<D3D12_RESOURCE_BARRIER> m_barriers;
 
     };
 

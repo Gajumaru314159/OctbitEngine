@@ -50,13 +50,13 @@ namespace ob::rhi::vulkan {
 		// 利用可能なフォーマットを取得
 		uint32_t formatCount = 0;
 		::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, nullptr);
-		Array<VkSurfaceFormatKHR> formats(formatCount);
+		Vector<VkSurfaceFormatKHR> formats(formatCount);
 		::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, formats.data());
 
 		//利用可能なプレゼンテーションモード
 		uint32_t presentModeCount;
 		::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, nullptr);
-		Array<VkPresentModeKHR> presentModeList(presentModeCount);
+		Vector<VkPresentModeKHR> presentModeList(presentModeCount);
 		::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, presentModeList.data());
 
 
@@ -96,7 +96,7 @@ namespace ob::rhi::vulkan {
 		// Image取得
 		uint32_t imageCount;
 		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchain, &imageCount, nullptr);
-		Array<VkImage> images(imageCount);
+		Vector<VkImage> images(imageCount);
 		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchain, &imageCount, images.data());
 
 		// ImageView生成

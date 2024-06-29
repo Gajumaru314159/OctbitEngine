@@ -62,7 +62,7 @@ namespace ob::core {
     private:
         template<class T> friend class ServiceBuilder;  // for m_builders
         HashMap<TypeId, UPtr<ServiceBuilderBase>>   m_builders;
-        HashMap<TypeId, Array<TypeId>>          m_builderMap;
+        HashMap<TypeId, Vector<TypeId>>          m_builderMap;
     };
 
 
@@ -196,7 +196,7 @@ namespace ob::core {
         if (auto instance = container.get<T>())
             return instance;
         // 抽象->具象
-        Array<TypeId> fallback;
+        Vector<TypeId> fallback;
         auto& concretes = try_find(m_builderMap, TypeId::Get<T>(), fallback);
         // 生成
         for (auto& concrete : concretes) {
@@ -382,7 +382,7 @@ namespace ob::core {
 
     private:
         template<class T> friend class ServiceBuilder;
-        Array<UPtr<detail::ServiceHolderBase>> m_services;
+        Vector<UPtr<detail::ServiceHolderBase>> m_services;
         HashMap<TypeId, size_t> m_indices;
     };
 

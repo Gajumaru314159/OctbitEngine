@@ -49,7 +49,7 @@ for(auto& objec:objects){
 for(auto& queue:queues){
     auto& object = objects[queue.front()];
     
-    Array<Matrix> matrixes;
+    Vector<Matrix> matrixes;
     for(auto& index : queue){
         matrixes.push_back(objects[index].matrix);
     }
@@ -74,7 +74,7 @@ GPUCulling(camera.buffer,aabbs,visibilities);
 for(auto& queue:queues){
     auto& object = objects[queue.front()];
     
-    Array<Matrix> matrixes;
+    Vector<Matrix> matrixes;
     for(auto& index : queue){
         matrixes.push_back(objects[index].matrix);
     }

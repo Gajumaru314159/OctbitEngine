@@ -70,15 +70,15 @@ namespace ob::core {
         JobSystem& m_system;
 
         // 所有
-        Array<Job*>        m_jobs;
-        Array<JobGroup*>   m_subGroups;
-        Array<JobGroup*>   m_childGroups;
+        Vector<Job*>        m_jobs;
+        Vector<JobGroup*>   m_subGroups;
+        Vector<JobGroup*>   m_childGroups;
 
         // 追加予約
         SpinLock                m_entryLock;
-        Array<UPtr<JobGroup>>   m_entrySubGroups;
-        Array<UPtr<JobGroup>>   m_entryChildGroups;
-        Array<UPtr<Job>>        m_entryJobs;
+        Vector<UPtr<JobGroup>>   m_entrySubGroups;
+        Vector<UPtr<JobGroup>>   m_entryChildGroups;
+        Vector<UPtr<Job>>        m_entryJobs;
 
         // 解放予約
         HashSet<Job*>           m_leaveJobs;
@@ -86,7 +86,7 @@ namespace ob::core {
 
 
         // 実依存
-        Array<JobGroup*>        m_deps;
+        Vector<JobGroup*>        m_deps;
 
 
 

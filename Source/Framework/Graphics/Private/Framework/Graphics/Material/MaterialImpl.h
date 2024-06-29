@@ -126,7 +126,7 @@ namespace ob::graphics {
 		Blob				m_bufferBlob;
 
 		Ref<rhi::Buffer>	m_buffer;
-		Array<Ref<Texture>> m_textures;
+		Vector<Ref<Texture>> m_textures;
 
 		Ref<rhi::DescriptorTable> m_bufferTable;
 		Ref<rhi::DescriptorTable> m_textureTable;

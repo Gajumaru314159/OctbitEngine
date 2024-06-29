@@ -41,8 +41,8 @@ namespace ob::rhi::dx12 {
         UINT64 m_fenceVal;
         HANDLE m_fenceEvent;
 
-        Array<ID3D12CommandList*> m_entriedNativeCommandList;
-        Array<const CommandList*> m_entriedCommandList;
+        Vector<ID3D12CommandList*> m_entriedNativeCommandList;
+        Vector<const CommandList*> m_entriedCommandList;
 
     };
 

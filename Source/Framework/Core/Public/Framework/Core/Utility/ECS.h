@@ -153,8 +153,8 @@ namespace ob::core {
 		}
 
 	private:
-		Array<T> m_components;
-		Array<Entity> m_entities;
+		Vector<T> m_components;
+		Vector<Entity> m_entities;
 		HashMap<Entity, size_t> m_lookup;
 	};
 

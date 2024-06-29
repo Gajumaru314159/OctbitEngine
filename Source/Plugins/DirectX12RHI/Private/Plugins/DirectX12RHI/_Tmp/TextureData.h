@@ -32,7 +32,7 @@ namespace ob::rhi {
         Size    m_size;
         Blob    m_blob;
 
-        //Array<TextureMipsData> m_mips;
+        //Vector<TextureMipsData> m_mips;
     };
 
     struct TextureMipsData {

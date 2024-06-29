@@ -32,7 +32,7 @@ namespace ob::engine {
 	class EntityUtil {
 	public:
 
-		static Array<EntityHandle> GetChildHandeles(EntityAccessor);
+		static Vector<EntityHandle> GetChildHandeles(EntityAccessor);
 
 	};
 

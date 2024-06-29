@@ -21,8 +21,8 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		子のハンドルのリストを取得
 	//@―---------------------------------------------------------------------------
-	Array<EntityHandle> EntityUtil::GetChildHandeles(EntityAccessor src) {
-		Array<EntityHandle> handles;
+	Vector<EntityHandle> EntityUtil::GetChildHandeles(EntityAccessor src) {
+		Vector<EntityHandle> handles;
 		if (src.value()) {
 			for (auto& child : src.value()->getChildren()) {
 				handles.emplace_back(child->getHandle());

@@ -40,7 +40,7 @@ namespace ob::model {
 		bool getActive()const;
 		void setActive(bool);
 
-		Array<Ref<Material>>& getMaterials();
+		Vector<Ref<Material>>& getMaterials();
 
 		auto findMaterial(StringView name)const->Ref<Material>;
 		void setMaterial(StringView name,const Ref<Material>&);
@@ -56,7 +56,7 @@ namespace ob::model {
 		
 		graphics::RenderScene*			m_scene = nullptr;
 		Ref<graphics::Mesh>				m_mesh;
-		Array<Ref<graphics::Material>>	m_materials;
+		Vector<Ref<graphics::Material>>	m_materials;
 		Map<String, s32,std::less<>>	m_materialMap;
 
 		u32 m_modelId;

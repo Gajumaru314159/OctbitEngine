@@ -511,7 +511,7 @@ namespace ob::graphics {
 		int width, height, bytes_per_pixel;
 		io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height, &bytes_per_pixel);
 
-		Array<IntColor> colors((u64)width * height);
+		Vector<IntColor> colors((u64)width * height);
 		for (s32 y = 0; y < height; y++) {
 			for (s32 x = 0; x < width; x++) {
 				size_t index = ((size_t)width * y + x);

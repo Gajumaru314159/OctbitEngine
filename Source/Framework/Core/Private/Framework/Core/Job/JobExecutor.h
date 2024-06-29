@@ -39,17 +39,17 @@ namespace ob::core {
 
         Atomic<bool>            m_stopFlag = false;
 
-        Array<JobGroup*>        m_groups;
+        Vector<JobGroup*>        m_groups;
 
-        Array<JobGroup*>        m_groupQueue;
+        Vector<JobGroup*>        m_groupQueue;
         Atomic<s32>             m_groupIndex;
         Atomic<s32>             m_groupSize;
 
-        Array<JobThread>        m_threads;
+        Vector<JobThread>        m_threads;
 
         // インスタンス
-        Array<UPtr<JobGroup>>   m_groups;
-        Array<UPtr<Job>>        m_jobs;
+        Vector<UPtr<JobGroup>>   m_groups;
+        Vector<UPtr<Job>>        m_jobs;
     };
 
 }

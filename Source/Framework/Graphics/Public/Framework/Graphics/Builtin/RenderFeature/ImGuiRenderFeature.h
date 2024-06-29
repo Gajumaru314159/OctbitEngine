@@ -134,7 +134,7 @@ namespace ob::graphics {
 
 		ob::core::DateTime          m_time;
 
-		Array<DrawCommand>			m_commands;
+		Vector<DrawCommand>			m_commands;
 
 		size_t						m_vertexCount = 0;
 		size_t                      m_indexCount = 0;

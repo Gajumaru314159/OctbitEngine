@@ -368,7 +368,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//!	@brief			サブメッシュのリストを取得
 	//@―---------------------------------------------------------------------------
-	const Array<SubMesh>& MeshImpl::getSubMeshes()const {
+	const Vector<SubMesh>& MeshImpl::getSubMeshes()const {
 		return m_meshData.submeshes;
 	}
 

@@ -79,7 +79,7 @@ namespace ob::graphics {
 
         FGResourcePool m_fgResourcePool;
 
-        Array<RenderScene*> m_scenes;
+        Vector<RenderScene*> m_scenes;
     };
 
 }

@@ -44,7 +44,7 @@ namespace ob::graphics {
 
 	private:
 
-		Map<String, Array<Renderable>,std::less<>> m_renderablesMap;
+		Map<String, Vector<Renderable>,std::less<>> m_renderablesMap;
 
 	};
 }

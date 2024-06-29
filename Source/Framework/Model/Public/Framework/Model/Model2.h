@@ -20,7 +20,7 @@ namespace ob::model2 {
 	struct Mesh {
 		Layout			layout;
 		Blob			buffer;
-		Array<Submesh>	submeshes;
+		Vector<Submesh>	submeshes;
 
 		Vec3& position(s64 index);
 		Vec3& position(s64 index);
@@ -32,7 +32,7 @@ namespace ob::model2 {
 		Model(Path);
 
 		Mesh mesh;
-		Array<Material> materials;
+		Vector<Material> materials;
 	};
 
 	

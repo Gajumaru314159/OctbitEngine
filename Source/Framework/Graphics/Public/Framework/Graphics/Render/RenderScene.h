@@ -58,7 +58,7 @@ namespace ob::graphics {
         void onFeatureAdded(RenderFeature& feature);
     private:
         HashMap<TypeId, UPtr<RenderFeature>>    m_features;
-        Array<RenderView*>                      m_views;
+        Vector<RenderView*>                      m_views;
 
         RenderSceneEventNotifier                m_releasedNotifier;
         RenderFeatureEventNotifier              m_featureAddedNotifier;

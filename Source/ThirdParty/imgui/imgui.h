@@ -2629,7 +2629,7 @@ struct ImDrawData
     int             CmdListsCount;          // Number of ImDrawList* to render
     int             TotalIdxCount;          // For convenience, sum of all ImDrawList's IdxBuffer.Size
     int             TotalVtxCount;          // For convenience, sum of all ImDrawList's VtxBuffer.Size
-    ImDrawList**    CmdLists;               // Array of ImDrawList* to render. The ImDrawList are owned by ImGuiContext and only pointed to from here.
+    ImDrawList**    CmdLists;               // Vector of ImDrawList* to render. The ImDrawList are owned by ImGuiContext and only pointed to from here.
     ImVec2          DisplayPos;             // Top-left position of the viewport to render (== top-left of the orthogonal projection matrix to use) (== GetMainViewport()->Pos for the main viewport, == (0.0) in most single-viewport applications)
     ImVec2          DisplaySize;            // Size of the viewport to render (== GetMainViewport()->Size for the main viewport, == io.DisplaySize in most single-viewport applications)
     ImVec2          FramebufferScale;       // Amount of pixels for each unit of DisplaySize. Based on io.DisplayFramebufferScale. Generally (1,1) on normal display, (2,2) on OSX with Retina display.

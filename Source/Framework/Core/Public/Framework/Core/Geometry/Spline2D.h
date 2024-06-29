@@ -34,7 +34,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief  ポイントリストから構築
         //@―---------------------------------------------------------------------------
-        explicit Spline2D(const Array<Vec2>&&);
+        explicit Spline2D(const Vector<Vec2>&&);
 
 
         //@―---------------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace ob::core {
 
     public:
 
-        Array<Vec2> points;         //!< ポイントリスト
+        Vector<Vec2> points;         //!< ポイントリスト
         bool        closed{false};  //!< 閉じているか
 
     };
@@ -127,14 +127,14 @@ namespace ob::core {
     //! @brief  ポイントリストから構築
     //@―---------------------------------------------------------------------------
     inline Spline2D::Spline2D(Span<Vec2> another) {
-        points = Array<Vec2>(another.begin(),another.end());
+        points = Vector<Vec2>(another.begin(),another.end());
     }
 
 
     //@―---------------------------------------------------------------------------
     //! @brief  ポイントリストから構築
     //@―---------------------------------------------------------------------------
-    inline Spline2D::Spline2D(const Array<Vec2>&& another) {
+    inline Spline2D::Spline2D(const Vector<Vec2>&& another) {
         points = another;
     }
 

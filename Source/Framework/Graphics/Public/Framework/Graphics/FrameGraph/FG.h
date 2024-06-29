@@ -36,13 +36,13 @@ namespace ob::graphics {
 			String desc;
 			bool transient;
 			u32 createdPassId;
-			Array<u32> readers;
-			Array<u32> writers;
+			Vector<u32> readers;
+			Vector<u32> writers;
 		};
 
-		Array<Pass> passes;
-		Array<u32> reads;
-		Array<u32> writes;
+		Vector<Pass> passes;
+		Vector<u32> reads;
+		Vector<u32> writes;
 		Map<u32, Resource> resources;
 	};
 
@@ -63,7 +63,7 @@ namespace ob::graphics {
 				}
 			);
 			const auto getResourceIds = [&](const auto type) {
-				Array<u32> ids;
+				Vector<u32> ids;
 				ids.reserve(resourceNodes.size());
 				for (const auto [id, _] : node.each(type)) {
 					ids.emplace_back(resourceNodes[id].getResourceId());

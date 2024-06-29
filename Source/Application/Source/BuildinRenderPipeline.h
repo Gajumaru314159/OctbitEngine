@@ -106,7 +106,7 @@ public:
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
-	void render(FG& fg, const Array<Ref<RenderView>>& views) override {
+	void render(FG& fg, const Vector<Ref<RenderView>>& views) override {
 
 		for (auto& view : views) {
 

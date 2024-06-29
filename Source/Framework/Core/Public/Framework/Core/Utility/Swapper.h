@@ -193,7 +193,7 @@ namespace ob::core {
 
 	private:
 
-		Array<T> m_instances;
+		Vector<T> m_instances;
 		size_t m_index;
 
 	};

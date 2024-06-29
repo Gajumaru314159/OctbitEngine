@@ -18,8 +18,8 @@ namespace ob::rhi::dx12 {
 		: m_desc(desc)
 	{
 		// パラメータ
-		Array<D3D12_ROOT_PARAMETER> parameters;
-		Array<CD3DX12_DESCRIPTOR_RANGE> descriptors;
+		Vector<D3D12_ROOT_PARAMETER> parameters;
+		Vector<CD3DX12_DESCRIPTOR_RANGE> descriptors;
 		parameters.reserve(desc.parameters.size());
 		descriptors.reserve(desc.parameters.size());
 		for (const auto& param : desc.parameters) {
@@ -57,7 +57,7 @@ namespace ob::rhi::dx12 {
 
 
 		// 静的サンプラー
-		Array<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
+		Vector<CD3DX12_STATIC_SAMPLER_DESC> samplerDescs;
 		samplerDescs.reserve(desc.samplers.size());
 		for (auto& params : desc.samplers) {
 			CD3DX12_STATIC_SAMPLER_DESC sampler(

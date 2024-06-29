@@ -15,7 +15,7 @@ namespace ob::engine {
 		virtual ~ComponentCreator() = default;
 		virtual Component* createComponent() = 0;
 		virtual TypeId getComponentTypeId()const = 0;
-		virtual Array<TypeId> getDependentComponentTypes()const = 0;
+		virtual Vector<TypeId> getDependentComponentTypes()const = 0;
 	};
 
 	template<class T>
@@ -28,7 +28,7 @@ namespace ob::engine {
 		TypeId getComponentTypeId()const override {
 			return TypeId::Get<T>();
 		}
-		Array<TypeId> getDependentComponentTypes()const {
+		Vector<TypeId> getDependentComponentTypes()const {
 			return {};
 		}
 	};

@@ -28,7 +28,7 @@ RenderSystem
 
 
 ```
-Map<RenderStage,Array<RenderItem>> itemMap;
+Map<RenderStage,Vector<RenderItem>> itemMap;
 
 addRenderItem(item);
 

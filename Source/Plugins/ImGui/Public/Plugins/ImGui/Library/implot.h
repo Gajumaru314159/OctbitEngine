@@ -533,7 +533,7 @@ struct ImPlotStyle {
     ImVec2  PlotDefaultSize;         // = 400,300 default size used when ImVec2(0,0) is passed to BeginPlot
     ImVec2  PlotMinSize;             // = 200,150 minimum size plot frame can be when shrunk
     // style colors
-    ImVec4  Colors[ImPlotCol_COUNT]; // Array of styling colors. Indexable with ImPlotCol_ enums.
+    ImVec4  Colors[ImPlotCol_COUNT]; // Vector of styling colors. Indexable with ImPlotCol_ enums.
     // colormap
     ImPlotColormap Colormap;         // The current colormap. Set this to either an ImPlotColormap_ enum or an index returned by AddColormap.
     // settings/flags

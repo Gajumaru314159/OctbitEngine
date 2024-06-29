@@ -96,7 +96,7 @@ namespace ob::rhi::dx12 {
         Blob                m_shaderBlob;                   //!< シェーダ・バイナリ
         ComPtr<IDxcBlob>    m_shaderBolb2;					//!< シェーダ・バイナリ
         
-        Array<VertexAttribute> m_attributes;
+        Vector<VertexAttribute> m_attributes;
 
     };
 

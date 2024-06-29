@@ -53,7 +53,7 @@ namespace ob::engine::rtti {
 	//! @brief  Enum型情報
 	//@―---------------------------------------------------------------------------
 	struct EnumInfo:TaggedInfo {
-		Array<ElementInfo> elements;
+		Vector<ElementInfo> elements;
 	};
 
 

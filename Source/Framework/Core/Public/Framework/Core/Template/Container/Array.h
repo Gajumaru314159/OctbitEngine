@@ -1,16 +1,15 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		動的配列
+//! @brief		静的配列
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <vector>
-#include <Framework/Core/Template/Allocator/STLAllocator.h>
+#include <array>
 
 namespace ob::core {
 
-	//! @brief 動的配列
-	template <class T, class TAlloc = ob::core::STLAllocator<T>>
-	using Array = std::vector<T, TAlloc>;
+	//! @brief 静的配列
+	template<class T, size_t N>
+	using Array = std::array<T, N>;
 
 }

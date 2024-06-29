@@ -26,7 +26,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
 		//@―---------------------------------------------------------------------------
-		virtual void render(FG&,const Array<Ref<RenderView>>&) {};
+		virtual void render(FG&,const Vector<Ref<RenderView>>&) {};
 
 	public:
 

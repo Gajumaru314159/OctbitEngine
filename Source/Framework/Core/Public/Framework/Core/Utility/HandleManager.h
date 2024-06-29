@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Template/Container/Array.h>
+#include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Set.h>
 #include <Framework/Core/Template/Utility/Function.h>
 
@@ -173,7 +173,7 @@ namespace ob::core {
 		}
 
 	private:
-		Array<Node> m_nodes;
+		Vector<Node> m_nodes;
 		IntrusiveQueue<Node, &Node::next> m_queue;
 	};
 
@@ -191,7 +191,7 @@ namespace ob::core {
 	private:
 		SpinLock m_lock;
 		HandleManager<T> m_manager;
-		Array<handle_type> m_disposeQueue;
+		Vector<handle_type> m_disposeQueue;
 		HashSet<handle_type, Hasher> m_actives;
 		HashSet<u32> m_disposedSet;
 	public:

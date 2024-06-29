@@ -81,7 +81,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	TLSFMapper::~TLSFMapper() {
 		// m_blocks の最上位に1つ残っているのが正常
-		Array<TLSFBlock*> blocks;
+		Vector<TLSFBlock*> blocks;
 		if (m_freeList.size() + 1 != m_capacity) {
 			for (auto& item : m_buffer) {
 				if (item.allocated) {

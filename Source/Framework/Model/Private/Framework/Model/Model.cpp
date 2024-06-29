@@ -173,7 +173,7 @@ namespace ob::model {
 
 	}
 
-	Array<Ref<graphics::Material>>& Model::getMaterials() {
+	Vector<Ref<graphics::Material>>& Model::getMaterials() {
 		return m_materials;
 	}
 

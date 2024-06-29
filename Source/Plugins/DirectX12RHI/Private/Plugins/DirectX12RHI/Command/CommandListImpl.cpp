@@ -308,7 +308,7 @@ namespace ob::rhi::dx12 {
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setVertexBuffers(Span<Ref<Buffer>> buffers) {
-		StaticArray<D3D12_VERTEX_BUFFER_VIEW, VERTEX_BUFFER_MAX> views;
+		Array<D3D12_VERTEX_BUFFER_VIEW, VERTEX_BUFFER_MAX> views;
 		if (views.size() <= buffers.size()) {
 			LOG_ERROR("頂点バッファは{}以下である必要があります。[size={}]",views.size(),buffers.size());
 			return;

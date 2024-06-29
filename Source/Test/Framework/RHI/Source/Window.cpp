@@ -195,13 +195,13 @@ PsOut PS_Main(PsIn i) {
 		}
 
 
-		Array<Vert> vertices{
+		Vector<Vert> vertices{
 			{Vec4(0,0,0,1),Vec2(0,0)},
 			{Vec4(1,0,0,1),Vec2(1,0)},
 			{Vec4(0,1,0,1),Vec2(0,1)},
 			{Vec4(1,1,0,1),Vec2(1,1)},
 		};
-		Array<u16> indices{
+		Vector<u16> indices{
 			0,1,2,2,1,3
 		};
 
@@ -267,7 +267,7 @@ PsOut PS_Main(PsIn i) {
 				cmdList->setVertexBuffer(vertexBuffer);
 				cmdList->setIndexBuffer(indexBuffer);
 
-				StaticArray<SetDescriptorTableParam, 1> params = {
+				Array<SetDescriptorTableParam, 1> params = {
 					SetDescriptorTableParam(dt,0),
 				};
 				cmdList->setRootDesciptorTable(params.data(), params.size());

@@ -46,8 +46,8 @@ namespace ob::core {
 		}
 
 		SpinLock            m_lock;
-		Array<const T*>     m_items;
-		Array<const T*>     m_entryItems;
+		Vector<const T*>     m_items;
+		Vector<const T*>     m_entryItems;
 		HashSet<const T*>   m_leaveItems;
 	};
 

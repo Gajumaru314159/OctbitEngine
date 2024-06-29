@@ -55,7 +55,7 @@ namespace ob::graphics {
         rhi::RasterizerDesc		        rasterizer;
         rhi::DepthStencilDesc	        depthStencil;
 
-        Array<InputLayout>              requiredLayout;
+        Vector<InputLayout>              requiredLayout;
     };
 
     //@―---------------------------------------------------------------------------
@@ -64,10 +64,10 @@ namespace ob::graphics {
     struct MaterialDesc{
         String          name;
         
-        Array<String>   floatProperties;
-        Array<String>   colorProperties;
-        Array<String>   matrixProperties;
-        Array<String>   textureProperties;
+        Vector<String>   floatProperties;
+        Vector<String>   colorProperties;
+        Vector<String>   matrixProperties;
+        Vector<String>   textureProperties;
 
         Map<String, MaterialPass,std::less<>> passes;
     };

@@ -4,11 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 using namespace ob;
-#include <Framework/Core/Template/Container/FixedArray.h>
+#include <Framework/Core/Template/Container/FixedVector.h>
 
-TEST(FixedArray, Constructors) {
-	FixedArray<int, 100> fakeEmpty, fake(5, 10), fakeCopy(fake), fakeArray{ 2, 3, 4, 5, 7 };
-	FixedArray<int, 100> realEmpty, real(5, 10), realCopy(real), realArray{ 2, 3, 4, 5, 7 };
+TEST(FixedVector, Constructors) {
+	FixedVector<int, 100> fakeEmpty, fake(5, 10), fakeCopy(fake), fakeArray{ 2, 3, 4, 5, 7 };
+	FixedVector<int, 100> realEmpty, real(5, 10), realCopy(real), realArray{ 2, 3, 4, 5, 7 };
 
 	ob::core::is_iterator<decltype(fake.begin())>::value;
 	EXPECT_TRUE(fakeEmpty.size() == realEmpty.size());
@@ -22,9 +22,9 @@ TEST(FixedArray, Constructors) {
 	}
 }
 
-TEST(FixedArray, PushBack) {
-	FixedArray<int, 100> fake(3, 10);
-	FixedArray<int, 100> real(3, 10);
+TEST(FixedVector, PushBack) {
+	FixedVector<int, 100> fake(3, 10);
+	FixedVector<int, 100> real(3, 10);
 
 	fake.push_back(4);
 	real.push_back(4);
@@ -34,9 +34,9 @@ TEST(FixedArray, PushBack) {
 	EXPECT_TRUE(fake.back() == fake.back());
 }
 
-TEST(FixedArray, Assign) {
-	FixedArray<int, 100> fake(10, 55);
-	FixedArray<int, 100> real(10, 55);
+TEST(FixedVector, Assign) {
+	FixedVector<int, 100> fake(10, 55);
+	FixedVector<int, 100> real(10, 55);
 
 	fake.assign(5, 3);
 	real.assign(5, 3);
@@ -56,9 +56,9 @@ TEST(FixedArray, Assign) {
 
 }
 
-TEST(FixedArray, ElementAccess) {
-	FixedArray<int, 100> fake(10);
-	FixedArray<int, 100> real(10);
+TEST(FixedVector, ElementAccess) {
+	FixedVector<int, 100> fake(10);
+	FixedVector<int, 100> real(10);
 
 	for (int i = 0; i < 10; i++) {
 		fake[i] = i;
@@ -70,9 +70,9 @@ TEST(FixedArray, ElementAccess) {
 	EXPECT_TRUE(fake.back() == real.back());
 }
 
-TEST(FixedArray, Clear) {
-	FixedArray<int, 100> fake(5, 55);
-	FixedArray<int, 100> real(5, 55);
+TEST(FixedVector, Clear) {
+	FixedVector<int, 100> fake(5, 55);
+	FixedVector<int, 100> real(5, 55);
 
 	fake.clear();
 	real.clear();
@@ -81,9 +81,9 @@ TEST(FixedArray, Clear) {
 	EXPECT_TRUE(fake.capacity() == real.capacity());
 }
 
-//TEST(FixedArray, Insert) {
-//	FixedArray<int, 100> fake(10, 5);
-//	FixedArray<int, 100> real(10, 5);
+//TEST(FixedVector, Insert) {
+//	FixedVector<int, 100> fake(10, 5);
+//	FixedVector<int, 100> real(10, 5);
 //
 //	auto itfake = fake.begin() + 2;
 //	auto itreal = real.begin() + 2;
@@ -106,9 +106,9 @@ TEST(FixedArray, Clear) {
 //
 //}
 
-TEST(FixedArray, Erase) {
-	FixedArray<int, 100> fake(10);
-	FixedArray<int, 100> real(10);
+TEST(FixedVector, Erase) {
+	FixedVector<int, 100> fake(10);
+	FixedVector<int, 100> real(10);
 
 
 	for (int i = 0; i < 10; i++) {
@@ -139,9 +139,9 @@ TEST(FixedArray, Erase) {
 
 }
 
-TEST(FixedArray, PopBack) {
-	FixedArray<int, 100> fake(10);
-	FixedArray<int, 100> real(10);
+TEST(FixedVector, PopBack) {
+	FixedVector<int, 100> fake(10);
+	FixedVector<int, 100> real(10);
 
 	for (int i = 0; i < 10; i++)
 		fake[i] = real[i] = i + 1;
@@ -155,9 +155,9 @@ TEST(FixedArray, PopBack) {
 		EXPECT_TRUE(fake[i] == real[i]);
 }
 
-TEST(FixedArray, Resize) {
-	FixedArray<int, 100> fake(10, 10);
-	FixedArray<int, 100> real(10, 10);
+TEST(FixedVector, Resize) {
+	FixedVector<int, 100> fake(10, 10);
+	FixedVector<int, 100> real(10, 10);
 
 	fake.resize(5);
 	real.resize(5);
@@ -183,9 +183,9 @@ TEST(FixedArray, Resize) {
 		EXPECT_TRUE(fake[i] == real[i]);
 }
 
-TEST(FixedArray, Swap) {
-	FixedArray<int, 100> fake1(10, 10), fake2(5, 5);
-	FixedArray<int, 100> real1(10, 10), real2(5, 5);
+TEST(FixedVector, Swap) {
+	FixedVector<int, 100> fake1(10, 10), fake2(5, 5);
+	FixedVector<int, 100> real1(10, 10), real2(5, 5);
 
 	fake1.swap(fake2);
 	real1.swap(real2);
@@ -202,8 +202,8 @@ TEST(FixedArray, Swap) {
 		EXPECT_TRUE(fake2[i] == real2[i]);
 }
 
-TEST(FixedArray, Operators) {
-	FixedArray<int, 100> fake1(10, 5), fake2(10, 5), fake3(10, 3), fake4(4, 2);
+TEST(FixedVector, Operators) {
+	FixedVector<int, 100> fake1(10, 5), fake2(10, 5), fake3(10, 3), fake4(4, 2);
 
 	EXPECT_TRUE((fake1 == fake2) == true);
 	EXPECT_TRUE((fake1 == fake3) == false);

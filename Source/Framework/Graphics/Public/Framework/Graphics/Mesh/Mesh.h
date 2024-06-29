@@ -62,7 +62,7 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//!	@brief			サブメッシュのリストを取得
 		//@―---------------------------------------------------------------------------
-		virtual const Array<SubMesh>& getSubMeshes()const = 0;
+		virtual const Vector<SubMesh>& getSubMeshes()const = 0;
 
 	};
 

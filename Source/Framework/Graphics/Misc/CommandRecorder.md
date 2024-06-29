@@ -17,7 +17,7 @@ public:
 
 	auto createCommandRecorder()->CommandRecorder*;
 private:
-	Array<CommandRecorder> m_recorder; 
+	Vector<CommandRecorder> m_recorder; 
 };
 
 ```

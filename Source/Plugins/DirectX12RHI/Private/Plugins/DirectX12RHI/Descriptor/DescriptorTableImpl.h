@@ -95,7 +95,7 @@ namespace ob::rhi::dx12 {
 			}
 		};
 
-		Array<UPtr<Element>> m_elemetns;
+		Vector<UPtr<Element>> m_elemetns;
 
     };
 

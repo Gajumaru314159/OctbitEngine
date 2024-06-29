@@ -23,8 +23,8 @@ namespace ob::model {
     //@―---------------------------------------------------------------------------
     struct ModelData {
         
-        Array<MeshData> meshes;
-        //Array<Material> materials;
+        Vector<MeshData> meshes;
+        //Vector<Material> materials;
         
     };
 

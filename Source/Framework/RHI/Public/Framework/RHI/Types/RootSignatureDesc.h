@@ -232,12 +232,12 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief      ルートパラメータ・配列
 	//@―---------------------------------------------------------------------------
-	using RootParameterArray = FixedArray<RootParameter, ROOT_PARAMETER_MAX>;
+	using RootParameterArray = FixedVector<RootParameter, ROOT_PARAMETER_MAX>;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      静的サンプラー・配列
 	//@―---------------------------------------------------------------------------
-	using StaticSamplerArray = FixedArray<StaticSamplerDesc, STATIC_SAMPLER_MAX>;
+	using StaticSamplerArray = FixedVector<StaticSamplerDesc, STATIC_SAMPLER_MAX>;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      ルートシグネチャ定義

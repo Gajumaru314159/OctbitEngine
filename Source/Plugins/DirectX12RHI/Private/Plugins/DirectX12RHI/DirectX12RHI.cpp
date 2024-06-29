@@ -256,7 +256,7 @@ namespace ob::rhi::dx12 {
 		}
 
 		// アダプターの列挙し、メモリ量が最大のグラフィックボードを選択
-		Array<IDXGIAdapter*> adapters;
+		Vector<IDXGIAdapter*> adapters;
 
 		ComPtr<IDXGIAdapter> tmpAdapter = nullptr;
 		ComPtr<IDXGIAdapter> selectedAdapter = nullptr;

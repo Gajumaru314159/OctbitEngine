@@ -22,7 +22,7 @@ namespace ob::debug {
 		public:
 			s32 size;
 			s32 offset;
-			Array<Vec2> data;
+			Vector<Vec2> data;
 		public:
 			TimeBuffer(s32 size = 2000) {
 				size = size;

@@ -56,7 +56,7 @@ namespace ob::core {
         //! @brief コンストラクタ(vector指定)
         //@―---------------------------------------------------------------------------
         template<class T>
-        BlobView(const Array<T>& data) {
+        BlobView(const Vector<T>& data) {
             m_pData = reinterpret_cast<const byte*>(data.data());
             m_size = data.size() * sizeof(T);
         }
@@ -111,10 +111,10 @@ namespace ob::core {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief 代入演算子(Array)
+        //! @brief 代入演算子(Vector)
         //@―---------------------------------------------------------------------------
         template<class T,typename std::enable_if_t<!std::is_same_v<T,Blob>>>
-        BlobView& operator =(const Array<T>& other) {
+        BlobView& operator =(const Vector<T>& other) {
             m_pData = static_cast<const byte*>(other.data());
             m_size = other.size() * sizeof(T);
             return *this;

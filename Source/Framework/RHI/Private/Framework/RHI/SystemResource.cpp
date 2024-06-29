@@ -16,7 +16,7 @@ namespace ob::rhi {
 		{
 			// テクスチャ
 			auto creator = [this,&rhi](IntColor color) {
-				Array<IntColor> colors(32 * 32, color);
+				Vector<IntColor> colors(32 * 32, color);
 				return rhi.createTexture(Format("Color({})",color), Size(32, 32), colors);
 			};
 			m_presetTextures[PresetTexture::White] = creator(IntColor::White);
@@ -26,7 +26,7 @@ namespace ob::rhi {
 		}
 		{
 			size_t size = 32;
-			Array<IntColor> colors(size * size);
+			Vector<IntColor> colors(size * size);
 			for (s32 y = 0; y < size; ++y) {
 				for (s32 x = 0; x < size; ++x) {
 					bool f = (x % 2) ^ (y % 2);

@@ -31,9 +31,9 @@ namespace ob::core {
 		return result;
 	}
 
-	auto StackTrace::elements()const->Array<StackTraceElement> {
+	auto StackTrace::elements()const->Vector<StackTraceElement> {
 
-		Array<StackTraceElement> result;
+		Vector<StackTraceElement> result;
 
 #ifdef OB_DEBUG
 

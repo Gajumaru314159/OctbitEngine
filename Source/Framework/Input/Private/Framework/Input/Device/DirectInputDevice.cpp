@@ -10,7 +10,7 @@ namespace ob::input
 {
 	BOOL CALLBACK DeviceFindCallBack(LPCDIDEVICEINSTANCE lpddi,LPVOID pvRef)
 	{
-		auto* ptr = (Array<DIDEVICEINSTANCE>*)pvRef;
+		auto* ptr = (Vector<DIDEVICEINSTANCE>*)pvRef;
 		DIDEVICEINSTANCE tmp = *lpddi;
 
 		// 配列に格納
@@ -26,7 +26,7 @@ namespace ob::input
 	)
 	{
 		// 第2引数をvector<DIDEVICEOBJECTINSTANCE>へのポインタに型変換
-		auto* tmp = (Array<DIDEVICEOBJECTINSTANCE>*)pvRef;
+		auto* tmp = (Vector<DIDEVICEOBJECTINSTANCE>*)pvRef;
 
 		// 配列にオブジェクトの情報を格納
 		tmp->push_back(*lpddoi);
@@ -53,7 +53,7 @@ namespace ob::input
 		}
 
 		// デバイスの列挙
-		Array<DIDEVICEINSTANCE> instances;
+		Vector<DIDEVICEINSTANCE> instances;
 		result = m_interface->EnumDevices(DI8DEVTYPE_JOYSTICK,DeviceFindCallBack,&instances,DIEDFL_ATTACHEDONLY);
 		if (FAILED(result)) {
 			LOG_ERROR("EnumDevicesに失敗");
@@ -99,7 +99,7 @@ namespace ob::input
 			return;
 		}
 
-		Array<DIDEVICEOBJECTINSTANCE> axies;
+		Vector<DIDEVICEOBJECTINSTANCE> axies;
 		result = m_mouse->EnumObjects(DIEnumDevObjCallback,&axies,DIDFT_ALL);
 		if (FAILED(result)) {
 			LOG_ERROR("EnumObjectsに失敗");

@@ -86,7 +86,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点属性・配列
 	//@―---------------------------------------------------------------------------
-	using VertexAttributeArray = FixedArray<VertexAttribute, VERTEX_ATTRIBUTE_MAX>;
+	using VertexAttributeArray = FixedVector<VertexAttribute, VERTEX_ATTRIBUTE_MAX>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーターゲット・フォーマット・配列
 	//@―---------------------------------------------------------------------------
-	using RenderTargetFormatArray = FixedArray<TextureFormat, RENDER_TARGET_MAX>;
+	using RenderTargetFormatArray = FixedVector<TextureFormat, RENDER_TARGET_MAX>;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインステート定義

@@ -53,7 +53,7 @@ namespace ob::engine {
 		
 		Mutex m_lock;
 		HashMap<EntityHandle, Entity*> m_entities;
-		Array<EntityHandle> m_removeEntities;
+		Vector<EntityHandle> m_removeEntities;
 
 	};
 

@@ -28,7 +28,7 @@ namespace ob::graphics {
 	private:
 
 		template <typename T> struct ResourceEntry { Ref<T> resource; s32 life; };
-		template <typename T> using ResourcePool = Array<ResourceEntry<T>>;
+		template <typename T> using ResourcePool = Vector<ResourceEntry<T>>;
 
 	private:
 		rhi::RHI& m_rhi;

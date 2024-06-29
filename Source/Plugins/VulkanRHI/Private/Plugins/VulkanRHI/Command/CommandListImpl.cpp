@@ -89,7 +89,7 @@ namespace ob::rhi::vulkan {
 
 		OB_CHECK_ASSERT_EXPR(m_commandBuffer != nullptr);
 
-		StaticArray<VkRect2D, 8> rects;
+		Array<VkRect2D, 8> rects;
 		for (s32 i = 0; i < num; ++i) {
 			auto& rectIn = pRect[i];
 			auto& rectOut = rects[i];
@@ -111,7 +111,7 @@ namespace ob::rhi::vulkan {
 
 		OB_CHECK_ASSERT_EXPR(m_commandBuffer != nullptr);
 
-		StaticArray<VkViewport, 8> viewports;
+		Array<VkViewport, 8> viewports;
 		for (s32 i = 0; i < num;++i) {
 			auto& viewportIn = pViewport[i];
 			auto& viewportOut = viewports[i];

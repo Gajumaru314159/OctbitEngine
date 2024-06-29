@@ -8,7 +8,7 @@
 #include<array>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/String.h>
-#include <Framework/Core/Template/Container/Array.h>
+#include <Framework/Core/Template/Container/Vector.h>
 
 namespace ob::core {
 
@@ -38,7 +38,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief      スタック情報をStackTraceElementに変換して取得
 		//@―---------------------------------------------------------------------------
-		auto elements()const -> Array<StackTraceElement>;
+		auto elements()const -> Vector<StackTraceElement>;
 
 	};
 

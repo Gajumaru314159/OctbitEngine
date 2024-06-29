@@ -13,7 +13,7 @@ namespace ob::core {
     //! @brief  Fixed配列
     //@―---------------------------------------------------------------------------
     template<typename T, std::size_t N>
-    class FixedArray {
+    class FixedVector {
     public:
         using value_type = T;
         using size_type = std::size_t;
@@ -28,43 +28,43 @@ namespace ob::core {
         using const_reverse_iterator = typename std::array<T, N>::const_reverse_iterator;
     public:
 
-        FixedArray() : m_size(0) {}
+        FixedVector() : m_size(0) {}
 
-        FixedArray(size_type size)
+        FixedVector(size_type size)
             : m_size(size) 
         {
-            if (size > N) throw std::overflow_error("FixedArray: overflow");
+            if (size > N) throw std::overflow_error("FixedVector: overflow");
         }
 
-        FixedArray(size_type size, const T& value) 
+        FixedVector(size_type size, const T& value) 
             : m_size(size) 
         {
-            if (size > N) throw std::overflow_error("FixedArray: overflow");
+            if (size > N) throw std::overflow_error("FixedVector: overflow");
             std::fill(m_data.begin(), m_data.begin() + size, value);
         }
 
-        FixedArray(std::initializer_list<T> init)
+        FixedVector(std::initializer_list<T> init)
             : m_size(init.size())
         {
-            if (init.size() > N) throw std::overflow_error("FixedArray: overflow");
+            if (init.size() > N) throw std::overflow_error("FixedVector: overflow");
             std::copy(init.begin(), init.end(), m_data.begin());
         }
 
         template<class InputIt,std::enable_if_t<is_iterator<InputIt>::value>>
-        FixedArray(InputIt first, InputIt last) {
+        FixedVector(InputIt first, InputIt last) {
             size_type count = std::distance(first, last);
-            if (count > N) throw std::overflow_error("FixedArray: overflow");
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
             std::copy(first, last, m_data.begin());
             m_size = count;
         }
 
         reference at(size_type pos) {
-            if (pos >= m_size) throw std::out_of_range("FixedArray: out of range");
+            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
             return m_data[pos];
         }
 
         const_reference at(size_type pos) const {
-            if (pos >= m_size) throw std::out_of_range("FixedArray: out of range");
+            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
             return m_data[pos];
         }
 
@@ -161,18 +161,18 @@ namespace ob::core {
         }
 
         void push_back(const T& value) {
-            if (m_size >= N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
             m_data[m_size++] = value;
         }
 
         void push_back(T&& value) {
-            if (m_size >= N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
             m_data[m_size++] = std::move(value);
         }
 
         template<class... Args>
         reference emplace_back(Args&&... args) {
-            if (m_size >= N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
             m_data[m_size] = T(std::forward<Args>(args)...);
             return m_data[m_size++];
         }
@@ -182,12 +182,12 @@ namespace ob::core {
         }
 
         void resize(size_type count) {
-            if (count > N) throw std::overflow_error("FixedArray: overflow");
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
             m_size = count;
         }
 
         void resize(size_type count, const value_type& value) {
-            if (count > N) throw std::overflow_error("FixedArray: overflow");
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
             if (count > m_size) {
                 std::fill(m_data.begin() + m_size, m_data.begin() + count, value);
             }
@@ -201,7 +201,7 @@ namespace ob::core {
         template<class InputIt, std::enable_if_t<is_iterator<InputIt>::value>>
         void assign(InputIt first, InputIt last) {
             size_type count = std::distance(first, last);
-            if (count > N) throw std::overflow_error("FixedArray: overflow");
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
             std::copy(first, last, m_data.begin());
             m_size = count;
         }    // Single element insert
@@ -216,7 +216,7 @@ namespace ob::core {
 
         // Fill insert
         iterator insert(const_iterator pos, size_type count, const T& value) {
-            if (m_size + count > N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size + count > N) throw std::overflow_error("FixedVector: overflow");
             auto index = pos - cbegin();
             if (count > 0) {
                 std::move_backward(begin() + index, end(), end() + count);
@@ -230,7 +230,7 @@ namespace ob::core {
         template<class InputIt, std::enable_if_t<is_iterator<InputIt>::value>>
         iterator insert(const_iterator pos, InputIt first, InputIt last) {
             size_type count = std::distance(first, last);
-            if (m_size + count > N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size + count > N) throw std::overflow_error("FixedVector: overflow");
             auto index = pos - cbegin();
             if (count > 0) {
                 std::move_backward(begin() + index, end(), end() + count);
@@ -265,7 +265,7 @@ namespace ob::core {
             return begin() + start_index;
         }
         // Swap function
-        void swap(FixedArray& other) noexcept {
+        void swap(FixedVector& other) noexcept {
             if (this != &other) {
                 std::swap_ranges(m_data.begin(), m_data.begin() + std::max(m_size, other.m_size), other.m_data.begin());
                 std::swap(m_size, other.m_size);
@@ -274,7 +274,7 @@ namespace ob::core {
         // Emplace function
         template<class... Args>
         iterator emplace(const_iterator pos, Args&&... args) {
-            if (m_size >= N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
             auto index = pos - cbegin();
             if (index < m_size) {
                 std::move_backward(begin() + index, end(), end() + 1);
@@ -284,31 +284,31 @@ namespace ob::core {
             return begin() + index;
         }
         // Equality comparison
-        bool operator==(const FixedArray& other) const {
+        bool operator==(const FixedVector& other) const {
             return m_size == other.m_size && std::equal(begin(), end(), other.begin());
         }
 
         // Inequality comparison
-        bool operator!=(const FixedArray& other) const {
+        bool operator!=(const FixedVector& other) const {
             return !(*this == other);
         }
         // Less than comparison
-        bool operator<(const FixedArray& other) const {
+        bool operator<(const FixedVector& other) const {
             return std::lexicographical_compare(begin(), end(), other.begin(), other.end());
         }
 
         // Less than or equal to comparison
-        bool operator<=(const FixedArray& other) const {
+        bool operator<=(const FixedVector& other) const {
             return !(other < *this);
         }
 
         // Greater than comparison
-        bool operator>(const FixedArray& other) const {
+        bool operator>(const FixedVector& other) const {
             return other < *this;
         }
 
         // Greater than or equal to comparison
-        bool operator>=(const FixedArray& other) const {
+        bool operator>=(const FixedVector& other) const {
             return !(*this < other);
         }
 
@@ -316,7 +316,7 @@ namespace ob::core {
     private:
         template<typename U>
         iterator insert_impl(const_iterator pos, U&& value) {
-            if (m_size >= N) throw std::overflow_error("FixedArray: overflow");
+            if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
             auto index = pos - cbegin();
             if (index < m_size) {
                 std::move_backward(begin() + index, end(), end() + 1);

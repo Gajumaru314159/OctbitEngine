@@ -35,32 +35,32 @@ namespace ob::graphics {
 		//===============================================================
 		// インデックス
 		//===============================================================
-		Array<u16>			indices;
-		Array<u32>			indices32;
+		Vector<u16>			indices;
+		Vector<u32>			indices32;
 
 		//===============================================================
 		// 頂点
 		//===============================================================
-		Array<Vec3>			positions;
-		Array<Color>		colors;
-		Array<IntColor>		intColors;
-		Array<Vec3>			normals;
-		Array<Vec4>			tangents;
-		Array<Vec2>			uvs;
-		Array<Vec2>			uvs1;
-		Array<Vec2>			uvs2;
-		Array<Vec2>			uvs3;
-		Array<Vec2>			uvs4;
-		Array<Vec2>			uvs5;
-		Array<Vec2>			uvs6;
-		Array<Vec2>			uvs7;
-		//Array<Matrix>		bindPoses;
-		//Array<BoneWeight>	boneWeights;
+		Vector<Vec3>			positions;
+		Vector<Color>		colors;
+		Vector<IntColor>		intColors;
+		Vector<Vec3>			normals;
+		Vector<Vec4>			tangents;
+		Vector<Vec2>			uvs;
+		Vector<Vec2>			uvs1;
+		Vector<Vec2>			uvs2;
+		Vector<Vec2>			uvs3;
+		Vector<Vec2>			uvs4;
+		Vector<Vec2>			uvs5;
+		Vector<Vec2>			uvs6;
+		Vector<Vec2>			uvs7;
+		//Vector<Matrix>		bindPoses;
+		//Vector<BoneWeight>	boneWeights;
 
 		//===============================================================
 		// サブメッシュ
 		//===============================================================
-		Array<SubMesh>		submeshes;
+		Vector<SubMesh>		submeshes;
 	public:
 
 		//@―---------------------------------------------------------------------------
