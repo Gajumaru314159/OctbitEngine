@@ -46,9 +46,11 @@ namespace ob {
 
     TEST(Logger, Subscribe) {
 
+        Logger logger;
+
         // ログイベントを登録
         Logger::EventHandle handle;
-        Logger::Get().addEvent(handle, { LogEvent });
+        if(auto logger = Logger::Get()) logger->addEvent(handle, { LogEvent });
 
         // ログ追加
         {
@@ -88,7 +90,7 @@ namespace ob {
         }
 
         // ログイベントの削除
-        Logger::Get().removeEvent(handle);
+        if (auto logger = Logger::Get()) logger->removeEvent(handle);
 
         // ログ追加
         {
