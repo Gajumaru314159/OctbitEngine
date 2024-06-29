@@ -9,7 +9,7 @@ using namespace ob;
 TEST(FixedVector, Constructors) {
 	FixedVector<int, 100> fakeEmpty, fake(5, 10), fakeCopy(fake), fakeArray{ 2, 3, 4, 5, 7 };
 	FixedVector<int, 100> realEmpty, real(5, 10), realCopy(real), realArray{ 2, 3, 4, 5, 7 };
-
+	fake = real;
 	ob::core::is_iterator<decltype(fake.begin())>::value;
 	EXPECT_TRUE(fakeEmpty.size() == realEmpty.size());
 	EXPECT_TRUE(fake.size() == real.size());
@@ -81,30 +81,30 @@ TEST(FixedVector, Clear) {
 	EXPECT_TRUE(fake.capacity() == real.capacity());
 }
 
-//TEST(FixedVector, Insert) {
-//	FixedVector<int, 100> fake(10, 5);
-//	FixedVector<int, 100> real(10, 5);
-//
-//	auto itfake = fake.begin() + 2;
-//	auto itreal = real.begin() + 2;
-//
-//
-//	itfake = fake.insert(itfake, 10);
-//	itreal = real.insert(itreal, 10);
-//
-//	EXPECT_TRUE(fake.size() == real.size());
-//	for (int i = 0; i < fake.size(); i++)
-//		EXPECT_TRUE(fake[i] == real[i]);
-//
-//	int ten = 10;
-//	itfake = fake.insert(itfake, 3, ten);
-//	itreal = real.insert(itreal, 3, ten);
-//
-//	EXPECT_TRUE(fake.size() == real.size());
-//	for (int i = 0; i < fake.size(); i++)
-//		EXPECT_TRUE(fake[i] == real[i]);
-//
-//}
+TEST(FixedVector, Insert) {
+	FixedVector<int, 100> fake(10, 5);
+	FixedVector<int, 100> real(10, 5);
+
+	auto itfake = fake.begin() + 2;
+	auto itreal = real.begin() + 2;
+
+
+	itfake = fake.insert(itfake, 10);
+	itreal = real.insert(itreal, 10);
+
+	EXPECT_TRUE(fake.size() == real.size());
+	for (int i = 0; i < fake.size(); i++)
+		EXPECT_TRUE(fake[i] == real[i]);
+
+	int ten = 10;
+	itfake = fake.insert(itfake, 3, ten);
+	itreal = real.insert(itreal, 3, ten);
+
+	EXPECT_TRUE(fake.size() == real.size());
+	for (int i = 0; i < fake.size(); i++)
+		EXPECT_TRUE(fake[i] == real[i]);
+
+}
 
 TEST(FixedVector, Erase) {
 	FixedVector<int, 100> fake(10);

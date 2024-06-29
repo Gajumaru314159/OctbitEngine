@@ -15,19 +15,22 @@ namespace ob::core {
     template<typename T, std::size_t N>
     class FixedVector {
     public:
-        using value_type = T;
-        using size_type = std::size_t;
-        using difference_type = std::ptrdiff_t;
-        using reference = value_type&;
-        using const_reference = const value_type&;
-        using pointer = value_type*;
-        using const_pointer = const value_type*;
+        using reference = T&;
+        using const_reference = const T&;
         using iterator = typename std::array<T, N>::iterator;
         using const_iterator = typename std::array<T, N>::const_iterator;
+        using size_type = std::size_t;
+        using difference_type = std::ptrdiff_t;
+        using value_type = T;
+        using pointer = value_type*;
+        using const_pointer = const value_type*;
         using reverse_iterator = typename std::array<T, N>::reverse_iterator;
         using const_reverse_iterator = typename std::array<T, N>::const_reverse_iterator;
     public:
 
+        //===============================================================
+        // コンストラクタ / デストラクタ
+        //===============================================================
         FixedVector() : m_size(0) {}
 
         FixedVector(size_type size)
@@ -58,39 +61,10 @@ namespace ob::core {
             m_size = count;
         }
 
-        reference at(size_type pos) {
-            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
-            return m_data[pos];
-        }
 
-        const_reference at(size_type pos) const {
-            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
-            return m_data[pos];
-        }
-
-        reference operator[](size_type pos) {
-            return m_data[pos];
-        }
-
-        const_reference operator[](size_type pos) const {
-            return m_data[pos];
-        }
-
-        reference front() {
-            return m_data[0];
-        }
-
-        const_reference front() const {
-            return m_data[0];
-        }
-
-        reference back() {
-            return m_data[m_size - 1];
-        }
-
-        const_reference back() const {
-            return m_data[m_size - 1];
-        }
+        //===============================================================
+        // イテレータ
+        //===============================================================
 
         iterator begin() noexcept {
             return m_data.begin();
@@ -140,24 +114,102 @@ namespace ob::core {
             return m_data.crbegin() + m_size;
         }
 
-        bool empty() const noexcept {
-            return m_size == 0;
-        }
+
+        //===============================================================
+        // 領域
+        //===============================================================
 
         size_type size() const noexcept {
             return m_size;
-        }
-
-        size_type capacity() const noexcept {
-            return N;
         }
 
         constexpr size_type max_size() const noexcept {
             return N;
         }
 
-        void clear() noexcept {
-            m_size = 0;
+        void resize(size_type count) {
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
+            m_size = count;
+        }
+
+        void resize(size_type count, const value_type& value) {
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
+            if (count > m_size) {
+                std::fill(m_data.begin() + m_size, m_data.begin() + count, value);
+            }
+            m_size = count;
+        }
+
+        constexpr size_type capacity() const noexcept {
+            return N;
+        }
+
+        bool empty() const noexcept {
+            return m_size == 0;
+        }
+
+
+        //===============================================================
+        // 要素アクセス
+        //===============================================================
+
+        reference operator[](size_type pos) {
+            return m_data[pos];
+        }
+
+        const_reference operator[](size_type pos) const {
+            return m_data[pos];
+        }
+
+        reference at(size_type pos) {
+            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
+            return m_data[pos];
+        }
+
+        const_reference at(size_type pos) const {
+            if (pos >= m_size) throw std::out_of_range("FixedVector: out of range");
+            return m_data[pos];
+        }
+
+        pointer data() {
+            return m_data.data();
+        }
+        
+        const_pointer data() const {
+            return m_data.data();
+        }
+
+        reference front() {
+            return m_data.front();
+        }
+
+        const_reference front() const {
+            return m_data.front();
+        }
+
+        reference back() {
+            return m_data[m_size - 1];
+        }
+
+        const_reference back() const {
+            return m_data[m_size - 1];
+        }
+
+
+        //===============================================================
+        // コンテナの変更
+        //===============================================================
+
+        void assign(size_type n, const T& t) {
+            std::fill(m_data.begin(), m_data.begin() + n, t);
+        }
+
+        template<class InputIt, std::enable_if_t<is_iterator<InputIt>::value>>
+        void assign(InputIt first, InputIt last) {
+            size_type count = std::distance(first, last);
+            if (count > N) throw std::overflow_error("FixedVector: overflow");
+            std::copy(first, last, m_data.begin());
+            m_size = count;
         }
 
         void push_back(const T& value) {
@@ -181,40 +233,14 @@ namespace ob::core {
             if (m_size > 0) --m_size;
         }
 
-        void resize(size_type count) {
-            if (count > N) throw std::overflow_error("FixedVector: overflow");
-            m_size = count;
-        }
-
-        void resize(size_type count, const value_type& value) {
-            if (count > N) throw std::overflow_error("FixedVector: overflow");
-            if (count > m_size) {
-                std::fill(m_data.begin() + m_size, m_data.begin() + count, value);
-            }
-            m_size = count;
-        }
-
-        void assign(size_type n, const T& t) {
-            std::fill(m_data.begin(),m_data.begin()+n,t);
-        }
-
-        template<class InputIt, std::enable_if_t<is_iterator<InputIt>::value>>
-        void assign(InputIt first, InputIt last) {
-            size_type count = std::distance(first, last);
-            if (count > N) throw std::overflow_error("FixedVector: overflow");
-            std::copy(first, last, m_data.begin());
-            m_size = count;
-        }    // Single element insert
         iterator insert(const_iterator pos, const T& value) {
             return insert_impl(pos, value);
         }
 
-        // Move element insert
         iterator insert(const_iterator pos, T&& value) {
             return insert_impl(pos, std::move(value));
         }
 
-        // Fill insert
         iterator insert(const_iterator pos, size_type count, const T& value) {
             if (m_size + count > N) throw std::overflow_error("FixedVector: overflow");
             auto index = pos - cbegin();
@@ -226,7 +252,6 @@ namespace ob::core {
             return begin() + index;
         }
 
-        // Range insert
         template<class InputIt, std::enable_if_t<is_iterator<InputIt>::value>>
         iterator insert(const_iterator pos, InputIt first, InputIt last) {
             size_type count = std::distance(first, last);
@@ -240,38 +265,10 @@ namespace ob::core {
             return begin() + index;
         }
 
-        // Initializer list insert
         iterator insert(const_iterator pos, std::initializer_list<T> ilist) {
             return insert(pos, ilist.begin(), ilist.end());
         }
-        // Erase single element
-        iterator erase(const_iterator pos) {
-            auto index = pos - cbegin();
-            if (index < m_size) {
-                std::move(begin() + index + 1, end(), begin() + index);
-                --m_size;
-            }
-            return begin() + index;
-        }
 
-        // Erase range of elements
-        iterator erase(const_iterator first, const_iterator last) {
-            auto start_index = first - cbegin();
-            auto end_index = last - cbegin();
-            if (start_index < end_index && end_index <= m_size) {
-                std::move(begin() + end_index, end(), begin() + start_index);
-                m_size -= (end_index - start_index);
-            }
-            return begin() + start_index;
-        }
-        // Swap function
-        void swap(FixedVector& other) noexcept {
-            if (this != &other) {
-                std::swap_ranges(m_data.begin(), m_data.begin() + std::max(m_size, other.m_size), other.m_data.begin());
-                std::swap(m_size, other.m_size);
-            }
-        }
-        // Emplace function
         template<class... Args>
         iterator emplace(const_iterator pos, Args&&... args) {
             if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
@@ -283,37 +280,69 @@ namespace ob::core {
             ++m_size;
             return begin() + index;
         }
-        // Equality comparison
+
+        iterator erase(const_iterator pos) {
+            auto index = pos - cbegin();
+            if (index < m_size) {
+                std::move(begin() + index + 1, end(), begin() + index);
+                --m_size;
+            }
+            return begin() + index;
+        }
+
+        iterator erase(const_iterator first, const_iterator last) {
+            auto start_index = first - cbegin();
+            auto end_index = last - cbegin();
+            if (start_index < end_index && end_index <= m_size) {
+                std::move(begin() + end_index, end(), begin() + start_index);
+                m_size -= (end_index - start_index);
+            }
+            return begin() + start_index;
+        }
+
+        void swap(FixedVector& other) noexcept {
+            if (this != &other) {
+                std::swap_ranges(m_data.begin(), m_data.begin() + std::max(m_size, other.m_size), other.m_data.begin());
+                std::swap(m_size, other.m_size);
+            }
+        }
+
+        void clear() noexcept {
+            m_size = 0;
+        }
+
+
+        //===============================================================
+        // 比較演算子
+        //===============================================================
+
         bool operator==(const FixedVector& other) const {
             return m_size == other.m_size && std::equal(begin(), end(), other.begin());
         }
 
-        // Inequality comparison
         bool operator!=(const FixedVector& other) const {
             return !(*this == other);
         }
-        // Less than comparison
+
         bool operator<(const FixedVector& other) const {
             return std::lexicographical_compare(begin(), end(), other.begin(), other.end());
         }
 
-        // Less than or equal to comparison
         bool operator<=(const FixedVector& other) const {
             return !(other < *this);
         }
 
-        // Greater than comparison
         bool operator>(const FixedVector& other) const {
             return other < *this;
         }
 
-        // Greater than or equal to comparison
         bool operator>=(const FixedVector& other) const {
             return !(*this < other);
         }
 
 
     private:
+
         template<typename U>
         iterator insert_impl(const_iterator pos, U&& value) {
             if (m_size >= N) throw std::overflow_error("FixedVector: overflow");
@@ -325,7 +354,6 @@ namespace ob::core {
             ++m_size;
             return begin() + index;
         }
-
 
     private:
         std::array<T, N> m_data;
