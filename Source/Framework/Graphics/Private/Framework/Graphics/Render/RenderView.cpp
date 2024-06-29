@@ -73,6 +73,15 @@ namespace ob::graphics {
 	}
 
 	//@―---------------------------------------------------------------------------
+	//! @brief      ビューポートを取得
+	//@―---------------------------------------------------------------------------
+	auto RenderView::getViewport()const->Viewport {
+		IntRect rect = getScaledRect();
+		Viewport viewport(rect.left, rect.top, rect.right, rect.bottom);
+		return viewport;
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief      RenderFeatureを見つける
 	//@―---------------------------------------------------------------------------
 	RenderFeature* RenderView::findFeature(TypeId typeId)const {

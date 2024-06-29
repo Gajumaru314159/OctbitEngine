@@ -18,28 +18,23 @@ namespace ob::graphics {
 
 	bool OpaqueRenderer::render(FG& fg, FGBlackboard& blackboard)const {
 
-		IntRect rect = m_view.getScaledRect();
+		auto rect = m_view.getScaledRect();
+		auto viewport = m_view.getViewport();
 
 		auto& gbuffer = blackboard.get<GBufferData>();
 
 		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
 			"Opaque",
 			[&](FGBuilder& builder, GBufferData& data) {
-				rhi::RenderTextureDesc desc;
-				desc.size = m_view.getRenderSize();
-
 				data.albedo = builder.write(gbuffer.albedo);
 				data.normal = builder.write(gbuffer.normal);
 				data.depth = builder.write(gbuffer.depth);
 				data.uv = builder.write(gbuffer.uv);
-
 			},
 			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
 				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 
 					cmdList.pushMarker("Opaque");
-
-					Viewport vp(rect.left, rect.top, rect.right, rect.bottom, 1, 0);
 
 					cmdList.setRenderTargets(
 						{ resources.get(data.albedo) ,resources.get(data.normal) ,resources.get(data.uv) },
@@ -48,7 +43,7 @@ namespace ob::graphics {
 
 					cmdList.clearColors();
 					cmdList.clearDepthStencil();
-					cmdList.setViewport(&vp, 1);
+					cmdList.setViewport(&viewport, 1);
 					cmdList.setScissorRect(&rect, 1);
 
 					feature->render("Opaque", cmdList);
