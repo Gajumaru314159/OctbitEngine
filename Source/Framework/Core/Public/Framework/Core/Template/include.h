@@ -33,6 +33,7 @@
 #include "Container/BitFlags.h"
 #include "Container/BitSet.h"
 #include "Container/Deque.h"
+#include "Container/FixedArray.h"
 #include "Container/ForwardList.h"
 #include "Container/HandleForwardList.h"
 #include "Container/HandleList.h"

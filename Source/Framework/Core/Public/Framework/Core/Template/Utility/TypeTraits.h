@@ -15,4 +15,17 @@ namespace ob::core {
 	template <class T>
 	using remove_cvr_t = typename remove_cvr<T>::type;
 
+    //! @brief イテレータか
+	template < class, class = void >
+	struct is_iterator : std::false_type {};
+
+	template < typename T >
+	struct is_iterator<T,
+		std::enable_if_t<
+			std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value || 
+			std::is_base_of<std::output_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value
+		>
+	> : std::true_type {};
+
+
 }
