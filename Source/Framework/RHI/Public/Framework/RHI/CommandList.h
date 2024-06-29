@@ -27,7 +27,7 @@ namespace ob::rhi {
         virtual void end() = 0;
         virtual void flush() = 0;
 
-        virtual void setRenderTargets(const Array<Ref<RenderTexture>>& colors, const Ref<RenderTexture>& depth = {}) = 0; //!< レンダーパス開始
+        virtual void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth = {}) = 0; //!< レンダーパス開始
         void setRenderTarget(const Ref<RenderTexture>& color, const Ref<RenderTexture>& depth = {}) { setRenderTargets({color},depth); }
 
         virtual void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) = 0;

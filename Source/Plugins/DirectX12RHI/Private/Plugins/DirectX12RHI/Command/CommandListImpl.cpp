@@ -134,7 +134,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      描画先設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRenderTargets(const Array<Ref<RenderTexture>>& colors, const Ref<RenderTexture>& depth) {
+	void CommandListImpl::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
 
 		D3D12_CPU_DESCRIPTOR_HANDLE hColors[8]{};
 		D3D12_CPU_DESCRIPTOR_HANDLE hDepth{};

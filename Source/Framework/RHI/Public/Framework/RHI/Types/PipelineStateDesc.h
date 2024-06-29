@@ -83,12 +83,17 @@ namespace ob::rhi {
 
 	};
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  頂点属性・配列
+	//@―---------------------------------------------------------------------------
+	using VertexAttributeArray = FixedArray<VertexAttribute, VERTEX_ATTRIBUTE_MAX>;
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  頂点レイアウト
 	//@―---------------------------------------------------------------------------
 	struct VertexLayout {
-		Array<VertexAttribute> attributes;	//!< 属性リスト
+		VertexAttributeArray attributes;	//!< 属性リスト
 	};
 
 
@@ -105,13 +110,18 @@ namespace ob::rhi {
 #pragma endregion
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  レンダーターゲット・フォーマット・配列
+	//@―---------------------------------------------------------------------------
+	using RenderTargetFormatArray = FixedArray<TextureFormat, RENDER_TARGET_MAX>;
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインステート定義
 	//@―---------------------------------------------------------------------------
 	struct PipelineStateDesc {
 		
 		String					name;							//!< 名前
 
-		Array<TextureFormat>	colors;							//!< 描画先フォーマット
+		RenderTargetFormatArray	colors;						//!< 描画先フォーマット
 		Optional<TextureFormat>	depth;
 
 		Ref<RootSignature>		rootSignature;					//!< ルートシグネチャ

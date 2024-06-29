@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/ShaderStage.h>
 #include <Framework/RHI/Types/SamplerDesc.h>
 
@@ -229,13 +230,23 @@ namespace ob::rhi {
 #pragma endregion
 
 	//@―---------------------------------------------------------------------------
+	//! @brief      ルートパラメータ・配列
+	//@―---------------------------------------------------------------------------
+	using RootParameterArray = FixedArray<RootParameter, ROOT_PARAMETER_MAX>;
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      静的サンプラー・配列
+	//@―---------------------------------------------------------------------------
+	using StaticSamplerArray = FixedArray<StaticSamplerDesc, STATIC_SAMPLER_MAX>;
+
+	//@―---------------------------------------------------------------------------
 	//! @brief      ルートシグネチャ定義
 	//@―---------------------------------------------------------------------------
 	struct RootSignatureDesc {
-		String						name;		//!< 名前
-		Array<RootParameter>		parameters;	//!< ルートパラメータ
-		Array<StaticSamplerDesc>	samplers;	//!< 固定サンプラー
-		RootSignatureFlags          flags;		//!< フラグ
+		String					name;		//!< 名前
+		RootParameterArray		parameters;	//!< ルートパラメータ
+		StaticSamplerArray		samplers;	//!< 静的サンプラー
+		RootSignatureFlags		flags;		//!< フラグ
 	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
@@ -245,7 +256,7 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
-		RootSignatureDesc(Array<RootParameter>&& parameters, Array<StaticSamplerDesc>&& samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
+		RootSignatureDesc(decltype(parameters) parameters, decltype(samplers) samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
 			: parameters(parameters), samplers(samplers), flags(flags) {}
 	};
 

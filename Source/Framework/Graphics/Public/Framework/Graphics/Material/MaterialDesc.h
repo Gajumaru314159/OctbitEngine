@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 
 // HashMap<Name, MaterialPass> で使用するためインクルード
@@ -43,7 +44,7 @@ namespace ob::graphics {
     //! @brief  マテリアルパス定義
     //@―---------------------------------------------------------------------------
     struct MaterialPass {
-        Array<rhi::TextureFormat>	    colors;			    //!< 描画先フォーマット
+        rhi::RenderTargetFormatArray	colors;			    //!< 描画先フォーマット
         Optional<rhi::TextureFormat>	depth;
 
         Ref<rhi::RootSignature>         rootSignature;

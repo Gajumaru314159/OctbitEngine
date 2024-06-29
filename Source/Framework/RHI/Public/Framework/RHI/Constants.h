@@ -19,4 +19,9 @@ namespace ob::rhi {
 	static const s32 MIPMAP__MAX			= 16;		//!< ミップマップ最大数
 	static const s32 VERTEX_BUFFER_MAX		= 16;		//!< 頂点バッファのストーリム最大数
 
+	static const s32 VERTEX_ATTRIBUTE_MAX	= 16;		//!< 頂点属性の最大数
+	static const s32 ROOT_PARAMETER_MAX		= 16;		//!< ルートシグネチャのパラメータ最大数
+	static const s32 STATIC_SAMPLER_MAX		= 16;		//!< 静的サンプラー最大数
+
+
 }

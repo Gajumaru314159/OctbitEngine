@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 
@@ -31,5 +32,7 @@ namespace ob::rhi {
         virtual const RenderTextureDesc& descOfRenderTexture()const = 0;
 
     };
+
+    using RenderTextureArray = FixedArray<Ref<RenderTexture>,RENDER_TARGET_MAX>;
 
 }

@@ -64,7 +64,7 @@ namespace ob::rhi::dx12 {
          //@―---------------------------------------------------------------------------
          //! @brief      描画先設定
          //@―---------------------------------------------------------------------------
-         void setRenderTargets(const Array<Ref<RenderTexture>>& targets, const Ref<RenderTexture>& depth) override;
+         void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) override;
 
         //@―---------------------------------------------------------------------------
         //! @brief      ディスプレイにテクスチャを適用
