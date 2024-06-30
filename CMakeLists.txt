@@ -109,7 +109,7 @@ add_subdirectory ("Source/Framework/Graphics")
 add_subdirectory ("Source/Framework/Model")
 #add_subdirectory ("Source/Framework/Asset")
 add_subdirectory ("Source/Framework/Debug")
-#add_subdirectory ("Source/Framework/Engine")
+add_subdirectory ("Source/Framework/Engine")
 
 # Plugins
 if(WIN32)
@@ -128,6 +128,7 @@ add_subdirectory ("Source/Test/Framework/Core")
 add_subdirectory ("Source/Test/Framework/Platform")
 add_subdirectory ("Source/Test/Framework/RHI")
 add_subdirectory ("Source/Test/Framework/Graphics")
+add_subdirectory ("Source/Test/Framework/Engine")
 
 # Application
 #add_subdirectory ("Source/Application")

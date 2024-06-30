@@ -15,7 +15,7 @@ namespace ob::engine {
 	DEFINE_YES_NO(Recursive);
 	DEFINE_YES_NO(Async);
 
-	using SceneList = List<Ref<Scene>>;
+	using SceneVector = Vector<Scene*>;
 
 
 
@@ -23,13 +23,13 @@ namespace ob::engine {
 	//! @brief  シーン
 	//! @ref	https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ULevel/
 	//@―---------------------------------------------------------------------------
-	class Scene : public RefObject {
+	class Scene {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		生成
 		//@―---------------------------------------------------------------------------
-		static Ref<Scene> Create(StringView name);
+		static Scene* Create(StringView name);
 
 	public:
 
@@ -46,8 +46,8 @@ namespace ob::engine {
 		//===============================================================
 		// Scene
 		//===============================================================
-		const SceneList& getChildren()const;
-		void addSubScene(const Ref<Scene>&);
+		const SceneVector& getChildren()const;
+		void addSubScene(Scene&);
 		Scene* findScene(StringView name, Recursive recursive = Recursive::No);
 
 		void setGlobalOffset(Vec3 offset);
@@ -77,7 +77,7 @@ namespace ob::engine {
 		Vec3		m_localOffset;
 
 		Scene*		m_parent = nullptr;
-		SceneList	m_children;
+		SceneVector	m_children;
 		EntityHandleList	m_entities;
 
 

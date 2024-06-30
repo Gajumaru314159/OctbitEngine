@@ -26,8 +26,9 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		ルートシーン取得
 	//@―---------------------------------------------------------------------------
-	const Ref<Scene>& World::getRootScene()const {
-		return m_scene;
+	Scene& World::getRootScene()const {
+		OB_ASSERT(m_scene!=nullptr,"ルートシーンが解放済みです。");
+		return *m_scene;
 	}
 
 
@@ -36,9 +37,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void World::createRootScene() {
 		if (m_scene)return;
-
 		m_scene = Scene::Create(Format("Root({})",m_name));
-
 	}
 
 }

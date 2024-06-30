@@ -8,7 +8,6 @@
 
 #include <Framework/Engine/Component/TransformComponent.h>
 #include <Framework/Engine/Component/TransformComponentImpl.h>
-#include <Framework/Engine/Component/CameraComponent.h>
 
 namespace ob::engine {
 
@@ -16,9 +15,7 @@ namespace ob::engine {
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	ComponentFactory::ComponentFactory() {
-
 		registerCreator(TypeId::Get<TransformComponent>(), std::make_unique<ComponentCreatorTemplate<TransformComponentImpl>>());
-		registerCreator(TypeId::Get<CameraComponent>(), std::make_unique<ComponentCreatorTemplate<CameraComponent>>());
 	}
 
 	//@―---------------------------------------------------------------------------

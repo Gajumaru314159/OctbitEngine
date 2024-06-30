@@ -11,10 +11,8 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		生成
 	//@―---------------------------------------------------------------------------
-	Ref<Scene> Scene::Create(StringView name) {
-
+	Scene* Scene::Create(StringView name) {
 		auto scene = new Scene(name);
-
 		return scene;
 	}
 
@@ -63,34 +61,32 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		子シーンを取得
 	//@―---------------------------------------------------------------------------
-	const SceneList& Scene::getChildren()const {
+	const SceneVector& Scene::getChildren()const {
 		return m_children;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		サブシーンを追加
 	//@―---------------------------------------------------------------------------
-	void Scene::addSubScene(const Ref<Scene>& child) {
-		if (!child)
-			return;
+	void Scene::addSubScene(Scene& child) {
 
 		ScopeLock lock(m_lock);
 
 		// TODO シーンを共有できないようにする
-		if (child->getParent()) {
-			LOG_ERROR("シーンの追加に失敗。登録済みのシーンは登録できません。[child={},this={}]", child->getName(),m_name);
+		if (child.getParent()) {
+			LOG_ERROR("シーンの追加に失敗。登録済みのシーンは登録できません。[child={},this={}]", child.getName(),m_name);
 		}
 
 		auto ancestor = m_parent;
 		while (ancestor) {
-			if (ancestor == child.get()) {
-				LOG_ERROR("シーンの追加に失敗。循環を検知しました。 [child={},this={}]", child->getName(), m_name);
+			if (ancestor == &child) {
+				LOG_ERROR("シーンの追加に失敗。循環を検知しました。 [child={},this={}]", child.getName(), m_name);
 			}
 			ancestor = ancestor->getParent();
 		}
 
-		child->m_parent = this;
-		m_children.emplace_back(child);
+		child.m_parent = this;
+		m_children.emplace_back(&child);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -101,7 +97,7 @@ namespace ob::engine {
 		for (auto& child: m_children) {
 
 			if (child->getName() == name) {
-				return child.get();
+				return child;
 			}
 
 			if (recursive) {
