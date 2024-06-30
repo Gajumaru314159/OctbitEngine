@@ -36,7 +36,4 @@ include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
 
 # カスタムコマンド
-add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:Graphics-test>
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/dxc/bin/x64/dxil.dll" $<TARGET_FILE_DIR:Graphics-test>
-)
+COPY_REQUIRED_DLL()
