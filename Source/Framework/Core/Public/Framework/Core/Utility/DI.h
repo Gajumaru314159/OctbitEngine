@@ -62,7 +62,8 @@ namespace ob::core {
     private:
         template<class T> friend class ServiceBuilder;  // for m_builders
         HashMap<TypeId, UPtr<ServiceBuilderBase>>   m_builders;
-        HashMap<TypeId, Vector<TypeId>>          m_builderMap;
+        HashMap<TypeId, Vector<TypeId>>             m_builderMap;
+        Vector<TypeId>                              m_orders;
     };
 
 
@@ -173,6 +174,7 @@ namespace ob::core {
     ServiceBuilder<T>& ServiceInjector::bind() {
         auto builder = new ServiceBuilder<T>(*this);
         m_builders[TypeId::Get<T>()].reset(builder);
+        m_orders.push_back(TypeId::Get<T>());
         return *builder;
     }
 
@@ -183,6 +185,7 @@ namespace ob::core {
     ServiceBuilder<T>& ServiceInjector::bind(T& instance) {
         auto builder = new ServiceBuilder<T>(*this,instance);
         m_builders[TypeId::Get<T>()].reset(builder);
+        m_orders.push_back(TypeId::Get<T>());
         return *builder;
     }
 
@@ -297,22 +300,6 @@ namespace ob::core {
         Func<T*()>      m_getter;
     };
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  サービスを生成
-    //! @param container 生成されたサービスを管理させるコンテナの参照
-    //@―---------------------------------------------------------------------------
-    inline void ServiceInjector::createAll(ServiceContainer& container)const {
-        for (auto& [typeId, builder] : m_builders) {
-            try {
-                builder->create(container);
-            }
-            catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
-            }
-        }
-    }
-
     namespace detail {
 
         //@―---------------------------------------------------------------------------
@@ -380,10 +367,40 @@ namespace ob::core {
             return reinterpret_cast<T*>(m_services.at(found->second)->get());
         }
 
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスが存在しているか
+        //@―---------------------------------------------------------------------------
+        bool has(TypeId typeId)const {
+            return m_indices.count(typeId);
+        }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      サービスが存在しているか
+        //@―---------------------------------------------------------------------------
+        template<class T>
+        bool has()const {
+            return m_indices.count(TypeId::Get<T>());
+        }
+
     private:
         template<class T> friend class ServiceBuilder;
         Vector<UPtr<detail::ServiceHolderBase>> m_services;
         HashMap<TypeId, size_t> m_indices;
     };
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  サービスを生成
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    //@―---------------------------------------------------------------------------
+    inline void ServiceInjector::createAll(ServiceContainer& container)const {
+        for (auto typeId : m_orders) {
+            try {
+                if (container.has(typeId))continue;
+                m_builders.find(typeId)->second->create(container);
+            }
+            catch (Exception e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
+            }
+        }
+    }
 }

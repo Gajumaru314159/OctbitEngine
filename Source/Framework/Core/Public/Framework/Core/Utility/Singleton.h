@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Exception/Exception.h>
 
 namespace ob::core {
 
@@ -35,7 +36,9 @@ namespace ob::core {
         //! @brief      デストラクタ
         //@―---------------------------------------------------------------------------
         virtual ~Singleton() {
-            s_instance = nullptr;
+            if (s_instance == this) {
+                s_instance = nullptr;
+            }
         }
 
     protected:
@@ -44,7 +47,7 @@ namespace ob::core {
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
         Singleton() {
-            OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<T>().name());
+            if (s_instance != nullptr) throw Exception("既に生成されています。");
             s_instance = reinterpret_cast<T*>(this);
         }
 
