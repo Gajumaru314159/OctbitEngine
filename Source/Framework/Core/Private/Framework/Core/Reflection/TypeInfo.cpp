@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Core.h>
 
-namespace ob::engine::rtti {
+namespace ob::core::rtti {
 
 	//class ClassFactoryBase {
 	//public:

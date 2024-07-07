@@ -5,9 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Core.h>
-#include <Framework/Engine/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfo.h>
 
-namespace ob::engine::rtti {
+namespace ob::core::rtti {
 
 	//using PropertyVariant = Variant<
 	//	bool,

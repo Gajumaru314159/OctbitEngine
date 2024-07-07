@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Core.h>
 #include <Framework/Core/Reflection/TypeId.h>
-#include <Framework/Engine/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfo.h>
 
 //@―---------------------------------------------------------------------------
 //! @brief		Enum型情報登録

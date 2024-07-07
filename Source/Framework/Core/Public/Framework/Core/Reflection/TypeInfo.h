@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Reflection/TypeId.h>
 
-namespace ob::engine::rtti {
+namespace ob::core::rtti {
 
 	namespace internal {
 		class ClassBuilder;
@@ -86,7 +86,7 @@ namespace ob::engine::rtti {
 	//! @brief  Class型情報
 	//@―---------------------------------------------------------------------------
 	class ClassInfo :public TaggedInfo {
-		friend class ob::engine::rtti::internal::ClassBuilder;
+		friend class ob::core::rtti::internal::ClassBuilder;
 	public:
 
 		// 名前で検索できるようにする

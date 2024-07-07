@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/Entity.h>
-#include <Framework/Engine/Reflection/TypeBuilder.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
 
 namespace ob::engine {
 

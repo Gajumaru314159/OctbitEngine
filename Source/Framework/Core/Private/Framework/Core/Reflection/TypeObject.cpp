@@ -1,7 +1,7 @@
-﻿#include <Framework/Engine/Reflection/TypeObject.h>
+﻿#include <Framework/Core/Reflection/TypeObject.h>
 
 
-namespace ob::engine::rtti {
+namespace ob::core::rtti {
 
 	PropertyObject::PropertyObject(void* target, const PropertyInfo& info)
 		: m_target(target)

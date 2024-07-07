@@ -4,27 +4,27 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Reflection/TypeBuilder.h>
-#include <Framework/Engine/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
+#include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Core.h>
 
 
 
 namespace type_info_builder {
 	// テスト
-	ob::engine::rtti::EnumInfo s_enumInfo;
-	ob::engine::rtti::ClassInfo s_classInfo;
+	ob::core::rtti::EnumInfo s_enumInfo;
+	ob::core::rtti::ClassInfo s_classInfo;
 
-	ob::engine::rtti::EnumInfo& CreateEnumInfo(ob::TypeId) {
+	ob::core::rtti::EnumInfo& CreateEnumInfo(ob::TypeId) {
 		return s_enumInfo;
 	}
 
-	ob::engine::rtti::ClassInfo& CreateClassInfo(ob::TypeId) {
+	ob::core::rtti::ClassInfo& CreateClassInfo(ob::TypeId) {
 		return s_classInfo;
 	}
 }
 
-namespace ob::engine::rtti::internal {
+namespace ob::core::rtti::internal {
 
 	//===============================================================
 	// ElementBuilder
@@ -165,7 +165,7 @@ namespace ob::engine::rtti::internal {
 		return FunctionBuilder(f);
 	}
 
-	void ClassBuilder::nameChange(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName) {
+	void ClassBuilder::convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName) {
 	}
 
 

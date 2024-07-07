@@ -5,6 +5,6 @@
 //***********************************************************
 #pragma once
 
-namespace ob::engine{
+namespace ob::core{
 
 }

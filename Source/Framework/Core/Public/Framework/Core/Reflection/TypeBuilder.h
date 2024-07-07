@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/Core.h>
 #include <Framework/Core/Reflection/TypeId.h>
-#include <Framework/Engine/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfo.h>
 
 
 //@―---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ namespace type_info_builder::type {\
 template<> void type_info_builder::ClassBuilderTemplate<::type>::Register()
 
 
-namespace ob::engine::rtti::internal {
+namespace ob::core::rtti::internal {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum要素情報ビルダー
@@ -150,15 +150,22 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		void tag(StringView key, StringView value = "");
 
+		//@―---------------------------------------------------------------------------
+		//! @brief			基底クラスを追加
+		//@―---------------------------------------------------------------------------
+		template<class TBase>
+		void constructor() {
+			constructorImpl();
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ追加
 		//! @tparam Args	引数型リスト
 		//@―---------------------------------------------------------------------------
-		//template<class... Args>
-		//void constructor() {
-		//	constructorImpl();
-		//}
+		template<class... Args>
+		void constructor() {
+			constructorImpl();
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			関数追加
@@ -215,7 +222,7 @@ namespace ob::engine::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			名前変更
 		//@―---------------------------------------------------------------------------
-		void nameChange(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName);
+		void convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName);
 
 
 	private:
@@ -237,12 +244,12 @@ namespace type_info_builder {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報生成
 	//@―---------------------------------------------------------------------------
-	::ob::engine::rtti::EnumInfo& CreateEnumInfo(::ob::TypeId);
+	::ob::core::rtti::EnumInfo& CreateEnumInfo(::ob::TypeId);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報生成
 	//@―---------------------------------------------------------------------------
-	::ob::engine::rtti::ClassInfo& CreateClassInfo(::ob::TypeId);
+	::ob::core::rtti::ClassInfo& CreateClassInfo(::ob::TypeId);
 
 
 
@@ -250,9 +257,9 @@ namespace type_info_builder {
 	//! @brief		Enum型情報ビルダー
 	//@―---------------------------------------------------------------------------
 	template<class T>
-	class EnumBuilderTemplate :public ::ob::engine::rtti::internal::EnumBuilder {
+	class EnumBuilderTemplate :public ::ob::core::rtti::internal::EnumBuilder {
 	public:
-		EnumBuilderTemplate() : ::ob::engine::rtti::internal::EnumBuilder(CreateEnumInfo(::ob::TypeId::Get<T>())) {}
+		EnumBuilderTemplate() : ::ob::core::rtti::internal::EnumBuilder(CreateEnumInfo(::ob::TypeId::Get<T>())) {}
 		void Register() {}
 	};
 
@@ -260,9 +267,9 @@ namespace type_info_builder {
 	//! @brief		Class型情報ビルダー
 	//@―---------------------------------------------------------------------------
 	template<class T>
-	class ClassBuilderTemplate :public ::ob::engine::rtti::internal::ClassBuilder {
+	class ClassBuilderTemplate :public ::ob::core::rtti::internal::ClassBuilder {
 	public:
-		ClassBuilderTemplate() : ::ob::engine::rtti::internal::ClassBuilder(CreateClassInfo(::ob::TypeId::Get<T>())) {}
+		ClassBuilderTemplate() : ::ob::core::rtti::internal::ClassBuilder(CreateClassInfo(::ob::TypeId::Get<T>())) {}
 
 		template<class TBase,class = std::enable_if_t<std::is_base_of_v<TBase,T>>>
 		void base() { baseImpl(::ob::TypeId::Get<TBase>()); }

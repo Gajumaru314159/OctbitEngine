@@ -5,9 +5,10 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component/TransformComponentImpl.h>
+#include <Framework/Engine/Component.h>
 #include <Framework/Engine/Entity.h>
 
-
+/*
 #include <Framework/Engine/Reflection/TypeBuilder.h>
 
 OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponent
@@ -17,14 +18,16 @@ OB_DEFINE_CLASS_TYPE_INFO(ob::engine::TransformComponent
 
 	tag("DisallowMultiple");
 
+
 	function("getEntity", &Type::getEntity);
 
-	property("Translation", &Type::setLocalPosition, &Type::setLocalPosition);
+	property("Translation", &Type::setLocalPosition, &Type::setLocalPosition)
+		.tag("Description","");
 	property("Scaling", &Type::setLocalScale, &Type::setLocalScale);
 	property("Rotation", &Type::setLocalRotation, &Type::setLocalRotation);
 
 };
-
+*/
 
 namespace ob::engine {
 
