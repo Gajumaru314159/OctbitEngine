@@ -22,6 +22,7 @@ namespace ob {
 		class InputModule;
 	}
 	namespace graphics {
+		class Graphics;
 		class MaterialManager;
 	}
 	namespace rhi {
@@ -31,17 +32,6 @@ namespace ob {
 
 namespace ob::engine {
 
-	struct EngineDependency {
-		EngineDependency(
-			EntityManager&,
-			platform::WindowManager*,
-			input::InputModule*,
-			graphics::MaterialManager*,
-			rhi::SystemResource*
-		) {}
-	};
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
@@ -49,11 +39,8 @@ namespace ob::engine {
 	{
 		injector.bind<EntityManager>();
 		injector.bind<ComponentFactory>();
-		injector.bind<EngineDependency>();
 
-		if (injector.create<EngineDependency>(m_container) == nullptr) {
-			LOG_FATAL("依存関係の構築に失敗");
-		}
+		injector.createAll(m_container);
 	}
 
 	//@―---------------------------------------------------------------------------
