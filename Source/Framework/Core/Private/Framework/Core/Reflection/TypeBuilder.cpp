@@ -164,10 +164,6 @@ namespace ob::core::internal {
 		return FunctionBuilder(f);
 	}
 
-	void ClassBuilder::convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName) {
-	}
-
-
 	void ClassBuilder::version(s32 version/*,VersionConverter converter = nullptr*/) {
 	};
 
