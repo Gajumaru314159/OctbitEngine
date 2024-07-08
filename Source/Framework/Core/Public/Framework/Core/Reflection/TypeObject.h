@@ -88,8 +88,8 @@ namespace ob::core::rtti {
 
 	protected:
 
-		void setValueImpl(Type type, void* value);
-		const void* getValueImpl(Type type)const;
+		void setValueImpl(Type type, TypedValue value);
+		const TypedValue getValueImpl(Type type)const;
 
 	private:
 

@@ -12,7 +12,7 @@ namespace type_info_builder {
 
 	struct ReflectionFunction {
 		using func_type = void(*)();
-		ReflectionFunction(func_type func):func(func){}
+		ReflectionFunction(func_type func) :func(func) {}
 		func_type func;
 		ReflectionFunction* next = nullptr;
 	};
@@ -53,15 +53,15 @@ template<> void ::ob::core::internal::ClassBuilderTemplate<::type>::Register()
 namespace ob::core::internal {
 
 	//@―---------------------------------------------------------------------------
-	//! @brief		Enum要素情報ビルダー
+	//! @brief		タグ情報ビルダー
 	//@―---------------------------------------------------------------------------
-	class ElementBuilder {
+	class TagBuilder {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		ElementBuilder(ElementInfo&);
+		TagBuilder(TagInfo&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
@@ -69,186 +69,101 @@ namespace ob::core::internal {
 		void tag(StringView key, StringView value = "");
 
 	private:
-		ElementInfo& m_info;
+		TagInfo* m_info;
 	};
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報ビルダー
 	//@―---------------------------------------------------------------------------
-	class EnumBuilder {
+	class EnumBuilder : public TagBuilder {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		EnumBuilder(EnumInfo&);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		タグ追加
-		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = "");
+		EnumBuilder(TypeInfo&);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		要素追加
 		//! @details	追加した順番にインデックスが割り振られます。インデックスは0ベースです。
 		//@―---------------------------------------------------------------------------
 		template<typename E>
-		ElementBuilder element(StringView name, E value) {
-			return ElementBuilder(elementImpl(name, enum_cast(value)));
+		TagBuilder element(StringView name, E value) {
+			return elementImpl(name, enum_cast(value));
 		}
 
 	private:
-		ElementInfo& elementImpl(StringView name, s64 value);
+		TagBuilder elementImpl(StringView name, s64 value);
 	private:
-		EnumInfo& m_info;
-	};
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		プロパティ情報ビルダー
-	//@―---------------------------------------------------------------------------
-	class PropertyBuilder {
-	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
-		PropertyBuilder(PropertyInfo*);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		タグ追加
-		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = "");
-
-	private:
-		PropertyInfo* m_info;
-	};
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		関数情報ビルダー
-	//@―---------------------------------------------------------------------------
-	class FunctionBuilder {
-	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
-		FunctionBuilder(FunctionInfo&);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		タグ追加
-		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = "");
-
-	private:
-		FunctionInfo& m_info;
+		TypeInfo& m_info;
 	};
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		クラス情報ビルダー
 	//@―---------------------------------------------------------------------------
-	class ClassBuilder {
+	class ClassBuilder : public TagBuilder {
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ
 		//@―---------------------------------------------------------------------------
-		ClassBuilder(ClassInfo&);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			タグ追加
-		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = "");
+		ClassBuilder(TypeInfo&);
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			関数追加
 		//@―---------------------------------------------------------------------------
-		template<class TFunc>
-		FunctionBuilder function(StringView name, TFunc function) {
-			return functionImpl(name);
+		template<class TFunc, class... TArgDescs>
+		TagBuilder method(StringView name, TFunc function, TArgDescs&& ...desc) {
+			auto& info = m_info.methods[name];
+			info.name = name;
+			return info;
+			return methodImpl(name);
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(メンバ変数)
 		//@―---------------------------------------------------------------------------
 		template<class TClass, class TField>
-		PropertyBuilder property(StringView name, TField TClass::* address,bool writable = true) {
+		TagBuilder property(StringView name, TField TClass::* address, bool writable = true) {
 			auto& info = m_info.properties[name];
 			info.name = name;
-			return PropertyBuilder(&info);
+			return info;
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(Getter)
 		//@―---------------------------------------------------------------------------
 		template<class F>
-		PropertyBuilder property(StringView name, F getter) {
+		TagBuilder property(StringView name, F getter) {
 			auto& info = m_info.properties[name];
 			info.name = name;
-			return PropertyBuilder(&info);
+			return info;
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(Getter)
 		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
-		PropertyBuilder property(StringView name, F1 getter, F2 setter) {
+		TagBuilder property(StringView name, F1 getter, F2 setter) {
 			auto& info = m_info.properties[name];
 			info.name = name;
-			info.setter = [](void* owner, const void* value) {  };
-			return PropertyBuilder(&info);
+			//info.setter = [](void* owner, const void* value) {};
+			return info;
 		}
-
-		// 以下バージョン互換機能
-		
-		//@―---------------------------------------------------------------------------
-		//! @brief			バージョン設定
-		//@―---------------------------------------------------------------------------
-		void version(s32 version/*,VersionConverter converter = nullptr*/);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			型変更
-		//@―---------------------------------------------------------------------------
-		//template <class TFrom, class TTo>
-		//ClassBuilder& typeChange(StringView fieldName, s32 fromVersion, s32 toVersion, Func<TTo(const TFrom&)> upgradeFunc);
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			名前変更
-		//@―---------------------------------------------------------------------------
-		void convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName) {
-			auto& converter = m_info.converters.emplace_back();
-			converter.fromVersion = fromVersion;
-			converter.toVersion = toVersion;
-			converter.from = oldName;
-			converter.to = newName;
-		}
-
 
 	protected:
 
 		void baseImpl(Type);
 		void constructorImpl();
-		PropertyBuilder addPropertyImpl() {}
-		FunctionBuilder functionImpl(StringView name);
+		TagBuilder addPropertyImpl() {}
+		TagBuilder methodImpl(StringView name);
 
-	private:
-		ClassInfo& m_info;
+	protected:
+		TypeInfo& m_info;
 	};
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		Enum型情報生成
-	//@―---------------------------------------------------------------------------
-	EnumInfo& CreateEnumInfo(ob::Type);
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		Class型情報生成
-	//@―---------------------------------------------------------------------------
-	ClassInfo& CreateClassInfo(ob::Type);
-
 
 
 	//@―---------------------------------------------------------------------------
@@ -257,7 +172,7 @@ namespace ob::core::internal {
 	template<class T>
 	class EnumBuilderTemplate :public EnumBuilder {
 	public:
-		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerEnumInfo(Type::Get<T>())) {
+		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
 		}
 		void Register();
@@ -269,36 +184,123 @@ namespace ob::core::internal {
 	template<class T>
 	class ClassBuilderTemplate : public ClassBuilder {
 	public:
-		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerClassInfo(Type::Get<T>())) {
+		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
 		}
 		void Register();
 
-		template<class TBase,class = std::enable_if_t<std::is_base_of_v<TBase,T>>>
+		//@―---------------------------------------------------------------------------
+		//! @brief			基底クラスを追加
+		//@―---------------------------------------------------------------------------
+		template<class TBase, class = std::enable_if_t<std::is_base_of<TBase, T>::value>>
 		void base() { baseImpl(::ob::Type::Get<TBase>()); }
-
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ追加
 		//! @tparam Args	引数型リスト
 		//@―---------------------------------------------------------------------------
-		void ctor() {
-			auto creator = []() { return new T(); };
+		//! @{
+		TagBuilder constructor() {
+			auto& info = m_info.constructors.emplace_back();
+			info.invoker = &CreateWithoutArg;
+			return info;
 		}
+
+#define RETURN_TYPE(...) std::enable_if_t<std::is_constructible<T, __VA_ARGS__>::value,TagBuilder>
+
+		template<class Arg>
+		auto constructor(StringView name = "arg") -> RETURN_TYPE(Arg)
+		{
+			auto& info = m_info.constructors.emplace_back();
+			info.arguments = {
+				ArgumentInfo{Type::Get<Arg>(),name}
+			};
+			info.invoker = &Create<Arg>;
+			return info;
+		}
+		template<class Arg0, class Arg1>
+		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1") -> RETURN_TYPE(Arg0,Arg1) {
+			auto& info = m_info.constructors.emplace_back();
+			info.arguments = {
+				ArgumentInfo{Type::Get<Arg0>(),name0},
+				ArgumentInfo{Type::Get<Arg1>(),name1},
+			};
+			info.invoker = &Create<Arg0, Arg1>;
+			return info;
+		}
+		template<class Arg0, class Arg1, class Arg2>
+		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1", StringView name2 = "arg2") -> RETURN_TYPE(Arg0,Arg1,Arg2) {
+			auto& info = m_info.constructors.emplace_back();
+			info.arguments = {
+				ArgumentInfo{Type::Get<Arg0>(),name0},
+				ArgumentInfo{Type::Get<Arg1>(),name1},
+				ArgumentInfo{Type::Get<Arg2>(),name2},
+			};
+			info.invoker = &Create<Arg0, Arg1, Arg2>;
+			return info;
+		}
+		template<class Arg0, class Arg1, class Arg2, class Arg3>
+		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1", StringView name2 = "arg2", StringView name3 = "arg3") -> RETURN_TYPE(Arg0,Arg1,Arg2,Arg3) {
+			auto& info = m_info.constructors.emplace_back();
+			info.arguments = {
+				ArgumentInfo{Type::Get<Arg0>(),name0},
+				ArgumentInfo{Type::Get<Arg1>(),name1},
+				ArgumentInfo{Type::Get<Arg2>(),name2},
+				ArgumentInfo{Type::Get<Arg3>(),name3},
+			};
+			info.invoker = &Create<Arg0, Arg1, Arg2, Arg3>;
+			return info;
+		}
+		//! @}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ追加
 		//! @tparam Args	引数型リスト
 		//@―---------------------------------------------------------------------------
 		template<class... Args>
-		void constructor() {
+		auto constructor(Array<StringView, sizeof...(Args)> names) -> RETURN_TYPE(Args...) {
 
-			// {Type::Get<Args>()...}
+			auto& info = m_info.constructors.emplace_back();
 
-			// new T(Args{args});
+			Array<Type, sizeof...(Args)> types = { Type::Get<Args>() ... };
+			for (s32 i = 0; i < types.size(); ++i) {
+				auto& arg = info.arguments.emplace_back();
+				arg.type = types[i];
+				arg.name = names[i];
+			}
 
-			constructorImpl();
+			if constexpr (sizeof...(Args) == 0)
+				info.invoker = &CreateWithoutArg;
+			else
+				info.invoker = &Create<Args...>;
+
+			return info;
 		}
+
+#undef RETURN_TYPE
+
+	private:
+
+		static TypedValue CreateWithoutArg([[meybe_unused]] Span<TypedValue>) {
+			return new T();
+		}
+
+		template<class T,class... Args,size_t ...I>
+		static TypedValue CreateImpl(Span<TypedValue>& args, std::index_sequence<I...>) {
+			return new T((*reinterpret_cast<Args*>(const_cast<void*>(args[I].pointer)))...);
+		}
+
+		template<class... Args>
+		static TypedValue Create(Span<TypedValue> args) {
+
+			Type types[] = {Type::Get<Args>()...};
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const TypedValue& a, const Type& b) {return a.type == b; })) {
+				return {};
+			}
+
+			return CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>());
+		}
+
 	};
 
 }

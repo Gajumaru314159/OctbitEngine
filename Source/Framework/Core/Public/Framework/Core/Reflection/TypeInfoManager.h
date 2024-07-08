@@ -17,43 +17,26 @@ namespace ob::core {
 
 		TypeInfoManager();
 
-		void visit(const std::function<void(const EnumInfo&)> func) {
-			for (auto& [type, info] : m_enums) func(info);
-		}
-		void visit(const std::function<void(const ClassInfo&)> func) {
-			for (auto& [type, info] : m_classes) func(info);
+		void visit(const std::function<void(const TypeInfo&)> func) {
+			for (auto& [type, info] : m_infos) func(info);
 		}
 
-		const EnumInfo* findEnumInfo(Type type)const {
-			if (auto itr = m_enums.find(type); itr != m_enums.end()) {
-				return &itr->second;
-			}
-			return nullptr;
-		}
-		const ClassInfo* findClassInfo(Type type)const {
-			if (auto itr = m_classes.find(type); itr != m_classes.end()) {
+		const TypeInfo* find(Type type)const {
+			if (auto itr = m_infos.find(type); itr != m_infos.end()) {
 				return &itr->second;
 			}
 			return nullptr;
 		}
 
 
-		EnumInfo& registerEnumInfo(Type type) {
-			auto& info = m_enums[type];
-			info.type = type;
-			return info;
-		}
-		ClassInfo& registerClassInfo(Type type) {
-			auto& info = m_classes[type];
+		TypeInfo& registerInfo(Type type) {
+			auto& info = m_infos[type];
+			info = {};
 			info.type = type;
 			return info;
 		}
 
 	private:
-		HashMap<Type, EnumInfo> m_enums;
-		HashMap<Type, ClassInfo> m_classes;
-		//HashMap<Type, PrimitiveInfo> m_primitives;
-
-
+		HashMap<Type, TypeInfo> m_infos;
 	};
 }

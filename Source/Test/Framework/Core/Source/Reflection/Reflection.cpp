@@ -7,43 +7,6 @@
 #include <Framework/Core/Reflection/TypeRegister.h>
 using namespace ob;
 
-class Base {
-
-};
-
-class Test : public Base{
-public:
-	Test() {
-
-	}
-	Test(f32 val) {
-
-	}
-	void setInt(s32 val){}
-	s32 getInt()const {
-		return 0;
-	}
-
-	void func(s32 a,s32 b) {
-
-	}
-};
-
-
-OB_DEFINE_CLASS_INFO(Base) {
-	tag("Description", "ベース");
-	constructor();
-}
-
-OB_DEFINE_CLASS_INFO(Test) {
-	tag("Description", "説明");
-	base<Base>();
-	ctor();
-	constructor();
-	constructor<f32>();
-
-	property("Int", &Test::getInt, &Test::setInt).tag("Description", "エー");
-}
 
 enum class EnumTest {
 	A,
@@ -53,14 +16,58 @@ enum class EnumTest {
 
 OB_DEFINE_ENUM_INFO(EnumTest) {
 	tag("Description", "説明");
-	element("A", ::EnumTest::A).tag("Description","エー");
+	element("A", ::EnumTest::A).tag("Description", "エー");
 	element("B", ::EnumTest::B).tag("Description", "ビー");
 	element("C", ::EnumTest::C).tag("Description", "シー");
 }
 
+class Base {
+
+};
+
+class TestBase : public Base{
+public:
+	TestBase() {
+
+	}
+	TestBase(f32 val) {
+
+	}
+	TestBase(s32 val,EnumTest val2) {
+		msg = Format("{}/{}",val,enum_cast(val2));
+	}
+	void setInt(s32 val){}
+	s32 getInt()const {
+		return 0;
+	}
+
+	void func(s32 a,s32 b) {
+
+	}
+public:
+	String msg;
+};
+
+
+OB_DEFINE_CLASS_INFO(Base) {
+	tag("Description", "ベース");
+	constructor();
+}
+
+OB_DEFINE_CLASS_INFO(TestBase) {
+	tag("Description", "説明");
+	base<Base>();
+	constructor();
+	constructor<f32>();
+	constructor<s32,EnumTest>("count","type");
+
+	property("Int", &TestBase::getInt, &TestBase::setInt).tag("Description", "エー");
+}
+
+
 
 OB_REGISTER_RTTI(EnumTest);
-OB_REGISTER_RTTI(Test);
+OB_REGISTER_RTTI(TestBase);
 OB_REGISTER_RTTI(Base);
 
 namespace a::b::c {
@@ -81,25 +88,56 @@ TEST(TypeBuilder, Construct) {
 	LOG_INFO("{}",Type::Get<a::b::c::AA>().fullName());
 
 	
-	manager.visit([](const EnumInfo& info) { LOG_INFO("型：{}", info.type.fullName()); });
-	manager.visit([](const ClassInfo& info) { LOG_INFO("型：{}",info.type.fullName()); });
+	manager.visit([](const TypeInfo& info) { 
 
-	// TODO 検索
-	// TODO 生成
-	// TODO デシリアライズ
+		// TODO 検索
+		// TODO 生成
+		// TODO デシリアライズ
 
-	if (auto info = manager.findClassInfo(Type("Test"))) {
-		LOG_INFO("{}が見つかりました", info->type.fullName());
-
-		for (auto& [name,property] : info->properties) {
+		String str;
+		
+		str = Format("class {} \n", info.type.name());
+		if (info.bases.empty() == false) {
+			str += "    : ";
+			for (auto& base : info.bases) {
+				str += Format("public * {},\n", base.name());
+			}
+			str.pop_back();
 		}
-		for (auto& function: info->functions) {
+		str += " {\n";
+		str += "public:\n";
 
+		for (auto& constructor : info.constructors) {
+			str += Format("    {}(", info.type.name());
+			for (auto& arg : constructor.arguments) {
+				str += Format("{} ", arg.type.fullName());
+				str += Format("{},",arg.name);
+			}
+			if (constructor.arguments.empty() == false) {
+				str.pop_back();
+			}
+			str += ");\n";
 		}
-		for (auto& constructor : info->converters) {
-			// constructor();
+
+		str += "public:\n";
+		for (auto& [name, property] : info.properties) {
+			str += Format("    {} {};",property.type.fullName(),name);
+			str += "\n";
 		}
-	}
 
 
+		str += "public:\n";
+		for (auto& [name,method] : info.methods) {
+			str += Format("    {} {}(",method.returnType.fullName(),method.name);
+			for (auto& arg : method.arguments) {
+				str += Format("{} ", arg.type.fullName());
+				str += Format("{},", arg.name);
+			}
+			str.pop_back();
+			str += ");\n";
+		}
+		str += "};";
+
+		LOG_INFO("\n{}",str);
+	});
 }

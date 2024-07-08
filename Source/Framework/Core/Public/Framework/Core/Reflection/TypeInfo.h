@@ -7,18 +7,37 @@
 #include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Map.h>
+#include <Framework/Core/Template/Utility/Function.h>
 
 namespace ob::core {
 
-	namespace internal {
-		class ClassBuilder;
-	}
+	struct PropertyConverter {
+		s32 fromVersion;
+		s32 toVersion;
+		StringView from;
+		StringView to;
+	};
+
+
+	struct TypedValue {
+		TypedValue() = default;
+		template<class T>
+		TypedValue(T* value) : type(Type::Get<T>()), pointer(value) {}
+		Type		type;
+		const void*	pointer = nullptr;
+	};
+
+
+	using ConstructorInvoker = Func<TypedValue(Span<TypedValue> args)>;
+	using MethodInvoker = Func<TypedValue(TypedValue owner, Span<TypedValue> args)>;
+	using PropertySetter = Func<void(TypedValue owner, TypedValue value)>;
+	using PropertyGetter = Func<TypedValue(TypedValue owner)>;
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  タグ情報
 	//@―---------------------------------------------------------------------------
-	struct TaggedInfo {
-
+	struct TagInfo {
 		HashMap<StringView, String> tags;
 
 		//@―---------------------------------------------------------------------------
@@ -36,82 +55,90 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  Enum要素情報
 	//@―---------------------------------------------------------------------------
-	struct ElementInfo : TaggedInfo {
-		String	name;
-		s32		index;
-		s64		value;
+	struct EnumElementInfo : TagInfo {
+		StringView				name;
+		s32						index;
+		s64						value;
+	};
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  Enum型を指定して取得
-		//@―---------------------------------------------------------------------------
-		template<class T, class = std::enable_if_t<std::is_enum_v<T>>>
-		T get()const noexcept {
-			return static_cast<T>(value);
+	//@―---------------------------------------------------------------------------
+	//! @brief  引数情報
+	//@―---------------------------------------------------------------------------
+	struct ArgumentInfo {
+		Type					type;
+		StringView				name;
+	};
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ情報
+	//@―---------------------------------------------------------------------------
+	struct ConstructorInfo : TagInfo {
+		Vector<ArgumentInfo>	arguments;
+		ConstructorInvoker		invoker;
+
+		template<class T>
+		T* invoke(Span<TypedValue> args) const {
+			return reinterpret_cast<T*>(const_cast<void*>(invoker(args).pointer));
 		}
-	};
 
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  Enum型情報
-	//@―---------------------------------------------------------------------------
-	struct EnumInfo :TaggedInfo {
-		Type				type;
-		Vector<ElementInfo> elements;
-	};
-
-
-	struct PropertyConverter {
-		s32 fromVersion;
-		s32 toVersion;
-		StringView from;
-		StringView to;
+		template<class... Args>
+		bool match()const {
+			Type types[] = { Type::Get<Args>()... };
+			return std::equal(arguments.begin(), arguments.end(), std::begin(types), std::end(types), [](const ArgumentInfo& a, const Type& b) {return a.type == b; });
+		}
 	};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  プロパティ情報
 	//@―---------------------------------------------------------------------------
-	struct PropertyInfo :TaggedInfo {
+	struct PropertyInfo : TagInfo {
+		Type					type;
+		StringView				name;
+		PropertySetter			setter;
+		PropertyGetter			getter;
 
-		using Setter = Func<void(void*, const void*)>;
-		using Getter = Func<const void* (void*)>;
-
-		Type type;
-		String name;
-		Getter getter;
-		Setter setter;
-
+		bool					canRead() const { return !!getter; }
+		bool					canWrite() const { return !!setter; }
 	};
 
-
 	//@―---------------------------------------------------------------------------
-	//! @brief  関数情報
+	//! @brief  メソッド情報
 	//@―---------------------------------------------------------------------------
-	struct FunctionInfo :TaggedInfo {
-	public:
-		String name;
-		//Func
+	struct MethodInfo : TagInfo {
+		StringView				name;
+		bool					isStatic;
+		Type					returnType;
+		Vector<ArgumentInfo>	arguments;
+		MethodInvoker			invoke;
 	};
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  プロパティタイプマップ
+	//@―---------------------------------------------------------------------------
+	using PropertyInfoMap = HashMap<StringView, PropertyInfo>;
 
 	//@―---------------------------------------------------------------------------
-	//! @brief  Class型情報
+	//! @brief  メソッドタイプマップ
 	//@―---------------------------------------------------------------------------
-	struct ClassInfo : TaggedInfo {
+	using MethodInfoMap = HashMap<StringView, MethodInfo>;
 
-		using PropertyInfoMap = HashMap<StringView,PropertyInfo>;
-		using FunctionInfoSet = MultiMap<String, FunctionInfo, std::less<>>;
-	
-		Type			type;
-		HashSet<Type> bases;
-		PropertyInfoMap properties;
-		FunctionInfoSet functions;
+	//@―---------------------------------------------------------------------------
+	//! @brief  タイプ情報
+	//@―---------------------------------------------------------------------------
+	struct TypeInfo : TagInfo {
+		Type					type;
+		HashSet<Type>			bases;
 
-		HashSet<Type> derivedes;
+		Vector<ConstructorInfo>	constructors;
 
+		PropertyInfoMap			properties;
+		MethodInfoMap			methods;
 
-		Vector<PropertyConverter> converters;
+		bool					isEnum;
+		Vector<EnumElementInfo>	enumElements;
+
+		bool					isList;
+		Optional<Type>			elementType;
 	};
-
 
 }

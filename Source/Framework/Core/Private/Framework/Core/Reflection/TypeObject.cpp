@@ -10,7 +10,7 @@ namespace ob::core::rtti {
 		LOG_ERROR("{} {} のターゲットが未設定です。", m_info.type.fullName(), m_info.name);
 	}
 
-	void PropertyObject::setValueImpl(Type type, void* value) {
+	void PropertyObject::setValueImpl(Type type, TypedValue value) {
 		if (m_target==nullptr) {
 			LOG_ERROR("{} {} のターゲットが未設定です。", m_info.type.fullName(), m_info.name);
 			return;
@@ -26,14 +26,14 @@ namespace ob::core::rtti {
 		m_info.setter(m_target, value);
 	}
 
-	const void* PropertyObject::getValueImpl(Type type)const {
+	const TypedValue PropertyObject::getValueImpl(Type type)const {
 		if (m_target == nullptr) {
 			LOG_ERROR("{} {} のターゲットが未設定です。", m_info.type.fullName(), m_info.name);
-			return nullptr;
+			return {};
 		}
 		if (!m_info.getter) {
 			LOG_ERROR("{} {} の取得関数が設定されていません。", m_info.type.fullName(), m_info.name);
-			return nullptr;
+			return {};
 		}
 		return m_info.getter(m_target);
 	}

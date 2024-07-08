@@ -80,5 +80,9 @@
 		</Expand>
 	</Type>
 
+	<!--Type-->
+	<Type Name="ob::core::ArgumentInfo">
+		<DisplayString>{type.m_fullName,sb}    {name,sb}</DisplayString>
+	</Type>
 
 </AutoVisualizer>

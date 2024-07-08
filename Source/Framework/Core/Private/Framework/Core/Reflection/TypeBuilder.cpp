@@ -26,23 +26,22 @@ namespace type_info_builder {
 namespace ob::core::internal {
 
 	//===============================================================
-	// ElementBuilder
+	// TagBuilder
 	//===============================================================
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	ElementBuilder::ElementBuilder(ElementInfo& info)
-		: m_info(info)
+	TagBuilder::TagBuilder(TagInfo& info)
+		: m_info(&info)
 	{
-		m_info.tags.clear();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
 	//@―---------------------------------------------------------------------------
-	void ElementBuilder::tag(StringView key, StringView value) {
-		m_info.tags.emplace(key, value);
+	void TagBuilder::tag(StringView key, StringView value) {
+		m_info->tags.emplace(key, value);
 	}
 
 
@@ -53,72 +52,23 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	EnumBuilder::EnumBuilder(EnumInfo& info)
-		: m_info(info)
+	EnumBuilder::EnumBuilder(TypeInfo& info)
+		: TagBuilder(info)
+		, m_info(info)
 	{
-		m_info.elements.clear();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		タグ追加
-	//@―---------------------------------------------------------------------------
-	void EnumBuilder::tag(StringView key, StringView value) {
-		m_info.tags.emplace(key, value);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		要素追加
 	//! @details	追加した順番にインデックスが割り振られます。インデックスは0ベースです。
 	//@―---------------------------------------------------------------------------
-	ElementInfo& EnumBuilder::elementImpl(StringView name, s64 value){
-		auto& element = m_info.elements.emplace_back();
+	TagBuilder EnumBuilder::elementImpl(StringView name, s64 value){
+		auto& element = m_info.enumElements.emplace_back();
 		element.name = name;
-		element.index = m_info.elements.size() - 1;
+		element.index = m_info.enumElements.size() - 1;
 		element.value = value;
 		return element;
 	};
-
-
-	//===============================================================
-	// PropertyBuilder
-	//===============================================================
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
-	PropertyBuilder::PropertyBuilder(PropertyInfo* info)
-		: m_info(info)
-	{
-		if(m_info)m_info->tags.clear();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		タグ追加
-	//@―---------------------------------------------------------------------------
-	void PropertyBuilder::tag(StringView key, StringView value) {
-		if (m_info)m_info->tags.emplace(key, value);
-	}
-
-
-	//===============================================================
-	// FunctionBuilder
-	//===============================================================
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
-	FunctionBuilder::FunctionBuilder(FunctionInfo& info)
-		: m_info(info)
-	{
-		m_info.tags.clear();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		タグ追加
-	//@―---------------------------------------------------------------------------
-	void FunctionBuilder::tag(StringView key, StringView value) {
-		m_info.tags.emplace(key, value);
-	}
 
 
 	//===============================================================
@@ -128,43 +78,18 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	ClassBuilder::ClassBuilder(ClassInfo& info)
-		: m_info(info)
+	ClassBuilder::ClassBuilder(TypeInfo& info)
+		: TagBuilder(info)
+		, m_info(info)
 	{
-		m_info.tags.clear();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
 	//@―---------------------------------------------------------------------------
-	void ClassBuilder::tag(StringView key, StringView value ) {
-		m_info.tags.emplace(key, value);
-	}
-
 	void ClassBuilder::baseImpl(Type type) {
 		m_info.bases.emplace(type);
 	}
 
-	//@―---------------------------------------------------------------------------
-	//! @brief		基底クラス登録
-	//! @details	SFINAEで不正な型をコンパイルエラーにするために実装はClassBuilderTemplateでしています。
-	//@―---------------------------------------------------------------------------
-	void ClassBuilder::constructorImpl() {
-
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		基底クラス登録
-	//! @details	SFINAEで不正な型をコンパイルエラーにするために実装はClassBuilderTemplateでしています。
-	//@―---------------------------------------------------------------------------
-	FunctionBuilder ClassBuilder::functionImpl(StringView name) {
-		FunctionInfo f;
-		f.name = name;
-		m_info.functions.emplace(name,f);
-		return FunctionBuilder(f);
-	}
-
-	void ClassBuilder::version(s32 version/*,VersionConverter converter = nullptr*/) {
-	};
 
 }

@@ -20,11 +20,10 @@ namespace ob::core {
 		}
 
 		// 継承解決
-		for (auto& [type, info] : m_classes) {
+		for (auto& [type, info] : m_infos) {
 			for (auto& baseClass : info.bases) {
-				auto itr = m_classes.find(baseClass);
-				if (itr != m_classes.end()) {
-					itr->second.derivedes.emplace(type);
+				if (auto baseInfo = find(baseClass)) {
+					// baseInfo.inherits.emplace(type);
 				}
 			}
 		}
