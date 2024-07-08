@@ -29,7 +29,7 @@ namespace ob::graphics {
         //! @brief      RenderFeatureを見つける
         //@―---------------------------------------------------------------------------
         template<class T> T* findFeature()const;
-        RenderFeature* findFeature(TypeId typeId)const;
+        RenderFeature* findFeature(Type type)const;
 
 
         //@―---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace ob::graphics {
     private:
         void onFeatureAdded(RenderFeature& feature);
     private:
-        HashMap<TypeId, UPtr<RenderFeature>>    m_features;
+        HashMap<Type, UPtr<RenderFeature>>    m_features;
         Vector<RenderView*>                      m_views;
 
         RenderSceneEventNotifier                m_releasedNotifier;
@@ -70,7 +70,7 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     template<class T, class... Args>
     void RenderScene::addFeature(Args&& ...args) {
-        auto& feature = m_features[TypeId::Get<T>()] = std::make_unique<T>(args...);
+        auto& feature = m_features[Type::Get<T>()] = std::make_unique<T>(args...);
         onFeatureAdded(*feature);
     }
 
@@ -79,7 +79,7 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     template<class T>
     T* RenderScene::findFeature()const {
-        return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
+        return reinterpret_cast<T*>(findFeature(Type::Get<T>()));
     }
 
 

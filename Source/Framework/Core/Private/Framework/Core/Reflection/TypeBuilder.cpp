@@ -141,8 +141,8 @@ namespace ob::core::internal {
 		m_info.tags.emplace(key, value);
 	}
 
-	void ClassBuilder::baseImpl(TypeId typeId) {
-		m_info.bases.emplace(typeId);
+	void ClassBuilder::baseImpl(Type type) {
+		m_info.bases.emplace(type);
 	}
 
 	//@―---------------------------------------------------------------------------

@@ -27,7 +27,7 @@ namespace ob::engine {
 
 
 	private:
-		HashMap<TypeId, void*> m_systems;
+		HashMap<Type, void*> m_systems;
 	};
 
 	//@―---------------------------------------------------------------------------

@@ -92,7 +92,7 @@ namespace ob::graphics {
         template<class T>
         T* getPipeline() {
             if (!m_pipeline)return nullptr;
-            if (m_pipeline->getTypeId() != TypeId::Get<T>())return;
+            if (m_pipeline->getType() != Type::Get<T>())return;
             return reinterpret_cast<T*>(m_pipeline.get());
         }
 
@@ -112,7 +112,7 @@ namespace ob::graphics {
         //! @brief      RenderFeatureを見つける
         //@―---------------------------------------------------------------------------
         template<class T> T* findFeature()const;
-        RenderFeature* findFeature(TypeId typeId)const;
+        RenderFeature* findFeature(Type type)const;
 
     private:
         void clearTarget();
@@ -130,7 +130,7 @@ namespace ob::graphics {
 
     template<class T>
     T* RenderView::findFeature()const {
-        return reinterpret_cast<T*>(findFeature(TypeId::Get<T>()));
+        return reinterpret_cast<T*>(findFeature(Type::Get<T>()));
     }
 
 }

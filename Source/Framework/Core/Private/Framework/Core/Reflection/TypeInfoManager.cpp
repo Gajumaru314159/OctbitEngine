@@ -20,11 +20,11 @@ namespace ob::core {
 		}
 
 		// 継承解決
-		for (auto& [typeId, info] : m_classes) {
+		for (auto& [type, info] : m_classes) {
 			for (auto& baseClass : info.bases) {
 				auto itr = m_classes.find(baseClass);
 				if (itr != m_classes.end()) {
-					itr->second.derivedes.emplace(typeId);
+					itr->second.derivedes.emplace(type);
 				}
 			}
 		}

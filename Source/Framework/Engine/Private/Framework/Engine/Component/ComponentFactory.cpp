@@ -15,7 +15,7 @@ namespace ob::engine {
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
 	ComponentFactory::ComponentFactory() {
-		registerCreator(TypeId::Get<TransformComponent>(), std::make_unique<ComponentCreatorTemplate<TransformComponentImpl>>());
+		registerCreator(Type::Get<TransformComponent>(), std::make_unique<ComponentCreatorTemplate<TransformComponentImpl>>());
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -27,15 +27,15 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		ContentCreatorを登録
 	//@―---------------------------------------------------------------------------
-	void ComponentFactory::registerCreator(TypeId typeId, UPtr<ComponentCreator> creator) {
-		m_creatorMap[typeId] = std::move(creator);
+	void ComponentFactory::registerCreator(Type type, UPtr<ComponentCreator> creator) {
+		m_creatorMap[type] = std::move(creator);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		ContentCreatorを検索
 	//@―---------------------------------------------------------------------------
-	ComponentCreator* ComponentFactory::findCreator(TypeId typeId) {
-		auto found = m_creatorMap.find(typeId);
+	ComponentCreator* ComponentFactory::findCreator(Type type) {
+		auto found = m_creatorMap.find(type);
 		if (found != m_creatorMap.end()) {
 			return found->second.get();
 		}

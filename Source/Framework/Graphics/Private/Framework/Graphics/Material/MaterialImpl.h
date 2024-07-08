@@ -23,10 +23,10 @@ namespace ob::graphics {
 	//! @see    VertexLayout
 	//@―---------------------------------------------------------------------------
 	struct VertexAttributeKey {
-		rhi::Semantic	semantic;	//!< 0x000F
-		rhi::Type		type;		//!< 0x00F0
-		s32				dimention;	//!< 0x0F00
-		s32				index;		//!< 0xF000
+		rhi::Semantic		semantic;	//!< 0x000F
+		rhi::ElementType	type;		//!< 0x00F0
+		s32					dimention;	//!< 0x0F00
+		s32					index;		//!< 0xF000
 	};
 
 

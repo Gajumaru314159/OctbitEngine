@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/PropertyNotifier.h>
 
@@ -17,7 +17,7 @@ namespace ob::engine {
 	public:\
 		OB_RTTI();\
 		static type* Create();\
-		virtual TypeId getComponentTypeId() const{return TypeId::Get<type>();}
+		virtual Type getComponentType() const{return Type::Get<type>();}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネント実装マクロ
@@ -46,7 +46,7 @@ namespace ob::engine {
 		//! @brief		コンポーネントのインターフェイス取得
 		//! @details	コンポ―ネントのインターフェイスと実装を分離する場合に使用する
 		//@―---------------------------------------------------------------------------
-		virtual TypeId getComponentTypeId()const { return getTypeId(); };
+		virtual Type getComponentType()const { return getType(); };
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		所属するEntityを取得

@@ -20,10 +20,10 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     struct InputLayout {
 
-        rhi::Semantic	semantic;	//!< セマンティクス
-        rhi::Type		type;		//!< コンポーネント型
-        s32			    dimention;	//!< 次元数
-        s32			    index;		//!< セマンティクス内インデックス
+        rhi::Semantic	    semantic;	//!< セマンティクス
+        rhi::ElementType	type;		//!< コンポーネント型
+        s32			        dimention;	//!< 次元数
+        s32			        index;		//!< セマンティクス内インデックス
 
     public:
 
@@ -35,7 +35,7 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //@―---------------------------------------------------------------------------
-        InputLayout(rhi::Semantic semantic, rhi::Type type, s32 dimention = 1, s32 index = 0)
+        InputLayout(rhi::Semantic semantic, rhi::ElementType type, s32 dimention = 1, s32 index = 0)
             :semantic(semantic), type(type), dimention(dimention), index(index) {}
 
     };

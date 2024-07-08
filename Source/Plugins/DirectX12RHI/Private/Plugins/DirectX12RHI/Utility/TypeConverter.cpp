@@ -342,53 +342,53 @@ namespace ob::rhi::dx12
     //@―---------------------------------------------------------------------------
     //! @brief  Type を DXGI_FORMAT に変換
     //@―---------------------------------------------------------------------------
-    DXGI_FORMAT TypeConverter::Convert(Type value, s32 dimension) {
+    DXGI_FORMAT TypeConverter::Convert(ElementType value, s32 dimension) {
         if (dimension == 1) {
             switch (value)
             {
-            case Type::Int8:   return DXGI_FORMAT_R8_SINT;
-            case Type::Int16:  return DXGI_FORMAT_R16_SINT;
-            case Type::Int32:  return DXGI_FORMAT_R32_SINT;
-            case Type::UInt8:  return DXGI_FORMAT_R8_UINT;
-            case Type::UInt16: return DXGI_FORMAT_R16_UINT;
-            case Type::UInt32: return DXGI_FORMAT_R32_UINT;
-            case Type::Float:  return DXGI_FORMAT_R32_FLOAT;
+            case ElementType::Int8:   return DXGI_FORMAT_R8_SINT;
+            case ElementType::Int16:  return DXGI_FORMAT_R16_SINT;
+            case ElementType::Int32:  return DXGI_FORMAT_R32_SINT;
+            case ElementType::UInt8:  return DXGI_FORMAT_R8_UINT;
+            case ElementType::UInt16: return DXGI_FORMAT_R16_UINT;
+            case ElementType::UInt32: return DXGI_FORMAT_R32_UINT;
+            case ElementType::Float:  return DXGI_FORMAT_R32_FLOAT;
             }
         }
         if (dimension == 2) {
             switch (value)
             {
-            case Type::Int8:   return DXGI_FORMAT_R8G8_SINT;
-            case Type::Int16:  return DXGI_FORMAT_R16G16_SINT;
-            case Type::Int32:  return DXGI_FORMAT_R32G32_SINT;
-            case Type::UInt8:  return DXGI_FORMAT_R8G8_UINT;
-            case Type::UInt16: return DXGI_FORMAT_R16G16_UINT;
-            case Type::UInt32: return DXGI_FORMAT_R32G32_UINT;
-            case Type::Float:  return DXGI_FORMAT_R32G32_FLOAT;
+            case ElementType::Int8:   return DXGI_FORMAT_R8G8_SINT;
+            case ElementType::Int16:  return DXGI_FORMAT_R16G16_SINT;
+            case ElementType::Int32:  return DXGI_FORMAT_R32G32_SINT;
+            case ElementType::UInt8:  return DXGI_FORMAT_R8G8_UINT;
+            case ElementType::UInt16: return DXGI_FORMAT_R16G16_UINT;
+            case ElementType::UInt32: return DXGI_FORMAT_R32G32_UINT;
+            case ElementType::Float:  return DXGI_FORMAT_R32G32_FLOAT;
             }
         }
         if (dimension == 3) {
             switch (value)
             {
-            case Type::Int8:   return DXGI_FORMAT_R8G8B8A8_SINT;//
-            case Type::Int16:  return DXGI_FORMAT_R16G16B16A16_SINT;//
-            case Type::Int32:  return DXGI_FORMAT_R32G32B32_SINT;
-            case Type::UInt8:  return DXGI_FORMAT_R8G8B8A8_UINT;//
-            case Type::UInt16: return DXGI_FORMAT_R16G16B16A16_UINT;//
-            case Type::UInt32: return DXGI_FORMAT_R32G32B32_UINT;
-            case Type::Float:  return DXGI_FORMAT_R32G32B32_FLOAT;
+            case ElementType::Int8:   return DXGI_FORMAT_R8G8B8A8_SINT;//
+            case ElementType::Int16:  return DXGI_FORMAT_R16G16B16A16_SINT;//
+            case ElementType::Int32:  return DXGI_FORMAT_R32G32B32_SINT;
+            case ElementType::UInt8:  return DXGI_FORMAT_R8G8B8A8_UINT;//
+            case ElementType::UInt16: return DXGI_FORMAT_R16G16B16A16_UINT;//
+            case ElementType::UInt32: return DXGI_FORMAT_R32G32B32_UINT;
+            case ElementType::Float:  return DXGI_FORMAT_R32G32B32_FLOAT;
             }
         }
         if (dimension == 3 || dimension == 4) {
             switch (value)
             {
-            case Type::Int8:   return DXGI_FORMAT_R8G8B8A8_SINT;
-            case Type::Int16:  return DXGI_FORMAT_R16G16B16A16_SINT;
-            case Type::Int32:  return DXGI_FORMAT_R32G32B32A32_SINT;
-            case Type::UInt8:  return DXGI_FORMAT_R8G8B8A8_UNORM;
-            case Type::UInt16: return DXGI_FORMAT_R16G16B16A16_UNORM;
-            case Type::UInt32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
-            case Type::Float:  return DXGI_FORMAT_R32G32B32A32_FLOAT;
+            case ElementType::Int8:   return DXGI_FORMAT_R8G8B8A8_SINT;
+            case ElementType::Int16:  return DXGI_FORMAT_R16G16B16A16_SINT;
+            case ElementType::Int32:  return DXGI_FORMAT_R32G32B32A32_SINT;
+            case ElementType::UInt8:  return DXGI_FORMAT_R8G8B8A8_UNORM;
+            case ElementType::UInt16: return DXGI_FORMAT_R16G16B16A16_UNORM;
+            case ElementType::UInt32: return DXGI_FORMAT_R32G32B32A32_FLOAT;
+            case ElementType::Float:  return DXGI_FORMAT_R32G32B32A32_FLOAT;
             }
         }
         LOG_WARNING_EX("Graphic", "不正なSemantic[value={0},index={1}]", enum_cast(value),dimension);

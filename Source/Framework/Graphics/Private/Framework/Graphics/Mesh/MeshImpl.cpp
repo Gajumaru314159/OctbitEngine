@@ -200,25 +200,25 @@ namespace ob::graphics {
 
 		size_t vertexCount = 0;
 
-		ADD_VERTEX_ATTRIBUTE(Vec4, positions, Position, Type::Float, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec4, positions, Position, ElementType::Float, 4);
 
 		if (!meshData.colors.empty()) {
-			ADD_VERTEX_ATTRIBUTE(Color, colors, Color, Type::Float, 4);
+			ADD_VERTEX_ATTRIBUTE(Color, colors, Color, ElementType::Float, 4);
 		} else if (!meshData.intColors.empty()) {
 			offset -= sizeof(f32);
-			ADD_VERTEX_ATTRIBUTE(IntColor, intColors, Color, Type::UInt32, 1);
+			ADD_VERTEX_ATTRIBUTE(IntColor, intColors, Color, ElementType::UInt32, 1);
 		}
 
-		ADD_VERTEX_ATTRIBUTE(Vec4, normals	, Normal	, Type::Float, 4);
-		ADD_VERTEX_ATTRIBUTE(Vec4, tangents	, Tangent	, Type::Float, 4);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs		, TexCoord	, Type::Float, 2, 0);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs1		, TexCoord	, Type::Float, 2, 1);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs2		, TexCoord	, Type::Float, 2, 2);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs3		, TexCoord	, Type::Float, 2, 3);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs4		, TexCoord	, Type::Float, 2, 4);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs5		, TexCoord	, Type::Float, 2, 5);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs6		, TexCoord	, Type::Float, 2, 6);
-		ADD_VERTEX_ATTRIBUTE(Vec2, uvs7		, TexCoord	, Type::Float, 2, 7);
+		ADD_VERTEX_ATTRIBUTE(Vec4, normals	, Normal	, ElementType::Float, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec4, tangents	, Tangent	, ElementType::Float, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs		, TexCoord	, ElementType::Float, 2, 0);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs1		, TexCoord	, ElementType::Float, 2, 1);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs2		, TexCoord	, ElementType::Float, 2, 2);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs3		, TexCoord	, ElementType::Float, 2, 3);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs4		, TexCoord	, ElementType::Float, 2, 4);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs5		, TexCoord	, ElementType::Float, 2, 5);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs6		, TexCoord	, ElementType::Float, 2, 6);
+		ADD_VERTEX_ATTRIBUTE(Vec2, uvs7		, TexCoord	, ElementType::Float, 2, 7);
 
 		auto stribe = align_up(offset, 16);
 

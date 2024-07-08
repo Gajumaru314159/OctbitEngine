@@ -104,9 +104,9 @@ int TestDirectX12() {
 		opaque.vs = Shader::CompileVS(code.value());
 		opaque.ps = Shader::CompilePS(code.value());
 		opaque.requiredLayout = {
-			{Semantic::Position,Type::Float,4},
-			{Semantic::Normal,Type::Float,4},
-			{Semantic::TexCoord,Type::Float,2},
+			{Semantic::Position,ElementType::Float,4},
+			{Semantic::Normal,ElementType::Float,4},
+			{Semantic::TexCoord,ElementType::Float,2},
 		};
 
 		return Material::Create(desc);

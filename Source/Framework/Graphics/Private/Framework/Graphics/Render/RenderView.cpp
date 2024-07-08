@@ -84,8 +84,8 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      RenderFeatureを見つける
 	//@―---------------------------------------------------------------------------
-	RenderFeature* RenderView::findFeature(TypeId typeId)const {
-		return m_scene.findFeature(typeId);
+	RenderFeature* RenderView::findFeature(Type type)const {
+		return m_scene.findFeature(type);
 	}
 
 	//@―---------------------------------------------------------------------------

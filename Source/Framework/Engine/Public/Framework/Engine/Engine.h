@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Utility/DI.h>
 
 namespace ob::engine {

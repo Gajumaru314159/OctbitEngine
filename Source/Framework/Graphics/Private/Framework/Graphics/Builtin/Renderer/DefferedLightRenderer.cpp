@@ -129,8 +129,8 @@ namespace ob::graphics {
 			lighting.ps = Shader::CompilePS(code.value());
 			lighting.blends = { BlendDesc::AlphaBlend };
 			lighting.requiredLayout = {
-				{Semantic::Position,Type::Float,4},
-				{Semantic::TexCoord,Type::Float,2},
+				{Semantic::Position,ElementType::Float,4},
+				{Semantic::TexCoord,ElementType::Float,2},
 			};
 
 			desc.passes.emplace("PostProcess", lighting);

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/PropertyNotifier.h>
 
@@ -14,8 +14,8 @@ namespace ob::engine {
 	public:
 		virtual ~ComponentCreator() = default;
 		virtual Component* createComponent() = 0;
-		virtual TypeId getComponentTypeId()const = 0;
-		virtual Vector<TypeId> getDependentComponentTypes()const = 0;
+		virtual Type getComponentType()const = 0;
+		virtual Vector<Type> getDependentComponentTypes()const = 0;
 	};
 
 	template<class T>
@@ -25,10 +25,10 @@ namespace ob::engine {
 		Component* createComponent() override {
 			return new T;
 		}
-		TypeId getComponentTypeId()const override {
-			return TypeId::Get<T>();
+		Type getComponentType()const override {
+			return Type::Get<T>();
 		}
-		Vector<TypeId> getDependentComponentTypes()const {
+		Vector<Type> getDependentComponentTypes()const {
 			return {};
 		}
 	};

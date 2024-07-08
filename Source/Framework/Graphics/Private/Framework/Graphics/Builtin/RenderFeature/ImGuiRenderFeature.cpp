@@ -475,9 +475,9 @@ namespace ob::graphics {
 			desc.vs = vs;
 			desc.ps = ps;
 			desc.vertexLayout.attributes = {
-				VertexAttribute(Semantic::Position,offsetof(ImDrawVert,pos),Type::Float,2),
-				VertexAttribute(Semantic::TexCoord,offsetof(ImDrawVert,uv),Type::Float,2),
-				VertexAttribute(Semantic::Color,offsetof(ImDrawVert,col),Type::UInt8,4),
+				VertexAttribute(Semantic::Position,offsetof(ImDrawVert,pos),ElementType::Float,2),
+				VertexAttribute(Semantic::TexCoord,offsetof(ImDrawVert,uv),ElementType::Float,2),
+				VertexAttribute(Semantic::Color,offsetof(ImDrawVert,col),ElementType::UInt8,4),
 			};
 			desc.blend[0] = BlendDesc::AlphaBlend;
 			desc.rasterizer.cullMode = CullMode::None;

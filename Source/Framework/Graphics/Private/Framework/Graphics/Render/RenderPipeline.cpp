@@ -38,8 +38,8 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      RenderFeatureを見つける
 		//@―---------------------------------------------------------------------------
-		template<class T> T* findFeature()const { return findFeature(TypeId::Get<T>()); }
-		RenderFeature* findFeature(TypeId typId)const;
+		template<class T> T* findFeature()const { return findFeature(Type::Get<T>()); }
+		RenderFeature* findFeature(Type typId)const;
 
 	protected:
 		RenderPipeline(RenderScene& scene) :m_scene(scene) {}

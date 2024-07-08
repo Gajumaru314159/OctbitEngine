@@ -15,7 +15,7 @@ namespace ob::platform {
     }
 
     WindowManager::WindowManager() {
-        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", TypeId::Get<WindowManager>().name());
+        OB_ASSERT(s_instance == nullptr, "{}は既に生成されています。", Type::Get<WindowManager>().fullName());
         s_instance = this;
     }
 

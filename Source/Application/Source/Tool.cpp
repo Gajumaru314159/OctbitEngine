@@ -91,12 +91,12 @@ void drawComponents(engine::Entity* pEntity) {
 			ImGui::TextUnformatted(entity.getName().c_str());
 
 			for (auto& component : entity.componets()) {
-				auto cmpname = String(component->getComponentTypeId().name());
+				auto cmpname = String(component->getComponentType().name());
 				if (ImGui::CollapsingHeader(cmpname.c_str())) {
 
 					ImGui::ScopedIndent indent;
 
-					if (component->getTypeId() == TypeId::Get<engine::TransformComponent>()) {
+					if (component->getType() == Type::Get<engine::TransformComponent>()) {
 						auto c = reinterpret_cast<engine::TransformComponent*>(component.get());
 						{
 							Vec3 value = c->getLocal().position;

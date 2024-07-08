@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Map.h>
 
@@ -56,7 +56,7 @@ namespace ob::core {
 	//! @brief  Enum型情報
 	//@―---------------------------------------------------------------------------
 	struct EnumInfo :TaggedInfo {
-		TypeId				typeId;
+		Type				type;
 		Vector<ElementInfo> elements;
 	};
 
@@ -76,7 +76,7 @@ namespace ob::core {
 		using Setter = Func<void(void*, const void*)>;
 		using Getter = Func<const void* (void*)>;
 
-		TypeId typeId;
+		Type type;
 		String name;
 		Getter getter;
 		Setter setter;
@@ -102,12 +102,12 @@ namespace ob::core {
 		using PropertyInfoMap = HashMap<StringView,PropertyInfo>;
 		using FunctionInfoSet = MultiMap<String, FunctionInfo, std::less<>>;
 	
-		TypeId			typeId;
-		HashSet<TypeId> bases;
+		Type			type;
+		HashSet<Type> bases;
 		PropertyInfoMap properties;
 		FunctionInfoSet functions;
 
-		HashSet<TypeId> derivedes;
+		HashSet<Type> derivedes;
 
 
 		Vector<PropertyConverter> converters;

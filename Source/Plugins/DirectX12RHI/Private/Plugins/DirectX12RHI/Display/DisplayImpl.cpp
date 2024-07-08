@@ -261,7 +261,7 @@ namespace ob::rhi::dx12 {
 			desc.vs = vs;
 			desc.ps = ps;
 			desc.vertexLayout.attributes = {
-				VertexAttribute(Semantic::Position,0,Type::Float,2),
+				VertexAttribute(Semantic::Position,0,ElementType::Float,2),
 			};
 			desc.blend[0] = BlendDesc::AlphaBlend;
 			desc.rasterizer.cullMode = CullMode::None;

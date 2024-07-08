@@ -68,21 +68,21 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント追加
 	//@―---------------------------------------------------------------------------
-	Component* Entity::addComponent(TypeId typeId) {
+	Component* Entity::addComponent(Type type) {
 
 		if (32 < m_components.size()) {
-			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,typeId.name());
+			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,type.fullName());
 			return nullptr;
 		}
 
 		if (auto factory = ComponentFactory::Get()) {
-			if (auto desc = factory->findCreator(typeId)) {
+			if (auto desc = factory->findCreator(type)) {
 
 				// 依存コンポーネントを生成
 				for (auto& depType : desc->getDependentComponentTypes()) {
 					if (findComponent(depType) == nullptr) {
 						if (addComponent(depType) == nullptr) {
-							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", typeId.name(), depType.name());
+							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.fullName(), depType.fullName());
 						}
 					}
 				}
@@ -92,7 +92,7 @@ namespace ob::engine {
 				raisePropertyChanged("Components");
 			}
 		} else {
-			LOG_WARNING("{}が生成されていません。", TypeId::Get<decltype(this)>().name());
+			LOG_WARNING("{}が生成されていません。", Type::Get<decltype(this)>().fullName());
 		}
 
 		return nullptr;
@@ -101,12 +101,12 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント削除
 	//@―---------------------------------------------------------------------------
-	bool Entity::removeComponent(TypeId typeId,s32 index) {
+	bool Entity::removeComponent(Type type,s32 index) {
 
 		// TODO Componentの取得をインターフェイスで行う
 		Component* found = nullptr;
 		for (auto& component : m_components) {
-			if (component->getComponentTypeId() == typeId) {
+			if (component->getComponentType() == type) {
 				if (index <= 0) {
 					found = component.get();
 					break;
@@ -136,11 +136,11 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント検索
 	//@―---------------------------------------------------------------------------
-	Component* Entity::findComponent(TypeId typeId, s32 index)const {
+	Component* Entity::findComponent(Type type, s32 index)const {
 		// TODO Componentの取得をインターフェイスで行う
 		s32 count = 0;
 		for (auto& component : m_components) {
-			if (component->getComponentTypeId() == typeId) {
+			if (component->getComponentType() == type) {
 				if (count == index) {
 					return component.get();
 				}
@@ -172,12 +172,12 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief			コンポーネント走査
 	//! @param func		走査関数
-	//! @param typeId	走査するコンポーネントの型 (TypeId::Invalid()の場合全て走査)
+	//! @param type	走査するコンポーネントの型 (Type::Invalid()の場合全て走査)
 	//@―---------------------------------------------------------------------------
-	void Entity::visitComponents(const Delegate<void(Component*)>& func, TypeId typeId)const {
+	void Entity::visitComponents(const Delegate<void(Component*)>& func, Type type)const {
 		for (auto& component : m_components) {
 			// TODO DynamicCast
-			if (component->getComponentTypeId() == typeId || typeId == TypeId::Invalid()) {
+			if (component->getComponentType() == type || type == Type::Invalid()) {
 				func(component.get());
 			}
 		}

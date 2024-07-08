@@ -46,7 +46,7 @@ namespace ob::core::rtti {
 		template<class T>
 		void setValue(T&& value) {
 			T copy = value;
-			setValueImpl(TypeId::Get<T>(), &copy);
+			setValueImpl(Type::Get<T>(), &copy);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ namespace ob::core::rtti {
 		//@―---------------------------------------------------------------------------
 		template<class T>
 		Optional<T> getValue() {
-			if (auto ret = getValueImpl(TypeId::Get<T>())) {
+			if (auto ret = getValueImpl(Type::Get<T>())) {
 				return *reinterpret_cast<const T*>(ret);
 			}
 			return std::nullopt;
@@ -65,7 +65,7 @@ namespace ob::core::rtti {
 		//@―---------------------------------------------------------------------------
 		template<class T>
 		const T* getValuePtr() {
-			if (auto ret = getValueImpl(TypeId::Get<T>())) {
+			if (auto ret = getValueImpl(Type::Get<T>())) {
 				return reinterpret_cast<const T*>(ret);
 			}
 			return std::nullopt;
@@ -76,7 +76,7 @@ namespace ob::core::rtti {
 		//@―---------------------------------------------------------------------------
 		template<class T>
 		bool is() const noexcept {
-			return m_info.type == TypeId::Get<T>();
+			return m_info.type == Type::Get<T>();
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -88,8 +88,8 @@ namespace ob::core::rtti {
 
 	protected:
 
-		void setValueImpl(TypeId typeId, void* value);
-		const void* getValueImpl(TypeId typeId)const;
+		void setValueImpl(Type type, void* value);
+		const void* getValueImpl(Type type)const;
 
 	private:
 

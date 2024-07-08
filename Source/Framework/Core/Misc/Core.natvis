@@ -63,8 +63,8 @@
 		</Expand>
 	</Type>
 
-	<!--TypeId-->
-	<Type Name="ob::core::TypeId">
+	<!--Type-->
+	<Type Name="ob::core::Type">
 		<DisplayString>{m_name.m_view,sb}</DisplayString>
 	</Type>
 

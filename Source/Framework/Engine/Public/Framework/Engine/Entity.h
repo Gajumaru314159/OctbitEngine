@@ -88,25 +88,25 @@ namespace ob::engine {
 		// Component
 		//===============================================================
 
-		//! @brief TypeIdからComponentを追加 
-		Component* addComponent(TypeId typeId);
+		//! @brief TypeからComponentを追加 
+		Component* addComponent(Type type);
 		//! @brief Componentを削除
-		bool removeComponent(TypeId,s32 index);
+		bool removeComponent(Type,s32 index);
 		//! @brief Componentを削除
 		bool removeComponent(Component*);
-		//! @brief TypeIdからComponentを取得 
-		Component* findComponent(TypeId typeId, s32 index = 0)const;
+		//! @brief TypeからComponentを取得 
+		Component* findComponent(Type type, s32 index = 0)const;
 		//! @brief Comoponentを追加 
 		template<class T>T* addComponent();
 		//! @brief Comoponentを削除 
-		template<class T>bool removeComponent(s32 index = 0) { return removeComponent(TypeId::Get<T>(),index); }
+		template<class T>bool removeComponent(s32 index = 0) { return removeComponent(Type::Get<T>(),index); }
 		//! @brief Componentを取得
-		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(TypeId::Get<T>(), index)); }
+		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(Type::Get<T>(), index)); }
 		//! @brief 特定の型のComponentに対して処理
 		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 			for (auto& component : componens()) {
 				// TODO DynamicCast
-				if (component->getComponentTypeId() == TypeId::Get<T>()) {
+				if (component->getComponentType() == Type::Get<T>()) {
 					func(*reinterpret_cast<T*>(component.get()));
 				}
 			}
@@ -132,7 +132,7 @@ namespace ob::engine {
 
 		Component* addComponent(Component*);
 
-		void visitComponents(const Delegate<void(Component*)>& func,TypeId)const;
+		void visitComponents(const Delegate<void(Component*)>& func,Type)const;
 
 
 		//@―---------------------------------------------------------------------------
@@ -166,7 +166,7 @@ namespace ob::engine {
 
 	template<class T>
 	inline T* Entity::addComponent() {
-		return reinterpret_cast<T*>(addComponent(TypeId::Get<T>()));
+		return reinterpret_cast<T*>(addComponent(Type::Get<T>()));
 	}
 
 }

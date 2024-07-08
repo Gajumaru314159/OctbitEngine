@@ -31,16 +31,16 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		//! @brief  ContentCreatorを登録
 		//@―---------------------------------------------------------------------------
-		void registerCreator(TypeId typeId, UPtr<ComponentCreator> creator);
+		void registerCreator(Type type, UPtr<ComponentCreator> creator);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  ContentCreatorを検索
 		//@―---------------------------------------------------------------------------
-		ComponentCreator* findCreator(TypeId typeId);
+		ComponentCreator* findCreator(Type type);
 
 	private:
 
-		HashMap<TypeId, UPtr<ComponentCreator>> m_creatorMap;
+		HashMap<Type, UPtr<ComponentCreator>> m_creatorMap;
 
 	};
 }

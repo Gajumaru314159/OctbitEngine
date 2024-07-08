@@ -30,8 +30,8 @@ namespace ob::graphics {
     //@―---------------------------------------------------------------------------
     //! @brief      RenderFeatureを見つける
     //@―---------------------------------------------------------------------------
-    RenderFeature* RenderScene::findFeature(TypeId typeId)const {
-        auto found = m_features.find(typeId);
+    RenderFeature* RenderScene::findFeature(Type type)const {
+        auto found = m_features.find(type);
         if (found == m_features.end())return nullptr;
         return found->second.get();
     }
@@ -85,7 +85,7 @@ namespace ob::graphics {
     //! @brief      描画
     //@―---------------------------------------------------------------------------
     void RenderScene::render(FG& fg) {
-        for (auto& [typeId, feature] : m_features) {
+        for (auto& [type, feature] : m_features) {
             feature->render(fg);
         }
         for (auto view : m_views) {

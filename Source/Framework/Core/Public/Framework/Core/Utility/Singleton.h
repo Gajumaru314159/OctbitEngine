@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Exception/Exception.h>
 
 namespace ob::core {
@@ -28,7 +28,7 @@ namespace ob::core {
         //! @brief      インスタンスを取得
         //@―---------------------------------------------------------------------------
         static T& Instance()noexcept {
-            OB_ASSERT(s_instance,"{}は生成されていません。", TypeId::Get<T>().name());
+            OB_ASSERT(s_instance,"{}は生成されていません。", Type::Get<T>().fullName());
             return *s_instance;
         }
 

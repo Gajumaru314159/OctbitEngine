@@ -63,21 +63,33 @@ OB_REGISTER_RTTI(EnumTest);
 OB_REGISTER_RTTI(Test);
 OB_REGISTER_RTTI(Base);
 
+namespace a::b::c {
+	class AA {
+
+	};
+}
+
 TEST(TypeBuilder, Construct) {
+
+	std::array<int, Type::Get<a::b::c::AA>().fullName().size()> a;
 
 	Logger logger;
 	
 	TypeInfoManager manager;
+
+	LOG_INFO("{}",Type::Get<a::b::c::AA>().name());
+	LOG_INFO("{}",Type::Get<a::b::c::AA>().fullName());
+
 	
-	manager.visit([](const EnumInfo& info) { LOG_INFO("型：{}", info.typeId.name()); });
-	manager.visit([](const ClassInfo& info) { LOG_INFO("型：{}",info.typeId.name()); });
+	manager.visit([](const EnumInfo& info) { LOG_INFO("型：{}", info.type.fullName()); });
+	manager.visit([](const ClassInfo& info) { LOG_INFO("型：{}",info.type.fullName()); });
 
 	// TODO 検索
 	// TODO 生成
 	// TODO デシリアライズ
 
-	if (auto info = manager.findClassInfo(TypeId("Test"))) {
-		LOG_INFO("{}が見つかりました", info->typeId.name());
+	if (auto info = manager.findClassInfo(Type("Test"))) {
+		LOG_INFO("{}が見つかりました", info->type.fullName());
 
 		for (auto& [name,property] : info->properties) {
 		}

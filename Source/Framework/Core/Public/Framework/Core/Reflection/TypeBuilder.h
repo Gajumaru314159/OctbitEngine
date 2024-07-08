@@ -30,10 +30,10 @@ namespace type_info_builder {
 #define OB_DEFINE_ENUM_INFO(type)\
 namespace type_info_builder::type {\
 	void Register() {\
-		ob::core::internal::EnumBuilderTemplate<::type> builder{};\
+		::ob::core::internal::EnumBuilderTemplate<::type> builder{};\
 	}\
 }\
-template<> void ob::core::internal::EnumBuilderTemplate<::type>::Register()
+template<> void ::ob::core::internal::EnumBuilderTemplate<::type>::Register()
 
 
 //@―---------------------------------------------------------------------------
@@ -44,10 +44,10 @@ template<> void ob::core::internal::EnumBuilderTemplate<::type>::Register()
 #define OB_DEFINE_CLASS_INFO(type)\
 namespace type_info_builder::type {\
 	void Register() {\
-		ob::core::internal::ClassBuilderTemplate<::type> builder{};\
+		::ob::core::internal::ClassBuilderTemplate<::type> builder{};\
 	}\
 }\
-template<> void ob::core::internal::ClassBuilderTemplate<::type>::Register()
+template<> void ::ob::core::internal::ClassBuilderTemplate<::type>::Register()
 
 
 namespace ob::core::internal {
@@ -230,7 +230,7 @@ namespace ob::core::internal {
 
 	protected:
 
-		void baseImpl(TypeId);
+		void baseImpl(Type);
 		void constructorImpl();
 		PropertyBuilder addPropertyImpl() {}
 		FunctionBuilder functionImpl(StringView name);
@@ -242,12 +242,12 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報生成
 	//@―---------------------------------------------------------------------------
-	EnumInfo& CreateEnumInfo(ob::TypeId);
+	EnumInfo& CreateEnumInfo(ob::Type);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報生成
 	//@―---------------------------------------------------------------------------
-	ClassInfo& CreateClassInfo(ob::TypeId);
+	ClassInfo& CreateClassInfo(ob::Type);
 
 
 
@@ -257,7 +257,7 @@ namespace ob::core::internal {
 	template<class T>
 	class EnumBuilderTemplate :public EnumBuilder {
 	public:
-		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerEnumInfo(TypeId::Get<T>())) {
+		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerEnumInfo(Type::Get<T>())) {
 			Register();
 		}
 		void Register();
@@ -269,13 +269,13 @@ namespace ob::core::internal {
 	template<class T>
 	class ClassBuilderTemplate : public ClassBuilder {
 	public:
-		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerClassInfo(TypeId::Get<T>())) {
+		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerClassInfo(Type::Get<T>())) {
 			Register();
 		}
 		void Register();
 
 		template<class TBase,class = std::enable_if_t<std::is_base_of_v<TBase,T>>>
-		void base() { baseImpl(::ob::TypeId::Get<TBase>()); }
+		void base() { baseImpl(::ob::Type::Get<TBase>()); }
 
 
 		//@―---------------------------------------------------------------------------
@@ -293,7 +293,7 @@ namespace ob::core::internal {
 		template<class... Args>
 		void constructor() {
 
-			// {TypeId::Get<Args>()...}
+			// {Type::Get<Args>()...}
 
 			// new T(Args{args});
 

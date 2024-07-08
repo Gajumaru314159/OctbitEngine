@@ -39,45 +39,45 @@ namespace ob::core {
 
 			constexpr StringView name = signature.substr(prefix, signature.size() - prefix - suffix);
 			
-			static_assert(!std::is_volatile_v<T>, "TypeId does not support volatile.");
+			static_assert(!std::is_volatile_v<T>, "Type does not support volatile.");
 			
 			return name;
 		}
 
 	}
 
-#define OB_RTTI()	virtual TypeId getTypeId()const{return TypeId::Get<std::remove_cv_t<std::remove_reference_t<decltype(*this)>>>();}
+#define OB_RTTI()	virtual Type getType()const{return Type::Get<std::remove_cv_t<std::remove_reference_t<decltype(*this)>>>();}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  型ID
 	//@―---------------------------------------------------------------------------
-	class TypeId {
+	class Type {
 	public:
 		//@―---------------------------------------------------------------------------
-		//! @brief  TypeId取得
+		//! @brief  Type取得
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		static constexpr TypeId Get() {
+		static constexpr Type Get() {
 			auto name = internal::type_id::GetTypeName<std::remove_cv_t<std::remove_reference_t<T>>>();
 			return name;
 		}
 		//@―---------------------------------------------------------------------------
-		//! @brief  無効なTypeId取得
+		//! @brief  無効なType取得
 		//@―---------------------------------------------------------------------------
-		static constexpr TypeId Invalid() {
-			return TypeId();
+		static constexpr Type Invalid() {
+			return Type();
 		}
 	public:
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		constexpr TypeId() : TypeId( TypeId::Get<InvalidType>().name() ){}
+		constexpr Type() : Type( Type::Get<InvalidType>().fullName() ){}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief		名前からTypeIdを生成
+		//! @brief		名前からTypeを生成
 		//@―---------------------------------------------------------------------------
-		constexpr TypeId(StringView fullName)
+		constexpr Type(StringView fullName)
 			: m_fullName(fullName)
 			, m_hash(0)
 		{
@@ -127,10 +127,10 @@ namespace ob::core {
 
 		//! @cond
 		constexpr operator bool()const { return !empty(); }
-		constexpr bool operator==(TypeId rhs)const { return m_hash == rhs.m_hash; }
-		constexpr bool operator!=(TypeId rhs)const { return m_hash != rhs.m_hash; }
-		constexpr bool operator<(TypeId rhs)const { return m_hash < rhs.m_hash; }
-		constexpr bool operator>(TypeId rhs)const { return m_hash > rhs.m_hash; }
+		constexpr bool operator==(Type rhs)const { return m_hash == rhs.m_hash; }
+		constexpr bool operator!=(Type rhs)const { return m_hash != rhs.m_hash; }
+		constexpr bool operator<(Type rhs)const { return m_hash < rhs.m_hash; }
+		constexpr bool operator>(Type rhs)const { return m_hash > rhs.m_hash; }
 		//! @endcond
 
 	private:
@@ -154,9 +154,9 @@ namespace ob::core {
 //===============================================================
 //! @cond
 template<>
-struct std::hash<ob::core::TypeId> {
+struct std::hash<ob::core::Type> {
 public:
-	size_t operator()(const ob::core::TypeId& value)const {
+	size_t operator()(const ob::core::Type& value)const {
 		return value.hash();
 	}
 };

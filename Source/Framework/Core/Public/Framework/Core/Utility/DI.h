@@ -6,7 +6,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Exception/Exception.h>
-#include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Reflection/Type.h>
 
 namespace ob::core {
 
@@ -61,9 +61,9 @@ namespace ob::core {
 
     private:
         template<class T> friend class ServiceBuilder;  // for m_builders
-        HashMap<TypeId, UPtr<ServiceBuilderBase>>   m_builders;
-        HashMap<TypeId, Vector<TypeId>>             m_builderMap;
-        Vector<TypeId>                              m_orders;
+        HashMap<Type, UPtr<ServiceBuilderBase>>   m_builders;
+        HashMap<Type, Vector<Type>>             m_builderMap;
+        Vector<Type>                              m_orders;
     };
 
 
@@ -88,7 +88,7 @@ namespace ob::core {
             operator U& () const {
                 auto instance = injector.create<U>(container);
                 if (instance == nullptr) {
-                    throw Exception(Format("{} => {}", TypeId::Get<U>().name(), TypeId::Get<T>().name()));
+                    throw Exception(Format("{} => {}", Type::Get<U>().fullName(), Type::Get<T>().fullName()));
                 }
                 return *instance;
             }
@@ -173,8 +173,8 @@ namespace ob::core {
     template<class T>
     ServiceBuilder<T>& ServiceInjector::bind() {
         auto builder = new ServiceBuilder<T>(*this);
-        m_builders[TypeId::Get<T>()].reset(builder);
-        m_orders.push_back(TypeId::Get<T>());
+        m_builders[Type::Get<T>()].reset(builder);
+        m_orders.push_back(Type::Get<T>());
         return *builder;
     }
 
@@ -184,8 +184,8 @@ namespace ob::core {
     template<class T>
     ServiceBuilder<T>& ServiceInjector::bind(T& instance) {
         auto builder = new ServiceBuilder<T>(*this,instance);
-        m_builders[TypeId::Get<T>()].reset(builder);
-        m_orders.push_back(TypeId::Get<T>());
+        m_builders[Type::Get<T>()].reset(builder);
+        m_orders.push_back(Type::Get<T>());
         return *builder;
     }
 
@@ -199,15 +199,15 @@ namespace ob::core {
         if (auto instance = container.get<T>())
             return instance;
         // 抽象->具象
-        Vector<TypeId> fallback;
-        auto& concretes = try_find(m_builderMap, TypeId::Get<T>(), fallback);
+        Vector<Type> fallback;
+        auto& concretes = try_find(m_builderMap, Type::Get<T>(), fallback);
         // 生成
         for (auto& concrete : concretes) {
             auto& builder = m_builders.find(concrete)->second;
             try {
                 return reinterpret_cast<T*>(builder->create(container));
             } catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",TypeId::Get<T>().name(),e.message());
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",Type::Get<T>().fullName(),e.message());
                 // 生成キャンセル
             }
         }
@@ -239,10 +239,10 @@ namespace ob::core {
         template<class... U>
         ServiceBuilder& as() {
             static_assert((std::is_base_of_v<U, T> && ...), "U must be a base class of T.");
-            TypeId types[] = { TypeId::Get<U>() ... };
+            Type types[] = { Type::Get<U>() ... };
             for (auto& type : types) {
                 m_bases.emplace(type);
-                m_injector.m_builderMap[type].emplace_back(TypeId::Get<T>());
+                m_injector.m_builderMap[type].emplace_back(Type::Get<T>());
             }
             return *this;
         }
@@ -253,8 +253,8 @@ namespace ob::core {
         ServiceBuilder(ServiceInjector& injector)
             : m_injector(injector)
         {
-            m_bases.emplace(TypeId::Get<T>());
-            m_injector.m_builderMap[TypeId::Get<T>()].emplace_back(TypeId::Get<T>());
+            m_bases.emplace(Type::Get<T>());
+            m_injector.m_builderMap[Type::Get<T>()].emplace_back(Type::Get<T>());
         }
         //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
@@ -262,8 +262,8 @@ namespace ob::core {
         ServiceBuilder(ServiceInjector& injector,T& instance)
             : m_injector(injector)
         {
-            m_bases.emplace(TypeId::Get<T>());
-            m_injector.m_builderMap[TypeId::Get<T>()].emplace_back(TypeId::Get<T>());
+            m_bases.emplace(Type::Get<T>());
+            m_injector.m_builderMap[Type::Get<T>()].emplace_back(Type::Get<T>());
 
             // コピー
             m_getter = [instance]() {
@@ -296,7 +296,7 @@ namespace ob::core {
     private:
         friend class ServiceInjector;
         ServiceInjector& m_injector;
-        HashSet<TypeId> m_bases;
+        HashSet<Type> m_bases;
         Func<T*()>      m_getter;
     };
 
@@ -362,7 +362,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<class T>
         T* get()const {
-            auto found = m_indices.find(TypeId::Get<T>());
+            auto found = m_indices.find(Type::Get<T>());
             if (found == m_indices.end()) return nullptr;
             return reinterpret_cast<T*>(m_services.at(found->second)->get());
         }
@@ -370,8 +370,8 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief      サービスが存在しているか
         //@―---------------------------------------------------------------------------
-        bool has(TypeId typeId)const {
-            return m_indices.count(typeId);
+        bool has(Type type)const {
+            return m_indices.count(type);
         }
 
         //@―---------------------------------------------------------------------------
@@ -379,13 +379,13 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<class T>
         bool has()const {
-            return m_indices.count(TypeId::Get<T>());
+            return m_indices.count(Type::Get<T>());
         }
 
     private:
         template<class T> friend class ServiceBuilder;
         Vector<UPtr<detail::ServiceHolderBase>> m_services;
-        HashMap<TypeId, size_t> m_indices;
+        HashMap<Type, size_t> m_indices;
     };
 
     //@―---------------------------------------------------------------------------
@@ -393,13 +393,13 @@ namespace ob::core {
     //! @param container 生成されたサービスを管理させるコンテナの参照
     //@―---------------------------------------------------------------------------
     inline void ServiceInjector::createAll(ServiceContainer& container)const {
-        for (auto typeId : m_orders) {
+        for (auto type : m_orders) {
             try {
-                if (container.has(typeId))continue;
-                m_builders.find(typeId)->second->create(container);
+                if (container.has(type))continue;
+                m_builders.find(type)->second->create(container);
             }
             catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", typeId.name(), e.message());
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.fullName(), e.message());
             }
         }
     }

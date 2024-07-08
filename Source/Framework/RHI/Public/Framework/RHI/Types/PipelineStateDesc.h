@@ -22,7 +22,7 @@ namespace ob::rhi {
 	//! @see		VertexAttribute
 	//! @see		VertexLayout
 	//@―---------------------------------------------------------------------------
-	enum class Type : u32 {
+	enum class ElementType : u32 {
 		Int8,
 		Int16,
 		Int32,
@@ -64,7 +64,7 @@ namespace ob::rhi {
 
 		Semantic	semantic;	//!< セマンティクス
 		s32			offset;		//!< 頂点構造体内でのオフセット
-		Type		type;		//!< コンポーネント型
+		ElementType	type;		//!< コンポーネント型
 		s32			dimention;	//!< 次元数
 		s32			index;		//!< セマンティクス内インデックス
 
@@ -78,7 +78,7 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
 		//@―---------------------------------------------------------------------------
-		VertexAttribute(Semantic semantic, s32 offset,Type type,s32 dimention=1,s32 index = 0)
+		VertexAttribute(Semantic semantic, s32 offset, ElementType type,s32 dimention=1,s32 index = 0)
 			:semantic(semantic), offset(offset), type(type), dimention(dimention),index(index) {}
 
 	};
