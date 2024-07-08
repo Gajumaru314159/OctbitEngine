@@ -5,8 +5,21 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Core.h>
-#include <Framework/Core/Reflection/TypeId.h>
 #include <Framework/Core/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfoManager.h>
+
+namespace type_info_builder {
+
+	struct ReflectionFunction {
+		using func_type = void(*)();
+		ReflectionFunction(func_type func):func(func){}
+		func_type func;
+		ReflectionFunction* next = nullptr;
+	};
+	ReflectionFunction* GetReflectionFunction();
+	void PushReflectionFunction(ReflectionFunction*);
+
+}
 
 
 //@―---------------------------------------------------------------------------
@@ -14,13 +27,13 @@
 //! @details	
 //! @note		
 //@―---------------------------------------------------------------------------
-#define OB_DEFINE_ENUM_TYPE_INFO(type)\
+#define OB_DEFINE_ENUM_INFO(type)\
 namespace type_info_builder::type {\
-	void Link() {\
-		type_info_builder::EnumBuilderTemplate<::type>{};\
+	void Register() {\
+		ob::core::internal::EnumBuilderTemplate<::type> builder{};\
 	}\
 }\
-template<> void type_info_builder::EnumBuilderTemplate<::type>::Register()
+template<> void ob::core::internal::EnumBuilderTemplate<::type>::Register()
 
 
 //@―---------------------------------------------------------------------------
@@ -28,16 +41,16 @@ template<> void type_info_builder::EnumBuilderTemplate<::type>::Register()
 //! @details	
 //! @note		
 //@―---------------------------------------------------------------------------
-#define OB_DEFINE_CLASS_TYPE_INFO(type)\
+#define OB_DEFINE_CLASS_INFO(type)\
 namespace type_info_builder::type {\
-	void Link() {\
-		type_info_builder::ClassBuilderTemplate<::type>{};\
+	void Register() {\
+		ob::core::internal::ClassBuilderTemplate<::type> builder{};\
 	}\
 }\
-template<> void type_info_builder::ClassBuilderTemplate<::type>::Register()
+template<> void ob::core::internal::ClassBuilderTemplate<::type>::Register()
 
 
-namespace ob::core::rtti::internal {
+namespace ob::core::internal {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum要素情報ビルダー
@@ -101,7 +114,7 @@ namespace ob::core::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		PropertyBuilder(PropertyInfo&);
+		PropertyBuilder(PropertyInfo*);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
@@ -109,7 +122,7 @@ namespace ob::core::rtti::internal {
 		void tag(StringView key, StringView value = "");
 
 	private:
-		PropertyInfo& m_info;
+		PropertyInfo* m_info;
 	};
 
 
@@ -150,22 +163,6 @@ namespace ob::core::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		void tag(StringView key, StringView value = "");
 
-		//@―---------------------------------------------------------------------------
-		//! @brief			基底クラスを追加
-		//@―---------------------------------------------------------------------------
-		template<class TBase>
-		void constructor() {
-			constructorImpl();
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			コンストラクタ追加
-		//! @tparam Args	引数型リスト
-		//@―---------------------------------------------------------------------------
-		template<class... Args>
-		void constructor() {
-			constructorImpl();
-		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			関数追加
@@ -179,10 +176,10 @@ namespace ob::core::rtti::internal {
 		//! @brief			プロパティ追加(メンバ変数)
 		//@―---------------------------------------------------------------------------
 		template<class TClass, class TField>
-		PropertyBuilder& property(StringView name, TField TClass::* address,bool writable = true) {
-			PropertyInfo p; 
-			p.name = name;
-			m_info.m_properties.emplace(p);
+		PropertyBuilder property(StringView name, TField TClass::* address,bool writable = true) {
+			auto& info = m_info.properties[name];
+			info.name = name;
+			return PropertyBuilder(&info);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -190,9 +187,9 @@ namespace ob::core::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F>
 		PropertyBuilder property(StringView name, F getter) {
-			PropertyInfo p;
-			p.name = name;
-			m_info.m_properties.emplace(p);
+			auto& info = m_info.properties[name];
+			info.name = name;
+			return PropertyBuilder(&info);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -200,10 +197,10 @@ namespace ob::core::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
 		PropertyBuilder property(StringView name, F1 getter, F2 setter) {
-
-			PropertyInfo p;
-			p.name = name;
-			m_info.m_properties.emplace(p);
+			auto& info = m_info.properties[name];
+			info.name = name;
+			info.setter = [](void* owner, const void* value) {  };
+			return PropertyBuilder(&info);
 		}
 
 		// 以下バージョン互換機能
@@ -222,34 +219,35 @@ namespace ob::core::rtti::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			名前変更
 		//@―---------------------------------------------------------------------------
-		void convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName);
+		void convert(s32 fromVersion, s32 toVersion, StringView oldName, StringView newName) {
+			auto& converter = m_info.converters.emplace_back();
+			converter.fromVersion = fromVersion;
+			converter.toVersion = toVersion;
+			converter.from = oldName;
+			converter.to = newName;
+		}
 
 
-	private:
+	protected:
 
 		void baseImpl(TypeId);
-		void constructorImpl(TypeId);
+		void constructorImpl();
+		PropertyBuilder addPropertyImpl() {}
 		FunctionBuilder functionImpl(StringView name);
 
 	private:
 		ClassInfo& m_info;
 	};
 
-}
-
-
-
-namespace type_info_builder {
-
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報生成
 	//@―---------------------------------------------------------------------------
-	::ob::core::rtti::EnumInfo& CreateEnumInfo(::ob::TypeId);
+	EnumInfo& CreateEnumInfo(ob::TypeId);
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報生成
 	//@―---------------------------------------------------------------------------
-	::ob::core::rtti::ClassInfo& CreateClassInfo(::ob::TypeId);
+	ClassInfo& CreateClassInfo(ob::TypeId);
 
 
 
@@ -257,23 +255,50 @@ namespace type_info_builder {
 	//! @brief		Enum型情報ビルダー
 	//@―---------------------------------------------------------------------------
 	template<class T>
-	class EnumBuilderTemplate :public ::ob::core::rtti::internal::EnumBuilder {
+	class EnumBuilderTemplate :public EnumBuilder {
 	public:
-		EnumBuilderTemplate() : ::ob::core::rtti::internal::EnumBuilder(CreateEnumInfo(::ob::TypeId::Get<T>())) {}
-		void Register() {}
+		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerEnumInfo(TypeId::Get<T>())) {
+			Register();
+		}
+		void Register();
 	};
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報ビルダー
 	//@―---------------------------------------------------------------------------
 	template<class T>
-	class ClassBuilderTemplate :public ::ob::core::rtti::internal::ClassBuilder {
+	class ClassBuilderTemplate : public ClassBuilder {
 	public:
-		ClassBuilderTemplate() : ::ob::core::rtti::internal::ClassBuilder(CreateClassInfo(::ob::TypeId::Get<T>())) {}
+		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerClassInfo(TypeId::Get<T>())) {
+			Register();
+		}
+		void Register();
 
 		template<class TBase,class = std::enable_if_t<std::is_base_of_v<TBase,T>>>
 		void base() { baseImpl(::ob::TypeId::Get<TBase>()); }
-		void Register() {}
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ追加
+		//! @tparam Args	引数型リスト
+		//@―---------------------------------------------------------------------------
+		void ctor() {
+			auto creator = []() { return new T(); };
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ追加
+		//! @tparam Args	引数型リスト
+		//@―---------------------------------------------------------------------------
+		template<class... Args>
+		void constructor() {
+
+			// {TypeId::Get<Args>()...}
+
+			// new T(Args{args});
+
+			constructorImpl();
+		}
 	};
 
 }

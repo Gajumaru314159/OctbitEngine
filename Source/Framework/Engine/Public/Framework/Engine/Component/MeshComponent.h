@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Component.h>
+#include <Framework/Graphics/Forward.h>
 // #include <Framework/Graphics/Model/ModelRenderHandle.h>
 
 namespace ob::engine {
@@ -25,7 +26,7 @@ namespace ob::engine {
 
 		MeshComponent();
 
-		void setModel();
+		void setModel(StringView path);
 
 		void activate() override;
 		void deactivate() override;
@@ -33,6 +34,10 @@ namespace ob::engine {
 		void updateModel();
 	private:
 		//graphics::ModelRenderHandle m_handle;
+		Ref<graphics::Material> m_material;
+		Ref<rhi::Texture> m_mainTex;
+		Ref<graphics::Mesh> m_mesh;
+		String m_path;
 	};
 
 }

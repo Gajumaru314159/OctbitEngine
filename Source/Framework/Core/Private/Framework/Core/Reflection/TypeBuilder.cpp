@@ -8,23 +8,22 @@
 #include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Core.h>
 
-
-
 namespace type_info_builder {
-	// テスト
-	ob::core::rtti::EnumInfo s_enumInfo;
-	ob::core::rtti::ClassInfo s_classInfo;
 
-	ob::core::rtti::EnumInfo& CreateEnumInfo(ob::TypeId) {
-		return s_enumInfo;
+	ReflectionFunction* g_reflectionFunction = nullptr;
+
+	ReflectionFunction* GetReflectionFunction() {
+		return g_reflectionFunction;
+	}
+	void PushReflectionFunction(ReflectionFunction* func) {
+		func->next = g_reflectionFunction;
+		g_reflectionFunction = func;
 	}
 
-	ob::core::rtti::ClassInfo& CreateClassInfo(ob::TypeId) {
-		return s_classInfo;
-	}
 }
 
-namespace ob::core::rtti::internal {
+
+namespace ob::core::internal {
 
 	//===============================================================
 	// ElementBuilder
@@ -87,17 +86,17 @@ namespace ob::core::rtti::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	PropertyBuilder::PropertyBuilder(PropertyInfo& info)
+	PropertyBuilder::PropertyBuilder(PropertyInfo* info)
 		: m_info(info)
 	{
-		m_info.tags.clear();
+		if(m_info)m_info->tags.clear();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
 	//@―---------------------------------------------------------------------------
 	void PropertyBuilder::tag(StringView key, StringView value) {
-		m_info.tags.emplace(key, value);
+		if (m_info)m_info->tags.emplace(key, value);
 	}
 
 
@@ -143,14 +142,14 @@ namespace ob::core::rtti::internal {
 	}
 
 	void ClassBuilder::baseImpl(TypeId typeId) {
-		m_info.m_baseClasses.emplace(typeId);
+		m_info.bases.emplace(typeId);
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		基底クラス登録
 	//! @details	SFINAEで不正な型をコンパイルエラーにするために実装はClassBuilderTemplateでしています。
 	//@―---------------------------------------------------------------------------
-	void ClassBuilder::constructorImpl(TypeId) {
+	void ClassBuilder::constructorImpl() {
 
 	}
 
@@ -161,7 +160,7 @@ namespace ob::core::rtti::internal {
 	FunctionBuilder ClassBuilder::functionImpl(StringView name) {
 		FunctionInfo f;
 		f.name = name;
-		m_info.m_functions.emplace(name,f);
+		m_info.functions.emplace(name,f);
 		return FunctionBuilder(f);
 	}
 

@@ -9,6 +9,27 @@
 
 namespace ob::engine {
 
+	class SubSystemContainer {
+	public:
+		//@―---------------------------------------------------------------------------
+		//! @brief		サブシステムを取得
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		T* find()const { return nullptr; }
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		同じ型のサブシステムを尊くすることはできません
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		bool add(T&&) {
+			m_systems.try_emplace()
+		}
+
+
+	private:
+		HashMap<TypeId, void*> m_systems;
+	};
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  ワールド
 	//! @see	https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/UWorld/
@@ -37,13 +58,13 @@ namespace ob::engine {
 		//! @brief		サブシステムを取得
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		T* findSystem()const { return nullptr; }
+		T* findSubSystem()const { return nullptr; }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		同じ型のサブシステムを尊くすることはできません
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		bool setSubsystem(T&&){}
+		bool addSubSystem(T&&){}
 
 	private:
 
@@ -55,7 +76,7 @@ namespace ob::engine {
 
 		String m_name;
 
-		Scene* m_scene;
+		Scene* m_scene = nullptr;
 
 	};
 

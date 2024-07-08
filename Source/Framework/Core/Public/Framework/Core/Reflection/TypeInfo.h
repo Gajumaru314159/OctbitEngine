@@ -5,8 +5,10 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/TypeId.h>
+#include <Framework/Core/Template/Container/Vector.h>
+#include <Framework/Core/Template/Container/Map.h>
 
-namespace ob::core::rtti {
+namespace ob::core {
 
 	namespace internal {
 		class ClassBuilder;
@@ -16,7 +18,8 @@ namespace ob::core::rtti {
 	//! @brief  タグ情報
 	//@―---------------------------------------------------------------------------
 	struct TaggedInfo {
-		Map<String, String, std::less<>> tags;
+
+		HashMap<StringView, String> tags;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグを持っているか
@@ -33,7 +36,7 @@ namespace ob::core::rtti {
 	//@―---------------------------------------------------------------------------
 	//! @brief  Enum要素情報
 	//@―---------------------------------------------------------------------------
-	struct ElementInfo:TaggedInfo {
+	struct ElementInfo : TaggedInfo {
 		String	name;
 		s32		index;
 		s64		value;
@@ -52,30 +55,39 @@ namespace ob::core::rtti {
 	//@―---------------------------------------------------------------------------
 	//! @brief  Enum型情報
 	//@―---------------------------------------------------------------------------
-	struct EnumInfo:TaggedInfo {
+	struct EnumInfo :TaggedInfo {
+		TypeId				typeId;
 		Vector<ElementInfo> elements;
 	};
 
 
+	struct PropertyConverter {
+		s32 fromVersion;
+		s32 toVersion;
+		StringView from;
+		StringView to;
+	};
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  プロパティ情報
 	//@―---------------------------------------------------------------------------
-	struct PropertyInfo:TaggedInfo {
+	struct PropertyInfo :TaggedInfo {
 
 		using Setter = Func<void(void*, const void*)>;
-		using Getter = Func<const void*(void*)>;
+		using Getter = Func<const void* (void*)>;
 
+		TypeId typeId;
 		String name;
-		TypeId type;
 		Getter getter;
 		Setter setter;
+
 	};
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  関数情報
 	//@―---------------------------------------------------------------------------
-	struct FunctionInfo:TaggedInfo {
+	struct FunctionInfo :TaggedInfo {
 	public:
 		String name;
 		//Func
@@ -85,51 +97,20 @@ namespace ob::core::rtti {
 	//@―---------------------------------------------------------------------------
 	//! @brief  Class型情報
 	//@―---------------------------------------------------------------------------
-	class ClassInfo :public TaggedInfo {
-		friend class ob::core::rtti::internal::ClassBuilder;
-	public:
+	struct ClassInfo : TaggedInfo {
 
-		// 名前で検索できるようにする
-		struct PropertyInfoPred {
-			bool operator()(const PropertyInfo& left, const PropertyInfo& right) const noexcept {
-				return left.name < right.name;
-			}
-			bool operator()(const PropertyInfo& left, StringView right) const noexcept {
-				return left.name < right;
-			}
-		};
+		using PropertyInfoMap = HashMap<StringView,PropertyInfo>;
+		using FunctionInfoSet = MultiMap<String, FunctionInfo, std::less<>>;
+	
+		TypeId			typeId;
+		HashSet<TypeId> bases;
+		PropertyInfoMap properties;
+		FunctionInfoSet functions;
 
-		using PropertyInfoSet	= Set<PropertyInfo, PropertyInfoPred>;
-		using FunctionInfoSet	= MultiMap<String,FunctionInfo, std::less<>>;
-	public:
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		基底クラスを取得
-		//! @detaisl	プリミティブ型はnullptrを返す。
-		//@―---------------------------------------------------------------------------
-		ClassInfo* base()const;
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		継承しているか
-		//@―---------------------------------------------------------------------------
-		bool inherit(ClassInfo*)const;
-
-		//@―---------------------------------------------------------------------------
-		//! @brief		型のハッシュ値を返す
-		//! @details	プラットフォームによらず固定です。
-		//! @note		内部実装は型名のハッシュ値です。
-		//@―---------------------------------------------------------------------------
-		//TypeId hash()const { return m_typeId; }
+		HashSet<TypeId> derivedes;
 
 
-		const PropertyInfoSet& properties()const { return m_properties; }
-
-	private:
-
-		HashSet<TypeId> m_baseClasses;
-		PropertyInfoSet m_properties;
-		FunctionInfoSet m_functions;
-
+		Vector<PropertyConverter> converters;
 	};
 
 

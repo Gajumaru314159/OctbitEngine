@@ -46,7 +46,7 @@ namespace ob::engine {
 
 }
 
-OB_DEFINE_CLASS_TYPE_INFO(ob::engine::Component) {
+OB_DEFINE_CLASS_INFO(ob::engine::Component) {
 
 	using Type = ::ob::engine::Component;
 

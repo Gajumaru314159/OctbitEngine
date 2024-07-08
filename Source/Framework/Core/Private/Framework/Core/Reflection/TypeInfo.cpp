@@ -7,7 +7,7 @@
 #include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Core.h>
 
-namespace ob::core::rtti {
+namespace ob::core {
 
 	//class ClassFactoryBase {
 	//public:

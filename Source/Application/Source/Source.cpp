@@ -1,299 +1,183 @@
-﻿#include <Windows.h>
-
-#include <Framework/Core/Utility/DI.h>
-
+﻿#include <Framework/Core/Utility/DI.h>
+#include <Framework/Graphics/All.h>
+#include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/RHI/All.h>
-#include <Framework/Input/All.h>
-#include <Framework/Platform/Window.h>
-
 #include <Framework/Engine/All.h>
-
-#include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Graphics.h>
-#include <Framework/Graphics/Material.h>
-#include <Framework/Graphics/Mesh.h>
-#include <Framework/Engine/Component/CameraComponent.h>
+#include <Framework/Input/All.h>
+#include <Framework/Platform/System.h>
+#include <Framework/Platform/Window.h>
+#include <Plugins/DirectX12RHI/System.h>
 
 #include <Framework/Debug/LogInfo.h>
 #include <Framework/Debug/Profiler.h>
+#include <Framework/Debug/FrameGraphDebugger.h>
 
-#include <Plugins/ImGui/ImGui.h>
+#include <Framework/Graphics/Material/Material.h>
 
-#include <Model.h>
 
-#include <Framework/Platform/System.h>
-#include <Framework/Input/System.h>
-#include <Framework/Input/InputManager.h>
-#include <Plugins/DirectX12RHI/System.h>
-
-#include <Framework/Graphics/Feature/ImGuiRenderFeature.h>
-
-#include "BuildinRenderPipeline.h"
+#include <Framework/Core/String/FixedString.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
+using namespace ob::rhi;
+using namespace ob::engine;
+using namespace ob::graphics;
+using namespace ob::platform;
 
-void drawOutliner(const Ref<engine::Scene>& scene);
-void drawComponents(engine::Entity* pEntity = nullptr);
+
+void drawOutliner(Scene* scene);
+void drawComponents(Entity* pEntity = nullptr);
 
 int TestDirectX12() {
 
-	using namespace ob::rhi;
-	using namespace ob::graphics;
-
-	debug::LogInfo logInfo;
-	debug::Profiler profiler;
-
-
-	Ref<RenderScene> renderScene;
 	{
-		RenderSceneDesc desc;
-		desc.name = "Test";
-		desc.pipelines.add<BuiltinRenderPipeline>();
-		desc.features.add<TestRenderFeature>();
+	FixedString<120> fstr;
+	Char aaa[129];
 
-		renderScene = RenderScene::Create(desc);
+	FormatTo(std::back_inserter(fstr), "test{}", 123);
 	}
+
+	ob::core::Logger log;
+
+	ob::debug::Profiler profiler;
+	ob::debug::LogInfo loginfo;
+	ob::debug::FrameGraphDebugger fgdebugger;
+
+	System::Setup();
+
+	auto world = World::Create("MainWorld");
+	auto scene2 = Scene::Create("SubScene");
+	auto entity = Entity::Create("RootEntity");
+	entity->addComponent<TransformComponent>();
+	scene2->addEntity(entity);
+	world->getRootScene().addSubScene(*scene2);
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
 	windowDesc.title = "Graphic Test";
 	platform::Window window(windowDesc);
 
-	// ディスプレイ
-	Ref<Display> display;
-	{
+	Ref<Display> display = [&] {
 		DisplayDesc desc;
 		desc.name = "MainDisplay";
 		desc.window = window;
-		display = Display::Create(desc);
-		OB_ASSERT_EXPR(display);
+		return Display::Create(desc);
+		}();
+#pragma endregion
+		// 事前セットアップここまで
+
+		RenderScene scene;
+		RenderView view(scene, "Test");
+		scene.addFeature<ImGuiRenderFeature>(scene);
+		scene.addFeature<MaterialRenderFeature>();
+		view.setDisplay(display);
+		view.setPipeline<TestRenderPipeline>(view);
+
+		ImGuiHandle handle;
+		ImGuiHandle handle2;
+
+		ImGuiRenderFeature::AddTask(
+			scene, handle,
+			[&] {
+				profiler.draw();
+				loginfo.draw();
+				fgdebugger.draw();
+				drawOutliner(&world->getRootScene());
+				drawComponents();
+			}
+	);
+
+	Ref<Material> material = [&] {
+
+		auto code = ReadFile("Asset/Shader/GraphicTest.hlsl");
+		OB_ASSERT(code, "ファイル読み込み失敗");
+
+		MaterialDesc desc;
+		desc.name = "Default";
+		desc.matrixProperties = { "Matrix" };
+		desc.textureProperties = { "Main" };
+
+		MaterialPass& opaque = desc.passes["Opaque"];
+		opaque.depthStencil.depth.enable = true;
+		opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+		opaque.depth = TextureFormat::D32;
+		opaque.vs = Shader::CompileVS(code.value());
+		opaque.ps = Shader::CompilePS(code.value());
+		opaque.requiredLayout = {
+			{Semantic::Position,Type::Float,4},
+			{Semantic::Normal,Type::Float,4},
+			{Semantic::TexCoord,Type::Float,2},
+		};
+
+		return Material::Create(desc);
+	}();
+	auto skyMat = Material::Create(material->getDesc());
+
+
+	auto texture = Texture::Load("Asset/Model/Ukulele_col.dds");
+	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
+	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
+	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
+
+	material->setMatrix("Matrix", Matrix::Identity);
+	material->setTexture("Main", texture);
+
+	skyMat->setMatrix("Matrix", Matrix::Identity);
+	skyMat->setTexture("Main", skyTexture);
+
+	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
+		feature->addRenderable(mesh, material);
+		feature->addRenderable(skyMesh, skyMat);
 	}
-
-	// 描画先生成
-	Ref<RenderTexture> colorRT;
-	{
-		RenderTextureDesc desc;
-		desc.name = "Color0";
-		desc.size = display->getDesc().size;
-		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::Black;
-		desc.display = display;
-
-		colorRT = RenderTexture::Create(desc);
-		OB_ASSERT_EXPR(colorRT);
-	}
-	Ref<RenderTexture> color2RT;
-	{
-		RenderTextureDesc desc;
-		desc.name = "Color1";
-		desc.size = display->getDesc().size;
-		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::Green;
-		desc.display = display;
-
-		color2RT = RenderTexture::Create(desc);
-		OB_ASSERT_EXPR(color2RT);
-	}
-	Ref<RenderTexture> depthRT;
-	{
-		RenderTextureDesc desc;
-		desc.name = "Depth";
-		desc.size = display->getDesc().size;
-		desc.format = TextureFormat::D32;
-		desc.clear.depth = 1.0f;
-		desc.display = display;
-
-		depthRT = RenderTexture::Create(desc);
-		OB_ASSERT_EXPR(depthRT);
-	}
-
-	Ref<CommandList> cmdList;
-	{
-		CommandListDesc desc;
-		desc.name = "MainCommandList";
-		desc.type = CommandListType::Graphic;
-		cmdList = CommandList::Create(desc);
-		OB_ASSERT_EXPR(cmdList);
-	}
-
-	Model sky("Asset/Model/sky.obj", "Asset/Texture/sky.dds");
-	Model ukulele("Asset/Model/Ukulele.obj", "Asset/Model/Ukulele_col.dds");
-
-
-	// ImGui初期化
-	ImGui::StartupImGui(window, renderPass);
-
-
-
-	// シーン生成テスト
-	auto world = engine::World::Create("TestWorld");
-	auto scene = engine::Scene::Create("SampleScene");
-	auto entity = engine::Entity::Create("Parent");
-	auto child = engine::Entity::Create("Child");
-	entity->addChild(child);
-	scene->addEntity(entity);
-
-	world->getRootScene()->addSubScene(scene);
-
-	if (entity && scene) {
-
-		entity->addComponent<engine::TransformComponent>();
-		child->addComponent<engine::TransformComponent>();
-		if (auto camera = child->addComponent<engine::CameraComponent>()) {
-			//auto renderView = std::make_unique<UniversalRenderView>();
-			//camera->setRenderView(std::move(renderView));
-		}
-
-	}
-
-	Texture::White();
-	//------ループ-----
 
 	Vec3 pos(0, 0, -10);
 	Rot rot = Rot::Identity;
-	f32 modelRotSpeed = 1.0f;
+	auto now = DateTime::Now();
 
-	MSG msg = {};
+
+	auto size = display->getDesc().size;
+	auto viewMtx =
+		Matrix::Perspective(60, size.width, size.height, 0.01f, 10000.0f) *
+		Matrix::TRS(pos, rot, Vec3::One).inverse();
+	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
+
 	while (true) {
 
-		// TODO アプリ更新内部にモジュール更新とメッセージ処理を隠ぺい
-		{
-			if (auto engine = engine::Engine::Get()) {
-				engine->update();
-			}
+		if (System::Update() == false)break;
 
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-			if (msg.message == WM_QUIT) {
-				break;
-			}
-		}
-
-		if (input::Keyboard::Escape.down())break;
-
-		// 入力更新
-		const auto rspd = 90 / 60.f;
-		Rot r2(rot.x, rot.y, 0);
-		static auto speed = 4 / 60.f;
-		speed += input::Mouse::Wheel.value() * 0.0001f;
-
-		pos += r2.front() * speed * (input::Keyboard::W.pressed() - input::Keyboard::S.pressed());
-		pos += r2.right() * speed * (input::Keyboard::D.pressed() - input::Keyboard::A.pressed());
-
-		if (input::Mouse::Right.pressed()) {
-			auto md = input::Mouse::GetDeltaPos() * 0.1f;
-			rot.y += md.x;
-			rot.x += md.y;
-		}
-		rot.x = Math::Clamp(rot.x, -85.f, 85.f);
-
-
-		static f32 t = 1.0f;
-		t -= modelRotSpeed;
-		// 行列更新
-		auto modelScale = 100.0f;
-		auto viewMtx = Matrix::Perspective(60, 1.0f * color2RT->width() / color2RT->height(), 0.01f, 10000.0f) * Matrix::TRS(pos, rot, Vec3::One).inverse();
-		auto skyMtx = Matrix::Scale(Vec3(1, 1, 1) * modelScale);
-		auto ukuleleMtx = Matrix::TRS(Vec3::Zero, Quat(0, t, 70), Vec3::One);
-
-		graphics::Material::SetGlobalColor("LightDir", Color(1, 1, 1));
-		graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
-		sky.setMatrix(skyMtx);
-		ukulele.setMatrix(ukuleleMtx);
-
-
-
-		// 表示を更新(Present)
+		RHI::Get()->update();
+		input::InputModule::Get()->update();
 		display->update();
 
-		cmdList->begin();
 
-		cmdList->beginRenderPass(frameBuffer);
+		// 行列更新
+		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
+		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t * 30.0f, 70), Vec3::One);
+		material->setMatrix("Matrix", mtx);
+		material->setColor("Color", Color::White);
 
-		{
-			cmdList->pushMarker("My");
 
-			cmdList->popMarker();
+		if (auto graphics = Graphics::Get()) {
+			graphics->update();
 		}
 
-		if (true) {
-			cmdList->pushMarker("ImGui");
-			ImGui::BeginFrame();
-
-			ImGui::BeginMainMenuBar();
-
-			static bool bShowDemo = false;
-			ImGui::MenuItem("ImGui", 0, &bShowDemo);
-
-			static bool bShowComponents = true;
-			ImGui::MenuItem("Components", 0, &bShowComponents);
-
-			static bool bShowOutliner = true;
-			ImGui::MenuItem("Outliner", 0, &bShowOutliner);
-
-			ImGui::EndMainMenuBar();
-
-
-			if (bShowDemo) {
-				ImGui::ShowDemoWindow();
-			}
-			if (bShowDemo) {
-				ImPlot::ShowDemoWindow();
-			}
-
-			if (ImGui::Begin("MaterialEdirot")) {
-				ImGui::SliderFloat("Speed", &modelRotSpeed, -2.0f, 2.0f);
-			}
-			ImGui::End();
-
-			if (bShowComponents) {
-				drawComponents();
-			}
-			if (bShowOutliner) {
-				drawOutliner(world->getRootScene());
-			}
-
-			logInfo.update();
-			profiler.update();
-
-
-			ImGui::EndFrame(cmdList);
-			cmdList->popMarker();
-		}
-
-		cmdList->endRenderPass();
-
-		// ディスプレイ更新
-		if (!input::Keyboard::R.pressed()) {
-
-			// ディスプレイにバインド
-			cmdList->applyDisplay(display, colorRT);
-		} else {
-			cmdList->applyDisplay(display, color2RT);
-		}
-
-		cmdList->end();
-
-		// TODO コマンドの個別実行を許可する？
-		cmdList->flush();
+		fgdebugger.update();
 
 	}
-	ImGui::ShutdownImGui();
 
 	return 0;
 }
 
 void OctbitInit(ServiceInjector& injector) {
 
-	input::
-		Register(injector);
-	rhi::dx12::
-		Register(injector);
-	graphics::
-		Register(injector);
+	rhi::dx12::Register(injector);
+	input::Register(injector);
+	graphics::Register(injector);
+
+	rhi::Config config;
+	config.enablePIX = true;
+	config.breakWithWarning = true;
+	injector.bind(config);
 
 }
 

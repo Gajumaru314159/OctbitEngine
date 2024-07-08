@@ -1,7 +1,6 @@
 ﻿#include <Framework/Core/Core.h>
 #include <Framework/Engine/All.h>
 #include <Plugins/ImGui/ImGui.h>
-#include <Framework/Engine/Component/CameraComponent.h>
 
 using namespace ob;
 
@@ -10,7 +9,7 @@ engine::Scene* s_selectedScene = nullptr;
 
 void drawOutliner_Entity(engine::Entity* entity) {
 	if (!entity)return;
-	auto name = ImGui::ToImChars(entity->getName());
+	auto name = entity->getName().c_str();
 	bool empty = entity->getChildren().empty();
 
 	auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
@@ -36,19 +35,19 @@ void drawOutliner_Entity(engine::Entity* entity) {
 
 	}
 }
-void drawOutliner_Scene(const Ref<engine::Scene>& scene) {
+void drawOutliner_Scene(engine::Scene* scene) {
 	if (!scene)return;
-	auto name = ImGui::ToImChars(scene->getName());
+	auto name = scene->getName().c_str();
 	bool empty = scene->getChildren().empty() && scene->getEntities().empty();
 
 	auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
-	if (s_selectedScene == scene.get())flag |= ImGuiTreeNodeFlags_Selected;
+	if (s_selectedScene == scene)flag |= ImGuiTreeNodeFlags_Selected;
 	flag |= ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
 
 	bool opend = ImGui::TreeNodeEx(name, flag, name);
 
 	if (ImGui::IsItemClicked()) {
-		s_selectedScene = scene.get();
+		s_selectedScene = scene;
 		s_selectedEntity = nullptr;
 	}
 
@@ -72,7 +71,7 @@ void drawOutliner_Scene(const Ref<engine::Scene>& scene) {
 
 	}
 }
-void drawOutliner(const Ref<engine::Scene>& scene) {
+void drawOutliner(engine::Scene* scene) {
 
 	if (ImGui::Begin("Outliner")) {
 		drawOutliner_Scene(scene);
@@ -89,11 +88,11 @@ void drawComponents(engine::Entity* pEntity) {
 	if (ImGui::Begin("Inspector")) {
 		if (pEntity) {
 			auto& entity = *pEntity;
-			ImGui::Text(ImGui::ToImChars(entity.getName()));
+			ImGui::TextUnformatted(entity.getName().c_str());
 
 			for (auto& component : entity.componets()) {
-				auto cmpname = ImGui::ToImChars(component->getComponentTypeId().name());
-				if (ImGui::CollapsingHeader(cmpname)) {
+				auto cmpname = String(component->getComponentTypeId().name());
+				if (ImGui::CollapsingHeader(cmpname.c_str())) {
 
 					ImGui::ScopedIndent indent;
 
@@ -116,34 +115,6 @@ void drawComponents(engine::Entity* pEntity) {
 							Vec3 value = c->getLocal().scale;
 							if (ImGui::DragFloat3("Scale", value)) {
 								c->setLocalScale(value);
-							}
-						}
-					}
-					if (component->getTypeId() == TypeId::Get<engine::CameraComponent>()) {
-						auto c = reinterpret_cast<engine::CameraComponent*>(component.get());
-						{
-							f32 value[] = { c->getFov() };
-							if (ImGui::SliderFloat("FovY", value, 0, 180)) {
-								c->setFov(value[0]);
-							}
-						}
-						{
-							f32 value[] = { c->getClipRange().min,c->getClipRange().max };
-							if (ImGui::SliderFloat2("ClipRange", value, 0, 10000)) {
-								c->setClipRange({ value[0],value[1] });
-							}
-						}
-						{
-							auto rect = c->getVieportRect();
-							f32 values[] = { rect.left,rect.top,rect.right,rect.bottom };
-							if (ImGui::DragFloat4("ViewportRect", values, 0.01f, 0.0f, 1.0f)) {
-								c->setVieportRect({ values[0] ,values[1],values[2] ,values[3] });
-							}
-						}
-						{
-							auto value = c->getClearColor();
-							if (ImGui::ColorEdit3("ClearColor", value)) {
-								c->setClearColor(value);
 							}
 						}
 					}

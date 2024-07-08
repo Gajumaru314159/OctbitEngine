@@ -68,6 +68,11 @@ namespace ob::graphics {
         //@―---------------------------------------------------------------------------
         void removeScene(RenderScene* scene);
 
+        RenderScene* getScene() {
+            if (m_scenes.empty())return nullptr;
+            return m_scenes.front();
+        }
+
         FGData getFGData()const;
     private:
 

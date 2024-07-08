@@ -131,4 +131,4 @@ add_subdirectory ("Source/Test/Framework/Graphics")
 add_subdirectory ("Source/Test/Framework/Engine")
 
 # Application
-#add_subdirectory ("Source/Application")
+add_subdirectory ("Source/Application")
