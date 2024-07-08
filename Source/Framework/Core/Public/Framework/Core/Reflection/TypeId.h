@@ -77,17 +77,23 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		名前からTypeIdを生成
 		//@―---------------------------------------------------------------------------
-		constexpr TypeId(StringView name)
-			: m_name(name)
+		constexpr TypeId(StringView fullName)
+			: m_fullName(fullName)
 			, m_hash(0)
 		{
+			if (auto index = fullName.rfind(':'); index != StringView::npos) {
+				m_name = fullName.substr(index+1);
+			} else {
+				m_name = fullName;
+			}
+
 			// FNV64
 			constexpr u64 offset_basis = 14695981039346656037u;
 			constexpr u64 fnv_prime = 1099511628211u;
 			u64 result = offset_basis;
 
-			for (size_t i = 0; i < name.size(); ++i) {
-				result ^= static_cast<u64>(name[i]);
+			for (size_t i = 0; i < fullName.size(); ++i) {
+				result ^= static_cast<u64>(fullName[i]);
 				result *= fnv_prime;
 			}
 			m_hash = result;
@@ -100,10 +106,17 @@ namespace ob::core {
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型名
-		//! @details	名前空間を含みます。
+		//! @details	名前空間を含みません。
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
 		constexpr StringView name() const { return m_name; }
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		型名
+		//! @details	名前空間を含みます。
+		//!				未設定の場合は空文字列を返します。
+		//@―---------------------------------------------------------------------------
+		constexpr StringView fullName() const { return m_fullName; }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		ハッシュ値
@@ -127,6 +140,7 @@ namespace ob::core {
 		};
 
 	private:
+		StringView	m_fullName;
 		StringView	m_name;
 		u64			m_hash;
 	};
