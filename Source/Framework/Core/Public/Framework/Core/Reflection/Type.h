@@ -125,8 +125,15 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		constexpr u64 hash() const { return m_hash; }
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		型比較を行う
+		//! @details	この比較ではダイナミックキャストを考慮しません。
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		constexpr bool is() const { return *this == Type::Get<T>(); }
+
 		//! @cond
-		constexpr operator bool()const { return !empty(); }
+		constexpr operator u32()const { return m_hash; }
 		constexpr bool operator==(Type rhs)const { return m_hash == rhs.m_hash; }
 		constexpr bool operator!=(Type rhs)const { return m_hash != rhs.m_hash; }
 		constexpr bool operator<(Type rhs)const { return m_hash < rhs.m_hash; }

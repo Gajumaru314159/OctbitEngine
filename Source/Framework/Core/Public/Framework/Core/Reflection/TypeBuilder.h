@@ -112,48 +112,6 @@ namespace ob::core::internal {
 		ClassBuilder(TypeInfo&);
 
 
-		//@―---------------------------------------------------------------------------
-		//! @brief			関数追加
-		//@―---------------------------------------------------------------------------
-		template<class TFunc, class... TArgDescs>
-		TagBuilder method(StringView name, TFunc function, TArgDescs&& ...desc) {
-			auto& info = m_info.methods[name];
-			info.name = name;
-			return info;
-			return methodImpl(name);
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			プロパティ追加(メンバ変数)
-		//@―---------------------------------------------------------------------------
-		template<class TClass, class TField>
-		TagBuilder property(StringView name, TField TClass::* address, bool writable = true) {
-			auto& info = m_info.properties[name];
-			info.name = name;
-			return info;
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			プロパティ追加(Getter)
-		//@―---------------------------------------------------------------------------
-		template<class F>
-		TagBuilder property(StringView name, F getter) {
-			auto& info = m_info.properties[name];
-			info.name = name;
-			return info;
-		}
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			プロパティ追加(Getter)
-		//@―---------------------------------------------------------------------------
-		template<class F1, class F2>
-		TagBuilder property(StringView name, F1 getter, F2 setter) {
-			auto& info = m_info.properties[name];
-			info.name = name;
-			//info.setter = [](void* owner, const void* value) {};
-			return info;
-		}
-
 	protected:
 
 		void baseImpl(Type);
@@ -169,8 +127,10 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報ビルダー
 	//@―---------------------------------------------------------------------------
-	template<class T>
+	template<class _T>
 	class EnumBuilderTemplate :public EnumBuilder {
+	public:
+		using T = _T;
 	public:
 		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
@@ -181,8 +141,10 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報ビルダー
 	//@―---------------------------------------------------------------------------
-	template<class T>
+	template<class _T>
 	class ClassBuilderTemplate : public ClassBuilder {
+	public:
+		using T = _T;
 	public:
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
@@ -279,6 +241,70 @@ namespace ob::core::internal {
 
 #undef RETURN_TYPE
 
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			関数追加
+		//@―---------------------------------------------------------------------------
+		template<class TFunc, class... TArgDescs>
+		TagBuilder method(StringView name, TFunc function, TArgDescs&& ...desc) {
+			auto& info = m_info.methods[name];
+			info.name = name;
+			return info;
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			プロパティ追加(メンバ変数)
+		//@―---------------------------------------------------------------------------
+		template<class TField>
+		TagBuilder property(StringView name, TField T::* address) {
+			auto& info = m_info.properties[name];
+			info.name = name;
+			info.type = Type::Get<TField>();
+			info.getter = &Getter<TField,address>;
+			return info;
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			プロパティ追加(Getter)
+		//@―---------------------------------------------------------------------------
+		template<class F>
+		TagBuilder property(StringView name, F getter) {
+			auto& info = m_info.properties[name];
+			info.name = name;
+			info.getter = [=](TypedValue owner) {
+				auto* pOwner = reinterpret_cast<const T*>(owner.pointer);
+				return TypedValue(&(pOwner->*(getter))());
+			};
+			return info;
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			プロパティ追加(Getter)
+		//@―---------------------------------------------------------------------------
+		template<class F1, class F2>
+		TagBuilder property(StringView name, F1 getter, F2 setter) {
+			auto& info = m_info.properties[name];
+			info.name = name;
+			info.getter = [=](TypedValue owner) {
+				auto* pOwner = reinterpret_cast<const T*>(owner.pointer);
+				using result_type = decltype((pOwner->*(getter))());
+				if constexpr (std::is_reference<result_type>::value){
+					auto& result = (pOwner->*(getter))();
+					return TypedValue(&result);
+				}
+				else {
+					// TODO 動的確保した値の開放
+					auto result = (pOwner->*(getter))();
+					return TypedValue(new decltype(result)(result));
+				}
+				//return TypedValue(&(pOwner->*(getter))());
+			};
+
+			//info.setter = [](void* owner, const void* value) {};
+			return info;
+		}
+
 	private:
 
 		static TypedValue CreateWithoutArg([[meybe_unused]] Span<TypedValue>) {
@@ -299,6 +325,11 @@ namespace ob::core::internal {
 			}
 
 			return CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>());
+		}
+
+		template<class TField,TField T::* address>
+		static TypedValue Getter(TypedValue owner) {
+			return address(reinterpret_cast<const T*>(owner.pointer));
 		}
 
 	};

@@ -16,9 +16,9 @@ enum class EnumTest {
 
 OB_DEFINE_ENUM_INFO(EnumTest) {
 	tag("Description", "説明");
-	element("A", ::EnumTest::A).tag("Description", "エー");
-	element("B", ::EnumTest::B).tag("Description", "ビー");
-	element("C", ::EnumTest::C).tag("Description", "シー");
+	element("A", T::A).tag("Description", "エー");
+	element("B", T::B).tag("Description", "ビー");
+	element("C", T::C).tag("Description", "シー");
 }
 
 class Base {
@@ -36,9 +36,11 @@ public:
 	TestBase(s32 val,EnumTest val2) {
 		msg = Format("{}/{}",val,enum_cast(val2));
 	}
-	void setInt(s32 val){}
+	void setInt(s32 val){
+		m_val = val;
+	}
 	s32 getInt()const {
-		return 0;
+		return m_val;
 	}
 
 	void func(s32 a,s32 b) {
@@ -46,6 +48,7 @@ public:
 	}
 public:
 	String msg;
+	s32 m_val;
 };
 
 
@@ -61,7 +64,9 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 	constructor<f32>();
 	constructor<s32,EnumTest>("count","type");
 
-	property("Int", &TestBase::getInt, &TestBase::setInt).tag("Description", "エー");
+	//property("Message", &TestBase::msg);
+
+	property("Int", &T::getInt, &T::setInt).tag("Description", "エー");
 }
 
 
@@ -86,6 +91,17 @@ TEST(TypeBuilder, Construct) {
 
 	LOG_INFO("{}",Type::Get<a::b::c::AA>().name());
 	LOG_INFO("{}",Type::Get<a::b::c::AA>().fullName());
+
+	if (auto info = manager.find(Type("TestBase"))) {
+		TestBase base;
+		base.setInt(333);
+
+		if (auto itr = info->properties.find("Int"); itr != info->properties.end()) {
+			auto result = itr->second.getter(&base);
+			auto re = reinterpret_cast<const s32*>(result.pointer);
+			LOG_INFO("{}",*re);
+		}
+	}
 
 	
 	manager.visit([](const TypeInfo& info) { 
@@ -140,4 +156,29 @@ TEST(TypeBuilder, Construct) {
 
 		LOG_INFO("\n{}",str);
 	});
+
+	class Component {
+	public:
+		Type getType() { return Type::Get<s32>(); }
+	} component;
+
+	if (auto info = manager.find(component.getType())) {
+		for (auto& [name, p] : info->properties) {
+
+			if (p.type.is<s32>()) {
+				auto value = p.get<s32>(&component);
+				// ImGui::InputInt(name,&value);
+				p.set(component, value);
+			}
+			if (p.type.is<f32>()) {
+				auto value = p.get<f32>(&component);
+
+				// valueは内部に参照ポインタかコピーインスタンスを持つ
+
+				// ImGui::InputInt(name,&value);
+				p.set(component, value);
+			}
+		}
+	}
+
 }

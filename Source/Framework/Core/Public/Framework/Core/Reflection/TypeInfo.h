@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Reflection/Any.h>
 #include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Map.h>
 #include <Framework/Core/Template/Utility/Function.h>
@@ -96,6 +97,16 @@ namespace ob::core {
 		StringView				name;
 		PropertySetter			setter;
 		PropertyGetter			getter;
+
+		template<class T>
+		T get(TypedValue owner) const {
+			return *reinterpret_cast<const T*>(getter(owner).pointer);
+		}
+
+		template<class T,class TOwner>
+		void set(TOwner&& owner, T&& value) const {
+			setter(TypedValue(&owner), TypedValue(&value));
+		}
 
 		bool					canRead() const { return !!getter; }
 		bool					canWrite() const { return !!setter; }
