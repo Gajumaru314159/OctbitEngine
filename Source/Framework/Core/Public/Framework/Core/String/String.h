@@ -209,10 +209,8 @@ namespace ob::core {
 		iterator erase(const_iterator pos) noexcept { m_str.erase(pos); return *this; }
 		iterator erase(const_iterator first, const_iterator last) noexcept { m_str.erase(first, last); return *this; }
 
-		void pop_front() { m_str.pop_front(); }
-		void pop_front_n(size_type n) { for (size_type i = 0; i < n; ++i)m_str.push_front(); }
-		void pop_back() noexcept { m_str.pop_back(); }
-		void pop_back_n(size_type n) noexcept { for (size_type i = 0; i < n; ++i)m_str.pop_back(); }
+		void pop_front(size_type n=1) { for (size_type i = 0; i < n; ++i)m_str.push_front(); }
+		void pop_back(size_type n=1) noexcept { for (size_type i = 0; i < n; ++i)m_str.pop_back(); }
 
 		StringBase& remove(value_type c) {
 			size_type i, n;

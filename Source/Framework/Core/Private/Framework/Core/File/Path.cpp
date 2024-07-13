@@ -132,7 +132,7 @@ namespace ob::core {
 	//! @details	Path("sample.txt").removeExtension();	// sample
 	//@―---------------------------------------------------------------------------
 	Path& Path::removeExtension() {
-		m_string.pop_back_n(extension(WithDot::Yes).size());
+		m_string.pop_back(extension(WithDot::Yes).size());
 		return *this;
 	}
 
@@ -143,7 +143,7 @@ namespace ob::core {
 	//!				Path("dir/sub/").removeFileName();		// dir/sub
 	//@―---------------------------------------------------------------------------
 	Path& Path::removeFileName() {
-		m_string.pop_back_n(fileName().size());
+		m_string.pop_back(fileName().size());
 		return *this;
 	}
 
