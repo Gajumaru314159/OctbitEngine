@@ -50,7 +50,7 @@ namespace ob::core {
             return static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
         }
 
-        ConstAnyReference refelence() const {
+        ConstAnyReference reference() const {
             return m_holder ? m_holder->refelence() : ConstAnyReference();
         }
 
