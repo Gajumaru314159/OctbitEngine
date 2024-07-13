@@ -152,7 +152,7 @@ namespace ob::core::internal {
 			ctor.invoker = [](Span<ConstAnyReference> args) { return new T(args[0].get<T>()); };
 
 			// デストラクタ登録
-			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
+			m_info.destructor = [](const AnyReference& instance) { delete (&instance.get<T>()); };
 
 			// タイプ登録
 			Register();
@@ -179,7 +179,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			// デストラクタ登録
-			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
+			m_info.destructor = [](const AnyReference& instance) { delete (&instance.get<T>()); };
 
 			// タイプ登録
 			Register();
@@ -302,7 +302,7 @@ namespace ob::core::internal {
 				return Any(owner.get<T>().*address);
 			};
 			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
-				info.setter = [=](AnyReference& owner, const ConstAnyReference& value) {
+				info.setter = [=](const AnyReference& owner, const ConstAnyReference& value) {
 					(owner.get<T>().*(address)) = value.get<TField>();
 				};
 			}
@@ -336,7 +336,7 @@ namespace ob::core::internal {
 			info.getter = [=](const ConstAnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
-			info.setter = [=](AnyReference& owner,const ConstAnyReference& value) {
+			info.setter = [=](const AnyReference& owner,const ConstAnyReference& value) {
 				(owner.get<T>().*(setter))(value.get<remove_cvr_t<return_type>>());
 			};
 			return info;

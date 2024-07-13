@@ -22,9 +22,9 @@ namespace ob::core {
 
 
 	using ConstructorInvoker = Func<void* (Span<ConstAnyReference> args)>;
-	using DestructorInvoker = Func<void(AnyReference& instance)>;
-	using MethodInvoker = Func<Any(AnyReference& owner, Span<ConstAnyReference> args)>;
-	using PropertySetter = Func<void(AnyReference& owner, const ConstAnyReference& value)>;
+	using DestructorInvoker = Func<void(const AnyReference& instance)>;
+	using MethodInvoker = Func<Any(const AnyReference& owner, Span<ConstAnyReference> args)>;
+	using PropertySetter = Func<void(const AnyReference& owner, const ConstAnyReference& value)>;
 	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
 
 
@@ -77,7 +77,7 @@ namespace ob::core {
 		template<class T,class... Args>
 		UPtr<T> invoke(Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
-			ConstAnyReference rargs[] = {ConstAnyReference(args)...,ConstAnyReference()};
+			ConstAnyReference rargs[] = {args...,ConstAnyReference()};
 			return UPtr<T>(reinterpret_cast<T*>(invoker(Span<ConstAnyReference>(rargs,sizeof...(Args)))));
 		}
 
@@ -100,12 +100,12 @@ namespace ob::core {
 
 		template<class T,class TOwner>
 		T get(TOwner&& owner) const {
-			return getter(ConstAnyReference(owner)).get<T>();
+			return getter(owner).get<T>();
 		}
 
 		template<class T,class TOwner, class = std::enable_if_t<!std::is_const<std::remove_reference_t<TOwner>>::value>>
 		void set(TOwner&& owner, T&& value) const {
-			if(setter) setter(AnyReference(owner), ConstAnyReference(value));
+			if(setter) setter(owner, value);
 		}
 
 		bool					canRead() const { return !!getter; }

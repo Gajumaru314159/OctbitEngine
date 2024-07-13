@@ -84,9 +84,9 @@ namespace ob::core {
 		}
 
 		template<typename ValueType>
-		ValueType& get() {
+		ValueType& get() const {
 			if (Type::Get<ValueType>() != type()) throw std::bad_cast();
-			return static_cast<Holder<ValueType>*>(m_holder.get())->value;
+			return static_cast<Holder<ValueType>*>(const_cast<HolderBase*>(m_holder.get()))->value;
 		}
 	};
 
