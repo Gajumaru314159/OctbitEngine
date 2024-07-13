@@ -91,7 +91,7 @@ void drawComponents(engine::Entity* pEntity) {
 			ImGui::TextUnformatted(entity.getName().c_str());
 
 			for (auto& component : entity.componets()) {
-				auto cmpname = String(component->getComponentType().name());
+				auto cmpname = String(component->getComponentType().shortName());
 				if (ImGui::CollapsingHeader(cmpname.c_str())) {
 
 					ImGui::ScopedIndent indent;

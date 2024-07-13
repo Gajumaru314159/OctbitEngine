@@ -80,13 +80,13 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
 		//@―---------------------------------------------------------------------------
-		constexpr Type() : Type( Type::Get<InvalidType>().fullName() ){}
+		constexpr Type() : Type( Type::Get<InvalidType>().name() ){}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		名前からTypeを生成
 		//@―---------------------------------------------------------------------------
 		constexpr Type(StringView fullName)
-			: m_fullName(fullName)
+			: m_name(fullName)
 			, m_hash(0)
 		{
 			// FNV64
@@ -108,24 +108,38 @@ namespace ob::core {
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型名
+		//! @details	名前空間を含みます。
+		//!				未設定の場合は空文字列を返します。
+		//@―---------------------------------------------------------------------------
+		constexpr StringView name() const { return m_name; }
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		型名
 		//! @details	名前空間を含みません。
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
-		constexpr StringView name() const { 
-			if (auto index = m_fullName.rfind(':'); index != StringView::npos) {
-				return m_fullName.substr(index + 1);
+		constexpr StringView shortName() const { 
+			if (auto index = m_name.rfind(':'); index != StringView::npos) {
+				return m_name.substr(index + 1);
 			}
 			else {
-				return m_fullName;
+				return m_name;
 			}		
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型名
-		//! @details	名前空間を含みます。
+		//! @details	名前空間を含みません。
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
-		constexpr StringView fullName() const { return m_fullName; }
+		constexpr StringView nameSpace() const {
+			if (auto index = m_name.rfind(':'); index != StringView::npos) {
+				return m_name.substr(0,index - 1);
+			}
+			else {
+				return "";
+			}
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		ハッシュ値
@@ -156,7 +170,6 @@ namespace ob::core {
 		};
 
 	private:
-		StringView	m_fullName;
 		StringView	m_name;
 		u64			m_hash;
 	};

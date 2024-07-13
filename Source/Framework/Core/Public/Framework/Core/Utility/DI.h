@@ -399,7 +399,7 @@ namespace ob::core {
                 m_builders.find(type)->second->create(container);
             }
             catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.fullName(), e.message());
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.name(), e.message());
             }
         }
     }

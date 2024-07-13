@@ -71,7 +71,7 @@ namespace ob::engine {
 	Component* Entity::addComponent(Type type) {
 
 		if (32 < m_components.size()) {
-			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,type.fullName());
+			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,type.name());
 			return nullptr;
 		}
 
@@ -82,7 +82,7 @@ namespace ob::engine {
 				for (auto& depType : desc->getDependentComponentTypes()) {
 					if (findComponent(depType) == nullptr) {
 						if (addComponent(depType) == nullptr) {
-							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.fullName(), depType.fullName());
+							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.name(), depType.name());
 						}
 					}
 				}
@@ -92,7 +92,7 @@ namespace ob::engine {
 				raisePropertyChanged("Components");
 			}
 		} else {
-			LOG_WARNING("{}が生成されていません。", Type::Get<decltype(this)>().fullName());
+			LOG_WARNING("{}が生成されていません。", Type::Get<decltype(this)>().name());
 		}
 
 		return nullptr;

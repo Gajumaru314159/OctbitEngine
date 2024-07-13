@@ -116,8 +116,9 @@ TEST(TypeBuilder, Construct) {
 
 	TypeInfoManager manager;
 
+	LOG_INFO("{}", Type::Get<a::b::c::AA>().shortName());
 	LOG_INFO("{}", Type::Get<a::b::c::AA>().name());
-	LOG_INFO("{}", Type::Get<a::b::c::AA>().fullName());
+	LOG_INFO("{}", Type::Get<a::b::c::AA>().nameSpace());
 
 	if (auto info = manager.find(Type("TestBase"))) {
 		TestBase base;
@@ -155,11 +156,11 @@ TEST(TypeBuilder, Construct) {
 
 		String str;
 
-		str = Format("class {} \n", info.type.name());
+		str = Format("class {} \n", info.type.shortName());
 		if (info.bases.empty() == false) {
 			str += "    : ";
 			for (auto& base : info.bases) {
-				str += Format("public {},\n", base.name());
+				str += Format("public {},\n", base.shortName());
 			}
 			str.pop_back(2);
 			str += "\n";
@@ -168,9 +169,9 @@ TEST(TypeBuilder, Construct) {
 		str += "public:\n";
 
 		for (auto& constructor : info.constructors) {
-			str += Format("    {}(", info.type.name());
+			str += Format("    {}(", info.type.shortName());
 			for (auto& arg : constructor.arguments) {
-				str += Format("{} ", arg.type.fullName());
+				str += Format("{} ", arg.type.name());
 				str += Format("{},", arg.name);
 			}
 			if (constructor.arguments.empty() == false) {
@@ -181,16 +182,16 @@ TEST(TypeBuilder, Construct) {
 
 		str += "public:\n";
 		for (auto& [name, property] : info.properties) {
-			str += Format("    {} {};", property.type.fullName(), name);
+			str += Format("    {} {};", property.type.name(), name);
 			str += "\n";
 		}
 
 
 		str += "public:\n";
 		for (auto& [name, method] : info.methods) {
-			str += Format("    {} {}(", method.returnType.fullName(), method.name);
+			str += Format("    {} {}(", method.returnType.name(), method.name);
 			for (auto& arg : method.arguments) {
-				str += Format("{} ", arg.type.fullName());
+				str += Format("{} ", arg.type.name());
 				str += Format("{},", arg.name);
 			}
 			str.pop_back();
@@ -208,7 +209,7 @@ TEST(TypeBuilder, Construct) {
 				4
 			};
 			for (auto& arg : args) {
-				LOG_INFO("{}",arg.type().name());
+				LOG_INFO("{}",arg.type().shortName());
 			}
 			auto dc = ctor->invoke<DC>(args);
 			LOG_INFO("==");

@@ -28,7 +28,7 @@ namespace ob::core {
         //! @brief      インスタンスを取得
         //@―---------------------------------------------------------------------------
         static T& Instance()noexcept {
-            OB_ASSERT(s_instance,"{}は生成されていません。", Type::Get<T>().fullName());
+            OB_ASSERT(s_instance,"{}は生成されていません。", Type::Get<T>().name());
             return *s_instance;
         }
 
