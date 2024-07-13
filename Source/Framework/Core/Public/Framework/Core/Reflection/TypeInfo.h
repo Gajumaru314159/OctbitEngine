@@ -117,7 +117,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	struct MethodInfo : TagInfo {
 		StringView				name;
-		bool					isStatic;
+		bool					isConst;
 		Type					returnType;
 		Vector<ArgumentInfo>	arguments;
 		MethodInvoker			invoke;
@@ -149,9 +149,6 @@ namespace ob::core {
 		bool					isEnum;
 		Vector<EnumElementInfo>	enumElements;
 
-		bool					isList;
-		Optional<Type>			elementType;
-
 		template<class T>
 		bool isSuperClassOf()const {
 			return bases.count(Type::Get<T>());
@@ -168,7 +165,7 @@ namespace ob::core {
 		}
 
 		template<class T = void>
-		const PropertyInfoMap* findProperty(StringView name)const {
+		const PropertyInfo* findProperty(StringView name)const {
 			auto itr = properties.find(name);
 			if (itr == properties.end()) return nullptr;
 
@@ -186,6 +183,21 @@ namespace ob::core {
 			auto itr = methods.find(name);
 			if (itr == methods.end()) return nullptr;
 			return &itr->second;
+		}
+
+		const EnumElementInfo* findEnumElement(StringView name)const {
+			for (auto& element : enumElements) {
+				if (element.name != name)continue;
+				return &element;
+			}
+			return nullptr;
+		}
+		const EnumElementInfo* findEnumElement(s32 value)const {
+			for (auto& element : enumElements) {
+				if (element.value != value)continue;
+				return &element;
+			}
+			return nullptr;
 		}
 
 	};

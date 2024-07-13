@@ -68,6 +68,11 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		void tag(StringView key, StringView value = "");
 
+		//@―---------------------------------------------------------------------------
+		//! @brief		説明をDescriptionタグとして追加
+		//@―---------------------------------------------------------------------------
+		void desc(StringView value);
+
 	private:
 		TagInfo* m_info;
 	};
@@ -114,6 +119,10 @@ namespace ob::core::internal {
 		ClassBuilder(TypeInfo&);
 
 	protected:
+
+		StringView getArgumentName(size_t index);
+
+	protected:
 		TypeInfo& m_info;
 	};
 
@@ -126,20 +135,34 @@ namespace ob::core::internal {
 	public:
 		using T = _T;
 	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ
+		//@―---------------------------------------------------------------------------
 		EnumBuilderTemplate() 
 			: EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
 		{
+			// 基底型登録
 			m_info.bases.emplace(Type::Get<std::underlying_type_t<T>>());
+			m_info.isEnum = true;
 
+			// コンストラクタ登録
 			auto& ctor = m_info.constructors.emplace_back();
 			ctor.arguments = { {Type::Get<T>(),"value"}};
 			ctor.invoker = [](Span<ConstAnyReference> args) { return new T(args[0].get<T>()); };
 
+			// デストラクタ登録
 			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
 
+			// タイプ登録
 			Register();
 		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			タイプ登録
+		//@―---------------------------------------------------------------------------
 		void Register();
+
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -150,10 +173,21 @@ namespace ob::core::internal {
 	public:
 		using T = _T;
 	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ
+		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
+			// デストラクタ登録
 			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
+
+			// タイプ登録
 			Register();
 		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			タイプ登録
+		//@―---------------------------------------------------------------------------
 		void Register();
 
 		//@―---------------------------------------------------------------------------
@@ -165,99 +199,94 @@ namespace ob::core::internal {
 		}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief			コンストラクタ追加
-		//! @tparam Args	引数型リスト
+		//! @brief			コンストラクタを追加
 		//@―---------------------------------------------------------------------------
 		//! @{
 		TagBuilder constructor() {
+			static_assert(std::is_constructible<T>::value,"0引数のコンストラクタがありません");
 			auto& info = m_info.constructors.emplace_back();
-			info.invoker = &CreateWithoutArg;
+			info.invoker = &CreateWithoutArgs;
 			return info;
 		}
-
-#define RETURN_TYPE(...) std::enable_if_t<std::is_constructible<T, __VA_ARGS__>::value,TagBuilder>
-
-		template<class Arg>
-		auto constructor(StringView name = "arg") -> RETURN_TYPE(Arg)
+		template<class... Args,class... Names>
+		auto constructor(Names&&... argNames)
+			-> std::enable_if_t<std::is_constructible<T, Args...>::value && (sizeof...(Args)==sizeof...(Names) || sizeof...(Names) == 0), TagBuilder>
 		{
 			auto& info = m_info.constructors.emplace_back();
-			info.arguments = {
-				ArgumentInfo{Type::Get<Arg>(),name}
-			};
-			info.invoker = &Create<Arg>;
-			return info;
-		}
-		template<class Arg0, class Arg1>
-		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1") -> RETURN_TYPE(Arg0,Arg1) {
-			auto& info = m_info.constructors.emplace_back();
-			info.arguments = {
-				ArgumentInfo{Type::Get<Arg0>(),name0},
-				ArgumentInfo{Type::Get<Arg1>(),name1},
-			};
-			info.invoker = &Create<Arg0, Arg1>;
-			return info;
-		}
-		template<class Arg0, class Arg1, class Arg2>
-		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1", StringView name2 = "arg2") -> RETURN_TYPE(Arg0,Arg1,Arg2) {
-			auto& info = m_info.constructors.emplace_back();
-			info.arguments = {
-				ArgumentInfo{Type::Get<Arg0>(),name0},
-				ArgumentInfo{Type::Get<Arg1>(),name1},
-				ArgumentInfo{Type::Get<Arg2>(),name2},
-			};
-			info.invoker = &Create<Arg0, Arg1, Arg2>;
-			return info;
-		}
-		template<class Arg0, class Arg1, class Arg2, class Arg3>
-		auto constructor(StringView name0 = "arg0", StringView name1 = "arg1", StringView name2 = "arg2", StringView name3 = "arg3") -> RETURN_TYPE(Arg0,Arg1,Arg2,Arg3) {
-			auto& info = m_info.constructors.emplace_back();
-			info.arguments = {
-				ArgumentInfo{Type::Get<Arg0>(),name0},
-				ArgumentInfo{Type::Get<Arg1>(),name1},
-				ArgumentInfo{Type::Get<Arg2>(),name2},
-				ArgumentInfo{Type::Get<Arg3>(),name3},
-			};
-			info.invoker = &Create<Arg0, Arg1, Arg2, Arg3>;
+
+			// 0引数に対応するために最後尾に空要素を追加している
+			StringView names[] = { StringView(argNames)... ,"" };
+			Type types[] = { Type::Get<Args>() ...,Type() };
+
+			// 型と名前を登録
+			for (s32 i = 0; i < std::size(types) - 1; ++i) {
+				auto& arg = info.arguments.emplace_back();
+				arg.type = types[i];
+				if constexpr (sizeof...(Names) == 0)
+					arg.name = getArgumentName(i);
+				else
+					arg.name = names[i];
+			}
+
+			// invokerを登録
+			info.invoker = &Create<Args...>;
+
 			return info;
 		}
 		//! @}
 
-		//@―---------------------------------------------------------------------------
-		//! @brief			コンストラクタ追加
-		//! @tparam Args	引数型リスト
-		//@―---------------------------------------------------------------------------
-		template<class... Args>
-		auto constructor(Array<StringView, sizeof...(Args)> names) -> RETURN_TYPE(Args...) {
+		//! @cond
+		//! テンプレートメタプログラミングで関数ポインタの引数型を取得
+		template<typename U>
+		struct MethodTraits;
 
-			auto& info = m_info.constructors.emplace_back();
-
-			// 0引数に対応するために最後尾に空要素を追加している
-			Type types[] = {Type::Get<Args>() ...,Type()};
-			for (s32 i = 0; i < std::size(types)-1; ++i) {
-				auto& arg = info.arguments.emplace_back();
-				arg.type = types[i];
-				arg.name = names[i];
+		//! 関数ポインタの特殊化
+		template<typename OwnerType, typename ReturnType, typename... Args>
+		struct MethodTraits<ReturnType(OwnerType::*)(Args...)> {
+			static constexpr Array<Type,sizeof...(Args)+1> Types() {
+				return { Type::Get<Args>()... ,Type()};
 			}
+			static constexpr size_t Count() { 
+				return sizeof...(Args); 
+			}
+		};
 
-			if constexpr (sizeof...(Args) == 0)
-				info.invoker = &CreateWithoutArg;
-			else
-				info.invoker = &Create<Args...>;
-
-			return info;
-		}
-
-#undef RETURN_TYPE
-
-
+		template<typename OwnerType, typename ReturnType, typename... Args>
+		struct MethodTraits<ReturnType(OwnerType::*)(Args...)const> {
+			static constexpr Array<Type, sizeof...(Args) + 1> Types() {
+				return { Type::Get<Args>()... ,Type() };
+			}
+			static constexpr size_t Count() {
+				return sizeof...(Args);
+			}
+		};
+		//! @endcond
 
 		//@―---------------------------------------------------------------------------
-		//! @brief			関数追加
+		//! @brief			メソッド追加
 		//@―---------------------------------------------------------------------------
-		template<class TFunc, class... TArgDescs>
-		TagBuilder method(StringView name, TFunc function, TArgDescs&& ...desc) {
+		template<class TMethod,class... Names>
+		auto method(StringView name, TMethod function,Names&&... argNames) 
+			-> std::enable_if_t<MethodTraits<TMethod>::Count() == sizeof...(Names) || 0 == sizeof...(Names) , TagBuilder>
+		{
+			using return_type = typename member_function_traits<TMethod>::return_type;
+
 			auto& info = m_info.methods[name];
 			info.name = name;
+			info.returnType = Type::Get<return_type>();
+
+			StringView names[] = { StringView(argNames)... ,""};
+			auto types = MethodTraits<TMethod>::Types();
+
+			for (s32 i = 0; i < std::size(types) - 1; ++i) {
+				auto& arg = info.arguments.emplace_back();
+				arg.type = types[i];
+				if constexpr (std::size(names)-1 == 0)
+					arg.name = getArgumentName(i);
+				else
+					arg.name = names[i];
+			}
+
 			return info;
 		}
 
@@ -285,7 +314,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
-			using return_type = remove_cvr_t<member_function_traits<decltype(getter)>::return_type>;
+			using return_type = typename member_function_traits<F>::return_type;
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
@@ -296,11 +325,11 @@ namespace ob::core::internal {
 		}
 
 		//@―---------------------------------------------------------------------------
-		//! @brief			プロパティ追加(Getter)
+		//! @brief			プロパティ追加(Getter/Setter)
 		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
-			using return_type = remove_cvr_t<member_function_traits<decltype(getter)>::return_type>;
+			using return_type = typename member_function_traits<F1>::return_type;
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
@@ -308,22 +337,31 @@ namespace ob::core::internal {
 				return Any((owner.get<T>().*(getter))());
 			};
 			info.setter = [=](AnyReference& owner,const ConstAnyReference& value) {
-				(owner.get<T>().*(setter))(value.get<return_type>());
+				(owner.get<T>().*(setter))(value.get<remove_cvr_t<return_type>>());
 			};
 			return info;
 		}
 
 	private:
 
-		static void* CreateWithoutArg([[meybe_unused]] Span<ConstAnyReference>) {
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		static void* CreateWithoutArgs([[meybe_unused]] Span<ConstAnyReference>) {
 			return new T();
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
 		static void* CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
 			return new T(args[I].get<Args>()...);
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
 		template<class... Args>
 		static void* Create(Span<ConstAnyReference> args) {
 
@@ -333,11 +371,6 @@ namespace ob::core::internal {
 			}
 
 			return CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>());
-		}
-
-		template<class TField,TField T::* address>
-		static Any Getter(const ConstAnyReference& owner) {
-			return owner.get<T>().*address;
 		}
 
 	};

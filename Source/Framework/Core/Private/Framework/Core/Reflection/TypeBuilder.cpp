@@ -44,6 +44,12 @@ namespace ob::core::internal {
 		m_info->tags.emplace(key, value);
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief		説明をDescriptionタグとして追加
+	//@―---------------------------------------------------------------------------
+	void TagBuilder::desc(StringView value) {
+		tag("Description", value);
+	}
 
 	//===============================================================
 	// EnumBuilder
@@ -70,6 +76,24 @@ namespace ob::core::internal {
 		: TagBuilder(info)
 		, m_info(info)
 	{
+	}
+
+
+	StringView ClassBuilder::getArgumentName(size_t index) {
+		StringView names[] = {
+			"arg0",
+			"arg1",
+			"arg2",
+			"arg3",
+			"arg4",
+			"arg5",
+			"arg6",
+			"arg7",
+			"arg8",
+			"arg9",
+		};
+		if (std::size(names) < index) return "argX";
+		return names[index];
 	}
 
 }

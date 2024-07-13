@@ -119,7 +119,10 @@ namespace ob::core {
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
 		constexpr StringView shortName() const { 
-			if (auto index = m_name.rfind(':'); index != StringView::npos) {
+			auto limit = m_name.find('<');
+			if (limit == m_name.npos) limit = m_name.size();
+
+			if (auto index = m_name.rfind(':',limit); index != StringView::npos) {
 				return m_name.substr(index + 1);
 			}
 			else {
@@ -133,7 +136,10 @@ namespace ob::core {
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
 		constexpr StringView nameSpace() const {
-			if (auto index = m_name.rfind(':'); index != StringView::npos) {
+			auto limit = m_name.find('<');
+			if (limit == m_name.npos) limit = m_name.size();
+
+			if (auto index = m_name.rfind(':',limit); index != StringView::npos) {
 				return m_name.substr(0,index - 1);
 			}
 			else {

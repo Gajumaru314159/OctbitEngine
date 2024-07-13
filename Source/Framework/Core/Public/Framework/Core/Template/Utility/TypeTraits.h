@@ -44,4 +44,26 @@ namespace ob::core {
 		using return_type = ReturnType;
 	};
 
+	// テンプレートメタプログラミングで関数ポインタの引数型を取得
+	template<typename T>
+	struct arguments_traits;
+
+	// 関数ポインタの特殊化
+	template<typename ReturnType, typename... Args>
+	struct arguments_traits<ReturnType(*)(Args...)> {
+		using argument_types = std::tuple<Args...>;
+	};
+
+	// メンバ関数ポインタの特殊化
+	template<typename OwnerType, typename ReturnType, typename... Args>
+	struct arguments_traits<ReturnType(OwnerType::*)(Args...)> {
+		using argument_types = std::tuple<Args...>;
+	};
+
+	// constメンバ関数ポインタの特殊化
+	template<typename OwnerType, typename ReturnType, typename... Args>
+	struct arguments_traits<ReturnType(OwnerType::*)(Args...)const> {
+		using argument_types = std::tuple<Args...>;
+	};
+
 }

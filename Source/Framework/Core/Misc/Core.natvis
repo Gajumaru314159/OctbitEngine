@@ -82,7 +82,7 @@
 
 	<!--ArgumentInfo-->
 	<Type Name="ob::core::ArgumentInfo">
-		<DisplayString>{type.m_fullName,sb}    {name,sb}</DisplayString>
+		<DisplayString>{type.m_name,sb}    {name,sb}</DisplayString>
 	</Type>
 
 	<!--Any-->
