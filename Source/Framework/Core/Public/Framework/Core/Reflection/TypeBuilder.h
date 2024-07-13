@@ -272,9 +272,8 @@ namespace ob::core::internal {
 		TagBuilder property(StringView name, F getter) {
 			auto& info = m_info.properties[name];
 			info.name = name;
-			info.getter = [=](TypedValue owner) {
-				auto* pOwner = reinterpret_cast<const T*>(owner.pointer);
-				return TypedValue(&(pOwner->*(getter))());
+			info.getter = [=](const AnyReference& owner) {
+				return Any((owner.get<T>().*(getter))());
 			};
 			return info;
 		}
@@ -286,41 +285,38 @@ namespace ob::core::internal {
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
 			auto& info = m_info.properties[name];
 			info.name = name;
-			info.getter = [=](TypedValue owner) {
-				auto* pOwner = reinterpret_cast<const T*>(owner.pointer);
-				using result_type = decltype((pOwner->*(getter))());
-				if constexpr (std::is_reference<result_type>::value){
-					auto& result = (pOwner->*(getter))();
-					return TypedValue(&result);
-				}
-				else {
-					// TODO 動的確保した値の開放
-					auto result = (pOwner->*(getter))();
-					return TypedValue(new decltype(result)(result));
-				}
-				//return TypedValue(&(pOwner->*(getter))());
+			info.getter = [=](const AnyReference& owner) {
+				return Any((owner.get<T>().*(getter))());
 			};
-
-			//info.setter = [](void* owner, const void* value) {};
+			info.setter = [=](AnyReference& owner,const AnyReference& value) {
+				using return_type = decltype((owner.get<T>().*(getter))());
+				(
+					owner.get<T>().*
+					(setter)
+				)
+				(
+					value.get<return_type>()
+				);
+			};
 			return info;
 		}
 
 	private:
 
-		static TypedValue CreateWithoutArg([[meybe_unused]] Span<TypedValue>) {
+		static void* CreateWithoutArg([[meybe_unused]] Span<AnyReference>) {
 			return new T();
 		}
 
 		template<class T,class... Args,size_t ...I>
-		static TypedValue CreateImpl(Span<TypedValue>& args, std::index_sequence<I...>) {
-			return new T((*reinterpret_cast<Args*>(const_cast<void*>(args[I].pointer)))...);
+		static void* CreateImpl(Span<AnyReference> args, std::index_sequence<I...>) {
+			return new T(args[I].get<Args>()...);
 		}
 
 		template<class... Args>
-		static TypedValue Create(Span<TypedValue> args) {
+		static void* Create(Span<AnyReference> args) {
 
 			Type types[] = {Type::Get<Args>()...};
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const TypedValue& a, const Type& b) {return a.type == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
 
@@ -328,8 +324,8 @@ namespace ob::core::internal {
 		}
 
 		template<class TField,TField T::* address>
-		static TypedValue Getter(TypedValue owner) {
-			return address(reinterpret_cast<const T*>(owner.pointer));
+		static Any Getter(AnyReference owner) {
+			return owner.get<T>().*address;
 		}
 
 	};

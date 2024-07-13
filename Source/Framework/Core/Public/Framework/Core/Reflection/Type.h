@@ -81,12 +81,6 @@ namespace ob::core {
 			: m_fullName(fullName)
 			, m_hash(0)
 		{
-			if (auto index = fullName.rfind(':'); index != StringView::npos) {
-				m_name = fullName.substr(index+1);
-			} else {
-				m_name = fullName;
-			}
-
 			// FNV64
 			constexpr u64 offset_basis = 14695981039346656037u;
 			constexpr u64 fnv_prime = 1099511628211u;
@@ -109,7 +103,14 @@ namespace ob::core {
 		//! @details	名前空間を含みません。
 		//!				未設定の場合は空文字列を返します。
 		//@―---------------------------------------------------------------------------
-		constexpr StringView name() const { return m_name; }
+		constexpr StringView name() const { 
+			if (auto index = m_fullName.rfind(':'); index != StringView::npos) {
+				return m_fullName.substr(index + 1);
+			}
+			else {
+				return m_fullName;
+			}		
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型名

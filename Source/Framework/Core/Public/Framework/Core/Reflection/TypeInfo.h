@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Reflection/Any.h>
+#include <Framework/Core/Reflection/AnyReference.h>
 #include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Map.h>
 #include <Framework/Core/Template/Utility/Function.h>
@@ -20,19 +21,10 @@ namespace ob::core {
 	};
 
 
-	struct TypedValue {
-		TypedValue() = default;
-		template<class T>
-		TypedValue(T* value) : type(Type::Get<T>()), pointer(value) {}
-		Type		type;
-		const void*	pointer = nullptr;
-	};
-
-
-	using ConstructorInvoker = Func<TypedValue(Span<TypedValue> args)>;
-	using MethodInvoker = Func<TypedValue(TypedValue owner, Span<TypedValue> args)>;
-	using PropertySetter = Func<void(TypedValue owner, TypedValue value)>;
-	using PropertyGetter = Func<TypedValue(TypedValue owner)>;
+	using ConstructorInvoker = Func<void*(Span<AnyReference> args)>;
+	using MethodInvoker = Func<Any(AnyReference& owner, Span<Any> args)>;
+	using PropertySetter = Func<void(AnyReference& owner, const AnyReference& value)>;
+	using PropertyGetter = Func<Any(const AnyReference& owner)>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -78,8 +70,8 @@ namespace ob::core {
 		ConstructorInvoker		invoker;
 
 		template<class T>
-		T* invoke(Span<TypedValue> args) const {
-			return reinterpret_cast<T*>(const_cast<void*>(invoker(args).pointer));
+		UPtr<T> invoke(Span<AnyReference> args) const {
+			return reinterpret_cast<T*>(invoker(args));
 		}
 
 		template<class... Args>
@@ -98,14 +90,14 @@ namespace ob::core {
 		PropertySetter			setter;
 		PropertyGetter			getter;
 
-		template<class T>
-		T get(TypedValue owner) const {
-			return *reinterpret_cast<const T*>(getter(owner).pointer);
+		template<class T,class TOwner>
+		T get(TOwner&& owner) const {
+			return getter(AnyReference(owner)).get<T>();
 		}
 
 		template<class T,class TOwner>
 		void set(TOwner&& owner, T&& value) const {
-			setter(TypedValue(&owner), TypedValue(&value));
+			if(setter) setter(AnyReference(owner), AnyReference(value));
 		}
 
 		bool					canRead() const { return !!getter; }

@@ -42,6 +42,12 @@ public:
 	s32 getInt()const {
 		return m_val;
 	}
+	s32* getIntPtr()const {
+		return nullptr;
+	}
+	void setIntPtr(s32&)const {
+		
+	}
 
 	void func(s32 a,s32 b) {
 
@@ -67,6 +73,8 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 	//property("Message", &TestBase::msg);
 
 	property("Int", &T::getInt, &T::setInt).tag("Description", "エー");
+	//property("IntPtr", &T::getIntPtr, &T::setIntPtr).tag("Description", "エー");
+
 }
 
 
@@ -83,51 +91,66 @@ namespace a::b::c {
 
 TEST(TypeBuilder, Construct) {
 
-	std::array<int, Type::Get<a::b::c::AA>().fullName().size()> a;
-
 	Logger logger;
-	
+
 	TypeInfoManager manager;
 
-	LOG_INFO("{}",Type::Get<a::b::c::AA>().name());
-	LOG_INFO("{}",Type::Get<a::b::c::AA>().fullName());
+	LOG_INFO("{}", Type::Get<a::b::c::AA>().name());
+	LOG_INFO("{}", Type::Get<a::b::c::AA>().fullName());
 
 	if (auto info = manager.find(Type("TestBase"))) {
 		TestBase base;
 		base.setInt(333);
 
 		if (auto itr = info->properties.find("Int"); itr != info->properties.end()) {
-			auto result = itr->second.getter(&base);
-			auto re = reinterpret_cast<const s32*>(result.pointer);
-			LOG_INFO("{}",*re);
+			auto& [name, p] = *itr;
+			auto result = p.get<s32>(base);
+			LOG_INFO("結果：{}", result);
+			p.set(base, 222);
+			auto result2 = p.get<s32>(base);
+			LOG_INFO("結果：{}", result2);
+
 		}
 	}
 
-	
-	manager.visit([](const TypeInfo& info) { 
+	s32 aval = 123;
+
+	Any empty;
+	Any a(123);
+	Any b(std::move(aval));
+	Any c(aval + 1);
+
+	String abc("abc");
+	Any d = abc;
+	Any e = String("abc");
+
+
+
+	manager.visit([](const TypeInfo& info) {
 
 		// TODO 検索
 		// TODO 生成
 		// TODO デシリアライズ
 
 		String str;
-		
+
 		str = Format("class {} \n", info.type.name());
 		if (info.bases.empty() == false) {
 			str += "    : ";
 			for (auto& base : info.bases) {
-				str += Format("public * {},\n", base.name());
+				str += Format("public {},\n", base.name());
 			}
-			str.pop_back();
+			str.pop_back(2);
+			str += "\n";
 		}
-		str += " {\n";
+		str += "{\n";
 		str += "public:\n";
 
 		for (auto& constructor : info.constructors) {
 			str += Format("    {}(", info.type.name());
 			for (auto& arg : constructor.arguments) {
 				str += Format("{} ", arg.type.fullName());
-				str += Format("{},",arg.name);
+				str += Format("{},", arg.name);
 			}
 			if (constructor.arguments.empty() == false) {
 				str.pop_back();
@@ -137,14 +160,14 @@ TEST(TypeBuilder, Construct) {
 
 		str += "public:\n";
 		for (auto& [name, property] : info.properties) {
-			str += Format("    {} {};",property.type.fullName(),name);
+			str += Format("    {} {};", property.type.fullName(), name);
 			str += "\n";
 		}
 
 
 		str += "public:\n";
-		for (auto& [name,method] : info.methods) {
-			str += Format("    {} {}(",method.returnType.fullName(),method.name);
+		for (auto& [name, method] : info.methods) {
+			str += Format("    {} {}(", method.returnType.fullName(), method.name);
 			for (auto& arg : method.arguments) {
 				str += Format("{} ", arg.type.fullName());
 				str += Format("{},", arg.name);
@@ -154,8 +177,10 @@ TEST(TypeBuilder, Construct) {
 		}
 		str += "};";
 
-		LOG_INFO("\n{}",str);
-	});
+		LOG_INFO("\n{}", str);
+		});
+
+
 
 	class Component {
 	public:
