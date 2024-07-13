@@ -6,12 +6,34 @@
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Template/Utility/Memory.h>
+#include <Framework/Core/Template/Utility/SequenceTraits.h>
 
 namespace ob::core {
 	
 	class Any;
 
 	class ConstAnyReference {
+	public:
+		class const_iterator_impl_interface {
+		public:
+			const_iterator_impl_interface() = default;
+			virtual ~const_iterator_impl_interface() = default;
+			virtual ConstAnyReference ref() { return {}; }
+			virtual void increment() {}
+			virtual bool equals(const const_iterator_impl_interface* other)const { return true; }
+		};
+
+		class const_iterator {
+		public:
+			const_iterator() { m_impl = std::make_unique<const_iterator_impl_interface>(); }
+			const_iterator(UPtr<const_iterator_impl_interface> impl) { m_impl = std::move(impl); }
+			ConstAnyReference operator*() { return m_impl->ref(); }
+			const_iterator& operator++() { m_impl->increment(); return *this; }
+			bool operator!=(const const_iterator& v) { return !m_impl->equals(v.m_impl.get()); }
+		private:
+			UPtr<const_iterator_impl_interface> m_impl;
+		};
+
 	public:
 		ConstAnyReference() {}
 
@@ -42,19 +64,70 @@ namespace ob::core {
 			return static_cast<ReadOnlyHolder<ValueType>*>(m_holder.get())->value;
 		}
 
+
+
+		bool isSequence()const {
+			return m_holder ? m_holder->isSequence() : false;
+		}
+
+		const_iterator begin()const {
+			return m_holder ? m_holder->begin() : const_iterator();
+		}
+
+		const_iterator end()const {
+			return m_holder ? m_holder->end() : const_iterator();
+		}
+
 	protected:
 
 		class HolderBase {
 		public:
 			virtual ~HolderBase() {}
 			virtual Type type() const = 0;
+
+			virtual bool isSequence()const = 0;
+			virtual const_iterator begin()const = 0;
+			virtual const_iterator end()const = 0;
 		};
 
 		template<typename ValueType>
 		class ReadOnlyHolder : public HolderBase {
 		public:
+			class const_iterator_impl : public const_iterator_impl_interface {
+			public:
+				using const_iterator = typename ValueType::const_iterator;
+			public:
+				const_iterator_impl(const_iterator itr) : m_itr(itr) { }
+				ConstAnyReference ref() override { return *m_itr; }
+				void increment() override { ++m_itr; }
+				bool equals(const const_iterator_impl_interface* other)const override {
+					return static_cast<const const_iterator_impl*>(other)->m_itr == m_itr;
+				}
+			private:
+				const_iterator m_itr;
+			};
+		public:
 			ReadOnlyHolder(const ValueType& value) : value(value) {}
 			Type type() const override { return Type::Get<ValueType>(); }
+
+			bool isSequence()const {
+				return is_sequence<ValueType>::value;
+			}
+
+			const_iterator begin()const {
+				if constexpr (is_sequence<ValueType>::value)
+					return std::make_unique<const_iterator_impl>(value.begin());
+				else
+					return {};
+			}
+
+			const_iterator end()const {
+				if constexpr (is_sequence<ValueType>::value)
+					return std::make_unique<const_iterator_impl>(value.end());
+				else
+					return {};
+			}
+
 			const ValueType& value;
 		};
 
@@ -69,6 +142,10 @@ namespace ob::core {
 	protected:
 		SPtr<HolderBase> m_holder;
 	};
+
+
+
+
 
 	class AnyReference : public ConstAnyReference {
 	public:
