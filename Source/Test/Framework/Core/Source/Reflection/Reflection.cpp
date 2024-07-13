@@ -5,119 +5,168 @@
 //***********************************************************
 #include <Framework/Core/Reflection/TypeBuilder.h>
 #include <Framework/Core/Reflection/TypeRegister.h>
+#include <Framework/Core/Reflection/TypeInfoPrinter.h>
+#include <nlohmann/json.hpp>
+
 using namespace ob;
 
-
-enum class EnumTest {
-	A,
-	B,
-	C,
+enum class FruitType : u32 {
+	Apple,
+	Melon,
+	Lemon,
 };
 
-OB_DEFINE_ENUM_INFO(EnumTest) {
-	tag("Description", "説明");
-	element("A", T::A).tag("Description", "エー");
-	element("B", T::B).tag("Description", "ビー");
-	element("C", T::C).tag("Description", "シー");
-}
-
-class Base {
-
+class Food {
+public:
+	virtual ~Food() = default;
 };
 
-class TestBase : public Base {
-public:
-	TestBase() {
-
-	}
-	TestBase(f32 val) {
-		m_val = val;
-	}
-	TestBase(s32 val, EnumTest val2) {
-		msg = Format("{}/{}", val, enum_cast(val2));
-	}
-	void setInt(s32 val) {
-		m_val = val;
-	}
-	s32 getInt()const {
-		return m_val;
-	}
-	s32* getIntPtr()const {
-		return nullptr;
-	}
-	void setIntPtr(s32&)const {
-
-	}
-
-	void func(s32 a, s32 b) {
-
-	}
-public:
-	String msg;
-	const String msg2 = "b";
-	s32 m_val;
+struct Nutrients {
+	f32 calorie;
+	f32 fat;
+	f32 sugar;
 };
 
-class DC {
+class Fruit : public Food {
 public:
-	DC() {
-		LOG_INFO("生成");
-		m_value = 0;
+	Fruit() : Fruit(FruitType::Apple, 0, 0) {
 	}
-	DC(s32 a) {
-		LOG_INFO("生成");
-		m_value = a;
+	Fruit(FruitType type, s32 price, f32 weight) {
+		m_type = type;
+		m_price = price;
+		m_weight = weight;
+
+		m_nutrients.calorie = 64;
+		m_nutrients.fat = 0;
+		m_nutrients.sugar = 100;
 	}
-	DC(s32 a, s32 b) {
-		LOG_INFO("生成");
-		m_value = a * b;
-	}
-	~DC() {
+
+	~Fruit() {
 		LOG_INFO("破棄");
 	}
+
+	Vector<s32> getPriceHistory()const { return { 0,1,2,3,4 }; }
+
+	FruitType getType()const { return m_type; }
+
+	void setPrice(s32 price) { m_price = price; }
+	auto getPrice()const { return m_price; }
+
+
+	const Nutrients& getNutrients() const { return m_nutrients; }
+
+	void print(bool console, bool file)const {
+		// プリント処理
+	}
+
+	String toString()const {
+		return Format("{}:{}円", enum_cast(m_type), m_price);
+	}
 private:
-	s32 m_value;
+	Nutrients m_nutrients;
+	FruitType m_type;
+	s32 m_price;
+public:
+	f32 m_weight;
 };
 
-
-OB_DEFINE_CLASS_INFO(Base) {
-	tag("Description", "ベース");
-	constructor();
+OB_DEFINE_ENUM_INFO(FruitType) {
+	tag("Description", "フルーツの種類");
+	element("Apple", T::Apple).desc("リンゴ");
+	element("Melon", T::Melon).desc("メロン");
+	element("Lemon", T::Lemon).desc("レモン");
 }
 
-OB_DEFINE_CLASS_INFO(TestBase) {
-	tag("Description", "説明");
-	base<Base>();
-	constructor();
-	constructor<f32>();
-	constructor<s32, EnumTest>("count", "type");
-
-	field("Message", &TestBase::msg);
-	field("Message2", &TestBase::msg2);
-
-	property("Int", &T::getInt, &T::setInt).tag("Description", "エー");
-	property("ReadOnlyInt", &T::getInt).tag("Description", "エー");
-	//property("IntPtr", &T::getIntPtr, &T::setIntPtr).tag("Description", "エー");
+OB_DEFINE_CLASS_INFO(Nutrients) {
+	tag("Description", "栄養素");
+	field("Calorie", &T::calorie);
+	field("Fat", &T::fat);
+	field("Sugar", &T::sugar);
 }
 
-
-OB_DEFINE_CLASS_INFO(DC) {
-	tag("Description", "ベース");
-	constructor<s32 >();
-	constructor<s32,s32>();
+OB_DEFINE_CLASS_INFO(Food) {
+	tag("Description", "食べ物");
+}
+OB_DEFINE_CLASS_INFO(Fruit) {
+	tag("Description", "Fruitフルーツ");
+	base<Food>();
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<FruitType, s32, f32>("type", "price", "weight").desc("プロパティを指定して生成");
+	method("print", &T::print, "console", "file");
+	method("toString", &T::toString);
+	property("PriceHistory", &T::getPriceHistory);
+	property("Nutrients", &T::getNutrients);
+	property("Type", &T::getType);
+	property("Price", &T::getPrice, &T::setPrice);
+	field("Weight", &T::m_weight);
 }
 
+OB_REGISTER_RTTI(Nutrients);
+OB_REGISTER_RTTI(FruitType);
+OB_REGISTER_RTTI(Food);
+OB_REGISTER_RTTI(Fruit);
 
 
-OB_REGISTER_RTTI(EnumTest);
-OB_REGISTER_RTTI(TestBase);
-OB_REGISTER_RTTI(Base);
-OB_REGISTER_RTTI(DC);
+nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& manager) {
+	nlohmann::json obj;
+	auto& type = owner.type();
 
-namespace a::b::c {
-	class AA {
+	if (false);
+	else if (type.is<s32>()) obj = owner.get<s32>();
+	else if (type.is<f32>()) obj = owner.get<f32>();
+	else if (owner.isSequence()) {
+		for (auto element : owner) {
+			obj.emplace_back(Serealize(element,manager));
+		}
+	} else if (auto info = manager.find(type)) {
+		if (info->isEnum) {
+			if (info->enumValueGetter) {
+				auto value = info->enumValueGetter(owner);
+				if (auto enumInfo = info->findEnumElement(value)) {
+					obj = enumInfo->name;
+				}
+			}
+		}
+		else {
+			obj["Type"] = type.name();
+			auto& properties = obj["Properties"];
+			for (auto& [name, p] : info->properties) {
+				if (!p.canRead())continue;
+				properties[name] = Serealize(p.getter(owner).reference(), manager);
+			}
+		}
+	}
 
-	};
+	return obj;
+}
+
+Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
+	auto type = obj["Type"].operator std::string();
+	if (auto info = manager.find(type)) {
+
+		if (auto ctor = info->findConstructor()) {
+			auto instance = ctor->invoker({});
+
+			auto& properties = obj["Properties"];
+			for (auto& [name,p] : properties.items()) {
+
+				if (auto pInfo = info->findProperty(name)) {
+					if (pInfo->canWrite()) {
+
+						Any pany;
+
+						pInfo->setter(instance, pany.reference());
+					}
+				}
+
+
+			}
+
+			info->destructor(instance);
+		}
+
+	}
+	return {};
 }
 
 TEST(TypeBuilder, Construct) {
@@ -125,106 +174,32 @@ TEST(TypeBuilder, Construct) {
 	Logger logger;
 	TypeInfoManager manager;
 
-	manager.visit([](const TypeInfo& info) {
-
-		// TODO デシリアライズ
-
-		String str;
-
-		str = Format("class {} \n", info.type.shortName());
-		if (info.bases.empty() == false) {
-			str += "    : ";
-			for (auto& base : info.bases) {
-				str += Format("public {},\n", base.shortName());
-			}
-			str.pop_back(2);
-			str += "\n";
-		}
-		str += "{\n";
-		str += "public:\n";
-
-		for (auto& constructor : info.constructors) {
-			str += Format("    {}(", info.type.shortName());
-			for (auto& arg : constructor.arguments) {
-				str += Format("{} ", arg.type.name());
-				str += Format("{},", arg.name);
-			}
-			if (constructor.arguments.empty() == false) {
-				str.pop_back();
-			}
-			str += ");\n";
-		}
-
-		str += "public:\n";
-		for (auto& [name, property] : info.properties) {
-			str += Format("    {} {};", property.type.name(), name);
-			str += "\n";
-		}
-
-
-		str += "public:\n";
-		for (auto& [name, method] : info.methods) {
-			str += Format("    {} {}(", method.returnType.name(), method.name);
-			for (auto& arg : method.arguments) {
-				str += Format("{} ", arg.type.name());
-				str += Format("{},", arg.name);
-			}
-			str.pop_back();
-			str += ");\n";
-		}
-		str += "};";
-
-		LOG_INFO("\n{}", str);
+	manager.visit(
+		[](const TypeInfo& info) {
+			LOG_INFO("\n{}", PrintTypeInfo(info));
 		}
 	);
 
-	if (auto info = manager.find("DC")) {
-		if (auto ctor = info->findConstructor<>()) {
-			auto dc = ctor->invoke<DC>();
-			LOG_INFO("==");
-		}
-		if (auto ctor = info->findConstructor<s32>()) {
-			auto dc = ctor->invoke<DC>(3);
-			LOG_INFO("==");
-		}
-		if (auto ctor = info->findConstructor<s32, s32>()) {
-			auto dc = ctor->invoke<DC>(3, 4);
-			LOG_INFO("==");
-		}
+
+	Fruit fruit;
+
+
+	auto serealize = [](Type type) {
+
+	};
+
+
+	if (auto info = manager.find(Type::Get(fruit))) {
+
+		nlohmann::json clazz = Serealize(fruit,manager);
+
+		LOG_INFO("\n{}",clazz.dump(4));
 	}
 
 
+	nlohmann::json obj;
+	obj["Type"] = "Fruit";
 
-
-	TestBase test(11);
-	test.msg = "a";
-
-	const auto& ctest = test;
-
-	if (auto info = manager.find(Type::Get(test))) {
-		for (auto& [name, p] : info->properties) {
-
-			if (p.type.is<s32>()) {
-				auto value = p.get<s32>(ctest);
-				// ImGui::InputInt(name,&value);
-				p.set(test, value * value);
-			}
-			if (p.type.is<f32>()) {
-				auto value = p.get<f32>(ctest);
-
-				// valueは内部に参照ポインタかコピーインスタンスを持つ
-
-				// ImGui::InputInt(name,&value);
-				p.set(test, value);
-			}
-			if (p.type.is<String>()) {
-				auto value = p.get<String>(ctest);
-				p.set(test, value + value);
-			}
-		}
-	}
-
-	LOG_INFO("{}", test.msg);
-	LOG_INFO("{}", test.msg2);
+	//Deserealize(obj, manager);
 
 }

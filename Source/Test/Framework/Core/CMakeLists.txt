@@ -18,7 +18,7 @@ SET_PCH("PCH/stdafx.h")
 target_compile_definitions(${PROJECT_NAME} PUBLIC CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
 
 # インクルードディレクトリ設定
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Source")
+set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Source" "${OCTBIT_THIRD_PARTY_PATH}/nlohmann")
 target_include_directories(${PROJECT_NAME} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
