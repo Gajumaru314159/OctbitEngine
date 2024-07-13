@@ -28,4 +28,20 @@ namespace ob::core {
 	> : std::true_type {};
 
 
+	// メンバ関数ポインタの戻り値の型を取得するためのテンプレート
+	template<typename T>
+	struct member_function_traits;
+
+	// 特化：メンバ関数ポインタの場合
+	template<typename ReturnType, typename ClassType, typename... Args>
+	struct member_function_traits<ReturnType(ClassType::*)(Args...)> {
+		using return_type = ReturnType;
+	};
+
+	// 特化：constメンバ関数ポインタの場合
+	template<typename ReturnType, typename ClassType, typename... Args>
+	struct member_function_traits<ReturnType(ClassType::*)(Args...) const> {
+		using return_type = ReturnType;
+	};
+
 }

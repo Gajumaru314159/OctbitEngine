@@ -21,10 +21,11 @@ namespace ob::core {
 	};
 
 
-	using ConstructorInvoker = Func<void*(Span<AnyReference> args)>;
-	using MethodInvoker = Func<Any(AnyReference& owner, Span<Any> args)>;
-	using PropertySetter = Func<void(AnyReference& owner, const AnyReference& value)>;
-	using PropertyGetter = Func<Any(const AnyReference& owner)>;
+	using ConstructorInvoker = Func<void* (Span<ConstAnyReference> args)>;
+	using DestructorInvoker = Func<void(AnyReference& instance)>;
+	using MethodInvoker = Func<Any(AnyReference& owner, Span<ConstAnyReference> args)>;
+	using PropertySetter = Func<void(AnyReference& owner, const ConstAnyReference& value)>;
+	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -70,8 +71,8 @@ namespace ob::core {
 		ConstructorInvoker		invoker;
 
 		template<class T>
-		UPtr<T> invoke(Span<AnyReference> args) const {
-			return reinterpret_cast<T*>(invoker(args));
+		UPtr<T> invoke(Span<ConstAnyReference> args) const {
+			return UPtr<T>(reinterpret_cast<T*>(invoker(args)));
 		}
 
 		template<class... Args>
@@ -92,12 +93,12 @@ namespace ob::core {
 
 		template<class T,class TOwner>
 		T get(TOwner&& owner) const {
-			return getter(AnyReference(owner)).get<T>();
+			return getter(ConstAnyReference(owner)).get<T>();
 		}
 
-		template<class T,class TOwner>
+		template<class T,class TOwner, class = std::enable_if_t<!std::is_const<std::remove_reference_t<TOwner>>::value>>
 		void set(TOwner&& owner, T&& value) const {
-			if(setter) setter(AnyReference(owner), AnyReference(value));
+			if(setter) setter(AnyReference(owner), ConstAnyReference(value));
 		}
 
 		bool					canRead() const { return !!getter; }
@@ -133,6 +134,7 @@ namespace ob::core {
 		HashSet<Type>			bases;
 
 		Vector<ConstructorInfo>	constructors;
+		DestructorInvoker		destructor;
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;
@@ -142,6 +144,43 @@ namespace ob::core {
 
 		bool					isList;
 		Optional<Type>			elementType;
+
+		template<class T>
+		bool isSuperClassOf()const {
+			return bases.count(Type::Get<T>());
+		}
+
+		template<class... Args>
+		const ConstructorInfo* findConstructor()const {
+			for (auto& constructor : constructors) {
+				if (constructor.match<Args...>()) {
+					return &constructor;
+				}
+			}
+			return nullptr;
+		}
+
+		template<class T = void>
+		const PropertyInfoMap* findProperty(StringView name)const {
+			auto itr = properties.find(name);
+			if (itr == properties.end()) return nullptr;
+
+			if constexpr (std::is_same<T, void>::value) {
+				return &itr->second;
+			} else {
+				if (itr->second.type.is<T>()) {
+					return &itr->second;
+				}
+			}
+			return nullptr;
+		}
+
+		const MethodInfo* findMethod(StringView name)const {
+			auto itr = methods.find(name);
+			if (itr == methods.end()) return nullptr;
+			return &itr->second;
+		}
+
 	};
 
 }

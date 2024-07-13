@@ -90,12 +90,14 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<typename E>
 		TagBuilder element(StringView name, E value) {
-			return elementImpl(name, enum_cast(value));
+			auto& element = m_info.enumElements.emplace_back();
+			element.name = name;
+			element.index = m_info.enumElements.size() - 1;
+			element.value = enum_cast(value);
+			return element;
 		}
 
-	private:
-		TagBuilder elementImpl(StringView name, s64 value);
-	private:
+	protected:
 		TypeInfo& m_info;
 	};
 
@@ -111,14 +113,6 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		ClassBuilder(TypeInfo&);
 
-
-	protected:
-
-		void baseImpl(Type);
-		void constructorImpl();
-		TagBuilder addPropertyImpl() {}
-		TagBuilder methodImpl(StringView name);
-
 	protected:
 		TypeInfo& m_info;
 	};
@@ -132,7 +126,17 @@ namespace ob::core::internal {
 	public:
 		using T = _T;
 	public:
-		EnumBuilderTemplate() : EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
+		EnumBuilderTemplate() 
+			: EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
+		{
+			m_info.bases.emplace(Type::Get<std::underlying_type_t<T>>());
+
+			auto& ctor = m_info.constructors.emplace_back();
+			ctor.arguments = { {Type::Get<T>(),"value"}};
+			ctor.invoker = [](Span<ConstAnyReference> args) { return new T(args[0].get<T>()); };
+
+			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
+
 			Register();
 		}
 		void Register();
@@ -147,6 +151,7 @@ namespace ob::core::internal {
 		using T = _T;
 	public:
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
+			m_info.destructor = [](AnyReference& instance) { delete (&instance.get<T>()); };
 			Register();
 		}
 		void Register();
@@ -155,7 +160,9 @@ namespace ob::core::internal {
 		//! @brief			基底クラスを追加
 		//@―---------------------------------------------------------------------------
 		template<class TBase, class = std::enable_if_t<std::is_base_of<TBase, T>::value>>
-		void base() { baseImpl(::ob::Type::Get<TBase>()); }
+		void base() {
+			m_info.bases.emplace(::ob::Type::Get<TBase>());
+		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ追加
@@ -261,7 +268,14 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.name = name;
 			info.type = Type::Get<TField>();
-			info.getter = &Getter<TField,address>;
+			info.getter = [=](const ConstAnyReference& owner) {
+				return Any(owner.get<T>().*address);
+			};
+			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
+				info.setter = [=](AnyReference& owner, const ConstAnyReference& value) {
+					(owner.get<T>().*(address)) = value.get<TField>();
+				};
+			}
 			return info;
 		}
 
@@ -270,9 +284,11 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
+			using return_type = remove_cvr_t<member_function_traits<decltype(getter)>::return_type>;
 			auto& info = m_info.properties[name];
+			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const AnyReference& owner) {
+			info.getter = [=](const ConstAnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
 			return info;
@@ -283,40 +299,35 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
+			using return_type = remove_cvr_t<member_function_traits<decltype(getter)>::return_type>;
 			auto& info = m_info.properties[name];
+			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const AnyReference& owner) {
+			info.getter = [=](const ConstAnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
-			info.setter = [=](AnyReference& owner,const AnyReference& value) {
-				using return_type = decltype((owner.get<T>().*(getter))());
-				(
-					owner.get<T>().*
-					(setter)
-				)
-				(
-					value.get<return_type>()
-				);
+			info.setter = [=](AnyReference& owner,const ConstAnyReference& value) {
+				(owner.get<T>().*(setter))(value.get<return_type>());
 			};
 			return info;
 		}
 
 	private:
 
-		static void* CreateWithoutArg([[meybe_unused]] Span<AnyReference>) {
+		static void* CreateWithoutArg([[meybe_unused]] Span<ConstAnyReference>) {
 			return new T();
 		}
 
 		template<class T,class... Args,size_t ...I>
-		static void* CreateImpl(Span<AnyReference> args, std::index_sequence<I...>) {
+		static void* CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
 			return new T(args[I].get<Args>()...);
 		}
 
 		template<class... Args>
-		static void* Create(Span<AnyReference> args) {
+		static void* Create(Span<ConstAnyReference> args) {
 
 			Type types[] = {Type::Get<Args>()...};
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const ConstAnyReference& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
 
@@ -324,7 +335,7 @@ namespace ob::core::internal {
 		}
 
 		template<class TField,TField T::* address>
-		static Any Getter(AnyReference owner) {
+		static Any Getter(const ConstAnyReference& owner) {
 			return owner.get<T>().*address;
 		}
 

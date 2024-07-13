@@ -27,6 +27,9 @@ namespace ob::core {
 			}
 			return nullptr;
 		}
+		const TypeInfo* find(StringView type)const {
+			return find(Type(type));
+		}
 
 
 		TypeInfo& registerInfo(Type type) {

@@ -25,18 +25,18 @@ class Base {
 
 };
 
-class TestBase : public Base{
+class TestBase : public Base {
 public:
 	TestBase() {
 
 	}
 	TestBase(f32 val) {
-
+		m_val = val;
 	}
-	TestBase(s32 val,EnumTest val2) {
-		msg = Format("{}/{}",val,enum_cast(val2));
+	TestBase(s32 val, EnumTest val2) {
+		msg = Format("{}/{}", val, enum_cast(val2));
 	}
-	void setInt(s32 val){
+	void setInt(s32 val) {
 		m_val = val;
 	}
 	s32 getInt()const {
@@ -46,15 +46,29 @@ public:
 		return nullptr;
 	}
 	void setIntPtr(s32&)const {
-		
+
 	}
 
-	void func(s32 a,s32 b) {
+	void func(s32 a, s32 b) {
 
 	}
 public:
 	String msg;
+	const String msg2 = "b";
 	s32 m_val;
+};
+
+class DC {
+public:
+	DC(s32 a, s32 b) {
+		LOG_INFO("生成");
+		m_value = a * b;
+	}
+	~DC() {
+		LOG_INFO("破棄");
+	}
+private:
+	s32 m_value;
 };
 
 
@@ -68,13 +82,19 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 	base<Base>();
 	constructor();
 	constructor<f32>();
-	constructor<s32,EnumTest>("count","type");
+	constructor<s32, EnumTest>("count", "type");
 
-	//property("Message", &TestBase::msg);
+	property("Message", &TestBase::msg);
+	property("Message2", &TestBase::msg2);
 
 	property("Int", &T::getInt, &T::setInt).tag("Description", "エー");
 	//property("IntPtr", &T::getIntPtr, &T::setIntPtr).tag("Description", "エー");
+}
 
+
+OB_DEFINE_CLASS_INFO(DC) {
+	tag("Description", "ベース");
+	constructor<s32,s32>();
 }
 
 
@@ -82,6 +102,7 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 OB_REGISTER_RTTI(EnumTest);
 OB_REGISTER_RTTI(TestBase);
 OB_REGISTER_RTTI(Base);
+OB_REGISTER_RTTI(DC);
 
 namespace a::b::c {
 	class AA {
@@ -180,30 +201,52 @@ TEST(TypeBuilder, Construct) {
 		LOG_INFO("\n{}", str);
 		});
 
+	if (auto info = manager.find("DC")) {
+		if (auto ctor = info->findConstructor<s32, s32>()) {
+			ConstAnyReference args[]{
+				3,
+				4
+			};
+			for (auto& arg : args) {
+				LOG_INFO("{}",arg.type().name());
+			}
+			auto dc = ctor->invoke<DC>(args);
+			LOG_INFO("==");
+		}
+	}
 
 
-	class Component {
-	public:
-		Type getType() { return Type::Get<s32>(); }
-	} component;
 
-	if (auto info = manager.find(component.getType())) {
+
+	TestBase test(11);
+	test.msg = "a";
+
+	const auto& ctest = test;
+
+	if (auto info = manager.find(Type::Get(test))) {
 		for (auto& [name, p] : info->properties) {
 
 			if (p.type.is<s32>()) {
-				auto value = p.get<s32>(&component);
+				auto value = p.get<s32>(ctest);
 				// ImGui::InputInt(name,&value);
-				p.set(component, value);
+				p.set(test, value * value);
 			}
 			if (p.type.is<f32>()) {
-				auto value = p.get<f32>(&component);
+				auto value = p.get<f32>(ctest);
 
 				// valueは内部に参照ポインタかコピーインスタンスを持つ
 
 				// ImGui::InputInt(name,&value);
-				p.set(component, value);
+				p.set(test, value);
+			}
+			if (p.type.is<String>()) {
+				auto value = p.get<String>(ctest);
+				p.set(test, value + value);
 			}
 		}
 	}
+
+	LOG_INFO("{}", test.msg);
+	LOG_INFO("{}", test.msg2);
 
 }

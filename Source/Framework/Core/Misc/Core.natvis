@@ -65,7 +65,7 @@
 
 	<!--Type-->
 	<Type Name="ob::core::Type">
-		<DisplayString>{m_name.m_view,sb}</DisplayString>
+		<DisplayString>{m_fullName.m_view,sb}</DisplayString>
 	</Type>
 
 
@@ -94,14 +94,24 @@
 			<Item Name="value" Condition="m_holder._Mypair._Myval2!=nullptr">*m_holder._Mypair._Myval2</Item>
 		</Expand>
 	</Type>
-	
-	<!--AnyRefelence-->
-	<Type Name="ob::core::AnyRefelence">
-		<DisplayString Condition="m_holder._Mypair._Myval2==nullptr">Empty</DisplayString>
-		<DisplayString>{*m_holder._Mypair._Myval2}</DisplayString>
+
+	<!--ConstAnyReference-->
+	<Type Name="ob::core::ConstAnyReference">
+		<DisplayString Condition="m_holder._Ptr==nullptr">Empty</DisplayString>
+		<DisplayString>{*m_holder._Ptr}</DisplayString>
 
 		<Expand>
-			<Item Name="value" Condition="m_holder._Mypair._Myval2!=nullptr">*m_holder._Mypair._Myval2</Item>
+			<Item Name="value" Condition="m_holder._Ptr!=nullptr">*m_holder._Ptr</Item>
+		</Expand>
+	</Type>
+
+	<!--AnyReference-->
+	<Type Name="ob::core::AnyReference">
+		<DisplayString Condition="m_holder._Ptr==nullptr">Empty</DisplayString>
+		<DisplayString>{*m_holder._Ptr}</DisplayString>
+
+		<Expand>
+			<Item Name="value" Condition="m_holder._Ptr!=nullptr">*m_holder._Ptr</Item>
 		</Expand>
 	</Type>
 

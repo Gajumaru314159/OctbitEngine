@@ -58,18 +58,6 @@ namespace ob::core::internal {
 	{
 	}
 
-	//@―---------------------------------------------------------------------------
-	//! @brief		要素追加
-	//! @details	追加した順番にインデックスが割り振られます。インデックスは0ベースです。
-	//@―---------------------------------------------------------------------------
-	TagBuilder EnumBuilder::elementImpl(StringView name, s64 value){
-		auto& element = m_info.enumElements.emplace_back();
-		element.name = name;
-		element.index = m_info.enumElements.size() - 1;
-		element.value = value;
-		return element;
-	};
-
 
 	//===============================================================
 	// ClassBuilder
@@ -83,13 +71,5 @@ namespace ob::core::internal {
 		, m_info(info)
 	{
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief		タグ追加
-	//@―---------------------------------------------------------------------------
-	void ClassBuilder::baseImpl(Type type) {
-		m_info.bases.emplace(type);
-	}
-
 
 }

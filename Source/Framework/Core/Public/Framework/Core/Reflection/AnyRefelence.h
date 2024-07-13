@@ -14,11 +14,11 @@ namespace ob::core {
 		ConstAnyReference() {}
 
 		template<typename ValueType>
-		ConstAnyReference(const ValueType& value) : m_holder(std::make_shared<ReadOnlyHolder<ValueType>>(value)) {}
+		ConstAnyReference(const ValueType& value) : m_holder(new ReadOnlyHolder<ValueType>(value)) {}
 
 		template<typename ValueType>
 		ConstAnyReference& operator=(const ValueType& value) {
-			m_holder = std::make_shared<ReadOnlyHolder<ValueType>>(value);
+			m_holder = new ReadOnlyHolder<ValueType>(value);
 			return *this;
 		}
 
@@ -42,10 +42,13 @@ namespace ob::core {
 
 	protected:
 
+		ConstAnyReference(SPtr<HolderBase>&& holder) : m_holder(holder) {}
+
 		class HolderBase {
 		public:
 			virtual ~HolderBase() {}
 			virtual Type type() const = 0;
+			virtual bool isConst() const = 0;
 		};
 
 		template<typename ValueType>
@@ -53,6 +56,7 @@ namespace ob::core {
 		public:
 			ReadOnlyHolder(const ValueType& value) : value(value) {}
 			Type type() const override { return Type::Get<ValueType>(); }
+			bool isConst() const override { return true; }
 			const ValueType& value;
 		};
 
@@ -60,26 +64,33 @@ namespace ob::core {
 		class Holder : public ReadOnlyHolder<ValueType> {
 		public:
 			Holder(ValueType& value) : ReadOnlyHolder(value), value(value) {}
+			bool isConst() const override { return false; }
 			ValueType& value;
 		};
 	protected:
-		ConstAnyReference(SPtr<HolderBase>&& holder) : m_holder(holder) {}
-	protected:
 		SPtr<HolderBase> m_holder;
 	};
+
 
 	class AnyReference : public ConstAnyReference {
 	public:
 		AnyReference() {}
 
-		template<typename ValueType,class = std::enable_if_t<!std::is_const<std::remove_reference_t<ValueType>>::value>>
-		AnyReference(ValueType& value) {
-			m_holder = std::make_shared<Holder<ValueType>>(value);
+		template<typename ValueType>
+		AnyReference(ValueType& value) : ConstAnyReference(new Holder<ValueType>(value)) {}
+
+		template<typename ValueType>
+		AnyReference(const ValueType& value) : ConstAnyReference(new ReadOnlyHolder<ValueType>(value)) {}
+
+		template<typename ValueType>
+		AnyReference& operator=(ValueType& value) {
+			m_holder = new Holder<ValueType>(value);
+			return *this;
 		}
 
-		template<typename ValueType, class = std::enable_if_t<!std::is_const<std::remove_reference_t<ValueType>>::value>>
-		AnyReference& operator=(ValueType& value) {
-			m_holder = std::make_shared<Holder<ValueType>>(value);
+		template<typename ValueType>
+		AnyReference& operator=(const ValueType& value) {
+			m_holder = new ReadOnlyHolder<ValueType>(value);
 			return *this;
 		}
 
@@ -89,5 +100,7 @@ namespace ob::core {
 			return static_cast<Holder<ValueType>*>(m_holder.get())->value;
 		}
 	};
+
+
 
 }
