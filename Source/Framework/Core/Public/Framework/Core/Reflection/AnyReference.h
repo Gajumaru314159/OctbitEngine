@@ -8,15 +8,17 @@
 #include <Framework/Core/Template/Utility/Memory.h>
 
 namespace ob::core {
+	
+	class Any;
 
 	class ConstAnyReference {
 	public:
 		ConstAnyReference() {}
 
-		template<typename ValueType>
+		template<typename ValueType,class = std::enable_if_t<!std::is_same<ValueType,Any>::value>>
 		ConstAnyReference(const ValueType& value) : m_holder(std::make_shared<ReadOnlyHolder<ValueType>>(value)) {}
 
-		template<typename ValueType>
+		template<typename ValueType, class = std::enable_if_t<!std::is_same<ValueType, Any>::value>>
 		ConstAnyReference& operator=(const ValueType& value) {
 			m_holder = std::make_shared<ReadOnlyHolder<ValueType>>(value);
 			return *this;

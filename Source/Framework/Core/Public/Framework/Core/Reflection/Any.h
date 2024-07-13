@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Reflection/AnyReference.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 
 namespace ob::core {
@@ -49,12 +50,17 @@ namespace ob::core {
             return static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
         }
 
+        ConstAnyReference refelence() const {
+            return m_holder ? m_holder->refelence() : ConstAnyReference();
+        }
+
     private:
         class HolderBase {
         public:
             virtual ~HolderBase() {}
             virtual Type type() const = 0;
             virtual UPtr<HolderBase> clone() const = 0;
+            virtual ConstAnyReference refelence() const = 0;
         };
 
         template<typename ValueType>
@@ -64,8 +70,11 @@ namespace ob::core {
             Type type() const override{
                 return Type::Get<ValueType>();
             }
-            virtual UPtr<HolderBase> clone() const {
+            UPtr<HolderBase> clone() const override{
                 return UPtr<HolderBase>(new Holder(value));
+            }
+            ConstAnyReference refelence() const override {
+                return ConstAnyReference(value);
             }
             ValueType value;
         };

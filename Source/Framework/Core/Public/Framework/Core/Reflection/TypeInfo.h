@@ -26,6 +26,7 @@ namespace ob::core {
 	using MethodInvoker = Func<Any(const AnyReference& owner, Span<ConstAnyReference> args)>;
 	using PropertySetter = Func<void(const AnyReference& owner, const ConstAnyReference& value)>;
 	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
+	using EnumValueGetter = Func<s32(const ConstAnyReference& owner)>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -110,6 +111,7 @@ namespace ob::core {
 
 		bool					canRead() const { return !!getter; }
 		bool					canWrite() const { return !!setter; }
+		bool					canReadWrite() const { return canRead() && canWrite(); }
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -147,6 +149,7 @@ namespace ob::core {
 		MethodInfoMap			methods;
 
 		bool					isEnum;
+		EnumValueGetter			enumValueGetter;
 		Vector<EnumElementInfo>	enumElements;
 
 		template<class T>

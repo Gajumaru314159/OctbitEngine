@@ -154,6 +154,11 @@ namespace ob::core::internal {
 			// デストラクタ登録
 			m_info.destructor = [](const AnyReference& instance) { delete (&instance.get<T>()); };
 
+			// 値取得
+			m_info.enumValueGetter = [](const ConstAnyReference& instance) {
+				return enum_cast(instance.get<T>());
+			};
+
 			// タイプ登録
 			Register();
 		}
