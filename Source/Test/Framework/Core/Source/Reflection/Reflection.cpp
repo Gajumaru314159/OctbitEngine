@@ -84,10 +84,11 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 	constructor<f32>();
 	constructor<s32, EnumTest>("count", "type");
 
-	property("Message", &TestBase::msg);
-	property("Message2", &TestBase::msg2);
+	field("Message", &TestBase::msg);
+	field("Message2", &TestBase::msg2);
 
 	property("Int", &T::getInt, &T::setInt).tag("Description", "エー");
+	property("ReadOnlyInt", &T::getInt).tag("Description", "エー");
 	//property("IntPtr", &T::getIntPtr, &T::setIntPtr).tag("Description", "エー");
 }
 

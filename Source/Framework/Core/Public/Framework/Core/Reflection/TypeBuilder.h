@@ -264,7 +264,7 @@ namespace ob::core::internal {
 		//! @brief			プロパティ追加(メンバ変数)
 		//@―---------------------------------------------------------------------------
 		template<class TField>
-		TagBuilder property(StringView name, TField T::* address) {
+		TagBuilder field(StringView name, TField T::* address) {
 			auto& info = m_info.properties[name];
 			info.name = name;
 			info.type = Type::Get<TField>();
