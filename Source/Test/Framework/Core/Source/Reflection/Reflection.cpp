@@ -60,6 +60,14 @@ public:
 
 class DC {
 public:
+	DC() {
+		LOG_INFO("生成");
+		m_value = 0;
+	}
+	DC(s32 a) {
+		LOG_INFO("生成");
+		m_value = a;
+	}
 	DC(s32 a, s32 b) {
 		LOG_INFO("生成");
 		m_value = a * b;
@@ -95,6 +103,7 @@ OB_DEFINE_CLASS_INFO(TestBase) {
 
 OB_DEFINE_CLASS_INFO(DC) {
 	tag("Description", "ベース");
+	constructor<s32 >();
 	constructor<s32,s32>();
 }
 
@@ -114,45 +123,10 @@ namespace a::b::c {
 TEST(TypeBuilder, Construct) {
 
 	Logger logger;
-
 	TypeInfoManager manager;
-
-	LOG_INFO("{}", Type::Get<a::b::c::AA>().shortName());
-	LOG_INFO("{}", Type::Get<a::b::c::AA>().name());
-	LOG_INFO("{}", Type::Get<a::b::c::AA>().nameSpace());
-
-	if (auto info = manager.find(Type("TestBase"))) {
-		TestBase base;
-		base.setInt(333);
-
-		if (auto itr = info->properties.find("Int"); itr != info->properties.end()) {
-			auto& [name, p] = *itr;
-			auto result = p.get<s32>(base);
-			LOG_INFO("結果：{}", result);
-			p.set(base, 222);
-			auto result2 = p.get<s32>(base);
-			LOG_INFO("結果：{}", result2);
-
-		}
-	}
-
-	s32 aval = 123;
-
-	Any empty;
-	Any a(123);
-	Any b(std::move(aval));
-	Any c(aval + 1);
-
-	String abc("abc");
-	Any d = abc;
-	Any e = String("abc");
-
-
 
 	manager.visit([](const TypeInfo& info) {
 
-		// TODO 検索
-		// TODO 生成
 		// TODO デシリアライズ
 
 		String str;
@@ -201,18 +175,20 @@ TEST(TypeBuilder, Construct) {
 		str += "};";
 
 		LOG_INFO("\n{}", str);
-		});
+		}
+	);
 
 	if (auto info = manager.find("DC")) {
+		if (auto ctor = info->findConstructor<>()) {
+			auto dc = ctor->invoke<DC>();
+			LOG_INFO("==");
+		}
+		if (auto ctor = info->findConstructor<s32>()) {
+			auto dc = ctor->invoke<DC>(3);
+			LOG_INFO("==");
+		}
 		if (auto ctor = info->findConstructor<s32, s32>()) {
-			ConstAnyReference args[]{
-				3,
-				4
-			};
-			for (auto& arg : args) {
-				LOG_INFO("{}",arg.type().shortName());
-			}
-			auto dc = ctor->invoke<DC>(args);
+			auto dc = ctor->invoke<DC>(3, 4);
 			LOG_INFO("==");
 		}
 	}

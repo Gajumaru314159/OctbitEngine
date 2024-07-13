@@ -231,8 +231,9 @@ namespace ob::core::internal {
 
 			auto& info = m_info.constructors.emplace_back();
 
-			Array<Type, sizeof...(Args)> types = { Type::Get<Args>() ... };
-			for (s32 i = 0; i < types.size(); ++i) {
+			// 0引数に対応するために最後尾に空要素を追加している
+			Type types[] = {Type::Get<Args>() ...,Type()};
+			for (s32 i = 0; i < std::size(types)-1; ++i) {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types[i];
 				arg.name = names[i];

@@ -74,11 +74,18 @@ namespace ob::core {
 		UPtr<T> invoke(Span<ConstAnyReference> args) const {
 			return UPtr<T>(reinterpret_cast<T*>(invoker(args)));
 		}
+		template<class T,class... Args>
+		UPtr<T> invoke(Args&&... args) const {
+			// 0引数に対応するために最後尾に空要素を追加している
+			ConstAnyReference rargs[] = {ConstAnyReference(args)...,ConstAnyReference()};
+			return UPtr<T>(reinterpret_cast<T*>(invoker(Span<ConstAnyReference>(rargs,sizeof...(Args)))));
+		}
 
 		template<class... Args>
 		bool match()const {
-			Type types[] = { Type::Get<Args>()... };
-			return std::equal(arguments.begin(), arguments.end(), std::begin(types), std::end(types), [](const ArgumentInfo& a, const Type& b) {return a.type == b; });
+			// 0引数に対応するために最後尾に空要素を追加している
+			Type types[] = { Type::Get<Args>()... ,Type()};
+			return std::equal(arguments.begin(), arguments.end(), std::begin(types), std::end(types)-1, [](const ArgumentInfo& a, const Type& b) {return a.type == b; });
 		}
 	};
 
