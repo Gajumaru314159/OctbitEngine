@@ -20,24 +20,17 @@ namespace ob::core {
 
         //! 参照から構築
         template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
-        ConstAnyReference(const T& value) { reset(value); }
+        ConstAnyReference(const T& value) { reset_impl(value); }
 
         //! 参照から代入
         template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
-        ConstAnyReference& operator=(const T& value) { reset(value); return *this; }
+        ConstAnyReference& operator=(const T& value) { reset_impl(value); return *this; }
 
         //! 値を保持しているか
         bool empty()const { return m_pointer != nullptr; }
 
         //! 保持している値の型
         Type type() const { return m_type; }
-
-        //! 内部の参照を解放
-        void reset() { m_type = {}; m_pointer = nullptr; m_list = {}; }
-
-        //! 参照から再構築
-        template<class T>
-        void reset(const T& value) { reset_impl(value); }
 
         //! 値を取得
         template<class T>
