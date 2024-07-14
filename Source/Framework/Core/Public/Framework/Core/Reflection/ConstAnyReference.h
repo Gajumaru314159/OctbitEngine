@@ -140,7 +140,7 @@ namespace ob::core {
     private:
 
         template<class T>
-        void reset_impl(T& value) {
+        void reset_impl(const T& value) {
             m_type = Type::Get<T>();
             m_pointer = &value;
             m_list = {};

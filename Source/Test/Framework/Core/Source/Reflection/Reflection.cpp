@@ -139,7 +139,7 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 			}
 		}
 		else {
-			obj["_Type"] = type.name();
+			obj["@Type"] = type.name();
 			for (auto& [name, p] : info->properties) {
 				if (!p.canRead())continue;
 				obj[name] = Serealize(p.getter(owner), manager);
@@ -151,25 +151,56 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 }
 
 
-Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
-	auto type = obj["Type"].operator std::string();
+Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
+
+	if (!obj.contains("@Type"))return {};
+	auto type = obj["@Type"].operator std::string();
+	
 	if (auto info = manager.find(type)) {
 
 		if (auto ctor = info->findConstructor()) {
+
+			// インスタンス生成
 			auto instance = ctor->invoker({});
+			AnyReference owner = instance;
 
-			auto& properties = obj["Properties"];
-			for (auto& [name,p] : properties.items()) {
+			for (auto& [name, property] : info->properties) {
+				if (!property.canWrite()) continue;
 
-				if (auto pInfo = info->findProperty(name)) {
-					if (pInfo->canWrite()) {
+				auto itr = obj.find(name);
+				if (itr == obj.end())continue;
+				auto& value = *itr;
 
+				auto& type = property.type;
+
+				if (false);
+				else if (type.is<s32>()) property.setter(owner, value.operator s32());
+				else if (type.is<f32>()) property.setter(owner, value.operator f32());
+				else if (type.is<String>()) property.setter(owner, value.operator String());
+				else if (owner.list()) {
+
+				}
+				else if (owner.map()) {
+
+				}
+				else if (auto info = manager.find(type)) {
+					if (info->isEnum) {
+						if (auto enumInfo = info->findEnumElement(value.operator String())) {
+							// property.setter(owner, enumInfo.);
+						}						
+					}
+					else {
+						if (Any userObject = Deserealize(*itr, manager)) {
+							property.setter(owner, userObject);
+						}
 					}
 				}
 
 
+				Deserealize(*itr, manager);
 			}
 
+			return std::move(instance);
 		}
 
 	}
@@ -231,47 +262,18 @@ TEST(TypeBuilder, Construct) {
 		}
 	);
 
-
 	Fruit fruit;
-
-
-	auto serealize = [](Type type) {
-
-	};
-
 
 	if (auto info = manager.find(Type::Get(fruit))) {
 
 		nlohmann::json clazz = Serealize(fruit,manager);
 
 		LOG_INFO("\n{}",clazz.dump(4));
+
+		if (auto copy = Deserealize(clazz, manager)) {
+			auto& copyFruit = copy.get<Fruit>();
+			LOG_INFO("{}", copyFruit.getPrice());
+		}
 	}
-
-
-	nlohmann::json obj;
-	obj["Type"] = "Fruit";
-
-	Deserealize(obj, manager);
-
-	Map<String,Vector<int>> test = {
-		{"AAA",{1,2,3}},
-		{"BBB",{4,5,6}}
-	};
-
-	nlohmann::json clazz = Serealize(test, manager);
-
-	LOG_INFO("\n{}", clazz.dump(4));
-
-
-
-	int aa = 0;
-	AnyReference ac(aa);
-	ConstAnyReference bc(aa);
-	ac.get<int>();
-	bc.get<int>();
-
-
-	ConstAnyReference test2 = ac;
-	LOG_INFO("{}",test2.type().name());
 
 }

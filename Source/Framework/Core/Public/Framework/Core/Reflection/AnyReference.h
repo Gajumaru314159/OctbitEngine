@@ -170,14 +170,14 @@ namespace ob::core {
     namespace internal {
         //! sequence_iterator_wrapperの特殊化
         template<class T>
-        struct map_iterator_wrapper_template : ConstAnyReference::map_iterator_wrapper {
-            map_iterator_wrapper_template(typename T::const_iterator itr) : m_itr(itr) {}
+        struct map_iterator_wrapper_template : AnyReference::map_iterator_wrapper {
+            map_iterator_wrapper_template(typename T::iterator itr) : m_itr(itr) {}
             Pair<ConstAnyReference, AnyReference> access() override { return { m_itr->first,m_itr->second }; };
             void increment() override { ++m_itr; }
             bool equals(const map_iterator_wrapper& other)const {
-                return static_cast<const const_map_iterator_wrapper_template<T>*>(&other)->m_itr == m_itr;
+                return static_cast<const map_iterator_wrapper_template<T>*>(&other)->m_itr == m_itr;
             }
-            typename T::const_iterator m_itr;
+            typename T::iterator m_itr;
         };
 
         template<class T>

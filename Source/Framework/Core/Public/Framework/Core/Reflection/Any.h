@@ -58,6 +58,20 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief		ConstAnyReferenceにキャスト
         //@―---------------------------------------------------------------------------
+        operator bool () const {
+            return !empty();
+        }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief		ConstAnyReferenceにキャスト
+        //@―---------------------------------------------------------------------------
+        operator AnyReference () const {
+            return m_holder ? m_holder->refelence() : AnyReference();
+        }
+
+        //@―---------------------------------------------------------------------------
+        //! @brief		ConstAnyReferenceにキャスト
+        //@―---------------------------------------------------------------------------
         operator ConstAnyReference () const {
             return m_holder ? m_holder->refelence() : ConstAnyReference();
         }
@@ -87,9 +101,9 @@ namespace ob::core {
         //! @brief		内部オブジェトを取得する
         //@―---------------------------------------------------------------------------
         template<typename ValueType>
-        const ValueType& get() const {
+        ValueType& get() const {
             if (Type::Get<ValueType>() != type()) throw std::bad_cast();
-            return *static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
+            return *static_cast<Any::Holder<ValueType>*>(const_cast<HolderBase*>(m_holder.get()))->value;
         }
 
         //@―---------------------------------------------------------------------------
@@ -110,23 +124,28 @@ namespace ob::core {
             virtual ~HolderBase() {}
             virtual Type type() const = 0;
             virtual UPtr<HolderBase> clone() const = 0;
-            virtual ConstAnyReference refelence() const = 0;
+            virtual AnyReference refelence() const = 0;
         };
 
         template<typename ValueType>
         class Holder : public HolderBase {
         public:
-            Holder(const ValueType& value) : value(std::make_unique<ValueType>(value)) {}
-            Holder(UPtr<ValueType> value) : value(std::move(value)) {}
+            Holder(const ValueType& value) : value(std::make_unique<ValueType>(value)) {
+                anyRef = *this->value;
+            }
+            Holder(UPtr<ValueType> value) : value(std::move(value)) {
+                anyRef = *this->value;
+            }
             Type type() const override{
                 return Type::Get<ValueType>();
             }
             UPtr<HolderBase> clone() const override{
                 return UPtr<HolderBase>(new Holder(*value));
             }
-            ConstAnyReference refelence() const override {
-                return ConstAnyReference(*value);
+            AnyReference refelence() const override {
+                return anyRef;
             }
+            AnyReference anyRef;
             UPtr<ValueType> value;
         };
 
