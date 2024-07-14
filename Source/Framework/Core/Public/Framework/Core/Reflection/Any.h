@@ -18,7 +18,7 @@ namespace ob::core {
         Any(const ValueType& value) : m_holder(new Holder<ValueType>(value)) {}
 
         template<typename ValueType>
-        Any(UPtr<ValueType>&& value) : m_holder(new Holder<ValueType>(value)) {}
+        Any(UPtr<ValueType> value) : m_holder(new Holder<ValueType>(std::move(value))) {}
 
         Any(const Any& other) : m_holder(other.m_holder ? other.m_holder->clone() : nullptr) {}
 
@@ -57,8 +57,12 @@ namespace ob::core {
             return *static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
         }
 
-        ConstAnyReference reference() const {
-            return m_holder ? m_holder->refelence() : ConstAnyReference();
+        template<class ValueType>
+        UPtr<ValueType> release() {
+            if (Type::Get<ValueType>() != type()) throw std::bad_cast();
+            UPtr<ValueType> result = std::move(static_cast<Any::Holder<ValueType>*>(m_holder.get())->value);
+            reset();
+            return std::move(result);
         }
 
     private:
@@ -74,7 +78,7 @@ namespace ob::core {
         class Holder : public HolderBase {
         public:
             Holder(const ValueType& value) : value(std::make_unique<ValueType>(value)) {}
-            Holder(UPtr<ValueType>&& value) : value(value) {}
+            Holder(UPtr<ValueType> value) : value(std::move(value)) {}
             Type type() const override{
                 return Type::Get<ValueType>();
             }
@@ -86,6 +90,7 @@ namespace ob::core {
             }
             UPtr<ValueType> value;
         };
+
     private:
         UPtr<HolderBase> m_holder;
     };

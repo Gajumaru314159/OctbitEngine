@@ -149,10 +149,7 @@ namespace ob::core::internal {
 			// コンストラクタ登録
 			auto& ctor = m_info.constructors.emplace_back();
 			ctor.arguments = { {Type::Get<T>(),"value"}};
-			ctor.invoker = [](Span<ConstAnyReference> args) { return new T(args[0].get<T>()); };
-
-			// デストラクタ登録
-			m_info.destructor = [](const AnyReference& instance) { delete (&instance.get<T>()); };
+			ctor.invoker = [](Span<ConstAnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
 
 			// 値取得
 			m_info.enumValueGetter = [](const ConstAnyReference& instance) {
@@ -183,9 +180,6 @@ namespace ob::core::internal {
 		//! @brief			コンストラクタ
 		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
-			// デストラクタ登録
-			m_info.destructor = [](const AnyReference& instance) { delete (&instance.get<T>()); };
-
 			// タイプ登録
 			Register();
 		}
@@ -352,30 +346,30 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
 		//@―---------------------------------------------------------------------------
-		static void* CreateWithoutArgs([[meybe_unused]] Span<ConstAnyReference>) {
-			return new T();
+		static Any CreateWithoutArgs([[meybe_unused]] Span<ConstAnyReference>) {
+			return Any(std::make_unique<T>());
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
-		static void* CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
-			return new T(args[I].get<Args>()...);
+		static Any CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
+			return Any(std::make_unique<T>(args[I].get<Args>()...));
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class... Args>
-		static void* Create(Span<ConstAnyReference> args) {
+		static Any Create(Span<ConstAnyReference> args) {
 
 			Type types[] = {Type::Get<Args>()...};
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const ConstAnyReference& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
 
-			return CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>());
+			return std::move(CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>()));
 		}
 
 	};

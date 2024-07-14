@@ -21,8 +21,7 @@ namespace ob::core {
 	};
 
 
-	using ConstructorInvoker = Func<void* (Span<ConstAnyReference> args)>;
-	using DestructorInvoker = Func<void(const AnyReference& instance)>;
+	using ConstructorInvoker = Func<Any(Span<ConstAnyReference> args)>;
 	using MethodInvoker = Func<Any(const AnyReference& owner, Span<ConstAnyReference> args)>;
 	using PropertySetter = Func<void(const AnyReference& owner, const ConstAnyReference& value)>;
 	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
@@ -73,13 +72,13 @@ namespace ob::core {
 
 		template<class T>
 		UPtr<T> invoke(Span<ConstAnyReference> args) const {
-			return UPtr<T>(reinterpret_cast<T*>(invoker(args)));
+			return invoker(args).release<T>();
 		}
 		template<class T,class... Args>
 		UPtr<T> invoke(Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
 			ConstAnyReference rargs[] = {args...,ConstAnyReference()};
-			return UPtr<T>(reinterpret_cast<T*>(invoker(Span<ConstAnyReference>(rargs,sizeof...(Args)))));
+			return invoker(Span<ConstAnyReference>(rargs,sizeof...(Args))).release<T>();
 		}
 
 		template<class... Args>
@@ -143,7 +142,6 @@ namespace ob::core {
 		HashSet<Type>			bases;
 
 		Vector<ConstructorInfo>	constructors;
-		DestructorInvoker		destructor;
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;

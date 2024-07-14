@@ -163,7 +163,6 @@ Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
 
 			}
 
-			info->destructor(instance);
 		}
 
 	}
@@ -204,7 +203,6 @@ UPtr<T> Deserealize(nlohmann::json& obj, const TypeInfoManager& manager) {
 
 				}
 
-				info->destructor(instance);
 			}
 
 		}
@@ -246,6 +244,6 @@ TEST(TypeBuilder, Construct) {
 	nlohmann::json obj;
 	obj["Type"] = "Fruit";
 
-	//Deserealize(obj, manager);
+	Deserealize(obj, manager);
 
 }
