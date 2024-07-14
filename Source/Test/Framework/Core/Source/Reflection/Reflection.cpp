@@ -114,9 +114,9 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 	auto& type = owner.type();
 
 	if (false);
-	else if (type.is<s32>()) obj = owner.get<s32>();
-	else if (type.is<f32>()) obj = owner.get<f32>();
-	else if (type.is<String>()) obj = owner.get<String>();
+	else if (type.is<s32>()) obj = owner.get<const s32>();
+	else if (type.is<f32>()) obj = owner.get<const f32>();
+	else if (type.is<String>()) obj = owner.get<const String>();
 	else if (owner.list()) {
 		for (auto element : owner.list()) {
 			obj.emplace_back(Serealize(element,manager));
@@ -252,5 +252,26 @@ TEST(TypeBuilder, Construct) {
 	obj["Type"] = "Fruit";
 
 	Deserealize(obj, manager);
+
+	Map<String,Vector<int>> test = {
+		{"AAA",{1,2,3}},
+		{"BBB",{4,5,6}}
+	};
+
+	nlohmann::json clazz = Serealize(test, manager);
+
+	LOG_INFO("\n{}", clazz.dump(4));
+
+
+
+	int aa = 0;
+	AnyReference ac(aa);
+	ConstAnyReference bc(aa);
+	ac.get<int>();
+	bc.get<int>();
+
+
+	ConstAnyReference test2 = ac;
+	LOG_INFO("{}",test2.type().name());
 
 }

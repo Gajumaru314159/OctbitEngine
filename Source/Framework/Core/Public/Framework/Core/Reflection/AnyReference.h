@@ -20,15 +20,15 @@ namespace ob::core {
         AnyReference() = default;
 
         //! 参照から構築
-        template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
+        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any> || std::is_same_v<T, ConstAnyReference> || std::is_const_v<T>)>>
         AnyReference(T& value) { reset_impl(value); }
 
         //! 参照から代入
-        template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
+        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any> || std::is_same_v<T, ConstAnyReference> || std::is_const_v<T>)>>
         AnyReference& operator=(T& value) { reset_impl(value); return *this; }
 
-        //! ConstAnyReferenceに変換
-        
+        //! ConstAnyReferenceへの変換
+        operator ConstAnyReference() const { return m_const; }
 
         //! 値を保持しているか
         bool empty()const { return m_pointer != nullptr; }
@@ -38,15 +38,9 @@ namespace ob::core {
 
         //! 値を取得
         template<class T>
-        T& get() {
+        T& get() const {
             if (!m_type.is<T>()) throw std::bad_cast();
             return *reinterpret_cast<T*>(m_pointer);
-        }
-        //! 値を取得
-        template<class T>
-        const T& get() const {
-            if (!m_type.is<T>()) throw std::bad_cast();
-            return *reinterpret_cast<const T*>(m_pointer);
         }
 
     public:
@@ -148,11 +142,12 @@ namespace ob::core {
     private:
 
         template<class T>
-        void reset_impl(const T& value) {
+        void reset_impl(T& value) {
             m_type = Type::Get<T>();
             m_pointer = &value;
             m_list = {};
             m_map = {};
+            m_const = value;
             if constexpr (is_sequence<T>::value) {
                 m_list = ListAccessor(
                     [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::begin(value)); },
@@ -169,6 +164,7 @@ namespace ob::core {
         void* m_pointer = nullptr;
         ListAccessor m_list;
         MapAccessor m_map;
+        ConstAnyReference m_const;
     };
 
     namespace internal {
@@ -185,7 +181,7 @@ namespace ob::core {
         };
 
         template<class T>
-        AnyReference::MapAccessor CreateAnyReferenceMapAccessor(const T& value) {
+        AnyReference::MapAccessor CreateAnyReferenceMapAccessor(T& value) {
             return {
                 [&] { return std::make_unique<map_iterator_wrapper_template<T>>(std::begin(value)); },
                 [&] { return std::make_unique<map_iterator_wrapper_template<T>>(std::end(value)); }

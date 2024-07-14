@@ -11,6 +11,7 @@
 namespace ob::core {
 
 	class Any;
+    class AnyReference;
 
     class ConstAnyReference {
     public:
@@ -19,11 +20,11 @@ namespace ob::core {
         ConstAnyReference() = default;
 
         //! 参照から構築
-        template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
+        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any> || std::is_same_v<T, AnyReference>)>>
         ConstAnyReference(const T& value) { reset_impl(value); }
 
         //! 参照から代入
-        template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
+        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any>||std::is_same_v<T, AnyReference>)>>
         ConstAnyReference& operator=(const T& value) { reset_impl(value); return *this; }
 
         //! 値を保持しているか
@@ -139,15 +140,15 @@ namespace ob::core {
     private:
 
         template<class T>
-        void reset_impl(const T& value) {
+        void reset_impl(T& value) {
             m_type = Type::Get<T>();
             m_pointer = &value;
             m_list = {};
             m_map = {};
             if constexpr (is_sequence<T>::value) {
                 m_list = ListAccessor(
-                    [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::begin(value)); },
-                    [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::end(value)); }
+                    [&] { return std::make_unique<sequence_iterator_wrapper_template<std::remove_const_t<T>>>(std::begin(value)); },
+                    [&] { return std::make_unique<sequence_iterator_wrapper_template<std::remove_const_t<T>>>(std::end(value)); }
                 );
             }
             if constexpr (is_map<T>::value) {
