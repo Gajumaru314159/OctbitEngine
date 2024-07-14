@@ -132,13 +132,14 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 			auto& properties = obj["Properties"];
 			for (auto& [name, p] : info->properties) {
 				if (!p.canRead())continue;
-				properties[name] = Serealize(p.getter(owner).reference(), manager);
+				properties[name] = Serealize(p.getter(owner), manager);
 			}
 		}
 	}
 
 	return obj;
 }
+
 
 Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
 	auto type = obj["Type"].operator std::string();
@@ -155,7 +156,7 @@ Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
 
 						Any pany;
 
-						pInfo->setter(instance, pany.reference());
+						pInfo->setter(instance, pany);
 					}
 				}
 
@@ -166,6 +167,51 @@ Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
 		}
 
 	}
+	return {};
+}
+
+template<class T>
+UPtr<T> Deserealize(nlohmann::json& obj, const TypeInfoManager& manager) {
+
+	auto type = Type::Get<T>();
+
+	if (false);
+	else if (type.is<s32>()) obj = owner.get<s32>();
+	else if (type.is<f32>()) obj = owner.get<f32>();
+	else if (is_sequence<T>::value) {
+
+	}
+	else {
+
+		auto type = obj["Type"].operator std::string();
+		if (type != Type::Get<T>())return {};
+
+		if (auto info = manager.find(type)) {
+
+			if (auto ctor = info->findConstructor()) {
+				auto instance = ctor->invoke<T>();
+
+				auto& properties = obj["Properties"];
+				for (auto& [name, p] : properties.items()) {
+
+					if (auto pInfo = info->findProperty(name)) {
+						if (pInfo->canWrite()) {
+
+							pInfo->setter(*instance, );
+						}
+					}
+
+
+				}
+
+				info->destructor(instance);
+			}
+
+		}
+
+	}
+
+
 	return {};
 }
 

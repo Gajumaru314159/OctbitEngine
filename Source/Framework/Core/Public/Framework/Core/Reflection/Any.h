@@ -17,6 +17,9 @@ namespace ob::core {
         template<typename ValueType>
         Any(const ValueType& value) : m_holder(new Holder<ValueType>(value)) {}
 
+        template<typename ValueType>
+        Any(UPtr<ValueType>&& value) : m_holder(new Holder<ValueType>(value)) {}
+
         Any(const Any& other) : m_holder(other.m_holder ? other.m_holder->clone() : nullptr) {}
 
         Any& operator=(const Any& other) {
@@ -30,6 +33,10 @@ namespace ob::core {
         Any& operator=(const ValueType& value) {
             m_holder = new Holder<ValueType>(value);
             return *this;
+        }
+
+        operator ConstAnyReference () const {
+            return m_holder ? m_holder->refelence() : ConstAnyReference();
         }
 
         bool empty() const {
@@ -47,7 +54,7 @@ namespace ob::core {
         template<typename ValueType>
         const ValueType& get() const {
             if (Type::Get<ValueType>() != type()) throw std::bad_cast();
-            return static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
+            return *static_cast<Any::Holder<ValueType>*>(m_holder.get())->value;
         }
 
         ConstAnyReference reference() const {
@@ -66,17 +73,18 @@ namespace ob::core {
         template<typename ValueType>
         class Holder : public HolderBase {
         public:
-            Holder(const ValueType& value) : value(value) {}
+            Holder(const ValueType& value) : value(std::make_unique<ValueType>(value)) {}
+            Holder(UPtr<ValueType>&& value) : value(value) {}
             Type type() const override{
                 return Type::Get<ValueType>();
             }
             UPtr<HolderBase> clone() const override{
-                return UPtr<HolderBase>(new Holder(value));
+                return UPtr<HolderBase>(new Holder(*value));
             }
             ConstAnyReference refelence() const override {
-                return ConstAnyReference(value);
+                return ConstAnyReference(*value);
             }
-            ValueType value;
+            UPtr<ValueType> value;
         };
     private:
         UPtr<HolderBase> m_holder;
