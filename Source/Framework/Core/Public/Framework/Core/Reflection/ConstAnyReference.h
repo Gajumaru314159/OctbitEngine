@@ -5,30 +5,26 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
-#include <Framework/Core/Reflection/ConstAnyReference.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 #include <Framework/Core/Template/Utility/SequenceTraits.h>
 
 namespace ob::core {
 
-    class Any;
+	class Any;
 
-    class AnyReference {
+    class ConstAnyReference {
     public:
 
         //! デフォルトコンストラクタ
-        AnyReference() = default;
+        ConstAnyReference() = default;
 
         //! 参照から構築
         template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
-        AnyReference(T& value) { reset(value); }
+        ConstAnyReference(const T& value) { reset(value); }
 
         //! 参照から代入
         template<class T, class = std::enable_if_t<!std::is_same<T, Any>::value>>
-        AnyReference& operator=(T& value) { reset(value); return *this; }
-
-        //! ConstAnyReferenceに変換
-        
+        ConstAnyReference& operator=(const T& value) { reset(value); return *this; }
 
         //! 値を保持しているか
         bool empty()const { return m_pointer != nullptr; }
@@ -41,14 +37,8 @@ namespace ob::core {
 
         //! 参照から再構築
         template<class T>
-        void reset(T& value) { reset_impl(value); }
+        void reset(const T& value) { reset_impl(value); }
 
-        //! 値を取得
-        template<class T>
-        T& get() {
-            if (!m_type.is<T>()) throw std::bad_cast();
-            return *reinterpret_cast<T*>(m_pointer);
-        }
         //! 値を取得
         template<class T>
         const T& get() const {
@@ -57,7 +47,8 @@ namespace ob::core {
         }
 
     public:
-#pragma region リストアクセス
+
+#pragma region シーケンスイテレータ
 
         //! 異なる型のイテレータを共通操作するためのラッパー
         struct sequence_iterator_wrapper {
@@ -108,12 +99,12 @@ namespace ob::core {
 
 #pragma endregion
 
-#pragma region マップアクセス
+#pragma region マップイテレータ
 
         //! 異なる型のイテレータを共通操作するためのラッパー
         struct map_iterator_wrapper {
             virtual ~map_iterator_wrapper() = default;
-            virtual Pair<ConstAnyReference, AnyReference> access() = 0;
+            virtual Pair<ConstAnyReference, ConstAnyReference> access() = 0;
             virtual void increment() = 0;
             virtual bool equals(const map_iterator_wrapper& other)const = 0;
         };
@@ -122,7 +113,7 @@ namespace ob::core {
         class map_iterator {
         public:
             map_iterator(UPtr<map_iterator_wrapper> impl) : m_impl(std::move(impl)) {}
-            Pair<ConstAnyReference, AnyReference> operator*() { return m_impl->access(); }
+            Pair<ConstAnyReference, ConstAnyReference> operator*() { return m_impl->access(); }
             map_iterator& operator++() { m_impl->increment(); return *this; }
             bool operator!=(const map_iterator& v) { return !m_impl->equals(*v.m_impl); }
         private:
@@ -164,16 +155,16 @@ namespace ob::core {
                 m_list = ListAccessor(
                     [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::begin(value)); },
                     [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::end(value)); }
-                    );
+                );
             }
             if constexpr (is_map<T>::value) {
-                m_map = internal::CreateAnyReferenceMapAccessor(value);
+                m_map = internal::CreateConstAnyReferenceMapAccessor(value);
             }
         }
 
     private:
         Type m_type;
-        void* m_pointer = nullptr;
+        const void* m_pointer = nullptr;
         ListAccessor m_list;
         MapAccessor m_map;
     };
@@ -181,9 +172,9 @@ namespace ob::core {
     namespace internal {
         //! sequence_iterator_wrapperの特殊化
         template<class T>
-        struct map_iterator_wrapper_template : ConstAnyReference::map_iterator_wrapper {
-            map_iterator_wrapper_template(typename T::const_iterator itr) : m_itr(itr) {}
-            Pair<ConstAnyReference, AnyReference> access() override { return { m_itr->first,m_itr->second }; };
+        struct const_map_iterator_wrapper_template : ConstAnyReference::map_iterator_wrapper {
+            const_map_iterator_wrapper_template(typename T::const_iterator itr) : m_itr(itr) {}
+            Pair<ConstAnyReference, ConstAnyReference> access() override { return { m_itr->first,m_itr->second }; };
             void increment() override { ++m_itr; }
             bool equals(const map_iterator_wrapper& other)const {
                 return static_cast<const const_map_iterator_wrapper_template<T>*>(&other)->m_itr == m_itr;
@@ -192,11 +183,12 @@ namespace ob::core {
         };
 
         template<class T>
-        AnyReference::MapAccessor CreateAnyReferenceMapAccessor(const T& value) {
+        ConstAnyReference::MapAccessor CreateConstAnyReferenceMapAccessor(const T& value) {
             return {
-                [&] { return std::make_unique<map_iterator_wrapper_template<T>>(std::begin(value)); },
-                [&] { return std::make_unique<map_iterator_wrapper_template<T>>(std::end(value)); }
+                [&] { return std::make_unique<const_map_iterator_wrapper_template<T>>(std::begin(value)); },
+                [&] { return std::make_unique<const_map_iterator_wrapper_template<T>>(std::end(value)); }
             };
         }
     }
+
 }

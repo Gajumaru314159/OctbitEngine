@@ -22,8 +22,8 @@ namespace ob::core {
 
 
 	using ConstructorInvoker = Func<Any(Span<ConstAnyReference> args)>;
-	using MethodInvoker = Func<Any(const AnyReference& owner, Span<ConstAnyReference> args)>;
-	using PropertySetter = Func<void(const AnyReference& owner, const ConstAnyReference& value)>;
+	using MethodInvoker = Func<Any(AnyReference& owner, Span<ConstAnyReference> args)>;
+	using PropertySetter = Func<void(AnyReference& owner, const ConstAnyReference& value)>;
 	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
 	using EnumValueGetter = Func<s32(const ConstAnyReference& owner)>;
 

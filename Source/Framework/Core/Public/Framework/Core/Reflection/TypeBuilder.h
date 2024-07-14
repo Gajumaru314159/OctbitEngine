@@ -301,7 +301,7 @@ namespace ob::core::internal {
 				return Any(owner.get<T>().*address);
 			};
 			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
-				info.setter = [=](const AnyReference& owner, const ConstAnyReference& value) {
+				info.setter = [=](AnyReference& owner, const ConstAnyReference& value) {
 					(owner.get<T>().*(address)) = value.get<TField>();
 				};
 			}
@@ -335,7 +335,7 @@ namespace ob::core::internal {
 			info.getter = [=](const ConstAnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
-			info.setter = [=](const AnyReference& owner,const ConstAnyReference& value) {
+			info.setter = [=](AnyReference& owner,const ConstAnyReference& value) {
 				(owner.get<T>().*(setter))(value.get<remove_cvr_t<return_type>>());
 			};
 			return info;

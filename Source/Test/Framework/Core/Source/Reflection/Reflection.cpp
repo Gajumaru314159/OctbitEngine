@@ -45,7 +45,9 @@ public:
 		LOG_INFO("破棄");
 	}
 
-	Vector<s32> getPriceHistory()const { return { 0,1,2,3,4 }; }
+	Map<s32,String> getPriceHistory()const { 
+		return { {1,"A"}, {2,"B"}, {3,"C"}};
+	}
 
 	FruitType getType()const { return m_type; }
 
@@ -114,11 +116,20 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 	if (false);
 	else if (type.is<s32>()) obj = owner.get<s32>();
 	else if (type.is<f32>()) obj = owner.get<f32>();
-	else if (owner.isSequence()) {
-		for (auto element : owner) {
+	else if (type.is<String>()) obj = owner.get<String>();
+	else if (owner.list()) {
+		for (auto element : owner.list()) {
 			obj.emplace_back(Serealize(element,manager));
 		}
-	} else if (auto info = manager.find(type)) {
+	}
+	else if (owner.map()) {
+		for (auto [key,value] : owner.map()) {
+			auto& item = obj.emplace_back();
+			item["Key"] = Serealize(key, manager);
+			item["Value"] = Serealize(value, manager);
+		}
+	}
+	else if (auto info = manager.find(type)) {
 		if (info->isEnum) {
 			if (info->enumValueGetter) {
 				auto value = info->enumValueGetter(owner);
@@ -128,11 +139,10 @@ nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& m
 			}
 		}
 		else {
-			obj["Type"] = type.name();
-			auto& properties = obj["Properties"];
+			obj["_Type"] = type.name();
 			for (auto& [name, p] : info->properties) {
 				if (!p.canRead())continue;
-				properties[name] = Serealize(p.getter(owner), manager);
+				obj[name] = Serealize(p.getter(owner), manager);
 			}
 		}
 	}
@@ -154,9 +164,6 @@ Any Deserealize(nlohmann::json& obj , const TypeInfoManager& manager) {
 				if (auto pInfo = info->findProperty(name)) {
 					if (pInfo->canWrite()) {
 
-						Any pany;
-
-						pInfo->setter(instance, pany);
 					}
 				}
 
