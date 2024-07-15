@@ -5,14 +5,26 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Core.h>
-#include <Framework/Core/Reflection/TypeInfo.h>
-#include <Framework/Core/Reflection/TypeInfoManager.h>
+#include <Framework/Core/Reflection/Type.h>
 
 namespace ob::core {
 
-	template<class T>
-	T* DynamicCast() {
+	bool IsCastable(Type from, Type to);
+	
+	template<class To, class From>
+	bool IsCastable(From&&) {
+		return IsCastable(Type::Get<From>(), Type::Get<To>());	
+	}
 
+	template<class From, class To>
+	bool IsCastable() {
+		return IsCastable(Type::Get<From>(), Type::Get<To>());
+	}
+
+	template<class To,class From>
+	To* DynamicCast(From&& from) {
+		if (!IsCastable<To>(from)) return nullptr;
+		return reinterpret_cast<To*>(&from);
 	}
 
 }

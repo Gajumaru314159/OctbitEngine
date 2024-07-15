@@ -154,7 +154,15 @@ namespace ob::core {
 		EnumValueGetter			enumValueGetter;
 		Vector<EnumElementInfo>	enumElements;
 
-		bool isSuperClassOf(const Type& type)const;
+
+		bool isBaseOf(const Type& super)const;
+
+		template<class T>
+		bool isBaseOf()const {
+			return isBaseOf(Type::Get<T>());
+		}
+
+		bool isSuperClassOf(const Type& base)const;
 
 		template<class T>
 		bool isSuperClassOf()const {

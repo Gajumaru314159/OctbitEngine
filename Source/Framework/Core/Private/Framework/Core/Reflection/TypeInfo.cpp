@@ -10,15 +10,22 @@
 
 namespace ob::core {
 
-	bool TypeInfo::isSuperClassOf(const Type& type)const {
+	bool TypeInfo::isBaseOf(const Type& super)const {
 
-		if(bases.count(type))return true;
+		if (auto info = TypeInfoManager::Find(super)) {
+			return info->isSuperClassOf(type);
+		}
 
-		if (auto manager = TypeInfoManager::Get()) {
-			for (auto& base : bases) {
-				if (auto baseInfo = manager->find(base)) {
-					if (baseInfo->isSuperClassOf(type))return true;
-				}
+		return false;
+	}
+
+	bool TypeInfo::isSuperClassOf(const Type& base)const {
+
+		if(bases.count(base))return true;
+
+		for (auto& base : bases) {
+			if (auto info = TypeInfoManager::Find(base)) {
+				if (info->isSuperClassOf(base))return true;
 			}
 		}
 

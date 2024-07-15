@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Reflection/DynamicCast.h>
 #include <Framework/Core/Reflection/AnyReference.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 
@@ -93,16 +94,16 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         //! @brief		内部型を取得する
         //@―---------------------------------------------------------------------------
-        bool is(const Type&) const;
+        bool isCastable(const Type& to) const { return IsCastable(type(), to); }
         template<typename ValueType>
-        bool is() const { return is(Type::Get<ValueType>()); }
+        bool isCastable() const { return isCastable(Type::Get<ValueType>()); }
 
         //@―---------------------------------------------------------------------------
         //! @brief		内部オブジェトを取得する
         //@―---------------------------------------------------------------------------
         template<typename ValueType>
         ValueType& get() const {
-            if (!is<ValueType>()) throw std::bad_cast();
+            if (!isCastable<ValueType>()) throw std::bad_cast();
             return *reinterpret_cast<ValueType*>(m_holder->get());
         }
 
@@ -111,7 +112,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<class ValueType>
         UPtr<ValueType> release() {
-            if (!is<ValueType>()) throw std::bad_cast();
+            if (!isCastable<ValueType>()) throw std::bad_cast();
             auto instance = reinterpret_cast<ValueType*>(m_holder->release());
             OB_ASSERT_EXPR(instance);
             reset();

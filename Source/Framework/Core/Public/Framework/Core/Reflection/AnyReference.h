@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Reflection/DynamicCast.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 #include <Framework/Core/Template/Utility/SequenceTraits.h>
 
@@ -32,10 +33,16 @@ namespace ob::core {
         //! 保持している値の型
         Type type() const { return m_type; }
 
+        //! 指定した型にキャスト可能か
+        bool isCastable(const Type& to) const { return IsCastable(type(), to); }
+        template<typename ValueType>
+        bool isCastable() const { return isCastable(Type::Get<ValueType>()); }
+
         //! 値を取得
         template<class T>
         std::remove_reference_t<T>& get() const {
-            // if (!m_type.is<T>()) throw std::bad_cast();
+            // TODO ダイナミックキャストチェックをできるようにする
+            // if (!isCastable<T>()) throw std::bad_cast();
             return *reinterpret_cast<std::remove_reference_t<T>*>(m_pointer);
         }
 
