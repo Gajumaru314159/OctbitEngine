@@ -89,7 +89,9 @@ namespace ob::core {
 				str += "public:\n";
 			}
 			for (auto& [name, property] : info.properties) {
-				str += Format("    {} {};", property.type.shortName(), name);
+				str += "    ";
+				if (!property.canWrite()) str += "const ";
+				str += Format("{} {};", property.type.shortName(), name);
 				str += "\n";
 			}
 
