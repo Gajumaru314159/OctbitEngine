@@ -305,7 +305,7 @@ namespace ob::graphics {
 		// 更新
 		ImGui::GetIO().DisplaySize = { window.getSize().x,window.getSize().y };
 		updateMouse(window);
-		updateKeyboard();
+		updateKeyboard(window);
 		updateTime();
 
 		// 描画
@@ -573,7 +573,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      キーボード更新
 	//@―---------------------------------------------------------------------------
-	void ImGuiRenderer::updateKeyboard() {
+	void ImGuiRenderer::updateKeyboard(platform::Window& window) {
 
 		using namespace ob::input;
 
@@ -697,6 +697,9 @@ namespace ob::graphics {
 			if (Keyboard::GetButton(from).down())io.AddKeyEvent(to, true);
 			if (Keyboard::GetButton(from).up())io.AddKeyEvent(to, false);
 		}
+
+		auto inputText = window.getTextInput();
+		io.AddInputCharactersUTF8(inputText.c_str());
 
 	}
 
