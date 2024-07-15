@@ -16,6 +16,8 @@
 
 OB_DEFINE_CLASS_INFO(ob::engine::ReflectionTestComponent) {
 
+	tag("Requirements", "ob::engine::TransformComponent");
+
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
 

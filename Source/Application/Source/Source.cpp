@@ -36,46 +36,33 @@ void drawComponents(Entity* pEntity = nullptr);
 
 int TestDirectX12() {
 
-	{
-	FixedString<120> fstr;
-	Char aaa[129];
-
-	FormatTo(std::back_inserter(fstr), "test{}", 123);
-	}
-
+	ob::core::TypeInfoManager typeInfoManager;
 	ob::core::Logger log;
-
-	TypeInfoManager typeInfoManager;
-
 	ob::debug::Profiler profiler;
 	ob::debug::LogInfo loginfo;
 	ob::debug::FrameGraphDebugger fgdebugger;
-	ob::debug::ReflectionExplorer reflectionExplorer(typeInfoManager);
+	ob::debug::ReflectionExplorer reflectionExplorer;
 
 	System::Setup();
 
+	// シーン生成
 	auto world = World::Create("MainWorld");
 	auto scene2 = Scene::Create("SubScene");
 	auto entity = Entity::Create("RootEntity");
-	entity->addComponent<TransformComponent>();
+	// entity->addComponent<TransformComponent>();
 	entity->addComponent<ReflectionTestComponent>();
 	scene2->addEntity(entity);
 	world->getRootScene().addSubScene(*scene2);
 
-	// ウィンドウ生成
-	platform::WindowDesc windowDesc;
-	windowDesc.title = "Graphic Test";
-	platform::Window window(windowDesc);
-
+	// ディスプレイ生成
 	Ref<Display> display = [&] {
 		DisplayDesc desc;
 		desc.name = "MainDisplay";
-		desc.window = window;
+		desc.window = platform::Window::Main();
 		return Display::Create(desc);
 	}();
-#pragma endregion
-	// 事前セットアップここまで
 
+	// 描画オブジェクト生成
 	RenderScene scene;
 	RenderView view(scene, "Test");
 	scene.addFeature<ImGuiRenderFeature>(scene);
@@ -83,6 +70,7 @@ int TestDirectX12() {
 	view.setDisplay(display);
 	view.setPipeline<TestRenderPipeline>(view);
 
+	// デバッグ描画タスク追加
 	ImGuiHandle handle;
 	ImGuiHandle handle2;
 	ImGuiHandle handle3;
@@ -104,6 +92,19 @@ int TestDirectX12() {
 		}
 	);
 
+
+
+
+
+	// テクスチャ読み込み
+	auto texture = Texture::Load("Asset/Model/Ukulele_col.dds");
+	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
+
+	// メッシュ読み込み
+	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
+	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
+
+	// 描画物生成
 	Ref<Material> material = [&] {
 
 		auto code = ReadFile("Asset/Shader/GraphicTest.hlsl");
@@ -130,42 +131,29 @@ int TestDirectX12() {
 	}();
 	auto skyMat = Material::Create(material->getDesc());
 
-
-	auto texture = Texture::Load("Asset/Model/Ukulele_col.dds");
-	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
-	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
-	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
-
 	material->setMatrix("Matrix", Matrix::Identity);
 	material->setTexture("Main", texture);
 
 	skyMat->setMatrix("Matrix", Matrix::Identity);
 	skyMat->setTexture("Main", skyTexture);
 
+
+	// モデル登録
 	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
 		feature->addRenderable(mesh, material);
 		feature->addRenderable(skyMesh, skyMat);
 	}
 
-	Vec3 pos(0, 0, -10);
-	Rot rot = Rot::Identity;
-	auto now = DateTime::Now();
 
-
-	auto size = display->getDesc().size;
 	auto viewMtx =
-		Matrix::Perspective(60, size.width, size.height, 0.01f, 10000.0f) *
-		Matrix::TRS(pos, rot, Vec3::One).inverse();
+		Matrix::Perspective(60, display->getDesc().size, 0.01f, 10000.0f) *
+		Matrix::TRS(Vec3(0,0,-10), Rot::Identity, Vec3::One).inverse();
 	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 
+	auto now = DateTime::Now();
 	while (true) {
 
 		if (System::Update() == false)break;
-
-		RHI::Get()->update();
-		input::InputModule::Get()->update();
-		display->update();
-
 
 		// 行列更新
 		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
@@ -173,10 +161,10 @@ int TestDirectX12() {
 		material->setMatrix("Matrix", mtx);
 		material->setColor("Color", Color::White);
 
-
-		if (auto graphics = Graphics::Get()) {
-			graphics->update();
-		}
+		input::InputModule::Get()->update();
+		RHI::Get()->update();
+		display->update();
+		Graphics::Get()->update();
 
 		fgdebugger.update();
 
@@ -192,8 +180,8 @@ void OctbitInit(ServiceInjector& injector) {
 	graphics::Register(injector);
 
 	rhi::Config config;
-	config.enablePIX = true;
-	config.breakWithWarning = true;
+	//config.enablePIX = true;
+	//config.breakWithWarning = true;
 	injector.bind(config);
 
 }

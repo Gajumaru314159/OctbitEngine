@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Geometry/Size.h>
 #include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Math/Quaternion.h>
@@ -332,12 +333,8 @@ namespace ob::core {
 		//! @brief 透視投影行列の生成
 		//@―---------------------------------------------------------------------------
 		static Matrix Perspective(f32 fov, f32 aspect, f32 zNear, f32 zFar);
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief 透視投影行列の生成
-		//@―---------------------------------------------------------------------------
-		static Matrix Perspective(f32 fov, f32 width,f32 height, f32 zNear, f32 zFar);
+		static Matrix Perspective(f32 fov, f32 width, f32 height, f32 zNear, f32 zFar);
+		static Matrix Perspective(f32 fov, Size size, f32 zNear, f32 zFar);
 
 
 		//@―---------------------------------------------------------------------------

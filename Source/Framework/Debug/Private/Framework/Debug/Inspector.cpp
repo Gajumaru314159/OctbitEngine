@@ -106,6 +106,9 @@ namespace ob::debug {
 					}
 				} else if (p.type.is<Rot>()) {
 					auto value = p.get<Rot>(obj);
+					if (Math::IsNearZero(value.x)) value.x = 0.0f;
+					if (Math::IsNearZero(value.y)) value.y = 0.0f;
+					if (Math::IsNearZero(value.z)) value.x = 0.0f;
 					if (ImGui::InputFloat3(name.c_str(), reinterpret_cast<f32*>(&value))) {
 						p.setter(obj, value);
 					}

@@ -9,8 +9,7 @@
 
 namespace ob::debug {
 
-	ReflectionExplorer::ReflectionExplorer(const TypeInfoManager& manager)
-		: m_manager(manager)
+	ReflectionExplorer::ReflectionExplorer()
 	{
 
 	}
@@ -32,12 +31,12 @@ namespace ob::debug {
 
 			if (ImGui::BeginListBox("Types")) {
 
-				m_manager.visit([this](const TypeInfo& info) { draw(info); });
+				TypeInfoManager::Visit([this](const TypeInfo& info) { draw(info); });
 
 				ImGui::EndListBox();
 			}
 
-			if (auto info = m_manager.find(m_selected)) {
+			if (auto info = TypeInfoManager::Find(m_selected)) {
 				drawDetail(*info);
 			}
 

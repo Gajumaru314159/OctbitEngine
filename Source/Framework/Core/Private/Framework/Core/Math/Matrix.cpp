@@ -4,7 +4,6 @@
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Matrix.h>
-
 #include <Framework/Core/Math/Math.h>
 #include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Quaternion.h>
@@ -367,8 +366,15 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief 透視投影行列の生成
 	//@―---------------------------------------------------------------------------
-	Matrix Matrix::Perspective(f32 fov, f32 width,f32 height, f32 zNear, f32 zFar) {
-		return Perspective(fov,width/std::max(height,0.00001f),zNear,zFar);
+	Matrix Matrix::Perspective(f32 fov, f32 width, f32 height, f32 zNear, f32 zFar) {
+		return Perspective(fov, width / std::max(height, 0.00001f), zNear, zFar);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief 透視投影行列の生成
+	//@―---------------------------------------------------------------------------
+	Matrix Matrix::Perspective(f32 fov, Size size, f32 zNear, f32 zFar) {
+		return Perspective(fov, size.width / std::max<f32>(size.height, 0.00001f), zNear, zFar);
 	}
 
 	//@―---------------------------------------------------------------------------

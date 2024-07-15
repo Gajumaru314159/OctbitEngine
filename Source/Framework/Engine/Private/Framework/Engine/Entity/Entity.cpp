@@ -82,7 +82,10 @@ namespace ob::engine {
 				if (info->isSuperClassOf<Component>()) {
 					if (auto ctor = info->findConstructor<Entity>()) {
 						// 依存コンポーネントを生成
-						// LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.name(), depType.name());
+						if (auto requirements = info->findTag("Requirements")) {
+							// TODO 循環参照検知
+							addComponent(Type(*requirements));
+						}
 
 						// 生成
 						if (auto component = ctor->invoke<Component>(*this)) {
@@ -90,10 +93,20 @@ namespace ob::engine {
 							m_components.emplace_back(std::move(component));
 							raisePropertyChanged("Components");
 							return result;
-						}						
+						} else {
+							LOG_WARNING("{}のコンストラクタが失敗しました。", type.name());
+						}
+					} else {
+						LOG_WARNING("{}のコンストラクタが見つかりません。", type.name());
 					}
+				} else {
+					LOG_WARNING("{}はComponentではありません。", type.name());
 				}
+			} else {
+				LOG_WARNING("{}がTypeInfoManagerに登録されていません。", type.name());
 			}
+		} else {
+			LOG_WARNING("TypeInfoManagerが初期化されていません。");
 		}
 
 		LOG_WARNING("{}をComponentとして追加できませんでした。", type.name());
