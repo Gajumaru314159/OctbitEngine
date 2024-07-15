@@ -348,15 +348,15 @@ namespace ob::core::internal {
 		//! @brief			引数なしのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		static Any CreateWithoutArgs([[meybe_unused]] Span<ConstAnyReference>) {
-			return Any(std::make_unique<T>());
+			return std::move(Any(std::make_unique<T>()));
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
-		static Any CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
-			return Any(std::make_unique<T>(args[I].get<Args>()...));
+		static UPtr<T> CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
+			return std::make_unique<T>(args[I].get<Args>()...);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -370,7 +370,7 @@ namespace ob::core::internal {
 				return {};
 			}
 
-			return std::move(CreateImpl<T,Args...>(args,std::make_index_sequence<sizeof...(Args)>()));
+			return Any(CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>()));
 		}
 
 	};

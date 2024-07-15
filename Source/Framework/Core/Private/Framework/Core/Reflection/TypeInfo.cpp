@@ -5,26 +5,24 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/TypeInfo.h>
+#include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Core/Core.h>
 
 namespace ob::core {
 
-	//class ClassFactoryBase {
-	//public:
-	//	virtual void* construct() = 0;
-	//};
-	//
-	//template<class T,typename... Args>
-	//class ClassFactory :public ClassFactoryBase {
-	//public:
-	//	ClassFactory(Args&& args...) {
-	//
-	//	}
-	//	void* construct() {
-	//		return new T();
-	//	}
-	//
-	//};
+	bool TypeInfo::isSuperClassOf(const Type& type)const {
 
+		if(bases.count(type))return true;
+
+		if (auto manager = TypeInfoManager::Get()) {
+			for (auto& base : bases) {
+				if (auto baseInfo = manager->find(base)) {
+					if (baseInfo->isSuperClassOf(type))return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 }

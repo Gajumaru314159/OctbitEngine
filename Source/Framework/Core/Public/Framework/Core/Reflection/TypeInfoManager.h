@@ -17,7 +17,7 @@ namespace ob::core {
 
 		TypeInfoManager();
 
-		void visit(const std::function<void(const TypeInfo&)> func) {
+		void visit(const std::function<void(const TypeInfo&)> func) const {
 			for (auto& [type, info] : m_infos) func(info);
 		}
 
