@@ -5,14 +5,13 @@
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Engine.h>
-#include <Framework/Engine/Component/ComponentFactory.h>
 
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
 	//@―---------------------------------------------------------------------------
-	EntityManager::EntityManager(ComponentFactory& c) {
+	EntityManager::EntityManager() {
 		m_entities.reserve(10000);
 	}
 

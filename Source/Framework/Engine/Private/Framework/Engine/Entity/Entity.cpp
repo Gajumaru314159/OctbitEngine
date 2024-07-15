@@ -4,9 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component.h>
-#include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 
@@ -70,30 +70,29 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	Component* Entity::addComponent(Type type) {
 
-		if (32 < m_components.size()) {
-			LOG_ERROR("コンポーネントの最大数を超えました。 [name={},component={}]",m_name,type.name());
-			return nullptr;
-		}
+		if (auto manager = TypeInfoManager::Get()) {
+			if (auto info = manager->find(type)) {
+				if (info->isSuperClassOf<Component>()) {
+					if (auto ctor = info->findConstructor<Entity>()) {
+						// 依存コンポーネントを生成
+						// LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.name(), depType.name());
 
-		if (auto factory = ComponentFactory::Get()) {
-			if (auto desc = factory->findCreator(type)) {
+						ConstAnyReference args[] = {ConstAnyReference(this)};
+						ctor->invoker(args);
 
-				// 依存コンポーネントを生成
-				for (auto& depType : desc->getDependentComponentTypes()) {
-					if (findComponent(depType) == nullptr) {
-						if (addComponent(depType) == nullptr) {
-							LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.name(), depType.name());
-						}
+						// 生成
+						// if (auto component = ctor->invoke<Component,Entity&>(*this)) {
+						// 	auto result = component.get();
+						// 	m_components.emplace_back(std::move(component));
+						// 	raisePropertyChanged("Components");
+						// 	return result;
+						// }						
 					}
 				}
-
-				m_components.emplace_back(desc->createComponent());
-
-				raisePropertyChanged("Components");
 			}
-		} else {
-			LOG_WARNING("{}が生成されていません。", Type::Get<decltype(this)>().name());
 		}
+
+		LOG_WARNING("{}をComponentとして追加できませんでした。", type.name());
 
 		return nullptr;
 	}
@@ -153,19 +152,22 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネントリスト取得
 	//@―---------------------------------------------------------------------------
-	const ComponentList& Entity::componets()const {
+	const ComponentVector& Entity::componets()const {
 		return m_components;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント追加
 	//@―---------------------------------------------------------------------------
-	Component* Entity::addComponent(Component* component) {
-		if (component) {
-			m_components.emplace_back(component);
-			component->initialize();
-			raisePropertyChanged("Components");
-		}
+	Component* Entity::addComponent(Component* component, bool withInitialize) {
+		// TODO initializeの呼び出しフローを考える
+		//if (component) {
+		//	m_components.emplace_back(component);
+		//	if (withInitialize) {
+		//		component->initialize();
+		//	}
+		//	raisePropertyChanged("Components");
+		//}
 		return component;
 	}
 

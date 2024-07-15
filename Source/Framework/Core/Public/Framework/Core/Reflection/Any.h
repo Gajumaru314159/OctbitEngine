@@ -31,7 +31,7 @@ namespace ob::core {
         //! @brief		UPtrから直接構築
         //@―---------------------------------------------------------------------------
         template<typename ValueType>
-        Any(UPtr<ValueType> value) : m_holder(new Holder<ValueType>(std::move(value))) {}
+        Any(UPtr<ValueType> value) : m_holder(new Holder<ValueType>(std::move(value),0)) {}
 
         //@―---------------------------------------------------------------------------
         //! @brief		コピー
@@ -130,17 +130,21 @@ namespace ob::core {
         template<typename ValueType>
         class Holder : public HolderBase {
         public:
-            Holder(const ValueType& value) : value(std::make_unique<ValueType>(value)) {
+            Holder(const ValueType& value) : value(new ValueType(value)) {
                 anyRef = *this->value;
             }
-            Holder(UPtr<ValueType> value) : value(std::move(value)) {
+            Holder(UPtr<ValueType> value,int) : value(std::move(value)) {
                 anyRef = *this->value;
             }
             Type type() const override{
                 return Type::Get<ValueType>();
             }
             UPtr<HolderBase> clone() const override{
-                return UPtr<HolderBase>(new Holder(*value));
+                if constexpr (std::is_copy_constructible<ValueType>::value) {
+                    return UPtr<HolderBase>(new Holder(*value));
+                } else {
+                    throw std::exception("コピー不可なクラスです。");
+                }
             }
             AnyReference refelence() const override {
                 return anyRef;

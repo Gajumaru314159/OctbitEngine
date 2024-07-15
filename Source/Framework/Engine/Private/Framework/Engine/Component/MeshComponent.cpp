@@ -18,7 +18,9 @@
 
 namespace ob::engine {
 
-	MeshComponent::MeshComponent() {
+	MeshComponent::MeshComponent(Entity* entity)
+		: Component(entity)
+	{
 
 		using namespace ob::rhi;
 		using namespace ob::graphics;

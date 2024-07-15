@@ -10,12 +10,16 @@
 
 #include <Framework/Debug/LogInfo.h>
 #include <Framework/Debug/Profiler.h>
+#include <Framework/Debug/ReflectionExplorer.h>
 #include <Framework/Debug/FrameGraphDebugger.h>
 
 #include <Framework/Graphics/Material/Material.h>
 
 
 #include <Framework/Core/String/FixedString.h>
+
+#include <Framework/Core/Reflection/TypeInfoManager.h>
+#include <Framework/Engine/Reflection.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -39,9 +43,12 @@ int TestDirectX12() {
 
 	ob::core::Logger log;
 
+	TypeInfoManager typeInfoManager;
+
 	ob::debug::Profiler profiler;
 	ob::debug::LogInfo loginfo;
 	ob::debug::FrameGraphDebugger fgdebugger;
+	ob::debug::ReflectionExplorer reflectionExplorer(typeInfoManager);
 
 	System::Setup();
 
@@ -62,29 +69,36 @@ int TestDirectX12() {
 		desc.name = "MainDisplay";
 		desc.window = window;
 		return Display::Create(desc);
-		}();
+	}();
 #pragma endregion
-		// 事前セットアップここまで
+	// 事前セットアップここまで
 
-		RenderScene scene;
-		RenderView view(scene, "Test");
-		scene.addFeature<ImGuiRenderFeature>(scene);
-		scene.addFeature<MaterialRenderFeature>();
-		view.setDisplay(display);
-		view.setPipeline<TestRenderPipeline>(view);
+	RenderScene scene;
+	RenderView view(scene, "Test");
+	scene.addFeature<ImGuiRenderFeature>(scene);
+	scene.addFeature<MaterialRenderFeature>();
+	view.setDisplay(display);
+	view.setPipeline<TestRenderPipeline>(view);
 
-		ImGuiHandle handle;
-		ImGuiHandle handle2;
+	ImGuiHandle handle;
+	ImGuiHandle handle2;
+	ImGuiHandle handle3;
 
-		ImGuiRenderFeature::AddTask(
-			scene, handle,
-			[&] {
-				profiler.draw();
-				loginfo.draw();
-				fgdebugger.draw();
-				drawOutliner(&world->getRootScene());
-				drawComponents();
-			}
+	ImGuiRenderFeature::AddTask(
+		scene, handle,
+		[&] {
+			profiler.draw();
+			loginfo.draw();
+			fgdebugger.draw();
+			drawOutliner(&world->getRootScene());
+			drawComponents();
+		}
+	);
+	ImGuiRenderFeature::AddTask(
+		scene, handle3,
+		[&] {
+			reflectionExplorer.draw();
+		}
 	);
 
 	Ref<Material> material = [&] {

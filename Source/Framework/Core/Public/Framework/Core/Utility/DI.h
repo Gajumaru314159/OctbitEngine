@@ -88,7 +88,7 @@ namespace ob::core {
             operator U& () const {
                 auto instance = injector.create<U>(container);
                 if (instance == nullptr) {
-                    throw Exception(Format("{} => {}", Type::Get<U>().fullName(), Type::Get<T>().fullName()));
+                    throw Exception(Format("{} => {}", Type::Get<U>().name(), Type::Get<T>().name()));
                 }
                 return *instance;
             }
@@ -207,7 +207,7 @@ namespace ob::core {
             try {
                 return reinterpret_cast<T*>(builder->create(container));
             } catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",Type::Get<T>().fullName(),e.message());
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",Type::Get<T>().name(),e.message());
                 // 生成キャンセル
             }
         }

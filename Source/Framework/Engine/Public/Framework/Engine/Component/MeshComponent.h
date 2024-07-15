@@ -24,7 +24,7 @@ namespace ob::engine {
 	class MeshComponent : public engine::Component {
 	public:
 
-		MeshComponent();
+		MeshComponent(Entity*);
 
 		void setModel(StringView path);
 

@@ -6,7 +6,6 @@
 #include <Framework/Core/Core.h>
 #include <Framework/Engine/Engine.h>
 
-#include <Framework/Engine/Component/ComponentFactory.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 
 #include <Framework/Input/InputManager.h>
@@ -38,7 +37,6 @@ namespace ob::engine {
 	Engine::Engine(ServiceInjector& injector)
 	{
 		injector.bind<EntityManager>();
-		injector.bind<ComponentFactory>();
 
 		injector.createAll(m_container);
 	}

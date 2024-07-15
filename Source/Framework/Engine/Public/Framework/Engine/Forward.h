@@ -15,6 +15,5 @@ namespace ob::engine {
 	class EntityHandle;
 	class EntityManager;
 	class Component;
-	class ComponentFactory;
 	
 }

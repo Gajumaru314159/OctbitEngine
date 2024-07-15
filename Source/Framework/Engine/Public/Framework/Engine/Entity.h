@@ -112,7 +112,7 @@ namespace ob::engine {
 			}
 		}
 		//! @brief Componentのリストを取得 
-		const ComponentList& componets()const;
+		const ComponentVector& componets()const;
 
 
 		//===============================================================
@@ -130,7 +130,7 @@ namespace ob::engine {
 
 		Entity(StringView name);
 
-		Component* addComponent(Component*);
+		Component* addComponent(Component*,bool withInitialize);
 
 		void visitComponents(const Delegate<void(Component*)>& func,Type)const;
 
@@ -146,7 +146,7 @@ namespace ob::engine {
 		String					m_name;
 		List<Entity*>			m_children;
 		std::atomic<Entity*>	m_parent = nullptr;
-		ComponentList			m_components;
+		ComponentVector			m_components;
 		TagSet					m_tags;
 		
 		bool					m_active : 1;

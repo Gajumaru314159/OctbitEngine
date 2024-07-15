@@ -8,12 +8,18 @@
 #include <Framework/Engine/Entity.h>
 #include <Framework/Core/Reflection/TypeBuilder.h>
 
+OB_DEFINE_CLASS_INFO(ob::engine::Component) {
+	// constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
+}
+
 namespace ob::engine {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Component::Component() {
+	Component::Component(Entity* entity)
+		: m_entity(*entity)
+	{
 		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
 	}
 
@@ -26,8 +32,7 @@ namespace ob::engine {
 	//! @brief  エンティティ取得
 	//@―---------------------------------------------------------------------------
 	Entity& Component::getEntity()const {
-		OB_ASSERT(m_entity, "EntityにはComponent::initialize()前にアクセスできません。");
-		return *m_entity;
+		return m_entity;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -45,13 +50,3 @@ namespace ob::engine {
 	}
 
 }
-
-OB_DEFINE_CLASS_INFO(ob::engine::Component) {
-
-	using Type = ::ob::engine::Component;
-
-	tag("", "");
-
-	function("getEntity", &Type::getEntity);
-
-};
