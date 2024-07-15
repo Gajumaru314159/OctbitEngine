@@ -128,6 +128,13 @@ namespace ob::debug {
 
 				if (!p.canWrite()) ImGui::EndDisabled();
 
+				if (ImGui::IsItemHovered()) {
+					if (auto desc = p.findTag("Description")) {
+						name = *desc;
+						ImGui::SetTooltip(name.c_str());
+					}
+				}
+
 			}
 
 		}
