@@ -150,10 +150,10 @@ namespace ob::core::internal {
 			// コンストラクタ登録
 			auto& ctor = m_info.constructors.emplace_back();
 			ctor.arguments = { {Type::Get<T>(),"value"}};
-			ctor.invoker = [](Span<ConstAnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
+			ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
 
 			// 値取得
-			m_info.enumValueGetter = [](const ConstAnyReference& instance) {
+			m_info.enumValueGetter = [](const AnyReference& instance) {
 				return enum_cast(instance.get<T>());
 			};
 
@@ -270,7 +270,9 @@ namespace ob::core::internal {
 			-> std::enable_if_t<MethodTraits<TMethod>::Count() == sizeof...(Names) || 0 == sizeof...(Names) , TagBuilder>
 		{
 			using return_type = typename member_function_traits<TMethod>::return_type;
+			OB_ASSERT(m_info.methods.count(name) == 0, "{}は登録済みのメソッドです [{}]",name,m_info.type.name());
 
+			m_info.methodOrder.emplace_back(name);
 			auto& info = m_info.methods[name];
 			info.name = name;
 			info.returnType = Type::Get<return_type>();
@@ -295,14 +297,16 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class TField>
 		TagBuilder field(StringView name, TField T::* address) {
+			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
+			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
 			info.name = name;
 			info.type = Type::Get<TField>();
-			info.getter = [=](const ConstAnyReference& owner) {
+			info.getter = [=](const AnyReference& owner) {
 				return Any(owner.get<T>().*address);
 			};
 			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
-				info.setter = [=](AnyReference& owner, const ConstAnyReference& value) {
+				info.setter = [=](const AnyReference& owner, const AnyReference& value) {
 					(owner.get<T>().*(address)) = value.get<TField>();
 				};
 			}
@@ -315,10 +319,12 @@ namespace ob::core::internal {
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
 			using return_type = typename member_function_traits<F>::return_type;
+			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
+			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const ConstAnyReference& owner) {
+			info.getter = [=](const AnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
 			return info;
@@ -330,13 +336,15 @@ namespace ob::core::internal {
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
 			using return_type = typename member_function_traits<F1>::return_type;
+			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
+			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const ConstAnyReference& owner) {
+			info.getter = [=](const AnyReference& owner) {
 				return Any((owner.get<T>().*(getter))());
 			};
-			info.setter = [=](AnyReference& owner,const ConstAnyReference& value) {
+			info.setter = [=](const AnyReference& owner,const AnyReference& value) {
 				(owner.get<T>().*(setter))(value.get<remove_cvr_t<return_type>>());
 			};
 			return info;
@@ -347,7 +355,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
 		//@―---------------------------------------------------------------------------
-		static Any CreateWithoutArgs([[meybe_unused]] Span<ConstAnyReference>) {
+		static Any CreateWithoutArgs([[meybe_unused]] Span<AnyReference>) {
 			return std::move(Any(std::make_unique<T>()));
 		}
 
@@ -355,7 +363,7 @@ namespace ob::core::internal {
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
-		static UPtr<T> CreateImpl(Span<ConstAnyReference> args, std::index_sequence<I...>) {
+		static UPtr<T> CreateImpl(Span<AnyReference> args, std::index_sequence<I...>) {
 			return std::make_unique<T>(args[I].get<Args>()...);
 		}
 
@@ -363,10 +371,10 @@ namespace ob::core::internal {
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class... Args>
-		static Any Create(Span<ConstAnyReference> args) {
+		static Any Create(Span<AnyReference> args) {
 
 			Type types[] = {Type::Get<Args>()...};
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const ConstAnyReference& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const AnyReference& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
 

@@ -110,7 +110,7 @@ OB_REGISTER_RTTI(Food);
 OB_REGISTER_RTTI(Fruit);
 
 
-nlohmann::json Serealize(const ConstAnyReference& owner,const TypeInfoManager& manager) {
+nlohmann::json Serealize(const AnyReference& owner,const TypeInfoManager& manager) {
 	nlohmann::json obj;
 	auto& type = owner.type();
 
@@ -175,9 +175,9 @@ Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
 				auto& type = property.type;
 
 				if (false);
-				else if (type.is<s32>()) property.setter(owner, value.operator s32());
-				else if (type.is<f32>()) property.setter(owner, value.operator f32());
-				else if (type.is<String>()) property.setter(owner, value.operator String());
+				else if (type.is<s32>()) property.set(owner, value.operator s32());
+				else if (type.is<f32>()) property.set(owner, value.operator f32());
+				else if (type.is<String>()) property.set(owner, value.operator String());
 				else if (owner.list()) {
 					for (auto& item : value.array()) {
 						// 要素型が必要

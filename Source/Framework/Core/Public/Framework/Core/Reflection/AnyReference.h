@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
-#include <Framework/Core/Reflection/ConstAnyReference.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 #include <Framework/Core/Template/Utility/SequenceTraits.h>
 
@@ -20,15 +19,12 @@ namespace ob::core {
         AnyReference() = default;
 
         //! 参照から構築
-        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any> || std::is_same_v<T, ConstAnyReference> || std::is_const_v<T>)>>
+        template<class T, class = std::enable_if_t<!std::is_same_v<std::remove_const_t<T>, Any> && !std::is_same_v<std::remove_const_t<T>, AnyReference>>>
         AnyReference(T& value) { reset_impl(value); }
 
         //! 参照から代入
-        template<class T, class = std::enable_if_t<!(std::is_same_v<T, Any> || std::is_same_v<T, ConstAnyReference> || std::is_const_v<T>)>>
+        template<class T, class = std::enable_if_t<!std::is_same_v<std::remove_const_t<T>, Any> && !std::is_same_v<std::remove_const_t<T>, AnyReference>>>
         AnyReference& operator=(T& value) { reset_impl(value); return *this; }
-
-        //! ConstAnyReferenceへの変換
-        operator ConstAnyReference() const { return m_const; }
 
         //! 値を保持しているか
         bool empty()const { return m_pointer != nullptr; }
@@ -38,9 +34,9 @@ namespace ob::core {
 
         //! 値を取得
         template<class T>
-        T& get() const {
-            if (!m_type.is<T>()) throw std::bad_cast();
-            return *reinterpret_cast<T*>(m_pointer);
+        std::remove_reference_t<T>& get() const {
+            // if (!m_type.is<T>()) throw std::bad_cast();
+            return *reinterpret_cast<std::remove_reference_t<T>*>(m_pointer);
         }
 
     public:
@@ -49,7 +45,7 @@ namespace ob::core {
         //! 異なる型のイテレータを共通操作するためのラッパー
         struct sequence_iterator_wrapper {
             virtual ~sequence_iterator_wrapper() = default;
-            virtual ConstAnyReference access() const = 0;
+            virtual AnyReference access() const = 0;
             virtual void increment() = 0;
             virtual bool equals(const sequence_iterator_wrapper& other)const = 0;
         };
@@ -57,20 +53,20 @@ namespace ob::core {
         //! sequence_iterator_wrapperの特殊化
         template<class T>
         struct sequence_iterator_wrapper_template : sequence_iterator_wrapper {
-            sequence_iterator_wrapper_template(typename T::const_iterator itr) : m_itr(itr) {}
-            ConstAnyReference access() const override { return *m_itr; };
+            sequence_iterator_wrapper_template(typename T::iterator itr) : m_itr(itr) {}
+            AnyReference access() const override { return *m_itr; };
             void increment() override { ++m_itr; }
             bool equals(const sequence_iterator_wrapper& other)const {
                 return static_cast<const sequence_iterator_wrapper_template<T>*>(&other)->m_itr == m_itr;
             }
-            typename T::const_iterator m_itr;
+            typename T::iterator m_itr;
         };
 
         //! イテレータ本体
         class sequence_iterator {
         public:
             sequence_iterator(UPtr<sequence_iterator_wrapper> impl) : m_impl(std::move(impl)) {}
-            ConstAnyReference operator*() { return m_impl->access(); }
+            AnyReference operator*() { return m_impl->access(); }
             sequence_iterator& operator++() { m_impl->increment(); return *this; }
             bool operator!=(const sequence_iterator& v) { return !m_impl->equals(*v.m_impl); }
         private:
@@ -100,7 +96,7 @@ namespace ob::core {
         //! 異なる型のイテレータを共通操作するためのラッパー
         struct map_iterator_wrapper {
             virtual ~map_iterator_wrapper() = default;
-            virtual Pair<ConstAnyReference, AnyReference> access() = 0;
+            virtual Pair<AnyReference, AnyReference> access() = 0;
             virtual void increment() = 0;
             virtual bool equals(const map_iterator_wrapper& other)const = 0;
         };
@@ -109,7 +105,7 @@ namespace ob::core {
         class map_iterator {
         public:
             map_iterator(UPtr<map_iterator_wrapper> impl) : m_impl(std::move(impl)) {}
-            Pair<ConstAnyReference, AnyReference> operator*() { return m_impl->access(); }
+            Pair<AnyReference, AnyReference> operator*() { return m_impl->access(); }
             map_iterator& operator++() { m_impl->increment(); return *this; }
             bool operator!=(const map_iterator& v) { return !m_impl->equals(*v.m_impl); }
         private:
@@ -144,10 +140,9 @@ namespace ob::core {
         template<class T>
         void reset_impl(T& value) {
             m_type = Type::Get<T>();
-            m_pointer = &value;
+            m_pointer = const_cast<void*>(reinterpret_cast<const void*>(&value));
             m_list = {};
             m_map = {};
-            m_const = value;
             if constexpr (is_sequence<T>::value) {
                 m_list = ListAccessor(
                     [&] { return std::make_unique<sequence_iterator_wrapper_template<T>>(std::begin(value)); },
@@ -164,7 +159,6 @@ namespace ob::core {
         void* m_pointer = nullptr;
         ListAccessor m_list;
         MapAccessor m_map;
-        ConstAnyReference m_const;
     };
 
     namespace internal {
@@ -172,7 +166,7 @@ namespace ob::core {
         template<class T>
         struct map_iterator_wrapper_template : AnyReference::map_iterator_wrapper {
             map_iterator_wrapper_template(typename T::iterator itr) : m_itr(itr) {}
-            Pair<ConstAnyReference, AnyReference> access() override { return { m_itr->first,m_itr->second }; };
+            Pair<AnyReference, AnyReference> access() override { return { m_itr->first,m_itr->second }; };
             void increment() override { ++m_itr; }
             bool equals(const map_iterator_wrapper& other)const {
                 return static_cast<const map_iterator_wrapper_template<T>*>(&other)->m_itr == m_itr;

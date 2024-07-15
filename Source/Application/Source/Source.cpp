@@ -21,6 +21,8 @@
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Engine/Reflection.h>
 
+#include <Framework/Engine/Component/ReflectionTestComponent.h>
+
 //-----------------------------------------------------------------
 using namespace ob;
 using namespace ob::rhi;
@@ -56,6 +58,7 @@ int TestDirectX12() {
 	auto scene2 = Scene::Create("SubScene");
 	auto entity = Entity::Create("RootEntity");
 	entity->addComponent<TransformComponent>();
+	entity->addComponent<ReflectionTestComponent>();
 	scene2->addEntity(entity);
 	world->getRootScene().addSubScene(*scene2);
 

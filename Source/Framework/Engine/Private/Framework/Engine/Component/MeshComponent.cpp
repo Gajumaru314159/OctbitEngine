@@ -18,7 +18,7 @@
 
 namespace ob::engine {
 
-	MeshComponent::MeshComponent(Entity* entity)
+	MeshComponent::MeshComponent(Entity& entity)
 		: Component(entity)
 	{
 

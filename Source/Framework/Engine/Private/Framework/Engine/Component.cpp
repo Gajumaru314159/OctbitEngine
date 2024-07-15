@@ -17,8 +17,8 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	Component::Component(Entity* entity)
-		: m_entity(*entity)
+	Component::Component(Entity& entity)
+		: m_entity(entity)
 	{
 		OB_DEBUG_CONTEXT(setNotificationSuppression(false));
 	}

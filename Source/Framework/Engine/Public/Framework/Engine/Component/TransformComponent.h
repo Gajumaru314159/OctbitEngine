@@ -20,7 +20,7 @@ namespace ob::engine {
 
 		OB_RTTI();
 
-		TransformComponent(Entity*);
+		TransformComponent(Entity&);
 
 		~TransformComponent() = default;
 

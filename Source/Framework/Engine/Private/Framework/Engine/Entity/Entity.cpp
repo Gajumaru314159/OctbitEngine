@@ -73,12 +73,12 @@ namespace ob::engine {
 		if (auto manager = TypeInfoManager::Get()) {
 			if (auto info = manager->find(type)) {
 				if (info->isSuperClassOf<Component>()) {
-					if (auto ctor = info->findConstructor<Entity*>()) {
+					if (auto ctor = info->findConstructor<Entity>()) {
 						// 依存コンポーネントを生成
 						// LOG_ERROR("依存するコンポーネントの生成に失敗 [{}=>{}]", type.name(), depType.name());
 
 						// 生成
-						if (auto component = ctor->invoke<Component>(this)) {
+						if (auto component = ctor->invoke<Component>(*this)) {
 							auto result = component.get();
 							m_components.emplace_back(std::move(component));
 							raisePropertyChanged("Components");

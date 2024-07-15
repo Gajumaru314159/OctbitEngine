@@ -25,7 +25,7 @@ namespace ob::engine {
 	public:
 		OB_RTTI();
 
-		MeshComponent(Entity*);
+		MeshComponent(Entity&);
 
 		void setModel(StringView path);
 

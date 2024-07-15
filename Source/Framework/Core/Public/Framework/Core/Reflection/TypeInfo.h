@@ -21,11 +21,11 @@ namespace ob::core {
 	};
 
 
-	using ConstructorInvoker = Func<Any(Span<ConstAnyReference> args)>;
-	using MethodInvoker = Func<Any(AnyReference& owner, Span<ConstAnyReference> args)>;
-	using PropertySetter = Func<void(AnyReference& owner, const ConstAnyReference& value)>;
-	using PropertyGetter = Func<Any(const ConstAnyReference& owner)>;
-	using EnumValueGetter = Func<s32(const ConstAnyReference& owner)>;
+	using ConstructorInvoker = Func<Any(Span<AnyReference> args)>;
+	using MethodInvoker = Func<Any(AnyReference& owner, Span<AnyReference> args)>;
+	using PropertySetter = Func<void(const AnyReference& owner, const AnyReference& value)>;
+	using PropertyGetter = Func<Any(const AnyReference& owner)>;
+	using EnumValueGetter = Func<s32(const AnyReference& owner)>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -72,14 +72,14 @@ namespace ob::core {
 		ConstructorInvoker		invoker;
 
 		template<class T>
-		UPtr<T> invoke(Span<ConstAnyReference> args) const {
+		UPtr<T> invoke(Span<AnyReference> args) const {
 			return invoker(args).release<T>();
 		}
 		template<class T,class... Args>
 		UPtr<T> invoke(Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
-			ConstAnyReference rargs[] = {args...,ConstAnyReference()};
-			return invoker(Span<ConstAnyReference>(rargs,sizeof...(Args))).release<T>();
+			AnyReference rargs[] = {args...,AnyReference()};
+			return invoker(Span<AnyReference>(rargs,sizeof...(Args))).release<T>();
 		}
 
 		template<class... Args>
@@ -146,6 +146,9 @@ namespace ob::core {
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;
+
+		Vector<StringView>		propertyOrder;
+		Vector<StringView>		methodOrder;
 
 		bool					isEnum;
 		EnumValueGetter			enumValueGetter;

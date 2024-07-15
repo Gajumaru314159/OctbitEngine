@@ -70,13 +70,6 @@ namespace ob::core {
         }
 
         //@―---------------------------------------------------------------------------
-        //! @brief		ConstAnyReferenceにキャスト
-        //@―---------------------------------------------------------------------------
-        operator ConstAnyReference () const {
-            return m_holder ? m_holder->refelence() : ConstAnyReference();
-        }
-
-        //@―---------------------------------------------------------------------------
         //! @brief		要素が空か
         //@―---------------------------------------------------------------------------
         bool empty() const {
@@ -110,7 +103,7 @@ namespace ob::core {
         template<typename ValueType>
         ValueType& get() const {
             if (!is<ValueType>()) throw std::bad_cast();
-            return *static_cast<Any::Holder<ValueType>*>(const_cast<HolderBase*>(m_holder.get()))->value;
+            return *reinterpret_cast<ValueType*>(m_holder->get());
         }
 
         //@―---------------------------------------------------------------------------
@@ -119,9 +112,10 @@ namespace ob::core {
         template<class ValueType>
         UPtr<ValueType> release() {
             if (!is<ValueType>()) throw std::bad_cast();
-            UPtr<ValueType> result = std::move(static_cast<Any::Holder<ValueType>*>(m_holder.get())->value);
+            auto instance = reinterpret_cast<ValueType*>(m_holder->release());
+            OB_ASSERT_EXPR(instance);
             reset();
-            return std::move(result);
+            return UPtr<ValueType>(instance);
         }
 
     private:
@@ -132,6 +126,8 @@ namespace ob::core {
             virtual Type type() const = 0;
             virtual UPtr<HolderBase> clone() const = 0;
             virtual AnyReference refelence() const = 0;
+            virtual void* get() const = 0;
+            virtual void* release() = 0;
         };
 
         template<typename ValueType>
@@ -155,6 +151,12 @@ namespace ob::core {
             }
             AnyReference refelence() const override {
                 return anyRef;
+            }
+            void* get() const override {
+                return value.get();
+            }
+            void* release() override {
+                return const_cast<ValueType*>(value.release());
             }
             AnyReference anyRef;
             UPtr<ValueType> value;

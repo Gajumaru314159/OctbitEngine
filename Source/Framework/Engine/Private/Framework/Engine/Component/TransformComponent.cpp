@@ -16,7 +16,7 @@
 
 OB_DEFINE_CLASS_INFO(ob::engine::TransformComponent) {
 	base<ob::engine::Component>();
-	constructor<ob::engine::Entity*>("entity").desc("コンストラクタ");
+	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
 	property("LocalPosition", &T::getLocalPosition, &T::setLocalPosition).desc("ローカル座標を設定");
 	property("LocalScale", &T::getLocalScale, &T::setLocalScale).desc("ローカルスケールを設定");
 	property("LocalRotation", &T::getLocalRotation, &T::setLocalRotation).desc("ローカル回転を設定");
@@ -35,9 +35,12 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	TransformComponent::TransformComponent(Entity* entity)
+	TransformComponent::TransformComponent(Entity& entity)
 		: Component(entity)
-	{}
+	{
+		m_local = Transform::Identity;
+		m_world = Transform::Identity;
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
