@@ -15,52 +15,8 @@ namespace ob::debug {
 
 	class Inspector {
 	public:
-		Inspector();
-
-		void draw(Any obj) {
-
-			TypeInfoManager manager;
-
-			String name;
-			std::string str;
-
-			if (auto type = manager.find(obj.type())) {
-
-				for (auto& [n, p] : type->properties) {
-
-					name = n;
-
-					if (p.type.is<bool>()) {
-						auto value = p.get<bool>(obj);
-						if (ImGui::Checkbox(name.c_str(), &value)) {
-							p.setter((AnyReference)obj, value);
-						}
-					}
-					if (p.type.is<s32>()) {
-						auto value = p.get<s32>(obj);
-						if (ImGui::InputInt(name.c_str(), &value)) {
-							p.setter((AnyReference)obj, value);
-						}
-					}
-					if (p.type.is<f32>()) {
-						auto value = p.get<f32>(obj);
-						if (ImGui::InputFloat(name.c_str(), &value)) {
-							p.setter((AnyReference)obj, value);
-						}
-					}
-					if (p.type.is<String>()) {
-						str = p.get<String>(obj);
-						if (ImGui::InputText(name.c_str(), &str)) {
-							p.setter((AnyReference)obj, String(str));
-						}
-					}
-
-				}
-
-			}
-
-		}
-
+		Inspector() = default;
+		void draw(AnyReference obj, Type type) const;
 	};
 
 }

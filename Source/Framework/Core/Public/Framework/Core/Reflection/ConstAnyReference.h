@@ -36,7 +36,7 @@ namespace ob::core {
         //! 値を取得
         template<class T>
         const T& get() const {
-            if (!m_type.is<T>()) throw std::bad_cast();
+            // if (!m_type.is<T>()) throw std::bad_cast();
             return *reinterpret_cast<const T*>(m_pointer);
         }
 

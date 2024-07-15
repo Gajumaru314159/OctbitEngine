@@ -39,6 +39,25 @@ namespace ob::core {
 			return info;
 		}
 
+	public:
+
+		static void Visit(const std::function<void(const TypeInfo&)> func) {
+			if (auto manager = Get()) {
+				manager->visit(func);
+			}
+		}
+
+		static const TypeInfo* Find(Type type) {
+			if (auto manager = Get()) {
+				return manager->find(type);
+			}
+			return nullptr;
+		}
+		static const TypeInfo* Find(StringView type) {
+			return Find(Type(type));
+		}
+
+
 	private:
 		HashMap<Type, TypeInfo> m_infos;
 	};

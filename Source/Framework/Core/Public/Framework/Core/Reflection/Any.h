@@ -98,11 +98,18 @@ namespace ob::core {
         }
 
         //@―---------------------------------------------------------------------------
+        //! @brief		内部型を取得する
+        //@―---------------------------------------------------------------------------
+        bool is(const Type&) const;
+        template<typename ValueType>
+        bool is() const { return is(Type::Get<ValueType>()); }
+
+        //@―---------------------------------------------------------------------------
         //! @brief		内部オブジェトを取得する
         //@―---------------------------------------------------------------------------
         template<typename ValueType>
         ValueType& get() const {
-            if (Type::Get<ValueType>() != type()) throw std::bad_cast();
+            if (!is<ValueType>()) throw std::bad_cast();
             return *static_cast<Any::Holder<ValueType>*>(const_cast<HolderBase*>(m_holder.get()))->value;
         }
 
@@ -111,7 +118,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<class ValueType>
         UPtr<ValueType> release() {
-            if (Type::Get<ValueType>() != type()) throw std::bad_cast();
+            if (!is<ValueType>()) throw std::bad_cast();
             UPtr<ValueType> result = std::move(static_cast<Any::Holder<ValueType>*>(m_holder.get())->value);
             reset();
             return std::move(result);

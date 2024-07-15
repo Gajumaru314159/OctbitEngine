@@ -18,6 +18,8 @@ namespace ob::engine {
 	class TransformComponent :public Component {
 	public:
 
+		OB_RTTI();
+
 		TransformComponent(Entity*);
 
 		~TransformComponent() = default;

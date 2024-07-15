@@ -1,6 +1,8 @@
 ﻿#include <Framework/Core/Core.h>
 #include <Framework/Engine/All.h>
 #include <Plugins/ImGui/ImGui.h>
+#include <Framework/Core/Reflection/TypeInfoManager.h>
+#include <Framework/Debug/Inspector.h>
 
 using namespace ob;
 
@@ -81,6 +83,8 @@ void drawOutliner(engine::Scene* scene) {
 }
 void drawComponents(engine::Entity* pEntity) {
 
+	debug::Inspector inspector;
+
 	if (pEntity == nullptr) {
 		pEntity = s_selectedEntity;
 	}
@@ -91,33 +95,15 @@ void drawComponents(engine::Entity* pEntity) {
 			ImGui::TextUnformatted(entity.getName().c_str());
 
 			for (auto& component : entity.componets()) {
+
 				auto cmpname = String(component->getComponentType().shortName());
 				if (ImGui::CollapsingHeader(cmpname.c_str())) {
 
 					ImGui::ScopedIndent indent;
 
-					if (component->getType() == Type::Get<engine::TransformComponent>()) {
-						auto c = reinterpret_cast<engine::TransformComponent*>(component.get());
-						{
-							Vec3 value = c->getLocal().position;
-							if (ImGui::DragFloat3("Position", value)) {
-								c->setLocalPosition(value);
-							}
-						}
-						{
-							auto eulerAngles = c->getLocal().rotation.toRot();
-							f32 xyz[] = { eulerAngles.x,eulerAngles.y,eulerAngles.z };
-							if (ImGui::DragFloat3("Rotation", xyz)) {
-								c->setLocalRotation({ xyz[0] ,xyz[1] ,xyz[2] });
-							}
-						}
-						{
-							Vec3 value = c->getLocal().scale;
-							if (ImGui::DragFloat3("Scale", value)) {
-								c->setLocalScale(value);
-							}
-						}
-					}
+					AnyReference obj(*component);
+
+					inspector.draw(obj,component->getType());
 
 				}
 			}

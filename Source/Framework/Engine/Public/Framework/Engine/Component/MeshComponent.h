@@ -23,6 +23,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	class MeshComponent : public engine::Component {
 	public:
+		OB_RTTI();
 
 		MeshComponent(Entity*);
 
