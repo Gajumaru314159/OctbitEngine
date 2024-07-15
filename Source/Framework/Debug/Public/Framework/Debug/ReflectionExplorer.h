@@ -18,9 +18,11 @@ namespace ob::debug {
 		void draw();
 	private:
 		void draw(const TypeInfo&);
+		void drawDetail(const TypeInfo&);
 	private:
-		String m_buffer;
 		const TypeInfoManager& m_manager;
+		String m_buffer;
+		Type m_selected;
 	};
 
 }
