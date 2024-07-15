@@ -50,6 +50,7 @@ public:
 	}
 
 	FruitType getType()const { return m_type; }
+	void setType(FruitType type){ m_type = type; }
 
 	void setPrice(s32 price) { m_price = price; }
 	auto getPrice()const { return m_price; }
@@ -98,7 +99,7 @@ OB_DEFINE_CLASS_INFO(Fruit) {
 	method("toString", &T::toString);
 	property("PriceHistory", &T::getPriceHistory);
 	property("Nutrients", &T::getNutrients);
-	property("Type", &T::getType);
+	property("Type", &T::getType,&T::setType);
 	property("Price", &T::getPrice, &T::setPrice);
 	field("Weight", &T::m_weight);
 }
@@ -178,15 +179,22 @@ Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
 				else if (type.is<f32>()) property.setter(owner, value.operator f32());
 				else if (type.is<String>()) property.setter(owner, value.operator String());
 				else if (owner.list()) {
-
+					for (auto& item : value.array()) {
+						// 要素型が必要
+						// Deserealize(item,manager);
+					}
 				}
 				else if (owner.map()) {
-
+					for (auto& [key,value] : value.items()) {
+						// キーと要素型が必要
+						// Deserealize(key, manager);
+						// Deserealize(value, manager);
+					}
 				}
 				else if (auto info = manager.find(type)) {
 					if (info->isEnum) {
 						if (auto enumInfo = info->findEnumElement(value.operator String())) {
-							// property.setter(owner, enumInfo.);
+							property.setter(owner, enumInfo->sample);
 						}						
 					}
 					else {
@@ -195,59 +203,12 @@ Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
 						}
 					}
 				}
-
-
-				Deserealize(*itr, manager);
 			}
 
 			return std::move(instance);
 		}
 
 	}
-	return {};
-}
-
-template<class T>
-UPtr<T> Deserealize(nlohmann::json& obj, const TypeInfoManager& manager) {
-
-	auto type = Type::Get<T>();
-
-	if (false);
-	else if (type.is<s32>()) obj = owner.get<s32>();
-	else if (type.is<f32>()) obj = owner.get<f32>();
-	else if (is_sequence<T>::value) {
-
-	}
-	else {
-
-		auto type = obj["Type"].operator std::string();
-		if (type != Type::Get<T>())return {};
-
-		if (auto info = manager.find(type)) {
-
-			if (auto ctor = info->findConstructor()) {
-				auto instance = ctor->invoke<T>();
-
-				auto& properties = obj["Properties"];
-				for (auto& [name, p] : properties.items()) {
-
-					if (auto pInfo = info->findProperty(name)) {
-						if (pInfo->canWrite()) {
-
-							pInfo->setter(*instance, );
-						}
-					}
-
-
-				}
-
-			}
-
-		}
-
-	}
-
-
 	return {};
 }
 
@@ -262,7 +223,7 @@ TEST(TypeBuilder, Construct) {
 		}
 	);
 
-	Fruit fruit;
+	Fruit fruit(FruitType::Lemon, 1111, 3.14f);
 
 	if (auto info = manager.find(Type::Get(fruit))) {
 
@@ -273,6 +234,11 @@ TEST(TypeBuilder, Construct) {
 		if (auto copy = Deserealize(clazz, manager)) {
 			auto& copyFruit = copy.get<Fruit>();
 			LOG_INFO("{}", copyFruit.getPrice());
+
+
+			nlohmann::json clazz2 = Serealize(copyFruit, manager);
+
+			LOG_INFO("\n{}", clazz2.dump(4));
 		}
 	}
 

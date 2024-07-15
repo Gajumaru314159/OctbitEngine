@@ -51,7 +51,7 @@ namespace ob::core {
         //@―---------------------------------------------------------------------------
         template<typename ValueType>
         Any& operator=(const ValueType& value) {
-            m_holder = new Holder<ValueType>(value);
+            m_holder.reset(new Holder<ValueType>(value));
             return *this;
         }
 

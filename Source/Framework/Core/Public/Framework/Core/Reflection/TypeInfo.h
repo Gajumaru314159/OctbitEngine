@@ -53,6 +53,7 @@ namespace ob::core {
 		StringView				name;
 		s32						index;
 		s64						value;
+		Any						sample;
 	};
 
 	//@―---------------------------------------------------------------------------

@@ -99,6 +99,7 @@ namespace ob::core::internal {
 			element.name = name;
 			element.index = m_info.enumElements.size() - 1;
 			element.value = enum_cast(value);
+			element.sample = value;
 			return element;
 		}
 
