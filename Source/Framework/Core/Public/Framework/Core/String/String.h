@@ -63,8 +63,8 @@ namespace ob::core {
 		StringBase(const value_type* s, size_type n) :m_str(s, n) {}
 		StringBase(std::initializer_list<value_type> init) :m_str(init) {}
 		StringBase(size_type n, value_type c) :m_str(n, c) {}
-		StringBase(StringBase&& rhs) noexcept : m_str(rhs.m_str) {}
-		StringBase(string_type&& rhs) noexcept : m_str(rhs) {}
+		StringBase(StringBase&& rhs) noexcept : m_str(std::move(rhs.m_str)) {}
+		StringBase(string_type&& rhs) noexcept : m_str(std::move(rhs)) {}
 
 		template <class TStringView, class = is_string_view<TStringView>>
 		explicit StringBase(TStringView s) : m_str(std::begin(s), std::end(s)) {}
@@ -92,6 +92,7 @@ namespace ob::core {
 		// 変換
 		//===============================================================
 		operator StringViewBase<TChar>() const noexcept { return m_str; }
+		operator std::basic_string<TChar>() const noexcept { return m_str; }
 		operator std::basic_string_view<TChar>() const noexcept { return m_str; }
 
 
@@ -121,25 +122,23 @@ namespace ob::core {
 		void resize(size_type n) { m_str.resize(n); }
 		void resize(size_type n, value_type c) { m_str.resize(n, c); }
 		size_type capacity() const noexcept { return m_str.capacity(); }
-		void reserve(size_type res_arg = 0) { m_str.reserve(res_arg); }
+		void reserve(size_type new_capacity) { m_str.reserve(new_capacity); }
 		void shrink_to_fit() { m_str.shrink_to_fit(); }
 		void clear() noexcept { m_str.clear(); }
 		bool empty() const noexcept { return m_str.empty(); }
-		size_type size_bytes() const noexcept { return size() * sizeof(value_type); }
+		size_type size_bytes() const noexcept { return (size()+1) * sizeof(value_type); }
 
 
 		//===============================================================
 		// 要素アクセス
 		//===============================================================
-		value_type& at(size_type pos)& { return m_str.at(pos); }
-		const value_type& at(size_type pos) const& { return m_str.at(pos); };
-		value_type at(size_type pos)&& { return m_str.at(pos); }
-		value_type& operator [](size_type pos) & noexcept { return m_str[pos]; }
-		const value_type& operator [](size_type pos) const& noexcept { return m_str[pos]; }
-		value_type operator [](size_type pos) && noexcept { return m_str[pos]; }
+		value_type& at(size_type pos) { return m_str.at(pos); }
+		const value_type& at(size_type pos) const { return m_str.at(pos); };
+		value_type& operator [](size_type pos) noexcept { return m_str[pos]; }
+		const value_type& operator [](size_type pos) const noexcept { return m_str[pos]; }
 
 		value_type& front() noexcept { return m_str.front(); }
-		const value_type& front() const noexcept { return m_front(); }
+		const value_type& front() const noexcept { return m_str.front(); }
 		value_type& back() noexcept { return m_str.back(); }
 		const value_type& back() const noexcept { return m_str.back(); }
 
@@ -160,9 +159,9 @@ namespace ob::core {
 		StringBase& append(const string_type& s) { m_str.append(s); return *this; }
 		StringBase& append(value_type c) { m_str.append(c); return *this; }
 		StringBase& append(const value_type* s) { m_str.append(s); return *this; }
-		StringBase& append(const value_type* s, size_type count) { m_str.append(s); return *this; }
-		StringBase& append(std::initializer_list<value_type> il) { m_str.append(il); return *this; }
+		StringBase& append(const value_type* s, size_type count) { m_str.append(s,count); return *this; }
 		StringBase& append(size_type n, value_type c) { m_str.append(n, c); return *this; }
+		StringBase& append(std::initializer_list<value_type> il) { m_str.append(il); return *this; }
 		template <class TStringView, class = is_string_view<TStringView>>
 		StringBase& append(const TStringView& s) { m_str.append(s); return *this; }
 		template <class Iterator> StringBase& append(Iterator first, Iterator last) { m_str.append(first, last); return *this; }
@@ -206,10 +205,10 @@ namespace ob::core {
 		// 文字列の消去
 		//===============================================================
 		StringBase& erase(size_type pos = 0, size_type n = npos) { m_str.erase(pos, n); return *this; }
-		iterator erase(const_iterator pos) noexcept { m_str.erase(pos); return *this; }
-		iterator erase(const_iterator first, const_iterator last) noexcept { m_str.erase(first, last); return *this; }
+		iterator erase(const_iterator pos) noexcept { return m_str.erase(pos); }
+		iterator erase(const_iterator first, const_iterator last) noexcept { return m_str.erase(first, last); }
 
-		void pop_front(size_type n=1) { for (size_type i = 0; i < n; ++i)m_str.push_front(); }
+		void pop_front(size_type n=1) { m_str.erase(0,n); }
 		void pop_back(size_type n=1) noexcept { for (size_type i = 0; i < n; ++i)m_str.pop_back(); }
 
 		StringBase& remove(value_type c) {
@@ -224,8 +223,11 @@ namespace ob::core {
 			m_str.resize(i);
 			return *this;
 		}
+		StringBase& remove(const value_type* s) { 
+			return remove(StringView(s));
+		}
 		template <class TStringView, class = is_string_view<TStringView>>
-		StringBase& remove(const TStringView& s) {
+		StringBase& remove(TStringView s) {
 			size_type i, n;
 			for (n = i = 0; i + n < m_str.size();) {
 
@@ -256,10 +258,11 @@ namespace ob::core {
 		// 文字列の置換
 		//===============================================================
 		StringBase& replace(value_type oldChar, value_type newChar) { for (auto& c : m_str)if (c == oldChar)c = newChar; return *this; }
+		StringBase& replace(const char* oldStr, const char* newStr) { return replace(StringView(oldStr), StringView(newStr)); }
 		template <class TStringView, class = is_string_view<TStringView>>
 		StringBase& replace(const TStringView& oldStr, const TStringView& newStr) {
 			size_type pos = 0;
-			while (pos = find(pos, oldStr), pos != m_str.npos) {
+			while (pos = m_str.find(oldStr, pos), pos != m_str.npos) {
 				m_str.replace(pos, oldStr.size(), newStr);
 				pos += oldStr.size();
 			}
@@ -267,8 +270,10 @@ namespace ob::core {
 		}
 		template <class TStringView, class = is_string_view<TStringView>>
 		StringBase& replace(size_type pos, size_type n, const TStringView& s) { m_str.replace(pos, n, s); return *this; }
+		StringBase& replace(size_type pos, size_type n, const char* s) { replace(pos, n, StringView(s)); return *this; }
 		template <class TStringView, class = is_string_view<TStringView>>
 		StringBase& replace(const_iterator first, const_iterator last, const TStringView& s) { m_str.replace(first, last, s); return *this; }
+		StringBase& replace(const_iterator first, const_iterator last, const char* s) { replace(first, last, StringView(s)); return *this; }
 		template <class Iterator>
 		StringBase& replace(const_iterator first, const_iterator last, Iterator first2, Iterator last2) { m_str.replace(first, last, first2, last2); return *this; }
 
@@ -299,8 +304,12 @@ namespace ob::core {
 		// 文字列の切り出し
 		//===============================================================
 		StringViewBase<TChar> substr(size_type pos = 0, size_type n = npos) const { return StringViewBase<TChar>(m_str).substr(pos, n); }
-		StringViewBase<TChar> rsubstr(size_type pos = 0, size_type n = npos) const { return StringViewBase<TChar>(m_str).substr(size() - pos - n - 1, n); }
-		StringViewBase<TChar> substr_range(size_type first = 0, size_type last = npos) const { return StringViewBase<TChar>(m_str).substr(first, last - first); }
+		StringViewBase<TChar> rsubstr(size_type pos = 0, size_type n = npos) const {
+			if (size() < pos) pos = size();
+			if (size() - pos < n) n = size() - pos;
+			return StringViewBase<TChar>(m_str).substr(size() - pos - n, n);
+		}
+		StringViewBase<TChar> substr_range(size_type first = 0, size_type last = npos) const { return StringViewBase<TChar>(m_str).substr(first, last - first + 1); }
 
 
 		//===============================================================
@@ -312,7 +321,7 @@ namespace ob::core {
 		constexpr size_type find(const value_type* s, size_type pos, size_type count) const noexcept { return m_str.find(s, pos, count); }
 		constexpr size_type find(const value_type* s, size_type pos = 0) const noexcept { return m_str.find(s, pos); }
 		template<class TStringView>
-		constexpr size_type find_first_not_of(TStringView str, size_type pos = npos) const noexcept { return m_str.find_first_not_of(str, pos); }
+		constexpr size_type find_first_not_of(TStringView str, size_type pos = 0) const noexcept { return m_str.find_first_not_of(str, pos); }
 		template<class TStringView>
 		constexpr size_type find_first_not_of(TStringView str, size_type pos,size_type n) const noexcept { return m_str.find_first_not_of(str, pos,n); }
 
@@ -333,7 +342,7 @@ namespace ob::core {
 		s32 compare(const StringBase& s) const noexcept { return m_str.compare(s.m_str); }
 		s32 compare(const value_type* s) const noexcept { return m_str.compare(s); }
 		template <class TStringView, class = is_string_view<TStringView>>
-		s32 compare(TStringView s) const noexcept { return m_str.compare(s.m_str); }
+		s32 compare(TStringView s) const noexcept { return m_str.compare(s); }
 
 		bool starts_with(value_type c) const noexcept {
 			if (empty())return false;
@@ -348,16 +357,19 @@ namespace ob::core {
 			if (size() < s.size())return false;
 			return s == m_str.substr(0, s.size());
 		}
+		bool starts_with(const char* s) const { return starts_with(StringView(s)); }
+
 
 		template <class TStringView, class = is_string_view<TStringView>>
 		bool ends_with(TStringView s) const {
 			if (size() < s.size())return false;
 			return s == m_str.substr(size() - s.size(), s.size());
 		}
+		bool ends_with(const char* s) const { return ends_with(StringView(s)); }
 
 		template <class TStringView, class = is_string_view<TStringView>>
 		constexpr bool contains(TStringView s) const noexcept { return m_str.find(s) != m_str.npos; }
-		constexpr bool contains(value_type* c) const noexcept { return m_str.find(c) != m_str.npos; }
+		constexpr bool contains(value_type c) const noexcept { return m_str.find(c) != m_str.npos; }
 		constexpr bool contains(const value_type* s) const noexcept { return m_str.find(s) != m_str.npos; }
 
 

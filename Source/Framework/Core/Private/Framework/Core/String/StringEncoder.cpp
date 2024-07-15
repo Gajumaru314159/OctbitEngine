@@ -307,9 +307,8 @@ namespace ob::core {
             }
             if (sizeof(wchar_t) == sizeof(char16_t)) {
                 StringBase<char> tmp;
-                tmp.resize(size16to8(src.size()));
-                utf8::utf16to8(src.begin(), src.end(), std::back_inserter(dest));
-                dest = utf8::utf8to32(tmp);
+                // StringViewBase<wchar_t>からStringBase<char32_t>に変換
+                Encode(StringViewBase<char16_t>(reinterpret_cast<const char16_t*>(src.data()), src.size()), dest);
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
                 dest.resize(src.size());
