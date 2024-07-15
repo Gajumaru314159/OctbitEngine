@@ -77,7 +77,15 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		constexpr bool contains(f32 value)const noexcept
 		{
-			return min < value&& value < max;
+			return containsCC(value);
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		[min,max]がvalueを含むか
+		//@―---------------------------------------------------------------------------
+		constexpr bool containsCC(f32 value)const noexcept
+		{
+			return min <= value && value <= max;
 		}
 
 
@@ -86,7 +94,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		constexpr bool containsOO(f32 value)const noexcept
 		{
-			return min <= value && value <= max;
+			return min < value && value < max;
 		}
 
 
@@ -95,7 +103,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		constexpr bool containsCO(f32 value)const noexcept
 		{
-			return min < value&& value <= max;
+			return min <= value&& value < max;
 		}
 
 
@@ -104,7 +112,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		constexpr bool containsOC(f32 value)const noexcept
 		{
-			return min <= value&& value < max;
+			return min < value&& value <= max;
 		}
 
 	public:
