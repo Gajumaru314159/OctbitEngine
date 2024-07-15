@@ -54,8 +54,8 @@ TEST(Capsule, Getter) {
         f32 radius = 2.f;
         Capsule capsule(pos1, pos2, radius);
 
-        ASSERT_EQ(capsule.height(), Vec3::Dist(pos1, pos2) + radius);
-        ASSERT_EQ(capsule.minHeight(), Vec3::Dist(pos1,pos2));
+        ASSERT_FLOAT_EQ(capsule.height(), Vec3::Dist(pos1, pos2) + radius * 2.0f);
+        ASSERT_FLOAT_EQ(capsule.minHeight(), Vec3::Dist(pos1,pos2));
     }
 
     // 中心 / 高さ / 回転

@@ -165,7 +165,7 @@ namespace ob::core {
 	//! @brief      高さ
 	//@―---------------------------------------------------------------------------
 	constexpr f32 Viewport::depth()const noexcept {
-		return farZ - nearZ;
+		return Math::Abs(farZ - nearZ);
 	}
 
 

@@ -176,9 +176,7 @@ namespace ob::core {
     //! @brief           体積を取得
     //@―---------------------------------------------------------------------------
     inline f32 Cylinder::volume()const noexcept {
-        return
-            radius * radius * Math::PI * height() +
-            radius * radius * radius * Math::PI * 4.0f / 3.0f;
+        return radius * radius * Math::PI * height();
     }
 
     //! @endcond

@@ -162,7 +162,7 @@ namespace ob::core {
     //! @brief           高さを取得
     //@―---------------------------------------------------------------------------
     inline f32 Capsule::height()const {
-        return Vec3::Dist(pos1, pos2) + radius;
+        return Vec3::Dist(pos1, pos2) + radius * 2.0f;
     }
 
 

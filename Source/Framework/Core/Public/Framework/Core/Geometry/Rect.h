@@ -250,10 +250,10 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     constexpr bool Rect::operator==(const Rect& other)const noexcept {
         return
-            left == other.left &&
-            top == other.top &&
-            right == other.right &&
-            bottom == other.bottom;
+            Math::IsNearEquals(left,other.left) &&
+            Math::IsNearEquals(top,other.top) &&
+            Math::IsNearEquals(right,other.right) &&
+            Math::IsNearEquals(bottom,other.bottom);
     }
 
 

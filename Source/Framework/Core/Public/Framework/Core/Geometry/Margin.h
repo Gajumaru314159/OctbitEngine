@@ -88,13 +88,13 @@ namespace ob::core {
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  親サイズからサイズを計算
+		//! @brief  親サイズから余白サイズを引いたサイズを計算
 		//@―---------------------------------------------------------------------------
 		constexpr Vec2 size(const Vec2& parent)const noexcept;
 
 
 		//@―---------------------------------------------------------------------------
-		//! @brief  親矩形から Rect を計算
+		//! @brief  親矩形から余白サイズを引いた Rect を計算
 		//@―---------------------------------------------------------------------------
 		constexpr Rect rect(const Rect& parent)const noexcept;
 
@@ -218,10 +218,7 @@ namespace ob::core {
 	//! @brief  親矩形から Rect を計算
 	//@―---------------------------------------------------------------------------
 	constexpr Rect Margin::rect(const Rect& parent)const noexcept {
-		return Rect(
-			size(parent.size()),
-			parent.center() + Vec2(left + right, top + bottom) * 0.5f
-		);
+		return Rect(parent.left + left, parent.top + top, parent.right - right, parent.bottom - bottom);
 	}
 
 

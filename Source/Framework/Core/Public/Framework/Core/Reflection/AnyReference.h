@@ -142,7 +142,7 @@ namespace ob::core {
         const ListAccessor& list() const { return m_list; }
         const MapAccessor& map() const { return m_map; }
 
-    private:
+    public:
 
         template < typename T >
         class callable_get_type {
@@ -150,16 +150,20 @@ namespace ob::core {
             template< typename Arg >
             static auto impl(...) -> std::false_type;
             template < typename Arg >
-            static auto impl(Arg*) -> decltype(std::declval < Arg >().getType(), std::true_type());
+            static auto impl(Arg*) -> decltype(std::declval<Arg>().getType(), std::true_type());
         public:
-            static constexpr bool value = decltype(impl< T >(nullptr)) ::value;
+            static constexpr bool value = decltype(impl<T>(nullptr)) ::value;
         };
 
         template<class T>
         void reset_impl(T& value) {
 
-            if constexpr (callable_get_type<T>::value){
-				m_type = value.getType();
+            if constexpr (callable_get_type<T>::value) {
+                if constexpr (std::is_same<decltype(value.getType()), Type>::value){
+                    m_type = value.getType();
+                } else {
+                    m_type = Type::Get<T>();
+                }
 			} else {
 				m_type = Type::Get<T>();
 			}

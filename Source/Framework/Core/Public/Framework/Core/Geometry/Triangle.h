@@ -211,13 +211,14 @@ namespace ob::core {
     //! @brief  外心を計算
     //@―---------------------------------------------------------------------------
     inline Vec3 Triangle::circumcenter()const noexcept {
-        auto a = Vec3::Dist(p1, p2);
-        auto b = Vec3::Dist(p2, p0);
-        auto c = Vec3::Dist(p0, p1);
-        auto ca = Vec3::CosAngle(p2 - p0, p1 - p0);
-        auto cb = Vec3::CosAngle(p0 - p1, p2 - p1);
-        auto cc = Vec3::CosAngle(p1 - p2, p0 - p2);
-        return (a * ca * p0 + b * cb * p1 + c * cc * p2) / (a * ca + b * cb + c * cc);
+        auto a = Vec3::SqrDist(p1, p2);
+        auto b = Vec3::SqrDist(p2, p0);
+        auto c = Vec3::SqrDist(p0, p1);
+        auto t_a = a * (-a + b + c);
+        auto t_b = b * (a - b + c);
+        auto t_c = c * (a + b - c);
+        auto s = t_a + t_b + t_c;
+        return t_a / s * p0 + t_b / s*p1 +t_c / s * p2;
     }
 
 

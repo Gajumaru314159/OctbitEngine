@@ -217,6 +217,8 @@ TEST(TypeBuilder, Construct) {
 	Logger logger;
 	TypeInfoManager manager;
 
+	AnyReference::callable_get_type<FruitType&>::value;
+
 	manager.visit(
 		[](const TypeInfo& info) {
 			LOG_INFO("\n{}", PrintTypeInfo(info));
@@ -227,7 +229,7 @@ TEST(TypeBuilder, Construct) {
 
 	if (auto info = manager.find(Type::Get(fruit))) {
 
-		nlohmann::json clazz = Serealize(fruit,manager);
+		nlohmann::json clazz = Serealize(fruit, manager);
 
 		LOG_INFO("\n{}",clazz.dump(4));
 
