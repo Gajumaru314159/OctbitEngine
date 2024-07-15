@@ -42,7 +42,7 @@ namespace ob::core {
         template<class T>
         std::remove_reference_t<T>& get() const {
             // TODO ダイナミックキャストチェックをできるようにする
-            // if (!isCastable<T>()) throw std::bad_cast();
+            if (!isCastable<T>()) throw std::bad_cast();
             return *reinterpret_cast<std::remove_reference_t<T>*>(m_pointer);
         }
 
@@ -144,9 +144,25 @@ namespace ob::core {
 
     private:
 
+        template < typename T >
+        class callable_get_type {
+        private:
+            template< typename Arg >
+            static auto impl(...) -> std::false_type;
+            template < typename Arg >
+            static auto impl(Arg*) -> decltype(std::declval < Arg >().getType(), std::true_type());
+        public:
+            static constexpr bool value = decltype(impl< T >(nullptr)) ::value;
+        };
+
         template<class T>
         void reset_impl(T& value) {
-            m_type = Type::Get<T>();
+
+            if constexpr (callable_get_type<T>::value){
+				m_type = value.getType();
+			} else {
+				m_type = Type::Get<T>();
+			}
             m_pointer = const_cast<void*>(reinterpret_cast<const void*>(&value));
             m_list = {};
             m_map = {};
