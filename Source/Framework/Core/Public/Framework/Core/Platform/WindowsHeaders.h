@@ -2,6 +2,7 @@
 //! @file
 //! @brief		Windowsヘッダー読み込み
 //! @author		Gajumaru
+//! @note		このヘッダーはプラットフォーム固有機能なのでPublicなヘッダーではインクルードしないでください。
 //***********************************************************
 #pragma once
 #include <Framework/Core/HAL/Platform.h>
