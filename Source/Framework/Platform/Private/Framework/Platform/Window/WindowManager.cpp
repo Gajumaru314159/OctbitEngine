@@ -39,6 +39,13 @@ namespace ob::platform {
     //! @brief  メインウィンドウを取得
     //@―---------------------------------------------------------------------------
     auto WindowManager::getMainWindow()->Window& {
+        static bool isAutoGenerate = false;
+        if (!m_mainWindow && isAutoGenerate==false) {
+            isAutoGenerate = true;
+            platform::WindowDesc windowDesc;
+            windowDesc.title = "Application";
+            m_mainWindow = platform::Window(windowDesc);
+        }
         return m_mainWindow;
     }
 
