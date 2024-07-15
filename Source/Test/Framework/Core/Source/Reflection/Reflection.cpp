@@ -213,35 +213,5 @@ Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
 }
 
 TEST(TypeBuilder, Construct) {
-
-	Logger logger;
 	TypeInfoManager manager;
-
-	AnyReference::callable_get_type<FruitType&>::value;
-
-	manager.visit(
-		[](const TypeInfo& info) {
-			LOG_INFO("\n{}", PrintTypeInfo(info));
-		}
-	);
-
-	Fruit fruit(FruitType::Lemon, 1111, 3.14f);
-
-	if (auto info = manager.find(Type::Get(fruit))) {
-
-		nlohmann::json clazz = Serealize(fruit, manager);
-
-		LOG_INFO("\n{}",clazz.dump(4));
-
-		if (auto copy = Deserealize(clazz, manager)) {
-			auto& copyFruit = copy.get<Fruit>();
-			LOG_INFO("{}", copyFruit.getPrice());
-
-
-			nlohmann::json clazz2 = Serealize(copyFruit, manager);
-
-			LOG_INFO("\n{}", clazz2.dump(4));
-		}
-	}
-
 }
