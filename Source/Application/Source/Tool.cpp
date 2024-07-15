@@ -92,7 +92,15 @@ void drawComponents(engine::Entity* pEntity) {
 	if (ImGui::Begin("Inspector")) {
 		if (pEntity) {
 			auto& entity = *pEntity;
-			ImGui::TextUnformatted(entity.getName().c_str());
+
+			if (ImGui::CollapsingHeader("Entity")) {
+
+				ImGui::ScopedIndent indent;
+
+				AnyReference obj(entity);
+
+				inspector.draw(obj, Type::Get(entity));
+			}
 
 			for (auto& component : entity.componets()) {
 

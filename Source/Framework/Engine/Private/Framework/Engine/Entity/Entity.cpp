@@ -9,6 +9,13 @@
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/Entity/EntityManager.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
+
+OB_DEFINE_CLASS_INFO(ob::engine::Entity) {
+	property("Active", &T::isActive, &T::setActive).desc("アクティブ");
+	property("Name", &T::getName, &T::setName).desc("名前");
+}
+
 
 namespace ob::engine {
 

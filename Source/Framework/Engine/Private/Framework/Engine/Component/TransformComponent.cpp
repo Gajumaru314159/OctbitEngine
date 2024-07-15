@@ -6,14 +6,6 @@
 #include <Framework/Engine/Component/TransformComponent.h>
 #include <Framework/Core/Reflection/TypeBuilder.h>
 
-//***********************************************************
-//! @file
-//! @brief		TransformComponent
-//! @author		Gajumaru
-//***********************************************************
-#include <Framework/Engine/Component/TransformComponent.h>
-#include <Framework/Core/Reflection/TypeRegister.h>
-
 OB_DEFINE_CLASS_INFO(ob::engine::TransformComponent) {
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
