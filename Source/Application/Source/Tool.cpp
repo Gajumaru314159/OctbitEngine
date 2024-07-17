@@ -104,7 +104,7 @@ void drawComponents(engine::Entity* pEntity) {
 
 			for (auto& component : entity.componets()) {
 
-				auto cmpname = String(component->getComponentType().shortName());
+				auto cmpname = String(component->getType().shortName());
 				if (ImGui::CollapsingHeader(cmpname.c_str())) {
 
 					ImGui::ScopedIndent indent;
