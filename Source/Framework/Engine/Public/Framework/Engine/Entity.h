@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Reflection/DynamicCast.h>
 #include <Framework/Engine/Forward.h>
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/ECSTypes.h>
@@ -105,9 +106,8 @@ namespace ob::engine {
 		//! @brief 特定の型のComponentに対して処理
 		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
 			for (auto& component : componens()) {
-				// TODO DynamicCast
-				if (component->getComponentType() == Type::Get<T>()) {
-					func(*reinterpret_cast<T*>(component.get()));
+				if (auto c = DynamicCast<T>(*component)) {
+					func(*c);
 				}
 			}
 		}

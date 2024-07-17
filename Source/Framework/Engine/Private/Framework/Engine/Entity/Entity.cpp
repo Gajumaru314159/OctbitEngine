@@ -122,7 +122,7 @@ namespace ob::engine {
 		// TODO Componentの取得をインターフェイスで行う
 		Component* found = nullptr;
 		for (auto& component : m_components) {
-			if (component->getComponentType() == type) {
+			if (IsCastable(component->getType(),type)) {
 				if (index <= 0) {
 					found = component.get();
 					break;
@@ -156,7 +156,7 @@ namespace ob::engine {
 		// TODO Componentの取得をインターフェイスで行う
 		s32 count = 0;
 		for (auto& component : m_components) {
-			if (component->getComponentType() == type) {
+			if (IsCastable(component->getType(),type)) {
 				if (count == index) {
 					return component.get();
 				}
@@ -195,8 +195,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void Entity::visitComponents(const Delegate<void(Component*)>& func, Type type)const {
 		for (auto& component : m_components) {
-			// TODO DynamicCast
-			if (component->getComponentType() == type || type == Type::Invalid()) {
+			if (IsCastable(component->getType(), type)) {
 				func(component.get());
 			}
 		}
