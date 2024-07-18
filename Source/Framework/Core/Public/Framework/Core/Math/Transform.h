@@ -22,6 +22,8 @@ namespace ob::core {
         Transform operator*(const Transform&)const;
         Transform operator*=(const Transform&);
 
+        operator Matrix()const;
+
         //@―---------------------------------------------------------------------------
         //! @brief  Matrix に変換
         //@―---------------------------------------------------------------------------
