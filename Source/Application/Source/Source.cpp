@@ -23,6 +23,7 @@
 
 #include <Framework/Engine/Component/ReflectionTestComponent.h>
 #include <Framework/Engine/Component/MeshComponent.h>
+#include <Framework/Engine/Component/FlyCameraComponent.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -51,10 +52,21 @@ int TestDirectX12() {
 	auto scene2 = Scene::Create("SubScene");
 	auto entity = Entity::Create("RootEntity");
 	// entity->addComponent<TransformComponent>();
+	entity->setActive(true);
 	entity->addComponent<ReflectionTestComponent>();
-	entity->addComponent<MeshComponent>();
+	entity->addComponent<MeshComponent>()->setModel("Asset/Model/Ukulele.obj");
 	scene2->addEntity(entity);
+	
 	world->getRootScene().addSubScene(*scene2);
+
+
+	auto camera = Entity::Create("FlyCamera");
+	if (auto transform = camera->addComponent<TransformComponent>()) {
+		transform->setWorldPosition({0,0,-10});
+	}
+	auto flyCamera = camera->addComponent<FlyCameraComponent>();
+	scene2->addEntity(camera);
+
 
 	// ディスプレイ生成
 	Ref<Display> display = [&] {
@@ -136,7 +148,7 @@ int TestDirectX12() {
 	material->setMatrix("Matrix", Matrix::Identity);
 	material->setTexture("Main", texture);
 
-	skyMat->setMatrix("Matrix", Matrix::Identity);
+	skyMat->setMatrix("Matrix", Matrix::Scale(Vec3(1000)));
 	skyMat->setTexture("Main", skyTexture);
 
 
@@ -162,6 +174,8 @@ int TestDirectX12() {
 		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t * 30.0f, 70), Vec3::One);
 		material->setMatrix("Matrix", mtx);
 		material->setColor("Color", Color::White);
+
+		flyCamera->update();
 
 		input::InputModule::Get()->update();
 		RHI::Get()->update();
