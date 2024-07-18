@@ -69,7 +69,6 @@ namespace ob::graphics {
 	struct BackendData
 	{
 		String						clipboard;
-		String						clipboard2;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -216,9 +215,7 @@ namespace ob::graphics {
 
 			}
 #endif
-			bd->clipboard2 = std::move(bd->clipboard);
-			bd->clipboard.clear();
-			return bd->clipboard2.c_str();
+			return bd->clipboard.c_str();
 		}
 		return "Pasted";
 	}
@@ -703,6 +700,10 @@ namespace ob::graphics {
 
 		auto inputText = window.getTextInput();
 		io.AddInputCharactersUTF8(inputText.c_str());
+
+		if (auto bd = GetBackendData()) {
+			bd->clipboard.clear();
+		}
 
 	}
 
