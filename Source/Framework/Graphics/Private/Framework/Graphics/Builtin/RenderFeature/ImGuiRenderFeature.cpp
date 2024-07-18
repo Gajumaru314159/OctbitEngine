@@ -69,6 +69,7 @@ namespace ob::graphics {
 	struct BackendData
 	{
 		String						clipboard;
+		String						clipboard2;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -215,7 +216,9 @@ namespace ob::graphics {
 
 			}
 #endif
-			return bd->clipboard.c_str();
+			bd->clipboard2 = std::move(bd->clipboard);
+			bd->clipboard.clear();
+			return bd->clipboard2.c_str();
 		}
 		return "Pasted";
 	}
