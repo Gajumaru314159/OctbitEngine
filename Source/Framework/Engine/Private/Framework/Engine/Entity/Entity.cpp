@@ -83,14 +83,22 @@ namespace ob::engine {
 					if (auto ctor = info->findConstructor<Entity>()) {
 						// 依存コンポーネントを生成
 						if (auto requirements = info->findTag("Requirements")) {
+							Type rtype = (*requirements);
 							// TODO 循環参照検知
-							addComponent(Type(*requirements));
+							if (findComponent(rtype) == nullptr) {
+								addComponent(rtype);
+							}
 						}
 
 						// 生成
 						if (auto component = ctor->invoke<Component>(*this)) {
 							auto result = component.get();
+							
+							// initializeはまとめて行う
+							component->initialize();
+
 							m_components.emplace_back(std::move(component));
+
 							raisePropertyChanged("Components");
 							return result;
 						} else {
@@ -242,6 +250,11 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void Entity::setActive(bool value) {
 		m_active = value;
+
+		for (auto& component : m_components) {
+			if (m_active) component->activate();
+			if (!m_active) component->deactivate();
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
