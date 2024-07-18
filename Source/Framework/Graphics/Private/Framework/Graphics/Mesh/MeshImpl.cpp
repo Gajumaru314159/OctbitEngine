@@ -35,7 +35,16 @@ namespace ob::graphics {
 		for (auto mesh : Span<aiMesh*>(scene->mMeshes, scene->mNumMeshes)) {
 
 			if (mesh->mPrimitiveTypes != aiPrimitiveType_TRIANGLE) {
-				LOG_ERROR("非対応のプリミティブライプです");
+				auto getPrimitiveName = [](int type) {
+					String message;
+					if (type & aiPrimitiveType_POINT) message += "POINT,";
+					if (type & aiPrimitiveType_LINE) message += "LINE,";
+					if (type & aiPrimitiveType_TRIANGLE) message += "TRIANGLE,";
+					if (type & aiPrimitiveType_POLYGON) message += "POLYGON,";
+					if(!message.empty()) message.pop_back();
+					return message;
+				};
+				LOG_ERROR("非対応のプリミティブライプです [{}]", getPrimitiveName(mesh->mPrimitiveTypes));
 				continue;
 			}
 
