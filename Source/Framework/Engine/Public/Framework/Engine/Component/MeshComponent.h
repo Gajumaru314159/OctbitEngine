@@ -8,6 +8,10 @@
 #include <Framework/Graphics/Forward.h>
 // #include <Framework/Graphics/Model/ModelRenderHandle.h>
 
+#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Engine/Component/TransformComponent.h>
+
+
 namespace ob::engine {
 
 	class RenderLayer {
@@ -28,17 +32,24 @@ namespace ob::engine {
 		MeshComponent(Entity&);
 
 		void setModel(StringView path);
+		auto getModel()const -> const String&;
 
+	private:
+		void initialize() override;
 		void activate() override;
 		void deactivate() override;
 	private:
 		void updateModel();
+		void onTransformChanged(TransformComponent&);
 	private:
 		//graphics::ModelRenderHandle m_handle;
 		Ref<graphics::Material> m_material;
 		Ref<rhi::Texture> m_mainTex;
 		Ref<graphics::Mesh> m_mesh;
 		String m_path;
+		graphics::MaterialId m_id = graphics::MaterialId::Invalid;
+
+		TransformChangedHandle m_hTransformChanged;
 	};
 
 }

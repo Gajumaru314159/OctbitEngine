@@ -22,6 +22,7 @@
 #include <Framework/Engine/Reflection.h>
 
 #include <Framework/Engine/Component/ReflectionTestComponent.h>
+#include <Framework/Engine/Component/MeshComponent.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -51,6 +52,7 @@ int TestDirectX12() {
 	auto entity = Entity::Create("RootEntity");
 	// entity->addComponent<TransformComponent>();
 	entity->addComponent<ReflectionTestComponent>();
+	entity->addComponent<MeshComponent>();
 	scene2->addEntity(entity);
 	world->getRootScene().addSubScene(*scene2);
 
@@ -140,7 +142,7 @@ int TestDirectX12() {
 
 	// モデル登録
 	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
-		feature->addRenderable(mesh, material);
+		// feature->addRenderable(mesh, material);
 		feature->addRenderable(skyMesh, skyMat);
 	}
 

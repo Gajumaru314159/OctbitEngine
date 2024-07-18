@@ -11,3 +11,4 @@ OB_REGISTER_RTTI(ob::engine::Component);
 OB_REGISTER_RTTI(ob::engine::TransformComponent);
 
 OB_REGISTER_RTTI(ob::engine::ReflectionTestComponent);
+OB_REGISTER_RTTI(ob::engine::MeshComponent);

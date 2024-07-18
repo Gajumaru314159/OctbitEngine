@@ -12,9 +12,19 @@
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
 
 #include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Engine/Component/TransformComponent.h>
+
+OB_DEFINE_CLASS_INFO(ob::engine::MeshComponent) {
+	tag("Requirements", "ob::engine::TransformComponent");
+	base<ob::engine::Component>();
+	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
+
+	property("LocalPosition", &T::getModel, &T::setModel).desc("モデルファイル");
+}
 
 namespace ob::engine {
 
@@ -59,35 +69,59 @@ namespace ob::engine {
 		m_path = path;
 		updateModel();
 	}
+	auto MeshComponent::getModel()const -> const String& {
+		return m_path;
+	}
+
+	void MeshComponent::initialize() {
+		if (auto transform = getEntity().findComponent<TransformComponent>()) {
+			transform->addTransformChangedEvent(m_hTransformChanged, { *this,&MeshComponent::onTransformChanged });
+		}
+	}
+	void MeshComponent::onTransformChanged(TransformComponent& transform) {
+		if (m_material) {
+			m_material->setMatrix("Matrix", transform.getWorld());
+		}
+	}
 
 	void MeshComponent::activate() {
 		updateModel();
 	}
 
 	void MeshComponent::deactivate() {
-		// m_handle = {};
+		updateModel();
 	}
 
 	void MeshComponent::updateModel() {
-		m_mesh = graphics::Mesh::Load(m_path);
 
+		graphics::MaterialRenderFeature* feature = nullptr;
+
+		// 仮のアクセス
 		if (auto rpi = graphics::Graphics::Get()) {
 			if (auto scene = rpi->getScene()) {
-				if (auto feature = scene->findFeature<graphics::MaterialRenderFeature>()) {
-					feature->addRenderable(m_mesh,m_material);
-				}
+				feature = scene->findFeature<graphics::MaterialRenderFeature>();
 			}
 		}
 
-		if (auto world = getEntity().getWorld()) {
-			//if (rpi = world->findSystem<RPI>()) {
-			//
-			//}
-
-			//if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
-			//	feature->addRenderable(mesh, material);
-			//}
+		if (feature == nullptr) {
+			return;
 		}
+		
+		feature->removeRenderable(m_id);
+
+		if (getEntity().isActive() == false) {
+			return;
+		}
+
+		m_mesh = graphics::Mesh::Load(m_path);
+
+		// メッシュの読み込み失敗
+		if (!m_mesh) {
+			return;
+		}
+
+		m_id = feature->addRenderable(m_mesh, m_material);
+
 	}
 
 }

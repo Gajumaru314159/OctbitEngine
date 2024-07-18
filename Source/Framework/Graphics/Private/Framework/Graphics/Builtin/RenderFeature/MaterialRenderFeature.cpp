@@ -15,10 +15,17 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
 	//@―---------------------------------------------------------------------------
-	MaterialRenderFeature::MaterialRenderFeature() {
-
+	MaterialRenderFeature::MaterialRenderFeature() {		
+		m_materialId = static_cast<MaterialId>(0);
 	}
-	void MaterialRenderFeature::addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material) {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画可能なオブジェクトを追加
+	//@―---------------------------------------------------------------------------
+	MaterialId MaterialRenderFeature::addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material) {
+
+		m_materialId = static_cast<MaterialId>(enum_cast(m_materialId)+1);
+
 		for (auto [i,submesh] : Indexed(mesh->getSubMeshes())) {
 			Renderable renderable;
 			renderable.mesh = mesh;
@@ -26,8 +33,20 @@ namespace ob::graphics {
 			renderable.material = material;
 
 			for (auto [name,pass] : material->getDesc().passes) {
-				m_renderablesMap[name].emplace_back(renderable);
+				m_renderablesMap[name][m_materialId] = renderable;
 			}
+		}
+
+		return m_materialId;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      描画アイテムを削除
+	//@―---------------------------------------------------------------------------
+	void MaterialRenderFeature::removeRenderable(MaterialId id) {
+		if(id==MaterialId::Invalid)return;
+		for (auto& [name, pass] : m_renderablesMap) {
+			pass.erase(id);
 		}
 	}
 
@@ -41,7 +60,7 @@ namespace ob::graphics {
 
 		auto& renderables = itr->second;
 
-		for (auto& renderable : renderables) {
+		for (auto& [maerialId,renderable] : renderables) {
 			Matrix matrix;
 			Ref<rhi::CommandList> cmdList2 = &cmdList;
 			renderable.material->record(cmdList2, matrix, renderable.mesh, renderable.submesh, pass);

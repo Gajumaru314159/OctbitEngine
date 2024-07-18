@@ -22,6 +22,10 @@ namespace ob::graphics {
 		// ReveievShadow
 	};
 
+	enum class MaterialId : u32 {
+		Invalid = 0,
+	};
+
 	//@―---------------------------------------------------------------------------
 	//! @brief      マテリアル描画機能
 	//@―---------------------------------------------------------------------------
@@ -35,7 +39,12 @@ namespace ob::graphics {
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画アイテムを追加
 		//@―---------------------------------------------------------------------------
-		void addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material);
+		MaterialId addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material);
+
+		//@―---------------------------------------------------------------------------
+		//! @brief      描画アイテムを削除
+		//@―---------------------------------------------------------------------------
+		void removeRenderable(MaterialId id);
 
 		//@―---------------------------------------------------------------------------
 		//! @brief      描画
@@ -44,7 +53,8 @@ namespace ob::graphics {
 
 	private:
 
-		Map<String, Vector<Renderable>,std::less<>> m_renderablesMap;
+		MaterialId m_materialId;
+		Map<String, HashMap<MaterialId,Renderable>,std::less<>> m_renderablesMap;
 
 	};
 }
