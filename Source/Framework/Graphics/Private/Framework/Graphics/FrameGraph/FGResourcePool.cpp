@@ -103,6 +103,7 @@ namespace ob::graphics {
 			return RenderTexture::Create(desc);
 		} else {
 			auto resource = pool.back().resource;
+			resource->setName(desc.name);
 			pool.pop_back();
 			return resource;
 		}
