@@ -47,27 +47,6 @@ int TestDirectX12() {
 
 	System::Setup();
 
-	// シーン生成
-	auto world = World::Create("MainWorld");
-	auto scene2 = Scene::Create("SubScene");
-	auto entity = Entity::Create("RootEntity");
-	// entity->addComponent<TransformComponent>();
-	entity->setActive(true);
-	entity->addComponent<ReflectionTestComponent>();
-	entity->addComponent<MeshComponent>()->setModel("Asset/Model/Ukulele.obj");
-	scene2->addEntity(entity);
-	
-	world->getRootScene().addSubScene(*scene2);
-
-
-	auto camera = Entity::Create("FlyCamera");
-	if (auto transform = camera->addComponent<TransformComponent>()) {
-		transform->setWorldPosition({0,0,-10});
-	}
-	auto flyCamera = camera->addComponent<FlyCameraComponent>();
-	scene2->addEntity(camera);
-
-
 	// ディスプレイ生成
 	Ref<Display> display = [&] {
 		DisplayDesc desc;
@@ -83,6 +62,27 @@ int TestDirectX12() {
 	scene.addFeature<MaterialRenderFeature>();
 	view.setDisplay(display);
 	view.setPipeline<TestRenderPipeline>(view);
+
+	// シーン生成
+	auto world = World::Create("MainWorld");
+	auto scene2 = Scene::Create("SubScene");
+	auto entity = Entity::Create("RootEntity");
+	// entity->addComponent<TransformComponent>();
+	entity->setActive(true);
+	entity->addComponent<ReflectionTestComponent>();
+	entity->addComponent<MeshComponent>()->setModel("Asset/Model/Ukulele.obj");
+	scene2->addEntity(entity);
+
+	world->getRootScene().addSubScene(*scene2);
+
+
+	auto camera = Entity::Create("FlyCamera");
+	if (auto transform = camera->addComponent<TransformComponent>()) {
+		transform->setWorldPosition({ 0,0,-10 });
+	}
+	auto flyCamera = camera->addComponent<FlyCameraComponent>();
+	scene2->addEntity(camera);
+
 
 	// デバッグ描画タスク追加
 	ImGuiHandle handle;
