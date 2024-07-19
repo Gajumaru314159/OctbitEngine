@@ -15,6 +15,8 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	class File {
 	public:
+		static bool Exists(StringView path);
+		static size_t Size(StringView path);
 
 	private:
 
