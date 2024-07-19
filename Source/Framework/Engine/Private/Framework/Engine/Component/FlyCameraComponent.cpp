@@ -19,8 +19,8 @@ OB_DEFINE_CLASS_INFO(ob::engine::FlyCameraComponent) {
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
 
-	property("TranslationSpeed", &T::getTranslationSpeed, &T::setTranslationSpeed).desc("移動速度");
-	property("RotationSpeed", &T::getRotationSpeed, &T::setRotationSpeed).desc("回転速度");
+	property("TranslationSpeed", &T::getTranslationSpeed, &T::setTranslationSpeed).desc("移動速度").tag("Min","0").tag("Max","100");
+	property("RotationSpeed", &T::getRotationSpeed, &T::setRotationSpeed).desc("回転速度").tag("Min", "0").tag("Max", "100");
 }
 
 namespace ob::engine {

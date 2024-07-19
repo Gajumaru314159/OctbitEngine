@@ -30,49 +30,127 @@ namespace ob::debug {
 					}
 				} else if (p.type.is<s32>()) {
 					auto value = p.get<s32>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						p.setter(obj, value);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<s16>()) {
 					s32 value = p.get<s16>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						s16 value2 = value;
-						p.setter(obj, value2);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							s16 value2 = value;
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							s16 value2 = value;
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<s8>()) {
 					s32 value = p.get<s8>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						s8 value2 = value;
-						p.setter(obj, value2);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							s8 value2 = value;
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							s8 value2 = value;
+							p.setter(obj, value);
+						}
 					}
-				} else if (p.type.is<u32>()) {
+				} else if (p.type.is<u32>()) {					
 					s32 value = p.get<u32>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						u32 value2 = value;
-						p.setter(obj, value2);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							u32 value2 = value;
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							u32 value2 = value;
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<u16>()) {
 					s32 value = p.get<u16>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						u16 value2 = value;
-						p.setter(obj, value2);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							u16 value2 = value;
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							u16 value2 = value;
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<u8>()) {
 					s32 value = p.get<u8>(obj);
-					if (ImGui::InputInt(name.c_str(), &value)) {
-						u8 value2 = value;
-						p.setter(obj, value2);
+					Optional<s32> min, max;
+					if (auto tag = p.findTag("Min")) min = (s32)std::atoi(tag->data());
+					if (auto tag = p.findTag("Max")) max = (s32)std::atoi(tag->data());
+					if (min && max) {
+						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
+							u8 value2 = value;
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputInt(name.c_str(), &value)) {
+							u8 value2 = value;
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<f32>()) {
 					auto value = p.get<f32>(obj);
-					if (ImGui::InputFloat(name.c_str(), &value)) {
-						p.setter(obj, value);
+					Optional<f32> min,max;
+					if (auto tag = p.findTag("Min")) min = (f32)std::atof(tag->data());
+					if (auto tag = p.findTag("Max")) max = (f32)std::atof(tag->data());
+					if (min && max) {
+						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value())) {
+							p.setter(obj, value);
+						}
+					} else {
+						if (ImGui::InputFloat(name.c_str(), &value)) {
+							p.setter(obj, value);
+						}
 					}
 				} else if (p.type.is<f64>()) {
 					f32 value = p.get<f64>(obj);
-					if (ImGui::InputFloat(name.c_str(), &value)) {
-						f64 value2 = value;
-						p.setter(obj, value2);
+					Optional<f32> min,max;
+					if (auto tag = p.findTag("Min")) min = (f32)std::atof(tag->data());
+					if (auto tag = p.findTag("Max")) max = (f32)std::atof(tag->data());
+					if (min && max) {
+						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value())) {
+							f64 value2 = value;
+							p.setter(obj, value2);
+						}
+					} else {
+						if (ImGui::InputFloat(name.c_str(), &value)) {
+							f64 value2 = value;
+							p.setter(obj, value2);
+						}
 					}
 				} else if (p.type.is<Vec2>()) {
 					auto value = p.get<Vec2>(obj);
