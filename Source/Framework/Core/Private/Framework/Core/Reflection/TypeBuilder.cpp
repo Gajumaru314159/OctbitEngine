@@ -40,15 +40,17 @@ namespace ob::core::internal {
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
 	//@―---------------------------------------------------------------------------
-	void TagBuilder::tag(StringView key, StringView value) {
+	TagBuilder& TagBuilder::tag(StringView key, StringView value) {
 		m_info->tags.emplace(key, value);
+		return *this;
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		説明をDescriptionタグとして追加
 	//@―---------------------------------------------------------------------------
-	void TagBuilder::desc(StringView value) {
+	TagBuilder& TagBuilder::desc(StringView value) {
 		tag("Description", value);
+		return *this;
 	}
 
 	//===============================================================

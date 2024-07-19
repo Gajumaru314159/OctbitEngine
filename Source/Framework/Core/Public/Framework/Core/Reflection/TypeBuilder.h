@@ -66,12 +66,12 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
 		//@―---------------------------------------------------------------------------
-		void tag(StringView key, StringView value = "");
+		TagBuilder& tag(StringView key, StringView value = "");
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		説明をDescriptionタグとして追加
 		//@―---------------------------------------------------------------------------
-		void desc(StringView value);
+		TagBuilder& desc(StringView value);
 
 	private:
 		TagInfo* m_info;
