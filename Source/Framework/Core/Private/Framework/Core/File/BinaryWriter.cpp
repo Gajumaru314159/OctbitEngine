@@ -134,13 +134,15 @@ namespace ob::core {
 	//! @brief   読み込み
 	//@―---------------------------------------------------------------------------
 	bool BinaryReader::readImpl(void* dest, size_t size) {
-		size_t count = m_stream.read(dest, size);
-		if (count != size) return false;
-		if (m_byteOrder != Endian::Get()) {
-			auto bytes = reinterpret_cast<byte*>(dest);
-			std::reverse(bytes, bytes +size);
+		if (m_stream.read(dest, size)) {
+			if (m_byteOrder != Endian::Get()) {
+				auto bytes = reinterpret_cast<byte*>(dest);
+				std::reverse(bytes, bytes + size);
+			}
+			return true;
+		} else {
+			return false;
 		}
-		return true;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -148,9 +150,9 @@ namespace ob::core {
 	//! 
 	//! @param buffer 　 読み込みデータ格納先のポインタ
 	//! @param byteCount 読み込むバイト数
-	//! @return 読み込んだデータ個数※エラー時やストリームの終わりに達したときは byteCount 以下の値が返される
+	//! @return 読み込みに成功したか
 	//@―---------------------------------------------------------------------------
-	size_t BinaryReader::read(void* buffer, size_t count)
+	bool BinaryReader::read(void* buffer, size_t count)
 	{
 		return m_stream.read(buffer, count);
 	}

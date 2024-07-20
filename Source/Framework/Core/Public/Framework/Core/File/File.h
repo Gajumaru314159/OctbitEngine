@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/File/Stream.h>
+#include <Framework/Core/Misc/Blob.h>
 
 namespace ob::core {
 

@@ -61,6 +61,7 @@ namespace ob::core {
 	bool BlobStream::read(void* buffer, size_t byteCount) {
 		if (size() < m_position + byteCount)return false;
 		std::memcpy(buffer, m_blob.data() + m_position, byteCount);
+		m_position += byteCount;
 		return byteCount;
 	}
 
@@ -72,6 +73,7 @@ namespace ob::core {
 		auto needSize = m_position + byteCount;
 		m_blob.resize(needSize);
 		std::memcpy(m_blob.data() + m_position, buffer, byteCount);
+		m_position += byteCount;
 		return true;
 	}
 

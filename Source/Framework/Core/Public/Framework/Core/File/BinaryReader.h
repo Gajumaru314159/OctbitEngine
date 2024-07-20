@@ -44,19 +44,19 @@ namespace ob::core {
 		//! 
 		//! @param buffer 　 読み込みデータ格納先のポインタ
 		//! @param byteCount 読み込むバイト数
-		//! @return 読み込んだデータ個数※エラー時やストリームの終わりに達したときは byteCount 以下の値が返される
+		//! @return 読み込みに成功したか
 		//@―---------------------------------------------------------------------------
-		size_t read(void* buffer, size_t count);
+		bool read(void* buffer, size_t count);
 
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  バイト列読み込み
 		//! 
 		//! @param dest 　 読み込み先
-		//! @return 読み込んだデータ個数※エラー時やストリームの終わりに達したときは byteCount 以下の値が返される
+		//! @return 読み込みに成功したか
 		//@―---------------------------------------------------------------------------
 		template<class T>
-		size_t read(T& dest) {
+		bool read(T& dest) {
 			return read(&dest, sizeof(T));
 		}
 
