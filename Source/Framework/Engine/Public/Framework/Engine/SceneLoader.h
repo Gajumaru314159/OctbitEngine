@@ -18,8 +18,8 @@ namespace ob::engine {
 	class SceneLoader{
 	public:
 
-		SceneLoader(Path path,SceneEventDelegate loaded) {
-			m_path = std::move(path);
+		SceneLoader(StringView path,SceneEventDelegate loaded) {
+			m_path = path;
 			m_loaded = std::move(loaded);
 
 			Func<void(SceneLoader&)> f = &SceneLoader::load;
@@ -47,7 +47,7 @@ namespace ob::engine {
 
 	private:
 		Thread	m_thread;
-		Path	m_path;
+		String	m_path;
 		SceneEventDelegate m_loaded;
 	};
 

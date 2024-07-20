@@ -29,7 +29,7 @@ namespace ob::model2 {
 
 
 	struct Model {
-		Model(Path);
+		Model(StringView path);
 
 		Mesh mesh;
 		Vector<Material> materials;

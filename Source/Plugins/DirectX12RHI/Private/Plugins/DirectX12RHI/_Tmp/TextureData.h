@@ -7,7 +7,6 @@
 #include <Framework/Core/Misc/BlobView.h>
 #include <Framework/RHI/Types/TextureFormat.h>
 #include <Framework/RHI/Types/TextureDesc.h>
-#include <Framework/Core/File/Path.h>
 
 namespace ob::rhi {
 
@@ -21,7 +20,7 @@ namespace ob::rhi {
         //! @brief  説明
         //@―---------------------------------------------------------------------------
 
-        TextureData(const Path& path);
+        TextureData(StringView path);
         //TextureData(const void* data,size_t size);
 
     private:

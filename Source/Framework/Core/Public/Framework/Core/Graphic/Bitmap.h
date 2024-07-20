@@ -4,10 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/String/StringView.h>
 #include <Framework/Core/Geometry/Size.h>
 #include <Framework/Core/Geometry/IntRect.h>
 #include <Framework/Core/Graphic/Color.h>
-#include <Framework/Core/File/Path.h>
 
 namespace ob::core {
 
@@ -45,7 +45,7 @@ namespace ob::core {
         Bitmap(s32 width, s32 height, IntColor color = IntColor::White);
         template<class TGen>
         Bitmap(s32 width, s32 height,TGen generator);
-        Bitmap(const Path& path,ImageFormat fotrmat = ImageFormat::Unspecified);
+        Bitmap(StringView path,ImageFormat fotrmat = ImageFormat::Unspecified);
 
         s32 width()const noexcept;
         s32 height()const noexcept;

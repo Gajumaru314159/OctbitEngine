@@ -72,7 +72,7 @@ namespace ob::rhi
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//@―---------------------------------------------------------------------------
-	TextureData::TextureData(const Path& path)
+	TextureData::TextureData(StringView path)
 		: m_size(0, 0)
 		, m_format(TextureFormat::RGBA8)
 		, m_type(TextureType::Texture2D)

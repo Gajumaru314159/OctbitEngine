@@ -8,6 +8,7 @@
 #include <Framework/Platform/DLL.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Core/File/Path.h>
 
 
 namespace ob::platform {
@@ -18,10 +19,10 @@ namespace ob::platform {
     //! @details    読み込むパスの拡張子はぷらっとふぉーむ
     //! @path       読み込む動的ライブラリのパス
     //@―---------------------------------------------------------------------------
-    DLL::DLL(const Path& path) {
+    DLL::DLL(StringView path) {
         m_handle = nullptr;
 
-        auto pathWithExt = path;
+        Path pathWithExt = path;
         pathWithExt.replaceExtension(".dll");
         
         WString fileNameW;
@@ -36,7 +37,7 @@ namespace ob::platform {
         }
 
         m_handle = dll;
-        m_path = pathWithExt;
+        m_path = pathWithExt.string();
     }
 
     //@―---------------------------------------------------------------------------
@@ -75,7 +76,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief      読み込み中の動的ライブラリのパスを取得
     //@―---------------------------------------------------------------------------
-    const Path& DLL::getPath()const {
+    const String& DLL::getPath()const {
         return m_path;
     }
 

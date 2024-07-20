@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/File/Path.h>
 
 namespace ob::platform {
 
@@ -82,7 +81,7 @@ namespace ob::platform {
         //!             |.dll       |.so        |.dylib     |
         //! @param path 動的ライブラリのファイル名
         //@―---------------------------------------------------------------------------
-        DLL(const Path& path);
+        DLL(StringView path);
 
         //@―---------------------------------------------------------------------------
         //! @brief      デストラクタ
@@ -122,11 +121,11 @@ namespace ob::platform {
         //! 
         //! @detilas    拡張子付きのパスを返します。読み込み失敗している場合は空のパスを返します。
         //@―---------------------------------------------------------------------------
-        const Path& getPath()const;
+        const String& getPath()const;
 
     private:
 
-        Path m_path;
+        String m_path;
         
         // WindowsではHMODULE
         const void* m_handle;
