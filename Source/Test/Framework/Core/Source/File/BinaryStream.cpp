@@ -1,35 +1,35 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		BlobStream のテストコード
+//! @brief		BinaryStream のテストコード
 //! @author		Gajumaru
 //***********************************************************
 #include <gtest/gtest.h>
-#include <Framework/Core/File/BlobStream.h>
+#include <Framework/Core/File/BinaryStream.h>
 
 using namespace ob::core;
 
-TEST(BlobStream, CanRead)
+TEST(BinaryStream, CanRead)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // 読み込み可能かを確認
     EXPECT_TRUE(stream.canRead());
 }
 
-TEST(BlobStream, CanWrite)
+TEST(BinaryStream, CanWrite)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // 書き込み可能かを確認
     EXPECT_TRUE(stream.canWrite());
 }
 
-TEST(BlobStream, Size)
+TEST(BinaryStream, Size)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // サイズを取得
     size_t streamSize = stream.size();
@@ -38,10 +38,10 @@ TEST(BlobStream, Size)
     EXPECT_EQ(streamSize, 1024);
 }
 
-TEST(BlobStream, Position)
+TEST(BinaryStream, Position)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // シーク位置を取得
     size_t streamPosition = stream.position();
@@ -50,10 +50,10 @@ TEST(BlobStream, Position)
     EXPECT_EQ(streamPosition, 0);
 }
 
-TEST(BlobStream, Read)
+TEST(BinaryStream, Read)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     char buffer[256];
 
@@ -64,10 +64,10 @@ TEST(BlobStream, Read)
     EXPECT_TRUE(success);
 }
 
-TEST(BlobStream, Write)
+TEST(BinaryStream, Write)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     char buffer[256];
 
@@ -78,10 +78,10 @@ TEST(BlobStream, Write)
     EXPECT_TRUE(success);
 }
 
-TEST(BlobStream, Seek)
+TEST(BinaryStream, Seek)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // シークする
     bool success = stream.seek(256, SeekOrigin::Begin);
@@ -90,10 +90,10 @@ TEST(BlobStream, Seek)
     EXPECT_TRUE(success);
 }
 
-TEST(BlobStream, Flush)
+TEST(BinaryStream, Flush)
 {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
 
     // バッファをフラッシュする
     stream.flush();

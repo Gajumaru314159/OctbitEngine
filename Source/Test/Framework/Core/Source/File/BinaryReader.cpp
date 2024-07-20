@@ -5,13 +5,14 @@
 //***********************************************************
 #include <gtest/gtest.h>
 #include <Framework/Core/File/BinaryReader.h>
+#include <Framework/Core/File/BinaryStream.h>
 
 using namespace ob::core;
 
 
 TEST(BinaryReader, Construct) {
     Blob blob(1024);
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
     BinaryReader reader(stream);
 }
 
@@ -33,7 +34,7 @@ TEST(BinaryReader, Read) {
 	} test;
 
     Blob blob(&test,sizeof(test));
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
     BinaryReader reader(stream);
 
     EXPECT_EQ(reader.readS64(), 123);
@@ -63,7 +64,7 @@ TEST(BinaryReader, Seek) {
     } test;
 
     Blob blob(&test, sizeof(test));
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
     BinaryReader reader(stream);
 
     EXPECT_EQ(reader.readS32(), 123);
@@ -82,7 +83,7 @@ TEST(BinaryReader, ReadStruct) {
 	} test;
 
 	Blob blob(&test, sizeof(test));
-	BlobStream stream(blob);
+	BinaryStream stream(blob);
 	BinaryReader reader(stream);
 
 	TestStruct read;
@@ -100,7 +101,7 @@ TEST(BinaryReader,IsEOF) {
 	} test;
 
 	Blob blob(&test, sizeof(test));
-	BlobStream stream(blob);
+	BinaryStream stream(blob);
 	BinaryReader reader(stream);
 
 	reader.readS32();

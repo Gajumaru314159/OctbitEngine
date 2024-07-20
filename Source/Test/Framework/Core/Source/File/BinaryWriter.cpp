@@ -5,20 +5,21 @@
 //***********************************************************
 #include <gtest/gtest.h>
 #include <Framework/Core/File/BinaryWriter.h>
+#include <Framework/Core/File/BinaryStream.h>
 
 using namespace ob::core;
 
 TEST(BinaryWriter, Constructor)
 {
     Blob blob;
-    BlobStream stream(blob);
+    BinaryStream stream(blob);
     BinaryWriter writer(stream);
 }
 
 TEST(BinaryWriter, Write) {
 
 	Blob blob;
-	BlobStream stream(blob);
+	BinaryStream stream(blob);
 	BinaryWriter writer(stream);
 
 	writer.writeInt64(123);

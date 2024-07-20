@@ -1,16 +1,16 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Blobストリーム
+//! @brief		Bynaryストリーム
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/File/BlobStream.h>
+#include <Framework/Core/File/BinaryStream.h>
 
 namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	BlobStream::BlobStream(Blob& blob)
+	BinaryStream::BinaryStream(Blob& blob)
 		: m_blob(blob)
 		, m_position(0)
 	{
@@ -20,13 +20,13 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-	BlobStream::~BlobStream() = default;
+	BinaryStream::~BinaryStream() = default;
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  読み込み可能か
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::canRead()const {
+	bool BinaryStream::canRead()const {
 		return true;
 	}
 
@@ -34,7 +34,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  書き込み可能か
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::canWrite()const {
+	bool BinaryStream::canWrite()const {
 		return true;
 	}
 
@@ -42,7 +42,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  サイズ取得
 	//@―---------------------------------------------------------------------------
-	size_t BlobStream::size()const {
+	size_t BinaryStream::size()const {
 		return m_blob.size();
 	}
 
@@ -50,7 +50,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  読み込み位置取得
 	//@―---------------------------------------------------------------------------
-	size_t BlobStream::position()const {
+	size_t BinaryStream::position()const {
 		return m_position;
 	}
 
@@ -58,7 +58,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  読み込み
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::read(void* buffer, size_t byteCount) {
+	bool BinaryStream::read(void* buffer, size_t byteCount) {
 		if (size() < m_position + byteCount)return false;
 		std::memcpy(buffer, m_blob.data() + m_position, byteCount);
 		m_position += byteCount;
@@ -69,7 +69,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  書き込み
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::write(const void* buffer, size_t byteCount) {
+	bool BinaryStream::write(const void* buffer, size_t byteCount) {
 		auto needSize = m_position + byteCount;
 		m_blob.resize(needSize);
 		std::memcpy(m_blob.data() + m_position, buffer, byteCount);
@@ -81,7 +81,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  シーク
 	//@―---------------------------------------------------------------------------
-	bool BlobStream::seek(offset_t offset, SeekOrigin origin) {
+	bool BinaryStream::seek(offset_t offset, SeekOrigin origin) {
 		offset_t newPos = offset;
 		if (origin == SeekOrigin::Begin) {
 		}
@@ -102,7 +102,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  フラッシュ
 	//@―---------------------------------------------------------------------------
-	void BlobStream::flush() { 
+	void BinaryStream::flush() { 
 	}
 
 }
