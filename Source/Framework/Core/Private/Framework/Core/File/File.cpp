@@ -20,7 +20,7 @@ namespace ob::core {
 		std::string errorStr = strerror(errno);
 		String errorStr2;
 		StringEncoder::Encode(errorStr, errorStr2);
-		return errorStr;
+		return errorStr2;
 	}
 
 	//@―---------------------------------------------------------------------------

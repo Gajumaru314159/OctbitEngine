@@ -30,7 +30,7 @@ namespace ob::core {
     //! @brief  カレントディレクトリを取得
     //@―---------------------------------------------------------------------------
     String Directory::Current() {
-        return std::filesystem::current_path().string();
+        return std::filesystem::current_path().u8string();
     }
 
     //@―---------------------------------------------------------------------------
@@ -93,12 +93,12 @@ namespace ob::core {
         Vector<String> result;
         if (recursive) {
             for (auto& p : std::filesystem::directory_iterator((std::string_view)path)) {
-                result.push_back(p.path().string());
+                result.push_back(String(p.path().u8string()));
             }
         }
         else {
             for (auto& p : std::filesystem::recursive_directory_iterator((std::string_view)path)) {
-                result.push_back(p.path().string());
+                result.push_back(String(p.path().u8string()));
             }
         }
         return result;

@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/File/Path.h>
+#include <Framework/Core/String/FixedString.h>
 #include <Framework/Core/Platform/WindowsHeaders.h>
 #include <Framework/Core/String/StringEncoder.h>
 
@@ -29,10 +30,7 @@ namespace ob::core {
 	//! @brief		カレントディレクトリの絶対パスを取得
 	//@―---------------------------------------------------------------------------
 	Path Path::Curren() {
-		StringBase<std::filesystem::path::value_type> nativeString = std::filesystem::current_path().native();
-		String result;
-		StringEncoder::Encode(nativeString, result);
-		return Path(result);
+		return std::filesystem::current_path().u8string();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -96,7 +94,7 @@ namespace ob::core {
 			if (extension.starts_with(".")) {
 				m_string += extension;
 			} else {
-				m_string = m_string + "." + extension;
+				m_string = m_string.append(".").append(extension);
 			}
 		}
 		validate();
