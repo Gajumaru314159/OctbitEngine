@@ -12,6 +12,7 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Mesh/MeshData.h>
@@ -25,8 +26,9 @@ namespace ob::graphics {
 		std::string pathStr(path.data());
 
 		Assimp::Importer importer;
-		auto scene = importer.ReadFile(pathStr, 0);
-
+		importer.ReadFile(pathStr, 0);
+		auto scene = importer.ApplyPostProcessing(aiProcess_Triangulate);
+		
 		if (scene == nullptr) {
 			LOG_ERROR("Failed to load {}", path);
 			return nullptr;
@@ -41,11 +43,12 @@ namespace ob::graphics {
 					if (type & aiPrimitiveType_LINE) message += "LINE,";
 					if (type & aiPrimitiveType_TRIANGLE) message += "TRIANGLE,";
 					if (type & aiPrimitiveType_POLYGON) message += "POLYGON,";
+					if (type & aiPrimitiveType_NGONEncodingFlag) message += "NGON,";
 					if(!message.empty()) message.pop_back();
 					return message;
 				};
 				LOG_ERROR("非対応のプリミティブライプです [{}]", getPrimitiveName(mesh->mPrimitiveTypes));
-				continue;
+				//continue;
 			}
 
 			graphics::MeshData meshData;

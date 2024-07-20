@@ -111,17 +111,15 @@ int TestDirectX12() {
 
 
 	// テクスチャ読み込み
-	auto texture = Texture::Load("Asset/Model/Ukulele_col.dds");
 	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
 
 	// メッシュ読み込み
-	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
 	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
 
 	// 描画物生成
 	Ref<Material> material = [&] {
 
-		auto code = ReadFile("Asset/Shader/GraphicTest.hlsl");
+		auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
 		OB_ASSERT(code, "ファイル読み込み失敗");
 
 		MaterialDesc desc;
@@ -143,19 +141,13 @@ int TestDirectX12() {
 
 		return Material::Create(desc);
 	}();
-	auto skyMat = Material::Create(material->getDesc());
-
-	material->setMatrix("Matrix", Matrix::Identity);
-	material->setTexture("Main", texture);
-
-	skyMat->setMatrix("Matrix", Matrix::Scale(Vec3(1000)));
-	skyMat->setTexture("Main", skyTexture);
+	material->setMatrix("Matrix", Matrix::Scale(Vec3(100)));
+	material->setTexture("Main", skyTexture);
 
 
 	// モデル登録
 	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
-		// feature->addRenderable(mesh, material);
-		feature->addRenderable(skyMesh, skyMat);
+		feature->addRenderable(skyMesh, material);
 	}
 
 
@@ -172,8 +164,6 @@ int TestDirectX12() {
 		// 行列更新
 		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
 		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t * 30.0f, 70), Vec3::One);
-		material->setMatrix("Matrix", mtx);
-		material->setColor("Color", Color::White);
 
 		flyCamera->update();
 
@@ -196,7 +186,7 @@ void OctbitInit(ServiceInjector& injector) {
 	graphics::Register(injector);
 
 	rhi::Config config;
-	//config.enablePIX = true;
+	config.enablePIX = true;
 	//config.breakWithWarning = true;
 	injector.bind(config);
 

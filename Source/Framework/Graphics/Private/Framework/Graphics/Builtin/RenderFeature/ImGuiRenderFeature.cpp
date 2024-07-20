@@ -26,8 +26,7 @@ ImFileHandle ImFileOpen(const char* filename, const char* mode) {
 	if (strchr(mode, 'a'))modes.on(FileOpenMode::Append);
 	if (strchr(mode, 'b') == nullptr)modes.on(FileOpenMode::Text);
 	if (strchr(mode, '+'))LOG_FATAL("Not supported");// modes.on(FileOpenMode::Append);
-	Path path = filename;
-	return new ob::core::FileStream(path, modes.get_enum());
+	return new ob::core::File(filename, modes.get_enum());
 }
 //@―---------------------------------------------------------------------------
 //! @brief      ファイルクローズ
@@ -499,7 +498,7 @@ namespace ob::graphics {
 
 		// フォント読み込み
 		// TODO ビューごとにリソースを生成する必要はないのでImGuiFeatureに共有リソースを登録しておく
-		FileStream file("Asset/Font/ipaexg.ttf");
+		File file("Asset/Font/ipaexg.ttf");
 		if (Blob blob(file); blob) {
 			ImFontConfig config;
 			m_fontBlod = ::ImGui::MemAlloc(blob.size());

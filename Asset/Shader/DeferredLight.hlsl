@@ -59,6 +59,6 @@ PsOut PS_Main(PsIn i){
     float4 uv = g_uv.Sample(g_mainSampler,i.uv);
     float4 l = lerp(normal,depth,step(i.uv.y,0.5));
     float4 r = lerp(albedo,uv,step(i.uv.y,0.5));
-    o.color = lerp(l,r,step(i.uv.x,0.5));
+    o.color = albedo;//lerp(l,r,step(i.uv.x,0.5));
     return o;
 }

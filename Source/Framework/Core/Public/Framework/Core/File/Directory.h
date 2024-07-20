@@ -8,65 +8,72 @@
 #include <Framework/Core/Misc/DateTime.h>
 #include <Framework/Core/Misc/YesNo.h>
 
+#include <filesystem>
+
 namespace ob::core {
 
-	DEFINE_YES_NO(Recrusive);
+    DEFINE_YES_NO(Recursive);
 
-	enum class SearchOption :u32 {
-		TopDirectoryOnly,
-		Drecursive,
-	};
+    class Directory {
+    public:
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリが存在するか
+        //! @details ファイルの存在を確認する場合は File::Exists を使用してください。
+        //@―---------------------------------------------------------------------------
+        static bool Exists(StringView path);
 
-	struct DirectoryInfo {};
-	struct FileInfo {};
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリが空か
+        //@―---------------------------------------------------------------------------
+        static bool Empty(StringView path);
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  説明
-	//@―---------------------------------------------------------------------------
-	class Directory {
-	public:
+        //@―---------------------------------------------------------------------------
+        //! @brief  カレントディレクトリを取得
+        //@―---------------------------------------------------------------------------
+        static String Current();
 
-		static DirectoryInfo CreateDirectory(Path path);
-		static void Delete(Path path, Recrusive recrusive = Recrusive::Yes);
+        //@―---------------------------------------------------------------------------
+        //! @brief  カレントディレクトリを変更
+        //@―---------------------------------------------------------------------------
+        static void ChangeCurrentDirectory(StringView path);
 
-		using VisitDirectoryFunc = const Func<void(const DirectoryInfo&)>&;
-		using VisitFileFunc = const Func<void(const FileInfo&)>&;
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ作成
+        //! @details 間のディレクトリが存在しない場合は自動的に作成されます。
+        //@―---------------------------------------------------------------------------
+        static void Create(StringView path);
 
-		static void VisitDirectories(Path path, VisitDirectoryFunc func);
-		static void VisitFiles(Path path, VisitFileFunc func);
-		//void VisitItems(Path path, VisitFileFunc func);
-		//void VisitDirectories(Path path, VisitFunc func,Regex regex);
-		static  bool Exists(Path path);
-		static Path GetCurrentDirectory();
-		static void Move(Path sourceDirName, Path destDirName);
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ移動
+        //@―---------------------------------------------------------------------------
+        static void Move(StringView from, StringView to);
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ名変更
+        //@―---------------------------------------------------------------------------
+        static void Rename(StringView from, StringView to);
 
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリコピー
+        //@―---------------------------------------------------------------------------
+        static void Copy(StringView from, StringView to);
 
-		//@―---------------------------------------------------------------------------
-		//! @brief  説明
-		//@―---------------------------------------------------------------------------
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ削除
+        //@―---------------------------------------------------------------------------
+        static void Delete(StringView path);
 
-	private:
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ内容削除
+        //! @details pathに指定したディレクトリ自体は削除されません。
+        //@―---------------------------------------------------------------------------
+        static void DeleteContents(StringView path);
 
+        //@―---------------------------------------------------------------------------
+        //! @brief  ディレクトリ内容取得
+        //@―---------------------------------------------------------------------------
+        static auto Contents(StringView path, Recursive recursive = Recursive::No) -> Vector<String>;
+    };
 
-
-	};
-
-
-
-
-
-
-	//===============================================================
-	// インライン関数
-	//===============================================================
-	//! @cond
-
-
-
-	//! @endcond
 }

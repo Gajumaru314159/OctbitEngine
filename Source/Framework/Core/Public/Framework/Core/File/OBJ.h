@@ -15,7 +15,7 @@ namespace ob::core {
 	public:
 		OBJ() = default;
 
-		void save(StringView);
+		bool save(StringView);
 
 		void comment(StringView comment);
 		void mtllib(StringView filename);

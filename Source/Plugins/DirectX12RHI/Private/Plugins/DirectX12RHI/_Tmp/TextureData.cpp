@@ -8,7 +8,7 @@
 #include <Framework/RHI/Private/DDSFormat.h>
 #include <Framework/RHI/Private/DXGIFormat.h>
 #include <Framework/Core/File/BinaryReader.h>
-#include <Framework/Core/File/FileStream.h>
+#include <Framework/Core/File/File.h>
 
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -85,7 +85,7 @@ namespace ob::rhi
 		};
 		DDSErrorCode errorCode = DDSErrorCode::None;
 
-		FileStream fs(path);
+		File fs(path);
 		bool isDDS = true;
 		if (fs) {
 			BinaryReader reader(fs);

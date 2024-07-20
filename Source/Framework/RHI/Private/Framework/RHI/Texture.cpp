@@ -78,13 +78,13 @@ namespace ob::rhi {
 	//! 
 	//! @param path ファイルパス
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> Texture::Load(const Path& path) {
+	Ref<Texture> Texture::Load(StringView path) {
 
-		FileStream fs(path);
+		File fs(path);
 		if (fs) {
 			Blob blob(fs.size());
 			fs.read(blob.data(), blob.size());
-			return Texture::Create(path.string(), blob);
+			return Texture::Create(path, blob);
 		}
 
 		return nullptr;

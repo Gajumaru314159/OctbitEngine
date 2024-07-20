@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+#include <Framework/Core/File/File.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/World.h>
 #include <Framework/Engine/Component/MeshComponent.h>
@@ -37,7 +37,7 @@ namespace ob::engine {
 
 		m_material = [&] {
 
-			auto code = ReadFile("Asset/Shader/GraphicTest.hlsl");
+			auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
 			OB_ASSERT(code, "ファイル読み込み失敗");
 
 			MaterialDesc desc;
@@ -113,7 +113,10 @@ namespace ob::engine {
 			return;
 		}
 
-		m_mesh = graphics::Mesh::Load(m_path);
+		m_mesh = {};
+		if (File::Exists(m_path)) {
+			m_mesh = graphics::Mesh::Load(m_path);
+		}
 
 		// メッシュの読み込み失敗
 		if (!m_mesh) {

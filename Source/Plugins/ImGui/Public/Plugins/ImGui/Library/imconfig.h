@@ -50,7 +50,7 @@
 //#define IMGUI_DISABLE_DEFAULT_ALLOCATORS                  // Don't implement default allocators calling malloc()/free() to avoid linking with them. You will need to call ImGui::SetAllocatorFunctions().
 //#define IMGUI_DISABLE_SSE                                 // Disable use of SSE intrinsics even if available
 
-using ImFileHandle = ob::core::FileStream*;
+using ImFileHandle = ob::core::File*;
 ImFileHandle      ImFileOpen(const char* filename, const char* mode);
 bool              ImFileClose(ImFileHandle file);
 ob::u64           ImFileGetSize(ImFileHandle file);

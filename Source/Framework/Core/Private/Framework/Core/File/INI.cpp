@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/File/INI.h>
-#include <Framework/Core/File/FileStream.h>
+#include <Framework/Core/File/File.h>
 #include <fstream>
 #include <sstream>
 
@@ -100,7 +100,7 @@ namespace ob::core {
 		if (path.empty()) path = m_path;
 		if (path.empty()) return false;
 
-		FileStream fs(path, FileOpenMode::Write);
+		File fs(path, FileOpenMode::Write);
 		if (!fs) return false;
 
 		auto str = string();

@@ -30,18 +30,16 @@ namespace ob::debug {
 		if (ImGui::Begin("ReflectionExplorer")) {
 
 			if (ImGui::BeginListBox("Types")) {
-
 				TypeInfoManager::Visit([this](const TypeInfo& info) { draw(info); });
-
 				ImGui::EndListBox();
 			}
 
 			if (auto info = TypeInfoManager::Find(m_selected)) {
 				drawDetail(*info);
 			}
-
-			ImGui::End();
 		}
+
+		ImGui::End();
 
 	}
 

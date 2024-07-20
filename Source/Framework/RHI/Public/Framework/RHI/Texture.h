@@ -63,7 +63,7 @@ namespace ob::rhi {
         //! 
         //! @param path ファイルパス
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Load(const Path& path);
+        static Ref<Texture> Load(StringView path);
 
     public:
 

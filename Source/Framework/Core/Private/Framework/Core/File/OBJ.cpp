@@ -5,15 +5,19 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/File/OBJ.h>
-#include <Framework/Core/File/FileStream.h>
 #include <fstream>
 #include <sstream>
 
 namespace ob::core {
 
-	void OBJ::save(StringView path) {
-		std::ofstream os{std::string(path.data(), path.size())};
-		os << m_ss.str();
+	//@―---------------------------------------------------------------------------
+	//! @brief  ファイルに保存
+	//@―---------------------------------------------------------------------------
+	bool OBJ::save(StringView path) {
+		File file(path, FileOpenMode::Write);
+		if (!file)return false;
+		auto str = m_ss.str();
+		return file.write(str.data(), str.size());
 	}
 
 	//@―---------------------------------------------------------------------------

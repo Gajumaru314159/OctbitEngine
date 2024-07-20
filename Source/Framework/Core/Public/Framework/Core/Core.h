@@ -10,7 +10,7 @@
 #include <Framework/Core/File/BinaryReader.h>
 #include <Framework/Core/File/BinaryWriter.h>
 #include <Framework/Core/File/BlobStream.h>
-#include <Framework/Core/File/FileStream.h>
+#include <Framework/Core/File/File.h>
 #include <Framework/Core/File/Path.h>
 #include <Framework/Core/File/Stream.h>
 
