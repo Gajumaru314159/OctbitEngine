@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/File/ByteOrder.h>
 #include <Framework/Core/File/FileTypes.h>
+#include <Framework/Core/File/Stream.h>
 
 namespace ob::core {
 

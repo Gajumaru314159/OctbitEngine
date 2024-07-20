@@ -4,9 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/File/File.h>
+#include <Framework/Core/Misc/Blob.h>
 #include <Framework/Core/String/StringEncoder.h>
-#include <chrono>
-#include <stdio.h>
 #include <filesystem>
 
 

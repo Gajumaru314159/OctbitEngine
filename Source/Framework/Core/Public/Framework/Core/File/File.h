@@ -5,35 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Template/Utility/Utility.h>
-#include <Framework/Core/File/Path.h>
 #include <Framework/Core/File/Stream.h>
-#include <Framework/Core/Misc/Blob.h>
-#include <Framework/Core/Misc/DateTime.h>
-#include <Framework/Core/Misc/YesNo.h>
 
 namespace ob::core {
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  ファイルコピーのオプション
-	//@―---------------------------------------------------------------------------
-	enum class FileCopyOption {
-		None				= get_bit(0),
-		SkipExisting		= get_bit(1),
-		OverwriteExisting	= get_bit(2),
-		UpdateExisting		= get_bit(3),
-		Recursive			= get_bit(4),
-		CopySymlinks		= get_bit(5),
-		SkipSymLinks		= get_bit(6),
-		DirectoriesOnly		= get_bit(7),
-		CreateSymLinks		= get_bit(8),
-		CreateHardLinks		= get_bit(9),
-	};
-	//@―---------------------------------------------------------------------------
-	//! @brief  ファイルコピーのオプションセット
-	//@―---------------------------------------------------------------------------
-	using FileCopyOptions = BitFlags<FileCopyOption>;
-
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ファイル

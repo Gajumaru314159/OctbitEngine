@@ -15,7 +15,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	class BinaryWriter{
 	public:
-		BinaryWriter(Stream* stream, ByteOrder byteOrder = ByteOrder::Auto);
+		BinaryWriter(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);
 		~BinaryWriter();
 
 		void writeInt8(s8 value);
@@ -31,24 +31,11 @@ namespace ob::core {
 
 		void write(const void* buffer, size_t count);
 		void seek(offset_t offset);
+		void flush();
 
 	private:
-		class Stream* m_stream;
+		Stream& m_stream;
 		ByteOrder m_byteOrder;
-		//std::Vector<byte_t> m_stringCache;
 	};
 
-
-
-
-
-
-	//===============================================================
-	// インライン関数
-	//===============================================================
-	//! @cond
-
-
-
-	//! @endcond
 }
