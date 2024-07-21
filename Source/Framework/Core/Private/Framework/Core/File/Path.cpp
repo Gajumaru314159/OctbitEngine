@@ -12,7 +12,7 @@ namespace ob::core {
 	//! @brief		std::filesystem::pathに変換
 	//@―---------------------------------------------------------------------------
 	static std::filesystem::path ToStdPath(StringView path) {
-		return std::filesystem::path((std::string_view)path);
+		return std::filesystem::u8path((std::string_view)path);
 	}
 
 	//@―---------------------------------------------------------------------------

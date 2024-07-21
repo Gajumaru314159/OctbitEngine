@@ -51,8 +51,15 @@ namespace ob::engine {
 	}
 	void MeshComponent::onTransformChanged(TransformComponent& transform) {
 		if (!m_model)return;
+
+		// テスト
+		f32 maxScale = 1.0f;
+		for (auto& submesh : m_model->getMesh()->getSubMeshes()) {
+			maxScale = Math::Max(maxScale, submesh.bounds.size.maxAbsComponent());
+		}
+
 		for (auto& material : m_model->getMaterials()) {
-			material->setMatrix("Matrix", transform.getWorld());
+			material->setMatrix("Matrix", transform.getWorld().toMatrix() * Matrix::Scale(Vec3(10/maxScale)));
 		}
 	}
 
@@ -92,6 +99,10 @@ namespace ob::engine {
 
 		// メッシュの読み込み失敗
 		if (!m_model) return;
+
+		if(auto transform = getEntity().findComponent<TransformComponent>()){
+			onTransformChanged(*transform);
+		}
 
 		for (auto& [index, submesh] : Indexed(m_model->getMesh()->getSubMeshes())) {
 			auto id = feature->addRenderable(m_model->getMesh(), m_model->getMaterials().at(index));

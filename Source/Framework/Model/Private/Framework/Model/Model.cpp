@@ -34,7 +34,8 @@ namespace ob::model {
 			aiProcess_GenSmoothNormals |
 			aiProcess_GenUVCoords |
 			aiProcess_RemoveRedundantMaterials |
-			aiProcess_OptimizeMeshes;
+			aiProcess_OptimizeMeshes | 
+			aiProcess_GenBoundingBoxes;
 
 		Assimp::Importer importer;
 		auto scene = importer.ReadFile(pathStr,flag);
@@ -55,13 +56,12 @@ namespace ob::model {
 					String message;
 					if (type & aiPrimitiveType_POINT) message += "POINT,";
 					if (type & aiPrimitiveType_LINE) message += "LINE,";
-					if (type & aiPrimitiveType_TRIANGLE) message += "TRIANGLE,";
 					if (type & aiPrimitiveType_POLYGON) message += "POLYGON,";
 					if (type & aiPrimitiveType_NGONEncodingFlag) message += "NGON,";
 					if (!message.empty()) message.pop_back();
 					return message;
 					};
-				LOG_ERROR("非対応のプリミティブライプです [{}]", getPrimitiveName(mesh->mPrimitiveTypes));
+				LOG_ERROR("非対応のプリミティブライプを含んでいます [{}]", getPrimitiveName(mesh->mPrimitiveTypes));
 				//continue;
 			}
 
@@ -119,20 +119,33 @@ namespace ob::model {
 			}
 
 			// インデックス
-			meshData.indices.reserve(mesh->mNumFaces * 3);
-			for (auto face : Span<aiFace>(mesh->mFaces, mesh->mNumFaces)) {
-				if (face.mNumIndices == 3) {
-					meshData.indices.emplace_back(face.mIndices[0]);
-					meshData.indices.emplace_back(face.mIndices[1]);
-					meshData.indices.emplace_back(face.mIndices[2]);
+			size_t indexNum = mesh->mNumVertices;
+			if (1 << 16 < indexNum) {
+				meshData.indices32.reserve(mesh->mNumFaces * 3);
+				for (auto face : Span<aiFace>(mesh->mFaces, mesh->mNumFaces)) {
+					if (face.mNumIndices == 3) {
+						meshData.indices32.emplace_back(face.mIndices[0]);
+						meshData.indices32.emplace_back(face.mIndices[1]);
+						meshData.indices32.emplace_back(face.mIndices[2]);
+					}
 				}
+				meshData.indices.shrink_to_fit();
+			}else{
+				meshData.indices.reserve(mesh->mNumFaces * 3);
+				for (auto face : Span<aiFace>(mesh->mFaces, mesh->mNumFaces)) {
+					if (face.mNumIndices == 3) {
+						meshData.indices.emplace_back(face.mIndices[0]);
+						meshData.indices.emplace_back(face.mIndices[1]);
+						meshData.indices.emplace_back(face.mIndices[2]);
+					}
+				}
+				meshData.indices.shrink_to_fit();
 			}
-			meshData.indices.shrink_to_fit();
 
 			// サブメッシュ
 			auto& submesh = meshData.submeshes.emplace_back();
-			submesh.indexCount = meshData.indices.size();
-
+			submesh.indexCount = std::max(meshData.indices.size(),meshData.indices32.size());
+			submesh.bounds = Box::FromTo({ mesh->mAABB.mMin.x, mesh->mAABB.mMin.y, mesh->mAABB.mMin.z }, { mesh->mAABB.mMax.x, mesh->mAABB.mMax.y, mesh->mAABB.mMax.z });
 			model->m_mesh = graphics::Mesh::Create(std::move(meshData));
 
 			break;
@@ -185,6 +198,7 @@ namespace ob::model {
 				MaterialDesc desc;
 				desc.name = name;
 				desc.matrixProperties = { "Matrix" };
+				desc.colorProperties = {"Color"};
 				desc.textureProperties = { "Main" };
 			
 				MaterialPass& opaque = desc.passes["Opaque"];
@@ -201,21 +215,39 @@ namespace ob::model {
 			
 				return Material::Create(desc);
 			}();
+
 			material->setMatrix("Matrix", Matrix::Identity);
 
 			// テクスチャ読み込み
-			Ref<rhi::Texture> texture = rhi::Texture::Black();
+			Ref<rhi::Texture> texture;
 			if (aiString mainTexPath; m->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), mainTexPath) == AI_SUCCESS) {
-				auto fullPath = Path::Combine(directory, mainTexPath.C_Str());
+				String fullPath = mainTexPath.C_Str();
+				if (Path::IsRelative(fullPath)) {
+					fullPath = Path::Combine(directory, mainTexPath.C_Str());
+				}
 				if (File::Exists(fullPath)) {
 					texture = textures[fullPath] = rhi::Texture::Load(fullPath);
 				}
 			}
-			if (!texture) texture = rhi::Texture::Black();
+			if (!texture) texture = rhi::Texture::White();
 			material->setTexture("Main", texture);
 
-			if (aiColor4D color; m->Get(AI_MATKEY_COLOR_DIFFUSE,color) == AI_SUCCESS) {
-				material->setColor("Main", Color(color.r, color.g, color.b,color.a));
+			Color color = Color::White;
+			if (aiColor4D c; m->Get(AI_MATKEY_COLOR_DIFFUSE,color) == AI_SUCCESS) {
+				color = Color(c.r, c.g, c.b,c.a);
+			}else if (m->Get(AI_MATKEY_COLOR_SPECULAR, c) == AI_SUCCESS) {
+				color = Color(c.r, c.g, c.b, c.a);
+			}
+			material->setColor("Color", color);
+
+			Map<String,aiColor4D> colors;
+			for(auto p:Span<aiMaterialProperty*>(m->mProperties,m->mNumProperties)){
+				if (p->mType == aiPTI_Float) {
+					aiColor4D c;
+					if (m->Get(p->mKey.C_Str(), 0, 0, c) == AI_SUCCESS) {
+						colors[String(p->mKey.C_Str())] = c;
+					}
+				}
 			}
 
 			model->m_materialMap[name] = model->m_materials.size();
@@ -225,6 +257,8 @@ namespace ob::model {
 		// アニメーション
 
 		// AABB
+
+		
 
 		return model;
 	}

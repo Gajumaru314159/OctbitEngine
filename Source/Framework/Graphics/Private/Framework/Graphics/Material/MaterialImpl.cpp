@@ -13,6 +13,7 @@
 #include <Framework/Graphics/Mesh/MeshImpl.h>
 
 #include <Framework/Graphics/Material/MaterialManager.h>
+#include <magic_enum.hpp>
 
 namespace ob::graphics {
 
@@ -274,10 +275,10 @@ namespace ob::graphics {
 					ok = true;
 					break;
 				}
-
 			}
 			if (ok == false) {
 				LOG_ERROR("PipelineStateの生成に失敗。マテリアルに必要な頂点情報が足りません。");
+				LOG_ERROR("Semantic:{} Type:{} Dimention:{} Index:{}", magic_enum::enum_name(attr1.semantic), magic_enum::enum_name(attr1.type), attr1.dimention, attr1.index);
 				return nullptr;
 			}
 

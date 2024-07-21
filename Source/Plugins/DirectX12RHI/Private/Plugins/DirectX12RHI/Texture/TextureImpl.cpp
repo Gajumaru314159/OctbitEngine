@@ -164,14 +164,16 @@ namespace ob::rhi::dx12 {
 		: m_device(rDevice)
 	{
 		// 拡張子に合わせて読み込み
-		HRESULT result;
+		HRESULT result = 0;
 		DirectX::TexMetadata metadata = {};
 		DirectX::ScratchImage scratchImg = {};
 
 		result = DirectX::LoadFromDDSMemory(blob.data(), blob.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
-		
+		if (FAILED(result)) result = DirectX::LoadFromWICMemory(blob.data(), blob.size(), DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+		if (FAILED(result)) result = DirectX::LoadFromTGAMemory(blob.data(), blob.size(), &metadata, scratchImg);
+		if (FAILED(result)) result = DirectX::LoadFromHDRMemory(blob.data(), blob.size(), &metadata, scratchImg);
+				
 		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
 		

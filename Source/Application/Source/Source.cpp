@@ -125,6 +125,7 @@ int TestDirectX12() {
 		MaterialDesc desc;
 		desc.name = "Default";
 		desc.matrixProperties = { "Matrix" };
+		desc.colorProperties = { "Color" };
 		desc.textureProperties = { "Main" };
 
 		MaterialPass& opaque = desc.passes["Opaque"];
@@ -143,6 +144,7 @@ int TestDirectX12() {
 	}();
 	material->setMatrix("Matrix", Matrix::Scale(Vec3(100)));
 	material->setTexture("Main", skyTexture);
+	material->setColor("Color", Color::White);
 
 
 	// モデル登録

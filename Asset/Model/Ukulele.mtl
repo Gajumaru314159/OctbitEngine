@@ -10,7 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Bump D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_nrm.png
-map_Kd D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_col.png
-map_Ns D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_rgh.png
-refl D:\\My\\Productions\\Blender\\Ukulele\\Texture\\Ukulele_mtl.png
+map_Kd Ukulele_col.dds

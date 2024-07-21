@@ -14,6 +14,13 @@ namespace ob::core {
 	using namespace std::filesystem;
 
 	//@―---------------------------------------------------------------------------
+	//! @brief		std::filesystem::pathに変換
+	//@―---------------------------------------------------------------------------
+	static std::filesystem::path ToStdPath(StringView path) {
+		return std::filesystem::u8path((std::string_view)path);
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  エラーメッセージを取得
 	//@―---------------------------------------------------------------------------
 	static String GetErrnoString() {
@@ -233,14 +240,14 @@ namespace ob::core {
 	//! @brief  ファイルが存在するか
 	//@―---------------------------------------------------------------------------
 	bool File::Exists(StringView path) {
-		return is_regular_file((std::string_view)path);
+		return is_regular_file(ToStdPath(path));
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  ファイルサイズを取得
 	//@―---------------------------------------------------------------------------
 	size_t File::Size(StringView path) {
-		return file_size((std::string_view)path);
+		return file_size(ToStdPath(path));
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -256,7 +263,7 @@ namespace ob::core {
 		if (options.has(FileCopyOption::OverwriteExisting)) opt |= copy_options::overwrite_existing;
 		if (options.has(FileCopyOption::UpdateExisting)) opt |= copy_options::update_existing;
 
-		return copy_file((std::string_view)src, (std::string_view)dst, opt);
+		return copy_file(ToStdPath(src), ToStdPath(dst), opt);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -264,7 +271,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	bool File::Delete(StringView path) {
 		if (!Exists(path)) return false;
-		return remove((std::string_view)path);
+		return remove(ToStdPath(path));
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -272,7 +279,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	bool File::Move(StringView from, StringView to) {
 		std::error_code ec;
-		rename((std::string_view)from, (std::string_view)to, ec);
+		rename(ToStdPath(from), ToStdPath(to), ec);
 		return !ec.operator bool();
 	}
 
