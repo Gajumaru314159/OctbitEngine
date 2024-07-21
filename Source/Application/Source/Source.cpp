@@ -12,6 +12,7 @@
 #include <Framework/Debug/Profiler.h>
 #include <Framework/Debug/ReflectionExplorer.h>
 #include <Framework/Debug/FrameGraphDebugger.h>
+#include <Framework/Debug/Outliner.h>
 
 #include <Framework/Graphics/Material/Material.h>
 
@@ -34,10 +35,6 @@ using namespace ob::engine;
 using namespace ob::graphics;
 using namespace ob::platform;
 
-
-void drawOutliner(Scene* scene);
-void drawComponents(Entity* pEntity = nullptr);
-
 int TestDirectX12() {
 
 	ob::core::ThreadPool threadPool;
@@ -47,6 +44,7 @@ int TestDirectX12() {
 	ob::debug::LogInfo loginfo;
 	ob::debug::FrameGraphDebugger fgdebugger;
 	ob::debug::ReflectionExplorer reflectionExplorer;
+	ob::debug::Outliner outliner;
 
 	System::Setup();
 
@@ -95,21 +93,19 @@ int TestDirectX12() {
 	ImGuiRenderFeature::AddTask(
 		scene, handle,
 		[&] {
-			profiler.draw();
+			// profiler.draw();
 			loginfo.draw();
-			fgdebugger.draw();
-			drawOutliner(&world->getRootScene());
-			drawComponents();
+			// fgdebugger.draw();
+			// ImGui::ShowDemoWindow();
 		}
 	);
 	ImGuiRenderFeature::AddTask(
 		scene, handle3,
 		[&] {
 			reflectionExplorer.draw();
+			outliner.draw(*world);
 		}
 	);
-
-
 
 
 
@@ -172,8 +168,7 @@ int TestDirectX12() {
 
 		flyCamera->update();
 
-		input::InputModule::Get()->update();
-		RHI::Get()->update();
+		Engine::Get()->update();
 		display->update();
 		Graphics::Get()->update();
 
@@ -191,7 +186,7 @@ void OctbitInit(ServiceInjector& injector) {
 	graphics::Register(injector);
 
 	rhi::Config config;
-	config.enablePIX = true;
+	//config.enablePIX = true;
 	//config.breakWithWarning = true;
 	injector.bind(config);
 

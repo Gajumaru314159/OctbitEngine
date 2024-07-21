@@ -7,6 +7,7 @@
 #include <Framework/Core/Reflection/TypeBuilder.h>
 
 OB_DEFINE_CLASS_INFO(ob::engine::TransformComponent) {
+	desc("オブジェクトの位置、回転、スケールを扱うクラス");
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
 	property("LocalPosition", &T::getLocalPosition, &T::setLocalPosition).desc("ローカル座標を設定");

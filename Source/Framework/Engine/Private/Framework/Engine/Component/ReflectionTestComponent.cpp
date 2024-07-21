@@ -8,6 +8,7 @@
 
 OB_DEFINE_CLASS_INFO(ob::engine::ReflectionTestComponent) {
 
+	desc("プロパティのリフレクション登録を検証するクラス");
 	tag("Requirements", "ob::engine::TransformComponent");
 
 	base<ob::engine::Component>();

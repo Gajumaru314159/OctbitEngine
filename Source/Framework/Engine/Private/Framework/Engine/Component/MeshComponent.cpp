@@ -24,6 +24,7 @@
 
 
 OB_DEFINE_CLASS_INFO(ob::engine::MeshComponent) {
+	desc("メッシュの描画を行うクラス");
 	tag("Requirements", "ob::engine::TransformComponent");
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");

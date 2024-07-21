@@ -40,9 +40,7 @@ namespace ob::core {
 	//!				例：sample.txt
 	//@―---------------------------------------------------------------------------
 	String Path::FileName(StringView path) {
-		auto pos = path.rfind(Separator());
-		if (pos == path.npos) return String(path);
-		return String(path.substr(pos + 1));
+		return ToStdPath(path).filename().u8string();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -51,10 +49,7 @@ namespace ob::core {
 	//!				例：sample
 	//@―---------------------------------------------------------------------------
 	String Path::Stem(StringView path) {
-		auto fileName = FileName(path);
-		auto pos = fileName.rfind('.');
-		if (pos != path.npos) fileName.resize(pos);
-		return fileName;
+		return ToStdPath(path).stem().u8string();
 	}
 
 	//@―---------------------------------------------------------------------------

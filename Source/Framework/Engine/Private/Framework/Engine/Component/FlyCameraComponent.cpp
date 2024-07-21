@@ -15,6 +15,7 @@
 #include <Framework/Platform/Window.h>
 
 OB_DEFINE_CLASS_INFO(ob::engine::FlyCameraComponent) {
+	desc("デバッグ用のカメラ操作をするクラス");
 	tag("Requirements", "ob::engine::TransformComponent");
 	base<ob::engine::Component>();
 	constructor<ob::engine::Entity&>("entity").desc("コンストラクタ");
