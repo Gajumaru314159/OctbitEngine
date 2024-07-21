@@ -240,9 +240,10 @@ namespace ob::engine {
 	void Entity::requestRelease() {
 		if (auto manager = EntityManager::Get()) {
 			manager->requestRemove(*this);
+			setParent(nullptr);
 		} else {
 			LOG_WARNING("EntityManagerが解放済みのため解放予約に失敗しました。");
-		}		
+		}
 	}
 
 	//@―---------------------------------------------------------------------------
