@@ -20,24 +20,20 @@ namespace ob::platform {
     //! @path       読み込む動的ライブラリのパス
     //@―---------------------------------------------------------------------------
     DLL::DLL(StringView path) {
-        m_handle = nullptr;
 
-        Path pathWithExt = path;
-        pathWithExt.replaceExtension(".dll");
+        auto dllpath = Path::ReplaceExtension(path,"dll");
         
-        WString fileNameW;
-        StringEncoder::Encode(pathWithExt.string(), fileNameW);
-        HMODULE dll = ::LoadLibraryW(fileNameW.c_str());
+        WString wpath;
+        StringEncoder::Encode(dllpath, wpath);
+        HMODULE dll = ::LoadLibraryW(wpath.c_str());
 
         if (dll == nullptr) {
-            String pathString;
-            StringEncoder::Encode(fileNameW, pathString);
-            LOG_ERROR_EX("System", "DLL[{0}]が見つかりませんでした。", pathString);
+            LOG_ERROR_EX("System", "DLL[{0}]が見つかりませんでした。", dllpath);
             return;
         }
 
+        m_path = dllpath;
         m_handle = dll;
-        m_path = pathWithExt.string();
     }
 
     //@―---------------------------------------------------------------------------

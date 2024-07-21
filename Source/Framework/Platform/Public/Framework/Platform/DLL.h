@@ -128,7 +128,7 @@ namespace ob::platform {
         String m_path;
         
         // WindowsではHMODULE
-        const void* m_handle;
+        const void* m_handle = nullptr;
 
     };
 

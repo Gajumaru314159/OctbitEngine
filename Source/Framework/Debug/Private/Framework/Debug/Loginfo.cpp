@@ -50,7 +50,7 @@ namespace ob::debug {
 					cache.datetime = DateTime::Now();
 					cache.level = log.level;
 					cache.message = log.message;
-					cache.file = Format("{}({})", Path(log.sourceLocation.filePath).fileName(), log.sourceLocation.line);
+					cache.file = Format("{}({})", Path::FileName(log.sourceLocation.filePath), log.sourceLocation.line);
 					cache.path = log.sourceLocation.filePath;
 					cache.path.replace('\\', '/');
 					cache.line = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);

@@ -1,99 +1,156 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Path のテスト
+//! @brief		Path のテストコード
 //! @author		Gajumaru
 //***********************************************************
+#include <gtest/gtest.h>
 #include <Framework/Core/File/Path.h>
 
-using namespace ob;
+using namespace ob::core;
 
-TEST(Path, Constructors)
+TEST(Path, Combine)
 {
-    Path emptyPath;
-    EXPECT_TRUE(emptyPath.empty());
+    String path1 = "C:/Program Files";
+    String path2 = "MyApp";
+    String path3 = "bin";
 
-    Path pathFromStdString("C:/Program Files/MyApp");
-    EXPECT_EQ(pathFromStdString.string(), "C:/Program Files/MyApp");
+    String combinedPath = Path::Combine(path1, path2, path3);
 
-    Path pathFromCString("C:\\Users\\Admin\\Documents");
-    EXPECT_EQ(pathFromCString.string(), "C:/Users/Admin/Documents");
-
-    Path pathFromPath(pathFromCString);
-    EXPECT_EQ(pathFromPath.string(), pathFromCString.string());
+    EXPECT_EQ(combinedPath, "C:/Program Files/MyApp/bin");
 }
 
-TEST(Path, Assignment)
+TEST(Path, Separator)
 {
-    Path emptyPath;
-    Path path("C:/Windows");
+    char separator = Path::Separator();
 
-    emptyPath = path;
-    EXPECT_EQ(emptyPath.string(), "C:/Windows");
-
-    emptyPath = "C:/Program Files";
-    EXPECT_EQ(emptyPath.string(), "C:/Program Files");
+    EXPECT_EQ(separator, '/');
 }
 
-TEST(Path, Concatenation)
+TEST(Path, Normalize)
 {
-    Path path("C:/Program Files");
-    path /= "MyApp";
+    String path = "C:\\Program Files\\MyApp";
 
-    EXPECT_EQ(path.string(), "C:/Program Files/MyApp");
+    String normalizedPath = Path::Normalize(path);
 
-    Path newPath = path / "bin";
-    EXPECT_EQ(newPath.string(), "C:/Program Files/MyApp/bin");
+    EXPECT_EQ(normalizedPath, "C:/Program Files/MyApp");
+}
+
+TEST(Path, FileName)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String fileName = Path::FileName(path);
+
+    EXPECT_EQ(fileName, "report.docx");
+}
+
+TEST(Path, Stem)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String stem = Path::Stem(path);
+
+    EXPECT_EQ(stem, "report");
 }
 
 TEST(Path, Extension)
 {
-    Path path("C:/Users/Public/image.png");
-    EXPECT_EQ(path.extension(), "png");
-    EXPECT_EQ(path.extension(WithDot::Yes), ".png");
+    String path = "C:/Users/Admin/Documents/report.docx";
 
-    path.removeExtension();
-    EXPECT_EQ(path.string(), "C:/Users/Public/image");
+    String extension = Path::Extension(path);
 
-    path.replaceExtension(".jpg");
-    EXPECT_EQ(path.string(), "C:/Users/Public/image.jpg");
-
-    EXPECT_TRUE(path.hasExtension(".jpg"));
-    EXPECT_FALSE(path.hasExtension(".png"));
+    EXPECT_EQ(extension, "docx");
 }
 
-TEST(Path, Accessor)
+TEST(Path, Parent)
 {
-    Path path("C:/Users/Public/image.png");
-    EXPECT_EQ(path.fileName(), "image.png");
-    EXPECT_EQ(path.stem(), "image");
+    String path = "C:/Users/Admin/Documents/report.docx";
 
-    path.replaceFileName("logo.jpg");
-    EXPECT_EQ(path.fileName(), "logo.jpg");
+    String parentPath = Path::Parent(path, 1);
 
-    path.replaceStem("icon");
-    EXPECT_EQ(path.fileName(), "icon.jpg");
+    EXPECT_EQ(parentPath, "C:/Users/Admin/Documents");
+
+    parentPath = Path::Parent(path, 2);
+
+    EXPECT_EQ(parentPath, "C:/Users/Admin");
 }
 
-TEST(Path, Directory)
+TEST(Path, IsAbsolute)
 {
-    Path path("C:/Users/Public/image.png");
-    EXPECT_FALSE(path.isDirectory());
+    String absolutePath = "C:/Program Files/MyApp";
+    String relativePath = "Documents/report.docx";
 
-    Path directoryPath = path.parent();
-    EXPECT_TRUE(directoryPath.isDirectory());
-    EXPECT_EQ(directoryPath.string(), "C:/Users/Public/");
+    bool isAbsolutePath = Path::IsAbsolute(absolutePath);
+    bool isRelativePath = Path::IsAbsolute(relativePath);
 
-    directoryPath /= "pictures";
-    EXPECT_FALSE(directoryPath.isDirectory());
-    EXPECT_EQ(directoryPath.string(), "C:/Users/Public/pictures");
+    EXPECT_TRUE(isAbsolutePath);
+    EXPECT_FALSE(isRelativePath);
 }
 
-TEST(Path, Root)
+TEST(Path, IsRelative)
 {
-    Path path("C:/Program Files");
-    EXPECT_FALSE(path.isRoot());
+    String absolutePath = "C:/Program Files/MyApp";
+    String relativePath = "Documents/report.docx";
 
-    Path rootPath = path.parent();
-    EXPECT_TRUE(rootPath.isRoot());
-    EXPECT_EQ(rootPath.string(), "C:/");
+    bool isAbsolutePath = Path::IsRelative(absolutePath);
+    bool isRelativePath = Path::IsRelative(relativePath);
+
+    EXPECT_FALSE(isAbsolutePath);
+    EXPECT_TRUE(isRelativePath);
+}
+
+TEST(Path, HasExtension)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    bool hasExtension = Path::HasExtension(path, ".docx");
+    bool hasNoExtension = Path::HasExtension(path, ".txt");
+
+    EXPECT_TRUE(hasExtension);
+    EXPECT_FALSE(hasNoExtension);
+}
+
+TEST(Path, ReplaceExtension)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String newPath = Path::ReplaceExtension(path, ".pdf");
+
+    EXPECT_EQ(newPath, "C:/Users/Admin/Documents/report.pdf");
+}
+
+TEST(Path, ReplaceStem)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String newPath = Path::ReplaceStem(path, "invoice");
+
+    EXPECT_EQ(newPath, "C:/Users/Admin/Documents/invoice.docx");
+}
+
+TEST(Path, ReplaceFileName)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String newPath = Path::ReplaceFileName(path, "invoice.docx");
+
+    EXPECT_EQ(newPath, "C:/Users/Admin/Documents/invoice.docx");
+}
+
+TEST(Path, RemoveExtension)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String newPath = Path::RemoveExtension(path);
+
+    EXPECT_EQ(newPath, "C:/Users/Admin/Documents/report");
+}
+
+TEST(Path, RemoveFileName)
+{
+    String path = "C:/Users/Admin/Documents/report.docx";
+
+    String newPath = Path::RemoveFileName(path);
+
+    EXPECT_EQ(newPath, "C:/Users/Admin/Documents/");
 }
