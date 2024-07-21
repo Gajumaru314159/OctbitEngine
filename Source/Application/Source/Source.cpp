@@ -25,6 +25,8 @@
 #include <Framework/Engine/Component/MeshComponent.h>
 #include <Framework/Engine/Component/FlyCameraComponent.h>
 
+#include <Framework/Core/Thread/ThreadPool.h>
+
 //-----------------------------------------------------------------
 using namespace ob;
 using namespace ob::rhi;
@@ -38,6 +40,7 @@ void drawComponents(Entity* pEntity = nullptr);
 
 int TestDirectX12() {
 
+	ob::core::ThreadPool threadPool;
 	ob::core::TypeInfoManager typeInfoManager;
 	ob::core::Logger log;
 	ob::debug::Profiler profiler;

@@ -42,8 +42,11 @@ namespace ob::engine {
 		void deactivate() override;
 	private:
 		void updateModel();
+		void onModelLoaded();
 		void onTransformChanged(TransformComponent&);
 	private:
+
+		SpinLock m_lock;
 		Ref<model::Model> m_model;
 		Vector<graphics::MaterialId> m_materialIds;
 

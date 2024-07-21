@@ -20,6 +20,8 @@
 
 #include <Framework/Model/Model.h>
 
+#include <Framework/Core/Thread/ThreadPool.h>
+
 
 OB_DEFINE_CLASS_INFO(ob::engine::MeshComponent) {
 	tag("Requirements", "ob::engine::TransformComponent");
@@ -91,16 +93,52 @@ namespace ob::engine {
 
 		if (getEntity().isActive() == false) return;
 
+		ScopeLock lock(m_lock);
+
 		m_model = {};
 
-		if (File::Exists(m_path)) {
-			m_model = model::Model::Load(m_path);
+		if (auto pool = ThreadPool::Get()) {
+			pool->enqueue([this] {
+				{
+					ScopeLock lock(m_lock);
+					if (File::Exists(m_path)) {
+						m_model = model::Model::Load(m_path);
+					}
+				}
+				onModelLoaded();
+			});
+		} else {
+			if (File::Exists(m_path)) {
+				m_model = model::Model::Load(m_path);
+			}
+
+			onModelLoaded();
+		}
+
+
+	}
+
+	void MeshComponent::onModelLoaded() {
+
+		ScopeLock lock(m_lock);
+
+		graphics::MaterialRenderFeature* feature = nullptr;
+
+		// 仮のアクセス
+		if (auto rpi = graphics::Graphics::Get()) {
+			if (auto scene = rpi->getScene()) {
+				feature = scene->findFeature<graphics::MaterialRenderFeature>();
+			}
+		}
+
+		if (feature == nullptr) {
+			return;
 		}
 
 		// メッシュの読み込み失敗
 		if (!m_model) return;
 
-		if(auto transform = getEntity().findComponent<TransformComponent>()){
+		if (auto transform = getEntity().findComponent<TransformComponent>()) {
 			onTransformChanged(*transform);
 		}
 
