@@ -61,7 +61,7 @@ namespace ob::model {
 					if (!message.empty()) message.pop_back();
 					return message;
 					};
-				LOG_ERROR("非対応のプリミティブライプを含んでいます [{}]", getPrimitiveName(mesh->mPrimitiveTypes));
+				LOG_ERROR("{}は非対応のプリミティブタイプを含んでいます [{}]", path,getPrimitiveName(mesh->mPrimitiveTypes));
 				//continue;
 			}
 
