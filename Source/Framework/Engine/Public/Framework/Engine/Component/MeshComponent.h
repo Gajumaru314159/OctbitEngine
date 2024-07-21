@@ -11,6 +11,8 @@
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 #include <Framework/Engine/Component/TransformComponent.h>
 
+#include <Framework/Model/Model.h>
+
 
 namespace ob::engine {
 
@@ -42,13 +44,10 @@ namespace ob::engine {
 		void updateModel();
 		void onTransformChanged(TransformComponent&);
 	private:
-		//graphics::ModelRenderHandle m_handle;
-		Ref<graphics::Material> m_material;
-		Ref<rhi::Texture> m_mainTex;
-		Ref<graphics::Mesh> m_mesh;
-		String m_path;
-		graphics::MaterialId m_id = graphics::MaterialId::Invalid;
+		Ref<model::Model> m_model;
+		Vector<graphics::MaterialId> m_materialIds;
 
+		String m_path;
 		TransformChangedHandle m_hTransformChanged;
 	};
 

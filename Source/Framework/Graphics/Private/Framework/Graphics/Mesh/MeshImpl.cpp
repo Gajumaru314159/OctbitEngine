@@ -34,6 +34,10 @@ namespace ob::graphics {
 			return nullptr;
 		}
 
+		if (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
+			LOG_WARNING("Assimp scene is incomplete [{}]",path);
+		}
+
 		for (auto mesh : Span<aiMesh*>(scene->mMeshes, scene->mNumMeshes)) {
 
 			if (mesh->mPrimitiveTypes != aiPrimitiveType_TRIANGLE) {

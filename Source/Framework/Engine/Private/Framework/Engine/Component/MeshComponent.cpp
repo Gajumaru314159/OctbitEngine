@@ -18,6 +18,9 @@
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 #include <Framework/Engine/Component/TransformComponent.h>
 
+#include <Framework/Model/Model.h>
+
+
 OB_DEFINE_CLASS_INFO(ob::engine::MeshComponent) {
 	tag("Requirements", "ob::engine::TransformComponent");
 	base<ob::engine::Component>();
@@ -31,38 +34,6 @@ namespace ob::engine {
 	MeshComponent::MeshComponent(Entity& entity)
 		: Component(entity)
 	{
-
-		using namespace ob::rhi;
-		using namespace ob::graphics;
-
-		m_material = [&] {
-
-			auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
-			OB_ASSERT(code, "ファイル読み込み失敗");
-
-			MaterialDesc desc;
-			desc.name = "Default";
-			desc.matrixProperties = { "Matrix" };
-			desc.textureProperties = { "Main" };
-
-			MaterialPass& opaque = desc.passes["Opaque"];
-			opaque.depthStencil.depth.enable = true;
-			opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
-			opaque.depth = TextureFormat::D32;
-			opaque.vs = Shader::CompileVS(code.value());
-			opaque.ps = Shader::CompilePS(code.value());
-			opaque.requiredLayout = {
-				{Semantic::Position,ElementType::Float,4},
-				{Semantic::Normal,ElementType::Float,4},
-				{Semantic::TexCoord,ElementType::Float,2},
-			};
-
-			return Material::Create(desc);
-		}();
-
-		m_mainTex = Texture::Load("Asset/Model/Ukulele_col.dds");
-		m_material->setMatrix("Matrix", Matrix::Identity);
-		m_material->setTexture("Main", m_mainTex);
 	}
 
 	void MeshComponent::setModel(StringView path) {
@@ -79,8 +50,9 @@ namespace ob::engine {
 		}
 	}
 	void MeshComponent::onTransformChanged(TransformComponent& transform) {
-		if (m_material) {
-			m_material->setMatrix("Matrix", transform.getWorld());
+		if (!m_model)return;
+		for (auto& material : m_model->getMaterials()) {
+			material->setMatrix("Matrix", transform.getWorld());
 		}
 	}
 
@@ -106,24 +78,25 @@ namespace ob::engine {
 		if (feature == nullptr) {
 			return;
 		}
-		
-		feature->removeRenderable(m_id);
 
-		if (getEntity().isActive() == false) {
-			return;
-		}
+		for (auto& id : m_materialIds) feature->removeRenderable(id);
+		m_materialIds.clear();
 
-		m_mesh = {};
+		if (getEntity().isActive() == false) return;
+
+		m_model = {};
+
 		if (File::Exists(m_path)) {
-			m_mesh = graphics::Mesh::Load(m_path);
+			m_model = model::Model::Load(m_path);
 		}
 
 		// メッシュの読み込み失敗
-		if (!m_mesh) {
-			return;
-		}
+		if (!m_model) return;
 
-		m_id = feature->addRenderable(m_mesh, m_material);
+		for (auto& [index, submesh] : Indexed(m_model->getMesh()->getSubMeshes())) {
+			auto id = feature->addRenderable(m_model->getMesh(), m_model->getMaterials().at(index));
+			m_materialIds.push_back(id);
+		}
 
 	}
 
