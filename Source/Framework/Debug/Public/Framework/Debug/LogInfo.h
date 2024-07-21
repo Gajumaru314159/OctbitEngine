@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Thread/SpinLock.h>
 #include <Framework/Core/Log/Logger.h>
 #include <Plugins/ImGui/ImGui.h>
 
@@ -29,6 +30,7 @@ namespace ob::debug {
 
 		bool m_bAutoWrap = false;
 		Logger::EventHandle m_hLogged;
+		SpinLock		m_lock;
 		Deque<LogCache>	m_logs;
 		size_t		m_maxLogCount;
 		HashMap<LogLevel, bool> m_levelFilter;

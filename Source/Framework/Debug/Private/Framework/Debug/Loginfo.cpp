@@ -34,6 +34,7 @@ namespace ob::debug {
 		if (auto logger = Logger::Get()) {
 			logger->addEvent(m_hLogged,
 				[this](const Log& log) {
+					ScopeLock lock(m_lock);
 					if (m_maxLogCount < m_logs.size()) {
 						m_logs.pop_front();
 					}
@@ -64,6 +65,7 @@ namespace ob::debug {
 
 	void LogInfo::draw() {
 
+		ScopeLock lock(m_lock);
 		String buffer;
 
 		if (ImGui::Begin("LogInfo")) {

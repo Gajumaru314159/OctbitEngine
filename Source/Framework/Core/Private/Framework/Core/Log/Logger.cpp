@@ -127,10 +127,11 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     void Logger::addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage) {
 
-        if (m_logged.load())return;// 無限ループ回避のため早期リターン
+        thread_local bool logged = false;
+        if (logged)return;// 無限ループ回避のため早期リターン
 
         ScopeLock lock(m_mutex);
-        m_logged = true;
+        logged = true;
 
         Log log;
         log.level = level;
@@ -141,7 +142,7 @@ namespace ob::core {
         // 登録されたすべてのリスナに通知
         m_notifier.invoke(log);
 
-        m_logged = false;
+        logged = false;
     }
 
 

@@ -114,7 +114,6 @@ namespace ob::core {
         Mutex           m_mutex;
         EventNotifier   m_notifier;
         EventHandle     m_hDebugEvent;
-        Atomic<bool>    m_logged = false;
         static Logger*  s_instance;
     };
 
