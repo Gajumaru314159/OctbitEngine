@@ -55,15 +55,24 @@ namespace ob::engine {
 				rotation.x = Math::Clamp(rotation.x, -85.f, 85.f);
 				rotation.z = 0.0f;
 
+				
+				// マウスのホイール変更量を移動速度に掛ける
+				m_translationSpeed += Mouse::Wheel.value()*0.01f;
+				m_translationSpeed = Math::Max(m_translationSpeed, 0.01f);
+
 				// 移動
 				Vec3 speed(0, 0, 0);
+				Vec3 updown(0, 0, 0);
 				if (Keyboard::W.pressed())speed.z += 1;
 				if (Keyboard::S.pressed())speed.z -= 1;
 				if (Keyboard::A.pressed())speed.x -= 1;
 				if (Keyboard::D.pressed())speed.x += 1;
+				if (Keyboard::E.pressed())updown.y += 1;
+				if (Keyboard::Q.pressed())updown.y -= 1;
 
 				Vec3 position = transform->getLocalPosition();
-				position += (rotation.toQuat() * speed) * m_translationSpeed * deltaTime;
+				position += (rotation.toQuat() * speed + updown) * m_translationSpeed * deltaTime;
+
 
 				// 更新
 				Transform trs;
