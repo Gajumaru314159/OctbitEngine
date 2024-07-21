@@ -220,7 +220,10 @@ namespace ob::model {
 
 			// テクスチャ読み込み
 			Ref<rhi::Texture> texture;
-			if (aiString mainTexPath; m->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), mainTexPath) == AI_SUCCESS) {
+			aiString mainTexPath; 
+			if (mainTexPath.length == 0)m->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), mainTexPath);
+			if (mainTexPath.length == 0)m->Get(AI_MATKEY_TEXTURE_EMISSIVE(0), mainTexPath);
+			if (mainTexPath.length) {
 				String fullPath = mainTexPath.C_Str();
 				if (Path::IsRelative(fullPath)) {
 					fullPath = Path::Combine(directory, mainTexPath.C_Str());
@@ -235,8 +238,6 @@ namespace ob::model {
 			Color color = Color::White;
 			if (aiColor4D c; m->Get(AI_MATKEY_COLOR_DIFFUSE,color) == AI_SUCCESS) {
 				color = Color(c.r, c.g, c.b,c.a);
-			}else if (m->Get(AI_MATKEY_COLOR_SPECULAR, c) == AI_SUCCESS) {
-				color = Color(c.r, c.g, c.b, c.a);
 			}
 			material->setColor("Color", color);
 
