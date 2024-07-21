@@ -122,7 +122,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> DirectX12RHI::createTexture(StringView name, Size size, Span<IntColor> colors) {
+	Ref<Texture> DirectX12RHI::createTexture(StringView name, Size size, Span<const IntColor> colors) {
 		SAFE_CREATE(Texture, TextureImpl, *this, name, size, colors);
 	}
 

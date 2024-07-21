@@ -42,14 +42,14 @@ namespace ob::rhi {
         //! 
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Create(const Bitmap& bitmap);
+        static Ref<Texture> Create(StringView name, const Bitmap& bitmap);
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //! 
         //! @param desc テクスチャ定義
         //@―---------------------------------------------------------------------------
-        static Ref<Texture> Create(StringView name,Size size,Span<IntColor> colors);
+        static Ref<Texture> Create(StringView name,Size size,Span<const IntColor> colors);
 
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ

@@ -72,7 +72,7 @@ namespace ob::rhi::dx12 {
 		Ref<Texture> createTexture(const TextureDesc& desc)override;
 
 
-		Ref<Texture> createTexture(StringView name, Size size, Span<IntColor> colors) override;
+		Ref<Texture> createTexture(StringView name, Size size, Span<const IntColor> colors) override;
 
 
 		//@―---------------------------------------------------------------------------

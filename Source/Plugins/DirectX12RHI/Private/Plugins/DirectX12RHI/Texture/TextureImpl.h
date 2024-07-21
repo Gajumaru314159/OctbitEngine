@@ -38,7 +38,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief      IntColorの配列 から空のテクスチャを生成
         //@―---------------------------------------------------------------------------
-        TextureImpl(DirectX12RHI& rDevice, StringView name, Size size,Span<IntColor> colors);
+        TextureImpl(DirectX12RHI& rDevice, StringView name, Size size,Span<const IntColor> colors);
 
         //@―---------------------------------------------------------------------------
         //! @brief      テクスチャバイナリから生成

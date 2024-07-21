@@ -47,6 +47,13 @@ namespace ob::rhi {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	Ref<Texture> Texture::Create(StringView name, const Bitmap& bitmap) {
+		return Create(name, bitmap.size(), {bitmap.data(),bitmap.pixelCount()});
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
 	//! @param name オブジェクト名
@@ -58,14 +65,12 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
 	//@―---------------------------------------------------------------------------
-	Ref<Texture> Texture::Create(StringView name, Size size, Span<IntColor> colors) {
+	Ref<Texture> Texture::Create(StringView name, Size size, Span<const IntColor> colors) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(name, size, colors);
 		}

@@ -79,7 +79,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      IntColorの配列 から空のテクスチャを生成
 	//@―---------------------------------------------------------------------------
-	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<IntColor> colors)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<const IntColor> colors)
 		: m_device(rDevice)
 	{
 		if (size.width <= 0 || size.height <= 0) {
