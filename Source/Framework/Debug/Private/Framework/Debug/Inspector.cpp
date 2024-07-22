@@ -38,7 +38,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							p.setter(obj, value);
 						}
 					}
@@ -53,7 +53,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							s16 value2 = value;
 							p.setter(obj, value);
 						}
@@ -69,7 +69,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							s8 value2 = value;
 							p.setter(obj, value);
 						}
@@ -85,7 +85,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							u32 value2 = value;
 							p.setter(obj, value);
 						}
@@ -101,7 +101,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							u16 value2 = value;
 							p.setter(obj, value);
 						}
@@ -117,7 +117,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputInt(name.c_str(), &value)) {
+						if (ImGui::DragInt(name.c_str(), &value)) {
 							u8 value2 = value;
 							p.setter(obj, value);
 						}
@@ -132,7 +132,7 @@ namespace ob::debug {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::InputFloat(name.c_str(), &value)) {
+						if (ImGui::DragFloat(name.c_str(), &value)) {
 							p.setter(obj, value);
 						}
 					}
@@ -147,39 +147,39 @@ namespace ob::debug {
 							p.setter(obj, value2);
 						}
 					} else {
-						if (ImGui::InputFloat(name.c_str(), &value)) {
+						if (ImGui::DragFloat(name.c_str(), &value)) {
 							f64 value2 = value;
 							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<Vec2>()) {
 					auto value = p.get<Vec2>(obj);
-					if (ImGui::InputFloat2(name.c_str(), reinterpret_cast<f32*>(&value))) {
+					if (ImGui::DragFloat2(name.c_str(), value)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Vec3>()) {
 					auto value = p.get<Vec3>(obj);
-					if (ImGui::InputFloat3(name.c_str(), reinterpret_cast<f32*>(&value))) {
+					if (ImGui::DragFloat3(name.c_str(), value)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Vec4>()) {
 					auto value = p.get<Vec4>(obj);
-					if (ImGui::InputFloat4(name.c_str(), reinterpret_cast<f32*>(&value))) {
+					if (ImGui::DragFloat4(name.c_str(), value)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<IntVec2>()) {
 					auto value = p.get<IntVec2>(obj);
-					if (ImGui::InputInt2(name.c_str(), reinterpret_cast<s32*>(&value))) {
+					if (ImGui::DragInt2(name.c_str(), reinterpret_cast<s32*>(&value))) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<IntVec3>()) {
 					auto value = p.get<IntVec3>(obj);
-					if (ImGui::InputInt3(name.c_str(), reinterpret_cast<s32*>(&value))) {
+					if (ImGui::DragInt3(name.c_str(), reinterpret_cast<s32*>(&value))) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<IntVec4>()) {
 					auto value = p.get<IntVec4>(obj);
-					if (ImGui::InputInt4(name.c_str(), reinterpret_cast<s32*>(&value))) {
+					if (ImGui::DragInt4(name.c_str(), reinterpret_cast<s32*>(&value))) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Rot>()) {
