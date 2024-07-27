@@ -6,6 +6,7 @@
 #ifdef OS_WINDOWS
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>
 #include <Framework/Platform/Window.h>
+#include <Framework/Platform/Window/WindowManager.h>
 #include <Framework/Core/String/StringEncoder.h>
 
 namespace ob::platform {
@@ -25,7 +26,8 @@ namespace ob::platform {
 		, m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)
 	{
-		m_hParentWnd = (HWND)Window::Main().getHandle();
+		auto manager = WindowManager::Get();
+		m_hParentWnd = (HWND)((manager && manager->hasMainWindow()) ? Window::Main().getHandle() : nullptr);
 		const bool hasParent = m_hParentWnd != nullptr;
 
 		m_windowID = m_windowNum++;

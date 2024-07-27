@@ -36,6 +36,4 @@ include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
 
 # カスタムコマンド
-add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK 
-    COMMAND ${CMAKE_COMMAND} -E copy "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:RHI-test>
-    )
+COPY_REQUIRED_DLL()

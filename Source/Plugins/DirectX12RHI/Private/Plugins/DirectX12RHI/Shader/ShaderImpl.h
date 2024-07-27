@@ -87,7 +87,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンパイル
         //@―---------------------------------------------------------------------------
-        void compile(DirectX12RHI& device, const StringBase<char>& blob,ShaderStage stage);
+        void compile(DirectX12RHI& device, StringView code,ShaderStage stage);
 
     private:
 

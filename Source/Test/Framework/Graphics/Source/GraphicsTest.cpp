@@ -91,7 +91,7 @@ TEST(Graphis, Create) {
 
 	Ref<Material> material = [&]{
 
-		auto code = ReadFile("Asset/Shader/GraphicTest.hlsl");
+		auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
 		OB_ASSERT(code,"ファイル読み込み失敗");
 
 		MaterialDesc desc;
@@ -106,9 +106,9 @@ TEST(Graphis, Create) {
 		opaque.vs = Shader::CompileVS(code.value());
 		opaque.ps = Shader::CompilePS(code.value());
 		opaque.requiredLayout = {
-			{Semantic::Position,Type::Float,4},
-			{Semantic::Normal,Type::Float,4},
-			{Semantic::TexCoord,Type::Float,2},
+			{Semantic::Position,ElementType::Float,4},
+			{Semantic::Normal,ElementType::Float,4},
+			{Semantic::TexCoord,ElementType::Float,2},
 		};
 
 		return Material::Create(desc);

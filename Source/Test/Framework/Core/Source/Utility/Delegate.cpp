@@ -45,6 +45,11 @@ public:
 		d22(true);
 		d23(true);
 
+
+		MiniDalegate<void()> d04 = { *this, &A::func00 };
+		MiniDalegate<void()> d14 = { *this, &A::func10 };
+		MiniDalegate<void()> d24 = {&A::func20};
+
 		sizeof(MiniDalegate<void()>);
 	}
 

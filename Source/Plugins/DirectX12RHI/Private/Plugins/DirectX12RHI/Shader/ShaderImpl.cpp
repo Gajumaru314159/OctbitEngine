@@ -87,11 +87,7 @@ namespace ob::rhi::dx12 {
     ShaderImpl::ShaderImpl(DirectX12RHI& device,const String& code, ShaderStage stage, StringView name)
         : m_name(name)
     {
-        // コンパイルできるようにUTF-8にコンバート
-        StringBase<char> utfCode;
-        StringEncoder::Encode(code, utfCode);
-
-        compile(device,utfCode, stage);
+        compile(device, code, stage);
     }
 
 
@@ -164,7 +160,7 @@ namespace ob::rhi::dx12 {
     //@―---------------------------------------------------------------------------
     //! @brief				初期化
     //@―---------------------------------------------------------------------------
-    void ShaderImpl::compile(DirectX12RHI& device, const StringBase<char>& code, ShaderStage stage) {
+    void ShaderImpl::compile(DirectX12RHI& device, StringView code, ShaderStage stage) {
 
         HRESULT result;
 
