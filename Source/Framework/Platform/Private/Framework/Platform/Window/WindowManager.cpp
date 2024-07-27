@@ -49,4 +49,11 @@ namespace ob::platform {
         return m_mainWindow;
     }
 
+    //@―---------------------------------------------------------------------------
+    //! @brief  メインウィンドウが生成済みか
+    //@―---------------------------------------------------------------------------
+    auto WindowManager::hasMainWindow() const -> bool {
+        return m_mainWindow;
+    }
+
 }
