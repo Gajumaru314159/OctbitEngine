@@ -61,7 +61,8 @@ set(FG_BUILD_TEST OFF)
 set(BUILD_SHARED_LIBS OFF)
 
 # assimp
-set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_TESTS FALSE)
+set(P2T_STATIC_EXPORTS TRUE)
 
 #------------------------------------------------------------------------------
 # ThirdPartyライブラリ
