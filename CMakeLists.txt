@@ -73,7 +73,7 @@ FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.gi
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
-FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.4.0")
+FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
 FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX)

@@ -41,19 +41,19 @@ namespace ob::graphics {
 		//===============================================================
 		// 頂点
 		//===============================================================
-		Vector<Vec3>			positions;
+		Vector<Vec3>		positions;
 		Vector<Color>		colors;
-		Vector<IntColor>		intColors;
-		Vector<Vec3>			normals;
-		Vector<Vec4>			tangents;
-		Vector<Vec2>			uvs;
-		Vector<Vec2>			uvs1;
-		Vector<Vec2>			uvs2;
-		Vector<Vec2>			uvs3;
-		Vector<Vec2>			uvs4;
-		Vector<Vec2>			uvs5;
-		Vector<Vec2>			uvs6;
-		Vector<Vec2>			uvs7;
+		Vector<IntColor>	intColors;
+		Vector<Vec3>		normals;
+		Vector<Vec4>		tangents;
+		Vector<Vec2>		uvs;
+		Vector<Vec2>		uvs1;
+		Vector<Vec2>		uvs2;
+		Vector<Vec2>		uvs3;
+		Vector<Vec2>		uvs4;
+		Vector<Vec2>		uvs5;
+		Vector<Vec2>		uvs6;
+		Vector<Vec2>		uvs7;
 		//Vector<Matrix>		bindPoses;
 		//Vector<BoneWeight>	boneWeights;
 
