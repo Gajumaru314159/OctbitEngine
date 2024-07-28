@@ -1,9 +1,15 @@
+# directory
 /Build/
 /Insall/
 /Docs/html
 /Memo/
-/.vs
-/out/
+out/
+obj/
+bin/
+.vs/
 
+# extention
 .zip
+
+# file
 imgui.ini
