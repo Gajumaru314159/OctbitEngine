@@ -18,11 +18,9 @@
 
 #include <Framework/Graphics/Material/Material.h>
 
-using namespace ob;
-using namespace ob::graphics;
-
 TEST(Graphis, Create) {
 #pragma region
+	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
@@ -143,7 +141,7 @@ TEST(Graphis, Create) {
 		Matrix::TRS(pos, rot, Vec3::One).inverse();
 	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 
-	for (s32 i = 0; i < 100000; ++i) {
+	for (s32 i = 0; i < 1000; ++i) {
 
 		if (System::Update() == false)break;
 

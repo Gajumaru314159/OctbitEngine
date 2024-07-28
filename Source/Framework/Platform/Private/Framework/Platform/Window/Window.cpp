@@ -21,7 +21,7 @@ namespace ob::platform {
         m_impl = std::make_shared<WindowImpl>(desc);
 
         if (auto manager = WindowManager::Get()) {
-            if (!manager->getMainWindow()) {
+            if (!manager->hasMainWindow()) {
                 manager->setMainWindow(*this);
             }
         }
