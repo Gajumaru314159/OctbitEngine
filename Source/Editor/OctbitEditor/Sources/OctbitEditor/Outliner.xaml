@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="OctbitEditor.Outliner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OctbitEditor"
+             mc:Ignorable="d"
+             d:DesignWidth="200" d:DesignHeight="400" >
+
+    <UserControl.DataContext>
+        <local:OutlinerVM/>
+    </UserControl.DataContext>
+
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <TextBox Text="Search"/>
+            <ToggleButton Content="Test"/>
+        </DockPanel>
+            
+        <TreeView ItemsSource="{Binding Children}" Background="Transparent">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <!--タイプアイコン(Scene/Entity/Folder)-->
+                        <Rectangle Width="10" Height="10" Fill="Red" Margin="0,0,4,0" VerticalAlignment="Stretch"/>
+                        <TextBlock Text="{Binding Name.Value}" Foreground="White"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.Resources>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+        
+    </DockPanel>
+</UserControl>
