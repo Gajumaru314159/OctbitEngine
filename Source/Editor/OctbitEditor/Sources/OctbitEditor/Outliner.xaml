@@ -11,13 +11,35 @@
         <local:OutlinerVM/>
     </UserControl.DataContext>
 
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top">
-            <TextBox Text="Search"/>
-            <ToggleButton Content="Test"/>
-        </DockPanel>
-            
+    <DockPanel Background="{DynamicResource Background}">
+        <local:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
         <TreeView ItemsSource="{Binding Children}" Background="Transparent">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
+                    <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
+                    <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
+                    <MenuItem Header="Paste As Child"/>
+                    <Separator/>
+                    <MenuItem Header="Rename" InputGestureText="F2"/>
+                    <MenuItem Header="Duplicate" InputGestureText="Ctrl+D"/>
+                    <MenuItem Header="Delete" InputGestureText="Delete"/>
+                    <Separator/>
+                    <MenuItem Header="Create Empty" InputGestureText="Ctrl+N"/>
+                    <MenuItem Header="Create Empty Parent"/>
+                    <MenuItem Header="Light">
+                        <MenuItem Header="Directional Ligtht"/>
+                        <MenuItem Header="Point Ligtht"/>
+                        <MenuItem Header="Spot Ligtht"/>
+                        <Separator/>
+                        <MenuItem Header="Reflection Probe"/>
+                    </MenuItem>
+                    <MenuItem Header="Debug">
+                        <MenuItem Header="Memo"/>
+                    </MenuItem>
+
+                </ContextMenu>
+            </TreeView.ContextMenu>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">

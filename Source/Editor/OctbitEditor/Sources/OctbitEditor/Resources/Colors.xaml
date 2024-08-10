@@ -12,11 +12,16 @@
     <Color x:Key="Fill.Hovered.Color">#6B6B6B</Color>
     <Color x:Key="Fill.Disabled.Color">#585858</Color>
     <Color x:Key="Fill.Selected.Color">#557BB6</Color>
+    <Color x:Key="Fill.Selected.Active.Color">#658BC6</Color>
     <Color x:Key="Fill.Selected.Disabled.Color">#465876</Color>
 
-    <Color x:Key="aa" />
+    <Color x:Key="Surface.Color">#383838</Color>
+    
+    <Color x:Key="Header.Color">#383838</Color>
+    <SolidColorBrush x:Key="Header" Color="{DynamicResource Header.Color}"/>
 
     <SolidColorBrush x:Key="Background" Color="{DynamicResource Background.Color}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource Text.Color}"/>
 
     <SolidColorBrush x:Key="Text" Color="{DynamicResource Text.Color}"/>
     <SolidColorBrush x:Key="Text.Normal" Color="{DynamicResource Text.Color}"/>
@@ -39,12 +44,30 @@
 
 
 
+    <SolidColorBrush x:Key="Expander.Background" Color="{DynamicResource Surface.Color}"/>
     <SolidColorBrush x:Key="Expander.Normal" Color="{DynamicResource Fill.Color}"/>
     <SolidColorBrush x:Key="Expander.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
     <SolidColorBrush x:Key="Expander.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
     <SolidColorBrush x:Key="Expander.Disabled" Color="{DynamicResource Fill.Disabled.Color}"/>
     <SolidColorBrush x:Key="Expander.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
 
+
+    <SolidColorBrush x:Key="TreeViewItem.Normal" Color="Transparent"/>
+    <SolidColorBrush x:Key="TreeViewItem.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.SelectedActive" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Disabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected.Active" Color="{DynamicResource Fill.Selected.Active.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
+
+
+    <SolidColorBrush x:Key="ListViewItem.Normal" Color="Transparent"/>
+    <SolidColorBrush x:Key="ListViewItem.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.SelectedActive" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Disabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected.Active" Color="{DynamicResource Fill.Selected.Active.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
 
 
 </ResourceDictionary>

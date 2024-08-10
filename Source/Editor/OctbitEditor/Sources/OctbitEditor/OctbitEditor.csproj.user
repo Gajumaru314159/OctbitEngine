@@ -10,6 +10,9 @@
     <Compile Update="Explorer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Log.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Outliner.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Explorer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Log.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -31,6 +37,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Theme.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SearchBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Viewport.xaml">

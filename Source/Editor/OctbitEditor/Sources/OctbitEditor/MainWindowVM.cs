@@ -7,12 +7,12 @@ namespace OctbitEditor
     {
         public MainWindowVM()
         {
-            Message.Value = "Hello, World!";
+            Title.Value = "Octbit Editor";
 
             ExitCommand.Subscribe(_ => System.Windows.Application.Current.Shutdown());
         }
 
-        public ReactiveProperty<string> Message { get; } = new();
+        public ReactiveProperty<string> Title { get; } = new();
 
         public ReactiveCommand ExitCommand { get; } = new();
     }

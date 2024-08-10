@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="OctbitEditor.Log"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:OctbitEditor"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.DataContext>
+        <local:LogVM/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary Source="/SearchBox.xaml"/>
+    </UserControl.Resources>
+    
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" FlowDirection="RightToLeft" Background="{DynamicResource Header}">
+            <StackPanel.Resources>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                    <Setter Property="Padding" Value="2,0"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+                <Style x:Key="ButtonImage" TargetType="Image">
+                    <Setter Property="Width" Value="14"/>
+                    <Setter Property="Height" Value="14"/>
+                </Style>
+            </StackPanel.Resources>
+            <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error">
+                <DockPanel>
+                    <Image Source="/Resources/Icons/error.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <TextBlock Text="{Binding ErrorLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"/>                    
+                </DockPanel>
+            </ToggleButton>
+            <ToggleButton IsChecked="{Binding IsWarningLogFiltered.Value}" ToolTip="Warning">
+                <DockPanel>
+                    <Image Source="/Resources/Icons/warning.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <TextBlock Text="{Binding WarningLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="2"/>
+                </DockPanel>
+            </ToggleButton>
+            <ToggleButton IsChecked="{Binding IsInfoLogFiltered.Value}" ToolTip="Info">
+                <DockPanel>
+                    <Image Source="/Resources/Icons/info.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <TextBlock Text="{Binding InfoLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="2"/>
+                </DockPanel>
+            </ToggleButton>
+
+            <ToggleButton IsChecked="{Binding IsWarp.Value}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="32">
+                ⏎
+            </ToggleButton>
+
+            <local:SearchBox Text="{Binding Filter.Value}" FlowDirection="LeftToRight"/>
+            
+        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" MinHeight="10"/>
+                <RowDefinition Height="1*" MinHeight="10"/>
+            </Grid.RowDefinitions>
+            <ListBox 
+                ItemsSource="{Binding FilteredItems}" 
+                SelectedItem="{Binding SelectedLogItem.Value}" 
+                Grid.Row="0" 
+                Background="{DynamicResource Background}"
+                BorderThickness="0"
+                ScrollViewer.HorizontalScrollBarVisibility="{Binding WarpVisibility.Value}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Message}" Foreground="{Binding Brush}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}" Foreground="{DynamicResource Text.Normal}"/>
+
+
+            <GridSplitter Grid.Row="1" Height="8" Margin="0,-4,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border  Background="Transparent">
+                            <Rectangle Fill="Gray" Height="1" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+        </Grid>
+    </DockPanel>
+</UserControl>

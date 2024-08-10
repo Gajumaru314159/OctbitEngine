@@ -10,13 +10,60 @@
 
     <UserControl.DataContext>
         <local:ViewportVM/>
-    </UserControl.DataContext>    
+    </UserControl.DataContext>
 
-    <Grid>
-        <WindowsFormsHost>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Left">
+                <MenuItem Header="カメラ">
+                    <MenuItem Header="透視投影">
+                        <MenuItem.Icon>
+                            <RadioButton GroupName="Projection" IsChecked="True"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="平行投影">
+                        <MenuItem.Icon>
+                            <RadioButton GroupName="Projection"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="ライティング">
+                    <MenuItem Header="シェーディング"/>
+                    <MenuItem Header="アルベド"/>
+                    <MenuItem Header="ノーマル"/>
+                    <MenuItem Header="メタリック"/>
+                    <MenuItem Header="ラフネス"/>
+                </MenuItem>
+                <MenuItem Header="表示">
+                    <MenuItem Header="デバッグ" IsCheckable="True"/>
+                </MenuItem>
+            </Menu>
+            <Button Content="AAA" DockPanel.Dock="Right">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{DynamicResource Button.Normal}" CornerRadius="10" Margin="1" Padding="10,0">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>                            
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Menu DockPanel.Dock="Right">
+                <MenuItem Header="Test"/>
+                <MenuItem Header="Test"/>
+                <MenuItem Header="Test"/>
+            </Menu>
+            <Border/>
+        </DockPanel>
+        <WindowsFormsHost DockPanel.Dock="Bottom">
             <forms:Panel x:Name="m_panel"/>
         </WindowsFormsHost>
-
-    </Grid>
+    </DockPanel>
     
 </UserControl>

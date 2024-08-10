@@ -6,37 +6,78 @@
              xmlns:local="clr-namespace:OctbitEditor"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="1"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    
+    <UserControl.Resources>
+        <ResourceDictionary Source="/SearchBox.xaml"/>
+    </UserControl.Resources>
 
-        <TreeView>
-            <TreeViewItem Header="Scene">
-                <TreeViewItem Header="Scene1"/>
-                <TreeViewItem Header="Scene1"/>
-                <TreeViewItem Header="Scene1"/>
-                <TreeViewItem Header="Scene1"/>
-            </TreeViewItem>
-        </TreeView>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
+            <DockPanel.Resources>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                    <Setter Property="Width" Value="22"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,0,1,0"/>
+                </Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Width" Value="22"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="0,0,1,0"/>
+                </Style>
+            </DockPanel.Resources>
+            <local:SearchBox DockPanel.Dock="Right"/>
+            <ToggleButton Content="★" DockPanel.Dock="Right"/>
+            <ToggleButton Content="◆" DockPanel.Dock="Right"/>
+            <ToggleButton Content="■" DockPanel.Dock="Right"/>
+            <Button Content="←" DockPanel.Dock="Left"/>
+            <Button Content="→" DockPanel.Dock="Left"/>
+            <Button Content="↑" DockPanel.Dock="Left"/>
+            <Button Content="♽" DockPanel.Dock="Left"/>
+            <TextBox Text="Assets > Levels > Main > 1-1" Background="{DynamicResource Header}" Foreground="{DynamicResource Foreground}" BorderThickness="0" VerticalContentAlignment="Center"/>
+        </DockPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="100"/>
+                <ColumnDefinition Width="4*" MinWidth="100"/>
+            </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Column="1" Width="1" HorizontalAlignment="Stretch"  BorderBrush="Transparent">
-            <GridSplitter.Template>
-                <ControlTemplate TargetType="GridSplitter">
-                    <Border HorizontalAlignment="Center" MinWidth="40">
-                        <ContentPresenter/>
-                    </Border>
-                </ControlTemplate>
-            </GridSplitter.Template>
-        </GridSplitter>
+            <TreeView MinWidth="100">
+                <TreeViewItem Header="Assets">
+                    <TreeViewItem Header="Scene">
+                        <TreeViewItem Header="1-1"/>
+                        <TreeViewItem Header="1-2"/>
+                        <TreeViewItem Header="1-3"/>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Material"/>
+                    <TreeViewItem Header="Script"/>
+                    <TreeViewItem Header="Texture"/>
+                </TreeViewItem>
+            </TreeView>
 
-        <ListView Grid.Column="2">
-            <ListViewItem>Materials</ListViewItem>
-            <ListViewItem>Scenes</ListViewItem>
-            <ListViewItem>Scripts</ListViewItem>
-        </ListView>
+            <DockPanel Grid.Column="2" MinWidth="100" HorizontalAlignment="Stretch">
+                <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom">
+                    <TextBlock Text="1 item selected" Foreground="{DynamicResource Text}"/>
+                </Border>
+                <ListBox Background="Transparent" Foreground="{DynamicResource Text}" BorderThickness="0">
+                    <ListBoxItem>Materials</ListBoxItem>
+                    <ListBoxItem>Scenes</ListBoxItem>
+                    <ListBoxItem>Scripts</ListBoxItem>
+                    <ListBoxItem>Scripts</ListBoxItem>
+                </ListBox>
+            </DockPanel>
 
-    </Grid>
+            <GridSplitter Grid.Column="1" Width="8" Margin="-4,0,0,0" HorizontalAlignment="Left">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border  Background="Transparent">
+                            <Rectangle Fill="Gray" Width="1" HorizontalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
+        </Grid>
+    </DockPanel>
 </UserControl>
