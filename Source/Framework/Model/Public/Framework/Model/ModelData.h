@@ -4,28 +4,30 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphic/Mesh/MeshData.h>
+#include <Framework/Core/Geometry/Bounding.h>
+#include <Framework/RHI/Types/Topology.h>
+#include <Framework/Graphics/Mesh/Mesh.h>
+#include <Framework/Graphics/Material/Material.h>
 
 namespace ob::model {
 
-    struct Vertex {
-        Vec3    position;
-        Vec3    normal;
-        Vec3    tangent;
-        Vec2    uv;
+    struct MeshRange {
+        s32             start = 0;
+        s32             count = 0;
+        s32             base = 0;
+        rhi::Topology   topology = rhi::Topology::TriangleList;
     };
 
-    using MeshData = graphic::MeshData<Vertex>;
-    using Mesh32 = graphic::MeshData<Vertex,u32>;
+    struct ModelParts {
+        MeshRange   range;
+        Bounds      bounds;
+        Ref<graphics::Mesh>     mesh;
+        Ref<graphics::Material> material;
+    };
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  説明
-    //@―---------------------------------------------------------------------------
+
     struct ModelData {
-        
-        Vector<MeshData> meshes;
-        //Vector<Material> materials;
-        
+        Vector<ModelParts>  parts;        // メッシュとマテリアルの組み合わせ
     };
 
 }

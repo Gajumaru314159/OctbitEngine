@@ -25,7 +25,9 @@ namespace ob::rhi::dx12 {
 		HRESULT result;
 
 		// リソースの生成
-		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);		
+		D3D12_HEAP_PROPERTIES heapprop;
+		if(desc.usage == ResourceUsage::Immutable) heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		else heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.bufferSize);
 
 		ComPtr<ID3D12Resource> buffer;
