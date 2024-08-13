@@ -1,8 +1,8 @@
-Reflection
+﻿Reflection
 ==========
 
-## �N���X�ꗗ
-* �^���
+## クラス一覧
+* 型情報
     * TagInfo
 	* EnumElementInfo
 	* ArgumentInfo
@@ -10,24 +10,24 @@ Reflection
 	* PropertyInfo
 	* MethodInfo
 	* TypeInfo
-* �r���_�[
+* ビルダー
     * TagBuilder
 	* EnumBuilder
 	* ClassBuilder
 	* EnumBuilderTemplate
 	* ClassBuilderTemplate
-* �}�l�[�W���[
+* マネージャー
     * TypeInfoManager
-* �C���X�^���X
+* インスタンス
     * Any
 	* AnyReference
 
-## �^���̓o�^
+## 型情報の登録
 
-### �N���X�^���̓o�^
+### クラス型情報の登録
 
-`OB_DEFINE_CLASS_INFO`�́A�N���X�̌^����o�^���邽�߂̃}�N���ł��B  
-���̃}�N�����g�p���邱�ƂŁA�N���X�̃����o�[�ϐ��A���\�b�h�A�v���p�e�B�A�R���X�g���N�^�Ȃǂ̏���o�^���邱�Ƃ��ł��܂��B
+`OB_DEFINE_CLASS_INFO`は、クラスの型情報を登録するためのマクロです。  
+このマクロを使用することで、クラスのメンバー変数、メソッド、プロパティ、コンストラクタなどの情報を登録することができます。
 
 ```c++
 class Fruit : public Food {
@@ -44,10 +44,10 @@ public:
 ```
 ```c++
 OB_DEFINE_CLASS_INFO(Fruit) {
-	tag("Description", "Fruit�t���[�c");
+	tag("Description", "Fruitフルーツ");
 	base<Food>();
-	constructor().desc("�f�t�H���g�R���X�g���N�^");
-	constructor<FruitType, s32, f32>("type", "price", "weight").desc("�v���p�e�B���w�肵�Đ���");
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<FruitType, s32, f32>("type", "price", "weight").desc("プロパティを指定して生成");
 	method("print", &T::print, "console", "file");
 	method("toString", &T::toString);
 	property("Price", &T::getPrice, &T::setPrice);
@@ -55,11 +55,11 @@ OB_DEFINE_CLASS_INFO(Fruit) {
 }
 ```
 
-### �񋓌^���̓o�^
-�񋓌^�̏���o�^���邽�߂ɂ́A`OB_DEFINE_ENUM_INFO`�}�N�����g�p���܂��B  
-`element()`�̑������ɂ͗񋓎q�̖��O�A�������ɂ͗񋓎q�̒l���w�肵�܂��B
-�K�v�ɉ����ă`�F�[�����\�b�h��`desc()`���g�p���Đ�����ǉ����邱�Ƃ��ł��܂��B
-���̑��C�ӂ̃^�O��ǉ��������ꍇ�̓`�F�[�����\�b�h��`tag()`���g�p���Ă��������B
+### 列挙型情報の登録
+列挙型の情報を登録するためには、`OB_DEFINE_ENUM_INFO`マクロを使用します。  
+`element()`の第一引数には列挙子の名前、第二引数には列挙子の値を指定します。
+必要に応じてチェーンメソッドの`desc()`を使用して説明を追加することができます。
+その他任意のタグを追加したい場合はチェーンメソッドの`tag()`を使用してください。
 ```c++
 enum class FruitType : u32 {
 	Apple,
@@ -69,19 +69,19 @@ enum class FruitType : u32 {
 ```
 ```c++
 OB_DEFINE_ENUM_INFO(FruitType) {
-	tag("Description", "�t���[�c�̎��");
-	element("Apple", T::Apple).desc("�����S");
-	element("Melon", T::Melon).desc("������");
-	element("Lemon", T::Lemon).desc("������").tag("Color","#FFFF00");
+	tag("Description", "フルーツの種類");
+	element("Apple", T::Apple).desc("リンゴ");
+	element("Melon", T::Melon).desc("メロン");
+	element("Lemon", T::Lemon).desc("レモン").tag("Color","#FFFF00");
 }
 ```
-�N���X�^���Ɠ��l��`OB_REGISTER_RTTI`���g�p���ă}�l�[�W���[�Ɍ^����o�^���Ă��������B
+クラス型情報と同様に`OB_REGISTER_RTTI`を使用してマネージャーに型情報を登録してください。
 ```c++
 OB_REGISTER_RTTI(FruitType);
 ```
 
-## �^���̎擾
-�^����TypeInfoManager����擾�ł��܂��B  
+## 型情報の取得
+型情報はTypeInfoManagerから取得できます。  
 ```c++
 if(auto info = TypeInfoManager::Find(Type::Get<Fruit>())){
 
@@ -91,10 +91,10 @@ if(auto info = TypeInfoManager::Find("Fruit")){
 }
 ```
 
-## �C���X�^���X�̐���
-�C���X�^���X�̐��������邽�߂ɂ�TypeInfo����ConstructorInfo��T���K�v������܂��B
-`findConstructor`���g�p���Čďo���\�ȃR���X�g���N�^�\���擾���Ă��������B
-`ConstructorInfo::invoke`�������ƂƂ��ɌĂяo�����ƂŃC���X�^���X�𐶐����邱�Ƃ��ł��܂��B
+## インスタンスの生成
+インスタンスの生成をするためにはTypeInfoからConstructorInfoを探す必要があります。
+`findConstructor`を使用して呼出し可能なコンストラクタ―を取得してください。
+`ConstructorInfo::invoke`を引数とともに呼び出すことでインスタンスを生成することができます。
 ```c++
 if(auto info = TypeInfoManager::Find("Fruit")){
 	if(auto ctor = info->findConstructor<FruitType,s32,f32>()){
