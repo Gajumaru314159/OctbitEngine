@@ -23,8 +23,8 @@ namespace ob::core {
 
 		if(bases.count(base))return true;
 
-		for (auto& base : bases) {
-			if (auto info = TypeInfoManager::Find(base)) {
+		for (auto& base2 : bases) {
+			if (auto info = TypeInfoManager::Find(base2)) {
 				if (info->isSuperClassOf(base))return true;
 			}
 		}
