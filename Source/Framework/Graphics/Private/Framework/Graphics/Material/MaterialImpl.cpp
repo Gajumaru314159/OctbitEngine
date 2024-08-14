@@ -248,7 +248,7 @@ namespace ob::graphics {
 		rhi::SetDescriptorTableParam params[] = {
 			{m_dynamicTable, enum_cast(MaterialRootSignatureSlot::DynamicLocal)},
 			{m_textureTable, enum_cast(MaterialRootSignatureSlot::TextureLocal)},
-			{m_bufferTable, enum_cast(MaterialRootSignatureSlot::BufferLocal)},
+			//{m_bufferTable, enum_cast(MaterialRootSignatureSlot::BufferLocal)},
 			//{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
 		};
 

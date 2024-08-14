@@ -11,10 +11,10 @@ namespace ob::graphics {
 		DynamicGlobal ,
 		TextureGlobal,
 		//SamplerGlobal,
-		BufferGlobal,
+		//BufferGlobal,
 		DynamicLocal,
 		TextureLocal,
-		BufferLocal,
+		//BufferLocal,
 		//SamplerLocal,
 	};
 

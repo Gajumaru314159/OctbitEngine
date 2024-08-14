@@ -87,7 +87,7 @@ namespace ob::graphics {
 				RootParameter::Range(DescriptorRangeType::SRV,1,1),		// ローカルプロパティ(テクスチャ)
 			},
 			{
-				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),	// グローバルプロパティ(サンプラー)
+				StaticSamplerDesc(SamplerDesc(TextureFillter::Linear),0),	// グローバルプロパティ(サンプラー)
 			}
 		);
 		desc.name = "Common";
