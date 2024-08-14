@@ -20,6 +20,9 @@ namespace ob::debug {
 				name = namesv;
 				auto& p = *info->findProperty(name);
 
+				char format[32] = "%.3f";
+				if (auto tag = p.findTag("Unit")) sprintf_s(format, "%%.3f %s", tag->data());
+
 				if (!p.canRead())continue;
 				if (!p.canWrite()) ImGui::BeginDisabled();
 				
@@ -127,12 +130,13 @@ namespace ob::debug {
 					Optional<f32> min,max;
 					if (auto tag = p.findTag("Min")) min = (f32)std::atof(tag->data());
 					if (auto tag = p.findTag("Max")) max = (f32)std::atof(tag->data());
+
 					if (min && max) {
-						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value())) {
+						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value(), format)) {
 							p.setter(obj, value);
 						}
 					} else {
-						if (ImGui::DragFloat(name.c_str(), &value)) {
+						if (ImGui::DragFloat(name.c_str(), &value,1,0,0,format)) {
 							p.setter(obj, value);
 						}
 					}
@@ -142,29 +146,29 @@ namespace ob::debug {
 					if (auto tag = p.findTag("Min")) min = (f32)std::atof(tag->data());
 					if (auto tag = p.findTag("Max")) max = (f32)std::atof(tag->data());
 					if (min && max) {
-						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value())) {
+						if (ImGui::SliderFloat(name.c_str(), &value,min.value(),max.value(),format)) {
 							f64 value2 = value;
 							p.setter(obj, value2);
 						}
 					} else {
-						if (ImGui::DragFloat(name.c_str(), &value)) {
+						if (ImGui::DragFloat(name.c_str(), &value,1,0,0,format)) {
 							f64 value2 = value;
 							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<Vec2>()) {
 					auto value = p.get<Vec2>(obj);
-					if (ImGui::DragFloat2(name.c_str(), value)) {
+					if (ImGui::DragFloat2(name.c_str(), value,1,0,0,format)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Vec3>()) {
 					auto value = p.get<Vec3>(obj);
-					if (ImGui::DragFloat3(name.c_str(), value)) {
+					if (ImGui::DragFloat3(name.c_str(), value, 1, 0, 0, format)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Vec4>()) {
 					auto value = p.get<Vec4>(obj);
-					if (ImGui::DragFloat4(name.c_str(), value)) {
+					if (ImGui::DragFloat4(name.c_str(), value, 1, 0, 0, format)) {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<IntVec2>()) {
@@ -183,12 +187,13 @@ namespace ob::debug {
 						p.setter(obj, value);
 					}
 				} else if (p.type.is<Rot>()) {
-					auto value = p.get<Rot>(obj);
+					auto value = p.get<Rot>(obj).toVec3();
 					if (Math::IsNearZero(value.x)) value.x = 0.0f;
 					if (Math::IsNearZero(value.y)) value.y = 0.0f;
 					if (Math::IsNearZero(value.z)) value.z = 0.0f;
-					if (ImGui::InputFloat3(name.c_str(), reinterpret_cast<f32*>(&value))) {
-						p.setter(obj, value);
+					if (ImGui::DragFloat3(name.c_str(), value,1,0,0,"%.3f deg")) {
+						Rot value2(value);
+						p.setter(obj, value2);
 					}
 				} else if (p.type.is<String>()) {
 					str = p.get<String>(obj);
@@ -218,6 +223,9 @@ namespace ob::debug {
 
 			}
 
+			for (auto& base : info->bases) {
+				draw(obj, base);
+			}
 		}
 
 	}
