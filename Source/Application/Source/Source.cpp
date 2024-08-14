@@ -186,7 +186,7 @@ void OctbitInit(ServiceInjector& injector) {
 	graphics::Register(injector);
 
 	rhi::Config config;
-	//config.enablePIX = true;
+	config.enablePIX = true;
 	//config.breakWithWarning = true;
 	injector.bind(config);
 

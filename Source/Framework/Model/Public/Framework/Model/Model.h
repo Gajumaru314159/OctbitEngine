@@ -9,8 +9,12 @@
 #include <Framework/Graphics/Render/RenderScene.h>
 
 #include <Framework/Graphics/Render/RenderFeature.h>
+#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Model/ModelData.h>
 
 namespace ob::model {
+
+	struct ModelData;
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  説明
@@ -21,6 +25,7 @@ namespace ob::model {
 		using RenderScene = graphics::RenderScene;
 	public:
 
+		static Ref<Model> Create(const ModelData&);
 		static Ref<Model> Create(StringView name);
 		static Ref<Model> Load(StringView path);
 
@@ -28,9 +33,6 @@ namespace ob::model {
 
 		void join(RenderScene&);
 		void leaveScene();
-
-		auto getMesh()const->Ref<graphics::Mesh>;
-		void setMesh(const Ref<graphics::Mesh> mesh);
 
 		void setTransform(Transform transform, StringView bone);
 
@@ -40,10 +42,10 @@ namespace ob::model {
 		bool getActive()const;
 		void setActive(bool);
 
-		Vector<Ref<Material>>& getMaterials();
-
 		auto findMaterial(StringView name)const->Ref<Material>;
 		void setMaterial(StringView name,const Ref<Material>&);
+
+		void visitParts(Func<void(ModelParts&)>);
 
 	private:
 
@@ -55,12 +57,10 @@ namespace ob::model {
 	private:
 		
 		graphics::RenderScene*			m_scene = nullptr;
-		Ref<graphics::Mesh>				m_mesh;
-		Vector<Ref<graphics::Material>>	m_materials;
-		Map<String, s32,std::less<>>	m_materialMap;
+		ModelData						m_data;
 
-		u32 m_modelId;
 
+		Vector<graphics::MaterialId>	m_materialIds;
 	};
 
 

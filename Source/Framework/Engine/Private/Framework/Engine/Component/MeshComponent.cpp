@@ -55,15 +55,16 @@ namespace ob::engine {
 	void MeshComponent::onTransformChanged(TransformComponent& transform) {
 		if (!m_model)return;
 
-		// テスト
-		f32 maxScale = 1.0f;
-		for (auto& submesh : m_model->getMesh()->getSubMeshes()) {
-			maxScale = Math::Max(maxScale, submesh.bounds.size.maxAbsComponent());
-		}
+		//ScopeLock lock(m_lock);
 
-		for (auto& material : m_model->getMaterials()) {
-			material->setMatrix("Matrix", transform.getWorld().toMatrix() * Matrix::Scale(Vec3(10/maxScale)));
-		}
+		f32 maxScale = 1.0f;
+		m_model->visitParts([&](model::ModelParts& parts) {
+			maxScale = Math::Max(maxScale, parts.bounds.box.size.length()*0.5f);
+		});
+
+		m_model->visitParts([&](model::ModelParts& parts) {
+			parts.material->setMatrix("Matrix", transform.getWorld().toMatrix() * Matrix::Scale(Vec3(10 / maxScale)));
+		});
 	}
 
 	void MeshComponent::activate() {
@@ -76,35 +77,18 @@ namespace ob::engine {
 
 	void MeshComponent::updateModel() {
 
-		graphics::MaterialRenderFeature* feature = nullptr;
-
-		// 仮のアクセス
-		if (auto rpi = graphics::Graphics::Get()) {
-			if (auto scene = rpi->getScene()) {
-				feature = scene->findFeature<graphics::MaterialRenderFeature>();
-			}
-		}
-
-		if (feature == nullptr) {
-			return;
-		}
-
-		for (auto& id : m_materialIds) feature->removeRenderable(id);
-		m_materialIds.clear();
-
-		if (getEntity().isActive() == false) return;
-
 		ScopeLock lock(m_lock);
 
 		m_model = {};
 
+		if (getEntity().isActive() == false) return;
+		
 		if (auto pool = ThreadPool::Get()) {
 			pool->enqueue([this] {
-				{
+				if (File::Exists(m_path)) {
+					auto model = model::Model::Load(m_path);
 					ScopeLock lock(m_lock);
-					if (File::Exists(m_path)) {
-						m_model = model::Model::Load(m_path);
-					}
+					m_model = model;
 				}
 				onModelLoaded();
 			});
@@ -112,10 +96,8 @@ namespace ob::engine {
 			if (File::Exists(m_path)) {
 				m_model = model::Model::Load(m_path);
 			}
-
 			onModelLoaded();
 		}
-
 
 	}
 
@@ -123,31 +105,18 @@ namespace ob::engine {
 
 		ScopeLock lock(m_lock);
 
-		graphics::MaterialRenderFeature* feature = nullptr;
+		if (m_model) {
+			// 仮のアクセス
+			if (auto rpi = graphics::Graphics::Get()) {
+				if (auto scene = rpi->getScene()) {
+					m_model->join(*scene);
 
-		// 仮のアクセス
-		if (auto rpi = graphics::Graphics::Get()) {
-			if (auto scene = rpi->getScene()) {
-				feature = scene->findFeature<graphics::MaterialRenderFeature>();
+					if (auto transform = getEntity().findComponent<TransformComponent>()) {
+						onTransformChanged(*transform);
+					}
+				}
 			}
 		}
-
-		if (feature == nullptr) {
-			return;
-		}
-
-		// メッシュの読み込み失敗
-		if (!m_model) return;
-
-		if (auto transform = getEntity().findComponent<TransformComponent>()) {
-			onTransformChanged(*transform);
-		}
-
-		for (auto& [index, submesh] : Indexed(m_model->getMesh()->getSubMeshes())) {
-			auto id = feature->addRenderable(m_model->getMesh(), m_model->getMaterials().at(index));
-			m_materialIds.push_back(id);
-		}
-
 	}
 
 }

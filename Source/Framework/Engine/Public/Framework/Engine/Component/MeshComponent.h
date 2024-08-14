@@ -47,10 +47,8 @@ namespace ob::engine {
 	private:
 
 		SpinLock m_lock;
-		Ref<model::Model> m_model;
-		Vector<graphics::MaterialId> m_materialIds;
-
 		String m_path;
+		Ref<model::Model> m_model;
 		TransformChangedHandle m_hTransformChanged;
 	};
 

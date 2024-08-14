@@ -33,10 +33,11 @@ struct PsIn {
   float2 uv		:TEXCOORD;
 };
 struct PsOut {
-  float4 albedo	:SV_TARGET0;
-  float4 normal	:SV_TARGET1;
-  float4 uv	    :SV_TARGET2;
+  float4 albedo	:SV_TARGET0; // Albedo Occlusion
+  float4 normal	:SV_TARGET1; // Metalic Specular Roughness
+  float4 uv	    :SV_TARGET2; // WorldNormal
 };
+
 // ƒGƒ“ƒgƒŠ
 PsIn VS_Main(VsIn i) {
     PsIn o;
@@ -48,6 +49,8 @@ PsIn VS_Main(VsIn i) {
 PsOut PS_Main(PsIn i){
     PsOut o;
     o.albedo = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
+    if(o.albedo.a < 0.5) discard;
+
     o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
     o.uv = float4(i.uv,0,1);
     return o;
