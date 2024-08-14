@@ -68,6 +68,7 @@ namespace ob::graphics {
         Vector<String>   colorProperties;
         Vector<String>   matrixProperties;
         Vector<String>   textureProperties;
+        Vector<String>   bufferProperties;
 
         Map<String, MaterialPass,std::less<>> passes;
     };

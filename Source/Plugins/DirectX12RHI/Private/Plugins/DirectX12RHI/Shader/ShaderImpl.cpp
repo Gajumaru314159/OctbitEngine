@@ -13,43 +13,6 @@
 
 namespace ob::rhi::dx12 {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  ターゲット
-    //@―---------------------------------------------------------------------------
-    static const char s_shaderTargets[][16] =
-    {
-        "vs_5_0",
-        "ps_5_0"
-    };
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      シェーダのターゲット名を取得
-    //! 
-    //! @details    無効な値の場合は空白文字列を返します。
-    //@―---------------------------------------------------------------------------
-    const char* getTargetName(ShaderStage stage) {
-        switch (stage)
-        {
-        case ShaderStage::Vertex:          return "vs_5_1";
-        case ShaderStage::Hull:            return "hs_5_1";
-        case ShaderStage::Domain:          return "ds_5_1";
-        case ShaderStage::Geometry:        return "gs_5_1";
-        case ShaderStage::Pixel:           return "ps_5_1";
-        case ShaderStage::Compute:         return "cs_5_1";
-
-        //case ob::rhi::ShaderStage::Task:            return "vs_5_0";
-        //case ob::rhi::ShaderStage::Mesh:            return "vs_5_0";
-        //case ob::rhi::ShaderStage::RayGen:          return "vs_5_0";
-        //case ob::rhi::ShaderStage::AnyHit:          return "vs_5_0";
-        //case ob::rhi::ShaderStage::ClosestHit:      return "vs_5_0";
-        //case ob::rhi::ShaderStage::Miss:            return "vs_5_0";
-        //case ob::rhi::ShaderStage::Intersection:    return "vs_5_0";
-        //case ob::rhi::ShaderStage::Callable:        return "vs_5_0";
-        //case ob::rhi::ShaderStage::Amplification:   return "vs_5_0";
-        }
-        return "";
-    }
-
     const wchar_t* getEntryW(ShaderStage stage) {
         switch (stage)
         {
@@ -69,7 +32,7 @@ namespace ob::rhi::dx12 {
         case ShaderStage::Hull:            return L"hs_6_0";
         case ShaderStage::Domain:          return L"ds_6_0";
         case ShaderStage::Geometry:        return L"gs_6_0";
-        case ShaderStage::Pixel:           return L"ps_6_0";
+        case ShaderStage::Pixel:           return L"ps_6_6";
         case ShaderStage::Compute:         return L"cs_6_0";
         }
         return L"";

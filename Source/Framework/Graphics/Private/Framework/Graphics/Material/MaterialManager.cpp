@@ -176,7 +176,7 @@ namespace ob::graphics {
 		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
 
 		rhi::SetDescriptorTableParam params[]{
-			{m_bufferTable,enum_cast(MaterialRootSignatureSlot::BufferGlobal)},
+			{m_bufferTable,enum_cast(MaterialRootSignatureSlot::DynamicGlobal)},
 			{m_textureTable,enum_cast(MaterialRootSignatureSlot::TextureGlobal)},
 			//{m_textureTable,1},
 			//{m_samplerTable,2},

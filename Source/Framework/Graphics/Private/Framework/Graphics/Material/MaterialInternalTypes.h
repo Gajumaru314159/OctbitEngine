@@ -8,11 +8,13 @@
 namespace ob::graphics {
 
 	enum class MaterialRootSignatureSlot {
-		BufferGlobal ,
+		DynamicGlobal ,
 		TextureGlobal,
 		//SamplerGlobal,
-		BufferLocal,
+		BufferGlobal,
+		DynamicLocal,
 		TextureLocal,
+		BufferLocal,
 		//SamplerLocal,
 	};
 
@@ -26,7 +28,8 @@ namespace ob::graphics {
 		Float,
 		Color,
 		Matrix,
-		Texture
+		Texture,
+		Buffer
 	};
 
 	struct ValuePropertyDesc {

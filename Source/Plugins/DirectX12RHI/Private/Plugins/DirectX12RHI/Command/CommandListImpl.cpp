@@ -399,8 +399,6 @@ namespace ob::rhi::dx12 {
 			auto& param = params[i];
 			if (auto pTable = param.table.cast<DescriptorTableImpl>()) {
 				m_cmdList->SetGraphicsRootDescriptorTable(param.slot, pTable->getGpuHandle());
-			} else {
-				LOG_ERROR("空のDescriptorTableを含んでいます。");
 			}
 		}
 	}

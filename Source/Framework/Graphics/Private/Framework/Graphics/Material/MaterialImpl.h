@@ -48,7 +48,7 @@ namespace ob::graphics {
 	class MaterialImpl :public Material {
 	private:
 		using Texture = rhi::Texture;
-
+		using Buffer = rhi::Buffer;
 	public:
 
 		//===============================================================
@@ -69,11 +69,13 @@ namespace ob::graphics {
 		bool hasColor(StringView name)const override { return hasProprty(name, PropertyType::Color); }
 		bool hasMatrix(StringView name)const override { return hasProprty(name, PropertyType::Matrix); }
 		bool hasTexture(StringView name)const override { return hasProprty(name, PropertyType::Texture); }
+		bool hasBuffer(StringView name)const override { return hasProprty(name, PropertyType::Buffer); }
 
 		void setFloat(StringView name, f32 value) override;
 		void setColor(StringView name, Color value) override;
 		void setMatrix(StringView name, const Matrix& value) override;
 		void setTexture(StringView name, const Ref<Texture>& value) override;
+		void setBuffer(StringView name, const Ref<Buffer>& value) override;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  GPUリソースの事前生成
@@ -127,9 +129,11 @@ namespace ob::graphics {
 
 		Ref<rhi::Buffer>	m_buffer;
 		Vector<Ref<Texture>> m_textures;
+		Vector<Ref<Buffer>> m_buffers;
 
-		Ref<rhi::DescriptorTable> m_bufferTable;
+		Ref<rhi::DescriptorTable> m_dynamicTable;
 		Ref<rhi::DescriptorTable> m_textureTable;
+		Ref<rhi::DescriptorTable> m_bufferTable;
 		Ref<rhi::DescriptorTable> m_samplerTable;
 
 	};

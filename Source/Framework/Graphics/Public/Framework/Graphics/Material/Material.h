@@ -17,6 +17,7 @@ namespace ob::graphics {
     class Material:public RefObject {
     public:
         using Texture = ob::rhi::Texture;
+        using Buffer = ob::rhi::Buffer;
     public:
 
         //@―---------------------------------------------------------------------------
@@ -37,6 +38,7 @@ namespace ob::graphics {
         virtual bool hasColor(StringView name)const = 0;
         virtual bool hasMatrix(StringView name)const = 0;
         virtual bool hasTexture(StringView name)const = 0;
+        virtual bool hasBuffer(StringView name)const = 0;
         //! @}
         
         //@―---------------------------------------------------------------------------
@@ -47,11 +49,11 @@ namespace ob::graphics {
         virtual void setColor(StringView name, Color value) = 0;
         virtual void setMatrix(StringView name, const Matrix& value) = 0;
         virtual void setTexture(StringView name, const Ref<Texture>& value) = 0;
+        virtual void setBuffer(StringView name, const Ref<Buffer>& value) = 0;
         //! @}
         
         //virtual void setFloatArray(StringView name, Span<f32> values);
         //virtual void setColorArray(StringView name, Span<Color> values);
-        //virtual void setBuffer(StringView name, Buffer );
 
         //@―---------------------------------------------------------------------------
         //! @brief  GPUリソースの事前生成
