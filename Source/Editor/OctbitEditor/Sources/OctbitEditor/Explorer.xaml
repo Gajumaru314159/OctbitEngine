@@ -19,22 +19,45 @@
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="Margin" Value="0,0,1,0"/>
+                    <Style.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        </Style>
+                    </Style.Resources>
                 </Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Width" Value="22"/>
                     <Setter Property="Padding" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="Margin" Value="0,0,1,0"/>
+                    <Style.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        </Style>
+                    </Style.Resources>
                 </Style>
             </DockPanel.Resources>
             <local:SearchBox DockPanel.Dock="Right"/>
             <ToggleButton Content="★" DockPanel.Dock="Right"/>
             <ToggleButton Content="◆" DockPanel.Dock="Right"/>
             <ToggleButton Content="■" DockPanel.Dock="Right"/>
-            <Button Content="←" DockPanel.Dock="Left"/>
-            <Button Content="→" DockPanel.Dock="Left"/>
-            <Button Content="↑" DockPanel.Dock="Left"/>
-            <Button Content="♽" DockPanel.Dock="Left"/>
+
+            <Button DockPanel.Dock="Left">
+                <Image Source="/Resources/Icons/left.png"/>
+            </Button>
+            <Button DockPanel.Dock="Left">
+                <Image Source="/Resources/Icons/right.png"/>
+            </Button>
+            <Button DockPanel.Dock="Left">
+                <Image Source="/Resources/Icons/up.png"/>
+            </Button>
+            <Button DockPanel.Dock="Left">
+                <Image Source="/Resources/Icons/reload.png"/>
+            </Button>
             <TextBox Text="Assets > Levels > Main > 1-1" Background="{DynamicResource Header}" Foreground="{DynamicResource Foreground}" BorderThickness="0" VerticalContentAlignment="Center"/>
         </DockPanel>
         <Grid DockPanel.Dock="Bottom">

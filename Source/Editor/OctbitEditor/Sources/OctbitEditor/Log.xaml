@@ -16,46 +16,49 @@
     </UserControl.Resources>
     
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" FlowDirection="RightToLeft" Background="{DynamicResource Header}">
-            <StackPanel.Resources>
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
+            <DockPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                     <Setter Property="Padding" Value="2,0"/>
                     <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
                     <Setter Property="BorderBrush" Value="Black"/>
                     <Setter Property="BorderThickness" Value="0,0,1,0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="DockPanel.Dock" Value="Right"/>
                 </Style>
                 <Style x:Key="ButtonImage" TargetType="Image">
                     <Setter Property="Width" Value="14"/>
                     <Setter Property="Height" Value="14"/>
                 </Style>
-            </StackPanel.Resources>
+            </DockPanel.Resources>
             <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error">
                 <DockPanel>
-                    <Image Source="/Resources/Icons/error.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <Image Source="/Resources/Icons/error.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding ErrorLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"/>                    
                 </DockPanel>
             </ToggleButton>
             <ToggleButton IsChecked="{Binding IsWarningLogFiltered.Value}" ToolTip="Warning">
                 <DockPanel>
-                    <Image Source="/Resources/Icons/warning.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <Image Source="/Resources/Icons/warning.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding WarningLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="2"/>
                 </DockPanel>
             </ToggleButton>
             <ToggleButton IsChecked="{Binding IsInfoLogFiltered.Value}" ToolTip="Info">
                 <DockPanel>
-                    <Image Source="/Resources/Icons/info.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
+                    <Image Source="/Resources/Icons/info.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding InfoLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center" Margin="2"/>
                 </DockPanel>
             </ToggleButton>
 
             <ToggleButton IsChecked="{Binding IsWarp.Value}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="32">
-                ⏎
+                <Image Source="/Resources/Icons/wrap.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
             </ToggleButton>
 
-            <local:SearchBox Text="{Binding Filter.Value}" FlowDirection="LeftToRight"/>
-            
-        </StackPanel>
+            <local:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Right"/>
+
+            <Border/>
+
+        </DockPanel>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" MinHeight="10"/>

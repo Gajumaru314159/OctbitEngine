@@ -13,54 +13,111 @@
     </UserControl.DataContext>
 
     <DockPanel>
-        <DockPanel DockPanel.Dock="Top">
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Background}">
+            <DockPanel.Resources>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                    <Setter Property="Padding" Value="3,0"/>
+                    <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="DockPanel.Dock" Value="Left"/>
+                    <Setter Property="Padding" Value="1"/>
+                    <Style.Resources>
+                        <Style TargetType="Image">
+                            <Setter Property="Height" Value="15"/>
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        </Style>
+                    </Style.Resources>
+                </Style>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Width" Value="1"/>
+                    <Setter Property="Fill" Value="Gray"/>
+                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                </Style>
+
+                <BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+
+                <BitmapImage x:Key="MenuIcon" UriSource="/Resources/Icons/menu.png"/>
+                <BitmapImage x:Key="SelectIcon" UriSource="/Resources/Icons/select.png"/>
+                <BitmapImage x:Key="MoveIcon" UriSource="/Resources/Icons/move.png"/>
+                <BitmapImage x:Key="RotateIcon" UriSource="/Resources/Icons/rotate.png"/>
+                <BitmapImage x:Key="ScaleIcon" UriSource="/Resources/Icons/scale.png"/>
+                <BitmapImage x:Key="GlobalIcon" UriSource="/Resources/Icons/global.png"/>
+                <BitmapImage x:Key="MoveSnapIcon" UriSource="/Resources/Icons/grid.png"/>
+                <BitmapImage x:Key="RotateSnapIcon" UriSource="/Resources/Icons/angle.png"/>
+                <BitmapImage x:Key="ShadingIcon" UriSource="/Resources/Icons/shading.png"/>
+                <BitmapImage x:Key="WireIcon" UriSource="/Resources/Icons/wire.png"/>
+                <BitmapImage x:Key="WireShadingIcon" UriSource="/Resources/Icons/wire_shading.png"/>
+                <BitmapImage x:Key="LayerIcon" UriSource="/Resources/Icons/layer.png"/>
+            </DockPanel.Resources>
+
+            <!--メニュー-->
             <Menu DockPanel.Dock="Left">
-                <MenuItem Header="カメラ">
-                    <MenuItem Header="透視投影">
-                        <MenuItem.Icon>
-                            <RadioButton GroupName="Projection" IsChecked="True"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="平行投影">
-                        <MenuItem.Icon>
-                            <RadioButton GroupName="Projection"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="ライティング">
-                    <MenuItem Header="シェーディング"/>
-                    <MenuItem Header="アルベド"/>
-                    <MenuItem Header="ノーマル"/>
-                    <MenuItem Header="メタリック"/>
-                    <MenuItem Header="ラフネス"/>
-                </MenuItem>
-                <MenuItem Header="表示">
-                    <MenuItem Header="デバッグ" IsCheckable="True"/>
+                
+                <MenuItem Padding="0" Margin="-3">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource MenuIcon}"/>
+                    </MenuItem.Icon>
+
+                    <MenuItem Header="Tool" IsCheckable="True" IsChecked="{Binding ToolIsEnabled.Value}"/>
+                    <MenuItem Header="Coordinate" IsCheckable="True" IsChecked="{Binding CoordinateIsEnabled.Value}"/>
+                    <MenuItem Header="Snap" IsCheckable="True" IsChecked="{Binding SnapIsEnabled.Value}"/>
+                    <MenuItem Header="Shading" IsCheckable="True" IsChecked="{Binding ShadingIsEnabled.Value}"/>
+                    <MenuItem Header="Layer" IsCheckable="True" IsChecked="{Binding LayerIsEnabled.Value}"/>
                 </MenuItem>
             </Menu>
-            <Button Content="AAA" DockPanel.Dock="Right">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{DynamicResource Button.Normal}" CornerRadius="10" Margin="1" Padding="10,0">
-                                        <ContentPresenter/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>                            
-                        </Setter>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Menu DockPanel.Dock="Right">
-                <MenuItem Header="Test"/>
-                <MenuItem Header="Test"/>
-                <MenuItem Header="Test"/>
-            </Menu>
+            <Rectangle/>
+
+            <!--ツール-->
+            <ToggleButton ToolTip="Select" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource SelectIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Move" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource MoveIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Rotate" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource RotateIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Scale" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource ScaleIcon}"/>
+            </ToggleButton>
+            <Rectangle Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+            
+            <!--座標系-->
+            <ToggleButton ToolTip="Global/Local" Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource GlobalIcon}"/>
+            </ToggleButton>
+            <Rectangle Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+
+            <!--スナップ-->
+            <ToggleButton ToolTip="Grid Snap" Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource MoveSnapIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Rotate Snap" Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource RotateSnapIcon}"/>
+            </ToggleButton>
+            <Rectangle Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+
+            <!--シェーディング-->
+            <ToggleButton ToolTip="Shading" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource ShadingIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Wire" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource WireIcon}"/>
+            </ToggleButton>
+            <ToggleButton ToolTip="Wire Shading" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource WireShadingIcon}"/>
+            </ToggleButton>
+            <Rectangle Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+
+            <!--レイヤ-->
+            <ToggleButton ToolTip="Layer" Visibility="{Binding LayerIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <Image Source="{StaticResource LayerIcon}"/>
+            </ToggleButton>
+
             <Border/>
         </DockPanel>
+        <Border Height="1" Background="Black" DockPanel.Dock="Top"/>
         <WindowsFormsHost DockPanel.Dock="Bottom">
             <forms:Panel x:Name="m_panel"/>
         </WindowsFormsHost>

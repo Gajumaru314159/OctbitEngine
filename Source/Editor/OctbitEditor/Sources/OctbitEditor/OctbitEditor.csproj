@@ -11,14 +11,51 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\angle.png" />
+    <None Remove="Resources\Icons\down.png" />
     <None Remove="Resources\Icons\error.png" />
+    <None Remove="Resources\Icons\global.png" />
+    <None Remove="Resources\Icons\grid.png" />
+    <None Remove="Resources\Icons\icon_design.apd" />
     <None Remove="Resources\Icons\info.png" />
+    <None Remove="Resources\Icons\layer.png" />
+    <None Remove="Resources\Icons\left.png" />
+    <None Remove="Resources\Icons\light.png" />
+    <None Remove="Resources\Icons\menu.png" />
+    <None Remove="Resources\Icons\move.png" />
+    <None Remove="Resources\Icons\reload.png" />
+    <None Remove="Resources\Icons\right.png" />
+    <None Remove="Resources\Icons\rotate.png" />
+    <None Remove="Resources\Icons\scale.png" />
     <None Remove="Resources\Icons\search.png" />
+    <None Remove="Resources\Icons\select.png" />
+    <None Remove="Resources\Icons\shading.png" />
+    <None Remove="Resources\Icons\up.png" />
     <None Remove="Resources\Icons\warning.png" />
+    <None Remove="Resources\Icons\wire.png" />
+    <None Remove="Resources\Icons\wire_shading.png" />
+    <None Remove="Resources\Icons\wrap.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Icons\icon.ico" />
+    <Resource Include="Resources\Icons\down.png" />
+    <Resource Include="Resources\Icons\icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\angle.png" />
+    <Resource Include="Resources\Icons\global.png" />
+    <Resource Include="Resources\Icons\grid.png" />
+    <Resource Include="Resources\Icons\icon_design.apd" />
+    <Resource Include="Resources\Icons\layer.png" />
+    <Resource Include="Resources\Icons\left.png" />
+    <Resource Include="Resources\Icons\light.png" />
+    <Resource Include="Resources\Icons\menu.png" />
+    <Resource Include="Resources\Icons\move.png" />
+    <Resource Include="Resources\Icons\reload.png" />
+    <Resource Include="Resources\Icons\right.png" />
+    <Resource Include="Resources\Icons\rotate.png" />
+    <Resource Include="Resources\Icons\scale.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +69,13 @@
     <Resource Include="Resources\Icons\error.png" />
     <Resource Include="Resources\Icons\info.png" />
     <Resource Include="Resources\Icons\search.png" />
+    <Resource Include="Resources\Icons\select.png" />
+    <Resource Include="Resources\Icons\shading.png" />
+    <Resource Include="Resources\Icons\up.png" />
     <Resource Include="Resources\Icons\warning.png" />
+    <Resource Include="Resources\Icons\wire.png" />
+    <Resource Include="Resources\Icons\wire_shading.png" />
+    <Resource Include="Resources\Icons\wrap.png" />
   </ItemGroup>
 
   <ItemGroup>
