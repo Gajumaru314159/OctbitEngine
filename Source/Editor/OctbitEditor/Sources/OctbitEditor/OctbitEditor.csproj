@@ -23,6 +23,10 @@
     <None Remove="Resources\Icons\light.png" />
     <None Remove="Resources\Icons\menu.png" />
     <None Remove="Resources\Icons\move.png" />
+    <None Remove="Resources\Icons\Outliner\entity.png" />
+    <None Remove="Resources\Icons\Outliner\folder.png" />
+    <None Remove="Resources\Icons\pause.png" />
+    <None Remove="Resources\Icons\play.png" />
     <None Remove="Resources\Icons\reload.png" />
     <None Remove="Resources\Icons\right.png" />
     <None Remove="Resources\Icons\rotate.png" />
@@ -30,6 +34,12 @@
     <None Remove="Resources\Icons\search.png" />
     <None Remove="Resources\Icons\select.png" />
     <None Remove="Resources\Icons\shading.png" />
+    <None Remove="Resources\Icons\snap_move.png" />
+    <None Remove="Resources\Icons\snap_rotate.png" />
+    <None Remove="Resources\Icons\snap_rotatte.png" />
+    <None Remove="Resources\Icons\snap_scale.png" />
+    <None Remove="Resources\Icons\step.png" />
+    <None Remove="Resources\Icons\stop.png" />
     <None Remove="Resources\Icons\up.png" />
     <None Remove="Resources\Icons\warning.png" />
     <None Remove="Resources\Icons\wire.png" />
@@ -43,15 +53,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icons\angle.png" />
     <Resource Include="Resources\Icons\global.png" />
-    <Resource Include="Resources\Icons\grid.png" />
     <Resource Include="Resources\Icons\icon_design.apd" />
     <Resource Include="Resources\Icons\layer.png" />
     <Resource Include="Resources\Icons\left.png" />
     <Resource Include="Resources\Icons\light.png" />
     <Resource Include="Resources\Icons\menu.png" />
     <Resource Include="Resources\Icons\move.png" />
+    <Resource Include="Resources\Icons\Outliner\entity.png" />
+    <Resource Include="Resources\Icons\Outliner\folder.png" />
+    <Resource Include="Resources\Icons\pause.png" />
+    <Resource Include="Resources\Icons\play.png" />
     <Resource Include="Resources\Icons\reload.png" />
     <Resource Include="Resources\Icons\right.png" />
     <Resource Include="Resources\Icons\rotate.png" />
@@ -71,6 +83,11 @@
     <Resource Include="Resources\Icons\search.png" />
     <Resource Include="Resources\Icons\select.png" />
     <Resource Include="Resources\Icons\shading.png" />
+    <Resource Include="Resources\Icons\snap_move.png" />
+    <Resource Include="Resources\Icons\snap_rotate.png" />
+    <Resource Include="Resources\Icons\snap_scale.png" />
+    <Resource Include="Resources\Icons\step.png" />
+    <Resource Include="Resources\Icons\stop.png" />
     <Resource Include="Resources\Icons\up.png" />
     <Resource Include="Resources\Icons\warning.png" />
     <Resource Include="Resources\Icons\wire.png" />
@@ -82,6 +99,10 @@
     <Compile Update="OutlinerVM.cs">
       <Generator>MSBuild:Compile</Generator>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Themes\" />
   </ItemGroup>
 
 </Project>

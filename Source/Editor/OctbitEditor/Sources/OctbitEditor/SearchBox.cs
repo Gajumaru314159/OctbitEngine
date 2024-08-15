@@ -11,10 +11,10 @@ namespace OctbitEditor
     public class SearchBox : Control
     {
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(SearchBox), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Text", typeof(string), typeof(SearchBox), new PropertyMetadata());
 
         public static readonly DependencyProperty WatermarkProperty =
-            DependencyProperty.Register("Watermark", typeof(string), typeof(SearchBox), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Watermark", typeof(string), typeof(SearchBox), new PropertyMetadata("検索"));
 
         public string Text
         {

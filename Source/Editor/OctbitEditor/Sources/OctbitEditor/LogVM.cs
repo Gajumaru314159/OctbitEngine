@@ -69,7 +69,9 @@ namespace OctbitEditor
                     _ => false
                 };
             FilteredItems = LogItems.ToFilteredReadOnlyObservableCollection(filter);
-            Filter.Subscribe(_ => FilteredItems.Refresh(filter));
+            Filter.Subscribe(_ => 
+            FilteredItems.Refresh(filter)
+            );
 
             Observable.Merge(IsInfoLogFiltered,IsWarningLogFiltered,IsErrorLogFiltered)
                 .Subscribe(_ => FilteredItems.Refresh(filter));
@@ -108,7 +110,7 @@ namespace OctbitEditor
         public ReactivePropertySlim<int> ErrorLogCount { get; } = new(0);
 
         // レイアウト
-        public ReactivePropertySlim<bool> IsWarp { get; } = new(true);
+        public ReactivePropertySlim<bool> IsWarp { get; } = new(false);
         // TODO Converterに変更
         public ReactivePropertySlim<ScrollBarVisibility> WarpVisibility { get; } = new(ScrollBarVisibility.Disabled);
     }

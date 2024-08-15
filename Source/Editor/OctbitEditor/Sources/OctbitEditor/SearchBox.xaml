@@ -6,25 +6,37 @@
     <Style TargetType="local:SearchBox">
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
-        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Outline.Normal}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Text" Value=""/>
         <Setter Property="Margin" Value="1"/>
         <Setter Property="Height" Value="Auto"/>
         <Setter Property="Width" Value="200"/>
-        <Setter Property="Text" Value="検索"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:SearchBox">
-                    <Border Background="{TemplateBinding Background}" CornerRadius="4" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Height="{TemplateBinding Height}" Margin="{TemplateBinding Margin}" Padding="4,0">
-                        <Grid Width="{TemplateBinding Width}" Margin="0">
+                    <Border CornerRadius="4" 
+                            Padding="4,0"
+                            Height="{TemplateBinding Height}" 
+                            Margin="{TemplateBinding Margin}" 
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid Width="{TemplateBinding Width}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="/Resources/Icons/search.png" Height="12" Width="12" Grid.Column="0"/>
-                            <TextBox Text="{TemplateBinding Text}" Grid.Column="1" VerticalAlignment="Center"/>
+                            <Image Source="/Resources/Icons/search.png" Height="12" Width="12" Margin="0,0,4,0" Grid.Column="0"/>
+                            <TextBlock x:Name="waterMark" Text="{TemplateBinding Watermark}" Opacity="0.5" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center"/>
+                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Background="Transparent" BorderThickness="0" Grid.Column="1" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="waterMark" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

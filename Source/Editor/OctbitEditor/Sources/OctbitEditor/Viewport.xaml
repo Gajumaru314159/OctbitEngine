@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              xmlns:local="clr-namespace:OctbitEditor"
+             Background="{DynamicResource Background}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -12,16 +13,27 @@
         <local:ViewportVM/>
     </UserControl.DataContext>
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="Q" Command="{Binding SelectCommand}"/>
+        <KeyBinding Key="W" Command="{Binding MoveCommand}"/>
+        <KeyBinding Key="E" Command="{Binding RotateCommand}"/>
+        <KeyBinding Key="R" Command="{Binding ScaleCommand}"/>
+        <KeyBinding Key="T" Command="{Binding ToggleCoordinateCommand}"/>
+        <KeyBinding Gesture="Ctrl+W" Command="{Binding ToggleSnapMoveCommand}"/>
+        <KeyBinding Gesture="Ctrl+E" Command="{Binding ToggleSnapRotateCommand}"/>
+        <KeyBinding Gesture="Ctrl+R" Command="{Binding ToggleSnapScaleCommand}"/>
+    </UserControl.InputBindings>
+
     <DockPanel>
-        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Background}">
+        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
             <DockPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Padding" Value="3,0"/>
+                    <Setter Property="Margin" Value="1,0,0,0"/>
+                    <Setter Property="Padding" Value="2,0"/>
                     <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="DockPanel.Dock" Value="Left"/>
-                    <Setter Property="Padding" Value="1"/>
                     <Style.Resources>
                         <Style TargetType="Image">
                             <Setter Property="Height" Value="15"/>
@@ -29,36 +41,65 @@
                         </Style>
                     </Style.Resources>
                 </Style>
-                <Style TargetType="Rectangle">
-                    <Setter Property="Width" Value="1"/>
-                    <Setter Property="Fill" Value="Gray"/>
-                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}"/>
+
+
+                <Style TargetType="ItemsControl">
+                    <Setter Property="ItemsControl.Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <Border Background="{DynamicResource Background}" Margin="1" Padding="0" BorderBrush="{DynamicResource Outline}" BorderThickness="1">
+                                    <ItemsPresenter/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="ItemsControl.ItemsPanel">
+                        <Setter.Value>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
 
                 <BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+                <local:InverseBoolConverter x:Key="InverseBool"/>
+                <local:EnumToBooleanConverter x:Key="EnumToBool"/>
 
                 <BitmapImage x:Key="MenuIcon" UriSource="/Resources/Icons/menu.png"/>
+
+                <BitmapImage x:Key="PlayIcon" UriSource="/Resources/Icons/play.png"/>
+                <BitmapImage x:Key="PauseIcon" UriSource="/Resources/Icons/pause.png"/>
+                <BitmapImage x:Key="StepIcon" UriSource="/Resources/Icons/step.png"/>
+                <BitmapImage x:Key="StopIcon" UriSource="/Resources/Icons/stop.png"/>
+
                 <BitmapImage x:Key="SelectIcon" UriSource="/Resources/Icons/select.png"/>
                 <BitmapImage x:Key="MoveIcon" UriSource="/Resources/Icons/move.png"/>
                 <BitmapImage x:Key="RotateIcon" UriSource="/Resources/Icons/rotate.png"/>
                 <BitmapImage x:Key="ScaleIcon" UriSource="/Resources/Icons/scale.png"/>
+                
                 <BitmapImage x:Key="GlobalIcon" UriSource="/Resources/Icons/global.png"/>
-                <BitmapImage x:Key="MoveSnapIcon" UriSource="/Resources/Icons/grid.png"/>
-                <BitmapImage x:Key="RotateSnapIcon" UriSource="/Resources/Icons/angle.png"/>
+                
+                <BitmapImage x:Key="SnapMoveIcon" UriSource="/Resources/Icons/snap_move.png"/>
+                <BitmapImage x:Key="SnapRotateIcon" UriSource="/Resources/Icons/snap_rotate.png"/>
+                <BitmapImage x:Key="SnapScaleIcon" UriSource="/Resources/Icons/snap_scale.png"/>
+                
                 <BitmapImage x:Key="ShadingIcon" UriSource="/Resources/Icons/shading.png"/>
                 <BitmapImage x:Key="WireIcon" UriSource="/Resources/Icons/wire.png"/>
                 <BitmapImage x:Key="WireShadingIcon" UriSource="/Resources/Icons/wire_shading.png"/>
+                
                 <BitmapImage x:Key="LayerIcon" UriSource="/Resources/Icons/layer.png"/>
             </DockPanel.Resources>
 
             <!--メニュー-->
-            <Menu DockPanel.Dock="Left">
-                
-                <MenuItem Padding="0" Margin="-3">
+            <Menu DockPanel.Dock="Left" Margin="0">                
+                <MenuItem Padding="0" Margin="0">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource MenuIcon}"/>
                     </MenuItem.Icon>
 
+                    <MenuItem Header="Play" IsCheckable="True" IsChecked="{Binding PlayIsEnabled.Value}"/>
                     <MenuItem Header="Tool" IsCheckable="True" IsChecked="{Binding ToolIsEnabled.Value}"/>
                     <MenuItem Header="Coordinate" IsCheckable="True" IsChecked="{Binding CoordinateIsEnabled.Value}"/>
                     <MenuItem Header="Snap" IsCheckable="True" IsChecked="{Binding SnapIsEnabled.Value}"/>
@@ -68,53 +109,107 @@
             </Menu>
             <Rectangle/>
 
+            <!--再生-->
+            <ItemsControl Visibility="{Binding PlayIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}" Margin="0">
+                    <Image Source="{StaticResource PlayIcon}"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Stop (Ctrl+P)" IsEnabled="{Binding IsPlaying.Value}">
+                    <Image Source="{StaticResource PauseIcon}"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Step (Ctrl+P)">
+                    <Image Source="{StaticResource StepIcon}"/>
+                </ToggleButton>
+            </ItemsControl>
+
             <!--ツール-->
-            <ToggleButton ToolTip="Select" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource SelectIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Move" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource MoveIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Rotate" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource RotateIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Scale" Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource ScaleIcon}"/>
-            </ToggleButton>
-            <Rectangle Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
-            
+            <ItemsControl Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <RadioButton ToolTip="Select (Q)" Margin="0" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Select}">
+                    <Image Source="{StaticResource SelectIcon}"/>
+                </RadioButton>
+                <RadioButton ToolTip="Move (W)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Move}">
+                    <Image Source="{StaticResource MoveIcon}"/>
+                </RadioButton>
+                <RadioButton ToolTip="Rotate (E)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Rotate}">
+                    <Image Source="{StaticResource RotateIcon}"/>
+                </RadioButton>
+                <RadioButton ToolTip="Scale (R)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Scale}">
+                    <Image Source="{StaticResource ScaleIcon}"/>
+                </RadioButton>
+            </ItemsControl>
+
             <!--座標系-->
-            <ToggleButton ToolTip="Global/Local" Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource GlobalIcon}"/>
-            </ToggleButton>
-            <Rectangle Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+            <ItemsControl Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}" Margin="0">
+                    <Image Source="{StaticResource GlobalIcon}"/>
+                </ToggleButton>
+            </ItemsControl>
 
             <!--スナップ-->
-            <ToggleButton ToolTip="Grid Snap" Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource MoveSnapIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Rotate Snap" Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource RotateSnapIcon}"/>
-            </ToggleButton>
-            <Rectangle Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+            <ItemsControl Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <ToggleButton ToolTip="Snap Move" Margin="0" IsChecked="{Binding SnapMoveIsEnabled.Value}">
+                    <ToggleButton.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="0.1"/>
+                            <MenuItem Header="0.5"/>
+                            <MenuItem Header="1.0"/>
+                        </ContextMenu>
+                    </ToggleButton.ContextMenu>
+                    <Image Source="{StaticResource SnapMoveIcon}"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Snap Rotate" IsChecked="{Binding SnapRotateIsEnabled.Value}">
+                    <Image Source="{StaticResource SnapRotateIcon}"/>
+                </ToggleButton>
+                <ToggleButton ToolTip="Snap Scale" IsChecked="{Binding SnapScaleIsEnabled.Value}">
+                    <Image Source="{StaticResource SnapScaleIcon}"/>
+                </ToggleButton>
+            </ItemsControl>
 
             <!--シェーディング-->
-            <ToggleButton ToolTip="Shading" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource ShadingIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Wire" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource WireIcon}"/>
-            </ToggleButton>
-            <ToggleButton ToolTip="Wire Shading" Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource WireShadingIcon}"/>
-            </ToggleButton>
-            <Rectangle Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}"/>
+            <ItemsControl Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <RadioButton ToolTip="Shading" Margin="0" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Shading}">
+                    <Image Source="{StaticResource ShadingIcon}"/>
+                </RadioButton>
+                <RadioButton ToolTip="Wire" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Wireframe}">
+                    <Image Source="{StaticResource WireIcon}"/>
+                </RadioButton>
+                <RadioButton ToolTip="Wire Shading" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=ShadingWireframe}">
+                    <Image Source="{StaticResource WireShadingIcon}"/>
+                </RadioButton>
+            </ItemsControl>
 
             <!--レイヤ-->
-            <ToggleButton ToolTip="Layer" Visibility="{Binding LayerIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <Image Source="{StaticResource LayerIcon}"/>
-            </ToggleButton>
-
+            <ItemsControl Visibility="{Binding LayerIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
+                <ToggleButton ToolTip="Layer" Margin="0">
+                    <ToggleButton.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="3D Icons" IsCheckable="True"/>
+                            <MenuItem Header="Selection Outline" IsCheckable="True"/>
+                            <MenuItem Header="Light">
+                                <MenuItem Header="Directional Light" IsCheckable="True"/>
+                                <MenuItem Header="Point Light" IsCheckable="True"/>
+                                <MenuItem Header="Spot Light" IsCheckable="True"/>
+                            </MenuItem>
+                            <MenuItem Header="Graphics">
+                                <MenuItem Header="Camera" IsCheckable="True"/>
+                                <MenuItem Header="Decal" IsCheckable="True"/>
+                            </MenuItem>
+                            <MenuItem Header="Collision">
+                                <MenuItem Header="BoxCollider" IsCheckable="True"/>
+                                <MenuItem Header="SphereCollider" IsCheckable="True"/>
+                                <MenuItem Header="CapsuleCollider" IsCheckable="True"/>
+                                <MenuItem Header="ConvexCollider" IsCheckable="True"/>
+                            </MenuItem>
+                            <MenuItem Header="AI">
+                                <MenuItem Header="NavMesh" IsCheckable="True"/>
+                                <MenuItem Header="NavMeshLinker" IsCheckable="True"/>
+                                <MenuItem Header="NavMeshModifier" IsCheckable="True"/>
+                            </MenuItem>
+                        </ContextMenu>
+                    </ToggleButton.ContextMenu>
+                    <Image Source="{StaticResource LayerIcon}"/>
+                </ToggleButton>
+            </ItemsControl>
             <Border/>
         </DockPanel>
         <Border Height="1" Background="Black" DockPanel.Dock="Top"/>

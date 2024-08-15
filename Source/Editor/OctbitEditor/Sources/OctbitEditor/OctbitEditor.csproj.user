@@ -42,9 +42,6 @@
     <Page Update="SearchBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Viewport.xaml">
       <SubType>Designer</SubType>
     </Page>

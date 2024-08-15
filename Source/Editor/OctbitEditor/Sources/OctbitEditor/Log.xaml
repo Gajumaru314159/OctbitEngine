@@ -22,7 +22,7 @@
                     <Setter Property="Padding" Value="2,0"/>
                     <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
                     <Setter Property="BorderBrush" Value="Black"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                    <Setter Property="Margin" Value="0,0,1,0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="DockPanel.Dock" Value="Right"/>
                 </Style>
@@ -31,7 +31,7 @@
                     <Setter Property="Height" Value="14"/>
                 </Style>
             </DockPanel.Resources>
-            <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error">
+            <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error" Margin="0">
                 <DockPanel>
                     <Image Source="/Resources/Icons/error.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding ErrorLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2"/>                    
@@ -54,8 +54,8 @@
                 <Image Source="/Resources/Icons/wrap.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
             </ToggleButton>
 
-            <local:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Right"/>
-
+            <local:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Right"/>
+            
             <Border/>
 
         </DockPanel>
@@ -67,28 +67,40 @@
             <ListBox 
                 ItemsSource="{Binding FilteredItems}" 
                 SelectedItem="{Binding SelectedLogItem.Value}" 
-                Grid.Row="0" 
-                Background="{DynamicResource Background}"
+                AlternationCount="2"
+                Grid.Row="0"
                 BorderThickness="0"
                 ScrollViewer.HorizontalScrollBarVisibility="{Binding WarpVisibility.Value}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
+                        <Border Background="Transparent">
                             <TextBlock Text="{Binding Message}" Foreground="{Binding Brush}" TextWrapping="Wrap"/>
-                        </StackPanel>
+                        </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="#20FFFFFF" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
-            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}" Foreground="{DynamicResource Text.Normal}"/>
+            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}"/>
 
 
             <GridSplitter Grid.Row="1" Height="8" Margin="0,-4,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
                 <GridSplitter.Template>
                     <ControlTemplate TargetType="{x:Type GridSplitter}">
                         <Border  Background="Transparent">
-                            <Rectangle Fill="Gray" Height="1" VerticalAlignment="Center" />
+                            <Rectangle Fill="{DynamicResource Separator}" Height="1" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </GridSplitter.Template>

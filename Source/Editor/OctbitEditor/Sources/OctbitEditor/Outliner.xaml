@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OctbitEditor"
+             Foreground="{DynamicResource Foreground}"
+             Background="{DynamicResource Background}" 
              mc:Ignorable="d"
              d:DesignWidth="200" d:DesignHeight="400" >
 
@@ -11,8 +13,13 @@
         <local:OutlinerVM/>
     </UserControl.DataContext>
 
-    <DockPanel Background="{DynamicResource Background}">
+    <DockPanel>
         <local:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
+
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
+            <TextBlock Text="1/8 item selected"/>
+        </Border>
+        
         <TreeView ItemsSource="{Binding Children}" Background="Transparent">
             <TreeView.ContextMenu>
                 <ContextMenu>
@@ -43,14 +50,13 @@
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
-                        <!--タイプアイコン(Scene/Entity/Folder)-->
-                        <Rectangle Width="10" Height="10" Fill="Red" Margin="0,0,4,0" VerticalAlignment="Stretch"/>
-                        <TextBlock Text="{Binding Name.Value}" Foreground="White"/>
+                        <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                        <local:EditableTextBlock Text="{Binding Name.Value}" Foreground="White"/>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.Resources>
-                <Style TargetType="TreeViewItem">
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
                 </Style>
