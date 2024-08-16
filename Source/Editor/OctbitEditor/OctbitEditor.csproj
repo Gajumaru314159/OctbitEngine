@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,6 +44,10 @@
     <None Remove="Resources\Icons\wire.png" />
     <None Remove="Resources\Icons\wire_shading.png" />
     <None Remove="Resources\Icons\wrap.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Icons\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
