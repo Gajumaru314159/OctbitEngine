@@ -14,7 +14,28 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <!--ToolTip-->
+    <Style TargetType="ToolTip">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border Name="Border" 
+                            Background="{DynamicResource MenuBackground}" 
+                            BorderBrush="{DynamicResource Outline}" 
+                            BorderThickness="1"
+                            CornerRadius="{DynamicResource CornderRadiusB}"
+                            Width="{TemplateBinding Width}" 
+                            Height="{TemplateBinding Height}">
+                        <ContentPresenter Margin="8,4" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--Button-->
     <Style TargetType="Button">
         <Setter Property="SnapsToDevicePixels" Value="true" />
