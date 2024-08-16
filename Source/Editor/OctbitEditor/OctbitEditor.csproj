@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Icons\down.png" />
+    <None Remove="Resources\Icons\error.png" />
+    <None Remove="Resources\Icons\global.png" />
+    <None Remove="Resources\Icons\icon.ico" />
+    <None Remove="Resources\Icons\icon_design.apd" />
+    <None Remove="Resources\Icons\info.png" />
+    <None Remove="Resources\Icons\layer.png" />
+    <None Remove="Resources\Icons\left.png" />
+    <None Remove="Resources\Icons\light.png" />
+    <None Remove="Resources\Icons\menu.png" />
+    <None Remove="Resources\Icons\move.png" />
+    <None Remove="Resources\Icons\Outliner\entity.png" />
+    <None Remove="Resources\Icons\Outliner\folder.png" />
+    <None Remove="Resources\Icons\Outliner\icon_design.apd" />
+    <None Remove="Resources\Icons\pause.png" />
+    <None Remove="Resources\Icons\play.png" />
+    <None Remove="Resources\Icons\reload.png" />
+    <None Remove="Resources\Icons\right.png" />
+    <None Remove="Resources\Icons\rotate.png" />
+    <None Remove="Resources\Icons\scale.png" />
+    <None Remove="Resources\Icons\search.png" />
+    <None Remove="Resources\Icons\select.png" />
+    <None Remove="Resources\Icons\shading.png" />
+    <None Remove="Resources\Icons\snap_move.png" />
+    <None Remove="Resources\Icons\snap_rotate.png" />
+    <None Remove="Resources\Icons\snap_scale.png" />
+    <None Remove="Resources\Icons\step.png" />
+    <None Remove="Resources\Icons\stop.png" />
+    <None Remove="Resources\Icons\up.png" />
+    <None Remove="Resources\Icons\warning.png" />
+    <None Remove="Resources\Icons\wire.png" />
+    <None Remove="Resources\Icons\wire_shading.png" />
+    <None Remove="Resources\Icons\wrap.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1" />
+    <PackageReference Include="LivetCask" Version="4.0.2" />
+    <PackageReference Include="ReactiveProperty" Version="9.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonView\CommonView.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Icons\down.png" />
+    <Resource Include="Resources\Icons\error.png" />
+    <Resource Include="Resources\Icons\global.png" />
+    <Resource Include="Resources\Icons\icon.ico" />
+    <Resource Include="Resources\Icons\icon_design.apd" />
+    <Resource Include="Resources\Icons\info.png" />
+    <Resource Include="Resources\Icons\layer.png" />
+    <Resource Include="Resources\Icons\left.png" />
+    <Resource Include="Resources\Icons\light.png" />
+    <Resource Include="Resources\Icons\menu.png" />
+    <Resource Include="Resources\Icons\move.png" />
+    <Resource Include="Resources\Icons\Outliner\entity.png" />
+    <Resource Include="Resources\Icons\Outliner\folder.png" />
+    <Resource Include="Resources\Icons\Outliner\icon_design.apd" />
+    <Resource Include="Resources\Icons\pause.png" />
+    <Resource Include="Resources\Icons\play.png" />
+    <Resource Include="Resources\Icons\reload.png" />
+    <Resource Include="Resources\Icons\right.png" />
+    <Resource Include="Resources\Icons\rotate.png" />
+    <Resource Include="Resources\Icons\scale.png" />
+    <Resource Include="Resources\Icons\search.png" />
+    <Resource Include="Resources\Icons\select.png" />
+    <Resource Include="Resources\Icons\shading.png" />
+    <Resource Include="Resources\Icons\snap_move.png" />
+    <Resource Include="Resources\Icons\snap_rotate.png" />
+    <Resource Include="Resources\Icons\snap_scale.png" />
+    <Resource Include="Resources\Icons\step.png" />
+    <Resource Include="Resources\Icons\stop.png" />
+    <Resource Include="Resources\Icons\up.png" />
+    <Resource Include="Resources\Icons\warning.png" />
+    <Resource Include="Resources\Icons\wire.png" />
+    <Resource Include="Resources\Icons\wire_shading.png" />
+    <Resource Include="Resources\Icons\wrap.png" />
+  </ItemGroup>
+
+</Project>

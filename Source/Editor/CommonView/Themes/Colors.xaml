@@ -1,0 +1,135 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CommonView"
+                    >
+
+    <CornerRadius x:Key="CornderRadiusA" TopLeft="2" TopRight="2" BottomLeft="2" BottomRight="2"/>
+    <CornerRadius x:Key="CornderRadiusB" TopLeft="6" TopRight="6" BottomLeft="6" BottomRight="6"/>
+
+
+    <Color x:Key="BackgroundColor">#383838</Color>
+    <Color x:Key="TextColor">#EEEEEE</Color>
+    <Color x:Key="FillColor">#595959</Color>
+    <Color x:Key="AccentColor">#5680C2</Color>
+    <Color x:Key="FocusColor">#EEEEEE</Color>
+    <Color x:Key="OutlineColor">#444444</Color>
+    <Color x:Key="HeaderColor">#2D2D30</Color>
+
+    <SolidColorBrush x:Key="Text" Color="{DynamicResource TextColor}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource TextColor}"/>
+    <SolidColorBrush x:Key="Fill" Color="{DynamicResource FillColor}"/>
+    <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}"/>
+    <SolidColorBrush x:Key="Focus" Color="{DynamicResource FocusColor}"/>
+    <SolidColorBrush x:Key="Outline" Color="{DynamicResource OutlineColor}"/>
+    <SolidColorBrush x:Key="Background" Color="{DynamicResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="Header" Color="{DynamicResource HeaderColor}"/>
+
+
+    <Color x:Key="HoverColor">#20FFFFFF</Color>
+    <Color x:Key="DisableColor">#40000000</Color>
+    
+    <SolidColorBrush x:Key="Hover" Color="{DynamicResource HoverColor}"/>
+    <SolidColorBrush x:Key="Disabled" Color="{DynamicResource DisableColor}"/>
+
+
+    <Color x:Key="ExpanderHeaderColor">#505050</Color>
+    <Color x:Key="CheckBoxBackgroundColor">#666666</Color>
+    <Color x:Key="ComboBoxBackgroundColor">#2C2C2C</Color>
+    <Color x:Key="ComboBoxBorderColor">#444444</Color>
+    <Color x:Key="UnselectedTabColor">#2B2B2B</Color>
+    <Color x:Key="MenuBackgroundColor">#232323</Color>
+    <Color x:Key="TextBoxBackgroundColor">#232323</Color>
+
+    <SolidColorBrush x:Key="ExpanderHeader" Color="{DynamicResource ExpanderHeaderColor}"/>
+    <SolidColorBrush x:Key="CheckBoxBackground" Color="{DynamicResource CheckBoxBackgroundColor}"/>
+    <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource ComboBoxBackgroundColor}"/>
+    <SolidColorBrush x:Key="ComboBoxBorder" Color="{DynamicResource ComboBoxBorderColor}"/>
+    <SolidColorBrush x:Key="UnselectedTab" Color="{DynamicResource UnselectedTabColor}"/>
+    <SolidColorBrush x:Key="MenuBackground" Color="{DynamicResource MenuBackgroundColor}"/>
+    <SolidColorBrush x:Key="TextBoxBackground" Color="{DynamicResource TextBoxBackgroundColor}"/>
+
+
+
+
+
+    <!--<Color x:Key="Background.Color">#383838</Color>
+    
+    <Color x:Key="Text.Color" >#DADADA</Color>
+    <Color x:Key="Text.Disabled.Color">#656565</Color>
+    
+    <Color x:Key="Fill.Color">#595959</Color>
+    <Color x:Key="Fill.Hovered.Color">#6B6B6B</Color>
+    <Color x:Key="Fill.Disabled.Color">#585858</Color>
+    <Color x:Key="Fill.Selected.Color">#007ACC</Color>
+    <Color x:Key="Fill.Selected.Active.Color">#007ACC</Color>
+    <Color x:Key="Fill.Selected.Disabled.Color">#465876</Color>
+
+    <Color x:Key="Outline.Color">#505050</Color>
+
+    <Color x:Key="Surface.Color">#2D2D30</Color>
+
+    <Color x:Key="Header.Color">#2D2D30</Color>
+    <Color x:Key="Separator.Color">#505050</Color>
+
+    <Color x:Key="Hovered.Color">#20FF00FF</Color>
+
+    <CornerRadius x:Key="Menu.CornderRadius" TopLeft="4" TopRight="4" BottomLeft="4" BottomRight="4"/>
+
+    
+    <SolidColorBrush x:Key="Surface" Color="{DynamicResource Surface.Color}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource Text.Color}"/>
+    <SolidColorBrush x:Key="Header" Color="{DynamicResource Header.Color}"/>
+    <SolidColorBrush x:Key="Separator" Color="{DynamicResource Separator.Color}"/>
+    <SolidColorBrush x:Key="Hovered" Color="{DynamicResource Hovered.Color}"/>
+
+    
+    <SolidColorBrush x:Key="Text.Normal" Color="{DynamicResource Text.Color}"/>
+    <SolidColorBrush x:Key="Text.Hovered" Color="{DynamicResource Text.Hovered.Color}"/>
+    <SolidColorBrush x:Key="Text.Disabled" Color="{DynamicResource Text.Disabled.Color}"/>
+    <SolidColorBrush x:Key="Text.Selected" Color="{DynamicResource Text.Selected.Color}"/>
+    <SolidColorBrush x:Key="Text.Selected.Disabled" Color="{DynamicResource Text.Selected.Disabled.Color}"/>
+
+    
+    <SolidColorBrush x:Key="TextBox.Normal" Color="{DynamicResource Background.Color}"/>
+    <SolidColorBrush x:Key="TextBox.Outline.Normal" Color="{DynamicResource Outline.Color}"/>
+
+    
+    <SolidColorBrush x:Key="Fill.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="Fill.Disabled" Color="{DynamicResource Fill.Disabled.Color}"/>
+    <SolidColorBrush x:Key="Fill.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="Fill.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
+
+    
+    <SolidColorBrush x:Key="Button.Normal" Color="{DynamicResource Fill.Color}"/>
+    <SolidColorBrush x:Key="Button.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="Button.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="Button.Disabled" Color="{DynamicResource Fill.Disabled.Color}"/>
+    <SolidColorBrush x:Key="Button.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
+
+    
+    <SolidColorBrush x:Key="Expander.Background" Color="{DynamicResource Surface.Color}"/>
+    <SolidColorBrush x:Key="Expander.Normal" Color="{DynamicResource Fill.Color}"/>
+    <SolidColorBrush x:Key="Expander.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="Expander.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="Expander.Disabled" Color="{DynamicResource Fill.Disabled.Color}"/>
+    <SolidColorBrush x:Key="Expander.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
+
+    
+    <SolidColorBrush x:Key="TreeViewItem.Normal" Color="Transparent"/>
+    <SolidColorBrush x:Key="TreeViewItem.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.SelectedActive" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Disabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected.Active" Color="{DynamicResource Fill.Selected.Active.Color}"/>
+    <SolidColorBrush x:Key="TreeViewItem.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>
+
+    
+    <SolidColorBrush x:Key="ListViewItem.Normal" Color="Transparent"/>
+    <SolidColorBrush x:Key="ListViewItem.Hovered" Color="{DynamicResource Fill.Hovered.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.SelectedActive" Color="{DynamicResource Fill.Selected.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Disabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected.Active" Color="{DynamicResource Fill.Selected.Active.Color}"/>
+    <SolidColorBrush x:Key="ListViewItem.Selected.Disabled" Color="{DynamicResource Fill.Selected.Disabled.Color}"/>-->
+
+</ResourceDictionary>

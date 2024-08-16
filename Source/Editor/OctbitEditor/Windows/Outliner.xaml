@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="OctbitEditor.Outliner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OctbitEditor"
+             xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             Foreground="{DynamicResource Foreground}"
+             Background="{DynamicResource MenuBackground}" 
+             mc:Ignorable="d"
+             d:DesignWidth="200" d:DesignHeight="400" >
+
+    <UserControl.DataContext>
+        <local:OutlinerVM/>
+    </UserControl.DataContext>
+
+    <DockPanel>
+        <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
+
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
+            <TextBlock Text="1/8 item selected"/>
+        </Border>
+        
+        <TreeView ItemsSource="{Binding Children}" Background="Transparent">
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
+                    <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
+                    <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
+                    <MenuItem Header="Paste As Child"/>
+                    <Separator/>
+                    <MenuItem Header="Rename" InputGestureText="F2"/>
+                    <MenuItem Header="Duplicate" InputGestureText="Ctrl+D"/>
+                    <MenuItem Header="Delete" InputGestureText="Delete"/>
+                    <Separator/>
+                    <MenuItem Header="Create Empty" InputGestureText="Ctrl+N"/>
+                    <MenuItem Header="Create Empty Parent"/>
+                    <MenuItem Header="Light">
+                        <MenuItem Header="Directional Ligtht"/>
+                        <MenuItem Header="Point Ligtht"/>
+                        <MenuItem Header="Spot Ligtht"/>
+                        <Separator/>
+                        <MenuItem Header="Reflection Probe"/>
+                    </MenuItem>
+                    <MenuItem Header="Debug">
+                        <MenuItem Header="Memo"/>
+                    </MenuItem>
+
+                </ContextMenu>
+            </TreeView.ContextMenu>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                        <base:EditableTextBlock Text="{Binding Name.Value}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.Resources>
+                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                </Style>
+            </TreeView.Resources>
+        </TreeView>
+        
+    </DockPanel>
+</UserControl>
