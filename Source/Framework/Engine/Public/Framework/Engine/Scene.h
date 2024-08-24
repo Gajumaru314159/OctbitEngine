@@ -38,6 +38,8 @@ namespace ob::engine {
 		//@―---------------------------------------------------------------------------
 		~Scene();
 
+		void requestRelease();
+
 		const String& getName()const;
 		Scene* getParent()const;
 

@@ -115,4 +115,10 @@
 		</Expand>
 	</Type>
 
+	<!--IPAddress-->
+	<Type Name="ob::core::IPAddress">
+		<DisplayString >{(int)a}.{(int)b}.{(int)c}.{(int)d}</DisplayString>
+	</Type>
+
+
 </AutoVisualizer>

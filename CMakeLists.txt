@@ -19,7 +19,6 @@ set(CMAKE_DEBUG_POSTFIX "")                                         #
 add_definitions(-D_UNICODE -DUNICODE)                               # 文字リテラルをユニコードとする
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")            # UTF-8を強制する
 
 #------------------------------------------------------------------------------
 # パス設定
@@ -100,6 +99,7 @@ include("Source/CMake/Common.cmake")
 #------------------------------------------------------------------------------
 
 add_definitions(/Zc:__cplusplus)                                    # __cplusplusを使えるようにする
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")            # UTF-8を強制する
 
 # Framework
 add_subdirectory ("Source/Framework/Core")
@@ -133,3 +133,4 @@ add_subdirectory ("Source/Test/Framework/Engine")
 
 # Application
 add_subdirectory ("Source/Application")
+add_subdirectory ("Source/Application2")

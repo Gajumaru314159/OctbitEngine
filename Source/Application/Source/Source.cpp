@@ -28,6 +28,9 @@
 
 #include <Framework/Core/Thread/ThreadPool.h>
 
+#include <Framework/Core/Network/Network.h>
+#include <Framework/Core/Network/TCPServer.h>
+
 //-----------------------------------------------------------------
 using namespace ob;
 using namespace ob::rhi;
@@ -36,6 +39,8 @@ using namespace ob::graphics;
 using namespace ob::platform;
 
 int TestDirectX12() {
+
+	Network::Startup();
 
 	ob::core::ThreadPool threadPool;
 	ob::core::TypeInfoManager typeInfoManager;
@@ -47,6 +52,15 @@ int TestDirectX12() {
 	ob::debug::Outliner outliner;
 
 	System::Setup();
+
+	TCPClient client;
+	if (client.connect(IPAddress::LocalHost(), 5000)) {
+		char message[] = "Connected";
+		client.send(message, sizeof(message));
+		LOG_INFO("送信済み");
+	}
+
+
 
 	// ディスプレイ生成
 	Ref<Display> display = [&] {
@@ -176,6 +190,19 @@ int TestDirectX12() {
 
 	}
 
+	handle.remove();
+	handle2.remove();
+	handle3.remove();
+
+	delete scene2;
+	delete world;
+
+	Engine::Get()->update();
+	display->update();
+	Graphics::Get()->update();
+
+
+	Network::Shutdown();
 	return 0;
 }
 

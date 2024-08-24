@@ -279,7 +279,7 @@ namespace ob::engine {
 	//@―---------------------------------------------------------------------------
 	void Entity::setParent(Entity* newParent,s32 index) {
 		if (m_parent == newParent) {
-			OB_NOTIMPLEMENTED();
+			// OB_NOTIMPLEMENTED();
 		}
 		Entity* oldParent = nullptr;
 
