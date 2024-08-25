@@ -3,11 +3,11 @@
 namespace OctbitEditor
 {
     /// <summary>
-    /// Log.xaml の相互作用ロジック
+    /// LogList.xaml の相互作用ロジック
     /// </summary>
-    public partial class Log : UserControl
+    public partial class LogList : UserControl
     {
-        public Log()
+        public LogList()
         {
             InitializeComponent();
         }

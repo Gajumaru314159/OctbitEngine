@@ -1,4 +1,5 @@
 ﻿using Livet;
+using OctbitEngine.Asset;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,15 +11,17 @@ namespace OctbitEditor
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
-        public ExplorerItem() : this("", "")
+        public ExplorerItem()
         {
-
+            Name.Value = "";
+            Icon.Value = FolderIcon;
+            Path = "";
         }
-        public ExplorerItem(string name,string path,bool isAsset = false)
+        public ExplorerItem(IAsset asset,bool isAsset = false)
         {
-            Name.Value = name;
-            Icon.Value = isAsset?AssetIcon : FolderIcon;
-            Path = path;
+            Name.Value = asset.Name;
+            Icon.Value = asset is IAssetFile?AssetIcon : FolderIcon;
+            Path = asset.Path;
         }
 
 
@@ -26,7 +29,7 @@ namespace OctbitEditor
 
         public ReactiveProperty<string> Name { get; } = new();
         public ReactiveProperty<bool> IsSelected { get; } = new();
-        public ReactiveProperty<bool> IsExpanded { get; } = new(true);
+        public ReactiveProperty<bool> IsExpanded { get; } = new(false);
         public ReactivePropertySlim<BitmapSource> Icon { get; } = new();
 
         public ObservableCollection<ExplorerItem> Children { get; } = new();
@@ -36,26 +39,26 @@ namespace OctbitEditor
     {
         public ExplorerVM()
         {
-            void visit(ExplorerItem parent, string path)
+            void visit(IAssetFolder folder,ExplorerItem parent)
             {
-                foreach (var dir in Directory.EnumerateDirectories(path))
+                foreach (var child in folder.ChildFolders)
                 {
-                    var item = new ExplorerItem(Path.GetFileName(dir),dir);
+                    var item = new ExplorerItem(child);
                     parent.Children.Add(item);
-                    visit(item, dir);
+                    visit(child,item);
                 }
-                foreach(var file in Directory.EnumerateFiles(path))
+                foreach(var child in folder.ChildFiles)
                 {
-                    var item = new ExplorerItem(Path.GetFileName(file),file,true);
+                    var item = new ExplorerItem(child);
                     parent.Children.Add(item);
                 }
             }
 
-            string path = @"D:/My/Productions/C++/OctbitEngine/Asset";
+            m_manager = new AssetManager();
 
-
-            Children.Add(new ExplorerItem("Assets",path));
-            visit(Children[0], path);
+            var rootItem = new ExplorerItem(m_manager.RootFolder);
+            Children.Add(rootItem);
+            visit(m_manager.RootFolder, rootItem);
 
             SelectedFolder.Subscribe(item =>
             {
@@ -63,6 +66,8 @@ namespace OctbitEditor
             });
 
         }
+
+        AssetManager m_manager;
 
 
         public ObservableCollection<ExplorerItem> Children { get; } = new();

@@ -1,8 +1,11 @@
 ﻿using CommonView;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Sockets;
+using System.Net;
 using System.Runtime.InteropServices;
 using UserControl = System.Windows.Controls.UserControl;
+using System.Text;
 
 namespace OctbitEditor
 {
@@ -39,53 +42,99 @@ namespace OctbitEditor
                     //return;
                     if (m_process == null)
                     {
+#if false
+                        //ここからIPアドレスやポートの設定
+                        // 着信データ用のデータバッファー。
+                        byte[] bytes = new byte[1024];
+                        IPAddress ipAddress = IPAddress.Loopback;
+                        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 5000);
+                        //ここまでIPアドレスやポートの設定
+
+                        //ソケットの作成
+                        Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                        //通信の受け入れ準備
+                        listener.Bind(localEndPoint);
+                        listener.Listen(10);
+#endif
+
+#if false
+                        Task.Run(() =>
                         {
-                            string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
-                            using (var procKiller = new System.Diagnostics.Process())
                             {
-                                procKiller.StartInfo.FileName = taskkill;
-                                procKiller.StartInfo.Arguments = "/F /IM OctbitApp.exe";
-                                procKiller.StartInfo.CreateNoWindow = true;
-                                procKiller.StartInfo.UseShellExecute = false;
-                                procKiller.Start();
-                                procKiller.WaitForExit();
+                                string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
+                                using (var procKiller = new System.Diagnostics.Process())
+                                {
+                                    procKiller.StartInfo.FileName = taskkill;
+                                    procKiller.StartInfo.Arguments = "/F /IM OctbitApp.exe";
+                                    procKiller.StartInfo.CreateNoWindow = true;
+                                    procKiller.StartInfo.UseShellExecute = false;
+                                    procKiller.Start();
+                                    procKiller.WaitForExit();
+                                }
                             }
-                        }
 
-                        var psi = new ProcessStartInfo()
-                        {
-                            FileName = @"D:\My\Productions\C++\OctbitEngine\Build\x64-Debug\Source\Application\OctbitApp.exe",
-                            CreateNoWindow = true,
-                            UseShellExecute = false,
-                        };
-                        m_process = Process.Start(psi);
-                        if (m_process!=null)
-                        {
-
-                            IntPtr hWnd = IntPtr.Zero;
-                            for (int i = 0; i<1000; ++i)
+                            var psi = new ProcessStartInfo()
                             {
-                                Thread.Sleep(100);
-                                hWnd = m_process.MainWindowHandle;
-                                if(hWnd!=IntPtr.Zero)
-                                    break;
-                            }
-
-                            //var oldStyle = GetWindowLong(hWnd, GWL_STYLE);
-                            //var oldExStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
-                            int style = WS_POPUP | WS_VISIBLE;
-                            var exStyle = 0;// oldExStyle ;
-
-                            SetParent(hWnd, m_panel.Handle);
-                            SetWindowLong(hWnd, GWL_STYLE, style);
-                            SetWindowLong(hWnd, GWL_EXSTYLE, exStyle);
-
-                            SizeChanged += (sender, e) =>
-                            {
-                                MoveWindow(hWnd, 0, 0, (int)ActualWidth, (int)ActualHeight, 1);
+                                FileName = @"D:\My\Productions\C++\OctbitEngine\Build\x64-Debug\Source\Application\OctbitApp.exe",
+                                CreateNoWindow = true,
+                                UseShellExecute = false,
                             };
+                            m_process = Process.Start(psi);
+                            if (m_process!=null)
+                            {
+                                Dispatcher.Invoke(() =>
+                                {
+                                    IntPtr hWnd = IntPtr.Zero;
+                                    for (int i = 0; i<1000; ++i)
+                                    {
+                                        Thread.Sleep(100);
+                                        hWnd = m_process.MainWindowHandle;
+                                        if (hWnd!=IntPtr.Zero)
+                                            break;
+                                    }
 
-                        }
+                                    //var oldStyle = GetWindowLong(hWnd, GWL_STYLE);
+                                    //var oldExStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+                                    int style = WS_POPUP | WS_VISIBLE;
+                                    var exStyle = 0;// oldExStyle ;
+
+                                    SetParent(hWnd, m_panel.Handle);
+                                    SetWindowLong(hWnd, GWL_STYLE, style);
+                                    SetWindowLong(hWnd, GWL_EXSTYLE, exStyle);
+
+                                    MoveWindow(hWnd, 0, 0, (int)ActualWidth, (int)ActualHeight, 1);
+                                    SizeChanged += (sender, e) =>
+                                    {
+                                        MoveWindow(hWnd, 0, 0, (int)ActualWidth, (int)ActualHeight, 1);
+                                    };
+
+                                });
+                            }
+                        });
+#endif
+#if false
+                        //通信の確率
+                        Socket handler = listener.Accept();
+
+
+                        // 任意の処理
+                        //データの受取をReceiveで行う。
+                        int bytesRec = handler.Receive(bytes);
+                        string data1 = Encoding.UTF8.GetString(bytes, 0, bytesRec);
+                        Console.WriteLine(data1);
+                        Debug.WriteLine(data1);
+
+                        //大文字に変更
+                        data1 = data1.ToUpper();
+
+                        //クライアントにSendで返す。
+                        byte[] msg = Encoding.UTF8.GetBytes(data1);
+                        handler.Send(msg);
+
+                        //ソケットの終了
+                        handler.Shutdown(SocketShutdown.Both);
+                        handler.Close();
+#endif
                     }
                 }; 
 

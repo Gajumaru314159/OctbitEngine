@@ -1,71 +1,62 @@
-﻿using Livet;
+﻿using Common.Log;
+using CommonView.Menu;
+using Livet;
 using Reactive.Bindings;
 using Reactive.Bindings.Helpers;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 
 namespace OctbitEditor
 {
-    public enum LogType
-    {
-        Error,
-        Warning,
-        Info
-    }
-
     public class LogItem : ViewModel
     {
         private static Brush ErrorBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 209, G = 4, B = 4, A = 255 });
         private static Brush WarningBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 229, G = 175, B = 12, A = 255 });
         private static Brush InfoBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 233, G = 233, B = 233, A = 255 });
-        public LogItem()
+        private static Brush TraceBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 200, G = 200, B = 200, A = 255 });
+        public LogItem(LogObject log)
         {
-            Message = "System.Windows.Data Error: 40 : BindingExpression path error: 'Value' property not found on 'object' ''SolidColorBrush' (HashCode=41314614)'. BindingExpression:Path=Brush.Value; DataItem='LogItem' (HashCode=33650236); target element is 'TextBlock' (Name=''); target property is 'Foreground' (type 'Brush')";
-            CallStack = "New Log";
-            
-            LogType = Random.Shared.Next(0, 3) switch
-            {
-                0 => LogType.Error,
-                1 => LogType.Warning,
-                _ => LogType.Info
-            };
+            Message = log.Message;
+            CallStack = log.StackTrace;
+            LogLevel = log.Level;
 
             Brush =
-                LogType switch
+                LogLevel switch
                 {
-                    LogType.Error => ErrorBrush,
-                    LogType.Warning => WarningBrush,
+                    LogLevel.Error => ErrorBrush,
+                    LogLevel.Warning => WarningBrush,
                     _ => InfoBrush
                 };
         }
 
-        public LogType LogType { get; init; }
+        public LogLevel LogLevel { get; init; }
         public Brush Brush { get; init; }
         public string Message { get; init; }
         public string CallStack { get; init; }
     }
 
-    public class LogVM
+    public class LogListVM
     {
-        public LogVM()
+        public LogListVM()
         {
 
             LogItems.CollectionChanged += (sender, e) =>
             {
-                InfoLogCount.Value = LogItems.Count(item => item.LogType == LogType.Info);
-                WarningLogCount.Value = LogItems.Count(item => item.LogType == LogType.Warning);
-                ErrorLogCount.Value = LogItems.Count(item => item.LogType == LogType.Error);
+                InfoLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Info);
+                WarningLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Warning);
+                ErrorLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Error);
             };
 
             var filter = (LogItem item) =>
                 item.Message.Contains(Filter.Value) &&
-                item.LogType switch
+                item.LogLevel switch
                 {
-                    LogType.Info => IsInfoLogFiltered.Value,
-                    LogType.Warning => IsWarningLogFiltered.Value,
-                    LogType.Error => IsErrorLogFiltered.Value,
+                    LogLevel.Info => IsInfoLogFiltered.Value,
+                    LogLevel.Warning => IsWarningLogFiltered.Value,
+                    LogLevel.Error => IsErrorLogFiltered.Value,
                     _ => false
                 };
             FilteredItems = LogItems.ToFilteredReadOnlyObservableCollection(filter);
@@ -76,18 +67,26 @@ namespace OctbitEditor
             Observable.Merge(IsInfoLogFiltered,IsWarningLogFiltered,IsErrorLogFiltered)
                 .Subscribe(_ => FilteredItems.Refresh(filter));
 
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-            LogItems.Add(new LogItem());
-
             SelectedLogItem.Subscribe(item => SelectedLogMessage.Value = item?.Message??string.Empty);
             IsWarp.Subscribe(value => WarpVisibility.Value = value ? ScrollBarVisibility.Disabled : ScrollBarVisibility.Visible);
-        }
 
+
+            ClearCommand = new DelegateCommand(() => { LogItems.Clear(); });
+
+            Log.Logged += OnLogged;
+            Log.Trace("CoreSystem initialized");
+            Log.Info("CoreSystem initialized");
+            Log.Warning("CoreSystem initialized");
+            Log.Error("CoreSystem initialized");
+        }
+        private void OnLogged(LogObject log)
+        {
+
+            lock (LogItems)
+            {
+                LogItems.Add(new(log));
+            }
+        }
 
         // リスト
         public ReactiveCollection<LogItem> LogItems { get; } = new();
@@ -108,6 +107,8 @@ namespace OctbitEditor
         public ReactivePropertySlim<int> InfoLogCount { get; } = new(0);
         public ReactivePropertySlim<int> WarningLogCount { get; } = new(0);
         public ReactivePropertySlim<int> ErrorLogCount { get; } = new(0);
+
+        public ICommand ClearCommand { get; }
 
         // レイアウト
         public ReactivePropertySlim<bool> IsWarp { get; } = new(false);

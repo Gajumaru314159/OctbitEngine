@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                     xmlns:local="clr-namespace:CommonView"
+                    xmlns:conv="clr-namespace:CommonView.Converters"
+                    xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
                     >
 
     <!--Shared-->
@@ -722,6 +724,7 @@
     <!--Label-->
     <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
         <Setter Property="Foreground" Value="{DynamicResource Text}"/>
+        <Setter Property="Padding" Value="0"/>
     </Style>
 
     <!--TextBox-->
@@ -1165,7 +1168,7 @@
     </Style>
 
 
-
+    <!--TreeView-->
     <Style x:Key="TreeViewItemArrowStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Template">
             <Setter.Value>
@@ -1340,8 +1343,201 @@
     </Style>
 
 
+    <!--MultiSelectTreeView-->
+    <conv:ThicknessLeftConverter x:Key="ThicknessLeftConverter"/>
+    <Style TargetType="{x:Type ms:MultiSelectTreeViewItem}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding (VirtualizingStackPanel.IsVirtualizing), RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, FallbackValue=True}"
+				Value="True">
+                <Setter Property="ItemsControl.ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
+
+        <!-- Windows Classic Theme colours -->
+        <Setter Property="BorderBrushSelected" Value="{x:Null}"/>
+        <Setter Property="BackgroundSelected" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+        <Setter Property="ForegroundSelected" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+        <Setter Property="BorderBrushInactive" Value="{x:Null}"/>
+        <Setter Property="BackgroundInactive" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+        <Setter Property="ForegroundInactive" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
+        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="{Binding (VirtualizingStackPanel.VirtualizationMode), RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, FallbackValue=Standard}"/>
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="False"/>
+        <Setter Property="Panel.Background" Value="#00FFFFFF"/>
+        <Setter Property="Control.HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}, FallbackValue=Left}"/>
+        <Setter Property="Control.VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}, FallbackValue=Center}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="HoverHighlighting" Value="{Binding (ms:MultiSelectTreeView.HoverHighlighting), RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Mode=OneWay, FallbackValue=False}"/>
+        <Setter Property="ItemIndent" Value="{Binding (ms:MultiSelectTreeView.ItemIndent), RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Mode=OneWay, FallbackValue=13}"/>
+        <Setter Property="IsKeyboardMode" Value="{Binding (ms:MultiSelectTreeView.IsKeyboardMode), RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Mode=OneWay, FallbackValue=False}"/>
+
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ms:MultiSelectTreeViewItem}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="12"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!--Expandボタン-->
+                            <ToggleButton x:Name="Expander" ClickMode="Press"
+                                      Cursor="Hand"
+                                      Focusable="False"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      Style="{StaticResource TreeViewItemArrowStyle}"
+                                      VerticalAlignment="Center"/>
+
+                            <!--Header-->
+                            <Grid Grid.Column="1" x:Name="ElementGrid">
+                                <Border x:Name="headerBorder"
+									Padding="{TemplateBinding Padding}"
+									Background="{TemplateBinding Panel.Background}"
+									SnapsToDevicePixels="True"
+									VerticalAlignment="Center">
+                                    <ContentPresenter Name="PART_Header"
+										FocusManager.IsFocusScope="True"
+										Content="{TemplateBinding HeaderedContentControl.Header}"
+										ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+										ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
+										ContentTemplateSelector="{TemplateBinding HeaderedItemsControl.HeaderTemplateSelector}"
+										ContentSource="Header"
+										HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+										VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+										SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"/>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                        
+                        <!--インデント-->
+                        <Grid Name="ItemsHostGrid" Margin="{TemplateBinding ItemIndent, Converter={StaticResource ThicknessLeftConverter}}">
+                            <ItemsPresenter Name="ItemsHost"/>
+                        </Grid>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+
+                        <!-- 非表示 -->
+                        <Trigger Property="IsVisible" Value="False">
+                            <Setter Property="FrameworkElement.Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--選択時-->
+                        <Trigger Property="ms:MultiSelectTreeViewItem.IsSelected" Value="True">
+                            <Setter Property="Control.Background" Value="{Binding BackgroundSelected, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushSelected, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="TextElement.Foreground" Value="{Binding ForegroundSelected, RelativeSource={RelativeSource Self}}"/>
+                        </Trigger>
+
+                        <!--選択時非アクティブ-->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=IsActive, FallbackValue=False}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushInactive, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="Control.Background" Value="{Binding BackgroundInactive, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="TextElement.Foreground" Value="{Binding ForegroundInactive, RelativeSource={RelativeSource Self}}"/>
+                        </MultiDataTrigger>
+
+                        <!-- Make all selected items grey when none of this TreeView's items is focused (i.e. the TreeView is not focused) -->
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Path=IsKeyboardFocusWithin, FallbackValue=False}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Path=ContextMenu.IsOpen, FallbackValue=False}" Value="False"/>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushInactive, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="Control.Background" Value="{Binding BackgroundInactive, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="TextElement.Foreground" Value="{Binding ForegroundInactive, RelativeSource={RelativeSource Self}}"/>
+                        </MultiDataTrigger>
+
+                        <!--閉じている-->
+                        <Trigger Property="IsExpanded" Value="False">
+                            <Setter Property="Visibility" TargetName="ItemsHostGrid" Value="Collapsed"/>
+                        </Trigger>
+
+                        <!--子要素がない-->
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
+    <Style TargetType="{x:Type ms:MultiSelectTreeView}">
+        <Setter Property="Panel.Background" Value="{DynamicResource Background}"/>
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="False" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Control.VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ms:MultiSelectTreeView}">
+                    <Border Name="Bd" SnapsToDevicePixels="True">
+                        <ScrollViewer Name="scrollViewer"
+							          CanContentScroll="True"
+							          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+							          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+							          Background="{TemplateBinding Panel.Background}"
+							          Padding="{TemplateBinding Control.Padding}"
+							          SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+							          Focusable="False">
+                            <Grid Margin="0">
+                                <ItemsPresenter Name="content"/>
+                                <Canvas>
+                                    <Border Name="selectionBorder"
+										BorderBrush="{Binding BorderBrushSelectionRectangle, RelativeSource={RelativeSource AncestorType=ms:MultiSelectTreeView}}"
+										Background="{Binding BackgroundSelectionRectangle, RelativeSource={RelativeSource AncestorType=ms:MultiSelectTreeView}}"
+										BorderThickness="1"
+										VerticalAlignment="Top" HorizontalAlignment="Left"
+										Visibility="Collapsed"/>
+                                </Canvas>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="Panel.Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="True">
+                <Setter Property="ItemsControl.ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+
+    <!--ListBox-->
     <Style TargetType="{x:Type ListBoxItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Padding" Value="4,1"/>
@@ -1641,7 +1837,5 @@
         </Setter>
 
     </Style>
-
-
 
 </ResourceDictionary>

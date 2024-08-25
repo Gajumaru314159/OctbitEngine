@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             xmlns:menu="clr-namespace:CommonView.Menu;assembly=CommonView"
+             xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource MenuBackground}" 
              mc:Ignorable="d"
@@ -14,55 +16,105 @@
         <local:OutlinerVM/>
     </UserControl.DataContext>
 
+    <UserControl.Resources>
+        <BitmapImage x:Key="EyeOpen" UriSource="/Resources/Icons/eye_open.png"/>
+        <BitmapImage x:Key="EyeClose" UriSource="/Resources/Icons/eye_close.png"/>
+        <BitmapImage x:Key="Active" UriSource="/Resources/Icons/active.png/"/>
+
+        <Style x:Key="ActiveIcon" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Margin" Value="0,0,2,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="DockPanel.Dock" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <TextBlock x:Name="Icon" Width="15" Height="15" Text="●" Foreground="#00FF00"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Icon" Property="Foreground" Value="{DynamicResource Foreground}"/>
+                                <Setter TargetName="Icon" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="VisibleIcon" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="Margin" Value="0,0,2,0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Image x:Name="Icon" Source="{StaticResource EyeOpen}" Width="15" Height="15"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="Icon" Property="Source" Value="{StaticResource EyeClose}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <DockPanel>
+        
+        <!--検索ボックス-->
         <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
 
+        <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
             <TextBlock Text="1/8 item selected"/>
         </Border>
-        
-        <TreeView ItemsSource="{Binding Children}" Background="Transparent">
-            <TreeView.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
-                    <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
-                    <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
-                    <MenuItem Header="Paste As Child"/>
-                    <Separator/>
-                    <MenuItem Header="Rename" InputGestureText="F2"/>
-                    <MenuItem Header="Duplicate" InputGestureText="Ctrl+D"/>
-                    <MenuItem Header="Delete" InputGestureText="Delete"/>
-                    <Separator/>
-                    <MenuItem Header="Create Empty" InputGestureText="Ctrl+N"/>
-                    <MenuItem Header="Create Empty Parent"/>
-                    <MenuItem Header="Light">
-                        <MenuItem Header="Directional Ligtht"/>
-                        <MenuItem Header="Point Ligtht"/>
-                        <MenuItem Header="Spot Ligtht"/>
-                        <Separator/>
-                        <MenuItem Header="Reflection Probe"/>
-                    </MenuItem>
-                    <MenuItem Header="Debug">
-                        <MenuItem Header="Memo"/>
-                    </MenuItem>
-
-                </ContextMenu>
-            </TreeView.ContextMenu>
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
-                        <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <TreeView.Resources>
-                <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                
+        <ms:MultiSelectTreeView ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}" SelectedItems="{Binding SelectedItems}">
+            <ms:MultiSelectTreeView.Resources>
+                <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
                 </Style>
-            </TreeView.Resources>
-        </TreeView>
+            </ms:MultiSelectTreeView.Resources>
+            <ms:MultiSelectTreeView.ContextMenu>
+                <ContextMenu ItemsSource="{Binding MenuItems.Children}">
+                    <ContextMenu.Resources>
+                        <Image x:Key="MenuIconResource" Height="16" Width="16" Source="{Binding Icon}" x:Shared="False" />
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="Header" Value="{Binding Header}" />
+                            <Setter Property="InputGestureText" Value="{Binding Gesture}" />
+                            <Setter Property="ItemsSource" Value="{Binding Children}"/>
+                            <Setter Property="Icon" Value="{StaticResource MenuIconResource}" />
+                                <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                    <Setter Property="Template" >
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Separator/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Resources>
+                </ContextMenu>
+            </ms:MultiSelectTreeView.ContextMenu>
+            <ms:MultiSelectTreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                        <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}"/>
+                        <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}"/>
+                        <base:EditableTextBlock Text="{Binding Name}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </ms:MultiSelectTreeView.ItemTemplate>
+        </ms:MultiSelectTreeView>
         
     </DockPanel>
 </UserControl>

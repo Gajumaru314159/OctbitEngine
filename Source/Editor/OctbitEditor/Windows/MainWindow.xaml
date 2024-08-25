@@ -17,6 +17,11 @@
         <local:MainWindowVM/>
     </Window.DataContext>
 
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}"/>
+        <KeyBinding Gesture="Ctrl+Y" Command="{Binding RedoCommand}"/>
+    </Window.InputBindings>
+
     <DockPanel>
 
         <DockPanel DockPanel.Dock="Top" >
@@ -38,8 +43,8 @@
                     <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
                 </MenuItem>
                 <MenuItem Header="_Edit">
-                    <MenuItem Header="Undo" InputGestureText="Ctrl+Z"/>
-                    <MenuItem Header="Redo" InputGestureText="Ctrl+Y"/>
+                    <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding UndoCommand}" IsEnabled="{Binding CanUndo}"/>
+                    <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding RedoCommand}" IsEnabled="{Binding CanRedo}"/>
                     <MenuItem Header="Undo History" InputGestureText="Ctrl+Y"/>
                     <Separator/>
                     <MenuItem Header="Select All" InputGestureText="Ctrl+A"/>
@@ -175,6 +180,7 @@
                                                 <Label Content="Material"/>
                                             </StackPanel>
                                         </Expander>
+                                        <ProgressBar Width="60" Height="20" Value="60" Maximum="100" Minimum="0"/>
                                     </StackPanel>
                                 </DockPanel>
                             </avalonDock:LayoutAnchorable>
@@ -190,7 +196,7 @@
                         <avalonDock:LayoutDocumentPane DockWidth="400">
                             <avalonDock:LayoutDocument Title="Log">
 
-                                <local:Log/>
+                                <local:LogList/>
 
 
                             </avalonDock:LayoutDocument>

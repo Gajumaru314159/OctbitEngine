@@ -11,8 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\active.png" />
     <None Remove="Resources\Icons\down.png" />
     <None Remove="Resources\Icons\error.png" />
+    <None Remove="Resources\Icons\eye_close.png" />
+    <None Remove="Resources\Icons\eye_open.png" />
     <None Remove="Resources\Icons\global.png" />
     <None Remove="Resources\Icons\icon.ico" />
     <None Remove="Resources\Icons\icon_design.apd" />
@@ -44,6 +47,7 @@
     <None Remove="Resources\Icons\wire.png" />
     <None Remove="Resources\Icons\wire_shading.png" />
     <None Remove="Resources\Icons\wrap.png" />
+    <None Remove="Resources\Splashes\splash_000.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,18 +56,29 @@
 
   <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
-    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1" />
-    <PackageReference Include="LivetCask" Version="4.0.2" />
-    <PackageReference Include="ReactiveProperty" Version="9.6.0" />
+    <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="LivetCask" Version="4.0.2">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
+    <PackageReference Include="ReactiveProperty" Version="9.6.0">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CommonView\CommonView.csproj" />
+    <ProjectReference Include="..\OctbitEngine\OctbitEngine.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\active.png" />
     <Resource Include="Resources\Icons\down.png" />
     <Resource Include="Resources\Icons\error.png" />
+    <Resource Include="Resources\Icons\eye_close.png" />
+    <Resource Include="Resources\Icons\eye_open.png" />
     <Resource Include="Resources\Icons\global.png" />
     <Resource Include="Resources\Icons\icon.ico" />
     <Resource Include="Resources\Icons\icon_design.apd" />
@@ -95,6 +110,7 @@
     <Resource Include="Resources\Icons\wire.png" />
     <Resource Include="Resources\Icons\wire_shading.png" />
     <Resource Include="Resources\Icons\wrap.png" />
+    <Resource Include="Resources\Splashes\splash_000.png" />
   </ItemGroup>
 
 </Project>

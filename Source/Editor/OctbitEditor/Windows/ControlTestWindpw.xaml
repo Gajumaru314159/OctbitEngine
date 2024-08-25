@@ -131,7 +131,6 @@
         <Border Height="10"/>
 
         <!--TextBox-->
-
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -142,15 +141,21 @@
         </Grid>
         <Border Height="10"/>
 
+        <!--GroupBox-->
+        <GroupBox Header="group A">
+            <StackPanel >
+                <RadioButton Content="AAA"/>
+                <RadioButton Content="BBB"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!--StatusBar ProgressBar-->
         <StatusBar VerticalAlignment="Bottom">
-            <ProgressBar Width="60" Height="20" Value="60"/>
+            <ProgressBar Width="100" Height="20" Value="60" Maximum="100" Minimum="0"/>
             <Label Content="60%"/>
             <Separator/>
             <Label Content="処理しています..."/>
-        </StatusBar>
-        <Border Height="10"/>
-
-        <StatusBar/>
+            </StatusBar>
         <Border Height="10"/>
 
 
