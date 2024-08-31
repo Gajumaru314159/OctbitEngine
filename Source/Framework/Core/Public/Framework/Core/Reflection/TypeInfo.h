@@ -215,6 +215,13 @@ namespace ob::core {
 			return nullptr;
 		}
 
+	public:
+
+		static const TypeInfo* Find(const Type& type);
+		static const TypeInfo* Find(StringView type);
+		static const TypeInfo* Find(Type::hash_type hash);
+		static void Visit(const std::function<void(const TypeInfo&)> func);
+
 	};
 
 }

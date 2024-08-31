@@ -53,6 +53,8 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	class Type {
 	public:
+		using hash_type = u64;
+	public:
 		//@―---------------------------------------------------------------------------
 		//! @brief  Type取得
 		//@―---------------------------------------------------------------------------
@@ -152,7 +154,7 @@ namespace ob::core {
 		//! @details	プラットフォームによらず固定です。
 		//! @note		内部実装は型名のハッシュ値です。
 		//@―---------------------------------------------------------------------------
-		constexpr u64 hash() const { return m_hash; }
+		constexpr hash_type hash() const { return m_hash; }
 
 		//@―---------------------------------------------------------------------------
 		//! @brief		型比較を行う
@@ -162,7 +164,7 @@ namespace ob::core {
 		constexpr bool is() const { return *this == Type::Get<T>(); }
 
 		//! @cond
-		constexpr operator u32()const { return m_hash; }
+		constexpr operator hash_type()const { return m_hash; }
 		constexpr bool operator==(Type rhs)const { return m_hash == rhs.m_hash; }
 		constexpr bool operator!=(Type rhs)const { return m_hash != rhs.m_hash; }
 		constexpr bool operator<(Type rhs)const { return m_hash < rhs.m_hash; }
@@ -171,13 +173,18 @@ namespace ob::core {
 
 	private:
 
+		friend class TypeInfoManager;
+		Type(Type::hash_type hash) {
+			m_hash = hash;
+		}
+
 		class InvalidType {
 
 		};
 
 	private:
 		StringView	m_name;
-		u64			m_hash;
+		hash_type	m_hash;
 	};
 
 

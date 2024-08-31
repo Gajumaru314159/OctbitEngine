@@ -17,27 +17,11 @@ namespace ob::core {
 
 		TypeInfoManager();
 
-		void visit(const std::function<void(const TypeInfo&)> func) const {
-			for (auto& [type, info] : m_infos) func(info);
-		}
-
-		const TypeInfo* find(Type type)const {
-			if (auto itr = m_infos.find(type); itr != m_infos.end()) {
-				return &itr->second;
-			}
-			return nullptr;
-		}
-		const TypeInfo* find(StringView type)const {
-			return find(Type(type));
-		}
-
-
-		TypeInfo& registerInfo(Type type) {
-			auto& info = m_infos[type];
-			info = {};
-			info.type = type;
-			return info;
-		}
+		void visit(const std::function<void(const TypeInfo&)> func) const;
+		const TypeInfo* find(Type type)const;
+		const TypeInfo* find(StringView type)const;
+		const TypeInfo* find(Type::hash_type type)const;
+		TypeInfo& registerInfo(Type type);
 
 	public:
 

@@ -32,4 +32,27 @@ namespace ob::core {
 		return false;
 	}
 
+	const TypeInfo* TypeInfo::Find(const Type& type) {
+		if (auto manager = TypeInfoManager::Get()) {
+			return manager->find(type);
+		}
+		return nullptr;
+	}
+	const TypeInfo* TypeInfo::Find(StringView type) {
+		if (auto manager = TypeInfoManager::Get()) {
+			return manager->find(type);
+		}
+		return nullptr;
+	}
+	const TypeInfo* TypeInfo::Find(Type::hash_type hash) {
+		if (auto manager = TypeInfoManager::Get()) {
+			return manager->find(hash);
+		}
+		return nullptr;
+	}
+	void TypeInfo::Visit(const std::function<void(const TypeInfo&)> func) {
+		if (auto manager = TypeInfoManager::Get()) {
+			manager->visit(func);
+		}
+	}
 }
