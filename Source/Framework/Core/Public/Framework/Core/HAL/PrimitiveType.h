@@ -29,6 +29,7 @@ namespace ob::core {
     using byte = u8;	    //!< バイト値
 
 
+    using Bool = bool;  //!< 真偽値型
     using Char = char;  //!< 文字型
 
 

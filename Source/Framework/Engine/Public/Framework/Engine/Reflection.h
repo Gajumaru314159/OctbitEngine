@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Reflection/TypeRegister.h>
+#include <Framework/Core/Reflection/PrimitiveRegister.h>
 
 OB_REGISTER_RTTI(ob::engine::Entity);
 OB_REGISTER_RTTI(ob::engine::Component);

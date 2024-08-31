@@ -147,10 +147,18 @@ namespace ob::core::internal {
 			m_info.bases.emplace(Type::Get<std::underlying_type_t<T>>());
 			m_info.isEnum = true;
 
-			// コンストラクタ登録
-			auto& ctor = m_info.constructors.emplace_back();
-			ctor.arguments = { {Type::Get<T>(),"value"}};
-			ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
+			// コンストラクタ登録(デフォルト)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>()); };
+			}
+
+			// コンストラクタ登録(初期値あり)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.arguments = { {Type::Get<T>(),"value"} };
+				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
+			}
 
 			// 値取得
 			m_info.enumValueGetter = [](const AnyReference& instance) {

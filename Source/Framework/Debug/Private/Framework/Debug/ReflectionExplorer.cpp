@@ -15,7 +15,9 @@ namespace ob::debug {
 	}
 
 	void ReflectionExplorer::draw(const TypeInfo& info) {
+
 		m_buffer = info.type.name();
+		if (auto tag = info.findTag("DisplayName")) m_buffer = tag.value();
 		if (ImGui::Selectable(m_buffer.data())) {
 			m_selected = info.type;
 		}
