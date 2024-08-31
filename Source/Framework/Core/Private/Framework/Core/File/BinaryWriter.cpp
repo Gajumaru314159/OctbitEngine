@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Core/File/BinaryReader.h>
+#include <Framework/Core/File/BinaryWriter.h>
 #include <Framework/Core/File/Stream.h>
 
 namespace ob::core {
@@ -11,170 +11,66 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//! 
-	//! @details ストリームからバイナリデータを読み込む。コンストラクタに渡す Stream はBinaryReaderより後に解放される必要があります。
+	//! @details ストリームからバイナリデータを読み込む。コンストラクタに渡す Stream はBinaryWriterより後に解放される必要があります。
 	//! @param stream	 入力ストリーム
 	//! @param byteOrder 入力ストリームのバイトオーダー
 	//@―---------------------------------------------------------------------------
-	BinaryReader::BinaryReader(Stream& stream,ByteOrder byteOrder)
+	BinaryWriter::BinaryWriter(Stream& stream,ByteOrder byteOrder)
 		: m_stream(stream)
+		, m_byteOrder(byteOrder)
 	{
-		setByteOrder(byteOrder);
-		OB_ASSERT(stream.canRead(),"読み取り可能なストリームを設定してください。");
+		OB_ASSERT(stream.canWrite(),"書き込み可能なストリームを設定してください。");
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-	BinaryReader::~BinaryReader()
+	BinaryWriter::~BinaryWriter()
 	{
+		m_stream.flush();
 	}
 
 	//@―---------------------------------------------------------------------------
-	//! @brief   s8 を読み込む
+	//! @brief  値の書き込み
 	//@―---------------------------------------------------------------------------
-	s8 BinaryReader::readS8()
-	{
-		s8 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeInt8(s8 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   s16 を読み込む
-	//@―---------------------------------------------------------------------------
-	s16 BinaryReader::readS16()
-	{
-		s16 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeInt16(s16 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   s32 を読み込む
-	//@―---------------------------------------------------------------------------
-	s32 BinaryReader::readS32()
-	{
-		s32 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeInt32(s32 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   s64 を読み込む
-	//@―---------------------------------------------------------------------------
-	s64 BinaryReader::readS64()
-	{
-		s64 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
-
+	void BinaryWriter::writeInt64(s64 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   u8 を読み込む
-	//@―---------------------------------------------------------------------------
-	u8 BinaryReader::readU8()
-	{
-		u8 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeUInt8(u8 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   u16 を読み込む
-	//@―---------------------------------------------------------------------------
-	u16 BinaryReader::readU16()
-	{
-		u16 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeUInt16(u16 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   u32 を読み込む
-	//@―---------------------------------------------------------------------------
-	u32 BinaryReader::readU32()
-	{
-		u32 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeUInt32(u32 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   u64 を読み込む
-	//@―---------------------------------------------------------------------------
-	u64 BinaryReader::readU64()
-	{
-		u64 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeUInt64(u64 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   f32 を読み込む
-	//@―---------------------------------------------------------------------------
-	f32 BinaryReader::readF32()
-	{
-		f32 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeFloat(f32 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   f64 を読み込む
-	//@―---------------------------------------------------------------------------
-	f64 BinaryReader::readF64()
-	{
-		f64 buffer;
-		if (!readImpl(&buffer, sizeof(buffer)))return 0;
-		return buffer;
+	void BinaryWriter::writeDouble(f64 value) {
+		write(&value, sizeof(value));
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief   読み込み
-	//@―---------------------------------------------------------------------------
-	bool BinaryReader::readImpl(void* dest, size_t size) {
-		if (m_stream.read(dest, size)) {
-			if (m_byteOrder != Endian::Get()) {
-				auto bytes = reinterpret_cast<byte*>(dest);
-				std::reverse(bytes, bytes + size);
-			}
-			return true;
-		} else {
-			return false;
-		}
+	void BinaryWriter::write(const void* buffer, size_t count) {
+		m_stream.write(buffer, count);
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  バイト列読み込み
-	//! 
-	//! @param buffer 　 読み込みデータ格納先のポインタ
-	//! @param byteCount 読み込むバイト数
-	//! @return 読み込みに成功したか
-	//@―---------------------------------------------------------------------------
-	bool BinaryReader::read(void* buffer, size_t count)
-	{
-		return m_stream.read(buffer, count);
+	void BinaryWriter::seek(offset_t offset) {
+		m_stream.seek(offset, SeekOrigin::Current);
 	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  シーク
-	//! 
-	//! @param offset 　 基準からの移動量
-	//! @param origin	 基準位置
-	//! @return 0 のとき成功
-	//@―---------------------------------------------------------------------------
-	void BinaryReader::seek(offset_t offset,SeekOrigin origin)
-	{
-		m_stream.seek(offset, origin);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  ストリームの終わりか
-	//@―---------------------------------------------------------------------------
-	bool BinaryReader::isEOF() const
-	{
-		return (m_stream.position() >= m_stream.size());
+	void BinaryWriter::flush() {
+		m_stream.flush();
 	}
 
 }
