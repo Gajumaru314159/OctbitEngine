@@ -754,12 +754,14 @@
         <Setter Property="CaretBrush" Value="{DynamicResource Text}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
         <Setter Property="SelectionBrush" Value="{DynamicResource Accent}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="SelectionOpacity" Value="0.6"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="1,0"/>
+        <Setter Property="Margin" Value="0,0"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="AllowDrop" Value="True"/>
         <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="Template">
@@ -1403,6 +1405,7 @@
 									    VerticalAlignment="Center">
                                         <ContentPresenter Name="PART_Header"
 										    FocusManager.IsFocusScope="True"
+                                            FocusVisualStyle="{StaticResource FocusVisual}"
 										    Content="{TemplateBinding HeaderedContentControl.Header}"
 										    ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
 										    ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
@@ -1594,7 +1597,7 @@
     <!-- ボタンの長さ -->
     <sys:Double x:Key="ScrollBarRepeatButtonSize">10</sys:Double>
     <!-- スクロールバーのマージン -->
-    <sys:Double x:Key="ScrollBarMarginSize">1</sys:Double>
+    <sys:Double x:Key="ScrollBarMarginSize">0</sys:Double>
     <!-- スクロールバーの色-->
     <SolidColorBrush x:Key="ScrollBarColorBrush" Color="#5F5F5F" />
     <!-- トラック（レーン）の色 -->

@@ -37,7 +37,8 @@ namespace CommonView
 
             MouseDoubleClick += EditableTextBlock_MouseDoubleClick;
             m_textBox.PreviewKeyDown += TextBox_KeyDown;
-            m_textBox.LostFocus += TextBox_LostFocus;            
+            m_textBox.LostFocus += TextBox_LostFocus;   
+            m_textBox.LostKeyboardFocus += TextBox_LostFocus;
         }
 
 
@@ -110,21 +111,6 @@ namespace CommonView
                 m_isEditMode = false;
                 OnIsEditModeChanged();
                 e.Handled = true;
-            }
-        }
-
-        private void TextBox_PreKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var binding = BindingOperations.GetBindingExpression(this, TextBox.TextProperty);
-                binding?.UpdateSource();
-
-                // if (ChangeFocusWhenEnterKeyPressed)
-                {
-                    var direction = (Keyboard.Modifiers == ModifierKeys.Shift) ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next;
-                    MoveFocus(new TraversalRequest(direction));
-                }
             }
         }
 

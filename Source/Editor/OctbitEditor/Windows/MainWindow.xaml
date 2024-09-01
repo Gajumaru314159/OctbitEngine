@@ -22,7 +22,7 @@
         <KeyBinding Gesture="Ctrl+Y" Command="{Binding RedoCommand}"/>
     </Window.InputBindings>
 
-    <DockPanel>
+    <DockPanel x:Name="Root">
 
         <DockPanel DockPanel.Dock="Top" >
 

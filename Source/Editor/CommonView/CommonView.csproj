@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="LivetCask" Version="4.0.2" />
-    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
+    <PackageReference Include="MultiSelectTreeView" Version="1.0.9">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
     <PackageReference Include="ReactiveProperty" Version="9.6.0" />
   </ItemGroup>
 

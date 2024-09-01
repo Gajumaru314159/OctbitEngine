@@ -95,7 +95,7 @@
             <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
             <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
 
-            <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" VerticalAlignment="Center"  TabIndex="4"/>
+            <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" TabIndex="4"/>
         </DockPanel>
         
         <!--下部-->
