@@ -77,7 +77,10 @@ namespace OctbitEngine.Runtime
                     if (s_noticeTypeDictionary.TryGetValue(typeHash, out var noticeType))
                     {
                         object? notice = null;
-                        s_noticeReceiberDictionary[typeHash].Invoke(null, new object[] { notice });
+                        if(notice != null)
+                        {
+                            s_noticeReceiberDictionary[typeHash].Invoke(null, new object[] { notice });
+                        }
                     }
                     else
                     {

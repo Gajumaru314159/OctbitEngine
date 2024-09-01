@@ -42,7 +42,7 @@ namespace OctbitEngine.Runtime
             throw new NotImplementedException();
         }
 
-        private object? m_value;
+        private object? m_value = null;
 
     }
 

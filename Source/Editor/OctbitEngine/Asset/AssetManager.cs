@@ -13,7 +13,7 @@ namespace OctbitEngine.Asset
         public static char[] InvalidChars = Path.GetInvalidFileNameChars();
         public AssetManager()
         {
-            RootFolder = new AssetFolder("Assets");
+            RootFolder = new AssetFolder("Asset");
             LoadAssets();
         }
 

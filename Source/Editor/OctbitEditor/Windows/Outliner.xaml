@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
              xmlns:menu="clr-namespace:CommonView.Menu;assembly=CommonView"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource MenuBackground}" 
@@ -27,7 +29,7 @@
         <BitmapImage x:Key="Active" UriSource="/Resources/Icons/active.png/"/>
 
         <Style x:Key="ActiveIcon" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-            <Setter Property="Margin" Value="0,0,4,0"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -35,7 +37,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Ellipse x:Name="Icon" Width="10" Height="10" Fill="#00FF00"/>
+                        <Border Background="Transparent" Padding="2,4">
+                            <Ellipse x:Name="Icon" Width="8" Height="8" Fill="#00FF00"/>
+                        </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="False">
                                 <Setter TargetName="Icon" Property="Fill" Value="{DynamicResource Foreground}"/>
@@ -66,6 +70,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+        </Style>
     </UserControl.Resources>
 
     <DockPanel>
@@ -77,17 +86,8 @@
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
             <TextBlock Text="{Binding SelectionInfo}"/>
         </Border>
-                
-        <ms:MultiSelectTreeView ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}" SelectedItems="{Binding SelectedItems}"
-                                
-                                
-                                >
-            <ms:MultiSelectTreeView.Resources>
-                <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
-                    <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
-                </Style>
-            </ms:MultiSelectTreeView.Resources>
+
+        <ms:MultiSelectTreeView ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}" SelectedItems="{Binding SelectedItems}">
             <ms:MultiSelectTreeView.ContextMenu>
                 <ContextMenu ItemsSource="{Binding MenuItems.Children}">
                     <ContextMenu.Resources>
@@ -115,12 +115,12 @@
             </ms:MultiSelectTreeView.ContextMenu>
             <ms:MultiSelectTreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
+                    <DockPanel>
                         <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                        <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}"/>
-                        <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}"/>
-                        <base:EditableTextBlock Text="{Binding Name}" Margin="2,-2"/>
-                    </StackPanel>
+                        <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
+                        <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
+                        <base:EditableTextBlock Text="{Binding Name}" Margin="2,0" Focusable="False"/>
+                    </DockPanel>
                 </HierarchicalDataTemplate>
             </ms:MultiSelectTreeView.ItemTemplate>
         </ms:MultiSelectTreeView>

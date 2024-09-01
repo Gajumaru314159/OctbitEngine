@@ -27,32 +27,32 @@
                     <Setter Property="Margin" Value="2,0,4,0"/>
                 </Style>
             </DockPanel.Resources>
-            <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error" Margin="0">
+            <ToggleButton IsChecked="{Binding IsErrorLogFiltered.Value}" ToolTip="Error" Margin="0"  TabIndex="5">
                 <DockPanel>
                     <Image Source="/Resources/Icons/error.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding ErrorLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center" VerticalAlignment="Center"/>                    
                 </DockPanel>
             </ToggleButton>
-            <ToggleButton IsChecked="{Binding IsWarningLogFiltered.Value}" ToolTip="Warning">
+            <ToggleButton IsChecked="{Binding IsWarningLogFiltered.Value}" ToolTip="Warning" TabIndex="4">
                 <DockPanel>
                     <Image Source="/Resources/Icons/warning.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding WarningLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
                 </DockPanel>
             </ToggleButton>
-            <ToggleButton IsChecked="{Binding IsInfoLogFiltered.Value}" ToolTip="Info">
+            <ToggleButton IsChecked="{Binding IsInfoLogFiltered.Value}" ToolTip="Info" TabIndex="3">
                 <DockPanel>
                     <Image Source="/Resources/Icons/info.png" Style="{StaticResource ButtonImage}"/>
                     <TextBlock Text="{Binding InfoLogCount.Value,FallbackValue=0}" HorizontalAlignment="Center"  VerticalAlignment="Center"/>
                 </DockPanel>
             </ToggleButton>
 
-            <ToggleButton IsChecked="{Binding IsWarp.Value}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="32">
+            <ToggleButton IsChecked="{Binding IsWarp.Value}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="32" TabIndex="2">
                 <Image Source="/Resources/Icons/wrap.png" DockPanel.Dock="Right" Style="{StaticResource ButtonImage}"/>
             </ToggleButton>
 
-            <Button Content="Clear" Command="{Binding ClearCommand}" DockPanel.Dock="Right" Margin="0,0,1,0"/>
+            <Button Content="Clear" Command="{Binding ClearCommand}" DockPanel.Dock="Right" Margin="0,0,1,0" TabIndex="1"/>
 
-            <base:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Right"/>
+            <base:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Right" TabIndex="0"/>
             
             <Border/>
 
@@ -91,14 +91,14 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}"/>
+            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" Focusable="False" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}"/>
 
 
-            <GridSplitter Grid.Row="1" Height="8" Margin="0,-4,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <GridSplitter Grid.Row="1" Height="8" Margin="0,-4,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">
                 <GridSplitter.Template>
                     <ControlTemplate TargetType="{x:Type GridSplitter}">
                         <Border  Background="Transparent">
-                            <Rectangle Fill="{DynamicResource Separator}" Height="1" VerticalAlignment="Center" />
+                            <Rectangle Fill="{DynamicResource Outline}" Height="1" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
                 </GridSplitter.Template>

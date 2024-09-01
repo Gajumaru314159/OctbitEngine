@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
              mc:Ignorable="d" 
@@ -13,6 +14,37 @@
     <UserControl.DataContext>
         <local:ExplorerVM/>
     </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="ContextMenu" ItemsSource="{Binding MenuItems.Children}">
+
+            <ContextMenu.Resources>
+                <Style TargetType="{x:Type MenuItem}">
+                    <Setter Property="Command" Value="{Binding Command}" />
+                    <Setter Property="Header" Value="{Binding Header}" />
+                    <Setter Property="InputGestureText" Value="{Binding Gesture}" />
+                    <Setter Property="ItemsSource" Value="{Binding Children}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                            <Setter Property="Template" >
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Separator/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContextMenu.Resources>
+        </ContextMenu>
+        
+        <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
+            <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+        </Style>
+        
+    </UserControl.Resources>
 
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
@@ -44,65 +76,66 @@
                     </Style.Resources>
                 </Style>
             </DockPanel.Resources>
-            <base:SearchBox DockPanel.Dock="Right"/>
-            <ToggleButton Content="★" DockPanel.Dock="Right"/>
-            <ToggleButton Content="◆" DockPanel.Dock="Right"/>
-            <ToggleButton Content="■" DockPanel.Dock="Right"/>
 
-            <Button DockPanel.Dock="Left">
+            <Button DockPanel.Dock="Left" TabIndex="0">
                 <Image Source="/Resources/Icons/left.png"/>
             </Button>
-            <Button DockPanel.Dock="Left">
+            <Button DockPanel.Dock="Left" TabIndex="1">
                 <Image Source="/Resources/Icons/right.png"/>
             </Button>
-            <Button DockPanel.Dock="Left">
+            <Button DockPanel.Dock="Left" TabIndex="2">
                 <Image Source="/Resources/Icons/up.png"/>
             </Button>
-            <Button DockPanel.Dock="Left">
+            <Button DockPanel.Dock="Left" TabIndex="3">
                 <Image Source="/Resources/Icons/reload.png"/>
             </Button>
-            <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" VerticalContentAlignment="Center"/>
+
+            <base:SearchBox DockPanel.Dock="Right" TabIndex="8"/>
+            <ToggleButton Content="★" DockPanel.Dock="Right" TabIndex="7"/>
+            <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
+            <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
+
+            <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" VerticalAlignment="Center"  TabIndex="4"/>
         </DockPanel>
+        
+        <!--下部-->
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" MinWidth="100"/>
                 <ColumnDefinition Width="4*" MinWidth="100"/>
             </Grid.ColumnDefinitions>
 
-            <TreeView ItemsSource="{Binding Children}" SelectedItemChanged="TreeView_SelectedItemChanged" MinWidth="100">
-                <TreeView.ItemTemplate>
+            <!--TreeView-->
+            <ms:MultiSelectTreeView ItemsSource="{Binding Children}" SelectedItems="{Binding SelectedItems}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
+                <ms:MultiSelectTreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="local:ExplorerItem" ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal">
+                        <DockPanel>
                             <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
                             <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                        </StackPanel>
+                        </DockPanel>
                     </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-                <TreeView.Resources>
-                    <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
-                        <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
-                    </Style>
-                </TreeView.Resources>
-            </TreeView>
+                </ms:MultiSelectTreeView.ItemTemplate>
+            </ms:MultiSelectTreeView>
 
+            <!--ListView-->
             <DockPanel Grid.Column="2" MinWidth="100" HorizontalAlignment="Stretch">
                 <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom">
                     <TextBlock Text="1 item selected"/>
                 </Border>
-                <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}">
+                <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}">
                     <ListBox.ItemTemplate>
                         <DataTemplate DataType="local:ExplorerItem">
-                            <StackPanel Orientation="Horizontal">
+                            <DockPanel>
                                 <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
                                 <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                            </StackPanel>
+                            </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </DockPanel>
 
-            <GridSplitter Grid.Column="1" Width="8" Margin="-4,0,0,0" HorizontalAlignment="Left">
+            <!--Splitter-->
+            <GridSplitter Grid.Column="1" Width="8" Margin="-4,0,0,0" HorizontalAlignment="Left" Focusable="False">
                 <GridSplitter.Template>
                     <ControlTemplate TargetType="{x:Type GridSplitter}">
                         <Border  Background="Transparent">

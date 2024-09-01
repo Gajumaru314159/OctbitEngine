@@ -12,7 +12,7 @@ namespace Common.Tree
         {
             while (node != null)
             {
-                yield return node;
+                yield return node!;
                 node = parent(node!);
             }
         }
@@ -27,7 +27,7 @@ namespace Common.Tree
 
         public static bool IsAncestorOf<T>(this T? node, Func<T, T?> parent)
         {
-            return node.AnyAncestor(parent, n => n.Equals(node));
+            return node.AnyAncestor(parent, n => n!.Equals(node));
         }
 
         public static IEnumerable<T> DepthFirst<T>(this T? node, Func<T, IEnumerable<T>> children)

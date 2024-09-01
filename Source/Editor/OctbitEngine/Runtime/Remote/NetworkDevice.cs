@@ -74,14 +74,16 @@ namespace OctbitEngine.Runtime
         {
             Debug.Assert(m_client != null);
 
-            int queryType = 0;
+            //int queryType = 0;
 
             m_client.Receive(m_buffer);
 
-            if(m_queryTypes.TryGetValue(queryType,out Type type))
-            {
-                // var o = Serializer.Deserialize(buffer,type);
-            }
+            //if(m_queryTypes.TryGetValue(queryType,out Type type))
+            //{
+            //    // var o = Serializer.Deserialize(buffer,type);
+            //}
+
+            DataReceived?.Invoke(m_buffer);
 
         }
 

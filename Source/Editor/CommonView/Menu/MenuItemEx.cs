@@ -29,6 +29,12 @@ namespace CommonView.Menu
         {
             Header = header;
         }
+        public DynamicCommandItem AddEmptyCommand(string header, string? gesture = null)
+        {
+            var item = new DynamicCommandItem(header,gesture, () => { },_=>false);
+            Children.Add(item);
+            return item;
+        }
         public DynamicCommandItem AddCommand(string header, Action action, Func<object?, bool>? canExecute = null)
         {
             var item = new DynamicCommandItem(header,action,canExecute);
@@ -63,7 +69,7 @@ namespace CommonView.Menu
             Gesture = string.Empty;
             Command = new DelegateCommand(action, canExecute);
         }
-        public DynamicCommandItem(string header, string gesture, Action action, Func<object?, bool>? canExecute = null)
+        public DynamicCommandItem(string header, string? gesture, Action action, Func<object?, bool>? canExecute = null)
         {
             Header = header;
             Gesture = gesture;

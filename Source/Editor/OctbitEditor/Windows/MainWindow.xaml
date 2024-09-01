@@ -141,7 +141,7 @@
                                         <Expander>
                                             <Expander.Header>
                                                 <DockPanel Margin="0">
-                                                    <Button Content="X" Width="16" Height="16" Padding="-10" DockPanel.Dock="Right" Background="Transparent"/>
+                                                    <Button Content="X" Focusable="False" Width="16" Height="16" Padding="-10" DockPanel.Dock="Right" Background="Transparent"/>
                                                     <TextBlock Text="Entity"/>
                                                 </DockPanel>
                                             </Expander.Header>
