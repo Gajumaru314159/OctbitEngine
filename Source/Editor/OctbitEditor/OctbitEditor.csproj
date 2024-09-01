@@ -62,7 +62,6 @@
     <PackageReference Include="LivetCask" Version="4.0.2">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
-    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
     <PackageReference Include="ReactiveProperty" Version="9.6.0">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
