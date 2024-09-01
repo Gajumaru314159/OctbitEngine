@@ -21,5 +21,8 @@
     <Page Update="Windows\ControlTestWindpw.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Windows\HistoryWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

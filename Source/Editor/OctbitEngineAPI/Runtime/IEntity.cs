@@ -1,36 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OctbitEngine.Asset;
-using Common.Math;
-
-namespace OctbitEngine.Runtime
+﻿namespace OctbitEngine.Runtime
 {
-    public interface IScene
-    {
-        public string Name { get; set; }
-        public IAssetFile? File { get; }
-        public IReadOnlyList<IEntity> Entities { get; }
-    }
-
-    public interface IComponent
-    {
-        IEntity Entity { get; }
-    }
-
-
-    public interface ITransformComponent : IComponent
-    {
-        public Vector3 Position { get; set; }
-        public Vector3 Rotation { get; set; }
-        public Vector3 Scale { get; set; }
-        public Vector3 WorldPosition { get; set; }
-        public Vector3 WorldRotation { get; set; }
-        public Vector3 WorldScale { get; set; }
-    }
-
     public interface IEntity
     {
         public IScene Scene { get; }
@@ -52,7 +21,8 @@ namespace OctbitEngine.Runtime
 
         public ITransformComponent Transform { get; }
 
-        public bool SetParent(IEntity parent);
+        public bool SetParent(IEntity? parent);
+        public bool AddChild(IEntity child);
         public IComponent? GetComponent(string type);
         public IComponent[] GetComponents(string type);
         public T? GetComponent<T>() where T : IComponent;

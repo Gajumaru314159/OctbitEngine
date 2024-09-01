@@ -16,5 +16,18 @@ namespace Common.Tree
                 node = parent(node!);
             }
         }
+        public static bool AnyAncestor<T>(this T? node, Func<T, T?> parent, Func<T, bool> pred)
+        {
+            return node.Ancestor(parent).Any(pred);
+        }
+        public static bool AllAncestor<T>(this T? node, Func<T, T?> parent, Func<T, bool> pred)
+        {
+            return node.Ancestor(parent).All(pred);
+        }
+
+        public static bool IsAncestorOf<T>(this T? node, Func<T, T?> parent)
+        {
+            return node.AnyAncestor(parent, n => n.Equals(node));
+        }
     }
 }

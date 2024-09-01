@@ -195,10 +195,10 @@
                         </avalonDock:LayoutDocumentPane>
                         <avalonDock:LayoutDocumentPane DockWidth="400">
                             <avalonDock:LayoutDocument Title="Log">
-
                                 <local:LogList/>
-
-
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="History">
+                                <local:HistoryWindow/>
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
                     </avalonDock:LayoutPanel>

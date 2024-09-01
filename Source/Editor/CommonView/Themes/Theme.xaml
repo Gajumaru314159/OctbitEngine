@@ -1360,12 +1360,10 @@
         </Style.Triggers>
 
         <!-- Windows Classic Theme colours -->
-        <Setter Property="BorderBrushSelected" Value="{x:Null}"/>
         <Setter Property="BackgroundSelected" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-        <Setter Property="ForegroundSelected" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-        <Setter Property="BorderBrushInactive" Value="{x:Null}"/>
-        <Setter Property="BackgroundInactive" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-        <Setter Property="ForegroundInactive" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="ForegroundSelected" Value="{DynamicResource Foreground}"/>
+        <Setter Property="BackgroundInactive" Value="{DynamicResource Accent}"/>
+        <Setter Property="ForegroundInactive" Value="{DynamicResource Foreground}"/>
 
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False"/>
@@ -1438,7 +1436,6 @@
                         <!--選択時-->
                         <Trigger Property="ms:MultiSelectTreeViewItem.IsSelected" Value="True">
                             <Setter Property="Control.Background" Value="{Binding BackgroundSelected, RelativeSource={RelativeSource Self}}"/>
-                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushSelected, RelativeSource={RelativeSource Self}}"/>
                             <Setter Property="TextElement.Foreground" Value="{Binding ForegroundSelected, RelativeSource={RelativeSource Self}}"/>
                         </Trigger>
 
@@ -1448,7 +1445,6 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=IsActive, FallbackValue=False}" Value="False"/>
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushInactive, RelativeSource={RelativeSource Self}}"/>
                             <Setter Property="Control.Background" Value="{Binding BackgroundInactive, RelativeSource={RelativeSource Self}}"/>
                             <Setter Property="TextElement.Foreground" Value="{Binding ForegroundInactive, RelativeSource={RelativeSource Self}}"/>
                         </MultiDataTrigger>
@@ -1460,7 +1456,6 @@
                                 <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type ms:MultiSelectTreeView}}, Path=ContextMenu.IsOpen, FallbackValue=False}" Value="False"/>
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}" Value="True"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Border.BorderBrush" Value="{Binding BorderBrushInactive, RelativeSource={RelativeSource Self}}"/>
                             <Setter Property="Control.Background" Value="{Binding BackgroundInactive, RelativeSource={RelativeSource Self}}"/>
                             <Setter Property="TextElement.Foreground" Value="{Binding ForegroundInactive, RelativeSource={RelativeSource Self}}"/>
                         </MultiDataTrigger>

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Attribute\" />
+    <Folder Include="Reflection\" />
   </ItemGroup>
 
 </Project>

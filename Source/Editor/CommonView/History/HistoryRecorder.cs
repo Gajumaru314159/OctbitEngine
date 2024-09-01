@@ -11,16 +11,14 @@ namespace CommonView.History
     {
         public static void Record(string operation,Action redo, Action undo, bool executeRedo = true)
         {
+            s_undoStack.Push(new(operation,DateTime.Now,undo,redo));
+            s_redoStack.Clear();
+
             if (executeRedo)
             {
                 redo();
                 Executed?.Invoke();
             }
-
-            s_undoStack.Push(new(operation,undo,redo));
-            s_redoStack.Clear();
-
-            Log.Info($"Recorded: {operation}");
         }
 
         public static void Undo()
@@ -31,7 +29,6 @@ namespace CommonView.History
                 record.Undo();
                 s_redoStack.Push(record);
                 Executed?.Invoke();
-                Log.Info($"Undo: {record.Operation}");
             }
         }
 
@@ -43,7 +40,6 @@ namespace CommonView.History
                 record.Redo();
                 s_undoStack.Push(record);
                 Executed?.Invoke();
-                Log.Info($"Redo: {record.Operation}");
             }
         }
 
@@ -66,7 +62,7 @@ namespace CommonView.History
         public static event ExecutedEvent? Executed;
 
 
-        public record HistoryRecord(string Operation,Action Undo,Action Redo);
+        public record HistoryRecord(string Operation,DateTime DateTime, Action Undo,Action Redo);
 
         private static Stack<HistoryRecord> s_undoStack = new();
         private static Stack<HistoryRecord> s_redoStack = new();
