@@ -9,6 +9,7 @@ using CommonView.History;
 using OctbitEngine.Runtime;
 using Livet;
 using Common.Tree;
+using Common.Linq;
 
 namespace OctbitEditor
 {
@@ -114,6 +115,25 @@ namespace OctbitEditor
 
         public OutlinerItem? Parent { get; set; }
 
+        public bool SetParent(OutlinerItem? parent)
+        {
+            // 循環
+            if (parent?.Parent.AnyAncestor(i => i.Parent, i => i==parent)??false) return false;
+
+            if (Parent != null)
+            {
+                Parent.Children.Remove(this);
+            }
+
+            Parent = parent;
+            Parent?.Children.Add(this);
+
+            Entity.SetParent(parent?.Entity);
+
+            return false;
+        }
+
+
         public string Name
         {
             get => Entity.Name;
@@ -199,7 +219,7 @@ namespace OctbitEditor
 
     }
 
-    public class OutlinerVM
+    public class OutlinerVM : ViewModel
     {
         public OutlinerVM()
         {
@@ -223,7 +243,20 @@ namespace OctbitEditor
             visit(null,Children, entity.Children);
 
             MenuItems = new DynamicGroupItem("Root");
+
             GenerateMenuItems();
+            InitializeCommands();
+
+            SelectedItems.CollectionChanged += (sender, e) =>
+            {
+                RaisePropertyChanged(nameof(SelectionInfo));
+            };
+        }
+
+        private void InitializeCommands()
+        {
+            CreateEntityCommand = new DelegateCommand(CreateEntity);
+            DeleteEntityCommand = new DelegateCommand(DeleteEntity);
         }
 
         private void GenerateMenuItems()
@@ -255,49 +288,92 @@ namespace OctbitEditor
 
         private void CreateEntity()
         {
-            if (SelectedItems.Count == 0) return;
-            var entity = new EntityMock() { Name="New Entity" };
-            entity.SetParent(SelectedItems[0].Entity);
+            var parent = SelectedItems.FirstOrNull();
+            var item = new OutlinerItem(new EntityMock() { Name="New Entity" });
 
-            SelectedItems[0].Children.Add(new(entity) { Parent = SelectedItems[0] });
+            History.Record(
+                "エンティティを作成",
+                () =>
+                {
+                    if (parent==null)
+                    {
+                        Children.Add(item);
+                    }
+                    else
+                    {
+                        item.SetParent(parent);
+                    }
+
+                    // TODO ツリーの更新、もしくはEntity総数の変更をトリガーにする
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                },
+                () =>
+                {
+                    item.SetParent(null);
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                }
+            );
+
         }
         private void DeleteEntity()
         {
-            if (SelectedItems.Count == 0) return;
-            var item = SelectedItems[0];
-            item.Parent?.Children.Remove(item);
+            var roots = SelectedItems.SelectRoot(i => i.Parent, i => i.Children);
+            var items = roots.Select(i => (parent:i.Parent,node:i)).ToList();
+
+            History.Record(
+                "エンティティを削除",
+                () =>
+                {
+                    foreach(var i in items)
+                    {
+                        if (i.parent==null)
+                        {
+                            Children.Remove(i.node);
+                        }
+                        else
+                        {
+                            i.node.SetParent(null);
+                        }
+                    }
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                },
+                () =>
+                {
+                    foreach (var i in items)
+                    {
+                        if (i.parent==null)
+                        {
+                            Children.Add(i.node);
+                        }
+                        else
+                        {
+                            i.node.SetParent(i.parent);
+                        }
+                    }
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                }
+            );
         }
 
         private void CutEntity()
         {
-            Log.Info("CutEntity");
+            // TODO ヒストリ対応
 
+            var roots = SelectedItems.SelectRoot(i => i.Parent, i => i.Children);
 
-            var set = SelectedItems.ToHashSet();
-            var list = new List<OutlinerItem>();
-
-            foreach (var item in SelectedItems)
+            foreach (var root in roots)
             {
-                bool isAncestor = false;
-                var parent = item.Parent;
-                while (parent != null)
+                if (root.Parent==null)
                 {
-                    if (set.Contains(parent))
-                    {
-                        isAncestor = true;
-                        break;
-                    }
-                    parent = parent.Parent;
+                    Children.Remove(root);
                 }
-                if (isAncestor) continue;
-                list.Add(item);
+                else
+                {
+                    root.Parent?.Children.Remove(root);
+                }
             }
 
-            foreach (var item in list)
-            {
-                item.Name = "Cutted";
-            }
-
+            // TODO クリップボードにコピー
         }
 
         // テキストによるフィルタ
@@ -306,7 +382,12 @@ namespace OctbitEditor
 
         public ObservableCollection<OutlinerItem> SelectedItems { get; set; } = new();
 
+        public string SelectionInfo => $"{SelectedItems.Count}/{Children.Sum(i=>i.DepthFirst(i=>i.Children).Count())} selected";
 
         public DynamicGroupItem MenuItems { get; private set; }
+
+        // コマンド
+        public ICommand? CreateEntityCommand { get; private set; }
+        public ICommand? DeleteEntityCommand { get; private set; }
     }
 }

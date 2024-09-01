@@ -29,5 +29,42 @@ namespace Common.Tree
         {
             return node.AnyAncestor(parent, n => n.Equals(node));
         }
+
+        public static IEnumerable<T> DepthFirst<T>(this T? node, Func<T, IEnumerable<T>> children)
+        {
+            if (node != null)
+            {
+                yield return node;
+
+                foreach (var child in children(node))
+                {
+                    foreach (var descendant in child.DepthFirst(children))
+                    {
+                        yield return descendant;
+                    }
+                }
+            }
+        }
+
+        public static ISet<T> SelectRoot<T>(this IEnumerable<T> nodes, Func<T, T?> parent, Func<T, IEnumerable<T>> children)
+        {
+            var result = new HashSet<T>();
+            var set = nodes.ToHashSet();
+
+            void select(T node)
+            {
+                if (parent(node)?.AllAncestor(parent, i => !set.Contains(i))??true)
+                {
+                    result.Add(node);
+                }
+            }
+
+            foreach (var node in nodes)
+            {
+                select(node);
+            }
+
+            return result;
+        }
     }
 }

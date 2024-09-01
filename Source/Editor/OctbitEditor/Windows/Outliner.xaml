@@ -16,6 +16,11 @@
         <local:OutlinerVM/>
     </UserControl.DataContext>
 
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding CreateEntityCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding DeleteEntityCommand}"/>
+    </UserControl.InputBindings>
+
     <UserControl.Resources>
         <BitmapImage x:Key="EyeOpen" UriSource="/Resources/Icons/eye_open.png"/>
         <BitmapImage x:Key="EyeClose" UriSource="/Resources/Icons/eye_close.png"/>
@@ -70,7 +75,7 @@
 
         <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
-            <TextBlock Text="1/8 item selected"/>
+            <TextBlock Text="{Binding SelectionInfo}"/>
         </Border>
                 
         <ms:MultiSelectTreeView ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}" SelectedItems="{Binding SelectedItems}"
