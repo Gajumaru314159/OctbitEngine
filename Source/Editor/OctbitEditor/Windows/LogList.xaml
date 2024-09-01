@@ -91,7 +91,9 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True" Focusable="False" TextWrapping="Wrap" Text="{Binding SelectedLogMessage.Value}"/>
+            <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True"  TextWrapping="Wrap" 
+                     VerticalAlignment="Stretch" VerticalContentAlignment="Top"
+                     Text="{Binding SelectedLogMessage.Value}"/>
 
 
             <GridSplitter Grid.Row="1" Height="8" Margin="0,-4,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch" Focusable="False">

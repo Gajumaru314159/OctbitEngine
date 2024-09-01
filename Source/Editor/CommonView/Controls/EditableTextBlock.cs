@@ -44,13 +44,15 @@ namespace CommonView
 
         private void InitializeControl()
         {
-            m_textBox.Padding = new Thickness(1.0);
+            m_textBox.Padding = new Thickness(0);
             m_textBox.Visibility = Visibility.Hidden;
             m_textBox.VerticalAlignment = VerticalAlignment.Center;
             m_textBox.VerticalContentAlignment = VerticalAlignment.Center;
 
+            m_textBlock.Padding = new Thickness(3,0,0,0);
             m_textBlock.Visibility = Visibility.Visible;
             m_textBlock.VerticalAlignment = VerticalAlignment.Center;
+            m_textBlock.TextTrimming = TextTrimming.CharacterEllipsis;
 
             m_grid.Children.Add(m_textBlock);
             m_grid.Children.Add(m_textBox);
@@ -67,13 +69,6 @@ namespace CommonView
                     UpdateSourceTrigger = UpdateSourceTrigger.Explicit,
                 };
                 m_textBox.SetBinding(TextBox.TextProperty, binding);
-            }
-            {
-                Binding binding = new(nameof(Text))
-                {
-                    Source = this,
-                    UpdateSourceTrigger = UpdateSourceTrigger.Explicit,
-                };
                 m_textBlock.SetBinding(TextBlock.TextProperty, binding);
             }
         }

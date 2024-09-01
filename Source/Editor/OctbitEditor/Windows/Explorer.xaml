@@ -122,16 +122,104 @@
                 <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom">
                     <TextBlock Text="1 item selected"/>
                 </Border>
-                <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate DataType="local:ExplorerItem">
-                            <DockPanel>
-                                <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
-                                <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <TabControl TabIndex="2">
+                    <TabItem Header="一覧">
+                        <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="local:ExplorerItem">
+                                    <DockPanel>
+                                        <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                                        <base:EditableTextBlock Text="{Binding Name.Value}"/>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="中アイコン">
+                        <ListBox Margin="2" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="Margin" Value="4"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="local:ExplorerItem">
+                                    <DockPanel>
+                                        <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="50" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+                                        <Border BorderThickness="1" BorderBrush="AntiqueWhite">
+                                            <Image Source="{Binding Icon.Value}" Width="50" Height="50"/>
+                                        </Border>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </TabItem>
+                    <TabItem Header="詳細">
+                        <ListView ItemsSource="{Binding SelectedFolder.Value.Children}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="True">
+                                    <GridViewColumn Header="名前" Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <Image Source="{Binding Icon.Value}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                    <base:EditableTextBlock Text="{Binding Name.Value}" VerticalAlignment="Center" Margin="0,-2"/>
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="更新日時" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="2024/01/01"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="種類" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="Texture"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="サイズ" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="12KB"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="作成者" Width="80">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="Gajumaru"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="タグ" Width="Auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Border Background="Green" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                        <TextBlock Text="OBSOLATE"/>
+                                                    </Border>
+                                                    <Border Background="DarkOrange" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                        <TextBlock Text="FIXME"/>
+                                                    </Border>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </TabItem>
+                </TabControl>
             </DockPanel>
 
             <!--Splitter-->

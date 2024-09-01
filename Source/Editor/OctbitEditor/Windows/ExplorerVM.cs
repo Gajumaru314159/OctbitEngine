@@ -15,9 +15,9 @@ namespace OctbitEditor
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
-        public ExplorerItem()
+        public ExplorerItem(string name = "Sample")
         {
-            Name.Value = "";
+            Name.Value = name;
             Icon.Value = FolderIcon;
             Path = "";
         }
@@ -44,9 +44,17 @@ namespace OctbitEditor
         public ExplorerVM()
         {
 
+            if (Design.IsInDesignMode)
+            {
+                Children.Add(new ExplorerItem("Asset"));
+                Children[0].Children.Add(new ExplorerItem("Texture"));
+                Children[0].Children.Add(new ExplorerItem("Material"));
+                SelectedFolder.Value = Children[0];
+                return;
+            }
+
             m_manager = new AssetManager();
 
-            if (Design.IsInDesignMode) return;
 
             void visit(IAssetFolder folder,ExplorerItem parent)
             {
@@ -117,7 +125,7 @@ namespace OctbitEditor
             System.Diagnostics.Process.Start("explorer.exe", actualPath);
         }
 
-        AssetManager m_manager;
+        AssetManager? m_manager;
 
 
         public DynamicGroupItem MenuItems { get; } = new("Root");

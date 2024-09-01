@@ -12,7 +12,7 @@
     <Color x:Key="FillColor">#595959</Color>
     <Color x:Key="AccentColor">#5680C2</Color>
     <Color x:Key="FocusColor">#EEEEEE</Color>
-    <Color x:Key="OutlineColor">#444444</Color>
+    <Color x:Key="OutlineColor">#555555</Color>
     <Color x:Key="HeaderColor">#2D2D30</Color>
 
     <SolidColorBrush x:Key="Text" Color="{DynamicResource TextColor}"/>
