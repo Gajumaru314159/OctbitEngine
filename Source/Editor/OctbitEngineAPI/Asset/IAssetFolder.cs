@@ -10,7 +10,7 @@ namespace OctbitEngine.Asset
     {
         public IAssetFile? FindFile(string name);
         public IAssetFolder? FindFolder(string name);
-        public bool Remove(IAsset child);
+        public bool Add(IAsset child);
         public IEnumerable<IAsset> Children { get; }
         public IEnumerable<IAssetFolder> ChildFolders{ get; }
         public IEnumerable<IAssetFile> ChildFiles { get; }

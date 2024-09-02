@@ -21,5 +21,7 @@ namespace OctbitEngine.Asset
         public bool Delete();
 
         public bool Rename(string newName);
+
+        public bool IsAncestorAssetOf(IAsset? asset);
     }
 }

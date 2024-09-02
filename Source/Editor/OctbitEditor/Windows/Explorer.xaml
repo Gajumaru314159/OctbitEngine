@@ -1,11 +1,16 @@
 ﻿<UserControl x:Class="OctbitEditor.Explorer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
+             
+             Focusable="True"
+             FocusManager.FocusedElement="{Binding ElementName=Root}"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
              mc:Ignorable="d" 
@@ -15,6 +20,10 @@
         <local:ExplorerVM/>
     </UserControl.DataContext>
 
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding CreateFolderCommand}"/>
+    </UserControl.InputBindings>
+    
     <UserControl.Resources>
         <ContextMenu x:Key="ContextMenu" ItemsSource="{Binding MenuItems.Children}">
 
@@ -46,7 +55,7 @@
         
     </UserControl.Resources>
 
-    <DockPanel>
+    <DockPanel x:Name="Root">
         <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
             <DockPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -119,12 +128,19 @@
 
             <!--ListView-->
             <DockPanel Grid.Column="2" MinWidth="100" HorizontalAlignment="Stretch">
-                <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom">
-                    <TextBlock Text="1 item selected"/>
+                <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom" Padding="4,0">
+                    <TextBlock Text="{Binding SelectionInfo}"/>
                 </Border>
                 <TabControl TabIndex="2">
                     <TabItem Header="一覧">
-                        <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}">
+                        <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"
+                                 SelectionMode="Extended">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="local:ExplorerItem">
                                     <DockPanel>
@@ -133,10 +149,21 @@
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                         </ListBox>
                     </TabItem>
                     <TabItem Header="中アイコン">
-                        <ListBox Margin="2" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox Margin="2" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"  
+                                 SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel/>
@@ -145,13 +172,14 @@
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                     <Setter Property="Margin" Value="4"/>
+                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
                                 </Style>
                             </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="local:ExplorerItem">
                                     <DockPanel>
                                         <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="50" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
-                                        <Border BorderThickness="1" BorderBrush="AntiqueWhite">
+                                        <Border BorderThickness="1" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
                                             <Image Source="{Binding Icon.Value}" Width="50" Height="50"/>
                                         </Border>
                                     </DockPanel>
@@ -160,7 +188,18 @@
                         </ListBox>
                     </TabItem>
                     <TabItem Header="詳細">
-                        <ListView ItemsSource="{Binding SelectedFolder.Value.Children}">
+                        <ListView ItemsSource="{Binding SelectedFolder.Value.Children}"
+                                  SelectionMode="Extended">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="True">
                                     <GridViewColumn Header="名前" Width="300">

@@ -25,6 +25,7 @@ namespace OctbitEditor
     {
         public ViewportVM()
         {
+            PlayCommand.Subscribe(_ => IsPlaying.Value = !IsPlaying.Value);
             SelectCommand.Subscribe(_ => OpMode.Value = OperatorMode.Select);
             MoveCommand.Subscribe(_ => OpMode.Value = OperatorMode.Move);
             RotateCommand.Subscribe(_ => OpMode.Value = OperatorMode.Rotate);
@@ -55,6 +56,7 @@ namespace OctbitEditor
         public ReactivePropertySlim<bool> SnapRotateIsEnabled { get; } = new(false);
         public ReactivePropertySlim<bool> SnapScaleIsEnabled { get; } = new(false);
 
+        public ReactiveCommand PlayCommand { get; } = new();
         public ReactiveCommand SelectCommand { get; } = new();
         public ReactiveCommand MoveCommand { get; } = new();
         public ReactiveCommand RotateCommand { get; } = new();

@@ -1,37 +1,39 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                     xmlns:local="clr-namespace:CommonView"
                     >
+
+    <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
 
     <CornerRadius x:Key="CornderRadiusA" TopLeft="2" TopRight="2" BottomLeft="2" BottomRight="2"/>
     <CornerRadius x:Key="CornderRadiusB" TopLeft="6" TopRight="6" BottomLeft="6" BottomRight="6"/>
 
-
+    <!--基本カラー-->
     <Color x:Key="BackgroundColor">#383838</Color>
-    <Color x:Key="TextColor">#EEEEEE</Color>
-    <Color x:Key="FillColor">#595959</Color>
+    <Color x:Key="ForegroundColor">#EEEEEE</Color>
+    <Color x:Key="SurfaceColor">#595959</Color>
     <Color x:Key="AccentColor">#5680C2</Color>
-    <Color x:Key="FocusColor">#EEEEEE</Color>
     <Color x:Key="OutlineColor">#555555</Color>
     <Color x:Key="HeaderColor">#2D2D30</Color>
+    <Color x:Key="FocusColor">#EEEEEE</Color>
 
-    <SolidColorBrush x:Key="Text" Color="{DynamicResource TextColor}"/>
-    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource TextColor}"/>
-    <SolidColorBrush x:Key="Fill" Color="{DynamicResource FillColor}"/>
-    <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}"/>
-    <SolidColorBrush x:Key="Focus" Color="{DynamicResource FocusColor}"/>
-    <SolidColorBrush x:Key="Outline" Color="{DynamicResource OutlineColor}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource ForegroundColor}"/>
     <SolidColorBrush x:Key="Background" Color="{DynamicResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="Surface" Color="{DynamicResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="Accent" Color="{DynamicResource AccentColor}"/>
+    <SolidColorBrush x:Key="Outline" Color="{DynamicResource OutlineColor}"/>
     <SolidColorBrush x:Key="Header" Color="{DynamicResource HeaderColor}"/>
+    <SolidColorBrush x:Key="Focus" Color="{DynamicResource FocusColor}"/>
 
-
+    <!--オーバーレイ-->
     <Color x:Key="HoverColor">#20FFFFFF</Color>
     <Color x:Key="DisableColor">#40000000</Color>
     
     <SolidColorBrush x:Key="Hover" Color="{DynamicResource HoverColor}"/>
     <SolidColorBrush x:Key="Disabled" Color="{DynamicResource DisableColor}"/>
 
-
+    <!--特殊-->
     <Color x:Key="ExpanderHeaderColor">#505050</Color>
     <Color x:Key="CheckBoxBackgroundColor">#666666</Color>
     <Color x:Key="ComboBoxBackgroundColor">#2C2C2C</Color>

@@ -13,7 +13,8 @@
         <Setter Property="Text" Value=""/>
         <Setter Property="Margin" Value="1"/>
         <Setter Property="Height" Value="Auto"/>
-        <Setter Property="Width" Value="200"/>
+        <Setter Property="Width" Value="220"/>
+        <Setter Property="MinWidth" Value="220"/>
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -25,14 +26,14 @@
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid Width="{TemplateBinding Width}">
+                        <Grid MinWidth="{TemplateBinding MinWidth}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="/Resources/Icons/search.png" Height="12" Width="12" Margin="0,0,4,0" Grid.Column="0"/>
                             <TextBlock x:Name="waterMark" Text="{TemplateBinding Watermark}" Opacity="0.5" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center"/>
-                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Padding="0" Background="Transparent" BorderThickness="0" Grid.Column="1" VerticalAlignment="Center">
+                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent},UpdateSourceTrigger=PropertyChanged}" Padding="0" Background="Transparent" BorderThickness="0" Grid.Column="1" VerticalAlignment="Center">
                                 <i:Interaction.Behaviors>
                                     <behavior:EnterKeyBehavior/>
                                 </i:Interaction.Behaviors>

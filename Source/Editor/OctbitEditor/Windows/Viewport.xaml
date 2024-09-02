@@ -6,7 +6,7 @@
              xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
-             Background="{DynamicResource Background}"
+             Background="{DynamicResource MenuBackground}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -14,18 +14,19 @@
         <local:ViewportVM/>
     </UserControl.DataContext>
 
-    <UserControl.InputBindings>
-        <KeyBinding Key="Q" Command="{Binding SelectCommand}"/>
-        <KeyBinding Key="W" Command="{Binding MoveCommand}"/>
-        <KeyBinding Key="E" Command="{Binding RotateCommand}"/>
-        <KeyBinding Key="R" Command="{Binding ScaleCommand}"/>
-        <KeyBinding Key="T" Command="{Binding ToggleCoordinateCommand}"/>
-        <KeyBinding Gesture="Ctrl+W" Command="{Binding ToggleSnapMoveCommand}"/>
-        <KeyBinding Gesture="Ctrl+E" Command="{Binding ToggleSnapRotateCommand}"/>
-        <KeyBinding Gesture="Ctrl+R" Command="{Binding ToggleSnapScaleCommand}"/>
-    </UserControl.InputBindings>
-
-    <DockPanel>
+    <DockPanel FocusManager.IsFocusScope="True" Background="Transparent">
+        <DockPanel.InputBindings>
+            <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding PlayCommand}"/>
+            <KeyBinding Key="Q" Command="{Binding SelectCommand}"/>
+            <KeyBinding Key="W" Command="{Binding MoveCommand}"/>
+            <KeyBinding Key="E" Command="{Binding RotateCommand}"/>
+            <KeyBinding Key="R" Command="{Binding ScaleCommand}"/>
+            <KeyBinding Key="T" Command="{Binding ToggleCoordinateCommand}"/>
+            <KeyBinding Key="W" Modifiers="Shift" Command="{Binding ToggleSnapMoveCommand}"/>
+            <KeyBinding Key="E" Modifiers="Shift" Command="{Binding ToggleSnapRotateCommand}"/>
+            <KeyBinding Key="R" Modifiers="Shift" Command="{Binding ToggleSnapScaleCommand}"/>
+        </DockPanel.InputBindings>
+        
         <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
             <DockPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -213,8 +214,8 @@
             </ItemsControl>
             <Border/>
         </DockPanel>
-        <Border Height="1" Background="Black" DockPanel.Dock="Top"/>
-        <WindowsFormsHost DockPanel.Dock="Bottom">
+        <Border Height="1" DockPanel.Dock="Top"/>
+        <WindowsFormsHost DockPanel.Dock="Bottom" Background="Black">
             <forms:Panel x:Name="m_panel"/>
         </WindowsFormsHost>
     </DockPanel>

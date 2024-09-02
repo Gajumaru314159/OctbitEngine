@@ -15,28 +15,27 @@ namespace OctbitEngine.Asset
             Name = name;
         }
 
-        public string Name { get; protected set; } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
 
         public string Path => string.Join("/", Parent!.Ancestor(i => i.Parent).Reverse().Select(i=>i.Name).Append(Name));
 
-        public IAssetFolder? Parent { get; private set; }
+        public IAssetFolder? Parent { get; internal set; }
 
         public bool SetParent(IAssetFolder parent)
         {
-            var p = parent;
-            while (p != null)
-            {
-                if (p == this) return false;
-                p = p.Parent;
-            }
+            // 循環チェック
+            if (this.IsAncestorAssetOf(parent))
+                return false;
 
-            Parent = parent;
+            parent.Add(this);
+
             return true;
         }
 
         public bool Delete()
         {
-            return Parent?.Remove(this)??false;
+            return false;
+            //return Parent?.Remove(this)??false;
         }
 
         public bool Rename(string newName)
@@ -45,5 +44,18 @@ namespace OctbitEngine.Asset
             Name = newName;
             return true;
         }
+        public bool IsAncestorAssetOf(IAsset? asset)
+        {
+            if (asset == null) return false;
+
+            IAsset? p = asset;
+            while (p != null)
+            {
+                if (p == this) return true;
+                p = p.Parent;
+            }
+            return false;
+        }
+
     }
 }

@@ -13,7 +13,7 @@
              MouseDown="Root_MouseDown"
              Focusable="True"
              Foreground="{DynamicResource Foreground}"
-             Background="{DynamicResource MenuBackground}" 
+             Background="{DynamicResource Background}" 
              mc:Ignorable="d"
              d:DesignWidth="200" d:DesignHeight="400" >
 

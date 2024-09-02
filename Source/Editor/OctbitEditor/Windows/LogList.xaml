@@ -63,6 +63,7 @@
                 <RowDefinition Height="1*" MinHeight="10"/>
             </Grid.RowDefinitions>
             <ListBox 
+                TabIndex="6"
                 ItemsSource="{Binding FilteredItems}" 
                 SelectedItem="{Binding SelectedLogItem.Value}" 
                 AlternationCount="2"
@@ -92,6 +93,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
             <TextBox Grid.Row="1" Background="Transparent" BorderThickness="0" IsReadOnly="True"  TextWrapping="Wrap" 
+                TabIndex="7"
                      VerticalAlignment="Stretch" VerticalContentAlignment="Top"
                      Text="{Binding SelectedLogMessage.Value}"/>
 

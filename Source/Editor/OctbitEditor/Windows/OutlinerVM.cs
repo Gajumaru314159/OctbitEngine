@@ -265,9 +265,9 @@ namespace OctbitEditor
             MenuItems.AddCommand("Copy", "Ctrl+C", CutEntity).Icon = OutlinerItem.EntityIcon;
             MenuItems.AddCommand("Paste", "Ctrl+V", CutEntity);
             MenuItems.AddSeparator();
-            MenuItems.AddCommand("Rename", CutEntity);
-            MenuItems.AddCommand("Duplicate", CutEntity);
-            MenuItems.AddCommand("Delete", DeleteEntity);
+            MenuItems.AddCommand("Rename", "F2",CutEntity);
+            MenuItems.AddCommand("Duplicate","Ctrl+D", CutEntity);
+            MenuItems.AddCommand("Delete","Delete", DeleteEntity);
             MenuItems.AddSeparator();
             MenuItems.AddCommand("Create Empty", "Ctrl+N", CreateEntity);
             {

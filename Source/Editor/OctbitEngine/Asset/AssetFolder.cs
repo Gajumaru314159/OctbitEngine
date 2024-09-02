@@ -42,18 +42,25 @@ namespace OctbitEngine.Asset
             return null;
         }
 
-        public void Add(IAsset child)
+        public bool Add(IAsset child)
         {
-            if(child.Parent != null)
+            if (child.IsAncestorAssetOf(this))
+                return false;
+
+            if(child.Parent is AssetFolder folder)
             {
-                child.Parent.Remove(child);
+                folder.m_children.Remove(child);
             }
+
             m_children.Add(child);
+
+            if(child is Asset asset)
+            {
+                asset.Parent = this;
+            }
+            
+            return true;
         }
 
-        public bool Remove(IAsset child)
-        {
-            return m_children.Remove(child);
-        }
     }
 }

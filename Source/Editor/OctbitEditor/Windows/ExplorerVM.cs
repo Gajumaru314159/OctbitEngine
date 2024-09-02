@@ -1,13 +1,16 @@
-﻿using CommonView.Menu;
+﻿using Common.Tree;
+using CommonView;
+using CommonView.Menu;
 using Livet;
-using Common;
 using OctbitEngine.Asset;
+using OctbitEngine.Config;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using OctbitEngine.Config;
-using CommonView;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace OctbitEditor
 {
@@ -31,8 +34,11 @@ namespace OctbitEditor
 
         public string Path { get; }
 
+        public Brush ItemColorBrush => Brushes.Red;
+
         public ReactiveProperty<string> Name { get; } = new();
         public ReactiveProperty<bool> IsSelected { get; } = new();
+        public ReactiveProperty<bool> IsSelectedInList { get; } = new();
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
         public ReactivePropertySlim<BitmapSource> Icon { get; } = new();
 
@@ -71,19 +77,31 @@ namespace OctbitEditor
                 }
             }
             var rootItem = new ExplorerItem(m_manager.RootFolder);
+            rootItem.IsSelected.Value = true;
             SelectedFolder.Value = rootItem;
+            SelectedFolder.Subscribe(_ => RaisePropertyChanged(nameof(SelectionInfo)));
+
             Children.Add(rootItem);
             visit(m_manager.RootFolder, rootItem);
 
             SelectedItems.CollectionChanged += (sender, e) =>
             {
-                if(0 < (e.NewItems?.Count??0))
+                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is ExplorerItem item)
                 {
-                    SelectedFolder.Value = (ExplorerItem)(e.NewItems[0]!);
+                    SelectedFolder.Value = item;
                 }
                 else
                 {
                     SelectedFolder.Value = rootItem;
+                }
+
+                // TODO もともと選択していたフォルダだけ解除すればよい
+                foreach (var i in Children)
+                {
+                    foreach(var j in i.DepthFirst(i => i.Children))
+                    {
+                        j.IsSelectedInList.Value = false;
+                    }
                 }
             };
 
@@ -93,13 +111,15 @@ namespace OctbitEditor
             });
 
             GenerateMenuItems();
+
+            CreateFolderCommand = new DelegateCommand(CreateFolder);
         }
 
         private void GenerateMenuItems()
         {
             {
                 var group = MenuItems.AddGroup("_Create");
-                group.AddEmptyCommand("Folder","");
+                group.AddCommand("Folder",CreateFolder);
                 group.AddSeparator();
 
                 // Import専用アセット以外を生成
@@ -125,6 +145,32 @@ namespace OctbitEditor
             System.Diagnostics.Process.Start("explorer.exe", actualPath);
         }
 
+        private void CreateFolder()
+        {
+            var basePath = $"{SelectedFolder.Value.Path}/NewFolder";
+            var createPath = basePath;
+            int index = 1;
+            while (true)
+            {
+                if (m_manager.FindFolder(createPath)==null)
+                {
+                    break;
+                }
+
+                //string format= "{0}({1})";
+                string format= "{0}_{1:000}";
+
+                createPath = string.Format(format, basePath, index++);
+            }
+            var newFolder = m_manager.CreateFolder(createPath);
+            SelectedFolder.Value.Children.Add(new ExplorerItem(newFolder));
+        }
+
+        public void OnSelectionChangedInList()
+        {
+            RaisePropertyChanged(nameof(SelectionInfo));
+        }
+
         AssetManager? m_manager;
 
 
@@ -134,5 +180,9 @@ namespace OctbitEditor
         public ObservableCollection<ExplorerItem> SelectedItems { get; set; } = new();
         public ReactiveProperty<ExplorerItem> SelectedFolder { get; } = new();
         public ReactiveProperty<string> SelectedFolderPath { get; } = new("Asset");
+
+        public ICommand CreateFolderCommand { get; }
+
+        public string SelectionInfo => $"{SelectedFolder.Value.Children.Count(i=>i.IsSelectedInList.Value)}/{SelectedFolder.Value.Children.Count} items";
     }
 }
