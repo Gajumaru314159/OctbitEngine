@@ -25,30 +25,10 @@ namespace CommonView
                 typeof(EditableTextBlock),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-
-        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register(
-                nameof(TextWrapping),
-                typeof(TextWrapping),
-                typeof(EditableTextBlock),
-                new FrameworkPropertyMetadata(TextWrapping.NoWrap, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (obj, e) =>
-                {
-                    if(obj is EditableTextBlock et)
-                    {
-                        et.m_textBlock.TextWrapping = (TextWrapping)e.NewValue;
-                        et.m_textBox.TextWrapping = (TextWrapping)e.NewValue;
-                    }
-                }));
-
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
-        }
-
-        public TextWrapping TextWrapping
-        {
-            get { return (TextWrapping)GetValue(TextWrappingProperty); }
-            set { SetValue(TextWrappingProperty, value); }
         }
 
         public EditableTextBlock()
@@ -68,8 +48,6 @@ namespace CommonView
             m_textBox.Visibility = Visibility.Hidden;
             m_textBox.VerticalAlignment = VerticalAlignment.Center;
             m_textBox.VerticalContentAlignment = VerticalAlignment.Center;
-
-            m_textBox.SetBinding(TextBox.TextWrappingProperty, nameof(TextWrapping));
 
             m_textBlock.Padding = new Thickness(3,0,0,0);
             m_textBlock.Visibility = Visibility.Visible;
@@ -99,8 +77,6 @@ namespace CommonView
         {
             var binding = BindingOperations.GetBindingExpression(m_textBox, TextBox.TextProperty);
             binding?.UpdateSource();
-            m_textBox.TextWrapping = TextWrapping;
-            m_textBlock.TextWrapping = TextWrapping;
         }
 
         private void EditableTextBlock_MouseDoubleClick(object sender, MouseEventArgs e)

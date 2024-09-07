@@ -178,7 +178,6 @@
                     <ListBox Padding="1" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"  
                              SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Icon}"
-                             VerticalContentAlignment="Top"
                              AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
                              >
                         <i:Interaction.Triggers>
@@ -200,14 +199,14 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="local:ExplorerItem">
-                                <StackPanel>
+                                <DockPanel>
+                                    <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
                                     <Border BorderThickness="1" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
                                         <Image Source="{Binding Icon.Value}" 
                                            Width="{Binding DataContext.IconSize.Value,ElementName=Root}" 
                                            Height="{Binding DataContext.IconSize.Value,ElementName=Root}"/>
                                     </Border>
-                                    <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center"/>
-                                </StackPanel>
+                                </DockPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
