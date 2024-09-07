@@ -11,7 +11,7 @@ namespace OctbitEngine.Runtime
     {
         private static readonly int s_bufferSize = 2 * 1024 * 1024;
         private Socket m_socket;
-        private Socket? m_client;
+        private Socket? m_client = null;
         private byte[] m_buffer = new byte[s_bufferSize];
 
         internal NetworkDevice(IPAddress address,int port)

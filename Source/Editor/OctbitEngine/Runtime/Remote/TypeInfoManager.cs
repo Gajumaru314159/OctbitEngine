@@ -2,25 +2,25 @@
 
 namespace OctbitEngine.Runtime
 {
-    internal struct EnumElementInfoArchive
+    public struct EnumElementInfoArchive
     {
         public string Name;
         public int Index;
         public int Value;
     }
 
-    internal struct ArgumntInfoArchive
+    public struct ArgumntInfoArchive
     {
         public string Name;
         public string Type;
     }
 
-    internal struct ConstructorInfoArchive
+    public struct ConstructorInfoArchive
     {
         public ArgumntInfoArchive[] Arguments;
     }
 
-    internal struct PropertyInfoArchive
+    public struct PropertyInfoArchive
     {
         public string Name;
         public string Type;
@@ -28,7 +28,7 @@ namespace OctbitEngine.Runtime
         public bool CanWrite;
     }
 
-    internal struct MethodInfoArchive
+    public struct MethodInfoArchive
     {
         public string Name;
         public string ReturnType;
@@ -36,7 +36,7 @@ namespace OctbitEngine.Runtime
     }
 
 
-    internal struct TypeInfoArchive
+    public struct TypeInfoArchive
     {
         public string Name;
         public string[] Bases;

@@ -15,10 +15,6 @@ namespace OctbitEngine.Runtime
 
     public class RemoteObject : IRemoteObject
     {
-        internal RemoteObject(ITypeInfo typeInfo)
-        {
-            TypeInfo =typeInfo;
-        }
 
         internal RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
         {

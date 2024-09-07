@@ -81,7 +81,7 @@ namespace OctbitEngine.Runtime
         public IEntity CreateEntity()
         {
             // TODO RemoteObjectに変更
-            var obj = new RemoteObject(s_typeInfo);
+            var obj = new RemoteObject(m_remoteObject.Runtime,s_typeInfo,0);
             return new Entity(Guid.NewGuid(),obj,this);
         }
 

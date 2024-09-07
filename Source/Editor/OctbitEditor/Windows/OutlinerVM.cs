@@ -25,8 +25,10 @@ namespace OctbitEditor
         public bool IsStatic { get; set; }
 
         public IEntity? Parent { get; set; }
+        public EntityMock? _parent;
 
-        public IReadOnlyList<IEntity> Children { get; set; }
+        public IReadOnlyList<IEntity> Children => m_children;
+        private List<EntityMock> m_children = new();
 
         public IReadOnlyList<IComponent> Components => throw new NotImplementedException();
 
@@ -69,7 +71,18 @@ namespace OctbitEditor
 
         public bool SetParent(IEntity? parent)
         {
-            throw new NotImplementedException();
+            if (parent is not EntityMock cparent)
+            {
+                _parent?.m_children.Remove(this);
+                _parent = null;
+                return true;
+            }
+
+            if (cparent.AnyAncestor(i => i._parent, i => i == this)) return false;
+            _parent?.m_children.Remove(this);
+            _parent = cparent;
+            _parent.m_children.Add(this);
+            return true;
         }
     }
 
