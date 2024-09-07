@@ -1,14 +1,12 @@
 ﻿using Common.Log;
 using Common.Tree;
-using CommonView;
 using CommonView.Menu;
-using Livet;
-using OctbitEditor.Windows;
 using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
@@ -59,10 +57,6 @@ namespace OctbitEditor
 
     public class ExplorerVM : TabBase
     {
-        public ExplorerVM()
-            : this(OctbitEngine.Asset.AssetManager.Instance)
-        {
-        }
         public ExplorerVM(IAssetManager assetManager)
             : base("Explorer")
         {
@@ -136,7 +130,7 @@ namespace OctbitEditor
 
             }
             MenuItems.AddCommand("Show in Explorer", ShowInExplorer);
-            MenuItems.AddCommand("Open",OpenAsset,_=> Random.Shared.Next()%2==0);
+            MenuItems.AddCommand("Open",OpenAsset, CanOpenAsset);
             MenuItems.AddEmptyCommand("Delete");
             MenuItems.AddEmptyCommand("Dename");
             MenuItems.AddEmptyCommand("Copy Path");
@@ -204,13 +198,17 @@ namespace OctbitEditor
         public ObservableCollection<ExplorerItem> Children { get; } = new();
         public ObservableCollection<ExplorerItem> SelectedItems { get; set; } = new();
 
-        public ReactiveProperty<ExplorerItem> SelectedFolder { get; } = new();
-        public ReactiveProperty<string> SelectedFolderPath { get; } = new("Asset");
+        // 選択情報
+        public ReactivePropertySlim<ExplorerItem> SelectedFolder { get; } = new();
+        public ReactivePropertySlim<string> SelectedFolderPath { get; } = new("Asset");
+        public ReactivePropertySlim<bool> CanOpenAsset { get; } = new(false);
 
-        public ReactiveProperty<double> IconSize { get; } = new(50);
+
+
+        public ReactivePropertySlim<double> IconSize { get; } = new(50);
 
         public IEnumerable<ListViewType> ListViewTypes { get; private set; } = Enum.GetValues<ListViewType>();
-        public ReactiveProperty<ListViewType> SelectedListViewType { get; } = new(ListViewType.Detail);
+        public ReactivePropertySlim<ListViewType> SelectedListViewType { get; } = new(ListViewType.Detail);
 
 
 

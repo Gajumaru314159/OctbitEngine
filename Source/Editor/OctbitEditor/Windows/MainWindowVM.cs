@@ -1,13 +1,10 @@
-﻿using System;
-using System.Windows;
-using Reactive.Bindings;
-using CommonView.History;
-using Livet;
-using System.Windows.Input;
+﻿using CommonView.History;
 using CommonView.Menu;
-using System.Collections.ObjectModel;
-using OctbitEditor.Windows;
+using Livet;
 using OctbitEngine.Asset;
+using Reactive.Bindings;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace OctbitEditor
 {
@@ -17,7 +14,7 @@ namespace OctbitEditor
         {
             Title.Value = "Octbit Editor";
 
-            ExitCommand.Subscribe(_ => System.Windows.Application.Current.Shutdown());
+            ExitCommand = new DelegateCommand(_ => System.Windows.Application.Current.Shutdown());
 
             RedoCommand = new DelegateCommand(() => History.Redo());
             UndoCommand = new DelegateCommand(() =>
@@ -46,7 +43,7 @@ namespace OctbitEditor
         private ObservableCollection<ViewModel> _dockingPaneViewModels = new();
 
 
-        public ReactiveProperty<string> Title { get; } = new();
+        public ReactivePropertySlim<string> Title { get; } = new();
 
         public ICommand RedoCommand { get; }
         public ICommand UndoCommand { get; }
@@ -54,6 +51,6 @@ namespace OctbitEditor
         public bool CanRedo => History.CanRedo;
         public bool CanUndo => History.CanUndo;
 
-        public ReactiveCommand ExitCommand { get; } = new();
+        public ICommand ExitCommand { get; }
     }
 }

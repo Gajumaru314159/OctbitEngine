@@ -58,14 +58,14 @@ namespace OctbitEditor
         public ReactivePropertySlim<bool> SnapRotateIsEnabled { get; } = new(false);
         public ReactivePropertySlim<bool> SnapScaleIsEnabled { get; } = new(false);
 
-        public ReactiveCommand PlayCommand { get; } = new();
-        public ReactiveCommand SelectCommand { get; } = new();
-        public ReactiveCommand MoveCommand { get; } = new();
-        public ReactiveCommand RotateCommand { get; } = new();
-        public ReactiveCommand ScaleCommand { get; } = new();
-        public ReactiveCommand ToggleCoordinateCommand { get; } = new();
-        public ReactiveCommand ToggleSnapMoveCommand { get; } = new();
-        public ReactiveCommand ToggleSnapRotateCommand { get; } = new();
-        public ReactiveCommand ToggleSnapScaleCommand { get; } = new();
+        public ReactiveCommandSlim PlayCommand { get; } = new();
+        public ReactiveCommandSlim SelectCommand { get; } = new();
+        public ReactiveCommandSlim MoveCommand { get; } = new();
+        public ReactiveCommandSlim RotateCommand { get; } = new();
+        public ReactiveCommandSlim ScaleCommand { get; } = new();
+        public ReactiveCommandSlim ToggleCoordinateCommand { get; } = new();
+        public ReactiveCommandSlim ToggleSnapMoveCommand { get; } = new();
+        public ReactiveCommandSlim ToggleSnapRotateCommand { get; } = new();
+        public ReactiveCommandSlim ToggleSnapScaleCommand { get; } = new();
     }
 }

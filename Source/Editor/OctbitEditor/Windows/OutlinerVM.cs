@@ -199,8 +199,8 @@ namespace OctbitEditor
         public double VisibleIconOpacity
             => Entity.IsVisibleInHierarchy ? 1.0 : 0.5;
 
-        public ReactiveProperty<bool> IsExpanded { get; } = new(true);
-        public ReactiveProperty<bool> IsSelected { get; } = new(false);
+        public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
+        public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
         public BitmapImage Icon => EntityIcon;
         public ObservableCollection<OutlinerItem> Children { get; } = new();
 
@@ -347,7 +347,7 @@ namespace OctbitEditor
         }
 
         // テキストによるフィルタ
-        public ReactiveProperty<string> Filter { get; } = new(string.Empty);
+        public ReactivePropertySlim<string> Filter { get; } = new(string.Empty);
         public ObservableCollection<OutlinerItem> Children { get; } = new();
 
         public ObservableCollection<OutlinerItem> SelectedItems { get; set; } = new();

@@ -1,12 +1,4 @@
 ﻿using Reactive.Bindings;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -31,17 +23,17 @@ namespace CommonView.Menu
         }
         public DynamicCommandItem AddEmptyCommand(string header, string? gesture = null)
         {
-            var item = new DynamicCommandItem(header,gesture, () => { },_=>false);
+            var item = new DynamicCommandItem(header,gesture, () => { });
             Children.Add(item);
             return item;
         }
-        public DynamicCommandItem AddCommand(string header, Action action, Func<object?, bool>? canExecute = null)
+        public DynamicCommandItem AddCommand(string header, Action action, IObservable<bool>? canExecute = null)
         {
             var item = new DynamicCommandItem(header,action,canExecute);
             Children.Add(item);
             return item;
         }
-        public DynamicCommandItem AddCommand(string header, string gesture, Action action, Func<object?, bool>? canExecute = null)
+        public DynamicCommandItem AddCommand(string header, string gesture, Action action, IObservable<bool>? canExecute = null)
         {
             var item = new DynamicCommandItem(header,gesture,action,canExecute);
             Children.Add(item);
@@ -63,20 +55,19 @@ namespace CommonView.Menu
     }
     public class DynamicCommandItem : DynamicMenuItem
     {
-        public DynamicCommandItem(string header, Action action, Func<object?, bool>? canExecute = null)
+        public DynamicCommandItem(string header, Action action, IObservable<bool>? canExecute = null)
+            : this(header,null,action,canExecute)
+        {
+        }
+        public DynamicCommandItem(string header, string? gesture, Action action, IObservable<bool>? canExecute = null)
         {
             Header = header;
             Gesture = string.Empty;
-            Command = new DelegateCommand(action, canExecute);
+            if (canExecute is null)
+                Command =  new DelegateCommand(action);
+            else
+                Command = canExecute.ToReactiveCommandSlim();
         }
-        public DynamicCommandItem(string header, string? gesture, Action action, Func<object?, bool>? canExecute = null)
-        {
-            Header = header;
-            Gesture = gesture;
-            Command = new DelegateCommand(action, canExecute);
-        }
-
-
     }
     public class DynamicSeparatorItem : DynamicMenuItem
     {

@@ -98,7 +98,7 @@ namespace OctbitEditor
         public ReactivePropertySlim<string> SelectedLogMessage { get; } = new(string.Empty);
         
         // テキストによるフィルタ
-        public ReactiveProperty<string> Filter { get; } = new(string.Empty);
+        public ReactivePropertySlim<string> Filter { get; } = new(string.Empty);
 
         // ログタイプによるフィルタ
         public ReactivePropertySlim<bool> IsInfoLogFiltered { get; } = new(true);

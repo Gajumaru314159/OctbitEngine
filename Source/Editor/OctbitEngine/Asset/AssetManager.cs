@@ -9,6 +9,7 @@ namespace OctbitEngine.Asset
     {
         public static char[] InvalidChars = Path.GetInvalidFileNameChars();
         public static string MetaExtension = ".meta";
+        public static string RootFolderName = "Assets";
 
         public static IAssetManager Instance { get; private set; }
 
@@ -32,7 +33,7 @@ namespace OctbitEngine.Asset
         {
             InitializeImporter();
 
-            RootFolder = new AssetFolder(this,"Assets");
+            RootFolder = new AssetFolder(this, RootFolderName);
             LoadAssets();
         }
 
@@ -146,7 +147,7 @@ namespace OctbitEngine.Asset
                     parent.Add(item);
                 }
             }
-            visit(RootFolder, Path.Combine(WorkSpace.RootPath, "Asset"));
+            visit(RootFolder, Path.Combine(WorkSpace.RootPath, RootFolder.Name));
         }
 
         /// <summary>
