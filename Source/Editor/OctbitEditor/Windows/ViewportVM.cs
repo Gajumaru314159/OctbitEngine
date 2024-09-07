@@ -1,4 +1,5 @@
-﻿using Reactive.Bindings;
+﻿using OctbitEditor.Windows;
+using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,10 @@ namespace OctbitEditor
         ShadingWireframe,
     }
 
-    public class ViewportVM
+    public class ViewportVM : TabBase
     {
         public ViewportVM()
+            : base("Viewport")
         {
             PlayCommand.Subscribe(_ => IsPlaying.Value = !IsPlaying.Value);
             SelectCommand.Subscribe(_ => OpMode.Value = OperatorMode.Select);

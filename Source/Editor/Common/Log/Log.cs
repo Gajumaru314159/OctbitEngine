@@ -49,6 +49,7 @@ namespace Common.Log
         {
             var log = new LogObject(DateTime.Now, level, message, category ?? string.Empty,Environment.StackTrace);
             Logged?.Invoke(log);
+            Debug.WriteLine(message);
         }
 
         public static LogEventHandler? Logged;

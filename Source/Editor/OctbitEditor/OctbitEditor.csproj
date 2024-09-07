@@ -69,6 +69,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CommonView\CommonView.csproj" />
+    <ProjectReference Include="..\OctbitEngineAPI\OctbitEngineAPI.csproj" />
     <ProjectReference Include="..\OctbitEngine\OctbitEngine.csproj" />
   </ItemGroup>
 

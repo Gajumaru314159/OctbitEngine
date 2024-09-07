@@ -1,7 +1,6 @@
 ﻿namespace OctbitEngine.Runtime
 {
-
-    class TagInfo : ITagInfo
+    public class TagInfo : ITagInfo
     {
         internal TagInfo()
         {
@@ -9,7 +8,7 @@
         public IDictionary<string, string> Tags { get; } = new Dictionary<string, string>();
     }
 
-    class EnumElementInfo : TagInfo, IEnumElementInfo
+    public sealed class EnumElementInfo : TagInfo, IEnumElementInfo
     {
         internal EnumElementInfo(string name, int index, int value)
         {
@@ -22,7 +21,7 @@
         public int Value { get; }
     }
 
-    class ArgumentInfo : TagInfo, IArgumentInfo
+    public sealed class ArgumentInfo : TagInfo, IArgumentInfo
     {
         internal ArgumentInfo(ITypeInfo type, string name)
         {
@@ -33,7 +32,7 @@
         public string Name { get; }
     }
 
-    class ConstructorInfo : TagInfo, IConstructorInfo
+    public sealed class ConstructorInfo : TagInfo,IConstructorInfo
     {
         internal ConstructorInfo(IReadOnlyList<IArgumentInfo> arguments)
         {
@@ -46,7 +45,7 @@
         }
     }
 
-    class PropertyInfo : TagInfo, IPropertyInfo
+    public sealed class PropertyInfo : TagInfo,IPropertyInfo
     {
         internal PropertyInfo(ITypeInfo typeInfo, string name, bool canRead, bool canWrite)
         {
@@ -69,7 +68,7 @@
         }
     }
 
-    class MethodInfo : TagInfo, IMethodInfo
+    public sealed class MethodInfo : TagInfo,IMethodInfo
     {
         internal MethodInfo(string name, ITypeInfo returnType, IReadOnlyList<IArgumentInfo> arguments)
         {
@@ -86,7 +85,7 @@
         }
     }
 
-    internal class TypeInfo : TagInfo, ITypeInfo
+    public sealed class TypeInfo : TagInfo,ITypeInfo
     {
 
 

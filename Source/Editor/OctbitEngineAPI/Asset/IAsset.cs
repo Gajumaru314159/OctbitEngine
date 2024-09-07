@@ -16,6 +16,8 @@ namespace OctbitEngine.Asset
 
         public IAssetFolder? Parent { get; }
 
+        public IAssetManager Manager { get; }
+
         public bool SetParent(IAssetFolder parent);
 
         public bool Delete();

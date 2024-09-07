@@ -1,19 +1,38 @@
-﻿using OctbitEngine.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static OctbitEngine.Asset.IAssetManager;
+﻿using Common.Generic;
+using Common.Linq;
+using Common.Log;
+using OctbitEngine.Config;
 
 namespace OctbitEngine.Asset
 {
     public class AssetManager : IAssetManager
     {
         public static char[] InvalidChars = Path.GetInvalidFileNameChars();
-        public AssetManager()
+        public static string MetaExtension = ".meta";
+
+        public static IAssetManager Instance { get; private set; }
+
+        static AssetManager()
         {
-            RootFolder = new AssetFolder("Asset");
+            Instance = new AssetManager();
+        }
+
+        /// <summary>
+        /// 名前に使用できる文字列か
+        /// </summary>
+        public static bool IsValidName(string name)
+        {
+            return name.IndexOfAny(InvalidChars) == -1;
+        }
+
+
+        private static List<IAssetImporter> Importers = new List<IAssetImporter>();
+
+        internal AssetManager()
+        {
+            InitializeImporter();
+
+            RootFolder = new AssetFolder(this,"Assets");
             LoadAssets();
         }
 
@@ -41,15 +60,15 @@ namespace OctbitEngine.Asset
                 throw new ArgumentException("フォルダは既に存在します。");
             }
 
-            IAssetFolder? parent= RootFolder;
+            IAssetFolder parent= RootFolder;
 
             foreach (string folderName in folderNames)
             {
-                var child = parent.FindFolder(folderName);
+                var child = parent?.FindFolder(folderName);
                 if(child == null)
                 {
-                    child = new AssetFolder(folderName);
-                    child.SetParent(parent);
+                    child = new AssetFolder(this,folderName);
+                    child.SetParent(parent!);
                 }
                 parent = child;
             }
@@ -75,7 +94,7 @@ namespace OctbitEngine.Asset
                 return null;
             }
 
-            IAssetFolder? parent = RootFolder;
+            IAssetFolder parent = RootFolder;
 
             foreach (string folderName in folderNames)
             {
@@ -100,38 +119,65 @@ namespace OctbitEngine.Asset
 
         private void LoadAssets()
         {
-            void visit(AssetFolder parent, string path)
+            void visit(IAssetFolder parent, string path)
             {
                 foreach (var dir in Directory.EnumerateDirectories(path))
                 {
-                    var item = new AssetFolder(Path.GetFileName(dir));
+                    var item = new AssetFolder(this,Path.GetFileName(dir));
                     item.SetParent(parent);
                     parent.Add(item);
                     visit(item, dir);
                 }
                 foreach (var file in Directory.EnumerateFiles(path))
                 {
-                    if(Path.GetExtension(file) != ".meta")
+                    if(Path.GetExtension(file) != MetaExtension)
                     {
-                        if(File.Exists(file + ".meta") == false)
+                        if(File.Exists(file + MetaExtension) == false)
                         {
                             // TODO メタデータを生成して読み込む
                         }
                     }
                 }
                 foreach (var file in Directory.EnumerateFiles(path))
-                {
-                    
-                    if (Path.GetExtension(file) == ".meta") continue;
-                    var item = new AssetFile(Path.GetFileName(file));
+                {                    
+                    if (Path.GetExtension(file) == MetaExtension) continue;
+                    var item = new AssetFile(this,Path.GetFileName(file));
                     item.SetParent(parent);
                     parent.Add(item);
                 }
             }
-            visit((AssetFolder)RootFolder, Path.Combine(WorkSpace.RootPath, "Asset"));
+            visit(RootFolder, Path.Combine(WorkSpace.RootPath, "Asset"));
         }
 
-        public IAssetFolder RootFolder { get; private init; }
+        /// <summary>
+        /// 指定したパスのファイルをアセットとしてインポートできるか
+        /// </summary>
+        public bool CanImport(string path)
+        {
+            return Importers.Any(i => i.CanImport(path));
+        }
+
+        public bool Import(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void InitializeImporter()
+        {
+            typeof(AssetManager).Assembly.GetTypes()
+                .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IAssetImporter)))
+                .Select(t => Activator.CreateInstance(t) as IAssetImporter)
+                .NotNull()
+                .ToList()
+                .ForEach(i => Importers.Add(i!));
+
+            foreach (var importer in Importers)
+            {
+                Log.Info($"AssetImporterを追加 [{importer.GetType().Name}]");
+            }
+        }
+
+        public IAssetFolder RootFolder { get; private set; }
 
         public event EventHandler<IAsset>? AssetCreated;
 

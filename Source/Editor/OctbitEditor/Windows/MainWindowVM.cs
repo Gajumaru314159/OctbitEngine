@@ -5,6 +5,9 @@ using CommonView.History;
 using Livet;
 using System.Windows.Input;
 using CommonView.Menu;
+using System.Collections.ObjectModel;
+using OctbitEditor.Windows;
+using OctbitEngine.Asset;
 
 namespace OctbitEditor
 {
@@ -27,7 +30,21 @@ namespace OctbitEditor
                 RaisePropertyChanged(nameof(CanRedo));
                 RaisePropertyChanged(nameof(CanUndo));
             };
+
+            var assetManager = AssetManager.Instance;
+
+            _dockingDocumentViewModels.Add(new ViewportVM());
+            _dockingPaneViewModels.Add(new ExplorerVM(assetManager));
+            _dockingPaneViewModels.Add(new HistoryWindowVM());
+            _dockingPaneViewModels.Add(new LogListVM());
+            _dockingPaneViewModels.Add(new OutlinerVM());
         }
+
+        public ReadOnlyObservableCollection<ViewModel> DockingDocumentViewModels => new(_dockingDocumentViewModels);
+        private ObservableCollection<ViewModel> _dockingDocumentViewModels = new();
+        public ReadOnlyObservableCollection<ViewModel> DockingPaneViewModels => new(_dockingPaneViewModels);
+        private ObservableCollection<ViewModel> _dockingPaneViewModels = new();
+
 
         public ReactiveProperty<string> Title { get; } = new();
 

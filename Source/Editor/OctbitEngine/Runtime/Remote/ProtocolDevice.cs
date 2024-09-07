@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Common.Hash;
+using Common.Log;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-using Common.Hash;
-using Common.Log;
 
 namespace OctbitEngine.Runtime
 {
-
     internal class ProtocolDevice
     {
         private static readonly TimeSpan s_defaultTimeOut = TimeSpan.FromMilliseconds(-1);
 
         private record ResponseInfo(System.Reflection.MethodInfo OnReceived, System.Reflection.MethodInfo Deserialize);
-        private Dictionary<UInt32, ResponseInfo> m_responces = new();
+        private Dictionary<uint, ResponseInfo> m_responces = new();
 
         private Dictionary<uint, Type> s_noticeTypeDictionary = new();
         private Dictionary<uint, Type> s_queryTypeDictionary = new();

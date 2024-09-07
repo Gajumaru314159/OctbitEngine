@@ -54,6 +54,8 @@
 
     <!-- 終端の三角ボタンのスタイル -->
     <Style x:Key="ScrollBarRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -72,6 +74,8 @@
 
     <!-- トラック（レーン）のスタイル -->
     <Style x:Key="ScrollBarTrackStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -95,6 +99,7 @@
     <!-- カスタムスクロールバーのスタイル -->
     <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Style.Triggers>
             <!-- 縦向きのスクロールバー -->
             <Trigger Property="Orientation" Value="Vertical">
@@ -1306,14 +1311,14 @@
 
     <Style TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,1"/>
+        <Setter Property="Padding" Value="{Binding Path=Padding, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl, AncestorLevel=1}, FallbackValue=0}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border x:Name="Border" SnapsToDevicePixels="True" Background="{TemplateBinding Background}">
-                        <Border x:Name="Overlay" Padding="2">
+                        <Border x:Name="Overlay" Padding="{TemplateBinding Padding}">
                             <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </Border>
                     </Border>
@@ -1339,9 +1344,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    
-    <!--ListView-->
     
     <Style x:Key="GridViewColumnHeaderGripper" TargetType="Thumb">
         <Setter Property="Width" Value="18" />
@@ -1398,6 +1400,7 @@
     <Style TargetType="{x:Type ListView}">
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Padding" Value="4,0"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
@@ -1409,7 +1412,7 @@
                 <ControlTemplate TargetType="ListView">
                     <Border x:Name="Bd" Background="{TemplateBinding Background}" Padding="0" SnapsToDevicePixels="True">
                         <ScrollViewer Style="{DynamicResource {x:Static GridView.GridViewScrollViewerStyleKey}}">
-                            <ItemsPresenter />
+                            <ItemsPresenter/>
                         </ScrollViewer>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -1812,7 +1815,7 @@
     <Style TargetType="{x:Type ListBox}">
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Padding" Value="4,0"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>

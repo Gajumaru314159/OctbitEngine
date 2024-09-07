@@ -7,7 +7,7 @@ using System.Net;
 
 namespace OctbitEngine.Runtime
 {
-    internal class Runtime : Singleton<Runtime>,IRuntime
+    public sealed class Runtime : Singleton<Runtime>, IRuntime
     {
         private int m_runtimeId = 0;
         private List<World> m_worlds = new();
@@ -26,7 +26,7 @@ namespace OctbitEngine.Runtime
         {
             m_network = new NetworkDevice(IPAddress.Loopback, 50000);
 
-            progress.SetRange(0,100);
+            progress.SetRange(0, 100);
             progress.Message = "Runtimeを起動中";
 
             startupRuntime();
@@ -44,7 +44,8 @@ namespace OctbitEngine.Runtime
         {
             get
             {
-                lock(m_worlds){
+                lock (m_worlds)
+                {
                     return m_worlds.ToArray();
                 }
             }
@@ -74,10 +75,10 @@ namespace OctbitEngine.Runtime
             throw new NotImplementedException();
         }
 
-        public IRemoteObject CreateObject(ITypeInfo type)
+        public IRemoteObject CreateObject(TypeInfo type)
         {
             var id = Interlocked.Increment(ref m_runtimeId);
-            var obj =  new RemoteObject(this, type,id);
+            var obj = new RemoteObject(this, type, id);
             lock (m_objects)
             {
                 m_objects.Add(id, obj);
@@ -125,7 +126,7 @@ namespace OctbitEngine.Runtime
             };
 
             m_process = Process.Start(psi);
-            if(m_process != null)
+            if (m_process != null)
             {
                 m_process.OutputDataReceived += (sender, e) =>
                 {
@@ -146,9 +147,9 @@ namespace OctbitEngine.Runtime
 
                 try
                 {
-                    ThreadUtility.WaitUntil(() => m_process.MainWindowHandle != IntPtr.Zero, TimeSpan.FromSeconds(10),TimeSpan.FromMilliseconds(500));
+                    ThreadUtility.WaitUntil(() => m_process.MainWindowHandle != IntPtr.Zero, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
                 }
-                catch(TimeoutException)
+                catch (TimeoutException)
                 {
                     Log.Error("Runtimeの起動に失敗しました");
                     kill();
@@ -159,7 +160,7 @@ namespace OctbitEngine.Runtime
         private void kill()
         {
             var process = m_process;
-            if(process != null)
+            if (process != null)
             {
                 if (!process.HasExited)
                 {

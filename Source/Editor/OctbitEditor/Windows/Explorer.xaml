@@ -8,25 +8,28 @@
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
-             
+             DataContextChanged="UserControl_DataContextChanged"
              Focusable="True"
              FocusManager.FocusedElement="{Binding ElementName=Root}"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="800">
-
-    <UserControl.DataContext>
-        <local:ExplorerVM/>
-    </UserControl.DataContext>
+             d:DesignHeight="250" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:ExplorerVM}"
+             >
 
     <UserControl.InputBindings>
         <KeyBinding Gesture="Ctrl+S" Command="{Binding CreateFolderCommand}"/>
     </UserControl.InputBindings>
-    
-    <UserControl.Resources>
-        <ContextMenu x:Key="ContextMenu" ItemsSource="{Binding MenuItems.Children}">
 
+    
+    <!--リソース-->
+    <UserControl.Resources>
+
+        <base:EnumToVisibilityConverter x:Key="EnumToVisibility"/>
+
+        <!--コンテキストメニュー-->
+        <ContextMenu x:Key="ContextMenu" ItemsSource="{Binding MenuItems.Children}">
             <ContextMenu.Resources>
                 <Style TargetType="{x:Type MenuItem}">
                     <Setter Property="Command" Value="{Binding Command}" />
@@ -47,7 +50,8 @@
                 </Style>
             </ContextMenu.Resources>
         </ContextMenu>
-        
+
+        <!--ツリー定義-->
         <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
             <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
             <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
@@ -55,7 +59,11 @@
         
     </UserControl.Resources>
 
+    
+    <!--コンテンツ-->
     <DockPanel x:Name="Root">
+        
+        <!--ヘッダー-->
         <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
             <DockPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
@@ -107,7 +115,7 @@
             <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" TabIndex="4"/>
         </DockPanel>
         
-        <!--下部-->
+        <!--メイン-->
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" MinWidth="100"/>
@@ -115,150 +123,166 @@
             </Grid.ColumnDefinitions>
 
             <!--TreeView-->
-            <ms:MultiSelectTreeView ItemsSource="{Binding Children}" SelectedItems="{Binding SelectedItems}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
+            <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
                 <ms:MultiSelectTreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="local:ExplorerItem" ItemsSource="{Binding Children}">
-                        <DockPanel>
+                        <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
                             <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                        </DockPanel>
+                        </StackPanel>
                     </HierarchicalDataTemplate>
                 </ms:MultiSelectTreeView.ItemTemplate>
             </ms:MultiSelectTreeView>
 
             <!--ListView-->
             <DockPanel Grid.Column="2" MinWidth="100" HorizontalAlignment="Stretch">
-                <Border Background="{DynamicResource Header}" DockPanel.Dock="Bottom" Padding="4,0">
+                
+                <!--フッター-->
+                <DockPanel Background="{DynamicResource Header}" DockPanel.Dock="Bottom">
+                    <ComboBox ItemsSource="{Binding ListViewTypes}" SelectedItem="{Binding SelectedListViewType.Value}" DockPanel.Dock="Right"/>
+                    <Slider Value="{Binding IconSize.Value}" Minimum="40" Maximum="100" DockPanel.Dock="Right" Margin="4,0"
+                             Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Icon}"/>
                     <TextBlock Text="{Binding SelectionInfo}"/>
-                </Border>
-                <TabControl TabIndex="2">
-                    <TabItem Header="一覧">
-                        <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"
-                                 SelectionMode="Extended">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="local:ExplorerItem">
-                                    <DockPanel>
-                                        <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
-                                        <base:EditableTextBlock Text="{Binding Name.Value}"/>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </TabItem>
-                    <TabItem Header="中アイコン">
-                        <ListBox Margin="2" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"  
-                                 SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                                    <Setter Property="Margin" Value="4"/>
-                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate DataType="local:ExplorerItem">
-                                    <DockPanel>
-                                        <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="50" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
-                                        <Border BorderThickness="1" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
-                                            <Image Source="{Binding Icon.Value}" Width="50" Height="50"/>
-                                        </Border>
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </TabItem>
-                    <TabItem Header="詳細">
-                        <ListView ItemsSource="{Binding SelectedFolder.Value.Children}"
-                                  SelectionMode="Extended">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectionChanged">
-                                    <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                    <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                            <ListView.View>
-                                <GridView AllowsColumnReorder="True">
-                                    <GridViewColumn Header="名前" Width="300">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <DockPanel>
-                                                    <Image Source="{Binding Icon.Value}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                                                    <base:EditableTextBlock Text="{Binding Name.Value}" VerticalAlignment="Center" Margin="0,-2"/>
-                                                </DockPanel>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="更新日時" Width="80">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="2024/01/01"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="種類" Width="80">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="Texture"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="サイズ" Width="80">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="12KB"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="作成者" Width="80">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="Gajumaru"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="タグ" Width="Auto">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Border Background="Green" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
-                                                        <TextBlock Text="OBSOLATE"/>
-                                                    </Border>
-                                                    <Border Background="DarkOrange" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
-                                                        <TextBlock Text="FIXME"/>
-                                                    </Border>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
-                        </ListView>
-                    </TabItem>
-                </TabControl>
+                </DockPanel>
+                
+                <!--コンテンツ-->
+                <Grid>
+                    <!--リストビュー-->
+                    <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}" SelectionMode="Extended"
+                             Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=List}"
+                             AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="local:ExplorerItem">
+                                <StackPanel Orientation="Horizontal" Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
+                                    <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                                    <base:EditableTextBlock Text="{Binding Name.Value}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
+                    <!--アイコンビュー-->
+                    <ListBox Padding="1" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"  
+                             SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Icon}"
+                             AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
+                             >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Margin" Value="4"/>
+                                <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                                <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Cycle"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="local:ExplorerItem">
+                                <DockPanel>
+                                    <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+                                    <Border BorderThickness="1" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
+                                        <Image Source="{Binding Icon.Value}" 
+                                           Width="{Binding DataContext.IconSize.Value,ElementName=Root}" 
+                                           Height="{Binding DataContext.IconSize.Value,ElementName=Root}"/>
+                                    </Border>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--詳細ビュー-->
+                    <ListView ItemsSource="{Binding SelectedFolder.Value.Children}" SelectionMode="Extended" ContextMenu="{StaticResource ContextMenu}" 
+                             Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Detail}"
+                              AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
+                              >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="True">
+                                <GridViewColumn Header="名前" Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <Image Source="{Binding Icon.Value}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <base:EditableTextBlock Text="{Binding Name.Value}" VerticalAlignment="Center" Margin="0,-2"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="更新日時" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="2024/01/01"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="種類" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="Texture"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="サイズ" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="12KB"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="作成者" Width="80">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="Gajumaru"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="タグ" Width="Auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Background="Green" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                    <TextBlock Text="OBSOLATE"/>
+                                                </Border>
+                                                <Border Background="DarkOrange" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                    <TextBlock Text="FIXME"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                </Grid>
             </DockPanel>
 
             <!--Splitter-->

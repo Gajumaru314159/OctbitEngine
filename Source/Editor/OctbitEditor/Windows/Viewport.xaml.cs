@@ -6,6 +6,7 @@ using System.Net;
 using System.Runtime.InteropServices;
 using UserControl = System.Windows.Controls.UserControl;
 using System.Text;
+using Common.Log;
 
 namespace OctbitEditor
 {
@@ -149,5 +150,9 @@ namespace OctbitEditor
 
         private Process? m_process = null;
 
+        private void m_panel_Click(object sender, EventArgs e)
+        {
+            m_focusRoot.Focus();
+        }
     }
 }

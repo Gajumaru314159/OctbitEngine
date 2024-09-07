@@ -11,8 +11,4 @@
     <ProjectReference Include="..\OctbitEngineAPI\OctbitEngineAPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Database\" />
-  </ItemGroup>
-
 </Project>

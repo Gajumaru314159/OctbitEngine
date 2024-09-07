@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OctbitEngine.Config
+﻿namespace OctbitEngine.Config
 {
     public class WorkSpace
     {
@@ -13,6 +7,7 @@ namespace OctbitEngine.Config
         {
             m_rootPath = Directory.GetCurrentDirectory();
 
+            bool hasRootMark = false;
             while (true)
             {
                 var parent = Directory.GetParent(RootPath);
@@ -21,10 +16,16 @@ namespace OctbitEngine.Config
                     m_rootPath = parent.FullName;
                     if (File.Exists(Path.Combine(parent.FullName, RootMark)))
                     {
+                        hasRootMark = true;
                         break;
                     }
                 }
 
+            }
+
+            if (hasRootMark == false)
+            {
+                m_rootPath = Directory.GetCurrentDirectory();
             }
         }
 

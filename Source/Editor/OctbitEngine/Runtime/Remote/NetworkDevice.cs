@@ -1,17 +1,11 @@
-﻿using Common.Log;
-using Common.Thread;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OctbitEngine.Runtime
 {
-    public delegate void DataReceivedHandler(ReadOnlySpan<byte> buffer);
+    internal delegate void DataReceivedHandler(ReadOnlySpan<byte> buffer);
 
     internal class NetworkDevice
     {

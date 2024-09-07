@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OctbitEngine.Asset
+﻿namespace OctbitEngine.Asset
 {
-    internal class AssetFile : Asset,IAssetFile
+    public class AssetFile : Asset, IAssetFile
     {
-        internal AssetFile(string name) : base(name)
+        internal AssetFile(IAssetManager manager,string name) : base(manager,name)
         {
         }
 

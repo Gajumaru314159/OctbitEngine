@@ -9,15 +9,22 @@ namespace OctbitEngine.Asset
 {
     public interface IAssetManager
     {
+        public static IAssetManager? Instance { get; }
+
         /// <summary>
         /// ファイル名に使用できない文字のリスト
         /// </summary>
         public static char[] InvalidChars = Path.GetInvalidFileNameChars();
 
         /// <summary>
+        /// ルートフォルダ
+        /// </summary>
+        public IAssetFolder RootFolder { get; }
+
+        /// <summary>
         /// 名前に使用できる文字列か
         /// </summary>
-        public static bool IsValidName(string name)
+        public bool IsValidName(string name)
         {
             return name.IndexOfAny(InvalidChars) == -1;
         }
@@ -61,10 +68,14 @@ namespace OctbitEngine.Asset
         public IAssetFile? FindFile(string path);
 
         /// <summary>
-        /// ルートフォルダ
+        /// 指定したパスのファイルをアセットとしてインポートできるか
         /// </summary>
-        public IAssetFolder RootFolder { get; }
 
-        public event EventHandler<IAsset>? AssetCreated;
+        public event EventHandler<IAsset>? AssetCreated; 
+
+
+        public bool CanImport(string path);
+        public bool Import(string path);
+
     }
 }

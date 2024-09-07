@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace OctbitEngine.Runtime
 {
-    struct EnumElementInfoArchive
+    internal struct EnumElementInfoArchive
     {
         public string Name;
         public int Index;
         public int Value;
     }
 
-    struct ArgumntInfoArchive
+    internal struct ArgumntInfoArchive
     {
         public string Name;
         public string Type;
     }
 
-    struct ConstructorInfoArchive
+    internal struct ConstructorInfoArchive
     {
         public ArgumntInfoArchive[] Arguments;
     }
 
-    struct PropertyInfoArchive
+    internal struct PropertyInfoArchive
     {
         public string Name;
         public string Type;
@@ -33,7 +28,7 @@ namespace OctbitEngine.Runtime
         public bool CanWrite;
     }
 
-    struct MethodInfoArchive
+    internal struct MethodInfoArchive
     {
         public string Name;
         public string ReturnType;
@@ -41,7 +36,7 @@ namespace OctbitEngine.Runtime
     }
 
 
-    struct TypeInfoArchive
+    internal struct TypeInfoArchive
     {
         public string Name;
         public string[] Bases;
@@ -146,6 +141,6 @@ namespace OctbitEngine.Runtime
 
         }
 
-        public static Dictionary<string,ITypeInfo> TypeMap = new Dictionary<string, ITypeInfo>();
+        public static Dictionary<string,TypeInfo> TypeMap = new Dictionary<string, TypeInfo>();
     }
 }

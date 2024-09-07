@@ -3,9 +3,10 @@ using Livet;
 
 namespace OctbitEditor
 {
-    public class HistoryWindowVM : ViewModel
+    public class HistoryWindowVM : TabBase
     {
         public HistoryWindowVM()
+            : base("History")
         {
             History.Executed+=OnHistoryExecuted;
         }

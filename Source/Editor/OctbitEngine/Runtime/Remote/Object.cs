@@ -1,17 +1,11 @@
 ﻿using Common.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OctbitEngine.Runtime
 {
-    class PrimitiveObject : NotificationObject, IPrimitiveObject
+    public sealed class PrimitiveObject : NotificationObject, IPrimitiveObject
     {
-        PrimitiveObject(ITypeInfo typeInfo,Type type)
+        internal PrimitiveObject(ITypeInfo typeInfo, Type type)
         {
             Type = type;
             TypeInfo = typeInfo;
@@ -23,7 +17,7 @@ namespace OctbitEngine.Runtime
 
         public T GetValue<T>(T fallback) where T : notnull
         {
-            if(m_value is not T value) return fallback;
+            if (m_value is not T value) return fallback;
             return value;
         }
 
@@ -47,7 +41,7 @@ namespace OctbitEngine.Runtime
     }
 
 
-    class ClassObject : NotificationObject, IClassObject
+    public sealed class ClassObject : NotificationObject, IClassObject
     {
         internal ClassObject(ITypeInfo typeInfo)
         {
@@ -96,7 +90,7 @@ namespace OctbitEngine.Runtime
 
         public bool SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull
         {
-            if (m_properties.TryGetValue(name ?? string.Empty,out var v))
+            if (m_properties.TryGetValue(name ?? string.Empty, out var v))
             {
                 if (v.GetType() == value.GetType())
                 {

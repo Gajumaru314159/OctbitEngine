@@ -1,7 +1,9 @@
-﻿using Common.Tree;
+﻿using Common.Log;
+using Common.Tree;
 using CommonView;
 using CommonView.Menu;
 using Livet;
+using OctbitEditor.Windows;
 using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using Reactive.Bindings;
@@ -14,7 +16,14 @@ using Brushes = System.Windows.Media.Brushes;
 
 namespace OctbitEditor
 {
-    internal class ExplorerItem
+
+    public enum ListViewType
+    {
+        List,
+        Detail,
+        Icon,
+    }
+    public class ExplorerItem
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
@@ -23,17 +32,20 @@ namespace OctbitEditor
             Name.Value = name;
             Icon.Value = FolderIcon;
             Path = "";
+            IsFolder = true;
         }
         public ExplorerItem(IAsset asset,bool isAsset = false)
         {
             Name.Value = asset.Name;
-            Icon.Value = asset is IAssetFile?AssetIcon : FolderIcon;
+            Icon.Value = asset is AssetFile?AssetIcon : FolderIcon;
             Path = asset.Path;
+            IsFolder = asset is AssetFolder;
         }
 
 
         public string Path { get; }
 
+        public bool IsFolder { get; }
         public Brush ItemColorBrush => Brushes.Red;
 
         public ReactiveProperty<string> Name { get; } = new();
@@ -45,22 +57,17 @@ namespace OctbitEditor
         public ObservableCollection<ExplorerItem> Children { get; } = new();
     }
 
-    internal class ExplorerVM : ViewModel
+    public class ExplorerVM : TabBase
     {
         public ExplorerVM()
+            : this(OctbitEngine.Asset.AssetManager.Instance)
         {
-
-            if (Design.IsInDesignMode)
-            {
-                Children.Add(new ExplorerItem("Asset"));
-                Children[0].Children.Add(new ExplorerItem("Texture"));
-                Children[0].Children.Add(new ExplorerItem("Material"));
-                SelectedFolder.Value = Children[0];
-                return;
-            }
-
-            m_manager = new AssetManager();
-
+        }
+        public ExplorerVM(IAssetManager assetManager)
+            : base("Explorer")
+        {
+            Title ="Asset Browser";
+            AssetManager = assetManager;
 
             void visit(IAssetFolder folder,ExplorerItem parent)
             {
@@ -76,17 +83,18 @@ namespace OctbitEditor
                     parent.Children.Add(item);
                 }
             }
-            var rootItem = new ExplorerItem(m_manager.RootFolder);
+            var rootItem = new ExplorerItem(AssetManager.RootFolder);
             rootItem.IsSelected.Value = true;
+            rootItem.IsExpanded.Value = true;
             SelectedFolder.Value = rootItem;
             SelectedFolder.Subscribe(_ => RaisePropertyChanged(nameof(SelectionInfo)));
 
             Children.Add(rootItem);
-            visit(m_manager.RootFolder, rootItem);
+            visit(AssetManager.RootFolder, rootItem);
 
             SelectedItems.CollectionChanged += (sender, e) =>
             {
-                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is ExplorerItem item)
+                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is ExplorerItem item && item.IsFolder)
                 {
                     SelectedFolder.Value = item;
                 }
@@ -128,7 +136,7 @@ namespace OctbitEditor
 
             }
             MenuItems.AddCommand("Show in Explorer", ShowInExplorer);
-            MenuItems.AddEmptyCommand("Open");
+            MenuItems.AddCommand("Open",OpenAsset,_=> Random.Shared.Next()%2==0);
             MenuItems.AddEmptyCommand("Delete");
             MenuItems.AddEmptyCommand("Dename");
             MenuItems.AddEmptyCommand("Copy Path");
@@ -152,7 +160,7 @@ namespace OctbitEditor
             int index = 1;
             while (true)
             {
-                if (m_manager.FindFolder(createPath)==null)
+                if (AssetManager.FindFolder(createPath)==null)
                 {
                     break;
                 }
@@ -162,24 +170,49 @@ namespace OctbitEditor
 
                 createPath = string.Format(format, basePath, index++);
             }
-            var newFolder = m_manager.CreateFolder(createPath);
+            var newFolder = AssetManager.CreateFolder(createPath);
             SelectedFolder.Value.Children.Add(new ExplorerItem(newFolder));
         }
 
+        private void OpenAsset()
+        {
+        }
+
+        // Binding Methods
         public void OnSelectionChangedInList()
         {
             RaisePropertyChanged(nameof(SelectionInfo));
         }
 
-        AssetManager? m_manager;
 
+        public void OnFileDrop(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+            var dropFiles = e.Data.GetData(DataFormats.FileDrop) as string[];
+
+            if (dropFiles == null)
+                return;
+
+            Log.Info(string.Join(",", dropFiles));
+        }
+
+        public IAssetManager AssetManager { get; }
 
         public DynamicGroupItem MenuItems { get; } = new("Root");
 
         public ObservableCollection<ExplorerItem> Children { get; } = new();
         public ObservableCollection<ExplorerItem> SelectedItems { get; set; } = new();
+
         public ReactiveProperty<ExplorerItem> SelectedFolder { get; } = new();
         public ReactiveProperty<string> SelectedFolderPath { get; } = new("Asset");
+
+        public ReactiveProperty<double> IconSize { get; } = new(50);
+
+        public IEnumerable<ListViewType> ListViewTypes { get; private set; } = Enum.GetValues<ListViewType>();
+        public ReactiveProperty<ListViewType> SelectedListViewType { get; } = new(ListViewType.Detail);
+
+
 
         public ICommand CreateFolderCommand { get; }
 

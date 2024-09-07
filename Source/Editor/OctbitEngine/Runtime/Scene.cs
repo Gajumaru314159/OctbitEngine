@@ -3,16 +3,16 @@ using OctbitEngine.Asset;
 
 namespace OctbitEngine.Runtime
 {
-    internal class Scene : IScene
+    public sealed class Scene : IScene
     {
-        internal Scene(IClassObject remoteObject)
+        internal Scene(IRemoteObject remoteObject)
         {
             m_remoteObject = remoteObject;
         }
 
         public string Name
         {
-            get => m_remoteObject.GetValue("(null)");
+            get => m_remoteObject.GetValue<string>();
             set => m_remoteObject.SetValue(value);
         }
 
@@ -20,12 +20,12 @@ namespace OctbitEngine.Runtime
 
         public bool IsActive
         {
-            get => m_remoteObject.GetValue(false);
+            get => m_remoteObject.GetValue<bool>();
             set => m_remoteObject.SetValue(value);
         }
         public bool IsVisible
         {
-            get => m_remoteObject.GetValue(false);
+            get => m_remoteObject.GetValue<bool>();
             set => m_remoteObject.SetValue(value);
         }
 
@@ -43,15 +43,15 @@ namespace OctbitEngine.Runtime
         private List<Entity> m_entities = new();
 
 
-        public bool AddChild(IScene _child)
+        public bool AddChild(IScene child)
         {
-            if (_child is not Scene child) return false;
+            if (child is not Scene cchild) return false;
             if (this.AnyAncestor<IScene>(i => i.Parent, i => i == child)) return false;
 
-            child.m_parent?.m_children.Remove(child);
-            child.m_parent = this;
+            cchild.m_parent?.m_children.Remove(cchild);
+            cchild.m_parent = this;
 
-            m_children.Add(child);
+            m_children.Add(cchild);
 
             return true;
         }
@@ -81,13 +81,13 @@ namespace OctbitEngine.Runtime
         public IEntity CreateEntity()
         {
             // TODO RemoteObjectに変更
-            var obj = new ClassObject(s_typeInfo);
+            var obj = new RemoteObject(s_typeInfo);
             return new Entity(Guid.NewGuid(),obj,this);
         }
 
 
-        IClassObject m_remoteObject;
+        private IRemoteObject m_remoteObject;
 
-        static ITypeInfo s_typeInfo = new TypeInfo("ob::engine::Entity");
+        static TypeInfo s_typeInfo = new TypeInfo("ob::engine::Entity");
     }
 }

@@ -38,9 +38,10 @@ namespace OctbitEditor
         public string CallStack { get; init; }
     }
 
-    public class LogListVM
+    public class LogListVM : TabBase
     {
         public LogListVM()
+            : base("LogList")
         {
 
             LogItems.CollectionChanged += (sender, e) =>

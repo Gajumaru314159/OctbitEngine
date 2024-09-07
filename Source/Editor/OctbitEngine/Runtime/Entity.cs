@@ -2,53 +2,46 @@
 
 namespace OctbitEngine.Runtime
 {
-    internal class Entity : IEntity
+    public sealed class Entity : IEntity
     {
 
-        internal Entity(Guid uuid,IClassObject remoteObject,IScene scene)
+        internal Entity(Guid guid,IRemoteObject remoteObject,IScene scene)
         {
-            m_remoteObject = remoteObject;
-            m_scene = scene;
+            RemoteObject = remoteObject;
+            Scene = scene;
         }
 
-        public IScene Scene => m_scene;
-        private IScene m_scene;
+        public IScene Scene { get; }
 
         public string Name
         {
-            get => m_remoteObject.GetValue("(null)");
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<string>();
+            set => RemoteObject.SetValue(value);
         }
         public bool IsActive
         {
-            get => m_remoteObject.GetValue(false);
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<bool>();
+            set => RemoteObject.SetValue(value);
         }
         public bool IsVisible
         {
-            get => m_remoteObject.GetValue(false);
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<bool>();
+            set => RemoteObject.SetValue(value);
         }
         public bool IsStatic
         {
-            get => m_remoteObject.GetValue(false);
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<bool>();
+            set => RemoteObject.SetValue(value);
         }
 
-        public bool IsActiveInHierarchy => this.AllAncestor<IEntity>(i => i?.Parent, i => i.IsActive);
-
-        public bool IsVisibleInHierarchy => this.AllAncestor<IEntity>(i => i?.Parent, i => i.IsVisible);
-
-        public bool IsStaticInHierarchy => this.AllAncestor<IEntity>(i => i?.Parent, i => i.IsStatic);
-
-        public IEntity? Parent => m_parent;
-        private Entity? m_parent;
+        public IEntity? Parent => _parent;
+        public Entity? _parent;
 
         public IReadOnlyList<IEntity> Children => m_children;
         private List<Entity> m_children = new();
 
         public IReadOnlyList<IComponent> Components => m_component;
-        private List<Component> m_component = new();
+        private List<IComponent> m_component = new();
 
         public ITransformComponent Transform => m_transform!;
         private ITransformComponent? m_transform = null;
@@ -58,33 +51,27 @@ namespace OctbitEngine.Runtime
             if (_child is not Entity child) return false;
             if (this.AnyAncestor<IEntity>(i => i.Parent, i => i == child)) return false;
             
-            child.m_parent?.m_children.Remove(child);
-            child.m_parent = this;
+            child._parent?.m_children.Remove(child);
+            child._parent = this;
 
             m_children.Add(child);
 
             return true;
         }
-        public bool SetParent(IEntity? _parent)
+        public bool SetParent(IEntity? parent)
         {
-            if (_parent is null)
+            if (parent is not Entity cparent)
             {
-                m_parent?.m_children.Remove(this);
-                m_parent = null;
+                _parent?.m_children.Remove(this);
+                _parent = null;
                 return true;
             }
-            else if(_parent is Entity parent)
-            {
-                if (parent.AnyAncestor<IEntity>(i => i.Parent, i => i == this)) return false;
-                m_parent?.m_children.Remove(this);
-                m_parent = parent;
-                parent.m_children.Add(this);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            if (cparent.AnyAncestor(i => i._parent, i => i == this)) return false;
+            _parent?.m_children.Remove(this);
+            _parent = cparent;
+            _parent.m_children.Add(this);
+            return true;
         }
 
         public IComponent? AddComponent(string type)
@@ -99,25 +86,25 @@ namespace OctbitEngine.Runtime
 
         public IComponent? GetComponent(string type)
         {
-            return m_component.FirstOrDefault(i => i?.RemoteObject.TypeInfo.Name == type,null);
+            return null;
         }
 
         public T? GetComponent<T>() where T : IComponent
         {
-            return m_component.OfType<T?>().FirstOrDefault();
+            throw new NotImplementedException();
         }
 
         public IComponent[] GetComponents(string type)
         {
-            return m_component.Where(i => i?.RemoteObject.TypeInfo.Name == type).ToArray();
+            throw new NotImplementedException();
         }
 
         public T[] GetComponents<T>() where T : IComponent
         {
-            return m_component.OfType<T>().ToArray();
+            throw new NotImplementedException();
         }
 
 
-        private IClassObject m_remoteObject;
+        private IRemoteObject RemoteObject { get; init; }
     }
 }

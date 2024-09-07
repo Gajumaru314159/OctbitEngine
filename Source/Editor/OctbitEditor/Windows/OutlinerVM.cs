@@ -1,46 +1,41 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using CommonView.Menu;
-using Common.Log;
-using Reactive.Bindings;
-using CommonView.History;
-using OctbitEngine.Runtime;
-using Livet;
+﻿using Common.Linq;
 using Common.Tree;
-using Common.Linq;
+using CommonView.History;
+using CommonView.Menu;
+using Livet;
+using OctbitEngine.Runtime;
+using Reactive.Bindings;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace OctbitEditor
 {
     public class EntityMock : IEntity
     {
-        public EntityMock()
+        public EntityMock(string name)
         {
-
+            Name = name;
         }
         public IScene Scene => throw new NotImplementedException();
 
-        public string Name { get; set; } = string.Empty;
-        public bool IsActive { get; set; } = true;
-        public bool IsVisible { get; set; } = true;
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsVisible { get; set; }
         public bool IsStatic { get; set; }
 
-        public bool IsActiveInHierarchy => Parent.AllAncestor<IEntity>(i => i?.Parent, i => i.IsActive);
+        public IEntity? Parent { get; set; }
 
-        public bool IsVisibleInHierarchy => Parent.AllAncestor<IEntity>(i => i?.Parent, i => i.IsVisible);
+        public IReadOnlyList<IEntity> Children { get; set; }
 
-        public bool IsStaticInHierarchy => Parent.AllAncestor<IEntity>(i => i?.Parent, i => i.IsStatic);
-
-        public IEntity? Parent { get; private set; }
-
-        public IReadOnlyList<IEntity> Children => m_children;
-        private List<IEntity> m_children = new();
-
-        public IReadOnlyList<IComponent> Components => m_components;
-        private List<IComponent> m_components = new();
+        public IReadOnlyList<IComponent> Components => throw new NotImplementedException();
 
         public ITransformComponent Transform => throw new NotImplementedException();
+
+        public bool AddChild(IEntity child)
+        {
+            throw new NotImplementedException();
+        }
 
         public IComponent? AddComponent(string type)
         {
@@ -72,32 +67,11 @@ namespace OctbitEditor
             throw new NotImplementedException();
         }
 
-        public bool SetParent(IEntity? iparent)
+        public bool SetParent(IEntity? parent)
         {
-            // 不正な型
-            if (iparent is not EntityMock parent) return false;
-
-            // 循環
-            if (iparent.Parent.AnyAncestor(i => i.Parent, i => i==parent)) return false;
-
-            if (Parent is EntityMock oldParent)
-            {
-                oldParent.m_children.Remove(this);
-            }
-
-            parent.m_children.Add(this);
-            Parent = parent;
-
-            return false;
-        }
-
-        public bool AddChild(IEntity child)
-        {
-            return child.SetParent(this);
+            throw new NotImplementedException();
         }
     }
-
-
 
 
     public class OutlinerItem : ViewModel
@@ -219,29 +193,11 @@ namespace OctbitEditor
 
     }
 
-    public class OutlinerVM : ViewModel
+    public class OutlinerVM : TabBase
     {
         public OutlinerVM()
+            : base("Outliner")
         {
-            var entity = new EntityMock();
-            entity.AddChild(new EntityMock() { Name="Root" });
-            entity.AddChild(new EntityMock() { Name="Root" });
-            entity.AddChild(new EntityMock() { Name="Root" });
-            entity.Children[0].AddChild(new EntityMock() { Name="Root" });  
-            entity.Children[0].AddChild(new EntityMock() { Name="Root" });
-
-            void visit(OutlinerItem? parent,ObservableCollection<OutlinerItem> dst,IEnumerable<IEntity> src)
-            {
-                foreach (var s in src)
-                {
-                    var child = new OutlinerItem(s) { Parent = parent };
-                    dst.Add(child);
-                    visit(child, child.Children, s.Children);
-                }
-            }
-
-            visit(null,Children, entity.Children);
-
             MenuItems = new DynamicGroupItem("Root");
 
             GenerateMenuItems();
@@ -288,8 +244,9 @@ namespace OctbitEditor
 
         private void CreateEntity()
         {
+
             var parent = SelectedItems.FirstOrNull();
-            var item = new OutlinerItem(new EntityMock() { Name="New Entity" });
+            var item = new OutlinerItem(new EntityMock("New Entity") { Name="New Entity" });
 
             History.Record(
                 "エンティティを作成",
@@ -313,7 +270,7 @@ namespace OctbitEditor
                     RaisePropertyChanged(nameof(SelectionInfo));
                 }
             );
-
+            
         }
         private void DeleteEntity()
         {

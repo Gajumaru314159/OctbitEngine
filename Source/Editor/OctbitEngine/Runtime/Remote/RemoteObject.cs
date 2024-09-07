@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 
 namespace OctbitEngine.Runtime
 {
@@ -20,6 +15,11 @@ namespace OctbitEngine.Runtime
 
     public class RemoteObject : IRemoteObject
     {
+        internal RemoteObject(ITypeInfo typeInfo)
+        {
+            TypeInfo =typeInfo;
+        }
+
         internal RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
         {
             Runtime = runtime;

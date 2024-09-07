@@ -1,4 +1,5 @@
-﻿using OctbitEngine.Asset;
+﻿using Common.Tree;
+using OctbitEngine.Asset;
 
 namespace OctbitEngine.Runtime
 {
@@ -10,8 +11,9 @@ namespace OctbitEngine.Runtime
         public bool IsActive { get; set; }
         public bool IsVisible { get; set; }
 
-        public bool IsActiveInHierarchy { get; }
-        public bool IsVisibleInHierarchy { get; }
+        public bool IsActiveInHierarchy => this.AllAncestor(i => i?.Parent, i => i.IsActive);
+
+        public bool IsVisibleInHierarchy => this.AllAncestor(i => i?.Parent, i => i.IsVisible);
 
         public IScene? Parent { get; }
         public IReadOnlyList<IScene> Children { get; }

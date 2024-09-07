@@ -1,15 +1,15 @@
 ﻿namespace OctbitEngine.Runtime
 {
-    internal class Component : IComponent
+    public class Component : IComponent
     {
-        internal Component(Guid uuid, IClassObject remoteObject, Entity entity)
+        protected Component(Guid guid, IRemoteObject remoteObject, IEntity entity)
         {
             Entity = entity;
             RemoteObject = remoteObject;
         }
         public IEntity Entity { get; }
 
-        public IClassObject RemoteObject { get; }
+        public IRemoteObject RemoteObject { get; }
     }
 
 }
