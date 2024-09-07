@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace OctbitEditor.Windows
+namespace OctbitEditor
 {
     /// <summary>
     /// ControlTestWindpw.xaml の相互作用ロジック
     /// </summary>
-    public partial class ControlTestWindpw : Window
+    public partial class ControlTest : System.Windows.Controls.UserControl
     {
-        public ControlTestWindpw()
+        public ControlTest()
         {
             InitializeComponent();
         }

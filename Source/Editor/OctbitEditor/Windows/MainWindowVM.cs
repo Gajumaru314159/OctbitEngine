@@ -8,6 +8,19 @@ using System.Windows.Input;
 
 namespace OctbitEditor
 {
+    public enum ThemePreset
+    {
+        Dark,
+        Light,
+        Unity,
+        UnrealEngine,
+        Cyber,
+        Maya,
+        VisualStudioDark,
+        Deep,
+        //Modo,
+        //Cyber,
+    }
     internal class MainWindowVM : ViewModel
     {
         public MainWindowVM()
@@ -44,6 +57,9 @@ namespace OctbitEditor
 
 
         public ReactivePropertySlim<string> Title { get; } = new();
+
+        public ThemePreset ThemePreset { get; set; } = OctbitEditor.ThemePreset.Dark;
+        public IEnumerable<ThemePreset> ThemePresets { get; private set; } = Enum.GetValues<ThemePreset>();
 
         public ICommand RedoCommand { get; }
         public ICommand UndoCommand { get; }

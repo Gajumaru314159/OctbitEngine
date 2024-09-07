@@ -10,7 +10,7 @@
     <Compile Update="Dialog\StartupDialog\StartupDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Windows\ControlTestWindpw.xaml.cs">
+    <Compile Update="Windows\ControlTest.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -18,7 +18,7 @@
     <Page Update="Dialog\StartupDialog\StartupDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Windows\ControlTestWindpw.xaml">
+    <Page Update="Windows\ControlTest.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\HistoryWindow.xaml">

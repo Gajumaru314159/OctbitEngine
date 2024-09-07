@@ -5,8 +5,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/CommonView;component/Themes/Colors.xaml"/>
+                <!--Colorsは0番目に定義してください-->
+                <ResourceDictionary Source="/CommonView;component/Themes/Colors/Dark.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Theme.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Icons.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Controls/SearchBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

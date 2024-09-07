@@ -32,12 +32,6 @@
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                     <Setter Property="DockPanel.Dock" Value="Left"/>
-                    <Style.Resources>
-                        <Style TargetType="Image">
-                            <Setter Property="Height" Value="15"/>
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        </Style>
-                    </Style.Resources>
                 </Style>
                 <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}"/>
 
@@ -68,27 +62,6 @@
 
                 <BitmapImage x:Key="MenuIcon" UriSource="/Resources/Icons/menu.png"/>
 
-                <BitmapImage x:Key="PlayIcon" UriSource="/Resources/Icons/play.png"/>
-                <BitmapImage x:Key="PauseIcon" UriSource="/Resources/Icons/pause.png"/>
-                <BitmapImage x:Key="StepIcon" UriSource="/Resources/Icons/step.png"/>
-                <BitmapImage x:Key="StopIcon" UriSource="/Resources/Icons/stop.png"/>
-
-                <BitmapImage x:Key="SelectIcon" UriSource="/Resources/Icons/select.png"/>
-                <BitmapImage x:Key="MoveIcon" UriSource="/Resources/Icons/move.png"/>
-                <BitmapImage x:Key="RotateIcon" UriSource="/Resources/Icons/rotate.png"/>
-                <BitmapImage x:Key="ScaleIcon" UriSource="/Resources/Icons/scale.png"/>
-                
-                <BitmapImage x:Key="GlobalIcon" UriSource="/Resources/Icons/global.png"/>
-                
-                <BitmapImage x:Key="SnapMoveIcon" UriSource="/Resources/Icons/snap_move.png"/>
-                <BitmapImage x:Key="SnapRotateIcon" UriSource="/Resources/Icons/snap_rotate.png"/>
-                <BitmapImage x:Key="SnapScaleIcon" UriSource="/Resources/Icons/snap_scale.png"/>
-                
-                <BitmapImage x:Key="ShadingIcon" UriSource="/Resources/Icons/shading.png"/>
-                <BitmapImage x:Key="WireIcon" UriSource="/Resources/Icons/wire.png"/>
-                <BitmapImage x:Key="WireShadingIcon" UriSource="/Resources/Icons/wire_shading.png"/>
-                
-                <BitmapImage x:Key="LayerIcon" UriSource="/Resources/Icons/layer.png"/>
             </DockPanel.Resources>
 
             <!--メニュー-->
@@ -111,36 +84,66 @@
             <!--再生-->
             <ItemsControl Visibility="{Binding PlayIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
                 <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}" Margin="0">
-                    <Image Source="{StaticResource PlayIcon}"/>
+                    <ContentControl Style="{DynamicResource Play}"/>
                 </ToggleButton>
                 <ToggleButton ToolTip="Stop (Ctrl+P)" IsEnabled="{Binding IsPlaying.Value}">
-                    <Image Source="{StaticResource PauseIcon}"/>
+                    <ContentControl Style="{StaticResource Pause}"/>
                 </ToggleButton>
-                <ToggleButton ToolTip="Step (Ctrl+P)">
-                    <Image Source="{StaticResource StepIcon}"/>
+                <ToggleButton ToolTip="Step (Ctrl+P)" IsChecked="True">
+                    <ContentControl Style="{DynamicResource Step}"/>
                 </ToggleButton>
             </ItemsControl>
 
             <!--ツール-->
             <ItemsControl Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
                 <RadioButton ToolTip="Select (Q)" Margin="0" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Select}">
-                    <Image Source="{StaticResource SelectIcon}"/>
+                    <ContentControl Style="{StaticResource Cursor}"/>
                 </RadioButton>
+
                 <RadioButton ToolTip="Move (W)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Move}">
-                    <Image Source="{StaticResource MoveIcon}"/>
+                    <ContentControl Style="{StaticResource Move}"/>
                 </RadioButton>
                 <RadioButton ToolTip="Rotate (E)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Rotate}">
-                    <Image Source="{StaticResource RotateIcon}"/>
+                    <ContentControl Style="{StaticResource Rotate}"/>
                 </RadioButton>
                 <RadioButton ToolTip="Scale (R)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Scale}">
-                    <Image Source="{StaticResource ScaleIcon}"/>
+                    <ContentControl Style="{StaticResource Scale}"/>
                 </RadioButton>
             </ItemsControl>
 
             <!--座標系-->
             <ItemsControl Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
                 <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}" Margin="0">
-                    <Image Source="{StaticResource GlobalIcon}"/>
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Border" Background="Transparent">
+                                            <Border x:Name="Overlay">
+                                                <Grid Margin="3,0">
+                                                    <ContentControl x:Name="Local" Style="{StaticResource Local}" Foreground="{DynamicResource Foreground}"/>
+                                                    <ContentControl x:Name="Global" Style="{StaticResource Global}" Foreground="{DynamicResource Foreground}"/>
+                                                </Grid>
+                                            </Border>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="Local" Property="Visibility" Value="Collapsed"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter TargetName="Global" Property="Visibility" Value="Collapsed"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        
+                    </ToggleButton.Style>
                 </ToggleButton>
             </ItemsControl>
 
@@ -154,26 +157,26 @@
                             <MenuItem Header="1.0"/>
                         </ContextMenu>
                     </ToggleButton.ContextMenu>
-                    <Image Source="{StaticResource SnapMoveIcon}"/>
+                    <ContentControl Style="{StaticResource SnapPosition}"/>
                 </ToggleButton>
                 <ToggleButton ToolTip="Snap Rotate" IsChecked="{Binding SnapRotateIsEnabled.Value}">
-                    <Image Source="{StaticResource SnapRotateIcon}"/>
+                    <ContentControl Style="{StaticResource SnapRotation}"/>
                 </ToggleButton>
                 <ToggleButton ToolTip="Snap Scale" IsChecked="{Binding SnapScaleIsEnabled.Value}">
-                    <Image Source="{StaticResource SnapScaleIcon}"/>
+                    <ContentControl Style="{StaticResource SnapScale}"/>
                 </ToggleButton>
             </ItemsControl>
 
             <!--シェーディング-->
             <ItemsControl Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
                 <RadioButton ToolTip="Shading" Margin="0" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Shading}">
-                    <Image Source="{StaticResource ShadingIcon}"/>
+                    <ContentControl Style="{StaticResource Shading}"/>
                 </RadioButton>
                 <RadioButton ToolTip="Wire" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Wireframe}">
-                    <Image Source="{StaticResource WireIcon}"/>
+                    <ContentControl Style="{StaticResource Wire}"/>
                 </RadioButton>
                 <RadioButton ToolTip="Wire Shading" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=ShadingWireframe}">
-                    <Image Source="{StaticResource WireShadingIcon}"/>
+                    <ContentControl Style="{StaticResource ShadingWire}"/>
                 </RadioButton>
             </ItemsControl>
 
@@ -206,13 +209,13 @@
                             </MenuItem>
                         </ContextMenu>
                     </ToggleButton.ContextMenu>
-                    <Image Source="{StaticResource LayerIcon}"/>
+                    <ContentControl Style="{StaticResource Layer}"/>
                 </ToggleButton>
             </ItemsControl>
             <Border/>
         </DockPanel>
         <Border Height="1" DockPanel.Dock="Top"/>
-        <WindowsFormsHost DockPanel.Dock="Bottom" Background="Black">
+        <WindowsFormsHost DockPanel.Dock="Bottom" Background="{DynamicResource Background}">
             <forms:Panel x:Name="m_panel" Click="m_panel_Click"/>
         </WindowsFormsHost>
     </DockPanel>

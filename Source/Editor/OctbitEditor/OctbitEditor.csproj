@@ -11,7 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Icons\active.png" />
     <None Remove="Resources\Icons\down.png" />
     <None Remove="Resources\Icons\error.png" />
     <None Remove="Resources\Icons\eye_close.png" />
@@ -74,7 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icons\active.png" />
     <Resource Include="Resources\Icons\down.png" />
     <Resource Include="Resources\Icons\error.png" />
     <Resource Include="Resources\Icons\eye_close.png" />

@@ -98,6 +98,7 @@
                     <Separator/>
                     <MenuItem Header="Release Notes"/>
                 </MenuItem>
+                <ComboBox ItemsSource="{Binding ThemePresets}" SelectedValue="{Binding ThemePreset}" SelectionChanged="OnThemeColorChanged"/>
             </Menu>
 
         </DockPanel>

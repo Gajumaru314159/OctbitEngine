@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:local="clr-namespace:CommonView"
+                    >
+
+    <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
+
+    <SolidColorBrush x:Key="Foreground" Color="#FAFAFA"/>
+    <SolidColorBrush x:Key="Background" Color="#1F1F1F"/>
+    <SolidColorBrush x:Key="Surface" Color="#3F3F46"/>
+    <SolidColorBrush x:Key="Accent" Color="#3D3D3D"/>
+    <SolidColorBrush x:Key="AccentForeground" Color="#FAFAFA"/>
+    <SolidColorBrush x:Key="Field" Color="#333333"/>
+    <SolidColorBrush x:Key="Outline" Color="#63636D"/>
+    <SolidColorBrush x:Key="Header" Color="#1F1F1F"/>
+    <SolidColorBrush x:Key="Focus" Color="#EEEEEE"/>
+    <SolidColorBrush x:Key="MenuBackground" Color="#1F1F1F"/>
+    <SolidColorBrush x:Key="Hover" Color="#20FFFFFF"/>
+</ResourceDictionary>

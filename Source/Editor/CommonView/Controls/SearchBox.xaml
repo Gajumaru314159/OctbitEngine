@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:CommonView">
 
     <Style TargetType="local:SearchBox">
-        <Setter Property="Background" Value="{DynamicResource TextBoxBackground}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Text.Normal}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource TextBox.Outline.Normal}"/>
+        <Setter Property="Background" Value="{DynamicResource Field}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Text" Value=""/>
         <Setter Property="Margin" Value="1"/>
@@ -19,7 +19,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:SearchBox">
-                    <Border CornerRadius="4" 
+                    <Border CornerRadius="{DynamicResource CornderRadiusA}" 
                             Padding="4,0"
                             Height="{TemplateBinding Height}" 
                             Margin="{TemplateBinding Margin}" 
@@ -31,7 +31,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="/Resources/Icons/search.png" Height="12" Width="12" Margin="0,0,4,0" Grid.Column="0"/>
+                            <ContentControl Style="{StaticResource Search}" Foreground="{DynamicResource Foreground}" Margin="0,0,4,0" Grid.Column="0"/>
                             <TextBlock x:Name="waterMark" Text="{TemplateBinding Watermark}" Opacity="0.5" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center"/>
                             <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent},UpdateSourceTrigger=PropertyChanged}" Padding="0" Background="Transparent" BorderThickness="0" Grid.Column="1" VerticalAlignment="Center">
                                 <i:Interaction.Behaviors>

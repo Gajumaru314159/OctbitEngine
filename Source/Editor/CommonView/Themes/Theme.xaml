@@ -6,6 +6,9 @@
                     xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
                     >
 
+    <CornerRadius x:Key="CornderRadiusA" TopLeft="2" TopRight="2" BottomLeft="2" BottomRight="2"/>
+    <CornerRadius x:Key="CornderRadiusB" TopLeft="6" TopRight="6" BottomLeft="6" BottomRight="6"/>
+
     <!--Shared-->
     <Style x:Key="FocusVisual">
         <Setter Property="Control.Template">
@@ -25,7 +28,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
                     <Border Name="Border" 
-                            Background="{DynamicResource MenuBackground}" 
+                            Background="{DynamicResource Surface}" 
                             BorderBrush="{DynamicResource Outline}" 
                             BorderThickness="1"
                             CornerRadius="{DynamicResource CornderRadiusB}"
@@ -47,10 +50,6 @@
     <sys:Double x:Key="ScrollBarRepeatButtonSize">10</sys:Double>
     <!-- スクロールバーのマージン -->
     <sys:Double x:Key="ScrollBarMarginSize">0</sys:Double>
-    <!-- スクロールバーの色-->
-    <SolidColorBrush x:Key="ScrollBarColorBrush" Color="#5F5F5F" />
-    <!-- トラック（レーン）の色 -->
-    <SolidColorBrush x:Key="ScrollBarTrackBrush" Color="#303030" />
 
     <!-- 終端の三角ボタンのスタイル -->
     <Style x:Key="ScrollBarRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
@@ -90,7 +89,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border CornerRadius="4" Background="{StaticResource ScrollBarColorBrush}"/>
+                    <Border CornerRadius="4" Background="{StaticResource Surface}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -119,7 +118,7 @@
                                     <RowDefinition/>
                                     <RowDefinition MaxHeight="{StaticResource ScrollBarRepeatButtonSize}"/>
                                 </Grid.RowDefinitions>
-                                <Border Grid.RowSpan="3" Background="{StaticResource ScrollBarTrackBrush}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" />
+                                <Border Grid.RowSpan="3" Background="{StaticResource Background}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" />
                                 <RepeatButton Grid.Row="0" Style="{StaticResource ScrollBarRepeatButtonStyle}" Height="{StaticResource ScrollBarRepeatButtonSize}" Command="ScrollBar.LineUpCommand" Content="M 0 4 L 8 4 L 4 0 Z" />
                                 <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                                     <Track.DecreaseRepeatButton>
@@ -156,7 +155,7 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition MaxWidth="{StaticResource ScrollBarRepeatButtonSize}"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.ColumnSpan="3" Background="{StaticResource ScrollBarTrackBrush}"  BorderBrush="{DynamicResource Outline}" BorderThickness="1"/>
+                                <Border Grid.ColumnSpan="3" Background="{StaticResource Background}"  BorderBrush="{DynamicResource Outline}" BorderThickness="1"/>
                                 <RepeatButton Grid.Column="0" Style="{StaticResource ScrollBarRepeatButtonStyle}" Width="{StaticResource ScrollBarRepeatButtonSize}" Command="ScrollBar.LineLeftCommand" Content="M 4 0 L 4 8 L 0 4 Z" />
                                 <Track x:Name="PART_Track" Grid.Column="1" IsDirectionReversed="false">
                                     <Track.DecreaseRepeatButton>
@@ -228,6 +227,7 @@
                             <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -261,6 +261,7 @@
                             <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -294,9 +295,11 @@
                             <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -358,7 +361,7 @@
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
-        <Setter Property="Background" Value="{DynamicResource ExpanderHeader}"/>
+        <Setter Property="Background" Value="{DynamicResource Surface}"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="Padding" Value="4,3"/>
@@ -416,7 +419,7 @@
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
-        <Setter Property="Background" Value="{DynamicResource CheckBoxBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource Surface}"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -441,7 +444,7 @@
                                               Width="12" 
                                               Height="12" 
                                               SnapsToDevicePixels="True" 
-                                              Stroke="White"
+                                              Stroke="{TemplateBinding Foreground}"
                                               StrokeThickness="2" 
                                               Data="M 2 6 L 10 6"/>
                                     </Grid>
@@ -452,11 +455,13 @@
                     </BulletDecorator>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Visibility" TargetName="CheckMark" Value="Visible"/>
+                            <Setter Property="Stroke" TargetName="CheckMark" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="{x:Null}">
-                            <Setter TargetName="InderminateMark" Property="Visibility" Value="Visible"/>
+                            <Setter Property="Visibility" TargetName="InderminateMark" Value="Visible"/>
+                            <Setter Property="Stroke" TargetName="InderminateMark" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -527,6 +532,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -553,11 +559,11 @@
                     Grid.ColumnSpan="2" 
                     BorderThickness="1"
                     BorderBrush="{DynamicResource Outline}"
-                    Background="{DynamicResource ComboBoxBackground}"/>
+                    Background="{DynamicResource Field}"/>
             <Border Grid.Column="0"
                     Margin="1"
                     BorderBrush="{DynamicResource Outline}"
-                    Background="{DynamicResource ComboBoxBackground}"/>
+                    Background="{DynamicResource Field}"/>
             <Border x:Name="Overlay"
                     Grid.ColumnSpan="2"
                     Background="{DynamicResource Hover}"
@@ -635,7 +641,7 @@
                                 <Border x:Name="DropDownBorder" 
                                         BorderThickness="1" 
                                         BorderBrush="{DynamicResource Outline}" 
-                                        Background="{DynamicResource ComboBoxBackground}"/>
+                                        Background="{DynamicResource Field}"/>
 
                                 <ScrollViewer Margin="0"
                                                   SnapsToDevicePixels="True">
@@ -713,7 +719,7 @@
 
             <!--背景-->
             <Border x:Name="TrackBackground" Margin="0" CornerRadius="2" Height="4" Grid.Row="1" BorderThickness="1" 
-                    BorderBrush="{DynamicResource Outline}" Background="{DynamicResource ComboBoxBackground}" />
+                    BorderBrush="{DynamicResource Outline}" Background="{DynamicResource Field}" />
             <!--バー-->
             <Track Grid.Row="1" x:Name="PART_Track">
                 <Track.DecreaseRepeatButton>
@@ -758,7 +764,7 @@
 
             <!--背景-->
             <Border x:Name="TrackBackground" Margin="0" CornerRadius="2" Width="4" Grid.Column="1" BorderThickness="1" 
-                    BorderBrush="{DynamicResource Outline}" Background="{DynamicResource ComboBoxBackground}" />
+                    BorderBrush="{DynamicResource Outline}" Background="{DynamicResource Field}" />
             <!--バー-->
             <Track Grid.Column="1" x:Name="PART_Track">
                 <Track.DecreaseRepeatButton>
@@ -856,19 +862,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <Grid x:Name="Root">
-                        <Border x:Name="Border" Margin="0,0,2,1" CornerRadius="2,2,0,0" Background="{DynamicResource UnselectedTab}">
+                        <Border x:Name="Border" Margin="0,0,2,1" CornerRadius="2,2,0,0" Background="{DynamicResource Surface}">
                             <Border x:Name="Overlay" Background="Transparent" CornerRadius="2,2,0,0">
                                 <ContentPresenter x:Name="ContentSite" Margin="6,2" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" />
                             </Border>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
+                        <Trigger Property="IsSelected" Value="False">
                             <Setter Property="Panel.ZIndex" Value="100" />
-                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Surface}"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <!--<Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}" />-->
+                            <Setter Property="Opacity" TargetName="Border" Value="{DynamicResource DisableOpacity}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" TargetName="Border" Value="{DynamicResource DisableOpacity}"/>
@@ -905,7 +908,7 @@
 
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TextBoxErrorTemplate}"/>
-        <Setter Property="Background" Value="{DynamicResource TextBoxBackground}"/>
+        <Setter Property="Background" Value="{DynamicResource Field}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="CaretBrush" Value="{DynamicResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
@@ -1073,7 +1076,7 @@
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="Overlay" Property="Background" Value="{StaticResource Hover}"/>
+                <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
@@ -1141,7 +1144,7 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Border x:Name="GlyphPanel" Background="{StaticResource Accent}" ClipToBounds="False" HorizontalAlignment="Center" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
+                    <Border x:Name="GlyphPanel" Background="{DynamicResource Accent}" ClipToBounds="False" HorizontalAlignment="Center" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
                         <Path x:Name="Glyph" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="{StaticResource Foreground}" Height="11" Width="10"/>
                     </Border>
                     <ContentPresenter x:Name="menuHeaderContainer" ContentSource="Header" Grid.Column="2" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
@@ -1327,6 +1330,7 @@
                             <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
@@ -1365,7 +1369,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="GridViewColumnHeader">
-                    <Grid>
+                    <Grid Margin="-1,0,0,0">
                         <Border x:Name="HeaderBorder" BorderThickness="0,1,0,1" Padding="2,0,2,0" Background="{DynamicResource Surface}">
                             <ContentPresenter x:Name="HeaderContent"
                               Margin="0,0,0,1"
@@ -1524,15 +1528,9 @@
                             <Setter Property="Visibility" TargetName="Expander" Value="Visible"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter Property="Background" TargetName="Bd" Value="{DynamicResource Accent}"/>
                         </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true"/>
-                                <Condition Property="IsSelectionActive" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource Accent}"/>
-                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="false">
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -1692,6 +1690,7 @@
                         
                         <!--選択時-->
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter Property="Background" TargetName="ItemBG" Value="{DynamicResource Accent}"/>
                         </Trigger>
 
@@ -1794,6 +1793,7 @@
                             <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">

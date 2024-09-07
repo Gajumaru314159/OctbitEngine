@@ -64,57 +64,59 @@
     <DockPanel x:Name="Root">
         
         <!--ヘッダー-->
-        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
-            <DockPanel.Resources>
-                <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Width" Value="22"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="0,0,1,0"/>
-                    <Style.Resources>
-                        <Style TargetType="Image">
-                            <Setter Property="Width" Value="15"/>
-                            <Setter Property="Height" Value="Auto"/>
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        </Style>
-                    </Style.Resources>
-                </Style>
-                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                    <Setter Property="Width" Value="22"/>
-                    <Setter Property="Padding" Value="0"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="0,0,1,0"/>
-                    <Style.Resources>
-                        <Style TargetType="Image">
-                            <Setter Property="Width" Value="15"/>
-                            <Setter Property="Height" Value="Auto"/>
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        </Style>
-                    </Style.Resources>
-                </Style>
-            </DockPanel.Resources>
+        <Border DockPanel.Dock="Top" Background="{DynamicResource Header}" BorderBrush="{DynamicResource Outline}" BorderThickness="0,0,0,1">
+            <DockPanel>
+                <DockPanel.Resources>
+                    <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                        <Setter Property="Width" Value="22"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,0,1,0"/>
+                        <Style.Resources>
+                            <Style TargetType="Image">
+                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Height" Value="Auto"/>
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Width" Value="22"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0,0,1,0"/>
+                        <Style.Resources>
+                            <Style TargetType="Image">
+                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Height" Value="Auto"/>
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                </DockPanel.Resources>
 
-            <Button DockPanel.Dock="Left" TabIndex="0">
-                <Image Source="/Resources/Icons/left.png"/>
-            </Button>
-            <Button DockPanel.Dock="Left" TabIndex="1">
-                <Image Source="/Resources/Icons/right.png"/>
-            </Button>
-            <Button DockPanel.Dock="Left" TabIndex="2">
-                <Image Source="/Resources/Icons/up.png"/>
-            </Button>
-            <Button DockPanel.Dock="Left" TabIndex="3">
-                <Image Source="/Resources/Icons/reload.png"/>
-            </Button>
+                <Button DockPanel.Dock="Left" TabIndex="0">
+                    <ContentControl Style="{StaticResource LeftArrow}"/>
+                </Button>
+                <Button DockPanel.Dock="Left" TabIndex="1">
+                    <ContentControl Style="{StaticResource RightArrow}"/>
+                </Button>
+                <Button DockPanel.Dock="Left" TabIndex="2">
+                    <ContentControl Style="{StaticResource UpArrow}"/>
+                </Button>
+                <Button DockPanel.Dock="Left" TabIndex="3">
+                    <ContentControl Style="{StaticResource Reload}"/>
+                </Button>
 
-            <base:SearchBox DockPanel.Dock="Right" TabIndex="8"/>
-            <ToggleButton Content="★" DockPanel.Dock="Right" TabIndex="7"/>
-            <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
-            <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
+                <base:SearchBox DockPanel.Dock="Right" TabIndex="8"/>
+                <ToggleButton Content="★" DockPanel.Dock="Right" TabIndex="7"/>
+                <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
+                <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
 
-            <TextBox Text="{Binding SelectedFolderPath.Value}"  BorderThickness="0" TabIndex="4"/>
-        </DockPanel>
-        
+                <TextBox Text="{Binding SelectedFolderPath.Value}" TabIndex="4" Margin="0,0,1,0"/>
+            </DockPanel>
+        </Border>
+
         <!--メイン-->
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -142,7 +144,7 @@
                     <ComboBox ItemsSource="{Binding ListViewTypes}" SelectedItem="{Binding SelectedListViewType.Value}" DockPanel.Dock="Right"/>
                     <Slider Value="{Binding IconSize.Value}" Minimum="40" Maximum="100" DockPanel.Dock="Right" Margin="4,0"
                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Icon}"/>
-                    <TextBlock Text="{Binding SelectionInfo}"/>
+                    <TextBlock Text="{Binding SelectionInfo}" VerticalAlignment="Center" Padding="6,0"/>
                 </DockPanel>
                 
                 <!--コンテンツ-->

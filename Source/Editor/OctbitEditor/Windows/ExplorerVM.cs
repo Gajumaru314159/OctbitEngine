@@ -181,7 +181,7 @@ namespace OctbitEditor
 
         public void OnFileDrop(DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+            if (e?.Data?.GetDataPresent(DataFormats.FileDrop)??true) return;
 
             var dropFiles = e.Data.GetData(DataFormats.FileDrop) as string[];
 
