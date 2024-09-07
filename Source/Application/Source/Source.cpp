@@ -85,7 +85,7 @@ int TestDirectX12() {
 	// entity->addComponent<TransformComponent>();
 	entity->setActive(true);
 	entity->addComponent<ReflectionTestComponent>();
-	entity->addComponent<MeshComponent>()->setModel("Asset/Model/Ukulele.obj");
+	entity->addComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
 	scene2->addEntity(entity);
 
 	world->getRootScene().addSubScene(*scene2);
@@ -124,15 +124,15 @@ int TestDirectX12() {
 
 
 	// テクスチャ読み込み
-	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
+	auto skyTexture = Texture::Load("Assets/Texture/sky.dds");
 
 	// メッシュ読み込み
-	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
+	Ref<Mesh> skyMesh = Mesh::Load("Assets/Model/sky.obj");
 
 	// 描画物生成
 	Ref<Material> material = [&] {
 
-		auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
+		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
 		OB_ASSERT(code, "ファイル読み込み失敗");
 
 		MaterialDesc desc;

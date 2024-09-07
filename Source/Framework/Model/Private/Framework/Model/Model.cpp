@@ -57,7 +57,7 @@ namespace ob::model {
 		Map<String, Ref<rhi::Texture>, std::less<>> textures;
 		Vector<Ref<graphics::Material>> materials;
 
-		auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
+		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
 		OB_ASSERT(code, "ファイル読み込み失敗");
 		auto vs = rhi::Shader::CompileVS(*code);
 		auto ps = rhi::Shader::CompilePS(*code);

@@ -114,7 +114,7 @@ namespace ob::graphics {
 	{
 		m_material = [&] {
 
-			auto code = File::ReadAllText("Asset/Shader/DeferredLight.hlsl");
+			auto code = File::ReadAllText("Assets/Shader/DeferredLight.hlsl");
 			OB_ASSERT(code, "ファイル読み込み失敗");
 
 			MaterialDesc desc;
