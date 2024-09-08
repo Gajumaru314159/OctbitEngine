@@ -109,10 +109,16 @@
             DocumentsSource="{Binding DockingDocumentViewModels}"
             AnchorablesSource="{Binding DockingPaneViewModels}">
 
-
             <avalonDock:DockingManager.Theme>
                 <avalonDock:Vs2013DarkTheme />
             </avalonDock:DockingManager.Theme>
+            
+            <avalonDock:DockingManager.Style>
+                <Style TargetType="{x:Type avalonDock:DockingManager}" BasedOn="{StaticResource {x:Type avalonDock:DockingManager}}">
+                    <Setter Property="GridSplitterWidth" Value="3"/>
+                    <Setter Property="GridSplitterHeight" Value="3"/>
+                </Style>
+            </avalonDock:DockingManager.Style>
 
             <!-- ======== LayoutItem コンテナ (ウィンドウやタブ) のスタイル ======== -->
             <avalonDock:DockingManager.LayoutItemContainerStyleSelector>

@@ -270,10 +270,10 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <Border Background="Green" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                <Border BorderBrush="LimeGreen" BorderThickness="1" CornerRadius="{DynamicResource CornderRadiusA}" Padding="2,0" Margin="1,0">
                                                     <TextBlock Text="OBSOLATE"/>
                                                 </Border>
-                                                <Border Background="DarkOrange" CornerRadius="{DynamicResource CornderRadiusB}" Padding="4,0">
+                                                <Border BorderBrush="DarkOrange" BorderThickness="1" CornerRadius="{DynamicResource CornderRadiusA}" Padding="2,0" Margin="1,0">
                                                     <TextBlock Text="FIXME"/>
                                                 </Border>
                                             </StackPanel>

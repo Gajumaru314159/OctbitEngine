@@ -31,7 +31,7 @@
                             Background="{DynamicResource Surface}" 
                             BorderBrush="{DynamicResource Outline}" 
                             BorderThickness="1"
-                            CornerRadius="{DynamicResource CornderRadiusB}"
+                            CornerRadius="{DynamicResource CornderRadiusA}"
                             Width="{TemplateBinding Width}" 
                             Height="{TemplateBinding Height}">
                         <ContentPresenter Margin="8,4" HorizontalAlignment="Left" VerticalAlignment="Top" />
