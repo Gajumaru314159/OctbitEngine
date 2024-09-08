@@ -12,7 +12,8 @@ namespace OctbitEditor
     {
         Dark,
         Light,
-        Unity,
+        UnityDark,
+        UnityLight,
         UnrealEngine,
         Cyber,
         Maya,

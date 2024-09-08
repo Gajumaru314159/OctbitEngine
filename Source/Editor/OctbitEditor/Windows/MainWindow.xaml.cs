@@ -49,6 +49,7 @@ namespace OctbitEditor
                 _dockingManager.Theme = theme switch
                 {
                     ThemePreset.Light => new AvalonDock.Themes.Vs2013LightTheme(),
+                    ThemePreset.UnityLight => new AvalonDock.Themes.Vs2013LightTheme(),
                     _ => new AvalonDock.Themes.Vs2013DarkTheme()
                 };
             }
