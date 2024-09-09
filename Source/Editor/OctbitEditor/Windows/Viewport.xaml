@@ -60,15 +60,13 @@
                 <base:InverseBoolConverter x:Key="InverseBool"/>
                 <base:EnumToBooleanConverter x:Key="EnumToBool"/>
 
-                <BitmapImage x:Key="MenuIcon" UriSource="/Resources/Icons/menu.png"/>
-
             </DockPanel.Resources>
 
             <!--メニュー-->
             <Menu DockPanel.Dock="Left" Margin="0" Padding="0">                
                 <MenuItem Padding="0" Margin="0">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource MenuIcon}"/>
+                        <ContentControl Style="{StaticResource Hamburger}"/>
                     </MenuItem.Icon>
 
                     <MenuItem Header="Play" IsCheckable="True" IsChecked="{Binding PlayIsEnabled.Value}"/>
