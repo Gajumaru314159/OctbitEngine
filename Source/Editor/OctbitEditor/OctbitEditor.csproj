@@ -73,41 +73,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icons\down.png" />
-    <Resource Include="Resources\Icons\error.png" />
-    <Resource Include="Resources\Icons\eye_close.png" />
-    <Resource Include="Resources\Icons\eye_open.png" />
-    <Resource Include="Resources\Icons\global.png" />
     <Resource Include="Resources\Icons\icon.ico" />
     <Resource Include="Resources\Icons\icon_design.apd" />
-    <Resource Include="Resources\Icons\info.png" />
-    <Resource Include="Resources\Icons\layer.png" />
-    <Resource Include="Resources\Icons\left.png" />
-    <Resource Include="Resources\Icons\light.png" />
-    <Resource Include="Resources\Icons\menu.png" />
-    <Resource Include="Resources\Icons\move.png" />
     <Resource Include="Resources\Icons\Outliner\entity.png" />
     <Resource Include="Resources\Icons\Outliner\folder.png" />
     <Resource Include="Resources\Icons\Outliner\icon_design.apd" />
-    <Resource Include="Resources\Icons\pause.png" />
-    <Resource Include="Resources\Icons\play.png" />
-    <Resource Include="Resources\Icons\reload.png" />
-    <Resource Include="Resources\Icons\right.png" />
-    <Resource Include="Resources\Icons\rotate.png" />
-    <Resource Include="Resources\Icons\scale.png" />
-    <Resource Include="Resources\Icons\search.png" />
-    <Resource Include="Resources\Icons\select.png" />
-    <Resource Include="Resources\Icons\shading.png" />
-    <Resource Include="Resources\Icons\snap_move.png" />
-    <Resource Include="Resources\Icons\snap_rotate.png" />
-    <Resource Include="Resources\Icons\snap_scale.png" />
-    <Resource Include="Resources\Icons\step.png" />
-    <Resource Include="Resources\Icons\stop.png" />
-    <Resource Include="Resources\Icons\up.png" />
-    <Resource Include="Resources\Icons\warning.png" />
-    <Resource Include="Resources\Icons\wire.png" />
-    <Resource Include="Resources\Icons\wire_shading.png" />
-    <Resource Include="Resources\Icons\wrap.png" />
     <Resource Include="Resources\Splashes\splash_000.png" />
   </ItemGroup>
 
