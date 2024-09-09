@@ -180,7 +180,7 @@ namespace OctbitEngine.Asset
 
         public IAssetFolder RootFolder { get; private set; }
 
-        public event EventHandler<IAsset>? AssetCreated;
+        public event EventHandler<IAssetEntry>? AssetCreated;
 
     }
 }

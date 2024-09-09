@@ -13,6 +13,9 @@
     <Compile Update="Windows\ControlTest.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\Inspector.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Dialog\StartupDialog\StartupDialog.xaml">
@@ -22,6 +25,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\HistoryWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Windows\Inspector.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

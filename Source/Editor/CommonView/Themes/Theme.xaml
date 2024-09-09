@@ -387,14 +387,14 @@
                                           IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
                                           Margin="0"
                                           MinWidth="0" MinHeight="0" 
-                                          Padding="{TemplateBinding Padding}" 
+                                          Padding="4,3" 
                                           Style="{StaticResource ExpanderUpHeaderStyle}"/>
                             <ContentPresenter x:Name="ExpandSite" 
                                               DockPanel.Dock="Bottom" 
-                                              Focusable="false" 
+                                              Focusable="false"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                              Margin="4" 
+                                              Margin="{TemplateBinding Padding}" 
                                               Visibility="Collapsed"/>
                         </DockPanel>
                     </Border>
@@ -527,7 +527,7 @@
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border x:Name="Border" Background="{TemplateBinding Background}" CornerRadius="{DynamicResource CornderRadiusA}">
                         <Border x:Name="Overlay" Background="Transparent" CornerRadius="{DynamicResource CornderRadiusA}">
-                            <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True" />
+                            <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" />
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -945,6 +945,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="Background" Value="{DynamicResource Background}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
+        <Setter Property="Padding" Value="4,2"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -955,11 +956,11 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Border Grid.Row="0" CornerRadius="2,2,0,0" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{DynamicResource Header}">
-                            <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True"/>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" ContentSource="Header" RecognizesAccessKey="True"/>
                         </Border>
 
                         <Border Grid.Row="1" BorderThickness="1,0,1,1" CornerRadius="0,0,2,2" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter Margin="4" />
+                            <ContentPresenter Margin="{TemplateBinding Padding}" />
                         </Border>
                     </Grid>
                 </ControlTemplate>

@@ -36,7 +36,7 @@ namespace CommonView.AvalonDock
         {
             // item には ViewModel が入っている。
             // ViewModel の型に対応するテンプレートを返す。
-            var styleData = Items.Find(s => item.GetType().IsSubclassOf(s.DataType));
+            var styleData = Items.Find(s => s?.DataType != null && item.GetType().IsSubclassOf(s.DataType));
             if (styleData != null) return styleData.Style;
 
             return base.SelectStyle(item, container);
@@ -127,13 +127,9 @@ namespace CommonView.AvalonDock
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="layout"></param>
-        /// <param name="anchorableToShow">配置されようとしている LayoutAnchorable</param>
-        /// <param name="destinationContainer"></param>
-        /// <returns></returns>
         public bool BeforeInsertAnchorable(LayoutRoot layout, LayoutAnchorable anchorableToShow, ILayoutContainer destinationContainer)
         {
-            LayoutAnchorablePane destPane = destinationContainer as LayoutAnchorablePane;
+            LayoutAnchorablePane? destPane = destinationContainer as LayoutAnchorablePane;
             if (destinationContainer != null &&
                 destinationContainer.FindParent<LayoutFloatingWindow>() != null)
                 return false;
@@ -142,9 +138,9 @@ namespace CommonView.AvalonDock
             if (viewModel == null) return false;
 
             var propInfo = viewModel.GetType().GetProperty("ContentId", BindingFlags.Public | BindingFlags.Instance);
-            if (viewModel == null) return false;
+            if (viewModel == null || propInfo == null) return false;
 
-            var contentId = (string)propInfo.GetValue(viewModel);
+            var contentId = (string)propInfo.GetValue(viewModel)!;
 
             var target = Items.Find((t) => t.ContentId == contentId);
             if (target == null) return false;

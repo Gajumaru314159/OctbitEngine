@@ -71,7 +71,7 @@ namespace OctbitEngine.Asset
         /// 指定したパスのファイルをアセットとしてインポートできるか
         /// </summary>
 
-        public event EventHandler<IAsset>? AssetCreated; 
+        public event EventHandler<IAssetEntry>? AssetCreated; 
 
 
         public bool CanImport(string path);

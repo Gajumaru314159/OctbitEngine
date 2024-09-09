@@ -4,10 +4,9 @@ using System.IO;
 namespace OctbitEngine.Asset
 {
 
-    public class TextureAsset
+    public class TextureAsset : Asset
     {
         private string m_source = string.Empty;
-
 
         public string Source
         {
@@ -19,6 +18,22 @@ namespace OctbitEngine.Asset
 
 
             }
+        }
+
+        public TextureAsset(IAssetFile file, string name) : base(file, name, "Texture")
+        {
+        }
+
+
+
+        public override void Convert(AssetConvertParameter param)
+        {
+
+        }
+
+        public override void Open()
+        {
+
         }
     }
 }

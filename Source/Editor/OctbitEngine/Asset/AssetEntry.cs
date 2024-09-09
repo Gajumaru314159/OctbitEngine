@@ -2,9 +2,9 @@
 
 namespace OctbitEngine.Asset
 {
-    public class Asset : IAsset
+    public class AssetEntry : IAssetEntry
     {
-        private protected Asset(IAssetManager manager,string name)
+        private protected AssetEntry(IAssetManager manager,string name)
         {
             Manager = manager;
             Name = name;
@@ -41,11 +41,11 @@ namespace OctbitEngine.Asset
             Name = newName;
             return true;
         }
-        public bool IsAncestorAssetOf(IAsset? asset)
+        public bool IsAncestorAssetOf(IAssetEntry? asset)
         {
             if (asset == null) return false;
 
-            IAsset? p = asset;
+            IAssetEntry? p = asset;
             while (p != null)
             {
                 if (p == this) return true;

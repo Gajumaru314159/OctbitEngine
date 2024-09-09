@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Linq;
-using Common.Log;
+﻿using Common.Log;
 
 namespace OctbitEngine.Asset
 {
-    public class AssetFolder : Asset, IAssetFolder
+    public class AssetFolder : AssetEntry, IAssetFolder
     {
         public AssetFolder(IAssetManager manager,string name) : base(manager,name)
         {
         }
 
-        private List<Asset> m_children = new List<Asset>();
-        public IEnumerable<IAsset> Children => m_children;
+        private List<AssetEntry> m_children = new List<AssetEntry>();
+        public IEnumerable<IAssetEntry> Children => m_children;
         public IEnumerable<IAssetFolder> ChildFolders => m_children.OfType<IAssetFolder>();
         public IEnumerable<IAssetFile> ChildFiles => m_children.OfType<IAssetFile>();
 
@@ -43,12 +37,12 @@ namespace OctbitEngine.Asset
             return null;
         }
 
-        public bool Add(IAsset child)
+        public bool Add(IAssetEntry child)
         {
             if (child.IsAncestorAssetOf(this))
                 return false;
 
-            if (child is not Asset cchild)
+            if (child is not AssetEntry cchild)
             {
                 return false;
             }

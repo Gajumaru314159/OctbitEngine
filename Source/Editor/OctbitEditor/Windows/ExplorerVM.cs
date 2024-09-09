@@ -32,7 +32,7 @@ namespace OctbitEditor
             Path = "";
             IsFolder = true;
         }
-        public ExplorerItem(IAsset asset,bool isAsset = false)
+        public ExplorerItem(IAssetEntry asset,bool isAsset = false)
         {
             Name.Value = asset.Name;
             Icon.Value = asset is AssetFile?AssetIcon : FolderIcon;

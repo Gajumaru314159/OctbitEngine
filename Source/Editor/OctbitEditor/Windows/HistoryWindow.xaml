@@ -22,7 +22,7 @@
                 <TextBlock Text="{Binding HistoryInfo}"/>
             </StackPanel>
 
-            <local:ControlTest/>
+            <local:Inspector DockPanel.Dock="Top"/>
 
             <ListBox 
                     ItemsSource="{Binding UndoRecords}" 

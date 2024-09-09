@@ -1,29 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
 
 namespace OctbitEngine.Asset
 {
+    public struct AssetConvertParameter
+    {
+        public string Source { get; set; }
+        public string Destination { get; set; }
+        // Platform
+        // Language
+    }
+
     public interface IAsset
     {
-        public string Name { get; }
+        string AssetType { get; }
+        string Name { get; }
+        IAssetFile File { get; }
 
-        public string Path { get; }
-
-        public IAssetFolder? Parent { get; }
-
-        public IAssetManager Manager { get; }
-
-        public bool SetParent(IAssetFolder parent);
-
-        public bool Delete();
-
-        public bool Rename(string newName);
-
-        public bool IsAncestorAssetOf(IAsset? asset);
+        void Convert(AssetConvertParameter param);
+        void Open();
     }
 }
