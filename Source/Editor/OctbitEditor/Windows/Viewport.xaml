@@ -114,6 +114,7 @@
                 <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}" Margin="0">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ToggleButton">

@@ -20,6 +20,8 @@
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsTabStop" Value="False"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ctrl:InspectorItemContainer">
@@ -29,9 +31,9 @@
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="*" MinWidth="10"/>
                             </Grid.ColumnDefinitions>
-                            <ContentControl x:Name="LabelControl" Content="{TemplateBinding Label}" Grid.Column="0" Margin="{TemplateBinding Padding}" HorizontalAlignment="Right" Foreground="{TemplateBinding Foreground}"/>
-                            <ContentControl x:Name="ContentControl" Content="{TemplateBinding Content}" Grid.Column="2" Margin="{TemplateBinding Padding}"/>
-                            <GridSplitter x:Name="SplitterControl" Width="3" Grid.Column="1" HorizontalAlignment="Center" Background="{TemplateBinding BorderBrush}"/>
+                            <ContentControl x:Name="LabelControl" Content="{TemplateBinding Label}" Grid.Column="0" Focusable="False" Margin="{TemplateBinding Padding}" HorizontalAlignment="Right" Foreground="{TemplateBinding Foreground}"/>
+                            <ContentControl x:Name="ContentControl" Content="{TemplateBinding Content}" IsTabStop="False" Grid.Column="2" Margin="{TemplateBinding Padding}"/>
+                            <GridSplitter x:Name="SplitterControl" Width="3" Grid.Column="1" Focusable="False" HorizontalAlignment="Center" Background="{TemplateBinding BorderBrush}"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="CollapseLabel" Value="True">
