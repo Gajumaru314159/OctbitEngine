@@ -1,0 +1,152 @@
+﻿<Window x:Class="OctbitLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OctbitLauncher"
+        xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:MainWindowVM}"
+        Background="{DynamicResource Background}"
+        Title="Octbit Launcher" Height="450" Width="800">
+
+    <Window.Resources>
+        <base:NullToVisibilityConverter x:Key="NullToVisibility"/>
+    </Window.Resources>
+    
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border>
+            <Border.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Padding" Value="5"/>
+                </Style>
+            </Border.Resources>
+            <StackPanel DockPanel.Dock="Left">          
+                <Button Content="プロジェクト"/>
+                <Button Content="インストール"/>
+                <Button Content="チュートリアル"/>
+            </StackPanel>
+        </Border>
+
+        <GridSplitter Grid.Column="1" Width="1" Background="{DynamicResource Outline}"/>
+
+        <DockPanel Grid.Column="2">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+
+                <Grid Margin="5">
+                    <Rectangle Width="100" Height="100" Fill="{DynamicResource MenuBackground}" DockPanel.Dock="Left"/>
+                    <Image Width="100" Height="100" Source="{Binding Icon.Value}"/>
+                </Grid>
+
+                <DockPanel Margin="5">
+
+                    <Border Background="Orange" Width="150" DockPanel.Dock="Bottom">
+                        <Border.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </Border.Resources>
+                        <DockPanel>
+                            <Button Content="▼" DockPanel.Dock="Right"/>
+                            <Button>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="起動" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="ver.12345" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </DockPanel>
+                    </Border>
+                    
+                    <TextBlock Text="プロジェクト名" Foreground="{DynamicResource Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" DockPanel.Dock="Top" FontSize="20" FontWeight="Bold"/>
+                </DockPanel>
+
+                <ListBox Padding="1" ItemsSource="{Binding CustomLinks}" d:ItemsSource="{d:SampleData ItemCount=6}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                            <Setter Property="Margin" Value="1"/>
+                            <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Cycle"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate DataType="local:CustomLinkVM">
+                            <DockPanel>
+                                <Button ToolTip="{Binding ToolTip}" Command="{Binding Command}" Height="26" Padding="0">
+                                    <StackPanel Orientation="Horizontal" Width="100">
+                                        <Image Source="{Binding Icon}" VerticalAlignment="Center" Width="20" Height="20" Margin="4,0"/>
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </StackPanel>
+            
+            
+            <ListView d:ItemsSource="{d:SampleData ItemCount=10}" AlternationCount="2">
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                        <Style.Triggers>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Trigger>
+                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="#40000000" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                
+                <ListView.View>
+                    <GridView AllowsColumnReorder="True">
+                        <GridViewColumn Header="リビジョン" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="12345"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="コメント" Width="400">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="リビジョンのサブミットコメント"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="ユーザー名" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="Gajumaru"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="更新日時" Width="80">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="2024/01/01"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,17 @@
+﻿<Application x:Class="OctbitLauncher.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:OctbitLauncher"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--Colorsは0番目に定義してください-->
+                <ResourceDictionary Source="/CommonView;component/Themes/Colors/Dark.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Theme.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Icons.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Controls/SearchBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
