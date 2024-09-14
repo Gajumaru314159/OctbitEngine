@@ -21,18 +21,18 @@ namespace OctbitEditor
         Detail,
         Icon,
     }
-    public class ExplorerItem
+    public class AssetBrowserItem
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
-        public ExplorerItem(string name = "Sample")
+        public AssetBrowserItem(string name = "Sample")
         {
             Name.Value = name;
             Icon.Value = FolderIcon;
             Path = "";
             IsFolder = true;
         }
-        public ExplorerItem(IAssetEntry asset,bool isAsset = false)
+        public AssetBrowserItem(IAssetEntry asset,bool isAsset = false)
         {
             Name.Value = asset.Name;
             Icon.Value = asset is AssetFile?AssetIcon : FolderIcon;
@@ -52,32 +52,32 @@ namespace OctbitEditor
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
         public ReactivePropertySlim<BitmapSource> Icon { get; } = new();
 
-        public ObservableCollection<ExplorerItem> Children { get; } = new();
+        public ObservableCollection<AssetBrowserItem> Children { get; } = new();
     }
 
-    public class ExplorerVM : TabBase
+    public class AssetBrowserVM : TabBase
     {
-        public ExplorerVM(IAssetManager assetManager)
+        public AssetBrowserVM(IAssetManager assetManager)
             : base("Explorer")
         {
             Title ="Asset Browser";
             AssetManager = assetManager;
 
-            void visit(IAssetFolder folder,ExplorerItem parent)
+            void visit(IAssetFolder folder,AssetBrowserItem parent)
             {
                 foreach (var child in folder.ChildFolders)
                 {
-                    var item = new ExplorerItem(child);
+                    var item = new AssetBrowserItem(child);
                     parent.Children.Add(item);
                     visit(child,item);
                 }
                 foreach(var child in folder.ChildFiles)
                 {
-                    var item = new ExplorerItem(child);
+                    var item = new AssetBrowserItem(child);
                     parent.Children.Add(item);
                 }
             }
-            var rootItem = new ExplorerItem(AssetManager.RootFolder);
+            var rootItem = new AssetBrowserItem(AssetManager.RootFolder);
             rootItem.IsSelected.Value = true;
             rootItem.IsExpanded.Value = true;
             SelectedFolder.Value = rootItem;
@@ -88,7 +88,7 @@ namespace OctbitEditor
 
             SelectedItems.CollectionChanged += (sender, e) =>
             {
-                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is ExplorerItem item && item.IsFolder)
+                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is AssetBrowserItem item && item.IsFolder)
                 {
                     SelectedFolder.Value = item;
                 }
@@ -165,7 +165,7 @@ namespace OctbitEditor
                 createPath = string.Format(format, basePath, index++);
             }
             var newFolder = AssetManager.CreateFolder(createPath);
-            SelectedFolder.Value.Children.Add(new ExplorerItem(newFolder));
+            SelectedFolder.Value.Children.Add(new AssetBrowserItem(newFolder));
         }
 
         private void OpenAsset()
@@ -195,11 +195,11 @@ namespace OctbitEditor
 
         public DynamicGroupItem MenuItems { get; } = new("Root");
 
-        public ObservableCollection<ExplorerItem> Children { get; } = new();
-        public ObservableCollection<ExplorerItem> SelectedItems { get; set; } = new();
+        public ObservableCollection<AssetBrowserItem> Children { get; } = new();
+        public ObservableCollection<AssetBrowserItem> SelectedItems { get; set; } = new();
 
         // 選択情報
-        public ReactivePropertySlim<ExplorerItem> SelectedFolder { get; } = new();
+        public ReactivePropertySlim<AssetBrowserItem> SelectedFolder { get; } = new();
         public ReactivePropertySlim<string> SelectedFolderPath { get; } = new("Asset");
         public ReactivePropertySlim<bool> CanOpenAsset { get; } = new(false);
 

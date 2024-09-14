@@ -8,12 +8,12 @@ using UserControl = System.Windows.Controls.UserControl;
 namespace OctbitEditor
 {
     /// <summary>
-    /// Explorer.xaml の相互作用ロジック
+    /// AssetBrowser.xaml の相互作用ロジック
     /// </summary>
-    public partial class Explorer : UserControl
+    public partial class AssetBrowser : UserControl
     {
-        ExplorerVM? ViewModel => DataContext as ExplorerVM;
-        public Explorer()
+        AssetBrowserVM? ViewModel => DataContext as AssetBrowserVM;
+        public AssetBrowser()
         {
             InitializeComponent();
         }
@@ -49,7 +49,7 @@ namespace OctbitEditor
         {
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
             _tree.DataContext = e.NewValue;
-            _tree.SetBinding(MultiSelectTreeView.SelectedItemsProperty, nameof(ExplorerVM.SelectedItems));
+            _tree.SetBinding(MultiSelectTreeView.SelectedItemsProperty, nameof(AssetBrowserVM.SelectedItems));
         }
     }
 }

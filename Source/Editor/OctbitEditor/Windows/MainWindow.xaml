@@ -144,8 +144,8 @@
                     <DataTemplate DataType="{x:Type local:ViewportVM}">
                         <local:Viewport/>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type local:ExplorerVM}">
-                        <local:Explorer/>
+                    <DataTemplate DataType="{x:Type local:AssetBrowserVM}">
+                        <local:AssetBrowser/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type local:HistoryWindowVM}">
                         <local:HistoryWindow/>

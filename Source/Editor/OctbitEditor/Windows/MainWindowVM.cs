@@ -45,7 +45,7 @@ namespace OctbitEditor
             var assetManager = AssetManager.Instance;
 
             _dockingDocumentViewModels.Add(new ViewportVM());
-            _dockingPaneViewModels.Add(new ExplorerVM(assetManager));
+            _dockingPaneViewModels.Add(new AssetBrowserVM(assetManager));
             _dockingPaneViewModels.Add(new HistoryWindowVM());
             _dockingPaneViewModels.Add(new LogListVM());
             _dockingPaneViewModels.Add(new OutlinerVM());
