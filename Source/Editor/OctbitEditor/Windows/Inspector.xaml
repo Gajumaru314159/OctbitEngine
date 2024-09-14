@@ -27,7 +27,7 @@
                     <ControlTemplate TargetType="ctrl:InspectorItemContainer">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="{Binding LabelWidth,RelativeSource={RelativeSource TemplatedParent}}" MinWidth="10"/>
+                                <ColumnDefinition Width="{Binding LabelWidth,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" MinWidth="10"/>
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="*" MinWidth="10"/>
                             </Grid.ColumnDefinitions>
