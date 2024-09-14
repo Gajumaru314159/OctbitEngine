@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Markup;
 
 namespace CommonView.Controls
 {
-    [ContentProperty("Content")]
-    public class InspectorView : Control
+    public class InspectorView : ItemsControl
     {
         public static readonly DependencyProperty LabelWidthProperty = DependencyProperty.Register(
                 nameof(LabelWidth),
@@ -20,11 +18,6 @@ namespace CommonView.Controls
         //        typeof(InspectorView),
         //        new PropertyMetadata());
 
-        public static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
-                nameof(Content),
-                typeof(object),
-                typeof(InspectorView),
-                new PropertyMetadata());
 
         public GridLength LabelWidth
         {
@@ -36,11 +29,6 @@ namespace CommonView.Controls
         //    get => (IEnumerable)GetValue(ItemsSourceProperty);
         //    set => SetValue(ItemsSourceProperty, value);
         //}
-        public object? Content
-        {
-            get => GetValue(ContentProperty);
-            set => SetValue(ContentProperty, value);
-        }
 
         static InspectorView()
         {
