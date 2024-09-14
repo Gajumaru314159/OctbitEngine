@@ -23,11 +23,13 @@
             <KeyBinding Key="E" Modifiers="Shift" Command="{Binding ToggleSnapRotateCommand}"/>
             <KeyBinding Key="R" Modifiers="Shift" Command="{Binding ToggleSnapScaleCommand}"/>
         </DockPanel.InputBindings>
-        
-        <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
-            <DockPanel.Resources>
+
+        <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation}" Background="{DynamicResource Header}">
+            <StackPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                     <Setter Property="Margin" Value="1,0,0,0"/>
+                    <Setter Property="Width" Value="24"/>
+                    <Setter Property="Height" Value="24"/>
                     <Setter Property="Padding" Value="3,0"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -50,7 +52,7 @@
                     <Setter Property="ItemsControl.ItemsPanel">
                         <Setter.Value>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
+                                <StackPanel Orientation="{Binding DataContext.ToolBarOrientation, ElementName=m_focusRoot}"/>
                             </ItemsPanelTemplate>
                         </Setter.Value>
                     </Setter>
@@ -60,13 +62,13 @@
                 <base:InverseBoolConverter x:Key="InverseBool"/>
                 <base:EnumToBooleanConverter x:Key="EnumToBool"/>
 
-            </DockPanel.Resources>
+            </StackPanel.Resources>
 
             <!--メニュー-->
             <Menu DockPanel.Dock="Left" Margin="0" Padding="0">                
-                <MenuItem Padding="0" Margin="0">
+                <MenuItem Padding="0" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <MenuItem.Icon>
-                        <ContentControl Style="{StaticResource Hamburger}"/>
+                        <ContentControl Style="{StaticResource Hamburger}" Foreground="{DynamicResource Foreground}"/>
                     </MenuItem.Icon>
 
                     <MenuItem Header="Play" IsCheckable="True" IsChecked="{Binding PlayIsEnabled.Value}"/>
@@ -75,6 +77,8 @@
                     <MenuItem Header="Snap" IsCheckable="True" IsChecked="{Binding SnapIsEnabled.Value}"/>
                     <MenuItem Header="Shading" IsCheckable="True" IsChecked="{Binding ShadingIsEnabled.Value}"/>
                     <MenuItem Header="Layer" IsCheckable="True" IsChecked="{Binding LayerIsEnabled.Value}"/>
+
+                    <ComboBox ItemsSource="{Binding ToolBarDocks}" SelectedValue="{Binding ToolBarDock.Value}"/>
                 </MenuItem>
             </Menu>
             <Rectangle/>
@@ -114,6 +118,8 @@
                 <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}" Margin="0">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
+                            <Setter Property="Width" Value="24"/>
+                            <Setter Property="Height" Value="24"/>
                             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -212,7 +218,7 @@
                 </ToggleButton>
             </ItemsControl>
             <Border/>
-        </DockPanel>
+        </StackPanel>
         <Border Height="1" DockPanel.Dock="Top"/>
         <WindowsFormsHost DockPanel.Dock="Bottom" Background="{DynamicResource Background}">
             <forms:Panel x:Name="m_panel" Click="m_panel_Click"/>

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dock = System.Windows.Controls.Dock;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace OctbitEditor
 {
@@ -35,8 +37,22 @@ namespace OctbitEditor
             ToggleSnapMoveCommand.Subscribe(_ => SnapMoveIsEnabled.Value = !SnapMoveIsEnabled.Value);
             ToggleSnapRotateCommand.Subscribe(_ => SnapRotateIsEnabled.Value = !SnapRotateIsEnabled.Value);
             ToggleSnapScaleCommand.Subscribe(_ => SnapScaleIsEnabled.Value = !SnapScaleIsEnabled.Value);
+
+            ToolBarDock.Subscribe(_ => RaisePropertyChanged(nameof(ToolBarOrientation)));
         }
 
+
+        public ReactivePropertySlim<Dock> ToolBarDock { get; } = new(Dock.Top);
+        public IEnumerable<Dock> ToolBarDocks => Enum.GetValues<Dock>();
+        public Orientation ToolBarOrientation
+            => ToolBarDock.Value switch
+            {
+                Dock.Top => Orientation.Horizontal,
+                Dock.Bottom => Orientation.Horizontal,
+                Dock.Left => Orientation.Vertical,
+                Dock.Right => Orientation.Vertical,
+                _ => Orientation.Horizontal
+            };
 
         public ReactivePropertySlim<bool> PlayIsEnabled { get; } = new (true);
         public ReactivePropertySlim<bool> ToolIsEnabled { get; } = new (true);
