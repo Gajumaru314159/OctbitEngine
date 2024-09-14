@@ -24,7 +24,7 @@
             <KeyBinding Key="R" Modifiers="Shift" Command="{Binding ToggleSnapScaleCommand}"/>
         </DockPanel.InputBindings>
 
-        <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation}" Background="{DynamicResource Header}">
+        <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation,FallbackValue=Horizontal}" Background="{DynamicResource Header}">
             <StackPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
                     <Setter Property="Margin" Value="1,0,0,0"/>
@@ -52,7 +52,7 @@
                     <Setter Property="ItemsControl.ItemsPanel">
                         <Setter.Value>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="{Binding DataContext.ToolBarOrientation, ElementName=m_focusRoot}"/>
+                                <StackPanel Orientation="{Binding DataContext.ToolBarOrientation, ElementName=m_focusRoot,FallbackValue=Horizontal}"/>
                             </ItemsPanelTemplate>
                         </Setter.Value>
                     </Setter>
@@ -120,6 +120,7 @@
                         <Style TargetType="ToggleButton">
                             <Setter Property="Width" Value="24"/>
                             <Setter Property="Height" Value="24"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
                             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                             <Setter Property="Template">
                                 <Setter.Value>
