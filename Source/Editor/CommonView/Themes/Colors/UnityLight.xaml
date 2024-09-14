@@ -15,6 +15,6 @@
     <SolidColorBrush x:Key="Outline" Color="#7F7F7F"/>
     <SolidColorBrush x:Key="Header" Color="#CFCFCF"/>
     <SolidColorBrush x:Key="Focus" Color="#050505"/>
-    <SolidColorBrush x:Key="MenuBackground" Color="#8A8A8A"/>
+    <SolidColorBrush x:Key="MenuBackground" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Hover" Color="#20000000"/>
 </ResourceDictionary>

@@ -89,7 +89,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border CornerRadius="4" Background="{StaticResource Surface}"/>
+                    <Border CornerRadius="4" Background="{DynamicResource Surface}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -118,7 +118,7 @@
                                     <RowDefinition/>
                                     <RowDefinition MaxHeight="{StaticResource ScrollBarRepeatButtonSize}"/>
                                 </Grid.RowDefinitions>
-                                <Border Grid.RowSpan="3" Background="{StaticResource Background}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" />
+                                <Border Grid.RowSpan="3" Background="{DynamicResource Background}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" />
                                 <RepeatButton Grid.Row="0" Style="{StaticResource ScrollBarRepeatButtonStyle}" Height="{StaticResource ScrollBarRepeatButtonSize}" Command="ScrollBar.LineUpCommand" Content="M 0 4 L 8 4 L 4 0 Z" />
                                 <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                                     <Track.DecreaseRepeatButton>
@@ -155,7 +155,7 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition MaxWidth="{StaticResource ScrollBarRepeatButtonSize}"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.ColumnSpan="3" Background="{StaticResource Background}"  BorderBrush="{DynamicResource Outline}" BorderThickness="1"/>
+                                <Border Grid.ColumnSpan="3" Background="{DynamicResource Background}"  BorderBrush="{DynamicResource Outline}" BorderThickness="1"/>
                                 <RepeatButton Grid.Column="0" Style="{StaticResource ScrollBarRepeatButtonStyle}" Width="{StaticResource ScrollBarRepeatButtonSize}" Command="ScrollBar.LineLeftCommand" Content="M 4 0 L 4 8 L 0 4 Z" />
                                 <Track x:Name="PART_Track" Grid.Column="1" IsDirectionReversed="false">
                                     <Track.DecreaseRepeatButton>
@@ -1035,7 +1035,7 @@
                                     <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
                                 </MultiBinding>
                             </RepeatButton.Visibility>
-                            <Path Data="{StaticResource UpArrow}" Fill="{StaticResource Foreground}"/>
+                            <Path Data="{StaticResource UpArrow}" Fill="{DynamicResource Foreground}"/>
                         </RepeatButton>
                         <RepeatButton Command="{x:Static ScrollBar.LineDownCommand}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Grid.Column="0" Focusable="false" Grid.Row="2" Style="{StaticResource MenuScrollButton}">
                             <RepeatButton.Visibility>
@@ -1046,7 +1046,7 @@
                                     <Binding Path="ViewportHeight" RelativeSource="{RelativeSource TemplatedParent}"/>
                                 </MultiBinding>
                             </RepeatButton.Visibility>
-                            <Path Data="{StaticResource DownArrow}" Fill="{StaticResource Foreground}"/>
+                            <Path Data="{StaticResource DownArrow}" Fill="{DynamicResource Foreground}"/>
                         </RepeatButton>
                     </Grid>
                 </ControlTemplate>
@@ -1063,7 +1063,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="Icon" Width="16" Height="16" Margin="3" ContentSource="Icon" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                    <Path x:Name="GlyphPanel" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="{DynamicResource Foreground}" Margin="3" VerticalAlignment="Center" Visibility="Collapsed"/>
+                    <CheckBox x:Name="CheckBox" Margin="4,0" IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}}" Visibility="Collapsed"/>
                     <ContentPresenter ContentSource="Header" Grid.Column="1" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                 </Grid>
             </Border>
@@ -1072,8 +1072,8 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="true">
-                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter Property="Visibility" TargetName="CheckBox" Value="Visible"/>
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
@@ -1094,10 +1094,10 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Path x:Name="GlyphPanel" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="{TemplateBinding Foreground}" Margin="3" VerticalAlignment="Center" Visibility="Collapsed"/>
+                    <CheckBox x:Name="CheckBox" Margin="4,0" IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}}" Visibility="Collapsed"/>
                     <ContentPresenter ContentSource="Header" Grid.Column="1" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                     <Popup x:Name="PART_Popup" AllowsTransparency="true" Focusable="false" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="None" PlacementTarget="{Binding ElementName=templateRoot}">
-                        <Border x:Name="SubMenuBorder" Background="{StaticResource MenuBackground}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" CornerRadius="{StaticResource CornderRadiusA}" Padding="1">
+                        <Border x:Name="SubMenuBorder" Background="{DynamicResource MenuBackground}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" CornerRadius="{StaticResource CornderRadiusA}" Padding="1">
                             <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
                                 <Grid RenderOptions.ClearTypeHint="Enabled">
                                     <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
@@ -1115,9 +1115,8 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="true">
-                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
-                <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter Property="Visibility" TargetName="CheckBox" Value="Visible"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
                 <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
@@ -1145,9 +1144,7 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Border x:Name="GlyphPanel" Background="{DynamicResource Accent}" ClipToBounds="False" HorizontalAlignment="Center" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
-                        <Path x:Name="Glyph" Data="{StaticResource Checkmark}" FlowDirection="LeftToRight" Fill="{StaticResource Foreground}" Height="11" Width="10"/>
-                    </Border>
+                    <CheckBox x:Name="CheckBox" Margin="4,0" IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}}" Visibility="Collapsed"/>
                     <ContentPresenter x:Name="menuHeaderContainer" ContentSource="Header" Grid.Column="2" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="menuGestureText" Grid.Column="4" Margin="{TemplateBinding Padding}" Opacity="0.7" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center"/>
                 </Grid>
@@ -1157,12 +1154,12 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter Property="Visibility" TargetName="CheckBox" Value="Visible"/>
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">
-                <Setter TargetName="Overlay" Property="Background" Value="{StaticResource Hover}"/>
+                <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
@@ -1183,14 +1180,12 @@
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <ContentPresenter x:Name="Icon" ContentSource="Icon" HorizontalAlignment="Center" Height="16" Margin="3" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" Width="16"/>
-                    <Border x:Name="GlyphPanel" Background="{DynamicResource Accent}" Height="22" Margin="-1,0,0,0" VerticalAlignment="Center" Visibility="Hidden" Width="22">
-                        <Path x:Name="Glyph" Data="{DynamicResource Checkmark}" FlowDirection="LeftToRight" Fill="{StaticResource Foreground}" Height="11" Width="9"/>
-                    </Border>
+                    <CheckBox x:Name="CheckBox" Margin="4,0" IsChecked="{Binding IsChecked,RelativeSource={RelativeSource TemplatedParent}}" Visibility="Collapsed"/>
                     <ContentPresenter ContentSource="Header" Grid.Column="2" HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                     <TextBlock Grid.Column="4" Margin="{TemplateBinding Padding}" Opacity="0.7" Text="{TemplateBinding InputGestureText}" VerticalAlignment="Center"/>
-                    <Path x:Name="RightArrow" Grid.Column="5" Data="{StaticResource RightArrow}" Fill="{StaticResource Foreground}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <Path x:Name="RightArrow" Grid.Column="5" Data="{StaticResource RightArrow}" Fill="{DynamicResource Foreground}" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center"/>
                     <Popup x:Name="PART_Popup" AllowsTransparency="true" Focusable="false" HorizontalOffset="-2" IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" Placement="Right" VerticalOffset="-3">
-                        <Border x:Name="SubMenuBorder" Background="{StaticResource MenuBackground}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" CornerRadius="{StaticResource CornderRadiusA}" Padding="1">
+                        <Border x:Name="SubMenuBorder" Background="{DynamicResource MenuBackground}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" CornerRadius="{StaticResource CornderRadiusA}" Padding="1">
                             <ScrollViewer x:Name="SubMenuScrollViewer" Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
                                 <Grid RenderOptions.ClearTypeHint="Enabled">
                                     <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
@@ -1208,8 +1203,8 @@
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Visibility" TargetName="GlyphPanel" Value="Visible"/>
+            <Trigger Property="IsCheckable" Value="True">
+                <Setter Property="Visibility" TargetName="CheckBox" Value="Visible"/>
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="True">

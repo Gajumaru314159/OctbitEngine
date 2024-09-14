@@ -6,15 +6,46 @@
 
     <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
 
-    <SolidColorBrush x:Key="Foreground" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="Background" Color="#383838"/>
-    <SolidColorBrush x:Key="Surface" Color="#595959"/>
-    <SolidColorBrush x:Key="Accent" Color="#5680C2"/>
-    <SolidColorBrush x:Key="AccentForeground" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="Field" Color="#232323"/>
-    <SolidColorBrush x:Key="Outline" Color="#555555"/>
-    <SolidColorBrush x:Key="Header" Color="#2D2D30"/>
-    <SolidColorBrush x:Key="Focus" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="MenuBackground" Color="#232323"/>
+    <SolidColorBrush x:Key="Foreground" Color="#24EBEE"/>
+    
+    <LinearGradientBrush x:Key="Background" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#11222A" Offset="0" />
+        <GradientStop Color="#182F3B" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Surface" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#02495B" Offset="0" />
+        <GradientStop Color="#014C61" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Accent" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#049696" Offset="0" />
+        <GradientStop Color="#24EBEE" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="AccentForeground" Color="#000000"/>
+
+
+    <LinearGradientBrush x:Key="Field" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0D2223" Offset="0" />
+        <GradientStop Color="#000000" Offset="1" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="Outline" Color="#037D7D"/>
+
+    <LinearGradientBrush x:Key="Header" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#005361" Offset="0" />
+        <GradientStop Color="#014C61" Offset="1" />
+    </LinearGradientBrush>
+    
+    <SolidColorBrush x:Key="Focus" Color="#EEFEFE"/>
+
+
+    <LinearGradientBrush x:Key="MenuBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#11222A" Offset="0" />
+        <GradientStop Color="#00494F" Offset="1" />
+    </LinearGradientBrush>
+    
     <SolidColorBrush x:Key="Hover" Color="#20FFFFFF"/>
+    
 </ResourceDictionary>

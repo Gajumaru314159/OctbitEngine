@@ -9,16 +9,8 @@
         d:DataContext="{d:DesignInstance local:HistoryWindowVM}">
 
     <Grid>
-        <!--<DataGrid ItemsSource="{Binding UndoRecords}" d:ItemsSource="{d:SampleData}" 
-                  AutoGenerateColumns="False"
-                  Background="{DynamicResource Background}" Foreground="{DynamicResource Foreground}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Operation}"/>
-                <DataGridTextColumn Header="Time" Binding="{Binding Time}"/>
-            </DataGrid.Columns>
-        </DataGrid>-->
         <DockPanel>
-            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Bottom" Background="{DynamicResource Header}">
                 <TextBlock Text="{Binding HistoryInfo}"/>
             </StackPanel>
 

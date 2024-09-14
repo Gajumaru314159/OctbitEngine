@@ -9,8 +9,8 @@
     <SolidColorBrush x:Key="Foreground" Color="#0F0F0F"/>
     <SolidColorBrush x:Key="Background" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="Surface" Color="#D5D5D5"/>
-    <SolidColorBrush x:Key="Accent" Color="#6B6B6B"/>
-    <SolidColorBrush x:Key="AccentForeground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="Accent" Color="#5680C2"/>
+    <SolidColorBrush x:Key="AccentForeground" Color="#EEEEEE"/>
     <SolidColorBrush x:Key="Field" Color="#EDF2FA"/>
     <SolidColorBrush x:Key="Outline" Color="#E5E5E5"/>
     <SolidColorBrush x:Key="Header" Color="#FFFFFF"/>
