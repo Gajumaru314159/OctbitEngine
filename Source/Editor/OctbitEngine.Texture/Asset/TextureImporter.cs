@@ -12,12 +12,15 @@ namespace OctbitEngine.Asset
         {
             return path.MatchExtentions(".png", ".jpg", ".jpeg");
         }
-        public bool OnImport(string path)
+        public void OnImport(IAssetContainer container, string path)
         {
+            var texture = new Texture();
+            container.Add("texture", texture);
 
 
-            return true;
+            container.Map("oldTexture", "texture");
         }
+
     }
 
 }

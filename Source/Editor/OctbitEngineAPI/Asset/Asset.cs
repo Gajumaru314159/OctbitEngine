@@ -1,4 +1,5 @@
-﻿namespace OctbitEngine.Asset
+﻿
+namespace OctbitEngine.Asset
 {
     public abstract class Asset : IAsset
     {
@@ -22,6 +23,11 @@
         public virtual void Open()
         {
 
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

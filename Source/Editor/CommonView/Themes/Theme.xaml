@@ -1087,7 +1087,7 @@
     
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=TopLevelHeaderTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
         <Border x:Name="templateRoot" Background="{TemplateBinding Background}" Margin="2,2" CornerRadius="{StaticResource CornderRadiusA}" SnapsToDevicePixels="true">
-            <Border x:Name="Overlay" CornerRadius="{StaticResource CornderRadiusA}" >
+            <Border x:Name="Overlay" CornerRadius="{StaticResource CornderRadiusA}">
                 <Grid VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

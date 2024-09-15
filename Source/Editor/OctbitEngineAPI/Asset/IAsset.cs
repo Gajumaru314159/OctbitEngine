@@ -22,5 +22,6 @@ namespace OctbitEngine.Asset
 
         void Convert(AssetConvertParameter param);
         void Open();
+        void Serialize(BinaryWriter writer);
     }
 }

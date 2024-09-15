@@ -27,13 +27,12 @@
         <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation,FallbackValue=Horizontal}" Background="{DynamicResource Header}">
             <StackPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Margin" Value="1,0,0,0"/>
-                    <Setter Property="Width" Value="24"/>
-                    <Setter Property="Height" Value="24"/>
-                    <Setter Property="Padding" Value="3,0"/>
+                    <Setter Property="Margin" Value="1"/>
+                    <Setter Property="Width" Value="20"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Padding" Value="0"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="DockPanel.Dock" Value="Left"/>
                 </Style>
                 <Style TargetType="RadioButton" BasedOn="{StaticResource {x:Type ToggleButton}}"/>
 
@@ -77,7 +76,6 @@
                     <MenuItem Header="Snap" IsCheckable="True" IsChecked="{Binding SnapIsEnabled.Value}"/>
                     <MenuItem Header="Shading" IsCheckable="True" IsChecked="{Binding ShadingIsEnabled.Value}"/>
                     <MenuItem Header="Layer" IsCheckable="True" IsChecked="{Binding LayerIsEnabled.Value}"/>
-
                     <ComboBox ItemsSource="{Binding ToolBarDocks}" SelectedValue="{Binding ToolBarDock.Value}"/>
                 </MenuItem>
             </Menu>
@@ -85,7 +83,7 @@
 
             <!--再生-->
             <ItemsControl Visibility="{Binding PlayIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}" Margin="0">
+                <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}">
                     <ContentControl Style="{DynamicResource Play}"/>
                 </ToggleButton>
                 <ToggleButton ToolTip="Stop (Ctrl+P)" IsEnabled="{Binding IsPlaying.Value}">
@@ -115,7 +113,7 @@
 
             <!--座標系-->
             <ItemsControl Visibility="{Binding CoordinateIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}" Margin="0">
+                <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
                             <Setter Property="Width" Value="24"/>
@@ -155,7 +153,7 @@
 
             <!--スナップ-->
             <ItemsControl Visibility="{Binding SnapIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <ToggleButton ToolTip="Snap Move" Margin="0" IsChecked="{Binding SnapMoveIsEnabled.Value}">
+                <ToggleButton ToolTip="Snap Move" IsChecked="{Binding SnapMoveIsEnabled.Value}">
                     <ToggleButton.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="0.1"/>
@@ -175,7 +173,7 @@
 
             <!--シェーディング-->
             <ItemsControl Visibility="{Binding ShadingIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <RadioButton ToolTip="Shading" Margin="0" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Shading}">
+                <RadioButton ToolTip="Shading" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Shading}">
                     <ContentControl Style="{StaticResource Shading}"/>
                 </RadioButton>
                 <RadioButton ToolTip="Wire" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Wireframe}">
@@ -188,7 +186,7 @@
 
             <!--レイヤ-->
             <ItemsControl Visibility="{Binding LayerIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <ToggleButton ToolTip="Layer" Margin="0">
+                <ToggleButton ToolTip="Layer">
                     <ToggleButton.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="3D Icons" IsCheckable="True"/>

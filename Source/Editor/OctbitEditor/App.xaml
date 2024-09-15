@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="/CommonView;component/Themes/Colors/Dark.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Theme.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Icons.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/CustomAvalonDock.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Controls/SearchBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

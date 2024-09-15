@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-
-namespace OctbitEngine.Asset
+﻿namespace OctbitEngine.Asset
 {
     public interface IAssetEntry
     {

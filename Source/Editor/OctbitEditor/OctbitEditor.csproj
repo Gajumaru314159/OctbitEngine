@@ -16,6 +16,7 @@
     <None Remove="Resources\Icons\eye_close.png" />
     <None Remove="Resources\Icons\eye_open.png" />
     <None Remove="Resources\Icons\global.png" />
+    <None Remove="Resources\Icons\header.png" />
     <None Remove="Resources\Icons\icon.ico" />
     <None Remove="Resources\Icons\icon_design.apd" />
     <None Remove="Resources\Icons\info.png" />
@@ -50,10 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Icons\icon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.1">
       <TreatAsUsed>true</TreatAsUsed>
@@ -75,6 +72,7 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\eye_close.png" />
     <Resource Include="Resources\Icons\eye_open.png" />
+    <Resource Include="Resources\Icons\header.png" />
     <Resource Include="Resources\Icons\icon.ico" />
     <Resource Include="Resources\Icons\icon_design.apd" />
     <Resource Include="Resources\Icons\Outliner\entity.png" />

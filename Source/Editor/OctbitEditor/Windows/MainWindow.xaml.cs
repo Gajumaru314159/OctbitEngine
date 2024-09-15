@@ -2,13 +2,14 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OctbitEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         private static readonly string s_configName = "AvalonDock.config";
 
@@ -62,6 +63,27 @@ namespace OctbitEditor
             var brushes = System.Windows.Application.Current.Resources.MergedDictionaries[2];
             System.Windows.Application.Current.Resources.MergedDictionaries.RemoveAt(2);
             System.Windows.Application.Current.Resources.MergedDictionaries.Insert(2,brushes);
+        }
+
+
+        private void MinimizeClick(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeClick(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Maximized;
+        }
+
+        private void RestoreDownClick(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Normal;
+        }
+
+        private void CloseClick(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
     }

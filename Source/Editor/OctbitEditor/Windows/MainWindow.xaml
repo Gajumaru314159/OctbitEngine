@@ -8,10 +8,12 @@
         xmlns:base="clr-namespace:CommonView;assembly=CommonView"
         Title="{Binding Title.Value}"
         Foreground="{DynamicResource Foreground}"
-        Background="{DynamicResource Background}"
+        Background="{DynamicResource MenuBackground}"
         Width="1800" Height="1000"
         Loaded="OnLoaded"
         Unloaded="OnUnloaded"
+        
+        WindowStyle="None" ResizeMode="CanResizeWithGrip"
         
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,6 +21,11 @@
         d:DataContext="{d:DesignInstance local:MainWindowVM}"
     >
 
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="chrome" CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="0" NonClientFrameEdges="None" />
+    </WindowChrome.WindowChrome>
+    
     <Window.InputBindings>
         <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}"/>
         <KeyBinding Gesture="Ctrl+Y" Command="{Binding RedoCommand}"/>
@@ -30,10 +37,20 @@
 
     <DockPanel x:Name="Root">
 
-        <DockPanel DockPanel.Dock="Top" >
+        <DockPanel DockPanel.Dock="Top" Margin="0,5,0,0">
 
+            <!--ボタン-->
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button Style="{StaticResource MinimizeButton}" Click="MinimizeClick" />
+                <Button Style="{StaticResource MaximizeButton}" Click="MaximizeClick" />
+                <Button Style="{StaticResource RestoreDownButton}" Click="RestoreDownClick" />
+                <Button Style="{StaticResource CloseButton}" Click="CloseClick" />
+            </StackPanel>
+            
+            <Image Source="/Resources/Icons/header.png" Height="32" Margin="10,0" VerticalAlignment="Center"/>
+            
             <!--メニューバー-->
-            <Menu DockPanel.Dock="Top">
+            <Menu VerticalAlignment="Bottom" Padding="0" WindowChrome.IsHitTestVisibleInChrome="True">
                 <MenuItem Header="_File">
                     <MenuItem Header="_New Scene" InputGestureText="Ctrl+N"/>
                     <MenuItem Header="_Open Scene" InputGestureText="Ctrl+O"/>
@@ -98,8 +115,11 @@
                     <Separator/>
                     <MenuItem Header="Release Notes"/>
                 </MenuItem>
-                <ComboBox ItemsSource="{Binding ThemePresets}" SelectedValue="{Binding ThemePreset}" SelectionChanged="OnThemeColorChanged"/>
             </Menu>
+
+            <ComboBox VerticalAlignment="Bottom" WindowChrome.IsHitTestVisibleInChrome="True" ItemsSource="{Binding ThemePresets}" SelectedValue="{Binding ThemePreset}" SelectionChanged="OnThemeColorChanged"/>
+
+            <Border DockPanel.Dock="Right"/>
 
         </DockPanel>
 
@@ -117,6 +137,7 @@
                 <Style TargetType="{x:Type avalonDock:DockingManager}" BasedOn="{StaticResource {x:Type avalonDock:DockingManager}}">
                     <Setter Property="GridSplitterWidth" Value="3"/>
                     <Setter Property="GridSplitterHeight" Value="3"/>
+                    <Setter Property="Background" Value="{DynamicResource MenuBackground}"/>
                 </Style>
             </avalonDock:DockingManager.Style>
 
