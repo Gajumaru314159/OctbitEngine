@@ -1,12 +1,7 @@
 ﻿using CommonView;
 using System.Diagnostics;
-using System.IO;
-using System.Net.Sockets;
-using System.Net;
 using System.Runtime.InteropServices;
-using UserControl = System.Windows.Controls.UserControl;
-using System.Text;
-using Common.Log;
+using System.Windows.Controls;
 
 namespace OctbitEditor
 {

@@ -27,7 +27,7 @@ namespace OctbitEditor
                 LogLevel switch
                 {
                     LogLevel.Error => ErrorBrush,
-                    LogLevel.Warning => WarningBrush,
+                    LogLevel.Warn => WarningBrush,
                     _ => InfoBrush
                 };
         }
@@ -47,7 +47,7 @@ namespace OctbitEditor
             LogItems.CollectionChanged += (sender, e) =>
             {
                 InfoLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Info);
-                WarningLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Warning);
+                WarningLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Warn);
                 ErrorLogCount.Value = LogItems.Count(item => item.LogLevel == LogLevel.Error);
             };
 
@@ -56,7 +56,7 @@ namespace OctbitEditor
                 item.LogLevel switch
                 {
                     LogLevel.Info => IsInfoLogFiltered.Value,
-                    LogLevel.Warning => IsWarningLogFiltered.Value,
+                    LogLevel.Warn => IsWarningLogFiltered.Value,
                     LogLevel.Error => IsErrorLogFiltered.Value,
                     _ => false
                 };
@@ -75,18 +75,16 @@ namespace OctbitEditor
             ClearCommand = new DelegateCommand(() => { LogItems.Clear(); });
 
             Log.Logged += OnLogged;
-            Log.Trace("CoreSystem initialized");
-            Log.Info("CoreSystem initialized");
-            Log.Warning("CoreSystem initialized");
-            Log.Error("CoreSystem initialized");
         }
         private void OnLogged(LogObject log)
         {
-
-            lock (LogItems)
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                LogItems.Add(new(log));
-            }
+                lock (LogItems)
+                {
+                    LogItems.Add(new(log));
+                }
+            });
         }
 
         // リスト

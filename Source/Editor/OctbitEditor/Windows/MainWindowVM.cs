@@ -1,6 +1,8 @@
-﻿using CommonView.History;
+﻿using Common.Log;
+using CommonView.History;
 using CommonView.Menu;
 using Livet;
+using OctbitEngine;
 using OctbitEngine.Asset;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
@@ -42,13 +44,19 @@ namespace OctbitEditor
                 RaisePropertyChanged(nameof(CanUndo));
             };
 
+            Log.BeginShink();
+
+            var coreSyste = new CoreSystem();
             var assetManager = AssetManager.Instance;
 
             _dockingDocumentViewModels.Add(new ViewportVM());
-            _dockingPaneViewModels.Add(new AssetBrowserVM(assetManager));
-            _dockingPaneViewModels.Add(new HistoryWindowVM());
-            _dockingPaneViewModels.Add(new LogListVM());
             _dockingPaneViewModels.Add(new OutlinerVM());
+            _dockingPaneViewModels.Add(new InspectorVM());
+            _dockingPaneViewModels.Add(new HistoryWindowVM());
+            _dockingPaneViewModels.Add(new AssetBrowserVM(assetManager));
+            _dockingPaneViewModels.Add(new LogListVM());
+
+            Log.EndShink();
         }
 
         public ReadOnlyObservableCollection<ViewModel> DockingDocumentViewModels => new(_dockingDocumentViewModels);

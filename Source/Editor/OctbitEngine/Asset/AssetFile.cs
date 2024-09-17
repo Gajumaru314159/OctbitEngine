@@ -36,9 +36,8 @@ namespace OctbitEngine.Asset
             }
         }
 
-        public string AssetType => throw new NotImplementedException();
-
-        public IReadOnlyList<IAsset> Assets => throw new NotImplementedException();
+        public IReadOnlyList<IAsset> Assets => _assets;
+        private List<IAsset> _assets = new List<IAsset>();
 
         private AssetContainer _container = new AssetContainer();
         private IAssetImporter? _importer=null;

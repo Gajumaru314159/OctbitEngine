@@ -12,7 +12,7 @@
     <SolidColorBrush x:Key="Accent" Color="#0070E0"/>
     <SolidColorBrush x:Key="AccentForeground" Color="#C0C0C0"/>
     <SolidColorBrush x:Key="Field" Color="#0F0F0F"/>
-    <SolidColorBrush x:Key="Outline" Color="#353535"/>
+    <SolidColorBrush x:Key="Outline" Color="#1A1A1A"/>
     <SolidColorBrush x:Key="Header" Color="#242424"/>
     <SolidColorBrush x:Key="Focus" Color="#EEEEEE"/>
     <SolidColorBrush x:Key="MenuBackground" Color="#151515"/>

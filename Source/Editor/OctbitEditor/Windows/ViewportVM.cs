@@ -1,11 +1,5 @@
 ﻿using Reactive.Bindings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dock = System.Windows.Controls.Dock;
-using Orientation = System.Windows.Controls.Orientation;
+using System.Windows.Controls;
 
 namespace OctbitEditor
 {

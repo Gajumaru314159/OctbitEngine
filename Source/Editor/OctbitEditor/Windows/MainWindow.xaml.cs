@@ -1,15 +1,13 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Controls;
 
 namespace OctbitEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window
+    public partial class MainWindow : Window
     {
         private static readonly string s_configName = "AvalonDock.config";
 
@@ -39,7 +37,7 @@ namespace OctbitEditor
             serializer.Serialize(s_configName);
         }
 
-        private void OnThemeColorChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void OnThemeColorChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DataContext is not MainWindowVM vm) return;
             var theme = vm.ThemePreset;
@@ -57,12 +55,12 @@ namespace OctbitEditor
 
             // ブラシ変更
             var resource = new ResourceDictionary() { Source = new Uri($"/CommonView;component/Themes/Colors/{theme}.xaml", UriKind.Relative) };
-            System.Windows.Application.Current.Resources.MergedDictionaries[0] = resource;
+            Application.Current.Resources.MergedDictionaries[0] = resource;
 
             // Collection変更によるリロード
-            var brushes = System.Windows.Application.Current.Resources.MergedDictionaries[2];
-            System.Windows.Application.Current.Resources.MergedDictionaries.RemoveAt(2);
-            System.Windows.Application.Current.Resources.MergedDictionaries.Insert(2,brushes);
+            var brushes = Application.Current.Resources.MergedDictionaries[2];
+            Application.Current.Resources.MergedDictionaries.RemoveAt(2);
+            Application.Current.Resources.MergedDictionaries.Insert(2,brushes);
         }
 
 

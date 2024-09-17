@@ -1,9 +1,11 @@
-﻿namespace OctbitEditor
+﻿using System.Windows.Controls;
+
+namespace OctbitEditor
 {
     /// <summary>
     /// Inspector.xaml の相互作用ロジック
     /// </summary>
-    public partial class Inspector : System.Windows.Controls.UserControl
+    public partial class Inspector : UserControl
     {
         public Inspector()
         {

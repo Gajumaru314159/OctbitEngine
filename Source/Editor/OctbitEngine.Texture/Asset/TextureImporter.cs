@@ -14,11 +14,11 @@ namespace OctbitEngine.Asset
         }
         public void OnImport(IAssetContainer container, string path)
         {
-            var texture = new Texture();
-            container.Add("texture", texture);
-
-
-            container.Map("oldTexture", "texture");
+            //var texture = new Texture();
+            //container.Add("texture", texture);
+            //
+            //
+            //container.Map("oldTexture", "texture");
         }
 
     }

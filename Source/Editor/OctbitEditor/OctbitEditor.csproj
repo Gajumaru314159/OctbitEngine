@@ -8,8 +8,15 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <BaseOutputPath>../../../Build/Editor</BaseOutputPath>
+	<UseCommonOutputDirectory>true</UseCommonOutputDirectory>
   </PropertyGroup>
 
+  <ItemGroup>
+	<Using Remove="System.Drawing"/>
+	<Using Remove="System.Windows.Forms"/>
+  </ItemGroup>
+	
   <ItemGroup>
     <None Remove="Resources\Icons\down.png" />
     <None Remove="Resources\Icons\error.png" />

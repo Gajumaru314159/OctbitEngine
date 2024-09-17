@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
+             xmlns:base="clr-namespace:CommonView;assembly=CommonView"
              Background="{DynamicResource Background}"
              mc:Ignorable="d" 
              d:DesignWidth="350" d:DesignHeight="250">
@@ -33,7 +34,16 @@
                             </Grid.ColumnDefinitions>
                             <ContentControl x:Name="LabelControl" TextBlock.TextAlignment="Right" Content="{TemplateBinding Label}" Grid.Column="0" Focusable="False" Margin="{TemplateBinding Padding}" HorizontalContentAlignment="Right" HorizontalAlignment="Stretch" Foreground="{TemplateBinding Foreground}"/>
                             <ContentControl x:Name="ContentControl" Content="{TemplateBinding Content}" IsTabStop="False" Grid.Column="2" Margin="{TemplateBinding Padding}"/>
-                            <GridSplitter x:Name="SplitterControl" Width="3" Grid.Column="1" Focusable="False" HorizontalAlignment="Center" Background="{TemplateBinding BorderBrush}"/>
+
+                            <GridSplitter x:Name="SplitterControl" Grid.Column="1" HorizontalAlignment="Stretch" Focusable="False">
+                                <GridSplitter.Template>
+                                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                                        <Border  Background="Transparent">
+                                            <Rectangle Fill="{DynamicResource Outline}" Width="1" HorizontalAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </GridSplitter.Template>
+                            </GridSplitter>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="CollapseLabel" Value="True">
@@ -51,174 +61,173 @@
                 
     </UserControl.Resources>
 
-    <ctrl:InspectorView LabelWidth="100">
-        <ctrl:InspectorView.Template>
-            <ControlTemplate TargetType="ctrl:InspectorView">
-                <ScrollViewer>
-                    <ItemsPresenter/>
-                </ScrollViewer>
-            </ControlTemplate>
-        </ctrl:InspectorView.Template>
-        <ctrl:InspectorView.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Vertical"/>
-            </ItemsPanelTemplate>
-        </ctrl:InspectorView.ItemsPanel>        
+    <DockPanel>
+
+        <base:SearchBox DockPanel.Dock="Top" Width="Auto"/>
+
+        <Button Content="Add Component" DockPanel.Dock="Bottom"/>
+
+        <ctrl:InspectorView LabelWidth="100">
+            <ctrl:InspectorView.Template>
+                <ControlTemplate TargetType="ctrl:InspectorView">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsPresenter/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ctrl:InspectorView.Template>
+            <ctrl:InspectorView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ctrl:InspectorView.ItemsPanel>        
         
+
         
+            <!--ここから検証用コンテンツ-->
         
-        <!--ここから検証用コンテンツ-->
-        
-        <ctrl:InspectorItemContainer>
-            <ctrl:InspectorItemContainer.Label>
-                <DockPanel HorizontalAlignment="Stretch">
-                    <TextBlock Text="Position" Foreground="{DynamicResource Foreground}" DockPanel.Dock="Right"/>
-                    <CheckBox IsChecked="True"/>
-                </DockPanel>
-            </ctrl:InspectorItemContainer.Label>
-            <ctrl:InspectorItemContainer.Content>
-                <TextBox Text="Name"/>
-            </ctrl:InspectorItemContainer.Content>
-        </ctrl:InspectorItemContainer>
+            <ctrl:InspectorItemContainer>
+                <ctrl:InspectorItemContainer.Label>
+                    <DockPanel HorizontalAlignment="Stretch">
+                        <TextBlock Text="Position" Foreground="{DynamicResource Foreground}" DockPanel.Dock="Right"/>
+                        <CheckBox IsChecked="True"/>
+                    </DockPanel>
+                </ctrl:InspectorItemContainer.Label>
+                <ctrl:InspectorItemContainer.Content>
+                    <TextBox Text="Name"/>
+                </ctrl:InspectorItemContainer.Content>
+            </ctrl:InspectorItemContainer>
 
 
-        <ctrl:InspectorItemContainer>
-            <ctrl:InspectorItemContainer.Label>
-                <TextBlock Text="Position" Foreground="{DynamicResource Foreground}"/>
-            </ctrl:InspectorItemContainer.Label>
-            <ctrl:InspectorItemContainer.Content>
-                <TextBox Text="Name"/>
-            </ctrl:InspectorItemContainer.Content>
-        </ctrl:InspectorItemContainer>
+            <ctrl:InspectorItemContainer>
+                <ctrl:InspectorItemContainer.Label>
+                    <TextBlock Text="Position" Foreground="{DynamicResource Foreground}"/>
+                </ctrl:InspectorItemContainer.Label>
+                <ctrl:InspectorItemContainer.Content>
+                    <TextBox Text="Name"/>
+                </ctrl:InspectorItemContainer.Content>
+            </ctrl:InspectorItemContainer>
 
-        <ctrl:InspectorItemContainer Label="Rotation">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Text="0" Grid.Column="0" Margin="0,0,1,0"/>
-                <TextBox Text="0" Grid.Column="1" Margin="0,0,1,0"/>
-                <TextBox Text="0" Grid.Column="2"/>
-            </Grid>
-        </ctrl:InspectorItemContainer>
-        
-        <ctrl:InspectorItemContainer Label="Rotation">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="X" Grid.Column="0" Margin="0,0,3,0" VerticalAlignment="Center"/>
-                <TextBlock Text="Y" Grid.Column="2" Margin="0,0,3,0" VerticalAlignment="Center"/>
-                <TextBlock Text="Z" Grid.Column="4" Margin="0,0,3,0" VerticalAlignment="Center"/>
-                <TextBox Text="0" Grid.Column="1" Margin="0,0,1,0"/>
-                <TextBox Text="0" Grid.Column="3" Margin="0,0,1,0"/>
-                <TextBox Text="0" Grid.Column="5"/>
-            </Grid>
-        </ctrl:InspectorItemContainer>
+            <ctrl:InspectorItemContainer Label="Rotation">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="0" Grid.Column="0" Margin="0,0,1,0"/>
+                    <TextBox Text="0" Grid.Column="1" Margin="0,0,1,0"/>
+                    <TextBox Text="0" Grid.Column="2"/>
+                </Grid>
+            </ctrl:InspectorItemContainer>
 
-        <ctrl:InspectorItemContainer Label="IsActive">
-            <CheckBox IsChecked="True"/>
-        </ctrl:InspectorItemContainer>
+            <ctrl:InspectorItemContainer Label="Rotation">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="0" Grid.Column="0" Margin="0,0,1,0"/>
+                    <TextBox Text="0" Grid.Column="1"/>
+                </Grid>
+            </ctrl:InspectorItemContainer>
 
-        <ctrl:InspectorItemContainer Label="Button">
-            <Button Content="Button"/>
-        </ctrl:InspectorItemContainer>
+            <ctrl:InspectorItemContainer Label="IsActive">
+                <CheckBox IsChecked="True"/>
+            </ctrl:InspectorItemContainer>
 
-        <ctrl:InspectorItemContainer Label="Mobility">
-            <Grid>
-                <Grid.Resources>
-                    <Style TargetType="RadioButton" BasedOn="{StaticResource NoIconRadioButton}">
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <RadioButton IsChecked="False" Grid.Column="0">
-                    <StackPanel Orientation="Horizontal">
-                        <ContentControl Style="{StaticResource Error}"/>
-                        <TextBlock Text="Static"/>
-                    </StackPanel>
-                </RadioButton>
-                <RadioButton IsChecked="False" Content="Stationaly" Grid.Column="1"/>
-                <RadioButton IsChecked="True" Content="Movable" Grid.Column="2"/>
-            </Grid>
-        </ctrl:InspectorItemContainer>
-
-        <ctrl:InspectorItemContainer Label="ComboBox">
-            <ComboBox/>
-        </ctrl:InspectorItemContainer>
-
-        <ctrl:InspectorItemContainer Label="Slider">
-            <Slider/>
-        </ctrl:InspectorItemContainer>
-
-
-        <ctrl:InspectorItemContainer Label="Asset">
-            <DockPanel>
-                <ContentControl Style="{StaticResource Local}"/>
-                <ContentControl Style="{StaticResource Reload}" DockPanel.Dock="Right"/>
-                <TextBox Text="Assets/Texture/Entity"/>
-            </DockPanel>
-        </ctrl:InspectorItemContainer>
-        
-        <ctrl:InspectorItemContainer CollapseLabel="True">
-            <TabControl>
-                <TabItem Header="Model">
-                    <StackPanel Orientation="Horizontal">
-                        <ContentControl Style="{StaticResource Error}"/>
-                        <ContentControl Style="{StaticResource Warning}"/>
-                        <ContentControl Style="{StaticResource Info}"/>
-                    </StackPanel>
-                </TabItem>
-                <TabItem Header="Texture">
-
-                </TabItem>
-                <TabItem Header="Sound">
-
-                </TabItem>
-            </TabControl>
-        </ctrl:InspectorItemContainer>
-
-        <ctrl:InspectorItemContainer Label="Color">
-            <DatePicker/>
-        </ctrl:InspectorItemContainer>
-
-        <ctrl:InspectorItemContainer CollapseLabel="True">
-            <Expander Header="Expander" Padding="0">
-                <ctrl:InspectorItemContainer CollapseLabel="True">
-                    <Expander Header="Expander" Padding="0" Margin="0">
-                        <StackPanel>
-                            <ctrl:InspectorItemContainer Label="IsActive">
-                                <CheckBox IsChecked="True"/>
-                            </ctrl:InspectorItemContainer>
-
-                            <ctrl:InspectorItemContainer Label="Button">
-                                <Button Content="Button"/>
-                            </ctrl:InspectorItemContainer>
-                        </StackPanel>
-                    </Expander>
-                </ctrl:InspectorItemContainer>
-            </Expander>
-        </ctrl:InspectorItemContainer>
-
-
-        <GroupBox Header="ボタン一覧">
-            <StackPanel Orientation="Vertical">
-                <Button Content="Button" Margin="0,0,0,1"/>
+            <ctrl:InspectorItemContainer Label="Button">
                 <Button Content="Button"/>
-            </StackPanel>
-        </GroupBox>
-    </ctrl:InspectorView>
+            </ctrl:InspectorItemContainer>
+
+            <ctrl:InspectorItemContainer Label="Mobility">
+                <Grid>
+                    <Grid.Resources>
+                        <Style TargetType="RadioButton" BasedOn="{StaticResource NoIconRadioButton}">
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton IsChecked="False" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Style="{StaticResource Error}"/>
+                            <TextBlock Text="Static"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton IsChecked="False" Content="Stationaly" Grid.Column="1"/>
+                    <RadioButton IsChecked="True" Content="Movable" Grid.Column="2"/>
+                </Grid>
+            </ctrl:InspectorItemContainer>
+
+            <ctrl:InspectorItemContainer Label="ComboBox">
+                <ComboBox/>
+            </ctrl:InspectorItemContainer>
+
+            <ctrl:InspectorItemContainer Label="Slider">
+                <Slider/>
+            </ctrl:InspectorItemContainer>
+
+
+            <ctrl:InspectorItemContainer Label="Asset">
+                <DockPanel>
+                    <ContentControl Style="{StaticResource Local}"/>
+                    <ContentControl Style="{StaticResource Reload}" DockPanel.Dock="Right"/>
+                    <TextBox Text="Assets/Texture/Entity"/>
+                </DockPanel>
+            </ctrl:InspectorItemContainer>
+        
+            <ctrl:InspectorItemContainer CollapseLabel="True">
+                <TabControl>
+                    <TabItem Header="Model">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Style="{StaticResource Error}"/>
+                            <ContentControl Style="{StaticResource Warning}"/>
+                            <ContentControl Style="{StaticResource Info}"/>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="Texture">
+
+                    </TabItem>
+                    <TabItem Header="Sound">
+
+                    </TabItem>
+                </TabControl>
+            </ctrl:InspectorItemContainer>
+
+            <ctrl:InspectorItemContainer Label="Color">
+                <DatePicker/>
+            </ctrl:InspectorItemContainer>
+
+            <ctrl:InspectorItemContainer CollapseLabel="True">
+                <Expander Header="Expander" Padding="0">
+                    <ctrl:InspectorItemContainer CollapseLabel="True">
+                        <Expander Header="Expander" Padding="0" Margin="0">
+                            <StackPanel>
+                                <ctrl:InspectorItemContainer Label="IsActive">
+                                    <CheckBox IsChecked="True"/>
+                                </ctrl:InspectorItemContainer>
+
+                                <ctrl:InspectorItemContainer Label="Button">
+                                    <Button Content="Button"/>
+                                </ctrl:InspectorItemContainer>
+                            </StackPanel>
+                        </Expander>
+                    </ctrl:InspectorItemContainer>
+                </Expander>
+            </ctrl:InspectorItemContainer>
+
+
+            <GroupBox Header="ボタン一覧">
+                <StackPanel Orientation="Vertical">
+                    <Button Content="Button" Margin="0,0,0,1"/>
+                    <Button Content="Button"/>
+                </StackPanel>
+            </GroupBox>
+        </ctrl:InspectorView>
+    </DockPanel>
 
 </UserControl>

@@ -6,6 +6,8 @@
 
         public string Path { get; }
 
+        public string PhysicalPath { get; }
+
         public IAssetFolder? Parent { get; }
 
         public IAssetManager Manager { get; }

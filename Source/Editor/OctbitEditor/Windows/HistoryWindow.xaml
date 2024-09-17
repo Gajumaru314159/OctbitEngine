@@ -10,11 +10,9 @@
 
     <Grid>
         <DockPanel>
-            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Bottom" Background="{DynamicResource Header}">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Background="{DynamicResource Header}">
                 <TextBlock Text="{Binding HistoryInfo}"/>
             </StackPanel>
-
-            <local:Inspector DockPanel.Dock="Top"/>
 
             <ListBox 
                     ItemsSource="{Binding UndoRecords}" 

@@ -75,7 +75,7 @@ namespace OctbitEngine.Asset
 
 
         public bool CanImport(string path);
-        public bool Import(string path);
+        public bool Import(string path,IAssetFolder folder);
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Common.Tree;
+using OctbitEngine.Config;
 
 namespace OctbitEngine.Asset
 {
@@ -13,6 +14,7 @@ namespace OctbitEngine.Asset
         public string Name { get; private set; } = string.Empty;
 
         public string Path => string.Join("/", Parent!.Ancestor(i => i.Parent).Reverse().Select(i => i.Name).Append(Name));
+        public string PhysicalPath => System.IO.Path.Combine(WorkSpace.RootPath,string.Join("/", Parent!.Ancestor(i => i.Parent).Reverse().Select(i => i.Name).Append(Name)));
 
         public IAssetFolder? Parent { get; internal set; }
 

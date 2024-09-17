@@ -1,9 +1,4 @@
-﻿using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Windows;
-using OctbitEditor.Dialog;
-using Application = System.Windows.Application;
+﻿using System.Windows;
 
 namespace OctbitEditor
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace Common.Log
 {
@@ -12,7 +6,7 @@ namespace Common.Log
     {
         Trace,
         Info,
-        Warning,
+        Warn,
         Error
     }
 
@@ -28,6 +22,25 @@ namespace Common.Log
 
     public static class Log
     {
+        public static void BeginShink()
+        {
+            if (ShinkedObjects==null)
+            {
+                ShinkedObjects = new List<LogObject>();
+            }
+        }
+        public static void EndShink()
+        {
+            if (ShinkedObjects!=null)
+            {
+                foreach(var item in ShinkedObjects)
+                {
+                    Logged?.Invoke(item);
+                }
+                ShinkedObjects = null;
+            }
+        }
+
         public static void Trace(string message, string? category = null)
         {
             LogImpl(LogLevel.Trace, message, category);
@@ -38,7 +51,7 @@ namespace Common.Log
         }
         public static void Warning(string message, string? category = null)
         {
-            LogImpl(LogLevel.Warning, message, category);
+            LogImpl(LogLevel.Warn, message, category);
         }
         public static void Error(string message, string? category = null)
         {
@@ -48,10 +61,17 @@ namespace Common.Log
         private static void LogImpl(LogLevel level, string message, string? category = null)
         {
             var log = new LogObject(DateTime.Now, level, message, category ?? string.Empty,Environment.StackTrace);
-            Logged?.Invoke(log);
-            Debug.WriteLine(message);
+            if (ShinkedObjects==null)
+            {
+                Logged?.Invoke(log);
+            }
+            else
+            {
+                ShinkedObjects.Add(log);
+            }
         }
 
         public static LogEventHandler? Logged;
+        public static List<LogObject>? ShinkedObjects = null; 
     }
 }

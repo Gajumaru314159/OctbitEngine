@@ -1,9 +1,5 @@
-﻿using Common.Log;
-using OctbitEngine.Asset;
+﻿using System.Windows;
 using System.Windows.Controls;
-using DataFormats = System.Windows.DataFormats;
-using DragDropEffects = System.Windows.DragDropEffects;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace OctbitEditor
 {
@@ -18,7 +14,7 @@ namespace OctbitEditor
             InitializeComponent();
         }
 
-        private void Grid_Drop(object sender, System.Windows.DragEventArgs e)
+        private void Grid_Drop(object sender, DragEventArgs e)
         {
             if (ViewModel is null) return;
             var list = ToPathArray(e).Where(i => ViewModel.AssetManager.CanImport(i)).ToArray();
@@ -28,24 +24,24 @@ namespace OctbitEditor
             }
         }
 
-        private void ListBox_DragOver(object sender, System.Windows.DragEventArgs e)
+        private void ListBox_DragOver(object sender, DragEventArgs e)
         {
             e.Effects = CanImport(e) ? DragDropEffects.Copy : DragDropEffects.None;
             e.Handled = true;
         }
 
-        private string[] ToPathArray(System.Windows.DragEventArgs e)
+        private string[] ToPathArray(DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return Array.Empty<string>();
             return e.Data.GetData(DataFormats.FileDrop) as string[] ?? Array.Empty<string>();
         }
-        private bool CanImport(System.Windows.DragEventArgs e)
+        private bool CanImport(DragEventArgs e)
         {
             if (ViewModel is null) return false;
             return ToPathArray(e).Any(i => ViewModel.AssetManager.CanImport(i));
         }
 
-        private void UserControl_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
             _tree.DataContext = e.NewValue;

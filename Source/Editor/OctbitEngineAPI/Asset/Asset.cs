@@ -25,9 +25,6 @@ namespace OctbitEngine.Asset
 
         }
 
-        public void Serialize(BinaryWriter writer)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void Serialize(BinaryWriter writer);
     }
 }

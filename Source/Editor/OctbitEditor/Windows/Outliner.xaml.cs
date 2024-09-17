@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
-using UserControl = System.Windows.Controls.UserControl;
+using System.Windows;
 
 namespace OctbitEditor
 {
@@ -14,16 +14,16 @@ namespace OctbitEditor
             InitializeComponent();
         }
 
-        private void Root_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Root_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (Keyboard.FocusedElement is System.Windows.Controls.TextBox textBox)
+            if (Keyboard.FocusedElement is TextBox textBox)
             {
                 TraversalRequest tRequest = new TraversalRequest(FocusNavigationDirection.Next);
                 textBox.MoveFocus(tRequest);
             }
         }
 
-        private void Root_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void Root_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
             _tree.DataContext = e.NewValue;

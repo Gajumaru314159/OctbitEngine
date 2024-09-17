@@ -9,8 +9,7 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
+using System.Windows.Media;
 
 namespace OctbitEditor
 {
@@ -24,7 +23,7 @@ namespace OctbitEditor
     public class AssetBrowserItem
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
-        internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
+        internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
         public AssetBrowserItem(string name = "Sample")
         {
             Name.Value = name;
@@ -75,6 +74,12 @@ namespace OctbitEditor
                 {
                     var item = new AssetBrowserItem(child);
                     parent.Children.Add(item);
+
+                    foreach (var asset in child.Assets)
+                    {
+                        var assetItem = new AssetBrowserItem("asset");
+                        item.Children.Add(assetItem);
+                    }
                 }
             }
             var rootItem = new AssetBrowserItem(AssetManager.RootFolder);
@@ -176,19 +181,6 @@ namespace OctbitEditor
         public void OnSelectionChangedInList()
         {
             RaisePropertyChanged(nameof(SelectionInfo));
-        }
-
-
-        public void OnFileDrop(DragEventArgs e)
-        {
-            if (e?.Data?.GetDataPresent(DataFormats.FileDrop)??true) return;
-
-            var dropFiles = e.Data.GetData(DataFormats.FileDrop) as string[];
-
-            if (dropFiles == null)
-                return;
-
-            Log.Info(string.Join(",", dropFiles));
         }
 
         public IAssetManager AssetManager { get; }

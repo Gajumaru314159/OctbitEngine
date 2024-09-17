@@ -10,12 +10,15 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{FCEBE67D-86A6-4351-A14D-BEAAF9CC9ED2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitEngine", "OctbitEngine\OctbitEngine.csproj", "{7ACC4947-BCAA-4022-B43E-042C45010649}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9E8C352-2E65-46ED-ADC4-59841279F97A} = {F9E8C352-2E65-46ED-ADC4-59841279F97A}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitEngineAPI", "OctbitEngineAPI\OctbitEngineAPI.csproj", "{9F74FED1-D087-4257-AF3F-B82C1F7C7944}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitEngine.Texture", "OctbitEngine.Texture\OctbitEngine.Texture.csproj", "{F9E8C352-2E65-46ED-ADC4-59841279F97A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctbitLauncher", "OctbitLauncher\OctbitLauncher.csproj", "{F53CC651-5158-4F16-A7BA-07FBCFEB9164}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitLauncher", "OctbitLauncher\OctbitLauncher.csproj", "{F53CC651-5158-4F16-A7BA-07FBCFEB9164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

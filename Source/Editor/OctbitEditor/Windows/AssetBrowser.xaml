@@ -195,14 +195,47 @@
                                 <Setter Property="Margin" Value="4"/>
                                 <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
                                 <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Cycle"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border x:Name="Border" Background="{DynamicResource Surface}" SnapsToDevicePixels="true">
+                                                <Border x:Name="Overlay" Background="Transparent">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                                <Border.Effect>
+                                                    <DropShadowEffect BlurRadius="3" ShadowDepth="3" Opacity="0.3"/>
+                                                </Border.Effect>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Overlay" Property="Background" Value="{DynamicResource Hover}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentForeground}"/>
+                                                    <Setter TargetName="Border" Property="Background" Value="{DynamicResource Accent}"/>
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
+                                                </Trigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                                        <Condition Property="IsEnabled" Value="False"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="Opacity" Value="0.8"/>
+                                                </MultiTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="local:ExplorerItem">
-                                <DockPanel>
+                                <DockPanel Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
                                     <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
-                                    <Border BorderThickness="1" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
-                                        <Image Source="{Binding Icon.Value}" 
+                                    <Border BorderThickness="0,0,0,2" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
+                                        <Image Source="{Binding Icon.Value}"
                                            Width="{Binding DataContext.IconSize.Value,ElementName=Root}" 
                                            Height="{Binding DataContext.IconSize.Value,ElementName=Root}"/>
                                     </Border>

@@ -19,7 +19,7 @@ namespace OctbitEditor
 
         public IEnumerable<History.HistoryRecord> UndoRecords => History.UndoRecords.ToList();
 
-        public string HistoryInfo => $"Undo:{History.UndoCount} Redo:{History.RedoCount}";
+        public string HistoryInfo => $"Undo : {History.UndoCount}   Redo : {History.RedoCount}";
 
     }
 }

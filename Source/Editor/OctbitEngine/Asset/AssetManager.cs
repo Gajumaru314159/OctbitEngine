@@ -11,6 +11,8 @@ namespace OctbitEngine.Asset
         public static string MetaExtension = ".meta";
         public static string RootFolderName = "Assets";
 
+        private FileSystemWatcher _watcher;
+
         public static IAssetManager Instance { get; private set; }
 
         static AssetManager()
@@ -35,6 +37,24 @@ namespace OctbitEngine.Asset
 
             RootFolder = new AssetFolder(this, RootFolderName);
             LoadAssets();
+
+            _watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
+            _watcher.NotifyFilter = 
+                NotifyFilters.FileName | 
+                NotifyFilters.DirectoryName | 
+                NotifyFilters.LastWrite;
+
+            _watcher.Changed +=OnFileChanged;
+            _watcher.Created  +=OnFileChanged;
+            _watcher.Deleted  +=OnFileChanged;
+            _watcher.Renamed  +=OnFileChanged;
+            _watcher.IncludeSubdirectories = true;
+            _watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            Log.Info($"ファイル変更 : {e.FullPath} ({e.ChangeType})");
         }
 
         private void CheckValidPath(string[] items)
@@ -158,14 +178,42 @@ namespace OctbitEngine.Asset
             return Importers.Any(i => i.CanImport(path));
         }
 
-        public bool Import(string path)
+        public bool Import(string path, IAssetFolder folder)
         {
-            throw new NotImplementedException();
+            foreach(var importer in Importers)
+            {
+                if (!importer.CanImport(path)) continue;
+
+                var importDest = Path.Combine(folder.PhysicalPath, Path.GetFileName(path));
+                if (File.Exists(importDest))
+                {
+                    // TODO 名前変更
+                    continue;
+                }
+
+                try
+                {
+                    File.Copy(path, importDest);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"ファイルのコピーに失敗\n{path} {e}");
+                    return false;
+                }
+
+
+                var container = new AssetContainer();
+                importer.OnImport(container, path);
+                return true;
+            }
+            return false;
         }
 
         private void InitializeImporter()
         {
-            typeof(AssetManager).Assembly.GetTypes()
+            CoreSystem.Instance.PluginAssemblies
+                .Append(typeof(AssetManager).Assembly)
+                .SelectMany(i=>i.GetTypes())
                 .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IAssetImporter)))
                 .Select(t => Activator.CreateInstance(t) as IAssetImporter)
                 .NotNull()

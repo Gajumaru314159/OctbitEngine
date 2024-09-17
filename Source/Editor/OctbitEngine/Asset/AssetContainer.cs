@@ -7,6 +7,10 @@ namespace OctbitEngine.Asset
         private Dictionary<string, ISerializable> _assets = new();
         private Dictionary<string, string> _map = new();
 
+        public AssetContainer()
+        {
+        }
+
         public bool Contains(string name)
         {
             return _assets.ContainsKey(name);

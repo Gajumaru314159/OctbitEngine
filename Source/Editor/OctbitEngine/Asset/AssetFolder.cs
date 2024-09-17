@@ -62,6 +62,8 @@ namespace OctbitEngine.Asset
         public bool Import(string path)
         {
             Log.Info($"Import {path}");
+
+            Manager.Import(path,this);
             return false;
         }
     }

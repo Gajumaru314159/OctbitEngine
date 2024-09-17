@@ -1,5 +1,4 @@
-﻿using Common.String;
-using System.IO;
+﻿using System.IO;
 
 namespace OctbitEngine.Asset
 {
@@ -34,6 +33,11 @@ namespace OctbitEngine.Asset
         public override void Open()
         {
 
+        }
+
+        public override void Serialize(BinaryWriter writer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

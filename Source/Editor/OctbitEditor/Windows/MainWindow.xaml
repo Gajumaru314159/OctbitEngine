@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:OctbitEditor"
         xmlns:v="clr-namespace:CommonView.AvalonDock;assembly=CommonView"
         xmlns:base="clr-namespace:CommonView;assembly=CommonView"
-        Title="{Binding Title.Value}"
         Foreground="{DynamicResource Foreground}"
         Background="{DynamicResource MenuBackground}"
         Width="1800" Height="1000"
         Loaded="OnLoaded"
         Unloaded="OnUnloaded"
+        FontSize="{StaticResource SystemFontSize}"
         
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -117,7 +117,7 @@
 
             <ComboBox VerticalAlignment="Bottom" WindowChrome.IsHitTestVisibleInChrome="True" ItemsSource="{Binding ThemePresets}" SelectedValue="{Binding ThemePreset}" SelectionChanged="OnThemeColorChanged"/>
 
-            <Border DockPanel.Dock="Right"/>
+            <TextBlock Text="{Binding Title.Value}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
 
         </DockPanel>
 
@@ -169,6 +169,9 @@
                     <DataTemplate DataType="{x:Type local:HistoryWindowVM}">
                         <local:HistoryWindow/>
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type local:InspectorVM}">
+                        <local:Inspector/>
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type local:LogListVM}">
                         <local:LogList/>
                     </DataTemplate>
@@ -185,6 +188,7 @@
                 <v:LayoutInitializer>
                     <v:LayoutInsertTarget ContentId="Outliner" TargetLayoutName="TopLeftSideArea" />
                     <v:LayoutInsertTarget ContentId="History" TargetLayoutName="TopRightSideArea" />
+                    <v:LayoutInsertTarget ContentId="Inspector" TargetLayoutName="TopRightSideArea" />
                     <v:LayoutInsertTarget ContentId="Explorer" TargetLayoutName="BottomSide" />
                     <v:LayoutInsertTarget ContentId="LogList" TargetLayoutName="BottomSide" />
                 </v:LayoutInitializer>

@@ -6,6 +6,8 @@
                     xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
                     >
 
+    <sys:Double x:Key="SystemFontSize">12</sys:Double>
+
     <CornerRadius x:Key="CornderRadiusA" TopLeft="2" TopRight="2" BottomLeft="2" BottomRight="2"/>
     <CornerRadius x:Key="CornderRadiusB" TopLeft="6" TopRight="6" BottomLeft="6" BottomRight="6"/>
 
@@ -974,6 +976,7 @@
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="Background" Value="{DynamicResource MenuBackground}"/>
         <Setter Property="Padding" Value="0,4"/>
+        <Setter Property="FontSize" Value="{StaticResource SystemFontSize}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Menu}">
