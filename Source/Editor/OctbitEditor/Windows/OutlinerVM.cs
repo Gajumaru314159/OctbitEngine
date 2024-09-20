@@ -1,4 +1,5 @@
 ﻿using Common.Linq;
+using Common.Log;
 using Common.Tree;
 using CommonView.History;
 using CommonView.Menu;
@@ -96,6 +97,7 @@ namespace OctbitEditor
         {
             Entity = entity;
             Parent = null;
+            IsNameEditting.Subscribe(i => Log.Info($"IsNameEditting:{i}"));
         }
 
         public IEntity Entity { get; }
@@ -201,6 +203,7 @@ namespace OctbitEditor
 
         public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
         public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
+        public ReactivePropertySlim<bool> IsNameEditting { get; } = new(false);
         public BitmapImage Icon => EntityIcon;
         public ObservableCollection<OutlinerItem> Children { get; } = new();
 
@@ -226,6 +229,7 @@ namespace OctbitEditor
         {
             CreateEntityCommand = new DelegateCommand(CreateEntity);
             DeleteEntityCommand = new DelegateCommand(DeleteEntity);
+            EditEntityNameCommand = new DelegateCommand(EditEntityName);
         }
 
         private void GenerateMenuItems()
@@ -253,6 +257,11 @@ namespace OctbitEditor
                     group2.AddCommand("Capsule", CutEntity);
                 }
             }
+        }
+
+        public void EditEntityName()
+        {
+            SelectedItems.ForEach(i=>i.IsNameEditting.Value = i == SelectedItems.Last());
         }
 
         private void CreateEntity()
@@ -359,5 +368,6 @@ namespace OctbitEditor
         // コマンド
         public ICommand? CreateEntityCommand { get; private set; }
         public ICommand? DeleteEntityCommand { get; private set; }
+        public ICommand? EditEntityNameCommand { get; private set; }
     }
 }

@@ -10,18 +10,20 @@
              xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              x:Name="Root"
-             MouseDown="Root_MouseDown"
              Focusable="True"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
-             DataContextChanged="Root_DataContextChanged"
+             DataContextChanged="OnDataContextChanged"
+             PreviewKeyDown="OnPreviewKeyDown"
+             KeyDown="Root_KeyDown"
              mc:Ignorable="d"
              d:DesignWidth="200" d:DesignHeight="400"
              d:DataContext="{d:DesignInstance local:OutlinerVM}" >
 
     <UserControl.InputBindings>
         <KeyBinding Gesture="Ctrl+N" Command="{Binding CreateEntityCommand}"/>
-        <KeyBinding Key="Delete" Command="{Binding DeleteEntityCommand}"/>
+        <!--<KeyBinding Key="Delete" Command="{Binding DeleteEntityCommand}"/>-->
+        <KeyBinding Gesture="Ctrl+R" Command="{Binding EditEntityNameCommand}"/>
     </UserControl.InputBindings>
     
     <UserControl.Resources>
@@ -80,20 +82,21 @@
             <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
             <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
         </Style>
-        
+
     </UserControl.Resources>
 
     <DockPanel>
         
         <!--検索ボックス-->
         <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
+        <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Bottom" Width="Auto"/>
 
         <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
             <TextBlock Text="{Binding SelectionInfo}"/>
         </Border>
 
-        <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}">
+        <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}">
             <ms:MultiSelectTreeView.ContextMenu>
                 <ContextMenu ItemsSource="{Binding MenuItems.Children}">
                     <ContextMenu.Resources>
@@ -125,10 +128,16 @@
                         <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                         <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
                         <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
-                        <base:EditableTextBlock Text="{Binding Name}" BorderBrush="{DynamicResource Outline2}" Margin="2,0,0,0" Focusable="False"/>
+                        <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline2}" Margin="2,0,0,0" Focusable="False"/>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </ms:MultiSelectTreeView.ItemTemplate>
+            <ms:MultiSelectTreeView.ItemContainerStyle>
+                <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                </Style>
+            </ms:MultiSelectTreeView.ItemContainerStyle>
         </ms:MultiSelectTreeView>
         
     </DockPanel>

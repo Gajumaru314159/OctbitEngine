@@ -16,7 +16,6 @@ namespace CommonView
         private readonly TextBox m_textBox = new();
         private readonly TextBlock m_textBlock = new();
         private string m_previousText = string.Empty;
-        private bool m_isEditMode = false;
 
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
@@ -25,23 +24,39 @@ namespace CommonView
                 typeof(EditableTextBlock),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
+        public static readonly DependencyProperty IsEdittingProperty = DependencyProperty.Register(
+                nameof(IsEditting),
+                typeof(bool),
+                typeof(EditableTextBlock),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(OnIsEdittingChanged)));
+
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
+        public bool IsEditting
+        {
+            get { return (bool)GetValue(IsEdittingProperty); }
+            set { SetValue(IsEdittingProperty, value); }
+        }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public EditableTextBlock()
         {
             InitializeControl();
 
-            MouseDoubleClick += EditableTextBlock_MouseDoubleClick;
-            m_textBox.PreviewKeyDown += TextBox_KeyDown;
-            m_textBox.LostFocus += TextBox_LostFocus;   
-            m_textBox.LostKeyboardFocus += TextBox_LostFocus;
+            MouseDoubleClick += OnDoubleClicked;
+            m_textBox.PreviewKeyDown += OnKeyDown;
+            m_textBox.LostFocus += OnLostFocus;   
+            m_textBox.LostKeyboardFocus += OnLostFocus;
         }
 
-
+        /// <summary>
+        /// コントロールを初期化する
+        /// </summary>
         private void InitializeControl()
         {
             m_textBox.Padding = new Thickness(0);
@@ -73,53 +88,85 @@ namespace CommonView
             }
         }
 
-        private void UpdateText()
+
+        private void OnDoubleClicked(object sender, MouseEventArgs e)
+        {
+            IsEditting = true;
+            e.Handled = true;
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            // 確定
+            if (e.Key == Key.Enter)
+            {
+                CommitEdit();
+                e.Handled = true;
+            }
+            
+            // キャンセルまたはフォーカス切り替え
+            if (e.Key == Key.Escape || e.Key == Key.Tab)
+            {
+                CancelEdit();
+                e.Handled = true;
+            }
+
+            // F2キーで編集開始
+            if (e.Key == Key.F2) { 
+                IsEditting = true;
+            }
+        }
+
+        private void OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            CancelEdit();
+            e.Handled = true;
+        }
+
+        private static void OnIsEdittingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            if (obj is not EditableTextBlock etb) return;
+            if (e.NewValue is not bool isEditting) return;
+
+            if (isEditting)
+            {
+                etb.BeginEdit();
+            }
+            else
+            {
+                etb.CancelEdit();
+            }
+        }
+
+        private void BeginEdit()
+        {
+            m_previousText = m_textBlock.Text;
+            m_textBox.Text = Text;
+            UpdateControlVisibility();
+            m_textBox.Focus();
+            m_textBox.SelectAll();
+        }
+
+        private void CommitEdit()
         {
             var binding = BindingOperations.GetBindingExpression(m_textBox, TextBox.TextProperty);
             binding?.UpdateSource();
+            UpdateControlVisibility();
+            IsEditting = false;
         }
 
-        private void EditableTextBlock_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void CancelEdit()
         {
-            if (m_isEditMode) return;
-
-            m_previousText = m_textBlock.Text;
-            m_isEditMode = true;
-            OnIsEditModeChanged();
-            m_textBox.Focus();
-            m_textBox.SelectAll();
-            e.Handled = true;
+            m_textBox.Text = m_previousText;
+            UpdateControlVisibility();
+            IsEditting = false;
         }
 
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        private void UpdateControlVisibility()
         {
-            if (e.Key == Key.Enter)
-            {
-                m_isEditMode = false;
-                UpdateText();
-                OnIsEditModeChanged();
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Escape || e.Key == Key.Tab)
-            {
-                m_textBox.Text = m_previousText;
-                m_isEditMode = false;
-                OnIsEditModeChanged();
-                e.Handled = true;
-            }
+            m_textBlock.Visibility = IsEditting ? Visibility.Hidden : Visibility.Visible;
+            m_textBox.Visibility = IsEditting ? Visibility.Visible : Visibility.Hidden;
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            m_isEditMode = false;
-            OnIsEditModeChanged();
-            e.Handled = true;
-        }
-
-        private void OnIsEditModeChanged()
-        {
-            m_textBlock.Visibility = m_isEditMode ? Visibility.Hidden : Visibility.Visible;
-            m_textBox.Visibility = m_isEditMode ? Visibility.Visible : Visibility.Hidden;
-        }
     }
 }
