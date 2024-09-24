@@ -62,7 +62,7 @@ namespace CommonView.Menu
         public DynamicCommandItem(string header, string? gesture, Action action, IObservable<bool>? canExecute = null)
         {
             Header = header;
-            Gesture = string.Empty;
+            Gesture = gesture;
             if (canExecute is null)
                 Command =  new DelegateCommand(action);
             else
