@@ -6,6 +6,7 @@
              xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              xmlns:local="clr-namespace:OctbitEditor"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             Loaded="OnLoaded"
              Background="{DynamicResource MenuBackground}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -219,8 +220,8 @@
             <Border/>
         </StackPanel>
         <Border Height="1" DockPanel.Dock="Top"/>
-        <WindowsFormsHost DockPanel.Dock="Bottom" Background="{DynamicResource Background}">
-            <forms:Panel x:Name="m_panel" Click="m_panel_Click"/>
+        <WindowsFormsHost DockPanel.Dock="Bottom" Background="{DynamicResource Background}" x:Name="m_host">
+            <forms:Panel x:Name="m_panel" Click="OnClicked"/>
         </WindowsFormsHost>
     </DockPanel>
     

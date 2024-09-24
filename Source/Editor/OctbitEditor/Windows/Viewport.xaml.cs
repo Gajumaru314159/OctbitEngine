@@ -1,7 +1,9 @@
 ﻿using CommonView;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 
 namespace OctbitEditor
 {
@@ -25,6 +27,24 @@ namespace OctbitEditor
 
         private const int WS_POPUP = unchecked((int)0x80000000);
         private const int WS_VISIBLE = unchecked((int)0x10000000);
+
+
+        private Process? m_process = null;
+
+        // ウィンドウプロシージャ
+        IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            switch (msg)
+            {
+                case 0x0231: // WM_ENTERSIZEMOVE
+                    m_host.Visibility = Visibility.Collapsed;
+                    break;
+                case 0x0232: // WM_EXITSIZEMOVE
+                    m_host.Visibility = Visibility.Visible;
+                    break;
+            }
+            return IntPtr.Zero;
+        }
 
 
         public Viewport()
@@ -143,11 +163,20 @@ namespace OctbitEditor
             }
         }
 
-        private Process? m_process = null;
-
-        private void m_panel_Click(object sender, EventArgs e)
+        private void OnClicked(object sender, EventArgs e)
         {
             m_focusRoot.Focus();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+
+            if (Window.GetWindow(this) is Window window)
+            {
+                var hsrc = HwndSource.FromVisual(this) as HwndSource;
+                hsrc?.AddHook(WndProc);
+            }
+
         }
     }
 }
