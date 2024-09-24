@@ -18,9 +18,9 @@ namespace Common.Linq
             return items.DefaultIfEmpty(null).FirstOrDefault(i=>predicate(i!));
         }
 
-        public static IEnumerable<T> NotNull<T>(this IEnumerable<T?> item) where T : class
+        public static IEnumerable<T> NotNull<T>(this IEnumerable<T?>? item)
         {
-            return item.Where(x => x != null).Select(x => x!);
+            return item?.Where(x => x != null).Select(x => x!)??Array.Empty<T>();
         }
 
         public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
