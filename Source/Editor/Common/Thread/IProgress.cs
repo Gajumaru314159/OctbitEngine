@@ -8,6 +8,8 @@
         string Message { get; set; }
 
         void SetRange(int minimum, int maximum);
+        void SetMessage(string message);
+        void SetValue(int value);
         void Increment(int value = 1);
     }
 }
