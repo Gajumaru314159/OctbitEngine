@@ -85,18 +85,29 @@
 
     </UserControl.Resources>
 
-    <DockPanel>
+    <DockPanel Grid.IsSharedSizeScope="True">
         
         <!--検索ボックス-->
         <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
-        <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Bottom" Width="Auto"/>
 
         <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
             <TextBlock Text="{Binding SelectionInfo}"/>
         </Border>
 
+        <Grid DockPanel.Dock="Top" Background="{DynamicResource Surface}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Label" HorizontalAlignment="Center" Grid.Column="0"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="1" Background="{DynamicResource Background}"/>
+            <TextBlock Text="Type" HorizontalAlignment="Center" Grid.Column="1"/>
+        </Grid>
+
         <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}">
+
+            <!--ContextMenu-->
             <ms:MultiSelectTreeView.ContextMenu>
                 <ContextMenu ItemsSource="{Binding MenuItems.Children}">
                     <ContextMenu.Resources>
@@ -122,16 +133,37 @@
                     </ContextMenu.Resources>
                 </ContextMenu>
             </ms:MultiSelectTreeView.ContextMenu>
+            
+            <!--ItemTemplate-->
             <ms:MultiSelectTreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
+
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                            <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
+                            <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
+                            <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
+                        </StackPanel>
+                        <TextBlock Text="Entity" Grid.Column="1" Opacity="0.5"/>
+                    </Grid>
+
+                    <!--
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                         <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
                         <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
-                        <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline2}" Margin="2,0,0,0" Focusable="False"/>
+                        <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
                     </StackPanel>
+                    -->
                 </HierarchicalDataTemplate>
             </ms:MultiSelectTreeView.ItemTemplate>
+            
+            <!--ItemContainerStyle-->
             <ms:MultiSelectTreeView.ItemContainerStyle>
                 <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>

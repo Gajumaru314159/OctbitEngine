@@ -5,7 +5,8 @@
         private static string RootMark = "EngineRootMark";
         static WorkSpace()
         {
-            m_rootPath = Directory.GetCurrentDirectory();
+            m_rootPath = Directory.GetCurrentDirectory()+"/a";
+
 
             bool hasRootMark = false;
             while (true)
@@ -19,6 +20,10 @@
                         hasRootMark = true;
                         break;
                     }
+                }
+                else
+                {
+                    break;
                 }
 
             }

@@ -142,6 +142,7 @@ namespace OctbitEngine.Asset
         {
             void visit(IAssetFolder parent, string path)
             {
+                // 1. フォルダを読み込む
                 foreach (var dir in Directory.EnumerateDirectories(path))
                 {
                     var item = new AssetFolder(this,Path.GetFileName(dir));
@@ -149,6 +150,7 @@ namespace OctbitEngine.Asset
                     parent.Add(item);
                     visit(item, dir);
                 }
+                // 2. ファイルを読み込む
                 foreach (var file in Directory.EnumerateFiles(path))
                 {
                     if(Path.GetExtension(file) != MetaExtension)
@@ -159,6 +161,7 @@ namespace OctbitEngine.Asset
                         }
                     }
                 }
+                // 3. メタデータを読み込む
                 foreach (var file in Directory.EnumerateFiles(path))
                 {                    
                     if (Path.GetExtension(file) == MetaExtension) continue;

@@ -2,6 +2,9 @@
 
 namespace OctbitEngine.Asset
 {
+    /// <summary>
+    /// インポートしたフォルダに対応する
+    /// </summary>
     public interface IAssetFile : IAssetEntry
     {
         /// <summary>

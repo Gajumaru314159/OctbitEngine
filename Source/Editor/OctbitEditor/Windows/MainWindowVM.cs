@@ -28,6 +28,20 @@ namespace OctbitEditor
     {
         public MainWindowVM()
         {
+
+            Log.BeginShink();
+
+            _coreSystem = new CoreSystem();
+
+            _dockingDocumentViewModels.Add(new ViewportVM());
+            _dockingPaneViewModels.Add(new OutlinerVM(_coreSystem.Runtime.ViewportWorld));
+            _dockingPaneViewModels.Add(new InspectorVM());
+            _dockingPaneViewModels.Add(new HistoryWindowVM());
+            _dockingPaneViewModels.Add(new AssetBrowserVM(_coreSystem.AssetManager));
+            _dockingPaneViewModels.Add(new LogListVM());
+
+            Log.EndShink();
+
             Title.Value = "Octbit Editor";
 
             ExitCommand = new DelegateCommand(_ => System.Windows.Application.Current.Shutdown());
@@ -38,25 +52,16 @@ namespace OctbitEditor
                 History.Undo();
             });
 
+            NewSceneCommand = new DelegateCommand(() =>
+            {
+                _coreSystem.Runtime.ViewportWorld.CreateScene();
+            });
+
             History.Executed += () =>
             {
                 RaisePropertyChanged(nameof(CanRedo));
                 RaisePropertyChanged(nameof(CanUndo));
             };
-
-            Log.BeginShink();
-
-            var coreSyste = new CoreSystem();
-            var assetManager = AssetManager.Instance;
-
-            _dockingDocumentViewModels.Add(new ViewportVM());
-            _dockingPaneViewModels.Add(new OutlinerVM());
-            _dockingPaneViewModels.Add(new InspectorVM());
-            _dockingPaneViewModels.Add(new HistoryWindowVM());
-            _dockingPaneViewModels.Add(new AssetBrowserVM(assetManager));
-            _dockingPaneViewModels.Add(new LogListVM());
-
-            Log.EndShink();
         }
 
         public ReadOnlyObservableCollection<ViewModel> DockingDocumentViewModels => new(_dockingDocumentViewModels);
@@ -73,9 +78,13 @@ namespace OctbitEditor
         public ICommand RedoCommand { get; }
         public ICommand UndoCommand { get; }
 
+        public ICommand NewSceneCommand { get; }
+
         public bool CanRedo => History.CanRedo;
         public bool CanUndo => History.CanUndo;
 
         public ICommand ExitCommand { get; }
+
+        private CoreSystem _coreSystem;
     }
 }

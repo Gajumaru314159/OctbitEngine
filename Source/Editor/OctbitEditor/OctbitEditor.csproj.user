@@ -13,7 +13,7 @@
     <Compile Update="Windows\ControlTest.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Windows\Inspector.xaml.cs">
+    <Compile Update="Windows\Inspector\Inspector.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -24,10 +24,10 @@
     <Page Update="Windows\ControlTest.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Windows\HistoryWindow.xaml">
+    <Page Update="Windows\History\HistoryWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Windows\Inspector.xaml">
+    <Page Update="Windows\Inspector\Inspector.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

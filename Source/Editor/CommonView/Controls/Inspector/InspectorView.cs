@@ -12,23 +12,11 @@ namespace CommonView.Controls
                 typeof(InspectorView),
                 new PropertyMetadata());
 
-        //public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
-        //        nameof(ItemsSource),
-        //        typeof(IEnumerable),
-        //        typeof(InspectorView),
-        //        new PropertyMetadata());
-
-
         public GridLength LabelWidth
         {
             get => (GridLength)GetValue(LabelWidthProperty);
             set => SetValue(LabelWidthProperty, value);
         }
-
-        //public IEnumerable ItemsSource {
-        //    get => (IEnumerable)GetValue(ItemsSourceProperty);
-        //    set => SetValue(ItemsSourceProperty, value);
-        //}
 
         static InspectorView()
         {

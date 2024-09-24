@@ -8,13 +8,12 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
-    <BaseOutputPath>../../../Build/Editor</BaseOutputPath>
-	<UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
-	<Using Remove="System.Drawing"/>
-	<Using Remove="System.Windows.Forms"/>
+	<Using Remove="System.Drawing" />
+	<Using Remove="System.Windows.Forms" />
   </ItemGroup>
 	
   <ItemGroup>

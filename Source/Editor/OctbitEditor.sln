@@ -20,6 +20,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitEngine.Texture", "Oct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OctbitLauncher", "OctbitLauncher\OctbitLauncher.csproj", "{F53CC651-5158-4F16-A7BA-07FBCFEB9164}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{D93FD1F2-DAD9-4249-AB80-6848E0D81745}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{D31CC744-6831-469A-9A12-A3789E026291}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Texture", "Texture", "{52A6B411-4EA0-4B67-82C4-EC478C5CC734}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctbitEngineAPI.Texture", "OctbitEngineAPI.Texture\OctbitEngineAPI.Texture.csproj", "{CA636B86-7CB8-4903-BC73-23C0B6A09CD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,9 +62,20 @@ Global
 		{F53CC651-5158-4F16-A7BA-07FBCFEB9164}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F53CC651-5158-4F16-A7BA-07FBCFEB9164}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F53CC651-5158-4F16-A7BA-07FBCFEB9164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA636B86-7CB8-4903-BC73-23C0B6A09CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA636B86-7CB8-4903-BC73-23C0B6A09CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA636B86-7CB8-4903-BC73-23C0B6A09CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA636B86-7CB8-4903-BC73-23C0B6A09CD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FBC6F6EA-BCAD-4303-A421-8975C5A10A4A} = {D93FD1F2-DAD9-4249-AB80-6848E0D81745}
+		{FCEBE67D-86A6-4351-A14D-BEAAF9CC9ED2} = {D93FD1F2-DAD9-4249-AB80-6848E0D81745}
+		{F9E8C352-2E65-46ED-ADC4-59841279F97A} = {52A6B411-4EA0-4B67-82C4-EC478C5CC734}
+		{52A6B411-4EA0-4B67-82C4-EC478C5CC734} = {D31CC744-6831-469A-9A12-A3789E026291}
+		{CA636B86-7CB8-4903-BC73-23C0B6A09CD1} = {52A6B411-4EA0-4B67-82C4-EC478C5CC734}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5DAFC363-9E9F-4C40-977B-5B04FEE04297}

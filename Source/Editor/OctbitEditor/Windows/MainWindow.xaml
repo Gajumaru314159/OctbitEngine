@@ -21,7 +21,7 @@
 
 
     <WindowChrome.WindowChrome>
-        <WindowChrome x:Name="chrome" CornerRadius="0" GlassFrameThickness="0" ResizeBorderThickness="0" NonClientFrameEdges="None" />
+        <WindowChrome x:Name="chrome" ResizeBorderThickness="2" NonClientFrameEdges="None" />
     </WindowChrome.WindowChrome>
     
     <Window.InputBindings>
@@ -50,7 +50,7 @@
             <!--メニューバー-->
             <Menu VerticalAlignment="Bottom" Padding="0" WindowChrome.IsHitTestVisibleInChrome="True">
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New Scene" InputGestureText="Ctrl+N"/>
+                    <MenuItem Header="_New Scene" InputGestureText="Ctrl+N" Command="{Binding NewSceneCommand}"/>
                     <MenuItem Header="_Open Scene" InputGestureText="Ctrl+O"/>
                     <!--<MenuItem Header="Open Recent Scene" ItemsSource="{Binding RecentScenes}"/>-->
                     <Separator/>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OctbitEditor": {
+      "commandName": "Project",
+      "workingDirectory": "../../../Projects/SampleProject"
+    }
+  }
+}

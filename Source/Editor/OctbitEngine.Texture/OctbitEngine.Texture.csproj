@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -7,10 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>$(MSBuildProjectName.Replace(".Texture", ""))</RootNamespace>
 	<BaseOutputPath>../../../Build/Plugins</BaseOutputPath>
-	<UseCommonOutputDirectory>true</UseCommonOutputDirectory>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OctbitEngineAPI.Texture\OctbitEngineAPI.Texture.csproj" />
     <ProjectReference Include="..\OctbitEngineAPI\OctbitEngineAPI.csproj" />
   </ItemGroup>
 

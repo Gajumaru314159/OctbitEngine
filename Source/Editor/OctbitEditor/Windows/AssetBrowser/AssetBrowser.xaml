@@ -129,7 +129,7 @@
                 <ms:MultiSelectTreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="local:ExplorerItem" ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                            <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                             <base:EditableTextBlock Text="{Binding Name.Value}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
@@ -162,7 +162,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="local:ExplorerItem">
                                 <StackPanel Orientation="Horizontal" Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
-                                    <Image Source="{Binding Icon.Value}" Width="15" Margin="3,0"/>
+                                    <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                                     <base:EditableTextBlock Text="{Binding Name.Value}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -235,7 +235,7 @@
                                 <DockPanel Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
                                     <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
                                     <Border BorderThickness="0,0,0,2" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
-                                        <Image Source="{Binding Icon.Value}"
+                                        <Image Source="{Binding Icon}"
                                            Width="{Binding DataContext.IconSize.Value,ElementName=Root}" 
                                            Height="{Binding DataContext.IconSize.Value,ElementName=Root}"/>
                                     </Border>
@@ -265,7 +265,7 @@
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <DockPanel>
-                                                <Image Source="{Binding Icon.Value}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                <Image Source="{Binding Icon}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                                 <base:EditableTextBlock Text="{Binding Name.Value}" VerticalAlignment="Center" Margin="0,-2"/>
                                             </DockPanel>
                                         </DataTemplate>

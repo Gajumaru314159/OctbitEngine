@@ -2,6 +2,7 @@
 
 namespace OctbitEngine.Runtime
 {
+    [RuntimeType("ob::engine::TransformComponent")]
     public class TransformComponent : Component, ITransformComponent
     {
         internal TransformComponent(Guid guid, RemoteObject remoteObject, Entity entity)

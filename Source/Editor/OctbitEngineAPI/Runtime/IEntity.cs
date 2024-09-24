@@ -29,11 +29,11 @@ namespace OctbitEngine.Runtime
         public bool AddChild(IEntity child);
 
         public IComponent? AddComponent(string type);
-        public T? AddComponent<T>() where T : IComponent;
+        public T? AddComponent<T>() where T : class,IComponent;
         public IComponent? GetComponent(string type);
         public IComponent[] GetComponents(string type);
-        public T? GetComponent<T>() where T : IComponent;
-        public T[] GetComponents<T>() where T : IComponent;
+        public T? GetComponent<T>() where T : class, IComponent;
+        public T[] GetComponents<T>() where T : class, IComponent;
     }
 
 

@@ -10,6 +10,8 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using Common.String;
+using Livet;
 
 namespace OctbitEditor
 {
@@ -20,23 +22,52 @@ namespace OctbitEditor
         Detail,
         Icon,
     }
-    public class AssetBrowserItem
+    public class AssetBrowserItem : ViewModel
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
         public AssetBrowserItem(string name = "Sample")
         {
             Name.Value = name;
-            Icon.Value = FolderIcon;
             Path = "";
             IsFolder = true;
+            _icon = FolderIcon;
         }
         public AssetBrowserItem(IAssetEntry asset,bool isAsset = false)
         {
             Name.Value = asset.Name;
-            Icon.Value = asset is AssetFile?AssetIcon : FolderIcon;
             Path = asset.Path;
             IsFolder = asset is AssetFolder;
+            _icon = asset is AssetFile?AssetIcon : FolderIcon;
+
+            if(asset is AssetFile file)
+            {
+                if (file.PhysicalPath.MatchExtentions(".png", ".jpg"))
+                {
+                    _path = file.PhysicalPath;
+                }
+            }
+        }
+
+
+
+        public async Task<BitmapImage> DownloadImageAsync(string path)
+        {
+            using var fs = new FileStream(path, FileMode.Open);
+            using var stream = new MemoryStream();
+
+            await fs.CopyToAsync(stream);
+            stream.Position = 0;
+
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.DecodePixelHeight = 128;
+            bitmap.StreamSource = stream;
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            return bitmap;
         }
 
 
@@ -49,7 +80,25 @@ namespace OctbitEditor
         public ReactiveProperty<bool> IsSelected { get; } = new();
         public ReactiveProperty<bool> IsSelectedInList { get; } = new();
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
-        public ReactivePropertySlim<BitmapSource> Icon { get; } = new();
+        public BitmapSource Icon
+        {
+            get {
+                if(_path != null)
+                {
+                    var task = DownloadImageAsync(_path);
+                    _path = null;
+                    Task.Run(() =>
+                    {
+                        _icon = task.Result;
+                        RaisePropertyChanged(nameof(Icon));
+                    });
+                    return FolderIcon;
+                }
+                return _icon ?? FolderIcon;
+            }
+        }
+        private BitmapSource? _icon;
+        private string? _path;
 
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
     }

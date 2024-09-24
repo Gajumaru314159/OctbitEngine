@@ -3,6 +3,7 @@
 
     public interface IRuntime
     {
+        IWorld ViewportWorld { get; }
         IWorld[] Worlds { get; }
 
         event Action<IRuntime>? Crashed;

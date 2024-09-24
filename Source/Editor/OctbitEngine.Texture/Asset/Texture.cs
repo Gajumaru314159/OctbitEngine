@@ -9,7 +9,7 @@ namespace OctbitEngine.Asset
         public string Source { get; set; } = string.Empty;
 
         // LOD
-        public string TextureGroup { get; set; }
+        public string TextureGroup { get; set; } = string.Empty;
 
         // Compression
         public TextureCompression Compression { get; set; }

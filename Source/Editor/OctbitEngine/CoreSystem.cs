@@ -1,4 +1,5 @@
 ﻿using Common.Log;
+using OctbitEngine.Runtime;
 using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using System.Diagnostics;
@@ -6,41 +7,50 @@ using System.Reflection;
 
 namespace OctbitEngine
 {
-    public class CoreSystem
+    public class CoreSystem : ICoreSystem
     {
         public static CoreSystem? Instance;
+
+        public IAssetManager AssetManager { get; }
+        public IRuntime Runtime { get; }
 
         public CoreSystem()
         {
             Instance = this;
             Log.Logged += OnLogged;
 
-            Log.Trace("CoreSystem initialized");
-            Log.Info("CoreSystem initialized");
-            Log.Warning("CoreSystem initialized");
-            Log.Error("CoreSystem initialized");
-
-
             try
             {
                 var pluginsFolder = Path.Combine(WorkSpace.RootPath, "Build","Plugins");
                 var searchPattern = "OctbitEngine.*.dll";
-                string[] files = Directory.GetFiles(pluginsFolder, searchPattern, SearchOption.AllDirectories);
-
-                foreach (string file in files)
+                if (Directory.Exists(pluginsFolder))
                 {
-                    try
+                    string[] files = Directory.GetFiles(pluginsFolder, searchPattern, SearchOption.AllDirectories);
+
+                    foreach (string file in files)
                     {
-                        _pluginAssemblies.Add(Assembly.LoadFrom(file));
-                    } catch(Exception e)
-                    {
-                        Log.Error($"プラグインの読み込みに失敗\n{e.Message}");
+                        try
+                        {
+                            _pluginAssemblies.Add(Assembly.LoadFrom(file));
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"プラグインの読み込みに失敗\n{e.Message}");
+                        }
                     }
+                }
+                else
+                {
+                    Log.Error($"プラグインフォルダが見つかりません ({pluginsFolder})");
                 }
             }catch(Exception e)
             {
                 Log.Error(e.Message);
             }
+
+            AssetManager = new AssetManager();
+            Runtime = new Runtime.Runtime();
+
         }
 
         private void OnLogged(LogObject log)

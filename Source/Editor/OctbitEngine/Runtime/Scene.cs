@@ -5,28 +5,31 @@ namespace OctbitEngine.Runtime
 {
     public sealed class Scene : IScene
     {
-        internal Scene(IRemoteObject remoteObject)
+        internal Scene(IWorld world,IRemoteObject remoteObject)
         {
-            m_remoteObject = remoteObject;
+            World = world;
+            RemoteObject = remoteObject;
         }
+
+        public IWorld World { get; }
 
         public string Name
         {
-            get => m_remoteObject.GetValue<string>();
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<string>();
+            set => RemoteObject.SetValue(value);
         }
 
         public IAssetFile? File => throw new NotImplementedException();
 
         public bool IsActive
         {
-            get => m_remoteObject.GetValue<bool>();
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<bool>();
+            set => RemoteObject.SetValue(value);
         }
         public bool IsVisible
         {
-            get => m_remoteObject.GetValue<bool>();
-            set => m_remoteObject.SetValue(value);
+            get => RemoteObject.GetValue<bool>();
+            set => RemoteObject.SetValue(value);
         }
 
         public bool IsActiveInHierarchy => this.AllAncestor<IScene>(i => i?.Parent, i => i.IsActive);
@@ -80,14 +83,14 @@ namespace OctbitEngine.Runtime
 
         public IEntity CreateEntity()
         {
-            // TODO RemoteObjectに変更
-            var obj = new RemoteObject(m_remoteObject.Runtime,s_typeInfo,0);
-            return new Entity(Guid.NewGuid(),obj,this);
+            int id = RemoteObject.Invoke<int>("createEntity");
+            var typeInfo = RemoteObject.Runtime.FindTypeInfo("ob::engine::Entity");
+            if(typeInfo==null) throw new Exception("エンティティ型がリフレクション登録されていません");
+            return new Entity(Guid.NewGuid(), new RemoteObject(RemoteObject.Runtime, typeInfo, id), this);
         }
 
 
-        private IRemoteObject m_remoteObject;
+        private IRemoteObject RemoteObject { get; }
 
-        static TypeInfo s_typeInfo = new TypeInfo("ob::engine::Entity");
     }
 }

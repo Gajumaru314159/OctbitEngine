@@ -1,10 +1,12 @@
-﻿using System.Text.Json;
+﻿using Common.Log;
+using Common.Linq;
+using System.Text.Json;
 
 namespace OctbitEngine.Runtime
 {
     public struct EnumElementInfoArchive
     {
-        public string Name;
+        public string Name { get; set; }
         public int Index;
         public int Value;
     }
@@ -36,9 +38,10 @@ namespace OctbitEngine.Runtime
     }
 
 
+    [Serializable]
     public struct TypeInfoArchive
     {
-        public string Name;
+        public string Name{ get; set; }
         public string[] Bases;
         public ConstructorInfoArchive[] Constructors;
         public PropertyInfoArchive[] Properties;
@@ -49,74 +52,41 @@ namespace OctbitEngine.Runtime
 
     internal class TypeInfoManager
     {
-        TypeInfoManager(string json)
+        internal TypeInfoManager(string json)
         {
-            var archives = JsonSerializer.Deserialize<TypeInfoArchive[]>(json) ?? Array.Empty<TypeInfoArchive>();
-
-            var types = new Dictionary<string, TypeInfo>();
-
-            foreach(var archive in archives)
+            try
             {
-                types.Add(archive.Name, new TypeInfo(archive.Name));
-            }
+                var archives = JsonSerializer.Deserialize<TypeInfoArchive[]>(json) ?? Array.Empty<TypeInfoArchive>();
 
-            foreach (var archive in archives)
-            {
-                var typeInfo = types[archive.Name];
-
-                // ベースクラス
-                foreach (var baseName in archive.Bases)
+                foreach (var archive in archives.NotNull())
                 {
-                    if (types.TryGetValue(baseName, out var baseType))
-                    {
-                        typeInfo.m_bases.Add(baseType);
-                    }
-                    else
-                    {
-                        // TODO 例外処理
-                    }
+                    TypeMap.Add(archive.Name, new TypeInfo(archive.Name));
                 }
 
-                // コンストラクタ
-                foreach (var constructorArchive in archive.Constructors)
+                foreach (var archive in archives.NotNull())
                 {
-                    var arguments = new List<ArgumentInfo>();
-                    foreach (var argArchive in constructorArchive.Arguments)
+                    var typeInfo = TypeMap[archive.Name];
+
+                    // ベースクラス
+                    foreach (var baseName in archive.Bases.NotNull())
                     {
-                        if (types.TryGetValue(argArchive.Type, out var argType))
+                        if (TypeMap.TryGetValue(baseName, out var baseType))
                         {
-                            arguments.Add(new ArgumentInfo(argType, argArchive.Name));
+                            typeInfo.m_bases.Add(baseType);
                         }
                         else
                         {
                             // TODO 例外処理
                         }
                     }
-                    typeInfo.m_constructors.Add(new ConstructorInfo(arguments));
-                }
 
-                // プロパティ
-                foreach (var propertyArchive in archive.Properties)
-                {
-                    if (types.TryGetValue(propertyArchive.Type, out var propertyType))
-                    {
-                        typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite));
-                    }
-                    else
-                    {
-                        // TODO 例外処理
-                    }
-                }
-
-                // メソッド
-                foreach (var methodArchive in archive.Methods)
-                {
-                    if (types.TryGetValue(methodArchive.ReturnType, out var returnType))
+                    // コンストラクタ
+                    foreach (var constructorArchive in archive.Constructors.NotNull())
                     {
                         var arguments = new List<ArgumentInfo>();
-                        foreach (var argArchive in methodArchive.Arguments)
+                        foreach (var argArchive in constructorArchive.Arguments.NotNull())
                         {
-                            if (types.TryGetValue(argArchive.Type, out var argType))
+                            if (TypeMap.TryGetValue(argArchive.Type, out var argType))
                             {
                                 arguments.Add(new ArgumentInfo(argType, argArchive.Name));
                             }
@@ -125,22 +95,67 @@ namespace OctbitEngine.Runtime
                                 // TODO 例外処理
                             }
                         }
-                        typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments));
+                        typeInfo.m_constructors.Add(new ConstructorInfo(arguments));
                     }
-                    else
+
+                    // プロパティ
+                    foreach (var propertyArchive in archive.Properties.NotNull())
                     {
-                        // TODO 例外処理
+                        if (TypeMap.TryGetValue(propertyArchive.Type, out var propertyType))
+                        {
+                            typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite));
+                        }
+                        else
+                        {
+                            // TODO 例外処理
+                        }
                     }
+
+                    // メソッド
+                    foreach (var methodArchive in archive.Methods.NotNull())
+                    {
+                        if (TypeMap.TryGetValue(methodArchive.ReturnType, out var returnType))
+                        {
+                            var arguments = new List<ArgumentInfo>();
+                            foreach (var argArchive in methodArchive.Arguments.NotNull())
+                            {
+                                if (TypeMap.TryGetValue(argArchive.Type, out var argType))
+                                {
+                                    arguments.Add(new ArgumentInfo(argType, argArchive.Name));
+                                }
+                                else
+                                {
+                                    // TODO 例外処理
+                                }
+                            }
+                            typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments));
+                        }
+                        else
+                        {
+                            // TODO 例外処理
+                        }
+                    }
+
+                    typeInfo.m_propertyOrder = archive.Properties.NotNull().Select(p => p.Name).ToList();
+                    typeInfo.m_methodOrder = archive.Methods.NotNull().Select(m => m.Name).ToList();
+
                 }
-
-                typeInfo.m_propertyOrder = archive.Properties.Select(p => p.Name).ToList();
-                typeInfo.m_methodOrder = archive.Methods.Select(m => m.Name).ToList();
-
+            }catch (Exception e)
+            {
+                Log.Error(e.Message);
             }
-
 
         }
 
-        public static Dictionary<string,TypeInfo> TypeMap = new Dictionary<string, TypeInfo>();
+        public ITypeInfo? Find(string type)
+        {
+            if (TypeMap.TryGetValue(type, out var typeInfo))
+            {
+                return typeInfo;
+            }
+            return null;
+        }
+
+        public Dictionary<string,TypeInfo> TypeMap { get; init; } = new();
     }
 }

@@ -5,6 +5,7 @@ namespace OctbitEngine.Runtime
 {
     public interface IScene
     {
+        public IWorld World { get; }
         public string Name { get; set; }
         public IAssetFile? File { get; }
 

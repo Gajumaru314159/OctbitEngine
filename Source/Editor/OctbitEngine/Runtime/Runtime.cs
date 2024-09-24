@@ -3,6 +3,7 @@ using Common.Log;
 using Common.Thread;
 using OctbitEngine.Config;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace OctbitEngine.Runtime
@@ -14,31 +15,57 @@ namespace OctbitEngine.Runtime
         private Dictionary<int, RemoteObject> m_objects = new();
         private Process? m_process;
         private NetworkDevice m_network;
+        private TypeInfoManager _typeInfoManager;
 
         public Runtime()
+            : this(null)
         {
-            m_network = new NetworkDevice(IPAddress.Loopback, 50000);
-
-            startupRuntime();
-            connectRuntime();
         }
-        public Runtime(IProgress progress)
+        public Runtime(IProgress? progress)
         {
             m_network = new NetworkDevice(IPAddress.Loopback, 50000);
 
-            progress.SetRange(0, 100);
-            progress.Message = "Runtimeを起動中";
+            progress?.SetRange(0, 100);
+            progress?.SetMessage("Runtimeを起動中");
 
             startupRuntime();
 
-            progress.Value = 10;
-            progress.Message = "Runtimeに接続中";
+            progress?.SetValue(10);
+            progress?.SetMessage("Runtimeに接続中");
 
             connectRuntime();
 
 
 
+            var infos = new TypeInfoArchive[]{
+                new TypeInfoArchive
+                {
+                    Name = "ob::engine::World",
+                },
+                new TypeInfoArchive
+                {
+                    Name = "ob::engine::Scene",
+                },
+                new TypeInfoArchive
+                {
+                    Name = "ob::engine::Entity",
+                },
+                new TypeInfoArchive
+                {
+                    Name = "ob::engine::Component",
+                }
+            };
+
+            var text = System.Text.Json.JsonSerializer.Serialize(infos);
+
+
+            _typeInfoManager = new TypeInfoManager(text);
+
+            createViewportWorld();
+
         }
+
+        public IWorld ViewportWorld { get;private set; }
 
         public IWorld[] Worlds
         {
@@ -57,7 +84,7 @@ namespace OctbitEngine.Runtime
 
         public ITypeInfo? FindTypeInfo(string name)
         {
-            throw new NotImplementedException();
+            return _typeInfoManager.Find(name);
         }
 
         public void Send<T>(T query) where T : Query
@@ -125,7 +152,19 @@ namespace OctbitEngine.Runtime
                 Arguments = "--editor",
             };
 
-            m_process = Process.Start(psi);
+            if (File.Exists(psi.FileName))
+            {
+                try
+                {
+                    m_process = Process.Start(psi);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Runtimeの起動に失敗\n{e.Message}");
+                    return;
+                }
+            }
+
             if (m_process != null)
             {
                 m_process.OutputDataReceived += (sender, e) =>
@@ -174,6 +213,17 @@ namespace OctbitEngine.Runtime
         private void connectRuntime()
         {
 
+        }
+
+        [MemberNotNull(nameof(ViewportWorld))]
+        private void createViewportWorld()
+        {
+            lock (m_worlds)
+            {
+                var world = new World(this);
+                ViewportWorld = world;
+                m_worlds.Add(world);
+            }
         }
     }
 }

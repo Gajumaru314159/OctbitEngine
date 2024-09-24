@@ -21,8 +21,8 @@ namespace OctbitEditor
         public IScene Scene => throw new NotImplementedException();
 
         public string Name { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsVisible { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsVisible { get; set; } = true;
         public bool IsStatic { get; set; }
 
         public IEntity? Parent { get; set; }
@@ -45,7 +45,7 @@ namespace OctbitEditor
             throw new NotImplementedException();
         }
 
-        public T? AddComponent<T>() where T : IComponent
+        public T? AddComponent<T>() where T : class,IComponent
         {
             throw new NotImplementedException();
         }
@@ -55,7 +55,7 @@ namespace OctbitEditor
             throw new NotImplementedException();
         }
 
-        public T? GetComponent<T>() where T : IComponent
+        public T? GetComponent<T>() where T : class, IComponent
         {
             throw new NotImplementedException();
         }
@@ -65,7 +65,7 @@ namespace OctbitEditor
             throw new NotImplementedException();
         }
 
-        public T[] GetComponents<T>() where T : IComponent
+        public T[] GetComponents<T>() where T : class, IComponent
         {
             throw new NotImplementedException();
         }
@@ -197,9 +197,9 @@ namespace OctbitEditor
         }
 
         public double ActiveIconOpacity
-            => Entity.IsActiveInHierarchy ? 1.0 : 0.5;
+            => this.AllAncestor(i => i?.Parent, i => i.IsActive) ? 1.0 : 0.5;
         public double VisibleIconOpacity
-            => Entity.IsVisibleInHierarchy ? 1.0 : 0.5;
+            => this.AllAncestor(i => i?.Parent, i => i.IsVisible) ? 1.0 : 0.5;
 
         public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
         public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
@@ -209,11 +209,14 @@ namespace OctbitEditor
 
     }
 
+
     public class OutlinerVM : TabBase
     {
-        public OutlinerVM()
+        public OutlinerVM(IWorld world)
             : base("Outliner")
         {
+            World = world;
+
             MenuItems = new DynamicGroupItem("Root");
 
             GenerateMenuItems();
@@ -288,6 +291,10 @@ namespace OctbitEditor
                 },
                 () =>
                 {
+                    if (item.Parent==null)
+                    {
+                        Children.Remove(item);
+                    }
                     item.SetParent(null);
                     RaisePropertyChanged(nameof(SelectionInfo));
                 }
@@ -369,5 +376,7 @@ namespace OctbitEditor
         public ICommand? CreateEntityCommand { get; private set; }
         public ICommand? DeleteEntityCommand { get; private set; }
         public ICommand? EditEntityNameCommand { get; private set; }
+
+        private IWorld World { get; init; }
     }
 }
