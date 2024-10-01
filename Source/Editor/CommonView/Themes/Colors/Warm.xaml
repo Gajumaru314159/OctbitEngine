@@ -7,15 +7,15 @@
     <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
 
     <SolidColorBrush x:Key="Foreground" Color="#0F0F0F"/>
-    <SolidColorBrush x:Key="Background" Color="#E4E4E4"/>
-    <SolidColorBrush x:Key="Surface" Color="#D5D5D5"/>
-    <SolidColorBrush x:Key="Accent" Color="#5680C2"/>
+    <SolidColorBrush x:Key="Background" Color="#EDEDE5"/>
+    <SolidColorBrush x:Key="Surface" Color="#CCC7A1"/>
+    <SolidColorBrush x:Key="Accent" Color="#EFB47C"/>
     <SolidColorBrush x:Key="AccentForeground" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="Field" Color="#CACACA"/>
-    <SolidColorBrush x:Key="Outline" Color="#CACACA"/>
-    <SolidColorBrush x:Key="Header" Color="#D0D0D0"/>
+    <SolidColorBrush x:Key="Field" Color="#D9D9C1"/>
+    <SolidColorBrush x:Key="Outline" Color="#DBD9C0"/>
+    <SolidColorBrush x:Key="Header" Color="#DCDBBF"/>
     <SolidColorBrush x:Key="Focus" Color="#0F0F0F"/>
-    <SolidColorBrush x:Key="MenuBackground" Color="#CFD0D2"/>
+    <SolidColorBrush x:Key="MenuBackground" Color="#DCDBBF"/>
     <SolidColorBrush x:Key="Hover" Color="#20000000"/>
 
 </ResourceDictionary>

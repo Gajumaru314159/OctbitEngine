@@ -14,6 +14,8 @@ namespace OctbitEditor
     {
         Dark,
         Light,
+        Warm,
+        Blue,
         UnityDark,
         UnityLight,
         UnrealEngine,
