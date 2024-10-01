@@ -28,10 +28,6 @@
     
     <UserControl.Resources>
         
-        <!--アイコンリソース-->
-        <BitmapImage x:Key="EyeOpen" UriSource="/Resources/Icons/eye_open.png"/>
-        <BitmapImage x:Key="EyeClose" UriSource="/Resources/Icons/eye_close.png"/>
-
         <!--IsActiveアイコン-->
         <Style x:Key="ActiveIcon" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
             <Setter Property="Margin" Value="0,0,2,0"/>
@@ -66,10 +62,12 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Image x:Name="Icon" Source="{StaticResource EyeOpen}" Width="15" Height="15" VerticalAlignment="Center"/>
+                        <Border Background="Transparent" Width="14" Height="14">
+                            <ContentControl Style="{StaticResource Visible}" x:Name="Icon" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="False">
-                                <Setter TargetName="Icon" Property="Source" Value="{StaticResource EyeClose}"/>
+                                <Setter TargetName="Icon" Property="Style" Value="{StaticResource Invisible}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -88,7 +86,7 @@
     <DockPanel Grid.IsSharedSizeScope="True">
         
         <!--検索ボックス-->
-        <base:SearchBox Text="{Binding Filter.Value}" DockPanel.Dock="Top" Width="Auto"/>
+        <base:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Top" Width="Auto"/>
 
         <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">
@@ -143,6 +141,9 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
                         </Grid.ColumnDefinitions>
+
+                        <Border x:Name="BG" Grid.ColumnSpan="2" Background="{DynamicResource Accent}" Opacity="0.5"/>
+
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                             <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
@@ -151,6 +152,12 @@
                         </StackPanel>
                         <TextBlock Text="Entity" Grid.Column="1" Opacity="0.5"/>
                     </Grid>
+
+                    <HierarchicalDataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IsMatched.Value}" Value="False">
+                            <Setter Property="Visibility" TargetName="BG" Value="Collapsed"/>
+                        </DataTrigger>
+                    </HierarchicalDataTemplate.Triggers>
 
                     <!--
                     <StackPanel Orientation="Horizontal">
@@ -168,6 +175,7 @@
                 <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
                     <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                    <Setter Property="Visibility" Value="{Binding IsFiltered.Value,Converter={InverseBoolToVisibilityConverter}}"/>
                 </Style>
             </ms:MultiSelectTreeView.ItemContainerStyle>
         </ms:MultiSelectTreeView>

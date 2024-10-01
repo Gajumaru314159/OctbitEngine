@@ -203,6 +203,8 @@ namespace OctbitEditor
 
         public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
         public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
+        public ReactivePropertySlim<bool> IsFiltered { get; } = new(false);
+        public ReactivePropertySlim<bool> IsMatched { get; } = new(false);
         public ReactivePropertySlim<bool> IsNameEditting { get; } = new(false);
         public BitmapImage Icon => EntityIcon;
         public ObservableCollection<OutlinerItem> Children { get; } = new();
@@ -226,7 +228,31 @@ namespace OctbitEditor
             {
                 RaisePropertyChanged(nameof(SelectionInfo));
             };
+
+            Filter.Subscribe(_ => { Children.ForEach(i=> UpdateFilter(i)); });
         }
+
+        private bool MatchFilter(OutlinerItem item)
+        {
+            return item.Name.Contains(Filter.Value) && !string.IsNullOrEmpty(Filter.Value);
+        }
+
+        private bool UpdateFilter(OutlinerItem item)
+        {
+            // TODO async処理
+            bool matched = MatchFilter(item);
+            bool visible = matched || string.IsNullOrEmpty(Filter.Value);
+            foreach (var child in item.Children)
+            {
+                visible |= UpdateFilter(child);
+            }
+
+            item.IsMatched.Value = matched;
+            item.IsFiltered.Value = !visible;
+
+            return visible;
+        }
+
 
         private void InitializeCommands()
         {
