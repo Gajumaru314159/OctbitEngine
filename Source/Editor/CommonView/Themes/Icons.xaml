@@ -620,7 +620,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="Global" TargetType="ContentControl" BasedOn="{StaticResource IconBase}" >
         <Setter Property="Template">
             <Setter.Value>
@@ -635,6 +635,54 @@
                             </GeometryGroup>
                         </Path.Data>
                     </Path>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="Visible" TargetType="ContentControl" BasedOn="{StaticResource IconBase}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Canvas Width="14" Height="14">
+                        <Path Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <PathGeometry Figures="M 0,7 Q 7,-1 14,7 Q 7,15 0,7 Z"/>
+                                    <EllipseGeometry Center="7,7" RadiusX="3.5" RadiusY="3.5"/>
+                                    <EllipseGeometry Center="7,7" RadiusX="1.5" RadiusY="1.5"/>
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Invisible" TargetType="ContentControl" BasedOn="{StaticResource IconBase}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Canvas Width="14" Height="14">
+                        <Path Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <PathGeometry Figures="M 0,7 Q 7,-1 14,7 Q 7,15 0,7 Z"/>
+                                    <EllipseGeometry Center="7,7" RadiusX="3.5" RadiusY="3.5"/>
+                                    <EllipseGeometry Center="7,7" RadiusX="1.5" RadiusY="1.5"/>
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                        <Path Fill="{TemplateBinding Foreground}">
+                            <Path.Data>
+                                <GeometryGroup>
+                                    <PathGeometry Figures="M 1,13 L 1,12 12,1 13,1 13,2 2,13 Z"/>
+                                </GeometryGroup>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
