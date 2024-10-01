@@ -13,11 +13,6 @@
     <UserControl.Resources>
 
         <Style TargetType="ctrl:InspectorItemContainer">
-            <Setter Property="LabelWidth" Value="100"/>
-
-
-            <Setter Property="LabelWidth" Value="{Binding LabelWidth, RelativeSource={RelativeSource AncestorType={x:Type ctrl:InspectorView}},Mode=TwoWay,FallbackValue=100}"/>
-
             <Setter Property="Padding" Value="2"/>
             <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
@@ -28,7 +23,7 @@
                     <ControlTemplate TargetType="ctrl:InspectorItemContainer">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="{Binding LabelWidth,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" MinWidth="10"/>
+                                <ColumnDefinition Width="100" MinWidth="10" SharedSizeGroup="LabelWidth"/>
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="*" MinWidth="10"/>
                             </Grid.ColumnDefinitions>
@@ -67,7 +62,7 @@
 
         <Button Content="Add Component" DockPanel.Dock="Bottom"/>
 
-        <ctrl:InspectorView LabelWidth="100">
+        <ctrl:InspectorView Grid.IsSharedSizeScope="True">
             <ctrl:InspectorView.Template>
                 <ControlTemplate TargetType="ctrl:InspectorView">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">

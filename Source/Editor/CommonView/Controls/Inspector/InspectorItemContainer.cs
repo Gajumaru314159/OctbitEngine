@@ -24,12 +24,6 @@ namespace CommonView.Controls
                 typeof(InspectorItemContainer),
                 new PropertyMetadata());
 
-        public static readonly DependencyProperty LabelWidthProperty = DependencyProperty.Register(
-                nameof(LabelWidth),
-                typeof(GridLength),
-                typeof(InspectorItemContainer),
-                new PropertyMetadata());
-
         public static readonly DependencyProperty CollapseLabelProperty = DependencyProperty.Register(
                 nameof(CollapseLabel),
                 typeof(bool),
@@ -46,11 +40,6 @@ namespace CommonView.Controls
         {
             get => GetValue(ContentProperty);
             set => SetValue(ContentProperty, value);
-        }
-        public GridLength LabelWidth
-        {
-            get => (GridLength)GetValue(LabelWidthProperty);
-            set => SetValue(LabelWidthProperty, value);
         }
 
         public bool CollapseLabel
