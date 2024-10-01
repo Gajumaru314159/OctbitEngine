@@ -28,7 +28,7 @@
         <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation,FallbackValue=Horizontal}" Background="{DynamicResource Header}">
             <StackPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Margin" Value="1"/>
+                    <Setter Property="Margin" Value="1,0,0,0"/>
                     <Setter Property="Width" Value="20"/>
                     <Setter Property="Height" Value="20"/>
                     <Setter Property="Padding" Value="0"/>
@@ -43,8 +43,8 @@
                     <Setter Property="ItemsControl.Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ItemsControl">
-                                <Border Background="{DynamicResource Background}" Margin="1" Padding="0" BorderBrush="{DynamicResource Outline}" BorderThickness="1" SnapsToDevicePixels="True">
-                                    <ItemsPresenter/>
+                                <Border Background="{DynamicResource Background}" Margin="1" Padding="0,0,1,0" BorderBrush="{DynamicResource Outline}" BorderThickness="1" SnapsToDevicePixels="True">
+                                    <ItemsPresenter Margin="0,-1"/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
