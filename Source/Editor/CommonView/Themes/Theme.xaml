@@ -336,7 +336,7 @@
                                             </TransformGroup.Children>
                                         </TransformGroup>
                                     </Grid.LayoutTransform>
-                                    <Path x:Name="arrow" Data="M 4.5,7 L 1,3.5 L 4.5,0" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="2"/>
+                                    <Path x:Name="arrow" Data="M 4.5,7 L 1,3.5 L 4.5,0" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
                                 </Grid>
                                 <ContentPresenter Grid.Column="1" HorizontalAlignment="Stretch" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
                             </Grid>

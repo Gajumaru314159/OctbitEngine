@@ -97,7 +97,6 @@ namespace OctbitEditor
         {
             Entity = entity;
             Parent = null;
-            IsNameEditting.Subscribe(i => Log.Info($"IsNameEditting:{i}"));
         }
 
         public IEntity Entity { get; }

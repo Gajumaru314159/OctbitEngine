@@ -99,7 +99,7 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Label" HorizontalAlignment="Center" Grid.Column="0"/>
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="1" Background="{DynamicResource Background}"/>
+            <GridSplitter Grid.Column="1" IsTabStop="False" HorizontalAlignment="Left" Width="1" Background="{DynamicResource Background}"/>
             <TextBlock Text="Type" HorizontalAlignment="Center" Grid.Column="1"/>
         </Grid>
 
