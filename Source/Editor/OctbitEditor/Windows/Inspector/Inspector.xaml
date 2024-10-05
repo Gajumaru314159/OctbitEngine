@@ -33,7 +33,7 @@
                 <behavior:ScrollViewerMiddleButtonDragBehavior/>
             </b:Interaction.Behaviors>
             <StackPanel DockPanel.Dock="Top" Grid.IsSharedSizeScope="True">
-                <Expander IsExpanded="True" Padding="2,0" Margin="0,0,0,1">
+                <Expander IsExpanded="True" Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <TextBlock Text="Entity"/>
@@ -41,7 +41,7 @@
                     </Expander.Header>
                     <ctrl:InspectorView Target="{Binding Entity}" Grid.IsSharedSizeScope="False"/>
                 </Expander>
-                <Expander IsExpanded="True" Padding="2,0" Margin="0,0,0,1">
+                <Expander IsExpanded="True" Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
@@ -50,7 +50,7 @@
                     </Expander.Header>
                     <ctrl:InspectorView Target="{Binding Transform}" Grid.IsSharedSizeScope="False"/>
                 </Expander>
-                <Expander IsExpanded="True" Padding="2,0" Margin="0,0,0,1">
+                <Expander IsExpanded="False" Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
@@ -59,7 +59,7 @@
                     </Expander.Header>
                     <ctrl:InspectorView Target="{Binding TestObject}" Grid.IsSharedSizeScope="False"/>
                 </Expander>
-                <Expander IsExpanded="True" Padding="2,0" Margin="0,0,0,1">
+                <Expander IsExpanded="True" Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>

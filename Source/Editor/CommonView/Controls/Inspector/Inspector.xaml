@@ -22,33 +22,6 @@
         </DockPanel>
     </DataTemplate>
 
-    <Style x:Key="ExpanderToggle" TargetType="ToggleButton">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Grid Background="Transparent" SnapsToDevicePixels="False" Width="10">
-                        <Grid.LayoutTransform>
-                            <TransformGroup>
-                                <TransformGroup.Children>
-                                    <TransformCollection>
-                                        <RotateTransform Angle="180"/>
-                                    </TransformCollection>
-                                </TransformGroup.Children>
-                            </TransformGroup>
-                        </Grid.LayoutTransform>
-                        <Path x:Name="arrow" Data="M 4.5,7 L 1,3.5 L 4.5,0" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
     <Style TargetType="ctrl:InspectorItemContainer">
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
@@ -80,7 +53,7 @@
                             </Border>
 
                             <ToggleButton x:Name="IsExpanded" Grid.Column="1" 
-                                      Style="{StaticResource ExpanderToggle}" Foreground="{TemplateBinding Foreground}" 
+                                      Style="{StaticResource ExpanderUpHeaderStyle}" Foreground="{TemplateBinding Foreground}" 
                                       IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"/>
 
                             <ContentControl x:Name="LabelControl" Grid.Column="2" Margin="{TemplateBinding Padding}"

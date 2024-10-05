@@ -315,36 +315,28 @@
 
     <!--Expander-->
     <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
                     <Border x:Name="Border" Background="{TemplateBinding Background}">
-                        <Border x:Name="Overlay" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="Overlay">
                             <Grid Background="Transparent" SnapsToDevicePixels="False">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="19"/>
+                                    <ColumnDefinition Width="18"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid>
-                                    <Grid.LayoutTransform>
-                                        <TransformGroup>
-                                            <TransformGroup.Children>
-                                                <TransformCollection>
-                                                    <RotateTransform Angle="180"/>
-                                                </TransformCollection>
-                                            </TransformGroup.Children>
-                                        </TransformGroup>
-                                    </Grid.LayoutTransform>
-                                    <Path x:Name="arrow" Data="M 4.5,7 L 1,3.5 L 4.5,0" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
+                                    <Path x:Name="arrow" Data="M 3.5,0 L 7,3.5 L 3.5,7" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
                                 </Grid>
-                                <ContentPresenter Grid.Column="1" HorizontalAlignment="Stretch" Margin="4,0,0,0" RecognizesAccessKey="True" SnapsToDevicePixels="True" VerticalAlignment="Center"/>
+                                <ContentPresenter Grid.Column="1" Margin="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="True" />
                             </Grid>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Data" TargetName="arrow" Value="M 1,4.5  L 4.5,1  L 8,4.5"/>
+                            <Setter Property="Data" TargetName="arrow" Value="M 7,3.5  L 3.5,7  L 0,3.5"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
@@ -366,7 +358,6 @@
         <Setter Property="Background" Value="{DynamicResource Surface}"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-        <Setter Property="Padding" Value="4,3"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
@@ -379,21 +370,14 @@
                                           Content="{TemplateBinding Header}"
                                           ContentTemplate="{TemplateBinding HeaderTemplate}" 
                                           ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" 
-                                          FontStretch="{TemplateBinding FontStretch}" 
-                                          FontStyle="{TemplateBinding FontStyle}"
-                                          FontFamily="{TemplateBinding FontFamily}"
-                                          FontWeight="{TemplateBinding FontWeight}" 
-                                          FontSize="{TemplateBinding FontSize}" 
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
-                                          Margin="0"
-                                          MinWidth="0" MinHeight="0" 
-                                          Padding="4,3" 
+                                          IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          Padding="2,3" 
                                           Style="{StaticResource ExpanderUpHeaderStyle}"/>
                             <ContentPresenter x:Name="ExpandSite" 
                                               DockPanel.Dock="Bottom" 
-                                              Focusable="false"
+                                              Focusable="False"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
                                               Margin="{TemplateBinding Padding}" 
