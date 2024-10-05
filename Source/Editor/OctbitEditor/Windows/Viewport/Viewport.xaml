@@ -12,6 +12,13 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:ViewportVM}">
 
+    <UserControl.Resources>
+        <Style x:Key="Spacer" TargetType="Control">
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="Height" Value="1"/>
+        </Style>
+    </UserControl.Resources>
+
     <DockPanel x:Name="m_focusRoot" FocusManager.IsFocusScope="True" Background="Transparent">
         <DockPanel.InputBindings>
             <KeyBinding Key="P" Modifiers="Ctrl" Command="{Binding PlayCommand}"/>
@@ -28,7 +35,6 @@
         <StackPanel DockPanel.Dock="{Binding ToolBarDock.Value,FallbackValue=Top}" Orientation="{Binding ToolBarOrientation,FallbackValue=Horizontal}" Background="{DynamicResource Header}">
             <StackPanel.Resources>
                 <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
-                    <Setter Property="Margin" Value="1,0,0,0"/>
                     <Setter Property="Width" Value="20"/>
                     <Setter Property="Height" Value="20"/>
                     <Setter Property="Padding" Value="0"/>
@@ -43,8 +49,9 @@
                     <Setter Property="ItemsControl.Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ItemsControl">
-                                <Border Background="{DynamicResource Background}" Margin="1" Padding="0,0,1,0" BorderBrush="{DynamicResource Outline}" BorderThickness="1" SnapsToDevicePixels="True">
-                                    <ItemsPresenter Margin="0,-1"/>
+                                <Border Background="{DynamicResource Background}" BorderBrush="{DynamicResource Outline}" BorderThickness="1" 
+                                        SnapsToDevicePixels="True" Margin="1">
+                                    <ItemsPresenter/>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
@@ -65,8 +72,8 @@
             </StackPanel.Resources>
 
             <!--メニュー-->
-            <Menu DockPanel.Dock="Left" Margin="0" Padding="0">                
-                <MenuItem Padding="0" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Menu DockPanel.Dock="Left" Margin="0" Padding="0" Visibility="Visible">
+                <MenuItem Padding="0" Margin="-1" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <MenuItem.Icon>
                         <ContentControl Style="{StaticResource Hamburger}" Foreground="{DynamicResource Foreground}"/>
                     </MenuItem.Icon>
@@ -80,16 +87,17 @@
                     <ComboBox ItemsSource="{Binding ToolBarDocks}" SelectedValue="{Binding ToolBarDock.Value}"/>
                 </MenuItem>
             </Menu>
-            <Rectangle/>
 
             <!--再生-->
             <ItemsControl Visibility="{Binding PlayIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
                 <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}">
                     <ContentControl Style="{DynamicResource Play}"/>
                 </ToggleButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <ToggleButton ToolTip="Stop (Ctrl+P)" IsEnabled="{Binding IsPlaying.Value}">
                     <ContentControl Style="{StaticResource Pause}"/>
                 </ToggleButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <ToggleButton ToolTip="Step (Ctrl+P)" IsChecked="True">
                     <ContentControl Style="{DynamicResource Step}"/>
                 </ToggleButton>
@@ -97,16 +105,18 @@
 
             <!--ツール-->
             <ItemsControl Visibility="{Binding ToolIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <RadioButton ToolTip="Select (Q)" Margin="0" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Select}">
+                <RadioButton ToolTip="Select (Q)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Select}">
                     <ContentControl Style="{StaticResource Cursor}"/>
                 </RadioButton>
-
+                <Control Style="{StaticResource Spacer}"/>
                 <RadioButton ToolTip="Move (W)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Move}">
                     <ContentControl Style="{StaticResource Move}"/>
                 </RadioButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <RadioButton ToolTip="Rotate (E)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Rotate}">
                     <ContentControl Style="{StaticResource Rotate}"/>
                 </RadioButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <RadioButton ToolTip="Scale (R)" IsChecked="{Binding OpMode.Value,Converter={StaticResource EnumToBool},ConverterParameter=Scale}">
                     <ContentControl Style="{StaticResource Scale}"/>
                 </RadioButton>
@@ -117,8 +127,8 @@
                 <ToggleButton ToolTip="Global/Local" IsChecked="{Binding IsWorldCoordinate.Value}">
                     <ToggleButton.Style>
                         <Style TargetType="ToggleButton">
-                            <Setter Property="Width" Value="24"/>
-                            <Setter Property="Height" Value="24"/>
+                            <Setter Property="Width" Value="20"/>
+                            <Setter Property="Height" Value="20"/>
                             <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
                             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
                             <Setter Property="Template">
@@ -164,9 +174,11 @@
                     </ToggleButton.ContextMenu>
                     <ContentControl Style="{StaticResource SnapPosition}"/>
                 </ToggleButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <ToggleButton ToolTip="Snap Rotate" IsChecked="{Binding SnapRotateIsEnabled.Value}">
                     <ContentControl Style="{StaticResource SnapRotation}"/>
                 </ToggleButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <ToggleButton ToolTip="Snap Scale" IsChecked="{Binding SnapScaleIsEnabled.Value}">
                     <ContentControl Style="{StaticResource SnapScale}"/>
                 </ToggleButton>
@@ -177,9 +189,11 @@
                 <RadioButton ToolTip="Shading" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Shading}">
                     <ContentControl Style="{StaticResource Shading}"/>
                 </RadioButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <RadioButton ToolTip="Wire" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=Wireframe}">
                     <ContentControl Style="{StaticResource Wire}"/>
                 </RadioButton>
+                <Control Style="{StaticResource Spacer}"/>
                 <RadioButton ToolTip="Wire Shading" IsChecked="{Binding ShadingMode_.Value,Converter={StaticResource EnumToBool},ConverterParameter=ShadingWireframe}">
                     <ContentControl Style="{StaticResource ShadingWire}"/>
                 </RadioButton>
