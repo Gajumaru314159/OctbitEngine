@@ -35,7 +35,7 @@ namespace OctbitLauncher
             {
                 Icon = new BitmapImage(new Uri(icon));
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -64,7 +64,7 @@ namespace OctbitLauncher
             {
                 Icon.Value = new BitmapImage(new Uri("file://D:\\My\\Productions\\C++\\OctbitEngine\\Source\\Editor\\OctbitLauncher\\Resources\\Icons\\document.png"));
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }

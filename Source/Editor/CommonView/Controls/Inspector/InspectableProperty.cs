@@ -11,4 +11,21 @@
         IReadOnlyDictionary<string,string> Tags { get; }
     }
 
+    public class InspectableProperty : IInspectableProperty
+    {
+        public object Owner => throw new NotImplementedException();
+
+        public string Name =>string.Empty;
+
+        public Type Type => throw new NotImplementedException();
+
+        public object? Value { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public bool CanWrite => throw new NotImplementedException();
+
+        public bool CanRead => throw new NotImplementedException();
+
+        public IReadOnlyDictionary<string, string> Tags => throw new NotImplementedException();
+    }
+
 }

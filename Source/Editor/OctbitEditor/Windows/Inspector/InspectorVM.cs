@@ -39,7 +39,11 @@ namespace OctbitEditor
 
     public enum TagTest
     {
-        Untagged
+        Untagged,
+        Untagged1,
+        Untagged2,
+        Untagged3,
+        Untagged4,
     }
     public enum LayerTest
     {

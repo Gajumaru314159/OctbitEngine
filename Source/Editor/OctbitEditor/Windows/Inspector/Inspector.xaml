@@ -13,9 +13,9 @@
              Background="{DynamicResource Background}"             
              d:DataContext="{d:DesignInstance local:InspectorVM}"
              mc:Ignorable="d" 
-             d:DesignWidth="350" d:DesignHeight="250">
+             d:DesignWidth="350" d:DesignHeight="450">
 
-    <DockPanel>
+    <DockPanel Grid.IsSharedSizeScope="True">
 
         <base:SearchBox DockPanel.Dock="Top" Width="Auto"/>
 
@@ -39,7 +39,7 @@
                             <TextBlock Text="Entity"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Entity}" Grid.IsSharedSizeScope="False"/>
+                    <ctrl:InspectorView Target="{Binding Entity}" />
                 </Expander>
                 <Expander IsExpanded="True" Margin="0,0,0,1">
                     <Expander.Header>
@@ -48,7 +48,7 @@
                             <TextBlock Text="Transform"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Transform}" Grid.IsSharedSizeScope="False"/>
+                    <ctrl:InspectorView Target="{Binding Transform}" />
                 </Expander>
                 <Expander IsExpanded="False" Margin="0,0,0,1">
                     <Expander.Header>
@@ -57,7 +57,7 @@
                             <TextBlock Text="Model"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding TestObject}" Grid.IsSharedSizeScope="False"/>
+                    <ctrl:InspectorView Target="{Binding TestObject}" />
                 </Expander>
                 <Expander IsExpanded="True" Margin="0,0,0,1">
                     <Expander.Header>
@@ -66,11 +66,12 @@
                             <TextBlock Text="Test"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Grid.IsSharedSizeScope="False">
+                    <ctrl:InspectorView>
+                                                
                         <ctrl:InspectorItemContainer Label="AAA">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>
-                        <ctrl:InspectorItemContainer Label="BBB">
+                        <ctrl:InspectorItemContainer Label="BBB" CollapseLabel="True">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>
 
@@ -81,45 +82,38 @@
                             </ctrl:InspectorItemContainer.Label>
                         </ctrl:InspectorItemContainer>
 
-                        <ctrl:InspectorItemContainer CollapseLabel="True" Visibility="{Binding Expanded.Value,Converter={BoolToVisibilityConverter}}">
 
-                            <ctrl:InspectorView Indent="15" >
+                        <ctrl:InspectorView>
 
-                                <ctrl:InspectorItemContainer IsExpanded="{Binding Expanded.Value,Mode=TwoWay,FallbackValue=True}">
+                            <ctrl:InspectorItemContainer IsExpanded="{Binding Expanded.Value,Mode=TwoWay,FallbackValue=True}">
+                                <ctrl:InspectorItemContainer.Label>
+                                    <TextBlock Text="Struct" TextAlignment="Left"/>
+                                </ctrl:InspectorItemContainer.Label>
+                            </ctrl:InspectorItemContainer>
+
+                            <ctrl:InspectorView>
+
+
+                                <ctrl:InspectorItemContainer IsExpanded="True">
                                     <ctrl:InspectorItemContainer.Label>
-                                        <TextBlock Text="Struct" TextAlignment="Left"/>
+                                        <TextBlock Text="List" TextAlignment="Left"/>
                                     </ctrl:InspectorItemContainer.Label>
                                 </ctrl:InspectorItemContainer>
 
-                                <ctrl:InspectorItemContainer CollapseLabel="True" Visibility="{Binding Expanded.Value,Converter={BoolToVisibilityConverter}}">
+                                <ctrl:InspectorView>
+                                    <ctrl:InspectorItemContainer Label="Size">
+                                        <TextBox Text="2"/>
+                                    </ctrl:InspectorItemContainer>
+                                    <ctrl:InspectorItemContainer Label="[0]">
+                                        <CheckBox/>
+                                    </ctrl:InspectorItemContainer>
+                                    <ctrl:InspectorItemContainer Label="[1]">
+                                        <CheckBox/>
+                                    </ctrl:InspectorItemContainer>
 
-                                    <ctrl:InspectorView Indent="30" >
-
-
-                                        <ctrl:InspectorItemContainer IsExpanded="True">
-                                            <ctrl:InspectorItemContainer.Label>
-                                                <TextBlock Text="List" TextAlignment="Left"/>
-                                            </ctrl:InspectorItemContainer.Label>
-                                        </ctrl:InspectorItemContainer>
-
-                                        <ctrl:InspectorItemContainer CollapseLabel="True" Visibility="{Binding Expanded.Value,Converter={BoolToVisibilityConverter}}">
-                                            <ctrl:InspectorView Indent="45">
-                                                <ctrl:InspectorItemContainer Label="Size">
-                                                    <TextBox Text="2"/>
-                                                </ctrl:InspectorItemContainer>
-                                                <ctrl:InspectorItemContainer Label="[0]">
-                                                    <CheckBox/>
-                                                </ctrl:InspectorItemContainer>
-                                                <ctrl:InspectorItemContainer Label="[1]">
-                                                    <CheckBox/>
-                                                </ctrl:InspectorItemContainer>
-
-                                            </ctrl:InspectorView>
-                                        </ctrl:InspectorItemContainer>
-                                    </ctrl:InspectorView>
-                                </ctrl:InspectorItemContainer>
+                                </ctrl:InspectorView>
                             </ctrl:InspectorView>
-                        </ctrl:InspectorItemContainer>
+                        </ctrl:InspectorView>
                         <ctrl:InspectorItemContainer Label="CCC">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>

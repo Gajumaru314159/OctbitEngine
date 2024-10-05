@@ -2,9 +2,12 @@
 using Common.Linq;
 using Common.Math;
 using System;
+using System.Globalization;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace CommonView.Controls
 {
@@ -107,9 +110,8 @@ namespace CommonView.Controls
                     }
                     else if (p.PropertyType.IsEnum)
                     {
-                        var comboBox = new ComboBox();
-                        Enum.GetNames(p.PropertyType).ForEach(i=>comboBox.Items.Add(i));
-                        comboBox.SelectedItem = p.GetValue(obj)!.ToString();
+                        var comboBox = new EnumComboBox();
+                        comboBox.Value = p.GetValue(obj)!;
                         container.Content = comboBox;
                     }
                     else if (p.PropertyType == typeof(Vector3))

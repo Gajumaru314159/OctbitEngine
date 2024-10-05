@@ -1,17 +1,43 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:CommonView.Controls">
 
 
-    <DataTemplate x:Key="BoolInspectorItem">
-        <CheckBox IsChecked="{Binding}"/>
+    <DataTemplate x:Key="BoolInspectorControl" DataType="ctrl:InspectableProperty">
+        <CheckBox IsChecked="{Binding Value}"/>
     </DataTemplate>
 
-    <DataTemplate x:Key="IntInspectorItem">
-        <TextBlock Text="{Binding}"/>
+    <DataTemplate x:Key="IntInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Value}"/>
     </DataTemplate>
 
-    <DataTemplate x:Key="Vector3InspectorItem">
-        <CheckBox IsChecked="{Binding}"/>
+    <DataTemplate x:Key="FloatInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Value}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DoubleInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Value}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="StringInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Value}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EnumInspectorControl" DataType="ctrl:InspectableProperty">
+        <ctrl:EnumComboBox Value="{Binding Value}"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Vector3InspectorControl" DataType="ctrl:InspectableProperty">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBlock Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBlock Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+        </Grid>
     </DataTemplate>
 
 </ResourceDictionary>

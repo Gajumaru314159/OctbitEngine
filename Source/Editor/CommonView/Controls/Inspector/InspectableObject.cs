@@ -26,6 +26,13 @@ namespace CommonView.Controls
 
     }
 
+
+    public interface IInspectableObject
+    {
+        object Object { get; }
+
+    }
+
     public class InspectableObject
     {
         public static InspectableObject? Create(object o) { 
