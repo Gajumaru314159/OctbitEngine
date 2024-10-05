@@ -6,15 +6,15 @@
 
     <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
 
-    <SolidColorBrush x:Key="Foreground" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="Background" Color="#383838"/>
-    <SolidColorBrush x:Key="Surface" Color="#595959"/>
-    <SolidColorBrush x:Key="Accent" Color="#5680C2"/>
-    <SolidColorBrush x:Key="AccentForeground" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="Field" Color="#232323"/>
-    <SolidColorBrush x:Key="Outline" Color="#555555"/>
-    <SolidColorBrush x:Key="Header" Color="#2D2D30"/>
+    <SolidColorBrush x:Key="Foreground" Color="#C0C0C0"/>
+    <SolidColorBrush x:Key="Background" Color="#242424"/>
+    <SolidColorBrush x:Key="Surface" Color="#353535"/>
+    <SolidColorBrush x:Key="Accent" Color="#0070E0"/>
+    <SolidColorBrush x:Key="AccentForeground" Color="#C0C0C0"/>
+    <SolidColorBrush x:Key="Field" Color="#0F0F0F"/>
+    <SolidColorBrush x:Key="Outline" Color="#404040"/>
+    <SolidColorBrush x:Key="Header" Color="#303030"/>
     <SolidColorBrush x:Key="Focus" Color="#EEEEEE"/>
-    <SolidColorBrush x:Key="MenuBackground" Color="#232323"/>
+    <SolidColorBrush x:Key="MenuBackground" Color="#151515"/>
     <SolidColorBrush x:Key="Hover" Color="#20FFFFFF"/>
 </ResourceDictionary>
