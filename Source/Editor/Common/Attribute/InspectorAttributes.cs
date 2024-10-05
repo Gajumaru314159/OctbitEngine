@@ -36,14 +36,6 @@
         }
     }
 
-    [AttributeUsage(AttributeTargets.All)]
-    public class HideLabelAttribute : System.Attribute
-    {
-        public HideLabelAttribute()
-        {
-        }
-    }
-
     [AttributeUsage(AttributeTargets.Property)]
     public class OrderAttribute : System.Attribute
     {

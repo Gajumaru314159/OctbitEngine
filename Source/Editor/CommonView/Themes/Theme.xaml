@@ -314,6 +314,9 @@
     </Style>
 
     <!--Expander-->
+    <Geometry x:Key="ExpanderCloseArrow">M 3.5,0 L 7,3.5 L 3.5,7</Geometry>
+    <Geometry x:Key="ExpanderOpenArrow">M 7,3.5  L 3.5,7  L 0,3.5</Geometry>
+    
     <Style x:Key="ExpanderUpHeaderStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -328,7 +331,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid>
-                                    <Path x:Name="arrow" Data="M 3.5,0 L 7,3.5 L 3.5,7" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
+                                    <Path x:Name="arrow" Data="{StaticResource ExpanderCloseArrow}" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
                                 </Grid>
                                 <ContentPresenter Grid.Column="1" Margin="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="True" />
                             </Grid>
@@ -336,7 +339,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter Property="Data" TargetName="arrow" Value="M 7,3.5  L 3.5,7  L 0,3.5"/>
+                            <Setter Property="Data" TargetName="arrow" Value="{StaticResource ExpanderOpenArrow}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>

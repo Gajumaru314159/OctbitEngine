@@ -33,74 +33,63 @@
                 <behavior:ScrollViewerMiddleButtonDragBehavior/>
             </b:Interaction.Behaviors>
             <StackPanel DockPanel.Dock="Top" Grid.IsSharedSizeScope="True">
-                <Expander IsExpanded="True" Margin="0,0,0,1">
+                <Expander Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <TextBlock Text="Entity"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Entity}" />
+                    <ctrl:InspectorView Target="{Binding Entity}"/>
                 </Expander>
-                <Expander IsExpanded="True" Margin="0,0,0,1">
+                <Expander Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
                             <TextBlock Text="Transform"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Transform}" />
+                    <ctrl:InspectorView Target="{Binding Transform}"/>
                 </Expander>
-                <Expander IsExpanded="False" Margin="0,0,0,1">
+                <Expander Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
                             <TextBlock Text="Model"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding TestObject}" />
+                    <ctrl:InspectorView Target="{Binding TestObject}"/>
                 </Expander>
-                <Expander IsExpanded="True" Margin="0,0,0,1">
+                <Expander Margin="0,0,0,1">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
                             <TextBlock Text="Test"/>
                         </DockPanel>
                     </Expander.Header>
+                    <ctrl:InspectorView Target="{Binding TestObject}"/>
+                </Expander>
+                <Expander Margin="0,0,0,1">
+                    <Expander.Header>
+                        <DockPanel>
+                            <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
+                            <TextBlock Text="Manual"/>
+                        </DockPanel>
+                    </Expander.Header>
                     <ctrl:InspectorView>
-                                                
+
                         <ctrl:InspectorItemContainer Label="AAA">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>
-                        <ctrl:InspectorItemContainer Label="BBB" CollapseLabel="True">
+                        
+                        <ctrl:InspectorItemContainer Label="BBB">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>
 
+                        <ctrl:InspectorView Label="Struct">
 
-                        <ctrl:InspectorItemContainer IsExpanded="{Binding Expanded.Value,Mode=TwoWay,FallbackValue=True}">
-                            <ctrl:InspectorItemContainer.Label>
-                                <TextBlock Text="Struct" TextAlignment="Left"/>
-                            </ctrl:InspectorItemContainer.Label>
-                        </ctrl:InspectorItemContainer>
+                            <ctrl:InspectorView Label="Struct2">
 
-
-                        <ctrl:InspectorView>
-
-                            <ctrl:InspectorItemContainer IsExpanded="{Binding Expanded.Value,Mode=TwoWay,FallbackValue=True}">
-                                <ctrl:InspectorItemContainer.Label>
-                                    <TextBlock Text="Struct" TextAlignment="Left"/>
-                                </ctrl:InspectorItemContainer.Label>
-                            </ctrl:InspectorItemContainer>
-
-                            <ctrl:InspectorView>
-
-
-                                <ctrl:InspectorItemContainer IsExpanded="True">
-                                    <ctrl:InspectorItemContainer.Label>
-                                        <TextBlock Text="List" TextAlignment="Left"/>
-                                    </ctrl:InspectorItemContainer.Label>
-                                </ctrl:InspectorItemContainer>
-
-                                <ctrl:InspectorView>
+                                <ctrl:InspectorView Label="List">
                                     <ctrl:InspectorItemContainer Label="Size">
                                         <TextBox Text="2"/>
                                     </ctrl:InspectorItemContainer>
@@ -110,20 +99,14 @@
                                     <ctrl:InspectorItemContainer Label="[1]">
                                         <CheckBox/>
                                     </ctrl:InspectorItemContainer>
-
                                 </ctrl:InspectorView>
+
                             </ctrl:InspectorView>
                         </ctrl:InspectorView>
                         <ctrl:InspectorItemContainer Label="CCC">
                             <TextBox/>
                         </ctrl:InspectorItemContainer>
-                        <GroupBox Header="Group">
-                            <StackPanel>
-                                <TextBox/>
-                                <TextBox/>
-                                <TextBox/>
-                            </StackPanel>
-                        </GroupBox>
+                        
                     </ctrl:InspectorView>
                 </Expander>
             </StackPanel>

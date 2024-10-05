@@ -18,12 +18,6 @@ namespace CommonView.Controls
                 typeof(InspectorItemContainer),
                 new PropertyMetadata(0.0));
 
-        public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(
-                nameof(IsExpanded),
-                typeof(bool?),
-                typeof(InspectorItemContainer),
-                 new FrameworkPropertyMetadata(null));
-
         public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
                 nameof(Label),
                 typeof(object),
@@ -47,12 +41,6 @@ namespace CommonView.Controls
         {
             get => (double)GetValue(IndentProperty);
             set => SetValue(IndentProperty, value);
-        }
-
-        public bool? IsExpanded
-        {
-            get => (bool?)GetValue(IsExpandedProperty);
-            set => SetValue(IsExpandedProperty, value);
         }
 
         public object? Label

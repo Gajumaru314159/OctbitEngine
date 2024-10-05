@@ -1,13 +1,9 @@
 ﻿using Common.Attribute;
-using Common.Linq;
 using Common.Math;
-using System;
-using System.Globalization;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Markup;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CommonView.Controls
 {
@@ -18,6 +14,18 @@ namespace CommonView.Controls
                 typeof(double),
                 typeof(InspectorView),
                 new PropertyMetadata(0.0));
+
+        public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(
+                nameof(IsExpanded),
+                typeof(bool),
+                typeof(InspectorView),
+                 new PropertyMetadata(true));
+
+        public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
+                nameof(Label),
+                typeof(object),
+                typeof(InspectorView),
+                new PropertyMetadata());
 
         public static readonly DependencyProperty LabelWidthProperty = DependencyProperty.Register(
                 nameof(LabelWidth),
@@ -35,6 +43,17 @@ namespace CommonView.Controls
         {
             get => (double)GetValue(IndentProperty);
             set => SetValue(IndentProperty, value);
+        }
+
+        public bool IsExpanded
+        {
+            get => (bool)GetValue(IsExpandedProperty);
+            set => SetValue(IsExpandedProperty, value);
+        }
+        public object? Label
+        {
+            get => GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
         }
 
         public GridLength LabelWidth
@@ -77,71 +96,15 @@ namespace CommonView.Controls
                         view.AddChild(spacer);
                     }
 
-                    var container = new InspectorItemContainer();
-
-                    var displayName = p.GetCustomAttribute<DisplayNameAttribute>();
-                    container.Label = new TextBlock() { Text = displayName?.DisplayName??p.Name };
-
-                    var tooltip = p.GetCustomAttribute<TooltipAttribute>();
-                    container.ToolTip = tooltip?.Tooltip;
-
-                    var hideLabel = p.GetCustomAttribute<HideLabelAttribute>()!=null;
-                    container.CollapseLabel = hideLabel;
-
-                    if (p.PropertyType == typeof(int))
+                    if (p.PropertyType.IsArray)
                     {
-                        container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
-                    }
-                    else if (p.PropertyType == typeof(float))
-                    {
-                        container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
-                    }
-                    else if (p.PropertyType == typeof(double))
-                    {
-                        container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
-                    }
-                    else if (p.PropertyType == typeof(string))
-                    {
-                        container.Content = new TextBox() { Text = (string)p.GetValue(obj)! };
-                    }
-                    else if (p.PropertyType == typeof(bool))
-                    {
-                        container.Content = new CheckBox() { IsChecked = (bool)p.GetValue(obj)! };
-                    }
-                    else if (p.PropertyType.IsEnum)
-                    {
-                        var comboBox = new EnumComboBox();
-                        comboBox.Value = p.GetValue(obj)!;
-                        container.Content = comboBox;
-                    }
-                    else if (p.PropertyType == typeof(Vector3))
-                    {
-                        var value = (Vector3)p.GetValue(obj)!;
+                        var container = new InspectorView();
 
-                        var grid = new Grid();
-                        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
-                        grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                        var displayName = p.GetCustomAttribute<DisplayNameAttribute>();
+                        container.Label =  displayName?.DisplayName??p.Name;
 
-                        grid.Children.Add(new TextBox() { Text= value.x.ToString(), Margin = new Thickness(0, 0, 1, 0) });
-                        grid.Children.Add(new TextBox() { Text= value.y.ToString(), Margin = new Thickness(0, 0, 1, 0) });
-                        grid.Children.Add(new TextBox() { Text= value.z.ToString(), Margin = new Thickness(0, 0, 0, 0) });
-
-                        for (int i = 0; i<grid.Children.Count; ++i)
-                        {
-                            Grid.SetColumn(grid.Children[i], i);
-                        }
-
-                        container.Content = grid;
-                    }else if(p.PropertyType.IsArray)
-                    {
-                        container.CollapseLabel = true;
-
-                        var expander = new Expander() { Header = p.Name };
-                        expander.Background = System.Windows.Media.Brushes.Transparent;
-
-                        var listContainer = new InspectorView();
-                        Grid.SetIsSharedSizeScope(listContainer, false);
+                        var tooltip = p.GetCustomAttribute<TooltipAttribute>();
+                        container.ToolTip = tooltip?.Tooltip;
 
                         var array = (System.Array)p.GetValue(obj)!;
 
@@ -152,26 +115,86 @@ namespace CommonView.Controls
                             var value = array.GetValue(i);
                             var text = new TextBox() { Text = value?.ToString() };
                             itemContaienr.Content = text;
-                            listContainer.AddChild(itemContaienr);
+                            container.AddChild(itemContaienr);
                         }
 
-                        expander.Content = listContainer;
-                        container.Content = expander;
+                        view.AddChild(container);
                     }
                     else
                     {
-                        container.Content = new TextBlock() { Text = p.GetValue(obj)!.ToString() };
-                    }
+                        var container = new InspectorItemContainer();
 
-                    if (!p.CanWrite)
-                    {
-                        if(container.Content is Control ctrl)
+                        var displayName = p.GetCustomAttribute<DisplayNameAttribute>();
+                        container.Label = new TextBlock() { Text = displayName?.DisplayName??p.Name };
+
+                        var tooltip = p.GetCustomAttribute<TooltipAttribute>();
+                        container.ToolTip = tooltip?.Tooltip;
+
+                        if (p.PropertyType == typeof(int))
                         {
-                            // ctrl.IsEnabled = false;
+                            container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
                         }
-                    }
+                        else if (p.PropertyType == typeof(float))
+                        {
+                            container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
+                        }
+                        else if (p.PropertyType == typeof(double))
+                        {
+                            container.Content = new TextBox() { Text = p.GetValue(obj)!.ToString() };
+                        }
+                        else if (p.PropertyType == typeof(string))
+                        {
+                            container.Content = new TextBox() { Text = (string)p.GetValue(obj)! };
+                        }
+                        else if (p.PropertyType == typeof(bool))
+                        {
+                            container.Content = new CheckBox() { IsChecked = (bool)p.GetValue(obj)! };
+                        }
+                        else if (p.PropertyType.IsEnum)
+                        {
+                            var comboBox = new EnumComboBox();
+                            comboBox.Value = p.GetValue(obj)!;
+                            container.Content = comboBox;
+                        }
+                        else if (p.PropertyType == typeof(Vector3))
+                        {
+                            var value = (Vector3)p.GetValue(obj)!;
 
-                    view.AddChild(container);
+                            var grid = new Grid();
+                            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+                            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+
+                            grid.Children.Add(new TextBox() { Text= value.x.ToString(), Margin = new Thickness(0, 0, 1, 0) });
+                            grid.Children.Add(new TextBox() { Text= value.y.ToString(), Margin = new Thickness(0, 0, 1, 0) });
+                            grid.Children.Add(new TextBox() { Text= value.z.ToString(), Margin = new Thickness(0, 0, 0, 0) });
+
+                            for (int i = 0; i<grid.Children.Count; ++i)
+                            {
+                                Grid.SetColumn(grid.Children[i], i);
+                            }
+
+                            container.Content = grid;
+                        }
+                        else
+                        {
+                            container.Content = new TextBlock() { Text = p.GetValue(obj)!.ToString() };
+                        }
+
+                        if (!p.CanWrite)
+                        {
+                            if (container.Label is TextBlock lctrl)
+                            {
+                                lctrl.Opacity = 0.5;
+                            }
+                            if (container.Content is Control ctrl)
+                            {
+                                ctrl.IsEnabled = false;
+                            }
+                        }
+
+                        view.AddChild(container);
+                    }
                 }
             }
 
@@ -190,9 +213,6 @@ namespace CommonView.Controls
 
                     var tooltip = m.GetCustomAttribute<TooltipAttribute>();
                     container.ToolTip = tooltip?.Tooltip;
-
-                    var hideLabel = m.GetCustomAttribute<HideLabelAttribute>()!=null;
-                    container.CollapseLabel = hideLabel;
 
                     var button = new Button() { Content = "実行" };
                     button.Click += (sender, e) => { m.Invoke(obj, null); };

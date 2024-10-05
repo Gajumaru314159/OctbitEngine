@@ -57,16 +57,11 @@
                         <Grid x:Name="LabelBlock">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="{Binding Indent,RelativeSource={RelativeSource TemplatedParent}}"/>
-                                <ColumnDefinition Width="14"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <ToggleButton x:Name="IsExpanded" Grid.Column="1" 
-                                      Style="{StaticResource ExpanderUpHeaderStyle}" Foreground="{TemplateBinding Foreground}" 
-                                      IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}"/>
-
-                            <ContentControl x:Name="LabelControl" Grid.Column="2" Margin="{TemplateBinding Padding}"
-                                        Content="{TemplateBinding Label}" IsTabStop="False"
+                            <ContentControl x:Name="LabelControl" Grid.Column="1" Margin="{TemplateBinding Padding}"
+                                        Content="{TemplateBinding Label}" IsTabStop="False" TextBlock.TextAlignment="Right"
                                         Foreground="{TemplateBinding Foreground}"/>
                         </Grid>
 
@@ -84,9 +79,40 @@
                             <Setter TargetName="ContentControl" Property="Grid.ColumnSpan" Value="3"/>
                             <Setter TargetName="ContentControl" Property="Margin" Value="0"/>
                         </Trigger>
-                        <Trigger Property="IsExpanded" Value="{x:Null}">
-                            <Setter TargetName="IsExpanded" Property="Visibility" Value="Hidden"/>
-                            <Setter TargetName="LabelControl" Property="TextBlock.TextAlignment" Value="Right"/>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="InspectorExpandStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}">
+                        <Border x:Name="Overlay">
+                            <Grid Background="Transparent" SnapsToDevicePixels="False">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="14"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Path x:Name="arrow" Data="{StaticResource ExpanderCloseArrow}" Stroke="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="false" StrokeThickness="1"/>
+                                </Grid>
+                                <ContentPresenter Grid.Column="1" Margin="{TemplateBinding Padding}" HorizontalAlignment="Stretch" VerticalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="True" />
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Data" TargetName="arrow" Value="{StaticResource ExpanderOpenArrow}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -100,17 +126,35 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:InspectorView">
-                    <Grid>
-                        <Border x:Name="Border" BorderBrush="{DynamicResource Outline}" BorderThickness="1,0,0,0">
-                            <Border.RenderTransform>
-                                <TranslateTransform X="{Binding Indent,RelativeSource={RelativeSource TemplatedParent},Converter={common:AddConverter},ConverterParameter=-7}"/>
-                            </Border.RenderTransform>
-                        </Border>
-                        <ItemsPresenter/>
-                    </Grid>
+                    <StackPanel Orientation="Vertical">
+                        <ctrl:InspectorItemContainer x:Name="Header" 
+                                                     Indent="{Binding Indent,RelativeSource={RelativeSource TemplatedParent},Converter={common:AddConverter},ConverterParameter=-15}">
+                            <ctrl:InspectorItemContainer.Label>
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" Style="{StaticResource InspectorExpandStyle}">
+                                        <TextBlock Text="{TemplateBinding Label}" TextAlignment="Left"/>
+                                    </ToggleButton>
+                                </StackPanel>
+                            </ctrl:InspectorItemContainer.Label>
+                        </ctrl:InspectorItemContainer>
+                        <Grid>
+                            <Border x:Name="Border" BorderBrush="{DynamicResource Outline}" BorderThickness="1,0,0,0">
+                                <Border.RenderTransform>
+                                    <TranslateTransform X="{Binding Indent,RelativeSource={RelativeSource TemplatedParent},Converter={common:AddConverter},ConverterParameter=-7}"/>
+                                </Border.RenderTransform>
+                            </Border>
+                            <ItemsPresenter x:Name="Items"/>
+                        </Grid>
+                    </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Indent" Value="0">
                             <Setter TargetName="Border" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="Label" Value="{x:Null}">
+                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsExpanded" Value="False">
+                            <Setter TargetName="Items" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
