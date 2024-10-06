@@ -39,7 +39,7 @@
                             <TextBlock Text="Entity"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Entity}"/>
+                    <ctrl:InspectorView ItemsSource="{Binding Inspectables}"/>
                 </Expander>
                 <Expander Margin="0,0,0,1">
                     <Expander.Header>

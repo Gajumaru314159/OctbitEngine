@@ -74,6 +74,7 @@ namespace CommonView.Controls
         }
         private static void OnTargetChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
+            return;
             if (sender is not InspectorView view) return;
 
             view.Items.Clear();

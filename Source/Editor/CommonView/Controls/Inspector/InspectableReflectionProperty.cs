@@ -1,4 +1,5 @@
 ﻿using Common.Attribute;
+using Common.Math;
 using CommonView.Menu;
 using Livet.Commands;
 using System.Reflection;
@@ -7,61 +8,48 @@ using System.Windows.Input;
 
 namespace CommonView.Controls.Inspector
 {
-    public interface IInspectable
+    public class InspectableReflectionObject : InspectableObject
     {
-
-    }
-
-    public class InspectableReflectionObject : IInspectable
-    {
-        public static IList<IInspectable> Create(object obj)
+        public static IList<Inspectable> Create(object obj)
         {
-            var result = new List<IInspectable>();
+            var result = new List<Inspectable>();
 
             var type = obj.GetType();
+
             {
                 var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
                 foreach (PropertyInfo p in properties)
                 {
-                    result.Add(new InspectableReflectionProperty(obj, p));
-                }
-            }
-
-            {
-                var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-                foreach (MethodInfo m in methods)
-                {
-                    // setter,getter,add,removeなどの特殊なメソッドは無視
-                    if (m.IsSpecialName) continue;
-                    if (m.GetParameters().Length!=0) continue;
-
-                    result.Add(new InspectableReflectionMethod(obj, m));
+                    if (p.PropertyType.IsPrimitive || p.PropertyType.IsEnum || p.PropertyType == typeof(string) || p.PropertyType == typeof(Vector3))
+                    {
+                        result.Add(new InspectableReflectionProperty(obj, p));
+                    }
+                    else
+                    {
+                        var clazz = p.GetValue(obj);
+                        if (clazz != null)
+                            result.Add(new InspectableReflectionObject(p.Name, clazz));
+                    }
                 }
             }
 
             return result;
         }
 
-        public IList<IInspectable> Inspectables { get; } = new List<IInspectable>();
-    }
-
-
-    public class InspectableReflectionMethod : IInspectable
-    {
-        private MethodInfo m_methodInfo;
-        public InspectableReflectionMethod(object owner, MethodInfo methodInfo)
+        private InspectableReflectionObject(string name,object obj)
         {
-            m_methodInfo = methodInfo;
-            Command = new DelegateCommand(() => { m_methodInfo.Invoke(owner, []); });
+            Name = name;
+            Inspectables = Create(obj);
         }
-        public string Name => m_methodInfo.Name;
-        public ICommand Command { get; }
+
+        public override string Name { get; } = "Name";
+        public override IList<Inspectable> Inspectables { get; } = new List<Inspectable>();
     }
 
     /// <summary>
     /// インスペクタ表示可能なリフレクションプロパティ
     /// </summary>
-    internal class InspectableReflectionProperty : IInspectableProperty, IInspectable
+    internal class InspectableReflectionProperty : InspectableProperty
     {
         public InspectableReflectionProperty(object owner, PropertyInfo propertyInfo)
         {
@@ -78,26 +66,38 @@ namespace CommonView.Controls.Inspector
         }
 
         public object Owner { get; }
-        public string Name => PropertyInfo.Name;
-        public Type Type => PropertyInfo.PropertyType;
-        public object? Value
+        public override string Name => PropertyInfo.Name;
+        public override Type Type => PropertyInfo.PropertyType;
+        public override object? Value
         {
             get => PropertyInfo.GetValue(Owner);
             set
             {
+                if(value?.GetType() != Type)
+                {
+                    try
+                    {
+                        value = Convert.ChangeType(value, Type);
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
                 if (value == Value) return;
+
                 var oldValue = Value;
                 History.History.Record(
-                    "値をセット",
-                    () => PropertyInfo.SetValue(Owner,value),
-                    () => PropertyInfo.SetValue(Owner,oldValue)
+                    $"{Name}に値をセット : {value?.ToString()}",
+                    () => { PropertyInfo.SetValue(Owner, value); RaisePropertyChanged(); },
+                    () => { PropertyInfo.SetValue(Owner, oldValue); RaisePropertyChanged(); }
                 );
             }
         }
 
-        public bool CanWrite => PropertyInfo.CanWrite;
-        public bool CanRead => PropertyInfo.CanRead;
-        public IReadOnlyDictionary<string, string> Tags => m_tags;
+        public override bool CanRead => PropertyInfo.CanRead;
+        public override bool CanWrite => PropertyInfo.CanWrite;
+        public override IReadOnlyDictionary<string, string> Tags => m_tags;
         private Dictionary<string, string> m_tags = new();
 
         public PropertyInfo PropertyInfo { get; }

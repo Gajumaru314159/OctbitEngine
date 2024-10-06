@@ -4,27 +4,27 @@
 
 
     <DataTemplate x:Key="BoolInspectorControl" DataType="ctrl:InspectableProperty">
-        <CheckBox IsChecked="{Binding Value}"/>
+        <CheckBox IsChecked="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="IntInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBlock Text="{Binding Value}"/>
+        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="FloatInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBlock Text="{Binding Value}"/>
+        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="DoubleInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBlock Text="{Binding Value}"/>
+        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="StringInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBlock Text="{Binding Value}"/>
+        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="EnumInspectorControl" DataType="ctrl:InspectableProperty">
-        <ctrl:EnumComboBox Value="{Binding Value}"/>
+        <ctrl:EnumComboBox Value="{Binding Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="Vector3InspectorControl" DataType="ctrl:InspectableProperty">
@@ -34,9 +34,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBlock Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBlock Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
         </Grid>
     </DataTemplate>
 

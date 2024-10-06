@@ -1,6 +1,8 @@
 ﻿using Common.Attribute;
 using Common.Log;
 using Common.Math;
+using CommonView.Controls;
+using CommonView.Controls.Inspector;
 using Reactive.Bindings;
 
 namespace OctbitEditor
@@ -9,6 +11,13 @@ namespace OctbitEditor
     {
         Inspector,
         History,
+    }
+
+    public class ReflectionSubTest
+    {
+        public ReflectionSubTest() { }
+        public string Name { get; set; } = "New Entity";
+        public int Size{ get; set; } = 123;
     }
     public class ReflectionTest
     {
@@ -32,7 +41,9 @@ namespace OctbitEditor
         public float FloatValue { get; } = 1.23f;
         public string StringValue { get; set; } = "サンプル";
         public TabType EnumValue { get; set; } = TabType.History;
-        public int[] Array { get; set; } = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,};
+
+        public ReflectionSubTest SubTest { get; } = new();
+        //public int[] Array { get; set; } = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,};
 
     }
 
@@ -80,7 +91,11 @@ namespace OctbitEditor
         public InspectorVM()
             : base("Inspector")
         {
+            Inspectables = InspectableReflectionObject.Create(TestObject);
+
         }
+
+        public IList<Inspectable> Inspectables { get; }
 
         public ReflectionTest TestObject { get; } = new();
         public EntityTest Entity{ get; } = new();

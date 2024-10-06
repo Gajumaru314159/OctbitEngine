@@ -12,14 +12,14 @@ namespace CommonView.Controls
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not FrameworkElement f) return null;
-            if (item is IInspectableProperty p)
+            if (container is not FrameworkElement f) return null;
+            if (item is InspectableProperty p)
             {
-                return f.FindResource("PropertyTemplate") as DataTemplate;
+                return f.FindResource("InspectablePropertyTemplate") as DataTemplate;
             }
-            if (item is IInspectableObject o)
+            if (item is InspectableObject o)
             {
-                return f.FindResource("ObjectTemplate") as DataTemplate;
+                return f.FindResource("InspectableObjectTemplate") as DataTemplate;
             }
             // TODO List
             // TODO Dictionary
@@ -38,16 +38,28 @@ namespace CommonView.Controls
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not FrameworkElement f) return null;
-            if (item is not IInspectableProperty p) return null;
+            if (container is not FrameworkElement f) return null;
+            if (item is not InspectableProperty p) return null;
 
             if (p.Type == typeof(bool))
             {
-                return f.FindResource("InspectorBoolTemplate") as DataTemplate;
+                return f.FindResource("BoolInspectorControl") as DataTemplate;
             }
             if (p.Type == typeof(int))
             {
-                return f.FindResource("InspectorBoolTemplate") as DataTemplate;
+                return f.FindResource("IntInspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(float))
+            {
+                return f.FindResource("FloatInspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(string))
+            {
+                return f.FindResource("StringInspectorControl") as DataTemplate;
+            }
+            if (p.Type.IsEnum)
+            {
+                return f.FindResource("EnumInspectorControl") as DataTemplate;
             }
             return null;
         }

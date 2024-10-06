@@ -7,6 +7,11 @@
     xmlns:behavior="clr-namespace:CommonView.Behaviors"
     xmlns:ctrl="clr-namespace:CommonView.Controls">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/CommonView;component/Controls/Inspector/BuiltInInspectorIemTemplate.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <ctrl:InspectorItemDataSelector x:Key="InspectorItemDataSelector"/>
     <ctrl:InspectorControlDataSelector x:Key="InspectorControlDataSelector"/>
 
     <!--プロパティのラベル-->
@@ -25,17 +30,14 @@
         </DockPanel>
     </DataTemplate>
 
-    <DataTemplate x:Key="Test" DataType="ctrl:InspectableProperty">
+    <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:InspectableProperty">
         <ctrl:InspectorItemContainer Label="{Binding Name}">
-            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
+            <ContentControl Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
         </ctrl:InspectorItemContainer>
     </DataTemplate>
 
-    <DataTemplate x:Key="Test2" DataType="ctrl:InspectableObject">
-        <StackPanel Orientation="Vertical">
-            <ctrl:InspectorItemContainer Label="{Binding Name}" TextBlock.TextAlignment="Left"/>
-            <ctrl:InspectorView/>
-        </StackPanel>
+    <DataTemplate x:Key="InspectableObjectTemplate" DataType="ctrl:InspectableObject">
+        <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}"/>
     </DataTemplate>
 
     <Style TargetType="ctrl:InspectorItemContainer">
@@ -167,6 +169,7 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
     </Style>
 
 
