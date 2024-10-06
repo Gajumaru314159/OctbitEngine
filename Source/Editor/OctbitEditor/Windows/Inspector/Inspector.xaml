@@ -78,7 +78,7 @@
                     <ctrl:InspectorView>
 
                         <ctrl:InspectorItemContainer Label="AAA">
-                            <TextBox/>
+                            <ComboBox/>
                         </ctrl:InspectorItemContainer>
                         
                         <ctrl:InspectorItemContainer Label="BBB">

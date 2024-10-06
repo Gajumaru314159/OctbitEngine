@@ -49,7 +49,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:InspectorItemContainer">
-                    <Grid>
+                    <Grid MinHeight="22">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="10"/>

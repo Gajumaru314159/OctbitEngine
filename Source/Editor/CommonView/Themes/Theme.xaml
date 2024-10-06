@@ -597,7 +597,7 @@
                                                 Content="{TemplateBinding SelectionBoxItem}"
                                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                                Margin="3,3,23,3"
+                                                Margin="3,0,23,0"
                                                 VerticalAlignment="Stretch"
                                                 HorizontalAlignment="Left"/>
 
@@ -605,7 +605,7 @@
                                        Style="{x:Null}"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Bottom"
-                                       Margin="3,3,23,3"
+                                       Margin="3,0,23,0"
                                        Focusable="True"
                                        Background="Transparent"
                                        Visibility="Hidden"
@@ -907,6 +907,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="1,0"/>
         <Setter Property="Margin" Value="0,0"/>
+        <Setter Property="MinHeight" Value="20"/>
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="AllowDrop" Value="True"/>
