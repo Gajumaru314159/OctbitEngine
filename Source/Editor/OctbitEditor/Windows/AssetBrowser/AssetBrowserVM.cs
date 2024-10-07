@@ -185,8 +185,8 @@ namespace OctbitEditor
             }
             MenuItems.AddCommand("Show in Explorer", ShowInExplorer);
             MenuItems.AddCommand("Open",OpenAsset, CanOpenAsset);
-            MenuItems.AddEmptyCommand("Delete");
-            MenuItems.AddEmptyCommand("Dename");
+            MenuItems.AddCommand("Delete",DeleteAssets);
+            MenuItems.AddEmptyCommand("Rename","F2");
             MenuItems.AddEmptyCommand("Copy Path");
             MenuItems.AddSeparator();
             MenuItems.AddEmptyCommand("Reimport");
@@ -223,6 +223,10 @@ namespace OctbitEditor
         }
 
         private void OpenAsset()
+        {
+        }
+
+        private void DeleteAssets()
         {
         }
 

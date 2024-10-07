@@ -48,7 +48,7 @@ namespace OctbitEngine
                 Log.Error(e.Message);
             }
 
-            AssetManager = new AssetManager();
+            AssetManager = OctbitEngine.Asset.AssetManager.Instance;
             Runtime = new Runtime.Runtime();
 
         }

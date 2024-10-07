@@ -39,34 +39,7 @@
                             <TextBlock Text="Entity"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView ItemsSource="{Binding Inspectables}"/>
-                </Expander>
-                <Expander Margin="0,0,0,1">
-                    <Expander.Header>
-                        <DockPanel>
-                            <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
-                            <TextBlock Text="Transform"/>
-                        </DockPanel>
-                    </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding Transform}"/>
-                </Expander>
-                <Expander Margin="0,0,0,1">
-                    <Expander.Header>
-                        <DockPanel>
-                            <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
-                            <TextBlock Text="Model"/>
-                        </DockPanel>
-                    </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding TestObject}"/>
-                </Expander>
-                <Expander Margin="0,0,0,1">
-                    <Expander.Header>
-                        <DockPanel>
-                            <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
-                            <TextBlock Text="Test"/>
-                        </DockPanel>
-                    </Expander.Header>
-                    <ctrl:InspectorView Target="{Binding TestObject}"/>
+                    <ctrl:InspectorView ItemsSource="{Binding Inspectables}" Style="{StaticResource ToLevelnspector}"/>
                 </Expander>
                 <Expander Margin="0,0,0,1">
                     <Expander.Header>
@@ -75,7 +48,7 @@
                             <TextBlock Text="Manual"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView>
+                    <ctrl:InspectorView Style="{StaticResource ToLevelnspector}">
 
                         <ctrl:InspectorItemContainer Label="AAA">
                             <ComboBox/>

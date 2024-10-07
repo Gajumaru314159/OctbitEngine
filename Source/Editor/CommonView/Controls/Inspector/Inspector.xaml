@@ -173,4 +173,44 @@
     </Style>
 
 
+    <Style TargetType="ctrl:InspectorView" x:Key="ToLevelnspector">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrl:InspectorView">
+                    <StackPanel Orientation="Vertical">
+                        <ctrl:InspectorItemContainer x:Name="Header">
+                            <ctrl:InspectorItemContainer.Label>
+                                <StackPanel Orientation="Horizontal">
+                                    <ToggleButton IsChecked="{Binding IsExpanded,RelativeSource={RelativeSource TemplatedParent},Mode=TwoWay}" Style="{StaticResource InspectorExpandStyle}">
+                                        <TextBlock Text="{TemplateBinding Label}" TextAlignment="Left"/>
+                                    </ToggleButton>
+                                </StackPanel>
+                            </ctrl:InspectorItemContainer.Label>
+                        </ctrl:InspectorItemContainer>
+                        <Grid>
+                            <ItemsPresenter x:Name="Items"/>
+                        </Grid>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Label" Value="{x:Null}">
+                            <Setter TargetName="Header" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="IsExpanded" Value="False">
+                            <Setter TargetName="Items" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
+    </Style>
+
 </ResourceDictionary>

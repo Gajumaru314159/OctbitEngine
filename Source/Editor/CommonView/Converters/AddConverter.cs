@@ -12,7 +12,7 @@ namespace CommonView
         {
             if(value is not double doubleValue) return DependencyProperty.UnsetValue;
             if(!double.TryParse(parameter.ToString(),out double add)) return DependencyProperty.UnsetValue;
-            return doubleValue + add;
+            return Math.Max(doubleValue + add,0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

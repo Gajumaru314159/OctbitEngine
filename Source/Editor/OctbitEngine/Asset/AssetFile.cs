@@ -5,8 +5,11 @@ namespace OctbitEngine.Asset
 {
     public class AssetFile : AssetEntry, IAssetFile
     {
-        internal AssetFile(IAssetManager manager,string name) : base(manager,name)
+
+        public Guid Guid { get; }
+        internal AssetFile(IAssetManager manager,string name,Guid guid) : base(manager,name)
         {
+            Guid =guid;
         }
 
         internal void Serialize()

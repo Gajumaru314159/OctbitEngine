@@ -29,7 +29,7 @@ namespace OctbitEngine.Asset
         }
 
 
-        private static List<IAssetImporter> Importers = new List<IAssetImporter>();
+        private static Dictionary<string,IAssetImporter> Importers = new();
 
         internal AssetManager()
         {
@@ -142,8 +142,10 @@ namespace OctbitEngine.Asset
         {
             void visit(IAssetFolder parent, string path)
             {
+                List<string>? nometadatas = null;
+
                 // 1. フォルダを読み込む
-                foreach (var dir in Directory.EnumerateDirectories(path))
+                foreach (string dir in Directory.EnumerateDirectories(path))
                 {
                     var item = new AssetFolder(this,Path.GetFileName(dir));
                     item.SetParent(parent);
@@ -151,23 +153,73 @@ namespace OctbitEngine.Asset
                     visit(item, dir);
                 }
                 // 2. ファイルを読み込む
-                foreach (var file in Directory.EnumerateFiles(path))
-                {
-                    if(Path.GetExtension(file) != MetaExtension)
-                    {
-                        if(File.Exists(file + MetaExtension) == false)
-                        {
-                            // TODO メタデータを生成して読み込む
-                        }
-                    }
-                }
-                // 3. メタデータを読み込む
-                foreach (var file in Directory.EnumerateFiles(path))
+                foreach (string file in Directory.EnumerateFiles(path))
                 {                    
                     if (Path.GetExtension(file) == MetaExtension) continue;
-                    var item = new AssetFile(this,Path.GetFileName(file));
+
+                    var metadataPath = file + MetaExtension;
+
+                    AssetFile? item = null;
+
+                    if (File.Exists(metadataPath))
+                    {
+                        try
+                        {
+                            string jsonString = File.ReadAllText(metadataPath);
+                            var metadata = System.Text.Json.JsonSerializer.Deserialize<AssetMetadata>(jsonString);
+
+                            item = new AssetFile(this, Path.GetFileName(file), metadata.Guid);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"メタデータの読み込みに失敗\n{metadataPath} {e}");
+                        }
+                    }
+
+                    if(item==null)
+                    {
+                        if (nometadatas==null) nometadatas = new();
+                        nometadatas.Add(file);
+                        continue;
+                    }
+
                     item.SetParent(parent);
                     parent.Add(item);
+                }
+
+                // 3. メタデータがなかったデータは再処理
+                foreach (var file in nometadatas.NotNull())
+                {
+                    try
+                    {
+                        var extension = Path.GetExtension(file);
+                        var metadataPath = file + MetaExtension;
+
+                        // TODO 不正なメタデータのエラーハンドリングを考える
+                        if(File.Exists(metadataPath))
+                        {
+                            File.Delete(metadataPath);
+                        }
+
+                        AssetMetadata metadata = new()
+                        {
+                            Version = 0,
+                            Guid = Guid.NewGuid(),
+                        };
+                        System.Text.Json.JsonSerializerOptions options = new()
+                        {
+                            WriteIndented = true,
+                        };
+                        var bytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(metadata, options);
+
+                        using var stream = File.Create(metadataPath);
+                        stream.Write(bytes);
+
+                        // TODO 新規作成アセットの読み込み処理
+                    }catch(Exception e)
+                    {
+                        Log.Error($"メタデータの作成に失敗\n{file} {e}");
+                    }
                 }
             }
             visit(RootFolder, Path.Combine(WorkSpace.RootPath, RootFolder.Name));
@@ -178,20 +230,26 @@ namespace OctbitEngine.Asset
         /// </summary>
         public bool CanImport(string path)
         {
-            return Importers.Any(i => i.CanImport(path));
+            var extension = Path.GetExtension(path);
+            if(Importers.TryGetValue(extension,out var importer))
+            {
+                return importer.CanImport(path);
+            }
+            return false;
         }
 
         public bool Import(string path, IAssetFolder folder)
         {
-            foreach(var importer in Importers)
+            var extension = Path.GetExtension(path);
+            if (Importers.TryGetValue(extension, out var importer))
             {
-                if (!importer.CanImport(path)) continue;
+                if(importer.CanImport(path))return false;
 
                 var importDest = Path.Combine(folder.PhysicalPath, Path.GetFileName(path));
                 if (File.Exists(importDest))
                 {
                     // TODO 名前変更
-                    continue;
+                    return false;
                 }
 
                 try
@@ -214,14 +272,14 @@ namespace OctbitEngine.Asset
 
         private void InitializeImporter()
         {
-            CoreSystem.Instance.PluginAssemblies
+            CoreSystem.Instance?.PluginAssemblies
                 .Append(typeof(AssetManager).Assembly)
                 .SelectMany(i=>i.GetTypes())
                 .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IAssetImporter)))
                 .Select(t => Activator.CreateInstance(t) as IAssetImporter)
                 .NotNull()
                 .ToList()
-                .ForEach(i => Importers.Add(i!));
+                .ForEach(importer => importer.EliagebleExtensions.ForEach(extension=>Importers.Add(extension, importer)));
 
             foreach (var importer in Importers)
             {

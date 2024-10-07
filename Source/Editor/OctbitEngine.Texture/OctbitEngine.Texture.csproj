@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonView\CommonView.csproj" />
     <ProjectReference Include="..\OctbitEngineAPI.Texture\OctbitEngineAPI.Texture.csproj" />
     <ProjectReference Include="..\OctbitEngineAPI\OctbitEngineAPI.csproj" />
   </ItemGroup>
