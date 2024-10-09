@@ -30,6 +30,12 @@ namespace CommonView
                 typeof(EditableTextBlock),
                 new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(OnIsEdittingChanged)));
 
+        public static readonly DependencyProperty IsEditableProperty = DependencyProperty.Register(
+                nameof(IsEditable),
+                typeof(bool),
+                typeof(EditableTextBlock),
+                new PropertyMetadata(false));
+
         public string Text
         {
             get { return (string)GetValue(TextProperty); }
@@ -39,6 +45,11 @@ namespace CommonView
         {
             get { return (bool)GetValue(IsEdittingProperty); }
             set { SetValue(IsEdittingProperty, value); }
+        }
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
         }
 
         /// <summary>
@@ -91,6 +102,7 @@ namespace CommonView
 
         private void OnDoubleClicked(object sender, MouseEventArgs e)
         {
+            if (IsEditable == false) return;
             IsEditting = true;
             e.Handled = true;
         }
@@ -112,8 +124,13 @@ namespace CommonView
             }
 
             // F2キーで編集開始
-            if (e.Key == Key.F2) { 
-                IsEditting = true;
+            if (e.Key == Key.F2)
+            {
+                if (IsEditable)
+                {
+                    IsEditting = true;
+                    e.Handled = true;
+                }
             }
         }
 
@@ -149,8 +166,11 @@ namespace CommonView
 
         private void CommitEdit()
         {
-            var binding = BindingOperations.GetBindingExpression(m_textBox, TextBox.TextProperty);
-            binding?.UpdateSource();
+            if (IsEditable)
+            {
+                var binding = BindingOperations.GetBindingExpression(m_textBox, TextBox.TextProperty);
+                binding?.UpdateSource();
+            }
             UpdateControlVisibility();
             IsEditting = false;
         }

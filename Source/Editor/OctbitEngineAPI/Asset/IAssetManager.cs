@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OctbitEngine.Asset
+﻿namespace OctbitEngine.Asset
 {
     public interface IAssetManager
     {
@@ -14,7 +7,7 @@ namespace OctbitEngine.Asset
         /// <summary>
         /// ファイル名に使用できない文字のリスト
         /// </summary>
-        public static char[] InvalidChars = Path.GetInvalidFileNameChars();
+        public static char[] InvalidChars = System.IO.Path.GetInvalidFileNameChars();
 
         /// <summary>
         /// ルートフォルダ

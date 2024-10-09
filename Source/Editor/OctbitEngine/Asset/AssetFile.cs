@@ -7,42 +7,27 @@ namespace OctbitEngine.Asset
     {
 
         public Guid Guid { get; }
-        internal AssetFile(IAssetManager manager,string name,Guid guid) : base(manager,name)
+        internal AssetFile(string name,Guid guid,IAssetImporter importer) : base(name)
         {
             Guid =guid;
+            Importer = importer;
         }
 
-        internal void Serialize()
+        public void Reimport()
         {
-            // TODO ID管理
-            var path = System.IO.Path.Combine(WorkSpace.RootPath,"Binaries", Name);
-            using var stream = new FileStream(path, FileMode.Create);
-            using var writer = new BinaryWriter(stream);
+            var assets = Importer.Import(PhysicalPath);
 
-            lock (this)
+            lock (m_assets)
             {
-                _container.Serialize(writer);
+                m_assets = assets;
             }
+
+            // TODO Componentなどに再インポート結果を通知
         }
 
-        internal void Reimport()
-        {
-            // イミュータブルにしたほうが良いかも
-            var path = System.IO.Path.Combine(WorkSpace.RootPath, "Assets", $"{Path}.{AssetManager.MetaExtension}");
+        public IReadOnlyList<IAsset> Assets => m_assets;
+        private IAsset[] m_assets = Array.Empty<IAsset>();
 
-            var container = new AssetContainer();
-            _importer?.OnImport(container, path);
-
-            lock (this)
-            {
-                _container = container;
-            }
-        }
-
-        public IReadOnlyList<IAsset> Assets => _assets;
-        private List<IAsset> _assets = new List<IAsset>();
-
-        private AssetContainer _container = new AssetContainer();
-        private IAssetImporter? _importer=null;
+        private IAssetImporter Importer { get; }
     }
 }

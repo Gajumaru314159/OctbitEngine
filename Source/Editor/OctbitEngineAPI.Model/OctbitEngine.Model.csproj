@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <BaseOutputPath>$(SolutionDir)../../Build/Editor/Plugins/$(ProjectName)</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OctbitEngineAPI.Texture\OctbitEngineAPI.Texture.csproj" />
+    <ProjectReference Include="..\OctbitEngineAPI\OctbitEngineAPI.csproj" />
+  </ItemGroup>
+
+</Project>

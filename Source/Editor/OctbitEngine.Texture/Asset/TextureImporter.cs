@@ -1,4 +1,5 @@
 ﻿using Common.String;
+using System.IO;
 
 namespace OctbitEngine.Asset
 {
@@ -13,15 +14,18 @@ namespace OctbitEngine.Asset
         {
             return path.MatchExtentions(EliagebleExtensions);
         }
-        public void OnImport(IAssetContainer container, string path)
-        {
-            //var texture = new Texture();
-            //container.Add("texture", texture);
-            //
-            //
-            //container.Map("oldTexture", "texture");
-        }
 
+        public IAsset[] Import(string path)
+        {
+            if(File.Exists(path)==false)return Array.Empty<IAsset>();
+
+            if(Path.GetExtension(path) == ".jpg")
+            {
+                return [new Texture(path), new Texture(path)];
+            }
+
+            return [new Texture(path)];
+        }
     }
 
 }

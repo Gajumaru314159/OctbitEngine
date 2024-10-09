@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+	<TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+	<UseWPF>true</UseWPF>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <RootNamespace>$(MSBuildProjectName.Replace(".Texture", ""))</RootNamespace>
-	<BaseOutputPath>../../../Build/Plugins</BaseOutputPath>
+	<BaseOutputPath>$(SolutionDir)../../Build/Editor/Plugins/$(ProjectName)</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

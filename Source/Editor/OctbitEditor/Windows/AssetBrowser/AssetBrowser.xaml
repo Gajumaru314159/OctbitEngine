@@ -127,10 +127,10 @@
             <!--TreeView-->
             <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
                 <ms:MultiSelectTreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="local:ExplorerItem" ItemsSource="{Binding Children}">
+                    <HierarchicalDataTemplate DataType="local:AssetBrowserItem" ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                            <base:EditableTextBlock Text="{Binding Name.Value}"/>
+                            <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </ms:MultiSelectTreeView.ItemTemplate>
@@ -160,10 +160,10 @@
                         </i:Interaction.Triggers>
 
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="local:ExplorerItem">
-                                <StackPanel Orientation="Horizontal" Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
+                            <DataTemplate DataType="local:AssetBrowserItem">
+                                <StackPanel Orientation="Horizontal" Background="Transparent" ToolTip="{Binding Name}" ToolTipService.InitialShowDelay="0">
                                     <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                                    <base:EditableTextBlock Text="{Binding Name.Value}"/>
+                                    <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -232,8 +232,8 @@
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="local:ExplorerItem">
-                                <DockPanel Background="Transparent" ToolTip="{Binding Name.Value}" ToolTipService.InitialShowDelay="0">
-                                    <base:EditableTextBlock Text="{Binding Name.Value}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+                                <DockPanel Background="Transparent" ToolTip="{Binding Name}" ToolTipService.InitialShowDelay="0">
+                                    <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
                                     <Border BorderThickness="0,0,0,2" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">
                                         <Image Source="{Binding Icon}"
                                            Width="{Binding DataContext.IconSize.Value,ElementName=Root}" 
@@ -266,7 +266,7 @@
                                         <DataTemplate>
                                             <DockPanel>
                                                 <Image Source="{Binding Icon}" Width="15" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                                                <base:EditableTextBlock Text="{Binding Name.Value}" VerticalAlignment="Center" Margin="0,-2"/>
+                                                <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}" VerticalAlignment="Center" Margin="0,-2"/>
                                             </DockPanel>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>

@@ -25,6 +25,5 @@
         bool sRGB { get; set; }
         bool Mipmaps { get; set; }
 
-        void Reimport();
     }
 }

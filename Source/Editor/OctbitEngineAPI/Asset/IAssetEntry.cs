@@ -2,15 +2,25 @@
 {
     public interface IAssetEntry
     {
+        /// <summary>
+        /// アセット名
+        /// 例：Sample.png
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// アセットシステム上のファイルパス
+        /// 例：Assets/Sample.png
+        /// </summary>
         public string Path { get; }
 
+        /// <summary>
+        /// ファイルシステム上のファイルパス
+        /// 例：C:/Project/Assets/Sample.png
+        /// </summary>
         public string PhysicalPath { get; }
 
         public IAssetFolder? Parent { get; }
-
-        public IAssetManager Manager { get; }
 
         public bool SetParent(IAssetFolder parent);
 

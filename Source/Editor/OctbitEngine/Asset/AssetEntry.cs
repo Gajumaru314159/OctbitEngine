@@ -5,9 +5,8 @@ namespace OctbitEngine.Asset
 {
     public class AssetEntry : IAssetEntry
     {
-        private protected AssetEntry(IAssetManager manager,string name)
+        private protected AssetEntry(string name)
         {
-            Manager = manager;
             Name = name;
         }
 
@@ -17,8 +16,6 @@ namespace OctbitEngine.Asset
         public string PhysicalPath => System.IO.Path.Combine(WorkSpace.RootPath,string.Join("/", Parent!.Ancestor(i => i.Parent).Reverse().Select(i => i.Name).Append(Name)));
 
         public IAssetFolder? Parent { get; internal set; }
-
-        public IAssetManager Manager { get; }
 
         public bool SetParent(IAssetFolder parent)
         {

@@ -1,6 +1,6 @@
-﻿using Common.Log;
-using Common.Tree;
+﻿using Common.Tree;
 using CommonView.Menu;
+using Livet;
 using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using Reactive.Bindings;
@@ -8,10 +8,8 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
-using Common.String;
-using Livet;
+using System.Windows.Media.Imaging;
 
 namespace OctbitEditor
 {
@@ -25,83 +23,92 @@ namespace OctbitEditor
     public class AssetBrowserItem : ViewModel
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
-        internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
-        public AssetBrowserItem(string name = "Sample")
-        {
-            Name.Value = name;
-            Path = "";
-            IsFolder = true;
-            _icon = FolderIcon;
-        }
-        public AssetBrowserItem(IAssetEntry asset,bool isAsset = false)
-        {
-            Name.Value = asset.Name;
-            Path = asset.Path;
-            IsFolder = asset is AssetFolder;
-            _icon = asset is AssetFile?AssetIcon : FolderIcon;
 
-            if(asset is AssetFile file)
-            {
-                if (file.PhysicalPath.MatchExtentions(".png", ".jpg"))
-                {
-                    _path = file.PhysicalPath;
-                }
-            }
+        protected AssetBrowserItem()
+        {
         }
 
-
-
-        public async Task<BitmapImage> DownloadImageAsync(string path)
-        {
-            using var fs = new FileStream(path, FileMode.Open);
-            using var stream = new MemoryStream();
-
-            await fs.CopyToAsync(stream);
-            stream.Position = 0;
-
-            var bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.DecodePixelHeight = 128;
-            bitmap.StreamSource = stream;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            bitmap.Freeze();
-
-            return bitmap;
-        }
-
-
-        public string Path { get; }
-
-        public bool IsFolder { get; }
-        public Brush ItemColorBrush => Brushes.Red;
-
-        public ReactiveProperty<string> Name { get; } = new();
+        public AssetBrowserItem? Parent { get; set; } // TODO setを排除
+        public virtual Brush ItemColorBrush => Brushes.Transparent;
+        public virtual BitmapSource Icon => FolderIcon;
+        public virtual string Name { get; set; } = "-";
+        public virtual bool IsEditable => false;
         public ReactiveProperty<bool> IsSelected { get; } = new();
         public ReactiveProperty<bool> IsSelectedInList { get; } = new();
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
-        public BitmapSource Icon
-        {
-            get {
-                if(_path != null)
-                {
-                    var task = DownloadImageAsync(_path);
-                    _path = null;
-                    Task.Run(() =>
-                    {
-                        _icon = task.Result;
-                        RaisePropertyChanged(nameof(Icon));
-                    });
-                    return FolderIcon;
-                }
-                return _icon ?? FolderIcon;
-            }
-        }
-        private BitmapSource? _icon;
-        private string? _path;
-
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
     }
+    public class AssetBrowserFolderItem : AssetBrowserItem
+    {
+        public override Brush ItemColorBrush => Brushes.Red;
+        public override BitmapSource Icon => FolderIcon;
+        public override string Name {
+            get => Folder.Name;
+            set => throw new NotImplementedException("Folderのリネームは未実装です");
+        }
+        public override bool IsEditable => false;
+        public IAssetFolder Folder { get; }
+
+        public AssetBrowserFolderItem(IAssetFolder folder)
+        {
+            Folder = folder;
+        }
+    }
+    public class AssetBrowserFileItem : AssetBrowserItem
+    {
+        internal static BitmapImage DefaultIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
+        public override Brush ItemColorBrush => Brushes.Red;
+        public override BitmapSource Icon
+        {
+            get
+            {
+                if (0 < Children.Count)
+                {
+                    // アイコン変更の検知が必要
+                    return Children[0].Icon;
+                }
+                if (File.Assets.Count == 1)
+                {
+                    // TODO アセット専用アイコンを取得
+                    return DefaultIcon;
+                }
+
+                return DefaultIcon;
+            }
+        }
+        public override string Name
+        {
+            get => File.Name;
+            set => throw new NotImplementedException("Fileのリネームは未実装です");
+        }
+        public override bool IsEditable => false;
+
+        private IAssetFile File { get; }
+
+        public AssetBrowserFileItem(IAssetFile file)
+        {
+            File = file;
+        }
+    }
+    public class AssetBrowserAssetItem : AssetBrowserItem
+    {
+        internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
+        public override Brush ItemColorBrush => Brushes.Red;
+        public override BitmapSource Icon => AssetIcon;
+        public override string Name
+        {
+            get => Asset.Name;
+            set => throw new NotImplementedException("Assetのリネームは未実装です");
+        }
+        public override bool IsEditable => false;
+        private IAsset Asset { get; }
+
+        public AssetBrowserAssetItem(IAsset asset)
+        {
+            Asset = asset;
+        }
+    }
+
 
     public class AssetBrowserVM : TabBase
     {
@@ -115,23 +122,29 @@ namespace OctbitEditor
             {
                 foreach (var child in folder.ChildFolders)
                 {
-                    var item = new AssetBrowserItem(child);
+                    var item = new AssetBrowserFolderItem(child);
                     parent.Children.Add(item);
+                    item.Parent = parent;
                     visit(child,item);
                 }
                 foreach(var child in folder.ChildFiles)
                 {
-                    var item = new AssetBrowserItem(child);
+                    var item = new AssetBrowserFileItem(child);
                     parent.Children.Add(item);
+                    item.Parent = parent;
 
-                    foreach (var asset in child.Assets)
+                    if (1 < child.Assets.Count)
                     {
-                        var assetItem = new AssetBrowserItem("asset");
-                        item.Children.Add(assetItem);
+                        foreach (var asset in child.Assets)
+                        {
+                            var assetItem = new AssetBrowserAssetItem(asset);
+                            item.Children.Add(assetItem);
+                            assetItem.Parent = item;
+                        }
                     }
                 }
             }
-            var rootItem = new AssetBrowserItem(AssetManager.RootFolder);
+            var rootItem = new AssetBrowserFolderItem(AssetManager.RootFolder);
             rootItem.IsSelected.Value = true;
             rootItem.IsExpanded.Value = true;
             SelectedFolder.Value = rootItem;
@@ -142,9 +155,28 @@ namespace OctbitEditor
 
             SelectedItems.CollectionChanged += (sender, e) =>
             {
-                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count && e.NewItems[0] is AssetBrowserItem item && item.IsFolder)
+                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count)
                 {
-                    SelectedFolder.Value = item;
+                    // TODO より安全なアクセスにする
+                    if (e.NewItems[0] is AssetBrowserFolderItem folder)
+                    {
+                        SelectedFolder.Value = folder;
+                    }
+                    if (e.NewItems[0] is AssetBrowserFileItem file)
+                    {
+                        if(file.Children.Count == 0)
+                        {
+                            SelectedFolder.Value = file.Parent!;
+                        }
+                        else
+                        {
+                            SelectedFolder.Value = file;
+                        }
+                    }
+                    if (e.NewItems[0] is AssetBrowserAssetItem asset)
+                    {
+                        SelectedFolder.Value = asset.Parent!;
+                    }
                 }
                 else
                 {
@@ -163,7 +195,7 @@ namespace OctbitEditor
 
             SelectedFolder.Subscribe(item =>
             {
-                SelectedFolderPath.Value = (item?.Path??"Asset").Replace("\\","/");
+                // SelectedFolderPath.Value = (item?.Path??"Asset").Replace("\\","/");
             });
 
             GenerateMenuItems();
@@ -196,30 +228,32 @@ namespace OctbitEditor
 
         private void ShowInExplorer()
         {
-            if (SelectedFolder.Value == null) return;
-            var actualPath = Path.GetFullPath(Path.Combine(WorkSpace.RootPath, SelectedFolder.Value.Path));
+            AssetBrowserItem? item = SelectedFolder.Value;
+            if (item == null) return;
+            while (item is not AssetBrowserFolderItem) item = item?.Parent;
+            var actualPath = Path.GetFullPath(Path.Combine(WorkSpace.RootPath, ((AssetBrowserFolderItem)item).Folder.PhysicalPath));
             System.Diagnostics.Process.Start("explorer.exe", actualPath);
         }
 
         private void CreateFolder()
         {
-            var basePath = $"{SelectedFolder.Value.Path}/NewFolder";
-            var createPath = basePath;
-            int index = 1;
-            while (true)
-            {
-                if (AssetManager.FindFolder(createPath)==null)
-                {
-                    break;
-                }
-
-                //string format= "{0}({1})";
-                string format= "{0}_{1:000}";
-
-                createPath = string.Format(format, basePath, index++);
-            }
-            var newFolder = AssetManager.CreateFolder(createPath);
-            SelectedFolder.Value.Children.Add(new AssetBrowserItem(newFolder));
+            // var basePath = $"{SelectedFolder.Value.Path}/NewFolder";
+            // var createPath = basePath;
+            // int index = 1;
+            // while (true)
+            // {
+            //     if (AssetManager.FindFolder(createPath)==null)
+            //     {
+            //         break;
+            //     }
+            // 
+            //     //string format= "{0}({1})";
+            //     string format= "{0}_{1:000}";
+            // 
+            //     createPath = string.Format(format, basePath, index++);
+            // }
+            // var newFolder = AssetManager.CreateFolder(createPath);
+            // SelectedFolder.Value.Children.Add(new AssetBrowserItem(newFolder));
         }
 
         private void OpenAsset()

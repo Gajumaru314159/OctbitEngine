@@ -4,7 +4,7 @@ namespace OctbitEngine.Asset
 {
     public class AssetFolder : AssetEntry, IAssetFolder
     {
-        public AssetFolder(IAssetManager manager,string name) : base(manager,name)
+        public AssetFolder(string name) : base(name)
         {
         }
 
@@ -63,7 +63,6 @@ namespace OctbitEngine.Asset
         {
             Log.Info($"Import {path}");
 
-            Manager.Import(path,this);
             return false;
         }
     }

@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace OctbitEngine.Asset
 {
-    public struct AssetConvertParameter
-    {
-        public string Source { get; set; }
-        public string Destination { get; set; }
-        // Platform
-        // Language
-    }
-
     public interface IAsset
     {
-        string AssetType { get; }
-        string Name { get; }
-        IAssetFile File { get; }
+        public struct ConvertOptions
+        {
+            public Platform Platform;
+            public Endian Endian;
+        }
 
-        void Convert(AssetConvertParameter param);
-        void Open();
-        void Serialize(BinaryWriter writer);
+        string Name { get; }
+
+        bool Convert(BinaryWriter writer,ConvertOptions options);
     }
 }

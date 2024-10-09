@@ -8,7 +8,10 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Resources\Icons\icon.ico</ApplicationIcon>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <BaseOutputPath>$(SolutionDir)../../Build/Editor/$(ProjectName)</BaseOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -85,6 +88,21 @@
     <Resource Include="Resources\Icons\Outliner\folder.png" />
     <Resource Include="Resources\Icons\Outliner\icon_design.apd" />
     <Resource Include="Resources\Splashes\splash_000.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

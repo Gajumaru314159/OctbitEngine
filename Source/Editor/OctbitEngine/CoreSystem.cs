@@ -21,7 +21,7 @@ namespace OctbitEngine
 
             try
             {
-                var pluginsFolder = Path.Combine(WorkSpace.RootPath, "Build","Plugins");
+                var pluginsFolder = Path.Combine(Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName??"", "..","Plugins");
                 var searchPattern = "OctbitEngine.*.dll";
                 if (Directory.Exists(pluginsFolder))
                 {

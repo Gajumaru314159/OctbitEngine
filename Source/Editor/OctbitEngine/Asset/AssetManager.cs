@@ -2,6 +2,8 @@
 using Common.Linq;
 using Common.Log;
 using OctbitEngine.Config;
+using System.Reflection;
+using System.Text.Json;
 
 namespace OctbitEngine.Asset
 {
@@ -12,6 +14,7 @@ namespace OctbitEngine.Asset
         public static string RootFolderName = "Assets";
 
         private FileSystemWatcher _watcher;
+        private DefaultAssetImporter m_defaultImporter= new();
 
         public static IAssetManager Instance { get; private set; }
 
@@ -29,13 +32,13 @@ namespace OctbitEngine.Asset
         }
 
 
-        private static Dictionary<string,IAssetImporter> Importers = new();
+        private Dictionary<string,IAssetImporter> Importers = new();
 
         internal AssetManager()
         {
             InitializeImporter();
 
-            RootFolder = new AssetFolder(this, RootFolderName);
+            RootFolder = new AssetFolder(RootFolderName);
             LoadAssets();
 
             _watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
@@ -88,7 +91,7 @@ namespace OctbitEngine.Asset
                 var child = parent?.FindFolder(folderName);
                 if(child == null)
                 {
-                    child = new AssetFolder(this,folderName);
+                    child = new AssetFolder(folderName);
                     child.SetParent(parent!);
                 }
                 parent = child;
@@ -140,19 +143,73 @@ namespace OctbitEngine.Asset
 
         private void LoadAssets()
         {
+            JsonSerializerOptions options = new()
+            {
+                WriteIndented = true,
+                Converters = { 
+                    new AssetImporterJsonConverter(
+                        CoreSystem.Instance.PluginAssemblies.Append(GetType().Assembly).SelectMany(i=>i.GetTypes()).Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
+                    )
+                }
+            };
+
             void visit(IAssetFolder parent, string path)
             {
-                List<string>? nometadatas = null;
-
                 // 1. フォルダを読み込む
                 foreach (string dir in Directory.EnumerateDirectories(path))
                 {
-                    var item = new AssetFolder(this,Path.GetFileName(dir));
+                    var item = new AssetFolder(Path.GetFileName(dir));
                     item.SetParent(parent);
                     parent.Add(item);
                     visit(item, dir);
                 }
-                // 2. ファイルを読み込む
+
+                // 2. メタデータがない場合は作成
+                foreach (string file in Directory.EnumerateFiles(path))
+                {
+                    if (Path.GetExtension(file) == MetaExtension) continue;
+                    var metadataPath = file + MetaExtension;
+                    if (File.Exists(metadataPath))
+                    {
+                        // メタデータの読み込み
+                        try
+                        {
+                            string jsonString = File.ReadAllText(metadataPath);
+                            var t = JsonSerializer.Deserialize<AssetMetadata>(jsonString, options);
+                            if(t.Importer is not DefaultAssetImporter)
+                            {
+                                continue;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error($"不正なメタデータを削除\n{metadataPath} {e}");
+                            File.Delete(metadataPath);
+                        }
+                    }
+
+                    // 拡張子からImporterを選択
+                    var extension = Path.GetExtension(file);
+                    IAssetImporter importer = m_defaultImporter;
+                    if (Importers.TryGetValue(extension, out var i))
+                    {
+                        importer = i;
+                    }
+
+                    AssetMetadata metadata = new()
+                    {
+                        Version = 0,
+                        Guid = Guid.NewGuid(),
+                        Importer = importer,
+                    };
+
+                    var bytes = JsonSerializer.SerializeToUtf8Bytes(metadata, options);
+
+                    using var stream = File.Create(metadataPath);
+                    stream.Write(bytes);
+                }
+
+                // 3. ファイルを読み込む
                 foreach (string file in Directory.EnumerateFiles(path))
                 {                    
                     if (Path.GetExtension(file) == MetaExtension) continue;
@@ -161,65 +218,25 @@ namespace OctbitEngine.Asset
 
                     AssetFile? item = null;
 
-                    if (File.Exists(metadataPath))
+                    // メタデータの読み込み
+                    try
                     {
-                        try
-                        {
-                            string jsonString = File.ReadAllText(metadataPath);
-                            var metadata = System.Text.Json.JsonSerializer.Deserialize<AssetMetadata>(jsonString);
+                        string jsonString = File.ReadAllText(metadataPath);
+                        var metadata = JsonSerializer.Deserialize<AssetMetadata>(jsonString, options);
 
-                            item = new AssetFile(this, Path.GetFileName(file), metadata.Guid);
-                        }
-                        catch (Exception e)
-                        {
-                            Log.Error($"メタデータの読み込みに失敗\n{metadataPath} {e}");
-                        }
+                        item = new AssetFile(Path.GetFileName(file), metadata.Guid, metadata.Importer??m_defaultImporter);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"メタデータの読み込みに失敗\n{metadataPath} {e}");
                     }
 
-                    if(item==null)
-                    {
-                        if (nometadatas==null) nometadatas = new();
-                        nometadatas.Add(file);
-                        continue;
-                    }
+                    if (item==null)continue;
 
                     item.SetParent(parent);
                     parent.Add(item);
-                }
 
-                // 3. メタデータがなかったデータは再処理
-                foreach (var file in nometadatas.NotNull())
-                {
-                    try
-                    {
-                        var extension = Path.GetExtension(file);
-                        var metadataPath = file + MetaExtension;
-
-                        // TODO 不正なメタデータのエラーハンドリングを考える
-                        if(File.Exists(metadataPath))
-                        {
-                            File.Delete(metadataPath);
-                        }
-
-                        AssetMetadata metadata = new()
-                        {
-                            Version = 0,
-                            Guid = Guid.NewGuid(),
-                        };
-                        System.Text.Json.JsonSerializerOptions options = new()
-                        {
-                            WriteIndented = true,
-                        };
-                        var bytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(metadata, options);
-
-                        using var stream = File.Create(metadataPath);
-                        stream.Write(bytes);
-
-                        // TODO 新規作成アセットの読み込み処理
-                    }catch(Exception e)
-                    {
-                        Log.Error($"メタデータの作成に失敗\n{file} {e}");
-                    }
+                    item.Reimport();
                 }
             }
             visit(RootFolder, Path.Combine(WorkSpace.RootPath, RootFolder.Name));
@@ -243,7 +260,7 @@ namespace OctbitEngine.Asset
             var extension = Path.GetExtension(path);
             if (Importers.TryGetValue(extension, out var importer))
             {
-                if(importer.CanImport(path))return false;
+                if(!importer.CanImport(path))return false;
 
                 var importDest = Path.Combine(folder.PhysicalPath, Path.GetFileName(path));
                 if (File.Exists(importDest))
@@ -262,9 +279,6 @@ namespace OctbitEngine.Asset
                     return false;
                 }
 
-
-                var container = new AssetContainer();
-                importer.OnImport(container, path);
                 return true;
             }
             return false;
@@ -272,8 +286,7 @@ namespace OctbitEngine.Asset
 
         private void InitializeImporter()
         {
-            CoreSystem.Instance?.PluginAssemblies
-                .Append(typeof(AssetManager).Assembly)
+            CoreSystem.Instance?.PluginAssemblies.Append(typeof(AssetManager).Assembly)
                 .SelectMany(i=>i.GetTypes())
                 .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IAssetImporter)))
                 .Select(t => Activator.CreateInstance(t) as IAssetImporter)
@@ -281,9 +294,16 @@ namespace OctbitEngine.Asset
                 .ToList()
                 .ForEach(importer => importer.EliagebleExtensions.ForEach(extension=>Importers.Add(extension, importer)));
 
-            foreach (var importer in Importers)
+            var extensions = new Dictionary<IAssetImporter, HashSet<string>>();
+            foreach(var (extension,importer) in Importers)
             {
-                Log.Info($"AssetImporterを追加 [{importer.GetType().Name}]");
+                extensions.TryAdd(importer, new());
+                extensions[importer].Add(extension);
+            }
+
+            foreach (var (importer,extension) in extensions)
+            {
+                Log.Info($"AssetImporterを追加 [{importer.GetType().Name}({string.Join(",", extension)})]");
             }
         }
 
