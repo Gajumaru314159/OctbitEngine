@@ -13,11 +13,18 @@ namespace OctbitEditor
         History,
     }
 
+    public class ReflectionSub2Test
+    {
+        public ReflectionSub2Test() { }
+        public string Name { get; set; } = "New Entity";
+        public int Size { get; set; } = 123;
+    }
     public class ReflectionSubTest
     {
         public ReflectionSubTest() { }
         public string Name { get; set; } = "New Entity";
         public int Size{ get; set; } = 123;
+        public ReflectionSub2Test Sub2 { get; set; } = new();
     }
     public class ReflectionTest
     {
