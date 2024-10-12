@@ -39,16 +39,16 @@
                             <TextBlock Text="Entity"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView ItemsSource="{Binding Inspectables}" Style="{StaticResource ToLevelnspector}"/>
+                    <ctrl:InspectorView ItemsSource="{Binding Inspectables}" Style="{StaticResource TopLevelInspectorView}"/>
                 </Expander>
-                <Expander Margin="0,0,0,1">
+                <Expander Margin="0,0,0,1" IsExpanded="True">
                     <Expander.Header>
                         <DockPanel>
                             <ContentControl Style="{StaticResource Hamburger}" DockPanel.Dock="Right" VerticalAlignment="Bottom"/>
                             <TextBlock Text="Manual"/>
                         </DockPanel>
                     </Expander.Header>
-                    <ctrl:InspectorView Style="{StaticResource ToLevelnspector}">
+                    <ctrl:InspectorView Style="{StaticResource TopLevelInspectorView}">
 
                         <ctrl:InspectorItemContainer Label="AAA">
                             <ComboBox/>

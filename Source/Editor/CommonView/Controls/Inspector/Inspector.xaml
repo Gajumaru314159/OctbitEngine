@@ -125,6 +125,7 @@
     <Style TargetType="ctrl:InspectorView">
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Indent" Value="{Binding Indent,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView},Converter={common:AddConverter},ConverterParameter=15}"/>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:InspectorView">
@@ -173,6 +174,12 @@
             </Setter.Value>
         </Setter>
         <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
+    </Style>
+
+    
+    <!--仮対応-->
+    <Style TargetType="ctrl:InspectorView" x:Key="TopLevelInspectorView" BasedOn="{StaticResource {x:Type ctrl:InspectorView}}">
+        <Setter Property="Indent" Value="0"/>
     </Style>
 
 </ResourceDictionary>
