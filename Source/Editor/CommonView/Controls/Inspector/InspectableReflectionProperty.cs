@@ -1,10 +1,6 @@
 ﻿using Common.Attribute;
 using Common.Math;
-using CommonView.Menu;
-using Livet.Commands;
 using System.Reflection;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace CommonView.Controls.Inspector
 {
