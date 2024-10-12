@@ -11,7 +11,7 @@ namespace CommonView
             var parent = self;
             while (true)
             {
-                if (parent is not Visual || parent is not Visual3D)
+                if (parent is not Visual && parent is not Visual3D)
                     return default;
 
                 parent = VisualTreeHelper.GetParent(parent);
