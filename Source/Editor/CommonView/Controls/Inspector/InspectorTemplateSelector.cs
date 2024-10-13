@@ -17,6 +17,10 @@ namespace CommonView.Controls
             {
                 return f.FindResource("InspectablePropertyTemplate") as DataTemplate;
             }
+            if (item is InspectableMethod m)
+            {
+                return f.FindResource("InspectableMethodTemplate") as DataTemplate;
+            }
             if (item is InspectableObject o)
             {
                 return f.FindResource("InspectableObjectTemplate") as DataTemplate;

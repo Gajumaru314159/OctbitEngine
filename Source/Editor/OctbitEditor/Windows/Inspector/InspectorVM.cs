@@ -46,6 +46,7 @@ namespace OctbitEditor
 
 
         [Tooltip("ブール値")]
+        [DisplayName("ブール値")]
         public bool BoolValue { get; set; } = true;
 
         [Space(20)]

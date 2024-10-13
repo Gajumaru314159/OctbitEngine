@@ -1,47 +1,9 @@
 ﻿using Common.Attribute;
 using Common.Math;
-using System.ComponentModel;
 using System.Reflection;
 
 namespace CommonView.Controls.Inspector
 {
-    public class InspectableReflectionObject : InspectableObject
-    {
-        public static IList<Inspectable> Create(object obj)
-        {
-            var result = new List<Inspectable>();
-
-            var type = obj.GetType();
-
-            {
-                var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                foreach (PropertyInfo p in properties)
-                {
-                    if (p.PropertyType.IsPrimitive || p.PropertyType.IsEnum || p.PropertyType == typeof(string) || p.PropertyType == typeof(Vector3))
-                    {
-                        result.Add(new InspectableReflectionProperty(obj, p));
-                    }
-                    else
-                    {
-                        var clazz = p.GetValue(obj);
-                        if (clazz != null)
-                            result.Add(new InspectableReflectionObject(p.Name, clazz));
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        private InspectableReflectionObject(string name,object obj)
-        {
-            Name = name;
-            Inspectables = Create(obj);
-        }
-
-        public override string Name { get; } = "Name";
-        public override IList<Inspectable> Inspectables { get; } = new List<Inspectable>();
-    }
 
     /// <summary>
     /// インスペクタ表示可能なリフレクションプロパティ
@@ -53,7 +15,7 @@ namespace CommonView.Controls.Inspector
             Owner = owner;
             PropertyInfo = propertyInfo;
 
-            if(Owner is INotifyPropertyChanged npc)
+            if(Owner is System.ComponentModel.INotifyPropertyChanged npc)
             {
                 // TODO 購読解除
                 npc.PropertyChanged += (s, e) =>
@@ -72,10 +34,11 @@ namespace CommonView.Controls.Inspector
             {
                 throw new ArgumentException("プロパティがオーナーの型に属していません。");
             }
+
         }
 
         public object Owner { get; }
-        public override string DisplayName => PropertyInfo.Name;
+        public override string DisplayName => PropertyInfo.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? Name;
         public override string Name => PropertyInfo.Name;
         public override Type Type => PropertyInfo.PropertyType;
         public override object? Value

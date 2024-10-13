@@ -79,4 +79,14 @@
             Multiline = multilne;
         }
     }
+
+
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class NotInspectableAttribute : System.Attribute
+    {
+        public NotInspectableAttribute()
+        {
+        }
+    }
 }
