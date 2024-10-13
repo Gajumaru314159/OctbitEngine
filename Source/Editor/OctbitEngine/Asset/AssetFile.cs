@@ -27,7 +27,7 @@ namespace OctbitEngine.Asset
 
         public IReadOnlyList<IAsset> Assets => m_assets;
         private IAsset[] m_assets = Array.Empty<IAsset>();
+        public IAssetImporter Importer { get; }
 
-        private IAssetImporter Importer { get; }
     }
 }

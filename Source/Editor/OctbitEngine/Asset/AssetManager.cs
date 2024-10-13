@@ -1,5 +1,4 @@
-﻿using Common.Generic;
-using Common.Linq;
+﻿using Common.Linq;
 using Common.Log;
 using OctbitEngine.Config;
 using System.Reflection;
@@ -13,7 +12,7 @@ namespace OctbitEngine.Asset
         public static string MetaExtension = ".meta";
         public static string RootFolderName = "Assets";
 
-        private FileSystemWatcher _watcher;
+        private FileSystemWatcher m_watcher;
         private DefaultAssetImporter m_defaultImporter= new();
 
         public static IAssetManager Instance { get; private set; }
@@ -37,22 +36,23 @@ namespace OctbitEngine.Asset
         internal AssetManager()
         {
             InitializeImporter();
+            InitializeEditor();
 
             RootFolder = new AssetFolder(RootFolderName);
             LoadAssets();
 
-            _watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
-            _watcher.NotifyFilter = 
+            m_watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
+            m_watcher.NotifyFilter = 
                 NotifyFilters.FileName | 
                 NotifyFilters.DirectoryName | 
                 NotifyFilters.LastWrite;
 
-            _watcher.Changed +=OnFileChanged;
-            _watcher.Created  +=OnFileChanged;
-            _watcher.Deleted  +=OnFileChanged;
-            _watcher.Renamed  +=OnFileChanged;
-            _watcher.IncludeSubdirectories = true;
-            _watcher.EnableRaisingEvents = true;
+            m_watcher.Changed +=OnFileChanged;
+            m_watcher.Created  +=OnFileChanged;
+            m_watcher.Deleted  +=OnFileChanged;
+            m_watcher.Renamed  +=OnFileChanged;
+            m_watcher.IncludeSubdirectories = true;
+            m_watcher.EnableRaisingEvents = true;
         }
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
@@ -307,9 +307,27 @@ namespace OctbitEngine.Asset
             }
         }
 
+
+        private void InitializeEditor()
+        {
+            m_editorMap = CoreSystem.Instance!.PluginAssemblies.Append(typeof(AssetManager).Assembly)
+                .SelectMany(i => i.GetTypes())
+                .Where(t => t.GetCustomAttribute<AssetEditorAttribute>()!=null)
+                .ToDictionary(t => t.GetCustomAttribute<AssetEditorAttribute>()!.Type, t => t);
+        }
+
         public IAssetFolder RootFolder { get; private set; }
 
         public event EventHandler<IAssetEntry>? AssetCreated;
+
+        // 検証
+        private Dictionary<Type, Type> m_editorMap=new();
+        public Type? FindEditorType(Type type)
+        {
+            if (m_editorMap.TryGetValue(type, out var editorType)) return editorType;
+            return null;
+        }
+
 
     }
 }

@@ -23,5 +23,7 @@ namespace OctbitEngine.Asset
         /// </summary>
         public void Reimport();
 
+        public IAssetImporter Importer { get; }
+
     }
 }

@@ -1,11 +1,24 @@
-﻿using Common.String;
+﻿using Common.Attribute;
+using Common.String;
 using System.IO;
 
 namespace OctbitEngine.Asset
 {
+    public enum DownScaleMethod
+    {
+        Linear,
+        Nearest,
+    }
+
     public class TextureAssetImporter : IAssetImporter
     {
+        [NotInspectable]
         public string[] EliagebleExtensions => new string[] { ".png", ".jpg", ".jpeg" };
+
+
+        public string TextureGroup { get; set;} = "Default";
+        public DownScaleMethod DownScaleMethod { get; set; } = DownScaleMethod.Linear;
+
         public TextureAssetImporter()
         {
         }

@@ -36,5 +36,8 @@
 
         private static string m_rootPath;
         public static string RootPath => m_rootPath;
+        public static string AssetsPath => Path.Combine(RootPath,"Assets");
+        public static string BinariesPath => Path.Combine(RootPath,"Binaries");
+        public static string CachePath => Path.Combine(RootPath, "Cache");
     }
 }

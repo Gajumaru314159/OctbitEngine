@@ -70,5 +70,9 @@
         public bool CanImport(string path);
         public bool Import(string path,IAssetFolder folder);
 
+
+        //Test
+        public Type? FindEditorType(Type type);
+
     }
 }

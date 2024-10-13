@@ -1,14 +1,27 @@
-﻿<UserControl x:Class="OctbitEngine.View.TextureViewer"
+﻿<Window x:Class="OctbitEngine.View.TextureViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OctbitEngine.View"
+             xmlns:local="clr-namespace:OctbitEngine.Texture;assembly=OctbitEngineAPI.Texture"
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
              mc:Ignorable="d" 
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
+             d:DataContext="{d:DesignInstance Type=local:TextureViewerVM}}"
              d:DesignHeight="450" d:DesignWidth="1000">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--Colorsは0番目に定義してください-->
+                <ResourceDictionary Source="/CommonView;component/Themes/Colors/Dark.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Theme.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Icons.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Controls.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <DockPanel>
 
@@ -40,7 +53,7 @@
 
             <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Canvas Width="2048" Height="2048" Background="{DynamicResource MenuBackground}">
-                    <Rectangle Width="200" Height="200" Fill="Green"/>
+                    <Image x:Name="m_image"/>
                 </Canvas>
             </ScrollViewer>
 
@@ -52,49 +65,9 @@
                     2731MB
                     RGBA8
                 </TextBlock>
-                
-                <Expander Header="LOD" IsExpanded="True">
-                    <ctrl:InspectorView>
-                        <ctrl:InspectorItem Label="ミップ全般設定">
-                            <TextBox Text="FromTextureGroup"/>
-                        </ctrl:InspectorItem>
-                        <ctrl:InspectorItem Label="LOD Bias">
-                            <TextBox Text="0"/>
-                        </ctrl:InspectorItem>
-                        <ctrl:InspectorItem Label="Texture Group">
-                            <TextBox Text="World"/>
-                        </ctrl:InspectorItem>
-                        <ctrl:InspectorView Label="詳細設定">
-                            <ctrl:InspectorItem Label="Preserve Border">
-                                <CheckBox/>
-                            </ctrl:InspectorItem>
-                            <ctrl:InspectorItem Label="Downscale">
-                                <TextBox Text="0.0"/>
-                            </ctrl:InspectorItem>
-                            <ctrl:InspectorItem Label="Downscale Options">
-                                <TextBox Text="Default"/>
-                            </ctrl:InspectorItem>
-                            <ctrl:InspectorItem Label="Num Cinematic Mip Levels">
-                                <TextBox Text="0"/>
-                            </ctrl:InspectorItem>
-                            <ctrl:InspectorItem Label="Never Stream">
-                                <CheckBox/>
-                            </ctrl:InspectorItem>
-                            <ctrl:InspectorItem Label="Global Force Resident Mip Level">
-                                <CheckBox/>
-                            </ctrl:InspectorItem>
-                        </ctrl:InspectorView>
-                    </ctrl:InspectorView>
 
-                </Expander>
-                <Expander Header="圧縮" IsExpanded="True">
-                    <ctrl:InspectorView>
-                        <ctrl:InspectorItem Label="Compress Without Alpha">
-                            <CheckBox/>
-                        </ctrl:InspectorItem>
-                    </ctrl:InspectorView>
-                </Expander>
+                <ctrl:InspectorView Label="LOD" ItemsSource="{Binding Inspectables}" Style="{StaticResource TopLevelInspectorView}"/>
             </StackPanel>
         </Grid>
     </DockPanel>
-</UserControl>
+</Window>

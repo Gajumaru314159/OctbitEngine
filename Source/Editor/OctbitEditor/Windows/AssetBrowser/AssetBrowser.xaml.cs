@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using OctbitEngine.Asset;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace OctbitEditor
@@ -46,6 +47,29 @@ namespace OctbitEditor
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
             _tree.DataContext = e.NewValue;
             _tree.SetBinding(MultiSelectTreeView.SelectedItemsProperty, nameof(AssetBrowserVM.SelectedItems));
+
+        }
+
+        private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is not FrameworkElement element) return;
+            if (element.DataContext is AssetBrowserFolderItem folder)
+            {
+                if (DataContext is AssetBrowserVM vm)
+                {
+                    vm.SelectedFolder.Value = folder;
+                }
+            }
+            if (element.DataContext is AssetBrowserFileItem file)
+            {
+                var editorType = AssetManager.Instance.FindEditorType(file.File.Asset.GetType());
+                if(editorType != null)
+                {
+                    var window = Activator.CreateInstance(editorType, [file.File]) as Window;
+                    window?.Show();
+                }
+
+            }
         }
     }
 }

@@ -245,7 +245,7 @@
                     </ListBox>
 
                     <!--詳細ビュー-->
-                    <ListView ItemsSource="{Binding SelectedFolder.Value.Children}" SelectionMode="Extended" ContextMenu="{StaticResource ContextMenu}" 
+                    <ListView x:Name="_list" ItemsSource="{Binding SelectedFolder.Value.Children}" SelectionMode="Extended" ContextMenu="{StaticResource ContextMenu}" 
                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Detail}"
                               AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
                               >
@@ -257,6 +257,7 @@
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
                                 <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                                <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
                             </Style>
                         </ListView.ItemContainerStyle>
                         <ListView.View>

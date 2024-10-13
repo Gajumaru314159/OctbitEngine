@@ -144,14 +144,14 @@
                         <Trigger Property="Indent" Value="0">
                             <Setter TargetName="Border" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
-                        <Trigger Property="Label" Value="{x:Null}">
+                        <Trigger Property="Label" Value="">
                             <Setter TargetName="Header" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="False">
                             <Setter TargetName="Items" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
-                        <Trigger Property="ItemsSource" Value="{x:Null}">
-                            <Setter Property="ItemTemplateSelector" Value="{x:Null}"/>
+                        <Trigger Property="HasItems" Value="True">
+                            <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -164,7 +164,6 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
     </Style>
 
     <!--インスペクタビュー(Top)-->
@@ -184,8 +183,8 @@
                         <Trigger Property="IsExpanded" Value="False">
                             <Setter TargetName="Items" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
-                        <Trigger Property="ItemsSource" Value="{x:Null}">
-                            <Setter Property="ItemTemplateSelector" Value="{x:Null}"/>
+                        <Trigger Property="HasItems" Value="True">
+                            <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -198,7 +197,6 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ItemTemplateSelector" Value="{StaticResource InspectorItemDataSelector}"/>
     </Style>
 
 </ResourceDictionary>

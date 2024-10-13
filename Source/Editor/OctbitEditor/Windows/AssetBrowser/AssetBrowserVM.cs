@@ -1,4 +1,5 @@
-﻿using Common.Tree;
+﻿using Common.Log;
+using Common.Tree;
 using CommonView.Menu;
 using Livet;
 using OctbitEngine.Asset;
@@ -83,7 +84,7 @@ namespace OctbitEditor
         }
         public override bool IsEditable => false;
 
-        private IAssetFile File { get; }
+        public IAssetFile File { get; }
 
         public AssetBrowserFileItem(IAssetFile file)
         {
@@ -276,6 +277,7 @@ namespace OctbitEditor
 
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
         public ObservableCollection<AssetBrowserItem> SelectedItems { get; set; } = new();
+        public ObservableCollection<AssetBrowserItem> SelectedItemsInList { get; set; } = new();
 
         // 選択情報
         public ReactivePropertySlim<AssetBrowserItem> SelectedFolder { get; } = new();

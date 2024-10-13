@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OctbitEngine.Asset;
+using OctbitEngine.Texture;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace OctbitEngine.View
 {
     /// <summary>
     /// TextureViewer.xaml の相互作用ロジック
     /// </summary>
-    public partial class TextureViewer : UserControl
+    [AssetEditor(typeof(OctbitEngine.Asset.Texture))]
+    public partial class TextureViewer : Window
     {
-        public TextureViewer()
+        public TextureViewer(IAssetFile file)
         {
+            DataContext = new TextureViewerVM(file);
+
             InitializeComponent();
+
+            m_image.Source = new BitmapImage(new Uri(file.PhysicalPath));
         }
     }
 }

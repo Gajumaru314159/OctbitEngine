@@ -1,5 +1,4 @@
-﻿using CommonView.Controls;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
@@ -10,8 +9,8 @@ namespace CommonView
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is not double doubleValue) return DependencyProperty.UnsetValue;
-            if(!double.TryParse(parameter.ToString(),out double add)) return DependencyProperty.UnsetValue;
+            if(value is not double doubleValue) return 0.0;
+            if(!double.TryParse(parameter.ToString(),out double add)) return 0.0;
             return Math.Max(doubleValue + add,0);
         }
 
