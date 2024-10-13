@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using Common.Attribute;
+﻿using Common.Attribute;
 using Common.Math;
+using System.Collections;
+using System.Reflection;
 
 namespace CommonView.Controls.Inspector
 {
@@ -19,16 +20,28 @@ namespace CommonView.Controls.Inspector
                     if (p.GetCustomAttribute<NotInspectableAttribute>()!=null) continue;
 
                     // TODO 判定方法を厳密にする
-                    if (p.PropertyType.IsPrimitive || p.PropertyType.IsEnum || p.PropertyType == typeof(string) || p.PropertyType == typeof(Vector3))
+                    bool hasEditor =
+                        p.PropertyType == typeof(bool) ||
+                        p.PropertyType == typeof(int) ||
+                        p.PropertyType == typeof(float) ||
+                        p.PropertyType == typeof(string) ||
+                        p.PropertyType == typeof(Vector3) ||
+                        p.PropertyType.IsEnum;
+
+                    if (hasEditor)
                     {
                         result.Add(new InspectableReflectionProperty(obj, p));
-                    }
-                    else
+                    } else if(p.PropertyType.GetInterfaces().Contains(typeof(IList)))
+                    {
+                        result.Add(new InspectableReflectionList(obj, p));
+                    } else if (p.PropertyType.IsClass)
                     {
                         var clazz = p.GetValue(obj);
                         if (clazz != null)
                             result.Add(new InspectableReflectionObject(p.Name, clazz));
                     }
+
+
                 }
             }
 

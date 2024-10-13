@@ -12,7 +12,7 @@ namespace OctbitEngine.Asset
 
     public class TextureAssetImporter : IAssetImporter
     {
-        [NotInspectable]
+        //[NotInspectable]
         public string[] EliagebleExtensions => new string[] { ".png", ".jpg", ".jpeg" };
 
 

@@ -56,7 +56,9 @@ namespace OctbitEditor
         public TabType EnumValue { get; set; } = TabType.History;
 
         public ReflectionSubTest SubTest { get; } = new();
-        //public int[] Array { get; set; } = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,};
+        public int[] Array { get; set; } = [ 1, 2, 3];
+        public List<int> List { get; set; } = [ 1, 2, 3];
+        public List<Vector3> Vectors { get; set; } = new();
 
     }
 

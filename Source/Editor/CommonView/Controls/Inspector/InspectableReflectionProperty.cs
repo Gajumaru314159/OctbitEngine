@@ -37,7 +37,6 @@ namespace CommonView.Controls.Inspector
 
         }
 
-        public object Owner { get; }
         public override string DisplayName => PropertyInfo.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? Name;
         public override string Name => PropertyInfo.Name;
         public override Type Type => PropertyInfo.PropertyType;
@@ -73,6 +72,8 @@ namespace CommonView.Controls.Inspector
         public override IReadOnlyDictionary<string, string> Tags => m_tags;
         private Dictionary<string, string> m_tags = new();
 
+
+        public object Owner { get; }
         public PropertyInfo PropertyInfo { get; }
 
     }

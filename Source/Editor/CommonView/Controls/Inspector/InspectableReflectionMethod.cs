@@ -1,7 +1,5 @@
 ﻿using Common.Attribute;
-using Common.Math;
 using CommonView.Menu;
-using Livet.Commands;
 using System.Reflection;
 using System.Windows.Input;
 
@@ -20,6 +18,7 @@ namespace CommonView.Controls.Inspector
             Command = new DelegateCommand(() => MethodInfo.Invoke(Owner, null));
 
             // NOTE プロパティごとに生成する必要はないのでメンバに持たなくてもよい？
+            // アクセスのたびに生成するのも無駄なのでキャッシュしておく
             m_tags = MethodInfo.GetCustomAttributes<TagAttribute>().ToDictionary(i => i.Key, i => i.Value);
 
             if (MethodInfo.ReflectedType?.IsSubclassOf(Owner.GetType())??false)
@@ -29,14 +28,14 @@ namespace CommonView.Controls.Inspector
 
         }
 
-        public object Owner { get; }
         public override string DisplayName => MethodInfo.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName ?? Name;
         public override string Name => MethodInfo.Name;
         public override ICommand Command { get; }
-
         public override IReadOnlyDictionary<string, string> Tags => m_tags;
         private Dictionary<string, string> m_tags = new();
 
+
+        public object Owner { get; }
         public MethodInfo MethodInfo { get; }
 
     }

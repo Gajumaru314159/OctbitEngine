@@ -4,10 +4,5 @@
     {
         public abstract string Name { get; }
         public abstract IList<Inspectable> Inspectables { get; }
-
-        protected InspectableObject()
-        {
-        }
-
     }
 }
