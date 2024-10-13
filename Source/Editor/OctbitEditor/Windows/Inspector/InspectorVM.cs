@@ -1,9 +1,13 @@
 ﻿using Common.Attribute;
+using Common.Linq;
 using Common.Log;
 using Common.Math;
+using Common.Tree;
+using CommonView;
 using CommonView.Controls;
 using CommonView.Controls.Inspector;
 using Reactive.Bindings;
+using System.Collections.ObjectModel;
 
 namespace OctbitEditor
 {
@@ -26,6 +30,7 @@ namespace OctbitEditor
         public int Size{ get; set; } = 123;
         public ReflectionSub2Test Sub2 { get; set; } = new();
     }
+
     public class ReflectionTest
     {
         public ReflectionTest()
@@ -93,16 +98,87 @@ namespace OctbitEditor
         public bool ReceiveShadow { get; set; }
     }
 
+
+    public class InspectableGroup
+    {
+        public InspectableGroup(string name, IList<Inspectable> inspectables)
+        {
+            Name = name;
+            Inspectables = inspectables;
+        }
+        public string Name { get; init; } = string.Empty;
+        public IList<Inspectable> Inspectables { get; init; } = Array.Empty<Inspectable>();
+    }
+
     public class InspectorVM : TabBase
     {
         public InspectorVM()
             : base("Inspector")
         {
-            Inspectables = InspectableReflectionObject.Create(TestObject);
+            Inspectables = [
+                new( nameof(Entity), InspectableReflectionObject.Create(Entity)),
+                new( nameof(Transform), InspectableReflectionObject.Create(Transform)),
+                new( nameof(Model), InspectableReflectionObject.Create(Model)),
+                new( nameof(TestObject), InspectableReflectionObject.Create(TestObject))
+            ];
+
+            Filter.Subscribe(_ => { UpdateFilter(); });
+        }
+
+        private void UpdateFilter()
+        {
+            bool filter(InspectableProperty p)
+            {
+                return p.Visible = p.Name.Contains(Filter.Value) || string.IsNullOrEmpty(Filter.Value);
+            }
+            bool visit(InspectableObject obj)
+            {
+                bool any = false;
+                foreach (var inspectable in obj.Inspectables)
+                {
+                    if (inspectable is InspectableObject o)
+                    {
+                        if (visit(o))
+                        {
+                            o.Visible = true;
+                        }
+                    }
+                    if (inspectable is InspectableProperty p)
+                    {
+                        any |= filter(p);
+                    }
+                }
+                return any;
+            }
+
+            foreach (var group in Inspectables)
+            {
+                foreach(var inspectable in group.Inspectables)
+                {
+                    if (inspectable is InspectableObject o)
+                    {
+                        visit(o);
+                    }
+                    if (inspectable is InspectableProperty p)
+                    {
+                        filter(p);
+                    }
+                }
+            }
 
         }
 
-        public IList<Inspectable> Inspectables { get; }
+
+        public Action<ItemMovement> DroppedAction => MoveItem;
+        private void MoveItem(ItemMovement itemMovement)
+        {
+            if (itemMovement.TargetIndex == 0) return;
+            if (itemMovement.MovedItem is InspectableGroup g && g.Name == nameof(Entity)) return;
+            itemMovement.MoveItem();
+        }
+
+        public ReactivePropertySlim<string> Filter { get; } = new("");
+        public ObservableCollection<InspectableGroup> Inspectables { get; }
 
         public ReflectionTest TestObject { get; } = new();
         public EntityTest Entity{ get; } = new();

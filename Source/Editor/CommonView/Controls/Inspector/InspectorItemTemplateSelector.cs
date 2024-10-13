@@ -57,6 +57,10 @@ namespace CommonView.Controls
             {
                 return f.FindResource("StringInspectorControl") as DataTemplate;
             }
+            if (p.Type == typeof(Common.Math.Vector3))
+            {
+                return f.FindResource("Vector3InspectorControl") as DataTemplate;
+            }
             if (p.Type.IsEnum)
             {
                 return f.FindResource("EnumInspectorControl") as DataTemplate;

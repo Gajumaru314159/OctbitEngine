@@ -2,43 +2,43 @@
 {
     public struct Vector3
     {
-        public float x;
-        public float y;
-        public float z;
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
         public static Vector3 Zero => new Vector3(0, 0, 0);
         public static Vector3 One => new Vector3(1, 1, 1);
 
         public Vector3(float x, float y, float z)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
         }
 
         public static Vector3 operator +(Vector3 a, Vector3 b)
         {
-            return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+            return new Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
         }
 
         public static Vector3 operator -(Vector3 a, Vector3 b)
         {
-            return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+            return new Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
         }
 
         public static Vector3 operator *(Vector3 a, float scalar)
         {
-            return new Vector3(a.x * scalar, a.y * scalar, a.z * scalar);
+            return new Vector3(a.X * scalar, a.Y * scalar, a.Z * scalar);
         }
 
         public static Vector3 operator /(Vector3 a, float scalar)
         {
-            return new Vector3(a.x / scalar, a.y / scalar, a.z / scalar);
+            return new Vector3(a.X / scalar, a.Y / scalar, a.Z / scalar);
         }
 
         public static bool operator ==(Vector3 a, Vector3 b)
         {
-            return a.x == b.x && a.y == b.y && a.z == b.z;
+            return a.X == b.X && a.Y == b.Y && a.Z == b.Z;
         }
 
         public static bool operator !=(Vector3 a, Vector3 b)
@@ -57,17 +57,17 @@
 
         public override int GetHashCode()
         {
-            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
+            return X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
         public float Length()
         {
-            return (float)System.Math.Sqrt(x * x + y * y + z * z);
+            return (float)System.Math.Sqrt(X * X + Y * Y + Z * Z);
         }
 
         public float SqrLength()
         {
-            return x * x + y * y + z * z;
+            return X * X + Y * Y + Z * Z;
         }
 
         public Vector3 Normalize()

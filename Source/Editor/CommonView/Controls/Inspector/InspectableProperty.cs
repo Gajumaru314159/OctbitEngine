@@ -7,6 +7,7 @@
 
         }
 
+        public abstract string DisplayName { get; }
         public abstract string Name { get; }
         public abstract Type Type { get; }
         public abstract object? Value { get; set; }

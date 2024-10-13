@@ -1,5 +1,6 @@
 ﻿using Common.Attribute;
 using Common.Math;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace CommonView.Controls.Inspector
@@ -52,6 +53,18 @@ namespace CommonView.Controls.Inspector
             Owner = owner;
             PropertyInfo = propertyInfo;
 
+            if(Owner is INotifyPropertyChanged npc)
+            {
+                // TODO 購読解除
+                npc.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == Name)
+                    {
+                        RaisePropertyChanged(nameof(Value));
+                    }
+                };
+            }
+
             // NOTE プロパティごとに生成する必要はないのでメンバに持たなくてもよい？
             m_tags = propertyInfo.GetCustomAttributes<TagAttribute>().ToDictionary(i=>i.Key,i=>i.Value);
 
@@ -62,6 +75,7 @@ namespace CommonView.Controls.Inspector
         }
 
         public object Owner { get; }
+        public override string DisplayName => PropertyInfo.Name;
         public override string Name => PropertyInfo.Name;
         public override Type Type => PropertyInfo.PropertyType;
         public override object? Value

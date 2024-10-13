@@ -5,35 +5,35 @@ using System.Windows.Markup;
 namespace CommonView.Controls
 {
     [ContentProperty("Content")]
-    public class InspectorItemContainer : Control
+    public class InspectorItem : Control
     {
-        static InspectorItemContainer()
+        static InspectorItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(InspectorItemContainer), new FrameworkPropertyMetadata(typeof(InspectorItemContainer)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(InspectorItem), new FrameworkPropertyMetadata(typeof(InspectorItem)));
         }
 
         public static readonly DependencyProperty IndentProperty = DependencyProperty.Register(
                 nameof(Indent),
                 typeof(double),
-                typeof(InspectorItemContainer),
+                typeof(InspectorItem),
                 new PropertyMetadata(0.0));
 
         public static readonly DependencyProperty LabelProperty = DependencyProperty.Register(
                 nameof(Label),
                 typeof(object),
-                typeof(InspectorItemContainer),
+                typeof(InspectorItem),
                 new PropertyMetadata());
 
         public static readonly DependencyProperty ContentProperty = DependencyProperty.Register(
                 nameof(Content),
                 typeof(object),
-                typeof(InspectorItemContainer),
+                typeof(InspectorItem),
                 new PropertyMetadata());
 
         public static readonly DependencyProperty CollapseLabelProperty = DependencyProperty.Register(
                 nameof(CollapseLabel),
                 typeof(bool),
-                typeof(InspectorItemContainer),
+                typeof(InspectorItem),
                 new PropertyMetadata());
 
 

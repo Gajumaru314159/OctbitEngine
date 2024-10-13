@@ -19,10 +19,10 @@ namespace OctbitEngine.Runtime
             int maxConnections = 1;
             IPEndPoint endPoint = new IPEndPoint(address, port);
             m_socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            m_socket.Bind(endPoint);
-            m_socket.Listen(maxConnections);
-            m_socket.NoDelay = true; // バッファリング無効化
-            m_socket.BeginAccept(new AsyncCallback(OnAccept), m_socket);
+            //m_socket.Bind(endPoint);
+            //m_socket.Listen(maxConnections);
+            //m_socket.NoDelay = true; // バッファリング無効化
+            //m_socket.BeginAccept(new AsyncCallback(OnAccept), m_socket);
 
         }
 

@@ -55,43 +55,43 @@
                 
                 <Expander Header="LOD" IsExpanded="True">
                     <ctrl:InspectorView>
-                        <ctrl:InspectorItemContainer Label="ミップ全般設定">
+                        <ctrl:InspectorItem Label="ミップ全般設定">
                             <TextBox Text="FromTextureGroup"/>
-                        </ctrl:InspectorItemContainer>
-                        <ctrl:InspectorItemContainer Label="LOD Bias">
+                        </ctrl:InspectorItem>
+                        <ctrl:InspectorItem Label="LOD Bias">
                             <TextBox Text="0"/>
-                        </ctrl:InspectorItemContainer>
-                        <ctrl:InspectorItemContainer Label="Texture Group">
+                        </ctrl:InspectorItem>
+                        <ctrl:InspectorItem Label="Texture Group">
                             <TextBox Text="World"/>
-                        </ctrl:InspectorItemContainer>
+                        </ctrl:InspectorItem>
                         <ctrl:InspectorView Label="詳細設定">
-                            <ctrl:InspectorItemContainer Label="Preserve Border">
+                            <ctrl:InspectorItem Label="Preserve Border">
                                 <CheckBox/>
-                            </ctrl:InspectorItemContainer>
-                            <ctrl:InspectorItemContainer Label="Downscale">
+                            </ctrl:InspectorItem>
+                            <ctrl:InspectorItem Label="Downscale">
                                 <TextBox Text="0.0"/>
-                            </ctrl:InspectorItemContainer>
-                            <ctrl:InspectorItemContainer Label="Downscale Options">
+                            </ctrl:InspectorItem>
+                            <ctrl:InspectorItem Label="Downscale Options">
                                 <TextBox Text="Default"/>
-                            </ctrl:InspectorItemContainer>
-                            <ctrl:InspectorItemContainer Label="Num Cinematic Mip Levels">
+                            </ctrl:InspectorItem>
+                            <ctrl:InspectorItem Label="Num Cinematic Mip Levels">
                                 <TextBox Text="0"/>
-                            </ctrl:InspectorItemContainer>
-                            <ctrl:InspectorItemContainer Label="Never Stream">
+                            </ctrl:InspectorItem>
+                            <ctrl:InspectorItem Label="Never Stream">
                                 <CheckBox/>
-                            </ctrl:InspectorItemContainer>
-                            <ctrl:InspectorItemContainer Label="Global Force Resident Mip Level">
+                            </ctrl:InspectorItem>
+                            <ctrl:InspectorItem Label="Global Force Resident Mip Level">
                                 <CheckBox/>
-                            </ctrl:InspectorItemContainer>
+                            </ctrl:InspectorItem>
                         </ctrl:InspectorView>
                     </ctrl:InspectorView>
 
                 </Expander>
                 <Expander Header="圧縮" IsExpanded="True">
                     <ctrl:InspectorView>
-                        <ctrl:InspectorItemContainer Label="Compress Without Alpha">
+                        <ctrl:InspectorItem Label="Compress Without Alpha">
                             <CheckBox/>
-                        </ctrl:InspectorItemContainer>
+                        </ctrl:InspectorItem>
                     </ctrl:InspectorView>
                 </Expander>
             </StackPanel>
