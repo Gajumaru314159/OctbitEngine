@@ -1,14 +1,17 @@
-﻿<Window x:Class="OctbitEngine.View.TextureViewer"
+﻿<Window x:Class="OctbitEngine.Texture.TextureViewer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OctbitEngine.Texture;assembly=OctbitEngineAPI.Texture"
+             xmlns:local="clr-namespace:OctbitEngine.Texture;assembly=OctbitEngine.Texture"
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
              mc:Ignorable="d" 
+             Title="{Binding Title.Value}"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
-             d:DataContext="{d:DesignInstance Type=local:TextureViewerVM}}"
+             d:DataContext="{d:DesignInstance Type=local:TextureViewerVM}"
              d:DesignHeight="450" d:DesignWidth="1000">
 
     <Window.Resources>
@@ -52,7 +55,10 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <Canvas Width="2048" Height="2048" Background="{DynamicResource MenuBackground}">
+                <b:Interaction.Behaviors>
+                    <behavior:ScrollViewerMiddleButtonDragBehavior/>
+                </b:Interaction.Behaviors>
+                <Canvas x:Name="m_canvas" Width="2048" Height="2048" Background="{DynamicResource MenuBackground}">
                     <Image x:Name="m_image"/>
                 </Canvas>
             </ScrollViewer>

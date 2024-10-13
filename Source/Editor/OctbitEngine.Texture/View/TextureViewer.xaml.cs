@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace OctbitEngine.View
+namespace OctbitEngine.Texture
 {
     /// <summary>
     /// TextureViewer.xaml の相互作用ロジック
@@ -19,7 +19,10 @@ namespace OctbitEngine.View
 
             InitializeComponent();
 
-            m_image.Source = new BitmapImage(new Uri(file.PhysicalPath));
+            var image = new BitmapImage(new Uri(file.PhysicalPath));
+            m_image.Source = image;
+            m_canvas.Width = image.PixelWidth;
+            m_canvas.Height = image.PixelHeight;
         }
     }
 }
