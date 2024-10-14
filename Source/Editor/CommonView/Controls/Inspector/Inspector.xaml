@@ -118,7 +118,7 @@
     <!--インスペクタビュー-->
     <Style TargetType="ctrl:InspectorView">
         <Setter Property="IsTabStop" Value="False"/>
-        <Setter Property="Indent" Value="{Binding Indent,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView},Converter={common:AddConverter},ConverterParameter=15}"/>
+        <Setter Property="Indent" Value="{Binding Indent,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView},UpdateSourceTrigger=Explicit,Converter={common:AddConverter},ConverterParameter=15}"/>
 
         <Setter Property="Template">
             <Setter.Value>
