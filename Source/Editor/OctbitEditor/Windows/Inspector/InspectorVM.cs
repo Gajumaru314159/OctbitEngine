@@ -58,7 +58,7 @@ namespace OctbitEditor
         public ReflectionSubTest SubTest { get; } = new();
         public int[] Array { get; set; } = [ 1, 2, 3];
         public List<int> List { get; set; } = [ 1, 2, 3];
-        public List<Vector3> Vectors { get; set; } = new();
+        public List<ReflectionSub2Test> Vectors { get; set; } = new();
 
     }
 

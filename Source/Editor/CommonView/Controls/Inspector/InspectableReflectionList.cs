@@ -25,13 +25,37 @@ namespace CommonView.Controls.Inspector
         
         private void GenerateInspectables()
         {
-            var count = List.Count;
+            var oldCount = Inspectables.Count -1;
+            var newCount = List.Count;
+
 
             while (1<Inspectables.Count) Inspectables.RemoveAt(Inspectables.Count-1);
 
-            for (int i = 0; i<count; i++)
+
+            var type = List.GetType();
+            Type? elementType = null;
+            if (type.IsArray) elementType = type.GetElementType()!;
+            if (type.IsGenericType) elementType = type.GetGenericArguments()[0]!;
+
+            bool hasEditor =
+                elementType == typeof(bool) ||
+                elementType == typeof(int) ||
+                elementType == typeof(float) ||
+                elementType == typeof(string) ||
+                elementType == typeof(Vector3) ||
+                elementType!.IsEnum;
+
+
+            for (int i = 0; i<newCount; i++)
             {
-                Inspectables.Add(new InspectableReflectionListItem(List, PropertyInfo, i));
+                if (hasEditor)
+                {
+                    Inspectables.Add(new InspectableReflectionListItem(List, PropertyInfo, i));
+                }
+                else
+                {
+                    Inspectables.Add(new InspectableReflectionObject($"[{i}]", List[i]!));
+                }
             }
 
             RaisePropertyChanged(nameof(Inspectables));
@@ -96,14 +120,17 @@ namespace CommonView.Controls.Inspector
 
                 if (0<delta)
                 {
+                    var appendItems = new List<object?>();
+                    for (int i = 0; i<delta; ++i)
+                    {
+                        appendItems.Add(Activator.CreateInstance(ElementType));
+                    }
+
                     History.History.Record(
                         $"{Name}に値をセット : {value?.ToString()}",
                         () =>
                         {
-                            for (int i = 0; i<delta; ++i)
-                            {
-                                List.Add(Activator.CreateInstance(ElementType));
-                            }
+                            appendItems.ForEach(i=>List.Add(i));
                             RaisePropertyChanged();
                             Resized?.Invoke();
                         },
@@ -120,6 +147,12 @@ namespace CommonView.Controls.Inspector
                 }
                 else
                 {
+                    var removeItems = new List<object?>();
+                    for (int i = -delta; i<0; ++i)
+                    {
+                        removeItems.Add(List[List.Count+i]);
+                    }
+
                     History.History.Record(
                         $"{Name}に値をセット : {value?.ToString()}",
                         () =>
@@ -133,10 +166,7 @@ namespace CommonView.Controls.Inspector
                         },
                         () =>
                         {
-                            for (int i = 0; i<-delta; ++i)
-                            {
-                                List.Add(Activator.CreateInstance(ElementType));
-                            }
+                            removeItems.ForEach(i => List.Add(i));
                             RaisePropertyChanged();
                             Resized?.Invoke();
                         }

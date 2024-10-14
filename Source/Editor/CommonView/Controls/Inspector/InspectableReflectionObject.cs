@@ -59,7 +59,7 @@ namespace CommonView.Controls.Inspector
             return result;
         }
 
-        private InspectableReflectionObject(string name, object obj)
+        internal InspectableReflectionObject(string name, object obj)
         {
             Name = name;
             Inspectables = Create(obj);
