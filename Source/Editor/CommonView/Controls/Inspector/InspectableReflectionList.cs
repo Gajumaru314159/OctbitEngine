@@ -18,6 +18,8 @@ namespace CommonView.Controls.Inspector
             m_countProperty = new InspectableReflectionListCountProperty(List);
             m_countProperty.Resized += OnResized;
 
+            Inspectables.Add(m_countProperty);
+
             GenerateInspectables();
         }
         
@@ -25,8 +27,7 @@ namespace CommonView.Controls.Inspector
         {
             var count = List.Count;
 
-            m_inspectables = new();
-            Inspectables.Add(m_countProperty!);
+            while (1<Inspectables.Count) Inspectables.RemoveAt(Inspectables.Count-1);
 
             for (int i = 0; i<count; i++)
             {
@@ -42,8 +43,7 @@ namespace CommonView.Controls.Inspector
         }
 
         public override string Name => PropertyInfo.Name;
-        public override IList<Inspectable> Inspectables => m_inspectables;
-        private List<Inspectable> m_inspectables = new();
+        public override ObservableCollection<Inspectable> Inspectables { get; } = new();
         public IList List { get; }
         public PropertyInfo PropertyInfo { get; }
 

@@ -1,15 +1,16 @@
 ﻿using Common.Attribute;
 using Common.Math;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace CommonView.Controls.Inspector
 {
     public class InspectableReflectionObject : InspectableObject
     {
-        public static IList<Inspectable> Create(object obj)
+        public static ObservableCollection<Inspectable> Create(object obj)
         {
-            var result = new List<Inspectable>();
+            var result = new ObservableCollection<Inspectable>();
 
             var type = obj.GetType();
 
@@ -65,6 +66,6 @@ namespace CommonView.Controls.Inspector
         }
 
         public override string Name { get; } = "-";
-        public override IList<Inspectable> Inspectables { get; } = new List<Inspectable>();
+        public override ObservableCollection<Inspectable> Inspectables { get; } = new();
     }
 }
