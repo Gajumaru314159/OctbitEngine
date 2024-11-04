@@ -36,6 +36,12 @@ namespace ob::core {
 			m_size++;
 			m_data[m_size] = 0;
 		}
+		value_type* data() { return m_data; }
+		const value_type* data()const { return m_data; }
+		size_t size()const { return m_size; }
+
+		value_type& operator[](size_t index) { return m_data[index]; }
+		const value_type& operator[](size_t index) const{ return m_data[index]; }
 	private:
 		TChar m_data[N] = {};
 		size_t m_size = 0;

@@ -75,7 +75,7 @@ namespace ob::core {
 
 	private:
 		String m_tag;
-		FixedVector<Pair<u8,u8>,6> m_subtags;
+		FixedVector<u8,8> m_subtags;
 	};
 
 }
