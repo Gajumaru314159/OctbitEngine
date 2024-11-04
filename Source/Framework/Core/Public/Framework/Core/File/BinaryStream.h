@@ -78,7 +78,7 @@ namespace ob::core {
 		//! @param origin	 基準位置
 		//! @return 成功したか
 		//@―---------------------------------------------------------------------------
-		bool seek(offset_t offset, SeekOrigin origin) override;
+		bool seek(offset_t offset, SeekOrigin origin = SeekOrigin::Begin) override;
 
 
 		//@―---------------------------------------------------------------------------
