@@ -12,7 +12,7 @@
 namespace ob::core {
 
 #define OB_EVENT_NOTIFIER(prefix,...) \
-    using prefix##Notifier = EventNotifier<__VA_ARGS__>;\
+    class prefix##Notifier : public EventNotifier<__VA_ARGS__> {};\
     using prefix##Handle = typename prefix##Notifier::Handle;\
     using prefix##Delegate = typename prefix##Notifier::delegate_type;
 
