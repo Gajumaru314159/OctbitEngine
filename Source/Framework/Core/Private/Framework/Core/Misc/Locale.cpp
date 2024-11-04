@@ -70,6 +70,6 @@ namespace ob::core {
 		static_assert("未実装");
 #endif
 		return Locale("");
-		}
-
 	}
+
+}
