@@ -97,7 +97,7 @@ namespace ob::engine {
 						};
 
 						writer.writeUInt64(0); // サイズを書き込むためのダミー
-						writer.writeUInt64(Hash::FNV64("AddViewportResponse"));
+						writer.writeUInt64(Hash::FNV64(response->getType().shortName()));
 						writer.writeUInt64(header.id);
 						response->serialize(writer);
 						writer.seek(0);
