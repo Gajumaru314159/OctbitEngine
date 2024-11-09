@@ -27,7 +27,7 @@ namespace ob::core {
 	//		         |-----|	LinearManagement	下位6ビット
 	//===============================================================
 	static const s32 s_maxSecondLevelLog2 = 2;
-	static const s32 s_linearManagementSizeLog2 = 6;
+	static const s32 s_linearManagementSizeLog2 = 1;// 6; TODO 本当は6当たりだったがリニア検索がバグっているので一時的に小さくしている
 
 	static const s32 s_maxSecondLevel = 1 << s_maxSecondLevelLog2;		// 4
 	static const s32 s_linearManagementSize = 1 << s_linearManagementSizeLog2;	// 64
