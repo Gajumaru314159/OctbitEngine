@@ -13,6 +13,22 @@ namespace ImGui {
         using namespace ::ob;
 
         //@―---------------------------------------------------------------------------
+        //! @brief  SetCurrentContextのRAII対応
+        //@―---------------------------------------------------------------------------
+        class ScopedContext {
+        public:
+            ScopedContext(ImGuiContext* context) {
+				m_context = ::ImGui::GetCurrentContext();
+                ImGui::SetCurrentContext(context);
+            }
+            ~ScopedContext() {
+                ImGui::SetCurrentContext(m_context);
+            }
+        private:
+            ImGuiContext* m_context;
+        };
+
+        //@―---------------------------------------------------------------------------
         //! @brief  ImGui::PushFontのRAII対応
         //@―---------------------------------------------------------------------------
         class ScopedFont {

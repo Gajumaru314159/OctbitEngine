@@ -9,6 +9,7 @@
 
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Plugins/ImGui/ImGuiRAII.h>
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #endif
@@ -302,9 +303,11 @@ namespace ob::graphics {
 
 
 		// 更新
-		ImGui::GetIO().DisplaySize = { window.getSize().x,window.getSize().y };
-		updateMouse(window);
-		updateKeyboard(window);
+		if (window) {
+			ImGui::GetIO().DisplaySize = { window.getSize().x,window.getSize().y };
+			updateMouse(window);
+			updateKeyboard(window);
+		}
 		updateTime();
 
 		// 描画
@@ -382,6 +385,8 @@ namespace ob::graphics {
 
 		m_imguiContext = ::ImGui::CreateContext();
 		m_implotContext = ::ImPlot::CreateContext();
+
+		ImGui::ScopedContext sc(m_imguiContext);
 
 		BackendData* bd = nullptr;
 		ImGuiIO& io = ::ImGui::GetIO();
@@ -493,6 +498,7 @@ namespace ob::graphics {
 	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::initializeFont()
 	{
+		ImGui::ScopedContext sc(m_imguiContext);
 		ImGuiIO& io = ::ImGui::GetIO();
 		unsigned char* pixels;
 
