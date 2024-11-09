@@ -96,6 +96,36 @@ namespace ob::engine {
 		}
 	};
 
+	class CreateWorldResponse : public Response {
+	public:
+		OB_RTTI();
+	private:
+		bool serialize(BinaryWriter& writer) const override {
+			writer.writeInt32(remoteId);
+			return true;
+		}
+	public:
+		s32 remoteId;
+	};
+
+	class CreateWorldQuery : public Query {
+	public:
+		OB_RTTI();
+		String name;
+	private:
+		bool deserialize(BinaryReader& reader) override {
+			auto len = reader.readS32();
+			name.resize(len);
+			reader.read(name.data(), len);
+			return true;
+		}
+		Response* execute() const override {
+			auto response = new CreateWorldResponse();
+			response->remoteId = 123;
+
+			return response;
+		}
+	};
 
 
 	//@―---------------------------------------------------------------------------
@@ -113,6 +143,10 @@ namespace ob::engine {
 
 			{
 				auto query = std::make_unique<AddViewportQuery>();
+				m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
+			}
+			{
+				auto query = std::make_unique<CreateWorldQuery>();
 				m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
 			}
 

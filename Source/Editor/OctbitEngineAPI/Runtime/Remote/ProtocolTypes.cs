@@ -87,4 +87,25 @@ namespace OctbitEngine.Runtime
         }
     }
 
+
+    public class CreateWorldQuery : Query
+    {
+        public void Serialize(BinaryWriter writer)
+        {
+            var bytes = Encoding.UTF8.GetBytes(Name);
+            writer.Write(bytes.Length);
+            writer.Write(bytes);
+        }
+        public string Name { get; init; } = string.Empty;
+    }
+    public class CreateWorldResponse : Response
+    {
+        public int RemoteId;
+
+        public void Deserialize(BinaryReader reader)
+        {
+            RemoteId = reader.ReadInt32();
+        }
+    }
+
 }
