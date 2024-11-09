@@ -113,7 +113,9 @@ namespace ob::platform {
 		::SetProp(m_hWnd, PROPERTY_NAME, this);
 
 		// ウィンドウを表示
-		show();
+		if (desc.show) {
+			show();
+		}
 	}
 
 

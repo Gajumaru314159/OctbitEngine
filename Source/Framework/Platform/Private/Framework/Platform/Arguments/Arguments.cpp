@@ -50,7 +50,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  開始イテレータ(const)
     //@―---------------------------------------------------------------------------
-    Arguments::const_iterator Arguments::cbegin()const noexcept {
+    Arguments::const_iterator Arguments::begin()const noexcept {
         return m_args.cbegin();
     }
 
@@ -58,7 +58,7 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     //! @brief  終了イテレータ(const)
     //@―---------------------------------------------------------------------------
-    Arguments::const_iterator Arguments::cend()const noexcept {
+    Arguments::const_iterator Arguments::end()const noexcept {
         return m_args.cend();
     }
 

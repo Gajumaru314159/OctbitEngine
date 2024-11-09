@@ -33,6 +33,7 @@
 
 #include <Framework/Engine/Editor.h>
 #include <Framework/Core/Misc/TimeSpan.h>
+#include <Framework/Platform/Arguments.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -124,6 +125,20 @@ int TestDirectX12() {
 		desc.window = platform::Window::Main();
 		return Display::Create(desc);
 	}();
+
+	{
+		bool isEditor = false;
+		Arguments args;
+		for (auto& arg : args) {
+			if (arg == "--editor") {
+				isEditor = true;
+			}
+		}
+		if (isEditor == false) {
+			Window::Main().show();
+		}
+	}
+
 
 	// 描画オブジェクト生成
 	RenderScene scene;

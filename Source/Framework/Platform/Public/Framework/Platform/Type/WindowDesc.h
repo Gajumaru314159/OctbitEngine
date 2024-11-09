@@ -21,9 +21,10 @@ namespace ob::platform {
     //@―---------------------------------------------------------------------------
     struct WindowDesc {
         String      title = "NONAME";			//!< ウィンドウタイトル
-        Vec2		clientSize{ 1280, 720};	        //!< クライアント領域のピクセルサイズ
-        WindowMode	mode = WindowMode::Window;      //!< フルスクリーンモードで作成するかどうか
-        bool		resizable = true;				//!< 可変ウィンドウとして作成するかどうか
+        Vec2		clientSize{ 1280, 720};	    //!< クライアント領域のピクセルサイズ
+        WindowMode	mode = WindowMode::Window;  //!< フルスクリーンモードで作成するかどうか
+        bool		resizable = true;			//!< 可変ウィンドウとして作成するかどうか
+		bool		show = false;				//!< ウィンドウ生成時に表示するかどうか
     };
 
 }
