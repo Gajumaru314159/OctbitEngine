@@ -31,6 +31,9 @@
 #include <Framework/Core/Network/Network.h>
 #include <Framework/Core/Network/TCPServer.h>
 
+#include <Framework/Engine/Editor.h>
+#include <Framework/Core/Misc/TimeSpan.h>
+
 //-----------------------------------------------------------------
 using namespace ob;
 using namespace ob::rhi;
@@ -38,9 +41,60 @@ using namespace ob::engine;
 using namespace ob::graphics;
 using namespace ob::platform;
 
+#if 0
+
+class Protocol {
+public:
+	virtual void onReceived() {
+
+	}
+};
+
+void OctbitInit(ServiceInjector& injector) {
+
+}
+
+int OctbitMain() {
+	//ob::core::Logger log;
+	//
+	//LOG_INFO("Startup");
+	//
+	//Network::Startup();
+	//{
+	//
+	//	LOG_INFO("Editor生成");
+	//	Editor editor;
+	//
+	//	LOG_INFO("接続待機");
+	//	while (true) {
+	//
+	//		if (System::Update() == false)break;
+	//
+	//		editor.update();
+	//
+	//	}
+	//}
+	//
+	//Network::Shutdown();
+	return 0;
+}
+#endif
+
+
+#if 1
+
+struct TransformA {
+	Transform transform;
+	bool changed = false;
+};
+
 int TestDirectX12() {
 
+
+
 	Network::Startup();
+
+	Editor editor;
 
 	ob::core::ThreadPool threadPool;
 	ob::core::TypeInfoManager typeInfoManager;
@@ -51,16 +105,17 @@ int TestDirectX12() {
 	ob::debug::ReflectionExplorer reflectionExplorer;
 	ob::debug::Outliner outliner;
 
+	Logger::EventHandle hLog;
+	log.addEvent(hLog,
+		[&](const Log& log){
+			LogNotice notice;
+			notice.level = log.level;
+			notice.message = log.message;
+			editor.send(notice);
+		}
+	);
+
 	System::Setup();
-
-	TCPClient client;
-	if (client.connect(IPAddress::LocalHost(), 5000)) {
-		char message[] = "Connected";
-		client.send(message, sizeof(message));
-		LOG_INFO("送信済み");
-	}
-
-
 
 	// ディスプレイ生成
 	Ref<Display> display = [&] {
@@ -120,8 +175,6 @@ int TestDirectX12() {
 			outliner.draw(*world);
 		}
 	);
-
-
 
 	// テクスチャ読み込み
 	auto skyTexture = Texture::Load("Assets/Texture/sky.dds");
@@ -187,7 +240,7 @@ int TestDirectX12() {
 		Graphics::Get()->update();
 
 		fgdebugger.update();
-
+		editor.update();
 	}
 
 	handle.remove();
@@ -224,3 +277,5 @@ int OctbitMain() {
 	//TestVulkan();
 	return 0;
 }
+
+#endif

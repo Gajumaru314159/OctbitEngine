@@ -71,7 +71,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	bool BinaryStream::write(const void* buffer, size_t byteCount) {
 		auto needSize = m_position + byteCount;
-		m_blob.resize(needSize);
+		if(m_blob.size()<needSize)m_blob.resize(needSize);
 		std::memcpy(m_blob.data() + m_position, buffer, byteCount);
 		m_position += byteCount;
 		return true;

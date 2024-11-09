@@ -33,9 +33,12 @@ namespace Common.Log
         {
             if (ShinkedObjects!=null)
             {
-                foreach(var item in ShinkedObjects)
+                lock (ShinkedObjects)
                 {
-                    Logged?.Invoke(item);
+                    foreach (var item in ShinkedObjects)
+                    {
+                        Logged?.Invoke(item);
+                    }
                 }
                 ShinkedObjects = null;
             }

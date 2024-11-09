@@ -10,6 +10,6 @@ namespace ob::core {
     //@―---------------------------------------------------------------------------
     //! @brief  コンパイル時定数
     //@―---------------------------------------------------------------------------
-    template <typename T, T N> struct ConstValue { static const T value = N; };
+    template <typename T, T N> struct ConstValue { static constexpr T value = N; };
 
 }

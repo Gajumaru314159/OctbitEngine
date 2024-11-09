@@ -63,11 +63,14 @@ namespace ob::core {
 	void BinaryWriter::writeDouble(f64 value) {
 		write(&value, sizeof(value));
 	}
+	void BinaryWriter::writeString(StringView value) {
+		write(value.data(), value.size());
+	}
 	void BinaryWriter::write(const void* buffer, size_t count) {
 		m_stream.write(buffer, count);
 	}
 	void BinaryWriter::seek(offset_t offset) {
-		m_stream.seek(offset, SeekOrigin::Current);
+		m_stream.seek(offset, SeekOrigin::Begin);
 	}
 	void BinaryWriter::flush() {
 		m_stream.flush();

@@ -42,7 +42,7 @@ namespace ob::core {
 		static inline bool IsLittleEndian()
 		{
 			int const t = 1;
-			return *reinterpret_cast<unsigned char const*>(&t) == 1;
+			return *reinterpret_cast<unsigned char const*>(&t) != 1;
 		}
 
 		//@―---------------------------------------------------------------------------

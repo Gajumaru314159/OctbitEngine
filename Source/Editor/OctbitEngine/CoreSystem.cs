@@ -48,17 +48,29 @@ namespace OctbitEngine
                 Log.Error(e.Message);
             }
 
-            AssetManager = OctbitEngine.Asset.AssetManager.Instance;
-            Runtime = new Runtime.Runtime();
+            m_types = _pluginAssemblies.Append(GetType().Assembly).Append(typeof(Query).Assembly).SelectMany(a => a.GetTypes()).ToList();
 
+            AssetManager = OctbitEngine.Asset.AssetManager.Instance;
+            Runtime = new Runtime.Runtime(Types);
         }
 
         private void OnLogged(LogObject log)
         {
-            Debug.WriteLine($"{log.Timespamp} [{log.Level}] {log.Cateogory}\t: {log.Message}");
+            string GetName(LogLevel level) => level switch
+            {
+                LogLevel.Error => "[Error]  ",
+                LogLevel.Warn =>  "[Warning]",
+                LogLevel.Info =>  "[Info]   ",
+                LogLevel.Trace => "[Trace]  ",
+                _ => ""
+            };
+            // TODO ロックオブジェクトを追加して書き込みの競合を防ぐ
+            Debug.WriteLine($"{log.Timespamp} {GetName(log.Level)} : {log.Message}");
         }
 
         public IReadOnlyList<Assembly> PluginAssemblies => _pluginAssemblies;
+        public IReadOnlyList<Type> Types => m_types;
         private List<Assembly> _pluginAssemblies = new();
+        private List<Type> m_types = new();
     }
 }

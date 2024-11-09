@@ -1,5 +1,11 @@
-﻿using Reactive.Bindings;
+﻿using Common.Hash;
+using CommonView.Menu;
+using OctbitEngine.Runtime;
+using Reactive.Bindings;
+using System.IO;
+using System.Text;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace OctbitEditor
 {
@@ -19,9 +25,13 @@ namespace OctbitEditor
 
     public class ViewportVM : TabBase
     {
-        public ViewportVM()
+        private IRuntime Runtime { get; }
+
+        public ViewportVM(IRuntime runtime)
             : base("Viewport")
         {
+            Runtime = runtime;
+
             PlayCommand.Subscribe(_ => IsPlaying.Value = !IsPlaying.Value);
             SelectCommand.Subscribe(_ => OpMode.Value = OperatorMode.Select);
             MoveCommand.Subscribe(_ => OpMode.Value = OperatorMode.Move);
@@ -33,7 +43,18 @@ namespace OctbitEditor
             ToggleSnapScaleCommand.Subscribe(_ => SnapScaleIsEnabled.Value = !SnapScaleIsEnabled.Value);
 
             ToolBarDock.Subscribe(_ => RaisePropertyChanged(nameof(ToolBarOrientation)));
+
+
+
+            var query = new AddViewportQuery();
+            Runtime.Send(query, r =>
+            {
+                if (r is not AddViewportResponse responce) return;
+                Hwnd.Value = responce.WindowHandle;
+            });
         }
+
+        public ReactiveProperty<IntPtr> Hwnd { get; } = new(IntPtr.Zero);
 
 
         public ReactivePropertySlim<Dock> ToolBarDock { get; } = new(Dock.Top);

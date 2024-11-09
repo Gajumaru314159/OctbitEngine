@@ -28,10 +28,38 @@ namespace ob::core {
 		void writeUInt64(u64 value);
 		void writeFloat(f32 value);
 		void writeDouble(f64 value);
+		void writeString(StringView value);
 
 		void write(const void* buffer, size_t count);
 		void seek(offset_t offset);
 		void flush();
+
+		template<class T>
+		void write(const T& value) {
+			using pure_type = remove_cvr_t<T>;
+			if constexpr (std::is_same<pure_type, s8>::value)
+				writeInt8(value);
+			else if constexpr (std::is_same<pure_type, s16>::value)
+				writeInt16(value);
+			else if constexpr (std::is_same<pure_type, s32>::value)
+				writeInt32(value);
+			else if constexpr (std::is_same<pure_type, s64>::value)
+				writeInt64(value);
+			else if constexpr (std::is_same<pure_type, u8>::value)
+				writeUInt8(value);
+			else if constexpr (std::is_same<pure_type, u16>::value)
+				writeUInt16(value);
+			else if constexpr (std::is_same<pure_type, u32>::value)
+				writeUInt32(value);
+			else if constexpr (std::is_same<pure_type, u64>::value)
+				writeUInt64(value);
+			else if constexpr (std::is_same<pure_type, f32>::value)
+				writeFloat(value);
+			else if constexpr (std::is_same<pure_type, f64>::value)
+				writeDouble(value);
+			else
+				static_assert("not implemented");
+		}
 
 	private:
 		Stream& m_stream;

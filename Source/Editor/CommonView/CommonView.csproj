@@ -4,10 +4,16 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+	<Using Remove="System.Drawing" />
+	<Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+  
+	<ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
     <PackageReference Include="LivetCask" Version="4.0.2" />
     <PackageReference Include="MultiSelectTreeView" Version="1.0.9">

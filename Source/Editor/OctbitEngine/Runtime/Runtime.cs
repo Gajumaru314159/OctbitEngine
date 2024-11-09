@@ -1,29 +1,35 @@
 ﻿using Common.Generic;
+using Common.Hash;
 using Common.Log;
 using Common.Thread;
 using OctbitEngine.Config;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Reflection;
+using System.Text;
 
 namespace OctbitEngine.Runtime
 {
-    public sealed class Runtime : Singleton<Runtime>, IRuntime
+    public sealed class Runtime : IRuntime
     {
         private int m_runtimeId = 0;
         private List<World> m_worlds = new();
         private Dictionary<int, RemoteObject> m_objects = new();
         private Process? m_process;
-        private NetworkDevice m_network;
-        private TypeInfoManager _typeInfoManager;
+        private ProtocolDevice m_protocolDevice;
+        private TypeInfoManager m_typeInfoManager;
 
-        public Runtime()
-            : this(null)
+        public Runtime(IEnumerable<Type> types)
+            : this(types,null)
         {
         }
-        public Runtime(IProgress? progress)
+        public Runtime(IEnumerable<Type> types,IProgress? progress)
         {
-            m_network = new NetworkDevice(IPAddress.Loopback, 50000);
+            progress?.SetRange(0, 100);
+            progress?.SetMessage("ProtocolDeviceを生成");
+
+            m_protocolDevice = new ProtocolDevice(types);
 
             progress?.SetRange(0, 100);
             progress?.SetMessage("Runtimeを起動中");
@@ -33,8 +39,7 @@ namespace OctbitEngine.Runtime
             progress?.SetValue(10);
             progress?.SetMessage("Runtimeに接続中");
 
-            connectRuntime();
-
+            ThreadUtility.WaitUntil(()=>m_protocolDevice.IsConnected, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
 
 
             var infos = new TypeInfoArchive[]{
@@ -59,9 +64,14 @@ namespace OctbitEngine.Runtime
             var text = System.Text.Json.JsonSerializer.Serialize(infos);
 
 
-            _typeInfoManager = new TypeInfoManager(text);
+            m_typeInfoManager = new TypeInfoManager(text);
 
             createViewportWorld();
+
+        }
+
+        private void OnDataReceived(ReadOnlySpan<byte> buffer)
+        {
 
         }
 
@@ -84,22 +94,22 @@ namespace OctbitEngine.Runtime
 
         public ITypeInfo? FindTypeInfo(string name)
         {
-            return _typeInfoManager.Find(name);
+            return m_typeInfoManager.Find(name);
         }
 
         public void Send<T>(T query) where T : Query
         {
-            throw new NotImplementedException();
+            m_protocolDevice.Send(query, null, false, TimeSpan.FromHours(1));
         }
 
         public void Send<T>(T query, Action<object> responce, TimeSpan? timeout = null) where T : Query
         {
-            throw new NotImplementedException();
+            m_protocolDevice.Send(query, responce, false, timeout?? TimeSpan.FromHours(1));
         }
 
         public void SendAsync<T>(T query, Action<object> responce, TimeSpan? timeout = null) where T : Query
         {
-            throw new NotImplementedException();
+            m_protocolDevice.Send(query, responce, true, timeout?? TimeSpan.FromHours(1));
         }
 
         public IRemoteObject CreateObject(TypeInfo type)
@@ -141,13 +151,12 @@ namespace OctbitEngine.Runtime
                 }
             }
 
+            
             var psi = new ProcessStartInfo()
             {
-                FileName = Path.Combine(WorkSpace.RootPath, @"Build\x64-Debug\Source\Application\OctbitApp.exe"),
-                WorkingDirectory = WorkSpace.RootPath,
+                FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @"../../x64-Debug/Source/Application/OctbitApp.exe"),
+                WorkingDirectory = Path.Combine(WorkSpace.RootPath,"../../Assets"),
                 UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
                 CreateNoWindow = true,
                 Arguments = "--editor",
             };
@@ -167,32 +176,12 @@ namespace OctbitEngine.Runtime
 
             if (m_process != null)
             {
-                m_process.OutputDataReceived += (sender, e) =>
-                {
-                    Debug.WriteLine(e.Data);
-                };
-                m_process.ErrorDataReceived += (sender, e) =>
-                {
-                    Debug.WriteLine(e.Data);
-                };
-                m_process.BeginOutputReadLine();
-                m_process.BeginErrorReadLine();
                 m_process.Exited += (sender, e) =>
                 {
                     m_process = null;
                     Crashed?.Invoke(this);
                 };
                 m_process.EnableRaisingEvents = true;
-
-                try
-                {
-                    ThreadUtility.WaitUntil(() => m_process.MainWindowHandle != IntPtr.Zero, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
-                }
-                catch (TimeoutException)
-                {
-                    Log.Error("Runtimeの起動に失敗しました");
-                    kill();
-                }
             }
         }
 
@@ -208,11 +197,6 @@ namespace OctbitEngine.Runtime
                 process.Dispose();
             }
             m_process = null;
-        }
-
-        private void connectRuntime()
-        {
-
         }
 
         [MemberNotNull(nameof(ViewportWorld))]

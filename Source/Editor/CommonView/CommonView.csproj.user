@@ -2,6 +2,14 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
+    <Compile Update="Controls\InsertWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\InsertWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Controls\Inspector\BuiltInInspectorIemTemplate.xaml">
       <SubType>Designer</SubType>
     </Page>

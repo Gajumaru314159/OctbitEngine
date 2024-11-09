@@ -156,8 +156,9 @@ namespace ob::core {
         //! @brief データを追加
         //@―---------------------------------------------------------------------------
         void append(const void* pData, size_t dataSize) {
-            m_data.reserve(m_data.size()+dataSize);
-            memcpy_s(m_data.data() + m_data.size(), dataSize, pData, dataSize);
+            auto size = m_data.size();
+            m_data.resize(size +dataSize);
+            memcpy_s(m_data.data() + size, dataSize, pData, dataSize);
         }
 
 
