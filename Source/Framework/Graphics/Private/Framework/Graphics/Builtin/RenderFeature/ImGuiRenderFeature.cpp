@@ -498,7 +498,7 @@ namespace ob::graphics {
 
 		// フォント読み込み
 		// TODO ビューごとにリソースを生成する必要はないのでImGuiFeatureに共有リソースを登録しておく
-		File file("Asset/Font/ipaexg.ttf");
+		File file("Assets/Font/ipaexg.ttf");
 		if (Blob blob(file); blob) {
 			ImFontConfig config;
 			m_fontBlod = ::ImGui::MemAlloc(blob.size());
