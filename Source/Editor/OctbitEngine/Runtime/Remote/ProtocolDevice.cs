@@ -66,9 +66,9 @@ namespace OctbitEngine.Runtime
                 query.Serialize(writer);
                 writer.Seek(0, SeekOrigin.Begin);
                 writer.Write((UInt64)stream.Length - 8 - 8 - 8);
-                writer.Close();
-
-                m_device.Send(stream.GetBuffer());
+                var len = (int)stream.Length;
+                var buffer = stream.GetBuffer();
+                m_device.Send(new ReadOnlySpan<byte>(buffer,0,len));
 
                 return waitEvent?.WaitOne(timeout) ?? true;
             }
