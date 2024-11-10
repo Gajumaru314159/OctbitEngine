@@ -12,6 +12,11 @@ namespace OctbitEngine.Runtime
 
         bool SetValue(object value, [CallerMemberName] string? name = null);
         bool SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull;
+
+        void Serialize(BinaryWriter writer);
+        void Deserialize(BinaryReader reader);
+        void Serialize(BinaryWriter writer,string propertyName);
+        void Deserialize(BinaryReader reader, string propertyName);
     }
 
 }
