@@ -16,12 +16,14 @@ namespace OctbitEngine.Runtime
 
     public class RemoteObject : IRemoteObject
     {
+        private UserTypeObject UserTypeObject { get; init; }
 
         internal RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
         {
             Runtime = runtime;
             TypeInfo = typeInfo;
             Id = id;
+            UserTypeObject = new UserTypeObject(typeInfo);
         }
         public int Id { get; private init; }
 
@@ -31,11 +33,12 @@ namespace OctbitEngine.Runtime
 
         public T GetValue<T>([CallerMemberName] string? name = null) where T : notnull
         {
-            throw new NotImplementedException();
+            return UserTypeObject.GetValue<T>(name);
         }
         public void SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull
         {
-            throw new NotImplementedException();
+            UserTypeObject.SetValue(value, name);
+            // TODO 値の転送
         }
 
         public void Invoke(string name, IReadOnlyList<object>? args = null)
