@@ -34,6 +34,7 @@ set(public_libs
     ImGui
     Graphics
     Debug
+    Editor
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 

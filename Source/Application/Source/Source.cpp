@@ -31,7 +31,7 @@
 #include <Framework/Core/Network/Network.h>
 #include <Framework/Core/Network/TCPServer.h>
 
-#include <Framework/Engine/Editor.h>
+#include <Framework/Editor/Editor.h>
 #include <Framework/Core/Misc/TimeSpan.h>
 #include <Framework/Platform/Arguments.h>
 
@@ -95,7 +95,7 @@ int TestDirectX12() {
 
 	Network::Startup();
 
-	Editor editor;
+	ob::editor::Editor editor;
 
 	ob::core::ThreadPool threadPool;
 	ob::core::TypeInfoManager typeInfoManager;
@@ -109,7 +109,7 @@ int TestDirectX12() {
 	Logger::EventHandle hLog;
 	log.addEvent(hLog,
 		[&](const Log& log){
-			LogNotice notice;
+			ob::editor::LogNotice notice;
 			notice.level = log.level;
 			notice.message = log.message;
 			editor.send(notice);

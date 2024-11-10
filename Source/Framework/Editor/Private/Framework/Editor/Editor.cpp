@@ -4,13 +4,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Engine/Editor.h>
+#include <Framework/Editor/Editor.h>
+#include <Framework/Editor/ReflectionWriter.h>
 
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <nlohmann/json.hpp>
 #include <fstream>
 
-namespace ob::engine {
+namespace ob::editor {
 
 
 	class GetReflectionResponse : public Response {
@@ -37,24 +38,8 @@ namespace ob::engine {
 		Response* execute() const override {
 			auto response = new GetReflectionResponse();
 
-			nlohmann::json json;
-
-			TypeInfoManager::Visit(
-				[&](const TypeInfo& typeInfo) {
-					
-					nlohmann::json type;
-					type["Name"] = typeInfo.type.name();
-					auto& tags = type["Tags"];
-					for (auto& [key, value] : typeInfo.tags) {
-						tags[key] = value;
-					}
-
-					json.push_back(type);
-				}
-			);
-
-			std::ofstream o(output);
-			o << std::setw(4) << json << std::endl;
+			ReflectionWriter writer;
+			writer.output(output);
 
 			return response;
 		}
@@ -146,7 +131,7 @@ namespace ob::engine {
 
 			header.size = reader.readU64();
 			header.type = reader.readU64();
-			header.id   = reader.readU64();
+			header.id = reader.readU64();
 
 			// バッファサイズが足りなければシークを戻して終了
 			if (remain < sizeof(QueryHeader) + header.size) {
@@ -188,7 +173,8 @@ namespace ob::engine {
 
 						send(m_writeBlob);
 
-					} else {
+					}
+					else {
 						// LOG_ERROR("レスポンスが空です");
 					}
 				}

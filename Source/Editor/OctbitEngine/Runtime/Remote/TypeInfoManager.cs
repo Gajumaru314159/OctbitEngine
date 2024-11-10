@@ -45,6 +45,8 @@ namespace OctbitEngine.Runtime
         public ConstructorInfoArchive[] Constructors { get; set; }
         public PropertyInfoArchive[] Properties { get; set; }
         public MethodInfoArchive[] Methods { get; set; }
+        public string[] PropertyOrder { get; set; }
+        public string[] MethodOrder { get; set; }
     }
 
 

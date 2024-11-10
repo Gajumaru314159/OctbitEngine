@@ -10,7 +10,7 @@
 
 #include <Framework/Platform/Window.h>
 
-namespace ob::engine {
+namespace ob::editor {
 
 	class Response {
 	public:
@@ -48,10 +48,10 @@ namespace ob::engine {
 		LogLevel level;
 		String message;
 	private:
-		virtual bool serialize(BinaryWriter& writer) const{
+		virtual bool serialize(BinaryWriter& writer) const {
 			writer.writeUInt32(static_cast<u8>(level));
 			writer.writeUInt64(message.size());
-			writer.write(message.data(),message.size());
+			writer.write(message.data(), message.size());
 			return true;
 		}
 	};
@@ -60,7 +60,7 @@ namespace ob::engine {
 	public:
 		OB_RTTI();
 	private:
-		bool serialize(BinaryWriter& writer) const override{
+		bool serialize(BinaryWriter& writer) const override {
 			writer.writeUInt64(handle);
 			return true;
 		}
@@ -72,11 +72,11 @@ namespace ob::engine {
 	public:
 		OB_RTTI();
 	private:
-		bool deserialize(BinaryReader& reader) override{
+		bool deserialize(BinaryReader& reader) override {
 
 			return true;
 		}
-		Response* execute() const override{
+		Response* execute() const override {
 			using namespace ob::platform;
 			//WindowDesc desc;
 			//desc.title = "Test";
@@ -86,7 +86,7 @@ namespace ob::engine {
 
 			auto response = new AddViewportResponse();
 
-			
+
 			response->handle = reinterpret_cast<u64>(platform::Window::Main().getHandle());
 
 			LOG_INFO("ハンドル {}", response->handle);

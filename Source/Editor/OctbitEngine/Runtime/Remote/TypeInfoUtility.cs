@@ -1,4 +1,6 @@
-﻿namespace OctbitEngine.Runtime
+﻿using Common.Math;
+
+namespace OctbitEngine.Runtime
 {
     
     public static class TypeInfoUtility
@@ -6,7 +8,12 @@
         private static Dictionary<string, Type> s_builtinTypeMap = new();
         static TypeInfoUtility()
         {
-            void Add(string name) => s_builtinTypeMap.Add(name, Type.GetType(name)!);
+            void Add(string name)
+            {
+                var type = Type.GetType(name)??typeof(Vector2).Assembly.GetType(name);
+                if (type == null) throw new ArgumentException($"{name}がアセンブリ内に存在しません");
+                s_builtinTypeMap.Add(name, type);
+            }
             Add("System.Int64");
             Add("System.Int32");
             Add("System.Int16");
@@ -20,6 +27,12 @@
             Add("System.Char");
             Add("System.Boolean");
             Add("System.String");
+            Add("Common.Math.Vector2");
+            Add("Common.Math.Vector3");
+            Add("Common.Math.Vector4");
+            Add("Common.Math.Rotation");
+            Add("Common.Math.Quaternion");
+            Add("Common.Graphics.Color");
         }
 
         public static bool IsBuiltinType(this ITypeInfo info)

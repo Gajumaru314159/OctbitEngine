@@ -2,6 +2,7 @@
 using Common.Hash;
 using Common.Log;
 using Common.Thread;
+using Common.Math;
 using OctbitEngine.Config;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -42,15 +43,42 @@ namespace OctbitEngine.Runtime
 
             ThreadUtility.WaitUntil(()=>m_protocolDevice.IsConnected, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
 
-            var output = "reflection.json";
+            var output = "D:/reflection.json";
             Send(new GetReflectionQuery() { Output = output }, 
                 (r) => {
                     if (r is not GetReflectionResponse response) return;
-                    var json = System.IO.File.ReadAllText(output);
-                    File.Delete(output);
-                    m_typeInfoManager = new TypeInfoManager(json);
+                    if (File.Exists(output))
+                    {
+                        var json = System.IO.File.ReadAllText(output);
+                        File.Delete(output);
+                        m_typeInfoManager = new TypeInfoManager(json);
+                    }
                 }
             );
+
+
+            {
+                var info = m_typeInfoManager!.Find("ob::engine::Entity");
+                if (info != null)
+                {
+                    var entity = new UserTypeObject(info);
+                    entity.SetValue(true, "Active");
+                    entity.SetValue("名前", "Name");
+                    Log.Info($"{entity.GetValue<string>("Name")}");
+                    Log.Info($"{entity.GetValue<bool>("Active")}");
+                }
+            }
+            {
+                var info = m_typeInfoManager!.Find("ob::engine::TransformComponent");
+                if (info != null)
+                {
+                    var trans = new UserTypeObject(info);
+                    trans.SetValue(new Vector3(1, 2, 3), "WorldPosition");
+
+                    Log.Info($"{trans.GetValue<Vector3>("WorldPosition").X}");
+
+                }
+            }
 
             createViewportWorld();
 
