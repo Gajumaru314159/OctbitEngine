@@ -4,9 +4,23 @@ namespace OctbitEngine.Asset
 {
     public class AssetConverter
     {
+        public IAssetManager Manager { get; }
 
+        public AssetConverter(IAssetManager manager)
+        {
+            Manager = manager;
+        }
         public void Convert()
         {
+            var files = Manager.AllAssetFile.ToArray();
+
+            foreach (var file in files)
+            {
+                foreach (var asset in file.Assets)
+                {
+                    ConvertImpl(asset);
+                }
+            }
         }
 
         private void ConvertImpl(IAsset asset)

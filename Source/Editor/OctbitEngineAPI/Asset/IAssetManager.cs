@@ -70,9 +70,11 @@
         public bool CanImport(string path);
         public bool Import(string path,IAssetFolder folder);
 
+        public IEnumerable<IAssetFile> AllAssetFile { get; }
+
 
         //Test
-        public Type? FindEditorType(Type type);
+        public Type? FindEditorType(Type? type);
 
     }
 }

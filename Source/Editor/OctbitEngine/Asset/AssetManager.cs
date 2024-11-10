@@ -1,5 +1,6 @@
 ﻿using Common.Linq;
 using Common.Log;
+using Common.Tree;
 using OctbitEngine.Config;
 using System.Reflection;
 using System.Text.Json;
@@ -320,10 +321,17 @@ namespace OctbitEngine.Asset
 
         public event EventHandler<IAssetEntry>? AssetCreated;
 
+
+
+        public IEnumerable<IAssetFile> AllAssetFile => RootFolder.DepthFirst(i=>i.ChildFolders).SelectMany(i=>i.ChildFiles);
+
+
+
         // 検証
         private Dictionary<Type, Type> m_editorMap=new();
-        public Type? FindEditorType(Type type)
+        public Type? FindEditorType(Type? type)
         {
+            if(type == null) return null;
             if (m_editorMap.TryGetValue(type, out var editorType)) return editorType;
             return null;
         }
