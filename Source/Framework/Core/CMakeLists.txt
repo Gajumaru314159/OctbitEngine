@@ -15,7 +15,7 @@ add_library(${PROJECT_NAME} STATIC ${out_sources})
 target_compile_definitions(${PROJECT_NAME} PRIVATE OB_CORE_BUILD)
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${OCTBIT_THIRD_PARTY_PATH}/nlohmann")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 

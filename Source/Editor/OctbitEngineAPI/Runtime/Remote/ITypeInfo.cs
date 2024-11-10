@@ -5,7 +5,7 @@
     /// </summary>
     public interface ITagInfo
     {
-        IDictionary<string, string> Tags { get; }
+        IReadOnlyDictionary<string, string> Tags { get; }
     }
 
     /// <summary>

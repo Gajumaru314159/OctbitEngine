@@ -19,6 +19,7 @@ namespace OctbitEngine.Runtime
         private Process? m_process;
         private ProtocolDevice m_protocolDevice;
         private TypeInfoManager m_typeInfoManager;
+        private RemoteObjectManager remoteObjectManager = new();
 
         public Runtime(IEnumerable<Type> types)
             : this(types,null)
@@ -41,30 +42,15 @@ namespace OctbitEngine.Runtime
 
             ThreadUtility.WaitUntil(()=>m_protocolDevice.IsConnected, TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(500));
 
-
-            var infos = new TypeInfoArchive[]{
-                new TypeInfoArchive
-                {
-                    Name = "ob::engine::World",
-                },
-                new TypeInfoArchive
-                {
-                    Name = "ob::engine::Scene",
-                },
-                new TypeInfoArchive
-                {
-                    Name = "ob::engine::Entity",
-                },
-                new TypeInfoArchive
-                {
-                    Name = "ob::engine::Component",
+            var output = "reflection.json";
+            Send(new GetReflectionQuery() { Output = output }, 
+                (r) => {
+                    if (r is not GetReflectionResponse response) return;
+                    var json = System.IO.File.ReadAllText(output);
+                    File.Delete(output);
+                    m_typeInfoManager = new TypeInfoManager(json);
                 }
-            };
-
-            var text = System.Text.Json.JsonSerializer.Serialize(infos);
-
-
-            m_typeInfoManager = new TypeInfoManager(text);
+            );
 
             createViewportWorld();
 
@@ -107,7 +93,7 @@ namespace OctbitEngine.Runtime
             m_protocolDevice.Send(query, responce, false, timeout?? TimeSpan.FromHours(1));
         }
 
-        public void SendAsync<T>(T query, Action<object> responce, TimeSpan? timeout = null) where T : Query
+        public void SendAsync<T>(T query, Action<object>? responce = null, TimeSpan? timeout = null) where T : Query
         {
             m_protocolDevice.Send(query, responce, true, timeout?? TimeSpan.FromHours(1));
         }

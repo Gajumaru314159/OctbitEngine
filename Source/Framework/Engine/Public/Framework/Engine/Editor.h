@@ -134,32 +134,7 @@ namespace ob::engine {
 	class Editor {
 	public:
 
-		Editor() 
-		{
-			if (!m_client.connect(IPAddress::LocalHost(), 50000)) {
-				LOG_WARNING("エディタとの接続に失敗しました");
-			}
-			m_blob.reserve(5 * 1024 * 1024);
-
-			{
-				auto query = std::make_unique<AddViewportQuery>();
-				m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
-			}
-			{
-				auto query = std::make_unique<CreateWorldQuery>();
-				m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
-			}
-
-			m_thread = std::make_unique<Thread>(
-				"Protocol Thread",
-				[this]() {
-					while (true) {
-						receive();
-						if (!m_client.isConnected())return;
-					}
-				}
-			);
-		}
+		Editor();
 
 
 		void send(const Notice& notice);

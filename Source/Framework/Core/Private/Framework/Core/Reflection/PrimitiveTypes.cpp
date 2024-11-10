@@ -86,62 +86,75 @@ template<> void ::ob::core::internal::PrimitiveBuilderTemplate<::type>::Register
 OB_DEFINE_PRIMITIVE_INFO(ob::core::s64) {
 	desc("64bit符号付き整数型");
 	tag("DisplayName", "s64");
+	tag("C#", "System.Int64");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::u64) {
 	desc("64bit符号なし整数型");
 	tag("DisplayName", "u64");
+	tag("C#", "System.UInt64");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::s32) {
 	desc("32bit符号付き整数型");
 	tag("DisplayName", "s32");
+	tag("C#", "System.Int32");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::u32) {
 	desc("32bit符号なし整数型");
 	tag("DisplayName", "u32");
+	tag("C#", "System.UInt32");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::s16) {
 	desc("16bit符号付き整数型");
 	tag("DisplayName", "s16");
+	tag("C#", "System.Int16");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::u16) {
 	desc("16bit符号なし整数型");
 	tag("DisplayName", "u16");
+	tag("C#", "System.UInt16");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::s8) {
 	desc("8bit符号付き整数型");
 	tag("DisplayName", "s8");
+	tag("C#", "System.SByte");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::u8) {
 	desc("8bit符号なし整数型");
 	tag("DisplayName", "u8");
+	tag("C#", "System.Byte");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::f64) {
 	tag("DisplayName", "f64");
+	tag("C#", "System.Double");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::f32) {
 	tag("DisplayName", "f32");
+	tag("C#", "System.Single");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::Char) {
 	desc("文字型");
+	tag("C#", "System.Char");
 }
 
 OB_DEFINE_PRIMITIVE_INFO(ob::core::Bool) {
 	desc("真偽値型");
+	tag("C#", "System.Boolean");
 }
 
 OB_DEFINE_CLASS_INFO(ob::core::String) {
 	desc("文字列型");
 	tag("DisplayName", "ob::core::String");
+	tag("C#", "System.String");
 	constructor<const Char*>().desc("コンストラクタ");
 	constructor<String>().desc("コンストラクタ");
 }

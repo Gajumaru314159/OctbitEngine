@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace OctbitEngine.Runtime
 {
@@ -105,6 +106,49 @@ namespace OctbitEngine.Runtime
         public void Deserialize(BinaryReader reader)
         {
             RemoteId = reader.ReadInt32();
+        }
+    }
+
+
+
+    public class GetReflectionResponse : Response
+    {
+
+        public void Deserialize(BinaryReader reader)
+        {
+        }
+    }
+
+    public class GetReflectionQuery : Query
+    {
+        public string Output = string.Empty;
+        public void Serialize(BinaryWriter writer)
+        {
+            var bytes = Encoding.UTF8.GetBytes(Output);
+            writer.Write(bytes.Length);
+            writer.Write(bytes);
+        }
+    }
+
+
+    public class InvokeRemoteObjectMethodQuery : Query
+    {
+        public int RemoteId { get; init; }
+        public string Name { get; init; } = string.Empty;
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(RemoteId);
+            var bytes = Encoding.UTF8.GetBytes(Name);
+            writer.Write(bytes.Length);
+            writer.Write(bytes);
+        }
+    }
+    public class InvokeRemoteObjectMethodResponse: Response
+    {
+
+        public void Deserialize(BinaryReader reader)
+        {
         }
     }
 

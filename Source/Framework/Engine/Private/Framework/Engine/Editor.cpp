@@ -6,7 +6,90 @@
 #pragma once
 #include <Framework/Engine/Editor.h>
 
+#include <Framework/Core/Reflection/TypeInfoManager.h>
+#include <nlohmann/json.hpp>
+#include <fstream>
+
 namespace ob::engine {
+
+
+	class GetReflectionResponse : public Response {
+	public:
+		OB_RTTI();
+	private:
+		bool serialize(BinaryWriter& writer) const override {
+			return true;
+		}
+	public:
+	};
+
+	class GetReflectionQuery : public Query {
+	public:
+		OB_RTTI();
+		String output;
+	private:
+		bool deserialize(BinaryReader& reader) override {
+			auto len = reader.readS32();
+			output.resize(len);
+			reader.read(output.data(), len);
+			return true;
+		}
+		Response* execute() const override {
+			auto response = new GetReflectionResponse();
+
+			nlohmann::json json;
+
+			TypeInfoManager::Visit(
+				[&](const TypeInfo& typeInfo) {
+					
+					nlohmann::json type;
+					type["Name"] = typeInfo.type.name();
+					auto& tags = type["Tags"];
+					for (auto& [key, value] : typeInfo.tags) {
+						tags[key] = value;
+					}
+
+					json.push_back(type);
+				}
+			);
+
+			std::ofstream o(output);
+			o << std::setw(4) << json << std::endl;
+
+			return response;
+		}
+	};
+
+	Editor::Editor()
+	{
+		if (!m_client.connect(IPAddress::LocalHost(), 50000)) {
+			LOG_WARNING("エディタとの接続に失敗しました");
+		}
+		m_blob.reserve(5 * 1024 * 1024);
+
+		{
+			auto query = std::make_unique<AddViewportQuery>();
+			m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
+		}
+		{
+			auto query = std::make_unique<CreateWorldQuery>();
+			m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
+		}
+		{
+			auto query = std::make_unique<GetReflectionQuery>();
+			m_queries[Hash::FNV64(query->getType().shortName())] = std::move(query);
+		}
+
+		m_thread = std::make_unique<Thread>(
+			"Protocol Thread",
+			[this]() {
+				while (true) {
+					receive();
+					if (!m_client.isConnected())return;
+				}
+			}
+		);
+	}
 
 	void Editor::send(const Notice& notice) {
 

@@ -2,15 +2,17 @@
 {
     public class TagInfo : ITagInfo
     {
-        internal TagInfo()
+        internal TagInfo(IReadOnlyDictionary<string,string> tags)
         {
+            Tags =tags;
         }
-        public IDictionary<string, string> Tags { get; } = new Dictionary<string, string>();
+        public IReadOnlyDictionary<string, string> Tags { get; }
     }
 
     public sealed class EnumElementInfo : TagInfo, IEnumElementInfo
     {
-        internal EnumElementInfo(string name, int index, int value)
+        internal EnumElementInfo(string name, int index, int value, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             Name = name;
             Index = index;
@@ -23,7 +25,8 @@
 
     public sealed class ArgumentInfo : TagInfo, IArgumentInfo
     {
-        internal ArgumentInfo(ITypeInfo type, string name)
+        internal ArgumentInfo(ITypeInfo type, string name, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             TypeInfo = type;
             Name = name;
@@ -34,7 +37,8 @@
 
     public sealed class ConstructorInfo : TagInfo,IConstructorInfo
     {
-        internal ConstructorInfo(IReadOnlyList<IArgumentInfo> arguments)
+        internal ConstructorInfo(IReadOnlyList<IArgumentInfo> arguments, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             Arguments = arguments;
         }
@@ -47,7 +51,8 @@
 
     public sealed class PropertyInfo : TagInfo,IPropertyInfo
     {
-        internal PropertyInfo(ITypeInfo typeInfo, string name, bool canRead, bool canWrite)
+        internal PropertyInfo(ITypeInfo typeInfo, string name, bool canRead, bool canWrite, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             TypeInfo = typeInfo;
             Name = name;
@@ -70,7 +75,8 @@
 
     public sealed class MethodInfo : TagInfo,IMethodInfo
     {
-        internal MethodInfo(string name, ITypeInfo returnType, IReadOnlyList<IArgumentInfo> arguments)
+        internal MethodInfo(string name, ITypeInfo returnType, IReadOnlyList<IArgumentInfo> arguments, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             Name = name;
             ReturnType = returnType;
@@ -89,7 +95,8 @@
     {
 
 
-        internal TypeInfo(string name)
+        internal TypeInfo(string name, IReadOnlyDictionary<string, string> tags)
+            : base(tags)
         {
             Name = name;
             ShortName = name.Split("::").LastOrDefault()??string.Empty;

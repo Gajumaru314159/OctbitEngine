@@ -6,46 +6,45 @@ namespace OctbitEngine.Runtime
 {
     public struct EnumElementInfoArchive
     {
+        public Dictionary<string, string> Tags { get; set; }
         public string Name { get; set; }
-        public int Index;
-        public int Value;
+        public int Index { get; set; }
+        public int Value { get; set; }
     }
-
     public struct ArgumntInfoArchive
     {
-        public string Name;
-        public string Type;
+        public Dictionary<string, string> Tags { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
     }
-
     public struct ConstructorInfoArchive
     {
-        public ArgumntInfoArchive[] Arguments;
+        public Dictionary<string, string> Tags { get; set; }
+        public ArgumntInfoArchive[] Arguments { get; set; }
     }
-
     public struct PropertyInfoArchive
     {
-        public string Name;
-        public string Type;
-        public bool CanRead;
-        public bool CanWrite;
+        public Dictionary<string, string> Tags { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+        public bool CanRead { get; set; }
+        public bool CanWrite { get; set; }
     }
-
     public struct MethodInfoArchive
     {
-        public string Name;
-        public string ReturnType;
-        public ArgumntInfoArchive[] Arguments;
+        public Dictionary<string, string> Tags { get; set; }
+        public string Name { get; set; }
+        public string ReturnType { get; set; }
+        public ArgumntInfoArchive[] Arguments { get; set; }
     }
-
-
-    [Serializable]
     public struct TypeInfoArchive
     {
+        public Dictionary<string, string> Tags { get; set; }
         public string Name{ get; set; }
-        public string[] Bases;
-        public ConstructorInfoArchive[] Constructors;
-        public PropertyInfoArchive[] Properties;
-        public MethodInfoArchive[] Methods;
+        public string[] Bases { get; set; }
+        public ConstructorInfoArchive[] Constructors { get; set; }
+        public PropertyInfoArchive[] Properties { get; set; }
+        public MethodInfoArchive[] Methods { get; set; }
     }
 
 
@@ -60,7 +59,7 @@ namespace OctbitEngine.Runtime
 
                 foreach (var archive in archives.NotNull())
                 {
-                    TypeMap.Add(archive.Name, new TypeInfo(archive.Name));
+                    TypeMap.Add(archive.Name, new TypeInfo(archive.Name,archive.Tags));
                 }
 
                 foreach (var archive in archives.NotNull())
@@ -88,14 +87,14 @@ namespace OctbitEngine.Runtime
                         {
                             if (TypeMap.TryGetValue(argArchive.Type, out var argType))
                             {
-                                arguments.Add(new ArgumentInfo(argType, argArchive.Name));
+                                arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags));
                             }
                             else
                             {
                                 // TODO 例外処理
                             }
                         }
-                        typeInfo.m_constructors.Add(new ConstructorInfo(arguments));
+                        typeInfo.m_constructors.Add(new ConstructorInfo(arguments,constructorArchive.Tags));
                     }
 
                     // プロパティ
@@ -103,7 +102,7 @@ namespace OctbitEngine.Runtime
                     {
                         if (TypeMap.TryGetValue(propertyArchive.Type, out var propertyType))
                         {
-                            typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite));
+                            typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite,propertyArchive.Tags));
                         }
                         else
                         {
@@ -121,14 +120,14 @@ namespace OctbitEngine.Runtime
                             {
                                 if (TypeMap.TryGetValue(argArchive.Type, out var argType))
                                 {
-                                    arguments.Add(new ArgumentInfo(argType, argArchive.Name));
+                                    arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags));
                                 }
                                 else
                                 {
                                     // TODO 例外処理
                                 }
                             }
-                            typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments));
+                            typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments,methodArchive.Tags));
                         }
                         else
                         {

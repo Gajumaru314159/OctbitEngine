@@ -13,6 +13,7 @@ namespace OctbitEngine.Runtime
         }
     }
 
+
     public class RemoteObject : IRemoteObject
     {
 
@@ -20,7 +21,9 @@ namespace OctbitEngine.Runtime
         {
             Runtime = runtime;
             TypeInfo = typeInfo;
+            Id = id;
         }
+        public int Id { get; private init; }
 
         public IRuntime Runtime { get; }
 
@@ -30,10 +33,25 @@ namespace OctbitEngine.Runtime
         {
             throw new NotImplementedException();
         }
+        public void SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull
+        {
+            throw new NotImplementedException();
+        }
 
         public void Invoke(string name, IReadOnlyList<object>? args = null)
         {
-            throw new NotImplementedException();
+            if(TypeInfo.FindMethod(name)==null)
+            {
+                throw new Exception($"メソッド{name}は存在しません");
+            }
+
+            var query = new InvokeRemoteObjectMethodQuery()
+            {
+                RemoteId = Id,
+                Name = name,
+            };
+
+            Runtime.Send(query);
         }
 
         public T Invoke<T>(string name, IReadOnlyList<object>? args = null)
@@ -43,7 +61,18 @@ namespace OctbitEngine.Runtime
 
         public void InvokeAsync(string name, IReadOnlyList<object>? args = null)
         {
-            throw new NotImplementedException();
+            if (TypeInfo.FindMethod(name)==null)
+            {
+                throw new Exception($"メソッド{name}は存在しません");
+            }
+
+            var query = new InvokeRemoteObjectMethodQuery()
+            {
+                RemoteId = Id,
+                Name = name,
+            };
+
+            Runtime.SendAsync(query);
         }
 
         public void InvokeAsync<T>(string name, Action<T> result, IReadOnlyList<object>? args = null)
@@ -56,10 +85,6 @@ namespace OctbitEngine.Runtime
             throw new NotImplementedException();
         }
 
-        public void SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull
-        {
-            throw new NotImplementedException();
-        }
     }
 
 
