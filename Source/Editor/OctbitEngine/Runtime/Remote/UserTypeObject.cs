@@ -87,5 +87,21 @@ namespace OctbitEngine.Runtime
             return false;
         }
 
+        public void Serialize(BinaryWriter writer)
+        {
+
+        }
+        public void Deserialize(BinaryReader reader)
+        {
+
+        }
+        public void Serialize(BinaryWriter writer, string propertyName)
+        {
+
+        }
+        public void Deserialize(BinaryReader reader, string propertyName)
+        {
+
+        }
     }
 }
