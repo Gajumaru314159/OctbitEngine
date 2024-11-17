@@ -28,12 +28,6 @@ namespace ob::core {
 		//! @brief 空のプロパティを生成
 		Property() = default;
 
-		//! @brief 読み書き可能なプロパティを生成 
-		Property(const TypeInfo& ownerInfo, void* owner, const PropertyInfo* info);
-
-		//! @brief 読み取り専用プロパティを生成 
-		Property(const TypeInfo& ownerInfo, const void* owner, const PropertyInfo* info);
-
 		//! @brief コピー代入演算子
 		Property& operator=(const Property& other) = default;
 
@@ -135,6 +129,17 @@ namespace ob::core {
 
 		Any owner();
 		Any owner()const;
+
+	private:
+
+		friend class Any;
+
+		//! @brief 読み書き可能なプロパティを生成 
+		Property(const TypeInfo& ownerInfo, void* owner, const PropertyInfo* info);
+
+		//! @brief 読み取り専用プロパティを生成 
+		Property(const TypeInfo& ownerInfo, const void* owner, const PropertyInfo* info);
+
 	private:
 		const TypeInfo* m_ownerInfo;
 		void* m_owner;
@@ -195,22 +200,6 @@ namespace ob::core {
 
 		//! @brief コピーAnyオブジェクトを生成 
 		template<class T> Any(T&& value) : Any(GetTypeInfo<T>(value), new T(value), Flag::Instance) {}
-
-		Any(const TypeInfo& info, const void* ptr, Flags flags) {
-			m_info = &info;
-			m_pointer = const_cast<void*>(ptr);
-			m_reference = flags.has(Flag::Reference);
-			m_writable = false;
-			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
-		}
-
-		Any(const TypeInfo& info, void* ptr, Flags flags) {
-			m_info = &info;
-			m_pointer = ptr;
-			m_reference = flags.has(Flag::Reference);
-			m_writable = true;
-			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
-		}
 
 		Property operator[](StringView name) const;
 
@@ -327,6 +316,29 @@ namespace ob::core {
 
 		void seralize(BinaryWriter& writer) {}
 		void deserialize(BinaryReader& reader) {}
+
+	private:
+
+		friend class Property;
+		template<class T>
+		friend class ClassBuilderTemplate;
+
+		Any(const TypeInfo& info, const void* ptr, Flags flags) {
+			m_info = &info;
+			m_pointer = const_cast<void*>(ptr);
+			m_reference = flags.has(Flag::Reference);
+			m_writable = false;
+			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
+		}
+
+		Any(const TypeInfo& info, void* ptr, Flags flags) {
+			m_info = &info;
+			m_pointer = ptr;
+			m_reference = flags.has(Flag::Reference);
+			m_writable = true;
+			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
+		}
+
 	private:
 
 		template < typename T >

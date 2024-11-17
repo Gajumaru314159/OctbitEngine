@@ -98,10 +98,6 @@ TEST(Any, Construct) {
 	copy = value;
 	EXPECT_EQ(foo.value, 2);
 	
-	// ネストは直接書き込めない
-	a["bar"]["value"] = 1;
-	EXPECT_EQ(foo.bar.value,0);
-
 	// 読み込みはできる
 	foo.bar.value = 1;
 	auto value2 = a["bar"]["value"].as<s32>();

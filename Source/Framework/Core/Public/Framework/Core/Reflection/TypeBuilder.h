@@ -424,8 +424,8 @@ namespace ob::core::internal {
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
-		static T* CreateImpl(Span<Any> args, std::index_sequence<I...>) {
-			return new T(args[I].as<std::remove_reference_t<Args>>()...);
+		static Any CreateImpl(Span<Any> args, std::index_sequence<I...>) {
+			return Any::Create<T>(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -438,9 +438,7 @@ namespace ob::core::internal {
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
-			auto info = TypeInfo::Find<T>();
-			OB_ASSERT(info!=nullptr,"{}がリフレクション登録されていません",Type::Get<T>().name());
-			return Any(*info,CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>()), Any::Flag::Instance | Any::Flag::Writable);
+			return CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>());
 		}
 
 
