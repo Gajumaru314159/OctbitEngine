@@ -109,109 +109,16 @@ OB_REGISTER_RTTI(FruitType);
 OB_REGISTER_RTTI(Food);
 OB_REGISTER_RTTI(Fruit);
 
-
-nlohmann::json Serealize(const AnyReference& owner,const TypeInfoManager& manager) {
-	nlohmann::json obj;
-	auto& type = owner.type();
-
-	if (false);
-	else if (type.is<s32>()) obj = owner.get<const s32>();
-	else if (type.is<f32>()) obj = owner.get<const f32>();
-	else if (type.is<String>()) obj = owner.get<const String>();
-	else if (owner.list()) {
-		for (auto element : owner.list()) {
-			obj.emplace_back(Serealize(element,manager));
-		}
-	}
-	else if (owner.map()) {
-		for (auto [key,value] : owner.map()) {
-			auto& item = obj.emplace_back();
-			item["Key"] = Serealize(key, manager);
-			item["Value"] = Serealize(value, manager);
-		}
-	}
-	else if (auto info = manager.find(type)) {
-		if (info->isEnum) {
-			if (info->enumValueGetter) {
-				auto value = info->enumValueGetter(owner);
-				if (auto enumInfo = info->findEnumElement(value)) {
-					obj = enumInfo->name;
-				}
-			}
-		}
-		else {
-			obj["@Type"] = type.name();
-			for (auto& [name, p] : info->properties) {
-				if (!p.canRead())continue;
-				obj[name] = Serealize(p.getter(owner), manager);
-			}
-		}
-	}
-
-	return obj;
-}
-
-
-Any Deserealize(const nlohmann::json& obj , const TypeInfoManager& manager) {
-
-	if (!obj.contains("@Type"))return {};
-	auto type = obj["@Type"].operator std::string();
-	
-	if (auto info = manager.find(type)) {
-
-		if (auto ctor = info->findConstructor()) {
-
-			// インスタンス生成
-			auto instance = ctor->invoker({});
-			AnyReference owner = instance;
-
-			for (auto& [name, property] : info->properties) {
-				if (!property.canWrite()) continue;
-
-				auto itr = obj.find(name);
-				if (itr == obj.end())continue;
-				auto& value = *itr;
-
-				auto& type = property.type;
-
-				if (false);
-				else if (type.is<s32>()) property.set(owner, value.operator s32());
-				else if (type.is<f32>()) property.set(owner, value.operator f32());
-				else if (type.is<String>()) property.set(owner, value.operator String());
-				else if (owner.list()) {
-					for (auto& item : value.array()) {
-						// 要素型が必要
-						// Deserealize(item,manager);
-					}
-				}
-				else if (owner.map()) {
-					for (auto& [key,value] : value.items()) {
-						// キーと要素型が必要
-						// Deserealize(key, manager);
-						// Deserealize(value, manager);
-					}
-				}
-				else if (auto info = manager.find(type)) {
-					if (info->isEnum) {
-						if (auto enumInfo = info->findEnumElement(value.operator String())) {
-							property.setter(owner, enumInfo->sample);
-						}						
-					}
-					else {
-						if (Any userObject = Deserealize(*itr, manager)) {
-							property.setter(owner, userObject);
-						}
-					}
-				}
-			}
-
-			return std::move(instance);
-		}
-
-	}
-	return {};
-}
-
 TEST(TypeBuilder, Construct) {
 	TypeInfoManager manager;
+
+	EXPECT_NE(manager.find("Nutrients"), nullptr);
+	EXPECT_NE(manager.find("FruitType"), nullptr);
+	EXPECT_NE(manager.find("Food"), nullptr);
+	EXPECT_NE(manager.find("Fruit"), nullptr);
+	EXPECT_NE(manager.find(Type::Get<Nutrients>()), nullptr);
+	EXPECT_NE(manager.find(Type::Get<FruitType>()), nullptr);
+	EXPECT_NE(manager.find(Type::Get<Food>()), nullptr);
+	EXPECT_NE(manager.find(Type::Get<Fruit>()), nullptr);
+
 }

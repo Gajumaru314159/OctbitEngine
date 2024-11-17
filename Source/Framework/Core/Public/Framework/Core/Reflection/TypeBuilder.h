@@ -172,9 +172,10 @@ namespace ob::core::internal {
 				ctor.placedInvoker = [](void* p, Span<Any> args) { OB_ASSERT(p, "pがnullです"); new(p)T(args[0].as<T>()); };
 			}
 
-			// デストラクタ登録(初期値あり)
+			// デストラクタ登録
 			{
-				m_info.destructor = [](void* p) { OB_ASSERT(p, "pがnullです"); static_cast<T*>(p)->~T(); };
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
 			// 値取得
@@ -207,6 +208,12 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
+
+			// デストラクタ登録
+			{
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+			}
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -436,16 +443,6 @@ namespace ob::core::internal {
 			}
 
 			PlacedCreateImpl<T, Args...>(ptr,args, std::make_index_sequence<sizeof...(Args)>());
-		}
-
-
-
-		//@―---------------------------------------------------------------------------
-		//! @brief			デストラクタ
-		//@―---------------------------------------------------------------------------
-		template<class T>
-		static void Destroy(void* p) {
-			static_cast<T*>(p)->~T();
 		}
 
 	};

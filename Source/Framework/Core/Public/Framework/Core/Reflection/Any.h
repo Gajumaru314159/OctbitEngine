@@ -73,7 +73,7 @@ namespace ob::core {
 		//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
 		template<class T>
 		auto as() const -> std::enable_if_t<std::is_reference<T>::value,const T> {
-			OB_ASSERT(empty(), "空のプロパティです。");
+			OB_ASSERT(!empty(), "空のプロパティです。");
 			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
 			OB_ASSERT(isReference(), "値型は参照型で受け取ることはできません。isReference()で参照可能か確認してください。");
 			return get().as<std::remove_reference_t<T>>();
@@ -90,7 +90,7 @@ namespace ob::core {
 		//! @details プロパティの型が異なる型の場合はassertが発生します。
 		template<class T>
 		auto as() const -> std::enable_if_t<!std::is_reference<T>::value && std::is_copy_assignable<T>::value, T> {
-			OB_ASSERT(empty(), "空のプロパティです。");
+			OB_ASSERT(!empty(), "空のプロパティです。");
 			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
 			return get().as<T>();
 		}

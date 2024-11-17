@@ -54,6 +54,12 @@ namespace  ob::core::internal{
 				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
 			}
 
+			// デストラクタ登録
+			{
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+			}
+
 			// タイプ登録
 			Register();
 		}

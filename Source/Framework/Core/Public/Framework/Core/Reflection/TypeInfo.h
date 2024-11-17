@@ -150,6 +150,7 @@ namespace ob::core {
 
 		Vector<ConstructorInfo>	constructors;
 		PlacedDestructorInvoker destructor;
+		PlacedDestructorInvoker placedDestructor;
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;
@@ -162,7 +163,8 @@ namespace ob::core {
 		Vector<EnumElementInfo>	enumElements;
 
 		void* copy(const void* other)const { return nullptr; }
-		void destroy(void* pointer)const { if (destructor)destructor(pointer); }
+		void destroy(void* pointer)const { OB_ASSERT_EXPR(destructor); destructor(pointer); }
+		void destroyPlaced(void* pointer)const { OB_ASSERT_EXPR(placedDestructor);  placedDestructor(pointer); }
 		void assign(void* to, const void* from)const {  }
 
 
