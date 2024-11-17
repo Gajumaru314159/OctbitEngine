@@ -349,7 +349,11 @@ namespace ob::core::internal {
 			info.name = name;
 			info.isReference = true;
 			info.getter = [=](const Any& owner) {
-				return Any(owner.as<T>().*address);
+				if (owner.isWritable()) {
+					return Any(std::remove_const_t<Any&>(owner).as<T>().*address);
+				} else {
+					return Any(owner.as<T>().*address);
+				}
 			};
 			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
 				info.setter = [=](Any& owner, const Any& value) {
@@ -370,9 +374,14 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.isReference = false; // TODO
+			info.isReference = std::is_reference<return_type>::value && !std::is_const<return_type>::value;
 			info.getter = [=](const Any& owner) {
-				return Any((owner.as<T>().*(getter))());
+				if (owner.isWritable()) {
+					return Any((std::remove_const_t<Any&>(owner).as<T>().*(getter))());
+				}
+				else {
+					return Any((owner.as<T>().*(getter))());
+				}
 			};
 			return info;
 		}
@@ -388,9 +397,13 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.isReference = false; // TODO
+			info.isReference = std::is_reference<return_type>::value && !std::is_const<return_type>::value;
 			info.getter = [=](const Any& owner) {
-				return Any((owner.as<T>().*(getter))());
+				if (owner.isWritable()) {
+					return Any((std::remove_const_t<Any&>(owner).as<T>().*(getter))());
+				} else {
+					return Any((owner.as<T>().*(getter))());
+				}
 			};
 			info.setter = [=](Any& owner,const Any& value) {
 				(owner.as<T>().*(setter))(value.as<remove_cvr_t<return_type>>());

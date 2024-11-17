@@ -29,10 +29,10 @@ namespace ob::core {
 		Property() = default;
 
 		//! @brief 読み書き可能なプロパティを生成 
-		Property(const TypeInfo& ownerInfo,void* owner, const PropertyInfo* info) : m_ownerInfo(&ownerInfo), m_owner(owner), m_info(info), m_flags(Flag::Writable) {}
+		Property(const TypeInfo& ownerInfo, void* owner, const PropertyInfo* info);
 
 		//! @brief 読み取り専用プロパティを生成 
-		Property(const TypeInfo& ownerInfo,const void* owner, const PropertyInfo* info) : m_ownerInfo(&ownerInfo),m_owner(const_cast<void*>(owner)), m_info(info), m_flags() {}
+		Property(const TypeInfo& ownerInfo, const void* owner, const PropertyInfo* info);
 
 		//! @brief コピー代入演算子
 		Property& operator=(const Property& other) = default;
@@ -115,6 +115,7 @@ namespace ob::core {
 		//------ ラッパー ------//
 
 		//! @brief プロパティのメンバを取得
+		Any operator[](StringView name);
 		Any operator[](StringView name) const;
 
 		//! @brief プロパティのindex番目の要素を取得
@@ -124,6 +125,12 @@ namespace ob::core {
 		
 		bool empty() const {
 			return m_owner == nullptr || m_info == nullptr;
+		}
+
+		void clear() {
+			m_ownerInfo = nullptr;
+			m_owner = nullptr;
+			m_info = nullptr;
 		}
 
 		Any owner();
@@ -268,6 +275,9 @@ namespace ob::core {
 
 		bool isReference() const {
 			return m_reference;
+		}
+		bool isWritable() const {
+			return m_writable;
 		}
 
 		template<class T>

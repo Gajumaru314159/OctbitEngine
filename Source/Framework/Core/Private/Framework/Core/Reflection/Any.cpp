@@ -4,6 +4,30 @@
 
 namespace ob::core {
 
+	//! @brief 読み書き可能なプロパティを生成 
+	Property::Property(const TypeInfo& ownerInfo, void* owner, const PropertyInfo* info)
+		: m_ownerInfo(&ownerInfo), m_owner(owner), m_info(info), m_flags(Flag::Writable)
+	{
+		if (info) {
+			if (info->canWrite() == false) {
+				m_flags.off(Flag::Writable);
+			}
+		} else {
+			clear();
+		}
+	}
+
+	//! @brief 読み取り専用プロパティを生成 
+	Property::Property(const TypeInfo& ownerInfo, const void* owner, const PropertyInfo* info)
+		: m_ownerInfo(&ownerInfo), m_owner(const_cast<void*>(owner)), m_info(info), m_flags() 
+	{
+		if (info) {
+		}
+		else {
+			clear();
+		}
+	}
+
 	Property& Property::assign(const Any& value) {
 		if (m_info && m_ownerInfo) {
 			if (m_flags.has(Flag::Writable)) {
@@ -18,10 +42,10 @@ namespace ob::core {
 	}
 
 	Any Property::get() {
-		return m_info->getter(owner());
+		return m_info ? m_info->getter(owner()):Any();
 	}
 	Any Property::get() const {
-		return m_info->getter(owner());
+		return m_info ? m_info->getter(owner()):Any();
 	}
 
 	Type Property::type() const {
@@ -35,7 +59,9 @@ namespace ob::core {
 
 	Any Property::owner() {
 		if (m_ownerInfo && m_owner) {
-			return Any(*m_ownerInfo, m_owner, Any::Flag::Reference);
+			Any::Flags flags = Any::Flag::Reference;
+			if (m_flags.has(Flag::Writable)) flags |= Any::Flag::Writable;
+			return Any(*m_ownerInfo, m_owner, flags);
 		}
 		return {};
 	}
@@ -44,6 +70,16 @@ namespace ob::core {
 			return Any(*m_ownerInfo, m_owner, Any::Flag::Reference);
 		}
 		return {};
+	}
+
+	Any Property::operator[](StringView name) {
+		if (empty())return {};
+		if (isReference()) {
+			return m_info->getter(owner())[name].get();
+		}
+		else {
+			return copy()[name].copy();
+		}
 	}
 
 	Any Property::operator[](StringView name) const {
@@ -72,8 +108,8 @@ namespace ob::core {
 	Any& Any::operator=(const Any& other) {
 		if (other.empty()) return *this;
 		m_info = other.m_info;
-		m_pointer = other.m_pointer;
 		m_reference = other.m_reference;
+		m_writable = other.m_writable;
 		m_pointer = m_reference ? other.m_pointer : m_info->copy(other.m_pointer);
 		return *this;
 	}

@@ -22,8 +22,48 @@ struct AnyFoo {
 	Vector<f32> list;
 };
 
+
+struct ObjectC {
+	s32 _s32 = 0;
+};
+struct ObjectB {
+	s32 _s32 = 0;
+	ObjectC _objectC;
+};
+struct ObjectA {
+	bool _bool = 0;
+	s32 _s32 = 0;
+	f32 _f32 = 0;
+	String _string;
+	ObjectB _objectB;
+};
+
+OB_DEFINE_CLASS_INFO(ObjectC) {
+	constructor();
+	field("_s32", &T::_s32);
+}
+OB_DEFINE_CLASS_INFO(ObjectB) {
+	constructor();
+	field("_s32", &T::_s32);
+	field("_objectC", &T::_objectC);
+}
+OB_DEFINE_CLASS_INFO(ObjectA) {
+	constructor();
+	field("_bool", &T::_bool);
+	field("_s32", &T::_s32);
+	field("_f32", &T::_f32);
+	field("_string", &T::_string);
+	field("_objectB", &T::_objectB);
+}
+OB_REGISTER_RTTI(ObjectC);
+OB_REGISTER_RTTI(ObjectB);
+OB_REGISTER_RTTI(ObjectA);
+
+
+
+
+
 OB_DEFINE_CLASS_INFO(AnyBar) {
-	constructor<AnyBar>();
 	field("value", & T::value);
 }
 OB_DEFINE_CLASS_INFO(AnyFoo) {
@@ -124,5 +164,23 @@ TEST(Any, Construct) {
 
 	sizeof(Delegate<void()>);
 	sizeof(Func<void()>);
+
+
+	ObjectA object1;
+	Any obj(object1);
+	obj["_bool"] = true;
+	obj["_s32"] = 1;
+	obj["_f32"] = 2.f;
+	obj["_string"] = String("A");
+	obj["_objectB"]["_32"] = 3;
+	obj["_objectB"]["_objectC"]["_s32"] = 4;
+
+	ObjectA object2;
+	object2._bool = true;
+	object2._s32 = 1;
+	object2._f32 = 2.f;
+	object2._string = "A";
+	object2._objectB._s32 = 3;
+	object2._objectB._objectC._s32 = 4;
 
 }
