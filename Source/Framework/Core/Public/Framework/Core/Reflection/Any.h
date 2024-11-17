@@ -180,13 +180,13 @@ namespace ob::core {
 		}
 
 		//! @brief 参照Anyオブジェクトを生成 
-		template<class T> explicit Any(T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference | Flag::Writable) {}
+		template<class T> Any(T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference | Flag::Writable) {}
 
 		//! @brief 参照Anyオブジェクトを生成(const)
-		template<class T> explicit Any(const T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference) {}
+		template<class T> Any(const T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference) {}
 
 		//! @brief コピーAnyオブジェクトを生成 
-		template<class T> explicit Any(T&& value) : Any(GetTypeInfo<T>(), new T(value), Flag::Instance) {}
+		template<class T> Any(T&& value) : Any(GetTypeInfo<T>(), new T(value), Flag::Instance) {}
 
 		Any(const TypeInfo& info, const void* ptr, Flags flags) {
 			m_info = &info;
@@ -303,7 +303,9 @@ namespace ob::core {
 		template<class T>
 		UPtr<T> release() {
 			if (is<T>()) {
-				return UPtr<T>(static_cast<T*>(m_pointer));
+				auto pointer = m_pointer;
+				clear();
+				return UPtr<T>(static_cast<T*>(pointer));
 			}
 			return nullptr;
 		}

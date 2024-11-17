@@ -397,7 +397,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
 		static T* CreateImpl(Span<Any> args, std::index_sequence<I...>) {
-			return new T(args[I].as<Args>()...);
+			return new T(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
 		//@―---------------------------------------------------------------------------
@@ -428,7 +428,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class T, class... Args, size_t ...I>
 		static void PlacedCreateImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
-			new(ptr)T(args[I].as<Args>()...);
+			new(ptr)T(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
 		//@―---------------------------------------------------------------------------

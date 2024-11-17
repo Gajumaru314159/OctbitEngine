@@ -47,7 +47,7 @@ namespace ob::core {
 	}
 
 	Any::~Any() {
-		if (m_info) m_info->destroy(m_pointer);
+		if (m_info && m_flags.has(Flag::Instance)) m_info->destroy(m_pointer);
 		clear();
 	}
 

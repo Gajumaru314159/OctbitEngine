@@ -16,7 +16,7 @@ namespace ob::debug {
 	class Inspector {
 	public:
 		Inspector() = default;
-		void draw(AnyReference obj, Type type) const;
+		void draw(Any& obj, Type type) const;
 	};
 
 }

@@ -8,7 +8,7 @@
 
 namespace ob::debug {
 
-	void Inspector::draw(AnyReference obj, Type type) const {
+	void Inspector::draw(Any& obj, Type type) const {
 
 		String name;
 		std::string str;

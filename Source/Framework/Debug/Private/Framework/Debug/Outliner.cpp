@@ -152,7 +152,7 @@ namespace ob::debug {
 
 					ImGui::ScopedIndent indent;
 
-					AnyReference obj(entity);
+					Any obj(entity);
 
 					inspector.draw(obj, Type::Get(entity));
 				}
@@ -179,7 +179,7 @@ namespace ob::debug {
 
 					if (ImGui::CollapsingHeader(cmpname.c_str(), pVisible)) {
 						ImGui::ScopedIndent indent;
-						AnyReference obj(*component);
+						Any obj(*component);
 						inspector.draw(obj, component->getType());
 					}
 
