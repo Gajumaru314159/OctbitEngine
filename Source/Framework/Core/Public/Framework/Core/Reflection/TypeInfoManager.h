@@ -40,7 +40,10 @@ namespace ob::core {
 		static const TypeInfo* Find(StringView type) {
 			return Find(Type(type));
 		}
-
+		template<class T>
+		static const TypeInfo* Find() {
+			return Find(Type::Get<T>());
+		}
 
 	private:
 		HashMap<Type, TypeInfo> m_infos;

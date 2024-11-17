@@ -13,7 +13,7 @@ namespace ob::core {
 	//@―---------------------------------------------------------------------------
 	//! @brief  TypeInfoを文字列化する
 	//@―---------------------------------------------------------------------------
-	String PrintTypeInfo(const TypeInfo& info) {
+	inline String PrintTypeInfo(const TypeInfo& info) {
 
 		String str;
 

@@ -10,14 +10,24 @@
 
 namespace type_info_builder {
 
+	//! @brief		リフレクション登録関数
+	//! @details	リフレクション登録関数を連結リストとして関するためのオブジェクトです。
 	struct ReflectionFunction {
 		using func_type = void(*)();
 		ReflectionFunction(func_type func) :func(func) {}
 		func_type func;
 		ReflectionFunction* next = nullptr;
 	};
-	ReflectionFunction* GetReflectionFunction();
+
+	//! @brief		リフレクション登録関数を追加する
+	//! @details	OB_REGISTER_RTTI から呼び出される関数です。
+	//!				登録されたリフレクション登録関数は GetReflectionFunction で取得できます。
 	void PushReflectionFunction(ReflectionFunction*);
+
+	//! @brief		ルートのリフレクション関数を取得する
+	//! @details	リフレクション登録関数は ReflectionFunction の連結リストとして登録されています。
+	//!				next が有効なポインタであれば次のリフレクション登録関数が存在します。
+	ReflectionFunction* GetReflectionFunction();
 
 }
 
@@ -99,7 +109,7 @@ namespace ob::core::internal {
 			element.name = name;
 			element.index = m_info.enumElements.size() - 1;
 			element.value = enum_cast(value);
-			element.sample = value;
+			//element.sample = value;
 			return element;
 		}
 
@@ -150,19 +160,26 @@ namespace ob::core::internal {
 			// コンストラクタ登録(デフォルト)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
-				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>()); };
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(); };
+				ctor.placedInvoker = [](void* p, Span<Any> args) { OB_ASSERT(p, "pがnullです"); new(p)T; };
 			}
 
 			// コンストラクタ登録(初期値あり)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
 				ctor.arguments = { {Type::Get<T>(),"value"} };
-				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
+				ctor.placedInvoker = [](void* p, Span<Any> args) { OB_ASSERT(p, "pがnullです"); new(p)T(args[0].as<T>()); };
+			}
+
+			// デストラクタ登録(初期値あり)
+			{
+				m_info.destructor = [](void* p) { OB_ASSERT(p, "pがnullです"); static_cast<T*>(p)->~T(); };
 			}
 
 			// 値取得
-			m_info.enumValueGetter = [](const AnyReference& instance) {
-				return enum_cast(instance.get<T>());
+			m_info.enumValueGetter = [](const Any& instance) {
+				return enum_cast(instance.as<T>());
 			};
 
 			// タイプ登録
@@ -189,7 +206,6 @@ namespace ob::core::internal {
 		//! @brief			コンストラクタ
 		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
-			// タイプ登録
 			Register();
 		}
 
@@ -214,6 +230,7 @@ namespace ob::core::internal {
 			static_assert(std::is_constructible<T>::value,"0引数のコンストラクタがありません");
 			auto& info = m_info.constructors.emplace_back();
 			info.invoker = &CreateWithoutArgs;
+			info.placedInvoker = &PlacedCreateWithoutArgs;
 			return info;
 		}
 		template<class... Args,class... Names>
@@ -238,6 +255,7 @@ namespace ob::core::internal {
 
 			// invokerを登録
 			info.invoker = &Create<Args...>;
+			info.placedInvoker = &PlacedCreate<Args...>;
 
 			return info;
 		}
@@ -310,12 +328,12 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.name = name;
 			info.type = Type::Get<TField>();
-			info.getter = [=](const AnyReference& owner) {
-				return Any(owner.get<T>().*address);
+			info.getter = [=](const Any& owner) {
+				return Any(owner.as<T>().*address);
 			};
 			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
-				info.setter = [=](const AnyReference& owner, const AnyReference& value) {
-					(owner.get<T>().*(address)) = value.get<TField>();
+				info.setter = [=](Any& owner, const Any& value) {
+					(owner.as<T>().*(address)) = value.as<TField>();
 				};
 			}
 			return info;
@@ -332,8 +350,8 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const AnyReference& owner) {
-				return Any((owner.get<T>().*(getter))());
+			info.getter = [=](const Any& owner) {
+				return Any((owner.as<T>().*(getter))());
 			};
 			return info;
 		}
@@ -349,11 +367,11 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.getter = [=](const AnyReference& owner) {
-				return Any((owner.get<T>().*(getter))());
+			info.getter = [=](const Any& owner) {
+				return Any((owner.as<T>().*(getter))());
 			};
-			info.setter = [=](const AnyReference& owner,const AnyReference& value) {
-				(owner.get<T>().*(setter))(value.get<remove_cvr_t<return_type>>());
+			info.setter = [=](Any& owner,const Any& value) {
+				(owner.as<T>().*(setter))(value.as<remove_cvr_t<return_type>>());
 			};
 			return info;
 		}
@@ -363,30 +381,71 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
 		//@―---------------------------------------------------------------------------
-		static Any CreateWithoutArgs([[meybe_unused]] Span<AnyReference>) {
-			return std::move(Any(std::make_unique<T>()));
+		static Any CreateWithoutArgs([[meybe_unused]] Span<Any>) {
+			return Any::Create<T>();
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
-		static UPtr<T> CreateImpl(Span<AnyReference> args, std::index_sequence<I...>) {
-			return std::make_unique<T>(args[I].get<Args>()...);
+		static T* CreateImpl(Span<Any> args, std::index_sequence<I...>) {
+			return new T(args[I].as<Args>()...);
 		}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class... Args>
-		static Any Create(Span<AnyReference> args) {
+		static Any Create(Span<Any> args) {
 
 			Type types[] = {Type::Get<Args>()...};
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const AnyReference& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
 				return {};
 			}
+			auto info = TypeInfo::Find<T>();
+			OB_ASSERT(info!=nullptr,"{}がリフレクション登録されていません",Type::Get<T>().name());
+			return Any(*info,CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>()), Any::Flag::Instance | Any::Flag::Writable);
+		}
 
-			return Any(CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>()));
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		static void PlacedCreateWithoutArgs(void* ptr,[[meybe_unused]] Span<Any>) {
+			new(ptr)T();
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class T, class... Args, size_t ...I>
+		static void PlacedCreateImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
+			new(ptr)T(args[I].as<Args>()...);
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class... Args>
+		static void PlacedCreate(void* ptr, Span<Any> args) {
+
+			Type types[] = { Type::Get<Args>()... };
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				return;
+			}
+
+			PlacedCreateImpl<T, Args...>(ptr,args, std::make_index_sequence<sizeof...(Args)>());
+		}
+
+
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			デストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class T>
+		static void Destroy(void* p) {
+			static_cast<T*>(p)->~T();
 		}
 
 	};

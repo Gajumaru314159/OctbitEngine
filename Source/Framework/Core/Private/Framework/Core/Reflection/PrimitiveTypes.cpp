@@ -44,14 +44,14 @@ namespace  ob::core::internal{
 			// コンストラクタ登録(デフォルト)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
-				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>()); };
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(); };
 			}
 
 			// コンストラクタ登録(初期値あり)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
 				ctor.arguments = { {Type::Get<T>(),"value"} };
-				ctor.invoker = [](Span<AnyReference> args) { return Any(std::make_unique<T>(args[0].get<T>())); };
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
 			}
 
 			// タイプ登録

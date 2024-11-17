@@ -6,26 +6,19 @@
 #pragma once
 #include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Reflection/Any.h>
-#include <Framework/Core/Reflection/AnyReference.h>
 #include <Framework/Core/Template/Container/Vector.h>
 #include <Framework/Core/Template/Container/Map.h>
 #include <Framework/Core/Template/Utility/Function.h>
 
 namespace ob::core {
 
-	struct PropertyConverter {
-		s32 fromVersion;
-		s32 toVersion;
-		StringView from;
-		StringView to;
-	};
-
-
-	using ConstructorInvoker = Func<Any(Span<AnyReference> args)>;
-	using MethodInvoker = Func<Any(AnyReference& owner, Span<AnyReference> args)>;
-	using PropertySetter = Func<void(const AnyReference& owner, const AnyReference& value)>;
-	using PropertyGetter = Func<Any(const AnyReference& owner)>;
-	using EnumValueGetter = Func<s32(const AnyReference& owner)>;
+	using ConstructorInvoker = Func<Any(Span<Any> args)>;
+	using PlacedConstructorInvoker = Func<void(void*, Span<Any> args)>;
+	using PlacedDestructorInvoker = Func<void(void*)>;
+	using MethodInvoker = Func<Any(Any& owner, Span<Any> args)>;
+	using PropertySetter = Func<void(Any& owner, const Any& value)>;
+	using PropertyGetter = Func<Any(const Any& owner)>;
+	using EnumValueGetter = Func<s32(const Any& owner)>;
 
 
 	//@―---------------------------------------------------------------------------
@@ -53,7 +46,7 @@ namespace ob::core {
 		StringView				name;
 		s32						index;
 		s64						value;
-		Any						sample;
+		//Any						sample;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -68,18 +61,30 @@ namespace ob::core {
 	//! @brief  コンストラクタ情報
 	//@―---------------------------------------------------------------------------
 	struct ConstructorInfo : TagInfo {
-		Vector<ArgumentInfo>	arguments;
-		ConstructorInvoker		invoker;
+		Vector<ArgumentInfo>		arguments;
+		ConstructorInvoker			invoker;
+		PlacedConstructorInvoker	placedInvoker;
 
 		template<class T>
-		UPtr<T> invoke(Span<AnyReference> args) const {
+		UPtr<T> invoke(Span<Any> args) const {
 			return invoker(args).release<T>();
 		}
 		template<class T,class... Args>
 		UPtr<T> invoke(Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
-			AnyReference rargs[] = {args...,AnyReference()};
-			return invoker(Span<AnyReference>(rargs,sizeof...(Args))).release<T>();
+			Any rargs[] = {args...,Any()};
+			return invoker(Span<Any>(rargs,sizeof...(Args))).release<T>();
+		}
+
+		template<class T>
+		void invoke_placed(void* p,Span<Any> args) const {
+			placedInvoker(p,args);
+		}
+		template<class T, class... Args>
+		void invoke_placed(Args&&... args) const {
+			// 0引数に対応するために最後尾に空要素を追加している
+			Any rargs[] = { args...,Any() };
+			placedInvoker(p, Span<Any>(rargs, sizeof...(Args)));
 		}
 
 		template<class... Args>
@@ -98,6 +103,7 @@ namespace ob::core {
 		StringView				name;
 		PropertySetter			setter;
 		PropertyGetter			getter;
+		bool					isReference;
 
 		template<class T,class TOwner>
 		T get(TOwner&& owner) const {
@@ -143,6 +149,7 @@ namespace ob::core {
 		HashSet<Type>			bases;
 
 		Vector<ConstructorInfo>	constructors;
+		PlacedDestructorInvoker destructor;
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;
@@ -153,6 +160,10 @@ namespace ob::core {
 		bool					isEnum;
 		EnumValueGetter			enumValueGetter;
 		Vector<EnumElementInfo>	enumElements;
+
+		void* copy(const void* other)const { return nullptr; }
+		void destroy(void* pointer)const { if (destructor)destructor(pointer); }
+		void assign(void* to, const void* from)const {  }
 
 
 		bool isBaseOf(const Type& super)const;
@@ -217,6 +228,8 @@ namespace ob::core {
 
 	public:
 
+		template<class T>
+		static const TypeInfo* Find() { return Find(Type::Get<T>()); }
 		static const TypeInfo* Find(const Type& type);
 		static const TypeInfo* Find(StringView type);
 		static const TypeInfo* Find(Type::hash_type hash);
