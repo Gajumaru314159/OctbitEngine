@@ -62,10 +62,18 @@ TEST(Any, Construct) {
 	a["bar"]["value"] = 1;
 	EXPECT_EQ(foo.bar.value,0);
 
-	// オブジェクトをコピーして書き込む
+	// 読み込みはできる
+	foo.bar.value = 1;
+	auto value2 = a["bar"]["value"].as<s32>();
+	EXPECT_EQ(value2, 1);
+
+
+	// ネスト先に書き込む場合はオブジェクトをコピーして書き込む
 	auto bar = a["bar"].copy();
-	bar["value"] = 1;
+	bar["value"] = 2;
 	a["bar"] = bar;
+
+	EXPECT_EQ(foo.bar.value, 2);
 
 	// 専用のセッターで上記の処理を行える
 	//a.set("bar","value", 1);
