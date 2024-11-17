@@ -188,13 +188,13 @@ namespace ob::core {
 		}
 
 		//! @brief 参照Anyオブジェクトを生成 
-		template<class T> Any(T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference | Flag::Writable) {}
+		template<class T> Any(T& value) : Any(GetTypeInfo<T>(value), &value, Flag::Reference | Flag::Writable) {}
 
 		//! @brief 参照Anyオブジェクトを生成(const)
-		template<class T> Any(const T& value) : Any(GetTypeInfo<T>(), &value, Flag::Reference) {}
+		template<class T> Any(const T& value) : Any(GetTypeInfo<T>(value), &value, Flag::Reference) {}
 
 		//! @brief コピーAnyオブジェクトを生成 
-		template<class T> Any(T&& value) : Any(GetTypeInfo<T>(), new T(value), Flag::Instance) {}
+		template<class T> Any(T&& value) : Any(GetTypeInfo<T>(value), new T(value), Flag::Instance) {}
 
 		Any(const TypeInfo& info, const void* ptr, Flags flags) {
 			m_info = &info;
@@ -328,8 +328,31 @@ namespace ob::core {
 		void seralize(BinaryWriter& writer) {}
 		void deserialize(BinaryReader& reader) {}
 	private:
+
+		template < typename T >
+		class has_get_type {
+		private:
+			template< typename Arg >
+			static auto impl(...) -> std::false_type;
+			template < typename Arg >
+			static auto impl(Arg*) -> decltype(std::declval<Arg>().getType(), std::true_type());
+		public:
+			static constexpr bool value = decltype(impl<T>(nullptr)) ::value;
+		};
+
 		template<class T>
-		static const TypeInfo& GetTypeInfo() { return GetTypeInfo(Type::Get<T>()); }
+		static const TypeInfo& GetTypeInfo() {
+			return GetTypeInfo(Type::Get<T>());
+		}
+		template<class T>
+		static const TypeInfo& GetTypeInfo(const T& obj) {
+			if constexpr (has_get_type<T>::value) {
+				return GetTypeInfo(obj.getType());
+			}
+			else {
+				return GetTypeInfo<T>();
+			}
+		}
 		static const TypeInfo& GetTypeInfo(const Type&);
 	private:
 		const TypeInfo* m_info = nullptr;
