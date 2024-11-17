@@ -29,7 +29,7 @@ namespace ob::core {
 	}
 
 	Any Property::copy()const {
-		if (m_info) return m_info->getter(owner());
+		if (m_info) return m_info->getter(owner()).copy();
 		return {};
 	}
 
@@ -46,8 +46,25 @@ namespace ob::core {
 		return {};
 	}
 
+	Any Property::operator[](StringView name) const {
+		if (empty())return {};
+		if (isReference()) {
+			return m_info->getter(owner())[name].get();
+		}
+		else {
+			return copy()[name].copy();
+		}
+	}
+
+
+
+	Any::Any() {
+		m_reference = false;
+		m_writable = false;
+	}
+
 	Any::~Any() {
-		if (m_info && m_flags.has(Flag::Instance)) m_info->destroy(m_pointer);
+		if (m_info && !m_reference) m_info->destroy(m_pointer);
 		clear();
 	}
 
@@ -55,8 +72,9 @@ namespace ob::core {
 	Any& Any::operator=(const Any& other) {
 		if (other.empty()) return *this;
 		m_info = other.m_info;
-		m_flags = other.m_flags;
-		m_pointer = other.m_flags.has(Flag::Reference) ? other.m_pointer : m_info->copy(other.m_pointer);
+		m_pointer = other.m_pointer;
+		m_reference = other.m_reference;
+		m_pointer = m_reference ? other.m_pointer : m_info->copy(other.m_pointer);
 		return *this;
 	}
 
@@ -72,7 +90,7 @@ namespace ob::core {
 	Property Any::operator[](StringView name) {
 		if (m_info) {
 			if (auto property = m_info->findProperty(name)) {
-				if (m_flags.has(Flag::Writable)) {
+				if (m_writable) {
 					return { *m_info,  m_pointer ,property };
 				}
 				else {
@@ -97,7 +115,17 @@ namespace ob::core {
 
 	Any Any::copy()const {
 		if (empty())return {};
-		return Any(*m_info, m_info->copy(m_pointer), Flags(m_flags) |= Flag::Writable);
+		auto instance = m_info->copy(m_pointer);
+		if (instance == nullptr)return {};
+		return Any(*m_info, instance, Flag::Instance | Flag::Writable);
+	}
+
+	Any::Flags Any::flags()const {
+		Flags flags;
+		if (m_reference) flags |= Flag::Reference;
+		if (!m_reference) flags |= Flag::Instance;
+		if (m_writable) flags |= Flag::Writable;
+		return flags;
 	}
 
 	const TypeInfo& Any::GetTypeInfo(const Type& type) {

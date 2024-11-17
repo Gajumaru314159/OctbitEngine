@@ -179,7 +179,7 @@ namespace ob::debug {
 
 					if (ImGui::CollapsingHeader(cmpname.c_str(), pVisible)) {
 						ImGui::ScopedIndent indent;
-						Any obj(*component);
+						Any obj(*TypeInfo::Find(component->getType()),component.get(), Any::Flag::Reference | Any::Flag::Writable);
 						inspector.draw(obj, component->getType());
 					}
 

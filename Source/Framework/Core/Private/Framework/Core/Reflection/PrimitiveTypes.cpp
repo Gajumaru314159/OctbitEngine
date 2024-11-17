@@ -60,6 +60,11 @@ namespace  ob::core::internal{
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
+			// コピー
+			if constexpr (std::is_copy_assignable<T>::value) {
+				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
+			}
+
 			// タイプ登録
 			Register();
 		}
@@ -176,7 +181,7 @@ OB_DEFINE_CLASS_INFO(ob::core::Vec2) {
 }
 
 OB_DEFINE_CLASS_INFO(ob::core::Vec3) {
-	desc("2次元ベクトル");
+	desc("3次元ベクトル");
 	tag("C#", "Common.Math.Vector3");
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<f32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
@@ -184,11 +189,35 @@ OB_DEFINE_CLASS_INFO(ob::core::Vec3) {
 }
 
 OB_DEFINE_CLASS_INFO(ob::core::Vec4) {
-	desc("2次元ベクトル");
+	desc("4次元ベクトル");
 	tag("C#", "Common.Math.Vector4");
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<f32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
 	constructor<f32, f32, f32, f32>().desc("コンストラクタ(要素を指定して初期化)");
+}
+
+OB_DEFINE_CLASS_INFO(ob::core::IntVec2) {
+	desc("2次元整数ベクトル");
+	//tag("C#", "Common.Math.Vector2");
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
+	constructor<s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
+}
+
+OB_DEFINE_CLASS_INFO(ob::core::IntVec3) {
+	desc("3次元整数ベクトル");
+	tag("C#", "Common.Math.Vector3");
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
+	constructor<s32, s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
+}
+
+OB_DEFINE_CLASS_INFO(ob::core::IntVec4) {
+	desc("4次元整数ベクトル");
+	//tag("C#", "Common.Math.Vector4");
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
+	constructor<s32, s32, s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
 }
 
 OB_DEFINE_CLASS_INFO(ob::core::Rot) {
@@ -211,4 +240,12 @@ OB_DEFINE_CLASS_INFO(ob::core::Color) {
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<f32, f32, f32, f32>().desc("コンストラクタ(各要素を指定して初期化)");
 	constructor<f32, f32>().desc("コンストラクタ(輝度とアルファ値を指定して初期化)");
+}
+
+OB_DEFINE_CLASS_INFO(ob::core::IntColor) {
+	desc("色");
+	//tag("C#", "Common.Graphics.Color");
+	constructor().desc("デフォルトコンストラクタ");
+	constructor<s32, s32, s32, s32>().desc("コンストラクタ(各要素を指定して初期化)");
+	constructor<s32, s32>().desc("コンストラクタ(輝度とアルファ値を指定して初期化)");
 }

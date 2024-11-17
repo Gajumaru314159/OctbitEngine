@@ -178,6 +178,11 @@ namespace ob::core::internal {
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
+			// コピー
+			if constexpr (std::is_copy_assignable<T>::value) {
+				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
+			}
+
 			// 値取得
 			m_info.enumValueGetter = [](const Any& instance) {
 				return enum_cast(instance.as<T>());
@@ -213,6 +218,11 @@ namespace ob::core::internal {
 			{
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+			}
+
+			// コピー
+			if constexpr(std::is_copy_assignable<T>::value){
+				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
 			}
 		}
 
@@ -333,8 +343,9 @@ namespace ob::core::internal {
 			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
 			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
-			info.name = name;
 			info.type = Type::Get<TField>();
+			info.name = name;
+			info.isReference = true;
 			info.getter = [=](const Any& owner) {
 				return Any(owner.as<T>().*address);
 			};
@@ -357,6 +368,7 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
+			info.isReference = false; // TODO
 			info.getter = [=](const Any& owner) {
 				return Any((owner.as<T>().*(getter))());
 			};
@@ -374,6 +386,7 @@ namespace ob::core::internal {
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
+			info.isReference = false; // TODO
 			info.getter = [=](const Any& owner) {
 				return Any((owner.as<T>().*(getter))());
 			};

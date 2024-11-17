@@ -15,6 +15,7 @@ namespace ob::core {
 	using ConstructorInvoker = Func<Any(Span<Any> args)>;
 	using PlacedConstructorInvoker = Func<void(void*, Span<Any> args)>;
 	using PlacedDestructorInvoker = Func<void(void*)>;
+	using CopyInvoker = Func<void*(const void*)>;
 	using MethodInvoker = Func<Any(Any& owner, Span<Any> args)>;
 	using PropertySetter = Func<void(Any& owner, const Any& value)>;
 	using PropertyGetter = Func<Any(const Any& owner)>;
@@ -151,6 +152,7 @@ namespace ob::core {
 		Vector<ConstructorInfo>	constructors;
 		PlacedDestructorInvoker destructor;
 		PlacedDestructorInvoker placedDestructor;
+		CopyInvoker				copyInvoker;
 
 		PropertyInfoMap			properties;
 		MethodInfoMap			methods;
@@ -162,7 +164,7 @@ namespace ob::core {
 		EnumValueGetter			enumValueGetter;
 		Vector<EnumElementInfo>	enumElements;
 
-		void* copy(const void* other)const { return nullptr; }
+		void* copy(const void* pointer)const { OB_ASSERT_EXPR(destructor); return copyInvoker(pointer); }
 		void destroy(void* pointer)const { OB_ASSERT_EXPR(destructor); destructor(pointer); }
 		void destroyPlaced(void* pointer)const { OB_ASSERT_EXPR(placedDestructor);  placedDestructor(pointer); }
 		void assign(void* to, const void* from)const {  }

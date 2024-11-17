@@ -152,7 +152,7 @@ namespace ob::core {
 	public:
 
 		//! @brief 空のAnyオブジェクト作成
-		Any() = default;
+		Any();
 
 		//! @brief デストラクタ
 		~Any();
@@ -174,7 +174,8 @@ namespace ob::core {
 		Any& operator=(Any&& other) noexcept {
 			m_info = other.m_info;
 			m_pointer = other.m_pointer;
-			m_flags = other.m_flags;
+			m_reference = other.m_reference;
+			m_writable = other.m_writable;
 			other.clear();
 			return *this;
 		}
@@ -191,17 +192,17 @@ namespace ob::core {
 		Any(const TypeInfo& info, const void* ptr, Flags flags) {
 			m_info = &info;
 			m_pointer = const_cast<void*>(ptr);
-			m_flags = flags;
-			m_flags.off(Flag::Writable);
-			OB_ASSERT_EXPR(m_flags.has(Flag::Reference) || m_flags.has(Flag::Instance));
+			m_reference = flags.has(Flag::Reference);
+			m_writable = false;
+			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
 		}
 
 		Any(const TypeInfo& info, void* ptr, Flags flags) {
 			m_info = &info;
 			m_pointer = ptr;
-			m_flags = flags;
-			m_flags.on(Flag::Writable);
-			OB_ASSERT_EXPR(m_flags.has(Flag::Reference) || m_flags.has(Flag::Instance));
+			m_reference = flags.has(Flag::Reference);
+			m_writable = true;
+			OB_ASSERT_EXPR(flags.has(Flag::Reference) || flags.has(Flag::Instance));
 		}
 
 		Property operator[](StringView name) const;
@@ -221,7 +222,7 @@ namespace ob::core {
 		template<class T>
 		auto operator=(T&& value) -> std::enable_if_t<!std::is_same<remove_cvr_t<T>, Any>::value,Any&> {
 			if (m_pointer) {
-				if (m_flags.has(Flag::Writable)) {
+				if (m_writable) {
 					(*reinterpret_cast<remove_cvr_t<T>*>(m_pointer)) = value;
 				}
 			}
@@ -266,7 +267,7 @@ namespace ob::core {
 		}
 
 		bool isReference() const {
-			return m_flags.has(Flag::Reference);
+			return m_reference;
 		}
 
 		template<class T>
@@ -290,7 +291,6 @@ namespace ob::core {
 		void clear() {
 			m_info = nullptr;
 			m_pointer = nullptr;
-			m_flags.clear();
 		}
 
 		Any copy()const;
@@ -313,6 +313,8 @@ namespace ob::core {
 		// Vector<Any> list();
 		// Map<Any, Any> map();
 
+		Flags flags()const;
+
 		void seralize(BinaryWriter& writer) {}
 		void deserialize(BinaryReader& reader) {}
 	private:
@@ -322,12 +324,8 @@ namespace ob::core {
 	private:
 		const TypeInfo* m_info = nullptr;
 		void* m_pointer = nullptr;
-		Flags       m_flags;
+		bool m_reference : 1;
+		bool m_writable : 1;
 	};
-
-
-	inline Any Property::operator[](StringView name) const {
-		return copy()[name].copy() ;
-	}
 
 }
