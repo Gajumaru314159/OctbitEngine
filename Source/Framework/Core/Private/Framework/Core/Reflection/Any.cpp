@@ -103,7 +103,7 @@ namespace ob::core {
 
 	Any& Any::assign(const Any& other) {
 		if (IsCastable(other.type(), type())) {
-			m_info->assign(m_pointer, other.m_pointer);
+			m_info->assign(other.m_pointer, m_pointer);
 		}
 		return *this;
 	}

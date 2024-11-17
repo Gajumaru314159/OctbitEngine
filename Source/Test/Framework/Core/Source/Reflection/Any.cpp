@@ -108,6 +108,12 @@ TEST(Any, Construct) {
 	Property p = a["bar"];
 	p.as<AnyBar>();
 
+	auto c = a.copy();
+	c["value"] = 2;
+	OB_ASSERT_EXPR(foo.value == 1);
+	a.assign(c);
+	OB_ASSERT_EXPR(foo.value == 2);
+
 
 	Blob blob;
 	BinaryStream stream(blob);
@@ -118,4 +124,5 @@ TEST(Any, Construct) {
 
 	sizeof(Delegate<void()>);
 	sizeof(Func<void()>);
+
 }

@@ -63,6 +63,7 @@ namespace  ob::core::internal{
 			// コピー
 			if constexpr (std::is_copy_assignable<T>::value) {
 				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
+				m_info.assignInvoker = [](const void* from,void* to) { (*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from)); };
 			}
 
 			// タイプ登録
