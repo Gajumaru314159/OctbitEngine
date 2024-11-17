@@ -22,7 +22,7 @@
     {                                                                                                   \
         if(auto logger = ob::core::Logger::Get())logger->addLog(level, CURRENT_SOURCE_LOCATION, category, format, __VA_ARGS__);  \
         if (UNLIKELY(level == ob::core::LogLevel::Fatal)) {                                             \
-            ::CallBreakPoint();                                                                         \
+            CallBreakPoint();                                                                           \
             assert(false);                                                                              \
         }                                                                                               \
     }

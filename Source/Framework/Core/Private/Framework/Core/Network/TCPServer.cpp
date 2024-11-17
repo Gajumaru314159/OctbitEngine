@@ -94,6 +94,7 @@ namespace ob::core {
 			return false;
 		}
 
+		return true;
 	}
 
 	/// サーバーを停止する

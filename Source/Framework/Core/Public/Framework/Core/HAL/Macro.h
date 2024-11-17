@@ -10,6 +10,10 @@
 #if defined(OS_WINDOWS)
 #include "Windows/Macro.h"
 
+#ifdef _DEBUG
+#include <crtdbg.h> 
+#endif
+
 #elif defined(OS_LINUX)
 #include "Linux/Macro.h"
 
@@ -120,11 +124,17 @@
 extern void OutputDebugLog(const wchar_t* message);
 
 //@―---------------------------------------------------------------------------
-//! @brief  ブレークポイントを呼び出し
-//@―---------------------------------------------------------------------------
-extern void CallBreakPoint();
-
-//@―---------------------------------------------------------------------------
 //! @brief  メッセージボックス表示
 //@―---------------------------------------------------------------------------
 extern void ShowMessageBox(const wchar_t* message);
+
+//@―---------------------------------------------------------------------------
+//! @brief  ブレークポイントを呼び出し
+//@―---------------------------------------------------------------------------
+#ifdef _DEBUG
+#ifdef OS_WINDOWS
+#define CallBreakPoint()  { _CrtDbgBreak(); } // if (::IsDebuggerPresent())
+#else
+#define CallBreakPoint() /**/
+#endif
+#endif

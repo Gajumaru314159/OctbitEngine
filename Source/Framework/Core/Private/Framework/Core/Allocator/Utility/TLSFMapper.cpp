@@ -311,10 +311,6 @@ namespace ob::core {
 		}
 		pTop = &block;
 
-		if (block.capacity == 0) {
-			::CallBreakPoint();
-		}
-
 		entryFreeListBitState(firstLevel, secondLevel);
 
 	}
