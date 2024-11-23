@@ -217,6 +217,7 @@ namespace ob::core {
 		const MethodInfo* findMethod(StringView name)const {
 			auto itr = methods.find(name);
 			if (itr == methods.end()) return nullptr;
+			if (!itr->second.invoke) return nullptr;
 			return &itr->second;
 		}
 

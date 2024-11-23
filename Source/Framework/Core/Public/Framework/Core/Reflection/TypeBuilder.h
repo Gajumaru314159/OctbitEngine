@@ -287,12 +287,10 @@ namespace ob::core::internal {
 		//! 関数ポインタの特殊化
 		template<typename OwnerType, typename ReturnType, typename... Args>
 		struct MethodTraits<ReturnType(OwnerType::*)(Args...)> {
-			static constexpr Array<Type,sizeof...(Args)+1> Types() {
-				return { Type::Get<Args>()... ,Type()};
+			static constexpr Array<Type, sizeof...(Args) + 1> Types() {
+				return { Type::Get<Args>()... ,Type() };
 			}
-			static constexpr size_t Count() { 
-				return sizeof...(Args); 
-			}
+			static constexpr size_t Count = sizeof...(Args);
 			static constexpr bool Const = false;
 		};
 
@@ -301,32 +299,49 @@ namespace ob::core::internal {
 			static constexpr Array<Type, sizeof...(Args) + 1> Types() {
 				return { Type::Get<Args>()... ,Type() };
 			}
-			static constexpr size_t Count() {
-				return sizeof...(Args);
-			}
+			static constexpr size_t Count = sizeof...(Args);
 			static constexpr bool Const = true;
 		};
+		template<typename OwnerType, typename ReturnType, typename... Args>
+		struct MethodTraits<ReturnType(OwnerType::*)(Args...)noexcept> {
+			static constexpr Array<Type, sizeof...(Args) + 1> Types() {
+				return { Type::Get<Args>()... ,Type() };
+			}
+			static constexpr size_t Count = sizeof...(Args);
+			static constexpr bool Const = false;
+		};
+
+		template<typename OwnerType, typename ReturnType, typename... Args>
+		struct MethodTraits<ReturnType(OwnerType::*)(Args...)const noexcept> {
+			static constexpr Array<Type, sizeof...(Args) + 1> Types() {
+				return { Type::Get<Args>()... ,Type() };
+			}
+			static constexpr size_t Count = sizeof...(Args);
+			static constexpr bool Const = true;
+		};
+
+
 		//! @endcond
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
 		//@―---------------------------------------------------------------------------
-		template<class TMethod,class... Names>
-		auto method(StringView name, TMethod function,Names&&... argNames) 
-			-> std::enable_if_t<MethodTraits<TMethod>::Count() == sizeof...(Names) || 0 == sizeof...(Names) , TagBuilder>
+		template< class R, class... Args,class... Names>
+		auto method(StringView name, R(T::*function)(Args...), Names&&... argNames)
+			-> std::enable_if_t<MethodTraits<decltype(function)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			using return_type = typename member_function_traits<TMethod>::return_type;
+			using return_type = typename member_function_traits<decltype(function)>::return_type;
 			OB_ASSERT(m_info.methods.count(name) == 0, "{}は登録済みのメソッドです [{}]",name,m_info.type.name());
 
 			m_info.methodOrder.emplace_back(name);
 			auto& info = m_info.methods[name];
 			info.name = name;
 			info.returnType = Type::Get<return_type>();
-			info.isConst = MethodTraits<TMethod>::Const;
+			info.isConst = MethodTraits<decltype(function)>::Const;
 
 			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
 			StringView names[] = { StringView(argNames)... ,""};
-			auto types = MethodTraits<TMethod>::Types();
+			auto types = MethodTraits<decltype(function)>::Types();
 
 			for (s32 i = 0; i < std::size(types) - 1; ++i) {
 				auto& arg = info.arguments.emplace_back();
@@ -335,6 +350,48 @@ namespace ob::core::internal {
 					arg.name = GetDefaultArgumentName(i);
 				else
 					arg.name = names[i];
+			}
+
+			if constexpr (sizeof...(Args) == 0) {
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeWithoutArgs(owner, args, function); };
+			} else {
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeMethod(owner, args, function); };
+			}
+
+			return info;
+		}
+
+		template< class R, class... Args, class... Names>
+		auto method(StringView name, R(T::* function)(Args...)const, Names&&... argNames)
+			-> std::enable_if_t<MethodTraits<decltype(function)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
+		{
+			using return_type = typename member_function_traits<decltype(function)>::return_type;
+			OB_ASSERT(m_info.methods.count(name) == 0, "{}は登録済みのメソッドです [{}]", name, m_info.type.name());
+
+			m_info.methodOrder.emplace_back(name);
+			auto& info = m_info.methods[name];
+			info.name = name;
+			info.returnType = Type::Get<return_type>();
+			info.isConst = MethodTraits<decltype(function)>::Const;
+
+			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
+			StringView names[] = { StringView(argNames)... ,"" };
+			auto types = MethodTraits<decltype(function)>::Types();
+
+			for (s32 i = 0; i < std::size(types) - 1; ++i) {
+				auto& arg = info.arguments.emplace_back();
+				arg.type = types[i];
+				if constexpr (std::size(names) - 1 == 0)
+					arg.name = GetDefaultArgumentName(i);
+				else
+					arg.name = names[i];
+			}
+
+			if constexpr (sizeof...(Args) == 0) {
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeWithoutArgs(owner, args, function); };
+			}
+			else {
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeMethod(owner, args, function); };
 			}
 
 			return info;
@@ -371,7 +428,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
-			using return_type = typename member_function_traits<F>::return_type;
+			using return_type = typename member_function_traits<remove_noexcept_t<F>>::return_type;
 			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
 			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
@@ -394,7 +451,7 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
-			using return_type = typename member_function_traits<F1>::return_type;
+			using return_type = typename member_function_traits<remove_noexcept_t<F1>>::return_type;
 			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
 			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
@@ -415,6 +472,173 @@ namespace ob::core::internal {
 		}
 
 	private:
+
+		// 
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, R(T::* function)(Args...)) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))();
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))());
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args, size_t... I>
+		static Any InvokeMethodImpl(Any& owner, Span<Any> args, R(T::* function)(Args...), std::index_sequence<I...>) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...);
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...));
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeMethod(Any& owner, Span<Any> args, R(T::* function)(Args...)) {
+			Type types[] = { Type::Get<Args>()... };
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
+				return {};
+			}
+			return InvokeMethodImpl<R, Args...>(owner, args, function, std::make_index_sequence<sizeof...(Args)>());
+		}
+
+		// noexcept
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, R(T::* function)(Args...)noexcept) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))();
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))());
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args, size_t ...I>
+		static Any InvokeMethodImpl(Any& owner, Span<Any> args, R(T::* function)(Args...)noexcept, std::index_sequence<I...>) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...);
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...));
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeMethod(Any& owner, Span<Any> args, R(T::* function)(Args...)noexcept) {
+			Type types[] = { Type::Get<Args>()... };
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
+				return {};
+			}
+			return InvokeMethodImpl<R, Args...>(owner, args, function, std::make_index_sequence<sizeof...(Args)>());
+		}
+
+		// const 
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, R(T::* function)(Args...)const) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))();
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))());
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args, size_t... I>
+		static Any InvokeMethodImpl(Any& owner, Span<Any> args, R(T::* function)(Args...)const, std::index_sequence<I...>) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...);
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...));
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeMethod(Any& owner, Span<Any> args, R(T::* function)(Args...)const) {
+			Type types[] = { Type::Get<Args>()... };
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
+				return {};
+			}
+			return InvokeMethodImpl<R, Args...>(owner, args, function, std::make_index_sequence<sizeof...(Args)>());
+		}
+
+		// const noexcept
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数なしのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, R(T::* function)(Args...)const noexcept) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))();
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))());
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args, size_t ...I>
+		static Any InvokeMethodImpl(Any& owner, Span<Any> args, R(T::* function)(Args...)const noexcept, std::index_sequence<I...>) {
+			if constexpr (std::is_same<R, void>::value) {
+				(owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...);
+				return Any();
+			} else {
+				return Any((owner.as<T>().*(function))(args[I].as<std::remove_reference_t<Args>>()...));
+			}
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			引数ありのコンストラクタ
+		//@―---------------------------------------------------------------------------
+		template<class R, class... Args>
+		static Any InvokeMethod(Any& owner, Span<Any> args, R(T::* function)(Args...)const noexcept) {
+			Type types[] = { Type::Get<Args>()... };
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
+				return {};
+			}
+			return InvokeMethodImpl<R, Args...>(owner, args, function, std::make_index_sequence<sizeof...(Args)>());
+		}
+
+
+
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
@@ -439,6 +663,7 @@ namespace ob::core::internal {
 
 			Type types[] = {Type::Get<Args>()...};
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
 				return {};
 			}
 			return CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>());
@@ -468,6 +693,7 @@ namespace ob::core::internal {
 
 			Type types[] = { Type::Get<Args>()... };
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+				OB_ABORT("関数の呼出し引数が一致しません");
 				return;
 			}
 

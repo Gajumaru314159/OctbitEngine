@@ -109,6 +109,27 @@ OB_REGISTER_RTTI(FruitType);
 OB_REGISTER_RTTI(Food);
 OB_REGISTER_RTTI(Fruit);
 
+
+using Vector_int = Vector<int>;
+OB_DEFINE_CLASS_INFO(Vector_int) {
+	constructor();
+	property("size", &T::size);
+	property("max_size", &T::max_size);
+	method<void, size_t>("resize", &T::resize, "size");
+	property("capacity", &T::capacity);
+	property("empty", &T::empty);
+	method("reserve", &T::reserve, "n");
+	method("shrink_to_fit", &T::shrink_to_fit);
+
+	method<int&, size_t>("at", &T::at, "n");
+
+	method<void, size_t, const int&>("assign", &T::assign, "n", "t");
+	method<void, const int&>("push_back", &T::push_back, "x");
+	method("pop_back", &T::pop_back);
+	method("clear", &T::clear);
+}
+OB_REGISTER_RTTI(Vector_int);
+
 TEST(TypeBuilder, Construct) {
 	TypeInfoManager manager;
 
@@ -120,5 +141,48 @@ TEST(TypeBuilder, Construct) {
 	EXPECT_NE(manager.find(Type::Get<FruitType>()), nullptr);
 	EXPECT_NE(manager.find(Type::Get<Food>()), nullptr);
 	EXPECT_NE(manager.find(Type::Get<Fruit>()), nullptr);
+
+	auto items = Type::Get<Vector<int>>();
+	if (auto info = TypeInfo::Find(items)) {
+
+		{
+			Vector<int> items3;
+			Any items2(items3);
+
+			if (auto func = info->findMethod("resize")) {
+				Any args[]{ 3ull };
+				func->invoke(items2, args);
+			
+			}
+
+			if (auto prop = info->findProperty("size")) {
+				size_t size = prop->get<size_t>(items2);
+				EXPECT_EQ(size, 3);
+			}
+			items3.resize(199);
+
+			if (auto prop = info->findProperty("size")) {
+				size_t size = prop->get<size_t>(items2);
+				EXPECT_EQ(size, 199);
+			}
+		}
+
+
+
+		if (auto ctor = info->findConstructor()) {
+			auto items2 = ctor->invoker({});
+			
+			if (auto func = info->findMethod("resize")) {
+				Any args[]{ 3ull };
+				func->invoke(items2, args);
+
+			}
+
+			if (auto prop = info->findProperty("size")) {
+				size_t size = prop->get<size_t>(items2);
+			}
+
+		}
+	}
 
 }
