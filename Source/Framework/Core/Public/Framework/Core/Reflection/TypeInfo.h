@@ -13,6 +13,7 @@
 namespace ob::core {
 
 	using ConstructorInvoker = Func<Any(Span<Any> args)>;
+	using DestructorInvoker = Func<void(void*)>;
 	using PlacedConstructorInvoker = Func<void(void*, Span<Any> args)>;
 	using PlacedDestructorInvoker = Func<void(void*)>;
 	using CopyInvoker = Func<void* (const void*)>;
@@ -48,7 +49,6 @@ namespace ob::core {
 		StringView				name;
 		s32						index;
 		s64						value;
-		//Any						sample;
 	};
 
 	//@―---------------------------------------------------------------------------
@@ -150,8 +150,11 @@ namespace ob::core {
 		Type					type;
 		HashSet<Type>			bases;
 
+		size_t					stride;
+		size_t					alignment;
+
 		Vector<ConstructorInfo>	constructors;
-		PlacedDestructorInvoker destructor;
+		DestructorInvoker		destructor;
 		PlacedDestructorInvoker placedDestructor;
 		CopyInvoker				copyInvoker;
 		AssignInvoker			assignInvoker;

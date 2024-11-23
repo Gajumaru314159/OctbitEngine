@@ -57,7 +57,7 @@ namespace  ob::core::internal{
 			// デストラクタ登録
 			{
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
 			// コピー

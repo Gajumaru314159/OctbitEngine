@@ -87,37 +87,26 @@
 
 	<!--Any-->
 	<Type Name="ob::core::Any">
-		<DisplayString Condition="m_holder._Mypair._Myval2==nullptr">Empty</DisplayString>
-		<DisplayString>{*m_holder._Mypair._Myval2}</DisplayString>
-
-		<Expand>
-			<Item Name="value" Condition="m_holder._Mypair._Myval2!=nullptr">*m_holder._Mypair._Myval2</Item>
-		</Expand>
+		<DisplayString Condition="m_info">({m_info->type}*)({m_pointer})</DisplayString>
+		<DisplayString Condition="!m_info">empty</DisplayString>
 	</Type>
 
-	<!--ConstAnyReference-->
-	<Type Name="ob::core::ConstAnyReference">
-		<DisplayString Condition="m_holder._Ptr==nullptr">Empty</DisplayString>
-		<DisplayString>{*m_holder._Ptr}</DisplayString>
-
-		<Expand>
-			<Item Name="value" Condition="m_holder._Ptr!=nullptr">*m_holder._Ptr</Item>
-		</Expand>
+	<!--Property-->
+	<Type Name="ob::core::Property">
+		<DisplayString Condition="m_info">{m_ownerInfo->type}::{m_info->name.m_view._Mydata,s8b}</DisplayString>
+		<DisplayString Condition="!m_info">empty</DisplayString>
 	</Type>
 
-	<!--AnyReference-->
-	<Type Name="ob::core::AnyReference">
-		<DisplayString Condition="m_holder._Ptr==nullptr">Empty</DisplayString>
-		<DisplayString>{*m_holder._Ptr}</DisplayString>
-
-		<Expand>
-			<Item Name="value" Condition="m_holder._Ptr!=nullptr">*m_holder._Ptr</Item>
-		</Expand>
-	</Type>
 
 	<!--IPAddress-->
 	<Type Name="ob::core::IPAddress">
 		<DisplayString >{(int)a}.{(int)b}.{(int)c}.{(int)d}</DisplayString>
+	</Type>
+
+	<!--YesNo-->
+	<Type Name="ob::core::YesNo&lt;*&gt;">
+		<DisplayString Condition="m_yesNo">Yes</DisplayString>
+		<DisplayString Condition="!m_yesNo">No</DisplayString>
 	</Type>
 
 

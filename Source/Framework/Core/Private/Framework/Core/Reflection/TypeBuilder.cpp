@@ -81,7 +81,7 @@ namespace ob::core::internal {
 	}
 
 
-	StringView ClassBuilder::getArgumentName(size_t index) {
+	StringView ClassBuilder::GetDefaultArgumentName(size_t index) {
 		StringView names[] = {
 			"arg0",
 			"arg1",

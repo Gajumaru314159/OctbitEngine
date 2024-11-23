@@ -6,20 +6,16 @@ namespace ob::core {
 
 	//! @brief 読み書き可能なプロパティを生成 
 	Property::Property(const TypeInfo& ownerInfo, void* owner, const PropertyInfo* info)
-		: m_ownerInfo(&ownerInfo), m_owner(owner), m_info(info), m_flags(Flag::Writable)
+		: m_ownerInfo(&ownerInfo), m_owner(owner), m_info(info), m_writableOwner(Writable::Yes)
 	{
-		if (info) {
-			if (info->canWrite() == false) {
-				m_flags.off(Flag::Writable);
-			}
-		} else {
+		if (!info) {
 			clear();
 		}
 	}
 
 	//! @brief 読み取り専用プロパティを生成 
 	Property::Property(const TypeInfo& ownerInfo, const void* owner, const PropertyInfo* info)
-		: m_ownerInfo(&ownerInfo), m_owner(const_cast<void*>(owner)), m_info(info), m_flags() 
+		: m_ownerInfo(&ownerInfo), m_owner(const_cast<void*>(owner)), m_info(info), m_writableOwner(Writable::No)
 	{
 		if (info) {
 		}
@@ -28,26 +24,42 @@ namespace ob::core {
 		}
 	}
 
+	//! @brief 値をAny型で設定
 	Property& Property::assign(const Any& value) {
 		if (m_info && m_ownerInfo) {
-			if (m_flags.has(Flag::Writable)) {
-				m_info->setter(Any(*m_ownerInfo,m_owner, Any::Flag::Reference),value);
+			if (isWritable()) {
+				m_info->setter(Any(*m_ownerInfo,m_owner),value);
 			}
 		}
 		return *this;
 	}
 
+	//! @brief 参照型のプロパティか
 	bool Property::isReference() const {
 		return m_info ? m_info->isReference : false;
 	}
 
+	//! @brief 書き込み可能なプロパティか
+	//! @details Ownerがconst、もしくはプロパティのSetterがない場合はfalseを返します。
+	bool Property::isWritable() const {
+		if (!m_writableOwner)return false;
+		return m_info ? m_info->canWrite() : false;
+	}
+
+	//! @brief PropertyをAny型で取得しなおす
+	//! @details isReference()がfalseの場合はコピーを返します。
 	Any Property::get() {
 		return m_info ? m_info->getter(owner()):Any();
 	}
+
+	//! @brief PropertyをAny型で取得しなおす
+	//! @details isReference()がfalseの場合はコピーを返します。
+	//!		     取得したAnyオブジェクトは書き込み不可としてマークされます。
 	Any Property::get() const {
 		return m_info ? m_info->getter(owner()):Any();
 	}
 
+	//! @brief プロパティの型を取得
 	Type Property::type() const {
 		return m_info ? m_info->type : Type();
 	}
@@ -59,15 +71,17 @@ namespace ob::core {
 
 	Any Property::owner() {
 		if (m_ownerInfo && m_owner) {
-			Any::Flags flags = Any::Flag::Reference;
-			if (m_flags.has(Flag::Writable)) flags |= Any::Flag::Writable;
-			return Any(*m_ownerInfo, m_owner, flags);
+			if (m_writableOwner) {
+				return Any(*m_ownerInfo, m_owner);
+			} else {
+				return Any(*m_ownerInfo, (const void*)m_owner);
+			}
 		}
 		return {};
 	}
 	Any Property::owner()const {
 		if (m_ownerInfo && m_owner) {
-			return Any(*m_ownerInfo, m_owner, Any::Flag::Reference);
+			return Any(*m_ownerInfo, (const void*)m_owner);
 		}
 		return {};
 	}
@@ -86,18 +100,13 @@ namespace ob::core {
 		if (empty())return {};
 		if (isReference()) {
 			return m_info->getter(owner())[name].get();
-		}
-		else {
+		} else {
 			return copy()[name].copy();
 		}
 	}
 
 
 
-	Any::Any() {
-		m_reference = false;
-		m_writable = false;
-	}
 
 	Any::~Any() {
 		if (m_info && !m_reference) m_info->destroy(m_pointer);
@@ -108,9 +117,19 @@ namespace ob::core {
 	Any& Any::operator=(const Any& other) {
 		if (other.empty()) return *this;
 		m_info = other.m_info;
+		m_reference = Reference::Yes;
+		m_writable = other.m_writable;
+		m_pointer = other.m_pointer;
+		return *this;
+	}
+
+	//! @brief ムーブ代入演算子
+	Any& Any::operator=(Any&& other) noexcept {
+		m_info = other.m_info;
+		m_pointer = other.m_pointer;
 		m_reference = other.m_reference;
 		m_writable = other.m_writable;
-		m_pointer = m_reference ? other.m_pointer : m_info->copy(other.m_pointer);
+		other.clear();
 		return *this;
 	}
 
@@ -130,7 +149,7 @@ namespace ob::core {
 					return { *m_info,  m_pointer ,property };
 				}
 				else {
-					return { *m_info, static_cast<const void*>(m_pointer),property };
+					return { *m_info, (const void*)(m_pointer),property };
 				}
 			}
 		}
@@ -153,15 +172,7 @@ namespace ob::core {
 		if (empty())return {};
 		auto instance = m_info->copy(m_pointer);
 		if (instance == nullptr)return {};
-		return Any(*m_info, instance, Flag::Instance | Flag::Writable);
-	}
-
-	Any::Flags Any::flags()const {
-		Flags flags;
-		if (m_reference) flags |= Flag::Reference;
-		if (!m_reference) flags |= Flag::Instance;
-		if (m_writable) flags |= Flag::Writable;
-		return flags;
+		return Any(*m_info, instance, Reference::No,Writable::Yes);
 	}
 
 	const TypeInfo& Any::GetTypeInfo(const Type& type) {

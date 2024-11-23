@@ -161,14 +161,14 @@ TEST(Any, Construct) {
 	sizeof(Delegate<void()>);
 	sizeof(Func<void()>);
 
-
+	Any empty;
 	ObjectA object1;
 	Any obj(object1);
 	obj["_bool"] = true;
 	obj["_s32"] = 1;
 	obj["_f32"] = 2.f;
 	obj["_string"] = String("A");
-	obj["_objectB"]["_32"] = 3;
+	obj["_objectB"]["_s32"] = 3;
 	obj["_objectB"]["_objectC"]["_s32"] = 4;
 
 	ObjectA object2;

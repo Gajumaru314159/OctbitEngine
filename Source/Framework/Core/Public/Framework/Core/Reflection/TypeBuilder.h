@@ -109,7 +109,6 @@ namespace ob::core::internal {
 			element.name = name;
 			element.index = m_info.enumElements.size() - 1;
 			element.value = enum_cast(value);
-			//element.sample = value;
 			return element;
 		}
 
@@ -131,7 +130,7 @@ namespace ob::core::internal {
 
 	protected:
 
-		StringView getArgumentName(size_t index);
+		static StringView GetDefaultArgumentName(size_t index);
 
 	protected:
 		TypeInfo& m_info;
@@ -175,7 +174,7 @@ namespace ob::core::internal {
 			// デストラクタ登録
 			{
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
 			// コピー
@@ -218,7 +217,7 @@ namespace ob::core::internal {
 			// デストラクタ登録
 			{
 				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
 			}
 
 			// コピー
@@ -258,7 +257,7 @@ namespace ob::core::internal {
 		{
 			auto& info = m_info.constructors.emplace_back();
 
-			// 0引数に対応するために最後尾に空要素を追加している
+			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
 			StringView names[] = { StringView(argNames)... ,"" };
 			Type types[] = { Type::Get<Args>() ...,Type() };
 
@@ -267,7 +266,7 @@ namespace ob::core::internal {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types[i];
 				if constexpr (sizeof...(Names) == 0)
-					arg.name = getArgumentName(i);
+					arg.name = GetDefaultArgumentName(i);
 				else
 					arg.name = names[i];
 			}
@@ -294,6 +293,7 @@ namespace ob::core::internal {
 			static constexpr size_t Count() { 
 				return sizeof...(Args); 
 			}
+			static constexpr bool Const = false;
 		};
 
 		template<typename OwnerType, typename ReturnType, typename... Args>
@@ -304,6 +304,7 @@ namespace ob::core::internal {
 			static constexpr size_t Count() {
 				return sizeof...(Args);
 			}
+			static constexpr bool Const = true;
 		};
 		//! @endcond
 
@@ -321,7 +322,9 @@ namespace ob::core::internal {
 			auto& info = m_info.methods[name];
 			info.name = name;
 			info.returnType = Type::Get<return_type>();
+			info.isConst = MethodTraits<TMethod>::Const;
 
+			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
 			StringView names[] = { StringView(argNames)... ,""};
 			auto types = MethodTraits<TMethod>::Types();
 
@@ -329,7 +332,7 @@ namespace ob::core::internal {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types[i];
 				if constexpr (std::size(names)-1 == 0)
-					arg.name = getArgumentName(i);
+					arg.name = GetDefaultArgumentName(i);
 				else
 					arg.name = names[i];
 			}
@@ -349,7 +352,7 @@ namespace ob::core::internal {
 			info.name = name;
 			info.isReference = true;
 			info.getter = [=](const Any& owner) {
-				if (owner.isWritable()) {
+				if (owner.isReference()) {
 					return Any(std::remove_const_t<Any&>(owner).as<T>().*address);
 				} else {
 					return Any(owner.as<T>().*address);

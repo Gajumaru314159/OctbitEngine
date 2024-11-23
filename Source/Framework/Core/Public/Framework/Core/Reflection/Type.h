@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Hash/Hash.h>
+#include <Framework/Core/Utility/ConstValue.h>
 
 namespace ob::core {
 
@@ -14,7 +15,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief  関数名のPrefixを取得
 		//@―---------------------------------------------------------------------------
-		constexpr StringView GetTypeNamePrefix(void) {
+		constexpr StringView GetTypeName(void) {
 			return FUNC_NAME;
 		}
 
@@ -24,23 +25,27 @@ namespace ob::core {
 		template<class T>
 		constexpr StringView GetTypeName() {
 
+			static_assert(!std::is_volatile_v<T>, "Type does not support volatile.");
+
+			using namespace std::string_view_literals;
+
 			constexpr StringView signature = FUNC_NAME;
 
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
-			constexpr size_t prefix2 = GetTypeNamePrefix().size() - std::size("Prefix(void)") + std::size("<");
-			constexpr size_t suffix = StringView(">(void)").size();
+			constexpr size_t prefix2 = GetTypeName().size() - "(void)"sv.size() + "<"sv.size();
+			constexpr size_t suffix = ">(void)"sv.size();
 			constexpr size_t prefix = prefix2 +
 				(
-					signature.substr(prefix2).starts_with("enum ") ? std::size("enum") :
-					signature.substr(prefix2).starts_with("class ") ? std::size("class") :
-					signature.substr(prefix2).starts_with("struct ") ? std::size("struct") : 0
+					signature.substr(prefix2).starts_with("enum ") ? "enum "sv.size() :
+					signature.substr(prefix2).starts_with("class ") ? "class "sv.size() :
+					signature.substr(prefix2).starts_with("struct ") ? "struct "sv.size() :
+					signature.substr(prefix2).starts_with("union ") ? "union "sv.size() : 0
 				);
 
 			constexpr StringView name = signature.substr(prefix, signature.size() - prefix - suffix);
 			
-			static_assert(!std::is_volatile_v<T>, "Type does not support volatile.");
-			
+
 			return name;
 		}
 
