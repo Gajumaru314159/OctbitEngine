@@ -272,3 +272,46 @@ OB_DEFINE_CLASS_INFO(MethodTest) {
 	method("int_args_const_noexcept", &T::int_args_const_noexcept, "a", "b");
 }
 OB_REGISTER_RTTI(MethodTest);
+
+
+
+class PropertyTest {
+public:
+
+	PropertyTest() = default;
+
+	int get() { return 1; }
+	int get_const()const { return 1; }
+	int get_noexceot()noexcept { return 1; }
+	int get_const_noexcept()const noexcept { return 1; }
+	void set(s32) { }
+	void set_noexceot(s32)noexcept { }
+
+};
+OB_DEFINE_CLASS_INFO(PropertyTest) {
+	constructor();
+
+	property("get", &T::get);
+	property("get_const", &T::get_const);
+	property("get_noexcept", &T::get_noexceot);
+	property("get_const_noexcept", &T::get_const_noexcept);
+
+	property("get_set", &T::get, &T::set);
+	property("get_set_noexcept", &T::get_noexceot, &T::set_noexceot);
+}
+OB_REGISTER_RTTI(PropertyTest);
+
+struct FieldTest {
+	int value;
+	int& ref;
+	const int const_value;
+	const int& const_reference;
+};
+OB_DEFINE_CLASS_INFO(FieldTest) {
+
+	field("value", &T::value);
+	//field("ref", &T::ref);
+	//field("const_value", &T::const_value);
+	//field("const_reference", &T::const_reference);
+}
+OB_REGISTER_RTTI(FieldTest);
