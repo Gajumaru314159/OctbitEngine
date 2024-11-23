@@ -295,7 +295,7 @@ OB_DEFINE_CLASS_INFO(PropertyTest) {
 	property("get_const", &T::get_const);
 	property("get_noexcept", &T::get_noexceot);
 	property("get_const_noexcept", &T::get_const_noexcept);
-
+	
 	property("get_set", &T::get, &T::set);
 	property("get_set_noexcept", &T::get_noexceot, &T::set_noexceot);
 }
@@ -311,7 +311,7 @@ OB_DEFINE_CLASS_INFO(FieldTest) {
 
 	field("value", &T::value);
 	//field("ref", &T::ref);
-	//field("const_value", &T::const_value);
+	field("const_value", &T::const_value);
 	//field("const_reference", &T::const_reference);
 }
 OB_REGISTER_RTTI(FieldTest);
