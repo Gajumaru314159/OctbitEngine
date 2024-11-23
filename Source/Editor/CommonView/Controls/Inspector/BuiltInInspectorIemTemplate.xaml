@@ -24,7 +24,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="EnumInspectorControl" DataType="ctrl:InspectableProperty">
-        <ctrl:EnumComboBox Value="{Binding Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <ctrl:EnumComboBox IsTabStop="False" Value="{Binding Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="Vector3InspectorControl" DataType="ctrl:InspectableProperty">

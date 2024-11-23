@@ -25,9 +25,9 @@
 
     <DockPanel Grid.IsSharedSizeScope="True">
 
-        <base:SearchBox DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
+        <base:SearchBox TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
 
-        <Button Content="Add Component" DockPanel.Dock="Bottom">
+        <Button TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Transform"/>
@@ -36,11 +36,11 @@
             </Button.ContextMenu>
         </Button>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer  TabIndex="1" VerticalScrollBarVisibility="Auto">
             <b:Interaction.Behaviors>
                 <behavior:ScrollViewerMiddleButtonDragBehavior/>
             </b:Interaction.Behaviors>
-            <ItemsControl ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" DockPanel.Dock="Top" AllowDrop="True">
+            <ItemsControl IsTabStop="False" ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" DockPanel.Dock="Top" AllowDrop="True">
                 <i:Interaction.Behaviors>
                     <base:DraggableItemsControlBehavior Target="{Binding DroppedAction, Mode=OneWay}" />
                 </i:Interaction.Behaviors>

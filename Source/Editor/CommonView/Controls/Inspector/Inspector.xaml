@@ -16,7 +16,7 @@
     <!--プロパティテンプレート-->
     <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:InspectableProperty">
         <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
-            <ContentControl Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
+            <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
         </ctrl:InspectorItem>
     </DataTemplate>
 
