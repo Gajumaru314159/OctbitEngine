@@ -186,3 +186,89 @@ TEST(TypeBuilder, Construct) {
 	}
 
 }
+
+
+class MethodTest {
+public:
+
+	MethodTest() = default;
+
+	void void_no_args() {
+
+	}
+	void void_no_args_const() const {
+
+	}
+	void void_no_args_noexcept() noexcept{
+
+	}
+	void void_no_args_const_noexcept() const noexcept{
+
+	}
+
+
+	int int_no_args() {
+		return 1;
+	}
+	int int_no_args_const() const {
+		return 1;
+	}
+	int int_no_args_noexcept() noexcept {
+		return 1;
+	}
+	int int_no_args_const_noexcept() const noexcept {
+		return 1;
+	}
+
+	void void_args(int,float) {
+
+	}
+	void void_args_const(int, float) const {
+
+	}
+	void void_args_noexcept(int, float) noexcept {
+
+	}
+	void void_args_const_noexcept(int, float) const noexcept {
+
+	}
+
+
+	int int_args(int, float) {
+		return 1;
+	}
+	int int_args_const(int, float) const {
+		return 1;
+	}
+	int int_args_noexcept(int, float) noexcept {
+		return 1;
+	}
+	int int_args_const_noexcept(int, float) const noexcept {
+		return 1;
+	}
+
+};
+OB_DEFINE_CLASS_INFO(MethodTest) {
+	constructor();
+
+	method("void_no_args", &T::void_no_args);
+	method("void_no_args_const", &T::void_no_args_const);
+	method("void_no_args_noexcept", &T::void_no_args_noexcept);
+	method("void_no_args_const_noexcept", &T::void_no_args_const_noexcept);
+
+	method("int_no_args", &T::int_no_args);
+	method("int_no_args_const", &T::int_no_args_const);
+	method("int_no_args_noexcept", &T::int_no_args_noexcept);
+	method("int_no_args_const_noexcept", &T::int_no_args_const_noexcept);
+
+	method("void_args", &T::void_args, "a", "b");
+	method("void_args_const", &T::void_args_const, "a", "b");
+	method("void_args_noexcept", &T::void_args_noexcept, "a", "b");
+	method("void_args_const_noexcept", &T::void_args_const_noexcept, "a", "b");
+
+	method("int_args", &T::int_args, "a", "b");
+	method("int_args_const", &T::int_args_const, "a", "b");
+	method("int_args_noexcept", &T::int_args_noexcept, "a", "b");
+	method("int_args_const_noexcept", &T::int_args_const_noexcept, "a", "b");
+}
+OB_REGISTER_RTTI(MethodTest);
