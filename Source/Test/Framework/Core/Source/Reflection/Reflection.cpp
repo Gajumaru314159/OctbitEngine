@@ -206,7 +206,6 @@ public:
 
 	}
 
-
 	int int_no_args() {
 		return 1;
 	}
@@ -232,7 +231,6 @@ public:
 	void void_args_const_noexcept(int, float) const noexcept {
 
 	}
-
 
 	int int_args(int, float) {
 		return 1;

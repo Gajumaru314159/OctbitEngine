@@ -399,17 +399,14 @@ namespace ob::core::internal {
 			for (s32 i = 0; i < std::size(types) - 1; ++i) {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types[i];
-				if constexpr (std::size(names) - 1 == 0)
-					arg.name = GetDefaultArgumentName(i);
-				else
-					arg.name = names[i];
+				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names[i];
 			}
 
 			if constexpr (sizeof...(Args) == 0) {
-				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeWithoutArgs<decltype(method), Args...>(owner, args, method); };
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeWithoutArgs<M, Args...>(owner, args, method); };
 			}
 			else {
-				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeMethod<decltype(method), Args...>(owner, args, method); };
+				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeMethod<M, Args...>(owner, args, method); };
 			}
 
 			return info;
@@ -498,8 +495,7 @@ namespace ob::core::internal {
 		//! @brief			引数ありのコンストラクタ
 		//@―---------------------------------------------------------------------------
 		template<class M,class... Args, size_t... I>
-		static Any InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {
-			
+		static Any InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
 			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))(args[I].as<std::remove_reference_t<Args>>()...);
 				return Any();
@@ -514,7 +510,7 @@ namespace ob::core::internal {
 		template<class M, class... Args>
 		static Any InvokeMethod(Any& owner, Span<Any> args, M method) {
 			Type types[] = { Type::Get<Args>()... };
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return {};
 			}
@@ -544,7 +540,7 @@ namespace ob::core::internal {
 		static Any Create(Span<Any> args) {
 
 			Type types[] = {Type::Get<Args>()...};
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return {};
 			}
@@ -574,7 +570,7 @@ namespace ob::core::internal {
 		static void PlacedCreate(void* ptr, Span<Any> args) {
 
 			Type types[] = { Type::Get<Args>()... };
-			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.type() == b; })) {
+			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return;
 			}
