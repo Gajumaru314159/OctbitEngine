@@ -61,6 +61,7 @@ namespace CommonView.Controls
         private void OnSizeChanged(object sender,SizeChangedEventArgs e)
         {
             if(Hwnd == IntPtr.Zero) return;
+            if(ActualWidth<=0 || ActualHeight<=0) return;
             MoveWindow(Hwnd, 0, 0, (int)ActualWidth, (int)ActualHeight, 1);
         }
 
