@@ -13,25 +13,6 @@
     <ctrl:InspectorItemDataSelector x:Key="InspectorItemDataSelector"/>
     <ctrl:InspectorControlDataSelector x:Key="InspectorControlDataSelector"/>
 
-    <!--プロパティテンプレート-->
-    <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:InspectableProperty">
-        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
-            <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
-        </ctrl:InspectorItem>
-    </DataTemplate>
-
-    <!--メソッドテンプレート-->
-    <DataTemplate x:Key="InspectableMethodTemplate" DataType="ctrl:InspectableMethod">
-        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
-            <Button Content="Invoke" Command="{Binding Command}"/>
-        </ctrl:InspectorItem>
-    </DataTemplate>
-
-    <!--オブジェクトテンプレート-->
-    <DataTemplate x:Key="InspectableObjectTemplate" DataType="ctrl:InspectableObject">
-        <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}"/>
-    </DataTemplate>
-
     <!--インスペクタアイテム-->
     <Style TargetType="ctrl:InspectorItem">
         <Setter Property="Padding" Value="2"/>
@@ -116,7 +97,7 @@
     </Style>
 
     <!--インスペクタビュー-->
-    <Style TargetType="ctrl:InspectorView">
+    <Style TargetType="ctrl:InspectorView" x:Key="NestedInspectorView">
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Indent" Value="{Binding Indent,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView},UpdateSourceTrigger=Explicit,Converter={common:AddConverter},ConverterParameter=15}"/>
 
@@ -167,7 +148,7 @@
     </Style>
 
     <!--インスペクタビュー(Top)-->
-    <Style TargetType="ctrl:InspectorView" x:Key="TopLevelInspectorView">
+    <Style TargetType="ctrl:InspectorView">
         <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="Template">
@@ -198,5 +179,25 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+    <!--プロパティテンプレート-->
+    <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:InspectableProperty">
+        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
+            <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
+        </ctrl:InspectorItem>
+    </DataTemplate>
+
+    <!--メソッドテンプレート-->
+    <DataTemplate x:Key="InspectableMethodTemplate" DataType="ctrl:InspectableMethod">
+        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
+            <Button Content="Invoke" Command="{Binding Command}"/>
+        </ctrl:InspectorItem>
+    </DataTemplate>
+
+    <!--オブジェクトテンプレート-->
+    <DataTemplate x:Key="InspectableObjectTemplate" DataType="ctrl:InspectableObject">
+        <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}" Style="{StaticResource NestedInspectorView}"/>
+    </DataTemplate>
 
 </ResourceDictionary>

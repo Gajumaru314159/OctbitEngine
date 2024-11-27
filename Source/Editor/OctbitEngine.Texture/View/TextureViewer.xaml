@@ -72,7 +72,7 @@
                     RGBA8
                 </TextBlock>
 
-                <ctrl:InspectorView Label="LOD" ItemsSource="{Binding Inspectables}" Style="{StaticResource TopLevelInspectorView}"/>
+                <ctrl:InspectorView Label="LOD" ItemsSource="{Binding Inspectables}"/>
             </StackPanel>
         </Grid>
     </DockPanel>
