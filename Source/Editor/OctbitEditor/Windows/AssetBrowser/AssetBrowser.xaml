@@ -108,12 +108,13 @@
                     <ContentControl Style="{StaticResource Reload}"/>
                 </Button>
 
-                <base:SearchBox DockPanel.Dock="Right" TabIndex="8"/>
+                <base:SearchBox Watermark="検索 (F3)" DockPanel.Dock="Right" TabIndex="8"/>
                 <ToggleButton Content="★" DockPanel.Dock="Right" TabIndex="7"/>
                 <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
                 <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
 
-                <TextBox Text="{Binding SelectedFolderPath.Value}" TabIndex="4" Margin="0,0,1,0"/>
+                <TextBlock Text="  Assets  >  Textures  >  header.png" VerticalAlignment="Center"/>
+                <!--<TextBox Text="{Binding SelectedFolderPath.Value}" TabIndex="4" Margin="0,0,1,0"/>-->
             </DockPanel>
         </Border>
 

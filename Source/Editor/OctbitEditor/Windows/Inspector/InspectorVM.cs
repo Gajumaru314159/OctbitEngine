@@ -176,7 +176,8 @@ namespace OctbitEditor
         private void MoveItem(ItemMovement itemMovement)
         {
             if (itemMovement.TargetIndex == 0) return;
-            if (itemMovement.MovedItem is InspectableGroup g && g.Name == nameof(Entity)) return;
+            if (itemMovement.MovedItem is not InspectableGroup g) return;
+            if (g.Name == nameof(Entity)) return;
             itemMovement.MoveItem();
         }
 

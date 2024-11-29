@@ -11,10 +11,10 @@ namespace OctbitEngine.Runtime
         }
 
         public Vector3 Position { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
-        public Vector3 Rotation { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
+        public Rotation Rotation { get => RemoteObject.GetValue<Rotation>(); set => RemoteObject.SetValue(value); }
         public Vector3 Scale { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
         public Vector3 WorldPosition { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
-        public Vector3 WorldRotation { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
+        public Rotation WorldRotation { get => RemoteObject.GetValue<Rotation>(); set => RemoteObject.SetValue(value); }
         public Vector3 WorldScale { get => RemoteObject.GetValue<Vector3>(); set => RemoteObject.SetValue(value); }
     }
 }

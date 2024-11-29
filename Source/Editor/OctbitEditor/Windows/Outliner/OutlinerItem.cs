@@ -1,13 +1,44 @@
 ﻿using Common.Tree;
+using CommonView.Controls;
 using CommonView.History;
 using Livet;
 using OctbitEngine.Runtime;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace OctbitEditor
 {
+
+    public class OutlinerItemDataSelector : DataTemplateSelector
+    {
+        static OutlinerItemDataSelector()
+        {
+
+        }
+
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        {
+            if (container is not FrameworkElement f) return null;
+            if (item is SceneOutlinerItem)
+            {
+                return f.FindResource("SceneOutlinerItemTemplate") as DataTemplate;
+            }
+            if (item is FolderOutlinerItem)
+            {
+                return f.FindResource("FolderOutlinerItemTemplate") as DataTemplate;
+            }
+            if (item is EntityOutlinerItem)
+            {
+                return f.FindResource("EntityOutlinerItemTemplate") as DataTemplate;
+            }
+            return null;
+        }
+
+    }
+
 
     public abstract class OutlinerItemBase : ViewModel
     {
@@ -16,6 +47,7 @@ namespace OctbitEditor
         public string TypeName { get; protected init; }
         public ObservableCollection<OutlinerItemBase> Children { get; } = new();
 
+        public abstract string Name { get; set; }
         public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
         public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
         public ReactivePropertySlim<bool> IsNameEditting { get; } = new(false);
@@ -28,12 +60,17 @@ namespace OctbitEditor
         public double VisibleIconOpacity
             => this.AllAncestor(i => i?.Parent, i => i.IsVisible) ? 1.0 : 0.5;
 
+
+        public ReactivePropertySlim<bool> IsFiltered { get; } = new(false);
+        public ReactivePropertySlim<bool> IsMatched { get; } = new(false);
+
         protected OutlinerItemBase()
         {
             Icon = DefaultIcon;
             TypeName = "Unknown";
         }
 
+        // TODO 基底から削除して型制約を付ける
         public virtual bool SetParent(OutlinerItemBase? parent)
         {
             return false;
@@ -72,7 +109,7 @@ namespace OctbitEditor
 
     public class SceneOutlinerItem : OutlinerItemBase
     {
-        internal static BitmapImage SceneIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
+        internal static BitmapImage SceneIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/scene.png"));
         public SceneOutlinerItem(IScene scene)
         {
             Icon = SceneIcon;
@@ -81,7 +118,7 @@ namespace OctbitEditor
         }
 
         public IScene Scene { get; }
-        public string Name
+        public override string Name
         {
             get => Scene.Name;
             set
@@ -119,7 +156,7 @@ namespace OctbitEditor
                 if (IsVisible == value) return;
                 var oldValue = IsVisible;
                 History.Record(
-                    $"エンティティシーン({Name})のIsVisibleを{value}に変更",
+                    $"シーン({Name})のIsVisibleを{value}に変更",
                     () => { Scene.IsVisible = value; UpdateHierarchyStatus(HierarchyStatus.Visible); },
                     () => { Scene.IsVisible = oldValue; UpdateHierarchyStatus(HierarchyStatus.Visible); }
                 );
@@ -142,7 +179,7 @@ namespace OctbitEditor
         }
 
         public IEntity Entity { get; }
-        public string Name
+        public override string Name
         {
             get => Entity.Name;
             set
@@ -186,13 +223,67 @@ namespace OctbitEditor
         }
         public override bool SetParent(OutlinerItemBase? parent)
         {
-            return false;
+            // 循環
+            if (parent?.Parent.AnyAncestor(i => i.Parent, i => i==parent)??false) return false;
+
+            if (Parent != null)
+            {
+                Parent.Children.Remove(this);
+            }
+
+            Parent = parent;
+            Parent?.Children.Add(this);
+
+            if (parent is EntityOutlinerItem e)
+            {
+                Entity.SetParent(e.Entity);
+            }
+            if (parent is SceneOutlinerItem s)
+            {
+                // Entity.SetParent(s.Scene);
+            }
+
+
+            return true;
         }
     }
     public class FolderOutlinerItem : OutlinerItemBase
     {
         internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
-        public string Name { get; set; } = "New Folder";
+        public override string Name { get; set; } = "New Folder";
+
+        public override bool IsActive
+        {
+            get => m_isActive;
+            set
+            {
+                if (IsActive == value) return;
+                var oldValue = IsActive;
+                History.Record(
+                    $"フォルダ({Name})のIsActiveを{value}に変更",
+                    () => { m_isActive = value; UpdateHierarchyStatus(HierarchyStatus.Active); },
+                    () => { m_isActive = oldValue; UpdateHierarchyStatus(HierarchyStatus.Active); }
+                );
+            }
+        }
+        private bool m_isActive = true;
+
+        public override bool IsVisible
+        {
+            get => m_isVisible;
+            set
+            {
+                if (IsVisible == value) return;
+                var oldValue = IsVisible;
+                History.Record(
+                    $"フォルダ({Name})のIsVisibleを{value}に変更",
+                    () => { m_isVisible = value; UpdateHierarchyStatus(HierarchyStatus.Visible); },
+                    () => { m_isVisible = oldValue; UpdateHierarchyStatus(HierarchyStatus.Visible); }
+                );
+            }
+        }
+        private bool m_isVisible= true;
+
         public FolderOutlinerItem()
         {
             Icon = FolderIcon;
@@ -201,7 +292,24 @@ namespace OctbitEditor
 
         public override bool SetParent(OutlinerItemBase? parent)
         {
-            return false;
+            // 循環
+            if (parent?.Parent.AnyAncestor(i => i.Parent, i => i==parent)??false) return false;
+
+            if (Parent != null)
+            {
+                Parent.Children.Remove(this);
+            }
+
+            var index = Parent?.Children.Count(i => i is FolderOutlinerItem)??0;
+
+            Parent = parent;
+            Parent?.Children.Insert(index, this);
+
+            if (parent is SceneOutlinerItem s)
+            {
+                // Entity.SetParent(s.Scene);
+            }
+            return true;
         }
 
     }

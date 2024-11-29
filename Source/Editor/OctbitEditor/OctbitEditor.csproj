@@ -37,6 +37,7 @@
     <None Remove="Resources\Icons\Outliner\entity.png" />
     <None Remove="Resources\Icons\Outliner\folder.png" />
     <None Remove="Resources\Icons\Outliner\icon_design.apd" />
+    <None Remove="Resources\Icons\Outliner\scene.png" />
     <None Remove="Resources\Icons\pause.png" />
     <None Remove="Resources\Icons\play.png" />
     <None Remove="Resources\Icons\reload.png" />
@@ -57,6 +58,10 @@
     <None Remove="Resources\Icons\wire_shading.png" />
     <None Remove="Resources\Icons\wrap.png" />
     <None Remove="Resources\Splashes\splash_000.png" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Outliner\scene.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -46,7 +46,7 @@
                 </i:Interaction.Behaviors>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate DataType="local:InspectableGroup">
-                        <ctrl:InspectorView ItemsSource="{Binding Inspectables}" Style="{StaticResource TopLevelInspectorView}">
+                        <ctrl:InspectorView ItemsSource="{Binding Inspectables}">
                             <ctrl:InspectorView.Label>
                                 <DockPanel>
                                     <Border Background="Transparent" DockPanel.Dock="Right" ContextMenu="{StaticResource ContentContextMenu}">

@@ -21,7 +21,9 @@
              d:DataContext="{d:DesignInstance local:OutlinerVM}" >
 
     <UserControl.InputBindings>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding CreateSceneCommand}"/>
         <KeyBinding Gesture="Ctrl+N" Command="{Binding CreateEntityCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding CreateFolderCommand}"/>
         <!--<KeyBinding Key="Delete" Command="{Binding DeleteEntityCommand}"/>-->
         <KeyBinding Gesture="Ctrl+R" Command="{Binding EditEntityNameCommand}"/>
     </UserControl.InputBindings>
@@ -81,6 +83,93 @@
             <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
         </Style>
 
+
+
+        <HierarchicalDataTemplate x:Key="SceneOutlinerItemTemplate" DataType="local:SceneOutlinerItem" ItemsSource="{Binding Children}">
+
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="BG" Grid.ColumnSpan="2" Background="{DynamicResource Accent}" Opacity="0.5"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                    <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
+                    <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
+                    <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
+                </StackPanel>
+                <TextBlock Text="Scene" Grid.Column="1" Opacity="0.5" Padding="10,0"/>
+            </Grid>
+
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsMatched.Value}" Value="False">
+                    <Setter Property="Visibility" TargetName="BG" Value="Collapsed"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
+
+        </HierarchicalDataTemplate>
+
+
+        <HierarchicalDataTemplate x:Key="EntityOutlinerItemTemplate" DataType="local:EntityOutlinerItem" ItemsSource="{Binding Children}">
+
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="BG" Grid.ColumnSpan="2" Background="{DynamicResource Accent}" Opacity="0.5"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                    <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
+                    <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
+                    <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
+                </StackPanel>
+                <TextBlock Text="Entity" Grid.Column="1" Opacity="0.5" Padding="10,0"/>
+            </Grid>
+
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsMatched.Value}" Value="False">
+                    <Setter Property="Visibility" TargetName="BG" Value="Collapsed"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
+
+        </HierarchicalDataTemplate>
+
+
+        <HierarchicalDataTemplate x:Key="FolderOutlinerItemTemplate" DataType="local:FolderOutlinerItem" ItemsSource="{Binding Children}">
+
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="BG" Grid.ColumnSpan="2" Background="{DynamicResource Accent}" Opacity="0.5"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                    <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
+                    <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
+                    <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
+                </StackPanel>
+                <TextBlock Text="Folder" Grid.Column="1" Opacity="0.5" Padding="10,0"/>
+            </Grid>
+
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsMatched.Value}" Value="False">
+                    <Setter Property="Visibility" TargetName="BG" Value="Collapsed"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
+
+        </HierarchicalDataTemplate>
+
+        <local:OutlinerItemDataSelector x:Key="OutlinerItemDataSelector"/>
+
     </UserControl.Resources>
 
     <DockPanel Grid.IsSharedSizeScope="True">
@@ -98,12 +187,14 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Label" HorizontalAlignment="Center" Grid.Column="0"/>
+            <TextBlock Text="Label"  Grid.Column="0" Padding="10,0"/>
             <GridSplitter Grid.Column="1" IsTabStop="False" HorizontalAlignment="Left" Width="1" Background="{DynamicResource Background}"/>
-            <TextBlock Text="Type" HorizontalAlignment="Center" Grid.Column="1"/>
+            <TextBlock Text="Type" Grid.Column="1" Padding="10,0"/>
         </Grid>
 
-        <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}">
+        <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}"
+                                ItemTemplateSelector="{StaticResource OutlinerItemDataSelector}"
+                                >
 
             <!--ContextMenu-->
             <ms:MultiSelectTreeView.ContextMenu>
@@ -116,7 +207,7 @@
                             <Setter Property="InputGestureText" Value="{Binding Gesture}" />
                             <Setter Property="ItemsSource" Value="{Binding Children}"/>
                             <Setter Property="Icon" Value="{StaticResource MenuIconResource}" />
-                                <Style.Triggers>
+                            <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsSeparator}" Value="True">
                                     <Setter Property="Template" >
                                         <Setter.Value>
@@ -131,45 +222,7 @@
                     </ContextMenu.Resources>
                 </ContextMenu>
             </ms:MultiSelectTreeView.ContextMenu>
-            
-            <!--ItemTemplate-->
-            <ms:MultiSelectTreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="local:OutlinerItem" ItemsSource="{Binding Children}">
 
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Type"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Border x:Name="BG" Grid.ColumnSpan="2" Background="{DynamicResource Accent}" Opacity="0.5"/>
-
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                            <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
-                            <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
-                            <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
-                        </StackPanel>
-                        <TextBlock Text="Entity" Grid.Column="1" Opacity="0.5"/>
-                    </Grid>
-
-                    <HierarchicalDataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding IsMatched.Value}" Value="False">
-                            <Setter Property="Visibility" TargetName="BG" Value="Collapsed"/>
-                        </DataTrigger>
-                    </HierarchicalDataTemplate.Triggers>
-
-                    <!--
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                        <ToggleButton IsChecked="{Binding IsActive}" Opacity="{Binding ActiveIconOpacity}" Style="{StaticResource ActiveIcon}" Focusable="False"/>
-                        <ToggleButton IsChecked="{Binding IsVisible}" Opacity="{Binding VisibleIconOpacity}" Style="{StaticResource VisibleIcon}" Focusable="False"/>
-                        <base:EditableTextBlock Text="{Binding Name}" IsEditting="{Binding IsNameEditting.Value}" BorderBrush="{DynamicResource Outline}" Margin="2,0,0,0" Focusable="False"/>
-                    </StackPanel>
-                    -->
-                </HierarchicalDataTemplate>
-            </ms:MultiSelectTreeView.ItemTemplate>
-            
             <!--ItemContainerStyle-->
             <ms:MultiSelectTreeView.ItemContainerStyle>
                 <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">

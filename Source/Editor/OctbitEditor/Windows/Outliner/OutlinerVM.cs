@@ -4,14 +4,53 @@ using Common.Tree;
 using CommonView.History;
 using CommonView.Menu;
 using Livet;
+using OctbitEngine.Asset;
 using OctbitEngine.Runtime;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace OctbitEditor
 {
+
+    public class SceneMock : IScene
+    {
+        public IWorld World => throw new NotImplementedException();
+
+        public string Name { get; set; } = string.Empty;
+
+        public IAssetFile? File => throw new NotImplementedException();
+
+        public bool IsActive { get; set; } = true;
+        public bool IsVisible { get; set; } = true;
+
+        public IScene? Parent { get; set; }
+
+        public IReadOnlyList<IScene> Children => m_children;
+        private List<IScene> m_children = new();
+
+        public IReadOnlyList<IEntity> Entities => m_entities;
+        private List<IEntity> m_entities = new();
+
+        public bool AddChild(IScene child)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEntity CreateEntity()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetParent(IScene? parent)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class EntityMock : IEntity
     {
         public EntityMock(string name)
@@ -88,129 +127,6 @@ namespace OctbitEditor
     }
 
 
-    public class OutlinerItem : ViewModel
-    {
-        internal static BitmapImage FolderIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/folder.png"));
-        internal static BitmapImage EntityIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/entity.png"));
-
-        public OutlinerItem(IEntity entity)
-        {
-            Entity = entity;
-            Parent = null;
-        }
-
-        public IEntity Entity { get; }
-
-        public OutlinerItem? Parent { get; set; }
-
-        public bool SetParent(OutlinerItem? parent)
-        {
-            // 循環
-            if (parent?.Parent.AnyAncestor(i => i.Parent, i => i==parent)??false) return false;
-
-            if (Parent != null)
-            {
-                Parent.Children.Remove(this);
-            }
-
-            Parent = parent;
-            Parent?.Children.Add(this);
-
-            Entity.SetParent(parent?.Entity);
-
-            return false;
-        }
-
-
-        public string Name
-        {
-            get => Entity.Name;
-            set
-            {
-                if (Name == value) return;
-                var oldValue = Name;
-                History.Record(
-                    $"エンティティの名前を {value} に変更",
-                    () => { Entity.Name = value; RaisePropertyChanged(); },
-                    () => { Entity.Name = oldValue; RaisePropertyChanged(); }
-                );
-            }
-        }
-
-        enum HierarchyStatus
-        {
-            Active,
-            Visible,
-            Static
-        }
-        private void UpdateHierarchyStatus(HierarchyStatus mode)
-        {
-            switch (mode)
-            {
-                case HierarchyStatus.Active:
-                    RaisePropertyChanged(nameof(IsActive));
-                    RaisePropertyChanged(nameof(ActiveIconOpacity));
-                    break;
-                case HierarchyStatus.Visible:
-                    RaisePropertyChanged(nameof(IsVisible));
-                    RaisePropertyChanged(nameof(VisibleIconOpacity));
-                    break;
-                case HierarchyStatus.Static:
-                    break;
-            }
-
-            foreach (var child in Children)
-            {
-                child.UpdateHierarchyStatus(mode);
-            }
-        }
-
-
-        public bool IsActive
-        {
-            get => Entity.IsActive;
-            set
-            {
-                if (IsActive == value) return;
-                var oldValue = IsActive;
-                History.Record(
-                    $"エンティティ({Name})のIsActiveを{value}に変更",
-                    () => { Entity.IsActive = value; UpdateHierarchyStatus(HierarchyStatus.Active); },
-                    () => { Entity.IsActive = oldValue; UpdateHierarchyStatus(HierarchyStatus.Active); }
-                );
-            }
-        }
-        public bool IsVisible
-        {
-            get => Entity.IsVisible;
-            set
-            {
-                if (IsVisible == value) return;
-                var oldValue = IsVisible;
-                History.Record(
-                    $"エンティティ({Name})のIsVisibleを{value}に変更",
-                    () => { Entity.IsVisible = value; UpdateHierarchyStatus(HierarchyStatus.Visible); },
-                    () => { Entity.IsVisible = oldValue; UpdateHierarchyStatus(HierarchyStatus.Visible); }
-                );
-            }
-        }
-
-        public double ActiveIconOpacity
-            => this.AllAncestor(i => i?.Parent, i => i.IsActive) ? 1.0 : 0.5;
-        public double VisibleIconOpacity
-            => this.AllAncestor(i => i?.Parent, i => i.IsVisible) ? 1.0 : 0.5;
-
-        public ReactivePropertySlim<bool> IsExpanded { get; } = new(true);
-        public ReactivePropertySlim<bool> IsSelected { get; } = new(false);
-        public ReactivePropertySlim<bool> IsFiltered { get; } = new(false);
-        public ReactivePropertySlim<bool> IsMatched { get; } = new(false);
-        public ReactivePropertySlim<bool> IsNameEditting { get; } = new(false);
-        public BitmapImage Icon => EntityIcon;
-        public ObservableCollection<OutlinerItem> Children { get; } = new();
-
-    }
-
-
     public class OutlinerVM : TabBase
     {
         public OutlinerVM(IWorld world)
@@ -223,20 +139,30 @@ namespace OctbitEditor
             GenerateMenuItems();
             InitializeCommands();
 
-            SelectedItems.CollectionChanged += (sender, e) =>
+            // ルートシーン
+            var scenes = new List<SceneOutlinerItem>();
+            for (int i = 0; i<1; ++i)
             {
-                RaisePropertyChanged(nameof(SelectionInfo));
-            };
+                scenes.Add(new SceneOutlinerItem(new SceneMock() { Name="Root Scene" }));
+            }
+            Children = new(scenes);
+
+            // SelectionInfoは頻繁に更新する必要はないのでThrottleをかける
+            Observable.FromEventPattern<NotifyCollectionChangedEventHandler,NotifyCollectionChangedEventArgs>
+                ( h => SelectedItems.CollectionChanged += h,h=> SelectedItems.CollectionChanged -= h)
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Subscribe(e => RaisePropertyChanged(nameof(SelectionInfo)));
 
             Filter.Subscribe(_ => { Children.ForEach(i=> UpdateFilter(i)); });
+
         }
 
-        private bool MatchFilter(OutlinerItem item)
+        private bool MatchFilter(OutlinerItemBase item)
         {
             return item.Name.Contains(Filter.Value) && !string.IsNullOrEmpty(Filter.Value);
         }
 
-        private bool UpdateFilter(OutlinerItem item)
+        private bool UpdateFilter(OutlinerItemBase item)
         {
             // TODO async処理
             bool matched = MatchFilter(item);
@@ -255,6 +181,8 @@ namespace OctbitEditor
 
         private void InitializeCommands()
         {
+            CreateSceneCommand = new DelegateCommand(CreateSceneTest);
+            CreateFolderCommand = new DelegateCommand(CreateFolder);
             CreateEntityCommand = new DelegateCommand(CreateEntity);
             DeleteEntityCommand = new DelegateCommand(DeleteEntity);
             EditEntityNameCommand = new DelegateCommand(EditEntityName);
@@ -262,8 +190,8 @@ namespace OctbitEditor
 
         private void GenerateMenuItems()
         {
-            MenuItems.AddCommand("Cut", "Ctrl+X", CutEntity).Icon = OutlinerItem.EntityIcon;
-            MenuItems.AddCommand("Copy", "Ctrl+C", CutEntity).Icon = OutlinerItem.EntityIcon;
+            MenuItems.AddCommand("Cut", "Ctrl+X", CutEntity);
+            MenuItems.AddCommand("Copy", "Ctrl+C", CutEntity);
             MenuItems.AddCommand("Paste", "Ctrl+V", CutEntity);
             MenuItems.AddSeparator();
             MenuItems.AddCommand("Rename", "F2",CutEntity);
@@ -292,39 +220,74 @@ namespace OctbitEditor
             SelectedItems.ForEach(i=>i.IsNameEditting.Value = i == SelectedItems.Last());
         }
 
-        private void CreateEntity()
+        private void CreateSceneTest()
         {
-
-            var parent = SelectedItems.FirstOrNull();
-            var item = new OutlinerItem(new EntityMock("New Entity") { Name="New Entity" });
+            var item = new SceneOutlinerItem(new SceneMock() { Name="New Scene" });
 
             History.Record(
-                "エンティティを作成",
+                "シーンを作成",
                 () =>
                 {
-                    if (parent==null)
-                    {
-                        Children.Add(item);
-                    }
-                    else
-                    {
-                        item.SetParent(parent);
-                    }
+                    Children.Add(item);
 
                     // TODO ツリーの更新、もしくはEntity総数の変更をトリガーにする
                     RaisePropertyChanged(nameof(SelectionInfo));
                 },
                 () =>
                 {
-                    if (item.Parent==null)
-                    {
-                        Children.Remove(item);
-                    }
+                    Children.Remove(item);
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                }
+            );
+        }
+        private void CreateFolder()
+        {
+            var parent = SelectedItems.FirstOrNull();
+            if (!(parent is SceneOutlinerItem || parent is FolderOutlinerItem)) return;
+            if (parent is null) return;
+
+            var item = new FolderOutlinerItem() { Name="New Folder" };
+
+            History.Record(
+                "エンティティを作成",
+                () =>
+                {
+                    item.SetParent(parent);
+
+                    // TODO ツリーの更新、もしくはEntity総数の変更をトリガーにする
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                },
+                () =>
+                {
                     item.SetParent(null);
                     RaisePropertyChanged(nameof(SelectionInfo));
                 }
             );
-            
+        }
+
+        private void CreateEntity()
+        {
+            var parent = SelectedItems.FirstOrNull();
+            if (!(parent is SceneOutlinerItem || parent is FolderOutlinerItem || parent is EntityOutlinerItem)) return;
+            if (parent is null) return;
+
+            var item = new EntityOutlinerItem(new EntityMock("New Entity") { Name="New Entity" });
+
+            History.Record(
+                "エンティティを作成",
+                () =>
+                {
+                    item.SetParent(parent);
+
+                    // TODO ツリーの更新、もしくはEntity総数の変更をトリガーにする
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                },
+                () =>
+                {
+                    item.SetParent(null);
+                    RaisePropertyChanged(nameof(SelectionInfo));
+                }
+            );            
         }
         private void DeleteEntity()
         {
@@ -389,15 +352,17 @@ namespace OctbitEditor
 
         // テキストによるフィルタ
         public ReactivePropertySlim<string> Filter { get; } = new(string.Empty);
-        public ObservableCollection<OutlinerItem> Children { get; } = new();
+        public ObservableCollection<OutlinerItemBase> Children { get; } = new();
 
-        public ObservableCollection<OutlinerItem> SelectedItems { get; set; } = new();
+        public ObservableCollection<OutlinerItemBase> SelectedItems { get; set; } = new();
 
         public string SelectionInfo => $"{SelectedItems.Count}/{Children.Sum(i=>i.DepthFirst(i=>i.Children).Count())} selected";
 
         public DynamicGroupItem MenuItems { get; private set; }
 
         // コマンド
+        public ICommand? CreateSceneCommand { get; private set; }
+        public ICommand? CreateFolderCommand { get; private set; }
         public ICommand? CreateEntityCommand { get; private set; }
         public ICommand? DeleteEntityCommand { get; private set; }
         public ICommand? EditEntityNameCommand { get; private set; }

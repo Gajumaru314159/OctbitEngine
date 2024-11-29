@@ -34,7 +34,7 @@ namespace CommonView
                 nameof(IsEditable),
                 typeof(bool),
                 typeof(EditableTextBlock),
-                new PropertyMetadata(false));
+                new PropertyMetadata(true));
 
         public string Text
         {
@@ -157,6 +157,7 @@ namespace CommonView
 
         private void BeginEdit()
         {
+            if (IsEditable==false) return;
             m_previousText = m_textBlock.Text;
             m_textBox.Text = Text;
             UpdateControlVisibility();
