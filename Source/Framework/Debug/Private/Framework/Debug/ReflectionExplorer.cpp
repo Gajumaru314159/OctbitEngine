@@ -38,6 +38,11 @@ namespace ob::debug {
 
 			if (auto info = TypeInfoManager::Find(m_selected)) {
 				drawDetail(*info);
+
+				ImGui::Separator();
+				if (auto desc = info->findTag("Description")) {
+					ImGui::Text(desc->data());
+				}
 			}
 		}
 
