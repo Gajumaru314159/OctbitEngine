@@ -155,6 +155,8 @@ namespace ob::core::internal {
 			// 基底型登録
 			m_info.bases.emplace(Type::Get<std::underlying_type_t<T>>());
 			m_info.isEnum = true;
+			m_info.size = sizeof(T);
+			m_info.alignment = alignof (T);
 
 			// コンストラクタ登録(デフォルト)
 			{
@@ -213,6 +215,9 @@ namespace ob::core::internal {
 		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
+
+			m_info.size = sizeof(T);
+			m_info.alignment = alignof (T);
 
 			// デストラクタ登録
 			{

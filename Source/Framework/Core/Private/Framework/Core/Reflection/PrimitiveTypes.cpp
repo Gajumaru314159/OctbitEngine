@@ -41,6 +41,9 @@ namespace  ob::core::internal{
 		PrimitiveBuilderTemplate()
 			: PrimitiveBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
 		{
+			m_info.size = sizeof(T);
+			m_info.alignment = alignof (T);
+
 			// コンストラクタ登録(デフォルト)
 			{
 				auto& ctor = m_info.constructors.emplace_back();

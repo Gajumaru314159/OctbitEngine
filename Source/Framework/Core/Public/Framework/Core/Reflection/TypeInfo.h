@@ -150,7 +150,7 @@ namespace ob::core {
 		Type					type;
 		HashSet<Type>			bases;
 
-		size_t					stride;
+		size_t					size;
 		size_t					alignment;
 
 		Vector<ConstructorInfo>	constructors;
@@ -174,6 +174,7 @@ namespace ob::core {
 		void destroy(void* pointer)const { OB_ASSERT_EXPR(destructor); destructor(pointer); }
 		void destroyPlaced(void* pointer)const { OB_ASSERT_EXPR(placedDestructor);  placedDestructor(pointer); }
 
+		size_t stride()const { return align_up(size,alignment); }
 
 		bool isBaseOf(const Type& super)const;
 
