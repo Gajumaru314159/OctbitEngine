@@ -4,17 +4,29 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/TypeRegister.h>
-#include <Framework/Core/Reflection/PrimitiveRegister.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
 
-OB_REGISTER_RTTI(ob::engine::Entity);
-OB_REGISTER_RTTI(ob::engine::Component);
-OB_REGISTER_RTTI(ob::engine::TransformComponent);
-
-OB_REGISTER_RTTI(ob::engine::ReflectionTestComponent);
-OB_REGISTER_RTTI(ob::engine::MeshComponent);
-OB_REGISTER_RTTI(ob::engine::FlyCameraComponent);
-OB_REGISTER_RTTI(ob::engine::LightComponent);
-OB_REGISTER_RTTI(ob::engine::PointLightComponent);
-OB_REGISTER_RTTI(ob::engine::SpotLightComponent);
-OB_REGISTER_RTTI(ob::engine::DirectionalLightComponent);
+namespace ob::engine {
+	auto s_aaa = TypeRegister::Link<
+		class Entity,
+		class Component,
+		class TransformComponent,
+		class ReflectionTestComponent,
+		class MeshComponent,
+		class FlyCameraComponent,
+		class LightComponent,
+		class PointLightComponent,
+		class SpotLightComponent,
+		class DirectionalLightComponent
+	>;
+	//OB_REGISTER_RTTI(class Entity);
+	//OB_REGISTER_RTTI(class Component);
+	//OB_REGISTER_RTTI(class TransformComponent);
+	//OB_REGISTER_RTTI(class ReflectionTestComponent);
+	//OB_REGISTER_RTTI(class MeshComponent);
+	//OB_REGISTER_RTTI(class FlyCameraComponent);
+	//OB_REGISTER_RTTI(class LightComponent);
+	//OB_REGISTER_RTTI(class PointLightComponent);
+	//OB_REGISTER_RTTI(class SpotLightComponent);
+	//OB_REGISTER_RTTI(class DirectionalLightComponent);
+}

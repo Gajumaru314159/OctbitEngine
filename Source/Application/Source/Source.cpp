@@ -84,12 +84,33 @@ int OctbitMain() {
 
 #if 1
 
+OB_DEFINE_CLASS_INFO(Vector<String>) {
+	constructor();
+	tag("DisplayName", "Vector<int>");
+	method("size", &T::size);
+	method("max_size", &T::max_size);
+	method<void, size_t>("resize", &T::resize, "size");
+	method("capacity", &T::capacity);
+	method("empty", &T::empty);
+	method("reserve", &T::reserve, "n");
+	method("shrink_to_fit", &T::shrink_to_fit);
+
+	method<String&, size_t>("at", &T::at, "n");
+
+	method<void, size_t, const String&>("assign", &T::assign, "n", "t");
+	method<void, const String&>("push_back", &T::push_back, "x");
+	method("pop_back", &T::pop_back);
+	method("clear", &T::clear);
+}
+
 struct TransformA {
 	Transform transform;
 	bool changed = false;
 };
 
 int TestDirectX12() {
+
+	TypeRegister::Link<ReflectionTestComponent>();
 
 
 

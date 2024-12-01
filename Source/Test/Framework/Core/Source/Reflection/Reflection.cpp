@@ -104,11 +104,6 @@ OB_DEFINE_CLASS_INFO(Fruit) {
 	field("Weight", &T::m_weight);
 }
 
-OB_REGISTER_RTTI(Nutrients);
-OB_REGISTER_RTTI(FruitType);
-OB_REGISTER_RTTI(Food);
-OB_REGISTER_RTTI(Fruit);
-
 
 using Vector_int = Vector<int>;
 OB_DEFINE_CLASS_INFO(Vector_int) {
@@ -128,7 +123,6 @@ OB_DEFINE_CLASS_INFO(Vector_int) {
 	method("pop_back", &T::pop_back);
 	method("clear", &T::clear);
 }
-OB_REGISTER_RTTI(Vector_int);
 
 TEST(TypeBuilder, Construct) {
 	TypeInfoManager manager;
@@ -269,7 +263,6 @@ OB_DEFINE_CLASS_INFO(MethodTest) {
 	method("int_args_noexcept", &T::int_args_noexcept, "a", "b");
 	method("int_args_const_noexcept", &T::int_args_const_noexcept, "a", "b");
 }
-OB_REGISTER_RTTI(MethodTest);
 
 
 
@@ -297,7 +290,6 @@ OB_DEFINE_CLASS_INFO(PropertyTest) {
 	property("get_set", &T::get, &T::set);
 	property("get_set_noexcept", &T::get_noexceot, &T::set_noexceot);
 }
-OB_REGISTER_RTTI(PropertyTest);
 
 struct FieldTest {
 	int value;
@@ -312,4 +304,3 @@ OB_DEFINE_CLASS_INFO(FieldTest) {
 	field("const_value", &T::const_value);
 	//field("const_reference", &T::const_reference);
 }
-OB_REGISTER_RTTI(FieldTest);

@@ -8,9 +8,13 @@
 #include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Core.h>
 
-namespace type_info_builder {
+namespace ob::core {
 
 	ReflectionFunction* g_reflectionFunction = nullptr;
+
+	ReflectionFunction::ReflectionFunction(func_type func) :func(func) {
+		PushReflectionFunction(this);
+	}
 
 	ReflectionFunction* GetReflectionFunction() {
 		return g_reflectionFunction;
@@ -20,10 +24,6 @@ namespace type_info_builder {
 		g_reflectionFunction = func;
 	}
 
-}
-
-
-namespace ob::core::internal {
 
 	//===============================================================
 	// TagBuilder

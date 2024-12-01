@@ -6,7 +6,6 @@
 #include <Framework/Core/Reflection/TypeBuilder.h>
 #include <Framework/Core/Reflection/TypeRegister.h>
 #include <Framework/Core/Reflection/TypeInfoPrinter.h>
-#include <Framework/Core/Reflection/PrimitiveRegister.h>
 #include <nlohmann/json.hpp>
 
 using namespace ob;
@@ -55,10 +54,6 @@ OB_DEFINE_CLASS_INFO(ObjectA) {
 	field("_string", &T::_string);
 	field("_objectB", &T::_objectB);
 }
-OB_REGISTER_RTTI(ObjectC);
-OB_REGISTER_RTTI(ObjectB);
-OB_REGISTER_RTTI(ObjectA);
-
 
 
 
@@ -72,11 +67,14 @@ OB_DEFINE_CLASS_INFO(AnyFoo) {
 	field("bar", & T::bar);
 }
 
-OB_REGISTER_RTTI(AnyBar);
-OB_REGISTER_RTTI(AnyFoo);
 
 
-TEST(Any, Construct) {
+static_assert(sizeof("Any") > 1, "test_suite_name must not be empty"); static_assert(sizeof("Construct") > 1, "test_name must not be empty"); 
+class Any_Construct_Test : public ::testing::Test {
+public: Any_Construct_Test() = default; ~Any_Construct_Test() override = default; Any_Construct_Test(const Any_Construct_Test&) = delete; Any_Construct_Test& operator=(const Any_Construct_Test&) = delete; Any_Construct_Test(Any_Construct_Test&&) noexcept = delete; Any_Construct_Test& operator=(Any_Construct_Test&&) noexcept = delete; private: void TestBody() override; static ::testing::TestInfo* const test_info_;
+}; 
+
+::testing::TestInfo* const Any_Construct_Test::test_info_ = ::testing::internal::MakeAndRegisterTestInfo("Any", "Construct", nullptr, nullptr, ::testing::internal::CodeLocation("D:\\My\\Productions\\C++\\OctbitEngine\\Source\\Test\\Framework\\Core\\Source\\Reflection\\Any.cpp", 72), (::testing::internal::GetTestTypeId()), ::testing::internal::SuiteApiResolver< ::testing::Test>::GetSetUpCaseOrSuite("D:\\My\\Productions\\C++\\OctbitEngine\\Source\\Test\\Framework\\Core\\Source\\Reflection\\Any.cpp", 72), ::testing::internal::SuiteApiResolver< ::testing::Test>::GetTearDownCaseOrSuite("D:\\My\\Productions\\C++\\OctbitEngine\\Source\\Test\\Framework\\Core\\Source\\Reflection\\Any.cpp", 72), new ::testing::internal::TestFactoryImpl<Any_Construct_Test>); void Any_Construct_Test::TestBody() {
 	TypeInfoManager manager;
 
 	AnyFoo foo;

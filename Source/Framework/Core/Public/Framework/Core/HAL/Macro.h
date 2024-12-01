@@ -121,9 +121,9 @@
 //@―---------------------------------------------------------------------------
 //! @brief		名前結合
 //@―---------------------------------------------------------------------------
-#define VAR_NAME_FROM_LINE3(prefix,line) prefix##line
-#define VAR_NAME_FROM_LINE2(prefix,line) VAR_NAME_FROM_LINE3(prefix,line)
-#define VAR_NAME_FROM_LINE(prefix) VAR_NAME_FROM_LINE2(prefix,__LINE__)
+#define UNIQUE_ID3(prefix,line) prefix##line
+#define UNIQUE_ID2(prefix,line) UNIQUE_ID3(prefix,line)
+#define UNIQUE_ID(prefix) UNIQUE_ID2(prefix, __COUNTER__)
 
 
 //@―---------------------------------------------------------------------------

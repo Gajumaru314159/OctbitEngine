@@ -8,24 +8,15 @@
 
 namespace ob::core {
 
-
 	TypeInfoManager::TypeInfoManager() {
-		// TODO Primitive型
 
-		// 
-		auto f = type_info_builder::GetReflectionFunction();
+		// Primitive型を明示的にリンク
+		TypeRegister::Link<s32>();
+
+		auto f = GetReflectionFunction();
 		while (f != nullptr) {
 			f->func();
 			f = f->next;
-		}
-
-		// 継承解決
-		for (auto& [type, info] : m_infos) {
-			for (auto& baseClass : info.bases) {
-				if (auto baseInfo = find(baseClass)) {
-					// baseInfo.inherits.emplace(type);
-				}
-			}
 		}
 
 	}

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Engine/Component/LightComponent.h>
-#include <Framework/Core/Reflection/TypeRegister.h>
+#include <Framework/Core/Reflection/TypeBuilder.h>
 
 OB_DEFINE_CLASS_INFO(ob::engine::LightComponent) {
 	desc("ライト基底クラス");

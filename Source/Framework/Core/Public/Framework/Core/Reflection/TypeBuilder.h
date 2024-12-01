@@ -8,13 +8,13 @@
 #include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 
-namespace type_info_builder {
+namespace ob::core {
 
 	//! @brief		リフレクション登録関数
 	//! @details	リフレクション登録関数を連結リストとして関するためのオブジェクトです。
 	struct ReflectionFunction {
 		using func_type = void(*)();
-		ReflectionFunction(func_type func) :func(func) {}
+		ReflectionFunction(func_type func);
 		func_type func;
 		ReflectionFunction* next = nullptr;
 	};
@@ -29,6 +29,25 @@ namespace type_info_builder {
 	//!				next が有効なポインタであれば次のリフレクション登録関数が存在します。
 	ReflectionFunction* GetReflectionFunction();
 
+	//! @brief		リフレクション登録オブジェクト
+	//!	@details	OB_DEFINE_INFO_BASE 経由で使用してください。
+	template<class T>
+	struct TypeRegisterTemplate {
+		//! @brief 明示的なリンクをする
+		//! @details TypeRegister<T>::Link() という風に呼び出すことでリフレクション登録関数を登録します。
+		static void Link();
+		static void Register();
+		static ReflectionFunction s_register;
+	};
+
+	//! @brief		リフレクション登録関数をリンクする
+	struct TypeRegister {
+		template<class... Ts>
+		static void Link() {
+			auto funcs = { TypeRegisterTemplate<Ts>::Link... };
+		}
+	};
+
 }
 
 
@@ -37,30 +56,39 @@ namespace type_info_builder {
 //! @details	
 //! @note		
 //@―---------------------------------------------------------------------------
-#define OB_DEFINE_ENUM_INFO(type)\
-namespace type_info_builder::type {\
-	void Register() {\
-		::ob::core::internal::EnumBuilderTemplate<::type> builder{};\
+#define OB_DEFINE_INFO_BASE(builder_type,type)\
+namespace ob::core {\
+	void TypeRegisterTemplate<::type>::Register() {\
+		builder_type<::type> builder{};\
 	}\
+	void TypeRegisterTemplate<::type>::Link() {}\
+	ReflectionFunction TypeRegisterTemplate<::type>::s_register(TypeRegisterTemplate<::type>::Register);\
 }\
-template<> void ::ob::core::internal::EnumBuilderTemplate<::type>::Register()
+template<> void builder_type<::type>::Register()
 
+//@―---------------------------------------------------------------------------
+//! @brief		Enum型情報の定義
+//! @details	
+//! @note		
+//@―---------------------------------------------------------------------------
+#define OB_DEFINE_ENUM_INFO(type) OB_DEFINE_INFO_BASE(ob::core::EnumBuilderTemplate,type)
 
 //@―---------------------------------------------------------------------------
 //! @brief		Class型情報の定義
 //! @details	
 //! @note		
 //@―---------------------------------------------------------------------------
-#define OB_DEFINE_CLASS_INFO(type)\
-namespace type_info_builder::type {\
-	void Register() {\
-		::ob::core::internal::ClassBuilderTemplate<::type> builder{};\
-	}\
-}\
-template<> void ::ob::core::internal::ClassBuilderTemplate<::type>::Register()
+#define OB_DEFINE_CLASS_INFO(type) OB_DEFINE_INFO_BASE(ob::core::ClassBuilderTemplate,type)
+
+//@―---------------------------------------------------------------------------
+//! @brief		Primitive型情報の定義
+//! @details	
+//! @note		
+//@―---------------------------------------------------------------------------
+#define OB_DEFINE_PRIMITIVE_INFO(type) OB_DEFINE_INFO_BASE(ob::core::PrimitiveBuilderTemplate,type)
 
 
-namespace ob::core::internal {
+namespace ob::core {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		タグ情報ビルダー
@@ -131,6 +159,26 @@ namespace ob::core::internal {
 	protected:
 
 		static StringView GetDefaultArgumentName(size_t index);
+
+	protected:
+		TypeInfo& m_info;
+	};
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		Primitive型情報ビルダー
+	//@―---------------------------------------------------------------------------
+	class PrimitiveBuilder : public TagBuilder {
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief		コンストラクタ
+		//@―---------------------------------------------------------------------------
+		PrimitiveBuilder(TypeInfo& info)
+			: TagBuilder(info)
+			, m_info(info)
+		{
+		}
 
 	protected:
 		TypeInfo& m_info;
@@ -398,13 +446,13 @@ namespace ob::core::internal {
 			info.isConst = MethodTraits<M>::Const;
 
 			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
-			StringView names[] = { StringView(argNames)... ,"" };
+			Array<StringView,sizeof...(Args)+1> names = {StringView(argNames)... ,""};
 			auto types = MethodTraits<M>::Types();
 
-			for (s32 i = 0; i < std::size(types) - 1; ++i) {
+			for (s32 i = 0; i + 1 < std::size(types); ++i) {
 				auto& arg = info.arguments.emplace_back();
-				arg.type = types[i];
-				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names[i];
+				arg.type = types.at(i);
+				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names.at(i);
 			}
 
 			if constexpr (sizeof...(Args) == 0) {
@@ -585,4 +633,58 @@ namespace ob::core::internal {
 
 	};
 
+
+	//@―---------------------------------------------------------------------------
+	//! @brief		Primitive型情報ビルダー
+	//@―---------------------------------------------------------------------------
+	template<class _T>
+	class PrimitiveBuilderTemplate :public PrimitiveBuilder {
+	public:
+		using T = _T;
+	public:
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			コンストラクタ
+		//@―---------------------------------------------------------------------------
+		PrimitiveBuilderTemplate()
+			: PrimitiveBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
+		{
+			m_info.size = sizeof(T);
+			m_info.alignment = alignof (T);
+
+			// コンストラクタ登録(デフォルト)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(); };
+			}
+
+			// コンストラクタ登録(初期値あり)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.arguments = { {Type::Get<T>(),"value"} };
+				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
+			}
+
+			// デストラクタ登録
+			{
+				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
+				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+			}
+
+			// コピー
+			if constexpr (std::is_copy_assignable<T>::value) {
+				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
+				m_info.assignInvoker = [](const void* from, void* to) { (*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from)); };
+			}
+
+			// タイプ登録
+			Register();
+		}
+
+		//@―---------------------------------------------------------------------------
+		//! @brief			タイプ登録
+		//@―---------------------------------------------------------------------------
+		void Register();
+
+	};
 }
