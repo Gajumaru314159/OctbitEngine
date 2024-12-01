@@ -35,8 +35,8 @@ namespace ob::core {
 	struct TypeRegisterTemplate {
 		//! @brief 明示的なリンクをする
 		//! @details TypeRegister<T>::Link() という風に呼び出すことでリフレクション登録関数を登録します。
-		static void Link(){}
-		static void Register() {}
+		static void Link();
+		static void Register();
 		static ReflectionFunction s_register;
 	};
 

@@ -153,8 +153,8 @@ public: Any_Construct_Test() = default; ~Any_Construct_Test() override = default
 	BinaryStream stream(blob);
 	BinaryReader reader(stream);
 	BinaryWriter writer(stream);
-	a.seralize(writer);
-	a.deserialize(reader);
+	a.serealize(writer);
+	a.deserealize(reader);
 
 	sizeof(Delegate<void()>);
 	sizeof(Func<void()>);
