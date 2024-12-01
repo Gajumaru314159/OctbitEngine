@@ -14,6 +14,19 @@ namespace ob::core {
 	class Hash {
 	public:
 
+		template <class T>
+		static constexpr void Combine(size_t& seed, const T& v)
+		{
+			std::hash<T> hasher;
+			const std::size_t kMul = 0x9ddfea08eb382d69ULL;
+			size_t a = (hasher(v) ^ seed) * kMul;
+			a ^= (a >> 47);
+			size_t b = (seed ^ a) * kMul;
+			b ^= (b >> 47);
+			seed = b * kMul;
+		}
+
+
 		//! @brief  FNV-1aによる文字列のハッシュ化
 		template<class TChar>
 		static constexpr u32 FNV32(StringViewBase<TChar> text) {
