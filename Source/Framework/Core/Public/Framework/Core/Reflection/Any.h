@@ -142,6 +142,9 @@ namespace ob::core {
 		Any owner();
 		Any owner()const;
 
+		void serealize(BinaryWriter& writer);
+		void deserealize(BinaryReader& reader);
+
 	private:
 
 		friend class Any;
@@ -344,8 +347,8 @@ namespace ob::core {
 		// Vector<Any> list();
 		// Map<Any, Any> map();
 
-		void seralize(BinaryWriter& writer) {}
-		void deserialize(BinaryReader& reader) {}
+		void serealize(BinaryWriter& writer) {}
+		void deserealize(BinaryReader& reader) {}
 
 	private:
 

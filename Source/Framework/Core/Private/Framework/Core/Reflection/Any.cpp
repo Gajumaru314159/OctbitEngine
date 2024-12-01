@@ -106,6 +106,14 @@ namespace ob::core {
 	}
 
 
+	void Property::serealize(BinaryWriter& writer) {
+		
+	}
+	void Property::deserealize(BinaryReader& reader) {
+	
+	}
+
+
 
 
 	Any::~Any() {
