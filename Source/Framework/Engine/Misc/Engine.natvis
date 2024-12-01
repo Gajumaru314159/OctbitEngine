@@ -14,5 +14,10 @@
 			<Item Name="visible">m_visible</Item>
 		</Expand>
 	</Type>-->
+
+	<!--YesNo-->
+	<Type Name="ob::engine2::Archetype">
+		<DisplayString>{m_types.m_size} types</DisplayString>
+	</Type>
 	
 </AutoVisualizer>

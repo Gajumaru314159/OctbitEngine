@@ -108,6 +108,18 @@
 		<DisplayString Condition="m_yesNo">Yes</DisplayString>
 		<DisplayString Condition="!m_yesNo">No</DisplayString>
 	</Type>
+	
+	<!--FixedVector-->
+	<Type Name="ob::core::FixedVector&lt;*,*&gt;">
+		<DisplayString>size={m_size}, capacity={0}</DisplayString>
+		<Expand>
+			<Item Name="[capacity]">0</Item>
+			<ArrayItems>
+				<Size>m_size</Size>
+				<ValuePointer>m_data._Elems</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
 
 
 </AutoVisualizer>
