@@ -15,20 +15,16 @@ namespace ob::core {
     //! @endcond
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              初期化
     //! 
     //! @details            MemorySystemSetings内の各HeapDescにヒープが設定されている場
     //!                     合はそのヒープが設定され、そうでない場合はclassTypeとheapSi
     //!                     zeから新規のヒープが生成される。
-    //@―---------------------------------------------------------------------------
     void MemorySystem::Init() {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              解放
-    //@―---------------------------------------------------------------------------
     void MemorySystem::Release() {
         for (s32 i = 0; i < enum_cast(HeapUsage::Max); ++i) {
             if (s_heaps[i] != nullptr)
@@ -39,12 +35,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              ヒープにアロケータを設定
     //! 
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
-    //@―---------------------------------------------------------------------------
     void MemorySystem::SetHeapAllocator(HeapUsage HeapUsage, Allocator* pAllocator) {
         const s32 index = static_cast<s32>(HeapUsage);
         OB_ASSERT_RANGE(index,0,enum_cast(HeapUsage::Max)-1);
@@ -56,12 +50,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              デバッグ・ヒープにアロケータを設定
     //! 
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
-    //@―---------------------------------------------------------------------------
     void MemorySystem::SetDebugHeapAllocator(HeapUsage HeapUsage, Allocator* pAllocator) {
         const s32 index = enum_cast(HeapUsage);
         OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
@@ -74,12 +66,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              ヒープのアロケータを取得
     //! 
     //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
     //! @param HeapUsage     対象のヒープ・タイプ
-    //@―---------------------------------------------------------------------------
     Allocator& MemorySystem::GetHeapAllocator(HeapUsage HeapUsage) {
         const s32 index = enum_cast(HeapUsage);
         OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
@@ -94,12 +84,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              デバッグ・ヒープのアロケータを取得
     //! 
     //! @details            ヒープにアロケータが設定されていない場合は標準のアロケータが返される。
     //! @param HeapUsage     対象のヒープ・タイプ
-    //@―---------------------------------------------------------------------------
     Allocator& MemorySystem::GetDebugHeapAllocator(HeapUsage HeapUsage) {
         const s32 index = enum_cast(HeapUsage);
         OB_ASSERT_RANGE(index, 0, enum_cast(HeapUsage::Max)-1);
@@ -120,23 +108,19 @@ namespace ob::core {
 extern "C"
 {
 
-    //@―---------------------------------------------------------------------------
     //! @brief              ヒープにアロケータを設定
     //! 
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
-    //@―---------------------------------------------------------------------------
     void OB_API SetHeapAllocator(ob::core::HeapUsage HeapUsage, ob::core::Allocator* pAllocator) {
         ob::core::MemorySystem::SetHeapAllocator(HeapUsage, pAllocator);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              デバッグ・ヒープにアロケータを設定
     //! 
     //! @param HeapUsage     設定対象のヒープ・タイプ
     //! @param pAllocator   アロケータ
-    //@―---------------------------------------------------------------------------
     void OB_API SetDebugHeapAllocator(ob::core::HeapUsage HeapUsage, ob::core::Allocator* pAllocator) {
         ob::core::MemorySystem::SetDebugHeapAllocator(HeapUsage, pAllocator);
     }

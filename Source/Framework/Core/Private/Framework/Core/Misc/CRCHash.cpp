@@ -63,13 +63,11 @@ namespace ob::core {
 
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定した文字列のハッシュ値を求める
     //! 
     //! @param str 元文字配列
     //! @param len 配列の長さ
     //! @return ハッシュ値
-    //@―---------------------------------------------------------------------------
     static u32 CalcCRCHash(gsl::span<const byte> bytes) {
         u32 hash = static_cast<u32>(bytes.size());
         for (s32 i = 0; i < bytes.size(); ++i) {
@@ -81,13 +79,11 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定した文字列のハッシュ値を求める
     //! 
     //! @param str 元文字配列
     //! @param len 配列の長さ
     //! @return ハッシュ値
-    //@―---------------------------------------------------------------------------
     u32 CRCHash::Compute(const char* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>((len < 0) ? strlen(str) : len);
@@ -95,13 +91,11 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定した文字列のハッシュ値を求める
     //! 
     //! @param str 元文字配列
     //! @param len 配列の長さ
     //! @return ハッシュ値
-    //@―---------------------------------------------------------------------------
     u32 CRCHash::Compute(const wchar_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
@@ -109,13 +103,11 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定した文字列のハッシュ値を求める
     //! 
     //! @param str 元文字配列
     //! @param len 配列の長さ
     //! @return ハッシュ値
-    //@―---------------------------------------------------------------------------
     u32 CRCHash::Compute(const char16_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? std::char_traits<char16_t>::length(str) : len) * sizeof(char16_t));
@@ -123,13 +115,11 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定した文字列のハッシュ値を求める
     //! 
     //! @param str 元文字配列
     //! @param len 配列の長さ
     //! @return ハッシュ値
-    //@―---------------------------------------------------------------------------
     u32 CRCHash::Compute(const char32_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? std::char_traits<char32_t>::length(str) : len) * sizeof(char32_t));

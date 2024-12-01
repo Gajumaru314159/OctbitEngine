@@ -10,9 +10,7 @@
 namespace ob {
     namespace platform {
 
-        //@―---------------------------------------------------------------------------
         //! @brief  ウィンドウ
-        //@―---------------------------------------------------------------------------
         class WindowImpl :public Window {
         public:
             WindowImpl(const WindowDescParams& params);

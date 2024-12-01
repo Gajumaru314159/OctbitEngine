@@ -12,23 +12,17 @@
 
 namespace ob::graphics {
 
-	//@―---------------------------------------------------------------------------
 	//!	@brief			コンストラクタ
-	//@―---------------------------------------------------------------------------
 	MaterialManager::MaterialManager(rhi::RHI&, NameDictionary&) {
 		initializeGlobalProperties();
 		initializeRootSignature();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//!	@brief			デストラクタ
-	//@―---------------------------------------------------------------------------
 	MaterialManager::~MaterialManager() {
 	}
 
-	//@―---------------------------------------------------------------------------
 	//!	@brief			グローバルプロパティの初期化
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::initializeGlobalProperties() {
 		// グローバル変数用のリソース生成
 		constexpr size_t GLOBAL_TEXTURE_MAX = 256;
@@ -72,9 +66,7 @@ namespace ob::graphics {
 		m_propertyMap.emplace("Matrix", ValuePropertyDesc{ PropertyType::Matrix,sizeof(Color) });
 	}
 
-	//@―---------------------------------------------------------------------------
 	//!	@brief			共通ルートシグネチャを生成
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::initializeRootSignature() {
 		using namespace ob::rhi;
 
@@ -96,9 +88,7 @@ namespace ob::graphics {
 		OB_ASSERT_EXPR(m_signature);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//!	@brief			レイアウトID取得
-	//@―---------------------------------------------------------------------------
 	VertexLayoutId MaterialManager::getVertexLayoutId(const rhi::VertexLayout& layout) {
 		ScopeLock lock(m_lock);
 		auto found = m_vertexLayoutCache.find(layout);
@@ -112,9 +102,7 @@ namespace ob::graphics {
 
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	bool MaterialManager::hasProprty(StringView name, PropertyType type) const {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 			return found->second.type == type;
@@ -122,23 +110,17 @@ namespace ob::graphics {
 		return false;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::setFloat(StringView name, f32 value) {
 		setValueProprty(name, PropertyType::Float, value);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::setColor(StringView name, Color value) {
 		setValueProprty(name, PropertyType::Color, value);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::setMatrix(StringView name, const Matrix& value) {
 		setValueProprty(name, PropertyType::Matrix,
 #if 1
@@ -149,9 +131,7 @@ namespace ob::graphics {
 		);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::setTexture(StringView name, const Ref<rhi::Texture>& value) {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 
@@ -166,9 +146,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialManager::recordGlobalShaderProperties(Ref<rhi::CommandList>& cmdList) {
 
 		if (!cmdList)return;

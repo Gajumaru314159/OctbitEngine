@@ -8,9 +8,7 @@
 #include <Framework/Core/HAL/Platform.h>
 #if defined(OS_WINDOWS)
 
-//@―---------------------------------------------------------------------------
 // ワーニング抑制
-//@―---------------------------------------------------------------------------
 #pragma warning(disable:4018)   // signedとunsignedの数値を比較
 #pragma warning(disable:4389)   // signedとunsignedの数値を等価比較
 #pragma warning(disable:4324)   // 構造体のパディング自動追加
@@ -19,9 +17,7 @@
 #pragma warning(disable:4505)   // 参照されていないローカル関数の削除
 
 
-//@―---------------------------------------------------------------------------
 // マクロ定義
-//@―---------------------------------------------------------------------------
 #define ALIGN_DECL_IMPL(type,alignment) _declspec(align(alignment)) type                    // アライン付き宣言
 #define ALIGN_VAR_IMPL(var,alignment)   _declspec(align(alignment)) var                     // アライン付き変数宣言
 #define FINLINE_IMPL                    __forceinline                                       // 強制inline修飾子
@@ -34,9 +30,7 @@
 #define DLL_IMPORT_IMPL                 __declspec(dllimport)                               // DLL入力
 #define _internal_FUNC_NAME             __FUNCSIG__                                         // 関数名
 
-//@―---------------------------------------------------------------------------
 // 型定義
-//@―---------------------------------------------------------------------------
 using NativeChar = wchar_t;
 
 #endif

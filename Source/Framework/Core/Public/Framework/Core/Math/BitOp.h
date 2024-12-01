@@ -8,15 +8,11 @@
 
 namespace ob::core {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      ビット操作ユーティリティ
-	//@―---------------------------------------------------------------------------
 	struct BitOp {
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief 有効ビット数を計算
-		//@―---------------------------------------------------------------------------
 		static constexpr s32 GetBitCount(u8  value);
 		//! @copydoc GetBitCount(u8)
 		static constexpr s32 GetBitCount(u16 value);
@@ -25,9 +21,7 @@ namespace ob::core {
 		//! @copydoc GetBitCount(u8)
 		static constexpr s32 GetBitCount(u64 value);
 
-		//@―---------------------------------------------------------------------------
 		//! @brief 最上位ビットのインデックスを取得(Most Significant Bit)
-		//@―---------------------------------------------------------------------------
 		static constexpr s32 GetMSB(u8  value);
 		//! @copydoc GetMSB(u8)
 		static constexpr s32 GetMSB(u16 value);
@@ -36,9 +30,7 @@ namespace ob::core {
 		//! @copydoc GetMSB(u8)
 		static constexpr s32 GetMSB(u64 value);
 
-		//@―---------------------------------------------------------------------------
 		//! @brief 最下位ビットのインデックスを取得(Least Significant Bit)
-		//@―---------------------------------------------------------------------------
 		static constexpr s32 GetLSB(u8  value);
 		//! @copydoc GetLSB(u8)
 		static constexpr s32 GetLSB(u16 value);
@@ -58,9 +50,7 @@ namespace ob::core {
 //! @cond
 namespace ob::core {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 有効ビット数を計算
-	//@―---------------------------------------------------------------------------
 	constexpr s32 BitOp::GetBitCount(u8  value) {
 		value = (value & 0x55) + ((value >> 1) & 0x55);
 		value = (value & 0x33) + ((value >> 2) & 0x33);
@@ -92,9 +82,7 @@ namespace ob::core {
 		return (s32)value;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  最上位ビットのインデックスを取得(Most Significant Bit)
-	//@―---------------------------------------------------------------------------
 	constexpr s32 BitOp::GetMSB(u8  value) {
 		if (value == 0)return -1;
 		u8 temp = value;
@@ -134,9 +122,7 @@ namespace ob::core {
 		return GetBitCount(temp)-1;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 最下位ビットのインデックスを取得(Least Significant Bit)
-	//@―---------------------------------------------------------------------------
 	constexpr s32 BitOp::GetLSB(u8  value) {
 		if (value == 0)return -1;
 		u8 temp = value;

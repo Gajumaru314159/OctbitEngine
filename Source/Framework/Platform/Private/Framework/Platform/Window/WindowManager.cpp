@@ -24,9 +24,7 @@ namespace ob::platform {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  メインウィンドウを設定
-    //@―---------------------------------------------------------------------------
     void WindowManager::setMainWindow(const Window& window) {
         if (m_mainWindow) {
             LOG_WARNING("ウィンドウ[{}]が既にメインウィンドウに設定されているためメインウィンドウを変更できませんでした。", m_mainWindow.getTitle());
@@ -35,9 +33,7 @@ namespace ob::platform {
         }
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  メインウィンドウを取得
-    //@―---------------------------------------------------------------------------
     auto WindowManager::getMainWindow()->Window& {
         static bool isAutoGenerate = false;
         if (!m_mainWindow && isAutoGenerate==false) {
@@ -49,9 +45,7 @@ namespace ob::platform {
         return m_mainWindow;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  メインウィンドウが生成済みか
-    //@―---------------------------------------------------------------------------
     auto WindowManager::hasMainWindow() const -> bool {
         return m_mainWindow;
     }

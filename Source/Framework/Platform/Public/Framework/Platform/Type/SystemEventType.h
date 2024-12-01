@@ -7,9 +7,7 @@
 
 namespace ob::platform {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント・タイプ
-    //@―---------------------------------------------------------------------------
     enum class WindowEventType {
         Unknown,    //!< 不明
 
@@ -56,9 +54,7 @@ namespace ob::platform {
 
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ウィンドウ・イベント
-    //@―---------------------------------------------------------------------------
     //! @{
     using WindowEventNotifier = EventNotifier<const WindowEventArgs&>;
     using WindowEventHandle = typename WindowEventNotifier::Handle;

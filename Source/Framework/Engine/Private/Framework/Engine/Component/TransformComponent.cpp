@@ -25,9 +25,7 @@ OB_DEFINE_CLASS_INFO(ob::engine::TransformComponent) {
 
 namespace ob::engine {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	TransformComponent::TransformComponent(Entity& entity)
 		: Component(entity)
 	{
@@ -35,46 +33,34 @@ namespace ob::engine {
 		m_world = Transform::Identity;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::initialize(){
 		getEntity().addParentChangedEvent(m_hParentChanged, {*this,&TransformComponent::onParentChanged});
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Transform変更イベント
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::addTransformChangedEvent(TransformChangedHandle& handle, TransformChangedDelegate func) {
 		m_transformChangedNotifier.add(handle, func);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Parent変更イベント
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::addParentChangedEvent(ParentChangedHandle& handle, ParentChangedDelegate func) {
 		m_parentChangedNotifier.add(handle, func);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカルTransform設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocal(const Transform& value) {
 		m_local = value;
 		computeWorldTransform();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールドTransform設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorld(const Transform& value) {
 		m_world = value;
 		computeLocalTransform();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカルTransformを計算
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::computeLocalTransform() {
 		if (m_parent) {
 			m_local = m_parent->getWorld().inverse() * m_local;
@@ -85,9 +71,7 @@ namespace ob::engine {
 		m_transformChangedNotifier.invoke(*this);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールドTransformを計算
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::computeWorldTransform() {
 		if (m_parent) {
 			m_world = m_parent->getWorld() * m_local;
@@ -98,9 +82,7 @@ namespace ob::engine {
 		m_transformChangedNotifier.invoke(*this);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  親変更イベント
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::onParentChanged(Entity* oldParent, Entity* newParent) {
 		// 親TransformComonentを毎回findComponentしなくていいようにキャッシュ
 		if (newParent) {
@@ -110,72 +92,56 @@ namespace ob::engine {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカル座標設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalPosition(const Vec3& value) {
 		Transform local = getLocal();
 		local.position = value;
 		setLocal(local);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカルスケール設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalScale(const Vec3& value) {
 		Transform local = getLocal();
 		local.scale = value;
 		setLocal(local);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカル回転設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalQuaternion(const Quat& value) {
 		Transform local = getLocal();
 		local.rotation = value;
 		setLocal(local);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ローカル回転設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalRotation(const Rot& value) {
 		Transform local = getLocal();
 		local.rotation = value.toQuat();
 		setLocal(local);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールド座標設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldPosition(const Vec3& value) {
 		Transform world = getWorld();
 		world.position = value;
 		setWorld(world);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールドスケール設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldScale(const Vec3& value) {
 		Transform world = getWorld();
 		world.scale = value;
 		setWorld(world);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールド回転設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldQuaternion(const Quat& value) {
 		Transform world = getWorld();
 		world.rotation = value;
 		setWorld(world);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ワールド回転設定
-	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldRotation(const Rot& value) {
 		Transform world = getWorld();
 		world.rotation = value.toQuat();

@@ -51,11 +51,9 @@ namespace ob::core {
 }
 
 
-//@―---------------------------------------------------------------------------
 //! @brief		Enum型情報の定義
 //! @details	
 //! @note		
-//@―---------------------------------------------------------------------------
 #define OB_DEFINE_INFO_BASE(builder_type,type)\
 namespace ob::core {\
 	void TypeRegisterTemplate<::type>::Register() {\
@@ -66,49 +64,35 @@ namespace ob::core {\
 }\
 template<> void builder_type<::type>::Register()
 
-//@―---------------------------------------------------------------------------
 //! @brief		Enum型情報の定義
 //! @details	
 //! @note		
-//@―---------------------------------------------------------------------------
 #define OB_DEFINE_ENUM_INFO(type) OB_DEFINE_INFO_BASE(ob::core::EnumBuilderTemplate,type)
 
-//@―---------------------------------------------------------------------------
 //! @brief		Class型情報の定義
 //! @details	
 //! @note		
-//@―---------------------------------------------------------------------------
 #define OB_DEFINE_CLASS_INFO(type) OB_DEFINE_INFO_BASE(ob::core::ClassBuilderTemplate,type)
 
-//@―---------------------------------------------------------------------------
 //! @brief		Primitive型情報の定義
 //! @details	
 //! @note		
-//@―---------------------------------------------------------------------------
 #define OB_DEFINE_PRIMITIVE_INFO(type) OB_DEFINE_INFO_BASE(ob::core::PrimitiveBuilderTemplate,type)
 
 
 namespace ob::core {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タグ情報ビルダー
-	//@―---------------------------------------------------------------------------
 	class TagBuilder {
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
 		TagBuilder(TagInfo&);
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		タグ追加
-		//@―---------------------------------------------------------------------------
 		TagBuilder& tag(StringView key, StringView value = "");
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		説明をDescriptionタグとして追加
-		//@―---------------------------------------------------------------------------
 		TagBuilder& desc(StringView value);
 
 	private:
@@ -116,21 +100,15 @@ namespace ob::core {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報ビルダー
-	//@―---------------------------------------------------------------------------
 	class EnumBuilder : public TagBuilder {
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
 		EnumBuilder(TypeInfo&);
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		要素追加
 		//! @details	追加した順番にインデックスが割り振られます。インデックスは0ベースです。
-		//@―---------------------------------------------------------------------------
 		template<typename E>
 		TagBuilder element(StringView name, E value) {
 			auto& element = m_info.enumElements.emplace_back();
@@ -145,15 +123,11 @@ namespace ob::core {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		クラス情報ビルダー
-	//@―---------------------------------------------------------------------------
 	class ClassBuilder : public TagBuilder {
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ
-		//@―---------------------------------------------------------------------------
 		ClassBuilder(TypeInfo&);
 
 	protected:
@@ -165,15 +139,11 @@ namespace ob::core {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		Primitive型情報ビルダー
-	//@―---------------------------------------------------------------------------
 	class PrimitiveBuilder : public TagBuilder {
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief		コンストラクタ
-		//@―---------------------------------------------------------------------------
 		PrimitiveBuilder(TypeInfo& info)
 			: TagBuilder(info)
 			, m_info(info)
@@ -185,18 +155,14 @@ namespace ob::core {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		Enum型情報ビルダー
-	//@―---------------------------------------------------------------------------
 	template<class _T>
 	class EnumBuilderTemplate :public EnumBuilder {
 	public:
 		using T = _T;
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ
-		//@―---------------------------------------------------------------------------
 		EnumBuilderTemplate() 
 			: EnumBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
 		{
@@ -242,25 +208,19 @@ namespace ob::core {
 			Register();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
-		//@―---------------------------------------------------------------------------
 		void Register() {}
 
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		Class型情報ビルダー
-	//@―---------------------------------------------------------------------------
 	template<class _T>
 	class ClassBuilderTemplate : public ClassBuilder {
 	public:
 		using T = _T;
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ
-		//@―---------------------------------------------------------------------------
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
 			Register();
 
@@ -280,22 +240,16 @@ namespace ob::core {
 			}
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
-		//@―---------------------------------------------------------------------------
 		void Register() {}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			基底クラスを追加
-		//@―---------------------------------------------------------------------------
 		template<class TBase, class = std::enable_if_t<std::is_base_of<TBase, T>::value>>
 		void base() {
 			m_info.bases.emplace(::ob::Type::Get<TBase>());
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタを追加
-		//@―---------------------------------------------------------------------------
 		//! @{
 		TagBuilder constructor() {
 			static_assert(std::is_constructible<T>::value,"0引数のコンストラクタがありません");
@@ -378,9 +332,7 @@ namespace ob::core {
 		//! @endcond
 
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class M, class... Args, class... Names>
 		auto method(StringView name, M method, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<M>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -388,9 +340,7 @@ namespace ob::core {
 			return method_impl(name,method,argNames...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...), Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -398,9 +348,7 @@ namespace ob::core {
 			return method_impl<decltype(m),Args...>(name, m, argNames...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)const, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -408,9 +356,7 @@ namespace ob::core {
 			return method_impl<decltype(m), Args...>(name, m, argNames...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)noexcept, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -418,9 +364,7 @@ namespace ob::core {
 			return method_impl<decltype(m), Args...>(name, m, argNames...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)const noexcept, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -430,9 +374,7 @@ namespace ob::core {
 
 	private:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			メソッド追加
-		//@―---------------------------------------------------------------------------
 		template< class M, class... Args, class... Names>
 		auto method_impl(StringView name, M method, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<M>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
@@ -467,9 +409,7 @@ namespace ob::core {
 
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(メンバ変数)
-		//@―---------------------------------------------------------------------------
 		template<class TField>
 		TagBuilder field(StringView name, TField T::* address) {
 			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
@@ -493,17 +433,13 @@ namespace ob::core {
 			return info;
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(Getter)
-		//@―---------------------------------------------------------------------------
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
 			return property(name, getter, getter);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			プロパティ追加(Getter/Setter)
-		//@―---------------------------------------------------------------------------
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
 			using return_type = typename MethodTraits<F1>::return_type;
@@ -531,9 +467,7 @@ namespace ob::core {
 
 	private:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class M, class... Args>
 		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, M method) {
 			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
@@ -544,9 +478,7 @@ namespace ob::core {
 			}
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class M,class... Args, size_t... I>
 		static Any InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
 			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
@@ -557,9 +489,7 @@ namespace ob::core {
 			}
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class M, class... Args>
 		static Any InvokeMethod(Any& owner, Span<Any> args, M method) {
 			Type types[] = { Type::Get<Args>()... };
@@ -571,24 +501,18 @@ namespace ob::core {
 		}
 
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		static Any CreateWithoutArgs([[meybe_unused]] Span<Any>) {
 			return Any::Create<T>();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class T,class... Args,size_t ...I>
 		static Any CreateImpl(Span<Any> args, std::index_sequence<I...>) {
 			return Any::Create<T>(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class... Args>
 		static Any Create(Span<Any> args) {
 
@@ -601,24 +525,18 @@ namespace ob::core {
 		}
 
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数なしのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		static void PlacedCreateWithoutArgs(void* ptr,[[meybe_unused]] Span<Any>) {
 			new(ptr)T();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class T, class... Args, size_t ...I>
 		static void PlacedCreateImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
 			new(ptr)T(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			引数ありのコンストラクタ
-		//@―---------------------------------------------------------------------------
 		template<class... Args>
 		static void PlacedCreate(void* ptr, Span<Any> args) {
 
@@ -634,18 +552,14 @@ namespace ob::core {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		Primitive型情報ビルダー
-	//@―---------------------------------------------------------------------------
 	template<class _T>
 	class PrimitiveBuilderTemplate :public PrimitiveBuilder {
 	public:
 		using T = _T;
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			コンストラクタ
-		//@―---------------------------------------------------------------------------
 		PrimitiveBuilderTemplate()
 			: PrimitiveBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
 		{
@@ -681,9 +595,7 @@ namespace ob::core {
 			Register();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
-		//@―---------------------------------------------------------------------------
 		void Register() {}
 
 	};

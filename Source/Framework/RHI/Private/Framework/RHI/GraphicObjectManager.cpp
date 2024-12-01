@@ -8,11 +8,9 @@
 
 namespace ob::rhi {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //! 
     //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
-    //@―---------------------------------------------------------------------------
     GraphicObjectManager::GraphicObjectManager(Config* config) 
         : m_config(config ? *config : Config{})
         , m_deleteStackList(std::max(m_config.frameBufferCount,1))
@@ -23,9 +21,7 @@ namespace ob::rhi {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  デストラクタ
-    //@―---------------------------------------------------------------------------
     GraphicObjectManager::~GraphicObjectManager() {
 
         // フレームバッファ分解放
@@ -44,9 +40,7 @@ namespace ob::rhi {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  更新
-    //@―---------------------------------------------------------------------------
     void GraphicObjectManager::update() {
 
         // インデックスを更新
@@ -64,17 +58,13 @@ namespace ob::rhi {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  登録
-    //@―---------------------------------------------------------------------------
     void GraphicObjectManager::registerObject(GraphicObject& object) {
         m_objects.push_back(&object);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  解放
-    //@―---------------------------------------------------------------------------
     void GraphicObjectManager::requestRelease(GraphicObject& object) {
         m_deleteStackList.current().emplace(&object);
     }

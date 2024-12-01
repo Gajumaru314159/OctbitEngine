@@ -11,9 +11,7 @@ namespace ob::core {
     const Transform Transform::Identity = { Vec3::Zero,Quat::Identity,Vec3::One };
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  等価演算子
-    //@―---------------------------------------------------------------------------
     bool Transform::operator==(const Transform& rhs)const noexcept {
         return
             position.equals(rhs.position) &&
@@ -21,16 +19,12 @@ namespace ob::core {
             rotation.equals(rhs.rotation);
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  否等価演算子
-    //@―---------------------------------------------------------------------------
     bool Transform::operator!=(const Transform& rhs)const noexcept {
         return !(*this == rhs);
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  乗算
-    //@―---------------------------------------------------------------------------
     Transform Transform::operator*(const Transform& rhs)const {
         Transform result;
         result.rotation = rotation * rhs.rotation;
@@ -39,32 +33,24 @@ namespace ob::core {
         return result;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  乗算代入
-    //@―---------------------------------------------------------------------------
     Transform Transform::operator*=(const Transform& rhs) {
         *this = *this * rhs;
         return *this;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Matrix に変換
-    //@―---------------------------------------------------------------------------
     Transform::operator Matrix()const {
         return toMatrix();
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Matrix に変換
-    //@―---------------------------------------------------------------------------
     Matrix Transform::toMatrix()const {
         return Matrix::TRS(position,rotation.toRot(), scale);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  反転
-    //@―---------------------------------------------------------------------------
     Transform Transform::inverse()const {
         Transform out;
         out.rotation = rotation.inverse();

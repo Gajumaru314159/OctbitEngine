@@ -12,9 +12,7 @@ namespace ob::engine {
 	class TransformComponent;
 	OB_EVENT_NOTIFIER(TransformChanged, TransformComponent&);
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Transformコンポーネント
-	//@―---------------------------------------------------------------------------
 	class TransformComponent :public Component {
 	public:
 

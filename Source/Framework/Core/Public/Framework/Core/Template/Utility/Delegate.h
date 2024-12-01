@@ -16,11 +16,9 @@ namespace ob::core {
 	//! @endcond
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      デリゲート
 	//! 
 	//! @details    インスタンスへの参照をメソッドへの参照をペアにしてカプセル化する。
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	class Delegate<Ret(Args...)> :public internal::DelegateBase
 	{
@@ -51,9 +49,7 @@ namespace ob::core {
 		template<class T> Delegate(T& object, method_type<T> pMethod)noexcept;				// メンバ関数で初期化する
 		template<class T> Delegate(const T& object, const_method_type<T> pMethod)noexcept;	// constメンバ関数で初期化する
 
-		//@―---------------------------------------------------------------------------
 		//! @brief ラムダ式による初期化
-		//@―---------------------------------------------------------------------------
 		template<typename T, 
 			typename = std::enable_if_t <
 				!std::is_base_of<
@@ -109,9 +105,7 @@ namespace ob::core {
 	// インライン関数
 	//===============================================================
 
-	//@―---------------------------------------------------------------------------
 	//! @brief デフォルトコンストラクタ
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline constexpr Delegate<Ret(Args...)>::Delegate()noexcept {
 		m_pInvoke = &invoke_nop;
@@ -119,18 +113,14 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief コピーコンストラクタ
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Delegate<Ret(Args...)>::Delegate(const this_type& rhs)noexcept {
 		copy_impl(rhs);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief ムーブコンストラクタ
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Delegate<Ret(Args...)>::Delegate(this_type&& rhs)noexcept {
 		m_pInvoke = rhs.m_pInvoke;
@@ -138,9 +128,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 関数で初期化する
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Delegate<Ret(Args...)>::Delegate(function_type& function)noexcept {
 		m_pInvoke = &invoke_function;
@@ -149,9 +137,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief メンバ関数で初期化する
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	template<class T>
 	inline Delegate<Ret(Args...)>::Delegate(T& object, method_type<T> pMethod)noexcept {
@@ -161,9 +147,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief constメンバ関数で初期化する
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	template<class T>
 	inline Delegate<Ret(Args...)>::Delegate(const T& object, const_method_type<T> pMethod)noexcept {
@@ -173,53 +157,41 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 等価演算子
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline constexpr bool Delegate<Ret(Args...)>::operator==(const this_type& rhs)const noexcept {
 		return (m_pInvoke == rhs.m_pInvoke) && (m_functor == rhs.m_functor);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 否等価演算子
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline constexpr bool Delegate<Ret(Args...)>::operator!=(const this_type& rhs)const noexcept {
 		return !(*this == rhs);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief コピー代入演算子
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Delegate<Ret(Args...)>& Delegate<Ret(Args...)>::operator=(const this_type& rhs)noexcept {
 		if (this != &rhs)copy_impl(rhs);
 		return *this;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 関数が登録されているか
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Delegate<Ret(Args...)>::operator bool()const {
 		return m_pInvoke != &invoke_nop;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 登録された関数を呼び出す
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Ret Delegate<Ret(Args...)>::operator()(Args... args)const {
 		return (*m_pInvoke)(m_functor, std::forward<Args>(args)...);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief コピー
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline void Delegate<Ret(Args...)>::copy_impl(const this_type& rhs)noexcept {
 		m_pInvoke = rhs.m_pInvoke;
@@ -227,29 +199,23 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      無効関数
 	//! 
 	//! @details    関数が登録されていないときに呼び出されるダミー関数
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Ret Delegate<Ret(Args...)>::invoke_nop(const functor_type&, Args...)noexcept {
 		// 何もしない
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      登録された関数を呼び出す
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	inline Ret Delegate<Ret(Args...)>::invoke_function(const functor_type& functor, Args... args) {
 		return (*(functor.get_function<function_type*>()))(std::forward<Args>(args)...);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      メンバ関数を呼び出す
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	template<class T>
 	inline Ret Delegate<Ret(Args...)>::invoke_method(const functor_type& functor, Args... args) {
@@ -257,9 +223,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      constメンバ関数を呼び出す
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	template<class T>
 	inline Ret Delegate<Ret(Args...)>::invoke_const_method(const functor_type& functor, Args... args) {
@@ -267,9 +231,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      ラムダ式を呼び出す
-	//@―---------------------------------------------------------------------------
 	template<typename Ret, typename... Args>
 	template<class T>
 	inline Ret Delegate<Ret(Args...)>::invoke_lamda(const functor_type& functor, Args... args) {

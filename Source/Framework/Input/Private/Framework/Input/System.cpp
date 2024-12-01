@@ -10,9 +10,7 @@
 
 namespace ob::input {
 
-    //@―---------------------------------------------------------------------------
     //! @brief      システムをServiceInjectorに登録
-    //@―---------------------------------------------------------------------------
     void Register(ServiceInjector& injector) {
         injector.bind<InputModule>();
         platform::Register(injector);

@@ -8,7 +8,6 @@
 
 namespace ob::core {
 
-    //@―---------------------------------------------------------------------------
     MimallocHeap::MimallocHeap(void* pBuffer, size_t size) {
         m_pName = "MimallocHeap";
         OB_ASSERT_EXPR(pBuffer != nullptr);
@@ -29,9 +28,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief	                ヒープ名を取得
-    //@―---------------------------------------------------------------------------
     Char* MimallocHeap::name() const {
         return m_pName;
     }

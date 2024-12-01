@@ -15,9 +15,7 @@ static const char* s_proWindowProcedure = "OctbitWindowProp";
 namespace ob {
     namespace platform {
 
-        //@―---------------------------------------------------------------------------
         //! @brief  説明
-        //@―---------------------------------------------------------------------------
 
         WindowsWindow::WindowsWindow(const WindowDesc& params) :Window(params) {
             m_hWnd = nullptr;

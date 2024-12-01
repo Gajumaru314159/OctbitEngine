@@ -11,27 +11,21 @@ namespace ob::core {
 
 	enum class Entity : u64;
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      ComponentManager
-	//@―---------------------------------------------------------------------------
 	template<class T>
 	class ComponentManager {
 	public:
 		using this_type = ComponentManager;
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      全ての要素を削除する
-		//@―---------------------------------------------------------------------------
 		void clear() {
 			m_components.clear();
 			m_entities.clear();
 			m_lookup.clear();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      別のマネージャーからコピーする
-		//@―---------------------------------------------------------------------------
 		void copy(const this_type& other) {
 			clear();
 			m_components = other.m_components;
@@ -39,9 +33,7 @@ namespace ob::core {
 			m_lookup = other.m_lookup;
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      別のマネージャーをマージしてから別のマネージャーをクリアする
-		//@―---------------------------------------------------------------------------
 		void merge(this_type& other) {
 			m_components.reseve(size() + other.size());
 			m_entities.reseve(size() + other.size());
@@ -57,9 +49,7 @@ namespace ob::core {
 			other.clear();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応する要素を生成する
-		//@―---------------------------------------------------------------------------
 		T& create(Entity entity) {
 			OB_ASSERT_EXPR(!contains(entity));
 			m_components.emplace_back();
@@ -67,9 +57,7 @@ namespace ob::core {
 			return m_components.back();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応する要素を削除する
-		//@―---------------------------------------------------------------------------
 		void remove(Entity entity) {
 			auto itr = m_lookup.find(entity);
 			if (itr != m_lookup.end()) {
@@ -88,66 +76,50 @@ namespace ob::core {
 			}
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応する要素が含まれているか
-		//@―---------------------------------------------------------------------------
 		bool contains(Entity entity)const {
 			return m_lookup.find(entity) != m_lookup.end();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応する要素を取得する
-		//@―---------------------------------------------------------------------------
 		T* at(Entity entity) {
 			auto itr = m_lookup.find(entity);
 			if (itr == m_lookup.end()) return nullptr;
 			return m_components[itr->second];
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応する要素を取得する
-		//@―---------------------------------------------------------------------------
 		const T* at(Entity entity) const {
 			auto itr = m_lookup.find(entity);
 			if (itr == m_lookup.end()) return nullptr;
 			return m_components[itr->second];
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      インデックスに対応する要素を取得する
-		//@―---------------------------------------------------------------------------
 		T* at(size_t index) {
 			if (m_components.size() <= index) return nullptr;
 			return m_components[index];
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      インデックスに対応する要素を取得する
-		//@―---------------------------------------------------------------------------
 		const T* at(size_t index) const {
 			if (m_components.size() <= index) return nullptr;
 			return m_components[index];
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      登録されているコンポーネント数を取得する
-		//@―---------------------------------------------------------------------------
 		size_t size()const {
 			return m_components.size();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Entityに対応するインデックスを取得する
-		//@―---------------------------------------------------------------------------
 		size_t getIndex(Entity entity)const {
 			auto itr = m_lookup.find(entity);
 			if (itr == m_lookup.end())return ~0ull;
 			return itr->second;
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      インデックスからエンティティを取得する
-		//@―---------------------------------------------------------------------------
 		Entity getEntity(size_t index)const {
 			return m_entities.at(index);
 		}
@@ -158,9 +130,7 @@ namespace ob::core {
 		HashMap<Entity, size_t> m_lookup;
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      EntityとManagerを保持するホルダー
-	//@―---------------------------------------------------------------------------
 	template<class T>
 	class ComponentHolder {
 	public:

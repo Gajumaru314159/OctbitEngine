@@ -25,43 +25,33 @@ namespace ob::core {
     const Color Color::Normal = { 0.5f,1.0f,0.5f,1 };
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ColorU8 を変換して初期化
-    //@―---------------------------------------------------------------------------
     Color::Color(const IntColor& another) noexcept {
         const f32 div = 1.0f / 255.0f;
         *this = Color(another.r * div, another.g * div, another.b * div, another.a * div);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief Vec3 を変換して初期化(アルファは1.0)
-    //@―---------------------------------------------------------------------------
     Color::Color(const Vec3& another) noexcept {
         *this = Color(another.x, another.y, another.z);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief Vec4 を変換して初期化
-    //@―---------------------------------------------------------------------------
     Color::Color(const Vec4& another) noexcept {
         *this = Color(another.x, another.y, another.z, another.w);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 色をカラーコードに変換
-    //@―---------------------------------------------------------------------------
     u32 Color::toCode(ColorCodeFormat format)const noexcept {
         IntColor c32 = toIntColor();
         return c32.toCode();
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief          IntColorに変換
-    //@―---------------------------------------------------------------------------
     IntColor Color::toIntColor()const noexcept {
         return IntColor(
             static_cast<s32>(Math::Clamp01(r) * 255),
@@ -71,9 +61,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief      リニアカラーに変換
-    //@―---------------------------------------------------------------------------
     Color Color::toLinear()const {
         Color linear;
         auto convert = [](f32 value) {
@@ -88,9 +76,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief      sRGBカラーに変換
-    //@―---------------------------------------------------------------------------
     Color Color::toSRGB()const {
         Color linear;
         auto convert = [](f32 value) {
@@ -105,7 +91,6 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief		HSV空間で色の線形補完
     //! 
     //! @details	t が0のとき a を返し、 t が1のとき b を返す。
@@ -113,7 +98,6 @@ namespace ob::core {
     //! @param b    色2
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
-    //@―---------------------------------------------------------------------------
     Color Color::LerpHSV(const Color& a, const Color& b, f32 t) noexcept {
         return HSV::Lerp(HSV(a), HSV(b), t).toColor();
     }

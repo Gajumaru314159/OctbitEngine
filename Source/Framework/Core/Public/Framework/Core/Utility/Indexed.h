@@ -8,9 +8,7 @@
 
 namespace ob::core {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  インデックス付きEnumlator
-    //@―---------------------------------------------------------------------------
 	template <class Type, class TItr = decltype(std::begin(std::declval<Type>())), class = decltype(std::end(std::declval<Type>()))>
 	inline constexpr auto IndexedRef(Type&& iterable)
 	{
@@ -36,7 +34,6 @@ namespace ob::core {
 		return IterableWrapper{ std::forward<Type>(iterable) };
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		インデックス付きEnumlator
 	//! 
 	//! @details	使用方法
@@ -45,16 +42,13 @@ namespace ob::core {
 	//! 
 	//!				}
 	//!				```
-	//@―---------------------------------------------------------------------------
 	template <class Type, class TItr = decltype(std::begin(std::declval<Type>())), class = decltype(std::end(std::declval<Type>()))>
 	inline constexpr auto Indexed(Type&& iterable)
 	{
 		return IndexedRef<Type, TItr>(std::forward<Type>(iterable));
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  インデックス付き逆Enumlator
-	//@―---------------------------------------------------------------------------
 	template <class Type, class TItr = decltype(std::rbegin(std::declval<Type>())), class = decltype(std::rend(std::declval<Type>()))>
 	inline constexpr auto ReverseIndexedRef(Type&& iterable)
 	{
@@ -77,9 +71,7 @@ namespace ob::core {
 		return IterableWrapper{ std::forward<Type>(iterable) };
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  インデックス付き逆Enumlator
-	//@―---------------------------------------------------------------------------
 	template <class Type, class TItr = decltype(std::rbegin(std::declval<Type>())), class = decltype(std::rend(std::declval<Type>()))>
 	inline constexpr auto ReverseIndexed(Type&& iterable)
 	{

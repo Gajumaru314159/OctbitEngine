@@ -8,9 +8,7 @@
 
 namespace ob::rhi {
 
-    //@―---------------------------------------------------------------------------
     //! @brief      シェーダのエントリ関数名を取得
-    //@―---------------------------------------------------------------------------
     const char* Shader::GetEntryName(ShaderStage stage) {
         switch (stage)
         {
@@ -33,12 +31,10 @@ namespace ob::rhi {
         return "";
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief              コンストラクタ
     //! 
     //! @param codeSet      シェーダ・バイナリ
     //! @param stage        シェーダステージ
-    //@―---------------------------------------------------------------------------
     Ref<Shader> Shader::Compile(const String& code,ShaderStage stage) {
         if (auto rhi = RHI::Get()) {
             return rhi->compileShader(code, stage);
@@ -53,12 +49,10 @@ namespace ob::rhi {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              コンストラクタ
     //! 
     //! @param binarySet    シェーダ・バイナリ
     //! @param stage        シェーダステージ
-    //@―---------------------------------------------------------------------------
     Ref<Shader> Shader::Load(BlobView binary, ShaderStage stage) {
         if (auto rhi = RHI::Get()) {
             return rhi->loadShader(binary, stage);

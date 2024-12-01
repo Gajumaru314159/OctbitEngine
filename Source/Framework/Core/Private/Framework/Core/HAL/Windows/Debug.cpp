@@ -16,17 +16,13 @@
 #endif
 
 
-//@―---------------------------------------------------------------------------
 //! @brief  システムログ出力 
-//@―---------------------------------------------------------------------------
 void OutputDebugLog(const wchar_t* message) {
     ::OutputDebugStringW(message);
     ::OutputDebugStringW(L"\n");
 }
 
-//@―---------------------------------------------------------------------------
 //! @brief  ブレークポイントを呼び出し
-//@―---------------------------------------------------------------------------
 void ShowMessageBox(const wchar_t* pMessage) {
     ::MessageBoxW(NULL, pMessage, L"OctbitEngine", MB_OK);
 }

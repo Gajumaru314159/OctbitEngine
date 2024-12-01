@@ -11,18 +11,14 @@
 
 namespace ob {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief コンストラクタ
-	//@―---------------------------------------------------------------------------
 	JobGroup::JobGroup(JobSystem& system, StringView name) 
 		: m_system(system)
 	{
 		m_name = name;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief デストラクタ
-	//@―---------------------------------------------------------------------------
 	JobGroup::~JobGroup() {
 		for (auto& job : m_jobs) {
 			LOG_TRACE("未開放のジョブ [{}({})]",job->getName(),m_name);
@@ -30,34 +26,26 @@ namespace ob {
 		OB_ASSERT(m_jobs.empty(), "未開放のジョブがあります");
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 名前を取得
-	//@―---------------------------------------------------------------------------
 	auto JobGroup::getName()const->const String& {
 		return m_name;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief サブ JobGroup を生成
-	//@―---------------------------------------------------------------------------
 	auto JobGroup::createSub(StringView name)->Ref<JobGroup> {
 		ScopeLock lock(m_entryLock);
 		m_entrySubGroups.emplace_back(std::make_unique<JobGroup>(*this));
 		return m_entrySubGroups.back().get();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 子 JobGroup を生成
-	//@―---------------------------------------------------------------------------
 	auto JobGroup::createChild(StringView name)->Ref<JobGroup> {
 		ScopeLock lock(m_entryLock);
 		m_entryChildGroups.emplace_back(std::make_unique<JobGroup>(*this));
 		return m_entryChildGroups.back().get();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 子 JobGroup を追加
-	//@―---------------------------------------------------------------------------
 	void JobGroup::addChild(Ref<JobGroup>& group) {
 
 		if (!group) {
@@ -72,25 +60,19 @@ namespace ob {
 		OB_NOTIMPLEMENTED();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief ジョブを追加
-	//@―---------------------------------------------------------------------------
 	auto JobGroup::addJob(StringView name, Action&& action)->JobHandle& {
 		ScopeLock lock(m_entryLock);
 		m_entryJobs.push_back(std::make_unique<Job>(*this,name,action));
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief ジョブを削除
-	//@―---------------------------------------------------------------------------
 	void JobGroup::removeJob(Job& job) {
 		ScopeLock lock(m_entryLock);
 		m_leaveJobs.emplace(&job);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 終端グループの数を数える
-	//@―---------------------------------------------------------------------------
 	s32 JobGroup::countLeafGroup()const {
 		s32 count = 0;
 
@@ -103,9 +85,7 @@ namespace ob {
 		return count;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief 更新
-	//@―---------------------------------------------------------------------------
 	void JobGroup::update(JobExecutor& executor) {
 		ScopeLock lock(m_entryLock);
 
@@ -148,9 +128,7 @@ namespace ob {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief ジョブを実行
-	//@―---------------------------------------------------------------------------
 	void JobGroup::execute(JobExecutor& executor) {
 
 		// ジョブ実行

@@ -20,11 +20,9 @@ namespace ob::core {
     const IntColor IntColor::Magenta = { 255,0,255,255 };
     const IntColor IntColor::Normal = { 128,128,255,255 };
 
-    //@―---------------------------------------------------------------------------
     //! @brief			カラーコードから生成
     //! @param code		カラーコード
     //! @param format	カラーコードの並び
-    //@―---------------------------------------------------------------------------
     IntColor IntColor::FromCode(u32 code,ColorCodeFormat format) {
         u32 c0 = (code >> 24) & 0xFF;
         u32 c1 = (code >> 16) & 0xFF;

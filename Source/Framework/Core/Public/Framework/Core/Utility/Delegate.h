@@ -13,10 +13,8 @@ namespace ob::core {
 	class MiniDalegate;
 	//@ endcond
 
-    //@―---------------------------------------------------------------------------
 //! @brief      Ownerのみをキャプチャできる軽量デリゲート
 //!	@details    通常のデリゲートよりも軽量ですが、ラムダ式のように変数をキャプチャすることはできません。
-//@―---------------------------------------------------------------------------
     template<class R, class... Args>
     class MiniDalegate<R(Args...)> {
     public:
@@ -24,55 +22,43 @@ namespace ob::core {
         constexpr static size_t kBufferSize = 24; // T (8) + BaseInvoker (8) + Invoker (8) = 24
 
     public:
-        //@―---------------------------------------------------------------------------
         //! @brief      デフォルトコンストラクタ
         //! @details    MiniDalegateクラスのデフォルトコンストラクタです。
-        //@―---------------------------------------------------------------------------
         MiniDalegate() = default;
 
-        //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //! @param[in]  func  静的関数ポインタ
-        //@―---------------------------------------------------------------------------
         MiniDalegate(StaticFuncPtr func) {
             assign(func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ
-        //@―---------------------------------------------------------------------------
         template<class T>
         MiniDalegate(T& object, R(T::* func)(Args...)) {
             assign(object, func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      コンストラクタ
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ(const)
-        //@―---------------------------------------------------------------------------
         template<class T>
         MiniDalegate(const T& object, R(T::* func)(Args...) const) {
             assign(object, func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      静的関数ポインタを割り当てる
         //! @param[in]  func  静的関数ポインタ
-        //@―---------------------------------------------------------------------------
         void assign(StaticFuncPtr func) {
             static_assert(sizeof(StaticInvoker) <= kBufferSize, "buffer is too small");
             reset();
             new (m_buffer.data()) StaticInvoker(func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      オブジェクトとメンバ関数ポインタを割り当てる
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ
-        //@―---------------------------------------------------------------------------
         template<class T>
         void assign(T& object, R(T::* func)(Args...)) {
             static_assert(sizeof(Invoker<T>) <= kBufferSize, "buffer is too small");
@@ -80,11 +66,9 @@ namespace ob::core {
             new (m_buffer.data()) Invoker(object, func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      オブジェクトとメンバ関数ポインタを割り当てる(const)
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ
-        //@―---------------------------------------------------------------------------
         template<class T>
         void assign(const T& object, R(T::* func)(Args...) const) {
             static_assert(sizeof(ConstInvoker<T>) <= kBufferSize, "buffer is too small");
@@ -92,26 +76,20 @@ namespace ob::core {
             new (m_buffer.data()) ConstInvoker(object, func);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      デリゲートが有効かどうかを判定する
         //! @return     デリゲートが有効な場合はtrue、そうでない場合はfalse
-        //@―---------------------------------------------------------------------------
         operator bool() const {
             return std::equal_range(m_buffer.begin(), m_buffer.end(), 0);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      デリゲートをリセットする
-        //@―---------------------------------------------------------------------------
         void reset() {
             m_buffer.fill(0);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief      デリゲートを呼び出す
         //! @param[in]  args  関数引数
         //! @return     関数の戻り値
-        //@―---------------------------------------------------------------------------
         R operator()(Args... args) const {
             return reinterpret_cast<const BaseInvoker*>(m_buffer.data())->invoke(args...);
         }

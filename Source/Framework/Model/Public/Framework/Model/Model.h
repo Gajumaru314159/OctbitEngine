@@ -16,9 +16,7 @@ namespace ob::model {
 
 	struct ModelData;
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 	class Model : public RefObject {
 	public:
 		using Material = graphics::Material;

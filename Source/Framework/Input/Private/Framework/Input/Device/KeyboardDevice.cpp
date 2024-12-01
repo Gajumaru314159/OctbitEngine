@@ -8,23 +8,17 @@
 
 namespace ob::input {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	KeyboardDevice::KeyboardDevice() {
 		m_hWnd = nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
-	//@―---------------------------------------------------------------------------
 	KeyboardDevice::~KeyboardDevice() {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	更新
-	//@―---------------------------------------------------------------------------
 	void KeyboardDevice::update() {
 
 		u8 buf[256] = {};
@@ -191,9 +185,7 @@ namespace ob::input {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ボタンの入力状態を取得
-	//@―---------------------------------------------------------------------------
 	ButtonStates KeyboardDevice::getButtonStates(u32 code)const {
 		auto key = static_cast<Key>(code);
 		auto found = m_states.find(key);
@@ -201,9 +193,7 @@ namespace ob::input {
 		return found->second.next;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ボタン入力イベントをバインド
-	//@―---------------------------------------------------------------------------
 	bool KeyboardDevice::bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) {
 		auto key = static_cast<Key>(code);
 		m_states[key].notifiers[state].add(handle, func);

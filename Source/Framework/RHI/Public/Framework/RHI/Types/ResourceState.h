@@ -7,7 +7,6 @@
 
 namespace ob::rhi {
 
-    //@―---------------------------------------------------------------------------
     //! @brief      リソース状態
     //! 
     //! @details    D3D12_RESOURCE_STATE VkImageLayout VkAccessFlagBits参照
@@ -27,7 +26,6 @@ namespace ob::rhi {
     //!             | CopySource                        | COPY_SOURCE                       | TRANSFER_DST_OPTIMAL          |
     //!             | RaytracingAccelerationStructure   | RAYTRACING_ACCELERATION_STRUCTURE | -                             |
     //!             | Present                           | PRESENT                           | PRESENT_KHR                   |
-    //@―-------------------------------------------------------------------------------------------------------------------
     enum class ResourceState {
         Common,                             //!< 遷移元
         //VertexBuffer,                       //!< 頂点バッファ

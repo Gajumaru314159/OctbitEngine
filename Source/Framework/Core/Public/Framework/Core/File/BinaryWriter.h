@@ -10,9 +10,7 @@ namespace ob::core {
 
 	class Stream;
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 	class BinaryWriter{
 	public:
 		BinaryWriter(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);

@@ -15,7 +15,6 @@
 namespace ob::core {
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief          ハンドル管理式双方向連結リスト
     //! 
     //! @details        このコンテナは要素をコンテナ内部で管理せずハンドル内で管理する。<br> 
@@ -34,22 +33,17 @@ namespace ob::core {
     //!                 }
     //!                 std::cout<<ls.size()<<std::endl;    // 0
     //! ```
-    //@―---------------------------------------------------------------------------
     template<typename T>
     class HandleList :Noncopyable {
     public:
 
         //! @cond
-        //@―---------------------------------------------------------------------------
         //! @brief ハンドル基底
-        //@―---------------------------------------------------------------------------
         class HandleBase {
             friend class HandleList<T>;
         public:
 
-            //@―---------------------------------------------------------------------------
             //! @brief ハンドルが対象のリストの要素か判定する
-            //@―---------------------------------------------------------------------------
             bool is_child_of(const HandleList<T>& parent)const noexcept {
                 return pParent == std::addressof(parent);
             }
@@ -68,28 +62,20 @@ namespace ob::core {
         //! @endcond
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief ハンドル
-        //@―---------------------------------------------------------------------------
         class Handle :public HandleBase, Noncopyable,Nonmovable {
             friend class HandleList<T>;
         public:
 
-            //@―---------------------------------------------------------------------------
             //! @brief コンストラクタ
-            //@―---------------------------------------------------------------------------
             Handle() = default;
 
-            //@―---------------------------------------------------------------------------
             //! @brief デストラクタ
-            //@―---------------------------------------------------------------------------
             ~Handle() {
                 remove();
             }
 
-            //@―---------------------------------------------------------------------------
             //! @brief ハンドルの要素をリストから削除する
-            //@―---------------------------------------------------------------------------
             void remove() {
                 if (!pParent)return;
                 // 排他的制御ができていない？
@@ -128,9 +114,7 @@ namespace ob::core {
 
 #pragma region Iterator
 
-        //@―---------------------------------------------------------------------------
         //! @brief constイテレータ
-        //@―---------------------------------------------------------------------------
         class const_iterator {
             friend class HandleList<T>;
         public:
@@ -160,9 +144,7 @@ namespace ob::core {
         };
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief イテレータ
-        //@―---------------------------------------------------------------------------
         class iterator :public const_iterator {
             friend class HandleList<T>;
         public:
@@ -186,9 +168,7 @@ namespace ob::core {
         };
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief const逆イテレータ
-        //@―---------------------------------------------------------------------------
         class const_reverse_iterator :public const_iterator {
             friend class HandleList<T>;
         public:
@@ -212,9 +192,7 @@ namespace ob::core {
         };
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief 逆イテレータ
-        //@―---------------------------------------------------------------------------
         class reverse_iterator :public const_reverse_iterator {
             friend class HandleList<T>;
         public:
@@ -346,18 +324,14 @@ namespace ob::core {
     // インライン関数
     //===============================================================
 
-    //@―---------------------------------------------------------------------------
     //! @brief 等価演算子
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline bool operator==(HandleList<T> const& a, HandleList<T> const& b)noexcept {
         ScopeLock lock(m_lock);
         return (a.size() == b.size()) && ob::equal(a.begin(), a.end(), b.begin());
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief 否等価演算子
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline bool operator!=(HandleList<T> const& a, HandleList<T> const& b)noexcept {
         return !(*this == rhs);
@@ -365,9 +339,7 @@ namespace ob::core {
 
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline HandleList<T>::HandleList()
         :m_header() {
@@ -375,9 +347,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ムーブコンストラクタ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline HandleList<T>::HandleList(this_type&& x)noexcept {
         clear_impl();
@@ -385,9 +355,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ムーブ代入演算子
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline HandleList<T>& HandleList<T>::operator=(this_type&& rhs)noexcept {
         if (this != &rhs) {
@@ -399,126 +367,98 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief デストラクタ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline HandleList<T>::~HandleList() {
         clear();
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指すイテレータを取得する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::begin()noexcept {
         return iterator(m_header.pNext);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指すイテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_iterator HandleList<T>::begin()const noexcept {
         return const_iterator(m_header.pNext);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指すイテレータを取得する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::end()noexcept {
         return iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指すイテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_iterator HandleList<T>::end()const noexcept {
         return const_iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指すイテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_iterator HandleList<T>::cbegin()const noexcept {
         return const_iterator(m_header.pNext);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指すイテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_iterator HandleList<T>::cend()const noexcept {
         return const_iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指す逆イテレータを取得する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reverse_iterator HandleList<T>::rbegin()noexcept {
         return reverse_iterator(m_header.pPrev);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指す逆イテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reverse_iterator HandleList<T>::rbegin()const noexcept {
         return const_reverse_iterator(m_header.pPrev);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指す逆イテレータを取得する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reverse_iterator HandleList<T>::rend()noexcept {
         return reverse_iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指す逆イテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reverse_iterator HandleList<T>::rend()const noexcept {
         return const_reverse_iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭を指す逆イテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reverse_iterator HandleList<T>::crbegin()const noexcept {
         return const_reverse_iterator(m_header.pPrev);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾の次を指す逆イテレータを取得する(const)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reverse_iterator HandleList<T>::crend()const noexcept {
         return const_reverse_iterator(&m_header);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief コンテナが空かどうかを判定する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline bool HandleList<T>::empty()const noexcept {
         ScopeLock lock(m_lock);
@@ -526,11 +466,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素数を取得する
     //! 
     //! @note  O(n)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::size_type HandleList<T>::size()const noexcept {
         ScopeLock lock(m_lock);
@@ -538,11 +476,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭要素への参照を取得する
     //! 
     //! @note  コンテナが空の時はassertを発生させる。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reference HandleList<T>::front() {
         ScopeLock lock(m_lock);
@@ -551,11 +487,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭要素への参照を取得する(const)
     //! 
     //! @note  コンテナが空の時はassertを発生させる。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reference HandleList<T>::front() const {
         ScopeLock lock(m_lock);
@@ -564,11 +498,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾要素への参照を取得する
     //! 
     //! @note  コンテナが空の時はassertを発生させる。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::reference HandleList<T>::back() {
         ScopeLock lock(m_lock);
@@ -577,11 +509,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾要素への参照を取得する(const)
     //! 
     //! @note  コンテナが空の時はassertを発生させる。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::const_reference HandleList<T>::back() const {
         ScopeLock lock(m_lock);
@@ -590,9 +520,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭に要素を追加する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_front(Handle& h, const T& x) {
         ScopeLock lock(m_lock);
@@ -601,9 +529,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭に要素を追加する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_front(Handle& h, T&& x) {
         ScopeLock lock(m_lock);
@@ -612,9 +538,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭に要素を直接構築して追加する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::reference HandleList<T>::emplace_front(Handle& h, Args&&... args) {
@@ -625,9 +549,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾に要素を追加する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_back(Handle& h, const T& x) {
         ScopeLock lock(m_lock);
@@ -636,9 +558,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾に要素を追加する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::push_back(Handle& h, T&& x) {
         ScopeLock lock(m_lock);
@@ -647,11 +567,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  末尾に要素を直接構築して追加する
     //! 
     //! @return 追加した要素の参照
-    //@―---------------------------------------------------------------------------
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::reference HandleList<T>::emplace_back(Handle& h, Args&&... args) {
@@ -662,11 +580,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  要素を指定位置に挿入する
     //! 
     //! @return 挿入した要素のイテレータ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::insert(Handle& h, const_iterator position, const T& x) {
         ScopeLock lock(m_lock);
@@ -676,11 +592,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素を指定位置に挿入する
     //! 
     //! @return 挿入した要素のイテレータ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::insert(Handle& h, const_iterator position, T&& x) {
         ScopeLock lock(m_lock);
@@ -690,11 +604,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素を指定位置に直接構築して挿入する
     //! 
     //! @return 挿入した要素のイテレータ
-    //@―---------------------------------------------------------------------------
     template<typename T>
     template<class... Args>
     inline typename HandleList<T>::iterator HandleList<T>::emplace(Handle& h, const_iterator position, Args&&... args) {
@@ -705,11 +617,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭から要素を削除する
     //! 
     //! @details    コンテナが空の場合は何もしない。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::pop_front()noexcept {
         ScopeLock lock(m_lock);
@@ -718,11 +628,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾から要素を削除する
     //! 
     //! @details    コンテナが空の場合は何もしない。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::pop_back()noexcept {
         ScopeLock lock(m_lock);
@@ -731,9 +639,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 指定位置の要素を削除する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::erase(const_iterator position) {
         ScopeLock lock(m_lock);
@@ -741,11 +647,9 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief      指定範囲の要素を削除する
     //! 
     //! @details    [position, last)で示される範囲の要素が削除される。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::erase(const_iterator position, const_iterator last) {
         ScopeLock lock(m_lock);
@@ -759,9 +663,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 全要素を削除する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::clear()noexcept {
         ScopeLock lock(m_lock);
@@ -775,18 +677,14 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief コンテナを交換する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::swap(this_type& x)noexcept {
         std::swap(*this, x);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素を削除する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::remove(Handle& h) {
         ScopeLock lock(m_lock);
@@ -794,12 +692,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief      条件に合った要素を削除する
     //! 
     //! @details    コンテナの全ての要素に対する各イテレータiにおいて、pred(*i) == trueとなる要素を削除する。
     //!             削除された要素に対するイテレータおよび参照は無効となる。
-    //@―---------------------------------------------------------------------------
     template<typename T>
     template<class Predicate>
     inline void HandleList<T>::remove_if(Predicate pred) {
@@ -816,9 +712,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief コンテナを反転する
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::reverse()noexcept {
         ScopeLock lock(m_lock);
@@ -834,9 +728,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief リストをクリア(remove呼び出しなし)
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::clear_impl()noexcept {
         m_header.pNext = &m_header;
@@ -846,9 +738,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ムーブ共通処理
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::move_impl(this_type&& src)noexcept {
         if (src.empty()) {
@@ -866,9 +756,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 全ての要素のpParentの更新
-    //@―---------------------------------------------------------------------------
     template<typename T>
     void HandleList<T>::reset_parent()noexcept {
         auto itr = begin();
@@ -880,9 +768,7 @@ namespace ob::core {
         m_header.pParent = this;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素を指定したハンドルの次に挿入
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::insert_impl(HandleBase* pPrev, Handle& h) {
         assert(pPrev != nullptr);
@@ -907,27 +793,21 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 先頭に要素を追加
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::insert_front_impl(Handle& h) {
         insert_impl(m_header.pNext, h);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 末尾に要素を追加
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline void HandleList<T>::insert_back_impl(Handle& h) {
         insert_impl(&m_header, h);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 要素の削除
-    //@―---------------------------------------------------------------------------
     template<typename T>
     inline typename HandleList<T>::iterator HandleList<T>::erase_impl(HandleBase* pHandle)noexcept {
         assert(pHandle != nullptr);

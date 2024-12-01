@@ -15,9 +15,7 @@ namespace ob::core {
 
     Logger* Logger::s_instance = nullptr;
 
-    //@―---------------------------------------------------------------------------
     //! @brief コンストラクタ
-    //@―---------------------------------------------------------------------------
     Logger::Logger() {
 
         assert(s_instance == nullptr);
@@ -106,16 +104,13 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief デストラクタ
-    //@―---------------------------------------------------------------------------
     Logger::~Logger() {
         m_hDebugEvent.remove();
         s_instance = nullptr;
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief                  ログの追加
     //! 
     //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
@@ -124,7 +119,6 @@ namespace ob::core {
     //! @param sourceLocation   ログ生成場所
     //! @param category         カテゴリ名
     //! @param pMessage         メッセージ
-    //@―---------------------------------------------------------------------------
     void Logger::addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pMessage) {
 
         thread_local bool logged = false;
@@ -146,17 +140,13 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの追加
-    //@―---------------------------------------------------------------------------
     void Logger::addEvent(EventHandle& handle, EventDelegateType func) {
         m_notifier.add(handle, func);
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ログ・イベントの削除
-    //@―---------------------------------------------------------------------------
     void Logger::removeEvent(EventHandle& handle) {
         m_notifier.remove(handle);
     }

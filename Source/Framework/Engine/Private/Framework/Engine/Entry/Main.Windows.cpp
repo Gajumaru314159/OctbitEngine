@@ -9,9 +9,7 @@
 #include <Windows.h>
 #include <Framework/Engine/Entry/MainInternal.h>
 
-//@―---------------------------------------------------------------------------
 //! @brief  エントリ関数(Windows)
-//@―---------------------------------------------------------------------------
 int main(int argc, const char* argv[]) {
 
     CommonMain();

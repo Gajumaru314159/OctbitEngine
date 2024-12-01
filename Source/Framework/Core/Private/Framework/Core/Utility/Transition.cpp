@@ -8,9 +8,7 @@
 
 namespace ob::core {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  更新
-    //@―---------------------------------------------------------------------------
     f32 Transition::get()const noexcept {
         if (time <= 0.0f)return minValue;
         if (length <= time)return minValue;

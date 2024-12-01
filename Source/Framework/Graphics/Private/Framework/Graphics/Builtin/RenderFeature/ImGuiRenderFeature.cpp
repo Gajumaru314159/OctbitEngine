@@ -16,9 +16,7 @@
 
 #pragma region
 
-//@―---------------------------------------------------------------------------
 //! @brief      ファイルオープン
-//@―---------------------------------------------------------------------------
 ImFileHandle ImFileOpen(const char* filename, const char* mode) {
 	using namespace ob::core;
 	BitFlags<FileOpenMode> modes;
@@ -29,32 +27,24 @@ ImFileHandle ImFileOpen(const char* filename, const char* mode) {
 	if (strchr(mode, '+'))LOG_FATAL("Not supported");// modes.on(FileOpenMode::Append);
 	return new ob::core::File(filename, modes.get_enum());
 }
-//@―---------------------------------------------------------------------------
 //! @brief      ファイルクローズ
-//@―---------------------------------------------------------------------------
 bool ImFileClose(ImFileHandle file) {
 	if (file == nullptr) return false;
 	delete file;
 	return true;
 }
-//@―---------------------------------------------------------------------------
 //! @brief      ファイルサイズ取得
-//@―---------------------------------------------------------------------------
 ob::u64 ImFileGetSize(ImFileHandle file) {
 	return file ? file->size() : 0;
 }
-//@―---------------------------------------------------------------------------
 //! @brief      ファイル読み込み
-//@―---------------------------------------------------------------------------
 ob::u64 ImFileRead(void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	if (!file)return 0;
 	if (file->canRead() == false)return 0;
 	file->read(data, size * count);
 	return size * count;
 }
-//@―---------------------------------------------------------------------------
 //! @brief      ファイル書き込み
-//@―---------------------------------------------------------------------------
 ImU64 ImFileWrite(const void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	if (!file)return 0;
 	if (file->canWrite() == false)return 0;
@@ -71,17 +61,13 @@ namespace ob::graphics {
 		String						clipboard;
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      バックエンドデータ取得
-	//@―---------------------------------------------------------------------------
 	static BackendData* GetBackendData()
 	{
 		return ::ImGui::GetCurrentContext() ? (BackendData*)::ImGui::GetIO().BackendPlatformUserData : nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		スタイル設定
-	//@―---------------------------------------------------------------------------
 	static void SetupStyle() {
 		ImVec4* colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
@@ -143,9 +129,7 @@ namespace ob::graphics {
 		style.WindowRounding = 6.0f;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      IME更新
-	//@―---------------------------------------------------------------------------
 	static void UpdateImeData(ImGuiViewport*, ImGuiPlatformImeData* data)
 	{
 		if (data->WantVisible) {
@@ -163,9 +147,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      クリップボードにテキストをコピー
-	//@―---------------------------------------------------------------------------
 	static void SetClipboardText(void*, const char* text)
 	{
 #ifdef OS_WINDOWS
@@ -190,9 +172,7 @@ namespace ob::graphics {
 #endif
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      クリップボードからテキストを取得
-	//@―---------------------------------------------------------------------------
 	static const char* GetClipboardText(void*)
 	{
 		if (auto bd = GetBackendData()) {
@@ -224,28 +204,20 @@ namespace ob::graphics {
 
 namespace ob::graphics {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	ImGuiRenderFeature::ImGuiRenderFeature(RenderScene& scene)
 	{
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		デストラクタ
-	//@―---------------------------------------------------------------------------
 	ImGuiRenderFeature::~ImGuiRenderFeature() {
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タスクを追加
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderFeature::addTask(ImGuiHandle& handle, ImGuiDelegate func) {
 		m_notifier.add(handle, func);
 	}
-	//@―---------------------------------------------------------------------------
 	//! @brief		タスクを追加
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderFeature::AddTask(RenderScene& scene, ImGuiHandle& handle, ImGuiDelegate func) {
 		if (auto feature = scene.findFeature<ImGuiRenderFeature>()) {
 			feature->addTask(handle, func);
@@ -255,18 +227,14 @@ namespace ob::graphics {
 		AddTask(view.getScene(), handle, func);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タスクを実行
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderFeature::executeTasks() {
 		m_notifier.invoke();
 	}
 
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	ImGuiRenderer::ImGuiRenderer(RenderView& view) 
 		: m_view(view)
 	{
@@ -274,9 +242,7 @@ namespace ob::graphics {
 		initializeResource();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		デストラクタ
-	//@―---------------------------------------------------------------------------
 	ImGuiRenderer::~ImGuiRenderer() {
 		ImGui::SetCurrentContext(m_imguiContext);
 		ImPlot::SetCurrentContext(m_implotContext);
@@ -287,9 +253,7 @@ namespace ob::graphics {
 		ImGui::DestroyContext(m_imguiContext);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	bool ImGuiRenderer::render(FG& fg, FGTexture& target) {
 
 		auto display = m_view.getDisplay();
@@ -377,10 +341,8 @@ namespace ob::graphics {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      コンテキストの初期化
 	//! @details	ImGuiとImPlotのコンテキストを生成し、必要なオプションを設定する。
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::initializeContext() {
 
 		m_imguiContext = ::ImGui::CreateContext();
@@ -403,11 +365,9 @@ namespace ob::graphics {
 		SetupStyle();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      リソースの初期化
 	//! @details	RootSignatureやシェーダはRenderFeatureで共用することも可能。
 	//!				実装をシンプルにするためView毎に生成しています。
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::initializeResource() {
 
 		using namespace ob::rhi;
@@ -493,9 +453,7 @@ namespace ob::graphics {
 		initializeFont();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      フォント画像生成
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::initializeFont()
 	{
 		ImGui::ScopedContext sc(m_imguiContext);
@@ -539,9 +497,7 @@ namespace ob::graphics {
 		io.Fonts->SetTexID((ImTextureID)&m_fontTextureTable);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      マウス更新
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::updateMouse(const platform::Window& window)
 	{
 		using namespace ob::input;
@@ -575,9 +531,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      キーボード更新
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::updateKeyboard(platform::Window& window) {
 
 		using namespace ob::input;
@@ -712,9 +666,7 @@ namespace ob::graphics {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      時間更新
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::updateTime()
 	{
 		auto& io = ::ImGui::GetIO();
@@ -729,9 +681,7 @@ namespace ob::graphics {
 		m_time = now;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		バッファ更新
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::updateBuffer() {
 
 		using namespace ob::rhi;
@@ -811,9 +761,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		バッファ更新
-	//@―---------------------------------------------------------------------------
 	void ImGuiRenderer::updateCommand() {
 
 		// コマンド更新

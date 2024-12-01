@@ -43,9 +43,7 @@ namespace ob::core {
     // Uuid
     //==============================================================================
 
-    //@―---------------------------------------------------------------------------
     //! @brief 新しいUUIDを生成
-    //@―---------------------------------------------------------------------------
     UUID UUID::Generate() {
         UUID uuid;
 #ifdef OS_WINDOWS
@@ -58,12 +56,10 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief			UUID文字列からUUIDオブジェクトを生成
     //! 
     //! @details		XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される16進数の並び
     //! @param uuidText UUIDの文字列表現
-    //@―---------------------------------------------------------------------------
     Optional<UUID> UUID::FromString(const StringView& uuidText) {
 
         if (uuidText.size() != 32 + 3)return std::nullopt;
@@ -88,22 +84,18 @@ namespace ob::core {
         return result;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief 文字列表現で取得
     //! 
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
-    //@―---------------------------------------------------------------------------
     void UUID::toString(Char(&dest)[37])const {
         FormatTo(dest,"{:08x}-{:04x}-{:04x}-{:04x}-{:04x}{:08x}", data[0], data[1] >> 16, data[1] & 0xFFFF, data[2] >> 16, data[2] & 0xFFFF, data[3]);
         dest[36] = '\0';
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief 文字列表現で取得
     //! 
     //! @return XXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXの形で表される文字列表現
-    //@―---------------------------------------------------------------------------
     String UUID::toString() const {
         Char text[37];
         toString(text);

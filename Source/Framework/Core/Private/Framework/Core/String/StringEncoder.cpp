@@ -42,17 +42,13 @@ namespace ob::core {
 
 #pragma region char
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<char>& dest) {
         dest = src;
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から char16_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<char16_t>& dest) {
         dest.clear();
         try {
@@ -64,9 +60,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から char32_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<char32_t>& dest) {
         dest.clear();
         try {
@@ -78,9 +72,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<wchar_t>& dest) {
         dest.clear();
         try {
@@ -107,9 +99,7 @@ namespace ob::core {
 
 #pragma region char16_t
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char16_t から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char16_t> src, StringBase<char>& dest) {
         dest.clear();
         try {
@@ -121,17 +111,13 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char16_t から char16_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char16_t> src, StringBase<char16_t>& dest) {
         dest = src;
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char16_t から char32_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char16_t> src, StringBase<char32_t>& dest) {
         dest.clear();
         try {
@@ -144,9 +130,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char16_t から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char16_t> src, StringBase<wchar_t>& dest) {
         dest.clear();
         try {
@@ -174,9 +158,7 @@ namespace ob::core {
 
 #pragma region char32_t
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char32_t から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char32_t> src, StringBase<char>& dest) {
         dest.clear();
         try {
@@ -188,9 +170,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char32_t から char16_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char32_t> src, StringBase<char16_t>& dest) {
         dest.clear();
         dest.reserve(src.size() * 110 / 100);
@@ -204,17 +184,13 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char32_t から char32_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char32_t> src, StringBase<char32_t>& dest) {
         dest = src;
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char32_t から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char32_t> src, StringBase<wchar_t>& dest) {
         dest.clear();
         try {
@@ -242,9 +218,7 @@ namespace ob::core {
 
 #pragma region wchar_t
 
-    //@―---------------------------------------------------------------------------
     //! @brief  wchar_t から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char>& dest) {
         dest.clear();
         try {
@@ -268,9 +242,7 @@ namespace ob::core {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  wchar_t から char16_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char16_t>& dest) {
         dest.clear();
         try {
@@ -294,9 +266,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  wchar_t から char32_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char32_t>& dest) {
         dest.clear();
         try {
@@ -321,9 +291,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  wchar_t から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<wchar_t>& dest) {
         dest = src;
         return true;
@@ -336,9 +304,7 @@ namespace ob::core {
     /*
 #pragma region wchar_t
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char>& dest) {
         if (sizeof(wchar_t) == sizeof(char16_t)) {
 
@@ -367,9 +333,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<wchar_t>& dest) {
         dest.clear();
         try {
@@ -386,9 +350,7 @@ namespace ob::core {
         return false;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char16_t>& dest) {
         dest.clear();
         try {
@@ -403,17 +365,13 @@ namespace ob::core {
 
 #pragma region char
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から char に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<char>& dest) {
         dest = src;
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<wchar_t>& dest) {
         dest.clear();
         try {
@@ -430,9 +388,7 @@ namespace ob::core {
         return false;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char> src, StringBase<char16_t>& dest) {
         dest.clear();
         try {
@@ -446,9 +402,7 @@ namespace ob::core {
 #pragma endregion
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  char16_t から wchar_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<char16_t> src, StringBase<wchar_t>& dest) {
         if (sizeof(char16_t) == sizeof(wchar_t)) {
             dest.clear();
@@ -481,9 +435,7 @@ namespace ob::core {
         return true;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  wchar_t から char16_t に変換する
-    //@―---------------------------------------------------------------------------
     bool StringEncoder::Encode(StringViewBase<wchar_t> src, StringBase<char16_t>& dest) {
         if (sizeof(char16_t) == sizeof(wchar_t)) {
             dest.clear();

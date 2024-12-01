@@ -13,9 +13,7 @@ namespace ob::core {
 
     class JobGroup;
 
-    //@―---------------------------------------------------------------------------
     //! @brief Job
-    //@―---------------------------------------------------------------------------
     class Job {
     public:
         Job(JobGroup&,StringView name,Action&& action);

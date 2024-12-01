@@ -12,16 +12,12 @@
 namespace ob::graphics {
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      コンストラクタ
-	//@―---------------------------------------------------------------------------
 	MaterialRenderFeature::MaterialRenderFeature() {		
 		m_materialId = static_cast<MaterialId>(0);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      描画可能なオブジェクトを追加
-	//@―---------------------------------------------------------------------------
 	MaterialId MaterialRenderFeature::addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material) {
 
 		m_materialId = static_cast<MaterialId>(enum_cast(m_materialId)+1);
@@ -40,9 +36,7 @@ namespace ob::graphics {
 		return m_materialId;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      描画アイテムを削除
-	//@―---------------------------------------------------------------------------
 	void MaterialRenderFeature::removeRenderable(MaterialId id) {
 		if(id==MaterialId::Invalid)return;
 		for (auto& [name, pass] : m_renderablesMap) {
@@ -50,9 +44,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      描画
-	//@―---------------------------------------------------------------------------
 	bool MaterialRenderFeature::render(StringView pass, rhi::CommandList& cmdList)const {
 
 		auto itr = m_renderablesMap.find(pass);

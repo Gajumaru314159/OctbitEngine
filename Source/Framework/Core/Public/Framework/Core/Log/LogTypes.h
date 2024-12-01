@@ -8,20 +8,16 @@
 
 namespace ob::core {
 
-    //@―---------------------------------------------------------------------------
     //! @brief このマクロの呼び出し位置の SourceLocation オブジェクトを作成する
-    //@―---------------------------------------------------------------------------
 #ifdef OB_DEBUG
 #define CURRENT_SOURCE_LOCATION ob::core::SourceLocation{__FILE__, FUNC_NAME ,__LINE__}
 #else
 #define CURRENT_SOURCE_LOCATION ob::core::SourceLocation{"","",__LINE__}
 #endif
 
-    //@―---------------------------------------------------------------------------
     //! @brief      ソースコード上の位置を表す構造体
     //! 
     //! @details    構築には CURRENT_SOURCE_LOCATION マクロを使用してください。
-    //@―---------------------------------------------------------------------------
     struct SourceLocation {
         const Char* filePath = nullptr;             //!< ファイルパス
         const Char* functionName = nullptr;         //!< 関数名
@@ -29,9 +25,7 @@ namespace ob::core {
     };
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ログのレベル
-    //@―---------------------------------------------------------------------------
     enum class LogLevel {
         Fatal,      //!< 致命的エラー
         Error,		//!< エラー
@@ -41,9 +35,7 @@ namespace ob::core {
     };
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief ログ・オブジェクト
-    //@―---------------------------------------------------------------------------
     struct Log {
         LogLevel        level;              //!< タイプ
         const Char*     category = nullptr; //!< カテゴリ

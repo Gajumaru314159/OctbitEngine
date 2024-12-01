@@ -8,9 +8,7 @@
 
 namespace ob::input {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	状態が state か
-	//@―---------------------------------------------------------------------------
 	bool Button::is(ButtonState state)const {
 		if (auto m = InputModule::Get()) {
 			if (auto device = m->findDevice(m_deviceId, m_user)) {
@@ -21,37 +19,27 @@ namespace ob::input {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	押された瞬間か
-	//@―---------------------------------------------------------------------------
 	bool Button::down()const {
 		return is(ButtonState::Down);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	離された瞬間か
-	//@―---------------------------------------------------------------------------
 	bool Button::up()const {
 		return is(ButtonState::Up);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	押されているか
-	//@―---------------------------------------------------------------------------
 	bool Button::pressed()const {
 		return is(ButtonState::Pressed);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	離されているか
-	//@―---------------------------------------------------------------------------
 	bool Button::released()const {
 		return is(ButtonState::Released);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	バインド
-	//@―---------------------------------------------------------------------------
 	bool Button::bindDown(ButtonHandle& handle, const ButtonDelegate& func)const {
 		return bind(ButtonState::Down, handle, func);
 	}
@@ -65,9 +53,7 @@ namespace ob::input {
 		return bind(ButtonState::Released, handle, func);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	バインド
-	//@―---------------------------------------------------------------------------
 	bool Button::bind(ButtonState state, ButtonHandle& handle, const ButtonDelegate& func)const {
 		if (auto m = InputModule::Get()) {
 			if (auto device = m->findDevice(m_deviceId, m_user)) {

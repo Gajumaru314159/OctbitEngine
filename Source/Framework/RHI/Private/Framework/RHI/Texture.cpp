@@ -32,12 +32,10 @@ namespace ob::rhi {
 		return GetPreset(PresetTexture::Check);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
 	//! @param name オブジェクト名
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> Texture::Create(const TextureDesc& desc) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(desc);
@@ -45,19 +43,15 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> Texture::Create(StringView name, const Bitmap& bitmap) {
 		return Create(name, bitmap.size(), {bitmap.data(),bitmap.pixelCount()});
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
 	//! @param name オブジェクト名
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> Texture::Create(StringView name, BlobView blob) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(name, blob);
@@ -65,11 +59,9 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> Texture::Create(StringView name, Size size, Span<const IntColor> colors) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(name, size, colors);
@@ -78,11 +70,9 @@ namespace ob::rhi {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      パスからテクスチャを読み込み
 	//! 
 	//! @param path ファイルパス
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> Texture::Load(StringView path) {
 
 		File fs(path);

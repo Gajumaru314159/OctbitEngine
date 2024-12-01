@@ -9,12 +9,10 @@
 
 namespace ob::core {
 
-    //@―---------------------------------------------------------------------------
     //! @brief		メモリの解放
     //! 
     //! @details	この関数はoperator deleteからも呼び出される。
     //!				解放するポインタは Heap から割り当てられたものである必要がある。
-    //@―---------------------------------------------------------------------------
     void Allocator::Free(void* pBuffer) {
         if (pBuffer == nullptr)return;
         auto pHeader = GetOffsetPtr<BlockHeader>(pBuffer, -static_cast<s32>(sizeof(BlockHeader)));

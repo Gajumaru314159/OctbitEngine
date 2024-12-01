@@ -104,17 +104,13 @@ namespace ob::graphics {
 	};
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      FrameGraph
-	//@―---------------------------------------------------------------------------
 	class FG : Noncopyable, Nonmovable {
 	public:
 
 		FG() = default;
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      パスを追加
-		//@―---------------------------------------------------------------------------
 		template <typename Data, typename Setup, typename Execute>
 		const Data& addPass(StringView name, Setup&& setup, Execute&& execute) {
 			return m_fg.addCallbackPass<Data>(
@@ -131,68 +127,50 @@ namespace ob::graphics {
 			);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGTextureのRenderTextureDescを取得する
-		//@―---------------------------------------------------------------------------
 		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
 			return m_fg.getDescriptor<FGTextureInstance>(static_cast<FrameGraphResource>(texture));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGBufferのBufferDescを取得する
-		//@―---------------------------------------------------------------------------
 		const rhi::BufferDesc& getDesc(FGBuffer buffer) {
 			return m_fg.getDescriptor<FGBufferInstance>(static_cast<FrameGraphResource>(buffer));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      RenderTextureをインポートする
-		//@―---------------------------------------------------------------------------
 		FGTexture import(const Ref<rhi::RenderTexture> & texture) {
 			if (!texture)return FGTexture{-1};
 			return static_cast<FGTexture>(m_fg.import(texture->desc().name.str(), texture->descOfRenderTexture(), FGTextureInstance{ texture }));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      Bufferをインポートする
-		//@―---------------------------------------------------------------------------
 		FGBuffer import(const Ref<rhi::Buffer> & buffer) {
 			if (!buffer)return FGBuffer{-1};
 			return static_cast<FGBuffer>(m_fg.import(buffer->getDesc().name.str(), buffer->getDesc(), FGBufferInstance{ buffer }));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGTextureが有効な値か
-		//@―---------------------------------------------------------------------------
 		bool isValid(FGTexture id) const {
 			return m_fg.isValid(static_cast<FrameGraphResource>(id));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGBufferが有効な値か
-		//@―---------------------------------------------------------------------------
 		bool isValid(FGBuffer id) const {
 			return m_fg.isValid(static_cast<FrameGraphResource>(id));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FrameGraphをコンパイルして実行可能な状態にする
 		//! @details	追加されたパスの依存関係を考慮してソートし、必要なパスのみを実行します
-		//@―---------------------------------------------------------------------------
 		void compile() {
 			m_fg.compile();
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief     コンパイルされたパスを実行する
-		//@―---------------------------------------------------------------------------
 		void execute(rhi::CommandList& cmd, FGResourcePool& pool) {
 			m_fg.execute(&cmd, &pool);
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      dot形式でFrameGraphの依存関係を出力する
-		//@―---------------------------------------------------------------------------
 		void save(StringView name) {
 			std::ofstream f{name.data()};
 			f << m_fg;
@@ -208,48 +186,36 @@ namespace ob::graphics {
 		FrameGraph m_fg;
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		FrameGraphのリソース管理クラス
 	//! @details	FGTextureやFGBufferからRenderTextureやBufferへのアクセスする手段を
 	//!				提供します。
-	//@―---------------------------------------------------------------------------
 	class FGResources {
 		friend class FrameGraph;
 
 	public:
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      コンストラクタ
-		//@―---------------------------------------------------------------------------
 		FGResources(FrameGraphPassResources& resources)
 			: m_resources(resources)
 		{
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGTextureからRenderTextureのインスタンスを取得する
-		//@―---------------------------------------------------------------------------
 		Ref<rhi::RenderTexture> get(FGTexture texture) {
 			return m_resources.get<FGTextureInstance>(static_cast<FrameGraphResource>(texture)).instance;
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGBufferからBufferのインスタンスを取得する
-		//@―---------------------------------------------------------------------------
 		Ref<rhi::Buffer> get(FGBuffer buffer) {
 			return m_resources.get<FGBufferInstance>(static_cast<FrameGraphResource>(buffer)).instance;
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGTextureのRenderTextureDescを取得する
-		//@―---------------------------------------------------------------------------
 		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
 			return m_resources.getDescriptor<FGTextureInstance>(static_cast<FrameGraphResource>(texture));
 		}
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      FGBufferのBufferDescを取得する
-		//@―---------------------------------------------------------------------------
 		const rhi::BufferDesc& getDesc(FGBuffer buffer) {
 			return m_resources.getDescriptor<FGBufferInstance>(static_cast<FrameGraphResource>(buffer));
 		}
@@ -258,9 +224,7 @@ namespace ob::graphics {
 		FrameGraphPassResources& m_resources;
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      FrameGraphで使用するリソースを生成するクラス
-	//@―---------------------------------------------------------------------------
 	class FGBuilder {
 	public:
 		FGBuilder(FrameGraph::Builder& builder) 

@@ -13,9 +13,7 @@ namespace ob::input {
 	public:
 		OB_DECL_INPUT_DEVICE_ID("Keyboard");
 
-		//@―---------------------------------------------------------------------------
 		//! @brief      ボタン取得
-		//@―---------------------------------------------------------------------------
 		static constexpr Button GetButton(Key key) { return {ID,key}; }
 
 	public:

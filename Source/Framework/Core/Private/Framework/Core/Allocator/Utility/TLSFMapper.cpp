@@ -34,11 +34,9 @@ namespace ob::core {
 
 	static const s32 s_secondLevelShift = s_linearManagementSizeLog2 - s_maxSecondLevelLog2;	// 4
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          コンストラクタ
 	//! 
 	//! @param capacity 容量
-	//@―---------------------------------------------------------------------------
 	TLSFMapper::TLSFMapper(s32 capacity)
 		: m_capacity(std::max(capacity, s_linearManagementSize))
 	{
@@ -76,9 +74,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          デストラクタ
-	//@―---------------------------------------------------------------------------
 	TLSFMapper::~TLSFMapper() {
 		// m_blocks の最上位に1つ残っているのが正常
 		Vector<TLSFBlock*> blocks;
@@ -93,12 +89,10 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルをアロケート
 	//! 
 	//! @param handle   アロケート先ハンドル
 	//! @param viewNum  割り当て個数
-	//@―---------------------------------------------------------------------------
 	auto TLSFMapper::allocate(s32 size) -> const TLSFBlock*{
 		
 		if (size <= 0)return nullptr;
@@ -115,9 +109,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルを解放
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::free(const TLSFBlock* block) {
 
 		auto pFreeBlock = const_cast<TLSFBlock*>(block);
@@ -146,11 +138,9 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          フリーブロックを確保
 	//! 
 	//! @details		内部で firstLevel と secondLevel が変更されます。
-	//@―---------------------------------------------------------------------------
 	TLSFBlock* TLSFMapper::allocateFreeBlock(s32 size) {
 
 		s32 firstLevel, secondLevel;
@@ -191,9 +181,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	ブロックを必要分だけ切り出して残りをフリーリストに戻す。
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::returnSurplusBlock(TLSFBlock& block, s32 size) {
 
 		OB_ASSERT(size, "サイズ0で分割できません。");
@@ -226,9 +214,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	ブロックをフリーリストから分離
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::separateFreeList(TLSFBlock& block) {
 
 		OB_ASSERT(!block.allocated, "フリーリストにないブロックは分離できません。");
@@ -258,12 +244,10 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		2つのブロックをマージしてフリーブロックから取り出す
 	//! 
 	//! @details	結合後に block2 はフリーリストに返却されます。
 	//! @return		結合後のブロックのポインタ
-	//@―---------------------------------------------------------------------------
 	TLSFBlock* TLSFMapper::mergeFreeBlocks(TLSFBlock& block1, TLSFBlock& block2) {
 
 		OB_ASSERT(!block1.allocated, "アロケート済みのブロックはマージできません。");
@@ -294,9 +278,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	フリーブロックをカテゴリに追加
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::addFreeBlock(TLSFBlock& block) {
 
 		OB_ASSERT(!block.allocated, "アロケート済みのブロックはフリーリストに追加できません。");
@@ -316,18 +298,14 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	フリーリストビットへ登録
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::entryFreeListBitState(s32 firstLevel, s32 secondLevel) {
 		m_freeFLI |= 1U << firstLevel;
 		m_freeSLI.at(firstLevel) |= 1U << secondLevel;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	フリーリストビットから削除
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::removeFreeListBitState(s32 firstLevel, s32 secondLevel) {
 		m_freeSLI.at(firstLevel) &= ~(1U << secondLevel);
 		if (m_freeSLI[firstLevel] == 0) {
@@ -336,17 +314,13 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	レベルからフリーブロックリストのインデックスを計算
-	//@―---------------------------------------------------------------------------
 	s32 TLSFMapper::getFreeBlockIndex(s32 firstLevel, s32 secondLevel)const noexcept {
 		return firstLevel * s_maxSecondLevel + secondLevel;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	サイズから各レベルのカテゴリを計算
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::getLevelIndex(s32 size, s32& firstLevel, s32& secondLevel)const noexcept {
 		if (size < s_linearManagementSize) {
 			firstLevel = 0;
@@ -361,9 +335,7 @@ namespace ob::core {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief	サイズからレベルとブロックインデックスを計算
-	//@―---------------------------------------------------------------------------
 	void TLSFMapper::getLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index)const noexcept {
 		getLevelIndex(size, firstLevel, secondLevel);
 		index = getFreeBlockIndex(firstLevel, secondLevel);

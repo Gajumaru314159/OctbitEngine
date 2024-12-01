@@ -13,26 +13,20 @@
 
 namespace ob::graphics {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 	class MaterialManager : public Singleton<MaterialManager> {
 	public:
 
 		MaterialManager(rhi::RHI&, NameDictionary&);
 		~MaterialManager();
 
-		//@―---------------------------------------------------------------------------
 		//!	@brief			レイアウトID取得
-		//@―---------------------------------------------------------------------------
 		VertexLayoutId getVertexLayoutId(const rhi::VertexLayout& layout);
 
 	public:
 
 
-		//@―---------------------------------------------------------------------------
 		//! @brief  説明
-		//@―---------------------------------------------------------------------------
 
 		bool hasProprty(StringView name, PropertyType type)const;
 

@@ -8,9 +8,7 @@
 
 namespace ob::rhi {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  生成
-	//@―---------------------------------------------------------------------------
 	Ref<PipelineState> PipelineState::Create(const PipelineStateDesc& desc) {
 		if (auto rhi= RHI::Get()) {
 			return rhi->createPipelineState(desc);

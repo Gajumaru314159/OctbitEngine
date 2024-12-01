@@ -19,9 +19,7 @@ OB_DEFINE_CLASS_INFO(ob::engine::Entity) {
 
 namespace ob::engine {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		生成
-	//@―---------------------------------------------------------------------------
 	Entity* Entity::Create(StringView name) {
 		if (auto manager = EntityManager::Get()) {
 			auto entity = new Entity(name);
@@ -31,9 +29,7 @@ namespace ob::engine {
 		return nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	Entity::Entity(StringView name) {
 		m_name = name;
 		m_active = false;
@@ -58,23 +54,17 @@ namespace ob::engine {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		名前設定
-	//@―---------------------------------------------------------------------------
 	const String& Entity::getName()const {
 		return m_name;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		名前取得
-	//@―---------------------------------------------------------------------------
 	void Entity::setName(StringView name) {
 		setProperty(m_name, name, "Name");
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント追加
-	//@―---------------------------------------------------------------------------
 	Component* Entity::addComponent(Type type) {
 
 		if (auto manager = TypeInfoManager::Get()) {
@@ -122,9 +112,7 @@ namespace ob::engine {
 		return nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント削除
-	//@―---------------------------------------------------------------------------
 	bool Entity::removeComponent(Type type,s32 index) {
 
 		// TODO Componentの取得をインターフェイスで行う
@@ -141,9 +129,7 @@ namespace ob::engine {
 		return removeComponent(found);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント削除
-	//@―---------------------------------------------------------------------------
 	bool Entity::removeComponent(Component* component) {
 
 		for (auto itr = m_components.begin(); itr != m_components.end(); itr++) {
@@ -157,9 +143,7 @@ namespace ob::engine {
 		return false;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント検索
-	//@―---------------------------------------------------------------------------
 	Component* Entity::findComponent(Type type, s32 index)const {
 		// TODO Componentの取得をインターフェイスで行う
 		s32 count = 0;
@@ -174,16 +158,12 @@ namespace ob::engine {
 		return nullptr;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネントリスト取得
-	//@―---------------------------------------------------------------------------
 	const ComponentVector& Entity::componets()const {
 		return m_components;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンポーネント追加
-	//@―---------------------------------------------------------------------------
 	Component* Entity::addComponent(Component* component, bool withInitialize) {
 		// TODO initializeの呼び出しフローを考える
 		//if (component) {
@@ -196,11 +176,9 @@ namespace ob::engine {
 		return component;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief			コンポーネント走査
 	//! @param func		走査関数
 	//! @param type	走査するコンポーネントの型 (Type::Invalid()の場合全て走査)
-	//@―---------------------------------------------------------------------------
 	void Entity::visitComponents(const Delegate<void(Component*)>& func, Type type)const {
 		for (auto& component : m_components) {
 			if (IsCastable(component->getType(), type)) {
@@ -209,17 +187,13 @@ namespace ob::engine {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タグ追加
-	//@―---------------------------------------------------------------------------
 	void Entity::addTag(StringView tag) {
 		m_tags.emplace(tag);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タグ削除
-	//@―---------------------------------------------------------------------------
 	void Entity::removeTag(StringView tag) {
 		auto found = m_tags.find(tag);
 		if (found != m_tags.end()) {
@@ -227,16 +201,12 @@ namespace ob::engine {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		タグを持っているか
-	//@―---------------------------------------------------------------------------
 	bool Entity::hasTag(StringView tag) {
 		return m_tags.count(tag);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		解放予約
-	//@―---------------------------------------------------------------------------
 	void Entity::requestRelease() {
 		if (auto manager = EntityManager::Get()) {
 			manager->requestRemove(*this);
@@ -246,9 +216,7 @@ namespace ob::engine {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		アクティブ設定
-	//@―---------------------------------------------------------------------------
 	void Entity::setActive(bool value) {
 		m_active = value;
 
@@ -258,25 +226,19 @@ namespace ob::engine {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		アクティブ取得
-	//@―---------------------------------------------------------------------------
 	bool Entity::isActive()const {
 		return m_active;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		子Entity追加
-	//@―---------------------------------------------------------------------------
 	void Entity::addChild(Entity* child) {
 		if (child) {
 			child->setParent(this);
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		子Entity追加
-	//@―---------------------------------------------------------------------------
 	void Entity::setParent(Entity* newParent,s32 index) {
 		if (m_parent == newParent) {
 			// OB_NOTIMPLEMENTED();
@@ -334,38 +296,28 @@ namespace ob::engine {
 		m_parentChangedNotifier.invoke(oldParent, newParent);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		アクティブ取得
-	//@―---------------------------------------------------------------------------
 	const List<Entity*>& Entity::getChildren()const {
 		return m_children;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		親変更イベントを購読
-	//@―---------------------------------------------------------------------------
 	void Entity::addParentChangedEvent(ParentChangedHandle& handle, ParentChangedDelegate event) {
 		m_parentChangedNotifier.add(handle, event);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		所属シーン取得
-	//@―---------------------------------------------------------------------------
 	Scene* Entity::getScene()const {
 		return m_scene;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		所属ワールド取得
-	//@―---------------------------------------------------------------------------
 	World* Entity::getWorld()const {
 		return m_world;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		別Entityからのアクセスを許可
-	//@―---------------------------------------------------------------------------
 	void Entity::raisePropertyChanged(StringView name) {
 		PropertyNotifier::raisePropertyChanged(name);
 	}

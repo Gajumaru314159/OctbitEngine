@@ -17,9 +17,7 @@
 
 namespace ob::graphics {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
 	{
@@ -101,9 +99,7 @@ namespace ob::graphics {
 		return m_desc;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  プロパティがあるか
-	//@―---------------------------------------------------------------------------
 	bool MaterialImpl::hasProprty(StringView name, PropertyType type) const {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 			return found->second.type == type;
@@ -111,23 +107,17 @@ namespace ob::graphics {
 		return false;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Floatプロパティを設定
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setFloat(StringView name, f32 value) {
 		setValueProprty(name, PropertyType::Float, value);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Colorプロパティを設定
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setColor(StringView name, Color value) {
 		setValueProprty(name, PropertyType::Color, value);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Matrixプロパティを設定
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
 		setValueProprty(name, PropertyType::Matrix,
 #if 1
@@ -138,9 +128,7 @@ namespace ob::graphics {
 		);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Textureプロパティを設定
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 
@@ -155,9 +143,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  Bufferプロパティを設定
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
 		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
 
@@ -172,9 +158,7 @@ namespace ob::graphics {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GPUリソースの事前生成
-	//@―---------------------------------------------------------------------------
 	bool MaterialImpl::reserve(const Ref<Mesh>& mesh) {
 
 		auto pMesh = mesh.cast<MeshImpl>();
@@ -188,9 +172,7 @@ namespace ob::graphics {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  描画コマンドを記録
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, StringView pass) {
 		// 1. 定数バッファのデスクリプタ設定
 		// 2. テクスチャのデスクリプタ設定
@@ -258,18 +240,14 @@ namespace ob::graphics {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  
-	//@―---------------------------------------------------------------------------
 	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh, s32 submesh, StringView pass) {
 
 		OB_NOTIMPLEMENTED();
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインを生成
-	//@―---------------------------------------------------------------------------
 	Ref<rhi::PipelineState> MaterialImpl::createPipeline(StringView pass, const rhi::VertexLayout& layout,VertexLayoutId id) {
 
 		using namespace ob::rhi;

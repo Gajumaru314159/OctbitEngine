@@ -24,7 +24,6 @@ namespace ob {
 #else
 #define OB_API /**/
 #endif
-//@―---------------------------------------------------------------------------
 //! @def		OB_API
 //! @brief		DLLエクスポート/インポートマクロ
 //! @details	DLL出力 / DLL入力 / その他(LIB)

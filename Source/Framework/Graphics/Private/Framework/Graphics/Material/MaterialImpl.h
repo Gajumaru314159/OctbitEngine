@@ -18,10 +18,8 @@ namespace ob::graphics {
 	class Mesh;
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  頂点属性
 	//! @see    VertexLayout
-	//@―---------------------------------------------------------------------------
 	struct VertexAttributeKey {
 		rhi::Semantic		semantic;	//!< 0x000F
 		rhi::ElementType	type;		//!< 0x00F0
@@ -42,9 +40,7 @@ namespace ob::graphics {
 		}
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 	class MaterialImpl :public Material {
 	private:
 		using Texture = rhi::Texture;
@@ -58,9 +54,7 @@ namespace ob::graphics {
 
 		const MaterialDesc& getDesc()const;
 
-		//@―---------------------------------------------------------------------------
 		//! @brief  説明
-		//@―---------------------------------------------------------------------------
 
 		bool hasProprty(StringView name, PropertyType type)const;
 
@@ -77,9 +71,7 @@ namespace ob::graphics {
 		void setTexture(StringView name, const Ref<Texture>& value) override;
 		void setBuffer(StringView name, const Ref<Buffer>& value) override;
 
-		//@―---------------------------------------------------------------------------
 		//! @brief  GPUリソースの事前生成
-		//@―---------------------------------------------------------------------------
 		bool reserve(const Ref<Mesh>& mesh);
 
 	public:

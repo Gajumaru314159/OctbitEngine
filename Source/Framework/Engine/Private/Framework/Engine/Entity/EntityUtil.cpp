@@ -18,9 +18,7 @@ namespace ob::engine {
 	Entity* EntityAccessor::value()const {return m_entity;}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		子のハンドルのリストを取得
-	//@―---------------------------------------------------------------------------
 	Vector<EntityHandle> EntityUtil::GetChildHandeles(EntityAccessor src) {
 		Vector<EntityHandle> handles;
 		if (src.value()) {

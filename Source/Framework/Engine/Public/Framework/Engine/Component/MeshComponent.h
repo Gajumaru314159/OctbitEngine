@@ -24,9 +24,7 @@ namespace ob::engine {
 		bool get(StringView index, bool fallback);
 	};
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 	class MeshComponent : public engine::Component {
 	public:
 		OB_RTTI();

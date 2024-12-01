@@ -10,9 +10,7 @@
 namespace ob::core {
     namespace internal {
 
-        //@―---------------------------------------------------------------------------
         //! @brief ファンクタ
-        //@―---------------------------------------------------------------------------
         struct Functor {
         private:
 
@@ -61,9 +59,7 @@ namespace ob::core {
         };
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief デリゲート基底クラス
-        //@―---------------------------------------------------------------------------
         class DelegateBase {
         protected:
 
@@ -80,9 +76,7 @@ namespace ob::core {
         // インライン関数
         //===============================================================
 
-        //@―---------------------------------------------------------------------------
         //! @brief コピー演算子
-        //@―---------------------------------------------------------------------------
         inline Functor& Functor::operator=(const Functor& src)noexcept {
             m_pObject = src.m_pObject;
             memcpy_s(m_function, sizeof(m_function), src.m_function, sizeof(m_function));
@@ -90,61 +84,47 @@ namespace ob::core {
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief 等価演算子
-        //@―---------------------------------------------------------------------------
         inline bool Functor::operator==(const Functor& rhs)const noexcept {
             if (m_pObject != rhs.m_pObject)return false;
             return (std::memcmp((void*)m_function, (void*)rhs.m_function, sizeof(m_function)) == 0);
         }
 
-        //@―---------------------------------------------------------------------------
         //! @brief 否等価演算子
-        //@―---------------------------------------------------------------------------
         inline bool Functor::operator!=(const Functor& rhs)const noexcept {
             return !(*this == rhs);
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief クリア
-        //@―---------------------------------------------------------------------------
         inline void Functor::clear()noexcept {
             m_pObject = nullptr;
             memset(m_function, 0x00, sizeof(m_function));
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief オブジェクトを取得
-        //@―---------------------------------------------------------------------------
         template<typename T>
         inline T* Functor::get_object()const {
             return reinterpret_cast<T*>(m_pObject);
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief オブジェクトを設定
-        //@―---------------------------------------------------------------------------
         template<typename T>
         inline void Functor::set_object(T* pObject)noexcept {
             m_pObject = reinterpret_cast<void*>(pObject);
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief 関数を取得
-        //@―---------------------------------------------------------------------------
         template<typename F>
         inline F Functor::get_function()const {
             return *reinterpret_cast<const F*>(&m_function[0]);
         }
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief 関数を設定
-        //@―---------------------------------------------------------------------------
         template<typename F>
         inline void Functor::set_function(const F function)noexcept {
             static_assert(sizeof(F) <= sizeof(m_function), "require more function size");

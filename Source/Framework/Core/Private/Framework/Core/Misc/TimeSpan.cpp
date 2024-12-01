@@ -11,9 +11,7 @@
 
 namespace ob::core {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
-	//@―---------------------------------------------------------------------------
 	TimeSpan::TimeSpan(const DateTime& from, const DateTime& to) noexcept {
 
 		auto getDays = [](const DateTime& dt) {
@@ -30,9 +28,7 @@ namespace ob::core {
 		);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  システムを起動してからの時間
-	//@―---------------------------------------------------------------------------
 	TimeSpan TimeSpan::FromSystemLaunch() {
 #ifdef OS_WINDOWS
 		return TimeSpan::MilliSeconds(gsl::narrow_cast<f64>(GetTickCount64()));

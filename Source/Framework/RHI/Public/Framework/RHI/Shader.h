@@ -30,13 +30,10 @@ namespace ob::rhi {
         ShaderEntryDesc entry;
     };
 
-    //@―---------------------------------------------------------------------------
     //! @brief      シェーダ
-    //@―---------------------------------------------------------------------------
     class Shader :public GraphicObject {
     public:
 
-        //@―---------------------------------------------------------------------------
         //! @brief      シェーダのエントリ関数名を取得
         //! 
         //! @details    取得できる関数名は以下の通りです。
@@ -58,27 +55,22 @@ namespace ob::rhi {
         //!             | Callable     | CS_Main    |
         //!             | Amplification| AS_Main    |
         //!             | 無効値       | 空白文字列 |
-        //@―---------------------------------------------------------------------------
         static const char* GetEntryName(ShaderStage stage);
 
-        //@―---------------------------------------------------------------------------
         //! @brief          シェーダコードをコンパイル
         //! 
         //! @param code     シェーダコード
         //! @param stage    シェーダステージ
-        //@―---------------------------------------------------------------------------
         //! @{
         static Ref<Shader> Compile(const String& code, ShaderStage stage);
         static Ref<Shader> CompileVS(const String& code);
         static Ref<Shader> CompilePS(const String& code);
         //! @}
 
-        //@―---------------------------------------------------------------------------
         //! @brief          シェーダバイナリをロード
         //! 
         //! @param binary   シェーダ・バイナリ
         //! @param stage    シェーダステージ
-        //@―---------------------------------------------------------------------------
         //! @{
         static Ref<Shader> Load(BlobView binary, ShaderStage stage);
         static Ref<Shader> LoadVS(BlobView binary);
@@ -87,9 +79,7 @@ namespace ob::rhi {
 
     public:
 
-        //@―---------------------------------------------------------------------------
         //! @brief          シェーダステージを取得
-        //@―---------------------------------------------------------------------------
         virtual ShaderStage getStage()const = 0;
 
     };

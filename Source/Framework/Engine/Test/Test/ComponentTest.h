@@ -8,9 +8,7 @@
 
 namespace ob::test {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンポーネント
-	//@―---------------------------------------------------------------------------
 	class ComponentTest: public ob::engine::Component {
 		friend class Entity;
 	public:
