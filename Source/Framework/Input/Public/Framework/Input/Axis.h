@@ -7,7 +7,7 @@
 #include <Framework/Input/InputType.h>
 
 
-//! @berif	ボタン定義マクロ
+//! @brief	ボタン定義マクロ
 #define OB_DECL_AXIS(type,name) static constexpr Axis name{ ID,type::name };
 
 namespace ob::input {
@@ -16,7 +16,7 @@ namespace ob::input {
 	class Axis {
 	public:
 
-		//! @berif	デフォルトコンストラクタ
+		//! @brief	デフォルトコンストラクタ
 		Axis() = default;
 
 		//! @brief			コンストラクタ
@@ -25,18 +25,18 @@ namespace ob::input {
 		//! @param user		ユーザ番号
 		constexpr Axis(DeviceID deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID), m_code(code), m_user(user) {}
 
-		//! @berif	コンストラクタ
+		//! @brief	コンストラクタ
 		template<typename T>
 		constexpr Axis(DeviceID type, T code, u32 user = 0) : Axis(type, enum_cast(code), user) {}
 
 	public:
 
-		//! @berif	値
+		//! @brief	値
 		f32  value() const;
 
 	public:
 
-		//! @berif	バインド
+		//! @brief	バインド
 		bool bind(AxisHandle& handle, const AxisDelegate& func)const;
 
 	private:

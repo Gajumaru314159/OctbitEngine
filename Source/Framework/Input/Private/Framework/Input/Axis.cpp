@@ -8,7 +8,7 @@
 
 namespace ob::input {
 
-	//! @berif	値
+	//! @brief	値
 	f32 Axis::value()const {
 		if (auto m = InputModule::Get()) {
 			if (auto device = m->findDevice(m_deviceId, m_user)) {
@@ -18,7 +18,7 @@ namespace ob::input {
 		return false;
 	}
 
-	//! @berif	バインド
+	//! @brief	バインド
 	bool Axis::bind(AxisHandle& handle, const AxisDelegate& func)const {
 		if (auto m = InputModule::Get()) {
 			if (auto device = m->findDevice(m_deviceId, m_user)) {

@@ -17,16 +17,16 @@ namespace ob::input {
 	class IInputDevice {
 	public:
 
-		//! @berif	デバイスタイプを取得
+		//! @brief	デバイスタイプを取得
 		virtual DeviceID getDeviceId()const = 0;
 
-		//! @berif	更新
+		//! @brief	更新
 		virtual void update() {}
 
-		//! @berif	ボタンの入力状態を取得
+		//! @brief	ボタンの入力状態を取得
 		virtual ButtonStates getButtonStates(u32 code)const { return {}; }
 
-		//! @berif	軸の入力状態を取得
+		//! @brief	軸の入力状態を取得
 		virtual f32  getAxisValue(u32 code) const { return 0.0f; }
 
 		//! @brief  ボタン入力イベントをバインド
