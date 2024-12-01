@@ -13,8 +13,10 @@
 
 namespace ob::engine2 {
 
+	//! @brief ECSにおけるEntityが持つComponentの型の構成を表すクラス
 	class Archetype {
 	public:
+		//! @brief TypeのリストからArchetypeを生成
 		template<class... TComponents>
 		static Archetype Create() {
 			Archetype archetype;
@@ -23,52 +25,54 @@ namespace ob::engine2 {
 		}
 	public:
 
+		//! @brief 空のArchetypeを生成
 		Archetype() = default;
 
+		//! @brief Type リストからArchetypeを生成 
 		Archetype(Span<Type> types) {
 			for (auto& type : types) {
 				m_types.push_back(type);
 			}
 		}
 
+		//! @brief カンマ区切りの文字列からArchetypeを生成
 		Archetype(StringView types) {
 			for (auto type : CommaSplitView(types)) {
 				if (auto info = TypeInfo::Find(type)) {
 					m_types.push_back(info->type);
+				} else {
+					throw Exception(Format("{}をリフレクション登録してください", type));
 				}
 			}
 		}
 
+		//! @brief Typeの開始イテレータ 
 		auto begin() const {
 			return m_types.begin();
 		}
+
+		//! @brief Typeの終了イテレータ 
 		auto end() const {
 			return m_types.end();
 		}
 
+		//! @brief 等価判定
 		bool operator==(const Archetype& other) const {
 			return m_types == other.m_types;
 		}
 
-	private:
-
-		template<class... TComponents>
-		static s32 Index(bool readonly = true) {
-			static s32 index = GenerateIndex(readonly);
-			return index;
+		//! @brief 否等価判定
+		bool operator!=(const Archetype& other) const {
+			return m_types != other.m_types;
 		}
 
-		static s32 GenerateIndex(bool readonly) {
-			OB_ASSERT(readonly, "読み取り専用のタイミングでアクセスされました。");
-			static s32 index = 0;
-			return index++;
-		}
 	private:
 		FixedVector<Type, 8> m_types;
 	};
 
 }
 
+//! @cond
 template<>
 struct std::hash<ob::engine2::Archetype> {
 	size_t operator()(const ob::engine2::Archetype& value)const {
@@ -79,12 +83,9 @@ struct std::hash<ob::engine2::Archetype> {
 		return hash;
 	}
 };
-
-
+//! @endcond
 
 namespace ob::engine2 {
-
-
 
 	// デフォルトのテンプレート定義
 	template<typename T, int N, typename... Types>
@@ -104,16 +105,15 @@ namespace ob::engine2 {
 		static constexpr int value = -1;
 	};
 
+	//! @brief Entity
 	struct Entity {
 		u32 index;
 		u16 archetype;
 		u16 version;
 	};
 
-
-
 	class AnyVector 
-		//: Noncopyable 
+		: Noncopyable 
 	{
 	public:
 		AnyVector(const TypeInfo& info) 
@@ -170,7 +170,7 @@ namespace ob::engine2 {
 			m_constructor = m_info.findConstructor();
 			OB_ASSERT(m_constructor, "{}にデフォルトコンストラクタを追加してください", info.type.name());
 			m_span = m_info.stride();
-			m_chunks.emplace_back(m_info);
+			m_chunks.emplace_back(std::make_unique<AnyVector>(m_info));
 		}
 
 		s32 push_back() {
@@ -178,14 +178,14 @@ namespace ob::engine2 {
 			auto* chunk = &m_chunks.back();
 			
 			// 現在のチャンクがいっぱいの場合新しいチャンクを生成
-			if (chunk->full()) {
-				chunk = &m_chunks.emplace_back(m_info);
+			if ((*chunk)->full()) {
+				chunk = &m_chunks.emplace_back(std::make_unique<AnyVector>(m_info));
 			}
 			
 			auto index = size();
 			
 			// チャンクに要素を追加
-			chunk->push_back();
+			(*chunk)->push_back();
 			
 			return index;
 		}
@@ -197,14 +197,14 @@ namespace ob::engine2 {
 		}
 
 		s32 size() const {
-			return (m_chunks.size() - 1) * m_span + m_chunks.back().size();
+			return (m_chunks.size() - 1) * m_span + m_chunks.back()->size();
 		}
 
 		void* at(size_t index) {
-			return m_chunks.at(index / m_span).at(index % m_span);
+			return m_chunks.at(index / m_span)->at(index % m_span);
 		}
 		const void* at(size_t index) const {
-			return m_chunks.at(index / m_span).at(index % m_span);
+			return m_chunks.at(index / m_span)->at(index % m_span);
 		}
 
 		template<class T>
@@ -223,7 +223,7 @@ namespace ob::engine2 {
 
 	private:
 		const TypeInfo& m_info;
-		Vector<AnyVector> m_chunks;
+		Vector<UPtr<AnyVector>> m_chunks;
 		size_t m_span;
 		const ConstructorInfo* m_constructor;
 	};
