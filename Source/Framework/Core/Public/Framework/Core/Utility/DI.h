@@ -393,7 +393,7 @@ namespace ob::core {
     //! @param container 生成されたサービスを管理させるコンテナの参照
     //@―---------------------------------------------------------------------------
     inline void ServiceInjector::createAll(ServiceContainer& container)const {
-        for (auto type : m_orders) {
+        for (auto& type : m_orders) {
             try {
                 if (container.has(type))continue;
                 m_builders.find(type)->second->create(container);

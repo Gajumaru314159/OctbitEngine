@@ -114,7 +114,7 @@ namespace ob::engine {
 	//! @brief  ローカル座標設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalPosition(const Vec3& value) {
-		auto local = getLocal();
+		Transform local = getLocal();
 		local.position = value;
 		setLocal(local);
 	}
@@ -123,7 +123,7 @@ namespace ob::engine {
 	//! @brief  ローカルスケール設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalScale(const Vec3& value) {
-		auto local = getLocal();
+		Transform local = getLocal();
 		local.scale = value;
 		setLocal(local);
 	}
@@ -132,7 +132,7 @@ namespace ob::engine {
 	//! @brief  ローカル回転設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalQuaternion(const Quat& value) {
-		auto local = getLocal();
+		Transform local = getLocal();
 		local.rotation = value;
 		setLocal(local);
 	}
@@ -141,7 +141,7 @@ namespace ob::engine {
 	//! @brief  ローカル回転設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setLocalRotation(const Rot& value) {
-		auto local = getLocal();
+		Transform local = getLocal();
 		local.rotation = value.toQuat();
 		setLocal(local);
 	}
@@ -150,7 +150,7 @@ namespace ob::engine {
 	//! @brief  ワールド座標設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldPosition(const Vec3& value) {
-		auto world = getWorld();
+		Transform world = getWorld();
 		world.position = value;
 		setWorld(world);
 	}
@@ -159,7 +159,7 @@ namespace ob::engine {
 	//! @brief  ワールドスケール設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldScale(const Vec3& value) {
-		auto world = getWorld();
+		Transform world = getWorld();
 		world.scale = value;
 		setWorld(world);
 	}
@@ -168,7 +168,7 @@ namespace ob::engine {
 	//! @brief  ワールド回転設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldQuaternion(const Quat& value) {
-		auto world = getWorld();
+		Transform world = getWorld();
 		world.rotation = value;
 		setWorld(world);
 	}
@@ -177,7 +177,7 @@ namespace ob::engine {
 	//! @brief  ワールド回転設定
 	//@―---------------------------------------------------------------------------
 	void TransformComponent::setWorldRotation(const Rot& value) {
-		auto world = getWorld();
+		Transform world = getWorld();
 		world.rotation = value.toQuat();
 		setWorld(world);
 	}

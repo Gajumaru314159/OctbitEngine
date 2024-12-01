@@ -35,8 +35,8 @@ namespace ob::core {
 	struct TypeRegisterTemplate {
 		//! @brief 明示的なリンクをする
 		//! @details TypeRegister<T>::Link() という風に呼び出すことでリフレクション登録関数を登録します。
-		static void Link();
-		static void Register();
+		static void Link(){}
+		static void Register() {}
 		static ReflectionFunction s_register;
 	};
 
@@ -245,7 +245,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
 		//@―---------------------------------------------------------------------------
-		void Register();
+		void Register() {}
 
 	};
 
@@ -283,7 +283,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
 		//@―---------------------------------------------------------------------------
-		void Register();
+		void Register() {}
 
 		//@―---------------------------------------------------------------------------
 		//! @brief			基底クラスを追加
@@ -312,12 +312,12 @@ namespace ob::core {
 
 			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
 			StringView names[] = { StringView(argNames)... ,"" };
-			Type types[] = { Type::Get<Args>() ... };
+			Array<Type,sizeof...(Args)> types = { Type::Get<Args>() ... };
 
 			// 型と名前を登録
 			for (s32 i = 0; i < std::size(types); ++i) {
 				auto& arg = info.arguments.emplace_back();
-				arg.type = types[i];
+				arg.type = types.at(i);
 				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names[i];
 			}
 
@@ -684,7 +684,7 @@ namespace ob::core {
 		//@―---------------------------------------------------------------------------
 		//! @brief			タイプ登録
 		//@―---------------------------------------------------------------------------
-		void Register();
+		void Register() {}
 
 	};
 }

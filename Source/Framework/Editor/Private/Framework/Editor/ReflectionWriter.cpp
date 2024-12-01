@@ -8,8 +8,10 @@
 #include <Framework/Editor/ReflectionWriter.h>
 
 #include <Framework/Core/Reflection/TypeInfoManager.h>
-#include <nlohmann/json.hpp>
 #include <fstream>
+#pragma warning(push : 0)
+#include <nlohmann/json.hpp>
+#pragma warning(pop)
 
 namespace ob::editor {
 	

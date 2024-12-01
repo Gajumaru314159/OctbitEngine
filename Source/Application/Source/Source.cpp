@@ -100,7 +100,6 @@ OB_DEFINE_CLASS_INFO(Vector<String>) {
 	method<void, size_t, const String&>("assign", &T::assign, "n", "t");
 	method<void, const String&>("push_back", &T::push_back, "x");
 	method("pop_back", &T::pop_back);
-	method("clear", &T::clear);
 }
 
 struct TransformA {

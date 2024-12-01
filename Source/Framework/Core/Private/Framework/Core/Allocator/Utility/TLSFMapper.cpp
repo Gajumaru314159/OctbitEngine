@@ -350,7 +350,9 @@ namespace ob::core {
 	void TLSFMapper::getLevelIndex(s32 size, s32& firstLevel, s32& secondLevel)const noexcept {
 		if (size < s_linearManagementSize) {
 			firstLevel = 0;
+#pragma warning(suppress: 4293)
 			secondLevel = size >> s_secondLevelShift;
+#pragma warning(default: 4293)
 		} else {
 			firstLevel = std::max(0, BitOp::GetMSB((u32)size) + 1 - s_linearManagementSizeLog2);
 			secondLevel = size >> (firstLevel + s_maxSecondLevel);
