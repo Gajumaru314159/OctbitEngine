@@ -20,6 +20,10 @@ namespace ob::core {
             }
 
             Iterator& operator++() {
+                if (m_end == StringView::npos) {
+                    m_start = m_end;
+                    return *this;
+                }
                 m_start = m_end + m_delimiter.size();
                 m_end = m_str.find(m_delimiter, m_start);
                 return *this;
