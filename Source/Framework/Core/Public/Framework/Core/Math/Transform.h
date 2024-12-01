@@ -36,7 +36,7 @@ namespace ob::core {
 
         Vec3    position;   //!< 位置
         Quat    rotation;   //!< 回転
-        Vec3    scale;      //!< 拡縮
+        Vec3    scale{1,1,1};      //!< 拡縮
 
     };
 
