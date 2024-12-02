@@ -43,4 +43,10 @@ TEST(ECS, Construct) {
 
 	ecs.destroy(entity1);
 
+	Func<void(TransformComponent&)> func = 
+		[](TransformComponent& t) {
+			t.local.position.x += 1;
+		};
+	ecs.update2(func);
+
 }

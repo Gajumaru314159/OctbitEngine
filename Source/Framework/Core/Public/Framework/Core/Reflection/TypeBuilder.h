@@ -51,9 +51,8 @@ namespace ob::core {
 }
 
 
-//! @brief		Enum型情報の定義
-//! @details	
-//! @note		
+//! @brief		型情報の定義
+//! @details	Builderを通じて型情報を登録するRegiser()と、翻訳単位を明示的にリンクするためのLink()を定義します。
 #define OB_DEFINE_INFO_BASE(builder_type,type)\
 namespace ob::core {\
 	void TypeRegisterTemplate<::type>::Register() {\
@@ -64,20 +63,33 @@ namespace ob::core {\
 }\
 template<> void builder_type<::type>::Register()
 
+//! @brief		Primitive型情報の定義
+//!	@details	```c++
+//!				OB_DEFINE_PRIMITIVE_INFO(int) {
+//!					desc("32bit符号付き整数型");
+//! 			}	
+//!				```
+#define OB_DEFINE_PRIMITIVE_INFO(type) OB_DEFINE_INFO_BASE(ob::core::PrimitiveBuilderTemplate,type)
+
 //! @brief		Enum型情報の定義
-//! @details	
-//! @note		
+//!	@details	```c++
+//!				OB_DEFINE_ENUM_INFO(EnumType) {
+//!					element(T::First);
+//!					element(T::Second);
+//! 			}	
+//!				```
 #define OB_DEFINE_ENUM_INFO(type) OB_DEFINE_INFO_BASE(ob::core::EnumBuilderTemplate,type)
 
 //! @brief		Class型情報の定義
-//! @details	
-//! @note		
+//!	@details	```c++
+//!				OB_DEFINE_CLASS_INFO(Foo) {
+//!					constructor();
+//!					field("field",&T::field);
+//!					property("prop",&T::getProp,&T::setProp);
+//!					method("method",&T::method,"arg0","arg1");
+//! 			}	
+//!				```
 #define OB_DEFINE_CLASS_INFO(type) OB_DEFINE_INFO_BASE(ob::core::ClassBuilderTemplate,type)
-
-//! @brief		Primitive型情報の定義
-//! @details	
-//! @note		
-#define OB_DEFINE_PRIMITIVE_INFO(type) OB_DEFINE_INFO_BASE(ob::core::PrimitiveBuilderTemplate,type)
 
 
 namespace ob::core {
@@ -96,9 +108,26 @@ namespace ob::core {
 		TagBuilder& desc(StringView value);
 
 	private:
-		TagInfo* m_info;
+		TagInfo& m_tagInfo;
 	};
 
+
+
+
+	//! @brief		Primitive型情報ビルダー
+	class PrimitiveBuilder : public TagBuilder {
+	public:
+
+		//! @brief		コンストラクタ
+		PrimitiveBuilder(TypeInfo& info)
+			: TagBuilder(info)
+			, m_info(info)
+		{
+		}
+
+	protected:
+		TypeInfo& m_info;
+	};
 
 	//! @brief		Enum型情報ビルダー
 	class EnumBuilder : public TagBuilder {
@@ -122,8 +151,7 @@ namespace ob::core {
 		TypeInfo& m_info;
 	};
 
-
-	//! @brief		クラス情報ビルダー
+	//! @brief		クラス型情報ビルダー
 	class ClassBuilder : public TagBuilder {
 	public:
 
@@ -132,26 +160,99 @@ namespace ob::core {
 
 	protected:
 
-		static StringView GetDefaultArgumentName(size_t index);
+		static StringView _GetDefaultArgumentName(size_t index);
 
 	protected:
 		TypeInfo& m_info;
 	};
 
+	//! @brief コンストラクタやデストラクタなどのオペレータを間接的に呼び出すためのクラス
+	template<class T>
+	class ClassTrait {
+	public:
+		static Any _New(Span<Any> args) {
+			return Any::Create<T>();
+		}
+		static void _PlacedNew(void* p, Span<Any> args) {
+			OB_ASSERT(p, "pがnullです");
+			new(p)T;
+		}
+		static Any _NewWith(Span<Any> args) {
+			return Any::Create<T>(args[0].as<T>());
+		}
+		static void _PlacedNewWith(void* ptr, Span<Any> args) {
+			OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T();
+		}
+		static void _Delete(void* ptr) {
+			OB_ASSERT(ptr, "ptrがnullです");
+			delete reinterpret_cast<T*>(ptr);
+		}
+		static void _PlacedDelete(void* ptr) {
+			OB_ASSERT(ptr, "ptrがnullです");
+			reinterpret_cast<T*>(ptr)->~T();
+		}
+		static void* _Copy(const void* ptr) {
+			OB_ASSERT(ptr, "ptrがnullです");
+			return (void*)new T(*reinterpret_cast<const T*>(ptr));
+		}
+		static void _Assign(const void* from, void* to) {
+			OB_ASSERT(from, "fromがnullです");
+			OB_ASSERT(to, "toがnullです");
+			(*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from));
+		}
+	};
+
 
 	//! @brief		Primitive型情報ビルダー
-	class PrimitiveBuilder : public TagBuilder {
+	template<class _T>
+	class PrimitiveBuilderTemplate :public PrimitiveBuilder {
+	public:
+		using T = _T;
 	public:
 
-		//! @brief		コンストラクタ
-		PrimitiveBuilder(TypeInfo& info)
-			: TagBuilder(info)
-			, m_info(info)
+		//! @brief			コンストラクタ
+		PrimitiveBuilderTemplate()
+			: PrimitiveBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
 		{
+			m_info.size = sizeof(T);
+			m_info.alignment = alignof(T);
+
+			// コンストラクタ登録(デフォルト)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.invoker = ClassTrait<T>::_New;
+				ctor.placedInvoker = ClassTrait<T>::_PlacedNew;
+			}
+
+			// コンストラクタ登録(初期値あり)
+			{
+				auto& ctor = m_info.constructors.emplace_back();
+				ctor.arguments = { {Type::Get<T>(),"value"} };
+				ctor.invoker = ClassTrait<T>::_NewWith;
+				ctor.placedInvoker = ClassTrait<T>::_PlacedNewWith;
+			}
+
+			// デストラクタ登録
+			{
+				m_info.destructor = ClassTrait<T>::_Delete;
+				m_info.placedDestructor = ClassTrait<T>::_PlacedDelete;
+			}
+
+			// コピー
+			if constexpr (std::is_copy_assignable<T>::value) {
+				m_info.copyInvoker = ClassTrait<T>::_Copy;
+				m_info.assignInvoker = ClassTrait<T>::_Assign;
+			}
+
+			// タイプ登録
+			Register();
 		}
 
-	protected:
-		TypeInfo& m_info;
+	private:
+
+		//! @brief			タイプ登録
+		void Register() {}
+
 	};
 
 
@@ -170,47 +271,49 @@ namespace ob::core {
 			m_info.bases.emplace(Type::Get<std::underlying_type_t<T>>());
 			m_info.isEnum = true;
 			m_info.size = sizeof(T);
-			m_info.alignment = alignof (T);
+			m_info.alignment = alignof(T);
 
 			// コンストラクタ登録(デフォルト)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
-				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(); };
-				ctor.placedInvoker = [](void* p, Span<Any> args) { OB_ASSERT(p, "pがnullです"); new(p)T; };
+				ctor.invoker = ClassTrait<T>::_New;
+				ctor.placedInvoker = ClassTrait<T>::_PlacedNew;
 			}
 
 			// コンストラクタ登録(初期値あり)
 			{
 				auto& ctor = m_info.constructors.emplace_back();
 				ctor.arguments = { {Type::Get<T>(),"value"} };
-				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
-				ctor.placedInvoker = [](void* p, Span<Any> args) { OB_ASSERT(p, "pがnullです"); new(p)T(args[0].as<T>()); };
+				ctor.invoker = ClassTrait<T>::_NewWith;
+				ctor.placedInvoker = ClassTrait<T>::_PlacedNewWith;
 			}
 
 			// デストラクタ登録
 			{
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+				m_info.destructor = ClassTrait<T>::_Delete;
+				m_info.placedDestructor = ClassTrait<T>::_PlacedDelete;
 			}
 
 			// コピー
 			if constexpr (std::is_copy_assignable<T>::value) {
-				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
-				m_info.assignInvoker = [](const void* from, void* to) { (*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from)); };
+				m_info.copyInvoker = ClassTrait<T>::_Copy;
+				m_info.assignInvoker = ClassTrait<T>::_Assign;
 			}
 
 			// 値取得
-			m_info.enumValueGetter = [](const Any& instance) {
-				return enum_cast(instance.as<T>());
-			};
+			m_info.enumValueGetter = _GetEnumValue;
 
 			// タイプ登録
 			Register();
 		}
 
+	private:
 		//! @brief			タイプ登録
 		void Register() {}
 
+		static s32 _GetEnumValue(const Any& instance) {
+			return enum_cast(instance.as<T>());
+		}
 	};
 
 	//! @brief		Class型情報ビルダー
@@ -222,26 +325,34 @@ namespace ob::core {
 
 		//! @brief			コンストラクタ
 		ClassBuilderTemplate() : ClassBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>())) {
-			Register();
 
 			m_info.size = sizeof(T);
-			m_info.alignment = alignof (T);
+			m_info.alignment = alignof(T);
 
 			// デストラクタ登録
 			{
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
+				m_info.destructor = ClassTrait<T>::_Delete;
+				m_info.placedDestructor = ClassTrait<T>::_PlacedDelete;
 			}
 
 			// コピー
 			if constexpr(std::is_copy_assignable<T>::value){
-				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
-				m_info.assignInvoker = [](const void* from, void* to) { (*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from)); };
+				m_info.copyInvoker = ClassTrait<T>::_Copy;
+				m_info.assignInvoker = ClassTrait<T>::_Assign;
 			}
+
+			// タイプ登録
+			Register();
 		}
+
+	private:
 
 		//! @brief			タイプ登録
 		void Register() {}
+
+		//===============================================================
+		//  基底型
+		//===============================================================
 
 		//! @brief			基底クラスを追加
 		template<class TBase, class = std::enable_if_t<std::is_base_of<TBase, T>::value>>
@@ -249,15 +360,22 @@ namespace ob::core {
 			m_info.bases.emplace(::ob::Type::Get<TBase>());
 		}
 
-		//! @brief			コンストラクタを追加
-		//! @{
+		//===============================================================
+		//  コンストラクタ
+		//===============================================================
+		
+		//! @brief			デフォルトコンストラクタを追加
 		TagBuilder constructor() {
 			static_assert(std::is_constructible<T>::value,"0引数のコンストラクタがありません");
 			auto& info = m_info.constructors.emplace_back();
-			info.invoker = &CreateWithoutArgs;
-			info.placedInvoker = &PlacedCreateWithoutArgs;
+			info.invoker = ClassTrait<T>::_New;
+			info.placedInvoker = ClassTrait<T>::_PlacedNew;
 			return info;
 		}
+
+		//! @brief			引数有コンストラクタを追加
+		//! @details		引数名を指定する場合は引数の数と一致させる必要があります。
+		//!					引数名を指定しない場合はデフォルトの引数名が使用されます。
 		template<class... Args,class... Names>
 		auto constructor(Names&&... argNames)
 			-> std::enable_if_t<std::is_constructible<T, Args...>::value && (sizeof...(Args)==sizeof...(Names) || sizeof...(Names) == 0), TagBuilder>
@@ -272,17 +390,20 @@ namespace ob::core {
 			for (s32 i = 0; i < std::size(types); ++i) {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types.at(i);
-				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names[i];
+				arg.name = (sizeof...(Names) == 0) ? _GetDefaultArgumentName(i) : names[i];
 			}
 
 			// invokerを登録
-			info.invoker = &Create<Args...>;
-			info.placedInvoker = &PlacedCreate<Args...>;
+			info.invoker = &_New<Args...>;
+			info.placedInvoker = &_PlacedNew<Args...>;
 
 			return info;
 		}
-		//! @}
 
+		//===============================================================
+		//  メソッド
+		//===============================================================
+		
 		//! @cond
 		//! テンプレートメタプログラミングで関数ポインタの引数型を取得
 		template<typename U>
@@ -327,56 +448,43 @@ namespace ob::core {
 			static constexpr size_t Count = sizeof...(Args);
 			static constexpr bool Const = true;
 		};
-
-
 		//! @endcond
-
-
-		//! @brief			メソッド追加
-		template< class M, class... Args, class... Names>
-		auto method(StringView name, M method, Names&&... argNames)
-			-> std::enable_if_t<MethodTraits<M>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
-		{
-			return method_impl(name,method,argNames...);
-		}
 
 		//! @brief			メソッド追加
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...), Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			return method_impl<decltype(m),Args...>(name, m, argNames...);
+			return _method_impl<decltype(m),Args...>(name, m, argNames...);
 		}
 
-		//! @brief			メソッド追加
+		//! @brief			メソッド追加 (const)
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)const, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			return method_impl<decltype(m), Args...>(name, m, argNames...);
+			return _method_impl<decltype(m), Args...>(name, m, argNames...);
 		}
 
-		//! @brief			メソッド追加
+		//! @brief			メソッド追加 (noexcept)
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)noexcept, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			return method_impl<decltype(m), Args...>(name, m, argNames...);
+			return _method_impl<decltype(m), Args...>(name, m, argNames...);
 		}
 
-		//! @brief			メソッド追加
+		//! @brief			メソッド追加 (const noexcept)
 		template< class R, class... Args, class... Names>
 		auto method(StringView name, R(T::* m)(Args...)const noexcept, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<decltype(m)>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			return method_impl<decltype(m), Args...>(name, m, argNames...);
+			return _method_impl<decltype(m), Args...>(name, m, argNames...);
 		}
 
-	private:
-
-		//! @brief			メソッド追加
+		//! @brief			メソッド追加 (内部実装)
 		template< class M, class... Args, class... Names>
-		auto method_impl(StringView name, M method, Names&&... argNames)
+		auto _method_impl(StringView name, M method, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<M>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
 			OB_ASSERT(m_info.methods.count(name) == 0, "{}は登録済みのメソッドです [{}]", name, m_info.type.name());
@@ -394,22 +502,24 @@ namespace ob::core {
 			for (s32 i = 0; i + 1 < std::size(types); ++i) {
 				auto& arg = info.arguments.emplace_back();
 				arg.type = types.at(i);
-				arg.name = (sizeof...(Names) == 0) ? GetDefaultArgumentName(i) : names.at(i);
+				arg.name = (sizeof...(Names) == 0) ? _GetDefaultArgumentName(i) : names.at(i);
 			}
 
 			if constexpr (sizeof...(Args) == 0) {
-				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeWithoutArgs<M, Args...>(owner, args, method); };
+				info.invoke = [=](Any& owner, Span<Any> args) { return _InvokeWithoutArgs<M, Args...>(owner, args, method); };
 			}
 			else {
-				info.invoke = [=](Any& owner, Span<Any> args) { return InvokeMethod<M, Args...>(owner, args, method); };
+				info.invoke = [=](Any& owner, Span<Any> args) { return _InvokeMethod<M, Args...>(owner, args, method); };
 			}
 
 			return info;
 		}
 
-	public:
+		//===============================================================
+		//  フィールド
+		//===============================================================
 
-		//! @brief			プロパティ追加(メンバ変数)
+		//! @brief			フィールド追加(メンバ変数)
 		template<class TField>
 		TagBuilder field(StringView name, TField T::* address) {
 			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
@@ -433,6 +543,10 @@ namespace ob::core {
 			return info;
 		}
 
+		//===============================================================
+		//  プロパティ
+		//===============================================================
+		
 		//! @brief			プロパティ追加(Getter)
 		template<class F>
 		TagBuilder property(StringView name, F getter) {
@@ -465,11 +579,13 @@ namespace ob::core {
 			return info;
 		}
 
-	private:
+		//===============================================================
+		//  メソッド定義
+		//===============================================================
 
-		//! @brief			引数なしのコンストラクタ
+		//! @brief			引数なしのメソッド呼び出し
 		template<class M, class... Args>
-		static Any InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, M method) {
+		static Any _InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, M method) {
 			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))();
 				return Any();
@@ -478,9 +594,9 @@ namespace ob::core {
 			}
 		}
 
-		//! @brief			引数ありのコンストラクタ
+		//! @brief			引数ありのメソッド呼び出し
 		template<class M,class... Args, size_t... I>
-		static Any InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
+		static Any _InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
 			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))(args[I].as<std::remove_reference_t<Args>>()...);
 				return Any();
@@ -489,114 +605,55 @@ namespace ob::core {
 			}
 		}
 
-		//! @brief			引数ありのコンストラクタ
+		//! @brief			引数ありのメソッド呼び出し
 		template<class M, class... Args>
-		static Any InvokeMethod(Any& owner, Span<Any> args, M method) {
+		static Any _InvokeMethod(Any& owner, Span<Any> args, M method) {
 			Type types[] = { Type::Get<Args>()... };
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return {};
 			}
-			return InvokeMethodImpl<M,Args...>(owner, args, method, std::make_index_sequence<sizeof...(Args)>());
+			return _InvokeMethodImpl<M,Args...>(owner, args, method, std::make_index_sequence<sizeof...(Args)>());
 		}
 
-
-		//! @brief			引数なしのコンストラクタ
-		static Any CreateWithoutArgs([[meybe_unused]] Span<Any>) {
-			return Any::Create<T>();
-		}
+		//===============================================================
+		//  コンストラクタ定義
+		//===============================================================
 
 		//! @brief			引数ありのコンストラクタ
 		template<class T,class... Args,size_t ...I>
-		static Any CreateImpl(Span<Any> args, std::index_sequence<I...>) {
+		static Any _NewImpl(Span<Any> args, std::index_sequence<I...>) {
 			return Any::Create<T>(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
 		//! @brief			引数ありのコンストラクタ
 		template<class... Args>
-		static Any Create(Span<Any> args) {
-
+		static Any _New(Span<Any> args) {
 			Type types[] = {Type::Get<Args>()...};
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return {};
 			}
-			return CreateImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>());
-		}
-
-
-		//! @brief			引数なしのコンストラクタ
-		static void PlacedCreateWithoutArgs(void* ptr,[[meybe_unused]] Span<Any>) {
-			new(ptr)T();
+			return _NewImpl<T, Args...>(args, std::make_index_sequence<sizeof...(Args)>());
 		}
 
 		//! @brief			引数ありのコンストラクタ
 		template<class T, class... Args, size_t ...I>
-		static void PlacedCreateImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
+		static void _PlacedNewImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
 			new(ptr)T(args[I].as<std::remove_reference_t<Args>>()...);
 		}
 
 		//! @brief			引数ありのコンストラクタ
 		template<class... Args>
-		static void PlacedCreate(void* ptr, Span<Any> args) {
-
+		static void _PlacedNew(void* ptr, Span<Any> args) {
 			Type types[] = { Type::Get<Args>()... };
 			if (!std::equal(args.begin(), args.end(), std::begin(types), std::end(types), [](const Any& a, const Type& b) {return a.is(b); })) {
 				OB_ABORT("関数の呼出し引数が一致しません");
 				return;
 			}
-
-			PlacedCreateImpl<T, Args...>(ptr,args, std::make_index_sequence<sizeof...(Args)>());
+			_PlacedNewImpl<T, Args...>(ptr,args, std::make_index_sequence<sizeof...(Args)>());
 		}
 
 	};
 
-
-	//! @brief		Primitive型情報ビルダー
-	template<class _T>
-	class PrimitiveBuilderTemplate :public PrimitiveBuilder {
-	public:
-		using T = _T;
-	public:
-
-		//! @brief			コンストラクタ
-		PrimitiveBuilderTemplate()
-			: PrimitiveBuilder(TypeInfoManager::Instance().registerInfo(Type::Get<T>()))
-		{
-			m_info.size = sizeof(T);
-			m_info.alignment = alignof (T);
-
-			// コンストラクタ登録(デフォルト)
-			{
-				auto& ctor = m_info.constructors.emplace_back();
-				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(); };
-			}
-
-			// コンストラクタ登録(初期値あり)
-			{
-				auto& ctor = m_info.constructors.emplace_back();
-				ctor.arguments = { {Type::Get<T>(),"value"} };
-				ctor.invoker = [](Span<Any> args) { return Any::Create<T>(args[0].as<T>()); };
-			}
-
-			// デストラクタ登録
-			{
-				m_info.destructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); delete reinterpret_cast<T*>(ptr); };
-				m_info.placedDestructor = [](void* ptr) { OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T(); };
-			}
-
-			// コピー
-			if constexpr (std::is_copy_assignable<T>::value) {
-				m_info.copyInvoker = [](const void* ptr) { return (void*)new T(*reinterpret_cast<const T*>(ptr)); };
-				m_info.assignInvoker = [](const void* from, void* to) { (*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from)); };
-			}
-
-			// タイプ登録
-			Register();
-		}
-
-		//! @brief			タイプ登録
-		void Register() {}
-
-	};
 }

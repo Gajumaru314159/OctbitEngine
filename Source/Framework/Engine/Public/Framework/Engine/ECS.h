@@ -112,6 +112,7 @@ namespace ob::engine2 {
 		u16 version;
 	};
 
+	//! @brief TypeInfoを渡すことでpush_backできるVector
 	class AnyVector 
 		: Noncopyable 
 	{
@@ -134,6 +135,7 @@ namespace ob::engine2 {
 			}
 		}
 		void push_back() {
+			OB_ASSERT(full()==false, "空きのないAnyVectorに要素を追加しました");
 			auto ptr = at(m_size);
 			m_constructor->placedInvoker(ptr, {});
 			m_size++;
@@ -161,10 +163,10 @@ namespace ob::engine2 {
 		size_t m_capacity;
 	};
 
-
-	class ComponentAllocator {
+	//! @brief Componentをキャッシュラインに収まるようにメモリ上連続するようにアロケートするコンテナ
+	class ComponentContainer {
 	public:
-		ComponentAllocator(const TypeInfo& info)
+		ComponentContainer(const TypeInfo& info)
 			: m_info(info)
 		{
 			m_constructor = m_info.findConstructor();
@@ -287,7 +289,7 @@ namespace ob::engine2 {
 			// TODO 型チェック
 			auto types = { Type::Get<TComponents>()... };
 
-			ComponentAllocator* chunks[] = { &m_chunks[Type::Get<TComponents>()]... };
+			ComponentContainer* chunks[] = { &m_chunks[Type::Get<TComponents>()]... };
 
 			size_t size = 0;
 			for (s32 i = 0; i < size; ++i) {
@@ -307,7 +309,7 @@ namespace ob::engine2 {
 	private:
 		Archetype m_archetype;
 
-		HashMap<Type, ComponentAllocator> m_chunks;
+		HashMap<Type, ComponentContainer> m_chunks;
 		Vector<s32> m_free;
 
 	};
@@ -414,21 +416,21 @@ namespace ob::engine2 {
 
 			Type types[] = { Type::Get<TComponents>()... };
 
-			ArchetypeMask mask;
-			mask.flip();
-
-			// 全てのComponentを持つチャンクを抽出
-			// NOTE 抽出は毎フレームしなくてよくはないか？
-			for (auto& type : types) {
-				mask &= m_availables[type]
-			}
-
-			// 型チェックはChunk * Archetype.size()回発生する
-			for (s32 i = 0; i < mask.size(); ++i) {
-				if (mask[i]) {
-					m_chunks.at(i);
-				}
-			}
+			//ArchetypeMask mask;
+			//mask.flip();
+			//
+			//// 全てのComponentを持つチャンクを抽出
+			//// NOTE 抽出は毎フレームしなくてよくはないか？
+			//for (auto& type : types) {
+			//	//mask &= m_availables[type]
+			//}
+			//
+			//// 型チェックはChunk * Archetype.size()回発生する
+			//for (s32 i = 0; i < mask.size(); ++i) {
+			//	if (mask[i]) {
+			//		m_chunks.at(i);
+			//	}
+			//}
 
 		}
 

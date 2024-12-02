@@ -31,13 +31,13 @@ namespace ob::core {
 
 	//! @brief		コンストラクタ
 	TagBuilder::TagBuilder(TagInfo& info)
-		: m_info(&info)
+		: m_tagInfo(info)
 	{
 	}
 
 	//! @brief		タグ追加
 	TagBuilder& TagBuilder::tag(StringView key, StringView value) {
-		m_info->tags.emplace(key, value);
+		m_tagInfo.tags.emplace(key, value);
 		return *this;
 	}
 
@@ -71,7 +71,7 @@ namespace ob::core {
 	}
 
 
-	StringView ClassBuilder::GetDefaultArgumentName(size_t index) {
+	StringView ClassBuilder::_GetDefaultArgumentName(size_t index) {
 		StringView names[] = {
 			"arg0",
 			"arg1",

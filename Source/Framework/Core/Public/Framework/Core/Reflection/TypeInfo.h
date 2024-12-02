@@ -12,16 +12,16 @@
 
 namespace ob::core {
 
-	using ConstructorInvoker = Func<Any(Span<Any> args)>;
-	using DestructorInvoker = Func<void(void*)>;
-	using PlacedConstructorInvoker = Func<void(void*, Span<Any> args)>;
-	using PlacedDestructorInvoker = Func<void(void*)>;
-	using CopyInvoker = Func<void* (const void*)>;
-	using AssignInvoker = Func<void(const void*,void*)>;
+	using ConstructorInvoker = Any(*)(Span<Any> args);
+	using DestructorInvoker = void(*)(void*);
+	using PlacedConstructorInvoker = void(*)(void*, Span<Any> args);
+	using PlacedDestructorInvoker = void(*)(void*);
+	using CopyInvoker = void* (*)(const void*);
+	using AssignInvoker = void(*)(const void*,void*);
 	using MethodInvoker = Func<Any(Any& owner, Span<Any> args)>;
 	using PropertySetter = Func<void(Any& owner, const Any& value)>;
 	using PropertyGetter = Func<Any(const Any& owner)>;
-	using EnumValueGetter = Func<s32(const Any& owner)>;
+	using EnumValueGetter = s32(*)(const Any& owner);
 
 
 	//! @brief  タグ情報
