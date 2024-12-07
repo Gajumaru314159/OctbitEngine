@@ -89,7 +89,7 @@ TEST(Graphis, Create) {
 
 	Ref<Material> material = [&]{
 
-		auto code = File::ReadAllText("Asset/Shader/GraphicTest.hlsl");
+		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
 		OB_ASSERT(code,"ファイル読み込み失敗");
 
 		MaterialDesc desc;
@@ -114,10 +114,10 @@ TEST(Graphis, Create) {
 	auto skyMat = Material::Create(material->getDesc());
 
 
-	auto texture = Texture::Load("Asset/Model/Ukulele_col.dds");
-	auto skyTexture = Texture::Load("Asset/Texture/sky.dds");
-	Ref<Mesh> mesh = Mesh::Load("Asset/Model/Ukulele.obj");
-	Ref<Mesh> skyMesh = Mesh::Load("Asset/Model/sky.obj");
+	auto texture = Texture::Load("Assets/Model/Ukulele_col.dds");
+	auto skyTexture = Texture::Load("Assets/Texture/sky.dds");
+	Ref<Mesh> mesh = Mesh::Load("Assets/Model/Ukulele.obj");
+	Ref<Mesh> skyMesh = Mesh::Load("Assets/Model/sky.obj");
 
 	material->setMatrix("Matrix", Matrix::Identity);
 	material->setTexture("Main", texture);

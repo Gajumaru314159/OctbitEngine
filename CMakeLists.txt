@@ -6,6 +6,7 @@ project ("OctbitEngine")
 #------------------------------------------------------------------------------
 option(DirectX "Enable DirectX RHI" ON)
 option(Vulkan "Enable Vulkan RHI" OFF)
+option(UnitTest "Enable UnitTest" ON)
 
 #------------------------------------------------------------------------------
 # ソリューション設定
@@ -71,7 +72,7 @@ FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TA
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v4.0.5")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
-FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "release-1.12.1")
+FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "v1.15.2")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
 FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
 FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph assimp)
@@ -127,11 +128,15 @@ endif()
 add_subdirectory ("Source/Plugins/ImGui")
 
 # Test
-add_subdirectory ("Source/Test/Framework/Core")
-add_subdirectory ("Source/Test/Framework/Platform")
-add_subdirectory ("Source/Test/Framework/RHI")
-add_subdirectory ("Source/Test/Framework/Graphics")
-add_subdirectory ("Source/Test/Framework/Engine")
+if(UnitTest)
+    enable_testing()
+    include(GoogleTest)
+    add_subdirectory ("Source/Test/Framework/Core")
+    add_subdirectory ("Source/Test/Framework/Platform")
+    add_subdirectory ("Source/Test/Framework/RHI")
+    add_subdirectory ("Source/Test/Framework/Graphics")
+    add_subdirectory ("Source/Test/Framework/Engine")
+endif()
 
 # Application
 add_subdirectory ("Source/Application")

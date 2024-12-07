@@ -5,7 +5,6 @@ project (Platform-test)
 # ソースコードの登録
 #------------------------------------------------------------------------------
 LOAD_FILES(out_sources "PlatformTest")
-enable_testing()
 add_executable(${PROJECT_NAME} ${out_sources})
 
 SET_PCH("PCH/stdafx.h")
@@ -32,5 +31,4 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
 
 # GoogleTest
-include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
