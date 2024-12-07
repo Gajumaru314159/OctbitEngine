@@ -6,6 +6,8 @@ using namespace ob::core;
 
 TEST(DirectoryTest, Exists)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
+
     auto path = "unit_test";
 
     Directory::Create(path);
@@ -22,6 +24,7 @@ TEST(DirectoryTest, Exists)
 
 TEST(DirectoryTest, Empty)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
 
     Directory::Delete(path);
@@ -42,6 +45,7 @@ TEST(DirectoryTest, Empty)
 
 TEST(DirectoryTest, Current)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
 
     auto current = Directory::Current();
@@ -61,6 +65,7 @@ TEST(DirectoryTest, Current)
 
 TEST(DirectoryTest, Create)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
 
     // ディレクトリの作成をテスト
@@ -74,6 +79,7 @@ TEST(DirectoryTest, Create)
 
 TEST(DirectoryTest, Move)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
     auto path2 = "unit_test2";
 
@@ -95,6 +101,7 @@ TEST(DirectoryTest, Move)
 
 TEST(DirectoryTest, Rename)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
     auto path2 = "unit_test2";
 
@@ -116,6 +123,7 @@ TEST(DirectoryTest, Rename)
 
 TEST(DirectoryTest, Copy)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
     auto path2 = "unit_test2";
 
@@ -135,6 +143,7 @@ TEST(DirectoryTest, Copy)
 
 TEST(DirectoryTest, Delete)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
     // ディレクトリの削除をテスト
     Directory::Create(path);
@@ -146,6 +155,7 @@ TEST(DirectoryTest, Delete)
 
 TEST(DirectoryTest, DeleteContents)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
 
     Directory::Create(path);
@@ -165,6 +175,7 @@ TEST(DirectoryTest, DeleteContents)
 
 TEST(DirectoryTest, Contents)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
     
     Directory::Create(path);

@@ -10,6 +10,7 @@ using namespace ob;
 
 TEST(INI, Test)
 {
+    GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto filename = "engine.ini";
     std::filesystem::remove(filename);
 

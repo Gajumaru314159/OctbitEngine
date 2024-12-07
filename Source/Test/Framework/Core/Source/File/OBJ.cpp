@@ -10,6 +10,7 @@ using namespace ob;
 
 TEST(OBJ, Test)
 {
+	GTEST_FLAG_SET(death_test_style, "threadsafe");
 	MTL mtl;
 	mtl.newmtl("test0");
 	mtl.diffuse(Color::Red);
