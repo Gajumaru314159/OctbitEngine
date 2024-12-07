@@ -51,21 +51,21 @@ namespace OctbitEngine.Runtime
         }
 
 
-        public object GetValue([CallerMemberName] string? name = null)
+        public object? GetValue([CallerMemberName] string? name = null)
         {
             return m_properties[name??string.Empty];
         }
 
         public T GetValue<T>([CallerMemberName] string? name = null) where T : notnull
         {
-            return (T)GetValue(name);
+            return (T)GetValue(name)!;
         }
 
-        public bool SetValue(object value, [CallerMemberName] string? name = null)
+        public bool SetValue(object? value, [CallerMemberName] string? name = null)
         {
             if (m_properties.TryGetValue(name ?? string.Empty, out var v))
             {
-                if (v.GetType() == value.GetType())
+                if (v.GetType() == value?.GetType())
                 {
                     m_properties[name ?? string.Empty] = value;
                     return true;

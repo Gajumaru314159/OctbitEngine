@@ -95,13 +95,15 @@
     {
 
 
-        internal TypeInfo(string name, IReadOnlyDictionary<string, string> tags)
+        internal TypeInfo(Type type,string name, IReadOnlyDictionary<string, string> tags)
             : base(tags)
         {
+            Type = type;
             Name = name;
             ShortName = name.Split("::").LastOrDefault()??string.Empty;
             IsEnum = false;
         }
+        public Type Type { get; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public ISet<ITypeInfo> Bases => m_bases;

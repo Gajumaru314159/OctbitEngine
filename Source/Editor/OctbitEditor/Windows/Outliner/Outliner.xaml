@@ -194,6 +194,7 @@
 
         <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}"
                                 ItemTemplateSelector="{StaticResource OutlinerItemDataSelector}"
+                                VirtualizingPanel.IsVirtualizing="True"
                                 >
 
             <!--ContextMenu-->

@@ -68,6 +68,7 @@
     /// </summary>
     public interface ITypeInfo : ITagInfo
     {
+        Type Type { get; }
         string Name { get; }
         string ShortName { get; }
         ISet<ITypeInfo> Bases { get; }

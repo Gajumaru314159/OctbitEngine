@@ -61,7 +61,14 @@ namespace OctbitEngine.Runtime
 
                 foreach (var archive in archives.NotNull())
                 {
-                    TypeMap.Add(archive.Name, new TypeInfo(archive.Name,archive.Tags));
+                    Type? type = null;
+                    if (archive.Tags?.TryGetValue("C#", out var csName)??false)
+                    {
+                        // TODO 他アセンブリ対応
+                        type = Type.GetType(csName);
+                    }
+
+                    TypeMap.Add(archive.Name, new TypeInfo(type??typeof(IUserTypeObject),archive.Name,archive.Tags??new()));
                 }
 
                 foreach (var archive in archives.NotNull())
@@ -89,14 +96,14 @@ namespace OctbitEngine.Runtime
                         {
                             if (TypeMap.TryGetValue(argArchive.Type, out var argType))
                             {
-                                arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags));
+                                arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags??new()));
                             }
                             else
                             {
                                 // TODO 例外処理
                             }
                         }
-                        typeInfo.m_constructors.Add(new ConstructorInfo(arguments,constructorArchive.Tags));
+                        typeInfo.m_constructors.Add(new ConstructorInfo(arguments,constructorArchive.Tags??new()));
                     }
 
                     // プロパティ
@@ -104,7 +111,7 @@ namespace OctbitEngine.Runtime
                     {
                         if (TypeMap.TryGetValue(propertyArchive.Type, out var propertyType))
                         {
-                            typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite,propertyArchive.Tags));
+                            typeInfo.m_properties.Add(propertyArchive.Name, new PropertyInfo(propertyType, propertyArchive.Name, propertyArchive.CanRead, propertyArchive.CanWrite,propertyArchive.Tags??new()));
                         }
                         else
                         {
@@ -122,14 +129,14 @@ namespace OctbitEngine.Runtime
                             {
                                 if (TypeMap.TryGetValue(argArchive.Type, out var argType))
                                 {
-                                    arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags));
+                                    arguments.Add(new ArgumentInfo(argType, argArchive.Name,argArchive.Tags??new()));
                                 }
                                 else
                                 {
                                     // TODO 例外処理
                                 }
                             }
-                            typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments,methodArchive.Tags));
+                            typeInfo.m_methods.Add(methodArchive.Name, new MethodInfo(methodArchive.Name, returnType, arguments,methodArchive.Tags??new()));
                         }
                         else
                         {

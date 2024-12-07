@@ -7,10 +7,10 @@ namespace OctbitEngine.Runtime
     {
         IReadOnlyDictionary<string, object> Properties { get; }
 
-        object GetValue([CallerMemberName] string? name = null);
+        object? GetValue([CallerMemberName] string? name = null);
         T GetValue<T>([CallerMemberName] string? name = null) where T : notnull;
 
-        bool SetValue(object value, [CallerMemberName] string? name = null);
+        bool SetValue(object? value, [CallerMemberName] string? name = null);
         bool SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull;
 
         void Serialize(BinaryWriter writer);

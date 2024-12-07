@@ -18,7 +18,8 @@ namespace OctbitEngine.Runtime
     {
         private UserTypeObject UserTypeObject { get; init; }
 
-        internal RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
+        //internal RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
+        public RemoteObject(IRuntime runtime, ITypeInfo typeInfo,int id)
         {
             Runtime = runtime;
             TypeInfo = typeInfo;
@@ -30,7 +31,16 @@ namespace OctbitEngine.Runtime
         public IRuntime Runtime { get; }
 
         public ITypeInfo TypeInfo { get; }
-
+        
+        public object? GetValue([CallerMemberName] string? name = null)
+        {
+            return UserTypeObject.GetValue(name);
+        }
+        public void SetValue(object? value, [CallerMemberName] string? name = null)
+        {
+            UserTypeObject.SetValue(value, name);
+            // TODO 値の転送
+        }
         public T GetValue<T>([CallerMemberName] string? name = null) where T : notnull
         {
             return UserTypeObject.GetValue<T>(name);

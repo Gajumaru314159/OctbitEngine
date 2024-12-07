@@ -16,11 +16,13 @@ namespace OctbitEngine.Runtime
         /// <summary>
         /// プロパティの値を取得します。
         /// </summary>
+        object? GetValue([CallerMemberName] string? name = null);
         T GetValue<T>([CallerMemberName] string? name = null) where T : notnull;
 
         /// <summary>
         /// プロパティの値を設定します。
         /// </summary>
+        void SetValue(object? value, [CallerMemberName] string? name = null);
         void SetValue<T>(T value, [CallerMemberName] string? name = null) where T : notnull;
 
         #endregion

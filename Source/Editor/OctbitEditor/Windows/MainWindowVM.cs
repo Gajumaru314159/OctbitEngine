@@ -37,7 +37,7 @@ namespace OctbitEditor
 
             _dockingDocumentViewModels.Add(new ViewportVM(_coreSystem.Runtime));
             _dockingPaneViewModels.Add(new OutlinerVM(_coreSystem.Runtime.ViewportWorld));
-            _dockingPaneViewModels.Add(new InspectorVM());
+            _dockingPaneViewModels.Add(new InspectorVM(_coreSystem.Runtime));
             _dockingPaneViewModels.Add(new HistoryWindowVM());
             _dockingPaneViewModels.Add(new AssetBrowserVM(_coreSystem.AssetManager));
             _dockingPaneViewModels.Add(new LogListVM());

@@ -6,6 +6,8 @@ using Common.Tree;
 using CommonView;
 using CommonView.Controls;
 using CommonView.Controls.Inspector;
+using OctbitEditor.Windows.Inspector;
+using OctbitEngine.Runtime;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 
@@ -115,11 +117,12 @@ namespace OctbitEditor
 
     public class InspectorVM : TabBase
     {
-        public InspectorVM()
+        public InspectorVM(IRuntime runtime)
             : base("Inspector")
         {
+            Entity = new RemoteObject(runtime,runtime.FindTypeInfo("ob::engine::ReflectionTestComponent")!,0);
             Inspectables = [
-                new( nameof(Entity), InspectableReflectionObject.Create(Entity)),
+                new( nameof(Entity), InspectableRunttimeObject.Create(Entity)),
                 new( nameof(Transform), InspectableReflectionObject.Create(Transform)),
                 new( nameof(Model), InspectableReflectionObject.Create(Model)),
                 new( nameof(TestObject), InspectableReflectionObject.Create(TestObject))
@@ -185,7 +188,7 @@ namespace OctbitEditor
         public ObservableCollection<InspectableGroup> Inspectables { get; }
 
         public ReflectionTest TestObject { get; } = new();
-        public EntityTest Entity{ get; } = new();
+        public IRemoteObject Entity{ get; }
         public TransformTest Transform { get; } = new();
         public ModelTest Model { get; } = new();
 

@@ -141,7 +141,7 @@ namespace OctbitEditor
 
             // ルートシーン
             var scenes = new List<SceneOutlinerItem>();
-            for (int i = 0; i<1; ++i)
+            for (int i = 0; i<100; ++i)
             {
                 scenes.Add(new SceneOutlinerItem(new SceneMock() { Name="Root Scene" }));
             }
