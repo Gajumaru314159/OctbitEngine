@@ -176,7 +176,7 @@ namespace ob::asset {
 		Map<String, UPtr<AssetFactory>> m_factories;
 
 		// Locale
-		SpinLock m_localeLock; // TODO ReadWriteLock化
+		mutable SpinLock m_localeLock; // TODO ReadWriteLock化
 		Map<String, HashSet<String>, std::less<>> m_groupMap;
 		Map<String, Locale, std::less<>> m_localeMapForGroup;
 		Map<String, Locale, std::less<>> m_localeMapForAssetType;
