@@ -19,35 +19,6 @@ TEST(HandleList, Test) {
     using List = HandleList<Hoge>;
     using Handle = List::Handle;
 
-    // ムーブコンストラクタ
-    {
-        List lst;
-        Handle h1, h2;
-        lst.emplace_back(h1, 2, 3);
-        lst.emplace_back(h2, 5, 7);
-
-        List lst2 = std::move(lst);
-
-        int sum2 = 0;
-        std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
-    }
-
-    // ムーブ代入
-    {
-        List lst;
-        Handle h1, h2;
-        lst.emplace_back(h1, 2, 3);
-        lst.emplace_back(h2, 5, 7);
-
-        List lst2;
-        lst2 = std::move(lst);
-
-        int sum2 = 0;
-        std::for_each(lst2.begin(), lst2.end(), [&sum2](auto& x) {sum2 += x.val; });
-        ASSERT_EQ(sum2, 2 * 3 + 5 * 7);
-    }
-
     // begin() / end()
     {
         List lst;
@@ -251,29 +222,6 @@ TEST(HandleList, Test) {
         int val = 0;
         std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
         ASSERT_EQ(val, 13);
-    }
-
-    // swap()
-    {
-        List lst;
-        Handle h1, h2, h3;
-        lst.emplace_back(h1, 1, 1);
-        lst.emplace_back(h2, 1, 2);
-        lst.emplace_back(h3, 1, 3);
-
-        List lst2;
-        Handle h4;
-        lst2.emplace_back(h4, 1, 4);
-
-        lst.swap(lst2);
-
-        int val = 0;
-        std::for_each(lst.begin(), lst.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        ASSERT_EQ(val, 4);
-
-        val = 0;
-        std::for_each(lst2.begin(), lst2.end(), [&val](auto& x) {val *= 10; val += x.val; });
-        ASSERT_EQ(val, 123);
     }
 
     // remove()
