@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Container/BitSet.h>
-#include <Framework/Core/Utility/Delegate.h>
+#include <Framework/Core/Template/Utility/MiniDelegate.h>
 
 using namespace ob;
 

@@ -13,8 +13,8 @@ namespace ob::core {
 	class MiniDalegate;
 	//@ endcond
 
-//! @brief      Ownerのみをキャプチャできる軽量デリゲート
-//!	@details    通常のデリゲートよりも軽量ですが、ラムダ式のように変数をキャプチャすることはできません。
+    //! @brief      Ownerのみをキャプチャできる軽量デリゲート
+    //!	@details    通常のデリゲートよりも軽量ですが、ラムダ式のように変数をキャプチャすることはできません。
     template<class R, class... Args>
     class MiniDalegate<R(Args...)> {
     public:
