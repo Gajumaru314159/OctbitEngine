@@ -87,30 +87,14 @@ struct std::hash<ob::engine2::Archetype> {
 
 namespace ob::engine2 {
 
-	// デフォルトのテンプレート定義
-	template<typename T, int N, typename... Types>
-	struct TypeIndex;
-
-	// 再帰的に型とインデックスをチェックするための部分特殊化
-	template<typename T, int N, typename First, typename... Rest>
-	struct TypeIndex<T, N, First, Rest...> {
-		static constexpr int value = std::is_same<T, First>::value ?
-			(N == 0 ? 0 : (TypeIndex<T, N - 1, Rest...>::value == -1 ? -1 : 1 + TypeIndex<T, N - 1, Rest...>::value)) :
-			(TypeIndex<T, N, Rest...>::value == -1 ? -1 : 1 + TypeIndex<T, N, Rest...>::value);
-	};
-
-	// 型が見つからない場合の特殊化
-	template<typename T, int N>
-	struct TypeIndex<T, N> {
-		static constexpr int value = -1;
-	};
-
 	//! @brief Entity
 	struct Entity {
 		u32 index;
 		u16 archetype;
 		u16 version;
 	};
+
+	struct Component { OB_RTTI(); };
 
 	//! @brief TypeInfoを渡すことでpush_backできるVector
 	class AnyVector 
@@ -120,14 +104,19 @@ namespace ob::engine2 {
 		AnyVector(const TypeInfo& info) 
 			: m_info(&info)
 		{
-			m_constructor = m_info->findConstructor();
-			OB_ASSERT(m_constructor, "{}にデフォルトコンストラクタを追加してください", info.type.name());
+			OB_ASSERT(info.isSuperClassOf<Component>(), "{}はComponentを継承していません", info.type.name());
+			auto ctor = m_info->findConstructor();
+			OB_ASSERT(ctor, "{}にデフォルトコンストラクタを追加してください", info.type.name());
+			m_constructor = ctor->placedInvoker;
 
 			const auto l1cache = 16 * 1024;
 
 			m_size = 0;
 			m_capacity = l1cache / m_info->stride();
 			m_blob.resize(m_capacity * m_info->stride());
+
+			m_components = reinterpret_cast<Component*>(m_blob.data());
+			m_stride = m_info->stride();
 		}
 		~AnyVector() {
 			for (s32 i = 0; i < m_size; ++i) {
@@ -137,7 +126,7 @@ namespace ob::engine2 {
 		void push_back() {
 			OB_ASSERT(full()==false, "空きのないAnyVectorに要素を追加しました");
 			auto ptr = at(m_size);
-			m_constructor->placedInvoker(ptr, {});
+			m_constructor(ptr, {});
 			m_size++;
 		}
 		size_t size() const {
@@ -157,10 +146,13 @@ namespace ob::engine2 {
 		}
 	private:
 		const TypeInfo* m_info;
-		const ConstructorInfo* m_constructor;
+		PlacedConstructorInvoker m_constructor;
 		Blob m_blob;
 		size_t m_size;
 		size_t m_capacity;
+
+		Component* m_components;
+		size_t m_stride;
 	};
 
 	//! @brief Componentをキャッシュラインに収まるようにメモリ上連続するようにアロケートするコンテナ
@@ -169,44 +161,50 @@ namespace ob::engine2 {
 		ComponentContainer(const TypeInfo& info)
 			: m_info(info)
 		{
-			m_constructor = m_info.findConstructor();
-			OB_ASSERT(m_constructor, "{}にデフォルトコンストラクタを追加してください", info.type.name());
-			m_span = m_info.stride();
-			m_chunks.emplace_back(std::make_unique<AnyVector>(m_info));
+			auto ctor = m_info.findConstructor();
+			OB_ASSERT(ctor, "{}にデフォルトコンストラクタを追加してください", info.type.name());
+			m_constructor = ctor->placedInvoker;
+			m_destructor = m_info.placedDestructor;
+			m_blocks.emplace_back(std::make_unique<AnyVector>(m_info));
+			m_span = m_blocks.back()->capacity();
+			m_usage = 0;
+			m_stride = m_info.stride();
 		}
 
 		s32 push_back() {
 
-			auto* chunk = &m_chunks.back();
+			auto* chunk = &m_blocks.back();
 			
 			// 現在のチャンクがいっぱいの場合新しいチャンクを生成
 			if ((*chunk)->full()) {
-				chunk = &m_chunks.emplace_back(std::make_unique<AnyVector>(m_info));
+				chunk = &m_blocks.emplace_back(std::make_unique<AnyVector>(m_info));
 			}
 			
 			auto index = size();
 			
 			// チャンクに要素を追加
 			(*chunk)->push_back();
+
+			m_usage++;
 			
 			return index;
 		}
 
 		void init(size_t index) {
 			auto ptr = at(index);
-			m_info.destroyPlaced(ptr);
-			m_constructor->placedInvoker(ptr, {});
+			m_destructor(ptr);
+			m_constructor(ptr, {});
 		}
 
 		s32 size() const {
-			return (m_chunks.size() - 1) * m_span + m_chunks.back()->size();
+			return (m_blocks.size() - 1) * m_span + m_blocks.back()->size();
 		}
 
 		void* at(size_t index) {
-			return m_chunks.at(index / m_span)->at(index % m_span);
+			return m_blocks.at(index / m_span)->at(index % m_span);
 		}
 		const void* at(size_t index) const {
-			return m_chunks.at(index / m_span)->at(index % m_span);
+			return m_blocks.at(index / m_span)->at(index % m_span);
 		}
 
 		template<class T>
@@ -225,9 +223,12 @@ namespace ob::engine2 {
 
 	private:
 		const TypeInfo& m_info;
-		Vector<UPtr<AnyVector>> m_chunks;
+		Vector<UPtr<AnyVector>> m_blocks;
+		size_t m_usage;
+		size_t m_stride;
 		size_t m_span;
-		const ConstructorInfo* m_constructor;
+		PlacedConstructorInvoker m_constructor;
+		PlacedDestructorInvoker m_destructor;
 	};
 
 
@@ -239,7 +240,7 @@ namespace ob::engine2 {
 		{
 			for (auto& type : archetype) {
 				if (auto info = TypeInfo::Find(type)) {
-					m_chunks.emplace(info->type, *info);
+					m_containers.emplace(info->type, *info);
 				}
 				else {
 					throw Exception(Format("{}をリフレクション登録してください", type.name()));
@@ -251,28 +252,32 @@ namespace ob::engine2 {
 
 			if (m_free.empty()) {
 				s32 index = 0;
-				for (auto& [type, chunk] : m_chunks) {
+				for (auto& [type, chunk] : m_containers) {
 					index = chunk.size();
 					chunk.push_back();
 				}
+				m_used.push_back(true);
 				return index;
 			}
 
 			auto index = m_free.back();
+			m_used[index] = true;
+
 			return index;
 		}
 		void destroy(s32 index) {
 			// TODO 範囲外チェック
 			// TODO 二重開放チェック
 			m_free.push_back(index);
-			for (auto& [type, chunk] : m_chunks) {
+			m_used[index] = false;
+			for (auto& [type, chunk] : m_containers) {
 				chunk.init(index);
 			}
 		}
 
 		Any get(Type type, u32 index) {
-			auto itr = m_chunks.find(type);
-			if (itr == m_chunks.end()) return {};
+			auto itr = m_containers.find(type);
+			if (itr == m_containers.end()) return {};
 
 			auto& chunk = itr->second;
 			return Any(chunk.info(), chunk.at(index));
@@ -284,38 +289,35 @@ namespace ob::engine2 {
 		}
 
 		template<class... TComponents>
-		void visit(Func<void(TComponents...)> func) {
+		void visit(Func<void(TComponents&...)>& func) {
+			visit_impl(func, std::make_index_sequence<sizeof...(TComponents)>());
+		}
 
-			// TODO 型チェック
-			auto types = { Type::Get<TComponents>()... };
+	private:
 
-			ComponentContainer* chunks[] = { &m_chunks[Type::Get<TComponents>()]... };
+		template<class... TComponents, size_t ...I>
+		void visit_impl(Func<void(TComponents&...)>& func, std::index_sequence<I...>) {
 
-			size_t size = 0;
-			for (s32 i = 0; i < size; ++i) {
-				Tuple<TComponents&...> components{
-					(*reinterpret_cast<TComponents*>(m_chunks[Type::Get<TComponents>()].at(i))) ...
-				};
-				std::apply(func, components);
+			ComponentContainer* chunks[] = { (&m_containers.find(Type::Get<TComponents>())->second) ... };
+
+			for (s32 i = 0; i < m_used.size(); ++i) {
+				func((*reinterpret_cast<TComponents*>(chunks[I]->at(i))) ...);
 			}
 
 		}
 
 	private:
-		struct ChunkData {
-			const TypeInfo* info;
-			Blob blob;
-		};
-	private:
 		Archetype m_archetype;
-
-		HashMap<Type, ComponentContainer> m_chunks;
+		HashMap<Type, ComponentContainer> m_containers;
+		Vector<bool> m_used;
 		Vector<s32> m_free;
-
 	};
 
 
 	class ECS {
+	public:
+		template<class... TCompoennts>
+		struct is_all_component : std::conjunction<std::is_base_of<Component, TCompoennts>...> {};
 	public:
 
 		//! @brief Archetypeを指定して新しいEntityを生成
@@ -325,6 +327,10 @@ namespace ob::engine2 {
 				auto index = m_indices.size();
 				m_indices[archetype] = index;
 				m_archetypes[index] = archetype;
+
+				for (auto& type : archetype) {
+					m_availables[type].set(index, true);
+				}
 			}
 
 			Chunk& chunk = itr->second;
@@ -336,7 +342,7 @@ namespace ob::engine2 {
 			return entity;
 		}
 		template<class... TComponents>
-		Entity create() {
+		auto create() -> std::enable_if_t<is_all_component<TComponents...>::value,Entity> {
 			return create(Archetype::Create<TComponents...>());
 		}
 		Entity create(StringView archetype) {
@@ -349,7 +355,7 @@ namespace ob::engine2 {
 			return {}; // TODO
 		}
 		template<class... TComponents>
-		Entity map(Entity from) {
+		auto map(Entity from) -> std::enable_if_t<is_all_component<TComponents...>::value, Entity> {
 			return map(Archetype::Create<TComponents...>(), from);
 		}
 		Entity map(StringView archetype, Entity from) {
@@ -363,7 +369,7 @@ namespace ob::engine2 {
 		//! @brief Archetypeを指定してEntityを複製
 		//! @details 不足するComponentはデフォルトコンストラクタで生成され、余分なComponentは破棄される。
 		template<class... TComponents>
-		Entity duplicateWith(Entity from) {
+		auto duplicateWith(Entity from) -> std::enable_if_t<is_all_component<TComponents...>::value, Entity> {
 			// TODO
 			return {};// create(Archetype::Create<TComponents...>());
 		}
@@ -403,35 +409,48 @@ namespace ob::engine2 {
 		}
 
 
-
-
-		template<class TSystem, class... Args>
-		void update() {
-			//TSystem::Update();
-		}
-
 		template<class... TComponents>
-		void update2(Func<void(TComponents&...)> func) {
+		void update(Func<void(TComponents&...)>& func) {
+			if (!func)return;
+
 			// 全てのComponentのArchetypeの論理積を取る
 
 			Type types[] = { Type::Get<TComponents>()... };
+			
+			ArchetypeMask mask;
+			mask.flip();
+			
+			// 全てのComponentを持つチャンクを抽出
+			// NOTE 抽出は毎フレームしなくてよくはないか？
+			for (auto& type : types) {
+				mask &= m_availables[type];
+			}
+			
+			// 型チェックはChunk * Archetype.size()回発生する
+			for (s32 i = 0; i < m_indices.size(); ++i) {
+				if (mask.test(i)) {
+					
+					auto& archetype = m_archetypes[i];
+					
+					auto itr = m_chunks.find(archetype);
+					if (itr == m_chunks.end()) continue;
+					auto& chunk = itr->second;
 
-			//ArchetypeMask mask;
-			//mask.flip();
-			//
-			//// 全てのComponentを持つチャンクを抽出
-			//// NOTE 抽出は毎フレームしなくてよくはないか？
-			//for (auto& type : types) {
-			//	//mask &= m_availables[type]
-			//}
-			//
-			//// 型チェックはChunk * Archetype.size()回発生する
-			//for (s32 i = 0; i < mask.size(); ++i) {
-			//	if (mask[i]) {
-			//		m_chunks.at(i);
-			//	}
-			//}
+					chunk.visit<TComponents...>(func);
+				}
+			}
 
+		}
+
+		template<class... TComponents,class... Args>
+		void update(void(*func)(TComponents&...),Args&&... args) {
+			Func<void(TComponents&...)> f(func);
+			update(f);
+		}
+
+		template<class TSystem,class... Args>
+		void update(Args&&... args) {
+			update(TSystem::Update,args...);
 		}
 
 		void merge(ECS& ecs) {
@@ -440,123 +459,15 @@ namespace ob::engine2 {
 		}
 	private:
 
-		using ArchetypeMask = BitSet<256>;
-
-		HashMap<Type, ArchetypeMask> m_availables;
+		using ArchetypeMask = BitSet<1024>;
 
 		HashMap<Archetype, Chunk> m_chunks;
 		HashMap<Archetype, s32> m_indices;
 		HashMap<s32, Archetype> m_archetypes;
+		HashMap<Type, ArchetypeMask> m_availables;
 	};
 
 
-
-
-
-
-
-
-
-
-
-
-
-	struct TransformComponent {
-		Transform local;
-		Transform world;
-		Entity    parent;
-	};
-	struct ModelComponent {
-		Transform local;
-		Transform world;
-		Entity    parent;
-	};
-
-	struct RigidbodyComponent {
-		Vec3 velocity;
-	};
-
-	struct CollisionComponent {
-
-	};
-
-	struct CameraComponent {
-		f32 fov;
-		Range clip;
-	};
-
-	struct LigthtComponent {
-		s32 type;
-		Color color;
-		f32 intensity;
-		f32 range;
-	};
-
-	struct BehaviorComponent {
-
-	};
-
-
-	class RigidbodySystem {
-	public:
-		static void Update(TransformComponent& transform, RigidbodyComponent& rigidbody) {
-			transform.local.position += rigidbody.velocity;
-		}
-	};
-
-	class TransformSystem {
-	public:
-		static void Update(TransformComponent& transform) {
-			ECS ecs;
-
-			auto& parent = ecs.get<TransformComponent>(transform.parent).world;
-
-
-			transform.parent;
-			transform.world = parent * transform.local;
-		}
-	};
-	class TransformStartupSystem {
-	public:
-		static void Update(TransformComponent& transform) {
-		}
-	};
-
-	void sample() {
-
-		ECS ecs;
-
-		auto entity0 = ecs.create<TransformComponent>();
-		auto entity1 = ecs.create<TransformComponent, RigidbodyComponent>();
-		auto entity2 = ecs.create("TransformComponent,RigidbodyComponent");
-
-		ecs.get<TransformComponent>(entity0);
-		ecs.get("TransformComponent", entity0).as<TransformComponent>();
-
-		ecs.destroy(entity1);
-
-		// 元EntityからAdd/RemoveしてComponentを再生成
-		auto entity3 = ecs.map<TransformComponent>(entity0);
-
-		// 元EntityからAdd/RemoveしてComponentを複製
-		auto entity4 = ecs.duplicate(entity0);
-		auto entity5 = ecs.duplicateWith<TransformComponent>(entity0);
-
-
-
-		ecs.update<RigidbodySystem>();
-		ecs.update<TransformSystem>();
-
-
-		ECS ecs2;
-		// 非同期更新
-		{
-			ecs2.update<TransformStartupSystem>();
-		}
-
-		ecs.merge(ecs2);
-
-	}
 
 }
 

@@ -15,9 +15,49 @@
 		</Expand>
 	</Type>-->
 
-	<!--YesNo-->
+	<!--Archetype-->
 	<Type Name="ob::engine2::Archetype">
-		<DisplayString>{m_types.m_size} types</DisplayString>
+		<DisplayString Condition="m_types.m_size==0">empty</DisplayString>
+		<DisplayString Condition="m_types.m_size==1">{m_types[0]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==2">{m_types[0]},{m_types[1]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==3">{m_types[0]},{m_types[1]},{m_types[2]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==4">{m_types[0]},{m_types[1]},{m_types[2]},{m_types[3]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==5">{m_types[0]},{m_types[1]},{m_types[2]},{m_types[3]},{m_types[4]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==6">{m_types[0]},{m_types[1]},{m_types[2]},{m_types[3]},{m_types[4]},{m_types[5]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==7">{m_types[0]},{m_types[1]},{m_types[2]},{m_types[3]},{m_types[4]},{m_types[5]},{m_types[6]}</DisplayString>
+		<DisplayString Condition="m_types.m_size==8">{m_types[0]},{m_types[1]},{m_types[2]},{m_types[3]},{m_types[4]},{m_types[5]},{m_types[6]},{m_types[7]}</DisplayString>
 	</Type>
-	
+
+	<!--Chunk-->
+	<Type Name="ob::engine2::Chunk">
+		<DisplayString>count={m_used.size()-m_free.size()}, capacity={m_used.size()}</DisplayString>
+		<Expand>
+			<Item Name="containers">m_containers</Item>
+		</Expand>
+	</Type>
+
+	<!--AnyVector-->
+	<Type Name="ob::engine2::AnyVector">
+		<DisplayString>{m_info->type}</DisplayString>
+		<Expand>
+			<Item Name="[size]">m_size</Item>
+			<Item Name="[capacity]">m_capacity</Item>
+			<IndexListItems>
+				<Size>m_size</Size>
+				<ValueNode>*((Component*)((char*)(m_components)+ m_stride * $i))</ValueNode>
+			</IndexListItems>
+		</Expand>
+	</Type>
+
+	<!--ComponentContainer-->
+	<Type Name="ob::engine2::ComponentContainer">
+		<DisplayString>block={m_blocks.size()}</DisplayString>
+		<Expand>
+			<IndexListItems>
+				<Size>m_usage</Size>
+				<ValueNode>*(Component*)((char*)(m_blocks[$i/m_span]->m_components) + m_stride * ($i%m_span))</ValueNode>
+			</IndexListItems>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>
