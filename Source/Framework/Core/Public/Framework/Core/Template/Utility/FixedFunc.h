@@ -37,7 +37,7 @@ namespace ob::core {
 		}
 
 		//! @brief ムーブコンストラクタ 
-		FixedFunc(FixedFunc&& other) {
+		FixedFunc(FixedFunc&& other) noexcept {
 			if (other.m_callable) {
 				other.m_callable->clone(m_buffer, &m_callable);
 				other.reset();
@@ -59,7 +59,7 @@ namespace ob::core {
 		}
 
 		//! @brief ムーブ代入演算子 
-		FixedFunc& operator=(FixedFunc&& other) {
+		FixedFunc& operator=(FixedFunc&& other) noexcept{
 			if (&other == this)
 				return *this;
 

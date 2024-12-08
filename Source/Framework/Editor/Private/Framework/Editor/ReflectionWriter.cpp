@@ -5,11 +5,10 @@
 //***********************************************************
 #pragma once
 #include <Framework/Editor/ReflectionWriter.h>
-#include <Framework/Editor/ReflectionWriter.h>
 
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <fstream>
-#pragma warning(push : 0)
+#pragma warning(push,0)
 #include <nlohmann/json.hpp>
 #pragma warning(pop)
 
