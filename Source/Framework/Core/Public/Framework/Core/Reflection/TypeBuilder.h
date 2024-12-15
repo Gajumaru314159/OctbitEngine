@@ -570,12 +570,12 @@ namespace ob::core {
 					return Any((std::remove_const_t<Any&>(owner).as<T>().*(getter))());
 				}
 			};
-			info.setter = [=](Any& owner,const Any& value) {
-				// 適切な実装ではないが、setterとgetterが同じシグネチャならgetterのみとして扱う
-				if constexpr (!std::is_same<F1, F2>::value) {
+			if constexpr (!std::is_same<F1, F2>::value) {
+				info.setter = [=](Any& owner,const Any& value) {
+					// 適切な実装ではないが、setterとgetterが同じシグネチャならgetterのみとして扱う
 					(owner.as<T>().*(setter))(value.as<remove_cvr_t<return_type>>());
-				}
-			};
+				};
+			}
 			return info;
 		}
 
