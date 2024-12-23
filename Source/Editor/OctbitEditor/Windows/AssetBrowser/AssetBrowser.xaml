@@ -10,7 +10,7 @@
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              DataContextChanged="UserControl_DataContextChanged"
              Focusable="True"
-             FocusManager.FocusedElement="{Binding ElementName=Root}"
+             FocusManager.FocusedElement="{Binding ElementName=_tree}"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
              mc:Ignorable="d" 

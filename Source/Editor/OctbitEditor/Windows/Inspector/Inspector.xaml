@@ -10,6 +10,7 @@
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
              xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             FocusManager.FocusedElement="{Binding ElementName=_addComponentButton}"
              Background="{DynamicResource Background}"             
              d:DataContext="{d:DesignInstance local:InspectorVM}"
              mc:Ignorable="d" 
@@ -27,7 +28,7 @@
 
         <base:SearchBox TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
 
-        <Button TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
+        <Button x:Name="_addComponentButton" TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Transform"/>

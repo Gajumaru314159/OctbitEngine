@@ -7,6 +7,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             FocusManager.FocusedElement="{Binding ElementName=_logList}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:LogListVM}">
@@ -63,6 +64,7 @@
                 <RowDefinition Height="1*" MinHeight="10"/>
             </Grid.RowDefinitions>
             <ListBox 
+                x:Name="_logList"
                 TabIndex="6"
                 ItemsSource="{Binding FilteredItems}" 
                 SelectedItem="{Binding SelectedLogItem.Value}" 

@@ -11,6 +11,7 @@
              xmlns:ms="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              x:Name="Root"
              Focusable="True"
+             FocusManager.FocusedElement="{Binding ElementName=_tree}"
              Foreground="{DynamicResource Foreground}"
              Background="{DynamicResource Background}"
              DataContextChanged="OnDataContextChanged"

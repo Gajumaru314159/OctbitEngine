@@ -8,6 +8,8 @@
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
              Background="{DynamicResource MenuBackground}"
+             Focusable="True"
+             FocusManager.FocusedElement="{Binding ElementName=_playButton}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:ViewportVM}">
@@ -16,6 +18,7 @@
         <Style x:Key="Spacer" TargetType="Control">
             <Setter Property="Width" Value="1"/>
             <Setter Property="Height" Value="1"/>
+            <Setter Property="Focusable" Value="False"/>
         </Style>
     </UserControl.Resources>
 
@@ -90,7 +93,7 @@
 
             <!--再生-->
             <ItemsControl Visibility="{Binding PlayIsEnabled.Value,Converter={StaticResource BoolToVisibility}}">
-                <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}">
+                <ToggleButton ToolTip="Play (Ctrl+P)" IsChecked="{Binding IsPlaying.Value}" x:Name="_playButton">
                     <ContentControl Style="{DynamicResource Play}"/>
                 </ToggleButton>
                 <Control Style="{StaticResource Spacer}"/>
