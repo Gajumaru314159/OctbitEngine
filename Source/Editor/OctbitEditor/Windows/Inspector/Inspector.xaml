@@ -24,9 +24,14 @@
         </ContextMenu>
     </UserControl.Resources>
 
+    <i:Interaction.Behaviors>
+        <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
+    </i:Interaction.Behaviors>
+
     <DockPanel Grid.IsSharedSizeScope="True">
 
-        <base:SearchBox TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
+        <TextBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
+        <!--<base:SearchBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>-->
 
         <Button x:Name="_addComponentButton" TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
             <Button.ContextMenu>
