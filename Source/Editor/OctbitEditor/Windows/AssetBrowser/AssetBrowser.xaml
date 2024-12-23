@@ -56,6 +56,20 @@
             <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value}"/>
             <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
         </Style>
+
+        <Style x:Key="AssetListBoxBase" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+            <Setter Property="ContextMenu" Value="{StaticResource ContextMenu}"/>
+            <Setter Property="SelectionMode" Value="Extended"/>
+            <Setter Property="TextSearch.TextPath" Value="Name"/>
+            <Setter Property="IsTextSearchEnabled" Value="True"/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <EventSetter Event="Drop" Handler="Grid_Drop"/>
+            <EventSetter Event="DragOver" Handler="ListBox_DragOver"/>
+        </Style>
+        <Style x:Key="AssetListViewBase" TargetType="ListView" BasedOn="{StaticResource AssetListBoxBase}">
+            
+        </Style>
         
     </UserControl.Resources>
 
@@ -135,6 +149,12 @@
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </ms:MultiSelectTreeView.ItemTemplate>
+                <ms:MultiSelectTreeView.ItemContainerStyle>
+                    <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
+                    </Style>
+                </ms:MultiSelectTreeView.ItemContainerStyle>
             </ms:MultiSelectTreeView>
 
             <!--ListView-->
@@ -151,9 +171,9 @@
                 <!--コンテンツ-->
                 <Grid>
                     <!--リストビュー-->
-                    <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}" SelectionMode="Extended"
+                    <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}"
                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=List}"
-                             AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver">
+                             Style="{StaticResource  AssetListBoxBase}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
@@ -171,16 +191,15 @@
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                 <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
+                                <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListBox>
 
                     <!--アイコンビュー-->
-                    <ListBox Padding="1" ItemsSource="{Binding SelectedFolder.Value.Children}" ContextMenu="{StaticResource ContextMenu}"  
-                             SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    <ListBox ItemsSource="{Binding SelectedFolder.Value.Children}" 
                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Icon}"
-                             AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
-                             >
+                             Style="{StaticResource  AssetListBoxBase}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
@@ -193,6 +212,7 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
                                 <Setter Property="Margin" Value="4"/>
                                 <Setter Property="IsSelected" Value="{Binding IsSelectedInList.Value}"/>
                                 <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Cycle"/>
@@ -246,10 +266,9 @@
                     </ListBox>
 
                     <!--詳細ビュー-->
-                    <ListView x:Name="_list" ItemsSource="{Binding SelectedFolder.Value.Children}" SelectionMode="Extended" ContextMenu="{StaticResource ContextMenu}" 
-                             Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Detail}"
-                              AllowDrop="True" Drop="Grid_Drop" DragOver="ListBox_DragOver"
-                              >
+                    <ListView x:Name="_list" ItemsSource="{Binding SelectedFolder.Value.Children}"
+                              Visibility="{Binding SelectedListViewType.Value,Converter={StaticResource EnumToVisibility},ConverterParameter=Detail}"
+                              Style="{StaticResource AssetListViewBase}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnSelectionChangedInList"/>
