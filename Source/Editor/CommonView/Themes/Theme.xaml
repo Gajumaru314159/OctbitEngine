@@ -18,7 +18,7 @@
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Rectangle Margin="0" SnapsToDevicePixels="true" Stroke="{DynamicResource Focus}" StrokeThickness="1" StrokeDashArray="2 2"/>
+                    <Rectangle SnapsToDevicePixels="True" Stroke="{DynamicResource Focus}" StrokeThickness="1" RadiusX="2" RadiusY="2"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
