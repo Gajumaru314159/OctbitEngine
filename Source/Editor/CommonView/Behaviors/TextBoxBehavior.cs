@@ -11,6 +11,7 @@ namespace CommonView.Behaviors
         private static readonly DependencyProperty s_changeFocusWhenEnterKeyPressedProperty
             = DependencyProperty.Register(nameof(ChangeFocusWhenEnterKeyPressed), typeof(bool), typeof(EnterKeyBehavior), new PropertyMetadata(true));
 
+        private IInputElement? _previousFocusedElement;
         public bool ChangeFocusWhenEnterKeyPressed
         {
             get => (bool)GetValue(s_changeFocusWhenEnterKeyPressedProperty);
@@ -20,6 +21,14 @@ namespace CommonView.Behaviors
         {
             base.OnAttached();
             AssociatedObject.PreviewKeyDown += OnPreViewKeyDown;
+            AssociatedObject.GotKeyboardFocus +=OnGotKeyboardFocus;
+        }
+
+        protected override void OnDetaching()
+        {
+            base.OnDetaching();
+            AssociatedObject.PreviewKeyDown -= OnPreViewKeyDown;
+            AssociatedObject.GotKeyboardFocus -=OnGotKeyboardFocus;
         }
 
         private void OnPreViewKeyDown(object? sender, KeyEventArgs e)
@@ -33,10 +42,19 @@ namespace CommonView.Behaviors
                 {
                     // var direction = (Keyboard.Modifiers == ModifierKeys.Shift) ? FocusNavigationDirection.Previous : FocusNavigationDirection.Next;
                     // AssociatedObject.MoveFocus(new TraversalRequest(direction));
-                    Keyboard.ClearFocus();
+                    Keyboard.ClearFocus(); 
+                    
+                    if (_previousFocusedElement != null)
+                    {
+                        (_previousFocusedElement as UIElement)?.Focus();
+                    }
                 }
             }
         }
-        
+        private void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            _previousFocusedElement = e.OldFocus;
+        }
+
     }
 }
