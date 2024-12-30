@@ -57,7 +57,7 @@ namespace ob::core {
 		//! @brief  Type取得
 		template<class T>
 		static constexpr Type Get() {
-			auto name = internal::type_id::GetTypeName<std::remove_cv_t<std::remove_reference_t<T>>>();
+			constexpr auto name = internal::type_id::GetTypeName<std::remove_cv_t<std::remove_reference_t<T>>>();
 			return name;
 		}
 		//! @brief  Type取得
