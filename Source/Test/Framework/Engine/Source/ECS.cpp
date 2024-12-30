@@ -65,7 +65,6 @@ TEST(ECS, Construct) {
 	TypeInfoManager manager;
 
 	ECS ecs;
-	std::is_base_of<Component, TransformComponent>::value;
 
 	auto entity0 = ecs.create<TransformComponent>();
 	auto entity1 = ecs.create<TransformComponent, RigidbodyComponent>();
@@ -101,12 +100,13 @@ TEST(ECS, Many) {
 	TypeInfoManager manager;
 
 	ECS ecs;
+	Entity entity;
 	for (s32 i = 0; i < 10000; ++i) {
 		ecs.create<TransformComponent>();
-		ecs.create<TransformComponent, RigidbodyComponent>();
+		entity = ecs.create<TransformComponent, RigidbodyComponent>();
 		ecs.create("RigidbodyComponent");
 	}
-
+	EntityHandle handle(ecs,entity);
 	{
 		s32 count = 0;
 		Func<void(TransformComponent&)> func = [&](auto&) { count++; };
@@ -128,3 +128,39 @@ TEST(ECS, Many) {
 		EXPECT_EQ(count, 10000);
 	}
 }
+
+TEST(ECS, Iterator) {
+	TypeInfoManager manager;
+
+	ECS ecs;
+
+	//for (auto [entity, transform] : ecs.view<TransformComponent>()) {
+	//	transform.local.position.set(1, 2, 3);
+	//}	
+
+}
+
+/*
+TEST(ECS, Map) {
+
+	TypeInfoManager manager;
+
+	const auto T = Archetype::Create<TransformComponent>();
+	const auto TR = Archetype::Create<TransformComponent, RigidbodyComponent>();
+	const auto R = Archetype::Create<RigidbodyComponent>();
+
+	ECS ecs;
+	Entity entity = ecs.create<TransformComponent>();
+
+	EXPECT_EQ(ecs.archetype(entity), T);
+
+	entity = ecs.map<TransformComponent, RigidbodyComponent>(entity);
+
+	EXPECT_EQ(ecs.archetype(entity), TR);
+
+	entity = ecs.map<RigidbodyComponent>(entity);
+
+	EXPECT_EQ(ecs.archetype(entity), R);
+
+}
+*/

@@ -18,18 +18,18 @@ namespace ob::engine2 {
 	public:
 		//! @brief TypeのリストからArchetypeを生成
 		template<class... TComponents>
-		static Archetype Create() {
-			Archetype archetype;
-			archetype.m_types = { Type::Get<TComponents>()... };
+		static constexpr Archetype Create() {
+			constexpr Type types[]{ Type::Get<TComponents>()... };
+			constexpr Archetype archetype(types);
 			return archetype;
 		}
 	public:
 
 		//! @brief 空のArchetypeを生成
-		Archetype() = default;
+		constexpr Archetype() = default;
 
 		//! @brief Type リストからArchetypeを生成 
-		Archetype(Span<Type> types) {
+		constexpr Archetype(Span<const Type> types) {
 			for (auto& type : types) {
 				m_types.push_back(type);
 			}
@@ -47,22 +47,22 @@ namespace ob::engine2 {
 		}
 
 		//! @brief Typeの開始イテレータ 
-		auto begin() const {
+		constexpr auto begin() const {
 			return m_types.begin();
 		}
 
 		//! @brief Typeの終了イテレータ 
-		auto end() const {
+		constexpr auto end() const {
 			return m_types.end();
 		}
 
 		//! @brief 等価判定
-		bool operator==(const Archetype& other) const {
+		constexpr bool operator==(const Archetype& other) const {
 			return m_types == other.m_types;
 		}
 
 		//! @brief 否等価判定
-		bool operator!=(const Archetype& other) const {
+		constexpr bool operator!=(const Archetype& other) const {
 			return m_types != other.m_types;
 		}
 
@@ -192,8 +192,9 @@ namespace ob::engine2 {
 
 		void init(size_t index) {
 			auto ptr = at(index);
+			constexpr Span<Any> args = {};
 			m_destructor(ptr);
-			m_constructor(ptr, {});
+			m_constructor(ptr, args);
 		}
 
 		s32 size() const {
@@ -285,7 +286,8 @@ namespace ob::engine2 {
 
 		template<class T>
 		T& get(u32 index) {
-			return get(Type::Get<T>(), index);
+			constexpr Type type = Type::Get<T>()
+			return get(type, index);
 		}
 
 		template<class... TComponents>
@@ -298,10 +300,14 @@ namespace ob::engine2 {
 		template<class... TComponents, size_t ...I>
 		void visit_impl(Func<void(TComponents&...)>& func, std::index_sequence<I...>) {
 
-			ComponentContainer* chunks[] = { (&m_containers.find(Type::Get<TComponents>())->second) ... };
+			constexpr Type types[] = {Type::Get<TComponents>()...};
+			ComponentContainer* chunks[sizeof...(TComponents)];
+			for (s32 i = 0; i < sizeof...(TComponents);++i) chunks[i] = &(m_containers.find(types[i])->second);
 
 			for (s32 i = 0; i < m_used.size(); ++i) {
-				func((*reinterpret_cast<TComponents*>(chunks[I]->at(i))) ...);
+				if (m_used[i]) {
+					func((*reinterpret_cast<TComponents*>(chunks[I]->at(i))) ...);
+				}
 			}
 
 		}
@@ -313,6 +319,75 @@ namespace ob::engine2 {
 		Vector<s32> m_free;
 	};
 
+
+	/*
+	template<class... TComponents>
+	class ECSView {
+	public:
+		static constexpr N = sizeof...(TComponents);
+	public:
+
+		class iterator {
+		public:
+			iterator(ComponentContainer** chunks,size_t index)
+				: m_chunks(chunks)
+				, m_index(index)
+			{
+			}
+			iterator& operator++() {
+				m_index++;
+				return *this;
+			}
+			iterator& operator+=(size_t n) {
+				m_index += n;
+				return *this;
+			}
+			iterator& operator--() {
+				m_index--;
+				return *this;
+			}
+			iterator& operator-=(size_t n) {
+				m_index -= n;
+				return *this;
+			}
+			bool operator!=(const iterator& other) const {
+				return m_index != other.m_index;
+			}
+			Tuple<TComponents&...> operator*() {
+				return get<TComponents...>(std::make_index_sequence<sizeof...(TComponents)>());
+			}
+		private:
+			template<class... Ts, size_t ...I>
+			Tuple<Ts&...> get(std::index_sequence<I...>) {
+				return { (*reinterpret_cast<Ts*>(m_chunks[I]->at(i))) ... };
+			}
+		private:
+			ComponentContainer** m_chunks;
+			s32 m_index;
+		};
+
+	public:
+
+		ECSView(ECS& ecs) {
+			constexpr Type types[] = { Type::Get<TComponents>()... };
+			for (s32 i = 0; i < sizeof...(TComponents); ++i) m_chunks[i] = &(ecs.m_containers.find(types[i])->second);
+			m_size = m_chunks[i]->m_used.size();
+		}
+
+		iterator begin() {
+			return iterator(m_chunks,0);
+		}
+		iterator begin() {
+			return iterator(m_chunks,m_size);
+		}
+
+	private:
+		ECS& m_ecs;
+		Archetype m_archetype;
+		ComponentContainer* m_chunks[sizeof...(TComponents)];
+		size_t m_size;
+	};
+	*/
 
 	class ECS {
 	public:
@@ -343,15 +418,27 @@ namespace ob::engine2 {
 		}
 		template<class... TComponents>
 		auto create() -> std::enable_if_t<is_all_component<TComponents...>::value,Entity> {
-			return create(Archetype::Create<TComponents...>());
+			constexpr auto archetype = Archetype::Create<TComponents...>();
+			return create(archetype);
 		}
 		Entity create(StringView archetype) {
 			return create(Archetype(archetype));
 		}
 
+		Archetype archetype(Entity entity)const {
+			auto itr = m_archetypes.find(entity.archetype);
+			if (itr == m_archetypes.end()) return {};
+			auto& archetype = itr->second;
+			return itr->second;
+		}
+
 		//! @brief Archetypeを変更して新しいEntityを生成
 		//! @details 元のEntityは破棄される
 		Entity map(Archetype archetype, Entity from) {
+
+			destroy(from);
+			
+
 			return {}; // TODO
 		}
 		template<class... TComponents>
@@ -405,7 +492,8 @@ namespace ob::engine2 {
 		}
 		template<class TComponent>
 		TComponent& get(Entity entity) {
-			return get(Type::Get<TComponent>(), entity).as<TComponent>();
+			constexpr auto type = Type::Get<TComponent>();
+			return get(type, entity).as<TComponent>();
 		}
 
 
@@ -415,7 +503,7 @@ namespace ob::engine2 {
 
 			// 全てのComponentのArchetypeの論理積を取る
 
-			Type types[] = { Type::Get<TComponents>()... };
+			constexpr Type types[] = { Type::Get<TComponents>()... };
 			
 			ArchetypeMask mask;
 			mask.flip();
@@ -457,6 +545,22 @@ namespace ob::engine2 {
 			// 他のECSのComponentを自分のECSに移す
 			// Entityのインデックスを再割り当てしないといけない？
 		}
+
+
+
+		template<class... TComponents>
+		auto view() -> std::enable_if_t<is_all_component<TComponents...>::value, Vector<std::tuple<Entity, TComponents&...>>> {
+			Vector<std::tuple<Entity, TComponents&...>> result;
+			constexpr auto archetype = Archetype::Create<TComponents...>();
+			auto itr = m_chunks.find(archetype);
+			if (itr == m_chunks.end()) return result;
+			auto& chunk = itr->second;
+			for (s32 i = 0; i < chunk.size(); ++i) {
+				result.emplace_back(Entity{ i, m_indices[archetype], 0 }, chunk.at<TComponents>(i)...);
+			}
+			return result;
+		}
+
 	private:
 
 		using ArchetypeMask = BitSet<1024>;
@@ -465,6 +569,17 @@ namespace ob::engine2 {
 		HashMap<Archetype, s32> m_indices;
 		HashMap<s32, Archetype> m_archetypes;
 		HashMap<Type, ArchetypeMask> m_availables;
+	};
+
+	class EntityHandle {
+	public:
+		EntityHandle() = default;
+		EntityHandle(ECS& ecs,Entity entity)
+			: m_ecs(&ecs),m_entity(entity)
+		{ }
+	private:
+		ECS* m_ecs = nullptr;
+		Entity m_entity{ 0 };
 	};
 
 
