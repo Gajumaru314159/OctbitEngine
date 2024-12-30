@@ -73,7 +73,7 @@ namespace ob::core {
         void clear()noexcept;                                                           // 登録したイベントをすべて削除する
         void remove(Handle& handle);                                                    // イベントを削除する
 
-        void invoke(Args&...)const;                                                     // イベントを呼び出す
+        void invoke(Args...)const;                                                      // イベントを呼び出す
         bool empty()const noexcept;                                                     // イベントが登録さえていないか判定する
         size_t size()const noexcept;                                                    // 登録されているイベントの数を取得する
 
@@ -180,7 +180,7 @@ namespace ob::core {
     //! 
     //! @param ...args 呼び出し引数
     template<typename... Args>
-    void EventNotifier<Args...>::invoke(Args&... args)const {
+    void EventNotifier<Args...>::invoke(Args... args)const {
         ScopeLock lock(m_mutex);
         for (auto& e : m_handleList) {
             if (e) {
