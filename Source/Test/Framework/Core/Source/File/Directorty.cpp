@@ -177,7 +177,8 @@ TEST(DirectoryTest, Contents)
 {
     GTEST_FLAG_SET(death_test_style, "threadsafe");
     auto path = "unit_test";
-    
+
+    Directory::Delete(path);
     Directory::Create(path);
 
     for (s32 i = 0; i < 10; ++i) {
