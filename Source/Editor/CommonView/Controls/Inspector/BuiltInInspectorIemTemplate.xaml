@@ -27,6 +27,18 @@
         <ctrl:EnumComboBox IsTabStop="False" Value="{Binding Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
     </DataTemplate>
 
+    <DataTemplate x:Key="Vector2InspectorControl" DataType="ctrl:InspectableProperty">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+        </Grid>
+    </DataTemplate>
+
+
     <DataTemplate x:Key="Vector3InspectorControl" DataType="ctrl:InspectableProperty">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -38,6 +50,61 @@
             <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
             <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
         </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="Vector4InspectorControl" DataType="ctrl:InspectableProperty">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="3" Text="{Binding Value.W}" Margin="1,0,0,0"/>
+        </Grid>
+    </DataTemplate>
+    
+
+    <DataTemplate x:Key="RotationInspectorControl" DataType="ctrl:InspectableProperty">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="QuaternionInspectorControl" DataType="ctrl:InspectableProperty">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+            <TextBox Grid.Column="3" Text="{Binding Value.W}" Margin="1,0,0,0"/>
+        </Grid>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="ColorInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Value.Hex}"/>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="UnknownInspectorControl" DataType="ctrl:InspectableProperty">
+        <TextBlock Text="{Binding Type.FullName}"/>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -21,6 +21,7 @@
 
     <i:Interaction.Behaviors>
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_addressBar}" InputGesture="Ctrl+L"/>
+        <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
     </i:Interaction.Behaviors>
 
     <UserControl.InputBindings>
@@ -127,7 +128,8 @@
                     <ContentControl Style="{StaticResource Reload}"/>
                 </Button>
 
-                <base:SearchBox Watermark="検索 (F3)" DockPanel.Dock="Right" TabIndex="8"/>
+                <base:SearchBox x:Name="_searchBox" Watermark="検索 (F3)" DockPanel.Dock="Right" Width="200" TabIndex="8"/>
+            
                 <ToggleButton Content="★" DockPanel.Dock="Right" TabIndex="7"/>
                 <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
                 <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
@@ -149,9 +151,10 @@
             </Grid.ColumnDefinitions>
 
             <!--TreeView-->
+            <!--SelectedItemのバインドはViewから-->
             <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
                 <ms:MultiSelectTreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="local:AssetBrowserItem" ItemsSource="{Binding Children}">
+                    <HierarchicalDataTemplate DataType="local:AssetBrowserItem" ItemsSource="{Binding ChildFolders.View}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
                             <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
@@ -161,6 +164,7 @@
                 <ms:MultiSelectTreeView.ItemContainerStyle>
                     <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value,Mode=TwoWay}"/>
                         <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
                     </Style>
                 </ms:MultiSelectTreeView.ItemContainerStyle>

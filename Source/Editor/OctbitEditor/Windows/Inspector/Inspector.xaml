@@ -30,8 +30,9 @@
 
     <DockPanel Grid.IsSharedSizeScope="True">
 
-        <TextBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>
-        <!--<base:SearchBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>-->
+        <!--<TextBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>-->
+        <base:SearchBox x:Name="_searchBox" Watermark="検索 (F3)" TabIndex="0" DockPanel.Dock="Top" Margin="1" Text="{Binding Filter.Value}"/>
+
 
         <Button x:Name="_addComponentButton" TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
             <Button.ContextMenu>
@@ -55,7 +56,9 @@
                         <ctrl:InspectorView ItemsSource="{Binding Inspectables}">
                             <ctrl:InspectorView.Label>
                                 <DockPanel>
-                                    <Border Background="Transparent" DockPanel.Dock="Right" ContextMenu="{StaticResource ContentContextMenu}">
+                                    <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"
+                                            Focusable="True" FocusVisualStyle="{StaticResource FocusVisual}" 
+                                            ContextMenu="{StaticResource ContentContextMenu}">
                                         <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
                                     </Border>
                                     <TextBlock Text="{Binding Name}"/>

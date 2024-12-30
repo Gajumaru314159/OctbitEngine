@@ -49,11 +49,11 @@ namespace CommonView.Controls
             {
                 return f.FindResource("BoolInspectorControl") as DataTemplate;
             }
-            if (p.Type == typeof(int))
+            if (p.Type == typeof(int) || p.Type == typeof(uint) || p.Type == typeof(short) || p.Type == typeof(ushort) || p.Type == typeof(sbyte) || p.Type == typeof(byte) || p.Type == typeof(long) || p.Type == typeof(ulong))
             {
                 return f.FindResource("IntInspectorControl") as DataTemplate;
             }
-            if (p.Type == typeof(float))
+            if (p.Type == typeof(float) || p.Type == typeof(double))
             {
                 return f.FindResource("FloatInspectorControl") as DataTemplate;
             }
@@ -61,15 +61,39 @@ namespace CommonView.Controls
             {
                 return f.FindResource("StringInspectorControl") as DataTemplate;
             }
+
+
+            
+            if (p.Type == typeof(Common.Math.Vector2))
+            {
+                return f.FindResource("Vector2InspectorControl") as DataTemplate;
+            }
             if (p.Type == typeof(Common.Math.Vector3))
             {
                 return f.FindResource("Vector3InspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Math.Vector4))
+            {
+                return f.FindResource("Vector4InspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Math.Rotation))
+            {
+                return f.FindResource("RotationInspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Math.Quaternion))
+            {
+                return f.FindResource("QuaternionInspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Graphics.Color))
+            {
+                return f.FindResource("ColorInspectorControl") as DataTemplate;
             }
             if (p.Type.IsEnum)
             {
                 return f.FindResource("EnumInspectorControl") as DataTemplate;
             }
-            return null;
+
+            return f.FindResource("UnknownInspectorControl") as DataTemplate;
         }
 
     }

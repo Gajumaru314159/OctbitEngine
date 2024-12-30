@@ -24,5 +24,9 @@ namespace CommonView
                 }
             }
         }
+
+        public static void OverrideMetadata<T>(this DependencyProperty self) {
+            self.OverrideMetadata(typeof(T), new FrameworkPropertyMetadata());
+        }
     }
 }

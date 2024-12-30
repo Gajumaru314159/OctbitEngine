@@ -1,4 +1,5 @@
-﻿using OctbitEngine.Asset;
+﻿using Common.Tree;
+using OctbitEngine.Asset;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -57,13 +58,17 @@ namespace OctbitEditor
             {
                 if (DataContext is AssetBrowserVM vm)
                 {
-                    vm.SelectedFolder.Value = folder;
+                    vm.SelectedItems.Clear();
+                    vm.SelectedItems.Add(folder);
+
+                    foreach (var item in folder.Ancestor<AssetBrowserItem>(i => i.Parent))
+                        item.IsExpanded.Value=true;
                 }
             }
             if (element.DataContext is AssetBrowserFileItem file)
             {
                 var editorType = AssetManager.Instance.FindEditorType(file.File.Asset.GetType());
-                if(editorType != null)
+                if (editorType != null)
                 {
                     var window = Activator.CreateInstance(editorType, [file.File]) as Window;
                     window?.Show();

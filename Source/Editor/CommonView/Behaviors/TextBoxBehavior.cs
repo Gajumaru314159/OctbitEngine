@@ -57,4 +57,34 @@ namespace CommonView.Behaviors
         }
 
     }
+
+    public class SelectAllOnFocusBehavior : Behavior<TextBox>
+    {
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus;
+            AssociatedObject.GotMouseCapture += OnGotMouseCapture;
+        }
+
+        protected override void OnDetaching()
+        {
+            base.OnDetaching();
+            AssociatedObject.GotKeyboardFocus -= OnGotKeyboardFocus;
+            AssociatedObject.GotMouseCapture -= OnGotMouseCapture;
+        }
+
+        private void OnGotKeyboardFocus(object sender, RoutedEventArgs e)
+        {
+            AssociatedObject.SelectAll();
+        }
+
+        private void OnGotMouseCapture(object sender, RoutedEventArgs e)
+        {
+            if (!AssociatedObject.IsKeyboardFocusWithin)
+            {
+                AssociatedObject.SelectAll();
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using Common.Log;
+﻿using Common.Generic;
+using Common.Log;
 using Common.Tree;
 using CommonView.Menu;
 using Livet;
@@ -8,6 +9,7 @@ using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -27,6 +29,8 @@ namespace OctbitEditor
 
         protected AssetBrowserItem()
         {
+            ChildFolders = new CollectionViewSource() { Source = Children };
+            ChildFolders.View.Filter = i => i is AssetBrowserFolderItem;
         }
 
         public AssetBrowserItem? Parent { get; set; } // TODO setを排除
@@ -38,6 +42,7 @@ namespace OctbitEditor
         public ReactiveProperty<bool> IsSelectedInList { get; } = new();
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
+        public CollectionViewSource ChildFolders { get; }
     }
     public class AssetBrowserFolderItem : AssetBrowserItem
     {
@@ -156,7 +161,7 @@ namespace OctbitEditor
 
             SelectedItems.CollectionChanged += (sender, e) =>
             {
-                if(e!=null && e.NewItems != null && 0 < e.NewItems.Count)
+                if(e?.NewItems != null && 0 < e.NewItems.Count)
                 {
                     // TODO より安全なアクセスにする
                     if (e.NewItems[0] is AssetBrowserFolderItem folder)

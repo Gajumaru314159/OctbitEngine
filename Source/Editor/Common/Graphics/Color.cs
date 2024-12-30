@@ -12,5 +12,7 @@ namespace Common.Graphics
         public float G { get; set; }
         public float B { get; set; }
         public float A { get; set; }
+
+        public string Hex => $"#{(int)(R * 255):X2}{(int)(G * 255):X2}{(int)(B * 255):X2}{(int)(A * 255):X2}";
     }
 }

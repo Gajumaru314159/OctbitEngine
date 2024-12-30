@@ -5,27 +5,18 @@
     xmlns:behavior="clr-namespace:CommonView.Behaviors"
     xmlns:local="clr-namespace:CommonView">
 
-    <Style TargetType="local:SearchBox">
-        <Setter Property="Background" Value="{DynamicResource Field}"/>
-        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Text" Value=""/>
-        <Setter Property="Margin" Value="1"/>
-        <Setter Property="Height" Value="Auto"/>
-        <Setter Property="Width" Value="220"/>
-        <Setter Property="MinWidth" Value="220"/>
-        <Setter Property="Focusable" Value="False"/>
+    <Style TargetType="{x:Type local:SearchBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local:SearchBox">
+                <ControlTemplate TargetType="{x:Type local:SearchBox}">
                     <Border CornerRadius="{DynamicResource CornderRadiusA}" 
-                            Padding="4,0"
+                            Padding="{TemplateBinding Padding}"
                             Height="{TemplateBinding Height}" 
                             Margin="{TemplateBinding Margin}" 
                             Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}">
+
                         <Grid MinWidth="{TemplateBinding MinWidth}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
@@ -33,21 +24,27 @@
                             </Grid.ColumnDefinitions>
                             <ContentControl Style="{StaticResource Search}" Foreground="{DynamicResource Foreground}" Margin="0,0,4,0" Grid.Column="0"/>
                             <TextBlock x:Name="waterMark" Text="{TemplateBinding Watermark}" Opacity="0.5" Grid.Column="1" Visibility="Collapsed" VerticalAlignment="Center"/>
-                            <TextBox Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent},UpdateSourceTrigger=PropertyChanged}" Padding="0" Background="Transparent" BorderThickness="0" Grid.Column="1" VerticalAlignment="Center">
-                                <i:Interaction.Behaviors>
-                                    <behavior:EnterKeyBehavior/>
-                                </i:Interaction.Behaviors>
-                            </TextBox>
+                            <ScrollViewer x:Name="PART_ContentHost" Grid.Column="1" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Text" Value="">
                             <Setter TargetName="waterMark" Property="Visibility" Value="Visible"/>
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="{DynamicResource DisableOpacity}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="local:StyleBehaviorCollection.StyleBehaviors">
+            <Setter.Value>
+                <local:StyleBehaviorCollection>
+                    <behavior:EnterKeyBehavior/>
+                </local:StyleBehaviorCollection>
+            </Setter.Value>
+        </Setter>
     </Style>
-    
+
 </ResourceDictionary>

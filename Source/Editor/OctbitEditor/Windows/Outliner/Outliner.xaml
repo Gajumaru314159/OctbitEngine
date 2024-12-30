@@ -21,6 +21,10 @@
              d:DesignWidth="200" d:DesignHeight="400"
              d:DataContext="{d:DesignInstance local:OutlinerVM}" >
 
+    <i:Interaction.Behaviors>
+        <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
+    </i:Interaction.Behaviors>
+
     <UserControl.InputBindings>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding CreateSceneCommand}"/>
         <KeyBinding Gesture="Ctrl+N" Command="{Binding CreateEntityCommand}"/>
@@ -176,7 +180,7 @@
     <DockPanel Grid.IsSharedSizeScope="True">
         
         <!--検索ボックス-->
-        <base:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Top" Width="Auto"/>
+        <base:SearchBox x:Name="_searchBox" Text="{Binding Filter.Value,UpdateSourceTrigger=PropertyChanged}" Watermark="検索 (F3)" Margin="1" DockPanel.Dock="Top" Width="Auto"/>
 
         <!--フッター-->
         <Border DockPanel.Dock="Bottom" Background="{DynamicResource Header}" Padding="4,0">

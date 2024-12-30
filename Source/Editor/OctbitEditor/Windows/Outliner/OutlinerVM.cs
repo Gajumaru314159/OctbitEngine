@@ -141,9 +141,9 @@ namespace OctbitEditor
 
             // ルートシーン
             var scenes = new List<SceneOutlinerItem>();
-            for (int i = 0; i<100; ++i)
+            for (int i = 0; i<10; ++i)
             {
-                scenes.Add(new SceneOutlinerItem(new SceneMock() { Name="Root Scene" }));
+                scenes.Add(new SceneOutlinerItem(new SceneMock() { Name=$"Root Scene {i}" }));
             }
             Children = new(scenes);
 
@@ -153,7 +153,10 @@ namespace OctbitEditor
                 .Throttle(TimeSpan.FromMilliseconds(100))
                 .Subscribe(e => RaisePropertyChanged(nameof(SelectionInfo)));
 
-            Filter.Subscribe(_ => { Children.ForEach(i=> UpdateFilter(i)); });
+            // TODO 更新時間のコンフィグ公開
+            Filter
+                .Throttle(TimeSpan.FromMilliseconds(300))
+                .Subscribe(_ => { Children.ForEach(i=> UpdateFilter(i)); });
 
         }
 
@@ -198,9 +201,9 @@ namespace OctbitEditor
             MenuItems.AddCommand("Duplicate","Ctrl+D", CutEntity);
             MenuItems.AddCommand("Delete","Delete", DeleteEntity);
             MenuItems.AddSeparator();
-            MenuItems.AddCommand("Create Empty", "Ctrl+N", CreateEntity);
+            MenuItems.AddCommand("_Create Empty", "Ctrl+N", CreateEntity);
             {
-                var group = MenuItems.AddGroup("3D Object");
+                var group = MenuItems.AddGroup("_3D Object");
                 group.AddCommand("Cube", CutEntity);
                 group.AddCommand("Sphere", CutEntity);
                 group.AddSeparator();

@@ -4,6 +4,7 @@ using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using System.Diagnostics;
 using System.Reflection;
+using Common.Math;
 
 namespace OctbitEngine
 {
@@ -48,7 +49,7 @@ namespace OctbitEngine
                 Log.Error(e.Message);
             }
 
-            m_types = _pluginAssemblies.Append(GetType().Assembly).Append(typeof(Query).Assembly).SelectMany(a => a.GetTypes()).ToList();
+            m_types = _pluginAssemblies.Append(GetType().Assembly).Append(typeof(Query).Assembly).Append(typeof(Vector2).Assembly).SelectMany(a => a.GetTypes()).ToHashSet();
 
             AssetManager = OctbitEngine.Asset.AssetManager.Instance;
             Runtime = new Runtime.Runtime(Types);
@@ -69,8 +70,8 @@ namespace OctbitEngine
         }
 
         public IReadOnlyList<Assembly> PluginAssemblies => _pluginAssemblies;
-        public IReadOnlyList<Type> Types => m_types;
+        public IReadOnlySet<Type> Types => m_types;
         private List<Assembly> _pluginAssemblies = new();
-        private List<Type> m_types = new();
+        private HashSet<Type> m_types = new();
     }
 }

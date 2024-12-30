@@ -1,6 +1,7 @@
 ﻿using Common.Log;
 using Common.Linq;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace OctbitEngine.Runtime
 {
@@ -53,8 +54,14 @@ namespace OctbitEngine.Runtime
 
     internal class TypeInfoManager
     {
-        internal TypeInfoManager(string json)
+        internal TypeInfoManager(string json, IReadOnlySet<Type> types)
         {
+            Dictionary<string, Type> typeNames = new();
+            foreach (var type in types)
+            {
+                typeNames.TryAdd(type.FullName??string.Empty,type);
+            }
+
             try
             {
                 var archives = JsonSerializer.Deserialize<TypeInfoArchive[]>(json) ?? Array.Empty<TypeInfoArchive>();
@@ -65,7 +72,10 @@ namespace OctbitEngine.Runtime
                     if (archive.Tags?.TryGetValue("C#", out var csName)??false)
                     {
                         // TODO 他アセンブリ対応
-                        type = Type.GetType(csName);
+                        if(typeNames.TryGetValue(csName, out type) == false)
+                        {
+                            type = Type.GetType(csName);
+                        }
                     }
 
                     TypeMap.Add(archive.Name, new TypeInfo(type??typeof(IUserTypeObject),archive.Name,archive.Tags??new()));

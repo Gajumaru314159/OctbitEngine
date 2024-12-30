@@ -22,11 +22,11 @@ namespace OctbitEngine.Runtime
         private TypeInfoManager m_typeInfoManager;
         private RemoteObjectManager remoteObjectManager = new();
 
-        public Runtime(IEnumerable<Type> types)
+        public Runtime(IReadOnlySet<Type> types)
             : this(types,null)
         {
         }
-        public Runtime(IEnumerable<Type> types,IProgress? progress)
+        public Runtime(IReadOnlySet<Type> types,IProgress? progress)
         {
             progress?.SetRange(0, 100);
             progress?.SetMessage("ProtocolDeviceを生成");
@@ -51,7 +51,7 @@ namespace OctbitEngine.Runtime
                     {
                         var json = System.IO.File.ReadAllText(output);
                         File.Delete(output);
-                        m_typeInfoManager = new TypeInfoManager(json);
+                        m_typeInfoManager = new TypeInfoManager(json, types);
                     }
                 }
             );

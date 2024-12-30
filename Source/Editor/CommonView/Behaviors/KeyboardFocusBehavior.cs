@@ -40,7 +40,6 @@ namespace CommonView.Behaviors
         {
             if (InputGesture != null && InputGesture.Matches(null, e) && Target != null)
             {
-                Target.Focus();
                 Keyboard.Focus(Target);
                 e.Handled = true;
             }
