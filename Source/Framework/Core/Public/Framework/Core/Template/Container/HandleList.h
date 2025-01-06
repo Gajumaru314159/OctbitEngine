@@ -189,11 +189,13 @@ namespace ob::core {
 		//===============================================================
 		// コンストラクタ / デストラクタ
 		//===============================================================
-		HandleList();                                                // コンストラクタ
-		HandleList(this_type&& x)noexcept;                                     // ムーブコンストラクタ
+		HandleList();															// コンストラクタ
+		HandleList(this_type&& x)noexcept;										// ムーブコンストラクタ
 		this_type& operator=(this_type&& x)noexcept;                            // ムーブ代入演算子
-		~HandleList();                                                         // デストラクタ
+		~HandleList();															// デストラクタ
 
+		bool operator==(const HandleList<T>& rhs)const noexcept;				// 等価演算子
+		bool operator!=(const HandleList<T>& rhs)const noexcept;				// 否等価演算子
 
 		//===============================================================
 		// イテレータ
@@ -293,15 +295,14 @@ namespace ob::core {
 
 	//! @brief 等価演算子
 	template<typename T>
-	inline bool operator==(HandleList<T> const& a, HandleList<T> const& b)noexcept {
-		ScopeLock lock(m_lock);
-		return (a.size() == b.size()) && std::equal(a.begin(), a.end(), b.begin());
+	inline bool typename HandleList<T>::operator==(const HandleList<T>& rhs)const noexcept {
+		return (size() == rhs.size()) && std::equal(begin(), end(), rhs.begin());
 	}
 
 	//! @brief 否等価演算子
 	template<typename T>
-	inline bool operator!=(HandleList<T> const& a, HandleList<T> const& b)noexcept {
-		return !(*this == rhs);
+	inline bool typename HandleList<T>::operator!=(const HandleList<T>& rhs)const noexcept {
+		return !(*this==rhs);
 	}
 
 
