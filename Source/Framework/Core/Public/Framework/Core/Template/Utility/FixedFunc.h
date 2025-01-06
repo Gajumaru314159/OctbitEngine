@@ -41,6 +41,9 @@ namespace ob::core {
 				*callablePtr = new (m_buffer) Callable(functor);
 			}
 		};
+	private:
+		ICallable* m_callable = nullptr;
+		u8			m_buffer[BufferSize + sizeof(void*)] = { 0 };
 	public:
 		using result_type = R;
 	public:
@@ -128,9 +131,6 @@ namespace ob::core {
 			memset(m_buffer, 0, BufferSize + sizeof(void*));
 		}
 
-	private:
-		ICallable*	m_callable = nullptr;
-		u8			m_buffer[BufferSize + sizeof(void*)] = { 0 };
 	};
 
 }
