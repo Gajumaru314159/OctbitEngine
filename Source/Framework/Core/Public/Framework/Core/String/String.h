@@ -293,7 +293,7 @@ namespace ob::core {
 		string_type& str() noexcept { return m_str; }
 		const string_type& str() const noexcept { return m_str; }
 
-		allocator_type get_allocator() const noexcept { return n_str.get_allocator(); }
+		allocator_type get_allocator() const noexcept { return m_str.get_allocator(); }
 
 		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_str.copy(dst, n, pos); }
 

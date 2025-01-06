@@ -109,8 +109,8 @@ namespace ob::core {
 		constexpr void remove_prefix(size_type n) noexcept { m_view = m_view.substr(n); }
 		constexpr void remove_suffix(size_type n) noexcept { m_view = m_view.substr(0, size() - n); }
 		constexpr StringViewBase substr(size_type pos = 0, size_type n = npos) const { return m_view.substr(pos, n); }
-		constexpr StringViewBase rsubstr(size_type pos = 0, size_type n = npos) const { return m_str.substr(size() - pos - n - 1, n); }
-		constexpr StringViewBase substr_range(size_type first = 0, size_type last = npos) const { return m_str.substr(first, last - first); }
+		constexpr StringViewBase rsubstr(size_type pos = 0, size_type n = npos) const { return m_view.substr(size() - pos - n - 1, n); }
+		constexpr StringViewBase substr_range(size_type first = 0, size_type last = npos) const { return m_view.substr(first, last - first); }
 		size_type copy(value_type* dst, size_type n, size_type pos = 0) const { return m_view.copy(dst, n, pos); }
 
 		StringViewBase trim() {
