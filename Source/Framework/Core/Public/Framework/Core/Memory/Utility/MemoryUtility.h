@@ -31,7 +31,7 @@ namespace ob::core {
 
     //! @brief nullチェック付き解放release呼び出し
     template<class T>
-    inline void SafeRelease(T*& pBuffer)noexcept(ptr->release()) {
+    inline void SafeRelease(T*& ptr)noexcept(ptr->release()) {
         if (ptr) {
             ptr->release();
             ptr = nullptr;
@@ -41,20 +41,20 @@ namespace ob::core {
 
     //! @brief deleteによるnullチェック付き解放
     template<class T>
-    inline void SafeDelete(T*& pBuffer) {
-        if (pBuffer) {
-            delete pBuffer;
-            pBuffer = nullptr;
+    inline void SafeDelete(T*& ptr) {
+        if (ptr) {
+            delete ptr;
+            ptr = nullptr;
         }
     }
 
 
     //! @brief delete[]によるnullチェック付き解放
     template<class T>
-    inline void SafeDeleteArray(T*& pBuffer) {
-        if (pBuffer) {
-            delete[] pBuffer;
-            pBuffer = nullptr;
+    inline void SafeDeleteArray(T*& ptr) {
+        if (ptr) {
+            delete[] ptr;
+            ptr = nullptr;
         }
     }
 

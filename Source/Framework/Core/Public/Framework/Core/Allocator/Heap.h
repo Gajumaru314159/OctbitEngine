@@ -72,7 +72,7 @@ namespace ob::core {
         //===============================================================
 
         //! @brief	                ヒープ名を取得
-        virtual Char* name()const = 0;
+        virtual const Char* name()const = 0;
 
 
         //! @brief	                アロケータのヒープサイズを取得

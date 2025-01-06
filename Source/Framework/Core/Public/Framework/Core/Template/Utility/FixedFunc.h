@@ -19,6 +19,28 @@ namespace ob::core {
 	//! @details std::functionと異なりヒープアロケーションを行わない関数オブジェクト
 	template <class R, class... Args, size_t BufferSize>
 	class FixedFunc<R(Args...), BufferSize> {
+	private:
+		struct ICallable {
+			virtual ~ICallable() = default;
+			virtual R operator()(Args...) const = 0;
+			virtual void clone(u8* m_buffer, ICallable** callablePtr) const = 0;
+		};
+
+		template <class T>
+		struct Callable : public ICallable {
+			T functor;
+
+			template<class F>
+			Callable(F&& f) : functor(std::forward<F>(f)) {}
+
+			R operator()(Args... args) const override {
+				return functor(std::forward<Args>(args)...);
+			}
+
+			void clone(u8* m_buffer, ICallable** callablePtr) const override {
+				*callablePtr = new (m_buffer) Callable(functor);
+			}
+		};
 	public:
 		using result_type = R;
 	public:
@@ -105,30 +127,6 @@ namespace ob::core {
 			}
 			memset(m_buffer, 0, BufferSize + sizeof(void*));
 		}
-
-	private:
-
-		struct ICallable {
-			virtual ~ICallable() = default;
-			virtual R operator()(Args...) const = 0;
-			virtual void clone(u8* m_buffer, ICallable** callablePtr) const = 0;
-		};
-
-		template <class T>
-		struct Callable : public ICallable {
-			T functor;
-
-			template<class F>
-			Callable(F&& f) : functor(std::forward<F>(f)) {}
-
-			R operator()(Args... args) const override {
-				return functor(std::forward<Args>(args)...);
-			}
-
-			void clone(u8* m_buffer, ICallable** callablePtr) const override {
-				*callablePtr = new (m_buffer) Callable(functor);
-			}
-		};
 
 	private:
 		ICallable*	m_callable = nullptr;

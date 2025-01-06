@@ -72,7 +72,7 @@ namespace ob::core {
 
 
     //! @brief	                ヒープ名を取得
-    Char* SystemHeap::name() const {
+    const Char* SystemHeap::name() const {
         return m_pName;
     }
 

@@ -22,16 +22,16 @@ namespace ob::core {
     //! @brief      二乗値の計算
     template<typename T>
     inline constexpr T get_square(T value)noexcept(std::is_arithmetic<T>::value) {
-        return v * v;
+        return value * value;
     }
 
 
     //! @brief      0～1にクランプ
     //! 
-    //! @param val        入力
+    //! @param value       入力
     template<typename T>
-    inline constexpr T clamp01(T val)noexcept(std::is_arithmetic<T>::value) {
-        return std::clamp(val, (T)0, (T)1);
+    inline constexpr T clamp01(T value)noexcept(std::is_arithmetic<T>::value) {
+        return std::clamp(value, (T)0, (T)1);
     }
 
 

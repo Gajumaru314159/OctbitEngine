@@ -51,7 +51,7 @@ namespace ob::core {
         //===============================================================
 
         //! @brief	                ヒープ名を取得
-        Char* name() const override;
+        const Char* name() const override;
 
 
         //! @brief	                アロケータのヒープサイズを取得
@@ -74,7 +74,7 @@ namespace ob::core {
     private:
 
         HANDLE m_handle;
-        Char* m_pName;
+        Char const* m_pName;
 
     };
 

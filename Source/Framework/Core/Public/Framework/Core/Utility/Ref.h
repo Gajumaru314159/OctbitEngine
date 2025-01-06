@@ -225,7 +225,7 @@ namespace ob::core {
 	{
 		T* t = ref.get();   // 暗黙変換チェック
 		if (m_ptr != ref.m_ptr) {
-			OB_SAFE_RETAIN(m_ref.m_ptr);
+			OB_SAFE_RETAIN(ref.m_ptr);
 			OB_SAFE_RELEASE(m_ptr);
 			m_ptr = ref.m_ptr;
 		}

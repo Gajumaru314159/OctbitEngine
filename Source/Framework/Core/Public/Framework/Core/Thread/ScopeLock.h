@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CoreTypes.h>
+#include <Framework/Core/Utility/Noncopyable.h>
 
 namespace ob::core {
 

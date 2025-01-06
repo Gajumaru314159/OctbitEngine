@@ -67,7 +67,7 @@ namespace ob::core {
 		template<class ...Args>
 		void face_pn_internal(s32 count, s32 p, s32 n, Args... args) {
 			if (count == 0) m_ss << "f";
-			m_ss << " " << p << "//" << t;
+			m_ss << " " << p << "//" << n;
 			face_pn_internal(count + 1, args...);
 		}
 
