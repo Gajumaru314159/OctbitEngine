@@ -269,7 +269,7 @@ namespace ob::graphics {
 
 		// 更新
 		if (window) {
-			ImGui::GetIO().DisplaySize = { window.getSize().x,window.getSize().y };
+			ImGui::GetIO().DisplaySize = { std::max<s32>(window.getSize().x,1),std::max<s32>(window.getSize().y,1) };
 			updateMouse(window);
 			updateKeyboard(window);
 		}
