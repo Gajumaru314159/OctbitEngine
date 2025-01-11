@@ -113,11 +113,10 @@
                             </ctrl:InspectorItem.Label>
                         </ctrl:InspectorItem>
                         <Grid>
-                            <Border x:Name="Border" BorderBrush="{DynamicResource Outline}" BorderThickness="1,0,0,0">
-                                <Border.RenderTransform>
-                                    <TranslateTransform X="{Binding Indent,RelativeSource={RelativeSource TemplatedParent},Converter={common:AddConverter},ConverterParameter=-7}"/>
-                                </Border.RenderTransform>
-                            </Border>
+                            <Border x:Name="Border" BorderBrush="{DynamicResource Outline}" 
+                                    Margin="{Binding Indent,RelativeSource={RelativeSource TemplatedParent},Converter={common:InspectorBorderConverter}}"
+                                    BorderThickness="1,0,0,0"/>
+
                             <ItemsPresenter x:Name="Items"/>
                         </Grid>
                     </StackPanel>
