@@ -37,6 +37,8 @@ set(OB_CONFIGURATION "Debug")
 # 警告レベルを最大にする
 if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
     add_definitions(/W4)
+else()
+    add_compile_options(-Wno-everything -Werror)
 endif()
 
 # 警告抑制
@@ -68,14 +70,13 @@ set(P2T_STATIC_EXPORTS TRUE)
 # ThirdPartyライブラリ
 #------------------------------------------------------------------------------
 include(FetchContent)
-FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt.git GIT_TAG "10.2.1")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v4.0.5")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "v1.15.2")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
 FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
-FetchContent_MakeAvailable(fmt GSL utf8cpp magic_enum googletest FrameGraph assimp)
+FetchContent_MakeAvailable(GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
