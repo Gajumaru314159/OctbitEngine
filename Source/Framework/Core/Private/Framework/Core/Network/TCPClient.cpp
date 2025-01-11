@@ -85,7 +85,7 @@ namespace ob::core {
 	}
 
 	/// TCPServerからの接続
-	bool TCPClient::connect(IPAddress ip, u16 port, s32 socket) {
+	bool TCPClient::connect(IPAddress ip, u16 port, u64 socket) {
 		m_socket = socket;
 		m_ip = ip;
 		m_port = port;
@@ -99,7 +99,7 @@ namespace ob::core {
 			return false;
 		}
 
-		auto sentSize = ::send((SOCKET)m_socket, data, size, 0);
+		auto sentSize = ::send((SOCKET)m_socket, data, (int)size, 0);
 		if (sentSize == -1) {
 			disconnect();
 			return false;
@@ -114,7 +114,7 @@ namespace ob::core {
 			return 0;
 		}
 
-		auto receivedSize = ::recv((SOCKET)m_socket, data, size, 0);
+		auto receivedSize = ::recv((SOCKET)m_socket, data, (int)size, 0);
 		if (receivedSize == -1) {
 			disconnect();
 			return 0;

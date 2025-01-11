@@ -218,7 +218,6 @@ namespace ob::core {
 			return (r << 24) | (g << 16) | (b << 8) | (a);
 		case ColorCodeFormat::BGRA:
 			return (b << 24) | (g << 16) | (r << 8) | (a);
-		default:break;
 		}
 		return 0xFFFFFFFF;
 	}

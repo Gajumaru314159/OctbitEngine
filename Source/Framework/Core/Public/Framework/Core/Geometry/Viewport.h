@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Vector2.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -100,12 +101,12 @@ namespace ob::core {
 	//! @brief      等価演算子
 	constexpr bool Viewport::operator==(const Viewport& other)const noexcept {
 		return
-			left == other.left &&
-			top == other.top &&
-			right == other.right &&
-			bottom == other.bottom &&
-			nearZ == other.nearZ &&
-			farZ == other.farZ;
+			Math::IsNearEquals(left,other.left) &&
+			Math::IsNearEquals(right, other.right) &&
+			Math::IsNearEquals(top, other.top) &&
+			Math::IsNearEquals(bottom, other.bottom) &&
+			Math::IsNearEquals(nearZ, other.nearZ) &&
+			Math::IsNearEquals(farZ, other.farZ);
 	}
 
 

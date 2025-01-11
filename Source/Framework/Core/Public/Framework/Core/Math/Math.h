@@ -193,7 +193,7 @@ namespace ob::core {
         static f32 Log10(f32 f) { return log10f(f); }
 
         //! @brief 0と1の間を往復する値を返す
-        static f32 PingPong(f32 f) { return abs(f * 0.5f - (f32)ceil(f * 0.5) - 0.5f); }
+        static f32 PingPong(f32 f) { return abs(f * 0.5f - ceilf(f * 0.5f) - 0.5f); }
 
         //! @brief fのp乗を返す
         static f32 Pow(f32 f, f32 p) { return powf(f, p); }
@@ -264,7 +264,7 @@ namespace ob::core {
         f32 z;
 
         s32 i;
-        radians *= (1.0f / 32.0);
+        radians *= (1.0f / 32.0f);
         z = radians * radians;
         do {
             c = c * z + (*p);

@@ -12,7 +12,7 @@ namespace ob::core {
     //! @brief  カーブの長さを計算
     //! 
     //! @params resolution いくつの直線で近似した長さを計算するか
-    f32 Spline2D::length(s32 resolution)const {
+    f32 Spline2D::length([[maybe_unused]]s32 resolution)const {
         OB_NOTIMPLEMENTED();
         return 0.0f;
     }
@@ -24,7 +24,7 @@ namespace ob::core {
     //! @params t0 開始位置[0,t1]
     //! @params t1 終了位置[t1,1]
     //! @params resolution いくつの直線で近似した長さを計算するか
-    f32 Spline2D::length(f32 t0, f32 t1, s32 resolution)const {
+    f32 Spline2D::length([[maybe_unused]] f32 t0, [[maybe_unused]] f32 t1, [[maybe_unused]] s32 resolution)const {
         OB_NOTIMPLEMENTED();
         return 0.0f;
     }
@@ -33,7 +33,7 @@ namespace ob::core {
     //! @brief  座標を計算
     //! 
     //! @params t 時間[0,1]
-    Vec2 Spline2D::position(f32 t)const {
+    Vec2 Spline2D::position([[maybe_unused]] f32 t)const {
         OB_NOTIMPLEMENTED();
         return Vec2();
     }
@@ -42,7 +42,7 @@ namespace ob::core {
     //! @brief  速度を計算
     //! 
     //! @params t 時間[0,1]
-    Vec2 Spline2D::velocity(f32 t)const {
+    Vec2 Spline2D::velocity([[maybe_unused]] f32 t)const {
         OB_NOTIMPLEMENTED();
         return Vec2();
     }
@@ -51,7 +51,7 @@ namespace ob::core {
     //! @brief  加速度を計算
     //! 
     //! @params t 時間[0,1]
-    Vec2 Spline2D::acceleration(f32 t)const {
+    Vec2 Spline2D::acceleration([[maybe_unused]] f32 t)const {
         OB_NOTIMPLEMENTED();
         return Vec2();
     }
@@ -60,7 +60,7 @@ namespace ob::core {
     //! @brief  曲率を計算
     //! 
     //! @params t 時間[0,1]
-    f32 Spline2D::curvature(f32 t)const {
+    f32 Spline2D::curvature([[maybe_unused]] f32 t)const {
         OB_NOTIMPLEMENTED();
         return 0.0f;
     }

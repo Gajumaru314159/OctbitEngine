@@ -325,7 +325,7 @@ namespace ob::core {
 
     //! @brief      サイズが0以下であるか
     constexpr bool Rect::empty()const noexcept {
-        return area() == Math::EPSILON;
+        return area() < Math::EPSILON;
     }
 
 

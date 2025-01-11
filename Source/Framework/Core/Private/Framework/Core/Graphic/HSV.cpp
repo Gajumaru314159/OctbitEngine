@@ -68,19 +68,19 @@ namespace ob::core {
 
 		if (g < b) {
 			std::swap(g, b);
-			k = -360.0;
+			k = -360.0f;
 		}
 
 		if (r < g) {
 			std::swap(r, g);
-			k = -720.0 / 6.0 - k;
+			k = -720.0f / 6.0f - k;
 		}
 
-		const f32 delta = (g - b) * (360.0 / 6.0);
+		const f32 delta = (g - b) * (360.0f / 6.0f);
 		const f32 chroma = r - Math::Min(g, b);
 		
-		h = Math::Abs(k + delta / (chroma + 1e-20));
-		s = chroma / (r + 1e-20);
+		h = Math::Abs(k + delta / (chroma + 1e-20f));
+		s = chroma / (r + 1e-20f);
 		v = r;
 		a = color.a;
 	}
@@ -88,8 +88,8 @@ namespace ob::core {
 
 	//! @brief      Color型に変換
 	Color  HSV::toColor()const {
-		const f32 hue01 = Math::Fract(h / 360.0);
-		const f32 hueF = (hue01 * 6.0);
+		const f32 hue01 = Math::Fract(h / 360.0f);
+		const f32 hueF = (hue01 * 6.0f);
 		const s32 hueI = static_cast<s32>(hueF);
 		const f32 fr = (hueF - hueI);
 		const f32 vals[4] = {

@@ -24,7 +24,7 @@ void OutputDebugLog(const wchar_t* message) {
 
 //! @brief  ブレークポイントを呼び出し
 void ShowMessageBox(const wchar_t* pMessage) {
-    ::MessageBoxW(NULL, pMessage, L"OctbitEngine", MB_OK);
+    ::MessageBoxW(nullptr, pMessage, L"OctbitEngine", MB_OK);
 }
 
 #endif// OS_WINDOWS

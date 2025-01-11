@@ -28,7 +28,7 @@ namespace ob::core {
 
     //! @brief f32 を 16bit小数に圧縮
     u32 FloatCompression::F32ToU16(f32 value) {
-        u32 binary = *reinterpret_cast<u32*>(&value);
+        u32 binary = std::bit_cast<u32>(value);
 
         u16 note = ((binary >> 16) & 0x8000);    // 符号  (1bit)
         u16 exp = ((binary >> 23) & 0x00ff);    // 指数部(5bit)

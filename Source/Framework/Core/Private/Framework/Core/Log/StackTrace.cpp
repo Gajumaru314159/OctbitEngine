@@ -25,7 +25,7 @@ namespace ob::core {
 	StackTrace StackTrace::Capture(s32 frameToSkip) {
 		StackTrace result;
 #ifdef OB_DEBUG
-		result.depth = ::RtlCaptureStackBackTrace(frameToSkip + 1, std::size(result.stack), result.stack, NULL);
+		result.depth = ::RtlCaptureStackBackTrace(frameToSkip + 1, std::size(result.stack), result.stack, nullptr);
 #endif
 		return result;
 	}
@@ -45,13 +45,13 @@ namespace ob::core {
 
 		HANDLE process = ::GetCurrentProcess();
 
-		auto limit = std::min<s32>(depth, std::size(stack));
+		auto limit = std::min<size_t>(depth, std::size(stack));
 
 		DWORD disp = 0;
 		IMAGEHLP_LINE64 line{};
 
 		for (s32 i = 0; i < limit; ++i) {
-			if (!::SymFromAddr(process, (DWORD64)(stack[i]), 0, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
+			if (!::SymFromAddr(process, (DWORD64)(stack[i]), nullptr, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
 				continue;
 			}
 			if (!::SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &disp, &line)) {

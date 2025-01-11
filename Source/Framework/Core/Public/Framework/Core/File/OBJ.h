@@ -139,9 +139,9 @@ namespace ob::core {
 		void save(StringView);
 
 		void newmtl(StringView name);
-		void ambient(Color color = {0.2,0.2,0.2}, StringView tex = "");
-		void diffuse(Color color = {0.8,0.8,0.8}, StringView tex = "");
-		void specular(Color color = {1.0,1.0,1.0}, StringView tex = "");
+		void ambient(Color color = {0.2f,0.2f,0.2f}, StringView tex = "");
+		void diffuse(Color color = {0.8f,0.8f,0.8f}, StringView tex = "");
+		void specular(Color color = {1.0f,1.0f,1.0f}, StringView tex = "");
 		void shininess(f32 ns = 0.0f, StringView tex = "");
 		void alpha(f32 alpha, StringView tex = "");
 		void illumination(s32);

@@ -47,7 +47,7 @@ namespace ob::core {
     //! @brief 色をカラーコードに変換
     u32 Color::toCode(ColorCodeFormat format)const noexcept {
         IntColor c32 = toIntColor();
-        return c32.toCode();
+        return c32.toCode(format);
     }
 
 

@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Vector2.h>
+#include <Framework/Core/Math/Math.h>
 
 namespace ob::core {
 
@@ -94,7 +95,7 @@ namespace ob::core {
 
     //! @brief          等価演算子
     constexpr bool Circle::operator==(const Circle& other)const noexcept {
-        return center == other.center && radius == other.radius;
+        return center == other.center && Math::IsNearEquals(radius,other.radius);
     }
 
 

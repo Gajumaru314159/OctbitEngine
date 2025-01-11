@@ -19,7 +19,7 @@ namespace ob::core {
     //! @brief      Bitmapクラスのコンストラクタ
     //! @param[in]  path    画像ファイルのパス
     //! @param[in]  format  画像のフォーマット
-    Bitmap::Bitmap(StringView path, ImageFormat format) {
+    Bitmap::Bitmap([[maybe_unused]] StringView path, [[maybe_unused]] ImageFormat format) {
         OB_NOTIMPLEMENTED();
     }
 

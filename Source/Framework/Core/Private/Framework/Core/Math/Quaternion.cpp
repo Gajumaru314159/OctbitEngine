@@ -301,11 +301,11 @@ namespace ob::core {
         f32 dot = Quat::Dot(a, b);
         f32 theta = Math::Acos(dot);
 
-        if (theta < 0.0)theta = -theta;
+        if (theta < 0.0f)theta = -theta;
 
         f32 st = Math::Sin(theta);
 
-        if (st == 0)return a;
+        if (st == 0.0f)return a;
 
         f32 sut = Math::Sin(theta * t);
         f32 sout = Math::Sin(theta * (1.0f - t));

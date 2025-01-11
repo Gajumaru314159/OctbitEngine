@@ -56,7 +56,7 @@ namespace ob::core {
 			else if constexpr (std::is_same<pure_type, f64>::value)
 				writeDouble(value);
 			else
-				static_assert("not implemented");
+				static_assert(false,"not implemented");
 		}
 
 	private:

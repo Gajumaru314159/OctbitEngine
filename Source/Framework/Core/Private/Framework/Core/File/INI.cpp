@@ -37,7 +37,7 @@ namespace ob::core {
 	}
 
 	//! @brief  要素数
-	s32 INISection::size()const {
+	size_t INISection::size()const {
 		return m_container.size();
 	}
 
@@ -184,7 +184,7 @@ namespace ob::core {
 	}
 
 	//! @brief  要素数
-	s32 INI::size()const {
+	size_t INI::size()const {
 		return m_container.size();
 	}
 

@@ -20,9 +20,7 @@ namespace ob::core {
     protected:
 
         //!< 署名(メモリ破壊チェック用)
-        enum {
-            MEMORY_SIGNATURE = 0xDEADC0DE,
-        };
+        static constexpr u32 MEMORY_SIGNATURE = 0xDEADC0DE;
 
 
         //! @brief      ブロック・ヘッダ

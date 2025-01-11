@@ -8,7 +8,7 @@
 
 namespace ob::core {
 
-    const Transform Transform::Identity = { Vec3::Zero,Quat::Identity,Vec3::One };
+    const Transform Transform::Identity = Transform{ Vec3::Zero,Quat::Identity,Vec3::One };
 
 
     //! @brief  等価演算子

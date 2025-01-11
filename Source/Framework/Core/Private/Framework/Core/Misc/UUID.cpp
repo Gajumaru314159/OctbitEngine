@@ -17,9 +17,9 @@ namespace ob::core {
 
 
     byte DigitCharToHex(int ch) {
-        if ('0' <= ch && ch <= '9') return ch - 48;
-        if ('a' <= ch && ch <= 'f') return ch - 87;
-        if ('A' <= ch && ch <= 'F') return ch - 55;
+        if ('0' <= ch && ch <= '9') return (byte)(ch - 48);
+        if ('a' <= ch && ch <= 'f') return (byte)(ch - 87);
+        if ('A' <= ch && ch <= 'F') return (byte)(ch - 55);
         return 0;
     }
 
@@ -70,7 +70,7 @@ namespace ob::core {
             if (c == '-') {
                 if (i == 8 || i == 12 || i == 17 || i == 22) {
                     continue;
-                } else {
+                } else if(36<i){
                     return std::nullopt;
                 }
                 if ('0' <= c && c <= '9')(*ptr) = c - '0';

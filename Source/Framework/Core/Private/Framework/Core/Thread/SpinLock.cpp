@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Thread/SpinLock.h>
-#include <Framework/core/Thread/Thread.h>
+#include <Framework/Core/Thread/Thread.h>
 #include <atomic>
 
 #ifdef OB_DEBUG_SPIN_LOCK

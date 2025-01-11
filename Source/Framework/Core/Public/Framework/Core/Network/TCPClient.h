@@ -40,7 +40,7 @@ namespace ob::core {
 		friend class TCPServer;
 
 		/// TCPServerからの接続
-		bool connect(IPAddress ip, u16 port,s32 socket);
+		bool connect(IPAddress ip, u16 port,u64 socket);
 
 	private:
 		IPAddress m_ip;

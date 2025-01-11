@@ -26,7 +26,7 @@ namespace ob::core {
 	//		         |-----|	LinearManagement	下位6ビット
 	//===============================================================
 	static const s32 s_maxSecondLevelLog2 = 2;
-	static const s32 s_linearManagementSizeLog2 = 1;// 6; TODO 本当は6当たりだったがリニア検索がバグっているので一時的に小さくしている
+	static const s32 s_linearManagementSizeLog2 = 2;// 6; TODO 本当は6当たりだったがリニア検索がバグっているので一時的に小さくしている
 
 	static const s32 s_maxSecondLevel = 1 << s_maxSecondLevelLog2;		// 4
 	static const s32 s_linearManagementSize = 1 << s_linearManagementSizeLog2;	// 64
@@ -324,7 +324,7 @@ namespace ob::core {
 		if (size < s_linearManagementSize) {
 			firstLevel = 0;
 #pragma warning(suppress: 4293)
-			secondLevel = size >> std::min<u32>(s_secondLevelShift,32);
+			secondLevel = size >> s_secondLevelShift;
 #pragma warning(default: 4293)
 		} else {
 			firstLevel = std::max(0, BitOp::GetMSB((u32)size) + 1 - s_linearManagementSizeLog2);

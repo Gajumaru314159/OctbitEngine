@@ -131,7 +131,7 @@ namespace ob::core {
 		// 要素アクセス
 		//===============================================================
 		value_type& at(size_type pos) { return m_str.at(pos); }
-		const value_type& at(size_type pos) const { return m_str.at(pos); };
+		const value_type& at(size_type pos) const { return m_str.at(pos); }
 		value_type& operator [](size_type pos) noexcept { return m_str[pos]; }
 		const value_type& operator [](size_type pos) const noexcept { return m_str[pos]; }
 
@@ -260,7 +260,9 @@ namespace ob::core {
 		template <class TStringView, class = is_string_view<TStringView>>
 		StringBase& replace(const TStringView& oldStr, const TStringView& newStr) {
 			size_type pos = 0;
-			while (pos = m_str.find(oldStr, pos), pos != m_str.npos) {
+			while (true) {
+				pos = m_str.find(oldStr, pos);
+				if (pos == m_str.npos)break;
 				m_str.replace(pos, oldStr.size(), newStr);
 				pos += oldStr.size();
 			}

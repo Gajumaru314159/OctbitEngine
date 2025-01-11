@@ -246,7 +246,8 @@ namespace ob::graphics {
 		ImGui::SetCurrentContext(m_imguiContext);
 		ImPlot::SetCurrentContext(m_implotContext);
 
-		SafeDelete(::ImGui::GetIO().BackendPlatformUserData);
+		auto data = reinterpret_cast<BackendData*>(::ImGui::GetIO().BackendPlatformUserData);
+		SafeDelete(data);
 
 		ImPlot::DestroyContext(m_implotContext);
 		ImGui::DestroyContext(m_imguiContext);

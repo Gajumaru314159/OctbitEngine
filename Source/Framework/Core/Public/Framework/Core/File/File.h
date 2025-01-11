@@ -54,7 +54,7 @@ namespace ob::core {
 		File(StringView path, FileOpenMode mode = FileOpenMode::Read);
 
 		//! @brief  デストラクタ
-		~File();
+		~File() override;
 
 		//! @brief  有効な状態か
 		operator bool()const;

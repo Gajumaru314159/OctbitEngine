@@ -493,7 +493,7 @@ namespace ob::engine2 {
 		template<class TComponent>
 		TComponent& get(Entity entity) {
 			constexpr auto type = Type::Get<TComponent>();
-			return get(type, entity).as<TComponent>();
+			return get(type, entity).template as<TComponent>();
 		}
 
 
@@ -556,7 +556,7 @@ namespace ob::engine2 {
 			if (itr == m_chunks.end()) return result;
 			auto& chunk = itr->second;
 			for (s32 i = 0; i < chunk.size(); ++i) {
-				result.emplace_back(Entity{ i, m_indices[archetype], 0 }, chunk.at<TComponents>(i)...);
+				result.emplace_back(Entity{ i, m_indices[archetype], 0 }, chunk.template at<TComponents>(i)...);
 			}
 			return result;
 		}

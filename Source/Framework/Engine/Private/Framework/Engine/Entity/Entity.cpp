@@ -257,7 +257,8 @@ namespace ob::engine {
 		{
 			// ロック
 			ScopeLock lock(m_childrenLock);
-			if (oldParent = m_parent.load()) {
+			oldParent = m_parent.load();
+			if (oldParent) {
 				oldParent->m_childrenLock.lock();
 
 				// 取り外し

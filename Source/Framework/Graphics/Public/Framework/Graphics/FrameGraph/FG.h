@@ -177,8 +177,6 @@ namespace ob::graphics {
 	//! @details	FGTextureやFGBufferからRenderTextureやBufferへのアクセスする手段を
 	//!				提供します。
 	class FGResources {
-		friend class FrameGraph;
-
 	public:
 
 		//! @brief      コンストラクタ

@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Memory/Allocator/MallocAllocator.h>
-#include <Framework/core/Memory/Utility/MemoryUtility.h>
+#include <Framework/Core/Memory/Utility/MemoryUtility.h>
 
 namespace ob::core {
 

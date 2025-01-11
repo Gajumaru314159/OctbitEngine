@@ -18,11 +18,11 @@ namespace ob::core {
 		m_tag = tag;
 		for (size_t i = 0; i < tag.size(); ++i) {
 			if (tag[i] == '-') {
-				m_subtags.emplace_back<u8>(i);
+				m_subtags.emplace_back<u8>((u8)i);
 				if (m_subtags.size() == 5) break;
 			}
 		}
-		m_subtags.emplace_back<u8>(tag.size());
+		m_subtags.emplace_back<u8>((u8)tag.size());
 	}
 
 	//! @brief 対象のロケールが自身のロケールに含まれるか
@@ -60,7 +60,7 @@ namespace ob::core {
 		char localeName[LOCALE_NAME_MAX_LENGTH];
 		if (GetUserDefaultLocaleName(localeNameW, LOCALE_NAME_MAX_LENGTH)) {
 			for (auto i = 0; i < std::size(localeNameW); ++i) {
-				localeName[i] = localeNameW[i];
+				localeName[i] = (char)localeNameW[i];
 			}
 			return Locale(localeName);
 		}

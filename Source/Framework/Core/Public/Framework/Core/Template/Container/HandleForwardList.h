@@ -267,7 +267,7 @@ namespace ob::core {
     inline HandleForwardList<T>& HandleForwardList<T>::operator=(this_type&& rhs)noexcept {
         if (this != &rhs) {
             clear();
-            ScopeLock lock(m_lock);;
+            ScopeLock lock(m_lock);
             move_impl(std::move(rhs));
         }
         return *this;
@@ -347,7 +347,7 @@ namespace ob::core {
     //! @brief コンテナが空かどうかを判定する
     template<typename T>
     inline bool HandleForwardList<T>::empty()const noexcept {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         return m_header.pNext == nullptr;
     }
 
@@ -355,7 +355,7 @@ namespace ob::core {
     //! @brief 要素数を取得する
     template<typename T>
     inline typename HandleForwardList<T>::size_type HandleForwardList<T>::size()const noexcept {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         return std::distance(begin(), end());
     }
 
@@ -363,7 +363,7 @@ namespace ob::core {
     //! @brief 先頭要素への参照を取得する
     template<typename T>
     inline typename HandleForwardList<T>::reference HandleForwardList<T>::front() {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         assert(m_header.pNext != nullptr);
         return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
@@ -372,7 +372,7 @@ namespace ob::core {
     //! @brief 先頭要素への参照を取得する(const)
     template<typename T>
     inline typename HandleForwardList<T>::const_reference HandleForwardList<T>::front() const {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         assert(m_header.pNext != nullptr);
         return *(static_cast<Handle*>(m_header.pNext)->get_ptr());
     }
@@ -381,7 +381,7 @@ namespace ob::core {
     //! @brief 先頭に要素を追加する
     template<typename T>
     inline void HandleForwardList<T>::push_front(Handle& h, const T& x) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         *h.get_ptr() = x;
     }
@@ -391,7 +391,7 @@ namespace ob::core {
     template<typename T>
     template<class... Args>
     inline typename HandleForwardList<T>::reference HandleForwardList<T>::emplace_front(Handle& h, Args&&... args) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
@@ -401,7 +401,7 @@ namespace ob::core {
     //! @brief 先頭に要素を追加する
     template<typename T>
     inline void HandleForwardList<T>::push_front(Handle& h, T&& x) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_front_impl(h);
         *h.get_ptr() = std::move(x);
     }
@@ -410,7 +410,7 @@ namespace ob::core {
     //! @brief 先頭から要素を削除する
     template<typename T>
     inline void HandleForwardList<T>::pop_front() {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         if (m_header.pNext == nullptr)return;
         erase_impl(static_cast<Handle*>(&m_header));
     }
@@ -420,7 +420,7 @@ namespace ob::core {
     template<typename T>
     template<class... Args>
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::emplace_after(Handle& h, const_iterator position, Args&&... args) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return &h;
@@ -431,7 +431,7 @@ namespace ob::core {
     //! @brief 要素を指定位置に挿入する
     template<typename T>
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::insert_after(Handle& h, const_iterator position, const T& x) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         *h.get_ptr() = x;
         return &h;
@@ -441,7 +441,7 @@ namespace ob::core {
     //! @brief 要素を指定位置に挿入する
     template<typename T>
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::insert_after(Handle& h, const_iterator position, T&& x) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
         *h.get_ptr() = x;
         return &h;
@@ -451,7 +451,7 @@ namespace ob::core {
     //! @brief 指定位置の要素を削除する
     template<typename T>
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::erase_after(const_iterator position) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         return erase_impl(position.pHandle);
     }
 
@@ -459,7 +459,7 @@ namespace ob::core {
     //! @brief 指定範囲の要素を削除する
     template<typename T>
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::erase_after(const_iterator position, const_iterator last) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         auto itr = position;
         while (position != last) {
             auto pHandle = position.pHandle;
@@ -480,7 +480,7 @@ namespace ob::core {
     //! @brief 全要素を削除する
     template<typename T>
     inline void HandleForwardList<T>::clear()noexcept {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         auto itr = begin();
         while (itr != end()) {
             auto pHandle = itr.pHandle;
@@ -494,7 +494,7 @@ namespace ob::core {
     //! @brief 要素を削除する
     template<typename T>
     inline void HandleForwardList<T>::remove(Handle& h) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         auto itrPrev = begin_before();
         auto itr = begin();
         const auto itrEnd = end();
@@ -514,7 +514,7 @@ namespace ob::core {
     template<typename T>
     template<class Predicate>
     inline void HandleForwardList<T>::remove_if(Predicate pred) {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
         auto itrPrev = begin_before();
         auto itr = begin();
         const auto itrEnd = end();
@@ -533,7 +533,7 @@ namespace ob::core {
     //! @brief コンテナを反転する
     template<typename T>
     inline void HandleForwardList<T>::reverse()noexcept {
-        ScopeLock lock(m_lock);;
+        ScopeLock lock(m_lock);
 
         HandleBase* pPrev = nullptr;
         HandleBase* pPos = m_header.pNext;

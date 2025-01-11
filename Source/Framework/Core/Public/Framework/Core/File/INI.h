@@ -29,7 +29,7 @@ namespace ob::core {
 		void clear();
 
 		//! @brief  要素数
-		s32 size()const;
+		size_t size()const;
 
 		//! @brief  Beginイテレータ
 		auto begin()const { return m_container.cbegin(); }
@@ -89,7 +89,7 @@ namespace ob::core {
 		void clear();
 
 		//! @brief  要素数
-		s32 size()const;
+		size_t size()const;
 
 		//! @brief  要素が空か
 		bool empty()const;

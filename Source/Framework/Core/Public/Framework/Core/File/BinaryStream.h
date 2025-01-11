@@ -18,7 +18,7 @@ namespace ob::core {
 
 		
 		//! @brief  デストラクタ
-		~BinaryStream();
+		~BinaryStream()override;
 
 
 		//! @brief  読み込み可能か

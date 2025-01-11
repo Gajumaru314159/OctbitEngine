@@ -20,10 +20,7 @@ namespace ob::core {
     protected:
 
         //!< 署名(メモリ破壊チェック用)
-        enum {
-            MEMORY_SIGNATURE = 0xDEADC0DE,
-        };
-
+        constexpr static u32 MEMORY_SIGNATURE = 0xDEADC0DE;
 
         //! @brief      ヒープヘッダ
         //! 
@@ -45,7 +42,7 @@ namespace ob::core {
         //===============================================================
 
         //! @brief                  デストラクタ
-        virtual ~Heap() {};
+        virtual ~Heap() {}
 
         //! @brief                  内部アロケート情報のクリア
         virtual void	release() = 0;
@@ -103,7 +100,6 @@ namespace ob::core {
         //! @param type                         ヒープの割り当てメソッドタイプ
         //! @param pName                        ヒープ名
         //! @param pParent                      親ヒープ
-        //! @return                 
         static Heap* Create(size_t size, HeapMethodType type, const Char* pName, Heap* pParent = nullptr);
 
     };

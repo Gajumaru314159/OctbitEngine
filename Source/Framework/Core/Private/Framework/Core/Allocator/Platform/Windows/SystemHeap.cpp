@@ -52,7 +52,7 @@ namespace ob::core {
 
 
         // ヘッダ情報の登録
-        auto pHeader = GetOffsetPtr<HeapHeader>(pAlloc, -static_cast<s32>(sizeof(HeapHeader)));
+        auto pHeader = GetOffsetPtr<Heap::HeapHeader>(pAlloc, -static_cast<ptrdiff_t>(sizeof(HeapHeader)));
         if (pHeader != nullptr) {
             pHeader->pHeap = this;
             pHeader->pRaw = pRaw;
