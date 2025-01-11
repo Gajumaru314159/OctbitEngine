@@ -3,7 +3,6 @@
 //! @brief		矩形
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Geometry/Rect.h>
 
 namespace ob::core {

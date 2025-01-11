@@ -86,7 +86,7 @@ namespace ob::core {
     //! @brief      乗算代入演算子
     Quat& Quat::operator *= (f32 scalar) {
         auto [axis,angle] = toAxisAndAngle();
-        return *this = Quat(axis,angle);
+        return *this = Quat(axis,scalar);
     }
 
 
@@ -269,7 +269,8 @@ namespace ob::core {
 
 
     //! @brief ターゲット方向に向けるQuaternionを計算
-    Quat Quat::LookAt(const Vec3& target, const Vec3& up) {
+    Quat Quat::LookAt(const Vec3& target, [[maybe_unused]]const Vec3& up) {
+        // TODO Upベクトル対応
         Vec3 tar = target.unitVec();
         Vec3 norm(0, 0, 1);
         f32 dot = Vec3::Dot(norm, tar);

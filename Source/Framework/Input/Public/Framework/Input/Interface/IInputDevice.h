@@ -17,6 +17,8 @@ namespace ob::input {
 	class IInputDevice {
 	public:
 
+		virtual ~IInputDevice() = default;
+
 		//! @brief	デバイスタイプを取得
 		virtual DeviceID getDeviceId()const = 0;
 
@@ -24,16 +26,16 @@ namespace ob::input {
 		virtual void update() {}
 
 		//! @brief	ボタンの入力状態を取得
-		virtual ButtonStates getButtonStates(u32 code)const { return {}; }
+		virtual ButtonStates getButtonStates(u32 /*code*/)const { return {}; }
 
 		//! @brief	軸の入力状態を取得
-		virtual f32  getAxisValue(u32 code) const { return 0.0f; }
+		virtual f32  getAxisValue(u32 /*code*/) const { return 0.0f; }
 
 		//! @brief  ボタン入力イベントをバインド
-		virtual bool bindButton(u32 code, ButtonState state, ButtonHandle& handle, const ButtonDelegate& func) { return false; }
+		virtual bool bindButton(u32 /*code*/, ButtonState /*state*/, ButtonHandle& /*handle*/, const ButtonDelegate& /*func*/) { return false; }
 
 		//! @brief  軸入力イベントをバインド
-		virtual bool bindAxis(u32 code,AxisHandle& handle, const AxisDelegate& func) { return false; }
+		virtual bool bindAxis(u32 /*code*/,AxisHandle& /*handle*/, const AxisDelegate& /*func*/) { return false; }
 
 	};
 

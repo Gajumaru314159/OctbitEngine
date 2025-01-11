@@ -10,7 +10,6 @@
 
 using namespace ob;
 
-
 struct AnyBar {
 	s32 value = 0;
 };
@@ -155,9 +154,6 @@ public: Any_Construct_Test() = default; ~Any_Construct_Test() override = default
 	BinaryWriter writer(stream);
 	a.serealize(writer);
 	a.deserealize(reader);
-
-	sizeof(Delegate<void()>);
-	sizeof(Func<void()>);
 
 	Any empty;
 	ObjectA object1;

@@ -20,9 +20,9 @@ namespace ob::platform {
 	//! 
 	//! @details    生成情報を指定してウィンドウを生成する。
 	WindowImpl::WindowImpl(const WindowDesc& desc)
-		:m_className(std::format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum.load()))
-		, m_hWnd(nullptr)
+		: m_hWnd(nullptr)
 		, m_hParentWnd(nullptr)
+		, m_className(std::format(TEXT("{}_{}"), WINDOW_CLASS_NAME, m_windowNum.load()))
 	{
 		auto manager = WindowManager::Get();
 		m_hParentWnd = (HWND)((manager && manager->hasMainWindow()) ? Window::Main().getHandle() : nullptr);
@@ -292,7 +292,7 @@ namespace ob::platform {
 
 
 	//! @brief      ウィンドウのスタイルを設定する
-	void WindowImpl::setStyle(WindowStyle style) {
+	void WindowImpl::setStyle([[maybe_unused]]WindowStyle style) {
 		// TODO ウィンドウスタイル設定
 	}
 
@@ -358,10 +358,6 @@ namespace ob::platform {
 
 	//! @brief              ウィンドウごとの Window Proceduer
 	LRESULT WindowImpl::wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-
-		bool maximized = false;
-		bool minimized = false;
-		bool restored = false;
 
 		WindowEventArgs args;
 		args.type = WindowEventType::Unknown;

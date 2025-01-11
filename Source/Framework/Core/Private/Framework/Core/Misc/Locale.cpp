@@ -16,11 +16,9 @@ namespace ob::core {
 	Locale::Locale(StringView tag) {
 		if (tag.empty())return;
 		m_tag = tag;
-		size_t start = 0;
 		for (size_t i = 0; i < tag.size(); ++i) {
 			if (tag[i] == '-') {
 				m_subtags.emplace_back<u8>(i);
-				start = i + 1;
 				if (m_subtags.size() == 5) break;
 			}
 		}

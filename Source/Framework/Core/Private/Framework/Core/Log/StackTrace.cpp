@@ -2,7 +2,6 @@
 //! @file
 //! @brief		スタックトレース
 //***********************************************************
-#pragma once
 #include <Framework/Core/Log/StackTrace.h>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/StringEncoder.h>

@@ -3,7 +3,6 @@
 //! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Graphics/FrameGraph/FGResourcePool.h>
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/RenderTexture.h>

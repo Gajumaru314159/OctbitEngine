@@ -46,7 +46,8 @@ namespace ob::core {
 		template<typename ...Args>
 		void construct(Args&&... args) {
 			if (m_constructed) {
-				destruct();
+				new(m_data) T(std::forward<Args>(args)...);
+				m_constructed = true;
 			}
 		}
 
@@ -71,7 +72,7 @@ namespace ob::core {
 		}
 
 		//! @brief  参照アクセス
-		T& operator *() const {
+		T& operator *() {
 			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
 			return *reinterpret_cast<T*>(&m_data);
 		}

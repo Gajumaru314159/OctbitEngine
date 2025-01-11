@@ -33,11 +33,11 @@ namespace ob::core {
 
         //! @brief  生成可能なクラスTをバインド
         template<class T>
-        typename ServiceBuilder<T>& bind();
+        ServiceBuilder<T>& bind();
 
         //! @brief  インスタンスTをバインド
         template<class T>
-        typename ServiceBuilder<T>& bind(T& instance);
+        ServiceBuilder<T>& bind(T& instance);
 
         //! @brief  サービスを生成
         //! @param container 生成されたサービスを管理させるコンテナの参照

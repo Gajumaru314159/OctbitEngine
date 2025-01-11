@@ -3,7 +3,6 @@
 //! @brief		ワールド
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Engine/World.h>
 
 namespace ob::engine {

@@ -3,7 +3,6 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/File/INI.h>
 #include <Framework/Core/File/File.h>
 #include <fstream>

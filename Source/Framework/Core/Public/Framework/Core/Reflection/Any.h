@@ -4,11 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Misc/YesNo.h>
+#include <Framework/Core/Reflection/Any.h>
 #include <Framework/Core/Reflection/DynamicCast.h>
+#include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Template/Utility/Memory.h>
 #include <Framework/Core/Template/Utility/TypeTraits.h>
-#include <Framework/Core/Misc/YesNo.h>
 
 namespace ob::core {
 
@@ -77,45 +78,27 @@ namespace ob::core {
 
 		//! @brief Propertyをコピーした値で取得する
 		template<class T>
-		auto copy() const -> std::enable_if_t<!std::is_reference<T>::value, T> {
-			OB_ASSERT(is<T>(), "型が違います");
-			return get().template as<T>();
-		}
+		auto copy() const->std::enable_if_t<!std::is_reference<T>::value, T>;
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
 		//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
 		//! @example property.as<s32&>();
 		template<class T>
-		auto as() const -> std::enable_if_t<std::is_reference<T>::value,const T> {
-			OB_ASSERT(!empty(), "空のプロパティです。");
-			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
-			OB_ASSERT(isReference(), "値型は参照型で受け取ることはできません。isReference()で参照可能か確認してください。");
-			return get().template as<std::remove_reference_t<T>>();
-		}
+		auto as() const->std::enable_if_t<std::is_reference<T>::value, const T>;
 
 		//! @brief  プロパティを特定の特定の型の参照として取得する
 		template<class T>
-		auto as(const T& fallback) const -> std::enable_if_t<std::is_reference<T>::value, const T> {
-			if (empty() || !is<T>() || !isReference()) return fallback;
-			return get().template as<std::remove_reference_t<T>>();
-		}
+		auto as(const T& fallback) const->std::enable_if_t<std::is_reference<T>::value, const T>;
 
 		//! @brief  プロパティを特定の特定の型のコピーとして取得する
 		//! @details プロパティの型が異なる型の場合はassertが発生します。
 		//! @example property.as<s32>();
 		template<class T>
-		auto as() const -> std::enable_if_t<!std::is_reference<T>::value && std::is_copy_assignable<T>::value, T> {
-			OB_ASSERT(!empty(), "空のプロパティです。");
-			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
-			return get().template as<T>();
-		}
+		auto as() const->std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T>;
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型のコピーとして取得する
 		template<class T>
-		auto as(const T& fallback) const -> std::enable_if_t<!std::is_reference<T>::value && std::is_copy_assignable<T>::value, T> {
-			if (empty() || !is<T>())return fallback;
-			return get().template as<T>();
-		}
+		auto as(const T& fallback) const->std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T>;
 
 		//! @brief プロパティの型を取得
 		Type type() const;
@@ -347,8 +330,8 @@ namespace ob::core {
 		// Vector<Any> list();
 		// Map<Any, Any> map();
 
-		void serealize(BinaryWriter& writer) {}
-		void deserealize(BinaryReader& reader) {}
+		void serealize([[maybe_unused]] BinaryWriter& writer) {}
+		void deserealize([[maybe_unused]] BinaryReader& reader) {}
 
 	private:
 
@@ -392,5 +375,48 @@ namespace ob::core {
 		Reference m_reference;
 		Writable m_writable;
 	};
+
+
+	//! @brief Propertyをコピーした値で取得する
+	template<class T>
+	auto Property::copy() const -> std::enable_if_t<!std::is_reference<T>::value, T> {
+		OB_ASSERT(is<T>(), "型が違います");
+		return get().template as<T>();
+	}
+
+	//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
+	//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
+	//! @example property.as<s32&>();
+	template<class T>
+	auto Property::as() const -> std::enable_if_t<std::is_reference<T>::value, const T> {
+		OB_ASSERT(!empty(), "空のプロパティです。");
+		OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
+		OB_ASSERT(isReference(), "値型は参照型で受け取ることはできません。isReference()で参照可能か確認してください。");
+		return get().template as<std::remove_reference_t<T>>();
+	}
+
+	//! @brief  プロパティを特定の特定の型の参照として取得する
+	template<class T>
+	auto Property::as(const T& fallback) const -> std::enable_if_t<std::is_reference<T>::value, const T> {
+		if (empty() || !is<T>() || !isReference()) return fallback;
+		return get().template as<std::remove_reference_t<T>>();
+	}
+
+	//! @brief  プロパティを特定の特定の型のコピーとして取得する
+	//! @details プロパティの型が異なる型の場合はassertが発生します。
+	//! @example property.as<s32>();
+	template<class T>
+	auto Property::as() const -> std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T> {
+		OB_ASSERT(!empty(), "空のプロパティです。");
+		OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
+		return get().template as<T>();
+	}
+
+	//! @brief  フォールバックを指定してプロパティを特定の特定の型のコピーとして取得する
+	template<class T>
+	auto Property::as(const T& fallback) const -> std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T> {
+		if (empty() || !is<T>())return fallback;
+		return get().template as<T>();
+	}
 
 }

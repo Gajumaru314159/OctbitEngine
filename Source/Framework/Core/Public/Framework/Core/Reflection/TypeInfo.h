@@ -95,7 +95,7 @@ namespace ob::core {
 
 		template<class T,class TOwner>
 		T get(TOwner&& owner) const {
-			return getter(owner).as<T>();
+			return getter(owner).template as<T>();
 		}
 
 		template<class T,class TOwner, class = std::enable_if_t<!std::is_const<std::remove_reference_t<TOwner>>::value>>

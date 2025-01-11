@@ -3,7 +3,6 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/File/OBJ.h>
 #include <fstream>
 #include <sstream>
@@ -80,19 +79,19 @@ namespace ob::core {
 	}
 
 
-	void OBJ::face_p_internal(s32 count) {
+	void OBJ::face_p_internal(s32) {
 		m_ss << std::endl;
 	}
-	void OBJ::face_pt_internal(s32 count) {
+	void OBJ::face_pt_internal(s32) {
 		m_ss << std::endl;
 	}
-	void OBJ::face_pn_internal(s32 count) {
+	void OBJ::face_pn_internal(s32) {
 		m_ss << std::endl;
 	}
-	void OBJ::face_ptn_internal(s32 count) {
+	void OBJ::face_ptn_internal(s32) {
 		m_ss << std::endl;
 	}
-	void OBJ::line_internal(s32 count) {
+	void OBJ::line_internal(s32) {
 		m_ss << std::endl;
 	}
 

@@ -44,7 +44,7 @@ namespace ob::core {
 	struct TypeRegister {
 		template<class... Ts>
 		static void Link() {
-			auto funcs = { TypeRegisterTemplate<Ts>::Link... };
+			[[maybe_unused]] auto funcs = { TypeRegisterTemplate<Ts>::Link... };
 		}
 	};
 
@@ -55,11 +55,11 @@ namespace ob::core {
 //! @details	Builderを通じて型情報を登録するRegiser()と、翻訳単位を明示的にリンクするためのLink()を定義します。
 #define OB_DEFINE_INFO_BASE(builder_type,type)\
 namespace ob::core {\
-	void TypeRegisterTemplate<::type>::Register() {\
+	template<> void TypeRegisterTemplate<::type>::Register() {\
 		builder_type<::type> builder{};\
 	}\
-	void TypeRegisterTemplate<::type>::Link() {}\
-	ReflectionFunction TypeRegisterTemplate<::type>::s_register(TypeRegisterTemplate<::type>::Register);\
+	template<> void TypeRegisterTemplate<::type>::Link() {}\
+	template<> ReflectionFunction TypeRegisterTemplate<::type>::s_register(TypeRegisterTemplate<::type>::Register);\
 }\
 template<> void builder_type<::type>::Register()
 
@@ -170,10 +170,10 @@ namespace ob::core {
 	template<class T>
 	class ClassTrait {
 	public:
-		static Any _New(Span<Any> args) {
+		static Any _New([[maybe_unused]] Span<Any> args) {
 			return Any::Create<T>();
 		}
-		static void _PlacedNew(void* p, Span<Any> args) {
+		static void _PlacedNew(void* p, [[maybe_unused]] Span<Any> args) {
 			OB_ASSERT(p, "pがnullです");
 			new(p)T;
 		}
@@ -181,7 +181,7 @@ namespace ob::core {
 			return Any::Create<T>(args[0].as<T>());
 		}
 		static void _PlacedNewWith(void* ptr, Span<Any> args) {
-			OB_ASSERT(ptr, "ptrがnullです"); reinterpret_cast<T*>(ptr)->~T();
+			OB_ASSERT(ptr, "ptrがnullです"); new(ptr) T(args[0].as<T>());
 		}
 		static void _Delete(void* ptr) {
 			OB_ASSERT(ptr, "ptrがnullです");
@@ -585,7 +585,7 @@ namespace ob::core {
 
 		//! @brief			引数なしのメソッド呼び出し
 		template<class M, class... Args>
-		static Any _InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, M method) {
+		static Any _InvokeWithoutArgs(Any& owner, [[maybe_unused]] Span<Any>, M method) {
 			if constexpr (std::is_same<typename MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))();
 				return Any();

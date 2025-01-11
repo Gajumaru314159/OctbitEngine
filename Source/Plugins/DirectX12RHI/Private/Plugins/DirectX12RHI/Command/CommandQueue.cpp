@@ -3,7 +3,6 @@
 //! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>

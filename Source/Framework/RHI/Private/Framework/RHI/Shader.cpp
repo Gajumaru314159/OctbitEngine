@@ -27,8 +27,8 @@ namespace ob::rhi {
         case ob::rhi::ShaderStage::Intersection:    return "IS_Main";
         case ob::rhi::ShaderStage::Callable:        return "CS_Main";
         case ob::rhi::ShaderStage::Amplification:   return "AS_Main";
+		default:                                    return "";
         }
-        return "";
     }
 
     //! @brief              コンストラクタ

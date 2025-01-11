@@ -46,7 +46,7 @@ namespace ob::core {
         }
 
         //! @brief メモリ解放
-        void deallocate(T* p, std::size_t n) {
+        void deallocate(T* p, [[maybe_unused]]std::size_t n) {
             STLAllocatorBase::deallocate(p);
         }
     };

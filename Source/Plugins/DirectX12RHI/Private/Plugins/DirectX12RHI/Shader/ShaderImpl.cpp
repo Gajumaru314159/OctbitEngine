@@ -22,8 +22,8 @@ namespace ob::rhi::dx12 {
         case ShaderStage::Geometry:        return L"GS_Main";
         case ShaderStage::Pixel:           return L"PS_Main";
         case ShaderStage::Compute:         return L"CS_Main";
+        default:                            return L"";
         }
-        return L"";
     }
     const wchar_t* getShadingModelW(ShaderStage stage) {
         switch (stage)
@@ -34,8 +34,8 @@ namespace ob::rhi::dx12 {
         case ShaderStage::Geometry:        return L"gs_6_0";
         case ShaderStage::Pixel:           return L"ps_6_6";
         case ShaderStage::Compute:         return L"cs_6_0";
+        default:                            return L"";
         }
-        return L"";
     }
 
 

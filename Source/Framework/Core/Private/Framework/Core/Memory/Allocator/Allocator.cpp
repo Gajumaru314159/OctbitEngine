@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Memory/Allocator/Allocator.h>
-#include <Framework/core/Memory/Utility/MemoryUtility.h>
+#include <Framework/Core/Memory/Utility/MemoryUtility.h>
 #include <assert.h>
 
 namespace ob::core {

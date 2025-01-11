@@ -3,7 +3,6 @@
 //! @brief		スレッド
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Thread/ThreadPool.h>
 
 namespace ob::core {

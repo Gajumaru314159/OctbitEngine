@@ -63,7 +63,7 @@ namespace ob::core {
         void assign(T& object, R(T::* func)(Args...)) {
             static_assert(sizeof(Invoker<T>) <= kBufferSize, "buffer is too small");
             reset();
-            new (m_buffer.data()) Invoker(object, func);
+            new (m_buffer.data()) Invoker<T>(object, func);
         }
 
         //! @brief      オブジェクトとメンバ関数ポインタを割り当てる(const)
@@ -73,13 +73,13 @@ namespace ob::core {
         void assign(const T& object, R(T::* func)(Args...) const) {
             static_assert(sizeof(ConstInvoker<T>) <= kBufferSize, "buffer is too small");
             reset();
-            new (m_buffer.data()) ConstInvoker(object, func);
+            new (m_buffer.data()) ConstInvoker<T>(object, func);
         }
 
         //! @brief      デリゲートが有効かどうかを判定する
         //! @return     デリゲートが有効な場合はtrue、そうでない場合はfalse
         operator bool() const {
-            return std::equal_range(m_buffer.begin(), m_buffer.end(), 0);
+            return std::find(m_buffer.begin(), m_buffer.end(), 0) != m_buffer.end();
         }
 
         //! @brief      デリゲートをリセットする

@@ -3,7 +3,6 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Reflection/TypeBuilder.h>
 #include <Framework/Engine/Component/FlyCameraComponent.h>
 #include <Framework/Engine/Component/TransformComponent.h>

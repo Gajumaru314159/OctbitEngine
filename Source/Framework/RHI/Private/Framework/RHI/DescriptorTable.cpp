@@ -3,7 +3,6 @@
 //! @brief		デスクリプタテーブル
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/RHI.h>
 

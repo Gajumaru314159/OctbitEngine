@@ -108,7 +108,7 @@ namespace ob::input {
         OB_DECL_BUTTON(Key, Question);			//!< ?
         OB_DECL_BUTTON(Key, At);				//!< @
         OB_DECL_BUTTON(Key, LeftBracket);		//!< [
-        OB_DECL_BUTTON(Key, Backslash);			//!< \ 
+        OB_DECL_BUTTON(Key, Backslash);			//!< \ (maybe yen)
         OB_DECL_BUTTON(Key, RightBracket);		//!< ]
         OB_DECL_BUTTON(Key, Caret);				//!< ^
         OB_DECL_BUTTON(Key, Underscore);		//!< _

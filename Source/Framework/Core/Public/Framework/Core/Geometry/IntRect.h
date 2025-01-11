@@ -140,7 +140,8 @@ namespace ob::core {
 
 
     //! @brief      デフォルトコンストラクタ
-    inline IntRect::IntRect() noexcept
+	inline IntRect::IntRect() noexcept
+		: left(0), top(0), right(0), bottom(0)
     {
     }
 

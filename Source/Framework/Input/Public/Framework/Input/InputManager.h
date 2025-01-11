@@ -28,7 +28,7 @@ namespace ob::input {
 
         //! @brief  入力デバイスを生成
         template<class T,typename... Args>
-        IInputDevice* createDevice(Args&&... args) {
+        IInputDevice* createDevice([[maybe_unused]]Args&&... args) {
             OB_NOTIMPLEMENTED();
             return nullptr;
         }

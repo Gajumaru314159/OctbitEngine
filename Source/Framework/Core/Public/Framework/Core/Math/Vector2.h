@@ -776,7 +776,6 @@ namespace ob::core {
         a.toDirectionAndLength(an, al);
         b.toDirectionAndLength(bn, bl);
         f32 angle = Math::Acos(Dot(an, bn));
-        f32 sinTh = Math::Sin(angle);
         f32 ps = Math::Sin(angle * (1.0f - t)) * Math::Lerp(al, bl, t);
         f32 pe = Math::Sin(angle * t) * Math::Lerp(al, bl, t);
 

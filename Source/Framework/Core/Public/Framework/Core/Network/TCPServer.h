@@ -37,7 +37,7 @@ namespace ob::core {
 
 	private:
 		s16 m_port;
-		s32 m_socket;
+		u64 m_socket;
 	};
 
 

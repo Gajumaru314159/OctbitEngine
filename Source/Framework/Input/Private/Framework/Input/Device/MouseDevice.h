@@ -58,7 +58,7 @@ namespace ob::input {
             f32 next{0.0f};
         };
 
-        DIMOUSESTATE m_mouseState;
+        DIMOUSESTATE2 m_mouseState;
         LPDIRECTINPUT8 m_interface;
         LPDIRECTINPUTDEVICE8 m_mouse;
 

@@ -44,4 +44,4 @@ namespace ob {
 
     }
 }
-#endif OS_LINUX
+#endif

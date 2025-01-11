@@ -10,17 +10,13 @@ namespace ob::core {
 
 	//! @brief      ビューポート
 	//! 
-	//! @details    全ての値は0～1に正規化さえれた値です。
+	//! @details    全ての値は0～1に正規化された値です。
 	struct Viewport {
 	public:
 
 		//===============================================================
 		//  コンストラクタ / デストラクタ
 		//===============================================================
-
-		//! @brief      デフォルトコンストラクタ( 初期化なし )
-		Viewport() noexcept = default;
-
 
 		//! @brief      コンストラクタ(要素指定)
 		constexpr Viewport(f32 left, f32 top, f32 right, f32 bottom, f32 nearZ = 1.0f, f32 farZ = 0.0f) noexcept;
@@ -29,6 +25,8 @@ namespace ob::core {
 		//! @brief      コンストラクタ(サイズ/中心指定)
 		constexpr Viewport(const Vec2& center, const Vec2& size = Vec2::Zero) noexcept;
 
+		//! @brief      デフォルトコンストラクタ( 初期化なし )
+		constexpr Viewport() noexcept : Viewport(0, 0, 0, 0) {}
 
 		//===============================================================
 		//  オペレータ

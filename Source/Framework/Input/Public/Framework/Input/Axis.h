@@ -41,8 +41,8 @@ namespace ob::input {
 
 	private:
 		DeviceID m_deviceId;
-		u32 m_user;
 		u32 m_code;
+		u32 m_user;
 	};
 
 }

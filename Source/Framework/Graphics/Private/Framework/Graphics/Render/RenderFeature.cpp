@@ -3,7 +3,6 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Utility/Ref.h>
 #include <Framework/Graphics/Forward.h>
 

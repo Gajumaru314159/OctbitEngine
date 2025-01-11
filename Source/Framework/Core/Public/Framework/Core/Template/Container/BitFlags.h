@@ -18,7 +18,7 @@ namespace ob::core {
 	public:
 
 		//! @brief bit_flagss<TEnum, TBitsType>
-		using this_type = typename BitFlags<TEnum, TBitsType>;
+		using this_type = BitFlags<TEnum, TBitsType>;
 
 	public:
 

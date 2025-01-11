@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/core/Memory/System/MemorySystem.h>
+#include <Framework/Core/Memory/System/MemorySystem.h>
 #include <new>
 
 //! @brief	ヒープからメモリを確保してインスタンスを作成
@@ -60,31 +60,31 @@ void operator delete[](void* ptr)noexcept {
 }
 
 //! @brief	指定したインスタンスの開放
-void operator delete(void* ptr, std::align_val_t alignment)noexcept {
+void operator delete(void* ptr, [[maybe_unused]]std::align_val_t alignment)noexcept {
     ob::core::Allocator::Free(ptr);
 }
 
 //! @brief	指定したインスタンス配列の開放
-void operator delete[](void* ptr, std::align_val_t alignment)noexcept {
+void operator delete[](void* ptr, [[maybe_unused]] std::align_val_t alignment)noexcept {
     ob::core::Allocator::Free(ptr);
 }
 
 //! @brief	指定したインスタンスの開放
-void operator delete(void* ptr, ob::core::Allocator& Allocator)noexcept {
+void operator delete(void* ptr, [[maybe_unused]] ob::core::Allocator& Allocator)noexcept {
     ob::core::Allocator::Free(ptr);
 }
 
 //! @brief	指定したインスタンス配列の開放
-void operator delete[](void* ptr, ob::core::Allocator& Allocator)noexcept {
+void operator delete[](void* ptr, [[maybe_unused]] ob::core::Allocator& Allocator)noexcept {
     ob::core::Allocator::Free(ptr);
 }
 
 //! @brief	指定したインスタンスの開放
-void operator delete(void* ptr, size_t alignment, ob::core::Allocator& Allocator)noexcept {
+void operator delete(void* ptr, [[maybe_unused]] size_t alignment, [[maybe_unused]] ob::core::Allocator& Allocator)noexcept {
     ob::core::Allocator::Free(ptr);
 }
 
 //! @brief	指定したインスタンス配列の開放
-void operator delete[](void* ptr, size_t alignment, ob::core::Allocator& Allocator)noexcept {
+void operator delete[](void* ptr, [[maybe_unused]] size_t alignment, [[maybe_unused]] ob::core::Allocator& Allocator)noexcept {
     ob::core::Allocator::Free(ptr);
 }

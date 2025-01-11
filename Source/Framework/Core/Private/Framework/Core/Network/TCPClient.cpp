@@ -3,7 +3,6 @@
 /// @brief  コア
 /// @author Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Network/TCPClient.h>
 #include <Framework/Core/String/StringEncoder.h>
 
@@ -41,7 +40,7 @@ namespace ob::core {
 		if (2 <= message.size())message.resize(message.size() - 2);
 		String error = Format("{0}", message.c_str());
 
-		return std::move(error);
+		return error;
 	}
 
 	/// コンストラクタ

@@ -3,7 +3,6 @@
 //! @brief		コマンドライン引数
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Platform/Arguments.h>
 #include <Framework/Core/String/StringEncoder.h>
 

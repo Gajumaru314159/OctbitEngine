@@ -3,7 +3,6 @@
 //! @brief		ウィンドウ
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Platform/Window.h>
 #include <Framework/Platform/Window/WindowManager.h>
 #include <Framework/Platform/Window/Implement/Windows/WindowImpl.h>

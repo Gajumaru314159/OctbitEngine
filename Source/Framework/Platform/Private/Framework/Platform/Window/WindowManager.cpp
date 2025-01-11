@@ -3,7 +3,6 @@
 //! @brief		ウィンドウマネージャ
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Platform/Window/WindowManager.h>
 
 namespace ob::platform {

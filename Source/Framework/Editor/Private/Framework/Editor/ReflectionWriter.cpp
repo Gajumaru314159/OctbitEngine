@@ -3,7 +3,6 @@
 //! @brief		ワールド
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Editor/ReflectionWriter.h>
 
 #include <Framework/Core/Reflection/TypeInfoManager.h>

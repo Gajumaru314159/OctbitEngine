@@ -19,7 +19,7 @@ namespace ob::core {
 
 		//! @brief  型テンプレートTの名前を取得
 		template<class T>
-		constexpr StringView GetTypeName() {
+		constexpr StringView GetTypeName(void) {
 
 			static_assert(!std::is_volatile_v<T>, "Type does not support volatile.");
 
@@ -29,6 +29,11 @@ namespace ob::core {
 
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
+			
+#if defined(__clang__)
+			constexpr size_t prefix = GetTypeName().size() + " [T = "sv.size();
+			constexpr size_t suffix = "]"sv.size();
+#elif defined(_MSC_VER)
 			constexpr size_t prefix2 = GetTypeName().size() - "(void)"sv.size() + "<"sv.size();
 			constexpr size_t suffix = ">(void)"sv.size();
 			constexpr size_t prefix = prefix2 +
@@ -37,7 +42,9 @@ namespace ob::core {
 					signature.substr(prefix2).starts_with("class ") ? "class "sv.size() :
 					signature.substr(prefix2).starts_with("struct ") ? "struct "sv.size() :
 					signature.substr(prefix2).starts_with("union ") ? "union "sv.size() : 0
-				);
+					);
+#endif
+
 
 			constexpr StringView name = signature.substr(prefix, signature.size() - prefix - suffix);
 			

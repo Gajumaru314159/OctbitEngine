@@ -167,8 +167,8 @@ namespace ob::core {
         this_type& operator=(this_type&& x)noexcept;
         ~HandleForwardList();
 
-        bool operator==(const HandleForwardList& rhs)const noexcept;				// 等価演算子
-        bool operator!=(const HandleForwardList& rhs)const noexcept;				// 否等価演算子
+        bool operator==(const HandleForwardList<T>& rhs)const noexcept;				// 等価演算子
+        bool operator!=(const HandleForwardList<T>& rhs)const noexcept;				// 否等価演算子
 
         iterator begin_before()noexcept;
         iterator begin()noexcept;
@@ -235,13 +235,13 @@ namespace ob::core {
 
     //! @brief 等価演算子
     template<typename T>
-    inline bool typename HandleForwardList<T>::operator==(const HandleForwardList& rhs)const noexcept {
+    inline bool HandleForwardList<T>::operator==(const HandleForwardList<T>& rhs)const noexcept {
         return (size() == rhs.size()) && std::equal(begin(), end(), rhs.begin());
     }
 
     //! @brief 否等価演算子
     template<typename T>
-    inline bool typename HandleForwardList<T>::operator!=(const HandleForwardList& rhs)const noexcept {
+    inline bool HandleForwardList<T>::operator!=(const HandleForwardList<T>& rhs)const noexcept {
         return !(*this == rhs);
     }
 

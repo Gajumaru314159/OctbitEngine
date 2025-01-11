@@ -3,7 +3,6 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 

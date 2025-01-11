@@ -107,10 +107,10 @@ namespace ob::core {
 	}
 
 
-	void Property::serealize(BinaryWriter& writer) {
+	void Property::serealize([[maybe_unused]] BinaryWriter& writer) {
 		
 	}
-	void Property::deserealize(BinaryReader& reader) {
+	void Property::deserealize([[maybe_unused]] BinaryReader& reader) {
 	
 	}
 

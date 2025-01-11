@@ -57,10 +57,10 @@ namespace ob::platform {
         void setStyle(WindowStyle style) override;
 
         void* getHandle()const override;
-        String getTextInput() {
-            auto a = std::move(m_inputText);
+        String getTextInput() override{
+            auto text = std::move(m_inputText);
             m_inputText.clear();
-            return std::move(a);
+            return text;
         }
 
         //===============================================================

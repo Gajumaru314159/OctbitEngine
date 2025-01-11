@@ -3,12 +3,11 @@
 //! @brief		ウィンドウ
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Platform/TextInput.h>
 #include <Framework/Platform/Window.h>
 
 namespace ob::platform {
-
+    /*
     String TextInput::GetText() {
         return "";
     }
@@ -21,6 +20,6 @@ namespace ob::platform {
     String TextInput::GetEditingText() {
         return "";
     }
-
+    */
 
 }

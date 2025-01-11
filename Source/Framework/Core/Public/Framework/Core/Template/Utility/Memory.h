@@ -57,10 +57,10 @@ namespace ob::core {
     //! @param first    開始イテレータ
     //! @param n        要素数
     //! @param ...args  コンストラクタの引数
-    template< class ForwardIt, class Size, class... Args>
-    constexpr ForwardIt destroy_n(ForwardIt first, Size n, Args&&... args) {
+    template< class ForwardIt, class Size>
+    constexpr ForwardIt destroy_n(ForwardIt first, Size n) {
         for (; n > 0; (void) ++first, --n)
-            ob::construct_at(&(*first));
+            std::destroy_at(&(*first));
     }
 
 

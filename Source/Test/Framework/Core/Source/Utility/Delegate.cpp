@@ -50,7 +50,6 @@ public:
 		MiniDalegate<void()> d14 = { *this, &A::func10 };
 		MiniDalegate<void()> d24 = {&A::func20};
 
-		sizeof(MiniDalegate<void()>);
 	}
 
 	void constTest() {		

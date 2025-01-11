@@ -3,7 +3,6 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/Graphics/Render/RenderView.h>

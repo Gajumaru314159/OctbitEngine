@@ -24,7 +24,7 @@ namespace ob::core {
 			d = ip & 0xff;
 		}
 		IPAddress(const char* ip) {
-			if(sscanf(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)){}
+			if(sscanf_s(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)){}
 		}
 
 		static IPAddress LocalHost() { return IPAddress(127, 0, 0, 1); }
@@ -43,17 +43,16 @@ namespace ob::core {
 //===============================================================
 //! @cond
 template <> struct std::formatter<ob::core::IPAddress, ob::core::Char> : std::formatter<ob::core::f32, ob::core::Char> {
-	using base = std::formatter<ob::core::u8, ob::core::Char>;
 	template<typename FormatContext>
 	auto format(const ob::core::IPAddress& value, FormatContext& ctx) const {
 		ctx.advance_to(format_to(ctx.out(), "("));
-		ctx.advance_to(base::format(value.a, ctx));
+		ctx.advance_to(format(value.a, ctx));
 		ctx.advance_to(format_to(ctx.out(), ","));
-		ctx.advance_to(base::format(value.b, ctx));
+		ctx.advance_to(format(value.b, ctx));
 		ctx.advance_to(format_to(ctx.out(), ","));
-		ctx.advance_to(base::format(value.c, ctx));
+		ctx.advance_to(format(value.c, ctx));
 		ctx.advance_to(format_to(ctx.out(), ","));
-		ctx.advance_to(base::format(value.d, ctx));
+		ctx.advance_to(format(value.d, ctx));
 		ctx.advance_to(format_to(ctx.out(), ")"));
 		return ctx.out();
 	}

@@ -3,7 +3,6 @@
 //! @brief		Two Level Segregate Fit Mapper
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Allocator/Utility/TLSFMapper.h>
 #include <Framework/Core/Log/Assertion.h>
 #include <Framework/Core/Math/BitOp.h>
@@ -325,7 +324,7 @@ namespace ob::core {
 		if (size < s_linearManagementSize) {
 			firstLevel = 0;
 #pragma warning(suppress: 4293)
-			secondLevel = size >> s_secondLevelShift;
+			secondLevel = size >> std::min<u32>(s_secondLevelShift,32);
 #pragma warning(default: 4293)
 		} else {
 			firstLevel = std::max(0, BitOp::GetMSB((u32)size) + 1 - s_linearManagementSizeLog2);

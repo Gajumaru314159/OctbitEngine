@@ -3,7 +3,6 @@
 //! @brief		Entity便利関数
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Engine/EntityUtil.h>
 #include <Framework/Engine/Entity.h>
 

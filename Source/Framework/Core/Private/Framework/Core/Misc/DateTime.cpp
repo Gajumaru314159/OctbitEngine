@@ -171,7 +171,7 @@ namespace ob::core {
 
 		}
 
-		return std::move(out);
+		return out;
 
 	}
 

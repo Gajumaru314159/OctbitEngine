@@ -212,8 +212,8 @@ namespace ob::core {
         //! @brief fの根(ルート)を返す(高速版)
         static constexpr f32 SqrtFast(f32 f)noexcept {
             f32 xHalf = 0.5f * f;
-            s32   tmp = 0x5F3759DF - (*(s32*)&f >> 1);
-            f32 xRes = *(f32*)&tmp;
+            s32   tmp = 0x5F3759DF - (std::bit_cast<s32>(f) >> 1);
+            f32 xRes = std::bit_cast<f32>(tmp);
 
             xRes *= (1.5f - (xHalf * xRes * xRes));		// 1回目
             xRes *= (1.5f - (xHalf * xRes * xRes));		// 2回目

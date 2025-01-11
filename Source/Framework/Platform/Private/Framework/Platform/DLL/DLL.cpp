@@ -59,7 +59,7 @@ namespace ob::platform {
         }
 
         Function function;
-        function.m_ptr = proc;
+        function.m_ptr = (const void*)proc;
         return function;
     }
 

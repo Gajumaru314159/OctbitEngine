@@ -61,7 +61,7 @@ namespace ob::core {
 
         //! @brief コンストラクタ(vector指定)
         explicit Blob(Vector<byte>&& data) {
-            m_data = move(data);
+            m_data = data;
         }
 
 
@@ -78,7 +78,7 @@ namespace ob::core {
 
         //! @brief ムーブ代入演算子
         Blob& operator =(Blob&& other) noexcept{
-            m_data = move(other.m_data);
+            m_data = other.m_data;
             return *this;
         }
 
@@ -92,7 +92,7 @@ namespace ob::core {
 
         //! @brief ムーブ代入演算子(Vector)
         Blob& operator =(Vector<byte>&& other) noexcept{
-            m_data = move(other);
+            m_data = other;
             return *this;
         }
 

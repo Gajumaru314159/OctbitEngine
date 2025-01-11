@@ -3,7 +3,6 @@
 //! @brief		シーン
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Engine/Scene.h>
 
 namespace ob::engine {

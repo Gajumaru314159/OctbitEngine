@@ -8,7 +8,7 @@
 
 namespace ob::core {
 
-    MimallocHeap::MimallocHeap(void* pBuffer, size_t size) {
+    MimallocHeap::MimallocHeap(void* pBuffer, size_t) {
         m_pName = "MimallocHeap";
         OB_ASSERT_EXPR(pBuffer != nullptr);
     }
@@ -17,11 +17,11 @@ namespace ob::core {
 
     }
 
-    void* MimallocHeap::allocate(size_t size, u32 alignment, bool zeroClear) {
+    void* MimallocHeap::allocate(size_t, u32, bool) {
         return nullptr;
     }
 
-    void MimallocHeap::deallocate(void* pBuffer) {
+    void MimallocHeap::deallocate(void* ) {
     }
 
     void MimallocHeap::release() {

@@ -3,7 +3,6 @@
 //! @brief		シーン
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component.h>

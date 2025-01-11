@@ -24,7 +24,7 @@ namespace ob::input {
 		DeviceID getDeviceId()const override { return Keyboard::ID; }
 
 		//! @brief  更新
-		void update();
+		void update() override;
 
 
 		//! @brief  ボタンの入力状態を取得

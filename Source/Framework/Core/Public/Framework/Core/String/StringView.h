@@ -201,8 +201,6 @@ struct std::hash<ob::core::StringViewBase<char>>
 {
 	size_t operator ()(const ob::core::StringViewBase<char>& value) const noexcept
 	{
-		ob::core::StringViewBase<char> a;
-
 		return std::hash<std::string_view>()({ value.data(), value.size() });
 	}
 };

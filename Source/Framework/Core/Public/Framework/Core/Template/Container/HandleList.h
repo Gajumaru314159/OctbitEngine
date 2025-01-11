@@ -296,13 +296,13 @@ namespace ob::core {
 
 	//! @brief 等価演算子
 	template<typename T>
-	inline bool typename HandleList<T>::operator==(const HandleList<T>& rhs)const noexcept {
+	inline bool HandleList<T>::operator==(const HandleList<T>& rhs)const noexcept {
 		return (size() == rhs.size()) && std::equal(begin(), end(), rhs.begin());
 	}
 
 	//! @brief 否等価演算子
 	template<typename T>
-	inline bool typename HandleList<T>::operator!=(const HandleList<T>& rhs)const noexcept {
+	inline bool HandleList<T>::operator!=(const HandleList<T>& rhs)const noexcept {
 		return !(*this==rhs);
 	}
 

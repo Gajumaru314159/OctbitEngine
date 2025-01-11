@@ -3,7 +3,6 @@
 //! @brief		型情報
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Reflection/TypeInfo.h>
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Core/Core.h>

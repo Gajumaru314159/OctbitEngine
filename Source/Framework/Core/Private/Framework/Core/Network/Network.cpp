@@ -3,7 +3,6 @@
 //! @brief  コア
 //! @author Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Core/Network/Network.h>
 
 #ifdef OS_WINDOWS

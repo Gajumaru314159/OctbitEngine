@@ -38,9 +38,9 @@ namespace ob::input
 
 
 	DirectInputDevice::DirectInputDevice()
-		: m_position{}
-		, m_interface(nullptr)
+		: m_interface(nullptr)
 		, m_mouse(nullptr)
+		, m_position{}
 	{
 		const auto& window = platform::Window::Main();
 		HWND hWnd = (HWND)window.getHandle();

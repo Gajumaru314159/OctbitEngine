@@ -3,7 +3,6 @@
 //! @brief		コンポーネント
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Core/Reflection/TypeBuilder.h>

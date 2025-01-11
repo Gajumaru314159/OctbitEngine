@@ -10,7 +10,7 @@ TEST(FixedVector, Constructors) {
 	FixedVector<int, 100> fakeEmpty, fake(5, 10), fakeCopy(fake), fakeArray{ 2, 3, 4, 5, 7 };
 	FixedVector<int, 100> realEmpty, real(5, 10), realCopy(real), realArray{ 2, 3, 4, 5, 7 };
 	fake = real;
-	ob::core::is_iterator<decltype(fake.begin())>::value;
+
 	EXPECT_TRUE(fakeEmpty.size() == realEmpty.size());
 	EXPECT_TRUE(fake.size() == real.size());
 	EXPECT_TRUE(fakeCopy.size() == realCopy.size());
