@@ -30,7 +30,7 @@ namespace ob::core {
         u32 c3 = (code >> 0) & 0xFF;
         switch (format) {
         case ColorCodeFormat::ARGB:
-            return IntColor(c3, c0, c1, c2);
+            return IntColor(c1, c2, c3, c0);
         case ColorCodeFormat::ABGR:
             return IntColor(c3, c2, c1, c0);
         case ColorCodeFormat::RGBA:
