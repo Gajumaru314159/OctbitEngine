@@ -492,7 +492,7 @@ namespace ob::core {
 			m_info.methodOrder.emplace_back(name);
 			auto& info = m_info.methods[name];
 			info.name = name;
-			info.returnType = Type::Get<MethodTraits<M>::return_type>();
+			info.returnType = Type::Get<typename MethodTraits<M>::return_type>();
 			info.isConst = MethodTraits<M>::Const;
 
 			// 0引数(引数名未指定)に対応するために最後尾に空要素を追加している
@@ -586,7 +586,7 @@ namespace ob::core {
 		//! @brief			引数なしのメソッド呼び出し
 		template<class M, class... Args>
 		static Any _InvokeWithoutArgs(Any& owner, [[meybe_unused]] Span<Any>, M method) {
-			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
+			if constexpr (std::is_same<typename MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))();
 				return Any();
 			} else {
@@ -597,7 +597,7 @@ namespace ob::core {
 		//! @brief			引数ありのメソッド呼び出し
 		template<class M,class... Args, size_t... I>
 		static Any _InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
-			if constexpr (std::is_same<MethodTraits<M>::return_type, void>::value) {
+			if constexpr (std::is_same<typename MethodTraits<M>::return_type, void>::value) {
 				(owner.as<T>().*(method))(args[I].as<std::remove_reference_t<Args>>()...);
 				return Any();
 			} else {

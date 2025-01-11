@@ -79,7 +79,7 @@ namespace ob::core {
 		template<class T>
 		auto copy() const -> std::enable_if_t<!std::is_reference<T>::value, T> {
 			OB_ASSERT(is<T>(), "型が違います");
-			return get().as<T>();
+			return get().template as<T>();
 		}
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
@@ -90,14 +90,14 @@ namespace ob::core {
 			OB_ASSERT(!empty(), "空のプロパティです。");
 			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
 			OB_ASSERT(isReference(), "値型は参照型で受け取ることはできません。isReference()で参照可能か確認してください。");
-			return get().as<std::remove_reference_t<T>>();
+			return get().template as<std::remove_reference_t<T>>();
 		}
 
 		//! @brief  プロパティを特定の特定の型の参照として取得する
 		template<class T>
 		auto as(const T& fallback) const -> std::enable_if_t<std::is_reference<T>::value, const T> {
 			if (empty() || !is<T>() || !isReference()) return fallback;
-			return get().as<std::remove_reference_t<T>>();
+			return get().template as<std::remove_reference_t<T>>();
 		}
 
 		//! @brief  プロパティを特定の特定の型のコピーとして取得する
@@ -107,14 +107,14 @@ namespace ob::core {
 		auto as() const -> std::enable_if_t<!std::is_reference<T>::value && std::is_copy_assignable<T>::value, T> {
 			OB_ASSERT(!empty(), "空のプロパティです。");
 			OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
-			return get().as<T>();
+			return get().template as<T>();
 		}
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型のコピーとして取得する
 		template<class T>
 		auto as(const T& fallback) const -> std::enable_if_t<!std::is_reference<T>::value && std::is_copy_assignable<T>::value, T> {
 			if (empty() || !is<T>())return fallback;
-			return get().as<T>();
+			return get().template as<T>();
 		}
 
 		//! @brief プロパティの型を取得

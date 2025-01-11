@@ -19,7 +19,7 @@ TEST(OBJ, Test)
 	mtl.save("test.mtl");
 
 	OBJ obj;
-	obj.comment(u8"テスト出力");
+	obj.comment("テスト出力");
 	obj.mtllib("test.mtl");
 	obj.material("test0");
 	obj.poly_pn(

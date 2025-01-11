@@ -6,7 +6,10 @@
 #pragma once
 #include <assert.h>
 #include <iterator>
+#include <memory>
 #include <Framework/Core/Thread/SpinLock.h>
+#include <Framework/Core/Utility/Noncopyable.h>
+#include <Framework/Core/Utility/Nonmovable.h>
 
 namespace ob::core {
 
@@ -36,21 +39,20 @@ namespace ob::core {
         //! @brief ハンドル基底
         //!@cond
         class HandleBase {
-            friend class HandleForwardList<T>;
         public:
 
             //! @brief ハンドルが対象のリストの要素か判定する
-            bool is_child_of(const HandleForwardList<T>& parent)const noexcept {
-                return pParent == std::addressof(parent);
+            bool is_child_of(const HandleForwardList& parent)const noexcept {
+                return pParent == &parent;
             }
 
-        protected:
             //! @brief クリア
             void clear()noexcept {
                 pParent = nullptr;
                 pNext = nullptr;
             }
-        protected:
+        public:
+        //protected:
             HandleBase* pNext = nullptr;
             HandleForwardList<T>* pParent = nullptr;
         };
@@ -59,7 +61,7 @@ namespace ob::core {
 
         //! @brief ハンドル
         class Handle :public HandleBase, private Noncopyable, private Nonmovable {
-            friend class HandleForwardList<T>;
+            friend class HandleForwardList;
         public:
 
             //! @brief コンストラクタ
@@ -85,16 +87,17 @@ namespace ob::core {
 
             const T* get_ptr()const noexcept {
                 if (!pParent)return nullptr;
-                return reinterpret_cast<T*>(instance);
+                return reinterpret_cast<const T*>(instance);
             }
 
         private:
+            using HandleBase::pParent;
             alignas(alignof(T)) byte instance[sizeof(T)];
         };
 
     public:
 
-        using this_type = HandleForwardList<T>;   //!< 型
+        using this_type = HandleForwardList;   //!< 型
         using value_type = T;                       //!< アイテムの型
         using size_type = size_t;                   //!< サイズ型
 
@@ -108,7 +111,7 @@ namespace ob::core {
 
         //! @brief constイテレータ
         class const_iterator {
-            friend class HandleForwardList<T>;
+            friend class HandleForwardList;
         public:
             using this_type = const_iterator;                                                                               //!< 型
             using difference_type = typename HandleForwardList<T>::difference_type;                                               //!< ポインタ差分型
@@ -120,7 +123,7 @@ namespace ob::core {
             const_iterator(const this_type& x)noexcept :pHandle(const_cast<HandleBase*>(x.pHandle)) {}                     //!< ムーブコンストラクタ
             const_iterator& operator = (const this_type& x)noexcept { pHandle = const_cast<HandleBase*>(x.pHandle); return*this; }     //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
-            pointer   operator->() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
+            pointer   operator->() const noexcept { return (static_cast<Handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pNext; return *this; }                                    //!< インクリメント
             this_type operator++(int)noexcept { auto temp = *this; ++(*this); return temp; }                                //!< 後置インクリメント
             bool operator==(const this_type& rhs)const noexcept { return pHandle == rhs.pHandle; }                          //!< 等価演算子
@@ -128,7 +131,7 @@ namespace ob::core {
         protected:
             const_iterator(const HandleBase* pHandle)noexcept :pHandle(const_cast<HandleBase*>(pHandle)) {}               //!< ハンドルのポインタから生成(内部用)
         private:
-            bool is_child_of(const HandleForwardList<T>& parent)const noexcept { return pHandle->is_child_of(parent); }           //!< ハンドルの所有者を確認
+            bool is_child_of(const HandleForwardList& parent)const noexcept { return pHandle->is_child_of(parent); }           //!< ハンドルの所有者を確認
         protected:
             HandleBase* pHandle;                                                                                           //!< インスタンス・ポインタ
         };
@@ -136,7 +139,7 @@ namespace ob::core {
 
         //! @brief イテレータ
         class iterator :public const_iterator {
-            friend class HandleForwardList<T>;
+            friend class HandleForwardList;
         public:
             using this_type = iterator;                                                                                     //!< 型
             using value_type = const T;                                                                                     //!< インスタンス型
@@ -146,13 +149,14 @@ namespace ob::core {
             iterator(const this_type& x)noexcept :const_iterator(x) {}                                                      //!< ムーブコンストラクタ
             iterator& operator = (const this_type& x)noexcept { const_iterator::operator=(x); return *this; }               //!< ムーブ代入演算子
             reference operator*() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                    //!< インスタンス参照
-            pointer   operator->() const noexcept { return *(static_cast<Handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
+            pointer   operator->() const noexcept { return (static_cast<Handle*>(pHandle)->get_ptr()); }                   //!< メンバアクセス
             this_type& operator++() noexcept { pHandle = pHandle->pNext; return *this; }                                    //!< インクリメント
             this_type operator++(int)noexcept { auto temp = *this; ++(*this); return temp; }                                //!< 後置インクリメント
             bool operator==(const this_type& rhs)const noexcept { return pHandle == rhs.pHandle; }                          //!< 等価演算子
             bool operator!=(const this_type& rhs)const noexcept { return !(*this == rhs); }                                 //!< 否等価演算子
         protected:
             iterator(const HandleBase* pHandle)noexcept :const_iterator(pHandle) {}                                        //!< ハンドルのポインタから生成(内部用)
+            using const_iterator::pHandle;
         };
 
 
@@ -163,8 +167,8 @@ namespace ob::core {
         this_type& operator=(this_type&& x)noexcept;
         ~HandleForwardList();
 
-        bool operator==(const HandleForwardList<T>& rhs)const noexcept;				// 等価演算子
-        bool operator!=(const HandleForwardList<T>& rhs)const noexcept;				// 否等価演算子
+        bool operator==(const HandleForwardList& rhs)const noexcept;				// 等価演算子
+        bool operator!=(const HandleForwardList& rhs)const noexcept;				// 否等価演算子
 
         iterator begin_before()noexcept;
         iterator begin()noexcept;
@@ -231,13 +235,13 @@ namespace ob::core {
 
     //! @brief 等価演算子
     template<typename T>
-    inline bool typename HandleForwardList<T>::operator==(const HandleForwardList<T>& rhs)const noexcept {
+    inline bool typename HandleForwardList<T>::operator==(const HandleForwardList& rhs)const noexcept {
         return (size() == rhs.size()) && std::equal(begin(), end(), rhs.begin());
     }
 
     //! @brief 否等価演算子
     template<typename T>
-    inline bool typename HandleForwardList<T>::operator!=(const HandleForwardList<T>& rhs)const noexcept {
+    inline bool typename HandleForwardList<T>::operator!=(const HandleForwardList& rhs)const noexcept {
         return !(*this == rhs);
     }
 

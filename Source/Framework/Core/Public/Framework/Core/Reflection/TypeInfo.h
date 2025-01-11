@@ -71,7 +71,7 @@ namespace ob::core {
 			placedInvoker(p,args);
 		}
 		template<class T, class... Args>
-		void invoke_placed(Args&&... args) const {
+		void invoke_placed(void* p,Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
 			Any rargs[] = { args...,Any() };
 			placedInvoker(p, Span<Any>(rargs, sizeof...(Args)));

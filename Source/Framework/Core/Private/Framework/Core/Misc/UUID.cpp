@@ -66,7 +66,7 @@ namespace ob::core {
 
         UUID result;
         auto ptr = reinterpret_cast<u8*>(&result.data);
-        for (auto& [i,c] : Indexed(uuidText)) {
+        for (auto [i,c] : Indexed(uuidText)) {
             if (c == '-') {
                 if (i == 8 || i == 12 || i == 17 || i == 22) {
                     continue;

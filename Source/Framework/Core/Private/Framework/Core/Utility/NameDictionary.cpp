@@ -42,7 +42,7 @@ namespace ob::core{
 
             // 新規追加
             if (itr == m_dict.end()) {
-                auto& item = m_dict.emplace(hash, internal::NameData(nameSV, hash));
+                const auto& item = m_dict.emplace(hash, internal::NameData(nameSV, hash));
                 return Name(item.first->second);
             }
 

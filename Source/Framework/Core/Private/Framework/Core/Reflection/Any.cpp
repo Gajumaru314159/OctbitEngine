@@ -28,7 +28,8 @@ namespace ob::core {
 	Property& Property::assign(const Any& value) {
 		if (m_info && m_ownerInfo) {
 			if (isWritable()) {
-				m_info->setter(Any(*m_ownerInfo,m_owner),value);
+				Any tempOowner(*m_ownerInfo, m_owner);
+				m_info->setter(tempOowner,value);
 			}
 		}
 		return *this;

@@ -175,29 +175,6 @@ namespace ob::core {
         return *builder;
     }
 
-    //! @brief  サービスを生成
-    //! @param container 生成されたサービスを管理させるコンテナの参照
-    template<class T>
-    T* ServiceInjector::create(ServiceContainer& container)const {
-        // 生成済み
-        if (auto instance = container.get<T>())
-            return instance;
-        // 抽象->具象
-        Vector<Type> fallback;
-        auto& concretes = try_find(m_builderMap, Type::Get<T>(), fallback);
-        // 生成
-        for (auto& concrete : concretes) {
-            auto& builder = m_builders.find(concrete)->second;
-            try {
-                return reinterpret_cast<T*>(builder->create(container));
-            } catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}",Type::Get<T>().name(),e.message());
-                // 生成キャンセル
-            }
-        }
-        return nullptr;
-    }
-
 
     //! @brief      サービスビルダー基底
     class ServiceBuilderBase {
@@ -245,26 +222,7 @@ namespace ob::core {
             };
         }
         //! @brief      サービス生成
-        void* create(ServiceContainer& container) {
-            // 生成
-            detail::ServiceHolder<T>* holder = nullptr;
-            if (m_getter) {
-                holder = new detail::ServiceHolder<T>(m_getter(), false);
-            } else {
-                holder = new detail::ServiceHolder<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)), true);
-            }
-            // 無効
-            if (holder->get() == nullptr) {
-                delete holder;
-                return nullptr;
-            }
-            // 基底クラスをマッピング
-            auto index = container.m_services.size();
-            for (auto& type : m_bases) {
-                container.m_indices.emplace(type, index);
-            }
-            return container.m_services.emplace_back(holder)->get();
-        }
+        void* create(ServiceContainer& container);
     private:
         friend class ServiceInjector;
         ServiceInjector& m_injector;
@@ -357,5 +315,53 @@ namespace ob::core {
                 LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.name(), e.message());
             }
         }
+    }
+
+    //! @brief      サービス生成
+    template<class T>
+    void* ServiceBuilder<T>::create(ServiceContainer& container) {
+        // 生成
+        detail::ServiceHolder<T>* holder = nullptr;
+        if (m_getter) {
+            holder = new detail::ServiceHolder<T>(m_getter(), false);
+        }
+        else {
+            holder = new detail::ServiceHolder<T>(reinterpret_cast<T*>(detail::Factory<T>::Create(m_injector, container)), true);
+        }
+        // 無効
+        if (holder->get() == nullptr) {
+            delete holder;
+            return nullptr;
+        }
+        // 基底クラスをマッピング
+        auto index = container.m_services.size();
+        for (auto& type : m_bases) {
+            container.m_indices.emplace(type, index);
+        }
+        return container.m_services.emplace_back(holder)->get();
+    }
+
+    //! @brief  サービスを生成
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    template<class T>
+    T* ServiceInjector::create(ServiceContainer& container)const {
+        // 生成済み
+        if (auto instance = container.get<T>())
+            return instance;
+        // 抽象->具象
+        Vector<Type> fallback;
+        auto& concretes = try_find(m_builderMap, Type::Get<T>(), fallback);
+        // 生成
+        for (auto& concrete : concretes) {
+            auto& builder = m_builders.find(concrete)->second;
+            try {
+                return reinterpret_cast<T*>(builder->create(container));
+            }
+            catch (Exception e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", Type::Get<T>().name(), e.message());
+                // 生成キャンセル
+            }
+        }
+        return nullptr;
     }
 }

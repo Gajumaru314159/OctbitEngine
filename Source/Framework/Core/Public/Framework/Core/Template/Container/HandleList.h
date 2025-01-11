@@ -175,6 +175,7 @@ namespace ob::core {
 			bool operator!=(const this_type& rhs)const noexcept { return !(*this == rhs); }                                 //!< 否等価演算子
 		protected:
 			iterator(const Handle* pHandle)noexcept :const_iterator(pHandle) {}                                        //!< ハンドルのポインタから生成(内部用)
+			using const_iterator::pHandle;
 		};
 
 
