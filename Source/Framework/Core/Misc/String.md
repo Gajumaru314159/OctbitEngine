@@ -55,7 +55,7 @@ template <> struct std::formatter<ob::core::Range, ob::core::Char> {
 	}
 
 	template<typename FormatContext>
-	auto format(ob::core::Range value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+	auto format(ob::core::Range value, FormatContext& ctx) const {
 		return format_to(ctx.out(), "({},{})", value.min,value.max);
 	}
 };

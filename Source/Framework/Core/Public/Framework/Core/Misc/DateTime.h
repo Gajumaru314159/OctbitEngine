@@ -233,7 +233,7 @@ template <> struct std::formatter<ob::core::DateTime, ob::core::Char> {
 	}
 
 	template<typename FormatContext>
-	auto format(const ob::core::DateTime& dt, FormatContext& ctx)  const -> decltype(ctx.out()) {
+	auto format(const ob::core::DateTime& dt, FormatContext& ctx) const {
 		return format_to(ctx.out(), dt.toString().c_str());
 	}
 };

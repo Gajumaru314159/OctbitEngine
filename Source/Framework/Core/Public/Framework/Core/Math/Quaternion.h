@@ -425,7 +425,7 @@ namespace ob::core {
 template <> struct std::formatter<ob::core::Quat, ob::core::Char> : std::formatter<ob::core::f32, ob::core::Char> {
     using base = std::formatter<ob::core::f32, ob::core::Char>;
     template<typename FormatContext>
-    auto format(const ob::core::Quat& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+    auto format(const ob::core::Quat& value, FormatContext& ctx) const {
         ctx.advance_to(format_to(ctx.out(), "("));
         ctx.advance_to(base::format(value.x, ctx));
         ctx.advance_to(format_to(ctx.out(), ","));

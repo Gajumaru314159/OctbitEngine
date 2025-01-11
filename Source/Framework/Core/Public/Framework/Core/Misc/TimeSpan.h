@@ -349,7 +349,7 @@ template <> struct std::formatter<ob::core::TimeSpan, ob::core::Char> {
 	}
 
 	template<typename FormatContext>
-	auto format(const ob::core::TimeSpan& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+	auto format(const ob::core::TimeSpan& value, FormatContext& ctx) const {
 		if (value.days())return format_to(ctx.out(), "{}d{:0>2}h{:0>2}m", value.days(), value.hours(), value.minutes());
 		if (value.hours())return format_to(ctx.out(), "{:0>2}h{:0>2}m{:0>2}s", value.hours(), value.minutes(), value.seconds());
 		if (value.minutes())return format_to(ctx.out(), "{:0>2}m{:.5}s", value.minutes(), value.secondsF());

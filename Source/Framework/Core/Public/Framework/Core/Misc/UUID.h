@@ -132,7 +132,7 @@ template <> struct std::formatter<ob::core::UUID, ob::core::Char> {
     }
 
     template<typename FormatContext>
-    auto format(ob::core::UUID value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+    auto format(ob::core::UUID value, FormatContext& ctx) const {
         ob::core::Char text[37];
         value.toString(text);
         return format_to(ctx.out(), "{}", text);

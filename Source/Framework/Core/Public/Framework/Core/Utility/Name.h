@@ -133,7 +133,7 @@ template <> struct std::formatter<ob::core::Name, ob::core::Char> {
     }
 
     template<typename FormatContext>
-    auto format(const ob::core::Name& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+    auto format(const ob::core::Name& value, FormatContext& ctx) const {
         return format_to(ctx.out(), "{}", value.toSV());
     }
 };

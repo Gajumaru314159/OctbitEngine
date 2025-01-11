@@ -216,7 +216,7 @@ template <> struct std::formatter<ob::core::HSV, ob::core::Char> {
     }
 
     template<typename FormatContext>
-    auto format(ob::core::HSV value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+    auto format(ob::core::HSV value, FormatContext& ctx) const {
         return format_to(ctx.out(), "({},{},{},{})", value.h, value.s, value.v, value.a);
     }
 };

@@ -245,7 +245,7 @@ template <> struct std::formatter<ob::core::IntColor, ob::core::Char> {
 	}
 
 	template<typename FormatContext>
-	auto format(ob::core::IntColor value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+	auto format(ob::core::IntColor value, FormatContext& ctx) const {
 		if (isCode) {
 			return format_to(ctx.out(), "{:08X}", value.toCode());
 		} else {

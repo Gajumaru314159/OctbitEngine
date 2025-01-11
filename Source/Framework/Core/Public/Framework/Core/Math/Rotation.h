@@ -197,7 +197,7 @@ template <> struct std::formatter<ob::core::Rot, ob::core::Char> : std::formatte
 		return base::parse(ctx);
 	}
 	template<typename FormatContext>
-	auto format(const ob::core::Rot& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
+	auto format(const ob::core::Rot& value, FormatContext& ctx) const {
 		auto x = value.x;
 		auto y = value.y;
 		auto z = value.z;
