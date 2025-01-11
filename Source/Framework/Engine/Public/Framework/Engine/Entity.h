@@ -85,7 +85,7 @@ namespace ob::engine {
 		template<class T>T* findComponent(s32 index = 0)const { return reinterpret_cast<T*>(findComponent(Type::Get<T>(), index)); }
 		//! @brief 特定の型のComponentに対して処理
 		template<class T>void visitComponents(const Delegate<void(const T&)>& func)const { 
-			for (auto& component : componens()) {
+			for (auto& component : m_components) {
 				if (auto c = DynamicCast<T>(*component)) {
 					func(*c);
 				}

@@ -231,7 +231,7 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
+template <> struct std::formatter<ob::core::IntColor, ob::core::Char> {
 	bool isCode=false;
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
@@ -245,7 +245,7 @@ template <> struct fmt::formatter<ob::core::IntColor, ob::core::Char> {
 	}
 
 	template<typename FormatContext>
-	auto format(ob::core::IntColor value, FormatContext& ctx) -> decltype(ctx.out()) {
+	auto format(ob::core::IntColor value, FormatContext& ctx)  const -> decltype(ctx.out()) {
 		if (isCode) {
 			return format_to(ctx.out(), "{:08X}", value.toCode());
 		} else {

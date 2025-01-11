@@ -43,7 +43,7 @@ namespace ob::rhi::dx12 {
 		if (!createResources(rDevice))return;
 		if (!createBuffers(rDevice))return;
 
-		m_desc.window.addEventListener(m_hEvent, platform::WindowEventNotifier::delegate_type{ *this,&DisplayImpl::onWindowChanged });
+		m_desc.window.addEventListener(m_hEvent, { *this,&DisplayImpl::onWindowChanged });
 
 	}
 

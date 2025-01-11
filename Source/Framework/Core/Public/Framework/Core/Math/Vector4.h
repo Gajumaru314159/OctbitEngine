@@ -848,10 +848,10 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Vec4, ob::core::Char> : fmt::formatter<ob::core::f32, ob::core::Char> {
-    using base = fmt::formatter<ob::core::f32, ob::core::Char>;
+template <> struct std::formatter<ob::core::Vec4, ob::core::Char> : std::formatter<ob::core::f32, ob::core::Char> {
+    using base = std::formatter<ob::core::f32, ob::core::Char>;
     template<typename FormatContext>
-    auto format(const ob::core::Vec4& value, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(const ob::core::Vec4& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
         ctx.advance_to(format_to(ctx.out(), "("));
         ctx.advance_to(base::format(value.x, ctx));
         ctx.advance_to(format_to(ctx.out(), ","));

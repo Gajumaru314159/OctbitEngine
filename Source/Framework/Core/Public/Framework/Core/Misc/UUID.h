@@ -125,14 +125,14 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::UUID, ob::core::Char> {
+template <> struct std::formatter<ob::core::UUID, ob::core::Char> {
     template<typename ParseContext>
     constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }
 
     template<typename FormatContext>
-    auto format(ob::core::UUID value, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(ob::core::UUID value, FormatContext& ctx)  const -> decltype(ctx.out()) {
         ob::core::Char text[37];
         value.toString(text);
         return format_to(ctx.out(), "{}", text);

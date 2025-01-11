@@ -112,20 +112,7 @@ namespace ob::graphics {
 
 		//! @brief      パスを追加
 		template <typename Data, typename Setup, typename Execute>
-		const Data& addPass(StringView name, Setup&& setup, Execute&& execute) {
-			return m_fg.addCallbackPass<Data>(
-				name,
-				[&](FrameGraph::Builder& nativeBuilder, Data& data) {
-					FGBuilder builder(nativeBuilder);
-					setup(builder, data);
-				},
-				[=](const Data& data, FrameGraphPassResources& nativeResources, void* ctx) {
-					auto& cmd = *static_cast<rhi::CommandList*>(ctx);
-					FGResources resources(nativeResources);
-					execute(data, resources, cmd);
-				}
-			);
-		}
+		const Data& addPass(StringView name, Setup&& setup, Execute&& execute);
 
 		//! @brief      FGTextureのRenderTextureDescを取得する
 		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
@@ -264,5 +251,23 @@ namespace ob::graphics {
 	private:
 		FrameGraph::Builder& m_builder;
 	};
+
+
+	//! @brief      パスを追加
+	template <typename Data, typename Setup, typename Execute>
+	const Data& FG::addPass(StringView name, Setup&& setup, Execute&& execute) {
+		return m_fg.addCallbackPass<Data>(
+			name,
+			[&](FrameGraph::Builder& nativeBuilder, Data& data) {
+				FGBuilder builder(nativeBuilder);
+				setup(builder, data);
+			},
+			[=](const Data& data, FrameGraphPassResources& nativeResources, void* ctx) {
+				auto& cmd = *static_cast<rhi::CommandList*>(ctx);
+				FGResources resources(nativeResources);
+				execute(data, resources, cmd);
+			}
+		);
+	}
 
 }

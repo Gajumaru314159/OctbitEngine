@@ -51,14 +51,14 @@ namespace ob::graphics {
 		bufferSize = align_up(bufferSize, arrayAlignment);
 
 		// プロパティ名とテクスチャ番号対応
-		for (auto& [index,name] : Indexed(desc.textureProperties)) {
+		for (auto [index,name] : Indexed(desc.textureProperties)) {
 			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Texture,(s32)index});
 			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
 		}
 		m_textures.resize(desc.textureProperties.size());
 
 		// プロパティ名とテクスチャ番号対応
-		for (auto& [index, name] : Indexed(desc.bufferProperties)) {
+		for (auto [index, name] : Indexed(desc.bufferProperties)) {
 			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Buffer,(s32)index });
 			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
 		}

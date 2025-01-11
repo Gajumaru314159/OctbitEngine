@@ -178,8 +178,8 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> : fmt::formatter<ob::core::f32, ob::core::Char> {
-	using base = fmt::formatter<ob::core::f32, ob::core::Char>;
+template <> struct std::formatter<ob::core::Rot, ob::core::Char> : std::formatter<ob::core::f32, ob::core::Char> {
+	using base = std::formatter<ob::core::f32, ob::core::Char>;
 	bool isRad = false;
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {		
@@ -197,7 +197,7 @@ template <> struct fmt::formatter<ob::core::Rot, ob::core::Char> : fmt::formatte
 		return base::parse(ctx);
 	}
 	template<typename FormatContext>
-	auto format(const ob::core::Rot& value, FormatContext& ctx) -> decltype(ctx.out()) {
+	auto format(const ob::core::Rot& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
 		auto x = value.x;
 		auto y = value.y;
 		auto z = value.z;

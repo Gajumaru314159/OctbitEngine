@@ -19,11 +19,13 @@ namespace ob::core {
 	//! @details std::functionと異なりヒープアロケーションを行わない関数オブジェクト
 	template <class R, class... Args, size_t BufferSize>
 	class FixedFunc<R(Args...), BufferSize> {
+	public:
+		using result_type = R;
 	private:
 		struct ICallable {
 			virtual ~ICallable() = default;
 			virtual R operator()(Args...) const = 0;
-			virtual void clone(u8* m_buffer, ICallable** callablePtr) const = 0;
+			virtual void clone(u8* buffer, ICallable** callablePtr) const = 0;
 		};
 
 		template <class T>
@@ -37,15 +39,13 @@ namespace ob::core {
 				return functor(std::forward<Args>(args)...);
 			}
 
-			void clone(u8* m_buffer, ICallable** callablePtr) const override {
-				*callablePtr = new (m_buffer) Callable(functor);
+			void clone(u8* buffer, ICallable** callablePtr) const override {
+				*callablePtr = new (buffer) Callable(functor);
 			}
 		};
 	private:
 		ICallable* m_callable = nullptr;
 		u8			m_buffer[BufferSize + sizeof(void*)] = { 0 };
-	public:
-		using result_type = R;
 	public:
 
 		//! @brief デフォルトコンストラクタ
@@ -103,7 +103,7 @@ namespace ob::core {
 			// コピー/ムーブ除外
 			(!std::is_base_of_v<FixedFunc,remove_cvr_t<F>>) &&
 			// サイズチェック
-			sizeof(Callable<F>) <= sizeof(m_buffer)
+			sizeof(Callable<F>) <= sizeof(FixedFunc::m_buffer)
 			>>
 		FixedFunc operator=(F&& f) {
 			if (m_callable)

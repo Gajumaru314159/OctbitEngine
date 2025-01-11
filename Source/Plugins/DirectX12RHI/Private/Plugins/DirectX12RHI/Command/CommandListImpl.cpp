@@ -209,9 +209,9 @@ namespace ob::rhi::dx12 {
 		m_cmdList->RSSetViewports(1, &viewport);
 		m_cmdList->RSSetScissorRects(1, &scissor);
 
-		for (auto& [i, item] : Indexed(hColors))m_hRTVs[i] = item;
+		for (auto [i, item] : Indexed(hColors))m_hRTVs[i] = item;
 		m_hDSV = hDepth;
-		for (auto& [i, item] : Indexed(tColors))m_colorTextures[i] = item;
+		for (auto [i, item] : Indexed(tColors))m_colorTextures[i] = item;
 		m_depthTexture = tDepth;
 
 	}

@@ -11,7 +11,7 @@ option(UnitTest "Enable UnitTest" ON)
 #------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
-set(CMAKE_CXX_STANDARD 17)                                          # C++17を使用
+set(CMAKE_CXX_STANDARD 20)                                          # C++17を使用
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                                 # 古いSTLにフォールバックしない
 set(CMAKE_CXX_EXTENSIONS OFF)                                       # GNU拡張オフ
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                     # DebugとReleaseのみ使用(MinSizeRel等を使わない)

@@ -46,16 +46,16 @@ auto text = Format("{}",Color::Red);
 ```
 書式文字列の詳細は[std::format](https://cpprefjp.github.io/reference/format/format.html)を参考にしてください。
 ### formatter対応
-独自追加した型をFormatに対応する場合はfmt::formatterを直接特殊化してください。以下はRange型のformatterの例です。
+独自追加した型をFormatに対応する場合はstd::formatterを直接特殊化してください。以下はRange型のformatterの例です。
 ```c++
-template <> struct fmt::formatter<ob::core::Range, ob::core::Char> {
+template <> struct std::formatter<ob::core::Range, ob::core::Char> {
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
 		return ctx.end();
 	}
 
 	template<typename FormatContext>
-	auto format(ob::core::Range value, FormatContext& ctx) -> decltype(ctx.out()) {
+	auto format(ob::core::Range value, FormatContext& ctx)  const -> decltype(ctx.out()) {
 		return format_to(ctx.out(), "({},{})", value.min,value.max);
 	}
 };

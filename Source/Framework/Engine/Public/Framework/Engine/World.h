@@ -18,7 +18,8 @@ namespace ob::engine {
 		//! @brief		同じ型のサブシステムを尊くすることはできません
 		template<class T>
 		bool add(T&&) {
-			m_systems.try_emplace()
+			//m_systems.try_emplace()
+			return false;
 		}
 
 

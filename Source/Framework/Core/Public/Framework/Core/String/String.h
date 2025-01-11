@@ -473,15 +473,13 @@ struct std::hash<ob::core::StringBase<char32_t>> {
 //===============================================================
 // フォーマット
 //===============================================================
-template <> struct fmt::formatter<ob::core::String, ob::core::Char> {
-	template<typename ParseContext>
-	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-		return ctx.end();
+template <> struct std::formatter<ob::core::String, ob::core::Char> {
+	constexpr auto parse(std::format_parse_context& ctx) {
+		return ctx.begin();
 	}
 
-	template<typename FormatContext>
-	auto format(const ob::core::String& value, FormatContext& ctx) -> decltype(ctx.out()) {
-		return format_to(ctx.out(), "{}", ob::core::StringView(value.data(), value.size()));
+	auto format(const ob::core::String& value, std::format_context& ctx) const {
+		return format_to(ctx.out(), "{}", value.c_str());
 	}
 };
 

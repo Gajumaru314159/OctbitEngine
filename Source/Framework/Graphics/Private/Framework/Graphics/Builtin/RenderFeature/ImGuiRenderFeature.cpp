@@ -151,24 +151,23 @@ namespace ob::graphics {
 	static void SetClipboardText(void*, const char* text)
 	{
 #ifdef OS_WINDOWS
-		HGLOBAL hText;
-
 		StringBase<char> text8 = text ? text : "";
 		WString wtext;
 		StringEncoder::Encode(text8, wtext);
 
 		auto bufferSize = sizeof(wchar_t) * (wtext.size() + 1);
 
-		hText = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, bufferSize);
-		wchar_t* pText = hText ? (wchar_t*)(GlobalLock(hText)) : L"";
+		if (auto hText = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, bufferSize)) {
+			wchar_t* pText = (wchar_t*)(GlobalLock(hText));
 
-		memcpy_s(pText, bufferSize, wtext.data(), bufferSize);
-		if (hText) GlobalUnlock(hText);
+			memcpy_s(pText, bufferSize, wtext.data(), bufferSize);
+			if (hText) GlobalUnlock(hText);
 
-		OpenClipboard(NULL);
-		EmptyClipboard();
-		SetClipboardData(CF_UNICODETEXT, hText);
-		CloseClipboard();
+			OpenClipboard(NULL);
+			EmptyClipboard();
+			SetClipboardData(CF_UNICODETEXT, hText);
+			CloseClipboard();
+		}
 #endif
 	}
 

@@ -209,7 +209,7 @@ namespace ob::platform {
     }
 
     //! @brief      ウィンドウ・イベントのリスナを追加する
-    void Window::addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) {
+    void Window::addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type func) {
         if (!m_impl)return;
         m_impl->addEventListener(handle, func);
     }

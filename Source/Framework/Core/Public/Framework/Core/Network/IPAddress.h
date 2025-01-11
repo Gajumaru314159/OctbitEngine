@@ -42,10 +42,10 @@ namespace ob::core {
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::IPAddress, ob::core::Char> : fmt::formatter<ob::core::f32, ob::core::Char> {
-	using base = fmt::formatter<ob::core::u8, ob::core::Char>;
+template <> struct std::formatter<ob::core::IPAddress, ob::core::Char> : std::formatter<ob::core::f32, ob::core::Char> {
+	using base = std::formatter<ob::core::u8, ob::core::Char>;
 	template<typename FormatContext>
-	auto format(const ob::core::IPAddress& value, FormatContext& ctx) -> decltype(ctx.out()) {
+	auto format(const ob::core::IPAddress& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
 		ctx.advance_to(format_to(ctx.out(), "("));
 		ctx.advance_to(base::format(value.a, ctx));
 		ctx.advance_to(format_to(ctx.out(), ","));

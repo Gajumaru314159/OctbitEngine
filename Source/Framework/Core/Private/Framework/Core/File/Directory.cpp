@@ -9,9 +9,16 @@
 
 namespace ob::core {
 
-    //! @brief		std::filesystem::pathに変換
-    static std::filesystem::path ToStdPath(StringView path) {
-        return std::filesystem::u8path((std::string_view)(path));
+    namespace {
+        //! @brief		std::filesystem::pathに変換
+        static std::filesystem::path ToStdPath(StringView path) {
+            return std::filesystem::u8path((std::string_view)path);
+        }
+
+        //! @brief		Stringに変換
+        static String ToString(const std::filesystem::path& path) {
+            return reinterpret_cast<const char*>(path.u8string().c_str());
+        }
     }
 
     //! @brief  ディレクトリが存在するか
@@ -28,7 +35,7 @@ namespace ob::core {
 
     //! @brief  カレントディレクトリを取得
     String Directory::Current() {
-        return std::filesystem::current_path().u8string();
+        return ToString(std::filesystem::current_path());
     }
 
     //! @brief  カレントディレクトリを変更
@@ -75,12 +82,12 @@ namespace ob::core {
         Vector<String> result;
         if (recursive) {
             for (auto& p : std::filesystem::directory_iterator(ToStdPath(path))) {
-                result.push_back(String(p.path().u8string()));
+                result.push_back(ToString(p.path()));
             }
         }
         else {
             for (auto& p : std::filesystem::recursive_directory_iterator(ToStdPath(path))) {
-                result.push_back(String(p.path().u8string()));
+                result.push_back(ToString(p.path()));
             }
         }
         return result;

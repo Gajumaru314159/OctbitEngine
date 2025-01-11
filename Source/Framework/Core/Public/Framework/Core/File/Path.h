@@ -19,7 +19,8 @@ namespace ob::core {
 
 		//! @brief		複数の文字列を結合してPath文字列に変換する。
 		template<class... TArgs>
-		static String Combine(TArgs&&... args) { return String((std::filesystem::u8path(std::string_view(args)) / ...).u8string()).replace('\\',Separator()); }
+		static String Combine(TArgs&&... args) { return String((std::filesystem::path(std::string_view(args)) / ...).string()).replace('\\', Separator()); }
+		//static String Combine(TArgs&&... args) { return String((std::filesystem::u8path(std::string_view(args)) / ...).u8string()).replace('\\',Separator()); }
 
 		//! @brief		区切り文字を取得
 		static Char Separator();

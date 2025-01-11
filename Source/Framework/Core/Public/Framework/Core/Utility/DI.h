@@ -350,7 +350,7 @@ namespace ob::core {
             return instance;
         // 抽象->具象
         Vector<Type> fallback;
-        auto& concretes = try_find(m_builderMap, Type::Get<T>(), fallback);
+        const auto& concretes = try_find(m_builderMap, Type::Get<T>(), fallback);
         // 生成
         for (auto& concrete : concretes) {
             auto& builder = m_builders.find(concrete)->second;

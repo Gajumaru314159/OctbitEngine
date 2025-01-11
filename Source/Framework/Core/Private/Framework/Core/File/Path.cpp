@@ -8,9 +8,16 @@
 
 namespace ob::core {
 
-	//! @brief		std::filesystem::pathに変換
-	static std::filesystem::path ToStdPath(StringView path) {
-		return std::filesystem::u8path((std::string_view)path);
+	namespace {
+		//! @brief		std::filesystem::pathに変換
+		static std::filesystem::path ToStdPath(StringView path) {
+			return std::filesystem::u8path((std::string_view)path);
+		}
+
+		//! @brief		Stringに変換
+		static String ToString(const std::filesystem::path& path) {
+			return reinterpret_cast<const char*>(path.u8string().c_str());
+		}
 	}
 
 	//! @brief		区切り文字を取得
@@ -23,7 +30,7 @@ namespace ob::core {
 	//!				* 区切り文字を/に統一
 	String Path::Normalize(StringView path) {
 		auto stdpath = ToStdPath(path);
-		String str = stdpath.lexically_normal().u8string();
+		String str = ToString(stdpath.lexically_normal());
 		str.replace('\\', '/');
 		return str;
 	}
@@ -32,14 +39,14 @@ namespace ob::core {
 	//! @details	StemとExtensionを結合したものを返します。
 	//!				例：sample.txt
 	String Path::FileName(StringView path) {
-		return ToStdPath(path).filename().u8string();
+		return ToString(ToStdPath(path).filename());
 	}
 
 	//! @brief		ファイルパスからStemを取得
 	//! @details	拡張子を除いたファイル名を返します。
 	//!				例：sample
 	String Path::Stem(StringView path) {
-		return ToStdPath(path).stem().u8string();
+		return ToString(ToStdPath(path).stem());
 	}
 
 	//! @brief		ファイルパスから拡張子を取得
@@ -58,7 +65,7 @@ namespace ob::core {
 		for (s32 i = 0; i < level; ++i) {
 			stdpath = stdpath.parent_path();
 		}
-		return stdpath.u8string();
+		return ToString(stdpath);
 	}
 
 	//! @brief		ファイルパスが絶対パスか
@@ -87,32 +94,32 @@ namespace ob::core {
 	//! @brief		ファイルパスの拡張子を変更
 	//! @details	ファイルパスが拡張子を持たない場合はfalseを返します。
 	String Path::ReplaceExtension(StringView path, StringView extension) {
-		return ToStdPath(path).replace_extension(ToStdPath(extension)).u8string();
+		return ToString(ToStdPath(path).replace_extension(ToStdPath(extension)));
 	}
 
 	//! @brief		ファイルパスのステムを変更
 	String Path::ReplaceStem(StringView path, StringView stem) {
 		auto stdpath = ToStdPath(path);
 		auto extension = stdpath.extension();
-		return stdpath.replace_filename(ToStdPath(stem)).replace_extension(extension).u8string();
+		return ToString(stdpath.replace_filename(ToStdPath(stem)).replace_extension(extension));
 	}
 
 	//! @brief		ファイルパスのファイル名を変更
 	String Path::ReplaceFileName(StringView path, StringView fileName) {
-		return ToStdPath(path).replace_filename(ToStdPath(fileName)).u8string();
+		return ToString(ToStdPath(path).replace_filename(ToStdPath(fileName)));
 	}
 
 	//! @brief		ファイルパスの拡張子を削除
 	String Path::RemoveExtension(StringView path) {
 		auto pos = path.rfind('.');
-		if (pos == path.npos) return false;
+		if (pos == path.npos) return String(path);
 		return String(path.substr(0,pos));
 	}
 
 	//! @brief		ファイルパスのファイル名を削除
 	String Path::RemoveFileName(StringView path) {
 		auto pos = path.rfind(Separator());
-		if (pos == path.npos) return false;
+		if (pos == path.npos) return String(path);
 		return String(path.substr(0, pos+1));
 	}
 

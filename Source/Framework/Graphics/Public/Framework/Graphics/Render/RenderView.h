@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Render/RenderPipeline.h>
 
 namespace ob::graphics {
 

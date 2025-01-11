@@ -75,8 +75,8 @@ namespace ob::core {
         //! @param pFormat          フォーマット文字列
         //! @param ...args          フォーマット引数
         template<typename... Args>
-        void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args... args) {
-            const String message = Format(pFormat, std::forward<Args>(args)...);
+        void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args&&... args) {
+            String message = Format(pFormat, std::forward<Args>(args)...);
             addLog(level, sourceLocation, category, message.c_str());
         }
 

@@ -126,14 +126,14 @@ public:
 // フォーマット
 //===============================================================
 //! @cond
-template <> struct fmt::formatter<ob::core::Name, ob::core::Char> {
+template <> struct std::formatter<ob::core::Name, ob::core::Char> {
     template<typename ParseContext>
     constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }
 
     template<typename FormatContext>
-    auto format(const ob::core::Name& value, FormatContext& ctx) -> decltype(ctx.out()) {
+    auto format(const ob::core::Name& value, FormatContext& ctx)  const -> decltype(ctx.out()) {
         return format_to(ctx.out(), "{}", value.toSV());
     }
 };

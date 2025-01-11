@@ -286,8 +286,8 @@ namespace ob::engine2 {
 
 		template<class T>
 		T& get(u32 index) {
-			constexpr Type type = Type::Get<T>()
-			return get(type, index);
+			constexpr Type type = Type::Get<T>();
+			return get(type, index).as<T>();
 		}
 
 		template<class... TComponents>

@@ -122,7 +122,7 @@ namespace ob::debug {
 				ImGui::TableHeadersRow();
 
 
-				for (auto& [index, log] : ReverseIndexed(m_logs)) {
+				for (auto [index, log] : ReverseIndexed(m_logs)) {
 
 					if (m_levelFilter[log.level] == false)
 						continue;
