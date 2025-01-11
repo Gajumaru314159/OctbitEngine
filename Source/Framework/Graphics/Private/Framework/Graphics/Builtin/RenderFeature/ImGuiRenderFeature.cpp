@@ -248,6 +248,7 @@ namespace ob::graphics {
 
 		auto data = reinterpret_cast<BackendData*>(::ImGui::GetIO().BackendPlatformUserData);
 		SafeDelete(data);
+		::ImGui::GetIO().BackendPlatformUserData = nullptr;
 
 		ImPlot::DestroyContext(m_implotContext);
 		ImGui::DestroyContext(m_imguiContext);
