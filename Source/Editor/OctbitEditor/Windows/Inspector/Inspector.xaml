@@ -10,6 +10,7 @@
              xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
              xmlns:behavior="clr-namespace:CommonView.Behaviors;assembly=CommonView"
              xmlns:base="clr-namespace:CommonView;assembly=CommonView"
+             x:Name="_root"
              FocusManager.FocusedElement="{Binding ElementName=_addComponentButton}"
              Background="{DynamicResource Background}"             
              d:DataContext="{d:DesignInstance local:InspectorVM}"
@@ -44,11 +45,10 @@
                 </b:Interaction.Behaviors>
                 <ItemsControl IsTabStop="False" ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" AllowDrop="True">
                     <i:Interaction.Behaviors>
-                        <base:DraggableItemsControlBehavior Target="{Binding DroppedAction, Mode=OneWay}" />
                     </i:Interaction.Behaviors>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="local:InspectableGroup">
-                            <ctrl:InspectorView ItemsSource="{Binding Inspectables}">
+                            <ctrl:InspectorView ItemsSource="{Binding Inspectables}" LabelWidth="{Binding DataContext.SharedLabelWidth.Value,ElementName=_root,Mode=TwoWay}">
                                 <ctrl:InspectorView.Label>
                                     <DockPanel>
                                         <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"

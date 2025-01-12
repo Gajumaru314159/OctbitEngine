@@ -10,6 +10,7 @@ using OctbitEditor.Windows.Inspector;
 using OctbitEngine.Runtime;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace OctbitEditor
 {
@@ -194,5 +195,6 @@ namespace OctbitEditor
 
 
         public ReactivePropertySlim<bool> Expanded { get; } = new(true);
+        public ReactivePropertySlim<GridLength> SharedLabelWidth { get; } = new(new GridLength(200));
     }
 }
