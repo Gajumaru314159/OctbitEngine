@@ -74,8 +74,10 @@ namespace CommonView
             m_textBox.Visibility = Visibility.Hidden;
             m_textBox.VerticalAlignment = VerticalAlignment.Center;
             m_textBox.VerticalContentAlignment = VerticalAlignment.Center;
+            m_textBox.BorderThickness = new Thickness(0);
+            m_textBox.MinHeight = 0;
 
-            m_textBlock.Padding = new Thickness(3,0,0,0);
+            m_textBlock.Padding = new Thickness(2,0,0,0);
             m_textBlock.Visibility = Visibility.Visible;
             m_textBlock.VerticalAlignment = VerticalAlignment.Center;
             m_textBlock.TextTrimming = TextTrimming.CharacterEllipsis;
@@ -86,7 +88,6 @@ namespace CommonView
             Focusable = false;
             m_grid.Focusable = false;
             m_textBlock.Focusable = false;
-            MinWidth = 10;
 
             {
                 Binding binding = new(nameof(Text))

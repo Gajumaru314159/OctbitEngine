@@ -178,7 +178,7 @@
     </UserControl.Resources>
 
     <DockPanel Grid.IsSharedSizeScope="True">
-        
+
         <!--検索ボックス-->
         <base:SearchBox x:Name="_searchBox" Text="{Binding Filter.Value,UpdateSourceTrigger=PropertyChanged}" Watermark="検索 (F3)" Margin="1" DockPanel.Dock="Top" Width="Auto"/>
 
@@ -199,6 +199,7 @@
 
         <ms:MultiSelectTreeView x:Name="_tree" IsTabStop="True" TabIndex="2" ItemsSource="{Binding Children}" Background="Transparent" Foreground="{DynamicResource Foreground}"
                                 ItemTemplateSelector="{StaticResource OutlinerItemDataSelector}"
+                                d:ItemsSource="{d:SampleData}"
                                 VirtualizingPanel.IsVirtualizing="True"
                                 >
 

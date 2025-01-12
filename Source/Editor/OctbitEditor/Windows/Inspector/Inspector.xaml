@@ -28,13 +28,47 @@
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
     </i:Interaction.Behaviors>
 
-    <DockPanel Grid.IsSharedSizeScope="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        
+        <DockPanel Grid.IsSharedSizeScope="True">
 
-        <!--<TextBox x:Name="_searchBox" TabIndex="0" DockPanel.Dock="Top" Width="Auto" Text="{Binding Filter.Value,Mode=TwoWay}"/>-->
-        <base:SearchBox x:Name="_searchBox" Watermark="検索 (F3)" TabIndex="0" DockPanel.Dock="Top" Margin="1" Text="{Binding Filter.Value}"/>
+            <base:SearchBox x:Name="_searchBox" Watermark="検索 (F3)" DockPanel.Dock="Top" Margin="1" Text="{Binding Filter.Value}"/>
 
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <b:Interaction.Behaviors>
+                    <behavior:ScrollViewerMiddleButtonDragBehavior/>
+                </b:Interaction.Behaviors>
+                <ItemsControl IsTabStop="False" ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" AllowDrop="True">
+                    <i:Interaction.Behaviors>
+                        <base:DraggableItemsControlBehavior Target="{Binding DroppedAction, Mode=OneWay}" />
+                    </i:Interaction.Behaviors>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="local:InspectableGroup">
+                            <ctrl:InspectorView ItemsSource="{Binding Inspectables}">
+                                <ctrl:InspectorView.Label>
+                                    <DockPanel>
+                                        <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"
+                                                Focusable="True" FocusVisualStyle="{StaticResource FocusVisual}" 
+                                                ContextMenu="{StaticResource ContentContextMenu}">
+                                            <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
+                                        </Border>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DockPanel>
+                                </ctrl:InspectorView.Label>
+                            </ctrl:InspectorView>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
-        <Button x:Name="_addComponentButton" TabIndex="2" Content="Add Component" DockPanel.Dock="Bottom">
+        </DockPanel>
+
+        <!--タブナビゲーションの順序がうまく制御できないので一番下で定義-->
+        <Button x:Name="_addComponentButton" Content="Add Component" Grid.Row="1">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Transform"/>
@@ -42,82 +76,6 @@
                 </ContextMenu>
             </Button.ContextMenu>
         </Button>
-
-        <ScrollViewer  TabIndex="1" VerticalScrollBarVisibility="Auto">
-            <b:Interaction.Behaviors>
-                <behavior:ScrollViewerMiddleButtonDragBehavior/>
-            </b:Interaction.Behaviors>
-            <ItemsControl IsTabStop="False" ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" DockPanel.Dock="Top" AllowDrop="True">
-                <i:Interaction.Behaviors>
-                    <base:DraggableItemsControlBehavior Target="{Binding DroppedAction, Mode=OneWay}" />
-                </i:Interaction.Behaviors>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="local:InspectableGroup">
-                        <ctrl:InspectorView ItemsSource="{Binding Inspectables}">
-                            <ctrl:InspectorView.Label>
-                                <DockPanel>
-                                    <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"
-                                            Focusable="True" FocusVisualStyle="{StaticResource FocusVisual}" 
-                                            ContextMenu="{StaticResource ContentContextMenu}">
-                                        <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
-                                    </Border>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </DockPanel>
-                            </ctrl:InspectorView.Label>
-                        </ctrl:InspectorView>
-                    </DataTemplate> 
-                </ItemsControl.ItemTemplate>
-                    
-                <!--
-                <ctrl:InspectorView ItemsSource="{Binding Inspectables}" Style="{StaticResource TopLevelInspectorView}" Label="Entity"/>
-                <ctrl:InspectorView ItemsSource="{Binding Inspectables2}" Style="{StaticResource TopLevelInspectorView}" Label="Transform"/>
-                <ctrl:InspectorView ItemsSource="{Binding Inspectables3}" Style="{StaticResource TopLevelInspectorView}" Label="Model"/>
-
-                <ctrl:InspectorView Style="{StaticResource TopLevelInspectorView}">
-                    <ctrl:InspectorView.Label>
-                        <DockPanel>
-                            <Border Background="Transparent" DockPanel.Dock="Right" ContextMenu="{StaticResource ContentContextMenu}">
-                                <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
-                            </Border>
-                            <TextBlock Text="Manual"/>
-                        </DockPanel>
-                    </ctrl:InspectorView.Label>
-
-                    <ctrl:InspectorItem Label="AAA">
-                        <ComboBox/>
-                    </ctrl:InspectorItem>
-                        
-                    <ctrl:InspectorItem Label="BBB">
-                        <TextBox/>
-                    </ctrl:InspectorItem>
-
-                    <ctrl:InspectorView Label="Struct">
-
-                        <ctrl:InspectorView Label="Manual">
-
-                            <ctrl:InspectorView Label="List">
-                                <ctrl:InspectorItem Label="Size">
-                                    <TextBox Text="2"/>
-                                </ctrl:InspectorItem>
-                                <ctrl:InspectorItem Label="[0]">
-                                    <CheckBox/>
-                                </ctrl:InspectorItem>
-                                <ctrl:InspectorItem Label="[1]">
-                                    <CheckBox/>
-                                </ctrl:InspectorItem>
-                            </ctrl:InspectorView>
-
-                        </ctrl:InspectorView>
-                    </ctrl:InspectorView>
-                    <ctrl:InspectorItem Label="CCC">
-                        <TextBox/>
-                    </ctrl:InspectorItem>
-                        
-                </ctrl:InspectorView>
-                -->
-            </ItemsControl>
-        </ScrollViewer>
-
-    </DockPanel>
+    </Grid>
 
 </UserControl>

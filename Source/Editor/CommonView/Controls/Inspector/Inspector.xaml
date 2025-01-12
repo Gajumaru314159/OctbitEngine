@@ -15,7 +15,7 @@
 
     <!--インスペクタアイテム-->
     <Style TargetType="ctrl:InspectorItem">
-        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Padding" Value="1"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
         <Setter Property="Indent" Value="{Binding Indent,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView}}"/>
@@ -23,7 +23,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:InspectorItem">
-                    <Grid MinHeight="22">
+                    <Grid MinHeight="20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="10"/>
