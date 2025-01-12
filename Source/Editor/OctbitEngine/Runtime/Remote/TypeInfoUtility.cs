@@ -27,12 +27,16 @@ namespace OctbitEngine.Runtime
             Add("System.Char");
             Add("System.Boolean");
             Add("System.String");
+            Add("Common.Math.IntVec2");
+            Add("Common.Math.IntVec3");
+            Add("Common.Math.IntVec4");
             Add("Common.Math.Vector2");
             Add("Common.Math.Vector3");
             Add("Common.Math.Vector4");
             Add("Common.Math.Rotation");
             Add("Common.Math.Quaternion");
             Add("Common.Graphics.Color");
+            // TODO ビルトイン型登録
         }
 
         public static bool IsBuiltinType(this ITypeInfo info)

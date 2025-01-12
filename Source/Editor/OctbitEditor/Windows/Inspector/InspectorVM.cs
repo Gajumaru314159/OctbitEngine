@@ -122,6 +122,7 @@ namespace OctbitEditor
             : base("Inspector")
         {
             Entity = new RemoteObject(runtime,runtime.FindTypeInfo("ob::engine::ReflectionTestComponent")!,0);
+            Entity.SetValue(new Common.Graphics.Color() { A = 0.8f, R=1.0f, G=0.5f, B=0.0f },"m_color");
             Inspectables = [
                 new( nameof(Entity), InspectableRunttimeObject.Create(Entity)),
                 new( nameof(Transform), InspectableReflectionObject.Create(Transform)),
@@ -195,6 +196,6 @@ namespace OctbitEditor
 
 
         public ReactivePropertySlim<bool> Expanded { get; } = new(true);
-        public ReactivePropertySlim<GridLength> SharedLabelWidth { get; } = new(new GridLength(200));
+        public ReactivePropertySlim<GridLength> SharedLabelWidth { get; } = new(new GridLength(100));
     }
 }

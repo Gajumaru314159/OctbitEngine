@@ -76,6 +76,20 @@ namespace CommonView.Controls
             {
                 return f.FindResource("Vector4InspectorControl") as DataTemplate;
             }
+
+            if (p.Type == typeof(Common.Math.IntVec2))
+            {
+                return f.FindResource("IntVec2InspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Math.IntVec3))
+            {
+                return f.FindResource("IntVec3InspectorControl") as DataTemplate;
+            }
+            if (p.Type == typeof(Common.Math.IntVec4))
+            {
+                return f.FindResource("IntVec4InspectorControl") as DataTemplate;
+            }
+
             if (p.Type == typeof(Common.Math.Rotation))
             {
                 return f.FindResource("RotationInspectorControl") as DataTemplate;

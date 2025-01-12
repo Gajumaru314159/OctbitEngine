@@ -109,7 +109,7 @@ OB_DEFINE_CLASS_INFO(ob::core::Vec4) {
 
 OB_DEFINE_CLASS_INFO(ob::core::IntVec2) {
 	desc("2次元整数ベクトル");
-	//tag("C#", "Common.Math.Vector2");
+	tag("C#", "Common.Math.IntVec2");
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
 	constructor<s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
@@ -117,7 +117,7 @@ OB_DEFINE_CLASS_INFO(ob::core::IntVec2) {
 
 OB_DEFINE_CLASS_INFO(ob::core::IntVec3) {
 	desc("3次元整数ベクトル");
-	tag("C#", "Common.Math.Vector3");
+	tag("C#", "Common.Math.IntVec3");
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
 	constructor<s32, s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
@@ -125,7 +125,7 @@ OB_DEFINE_CLASS_INFO(ob::core::IntVec3) {
 
 OB_DEFINE_CLASS_INFO(ob::core::IntVec4) {
 	desc("4次元整数ベクトル");
-	//tag("C#", "Common.Math.Vector4");
+	tag("C#", "Common.Math.IntVec4");
 	constructor().desc("デフォルトコンストラクタ");
 	constructor<s32>().desc("コンストラクタ(すべての要素を同じ値で初期化)");
 	constructor<s32, s32, s32, s32>().desc("コンストラクタ(要素を指定して初期化)");
