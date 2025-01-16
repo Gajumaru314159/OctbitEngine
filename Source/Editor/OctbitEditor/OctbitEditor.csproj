@@ -110,8 +110,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\AssetBrowser\" />
-  </ItemGroup>
-
 </Project>

@@ -15,7 +15,7 @@ namespace CommonView.Menu
         public ImageSource? Icon { get; set; }
     }
 
-    public class DynamicGroupItem: DynamicMenuItem
+    public class DynamicGroupItem: DynamicMenuItem,IDisposable
     {
         public DynamicGroupItem(string header)
         {
@@ -52,6 +52,16 @@ namespace CommonView.Menu
             return item;
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            // Disposeすべきリソースは持たないが、グルーピング時にusingを使うために実装。
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
     public class DynamicCommandItem : DynamicMenuItem
     {

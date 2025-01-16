@@ -115,6 +115,25 @@ namespace OctbitEditor
         }
     }
 
+    public class AssetBrowserShortcutItem : AssetBrowserItem
+    {
+        public override Brush ItemColorBrush => Brushes.Red;
+        public override BitmapSource Icon => FolderIcon;
+        public override string Name
+        {
+            get => m_name;
+            set => throw new NotImplementedException("Folderのリネームは未実装です");
+        }
+        public override bool IsEditable => false;
+
+        private string m_name;
+
+        public AssetBrowserShortcutItem(string name)
+        {
+            m_name = name;
+        }
+    }
+
 
     public class AssetBrowserVM : TabBase
     {
@@ -150,6 +169,10 @@ namespace OctbitEditor
                     }
                 }
             }
+
+
+            Children.Add(new AssetBrowserShortcutItem("Shortcuts"));
+
             var rootItem = new AssetBrowserFolderItem(AssetManager.RootFolder);
             rootItem.IsSelected.Value = true;
             rootItem.IsExpanded.Value = true;
