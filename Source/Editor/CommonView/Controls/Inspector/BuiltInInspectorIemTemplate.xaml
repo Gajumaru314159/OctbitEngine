@@ -2,6 +2,8 @@
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:CommonView"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:behavior="clr-namespace:CommonView.Behaviors"
                     xmlns:ctrl="clr-namespace:CommonView.Controls">
 
 
@@ -44,9 +46,6 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
-    <SolidColorBrush x:Key="MultiColor" Color="Gray"/>
-
-
     <DataTemplate x:Key="EnumEditor" DataType="ctrl:EnumEditor">
         <ComboBox x:Name="ComboBox" SelectedItem="{Binding Value,Mode=TwoWay}" ItemsSource="{Binding Items}"/>
         <DataTemplate.Triggers>
@@ -61,7 +60,11 @@
     </DataTemplate>
 
     <DataTemplate x:Key="ScalarEditor" DataType="ctrl:ScalarEditor">
-        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
+        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}">
+            <i:Interaction.Behaviors>
+                <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameValues}" Value="False">
                 <Setter TargetName="TextBox" Property="Background" Value="{StaticResource MultiValueBrush}"/>
@@ -70,7 +73,11 @@
     </DataTemplate>
 
     <DataTemplate x:Key="StringEditor" DataType="ctrl:StringEditor">
-        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
+        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}">
+            <i:Interaction.Behaviors>
+                <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+            </i:Interaction.Behaviors>
+        </TextBox>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameValues}" Value="False">
                 <Setter TargetName="TextBox" Property="Background" Value="{StaticResource MultiValueBrush}"/>
@@ -84,15 +91,23 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0"/>
-            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0"/>
+            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0">
+                <i:Interaction.Behaviors>
+                    <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0">
+                <i:Interaction.Behaviors>
+                    <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameXValues}" Value="False">
-                <Setter TargetName="X" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="X" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsSameYValues}" Value="False">
-                <Setter TargetName="Y" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="Y" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -104,19 +119,31 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0"/>
-            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0"/>
-            <TextBox x:Name="Z" Grid.Column="2" Text="{Binding Z}" Margin="1,0,0,0"/>
+            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0">
+                <i:Interaction.Behaviors>
+                    <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0">
+                <i:Interaction.Behaviors>
+                    <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
+            <TextBox x:Name="Z" Grid.Column="2" Text="{Binding Z}" Margin="1,0,0,0">
+                <i:Interaction.Behaviors>
+                    <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="False"/>
+                </i:Interaction.Behaviors>
+            </TextBox>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameXValues}" Value="False">
-                <Setter TargetName="X" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="X" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsSameYValues}" Value="False">
-                <Setter TargetName="Y" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="Y" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsSameZValues}" Value="False">
-                <Setter TargetName="Z" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="Z" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
