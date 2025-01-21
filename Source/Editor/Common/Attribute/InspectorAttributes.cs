@@ -26,12 +26,12 @@
     }
 
     [AttributeUsage(AttributeTargets.All)]
-    public class TooltipAttribute : TagAttribute
+    public class ToolTipAttribute : TagAttribute
     {
         public string Tooltip => Value;
 
-        public TooltipAttribute(string tooltip)
-            : base("Tooltip", tooltip)
+        public ToolTipAttribute(string tooltip)
+            : base("ToolTip", tooltip)
         {
         }
     }

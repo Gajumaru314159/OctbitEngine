@@ -182,7 +182,10 @@
 
     <!--プロパティテンプレート-->
     <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:Editor">
-        <ctrl:InspectorItem Label="{Binding Name}">
+        <ctrl:InspectorItem>
+            <ctrl:InspectorItem.Label>
+                <TextBlock Text="{Binding Name}" ToolTip="{Binding ToolTip}"/>
+            </ctrl:InspectorItem.Label>
             <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource EditorSelector}"/>
         </ctrl:InspectorItem>
     </DataTemplate>

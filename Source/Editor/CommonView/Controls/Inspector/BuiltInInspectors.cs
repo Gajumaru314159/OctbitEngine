@@ -117,6 +117,7 @@ namespace CommonView.Controls
 
         public Type Type => Target.Type;
         public string Name => Target.DisplayName;
+        public string? ToolTip => Target.Tags.TryGetValue("ToolTip", out string? value)?value:null;
         public bool CanRead => Target.CanRead;
         public bool CanWrite => Target.CanWrite;
     }
