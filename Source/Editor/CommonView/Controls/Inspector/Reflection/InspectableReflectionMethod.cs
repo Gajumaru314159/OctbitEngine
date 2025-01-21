@@ -3,7 +3,7 @@ using CommonView.Menu;
 using System.Reflection;
 using System.Windows.Input;
 
-namespace CommonView.Controls.Inspector
+namespace CommonView.Controls.Inspector.Reflection
 {
 
     /// <summary>

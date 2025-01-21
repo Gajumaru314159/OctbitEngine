@@ -23,6 +23,43 @@
             <MenuItem Header="ペースト"/>
             <MenuItem Header="削除"/>
         </ContextMenu>
+
+
+        <!--InspectableEntity-->
+        <DataTemplate x:Key="InspectableEntity" DataType="local:InspectableEntity">
+            <ItemsControl ItemsSource="{Binding Inspectables}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Expander>
+                            <Expander.Header>
+                                <DockPanel>
+                                    <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"
+                                                Focusable="True" FocusVisualStyle="{StaticResource FocusVisual}" 
+                                                ContextMenu="{StaticResource ContentContextMenu}">
+                                        <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DockPanel>
+                            </Expander.Header>
+                            <ctrl:InspectorView ItemsSource="{Binding Inspectables}"/>
+                        </Expander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DataTemplate>
+
+
+        <!--InspectableEntity-->
+        <DataTemplate x:Key="InspectableTransform" DataType="local:InspectableTransform">
+            <StackPanel>
+                <StackPanel>
+                    <RadioButton Content="World"/>
+                    <RadioButton Content="Local"/>
+                </StackPanel>
+                <ctrl:InspectorView ItemsSource="{Binding Inspectables}"/>
+            </StackPanel>
+        </DataTemplate>
+    
     </UserControl.Resources>
 
     <i:Interaction.Behaviors>
@@ -43,13 +80,14 @@
                 <b:Interaction.Behaviors>
                     <behavior:ScrollViewerMiddleButtonDragBehavior/>
                 </b:Interaction.Behaviors>
+
                 <ItemsControl IsTabStop="False" ItemsSource="{Binding Inspectables}" d:ItemsSource="{d:SampleData ItemCount=3}" AllowDrop="True">
                     <i:Interaction.Behaviors>
                     </i:Interaction.Behaviors>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="local:InspectableGroup">
-                            <ctrl:InspectorView ItemsSource="{Binding Inspectables}" LabelWidth="{Binding DataContext.SharedLabelWidth.Value,ElementName=_root,Mode=TwoWay}">
-                                <ctrl:InspectorView.Label>
+                            <Expander Margin="0,0,0,1">
+                                <Expander.Header>
                                     <DockPanel>
                                         <Border Background="Transparent" DockPanel.Dock="Right" Padding="1,0,0,0"
                                                 Focusable="True" FocusVisualStyle="{StaticResource FocusVisual}" 
@@ -58,11 +96,13 @@
                                         </Border>
                                         <TextBlock Text="{Binding Name}"/>
                                     </DockPanel>
-                                </ctrl:InspectorView.Label>
-                            </ctrl:InspectorView>
+                                </Expander.Header>
+                                <ctrl:InspectorView ItemsSource="{Binding Inspectables}" LabelWidth="{Binding DataContext.SharedLabelWidth.Value,ElementName=_root,Mode=TwoWay}"/>
+                            </Expander>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                
             </ScrollViewer>
 
         </DockPanel>

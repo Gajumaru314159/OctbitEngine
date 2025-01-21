@@ -1,5 +1,5 @@
 ﻿using CommonView.Controls;
-using CommonView.Controls.Inspector;
+using CommonView.Controls.Inspector.Reflection;
 using Livet;
 using OctbitEngine.Asset;
 using Reactive.Bindings;
@@ -14,7 +14,7 @@ namespace OctbitEngine.Texture
 
             Title.Value = file.Path;
 
-            Inspectables = InspectableReflectionObject.Create(file.Importer);
+            Inspectables = InspectableReflectionObject.Create([file.Importer]);
         }
 
         public ReactivePropertySlim<string> Title { get; } = new();

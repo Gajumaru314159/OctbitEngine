@@ -1,8 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary x:Class="CommonView.Controls.Vector3ResourceDictionary"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:common="clr-namespace:CommonView"
                     xmlns:ctrl="clr-namespace:CommonView.Controls">
-    
+
+
     <DrawingBrush x:Key="CheckerboardBrush" Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile">
         <DrawingBrush.Drawing>
             <DrawingGroup>
@@ -25,163 +27,84 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
+    <SolidColorBrush x:Key="MultiColor" Color="Gray"/>
 
-    <DataTemplate x:Key="BoolInspectorControl" DataType="ctrl:InspectableProperty">
-        <CheckBox IsChecked="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
+
+    <DataTemplate x:Key="EnumEditor" DataType="ctrl:EnumEditor">
+        <Grid>
+            <ComboBox x:Name="ComboBox" SelectedItem="{Binding Value,Mode=TwoWay}" ItemsSource="{Binding Items}"/>
+            <TextBlock x:Name="Overlay" Text=" *" Foreground="{StaticResource MultiColor}" IsHitTestVisible="False" Visibility="Collapsed"/>
+        </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSameValues}" Value="False">
+                <Setter TargetName="Overlay" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="IntInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
+    <DataTemplate x:Key="BoolEditor" DataType="ctrl:BoolEditor">
+        <CheckBox x:Name="CheckBox" IsChecked="{Binding Value,Mode=TwoWay}"/>
     </DataTemplate>
 
-    <DataTemplate x:Key="FloatInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
+    <DataTemplate x:Key="ScalarEditor" DataType="ctrl:ScalarEditor">
+        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSameValues}" Value="False">
+                <Setter TargetName="TextBox" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="DoubleInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
+    <DataTemplate x:Key="StringEditor" DataType="ctrl:StringEditor">
+        <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSameValues}" Value="False">
+                <Setter TargetName="TextBox" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-    <DataTemplate x:Key="StringInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBox Text="{Binding Value,UpdateSourceTrigger=PropertyChanged}"/>
-    </DataTemplate>
-
-    <DataTemplate x:Key="EnumInspectorControl" DataType="ctrl:InspectableProperty">
-        <ctrl:EnumComboBox IsTabStop="False" Value="{Binding Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-    </DataTemplate>
-
-    <DataTemplate x:Key="Vector2InspectorControl" DataType="ctrl:InspectableProperty">
+    <DataTemplate x:Key="Vector2Editor" DataType="ctrl:Vector2Editor">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
+            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0"/>
+            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0"/>
         </Grid>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSameXValues}" Value="False">
+                <Setter TargetName="X" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSameYValues}" Value="False">
+                <Setter TargetName="Y" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
-
-    <DataTemplate x:Key="Vector3InspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="Vector4InspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="3" Text="{Binding Value.W}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="IntVec2InspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="IntVec3InspectorControl" DataType="ctrl:InspectableProperty">
+    <DataTemplate x:Key="Vector3Editor" DataType="ctrl:Vector3Editor">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
+            <TextBox x:Name="X" Grid.Column="0" Text="{Binding X}" Margin="0,0,0,0"/>
+            <TextBox x:Name="Y" Grid.Column="1" Text="{Binding Y}" Margin="1,0,0,0"/>
+            <TextBox x:Name="Z" Grid.Column="2" Text="{Binding Z}" Margin="1,0,0,0"/>
         </Grid>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="IntVec4InspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="3" Text="{Binding Value.W}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate x:Key="RotationInspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="QuaternionInspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Value.X}" Margin="0,0,0,0"/>
-            <TextBox Grid.Column="1" Text="{Binding Value.Y}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="2" Text="{Binding Value.Z}" Margin="1,0,0,0"/>
-            <TextBox Grid.Column="3" Text="{Binding Value.W}" Margin="1,0,0,0"/>
-        </Grid>
-    </DataTemplate>
-    
-    <DataTemplate x:Key="ColorInspectorControl" DataType="ctrl:InspectableProperty">
-        <Grid>
-            <Border Background="{StaticResource CheckerboardBrush}">
-                <Border Background="{Binding Value,Converter={common:ColorToBrushConverter},ConverterParameter=Opaque}"/>
-            </Border>
-            <Border Background="Black" Height="2" VerticalAlignment="Bottom">
-                <Border Background="White">
-                    <Border.RenderTransformOrigin>
-                        <Point X="0.0" Y="0.5"/>
-                    </Border.RenderTransformOrigin>
-                    <Border.RenderTransform>
-                        <ScaleTransform ScaleX="{Binding Value.A}" ScaleY="1"/>
-                    </Border.RenderTransform>
-                </Border>
-            </Border>
-        </Grid>
-    </DataTemplate>
-
-
-    <DataTemplate x:Key="UnknownInspectorControl" DataType="ctrl:InspectableProperty">
-        <TextBlock Text="{Binding Type.FullName}"/>
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsSameXValues}" Value="False">
+                <Setter TargetName="X" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSameYValues}" Value="False">
+                <Setter TargetName="Y" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsSameZValues}" Value="False">
+                <Setter TargetName="Z" Property="Foreground" Value="{StaticResource MultiColor}"/>
+            </DataTrigger>
+        </DataTemplate.Triggers>
     </DataTemplate>
 
 </ResourceDictionary>

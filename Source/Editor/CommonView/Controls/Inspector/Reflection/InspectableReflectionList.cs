@@ -1,60 +1,66 @@
-﻿using Common.Attribute;
-using Common.Log;
-using Common.Math;
+﻿using Common.Math;
+using Reactive.Bindings.Extensions;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Reactive.Linq;
 using System.Reflection;
 
-namespace CommonView.Controls.Inspector
+namespace CommonView.Controls.Inspector.Reflection
 {
 
     public class InspectableReflectionList : InspectableObject
     {
-        public InspectableReflectionList(object owner, PropertyInfo propertyInfo)
+        public InspectableReflectionList(PropertyInfo propertyInfo, object[] targets)
         {
-            List = (IList)propertyInfo.GetValue(owner)!;
+            Inspectables = new(_inspectables);
+            Lists = targets.Select(i=>(IList)propertyInfo.GetValue(i)!).ToArray();
             PropertyInfo = propertyInfo;
+                        
+            m_countProperty = new ScalarEditor(Lists.Select(i => new InspectableReflectionListCountProperty(i)).ToArray());
 
-            m_countProperty = new InspectableReflectionListCountProperty(List);
-            m_countProperty.Resized += OnResized;
-
-            Inspectables.Add(m_countProperty);
+            if(m_countProperty.Target is InspectableReflectionListCountProperty a)
+            {
+                Observable
+                    .FromEvent(h => a.Resized+=h, h => a.Resized-=h)
+                    .Subscribe(size=>OnResized())
+                    .AddTo(CompositeDisposable);
+            }
+            _inspectables.Add(m_countProperty);
 
             GenerateInspectables();
         }
-        
+
         private void GenerateInspectables()
         {
             var oldCount = Inspectables.Count -1;
-            var newCount = List.Count;
+            var newCount = Lists.Min(i=>i.Count);
 
 
-            while (1<Inspectables.Count) Inspectables.RemoveAt(Inspectables.Count-1);
+            while (1<Inspectables.Count) _inspectables.RemoveAt(Inspectables.Count-1);
 
 
-            var type = List.GetType();
+            var type = Lists[0].GetType();
             Type? elementType = null;
             if (type.IsArray) elementType = type.GetElementType()!;
             if (type.IsGenericType) elementType = type.GetGenericArguments()[0]!;
+            if(elementType==null) return;
 
-            bool hasEditor =
-                elementType == typeof(bool) ||
-                elementType == typeof(int) ||
-                elementType == typeof(float) ||
-                elementType == typeof(string) ||
-                elementType == typeof(Vector3) ||
-                elementType!.IsEnum;
-
+            var vm = EditorRegistory.FindViewModel(elementType);
+            // TODO Enum対応
 
             for (int i = 0; i<newCount; i++)
             {
-                if (hasEditor)
+                if (vm!=null)
                 {
-                    Inspectables.Add(new InspectableReflectionListItem(List, PropertyInfo, i));
+                    var irps = Lists.Select(list => new InspectableReflectionListItem(list, PropertyInfo,i)).ToArray();
+                    if (Activator.CreateInstance(vm, [irps]) is Editor editor)
+                    {
+                        _inspectables.Add(editor);
+                    }
                 }
                 else
                 {
-                    Inspectables.Add(new InspectableReflectionObject($"[{i}]", List[i]!));
+                    _inspectables.Add(new InspectableReflectionObject($"[{i}]", [Lists[i]!]));
                 }
             }
 
@@ -67,12 +73,14 @@ namespace CommonView.Controls.Inspector
         }
 
         public override string Name => PropertyInfo.Name;
-        public override ObservableCollection<Inspectable> Inspectables { get; } = new();
-        public IList List { get; }
+        public ObservableCollection<Inspectable> _inspectables { get; } = new();
+        public override ReadOnlyObservableCollection<Inspectable> Inspectables { get; }
+        public IList[] Lists { get; }
         public PropertyInfo PropertyInfo { get; }
 
-        private InspectableReflectionListCountProperty? m_countProperty;
+        private ScalarEditor? m_countProperty;
     }
+
 
 
     /// <summary>
@@ -80,14 +88,14 @@ namespace CommonView.Controls.Inspector
     /// </summary>
     internal class InspectableReflectionListCountProperty : InspectableProperty
     {
-        public InspectableReflectionListCountProperty(object owner)
+        public InspectableReflectionListCountProperty(IList owner)
         {
             Owner = owner;
 
             var type = owner.GetType();
             if (type.IsArray) ElementType = type.GetElementType()!;
             if (type.IsGenericType) ElementType = type.GetGenericArguments()[0]!;
-            if(ElementType == null) throw new ArgumentException("要素の型が取得できません。");
+            if (ElementType == null) throw new ArgumentException("要素の型が取得できません。");
         }
 
         public override string DisplayName => Name;
@@ -100,7 +108,7 @@ namespace CommonView.Controls.Inspector
             {
                 if (value?.GetType() != Type)
                 {
-                    if(int.TryParse(value?.ToString(),out int tmp))
+                    if (int.TryParse(value?.ToString(), out int tmp))
                     {
                         value = tmp;
                     }
@@ -111,6 +119,8 @@ namespace CommonView.Controls.Inspector
                 }
                 if (!CanWrite) return;
                 if (value == Value) return;
+
+                return;
 
                 // TODO リストの復元対応
 
@@ -130,7 +140,7 @@ namespace CommonView.Controls.Inspector
                         $"{Name}に値をセット : {value?.ToString()}",
                         () =>
                         {
-                            appendItems.ForEach(i=>List.Add(i));
+                            appendItems.ForEach(i => List.Add(i));
                             RaisePropertyChanged();
                             Resized?.Invoke();
                         },
@@ -183,7 +193,7 @@ namespace CommonView.Controls.Inspector
 
 
 
-        public object Owner { get; }
+        public IList Owner { get; }
         public IList List => (IList)Owner;
         public Type ElementType { get; init; }
 
@@ -198,7 +208,7 @@ namespace CommonView.Controls.Inspector
     /// </summary>
     internal class InspectableReflectionListItem : InspectableProperty
     {
-        public InspectableReflectionListItem(object owner, PropertyInfo indexerProperty, int index)
+        public InspectableReflectionListItem(IList owner, PropertyInfo indexerProperty, int index)
         {
             Owner = owner;
             PropertyInfo = indexerProperty;
@@ -216,15 +226,15 @@ namespace CommonView.Controls.Inspector
         private Type ElementType { get; }
         public override object? Value
         {
-            get =>List[Index];
+            get => List[Index];
             set
             {
                 if (value?.GetType() != Type)
                 {
-                    if(value is string str)
+                    if (value is string str)
                     {
                         double v = 0;
-                        if(double.TryParse(str, out v))
+                        if (double.TryParse(str, out v))
                         {
                             value = v;
                         }
@@ -263,7 +273,7 @@ namespace CommonView.Controls.Inspector
 
         public IList List => (IList)Owner;
 
-        public object Owner { get; }
+        public IList Owner { get; }
         public PropertyInfo PropertyInfo { get; }
         public int Index { get; }
 

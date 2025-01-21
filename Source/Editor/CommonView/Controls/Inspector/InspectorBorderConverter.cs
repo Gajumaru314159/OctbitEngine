@@ -5,6 +5,9 @@ using System.Windows.Markup;
 
 namespace CommonView
 {
+    /// <summary>
+    /// インスペクタをネストしたときに表示する左端のライン調整用のコンバータ
+    /// </summary>
     public class InspectorBorderConverter : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

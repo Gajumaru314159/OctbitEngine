@@ -1,10 +1,12 @@
 ﻿using CommonView.Controls;
 using CommonView.History;
+using Livet;
 using OctbitEngine.Runtime;
 using System.Collections.ObjectModel;
 
 namespace OctbitEditor.Windows.Inspector
 {
+
     public class InspectableRunttimeObject
     {
         public static ObservableCollection<Inspectable> Create(IRemoteObject obj)
@@ -13,8 +15,18 @@ namespace OctbitEditor.Windows.Inspector
 
             {
                 foreach (var name in obj.TypeInfo.PropertyOrder)
-                {
-                    result.Add(new InspectableRuntimeProperty(obj,name));
+                {                    
+                    if (EditorRegistory.FindViewModel(obj.TypeInfo.FindProperty(name)?.TypeInfo.Type) is Type vm)
+                    {
+                        var ps = new InspectableProperty[1];
+                        ps[0] = new InspectableRuntimeProperty(obj, name);
+
+                        if (Activator.CreateInstance(vm, [ps]) is Editor editor)
+                        {
+                            result.Add(editor);
+                        }
+                    }
+
                 }
             }
 

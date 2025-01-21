@@ -5,7 +5,8 @@ using Common.Math;
 using Common.Tree;
 using CommonView;
 using CommonView.Controls;
-using CommonView.Controls.Inspector;
+using CommonView.Controls.Inspector.Reflection;
+using Livet;
 using OctbitEditor.Windows.Inspector;
 using OctbitEngine.Runtime;
 using Reactive.Bindings;
@@ -14,6 +15,21 @@ using System.Windows;
 
 namespace OctbitEditor
 {
+
+
+    public class InspectableEntity : ViewModel
+    {
+        public class InspectableGroup : ViewModel
+        {
+            public string Name { get; } = string.Empty;
+            public ObservableCollection<Inspectable> Inspectables { get; } = new();
+        }
+
+        public ObservableCollection<InspectableGroup> Inspectables { get; } = new();
+    }
+
+
+
     public enum TabType
     {
         Inspector,
@@ -57,6 +73,7 @@ namespace OctbitEditor
         public float FloatValue { get; } = 1.23f;
         public string StringValue { get; set; } = "サンプル";
         public TabType EnumValue { get; set; } = TabType.History;
+        public Vector3 Vector3Value { get; set; } = Vector3.One;
 
         public ReflectionSubTest SubTest { get; } = new();
         public int[] Array { get; set; } = [ 1, 2, 3];
@@ -91,10 +108,38 @@ namespace OctbitEditor
     public class TransformTest
     {
         public TransformTest() { }
-        public Vector3 Translation { get; set; } = Vector3.Zero;
-        public Vector3 Rotation { get; set; } = Vector3.Zero;
-        public Vector3 Scale { get; set; } = Vector3.One;
+
+        [DisplayName("Translation (L)")]
+        public Vector3 LocalTranslation { get; set; } = Vector3.Zero;
+        [DisplayName("Rotation (L)")]
+        public Vector3 LocalRotation { get; set; } = Vector3.Zero;
+        [DisplayName("Scale (L)")]
+        public Vector3 LocalScale { get; set; } = Vector3.One;
+        [DisplayName("Translation (W)")]
+        public Vector3 WorldTranslation { get; } = Vector3.Zero;
+        [DisplayName("Rotation (W)")]
+        public Vector3 WorldRotation { get; } = Vector3.Zero;
+        [DisplayName("Scale (W)")]
+        public Vector3 WorldScale { get; } = Vector3.One;
     }
+
+    public class InspectableTransform : ViewModel
+    {
+        public InspectableTransform(object[] targets)
+        {
+            Targets = targets.Cast<TransformTest>().ToArray();
+
+            Inspectables = InspectableReflectionObject.CreateProperties(Targets);
+        }
+
+
+        public ObservableCollection<Inspectable> Inspectables { get; }
+
+        TransformTest[] Targets { get; }
+        TransformTest Target => Targets[0];
+    }
+
+
     public class ModelTest
     {
         public ModelTest() { }
@@ -121,13 +166,22 @@ namespace OctbitEditor
         public InspectorVM(IRuntime runtime)
             : base("Inspector")
         {
+            TestObject2.BoolValue = false;
+            TestObject2.IntValue = 0;
+            TestObject2.StringValue = "aaa";
+            TestObject2.EnumValue = TabType.Inspector;
+            TestObject2.Vector3Value = new Vector3(0, 0, 1);
+            TestObject2.SubTest.Name ="b";
+            TestObject2.SubTest.Sub2.Size=0;
+
+
             Entity = new RemoteObject(runtime,runtime.FindTypeInfo("ob::engine::ReflectionTestComponent")!,0);
             Entity.SetValue(new Common.Graphics.Color() { A = 0.8f, R=1.0f, G=0.5f, B=0.0f },"m_color");
             Inspectables = [
                 new( nameof(Entity), InspectableRunttimeObject.Create(Entity)),
-                new( nameof(Transform), InspectableReflectionObject.Create(Transform)),
-                new( nameof(Model), InspectableReflectionObject.Create(Model)),
-                new( nameof(TestObject), InspectableReflectionObject.Create(TestObject))
+                new( nameof(Transform), InspectableReflectionObject.Create([Transform])),
+                new( nameof(Model), InspectableReflectionObject.Create([Model])),
+                new( nameof(TestObject), InspectableReflectionObject.Create([TestObject,TestObject2]))
             ];
 
             Filter.Subscribe(_ => { UpdateFilter(); });
@@ -135,6 +189,7 @@ namespace OctbitEditor
 
         private void UpdateFilter()
         {
+            /*
             bool filter(InspectableProperty p)
             {
                 return p.Visible = p.Name.Contains(Filter.Value) || string.IsNullOrEmpty(Filter.Value);
@@ -173,7 +228,7 @@ namespace OctbitEditor
                     }
                 }
             }
-
+            */
         }
 
 
@@ -189,7 +244,9 @@ namespace OctbitEditor
         public ReactivePropertySlim<string> Filter { get; } = new("");
         public ObservableCollection<InspectableGroup> Inspectables { get; }
 
+
         public ReflectionTest TestObject { get; } = new();
+        public ReflectionTest TestObject2 { get; } = new();
         public IRemoteObject Entity{ get; }
         public TransformTest Transform { get; } = new();
         public ModelTest Model { get; } = new();

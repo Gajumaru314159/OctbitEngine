@@ -127,11 +127,11 @@
         }
         public IPropertyInfo? FindProperty(string name)
         {
-            throw new NotImplementedException();
+            return m_properties.TryGetValue(name, out var result) ? result : null;
         }
         public IMethodInfo? FindMethod(string name)
         {
-            throw new NotImplementedException();
+            return m_methods.TryGetValue(name, out var result) ? result : null;
         }
         public IEnumElementInfo? FindEnumElement(string name)
         {

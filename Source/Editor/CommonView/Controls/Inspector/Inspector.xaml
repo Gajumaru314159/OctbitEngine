@@ -6,12 +6,8 @@
     xmlns:behavior="clr-namespace:CommonView.Behaviors"
     xmlns:ctrl="clr-namespace:CommonView.Controls">
 
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/CommonView;component/Controls/Inspector/BuiltInInspectorIemTemplate.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-
     <ctrl:InspectorItemDataSelector x:Key="InspectorItemDataSelector"/>
-    <ctrl:InspectorControlDataSelector x:Key="InspectorControlDataSelector"/>
+    <ctrl:EditorSelector x:Key="EditorSelector"/>
 
     <!--インスペクタアイテム-->
     <Style TargetType="ctrl:InspectorItem">
@@ -68,7 +64,7 @@
         </Setter>
     </Style>
 
-
+    <!--インスペクタネストエクスパンダ―-->
     <Style x:Key="InspectorExpandStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -162,12 +158,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrl:InspectorView">
-                    <Expander Margin="0,0,0,1" IsExpanded="{TemplateBinding IsExpanded}">
-                        <Expander.Header>
-                            <ContentControl IsTabStop="False" Content="{TemplateBinding Label}"/>
-                        </Expander.Header>
-                        <ItemsPresenter x:Name="Items"/>
-                    </Expander>
+                    <ItemsPresenter x:Name="Items"/>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="False">
                             <Setter TargetName="Items" Property="Visibility" Value="Collapsed"/>
@@ -190,15 +181,15 @@
 
 
     <!--プロパティテンプレート-->
-    <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:InspectableProperty">
-        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
-            <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource InspectorControlDataSelector}"/>
+    <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:Editor">
+        <ctrl:InspectorItem Label="{Binding Name}">
+            <ContentControl IsTabStop="False" Content="{Binding}" IsEnabled="{Binding CanWrite}" ContentTemplateSelector="{StaticResource EditorSelector}"/>
         </ctrl:InspectorItem>
     </DataTemplate>
 
     <!--メソッドテンプレート-->
     <DataTemplate x:Key="InspectableMethodTemplate" DataType="ctrl:InspectableMethod">
-        <ctrl:InspectorItem Label="{Binding DisplayName}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
+        <ctrl:InspectorItem Label="{Binding Name}" Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
             <Button Content="Invoke" Command="{Binding Command}"/>
         </ctrl:InspectorItem>
     </DataTemplate>
@@ -206,6 +197,11 @@
     <!--オブジェクトテンプレート-->
     <DataTemplate x:Key="InspectableObjectTemplate" DataType="ctrl:InspectableObject">
         <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}" Style="{StaticResource NestedInspectorView}"/>
+    </DataTemplate>
+    
+    <!--不明エディタ-->
+    <DataTemplate x:Key="UnknownEditor">
+        <TextBlock Text="Editor not support"/>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -1,8 +1,7 @@
 ﻿using Common.Attribute;
-using Common.Math;
 using System.Reflection;
 
-namespace CommonView.Controls.Inspector
+namespace CommonView.Controls.Inspector.Reflection
 {
 
     /// <summary>
@@ -15,7 +14,7 @@ namespace CommonView.Controls.Inspector
             Owner = owner;
             PropertyInfo = propertyInfo;
 
-            if(Owner is System.ComponentModel.INotifyPropertyChanged npc)
+            if (Owner is System.ComponentModel.INotifyPropertyChanged npc)
             {
                 // TODO 購読解除
                 npc.PropertyChanged += (s, e) =>
@@ -28,7 +27,7 @@ namespace CommonView.Controls.Inspector
             }
 
             // NOTE プロパティごとに生成する必要はないのでメンバに持たなくてもよい？
-            m_tags = propertyInfo.GetCustomAttributes<TagAttribute>().ToDictionary(i=>i.Key,i=>i.Value);
+            m_tags = propertyInfo.GetCustomAttributes<TagAttribute>().ToDictionary(i => i.Key, i => i.Value);
 
             if (PropertyInfo.ReflectedType?.IsSubclassOf(Owner.GetType())??false)
             {
@@ -45,7 +44,8 @@ namespace CommonView.Controls.Inspector
             get => PropertyInfo.GetValue(Owner);
             set
             {
-                if(value?.GetType() != Type)
+                // TODO 型変換の責務は各PropertyControlに任せる
+                if (value?.GetType() != Type)
                 {
                     try
                     {
@@ -57,13 +57,16 @@ namespace CommonView.Controls.Inspector
                     }
                 }
                 if (value == Value) return;
+                
+                PropertyInfo.SetValue(Owner, value); 
+                RaisePropertyChanged();
 
-                var oldValue = Value;
-                History.History.Record(
-                    $"{Name}に値をセット : {value?.ToString()}",
-                    () => { PropertyInfo.SetValue(Owner, value); RaisePropertyChanged(); },
-                    () => { PropertyInfo.SetValue(Owner, oldValue); RaisePropertyChanged(); }
-                );
+                // var oldValue = Value;
+                // History.History.Record(
+                //     $"{Name}に値をセット : {value?.ToString()}",
+                //     () => { PropertyInfo.SetValue(Owner, value); RaisePropertyChanged(); },
+                //     () => { PropertyInfo.SetValue(Owner, oldValue); RaisePropertyChanged(); }
+                // );
             }
         }
 

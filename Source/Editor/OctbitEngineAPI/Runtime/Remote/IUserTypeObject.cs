@@ -5,6 +5,7 @@ namespace OctbitEngine.Runtime
 {
     public interface IUserTypeObject : INotifyPropertyChanged
     {
+        ITypeInfo TypeInfo { get; }
         IReadOnlyDictionary<string, object> Properties { get; }
 
         object? GetValue([CallerMemberName] string? name = null);

@@ -1,7 +1,4 @@
-﻿using Common.Attribute;
-using Common.Math;
-using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace CommonView.Controls
