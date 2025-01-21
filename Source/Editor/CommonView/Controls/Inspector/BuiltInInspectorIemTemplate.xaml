@@ -27,17 +27,31 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
+    <DrawingBrush x:Key="MultiValueBrush" Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{DynamicResource Field}">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,10,10"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#20F00000">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,10,10"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
     <SolidColorBrush x:Key="MultiColor" Color="Gray"/>
 
 
     <DataTemplate x:Key="EnumEditor" DataType="ctrl:EnumEditor">
-        <Grid>
-            <ComboBox x:Name="ComboBox" SelectedItem="{Binding Value,Mode=TwoWay}" ItemsSource="{Binding Items}"/>
-            <TextBlock x:Name="Overlay" Text=" *" Foreground="{StaticResource MultiColor}" IsHitTestVisible="False" Visibility="Collapsed"/>
-        </Grid>
+        <ComboBox x:Name="ComboBox" SelectedItem="{Binding Value,Mode=TwoWay}" ItemsSource="{Binding Items}"/>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameValues}" Value="False">
-                <Setter TargetName="Overlay" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="ComboBox"  Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -50,7 +64,7 @@
         <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameValues}" Value="False">
-                <Setter TargetName="TextBox" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="TextBox" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
@@ -59,7 +73,7 @@
         <TextBox x:Name="TextBox" Text="{Binding Value,Mode=TwoWay}"/>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IsSameValues}" Value="False">
-                <Setter TargetName="TextBox" Property="Foreground" Value="{StaticResource MultiColor}"/>
+                <Setter TargetName="TextBox" Property="Background" Value="{StaticResource MultiValueBrush}"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
