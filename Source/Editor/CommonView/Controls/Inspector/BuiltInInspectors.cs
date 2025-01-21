@@ -103,7 +103,7 @@ namespace CommonView.Controls
 
     public class Editor : Inspectable
     {
-        public static string MultiValuesText = "―";
+        public static string MultiValuesText = "";
         protected Editor(InspectableProperty[] targets,params string[] syncs)
         {
             Targets = targets;
@@ -132,7 +132,7 @@ namespace CommonView.Controls
         public string Value
         {
             // NOTE ComboBoxにはItems以外の要素が表示できないためMultiValuesTextを表示できていない
-            get => IsSameValues ? MultiValuesText : Target.Value!.ToString()??string.Empty;
+            get => IsSameValues ? Target.Value!.ToString()??string.Empty : MultiValuesText;
             set
             {
                 if (Enum.TryParse(Type, value, out var result))

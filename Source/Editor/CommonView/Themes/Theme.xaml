@@ -553,12 +553,12 @@
             <Border x:Name="Border" 
                     Grid.ColumnSpan="2" 
                     BorderThickness="1"
-                    BorderBrush="{DynamicResource Outline}"
-                    Background="{DynamicResource Field}"/>
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Background="{TemplateBinding Background}"/>
             <Border Grid.Column="0"
                     Margin="1"
-                    BorderBrush="{DynamicResource Outline}"
-                    Background="{DynamicResource Field}"/>
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    Background="{TemplateBinding Background}"/>
             <Border x:Name="Overlay"
                     Grid.ColumnSpan="2"
                     Background="{DynamicResource Hover}"
@@ -586,6 +586,8 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+        <Setter Property="Background" Value="{DynamicResource Background}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Outline}"/>
         <Setter Property="MinWidth" Value="120" />
         <Setter Property="MinHeight" Value="20" />
         <Setter Property="Template">
@@ -597,6 +599,8 @@
                                             Grid.Column="2"
                                             Focusable="false"
                                             ClickMode="Press"
+                                            Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
                                             IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
                         <ContentPresenter x:Name="ContentSite"
                                                 IsHitTestVisible="False"
@@ -635,8 +639,8 @@
                                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                 <Border x:Name="DropDownBorder" 
                                         BorderThickness="1" 
-                                        BorderBrush="{DynamicResource Outline}" 
-                                        Background="{DynamicResource Field}"/>
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
+                                        Background="{TemplateBinding Background}"/>
 
                                 <ScrollViewer Margin="0"
                                                   SnapsToDevicePixels="True">
