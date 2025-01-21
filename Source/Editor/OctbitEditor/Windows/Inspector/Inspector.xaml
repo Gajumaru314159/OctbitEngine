@@ -94,7 +94,8 @@
                                                 ContextMenu="{StaticResource ContentContextMenu}">
                                             <ContentControl Style="{StaticResource Hamburger}" VerticalAlignment="Bottom"/>
                                         </Border>
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <ContentControl Style="{StaticResource ShadingWire}" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding Name}" Margin="4,0"/>
                                     </DockPanel>
                                 </Expander.Header>
                                 <ctrl:InspectorView ItemsSource="{Binding Inspectables}" LabelWidth="{Binding DataContext.SharedLabelWidth.Value,ElementName=_root,Mode=TwoWay}"/>
