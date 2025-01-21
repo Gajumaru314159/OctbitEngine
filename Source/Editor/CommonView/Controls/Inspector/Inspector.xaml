@@ -24,6 +24,7 @@
                             <ColumnDefinition MinWidth="50" Width="{Binding LabelWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:InspectorView},Mode=TwoWay}"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition MinWidth="50"/>
+                            <ColumnDefinition Width="5"/>
                         </Grid.ColumnDefinitions>
 
                         <Grid x:Name="LabelBlock">
