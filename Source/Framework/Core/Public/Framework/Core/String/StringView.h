@@ -233,12 +233,7 @@ struct std::hash<ob::core::StringViewBase<char32_t>>
 //===============================================================
 // フォーマット
 //===============================================================
-template <> struct std::formatter<ob::core::StringView, ob::core::Char> {
-	template<typename ParseContext>
-	constexpr auto parse(ParseContext& ctx) -> decltype(ctx.begin()) {
-		return ctx.end();
-	}
-
+template <> struct std::formatter<ob::core::StringView, ob::core::Char> : std::formatter<std::basic_string_view<ob::core::Char>> {
 	template<typename FormatContext>
 	auto format(const ob::core::StringView& value, FormatContext& ctx) const {
 		return format_to(ctx.out(), "{}", std::basic_string_view<ob::core::Char>(value.data(), value.size()));
