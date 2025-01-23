@@ -28,6 +28,9 @@ set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
 set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/bin")
+
 set(OB_CONFIGURATION "Debug")
 
 #------------------------------------------------------------------------------
@@ -38,7 +41,7 @@ set(OB_CONFIGURATION "Debug")
 if(CMAKE_BUILD_TOOL MATCHES "(msdev|devenv|nmake)")
     add_definitions(/W4)
 else()
-    add_compile_options(-Wno-everything -Werror)
+    #add_compile_options(-Wno-everything -Werror)
 endif()
 
 # 警告抑制
