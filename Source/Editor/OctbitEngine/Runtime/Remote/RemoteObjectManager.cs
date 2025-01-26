@@ -8,7 +8,7 @@ namespace OctbitEngine.Runtime
 {
     internal class RemoteObjectManager
     {
-        private Dictionary<int, IRemoteObject> m_obects = new();
+        private Dictionary<int, IRemoteObject> m_objects = new();
 
         public void CreateFromRuntime(int remoteId)
         {
@@ -17,17 +17,17 @@ namespace OctbitEngine.Runtime
 
         public void CreateFromEditor(int remoteId, IRemoteObject remoteObject)
         {
-            lock (m_obects)
+            lock (m_objects)
             {
-                m_obects.Add(remoteId, remoteObject);
+                m_objects.Add(remoteId, remoteObject);
             }
         }
 
         public IRemoteObject? Find(int remoteId)
         {
-            lock (m_obects)
+            lock (m_objects)
             {
-                if(m_obects.TryGetValue(remoteId, out var remoteObject))
+                if(m_objects.TryGetValue(remoteId, out var remoteObject))
                 {
                     return remoteObject;
                 }
