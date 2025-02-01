@@ -8,6 +8,6 @@
 namespace ob::rhi {
 
 	//! @brief      システムをServiceInjectorに登録
-	void Register(ServiceInjector&);
+	void RegisterRHIService(ServiceInjector&);
 
 }

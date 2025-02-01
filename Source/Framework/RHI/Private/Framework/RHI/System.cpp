@@ -12,7 +12,7 @@
 namespace ob::rhi {
 
 	//! @brief      システムをServiceInjectorに登録
-	void Register(ServiceInjector& injector) {
+	void RegisterRHIService(ServiceInjector& injector) {
 		injector.bind<GraphicObjectManager>();
 		injector.bind<SystemResource>();
 		injector.bind<EmptyRHI>().as<RHI>();

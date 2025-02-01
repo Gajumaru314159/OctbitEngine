@@ -17,7 +17,7 @@ TEST(RHI, CreateEmpty) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	rhi::Register(injector);
+	rhi::RegisterRHIService(injector);
 
 	injector.create<RHI>(container);
 
@@ -38,8 +38,8 @@ TEST(RHI, CreateEmptyDX12) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	rhi::dx12::Register(injector);
-	rhi::Register(injector);
+	rhi::dx12::RegisterDirectX12RHIService(injector);
+	rhi::RegisterRHIService(injector);
 
 	injector.create<RHI>(container);
 
@@ -62,8 +62,8 @@ TEST(RHI, ShowHide) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	rhi::dx12::Register(injector);
-	rhi::Register(injector);
+	rhi::dx12::RegisterDirectX12RHIService(injector);
+	rhi::RegisterRHIService(injector);
 
 	injector.create<RHI>(container);
 	{

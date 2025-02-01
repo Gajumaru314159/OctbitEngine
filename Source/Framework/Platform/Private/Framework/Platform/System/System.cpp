@@ -12,7 +12,7 @@
 namespace ob::platform {
 
 	//! @brief      システムをServiceInjectorに登録
-	void Register(ServiceInjector& injector) {
+	void RegisterPlatformService(ServiceInjector& injector) {
 		injector.bind<WindowManager>();
 	}
 

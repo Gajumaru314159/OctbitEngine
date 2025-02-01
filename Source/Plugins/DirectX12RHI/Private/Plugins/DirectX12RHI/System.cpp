@@ -12,9 +12,9 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      システムをServiceInjectorに登録
 	//@―---------------------------------------------------------------------------
-	void Register(ServiceInjector& injector) {
+	void RegisterDirectX12RHIService(ServiceInjector& injector) {
 		injector.bind<DirectX12RHI>().as<RHI>();
-		platform::Register(injector);
+		platform::RegisterPlatformService(injector);
 	}
 
 }

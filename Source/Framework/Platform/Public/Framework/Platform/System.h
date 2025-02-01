@@ -9,7 +9,7 @@
 namespace ob::platform {
 
     //! @brief      システムをServiceInjectorに登録
-    void Register(ServiceInjector&);
+    void RegisterPlatformService(ServiceInjector&);
 
     //! @brief  システム情報の取得
     namespace System {

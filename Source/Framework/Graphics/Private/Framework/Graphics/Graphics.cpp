@@ -16,10 +16,10 @@
 namespace ob::graphics {
 
 	//! @brief      システムをServiceInjectorに登録
-	void Register(ServiceInjector& injector) {
+	void RegisterGraphicsService(ServiceInjector& injector) {
 		injector.bind<MaterialManager>();
 		injector.bind<Graphics>();
-		rhi::Register(injector);
+		rhi::RegisterRHIService(injector);
 		Name::Register(injector);
 	}
 

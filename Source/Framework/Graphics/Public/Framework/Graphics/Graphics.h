@@ -18,7 +18,7 @@ namespace ob::graphics {
     class MaterialManager;
 
     //! @brief      システムをServiceInjectorに登録
-    void Register(ServiceInjector&);
+    void RegisterGraphicsService(ServiceInjector&);
 
     //! @brief      グラフィック
     class Graphics :public Singleton<Graphics> {

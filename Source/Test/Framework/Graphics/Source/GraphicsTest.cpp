@@ -36,9 +36,9 @@ TEST(Graphis, Create) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::Register(injector);
-		input::Register(injector);
-		graphics::Register(injector);
+		rhi::dx12::RegisterDirectX12RHIService(injector);
+		input::RegisterInputService(injector);
+		graphics::RegisterGraphicsService(injector);
 
 		rhi::RHIConfig config;
 		config.enablePIX = true;
