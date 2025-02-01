@@ -161,8 +161,6 @@ namespace ob::rhi::dx12 {
 			m_depthTexture = {};
 			m_hDSV = {};
 		}
-		// リソースバリア
-		m_cache.recordCommand(*m_cmdList.Get());
 
 		// レンダーターゲットビュー設定
 		for (auto [i, color] : Indexed(colors)) {
