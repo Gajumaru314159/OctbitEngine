@@ -11,8 +11,8 @@ namespace ob::rhi {
     //! @brief  コンストラクタ
     //! 
     //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
-    GraphicObjectManager::GraphicObjectManager(Config* config) 
-        : m_config(config ? *config : Config{})
+    GraphicObjectManager::GraphicObjectManager(RHIConfig* config) 
+        : m_config(config ? *config : RHIConfig{})
         , m_deleteStackList(std::max(m_config.frameBufferCount,1))
     {
         if (m_config.frameBufferCount < 1) {

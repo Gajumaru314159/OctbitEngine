@@ -17,7 +17,7 @@ namespace ob::rhi {
         //! @brief  コンストラクタ
         //! 
         //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
-        GraphicObjectManager(Config*);
+        GraphicObjectManager(RHIConfig*);
 
         //! @brief  デストラクタ
         ~GraphicObjectManager();
@@ -39,7 +39,7 @@ namespace ob::rhi {
     private:
 
         using ObjectQueue = Queue<GraphicObject*>;
-        Config                  m_config;
+        RHIConfig                  m_config;
         List<GraphicObject*>    m_objects;
         Swapper<ObjectQueue>    m_deleteStackList;
 

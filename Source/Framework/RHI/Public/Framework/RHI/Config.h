@@ -8,7 +8,7 @@
 namespace ob::rhi {
 
     //! @brief      Graphicモジュール設定
-    struct Config {
+    struct RHIConfig {
         s32 frameBufferCount = 2;   //!< ダブルバッファリング
 
         bool enablePIX = false;

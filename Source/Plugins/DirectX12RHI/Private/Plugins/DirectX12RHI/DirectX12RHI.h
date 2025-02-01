@@ -16,7 +16,7 @@ namespace ob::rhi::dx12 {
 
 	class DirectX12RHI : public RHI{
 	public:
-		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::Config*);
+		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*);
 		~DirectX12RHI();
 
 		//@―---------------------------------------------------------------------------
@@ -176,7 +176,7 @@ namespace ob::rhi::dx12 {
 
 	private:
 
-		Config								m_config;
+		RHIConfig								m_config;
 
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス

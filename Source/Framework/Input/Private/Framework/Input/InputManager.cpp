@@ -14,7 +14,7 @@
 namespace ob::input{
 
     //! @brief  コンストラクタ
-    InputModule::InputModule(Config* config, platform::WindowManager&) {
+    InputModule::InputModule(InputConfig* config, platform::WindowManager&) {
 
         if (config) {
             m_config = *config;

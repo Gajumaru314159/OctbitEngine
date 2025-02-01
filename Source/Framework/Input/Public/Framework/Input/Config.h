@@ -8,7 +8,7 @@
 namespace ob::input {
 
     //! @brief  コンフィグ
-    struct Config {
+    struct InputConfig {
         bool useKeyboard = true;
         bool useMouse = true;
     };

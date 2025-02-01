@@ -20,7 +20,7 @@ namespace ob::input {
         //===============================================================
         // コンストラクタ / デストラクタ
         //===============================================================
-        InputModule(Config*, platform::WindowManager&);
+        InputModule(InputConfig*, platform::WindowManager&);
         ~InputModule();
 
         //! @brief  更新
@@ -53,7 +53,7 @@ namespace ob::input {
         using DevicePtr = UPtr<IInputDevice>;
         HashMap<DeviceKey, DevicePtr, Hash> m_devices;
 
-        Config m_config;
+        InputConfig m_config;
         bool m_mouseAdded=false;
     };
 
