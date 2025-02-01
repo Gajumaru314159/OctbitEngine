@@ -118,6 +118,7 @@ add_subdirectory ("Source/Framework/Debug")
 add_subdirectory ("Source/Framework/Engine")
 add_subdirectory ("Source/Framework/Asset")
 add_subdirectory ("Source/Framework/Editor")
+add_subdirectory ("Source/Framework/Runtime")
 
 # Plugins
 if(WIN32)
