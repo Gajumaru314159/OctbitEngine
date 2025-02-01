@@ -237,7 +237,7 @@ namespace ob::rhi::dx12 {
 		UINT flagsDXGI = 0;
 #if OB_DEBUG
 		// DirectX12のデバッグレイヤーを有効にする
-		{
+		if (m_config.enableDebugLayer){
 			ComPtr<ID3D12Debug>	debugController;
 			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
