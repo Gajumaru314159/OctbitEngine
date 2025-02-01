@@ -56,7 +56,7 @@ namespace ob::graphics {
 			}
 
 			graphics::MeshData meshData;
-			meshData.name = mesh->mName.C_Str();
+			meshData.name = Format("{} ({})", path,mesh->mName.C_Str());
 
 			// 頂点
 			if (mesh->mVertices) {

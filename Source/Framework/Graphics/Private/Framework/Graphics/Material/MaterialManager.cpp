@@ -38,6 +38,7 @@ namespace ob::graphics {
 
 		{
 			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BindFlag::AllShaderResource);
+			bufferDesc.name = "MaterialGlobalProperty";
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
 			m_bufferBlob.resize(BUFFER_SIZE);

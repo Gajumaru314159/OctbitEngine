@@ -383,7 +383,7 @@ namespace ob::graphics {
 				StaticSamplerDesc(SamplerDesc(),0),
 			}
 			);
-			desc.name = "::ImGui";
+			desc.name = "ImGui";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
 		}
@@ -432,7 +432,7 @@ namespace ob::graphics {
 
 		{
 			PipelineStateDesc desc;
-			desc.name = "::ImGui";
+			desc.name = "ImGui";
 			desc.colors = { TextureFormat::RGBA8 };
 
 			desc.rootSignature = signature;
@@ -697,7 +697,7 @@ namespace ob::graphics {
 			auto newSize = 512;
 
 			BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(newSize);
-			desc.name = "::ImGui";
+			desc.name = "ImGuiConstant";
 			m_constantBuffer = Buffer::Create(desc);
 
 			m_constantTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
@@ -718,7 +718,7 @@ namespace ob::graphics {
 			auto newSize = (u64)draw_data->TotalVtxCount + overAllocVertexSize;
 
 			BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(newSize);
-			desc.name = "::ImGui";
+			desc.name = "ImGuiVertex";
 			m_vertexBuffer = Buffer::Create(desc);
 			m_vertexCount = newSize;
 		}
@@ -729,7 +729,7 @@ namespace ob::graphics {
 			auto newSize = (u64)draw_data->TotalIdxCount + overAllocIndexSize;
 
 			BufferDesc desc = BufferDesc::Index<ImDrawIdx>(newSize);
-			desc.name = "::ImGui";
+			desc.name = "ImGuiIndex";
 			m_indexBuffer = Buffer::Create(desc);
 			m_indexCount = newSize;
 		}
