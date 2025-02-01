@@ -314,7 +314,6 @@ namespace ob::graphics {
 				cmdList.setViewport(&vp, 1);
 				cmdList.setVertexBuffer(m_vertexBuffer);
 				cmdList.setIndexBuffer(m_indexBuffer);
-				cmdList.setPipelineState(m_pipeline);
 
 				rhi::SetDescriptorTableParam params[] = {
 					{m_constantTable,0}
