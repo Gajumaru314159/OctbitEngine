@@ -146,6 +146,7 @@ namespace ob::core {
 		void alpha(f32 alpha, StringView tex = "");
 		void illumination(s32);
 		void ior(f32);
+		void normal(StringView tex);
 		void bump(StringView tex);
 		void displacement(StringView tex);
 		void decal(StringView tex);

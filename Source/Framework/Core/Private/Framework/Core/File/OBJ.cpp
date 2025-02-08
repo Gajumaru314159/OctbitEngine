@@ -173,6 +173,10 @@ namespace ob::core {
 	void MTL::ior(f32 ior) {
 		m_ss << "Ni " << ior << std::endl;
 	}
+	void MTL::normal(StringView tex) {
+		if (tex.empty())return;
+		m_ss << "map_Kn " << tex << std::endl;
+	}
 	void MTL::bump(StringView tex) {
 		if (tex.empty())return;
 		m_ss << "map_bump " << tex << std::endl;
