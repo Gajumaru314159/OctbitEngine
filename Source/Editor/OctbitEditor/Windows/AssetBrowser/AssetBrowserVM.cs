@@ -1,4 +1,5 @@
 ﻿using Common.Generic;
+using Common.Linq;
 using Common.Log;
 using Common.Tree;
 using CommonView.Menu;
@@ -6,9 +7,12 @@ using Livet;
 using OctbitEngine.Asset;
 using OctbitEngine.Config;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
+using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,6 +20,23 @@ using System.Windows.Media.Imaging;
 
 namespace OctbitEditor
 {
+    public class AssetBrowserTreeDataTemplateSelector : DataTemplateSelector
+    {
+        public DataTemplate? Shortcut { get; set; }
+        public DataTemplate? Folder { get; set; }
+        public DataTemplate? File { get; set; }
+
+        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        {
+            return item switch
+            {
+                AssetBrowserShortcutItem => Shortcut,
+                AssetBrowserFolderItem => Folder,
+                AssetBrowserFileItem => File,
+                _ => null
+            };
+        }
+    }
 
     public enum ListViewType
     {
@@ -29,11 +50,9 @@ namespace OctbitEditor
 
         protected AssetBrowserItem()
         {
-            ChildFolders = new CollectionViewSource() { Source = Children };
-            ChildFolders.View.Filter = i => i is AssetBrowserFolderItem;
         }
 
-        public AssetBrowserItem? Parent { get; set; } // TODO setを排除
+        public AssetBrowserItem? Parent { get; protected init; } // TODO setを排除
         public virtual Brush ItemColorBrush => Brushes.Transparent;
         public virtual BitmapSource Icon => FolderIcon;
         public virtual string Name { get; set; } = "-";
@@ -41,37 +60,68 @@ namespace OctbitEditor
         public ReactiveProperty<bool> IsSelected { get; } = new();
         public ReactiveProperty<bool> IsSelectedInList { get; } = new();
         public ReactiveProperty<bool> IsExpanded { get; } = new(false);
-        public ObservableCollection<AssetBrowserItem> Children { get; } = new();
-        public CollectionViewSource ChildFolders { get; }
     }
+
+    /// <summary>
+    /// IFolderItemのViewModel
+    /// </summary>
     public class AssetBrowserFolderItem : AssetBrowserItem
     {
         public override Brush ItemColorBrush => Brushes.Red;
         public override BitmapSource Icon => FolderIcon;
-        public override string Name {
+        public override string Name
+        {
             get => Folder.Name;
             set => throw new NotImplementedException("Folderのリネームは未実装です");
         }
         public override bool IsEditable => false;
         public IAssetFolder Folder { get; }
+        public ReadOnlyObservableCollection<AssetBrowserItem> Children { get; }
+
+        public CollectionViewSource ChildFolders { get; }
 
         public AssetBrowserFolderItem(IAssetFolder folder)
+            : this(folder, null)
         {
+        }
+
+        public AssetBrowserFolderItem(IAssetFolder folder, AssetBrowserItem? parent)
+        {
+            Parent = parent;
             Folder = folder;
+            Children = folder.Children.ToReadOnlyReactiveCollection(GenerateAssetBrowserItem).AddTo(CompositeDisposable);
+
+            ChildFolders = new CollectionViewSource() { Source = Children };
+            ChildFolders.View.Filter = i => i is AssetBrowserFolderItem;
+        }
+
+        private AssetBrowserItem GenerateAssetBrowserItem(IAssetEntry entry)
+        {
+            return entry switch
+            {
+                IAssetFile file => new AssetBrowserFileItem(file, this),
+                IAssetFolder folder => new AssetBrowserFolderItem(folder),
+                _ => throw new System.NotImplementedException()
+            };
         }
     }
+
+    /// <summary>
+    /// IAssetFileのViewModel
+    /// </summary>
     public class AssetBrowserFileItem : AssetBrowserItem
     {
         internal static BitmapImage DefaultIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
         public override Brush ItemColorBrush => Brushes.Red;
+        public ReadOnlyObservableCollection<AssetBrowserAssetItem> Assets { get; }
         public override BitmapSource Icon
         {
             get
             {
-                if (0 < Children.Count)
+                if (0 < Assets.Count)
                 {
                     // アイコン変更の検知が必要
-                    return Children[0].Icon;
+                    return Assets[0].Icon;
                 }
                 if (File.Assets.Count == 1)
                 {
@@ -91,11 +141,17 @@ namespace OctbitEditor
 
         public IAssetFile File { get; }
 
-        public AssetBrowserFileItem(IAssetFile file)
+        public AssetBrowserFileItem(IAssetFile file, AssetBrowserItem parent)
         {
             File = file;
+            Parent = parent;
+            Assets = file.Assets.ToReadOnlyReactiveCollection(i => new AssetBrowserAssetItem(i, this));
         }
     }
+
+    /// <summary>
+    /// IAssetのViewModel
+    /// </summary>
     public class AssetBrowserAssetItem : AssetBrowserItem
     {
         internal static BitmapImage AssetIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/icon.ico"));
@@ -109,12 +165,18 @@ namespace OctbitEditor
         public override bool IsEditable => false;
         private IAsset Asset { get; }
 
-        public AssetBrowserAssetItem(IAsset asset)
+        public AssetBrowserAssetItem(IAsset asset, AssetBrowserItem parent)
         {
+            Parent = parent;
             Asset = asset;
         }
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class AssetBrowserShortcutItem : AssetBrowserItem
     {
         public override Brush ItemColorBrush => Brushes.Red;
@@ -124,6 +186,7 @@ namespace OctbitEditor
             get => m_name;
             set => throw new NotImplementedException("Folderのリネームは未実装です");
         }
+        public ObservableCollection<AssetBrowserAssetItem> Items { get; } = new();
         public override bool IsEditable => false;
 
         private string m_name;
@@ -135,6 +198,10 @@ namespace OctbitEditor
     }
 
 
+
+
+
+
     public class AssetBrowserVM : TabBase
     {
         public AssetBrowserVM(IAssetManager assetManager)
@@ -143,89 +210,27 @@ namespace OctbitEditor
             Title ="Asset Browser";
             AssetManager = assetManager;
 
-            void visit(IAssetFolder folder,AssetBrowserItem parent)
-            {
-                foreach (var child in folder.ChildFolders)
-                {
-                    var item = new AssetBrowserFolderItem(child);
-                    parent.Children.Add(item);
-                    item.Parent = parent;
-                    visit(child,item);
-                }
-                foreach(var child in folder.ChildFiles)
-                {
-                    var item = new AssetBrowserFileItem(child);
-                    parent.Children.Add(item);
-                    item.Parent = parent;
-
-                    if (1 < child.Assets.Count)
-                    {
-                        foreach (var asset in child.Assets)
-                        {
-                            var assetItem = new AssetBrowserAssetItem(asset);
-                            item.Children.Add(assetItem);
-                            assetItem.Parent = item;
-                        }
-                    }
-                }
-            }
-
 
             Children.Add(new AssetBrowserShortcutItem("Shortcuts"));
 
             var rootItem = new AssetBrowserFolderItem(AssetManager.RootFolder);
             rootItem.IsSelected.Value = true;
             rootItem.IsExpanded.Value = true;
+            Children.Add(rootItem);
+
+            SelectedItems.ToCollectionChanged().Subscribe(i => { if (i.Values?.FirstOrNull() is AssetBrowserFolderItem folder) SelectedFolder.Value=folder; });
+
             SelectedFolder.Value = rootItem;
             SelectedFolder.Subscribe(_ => RaisePropertyChanged(nameof(SelectionInfo)));
-
-            Children.Add(rootItem);
-            visit(AssetManager.RootFolder, rootItem);
-
-            SelectedItems.CollectionChanged += (sender, e) =>
-            {
-                if(e?.NewItems != null && 0 < e.NewItems.Count)
+            SelectedFolder.Zip(SelectedFolder.Skip(1), (x, y) => new { OldValue = x, NewValue = y })
+                .Subscribe(pair =>
                 {
-                    // TODO より安全なアクセスにする
-                    if (e.NewItems[0] is AssetBrowserFolderItem folder)
+                    foreach (var child in pair.OldValue.Children)
                     {
-                        SelectedFolder.Value = folder;
+                        child.IsSelectedInList.Value = false;
                     }
-                    if (e.NewItems[0] is AssetBrowserFileItem file)
-                    {
-                        if(file.Children.Count == 0)
-                        {
-                            SelectedFolder.Value = file.Parent!;
-                        }
-                        else
-                        {
-                            SelectedFolder.Value = file;
-                        }
-                    }
-                    if (e.NewItems[0] is AssetBrowserAssetItem asset)
-                    {
-                        SelectedFolder.Value = asset.Parent!;
-                    }
-                }
-                else
-                {
-                    SelectedFolder.Value = rootItem;
-                }
-
-                // TODO もともと選択していたフォルダだけ解除すればよい
-                foreach (var i in Children)
-                {
-                    foreach(var j in i.DepthFirst(i => i.Children))
-                    {
-                        j.IsSelectedInList.Value = false;
-                    }
-                }
-            };
-
-            SelectedFolder.Subscribe(item =>
-            {
-                // SelectedFolderPath.Value = (item?.Path??"Asset").Replace("\\","/");
-            });
+                    SelectedFolderPath.Value = (pair.NewValue.Folder.Path);
+                });
 
             GenerateMenuItems();
 
@@ -236,7 +241,7 @@ namespace OctbitEditor
         {
             {
                 var group = MenuItems.AddGroup("_Create");
-                group.AddCommand("Folder",CreateFolder);
+                group.AddCommand("Folder", CreateFolder);
                 group.AddSeparator();
 
                 // Import専用アセット以外を生成
@@ -245,9 +250,9 @@ namespace OctbitEditor
 
             }
             MenuItems.AddCommand("Show in Explorer", ShowInExplorer);
-            MenuItems.AddCommand("Open",OpenAsset, CanOpenAsset);
-            MenuItems.AddCommand("Delete",DeleteAssets);
-            MenuItems.AddEmptyCommand("Rename","F2");
+            MenuItems.AddCommand("Open", OpenAsset, CanOpenAsset);
+            MenuItems.AddCommand("Delete", DeleteAssets);
+            MenuItems.AddEmptyCommand("Rename", "F2");
             MenuItems.AddEmptyCommand("Copy Path");
             MenuItems.AddSeparator();
             MenuItems.AddEmptyCommand("Reimport");
@@ -308,7 +313,7 @@ namespace OctbitEditor
         public ObservableCollection<AssetBrowserItem> SelectedItemsInList { get; set; } = new();
 
         // 選択情報
-        public ReactivePropertySlim<AssetBrowserItem> SelectedFolder { get; } = new();
+        public ReactivePropertySlim<AssetBrowserFolderItem> SelectedFolder { get; } = new(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe);
         public ReactivePropertySlim<string> SelectedFolderPath { get; } = new("Asset");
         public ReactivePropertySlim<bool> CanOpenAsset { get; } = new(false);
 
@@ -323,6 +328,6 @@ namespace OctbitEditor
 
         public ICommand CreateFolderCommand { get; }
 
-        public string SelectionInfo => $"{SelectedFolder.Value.Children.Count(i=>i.IsSelectedInList.Value)}/{SelectedFolder.Value.Children.Count} items";
+        public string SelectionInfo => $"{SelectedFolder.Value.Children.Count(i => i.IsSelectedInList.Value)}/{SelectedFolder.Value.Children.Count} items";
     }
 }

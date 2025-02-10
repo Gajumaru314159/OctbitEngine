@@ -1,4 +1,5 @@
 ﻿using Common.Linq;
+using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
@@ -16,7 +17,7 @@ namespace OctbitEngine.Asset
         /// <summary>
         /// AssetFileの所有するAssetを取得します。
         /// </summary>
-        public IReadOnlyList<IAsset> Assets { get; }
+        public ReadOnlyObservableCollection<IAsset> Assets { get; }
 
         /// <summary>
         /// アセットを再インポートする。

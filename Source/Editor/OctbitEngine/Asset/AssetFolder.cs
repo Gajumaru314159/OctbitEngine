@@ -1,4 +1,5 @@
 ﻿using Common.Log;
+using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
@@ -8,8 +9,8 @@ namespace OctbitEngine.Asset
         {
         }
 
-        private List<AssetEntry> m_children = new List<AssetEntry>();
-        public IEnumerable<IAssetEntry> Children => m_children;
+        private ObservableCollection<IAssetEntry> m_children = new();
+        public ReadOnlyObservableCollection<IAssetEntry> Children => new(m_children);
         public IEnumerable<IAssetFolder> ChildFolders => m_children.OfType<IAssetFolder>();
         public IEnumerable<IAssetFile> ChildFiles => m_children.OfType<IAssetFile>();
 

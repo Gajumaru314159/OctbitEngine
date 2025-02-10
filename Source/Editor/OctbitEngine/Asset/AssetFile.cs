@@ -1,5 +1,6 @@
 ﻿
 using OctbitEngine.Config;
+using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
@@ -19,14 +20,17 @@ namespace OctbitEngine.Asset
 
             lock (m_assets)
             {
-                m_assets = assets;
+                m_assets.Clear();
+                foreach (var asset in assets) {
+                    m_assets.Add(asset);
+                }
             }
 
             // TODO Componentなどに再インポート結果を通知
         }
 
-        public IReadOnlyList<IAsset> Assets => m_assets;
-        private IAsset[] m_assets = Array.Empty<IAsset>();
+        public ReadOnlyObservableCollection<IAsset> Assets => new(m_assets);
+        private ObservableCollection<IAsset> m_assets = new();
         public IAssetImporter Importer { get; }
 
     }

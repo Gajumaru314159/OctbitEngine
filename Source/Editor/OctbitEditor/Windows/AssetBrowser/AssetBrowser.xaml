@@ -76,7 +76,37 @@
         <Style x:Key="AssetListViewBase" TargetType="ListView" BasedOn="{StaticResource AssetListBoxBase}">
             
         </Style>
+
+
+
+        <HierarchicalDataTemplate x:Key="SortcutHierarchicalDataTemplate" DataType="local:AssetBrowserShortcutItem" ItemsSource="{Binding Items}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate x:Key="FolderHierarchicalDataTemplate" DataType="local:AssetBrowserFolderItem" ItemsSource="{Binding ChildFolders.View}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
         
+        <HierarchicalDataTemplate x:Key="FileHierarchicalDataTemplate" DataType="local:AssetBrowserFileItem" ItemsSource="{Binding Assets}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
+                <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
+        <local:AssetBrowserTreeDataTemplateSelector x:Key="TreeViewTemplateSelector"
+            Shortcut="{StaticResource SortcutHierarchicalDataTemplate}"
+            Folder="{StaticResource FolderHierarchicalDataTemplate}"
+            File="{StaticResource FileHierarchicalDataTemplate}"/>
+
+
+
     </UserControl.Resources>
 
     
@@ -134,7 +164,7 @@
                 <ToggleButton Content="◆" DockPanel.Dock="Right" TabIndex="6"/>
                 <ToggleButton Content="■" DockPanel.Dock="Right" TabIndex="5"/>
 
-                <TextBox x:Name="_addressBar" Text="  Assets  >  Textures  >  header.png" VerticalAlignment="Center">
+                <TextBox x:Name="_addressBar" Text="{Binding SelectedFolderPath.Value}" VerticalAlignment="Center">
                     <i:Interaction.Behaviors>
                         <behavior:EnterKeyBehavior ChangeFocusWhenEnterKeyPressed="True"/>
                     </i:Interaction.Behaviors>
@@ -152,15 +182,9 @@
 
             <!--TreeView-->
             <!--SelectedItemのバインドはViewから-->
-            <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}">
-                <ms:MultiSelectTreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="local:AssetBrowserItem" ItemsSource="{Binding ChildFolders.View}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Icon}" Width="15" Margin="3,0"/>
-                            <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </ms:MultiSelectTreeView.ItemTemplate>
+            <ms:MultiSelectTreeView x:Name="_tree" ItemsSource="{Binding Children,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" ContextMenu="{StaticResource ContextMenu}"
+                                    ItemTemplateSelector="{StaticResource TreeViewTemplateSelector}"
+                                    >
                 <ms:MultiSelectTreeView.ItemContainerStyle>
                     <Style TargetType="ms:MultiSelectTreeViewItem" BasedOn="{StaticResource {x:Type ms:MultiSelectTreeViewItem}}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected.Value}"/>

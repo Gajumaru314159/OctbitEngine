@@ -48,7 +48,6 @@ namespace OctbitEditor
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
             _tree.DataContext = e.NewValue;
             _tree.SetBinding(MultiSelectTreeView.SelectedItemsProperty, nameof(AssetBrowserVM.SelectedItems));
-
         }
 
         private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
