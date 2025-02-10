@@ -144,7 +144,7 @@ namespace OctbitEngine.Runtime
             
             var psi = new ProcessStartInfo()
             {
-                FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @"../../x64-Debug/Source/Application/OctbitApp.exe"),
+                FileName = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @"../../bin/OctbitApp.exe"),
                 WorkingDirectory = Path.Combine(WorkSpace.RootPath,"../../Assets"),
                 UseShellExecute = false,
                 CreateNoWindow = true,
