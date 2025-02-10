@@ -294,7 +294,7 @@ namespace OctbitEditor
         }
         private void DeleteEntity()
         {
-            var roots = SelectedItems.SelectRoot(i => i.Parent, i => i.Children);
+            var roots = SelectedItems.SelectRoot(i => i.Parent);
             var items = roots.Select(i => (parent:i.Parent,node:i)).ToList();
 
             History.Record(
@@ -336,7 +336,7 @@ namespace OctbitEditor
         {
             // TODO ヒストリ対応
 
-            var roots = SelectedItems.SelectRoot(i => i.Parent, i => i.Children);
+            var roots = SelectedItems.SelectRoot(i => i.Parent);
 
             foreach (var root in roots)
             {

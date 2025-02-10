@@ -24,6 +24,15 @@ namespace OctbitEngine.Asset
         /// </summary>
         public void Reimport();
 
+        /// <summary>
+        /// アセットを削除する。
+        /// 他のアセットから参照されている場合は削除できません。
+        /// </summary>
+        /// <returns>
+        /// アセットの削除に成功したか。
+        /// </returns>
+        public bool Delete();
+
         public IAssetImporter Importer { get; }
 
     }

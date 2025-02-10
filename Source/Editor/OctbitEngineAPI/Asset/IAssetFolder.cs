@@ -6,6 +6,16 @@ namespace OctbitEngine.Asset
     {
         public IAssetFile? FindFile(string name);
         public IAssetFolder? FindFolder(string name);
+        public bool Delete(IAssetEntry entry);
+
+        /// <summary>
+        /// フォルダを削除する。
+        /// 他のアセットから参照されているファイルが含まれている場合は削除できません。
+        /// </summary>
+        /// <returns>
+        /// フォルダの削除に成功したか。
+        /// </returns>
+        public bool Delete();
         public bool Add(IAssetEntry child);
         public bool Import(string path);
         public ReadOnlyObservableCollection<IAssetEntry> Children { get; }

@@ -87,7 +87,7 @@ namespace OctbitEngine.Asset
 
             IAssetFolder parent= RootFolder;
 
-            foreach (string folderName in folderNames)
+            foreach (string folderName in folderNames.Skip(1))
             {
                 var child = parent?.FindFolder(folderName);
                 if(child == null)
@@ -114,14 +114,11 @@ namespace OctbitEngine.Asset
         {
             string[] folderNames = path.Split('/');
 
-            if (folderNames.Length == 0 || RootFolder.Name != folderNames[0])
-            {
-                return null;
-            }
+            CheckValidPath(folderNames);
 
             IAssetFolder parent = RootFolder;
 
-            foreach (string folderName in folderNames)
+            foreach (string folderName in folderNames.Skip(1))
             {
                 var child = parent.FindFolder(folderName);
                 if (child == null)

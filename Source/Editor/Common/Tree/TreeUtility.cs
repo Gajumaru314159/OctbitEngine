@@ -46,7 +46,7 @@ namespace Common.Tree
             }
         }
 
-        public static ISet<T> SelectRoot<T>(this IEnumerable<T> nodes, Func<T, T?> parent, Func<T, IEnumerable<T>> children)
+        public static ISet<T> SelectRoot<T>(this IEnumerable<T> nodes, Func<T, T?> parent)
         {
             var result = new HashSet<T>();
             var set = nodes.ToHashSet();

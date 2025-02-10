@@ -38,6 +38,16 @@ namespace OctbitEngine.Asset
             return null;
         }
 
+        public bool Delete()
+        {
+            return Parent?.Delete(this)??false;
+        }
+
+        public bool Delete(IAssetEntry entry)
+        {
+            return m_children.Remove(entry);
+        }
+
         public bool Add(IAssetEntry child)
         {
             if (child.IsAncestorAssetOf(this))

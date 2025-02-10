@@ -28,12 +28,6 @@ namespace OctbitEngine.Asset
             return true;
         }
 
-        public bool Delete()
-        {
-            return false;
-            //return Parent?.Remove(this)??false;
-        }
-
         public bool Rename(string newName)
         {
             if (AssetManager.IsValidName(newName) == false) return false;

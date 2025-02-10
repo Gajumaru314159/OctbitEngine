@@ -13,6 +13,10 @@ namespace OctbitEngine.Asset
             Guid =guid;
             Importer = importer;
         }
+        public bool Delete()
+        {
+            return Parent?.Delete(this)??false;
+        }
 
         public void Reimport()
         {

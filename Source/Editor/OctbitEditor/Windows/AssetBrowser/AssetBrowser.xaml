@@ -25,7 +25,16 @@
     </i:Interaction.Behaviors>
 
     <UserControl.InputBindings>
-        <KeyBinding Gesture="Ctrl+S" Command="{Binding CreateFolderCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding CreateFolderCommand}"/>
+        <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}"/>
+        <KeyBinding Gesture="Enter" Command="{Binding OpenCommand}"/>
+
+        <KeyBinding Modifiers="Ctrl" Key="Up" Command="{Binding MoveUpCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Left" Command="{Binding MoveBackCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Right" Command="{Binding MoveForwardCommand}"/>
+        <KeyBinding Gesture="BrowserBack" Command="{Binding MoveBackCommand}"/>
+        <KeyBinding Gesture="BrowserForward" Command="{Binding MoveForwardCommand}"/>
+
     </UserControl.InputBindings>
 
     
@@ -145,17 +154,17 @@
                     </Style>
                 </DockPanel.Resources>
 
-                <Button DockPanel.Dock="Left" TabIndex="0">
+                <Button DockPanel.Dock="Left" TabIndex="0" ToolTip="戻る Alt+Left" Command="{Binding MoveBackCommand}">
                     <ContentControl Style="{StaticResource LeftArrow}"/>
                 </Button>
-                <Button DockPanel.Dock="Left" TabIndex="1">
+                <Button DockPanel.Dock="Left" TabIndex="1" ToolTip="進む Alt+Right" Command="{Binding MoveForwardCommand}">
                     <ContentControl Style="{StaticResource RightArrow}"/>
                 </Button>
-                <Button DockPanel.Dock="Left" TabIndex="2">
+                <Button DockPanel.Dock="Left" TabIndex="2" ToolTip="上の階層へ Alt+Up" Command="{Binding MoveUpCommand}">
                     <ContentControl Style="{StaticResource UpArrow}"/>
                 </Button>
                 <Button DockPanel.Dock="Left" TabIndex="3">
-                    <ContentControl Style="{StaticResource Reload}"/>
+                    <ContentControl Style="{StaticResource Reload}" ToolTip="リロード F5"/>
                 </Button>
 
                 <base:SearchBox x:Name="_searchBox" Watermark="検索 (F3)" DockPanel.Dock="Right" Width="200" TabIndex="8"/>

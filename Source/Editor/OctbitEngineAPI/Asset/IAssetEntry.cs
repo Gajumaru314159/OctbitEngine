@@ -24,8 +24,6 @@
 
         public bool SetParent(IAssetFolder parent);
 
-        public bool Delete();
-
         public bool Rename(string newName);
 
         public bool IsAncestorAssetOf(IAssetEntry? asset);

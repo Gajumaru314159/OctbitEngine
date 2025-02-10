@@ -100,7 +100,7 @@ namespace OctbitEditor
             return entry switch
             {
                 IAssetFile file => new AssetBrowserFileItem(file, this),
-                IAssetFolder folder => new AssetBrowserFolderItem(folder),
+                IAssetFolder folder => new AssetBrowserFolderItem(folder,this),
                 _ => throw new System.NotImplementedException()
             };
         }
@@ -202,7 +202,7 @@ namespace OctbitEditor
 
 
 
-    public class AssetBrowserVM : TabBase
+    public partial class AssetBrowserVM : TabBase
     {
         public AssetBrowserVM(IAssetManager assetManager)
             : base("Explorer")
@@ -218,85 +218,52 @@ namespace OctbitEditor
             rootItem.IsExpanded.Value = true;
             Children.Add(rootItem);
 
-            SelectedItems.ToCollectionChanged().Subscribe(i => { if (i.Values?.FirstOrNull() is AssetBrowserFolderItem folder) SelectedFolder.Value=folder; });
+            SelectedItems.Add(rootItem);
+            SelectedItems.ToCollectionChanged().Subscribe(i => {
+                m_duaringChange = true;
+                if (i.Values?.FirstOrNull() is AssetBrowserFolderItem folder) SelectedFolder.Value=folder;
+                m_duaringChange = false;
+            });
 
             SelectedFolder.Value = rootItem;
             SelectedFolder.Subscribe(_ => RaisePropertyChanged(nameof(SelectionInfo)));
             SelectedFolder.Zip(SelectedFolder.Skip(1), (x, y) => new { OldValue = x, NewValue = y })
                 .Subscribe(pair =>
                 {
+                    // TODO TreeView空の複数選択を扱う
+                    if (!m_duaringChange) { 
+                        SelectedItems.Clear();
+                        SelectedItems.Add(pair.NewValue);
+                    }
+
+                    pair.OldValue.IsSelected.Value = false;
+                    pair.NewValue.IsSelected.Value = true;
+
                     foreach (var child in pair.OldValue.Children)
                     {
                         child.IsSelectedInList.Value = false;
                     }
                     SelectedFolderPath.Value = (pair.NewValue.Folder.Path);
+
+                    if (m_executingHistory==false)
+                    {
+                        m_undoHistory.Push(pair.OldValue);
+                        m_executingHistory = false;
+                    }
                 });
 
             GenerateMenuItems();
 
+            MoveUpCommand = new DelegateCommand(MoveUp);
+            MoveBackCommand = new DelegateCommand(MoveBack);
+            MoveForwardCommand = new DelegateCommand(MoveForward);
+
             CreateFolderCommand = new DelegateCommand(CreateFolder);
+            DeleteCommand = new DelegateCommand(DeleteAssets);
+            OpenCommand = new DelegateCommand(OpenAsset);
         }
 
-        private void GenerateMenuItems()
-        {
-            {
-                var group = MenuItems.AddGroup("_Create");
-                group.AddCommand("Folder", CreateFolder);
-                group.AddSeparator();
 
-                // Import専用アセット以外を生成
-                group.AddEmptyCommand("Scene");
-                group.AddEmptyCommand("Material");
-
-            }
-            MenuItems.AddCommand("Show in Explorer", ShowInExplorer);
-            MenuItems.AddCommand("Open", OpenAsset, CanOpenAsset);
-            MenuItems.AddCommand("Delete", DeleteAssets);
-            MenuItems.AddEmptyCommand("Rename", "F2");
-            MenuItems.AddEmptyCommand("Copy Path");
-            MenuItems.AddSeparator();
-            MenuItems.AddEmptyCommand("Reimport");
-            MenuItems.AddSeparator();
-            MenuItems.AddEmptyCommand("Show Dependencies");
-        }
-
-        private void ShowInExplorer()
-        {
-            AssetBrowserItem? item = SelectedFolder.Value;
-            if (item == null) return;
-            while (item is not AssetBrowserFolderItem) item = item?.Parent;
-            var actualPath = Path.GetFullPath(Path.Combine(WorkSpace.RootPath, ((AssetBrowserFolderItem)item).Folder.PhysicalPath));
-            System.Diagnostics.Process.Start("explorer.exe", actualPath);
-        }
-
-        private void CreateFolder()
-        {
-            // var basePath = $"{SelectedFolder.Value.Path}/NewFolder";
-            // var createPath = basePath;
-            // int index = 1;
-            // while (true)
-            // {
-            //     if (AssetManager.FindFolder(createPath)==null)
-            //     {
-            //         break;
-            //     }
-            // 
-            //     //string format= "{0}({1})";
-            //     string format= "{0}_{1:000}";
-            // 
-            //     createPath = string.Format(format, basePath, index++);
-            // }
-            // var newFolder = AssetManager.CreateFolder(createPath);
-            // SelectedFolder.Value.Children.Add(new AssetBrowserItem(newFolder));
-        }
-
-        private void OpenAsset()
-        {
-        }
-
-        private void DeleteAssets()
-        {
-        }
 
         // Binding Methods
         public void OnSelectionChangedInList()
@@ -310,7 +277,7 @@ namespace OctbitEditor
 
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
         public ObservableCollection<AssetBrowserItem> SelectedItems { get; set; } = new();
-        public ObservableCollection<AssetBrowserItem> SelectedItemsInList { get; set; } = new();
+        private bool m_duaringChange = false;
 
         // 選択情報
         public ReactivePropertySlim<AssetBrowserFolderItem> SelectedFolder { get; } = new(mode: ReactivePropertyMode.RaiseLatestValueOnSubscribe);
@@ -318,6 +285,7 @@ namespace OctbitEditor
         public ReactivePropertySlim<bool> CanOpenAsset { get; } = new(false);
 
 
+        private IEnumerable<AssetBrowserItem> SelectedItemsInList => SelectedFolder.Value.Children.Where(i => i.IsSelectedInList.Value);
 
         public ReactivePropertySlim<double> IconSize { get; } = new(50);
 
@@ -325,8 +293,11 @@ namespace OctbitEditor
         public ReactivePropertySlim<ListViewType> SelectedListViewType { get; } = new(ListViewType.Detail);
 
 
+        // ヒストリ
+        private bool m_executingHistory = false;
+        private Stack<AssetBrowserFolderItem> m_undoHistory = new();
+        private Stack<AssetBrowserFolderItem> m_redoHistory = new();
 
-        public ICommand CreateFolderCommand { get; }
 
         public string SelectionInfo => $"{SelectedFolder.Value.Children.Count(i => i.IsSelectedInList.Value)}/{SelectedFolder.Value.Children.Count} items";
     }

@@ -53,26 +53,9 @@ namespace OctbitEditor
         private void ListViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (sender is not FrameworkElement element) return;
-            if (element.DataContext is AssetBrowserFolderItem folder)
+            if (DataContext is AssetBrowserVM vm)
             {
-                if (DataContext is AssetBrowserVM vm)
-                {
-                    vm.SelectedItems.Clear();
-                    vm.SelectedItems.Add(folder);
-
-                    foreach (var item in folder.Ancestor<AssetBrowserItem>(i => i.Parent))
-                        item.IsExpanded.Value=true;
-                }
-            }
-            if (element.DataContext is AssetBrowserFileItem file)
-            {
-                var editorType = AssetManager.Instance.FindEditorType(file.File.Asset.GetType());
-                if (editorType != null)
-                {
-                    var window = Activator.CreateInstance(editorType, [file.File]) as Window;
-                    window?.Show();
-                }
-
+                vm.OpenCommand.Execute(null);
             }
         }
     }
