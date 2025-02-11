@@ -66,6 +66,12 @@ namespace OctbitEditor
             };
         }
 
+        public void Clear()
+        {
+            _dockingDocumentViewModels.Clear();
+            _dockingPaneViewModels.Clear();
+        }
+
         public ReadOnlyObservableCollection<ViewModel> DockingDocumentViewModels => new(_dockingDocumentViewModels);
         private ObservableCollection<ViewModel> _dockingDocumentViewModels = new();
         public ReadOnlyObservableCollection<ViewModel> DockingPaneViewModels => new(_dockingPaneViewModels);

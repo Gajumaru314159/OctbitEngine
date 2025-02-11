@@ -10,7 +10,7 @@
         Background="{DynamicResource MenuBackground}"
         Width="1800" Height="1000"
         Loaded="OnLoaded"
-        Unloaded="OnUnloaded"
+        Closing="OnClosing"
         FontSize="{StaticResource SystemFontSize}"
         
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -28,10 +28,6 @@
         <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}"/>
         <KeyBinding Gesture="Ctrl+Y" Command="{Binding RedoCommand}"/>
     </Window.InputBindings>
-
-    <Window.DataContext>
-        <local:MainWindowVM/>
-    </Window.DataContext>
 
     <DockPanel x:Name="Root">
 
@@ -57,7 +53,7 @@
                     <MenuItem Header="_Save" InputGestureText="Ctrl+S"/>
                     <MenuItem Header="Save _As..." InputGestureText="Ctrl+Shift+S"/>
                     <Separator/>
-                    <MenuItem Header="New Project..." Click="OnUnloaded"/>
+                    <MenuItem Header="New Project..."/>
                     <MenuItem Header="Open Project..."/>
                     <MenuItem Header="Save Project..."/>
                     <Separator/>
@@ -143,15 +139,17 @@
             <avalonDock:DockingManager.LayoutItemContainerStyleSelector>
                 <v:LayoutItemContainerStyleSelector>
                     <!-- Document のスタイル -->
-                    <v:LayoutItemTypedStyle DataType="{x:Type local:TabBase}">
+                    <v:LayoutItemTypedStyle DataType="{x:Type local:DocumentBase}">
                         <Style TargetType="{x:Type avalonDock:LayoutItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}" />
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
                     </v:LayoutItemTypedStyle>
                     <!-- Pane のスタイル -->
                     <v:LayoutItemTypedStyle DataType="{x:Type local:TabBase}">
                         <Style TargetType="{x:Type avalonDock:LayoutAnchorableItem}">
                             <Setter Property="Title" Value="{Binding Model.Title}"/>
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                         </Style>
                     </v:LayoutItemTypedStyle>
                 </v:LayoutItemContainerStyleSelector>

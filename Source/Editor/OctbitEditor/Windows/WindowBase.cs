@@ -13,4 +13,15 @@ namespace OctbitEditor
             Title = contentId;
         }
     }
+    public class DocumentBase : ViewModel
+    {
+        public string ContentId { get; }
+        public string Title { get; protected set; }
+
+        protected DocumentBase(string contentId)
+        {
+            ContentId = contentId;
+            Title = contentId;
+        }
+    }
 }

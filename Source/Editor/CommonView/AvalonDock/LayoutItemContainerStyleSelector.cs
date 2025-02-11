@@ -32,11 +32,11 @@ namespace CommonView.AvalonDock
         /// <param name="item"></param>
         /// <param name="container"></param>
         /// <returns></returns>
-        public override Style? SelectStyle(object item, System.Windows.DependencyObject container)
+        public override Style? SelectStyle(object? item, System.Windows.DependencyObject container)
         {
             // item には ViewModel が入っている。
             // ViewModel の型に対応するテンプレートを返す。
-            var styleData = Items.Find(s => s?.DataType != null && item.GetType().IsSubclassOf(s.DataType));
+            var styleData = Items?.Find(s => s?.DataType != null && (item?.GetType().IsSubclassOf(s.DataType)??false));
             if (styleData != null) return styleData.Style;
 
             return base.SelectStyle(item, container);
@@ -93,11 +93,11 @@ namespace CommonView.AvalonDock
         /// <summary>
         /// LayoutItem のコンテンツに適用する DataTemplate を選択する。
         /// </summary>
-        public override DataTemplate? SelectTemplate(object item, System.Windows.DependencyObject container)
+        public override DataTemplate? SelectTemplate(object? item, System.Windows.DependencyObject container)
         {
             // item には ViewModel が入っている。
             // ViewModel の型に対応するテンプレートを返す。
-            var template = Items.Find(dt => item.GetType().Equals(dt.DataType));
+            var template = Items.Find(dt => item?.GetType().Equals(dt.DataType)??false);
             if (template != null) return template;
 
             return base.SelectTemplate(item, container);

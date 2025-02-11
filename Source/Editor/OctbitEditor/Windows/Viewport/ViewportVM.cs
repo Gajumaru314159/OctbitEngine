@@ -23,7 +23,7 @@ namespace OctbitEditor
         ShadingWireframe,
     }
 
-    public class ViewportVM : TabBase
+    public class ViewportVM : DocumentBase
     {
         private IRuntime Runtime { get; }
 

@@ -16,7 +16,7 @@ namespace OctbitEditor
         public MainWindow()
         {
             InitializeComponent();
-            // DataContext = new MainWindowVM();
+            DataContext = new MainWindowVM();
         }
 
         private void OnLoaded(object? s,RoutedEventArgs e)
@@ -29,11 +29,11 @@ namespace OctbitEditor
 
             if (File.Exists(s_configName))
             {
-                //serializer.Deserialize(s_configName);
+                serializer.Deserialize(s_configName);
             }
         }
 
-        private void OnUnloaded(object? s,RoutedEventArgs e)
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var serializer = new AvalonDock.Layout.Serialization.XmlLayoutSerializer(_dockingManager);
             serializer.Serialize(s_configName);
