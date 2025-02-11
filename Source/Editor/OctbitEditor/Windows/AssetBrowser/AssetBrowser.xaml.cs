@@ -46,6 +46,7 @@ namespace OctbitEditor
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             // XAML上でMultiSelectTreeView.SelectedItemsをバインディングするとNullReferenceExceptionが発生するためコード上でバインディング
+            // TODO タブを再ドッキングするときにコレクション変更中の変更例外で落ちる問題の調査
             _tree.DataContext = e.NewValue;
             _tree.SetBinding(MultiSelectTreeView.SelectedItemsProperty, nameof(AssetBrowserVM.SelectedItemsInTree));
         }
