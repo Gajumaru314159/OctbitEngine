@@ -90,10 +90,19 @@ namespace OctbitEngine.Asset
             foreach (string folderName in folderNames.Skip(1))
             {
                 var child = parent?.FindFolder(folderName);
-                if(child == null)
+                if (child == null)
                 {
                     child = new AssetFolder(folderName);
                     child.SetParent(parent!);
+
+                    try
+                    {
+                        Directory.CreateDirectory(child.PhysicalPath);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"フォルダの作成に失敗\n{child.PhysicalPath} {e}");
+                    }
                 }
                 parent = child;
             }

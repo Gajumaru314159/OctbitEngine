@@ -40,6 +40,15 @@ namespace OctbitEngine.Asset
 
         public bool Delete()
         {
+            try
+            {
+                Directory.Delete(PhysicalPath);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return false;
+            }
             return Parent?.Delete(this)??false;
         }
 
