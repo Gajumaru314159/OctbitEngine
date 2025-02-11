@@ -54,8 +54,6 @@
             <Button Content="Clear" Command="{Binding ClearCommand}" DockPanel.Dock="Right" Margin="0,0,1,0" TabIndex="1"/>
 
             <base:SearchBox Text="{Binding Filter.Value,Mode=TwoWay}" DockPanel.Dock="Right" TabIndex="0"/>
-            
-            <Border/>
 
         </DockPanel>
         <Grid>
