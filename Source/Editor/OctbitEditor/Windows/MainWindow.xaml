@@ -29,6 +29,11 @@
         <KeyBinding Gesture="Ctrl+Y" Command="{Binding RedoCommand}"/>
     </Window.InputBindings>
 
+    <Window.Resources>
+
+        
+    </Window.Resources>
+
     <DockPanel x:Name="Root">
 
         <DockPanel DockPanel.Dock="Top" Margin="0,5,0,0">
@@ -44,72 +49,29 @@
             <Image Source="/Resources/Icons/header.png" Height="32" Margin="10,0" VerticalAlignment="Center"/>
             
             <!--メニューバー-->
-            <Menu VerticalAlignment="Bottom" Padding="0" WindowChrome.IsHitTestVisibleInChrome="True">
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New Scene" InputGestureText="Ctrl+N" Command="{Binding NewSceneCommand}"/>
-                    <MenuItem Header="_Open Scene" InputGestureText="Ctrl+O"/>
-                    <!--<MenuItem Header="Open Recent Scene" ItemsSource="{Binding RecentScenes}"/>-->
-                    <Separator/>
-                    <MenuItem Header="_Save" InputGestureText="Ctrl+S"/>
-                    <MenuItem Header="Save _As..." InputGestureText="Ctrl+Shift+S"/>
-                    <Separator/>
-                    <MenuItem Header="New Project..."/>
-                    <MenuItem Header="Open Project..."/>
-                    <MenuItem Header="Save Project..."/>
-                    <Separator/>
-                    <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
-                </MenuItem>
-                <MenuItem Header="_Edit">
-                    <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding UndoCommand}" IsEnabled="{Binding CanUndo}"/>
-                    <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding RedoCommand}" IsEnabled="{Binding CanRedo}"/>
-                    <MenuItem Header="Undo History" InputGestureText="Ctrl+Y"/>
-                    <Separator/>
-                    <MenuItem Header="Select All" InputGestureText="Ctrl+A"/>
-                    <MenuItem Header="Deselect All" InputGestureText="Ctrl+D"/>
-                    <MenuItem Header="Select Children" InputGestureText="Shift+C"/>
-                    <MenuItem Header="Select Prefab Root" InputGestureText="Ctrl+Shift+R"/>
-                    <Separator/>
-                    <MenuItem Header="Cut" InputGestureText="Ctrl+X"/>
-                    <MenuItem Header="Copy" InputGestureText="Ctrl+C"/>
-                    <MenuItem Header="Paste" InputGestureText="Ctrl+V"/>
-                    <Separator/>
-                    <MenuItem Header="Duplicate" InputGestureText="Ctrl+D"/>
-                    <MenuItem Header="Rename" InputGestureText="F2"/>
-                    <MenuItem Header="Delete" InputGestureText="Delete"/>
-                    <Separator/>
-                    <MenuItem Header="Find" InputGestureText="Ctrl+F"/>
-                    <Separator/>
-                    <MenuItem Header="Play" InputGestureText="Ctrl+P"/>
-                    <MenuItem Header="Pause" InputGestureText="Ctrl+Shift+P"/>
-                    <MenuItem Header="Step" InputGestureText="Ctrl+Alt+P"/>
-                    <Separator/>
-                    <MenuItem Header="Editor Config"/>
-                    <MenuItem Header="Runtime Config" IsCheckable="True"/>
-                </MenuItem>
-                <MenuItem Header="_Assets">
-                    <MenuItem Header="New"/>
-                </MenuItem>
-                <MenuItem Header="_GameObject">
-                    <MenuItem Header="New">
-                        <MenuItem Header="Empty"/>
-                        <MenuItem Header="Model"/>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="_Component">
-                    <MenuItem Header="New"/>
-                </MenuItem>
-                <MenuItem Header="_Window">
-                    <MenuItem Header="New"/>
-                </MenuItem>
-                <MenuItem Header="_Help">
-                    <MenuItem Header="About"/>
-                    <Separator/>
-                    <MenuItem Header="Manual"/>
-                    <MenuItem Header="API Refelence"/>
-                    <Separator/>
-                    <MenuItem Header="Release Notes"/>
-                </MenuItem>
+            <Menu VerticalAlignment="Bottom" Padding="0" WindowChrome.IsHitTestVisibleInChrome="True" ItemsSource="{Binding MenuItems.Children}">
+                <Menu.Resources>
+
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Command" Value="{Binding Command}" />
+                        <Setter Property="Header" Value="{Binding Header}" />
+                        <Setter Property="InputGestureText" Value="{Binding Gesture}" />
+                        <Setter Property="ItemsSource" Value="{Binding Children}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                <Setter Property="Template" >
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Menu.Resources>
             </Menu>
+
 
             <ComboBox VerticalAlignment="Bottom" WindowChrome.IsHitTestVisibleInChrome="True" ItemsSource="{Binding ThemePresets}" SelectedValue="{Binding ThemePreset}" SelectionChanged="OnThemeColorChanged"/>
 

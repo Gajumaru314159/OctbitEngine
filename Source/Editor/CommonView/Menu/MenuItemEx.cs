@@ -76,7 +76,11 @@ namespace CommonView.Menu
             if (canExecute is null)
                 Command =  new DelegateCommand(action);
             else
-                Command = canExecute.ToReactiveCommandSlim();
+            {
+                var reactive = canExecute.ToReactiveCommandSlim();
+                reactive.Subscribe(action);
+                Command = reactive;
+            }
         }
     }
     public class DynamicSeparatorItem : DynamicMenuItem
