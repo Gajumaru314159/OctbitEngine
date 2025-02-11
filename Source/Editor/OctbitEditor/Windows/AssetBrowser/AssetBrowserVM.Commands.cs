@@ -1,23 +1,11 @@
-﻿using Common.Generic;
-using Common.Linq;
-using Common.Log;
+﻿using Common.Linq;
 using Common.Tree;
-using CommonView.Menu;
-using Livet;
-using OctbitEngine.Asset;
 using OctbitEngine.Config;
-using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
-using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reactive.Linq;
-using System.Windows.Controls;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Diagnostics.CodeAnalysis;
 
 namespace OctbitEditor
 {

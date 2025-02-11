@@ -37,6 +37,7 @@
     <None Remove="Resources\Icons\Outliner\entity.png" />
     <None Remove="Resources\Icons\Outliner\folder.png" />
     <None Remove="Resources\Icons\Outliner\icon_design.apd" />
+    <None Remove="Resources\Icons\Outliner\link.png" />
     <None Remove="Resources\Icons\Outliner\scene.png" />
     <None Remove="Resources\Icons\pause.png" />
     <None Remove="Resources\Icons\play.png" />
@@ -61,6 +62,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <Resource Include="Resources\Icons\Outliner\link.png" />
     <Resource Include="Resources\Icons\Outliner\scene.png" />
   </ItemGroup>
 

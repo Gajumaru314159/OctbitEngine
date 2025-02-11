@@ -23,15 +23,20 @@
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_addressBar}" InputGesture="Ctrl+L"/>
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
     </i:Interaction.Behaviors>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnLoaded"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
 
     <UserControl.InputBindings>
         <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding CreateFolderCommand}"/>
         <KeyBinding Gesture="Delete" Command="{Binding DeleteCommand}"/>
         <KeyBinding Gesture="Enter" Command="{Binding OpenCommand}"/>
 
-        <KeyBinding Modifiers="Ctrl" Key="Up" Command="{Binding MoveUpCommand}"/>
-        <KeyBinding Modifiers="Ctrl" Key="Left" Command="{Binding MoveBackCommand}"/>
-        <KeyBinding Modifiers="Ctrl" Key="Right" Command="{Binding MoveForwardCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="Up" Command="{Binding MoveUpCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="Left" Command="{Binding MoveBackCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="Right" Command="{Binding MoveForwardCommand}"/>
         <KeyBinding Gesture="BrowserBack" Command="{Binding MoveBackCommand}"/>
         <KeyBinding Gesture="BrowserForward" Command="{Binding MoveForwardCommand}"/>
 

@@ -179,8 +179,9 @@ namespace OctbitEditor
     /// </summary>
     public class AssetBrowserShortcutItem : AssetBrowserItem
     {
+        internal static BitmapImage ShortcutIcon = new BitmapImage(new Uri("pack://application:,,,/OctbitEditor;component/Resources/Icons/Outliner/link.png"));
         public override Brush ItemColorBrush => Brushes.Red;
-        public override BitmapSource Icon => FolderIcon;
+        public override BitmapSource Icon => ShortcutIcon;
         public override string Name
         {
             get => m_name;
@@ -214,12 +215,9 @@ namespace OctbitEditor
             Children.Add(new AssetBrowserShortcutItem("Shortcuts"));
 
             var rootItem = new AssetBrowserFolderItem(AssetManager.RootFolder);
-            rootItem.IsSelected.Value = true;
-            rootItem.IsExpanded.Value = true;
             Children.Add(rootItem);
 
-            SelectedItems.Add(rootItem);
-            SelectedItems.ToCollectionChanged().Subscribe(i => {
+            SelectedItemsInTree.ToCollectionChanged().Subscribe(i => {
                 m_duaringChange = true;
                 if (i.Values?.FirstOrNull() is AssetBrowserFolderItem folder) SelectedFolder.Value=folder;
                 m_duaringChange = false;
@@ -230,14 +228,13 @@ namespace OctbitEditor
             SelectedFolder.Zip(SelectedFolder.Skip(1), (x, y) => new { OldValue = x, NewValue = y })
                 .Subscribe(pair =>
                 {
-                    // TODO TreeView空の複数選択を扱う
-                    if (!m_duaringChange) { 
-                        SelectedItems.Clear();
-                        SelectedItems.Add(pair.NewValue);
-                    }
+                    if(pair.OldValue == pair.NewValue) return;
 
-                    pair.OldValue.IsSelected.Value = false;
-                    pair.NewValue.IsSelected.Value = true;
+                    // TODO TreeView空の複数選択を扱う
+                    if (m_duaringChange==false) { 
+                        SelectedItemsInTree.Clear();
+                        SelectedItemsInTree.Add(pair.NewValue);
+                    }
 
                     foreach (var child in pair.OldValue.Children)
                     {
@@ -245,12 +242,16 @@ namespace OctbitEditor
                     }
                     SelectedFolderPath.Value = (pair.NewValue.Folder.Path);
 
+                    // TODO Redo/Undo時にSelectedItemsInTreeから即時反映されるわけではないのでヒストリの記録方法を変える
                     if (m_executingHistory==false)
                     {
+                        m_redoHistory.Clear();
                         m_undoHistory.Push(pair.OldValue);
                         m_executingHistory = false;
                     }
                 });
+
+            rootItem.IsExpanded.Value = true;
 
             GenerateMenuItems();
 
@@ -263,6 +264,11 @@ namespace OctbitEditor
             OpenCommand = new DelegateCommand(OpenAsset);
         }
 
+        public void OnLoaded()
+        {
+            // Lodedタイミングでないと一度SelectedItemsがリセットされてしまうのでロード後に再選択
+            SelectedItemsInTree.Add(Children[1]);
+        }
 
 
         // Binding Methods
@@ -276,7 +282,7 @@ namespace OctbitEditor
         public DynamicGroupItem MenuItems { get; } = new("Root");
 
         public ObservableCollection<AssetBrowserItem> Children { get; } = new();
-        public ObservableCollection<AssetBrowserItem> SelectedItems { get; set; } = new();
+        public ObservableCollection<AssetBrowserItem> SelectedItemsInTree { get; set; } = new();
         private bool m_duaringChange = false;
 
         // 選択情報
