@@ -9,7 +9,7 @@ namespace CommonView.Behaviors
     public class EnterKeyBehavior : Behavior<TextBox>
     {
         private static readonly DependencyProperty s_changeFocusWhenEnterKeyPressedProperty
-            = DependencyProperty.Register(nameof(ChangeFocusWhenEnterKeyPressed), typeof(bool), typeof(EnterKeyBehavior), new PropertyMetadata(true));
+            = DependencyProperty.Register(nameof(ChangeFocusWhenEnterKeyPressed), typeof(bool), typeof(EnterKeyBehavior), new PropertyMetadata(false));
 
         private IInputElement? _previousFocusedElement;
         public bool ChangeFocusWhenEnterKeyPressed
