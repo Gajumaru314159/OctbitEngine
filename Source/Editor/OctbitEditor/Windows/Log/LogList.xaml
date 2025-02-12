@@ -12,6 +12,20 @@
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance local:LogListVM}">
 
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="ErrorBrush" Color="#D10404"/>
+        <SolidColorBrush x:Key="WarningBrush" Color="#D1AF0C"/>
+        <SolidColorBrush x:Key="TraceBrush" Color="#808080"/>
+        <local:LogLevelToBrushConverter 
+            x:Key="LogLevelToBrushConverter"
+            ErrorBrush="{StaticResource ErrorBrush}"
+            WarnBrush="{StaticResource WarningBrush}"
+            InfoBrush="{StaticResource Foreground}"
+            TraceBrush="{StaticResource TraceBrush}"
+            />
+
+    </UserControl.Resources>
+
 
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Background="{DynamicResource Header}">
@@ -76,7 +90,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border Background="Transparent">
-                            <TextBlock Text="{Binding Message}" Foreground="{Binding Brush}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding Message}" Foreground="{Binding LogLevel,Converter={StaticResource LogLevelToBrushConverter}}" TextWrapping="Wrap"/>
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

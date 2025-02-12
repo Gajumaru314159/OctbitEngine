@@ -13,27 +13,14 @@ namespace OctbitEditor
 {
     public class LogItem : ViewModel
     {
-        private static Brush ErrorBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 209, G = 4, B = 4, A = 255 });
-        private static Brush WarningBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 229, G = 175, B = 12, A = 255 });
-        private static Brush InfoBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 233, G = 233, B = 233, A = 255 });
-        private static Brush TraceBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 200, G = 200, B = 200, A = 255 });
         public LogItem(LogObject log)
         {
             Message = log.Message;
             CallStack = log.StackTrace;
             LogLevel = log.Level;
-
-            Brush =
-                LogLevel switch
-                {
-                    LogLevel.Error => ErrorBrush,
-                    LogLevel.Warn => WarningBrush,
-                    _ => InfoBrush
-                };
         }
 
         public LogLevel LogLevel { get; init; }
-        public Brush Brush { get; init; }
         public string Message { get; init; }
         public string CallStack { get; init; }
     }
