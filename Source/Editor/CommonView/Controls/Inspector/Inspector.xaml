@@ -183,7 +183,7 @@
 
     <!--プロパティテンプレート-->
     <DataTemplate x:Key="InspectablePropertyTemplate" DataType="ctrl:Editor">
-        <ctrl:InspectorItem>
+        <ctrl:InspectorItem Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}">
             <ctrl:InspectorItem.Label>
                 <TextBlock Text="{Binding Name}" ToolTip="{Binding ToolTip}"/>
             </ctrl:InspectorItem.Label>
@@ -200,7 +200,8 @@
 
     <!--オブジェクトテンプレート-->
     <DataTemplate x:Key="InspectableObjectTemplate" DataType="ctrl:InspectableObject">
-        <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}" Style="{StaticResource NestedInspectorView}"/>
+        <ctrl:InspectorView Label="{Binding Name}" ItemsSource="{Binding Inspectables}" Style="{StaticResource NestedInspectorView}"
+                            Visibility="{Binding Visible,Converter={BoolToVisibilityConverter}}"/>
     </DataTemplate>
     
     <!--不明エディタ-->

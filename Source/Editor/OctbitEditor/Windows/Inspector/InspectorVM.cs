@@ -12,6 +12,7 @@ using OctbitEngine.Runtime;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.Windows;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OctbitEditor
 {
@@ -189,8 +190,12 @@ namespace OctbitEditor
 
         private void UpdateFilter()
         {
-            /*
+            Log.Info("フィルタ変更");
             bool filter(InspectableProperty p)
+            {
+                return p.Visible = p.Name.Contains(Filter.Value) || string.IsNullOrEmpty(Filter.Value);
+            }
+            bool filter2(Editor p)
             {
                 return p.Visible = p.Name.Contains(Filter.Value) || string.IsNullOrEmpty(Filter.Value);
             }
@@ -210,7 +215,12 @@ namespace OctbitEditor
                     {
                         any |= filter(p);
                     }
+                    if (inspectable is Editor e)
+                    {
+                        any |= filter2(e);
+                    }
                 }
+                obj.Visible = any;
                 return any;
             }
 
@@ -226,9 +236,12 @@ namespace OctbitEditor
                     {
                         filter(p);
                     }
+                    if (inspectable is Editor e)
+                    {
+                        filter2(e);
+                    }
                 }
             }
-            */
         }
 
 
