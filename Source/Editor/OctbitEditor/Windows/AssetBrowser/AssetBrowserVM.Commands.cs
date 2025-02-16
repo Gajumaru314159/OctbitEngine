@@ -19,7 +19,6 @@ namespace OctbitEditor
         public ICommand DeleteCommand { get; }
         public ICommand OpenCommand { get; }
 
-        [MemberNotNull(nameof(CreateFolderCommand))]
         private void GenerateMenuItems()
         {
 
