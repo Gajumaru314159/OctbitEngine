@@ -16,6 +16,7 @@ namespace OctbitEngine.Asset
         /// </returns>
         public bool Delete();
         public bool Add(IAssetEntry child);
+        public bool Import(string path);
         public ReadOnlyObservableCollection<IAssetEntry> Children { get; }
         public IEnumerable<IAssetFolder> ChildFolders{ get; }
         public IEnumerable<IAssetFile> ChildFiles { get; }
