@@ -1,4 +1,5 @@
 ﻿using Common.Tree;
+using Livet;
 using OctbitEngine.Asset;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +23,7 @@ namespace OctbitEditor
             var list = ToPathArray(e).Where(i => ViewModel.AssetManager.CanImport(i)).ToArray();
             foreach (var path in list)
             {
-                ViewModel.AssetManager.RootFolder.Import(path);
+                ViewModel.SelectedFolder.Value.Folder.Import(path);
             }
         }
 
