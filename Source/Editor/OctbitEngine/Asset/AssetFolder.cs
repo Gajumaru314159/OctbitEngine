@@ -1,12 +1,14 @@
 ﻿using Common.Log;
+using System.IO;
 using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
     public class AssetFolder : AssetEntry, IAssetFolder
     {
-        public AssetFolder(string name) : base(name)
+        public AssetFolder(string name, IAssetManager assetManager) : base(name, assetManager)
         {
+
         }
 
         private ObservableCollection<IAssetEntry> m_children = new();
@@ -49,7 +51,7 @@ namespace OctbitEngine.Asset
                 Log.Error(e.Message);
                 return false;
             }
-            return Parent?.Delete(this)??false;
+            return (Parent as AssetFolder)?.Delete(this)??false;
         }
 
         public bool Delete(IAssetEntry entry)
@@ -81,9 +83,7 @@ namespace OctbitEngine.Asset
 
         public bool Import(string path)
         {
-            Log.Info($"Import {path}");
-
-            return false;
+            return AssetManager.Import(path,this);
         }
     }
 }

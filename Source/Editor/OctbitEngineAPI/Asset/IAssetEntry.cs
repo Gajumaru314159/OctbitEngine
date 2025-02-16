@@ -2,6 +2,8 @@
 {
     public interface IAssetEntry
     {
+        public IAssetManager AssetManager { get; }
+
         /// <summary>
         /// アセット名
         /// 例：Sample.png

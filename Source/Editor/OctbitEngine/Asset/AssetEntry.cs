@@ -5,10 +5,12 @@ namespace OctbitEngine.Asset
 {
     public class AssetEntry : IAssetEntry
     {
-        private protected AssetEntry(string name)
+        private protected AssetEntry(string name, IAssetManager assetManager)
         {
+            AssetManager=assetManager;
             Name = name;
         }
+        public IAssetManager AssetManager { get; }
 
         public string Name { get; private set; } = string.Empty;
 

@@ -39,7 +39,7 @@ namespace OctbitEngine.Asset
             InitializeImporter();
             InitializeEditor();
 
-            RootFolder = new AssetFolder(RootFolderName);
+            RootFolder = new AssetFolder(RootFolderName,this);
             LoadAssets();
 
             m_watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
@@ -92,7 +92,7 @@ namespace OctbitEngine.Asset
                 var child = parent?.FindFolder(folderName);
                 if (child == null)
                 {
-                    child = new AssetFolder(folderName);
+                    child = new AssetFolder(folderName,this);
                     child.SetParent(parent!);
 
                     try
@@ -165,7 +165,7 @@ namespace OctbitEngine.Asset
                 // 1. フォルダを読み込む
                 foreach (string dir in Directory.EnumerateDirectories(path))
                 {
-                    var item = new AssetFolder(Path.GetFileName(dir));
+                    var item = new AssetFolder(Path.GetFileName(dir),this);
                     item.SetParent(parent);
                     parent.Add(item);
                     visit(item, dir);
@@ -231,7 +231,7 @@ namespace OctbitEngine.Asset
                         string jsonString = File.ReadAllText(metadataPath);
                         var metadata = JsonSerializer.Deserialize<AssetMetadata>(jsonString, options);
 
-                        item = new AssetFile(Path.GetFileName(file), metadata.Guid, metadata.Importer??m_defaultImporter);
+                        item = new AssetFile(Path.GetFileName(file), metadata.Guid, metadata.Importer??m_defaultImporter,this);
                     }
                     catch (Exception e)
                     {
@@ -264,6 +264,16 @@ namespace OctbitEngine.Asset
 
         public bool Import(string path, IAssetFolder folder)
         {
+            JsonSerializerOptions options = new()
+            {
+                WriteIndented = true,
+                Converters = {
+                    new AssetImporterJsonConverter(
+                        CoreSystem.Instance.PluginAssemblies.Append(GetType().Assembly).SelectMany(i=>i.GetTypes()).Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
+                    )
+                }
+            };
+
             var extension = Path.GetExtension(path);
             if (Importers.TryGetValue(extension, out var importer))
             {
@@ -285,6 +295,25 @@ namespace OctbitEngine.Asset
                     Log.Error($"ファイルのコピーに失敗\n{path} {e}");
                     return false;
                 }
+
+                var name = Path.GetFileName(path);
+                var file = new AssetFile(name,Guid.NewGuid(),importer, this);
+                folder.Add(file);
+                file.Reimport();
+
+
+                AssetMetadata metadata = new()
+                {
+                    Version = 0,
+                    Guid = Guid.NewGuid(),
+                    Importer = importer,
+                };
+
+                var bytes = JsonSerializer.SerializeToUtf8Bytes(metadata, options);
+
+                var metadataPath = file.PhysicalPath + MetaExtension;
+                using var stream = File.Create(metadataPath);
+                stream.Write(bytes);
 
                 return true;
             }

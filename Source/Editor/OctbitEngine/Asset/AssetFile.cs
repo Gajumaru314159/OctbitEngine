@@ -1,6 +1,4 @@
-﻿
-using OctbitEngine.Config;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
@@ -8,14 +6,14 @@ namespace OctbitEngine.Asset
     {
 
         public Guid Guid { get; }
-        internal AssetFile(string name,Guid guid,IAssetImporter importer) : base(name)
+        internal AssetFile(string name, Guid guid, IAssetImporter importer, IAssetManager assetManager) : base(name, assetManager)
         {
             Guid =guid;
             Importer = importer;
         }
         public bool Delete()
         {
-            return Parent?.Delete(this)??false;
+            return (Parent as AssetFolder)?.Delete(this)??false;
         }
 
         public void Reimport()
@@ -25,7 +23,8 @@ namespace OctbitEngine.Asset
             lock (m_assets)
             {
                 m_assets.Clear();
-                foreach (var asset in assets) {
+                foreach (var asset in assets)
+                {
                     m_assets.Add(asset);
                 }
             }
