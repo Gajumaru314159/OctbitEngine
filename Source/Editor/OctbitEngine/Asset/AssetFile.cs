@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Common.Log;
+using System.Collections.ObjectModel;
 
 namespace OctbitEngine.Asset
 {
@@ -13,6 +14,19 @@ namespace OctbitEngine.Asset
         }
         public bool Delete()
         {
+            // TODO Undoできないことの警告
+            // TODO 依存しているファイルがある場合は警告
+
+            try
+            {
+                File.Delete(PhysicalPath);
+                File.Delete(PhysicalPath+OctbitEngine.Asset.AssetManager.MetaExtension);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                return false;
+            }
             return (Parent as AssetFolder)?.Delete(this)??false;
         }
 

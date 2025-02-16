@@ -26,6 +26,7 @@ namespace OctbitEngine.Asset
                 return false;
 
             parent.Add(this);
+            Parent = parent;
 
             return true;
         }

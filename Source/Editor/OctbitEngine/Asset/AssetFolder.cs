@@ -42,6 +42,8 @@ namespace OctbitEngine.Asset
 
         public bool Delete()
         {
+            // TODO Undoできないことの警告
+            // TODO 依存しているファイルがある場合は警告
             try
             {
                 Directory.Delete(PhysicalPath);
