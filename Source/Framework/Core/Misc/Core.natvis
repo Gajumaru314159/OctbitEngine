@@ -129,6 +129,21 @@
 			</ArrayItems>
 		</Expand>
 	</Type>
+	
+	<Type Name="std::vector&lt;*&gt;">
+		<Intrinsic Name="size" Expression="(size_t)(_Mypair._Myval2._Mylast - _Mypair._Myval2._Myfirst)" />
+		<Intrinsic Name="capacity" Expression="(size_t)(_Mypair._Myval2._Myend - _Mypair._Myval2._Myfirst)" />
+		<DisplayString>{{ size={size()} }}</DisplayString>
+		<Expand>
+			<Item Name="[capacity]" ExcludeView="simple">capacity()</Item>
+			<Item Name="[size]" ExcludeView="simple">size()</Item>
+			<Item Name="[allocator]" ExcludeView="simple">_Mypair</Item>
+			<ArrayItems>
+				<Size>size()</Size>
+				<ValuePointer>_Mypair._Myval2._Myfirst</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
 
 
 </AutoVisualizer>
