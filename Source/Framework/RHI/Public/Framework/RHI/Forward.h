@@ -15,6 +15,7 @@ namespace ob::rhi {
 	struct SetDescriptorTableParam;
 	struct DrawParam;
 	struct DrawIndexedParam;
+	struct GraphicFileQueueDesc;
 
 	// クラス
 	class RHI;
@@ -28,6 +29,10 @@ namespace ob::rhi {
 	class RootSignature;
 	class Shader;
 	class Texture;
+
+	class GraphicFileHandle;
+	class GraphicFileEvent;
+	class GraphicFileQueue;
 
 	// 内部クラス
 	class GraphicObjectManager;

@@ -75,6 +75,10 @@ namespace ob::rhi {
         // virtual bool isAsyncComputeSupported()const=0;
         // virtual bool isRaytracingSupported()const=0;
 
+        virtual Ref<GraphicFileHandle>  createGraphicFileHandle(StringView path) { return nullptr; }
+        virtual Ref<GraphicFileEvent>   createGraphicFileEvent() { return nullptr; }
+        virtual Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }
+
     protected:
 
         //! @brief      終了処理

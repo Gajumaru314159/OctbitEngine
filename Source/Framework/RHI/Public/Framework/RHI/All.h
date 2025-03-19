@@ -17,3 +17,4 @@
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/GraphicFile.h>

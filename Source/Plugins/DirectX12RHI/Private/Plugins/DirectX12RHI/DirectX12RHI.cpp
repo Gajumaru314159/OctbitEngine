@@ -15,6 +15,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
+#include <Plugins/DirectX12RHI/GraphicFile/GraphicFileImpl.h>
 
 #ifdef OB_DEBUG
 #include <Plugins/DirectX12RHI/Utility/PIXModule.h>
@@ -38,7 +39,7 @@ namespace ob::rhi::dx12 {
 			if (m_config.enablePIX) {
 				m_pixModule = std::make_unique<PIXModule>();
 			}
-		);
+				);
 		initialize();
 	}
 
@@ -177,6 +178,36 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  GraphicFileHandleを生成
+	//@―---------------------------------------------------------------------------
+	Ref<GraphicFileHandle> DirectX12RHI::createGraphicFileHandle(StringView path) {
+		if (g_dsfactory == nullptr) return nullptr;
+		auto p = new GraphicFileHandleImpl(*g_dsfactory.Get(), path);
+		if (p->isValid() == false) return nullptr;
+		return p;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  GraphicFileEventを生成
+	//@―---------------------------------------------------------------------------
+	Ref<GraphicFileEvent> DirectX12RHI::createGraphicFileEvent() {
+		if (g_dsfactory == nullptr) return nullptr;
+		auto p = new GraphicFileEventImpl();
+		if (p->isValid() == false) return nullptr;
+		return p;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  GraphicFileQueueを生成
+	//@―---------------------------------------------------------------------------
+	Ref<GraphicFileQueue> DirectX12RHI::createGraphicFileQueue(const GraphicFileQueueDesc& desc) {
+		if (g_dsfactory == nullptr) return nullptr;
+		auto p = new GraphicFileQueueImpl(*m_device.Get(), *g_dsfactory.Get(), desc);
+		if (p->isValid() == false) return nullptr;
+		return p;
+	}
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  システム・コマンド・キューを取得
 	//@―---------------------------------------------------------------------------
 	ComPtr<ID3D12CommandQueue>& DirectX12RHI::getCommandQueue() {
@@ -212,6 +243,14 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  IDStorageFactoryを取得
+	//@―---------------------------------------------------------------------------
+	ComPtr<IDStorageFactory>& DirectX12RHI::getDirectStorageFactory() {
+		return g_dsfactory;
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
 	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initialize() {
@@ -225,6 +264,8 @@ namespace ob::rhi::dx12 {
 
 		if (!initializeShaderCompiler())return false;
 
+		if (!initializeDirectStorage())return false;
+
 		return true;
 	}
 
@@ -237,7 +278,7 @@ namespace ob::rhi::dx12 {
 		UINT flagsDXGI = 0;
 #if OB_DEBUG
 		// DirectX12のデバッグレイヤーを有効にする
-		if (m_config.enableDebugLayer){
+		if (m_config.enableDebugLayer) {
 			ComPtr<ID3D12Debug>	debugController;
 			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
@@ -319,7 +360,7 @@ namespace ob::rhi::dx12 {
 
 
 			// D3D12 エラー発生時にブレーク
-			if(m_config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
+			if (m_config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
 		}
 
@@ -373,6 +414,39 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  DirectStorageを初期化
+	//@―---------------------------------------------------------------------------
+	bool DirectX12RHI::initializeDirectStorage() {
+		if (m_config.enableDirectStorage) {
+
+			DSTORAGE_CONFIGURATION1 config{};
+			config.NumSubmitThreads = 8;
+			config.NumBuiltInCpuDecompressionThreads = 8;
+			::DStorageSetConfiguration1(&config);
+
+
+
+			::DStorageGetFactory(IID_PPV_ARGS(g_dsfactory.ReleaseAndGetAddressOf()));
+			if (g_dsfactory && m_config.enableDirectStorageDebug) {
+				g_dsfactory->SetDebugFlags(
+					DSTORAGE_DEBUG_SHOW_ERRORS |
+					DSTORAGE_DEBUG_BREAK_ON_ERROR |
+					DSTORAGE_DEBUG_RECORD_OBJECT_NAMES
+				);
+			}
+
+			if (g_dsfactory) {
+				g_dsfactory->SetStagingBufferSize(256 * 1024 * 1024);
+			}
+		}
+		// DirectStorageは必須機能ではない
+		return true;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  コマンドを実行してクリアする
+	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::clearCommands() {
 
 		m_commandQueue->execute();

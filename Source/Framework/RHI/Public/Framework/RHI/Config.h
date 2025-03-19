@@ -14,6 +14,8 @@ namespace ob::rhi {
         bool enablePIX = false;
         bool enableDebugLayer = false;
         bool breakWithWarning = false;
+        bool enableDirectStorage = true;
+        bool enableDirectStorageDebug = false;
     };
 
 }

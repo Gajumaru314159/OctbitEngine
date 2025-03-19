@@ -206,18 +206,20 @@ namespace ob::rhi::dx12 {
 		
 		
 		// GPUにデータ転送
-		auto img = scratchImg.GetImage(0, 0, 0);
-		
-		result = resource->WriteToSubresource(
-			0,
-			nullptr,               
-			img->pixels,           
-			(UINT)img->rowPitch,   
-			(UINT)img->slicePitch  
-		);
-		if (FAILED(result)) {
-			Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
-			return;
+		for (s32 i = 0; i < metadata.mipLevels; ++i) {
+			auto img = scratchImg.GetImage(i, 0, 0);
+
+			result = resource->WriteToSubresource(
+				i,
+				nullptr,
+				img->pixels,
+				(UINT)img->rowPitch,
+				(UINT)img->slicePitch
+			);
+			if (FAILED(result)) {
+				Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
+				return;
+			}
 		}
 		
 

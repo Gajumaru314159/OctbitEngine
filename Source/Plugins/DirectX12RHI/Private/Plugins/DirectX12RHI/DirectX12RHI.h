@@ -111,6 +111,22 @@ namespace ob::rhi::dx12 {
 		Ref<DescriptorTable> createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
 
 
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  GraphicFileHandleを生成
+		//@―---------------------------------------------------------------------------
+		Ref<GraphicFileHandle>  createGraphicFileHandle(StringView path) override;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  GraphicFileEventを生成
+		//@―---------------------------------------------------------------------------
+		Ref<GraphicFileEvent>   createGraphicFileEvent() override;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  GraphicFileQueueを生成
+		//@―---------------------------------------------------------------------------
+		Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) override;
+
 	public:
 
 		void clearCommands();
@@ -165,6 +181,12 @@ namespace ob::rhi::dx12 {
 		void setDescriptorHeaps(class CommandListImpl& cmdList);
 
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  IDStorageFactoryを取得
+		//@―---------------------------------------------------------------------------
+		ComPtr<IDStorageFactory>& getDirectStorageFactory();
+
+
 	private:
 
 		bool initialize();
@@ -173,6 +195,7 @@ namespace ob::rhi::dx12 {
 		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
 		bool initializeShaderCompiler();
+		bool initializeDirectStorage();
 
 	private:
 
@@ -190,7 +213,7 @@ namespace ob::rhi::dx12 {
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 
-
+		ComPtr<IDStorageFactory>			g_dsfactory;
 
 #ifdef OB_DEBUG
 		UPtr<class PIXModule> m_pixModule;
