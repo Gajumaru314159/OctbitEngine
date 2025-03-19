@@ -127,6 +127,16 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) override;
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  GraphicFileQueueを生成
+		//@―---------------------------------------------------------------------------
+		bool                    generateGraphicFile(StringView input, StringView output) override;
+
+		//@―---------------------------------------------------------------------------
+		//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
+		//@―---------------------------------------------------------------------------
+		Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) override;
+
 	public:
 
 		void clearCommands();

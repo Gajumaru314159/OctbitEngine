@@ -8,6 +8,9 @@
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/ErrorCode.h>
+#include <Framework/Core/File/BinaryWriter.h>
+#include <Framework/Core/File/File.h>
+#include <DirectXTex.h>
 
 namespace ob::rhi::dx12 {
 
@@ -131,8 +134,8 @@ namespace ob::rhi::dx12 {
 		request.Source.File.Size = desc.size;
 		request.Name = handle->path().c_str();
 
-		if (std::holds_alternative<GraphicFileRequest::BufferRequest>(desc.dest)) {
-			auto& bufferDesc = std::get<GraphicFileRequest::BufferRequest>(desc.dest);
+		if (std::holds_alternative<GraphicFileRequest::BufferDesc>(desc.dest)) {
+			auto& bufferDesc = std::get<GraphicFileRequest::BufferDesc>(desc.dest);
 			auto buffer = bufferDesc.buffer.cast<BufferImpl>();
 			if (buffer == nullptr) return;
 			request.Options.DestinationType = DSTORAGE_REQUEST_DESTINATION_BUFFER;
@@ -142,8 +145,8 @@ namespace ob::rhi::dx12 {
 			request.UncompressedSize = useDecompression ? desc.uncompressedSize : 0;
 		}
 
-		if (std::holds_alternative<GraphicFileRequest::TextureRequest>(desc.dest)) {
-			auto& textureDesc = std::get<GraphicFileRequest::TextureRequest>(desc.dest);
+		if (std::holds_alternative<GraphicFileRequest::TextureDesc>(desc.dest)) {
+			auto& textureDesc = std::get<GraphicFileRequest::TextureDesc>(desc.dest);
 			auto texture = textureDesc.texture.cast<TextureImpl>();
 			if (texture == nullptr) return;
 			request.Options.DestinationType = DSTORAGE_REQUEST_DESTINATION_TEXTURE_REGION;
@@ -155,6 +158,16 @@ namespace ob::rhi::dx12 {
 			request.Destination.Texture.Region.bottom = textureDesc.bottom;
 			request.Destination.Texture.Region.front = textureDesc.front;
 			request.Destination.Texture.Region.back = textureDesc.back;
+			request.UncompressedSize = useDecompression ? desc.uncompressedSize : 0;
+		}
+
+		if (std::holds_alternative<GraphicFileRequest::TextureSequenceDesc>(desc.dest)) {
+			auto& textureSequenceDesc = std::get<GraphicFileRequest::TextureSequenceDesc>(desc.dest);
+			auto texture = textureSequenceDesc.texture.cast<TextureImpl>();
+			if (texture == nullptr) return;
+			request.Options.DestinationType = DSTORAGE_REQUEST_DESTINATION_MULTIPLE_SUBRESOURCES;
+			request.Destination.MultipleSubresources.Resource = texture->getResource();
+			request.Destination.MultipleSubresources.FirstSubresource = textureSequenceDesc.firstSubresourceIndex;
 			request.UncompressedSize = useDecompression ? desc.uncompressedSize : 0;
 		}
 
@@ -268,4 +281,143 @@ namespace ob::rhi::dx12 {
 		}
 	}
 
+
+
+
+	bool GraphicFileImpl::Generate(ID3D12Device8& device, StringView input, StringView output) {
+
+		if (auto optblob = File::ReadAllByte(input)) {
+
+			auto& inputBlob = *optblob;
+
+			// 拡張子に合わせて読み込み
+			HRESULT result = 0;
+			DirectX::TexMetadata metadata = {};
+			DirectX::ScratchImage scratchImg = {};
+
+			result = DirectX::LoadFromDDSMemory(inputBlob.data(), inputBlob.size(), DirectX::DDS_FLAGS_NONE, &metadata, scratchImg);
+			if (FAILED(result)) result = DirectX::LoadFromWICMemory(inputBlob.data(), inputBlob.size(), DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
+			if (FAILED(result)) result = DirectX::LoadFromTGAMemory(inputBlob.data(), inputBlob.size(), &metadata, scratchImg);
+			if (FAILED(result)) result = DirectX::LoadFromHDRMemory(inputBlob.data(), inputBlob.size(), &metadata, scratchImg);
+			if (FAILED(result)) false;
+
+			// TODO Tex3D対応
+			auto desc = CD3DX12_RESOURCE_DESC::Tex2D(
+				metadata.format,
+				(UINT16)metadata.width,
+				(UINT)metadata.height,
+				(UINT16)metadata.arraySize,
+				(UINT16)metadata.mipLevels);
+
+			Blob outputBlob;
+			BinaryStream stream(outputBlob);
+			BinaryWriter writer(stream);
+
+			// ヘッダ書き込み
+			writer.writeUInt32(metadata.format);
+			writer.writeUInt32(metadata.width);
+			writer.writeUInt32(metadata.height);
+			writer.writeUInt32(metadata.arraySize);
+			writer.writeUInt32(metadata.mipLevels);
+
+
+			// リソースレイアウト取得
+			std::vector<D3D12_SUBRESOURCE_DATA> subresources;
+			result = DirectX::PrepareUpload(&device, scratchImg.GetImages(), scratchImg.GetImageCount(), metadata, subresources);
+			if (FAILED(result)) false;
+
+			std::vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> layouts(subresources.size());
+			std::vector<UINT> numRows(subresources.size());
+			std::vector<UINT64> rowSizes(subresources.size());
+			UINT64 totalBytes = 0;
+
+			device.GetCopyableFootprints(
+				&desc,
+				0,
+				subresources.size(),
+				0,
+				layouts.data(),
+				numRows.data(),
+				rowSizes.data(),
+				&totalBytes);
+
+
+			// 後で書き込む用のダミーデータ書き込み
+			auto mipInfoOffset = stream.position();
+			for (s32 i = 0; i < subresources.size(); ++i) {
+				writer.writeUInt32(0);
+				writer.writeUInt32(0);
+			}
+
+			// GPU都合に合わせてデータを並べ替える
+			Vector<UINT> mipstarts;
+
+			Blob blob(totalBytes);
+			auto dataOffset = stream.position();
+			for (s32 i = 0; i < subresources.size(); ++i) {
+
+				auto const& layout = layouts[i];
+				auto const& subresource = subresources[i];
+
+				D3D12_MEMCPY_DEST memcpyDest{};
+				memcpyDest.pData = blob.data() + layout.Offset;
+				memcpyDest.RowPitch = layout.Footprint.RowPitch;
+				memcpyDest.SlicePitch = layout.Footprint.RowPitch * numRows[i];
+
+				MemcpySubresource(
+					&memcpyDest,
+					&subresource,
+					static_cast<SIZE_T>(rowSizes[i]),
+					numRows[i],
+					layout.Footprint.Depth);
+
+				mipstarts.emplace_back(layout.Offset);
+			}
+			writer.write(blob.data(), blob.size());
+			mipstarts.emplace_back(totalBytes);
+
+			// ミップ情報書き込み
+			writer.seek(mipInfoOffset);
+			for (s32 i = 0; i < subresources.size(); ++i) {
+				writer.writeUInt32(mipstarts[i] + dataOffset);
+				writer.writeUInt32(mipstarts[i + 1] - mipstarts[i]);
+			}
+
+			// ファイル出力
+			File file(output, FileOpenMode::Write);
+			if (!file)return false;
+
+			file.write(outputBlob.data(), outputBlob.size());
+			
+			return true;
+
+		}
+
+		return false;
+
+	}
+
+	Vector<GraphicFileMipInfo> GraphicFileImpl::Prepare(StringView path) {
+
+		Vector<GraphicFileMipInfo> result;
+
+		File file(path);
+		BinaryReader reader(file);
+
+		u32 format = reader.readU32();
+		u32 width = reader.readU32();
+		u32 height = reader.readU32();
+		u32 arraySize = reader.readU32();
+		u32 mipLevels = reader.readU32();
+
+		for (s32 item = 0; item < arraySize; ++item) {
+			for (s32 mip = 0; mip < mipLevels; ++mip) {
+				auto& info = result.emplace_back();
+				info.offset = reader.readU32();
+				info.size = reader.readU32();
+			}
+		}
+
+		return result;
+	}
 }

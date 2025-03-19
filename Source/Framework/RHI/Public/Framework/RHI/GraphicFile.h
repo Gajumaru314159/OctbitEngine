@@ -28,12 +28,12 @@ namespace ob::rhi {
 		size_t			size = 0;				//! 読み込みサイズ	
 		size_t			uncompressedSize = 0;	//! 解凍後のサイズ
 		
-		struct BufferRequest {
-			Ref<Buffer> buffer;
+		struct BufferDesc {
+			Ref<rhi::Buffer> buffer;
 			size_t offset = 0;
 		};
-		struct TextureRequest {
-			Ref<Texture> texture;
+		struct TextureDesc {
+			Ref<rhi::Texture> texture;
 			s32 subresourceIndex = 0;
 			u32 left = 0;
 			u32 top = 0;
@@ -42,8 +42,12 @@ namespace ob::rhi {
 			u32 front = 0;
 			u32 back = 0;
 		};
+		struct TextureSequenceDesc {
+			Ref<Texture> texture;
+			s32 firstSubresourceIndex = 0;
+		};
 
-		Variant<BufferRequest, TextureRequest> dest;
+		Variant<BufferDesc, TextureDesc, TextureSequenceDesc> dest;
 
 	};
 
@@ -77,6 +81,18 @@ namespace ob::rhi {
 		virtual void wait() = 0;
 		virtual void submit() = 0;
 		virtual void validate() = 0;
+	};
+
+	struct GraphicFileMipInfo {
+		u32 offset = 0;
+		u32 size = 0;
+		u32 uncompressedSize = 0;
+	};
+
+	class GraphicFile {
+	public:
+		static bool Generate(StringView input, StringView output);
+		static Vector<GraphicFileMipInfo> Prepare(StringView file);
 	};
 
 }

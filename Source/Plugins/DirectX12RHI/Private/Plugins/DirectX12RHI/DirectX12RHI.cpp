@@ -39,7 +39,7 @@ namespace ob::rhi::dx12 {
 			if (m_config.enablePIX) {
 				m_pixModule = std::make_unique<PIXModule>();
 			}
-				);
+		);
 		initialize();
 	}
 
@@ -205,6 +205,20 @@ namespace ob::rhi::dx12 {
 		auto p = new GraphicFileQueueImpl(*m_device.Get(), *g_dsfactory.Get(), desc);
 		if (p->isValid() == false) return nullptr;
 		return p;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  GraphicFile用のファイルを生成する
+	//@―---------------------------------------------------------------------------
+	bool DirectX12RHI::generateGraphicFile(StringView input, StringView output) {
+		return GraphicFileImpl::Generate(*m_device.Get(), input, output);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
+	//@―---------------------------------------------------------------------------
+	Vector<GraphicFileMipInfo> DirectX12RHI::prepareGraphicFile(StringView path) {
+		return GraphicFileImpl::Prepare(path);
 	}
 
 	//@―---------------------------------------------------------------------------

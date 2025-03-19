@@ -29,4 +29,18 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
+
+	bool GraphicFile::Generate(StringView input, StringView output) {
+		if (auto rhi = RHI::Get()) {
+			return rhi->generateGraphicFile(input,output);
+		}
+		return false;
+	}
+
+	Vector<GraphicFileMipInfo> GraphicFile::Prepare(StringView file) {
+		if (auto rhi = RHI::Get()) {
+			return rhi->prepareGraphicFile(file);
+		}
+		return {};
+	}
 }

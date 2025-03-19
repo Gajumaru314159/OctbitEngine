@@ -203,6 +203,12 @@ namespace ob::rhi::dx12 {
 			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
+
+		D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint[20];
+		UINT pNumRows[20];
+		UINT64 pRowSizeInBytes[20];
+		UINT64 pTotalBytes[20];
+		rDevice.getNative()->GetCopyableFootprints(&resDesc, 0, metadata.mipLevels, 0, footprint, pNumRows, pRowSizeInBytes, pTotalBytes);
 		
 		
 		// GPUにデータ転送

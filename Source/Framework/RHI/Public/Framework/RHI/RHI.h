@@ -14,6 +14,7 @@
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Framework/RHI/GraphicFile.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Framework/Core/Utility/Ref.h>
 
@@ -78,6 +79,9 @@ namespace ob::rhi {
         virtual Ref<GraphicFileHandle>  createGraphicFileHandle(StringView path) { return nullptr; }
         virtual Ref<GraphicFileEvent>   createGraphicFileEvent() { return nullptr; }
         virtual Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }
+
+        virtual bool                    generateGraphicFile(StringView input, StringView output) { return false; }
+        virtual Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) { return {}; }
 
     protected:
 

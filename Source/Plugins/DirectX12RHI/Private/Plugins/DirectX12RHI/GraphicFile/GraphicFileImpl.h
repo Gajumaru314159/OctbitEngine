@@ -53,4 +53,11 @@ namespace ob::rhi::dx12 {
 		ComPtr<IDStorageQueue1> m_queue;
 	};
 
+	
+	class GraphicFileImpl {
+	public:
+		static bool Generate(ID3D12Device8& device, StringView input, StringView output);
+		static Vector<GraphicFileMipInfo> Prepare(StringView path);
+	};
+
 }
