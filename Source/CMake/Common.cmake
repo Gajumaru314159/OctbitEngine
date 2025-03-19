@@ -118,5 +118,7 @@ FUNCTION(COPY_REQUIRED_DLL)
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/dxc/bin/x64/dxcompiler.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/dxc/bin/x64/dxil.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/bin/x64/dstorage.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/bin/x64/dstoragecore.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
 	)
 ENDFUNCTION()
