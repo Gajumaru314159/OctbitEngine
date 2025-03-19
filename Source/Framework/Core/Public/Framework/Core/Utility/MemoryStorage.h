@@ -6,6 +6,8 @@
 #pragma once
 #include <type_traits>
 #include <Framework/Core/Template/include.h>
+#include <Framework/Core/Utility/Noncopyable.h>
+#include <Framework/Core/Utility/Nonmovable.h>
 #include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {
@@ -16,19 +18,18 @@ namespace ob::core {
 	//!				通常はRAIIに則り生成時に初期化することが望ましいですが、
 	//!				初期化を遅らせる必要がある場合に使用します。
 	//!				uniqque_ptrと違いメンバ変数として使用する場合はクラスのインクルードが必要です。
-	template<class T>
-	class MemoryStorage {
+	template<class T,size_t SIZE,size_t ALIGN>
+	class MemoryStorageBase : Noncopyable,Nonmovable{
 	public:
 
 		//! @brief  コンストラクタ
-		MemoryStorage()
+		MemoryStorageBase()
 			: m_constructed(false)
 		{
-			static_assert(sizeof(m_data) == sizeof(T));
 		}
 
 		//! @brief  デストラクタ
-		~MemoryStorage() {
+		~MemoryStorageBase() {
 			if (m_constructed)destruct();
 		}
 
@@ -45,7 +46,8 @@ namespace ob::core {
 		//! @brief  構築
 		template<typename ...Args>
 		void construct(Args&&... args) {
-			if (m_constructed) {
+			static_assert(sizeof(T) <= SIZE);
+			if (!m_constructed) {
 				new(m_data) T(std::forward<Args>(args)...);
 				m_constructed = true;
 			}
@@ -54,40 +56,43 @@ namespace ob::core {
 		//! @brief  破壊
 		void destruct() {
 			if (m_constructed) {
-				reinterpret_cast<T*>(&m_data)->~T();
+				reinterpret_cast<T*>(m_data)->~T();
 				m_constructed = false;
 			}
 		}
 
 		//! @brief  ポインタアクセス
 		T* operator ->() {
-			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
-			return reinterpret_cast<T*>(&m_data);
+			OB_ASSERT(!empty(), "空のMemoryStorageにアクセスしました。");
+			return reinterpret_cast<T*>(m_data);
 		}
 
 		//! @brief  ポインタアクセス(const)
 		const T* operator ->()const {
-			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
-			return reinterpret_cast<const T*>(&m_data);
+			OB_ASSERT(!empty(), "空のMemoryStorageにアクセスしました。");
+			return reinterpret_cast<const T*>(m_data);
 		}
 
 		//! @brief  参照アクセス
 		T& operator *() {
-			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
-			return *reinterpret_cast<T*>(&m_data);
+			OB_ASSERT(!empty(), "空のMemoryStorageにアクセスしました。");
+			return *reinterpret_cast<T*>(m_data);
 		}
 
 		//! @brief  参照アクセス(const)
 		const T& operator *()const noexcept {
-			OB_ABORT(empty(), "空のMemoryStorageにアクセスしました。");
-			return *reinterpret_cast<const T*>(&m_data);
+			OB_ASSERT(!empty(), "空のMemoryStorageにアクセスしました。");
+			return *reinterpret_cast<const T*>(m_data);
 		}
 
 	private:
 
-		std::aligned_storage_t<sizeof(T), alignof(T)> m_data;
+		alignas(ALIGN) std::byte m_data[SIZE];
 		bool m_constructed;
 
 	};
+		
+	template<class T>
+	using MemoryStorage = MemoryStorageBase<T, sizeof(T), alignof(T)>;
 
 }

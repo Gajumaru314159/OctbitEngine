@@ -41,6 +41,15 @@
 		<DisplayString>value = {*m_impl}</DisplayString>
 	</Type>
 
+	<!--MemoryStorageBase-->
+	<Type Name="ob::core::MemoryStorageBase&lt;*,*,*&gt;">
+		<Expand>
+			<Item Name="[constructed]">m_constructed</Item>
+			<Item Name="[instance]" Condition="m_constructed">*($T1*)(m_data)</Item>
+		</Expand>
+		
+	</Type>
+
 	<!--Matrix-->
 	<Type Name="ob::core::Matrix">
 		<DisplayString>[4, 4]</DisplayString>

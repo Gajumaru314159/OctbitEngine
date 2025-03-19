@@ -32,3 +32,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Test/Framework")
 
 # GoogleTest
 gtest_discover_tests(${PROJECT_NAME})
+
+# カスタムコマンド
+COPY_REQUIRED_DLL()
