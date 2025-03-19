@@ -151,7 +151,7 @@ namespace ob::core {
 			offset_t writeCount = fwrite(buffer, sizeof(byte), byteCount, m_fp);
 			m_size = std::max(m_size, position() + writeCount);
 			if (writeCount != byteCount) {
-				LOG_WARNING("読み取り位置の取得に失敗[{}]\n{}", m_path, GetErrnoString());
+				LOG_WARNING("書き込みに失敗[{}]\n{}", m_path, GetErrnoString());
 				return false;
 			}
 			return true;
