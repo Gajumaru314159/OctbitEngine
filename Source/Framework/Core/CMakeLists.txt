@@ -21,6 +21,7 @@ set(public_includes
 )
 set(private_includes
     "${CMAKE_CURRENT_SOURCE_DIR}/Private"
+    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate"
 )
 if (WIN32)
     list(APPEND private_includes "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include")
@@ -33,7 +34,10 @@ set(public_libs
     utf8cpp
     magic_enum
 )
-set(private_libs "")
+set(private_libs    
+    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/GDeflate.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/deflate.lib"
+)
 if (WIN32)
     list(APPEND private_libs "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib")
 endif()

@@ -10,6 +10,7 @@
 #include <Framework/Core/Misc/ErrorCode.h>
 #include <Framework/Core/File/BinaryWriter.h>
 #include <Framework/Core/File/File.h>
+#include <Framework/Core/Misc/Compression.h>
 #include <DirectXTex.h>
 
 namespace ob::rhi::dx12 {
@@ -302,12 +303,32 @@ namespace ob::rhi::dx12 {
 			if (FAILED(result)) false;
 
 			// TODO Tex3D対応
-			auto desc = CD3DX12_RESOURCE_DESC::Tex2D(
-				metadata.format,
-				(UINT16)metadata.width,
-				(UINT)metadata.height,
-				(UINT16)metadata.arraySize,
-				(UINT16)metadata.mipLevels);
+			D3D12_RESOURCE_DESC desc{};
+
+			if (metadata.dimension == 1) {
+				desc = CD3DX12_RESOURCE_DESC::Tex1D(
+					metadata.format,
+					(UINT16)metadata.width,
+					(UINT16)metadata.arraySize,
+					(UINT16)metadata.mipLevels);
+			} else if (metadata.dimension == 2) {
+				desc = CD3DX12_RESOURCE_DESC::Tex2D(
+					metadata.format,
+					(UINT16)metadata.width,
+					(UINT)metadata.height,
+					(UINT16)metadata.arraySize,
+					(UINT16)metadata.mipLevels);
+			} else if(metadata.dimension == 3) {
+				desc = CD3DX12_RESOURCE_DESC::Tex3D(
+					metadata.format,
+					(UINT16)metadata.width,
+					(UINT)metadata.height,
+					(UINT)metadata.depth,
+					(UINT16)metadata.mipLevels);
+			} else {
+				LOG_ERROR("不正なディメンション");
+				return false;
+			}
 
 			Blob outputBlob;
 			BinaryStream stream(outputBlob);
@@ -326,14 +347,15 @@ namespace ob::rhi::dx12 {
 			result = DirectX::PrepareUpload(&device, scratchImg.GetImages(), scratchImg.GetImageCount(), metadata, subresources);
 			if (FAILED(result)) false;
 
-			std::vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> layouts(subresources.size());
-			std::vector<UINT> numRows(subresources.size());
-			std::vector<UINT64> rowSizes(subresources.size());
+			Vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> layouts(subresources.size());
+			Vector<UINT> numRows(subresources.size());
+			Vector<UINT64> rowSizes(subresources.size());
 			UINT64 totalBytes = 0;
+			UINT firstSubresource = 0;
 
 			device.GetCopyableFootprints(
 				&desc,
-				0,
+				firstSubresource,
 				subresources.size(),
 				0,
 				layouts.data(),
@@ -341,26 +363,36 @@ namespace ob::rhi::dx12 {
 				rowSizes.data(),
 				&totalBytes);
 
+			// レイアウト書き込み用の番兵を追加
+			auto& lastLayout = layouts.emplace_back();
+			lastLayout.Offset = totalBytes;
 
 			// 後で書き込む用のダミーデータ書き込み
-			auto mipInfoOffset = stream.position();
+			auto offsetInfoPos = stream.position();
 			for (s32 i = 0; i < subresources.size(); ++i) {
+				writer.writeUInt32(0);
 				writer.writeUInt32(0);
 				writer.writeUInt32(0);
 			}
 
 			// GPU都合に合わせてデータを並べ替える
-			Vector<UINT> mipstarts;
-
-			Blob blob(totalBytes);
-			auto dataOffset = stream.position();
+			Vector<u32> offsets;
 			for (s32 i = 0; i < subresources.size(); ++i) {
+
+				// 16バイトアラインメントにそろえる(Xbox用)
+				auto padding = align_up(stream.position(), 16) - stream.position();
+				for (s32 i = 0; i < padding; ++i)writer.writeUInt8(0);
+
+				// 再配置
+				size_t size = layouts[i+1].Offset - layouts[i].Offset;
+				Blob blob(size);
+				Blob compressed(size*2);
 
 				auto const& layout = layouts[i];
 				auto const& subresource = subresources[i];
 
 				D3D12_MEMCPY_DEST memcpyDest{};
-				memcpyDest.pData = blob.data() + layout.Offset;
+				memcpyDest.pData = blob.data();
 				memcpyDest.RowPitch = layout.Footprint.RowPitch;
 				memcpyDest.SlicePitch = layout.Footprint.RowPitch * numRows[i];
 
@@ -371,16 +403,24 @@ namespace ob::rhi::dx12 {
 					numRows[i],
 					layout.Footprint.Depth);
 
-				mipstarts.emplace_back(layout.Offset);
+				size_t compressedSize = compressed.size();
+				GDeflate::Compress(compressed.data(), &compressedSize,blob.data(),blob.size(),GDeflate::MaxCompressionLvevel,0);
+				compressed.resize(compressedSize);
+
+				offsets.push_back(stream.position());
+				writer.write(compressed.data(), compressed.size());
 			}
-			writer.write(blob.data(), blob.size());
-			mipstarts.emplace_back(totalBytes);
+			offsets.push_back(stream.position());
 
 			// ミップ情報書き込み
-			writer.seek(mipInfoOffset);
+			writer.seek(offsetInfoPos);
 			for (s32 i = 0; i < subresources.size(); ++i) {
-				writer.writeUInt32(mipstarts[i] + dataOffset);
-				writer.writeUInt32(mipstarts[i + 1] - mipstarts[i]);
+				// offset
+				writer.writeUInt32(offsets[i]);
+				// size
+				writer.writeUInt32(offsets[i + 1] - offsets[i]);
+				// uncompressed
+				writer.writeUInt32(layouts[i + 1].Offset - layouts[i].Offset);
 			}
 
 			// ファイル出力
@@ -415,6 +455,7 @@ namespace ob::rhi::dx12 {
 				auto& info = result.emplace_back();
 				info.offset = reader.readU32();
 				info.size = reader.readU32();
+				info.uncompressedSize = reader.readU32();
 			}
 		}
 
