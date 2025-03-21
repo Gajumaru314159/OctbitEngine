@@ -30,9 +30,9 @@ namespace ob::rhi {
 	}
 
 
-	bool GraphicFile::Generate(StringView input, StringView output) {
+	bool GraphicFile::Generate(StringView input, StringView output,s32 compressionLevel) {
 		if (auto rhi = RHI::Get()) {
-			return rhi->generateGraphicFile(input,output);
+			return rhi->generateGraphicFile(input,output,compressionLevel);
 		}
 		return false;
 	}

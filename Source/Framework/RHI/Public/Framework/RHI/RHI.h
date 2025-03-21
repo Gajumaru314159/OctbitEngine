@@ -80,7 +80,7 @@ namespace ob::rhi {
         virtual Ref<GraphicFileEvent>   createGraphicFileEvent() { return nullptr; }
         virtual Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }
 
-        virtual bool                    generateGraphicFile(StringView input, StringView output) { return false; }
+        virtual bool                    generateGraphicFile(StringView input, StringView output, s32 compressionLevel) { return false; }
         virtual Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) { return {}; }
 
     protected:

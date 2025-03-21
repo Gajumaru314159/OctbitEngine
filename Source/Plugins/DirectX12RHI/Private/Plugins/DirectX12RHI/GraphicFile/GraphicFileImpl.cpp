@@ -285,7 +285,22 @@ namespace ob::rhi::dx12 {
 
 
 
-	bool GraphicFileImpl::Generate(ID3D12Device8& device, StringView input, StringView output) {
+	bool GraphicFileImpl::Generate(ID3D12Device8& device, StringView input, StringView output, s32 compressionLevel) {
+
+		if (compressionLevel < 0) {
+			LOG_WARNING("圧縮レベルが0未満です。");
+			return false;
+		}
+		if (10 < compressionLevel) {
+			LOG_WARNING("圧縮レベルが10より大きいです。");
+			return false;
+		}
+
+		u32 compressionLevelMap[11] = {
+			0,1,2,3,4,6,7,9,10,11,12
+		};
+		compressionLevel = compressionLevelMap[compressionLevel];
+		bool useCompression = 0 < compressionLevel;
 
 		if (auto optblob = File::ReadAllByte(input)) {
 
@@ -305,26 +320,28 @@ namespace ob::rhi::dx12 {
 			// TODO Tex3D対応
 			D3D12_RESOURCE_DESC desc{};
 
-			if (metadata.dimension == 1) {
+			if (metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE1D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex1D(
 					metadata.format,
 					(UINT16)metadata.width,
 					(UINT16)metadata.arraySize,
 					(UINT16)metadata.mipLevels);
-			} else if (metadata.dimension == 2) {
+			} else if (metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE2D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex2D(
 					metadata.format,
 					(UINT16)metadata.width,
 					(UINT)metadata.height,
 					(UINT16)metadata.arraySize,
 					(UINT16)metadata.mipLevels);
-			} else if(metadata.dimension == 3) {
+			} else if(metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE3D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex3D(
 					metadata.format,
 					(UINT16)metadata.width,
 					(UINT)metadata.height,
 					(UINT)metadata.depth,
 					(UINT16)metadata.mipLevels);
+				LOG_ERROR("GraphicFile::Generate() Texture3Dは非対応です");
+				return false;
 			} else {
 				LOG_ERROR("不正なディメンション");
 				return false;
@@ -373,6 +390,8 @@ namespace ob::rhi::dx12 {
 				writer.writeUInt32(0);
 				writer.writeUInt32(0);
 				writer.writeUInt32(0);
+				writer.writeUInt32(0);
+				writer.writeUInt32(0);
 			}
 
 			// GPU都合に合わせてデータを並べ替える
@@ -386,7 +405,7 @@ namespace ob::rhi::dx12 {
 				// 再配置
 				size_t size = layouts[i+1].Offset - layouts[i].Offset;
 				Blob blob(size);
-				Blob compressed(size*2);
+				Blob compressed(std::max<size_t>(size*2,1024));
 
 				auto const& layout = layouts[i];
 				auto const& subresource = subresources[i];
@@ -403,12 +422,16 @@ namespace ob::rhi::dx12 {
 					numRows[i],
 					layout.Footprint.Depth);
 
-				size_t compressedSize = compressed.size();
-				GDeflate::Compress(compressed.data(), &compressedSize,blob.data(),blob.size(),GDeflate::MaxCompressionLvevel,0);
-				compressed.resize(compressedSize);
-
 				offsets.push_back(stream.position());
-				writer.write(compressed.data(), compressed.size());
+				if (useCompression) {
+					size_t compressedSize = compressed.size();
+					GDeflate::Compress(compressed.data(), &compressedSize,blob.data(),blob.size(), compressionLevel,0);
+					compressed.resize(compressedSize);
+					writer.write(compressed.data(), compressed.size());
+				} else {
+					writer.write(blob.data(), blob.size());
+				}
+
 			}
 			offsets.push_back(stream.position());
 
@@ -417,10 +440,19 @@ namespace ob::rhi::dx12 {
 			for (s32 i = 0; i < subresources.size(); ++i) {
 				// offset
 				writer.writeUInt32(offsets[i]);
-				// size
-				writer.writeUInt32(offsets[i + 1] - offsets[i]);
-				// uncompressed
-				writer.writeUInt32(layouts[i + 1].Offset - layouts[i].Offset);
+				if (useCompression) {
+					// size
+					writer.writeUInt32(offsets[i + 1] - offsets[i]);
+					// uncompressed
+					writer.writeUInt32(layouts[i + 1].Offset - layouts[i].Offset);
+				} else {
+					// size
+					writer.writeUInt32(offsets[i + 1] - offsets[i]);
+					// uncompressed
+					writer.writeUInt32(0);
+				}
+				writer.writeUInt32(layouts[i].Footprint.Width);
+				writer.writeUInt32(layouts[i].Footprint.Height);
 			}
 
 			// ファイル出力
@@ -456,6 +488,8 @@ namespace ob::rhi::dx12 {
 				info.offset = reader.readU32();
 				info.size = reader.readU32();
 				info.uncompressedSize = reader.readU32();
+				info.width = reader.readU32();
+				info.height = reader.readU32();
 			}
 		}
 

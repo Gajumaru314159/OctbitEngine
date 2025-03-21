@@ -130,7 +130,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  GraphicFileQueueを生成
 		//@―---------------------------------------------------------------------------
-		bool                    generateGraphicFile(StringView input, StringView output) override;
+		bool                    generateGraphicFile(StringView input, StringView output, s32 compressionLevel) override;
 
 		//@―---------------------------------------------------------------------------
 		//! @brief  プラットフォームごとのGraphicFileから事前情報を取得

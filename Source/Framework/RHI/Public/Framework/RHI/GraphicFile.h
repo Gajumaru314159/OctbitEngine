@@ -87,11 +87,19 @@ namespace ob::rhi {
 		u32 offset = 0;
 		u32 size = 0;
 		u32 uncompressedSize = 0;
+		u32 width = 0;
+		u32 height = 0;
 	};
 
 	class GraphicFile {
 	public:
-		static bool Generate(StringView input, StringView output);
+		//! @brief 入力テクスチャをプラットフォームごとの直接アップロード可能な形式に変換してファイルに保存します。
+		//! @param input 入力テクスチャのファイルパス
+		//! @param output 出力バイナリのファイルパス
+		//! @param compressionLevel 圧縮レベル
+		//! @return 変換に成功したか
+		//! @details compressionLevelは0～10の範囲で指定します。0が無圧縮、10が最高圧縮です。
+		static bool Generate(StringView input, StringView output,s32 compressionLevel = 10);
 		static Vector<GraphicFileMipInfo> Prepare(StringView file);
 	};
 

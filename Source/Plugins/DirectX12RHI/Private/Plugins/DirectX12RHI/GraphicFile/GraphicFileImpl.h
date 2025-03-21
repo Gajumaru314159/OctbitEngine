@@ -56,7 +56,7 @@ namespace ob::rhi::dx12 {
 	
 	class GraphicFileImpl {
 	public:
-		static bool Generate(ID3D12Device8& device, StringView input, StringView output);
+		static bool Generate(ID3D12Device8& device, StringView input, StringView output, s32 compressionLevel);
 		static Vector<GraphicFileMipInfo> Prepare(StringView path);
 	};
 

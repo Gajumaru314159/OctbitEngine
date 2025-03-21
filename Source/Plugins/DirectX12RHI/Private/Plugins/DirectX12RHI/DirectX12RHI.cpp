@@ -210,8 +210,8 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  GraphicFile用のファイルを生成する
 	//@―---------------------------------------------------------------------------
-	bool DirectX12RHI::generateGraphicFile(StringView input, StringView output) {
-		return GraphicFileImpl::Generate(*m_device.Get(), input, output);
+	bool DirectX12RHI::generateGraphicFile(StringView input, StringView output, s32 compressionLevel) {
+		return GraphicFileImpl::Generate(*m_device.Get(), input, output,compressionLevel);
 	}
 
 	//@―---------------------------------------------------------------------------
