@@ -272,6 +272,7 @@ namespace ob::rhi::dx12 {
 				DS_ERROR(E_DSTORAGE_COMPRESSED_DATA_TOO_LARGE);
 				DS_ERROR(E_DSTORAGE_INVALID_DESTINATION_TYPE);
 				DS_ERROR(E_DSTORAGE_FILEBUFFERING_REQUIRES_DISABLED_BYPASSIO);
+			case E_INVALIDARG: message = "E_INVALIDARG Textureリクエストでこのエラーが発生する場合はID3D12Device::GetCopyableFootprints()に準拠したメモリレイアウト、サイズになっているか確認してください。"; break;
 			default: message = ErrorCode(errorRecord.FirstFailure.HResult).message();
 			}
 #undef DS_ERROR
