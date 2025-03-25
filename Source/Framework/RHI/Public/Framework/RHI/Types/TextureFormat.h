@@ -59,6 +59,22 @@ namespace ob::rhi {
         static bool HasColor(TextureFormat format) {
             return !(HasDepth(format) || HasStencil(format));
         }
+
+        //! @brief  BC圧縮か
+        static bool IsBC(TextureFormat format) {
+            return
+                format == TextureFormat::BC1 ||
+                format == TextureFormat::BC2 ||
+                format == TextureFormat::BC3 ||
+                format == TextureFormat::BC4 ||
+                format == TextureFormat::BC5 ||
+                format == TextureFormat::BC6H ||
+                format == TextureFormat::BC7 ||
+                format == TextureFormat::BC1_SRGB ||
+                format == TextureFormat::BC2_SRGB ||
+                format == TextureFormat::BC3_SRGB ||
+                format == TextureFormat::BC7_SRGB;
+        }
     };
 
 }

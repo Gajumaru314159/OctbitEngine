@@ -150,15 +150,25 @@ namespace ob::rhi::dx12 {
 			auto& textureDesc = std::get<GraphicFileRequest::TextureDesc>(desc.dest);
 			auto texture = textureDesc.texture.cast<TextureImpl>();
 			if (texture == nullptr) return;
+
+			auto size = texture->size();
+			bool isBC = TextureFormatUtility::IsBC(texture->format());
+
 			request.Options.DestinationType = DSTORAGE_REQUEST_DESTINATION_TEXTURE_REGION;
 			request.Destination.Texture.Resource = texture->getResource();
 			request.Destination.Texture.SubresourceIndex = textureDesc.subresourceIndex;
-			request.Destination.Texture.Region.left = textureDesc.left;
-			request.Destination.Texture.Region.top = textureDesc.top;
-			request.Destination.Texture.Region.right = textureDesc.right;
-			request.Destination.Texture.Region.bottom = textureDesc.bottom;
-			request.Destination.Texture.Region.front = textureDesc.front;
-			request.Destination.Texture.Region.back = textureDesc.back;
+			request.Destination.Texture.Region.left = 0;
+			request.Destination.Texture.Region.top = 0;
+			request.Destination.Texture.Region.front = 0;
+			request.Destination.Texture.Region.right = std::max(1,size.width >> textureDesc.subresourceIndex);
+			request.Destination.Texture.Region.bottom = std::max(1, size.height >> textureDesc.subresourceIndex);
+			request.Destination.Texture.Region.back = std::max(1, size.depth >> textureDesc.subresourceIndex);
+
+			if (isBC) {
+				request.Destination.Texture.Region.right = align_up(request.Destination.Texture.Region.right,4);
+				request.Destination.Texture.Region.bottom = align_up(request.Destination.Texture.Region.bottom, 4);
+			}
+
 			request.UncompressedSize = useDecompression ? desc.uncompressedSize : 0;
 		}
 

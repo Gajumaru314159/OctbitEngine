@@ -35,12 +35,6 @@ namespace ob::rhi {
 		struct TextureDesc {
 			Ref<rhi::Texture> texture;
 			s32 subresourceIndex = 0;
-			u32 left = 0;
-			u32 top = 0;
-			u32 right = 0;
-			u32 bottom = 0;
-			u32 front = 0;
-			u32 back = 0;
 		};
 		struct TextureSequenceDesc {
 			Ref<Texture> texture;
