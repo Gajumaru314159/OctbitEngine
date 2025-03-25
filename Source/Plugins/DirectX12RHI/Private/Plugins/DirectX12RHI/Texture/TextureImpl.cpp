@@ -27,6 +27,8 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
+		m_desc.mipLevels = std::max(m_desc.mipLevels, 1);
+
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
 		auto format = TypeConverter::Convert(desc.format);
@@ -34,7 +36,7 @@ namespace ob::rhi::dx12 {
 		// 定義生成
 		D3D12_RESOURCE_DESC resourceDesc{};
 		resourceDesc.DepthOrArraySize = std::max(desc.arrayNum, 1);
-		resourceDesc.MipLevels = std::max(desc.mipLevels, 0);
+		resourceDesc.MipLevels = m_desc.mipLevels;
 		
 		switch (desc.type) {
 		case TextureType::Texture1D:
@@ -151,7 +153,7 @@ namespace ob::rhi::dx12 {
 		m_desc.type = convertType(resourceDesc.Dimension);
 		m_desc.format = TypeConverter::Convert(format);
 		m_desc.arrayNum = 1;
-		m_desc.mipLevels = 0;
+		m_desc.mipLevels = 1;
 
 
 		Utility::SetName(m_resource.Get(), getName());
@@ -264,7 +266,7 @@ namespace ob::rhi::dx12 {
 		m_desc.type = TextureType::Texture2D;
 		m_desc.format = desc.format;
 		m_desc.arrayNum = 0;
-		m_desc.mipLevels = 0;
+		m_desc.mipLevels = 1;
 
 		createRenderTexture();
 
@@ -308,7 +310,7 @@ namespace ob::rhi::dx12 {
 		m_desc.type = TextureType::Texture2D;
 		m_desc.format = TypeConverter::Convert(resourceDesc.Format);
 		m_desc.arrayNum = 0;
-		m_desc.mipLevels = 0;
+		m_desc.mipLevels = 1;
 
 		m_renderDesc.format = m_desc.format;
 		m_renderDesc.size = m_desc.size;
@@ -482,19 +484,19 @@ namespace ob::rhi::dx12 {
 		case TextureType::Texture1D:
 			if (m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
-				texDesc.Texture1DArray.MipLevels = 1;
+				texDesc.Texture1DArray.MipLevels = m_desc.mipLevels;
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1D;
-				texDesc.Texture1D.MipLevels = 1;
+				texDesc.Texture1D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Texture2D:
 			if (1<m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-				texDesc.Texture2DArray.MipLevels = 1;
+				texDesc.Texture2DArray.MipLevels = m_desc.mipLevels;
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-				texDesc.Texture2D.MipLevels = 1;
+				texDesc.Texture2D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Texture3D:
@@ -502,16 +504,16 @@ namespace ob::rhi::dx12 {
 				OB_ABORT("Texture3Dは配列にできません。");
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
-				texDesc.Texture3D.MipLevels = 1;
+				texDesc.Texture3D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Cube:
 			if (1 < m_desc.arrayNum) {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
-				texDesc.TextureCubeArray.MipLevels = 1;
+				texDesc.TextureCubeArray.MipLevels = m_desc.mipLevels;
 			} else {
 				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
-				texDesc.TextureCube.MipLevels = 1;
+				texDesc.TextureCube.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		default:
