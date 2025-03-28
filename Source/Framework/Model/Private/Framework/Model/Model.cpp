@@ -74,7 +74,7 @@ namespace ob::model {
 				desc.name = name;
 				desc.matrixProperties = { "Matrix" };
 				desc.colorProperties = {"Color"};
-				desc.textureProperties = { "Main" };
+				desc.textureProperties = { "Main","Normal","Parameter"};
 			
 				MaterialPass& opaque = desc.passes["Opaque"];
 				opaque.depthStencil.depth.enable = true;
@@ -94,21 +94,44 @@ namespace ob::model {
 			material->setMatrix("Matrix", Matrix::Identity);
 
 			// テクスチャ読み込み
-			Ref<rhi::Texture> texture;
-			aiString mainTexPath; 
-			if (mainTexPath.length == 0)m->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), mainTexPath);
-			if (mainTexPath.length == 0)m->Get(AI_MATKEY_TEXTURE_EMISSIVE(0), mainTexPath);
-			if (mainTexPath.length) {
-				String fullPath = mainTexPath.C_Str();
-				if (Path::IsRelative(fullPath)) {
-					fullPath = Path::Combine(directory, mainTexPath.C_Str());
+			{
+				Ref<rhi::Texture> texture;
+				aiString texturePath;
+				if (texturePath.length == 0)m->Get(AI_MATKEY_TEXTURE_DIFFUSE(0), texturePath);
+				if (texturePath.length == 0)m->Get(AI_MATKEY_TEXTURE_EMISSIVE(0), texturePath);
+				if (texturePath.length) {
+					String fullPath = texturePath.C_Str();
+					if (Path::IsRelative(fullPath)) {
+						fullPath = Path::Combine(directory, texturePath.C_Str());
+					}
+					if (File::Exists(fullPath)) {
+						texture = textures[fullPath] = rhi::Texture::Load(fullPath);
+					}
 				}
-				if (File::Exists(fullPath)) {
-					texture = textures[fullPath] = rhi::Texture::Load(fullPath);
-				}
+				if (!texture) texture = rhi::Texture::White();
+				material->setTexture("Main", texture);
 			}
-			if (!texture) texture = rhi::Texture::White();
-			material->setTexture("Main", texture);
+			{
+				Ref<rhi::Texture> texture;
+				aiString texturePath;
+				if (texturePath.length == 0)m->Get(AI_MATKEY_TEXTURE_NORMALS(0), texturePath);
+				if (texturePath.length) {
+					String fullPath = texturePath.C_Str();
+					if (Path::IsRelative(fullPath)) {
+						fullPath = Path::Combine(directory, texturePath.C_Str());
+					}
+					if (File::Exists(fullPath)) {
+						texture = textures[fullPath] = rhi::Texture::Load(fullPath);
+					}
+				}
+				if (!texture) texture = rhi::Texture::White();
+				material->setTexture("Normal", texture);
+			}
+			{
+				Ref<rhi::Texture> texture;
+				if (!texture) texture = rhi::Texture::White();
+				material->setTexture("Parameter", rhi::Texture::Black());
+			}
 
 			Color color = Color::White;
 			if (aiColor4D c; m->Get(AI_MATKEY_COLOR_DIFFUSE,color) == AI_SUCCESS) {
