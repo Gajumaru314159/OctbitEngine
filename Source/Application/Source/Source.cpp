@@ -1,130 +1,56 @@
-﻿#include <Framework/Core/Utility/DI.h>
-#include <Framework/Graphics/All.h>
-#include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
-#include <Framework/RHI/All.h>
-#include <Framework/Engine/All.h>
-#include <Framework/Input/All.h>
-#include <Framework/Platform/System.h>
-#include <Framework/Platform/Window.h>
-#include <Plugins/DirectX12RHI/System.h>
-
-#include <Framework/Debug/LogInfo.h>
-#include <Framework/Debug/Profiler.h>
-#include <Framework/Debug/ReflectionExplorer.h>
-#include <Framework/Debug/FrameGraphDebugger.h>
-#include <Framework/Debug/Outliner.h>
-
-#include <Framework/Graphics/Material/Material.h>
-
-
-#include <Framework/Core/String/FixedString.h>
-
-#include <Framework/Core/Reflection/TypeInfoManager.h>
-#include <Framework/Engine/Reflection.h>
-
-#include <Framework/Engine/Component/ReflectionTestComponent.h>
-#include <Framework/Engine/Component/MeshComponent.h>
-#include <Framework/Engine/Component/FlyCameraComponent.h>
-
-#include <Framework/Core/Thread/ThreadPool.h>
-
+﻿#include <Framework/Core/Misc/TimeSpan.h>
 #include <Framework/Core/Network/Network.h>
 #include <Framework/Core/Network/TCPServer.h>
-
+#include <Framework/Core/Reflection/TypeInfoManager.h>
+#include <Framework/Core/String/FixedString.h>
+#include <Framework/Core/Thread/ThreadPool.h>
+#include <Framework/Core/Utility/DI.h>
+#include <Framework/Debug/FrameGraphDebugger.h>
+#include <Framework/Debug/LogInfo.h>
+#include <Framework/Debug/Outliner.h>
+#include <Framework/Debug/Profiler.h>
+#include <Framework/Debug/ReflectionExplorer.h>
 #include <Framework/Editor/Editor.h>
-#include <Framework/Core/Misc/TimeSpan.h>
+#include <Framework/Engine/All.h>
+#include <Framework/Engine/Component/FlyCameraComponent.h>
+#include <Framework/Engine/Component/MeshComponent.h>
+#include <Framework/Engine/Component/ReflectionTestComponent.h>
+#include <Framework/Engine/Reflection.h>
+#include <Framework/Graphics/All.h>
+#include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
+#include <Framework/Graphics/Material/Material.h>
+#include <Framework/Input/All.h>
 #include <Framework/Platform/Arguments.h>
+#include <Framework/Platform/System.h>
+#include <Framework/Platform/Window.h>
+#include <Framework/RHI/All.h>
+#include <Plugins/DirectX12RHI/System.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
+using namespace ob::debug;
 using namespace ob::rhi;
 using namespace ob::engine;
 using namespace ob::graphics;
 using namespace ob::platform;
-
-#if 0
-
-class Protocol {
-public:
-	virtual void onReceived() {
-
-	}
-};
-
-void OctbitInit(ServiceInjector& injector) {
-
-}
-
-int OctbitMain() {
-	//ob::core::Logger log;
-	//
-	//LOG_INFO("Startup");
-	//
-	//Network::Startup();
-	//{
-	//
-	//	LOG_INFO("Editor生成");
-	//	Editor editor;
-	//
-	//	LOG_INFO("接続待機");
-	//	while (true) {
-	//
-	//		if (System::Update() == false)break;
-	//
-	//		editor.update();
-	//
-	//	}
-	//}
-	//
-	//Network::Shutdown();
-	return 0;
-}
-#endif
-
-
-#if 1
-
-OB_DEFINE_CLASS_INFO(Vector<String>) {
-	constructor();
-	tag("DisplayName", "Vector<int>");
-	method("size", &T::size);
-	method("max_size", &T::max_size);
-	method<void, size_t>("resize", &T::resize, "size");
-	method("capacity", &T::capacity);
-	method("empty", &T::empty);
-	method("reserve", &T::reserve, "n");
-	method("shrink_to_fit", &T::shrink_to_fit);
-
-	method<String&, size_t>("at", &T::at, "n");
-
-	method<void, size_t, const String&>("assign", &T::assign, "n", "t");
-	method<void, const String&>("push_back", &T::push_back, "x");
-	method("pop_back", &T::pop_back);
-}
-
-struct TransformA {
-	Transform transform;
-	bool changed = false;
-};
+using namespace ob::rhi::dx12;
+using namespace ob::input;
 
 int TestDirectX12() {
 
 	TypeRegister::Link<ReflectionTestComponent>();
-
-
-
 	Network::Startup();
 
 	ob::editor::Editor editor;
 
-	ob::core::ThreadPool threadPool;
-	ob::core::TypeInfoManager typeInfoManager;
-	ob::core::Logger log;
-	ob::debug::Profiler profiler;
-	ob::debug::LogInfo loginfo;
-	ob::debug::FrameGraphDebugger fgdebugger;
-	ob::debug::ReflectionExplorer reflectionExplorer;
-	ob::debug::Outliner outliner;
+	ThreadPool threadPool;
+	TypeInfoManager typeInfoManager;
+	Logger log;
+	Profiler profiler;
+	LogInfo loginfo;
+	FrameGraphDebugger fgdebugger;
+	ReflectionExplorer reflectionExplorer;
+	Outliner outliner;
 
 	Logger::EventHandle hLog;
 	log.addEvent(hLog,
@@ -212,8 +138,21 @@ int TestDirectX12() {
 	);
 
 	// テクスチャ読み込み
-	auto skyTexture = Texture::Load("Assets/Texture/sky.dds");
+#if 1
+	auto skyTexture = Texture::Load("Assets/Texture/test.dds");
+#else
 
+	auto skyTexture = Texture::Create(
+		[] {
+			TextureDesc desc;
+			desc.type = TextureType::Texture2D;
+			desc.format = TextureFormat::RGBA16;
+			desc.size = { 4096,2048};
+			desc.mipLevels = 5;
+			return desc;
+		}()
+	);
+#endif
 	// メッシュ読み込み
 	Ref<Mesh> skyMesh = Mesh::Load("Assets/Model/sky.obj");
 
@@ -227,7 +166,7 @@ int TestDirectX12() {
 		desc.name = "Default";
 		desc.matrixProperties = { "Matrix" };
 		desc.colorProperties = { "Color" };
-		desc.textureProperties = { "Main" };
+		desc.textureProperties = { "Main", "Normal", "Parameter" };
 
 		MaterialPass& opaque = desc.passes["Opaque"];
 		opaque.depthStencil.depth.enable = true;
@@ -245,7 +184,56 @@ int TestDirectX12() {
 	}();
 	material->setMatrix("Matrix", Matrix::Scale(Vec3(100)));
 	material->setTexture("Main", skyTexture);
+	material->setTexture("Normal", Texture::Normal());
+	material->setTexture("Parameter", Texture::White());
 	material->setColor("Color", Color::White);
+
+
+	{
+		String src = "Assets/Texture/test2.dds";
+		String dest = "Assets/Texture/test2.bin";
+		GraphicFile::Generate(src, dest,1);
+
+		GraphicFileQueueDesc desc;
+		desc.name = "GraphicFileQueue";
+		auto queue = GraphicFileQueue::Create(desc);
+
+		auto infos = GraphicFile::Prepare(dest);
+
+		s32 index = 1;
+		
+		GraphicFileRequest request;
+		if(true){
+			request.handle = GraphicFileHandle::Create(dest);
+			request.offset = infos[index].offset;
+			request.size = infos[index].size;
+			request.uncompressedSize = infos[index].uncompressedSize;
+			GraphicFileRequest::TextureDesc t;
+			t.texture = skyTexture;
+			t.subresourceIndex = index;
+
+			request.dest = t;
+		} else {
+			request.handle = GraphicFileHandle::Create(dest);
+			request.offset = infos[0].offset;
+			for (auto& info : infos) {
+				request.size += info.size;
+			}
+			GraphicFileRequest::TextureSequenceDesc t;
+			t.texture = skyTexture;
+			t.firstSubresourceIndex = 0;
+			request.dest = t;
+		}
+		queue->add(request);
+
+		auto event = GraphicFileEvent::Create();
+		queue->add(event);
+		queue->submit();
+
+		event->wait();
+
+		queue->validate();
+	}
 
 
 	// モデル登録
@@ -296,12 +284,13 @@ int TestDirectX12() {
 
 void OctbitInit(ServiceInjector& injector) {
 
-	rhi::dx12::RegisterDirectX12RHIService(injector);
-	input::RegisterInputService(injector);
-	graphics::RegisterGraphicsService(injector);
+	RegisterDirectX12RHIService(injector);
+	RegisterInputService(injector);
+	RegisterGraphicsService(injector);
 
 	rhi::RHIConfig config;
-	//config.enablePIX = true;
+	config.enableDirectStorageDebug = true;
+	//config.enableDebugLayer = true;
 	//config.breakWithWarning = true;
 	injector.bind(config);
 
@@ -309,8 +298,5 @@ void OctbitInit(ServiceInjector& injector) {
 
 int OctbitMain() {
 	TestDirectX12();
-	//TestVulkan();
 	return 0;
 }
-
-#endif

@@ -20,6 +20,8 @@ cbuffer Param : register(b1) {
 
 Texture2D s_skyTex : register(t0);
 Texture2D g_mainTex:register(t1);
+Texture2D g_normalTex:register(t2);
+Texture2D g_paramTex : register(t3);
 
 // IN / OUT
 struct VsIn {
@@ -51,7 +53,8 @@ PsOut PS_Main(PsIn i){
     o.albedo = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
     if(o.albedo.a < 0.5) discard;
 
-    o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
+    //o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
+    o.normal = g_normalTex.Sample(g_mainSampler, i.uv)*0.5+0.5;
     o.uv = float4(i.uv,0,1);
     return o;
 }
