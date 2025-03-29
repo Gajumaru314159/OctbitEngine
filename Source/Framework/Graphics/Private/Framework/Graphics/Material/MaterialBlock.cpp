@@ -7,6 +7,7 @@
 #include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/DescriptorTable.h>
 
@@ -122,8 +123,10 @@ namespace ob::graphics {
             bufferDesc.name = Format("MaterialParameter ({})", desc.name);
             m_parameterBuffer = rhi::Buffer::Create(bufferDesc);
             OB_ASSERT_EXPR(m_parameterBuffer);
-            m_parameterBufferBlob.resize(bufferSize);
-            memset(m_parameterBufferBlob.data(), 0, m_parameterBufferBlob.size());
+            OB_ASSERT_EXPR(bufferSize % sizeof(Component) == 0);
+
+            m_parameterBufferBlob.resize(bufferSize / sizeof(Component));
+            memset(m_parameterBufferBlob.data(), 0, bufferSize);
         }
 
     }
@@ -148,8 +151,8 @@ namespace ob::graphics {
     void MaterialBlock::initializeBindlessDescriptorTables([[maybe_unused]] const MaterialBlockDesc& desc) {
         using namespace ob::rhi;
 
-        m_tables[0] = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
-        m_tables[0]->setResource(0, m_parameterBuffer);
+        m_tableCBV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+        m_tableCBV->setResource(0, m_parameterBuffer);
     }
 
     //! @brief バインドフルデスクリプタテーブルを初期化する
@@ -157,25 +160,27 @@ namespace ob::graphics {
     void MaterialBlock::initializeBindfullDescriptorTables(const MaterialBlockDesc& desc) {
         using namespace ob::rhi;
 
-        size_t resourceNum = desc.textures.size() + desc.buffers.size() + 1;
+        size_t cbvNum = 1 + desc.buffers.size();
+        size_t srvNum = desc.textures.size();
+        size_t uavNum = 0;
         size_t samplerNum = desc.textures.size();
 
-        m_tables[0] = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, resourceNum);
-        m_tables[1] = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, samplerNum);
+        m_tableCBV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, cbvNum);
+        m_tableSRV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, srvNum);
+        m_tableUAV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, uavNum);
+        m_tableSampler = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, samplerNum);
 
         // テーブル初期化
-        s32 index = 0;
         {
-            m_tables[0]->setResource(index, m_parameterBuffer);
-        }
-        for (s32 i = 0; i < desc.textures.size(); ++i) {
-            m_tables[0]->setResource(index, Texture::White());
-            // TODO サンプラ設定
-            //m_tables[1]->setResource(i, Texture::White());
+            m_tableCBV->setResource(0, m_parameterBuffer);
         }
         for (s32 i = 0; i < desc.buffers.size(); ++i) {
             // TODO デフォルトバッファ指定
-            // m_tables[0]->setResource(index, Buffer::Empty());
+            //m_tableCBV->setResource(i + 1, Buffer::Empty());
+        }
+        for (s32 i = 0; i < desc.textures.size(); ++i) {
+            m_tableSRV->setResource(i, Texture::White());
+            m_tableSampler->setResource(i, Sampler::Default());
         }
     }
 
@@ -198,13 +203,15 @@ namespace ob::graphics {
         if (auto found = m_properties.find(name); found != m_properties.end()) {
             auto& desc = found->second;
             if (desc.type != type)return;
-            if (!is_in_range(desc.offset, m_parameterBufferBlob))return;
+            if (!is_in_range(desc.offset / sizeof(Component), m_parameterBufferBlob))return;
 
             auto& dest = *GetOffsetPtr<T>(m_parameterBufferBlob.data(), desc.offset);
 
             if (TEq()(value, dest))return;
 
             dest = value;
+
+			m_hasChanged = true;
         }
     }
 
@@ -256,8 +263,8 @@ namespace ob::graphics {
 				TextureAndSamplerHandle handle{ };
                 setValueProprty(name, MaterialPropertyType::Texture, handle);
             } else {
-                m_tables[0]->setResource(desc.offset, texture);
-                m_tables[1]->setResource(desc.offset, sampler);
+                m_tableSRV->setResource(desc.offset, texture);
+                m_tableSampler->setResource(desc.offset, sampler);
             }
 
         }
@@ -281,7 +288,7 @@ namespace ob::graphics {
                 setValueProprty(name, MaterialPropertyType::Buffer, handle);
             }
             else {
-                m_tables[0]->setResource(desc.offset, value);
+                m_tableCBV->setResource(desc.offset, value);
             }
 
         }
@@ -291,16 +298,37 @@ namespace ob::graphics {
     //! @param commandList コマンドリスト
     //! @param resourceSlot リソース用のDescriptorTableを設定するスロット
     //! @param samplerSlot サンプラー用のDescriptorTableを設定するスロット
-    void MaterialBlock::record(Ref<CommandList>& commandList, s32 resourceSlot, s32 samplerSlot) {
+    void MaterialBlock::record(Ref<CommandList>& commandList, s32 cbvSlot, s32 srvSlot,s32 uavSlot,s32 samplerSlot) {
         if (!commandList) return;
         using namespace ob::rhi;
+        FixedVector < SetDescriptorTableParam, 4> params;
+        if (0 <= cbvSlot) {
+            auto& param = params.emplace_back();
+			param.slot = cbvSlot;
+			param.table = m_tableCBV;
 
-        SetDescriptorTableParam params[2];
-        params[0].table = m_tables[0];
-        params[0].slot = resourceSlot;
-        params[1].table = m_tables[1];
-        params[1].slot = samplerSlot;
-        commandList->setRootDesciptorTable(params, std::size(params));
+            if (m_hasChanged) {
+                m_parameterBuffer->updateDirect(m_parameterBufferBlob.size() * sizeof(Component), m_parameterBufferBlob.data());
+				m_hasChanged = false;
+            }
+        }
+		if (0 <= srvSlot) {
+			auto& param = params.emplace_back();
+			param.slot = srvSlot;
+			param.table = m_tableSRV;
+		}
+		if (0 <= uavSlot) {
+			auto& param = params.emplace_back();
+			param.slot = uavSlot;
+			param.table = m_tableUAV;
+		}
+		if (0 <= samplerSlot) {
+			auto& param = params.emplace_back();
+			param.slot = samplerSlot;
+			param.table = m_tableSampler;
+		}
+
+        commandList->setRootDesciptorTable(params.data(), params.size());
     }
 
 }

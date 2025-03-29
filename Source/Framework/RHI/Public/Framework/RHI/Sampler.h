@@ -13,6 +13,8 @@ namespace ob::rhi {
     //! @brief      サンプラー
     class Sampler :public GraphicObject {
     public:
+        static Ref<Sampler> Default();
+    public:
 
         static Ref<Sampler> Create(const SamplerDesc& desc);
 

@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/RHI/SystemResource.h>
 #include <Framework/RHI/Texture.h>
+#include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
@@ -27,11 +28,18 @@ namespace ob::rhi {
 			Vector<IntColor> colors(size * size);
 			for (s32 y = 0; y < size; ++y) {
 				for (s32 x = 0; x < size; ++x) {
-					bool f = (x % 2) ^ (y % 2);
+					bool f = (x < size/ 2) ^ (y < size / 2);
 					colors[y * size + x] = f ? IntColor::White : IntColor::Gray;
 				}
 			}
 			m_presetTextures[PresetTexture::Check] = rhi.createTexture("Check", Size(size, size), colors);
+		}
+
+		{
+			SamplerDesc desc(TextureFillter::Linear);
+			desc.anisotropy = Anisotropy::None;
+			desc.filter = TextureFillter::Linear;
+			m_presetSamplers[PresetSampler::Default] = rhi.createSampler(desc);
 		}
 	}
 
@@ -43,6 +51,14 @@ namespace ob::rhi {
 	Ref<Texture> SystemResource::getPresetTexture(PresetTexture type) {
 		auto found = m_presetTextures.find(type);
 		if (found == m_presetTextures.end())
+			return nullptr;
+		return found->second;
+	}
+
+	//! @brief  プリセットサンプラー取得
+	Ref<Sampler> SystemResource::getPresetSampler(PresetSampler type) {
+		auto found = m_presetSamplers.find(type);
+		if (found == m_presetSamplers.end())
 			return nullptr;
 		return found->second;
 	}

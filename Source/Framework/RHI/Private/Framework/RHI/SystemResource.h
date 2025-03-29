@@ -17,6 +17,11 @@ namespace ob::rhi {
 		Check,
 	};
 
+	//! @brief      プリセットサンプラー
+	enum class PresetSampler {
+		Default
+	};
+
 	//! @brief	システムリソース
 	class SystemResource : public Singleton<SystemResource> {
 	public:
@@ -30,9 +35,13 @@ namespace ob::rhi {
 		//! @brief  プリセットテクスチャ取得
 		Ref<Texture> getPresetTexture(PresetTexture type);
 
+
+		Ref<Sampler> getPresetSampler(PresetSampler type);
+
 	private:
 
 		HashMap<PresetTexture, Ref<Texture>> m_presetTextures;
+		HashMap<PresetSampler, Ref<Sampler>> m_presetSamplers;
 
 	};
 

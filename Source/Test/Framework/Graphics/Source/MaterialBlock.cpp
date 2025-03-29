@@ -1,0 +1,249 @@
+﻿//***********************************************************
+//! @file
+//! @brief		Box のテスト
+//! @author		Gajumaru
+//***********************************************************
+#include <Framework/Core/Utility/DI.h>
+#include <Framework/Graphics/All.h>
+#include <Framework/RHI/All.h>
+#include <Framework/Platform/System.h>
+#include <Framework/Platform/Window.h>
+#include <Plugins/DirectX12RHI/System.h>
+#include <Framework/Graphics/Material/MaterialBlock.h>
+
+namespace ob::rhi {
+	class SystemResource;
+}
+
+TEST(Graphis, MaterialBlock) {
+#pragma region
+	using namespace ob;
+	using namespace ob::rhi;
+	using namespace ob::graphics;
+	using namespace ob::platform;
+	// ob::core::Logger log;
+
+	System::Setup();
+	
+	ServiceInjector injector;
+	ServiceContainer container;
+	{
+		rhi::dx12::RegisterDirectX12RHIService(injector);
+		graphics::RegisterGraphicsService(injector);
+
+		rhi::RHIConfig config;
+		config.enablePIX = true;
+		config.breakWithWarning = true;
+		injector.bind(config);
+
+		struct Dependency {
+			Dependency(ob::graphics::Graphics&,SystemResource&) {}
+		};
+		injector.bind<Dependency>();
+
+		injector.create<Dependency>(container);
+	}
+
+
+	// ウィンドウ生成
+	platform::WindowDesc windowDesc;
+	windowDesc.title = "Graphic Test";
+	platform::Window window(windowDesc);
+	window.show();
+
+	Ref<Display> display = [&] {
+		DisplayDesc desc;
+		desc.name = "MainDisplay";
+		desc.window = window;
+		return Display::Create(desc);
+	}();
+
+#pragma endregion
+
+	struct Vertex {
+		Vec2 pos;
+		Vec2 uv;
+	};
+
+	Ref<Buffer> vertexBuffer;
+	Ref<Buffer> indexBuffer;
+	{
+		Vertex vertices[] = {
+			{Vec2(-1,-1),Vec2(0,1)},
+			{Vec2(1,-1),Vec2(1,1)},
+			{Vec2(1,1),Vec2(1,0)},
+			{Vec2(-1,1),Vec2(0,0)},
+		};
+		u16 indices[] = { 0,1,2,0,2,3 };
+
+		vertexBuffer = Buffer::Create(BufferDesc::Vertex<Vertex>(4));
+		indexBuffer = Buffer::Create(BufferDesc::Index<u16>(6));
+
+		vertexBuffer->updateDirect(sizeof(vertices), vertices);
+		indexBuffer->updateDirect(sizeof(indices), indices);
+	}
+
+	Ref<RootSignature> signature;
+	{
+		RootSignatureDesc desc(
+			{
+				RootParameter::Range(DescriptorRangeType::CBV,1,0),
+				RootParameter::Range(DescriptorRangeType::SRV,1,0),
+				RootParameter::Range(DescriptorRangeType::UAV,1,0),
+				RootParameter::Range(DescriptorRangeType::Sampler,1,0),
+			},
+			{}
+		);
+		desc.name = "MaterialBlock";
+		signature = RootSignature::Create(desc);
+		OB_ASSERT_EXPR(signature);
+	}
+
+	// 事前セットアップここまで
+	Ref<Shader> vs;
+	Ref<Shader> ps;
+	{
+		String code = R"(
+cbuffer Param : register(b0) {
+	float Speed;
+	float Time;
+	float Width;
+	float Height;
+	float4 Color;
+};
+Texture2D g_mainTex:register(t0);
+SamplerState g_mainSampler:register(s0);
+											
+// IN / OUT												
+struct VsIn {												
+	float2 pos		:POSITION;									
+	float2 uv	    :TEXCOORD0;										
+};															
+struct PsIn {												
+	float4 pos		:SV_POSITION;								
+	float2 uv	    :TEXCOORD0;									
+};															
+// エントリ													
+struct PsOut {												
+	float4 color	:SV_TARGET0;								
+};															
+PsIn VS_Main(VsIn i) {										
+	PsIn o;													
+	o.pos = float4(i.pos,0,1);					        
+	o.uv  = i.uv * float2(Width/16,Height/16) + float2(Time*Speed,Time*Speed);
+	return o;
+}
+PsOut PS_Main(PsIn i){										
+	PsOut o;												
+	o.color = g_mainTex.Sample(g_mainSampler,i.uv)*Color;		
+	return o;											        
+}																
+
+)";
+		vs = Shader::CompileVS(code);
+		ps = Shader::CompilePS(code);
+		OB_ASSERT_EXPR(vs && ps);
+	}
+
+	Ref<PipelineState> pipeline;
+	{
+		PipelineStateDesc desc;
+		desc.name = "MaterialBlock";
+		desc.colors = { TextureFormat::RGBA8 };
+
+		desc.rootSignature = signature;
+		desc.vs = vs;
+		desc.ps = ps;
+		desc.vertexLayout.attributes = {
+			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
+			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
+		};
+		desc.blend[0] = BlendDesc::AlphaBlend;
+		desc.rasterizer.cullMode = CullMode::None;
+
+		pipeline = PipelineState::Create(desc);
+		OB_ASSERT_EXPR(pipeline);
+	}
+
+
+	MaterialBlockDesc desc;
+	desc.name = "TestBlock";
+	desc.scalars = { "Speed", "Time", "Width", "Height" };
+	desc.colors = { "Color" };
+	desc.textures = { "Texture" };
+	desc.buffers = { "Buffer" };
+
+	MaterialBlock block(desc);
+	block.setFloat("Speed", 3.f);
+	block.setFloat("Width", window.getSize().x);
+	block.setFloat("Height", window.getSize().y);
+	block.setTexture("Texture", Texture::Check(),Sampler::Default());
+	block.setColor("Color", Color::Cyan);
+
+	auto start = DateTime::Now();
+
+	Ref<CommandList> commandList;
+	{
+		CommandListDesc desc;
+		desc.name = "Main";
+		desc.type = CommandListType::Graphic;
+		commandList = CommandList::Create(desc);
+	}
+
+
+	Ref<RenderTexture> renderTexture;
+	{
+		RenderTextureDesc desc;
+		desc.name = "RenderTexture";
+		desc.size = display->getDesc().size;
+		desc.format = TextureFormat::RGBA8;
+		desc.clear.color = Color::Black;
+		desc.display = display;
+		renderTexture = RenderTexture::Create(desc);
+	}
+
+	for (s32 i = 0; i < 60*10; ++i) {
+
+		if (System::Update() == false)break;
+
+		auto time = TimeSpan(DateTime::Now(), start).totalSecondsF();
+		block.setFloat("Time", time);
+
+		commandList->begin();
+
+		Viewport viewport;
+		viewport.right = renderTexture->width();
+		viewport.bottom = renderTexture->height();
+		commandList->setViewport(&viewport,1);
+
+		commandList->setRenderTarget(renderTexture);
+		commandList->clearColors();
+
+		commandList->setPipelineState(pipeline);
+		block.record(commandList, 0, 1,-1,3);
+
+		commandList->setVertexBuffer(vertexBuffer);
+		commandList->setIndexBuffer(indexBuffer);
+
+		DrawIndexedParam param;
+		param.indexCount = 6;
+		param.startIndex = 0;
+		param.startVertex = 0;
+		commandList->drawIndexed(param);
+
+		commandList->applyDisplay(display, renderTexture);
+
+		commandList->end();
+		commandList->flush();
+
+		if (auto graphics = container.get<Graphics>()) {
+			graphics->update();
+		}
+
+		RHI::Get()->update();
+		display->update();
+
+		Thread::Sleep(33);
+	}
+
+}

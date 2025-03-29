@@ -18,7 +18,8 @@
 
 #include <Framework/Graphics/Material/Material.h>
 
-TEST(Graphis, Create) {
+/*
+TEST(Graphis, MaterialBlock) {
 #pragma region
 	using namespace ob;
 	using namespace ob::rhi;
@@ -166,3 +167,4 @@ TEST(Graphis, Create) {
 	}
 
 }
+*/

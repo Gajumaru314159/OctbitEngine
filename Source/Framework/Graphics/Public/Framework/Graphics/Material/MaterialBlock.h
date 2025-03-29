@@ -51,7 +51,7 @@ namespace ob::graphics {
         void setBuffer(StringView name, const Ref<Buffer>& value);
         //! @}
 
-        void record(Ref<CommandList>& commandList, s32 resourceSlot, s32 samplerSlot);
+        void record(Ref<CommandList>& commandList, s32 cbvSlot, s32 srvSlot, s32 uavSlot, s32 samplerSlot);
 
     private:
 
@@ -65,16 +65,28 @@ namespace ob::graphics {
 
     private:
 
+        union Component {
+            float f;
+            int i;
+            unsigned int u;
+        };
+
         MaterialPropertyMap     m_properties;
 
-        Blob				    m_parameterBufferBlob;
+		bool					m_hasChanged = false;  
+        Vector<Component>		m_parameterBufferBlob;
 
         Ref<rhi::Buffer>	    m_parameterBuffer;
         Vector<Ref<Texture>>    m_textures;
         Vector<Ref<Sampler>>    m_samplers;
         Vector<Ref<Buffer>>     m_buffers;
 
-        Ref<DescriptorTable>    m_tables[2];
+        // Ref<DescriptorTable>    m_tables[2];
+
+        Ref<DescriptorTable>    m_tableCBV;
+        Ref<DescriptorTable>    m_tableSRV;
+        Ref<DescriptorTable>    m_tableUAV;
+        Ref<DescriptorTable>    m_tableSampler;
 
     };
 
