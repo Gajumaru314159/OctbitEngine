@@ -29,6 +29,7 @@ namespace ob::rhi {
 	class RootSignature;
 	class Shader;
 	class Texture;
+	class Sampler;
 
 	class GraphicFileHandle;
 	class GraphicFileEvent;

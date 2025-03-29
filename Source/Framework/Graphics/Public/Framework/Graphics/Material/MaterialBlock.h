@@ -24,6 +24,7 @@ namespace ob::graphics {
     public:
         using CommandList = ob::rhi::CommandList;
         using DescriptorTable = ob::rhi::DescriptorTable;
+        using Sampler = ob::rhi::Sampler;
         using Texture = ob::rhi::Texture;
         using Buffer = ob::rhi::Buffer;
     public:
@@ -46,7 +47,7 @@ namespace ob::graphics {
         void setFloat(StringView name, f32 value);
         void setColor(StringView name, Color value);
         void setMatrix(StringView name, const Matrix& value);
-        void setTexture(StringView name, const Ref<Texture>& value);
+        void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler);
         void setBuffer(StringView name, const Ref<Buffer>& value);
         //! @}
 
@@ -70,6 +71,7 @@ namespace ob::graphics {
 
         Ref<rhi::Buffer>	    m_parameterBuffer;
         Vector<Ref<Texture>>    m_textures;
+        Vector<Ref<Sampler>>    m_samplers;
         Vector<Ref<Buffer>>     m_buffers;
 
         Ref<DescriptorTable>    m_tables[2];

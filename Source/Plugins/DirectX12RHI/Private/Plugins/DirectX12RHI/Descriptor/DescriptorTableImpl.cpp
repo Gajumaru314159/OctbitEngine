@@ -10,6 +10,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
+#include <Plugins/DirectX12RHI/Sampler/SamplerImpl.h>
 
 namespace ob::rhi::dx12
 {
@@ -20,7 +21,10 @@ namespace ob::rhi::dx12
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
 	//@―---------------------------------------------------------------------------
-	DescriptorTableImpl::DescriptorTableImpl(DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum) {
+	DescriptorTableImpl::DescriptorTableImpl(DirectX12RHI& device, DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum)
+		: m_device(device)
+		, m_type(type)
+	{
 		heap.allocateHandle(m_handle,elementNum);
 		
 		m_elemetns.resize(elementNum);
@@ -54,6 +58,14 @@ namespace ob::rhi::dx12
 	//! @brief  バッファリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
+		if (m_type != DescriptorHeapType::CBV_SRV_UAV) {
+			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
+			return false;
+		}
+		if (!resource) {
+			LOG_ERROR("不正な引数。DescriptorTableに空のバッファを指定しました。[index={}]", index);
+			return false;
+		}
 		if (!is_in_range(index, m_elemetns)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
@@ -74,19 +86,27 @@ namespace ob::rhi::dx12
 	//! @brief  テクスチャリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Texture>& resource) {
+		if (m_type != DescriptorHeapType::CBV_SRV_UAV) {
+			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
+			return false;
+		}
+		if (!resource) {
+			LOG_ERROR("不正な引数。DescriptorTableに空のテクスチャを指定しました。[index={}]", index);
+			return false;
+		}
 		if (!is_in_range(index, m_elemetns)) {
-			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]",index);
+			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
 		m_elemetns[index]->clear();
 		m_elemetns[index]->texture = resource;
-		
+
 		if (auto p = resource.cast<TextureImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createSRV(handle);
 			p->addEventListener(m_elemetns[index]->hTextureUpdate,
-				[this,index]() {
+				[this, index]() {
 					if (auto p = m_elemetns[index]->texture.cast<TextureImpl>()) {
 						auto handle = m_handle.getCpuHandle(index);
 						p->createSRV(handle);
@@ -96,7 +116,36 @@ namespace ob::rhi::dx12
 		}
 		return true;
 	}
-	//bool setResource(s32 index, class Sampler& resource) override{}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  サンプラーリソースを設定
+	//@―---------------------------------------------------------------------------
+	bool DescriptorTableImpl::setResource(s32 index, const Ref<Sampler>& resource) {
+		if (m_type != DescriptorHeapType::Sampler) {
+			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
+			return false;
+		}
+		if (!resource) {
+			LOG_ERROR("不正な引数。DescriptorTableに空のサンプラーを指定しました。[index={}]", index);
+			return false;
+		}
+		if (!is_in_range(index, m_elemetns)) {
+			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
+			return false;
+		}
+
+		m_elemetns[index]->clear();
+		m_elemetns[index]->sampler = resource;
+
+		if (auto p = resource.cast<SamplerImpl>()) {
+			auto dest = m_handle.getCpuHandle(index);
+			auto src = p->getHandle();
+
+			// TODO Samplerはヒープサイズが小さいので戦略を変える必要がある
+			m_device.getNative()->CopyDescriptorsSimple(1, dest, src, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+		}
+		return true;
+	}
 	//! @}
 
 }

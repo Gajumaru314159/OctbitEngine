@@ -24,6 +24,17 @@ namespace ob::graphics {
 
         bool operator==(const TextureHandle& rhs)const { return index == rhs.index; }
     };
+    struct SamplerHandle {
+        u32 index;
+
+        bool operator==(const SamplerHandle& rhs)const { return index == rhs.index; }
+    };
+    struct TextureAndSamplerHandle {
+        TextureHandle texture;
+        SamplerHandle sampler;
+
+        bool operator==(const TextureAndSamplerHandle& rhs)const { return texture == rhs.texture && sampler == rhs.sampler; }
+    };
 
     //! @brief コンストラクタ
     //! @param desc マテリアルブロックの説明
@@ -72,9 +83,10 @@ namespace ob::graphics {
             for (auto [index, name] : Indexed(desc.textures)) {
                 auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Texture,bufferSize });
                 if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
-                bufferSize += sizeof(TextureHandle);
+                bufferSize += sizeof(TextureAndSamplerHandle);
             }
             m_textures.resize(desc.textures.size());
+            m_samplers.resize(desc.textures.size());
 
             for (auto [index, name] : Indexed(desc.buffers)) {
                 auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,bufferSize });
@@ -92,6 +104,7 @@ namespace ob::graphics {
                 if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
             }
             m_textures.resize(desc.textures.size());
+            m_samplers.resize(desc.textures.size());
 
             for (auto [index, name] : Indexed(desc.buffers)) {
                 auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,(s32)index });
@@ -217,7 +230,16 @@ namespace ob::graphics {
     }
 
     //! @brief  Textureプロパティを設定
-    void MaterialBlock::setTexture(StringView name, const Ref<Texture>& value) {
+    void MaterialBlock::setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler) {
+
+        if (!texture) {
+            LOG_ERROR("プロパティ[{}]に空のテクスチャを設定しようとしました", name);
+            return;
+        }
+        if (!sampler) {
+            LOG_ERROR("プロパティ[{}]に空のサンプラーを設定しようとしました", name);
+            return;
+        }
 
         bool useBindless = s_useBindless;
 
@@ -227,13 +249,15 @@ namespace ob::graphics {
             if (desc.type != MaterialPropertyType::Texture)return;
             if (!is_in_range(desc.offset, m_textures))return;
 
-            m_textures[desc.offset] = value;
+            m_textures[desc.offset] = texture;
+            m_samplers[desc.offset] = sampler;
 
             if (useBindless) {
-				TextureHandle handle{ 0 };
+				TextureAndSamplerHandle handle{ };
                 setValueProprty(name, MaterialPropertyType::Texture, handle);
             } else {
-                m_tables[0]->setResource(desc.offset, value);
+                m_tables[0]->setResource(desc.offset, texture);
+                m_tables[1]->setResource(desc.offset, sampler);
             }
 
         }
@@ -253,7 +277,7 @@ namespace ob::graphics {
             m_buffers[desc.offset] = value;
 
             if (useBindless) {
-                TextureHandle handle{ 0 };
+                BufferHandle handle{ };
                 setValueProprty(name, MaterialPropertyType::Buffer, handle);
             }
             else {

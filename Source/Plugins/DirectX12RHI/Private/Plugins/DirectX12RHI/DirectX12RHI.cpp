@@ -12,6 +12,7 @@
 #include <Plugins/DirectX12RHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
 #include <Plugins/DirectX12RHI/Shader/ShaderImpl.h>
+#include <Plugins/DirectX12RHI/Sampler/SamplerImpl.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
@@ -145,6 +146,14 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  サンプラーを生成
+	//@―---------------------------------------------------------------------------
+	Ref<Sampler> DirectX12RHI::createSampler(const SamplerDesc& desc) {
+		SAFE_CREATE(Sampler, SamplerImpl, *this, desc);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  バッファーを生成
 	//@―---------------------------------------------------------------------------
 	Ref<Buffer> DirectX12RHI::createBuffer(const BufferDesc& desc) {
@@ -173,7 +182,7 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
 		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *m_descriptorHeaps[type], type, elementNum);
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this,*m_descriptorHeaps[type], type, elementNum);
 	}
 
 

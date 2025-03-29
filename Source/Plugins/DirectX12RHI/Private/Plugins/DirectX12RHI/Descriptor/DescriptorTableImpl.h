@@ -17,6 +17,11 @@ namespace ob::rhi{
 	class Buffer;
 }
 
+namespace ob::rhi::dx12 {
+	class DirectX12RHI;
+	class DescriptorHeap;
+}
+
 //===============================================================
 // クラス定義
 //===============================================================
@@ -39,7 +44,7 @@ namespace ob::rhi::dx12 {
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
         //@―---------------------------------------------------------------------------
-        DescriptorTableImpl(class DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum);
+        DescriptorTableImpl(DirectX12RHI& device,DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum);
 
 
 		//@―---------------------------------------------------------------------------
@@ -60,7 +65,7 @@ namespace ob::rhi::dx12 {
 		//! @{
 		bool setResource(s32 index, const Ref<Buffer>& resource) override;
 		bool setResource(s32 index, const Ref<Texture>& resource) override;
-		//bool setResource(s32 index, class Sampler& resource) override;
+		bool setResource(s32 index, const Ref<Sampler>& resource) override;
 		//! @}
 
 		//@―---------------------------------------------------------------------------
@@ -78,7 +83,8 @@ namespace ob::rhi::dx12 {
 		}
 
     private:
-
+		DirectX12RHI&		m_device;
+		DescriptorHeapType	m_type;
 		String				m_name;
         DescriptorHandle	m_handle;
 
@@ -88,10 +94,14 @@ namespace ob::rhi::dx12 {
 			Ref<Texture> texture;
 			TextureEventHandle hTextureUpdate;
 
+			Ref<Sampler> sampler;
+
 			void clear() {
+				// TODO Variantに変えてメモリを節約する
 				buffer.reset();
 				texture.reset();
 				hTextureUpdate.remove();
+				sampler.reset();
 			}
 		};
 
