@@ -102,7 +102,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  シェーダをコンパイル
 		//@―---------------------------------------------------------------------------
-		Ref<Shader> compileShader(const String&, ShaderStage) override;
+		Ref<Shader> compileShader(const ShaderCompileDesc& desc) override;
 
 
 		//@―---------------------------------------------------------------------------

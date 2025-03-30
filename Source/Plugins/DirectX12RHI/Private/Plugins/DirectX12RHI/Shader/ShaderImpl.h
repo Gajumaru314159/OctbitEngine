@@ -34,12 +34,8 @@ namespace ob::rhi::dx12 {
 
         //@―---------------------------------------------------------------------------
         //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-        //!
-        //! @param src			シェーダコード
-        //! @param stage		シェーダステージ
-        //! @param errorDest	エラー出力先文字列
         //@―---------------------------------------------------------------------------
-        ShaderImpl(DirectX12RHI& device,const String& code, ShaderStage stage, StringView name="Shader");
+        ShaderImpl(DirectX12RHI& device, const ShaderCompileDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
@@ -87,7 +83,7 @@ namespace ob::rhi::dx12 {
         //@―---------------------------------------------------------------------------
         //! @brief  コンパイル
         //@―---------------------------------------------------------------------------
-        void compile(DirectX12RHI& device, StringView code,ShaderStage stage);
+        void compile(DirectX12RHI& device, const ShaderCompileDesc& desc);
 
     private:
 

@@ -98,4 +98,12 @@ namespace ob::rhi::dx12 {
 		return static_cast<DescriptorHeap*>(m_pBlock->pUser)->getGpuHandle(m_pBlock->index + index);
 	}
 
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  バインドレスハンドルに使用するインデックスを取得
+	//@―---------------------------------------------------------------------------
+	u32 DescriptorHandle::getBindlessIndex(s32 index)const {
+		return m_pBlock->index + index;
+	}
+
 }

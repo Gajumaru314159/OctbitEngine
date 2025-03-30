@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
@@ -28,7 +29,7 @@ namespace ob::rhi {
 	public:
 
         //! @brief      コンストラクタ
-		RHI(GraphicObjectManager&);
+		RHI(GraphicObjectManager&, RHIConfig*);
 
         //! @brief      デストラクタ
         virtual ~RHI();
@@ -65,7 +66,7 @@ namespace ob::rhi {
 
         virtual Ref<Sampler>        createSampler(const SamplerDesc& desc) { return nullptr; }
 
-        virtual Ref<Shader>         compileShader(const String& code, ShaderStage stage) { return nullptr; }
+        virtual Ref<Shader>         compileShader(const ShaderCompileDesc& desc) { return nullptr; }
         virtual Ref<Shader>         loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
 
         virtual Ref<DescriptorTable>createDescriptorTable(DescriptorHeapType type, s32 elementNum) { return nullptr; }
@@ -85,6 +86,8 @@ namespace ob::rhi {
         virtual bool                    generateGraphicFile(StringView input, StringView output, s32 compressionLevel) { return false; }
         virtual Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) { return {}; }
 
+		const RHIConfig& getConfig()const { return m_config; }
+
     protected:
 
         //! @brief      終了処理
@@ -92,6 +95,7 @@ namespace ob::rhi {
         void finalize();
 
     private:
+        RHIConfig m_config;
         GraphicObjectManager& m_objectManager;
 	};
 

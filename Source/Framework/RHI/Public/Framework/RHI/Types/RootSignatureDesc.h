@@ -51,6 +51,7 @@ namespace ob::rhi {
 		AllowStreamOutput				= get_bit(6),	//!< 
 		DenyAmplificationShaderAccess	= get_bit(7),	//!< 
 		DenyMeshShaderAccess			= get_bit(8),	//!< 
+		EnableBindless					= get_bit(9),	//!< 
 	};
 	//! @brief      ルートシグネチャ・フラグ・セット
 	//! @see        RootSignatureDesc
@@ -200,7 +201,7 @@ namespace ob::rhi {
 		RootSignatureDesc() = default;
 
 		//! @brief      コンストラクタ
-		RootSignatureDesc(decltype(parameters) parameters, decltype(samplers) samplers, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
+		RootSignatureDesc(decltype(parameters) parameters, decltype(samplers) samplers = {}, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
 			: parameters(parameters), samplers(samplers), flags(flags) {}
 	};
 

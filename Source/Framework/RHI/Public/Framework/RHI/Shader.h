@@ -30,6 +30,15 @@ namespace ob::rhi {
         ShaderEntryDesc entry;
     };
 
+
+    struct ShaderCompileDesc {
+        String         name;		    //!< シェーダ名
+        String         code;		    //!< シェーダコード
+		ShaderStage    stage;           //!< シェーダステージ
+		Vector<String> directories;     //!< インクルードディレクトリ
+		Vector<String> macros;		    //!< マクロ定義
+    };
+
     //! @brief      シェーダ
     class Shader :public GraphicObject {
     public:
@@ -62,6 +71,7 @@ namespace ob::rhi {
         //! @param code     シェーダコード
         //! @param stage    シェーダステージ
         //! @{
+		static Ref<Shader> Compile(const ShaderCompileDesc& desc);
         static Ref<Shader> Compile(const String& code, ShaderStage stage);
         static Ref<Shader> CompileVS(const String& code);
         static Ref<Shader> CompilePS(const String& code);

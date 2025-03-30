@@ -31,15 +31,23 @@ namespace ob::rhi {
         }
     }
 
+
+    Ref<Shader> Shader::Compile(const ShaderCompileDesc& desc) {
+        if (auto rhi = RHI::Get()) {
+            return rhi->compileShader(desc);
+        }
+        return nullptr;
+    }
+
     //! @brief              コンストラクタ
     //! 
     //! @param codeSet      シェーダ・バイナリ
     //! @param stage        シェーダステージ
     Ref<Shader> Shader::Compile(const String& code,ShaderStage stage) {
-        if (auto rhi = RHI::Get()) {
-            return rhi->compileShader(code, stage);
-        }
-        return nullptr;
+        ShaderCompileDesc desc;
+		desc.code = code;
+        desc.stage = stage;
+        return Compile(desc);
     }
     Ref<Shader> Shader::CompileVS(const String& code) {
         return Shader::Compile(code, ShaderStage::Vertex);
@@ -47,6 +55,7 @@ namespace ob::rhi {
     Ref<Shader> Shader::CompilePS(const String& code) {
         return Shader::Compile(code, ShaderStage::Pixel);
     }
+
 
 
     //! @brief              コンストラクタ

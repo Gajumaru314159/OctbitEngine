@@ -16,6 +16,7 @@ namespace ob::rhi {
 	struct DrawParam;
 	struct DrawIndexedParam;
 	struct GraphicFileQueueDesc;
+	struct ShaderCompileDesc;
 
 	// クラス
 	class RHI;

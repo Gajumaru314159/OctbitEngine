@@ -82,6 +82,13 @@ namespace ob::rhi::dx12 {
 			return m_handle.getGpuHandle(index);
 		}
 
+		//@―---------------------------------------------------------------------------
+		//! @brief  バインドレスハンドルに使用するインデックスを取得
+		//@―---------------------------------------------------------------------------
+		u32 getBindlessIndex(s32 index = 0)const override {
+			return m_handle.getBindlessIndex(index);
+		}
+
     private:
 		DirectX12RHI&		m_device;
 		DescriptorHeapType	m_type;

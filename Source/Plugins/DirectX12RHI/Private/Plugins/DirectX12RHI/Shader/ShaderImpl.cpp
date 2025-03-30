@@ -22,35 +22,30 @@ namespace ob::rhi::dx12 {
         case ShaderStage::Geometry:        return L"GS_Main";
         case ShaderStage::Pixel:           return L"PS_Main";
         case ShaderStage::Compute:         return L"CS_Main";
-        default:                            return L"";
+        default:                           return L"";
         }
     }
     const wchar_t* getShadingModelW(ShaderStage stage) {
         switch (stage)
         {
-        case ShaderStage::Vertex:          return L"vs_6_0";
-        case ShaderStage::Hull:            return L"hs_6_0";
-        case ShaderStage::Domain:          return L"ds_6_0";
-        case ShaderStage::Geometry:        return L"gs_6_0";
+        case ShaderStage::Vertex:          return L"vs_6_6";
+        case ShaderStage::Hull:            return L"hs_6_6";
+        case ShaderStage::Domain:          return L"ds_6_6";
+        case ShaderStage::Geometry:        return L"gs_6_6";
         case ShaderStage::Pixel:           return L"ps_6_6";
-        case ShaderStage::Compute:         return L"cs_6_0";
-        default:                            return L"";
+        case ShaderStage::Compute:         return L"cs_6_6";
+        default:                           return L"";
         }
     }
 
 
-
     //@―---------------------------------------------------------------------------
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    //!
-    //! @param src			シェーダコード
-    //! @param stage		シェーダステージ
-    //! @param errorDest	エラー出力先文字列
     //@―---------------------------------------------------------------------------
-    ShaderImpl::ShaderImpl(DirectX12RHI& device,const String& code, ShaderStage stage, StringView name)
-        : m_name(name)
+    ShaderImpl::ShaderImpl(DirectX12RHI& device, const ShaderCompileDesc& desc) 
+		: m_name(desc.name)
     {
-        compile(device, code, stage);
+        compile(device, desc);
     }
 
 
@@ -119,34 +114,47 @@ namespace ob::rhi::dx12 {
         return 0;
     }
 
-
     //@―---------------------------------------------------------------------------
     //! @brief				初期化
     //@―---------------------------------------------------------------------------
-    void ShaderImpl::compile(DirectX12RHI& device, StringView code, ShaderStage stage) {
+    void ShaderImpl::compile(DirectX12RHI& device, const ShaderCompileDesc& desc) {
 
         HRESULT result;
 
         // シェーダーコード
         DxcBuffer buffer;
-        buffer.Ptr = code.data();
-        buffer.Size = code.size();
+        buffer.Ptr = desc.code.data();
+        buffer.Size = desc.code.size();
         buffer.Encoding = 0;
 
-        // コンパイル引数
-        const wchar_t* args[] = {
+        Vector<WString> args{
             L"-E",
-            getEntryW(stage),
+            getEntryW(desc.stage),
             L"-T",
-            getShadingModelW(stage)
+            getShadingModelW(desc.stage),
         };
+
+        for (auto& macro : desc.macros) {
+            args.push_back(L"-D");
+            StringEncoder::Encode(macro, args.emplace_back());
+        }
+        for (auto& directory : desc.directories) {
+            args.push_back(L"-I");
+            StringEncoder::Encode(directory, args.emplace_back());
+        }
+
+        Vector<const wchar_t*> pargs;
+
+		for (auto& arg : args) {
+			pargs.push_back(arg.data());
+		}
 
         // コンパイル
         ComPtr<IDxcResult> resultBlob;
         result = device.getShaderCompiler()->Compile(
             &buffer,
-            args,
-            std::size(args),
+            pargs.data(),
+            pargs.size(),
             NULL,
             IID_PPV_ARGS(&resultBlob)
         );
@@ -158,7 +166,7 @@ namespace ob::rhi::dx12 {
         // エラーチェック
         ComPtr<IDxcBlobUtf8> errors{};
         ComPtr<IDxcBlobUtf16> outputName{};
-        result = resultBlob->GetOutput(DXC_OUT_ERRORS,IID_PPV_ARGS(&errors),&outputName);
+        result = resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName);
         if (FAILED(result)) {
             Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
             return;

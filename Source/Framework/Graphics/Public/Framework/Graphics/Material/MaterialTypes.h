@@ -22,7 +22,8 @@ namespace ob::graphics {
 
 	struct MaterialValuePropertyDesc {
 		MaterialPropertyType type;
-		s32 offset = -1;
+		s32 offset = -1; // バッファ内のバイトオフセット
+		s32 index = -1; // 何番目のプロパティか
 	};
 
 	using MaterialPropertyMap = Map<String, MaterialValuePropertyDesc, std::less<>>;

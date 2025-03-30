@@ -33,8 +33,8 @@ namespace ob::rhi::dx12 {
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
 	DirectX12RHI::DirectX12RHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config)
-		: m_config(config ? *config : ob::rhi::RHIConfig{})
-		, RHI(objectManager)
+		: RHI(objectManager,config)
+		, m_config(config ? *config : ob::rhi::RHIConfig{})
 	{
 		OB_DEBUG_CONTEXT(
 			if (m_config.enablePIX) {
@@ -164,11 +164,11 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダをコンパイル
 	//@―---------------------------------------------------------------------------
-	Ref<Shader> DirectX12RHI::compileShader(const String& code, ShaderStage stage) {
-		SAFE_CREATE(Shader, ShaderImpl, *this, code, stage);
+	Ref<Shader> DirectX12RHI::compileShader(const ShaderCompileDesc& desc) {
+		SAFE_CREATE(Shader, ShaderImpl, *this, desc);
 	}
 
-
+	
 	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダをロード
 	//@―---------------------------------------------------------------------------

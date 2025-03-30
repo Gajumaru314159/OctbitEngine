@@ -9,8 +9,9 @@
 namespace ob::rhi {
 
     //! @brief  コンストラクタ
-    RHI::RHI(GraphicObjectManager& manager) 
-        :m_objectManager(manager)
+    RHI::RHI(GraphicObjectManager& manager,RHIConfig* config) 
+        : m_objectManager(manager)
+        , m_config(config? *config:RHIConfig())
     {
     }
 

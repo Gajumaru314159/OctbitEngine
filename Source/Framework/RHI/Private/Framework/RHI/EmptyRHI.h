@@ -14,8 +14,8 @@ namespace ob::rhi {
 	class EmptyRHI : public RHI {
 	public:
 
-		EmptyRHI(GraphicObjectManager& manager)
-			: RHI(manager)
+		EmptyRHI(GraphicObjectManager& manager,RHIConfig* config)
+			: RHI(manager,config)
 		{
 
 		}

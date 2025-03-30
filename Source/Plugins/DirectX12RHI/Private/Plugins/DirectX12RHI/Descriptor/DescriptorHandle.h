@@ -38,6 +38,8 @@ namespace ob::rhi::dx12 {
         D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const;
         D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0)const;
 
+        u32 getBindlessIndex(s32 index = 0)const;
+
     private:
 
         const TLSFBlock* m_pBlock;
