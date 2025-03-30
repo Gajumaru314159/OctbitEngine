@@ -468,7 +468,7 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      シェーダリソースビューを生成
+	//! @brief      SRVを生成
 	//@―---------------------------------------------------------------------------
 	void TextureImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
@@ -522,6 +522,71 @@ namespace ob::rhi::dx12 {
 		}
 
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      UAVを生成
+	//@―---------------------------------------------------------------------------
+	void TextureImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const {
+
+		OB_NOTIMPLEMENTED();
+
+		D3D12_UNORDERED_ACCESS_VIEW_DESC texDesc = {};
+		texDesc.Format = m_resource->GetDesc().Format;
+
+		if (TextureFormatUtility::HasDepth(m_desc.format)) {
+			texDesc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
+		}
+
+		switch (m_desc.type) {
+		case TextureType::Texture1D:
+			if (m_desc.arrayNum) {
+				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1DARRAY;
+				texDesc.Texture1DArray.MipSlice = slice;
+				texDesc.Texture1DArray.FirstArraySlice = 0;
+				texDesc.Texture1DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+			}
+			else {
+				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1D;
+				texDesc.Texture1D.MipSlice = slice;
+			}
+			break;
+		case TextureType::Texture2D:
+			if (1 < m_desc.arrayNum) {
+				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+				texDesc.Texture2DArray.MipSlice = slice;
+				texDesc.Texture2DArray.MipSlice = slice;
+				texDesc.Texture2DArray.FirstArraySlice = 0;
+				texDesc.Texture2DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+				texDesc.Texture2DArray.PlaneSlice = 0;
+			}
+			else {
+				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+				texDesc.Texture2D.MipSlice = slice;
+				texDesc.Texture2D.PlaneSlice = 0;
+			}
+			break;
+		case TextureType::Texture3D:
+			if (1 < m_desc.arrayNum) {
+				OB_ABORT("Texture3Dは配列にできません。");
+			}
+			else {
+				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE3D;
+				texDesc.Texture3D.MipSlice = slice;
+				texDesc.Texture3D.FirstWSlice = 0;
+				texDesc.Texture3D.WSize = 0;
+			}
+			break;
+		case TextureType::Cube:
+			OB_ABORT("TextureCubeはUAVに使用できません");
+			break;
+		default:
+			OB_ABORT("不明なテクスチャタイプ");
+			break;
+		}
+
+		// TODO pCounterResource の調査
+		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &texDesc, handle);
 	}
 
 	//@―---------------------------------------------------------------------------

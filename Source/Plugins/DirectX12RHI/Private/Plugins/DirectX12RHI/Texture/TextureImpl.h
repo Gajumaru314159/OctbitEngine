@@ -131,9 +131,16 @@ namespace ob::rhi::dx12 {
         void clear(ID3D12GraphicsCommandList* cmdList);
 
         //@―---------------------------------------------------------------------------
-        //! @brief      シェーダリソースビューを生成
+        //! @brief      SRVを生成
         //@―---------------------------------------------------------------------------
         void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
+
+        //@―---------------------------------------------------------------------------
+        //! @brief      UAVを生成
+        //@―---------------------------------------------------------------------------
+        private:
+        void createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const;
+        public:
 
         //@―---------------------------------------------------------------------------
         //! @brief      遷移バリアを追加
@@ -154,6 +161,8 @@ namespace ob::rhi::dx12 {
         RenderTextureDesc       m_renderDesc;   //!< 定義
 
         ComPtr<ID3D12Resource>  m_resource;     //!< リソース
+
+        // TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
         DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル
         DescriptorHandle        m_hDSV;         //!< デスクリプタハンドル
 

@@ -155,15 +155,59 @@ namespace ob::rhi::dx12 {
 
 
 	//@―---------------------------------------------------------------------------
-	//! @brief      定数バッファ―ビューを生成
+	//! @brief      CBVを生成
 	//@―---------------------------------------------------------------------------
 	void BufferImpl::createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
-		D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-		cbvDesc.BufferLocation = m_resource->GetGPUVirtualAddress();
-		cbvDesc.SizeInBytes = (UINT)m_desc.bufferSize;
+		D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
+		desc.BufferLocation = m_resource->GetGPUVirtualAddress();
+		desc.SizeInBytes = (UINT)m_desc.bufferSize;
 
-		m_device.getNative()->CreateConstantBufferView(&cbvDesc, handle);
+		m_device.getNative()->CreateConstantBufferView(&desc, handle);
+
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      SRVを生成
+	//@―---------------------------------------------------------------------------
+	void BufferImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
+
+		bool isStructuredBuffer = 0 < m_desc.bufferStride;
+
+		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		desc.Buffer.FirstElement = 0;
+		desc.Buffer.NumElements = m_desc.bufferSize;
+		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.bufferStride : 0;
+		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
+
+		m_device.getNative()->CreateShaderResourceView(m_resource.Get(), &desc, handle);
+
+	}
+
+
+	//@―---------------------------------------------------------------------------
+	//! @brief      UAVを生成
+	//@―---------------------------------------------------------------------------
+	void BufferImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
+
+		OB_NOTIMPLEMENTED();
+
+		bool isStructuredBuffer = 0 < m_desc.bufferStride;
+
+		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
+		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+		desc.Buffer.FirstElement = 0;
+		desc.Buffer.NumElements = m_desc.bufferSize;
+		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.bufferStride : 0;
+		desc.Buffer.CounterOffsetInBytes = 0; // 何？
+		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
+
+		// TODO pCounterResource の調査
+		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &desc, handle);
 
 	}
 
