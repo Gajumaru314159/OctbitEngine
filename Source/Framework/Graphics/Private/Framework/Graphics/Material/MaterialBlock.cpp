@@ -14,17 +14,17 @@
 
 namespace ob::graphics {
 
-    struct BufferHandle {
+    struct alignas(16) BufferHandle {
         u32 index;
 
 		bool operator==(const BufferHandle& rhs)const { return index == rhs.index; }
     };
-    struct TextureHandle {
+    struct alignas(16) TextureHandle {
         u32 index;
 
         bool operator==(const TextureHandle& rhs)const { return index == rhs.index; }
     };
-    struct SamplerHandle {
+    struct alignas(16) SamplerHandle {
         u32 index;
 
         bool operator==(const SamplerHandle& rhs)const { return index == rhs.index; }
