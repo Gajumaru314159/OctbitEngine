@@ -132,6 +132,8 @@ namespace ob::rhi::dx12 {
             getEntryW(desc.stage),
             L"-T",
             getShadingModelW(desc.stage),
+            L"-encoding",
+            L"utf8",
         };
 
         for (auto& macro : desc.macros) {
@@ -148,18 +150,32 @@ namespace ob::rhi::dx12 {
 		for (auto& arg : args) {
 			pargs.push_back(arg.data());
 		}
+        
+
+        auto printArgs = [&]() {
+            WString wargsText;
+            for (auto& arg : args) {
+                wargsText += L" ";
+                wargsText += arg;
+            }
+            String argsText;
+            StringEncoder::Encode(wargsText, argsText);
+            LOG_INFO("{}",argsText);
+        };
 
         // コンパイル
+        // TODO スレッド安全性の確認
         ComPtr<IDxcResult> resultBlob;
         result = device.getShaderCompiler()->Compile(
             &buffer,
             pargs.data(),
             pargs.size(),
-            NULL,
+            device.getIncludeHandler().Get(),
             IID_PPV_ARGS(&resultBlob)
         );
         if (FAILED(result)) {
             Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            printArgs();
             return;
         }
 
@@ -169,10 +185,12 @@ namespace ob::rhi::dx12 {
         result = resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName);
         if (FAILED(result)) {
             Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            printArgs();
             return;
         }
         if (errors->GetBufferSize() != 0) {
             LOG_ERROR_EX("Graphic", "{}", StringView(errors->GetStringPointer(), errors->GetStringLength()));
+            printArgs();
             return;
         }
 
@@ -180,6 +198,7 @@ namespace ob::rhi::dx12 {
         result = resultBlob->GetResult(m_shaderBolb2.ReleaseAndGetAddressOf());
         if (FAILED(result)) {
             Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            printArgs();
             return;
         }
 

@@ -170,6 +170,12 @@ namespace ob::rhi::dx12 {
 
 
 		//@―---------------------------------------------------------------------------
+		//! @brief  シェーダーインクルードハンドラーを取得
+		//@―---------------------------------------------------------------------------
+		ComPtr<IDxcIncludeHandler>& getIncludeHandler();
+
+
+		//@―---------------------------------------------------------------------------
 		//! @brief  システム・コマンド・キューを取得
 		//@―---------------------------------------------------------------------------
 		ComPtr<ID3D12CommandQueue>& getCommandQueue();
@@ -220,6 +226,8 @@ namespace ob::rhi::dx12 {
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
 		ComPtr<IDxcCompiler3>				m_shaderCompiler;
+		ComPtr<IDxcUtils>					m_shaderUtils;
+		ComPtr<IDxcIncludeHandler>			m_shaderIncludeHandler;
 
 		UPtr<class CommandQueue>			m_commandQueue;
 
@@ -263,6 +271,13 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	inline ComPtr<IDxcCompiler3>& DirectX12RHI::getShaderCompiler() {
 		return m_shaderCompiler;
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  シェーダーインクルードハンドラーを取得
+	//@―---------------------------------------------------------------------------
+	inline ComPtr<IDxcIncludeHandler>& DirectX12RHI::getIncludeHandler() {
+		return m_shaderIncludeHandler;
 	}
 
 }

@@ -430,7 +430,20 @@ namespace ob::rhi::dx12 {
 
 		result = ::DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&m_shaderCompiler));
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, "D3D12CreateDevice()");
+			Utility::OutputFatalLog(result, "DxcCreateInstance()");
+			return false;
+		}
+
+		result = ::DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&m_shaderUtils));
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "DxcCreateInstance()");
+			return false;
+		}
+
+		// NOTE FileIOをフックする場合は、IDxcIncludeHandlerを継承したカスタムハンドラーを生成する
+		result = m_shaderUtils->CreateDefaultIncludeHandler(m_shaderIncludeHandler.GetAddressOf());
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "CreateDefaultIncludeHandler()");
 			return false;
 		}
 
