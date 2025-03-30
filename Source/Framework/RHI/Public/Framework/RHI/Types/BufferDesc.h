@@ -70,7 +70,7 @@ namespace ob::rhi {
 		BufferType      bufferType;     //!< バッファタイプ
 		ResourceUsage   usage;          //!< リソース使用法
 		u64             bufferSize;     //!< バッファサイズ
-		u32             bufferStride;   //!< ストライブ幅
+		u32             bufferStride;   //!< ストライド幅 StructuredBufferで使用する場合structureのサイズを設定する。
 		BufferFlags     bufferFlags;    //!< バッファフラグ
 		BindFlags       bindFlags;      //!< バインドフラグ
 
