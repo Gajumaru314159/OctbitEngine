@@ -167,16 +167,16 @@ PsOut PS_Main(PsIn i){
 	MaterialBlockDesc desc;
 	desc.name = "TestBlock";
 	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
-	desc.colors = { "Color" };
+	desc.vectors = { "Color" };
 	desc.textures = { "Texture" };
 	desc.buffers = { "Buffer" };
 
 	MaterialBlock block(desc);
-	block.setFloat("Speed", 3.f);
-	block.setFloat("Width", window.getSize().x);
-	block.setFloat("Height", window.getSize().y);
+	block.setScalar("Speed", 3.f);
+	block.setScalar("Width", window.getSize().x);
+	block.setScalar("Height", window.getSize().y);
 	block.setTexture("Texture", Texture::Check(),Sampler::Default());
-	block.setColor("Color", Color::Cyan);
+	block.setVector("Color", Color::Cyan);
 
 	auto start = DateTime::Now();
 
@@ -210,8 +210,8 @@ PsOut PS_Main(PsIn i){
 
 		if (endTime < time)break;
 
-		block.setFloat("Time", time);
-		block.setFloat("Progress", time / endTime);
+		block.setScalar("Time", time);
+		block.setScalar("Progress", time / endTime);
 
 		commandList->begin();
 
@@ -420,16 +420,16 @@ PsOut PS_Main(PsIn i){
 	MaterialBlockDesc desc;
 	desc.name = "TestBlock";
 	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
-	desc.colors = { "Color" };
+	desc.vectors = { "Color" };
 	desc.textures = { "Texture" };
 	desc.buffers = { "Buffer" };
 
 	MaterialBlock block(desc);
-	block.setFloat("Speed", 3.f);
-	block.setFloat("Width", window.getSize().x);
-	block.setFloat("Height", window.getSize().y);
+	block.setScalar("Speed", 3.f);
+	block.setScalar("Width", window.getSize().x);
+	block.setScalar("Height", window.getSize().y);
 	block.setTexture("Texture", Texture::Check(), Sampler::Default());
-	block.setColor("Color", Color::Cyan);
+	block.setVector("Color", Color::Cyan);
 
 	auto start = DateTime::Now();
 
@@ -463,8 +463,8 @@ PsOut PS_Main(PsIn i){
 
 		//if (endTime < time)break;
 
-		block.setFloat("Time", time);
-		block.setFloat("Progress", time / endTime);
+		block.setScalar("Time", time);
+		block.setScalar("Progress", time / endTime);
 
 		commandList->begin();
 

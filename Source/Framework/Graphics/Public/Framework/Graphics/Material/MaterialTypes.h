@@ -12,9 +12,9 @@
 namespace ob::graphics {   
 
 	enum class MaterialPropertyType {
-		Int,
-		Float,
-		Color,
+		Integer,
+		Scalar,
+		Vector,
 		Matrix,
 		Texture,
 		Buffer

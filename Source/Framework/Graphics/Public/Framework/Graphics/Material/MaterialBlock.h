@@ -12,8 +12,9 @@ namespace ob::graphics {
     //! @brief  マテリアル定義
     struct MaterialBlockDesc {
         String          name;
+        Vector<String>  integers;
         Vector<String>  scalars;
-        Vector<String>  colors;
+        Vector<String>  vectors;
         Vector<String>  matrices;
         Vector<String>  textures;
         Vector<String>  buffers;
@@ -34,9 +35,9 @@ namespace ob::graphics {
         //! @brief  マテリアルパラメータが存在するか
         //! @{
         bool hasProprty(StringView name, MaterialPropertyType type)const;
-        bool hasInt(StringView name)const;
-        bool hasFloat(StringView name)const;
-        bool hasColor(StringView name)const;
+        bool hasInteger(StringView name)const;
+        bool hasScalar(StringView name)const;
+        bool hasVector(StringView name)const;
         bool hasMatrix(StringView name)const;
         bool hasTexture(StringView name)const;
         bool hasBuffer(StringView name)const;
@@ -44,8 +45,9 @@ namespace ob::graphics {
 
         //! @brief  マテリアルパラメータを設定
         //! @{
-        void setFloat(StringView name, f32 value);
-        void setColor(StringView name, Color value);
+        void setInteger(StringView name, s32 value);
+        void setScalar(StringView name, f32 value);
+        void setVector(StringView name, Color value);
         void setMatrix(StringView name, const Matrix& value);
         void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler);
         void setBuffer(StringView name, const Ref<Buffer>& value);
@@ -92,9 +94,9 @@ namespace ob::graphics {
 
 
 
-    inline bool MaterialBlock::hasInt(StringView name)const { return hasProprty(name, MaterialPropertyType::Int); }
-    inline bool MaterialBlock::hasFloat(StringView name)const { return hasProprty(name, MaterialPropertyType::Float); }
-    inline bool MaterialBlock::hasColor(StringView name)const { return hasProprty(name, MaterialPropertyType::Color); }
+    inline bool MaterialBlock::hasInteger(StringView name)const { return hasProprty(name, MaterialPropertyType::Integer); }
+    inline bool MaterialBlock::hasScalar(StringView name)const { return hasProprty(name, MaterialPropertyType::Scalar); }
+    inline bool MaterialBlock::hasVector(StringView name)const { return hasProprty(name, MaterialPropertyType::Vector); }
     inline bool MaterialBlock::hasMatrix(StringView name)const { return hasProprty(name, MaterialPropertyType::Matrix); }
     inline bool MaterialBlock::hasTexture(StringView name)const { return hasProprty(name, MaterialPropertyType::Texture); }
     inline bool MaterialBlock::hasBuffer(StringView name)const { return hasProprty(name, MaterialPropertyType::Buffer); }

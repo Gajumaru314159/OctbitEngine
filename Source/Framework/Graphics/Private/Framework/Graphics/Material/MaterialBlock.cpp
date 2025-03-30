@@ -58,15 +58,23 @@ namespace ob::graphics {
 
         // プロパティ名とオフセットを対応
         s32 bufferSize = 0;
+
+        for (auto& name : desc.integers) {
+            auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Integer,bufferSize });
+            if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
+            bufferSize += sizeof(s32);
+        }
+        bufferSize = align_up(bufferSize, alignment);
+
         for (auto& name : desc.scalars) {
-            auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Float,bufferSize });
+            auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Scalar,bufferSize });
             if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
             bufferSize += sizeof(f32);
         }
         bufferSize = align_up(bufferSize, alignment);
 
-        for (auto& name : desc.colors) {
-            auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Color,bufferSize });
+        for (auto& name : desc.vectors) {
+            auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Vector,bufferSize });
             if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
             bufferSize += sizeof(Color);
         }
@@ -241,13 +249,18 @@ namespace ob::graphics {
     }
 
     //! @brief  Floatプロパティを設定
-    void MaterialBlock::setFloat(StringView name, f32 value) {
-        setValueProprty(name, MaterialPropertyType::Float, value);
+    void MaterialBlock::setInteger(StringView name, s32 value) {
+        setValueProprty(name, MaterialPropertyType::Scalar, value);
+    }
+
+    //! @brief  Floatプロパティを設定
+    void MaterialBlock::setScalar(StringView name, f32 value) {
+        setValueProprty(name, MaterialPropertyType::Scalar, value);
     }
 
     //! @brief  Colorプロパティを設定
-    void MaterialBlock::setColor(StringView name, Color value) {
-        setValueProprty(name, MaterialPropertyType::Color, value);
+    void MaterialBlock::setVector(StringView name, Color value) {
+        setValueProprty(name, MaterialPropertyType::Vector, value);
     }
 
     //! @brief  Matrixプロパティを設定
