@@ -49,7 +49,7 @@ TEST(Bindless, Handle) {
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
-	windowDesc.title = "Graphic Test2";
+	windowDesc.title = "Bindless Handle";
 	platform::Window window(windowDesc);
 	window.show();
 
@@ -165,7 +165,7 @@ TEST(Bindless, Handle) {
 
 	auto start = DateTime::Now();
 
-	f32 endTime = 30.0f;
+	f32 endTime = 5.0f;
 
 	while (true) {
 

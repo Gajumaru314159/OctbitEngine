@@ -45,7 +45,7 @@ TEST(MaterialBlock, Bindfull) {
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
-	windowDesc.title = "Graphic Test";
+	windowDesc.title = "MaterialBlock Bindfull";
 	platform::Window window(windowDesc);
 	window.show();
 
@@ -200,7 +200,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 3.0f;
+	f32 endTime = 5.0f;
 
 	while (true) {
 
@@ -284,7 +284,7 @@ TEST(MaterialBlock, Bindless) {
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
-	windowDesc.title = "Graphic Test2";
+	windowDesc.title = "MaterialBlock Bindless";
 	platform::Window window(windowDesc);
 	window.show();
 
@@ -453,7 +453,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 30.0f;
+	f32 endTime = 5.0f;
 
 	while (true) {
 
