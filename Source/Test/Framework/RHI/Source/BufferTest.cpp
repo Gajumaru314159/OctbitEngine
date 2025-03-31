@@ -13,8 +13,6 @@ class BufferTest : public RHITestBase {};
 
 TEST_F(BufferTest, Create) {
 
-	return;
-
 	// bufferType
 	for (auto type : magic_enum::enum_values<BufferType>()) {
 

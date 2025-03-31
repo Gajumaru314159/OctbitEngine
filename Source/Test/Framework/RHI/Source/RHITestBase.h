@@ -20,7 +20,7 @@ protected:
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		rhi::RegisterRHIService(injector);
 
-		//m_config.enableDebugLayer = true;
+		// m_config.enableDebugLayer = true;
 		injector.bind(m_config);
 
 		injector.create<RHI>(m_container);

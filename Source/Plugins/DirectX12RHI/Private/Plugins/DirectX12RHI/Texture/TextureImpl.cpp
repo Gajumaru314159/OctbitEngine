@@ -95,6 +95,10 @@ namespace ob::rhi::dx12 {
 			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size=({},{})]", size.width, size.height);
 			return;
 		}
+		if (m_desc.format == TextureFormat::Unknown) {
+			LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", m_desc.name);
+			return;
+		}
 
 		auto format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
@@ -326,7 +330,11 @@ namespace ob::rhi::dx12 {
 	void TextureImpl::createRenderTexture() {
 
 		if (m_desc.size.width <= 0 || m_desc.size.height <= 0) {
-			LOG_ERROR("RenderTextureの生成に失敗。サイズが不正です。[size=({},{})]", m_desc.size.width, m_desc.size.height);
+			LOG_ERROR("RenderTextureの生成に失敗。サイズが不正です。[[name={},size=({},{})]", m_desc.name, m_desc.size.width, m_desc.size.height);
+			return;
+		}
+		if (m_desc.format == TextureFormat::Unknown) {
+			LOG_ERROR("RenderTextureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", m_desc.name);
 			return;
 		}
 
