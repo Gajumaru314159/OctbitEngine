@@ -417,7 +417,7 @@ namespace ob::rhi::dx12 {
 			m_bindedTexture = texture;
 
 			if (m_bindedTexture) {
-				m_bindedTextureTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+				m_bindedTextureTable = DescriptorTable::Create(DescriptorRangeType::SRV, 1);
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
 			}
 

@@ -114,7 +114,7 @@ namespace ob::rhi::dx12 {
 		//@―---------------------------------------------------------------------------
 		//! @brief  デスクリプタ・テーブルを生成
 		//@―---------------------------------------------------------------------------
-		Ref<DescriptorTable> createDescriptorTable(DescriptorHeapType type, s32 elementNum)override;
+		Ref<DescriptorTable> createDescriptorTable(DescriptorRangeType type, s32 elementNum)override;
 
 
 

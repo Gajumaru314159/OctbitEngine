@@ -19,7 +19,15 @@ namespace ob::rhi::dx12 {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
-		m_desc.bufferSize = align_up(std::max<size_t>(m_desc.bufferSize, 1), 256);
+		if (m_desc.bufferSize == 0) {
+			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]",m_desc.name);
+			m_desc.bufferSize = 256;
+		}
+
+		if (m_desc.bufferType == BufferType::ConstantBuffer && m_desc.bufferSize % 256 != 0) {
+			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", m_desc.name,m_desc.bufferSize, align_up(m_desc.bufferSize,256));
+			m_desc.bufferSize = align_up(m_desc.bufferSize, 256);
+		}
 
 		HRESULT result;
 
@@ -34,7 +42,7 @@ namespace ob::rhi::dx12 {
 			&heapprop,
 			D3D12_HEAP_FLAG_NONE,
 			&resdesc,
-			D3D12_RESOURCE_STATE_GENERIC_READ,
+			D3D12_RESOURCE_STATE_COMMON, // D3D12_RESOURCE_STATE_GENERIC_READ,
 			nullptr,
 			IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
 
@@ -176,10 +184,11 @@ namespace ob::rhi::dx12 {
 		bool isStructuredBuffer = 0 < m_desc.bufferStride;
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
-		desc.Format = DXGI_FORMAT_UNKNOWN;
+		desc.Format = DXGI_FORMAT_R32_TYPELESS;
 		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
+		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = m_desc.bufferSize;
+		desc.Buffer.NumElements = m_desc.bufferSize/4;
 		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.bufferStride : 0;
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
 

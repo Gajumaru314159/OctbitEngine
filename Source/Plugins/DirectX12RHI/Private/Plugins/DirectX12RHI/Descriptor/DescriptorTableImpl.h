@@ -44,7 +44,7 @@ namespace ob::rhi::dx12 {
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
         //@―---------------------------------------------------------------------------
-        DescriptorTableImpl(DirectX12RHI& device,DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum);
+        DescriptorTableImpl(DirectX12RHI& device,DescriptorHeap& heap,DescriptorRangeType type, s32 elementNum);
 
 
 		//@―---------------------------------------------------------------------------
@@ -91,7 +91,7 @@ namespace ob::rhi::dx12 {
 
     private:
 		DirectX12RHI&		m_device;
-		DescriptorHeapType	m_type;
+		DescriptorRangeType	m_type;
 		String				m_name;
         DescriptorHandle	m_handle;
 

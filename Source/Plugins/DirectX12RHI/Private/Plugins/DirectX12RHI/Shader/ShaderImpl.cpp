@@ -134,6 +134,8 @@ namespace ob::rhi::dx12 {
             getShadingModelW(desc.stage),
             L"-encoding",
             L"utf8",
+            L"/Zi",
+            L"-Qembed_debug"
         };
 
         for (auto& macro : desc.macros) {

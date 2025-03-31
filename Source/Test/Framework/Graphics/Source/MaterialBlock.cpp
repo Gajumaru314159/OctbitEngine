@@ -21,7 +21,7 @@ TEST(MaterialBlock, Bindfull) {
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
-	// ob::core::Logger log;
+	 ob::core::Logger log;
 
 	System::Setup();
 	

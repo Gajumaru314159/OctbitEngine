@@ -230,7 +230,7 @@ PsOut PS_Main(PsIn i) {
 			OB_ASSERT_EXPR(cmdList);
 		}
 
-		auto dt = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+		auto dt = DescriptorTable::Create(DescriptorRangeType::CBV, 1);
 		dt->setResource(0, buffer);
 
 

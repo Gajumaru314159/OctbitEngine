@@ -490,7 +490,7 @@ namespace ob::graphics {
 
 		// グラフィックリソース生成
 		m_fontTexture = rhi::Texture::Create("ImGuiFont", Size(width, height), colors);
-		m_fontTextureTable = rhi::DescriptorTable::Create(rhi::DescriptorHeapType::CBV_SRV_UAV, 1);
+		m_fontTextureTable = rhi::DescriptorTable::Create(rhi::DescriptorRangeType::SRV, 1);
 		m_fontTextureTable->setResource(0, m_fontTexture);
 
 		// システム登録
@@ -700,7 +700,7 @@ namespace ob::graphics {
 			desc.name = "ImGuiConstant";
 			m_constantBuffer = Buffer::Create(desc);
 
-			m_constantTable = DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+			m_constantTable = DescriptorTable::Create(DescriptorRangeType::CBV, 1);
 			m_constantTable->setResource(0, m_constantBuffer);
 		}
 		{

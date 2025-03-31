@@ -7,6 +7,7 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Framework/RHI/Types/RootSignatureDesc.h>
 
 namespace ob::rhi {
 
@@ -19,7 +20,7 @@ namespace ob::rhi {
         //! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
         //! @param name         デバッグ名
-        static Ref<DescriptorTable> Create(DescriptorHeapType type, s32 elementNum);
+        static Ref<DescriptorTable> Create(DescriptorRangeType type, s32 elementNum);
 
     public:
 

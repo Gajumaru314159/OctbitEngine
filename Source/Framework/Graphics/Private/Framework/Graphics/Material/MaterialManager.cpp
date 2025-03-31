@@ -46,13 +46,13 @@ namespace ob::graphics {
 		}
 
 		{
-			m_bufferTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+			m_bufferTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, 1);
 			OB_ASSERT_EXPR(m_bufferTable);
 			m_bufferTable->setResource(0, m_buffer);
 		}
 
 		{
-			m_textureTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, GLOBAL_TEXTURE_MAX);
+			m_textureTable = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, GLOBAL_TEXTURE_MAX);
 
 			// サンプラのパターン数は限られる
 			///m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, GLOBAL_TEXTURE_MAX);

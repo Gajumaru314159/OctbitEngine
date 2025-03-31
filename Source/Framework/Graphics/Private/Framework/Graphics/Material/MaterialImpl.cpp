@@ -76,21 +76,21 @@ namespace ob::graphics {
 
 		// テーブル生成(バッファ)
 		if (0 < bufferSize) {
-			m_dynamicTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+			m_dynamicTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, 1);
 			OB_ASSERT_EXPR(m_dynamicTable);
 			m_dynamicTable->setResource(0, m_buffer);
 		}
 
 		// テーブル生成(テクスチャ)
 		if (desc.textureProperties.size()) {
-			m_textureTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, desc.textureProperties.size());
-			m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, desc.textureProperties.size());
+			m_textureTable = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, desc.textureProperties.size());
+			m_samplerTable = rhi::DescriptorTable::Create(DescriptorRangeType::Sampler, desc.textureProperties.size());
 			OB_ASSERT_EXPR(m_textureTable);
 			OB_ASSERT_EXPR(m_samplerTable);
 		}
 		// テーブル生成(バッファ)
 		if (desc.bufferProperties.size()) {
-			m_bufferTable = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, desc.bufferProperties.size());
+			m_bufferTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, desc.bufferProperties.size());
 			OB_ASSERT_EXPR(m_bufferTable);
 		}
 

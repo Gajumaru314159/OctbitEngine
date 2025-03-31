@@ -69,7 +69,7 @@ namespace ob::rhi {
         virtual Ref<Shader>         compileShader(const ShaderCompileDesc& desc) { return nullptr; }
         virtual Ref<Shader>         loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
 
-        virtual Ref<DescriptorTable>createDescriptorTable(DescriptorHeapType type, s32 elementNum) { return nullptr; }
+        virtual Ref<DescriptorTable>createDescriptorTable(DescriptorRangeType type, s32 elementNum) { return nullptr; }
 
         //virtual IFence*           createFence(const FenceDesc&);
 

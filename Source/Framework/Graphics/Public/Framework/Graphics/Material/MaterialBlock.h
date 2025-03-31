@@ -90,6 +90,9 @@ namespace ob::graphics {
         Ref<DescriptorTable>    m_tableUAV;
         Ref<DescriptorTable>    m_tableSampler;
 
+        u32 m_handle = 0;
+        u32 m_handle2 = 0;
+
     };
 
 

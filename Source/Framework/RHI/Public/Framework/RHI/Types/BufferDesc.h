@@ -97,6 +97,7 @@ namespace ob::rhi {
 		{}
 
 		//! @brief  定数バッファ用初期化
+		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc Constant(
 			u64             bufferSize,
 			BindFlags       bindFlags,
@@ -107,7 +108,7 @@ namespace ob::rhi {
 			return BufferDesc(
 				BufferType::ConstantBuffer,
 				usage,
-				bufferSize,
+				align_up(bufferSize,256),
 				0,
 				bufferFlags,
 				bindFlags

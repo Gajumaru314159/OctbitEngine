@@ -21,7 +21,7 @@ namespace ob::rhi::dx12
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
 	//@―---------------------------------------------------------------------------
-	DescriptorTableImpl::DescriptorTableImpl(DirectX12RHI& device, DescriptorHeap& heap,DescriptorHeapType type, s32 elementNum)
+	DescriptorTableImpl::DescriptorTableImpl(DirectX12RHI& device, DescriptorHeap& heap, DescriptorRangeType type, s32 elementNum)
 		: m_device(device)
 		, m_type(type)
 	{
@@ -58,7 +58,7 @@ namespace ob::rhi::dx12
 	//! @brief  バッファリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
-		if (m_type != DescriptorHeapType::CBV_SRV_UAV) {
+		if (m_type == DescriptorRangeType::Sampler) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
@@ -76,7 +76,9 @@ namespace ob::rhi::dx12
 
 		if (auto p = m_elemetns[index]->buffer.cast<BufferImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
-			p->createCBV(handle);
+			if (m_type == DescriptorRangeType::CBV)p->createCBV(handle);
+			if (m_type == DescriptorRangeType::SRV)p->createSRV(handle);
+			// if (m_type == DescriptorRangeType::UAV)p->createUAV(handle);
 		}
 		return true;
 	}
@@ -86,7 +88,7 @@ namespace ob::rhi::dx12
 	//! @brief  テクスチャリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Texture>& resource) {
-		if (m_type != DescriptorHeapType::CBV_SRV_UAV) {
+		if (m_type == DescriptorRangeType::Sampler || m_type == DescriptorRangeType::CBV) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
@@ -109,7 +111,9 @@ namespace ob::rhi::dx12
 				[this, index]() {
 					if (auto p = m_elemetns[index]->texture.cast<TextureImpl>()) {
 						auto handle = m_handle.getCpuHandle(index);
-						p->createSRV(handle);
+
+						if (m_type == DescriptorRangeType::SRV)p->createSRV(handle);
+						//if (m_type == DescriptorRangeType::UAV)p->createUAV(handle);
 					}
 				}
 			);
@@ -121,7 +125,7 @@ namespace ob::rhi::dx12
 	//! @brief  サンプラーリソースを設定
 	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Sampler>& resource) {
-		if (m_type != DescriptorHeapType::Sampler) {
+		if (m_type != DescriptorRangeType::Sampler) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}

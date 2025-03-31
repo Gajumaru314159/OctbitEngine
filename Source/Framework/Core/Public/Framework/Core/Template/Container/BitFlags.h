@@ -35,6 +35,16 @@ namespace ob::core {
 		// オペレータ
 		//===============================================================
 
+		//! @brief 等価比較
+		bool operator==(const BitFlags<TEnum>& rhs) const {
+			return m_bits == rhs.m_bits;
+		}
+
+		//! @brief 非等価比較
+		bool operator!=(const BitFlags<TEnum>& rhs) const {
+			return m_bits != rhs.m_bits;
+		}		
+
 		//! @brief コピー代入演算子
 		BitFlags<TEnum>& operator=(const BitFlags<TEnum>& rhs) {
 			m_bits = rhs.m_bits;

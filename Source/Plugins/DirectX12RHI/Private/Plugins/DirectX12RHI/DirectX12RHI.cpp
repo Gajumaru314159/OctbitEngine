@@ -180,9 +180,11 @@ namespace ob::rhi::dx12 {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタ・テーブルを生成
 	//@―---------------------------------------------------------------------------
-	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
-		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this,*m_descriptorHeaps[type], type, elementNum);
+	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorRangeType type, s32 elementNum) {
+		DescriptorHeapType heapType = type == DescriptorRangeType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
+		auto itr = m_descriptorHeaps.find(heapType);
+		if (itr == m_descriptorHeaps.end())return nullptr;
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this,*itr->second, type, elementNum);
 	}
 
 

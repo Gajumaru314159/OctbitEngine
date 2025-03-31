@@ -13,7 +13,7 @@ namespace ob::rhi {
     //! @param type         デスクリプタに設定するリソースの種類
     //! @param elementNum   要素数
     //! @param name         デバッグ名
-    Ref<DescriptorTable> DescriptorTable::Create(DescriptorHeapType type, s32 elementNum) {
+    Ref<DescriptorTable> DescriptorTable::Create(DescriptorRangeType type, s32 elementNum) {
         if (auto rhi= RHI::Get()) {
             return rhi->createDescriptorTable(type, elementNum);
         }

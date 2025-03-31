@@ -16,16 +16,19 @@ namespace ob::graphics {
 
     struct alignas(16) BufferHandle {
         u32 index;
+        u32 padding[3] = {0,0,0};
 
 		bool operator==(const BufferHandle& rhs)const { return index == rhs.index; }
     };
     struct alignas(16) TextureHandle {
         u32 index;
+        u32 padding[3] = { 0,0,0 };
 
         bool operator==(const TextureHandle& rhs)const { return index == rhs.index; }
     };
     struct alignas(16) SamplerHandle {
         u32 index;
+        u32 padding[3] = { 0,0,0 };
 
         bool operator==(const SamplerHandle& rhs)const { return index == rhs.index; }
     };
@@ -159,7 +162,7 @@ namespace ob::graphics {
     void MaterialBlock::initializeBindlessDescriptorTables([[maybe_unused]] const MaterialBlockDesc& desc) {
         using namespace ob::rhi;
 
-        m_tableCBV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, 1);
+        m_tableCBV = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, 1);
         m_tableCBV->setResource(0, m_parameterBuffer);
 
 
@@ -169,9 +172,9 @@ namespace ob::graphics {
         size_t samplerNum = desc.textures.size();
 
         //m_tableCBV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, cbvNum);
-        m_tableSRV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, srvNum);
-        m_tableUAV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, uavNum);
-        m_tableSampler = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, samplerNum);
+        m_tableSRV = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, srvNum);
+        m_tableUAV = rhi::DescriptorTable::Create(DescriptorRangeType::UAV, uavNum);
+        m_tableSampler = rhi::DescriptorTable::Create(DescriptorRangeType::Sampler, samplerNum);
 
         // テーブル初期化
         {
@@ -198,10 +201,10 @@ namespace ob::graphics {
         size_t uavNum = 0;
         size_t samplerNum = desc.textures.size();
 
-        m_tableCBV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, cbvNum);
-        m_tableSRV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, srvNum);
-        m_tableUAV = rhi::DescriptorTable::Create(DescriptorHeapType::CBV_SRV_UAV, uavNum);
-        m_tableSampler = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, samplerNum);
+        m_tableCBV = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, cbvNum);
+        m_tableSRV = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, srvNum);
+        m_tableUAV = rhi::DescriptorTable::Create(DescriptorRangeType::UAV, uavNum);
+        m_tableSampler = rhi::DescriptorTable::Create(DescriptorRangeType::Sampler, samplerNum);
 
         // テーブル初期化
         {
@@ -359,6 +362,8 @@ namespace ob::graphics {
 			m_hasChanged = false;
         }
 
+		m_handle = m_tableCBV->getBindlessIndex(0);
+
         FixedVector < SetDescriptorTableParam, 4> params;
         if (0 <= cbvSlot) {
             auto& param = params.emplace_back();
@@ -384,7 +389,17 @@ namespace ob::graphics {
             }
         }
 
-        commandList->setRootDesciptorTable(params.data(), params.size());
+
+        if (useBindless) {
+            SetRootConstantsParam param;
+            param.slot = cbvSlot;
+            param.blob = BlobView(&m_handle,sizeof(u32));
+            param.offset = 0;
+            commandList->setRootConstant(param);
+        } else {
+            commandList->setRootDesciptorTable(params.data(), params.size());
+        }
+
     }
 
 }
