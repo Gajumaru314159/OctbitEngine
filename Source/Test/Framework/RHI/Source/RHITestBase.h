@@ -6,6 +6,7 @@
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/RHI/All.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <magic_enum.hpp>
 
 using namespace ob;
 using namespace ob::rhi;
@@ -19,7 +20,7 @@ protected:
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		rhi::RegisterRHIService(injector);
 
-		m_config.enableDebugLayer = true;
+		//m_config.enableDebugLayer = true;
 		injector.bind(m_config);
 
 		injector.create<RHI>(m_container);

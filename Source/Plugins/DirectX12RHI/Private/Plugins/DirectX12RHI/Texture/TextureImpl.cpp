@@ -52,11 +52,13 @@ namespace ob::rhi::dx12 {
 			break;
 
 		case TextureType::Cube:
-			OB_NOTIMPLEMENTED();
+			LOG_ERROR("Texture::Cureは未実装です [name={}]", m_desc.name);
+			return;
 			break;
 
 		default:
-			OB_NOTIMPLEMENTED();
+			LOG_ERROR("不明なテクスチャタイプです [name={}]",m_desc.name);
+			return;
 			break;
 		}
 
@@ -72,7 +74,8 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result,"ID3D12Device::CreateCommittedResource()");
+			Utility::OutputErrorLog(result,"ID3D12Device::CreateCommittedResource()");
+			return;
 		}
 
 		Utility::SetName(m_resource.Get(), getName());
@@ -122,7 +125,7 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
+			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
 		}
 
 		result = m_resource->WriteToSubresource(
@@ -373,7 +376,8 @@ namespace ob::rhi::dx12 {
 			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
+			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
+			return;
 		}
 
 		// RTV生成
