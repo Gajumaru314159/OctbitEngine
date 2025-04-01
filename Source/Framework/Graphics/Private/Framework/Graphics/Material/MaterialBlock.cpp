@@ -154,7 +154,12 @@ namespace ob::graphics {
 		size_t uavNum = 0;
 		size_t samplerNum = m_textures.size();
 
-		// m_tableCBV Bindless時はパラメーターはByteAddressBufferで渡されるのでSRVを使用する
+		// https://github.com/sebbbi/perftest
+		// によるとConstantBufferでもByteAddressBufferでも同じ速度が出るらしい
+		// なのでMaterialBlockではCBV(ConstantBuffer)は使用せず、SRV(ByteAddressBuffer/StructuredBuffer)を使用する。
+		// 唯一の例外はBindless時にValuesBufferのBufferHandleをRootConstantで渡すとき。
+		// C++側はRootSignatureでConstantを使用し、シェーダーではb(CBV)を使用する。
+
 		m_tableSRV = DescriptorTable::Create(DescriptorRangeType::SRV, srvNum);
 		m_tableUAV = DescriptorTable::Create(DescriptorRangeType::UAV, uavNum);
 		m_tableSampler = DescriptorTable::Create(DescriptorRangeType::Sampler, samplerNum);
