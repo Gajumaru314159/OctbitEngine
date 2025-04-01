@@ -146,4 +146,13 @@
 	</Type>
 
 
+	<!--Ref-->
+	<Type Name="ob::core::Ref&lt;*&gt;">
+		<DisplayString Condition="m_ptr==nullptr">null</DisplayString>
+		<DisplayString>{*m_ptr}</DisplayString>
+		<Expand>
+			<ExpandedItem Condition="m_ptr!=nullptr">*m_ptr</ExpandedItem>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>
