@@ -17,6 +17,7 @@ namespace ob::rhi {
 
 TEST(MaterialBlock, Bindfull) {
 #pragma region
+	
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
@@ -32,6 +33,7 @@ TEST(MaterialBlock, Bindfull) {
 		graphics::RegisterGraphicsService(injector);
 
 		rhi::RHIConfig config;
+		config.enablePIX = true;
 		injector.bind(config);
 
 		struct Dependency {
@@ -81,37 +83,23 @@ TEST(MaterialBlock, Bindfull) {
 		indexBuffer->updateDirect(sizeof(indices), indices);
 	}
 
-	Ref<RootSignature> signature;
-	{
-		RootSignatureDesc desc(
-			{
-				RootParameter::Range(DescriptorRangeType::CBV,1,0),
-				RootParameter::Range(DescriptorRangeType::SRV,1,0),
-				RootParameter::Range(DescriptorRangeType::UAV,1,0),
-				RootParameter::Range(DescriptorRangeType::Sampler,1,0),
-			},
-			{}
-		);
-		desc.name = "MaterialBlock";
-		signature = RootSignature::Create(desc);
-		OB_ASSERT_EXPR(signature);
-	}
-
 	// 事前セットアップここまで
 	Ref<Shader> vs;
 	Ref<Shader> ps;
 	{
 		String code = R"(
-cbuffer Param : register(b0) {
+struct Params {
+	float4 Color;
 	float Progress;
 	float Speed;
 	float Time;
 	float Width;
 	float Height;
-	float4 Color;
 };
 Texture2D g_mainTex:register(t0);
 SamplerState g_mainSampler:register(s0);
+ByteAddressBuffer g_buffer:register(t1);
+ByteAddressBuffer g_params:register(t2);
 											
 // IN / OUT												
 struct VsIn {												
@@ -133,9 +121,10 @@ PsIn VS_Main(VsIn i) {
 	return o;
 }
 PsOut PS_Main(PsIn i){										
-	PsOut o;												
-	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(Width/16,Height/16) + float2(Time*Speed,Time*Speed))*Color;	
-	o.color.xyz *= 1 - step(i.uv.x,Progress) * step(i.uv.y,0.1);
+	PsOut o;							
+	Params params = g_params.Load<Params>(0);					
+	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(params.Width/16,params.Height/16) + float2(params.Time*params.Speed,params.Time*params.Speed))*params.Color;	
+	o.color.xyz *= 1 - step(i.uv.x,params.Progress) * step(i.uv.y,0.1);
 	return o;											        
 }																
 
@@ -143,6 +132,20 @@ PsOut PS_Main(PsIn i){
 		vs = Shader::CompileVS(code);
 		ps = Shader::CompilePS(code);
 		OB_ASSERT_EXPR(vs && ps);
+	}
+
+	Ref<RootSignature> signature;
+	{
+		RootSignatureDesc desc(
+			{
+				RootParameter::Range(DescriptorRangeType::SRV,3,0),
+				RootParameter::Range(DescriptorRangeType::Sampler,1,0),
+			},
+			{}
+			);
+		desc.name = "MaterialBlock";
+		signature = RootSignature::Create(desc);
+		OB_ASSERT_EXPR(signature);
 	}
 
 	Ref<PipelineState> pipeline;
@@ -166,10 +169,10 @@ PsOut PS_Main(PsIn i){
 
 	MaterialBlockDesc desc;
 	desc.name = "TestBlock";
-	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
-	desc.vectors = { "Color" };
 	desc.textures = { "Texture" };
 	desc.buffers = { "Buffer" };
+	desc.vectors = { "Color" };
+	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
 
 	MaterialBlock block(desc);
 	block.setScalar("Speed", 3.f);
@@ -200,7 +203,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 5.0f;
+	f32 endTime = 5;
 
 	while (true) {
 
@@ -224,7 +227,7 @@ PsOut PS_Main(PsIn i){
 		commandList->clearColors();
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0, 1,-1,3);
+		block.record(commandList, 0,-1,1);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);
@@ -258,7 +261,7 @@ TEST(MaterialBlock, Bindless) {
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
-	//ob::core::Logger log;
+	ob::core::Logger log;
 
 	System::Setup();
 
@@ -269,7 +272,9 @@ TEST(MaterialBlock, Bindless) {
 		graphics::RegisterGraphicsService(injector);
 		{
 			rhi::RHIConfig config;
+			// config.enableDebugLayer = true;
 			config.enableBindless = true;
+			config.enablePIX = true;
 			injector.bind(config);
 		}
 
@@ -307,9 +312,9 @@ TEST(MaterialBlock, Bindless) {
 	{
 		Vertex vertices[] = {
 			{Vec2(-1,-1),Vec2(0,1)},
-			{Vec2(1,-1),Vec2(1,1)},
-			{Vec2(1,1),Vec2(1,0)},
 			{Vec2(-1,1),Vec2(0,0)},
+			{Vec2(1,1),Vec2(1,0)},
+			{Vec2(1,-1),Vec2(1,1)},
 		};
 		u16 indices[] = { 0,1,2,0,2,3 };
 
@@ -320,23 +325,6 @@ TEST(MaterialBlock, Bindless) {
 		indexBuffer->updateDirect(sizeof(indices), indices);
 	}
 
-	Ref<RootSignature> signature;
-	{
-		RootSignatureDesc desc(
-			{
-				RootParameter::Range(DescriptorRangeType::CBV,1,0),
-				RootParameter::Range(DescriptorRangeType::SRV,1,0),
-				RootParameter::Range(DescriptorRangeType::UAV,1,0),
-				RootParameter::Range(DescriptorRangeType::Sampler,1,0),
-			},
-			{}
-			);
-		desc.name = "MaterialBlock";
-		desc.flags.set(RootSignatureFlag::EnableBindless, true);
-		signature = RootSignature::Create(desc);
-		OB_ASSERT_EXPR(signature);
-	}
-
 	// 事前セットアップここまで
 	Ref<Shader> vs;
 	Ref<Shader> ps;
@@ -345,21 +333,36 @@ TEST(MaterialBlock, Bindless) {
 
 struct TextureHandle {
 	uint index;
+	uint type;
+	uint padding[2];
 };
 
 struct SamplerHandle {
 	uint index;
+	uint type;
+	uint padding[2];
 };
 
-cbuffer Param : register(b0) {
+struct BufferHandle {
+	uint index;
+	uint type;
+	uint padding[2];
+};
+
+cbuffer Block : register(b0) {
+	BufferHandle ParamHandle;
+};
+
+struct Param {
+	TextureHandle MainTexture;
+	SamplerHandle MainSampler;
+	BufferHandle Buffer;
+	float4 Color;
 	float Progress;
 	float Speed;
 	float Time;
 	float Width;
 	float Height;
-	float4 Color;
-	TextureHandle MainTexture;
-	SamplerHandle MainSampler;
 };
 											
 // IN / OUT												
@@ -375,7 +378,7 @@ struct PsIn {
 struct PsOut {												
 	float4 color	:SV_TARGET0;								
 };															
-PsIn VS_Main(VsIn i) {										
+PsIn VS_Main(VsIn i) {
 	PsIn o;													
 	o.pos = float4(i.pos,0,1);					        
 	o.uv  = i.uv;
@@ -383,10 +386,12 @@ PsIn VS_Main(VsIn i) {
 }
 PsOut PS_Main(PsIn i){										
 	PsOut o;					
-	Texture2D g_mainTex = ResourceDescriptorHeap[MainTexture.index];							
-	SamplerState g_mainSampler = SamplerDescriptorHeap[MainSampler.index];							
-	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(Width/16,Height/16) + float2(Time*Speed,Time*Speed))*Color;	
-	o.color.xyz *= 1 - step(i.uv.x,Progress) * step(i.uv.y,0.1);
+	Param param = ByteAddressBuffer(ResourceDescriptorHeap[ParamHandle.index]).Load<Param>(0);
+
+	Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
+	SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							
+	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(param.Width/16,param.Height/16) + float2(param.Time*param.Speed,param.Time*param.Speed))*param.Color;	
+	o.color.xyz *= 1 - step(i.uv.x,param.Progress) * step(i.uv.y,0.1);
 	return o;											        
 }																
 
@@ -394,6 +399,15 @@ PsOut PS_Main(PsIn i){
 		vs = Shader::CompileVS(code);
 		ps = Shader::CompilePS(code);
 		OB_ASSERT_EXPR(vs && ps);
+	}
+
+	Ref<RootSignature> signature;
+	{
+		RootSignatureDesc desc({ RootParameter::Constants(16,0,0) });
+		desc.name = "MaterialBlock";
+		desc.flags.set(RootSignatureFlag::EnableBindless, true);
+		signature = RootSignature::Create(desc);
+		OB_ASSERT_EXPR(signature);
 	}
 
 	Ref<PipelineState> pipeline;
@@ -409,8 +423,6 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
-		desc.blend[0] = BlendDesc::AlphaBlend;
-		desc.rasterizer.cullMode = CullMode::None;
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);
@@ -419,10 +431,10 @@ PsOut PS_Main(PsIn i){
 
 	MaterialBlockDesc desc;
 	desc.name = "TestBlock";
-	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
-	desc.vectors = { "Color" };
 	desc.textures = { "Texture" };
 	desc.buffers = { "Buffer" };
+	desc.vectors = { "Color" };
+	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
 
 	MaterialBlock block(desc);
 	block.setScalar("Speed", 3.f);
@@ -453,7 +465,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 5.0f;
+	f32 endTime = 5;
 
 	while (true) {
 
@@ -461,7 +473,7 @@ PsOut PS_Main(PsIn i){
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 
-		//if (endTime < time)break;
+		if (endTime < time)break;
 
 		block.setScalar("Time", time);
 		block.setScalar("Progress", time / endTime);
@@ -477,7 +489,7 @@ PsOut PS_Main(PsIn i){
 		commandList->clearColors();
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0, 1, -1, 3);
+		block.record(commandList, 0);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);

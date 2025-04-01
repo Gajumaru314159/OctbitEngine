@@ -82,13 +82,13 @@ namespace ob::rhi {
 	struct RootConstantsDesc {
 		u32 registerNo;     //!< レジスタ番号
 		u32 registerSpace;  //!< レジスタ空間
-		u32 value;          //!< 値
+		u32 size;          //!< 値
 	public:
 		//! @brief      コンストラクタ
 		RootConstantsDesc() = default;
 		//! @brief      コンストラクタ(DescriptorTable)
 		RootConstantsDesc(u32 value,u32 registerNo, u32 registerSpace=0)
-			:value(value),registerNo(registerNo), registerSpace(registerSpace) {}
+			:size(value),registerNo(registerNo), registerSpace(registerSpace) {}
 	};
 
 
@@ -146,10 +146,11 @@ namespace ob::rhi {
 		}
 
 		//! @brief		定数
-		static RootParameter Constants(u32 value, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
+		//! @details    RootConstantsは4バイトアラインメントされます。
+		static RootParameter Constants(u32 size, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
 			RootParameter result;
 			result.type = RootParameterType::RootConstants;
-			result.constants.value = value;
+			result.constants.size = align_up(size,sizeof(u32));
 			result.constants.registerNo = registerNo;
 			result.constants.registerSpace = registerSpace;
 			result.visibility = visibility;

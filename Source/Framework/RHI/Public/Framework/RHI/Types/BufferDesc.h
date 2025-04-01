@@ -100,7 +100,7 @@ namespace ob::rhi {
 		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc Constant(
 			u64             bufferSize,
-			BindFlags       bindFlags,
+			BindFlags       bindFlags = BindFlag::AllShaderResource,
 			ResourceUsage   usage = ResourceUsage::Dynamic,
 			BufferFlags      bufferFlags = {}
 		)

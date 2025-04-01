@@ -17,6 +17,7 @@ namespace ob::rhi {
 
 TEST(Bindless, Handle) {
 #pragma region
+	
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
@@ -110,7 +111,7 @@ TEST(Bindless, Handle) {
 	{
 		RootSignatureDesc desc(
 			{
-				RootParameter::Constants(4,0)
+				RootParameter::Constants(32,0)
 			}
 		);
 		desc.name = "MaterialBlock";
@@ -186,7 +187,7 @@ TEST(Bindless, Handle) {
 		commandList->clearColors();
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0, -1, -1, -1);
+		block.record(commandList, 0);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);

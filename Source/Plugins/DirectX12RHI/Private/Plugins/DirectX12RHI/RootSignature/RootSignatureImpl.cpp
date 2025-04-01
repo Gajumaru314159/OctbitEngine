@@ -43,10 +43,17 @@ namespace ob::rhi::dx12 {
 				break;
 			}
 			case RootParameterType::RootConstants:
-				elm.Constants.Num32BitValues = param.constants.value;
+			{
+				size_t size = param.constants.size;
+				if (param.constants.size % sizeof(u32) != 0) {
+					size = align_up(size, sizeof(u32));
+					LOG_WARNING("RootConstantのサイズが4の倍数ではありません。{}に切り上げます。", size);
+				}
+				elm.Constants.Num32BitValues = size;
 				elm.Constants.ShaderRegister = param.constants.registerNo;
 				elm.Constants.RegisterSpace = param.constants.registerSpace;
 				break;
+			}
 			default:
 				elm.Descriptor.ShaderRegister = param.descriptor.registerNo;
 				elm.Descriptor.RegisterSpace = param.descriptor.registerSpace;
