@@ -15,12 +15,10 @@
 namespace ob::rhi::dx12
 {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief              コンストラクタ
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	//@―---------------------------------------------------------------------------
 	DescriptorTableImpl::DescriptorTableImpl(DirectX12RHI& device, DescriptorHeap& heap, DescriptorRangeType type, s32 elementNum)
 		: m_device(device)
 		, m_type(type)
@@ -32,31 +30,23 @@ namespace ob::rhi::dx12
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
-	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::isValid()const {
 		return !m_handle.empty();
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      名前を取得
-	//@―---------------------------------------------------------------------------
 	const String& DescriptorTableImpl::getName()const {
 		return m_name;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  リソースを設定
-	//@―---------------------------------------------------------------------------
 	//! @{
 	//bool setResource(s32 index, class Buffer& resource) override{}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  バッファリソースを設定
-	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
 		if (m_type == DescriptorRangeType::Sampler) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
@@ -84,9 +74,7 @@ namespace ob::rhi::dx12
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャリソースを設定
-	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Texture>& resource) {
 		if (m_type == DescriptorRangeType::Sampler || m_type == DescriptorRangeType::CBV) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
@@ -121,9 +109,7 @@ namespace ob::rhi::dx12
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  サンプラーリソースを設定
-	//@―---------------------------------------------------------------------------
 	bool DescriptorTableImpl::setResource(s32 index, const Ref<Sampler>& resource) {
 		if (m_type != DescriptorRangeType::Sampler) {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);

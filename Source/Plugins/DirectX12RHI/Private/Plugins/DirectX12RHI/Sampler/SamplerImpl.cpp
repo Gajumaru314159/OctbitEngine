@@ -10,13 +10,11 @@
 
 namespace ob::rhi::dx12 {
 
-    //@―---------------------------------------------------------------------------
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
     //!
     //! @param src			シェーダコード
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    //@―---------------------------------------------------------------------------
     SamplerImpl::SamplerImpl(DirectX12RHI& device,const SamplerDesc& desc)
     {
 		D3D12_SAMPLER_DESC ddesc = {};

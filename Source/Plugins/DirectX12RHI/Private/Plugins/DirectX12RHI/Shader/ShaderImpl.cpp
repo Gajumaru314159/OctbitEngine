@@ -39,9 +39,7 @@ namespace ob::rhi::dx12 {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    //@―---------------------------------------------------------------------------
     ShaderImpl::ShaderImpl(DirectX12RHI& device, const ShaderCompileDesc& desc) 
 		: m_name(desc.name)
     {
@@ -50,13 +48,11 @@ namespace ob::rhi::dx12 {
 
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief				バイナリからシェーダーオブジェクトを生成
     //!
     //! @param src			バイナリ
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    //@―---------------------------------------------------------------------------
     ShaderImpl::ShaderImpl(BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
     {
@@ -69,9 +65,7 @@ namespace ob::rhi::dx12 {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief              妥当な状態か
-    //@―---------------------------------------------------------------------------
     bool ShaderImpl::isValid()const {
         if (!m_shaderBlob.empty())return true;
         if (m_shaderBolb2)return true;
@@ -79,25 +73,19 @@ namespace ob::rhi::dx12 {
     }
 
     
-    //@―---------------------------------------------------------------------------
     //! @brief      名前を取得
-    //@―---------------------------------------------------------------------------
     const String& ShaderImpl::getName()const {
         return m_name;
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  シェーダステージを取得
-    //@―---------------------------------------------------------------------------
     ShaderStage ShaderImpl::getStage()const {
         return m_stage;
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  バイナリデータを取得
-    //@―---------------------------------------------------------------------------
     const void* ShaderImpl::getBinaryData()const {
         if (!m_shaderBlob.empty())return m_shaderBlob.data();
         if (m_shaderBolb2)return m_shaderBolb2->GetBufferPointer();
@@ -105,18 +93,14 @@ namespace ob::rhi::dx12 {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  バイナリサイズを取得
-    //@―---------------------------------------------------------------------------
     SIZE_T ShaderImpl::getBinarySize()const {
         if (!m_shaderBlob.empty())return m_shaderBlob.size();
         if (m_shaderBolb2)return m_shaderBolb2->GetBufferSize();
         return 0;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief				初期化
-    //@―---------------------------------------------------------------------------
     void ShaderImpl::compile(DirectX12RHI& device, const ShaderCompileDesc& desc) {
 
         HRESULT result;

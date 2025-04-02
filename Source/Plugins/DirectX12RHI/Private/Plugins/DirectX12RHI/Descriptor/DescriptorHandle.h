@@ -12,9 +12,7 @@ namespace ob::core {
 
 namespace ob::rhi::dx12 {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  説明
-    //@―---------------------------------------------------------------------------
     class DescriptorHandle:private Noncopyable {
         friend class DescriptorHeap;
     public:

@@ -30,9 +30,7 @@
 
 namespace ob::rhi::dx12 {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	CommandListImpl::CommandListImpl(class DirectX12RHI& device, const CommandListDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
@@ -63,26 +61,20 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
-	//@―---------------------------------------------------------------------------
 	bool CommandListImpl::isValid()const {
 		return m_cmdList;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      名前を取得
-	//@―---------------------------------------------------------------------------
 	const String& CommandListImpl::getName()const {
 		return m_desc.name;
 	}
 
 #pragma endregion Command
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  描画開始
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::begin() {
 
 		HRESULT result;
@@ -115,25 +107,19 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  描画終了
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::end() {
 		m_cmdList->Close();
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::flush() {
 		if (auto rhi = RHI::Get()) {
 			rhi->entryCommandList(*this);
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      描画先設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
 
 		D3D12_CPU_DESCRIPTOR_HANDLE hColors[8]{};
@@ -215,9 +201,7 @@ namespace ob::rhi::dx12 {
 	}
 	
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      ディスプレイにテクスチャを適用
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
 	{
 		if (auto pDisplay = display.cast<DisplayImpl>()) {
@@ -226,9 +210,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  シザー矩形を設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setScissorRect(const IntRect* pRect, s32 num) {
 
 		OB_ASSERT(num <= SCISSOR_RECT_MAX, "シザー矩形の最大数を超えました。[value={0},max={1}]", num, SCISSOR_RECT_MAX);
@@ -244,9 +226,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ビューポートを設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setViewport(const Viewport* pViewport, s32 num) {
 
 		OB_ASSERT(num <= VIEWPORT_MAX, "ビューポートの最大数を超えました。[value={0},max={1}]", num, VIEWPORT_MAX);
@@ -263,9 +243,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearColors(u32 mask) {
 
 		for (auto [i, handle] : Indexed(m_hRTVs)) {
@@ -286,9 +264,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      レンダーターゲットのデプスとステンシルをクリア
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDepthStencil() {
 		
 		if (m_hDSV.ptr != 0 && m_depthTexture) {
@@ -302,9 +278,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      頂点バッファを設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setVertexBuffers(Span<Ref<Buffer>> buffers) {
 		Array<D3D12_VERTEX_BUFFER_VIEW, VERTEX_BUFFER_MAX> views;
 		if (views.size() <= buffers.size()) {
@@ -334,9 +308,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      インデックスバッファを設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setIndexBuffer(const Ref<Buffer>& buffer) {
 		if (auto pBuffer = buffer.cast<BufferImpl>()) {
 			D3D12_INDEX_BUFFER_VIEW view;
@@ -350,9 +322,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      パイプラインステートを設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setPipelineState(const Ref<PipelineState>& pipeline) {
 		if (auto p = pipeline.cast<PipelineStateImpl>()) {
 
@@ -373,25 +343,19 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      描画
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::draw(const DrawParam& param) {
 		m_cmdList->DrawInstanced(param.vertexCount, 1, param.startVertex,0);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      インデックス描画
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::drawIndexed(const DrawIndexedParam& param) {
 		m_cmdList->DrawIndexedInstanced(param.indexCount,1, param.startIndex,param.startVertex,0);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      デスクリプタテーブルを設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
@@ -402,9 +366,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      ルート定数を設定
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setRootConstant(const SetRootConstantsParam& param) {
 		if (param.blob.size() % 4) {
 			LOG_WARNING("ルート定数のサイズが4の倍数ではありません。");
@@ -415,9 +377,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  リソースバリアを挿入
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::insertResourceBarrier(const ResourceBarrier& resourceBarrier) {
 
 		// ネイティブに変換
@@ -426,9 +386,7 @@ namespace ob::rhi::dx12 {
 
 #pragma endregion
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタハンドルのキャッシュをクリア
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDescriptorHandle() {
 		m_hDSV.ptr = 0;
 		for (s32 i = 0; i < std::size(m_hRTVs); ++i) {
@@ -436,17 +394,13 @@ namespace ob::rhi::dx12 {
 		}
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GPUマーカーをプッシュ
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::pushMarker(StringView name) {
 		StringEncoder::Encode(name, m_markerNameCache);
 		::PIXBeginEvent(m_cmdList.Get(),PIX_COLOR_DEFAULT, m_markerNameCache.data());
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GPUマーカーをポップ
-	//@―---------------------------------------------------------------------------
 	void CommandListImpl::popMarker() {
 		::PIXEndEvent(m_cmdList.Get());
 	}

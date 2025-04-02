@@ -13,13 +13,11 @@
 
 namespace ob::rhi::dx12 {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          コンストラクタ
 	//! 
 	//! @param device   デバイス
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
-	//@―---------------------------------------------------------------------------
 	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
 		: m_mapper(capacity)
 		, m_type(type)
@@ -48,27 +46,21 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          デストラクタ
-	//@―---------------------------------------------------------------------------
 	DescriptorHeap::~DescriptorHeap() {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  名前を設定
-	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::setName(StringView name) {
 		Utility::SetName(m_heap.Get(), name);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルをアロケート
 	//! 
 	//! @param handle   アロケート先ハンドル
 	//! @param viewNum  割り当て個数
-	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::allocateHandle(class DescriptorHandle& handle, s32 size) {
 
 		handle.release();
@@ -87,9 +79,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルを解放
-	//@―---------------------------------------------------------------------------
 	void DescriptorHeap::releaseHandle(class DescriptorHandle& handle) {
 
 		ScopeLock lock(m_mutex);
@@ -99,9 +89,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          CPUハンドルを取得
-	//@―---------------------------------------------------------------------------
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::getCpuHandle(u32 index) {
 		OB_ASSERT_RANGE(index, 0, m_mapper.capacity() - 1);
 		OB_ASSERT(m_heap,"ヒープが空です。");
@@ -111,9 +99,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          CPUハンドルを取得
-	//@―---------------------------------------------------------------------------
 	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::getGpuHandle(u32 index) {
 		OB_ASSERT_RANGE(index, 0, m_mapper.capacity() - 1);
 		OB_ASSERT(m_heap, "ヒープが空です。");
@@ -123,9 +109,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  タイプを取得
-	//@―---------------------------------------------------------------------------
 	DescriptorHeapType DescriptorHeap::getHeapType()const {
 		return m_type;
 	}

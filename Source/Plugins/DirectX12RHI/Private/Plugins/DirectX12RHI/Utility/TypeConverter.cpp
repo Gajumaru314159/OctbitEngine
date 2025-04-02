@@ -7,9 +7,7 @@
 
 namespace ob::rhi::dx12
 {
-    //@―---------------------------------------------------------------------------
     //! @brief  RootSignatureFlags を D3D12_ROOT_SIGNATURE_FLAGS に変換
-    //@―---------------------------------------------------------------------------
     D3D12_ROOT_SIGNATURE_FLAGS TypeConverter::Convert(RootSignatureFlags value) {
         D3D12_ROOT_SIGNATURE_FLAGS result = D3D12_ROOT_SIGNATURE_FLAG_NONE;
         if (value[RootSignatureFlag::AllowInputAssemblerInputLayout])   result |= D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -25,9 +23,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_ROOT_PARAMETER_TYPE TypeConverter::Convert(RootParameterType value) {
         switch (value) {
         case RootParameterType::CBV:                return D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -41,9 +37,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::Convert(DescriptorRangeType value) {
         switch (value) {
         case DescriptorRangeType::CBV:              return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -56,9 +50,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ShaderStages を D3D12_SHADER_VISIBILITY に変換
-    //@―---------------------------------------------------------------------------
     D3D12_SHADER_VISIBILITY TypeConverter::Convert(ShaderStage value) {
         switch (value) {
         case ShaderStage::Vertex:           return D3D12_SHADER_VISIBILITY_VERTEX;
@@ -76,9 +68,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  TextureFillter を D3D12_FILTER_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_FILTER_TYPE TypeConverter::Convert(TextureFillter value){
         switch (value) {
         case TextureFillter::Point:         return D3D12_FILTER_TYPE_POINT;
@@ -90,9 +80,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  MipFillter を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_FILTER_TYPE TypeConverter::Convert(MipFillter value){
         switch (value) {
         case MipFillter::Point:             return D3D12_FILTER_TYPE_POINT;
@@ -103,9 +91,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  D3D12_FILTER に変換
-    //@―---------------------------------------------------------------------------
     D3D12_FILTER TypeConverter::Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic) {
         if (anisotropic && up != TextureFillter::Point && down != TextureFillter::Point)return D3D12_FILTER_ANISOTROPIC;
         return D3D12_ENCODE_BASIC_FILTER(
@@ -117,9 +103,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Anisotropy を UINT に変換
-    //@―---------------------------------------------------------------------------
     UINT TypeConverter::Convert(Anisotropy value){
         switch (value)
         {
@@ -135,9 +119,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  TextureAddress を D3D12_TEXTURE_ADDRESS_MODE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_TEXTURE_ADDRESS_MODE TypeConverter::Convert(TextureAddress value){
         switch (value)
         {
@@ -150,9 +132,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  FillMode を D3D12_FILL_MODE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_FILL_MODE TypeConverter::Convert(FillMode value) {
         switch (value)
         {
@@ -167,9 +147,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  CullMode を D3D12_CULL_MODE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_CULL_MODE TypeConverter::Convert(CullMode value) {
         switch (value)
         {
@@ -182,9 +160,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  TextureFormat を DXGI_FORMAT に変換
-    //@―---------------------------------------------------------------------------
     DXGI_FORMAT TypeConverter::Convert(TextureFormat value,bool useTypeless ) {
         switch (value) {
         case TextureFormat::RGBA32:         return DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -229,9 +205,7 @@ namespace ob::rhi::dx12
         return DXGI_FORMAT_UNKNOWN;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  TextureFormat を DXGI_FORMAT に変換
-    //@―---------------------------------------------------------------------------
     DXGI_FORMAT TypeConverter::ConvertDepthAsColor(TextureFormat value) {
         // Depthはシェーダーリソースとしても使えるようにTYPELESSにする
         switch (value) {
@@ -244,9 +218,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  BlendFactor を D3D12_BLEND に変換
-    //@―---------------------------------------------------------------------------
     D3D12_BLEND TypeConverter::Convert(BlendFactor value) {
         switch (value)
         {
@@ -266,9 +238,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  BlendOp を D3D12_BLEND_OP に変換
-    //@―---------------------------------------------------------------------------
     D3D12_BLEND_OP TypeConverter::Convert(BlendOp value) {
         switch (value)
         {
@@ -283,9 +253,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  BlendFactor を UINT8 に変換
-    //@―---------------------------------------------------------------------------
     UINT8 TypeConverter::Convert(ColorMask value) {
         UINT8 result = 0;
         if (value[ColorCompoent::R])result |= D3D12_COLOR_WRITE_ENABLE_RED;
@@ -296,9 +264,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  LogicOp を D3D12_LOGIC_OP に変換
-    //@―---------------------------------------------------------------------------
     D3D12_LOGIC_OP TypeConverter::Convert(LogicOp value) {
         switch (value)
         {
@@ -324,9 +290,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Topology を D3D12_PRIMITIVE_TOPOLOGY に変換
-    //@―---------------------------------------------------------------------------
     D3D12_PRIMITIVE_TOPOLOGY TypeConverter::Convert(Topology value) {
         switch (value)
         {
@@ -339,9 +303,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Type を DXGI_FORMAT に変換
-    //@―---------------------------------------------------------------------------
     DXGI_FORMAT TypeConverter::Convert(ElementType value, s32 dimension) {
         if (dimension == 1) {
             switch (value)
@@ -396,9 +358,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  Semantic を LPCSTR に変換
-    //@―---------------------------------------------------------------------------
     LPCSTR TypeConverter::Convert(Semantic value) {
         switch (value)
         {
@@ -417,9 +377,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  StencilOp を D3D12_STENCIL_OP に変換
-    //@―---------------------------------------------------------------------------
     D3D12_STENCIL_OP TypeConverter::Convert(StencilOp value) {
         switch (value)
         {
@@ -437,9 +395,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ComparisonFunc を D3D12_COMPARISON_FUNC に変換
-    //@―---------------------------------------------------------------------------
     D3D12_COMPARISON_FUNC TypeConverter::Convert(ComparisonFunc value) {
         switch (value)
         {
@@ -457,9 +413,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_DESCRIPTOR_HEAP_TYPE TypeConverter::Convert(DescriptorHeapType value) {
         switch (value)
         {
@@ -474,9 +428,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_COMMAND_LIST_TYPE TypeConverter::Convert(CommandListType value) {
         switch (value)
         {
@@ -489,9 +441,7 @@ namespace ob::rhi::dx12
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
-    //@―---------------------------------------------------------------------------
     D3D12_HEAP_TYPE TypeConverter::Convert(ResourceUsage value) {
         switch (value)
         {
@@ -506,9 +456,7 @@ namespace ob::rhi::dx12
         return D3D12_HEAP_TYPE_DEFAULT;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
-    //@―---------------------------------------------------------------------------
     D3D12_RESOURCE_STATES TypeConverter::Convert(ResourceState value) {
         switch (value)
         {
@@ -524,9 +472,7 @@ namespace ob::rhi::dx12
         return D3D12_RESOURCE_STATE_COMMON;
     }
 
-    //@―---------------------------------------------------------------------------
     //! @brief  DXGI_FORMAT を TextureFormat に変換
-    //@―---------------------------------------------------------------------------
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
         switch (static_cast<DXGI_FORMAT>(value)) {
         case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;

@@ -11,10 +11,8 @@
 
 namespace {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
 	//! @link https://devblogs.microsoft.com/pix/taking-a-capture/
-	//@―---------------------------------------------------------------------------
 	static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()
 	{
 		LPWSTR programFilesPath = nullptr;
@@ -45,9 +43,7 @@ namespace {
 
 namespace ob::rhi::dx12 {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  説明
-	//@―---------------------------------------------------------------------------
 
 	PIXModule::PIXModule() 
 		: m_hModule(nullptr)

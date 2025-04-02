@@ -14,9 +14,7 @@
 
 namespace ob::rhi::dx12 {
 
-    //@―---------------------------------------------------------------------------
     //! @brief      TextureDesc から空のテクスチャを生成
-    //@―---------------------------------------------------------------------------
     TextureImpl::TextureImpl(DirectX12RHI& rDevice, const TextureDesc& desc)
 		: m_device(rDevice)
 		, m_desc(desc)
@@ -81,9 +79,7 @@ namespace ob::rhi::dx12 {
 		Utility::SetName(m_resource.Get(), getName());
     }
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      IntColorの配列 から空のテクスチャを生成
-	//@―---------------------------------------------------------------------------
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<const IntColor> colors)
 		: m_device(rDevice)
 	{
@@ -166,9 +162,7 @@ namespace ob::rhi::dx12 {
 		Utility::SetName(m_resource.Get(), getName());
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      テクスチャバイナリから生成
-	//@―---------------------------------------------------------------------------
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob)
 		: m_device(rDevice)
 	{
@@ -261,9 +255,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief       RenderTextureDesc からRenderTextureを生成
-	//@―---------------------------------------------------------------------------
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const RenderTextureDesc& desc)
 		: m_device(rDevice)
 		, m_renderDesc(desc)
@@ -283,9 +275,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	//@―---------------------------------------------------------------------------
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
 		: m_device(rDevice)
 		, m_resource(resource)
@@ -433,55 +423,41 @@ namespace ob::rhi::dx12 {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
-	//@―---------------------------------------------------------------------------
 	bool TextureImpl::isValid()const{
 		return !!m_resource;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      名前を取得
-	//@―---------------------------------------------------------------------------
 	const String& TextureImpl::getName()const {
 		return m_desc.name;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      名前を設定
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::setName(StringView name) {
 		Utility::SetName(m_resource.Get(), name);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      定義取得
-	//@―---------------------------------------------------------------------------
 	const TextureDesc& TextureImpl::desc()const {
 		return m_desc;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      定義取得
 	//! @note		RenderTexutreとして使用される場合のみアクセス可能
-	//@―---------------------------------------------------------------------------
 	const RenderTextureDesc& TextureImpl::descOfRenderTexture()const {
 		return m_renderDesc;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      イベントリスナ追加
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::addEventListener(TextureEventHandle& handle, TextureEventDelegate func) {
 		m_notifier.add(handle, func);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      SRVを生成
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC texDesc = {};
@@ -536,9 +512,7 @@ namespace ob::rhi::dx12 {
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      UAVを生成
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const {
 
 		OB_NOTIMPLEMENTED();
@@ -601,9 +575,7 @@ namespace ob::rhi::dx12 {
 		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &texDesc, handle);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  リソース遷移を追加
-	//@―---------------------------------------------------------------------------
 	bool TextureImpl::addResourceTransition(D3D12_RESOURCE_BARRIER& barrier,D3D12_RESOURCE_STATES state,s32 subresource) {
 
 		if (m_state == state)
@@ -625,9 +597,7 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  クリアコマンドを記録
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::clear(ID3D12GraphicsCommandList* cmdList) {
 
 		if (cmdList) {
@@ -647,9 +617,7 @@ namespace ob::rhi::dx12 {
 
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ディスプレイの更新イベント
-	//@―---------------------------------------------------------------------------
 	void TextureImpl::onUpdateDisplay() {
 
 		Size newSize = m_desc.size;

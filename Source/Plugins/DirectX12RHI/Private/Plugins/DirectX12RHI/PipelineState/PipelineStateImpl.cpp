@@ -13,9 +13,7 @@
 namespace ob::rhi::dx12 {
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	PipelineStateImpl::PipelineStateImpl(DirectX12RHI& rDevice, const PipelineStateDesc& desc)
 		: m_desc(desc)
 	{
@@ -111,9 +109,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  フォーマット設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
 
 		dst.NumRenderTargets = (UINT)src.colors.size();
@@ -129,9 +125,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ブレンド設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src) {
 		dst = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		for (s32 i = 0; i < std::size(src.blend); ++i) {
@@ -140,9 +134,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーターゲットごとのブレンド設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src) {
 		dst.BlendEnable = src.blendEnable;
 		dst.SrcBlend = TypeConverter::Convert(src.srcColorFactor);
@@ -155,9 +147,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  頂点レイアウト設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src) {
 		dst.SemanticName = TypeConverter::Convert(src.semantic);
 		dst.SemanticIndex = src.index;
@@ -169,9 +159,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ラスタライズ設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src) {
 
 		dst = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
@@ -189,9 +177,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デプス・ステンシル設定
-	//@―---------------------------------------------------------------------------
 	void PipelineStateImpl::setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src) {
 		dst = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 		dst.DepthEnable = src.depth.enable;
@@ -210,9 +196,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief      名前を取得
-	//@―---------------------------------------------------------------------------
 	const String& PipelineStateImpl::getName()const {
 		return m_desc.name;
 	}

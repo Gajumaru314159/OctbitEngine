@@ -29,9 +29,7 @@
 
 namespace ob::rhi::dx12 {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	DirectX12RHI::DirectX12RHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config)
 		: RHI(objectManager,config)
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
@@ -45,34 +43,26 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
-	//@―---------------------------------------------------------------------------
 	DirectX12RHI::~DirectX12RHI() {
 		clearCommands();
 		finalize();
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::isValid()const {
 		return m_device && m_commandQueue;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
-	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::entryCommandList(const CommandList& commandList) {
 		m_commandQueue->entryCommandList(commandList);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  更新
-	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::update() {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
@@ -81,105 +71,79 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドリストを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Display> DirectX12RHI::createDisplay(const DisplayDesc& desc) {
 		SAFE_CREATE(Display, DisplayImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドリストを生成
-	//@―---------------------------------------------------------------------------
 	Ref<CommandList> DirectX12RHI::createCommandList(const CommandListDesc& desc) {
 		SAFE_CREATE(CommandList, CommandListImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ルートシグネチャを生成
-	//@―---------------------------------------------------------------------------
 	Ref<RootSignature> DirectX12RHI::createRootSignature(const RootSignatureDesc& desc) {
 		SAFE_CREATE(RootSignature, RootSignatureImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  パイプラインステートを生成
-	//@―---------------------------------------------------------------------------
 	Ref<PipelineState> DirectX12RHI::createPipelineState(const PipelineStateDesc& desc) {
 		SAFE_CREATE(PipelineState, PipelineStateImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(const TextureDesc& desc) {
 		SAFE_CREATE(Texture, TextureImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(StringView name, Size size, Span<const IntColor> colors) {
 		SAFE_CREATE(Texture, TextureImpl, *this, name, size, colors);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  テクスチャを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Texture> DirectX12RHI::createTexture(StringView name, BlobView blob) {
 		SAFE_CREATE(Texture, TextureImpl, *this, name, blob);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  レンダーテクスチャを生成
-	//@―---------------------------------------------------------------------------
 	Ref<RenderTexture> DirectX12RHI::createRenderTexture(const RenderTextureDesc& desc) {
 		SAFE_CREATE(RenderTexture, TextureImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  サンプラーを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Sampler> DirectX12RHI::createSampler(const SamplerDesc& desc) {
 		SAFE_CREATE(Sampler, SamplerImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  バッファーを生成
-	//@―---------------------------------------------------------------------------
 	Ref<Buffer> DirectX12RHI::createBuffer(const BufferDesc& desc) {
 		SAFE_CREATE(Buffer, BufferImpl, *this, desc);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダをコンパイル
-	//@―---------------------------------------------------------------------------
 	Ref<Shader> DirectX12RHI::compileShader(const ShaderCompileDesc& desc) {
 		SAFE_CREATE(Shader, ShaderImpl, *this, desc);
 	}
 
 	
-	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダをロード
-	//@―---------------------------------------------------------------------------
 	Ref<Shader> DirectX12RHI::loadShader(BlobView binary, ShaderStage stage) {
 		SAFE_CREATE(Shader, ShaderImpl, binary, stage);
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタ・テーブルを生成
-	//@―---------------------------------------------------------------------------
 	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorRangeType type, s32 elementNum) {
 		DescriptorHeapType heapType = type == DescriptorRangeType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
 		auto itr = m_descriptorHeaps.find(heapType);
@@ -188,9 +152,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GraphicFileHandleを生成
-	//@―---------------------------------------------------------------------------
 	Ref<GraphicFileHandle> DirectX12RHI::createGraphicFileHandle(StringView path) {
 		if (g_dsfactory == nullptr) return nullptr;
 		auto p = new GraphicFileHandleImpl(*g_dsfactory.Get(), path);
@@ -198,9 +160,7 @@ namespace ob::rhi::dx12 {
 		return p;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GraphicFileEventを生成
-	//@―---------------------------------------------------------------------------
 	Ref<GraphicFileEvent> DirectX12RHI::createGraphicFileEvent() {
 		if (g_dsfactory == nullptr) return nullptr;
 		auto p = new GraphicFileEventImpl();
@@ -208,9 +168,7 @@ namespace ob::rhi::dx12 {
 		return p;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GraphicFileQueueを生成
-	//@―---------------------------------------------------------------------------
 	Ref<GraphicFileQueue> DirectX12RHI::createGraphicFileQueue(const GraphicFileQueueDesc& desc) {
 		if (g_dsfactory == nullptr) return nullptr;
 		auto p = new GraphicFileQueueImpl(*m_device.Get(), *g_dsfactory.Get(), desc);
@@ -218,35 +176,27 @@ namespace ob::rhi::dx12 {
 		return p;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  GraphicFile用のファイルを生成する
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::generateGraphicFile(StringView input, StringView output, s32 compressionLevel) {
 		return GraphicFileImpl::Generate(*m_device.Get(), input, output,compressionLevel);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
-	//@―---------------------------------------------------------------------------
 	Vector<GraphicFileMipInfo> DirectX12RHI::prepareGraphicFile(StringView path) {
 		return GraphicFileImpl::Prepare(path);
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  システム・コマンド・キューを取得
-	//@―---------------------------------------------------------------------------
 	ComPtr<ID3D12CommandQueue>& DirectX12RHI::getCommandQueue() {
 		return m_commandQueue->getNative();
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief          ハンドルをアロケート
 	//! 
 	//! @param type     ヒープタイプ
 	//! @param handle   アロケート先ハンドル
 	//! @param size     割り当て個数
-	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::allocateHandle(DescriptorHeapType type, DescriptorHandle& handle, s32 size) {
 		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end()) {
 			OB_ABORT("不正なDescriptorHeapType");
@@ -255,9 +205,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  SetDescriptorHeaps コマンドを積む
-	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::setDescriptorHeaps(CommandListImpl& cmdList) {
 		ID3D12DescriptorHeap* pHeaps[] = {
 			m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->getNative().Get(),
@@ -267,17 +215,13 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  IDStorageFactoryを取得
-	//@―---------------------------------------------------------------------------
 	ComPtr<IDStorageFactory>& DirectX12RHI::getDirectStorageFactory() {
 		return g_dsfactory;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initialize() {
 
 		if (!initializeDXGIDevice())return false;
@@ -295,9 +239,7 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  DXGIDeviceの初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initializeDXGIDevice() {
 		HRESULT result;
 		UINT flagsDXGI = 0;
@@ -393,17 +335,13 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  ビデオカード情報を初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initializeVideoCardInfo() {
 		return true;
 	}
 
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  デスクリプタヒープを初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initializeDescriptorHeaps() {
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
@@ -423,9 +361,7 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  シェーダコンパイラーを初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initializeShaderCompiler() {
 
 		HRESULT result;
@@ -452,9 +388,7 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  DirectStorageを初期化
-	//@―---------------------------------------------------------------------------
 	bool DirectX12RHI::initializeDirectStorage() {
 		if (m_config.enableDirectStorage) {
 
@@ -482,9 +416,7 @@ namespace ob::rhi::dx12 {
 		return true;
 	}
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドを実行してクリアする
-	//@―---------------------------------------------------------------------------
 	void DirectX12RHI::clearCommands() {
 
 		m_commandQueue->execute();
