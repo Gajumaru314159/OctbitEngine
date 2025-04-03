@@ -4,10 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Texture.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/TextureDesc.h>
-#include <Framework/RHI/Display.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -19,7 +17,6 @@
 //===============================================================
 namespace ob::rhi::dx12 {
     class DirectX12RHI;
-    class ResourceStateCache;
 }
 
 
@@ -40,18 +37,14 @@ namespace ob::rhi::dx12 {
         //! @brief      テクスチャバイナリから生成
         TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob);
 
-
         //! @brief      妥当な状態か
         bool isValid()const override;
-
 
         //! @brief      名前を取得
         const String& getName()const override;
 
-
         //! @brief      名前を設定
         void setName(StringView)override;
-
 
         //! @brief      定義取得
         const TextureDesc& desc()const override;
@@ -64,24 +57,22 @@ namespace ob::rhi::dx12 {
         //! @brief      RenderTextureDesc からRenderTextureを生成
         TextureImpl(DirectX12RHI& rDevice, const RenderTextureDesc& desc);
 
-
         //! @brief      SwapChainのリソースからRenderTextureを生成
         TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
-
 
     public:
 
         //! @brief      リソースを取得
         ID3D12Resource* getResource()const;
 
-
         //! @brief      ネイティブリソースを解放
         //! @details    Displayのリサイズ用
         void releaseNative() { m_resource = nullptr; }
 
-
-        //! @brief      Viewを取得
+        //! @brief      RTVを取得
         const DescriptorHandle& getRTV()const { return m_hRTV; }
+
+        //! @brief      DSVを取得
         const DescriptorHandle& getDSV()const { return m_hDSV; }
 
         //! @brief      Viewportを取得
@@ -97,9 +88,7 @@ namespace ob::rhi::dx12 {
         void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
         //! @brief      UAVを生成
-        private:
         void createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const;
-        public:
 
         //! @brief      遷移バリアを追加
         bool addResourceTransition(D3D12_RESOURCE_BARRIER& barrier, D3D12_RESOURCE_STATES state,s32 subresource=-1);
@@ -111,7 +100,7 @@ namespace ob::rhi::dx12 {
         TextureDesc             m_desc;         //!< 定義
         RenderTextureDesc       m_renderDesc;   //!< 定義
 
-        ComPtr<ID3D12Resource>  m_resource;     //!< リソース
+        ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
 
         // TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
         DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル

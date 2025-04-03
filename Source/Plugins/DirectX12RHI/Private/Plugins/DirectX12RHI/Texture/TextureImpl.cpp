@@ -16,41 +16,35 @@ namespace ob::rhi::dx12 {
 	static bool IsInvalid(const TextureDesc& desc) {
 
 		// フォーマット
-		{
-			if (desc.format == TextureFormat::Unknown) {
-				LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", desc.name);
-				return true;
-			}
+		if (desc.format == TextureFormat::Unknown) {
+			LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", desc.name);
+			return true;
 		}
 
 		// サイズ
-		{
-			bool isValidSize = true;
+		bool isValidSize = true;
 
-			if (desc.type == TextureType::Texture1D) {
-				isValidSize &= 0 < desc.size.width && 0 == desc.size.height && 0 == desc.size.depth;
-			}
-			if (desc.type == TextureType::Texture2D) {
-				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
-			}
-			if (desc.type == TextureType::Texture3D) {
-				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 < desc.size.depth;
-			}
-			if (desc.type == TextureType::Cube) {
-				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
-			}
-			if (!isValidSize) {
-				LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size={}]", desc.size);
-				return true;
-			}
+		if (desc.type == TextureType::Texture1D) {
+			isValidSize &= 0 < desc.size.width && 0 == desc.size.height && 0 == desc.size.depth;
+		}
+		if (desc.type == TextureType::Texture2D) {
+			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+		}
+		if (desc.type == TextureType::Texture3D) {
+			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 < desc.size.depth;
+		}
+		if (desc.type == TextureType::Cube) {
+			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+		}
+		if (!isValidSize) {
+			LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size={}]", desc.size);
+			return true;
 		}
 
 		// 配列
-		{
-			if (desc.type == TextureType::Texture3D && 0 < desc.arrayNum) {
-				LOG_ERROR("Texture3Dは配列に対応していません [name={}]", desc.name);
-				return true;
-			}
+		if (desc.type == TextureType::Texture3D && 0 < desc.arrayNum) {
+			LOG_ERROR("Texture3Dは配列に対応していません [name={}]", desc.name);
+			return true;
 		}
 
 		return false;
@@ -124,7 +118,7 @@ namespace ob::rhi::dx12 {
 			return;
 		}
 
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
     }
 
 
@@ -175,7 +169,7 @@ namespace ob::rhi::dx12 {
 		}
 
 		m_resource = resource;
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
 	}
 
 
@@ -250,7 +244,7 @@ namespace ob::rhi::dx12 {
 
 		m_resource = resource;
 
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
 	}
 
 
@@ -380,7 +374,7 @@ namespace ob::rhi::dx12 {
 		m_renderDesc.size = m_desc.size;
 		m_renderDesc.clear.color = Color::White;
 
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
 
 	}
 
