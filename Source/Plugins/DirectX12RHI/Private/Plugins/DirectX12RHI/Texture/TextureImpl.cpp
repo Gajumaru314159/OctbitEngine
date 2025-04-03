@@ -5,7 +5,6 @@
 //***********************************************************
 #include "TextureImpl.h"
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
-#include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 #include <DirectXTex.h>
@@ -13,62 +12,112 @@
 
 namespace ob::rhi::dx12 {
 
+	//! @brief バリデート
+	static bool IsInvalid(const TextureDesc& desc) {
+
+		// フォーマット
+		{
+			if (desc.format == TextureFormat::Unknown) {
+				LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", desc.name);
+				return true;
+			}
+		}
+
+		// サイズ
+		{
+			bool isValidSize = true;
+
+			if (desc.type == TextureType::Texture1D) {
+				isValidSize &= 0 < desc.size.width && 0 == desc.size.height && 0 == desc.size.depth;
+			}
+			if (desc.type == TextureType::Texture2D) {
+				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+			}
+			if (desc.type == TextureType::Texture3D) {
+				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 < desc.size.depth;
+			}
+			if (desc.type == TextureType::Cube) {
+				isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+			}
+			if (!isValidSize) {
+				LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size={}]", desc.size);
+				return true;
+			}
+		}
+
+		// 配列
+		{
+			if (desc.type == TextureType::Texture3D && 0 < desc.arrayNum) {
+				LOG_ERROR("Texture3Dは配列に対応していません [name={}]", desc.name);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	//! @brief D3D12_RESOURCE_DESCを構築する
+	static D3D12_RESOURCE_DESC CreateResourceDesc(TextureType type,TextureFormat format,Size size,s32 mipLevel,s32 arrayNum,StringView name) {
+
+		auto nativeFormat = TypeConverter::Convert(format);
+
+		// DepthOrArraySize は、1 から、特定のフィーチャー レベルとテクスチャ ディメンションでサポートされる最大ディメンションの間である必要があります。 
+		// https://learn.microsoft.com/ja-jp/windows/win32/api/d3d12/ns-d3d12-d3d12_resource_desc
+		arrayNum = std::max(1,arrayNum);
+
+		switch (type) {
+		case TextureType::Texture1D:
+			return CD3DX12_RESOURCE_DESC::Tex1D(nativeFormat, size.width, arrayNum, mipLevel);
+		case TextureType::Texture2D:
+			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, arrayNum, mipLevel);
+		case TextureType::Texture3D:
+			if(0 < arrayNum) LOG_ERROR("Texture3Dは配列に対応していません [name={}]", name);
+			return CD3DX12_RESOURCE_DESC::Tex3D(nativeFormat, size.width, size.height, size.depth, mipLevel);
+		case TextureType::Cube:
+			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, 6 * arrayNum, mipLevel);
+		default:
+			LOG_ERROR("不明なテクスチャタイプです [name={}]", name);
+			return {};
+		}
+	}
+
+	//! @brief SizeからTextureTypeに変換 (Texture::Cube非対応) 
+	static TextureType TextureTypeFrom(Size size) {
+		if (size.height == 0) return TextureType::Texture1D;
+		if (size.depth == 0) return TextureType::Texture2D;
+		return TextureType::Texture3D;
+	}
+
+	//! @brief TEX_DIMENSIONからTextureTypeに変換 (Texture::Cube非対応) 
+	static TextureType TextureTypeFrom(DirectX::TEX_DIMENSION dimension) {
+		switch (dimension) {
+		case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE1D:return TextureType::Texture1D;
+		case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE2D:return TextureType::Texture2D;
+		case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE3D:return TextureType::Texture3D;
+		}
+		return TextureType::Texture2D;
+	};
+
+
+
+
     //! @brief      TextureDesc から空のテクスチャを生成
     TextureImpl::TextureImpl(DirectX12RHI& rDevice, const TextureDesc& desc)
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
+		// バリデート
+		if (IsInvalid(m_desc)) return;
 
-		if (m_desc.size.width <= 0 || m_desc.size.height <= 0) {
-			LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size=({},{})]", m_desc.size.width, m_desc.size.height);
-			return;
-		}
-
-		m_desc.mipLevels = std::max(m_desc.mipLevels, 1);
-
-		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-
-		auto format = TypeConverter::Convert(desc.format);
-		
-		// 定義生成
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.DepthOrArraySize = std::max(desc.arrayNum, 1);
-		resourceDesc.MipLevels = m_desc.mipLevels;
-		
-		switch (desc.type) {
-		case TextureType::Texture1D:
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex1D(format, desc.size.width);
-			break;
-
-		case TextureType::Texture2D:
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, desc.size.width, desc.size.height);
-			break;
-
-		case TextureType::Texture3D:
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex3D(format, desc.size.width, desc.size.height,desc.size.depth);
-			break;
-
-		case TextureType::Cube:
-			LOG_ERROR("Texture::Cureは未実装です [name={}]", m_desc.name);
-			return;
-			break;
-
-		default:
-			LOG_ERROR("不明なテクスチャタイプです [name={}]",m_desc.name);
-			return;
-			break;
-		}
-
+		// 初期ステート
 		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
+		// 定義生成
+		D3D12_RESOURCE_DESC resourceDesc = CreateResourceDesc(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
 		// リソース生成
-		auto result = rDevice.getNative()->CreateCommittedResource(
-			&heapProps,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			m_state,
-			nullptr,
-			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps,D3D12_HEAP_FLAG_NONE,&resourceDesc,m_state,nullptr,IID_PPV_ARGS(m_resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result,"ID3D12Device::CreateCommittedResource()");
@@ -78,88 +127,57 @@ namespace ob::rhi::dx12 {
 		Utility::SetName(m_resource.Get(), getName());
     }
 
+
 	//! @brief      IntColorの配列 から空のテクスチャを生成
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<const IntColor> colors)
 		: m_device(rDevice)
 	{
-		if (size.width <= 0 || size.height <= 0) {
-			LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size=({},{})]", size.width, size.height);
+		// Desc設定
+		m_desc.name = name;
+		m_desc.size = size;
+		m_desc.type = TextureTypeFrom(size);
+		m_desc.format = TextureFormat::RGBA8;
+		m_desc.arrayNum = 0;
+		m_desc.mipLevels = 1;
+
+		// バリデート
+		if (IsInvalid(m_desc)) return;
+
+		if (std::max(size.width, 1) * std::max(size.height, 1) * std::max(size.depth, 1) != colors.size()) {
+			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size={}, name={}]", size, name);
 			return;
 		}
-		if (std::max(size.width, 1) * std::max(size.height, 1)* std::max(size.depth, 1) != colors.size()) {
-			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size=({},{})]", size.width, size.height);
-			return;
-		}
-		if (m_desc.format == TextureFormat::Unknown) {
-			LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", m_desc.name);
-			return;
-		}
 
-		auto format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
-
-		// 定義生成
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.DepthOrArraySize = 1;
-		resourceDesc.MipLevels = 0;
-
-		if (size.height == 0) {
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex1D(format, size.width);
-		} else if (size.depth == 0) {
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, size.width, size.height);
-		} else {
-			resourceDesc = CD3DX12_RESOURCE_DESC::Tex3D(format, size.width, size.height, size.depth);
-		}
-
+		// 初期ステート
 		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
+		// 定義生成
+		D3D12_RESOURCE_DESC resourceDesc = CreateResourceDesc(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
 		// リソース生成
-		auto result = rDevice.getNative()->CreateCommittedResource(
-			&heapProps,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			m_state,
-			nullptr,
-			IID_PPV_ARGS(m_resource.ReleaseAndGetAddressOf()));
+		ComPtr<ID3D12Resource> resource;
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
+			return;
 		}
 
-		result = m_resource->WriteToSubresource(
-			0,
-			nullptr,
-			colors.data(),
-			sizeof(IntColor)*size.width,
-			sizeof(IntColor) * size.width*size.height
-		);
+		// データ書き込み
+		// TODO TextureUploader対応
+		UINT SrcRowPitch = sizeof(IntColor) * size.width;
+		UINT SrcDepthPitch = sizeof(IntColor) * size.width * size.height;
+		result = resource->WriteToSubresource(0,nullptr,colors.data(), SrcRowPitch, SrcDepthPitch);
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
 			return;
 		}
 
-
-		auto convertType = [](D3D12_RESOURCE_DIMENSION dimension) {
-			switch (dimension) {
-			case D3D12_RESOURCE_DIMENSION_TEXTURE1D:return TextureType::Texture1D;
-			case D3D12_RESOURCE_DIMENSION_TEXTURE2D:return TextureType::Texture2D;
-			case D3D12_RESOURCE_DIMENSION_TEXTURE3D:return TextureType::Texture3D;
-			}
-			return TextureType::Texture2D;
-		};
-
-		// Desc設定
-		m_desc.name = name;
-		m_desc.size = size;
-		m_desc.type = convertType(resourceDesc.Dimension);
-		m_desc.format = TypeConverter::Convert(format);
-		m_desc.arrayNum = 1;
-		m_desc.mipLevels = 1;
-
-
+		m_resource = resource;
 		Utility::SetName(m_resource.Get(), getName());
 	}
+
 
 	//! @brief      テクスチャバイナリから生成
 	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob)
@@ -178,42 +196,42 @@ namespace ob::rhi::dx12 {
 		if (FAILED(result)) {
 			return;
 		}
-		
-		//WriteToSubresourceで転送する用のヒープ設定
-		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
-		auto resDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-			metadata.format,
-			(UINT16)metadata.width,
-			(UINT)metadata.height,
-			(UINT16)metadata.arraySize,
-			(UINT16)metadata.mipLevels);
-		
 
+		// Desc設定
+		m_desc.name = name;
+		m_desc.size = { (s32)metadata.width,(s32)metadata.height,(s32)metadata.depth };
+		m_desc.type = TextureTypeFrom(metadata.dimension);
+		m_desc.format = TypeConverter::Convert(metadata.format);
+		m_desc.arrayNum = (s32)metadata.arraySize;
+		m_desc.mipLevels = (s32)metadata.mipLevels;
+
+		// バリデート
+		if (IsInvalid(m_desc)) return;
+		
+		// 初期ステート
 		m_state = D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 
+		// リソース生成
 		ComPtr<ID3D12Resource> resource;
-		
-		result = m_device.getNative()->CreateCommittedResource(
-			&texHeapProp,
-			D3D12_HEAP_FLAG_NONE,
-			&resDesc,
-			m_state,
-			nullptr,
-			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		auto resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(metadata.format, (UINT16)metadata.width, (UINT)metadata.height, (UINT16)metadata.arraySize, (UINT16)metadata.mipLevels);
+		result = m_device.getNative()->CreateCommittedResource(&heapProps,D3D12_HEAP_FLAG_NONE,&resourceDesc,m_state,nullptr,IID_PPV_ARGS(resource.GetAddressOf()));
 		
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
 
+		// データ書き込み
+		// TODO TextureUploader対応
 		D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint[20];
 		UINT pNumRows[20];
 		UINT64 pRowSizeInBytes[20];
 		UINT64 pTotalBytes[20];
-		rDevice.getNative()->GetCopyableFootprints(&resDesc, 0, metadata.mipLevels, 0, footprint, pNumRows, pRowSizeInBytes, pTotalBytes);
-		
-		
+		rDevice.getNative()->GetCopyableFootprints(&resourceDesc, 0, metadata.mipLevels, 0, footprint, pNumRows, pRowSizeInBytes, pTotalBytes);
+				
 		// GPUにデータ転送
+		// TODO WriteToSubresourceはUMA向けなのでNUMAの場合はCopyTextureRegionで転送する
 		for (s32 i = 0; i < metadata.mipLevels; ++i) {
 			auto img = scratchImg.GetImage(i, 0, 0);
 
@@ -229,24 +247,6 @@ namespace ob::rhi::dx12 {
 				return;
 			}
 		}
-		
-
-		auto convertType = [](DirectX::TEX_DIMENSION dimension) {
-			switch (dimension) {
-			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE1D:return TextureType::Texture1D;
-			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE2D:return TextureType::Texture2D;
-			case DirectX::TEX_DIMENSION::TEX_DIMENSION_TEXTURE3D:return TextureType::Texture3D;
-			}
-			return TextureType::Texture2D;
-		};
-		
-		// Desc設定
-		m_desc.name = name;
-		m_desc.size = {(s32)metadata.width,(s32)metadata.height,(s32)metadata.depth};
-		m_desc.type = convertType(metadata.dimension);
-		m_desc.format = TypeConverter::Convert(metadata.format);
-		m_desc.arrayNum = (s32)metadata.arraySize;
-		m_desc.mipLevels = (s32)metadata.mipLevels;
 
 		m_resource = resource;
 
@@ -266,14 +266,11 @@ namespace ob::rhi::dx12 {
 		m_desc.arrayNum = 0;
 		m_desc.mipLevels = 1;
 
-		if (m_desc.size.width <= 0 || m_desc.size.height <= 0) {
-			LOG_ERROR("RenderTextureの生成に失敗。サイズが不正です。[[name={},size=({},{})]", m_desc.name, m_desc.size.width, m_desc.size.height);
-			return;
-		}
-		if (m_desc.format == TextureFormat::Unknown) {
-			LOG_ERROR("RenderTextureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", m_desc.name);
-			return;
-		}
+		// バリデート
+		if (IsInvalid(m_desc)) return;
+
+		// 定義生成
+		D3D12_RESOURCE_DESC resourceDesc = CreateResourceDesc(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { m_renderDesc.clear.color.r,m_renderDesc.clear.color.g,m_renderDesc.clear.color.b,m_renderDesc.clear.color.a };
@@ -281,43 +278,27 @@ namespace ob::rhi::dx12 {
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, m_renderDesc.clear.depth, m_renderDesc.clear.stencil);
 
-		// 定義生成
-		D3D12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(format, m_renderDesc.size.width, m_renderDesc.size.height);
-		m_state = D3D12_RESOURCE_STATE_COMMON;
-
 		D3D12_CLEAR_VALUE* clearValue = nullptr;
 		const bool isColor = !TextureFormatUtility::HasDepth(m_renderDesc.format);
 		const bool isDepth = !isColor;
 		if (isColor) {
-
 			OB_ASSERT(!TextureFormatUtility::HasDepth(m_renderDesc.format), "カラーに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;
 			m_state = D3D12_RESOURCE_STATE_RENDER_TARGET;
 			clearValue = &colorClearValue;
-
 		}
 		if (isDepth) {
-
 			OB_ASSERT(TextureFormatUtility::HasDepth(m_renderDesc.format), "デプス・ステンシルに非対応なフォーマットです。");
 			resourceDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 			m_state = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 			clearValue = &depthClearValue;
-
 		}
-
-		auto texHeapProp = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
 
 		// リソース生成
 		ComPtr<ID3D12Resource> resource;
-
-		auto result = m_device.getNative()->CreateCommittedResource(
-			&texHeapProp,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			m_state,
-			NULL,
-			IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
@@ -353,19 +334,11 @@ namespace ob::rhi::dx12 {
 
 		}
 
+		m_resource = resource;
 		m_viewport = CD3DX12_VIEWPORT(resource.Get());
 		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
-		m_resource = resource;
-
-		// リソース名設定
-		{
-			WString wname;
-			StringEncoder::Encode(m_desc.name, wname);
-			m_resource->SetName(wname.c_str());
-		}
-
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
 	}
 
 
@@ -411,79 +384,55 @@ namespace ob::rhi::dx12 {
 
 	}
 
-	//! @brief  妥当な状態か
-	bool TextureImpl::isValid()const{
-		return !!m_resource;
-	}
-
-
-	//! @brief      名前を取得
-	const String& TextureImpl::getName()const {
-		return m_desc.name;
-	}
-
-
-	//! @brief      名前を設定
-	void TextureImpl::setName(StringView name) {
-		Utility::SetName(m_resource.Get(), name);
-	}
-
-	//! @brief      定義取得
-	const TextureDesc& TextureImpl::desc()const {
-		return m_desc;
-	}
-
-	//! @brief      定義取得
-	//! @note		RenderTexutreとして使用される場合のみアクセス可能
-	const RenderTextureDesc& TextureImpl::descOfRenderTexture()const {
-		return m_renderDesc;
-	}
 
 	//! @brief      SRVを生成
 	void TextureImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
-		D3D12_SHADER_RESOURCE_VIEW_DESC texDesc = {};
-		texDesc.Format = m_resource->GetDesc().Format;
-		texDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
+		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-		if (TextureFormatUtility::HasDepth(m_desc.format)) {
-			texDesc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
+		// Depthをカラーテクスチャとして使用する場合は別の型に設定する必要がある
+		if (TextureFormatUtility::HasColor(m_desc.format)) {
+			desc.Format = m_resource->GetDesc().Format;
+		} else {
+			desc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
 		}
 
+		// NOTE 特定のスライスを指定する場合は追加の引数が必要
 		switch (m_desc.type) {
 		case TextureType::Texture1D:
-			if (m_desc.arrayNum) {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
-				texDesc.Texture1DArray.MipLevels = m_desc.mipLevels;
+			if (0 < m_desc.arrayNum) {
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
+				desc.Texture1DArray.MipLevels = m_desc.mipLevels;
 			} else {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1D;
-				texDesc.Texture1D.MipLevels = m_desc.mipLevels;
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1D;
+				desc.Texture1D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Texture2D:
-			if (1<m_desc.arrayNum) {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-				texDesc.Texture2DArray.MipLevels = m_desc.mipLevels;
+			if (0 < m_desc.arrayNum) {
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
+				desc.Texture2DArray.MipLevels = m_desc.mipLevels;
 			} else {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-				texDesc.Texture2D.MipLevels = m_desc.mipLevels;
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+				desc.Texture2D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Texture3D:
-			if (1 < m_desc.arrayNum) {
-				OB_ABORT("Texture3Dは配列にできません。");
+			if (0 < m_desc.arrayNum) {
+				OB_ABORT("Texture3Dは配列にできません。IsInvalid()の条件を修正してください。");
 			} else {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
-				texDesc.Texture3D.MipLevels = m_desc.mipLevels;
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
+				desc.Texture3D.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		case TextureType::Cube:
-			if (1 < m_desc.arrayNum) {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
-				texDesc.TextureCubeArray.MipLevels = m_desc.mipLevels;
+			if (0 < m_desc.arrayNum) {
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
+				desc.TextureCubeArray.MipLevels = m_desc.mipLevels;
 			} else {
-				texDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
-				texDesc.TextureCube.MipLevels = m_desc.mipLevels;
+				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+				desc.TextureCube.MipLevels = m_desc.mipLevels;
 			}
 			break;
 		default:
@@ -491,47 +440,51 @@ namespace ob::rhi::dx12 {
 			break;
 		}
 
-		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&texDesc, handle);
+		m_device.getNative()->CreateShaderResourceView(m_resource.Get(),&desc, handle);
 	}
+
 
 	//! @brief      UAVを生成
 	void TextureImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const {
 
 		OB_NOTIMPLEMENTED();
 
-		D3D12_UNORDERED_ACCESS_VIEW_DESC texDesc = {};
-		texDesc.Format = m_resource->GetDesc().Format;
+		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
 
-		if (TextureFormatUtility::HasDepth(m_desc.format)) {
-			texDesc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
+		// Depthをカラーテクスチャとして使用する場合は別の型に設定する必要がある
+		if (TextureFormatUtility::HasColor(m_desc.format)) {
+			desc.Format = m_resource->GetDesc().Format;
+		} else {
+			desc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
 		}
 
+		// NOTE 特定のスライスを指定する場合は追加の引数が必要
 		switch (m_desc.type) {
 		case TextureType::Texture1D:
 			if (m_desc.arrayNum) {
-				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1DARRAY;
-				texDesc.Texture1DArray.MipSlice = slice;
-				texDesc.Texture1DArray.FirstArraySlice = 0;
-				texDesc.Texture1DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1DARRAY;
+				desc.Texture1DArray.MipSlice = slice;
+				desc.Texture1DArray.FirstArraySlice = 0;
+				desc.Texture1DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
 			}
 			else {
-				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1D;
-				texDesc.Texture1D.MipSlice = slice;
+				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1D;
+				desc.Texture1D.MipSlice = slice;
 			}
 			break;
 		case TextureType::Texture2D:
 			if (1 < m_desc.arrayNum) {
-				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
-				texDesc.Texture2DArray.MipSlice = slice;
-				texDesc.Texture2DArray.MipSlice = slice;
-				texDesc.Texture2DArray.FirstArraySlice = 0;
-				texDesc.Texture2DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
-				texDesc.Texture2DArray.PlaneSlice = 0;
+				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+				desc.Texture2DArray.MipSlice = slice;
+				desc.Texture2DArray.MipSlice = slice;
+				desc.Texture2DArray.FirstArraySlice = 0;
+				desc.Texture2DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+				desc.Texture2DArray.PlaneSlice = 0;
 			}
 			else {
-				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
-				texDesc.Texture2D.MipSlice = slice;
-				texDesc.Texture2D.PlaneSlice = 0;
+				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
+				desc.Texture2D.MipSlice = slice;
+				desc.Texture2D.PlaneSlice = 0;
 			}
 			break;
 		case TextureType::Texture3D:
@@ -539,10 +492,10 @@ namespace ob::rhi::dx12 {
 				OB_ABORT("Texture3Dは配列にできません。");
 			}
 			else {
-				texDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE3D;
-				texDesc.Texture3D.MipSlice = slice;
-				texDesc.Texture3D.FirstWSlice = 0;
-				texDesc.Texture3D.WSize = 0;
+				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE3D;
+				desc.Texture3D.MipSlice = slice;
+				desc.Texture3D.FirstWSlice = 0;
+				desc.Texture3D.WSize = 0;
 			}
 			break;
 		case TextureType::Cube:
@@ -554,10 +507,12 @@ namespace ob::rhi::dx12 {
 		}
 
 		// TODO pCounterResource の調査
-		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &texDesc, handle);
+		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &desc, handle);
 	}
 
+
 	//! @brief  リソース遷移を追加
+	//! @param  subresource -1で全てのサブリソースを指定
 	bool TextureImpl::addResourceTransition(D3D12_RESOURCE_BARRIER& barrier,D3D12_RESOURCE_STATES state,s32 subresource) {
 
 		if (m_state == state)
@@ -570,14 +525,11 @@ namespace ob::rhi::dx12 {
 		barrier.Transition.StateBefore = m_state;
 		barrier.Transition.StateAfter = state;
 
-		if (m_state == D3D12_RESOURCE_STATE_RENDER_TARGET && state == D3D12_RESOURCE_STATE_DEPTH_WRITE) {
-			CallBreakPoint();
-		}
-
 		m_state = state;
 
 		return true;
 	}
+
 
 	//! @brief  クリアコマンドを記録
 	void TextureImpl::clear(ID3D12GraphicsCommandList* cmdList) {

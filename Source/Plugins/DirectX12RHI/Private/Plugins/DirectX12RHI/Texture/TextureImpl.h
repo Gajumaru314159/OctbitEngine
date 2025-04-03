@@ -10,6 +10,7 @@
 #include <Framework/RHI/Display.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+#include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 
 
@@ -131,6 +132,32 @@ namespace ob::rhi::dx12 {
 // インライン
 //===============================================================
 namespace ob::rhi::dx12 {
+
+    //! @brief  妥当な状態か
+    inline bool TextureImpl::isValid()const {
+        return !!m_resource;
+    }
+
+    //! @brief      名前を取得
+    inline const String& TextureImpl::getName()const {
+        return m_desc.name;
+    }
+
+    //! @brief      名前を設定
+    inline void TextureImpl::setName(StringView name) {
+        Utility::SetName(m_resource.Get(), name);
+    }
+
+    //! @brief      定義取得
+    inline const TextureDesc& TextureImpl::desc()const {
+        return m_desc;
+    }
+
+    //! @brief      定義取得
+    //! @note		RenderTexutreとして使用される場合のみアクセス可能
+    inline const RenderTextureDesc& TextureImpl::descOfRenderTexture()const {
+        return m_renderDesc;
+    }
 
     //! @brief      リソースを取得
     inline ID3D12Resource* TextureImpl::getResource() const {
