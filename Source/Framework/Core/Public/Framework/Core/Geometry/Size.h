@@ -87,3 +87,23 @@ namespace ob::core {
     };
 
 }
+
+//===============================================================
+// フォーマット
+//===============================================================
+//! @cond
+template <> struct std::formatter<ob::core::Size, ob::core::Char> : std::formatter<ob::core::s32, ob::core::Char> {
+    using base = std::formatter<ob::core::s32, ob::core::Char>;
+    template<typename FormatContext>
+    auto format(const ob::core::Size& value, FormatContext& ctx) const {
+        ctx.advance_to(format_to(ctx.out(), "("));
+        ctx.advance_to(base::format(value.width, ctx));
+        ctx.advance_to(format_to(ctx.out(), ","));
+        ctx.advance_to(base::format(value.height, ctx));
+        ctx.advance_to(format_to(ctx.out(), ","));
+        ctx.advance_to(base::format(value.depth, ctx));
+        ctx.advance_to(format_to(ctx.out(), ")"));
+        return ctx.out();
+    }
+};
+//! @endcond
