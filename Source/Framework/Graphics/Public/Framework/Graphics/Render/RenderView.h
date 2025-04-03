@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Display.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
 
@@ -82,11 +83,13 @@ namespace ob::graphics {
     private:
         void clearTarget();
         void onSceneReleased(RenderScene& scene);
+		void onDisplayUpdated();
     private:
         String                  m_name;
         Rect                    m_rect;
         RenderScene&            m_scene;
         Ref<Display>            m_display;
+        DisplayEventHandle      m_hDisplayUpdated;
         Ref<RenderTexture>      m_renderTexture;
         UPtr<RenderPipeline>    m_pipeline;
         RenderSceneEventHandle  m_hRelease;

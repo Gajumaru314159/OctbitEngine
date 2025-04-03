@@ -91,7 +91,6 @@ TEST(RHI, ShowHide) {
 			desc.size = display->getDesc().size;
 			desc.format = TextureFormat::RGBA8;
 			desc.clear.color = Color::Black;
-			desc.display = display;
 
 			colorRT = RenderTexture::Create(desc);
 			OB_ASSERT_EXPR(colorRT);

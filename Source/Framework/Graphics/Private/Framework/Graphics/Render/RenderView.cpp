@@ -78,18 +78,28 @@ namespace ob::graphics {
 		clearTarget();
 
 		m_display = display;
-		RenderTextureDesc desc;
-		desc.name = Format("Display_{}",m_name);
-		desc.size = display->getDesc().size;
-		desc.format = TextureFormat::RGBA8;
-		desc.clear.color = Color::Black;
-		desc.display = display;
-		m_renderTexture = RenderTexture::Create(desc);
+
+		m_display->addEventListener(m_hDisplayUpdated, { *this,&RenderView::onDisplayUpdated });
+
+		onDisplayUpdated();
+
 	}
 	
 	//! @brief      ディスプレイを取得する
 	auto RenderView::getDisplay()const->const Ref<rhi::Display> {
 		return m_display;
+	}
+
+	//! @brief		ディスプレイ更新イベント
+	void RenderView::onDisplayUpdated() {
+
+		RenderTextureDesc desc;
+		desc.name = Format("Display_{}", m_name);
+		desc.size = m_display->getDesc().size;
+		desc.format = TextureFormat::RGBA8;
+		desc.clear.color = Color::Black;
+		m_renderTexture = RenderTexture::Create(desc);
+
 	}
 
 	//! @brief      描画先を設定する

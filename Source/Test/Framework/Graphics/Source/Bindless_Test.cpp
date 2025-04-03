@@ -78,7 +78,6 @@ TEST(Bindless, Handle) {
 		desc.size = display->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
-		desc.display = display;
 		renderTexture = RenderTexture::Create(desc);
 	}
 

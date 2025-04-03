@@ -44,7 +44,6 @@ namespace ob::rhi::dx12
 
 	//! @brief  リソースを設定
 	//! @{
-	//bool setResource(s32 index, class Buffer& resource) override{}
 
 	//! @brief  バッファリソースを設定
 	bool DescriptorTableImpl::setResource(s32 index,const Ref<Buffer>& resource) {
@@ -95,16 +94,6 @@ namespace ob::rhi::dx12
 		if (auto p = resource.cast<TextureImpl>()) {
 			auto handle = m_handle.getCpuHandle(index);
 			p->createSRV(handle);
-			p->addEventListener(m_elemetns[index]->hTextureUpdate,
-				[this, index]() {
-					if (auto p = m_elemetns[index]->texture.cast<TextureImpl>()) {
-						auto handle = m_handle.getCpuHandle(index);
-
-						if (m_type == DescriptorRangeType::SRV)p->createSRV(handle);
-						//if (m_type == DescriptorRangeType::UAV)p->createUAV(handle);
-					}
-				}
-			);
 		}
 		return true;
 	}

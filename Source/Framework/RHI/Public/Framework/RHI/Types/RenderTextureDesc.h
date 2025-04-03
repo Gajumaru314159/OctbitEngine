@@ -22,8 +22,6 @@ namespace ob::rhi {
         TextureFormat   format = TextureFormat::RGBA8;  //!< テクスチャフォーマット
         Size            size = { 0,0,0 };               //!< サイズ
         ClearColor      clear;                          //!< クリアカラー
-
-        Display*        display = nullptr;              //!< リサイズ追従するDisplay [Optional]
     };
 
 }

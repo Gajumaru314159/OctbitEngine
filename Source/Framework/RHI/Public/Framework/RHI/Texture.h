@@ -11,9 +11,6 @@
 
 namespace ob::rhi {
 
-    //! @brief      テクスチャイベント
-    OB_EVENT_NOTIFIER(TextureEvent);
-
     //! @brief      テクスチャ
     class Texture :public GraphicObject {
     public:
@@ -79,10 +76,6 @@ namespace ob::rhi {
 
         //! @brief      ミップレベルを取得
         s32 mipLevels()const { return desc().mipLevels; }
-
-        //! @brief      イベントリスナ追加
-        //! @details    テクスチャリサイズ時に呼ばれます。
-        virtual void addEventListener(TextureEventHandle& handle, TextureEventDelegate func) = 0;
 
     };
 

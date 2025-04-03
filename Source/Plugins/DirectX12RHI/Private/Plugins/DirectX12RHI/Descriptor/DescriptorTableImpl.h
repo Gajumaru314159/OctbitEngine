@@ -83,7 +83,6 @@ namespace ob::rhi::dx12 {
 			Ref<Buffer> buffer;
 
 			Ref<Texture> texture;
-			TextureEventHandle hTextureUpdate;
 
 			Ref<Sampler> sampler;
 
@@ -91,7 +90,6 @@ namespace ob::rhi::dx12 {
 				// TODO Variantに変えてメモリを節約する
 				buffer.reset();
 				texture.reset();
-				hTextureUpdate.remove();
 				sampler.reset();
 			}
 		};

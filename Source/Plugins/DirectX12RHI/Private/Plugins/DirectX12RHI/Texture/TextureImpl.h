@@ -58,10 +58,6 @@ namespace ob::rhi::dx12 {
         //! @brief      定義取得
         const RenderTextureDesc& descOfRenderTexture()const override;
 
-
-        //! @brief      イベントリスナ追加
-        void addEventListener(TextureEventHandle& handle, TextureEventDelegate func)override;
-
     public:
 
         //! @brief      RenderTextureDesc からRenderTextureを生成
@@ -107,12 +103,6 @@ namespace ob::rhi::dx12 {
         //! @brief      遷移バリアを追加
         bool addResourceTransition(D3D12_RESOURCE_BARRIER& barrier, D3D12_RESOURCE_STATES state,s32 subresource=-1);
 
-
-    private:
-
-        void createRenderTexture();
-        void onUpdateDisplay();
-
     protected:
 
         class DirectX12RHI& m_device;
@@ -130,9 +120,7 @@ namespace ob::rhi::dx12 {
         D3D12_RECT              m_scissorRect{};//!< シザー矩形
 
         D3D12_RESOURCE_STATES   m_state = D3D12_RESOURCE_STATE_COMMON;
-        DisplayEventHandle      m_hUpdateDisplay;
 
-        TextureEventNotifier    m_notifier;
     };
 
 }

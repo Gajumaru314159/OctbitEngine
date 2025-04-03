@@ -46,9 +46,9 @@ namespace ob::engine {
 
 			auto deltaTime = 0.05f;
 
+			// カメラ回転
+			Rot rotation = transform->getLocalRotation();
 			if (Mouse::Right.pressed()) {
-				// カメラ回転
-				Rot rotation = transform->getLocalRotation();
 				rotation.y += Mouse::DeltaX.value() * m_rotationSpeed * deltaTime;
 				rotation.x += Mouse::DeltaY.value() * m_rotationSpeed * deltaTime;
 				rotation.y = Math::Mod(rotation.y, 360.f);
@@ -57,37 +57,40 @@ namespace ob::engine {
 
 				
 				// マウスのホイール変更量を移動速度に掛ける
-				m_translationSpeed += Mouse::Wheel.value()*0.01f;
+				m_translationSpeed += Mouse::Wheel.value() * 0.01f;
 				m_translationSpeed = Math::Max(m_translationSpeed, 0.01f);
-
-				// 移動
-				Vec3 speed(0, 0, 0);
-				Vec3 updown(0, 0, 0);
-				if (Keyboard::W.pressed())speed.z += 1;
-				if (Keyboard::S.pressed())speed.z -= 1;
-				if (Keyboard::A.pressed())speed.x -= 1;
-				if (Keyboard::D.pressed())speed.x += 1;
-				if (Keyboard::E.pressed())updown.y += 1;
-				if (Keyboard::Q.pressed())updown.y -= 1;
-
-				Vec3 position = transform->getLocalPosition();
-				position += (rotation.toQuat() * speed + updown) * m_translationSpeed * deltaTime;
-
-
-				// 更新
-				Transform trs;
-				trs.position = position;
-				trs.scale = Vec3(1);
-				trs.rotation = rotation.toQuat();
-				transform->setLocal(trs);
-
-				auto viewSize = platform::Window::Main().getSize();
-				auto viewMtx =
-					Matrix::Perspective(60, viewSize.x, viewSize.y, 0.01f, 10000.0f) *
-					trs.inverse();
-				graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 			}
 
+			// 移動
+			Vec3 speed(0, 0, 0);
+			Vec3 updown(0, 0, 0);
+			if (Keyboard::W.pressed())speed.z += 1;
+			if (Keyboard::S.pressed())speed.z -= 1;
+			if (Keyboard::A.pressed())speed.x -= 1;
+			if (Keyboard::D.pressed())speed.x += 1;
+			if (Keyboard::E.pressed())updown.y += 1;
+			if (Keyboard::Q.pressed())updown.y -= 1;
+
+			Vec3 position = transform->getLocalPosition();
+
+
+			if (Mouse::Right.pressed()) {
+				position += (rotation.toQuat() * speed + updown) * m_translationSpeed * deltaTime;
+			}
+
+
+			// 更新
+			Transform trs;
+			trs.position = position;
+			trs.scale = Vec3(1);
+			trs.rotation = rotation.toQuat();
+			transform->setLocal(trs);
+
+			auto viewSize = platform::Window::Main().getSize();
+			auto viewMtx =
+				Matrix::Perspective(60, viewSize.x, viewSize.y, 0.01f, 10000.0f) *
+				trs.inverse();
+			graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 			
 		}
 	}

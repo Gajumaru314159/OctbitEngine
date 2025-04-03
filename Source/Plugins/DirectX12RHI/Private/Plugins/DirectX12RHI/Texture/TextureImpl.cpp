@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "TextureImpl.h"
-#include <Framework/RHI/Display.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
@@ -267,58 +266,6 @@ namespace ob::rhi::dx12 {
 		m_desc.arrayNum = 0;
 		m_desc.mipLevels = 1;
 
-		createRenderTexture();
-
-		if (m_renderDesc.display) {
-			m_renderDesc.display->addEventListener(m_hUpdateDisplay, { *this,&TextureImpl::onUpdateDisplay });
-		}
-	}
-
-
-	//! @brief      SwapChainのリソースからRenderTextureを生成
-	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
-		: m_device(rDevice)
-		, m_resource(resource)
-		, m_state(state)
-	{
-
-		if (!resource)
-			return;
-
-		// RTV生成
-		{
-			rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV, 1);
-
-			D3D12_RENDER_TARGET_VIEW_DESC viewDesc = {};
-			viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-			viewDesc.Format = resource->GetDesc().Format;
-
-			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hRTV.getCpuHandle();
-			rDevice.getNative()->CreateRenderTargetView(resource.Get(), &viewDesc, handle);
-		}
-
-		m_viewport = CD3DX12_VIEWPORT(resource.Get());
-		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
-
-		auto resourceDesc = m_resource->GetDesc();
-
-		m_desc.name = name;
-		m_desc.size = { (s32)resourceDesc.Width,(s32)resourceDesc.Height, 0};
-		m_desc.type = TextureType::Texture2D;
-		m_desc.format = TypeConverter::Convert(resourceDesc.Format);
-		m_desc.arrayNum = 0;
-		m_desc.mipLevels = 1;
-
-		m_renderDesc.format = m_desc.format;
-		m_renderDesc.size = m_desc.size;
-		m_renderDesc.clear.color = Color::White;
-
-		Utility::SetName(m_resource.Get(), getName());
-
-	}
-
-	void TextureImpl::createRenderTexture() {
-
 		if (m_desc.size.width <= 0 || m_desc.size.height <= 0) {
 			LOG_ERROR("RenderTextureの生成に失敗。サイズが不正です。[[name={},size=({},{})]", m_desc.name, m_desc.size.width, m_desc.size.height);
 			return;
@@ -330,7 +277,7 @@ namespace ob::rhi::dx12 {
 
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { m_renderDesc.clear.color.r,m_renderDesc.clear.color.g,m_renderDesc.clear.color.b,m_renderDesc.clear.color.a };
-		auto format = TypeConverter::Convert(m_renderDesc.format,true);
+		auto format = TypeConverter::Convert(m_renderDesc.format, true);
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, m_renderDesc.clear.depth, m_renderDesc.clear.stencil);
 
@@ -362,7 +309,6 @@ namespace ob::rhi::dx12 {
 
 
 		// リソース生成
-
 		ComPtr<ID3D12Resource> resource;
 
 		auto result = m_device.getNative()->CreateCommittedResource(
@@ -420,6 +366,48 @@ namespace ob::rhi::dx12 {
 		}
 
 		Utility::SetName(m_resource.Get(), getName());
+	}
+
+
+	//! @brief      SwapChainのリソースからRenderTextureを生成
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
+		: m_device(rDevice)
+		, m_resource(resource)
+		, m_state(state)
+	{
+
+		if (!resource)
+			return;
+
+		// RTV生成
+		{
+			rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV, 1);
+
+			D3D12_RENDER_TARGET_VIEW_DESC viewDesc = {};
+			viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+			viewDesc.Format = resource->GetDesc().Format;
+
+			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hRTV.getCpuHandle();
+			rDevice.getNative()->CreateRenderTargetView(resource.Get(), &viewDesc, handle);
+		}
+
+		m_viewport = CD3DX12_VIEWPORT(resource.Get());
+		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
+
+		auto resourceDesc = m_resource->GetDesc();
+
+		m_desc.name = name;
+		m_desc.size = { (s32)resourceDesc.Width,(s32)resourceDesc.Height, 0};
+		m_desc.type = TextureType::Texture2D;
+		m_desc.format = TypeConverter::Convert(resourceDesc.Format);
+		m_desc.arrayNum = 0;
+		m_desc.mipLevels = 1;
+
+		m_renderDesc.format = m_desc.format;
+		m_renderDesc.size = m_desc.size;
+		m_renderDesc.clear.color = Color::White;
+
+		Utility::SetName(m_resource.Get(), getName());
 
 	}
 
@@ -450,12 +438,6 @@ namespace ob::rhi::dx12 {
 	const RenderTextureDesc& TextureImpl::descOfRenderTexture()const {
 		return m_renderDesc;
 	}
-
-	//! @brief      イベントリスナ追加
-	void TextureImpl::addEventListener(TextureEventHandle& handle, TextureEventDelegate func) {
-		m_notifier.add(handle, func);
-	}
-
 
 	//! @brief      SRVを生成
 	void TextureImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
@@ -615,35 +597,6 @@ namespace ob::rhi::dx12 {
 			}
 		}
 
-	}
-
-	//! @brief  ディスプレイの更新イベント
-	void TextureImpl::onUpdateDisplay() {
-
-		Size newSize = m_desc.size;
-		TextureFormat format = m_desc.format;
-
-		// TODO Displayフォーマット変更
-		//m_desc.format =
-
-		if (m_renderDesc.display) {
-
-			// TODO HDR変更対応
-			//format = m_renderDesc.display->getDesc().format;
-
-			newSize = m_renderDesc.display->getDesc().size;
-
-		}
-
-		if (m_desc.format == format && m_desc.size == newSize)
-			return;
-
-		m_desc.format = m_renderDesc.format = format;
-		m_desc.size = m_renderDesc.size = newSize;
-
-		createRenderTexture();
-
-		m_notifier.invoke();
 	}
 
 }// ob::rhi::dx12
