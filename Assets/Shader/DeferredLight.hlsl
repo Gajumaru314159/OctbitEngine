@@ -1,4 +1,4 @@
-//#include "Common.h"
+ï»¿//#include "Common.h"
 
 SamplerState g_mainSampler:register(s0);
 
@@ -37,7 +37,7 @@ struct PsIn {
 struct PsOut {
   float4 color	:SV_TARGET0;
 };
-// ƒGƒ“ƒgƒŠ
+// ã‚¨ãƒ³ãƒˆãƒª
 PsIn VS_Main(VsIn i) {
     PsIn o;
     o.pos = i.pos;

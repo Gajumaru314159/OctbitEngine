@@ -1,0 +1,15 @@
+﻿#ifndef SHADER_MODEL
+#define SHADER_MODEL 66
+#endif
+
+// Bindlessレンダリングを使用するか
+#ifndef BINDLESS_ENABLED
+#define BINDLESS_ENABLED (60 <= SHADER_MODEL && 1)
+#endif
+
+
+
+
+
+#define BINDLESS_V1_ENABLED (BINDLESS_ENABLED && 60 <= SHADER_MODEL && SHADER_MODEL < 66)
+#define BINDLESS_V2_ENABLED (BINDLESS_ENABLED && 66 <= SHADER_MODEL)
