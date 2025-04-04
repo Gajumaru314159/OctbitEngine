@@ -21,8 +21,12 @@ namespace ob::core {
 
 
         //! @brief  コンストラクタ
+        constexpr Size(s32 width)noexcept
+            : Size(width, 1, 1) {}
+
+        //! @brief  コンストラクタ
         constexpr Size(s32 width, s32 height)noexcept
-            : Size(width, height, 0) {}
+            : Size(width, height, 1) {}
 
 
         //! @brief  コンストラクタ
@@ -80,9 +84,9 @@ namespace ob::core {
 
     public:
 
-        s32 width;  //!< 幅
-        s32 height; //!< 高さ
-        s32 depth;  //!< 深さ(奥行)
+        s32 width = 1;  //!< 幅
+        s32 height = 1; //!< 高さ
+        s32 depth = 1;  //!< 深さ(奥行)
 
     };
 

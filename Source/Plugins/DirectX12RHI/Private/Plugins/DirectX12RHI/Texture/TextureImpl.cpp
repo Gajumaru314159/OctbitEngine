@@ -25,16 +25,16 @@ namespace ob::rhi::dx12 {
 		bool isValidSize = true;
 
 		if (desc.type == TextureType::Texture1D) {
-			isValidSize &= 0 < desc.size.width && 0 == desc.size.height && 0 == desc.size.depth;
+			isValidSize &= 0 < desc.size.width && 1 == desc.size.height && 1 == desc.size.depth;
 		}
 		if (desc.type == TextureType::Texture2D) {
-			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 1 == desc.size.depth;
 		}
 		if (desc.type == TextureType::Texture3D) {
 			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 < desc.size.depth;
 		}
 		if (desc.type == TextureType::Cube) {
-			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 == desc.size.depth;
+			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 1 == desc.size.depth;
 		}
 		if (!isValidSize) {
 			LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size={}]", desc.size);
@@ -57,18 +57,17 @@ namespace ob::rhi::dx12 {
 
 		// DepthOrArraySize は、1 から、特定のフィーチャー レベルとテクスチャ ディメンションでサポートされる最大ディメンションの間である必要があります。 
 		// https://learn.microsoft.com/ja-jp/windows/win32/api/d3d12/ns-d3d12-d3d12_resource_desc
-		arrayNum = std::max(1,arrayNum);
 
 		switch (type) {
 		case TextureType::Texture1D:
-			return CD3DX12_RESOURCE_DESC::Tex1D(nativeFormat, size.width, arrayNum, mipLevel);
+			return CD3DX12_RESOURCE_DESC::Tex1D(nativeFormat, size.width, std::max(1, arrayNum), mipLevel);
 		case TextureType::Texture2D:
-			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, arrayNum, mipLevel);
+			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, std::max(1, arrayNum), mipLevel);
 		case TextureType::Texture3D:
 			if(0 < arrayNum) LOG_ERROR("Texture3Dは配列に対応していません [name={}]", name);
 			return CD3DX12_RESOURCE_DESC::Tex3D(nativeFormat, size.width, size.height, size.depth, mipLevel);
 		case TextureType::Cube:
-			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, 6 * arrayNum, mipLevel);
+			return CD3DX12_RESOURCE_DESC::Tex2D(nativeFormat, size.width, size.height, 6 * std::max(1, arrayNum), mipLevel);
 		default:
 			LOG_ERROR("不明なテクスチャタイプです [name={}]", name);
 			return {};
@@ -123,13 +122,13 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief      IntColorの配列 から空のテクスチャを生成
-	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, Size size, Span<const IntColor> colors)
+	TextureImpl::TextureImpl(DirectX12RHI& rDevice, StringView name, TextureType type,Size size, Span<const IntColor> colors)
 		: m_device(rDevice)
 	{
 		// Desc設定
 		m_desc.name = name;
 		m_desc.size = size;
-		m_desc.type = TextureTypeFrom(size);
+		m_desc.type = type;
 		m_desc.format = TextureFormat::RGBA8;
 		m_desc.arrayNum = 0;
 		m_desc.mipLevels = 1;
@@ -198,6 +197,7 @@ namespace ob::rhi::dx12 {
 		m_desc.format = TypeConverter::Convert(metadata.format);
 		m_desc.arrayNum = (s32)metadata.arraySize;
 		m_desc.mipLevels = (s32)metadata.mipLevels;
+		//if (m_desc.arrayNum == 1) m_desc.arrayNum = 0; // 要素数1のTextureArrayはddsからは読み込めない
 
 		// バリデート
 		if (IsInvalid(m_desc)) return;

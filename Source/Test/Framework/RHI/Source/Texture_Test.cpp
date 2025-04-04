@@ -15,15 +15,12 @@ TEST_F(TextureTest, Create) {
 
 		TextureDesc desc;
 		desc.type = type;
-		desc.size = { 100, 100, 100 };
+		if (type == TextureType::Texture1D) desc.size = Size{ 100 };
+		if (type == TextureType::Texture2D) desc.size = Size{ 100,100 };
+		if (type == TextureType::Texture3D) desc.size = Size{ 100,100,100 };
+		if (type == TextureType::Cube) desc.size = Size{ 100,100 };
 
 		auto texture = Texture::Create(desc);
-
-		if (type == TextureType::Cube) {
-			// 未実装
-			ASSERT_EQ(texture, nullptr);
-			continue;
-		}
 
 		if (!texture)CallBreakPoint();
         ASSERT_NE(texture, nullptr);

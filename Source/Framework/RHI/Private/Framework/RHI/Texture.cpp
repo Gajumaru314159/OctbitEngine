@@ -45,7 +45,7 @@ namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	Ref<Texture> Texture::Create(StringView name, const Bitmap& bitmap) {
-		return Create(name, bitmap.size(), {bitmap.data(),bitmap.pixelCount()});
+		return Create(name, TextureType::Texture2D, bitmap.size(), {bitmap.data(),bitmap.pixelCount()});
 	}
 
 	//! @brief  コンストラクタ
@@ -62,9 +62,9 @@ namespace ob::rhi {
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc テクスチャ定義
-	Ref<Texture> Texture::Create(StringView name, Size size, Span<const IntColor> colors) {
+	Ref<Texture> Texture::Create(StringView name, TextureType type, Size size, Span<const IntColor> colors) {
 		if (auto rhi = RHI::Get()) {
-			return rhi->createTexture(name, size, colors);
+			return rhi->createTexture(name, type, size, colors);
 		}
 		return nullptr;
 	}

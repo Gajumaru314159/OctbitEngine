@@ -36,7 +36,7 @@ namespace ob::rhi {
         //! @brief  コンストラクタ
         //! 
         //! @param desc テクスチャ定義
-        static Ref<Texture> Create(StringView name,Size size,Span<const IntColor> colors);
+        static Ref<Texture> Create(StringView name, TextureType type,Size size,Span<const IntColor> colors);
 
         //! @brief  コンストラクタ
         //! 

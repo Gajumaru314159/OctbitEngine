@@ -39,7 +39,7 @@ namespace ob::rhi {
         String          name;
         TextureType     type        = TextureType::Texture2D;   //!< テクスチャタイプ
         TextureFormat   format      = TextureFormat::RGBA8;     //!< テクスチャフォーマット
-        Size            size        = { 0,0,0 };                //!< サイズ
+        Size            size        = { 1,1,1 };                //!< サイズ
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数 (Texture3Dでは0にしてください)
         s32             mipLevels   = 0;                        //!< ミップ生成レベル (0の場合sizeから自動計算されます)
         // TextureUsages usages;

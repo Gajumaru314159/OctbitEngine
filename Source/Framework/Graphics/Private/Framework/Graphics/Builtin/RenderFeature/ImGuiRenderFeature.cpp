@@ -489,7 +489,7 @@ namespace ob::graphics {
 		}
 
 		// グラフィックリソース生成
-		m_fontTexture = rhi::Texture::Create("ImGuiFont", Size(width, height), colors);
+		m_fontTexture = rhi::Texture::Create("ImGuiFont",TextureType::Texture2D, Size(width, height), colors);
 		m_fontTextureTable = rhi::DescriptorTable::Create(rhi::DescriptorRangeType::SRV, 1);
 		m_fontTextureTable->setResource(0, m_fontTexture);
 

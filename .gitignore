@@ -4,6 +4,9 @@
 /Docs/html
 /Memo/
 .vs/
+/Source/Editor/**/bin
+/Source/Editor/**/obj
+
 
 # extention
 .zip

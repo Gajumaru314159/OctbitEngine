@@ -15,12 +15,12 @@ TEST(Size, Constructor) {
 	}
 	// 要素指定
 	{
-		f32 width = 1.0f;
-		f32 height = 2.0f;
+		f32 width = 1;
+		f32 height = 2;
 		Size size(width, height);
 		EXPECT_EQ(size.width, width);
 		EXPECT_EQ(size.height, height);
-		EXPECT_EQ(size.depth, 0.0f);
+		EXPECT_EQ(size.depth, 1);
 	}
 	// 要素指定(depth)
 	{

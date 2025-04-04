@@ -64,6 +64,10 @@ int TestDirectX12() {
 
 	System::Setup();
 
+	std::filesystem::current_path("Projects/SampleProject");
+
+
+
 	// ディスプレイ生成
 	Ref<Display> display = [&] {
 		DisplayDesc desc;

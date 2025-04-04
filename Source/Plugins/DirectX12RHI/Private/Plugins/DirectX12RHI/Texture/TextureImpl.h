@@ -32,7 +32,7 @@ namespace ob::rhi::dx12 {
         TextureImpl(DirectX12RHI& rDevice, const TextureDesc& desc);
 
         //! @brief      IntColorの配列 から空のテクスチャを生成
-        TextureImpl(DirectX12RHI& rDevice, StringView name, Size size,Span<const IntColor> colors);
+        TextureImpl(DirectX12RHI& rDevice, StringView name, TextureType type, Size size,Span<const IntColor> colors);
 
         //! @brief      テクスチャバイナリから生成
         TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob);

@@ -61,7 +61,7 @@ namespace ob::rhi {
 
         virtual Ref<Texture>        createTexture(const TextureDesc& desc) { return nullptr; }
         virtual Ref<Texture>        createTexture(StringView name,BlobView blob) { return nullptr; }
-        virtual Ref<Texture>        createTexture(StringView name, Size size, Span<const IntColor> colors) { return nullptr; }
+        virtual Ref<Texture>        createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { return nullptr; }
         virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) { return nullptr; }
 
         virtual Ref<Sampler>        createSampler(const SamplerDesc& desc) { return nullptr; }
