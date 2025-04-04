@@ -7,6 +7,7 @@
 #include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Utility/Pimpl.h>
+#include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -136,6 +137,8 @@ namespace ob::rhi::dx12 {
 		//! @brief  システム・コマンド・リストを取得
 		//ComPtr<ID3D12GraphicsCommandList>& getSystemCommandList();
 
+		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
+
 
 		//! @brief          ハンドルをアロケート
 		//! 
@@ -161,11 +164,12 @@ namespace ob::rhi::dx12 {
 		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
 		bool initializeShaderCompiler();
+		bool initializeUploaders();
 		bool initializeDirectStorage();
 
 	private:
 
-		RHIConfig								m_config;
+		RHIConfig							m_config;
 
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス
@@ -174,12 +178,16 @@ namespace ob::rhi::dx12 {
 		ComPtr<IDxcIncludeHandler>			m_shaderIncludeHandler;
 
 		UPtr<class CommandQueue>			m_commandQueue;
+		Ref<CommandList>					m_copyCommandList;
+
 
 		ComPtr<ID3D12Fence>                 m_fence;
 		UINT64                              m_fenceVal;
 
+		MemoryStorage<BufferUploader>		m_bufferUploader;
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
+		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeapsReadable;  // デスクリプタ・ヒープ・リスト
 
 		ComPtr<IDStorageFactory>			g_dsfactory;
 

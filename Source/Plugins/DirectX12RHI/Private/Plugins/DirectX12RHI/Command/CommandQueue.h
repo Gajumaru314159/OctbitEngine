@@ -20,6 +20,7 @@ namespace ob::rhi::dx12 {
         CommandQueue(class DirectX12RHI& device);
 
         void entryCommandList(const CommandList& commandList);
+        void entryCommandListTop(const CommandList& commandList);
 
         void execute();
         void wait();

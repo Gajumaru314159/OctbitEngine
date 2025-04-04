@@ -434,6 +434,7 @@ namespace ob::rhi::dx12
         {
         case CommandListType::Graphic: return D3D12_COMMAND_LIST_TYPE_DIRECT;
         case CommandListType::Compute: return D3D12_COMMAND_LIST_TYPE_COMPUTE;
+        case CommandListType::Copy:    return D3D12_COMMAND_LIST_TYPE_COPY;
         }
 
         LOG_WARNING_EX("Graphic", "不正なCommandListType[value={}]", enum_cast(value));

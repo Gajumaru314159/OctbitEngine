@@ -10,6 +10,22 @@
 
 namespace ob::rhi::dx12 {
 
+	//! @brief バリデート
+	static bool IsInvalid(BufferDesc& desc) {
+
+		if (desc.bufferSize == 0) {
+			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
+			desc.bufferSize = 256;
+		}
+
+		if (desc.bufferType == BufferType::ConstantBuffer && desc.bufferSize % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
+			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.bufferSize, align_up(desc.bufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
+			desc.bufferSize = align_up(desc.bufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+		}
+
+		return false;
+	}
+
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc バッファ定義
@@ -17,32 +33,19 @@ namespace ob::rhi::dx12 {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
-		if (m_desc.bufferSize == 0) {
-			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]",m_desc.name);
-			m_desc.bufferSize = 256;
-		}
 
-		if (m_desc.bufferType == BufferType::ConstantBuffer && m_desc.bufferSize % 256 != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", m_desc.name,m_desc.bufferSize, align_up(m_desc.bufferSize,256));
-			m_desc.bufferSize = align_up(m_desc.bufferSize, 256);
-		}
+		if (IsInvalid(m_desc))return;
 
 		HRESULT result;
 
 		// リソースの生成
 		D3D12_HEAP_PROPERTIES heapprop;
 		if(desc.usage == ResourceUsage::Immutable) heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		else heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+		else heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.bufferSize);
 
 		ComPtr<ID3D12Resource> buffer;
-		result = rDevice.getNative()->CreateCommittedResource(
-			&heapprop,
-			D3D12_HEAP_FLAG_NONE,
-			&resdesc,
-			D3D12_RESOURCE_STATE_COMMON, // D3D12_RESOURCE_STATE_GENERIC_READ,
-			nullptr,
-			IID_PPV_ARGS(buffer.ReleaseAndGetAddressOf()));
+		result = rDevice.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,D3D12_RESOURCE_STATE_COMMON,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
 
 		if (FAILED(result))
 		{
@@ -60,10 +63,11 @@ namespace ob::rhi::dx12 {
 	//! @param desc バッファ定義
 	//! @param data 初期化データ
 	BufferImpl::BufferImpl(DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob)
-		: m_device(rDevice)
-		, m_desc(desc)
+		: BufferImpl(rDevice,desc)
 	{
-
+		if (!isValid())return;
+		// TODO
+		OB_NOTIMPLEMENTED();
 	}
 
 
@@ -105,9 +109,13 @@ namespace ob::rhi::dx12 {
 	//! @brief      バッファを更新(直接更新)
 	//! 
 	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
-	void BufferImpl::updateDirect(size_t size, const void* pData, size_t offset) {
-		if (pData == nullptr) return;
+	void BufferImpl::updateDirect(size_t size, const void* data, size_t offset) {
+		if (data == nullptr) return;
 
+		m_device.getBufferUploader().add(BlobView(data, size), m_resource, offset);
+
+
+		/*
 		HRESULT result;
 		byte* ptr = nullptr;
 		result = m_resource->Map(0, nullptr, (void**)&ptr);
@@ -118,7 +126,7 @@ namespace ob::rhi::dx12 {
 		}
 		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
 		m_resource->Unmap(0, nullptr);
-
+		*/
 	}
 
 
@@ -126,8 +134,12 @@ namespace ob::rhi::dx12 {
 	//! 
 	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 	void BufferImpl::updateDirect(const CopyFunc& func){
-		if (!func)
-			return;
+		if (!func) return;
+
+
+		m_device.getBufferUploader().add(func, m_desc.bufferSize, m_resource, 0);
+
+		return;
 
 		HRESULT result;
 		byte* ptr = nullptr;

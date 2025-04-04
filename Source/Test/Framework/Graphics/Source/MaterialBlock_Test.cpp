@@ -34,6 +34,7 @@ TEST(MaterialBlock, Bindfull) {
 
 		rhi::RHIConfig config;
 		config.enablePIX = true;
+		//config.enableDebugLayer = true;
 		injector.bind(config);
 
 		struct Dependency {

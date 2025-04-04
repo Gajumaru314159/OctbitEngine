@@ -35,7 +35,7 @@ TEST(Bindless, Handle) {
 			rhi::RHIConfig config;
 			config.enablePIX = true;
 			config.enableBindless = true;
-			//config.enableDebugLayer = true;
+			///config.enableDebugLayer = true;
 			injector.bind(config);
 		}
 

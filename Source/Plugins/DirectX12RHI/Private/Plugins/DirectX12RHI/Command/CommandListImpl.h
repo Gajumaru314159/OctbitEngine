@@ -126,7 +126,8 @@ namespace ob::rhi::dx12 {
 
         ResourceStateCache m_cache;                             // リソースバリア用ステートキャッシュ
 
-        StringBase<WCHAR> m_markerNameCache;                    // マーカー名用文字列キャッシュ
+		u64                 m_frameIndex = 0;                   // フレームインデックス
+        StringBase<WCHAR>   m_markerNameCache;                  // マーカー名用文字列キャッシュ
 
     };
 

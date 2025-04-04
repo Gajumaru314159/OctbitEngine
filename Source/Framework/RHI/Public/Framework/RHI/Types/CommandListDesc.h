@@ -13,7 +13,7 @@ namespace ob::rhi {
     enum class CommandListType :u32 {
         Graphic,    //!< グラフィック
         Compute,    //!< コンピュート
-        // Copy
+        Copy
         // VideoDecode
         // VideoProcess
         // ViewoEncode

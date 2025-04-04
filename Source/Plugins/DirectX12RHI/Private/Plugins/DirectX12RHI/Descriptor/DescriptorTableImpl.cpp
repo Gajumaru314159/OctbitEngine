@@ -118,10 +118,13 @@ namespace ob::rhi::dx12
 
 		if (auto p = resource.cast<SamplerImpl>()) {
 			auto dest = m_handle.getCpuHandle(index);
-			auto src = p->getHandle();
+			p->createSamplerView(dest);
 
-			// TODO Samplerはヒープサイズが小さいので戦略を変える必要がある
-			m_device.getNative()->CopyDescriptorsSimple(1, dest, src, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+			
+			// auto src = p->getHandle();
+			// 
+			// // TODO Samplerはヒープサイズが小さいので戦略を変える必要がある
+			// m_device.getNative()->CopyDescriptorsSimple(1, dest, src, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 		}
 		return true;
 	}

@@ -17,6 +17,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/GraphicFile/GraphicFileImpl.h>
+#include <pix3.h>
 
 #ifdef OB_DEBUG
 #include <Plugins/DirectX12RHI/Utility/PIXModule.h>
@@ -64,6 +65,16 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  更新
 	void DirectX12RHI::update() {
+
+		{
+			m_copyCommandList->begin();
+			m_bufferUploader->update(*const_cast<CommandListImpl*>(m_copyCommandList.cast<CommandListImpl>())->getNative());
+			m_copyCommandList->end();
+
+			m_commandQueue->entryCommandListTop(*m_copyCommandList);
+			// m_copyCommandList->wait();
+		}
+
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 
@@ -233,6 +244,8 @@ namespace ob::rhi::dx12 {
 
 		if (!initializeShaderCompiler())return false;
 
+		if (!initializeUploaders())return false;
+
 		if (!initializeDirectStorage())return false;
 
 		return true;
@@ -344,19 +357,27 @@ namespace ob::rhi::dx12 {
 	//! @brief  デスクリプタヒープを初期化
 	bool DirectX12RHI::initializeDescriptorHeaps() {
 
+		bool readable = false;
+		bool writable = true;
+
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 1'000'000);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 1'000'000, readable);
 		m_descriptorHeaps[DescriptorHeapType::Sampler] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256, readable);
 		m_descriptorHeaps[DescriptorHeapType::RTV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 256);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 256, readable);
 		m_descriptorHeaps[DescriptorHeapType::DSV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256, readable);
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName("SystemCBV_SRV_UAVHeap");
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName("SystemRTVHeap");
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName("SystemDSVHeap");
+
+
+		m_descriptorHeapsReadable[DescriptorHeapType::Sampler] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256, readable);
+		m_descriptorHeapsReadable[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
 
 		return true;
 	}
@@ -385,6 +406,19 @@ namespace ob::rhi::dx12 {
 			return false;
 		}
 
+		return true;
+	}
+
+	//! @brief  アップデータを初期化
+	bool DirectX12RHI::initializeUploaders() {
+
+		CommandListDesc desc;
+		desc.name = "CopyCommandList";
+		desc.type = CommandListType::Graphic;
+		m_copyCommandList = createCommandList(desc);
+					
+		size_t blockSize = 4 * 1024 * 1024;
+		m_bufferUploader.construct(*m_device.Get(), blockSize);
 		return true;
 	}
 
@@ -418,7 +452,7 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  コマンドを実行してクリアする
 	void DirectX12RHI::clearCommands() {
-
+		m_copyCommandList.reset();
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 	}

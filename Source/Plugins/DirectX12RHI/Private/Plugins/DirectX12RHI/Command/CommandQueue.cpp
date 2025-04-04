@@ -46,6 +46,9 @@ namespace ob::rhi::dx12 {
 	void CommandQueue::entryCommandList(const CommandList& commandList) {
 		m_entriedCommandList.push_back(&commandList);
 	}
+	void CommandQueue::entryCommandListTop(const CommandList& commandList) {
+		m_entriedCommandList.insert(m_entriedCommandList.begin(), &commandList);
+	}
 
 	void CommandQueue::execute() {
 		m_entriedNativeCommandList.clear();

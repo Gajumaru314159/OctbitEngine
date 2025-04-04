@@ -28,6 +28,8 @@ namespace ob::rhi::dx12 {
         SamplerImpl(DirectX12RHI& device, const SamplerDesc& desc);
 		D3D12_CPU_DESCRIPTOR_HANDLE getHandle() const { return m_handle.getCpuHandle(); }
 
+        void createSamplerView(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
+
 
         //! @brief  妥当な状態か
         bool isValid()const override { return !m_handle.empty(); }
@@ -37,6 +39,8 @@ namespace ob::rhi::dx12 {
         const String& getName()const override { return m_name; }
 
     private:
+        DirectX12RHI& m_device;
+        D3D12_SAMPLER_DESC m_desc;
         String m_name;
         DescriptorHandle m_handle;
     };

@@ -25,7 +25,7 @@ namespace ob::rhi::dx12 {
 		//! @param device   デバイス
 		//! @param type     ヒープ・タイプ
 		//! @param capacity 容量
-		DescriptorHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity);
+		DescriptorHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity,bool readable);
 
 
 		//! @brief          デストラクタ

@@ -18,7 +18,7 @@ namespace ob::rhi::dx12 {
 	//! @param device   デバイス
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
-	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
+	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity, bool readable)
 		: m_mapper(capacity)
 		, m_type(type)
 	{
@@ -26,11 +26,12 @@ namespace ob::rhi::dx12 {
 			D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 			descHeapDesc.Type = TypeConverter::Convert(type);
 			descHeapDesc.NumDescriptors = (UINT)m_mapper.capacity();
-			descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			descHeapDesc.NodeMask = 0;
-			if (descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_RTV ||
-				descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV) {
+			if (descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_RTV || descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV) {
 				descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			}
+			if (descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV|| descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER) {
+				descHeapDesc.Flags = readable ? D3D12_DESCRIPTOR_HEAP_FLAG_NONE : D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			}
 
 			m_descriptorSize = device.getNative()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);
