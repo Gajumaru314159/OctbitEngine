@@ -17,8 +17,8 @@ namespace ob::rhi::dx12
 		m_blockSize = align_up(blockSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 		m_frames.resize(4);
 		for (s32 i = 0; i < m_frames.size(); ++i) {
-			size_t itemNum = m_blockSize / 256;
-			m_frames.at(i).items.reserve(itemNum);
+			size_t requestNum = m_blockSize / 256;
+			m_frames.at(i).requests.reserve(requestNum);
 		}
 	}
 
@@ -36,13 +36,13 @@ namespace ob::rhi::dx12
 
 		auto& block = frame.block();
 
-		auto& item = frame.items.emplace_back();
+		auto& request = frame.requests.emplace_back();
 
-		item.source = block.resource;
-		item.dest = dest;
-		item.sourceOffset = block.blob.size();
-		item.destOffset = offset;
-		item.size = blob.size();
+		request.source = block.resource;
+		request.dest = dest;
+		request.sourceOffset = block.blob.size();
+		request.destOffset = offset;
+		request.size = blob.size();
 
 		block.blob.append(blob.data(), blob.size());
 
@@ -61,17 +61,17 @@ namespace ob::rhi::dx12
 
 		auto& block = frame.block();
 
-		auto& item = frame.items.emplace_back();
+		auto& request = frame.requests.emplace_back();
 
-		item.source = block.resource;
-		item.dest = dest;
-		item.sourceOffset = block.blob.size();
-		item.destOffset = offset;
-		item.size = size;
+		request.source = block.resource;
+		request.dest = dest;
+		request.sourceOffset = block.blob.size();
+		request.destOffset = offset;
+		request.size = size;
 
 		block.blob.resize(block.blob.size() + size);
 
-		func(block.blob.data() + item.sourceOffset);
+		func(block.blob.data() + request.sourceOffset);
 	}
 
 	//! @brief アップロードバッファを拡大する
@@ -142,21 +142,21 @@ namespace ob::rhi::dx12
 		::PIXBeginEvent(&commandList, PIX_COLOR_DEFAULT, L"BufferUploader");
 
 		// blocks 事前バリア設定は暗黙的な昇格を使用 (COMMON or GENERIC_READ > COPY_SOURCE)
-		// items  事前バリア設定は暗黙的な昇格を使用 (COMMON > COPY_DEST)
+		// requests  事前バリア設定は暗黙的な昇格を使用 (COMMON > COPY_DEST)
 
 		// コピー
-		for (auto& item : frame.items) {
-			commandList.CopyBufferRegion(item.dest.Get(), item.destOffset, item.source.Get(), item.sourceOffset, item.size);
+		for (auto& request : frame.requests) {
+			commandList.CopyBufferRegion(request.dest.Get(), request.destOffset, request.source.Get(), request.sourceOffset, request.size);
 		}
 
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
 		// TODO 同じリソースが複数回使用される場合は、バリアをまとめて実行する
 		m_barriers.clear();
-		for (auto& item : frame.items) {
+		for (auto& request : frame.requests) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-			barrier.Transition.pResource = item.dest.Get();
+			barrier.Transition.pResource = request.dest.Get();
 			barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;

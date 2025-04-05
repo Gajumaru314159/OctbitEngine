@@ -32,7 +32,8 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        struct Item {
+        // コピーリクエストごとの
+        struct Request {
             ComPtr<ID3D12Resource> source;
             ComPtr<ID3D12Resource> dest;
             UINT64 sourceOffset;
@@ -52,7 +53,7 @@ namespace ob::rhi::dx12 {
         struct FrameData {
 			s32                 blockIndex = -1;
             Vector<FrameBlock>  blocks;
-            Vector<Item>        items;
+            Vector<Request>     requests;
 
             FrameBlock& block() {
                 return blocks.at(blockIndex);
@@ -66,7 +67,7 @@ namespace ob::rhi::dx12 {
                 for (auto& block : blocks) {
                     block.blob.clear();
                 }
-                items.clear();
+                requests.clear();
             }
 		};
 

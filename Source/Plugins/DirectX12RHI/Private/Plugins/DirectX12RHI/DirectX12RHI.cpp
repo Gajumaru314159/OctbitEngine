@@ -69,6 +69,7 @@ namespace ob::rhi::dx12 {
 		{
 			m_copyCommandList->begin();
 			m_bufferUploader->update(*const_cast<CommandListImpl*>(m_copyCommandList.cast<CommandListImpl>())->getNative());
+			m_textureUploader->update(*const_cast<CommandListImpl*>(m_copyCommandList.cast<CommandListImpl>())->getNative());
 			m_copyCommandList->end();
 
 			m_commandQueue->entryCommandListTop(*m_copyCommandList);
@@ -419,6 +420,9 @@ namespace ob::rhi::dx12 {
 					
 		size_t blockSize = 4 * 1024 * 1024;
 		m_bufferUploader.construct(*m_device.Get(), blockSize);
+
+		m_textureUploader.construct(*m_device.Get());
+
 		return true;
 	}
 

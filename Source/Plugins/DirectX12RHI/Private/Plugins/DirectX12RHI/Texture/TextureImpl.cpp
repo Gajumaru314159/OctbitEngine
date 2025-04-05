@@ -158,7 +158,7 @@ namespace ob::rhi::dx12 {
 		}
 
 		// データ書き込み
-		// TODO TextureUploader対応
+#if 1
 		UINT SrcRowPitch = sizeof(IntColor) * size.width;
 		UINT SrcDepthPitch = sizeof(IntColor) * size.width * size.height;
 		result = resource->WriteToSubresource(0,nullptr,colors.data(), SrcRowPitch, SrcDepthPitch);
@@ -166,6 +166,21 @@ namespace ob::rhi::dx12 {
 			Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
 			return;
 		}
+#else
+		// TODO TextureUploader対応
+		FixedVector<TextureUploader::Subresource, 20> subresources;
+
+		for (s32 array = 0; array < resourceDesc.DepthOrArraySize; ++array) {
+			size_t offset = array * m_desc.size.volume() * sizeof(IntColor);
+			auto& subresource = subresources.emplace_back();
+			subresource.rowPitch = m_desc.size.width * sizeof(IntColor);
+			subresource.slicePitch = subresource.rowPitch * m_desc.size.height;
+			subresource.data = BlobView(GetOffsetPtr(colors.data(),offset), subresource.slicePitch);
+		}
+
+		m_device.getTextureUploader().add(resource, subresources);
+#endif
+		
 
 		m_resource = resource;
 		Utility::SetName(m_resource.Get(), m_desc.name);
@@ -215,15 +230,8 @@ namespace ob::rhi::dx12 {
 			Utility::OutputErrorLog(result, "DirectX::LoadFromDDSMemory()");
 			return;
 		}
-
-		// データ書き込み
-		// TODO TextureUploader対応
-		D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint[20];
-		UINT pNumRows[20];
-		UINT64 pRowSizeInBytes[20];
-		UINT64 pTotalBytes[20];
-		rDevice.getNative()->GetCopyableFootprints(&resourceDesc, 0, metadata.mipLevels, 0, footprint, pNumRows, pRowSizeInBytes, pTotalBytes);
-				
+		
+#if 1
 		// GPUにデータ転送
 		// TODO WriteToSubresourceはUMA向けなのでNUMAの場合はCopyTextureRegionで転送する
 		for (s32 i = 0; i < metadata.mipLevels; ++i) {
@@ -241,6 +249,25 @@ namespace ob::rhi::dx12 {
 				return;
 			}
 		}
+#else
+		FixedVector<TextureUploader::Subresource, 20> subresources;
+
+		for (s32 array = 0; array < m_desc.arrayNum; ++array) {
+			for (s32 depth = 0; depth < m_desc.size.depth; ++depth) {
+				for (s32 mipLevel = 0; mipLevel < resourceDesc.MipLevels; ++mipLevel) {
+
+					auto img = scratchImg.GetImage(mipLevel, array, depth);
+
+					auto& subresource = subresources.emplace_back();
+					subresource.data = BlobView(img->pixels,img->slicePitch);
+					subresource.rowPitch = img->rowPitch;
+					subresource.slicePitch = img->slicePitch;
+				}
+			}
+		}
+
+		m_device.getTextureUploader().add(resource, subresources);
+#endif
 
 		m_resource = resource;
 

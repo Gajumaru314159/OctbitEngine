@@ -8,6 +8,7 @@
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
+#include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -139,6 +140,8 @@ namespace ob::rhi::dx12 {
 
 		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
 
+		TextureUploader& getTextureUploader() { return *m_textureUploader; }
+
 
 		//! @brief          ハンドルをアロケート
 		//! 
@@ -185,6 +188,7 @@ namespace ob::rhi::dx12 {
 		UINT64                              m_fenceVal;
 
 		MemoryStorage<BufferUploader>		m_bufferUploader;
+		MemoryStorage<TextureUploader>		m_textureUploader;
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeapsReadable;  // デスクリプタ・ヒープ・リスト
