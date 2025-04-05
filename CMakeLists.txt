@@ -5,7 +5,7 @@ project ("OctbitEngine")
 # オプション定義
 #------------------------------------------------------------------------------
 option(DirectX "Enable DirectX RHI" ON)
-option(Vulkan "Enable Vulkan RHI" OFF)
+option(Vulkan "Enable Vulkan RHI" ON)
 option(UnitTest "Enable UnitTest" ON)
 
 #------------------------------------------------------------------------------
@@ -88,9 +88,9 @@ if(DirectX)
 endif()
 
 if(Vulkan)
-    # FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
-    # FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
-    # FetchContent_MakeAvailable(glslang spirv)
+    FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
+    FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
+    FetchContent_MakeAvailable(glslang spirv)
 endif()
 
 #------------------------------------------------------------------------------
@@ -127,9 +127,10 @@ if(WIN32)
         add_subdirectory ("Source/Plugins/DirectX12RHI")
     endif()
     if(Vulkan)
-        #add_subdirectory ("Source/Plugins/VulkanRHI")
+        add_subdirectory ("Source/Plugins/VulkanRHI")
     endif()
 endif()
+
 
 add_subdirectory ("Source/Plugins/ImGui")
 
@@ -140,6 +141,7 @@ if(UnitTest)
     add_subdirectory ("Source/Test/Framework/Core")
     add_subdirectory ("Source/Test/Framework/Platform")
     add_subdirectory ("Source/Test/Framework/RHI")
+    add_subdirectory ("Source/Test/Framework/RHIvulkan")
     add_subdirectory ("Source/Test/Framework/Graphics")
     add_subdirectory ("Source/Test/Framework/Engine")
 endif()

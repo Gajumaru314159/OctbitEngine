@@ -3,9 +3,10 @@
 //! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
-#include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-#include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
+#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Utility/Utility.h>
+// #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
+// #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -112,7 +113,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	static Vector<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
 	{
-		OB_CHECK_ASSERT_EXPR(instance != nullptr);
+		OB_ASSERT_EXPR(instance != nullptr);
 
 		uint32_t physicalDeviceCount = 0;
 		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
@@ -155,8 +156,10 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DeviceImpl::DeviceImpl(FeatureLevel featureLevel)
-		:m_featureLevel(featureLevel) {
+	VulkanRHI::VulkanRHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config)
+		: RHI(objectManager, config)
+		, m_config(config ? *config : ob::rhi::RHIConfig{})
+	{
 
 		createInstance();
 		createPhysicalDevice();
@@ -172,7 +175,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-	DeviceImpl::~DeviceImpl() {
+	VulkanRHI::~VulkanRHI() {
 
 		if (m_commandPool) {
 			::vkDestroyCommandPool(m_logicalDevice, m_commandPool, nullptr);
@@ -198,7 +201,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
 	//@―---------------------------------------------------------------------------
-	bool DeviceImpl::isValid()const {
+	bool VulkanRHI::isValid()const {
 		return 
 			m_instance != nullptr &&
 			m_physicalDevice != nullptr &&
@@ -211,7 +214,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkInstance生成
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::createInstance() {
+	void VulkanRHI::createInstance() {
 
 		// レイヤー
 		const char* layerNames[] = {
@@ -270,7 +273,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkPhysicalDevice生成
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::createPhysicalDevice() {
+	void VulkanRHI::createPhysicalDevice() {
 
 		if (m_instance == nullptr)
 			return;
@@ -319,7 +322,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkDevice生成
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::createLogicalDevice() {
+	void VulkanRHI::createLogicalDevice() {
 
 		if (m_physicalDevice == nullptr)
 			return;
@@ -362,7 +365,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkQueue生成
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::createQueue() {
+	void VulkanRHI::createQueue() {
 
 		if (m_logicalDevice == nullptr || m_physicalDevice == nullptr)
 			return;
@@ -380,119 +383,15 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::entryCommandList(const CommandList& commandList) {
+	void VulkanRHI::entryCommandList(const CommandList& commandList) {
 		OB_NOTIMPLEMENTED();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
-	void DeviceImpl::update() {
+	void VulkanRHI::update() {
 		//OB_NOTIMPLEMENTED();
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  フレームバッファを生成
-	//@―---------------------------------------------------------------------------
-	IFrameBuffer* DeviceImpl::createFrameBuffer(const FrameBufferDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  スワップ・チェーンを生成
-	//@―---------------------------------------------------------------------------
-	IDisplay* DeviceImpl::createDisplay(const SwapchainDesc& desc) {
-		return new DisplayImpl(m_instance, m_physicalDevice, m_logicalDevice, desc);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  コマンドリストを生成
-	//@―---------------------------------------------------------------------------
-	ICommandList* DeviceImpl::createCommandList(const CommandListDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  ルートシグネチャを生成
-	//@―---------------------------------------------------------------------------
-	IRootSignature* DeviceImpl::createRootSignature(const RootSignatureDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  パイプラインステートを生成
-	//@―---------------------------------------------------------------------------
-	IPipelineState* DeviceImpl::createPipelineState(const PipelineStateDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  テクスチャを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::ITexture* DeviceImpl::createTexture(const TextureDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  テクスチャを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::ITexture* DeviceImpl::createTexture(BlobView blob) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  レンダーテクスチャを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::IRenderTarget* DeviceImpl::createRenderTarget(const RenderTargetDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  バッファーを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::IBuffer* DeviceImpl::createBuffer(const BufferDesc& desc) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  頂点シェーダを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::IShader* DeviceImpl::createShader(const String& code, ShaderStage stage) {
-		return new ShaderImpl(m_logicalDevice, code, stage);
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  頂点シェーダを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::IShader* DeviceImpl::createShader(const Blob& binary, ShaderStage stage) {
-		return new ShaderImpl(m_logicalDevice, binary, stage);
-
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  デスクリプタ・テーブルを生成
-	//@―---------------------------------------------------------------------------
-	ob::rhi::IDescriptorTable* DeviceImpl::createDescriptorTable(DescriptorHeapType type, s32 elementNum) {
-		OB_NOTIMPLEMENTED();
-		return nullptr;
 	}
 
 

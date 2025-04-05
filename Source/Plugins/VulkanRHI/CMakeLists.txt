@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.15)
+﻿cmake_minimum_required (VERSION 3.22)
 project (VulkanRHI)
 
 #------------------------------------------------------------------------------
@@ -14,28 +14,26 @@ SET_PCH("Plugins/VulkanRHI/PCH/stdafx.h")
 # プロジェクト設定
 #------------------------------------------------------------------------------
 
-find_package(Vulkan REQUIRED)
-
 # インクルードディレクトリ設定
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" ${Vulkan_INCLUDE_DIRS})
+set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "$ENV{VK_SDK_PATH}/Include")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
 set(public_libs 
     Core
-    Engine
     RHI
 )
-set(private_libs 
-    ${Vulkan_LIBRARIES} 
+set(private_libs     
+    "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
     glslang
     #spirv
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
+target_link_directories(${PROJECT_NAME} PRIVATE "$ENV{VULKAN_SDK}/Bin")
 
 # ランタイムライブラリ設定
 set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # フィルタ設定
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins/VulkanRHI")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins/RHI")

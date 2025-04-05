@@ -114,15 +114,15 @@ namespace ob::rhi::vulkan {
         ////@―---------------------------------------------------------------------------
         ////! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
         ////@―---------------------------------------------------------------------------
-        //static D3D12_HEAP_TYPE Convert(ResourceUsage value);
-        //@―---------------------------------------------------------------------------
-        //! @brief  AttachmentClear を VkAttachmentLoadOp に変換
-        //@―---------------------------------------------------------------------------
-        static VkAttachmentLoadOp Convert(AttachmentClear value);
-        //@―---------------------------------------------------------------------------
-        //! @brief  ResourceState を VkImageLayout に変換
-        //@―---------------------------------------------------------------------------
-        static VkImageLayout Convert(ResourceState value);
+        ////static D3D12_HEAP_TYPE Convert(ResourceUsage value);
+        ////@―---------------------------------------------------------------------------
+        ////! @brief  AttachmentClear を VkAttachmentLoadOp に変換
+        ////@―---------------------------------------------------------------------------
+        //static VkAttachmentLoadOp Convert(AttachmentClear value);
+        ////@―---------------------------------------------------------------------------
+        ////! @brief  ResourceState を VkImageLayout に変換
+        ////@―---------------------------------------------------------------------------
+        //static VkImageLayout Convert(ResourceState value);
 
     };
 }

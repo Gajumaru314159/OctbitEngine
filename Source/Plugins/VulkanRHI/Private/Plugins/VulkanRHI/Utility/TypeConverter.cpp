@@ -490,36 +490,36 @@ namespace ob::rhi::vulkan
 	//    return D3D12_HEAP_TYPE_DEFAULT;
 	//}
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  AttachmentClear を VkAttachmentLoadOp に変換
-	//@―---------------------------------------------------------------------------
-	VkAttachmentLoadOp TypeConverter::Convert(AttachmentClear value) {
-		switch (value)
-		{
-		case AttachmentClear::None:		return VK_ATTACHMENT_LOAD_OP_LOAD;
-		case AttachmentClear::Clear:	return VK_ATTACHMENT_LOAD_OP_CLEAR;
-		case AttachmentClear::DontCare:	return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		}
-
-		LOG_WARNING_EX("Graphic", "不正なAttachmentClear[value={}]", enum_cast(value));
-		return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-	}
-	//@―---------------------------------------------------------------------------
-	//! @brief  ResourceState を VkImageLayout に変換
-	//@―---------------------------------------------------------------------------
-	VkImageLayout TypeConverter::Convert(ResourceState value) {
-		switch (value)
-		{
-		case ResourceState::Common:				return VK_IMAGE_LAYOUT_UNDEFINED;
-		case ResourceState::PixelShadeResource:	return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		case ResourceState::ColorAttachment:	return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-		case ResourceState::DepthAttachment:	return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
-		case ResourceState::DepthStencilAttachment:	return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-		case ResourceState::Present:			return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-		}
-
-		LOG_WARNING_EX("Graphic", "不正なResourceState[value={}]", enum_cast(value));
-		return VK_IMAGE_LAYOUT_UNDEFINED;
-	}
+	////@―---------------------------------------------------------------------------
+	////! @brief  AttachmentClear を VkAttachmentLoadOp に変換
+	////@―---------------------------------------------------------------------------
+	//VkAttachmentLoadOp TypeConverter::Convert(AttachmentClear value) {
+	//	switch (value)
+	//	{
+	//	case AttachmentClear::None:		return VK_ATTACHMENT_LOAD_OP_LOAD;
+	//	case AttachmentClear::Clear:	return VK_ATTACHMENT_LOAD_OP_CLEAR;
+	//	case AttachmentClear::DontCare:	return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	//	}
+	//
+	//	LOG_WARNING_EX("Graphic", "不正なAttachmentClear[value={}]", enum_cast(value));
+	//	return VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	//}
+	////@―---------------------------------------------------------------------------
+	////! @brief  ResourceState を VkImageLayout に変換
+	////@―---------------------------------------------------------------------------
+	//VkImageLayout TypeConverter::Convert(ResourceState value) {
+	//	switch (value)
+	//	{
+	//	case ResourceState::Common:				return VK_IMAGE_LAYOUT_UNDEFINED;
+	//	case ResourceState::PixelShadeResource:	return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	//	case ResourceState::ColorAttachment:	return VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+	//	case ResourceState::DepthAttachment:	return VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL;
+	//	case ResourceState::DepthStencilAttachment:	return VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+	//	case ResourceState::Present:			return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	//	}
+	//
+	//	LOG_WARNING_EX("Graphic", "不正なResourceState[value={}]", enum_cast(value));
+	//	return VK_IMAGE_LAYOUT_UNDEFINED;
+	//}
 
 }
