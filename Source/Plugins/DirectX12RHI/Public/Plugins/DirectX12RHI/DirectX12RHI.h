@@ -3,6 +3,7 @@
 //! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Core/Utility/DI.h>
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
@@ -17,6 +18,9 @@ namespace ob::platform {
 namespace ob::rhi::dx12 {
 
 	class DirectX12RHI : public RHI{
+	public:
+		//! @brief  DirectX12RHIの起動に必要なサービスを登録
+		static void Inject(ServiceInjector&);
 	public:
 		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*);
 		~DirectX12RHI();
