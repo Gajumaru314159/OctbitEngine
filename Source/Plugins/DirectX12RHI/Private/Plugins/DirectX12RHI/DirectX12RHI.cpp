@@ -452,7 +452,6 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  コマンドを実行してクリアする
 	void DirectX12RHI::clearCommands() {
-		m_copyCommandList.reset();
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 	}
