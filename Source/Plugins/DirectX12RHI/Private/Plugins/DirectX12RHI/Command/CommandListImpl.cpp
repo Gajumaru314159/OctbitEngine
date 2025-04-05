@@ -131,19 +131,31 @@ namespace ob::rhi::dx12 {
 		D3D12_VIEWPORT viewport{};
 		D3D12_RECT scissor{};
 
+		m_cache.clear();
 
 
 		for (auto [i, color] : Indexed(m_colorTextures)) {
 
-			if (auto texture = color.cast<TextureImpl>()) {
-				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			bool has = false;
+			for (auto& c : colors) {
+				if (c == color) {
+					has = true;
+				}
+			}
+
+			if (!has) {
+				if (auto texture = color.cast<TextureImpl>()) {
+					m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+				}
 			}
 			m_colorTextures[i] = {};
 			hColors[i] = {};
 		}
 		if (auto texture = m_depthTexture.cast<TextureImpl>()) {
 
-			m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			if (m_depthTexture != depth) {
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			}
 			m_depthTexture = {};
 			m_hDSV = {};
 		}

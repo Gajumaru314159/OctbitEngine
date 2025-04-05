@@ -150,6 +150,7 @@ namespace ob::rhi::dx12
 		}
 
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
+		// TODO 同じリソースが複数回使用される場合は、バリアをまとめて実行する
 		m_barriers.clear();
 		for (auto& item : frame.items) {
 			auto& barrier = m_barriers.emplace_back();
