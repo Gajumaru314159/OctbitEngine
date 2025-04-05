@@ -197,7 +197,7 @@ namespace ob::rhi::dx12 {
 		m_desc.format = TypeConverter::Convert(metadata.format);
 		m_desc.arrayNum = (s32)metadata.arraySize;
 		m_desc.mipLevels = (s32)metadata.mipLevels;
-		//if (m_desc.arrayNum == 1) m_desc.arrayNum = 0; // 要素数1のTextureArrayはddsからは読み込めない
+		if (m_desc.arrayNum == 1) m_desc.arrayNum = 0; // 要素数1のTextureArrayはddsからは読み込めない
 
 		// バリデート
 		if (IsInvalid(m_desc)) return;
