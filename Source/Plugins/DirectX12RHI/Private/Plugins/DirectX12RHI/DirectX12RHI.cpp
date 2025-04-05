@@ -17,7 +17,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
 #include <Plugins/DirectX12RHI/GraphicFile/GraphicFileImpl.h>
-#include <Framework/Platform/Window.h>
+#include <Framework/Platform/System.h>
 
 #ifdef OB_DEBUG
 #include <pix3.h>
@@ -33,9 +33,8 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  DirectX12RHIの起動に必要なサービスを登録
 	void DirectX12RHI::Inject(ServiceInjector& injector) {
-		injector.bind<DirectX12RHI>();
-		injector.bind<platform::WindowManager>();
-		injector.bind<GraphicObjectManager>();
+		injector.bind<DirectX12RHI>().as<RHI>();
+		platform::RegisterPlatformService(injector);
 	}
 
 	//! @brief  コンストラクタ
