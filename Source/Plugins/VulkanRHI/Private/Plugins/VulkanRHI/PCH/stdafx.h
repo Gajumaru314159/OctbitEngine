@@ -20,3 +20,6 @@
 //#include <vulkan/vulkan_win32.h>
 #include <vulkan/vk_layer.h>
 #include <vulkan/vulkan.h>
+#include <vulkan/vulkan_raii.hpp>
+
+#include <Plugins/VulkanRHI/Utility/Utility.h>

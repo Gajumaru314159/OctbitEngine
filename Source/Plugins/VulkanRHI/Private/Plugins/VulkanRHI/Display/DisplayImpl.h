@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Display.h>
-#include <Plugins/VulkanRHI/Display/Surface.h>
+#include <Framework/RHI/RenderTexture.h>
 
 //===============================================================
 // クラス定義
@@ -51,6 +51,9 @@ namespace ob::rhi::vulkan {
 		::VkSurfaceKHR		m_surface;
 		::VkSwapchainKHR    m_swapchain;
 		Vector<VkImageView>	m_imageViews;
+
+		Swapper<Ref<RenderTexture>> m_textures;
+
 		//std::vector<vulkan::ImageView> m_image_views;
 		//std::unique_ptr<vulkan::Queue> m_present_queue;
 		//vulkan::Device* m_device;

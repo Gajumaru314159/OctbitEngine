@@ -6,6 +6,7 @@
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/RHI/All.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <Plugins/VulkanRHI/System.h>
 #include <magic_enum.hpp>
 
 using namespace ob;
@@ -17,7 +18,8 @@ protected:
 
 		ServiceInjector injector;
 		ServiceContainer container;
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::vulkan::RegisterVulkanRHIService(injector);
 		rhi::RegisterRHIService(injector);
 
 		// m_config.enableDebugLayer = true;

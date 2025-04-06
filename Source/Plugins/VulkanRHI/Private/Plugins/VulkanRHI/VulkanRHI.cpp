@@ -186,11 +186,6 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
 
-		if (m_commandPool) {
-			::vkDestroyCommandPool(m_logicalDevice, m_commandPool, nullptr);
-			m_commandPool = nullptr;
-		}
-
 		if (m_logicalDevice) {
 			::vkDestroyDevice(m_logicalDevice, nullptr);
 			m_logicalDevice = nullptr;
@@ -226,8 +221,8 @@ namespace ob::rhi::vulkan {
 	void VulkanRHI::createInstance() {
 
 		// レイヤー / 拡張機能名
-		Vector<String> layerNames;
-		Vector<String> extensionNames;
+		Vector<const char*> layerNames;
+		Vector<const char*> extensionNames;
 		if (m_vconfig.enableDebugLayer) {
 			OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
 			OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME));
@@ -242,7 +237,7 @@ namespace ob::rhi::vulkan {
 		for (const auto& name : layerNames)
 		{
 			if (existLayerNames.count(name)) {
-				validLayerNames.push_back(name.c_str());
+				validLayerNames.push_back(name);
 			}
 		}
 
@@ -252,7 +247,7 @@ namespace ob::rhi::vulkan {
 		for (const auto& name : extensionNames)
 		{
 			if (existExtensionNames.count(name)) {
-				validExtensionNames.push_back(name.c_str());
+				validExtensionNames.push_back(name);
 			}
 		}
 
@@ -273,7 +268,7 @@ namespace ob::rhi::vulkan {
 		instanceInfo.ppEnabledExtensionNames = validExtensionNames.data();
 
 		// 生成
-		Success(::vkCreateInstance(&instanceInfo, nullptr, &m_instance));
+		if(Failed(::vkCreateInstance(&instanceInfo, nullptr, &m_instance)))return;
 
 	}
 
@@ -345,9 +340,31 @@ namespace ob::rhi::vulkan {
 			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
 		};
 
+		// TODO
+
+		//// 利用可能なレイヤーでフィルタ
+		//Vector<const char*> validLayerNames;
+		//const auto existLayerNames = EnumerateInstanceLayerNames();
+		//for (const auto& name : layerNames)
+		//{
+		//	if (existLayerNames.count(name)) {
+		//		validLayerNames.push_back(name);
+		//	}
+		//}
+		//
+		//// 利用可能な拡張機能でフィルタ
+		//Vector<const char*> validExtensionNames;
+		//const auto existExtensionNames = EnumerateInstanceExtensionNames(validLayerNames);
+		//for (const auto& name : extensionNames)
+		//{
+		//	if (existExtensionNames.count(name)) {
+		//		validExtensionNames.push_back(name);
+		//	}
+		//}
+
 		// デバイスキューのパラメータ
 		Vector<float> queuePriorities(m_queueCount, 0.0f);
-		::VkDeviceQueueCreateInfo queueInfo{};
+		VkDeviceQueueCreateInfo queueInfo{};
 		queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 		queueInfo.queueCount = 1;
 		queueInfo.pQueuePriorities = queuePriorities.data();
@@ -355,7 +372,7 @@ namespace ob::rhi::vulkan {
 		queueInfo.queueCount = (uint32_t)queuePriorities.size();
 
 		// 生成情報
-		::VkDeviceCreateInfo info{};
+		VkDeviceCreateInfo info{};
 		info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
@@ -365,7 +382,7 @@ namespace ob::rhi::vulkan {
 		info.ppEnabledLayerNames = layerNames;
 		info.pEnabledFeatures = nullptr;
 
-		Success(::vkCreateDevice(m_physicalDevice, &info, nullptr, &m_logicalDevice));
+		if (Failed(::vkCreateDevice(m_physicalDevice, &info, nullptr, &m_logicalDevice))) return;
 
 	}
 
@@ -375,16 +392,11 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createQueue() {
 
-		if (m_logicalDevice == nullptr || m_physicalDevice == nullptr)
+		if (m_logicalDevice == nullptr)
 			return;
 
 		::vkGetDeviceQueue(m_logicalDevice, m_queueFamilyIndex, 0, &m_queue);
 
-		VkCommandPoolCreateInfo ci{};
-		ci.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		ci.queueFamilyIndex = m_queueFamilyIndex;
-		ci.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		vkCreateCommandPool(m_logicalDevice, &ci, nullptr, &m_commandPool);
 	}
 
 
@@ -412,7 +424,7 @@ namespace ob::rhi::vulkan {
 
 	//! @brief  コマンドリスト生成
 	Ref<CommandList> VulkanRHI::createCommandList(const CommandListDesc& desc) {
-		SAFE_CREATE(CommandList, CommandListImpl, desc);
+		SAFE_CREATE(CommandList, CommandListImpl, desc, m_logicalDevice, m_queueFamilyIndex);
 	}
 
 

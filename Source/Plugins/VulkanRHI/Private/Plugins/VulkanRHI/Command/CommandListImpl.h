@@ -24,7 +24,9 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        CommandListImpl(const CommandListDesc& desc);
+        CommandListImpl(const CommandListDesc& desc,VkDevice device,u32 queueFamilyIndex);
+
+        ~CommandListImpl();
 
         //! @brief  妥当な状態か
         bool isValid()const override;
@@ -105,7 +107,9 @@ namespace ob::rhi::vulkan {
     private:
 
         const CommandListDesc m_desc;
-        VkCommandBuffer m_commandBuffer;
+		VkDevice		    m_device = nullptr;      
+        VkCommandPool		m_commandPool = nullptr;
+        VkCommandBuffer     m_commandBuffer = nullptr;
 
     };
 

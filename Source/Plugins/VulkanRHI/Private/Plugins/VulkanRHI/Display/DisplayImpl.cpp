@@ -4,22 +4,24 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-//#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
+#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
+#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Framework/Platform/Window.h>
 
 namespace ob::rhi::vulkan {
 
-    //@―---------------------------------------------------------------------------
-    //! @brief  コンストラクタ
-    //@―---------------------------------------------------------------------------
-    DisplayImpl::DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc)
-        : m_desc(desc)
+	//@―---------------------------------------------------------------------------
+	//! @brief  コンストラクタ
+	//@―---------------------------------------------------------------------------
+	DisplayImpl::DisplayImpl(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc)
+		: m_desc(desc)
 		, m_instance(instance)
 		, m_physicalDevice(physicalDevice)
 		, m_logicalDevice(device)
-    {
-		if (desc.size.width == 0 || desc.size.height == 0) {
+	{
+		// 未指定の場合はwindowから取得
+		if (desc.size.width <= 1 || desc.size.height <= 1) {
 			m_desc.size = { (s32)desc.window.getSize().x,(s32)desc.window.getSize().y };
 		}
 
@@ -31,37 +33,48 @@ namespace ob::rhi::vulkan {
 		info.hinstance = GetModuleHandle(nullptr);
 		info.hwnd = (HWND)desc.window.getHandle();
 
-		ThrowIfFailed(::vkCreateWin32SurfaceKHR(m_instance, &info, nullptr, &m_surface));
+		if (Failed(::vkCreateWin32SurfaceKHR(m_instance, &info, nullptr, &m_surface))) return;
 #else
 		static_assert(true, "Surface is not implemented.");
 #endif
 
 		// サーフェイスのサポートをチェック
 		VkBool32 surfaceSupport = false;
-		::vkGetPhysicalDeviceSurfaceSupportKHR(m_physicalDevice, 0, m_surface, &surfaceSupport);
-		if (surfaceSupport==false) {
-			LOG_FATAL("スワップチェーンがサポートされていません。");
+		if (Failed(::vkGetPhysicalDeviceSurfaceSupportKHR(m_physicalDevice, 0, m_surface, &surfaceSupport)))return;
+		if (surfaceSupport == false) {
+			LOG_ERROR("スワップチェーンがサポートされていません。");
+			return;
 		}
 
 		// サーフェスの機能を取得
 		VkSurfaceCapabilitiesKHR capabilities;
-		::vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physicalDevice, m_surface, &capabilities);
+		if (Failed(::vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physicalDevice, m_surface, &capabilities)))return;
 
 		// 利用可能なフォーマットを取得
 		uint32_t formatCount = 0;
-		::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, nullptr);
+		if (Failed(::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, nullptr)))return;
 		Vector<VkSurfaceFormatKHR> formats(formatCount);
-		::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, formats.data());
+		if (Failed(::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, formats.data())))return;
 
 		//利用可能なプレゼンテーションモード
 		uint32_t presentModeCount;
-		::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, nullptr);
+		if (Failed(::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, nullptr)))return;
 		Vector<VkPresentModeKHR> presentModeList(presentModeCount);
-		::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, presentModeList.data());
+		if (Failed(::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, presentModeList.data())))return;
+		
+		// VkExtent2D swapchain_size{};
+		// if (capabilities.currentExtent.width == 0xFFFFFFFF)
+		// {
+		// 	swapchain_size.width = context.swapchain_dimensions.width;
+		// 	swapchain_size.height = context.swapchain_dimensions.height;
+		// }
+		// else
+		// {
+		// 	swapchain_size = capabilities.currentExtent;
+		// }
 
 
-
-		VkSurfaceFormatKHR format = formats[0];
+		VkSurfaceFormatKHR format = formats[0]; // TODO desc.formatチェック
 
 		// サーフェイス生成
 		VkSwapchainCreateInfoKHR swapchain_create_info = {};
@@ -71,7 +84,7 @@ namespace ob::rhi::vulkan {
 		swapchain_create_info.surface = m_surface;
 
 		swapchain_create_info.minImageCount = capabilities.minImageCount;
-		swapchain_create_info.imageFormat = format.format;// TypeConverter::Convert(desc.format);
+		swapchain_create_info.imageFormat = format.format;
 		swapchain_create_info.imageColorSpace = format.colorSpace;
 		swapchain_create_info.imageExtent.width = m_desc.size.width;
 		swapchain_create_info.imageExtent.height = m_desc.size.height;
@@ -84,12 +97,12 @@ namespace ob::rhi::vulkan {
 		swapchain_create_info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 		swapchain_create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
 
-		swapchain_create_info.presentMode = VK_PRESENT_MODE_FIFO_KHR;
+		swapchain_create_info.presentMode = VK_PRESENT_MODE_FIFO_KHR; // 利用可能チェック
 		swapchain_create_info.clipped = VK_TRUE;
 		swapchain_create_info.oldSwapchain = VK_NULL_HANDLE;
 
 
-		ThrowIfFailed(::vkCreateSwapchainKHR(m_logicalDevice, &swapchain_create_info, nullptr, &m_swapchain));
+		if (Failed(::vkCreateSwapchainKHR(m_logicalDevice, &swapchain_create_info, nullptr, &m_swapchain)))return;
 
 
 
@@ -100,7 +113,9 @@ namespace ob::rhi::vulkan {
 		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchain, &imageCount, images.data());
 
 		// ImageView生成
-		for (auto& image: images) {
+		for (auto& image : images) {
+
+			m_textures.push_back(new TextureImpl(device,image));
 
 			VkImageViewCreateInfo image_view_create_info{};
 			image_view_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -123,13 +138,19 @@ namespace ob::rhi::vulkan {
 
 			auto& imageView = m_imageViews.emplace_back();
 			::vkCreateImageView(m_logicalDevice, &image_view_create_info, nullptr, &imageView);
+
+			VkMemoryRequirements memoryRequirements = {};
+			memoryRequirements.size;
+			memoryRequirements.alignment;
+			memoryRequirements.memoryTypeBits;
+			::vkGetImageMemoryRequirements(device, image, &memoryRequirements);
 		}
-    }
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-    DisplayImpl::~DisplayImpl() {
+	DisplayImpl::~DisplayImpl() {
 
 		for (auto imageView : m_imageViews) {
 			vkDestroyImageView(m_logicalDevice, imageView, nullptr);
@@ -149,24 +170,24 @@ namespace ob::rhi::vulkan {
 		m_instance = nullptr;
 		m_logicalDevice = nullptr;
 
-    }
+	}
 
 
-    //! @brief  妥当な状態か
-    bool DisplayImpl::isValid()const {
-        return m_swapchain;
-    }
+	//! @brief  妥当な状態か
+	bool DisplayImpl::isValid()const {
+		return m_swapchain;
+	}
 
 
-    //! @brief  定義を取得
-    const DisplayDesc& DisplayImpl::getDesc()const noexcept {
-        return m_desc;
-    }
+	//! @brief  定義を取得
+	const DisplayDesc& DisplayImpl::getDesc()const noexcept {
+		return m_desc;
+	}
 
-    //! @brief 更新
-    void DisplayImpl::update() {
+	//! @brief 更新
+	void DisplayImpl::update() {
 
-    }
+	}
 
 
 	//! @brief      イベントリスナ追加

@@ -133,7 +133,6 @@ namespace ob::rhi::vulkan {
 		VkPhysicalDevice	m_physicalDevice	= nullptr;
 		VkDevice			m_logicalDevice		= nullptr;
 		VkQueue				m_queue				= nullptr;
-		VkCommandPool		m_commandPool		= nullptr;
 
 		u32					m_queueFamilyIndex;
 		u32					m_queueCount;

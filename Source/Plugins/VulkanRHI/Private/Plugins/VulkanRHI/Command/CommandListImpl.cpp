@@ -25,10 +25,43 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandListImpl::CommandListImpl(const CommandListDesc& desc)
+	CommandListImpl::CommandListImpl(const CommandListDesc& desc, VkDevice device, u32 queueFamilyIndex)
 		: m_desc(desc)
+		, m_device(device)
 	{
+		VkResult result;
 
+		VkCommandPoolCreateInfo ci{};
+		ci.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+		ci.queueFamilyIndex = queueFamilyIndex;
+		ci.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+		result = vkCreateCommandPool(device, &ci, nullptr, &m_commandPool);
+		if (result == VK_SUCCESS) {
+			return;
+		}
+
+		VkCommandBufferAllocateInfo info{};
+		info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		info.commandPool = m_commandPool;
+		info.commandBufferCount;
+		info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+
+		result = vkAllocateCommandBuffers(m_device, &info, &m_commandBuffer);
+		if (result == VK_SUCCESS) {
+			return;
+		}
+
+	}
+
+	CommandListImpl::~CommandListImpl() {
+		if (m_commandBuffer) {
+			// TODO はきがひつようかしらべる
+			m_commandBuffer = nullptr;
+		}
+		if (m_commandPool) {
+			::vkDestroyCommandPool(m_device, m_commandPool, nullptr);
+			m_commandPool = nullptr;
+		}
 	}
 
 
