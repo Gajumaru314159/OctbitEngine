@@ -14,6 +14,10 @@ namespace ob::platform {
 
 namespace ob::rhi::vulkan {
 
+	struct VulkanRHIConfig {
+		bool enableDebugLayer = true;
+	};
+
 	class VulkanRHI :public RHI {
 	public:
 
@@ -24,7 +28,7 @@ namespace ob::rhi::vulkan {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		VulkanRHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*);
+		VulkanRHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*,VulkanRHIConfig*);
 		~VulkanRHI();
 
 		//! @brief  ゲーム更新イベント
@@ -47,19 +51,19 @@ namespace ob::rhi::vulkan {
 		//===============================================================
 
 		//! @brief  スワップ・チェーンを生成
-		Ref<Display> createDisplay(const DisplayDesc& desc){ return {}; }
+		Ref<Display> createDisplay(const DisplayDesc& desc);
 
 
 		//! @brief  コマンドリスト生成
-		Ref<CommandList> createCommandList(const CommandListDesc& desc){ return {}; }
+		Ref<CommandList> createCommandList(const CommandListDesc& desc);
 
 
 		//! @brief  ルートシグネチャを生成
-		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc){ return {}; }
+		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc);
 
 
 		//! @brief  パイプラインステートを生成
-		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc){ return {}; }
+		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc);
 
 
 		//! @brief  テクスチャを生成
@@ -123,6 +127,7 @@ namespace ob::rhi::vulkan {
 	private:
 
 		RHIConfig								m_config;
+		VulkanRHIConfig							m_vconfig;
 
 		VkInstance			m_instance			= nullptr;
 		VkPhysicalDevice	m_physicalDevice	= nullptr;

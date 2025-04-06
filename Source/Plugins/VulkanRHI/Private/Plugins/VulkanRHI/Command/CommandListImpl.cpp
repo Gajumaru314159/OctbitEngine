@@ -4,12 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "CommandListImpl.h"
-#include <Framework/RHI/Device.h>
 #include <Framework/RHI/Constants.h>
-#include <Framework/RHI/RenderTarget.h>
+#include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/Buffer.h>
-#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
+#include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
 //#include <Plugins/VulkanRHI/Texture/RenderTargetImpl.h>
 //#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
@@ -26,7 +25,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandListImpl::CommandListImpl(class DeviceImpl& device, const CommandListDesc& desc)
+	CommandListImpl::CommandListImpl(const CommandListDesc& desc)
 		: m_desc(desc)
 	{
 
@@ -38,6 +37,11 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	bool CommandListImpl::isValid()const {
 		return false;
+	}
+
+	//! @brief      名前を取得
+	const String& CommandListImpl::getName() const {
+		return m_desc.name;
 	}
 
 #pragma endregion Command
@@ -57,27 +61,22 @@ namespace ob::rhi::vulkan {
 		OB_NOTIMPLEMENTED();
 	}
 
+	//@―---------------------------------------------------------------------------
+	//! @brief  描画終了
+	//@―---------------------------------------------------------------------------
+	void CommandListImpl::flush() {
+		OB_NOTIMPLEMENTED();
+	}
+
+	//! @brief      描画先設定
+	void CommandListImpl::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
+
+	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::applyDisplay(const Display& display, const Texture& texture) {
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      レンダーターゲットを設定
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::beginRender(const RenderTarget& target) {
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      描画終了
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::endRender() {
+	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) {
 		OB_NOTIMPLEMENTED();
 	}
 
@@ -87,7 +86,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setScissorRect(const IntRect* pRect, s32 num) {
 
-		OB_CHECK_ASSERT_EXPR(m_commandBuffer != nullptr);
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
 
 		Array<VkRect2D, 8> rects;
 		for (s32 i = 0; i < num; ++i) {
@@ -109,7 +108,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setViewport(const Viewport* pViewport, s32 num) {
 
-		OB_CHECK_ASSERT_EXPR(m_commandBuffer != nullptr);
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
 
 		Array<VkViewport, 8> viewports;
 		for (s32 i = 0; i < num;++i) {
@@ -149,7 +148,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setVertexBuffers(Span<const Buffer*> buffers) {
+	void CommandListImpl::setVertexBuffers(Span<Ref<Buffer>> buffers) {
 
 		OB_NOTIMPLEMENTED();
 	}
@@ -158,16 +157,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief      インデックスバッファを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setIndexBuffer(const Buffer& buffer) {
-
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//@―---------------------------------------------------------------------------
-	//! @brief      ルートシグネチャを設定
-	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setRootSignature(const RootSignature& signature) {
+	void CommandListImpl::setIndexBuffer(const Ref<Buffer>& buffer) {
 
 		OB_NOTIMPLEMENTED();
 	}
@@ -176,7 +166,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief      パイプラインステートを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setPipelineState(const PipelineState& pipeline) {
+	void CommandListImpl::setPipelineState(const Ref<PipelineState>&) {
 
 		OB_NOTIMPLEMENTED();
 	}
@@ -187,7 +177,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::draw(const DrawParam& param) {
 
-		OB_CHECK_ASSERT_EXPR(m_commandBuffer);
+		OB_ASSERT_EXPR(m_commandBuffer);
 		::vkCmdDraw(m_commandBuffer, param.vertexCount, 0, param.startVertex, 0);
 
 	}
@@ -198,7 +188,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::drawIndexed(const DrawIndexedParam& param) {
 
-		OB_CHECK_ASSERT_EXPR(m_commandBuffer);
+		OB_ASSERT_EXPR(m_commandBuffer);
 		::vkCmdDrawIndexed(m_commandBuffer, param.indexCount, 0, param.startIndex,param.startVertex, 0);
 
 	}
@@ -213,12 +203,27 @@ namespace ob::rhi::vulkan {
 	}
 
 
+	//! @brief      ルート定数を設定
+	void CommandListImpl::setRootConstant(const SetRootConstantsParam&) {
+
+	}
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  リソースバリアを挿入
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::insertResourceBarrier(const ResourceBarrier& resourceBarrier) {
 
 		OB_NOTIMPLEMENTED();
+	}
+
+	//! @brief      GPUマーカーをプッシュ
+	void CommandListImpl::pushMarker(StringView name) {
+
+	}
+
+	//! @brief      GPUマーカーをポップ
+	void CommandListImpl::popMarker() {
+
 	}
 
 #pragma endregion

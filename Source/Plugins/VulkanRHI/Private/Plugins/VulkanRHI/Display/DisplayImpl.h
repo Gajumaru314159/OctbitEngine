@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IDisplay.h>
+#include <Framework/RHI/Display.h>
 #include <Plugins/VulkanRHI/Display/Surface.h>
 
 //===============================================================
@@ -12,7 +12,7 @@
 //===============================================================
 namespace ob::rhi::vulkan {
 
-	class DisplayImpl :public IDisplay{
+	class DisplayImpl :public Display{
 	public:
 
 		//===============================================================
@@ -22,36 +22,27 @@ namespace ob::rhi::vulkan {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const SwapchainDesc& desc);
+		DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc);
 		~DisplayImpl();
+		
+		bool isValid()const override;		
 
+		const String& getName()const override {
+			return m_desc.name;
+		}
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  妥当な状態か
-        //@―---------------------------------------------------------------------------
-        bool isValid()const override;
+		//! @brief      定義を取得
+		const DisplayDesc& getDesc()const noexcept;
 
+		//! @brief      更新
+		void update();
 
-        //@―---------------------------------------------------------------------------
-        //! @brief  定義を取得
-        //@―---------------------------------------------------------------------------
-        const SwapchainDesc& getDesc()const noexcept override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  バックバッファのサイズを変更
-        //@―---------------------------------------------------------------------------
-        bool resizeBackBuffer(const Size& size) override;
-
-
-        //@―---------------------------------------------------------------------------
-        //! @brief      更新
-        //@―---------------------------------------------------------------------------
-        void update() override;
+		//! @brief      イベントリスナ追加
+		void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func);
 
 	private:
 
-        SwapchainDesc m_desc;
+		DisplayDesc			m_desc;
 
 		::VkInstance		m_instance;
 		::VkPhysicalDevice	m_physicalDevice;

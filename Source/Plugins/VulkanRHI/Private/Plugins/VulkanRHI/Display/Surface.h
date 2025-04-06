@@ -18,7 +18,7 @@ namespace ob::rhi::vulkan {
 		Surface(::VkInstance instance, ::HWND hwnd)
 			: m_instance(instance)
 		{
-			OB_CHECK_ASSERT_EXPR(instance);
+			OB_ASSERT_EXPR(instance);
 
 #ifdef OS_WINDOWS
 			::VkWin32SurfaceCreateInfoKHR info{};
@@ -28,7 +28,7 @@ namespace ob::rhi::vulkan {
 			info.hwnd = hwnd;
 
 			if (Failed(::vkCreateWin32SurfaceKHR(m_instance, &info, nullptr, &m_surface))) {
-				OB_ASSERT("vkCreateWin32SurfaceKHRに失敗");
+				LOG_FATAL("vkCreateWin32SurfaceKHRに失敗");
 			}
 #else
 			static_assert(true, "Surface is not implemented.");

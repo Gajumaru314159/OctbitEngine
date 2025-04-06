@@ -4,8 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/IPipelineState.h>
-#include <Framework/RHI/Types/PipelineStateDesc.h>
+#include <Framework/RHI/PipelineState.h>
 
 //===============================================================
 // 前方宣言
@@ -23,13 +22,13 @@ namespace ob::rhi::vulkan {
     //@―---------------------------------------------------------------------------
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     //@―---------------------------------------------------------------------------
-    class PipelineStateImpl :public IPipelineState {
+    class PipelineStateImpl :public PipelineState {
     public:
 
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
         //@―---------------------------------------------------------------------------
-        PipelineStateImpl(DeviceImpl&, const PipelineStateDesc& desc);
+        PipelineStateImpl(const PipelineStateDesc& desc);
 
 
         //@―---------------------------------------------------------------------------
@@ -47,6 +46,10 @@ namespace ob::rhi::vulkan {
     private:
 
         const PipelineStateDesc m_desc;
+
+
+        // PipelineState を介して継承されました
+        const String& getName() const override;
 
     };
 

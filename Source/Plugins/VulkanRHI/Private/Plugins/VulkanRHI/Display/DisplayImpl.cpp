@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
+//#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Framework/Platform/Window.h>
 
@@ -13,14 +13,14 @@ namespace ob::rhi::vulkan {
     //@―---------------------------------------------------------------------------
     //! @brief  コンストラクタ
     //@―---------------------------------------------------------------------------
-    DisplayImpl::DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const SwapchainDesc& desc)
+    DisplayImpl::DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc)
         : m_desc(desc)
 		, m_instance(instance)
 		, m_physicalDevice(physicalDevice)
 		, m_logicalDevice(device)
     {
 		if (desc.size.width == 0 || desc.size.height == 0) {
-			m_desc.size = desc.window.getSize();
+			m_desc.size = { (s32)desc.window.getSize().x,(s32)desc.window.getSize().y };
 		}
 
 		// デバイスごとのサーフェイス生成
@@ -152,35 +152,26 @@ namespace ob::rhi::vulkan {
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  妥当な状態か
-    //@―---------------------------------------------------------------------------
     bool DisplayImpl::isValid()const {
         return m_swapchain;
     }
 
 
-    //@―---------------------------------------------------------------------------
     //! @brief  定義を取得
-    //@―---------------------------------------------------------------------------
-    const SwapchainDesc& DisplayImpl::getDesc()const noexcept {
+    const DisplayDesc& DisplayImpl::getDesc()const noexcept {
         return m_desc;
     }
 
-
-    //@―---------------------------------------------------------------------------
-    //! @brief  バックバッファのサイズを変更
-    //@―---------------------------------------------------------------------------
-    bool DisplayImpl::resizeBackBuffer(const Size& size) {
-        return false;
-    }
-
-
-    //@―---------------------------------------------------------------------------
-    //! @brief      更新
-    //@―---------------------------------------------------------------------------
+    //! @brief 更新
     void DisplayImpl::update() {
 
     }
+
+
+	//! @brief      イベントリスナ追加
+	void DisplayImpl::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
+
+	}
 
 }

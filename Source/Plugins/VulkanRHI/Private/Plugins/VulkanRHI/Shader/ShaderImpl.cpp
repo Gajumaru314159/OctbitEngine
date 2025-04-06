@@ -9,10 +9,9 @@
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Shader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Plugins/VulkanRHI/Device/DeviceImpl.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <glslang/SPIRV/GlslangToSpv.h>
-
+/*
 namespace ob::rhi::vulkan {
 
 
@@ -298,3 +297,4 @@ namespace ob::rhi::vulkan {
 	}
 
 }
+*/

@@ -6,7 +6,6 @@
 #pragma once
 #include <Plugins/VulkanRHI/Command/CommandPool.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Framework/RHI/Device.h>
 
 namespace ob::rhi::vulkan {
 

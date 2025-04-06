@@ -5,10 +5,18 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-// #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-// #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
+#include <Plugins/VulkanRHI/Display/DisplayImpl.h>
+#include <Plugins/VulkanRHI/Command/CommandListImpl.h>
+#include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
+#include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
+#include <Plugins/VulkanRHI/PipelineState/PipelineStateImpl.h>
 
 #include <Framework/Platform/Window.h>
+
+#define SAFE_CREATE(type,type_impl,...)			\
+	Ref<type> p = new type_impl(__VA_ARGS__);	\
+	if(p->isValid() == false) p = {};			\
+	return p;	
 
 namespace ob::rhi::vulkan {
 
@@ -156,9 +164,10 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	VulkanRHI::VulkanRHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config)
+	VulkanRHI::VulkanRHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config, VulkanRHIConfig* vconfig)
 		: RHI(objectManager, config)
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
+		, m_vconfig(vconfig ? *vconfig : ob::rhi::vulkan::VulkanRHIConfig{})
 	{
 
 		createInstance();
@@ -216,17 +225,16 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createInstance() {
 
-		// レイヤー
-		const char* layerNames[] = {
-			OB_DEBUG_CONTEXT("VK_LAYER_KHRONOS_validation")
-		};
-		// 拡張機能名
-		const char* extensionNames[] =
-		{
-			VK_EXT_DEBUG_REPORT_EXTENSION_NAME,							// デバッグレポート
-			VK_KHR_SURFACE_EXTENSION_NAME,								// Surface
-			OS_WINDOWS_CONTEXT(VK_KHR_WIN32_SURFACE_EXTENSION_NAME)		// Surface(Win32)
-		};
+		// レイヤー / 拡張機能名
+		Vector<String> layerNames;
+		Vector<String> extensionNames;
+		if (m_vconfig.enableDebugLayer) {
+			OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
+			OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME));
+		}
+
+		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
+		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
 
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
@@ -234,7 +242,7 @@ namespace ob::rhi::vulkan {
 		for (const auto& name : layerNames)
 		{
 			if (existLayerNames.count(name)) {
-				validLayerNames.push_back(name);
+				validLayerNames.push_back(name.c_str());
 			}
 		}
 
@@ -244,7 +252,7 @@ namespace ob::rhi::vulkan {
 		for (const auto& name : extensionNames)
 		{
 			if (existExtensionNames.count(name)) {
-				validExtensionNames.push_back(name);
+				validExtensionNames.push_back(name.c_str());
 			}
 		}
 
@@ -259,10 +267,10 @@ namespace ob::rhi::vulkan {
 		VkInstanceCreateInfo instanceInfo{};
 		instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 		instanceInfo.pApplicationInfo = &appInfo;
-		instanceInfo.enabledLayerCount = (uint32_t)std::size(layerNames);
-		instanceInfo.ppEnabledLayerNames = layerNames;
-		instanceInfo.enabledExtensionCount = (uint32_t)std::size(extensionNames);
-		instanceInfo.ppEnabledExtensionNames = extensionNames;
+		instanceInfo.enabledLayerCount = (uint32_t)validLayerNames.size();
+		instanceInfo.ppEnabledLayerNames = validLayerNames.data();
+		instanceInfo.enabledExtensionCount = (uint32_t)validExtensionNames.size();
+		instanceInfo.ppEnabledExtensionNames = validExtensionNames.data();
 
 		// 生成
 		Success(::vkCreateInstance(&instanceInfo, nullptr, &m_instance));
@@ -286,8 +294,8 @@ namespace ob::rhi::vulkan {
 		for (auto& device : devices) {
 
 			// 拡張機能チェック
-			//VkPhysicalDeviceFeatures featuresProperties;
-			//::vkGetPhysicalDeviceFeatures(device, &featuresProperties);
+			VkPhysicalDeviceFeatures featuresProperties;
+			::vkGetPhysicalDeviceFeatures(device, &featuresProperties);
 
 			// キューチェック
 			uint32_t familyCount = 0;
@@ -394,5 +402,30 @@ namespace ob::rhi::vulkan {
 		//OB_NOTIMPLEMENTED();
 	}
 
+
+
+	//! @brief  スワップ・チェーンを生成
+	Ref<Display> VulkanRHI::createDisplay(const DisplayDesc& desc) {
+		SAFE_CREATE(Display, DisplayImpl,m_instance,m_physicalDevice,m_logicalDevice, desc);
+	}
+
+
+	//! @brief  コマンドリスト生成
+	Ref<CommandList> VulkanRHI::createCommandList(const CommandListDesc& desc) {
+		SAFE_CREATE(CommandList, CommandListImpl, desc);
+	}
+
+
+
+	//! @brief  ルートシグネチャを生成
+	Ref<RootSignature> VulkanRHI::createRootSignature(const RootSignatureDesc& desc) {
+		SAFE_CREATE(RootSignature, RootSignatureImpl, desc);
+	}
+
+
+	//! @brief  パイプラインステートを生成
+	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
+		SAFE_CREATE(PipelineState, PipelineStateImpl, desc);
+	}
 
 }
