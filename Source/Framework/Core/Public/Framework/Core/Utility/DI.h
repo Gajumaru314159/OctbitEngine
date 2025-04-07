@@ -5,8 +5,8 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Exception/Exception.h>
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Exception/Exception.h>
 
 namespace ob::core {
 
@@ -78,7 +78,7 @@ namespace ob::core {
             operator U& () const {
                 auto instance = injector.create<U>(container);
                 if (instance == nullptr) {
-                    throw Exception(Format("{} => {}", Type::Get<U>().name(), Type::Get<T>().name()));
+                    throw Exception(Format("引数の型解決に失敗 {} => {}", Type::Get<U>().name(), Type::Get<T>().name()));
                 }
                 return *instance;
             }
@@ -311,8 +311,8 @@ namespace ob::core {
                 if (container.has(type))continue;
                 m_builders.find(type)->second->create(container);
             }
-            catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.name(), e.message());
+            catch (const std::exception& e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", type.name(), e.what());
             }
         }
     }
@@ -357,9 +357,8 @@ namespace ob::core {
             try {
                 return reinterpret_cast<T*>(builder->create(container));
             }
-            catch (Exception e) {
-                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", Type::Get<T>().name(), e.message());
-                // 生成キャンセル
+            catch (const std::exception& e) {
+                LOG_TRACE("[DI] {}の生成がキャンセルされました。\n{}", Type::Get<T>().name(), e.what());
             }
         }
         return nullptr;
