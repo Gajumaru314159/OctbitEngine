@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
+#include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Texture/TextureImpl.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
@@ -14,11 +15,8 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	DisplayImpl::DisplayImpl(VkInstance instance, VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc)
-		: m_desc(desc)
-		, m_instance(instance)
-		, m_physicalDevice(physicalDevice)
-		, m_logicalDevice(device)
+	DisplayImpl::DisplayImpl(VulkanRHI& rhi, const DisplayDesc& desc)
+		: m_rhi(rhi)
 	{
 		// 未指定の場合はwindowから取得
 		if (desc.size.width <= 1 || desc.size.height <= 1) {
@@ -27,41 +25,28 @@ namespace ob::rhi::vulkan {
 
 		// デバイスごとのサーフェイス生成
 #ifdef OS_WINDOWS
-		::VkWin32SurfaceCreateInfoKHR info{};
-		info.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
-		info.pNext = nullptr;
+		vk::Win32SurfaceCreateInfoKHR info{};
 		info.hinstance = GetModuleHandle(nullptr);
 		info.hwnd = (HWND)desc.window.getHandle();
 
-		if (Failed(::vkCreateWin32SurfaceKHR(m_instance, &info, nullptr, &m_surface))) return;
+		m_surface = rhi.getInstance().createWin32SurfaceKHR(info, rhi.getAllocationCallbacks());
 #else
 		static_assert(true, "Surface is not implemented.");
 #endif
 
 		// サーフェイスのサポートをチェック
-		VkBool32 surfaceSupport = false;
-		if (Failed(::vkGetPhysicalDeviceSurfaceSupportKHR(m_physicalDevice, 0, m_surface, &surfaceSupport)))return;
-		if (surfaceSupport == false) {
-			LOG_ERROR("スワップチェーンがサポートされていません。");
-			return;
+		if (!rhi.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
+			throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
 		}
-
-		// サーフェスの機能を取得
-		VkSurfaceCapabilitiesKHR capabilities;
-		if (Failed(::vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physicalDevice, m_surface, &capabilities)))return;
-
-		// 利用可能なフォーマットを取得
-		uint32_t formatCount = 0;
-		if (Failed(::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, nullptr)))return;
-		Vector<VkSurfaceFormatKHR> formats(formatCount);
-		if (Failed(::vkGetPhysicalDeviceSurfaceFormatsKHR(m_physicalDevice, m_surface, &formatCount, formats.data())))return;
-
-		//利用可能なプレゼンテーションモード
-		uint32_t presentModeCount;
-		if (Failed(::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, nullptr)))return;
-		Vector<VkPresentModeKHR> presentModeList(presentModeCount);
-		if (Failed(::vkGetPhysicalDeviceSurfacePresentModesKHR(m_physicalDevice, m_surface, &presentModeCount, presentModeList.data())))return;
 		
+
+		
+		// サーフェスの機能を取得
+		auto capabilities = rhi.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
+		auto formats = rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
+		auto presentModeList = rhi.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
+
+				
 		// VkExtent2D swapchain_size{};
 		// if (capabilities.currentExtent.width == 0xFFFFFFFF)
 		// {
@@ -74,13 +59,11 @@ namespace ob::rhi::vulkan {
 		// }
 
 
-		VkSurfaceFormatKHR format = formats[0]; // TODO desc.formatチェック
+		vk::SurfaceFormatKHR format = formats.at(0); // TODO desc.formatチェック
 
 		// サーフェイス生成
-		VkSwapchainCreateInfoKHR swapchain_create_info = {};
-		swapchain_create_info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-		swapchain_create_info.pNext = nullptr;
-		swapchain_create_info.flags = 0;
+		vk::SwapchainCreateInfoKHR swapchain_create_info;
+		swapchain_create_info.flags = {};
 		swapchain_create_info.surface = m_surface;
 
 		swapchain_create_info.minImageCount = capabilities.minImageCount;
@@ -90,60 +73,48 @@ namespace ob::rhi::vulkan {
 		swapchain_create_info.imageExtent.height = m_desc.size.height;
 		swapchain_create_info.imageArrayLayers = 1;
 
-		swapchain_create_info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-		swapchain_create_info.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		swapchain_create_info.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
+		swapchain_create_info.imageSharingMode = vk::SharingMode::eExclusive;
 		swapchain_create_info.queueFamilyIndexCount = 0;
 		swapchain_create_info.pQueueFamilyIndices = nullptr;
-		swapchain_create_info.preTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
-		swapchain_create_info.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+		swapchain_create_info.preTransform = vk::SurfaceTransformFlagBitsKHR::eIdentity;
+		swapchain_create_info.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
 
-		swapchain_create_info.presentMode = VK_PRESENT_MODE_FIFO_KHR; // 利用可能チェック
+		swapchain_create_info.presentMode = vk::PresentModeKHR::eFifo;
 		swapchain_create_info.clipped = VK_TRUE;
 		swapchain_create_info.oldSwapchain = VK_NULL_HANDLE;
 
-
-		if (Failed(::vkCreateSwapchainKHR(m_logicalDevice, &swapchain_create_info, nullptr, &m_swapchain)))return;
-
+		m_swapchain = m_rhi.getDevice().createSwapchainKHR(swapchain_create_info, m_rhi.getAllocationCallbacks());
 
 
 		// Image取得
-		uint32_t imageCount;
-		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchain, &imageCount, nullptr);
-		Vector<VkImage> images(imageCount);
-		vkGetSwapchainImagesKHR(m_logicalDevice, m_swapchain, &imageCount, images.data());
+		auto images = m_swapchain.getImages();
 
 		// ImageView生成
 		for (auto& image : images) {
 
-			m_textures.push_back(new TextureImpl(device,image));
+			// m_textures.push_back(new TextureImpl(image));
 
-			VkImageViewCreateInfo image_view_create_info{};
-			image_view_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-			image_view_create_info.pNext = nullptr;
-			image_view_create_info.flags = 0;
+			vk::ImageViewCreateInfo image_view_create_info;
+			image_view_create_info.flags = {};
 			image_view_create_info.image = image;
 
-			image_view_create_info.viewType = VK_IMAGE_VIEW_TYPE_2D;
-			image_view_create_info.format = VK_FORMAT_B8G8R8A8_UNORM;
-			image_view_create_info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-			image_view_create_info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-			image_view_create_info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-			image_view_create_info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+			image_view_create_info.viewType = vk::ImageViewType::e2D;
+			image_view_create_info.format = vk::Format::eB8G8R8A8Unorm;
+			image_view_create_info.components.r = vk::ComponentSwizzle::eIdentity;
+			image_view_create_info.components.g = vk::ComponentSwizzle::eIdentity;
+			image_view_create_info.components.b = vk::ComponentSwizzle::eIdentity;
+			image_view_create_info.components.a = vk::ComponentSwizzle::eIdentity;
 
-			image_view_create_info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+			image_view_create_info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 			image_view_create_info.subresourceRange.baseMipLevel = 0;
 			image_view_create_info.subresourceRange.levelCount = 1;
 			image_view_create_info.subresourceRange.baseArrayLayer = 0;
 			image_view_create_info.subresourceRange.layerCount = 1;
 
-			auto& imageView = m_imageViews.emplace_back();
-			::vkCreateImageView(m_logicalDevice, &image_view_create_info, nullptr, &imageView);
+			m_imageViews.push_back(m_rhi.getDevice().createImageView(image_view_create_info, m_rhi.getAllocationCallbacks()));
 
-			VkMemoryRequirements memoryRequirements = {};
-			memoryRequirements.size;
-			memoryRequirements.alignment;
-			memoryRequirements.memoryTypeBits;
-			::vkGetImageMemoryRequirements(device, image, &memoryRequirements);
+			
 		}
 	}
 
@@ -151,31 +122,12 @@ namespace ob::rhi::vulkan {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	DisplayImpl::~DisplayImpl() {
-
-		for (auto imageView : m_imageViews) {
-			vkDestroyImageView(m_logicalDevice, imageView, nullptr);
-		}
-		m_imageViews.clear();
-
-		if (m_swapchain) {
-			::vkDestroySwapchainKHR(m_logicalDevice, m_swapchain, nullptr);
-			m_swapchain = nullptr;
-		}
-
-		if (m_surface) {
-			::vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
-			m_surface = nullptr;
-		}
-
-		m_instance = nullptr;
-		m_logicalDevice = nullptr;
-
 	}
 
 
 	//! @brief  妥当な状態か
 	bool DisplayImpl::isValid()const {
-		return m_swapchain;
+		return !m_textures.empty();
 	}
 
 

@@ -7,6 +7,7 @@
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -117,6 +118,44 @@ namespace ob::rhi::vulkan {
 		//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
 		Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) override { return {}; }
 
+	public:
+
+		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
+
+		VkMemoryAllocateInfo getAllocationInfo(vk::MemoryRequirements requirements, vk::MemoryPropertyFlags requestProps) {
+			uint32_t memoryTypeIndex;
+			auto requestBits = requirements.memoryTypeBits;
+			for (uint32_t i = 0; i < m_memoryProperties.memoryTypeCount; ++i)
+			{
+				if (requestBits & 1)
+				{
+					const auto& types = m_memoryProperties.memoryTypes[i];
+					if ((types.propertyFlags & requestProps) == requestProps)
+					{
+						memoryTypeIndex = i; break;
+					}
+				}
+				requestBits >>= 1;
+			}
+
+			VkMemoryAllocateInfo allocInfo = {};
+			allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+			allocInfo.allocationSize = requirements.size;
+			allocInfo.memoryTypeIndex = memoryTypeIndex;
+
+			return allocInfo;
+		}
+
+		auto getQueryFamilyIndex() const { return m_queueFamilyIndex; }
+
+		vk::raii::Instance&			getInstance() { return m_instance; }
+		vk::raii::Device&			getDevice() { return m_device; }
+		vk::raii::PhysicalDevice&	getPhysicalDevice() { return m_physicalDevice; }
+		vk::raii::Queue&			getQueue() { return m_queue; }
+
+
+		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
+
 	private:
 
 		void createInstance();
@@ -129,13 +168,20 @@ namespace ob::rhi::vulkan {
 		RHIConfig								m_config;
 		VulkanRHIConfig							m_vconfig;
 
-		VkInstance			m_instance			= nullptr;
-		VkPhysicalDevice	m_physicalDevice	= nullptr;
-		VkDevice			m_logicalDevice		= nullptr;
-		VkQueue				m_queue				= nullptr;
+		vk::Optional<const vk::AllocationCallbacks>	m_allocationCallbacks = nullptr;
 
-		u32					m_queueFamilyIndex;
-		u32					m_queueCount;
+		vk::raii::Context							m_context;
+		vk::raii::Instance							m_instance			= nullptr;
+		vk::raii::PhysicalDevice					m_physicalDevice	= nullptr;
+		vk::raii::Device							m_device		= nullptr;
+		vk::raii::Queue								m_queue				= nullptr;
+
+		vk::PhysicalDeviceMemoryProperties			m_memoryProperties;
+
+		u32											m_queueFamilyIndex;
+		u32											m_queueCount;
+
+		MemoryStorage<BufferUploader> m_bufferUploader;
 
 	};
 }

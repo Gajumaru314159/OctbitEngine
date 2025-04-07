@@ -3,7 +3,7 @@
 //! @brief		テクスチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include "TextureImpl.h"
+#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
@@ -49,22 +49,19 @@ namespace ob::rhi::vulkan {
 
 	static VkImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
 		VkImageCreateInfo info = {};
-		info.sType;
-		info.flags;
+		info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+		info.flags = 0;
 		info.format = TypeConverter::Convert(format);
 		info.extent = {(u32)size.width,(u32)size.height,(u32)size.depth};
-		info.mipLevels = mipLevel;
+		info.mipLevels = std::max(mipLevel,1);
 		info.arrayLayers =arrayNum;
 		info.samples = VK_SAMPLE_COUNT_1_BIT;
-		info.tiling;
-		info.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-		info.sharingMode;
-		info.queueFamilyIndexCount;
-		info.pQueueFamilyIndices;
-		info.initialLayout;
-
-		VK_IMAGE_TYPE_2D;
-
+		info.tiling = VK_IMAGE_TILING_LINEAR; // VK_IMAGE_TILING_OPTIMAL; 直接アップロード用の仮対応
+		info.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+		info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		info.queueFamilyIndexCount = 0;
+		info.pQueueFamilyIndices = nullptr;
+		info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
 
 		switch (type) {
 		case TextureType::Texture1D:
@@ -84,6 +81,7 @@ namespace ob::rhi::vulkan {
 			return {};
 		}
 
+		return info;
 	}
 
 
@@ -96,35 +94,35 @@ namespace ob::rhi::vulkan {
 
 
     //! @brief      TextureDesc から空のテクスチャを生成
-    TextureImpl::TextureImpl(VkDevice device,const TextureDesc& desc)
-		: m_desc(desc)
+    TextureImpl::TextureImpl(VulkanRHI& rhi,const TextureDesc& desc)
+		: m_rhi(rhi)
+		, m_desc(desc)
 	{
 		// バリデート
 		if (IsInvalid(m_desc)) return;
 
+		auto& device = m_rhi.getDevice();
+
 		// 定義生成
-		VkImageCreateInfo info = CreateCreateInfo(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
 		// リソース生成
-		// ::VkResultvkCreateImage(device)
+		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
+
+		auto requirements = m_image.getMemoryRequirements();
 
 
-		if(Failed(vkCreateImage(device,&info,nullptr, &m_image))) return;
+		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
-		VkMemoryRequirements memoryRequirements;
-		vkGetImageMemoryRequirements(device, m_image, &memoryRequirements);
-
-		VkMemoryAllocateInfo allocInfo = {};
-		allocInfo.allocationSize = memoryRequirements.size;
-		allocInfo.memoryTypeIndex = vkGetMemoryType get_device().get_memory_type(memory_requirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
-		VK_CHECK(vkAllocateMemory(get_device().get_handle(), &memory_allocate_info, nullptr, &mappable_memory));
-		VK_CHECK(vkBindImageMemory(get_device().get_handle(), mappable_image, mappable_memory, 0));
+		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_image.bindMemory(m_memory, 0);
 
     }
 
 
 	//! @brief      IntColorの配列 から空のテクスチャを生成
-	TextureImpl::TextureImpl(VkDevice device, StringView name, TextureType type,Size size, Span<const IntColor> colors)
+	TextureImpl::TextureImpl(VulkanRHI& rhi, StringView name, TextureType type,Size size, Span<const IntColor> colors)
+		: m_rhi(rhi)
 	{
 		// Desc設定
 		m_desc.name = name;
@@ -142,18 +140,48 @@ namespace ob::rhi::vulkan {
 			return;
 		}
 
+		auto& device = m_rhi.getDevice();
+
+
+		// 定義生成
+		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
+		// リソース生成
+		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
+
+		auto requirements = m_image.getMemoryRequirements();
+
+
+		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+
+		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_image.bindMemory(m_memory, 0);
+
+
+		void* data = m_memory.mapMemory(0,requirements.size);
+		memcpy_s(data, requirements.size, colors.data(), colors.size_bytes());
+		m_memory.unmapMemory();
+
+		// TODO 
+		// コピー
+		// バリア
+
 	}
 
 
 	//! @brief      テクスチャバイナリから生成
-	TextureImpl::TextureImpl(VkDevice device, StringView name,BlobView blob)
+	TextureImpl::TextureImpl(VulkanRHI& rhi, StringView name,BlobView blob)
+		: m_rhi(rhi)
 	{
+		//ファイルパスからVkImageを生成する
+
 	}
 
 
 	//! @brief       RenderTextureDesc からRenderTextureを生成
-	TextureImpl::TextureImpl(VkDevice device, const RenderTextureDesc& desc)
-		: m_renderDesc(desc)
+	TextureImpl::TextureImpl(VulkanRHI& rhi, const RenderTextureDesc& desc)
+		: m_rhi(rhi)
+		, m_renderDesc(desc)
 	{
 		m_desc.name = desc.name;
 		m_desc.size = desc.size;
@@ -169,8 +197,14 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	TextureImpl::TextureImpl(VkDevice Device, VkImage view,StringView name) {
+	TextureImpl::TextureImpl(VulkanRHI& rhi, VkImage view,StringView name)
+		: m_rhi(rhi)
+	{
 
+	}
+
+
+	TextureImpl::~TextureImpl() {
 	}
 
 }// ob::rhi::dx12

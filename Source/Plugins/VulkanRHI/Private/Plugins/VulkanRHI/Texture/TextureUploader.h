@@ -6,7 +6,9 @@
 #include <Framework/RHI/Buffer.h>
 #include <Framework/Core/Utility/Swapper.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi::vulkan {
+
+    class VulkanRHI;
 
     //! @brief  テクスチャ・アップローダー
     //! 
@@ -23,22 +25,22 @@ namespace ob::rhi::dx12 {
         };
     public:
 
-        TextureUploader(ID3D12Device& device);
+        TextureUploader(VulkanRHI& rhi);
 
-        void add(const ComPtr<ID3D12Resource>& dest, Span<Subresource> subresources);
+        void add(const vk::raii::Image& dest, Span<Subresource> subresources);
 
-        void update(ID3D12GraphicsCommandList& commandList);
+        void update(vk::raii::CommandBuffer& commandBuffer);
 
     private:
 
-        ComPtr<ID3D12Resource> createUploadResource(const D3D12_RESOURCE_DESC& desc);
+        vk::raii::DeviceMemory createUploadResource(const vk::BufferCreateInfo& info);
 
     private:
 
         // コピーリクエスト
         struct Request {
-            ComPtr<ID3D12Resource> source;
-            ComPtr<ID3D12Resource> dest;
+            vk::Image source;
+            vk::Image dest;
             // UINT sourceSubresource = 0;
             // UINT destSubresource = 0;
             // 
@@ -62,7 +64,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        ID3D12Device& m_device;
+        VulkanRHI& m_rhi;
         bool m_isUMA = false;
 
 		size_t m_blockSize;
@@ -70,7 +72,7 @@ namespace ob::rhi::dx12 {
 		SpinLock m_lock;
 		Swapper<FrameData> m_frames;
 
-		Vector<D3D12_RESOURCE_BARRIER> m_barriers;
+		Vector<vk::MemoryBarrier> m_barriers;
 
     };
 

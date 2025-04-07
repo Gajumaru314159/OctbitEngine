@@ -25,43 +25,28 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	CommandListImpl::CommandListImpl(const CommandListDesc& desc, VkDevice device, u32 queueFamilyIndex)
-		: m_desc(desc)
-		, m_device(device)
+	CommandListImpl::CommandListImpl(VulkanRHI& rhi, const CommandListDesc& desc)
+		: m_rhi(rhi)
+		, m_desc(desc)
 	{
 		VkResult result;
 
-		VkCommandPoolCreateInfo ci{};
-		ci.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-		ci.queueFamilyIndex = queueFamilyIndex;
-		ci.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-		result = vkCreateCommandPool(device, &ci, nullptr, &m_commandPool);
-		if (result == VK_SUCCESS) {
-			return;
-		}
+		vk::CommandPoolCreateInfo ci;
+		ci.queueFamilyIndex = m_rhi.getQueryFamilyIndex();
+		ci.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
 
-		VkCommandBufferAllocateInfo info{};
-		info.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+		m_commandPool = rhi.getDevice().createCommandPool(ci, m_rhi.getAllocationCallbacks());
+
+		vk::CommandBufferAllocateInfo info;
 		info.commandPool = m_commandPool;
-		info.commandBufferCount;
-		info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+		info.commandBufferCount = 1;
+		info.level = vk::CommandBufferLevel::ePrimary;
 
-		result = vkAllocateCommandBuffers(m_device, &info, &m_commandBuffer);
-		if (result == VK_SUCCESS) {
-			return;
-		}
+		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(info).front());
 
 	}
 
 	CommandListImpl::~CommandListImpl() {
-		if (m_commandBuffer) {
-			// TODO はきがひつようかしらべる
-			m_commandBuffer = nullptr;
-		}
-		if (m_commandPool) {
-			::vkDestroyCommandPool(m_device, m_commandPool, nullptr);
-			m_commandPool = nullptr;
-		}
 	}
 
 
@@ -119,9 +104,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setScissorRect(const IntRect* pRect, s32 num) {
 
-		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
-
-		Array<VkRect2D, 8> rects;
+		Array<vk::Rect2D, 8> rects;
 		for (s32 i = 0; i < num; ++i) {
 			auto& rectIn = pRect[i];
 			auto& rectOut = rects[i];
@@ -131,7 +114,7 @@ namespace ob::rhi::vulkan {
 			rectOut.extent.height = rectIn.height();
 		}
 
-		::vkCmdSetScissor(m_commandBuffer, 0, num, rects.data());
+		m_commandBuffer.setScissor(0, rects);
 
 	}
 
@@ -143,7 +126,7 @@ namespace ob::rhi::vulkan {
 
 		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
 
-		Array<VkViewport, 8> viewports;
+		Array<vk::Viewport, 8> viewports;
 		for (s32 i = 0; i < num;++i) {
 			auto& viewportIn = pViewport[i];
 			auto& viewportOut = viewports[i];
@@ -155,7 +138,7 @@ namespace ob::rhi::vulkan {
 			viewportOut.maxDepth = viewportIn.farZ;
 		}
 
-		::vkCmdSetViewport(m_commandBuffer, 0, num, viewports.data());
+		m_commandBuffer.setViewport(0, viewports);
 
 	}
 
@@ -209,9 +192,7 @@ namespace ob::rhi::vulkan {
 	//! @brief      描画
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::draw(const DrawParam& param) {
-
-		OB_ASSERT_EXPR(m_commandBuffer);
-		::vkCmdDraw(m_commandBuffer, param.vertexCount, 0, param.startVertex, 0);
+		m_commandBuffer.draw(param.vertexCount, 1, param.startVertex, 0);
 
 	}
 
@@ -220,10 +201,7 @@ namespace ob::rhi::vulkan {
 	//! @brief      インデックス描画
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::drawIndexed(const DrawIndexedParam& param) {
-
-		OB_ASSERT_EXPR(m_commandBuffer);
-		::vkCmdDrawIndexed(m_commandBuffer, param.indexCount, 0, param.startIndex,param.startVertex, 0);
-
+		m_commandBuffer.draw(param.indexCount,param.indexCount, param.startVertex, param.startIndex);
 	}
 
 

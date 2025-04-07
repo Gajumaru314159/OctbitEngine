@@ -11,6 +11,8 @@
 
 namespace ob::rhi::vulkan {
 
+    class VulkanRHI;
+
     //@―---------------------------------------------------------------------------
     //! @brief  コマンドリスト実装(DirectX12)
     //@―---------------------------------------------------------------------------
@@ -24,7 +26,7 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        CommandListImpl(const CommandListDesc& desc,VkDevice device,u32 queueFamilyIndex);
+        CommandListImpl(VulkanRHI& rhi,const CommandListDesc& desc);
 
         ~CommandListImpl();
 
@@ -106,10 +108,12 @@ namespace ob::rhi::vulkan {
 
     private:
 
+        VulkanRHI& m_rhi;
+
         const CommandListDesc m_desc;
-		VkDevice		    m_device = nullptr;      
-        VkCommandPool		m_commandPool = nullptr;
-        VkCommandBuffer     m_commandBuffer = nullptr;
+		
+        vk::raii::CommandPool		m_commandPool = nullptr;
+        vk::raii::CommandBuffer     m_commandBuffer = nullptr;
 
     };
 

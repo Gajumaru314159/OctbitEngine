@@ -6,11 +6,14 @@
 #pragma once
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/RenderTexture.h>
+#include <Framework/Core/Utility/Swapper.h>
 
 //===============================================================
 // クラス定義
 //===============================================================
 namespace ob::rhi::vulkan {
+
+	class VulkanRHI;
 
 	class DisplayImpl :public Display{
 	public:
@@ -22,7 +25,7 @@ namespace ob::rhi::vulkan {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		DisplayImpl(VkInstance instance,VkPhysicalDevice physicalDevice, VkDevice device, const DisplayDesc& desc);
+		DisplayImpl(VulkanRHI& rhi, const DisplayDesc& desc);
 		~DisplayImpl();
 		
 		bool isValid()const override;		
@@ -42,15 +45,12 @@ namespace ob::rhi::vulkan {
 
 	private:
 
-		DisplayDesc			m_desc;
+		VulkanRHI&					m_rhi;
+		DisplayDesc					m_desc;
 
-		::VkInstance		m_instance;
-		::VkPhysicalDevice	m_physicalDevice;
-		::VkDevice			m_logicalDevice;
-
-		::VkSurfaceKHR		m_surface;
-		::VkSwapchainKHR    m_swapchain;
-		Vector<VkImageView>	m_imageViews;
+		vk::raii::SurfaceKHR		m_surface = nullptr;
+		vk::raii::SwapchainKHR		m_swapchain = nullptr;
+		Vector<vk::raii::ImageView>	m_imageViews;
 
 		Swapper<Ref<RenderTexture>> m_textures;
 

@@ -14,11 +14,72 @@
 #include <Framework/Platform/Window.h>
 
 #define SAFE_CREATE(type,type_impl,...)			\
-	Ref<type> p = new type_impl(__VA_ARGS__);	\
-	if(p->isValid() == false) p = {};			\
-	return p;	
+		try {\
+			return new type_impl(__VA_ARGS__);\
+		} catch (const vk::Error& error) {\
+			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", #type,error.what());\
+			return nullptr;\
+		}
 
 namespace ob::rhi::vulkan {
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  利用可能なレイヤー名のリストを取得
+	//@―---------------------------------------------------------------------------
+	static Set<std::string> EnumerateInstanceLayerNames() noexcept
+	{
+		uint32_t propertyCount;
+		::vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
+		Vector<::VkLayerProperties> properties(propertyCount);
+		::vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
+
+		Set<std::string> names;
+		for (auto const& prop : properties)
+		{
+			names.emplace(prop.layerName);
+		}
+
+		return std::move(names);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  利用可能な拡張機能のリストを取得
+	//@―---------------------------------------------------------------------------
+	static Set<std::string> EnumerateInstanceExtensionNames(Span<const char*> layers) noexcept
+	{
+		auto enumarate = [](Set<std::string>& names, const char* layerName) {
+			uint32_t propertyCount;
+			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
+			Vector<::VkExtensionProperties> properties(propertyCount);
+			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
+			for (auto& name : properties)names.emplace(name.extensionName);
+			};
+
+		Set<std::string> names;
+
+		enumarate(names, nullptr);
+
+		for (auto& layer : layers) {
+			enumarate(names, layer);
+		}
+
+		return std::move(names);
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  利用可能なGPUのリストを取得
+	//@―---------------------------------------------------------------------------
+	static Vector<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
+	{
+		OB_ASSERT_EXPR(instance != nullptr);
+
+		uint32_t physicalDeviceCount = 0;
+		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
+		Vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
+
+		return std::move(physicalDevices);
+	}
 
 	/*
 	//@―---------------------------------------------------------------------------
@@ -73,90 +134,6 @@ namespace ob::rhi::vulkan {
 	}
 	*/
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能なレイヤー名のリストを取得
-	//@―---------------------------------------------------------------------------
-	static Set<std::string> EnumerateInstanceLayerNames() noexcept
-	{
-		uint32_t propertyCount;
-		::vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
-		Vector<::VkLayerProperties> properties(propertyCount);
-		::vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
-
-		Set<std::string> names;
-		for (auto const& prop : properties)
-		{
-			names.emplace(prop.layerName);
-		}
-
-		return std::move(names);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能な拡張機能のリストを取得
-	//@―---------------------------------------------------------------------------
-	static Set<std::string> EnumerateInstanceExtensionNames(Span<const char*> layers) noexcept
-	{
-		auto enumarate = [](Set<std::string>& names, const char* layerName) {
-			uint32_t propertyCount;
-			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-			Vector<::VkExtensionProperties> properties(propertyCount);
-			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
-			for (auto& name : properties)names.emplace(name.extensionName);
-		};
-
-		Set<std::string> names;
-
-		enumarate(names, nullptr);
-
-		for (auto& layer : layers) {
-			enumarate(names, layer);
-		}
-
-		return std::move(names);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能なGPUのリストを取得
-	//@―---------------------------------------------------------------------------
-	static Vector<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
-	{
-		OB_ASSERT_EXPR(instance != nullptr);
-
-		uint32_t physicalDeviceCount = 0;
-		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
-		Vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
-
-		return std::move(physicalDevices);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  物理デバイスの性能スコアを計算
-	//@―---------------------------------------------------------------------------
-	static s32 ComputeScoreDeviceSuitability(const VkPhysicalDevice& physicalDevice) noexcept
-	{
-		VkPhysicalDeviceProperties props;
-		::vkGetPhysicalDeviceProperties(physicalDevice, &props);
-
-		VkPhysicalDeviceFeatures features;
-		::vkGetPhysicalDeviceFeatures(physicalDevice, &features);
-
-		// スコア計算
-		s32 score = 0;
-		{
-			// 最大テクスチャサイズ
-			score += props.limits.maxImageDimension2D;
-			// GPUタイプ
-			if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-				score += 1000;
-			}
-		}
-
-		return score;
-	}
-
-
 }
 
 namespace ob::rhi::vulkan {
@@ -169,14 +146,13 @@ namespace ob::rhi::vulkan {
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
 		, m_vconfig(vconfig ? *vconfig : ob::rhi::vulkan::VulkanRHIConfig{})
 	{
-
-		createInstance();
-		createPhysicalDevice();
-		createLogicalDevice();
-		createQueue();
-
-		if (isValid() == false) {
-			LOG_ERROR("Vulkanの初期化に失敗");
+		try{
+			createInstance();
+			createPhysicalDevice();
+			createLogicalDevice();
+			createQueue();
+		} catch (const vk::Error& error) {
+			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", "VulkanRHI", error.what());
 		}
 
 	}
@@ -185,20 +161,6 @@ namespace ob::rhi::vulkan {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
-
-		if (m_logicalDevice) {
-			::vkDestroyDevice(m_logicalDevice, nullptr);
-			m_logicalDevice = nullptr;
-		}
-
-		if (m_instance) {
-			::vkDestroyInstance(m_instance, nullptr);
-			m_instance = nullptr;
-		}
-
-		m_physicalDevice = nullptr;
-		m_queue = nullptr;
-
 	}
 
 
@@ -209,7 +171,7 @@ namespace ob::rhi::vulkan {
 		return 
 			m_instance != nullptr &&
 			m_physicalDevice != nullptr &&
-			m_logicalDevice != nullptr &&
+			m_device != nullptr &&
 			m_queue != nullptr &&
 			true;
 	}
@@ -230,6 +192,7 @@ namespace ob::rhi::vulkan {
 
 		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
+
 
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
@@ -252,23 +215,20 @@ namespace ob::rhi::vulkan {
 		}
 
 		// アプリ情報
-		VkApplicationInfo appInfo{};
-		appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+		vk::ApplicationInfo appInfo{};
 		appInfo.apiVersion = VK_API_VERSION_1_0;
 		appInfo.pApplicationName = "OctbitEngine";
 		appInfo.pEngineName = "OctbitEngine";
 
 		// インスタンス情報
-		VkInstanceCreateInfo instanceInfo{};
-		instanceInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+		vk::InstanceCreateInfo instanceInfo{};
 		instanceInfo.pApplicationInfo = &appInfo;
 		instanceInfo.enabledLayerCount = (uint32_t)validLayerNames.size();
 		instanceInfo.ppEnabledLayerNames = validLayerNames.data();
 		instanceInfo.enabledExtensionCount = (uint32_t)validExtensionNames.size();
 		instanceInfo.ppEnabledExtensionNames = validExtensionNames.data();
 
-		// 生成
-		if(Failed(::vkCreateInstance(&instanceInfo, nullptr, &m_instance)))return;
+		m_instance = m_context.createInstance(instanceInfo, m_allocationCallbacks);
 
 	}
 
@@ -281,7 +241,7 @@ namespace ob::rhi::vulkan {
 		if (m_instance == nullptr)
 			return;
 
-		auto devices = EnumerateDevices(m_instance);
+		auto devices = m_instance.enumeratePhysicalDevices();
 
 		if (devices.empty())LOG_FATAL_EX("RHI", "GPUが接続されていません。");
 
@@ -289,23 +249,17 @@ namespace ob::rhi::vulkan {
 		for (auto& device : devices) {
 
 			// 拡張機能チェック
-			VkPhysicalDeviceFeatures featuresProperties;
-			::vkGetPhysicalDeviceFeatures(device, &featuresProperties);
-
-			// キューチェック
-			uint32_t familyCount = 0;
-			::vkGetPhysicalDeviceQueueFamilyProperties(device, &familyCount, nullptr);
-			Vector<VkQueueFamilyProperties> familyPropertyList(familyCount);
-			::vkGetPhysicalDeviceQueueFamilyProperties(device, &familyCount, familyPropertyList.data());
+			auto featuresProperties = device.getFeatures();
+			auto familyPropertyList = device.getQueueFamilyProperties();
 
 			u32 index = 0;
 			for (auto& familyProperty : familyPropertyList) {
 
 				bool ok =
-					(familyProperty.queueFlags & VK_QUEUE_GRAPHICS_BIT) &&
-					(familyProperty.queueFlags & VK_QUEUE_COMPUTE_BIT) &&
-					(familyProperty.queueFlags & VK_QUEUE_TRANSFER_BIT) &&
-					(familyProperty.queueFlags & VK_QUEUE_SPARSE_BINDING_BIT);
+					(familyProperty.queueFlags & vk::QueueFlagBits::eGraphics) &&
+					(familyProperty.queueFlags & vk::QueueFlagBits::eCompute) &&
+					(familyProperty.queueFlags & vk::QueueFlagBits::eTransfer) &&
+					(familyProperty.queueFlags & vk::QueueFlagBits::eSparseBinding);
 
 				if (ok == false)
 					continue;
@@ -315,11 +269,18 @@ namespace ob::rhi::vulkan {
 				index++;
 			}
 
+			// 選択
 			m_physicalDevice = device;
 
-			// 選択
 			break;
 		}
+
+		if (m_physicalDevice == nullptr) {
+			LOG_ERROR("GPUが見つかりません。");
+			return;
+		}
+
+		m_memoryProperties = m_physicalDevice.getMemoryProperties();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -364,16 +325,14 @@ namespace ob::rhi::vulkan {
 
 		// デバイスキューのパラメータ
 		Vector<float> queuePriorities(m_queueCount, 0.0f);
-		VkDeviceQueueCreateInfo queueInfo{};
-		queueInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+		vk::DeviceQueueCreateInfo queueInfo{};
 		queueInfo.queueCount = 1;
 		queueInfo.pQueuePriorities = queuePriorities.data();
 		queueInfo.queueFamilyIndex = m_queueFamilyIndex;
 		queueInfo.queueCount = (uint32_t)queuePriorities.size();
 
 		// 生成情報
-		VkDeviceCreateInfo info{};
-		info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+		vk::DeviceCreateInfo info{};
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
 		info.enabledExtensionCount = (uint32_t)std::size(extensionNames);
@@ -382,7 +341,7 @@ namespace ob::rhi::vulkan {
 		info.ppEnabledLayerNames = layerNames;
 		info.pEnabledFeatures = nullptr;
 
-		if (Failed(::vkCreateDevice(m_physicalDevice, &info, nullptr, &m_logicalDevice))) return;
+		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
 
 	}
 
@@ -392,10 +351,10 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createQueue() {
 
-		if (m_logicalDevice == nullptr)
+		if (m_device == nullptr)
 			return;
 
-		::vkGetDeviceQueue(m_logicalDevice, m_queueFamilyIndex, 0, &m_queue);
+		m_queue = m_device.getQueue(m_queueFamilyIndex, 0);
 
 	}
 
@@ -418,13 +377,13 @@ namespace ob::rhi::vulkan {
 
 	//! @brief  スワップ・チェーンを生成
 	Ref<Display> VulkanRHI::createDisplay(const DisplayDesc& desc) {
-		SAFE_CREATE(Display, DisplayImpl,m_instance,m_physicalDevice,m_logicalDevice, desc);
+		SAFE_CREATE(Display, DisplayImpl,*this, desc);
 	}
 
 
 	//! @brief  コマンドリスト生成
 	Ref<CommandList> VulkanRHI::createCommandList(const CommandListDesc& desc) {
-		SAFE_CREATE(CommandList, CommandListImpl, desc, m_logicalDevice, m_queueFamilyIndex);
+		SAFE_CREATE(CommandList, CommandListImpl, *this, desc);
 	}
 
 

@@ -10,17 +10,22 @@
 
 namespace ob::rhi::vulkan {
 
+    class VulkanRHI;
+
     class TextureImpl :public rhi::RenderTexture {
     public:
 
         //! @brief      TextureDesc から空のテクスチャを生成
-        TextureImpl(VkDevice device, const TextureDesc& desc);
+        TextureImpl(VulkanRHI& rhi, const TextureDesc& desc);
 
         //! @brief      IntColorの配列 から空のテクスチャを生成
-        TextureImpl(VkDevice device, StringView name, TextureType type, Size size,Span<const IntColor> colors);
+        TextureImpl(VulkanRHI& rhi, StringView name, TextureType type, Size size,Span<const IntColor> colors);
 
         //! @brief      テクスチャバイナリから生成
-        TextureImpl(VkDevice device, StringView name,BlobView blob);
+        TextureImpl(VulkanRHI& rhi, StringView name,BlobView blob);
+
+        //! @brief      デストラクタ
+        ~TextureImpl();
 
         //! @brief      妥当な状態か
         bool isValid()const override;
@@ -40,19 +45,22 @@ namespace ob::rhi::vulkan {
     public:
 
         //! @brief      RenderTextureDesc からRenderTextureを生成
-        TextureImpl(VkDevice device, const RenderTextureDesc& desc);
+        TextureImpl(VulkanRHI& rhi, const RenderTextureDesc& desc);
 
         //! @brief      SwapChainのリソースからRenderTextureを生成
-        TextureImpl(VkDevice device, VkImage image,StringView name);
+        TextureImpl(VulkanRHI& rhi, VkImage image,StringView name);
 
     public:
 
     private:
 
+		VulkanRHI&              m_rhi;
+
         TextureDesc             m_desc;         //!< 定義
         RenderTextureDesc       m_renderDesc;   //!< 定義
 
-        VkImage                 m_image;
+        vk::raii::Image         m_image = nullptr;
+		vk::raii::DeviceMemory	m_memory = nullptr;
 
         //ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
         //
@@ -78,7 +86,7 @@ namespace ob::rhi::vulkan {
 
     //! @brief  妥当な状態か
     inline bool TextureImpl::isValid()const {
-        return m_image;
+        return true;
     }
 
     //! @brief      名前を取得
