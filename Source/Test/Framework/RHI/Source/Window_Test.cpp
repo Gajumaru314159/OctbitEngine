@@ -186,7 +186,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<Buffer> buffer;
 		CBuf cbuf;
 		{
-			BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
+			BufferDesc desc = BufferDesc::Constant(100, BufferFlag::PixelShaderResource);
 			desc.name = "TestConstant";
 			buffer = Buffer::Create(desc);
 			OB_ASSERT_EXPR(buffer);

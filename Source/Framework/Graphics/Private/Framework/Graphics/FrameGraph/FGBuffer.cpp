@@ -26,10 +26,10 @@ namespace ob::graphics {
 			"Size  :{}\n"
 			"Stride:{}",
 			desc.name,
-			magic_enum::enum_name(desc.bufferType),
-			magic_enum::enum_name(desc.usage),
-			desc.bufferSize,
-			desc.bufferStride
+			magic_enum::enum_name(desc.type),
+			magic_enum::enum_name(desc.type),
+			desc.size,
+			desc.stride
 		);
 		return std::move(str);
 	}

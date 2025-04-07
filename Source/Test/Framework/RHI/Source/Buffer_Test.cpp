@@ -13,56 +13,40 @@ class BufferTest : public RHITestBase {};
 
 TEST_F(BufferTest, Create) {
 
-	// bufferType
 	for (auto type : magic_enum::enum_values<BufferType>()) {
 
-		// usage
-		for (auto usage : magic_enum::enum_values<ResourceUsage>()) {
+		size_t sizes[] = { 0 ,100,256,512 };
+		for (auto size : sizes) {
 
-			// bufferSize
-			size_t sizes[] = { 0 ,100,256,512 };
-			for (auto size : sizes) {
+			for (u32 stride = 0; stride < 256; stride += 64) {
 
-				// bufferStride
-				for (u32 stride = 0; stride < 256; stride += 64) {
+				for (auto flags : magic_enum::enum_values<BufferFlag>()) {
 
-					// bufferFlags
-					for (auto flags : magic_enum::enum_values<BufferFlag>()) {
+					size_t checkSize = size;
 
-						// bindFlags
-						for (auto bind : magic_enum::enum_values<BindFlag>()) {
+					BufferDesc desc;
+					desc.type = type;
+					desc.size = size;
+					desc.stride = stride;
+					desc.flags = flags;
+					Ref<Buffer> buffer = Buffer::Create(desc);
 
-							size_t checkSize = size;
-
-							BufferDesc desc;
-							desc.bufferType = type;
-							desc.usage = usage;
-							desc.bufferSize = size;
-							desc.bufferStride = stride;
-							desc.bufferFlags = flags;
-							desc.bindFlags = bind;
-							Ref<Buffer> buffer = Buffer::Create(desc);
-
-							// サイズチェック
-							if (size == 0) {
-								checkSize = 256;
-							}
-
-							// 256バイト制限
-							if (size %256 != 0 && type == BufferType::ConstantBuffer) {
-								checkSize = align_up(checkSize,256);
-							}
-
-							ASSERT_NE(buffer, nullptr);
-							EXPECT_EQ(buffer->getDesc().bufferType, type);
-							EXPECT_EQ(buffer->getDesc().usage, usage);
-							EXPECT_EQ(buffer->getDesc().bufferSize, checkSize);
-							EXPECT_EQ(buffer->getDesc().bufferStride, stride);
-							EXPECT_EQ(buffer->getDesc().bufferFlags, BufferFlags(flags));
-							EXPECT_EQ(buffer->getDesc().bindFlags, BindFlags(bind));
-
-						}
+					// サイズチェック
+					if (size == 0) {
+						checkSize = 256;
 					}
+
+					// 256バイト制限
+					if (size %256 != 0 && type == BufferType::ConstantBuffer) {
+						checkSize = align_up(checkSize,256);
+					}
+
+					ASSERT_NE(buffer, nullptr);
+					EXPECT_EQ(buffer->getDesc().type, type);
+					EXPECT_EQ(buffer->getDesc().size, checkSize);
+					EXPECT_EQ(buffer->getDesc().stride, stride);
+					EXPECT_EQ(buffer->getDesc().flags, BufferFlags(flags));
+
 				}
 			}
 		}
@@ -75,7 +59,7 @@ TEST_F(BufferTest, CreateUtility) {
 
 	// Constant
 	{
-		BufferDesc desc = BufferDesc::Constant(100, BindFlag::PixelShaderResource);
+		BufferDesc desc = BufferDesc::Constant(100, BufferFlag::PixelShaderResource);
 
 		Ref<Buffer> buffer = Buffer::Create(desc);
 		ASSERT_NE(buffer, nullptr);
@@ -86,7 +70,7 @@ TEST_F(BufferTest, CreateUtility) {
 		BufferDesc desc = BufferDesc::Vertex<Vec4>(100);
 		Ref<Buffer> buffer = Buffer::Create(desc);
 		ASSERT_NE(buffer, nullptr);
-		ASSERT_EQ(buffer->getDesc().bufferSize, sizeof(Vec4) * 100);
+		ASSERT_EQ(buffer->getDesc().size, sizeof(Vec4) * 100);
 	}
 
 	// Index
@@ -94,7 +78,7 @@ TEST_F(BufferTest, CreateUtility) {
 		BufferDesc desc = BufferDesc::Index<u16>(100);
 		Ref<Buffer> buffer = Buffer::Create(desc);
 		ASSERT_NE(buffer, nullptr);
-		ASSERT_EQ(buffer->getDesc().bufferSize,sizeof(u16)*100);
+		ASSERT_EQ(buffer->getDesc().size,sizeof(u16)*100);
 	}
 
 }

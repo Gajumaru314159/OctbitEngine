@@ -441,22 +441,6 @@ namespace ob::rhi::dx12
         return D3D12_COMMAND_LIST_TYPE_DIRECT;
     }
 
-
-    //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
-    D3D12_HEAP_TYPE TypeConverter::Convert(ResourceUsage value) {
-        switch (value)
-        {
-        case ResourceUsage::Default: return D3D12_HEAP_TYPE_DEFAULT;
-        //case ResourceUsage::Immutable: return D3D12_COMMAND_LIST_TYPE_DIRECT;
-        case ResourceUsage::Dynamic: return D3D12_HEAP_TYPE_UPLOAD;
-        case ResourceUsage::ReadBack: return D3D12_HEAP_TYPE_DEFAULT;
-        //case ResourceUsage::WiteBack: return D3D12_COMMAND_LIST_TYPE_DIRECT;
-        }
-
-        LOG_WARNING_EX("Graphic", "不正なResourceUsage[value={}]", enum_cast(value));
-        return D3D12_HEAP_TYPE_DEFAULT;
-    }
-
     //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
     D3D12_RESOURCE_STATES TypeConverter::Convert(ResourceState value) {
         switch (value)

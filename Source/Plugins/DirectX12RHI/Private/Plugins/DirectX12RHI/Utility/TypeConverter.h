@@ -66,8 +66,6 @@ namespace ob::rhi::dx12 {
         static D3D12_DESCRIPTOR_HEAP_TYPE Convert(DescriptorHeapType value);
         //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
         static D3D12_COMMAND_LIST_TYPE Convert(CommandListType value);
-        //! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
-        static D3D12_HEAP_TYPE Convert(ResourceUsage value);
         //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
         static D3D12_RESOURCE_STATES Convert(ResourceState value);
 

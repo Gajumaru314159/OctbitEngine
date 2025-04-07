@@ -42,12 +42,11 @@ namespace std {
 			size_t h = 0;
 			hash_combine(
 				h, 
-				ob::enum_cast(desc.bufferType),
-				ob::enum_cast(desc.usage),
-				desc.bufferSize, 
-				desc.bufferStride, 
-				(ob::u32)desc.bufferFlags,
-				(ob::u32)desc.bindFlags
+				ob::enum_cast(desc.type),
+				ob::enum_cast(desc.type),
+				desc.size, 
+				desc.stride,
+				(ob::u32)desc.flags
 			);
 			return h;
 		}

@@ -13,14 +13,14 @@ namespace ob::rhi::dx12 {
 	//! @brief バリデート
 	static bool IsInvalid(BufferDesc& desc) {
 
-		if (desc.bufferSize == 0) {
-			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
-			desc.bufferSize = 256;
+		if (desc.type == BufferType::ConstantBuffer && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
+			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
+			desc.size = align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 		}
 
-		if (desc.bufferType == BufferType::ConstantBuffer && desc.bufferSize % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.bufferSize, align_up(desc.bufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
-			desc.bufferSize = align_up(desc.bufferSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+		if (desc.size == 0) {
+			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
+			desc.size = 256;
 		}
 
 		return false;
@@ -39,10 +39,8 @@ namespace ob::rhi::dx12 {
 		HRESULT result;
 
 		// リソースの生成
-		D3D12_HEAP_PROPERTIES heapprop;
-		if(desc.usage == ResourceUsage::Immutable) heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		else heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.bufferSize);
+		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.size);
 
 		ComPtr<ID3D12Resource> buffer;
 		result = rDevice.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,D3D12_RESOURCE_STATE_COMMON,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
@@ -137,7 +135,7 @@ namespace ob::rhi::dx12 {
 		if (!func) return;
 
 
-		m_device.getBufferUploader().add(func, m_desc.bufferSize, m_resource, 0);
+		m_device.getBufferUploader().add(func, m_desc.size, m_resource, 0);
 
 		return;
 
@@ -161,7 +159,7 @@ namespace ob::rhi::dx12 {
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
 		desc.BufferLocation = m_resource->GetGPUVirtualAddress();
-		desc.SizeInBytes = (UINT)m_desc.bufferSize;
+		desc.SizeInBytes = (UINT)m_desc.size;
 
 		m_device.getNative()->CreateConstantBufferView(&desc, handle);
 
@@ -171,15 +169,15 @@ namespace ob::rhi::dx12 {
 	//! @brief      SRVを生成
 	void BufferImpl::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
-		bool isStructuredBuffer = 0 < m_desc.bufferStride;
+		bool isStructuredBuffer = 0 < m_desc.stride;
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
 		desc.Format = DXGI_FORMAT_R32_TYPELESS;
 		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = m_desc.bufferSize/4;
-		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.bufferStride : 0;
+		desc.Buffer.NumElements = m_desc.size/4;
+		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
 
 		m_device.getNative()->CreateShaderResourceView(m_resource.Get(), &desc, handle);
@@ -192,14 +190,14 @@ namespace ob::rhi::dx12 {
 
 		OB_NOTIMPLEMENTED();
 
-		bool isStructuredBuffer = 0 < m_desc.bufferStride;
+		bool isStructuredBuffer = 0 < m_desc.stride;
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
 		desc.Format = DXGI_FORMAT_UNKNOWN;
 		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = m_desc.bufferSize;
-		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.bufferStride : 0;
+		desc.Buffer.NumElements = m_desc.size;
+		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
 		desc.Buffer.CounterOffsetInBytes = 0; // 何？
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
 

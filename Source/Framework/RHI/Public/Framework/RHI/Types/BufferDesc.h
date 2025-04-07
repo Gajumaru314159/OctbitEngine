@@ -9,16 +9,6 @@ namespace ob::rhi {
 
 #pragma region Enum
 
-	//! @brief  リソース使用法
-	enum class ResourceUsage {
-		Default,    //!< GPUでの読み取り/書き込み
-		Immutable,  //!< GPUでの読み取り
-		Dynamic,    //!< CPUでの書き込み/GPUでの読み取り
-		ReadBack,   //!< GPUでの書き込み/CPUでの読み取り
-		WiteBack,   //!< CPUでの書き込み/GPUでの読み取り
-	};
-
-
 	//! @brief  バッファ・タイプ
 	enum class BufferType {
 		Unknown,                //!< 指定なし
@@ -40,25 +30,15 @@ namespace ob::rhi {
 #pragma region Flag
 
 	//! @brief  バインド・フラグ
-	enum class BindFlag {
+	enum class BufferFlag {
 		NonPixelShaderResource	= get_bit(0),   //!< ピクセルシェーダ以外でのバインド許可
 		PixelShaderResource		= get_bit(1),   //!< ピクセルシェーダのバインド許可
 		AllShaderResource		= NonPixelShaderResource | PixelShaderResource, //!< 全てのシェーダでバインド許可
 		UnorderedAccess			= get_bit(2),   //!< UnorderedAccessのバインド許可
-		RenderTarget			= get_bit(3),   //!< レンダーターゲットビューの作成許可
-		CopySource				= get_bit(4),   //!< コピー元許可
-		CopyDest				= get_bit(5),   //!< コピー先許可
+		CopySource				= get_bit(3),   //!< コピー元許可
+		CopyDest				= get_bit(4),   //!< コピー先許可
 	};
 	//! @brief  バインド・フラグ・セット
-	using BindFlags = BitFlags<BindFlag>;
-
-
-	//! @brief  バッファ・フラグ
-	enum class BufferFlag {
-		IndirectArgs	= get_bit(0), //!< 間接引数として初期化
-		ZeroClear		= get_bit(1), //!< 初期化時にゼロクリア
-	};
-	//! @brief  バッファ・フラグ・セット
 	using BufferFlags = BitFlags<BufferFlag>;
 
 #pragma endregion
@@ -67,12 +47,10 @@ namespace ob::rhi {
 	struct BufferDesc {
 
 		String			name;			//!< 名前
-		BufferType      bufferType;     //!< バッファタイプ
-		ResourceUsage   usage;          //!< リソース使用法
-		u64             bufferSize;     //!< バッファサイズ
-		u32             bufferStride;   //!< ストライド幅 StructuredBufferで使用する場合structureのサイズを設定する。
-		BufferFlags     bufferFlags;    //!< バッファフラグ
-		BindFlags       bindFlags;      //!< バインドフラグ
+		BufferType		type;			//!< バッファタイプ
+		u64             size;			//!< バッファサイズ
+		u32             stride;			//!< ストライド幅 StructuredBufferで使用する場合structureのサイズを設定する。
+		BufferFlags     flags;			//!< バインドフラグ
 
 	public:
 
@@ -82,36 +60,28 @@ namespace ob::rhi {
 
 		//! @brief  コンストラクタ
 		BufferDesc(
-			BufferType      bufferType,
-			ResourceUsage   usage,
-			u64             bufferSize,
-			u32             bufferStride,
-			BufferFlags      bufferFlags,
-			BindFlags       bindFlags)
-			: bufferType(bufferType)
-			, usage(usage)
-			, bufferSize(bufferSize)
-			, bufferStride(bufferStride)
-			, bufferFlags(bufferFlags)
-			, bindFlags(bindFlags)
+			BufferType     type,
+			u64             size,
+			u32				stride,
+			BufferFlags     flags)
+			: type(type)
+			, size(size)
+			, stride(stride)
+			, flags(flags)
 		{}
 
 		//! @brief  定数バッファ用初期化
 		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc Constant(
-			u64             bufferSize,
-			BindFlags       bindFlags = BindFlag::AllShaderResource,
-			ResourceUsage   usage = ResourceUsage::Dynamic,
-			BufferFlags      bufferFlags = {}
+			u64				size,
+			BufferFlags     flags = BufferFlag::AllShaderResource
 		)
 		{
 			return BufferDesc(
 				BufferType::ConstantBuffer,
-				usage,
-				align_up(bufferSize,256),
+				align_up(size,256),
 				0,
-				bufferFlags,
-				bindFlags
+				flags
 			);
 		}
 
@@ -119,18 +89,14 @@ namespace ob::rhi {
 		template<typename TVertex>
 		static BufferDesc Vertex(
 			u64             count,
-			BindFlags       bindFlags = {},
-			ResourceUsage   usage = ResourceUsage::Dynamic,
-			BufferFlags      bufferFlags = {}
+			BufferFlags     flags = {}
 		)
 		{
 			return BufferDesc(
 				BufferType::VertexBuffer,
-				usage,
 				sizeof(TVertex)* count,
 				sizeof(TVertex),
-				bufferFlags,
-				bindFlags
+				flags
 			);
 		}
 
@@ -138,18 +104,14 @@ namespace ob::rhi {
 		template<typename TIndex>
 		static BufferDesc Index(
 			u64             count,
-			BindFlags       bindFlags = {},
-			ResourceUsage   usage = ResourceUsage::Dynamic,
-			BufferFlags      bufferFlags = {}
+			BufferFlags     flags = {}
 		)
 		{
 			return BufferDesc(
 				BufferType::IndexBuffer,
-				usage,
 				sizeof(TIndex) * count,
 				sizeof(TIndex),
-				bufferFlags,
-				bindFlags
+				flags
 			);
 		}
 

@@ -13,15 +13,15 @@ namespace ob::rhi::vulkan {
 	//! @brief バリデート
 	static bool IsInvalid(BufferDesc& desc) {
 
-		if (desc.bufferSize == 0) {
+		if (desc.size == 0) {
 			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
-			desc.bufferSize = 256;
+			desc.size = 256;
 		}
 
 		// D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT
-		if (desc.bufferType == BufferType::ConstantBuffer && desc.bufferSize % 256 != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.bufferSize, align_up(desc.bufferSize, 256));
-			desc.bufferSize = align_up(desc.bufferSize, 256);		}
+		if (desc.type == BufferType::ConstantBuffer && desc.size % 256 != 0) {
+			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, 256));
+			desc.size = align_up(desc.size, 256);		}
 
 		return false;
 	}
@@ -40,8 +40,8 @@ namespace ob::rhi::vulkan {
 
 		// リソースの生成
 		vk::BufferCreateInfo info;
-		info.size = desc.bufferSize;
-		info.usage = TypeConverter::Convert(desc.bufferType);
+		info.size = desc.size;
+		info.usage = TypeConverter::Convert(desc.type);
 		info.sharingMode = vk::SharingMode::eExclusive;
 
 		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());
@@ -133,7 +133,7 @@ namespace ob::rhi::vulkan {
 	void BufferImpl::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-		m_rhi.getBufferUploader().add(func, m_desc.bufferSize, m_buffer, 0);
+		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0);
 
 		return;
 

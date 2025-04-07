@@ -193,7 +193,7 @@ namespace ob::rhi::dx12 {
 			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
 			bdesc.name = m_desc.name + "_Vertices";
 			m_verices = Buffer::Create(bdesc);
-			m_verices->updateDirect(bdesc.bufferSize, vertices);
+			m_verices->updateDirect(bdesc.size, vertices);
 		}
 
 		Ref<Shader> vs;

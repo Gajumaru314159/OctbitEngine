@@ -308,8 +308,8 @@ namespace ob::rhi::dx12 {
 			if (auto pBuffer = buffer.cast<BufferImpl>()) {
 				auto& view = views[size];
 				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-				view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
-				view.StrideInBytes = pBuffer->getDesc().bufferStride;
+				view.SizeInBytes = (UINT)pBuffer->getDesc().size;
+				view.StrideInBytes = pBuffer->getDesc().stride;
 			} else {
 				LOG_ERROR("空の頂点バッファが含まれています");
 			}
@@ -325,8 +325,8 @@ namespace ob::rhi::dx12 {
 		if (auto pBuffer = buffer.cast<BufferImpl>()) {
 			D3D12_INDEX_BUFFER_VIEW view;
 			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = (UINT)pBuffer->getDesc().bufferSize;
-			view.Format = pBuffer->getDesc().bufferStride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
+			view.SizeInBytes = (UINT)pBuffer->getDesc().size;
+			view.Format = pBuffer->getDesc().stride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 			m_cmdList->IASetIndexBuffer(&view);
 		} else {
 

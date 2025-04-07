@@ -66,7 +66,7 @@ namespace ob::graphics {
 
 		// バッファ生成
 		if (0 < bufferSize) {
-			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BindFlag::AllShaderResource);
+			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BufferFlag::AllShaderResource);
 			bufferDesc.name = Format("MaterialParameter ({})",desc.name);
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);

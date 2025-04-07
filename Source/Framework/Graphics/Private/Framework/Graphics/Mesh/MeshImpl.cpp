@@ -230,8 +230,8 @@ namespace ob::graphics {
 		{
 			auto desc = BufferDesc::Vertex<s32>(0);
 			desc.name = meshData.name;
-			desc.bufferSize = stribe * vertexCount;
-			desc.bufferStride = stribe;
+			desc.size = stribe * vertexCount;
+			desc.stride = stribe;
 
 			m_vertexBuffer = Buffer::Create(desc);
 		}
@@ -252,8 +252,8 @@ namespace ob::graphics {
 
 				auto desc = BufferDesc::Index<s32>(0);
 				desc.name = meshData.name;
-				desc.bufferSize = indexStribe * indexCount;
-				desc.bufferStride = indexStribe;
+				desc.size = indexStribe * indexCount;
+				desc.stride = indexStribe;
 
 				m_indexBuffer = Buffer::Create(desc);
 

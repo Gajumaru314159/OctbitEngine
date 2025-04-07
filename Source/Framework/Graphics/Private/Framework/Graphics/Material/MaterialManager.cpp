@@ -37,7 +37,7 @@ namespace ob::graphics {
 		constexpr size_t BUFFER_SIZE = sizeof(f32) * GLOBAL_FLOAT_MAX + sizeof(Color) * GLOBAL_COLOR_MAX + sizeof(Matrix) * GLOBAL_MATRIX_MAX;
 
 		{
-			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BindFlag::AllShaderResource);
+			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BufferFlag::AllShaderResource);
 			bufferDesc.name = "MaterialGlobalProperty";
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
