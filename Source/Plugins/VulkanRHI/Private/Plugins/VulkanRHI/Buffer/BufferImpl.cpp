@@ -34,14 +34,14 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 
-		if (IsInvalid(m_desc))return;
+		if (IsInvalid(m_desc));
 
 		auto& device = rhi.getDevice();
 
 		// リソースの生成
 		vk::BufferCreateInfo info;
 		info.size = desc.bufferSize;
-		info.usage = vk::BufferUsageFlagBits::eVertexBuffer;// TypeConverter::Convert(desc.usage);
+		info.usage = TypeConverter::Convert(desc.bufferType);
 		info.sharingMode = vk::SharingMode::eExclusive;
 
 		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());
@@ -49,9 +49,8 @@ namespace ob::rhi::vulkan {
 		auto requirements = m_buffer.getMemoryRequirements();
 		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
-		device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_buffer.bindMemory(m_memory, 0);
-
 
 	}
 

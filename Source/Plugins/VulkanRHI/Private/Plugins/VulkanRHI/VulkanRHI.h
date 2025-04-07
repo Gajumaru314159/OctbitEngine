@@ -15,6 +15,8 @@ namespace ob::platform {
 
 namespace ob::rhi::vulkan {
 
+	class BufferUploader;
+
 	struct VulkanRHIConfig {
 		bool enableDebugLayer = true;
 	};
@@ -160,7 +162,7 @@ namespace ob::rhi::vulkan {
 
 		void createInstance();
 		void createPhysicalDevice();
-		void createLogicalDevice();
+		void createDevice();
 		void createQueue();
 
 	private:
@@ -181,7 +183,7 @@ namespace ob::rhi::vulkan {
 		u32											m_queueFamilyIndex;
 		u32											m_queueCount;
 
-		MemoryStorage<BufferUploader> m_bufferUploader;
+		UPtr<BufferUploader> m_bufferUploader;
 
 	};
 }

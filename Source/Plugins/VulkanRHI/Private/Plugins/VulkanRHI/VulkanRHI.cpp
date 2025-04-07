@@ -10,6 +10,7 @@
 #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
 #include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/VulkanRHI/PipelineState/PipelineStateImpl.h>
+#include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -146,21 +147,17 @@ namespace ob::rhi::vulkan {
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
 		, m_vconfig(vconfig ? *vconfig : ob::rhi::vulkan::VulkanRHIConfig{})
 	{
-		try{
-			createInstance();
-			createPhysicalDevice();
-			createLogicalDevice();
-			createQueue();
-		} catch (const vk::Error& error) {
-			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", "VulkanRHI", error.what());
-		}
-
+		createInstance();
+		createPhysicalDevice();
+		createDevice();
+		createQueue();
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
+		finalize();
 	}
 
 
@@ -215,18 +212,36 @@ namespace ob::rhi::vulkan {
 		}
 
 		// アプリ情報
-		vk::ApplicationInfo appInfo{};
+		vk::ApplicationInfo appInfo;
 		appInfo.apiVersion = VK_API_VERSION_1_0;
 		appInfo.pApplicationName = "OctbitEngine";
 		appInfo.pEngineName = "OctbitEngine";
 
 		// インスタンス情報
-		vk::InstanceCreateInfo instanceInfo{};
+		vk::InstanceCreateInfo instanceInfo;
 		instanceInfo.pApplicationInfo = &appInfo;
 		instanceInfo.enabledLayerCount = (uint32_t)validLayerNames.size();
 		instanceInfo.ppEnabledLayerNames = validLayerNames.data();
 		instanceInfo.enabledExtensionCount = (uint32_t)validExtensionNames.size();
 		instanceInfo.ppEnabledExtensionNames = validExtensionNames.data();
+
+#if OB_DEBUG
+		{
+			// 初期化情報を出力
+			String message;
+			message += Format("\n[ Vulkan ver.{} ]\n", m_context.enumerateInstanceVersion());
+			message += Format("Validation Layers\n");
+			for (auto& name : validLayerNames) {
+				message += Format("* {}\n", name);
+			}
+			message += Format("Extensions\n");
+			for (auto& name : validExtensionNames) {
+				message += Format("* {}\n", name);
+			}
+			message.pop_back();
+			LOG_INFO("{}", message);
+		}
+#endif
 
 		m_instance = m_context.createInstance(instanceInfo, m_allocationCallbacks);
 
@@ -238,12 +253,11 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createPhysicalDevice() {
 
-		if (m_instance == nullptr)
-			return;
-
 		auto devices = m_instance.enumeratePhysicalDevices();
 
-		if (devices.empty())LOG_FATAL_EX("RHI", "GPUが接続されていません。");
+		if (devices.empty()) {
+			throw Exception("GPUが接続されていません。");
+		}
 
 		// キューファミリーチェック
 		for (auto& device : devices) {
@@ -286,7 +300,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkDevice生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createLogicalDevice() {
+	void VulkanRHI::createDevice() {
 
 		if (m_physicalDevice == nullptr)
 			return;
@@ -325,14 +339,14 @@ namespace ob::rhi::vulkan {
 
 		// デバイスキューのパラメータ
 		Vector<float> queuePriorities(m_queueCount, 0.0f);
-		vk::DeviceQueueCreateInfo queueInfo{};
+		vk::DeviceQueueCreateInfo queueInfo;
 		queueInfo.queueCount = 1;
 		queueInfo.pQueuePriorities = queuePriorities.data();
 		queueInfo.queueFamilyIndex = m_queueFamilyIndex;
 		queueInfo.queueCount = (uint32_t)queuePriorities.size();
 
 		// 生成情報
-		vk::DeviceCreateInfo info{};
+		vk::DeviceCreateInfo info;
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
 		info.enabledExtensionCount = (uint32_t)std::size(extensionNames);

@@ -111,10 +111,10 @@ namespace ob::rhi::vulkan {
         ////! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
         ////@―---------------------------------------------------------------------------
         //static D3D12_COMMAND_LIST_TYPE Convert(CommandListType value);
-        ////@―---------------------------------------------------------------------------
-        ////! @brief  ResourceUsage を D3D12_HEAP_TYPE に変換
-        ////@―---------------------------------------------------------------------------
-        ////static D3D12_HEAP_TYPE Convert(ResourceUsage value);
+        //@―---------------------------------------------------------------------------
+        //! @brief  BufferType を vk::BufferUsageFlags に変換
+        //@―---------------------------------------------------------------------------
+        static vk::BufferUsageFlags Convert(BufferType value);
         ////@―---------------------------------------------------------------------------
         ////! @brief  AttachmentClear を VkAttachmentLoadOp に変換
         ////@―---------------------------------------------------------------------------

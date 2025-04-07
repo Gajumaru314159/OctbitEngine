@@ -29,21 +29,18 @@ namespace ob::rhi::vulkan {
 		: m_rhi(rhi)
 		, m_desc(desc)
 	{
-		VkResult result;
+		vk::CommandPoolCreateInfo info;
+		info.queueFamilyIndex = m_rhi.getQueryFamilyIndex();
+		info.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
 
-		vk::CommandPoolCreateInfo ci;
-		ci.queueFamilyIndex = m_rhi.getQueryFamilyIndex();
-		ci.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
+		m_commandPool = rhi.getDevice().createCommandPool(info, m_rhi.getAllocationCallbacks());
 
-		m_commandPool = rhi.getDevice().createCommandPool(ci, m_rhi.getAllocationCallbacks());
+		vk::CommandBufferAllocateInfo allocInfo;
+		allocInfo.commandPool = m_commandPool;
+		allocInfo.commandBufferCount = 1;
+		allocInfo.level = vk::CommandBufferLevel::ePrimary;
 
-		vk::CommandBufferAllocateInfo info;
-		info.commandPool = m_commandPool;
-		info.commandBufferCount = 1;
-		info.level = vk::CommandBufferLevel::ePrimary;
-
-		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(info).front());
-
+		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(allocInfo).front());
 	}
 
 	CommandListImpl::~CommandListImpl() {
