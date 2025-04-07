@@ -14,7 +14,7 @@
 namespace ob::core {
 
     //! @brief 例外クラス
-    class Exception {
+    class Exception : public std::exception {
     public:
         using NotificationHandler = bool(*)(const Exception& e);		//!< 例外ハンドラ型
     public:
@@ -32,7 +32,7 @@ namespace ob::core {
 
 
         //! @brief メッセージを取得
-        virtual const String& message()const;
+        virtual const char* what()const noexcept override { return m_message.c_str(); }
 
 
     protected:

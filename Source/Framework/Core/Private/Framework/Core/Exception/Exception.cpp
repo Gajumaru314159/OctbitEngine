@@ -28,10 +28,4 @@ namespace ob::core {
 
     }
 
-
-    //! @brief メッセージを取得
-    const String& Exception::message()const {
-        return m_message;
-    }
-
 }
