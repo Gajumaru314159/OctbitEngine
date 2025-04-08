@@ -23,14 +23,8 @@ namespace ob::rhi {
 		//! @brief		デストラクタ
 		virtual ~GraphicObject();
 
-
 		//! @brief      名前を取得
 		virtual const String& getName()const = 0;
-
-
-		//! @brief      名前を設定
-		virtual bool isValid() const = 0;
-
 
 	protected:
 

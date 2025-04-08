@@ -82,6 +82,12 @@ namespace ob::core {
 			return *this;
 		}
 
+		//! @brief OR結合演算子
+		bool operator&(TEnum value) const {
+			m_bits &= static_cast<TBitsType>(value);
+			return m_bits;
+		}
+
 		//! @brief			指定されたフラグが設定されているか確認する
 		//! 
 		//! @param value	確認するフラグ

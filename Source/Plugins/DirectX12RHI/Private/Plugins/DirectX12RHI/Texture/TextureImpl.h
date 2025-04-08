@@ -38,7 +38,7 @@ namespace ob::rhi::dx12 {
         TextureImpl(DirectX12RHI& rDevice, StringView name,BlobView blob);
 
         //! @brief      妥当な状態か
-        bool isValid()const override;
+        bool isValid()const;
 
         //! @brief      名前を取得
         const String& getName()const override;

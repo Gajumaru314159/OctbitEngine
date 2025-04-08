@@ -27,7 +27,7 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief  妥当な状態か
-		bool isValid()const override;
+		bool isValid()const;
 
 
 		//! @brief      名前を取得

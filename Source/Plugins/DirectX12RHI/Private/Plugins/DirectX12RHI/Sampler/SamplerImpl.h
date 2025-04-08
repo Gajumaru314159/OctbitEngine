@@ -32,7 +32,7 @@ namespace ob::rhi::dx12 {
 
 
         //! @brief  妥当な状態か
-        bool isValid()const override { return !m_handle.empty(); }
+        bool isValid()const { return !m_handle.empty(); }
 
 
         //! @brief      名前を取得

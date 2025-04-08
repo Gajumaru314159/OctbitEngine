@@ -26,7 +26,7 @@
 
 #define SAFE_CREATE(type,type_impl,...)			\
 	Ref<type> p = new type_impl(__VA_ARGS__);	\
-	if(p->isValid() == false) p = {};			\
+	if(p.cast<type_impl>()->isValid() == false) p = {};			\
 	return p;							
 
 namespace ob::rhi::dx12 {
