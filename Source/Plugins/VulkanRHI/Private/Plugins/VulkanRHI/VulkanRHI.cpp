@@ -193,8 +193,6 @@ namespace ob::rhi::vulkan {
 		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
 
-		OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME));
-
 
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
@@ -322,15 +320,14 @@ namespace ob::rhi::vulkan {
 		if (m_physicalDevice == nullptr)
 			return;
 
-		const char* layerNames[] =
-		{
-			OB_DEBUG_CONTEXT("VK_LAYER_KHRONOS_validation"),
-		};
+		Vector<const char*> layerNames;
+		Vector<const char*> extensionNames;
 
-		const char* extensionNames[] =
-		{
-			VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-		};
+
+		OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
+
+		extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+		//OB_DEBUG_CONTEXT(layerNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME));
 
 		// TODO
 
@@ -366,10 +363,10 @@ namespace ob::rhi::vulkan {
 		vk::DeviceCreateInfo info;
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
-		info.enabledExtensionCount = (uint32_t)std::size(extensionNames);
-		info.ppEnabledExtensionNames = extensionNames;
-		info.enabledLayerCount = (uint32_t)std::size(layerNames);
-		info.ppEnabledLayerNames = layerNames;
+		info.enabledExtensionCount = (uint32_t)extensionNames.size();
+		info.ppEnabledExtensionNames = extensionNames.data();
+		info.enabledLayerCount = (uint32_t)layerNames.size();
+		info.ppEnabledLayerNames = layerNames.data();
 		info.pEnabledFeatures = nullptr;
 
 		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
