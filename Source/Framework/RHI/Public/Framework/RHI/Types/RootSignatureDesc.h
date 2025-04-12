@@ -131,6 +131,24 @@ namespace ob::rhi {
 		BindingLayoutDesc() = default;
 		BindingLayoutDesc(Vector<BindingSlot> slots) : slots(slots) {}
 		BindingLayoutDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
+
+		void normalize() {
+			// インデックスを正規化
+			s32 index = 0;
+			for (auto& slot : slots) {
+				for (auto [i, item] : Indexed(slot.items)) {
+					// 先頭がオフセット指定ならば0に置き換え
+					if (i == 0 && item.index < 0) {
+						item.index = 0;
+					}
+					// オフセット指定なら正規化
+					if (item.index < 0) {
+						item.index = index - item.index;
+					}
+					index = item.index;
+				}
+			}
+		}
 	};
 
 	//! @brief      BindingItem定義のユーティリティ
