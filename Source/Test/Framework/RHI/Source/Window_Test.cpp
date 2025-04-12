@@ -144,14 +144,12 @@ PsOut PS_Main(PsIn i) {
 
 		Ref<RootSignature> signature;
 		{
-			BindingLayoutDesc desc(
+			BindingLayoutDesc desc{
 				{
 					Binding::ConstantBuffer(),
-				},
-				{
-					StaticSamplerDesc(SamplerDesc(),0),
 				}
-			);
+			};
+			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = "Common";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
