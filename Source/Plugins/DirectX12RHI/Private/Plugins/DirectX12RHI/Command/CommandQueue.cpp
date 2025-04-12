@@ -81,4 +81,4 @@ namespace ob::rhi::dx12 {
 		Utility::SetName(m_fence.Get(), fenceName);
 	}
 
-}// ob::rhi::dx12 
+}

@@ -13,25 +13,39 @@
 
 namespace ob::rhi::dx12 {
 
+	static D3D12_DESCRIPTOR_HEAP_TYPE Convert(DescriptorHeapType value) {
+		switch (value)
+		{
+		case DescriptorHeapType::CBV_SRV_UAV:		return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+		case DescriptorHeapType::Sampler:			return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+		case DescriptorHeapType::SamplerCopyable:   return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
+		case DescriptorHeapType::RTV:				return D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		case DescriptorHeapType::DSV:				return D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		}
+
+		LOG_WARNING_EX("Graphic", "不正なDescriptorHeapType[value={}]", enum_cast(value));
+		return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	}
+
+
 	//! @brief          コンストラクタ
 	//! 
 	//! @param device   デバイス
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
-	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity, bool readable)
+	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
 		: m_mapper(capacity)
 		, m_type(type)
 	{
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-			descHeapDesc.Type = TypeConverter::Convert(type);
+			descHeapDesc.Type = Convert(type);
 			descHeapDesc.NumDescriptors = (UINT)m_mapper.capacity();
 			descHeapDesc.NodeMask = 0;
-			if (descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_RTV || descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_DSV) {
-				descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-			}
-			if (descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV|| descHeapDesc.Type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER) {
-				descHeapDesc.Flags = readable ? D3D12_DESCRIPTOR_HEAP_FLAG_NONE : D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+			descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+			if (type == DescriptorHeapType::CBV_SRV_UAV || type == DescriptorHeapType::Sampler ) {
+				descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			}
 
 			m_descriptorSize = device.getNative()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);

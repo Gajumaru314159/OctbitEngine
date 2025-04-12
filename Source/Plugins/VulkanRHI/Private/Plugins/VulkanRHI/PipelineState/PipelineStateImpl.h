@@ -32,24 +32,19 @@ namespace ob::rhi::vulkan {
 
 
         //@―---------------------------------------------------------------------------
-        //! @brief  妥当な状態か
-        //@―---------------------------------------------------------------------------
-        bool isValid()const override{ return false; }
-
-
-        //@―---------------------------------------------------------------------------
         //! @brief      定義を取得
         //@―---------------------------------------------------------------------------
         //const PipelineStateDesc& getDesc()const override { return m_desc; };
 
 
     private:
+        // PipelineState を介して継承されました
+        const String& getName() const override;
 
         const PipelineStateDesc m_desc;
 
+	    vk::raii::Pipeline m_pipeline = nullptr;
 
-        // PipelineState を介して継承されました
-        const String& getName() const override;
 
     };
 

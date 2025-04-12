@@ -47,7 +47,7 @@ namespace ob::rhi::vulkan {
 		return false;
 	}
 
-	static VkImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
+	static vk::ImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
 		VkImageCreateInfo info = {};
 		info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
 		info.flags = 0;
@@ -57,7 +57,7 @@ namespace ob::rhi::vulkan {
 		info.arrayLayers =arrayNum;
 		info.samples = VK_SAMPLE_COUNT_1_BIT;
 		info.tiling = VK_IMAGE_TILING_LINEAR; // VK_IMAGE_TILING_OPTIMAL; 直接アップロード用の仮対応
-		info.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+		info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
 		info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 		info.queueFamilyIndexCount = 0;
 		info.pQueueFamilyIndices = nullptr;

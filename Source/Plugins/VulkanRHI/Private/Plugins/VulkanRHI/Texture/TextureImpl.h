@@ -27,9 +27,6 @@ namespace ob::rhi::vulkan {
         //! @brief      デストラクタ
         ~TextureImpl();
 
-        //! @brief      妥当な状態か
-        bool isValid()const override;
-
         //! @brief      名前を取得
         const String& getName()const override;
 

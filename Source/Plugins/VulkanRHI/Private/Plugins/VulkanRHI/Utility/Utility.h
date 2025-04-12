@@ -43,17 +43,12 @@ namespace ob::rhi::vulkan {
     class Utility {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
-        //! @brief  説明
-        //@―---------------------------------------------------------------------------
-
-    private:
-
-
+		template<typename T>
+        static void SetName(vk::raii::Device& device,const T& object, StringView name) {
+			vk::DebugReportObjectTypeEXT type = debugReportObjectType(object.objectType);
+            vk::DebugMarkerObjectNameInfoEXT info(type, (uint64_t)((typename T::CType)*object), name.c_str());
+            device.debugMarkerSetObjectNameEXT(nameinfo);
+        }
 
     };
 

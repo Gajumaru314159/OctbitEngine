@@ -476,13 +476,20 @@ namespace ob::rhi::vulkan
 	//@―---------------------------------------------------------------------------
 	//! @brief  BufferType を vk::BufferUsageFlags に変換
 	//@―---------------------------------------------------------------------------
-	vk::BufferUsageFlags Convert(BufferType value) {
+	vk::BufferUsageFlags Convert(BufferState value) {
 	    switch (value)
 	    {
-		case BufferType::VertexBuffer: return vk::BufferUsageFlagBits::eVertexBuffer;
-		case BufferType::IndexBuffer: return vk::BufferUsageFlagBits::eIndexBuffer;
-		case BufferType::ConstantBuffer: return vk::BufferUsageFlagBits::eUniformBuffer;
-		case BufferType::UnorderedAccess: return vk::BufferUsageFlagBits::eStorageBuffer;
+		case BufferState::VertexBuffer: return vk::BufferUsageFlagBits::eVertexBuffer;
+		case BufferState::IndexBuffer: return vk::BufferUsageFlagBits::eIndexBuffer;
+		case BufferState::ConstantBuffer: return vk::BufferUsageFlagBits::eUniformBuffer;
+		case BufferState::UnorderedAccess: return vk::BufferUsageFlagBits::eStorageBuffer;
+		// PixelShaderResource
+		// ComputeShaderResource
+		// AllShaderResource
+		// StreamOut
+		case BufferState::IndirectArgument: return vk::BufferUsageFlagBits::eIndirectBuffer;
+		// CopySource
+		// CopyDest
 	    }
 	
 	    LOG_WARNING_EX("Graphic", "不正なResourceUsage[value={}]", enum_cast(value));

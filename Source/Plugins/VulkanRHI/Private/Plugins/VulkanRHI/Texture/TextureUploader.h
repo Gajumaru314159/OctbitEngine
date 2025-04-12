@@ -27,7 +27,7 @@ namespace ob::rhi::vulkan {
 
         TextureUploader(VulkanRHI& rhi);
 
-        void add(const vk::raii::Image& dest, Span<Subresource> subresources);
+        void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, Span<Subresource> subresources);
 
         void update(vk::raii::CommandBuffer& commandBuffer);
 
@@ -39,8 +39,15 @@ namespace ob::rhi::vulkan {
 
         // コピーリクエスト
         struct Request {
-            vk::Image source;
             vk::Image dest;
+
+            vk::raii::Buffer source;
+            vk::raii::DeviceMemory memory;
+
+            vk::ImageLayout destLayout;
+            u32 mipLevels;
+			u32 layerCount;
+
             // UINT sourceSubresource = 0;
             // UINT destSubresource = 0;
             // 
@@ -72,7 +79,8 @@ namespace ob::rhi::vulkan {
 		SpinLock m_lock;
 		Swapper<FrameData> m_frames;
 
-		Vector<vk::MemoryBarrier> m_barriers;
+        Vector<vk::ImageMemoryBarrier> m_barriers;
+        Vector<vk::MemoryBarrier> m_barriers2;
 
     };
 

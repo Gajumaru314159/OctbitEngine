@@ -25,11 +25,8 @@ namespace ob::rhi::dx12 {
     class SamplerImpl :public Sampler {
     public:
 
-        SamplerImpl(DirectX12RHI& device, const SamplerDesc& desc);
-		D3D12_CPU_DESCRIPTOR_HANDLE getHandle() const { return m_handle.getCpuHandle(); }
-
-        void createSamplerView(D3D12_CPU_DESCRIPTOR_HANDLE& handle);
-
+        SamplerImpl(DirectX12RHI& rhi, const SamplerDesc& desc);
+		D3D12_CPU_DESCRIPTOR_HANDLE getCopyableHandle() const { return m_handle.getCpuHandle(); }
 
         //! @brief  妥当な状態か
         bool isValid()const { return !m_handle.empty(); }
@@ -39,7 +36,7 @@ namespace ob::rhi::dx12 {
         const String& getName()const override { return m_name; }
 
     private:
-        DirectX12RHI& m_device;
+        DirectX12RHI& m_rhi;
         D3D12_SAMPLER_DESC m_desc;
         String m_name;
         DescriptorHandle m_handle;

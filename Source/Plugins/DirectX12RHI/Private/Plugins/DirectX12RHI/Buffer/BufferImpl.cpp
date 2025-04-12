@@ -10,10 +10,49 @@
 
 namespace ob::rhi::dx12 {
 
+	//! @brief  BufferState を D3D12_RESOURCE_STATESに変換
+	static D3D12_RESOURCE_STATES Convert(BufferState value) {
+		switch (value)
+		{
+		case BufferState::Common:						return D3D12_RESOURCE_STATE_COMMON;
+		case BufferState::VertexBuffer:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+		case BufferState::IndexBuffer:					return D3D12_RESOURCE_STATE_INDEX_BUFFER;
+		case BufferState::ConstantBuffer:				return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+		case BufferState::UnorderedAccess:				return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+		case BufferState::PixelShadeResource:			return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE; // TODO ステートが必要か
+		case BufferState::ComputeShaderResource:		return D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
+		case BufferState::AllShaderResource:			return D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+		case BufferState::StreamOut:					return D3D12_RESOURCE_STATE_STREAM_OUT;
+		case BufferState::IndirectArgument:				return D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
+		case BufferState::CopySource:					return D3D12_RESOURCE_STATE_COPY_SOURCE;
+		case BufferState::CopyDest:						return D3D12_RESOURCE_STATE_COPY_DEST;
+		}
+		LOG_ERROR("不正なバッファ状態です。");
+		return {};
+	}
+
+	//! @brief  BufferFlags を D3D12_RESOURCE_FLAGS に変換	
+	static D3D12_RESOURCE_FLAGS Convert(BufferFlags value) {
+		D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE;
+		if (!value.has(BufferFlag::ShaderResource)) flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
+		if (value.has(BufferFlag::UnorderedAccess))flags |= D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+
+		// D3D12では使用しない
+		// if (value.has(BufferFlag::CopySource));
+		// if (value.has(BufferFlag::CopyDest));
+		// if (value.has(BufferFlag::Vertex));
+		// if (value.has(BufferFlag::Index));
+		// if (value.has(BufferFlag::Constant));
+		// if (value.has(BufferFlag::IndirectArgument));
+
+		return flags;
+	}
+
+
 	//! @brief バリデート
 	static bool IsInvalid(BufferDesc& desc) {
 
-		if (desc.type == BufferType::ConstantBuffer && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
+		if (desc.state == BufferState::ConstantBuffer && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
 			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
 			desc.size = align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 		}
@@ -40,10 +79,23 @@ namespace ob::rhi::dx12 {
 
 		// リソースの生成
 		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.size);
+		UINT64 alignment = 0; // PlacedBuffer対応時に設定
+		D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COMMON; // D3D12はパフォーマンス上暗黙的な状態遷移を使用するのでCommonを利用する
+		D3D12_RESOURCE_FLAGS flags = Convert(m_desc.flags);
+
+		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.size,flags, alignment);
+
+		// TODO ReadBack対応
+		// if(m_desc.state == BufferState::CopyDesc) {
+		//	state = D3D12_RESOURCE_STATE_COPY_DEST;
+		//	heapprop.Type = D3D12_HEAP_TYPE_READBACK;
+		//	
+		
+		// ByteAddressBufferはSRVのFormatをR32_TYPELESSにする必要がある?
+		// resdesc.Format = DXGI_FORMAT_R32_TYPELESS;
 
 		ComPtr<ID3D12Resource> buffer;
-		result = rDevice.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,D3D12_RESOURCE_STATE_COMMON,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
+		result = rDevice.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,state,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
 
 		if (FAILED(result))
 		{
@@ -109,22 +161,7 @@ namespace ob::rhi::dx12 {
 	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 	void BufferImpl::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
-
 		m_device.getBufferUploader().add(BlobView(data, size), m_resource, offset);
-
-
-		/*
-		HRESULT result;
-		byte* ptr = nullptr;
-		result = m_resource->Map(0, nullptr, (void**)&ptr);
-		if (FAILED(result))
-		{
-			Utility::OutputFatalLog(result, "ID3D12Resource::Map()");
-			return;
-		}
-		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
-		m_resource->Unmap(0, nullptr);
-		*/
 	}
 
 
@@ -188,8 +225,6 @@ namespace ob::rhi::dx12 {
 	//! @brief      UAVを生成
 	void BufferImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
-		OB_NOTIMPLEMENTED();
-
 		bool isStructuredBuffer = 0 < m_desc.stride;
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
@@ -197,9 +232,12 @@ namespace ob::rhi::dx12 {
 		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 		desc.Buffer.FirstElement = 0;
 		desc.Buffer.NumElements = m_desc.size;
-		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
+		desc.Buffer.StructureByteStride = m_desc.stride;
 		desc.Buffer.CounterOffsetInBytes = 0; // 何？
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
+
+		// TODO DXGI_FORMAT_R32_TYPELESS対応
+		OB_NOTIMPLEMENTED();
 
 		// TODO pCounterResource の調査
 		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &desc, handle);

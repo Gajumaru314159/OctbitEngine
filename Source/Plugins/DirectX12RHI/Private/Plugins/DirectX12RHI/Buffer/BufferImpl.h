@@ -63,19 +63,15 @@ namespace ob::rhi::dx12 {
 		//! @brief      ネイティブオブジェクトを取得
 		ID3D12Resource* getNative()const {return m_resource.Get();}
 
-
 		//! @brief      CBVを生成
 		void createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
-
 
 		//! @brief      SRVを生成
 		void createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
 
-
 		//! @brief      UAVを生成
-	private:
 		void createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
-	public:
+
 
 	private:
 

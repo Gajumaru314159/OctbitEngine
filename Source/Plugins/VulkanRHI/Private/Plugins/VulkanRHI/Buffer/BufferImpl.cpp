@@ -18,10 +18,10 @@ namespace ob::rhi::vulkan {
 			desc.size = 256;
 		}
 
-		// D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT
-		if (desc.type == BufferType::ConstantBuffer && desc.size % 256 != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, 256));
-			desc.size = align_up(desc.size, 256);		}
+		if (desc.size < 65536 && desc.size % 4 != 0) {
+			LOG_WARNING("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", desc.name, desc.size);
+			desc.size = align_up(desc.size, 4);
+		}
 
 		return false;
 	}
@@ -38,19 +38,25 @@ namespace ob::rhi::vulkan {
 
 		auto& device = rhi.getDevice();
 
-		// リソースの生成
+		// バッファ生成
 		vk::BufferCreateInfo info;
 		info.size = desc.size;
-		info.usage = TypeConverter::Convert(desc.type);
+		info.usage = TypeConverter::Convert(desc.state) | vk::BufferUsageFlagBits::eTransferDst;
 		info.sharingMode = vk::SharingMode::eExclusive;
 
-		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());
+		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
 
-		auto requirements = m_buffer.getMemoryRequirements();
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+		// メモリ確保
+		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_buffer.getMemoryRequirements(), vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+
+		// バインド
 		m_buffer.bindMemory(m_memory, 0);
+
+
+		Utility::SetName(device, m_buffer, m_desc.name);
+		Utility::SetName(device, m_memory, m_desc.name);
 
 	}
 
@@ -62,15 +68,7 @@ namespace ob::rhi::vulkan {
 	BufferImpl::BufferImpl(VulkanRHI& rhi, const BufferDesc& desc, const Blob& blob)
 		: BufferImpl(rhi,desc)
 	{
-		if (!isValid())return;
-		// TODO
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//! @brief  妥当な状態か
-	bool BufferImpl::isValid()const {
-		return true;
+		update(blob.size(), blob.data(),0);
 	}
 
 
@@ -110,20 +108,6 @@ namespace ob::rhi::vulkan {
 		if (data == nullptr) return;
 
 		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset);
-
-
-		/*
-		HRESULT result;
-		byte* ptr = nullptr;
-		result = m_resource->Map(0, nullptr, (void**)&ptr);
-		if (FAILED(result))
-		{
-			Utility::OutputFatalLog(result, "ID3D12Resource::Map()");
-			return;
-		}
-		memcpy_s(ptr+offset, (s64)m_desc.bufferSize-offset, pData, size);
-		m_resource->Unmap(0, nullptr);
-		*/
 	}
 
 

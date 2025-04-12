@@ -23,3 +23,7 @@
 #include <vulkan/vulkan_raii.hpp>
 
 #include <Plugins/VulkanRHI/Utility/Utility.h>
+
+namespace ob::rhi::vulkan {
+	class VulkanRHI;
+}

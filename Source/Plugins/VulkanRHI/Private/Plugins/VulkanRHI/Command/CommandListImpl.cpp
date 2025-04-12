@@ -46,14 +46,6 @@ namespace ob::rhi::vulkan {
 	CommandListImpl::~CommandListImpl() {
 	}
 
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  妥当な状態か
-	//@―---------------------------------------------------------------------------
-	bool CommandListImpl::isValid()const {
-		return false;
-	}
-
 	//! @brief      名前を取得
 	const String& CommandListImpl::getName() const {
 		return m_desc.name;

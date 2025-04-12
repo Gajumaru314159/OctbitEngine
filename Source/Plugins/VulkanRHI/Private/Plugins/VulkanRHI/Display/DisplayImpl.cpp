@@ -142,12 +142,6 @@ namespace ob::rhi::vulkan {
 	}
 
 
-	//! @brief  妥当な状態か
-	bool DisplayImpl::isValid()const {
-		return !m_textures.empty();
-	}
-
-
 	//! @brief  定義を取得
 	const DisplayDesc& DisplayImpl::getDesc()const noexcept {
 		return m_desc;

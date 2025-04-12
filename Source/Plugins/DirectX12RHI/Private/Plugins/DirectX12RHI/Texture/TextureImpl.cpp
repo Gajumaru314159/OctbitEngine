@@ -468,6 +468,7 @@ namespace ob::rhi::dx12 {
 	//! @brief      UAVを生成
 	void TextureImpl::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle,s32 slice)const {
 
+		// TODO Sliceの扱いを調査
 		OB_NOTIMPLEMENTED();
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};

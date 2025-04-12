@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
 namespace ob::core {
     struct TLSFBlock;

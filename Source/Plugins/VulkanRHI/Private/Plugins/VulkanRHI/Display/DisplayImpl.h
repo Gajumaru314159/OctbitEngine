@@ -27,8 +27,6 @@ namespace ob::rhi::vulkan {
 		//@―---------------------------------------------------------------------------
 		DisplayImpl(VulkanRHI& rhi, const DisplayDesc& desc);
 		~DisplayImpl();
-		
-		bool isValid()const override;		
 
 		const String& getName()const override {
 			return m_desc.name;

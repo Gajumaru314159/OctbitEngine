@@ -10,6 +10,7 @@
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
 #include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -53,7 +54,7 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief  ルートシグネチャを生成
-		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc)override;
+		Ref<RootSignature> createRootSignature(const BindingLayoutDesc& desc)override;
 
 
 		//! @brief  パイプラインステートを生成
@@ -92,7 +93,8 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief  デスクリプタ・テーブルを生成
-		Ref<DescriptorTable> createDescriptorTable(DescriptorRangeType type, s32 elementNum)override;
+		Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) override;
+		Ref<DescriptorTable> createDescriptorTable(const Ref<RootSignature>& signature, s32 slot)override;
 
 
 
@@ -195,7 +197,6 @@ namespace ob::rhi::dx12 {
 		MemoryStorage<TextureUploader>		m_textureUploader;
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
-		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeapsReadable;  // デスクリプタ・ヒープ・リスト
 
 		ComPtr<IDStorageFactory>			g_dsfactory;
 

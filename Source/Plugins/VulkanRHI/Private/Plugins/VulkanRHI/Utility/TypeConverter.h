@@ -114,7 +114,7 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         //! @brief  BufferType を vk::BufferUsageFlags に変換
         //@―---------------------------------------------------------------------------
-        static vk::BufferUsageFlags Convert(BufferType value);
+        static vk::BufferUsageFlags Convert(BufferState value);
         ////@―---------------------------------------------------------------------------
         ////! @brief  AttachmentClear を VkAttachmentLoadOp に変換
         ////@―---------------------------------------------------------------------------

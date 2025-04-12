@@ -22,34 +22,6 @@ namespace ob::rhi::dx12
         return result;
     }
 
-
-    //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    D3D12_ROOT_PARAMETER_TYPE TypeConverter::Convert(RootParameterType value) {
-        switch (value) {
-        case RootParameterType::CBV:                return D3D12_ROOT_PARAMETER_TYPE_CBV;
-        case RootParameterType::SRV:                return D3D12_ROOT_PARAMETER_TYPE_SRV;
-        case RootParameterType::UAV:                return D3D12_ROOT_PARAMETER_TYPE_UAV;
-        case RootParameterType::Range:              return D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-        case RootParameterType::RootConstants:      return D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-        }
-        LOG_WARNING_EX("Graphic", "不正なRootParameterType[value={}]", enum_cast(value));
-        return D3D12_ROOT_PARAMETER_TYPE_CBV;
-    }
-
-
-    //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::Convert(DescriptorRangeType value) {
-        switch (value) {
-        case DescriptorRangeType::CBV:              return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-        case DescriptorRangeType::SRV:              return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-        case DescriptorRangeType::UAV:              return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-        case DescriptorRangeType::Sampler:          return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-        }
-        LOG_WARNING_EX("Graphic", "不正なDescriptorRangeType[value={}]", enum_cast(value));
-        return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-    }
-
-
     //! @brief  ShaderStages を D3D12_SHADER_VISIBILITY に変換
     D3D12_SHADER_VISIBILITY TypeConverter::Convert(ShaderStage value) {
         switch (value) {
@@ -413,21 +385,6 @@ namespace ob::rhi::dx12
     }
 
 
-    //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
-    D3D12_DESCRIPTOR_HEAP_TYPE TypeConverter::Convert(DescriptorHeapType value) {
-        switch (value)
-        {
-        case DescriptorHeapType::CBV_SRV_UAV:  return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-        case DescriptorHeapType::Sampler:      return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
-        case DescriptorHeapType::RTV:          return D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-        case DescriptorHeapType::DSV:          return D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-        }
-
-        LOG_WARNING_EX("Graphic", "不正なDescriptorHeapType[value={}]", enum_cast(value));
-        return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-    }
-
-
     //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
     D3D12_COMMAND_LIST_TYPE TypeConverter::Convert(CommandListType value) {
         switch (value)
@@ -446,7 +403,7 @@ namespace ob::rhi::dx12
         switch (value)
         {
         case ResourceState::Common:                 return D3D12_RESOURCE_STATE_COMMON;
-        case ResourceState::PixelShadeResource:     return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+        case ResourceState::ShadeResource:          return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
         case ResourceState::ColorAttachment:        return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
         case ResourceState::DepthAttachment:        return D3D12_RESOURCE_STATE_DEPTH_WRITE;
         case ResourceState::DepthStencilAttachment: return D3D12_RESOURCE_STATE_DEPTH_WRITE;

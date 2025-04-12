@@ -103,7 +103,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  ルートシグネチャを生成
-	Ref<RootSignature> DirectX12RHI::createRootSignature(const RootSignatureDesc& desc) {
+	Ref<RootSignature> DirectX12RHI::createRootSignature(const BindingLayoutDesc& desc) {
 		SAFE_CREATE(RootSignature, RootSignatureImpl, *this, desc);
 	}
 
@@ -163,11 +163,21 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  デスクリプタ・テーブルを生成
-	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(DescriptorRangeType type, s32 elementNum) {
-		DescriptorHeapType heapType = type == DescriptorRangeType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
+	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) {
+		auto nativeSignature = signature.cast<RootSignatureImpl>();
+		if (nativeSignature == nullptr) return nullptr;
+		DescriptorHeapType heapType = nativeSignature->isSampler(slot) ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
 		auto itr = m_descriptorHeaps.find(heapType);
 		if (itr == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this,*itr->second, type, elementNum);
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this,*itr->second, signature,slot);
+	}
+
+	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(const BindingSlot& desc) {
+		if (desc.items.empty()) return nullptr;
+		DescriptorHeapType heapType = desc.items.front().type == BindingType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
+		auto itr = m_descriptorHeaps.find(heapType);
+		if (itr == m_descriptorHeaps.end())return nullptr;
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this, *itr->second, desc);
 	}
 
 
@@ -368,24 +378,25 @@ namespace ob::rhi::dx12 {
 		bool readable = false;
 		bool writable = true;
 
+		// TODO Tierチェック
+		// Samplerの割り当て割合調整
+
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, 1'000'000, readable);
-		m_descriptorHeaps[DescriptorHeapType::Sampler] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256, readable);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, D3D12_MAX_SHADER_VISIBLE_DESCRIPTOR_HEAP_SIZE_TIER_1);
 		m_descriptorHeaps[DescriptorHeapType::RTV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 256, readable);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::RTV, 256);
 		m_descriptorHeaps[DescriptorHeapType::DSV] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256, readable);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256);
+		m_descriptorHeaps[DescriptorHeapType::Sampler] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE / 2 );
+		m_descriptorHeaps[DescriptorHeapType::SamplerCopyable] =
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::SamplerCopyable, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE / 2);
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName("SystemCBV_SRV_UAVHeap");
-		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName("SystemRTVHeap");
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName("SystemDSVHeap");
-
-
-		m_descriptorHeapsReadable[DescriptorHeapType::Sampler] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, 256, readable);
-		m_descriptorHeapsReadable[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
+		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
+		m_descriptorHeaps[DescriptorHeapType::SamplerCopyable]->setName("SystemSamplerCopyableHeap");
 
 		return true;
 	}

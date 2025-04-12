@@ -106,13 +106,13 @@ namespace ob::rhi::dx12 {
 		m_rootSignature = nullptr;
 	}
 
-
 	//! @brief  描画終了
 	void CommandListImpl::end() {
 		m_cmdList->Close();
 	}
 
 	//! @brief  コマンドをシステムキューに追加
+	//! // TODO Singletonに依存しているので廃止
 	void CommandListImpl::flush() {
 		if (auto rhi = RHI::Get()) {
 			rhi->entryCommandList(*this);
@@ -306,6 +306,7 @@ namespace ob::rhi::dx12 {
 			}
 			
 			if (auto pBuffer = buffer.cast<BufferImpl>()) {
+				// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 				auto& view = views[size];
 				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
 				view.SizeInBytes = (UINT)pBuffer->getDesc().size;
@@ -323,13 +324,14 @@ namespace ob::rhi::dx12 {
 	//! @brief      インデックスバッファを設定
 	void CommandListImpl::setIndexBuffer(const Ref<Buffer>& buffer) {
 		if (auto pBuffer = buffer.cast<BufferImpl>()) {
+			// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 			D3D12_INDEX_BUFFER_VIEW view;
 			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
 			view.SizeInBytes = (UINT)pBuffer->getDesc().size;
 			view.Format = pBuffer->getDesc().stride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 			m_cmdList->IASetIndexBuffer(&view);
 		} else {
-
+			LOG_ERROR("空のインデックスバッファは指定できません");
 		}
 	}
 
@@ -340,10 +342,12 @@ namespace ob::rhi::dx12 {
 
 			if (auto rootSignature = p->getRootSignature()) {
 
+				// Bindless時は特にルートシグネチャが共通しているので変更時のみ記録する
 				if (m_rootSignature != rootSignature) {
 					m_cmdList->SetGraphicsRootSignature(rootSignature);
 					m_rootSignature = rootSignature;
 				}
+
 				m_cmdList->SetPipelineState(p->getNative());
 
 				// TODO Geometryシェーダでのプリミティブ設定対応
@@ -372,7 +376,7 @@ namespace ob::rhi::dx12 {
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
 			if (auto pTable = param.table.cast<DescriptorTableImpl>()) {
-				m_cmdList->SetGraphicsRootDescriptorTable(param.slot, pTable->getGpuHandle());
+				pTable->record(*m_cmdList.Get(),param.slot);
 			}
 		}
 	}

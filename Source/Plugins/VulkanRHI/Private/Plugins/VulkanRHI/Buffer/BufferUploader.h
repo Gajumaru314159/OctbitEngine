@@ -21,10 +21,10 @@ namespace ob::rhi::vulkan {
 
         BufferUploader(VulkanRHI& device,size_t blockSize);
 
-        void add(BlobView blob, vk::raii::Buffer& dest, size_t offset);
-        void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset);
+        void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlagBits postAccessFlags);
+        void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlagBits postAccessFlags);
 
-        void update(vk::raii::CommandBuffer& commandBuffer);
+        void update(vk::raii::CommandBuffer& commandBuffer, bool useDebugMarker);
 
     private:
 
@@ -42,6 +42,7 @@ namespace ob::rhi::vulkan {
             UINT64 sourceOffset;
             UINT64 destOffset;
             UINT64 size;
+			vk::AccessFlags postAccessFlags;
         };
 
         struct FrameBlock {

@@ -20,15 +20,11 @@ namespace ob::rhi::vulkan {
         //===============================================================
 
         //! @brief  コンストラクタ
-        RootSignatureImpl(const RootSignatureDesc& desc);
+        RootSignatureImpl(VulkanRHI& rhi,const RootSignatureDesc& desc);
 
 
         //! @brief  デストラクタ
         ~RootSignatureImpl();
-
-
-        //! @brief  妥当なオブジェクトか
-        bool isValid()const override;
 
         
         //! @brief      名前を取得
@@ -49,6 +45,13 @@ namespace ob::rhi::vulkan {
 
         const RootSignatureDesc m_desc;
 
+        Vector<vk::raii::DescriptorSetLayout> m_layouts;
+
+		vk::raii::DescriptorSetLayout m_descriptorSetLayout = nullptr;
+		vk::raii::PipelineLayout m_pipelineLayout = nullptr;
+
     };
+
+    static vk::DescriptorType Convert(DescriptorRangeType type);
 
 }

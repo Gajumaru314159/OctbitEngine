@@ -8,6 +8,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+#include <Plugins/DirectX12RHI/RootSignature/RootSignatureImpl.h>
 
 //===============================================================
 // クラス定義
@@ -40,7 +41,10 @@ namespace ob::rhi::dx12 {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        DescriptorTableImpl(DirectX12RHI& device,DescriptorHeap& heap,DescriptorRangeType type, s32 elementNum);
+        DescriptorTableImpl(DirectX12RHI& device,DescriptorHeap& heap, const Ref<RootSignature>& signature, s32 slot);
+		
+		DescriptorTableImpl(DirectX12RHI& device, DescriptorHeap& heap, const BindingSlot& desc);
+
 
 
 		//! @brief  妥当な状態か
@@ -73,28 +77,29 @@ namespace ob::rhi::dx12 {
 			return m_handle.getBindlessIndex(index);
 		}
 
+	public:
+
+		void record(ID3D12GraphicsCommandList& cmdList,s32 slot) const;
+
+	private:
+
+		bool tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, D3D12_DESCRIPTOR_RANGE_TYPE& type) const;
+		bool tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, D3D12_DESCRIPTOR_RANGE_TYPE& type) const;
+		bool tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, D3D12_DESCRIPTOR_RANGE_TYPE& type) const;
+
     private:
-		DirectX12RHI&		m_device;
-		DescriptorRangeType	m_type;
+		DirectX12RHI&		m_rhi;
+
+		BindingSlot			m_desc;
+		Ref<RootSignatureImpl>  m_signature;
+		s32					m_slot = -1;
+
 		String				m_name;
         DescriptorHandle	m_handle;
 
-		struct Element {
-			Ref<Buffer> buffer;
+		using Element = Variant<Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
 
-			Ref<Texture> texture;
-
-			Ref<Sampler> sampler;
-
-			void clear() {
-				// TODO Variantに変えてメモリを節約する
-				buffer.reset();
-				texture.reset();
-				sampler.reset();
-			}
-		};
-
-		Vector<UPtr<Element>> m_elemetns;
+		Vector<Element> m_elemetns;
 
     };
 

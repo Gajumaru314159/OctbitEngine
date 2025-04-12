@@ -82,6 +82,8 @@ namespace ob::rhi::dx12 {
 
 		Vector<D3D12_RESOURCE_BARRIER> m_barriers;
 
+        HashSet<ID3D12Resource*> m_entriedResources;
+
     };
 
 }

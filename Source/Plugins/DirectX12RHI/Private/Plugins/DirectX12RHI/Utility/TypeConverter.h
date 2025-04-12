@@ -20,10 +20,6 @@ namespace ob::rhi::dx12 {
 
         //! @brief  RootSignatureFlags を D3D12_ROOT_SIGNATURE_FLAGS に変換
         static D3D12_ROOT_SIGNATURE_FLAGS Convert(RootSignatureFlags value);
-        //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-        static D3D12_ROOT_PARAMETER_TYPE Convert(RootParameterType value);
-        //! @brief  RootParameterType を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-        static D3D12_DESCRIPTOR_RANGE_TYPE Convert(DescriptorRangeType value);
         //! @brief  ShaderStage を D3D12_SHADER_VISIBILITY に変換
         static D3D12_SHADER_VISIBILITY Convert(ShaderStage value);
         //! @brief  TextureFillter を D3D12_FILTER_TYPE に変換
@@ -62,8 +58,6 @@ namespace ob::rhi::dx12 {
         static D3D12_STENCIL_OP Convert(StencilOp value);
         //! @brief  ComparisonFunc を D3D12_COMPARISON_FUNC に変換
         static D3D12_COMPARISON_FUNC Convert(ComparisonFunc value);
-        //! @brief  DescriptorHeapType を D3D12_DESCRIPTOR_HEAP_TYPE に変換
-        static D3D12_DESCRIPTOR_HEAP_TYPE Convert(DescriptorHeapType value);
         //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
         static D3D12_COMMAND_LIST_TYPE Convert(CommandListType value);
         //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換

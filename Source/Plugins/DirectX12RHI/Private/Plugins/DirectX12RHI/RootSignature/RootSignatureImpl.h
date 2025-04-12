@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/RootSignature.h>
+#include <Framework/RHI/Forward.h>
 
 //===============================================================
 // 前方宣言
@@ -29,7 +30,7 @@ namespace ob::rhi::dx12 {
         //===============================================================
 
         //! @brief  コンストラクタ
-        RootSignatureImpl(DirectX12RHI& rDevice, const RootSignatureDesc& desc);
+        RootSignatureImpl(DirectX12RHI& rDevice, const BindingLayoutDesc& desc);
 
 
         //! @brief  デストラクタ
@@ -49,16 +50,25 @@ namespace ob::rhi::dx12 {
         //===============================================================
 
         //! @brief  定義を取得
-        const RootSignatureDesc& getDesc()const noexcept override;
+        const BindingLayoutDesc& getDesc()const noexcept override;
 
 
         //! @brief  ネイティブオブジェクトを取得
         auto getNative()const noexcept { return m_rootSignature.Get(); };
 
+        s32 getItemCount(s32 slot) const {
+            if (!is_in_range(slot, m_desc.slots)) return false;
+            return m_desc.slots[slot].items.size();
+        }
+
+		bool isSampler(s32 slot)const {
+            if (!is_in_range(slot, m_desc.slots)) return false;
+            if (m_desc.slots[slot].items.empty()) return false;
+			return m_desc.slots[slot].items.front().type == BindingType::Sampler;
+		}
 
     private:
-
-        const RootSignatureDesc m_desc;
+        BindingLayoutDesc m_desc;
 
         ComPtr<ID3D12RootSignature> m_rootSignature;    //!< ルートシグネチャ
 

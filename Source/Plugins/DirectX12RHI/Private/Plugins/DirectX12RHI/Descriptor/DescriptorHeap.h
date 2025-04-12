@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Allocator/Utility/TLSFMapper.h>
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
 namespace ob::rhi::dx12 {
 
@@ -25,7 +26,7 @@ namespace ob::rhi::dx12 {
 		//! @param device   デバイス
 		//! @param type     ヒープ・タイプ
 		//! @param capacity 容量
-		DescriptorHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity,bool readable);
+		DescriptorHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity);
 
 
 		//! @brief          デストラクタ

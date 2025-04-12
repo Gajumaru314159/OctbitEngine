@@ -46,6 +46,8 @@ namespace ob::rhi::dx12
 
 		block.blob.append(blob.data(), blob.size());
 
+		m_entriedResources.emplace(dest.Get());
+
 	}
 
 	void BufferUploader::add(const Buffer::CopyFunc& func, size_t size, const ComPtr<ID3D12Resource>& dest, size_t offset) {
@@ -72,6 +74,8 @@ namespace ob::rhi::dx12
 		block.blob.resize(block.blob.size() + size);
 
 		func(block.blob.data() + request.sourceOffset);
+
+		m_entriedResources.emplace(dest.Get());
 	}
 
 	//! @brief アップロードバッファを拡大する
@@ -119,13 +123,16 @@ namespace ob::rhi::dx12
 
 	}
 
+	//! @brief 更新
+	//! 
+	//! この関数は1フレームに1回だけ呼び出す必要があります。
 	void BufferUploader::update(ID3D12GraphicsCommandList& commandList) {
 
 		ScopeLock lock(m_lock);
 
 		auto& frame = m_frames.current();
 
-
+		// システムメモリからアップロードバッファにコピー
 		for (s32 i = 0; i <= frame.blockIndex; ++i) {
 			auto& block = frame.blocks.at(i);
 			void* data;
@@ -152,11 +159,11 @@ namespace ob::rhi::dx12
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
 		// TODO 同じリソースが複数回使用される場合は、バリアをまとめて実行する
 		m_barriers.clear();
-		for (auto& request : frame.requests) {
+		for (auto& resource : m_entriedResources) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-			barrier.Transition.pResource = request.dest.Get();
+			barrier.Transition.pResource = resource;
 			barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;

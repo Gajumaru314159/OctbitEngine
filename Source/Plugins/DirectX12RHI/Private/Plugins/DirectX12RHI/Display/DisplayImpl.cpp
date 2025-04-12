@@ -228,14 +228,12 @@ namespace ob::rhi::dx12 {
 
 		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc(
+			BindingLayoutDesc desc(
 				{
-					RootParameter::Range(DescriptorRangeType::SRV,1,0),
-				},
-				{
-					StaticSamplerDesc(SamplerDesc(),0),
+					Binding::Texture(),
 				}
-				);
+			);
+			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = m_desc.name;
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
@@ -383,7 +381,7 @@ namespace ob::rhi::dx12 {
 			m_bindedTexture = texture;
 
 			if (m_bindedTexture) {
-				m_bindedTextureTable = DescriptorTable::Create(DescriptorRangeType::SRV, 1);
+				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
 			}
 
