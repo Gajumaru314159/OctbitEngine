@@ -60,10 +60,16 @@ TEST(RHI, ShowHide) {
 
 	using namespace ob::rhi;
 
+	Logger log;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	rhi::dx12::RegisterDirectX12RHIService(injector);
 	rhi::RegisterRHIService(injector);
+
+	rhi::RHIConfig config;
+	config.enableDebugLayer = true;
+	injector.bind(config);
 
 	injector.create<RHI>(container);
 	{
@@ -138,14 +144,14 @@ PsOut PS_Main(PsIn i) {
 
 		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc(
+			BindingLayoutDesc desc(
 				{
-					RootParameter::Range(DescriptorRangeType::CBV,1,0),
+					Binding::ConstantBuffer(),
 				},
 				{
 					StaticSamplerDesc(SamplerDesc(),0),
 				}
-				);
+			);
 			desc.name = "Common";
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
@@ -186,7 +192,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<Buffer> buffer;
 		CBuf cbuf;
 		{
-			BufferDesc desc = BufferDesc::Constant(100, BufferFlag::PixelShaderResource);
+			BufferDesc desc = BufferDesc::Constant(100);
 			desc.name = "TestConstant";
 			buffer = Buffer::Create(desc);
 			OB_ASSERT_EXPR(buffer);
@@ -229,7 +235,7 @@ PsOut PS_Main(PsIn i) {
 			OB_ASSERT_EXPR(cmdList);
 		}
 
-		auto dt = DescriptorTable::Create(DescriptorRangeType::CBV, 1);
+		auto dt = DescriptorTable::Create(signature, 0);
 		dt->setResource(0, buffer);
 
 

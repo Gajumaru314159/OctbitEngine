@@ -137,13 +137,16 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		RootSignatureDesc desc(
+		BindingLayoutDesc desc{
 			{
-				RootParameter::Range(DescriptorRangeType::SRV,3,0),
-				RootParameter::Range(DescriptorRangeType::Sampler,1,0),
+				Binding::Texture(0),
+				Binding::Texture(1),
+				Binding::Texture(2)
 			},
-			{}
-			);
+			{
+				Binding::Sampler(0),
+			}
+		};
 		desc.name = "MaterialBlock";
 		signature = RootSignature::Create(desc);
 		OB_ASSERT_EXPR(signature);
@@ -403,7 +406,8 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		RootSignatureDesc desc({ RootParameter::Constants(16,0,0) });
+		BindingLayoutDesc desc;
+		desc.constants = RootConstantsDesc(16,0);
 		desc.name = "MaterialBlock";
 		desc.flags.set(RootSignatureFlag::EnableBindless, true);
 		signature = RootSignature::Create(desc);
@@ -628,9 +632,10 @@ struct Param2 {
 	float Scale;
 };
 
-ConstantBuffer<BufferHandle> ParamHandle : register(b0);
-ConstantBuffer<BufferHandle> Param2Handle : register(b1);
-
+cbuffer PushConstants : register(b0) {
+	BufferHandle ParamHandle;
+	BufferHandle Param2Handle;
+};
 											
 // IN / OUT												
 struct VsIn {												
@@ -672,7 +677,8 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		RootSignatureDesc desc({ RootParameter::Constants(16,0,0),RootParameter::Constants(16,1,0) });
+		BindingLayoutDesc desc;
+		desc.constants = RootConstantsDesc(32, 0, 0);
 		desc.name = "MaterialBlock";
 		desc.flags.set(RootSignatureFlag::EnableBindless, true);
 		signature = RootSignature::Create(desc);

@@ -109,11 +109,8 @@ TEST(Bindless, Handle) {
 
 	Ref<RootSignature> signature;
 	{
-		RootSignatureDesc desc(
-			{
-				RootParameter::Constants(32,0)
-			}
-		);
+		BindingLayoutDesc desc;
+		desc.constants = RootConstantsDesc(32, 0);
 		desc.name = "MaterialBlock";
 		desc.flags.set(RootSignatureFlag::EnableBindless, true);
 		signature = RootSignature::Create(desc);

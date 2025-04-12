@@ -13,7 +13,7 @@ class BufferTest : public RHITestBase {};
 
 TEST_F(BufferTest, Create) {
 
-	for (auto type : magic_enum::enum_values<BufferType>()) {
+	for (auto type : magic_enum::enum_values<BufferState>()) {
 
 		size_t sizes[] = { 0 ,100,256,512 };
 		for (auto size : sizes) {
@@ -25,7 +25,7 @@ TEST_F(BufferTest, Create) {
 					size_t checkSize = size;
 
 					BufferDesc desc;
-					desc.type = type;
+					desc.state = type;
 					desc.size = size;
 					desc.stride = stride;
 					desc.flags = flags;
@@ -37,12 +37,12 @@ TEST_F(BufferTest, Create) {
 					}
 
 					// 256バイト制限
-					if (size %256 != 0 && type == BufferType::ConstantBuffer) {
+					if (size %256 != 0 && type == BufferState::ConstantBuffer) {
 						checkSize = align_up(checkSize,256);
 					}
 
 					ASSERT_NE(buffer, nullptr);
-					EXPECT_EQ(buffer->getDesc().type, type);
+					EXPECT_EQ(buffer->getDesc().state, type);
 					EXPECT_EQ(buffer->getDesc().size, checkSize);
 					EXPECT_EQ(buffer->getDesc().stride, stride);
 					EXPECT_EQ(buffer->getDesc().flags, BufferFlags(flags));
@@ -59,7 +59,7 @@ TEST_F(BufferTest, CreateUtility) {
 
 	// Constant
 	{
-		BufferDesc desc = BufferDesc::Constant(100, BufferFlag::PixelShaderResource);
+		BufferDesc desc = BufferDesc::Constant(100);
 
 		Ref<Buffer> buffer = Buffer::Create(desc);
 		ASSERT_NE(buffer, nullptr);
