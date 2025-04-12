@@ -20,8 +20,11 @@ namespace ob::rhi {
         //! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
         //! @param name         デバッグ名
-        static Ref<DescriptorTable> Create(DescriptorRangeType type, s32 elementNum);
+        static Ref<DescriptorTable> Create(const Ref<RootSignature>& signature, s32 slot);
+        static Ref<DescriptorTable> Create(const PipelineStateDesc& desc, s32 slot);
+        // static Ref<DescriptorTable> Create(const Ref<PipelineState>& pipeline,s32 slot);
 
+        static Ref<DescriptorTable> Create(const BindingSlot& desc);
     public:
 
         //! @brief  リソースを設定

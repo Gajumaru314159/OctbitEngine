@@ -37,7 +37,7 @@ namespace ob::graphics {
 		constexpr size_t BUFFER_SIZE = sizeof(f32) * GLOBAL_FLOAT_MAX + sizeof(Color) * GLOBAL_COLOR_MAX + sizeof(Matrix) * GLOBAL_MATRIX_MAX;
 
 		{
-			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BufferFlag::AllShaderResource);
+			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BufferFlag::ShaderResource);
 			bufferDesc.name = "MaterialGlobalProperty";
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
@@ -46,13 +46,17 @@ namespace ob::graphics {
 		}
 
 		{
-			m_bufferTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, 1);
+			m_bufferTable = rhi::DescriptorTable::Create(BindingSlot{ Binding::ConstantBuffer() });
 			OB_ASSERT_EXPR(m_bufferTable);
 			m_bufferTable->setResource(0, m_buffer);
 		}
 
 		{
-			m_textureTable = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, GLOBAL_TEXTURE_MAX);
+			BindingSlot slot;
+			for (s32 i = 0; i < GLOBAL_TEXTURE_MAX; ++i) {
+				slot.items.push_back(Binding::Texture(i));
+			}
+			m_textureTable = rhi::DescriptorTable::Create(slot);
 
 			// サンプラのパターン数は限られる
 			///m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, GLOBAL_TEXTURE_MAX);
@@ -72,17 +76,15 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		// TODO テクスチャの複数枚対応
-		RootSignatureDesc desc(
+		BindingLayoutDesc desc = {
 			{
-				RootParameter::Range(DescriptorRangeType::CBV,1,0),		// グローバルプロパティ(バッファ)
-				RootParameter::Range(DescriptorRangeType::SRV,1,0),		// グローバルプロパティ(テクスチャ)
-				RootParameter::Range(DescriptorRangeType::CBV,1,1),		// ローカルプロパティ(バッファ)
-				RootParameter::Range(DescriptorRangeType::SRV,1,1),		// ローカルプロパティ(テクスチャ)
-			},
-			{
-				StaticSamplerDesc(SamplerDesc(TextureFillter::Linear),0),	// グローバルプロパティ(サンプラー)
+				Binding::ConstantBuffer(0),		// グローバルプロパティ(バッファ)
+				Binding::Texture(0),		// グローバルプロパティ(テクスチャ)
+				Binding::ConstantBuffer(1),		// ローカルプロパティ(バッファ)
+				Binding::Texture(1),		// ローカルプロパティ(テクスチャ)
 			}
-		);
+		};
+		desc.samplers = { StaticSamplerDesc(SamplerDesc(TextureFillter::Linear), 0) };	// グローバルプロパティ(サンプラー)
 		desc.name = "Common";
 
 		m_signature = RootSignature::Create(desc);

@@ -67,10 +67,10 @@ namespace ob::graphics {
 		//      キャッシュ対応することによってメモリ消費量の削減が見込める
 
 		// 定数変数のパッキング 規則 (https://learn.microsoft.com/ja-jp/windows/win32/direct3dhlsl/dx-graphics-hlsl-packing-rules)
-		// * Integer 4 byte aligned
-		// * Scalar  4 byte aligned
-		// * Vector  16 byte aligned
 		// * Matrix  16 byte aligned
+		// * Vector  16 byte aligned
+		// * Scalar  4 byte aligned
+		// * Integer 4 byte aligned
 
 		// プロパティ名とオフセットを対応 (パディングが入らないようにアライメントが大きいものから)
 		s32 offset = 0;
@@ -136,7 +136,7 @@ namespace ob::graphics {
 
 		// バッファ生成
 		size_t size = offset;
-		auto bufferDesc = rhi::BufferDesc::Constant(size);
+		auto bufferDesc = rhi::BufferDesc::Constant(size, BufferFlag::Constant | BufferFlag::ShaderResource);
 		bufferDesc.name = Format("MaterialParameter ({})", desc.name);
 		m_valuesBuffer = rhi::Buffer::Create(bufferDesc);
 		OB_ASSERT_EXPR(m_valuesBuffer);
@@ -150,8 +150,6 @@ namespace ob::graphics {
 	//! @param desc マテリアルブロックの説明
 	void MaterialBlock::initializeDescriptorTables() {
 		using namespace ob::rhi;
-		size_t srvNum = m_textures.size() + m_buffers.size() + 1;
-		size_t uavNum = 0;
 		size_t samplerNum = m_textures.size();
 
 		// https://github.com/sebbbi/perftest
@@ -160,22 +158,40 @@ namespace ob::graphics {
 		// 唯一の例外はBindless時にValuesBufferのBufferHandleをRootConstantで渡すとき。
 		// C++側はRootSignatureでConstantを使用し、シェーダーではb(CBV)を使用する。
 
-		m_tableSRV = DescriptorTable::Create(DescriptorRangeType::SRV, srvNum);
-		m_tableUAV = DescriptorTable::Create(DescriptorRangeType::UAV, uavNum);
-		m_tableSampler = DescriptorTable::Create(DescriptorRangeType::Sampler, samplerNum);
+		BindingSlot slot0;
+		for (s32 i = 0; i < m_textures.size(); ++i) {
+			// TODO RW対応
+			slot0.items.emplace_back(Binding::Texture());
+			// slot0.items.emplace_back(Binding::RWTexture());
+		}
+		for (s32 i = 0; i < m_buffers.size(); ++i) {
+			slot0.items.emplace_back(Binding::ByteAddressBuffer());
+			// slot0.items.emplace_back(Binding::RWByteAddressBuffer());
+		}
+		{
+			slot0.items.emplace_back(Binding::ByteAddressBuffer());
+		}
+
+		BindingSlot slot1;
+		for (s32 i = 0; i < samplerNum; ++i) {
+			slot1.items.emplace_back(Binding::Sampler());
+		}
+
+		m_table0 = DescriptorTable::Create(slot0);
+		m_table1 = DescriptorTable::Create(slot1);
 
 		s32 srv = 0;
 
 		for (s32 i = 0; i < m_textures.size(); ++i) {
-			m_tableSRV->setResource(srv++, Texture::White());
-			m_tableSampler->setResource(i, Sampler::Default());
+			m_table0->setResource(srv++, Texture::White());
+			m_table1->setResource(i, Sampler::Default());
 		}
 		for (s32 i = 0; i < m_buffers.size(); ++i) {
 			//m_tableSRV->setResource(srv++, Buffer::Empty());
 			srv++;
 		}
 		{
-			m_tableSRV->setResource(srv++, m_valuesBuffer);
+			m_table0->setResource(srv++, m_valuesBuffer);
 		}
 	}
 
@@ -268,13 +284,13 @@ namespace ob::graphics {
 			m_textures[desc.index] = texture;
 			m_samplers[desc.index] = sampler;
 
-			m_tableSRV->setResource(desc.index, texture);
-			m_tableSampler->setResource(desc.index, sampler);
+			m_table0->setResource(desc.index, texture);
+			m_table1->setResource(desc.index, sampler);
 
 			if (useBindless) {
 				TextureAndSamplerHandle handles;
-				handles.texture.index = m_tableSRV->getBindlessIndex(desc.index);
-				handles.sampler.index = m_tableSampler->getBindlessIndex(desc.index);
+				handles.texture.index = m_table0->getBindlessIndex(desc.index);
+				handles.sampler.index = m_table1->getBindlessIndex(desc.index);
 				setValueProprty(name, MaterialPropertyType::Texture, handles);
 			}
 
@@ -300,11 +316,11 @@ namespace ob::graphics {
 
 			m_buffers[desc.index] = value;
 
-			m_tableSRV->setResource(m_textures.size() + desc.index, value);
+			m_table0->setResource(m_textures.size() + desc.index, value);
 
 			if (useBindless) {
 				BufferHandle handle;
-				handle.index = m_tableSRV->getBindlessIndex(m_textures.size() + desc.index);
+				handle.index = m_table0->getBindlessIndex(m_textures.size() + desc.index);
 				setValueProprty(name, MaterialPropertyType::Buffer, handle);
 			}
 
@@ -326,21 +342,16 @@ namespace ob::graphics {
 
 		updateParameterBuffer();
 
-		FixedVector < SetDescriptorTableParam, 3> params;
+		FixedVector < SetDescriptorTableParam, 2> params;
 		if (0 <= srvSlot) {
 			auto& param = params.emplace_back();
 			param.slot = srvSlot;
-			param.table = m_tableSRV;
-		}
-		if (0 <= uavSlot) {
-			auto& param = params.emplace_back();
-			param.slot = uavSlot;
-			param.table = m_tableUAV;
+			param.table = m_table0;
 		}
 		if (0 <= samplerSlot) {
 			auto& param = params.emplace_back();
 			param.slot = samplerSlot;
-			param.table = m_tableSampler;
+			param.table = m_table1;
 		}
 
 		commandList->setRootDesciptorTable(params.data(), params.size());
@@ -361,7 +372,7 @@ namespace ob::graphics {
 		size_t valuesIndex = m_textures.size() + m_buffers.size();
 
 		BufferHandle handle;
-		handle.index = m_tableSRV->getBindlessIndex(valuesIndex);
+		handle.index = m_table0->getBindlessIndex(valuesIndex);
 
 		SetRootConstantsParam param;
 		param.slot = slot;

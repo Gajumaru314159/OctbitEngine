@@ -54,7 +54,7 @@ namespace ob::rhi {
 
         virtual Ref<CommandList>    createCommandList(const CommandListDesc& desc) { return nullptr; }
 
-        virtual Ref<RootSignature>  createRootSignature(const RootSignatureDesc& desc) { return nullptr; }
+        virtual Ref<RootSignature>  createRootSignature(const BindingLayoutDesc& desc) { return nullptr; }
         virtual Ref<PipelineState>  createPipelineState(const PipelineStateDesc& desc) { return nullptr; }
 
         virtual Ref<Buffer>         createBuffer(const BufferDesc& desc) { return nullptr; }
@@ -69,7 +69,8 @@ namespace ob::rhi {
         virtual Ref<Shader>         compileShader(const ShaderCompileDesc& desc) { return nullptr; }
         virtual Ref<Shader>         loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
 
-        virtual Ref<DescriptorTable>createDescriptorTable(DescriptorRangeType type, s32 elementNum) { return nullptr; }
+        virtual Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) { return nullptr; }
+        virtual Ref<DescriptorTable>createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return nullptr; }
 
         //virtual IFence*           createFence(const FenceDesc&);
 

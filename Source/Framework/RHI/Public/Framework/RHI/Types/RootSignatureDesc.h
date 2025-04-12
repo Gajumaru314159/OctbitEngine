@@ -12,27 +12,21 @@ namespace ob::rhi {
 
 #pragma region Enum
 
-	//! @brief      ルートシグネチャスロットのタイプ
-	//! 
-	//! @note       RootConstants以外はDescriptorTableで代替え可能
-	//! @see        RootParameter
-	enum class RootParameterType :u32 {
-		CBV,                //!< 定数バッファ・ビュー
-		SRV,                //!< シェーダ・リソース・ビュー
-		UAV,                //!< UnorderedAccessView
-		Range,    //!< デスクリプタ・テーブル
-		RootConstants,      //!< ルート定数
+
+	enum class BindingType {
+		// [HLSL]						[D3D12]				[GLSL]						[Vulkan]
+		Texture,				// (t) Texture2D				SRV					sampler2D					eSampledImage
+		RWTexture,				// (u) RWTexture2D				UAV					image2D						eStorageImage
+		Buffer,					// (t) Buffer<T>				SRV					buffer						eUniformTexelBuffer
+		RWBuffer,				// (u) RWBuffer<T>				UAV					buffer						eStorageTexelBuffer
+		StructuredBuffer,		// (t) StructuredBuffer<T>		SRV					buffer						eStorageBuffer
+		RWStructuredBuffer,		// (u) RWStructuredBuffer<T>	UAV					buffer						eStorageBuffer
+		ByteAddressBuffer,		// (t) ByteAddressBuffer		SRV					buffer						eStorageBuffer
+		RWByteAddressBuffer,	// (u) RWByteAddressBuffer		UAV					buffer						eStorageBuffer
+		ConstantBuffer,			// (b) ConstantBuffer			CBV					uniform						eUniformBuffer
+		Sampler,				// (s) SamplerState				Sampler				sampler						eSampler
 	};
 
-
-	//! @brief      デスクリプタ範囲タイプ
-	//! @see        RootDescriptorTable
-	enum class DescriptorRangeType :u32 {
-		CBV,                //!< 定数バッファ・ビュー
-		SRV,                //!< シェーダ・リソース・ビュー
-		UAV,                //!< UnorderedAccessView
-		Sampler,            //!< サンプラー
-	};
 
 #pragma endregion
 
@@ -61,106 +55,19 @@ namespace ob::rhi {
 
 #pragma region Sub Structure
 
-	//! @brief      デスクリプタ範囲
-	//! @see        RootDescriptorTable
-	struct DescriptorRange {
-		DescriptorRangeType type;           //!< タイプ
-		u32                 num;            //!< デスクリプタの数
-		u32                 baseRegister;   //!< 開始レジスタ番号
-		u32                 registerSpace;  //!< レジスタ空間
-	public:
-		//! @brief      コンストラクタ
-		DescriptorRange() = default;
-		//! @brief      コンストラクタ(DescriptorTable)
-		DescriptorRange(DescriptorRangeType type,u32 num, u32 baseRegister, u32 registerSpace = 0)
-			:type(type), num(num),baseRegister(baseRegister), registerSpace(registerSpace) {}
-	};
-
-
 	//! @brief      ルートコンスタント定義
 	//! @see        RootParameter
 	struct RootConstantsDesc {
-		u32 registerNo;     //!< レジスタ番号
-		u32 registerSpace;  //!< レジスタ空間
 		u32 size;          //!< 値
+		u32 registerNo;     //!< レジスタ番号 (D3D12のみ)
+		u32 registerSpace;  //!< レジスタ空間 (D3D12のみ)
 	public:
 		//! @brief      コンストラクタ
-		RootConstantsDesc() = default;
+		RootConstantsDesc() : RootConstantsDesc(0, 0, 0) {}
 		//! @brief      コンストラクタ(DescriptorTable)
-		RootConstantsDesc(u32 value,u32 registerNo, u32 registerSpace=0)
-			:size(value),registerNo(registerNo), registerSpace(registerSpace) {}
+		RootConstantsDesc(u32 size,u32 registerNo, u32 registerSpace=0)
+			:size(size),registerNo(registerNo), registerSpace(registerSpace) {}
 	};
-
-
-	//! @brief      ルートデスクリプタ定義
-	//! 
-	//! @details    1度にバインドする要素が1つの場合に使用可能です。
-	//! @see        RootParameter
-	struct RootDescriptorDesc {
-		u32 registerNo;     //!< レジスタ番号
-		u32 registerSpace;  //!< レジスタ空間
-	public:
-		//! @brief      コンストラクタ
-		RootDescriptorDesc() = default;
-		//! @brief      コンストラクタ(DescriptorTable)
-		RootDescriptorDesc(u32 registerNo, u32 registerSpace=0)
-			:registerNo(registerNo),registerSpace(registerSpace){}
-	};
-
-	//! @brief      ルートパラメータ
-	//! @see        RootSignatureDesc
-	struct RootParameter {
-		RootParameterType		type;			//!< パラメータ・タイプ
-		DescriptorRange			range;			//!< typeがDescriptorTableの場合使用
-		RootConstantsDesc		constants;		//!< typeがRootConstantsの場合使用
-		RootDescriptorDesc		descriptor;     //!< typeがCBV/SRV/UAVの場合使用
-		ShaderStage				visibility;		//!< どのシェーダステージから利用可能か
-	public:
-		//! @brief      コンストラクタ
-		RootParameter() = default;
-		//! @brief      デストラクタ
-		~RootParameter() {}
-
-		//! @brief      コンストラクタ(CBV/SRV/UAV)
-		RootParameter(RootParameterType type, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All)
-			:type(type), descriptor({ registerNo,registerSpace }), visibility(visibility) {}
-
-		//! @brief      コンストラクタ(CBV/SRV/UAV)
-		RootParameter(RootParameterType type, u32 registerNo, ShaderStage visibility = ShaderStage::All)
-			:RootParameter(type, registerNo, 0, visibility) {}
-
-
-		//! @brief      Range
-		static RootParameter Range(DescriptorRangeType type, u32 num, u32 baseRegister, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
-			RootParameter result;
-			result.type = RootParameterType::Range;
-			result.range.type = type;
-			result.range.num = num;
-			result.range.baseRegister = baseRegister;
-			result.range.registerSpace = registerSpace;
-			result.visibility = visibility;
-			return result;
-		}
-		static RootParameter Range(DescriptorRangeType type, u32 num, u32 baseRegister, ShaderStage visibility = ShaderStage::All) {
-			return Range(type, num, baseRegister, 0, visibility);
-		}
-
-		//! @brief		定数
-		//! @details    RootConstantsは4バイトアラインメントされます。
-		static RootParameter Constants(u32 size, u32 registerNo, u32 registerSpace, ShaderStage visibility = ShaderStage::All) {
-			RootParameter result;
-			result.type = RootParameterType::RootConstants;
-			result.constants.size = align_up(size,sizeof(u32));
-			result.constants.registerNo = registerNo;
-			result.constants.registerSpace = registerSpace;
-			result.visibility = visibility;
-			return result;
-		}
-		static RootParameter Constants(u32 value, u32 registerNo, ShaderStage visibility = ShaderStage::All) {
-			return Constants(value, registerNo, 0, visibility);
-		}
-	};
-
 
 	//! @brief      スタティックサンプラー定義
 	//! 
@@ -185,25 +92,62 @@ namespace ob::rhi {
 
 #pragma endregion
 
-	//! @brief      ルートパラメータ・配列
-	using RootParameterArray = FixedVector<RootParameter, ROOT_PARAMETER_MAX>;
-
 	//! @brief      静的サンプラー・配列
 	using StaticSamplerArray = FixedVector<StaticSamplerDesc, STATIC_SAMPLER_MAX>;
 
-	//! @brief      ルートシグネチャ定義
-	struct RootSignatureDesc {
-		String					name;		//!< 名前
-		RootParameterArray		parameters;	//!< ルートパラメータ
-		StaticSamplerArray		samplers;	//!< 静的サンプラー
-		RootSignatureFlags		flags;		//!< フラグ
-	public:
-		//! @brief      コンストラクタ
-		RootSignatureDesc() = default;
 
-		//! @brief      コンストラクタ
-		RootSignatureDesc(decltype(parameters) parameters, decltype(samplers) samplers = {}, RootSignatureFlags flags = RootSignatureFlag::AllowInputAssemblerInputLayout)
-			: parameters(parameters), samplers(samplers), flags(flags) {}
+
+	struct BindingItem {
+		BindingType type;
+		s32         index; // register / binding 負の数の場合は前の要素からの相対値
+		s32         space; // space / set
+
+		constexpr BindingItem(BindingType type, s32 index, s32 space)
+			: type(type), index(index), space(space) {}
+	};
+
+	struct BindingSlot {
+		Vector<BindingItem> items;
+
+		BindingSlot() = default;
+		BindingSlot(std::initializer_list<BindingItem> items) : items(items) {}
+	};
+
+	struct BindingLayoutDesc {
+		String				name;		//!< 名前
+		Vector<BindingSlot> slots;		//!< バインディングスロット
+		StaticSamplerArray	samplers;	//!< 静的サンプラー
+		RootConstantsDesc	constants;	//!< ルートコンスタント
+		RootSignatureFlags	flags;		//!< フラグ
+
+		BindingLayoutDesc() = default;
+		BindingLayoutDesc(Vector<BindingSlot> slots) : slots(slots) {}
+		BindingLayoutDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
+		BindingLayoutDesc(std::initializer_list<BindingItem> items) : slots({ items }) {}
+	};
+
+	//! @brief      BindingItem定義のユーティリティ
+	struct Binding {
+
+#define DECL_BINDING(TYPE) \
+		static constexpr BindingItem TYPE(s32 index = -1, s32 space = 0) {\
+			return BindingItem(BindingType::TYPE, index, space);\
+		}
+
+		// indexが負の場合は前のBindingItemのindexからの相対値を表します。
+		// 先頭のBindingItemが負の数の場合は0に置き換えられます
+		DECL_BINDING(Texture);
+		DECL_BINDING(RWTexture);
+		DECL_BINDING(Buffer);
+		DECL_BINDING(RWBuffer);
+		DECL_BINDING(StructuredBuffer);
+		DECL_BINDING(RWStructuredBuffer);
+		DECL_BINDING(ByteAddressBuffer);
+		DECL_BINDING(RWByteAddressBuffer);
+		DECL_BINDING(ConstantBuffer);
+		DECL_BINDING(Sampler);
+
+#undef DECL_BINDING
 	};
 
 }

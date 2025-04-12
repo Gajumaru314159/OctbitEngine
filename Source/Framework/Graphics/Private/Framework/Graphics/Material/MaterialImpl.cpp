@@ -66,7 +66,7 @@ namespace ob::graphics {
 
 		// バッファ生成
 		if (0 < bufferSize) {
-			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize, rhi::BufferFlag::AllShaderResource);
+			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize);
 			bufferDesc.name = Format("MaterialParameter ({})",desc.name);
 			m_buffer = rhi::Buffer::Create(bufferDesc);
 			OB_ASSERT_EXPR(m_buffer);
@@ -76,21 +76,36 @@ namespace ob::graphics {
 
 		// テーブル生成(バッファ)
 		if (0 < bufferSize) {
-			m_dynamicTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, 1);
+			BindingSlot slot { Binding::ConstantBuffer(0) };
+			m_dynamicTable = rhi::DescriptorTable::Create(slot);
 			OB_ASSERT_EXPR(m_dynamicTable);
 			m_dynamicTable->setResource(0, m_buffer);
 		}
 
 		// テーブル生成(テクスチャ)
 		if (desc.textureProperties.size()) {
-			m_textureTable = rhi::DescriptorTable::Create(DescriptorRangeType::SRV, desc.textureProperties.size());
-			m_samplerTable = rhi::DescriptorTable::Create(DescriptorRangeType::Sampler, desc.textureProperties.size());
+			BindingSlot slot0;
+			BindingSlot slot1;
+
+			for (auto& name : desc.textureProperties) {
+				slot0.items.push_back(Binding::Texture());
+			}
+			for (auto& name : desc.textureProperties) {
+				slot1.items.push_back(Binding::Texture());
+			}
+
+			m_textureTable = rhi::DescriptorTable::Create(slot0);
+			m_samplerTable = rhi::DescriptorTable::Create(slot1);
 			OB_ASSERT_EXPR(m_textureTable);
 			OB_ASSERT_EXPR(m_samplerTable);
 		}
 		// テーブル生成(バッファ)
 		if (desc.bufferProperties.size()) {
-			m_bufferTable = rhi::DescriptorTable::Create(DescriptorRangeType::CBV, desc.bufferProperties.size());
+			BindingSlot slot;
+			for (auto& name : desc.bufferProperties) {
+				slot.items.push_back(Binding::ConstantBuffer());
+			}
+			m_bufferTable = rhi::DescriptorTable::Create(slot);
 			OB_ASSERT_EXPR(m_bufferTable);
 		}
 
@@ -297,19 +312,22 @@ namespace ob::graphics {
 		Ref<RootSignature> signature = [&](){
 
 			// TODO テクスチャの複数枚対応
-			RootSignatureDesc desc(
+			BindingLayoutDesc desc {
 				{
-					RootParameter::Range(DescriptorRangeType::CBV,1,0),		// グローバルプロパティ(バッファ)
-					RootParameter::Range(DescriptorRangeType::SRV,1,0),		// グローバルプロパティ(テクスチャ)
+					Binding::ConstantBuffer(1,0),		// グローバルプロパティ(バッファ)
+					Binding::Texture(1,0),		// グローバルプロパティ(テクスチャ)
 					//RootParameter::Range(DescriptorRangeType::CBV,2,0),		// グローバルプロパティ(テクスチャ)
-					RootParameter::Range(DescriptorRangeType::CBV,1,1),		// ローカルプロパティ(バッファ)
-					RootParameter::Range(DescriptorRangeType::SRV,m_desc.textureProperties.size(),1),		// ローカルプロパティ(テクスチャ)
-					//RootParameter::Range(DescriptorRangeType::CBV,m_desc.bufferProperties.size(),1),		// グローバルプロパティ(テクスチャ)
 				},
+				{
+					Binding::ConstantBuffer(1,1),		// ローカルプロパティ(バッファ)
+					Binding::Texture(m_desc.textureProperties.size(),1),		// ローカルプロパティ(テクスチャ)
+					//RootParameter::Range(DescriptorRangeType::CBV,m_desc.bufferProperties.size(),1),		// グローバルプロパティ(テクスチャ)
+				}
+			};
+			desc.samplers =
 			{
 				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),	// グローバルプロパティ(サンプラー)
-			}
-			);
+			};
 			desc.name = "Common";
 
 			return RootSignature::Create(desc);

@@ -316,7 +316,8 @@ namespace ob::graphics {
 				cmdList.setIndexBuffer(m_indexBuffer);
 
 				rhi::SetDescriptorTableParam params[] = {
-					{m_constantTable,0}
+					{m_fontTextureTable,0},
+					{m_constantTable,1}
 				};
 				cmdList.setRootDesciptorTable(params, std::size(params));
 
@@ -372,20 +373,25 @@ namespace ob::graphics {
 
 		using namespace ob::rhi;
 
-		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc(
+			BindingLayoutDesc desc = {
 				{
-					RootParameter::Range(DescriptorRangeType::CBV,1,0),
-					RootParameter::Range(DescriptorRangeType::SRV,1,0),
+					Binding::Texture(0)
 				},
-			{
-				StaticSamplerDesc(SamplerDesc(),0),
-			}
-			);
+				{
+					Binding::ConstantBuffer(0)
+				}
+			};
+			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = "ImGui";
-			signature = RootSignature::Create(desc);
-			OB_ASSERT_EXPR(signature);
+			m_signature = RootSignature::Create(desc);
+			OB_ASSERT_EXPR(m_signature);
+		}
+		{
+			m_fontTextureTable = DescriptorTable::Create(m_signature, 0);
+			m_constantTable = DescriptorTable::Create(m_signature, 1);
+			OB_ASSERT_EXPR(m_fontTextureTable);
+			OB_ASSERT_EXPR(m_constantTable);
 		}
 
 		Ref<Shader> vs;
@@ -435,7 +441,7 @@ namespace ob::graphics {
 			desc.name = "ImGui";
 			desc.colors = { TextureFormat::RGBA8 };
 
-			desc.rootSignature = signature;
+			desc.rootSignature = m_signature;
 			desc.vs = vs;
 			desc.ps = ps;
 			desc.vertexLayout.attributes = {
@@ -490,7 +496,6 @@ namespace ob::graphics {
 
 		// グラフィックリソース生成
 		m_fontTexture = rhi::Texture::Create("ImGuiFont",TextureType::Texture2D, Size(width, height), colors);
-		m_fontTextureTable = rhi::DescriptorTable::Create(rhi::DescriptorRangeType::SRV, 1);
 		m_fontTextureTable->setResource(0, m_fontTexture);
 
 		// システム登録
@@ -700,7 +705,6 @@ namespace ob::graphics {
 			desc.name = "ImGuiConstant";
 			m_constantBuffer = Buffer::Create(desc);
 
-			m_constantTable = DescriptorTable::Create(DescriptorRangeType::CBV, 1);
 			m_constantTable->setResource(0, m_constantBuffer);
 		}
 		{

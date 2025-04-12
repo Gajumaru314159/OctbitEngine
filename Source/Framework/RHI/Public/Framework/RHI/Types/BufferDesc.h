@@ -4,14 +4,16 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Types/ResourceState.h>
 
 namespace ob::rhi {
 
 #pragma region Enum
 
 	//! @brief  バッファ・タイプ
-	enum class BufferType {
+	enum class BufferState {
 		Unknown,                //!< 指定なし
+		Common,					//!< 
 		VertexBuffer,           //!< 頂点バッファ
 		IndexBuffer,            //!< インデックスバッファ
 		ConstantBuffer,         //!< 定数バッファ
@@ -31,12 +33,15 @@ namespace ob::rhi {
 
 	//! @brief  バインド・フラグ
 	enum class BufferFlag {
-		NonPixelShaderResource	= get_bit(0),   //!< ピクセルシェーダ以外でのバインド許可
-		PixelShaderResource		= get_bit(1),   //!< ピクセルシェーダのバインド許可
-		AllShaderResource		= NonPixelShaderResource | PixelShaderResource, //!< 全てのシェーダでバインド許可
+		ShaderResource			= get_bit(0),	//!< シェーダでバインド許可
 		UnorderedAccess			= get_bit(2),   //!< UnorderedAccessのバインド許可
 		CopySource				= get_bit(3),   //!< コピー元許可
 		CopyDest				= get_bit(4),   //!< コピー先許可
+
+		Vertex,
+		Index,
+		Constant,
+		IndirectArgument
 	};
 	//! @brief  バインド・フラグ・セット
 	using BufferFlags = BitFlags<BufferFlag>;
@@ -47,7 +52,7 @@ namespace ob::rhi {
 	struct BufferDesc {
 
 		String			name;			//!< 名前
-		BufferType		type;			//!< バッファタイプ
+		BufferState		state;			//!< バッファタイプ
 		u64             size;			//!< バッファサイズ
 		u32             stride;			//!< ストライド幅 StructuredBufferで使用する場合structureのサイズを設定する。
 		BufferFlags     flags;			//!< バインドフラグ
@@ -60,11 +65,11 @@ namespace ob::rhi {
 
 		//! @brief  コンストラクタ
 		BufferDesc(
-			BufferType     type,
+			BufferState     state,
 			u64             size,
 			u32				stride,
 			BufferFlags     flags)
-			: type(type)
+			: state(state)
 			, size(size)
 			, stride(stride)
 			, flags(flags)
@@ -74,11 +79,11 @@ namespace ob::rhi {
 		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc Constant(
 			u64				size,
-			BufferFlags     flags = BufferFlag::AllShaderResource
+			BufferFlags     flags = BufferFlag::ShaderResource
 		)
 		{
 			return BufferDesc(
-				BufferType::ConstantBuffer,
+				BufferState::ConstantBuffer,
 				align_up(size,256),
 				0,
 				flags
@@ -93,7 +98,7 @@ namespace ob::rhi {
 		)
 		{
 			return BufferDesc(
-				BufferType::VertexBuffer,
+				BufferState::VertexBuffer,
 				sizeof(TVertex)* count,
 				sizeof(TVertex),
 				flags
@@ -108,7 +113,7 @@ namespace ob::rhi {
 		)
 		{
 			return BufferDesc(
-				BufferType::IndexBuffer,
+				BufferState::IndexBuffer,
 				sizeof(TIndex) * count,
 				sizeof(TIndex),
 				flags

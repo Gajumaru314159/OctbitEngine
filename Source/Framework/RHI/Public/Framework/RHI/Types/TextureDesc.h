@@ -34,6 +34,24 @@ namespace ob::rhi {
     using TextureUsages = BitFlags<TextureUsage>;
 
 
+    //! @brief  バッファ・タイプ
+    enum class TextureState {
+        Unknown,                //!< 指定なし
+        Common,					//!< 
+        ShadeResource,          //!< ピクセルシェーダで利用可能
+        UnorderedAccess,        //!< アンオーダード・アクセス
+        CopySource,             //!< コピー元
+        CopyDest,               //!< コピー先
+    };
+
+
+    enum class TextureFlag {
+        ShaderResource = get_bit(0),	//!< シェーダでバインド許可
+        UnorderedAccess = get_bit(1),   //!< UnorderedAccessのバインド許可
+	};
+    using TextureFlags = BitFlags<TextureFlag>;
+
+
     //! @brief  テクスチャ定義
     struct TextureDesc {
         String          name;
@@ -42,7 +60,7 @@ namespace ob::rhi {
         Size            size        = { 1,1,1 };                //!< サイズ
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数 (Texture3Dでは0にしてください)
         s32             mipLevels   = 0;                        //!< ミップ生成レベル (0の場合sizeから自動計算されます)
-        // TextureUsages usages;
+		TextureFlags    flags       = TextureFlag::ShaderResource;            //!< フラグ
     };
 
 }

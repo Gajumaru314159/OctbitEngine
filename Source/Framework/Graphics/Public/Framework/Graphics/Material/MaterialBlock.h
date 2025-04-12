@@ -111,11 +111,8 @@ namespace ob::graphics {
         Vector<Ref<Sampler>>    m_samplers;
         Vector<Ref<Buffer>>     m_buffers;
 
-
-        // Ref<DescriptorTable>    m_tableCBV;
-        Ref<DescriptorTable>    m_tableSRV;
-        Ref<DescriptorTable>    m_tableUAV;
-        Ref<DescriptorTable>    m_tableSampler;
+        Ref<DescriptorTable>    m_table0;
+        Ref<DescriptorTable>    m_table1;
 
     };
 

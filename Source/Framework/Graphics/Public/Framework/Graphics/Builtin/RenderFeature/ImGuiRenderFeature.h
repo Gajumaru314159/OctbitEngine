@@ -107,12 +107,14 @@ namespace ob::graphics {
 		size_t						m_vertexCount = 0;
 		size_t                      m_indexCount = 0;
 
+		Ref<rhi::RootSignature>		m_signature;
 		Ref<rhi::PipelineState>		m_pipeline;
 		Ref<rhi::Buffer>			m_vertexBuffer;
 		Ref<rhi::Buffer>			m_indexBuffer;
 		Ref<rhi::Buffer>            m_constantBuffer;
-		Ref<rhi::DescriptorTable>   m_constantTable;
 		Ref<rhi::Texture>           m_fontTexture;
+
+		Ref<rhi::DescriptorTable>   m_constantTable;
 		Ref<rhi::DescriptorTable>   m_fontTextureTable;
 	};
 

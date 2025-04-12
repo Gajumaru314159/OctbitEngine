@@ -42,8 +42,8 @@ namespace std {
 			size_t h = 0;
 			hash_combine(
 				h, 
-				ob::enum_cast(desc.type),
-				ob::enum_cast(desc.type),
+				ob::enum_cast(desc.state),
+				ob::enum_cast(desc.state),
 				desc.size, 
 				desc.stride,
 				(ob::u32)desc.flags

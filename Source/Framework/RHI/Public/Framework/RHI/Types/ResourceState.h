@@ -27,16 +27,19 @@ namespace ob::rhi {
     //!             | RaytracingAccelerationStructure   | RAYTRACING_ACCELERATION_STRUCTURE | -                             |
     //!             | Present                           | PRESENT                           | PRESENT_KHR                   |
     enum class ResourceState {
+		Unknown,                            //!< 不明
         Common,                             //!< 遷移元
-        //VertexBuffer,                       //!< 頂点バッファ
-        //IndexBuffer,                        //!< インデックスバッファ
-        //ConstantBuffer,                     //!< 定数バッファ
-        //UnorderedAccess,                    //!< アンオーダード・アクセス
-        PixelShadeResource,                 //!< ピクセルシェーダで利用可能
+        ConstantBuffer,                     //!< 定数バッファ
+        VertexBuffer,                       //!< 頂点バッファ
+        IndexBuffer,                        //!< インデックスバッファ
+        IndirectArgument,                   //!< 間接引数
+        ShadeResource,                      //!< シェーダーリソース
+        UnorderedAccess,                    //!< アンオーダード・アクセス
+		RenderTarget,                       //!< レンダーターゲット
+        
         //ComputeShaderResource,              //!< コンピュートシェーダで利用可能
         //AllShaderResource,                  //!< 全てのシェーダで利用可能
         //StreamOut,                          //!< ストリーム出力先
-        //IndirectArgument,                   //!< 間接引数
         //CopySource,                         //!< コピー元
         //CopyDest,                           //!< コピー先
         //RaytracingAccelerationStructure,    //!< RaytracingAccelerationStructure
