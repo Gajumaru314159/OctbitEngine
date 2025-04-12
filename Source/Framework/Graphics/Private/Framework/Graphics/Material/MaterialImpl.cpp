@@ -9,6 +9,7 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/Graphics/Mesh/MeshImpl.h>
 
@@ -21,93 +22,15 @@ namespace ob::graphics {
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
 	{
-		using namespace ob::rhi;
+		MaterialBlockDesc mdesc;
+		mdesc.name = desc.name;
+		mdesc.textures = desc.textureProperties;
+		mdesc.buffers = desc.bufferProperties;
+		mdesc.matrices = desc.matrixProperties;
+		mdesc.vectors = desc.colorProperties;
+		mdesc.scalars = desc.floatProperties;
 
-		// バッファの配列は128bitアラインメント
-		auto arrayAlignment = 128;
-
-		// プロパティ名とバッファ対応
-		s32 bufferSize = 0;	
-		for (auto& name : desc.floatProperties) {
-			auto [itr,added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Float,bufferSize });
-			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。",name); return; }
-			bufferSize += sizeof(f32);
-		}
-		bufferSize += sizeof(f32) * (8-desc.floatProperties.size()); // TEST
-		bufferSize = align_up(bufferSize, arrayAlignment);
-		for (auto& name : desc.colorProperties) {
-			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Color,bufferSize });
-			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
-			bufferSize += sizeof(Color);
-		}
-		bufferSize += sizeof(Color) * (8 - desc.colorProperties.size()); // TEST
-		bufferSize = align_up(bufferSize, arrayAlignment);
-		for (auto& name : desc.matrixProperties) {
-			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Matrix,bufferSize });
-			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
-			bufferSize += sizeof(Matrix);
-		}
-		bufferSize += sizeof(Matrix) * (8 - desc.matrixProperties.size()); // TEST
-		bufferSize = align_up(bufferSize, arrayAlignment);
-
-		// プロパティ名とテクスチャ番号対応
-		for (auto [index,name] : Indexed(desc.textureProperties)) {
-			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Texture,(s32)index});
-			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
-		}
-		m_textures.resize(desc.textureProperties.size());
-
-		// プロパティ名とテクスチャ番号対応
-		for (auto [index, name] : Indexed(desc.bufferProperties)) {
-			auto [itr, added] = m_propertyMap.try_emplace(name, ValuePropertyDesc{ PropertyType::Buffer,(s32)index });
-			if (!added) { LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name); return; }
-		}
-		m_buffers.resize(desc.bufferProperties.size());
-
-		// バッファ生成
-		if (0 < bufferSize) {
-			auto bufferDesc = rhi::BufferDesc::Constant(bufferSize);
-			bufferDesc.name = Format("MaterialParameter ({})",desc.name);
-			m_buffer = rhi::Buffer::Create(bufferDesc);
-			OB_ASSERT_EXPR(m_buffer);
-			m_bufferBlob.resize(bufferSize);
-			memset(m_bufferBlob.data(), 0, m_bufferBlob.size());
-		}
-
-		// テーブル生成(バッファ)
-		if (0 < bufferSize) {
-			BindingSlot slot { Binding::ConstantBuffer(0) };
-			m_dynamicTable = rhi::DescriptorTable::Create(slot);
-			OB_ASSERT_EXPR(m_dynamicTable);
-			m_dynamicTable->setResource(0, m_buffer);
-		}
-
-		// テーブル生成(テクスチャ)
-		if (desc.textureProperties.size()) {
-			BindingSlot slot0;
-			BindingSlot slot1;
-
-			for (auto& name : desc.textureProperties) {
-				slot0.items.push_back(Binding::Texture());
-			}
-			for (auto& name : desc.textureProperties) {
-				slot1.items.push_back(Binding::Texture());
-			}
-
-			m_textureTable = rhi::DescriptorTable::Create(slot0);
-			m_samplerTable = rhi::DescriptorTable::Create(slot1);
-			OB_ASSERT_EXPR(m_textureTable);
-			OB_ASSERT_EXPR(m_samplerTable);
-		}
-		// テーブル生成(バッファ)
-		if (desc.bufferProperties.size()) {
-			BindingSlot slot;
-			for (auto& name : desc.bufferProperties) {
-				slot.items.push_back(Binding::ConstantBuffer());
-			}
-			m_bufferTable = rhi::DescriptorTable::Create(slot);
-			OB_ASSERT_EXPR(m_bufferTable);
-		}
+		m_block.construct(mdesc);
 
 	}
 
@@ -116,62 +39,34 @@ namespace ob::graphics {
 	}
 
 	//! @brief  プロパティがあるか
-	bool MaterialImpl::hasProprty(StringView name, PropertyType type) const {
-		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-			return found->second.type == type;
-		}
-		return false;
+	bool MaterialImpl::hasProprty(StringView name, MaterialPropertyType type) const {
+		
+		return m_block->hasProprty(name, type);
 	}
 
 	//! @brief  Floatプロパティを設定
 	void MaterialImpl::setFloat(StringView name, f32 value) {
-		setValueProprty(name, PropertyType::Float, value);
+		m_block->setScalar(name, value);
 	}
 
 	//! @brief  Colorプロパティを設定
 	void MaterialImpl::setColor(StringView name, Color value) {
-		setValueProprty(name, PropertyType::Color, value);
+		m_block->setVector(name, value);
 	}
 
 	//! @brief  Matrixプロパティを設定
 	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
-		setValueProprty(name, PropertyType::Matrix,
-#if 1
-			value
-#else
-			value.transposed()
-#endif
-		);
+		m_block->setMatrix(name, value);
 	}
 
 	//! @brief  Textureプロパティを設定
 	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
-		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-
-			auto& desc = found->second;
-			if (desc.type != PropertyType::Texture)return;
-			if (!is_in_range(desc.offset, m_textures))return;
-
-			m_textures[desc.offset] = value;
-
-			m_textureTable->setResource(desc.offset, value);
-
-		}
+		m_block->setTexture(name, value,rhi::Sampler::Default());
 	}
 
 	//! @brief  Bufferプロパティを設定
 	void MaterialImpl::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
-		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-
-			auto& desc = found->second;
-			if (desc.type != PropertyType::Buffer)return;
-			if (!is_in_range(desc.offset, m_buffers))return;
-
-			m_buffers[desc.offset] = value;
-
-			m_bufferTable->setResource(desc.offset, value);
-
-		}
+		m_block->setBuffer(name, value);
 	}
 
 	//! @brief  GPUリソースの事前生成
@@ -199,12 +94,6 @@ namespace ob::graphics {
 		// 複数パス → パスを引数に取る
 		// シェーダ設定 → 
 		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
-
-
-		// TODO 複数パスある場合は余計なので別途更新関数を回す
-		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
-
-
 
 		auto pMesh = mesh.cast<MeshImpl>();
 		if (!pMesh) return;
@@ -242,15 +131,8 @@ namespace ob::graphics {
 			LOG_ERROR("MaterialManagerが未初期化です。");
 		}
 
-		// TODO スロット
-		rhi::SetDescriptorTableParam params[] = {
-			{m_dynamicTable, enum_cast(MaterialRootSignatureSlot::DynamicLocal)},
-			{m_textureTable, enum_cast(MaterialRootSignatureSlot::TextureLocal)},
-			//{m_bufferTable, enum_cast(MaterialRootSignatureSlot::BufferLocal)},
-			//{m_samplerTable, enum_cast(MaterialRootSignatureSlot::Sampler)},
-		};
 
-		cmdList->setRootDesciptorTable(params, std::size(params));
+		m_block->record(cmdList, 0,16);
 
 		pMesh->record(cmdList, submeshIndex);
 
@@ -312,22 +194,8 @@ namespace ob::graphics {
 		Ref<RootSignature> signature = [&](){
 
 			// TODO テクスチャの複数枚対応
-			BindingLayoutDesc desc {
-				{
-					Binding::ConstantBuffer(1,0),		// グローバルプロパティ(バッファ)
-					Binding::Texture(1,0),		// グローバルプロパティ(テクスチャ)
-					//RootParameter::Range(DescriptorRangeType::CBV,2,0),		// グローバルプロパティ(テクスチャ)
-				},
-				{
-					Binding::ConstantBuffer(1,1),		// ローカルプロパティ(バッファ)
-					Binding::Texture(m_desc.textureProperties.size(),1),		// ローカルプロパティ(テクスチャ)
-					//RootParameter::Range(DescriptorRangeType::CBV,m_desc.bufferProperties.size(),1),		// グローバルプロパティ(テクスチャ)
-				}
-			};
-			desc.samplers =
-			{
-				StaticSamplerDesc(SamplerDesc(TextureFillter::Point),0),	// グローバルプロパティ(サンプラー)
-			};
+			BindingLayoutDesc desc;
+			desc.constants.set(16 * 2, 0);	// グローバルプロパティ(バッファ)
 			desc.name = "Common";
 
 			return RootSignature::Create(desc);

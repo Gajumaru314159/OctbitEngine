@@ -8,6 +8,7 @@
 #include <Framework/RHI/Types/SubPass.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
+#include <Framework/Graphics/Material/MaterialBlock.h>
 
 #include <Framework/RHI/RootSignature.h>
 
@@ -28,13 +29,13 @@ namespace ob::graphics {
 
 		//! @brief  説明
 
-		bool hasProprty(StringView name, PropertyType type)const;
+		bool hasProprty(StringView name, MaterialPropertyType type)const;
 
-		bool hasInt(StringView name)const { return hasProprty(name, PropertyType::Int); }
-		bool hasFloat(StringView name)const { return hasProprty(name, PropertyType::Float); }
-		bool hasColor(StringView name)const { return hasProprty(name, PropertyType::Color); }
-		bool hasMatrix(StringView name)const { return hasProprty(name, PropertyType::Matrix); }
-		bool hasTexture(StringView name)const { return hasProprty(name, PropertyType::Texture); }
+		bool hasInt(StringView name)const { return hasProprty(name, MaterialPropertyType::Integer); }
+		bool hasFloat(StringView name)const { return hasProprty(name, MaterialPropertyType::Scalar); }
+		bool hasColor(StringView name)const { return hasProprty(name, MaterialPropertyType::Vector); }
+		bool hasMatrix(StringView name)const { return hasProprty(name, MaterialPropertyType::Matrix); }
+		bool hasTexture(StringView name)const { return hasProprty(name, MaterialPropertyType::Texture); }
 
 		void setFloat(StringView name, f32 value);
 		void setColor(StringView name, Color value);
@@ -43,22 +44,6 @@ namespace ob::graphics {
 
 		auto getSignature() { return m_signature; }
 
-	private:
-
-		template<typename T, typename TEq = std::equal_to<T>>
-		void setValueProprty(StringView name, PropertyType type, const T& value) {
-			if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-				auto& desc = found->second;
-				if (desc.type != type)return;
-				if (!is_in_range(desc.offset, m_bufferBlob))return;
-
-				auto& dest = *GetOffsetPtr<T>(m_bufferBlob.data(), desc.offset);
-
-				if (TEq()(value, dest))return;
-
-				dest = value;
-			}
-		}
 	public:
 
 		void initializeGlobalProperties();
@@ -96,16 +81,7 @@ namespace ob::graphics {
 
 		Ref<rhi::RootSignature>		m_signature;
 
-		PropertyMap					m_propertyMap;
-
-		Blob						m_bufferBlob;
-
-		Ref<rhi::Buffer>			m_buffer;
-		Vector<Ref<rhi::Texture>>	m_textures;
-
-		Ref<rhi::DescriptorTable>	m_bufferTable;
-		Ref<rhi::DescriptorTable>	m_textureTable;
-		Ref<rhi::DescriptorTable>	m_samplerTable;
+		MemoryStorage<MaterialBlock>	m_block;
 
 	};
 

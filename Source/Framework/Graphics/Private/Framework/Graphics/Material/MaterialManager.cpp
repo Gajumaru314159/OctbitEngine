@@ -6,6 +6,7 @@
 #include <Framework/Graphics/Material/MaterialManager.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
+#include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/RootSignature.h>
@@ -24,51 +25,14 @@ namespace ob::graphics {
 
 	//!	@brief			グローバルプロパティの初期化
 	void MaterialManager::initializeGlobalProperties() {
-		// グローバル変数用のリソース生成
-		constexpr size_t GLOBAL_TEXTURE_MAX = 256;
-		constexpr size_t GLOBAL_FLOAT_MAX = 256;
-		constexpr size_t GLOBAL_COLOR_MAX = 32;
-		constexpr size_t GLOBAL_MATRIX_MAX = 32;
 
-		m_textures.resize(GLOBAL_TEXTURE_MAX);
+		MaterialBlockDesc desc;
+		desc.name = "GlobalMaterialParamter";
+		desc.vectors = { "LightDir" };
+		desc.matrices = { "Matrix" };
 
-		using namespace ob::rhi;
+		m_block.construct(desc);
 
-		constexpr size_t BUFFER_SIZE = sizeof(f32) * GLOBAL_FLOAT_MAX + sizeof(Color) * GLOBAL_COLOR_MAX + sizeof(Matrix) * GLOBAL_MATRIX_MAX;
-
-		{
-			auto bufferDesc = rhi::BufferDesc::Constant(BUFFER_SIZE, rhi::BufferFlag::ShaderResource);
-			bufferDesc.name = "MaterialGlobalProperty";
-			m_buffer = rhi::Buffer::Create(bufferDesc);
-			OB_ASSERT_EXPR(m_buffer);
-			m_bufferBlob.resize(BUFFER_SIZE);
-			memset(m_bufferBlob.data(), 0, m_bufferBlob.size());
-		}
-
-		{
-			m_bufferTable = rhi::DescriptorTable::Create(BindingSlot{ Binding::ConstantBuffer() });
-			OB_ASSERT_EXPR(m_bufferTable);
-			m_bufferTable->setResource(0, m_buffer);
-		}
-
-		{
-			BindingSlot slot;
-			for (s32 i = 0; i < GLOBAL_TEXTURE_MAX; ++i) {
-				slot.items.push_back(Binding::Texture(i));
-			}
-			m_textureTable = rhi::DescriptorTable::Create(slot);
-
-			// サンプラのパターン数は限られる
-			///m_samplerTable = rhi::DescriptorTable::Create(DescriptorHeapType::Sampler, GLOBAL_TEXTURE_MAX);
-			OB_ASSERT_EXPR(m_textureTable);
-			//OB_ASSERT_EXPR(m_samplerTable);
-
-			for (s32 i = 0; i < GLOBAL_TEXTURE_MAX; ++i) {
-				m_textureTable->setResource(i, rhi::Texture::White());
-			}
-		}
-		m_propertyMap.emplace("LightDir", ValuePropertyDesc{ PropertyType::Color,0 });
-		m_propertyMap.emplace("Matrix", ValuePropertyDesc{ PropertyType::Matrix,sizeof(Color) });
 	}
 
 	//!	@brief			共通ルートシグネチャを生成
@@ -76,15 +40,10 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		// TODO テクスチャの複数枚対応
-		BindingLayoutDesc desc = {
-			{
-				Binding::ConstantBuffer(0),		// グローバルプロパティ(バッファ)
-				Binding::Texture(0),		// グローバルプロパティ(テクスチャ)
-				Binding::ConstantBuffer(1),		// ローカルプロパティ(バッファ)
-				Binding::Texture(1),		// ローカルプロパティ(テクスチャ)
-			}
-		};
+		BindingLayoutDesc desc;
+		desc.constants.set(16*2, 0);
 		desc.samplers = { StaticSamplerDesc(SamplerDesc(TextureFillter::Linear), 0) };	// グローバルプロパティ(サンプラー)
+		desc.flags &= RootSignatureFlag::EnableBindless;
 		desc.name = "Common";
 
 		m_signature = RootSignature::Create(desc);
@@ -106,64 +65,33 @@ namespace ob::graphics {
 
 
 	//! @brief  
-	bool MaterialManager::hasProprty(StringView name, PropertyType type) const {
-		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-			return found->second.type == type;
-		}
-		return false;
+	bool MaterialManager::hasProprty(StringView name, MaterialPropertyType type) const {
+		return m_block->hasProprty(name, type);
 	}
 
 	//! @brief  
 	void MaterialManager::setFloat(StringView name, f32 value) {
-		setValueProprty(name, PropertyType::Float, value);
+		return m_block->setScalar(name, value);
 	}
 
 	//! @brief  
 	void MaterialManager::setColor(StringView name, Color value) {
-		setValueProprty(name, PropertyType::Color, value);
+		return m_block->setVector(name, value);
 	}
 
 	//! @brief  
 	void MaterialManager::setMatrix(StringView name, const Matrix& value) {
-		setValueProprty(name, PropertyType::Matrix,
-#if 1
-			value
-#else
-			value.transposed()
-#endif
-		);
+		return m_block->setMatrix(name, value);
 	}
 
 	//! @brief  
 	void MaterialManager::setTexture(StringView name, const Ref<rhi::Texture>& value) {
-		if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-
-			auto& desc = found->second;
-			if (desc.type != PropertyType::Texture)return;
-			if (!is_in_range(desc.offset, m_textures))return;
-
-			m_textures[desc.offset] = value;
-
-			m_textureTable->setResource(desc.offset, value);
-
-		}
+		return m_block->setTexture(name, value,rhi::Sampler::Default());
 	}
 
 	//! @brief  
 	void MaterialManager::recordGlobalShaderProperties(Ref<rhi::CommandList>& cmdList) {
-
-		if (!cmdList)return;
-
-		m_buffer->update(m_bufferBlob.size(), m_bufferBlob.data());
-
-		rhi::SetDescriptorTableParam params[]{
-			{m_bufferTable,enum_cast(MaterialRootSignatureSlot::DynamicGlobal)},
-			{m_textureTable,enum_cast(MaterialRootSignatureSlot::TextureGlobal)},
-			//{m_textureTable,1},
-			//{m_samplerTable,2},
-		};
-		cmdList->setRootDesciptorTable(params,std::size(params));
-
+		m_block->record(cmdList, 0);
 	}
 
 

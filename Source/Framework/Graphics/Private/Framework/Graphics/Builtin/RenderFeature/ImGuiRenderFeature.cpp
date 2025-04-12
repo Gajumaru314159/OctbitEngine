@@ -701,7 +701,7 @@ namespace ob::graphics {
 		{
 			auto newSize = 512;
 
-			BufferDesc desc = BufferDesc::Vertex<ImDrawVert>(newSize);
+			BufferDesc desc = BufferDesc::Constant(newSize);
 			desc.name = "ImGuiConstant";
 			m_constantBuffer = Buffer::Create(desc);
 

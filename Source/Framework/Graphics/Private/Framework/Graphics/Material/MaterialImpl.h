@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Material/Material.h>
+#include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Forward.h>
@@ -56,14 +57,14 @@ namespace ob::graphics {
 
 		//! @brief  説明
 
-		bool hasProprty(StringView name, PropertyType type)const;
+		bool hasProprty(StringView name, MaterialPropertyType type)const;
 
-		bool hasInt(StringView name)const override { return hasProprty(name, PropertyType::Int); }
-		bool hasFloat(StringView name)const override { return hasProprty(name, PropertyType::Float); }
-		bool hasColor(StringView name)const override { return hasProprty(name, PropertyType::Color); }
-		bool hasMatrix(StringView name)const override { return hasProprty(name, PropertyType::Matrix); }
-		bool hasTexture(StringView name)const override { return hasProprty(name, PropertyType::Texture); }
-		bool hasBuffer(StringView name)const override { return hasProprty(name, PropertyType::Buffer); }
+		bool hasInt(StringView name)const override { return hasProprty(name, MaterialPropertyType::Integer); }
+		bool hasFloat(StringView name)const override { return hasProprty(name, MaterialPropertyType::Scalar); }
+		bool hasColor(StringView name)const override { return hasProprty(name, MaterialPropertyType::Vector); }
+		bool hasMatrix(StringView name)const override { return hasProprty(name, MaterialPropertyType::Matrix); }
+		bool hasTexture(StringView name)const override { return hasProprty(name, MaterialPropertyType::Texture); }
+		bool hasBuffer(StringView name)const override { return hasProprty(name, MaterialPropertyType::Buffer); }
 
 		void setFloat(StringView name, f32 value) override;
 		void setColor(StringView name, Color value) override;
@@ -79,23 +80,6 @@ namespace ob::graphics {
 		void record(Ref<rhi::CommandList>&, const Matrix&, const Ref<Mesh>& mesh, s32 submesh, StringView pass);
 		void record(Ref<rhi::CommandList>&, Span<Matrix>, const Ref<Mesh>& mesh, s32 submesh, StringView pass);
 
-	private:
-
-		template<typename T, typename TEq = std::equal_to<T>>
-		void setValueProprty(StringView name, PropertyType type, const T& value) {
-			if (auto found = m_propertyMap.find(name); found != m_propertyMap.end()) {
-				auto& desc = found->second;
-				if (desc.type != type)return;
-				if (!is_in_range(desc.offset, m_bufferBlob))return;
-
-				auto& dest = *GetOffsetPtr<T>(m_bufferBlob.data(), desc.offset);
-
-				if (TEq()(value, dest))return;
-				
-				dest = value;
-			}
-		}
-
 		Ref<rhi::PipelineState> createPipeline(StringView pass,const rhi::VertexLayout& layout, VertexLayoutId id);
 
 	private:
@@ -108,25 +92,14 @@ namespace ob::graphics {
 		};
 
 		using PipelineMap = HashMap<PipelineKey, Ref<rhi::PipelineState>, PipelineKeyHasher>;
-		using PropertyMap = Map<String, ValuePropertyDesc, std::less<>>;
 
 		const MaterialDesc	m_desc;
 
 		SpinLock			m_lock;
 
 		PipelineMap			m_pipelineMap;
-		PropertyMap			m_propertyMap;
 
-		Blob				m_bufferBlob;
-
-		Ref<rhi::Buffer>	m_buffer;
-		Vector<Ref<Texture>> m_textures;
-		Vector<Ref<Buffer>> m_buffers;
-
-		Ref<rhi::DescriptorTable> m_dynamicTable;
-		Ref<rhi::DescriptorTable> m_textureTable;
-		Ref<rhi::DescriptorTable> m_bufferTable;
-		Ref<rhi::DescriptorTable> m_samplerTable;
+		MemoryStorage<MaterialBlock> m_block;
 
 	};
 
