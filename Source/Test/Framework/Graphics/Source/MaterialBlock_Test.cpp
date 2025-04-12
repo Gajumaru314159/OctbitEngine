@@ -601,19 +601,22 @@ TEST(MaterialBlock, MultiBindless) {
 struct TextureHandle {
 	uint index;
 	uint type;
-	uint padding[2];
+	uint pad0;
+	uint pad;
 };
 
 struct SamplerHandle {
 	uint index;
 	uint type;
-	uint padding[2];
+	uint pad0;
+	uint pad;
 };
 
 struct BufferHandle {
 	uint index;
 	uint type;
-	uint padding[2];
+	uint pad0;
+	uint pad;
 };
 
 struct Param {
@@ -772,8 +775,8 @@ PsOut PS_Main(PsIn i){
 		commandList->clearColors();
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0);
-		block2.record(commandList, 1);
+		block.record(commandList, 0, 0);
+		block2.record(commandList, 0,16);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);

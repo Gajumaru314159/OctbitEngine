@@ -78,7 +78,7 @@ namespace ob::graphics {
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 		//! @details Bindless時のみ使用可能です。
         //!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
-        void record(Ref<CommandList>& commandList, s32 slot);
+        void record(Ref<CommandList>& commandList, s32 slot, s32 offset = 0);
 
     private:
 

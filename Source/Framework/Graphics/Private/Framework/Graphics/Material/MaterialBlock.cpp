@@ -361,7 +361,7 @@ namespace ob::graphics {
 	//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 	//! @details Bindless時のみ使用可能です。
 	//!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
-	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot) {
+	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot, s32 offset) {
 		if (!commandList) return;
 		using namespace ob::rhi;
 
@@ -377,7 +377,7 @@ namespace ob::graphics {
 		SetRootConstantsParam param;
 		param.slot = slot;
 		param.blob = BlobView(&handle, sizeof(handle));
-		param.offset = 0;
+		param.offset = offset;
 		commandList->setRootConstant(param);
 
 	}
