@@ -17,15 +17,20 @@ namespace ob::rhi::dx12 {
 		switch (value)
 		{
 		case BindingType::Texture:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		case BindingType::RWTexture:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+		case BindingType::Buffer:
+		case BindingType::StructuredBuffer:
 		case BindingType::ByteAddressBuffer:
 			return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+
+		case BindingType::RWTexture:
+		case BindingType::RWBuffer:
+		case BindingType::RWStructuredBuffer:
 		case BindingType::RWByteAddressBuffer:
 			return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+
 		case BindingType::ConstantBuffer:
 			return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+
 		case BindingType::Sampler:
 			return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 		}
