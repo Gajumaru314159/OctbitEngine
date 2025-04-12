@@ -81,11 +81,6 @@ namespace ob::rhi::vulkan {
 //===============================================================
 namespace ob::rhi::vulkan {
 
-    //! @brief  妥当な状態か
-    inline bool TextureImpl::isValid()const {
-        return true;
-    }
-
     //! @brief      名前を取得
     inline const String& TextureImpl::getName()const {
         return m_desc.name;

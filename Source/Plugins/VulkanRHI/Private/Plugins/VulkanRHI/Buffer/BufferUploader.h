@@ -21,8 +21,8 @@ namespace ob::rhi::vulkan {
 
         BufferUploader(VulkanRHI& device,size_t blockSize);
 
-        void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlagBits postAccessFlags);
-        void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlagBits postAccessFlags);
+        void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags);
+        void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlags postAccessFlags);
 
         void update(vk::raii::CommandBuffer& commandBuffer, bool useDebugMarker);
 
@@ -42,7 +42,6 @@ namespace ob::rhi::vulkan {
             UINT64 sourceOffset;
             UINT64 destOffset;
             UINT64 size;
-			vk::AccessFlags postAccessFlags;
         };
 
         struct FrameBlock {
@@ -86,7 +85,7 @@ namespace ob::rhi::vulkan {
 		Swapper<FrameData> m_frames;
 
 		Vector<vk::BufferMemoryBarrier> m_barriers;
-
+		HashMap<VkBuffer, vk::AccessFlags> m_entriedBuffers;
     };
 
 }

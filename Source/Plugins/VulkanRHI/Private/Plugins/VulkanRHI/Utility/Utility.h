@@ -45,9 +45,9 @@ namespace ob::rhi::vulkan {
 
 		template<typename T>
         static void SetName(vk::raii::Device& device,const T& object, StringView name) {
-			vk::DebugReportObjectTypeEXT type = debugReportObjectType(object.objectType);
-            vk::DebugMarkerObjectNameInfoEXT info(type, (uint64_t)((typename T::CType)*object), name.c_str());
-            device.debugMarkerSetObjectNameEXT(nameinfo);
+			//vk::DebugReportObjectTypeEXT type = debugReportObjectType(object.objectType);
+            //vk::DebugMarkerObjectNameInfoEXT info(type, (uint64_t)((typename T::CType)*object), name.data());
+            //device.debugMarkerSetObjectNameEXT(info);
         }
 
     };

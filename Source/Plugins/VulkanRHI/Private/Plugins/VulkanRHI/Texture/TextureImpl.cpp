@@ -47,34 +47,75 @@ namespace ob::rhi::vulkan {
 		return false;
 	}
 
+    vk::Format Convert(TextureFormat value) {
+		switch (value) {
+		case TextureFormat::RGBA32:         return vk::Format::eR32G32B32A32Sfloat;
+		case TextureFormat::RGBA16:         return vk::Format::eR16G16B16A16Sfloat;
+		case TextureFormat::RGBA8:          return vk::Format::eR8G8B8A8Unorm;
+
+		case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
+		case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
+
+		case TextureFormat::RG32:           return vk::Format::eR32G32Sfloat;
+		case TextureFormat::RG16:           return vk::Format::eR16G16Sfloat;
+		case TextureFormat::RG8:            return vk::Format::eR8G8Unorm;
+
+		case TextureFormat::R32:            return vk::Format::eR32Sfloat;
+		case TextureFormat::R16:            return vk::Format::eR16Sfloat;
+		case TextureFormat::R8:             return vk::Format::eR8Unorm;
+
+		case TextureFormat::R10G10B10A2:    return vk::Format::eA2R10G10B10UnormPack32;
+
+		case TextureFormat::D32S8:          return vk::Format::eD32SfloatS8Uint;
+		case TextureFormat::D32:            return vk::Format::eD32Sfloat;
+		case TextureFormat::D24S8:          return vk::Format::eD24UnormS8Uint;
+		case TextureFormat::D16:            return vk::Format::eD16Unorm;
+
+		case TextureFormat::BC1:            return vk::Format::eBc1RgbaUnormBlock;
+		case TextureFormat::BC2:            return vk::Format::eBc2UnormBlock;
+		case TextureFormat::BC3:            return vk::Format::eBc3UnormBlock;
+		case TextureFormat::BC4:            return vk::Format::eBc4UnormBlock;
+		case TextureFormat::BC5:            return vk::Format::eBc5UnormBlock;
+		case TextureFormat::BC6H:           return vk::Format::eBc6HSfloatBlock;
+		case TextureFormat::BC7:            return vk::Format::eBc7UnormBlock;
+
+		case TextureFormat::BC1_SRGB:       return vk::Format::eBc1RgbaSrgbBlock;
+		case TextureFormat::BC2_SRGB:       return vk::Format::eBc2SrgbBlock;
+		case TextureFormat::BC3_SRGB:       return vk::Format::eBc3SrgbBlock;
+		case TextureFormat::BC7_SRGB:       return vk::Format::eBc7SrgbBlock;
+		}
+
+		LOG_WARNING_EX("Graphic", "不正なTextureFormat[value={}]", enum_cast(value));
+		return vk::Format::eUndefined;
+    }
+
 	static vk::ImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
-		VkImageCreateInfo info = {};
-		info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-		info.flags = 0;
-		info.format = TypeConverter::Convert(format);
-		info.extent = {(u32)size.width,(u32)size.height,(u32)size.depth};
+		vk::ImageCreateInfo info;
+		info.flags = {};
+		info.format = Convert(format);
+		info.extent = vk::Extent3D{(u32)size.width,(u32)size.height,(u32)size.depth};
 		info.mipLevels = std::max(mipLevel,1);
 		info.arrayLayers =arrayNum;
-		info.samples = VK_SAMPLE_COUNT_1_BIT;
-		info.tiling = VK_IMAGE_TILING_LINEAR; // VK_IMAGE_TILING_OPTIMAL; 直接アップロード用の仮対応
-		info.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
-		info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+		info.samples = vk::SampleCountFlagBits::e1;
+		info.tiling = vk::ImageTiling::eOptimal;
+		info.usage = vk::ImageUsageFlags{} | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
+		info.sharingMode = vk::SharingMode::eExclusive;
 		info.queueFamilyIndexCount = 0;
 		info.pQueueFamilyIndices = nullptr;
-		info.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+		info.initialLayout = vk::ImageLayout::eUndefined;
 
 		switch (type) {
 		case TextureType::Texture1D:
-			info.imageType = VK_IMAGE_TYPE_1D;
+			info.imageType = vk::ImageType::e1D;
 			break;
 		case TextureType::Texture2D:
-			info.imageType = VK_IMAGE_TYPE_2D;
+			info.imageType = vk::ImageType::e2D;
 			break;
 		case TextureType::Texture3D:
-			info.imageType = VK_IMAGE_TYPE_3D;
+			info.imageType = vk::ImageType::e3D;
 			break;
 		case TextureType::Cube:
-			info.imageType = VK_IMAGE_TYPE_2D;
+			info.imageType = vk::ImageType::e2D;
 			break;
 		default:
 			LOG_ERROR("不明なテクスチャタイプです [name={}]", name);
@@ -152,19 +193,15 @@ namespace ob::rhi::vulkan {
 		auto requirements = m_image.getMemoryRequirements();
 
 
-		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
+		TextureUploader::Subresource subresources[1];
+		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
 
-		void* data = m_memory.mapMemory(0,requirements.size);
-		memcpy_s(data, requirements.size, colors.data(), colors.size_bytes());
-		m_memory.unmapMemory();
-
-		// TODO 
-		// コピー
-		// バリア
+		m_rhi.getTextureUploader().add(m_image,info,subresources);
 
 	}
 

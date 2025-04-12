@@ -8,6 +8,7 @@
 #include <Framework/RHI/Config.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
+#include <Plugins/VulkanRHI/Texture/TextureUploader.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -46,7 +47,7 @@ namespace ob::rhi::vulkan {
 		// 更新
 		//===============================================================
 
-		void entryCommandList(const CommandList&);
+		void entryCommandList(const CommandList&) override;
 
 
 		//===============================================================
@@ -54,54 +55,55 @@ namespace ob::rhi::vulkan {
 		//===============================================================
 
 		//! @brief  スワップ・チェーンを生成
-		Ref<Display> createDisplay(const DisplayDesc& desc);
+		Ref<Display> createDisplay(const DisplayDesc& desc) override;
 
 
 		//! @brief  コマンドリスト生成
-		Ref<CommandList> createCommandList(const CommandListDesc& desc);
+		Ref<CommandList> createCommandList(const CommandListDesc& desc) override;
 
 
 		//! @brief  ルートシグネチャを生成
-		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc);
+		Ref<RootSignature> createRootSignature(const BindingLayoutDesc& desc) override;
 
 
 		//! @brief  パイプラインステートを生成
-		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc);
+		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc) override;
 
 
 		//! @brief  テクスチャを生成
-		Ref<Texture> createTexture(const TextureDesc& desc){ return {}; }
+		Ref<Texture> createTexture(const TextureDesc& desc) override;
 
 
-		Ref<Texture> createTexture(StringView name, Size size, Span<const IntColor> colors) { return {}; }
+		Ref<Texture> createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) override;
 
 
 		//! @brief  テクスチャを生成
-		Ref<Texture> createTexture(StringView name, BlobView blob){ return {}; }
+		Ref<Texture> createTexture(StringView name, BlobView blob) override;
 
 
 		//! @brief  レンダーテクスチャを生成
-		Ref<RenderTexture> createRenderTexture(const RenderTextureDesc& desc){ return {}; }
+		Ref<RenderTexture> createRenderTexture(const RenderTextureDesc& desc) override;
 
 
 		//! @brief  サンプラーを生成
-		Ref<Sampler> createSampler(const SamplerDesc& desc){ return {}; }
+		Ref<Sampler> createSampler(const SamplerDesc& desc) override;
 
 
 		//! @brief  バッファーを生成
-		Ref<Buffer> createBuffer(const BufferDesc& desc) { return {}; }
+		Ref<Buffer> createBuffer(const BufferDesc& desc) override;
 
 
 		//! @brief  シェーダをコンパイル
-		Ref<Shader> compileShader(const ShaderCompileDesc& desc) { return {}; }
+		Ref<Shader> compileShader(const ShaderCompileDesc& desc) override;
 
 
 		//! @brief  シェーダをロード
-		Ref<Shader> loadShader(BlobView, ShaderStage) { return {}; }
+		Ref<Shader> loadShader(BlobView, ShaderStage) override;
 
 
 		//! @brief  デスクリプタ・テーブルを生成
-		Ref<DescriptorTable> createDescriptorTable(DescriptorRangeType type, s32 elementNum){ return {}; }
+		Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) override;
+		Ref<DescriptorTable> createDescriptorTable(const Ref<RootSignature>& signature, s32 slot)override;
 
 
 
@@ -123,6 +125,7 @@ namespace ob::rhi::vulkan {
 	public:
 
 		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
+		TextureUploader& getTextureUploader() { return *m_textureUploader; }
 
 		VkMemoryAllocateInfo getAllocationInfo(vk::MemoryRequirements requirements, vk::MemoryPropertyFlags requestProps) {
 			uint32_t memoryTypeIndex;
@@ -164,6 +167,7 @@ namespace ob::rhi::vulkan {
 		void createPhysicalDevice();
 		void createDevice();
 		void createQueue();
+		void createUploaders();
 
 	private:
 
@@ -184,6 +188,7 @@ namespace ob::rhi::vulkan {
 		u32											m_queueCount;
 
 		UPtr<BufferUploader> m_bufferUploader;
+		UPtr<TextureUploader> m_textureUploader;
 
 	};
 }

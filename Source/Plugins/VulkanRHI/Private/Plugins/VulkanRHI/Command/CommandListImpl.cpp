@@ -57,7 +57,7 @@ namespace ob::rhi::vulkan {
 	//! @brief  描画開始
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::begin() {
-		OB_NOTIMPLEMENTED();
+		m_commandBuffer.begin(vk::CommandBufferBeginInfo{});
 	}
 
 
@@ -65,14 +65,18 @@ namespace ob::rhi::vulkan {
 	//! @brief  描画終了
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::end() {
-		OB_NOTIMPLEMENTED();
+		m_commandBuffer.end();
+		m_commandPool.reset(vk::CommandPoolResetFlags{});
+		m_commandBuffer.reset(vk::CommandBufferResetFlags{});
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  描画終了
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::flush() {
-		OB_NOTIMPLEMENTED();
+		if (auto rhi = RHI::Get()) {
+			rhi->entryCommandList(*this);
+		}
 	}
 
 	//! @brief      描画先設定
@@ -93,7 +97,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setScissorRect(const IntRect* pRect, s32 num) {
 
-		Array<vk::Rect2D, 8> rects;
+		FixedVector<vk::Rect2D, 8> rects;
 		for (s32 i = 0; i < num; ++i) {
 			auto& rectIn = pRect[i];
 			auto& rectOut = rects[i];
@@ -115,7 +119,7 @@ namespace ob::rhi::vulkan {
 
 		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
 
-		Array<vk::Viewport, 8> viewports;
+		FixedVector<vk::Viewport, 8> viewports;
 		for (s32 i = 0; i < num;++i) {
 			auto& viewportIn = pViewport[i];
 			auto& viewportOut = viewports[i];
@@ -136,8 +140,8 @@ namespace ob::rhi::vulkan {
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearColors(u32 mask) {
-
 		OB_NOTIMPLEMENTED();
+		//m_commandBuffer.clearColorImage(m_renderTarget->getNative(), vk::ImageLayout::eColorAttachmentOptimal, vk::ClearColorValue{ 0.0f,0.0f,0.0f,1.0f }, { 0, 0, 1 });
 	}
 
 

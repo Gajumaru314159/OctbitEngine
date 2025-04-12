@@ -18,6 +18,11 @@ namespace ob::rhi::vulkan {
 			desc.size = 256;
 		}
 
+		if (desc.state == BufferState::ConstantBuffer && desc.size % 256 != 0) {
+			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, 256));
+			desc.size = align_up(desc.size, 256);
+		}
+
 		if (desc.size < 65536 && desc.size % 4 != 0) {
 			LOG_WARNING("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", desc.name, desc.size);
 			desc.size = align_up(desc.size, 4);
@@ -25,6 +30,31 @@ namespace ob::rhi::vulkan {
 
 		return false;
 	}
+
+	static vk::AccessFlags Convert(BufferState state) {
+		switch (state)
+		{
+		case BufferState::Common:
+			return vk::AccessFlagBits::eNone;
+		case BufferState::VertexBuffer:
+			return vk::AccessFlagBits::eVertexAttributeRead;
+		case BufferState::IndexBuffer:
+			return vk::AccessFlagBits::eIndexRead;
+		case BufferState::ConstantBuffer:
+			return vk::AccessFlagBits::eUniformRead;
+		case BufferState::UnorderedAccess:
+			return vk::AccessFlagBits::eShaderWrite;
+		case BufferState::PixelShadeResource:
+			return vk::AccessFlagBits::eShaderRead;
+		case BufferState::ComputeShaderResource:
+			return vk::AccessFlagBits::eShaderRead;
+		case BufferState::IndirectArgument:
+			return vk::AccessFlagBits::eIndirectCommandRead;
+		}
+		LOG_WARNING("不正なバッファ状態です。 [state={}]", static_cast<s32>(state));
+		return {};
+	}
+	
 
 	//! @brief  コンストラクタ
 	//! 
@@ -40,9 +70,18 @@ namespace ob::rhi::vulkan {
 
 		// バッファ生成
 		vk::BufferCreateInfo info;
-		info.size = desc.size;
-		info.usage = TypeConverter::Convert(desc.state) | vk::BufferUsageFlagBits::eTransferDst;
+		info.size = m_desc.size;
+		info.usage = vk::BufferUsageFlagBits::eTransferDst;
 		info.sharingMode = vk::SharingMode::eExclusive;
+
+		if (m_desc.flags.has(BufferFlag::ShaderResource)) info.usage |= vk::BufferUsageFlagBits::eUniformBuffer;
+		if (m_desc.flags.has(BufferFlag::UnorderedAccess)) info.usage |= vk::BufferUsageFlagBits::eStorageBuffer;
+		if (m_desc.flags.has(BufferFlag::CopySource)) info.usage |= vk::BufferUsageFlagBits::eTransferSrc;
+		if (m_desc.flags.has(BufferFlag::CopyDest)) info.usage |= vk::BufferUsageFlagBits::eTransferDst;
+		if (m_desc.flags.has(BufferFlag::Vertex)) info.usage |= vk::BufferUsageFlagBits::eVertexBuffer;
+		if (m_desc.flags.has(BufferFlag::Index)) info.usage |= vk::BufferUsageFlagBits::eIndexBuffer;
+		if (m_desc.flags.has(BufferFlag::Constant)) info.usage |= vk::BufferUsageFlagBits::eUniformBuffer;
+		if (m_desc.flags.has(BufferFlag::IndirectArgument)) info.usage |= vk::BufferUsageFlagBits::eIndirectBuffer;
 
 		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
 
@@ -107,7 +146,7 @@ namespace ob::rhi::vulkan {
 	void BufferImpl::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
 
-		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset);
+		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset,Convert(m_desc.state));
 	}
 
 
@@ -117,7 +156,7 @@ namespace ob::rhi::vulkan {
 	void BufferImpl::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0);
+		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0, Convert(m_desc.state));
 
 		return;
 

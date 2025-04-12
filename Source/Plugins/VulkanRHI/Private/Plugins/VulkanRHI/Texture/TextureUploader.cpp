@@ -24,49 +24,43 @@ namespace ob::rhi::vulkan
 			LOG_ERROR("[TextureUploader] destがnullです。");
 			return;
 		}
+
+		OB_ASSERT(subresources.size()==1,"Mipmapは未実装です");
+
 		auto& device = m_rhi.getDevice();
 
 
-		auto& device = m_rhi.getDevice();
-		auto allocationCallbacks = m_rhi.getAllocationCallbacks();
+		size_t bufferSize = info.extent.width;
 
-		// 転送用バッファを生成
-		vk::BufferCreateInfo info;
-		info.size = m_blockSize;
-		info.usage = vk::BufferUsageFlagBits::eTransferSrc;
-		info.sharingMode = vk::SharingMode::eExclusive;
+		vk::BufferCreateInfo bufferCreateInfo({}, bufferSize, vk::BufferUsageFlagBits::eTransferSrc);
+		vk::raii::Buffer buffer = device.createBuffer(bufferCreateInfo,m_rhi.getAllocationCallbacks());
 
-		block.buffer = device.createBuffer(info, allocationCallbacks);
+		auto allocInfo = m_rhi.getAllocationInfo(buffer.getMemoryRequirements(), vk::MemoryPropertyFlags{} | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
-		// メモリ確保
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(block.buffer.getMemoryRequirements(), vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+		vk::raii::DeviceMemory memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 
-		block.memory = device.allocateMemory(allocInfo, allocationCallbacks);
+		buffer.bindMemory(memory, 0);
 
-		// バインド
-		block.buffer.bindMemory(block.memory, 0);
+		void* data = memory.mapMemory(0, bufferSize, vk::MemoryMapFlags{});
 
-		Utility::SetName(device, block.buffer, "BufferUploader");
-		Utility::SetName(device, block.memory, "BufferUploader");
-
-
-		auto sourceResource = createUploadResource(info);
-		if (sourceResource == nullptr) {
-			LOG_ERROR("[TextureUploader] コピーソースリソースの生成に失敗しました");
-			return;
+		for (auto& subresource : subresources) {
+			memcpy_s(data,bufferSize,subresource.data.data(),subresource.data.size());
 		}
 
+		memory.unmapMemory();
+
+
+		ScopeLock lock(m_lock);
+
+		auto& frame = m_frames.current();
+
+		auto& request = frame.requests.emplace_back();
+		request.source = std::move(buffer);
+		request.memory = std::move(memory);
+		request.dest = dest;
+		// request.destLayout;
+
 	}
-
-    //! @brief アップロード用の一時リソースを作成 
-	vk::raii::DeviceMemory TextureUploader::createUploadResource(const vk::BufferCreateInfo& info) {
-
-		auto& device = m_rhi.getDevice();
-
-
-		return nullptr;
-	}
-
 
 	void TextureUploader::update(vk::raii::CommandBuffer& commandBuffer) {
 

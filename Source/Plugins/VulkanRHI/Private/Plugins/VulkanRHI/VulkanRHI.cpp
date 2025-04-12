@@ -5,6 +5,8 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
+#include <Plugins/VulkanRHI/Buffer/BufferImpl.h>
+#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
 #include <Plugins/VulkanRHI/Command/CommandListImpl.h>
 #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
@@ -151,6 +153,7 @@ namespace ob::rhi::vulkan {
 		createPhysicalDevice();
 		createDevice();
 		createQueue();
+		createUploaders();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -186,28 +189,36 @@ namespace ob::rhi::vulkan {
 			OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
 			OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME));
 		}
-
+		
 		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
+
+		OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME));
 
 
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
+		Vector<const char*> invalidLayerNames;
 		const auto existLayerNames = EnumerateInstanceLayerNames();
 		for (const auto& name : layerNames)
 		{
 			if (existLayerNames.count(name)) {
 				validLayerNames.push_back(name);
+			} else {
+				invalidLayerNames.push_back(name);
 			}
 		}
 
 		// 利用可能な拡張機能でフィルタ
 		Vector<const char*> validExtensionNames;
+		Vector<const char*> invalidExtensionNames;
 		const auto existExtensionNames = EnumerateInstanceExtensionNames(validLayerNames);
 		for (const auto& name : extensionNames)
 		{
 			if (existExtensionNames.count(name)) {
 				validExtensionNames.push_back(name);
+			} else {
+				invalidExtensionNames.push_back(name);
 			}
 		}
 
@@ -232,11 +243,17 @@ namespace ob::rhi::vulkan {
 			message += Format("\n[ Vulkan ver.{} ]\n", m_context.enumerateInstanceVersion());
 			message += Format("Validation Layers\n");
 			for (auto& name : validLayerNames) {
-				message += Format("* {}\n", name);
+				message += Format("+ {}\n", name);
+			}
+			for (auto& name : invalidLayerNames) {
+				message += Format("- {}\n", name);
 			}
 			message += Format("Extensions\n");
 			for (auto& name : validExtensionNames) {
-				message += Format("* {}\n", name);
+				message += Format("+ {}\n", name);
+			}
+			for (auto& name : invalidExtensionNames) {
+				message += Format("- {}\n", name);
 			}
 			message.pop_back();
 			LOG_INFO("{}", message);
@@ -374,6 +391,15 @@ namespace ob::rhi::vulkan {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  VkQueue生成
+	//@―---------------------------------------------------------------------------
+	void VulkanRHI::createUploaders() {
+		m_bufferUploader = std::make_unique<BufferUploader>(*this,16*1024);
+		m_textureUploader = std::make_unique<TextureUploader>(*this);
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::entryCommandList(const CommandList& commandList) {
@@ -403,8 +429,8 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  ルートシグネチャを生成
-	Ref<RootSignature> VulkanRHI::createRootSignature(const RootSignatureDesc& desc) {
-		SAFE_CREATE(RootSignature, RootSignatureImpl, desc);
+	Ref<RootSignature> VulkanRHI::createRootSignature(const BindingLayoutDesc& desc) {
+		SAFE_CREATE(RootSignature, RootSignatureImpl, *this,desc);
 	}
 
 
@@ -412,5 +438,45 @@ namespace ob::rhi::vulkan {
 	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
 		SAFE_CREATE(PipelineState, PipelineStateImpl, desc);
 	}
+
+
+	//! @brief  テクスチャを生成
+	Ref<Texture> VulkanRHI::createTexture(const TextureDesc& desc) { return {}; }
+
+
+	Ref<Texture> VulkanRHI::createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { 
+		SAFE_CREATE(Texture, TextureImpl, *this,name,type,size,colors);
+	}
+
+
+	//! @brief  テクスチャを生成
+	Ref<Texture> VulkanRHI::createTexture(StringView name, BlobView blob) { return {}; }
+
+
+	//! @brief  レンダーテクスチャを生成
+	Ref<RenderTexture> VulkanRHI::createRenderTexture(const RenderTextureDesc& desc) { return {}; }
+
+
+	//! @brief  サンプラーを生成
+	Ref<Sampler> VulkanRHI::createSampler(const SamplerDesc& desc) { return {}; }
+
+
+	//! @brief  バッファーを生成
+	Ref<Buffer> VulkanRHI::createBuffer(const BufferDesc& desc) { 
+		SAFE_CREATE(Buffer, BufferImpl, *this, desc);
+	}
+
+
+	//! @brief  シェーダをコンパイル
+	Ref<Shader> VulkanRHI::compileShader(const ShaderCompileDesc& desc) { return {}; }
+
+
+	//! @brief  シェーダをロード
+	Ref<Shader> VulkanRHI::loadShader(BlobView, ShaderStage) { return {}; }
+
+
+	//! @brief  デスクリプタ・テーブルを生成
+	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { return {}; }
+	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return {}; }
 
 }

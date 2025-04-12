@@ -33,16 +33,12 @@ namespace ob::rhi::vulkan {
 
     private:
 
-        vk::raii::DeviceMemory createUploadResource(const vk::BufferCreateInfo& info);
-
-    private:
-
         // コピーリクエスト
         struct Request {
             vk::Image dest;
 
-            vk::raii::Buffer source;
-            vk::raii::DeviceMemory memory;
+            vk::raii::Buffer source = nullptr;
+            vk::raii::DeviceMemory memory = nullptr;
 
             vk::ImageLayout destLayout;
             u32 mipLevels;

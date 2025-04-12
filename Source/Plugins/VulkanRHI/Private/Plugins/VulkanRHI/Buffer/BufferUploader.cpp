@@ -23,7 +23,7 @@ namespace ob::rhi::vulkan
 	}
 
 	//! @brief  アップロード要素を追加
-	void BufferUploader::add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlagBits postAccessFlags) {
+	void BufferUploader::add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
 
 		ScopeLock lock(m_lock);
 
@@ -43,13 +43,14 @@ namespace ob::rhi::vulkan
 		request.sourceOffset = block.blob.size();
 		request.destOffset = offset;
 		request.size = blob.size();
-		request.postAccessFlags = postAccessFlags;
 
 		block.blob.append(blob.data(), blob.size());
 
+		m_entriedBuffers[(VkBuffer)*dest] = postAccessFlags;
+
 	}
 
-	void BufferUploader::add(const Buffer::CopyFunc& func, size_t size, vk::raii::Buffer& dest, size_t offset, vk::AccessFlagBits postAccessFlags) {
+	void BufferUploader::add(const Buffer::CopyFunc& func, size_t size, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
 
 		ScopeLock lock(m_lock);
 
@@ -69,11 +70,12 @@ namespace ob::rhi::vulkan
 		request.sourceOffset = block.blob.size();
 		request.destOffset = offset;
 		request.size = size;
-		request.postAccessFlags = postAccessFlags;
 
 		block.blob.resize(block.blob.size() + size);
 
 		func(block.blob.data() + request.sourceOffset);
+
+		m_entriedBuffers[(VkBuffer)*dest] = postAccessFlags;
 	}
 
 	//! @brief アップロードバッファを拡大する
@@ -136,6 +138,7 @@ namespace ob::rhi::vulkan
 
 		auto& device = m_rhi.getDevice();
 
+		// アップロードバッファにデータをコピー
 		for (s32 i = 0; i <= frame.blockIndex; ++i) {
 			auto& block = frame.blocks.at(i);
 
@@ -150,16 +153,16 @@ namespace ob::rhi::vulkan
 
 		// blocks 事前バリア設定(COMMON or GENERIC_READ > COPY_SOURCE)
 		m_barriers.clear();
-		for (auto& request : frame.requests) {
+		for (auto& [buffer,accessFlags] : m_entriedBuffers) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
-			barrier.srcAccessMask = vk::AccessFlagBits::eNone; // TODO : 確認
+			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
 			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.buffer = request.dest;
-			barrier.offset = request.destOffset;
-			barrier.size = request.size;
+			barrier.buffer = buffer;
+			barrier.offset = 0;
+			barrier.size = VK_WHOLE_SIZE;
 		}
 		// requests  事前バリア設定 (COMMON > COPY_DEST)
 		for (auto& block : frame.blocks) {
@@ -171,8 +174,10 @@ namespace ob::rhi::vulkan
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.buffer = block.buffer;
 			barrier.offset = 0;
-			barrier.size = block.blob.size();
+			barrier.size = VK_WHOLE_SIZE;
 		}
+
+		// バリア追加
 		if (!m_barriers.empty()) {
 			commandBuffer.pipelineBarrier(
 				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
@@ -180,7 +185,6 @@ namespace ob::rhi::vulkan
 				{}, m_barriers, {}
 			);
 		}
-
 
 		// コピー
 		for (auto& request : frame.requests) {
@@ -190,18 +194,17 @@ namespace ob::rhi::vulkan
 		}
 
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
-		// TODO 同じリソースが複数回使用される場合は、バリアをまとめて実行する
 		m_barriers.clear();
-		for (auto& request : frame.requests) {
+		for (auto& [buffer,accessFlags] : m_entriedBuffers) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
 			barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
-			barrier.dstAccessMask = request.postAccessFlags;
+			barrier.dstAccessMask = accessFlags;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.buffer = request.dest;
-			barrier.offset = request.destOffset;
-			barrier.size = request.size;
+			barrier.buffer = buffer;
+			barrier.offset = 0;
+			barrier.size = VK_WHOLE_SIZE;
 		}
 		// requests  事前バリア設定は暗黙的な昇格を使用 (COMMON > COPY_DEST)
 		for (auto& block : frame.blocks) {
@@ -213,7 +216,7 @@ namespace ob::rhi::vulkan
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.buffer = block.buffer;
 			barrier.offset = 0;
-			barrier.size = block.blob.size();
+			barrier.size = VK_WHOLE_SIZE;
 		}
 		if (!m_barriers.empty()) {
 			commandBuffer.pipelineBarrier(
@@ -225,6 +228,7 @@ namespace ob::rhi::vulkan
 
 		// バッファを縮小
 		frame.clear();
+		m_entriedBuffers.clear();
 
 		if (useDebugMarker) commandBuffer.debugMarkerEndEXT();
 
