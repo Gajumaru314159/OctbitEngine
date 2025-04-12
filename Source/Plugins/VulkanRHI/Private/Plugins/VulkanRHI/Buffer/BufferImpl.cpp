@@ -64,7 +64,7 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 
-		if (IsInvalid(m_desc));
+		if (IsInvalid(m_desc)) throw Exception("Invalid ufferDesc");
 
 		auto& device = rhi.getDevice();
 

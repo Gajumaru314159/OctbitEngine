@@ -45,7 +45,7 @@ namespace ob::rhi::vulkan {
         TextureImpl(VulkanRHI& rhi, const RenderTextureDesc& desc);
 
         //! @brief      SwapChainのリソースからRenderTextureを生成
-        TextureImpl(VulkanRHI& rhi, VkImage image,StringView name);
+        TextureImpl(VulkanRHI& rhi, VkImage image, vk::Format format,StringView name);
 
     public:
 
@@ -62,8 +62,9 @@ namespace ob::rhi::vulkan {
         //ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
         //
         //// TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
-        //DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル
-        //DescriptorHandle        m_hDSV;         //!< デスクリプタハンドル
+        vk::raii::ImageView       m_hRTV = nullptr;
+        vk::raii::ImageView       m_hDSV = nullptr;
+
         //
         //D3D12_VIEWPORT          m_viewport{};   //!< ビューポート
         //D3D12_RECT              m_scissorRect{};//!< シザー矩形

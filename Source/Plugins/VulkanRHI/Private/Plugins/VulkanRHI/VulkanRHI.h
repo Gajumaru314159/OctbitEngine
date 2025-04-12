@@ -128,7 +128,7 @@ namespace ob::rhi::vulkan {
 		TextureUploader& getTextureUploader() { return *m_textureUploader; }
 
 		VkMemoryAllocateInfo getAllocationInfo(vk::MemoryRequirements requirements, vk::MemoryPropertyFlags requestProps) {
-			uint32_t memoryTypeIndex;
+			uint32_t memoryTypeIndex = (uint32_t)(-1);
 			auto requestBits = requirements.memoryTypeBits;
 			for (uint32_t i = 0; i < m_memoryProperties.memoryTypeCount; ++i)
 			{
@@ -141,6 +141,10 @@ namespace ob::rhi::vulkan {
 					}
 				}
 				requestBits >>= 1;
+			}
+
+			if (memoryTypeIndex == (uint32_t)(-1)) {
+				throw Exception("Invalid Memory Requirements");
 			}
 
 			VkMemoryAllocateInfo allocInfo = {};

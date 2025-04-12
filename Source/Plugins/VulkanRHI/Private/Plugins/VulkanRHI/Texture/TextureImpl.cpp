@@ -53,6 +53,9 @@ namespace ob::rhi::vulkan {
 		case TextureFormat::RGBA16:         return vk::Format::eR16G16B16A16Sfloat;
 		case TextureFormat::RGBA8:          return vk::Format::eR8G8B8A8Unorm;
 
+		case TextureFormat::RGBA8_SRGB:     return vk::Format::eR8G8B8A8Srgb;
+
+
 		case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
 		case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
 
@@ -95,7 +98,7 @@ namespace ob::rhi::vulkan {
 		info.format = Convert(format);
 		info.extent = vk::Extent3D{(u32)size.width,(u32)size.height,(u32)size.depth};
 		info.mipLevels = std::max(mipLevel,1);
-		info.arrayLayers =arrayNum;
+		info.arrayLayers =std::max(arrayNum,1);
 		info.samples = vk::SampleCountFlagBits::e1;
 		info.tiling = vk::ImageTiling::eOptimal;
 		info.usage = vk::ImageUsageFlags{} | vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled;
@@ -140,7 +143,7 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 		// バリデート
-		if (IsInvalid(m_desc)) return;
+		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
 
 		auto& device = m_rhi.getDevice();
 
@@ -174,7 +177,7 @@ namespace ob::rhi::vulkan {
 		m_desc.mipLevels = 1;
 
 		// バリデート
-		if (IsInvalid(m_desc)) return;
+		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
 
 		if (std::max(size.width, 1) * std::max(size.height, 1) * std::max(size.depth, 1) != colors.size()) {
 			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size={}, name={}]", size, name);
@@ -228,15 +231,79 @@ namespace ob::rhi::vulkan {
 		m_desc.mipLevels = 1;
 
 		// バリデート
-		if (IsInvalid(m_desc)) return;
+		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
+
+		if(TextureFormatUtility::IsBC(m_desc.format) || m_desc.format == TextureFormat::RGB32 || m_desc.format == TextureFormat::RGB8 || m_desc.format == TextureFormat::Unknown) {
+			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
+			throw Exception("Unsupported Foramt");
+		}
+
+		auto& device = m_rhi.getDevice();
+
+		const bool isColor = !TextureFormatUtility::HasDepth(m_renderDesc.format);
+		const bool isDepth = !isColor;
+
+
+		// 定義生成
+		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
+		if (isColor) {
+			info.usage |= vk::ImageUsageFlagBits::eColorAttachment;
+		}
+		if (isDepth) {
+			info.usage |= vk::ImageUsageFlagBits::eDepthStencilAttachment;
+		}
+
+		auto info2 = (VkImageCreateInfo)info;
+
+		// リソース生成
+		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
+
+		auto requirements = m_image.getMemoryRequirements();
+
+		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+
+		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_image.bindMemory(m_memory, 0);
+
+
+		// View
+		vk::ImageViewCreateInfo viewCreateInfo;
+		viewCreateInfo.viewType = vk::ImageViewType::e2D;
+		viewCreateInfo.format = info.format;
+		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
+		viewCreateInfo.subresourceRange.levelCount = 1;
+		viewCreateInfo.subresourceRange.layerCount = 1;
+		viewCreateInfo.image = m_image;
+
+		if (isColor) {
+			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+			m_hRTV = device.createImageView(viewCreateInfo);
+		}
+		if (isDepth) {
+			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
+			m_hDSV = device.createImageView(viewCreateInfo);
+		}
 
 	}
 
 
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	TextureImpl::TextureImpl(VulkanRHI& rhi, VkImage view,StringView name)
+	TextureImpl::TextureImpl(VulkanRHI& rhi, VkImage image, vk::Format format,StringView name)
 		: m_rhi(rhi)
 	{
+		auto& device = m_rhi.getDevice();
+
+		// View
+		vk::ImageViewCreateInfo viewCreateInfo;
+		viewCreateInfo.viewType = vk::ImageViewType::e2D;
+		viewCreateInfo.format = format;
+		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
+		viewCreateInfo.subresourceRange.levelCount = 1;
+		viewCreateInfo.subresourceRange.layerCount = 1;
+		viewCreateInfo.image = image;
+		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+		m_hRTV = device.createImageView(viewCreateInfo);
 
 	}
 

@@ -22,6 +22,9 @@
 		} catch (const vk::Error& error) {\
 			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", #type,error.what());\
 			return nullptr;\
+		} catch (const std::exception& error) {\
+			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", #type,error.what());\
+			return nullptr;\
 		}
 
 namespace ob::rhi::vulkan {
@@ -438,7 +441,9 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  テクスチャを生成
-	Ref<Texture> VulkanRHI::createTexture(const TextureDesc& desc) { return {}; }
+	Ref<Texture> VulkanRHI::createTexture(const TextureDesc& desc) {
+		SAFE_CREATE(Texture, TextureImpl, *this, desc);
+	}
 
 
 	Ref<Texture> VulkanRHI::createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { 
@@ -447,11 +452,15 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  テクスチャを生成
-	Ref<Texture> VulkanRHI::createTexture(StringView name, BlobView blob) { return {}; }
+	Ref<Texture> VulkanRHI::createTexture(StringView name, BlobView blob) {
+		SAFE_CREATE(Texture, TextureImpl, *this, name, blob);
+	}
 
 
 	//! @brief  レンダーテクスチャを生成
-	Ref<RenderTexture> VulkanRHI::createRenderTexture(const RenderTextureDesc& desc) { return {}; }
+	Ref<RenderTexture> VulkanRHI::createRenderTexture(const RenderTextureDesc& desc) {
+		SAFE_CREATE(Texture, TextureImpl, *this, desc);
+	}
 
 
 	//! @brief  サンプラーを生成
