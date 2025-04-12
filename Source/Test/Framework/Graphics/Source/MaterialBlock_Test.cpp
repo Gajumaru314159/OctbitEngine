@@ -210,7 +210,7 @@ PsOut PS_Main(PsIn i){
 
 	while (true) {
 
-		if (System::Update() == false)break;
+		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start,DateTime::Now()).totalSecondsF();
 
@@ -472,7 +472,7 @@ PsOut PS_Main(PsIn i){
 
 	while (true) {
 
-		if (System::Update() == false) break;
+		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 
@@ -755,7 +755,7 @@ PsOut PS_Main(PsIn i){
 
 	while (true) {
 
-		if (System::Update() == false) break;
+		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 

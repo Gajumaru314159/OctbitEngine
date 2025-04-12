@@ -167,7 +167,7 @@ TEST(Bindless, Handle) {
 
 	while (true) {
 
-		if (System::Update() == false) break;
+		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 
