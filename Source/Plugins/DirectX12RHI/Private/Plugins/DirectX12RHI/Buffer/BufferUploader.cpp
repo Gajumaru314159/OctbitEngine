@@ -174,6 +174,7 @@ namespace ob::rhi::dx12
 
 		// バッファを縮小
 		frame.clear();
+		m_entriedResources.clear();
 
 		::PIXEndEvent(&commandList);
 
