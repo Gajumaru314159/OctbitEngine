@@ -34,10 +34,71 @@ namespace ob::rhi::vulkan {
 			return;
 		}
 
+		FixedVector<vk::PipelineShaderStageCreateInfo, 8> stages;
 
-		VkGraphicsPipelineCreateInfo info{};
+		if (auto shader = desc.vs.cast<ShaderImpl>()) {
+			auto& stage = stages.emplace_back();
+			stage.flags = vk::PipelineShaderStageCreateFlags{};
+			stage.stage = vk::ShaderStageFlagBits::eVertex;
+			stage.module = shader->getModule();
+			stage.pName = Shader::GetEntryName(ShaderStage::Vertex);
+		}
+		if (auto shader = desc.vs.cast<ShaderImpl>()) {
+			auto& stage = stages.emplace_back();
+			stage.flags = vk::PipelineShaderStageCreateFlags{};
+			stage.stage = vk::ShaderStageFlagBits::eFragment;
+			stage.module = shader->getModule();
+			stage.pName = Shader::GetEntryName(ShaderStage::Pixel);
+		}
+		// TODO 他ステージの対応
+
+		vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
 
+		vk::PipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
+
+
+		vk::PipelineTessellationStateCreateInfo tessellationInfo;
+
+
+		vk::PipelineViewportStateCreateInfo viewportInfo;
+
+
+		vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
+
+
+		vk::PipelineMultisampleStateCreateInfo multisampleInfo;
+
+
+		vk::PipelineDepthStencilStateCreateInfo depthStencilInfo;
+
+
+		vk::PipelineColorBlendStateCreateInfo colorBlendInfo;
+
+
+		vk::PipelineDynamicStateCreateInfo dynamicStateInfo;
+
+
+
+
+		vk::GraphicsPipelineCreateInfo info;
+		info.flags = vk::PipelineCreateFlagBits{};
+		info.stageCount = stages.size();
+		info.pStages = stages.data();
+		info.pVertexInputState = &vertexInputInfo;
+		info.pInputAssemblyState = &inputAssemblyInfo;
+		info.pTessellationState = &tessellationInfo;
+		info.pViewportState = &viewportInfo;
+		info.pRasterizationState = &rasterizationInfo;
+		info.pMultisampleState = &multisampleInfo;
+		info.pDepthStencilState = &depthStencilInfo;
+		info.pColorBlendState = &colorBlendInfo;
+		info.pDynamicState = &dynamicStateInfo;
+		info.layout = desc.rootSignature.cast<RootSignatureImpl>()->getNative();
+		info.renderPass;
+		info.subpass;
+		info.basePipelineHandle;
+		info.basePipelineIndex;
 		//vkCreateGraphicsPipelines(,,1,)
 
 	}

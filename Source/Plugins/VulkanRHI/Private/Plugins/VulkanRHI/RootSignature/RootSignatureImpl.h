@@ -38,7 +38,12 @@ namespace ob::rhi::vulkan {
         //! @brief  定義を取得
         const BindingLayoutDesc& getDesc()const noexcept override;
 
+    public:
 
+		vk::PipelineLayout getNative() const noexcept
+		{
+			return *m_pipelineLayout;
+		}
 
 
     private:

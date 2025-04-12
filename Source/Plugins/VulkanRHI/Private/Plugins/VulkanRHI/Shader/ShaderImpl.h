@@ -65,6 +65,11 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         void compile(const StringBase<char>& blob,ShaderStage stage);
 
+
+		vk::ShaderModule getModule()const {
+			return m_shaderModule;
+		}
+
     private:
 
         void createShaderModule(BlobView blob, ShaderStage stage);
