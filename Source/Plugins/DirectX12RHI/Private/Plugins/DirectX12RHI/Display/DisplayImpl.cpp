@@ -228,11 +228,11 @@ namespace ob::rhi::dx12 {
 
 		Ref<RootSignature> signature;
 		{
-			BindingLayoutDesc desc(
+			BindingLayoutDesc desc{
 				{
 					Binding::Texture(),
 				}
-			);
+			};
 			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = m_desc.name;
 			signature = RootSignature::Create(desc);
