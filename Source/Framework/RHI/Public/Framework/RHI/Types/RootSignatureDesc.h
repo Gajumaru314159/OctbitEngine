@@ -67,6 +67,14 @@ namespace ob::rhi {
 		//! @brief      コンストラクタ(DescriptorTable)
 		RootConstantsDesc(u32 size,u32 registerNo, u32 registerSpace=0)
 			:size(size),registerNo(registerNo), registerSpace(registerSpace) {}
+
+
+		RootConstantsDesc& set(u32 size, u32 registerNo, u32 registerSpace = 0) {
+			this->size = size;
+			this->registerNo = registerNo;
+			this->registerSpace = registerSpace;
+			return *this;
+		}
 	};
 
 	//! @brief      スタティックサンプラー定義
@@ -123,7 +131,6 @@ namespace ob::rhi {
 		BindingLayoutDesc() = default;
 		BindingLayoutDesc(Vector<BindingSlot> slots) : slots(slots) {}
 		BindingLayoutDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
-		BindingLayoutDesc(std::initializer_list<BindingItem> items) : slots({ items }) {}
 	};
 
 	//! @brief      BindingItem定義のユーティリティ
