@@ -45,7 +45,7 @@ namespace ob::core {
 
 		//! @brief  構築
 		template<typename ...Args>
-		void construct(Args&&... args) {
+		auto construct(Args&&... args) -> std::enable_if_t<std::is_constructible<T,Args...>::value,void> {
 			static_assert(sizeof(T) <= SIZE);
 			if (!m_constructed) {
 				new(m_data) T(std::forward<Args>(args)...);
