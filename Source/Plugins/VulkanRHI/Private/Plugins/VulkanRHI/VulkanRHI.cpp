@@ -336,6 +336,9 @@ namespace ob::rhi::vulkan {
 		OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
 
 		extensionNames.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+		extensionNames.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
+		extensionNames.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
+		extensionNames.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
 		//OB_DEBUG_CONTEXT(layerNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME));
 
 		// TODO
@@ -377,6 +380,11 @@ namespace ob::rhi::vulkan {
 		info.enabledLayerCount = (uint32_t)layerNames.size();
 		info.ppEnabledLayerNames = layerNames.data();
 		info.pEnabledFeatures = nullptr;
+
+		// Dynamic Rendering機能を有効にするための構造体
+		vk::PhysicalDeviceDynamicRenderingFeaturesKHR dynamicRenderingFeatures{};
+		dynamicRenderingFeatures.dynamicRendering = true;
+		info.pNext = &dynamicRenderingFeatures;
 
 		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
 

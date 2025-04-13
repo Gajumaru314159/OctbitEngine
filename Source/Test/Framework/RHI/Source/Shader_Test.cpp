@@ -8,7 +8,7 @@
 
 class ShaderTest : public RHITestBase {};
 
-const char* s_code =
+static const char* s_code =
 R"(
     // Vertex Shader
     struct VSInput {

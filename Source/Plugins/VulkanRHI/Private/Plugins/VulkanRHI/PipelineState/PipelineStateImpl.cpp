@@ -165,6 +165,52 @@ namespace ob::rhi::vulkan {
 		return result;
 	}
 
+	// TODO 複数ファイルで使用するので、共通化する
+	vk::Format Convert2(TextureFormat value) {
+		switch (value) {
+		case TextureFormat::RGBA32:         return vk::Format::eR32G32B32A32Sfloat;
+		case TextureFormat::RGBA16:         return vk::Format::eR16G16B16A16Sfloat;
+		case TextureFormat::RGBA8:          return vk::Format::eR8G8B8A8Unorm;
+
+		case TextureFormat::RGBA8_SRGB:     return vk::Format::eR8G8B8A8Srgb;
+
+
+			// case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
+			// case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
+
+		case TextureFormat::RG32:           return vk::Format::eR32G32Sfloat;
+		case TextureFormat::RG16:           return vk::Format::eR16G16Sfloat;
+		case TextureFormat::RG8:            return vk::Format::eR8G8Unorm;
+
+		case TextureFormat::R32:            return vk::Format::eR32Sfloat;
+		case TextureFormat::R16:            return vk::Format::eR16Sfloat;
+		case TextureFormat::R8:             return vk::Format::eR8Unorm;
+
+		case TextureFormat::R10G10B10A2:    return vk::Format::eA2R10G10B10UnormPack32;
+
+		case TextureFormat::D32S8:          return vk::Format::eD32SfloatS8Uint;
+		case TextureFormat::D32:            return vk::Format::eD32Sfloat;
+		case TextureFormat::D24S8:          return vk::Format::eD24UnormS8Uint;
+		case TextureFormat::D16:            return vk::Format::eD16Unorm;
+
+		case TextureFormat::BC1:            return vk::Format::eBc1RgbaUnormBlock;
+		case TextureFormat::BC2:            return vk::Format::eBc2UnormBlock;
+		case TextureFormat::BC3:            return vk::Format::eBc3UnormBlock;
+		case TextureFormat::BC4:            return vk::Format::eBc4UnormBlock;
+		case TextureFormat::BC5:            return vk::Format::eBc5UnormBlock;
+		case TextureFormat::BC6H:           return vk::Format::eBc6HSfloatBlock;
+		case TextureFormat::BC7:            return vk::Format::eBc7UnormBlock;
+
+		case TextureFormat::BC1_SRGB:       return vk::Format::eBc1RgbaSrgbBlock;
+		case TextureFormat::BC2_SRGB:       return vk::Format::eBc2SrgbBlock;
+		case TextureFormat::BC3_SRGB:       return vk::Format::eBc3SrgbBlock;
+		case TextureFormat::BC7_SRGB:       return vk::Format::eBc7SrgbBlock;
+		}
+
+		LOG_WARNING_EX("Graphic", "不正なTextureFormat[value={}]", enum_cast(value));
+		return vk::Format::eUndefined;
+	}
+
 
 	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
@@ -202,7 +248,7 @@ namespace ob::rhi::vulkan {
 			stage.module = shader->getNative();
 			stage.pName = Shader::GetEntryName(ShaderStage::Vertex);
 		}
-		if (auto shader = desc.vs.cast<ShaderImpl>()) {
+		if (auto shader = desc.ps.cast<ShaderImpl>()) {
 			auto& stage = stages.emplace_back();
 			stage.flags = vk::PipelineShaderStageCreateFlags{};
 			stage.stage = vk::ShaderStageFlagBits::eFragment;
@@ -222,9 +268,11 @@ namespace ob::rhi::vulkan {
 
 			if (attribute.inputRate == VertexInputRate::Vertex) {
 				attr.location = vertexLocation++;
+				attr.offset = attr.offset;
 			}
 			else if (attribute.inputRate == VertexInputRate::Instance) {
 				attr.location = instanceLocation++;
+				attr.offset = attr.offset;
 			}
         }
 		{
@@ -251,23 +299,20 @@ namespace ob::rhi::vulkan {
         inputAssemblyInfo.topology = Convert(desc.topology);
         inputAssemblyInfo.primitiveRestartEnable = false;
 
-		// vk::PipelineTessellationStateCreateInfo tessellationInfo;
-		// tessellationInfo.patchControlPoints = 3;
+		vk::PipelineTessellationStateCreateInfo tessellationInfo;
 
-
-		// vk::Viewport viewport;
-		// vk::Rect2D scissor;
-		// vk::PipelineViewportStateCreateInfo viewportInfo;
-		// viewportInfo.viewportCount = 1;
-		// viewportInfo.scissorCount = 1;
-		// viewportInfo.pViewports = nullptr;
-		// viewportInfo.pScissors = nullptr;
-
+		vk::Viewport viewport[8];
+		vk::Rect2D scissor[8];
+		vk::PipelineViewportStateCreateInfo viewportInfo;
+		viewportInfo.viewportCount = desc.colors.size();
+		viewportInfo.scissorCount = desc.colors.size();
+		viewportInfo.pViewports = viewport;
+		viewportInfo.pScissors = scissor;
 
 		vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
 		rasterizationInfo.flags = vk::PipelineRasterizationStateCreateFlags{};
         rasterizationInfo.depthClampEnable = false; // TODO 確認
-        rasterizationInfo.rasterizerDiscardEnable = true; // Maskedの時だけtrueにしたい
+        rasterizationInfo.rasterizerDiscardEnable = false;
 		rasterizationInfo.polygonMode = Convert(desc.rasterizer.fillMode);
         rasterizationInfo.cullMode = Convert(desc.rasterizer.cullMode);
         rasterizationInfo.frontFace = vk::FrontFace::eClockwise;
@@ -313,7 +358,7 @@ namespace ob::rhi::vulkan {
         colorBlendInfo.logicOpEnable = VK_FALSE;
         colorBlendInfo.logicOp = vk::LogicOp::eCopy;
         colorBlendInfo.attachmentCount = static_cast<uint32_t>(desc.colors.size());
-        colorBlendInfo.pAttachments = nullptr; // TODO: Provide blend attachment states
+        colorBlendInfo.pAttachments = blendAttachments.data();
         colorBlendInfo.blendConstants[0] = 0.0f;
         colorBlendInfo.blendConstants[1] = 0.0f;
         colorBlendInfo.blendConstants[2] = 0.0f;
@@ -336,8 +381,8 @@ namespace ob::rhi::vulkan {
 		info.pStages = stages.data();
 		info.pVertexInputState = &vertexInputInfo;
 		info.pInputAssemblyState = &inputAssemblyInfo;
-		info.pTessellationState = nullptr;// &tessellationInfo;
-		info.pViewportState = nullptr;// &viewportInfo;
+		info.pTessellationState = &tessellationInfo;
+		info.pViewportState = &viewportInfo;
 		info.pRasterizationState = &rasterizationInfo;
 		info.pMultisampleState = &multisampleInfo;
 		info.pDepthStencilState = &depthStencilInfo;
@@ -348,6 +393,17 @@ namespace ob::rhi::vulkan {
 		info.subpass;
 		info.basePipelineHandle;
 		info.basePipelineIndex;
+
+		vk::PipelineRenderingCreateInfo renderingInfo;
+		FixedVector<vk::Format, 8> colorFormats;
+		for (auto& color : desc.colors) {
+			colorFormats.emplace_back(Convert2(color));
+		}
+		if (desc.depth) {
+			renderingInfo.setDepthAttachmentFormat(Convert2(desc.depth.value()));
+		}
+		renderingInfo.setColorAttachmentFormats(colorFormats);
+		info.pNext = &renderingInfo;
 
 		m_pipeline = device.createGraphicsPipeline(nullptr,info,rhi.getAllocationCallbacks());
 
