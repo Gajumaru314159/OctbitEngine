@@ -77,15 +77,13 @@ namespace ob::core {
 		}
 
 		//! @brief OR結合演算子
-		BitFlags<TEnum>& operator|(TEnum value) {
-			m_bits |= static_cast<TBitsType>(value);
-			return *this;
+		BitFlags<TEnum> operator|(TEnum value) {			
+			return BitFlags<TEnum>(m_bits | static_cast<TBitsType>(value));
 		}
 
 		//! @brief OR結合演算子
-		bool operator&(TEnum value) const {
-			m_bits &= static_cast<TBitsType>(value);
-			return m_bits;
+		BitFlags<TEnum> operator&(TEnum value) const {
+			return BitFlags<TEnum>(m_bits & static_cast<TBitsType>(value));
 		}
 
 		//! @brief			指定されたフラグが設定されているか確認する
