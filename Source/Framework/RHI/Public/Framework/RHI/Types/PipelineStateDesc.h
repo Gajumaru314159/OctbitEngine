@@ -48,6 +48,11 @@ namespace ob::rhi {
 		PointSize,		//!< ポイントサイズ
 	};
 
+	enum class VertexInputRate : u32 {
+		Vertex,			//!< 頂点ごと
+		Instance,		//!< インスタンスごと
+	};
+
 #pragma endregion
 
 #pragma region Sub Structure
@@ -61,6 +66,7 @@ namespace ob::rhi {
 		ElementType	type;		//!< コンポーネント型
 		s32			dimention;	//!< 次元数
 		s32			index;		//!< セマンティクス内インデックス
+		VertexInputRate inputRate = VertexInputRate::Vertex;	//!< 頂点ごとかインスタンスごとか
 
 	public:
 
@@ -79,7 +85,9 @@ namespace ob::rhi {
 
 	//! @brief  頂点レイアウト
 	struct VertexLayout {
-		VertexAttributeArray attributes;	//!< 属性リスト
+		VertexAttributeArray attributes;			//!< 属性リスト
+		s32					 vertexStride = 0;		//!< ストライド幅
+		s32					 instanceStride = 0;	//!< ストライド幅
 	};
 
 

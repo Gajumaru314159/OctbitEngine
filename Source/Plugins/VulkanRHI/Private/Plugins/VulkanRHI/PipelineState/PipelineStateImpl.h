@@ -28,7 +28,7 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         //! @brief		コンストラクタ
         //@―---------------------------------------------------------------------------
-        PipelineStateImpl(const PipelineStateDesc& desc);
+        PipelineStateImpl(VulkanRHI& rhi, const PipelineStateDesc& desc);
 
 
         //@―---------------------------------------------------------------------------

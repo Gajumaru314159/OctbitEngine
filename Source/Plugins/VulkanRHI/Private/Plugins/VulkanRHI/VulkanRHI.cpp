@@ -436,7 +436,7 @@ namespace ob::rhi::vulkan {
 
 	//! @brief  パイプラインステートを生成
 	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
-		SAFE_CREATE(PipelineState, PipelineStateImpl, desc);
+		SAFE_CREATE(PipelineState, PipelineStateImpl,*this, desc);
 	}
 
 

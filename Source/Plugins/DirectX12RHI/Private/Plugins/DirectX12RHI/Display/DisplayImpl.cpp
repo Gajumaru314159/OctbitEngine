@@ -251,6 +251,7 @@ namespace ob::rhi::dx12 {
 			desc.vertexLayout.attributes = {
 				VertexAttribute(Semantic::Position,0,ElementType::Float,2),
 			};
+			desc.vertexLayout.vertexStride = sizeof(Vec2);
 			desc.blend[0] = BlendDesc::AlphaBlend;
 			desc.rasterizer.cullMode = CullMode::None;
 			desc.depthStencil.depth.enable = false;

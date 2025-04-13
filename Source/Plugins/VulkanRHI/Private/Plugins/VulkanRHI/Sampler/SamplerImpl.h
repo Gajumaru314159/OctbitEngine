@@ -12,13 +12,14 @@ namespace ob::rhi::vulkan {
     class SamplerImpl :public Sampler {
     public:
 
-        SamplerImpl(const SamplerDesc& desc);
+        SamplerImpl(VulkanRHI& rhi,const SamplerDesc& desc);
 
         //! @brief      名前を取得
         const String& getName()const override { return m_name; }
 
     private:
         String m_name;
+		vk::raii::Sampler m_sampler = nullptr;
     };
 
 }
