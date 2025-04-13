@@ -22,6 +22,12 @@ namespace ob::rhi::vulkan {
 		bool enableDebugLayer = true;
 	};
 
+
+	struct VulkanFeatureInfo {
+
+	};
+
+
 	class VulkanRHI :public RHI {
 	public:
 
@@ -63,7 +69,7 @@ namespace ob::rhi::vulkan {
 
 
 		//! @brief  ルートシグネチャを生成
-		Ref<RootSignature> createRootSignature(const BindingLayoutDesc& desc) override;
+		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc) override;
 
 
 		//! @brief  パイプラインステートを生成
@@ -124,6 +130,17 @@ namespace ob::rhi::vulkan {
 
 	public:
 
+		//! @brief サポートしているテクスチャフォーマットか 
+		bool supports(TextureFormat format)const override;
+
+		//! @brief サポートしているシェーダーステージか 
+		bool supports(ShaderStage format)const override;
+
+	public:
+
+		const vk::PhysicalDeviceLimits& getLimits() const { return m_limits; }
+		const vk::PhysicalDeviceFeatures& getFeatures() const { return m_features; }
+
 		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
 		TextureUploader& getTextureUploader() { return *m_textureUploader; }
 
@@ -165,6 +182,14 @@ namespace ob::rhi::vulkan {
 
 		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
 
+#ifdef OS_WINDOWS
+		//! @brief  シェーダーコンパイラ―を取得
+		ComPtr<IDxcCompiler3>& getShaderCompiler() { return m_shaderCompiler; }
+
+		//! @brief  シェーダーインクルードハンドラーを取得
+		ComPtr<IDxcIncludeHandler>& getIncludeHandler() { return m_shaderIncludeHandler; }
+#endif
+
 	private:
 
 		void createInstance();
@@ -172,6 +197,7 @@ namespace ob::rhi::vulkan {
 		void createDevice();
 		void createQueue();
 		void createUploaders();
+		void createShaderCompiler();
 
 	private:
 
@@ -186,6 +212,12 @@ namespace ob::rhi::vulkan {
 		vk::raii::Device							m_device		= nullptr;
 		vk::raii::Queue								m_queue				= nullptr;
 
+#ifdef OS_WINDOWS
+		ComPtr<IDxcCompiler3>				m_shaderCompiler;
+		ComPtr<IDxcUtils>					m_shaderUtils;
+		ComPtr<IDxcIncludeHandler>			m_shaderIncludeHandler;
+#endif
+
 		vk::PhysicalDeviceMemoryProperties			m_memoryProperties;
 
 		u32											m_queueFamilyIndex;
@@ -193,6 +225,9 @@ namespace ob::rhi::vulkan {
 
 		UPtr<BufferUploader> m_bufferUploader;
 		UPtr<TextureUploader> m_textureUploader;
+
+		vk::PhysicalDeviceFeatures				m_features;
+		vk::PhysicalDeviceLimits				m_limits;
 
 	};
 }

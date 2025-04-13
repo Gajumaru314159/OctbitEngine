@@ -34,6 +34,10 @@ TEST_F(RenderTextureTest, Create) {
                 ASSERT_EQ(renderTexture, nullptr);
                 continue;
             }
+            if (format == TextureFormat::RGB8) {
+                ASSERT_EQ(renderTexture, nullptr);
+                continue;
+            }
             if (format == TextureFormat::D24S8) {
                 // Tier次第で生成に失敗するので除外
                 //ASSERT_EQ(renderTexture, nullptr);
@@ -49,7 +53,7 @@ TEST_F(RenderTextureTest, Create) {
                 continue;
             }
 
-            //if (!renderTexture)CallBreakPoint();
+            if (!renderTexture)CallBreakPoint();
 			ASSERT_NE(renderTexture, nullptr);
 
             ASSERT_EQ(renderTexture->descOfRenderTexture().format, format);

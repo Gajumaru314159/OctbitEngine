@@ -33,18 +33,23 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  コンストラクタ
-	RootSignatureImpl::RootSignatureImpl(VulkanRHI& rhi, const BindingLayoutDesc& desc)
+	RootSignatureImpl::RootSignatureImpl(VulkanRHI& rhi, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		m_desc.normalize();
 
 		auto& device = rhi.getDevice();
 
+		m_layouts.reserve(m_desc.slots.size());
+
 		FixedVector<vk::DescriptorSetLayout,32> layouts;		
 
-		for (auto& slot : desc.slots) {
+		for (auto& slot : m_desc.slots) {
 
 			FixedVector<vk::DescriptorSetLayoutBinding, 32> bindings;
+
+			s32 resourceCount = 0;
+			s32 samplerCount = 0;
 
 			for (auto& item : slot.items) {
 
@@ -55,26 +60,33 @@ namespace ob::rhi::vulkan {
 				binding.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
 				binding.pImmutableSamplers = nullptr;
 
+				if (item.type != BindingType::Sampler) resourceCount++;
+				if (item.type == BindingType::Sampler) samplerCount++;
+
+			}
+
+			if (0 < resourceCount && 0 < samplerCount) {
+				throw Exception("BindingSlot内にSamplerとそれ以外を混在させることはできません");
 			}
 
 			vk::DescriptorSetLayoutCreateInfo info;
 			info.setBindings(bindings);
 
 			m_layouts.push_back(device.createDescriptorSetLayout(info, rhi.getAllocationCallbacks()));
-			layouts.push_back(m_layouts.back());
+			layouts.push_back(*m_layouts.back());
 
 		}
 
 		vk::PushConstantRange pushConstantRange;
 		pushConstantRange.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
 		pushConstantRange.offset = 0;
-		pushConstantRange.size = desc.constants.size;
+		pushConstantRange.size = m_desc.constants.size;
 
 		vk::PipelineLayoutCreateInfo createInfo;
 		createInfo.setLayoutCount = (u32)layouts.size();
-		createInfo.pSetLayouts = layouts.data();
-		createInfo.pushConstantRangeCount = 1;
+		createInfo.pSetLayouts = layouts.empty() ? nullptr : layouts.data();
 		if (0 < m_desc.constants.size) {
+			createInfo.pushConstantRangeCount = 1;
 			createInfo.pPushConstantRanges = &pushConstantRange;
 		}
 
@@ -94,7 +106,7 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  定義を取得
-	const BindingLayoutDesc& RootSignatureImpl::getDesc()const noexcept {
+	const RootSignatureDesc& RootSignatureImpl::getDesc()const noexcept {
 		return m_desc;
 	}
 

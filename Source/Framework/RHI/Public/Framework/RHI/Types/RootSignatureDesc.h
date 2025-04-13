@@ -121,16 +121,16 @@ namespace ob::rhi {
 		BindingSlot(std::initializer_list<BindingItem> items) : items(items) {}
 	};
 
-	struct BindingLayoutDesc {
+	struct RootSignatureDesc {
 		String				name;		//!< 名前
 		Vector<BindingSlot> slots;		//!< バインディングスロット
 		StaticSamplerArray	samplers;	//!< 静的サンプラー
 		RootConstantsDesc	constants;	//!< ルートコンスタント
 		RootSignatureFlags	flags;		//!< フラグ
 
-		BindingLayoutDesc() = default;
-		BindingLayoutDesc(Vector<BindingSlot> slots) : slots(slots) {}
-		BindingLayoutDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
+		RootSignatureDesc() = default;
+		RootSignatureDesc(Vector<BindingSlot> slots) : slots(slots) {}
+		RootSignatureDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
 
 		void normalize() {
 			// インデックスを正規化

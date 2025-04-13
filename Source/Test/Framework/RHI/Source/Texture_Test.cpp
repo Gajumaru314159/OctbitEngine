@@ -22,7 +22,6 @@ TEST_F(TextureTest, Create) {
 
 		auto texture = Texture::Create(desc);
 
-		//if (!texture)CallBreakPoint();
         ASSERT_NE(texture, nullptr);
 
     }
@@ -36,7 +35,7 @@ TEST_F(TextureTest, Create) {
 
 		auto texture = Texture::Create(desc);
 
-		if (format == TextureFormat::Unknown) {
+		if (!Texture::Supports(format)) {
 			ASSERT_EQ(texture, nullptr);
 			continue;
 		}

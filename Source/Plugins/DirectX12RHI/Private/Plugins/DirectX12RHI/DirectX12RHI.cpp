@@ -103,7 +103,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  ルートシグネチャを生成
-	Ref<RootSignature> DirectX12RHI::createRootSignature(const BindingLayoutDesc& desc) {
+	Ref<RootSignature> DirectX12RHI::createRootSignature(const RootSignatureDesc& desc) {
 		SAFE_CREATE(RootSignature, RootSignatureImpl, *this, desc);
 	}
 
@@ -213,6 +213,20 @@ namespace ob::rhi::dx12 {
 	//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
 	Vector<GraphicFileMipInfo> DirectX12RHI::prepareGraphicFile(StringView path) {
 		return GraphicFileImpl::Prepare(path);
+	}
+
+	//! @brief サポートしているテクスチャフォーマットか 
+	bool DirectX12RHI::supports(TextureFormat format)const {
+		if (format == TextureFormat::Unknown) {
+			return false;
+		}
+
+		return true;
+	}
+
+	//! @brief サポートしているシェーダーステージか 
+	bool DirectX12RHI::supports(ShaderStage stage)const {
+		return true;
 	}
 
 	//! @brief  システム・コマンド・キューを取得

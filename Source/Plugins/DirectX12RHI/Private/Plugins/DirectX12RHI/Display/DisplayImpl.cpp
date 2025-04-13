@@ -228,7 +228,7 @@ namespace ob::rhi::dx12 {
 
 		Ref<RootSignature> signature;
 		{
-			BindingLayoutDesc desc{
+			RootSignatureDesc desc{
 				{
 					Binding::Texture(),
 				}

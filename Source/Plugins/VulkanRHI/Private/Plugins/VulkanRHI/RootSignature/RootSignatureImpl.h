@@ -20,7 +20,7 @@ namespace ob::rhi::vulkan {
         //===============================================================
 
         //! @brief  コンストラクタ
-        RootSignatureImpl(VulkanRHI& rhi,const BindingLayoutDesc& desc);
+        RootSignatureImpl(VulkanRHI& rhi,const RootSignatureDesc& desc);
 
 
         //! @brief  デストラクタ
@@ -36,7 +36,7 @@ namespace ob::rhi::vulkan {
         //===============================================================
 
         //! @brief  定義を取得
-        const BindingLayoutDesc& getDesc()const noexcept override;
+        const RootSignatureDesc& getDesc()const noexcept override;
 
     public:
 
@@ -48,7 +48,7 @@ namespace ob::rhi::vulkan {
 
     private:
 
-        BindingLayoutDesc m_desc;
+        RootSignatureDesc m_desc;
 
         Vector<vk::raii::DescriptorSetLayout> m_layouts;
 

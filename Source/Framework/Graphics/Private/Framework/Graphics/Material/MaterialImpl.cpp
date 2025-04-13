@@ -194,7 +194,7 @@ namespace ob::graphics {
 		Ref<RootSignature> signature = [&](){
 
 			// TODO テクスチャの複数枚対応
-			BindingLayoutDesc desc;
+			RootSignatureDesc desc;
 			desc.constants.set(16 * 2, 0);	// グローバルプロパティ(バッファ)
 			desc.name = "Common";
 

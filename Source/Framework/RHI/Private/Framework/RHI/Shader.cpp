@@ -75,4 +75,13 @@ namespace ob::rhi {
         return Shader::Load(binary, ShaderStage::Vertex);
     }
 
+
+    //! @brief          シェーダステージをサポートしているか
+    bool Shader::Supports(ShaderStage stage) {
+        if (auto rhi = RHI::Get()) {
+            return rhi->supports(stage);
+        }
+        return false;
+    }
+
 }

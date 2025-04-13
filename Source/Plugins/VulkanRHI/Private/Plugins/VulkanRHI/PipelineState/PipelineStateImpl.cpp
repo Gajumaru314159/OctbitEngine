@@ -199,14 +199,14 @@ namespace ob::rhi::vulkan {
 			auto& stage = stages.emplace_back();
 			stage.flags = vk::PipelineShaderStageCreateFlags{};
 			stage.stage = vk::ShaderStageFlagBits::eVertex;
-			stage.module = shader->getModule();
+			stage.module = shader->getNative();
 			stage.pName = Shader::GetEntryName(ShaderStage::Vertex);
 		}
 		if (auto shader = desc.vs.cast<ShaderImpl>()) {
 			auto& stage = stages.emplace_back();
 			stage.flags = vk::PipelineShaderStageCreateFlags{};
 			stage.stage = vk::ShaderStageFlagBits::eFragment;
-			stage.module = shader->getModule();
+			stage.module = shader->getNative();
 			stage.pName = Shader::GetEntryName(ShaderStage::Pixel);
 		}
 		// TODO 他ステージの対応

@@ -54,7 +54,7 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief  ルートシグネチャを生成
-		Ref<RootSignature> createRootSignature(const BindingLayoutDesc& desc)override;
+		Ref<RootSignature> createRootSignature(const RootSignatureDesc& desc)override;
 
 
 		//! @brief  パイプラインステートを生成
@@ -112,6 +112,14 @@ namespace ob::rhi::dx12 {
 
 		//! @brief  プラットフォームごとのGraphicFileから事前情報を取得
 		Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) override;
+
+	public:
+
+		//! @brief サポートしているテクスチャフォーマットか 
+		bool supports(TextureFormat format)const override;
+
+		//! @brief サポートしているシェーダーステージか 
+		bool supports(ShaderStage format)const override;
 
 	public:
 

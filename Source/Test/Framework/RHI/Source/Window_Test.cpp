@@ -144,7 +144,7 @@ PsOut PS_Main(PsIn i) {
 
 		Ref<RootSignature> signature;
 		{
-			BindingLayoutDesc desc{
+			RootSignatureDesc desc{
 				{
 					Binding::ConstantBuffer(),
 				}

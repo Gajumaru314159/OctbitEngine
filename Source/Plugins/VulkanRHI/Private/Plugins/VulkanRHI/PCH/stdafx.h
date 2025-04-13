@@ -27,3 +27,11 @@
 namespace ob::rhi::vulkan {
 	class VulkanRHI;
 }
+
+#ifdef OS_WINDOWS
+#pragma warning(disable:4100)
+#include <d3d12shader.h>
+#include <dxcapi.h>
+#include <wrl/client.h>
+using Microsoft::WRL::ComPtr;
+#endif

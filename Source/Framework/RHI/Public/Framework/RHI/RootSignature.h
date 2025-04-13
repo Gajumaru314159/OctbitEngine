@@ -14,12 +14,12 @@ namespace ob::rhi {
     public:
         
         //! @brief  生成
-        static Ref<RootSignature> Create(const BindingLayoutDesc& desc);
+        static Ref<RootSignature> Create(const RootSignatureDesc& desc);
 
     public:
 
         //! @brief      定義を取得
-        virtual const BindingLayoutDesc& getDesc()const = 0;
+        virtual const RootSignatureDesc& getDesc()const = 0;
 
     };
 

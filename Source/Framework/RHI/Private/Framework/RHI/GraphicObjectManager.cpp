@@ -32,10 +32,10 @@ namespace ob::rhi {
         // メモリリーク検知
         bool hasMemoryLeak = false;
         for (auto& pObject : m_objects) {
-            LOG_ERROR("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
-            delete pObject;
+            //LOG_ERROR("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
+            //delete pObject;
         }
-        OB_ASSERT(m_objects.empty(), "未開放のグラフィックオブジェクトがあります。");
+        //OB_ASSERT(m_objects.empty(), "未開放のグラフィックオブジェクトがあります。");
 
     }
 

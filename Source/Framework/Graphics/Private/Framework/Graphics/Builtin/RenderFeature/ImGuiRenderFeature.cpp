@@ -374,7 +374,7 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		{
-			BindingLayoutDesc desc = {
+			RootSignatureDesc desc = {
 				{
 					Binding::Texture(0)
 				},

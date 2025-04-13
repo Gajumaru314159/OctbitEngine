@@ -86,6 +86,10 @@ namespace ob::rhi {
         static Ref<Shader> LoadVS(BlobView binary);
         static Ref<Shader> LoadPS(BlobView binary);
         //! @}        
+        
+
+		//! @brief          シェーダステージをサポートしているか
+        static bool Supports(ShaderStage stage);
 
     public:
 

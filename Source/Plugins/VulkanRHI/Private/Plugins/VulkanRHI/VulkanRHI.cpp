@@ -10,9 +10,11 @@
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
 #include <Plugins/VulkanRHI/Command/CommandListImpl.h>
 #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
+#include <Plugins/VulkanRHI/Sampler/SamplerImpl.h>
 #include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/VulkanRHI/PipelineState/PipelineStateImpl.h>
 #include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
+#include <Framework/Core/Misc/ErrorCode.h>
 
 #include <Framework/Platform/Window.h>
 
@@ -157,6 +159,7 @@ namespace ob::rhi::vulkan {
 		createDevice();
 		createQueue();
 		createUploaders();
+		createShaderCompiler();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -312,6 +315,9 @@ namespace ob::rhi::vulkan {
 			return;
 		}
 
+		m_features = m_physicalDevice.getFeatures();
+		m_limits = m_physicalDevice.getProperties().limits;
+
 		m_memoryProperties = m_physicalDevice.getMemoryProperties();
 	}
 
@@ -400,6 +406,36 @@ namespace ob::rhi::vulkan {
 
 
 	//@―---------------------------------------------------------------------------
+	//! @brief  ShaderCompiler生成
+	//@―---------------------------------------------------------------------------
+	void VulkanRHI::createShaderCompiler() {
+#ifdef OS_WINDOWS
+
+		HRESULT result;
+
+		result = ::DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&m_shaderCompiler));
+		if (FAILED(result)) {
+			LOG_ERROR("DxcCreateInstance() {}",ErrorCode(result));
+			return;
+		}
+
+		result = ::DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&m_shaderUtils));
+		if (FAILED(result)) {
+			LOG_ERROR("DxcCreateInstance() {}", ErrorCode(result));
+			return;
+		}
+
+		// NOTE FileIOをフックする場合は、IDxcIncludeHandlerを継承したカスタムハンドラーを生成する
+		result = m_shaderUtils->CreateDefaultIncludeHandler(m_shaderIncludeHandler.GetAddressOf());
+		if (FAILED(result)) {
+			LOG_ERROR("CreateDefaultIncludeHandler() {}", ErrorCode(result));
+			return;
+		}
+#endif
+	}
+
+
+	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::entryCommandList(const CommandList& commandList) {
@@ -429,7 +465,7 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  ルートシグネチャを生成
-	Ref<RootSignature> VulkanRHI::createRootSignature(const BindingLayoutDesc& desc) {
+	Ref<RootSignature> VulkanRHI::createRootSignature(const RootSignatureDesc& desc) {
 		SAFE_CREATE(RootSignature, RootSignatureImpl, *this,desc);
 	}
 
@@ -464,7 +500,9 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  サンプラーを生成
-	Ref<Sampler> VulkanRHI::createSampler(const SamplerDesc& desc) { return {}; }
+	Ref<Sampler> VulkanRHI::createSampler(const SamplerDesc& desc) { 
+		SAFE_CREATE(Sampler, SamplerImpl, *this, desc);
+	}
 
 
 	//! @brief  バッファーを生成
@@ -474,7 +512,13 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  シェーダをコンパイル
-	Ref<Shader> VulkanRHI::compileShader(const ShaderCompileDesc& desc) { return {}; }
+	Ref<Shader> VulkanRHI::compileShader(const ShaderCompileDesc& desc) { 
+		if (!supports(desc.stage)) {
+			LOG_ERROR("非対応のShaderStageです。Shader::Supports()でサポート状況を確認してください。");
+			return nullptr;
+		}
+		SAFE_CREATE(Shader, ShaderImpl, *this, desc);
+	}
 
 
 	//! @brief  シェーダをロード
@@ -484,5 +528,41 @@ namespace ob::rhi::vulkan {
 	//! @brief  デスクリプタ・テーブルを生成
 	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { return {}; }
 	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return {}; }
+
+
+	//! @brief サポートしているテクスチャフォーマットか 
+	bool VulkanRHI::supports(TextureFormat format)const {
+
+		if (format == TextureFormat::Unknown) {
+			return false;
+		}
+
+		if (m_features.textureCompressionBC == false && TextureFormatUtility::IsBC(format)) {
+			return false;
+		}
+
+		switch (format)
+		{
+		case ob::rhi::TextureFormat::RGB32:
+		case ob::rhi::TextureFormat::RGB8:
+			return false;
+		}
+
+		return true;
+	}
+	//! @brief サポートしているシェーダーステージか
+	bool VulkanRHI::supports(ShaderStage stage)const {
+		if (stage == ShaderStage::Hull && m_features.tessellationShader) {
+			return false;
+		}
+		if (stage == ShaderStage::Domain && m_features.tessellationShader) {
+			return false;
+		}
+		if (stage == ShaderStage::Geometry && m_features.geometryShader) {
+			return false;
+		}
+
+		return true;
+	}
 
 }

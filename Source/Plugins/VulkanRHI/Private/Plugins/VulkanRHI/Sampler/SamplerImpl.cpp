@@ -72,6 +72,11 @@ namespace ob::rhi::vulkan {
 		info.borderColor = vk::BorderColor::eFloatOpaqueBlack;
 		info.unnormalizedCoordinates = false;
 
+		if (rhi.getFeatures().samplerAnisotropy == false && info.anisotropyEnable) {
+			info.anisotropyEnable = false;
+			info.maxAnisotropy = 0.0f;
+		}
+
 		auto& device = rhi.getDevice();
 		m_sampler = device.createSampler(info,rhi.getAllocationCallbacks());
 

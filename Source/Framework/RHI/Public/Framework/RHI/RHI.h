@@ -54,7 +54,7 @@ namespace ob::rhi {
 
         virtual Ref<CommandList>    createCommandList(const CommandListDesc& desc) { return nullptr; }
 
-        virtual Ref<RootSignature>  createRootSignature(const BindingLayoutDesc& desc) { return nullptr; }
+        virtual Ref<RootSignature>  createRootSignature(const RootSignatureDesc& desc) { return nullptr; }
         virtual Ref<PipelineState>  createPipelineState(const PipelineStateDesc& desc) { return nullptr; }
 
         virtual Ref<Buffer>         createBuffer(const BufferDesc& desc) { return nullptr; }
@@ -88,6 +88,11 @@ namespace ob::rhi {
         virtual Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) { return {}; }
 
 		const RHIConfig& getConfig()const { return m_config; }
+
+    public:
+
+        virtual bool supports(TextureFormat format)const { return false; }
+        virtual bool supports(ShaderStage stage)const { return false; }
 
     protected:
 

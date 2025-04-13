@@ -137,7 +137,7 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		BindingLayoutDesc desc{
+		RootSignatureDesc desc{
 			{
 				Binding::Texture(0),
 				Binding::Texture(1),
@@ -406,7 +406,7 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		BindingLayoutDesc desc;
+		RootSignatureDesc desc;
 		desc.constants = RootConstantsDesc(16,0);
 		desc.name = "MaterialBlock";
 		desc.flags.set(RootSignatureFlag::EnableBindless, true);
@@ -680,7 +680,7 @@ PsOut PS_Main(PsIn i){
 
 	Ref<RootSignature> signature;
 	{
-		BindingLayoutDesc desc;
+		RootSignatureDesc desc;
 		desc.constants = RootConstantsDesc(32, 0, 0);
 		desc.name = "MaterialBlock";
 		desc.flags.set(RootSignatureFlag::EnableBindless, true);

@@ -30,7 +30,7 @@ namespace ob::rhi::dx12 {
         //===============================================================
 
         //! @brief  コンストラクタ
-        RootSignatureImpl(DirectX12RHI& rDevice, const BindingLayoutDesc& desc);
+        RootSignatureImpl(DirectX12RHI& rDevice, const RootSignatureDesc& desc);
 
 
         //! @brief  デストラクタ
@@ -50,7 +50,7 @@ namespace ob::rhi::dx12 {
         //===============================================================
 
         //! @brief  定義を取得
-        const BindingLayoutDesc& getDesc()const noexcept override;
+        const RootSignatureDesc& getDesc()const noexcept override;
 
 
         //! @brief  ネイティブオブジェクトを取得
@@ -68,7 +68,7 @@ namespace ob::rhi::dx12 {
 		}
 
     private:
-        BindingLayoutDesc m_desc;
+        RootSignatureDesc m_desc;
 
         ComPtr<ID3D12RootSignature> m_rootSignature;    //!< ルートシグネチャ
 

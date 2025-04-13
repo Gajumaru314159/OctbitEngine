@@ -26,6 +26,7 @@ set(public_libs
 )
 set(private_libs     
     "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
+    dxcompiler.lib
     glslang
     #spirv
 )

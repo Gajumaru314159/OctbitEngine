@@ -1,85 +1,54 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シェーダ実装(DirectX12)
+//! @brief		シェーダ実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Shader.h>
 #include <Framework/Core/Misc/Blob.h>
+#include <Framework/RHI/Types/PipelineStateDesc.h>
 
-//===============================================================
-// 前方宣言
-//===============================================================
-namespace ob::rhi::vulkan {
-    class DeviceImpl;
-    class ITexture;
-}
-
-
-//===============================================================
-// クラス定義
-//===============================================================
 namespace ob::rhi::vulkan {
 
-    //@―---------------------------------------------------------------------------
     //! @brief  シェーダ実装(DirectX12)
-    //@―---------------------------------------------------------------------------
     class ShaderImpl :public Shader {
     public:
 
-        //===============================================================
-        //	コンストラクタ
-        //===============================================================
-
-        //@―---------------------------------------------------------------------------
         //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-        //!
-        //! @param src			シェーダコード
-        //! @param stage		シェーダステージ
-        //! @param errorDest	エラー出力先文字列
-        //@―---------------------------------------------------------------------------
-        ShaderImpl(VkDevice device, const String& code, ShaderStage stage);
+        ShaderImpl(VulkanRHI& rhi, const ShaderCompileDesc& desc);
 
 
-        //@―---------------------------------------------------------------------------
         //! @brief				バイナリからシェーダーオブジェクトを生成
         //!
         //! @param src			バイナリ
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
-        //@―---------------------------------------------------------------------------
-        ShaderImpl(VkDevice device,const Blob & blob, ShaderStage stage);
-
-        ~ShaderImpl();
+        ShaderImpl(VulkanRHI& rhi, BlobView blob, ShaderStage stage, StringView name = "Shader");
 
 
-        //@―---------------------------------------------------------------------------
+        //! @brief      名前を取得
+        const String& getName()const override;
+
+
         //! @brief  シェーダステージを取得
-        //@―---------------------------------------------------------------------------
         ShaderStage getStage()const override;
+
+		vk::ShaderModule getNative()const {
+			return *m_shaderModule;
+		}
+
 
     public:
 
-        //@―---------------------------------------------------------------------------
         //! @brief  コンパイル
-        //@―---------------------------------------------------------------------------
-        void compile(const StringBase<char>& blob,ShaderStage stage);
-
-
-		vk::ShaderModule getModule()const {
-			return m_shaderModule;
-		}
+        void compile(VulkanRHI& rhi, const ShaderCompileDesc& desc);
 
     private:
 
-        void createShaderModule(BlobView blob, ShaderStage stage);
-
-    private:
-
-        ShaderStage         m_stage;                        //!< シェーダ・ステージ
-
-        ::VkDevice          m_device=nullptr;
-        ::VkShaderModule    m_shaderModule=nullptr;
+        String                  m_name;
+        ShaderStage             m_stage;                        //!< シェーダ・ステージ
+        Blob                    m_shaderBlob;                   //!< シェーダ・バイナリ
+		vk::raii::ShaderModule  m_shaderModule = nullptr;       //!< シェーダ・モジュール
 
     };
 

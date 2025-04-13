@@ -20,6 +20,7 @@ TEST_F(SamplerTest, Create) {
                 desc.filter = filter;
 				desc.addressU = address;
 				desc.mipFilter = mipFiler;
+                desc.anisotropy = Anisotropy::None;
 
 				auto sampler = Sampler::Create(desc);
 

@@ -39,7 +39,7 @@ namespace ob::rhi::dx12 {
 	}
 
 	//! @brief  コンストラクタ
-	RootSignatureImpl::RootSignatureImpl(DirectX12RHI& rDevice, const BindingLayoutDesc& desc)
+	RootSignatureImpl::RootSignatureImpl(DirectX12RHI& rDevice, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		// パラメータ
@@ -239,7 +239,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  定義を取得
-	const BindingLayoutDesc& RootSignatureImpl::getDesc()const noexcept {
+	const RootSignatureDesc& RootSignatureImpl::getDesc()const noexcept {
 		return m_desc;
 	}
 

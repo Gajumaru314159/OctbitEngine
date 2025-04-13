@@ -56,8 +56,8 @@ namespace ob::rhi::vulkan {
 		case TextureFormat::RGBA8_SRGB:     return vk::Format::eR8G8B8A8Srgb;
 
 
-		case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
-		case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
+		// case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
+		// case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
 
 		case TextureFormat::RG32:           return vk::Format::eR32G32Sfloat;
 		case TextureFormat::RG16:           return vk::Format::eR16G16Sfloat;
@@ -149,6 +149,11 @@ namespace ob::rhi::vulkan {
 
 		// 定義生成
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
+		if (info.format == vk::Format::eUndefined) {
+			LOG_ERROR("不正なフォーマットです [name={}]", m_desc.name);
+			throw Exception("Invalid TextureDesc");
+		}
 
 		// リソース生成
 		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());

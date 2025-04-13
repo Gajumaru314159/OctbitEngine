@@ -48,6 +48,10 @@ namespace ob::rhi {
         //! @param path ファイルパス
         static Ref<Texture> Load(StringView path);
 
+
+		//! @brief      テクスチャフォーマットがサポートされているか
+        static bool Supports(TextureFormat format);
+
     public:
 
         //! @brief      名前を設定

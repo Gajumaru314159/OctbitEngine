@@ -40,7 +40,7 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		// TODO テクスチャの複数枚対応
-		BindingLayoutDesc desc;
+		RootSignatureDesc desc;
 		desc.constants.set(16*2, 0);
 		desc.samplers = { StaticSamplerDesc(SamplerDesc(TextureFillter::Linear), 0) };	// グローバルプロパティ(サンプラー)
 		desc.flags &= RootSignatureFlag::EnableBindless;
