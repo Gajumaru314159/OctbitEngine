@@ -34,14 +34,14 @@ namespace ob::rhi {
 	//! @brief  バインド・フラグ
 	enum class BufferFlag {
 		ShaderResource			= get_bit(0),	//!< シェーダでバインド許可
-		UnorderedAccess			= get_bit(2),   //!< UnorderedAccessのバインド許可
-		CopySource				= get_bit(3),   //!< コピー元許可
-		CopyDest				= get_bit(4),   //!< コピー先許可
+		UnorderedAccess			= get_bit(1),   //!< UnorderedAccessのバインド許可
+		CopySource				= get_bit(2),   //!< コピー元許可
+		CopyDest				= get_bit(3),   //!< コピー先許可
 
-		Vertex,
-		Index,
-		Constant,
-		IndirectArgument
+		Vertex = get_bit(4),
+		Index = get_bit(5),
+		Constant = get_bit(6),
+		IndirectArgument = get_bit(7)
 	};
 	//! @brief  バインド・フラグ・セット
 	using BufferFlags = BitFlags<BufferFlag>;
