@@ -55,6 +55,11 @@ namespace ob::rhi::vulkan {
 		//! @brief      バッファを更新(直接更新)
 		void updateDirect(const CopyFunc& func) override;
 
+	public:
+
+		//! @brief      バッファを取得
+		vk::Buffer getNative()const { return *m_buffer; }
+
 
 	private:
 

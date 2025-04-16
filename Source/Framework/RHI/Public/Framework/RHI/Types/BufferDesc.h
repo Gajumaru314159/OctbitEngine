@@ -94,7 +94,7 @@ namespace ob::rhi {
 		template<typename TVertex>
 		static BufferDesc Vertex(
 			u64             count,
-			BufferFlags     flags = {}
+			BufferFlags     flags = BufferFlag::Vertex
 		)
 		{
 			return BufferDesc(
@@ -109,7 +109,7 @@ namespace ob::rhi {
 		template<typename TIndex>
 		static BufferDesc Index(
 			u64             count,
-			BufferFlags     flags = {}
+			BufferFlags     flags = BufferFlag::Index
 		)
 		{
 			return BufferDesc(

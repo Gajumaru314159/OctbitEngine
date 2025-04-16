@@ -49,6 +49,15 @@ namespace ob::rhi::vulkan {
 
     public:
 
+		//! @brief      テクスチャを取得
+		vk::raii::Image& getNative() { return m_image; }
+		//! @brief      メモリを取得
+		vk::raii::DeviceMemory& getMemory() { return m_memory; }
+		//! @brief      レンダーテクスチャのイメージビューを取得
+		vk::raii::ImageView& getRTV() { return m_hRTV; }
+		//! @brief      レンダーテクスチャのデプスステンシルビューを取得
+		vk::raii::ImageView& getDSV() { return m_hDSV; }
+
     private:
 
 		VulkanRHI&              m_rhi;

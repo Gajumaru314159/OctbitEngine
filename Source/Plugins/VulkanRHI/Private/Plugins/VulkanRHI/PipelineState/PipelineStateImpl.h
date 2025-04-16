@@ -36,6 +36,11 @@ namespace ob::rhi::vulkan {
         //@―---------------------------------------------------------------------------
         //const PipelineStateDesc& getDesc()const override { return m_desc; };
 
+    public:
+		//@―---------------------------------------------------------------------------
+		//! @brief      パイプラインを取得
+		//@―---------------------------------------------------------------------------
+		vk::raii::Pipeline& getNative() { return m_pipeline; }
 
     private:
         // PipelineState を介して継承されました

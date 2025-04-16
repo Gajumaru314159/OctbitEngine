@@ -8,6 +8,7 @@
 #include <Plugins/VulkanRHI/Buffer/BufferImpl.h>
 #include <Plugins/VulkanRHI/Texture/TextureImpl.h>
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
+#include <Plugins/VulkanRHI/Descriptor/DescriptorTableImpl.h>
 #include <Plugins/VulkanRHI/Command/CommandListImpl.h>
 #include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
 #include <Plugins/VulkanRHI/Sampler/SamplerImpl.h>
@@ -534,8 +535,12 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  デスクリプタ・テーブルを生成
-	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { return {}; }
-	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return {}; }
+	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { 
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this, desc);
+	}
+	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { 
+		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this, signature,slot);
+	}
 
 
 	//! @brief サポートしているテクスチャフォーマットか 

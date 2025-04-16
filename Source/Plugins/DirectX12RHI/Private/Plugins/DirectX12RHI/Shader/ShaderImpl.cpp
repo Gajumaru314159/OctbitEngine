@@ -119,7 +119,8 @@ namespace ob::rhi::dx12 {
             L"-encoding",
             L"utf8",
             L"/Zi",
-            L"-Qembed_debug"
+            L"-Qembed_debug",
+            L"-Wignored-attributes"
         };
 
         for (auto& macro : desc.macros) {

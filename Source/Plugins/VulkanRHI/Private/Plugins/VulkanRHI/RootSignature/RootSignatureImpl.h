@@ -40,10 +40,19 @@ namespace ob::rhi::vulkan {
 
     public:
 
+		vk::DescriptorSetLayout getLayouts()const {
+			return *m_descriptorSetLayout;
+		}
+
 		vk::PipelineLayout getNative() const noexcept
 		{
 			return *m_pipelineLayout;
 		}
+
+        s32 getItemCount(s32 slot) const {
+            if (!is_in_range(slot, m_desc.slots)) return false;
+            return m_desc.slots[slot].items.size();
+        }
 
 
     private:

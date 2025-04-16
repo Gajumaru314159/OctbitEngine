@@ -10,13 +10,12 @@
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-//#include <Plugins/VulkanRHI/Texture/RenderTargetImpl.h>
-//#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
-//#include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
+#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
+#include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
 #include <Plugins/VulkanRHI/PipelineState/PipelineStateImpl.h>
-//#include <Plugins/VulkanRHI/Descriptor/DescriptorTableImpl.h>
-//#include <Plugins/VulkanRHI/Texture/RenderTargetImpl.h>
-//#include <Plugins/VulkanRHI/Buffer/BufferImpl.h>
+#include <Plugins/VulkanRHI/Descriptor/DescriptorTableImpl.h>
+#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
+#include <Plugins/VulkanRHI/Buffer/BufferImpl.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
@@ -82,13 +81,65 @@ namespace ob::rhi::vulkan {
 	//! @brief      描画先設定
 	void CommandListImpl::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
 
+		FixedVector<vk::RenderingAttachmentInfo, 8> colorAttachments;
+		FixedVector<vk::RenderingAttachmentInfo, 1> depthAttachments;
+		for (s32 i = 0; i < colors.size(); ++i) {
+			if (auto p = colors[i].cast<TextureImpl>()) {
+				auto& colorAttachment = colorAttachments.emplace_back();
+				colorAttachment.imageView = p->getRTV();
+				colorAttachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
+			}
+			else {
+				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
+			}
+		}
+		{
+			if (auto p = depth.cast<TextureImpl>()) {
+				auto& depthAttachment = depthAttachments.emplace_back();
+				depthAttachment.imageView = p->getRTV();
+				depthAttachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
+			}
+			else {
+				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
+			}
+		}
+
+		vk::RenderingInfo info;
+		info.flags = vk::RenderingFlagBits{};
+		info.renderArea.offset.x = 0;
+		info.renderArea.offset.y = 0;
+		info.renderArea.extent.width = colors[0]->width();
+		info.renderArea.extent.height = colors[0]->height();
+		info.layerCount = 1;
+		info.viewMask = 0;
+		if (!colorAttachments.empty()) {
+			info.pColorAttachments = colorAttachments.data();
+			info.colorAttachmentCount = colorAttachments.size();
+		}
+		if (!depthAttachments.empty()) {
+			info.pDepthAttachment = depthAttachments.data();
+		}
+		//if (!stencilAttachments.empty()) {
+		//	info.pStencilAttachment = stencilAttachments.data();
+		//}
+
+		m_commandBuffer.beginRendering(info);
+
+		// TODO endRenderingはどう呼ぶ？
 	}
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      スワップチェーンにテクスチャを適用
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) {
-		OB_NOTIMPLEMENTED();
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
+		if (auto p = display.cast<DisplayImpl>()) {
+			OB_NOTIMPLEMENTED();
+			//p->present(texture, m_commandBuffer);
+		}
+		else {
+			LOG_ERROR("不正な引数。ディスプレイが不正です。");
+		}
 	}
 
 
@@ -122,7 +173,7 @@ namespace ob::rhi::vulkan {
 		FixedVector<vk::Viewport, 8> viewports;
 		for (s32 i = 0; i < num;++i) {
 			auto& viewportIn = pViewport[i];
-			auto& viewportOut = viewports[i];
+			auto& viewportOut = viewports.emplace_back();
 			viewportOut.x = viewportIn.top;
 			viewportOut.y = viewportIn.left;
 			viewportOut.width = viewportIn.width();
@@ -140,7 +191,7 @@ namespace ob::rhi::vulkan {
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearColors(u32 mask) {
-		OB_NOTIMPLEMENTED();
+		//OB_NOTIMPLEMENTED();
 		//m_commandBuffer.clearColorImage(m_renderTarget->getNative(), vk::ImageLayout::eColorAttachmentOptimal, vk::ClearColorValue{ 0.0f,0.0f,0.0f,1.0f }, { 0, 0, 1 });
 	}
 
@@ -150,7 +201,7 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::clearDepthStencil() {
 
-		OB_NOTIMPLEMENTED();
+		//OB_NOTIMPLEMENTED();
 	}
 
 
@@ -158,8 +209,19 @@ namespace ob::rhi::vulkan {
 	//! @brief      頂点バッファを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setVertexBuffers(Span<Ref<Buffer>> buffers) {
-
-		OB_NOTIMPLEMENTED();
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
+		FixedVector<vk::Buffer, 8> vkBuffers;
+		FixedVector<vk::DeviceSize, 8> offsets;
+		for (auto& buffer : buffers) {
+			if (auto p = buffer.cast<BufferImpl>()) {
+				vkBuffers.push_back(p->getNative());
+				offsets.push_back(0);
+			}
+			else {
+				LOG_ERROR("不正な引数。頂点バッファが不正です。");
+			}
+		}
+		m_commandBuffer.bindVertexBuffers(0,vkBuffers, offsets);
 	}
 
 
@@ -167,17 +229,32 @@ namespace ob::rhi::vulkan {
 	//! @brief      インデックスバッファを設定
 	//@―---------------------------------------------------------------------------
 	void CommandListImpl::setIndexBuffer(const Ref<Buffer>& buffer) {
-
-		OB_NOTIMPLEMENTED();
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
+		if (auto p = buffer.cast<BufferImpl>()) {
+			vk::IndexType indexType = vk::IndexType::eUint16;
+			//TODO 16チェック
+			if (p->getDesc().stride ==sizeof(u32)) {
+				indexType = vk::IndexType::eUint32;
+			}
+			m_commandBuffer.bindIndexBuffer(p->getNative(), 0, indexType);
+		}
+		else {
+			LOG_ERROR("不正な引数。インデックスバッファが不正です。");
+		}
 	}
 
 
 	//@―---------------------------------------------------------------------------
 	//! @brief      パイプラインステートを設定
 	//@―---------------------------------------------------------------------------
-	void CommandListImpl::setPipelineState(const Ref<PipelineState>&) {
-
-		OB_NOTIMPLEMENTED();
+	void CommandListImpl::setPipelineState(const Ref<PipelineState>& pipeline) {
+		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
+		if (auto p = pipeline.cast<PipelineStateImpl>()) {
+			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, p->getNative());
+		}
+		else {
+			LOG_ERROR("不正な引数。パイプラインステートが不正です。");
+		}
 	}
 
 

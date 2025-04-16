@@ -54,7 +54,7 @@ namespace ob::rhi::dx12 {
 			for (auto [i, item] : Indexed(slot.items)) {
 				// 先頭がオフセット指定ならば0に置き換え
 				if (i == 0 && item.index < 0) {
-					item.index = 0;
+					item.index = index;
 				}
 				// オフセット指定なら正規化
 				if (item.index < 0) {
@@ -117,7 +117,7 @@ namespace ob::rhi::dx12 {
 
 
 			// 要素数が1かつRootDescriptorが視聴できるのであれば切り替え
-			if (parameter.DescriptorTable.NumDescriptorRanges = 1) {
+			if (parameter.DescriptorTable.NumDescriptorRanges == 1) {
 				switch (parameter.DescriptorTable.pDescriptorRanges[0].RangeType) {
 					// テクスチャなどはRootDescriptorに指定できないのでとりあえず無効化。
 					// TODO StructuredBufferは使えるので対応する
