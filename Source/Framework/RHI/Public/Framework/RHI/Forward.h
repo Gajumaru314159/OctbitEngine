@@ -34,6 +34,8 @@ namespace ob::rhi {
 	class Shader;
 	class Texture;
 	class Sampler;
+	class RenderPass;
+	class FrameBuffer;
 
 	class GraphicFileHandle;
 	class GraphicFileEvent;
