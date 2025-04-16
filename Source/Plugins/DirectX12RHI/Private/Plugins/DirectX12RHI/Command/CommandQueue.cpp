@@ -4,7 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
-#include <Plugins/DirectX12RHI/Command/CommandListImpl.h>
+#include <Plugins/DirectX12RHI/Command/DirectX12CommandList.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
@@ -53,7 +53,7 @@ namespace ob::rhi::dx12 {
 	void CommandQueue::execute() {
 		m_entriedNativeCommandList.clear();
 		for (auto& cmdList : m_entriedCommandList) {
-			m_entriedNativeCommandList.push_back(static_cast<const CommandListImpl*>(cmdList)->getNative());
+			m_entriedNativeCommandList.push_back(static_cast<const DirectX12CommandList*>(cmdList)->getNative());
 		}
 		m_entriedCommandList.clear();
 		m_commandQueue->ExecuteCommandLists((UINT)m_entriedNativeCommandList.size(), m_entriedNativeCommandList.data());

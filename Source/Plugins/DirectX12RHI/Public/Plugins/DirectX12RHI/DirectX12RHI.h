@@ -166,7 +166,7 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief          デスクリプタヒープを設定
-		void setDescriptorHeaps(class CommandListImpl& cmdList);
+		void setDescriptorHeaps(class DirectX12CommandList& cmdList);
 
 
 		//! @brief  IDStorageFactoryを取得

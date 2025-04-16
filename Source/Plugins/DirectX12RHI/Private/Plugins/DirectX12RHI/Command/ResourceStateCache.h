@@ -4,8 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Plugins/DirectX12RHI/Texture/TextureImpl.h>
-#include <Plugins/DirectX12RHI/Buffer/BufferImpl.h>
+#include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
+#include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 
 namespace ob::rhi::dx12 {
 
@@ -30,7 +30,7 @@ namespace ob::rhi::dx12 {
         }
 
         //! @brief  テクスチャの遷移追加
-        void addTexture(TextureImpl& texture, D3D12_RESOURCE_STATES after, s32 subresource = -1) {
+        void addTexture(DirectX12Texture& texture, D3D12_RESOURCE_STATES after, s32 subresource = -1) {
 
             D3D12_RESOURCE_BARRIER barrier{};
             if (texture.addResourceTransition(barrier, after, subresource)) {

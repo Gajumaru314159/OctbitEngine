@@ -5,15 +5,15 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Plugins/VulkanRHI/Buffer/BufferImpl.h>
-#include <Plugins/VulkanRHI/Texture/TextureImpl.h>
-#include <Plugins/VulkanRHI/Display/DisplayImpl.h>
-#include <Plugins/VulkanRHI/Descriptor/DescriptorTableImpl.h>
-#include <Plugins/VulkanRHI/Command/CommandListImpl.h>
-#include <Plugins/VulkanRHI/Shader/ShaderImpl.h>
-#include <Plugins/VulkanRHI/Sampler/SamplerImpl.h>
-#include <Plugins/VulkanRHI/RootSignature/RootSignatureImpl.h>
-#include <Plugins/VulkanRHI/PipelineState/PipelineStateImpl.h>
+#include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
+#include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
+#include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
+#include <Plugins/VulkanRHI/Shader/VulkanShader.h>
+#include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
+#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
+#include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
 #include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
 #include <Framework/Core/Misc/ErrorCode.h>
 
@@ -462,61 +462,61 @@ namespace ob::rhi::vulkan {
 
 	//! @brief  スワップ・チェーンを生成
 	Ref<Display> VulkanRHI::createDisplay(const DisplayDesc& desc) {
-		SAFE_CREATE(Display, DisplayImpl,*this, desc);
+		SAFE_CREATE(Display, VulkanDisplay,*this, desc);
 	}
 
 
 	//! @brief  コマンドリスト生成
 	Ref<CommandList> VulkanRHI::createCommandList(const CommandListDesc& desc) {
-		SAFE_CREATE(CommandList, CommandListImpl, *this, desc);
+		SAFE_CREATE(CommandList, VulkanCommandList, *this, desc);
 	}
 
 
 
 	//! @brief  ルートシグネチャを生成
 	Ref<RootSignature> VulkanRHI::createRootSignature(const RootSignatureDesc& desc) {
-		SAFE_CREATE(RootSignature, RootSignatureImpl, *this,desc);
+		SAFE_CREATE(RootSignature, VulkanRootSignature, *this,desc);
 	}
 
 
 	//! @brief  パイプラインステートを生成
 	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
-		SAFE_CREATE(PipelineState, PipelineStateImpl,*this, desc);
+		SAFE_CREATE(PipelineState, VulkanPipelineState,*this, desc);
 	}
 
 
 	//! @brief  テクスチャを生成
 	Ref<Texture> VulkanRHI::createTexture(const TextureDesc& desc) {
-		SAFE_CREATE(Texture, TextureImpl, *this, desc);
+		SAFE_CREATE(Texture, VulkanTexture, *this, desc);
 	}
 
 
 	Ref<Texture> VulkanRHI::createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { 
-		SAFE_CREATE(Texture, TextureImpl, *this,name,type,size,colors);
+		SAFE_CREATE(Texture, VulkanTexture, *this,name,type,size,colors);
 	}
 
 
 	//! @brief  テクスチャを生成
 	Ref<Texture> VulkanRHI::createTexture(StringView name, BlobView blob) {
-		SAFE_CREATE(Texture, TextureImpl, *this, name, blob);
+		SAFE_CREATE(Texture, VulkanTexture, *this, name, blob);
 	}
 
 
 	//! @brief  レンダーテクスチャを生成
 	Ref<RenderTexture> VulkanRHI::createRenderTexture(const RenderTextureDesc& desc) {
-		SAFE_CREATE(Texture, TextureImpl, *this, desc);
+		SAFE_CREATE(Texture, VulkanTexture, *this, desc);
 	}
 
 
 	//! @brief  サンプラーを生成
 	Ref<Sampler> VulkanRHI::createSampler(const SamplerDesc& desc) { 
-		SAFE_CREATE(Sampler, SamplerImpl, *this, desc);
+		SAFE_CREATE(Sampler, VulkanSampler, *this, desc);
 	}
 
 
 	//! @brief  バッファーを生成
 	Ref<Buffer> VulkanRHI::createBuffer(const BufferDesc& desc) { 
-		SAFE_CREATE(Buffer, BufferImpl, *this, desc);
+		SAFE_CREATE(Buffer, VulkanBuffer, *this, desc);
 	}
 
 
@@ -526,7 +526,7 @@ namespace ob::rhi::vulkan {
 			LOG_ERROR("非対応のShaderStageです。Shader::Supports()でサポート状況を確認してください。");
 			return nullptr;
 		}
-		SAFE_CREATE(Shader, ShaderImpl, *this, desc);
+		SAFE_CREATE(Shader, VulkanShader, *this, desc);
 	}
 
 
@@ -536,10 +536,10 @@ namespace ob::rhi::vulkan {
 
 	//! @brief  デスクリプタ・テーブルを生成
 	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { 
-		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this, desc);
+		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, desc);
 	}
 	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { 
-		SAFE_CREATE(DescriptorTable, DescriptorTableImpl, *this, signature,slot);
+		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, signature,slot);
 	}
 
 
