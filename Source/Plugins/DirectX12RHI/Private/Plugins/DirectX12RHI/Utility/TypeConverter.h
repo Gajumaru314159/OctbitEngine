@@ -4,13 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Types/TextureFormat.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
-#include <Framework/RHI/Types/ResourceState.h>
+#include <Framework/RHI/Types/TextureDesc.h>
 
 namespace ob::rhi::dx12 {
 
@@ -18,52 +17,30 @@ namespace ob::rhi::dx12 {
     class TypeConverter {
     public:
 
-        //! @brief  RootSignatureFlags を D3D12_ROOT_SIGNATURE_FLAGS に変換
         static D3D12_ROOT_SIGNATURE_FLAGS Convert(RootSignatureFlags value);
-        //! @brief  ShaderStage を D3D12_SHADER_VISIBILITY に変換
         static D3D12_SHADER_VISIBILITY Convert(ShaderStage value);
-        //! @brief  TextureFillter を D3D12_FILTER_TYPE に変換
         static D3D12_FILTER_TYPE Convert(TextureFillter value);
-        //! @brief  MipFillter を D3D12_DESCRIPTOR_RANGE_TYPE に変換
         static D3D12_FILTER_TYPE Convert(MipFillter value);
-        //! @brief  D3D12_FILTER に変換
         static D3D12_FILTER Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic);
-        //! @brief  Anisotropy を UINT に変換
         static UINT Convert(Anisotropy value);
-        //! @brief  TextureAddress を D3D12_TEXTURE_ADDRESS_MODE に変換
         static D3D12_TEXTURE_ADDRESS_MODE Convert(TextureAddress value);
-        //! @brief  FillMode を D3D12_FILL_MODE に変換
         static D3D12_FILL_MODE Convert(FillMode value);
-        //! @brief  CullMode を D3D12_CULL_MODE に変換
         static D3D12_CULL_MODE Convert(CullMode value);
-        //! @brief  TextureFormat を DXGI_FORMAT に変換
         static DXGI_FORMAT Convert(TextureFormat value, bool useTypeless = false);
-        //! @brief  TextureFormat を DXGI_FORMAT に変換
         static DXGI_FORMAT ConvertDepthAsColor(TextureFormat value);
-        //! @brief  BlendFactor を D3D12_BLEND に変換
         static D3D12_BLEND Convert(BlendFactor value);
-        //! @brief  BlendOp を D3D12_BLEND_OP に変換
         static D3D12_BLEND_OP Convert(BlendOp value);
-        //! @brief  BlendFactor を UINT8 に変換
         static UINT8 Convert(ColorMask value);
-        //! @brief  LogicOp を D3D12_LOGIC_OP に変換
         static D3D12_LOGIC_OP Convert(LogicOp value);
-        //! @brief  Topology を D3D12_PRIMITIVE_TOPOLOGY に変換
         static D3D12_PRIMITIVE_TOPOLOGY Convert(Topology value);
-        //! @brief  Type を DXGI_FORMAT に変換
         static DXGI_FORMAT Convert(ElementType value,s32 dimension);
-        //! @brief  Semantic を LPCSTR に変換
         static LPCSTR Convert(Semantic value);
-        //! @brief  StencilOp を D3D12_STENCIL_OP に変換
         static D3D12_STENCIL_OP Convert(StencilOp value);
-        //! @brief  ComparisonFunc を D3D12_COMPARISON_FUNC に変換
         static D3D12_COMPARISON_FUNC Convert(ComparisonFunc value);
-        //! @brief  CommandListType を D3D12_COMMAND_LIST_TYPE に変換
         static D3D12_COMMAND_LIST_TYPE Convert(CommandListType value);
-        //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
-        static D3D12_RESOURCE_STATES Convert(ResourceState value);
+        static D3D12_RESOURCE_STATES Convert(BufferState value);
+        static D3D12_RESOURCE_STATES Convert(TextureState value);
 
-        //! @brief  DXGI_FORMAT を TextureFormat に変換
         static TextureFormat Convert(DXGI_FORMAT dxgi);
 
 

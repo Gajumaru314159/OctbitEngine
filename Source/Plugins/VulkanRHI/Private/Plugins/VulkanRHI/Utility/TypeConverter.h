@@ -30,7 +30,7 @@ namespace ob::rhi::vulkan {
 		static vk::Format Convert(TextureFormat value);
 		static vk::AttachmentLoadOp Convert(AttachmentLoadOp value);
 		static vk::AttachmentStoreOp Convert(AttachmentStoreOp value);
-		static vk::ImageLayout Convert(ResourceState value); // TODO ImageStateとResourceStateに分離
+		static vk::ImageLayout Convert(TextureState value);
 		static  vk::DescriptorType Convert(BindingType value);
 		static vk::Filter Convert(TextureFillter filter);
 		static vk::SamplerMipmapMode Convert(MipFillter mipFilter);

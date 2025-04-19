@@ -200,7 +200,7 @@ namespace ob::rhi::dx12
 
 		case BindingType::ConstantBuffer:
 			type = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-			return desc.state == BufferState::ConstantBuffer;
+			return desc.state == BufferState::Constant;
 		}
 		return false;
 	}

@@ -18,7 +18,7 @@ namespace ob::rhi::vulkan {
 			desc.size = 256;
 		}
 
-		if (desc.state == BufferState::ConstantBuffer && desc.size % 256 != 0) {
+		if (desc.state == BufferState::Constant && desc.size % 256 != 0) {
 			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, 256));
 			desc.size = align_up(desc.size, 256);
 		}

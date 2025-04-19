@@ -6,14 +6,9 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/Types/RootSignatureDesc.h>
+#include <Framework/RHI/Types/FrameBufferDesc.h>
 
 namespace ob::rhi {
-
-    struct FrameBufferDesc {
-		Ref<RenderPass>         renderPass;
-		Vector<Ref<Texture>>    attachments;
-	};
 
     //! @brief      フレームバッファ
     //! @details    描画ターゲットのコレクションです。

@@ -6,12 +6,11 @@ namespace ob::rhi::vulkan {
 		switch (state)
 		{
 		case BufferState::Common:					return vk::AccessFlagBits::eNone;
-		case BufferState::VertexBuffer:				return vk::AccessFlagBits::eVertexAttributeRead;
-		case BufferState::IndexBuffer:				return vk::AccessFlagBits::eIndexRead;
-		case BufferState::ConstantBuffer:			return vk::AccessFlagBits::eUniformRead;
+		case BufferState::Vertex:				return vk::AccessFlagBits::eVertexAttributeRead;
+		case BufferState::Index:				return vk::AccessFlagBits::eIndexRead;
+		case BufferState::Constant:			return vk::AccessFlagBits::eUniformRead;
+		case BufferState::ShaderResource:			return vk::AccessFlagBits::eShaderRead;
 		case BufferState::UnorderedAccess:			return vk::AccessFlagBits::eShaderWrite;
-		case BufferState::PixelShadeResource:		return vk::AccessFlagBits::eShaderRead;
-		case BufferState::ComputeShaderResource:	return vk::AccessFlagBits::eShaderRead;
 		case BufferState::IndirectArgument:			return vk::AccessFlagBits::eIndirectCommandRead;
 		}
 		throw NotSupportedException();
@@ -230,11 +229,17 @@ namespace ob::rhi::vulkan {
 		throw NotSupportedException();
 	}
 
-	vk::ImageLayout TypeConverter::Convert(ResourceState value) {
+	vk::ImageLayout TypeConverter::Convert(TextureState value) {
 		switch (value) {
-		case ResourceState::Unknown:			return vk::ImageLayout::eUndefined;
-		case ResourceState::Common:				return vk::ImageLayout::eGeneral;
-		case ResourceState::ConstantBuffer:		return vk::ImageLayout::eShaderReadOnlyOptimal;
+		case TextureState::Common:			return vk::ImageLayout::eUndefined;
+		case TextureState::ShaderResource:	return vk::ImageLayout::eShaderReadOnlyOptimal;
+		case TextureState::UnorderedAccess:	return vk::ImageLayout::eGeneral;
+		case TextureState::RenderTargtet:	return vk::ImageLayout::eColorAttachmentOptimal;
+		case TextureState::DepthRead:		return vk::ImageLayout::eDepthStencilReadOnlyOptimal;
+		case TextureState::DepthWrite:		return vk::ImageLayout::eDepthStencilAttachmentOptimal;
+		case TextureState::CopySource:		return vk::ImageLayout::eTransferSrcOptimal;
+		case TextureState::CopyDest:		return vk::ImageLayout::eTransferDstOptimal;
+		case TextureState::Present:			return vk::ImageLayout::ePresentSrcKHR;
 		}
 		throw NotSupportedException();
 	}

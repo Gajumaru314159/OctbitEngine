@@ -37,7 +37,7 @@ TEST_F(BufferTest, Create) {
 					}
 
 					// 256バイト制限
-					if (size %256 != 0 && type == BufferState::ConstantBuffer) {
+					if (size %256 != 0 && type == BufferState::Constant) {
 						checkSize = align_up(checkSize,256);
 					}
 

@@ -5,40 +5,9 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/Types/RootSignatureDesc.h>
-#include <Framework/RHI/Types/TextureFormat.h>
-#include <Framework/RHI/Types/ResourceState.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
 
 namespace ob::rhi {
-
-    enum class AttachmentLoadOp {
-        Load,
-        Clear,
-        DontCare,
-    };
-    enum class AttachmentStoreOp {
-        Store,
-        DontCare,
-    };
-
-    struct AttackmentDesc {
-		TextureFormat format;
-
-        // 以下はできれば隠ぺいしたい
-        AttachmentLoadOp load;
-        AttachmentStoreOp store;
-        // ステンシル
-		ResourceState initialState; 
-		ResourceState finalState;
-    };
-
-	//! レンダーパス
-    //! レンダーパスは描画
-    struct RenderPassDesc {
-		Vector<AttackmentDesc> attachments;
-    };
-
-
 
     //! レンダーパス
     //! 

@@ -398,19 +398,41 @@ namespace ob::rhi::dx12
         return D3D12_COMMAND_LIST_TYPE_DIRECT;
     }
 
-    //! @brief  ResourceState を D3D12_RESOURCE_STATES に変換
-    D3D12_RESOURCE_STATES TypeConverter::Convert(ResourceState value) {
+    //! @brief  BufferState を D3D12_RESOURCE_STATES に変換
+    D3D12_RESOURCE_STATES TypeConverter::Convert(BufferState value) {
         switch (value)
         {
-        case ResourceState::Common:                 return D3D12_RESOURCE_STATE_COMMON;
-        case ResourceState::ShadeResource:          return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-        case ResourceState::ColorAttachment:        return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
-        case ResourceState::DepthAttachment:        return D3D12_RESOURCE_STATE_DEPTH_WRITE;
-        case ResourceState::DepthStencilAttachment: return D3D12_RESOURCE_STATE_DEPTH_WRITE;
-        case ResourceState::Present:                return D3D12_RESOURCE_STATE_PRESENT;
+        case BufferState::Common:         return D3D12_RESOURCE_STATE_COMMON;
+        case BufferState::Vertex:   return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+        case BufferState::Index:    return D3D12_RESOURCE_STATE_INDEX_BUFFER;
+        case BufferState::Constant: return D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+        case BufferState::ShaderResource: return D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
+        case BufferState::UnorderedAccess:return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+        case BufferState::IndirectArgument:return D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
+        case BufferState::CopySource:     return D3D12_RESOURCE_STATE_COPY_SOURCE;
+        case BufferState::CopyDest:       return D3D12_RESOURCE_STATE_COPY_DEST;
         }
 
-        LOG_WARNING_EX("Graphic", "不正なResourceState[value={}]", enum_cast(value));
+        LOG_WARNING_EX("Graphic", "不正なBufferState[value={}]", enum_cast(value));
+        return D3D12_RESOURCE_STATE_COMMON;
+    }
+
+    //! @brief  TextureState を D3D12_RESOURCE_STATES に変換
+    D3D12_RESOURCE_STATES TypeConverter::Convert(TextureState value) {
+        switch (value)
+        {
+		case TextureState::Common:         return D3D12_RESOURCE_STATE_COMMON;
+		case TextureState::ShaderResource: return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+		case TextureState::UnorderedAccess:return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+		case TextureState::RenderTargtet:  return D3D12_RESOURCE_STATE_RENDER_TARGET;
+		case TextureState::DepthRead:     return D3D12_RESOURCE_STATE_DEPTH_READ;
+		case TextureState::DepthWrite:    return D3D12_RESOURCE_STATE_DEPTH_WRITE;
+		case TextureState::CopySource:     return D3D12_RESOURCE_STATE_COPY_SOURCE;
+		case TextureState::CopyDest:       return D3D12_RESOURCE_STATE_COPY_DEST;
+		case TextureState::Present:        return D3D12_RESOURCE_STATE_PRESENT;
+        }
+
+        LOG_WARNING_EX("Graphic", "不正なTextureState[value={}]", enum_cast(value));
         return D3D12_RESOURCE_STATE_COMMON;
     }
 

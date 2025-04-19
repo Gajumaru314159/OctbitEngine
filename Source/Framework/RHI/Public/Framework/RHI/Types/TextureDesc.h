@@ -34,14 +34,30 @@ namespace ob::rhi {
     using TextureUsages = BitFlags<TextureUsage>;
 
 
-    //! @brief  バッファ・タイプ
+    //! @brief      テクスチャ状態
+    //! 
+    //! @details    D3D12_RESOURCE_STATE VkImageLayout 参照
+    //!             | TextureState                      | D3D12_RESOURCE_STATE              | VkImageLayout                 |
+    //!             |-----------------------------------|-----------------------------------|-------------------------------|
+    //!             | Common                            | COMMON                            | -                             |
+    //!             | ShadeResource                     | PIXEL_SHADER_RESOURCE             | SHADER_READ_ONLY              |
+    //!             | UnorderedAccess                   | UNORDERED_ACCESS                  | GENERAL                       |
+    //!             | RenderTarget                      | RENDER_TARGET                     | COLOR_ATTACHMENT              |
+    //!             | DepthRead                         | DEPTH_READ                        | EPTH_STENCIL_READ_ONLY        |
+    //!             | DepthWrite                        | DEPTH_WRITE                       | DEPTH_STENCIL_ATTACHMENT      |
+    //!             | CopyDest                          | COPY_DEST                         | TRANSFER_SRC                  |
+    //!             | CopySource                        | COPY_SOURCE                       | TRANSFER_DST                  |
+    //!             | Present                           | PRESENT                           | PRESENT_SRC_KHR               |
     enum class TextureState {
-        Unknown,                //!< 指定なし
-        Common,					//!< 
-        ShadeResource,          //!< ピクセルシェーダで利用可能
-        UnorderedAccess,        //!< アンオーダード・アクセス
-        CopySource,             //!< コピー元
-        CopyDest,               //!< コピー先
+        Common,
+        ShaderResource,
+        UnorderedAccess,
+        RenderTargtet,
+        DepthRead,
+        DepthWrite,
+        CopyDest,
+        CopySource,
+        Present,
     };
 
 

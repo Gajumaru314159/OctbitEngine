@@ -278,7 +278,7 @@ namespace ob::rhi::vulkan
 
 		case BindingType::ConstantBuffer:
 			type = vk::DescriptorType::eUniformBuffer;
-			return desc.state == BufferState::ConstantBuffer;
+			return desc.state == BufferState::Constant;
 		}
 		return false;
 	}

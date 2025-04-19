@@ -14,18 +14,15 @@ namespace ob::rhi::dx12 {
 	static D3D12_RESOURCE_STATES Convert(BufferState value) {
 		switch (value)
 		{
-		case BufferState::Common:						return D3D12_RESOURCE_STATE_COMMON;
-		case BufferState::VertexBuffer:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-		case BufferState::IndexBuffer:					return D3D12_RESOURCE_STATE_INDEX_BUFFER;
-		case BufferState::ConstantBuffer:				return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-		case BufferState::UnorderedAccess:				return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-		case BufferState::PixelShadeResource:			return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE; // TODO ステートが必要か
-		case BufferState::ComputeShaderResource:		return D3D12_RESOURCE_STATE_NON_PIXEL_SHADER_RESOURCE;
-		case BufferState::AllShaderResource:			return D3D12_RESOURCE_STATE_ALL_SHADER_RESOURCE;
-		case BufferState::StreamOut:					return D3D12_RESOURCE_STATE_STREAM_OUT;
-		case BufferState::IndirectArgument:				return D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
-		case BufferState::CopySource:					return D3D12_RESOURCE_STATE_COPY_SOURCE;
-		case BufferState::CopyDest:						return D3D12_RESOURCE_STATE_COPY_DEST;
+		case BufferState::Common:					return D3D12_RESOURCE_STATE_COMMON;
+		case BufferState::Vertex:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+		case BufferState::Index:					return D3D12_RESOURCE_STATE_INDEX_BUFFER;
+		case BufferState::Constant:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
+		case BufferState::UnorderedAccess:			return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
+		case BufferState::ShaderResource:			return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE; // TODO ステートが必要か
+		case BufferState::IndirectArgument:			return D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
+		case BufferState::CopySource:				return D3D12_RESOURCE_STATE_COPY_SOURCE;
+		case BufferState::CopyDest:					return D3D12_RESOURCE_STATE_COPY_DEST;
 		}
 		LOG_ERROR("不正なバッファ状態です。");
 		return {};
@@ -52,7 +49,7 @@ namespace ob::rhi::dx12 {
 	//! @brief バリデート
 	static bool IsInvalid(BufferDesc& desc) {
 
-		if (desc.state == BufferState::ConstantBuffer && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
+		if (desc.state == BufferState::Constant && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
 			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
 			desc.size = align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
 		}
