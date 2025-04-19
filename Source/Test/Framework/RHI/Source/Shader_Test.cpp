@@ -38,7 +38,8 @@ R"(
     };
 
     struct PatchConstant {
-        float edges[3] : SV_TessFactor;
+        float edges[3] : SV_TessFactor;         // 外側のテッセレーション係数
+        float inside : SV_InsideTessFactor;    // 内側のテッセレーション係数（必要に応じて）
     };
 
     [domain("tri")]

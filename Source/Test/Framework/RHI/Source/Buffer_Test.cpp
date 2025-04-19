@@ -33,12 +33,14 @@ TEST_F(BufferTest, Create) {
 
 					// サイズチェック
 					if (size == 0) {
-						checkSize = 256;
+						ASSERT_FALSE(buffer);
+						continue;
 					}
 
 					// 256バイト制限
 					if (size %256 != 0 && type == BufferState::Constant) {
-						checkSize = align_up(checkSize,256);
+						ASSERT_FALSE(buffer);
+						continue;
 					}
 
 					ASSERT_NE(buffer, nullptr);
@@ -62,7 +64,15 @@ TEST_F(BufferTest, CreateUtility) {
 		BufferDesc desc = BufferDesc::Constant(100);
 
 		Ref<Buffer> buffer = Buffer::Create(desc);
-		ASSERT_NE(buffer, nullptr);
+		ASSERT_TRUE(buffer);
+	}
+	// Constant
+	{
+		BufferDesc desc = BufferDesc::Constant(100);
+		desc.size--;
+
+		Ref<Buffer> buffer = Buffer::Create(desc);
+		ASSERT_FALSE(buffer);
 	}
 
 	// Vertex

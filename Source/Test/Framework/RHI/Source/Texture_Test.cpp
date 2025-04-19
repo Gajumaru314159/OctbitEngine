@@ -8,10 +8,10 @@
 
 class TextureTest : public RHITestBase {};
 
-TEST_F(TextureTest, Create) {
+TEST_F(TextureTest, Type) {
 
 	// タイプ
-    for (auto type : magic_enum::enum_values<TextureType>()) {
+	for (auto type : magic_enum::enum_values<TextureType>()) {
 
 		TextureDesc desc;
 		desc.type = type;
@@ -22,9 +22,12 @@ TEST_F(TextureTest, Create) {
 
 		auto texture = Texture::Create(desc);
 
-        ASSERT_NE(texture, nullptr);
+		ASSERT_NE(texture, nullptr);
 
-    }
+	}
+
+}
+TEST_F(TextureTest, Format) {
 
 	// フォーマット
 	for (auto format : magic_enum::enum_values<TextureFormat>()) {
@@ -35,15 +38,18 @@ TEST_F(TextureTest, Create) {
 
 		auto texture = Texture::Create(desc);
 
-		if (!Texture::Supports(format)) {
+		if (!Texture::Supports(format,desc.type)) {
 			ASSERT_EQ(texture, nullptr);
 			continue;
 		}
 
-		//if (!texture)CallBreakPoint();
+		if (!texture)CallBreakPoint();
 		ASSERT_NE(texture, nullptr);
 
 	}
+
+}
+TEST_F(TextureTest, Size) {
 
 	// 不正サイズ
 	{
@@ -54,6 +60,9 @@ TEST_F(TextureTest, Create) {
 
 		ASSERT_EQ(texture, nullptr);
 	}
+
+}
+TEST_F(TextureTest, Array) {
 
 	// 配列
 	{

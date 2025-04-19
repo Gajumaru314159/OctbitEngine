@@ -47,7 +47,7 @@ TEST(RHI, CreateEmptyDX12) {
 	ASSERT_TRUE(CommandList::Create({}));
 	ASSERT_TRUE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
-	ASSERT_TRUE(Buffer::Create({}));
+	ASSERT_FALSE(Buffer::Create({}));
 	ASSERT_FALSE(Texture::Create("Texture", Blob{}));
 	ASSERT_FALSE(RenderTexture::Create({}));
 	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));

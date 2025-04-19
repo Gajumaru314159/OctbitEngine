@@ -18,15 +18,17 @@ TEST_F(RenderTextureTest, Create) {
 
         for (auto size : sizes) {
             //if (format == TextureFormat::D24S8)CallBreakPoint();
-            // format = TextureFormat::D24S8;
-
-            // if(!RenderTexture::Supports(format))continue;
 
             RenderTextureDesc desc;
             desc.name = Format("{} {}x{}",magic_enum::enum_name(format),size.width,size.height);
 			desc.format = format;
 			desc.size = size;
 			auto renderTexture = RenderTexture::Create(desc);
+
+            if (!RenderTexture::Supports(format)) {
+                ASSERT_EQ(renderTexture, nullptr);
+                continue;
+            }
 
             if (format == TextureFormat::Unknown) {
                 ASSERT_EQ(renderTexture, nullptr);

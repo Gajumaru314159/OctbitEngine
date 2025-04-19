@@ -52,8 +52,6 @@ class PipelineStateTest : public RHITestBase {};
 
 TEST_F(PipelineStateTest, Create) {
 
-    Logger logger;
-
     PipelineStateDesc desc;
     desc.name = "TestPipelineState";
     desc.colors = { TextureFormat::RGBA8 };
