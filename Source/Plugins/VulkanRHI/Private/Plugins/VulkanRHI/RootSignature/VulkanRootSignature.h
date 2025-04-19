@@ -66,6 +66,4 @@ namespace ob::rhi::vulkan {
 
     };
 
-    static vk::DescriptorType Convert(BindingType type);
-
 }

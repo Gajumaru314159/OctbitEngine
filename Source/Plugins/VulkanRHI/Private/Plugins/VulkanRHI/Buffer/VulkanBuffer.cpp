@@ -29,32 +29,7 @@ namespace ob::rhi::vulkan {
 		}
 
 		return false;
-	}
-
-	static vk::AccessFlags Convert(BufferState state) {
-		switch (state)
-		{
-		case BufferState::Common:
-			return vk::AccessFlagBits::eNone;
-		case BufferState::VertexBuffer:
-			return vk::AccessFlagBits::eVertexAttributeRead;
-		case BufferState::IndexBuffer:
-			return vk::AccessFlagBits::eIndexRead;
-		case BufferState::ConstantBuffer:
-			return vk::AccessFlagBits::eUniformRead;
-		case BufferState::UnorderedAccess:
-			return vk::AccessFlagBits::eShaderWrite;
-		case BufferState::PixelShadeResource:
-			return vk::AccessFlagBits::eShaderRead;
-		case BufferState::ComputeShaderResource:
-			return vk::AccessFlagBits::eShaderRead;
-		case BufferState::IndirectArgument:
-			return vk::AccessFlagBits::eIndirectCommandRead;
-		}
-		LOG_WARNING("不正なバッファ状態です。 [state={}]", static_cast<s32>(state));
-		return {};
-	}
-	
+	}	
 
 	//! @brief  コンストラクタ
 	//! 
@@ -146,7 +121,7 @@ namespace ob::rhi::vulkan {
 	void VulkanBuffer::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
 
-		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset,Convert(m_desc.state));
+		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset,TypeConverter::Convert(m_desc.state));
 	}
 
 
@@ -156,7 +131,7 @@ namespace ob::rhi::vulkan {
 	void VulkanBuffer::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0, Convert(m_desc.state));
+		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0, TypeConverter::Convert(m_desc.state));
 
 		return;
 

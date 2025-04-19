@@ -5,31 +5,9 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
 namespace ob::rhi::vulkan {
-	static  vk::DescriptorType Convert(BindingType value) {
-		switch (value)
-		{
-		case BindingType::Texture:
-			return vk::DescriptorType::eSampledImage;
-		case BindingType::RWTexture:
-			return vk::DescriptorType::eStorageImage;
-		case BindingType::Buffer:
-		case BindingType::StructuredBuffer:
-		case BindingType::ByteAddressBuffer:
-			return vk::DescriptorType::eUniformBuffer;
-		case BindingType::RWBuffer:
-		case BindingType::RWStructuredBuffer:
-		case BindingType::RWByteAddressBuffer:
-			return vk::DescriptorType::eStorageBuffer;
-		case BindingType::ConstantBuffer:
-			return vk::DescriptorType::eUniformBuffer;
-		case BindingType::Sampler:
-			return vk::DescriptorType::eSampler;
-		}
-		OB_ABORT("不正なBindingTypeです。");
-		return {};
-	}
 
 
 	//! @brief  コンストラクタ
@@ -55,7 +33,7 @@ namespace ob::rhi::vulkan {
 
 				auto& binding = bindings.emplace_back();
 				binding.binding = item.index;
-				binding.descriptorType = Convert(item.type);
+				binding.descriptorType = TypeConverter::Convert(item.type);
 				binding.descriptorCount = 1;
 				binding.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
 				binding.pImmutableSamplers = nullptr;

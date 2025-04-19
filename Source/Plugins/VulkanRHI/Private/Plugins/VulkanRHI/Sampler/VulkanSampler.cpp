@@ -5,45 +5,9 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
 namespace ob::rhi::vulkan {
-
-	static vk::Filter Convert(TextureFillter filter) {
-		switch (filter) {
-		case TextureFillter::Point: return vk::Filter::eNearest;
-		case TextureFillter::Linear: return vk::Filter::eLinear;
-		default: return vk::Filter::eLinear;
-		}
-	}
-
-	static vk::SamplerMipmapMode Convert(MipFillter mipFilter) {
-		switch (mipFilter) {
-		case MipFillter::Point: return vk::SamplerMipmapMode::eNearest;
-		case MipFillter::Linear: return vk::SamplerMipmapMode::eLinear;
-		default: return vk::SamplerMipmapMode::eLinear;
-		}
-	}
-
-	static vk::SamplerAddressMode Convert(TextureAddress address) {
-		switch (address) {
-		case TextureAddress::Repeat: return vk::SamplerAddressMode::eRepeat;
-		case TextureAddress::Clamp: return vk::SamplerAddressMode::eClampToEdge;
-		case TextureAddress::Mirror: return vk::SamplerAddressMode::eMirroredRepeat;
-		default: return vk::SamplerAddressMode::eRepeat;
-		}
-	}
-
-	static f32 Convert(Anisotropy anisotropy) {
-		switch (anisotropy) {
-		case Anisotropy::None: return 0;
-		case Anisotropy::Level1: return 1;
-		case Anisotropy::Level2: return 2;
-		case Anisotropy::Level4: return 4;
-		case Anisotropy::Level8: return 8;
-		case Anisotropy::Level16: return 16;
-		default: return 0;
-		}
-	}
 
 
 	//! @brief				シェーダーコードからシェーダーオブジェクトを生成
@@ -56,15 +20,15 @@ namespace ob::rhi::vulkan {
 		m_name = desc.name;
 		vk::SamplerCreateInfo info;
 		info.flags = {};
-		info.magFilter = Convert(desc.filter); // 拡大時
-		info.minFilter = Convert(desc.filter);	// 縮小時
-		info.mipmapMode = Convert(desc.mipFilter);
-		info.addressModeU = Convert(desc.addressU);
-		info.addressModeV = Convert(desc.addressV);
-		info.addressModeW = Convert(desc.addressW);
+		info.magFilter = TypeConverter::Convert(desc.filter); // 拡大時
+		info.minFilter = TypeConverter::Convert(desc.filter);	// 縮小時
+		info.mipmapMode = TypeConverter::Convert(desc.mipFilter);
+		info.addressModeU = TypeConverter::Convert(desc.addressU);
+		info.addressModeV = TypeConverter::Convert(desc.addressV);
+		info.addressModeW = TypeConverter::Convert(desc.addressW);
 		info.mipLodBias = desc.mipLodBias;
 		info.anisotropyEnable = desc.anisotropy != Anisotropy::None;
-		info.maxAnisotropy = Convert(desc.anisotropy);
+		info.maxAnisotropy = TypeConverter::Convert(desc.anisotropy);
 		info.compareEnable = false;
 		info.compareOp = vk::CompareOp::eAlways;
 		info.minLod = 0.0f;

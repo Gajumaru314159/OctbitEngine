@@ -47,55 +47,10 @@ namespace ob::rhi::vulkan {
 		return false;
 	}
 
-    vk::Format Convert(TextureFormat value) {
-		switch (value) {
-		case TextureFormat::RGBA32:         return vk::Format::eR32G32B32A32Sfloat;
-		case TextureFormat::RGBA16:         return vk::Format::eR16G16B16A16Sfloat;
-		case TextureFormat::RGBA8:          return vk::Format::eR8G8B8A8Unorm;
-
-		case TextureFormat::RGBA8_SRGB:     return vk::Format::eR8G8B8A8Srgb;
-
-
-		// case TextureFormat::RGB32:          return vk::Format::eR32G32B32Sfloat;
-		// case TextureFormat::RGB8:           return vk::Format::eR8G8B8Unorm;
-
-		case TextureFormat::RG32:           return vk::Format::eR32G32Sfloat;
-		case TextureFormat::RG16:           return vk::Format::eR16G16Sfloat;
-		case TextureFormat::RG8:            return vk::Format::eR8G8Unorm;
-
-		case TextureFormat::R32:            return vk::Format::eR32Sfloat;
-		case TextureFormat::R16:            return vk::Format::eR16Sfloat;
-		case TextureFormat::R8:             return vk::Format::eR8Unorm;
-
-		case TextureFormat::R10G10B10A2:    return vk::Format::eA2R10G10B10UnormPack32;
-
-		case TextureFormat::D32S8:          return vk::Format::eD32SfloatS8Uint;
-		case TextureFormat::D32:            return vk::Format::eD32Sfloat;
-		case TextureFormat::D24S8:          return vk::Format::eD24UnormS8Uint;
-		case TextureFormat::D16:            return vk::Format::eD16Unorm;
-
-		case TextureFormat::BC1:            return vk::Format::eBc1RgbaUnormBlock;
-		case TextureFormat::BC2:            return vk::Format::eBc2UnormBlock;
-		case TextureFormat::BC3:            return vk::Format::eBc3UnormBlock;
-		case TextureFormat::BC4:            return vk::Format::eBc4UnormBlock;
-		case TextureFormat::BC5:            return vk::Format::eBc5UnormBlock;
-		case TextureFormat::BC6H:           return vk::Format::eBc6HSfloatBlock;
-		case TextureFormat::BC7:            return vk::Format::eBc7UnormBlock;
-
-		case TextureFormat::BC1_SRGB:       return vk::Format::eBc1RgbaSrgbBlock;
-		case TextureFormat::BC2_SRGB:       return vk::Format::eBc2SrgbBlock;
-		case TextureFormat::BC3_SRGB:       return vk::Format::eBc3SrgbBlock;
-		case TextureFormat::BC7_SRGB:       return vk::Format::eBc7SrgbBlock;
-		}
-
-		LOG_WARNING_EX("Graphic", "不正なTextureFormat[value={}]", enum_cast(value));
-		return vk::Format::eUndefined;
-    }
-
 	static vk::ImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
 		vk::ImageCreateInfo info;
 		info.flags = {};
-		info.format = Convert(format);
+		info.format = TypeConverter::Convert(format);
 		info.extent = vk::Extent3D{(u32)size.width,(u32)size.height,(u32)size.depth};
 		info.mipLevels = std::max(mipLevel,1);
 		info.arrayLayers =std::max(arrayNum,1);
@@ -240,7 +195,7 @@ namespace ob::rhi::vulkan {
 
 		if(TextureFormatUtility::IsBC(m_desc.format) || m_desc.format == TextureFormat::RGB32 || m_desc.format == TextureFormat::RGB8 || m_desc.format == TextureFormat::Unknown) {
 			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
-			throw Exception("Unsupported Foramt");
+			throw NotSupportedException();
 		}
 
 		auto& device = m_rhi.getDevice();
