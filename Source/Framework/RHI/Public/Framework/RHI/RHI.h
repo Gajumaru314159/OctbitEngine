@@ -41,6 +41,7 @@ namespace ob::rhi {
         //! @brief  妥当な状態か
         virtual bool isValid()const { return true; };
 
+        virtual String getAPIName()const { return {}; };
 
         //===============================================================
         // 更新
@@ -91,7 +92,8 @@ namespace ob::rhi {
 
     public:
 
-        virtual bool supports(TextureFormat format)const { return false; }
+        virtual bool supports(TextureFormat format, TextureType type)const { return false; }
+        virtual bool supportsForRenderTexture(TextureFormat format)const { return false; }
         virtual bool supports(ShaderStage stage)const { return false; }
 
     protected:

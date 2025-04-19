@@ -170,7 +170,7 @@ namespace ob::rhi::dx12 {
 			D3D12_ROOT_PARAMETER elm;
 			elm.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 			elm.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-			elm.Constants.Num32BitValues = desc.constants.size;
+			elm.Constants.Num32BitValues = desc.constants.size/4;
 			elm.Constants.ShaderRegister = desc.constants.registerNo;
 			elm.Constants.RegisterSpace = desc.constants.registerSpace;
 

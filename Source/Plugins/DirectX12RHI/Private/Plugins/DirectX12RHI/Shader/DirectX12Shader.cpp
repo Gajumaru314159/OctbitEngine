@@ -119,8 +119,7 @@ namespace ob::rhi::dx12 {
             L"-encoding",
             L"utf8",
             L"/Zi",
-            L"-Qembed_debug",
-            L"-Wignored-attributes"
+            L"-Qembed_debug"
         };
 
         for (auto& macro : desc.macros) {
@@ -137,7 +136,6 @@ namespace ob::rhi::dx12 {
 		for (auto& arg : args) {
 			pargs.push_back(arg.data());
 		}
-        
 
         auto printArgs = [&]() {
             WString wargsText;
@@ -147,7 +145,7 @@ namespace ob::rhi::dx12 {
             }
             String argsText;
             StringEncoder::Encode(wargsText, argsText);
-            LOG_INFO("{}",argsText);
+            LOG_INFO("{}", argsText);
         };
 
         // コンパイル
@@ -161,7 +159,7 @@ namespace ob::rhi::dx12 {
             IID_PPV_ARGS(&resultBlob)
         );
         if (FAILED(result)) {
-            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
+            Utility::OutputErrorLog(result, "シェーダコンパイルエラー。APIの呼び出し方が間違っています。");
             printArgs();
             return;
         }
@@ -169,23 +167,26 @@ namespace ob::rhi::dx12 {
         // エラーチェック
         ComPtr<IDxcBlobUtf8> errors{};
         ComPtr<IDxcBlobUtf16> outputName{};
-        result = resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName);
-        if (FAILED(result)) {
-            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
-            printArgs();
-            return;
+        String errorMessage;
+        if (SUCCEEDED(resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName))) {
+            if (errors->GetBufferSize() != 0) {
+                errorMessage = StringView(errors->GetStringPointer(), errors->GetStringLength());
+            }
         }
-        if (errors->GetBufferSize() != 0) {
-            LOG_ERROR_EX("Graphic", "{}", StringView(errors->GetStringPointer(), errors->GetStringLength()));
-            printArgs();
+
+        HRESULT blobStatus;
+        if (FAILED(resultBlob->GetStatus(&blobStatus)) || FAILED(blobStatus))
+        {
+            LOG_ERROR_EX("Graphic", "シェーダコンパイルに失敗しました\n{}", errorMessage);
             return;
+        } else if (!errorMessage.empty()) {
+            LOG_WARNING_EX("Graphic", "シェーダコンパイル時に警告が発生しています\n{}", errorMessage);
         }
 
         // バイナリ取得
         result = resultBlob->GetResult(m_shaderBolb2.ReleaseAndGetAddressOf());
         if (FAILED(result)) {
-            Utility::OutputErrorLog(result, "シェーダコンパイルエラー");
-            printArgs();
+            Utility::OutputErrorLog(result, "シェーダーバイナリの取得に失敗しました");
             return;
         }
 

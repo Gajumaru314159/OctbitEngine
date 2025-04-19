@@ -20,6 +20,9 @@ namespace ob::rhi {
         //! @param name     オブジェクト名
         static Ref<RenderTexture> Create(const RenderTextureDesc& desc);
 
+        //! @brief      テクスチャフォーマットがサポートされているか
+        static bool Supports(TextureFormat format);
+
     public:
 
         //! @brief      定義取得

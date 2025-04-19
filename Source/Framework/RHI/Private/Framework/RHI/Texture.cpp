@@ -85,9 +85,9 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-	bool Texture::Supports(TextureFormat format) {
+	bool Texture::Supports(TextureFormat format, TextureType type) {
 		if (auto rhi = RHI::Get()) {
-			return rhi->supports(format);
+			return rhi->supports(format,type);
 		}
 		return false;
 	}

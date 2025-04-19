@@ -10,27 +10,6 @@
 
 namespace ob::rhi::vulkan {
 
-	//! @brief バリデート
-	static bool IsInvalid(BufferDesc& desc) {
-
-		if (desc.size == 0) {
-			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
-			desc.size = 256;
-		}
-
-		if (desc.state == BufferState::Constant && desc.size % 256 != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, 256));
-			desc.size = align_up(desc.size, 256);
-		}
-
-		if (desc.size < 65536 && desc.size % 4 != 0) {
-			LOG_WARNING("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", desc.name, desc.size);
-			desc.size = align_up(desc.size, 4);
-		}
-
-		return false;
-	}	
-
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc バッファ定義
@@ -39,7 +18,7 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 
-		if (IsInvalid(m_desc)) throw Exception("Invalid ufferDesc");
+		if (!m_desc.isValid()) throw Exception("Invalid ufferDesc");
 
 		auto& device = rhi.getDevice();
 

@@ -49,6 +49,9 @@ namespace ob::rhi::vulkan {
 		bool isValid()const;
 
 
+		//! @brief	API名を取得
+		String getAPIName()const { return "Vulkan"; };
+
 		//===============================================================
 		// 更新
 		//===============================================================
@@ -131,7 +134,10 @@ namespace ob::rhi::vulkan {
 	public:
 
 		//! @brief サポートしているテクスチャフォーマットか 
-		bool supports(TextureFormat format)const override;
+		bool supports(TextureFormat format, TextureType type)const override;
+
+		//! @brief サポートしているレンダーテクスチャーフォーマットか 
+		bool supportsForRenderTexture(TextureFormat format)const override;
 
 		//! @brief サポートしているシェーダーステージか 
 		bool supports(ShaderStage format)const override;

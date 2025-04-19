@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
+#include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Display/DirectX12Display.h>
 #include <Plugins/DirectX12RHI/Command/DirectX12CommandList.h>
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
@@ -216,16 +217,38 @@ namespace ob::rhi::dx12 {
 	}
 
 	//! @brief サポートしているテクスチャフォーマットか 
-	bool DirectX12RHI::supports(TextureFormat format)const {
-		if (format == TextureFormat::Unknown) {
-			return false;
-		}
+	bool DirectX12RHI::supports(TextureFormat format, TextureType type)const {
 
-		return true;
+		if (format == TextureFormat::Unknown)return false;
+
+		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
+		result.Format = TypeConverter::Convert(format);
+		result.Support1 = D3D12_FORMAT_SUPPORT1_NONE;
+		if (type == TextureType::Texture1D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE1D;
+		if (type == TextureType::Texture2D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE2D;
+		if (type == TextureType::Texture3D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE3D;
+		if (type == TextureType::Cube) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE3D;
+		result.Support2 = D3D12_FORMAT_SUPPORT2_NONE;
+
+		return SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)));
+	}
+
+	//! @brief サポートしているテクスチャフォーマットか 
+	bool DirectX12RHI::supportsForRenderTexture(TextureFormat format)const {
+		
+		if (format == TextureFormat::Unknown)return false;
+
+		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
+		result.Format = TypeConverter::Convert(format);
+		result.Support1 = D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
+		result.Support2 = D3D12_FORMAT_SUPPORT2_NONE;
+
+		return SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)));
 	}
 
 	//! @brief サポートしているシェーダーステージか 
 	bool DirectX12RHI::supports(ShaderStage stage)const {
+		// TODO サポートするシェーダーステージのチェック
 		return true;
 	}
 

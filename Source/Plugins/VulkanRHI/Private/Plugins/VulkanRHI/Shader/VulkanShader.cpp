@@ -125,7 +125,6 @@ namespace ob::rhi::vulkan {
             pargs.push_back(arg.data());
         }
 
-
         auto printArgs = [&]() {
             WString wargsText;
             for (auto& arg : args) {
@@ -135,8 +134,8 @@ namespace ob::rhi::vulkan {
             String argsText;
             StringEncoder::Encode(wargsText, argsText);
             LOG_INFO("{}", argsText);
-            };
-
+        };
+        
         // コンパイル
         // TODO スレッド安全性の確認
         ComPtr<IDxcResult> resultBlob;
@@ -148,29 +147,35 @@ namespace ob::rhi::vulkan {
             IID_PPV_ARGS(&resultBlob)
         );
         if (FAILED(result)) {
+            LOG_ERROR_EX("Graphic", "シェーダコンパイルに失敗しました {}", ErrorCode(result));
             printArgs();
-            throw Exception("shaderのコンパイルに失敗しました");
+            return;
         }
 
         // エラーチェック
         ComPtr<IDxcBlobUtf8> errors{};
         ComPtr<IDxcBlobUtf16> outputName{};
-        result = resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName);
-        if (FAILED(result)) {
-            printArgs();
-            throw Exception("shaderのコンパイルに失敗しました");
+        String errorMessage;
+        if (SUCCEEDED(resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName))) {
+            if (errors->GetBufferSize() != 0) {
+                errorMessage = StringView(errors->GetStringPointer(), errors->GetStringLength());
+            }
         }
-        if (errors->GetBufferSize() != 0) {
-            printArgs();
-            throw Exception(Format("shaderのコンパイルに失敗しました\n{}", StringView(errors->GetStringPointer(), errors->GetStringLength())));
+
+        HRESULT blobStatus;
+        if (FAILED(resultBlob->GetStatus(&blobStatus)) || FAILED(blobStatus))
+        {
+            LOG_ERROR_EX("Graphic", "シェーダコンパイルに失敗しました\n{}", errorMessage);
+            return;
+        } else if (!errorMessage.empty()) {
+            LOG_WARNING_EX("Graphic", "シェーダコンパイル時に警告が発生しています\n{}", errorMessage);
         }
 
         // バイナリ取得
         ComPtr<IDxcBlob> shaderBlob;
         result = resultBlob->GetResult(shaderBlob.ReleaseAndGetAddressOf());
         if (FAILED(result)) {
-            printArgs();
-            throw Exception("shaderのコンパイルに失敗しました");
+            throw Exception("シェーダーバイナリの取得に失敗しました");
         }
 
         vk::ShaderModuleCreateInfo info;

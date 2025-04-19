@@ -59,6 +59,10 @@ namespace ob::rhi {
 
 	public:
 
+		bool isValid() const;
+
+	public:
+
 		//! @brief  コンストラクタ
 		BufferDesc() = default;
 

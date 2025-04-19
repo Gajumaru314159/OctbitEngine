@@ -34,6 +34,10 @@ namespace ob::rhi::dx12 {
 		bool isValid()const override;
 
 
+		//! @brief	API名を取得
+		String getAPIName()const { return "DirectX12"; };
+
+
 		//===============================================================
 		// 更新
 		//===============================================================
@@ -116,7 +120,10 @@ namespace ob::rhi::dx12 {
 	public:
 
 		//! @brief サポートしているテクスチャフォーマットか 
-		bool supports(TextureFormat format)const override;
+		bool supports(TextureFormat format, TextureType type)const override;
+
+		//! @brief サポートしているテクスチャフォーマットか 
+		bool supportsForRenderTexture(TextureFormat format)const override;
 
 		//! @brief サポートしているシェーダーステージか 
 		bool supports(ShaderStage format)const override;

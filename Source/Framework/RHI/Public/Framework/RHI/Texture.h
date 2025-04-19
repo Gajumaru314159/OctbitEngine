@@ -50,7 +50,7 @@ namespace ob::rhi {
 
 
 		//! @brief      テクスチャフォーマットがサポートされているか
-        static bool Supports(TextureFormat format);
+        static bool Supports(TextureFormat format, TextureType type);
 
     public:
 

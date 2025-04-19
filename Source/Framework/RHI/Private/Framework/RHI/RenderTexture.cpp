@@ -16,4 +16,11 @@ namespace ob::rhi {
         return nullptr;
     }
 
+    bool RenderTexture::Supports(TextureFormat format) {
+        if (auto rhi = RHI::Get()) {
+            return rhi->supportsForRenderTexture(format);
+        }
+        return false;
+    }
+
 }

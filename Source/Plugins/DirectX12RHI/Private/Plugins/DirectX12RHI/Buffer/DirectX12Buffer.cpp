@@ -46,22 +46,6 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//! @brief バリデート
-	static bool IsInvalid(BufferDesc& desc) {
-
-		if (desc.state == BufferState::Constant && desc.size % D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT != 0) {
-			LOG_WARNING("定数バッファは256の倍数で作成する必要があります。サイズを{}から{}に調整します。 [name={}]", desc.name, desc.size, align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT));
-			desc.size = align_up(desc.size, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
-		}
-
-		if (desc.size == 0) {
-			LOG_WARNING("バッファサイズは0より大きくなくてはいけません。サイズを256に設定します。 [name={}]", desc.name);
-			desc.size = 256;
-		}
-
-		return false;
-	}
-
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc バッファ定義
@@ -70,7 +54,7 @@ namespace ob::rhi::dx12 {
 		, m_desc(desc)
 	{
 
-		if (IsInvalid(m_desc))return;
+		if (!m_desc.isValid()) return;
 
 		HRESULT result;
 
@@ -112,7 +96,7 @@ namespace ob::rhi::dx12 {
 	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob)
 		: DirectX12Buffer(rDevice,desc)
 	{
-		if (!isValid())return;
+		if (!isValid())return; 
 		// TODO
 		OB_NOTIMPLEMENTED();
 	}

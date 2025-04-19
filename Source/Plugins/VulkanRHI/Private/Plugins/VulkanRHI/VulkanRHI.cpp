@@ -544,7 +544,27 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief サポートしているテクスチャフォーマットか 
-	bool VulkanRHI::supports(TextureFormat format)const {
+	bool VulkanRHI::supports(TextureFormat format, TextureType type)const {
+
+		if (format == TextureFormat::Unknown) {
+			return false;
+		}
+
+		if (m_features.textureCompressionBC == false && TextureFormatUtility::IsBC(format)) {
+			return false;
+		}
+
+		switch (format)
+		{
+		case ob::rhi::TextureFormat::RGB32:
+		case ob::rhi::TextureFormat::RGB8:
+			return false;
+		}
+
+		return true;
+	}
+	//! @brief サポートしているレンダーテクスチャフォーマットか 
+	bool VulkanRHI::supportsForRenderTexture(TextureFormat format)const {
 
 		if (format == TextureFormat::Unknown) {
 			return false;
