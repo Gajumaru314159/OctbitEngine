@@ -79,8 +79,6 @@ namespace ob::rhi::dx12 {
 	void DirectX12CommandList::begin() {
 		HRESULT result;
 
-		clearRenderTargets();
-
 		// コマンドアロケータをリセット
 		result = m_cmdAllocator->Reset();
 		if (FAILED(result)) {
@@ -115,12 +113,15 @@ namespace ob::rhi::dx12 {
 	//! // TODO Singletonに依存しているので廃止
 	void DirectX12CommandList::flush() {
 		if (auto rhi = RHI::Get()) {
-			rhi->entryCommandList(*this);
+			Ref<CommandList> commandList = this;
+			rhi->entryCommandList(commandList);
 		}
 	}
 
 	//! @brief      RenderPass開始
 	void DirectX12CommandList::beginRenderPass(const RenderPassDesc& param) {
+
+		clearRenderTargets();
 
 		m_currentRenderPass = param;
 
@@ -194,9 +195,9 @@ namespace ob::rhi::dx12 {
 		m_cmdList->BeginRenderPass(colors.size(), colors.data(), pDepth, flags);
 
 		// 初期設定としてViewportとScissorRectを設定
-		FixedVector<Viewport, VIEWPORT_MAX> viewports;
-		FixedVector<IntRect, SCISSOR_RECT_MAX> scissors;
-		for (auto& color : param.colors) {
+		FixedVector<Viewport, RENDER_TARGET_MAX> viewports;
+		FixedVector<IntRect, RENDER_TARGET_MAX> scissors;
+		for (s32 i = 0; i < std::max<s32>(param.colors.size(), 1); ++i) {
 			viewports.emplace_back(0, 0, width, height);
 			scissors.emplace_back(0, 0, width, height);
 		}

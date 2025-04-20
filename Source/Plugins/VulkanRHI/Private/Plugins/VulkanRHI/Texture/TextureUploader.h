@@ -29,7 +29,7 @@ namespace ob::rhi::vulkan {
 
         void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, Span<Subresource> subresources);
 
-        void update(vk::raii::CommandBuffer& commandBuffer);
+        void update(vk::CommandBuffer commandBuffer);
 
     private:
 

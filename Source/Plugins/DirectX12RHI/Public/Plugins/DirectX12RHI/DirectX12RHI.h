@@ -42,7 +42,7 @@ namespace ob::rhi::dx12 {
 		// 更新
 		//===============================================================
 
-		void entryCommandList(const CommandList&) override;
+		void entryCommandList(const Ref<CommandList>&) override;
 
 
 		//===============================================================

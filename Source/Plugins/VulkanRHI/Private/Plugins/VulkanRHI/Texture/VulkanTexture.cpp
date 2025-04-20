@@ -122,6 +122,7 @@ namespace ob::rhi::vulkan {
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
+		createSRV(m_image, info.format);
     }
 
 
@@ -168,6 +169,7 @@ namespace ob::rhi::vulkan {
 
 		m_rhi.getTextureUploader().add(m_image,info,subresources);
 
+		createSRV(m_image, info.format);
 	}
 
 
@@ -248,14 +250,24 @@ namespace ob::rhi::vulkan {
 			m_hDSV = device.createImageView(viewCreateInfo);
 		}
 
+		createSRV(m_image,info.format);
 	}
 
 
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	VulkanTexture::VulkanTexture(VulkanRHI& rhi, VkImage image, vk::Format format,StringView name)
+	VulkanTexture::VulkanTexture(VulkanRHI& rhi, VkImage image, vk::Format format,vk::Extent2D size, StringView name)
 		: m_rhi(rhi)
 	{
 		auto& device = m_rhi.getDevice();
+
+		m_desc.name = name;
+		m_desc.size = Size(size.width, size.height);
+		m_desc.type = TextureType::Texture2D;
+		m_desc.format = TypeConverter::Convert(format);
+		m_desc.arrayNum = 0;
+		m_desc.mipLevels = 1;
+
+
 
 		// View
 		vk::ImageViewCreateInfo viewCreateInfo;
@@ -268,10 +280,25 @@ namespace ob::rhi::vulkan {
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		m_hRTV = device.createImageView(viewCreateInfo);
 
+		createSRV(image,format);
 	}
 
 
 	VulkanTexture::~VulkanTexture() {
+	}
+
+	void VulkanTexture::createSRV(vk::Image image, vk::Format format) {
+
+		// View
+		vk::ImageViewCreateInfo viewCreateInfo;
+		viewCreateInfo.viewType = vk::ImageViewType::e2D;
+		viewCreateInfo.format = format;
+		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
+		viewCreateInfo.subresourceRange.levelCount = 1;
+		viewCreateInfo.subresourceRange.layerCount = 1;
+		viewCreateInfo.image = image;
+		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+		m_hSRV = m_rhi.getDevice().createImageView(viewCreateInfo);
 	}
 
 }// ob::rhi::dx12

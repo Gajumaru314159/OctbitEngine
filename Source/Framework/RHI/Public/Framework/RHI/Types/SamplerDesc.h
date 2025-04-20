@@ -69,7 +69,7 @@ namespace ob::rhi {
             TextureAddress addressV = TextureAddress::Repeat,
             TextureAddress addressW = TextureAddress::Repeat,
             f32 mipLodBias = 0,
-            Anisotropy anisotropy = Anisotropy::Level16,
+            Anisotropy anisotropy = Anisotropy::None,
             f32 minLod = 0,
             f32 maxLod = (std::numeric_limits<f32>::max)(),
             MipFillter mipFilter = MipFillter::Linear,

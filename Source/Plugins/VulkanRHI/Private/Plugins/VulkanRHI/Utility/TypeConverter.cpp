@@ -292,4 +292,49 @@ namespace ob::rhi::vulkan {
 		}
 	}
 
+	vk::AttachmentLoadOp TypeConverter::Convert(RenderPassBeforeAccessType type) {
+		switch (type) {
+		case RenderPassBeforeAccessType::Discard: return vk::AttachmentLoadOp::eClear;
+		case RenderPassBeforeAccessType::Preserve: return vk::AttachmentLoadOp::eLoad;
+		case RenderPassBeforeAccessType::Clear: return vk::AttachmentLoadOp::eClear;
+		case RenderPassBeforeAccessType::NoAccess: return vk::AttachmentLoadOp::eDontCare;
+		}
+		throw NotSupportedException();
+	}
+
+	vk::AttachmentStoreOp TypeConverter::Convert(RenderPassAfterAccessType type) {
+		switch (type) {
+		case RenderPassAfterAccessType::Discard: return vk::AttachmentStoreOp::eDontCare;
+		case RenderPassAfterAccessType::Preserve: return vk::AttachmentStoreOp::eStore;
+		case RenderPassAfterAccessType::NoAccess: return vk::AttachmentStoreOp::eDontCare;
+		}
+		throw NotSupportedException();
+	}
+
+
+	TextureFormat TypeConverter::Convert(vk::Format value) {
+		switch (value) {
+		case vk::Format::eR8G8B8A8Unorm: return TextureFormat::RGBA8;
+		case vk::Format::eB8G8R8A8Unorm: return TextureFormat::RGBA8;
+		case vk::Format::eR8G8B8A8Srgb: return TextureFormat::RGBA8_SRGB;
+		case vk::Format::eR32G32B32A32Sfloat: return TextureFormat::RGBA32;
+		case vk::Format::eR16G16B16A16Sfloat: return TextureFormat::RGBA16;
+		case vk::Format::eR8G8B8Unorm: return TextureFormat::RGB8;
+		case vk::Format::eR32G32B32Sfloat: return TextureFormat::RGB32;
+		case vk::Format::eR16G16B16A16Uint: return TextureFormat::RGBA16;
+		case vk::Format::eD32SfloatS8Uint: return TextureFormat::D32S8;
+		case vk::Format::eD24UnormS8Uint: return TextureFormat::D24S8;
+		case vk::Format::eD32Sfloat: return TextureFormat::D32;
+		case vk::Format::eD16Unorm: return TextureFormat::D16;
+		case vk::Format::eBc1RgbaUnormBlock: return TextureFormat::BC1;
+		case vk::Format::eBc2UnormBlock: return TextureFormat::BC2;
+		case vk::Format::eBc3UnormBlock: return TextureFormat::BC3;
+		case vk::Format::eBc4UnormBlock: return TextureFormat::BC4;
+		case vk::Format::eBc5UnormBlock: return TextureFormat::BC5;
+		case vk::Format::eBc6HSfloatBlock: return TextureFormat::BC6H;
+		case vk::Format::eBc7UnormBlock: return TextureFormat::BC7;
+		}
+		throw NotSupportedException();
+	}
+
 }

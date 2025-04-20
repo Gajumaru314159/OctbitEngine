@@ -56,7 +56,11 @@ namespace ob::rhi::vulkan {
 	//! @brief  描画開始
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::begin() {
-		m_commandBuffer.begin(vk::CommandBufferBeginInfo{});
+		m_commandPool.reset(vk::CommandPoolResetFlags{});
+		m_commandBuffer.reset(vk::CommandBufferResetFlags{});
+		vk::CommandBufferBeginInfo info;
+		info.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
+		m_commandBuffer.begin(info);
 	}
 
 
@@ -65,8 +69,6 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::end() {
 		m_commandBuffer.end();
-		m_commandPool.reset(vk::CommandPoolResetFlags{});
-		m_commandBuffer.reset(vk::CommandBufferResetFlags{});
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -74,38 +76,64 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::flush() {
 		if (auto rhi = RHI::Get()) {
-			rhi->entryCommandList(*this);
+			Ref<CommandList> commandList = this;
+			rhi->entryCommandList(commandList);
 		}
 	}
 
 	void VulkanCommandList::beginRenderPass(const RenderPassDesc& param) {
 
+		m_colorTextures.clear();
+		m_depthTexture = nullptr;
+
 		s32 width = 0;
 		s32 height = 0;
 
-		FixedVector<vk::RenderingAttachmentInfo, 8> colorAttachments;
+		FixedVector<vk::RenderingAttachmentInfo, RENDER_TARGET_MAX> colorAttachments;
 		FixedVector<vk::RenderingAttachmentInfo, 1> depthAttachments;
+		FixedVector<vk::RenderingAttachmentInfo, 1> stencilAttachments;
 		for (auto [index,color] : Indexed(param.colors)) {
 			if (auto p = color.texture.cast<VulkanTexture>()) {
-				auto& colorAttachment = colorAttachments.emplace_back();
-				colorAttachment.imageView = p->getRTV();
-				colorAttachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
+				auto& attachment = colorAttachments.emplace_back();
+				attachment.imageView = p->getRTV();
+				attachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
+				attachment.loadOp = TypeConverter::Convert(color.beforeAccess);
+				attachment.storeOp = TypeConverter::Convert(color.afterAccess);
 
 				width = color.texture->width();
 				height = color.texture->height();
-			}
-			else {
+			} else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
 			}
 		}
-		{
+		if (param.depth.texture) {
 			if (auto p = param.depth.texture.cast<VulkanTexture>()) {
-				auto& depthAttachment = depthAttachments.emplace_back();
-				depthAttachment.imageView = p->getDSV();
-				depthAttachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
+				auto& attachment = depthAttachments.emplace_back();
+				attachment.imageView = p->getDSV();
+				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
+				attachment.loadOp = TypeConverter::Convert(param.depth.beforeAccess);
+				attachment.storeOp = TypeConverter::Convert(param.depth.afterAccess);
+
+				// TODO Stencilの扱い
 
 				width = param.depth.texture->width();
 				height = param.depth.texture->height();
+			} else {
+				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
+			}
+		}
+		if (param.stencil.texture) {
+			if (auto p = param.stencil.texture.cast<VulkanTexture>()) {
+				auto& attachment = stencilAttachments.emplace_back();
+				attachment.imageView = p->getDSV();
+				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
+				attachment.loadOp = TypeConverter::Convert(param.stencil.beforeAccess);
+				attachment.storeOp = TypeConverter::Convert(param.stencil.afterAccess);
+
+				// TODO Stencilの扱い
+
+				width = param.stencil.texture->width();
+				height = param.stencil.texture->height();
 			}
 			else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
@@ -121,22 +149,50 @@ namespace ob::rhi::vulkan {
 		info.layerCount = 1;
 		info.viewMask = 0;
 		if (!colorAttachments.empty()) {
-			info.pColorAttachments = colorAttachments.data();
-			info.colorAttachmentCount = colorAttachments.size();
+			info.setColorAttachments(colorAttachments);
 		}
 		if (!depthAttachments.empty()) {
 			info.pDepthAttachment = depthAttachments.data();
 		}
-		//if (!stencilAttachments.empty()) {
-		//	info.pStencilAttachment = stencilAttachments.data();
-		//}
+		if (!stencilAttachments.empty()) {
+			info.pStencilAttachment = stencilAttachments.data();
+		}
 
 		m_commandBuffer.beginRendering(info);
 
+		// 初期設定としてViewportとScissorRectを設定
+		FixedVector<Viewport, RENDER_TARGET_MAX> viewports;
+		FixedVector<IntRect, RENDER_TARGET_MAX> scissors;
+		for (s32 i = 0; i < std::max<s32>(param.colors.size(),1);++i) {
+			viewports.emplace_back(0, 0, width, height);
+			scissors.emplace_back(0, 0, width, height);
+		}
+
+		setViewport(viewports.data(), (UINT)viewports.size());
+		setScissorRect(scissors.data(), (UINT)scissors.size());
+
 	}
-	// virtual void nextSubpass();
+
 	void VulkanCommandList::endRenderPass() {
-		m_commandBuffer.endRenderPass();
+		
+		m_commandBuffer.endRendering();
+
+		// m_cache.clear();
+		// 
+		// for (auto [i, color] : Indexed(m_colorTextures)) {
+		// 	if (auto texture = color.cast<DirectX12Texture>()) {
+		// 		m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+		// 	}
+		// }
+		// if (auto texture = m_depthTexture.cast<DirectX12Texture>()) {
+		// 	m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+		// }
+		// 
+		// // リソースバリア
+		// m_cache.recordCommand(*m_cmdList.Get());
+
+		m_colorTextures.clear();
+		m_depthTexture = nullptr;
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -161,7 +217,7 @@ namespace ob::rhi::vulkan {
 		FixedVector<vk::Rect2D, 8> rects;
 		for (s32 i = 0; i < num; ++i) {
 			auto& rectIn = pRect[i];
-			auto& rectOut = rects[i];
+			auto& rectOut = rects.emplace_back();
 			rectOut.offset.x = rectIn.left;
 			rectOut.offset.y = rectIn.top;
 			rectOut.extent.width = rectIn.width();
@@ -201,7 +257,15 @@ namespace ob::rhi::vulkan {
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::clearColors(u32 mask) {
-		//OB_NOTIMPLEMENTED();
+		// for (auto [i, texture] : Indexed(m_colorTextures)) {
+		// 	if (!(mask & (1 << i)))continue;
+		// 	if (auto impl = texture.cast<VulkanTexture>()) {
+		// 		Color color = texture->descOfRenderTexture().clear.color;
+		// 		vk::ClearColorValue value(color.r, color.g, color.b, color.a);
+		// 
+		// 		m_commandBuffer.clearColorImage(impl->getNative(), vk::ImageLayout::eTransferDstOptimal, vk::ImageLayout::eColorAttachmentOptimal, vk::ClearColorValue{0.0f,0.0f,0.0f,1.0f}, {0, 0, 1});
+		// 	}
+		// }
 		//m_commandBuffer.clearColorImage(m_renderTarget->getNative(), vk::ImageLayout::eColorAttachmentOptimal, vk::ClearColorValue{ 0.0f,0.0f,0.0f,1.0f }, { 0, 0, 1 });
 	}
 
@@ -290,13 +354,23 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
 
-		OB_NOTIMPLEMENTED();
+		for (s32 i = 0; i < num; ++i) {
+			auto& param = params[i];
+
+			if (auto impl = param.table.cast<VulkanDescriptorTable>()) {
+				impl->record(m_commandBuffer, param.slot);
+			} else {
+				LOG_ERROR("不正な引数。デスクリプタテーブルが不正です。");
+			}
+
+		}
+
 	}
 
 
 	//! @brief      ルート定数を設定
-	void VulkanCommandList::setRootConstant(const SetRootConstantsParam&) {
-
+	void VulkanCommandList::setRootConstant(const SetRootConstantsParam& param) {
+		// m_commandBuffer.pushConstants();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -309,12 +383,12 @@ namespace ob::rhi::vulkan {
 
 	//! @brief      GPUマーカーをプッシュ
 	void VulkanCommandList::pushMarker(StringView name) {
-
+		// if (m_rhi.debugMarkerEnabled) m_commandBuffer.debugMarkerBeginEXT("BufferUploader");
 	}
 
 	//! @brief      GPUマーカーをポップ
 	void VulkanCommandList::popMarker() {
-
+		// if (m_rhi.debugMarkerEnabled) m_commandBuffer.debugMarkerEndEXT();
 	}
 
 #pragma endregion

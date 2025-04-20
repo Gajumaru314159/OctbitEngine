@@ -66,8 +66,10 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  コマンドをシステムキューに追加
-	void DirectX12RHI::entryCommandList(const CommandList& commandList) {
-		m_commandQueue->entryCommandList(commandList);
+	void DirectX12RHI::entryCommandList(const Ref<CommandList>& commandList) {
+		if (commandList) {
+			m_commandQueue->entryCommandList(*commandList);
+		}
 	}
 
 

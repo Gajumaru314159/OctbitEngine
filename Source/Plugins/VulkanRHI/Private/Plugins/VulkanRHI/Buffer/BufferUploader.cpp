@@ -130,7 +130,7 @@ namespace ob::rhi::vulkan
 
 	}
 
-	void BufferUploader::update(vk::raii::CommandBuffer& commandBuffer,bool useDebugMarker) {
+	void BufferUploader::update(vk::CommandBuffer commandBuffer,bool useDebugMarker) {
 
 		ScopeLock lock(m_lock);
 
@@ -149,7 +149,7 @@ namespace ob::rhi::vulkan
 			block.memory.unmapMemory();
 		}
 
-		if(useDebugMarker) commandBuffer.debugMarkerBeginEXT("BufferUploader");
+		//if(useDebugMarker) commandBuffer.debugMarkerBeginEXT("BufferUploader");
 
 		// blocks 事前バリア設定(COMMON or GENERIC_READ > COPY_SOURCE)
 		m_barriers.clear();
@@ -230,7 +230,7 @@ namespace ob::rhi::vulkan
 		frame.clear();
 		m_entriedBuffers.clear();
 
-		if (useDebugMarker) commandBuffer.debugMarkerEndEXT();
+		//if (useDebugMarker) commandBuffer.debugMarkerEndEXT();
 
 	}
 

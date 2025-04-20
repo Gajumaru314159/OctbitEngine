@@ -45,7 +45,7 @@ namespace ob::rhi::vulkan {
         VulkanTexture(VulkanRHI& rhi, const RenderTextureDesc& desc);
 
         //! @brief      SwapChainのリソースからRenderTextureを生成
-        VulkanTexture(VulkanRHI& rhi, VkImage image, vk::Format format,StringView name);
+        VulkanTexture(VulkanRHI& rhi, VkImage image, vk::Format format, vk::Extent2D size, StringView name);
 
     public:
 
@@ -53,10 +53,16 @@ namespace ob::rhi::vulkan {
 		vk::raii::Image& getNative() { return m_image; }
 		//! @brief      メモリを取得
 		vk::raii::DeviceMemory& getMemory() { return m_memory; }
-		//! @brief      レンダーテクスチャのイメージビューを取得
-		vk::raii::ImageView& getRTV() { return m_hRTV; }
+        //! @brief      のイメージビューを取得(要修正)
+        vk::raii::ImageView& getSRV() { return m_hSRV; }
+        //! @brief      レンダーテクスチャのイメージビューを取得
+        vk::raii::ImageView& getRTV() { return m_hRTV; }
 		//! @brief      レンダーテクスチャのデプスステンシルビューを取得
 		vk::raii::ImageView& getDSV() { return m_hDSV; }
+
+    private:
+
+        void createSRV(vk::Image image,vk::Format format);
 
     private:
 
@@ -70,6 +76,7 @@ namespace ob::rhi::vulkan {
 
         //ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
         //
+        vk::raii::ImageView       m_hSRV = nullptr;
         //// TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
         vk::raii::ImageView       m_hRTV = nullptr;
         vk::raii::ImageView       m_hDSV = nullptr;

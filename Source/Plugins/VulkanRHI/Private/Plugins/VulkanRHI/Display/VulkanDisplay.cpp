@@ -14,6 +14,7 @@
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/Sampler.h>
 
 namespace ob::rhi::vulkan {
 
@@ -114,9 +115,11 @@ namespace ob::rhi::vulkan {
 		auto images = m_swapchain.getImages();
 
 		// ImageView生成
-		for (auto& image : images) {
+		for (auto [index,image] : Indexed(images)) {
 
-			// m_textures.push_back(new VulkanTexture(image));
+			String name = Format("{}_{}", m_desc.name,index);
+
+			m_textures.push_back(new VulkanTexture(rhi,image,format.format, size,name));
 
 			vk::ImageViewCreateInfo imageViewCreateInfo;
 			imageViewCreateInfo.flags = {};
@@ -155,24 +158,39 @@ namespace ob::rhi::vulkan {
 	}
 
 	//! @brief 更新
-	void VulkanDisplay::update() {}
+	void VulkanDisplay::update() {
+		//update(m_rhi.getQueue());
+	}
 	void VulkanDisplay::update(vk::Queue queue) {
-
 
 		if (!m_desc.window.isValid())return;
 
-		uint32_t imageIndex = m_textures.index();
-		vk::PresentInfoKHR info;
-		//info.setSwapchains(m_swapchain);
-		//info.setImageIndices(imageIndex);
-		
-		(0, 0, 0, *m_swapchain);
+		auto& device = m_rhi.getDevice();
 
-		vk::Result result = queue.presentKHR(info);
+		auto [result,index] = m_swapchain.acquireNextImage(1'000'000'000, {}, m_fence);
+		
 		if (result != vk::Result::eSuccess) {
+			LOG_ERROR("次フレームの取得に失敗");
+			return;
+		}
+
+		if (device.waitForFences(*m_fence, VK_TRUE, 1'000'000'000) != vk::Result::eSuccess) {
+			LOG_ERROR("フレーム待機に失敗");
+			return;
+		}
+
+
+
+		vk::PresentInfoKHR info;
+		info.setSwapchains(*m_swapchain);
+		info.setImageIndices(index);
+		
+		if (queue.presentKHR(info) != vk::Result::eSuccess) {
 			LOG_ERROR("Presentに失敗しました。");
 		}
 		
+		queue.waitIdle();
+
 		m_textures.next();
 	}
 
@@ -195,6 +213,10 @@ namespace ob::rhi::vulkan {
 			if (m_bindedTexture) {
 				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
+			}
+			if (m_bindedSamplerTable) {
+				m_bindedSamplerTable = DescriptorTable::Create(m_signature, 1);
+				m_bindedSamplerTable->setResource(0, m_bindedSampler);
 			}
 
 		}
@@ -255,23 +277,31 @@ namespace ob::rhi::vulkan {
 			m_verices->updateDirect(bdesc.size, vertices);
 		}
 
+		{
+			SamplerDesc desc;
+			desc.name = m_desc.name + "_Sampler";
+			m_bindedSampler = rhi.createSampler(desc);
+		}
+
 		Ref<Shader> vs;
 		Ref<Shader> ps;
 		{
 			String code;
-			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("[[vk::binding(0, 0)]]											\n");
 			code.append("Texture2D g_mainTex:register(t0);								\n");
-			code.append("// IN / OUT														\n");
+			code.append("[[vk::binding(0, 1)]]											\n");
+			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("// IN / OUT													\n");
 			code.append("struct VsIn {													\n");
 			code.append("  float2 pos	:POSITION;										\n");
 			code.append("};																\n");
 			code.append("struct PsIn {													\n");
 			code.append("  float4 pos	:SV_POSITION;									\n");
-			code.append("  float2 uv	    :TEXCOORD;									    \n");
+			code.append("  float2 uv	    :TEXCOORD;									\n");
 			code.append("};																\n");
-			code.append("// エントリ														\n");
+			code.append("// エントリ													\n");
 			code.append("PsIn VS_Main(VsIn i) {											\n");
-			code.append("    PsIn o;														\n");
+			code.append("    PsIn o;													\n");
 			code.append("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n");
 			code.append("    o.uv = i.pos.xy;								            \n");
 			code.append("    return o;													\n");
@@ -290,9 +320,11 @@ namespace ob::rhi::vulkan {
 			RootSignatureDesc desc{
 				{
 					Binding::Texture(),
+				},
+				{
+					Binding::Sampler(),
 				}
 			};
-			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = m_desc.name;
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);

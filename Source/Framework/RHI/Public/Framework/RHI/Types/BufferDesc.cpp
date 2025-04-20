@@ -10,6 +10,7 @@ namespace ob::rhi {
 	//! @brief バリデート
 	bool BufferDesc::isValid() const {
 
+		// VUID-VkBufferCreateInfo-size-00912
 		if (size == 0) {
 			LOG_ERROR("バッファサイズは0より大きくなくてはいけません。[name={}]", name);
 			return false;
@@ -20,10 +21,10 @@ namespace ob::rhi {
 			return false;
 		}
 
-		if (size < 65536 && size % 4 != 0) {
-			LOG_ERROR("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", name, size);
-			return false;
-		}
+		// if (size < 65536 && size % 4 != 0) {
+		// 	LOG_ERROR("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", name, size);
+		// 	return false;
+		// }
 
 		return true;
 	}

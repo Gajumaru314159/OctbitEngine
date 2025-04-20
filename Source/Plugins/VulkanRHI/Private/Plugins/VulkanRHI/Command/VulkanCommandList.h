@@ -103,6 +103,11 @@ namespace ob::rhi::vulkan {
 
 #pragma endregion
 
+    public:
+
+		vk::CommandBuffer getNative() {
+			return m_commandBuffer;
+		}
 
     private:
 
@@ -112,6 +117,9 @@ namespace ob::rhi::vulkan {
 		
         vk::raii::CommandPool		m_commandPool = nullptr;
         vk::raii::CommandBuffer     m_commandBuffer = nullptr;
+
+        RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
+        Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 
     };
 

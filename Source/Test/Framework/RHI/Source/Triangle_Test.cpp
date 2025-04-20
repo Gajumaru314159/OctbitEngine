@@ -6,13 +6,12 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class RHITest : public RHITestBase {};
+class ARHITest : public RHITestBase {};
 
-TEST_F(RHITest, Triangle) {
-	return;
+TEST_F(ARHITest, Triangle) {
+
 	using namespace ob::rhi;
 
-	Logger log;
 
 	{
 
@@ -20,6 +19,7 @@ TEST_F(RHITest, Triangle) {
 		platform::WindowDesc windowDesc;
 		windowDesc.title = "Graphic Test";
 		platform::Window window(windowDesc); window.show();
+
 
 		// ディスプレイ
 		Ref<Display> display;
@@ -126,7 +126,7 @@ PsOut PS_Main(PsIn i) {
 
 		Ref<Buffer> indexBuffer;
 		{
-			auto desc = BufferDesc::Vertex<u16>(indices.size());
+			auto desc = BufferDesc::Index<u16>(indices.size());
 			desc.name = "ModelIndices";
 			indexBuffer = Buffer::Create(desc, BlobView(indices));
 			OB_ASSERT_EXPR(indexBuffer);
@@ -143,7 +143,7 @@ PsOut PS_Main(PsIn i) {
 
 		auto start = DateTime::Now();
 
-		f32 endTime = 5.0f;
+		f32 endTime = 50.0f;
 
 		while (true) {
 
@@ -162,11 +162,6 @@ PsOut PS_Main(PsIn i) {
 
 			cmdList->beginRenderPass(renderPass);
 
-			Viewport viewport;
-			viewport.right = colorRT->width();
-			viewport.bottom = colorRT->height();
-			cmdList->setViewport(&viewport, 1);
-
 			cmdList->setPipelineState(pipeline);
 
 			cmdList->setVertexBuffer(vertexBuffer);
@@ -182,7 +177,7 @@ PsOut PS_Main(PsIn i) {
 			cmdList->endRenderPass();
 
 
-			cmdList->applyDisplay(display, colorRT);
+			//cmdList->applyDisplay(display, colorRT);
 
 			cmdList->end();
 			cmdList->flush();

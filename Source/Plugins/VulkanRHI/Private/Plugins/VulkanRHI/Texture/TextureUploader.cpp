@@ -62,7 +62,7 @@ namespace ob::rhi::vulkan
 
 	}
 
-	void TextureUploader::update(vk::raii::CommandBuffer& commandBuffer) {
+	void TextureUploader::update(vk::CommandBuffer commandBuffer) {
 
 		ScopeLock lock(m_lock);
 

@@ -59,6 +59,7 @@ namespace ob::rhi::vulkan {
 		vk::raii::SurfaceKHR		m_surface = nullptr;
 		vk::raii::SwapchainKHR		m_swapchain = nullptr;
 		Vector<vk::raii::ImageView>	m_imageViews;
+		vk::raii::Fence				m_fence = nullptr;	
 
 		Swapper<Ref<RenderTexture>> m_textures;
 
@@ -67,7 +68,9 @@ namespace ob::rhi::vulkan {
 		Ref<PipelineState>          m_pipeline;
 		Ref<Buffer>                 m_verices;
 		Ref<Texture>                m_bindedTexture;
+		Ref<Sampler>                m_bindedSampler;
 		Ref<DescriptorTable>        m_bindedTextureTable;
+		Ref<DescriptorTable>        m_bindedSamplerTable;
 
 	};
 }

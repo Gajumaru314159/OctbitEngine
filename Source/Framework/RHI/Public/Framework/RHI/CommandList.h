@@ -39,6 +39,7 @@ namespace ob::rhi {
         virtual void setViewport(const Viewport* pViewport, s32 num) = 0;  //!< ビューポートを設定
         virtual void setScissorRect(const IntRect* pRect, s32 num) = 0;    //!< シザー矩形を設定
 
+        // 廃止予定
         virtual void clearColors(u32 mask = -1) = 0;                         //!< カラーをクリア
         virtual void clearDepthStencil() = 0;                           //!< 深度値をクリア
 

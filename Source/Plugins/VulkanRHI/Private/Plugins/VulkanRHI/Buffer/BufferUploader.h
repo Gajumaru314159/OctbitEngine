@@ -24,7 +24,7 @@ namespace ob::rhi::vulkan {
         void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags);
         void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlags postAccessFlags);
 
-        void update(vk::raii::CommandBuffer& commandBuffer, bool useDebugMarker);
+        void update(vk::CommandBuffer commandBuffer, bool useDebugMarker);
 
     private:
 

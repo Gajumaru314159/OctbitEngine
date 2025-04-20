@@ -47,7 +47,7 @@ namespace ob::rhi {
         //===============================================================
         // 更新
         //===============================================================
-        virtual void entryCommandList(const CommandList&) {}
+        virtual void entryCommandList(const Ref<CommandList>&) {}
 
 
         //! @brief  説明

@@ -38,7 +38,7 @@ namespace ob::rhi {
     enum class RenderPassAfterAccessType {
         Discard,                // このRenderPass中二書き込んだデータに将来の依存関係がない。
         Preserve,               // 以降のコンテンツが依存している
-        NoAccess,               // 読み取りも書き込みもしない。
+        NoAccess,               // 読み取りも書き込みもしない。 TODO Vulkanとの対応関係を確認
     };
 
     struct RenderPassColorTargetDesc {

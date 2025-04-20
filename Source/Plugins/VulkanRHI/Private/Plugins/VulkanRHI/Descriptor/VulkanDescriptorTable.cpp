@@ -81,14 +81,21 @@ namespace ob::rhi::vulkan
 
 		
 
-		vk::DescriptorSetLayout descSetLayouts[] = { m_signature->getLayouts()};
+		vk::DescriptorSetLayout descSetLayouts[] = { m_signature->getLayouts(slot)};
 
 		vk::DescriptorSetAllocateInfo allocInfo;
 		allocInfo.descriptorPool = m_pool;
 		allocInfo.descriptorSetCount = 1;
 		allocInfo.pSetLayouts = descSetLayouts;
 
-		m_set = std::move(device.allocateDescriptorSets(allocInfo).front());
+		auto sets = device.allocateDescriptorSets(allocInfo);
+
+		if (sets.size() != 1) {
+			LOG_ERROR("不正な呼び出し。DescriptorSetの取得に失敗しました。");
+			return;
+		}
+
+		m_set = std::move(sets.front());
 
 	}
 
@@ -173,9 +180,8 @@ namespace ob::rhi::vulkan
 		if (auto p = resource.cast<VulkanTexture>()) {
 
 			vk::DescriptorImageInfo imageInfo;
-			imageInfo.imageView;
+			imageInfo.imageView = p->getSRV();
 			imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-			imageInfo.sampler = nullptr;
 
 			vk::WriteDescriptorSet writeDescSet;
 			writeDescSet.dstSet = m_set;

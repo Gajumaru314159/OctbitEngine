@@ -10,6 +10,7 @@
 #include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
@@ -167,6 +168,7 @@ namespace ob::rhi::vulkan {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
+		m_commandQueue.reset();
 		finalize();
 	}
 
@@ -175,12 +177,10 @@ namespace ob::rhi::vulkan {
 	//! @brief  妥当な状態か
 	//@―---------------------------------------------------------------------------
 	bool VulkanRHI::isValid()const {
-		return 
+		return
 			m_instance != nullptr &&
 			m_physicalDevice != nullptr &&
-			m_device != nullptr &&
-			m_queue != nullptr &&
-			true;
+			m_device != nullptr;
 	}
 
 
@@ -229,7 +229,7 @@ namespace ob::rhi::vulkan {
 
 		// アプリ情報
 		vk::ApplicationInfo appInfo;
-		appInfo.apiVersion = VK_API_VERSION_1_0;
+		appInfo.apiVersion = VK_API_VERSION_1_3;
 		appInfo.pApplicationName = "OctbitEngine";
 		appInfo.pEngineName = "OctbitEngine";
 
@@ -344,25 +344,73 @@ namespace ob::rhi::vulkan {
 
 		// TODO
 
-		//// 利用可能なレイヤーでフィルタ
-		//Vector<const char*> validLayerNames;
-		//const auto existLayerNames = EnumerateInstanceLayerNames();
-		//for (const auto& name : layerNames)
-		//{
-		//	if (existLayerNames.count(name)) {
-		//		validLayerNames.push_back(name);
-		//	}
-		//}
-		//
-		//// 利用可能な拡張機能でフィルタ
-		//Vector<const char*> validExtensionNames;
-		//const auto existExtensionNames = EnumerateInstanceExtensionNames(validLayerNames);
-		//for (const auto& name : extensionNames)
-		//{
-		//	if (existExtensionNames.count(name)) {
-		//		validExtensionNames.push_back(name);
-		//	}
-		//}
+
+		// 利用可能なレイヤーでフィルタ
+		Vector<const char*> validLayerNames;
+		Vector<const char*> invalidLayerNames;
+		const auto existLayerNames = m_physicalDevice.enumerateDeviceLayerProperties();
+		for (const auto& name : layerNames)
+		{
+			bool contains = false;
+			for (auto prop : existLayerNames) {
+				if (strcmp(name, prop.layerName) == 0) {
+					contains = true;
+					break;
+				}
+			}
+
+			if (contains) {
+				validLayerNames.push_back(name);
+			}
+			else {
+				invalidLayerNames.push_back(name);
+			}
+		}
+
+		// 利用可能な拡張機能でフィルタ
+		Vector<const char*> validExtensionNames;
+		Vector<const char*> invalidExtensionNames;
+		const auto existExtensionNames = m_physicalDevice.enumerateDeviceExtensionProperties();
+		for (const auto& name : extensionNames)
+		{
+			bool contains = false;
+			for (auto prop : existExtensionNames) {
+				if (strcmp(name, prop.extensionName) == 0) {
+					contains = true;
+					break;
+				}
+			}
+
+			if (contains) {
+				validExtensionNames.push_back(name);
+			}
+			else {
+				invalidExtensionNames.push_back(name);
+			}
+		}
+
+#if OB_DEBUG
+		{
+			// 初期化情報を出力
+			String message;
+			message += Format("Device Validation Layers\n");
+			for (auto& name : validLayerNames) {
+				message += Format("+ {}\n", name);
+			}
+			for (auto& name : invalidLayerNames) {
+				message += Format("- {}\n", name);
+			}
+			message += Format("Device Extensions\n");
+			for (auto& name : validExtensionNames) {
+				message += Format("+ {}\n", name);
+			}
+			for (auto& name : invalidExtensionNames) {
+				message += Format("- {}\n", name);
+			}
+			message.pop_back();
+			LOG_INFO("{}", message);
+		}
+#endif
 
 		// デバイスキューのパラメータ
 		Vector<float> queuePriorities(m_queueCount, 0.0f);
@@ -376,10 +424,10 @@ namespace ob::rhi::vulkan {
 		vk::DeviceCreateInfo info;
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
-		info.enabledExtensionCount = (uint32_t)extensionNames.size();
-		info.ppEnabledExtensionNames = extensionNames.data();
-		info.enabledLayerCount = (uint32_t)layerNames.size();
-		info.ppEnabledLayerNames = layerNames.data();
+		info.enabledExtensionCount = (uint32_t)validExtensionNames.size();
+		info.ppEnabledExtensionNames = validExtensionNames.data();
+		info.enabledLayerCount = (uint32_t)validLayerNames.size();
+		info.ppEnabledLayerNames = validLayerNames.data();
 		info.pEnabledFeatures = nullptr;
 
 		// Dynamic Rendering機能を有効にするための構造体
@@ -400,10 +448,7 @@ namespace ob::rhi::vulkan {
 		if (m_device == nullptr)
 			return;
 
-		m_queue = m_device.getQueue(m_queueFamilyIndex, 0);
-
-		vk::FenceCreateInfo fenceCreateInfo;
-		m_fence = m_device.createFence(fenceCreateInfo, m_allocationCallbacks);
+		m_commandQueue = std::make_unique<VulkanCommandQueue>(*this);
 	}
 
 
@@ -413,6 +458,8 @@ namespace ob::rhi::vulkan {
 	void VulkanRHI::createUploaders() {
 		m_bufferUploader = std::make_unique<BufferUploader>(*this,16*1024);
 		m_textureUploader = std::make_unique<TextureUploader>(*this);
+
+		m_copyCommandList = createCommandList(CommandListDesc{ "CopyBuffer",CommandListType::Graphic});
 	}
 
 
@@ -449,8 +496,8 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::entryCommandList(const CommandList& commandList) {
-		OB_NOTIMPLEMENTED();
+	void VulkanRHI::entryCommandList(const Ref<CommandList>& commandList) {
+		m_commandQueue->entryCommandList(commandList);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -458,35 +505,20 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::update() {
 
-		//{
-		//	m_copyCommandList->begin();
-		//	m_bufferUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
-		//	m_textureUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
-		//	m_copyCommandList->end();
-		//
-		//	m_commandQueue->entryCommandListTop(*m_copyCommandList);
-		//	// m_copyCommandList->wait();
-		//}
+		{
+			m_copyCommandList->begin();
+			if (auto impl = m_copyCommandList.cast<VulkanCommandList>()) {
+				m_bufferUploader->update(impl->getNative(),false);
+				m_textureUploader->update(impl->getNative());
+			}
+			m_copyCommandList->end();
+		
+			m_commandQueue->entryCommandListTop(m_copyCommandList);
+			// m_copyCommandList->wait();
+		}
 
-		// Vector<vk::CommandBuffer> commandBuffers;
-		// 
-		// // for
-		// {
-		// 	commandBuffers.push_back();
-		// }
-		// 
-		// 
-		// vk::raii::Semaphore imageAcquiredSemaphore(m_device, vk::SemaphoreCreateInfo());
-		// 
-		// vk::PipelineStageFlags waitDestinationStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput);
-		// vk::SubmitInfo submitInfo(*imageAcquiredSemaphore, waitDestinationStageMask);
-		// submitInfo.setCommandBuffers(commandBuffers);
-		// 
-		// m_queue.submit(submitInfo,m_fence);
-		// 
-		// 
-		// m_commandQueue->execute();
-		// m_commandQueue->wait();
+		m_commandQueue->execute();
+		m_commandQueue->wait();
 
 		RHI::update();
 	}

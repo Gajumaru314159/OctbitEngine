@@ -16,6 +16,7 @@ namespace ob::platform {
 
 namespace ob::rhi::vulkan {
 
+	class VulkanCommandQueue;
 	class BufferUploader;
 
 	struct VulkanRHIConfig {
@@ -56,7 +57,7 @@ namespace ob::rhi::vulkan {
 		// 更新
 		//===============================================================
 
-		void entryCommandList(const CommandList&) override;
+		void entryCommandList(const Ref<CommandList>&) override;
 
 
 		//===============================================================
@@ -182,8 +183,6 @@ namespace ob::rhi::vulkan {
 		vk::raii::Instance&			getInstance() { return m_instance; }
 		vk::raii::Device&			getDevice() { return m_device; }
 		vk::raii::PhysicalDevice&	getPhysicalDevice() { return m_physicalDevice; }
-		vk::raii::Queue&			getQueue() { return m_queue; }
-
 
 		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
 
@@ -215,8 +214,6 @@ namespace ob::rhi::vulkan {
 		vk::raii::Instance							m_instance			= nullptr;
 		vk::raii::PhysicalDevice					m_physicalDevice	= nullptr;
 		vk::raii::Device							m_device		= nullptr;
-		vk::raii::Queue								m_queue				= nullptr;
-		vk::raii::Fence								m_fence = nullptr;	
 
 #ifdef OS_WINDOWS
 		ComPtr<IDxcCompiler3>				m_shaderCompiler;
@@ -229,8 +226,12 @@ namespace ob::rhi::vulkan {
 		u32											m_queueFamilyIndex;
 		u32											m_queueCount;
 
+		UPtr<VulkanCommandQueue>					m_commandQueue;
+
 		UPtr<BufferUploader> m_bufferUploader;
 		UPtr<TextureUploader> m_textureUploader;
+
+		Ref<CommandList>						m_copyCommandList;
 
 		vk::PhysicalDeviceFeatures				m_features;
 		vk::PhysicalDeviceLimits				m_limits;

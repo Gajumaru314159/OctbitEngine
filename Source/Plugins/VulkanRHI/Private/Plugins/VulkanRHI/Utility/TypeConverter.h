@@ -34,6 +34,10 @@ namespace ob::rhi::vulkan {
 		static vk::SamplerMipmapMode Convert(MipFillter mipFilter);
 		static vk::SamplerAddressMode Convert(TextureAddress address);
 		static f32 Convert(Anisotropy anisotropy);
+		static vk::AttachmentLoadOp Convert(RenderPassBeforeAccessType type);
+		static vk::AttachmentStoreOp Convert(RenderPassAfterAccessType type);
+
+		static TextureFormat Convert(vk::Format value);
 	};
 
 }

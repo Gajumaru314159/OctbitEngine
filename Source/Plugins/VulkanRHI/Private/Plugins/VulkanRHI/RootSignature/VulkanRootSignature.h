@@ -40,8 +40,9 @@ namespace ob::rhi::vulkan {
 
     public:
 
-		vk::DescriptorSetLayout getLayouts()const {
-			return *m_descriptorSetLayout;
+		vk::DescriptorSetLayout getLayouts(s32 slot)const {
+            if (!is_in_range(slot, m_layouts)) return {};
+			return m_layouts.at(slot);
 		}
 
 		vk::PipelineLayout getNative() const noexcept
@@ -61,7 +62,6 @@ namespace ob::rhi::vulkan {
 
         Vector<vk::raii::DescriptorSetLayout> m_layouts;
 
-		vk::raii::DescriptorSetLayout m_descriptorSetLayout = nullptr;
 		vk::raii::PipelineLayout m_pipelineLayout = nullptr;
 
     };
