@@ -115,7 +115,6 @@ namespace ob::rhi::vulkan {
 		Ref<DescriptorTable> createDescriptorTable(const Ref<RootSignature>& signature, s32 slot)override;
 
 
-
 		//! @brief  GraphicFileHandleを生成
 		Ref<GraphicFileHandle>  createGraphicFileHandle(StringView path) { return {}; }
 
@@ -217,6 +216,7 @@ namespace ob::rhi::vulkan {
 		vk::raii::PhysicalDevice					m_physicalDevice	= nullptr;
 		vk::raii::Device							m_device		= nullptr;
 		vk::raii::Queue								m_queue				= nullptr;
+		vk::raii::Fence								m_fence = nullptr;	
 
 #ifdef OS_WINDOWS
 		ComPtr<IDxcCompiler3>				m_shaderCompiler;

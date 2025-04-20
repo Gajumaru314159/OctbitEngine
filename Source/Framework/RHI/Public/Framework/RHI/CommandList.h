@@ -9,6 +9,7 @@
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/CommandParam.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/RenderTexture.h>
 
 namespace ob::rhi {
@@ -25,8 +26,13 @@ namespace ob::rhi {
         virtual void end() = 0;
         virtual void flush() = 0;
 
-        virtual void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth = {}) = 0; //!< レンダーパス開始
-        void setRenderTarget(const Ref<RenderTexture>& color, const Ref<RenderTexture>& depth = {}) { setRenderTargets({color},depth); }
+        // virtual void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth = {}) = 0; //!< レンダーパス開始
+        // void setRenderTarget(const Ref<RenderTexture>& color, const Ref<RenderTexture>& depth = {}) { setRenderTargets({color},depth); }
+
+
+        virtual void beginRenderPass(const RenderPassDesc& param) = 0;
+        virtual void endRenderPass() = 0;
+
 
         virtual void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) = 0;
 

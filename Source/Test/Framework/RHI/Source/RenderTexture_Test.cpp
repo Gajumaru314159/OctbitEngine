@@ -30,36 +30,8 @@ TEST_F(RenderTextureTest, Create) {
                 continue;
             }
 
-            if (format == TextureFormat::Unknown) {
-                ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-            if (format == TextureFormat::RGB32) {
-                ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-            if (format == TextureFormat::RGB8) {
-                ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-            if (format == TextureFormat::D24S8) {
-                // Tier次第で生成に失敗するので除外
-                //ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-            if (format == TextureFormat::D16) {
-                // Tier次第で生成に失敗するので除外
-                //ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-            if (TextureFormatUtility::IsBC(format)) {
-                ASSERT_EQ(renderTexture, nullptr);
-                continue;
-            }
-
-            if (!renderTexture)CallBreakPoint();
+            //if (!renderTexture)CallBreakPoint();
 			ASSERT_NE(renderTexture, nullptr);
-
             ASSERT_EQ(renderTexture->descOfRenderTexture().format, format);
             ASSERT_EQ(renderTexture->descOfRenderTexture().size, size);
 

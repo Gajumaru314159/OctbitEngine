@@ -155,13 +155,17 @@ PsOut PS_Main(PsIn i) {
 
 			cmdList->begin();
 
+			RenderPassDesc renderPass;
+			{
+				renderPass.colors.emplace_back(colorRT, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+			}
+
+			cmdList->beginRenderPass(renderPass);
+
 			Viewport viewport;
 			viewport.right = colorRT->width();
 			viewport.bottom = colorRT->height();
 			cmdList->setViewport(&viewport, 1);
-
-			cmdList->setRenderTarget(colorRT);
-			cmdList->clearColors();
 
 			cmdList->setPipelineState(pipeline);
 
@@ -173,6 +177,10 @@ PsOut PS_Main(PsIn i) {
 			param.startIndex = 0;
 			param.startVertex = 0;
 			cmdList->drawIndexed(param);
+
+
+			cmdList->endRenderPass();
+
 
 			cmdList->applyDisplay(display, colorRT);
 

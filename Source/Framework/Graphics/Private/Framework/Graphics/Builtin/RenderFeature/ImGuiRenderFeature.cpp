@@ -309,7 +309,12 @@ namespace ob::graphics {
 
 				cmdList.pushMarker("ImGui");
 
-				cmdList.setRenderTarget(texture);
+
+				RenderPassDesc renderPass;
+				renderPass.colors.emplace_back(texture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+				cmdList.beginRenderPass(renderPass);
+
 				cmdList.setPipelineState(m_pipeline);
 				cmdList.setViewport(&vp, 1);
 				cmdList.setVertexBuffer(m_vertexBuffer);
@@ -333,6 +338,8 @@ namespace ob::graphics {
 					cmdList.setRootDesciptorTable(tables, std::size(tables));
 					cmdList.drawIndexed(cmd.param);
 				}
+
+				cmdList.endRenderPass();
 
 				cmdList.popMarker();
 			}

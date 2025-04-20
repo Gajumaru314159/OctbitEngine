@@ -212,23 +212,6 @@ namespace ob::rhi::vulkan {
 		throw NotSupportedException();
 	}
 
-	vk::AttachmentLoadOp TypeConverter::Convert(AttachmentLoadOp value) {
-		switch (value) {
-		case AttachmentLoadOp::Load:		return vk::AttachmentLoadOp::eLoad;
-		case AttachmentLoadOp::Clear:		return vk::AttachmentLoadOp::eClear;
-		case AttachmentLoadOp::DontCare:	return vk::AttachmentLoadOp::eDontCare;
-		}
-		throw NotSupportedException();
-	}
-
-	vk::AttachmentStoreOp TypeConverter::Convert(AttachmentStoreOp value) {
-		switch (value) {
-		case AttachmentStoreOp::Store:		return vk::AttachmentStoreOp::eStore;
-		case AttachmentStoreOp::DontCare:	return vk::AttachmentStoreOp::eDontCare;
-		}
-		throw NotSupportedException();
-	}
-
 	vk::ImageLayout TypeConverter::Convert(TextureState value) {
 		switch (value) {
 		case TextureState::Common:			return vk::ImageLayout::eUndefined;

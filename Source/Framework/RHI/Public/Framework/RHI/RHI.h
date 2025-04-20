@@ -15,6 +15,7 @@
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/DescriptorDesc.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/GraphicFile.h>
 #include <Framework/Core/Misc/BlobView.h>
 #include <Framework/Core/Utility/Ref.h>
@@ -72,6 +73,8 @@ namespace ob::rhi {
 
         virtual Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) { return nullptr; }
         virtual Ref<DescriptorTable>createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return nullptr; }
+
+        virtual Ref<RenderPass>     createRenderPass(const RenderPassDesc& desc) { return nullptr; }
 
         //virtual IFence*           createFence(const FenceDesc&);
 

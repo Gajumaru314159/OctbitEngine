@@ -28,8 +28,6 @@ namespace ob::rhi::vulkan {
 		static vk::StencilOp Convert(StencilOp value);
 		static vk::ColorComponentFlags Convert(ColorMask value);
 		static vk::Format Convert(TextureFormat value);
-		static vk::AttachmentLoadOp Convert(AttachmentLoadOp value);
-		static vk::AttachmentStoreOp Convert(AttachmentStoreOp value);
 		static vk::ImageLayout Convert(TextureState value);
 		static  vk::DescriptorType Convert(BindingType value);
 		static vk::Filter Convert(TextureFillter filter);

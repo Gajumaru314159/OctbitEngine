@@ -9,6 +9,11 @@
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Framework/Platform/Window.h>
+#include <Framework/RHI/Shader.h>
+#include <Framework/RHI/RootSignature.h>
+#include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/DescriptorTable.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::rhi::vulkan {
 
@@ -132,6 +137,8 @@ namespace ob::rhi::vulkan {
 
 			
 		}
+
+		createResources(rhi);
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -148,14 +155,173 @@ namespace ob::rhi::vulkan {
 	}
 
 	//! @brief 更新
-	void VulkanDisplay::update() {
+	void VulkanDisplay::update() {}
+	void VulkanDisplay::update(vk::Queue queue) {
 
+
+		if (!m_desc.window.isValid())return;
+
+		uint32_t imageIndex = m_textures.index();
+		vk::PresentInfoKHR info;
+		//info.setSwapchains(m_swapchain);
+		//info.setImageIndices(imageIndex);
+		
+		(0, 0, 0, *m_swapchain);
+
+		vk::Result result = queue.presentKHR(info);
+		if (result != vk::Result::eSuccess) {
+			LOG_ERROR("Presentに失敗しました。");
+		}
+		
+		m_textures.next();
 	}
 
 
 	//! @brief      イベントリスナ追加
 	void VulkanDisplay::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
 
+	}
+
+
+	//! @brief      テクスチャをディスプレイにコピー
+	void VulkanDisplay::recordApplyDisplay(CommandList& cmdList, const Ref<RenderTexture>& texture) {
+
+		// テクスチャが違う場合再バインド
+		if (m_bindedTexture != texture) {
+
+			m_bindedTextureTable.reset();
+			m_bindedTexture = texture.get();
+
+			if (m_bindedTexture) {
+				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
+				m_bindedTextureTable->setResource(0, m_bindedTexture);
+			}
+
+		}
+
+		// バインドされていなければスキップ
+		if (!m_bindedTextureTable)
+			return;
+
+		{
+
+			RenderPassDesc renderPass;
+			renderPass.colors.emplace_back(m_textures.current(), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+			cmdList.beginRenderPass(renderPass);
+
+			cmdList.setPipelineState(m_pipeline);
+
+			SetDescriptorTableParam tableParam(m_bindedTextureTable, 0);
+			cmdList.setRootDesciptorTable(&tableParam, 1);
+
+			cmdList.setVertexBuffer(m_verices);
+
+			DrawParam drawParam;
+			drawParam.startVertex = 0;
+			drawParam.vertexCount = 6;
+			cmdList.draw(drawParam);
+
+			cmdList.endRenderPass();
+
+			// Present準備
+			if (auto texture = m_textures.current().cast<VulkanTexture>()) {
+
+				// D3D12_RESOURCE_BARRIER barrier;
+				// if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
+				// 	cmdList.getNative()->ResourceBarrier(1, &barrier);
+				// }
+
+			}
+
+		}
+	}
+
+
+	void VulkanDisplay::createResources(VulkanRHI& rhi) {
+
+		{
+			Vec2 vertices[] = {
+				{-1,-1},
+				{+1,-1},
+				{-1,+1},
+				{+1,-1},
+				{+1,+1},
+				{-1,+1},
+			};
+			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
+			bdesc.name = m_desc.name + "_Vertices";
+			m_verices = Buffer::Create(bdesc);
+			m_verices->updateDirect(bdesc.size, vertices);
+		}
+
+		Ref<Shader> vs;
+		Ref<Shader> ps;
+		{
+			String code;
+			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("Texture2D g_mainTex:register(t0);								\n");
+			code.append("// IN / OUT														\n");
+			code.append("struct VsIn {													\n");
+			code.append("  float2 pos	:POSITION;										\n");
+			code.append("};																\n");
+			code.append("struct PsIn {													\n");
+			code.append("  float4 pos	:SV_POSITION;									\n");
+			code.append("  float2 uv	    :TEXCOORD;									    \n");
+			code.append("};																\n");
+			code.append("// エントリ														\n");
+			code.append("PsIn VS_Main(VsIn i) {											\n");
+			code.append("    PsIn o;														\n");
+			code.append("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n");
+			code.append("    o.uv = i.pos.xy;								            \n");
+			code.append("    return o;													\n");
+			code.append("}																\n");
+			code.append("float4 PS_Main(PsIn i):SV_TARGET0{								\n");
+			code.append("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n");
+			code.append("}																\n");
+
+			vs = Shader::CompileVS(code);
+			ps = Shader::CompilePS(code);
+			OB_ASSERT_EXPR(vs && ps);
+		}
+
+		Ref<RootSignature> signature;
+		{
+			RootSignatureDesc desc{
+				{
+					Binding::Texture(),
+				}
+			};
+			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
+			desc.name = m_desc.name;
+			signature = RootSignature::Create(desc);
+			OB_ASSERT_EXPR(signature);
+		}
+
+		Ref<PipelineState> pipeline;
+		{
+			PipelineStateDesc desc;
+			desc.name = m_desc.name;
+			desc.colors = { m_desc.format };
+
+			desc.rootSignature = signature;
+			desc.vs = vs;
+			desc.ps = ps;
+			desc.vertexLayout.attributes = {
+				VertexAttribute(Semantic::Position,0,ElementType::Float,2),
+			};
+			desc.vertexLayout.vertexStride = sizeof(Vec2);
+			desc.blend[0] = BlendDesc::AlphaBlend;
+			desc.rasterizer.cullMode = CullMode::None;
+			desc.depthStencil.depth.enable = false;
+			desc.depthStencil.stencil.enable = false;
+
+			pipeline = PipelineState::Create(desc);
+			OB_ASSERT_EXPR(pipeline);
+		}
+
+		m_signature = signature;
+		m_pipeline = pipeline;
 	}
 
 }

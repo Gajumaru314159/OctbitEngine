@@ -49,8 +49,9 @@ namespace ob::rhi::vulkan {
         //! @brief      記録終了
         void flush() override;
 
-        //! @brief      描画先設定
-        void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) override;
+        void beginRenderPass(const RenderPassDesc& param) override;
+        // virtual void nextSubpass();
+        void endRenderPass() override;
 
         //! @brief      ディスプレイにテクスチャを適用
         void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) override;

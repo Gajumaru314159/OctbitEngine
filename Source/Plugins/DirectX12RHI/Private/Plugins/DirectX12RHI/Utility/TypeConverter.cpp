@@ -436,6 +436,28 @@ namespace ob::rhi::dx12
         return D3D12_RESOURCE_STATE_COMMON;
     }
 
+    D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE TypeConverter::Convert(RenderPassBeforeAccessType value) {
+        switch (value) {
+        case RenderPassBeforeAccessType::Discard:    return D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_DISCARD;
+        case RenderPassBeforeAccessType::Preserve:   return D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_PRESERVE;
+        case RenderPassBeforeAccessType::Clear:      return D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_CLEAR;
+        case RenderPassBeforeAccessType::NoAccess:   return D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS;
+        }
+        LOG_WARNING_EX("Graphic", "不正なRenderPassBeforeAccessType[value={}]", enum_cast(value));
+        return D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS;
+    }
+
+    D3D12_RENDER_PASS_ENDING_ACCESS_TYPE TypeConverter::Convert(RenderPassAfterAccessType value) {
+		switch (value) {
+		case RenderPassAfterAccessType::Discard:    return D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_DISCARD;
+		case RenderPassAfterAccessType::Preserve:   return D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_PRESERVE;
+		case RenderPassAfterAccessType::NoAccess:   return D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
+		}
+		LOG_WARNING_EX("Graphic", "不正なRenderPassAfterAccessType[value={}]", enum_cast(value));
+		return D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
+    }
+
+
     //! @brief  DXGI_FORMAT を TextureFormat に変換
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
         switch (static_cast<DXGI_FORMAT>(value)) {

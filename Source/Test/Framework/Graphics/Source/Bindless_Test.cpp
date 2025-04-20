@@ -175,13 +175,10 @@ TEST(Bindless, Handle) {
 
 		commandList->begin();
 
-		Viewport viewport;
-		viewport.right = renderTexture->width();
-		viewport.bottom = renderTexture->height();
-		commandList->setViewport(&viewport, 1);
+		RenderPassDesc renderPass;
+		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-		commandList->setRenderTarget(renderTexture);
-		commandList->clearColors();
+		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
 		block.record(commandList, 0);
@@ -194,6 +191,8 @@ TEST(Bindless, Handle) {
 		param.startIndex = 0;
 		param.startVertex = 0;
 		commandList->drawIndexed(param);
+
+		commandList->endRenderPass();
 
 		commandList->applyDisplay(display, renderTexture);
 

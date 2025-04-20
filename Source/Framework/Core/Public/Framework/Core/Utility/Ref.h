@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Reflection/Type.h>
 
 //! @cond
 
@@ -260,7 +261,7 @@ namespace ob::core {
 	template<class T>
 	T& Ref<T>::operator*() const noexcept
 	{
-		OB_ASSERT_EXPR(m_ptr != nullptr);
+		OB_ASSERT(m_ptr != nullptr,"空の{}にアクセスしました", Type::Get<T>().name());
 		return *static_cast<T*>(m_ptr);
 	}
 
@@ -268,7 +269,7 @@ namespace ob::core {
 	template<class T>
 	T* Ref<T>::operator->() const noexcept
 	{
-		OB_ASSERT_EXPR(m_ptr != nullptr);
+		OB_ASSERT(m_ptr != nullptr, "空の{}にアクセスしました", Type::Get<T>().name());
 		return static_cast<T*>(m_ptr);
 	}
 

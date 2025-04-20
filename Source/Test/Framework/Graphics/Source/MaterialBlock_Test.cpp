@@ -221,13 +221,10 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		Viewport viewport;
-		viewport.right = renderTexture->width();
-		viewport.bottom = renderTexture->height();
-		commandList->setViewport(&viewport,1);
+		RenderPassDesc renderPass;
+		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-		commandList->setRenderTarget(renderTexture);
-		commandList->clearColors();
+		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
 		block.record(commandList, 0,-1,1);
@@ -240,6 +237,8 @@ PsOut PS_Main(PsIn i){
 		param.startIndex = 0;
 		param.startVertex = 0;
 		commandList->drawIndexed(param);
+
+		commandList->endRenderPass();
 
 		commandList->applyDisplay(display, renderTexture);
 
@@ -483,13 +482,10 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		Viewport viewport;
-		viewport.right = renderTexture->width();
-		viewport.bottom = renderTexture->height();
-		commandList->setViewport(&viewport, 1);
+		RenderPassDesc renderPass;
+		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-		commandList->setRenderTarget(renderTexture);
-		commandList->clearColors();
+		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
 		block.record(commandList, 0);
@@ -502,6 +498,8 @@ PsOut PS_Main(PsIn i){
 		param.startIndex = 0;
 		param.startVertex = 0;
 		commandList->drawIndexed(param);
+
+		commandList->endRenderPass();
 
 		commandList->applyDisplay(display, renderTexture);
 
@@ -766,13 +764,10 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		Viewport viewport;
-		viewport.right = renderTexture->width();
-		viewport.bottom = renderTexture->height();
-		commandList->setViewport(&viewport, 1);
+		RenderPassDesc renderPass;
+		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-		commandList->setRenderTarget(renderTexture);
-		commandList->clearColors();
+		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
 		block.record(commandList, 0, 0);
@@ -786,6 +781,8 @@ PsOut PS_Main(PsIn i){
 		param.startIndex = 0;
 		param.startVertex = 0;
 		commandList->drawIndexed(param);
+
+		commandList->endRenderPass();
 
 		commandList->applyDisplay(display, renderTexture);
 

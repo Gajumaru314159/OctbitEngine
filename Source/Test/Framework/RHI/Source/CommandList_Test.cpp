@@ -54,7 +54,7 @@ TEST_F(CommandListTest, GraphicCommands) {
     scissor.bottom = 720;
     commandList->setScissorRect(&scissor, 1);
 
-	commandList->setRenderTarget(target);
+	//commandList->setRenderTarget(target);
 
     //commandList->clearColors();
 

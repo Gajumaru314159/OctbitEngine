@@ -36,10 +36,20 @@ namespace ob::rhi::vulkan {
 		const DisplayDesc& getDesc()const noexcept;
 
 		//! @brief      更新
-		void update();
+		void update() override;
+		void update(vk::Queue queue);
 
 		//! @brief      イベントリスナ追加
 		void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func);
+
+	public:
+
+		//! @brief      テクスチャをディスプレイにコピー
+		void recordApplyDisplay(CommandList& cmdList, const Ref<RenderTexture>& texture);
+
+	private:
+
+		void createResources(VulkanRHI& rhi);
 
 	private:
 
@@ -52,9 +62,12 @@ namespace ob::rhi::vulkan {
 
 		Swapper<Ref<RenderTexture>> m_textures;
 
-		//std::vector<vulkan::ImageView> m_image_views;
-		//std::unique_ptr<vulkan::Queue> m_present_queue;
-		//vulkan::Device* m_device;
+		// 描画リソース    
+		Ref<RootSignature>          m_signature;
+		Ref<PipelineState>          m_pipeline;
+		Ref<Buffer>                 m_verices;
+		Ref<Texture>                m_bindedTexture;
+		Ref<DescriptorTable>        m_bindedTextureTable;
 
 	};
 }

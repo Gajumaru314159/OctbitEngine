@@ -402,6 +402,8 @@ namespace ob::rhi::vulkan {
 
 		m_queue = m_device.getQueue(m_queueFamilyIndex, 0);
 
+		vk::FenceCreateInfo fenceCreateInfo;
+		m_fence = m_device.createFence(fenceCreateInfo, m_allocationCallbacks);
 	}
 
 
@@ -455,7 +457,38 @@ namespace ob::rhi::vulkan {
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::update() {
-		//OB_NOTIMPLEMENTED();
+
+		//{
+		//	m_copyCommandList->begin();
+		//	m_bufferUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
+		//	m_textureUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
+		//	m_copyCommandList->end();
+		//
+		//	m_commandQueue->entryCommandListTop(*m_copyCommandList);
+		//	// m_copyCommandList->wait();
+		//}
+
+		// Vector<vk::CommandBuffer> commandBuffers;
+		// 
+		// // for
+		// {
+		// 	commandBuffers.push_back();
+		// }
+		// 
+		// 
+		// vk::raii::Semaphore imageAcquiredSemaphore(m_device, vk::SemaphoreCreateInfo());
+		// 
+		// vk::PipelineStageFlags waitDestinationStageMask(vk::PipelineStageFlagBits::eColorAttachmentOutput);
+		// vk::SubmitInfo submitInfo(*imageAcquiredSemaphore, waitDestinationStageMask);
+		// submitInfo.setCommandBuffers(commandBuffers);
+		// 
+		// m_queue.submit(submitInfo,m_fence);
+		// 
+		// 
+		// m_commandQueue->execute();
+		// m_commandQueue->wait();
+
+		RHI::update();
 	}
 
 

@@ -8,6 +8,7 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/CommandParam.h>
+#include <Framework/RHI/RenderPass.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Display/DirectX12Display.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
@@ -76,10 +77,9 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  描画開始
 	void DirectX12CommandList::begin() {
-
 		HRESULT result;
 
-		clearDescriptorHandle();
+		clearRenderTargets();
 
 		// コマンドアロケータをリセット
 		result = m_cmdAllocator->Reset();
@@ -119,99 +119,116 @@ namespace ob::rhi::dx12 {
 		}
 	}
 
-	//! @brief      描画先設定
-	void DirectX12CommandList::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
+	//! @brief      RenderPass開始
+	void DirectX12CommandList::beginRenderPass(const RenderPassDesc& param) {
 
-		D3D12_CPU_DESCRIPTOR_HANDLE hColors[8]{};
-		D3D12_CPU_DESCRIPTOR_HANDLE hDepth{};
+		m_currentRenderPass = param;
 
-		Ref<RenderTexture> tColors[8]{};
-		Ref<RenderTexture> tDepth{};
+		s32 width = 0;
+		s32 height = 0;
 
-		D3D12_VIEWPORT viewport{};
-		D3D12_RECT scissor{};
+		FixedVector<D3D12_RENDER_PASS_RENDER_TARGET_DESC, RENDER_TARGET_MAX> colors;
+		D3D12_RENDER_PASS_DEPTH_STENCIL_DESC  depth;
+		D3D12_RENDER_PASS_DEPTH_STENCIL_DESC* pDepth = nullptr;
+
+		RenderTextureArray colorTextures;
+		Ref<RenderTexture> depthTexture;
 
 		m_cache.clear();
 
+		for (auto [i, color] : Indexed(param.colors)) {
+			auto& targetDesc = colors.emplace_back();
+			if (auto texture = color.texture.cast<DirectX12Texture>()) {
+				targetDesc.cpuDescriptor = texture->getRTV().getCpuHandle();
+				targetDesc.BeginningAccess.Type = TypeConverter::Convert(color.beforeAccess);
+				targetDesc.EndingAccess.Type = TypeConverter::Convert(color.afterAccess);
 
-		for (auto [i, color] : Indexed(m_colorTextures)) {
+				width = texture->width();
+				height = texture->height();
 
-			bool has = false;
-			for (auto& c : colors) {
-				if (c == color) {
-					has = true;
-				}
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_RENDER_TARGET);
 			}
-
-			if (!has) {
-				if (auto texture = color.cast<DirectX12Texture>()) {
-					m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
-				}
-			}
-			m_colorTextures[i] = {};
-			hColors[i] = {};
 		}
-		if (auto texture = m_depthTexture.cast<DirectX12Texture>()) {
-
-			if (m_depthTexture != depth) {
-				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
-			}
-			m_depthTexture = {};
-			m_hDSV = {};
-		}
-
-		// レンダーターゲットビュー設定
-		for (auto [i, color] : Indexed(colors)) {
-
-			if (auto texture = color.cast<DirectX12Texture>()) {
-				
-				m_cache.addTexture(*texture,D3D12_RESOURCE_STATE_RENDER_TARGET);
-				hColors[i] = texture->getRTV().getCpuHandle();
-				tColors[i] = texture;
-
-				viewport = texture->getViewport();
-				scissor = texture->getScissorRect();
-
-			} else {
-				LOG_ERROR("無効なレンダーターゲットが設定されています。");
-				return;
-			}
-
-		}
-
-		// 深度ステンシルビュー設定
 		{
+			auto& targetDesc = depth;
+			if (auto texture = param.depth.texture.cast<DirectX12Texture>()) {
+				targetDesc.cpuDescriptor = texture->getRTV().getCpuHandle();
+				targetDesc.DepthBeginningAccess.Type = TypeConverter::Convert(param.depth.beforeAccess);
+				targetDesc.DepthEndingAccess.Type = TypeConverter::Convert(param.depth.afterAccess);
 
-			if (auto texture = depth.cast<DirectX12Texture>()) {
+				width = texture->width();
+				height = texture->height();
+
+				pDepth = &depth;
+
+				// TODO D3D12_RESOURCE_STATE_DEPTH_READが必要か確認する
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			}
+			if (auto texture = param.stencil.texture.cast<DirectX12Texture>()) {
+				targetDesc.cpuDescriptor = texture->getRTV().getCpuHandle();
+				targetDesc.StencilBeginningAccess.Type = TypeConverter::Convert(param.stencil.beforeAccess);
+				targetDesc.StencilEndingAccess.Type = TypeConverter::Convert(param.stencil.afterAccess);
+
+				width = texture->width();
+				height = texture->height();
+
+				pDepth = &depth;
 
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-				hDepth = texture->getDSV().getCpuHandle();
-				tDepth = texture;
 			}
 
+			if (param.depth.texture && param.stencil.texture && param.depth.texture != param.stencil.texture) {
+				OB_ABORT("DepthとStencilが異なるテクスチャを指しています");
+			}
+		}
+
+		D3D12_RENDER_PASS_FLAGS flags = D3D12_RENDER_PASS_FLAG_NONE;
+		if (param.flags & RenderPassFlag::AllowUAVWrite) flags |= D3D12_RENDER_PASS_FLAG_ALLOW_UAV_WRITES;
+		if (param.flags & RenderPassFlag::SuspendingPass) flags |= D3D12_RENDER_PASS_FLAG_SUSPENDING_PASS;
+		if (param.flags & RenderPassFlag::ResumingPass) flags |= D3D12_RENDER_PASS_FLAG_RESUMING_PASS;
+
+
+		// リソースバリア
+		m_cache.recordCommand(*m_cmdList.Get());
+
+		m_cmdList->BeginRenderPass(colors.size(), colors.data(), pDepth, flags);
+
+		// 初期設定としてViewportとScissorRectを設定
+		FixedVector<Viewport, VIEWPORT_MAX> viewports;
+		FixedVector<IntRect, SCISSOR_RECT_MAX> scissors;
+		for (auto& color : param.colors) {
+			viewports.emplace_back(0, 0, width, height);
+			scissors.emplace_back(0, 0, width, height);
+		}
+
+		setViewport(viewports.data(), (UINT)viewports.size());
+		setScissorRect(scissors.data(), (UINT)scissors.size());
+
+	}
+
+	//! @brief RenderPass終了
+	void DirectX12CommandList::endRenderPass() {
+
+		m_cmdList->EndRenderPass();
+
+		m_cache.clear();
+
+		for (auto [i, color] : Indexed(m_colorTextures)) {
+			if (auto texture = color.cast<DirectX12Texture>()) {
+				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
+			}
+		}
+		if (auto texture = m_depthTexture.cast<DirectX12Texture>()) {
+			m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
 		}
 
 		// リソースバリア
 		m_cache.recordCommand(*m_cmdList.Get());
 
-		// レンダーターゲット設定
-		m_cmdList->OMSetRenderTargets(
-			colors.size(),
-			hColors,
-			FALSE,
-			depth ? &hDepth : NULL
-		);
-
-		m_cmdList->RSSetViewports(1, &viewport);
-		m_cmdList->RSSetScissorRects(1, &scissor);
-
-		for (auto [i, item] : Indexed(hColors))m_hRTVs[i] = item;
-		m_hDSV = hDepth;
-		for (auto [i, item] : Indexed(tColors))m_colorTextures[i] = item;
-		m_depthTexture = tDepth;
+		clearRenderTargets();
 
 	}
-	
+
 
 	//! @brief      ディスプレイにテクスチャを適用
 	void DirectX12CommandList::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
@@ -257,35 +274,32 @@ namespace ob::rhi::dx12 {
 
 	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
 	void DirectX12CommandList::clearColors(u32 mask) {
-
-		for (auto [i, handle] : Indexed(m_hRTVs)) {
+		for (auto [i, texture] : Indexed(m_colorTextures)) {
 			if (!(mask & (1 << i)))continue;
-			if (!handle.ptr) continue;
-			if (!m_colorTextures[i]) continue;
-			
-			auto color = m_colorTextures[i]->descOfRenderTexture().clear.color;
-
-			FLOAT values[4];
-			values[0] = color.r;
-			values[1] = color.g;
-			values[2] = color.b;
-			values[3] = color.a;
-			m_cmdList->ClearRenderTargetView(handle, values, 0, nullptr);
+			if (auto impl = texture.cast<DirectX12Texture>()) {
+				Color color = texture->descOfRenderTexture().clear.color;
+				FLOAT values[4];
+				values[0] = color.r;
+				values[1] = color.g;
+				values[2] = color.b;
+				values[3] = color.a;
+				m_cmdList->ClearRenderTargetView(impl->getRTV().getCpuHandle(), values, 0, nullptr);
+			}
 		}
-
 	}
 
 
 	//! @brief      レンダーターゲットのデプスとステンシルをクリア
 	void DirectX12CommandList::clearDepthStencil() {
-		
-		if (m_hDSV.ptr != 0 && m_depthTexture) {
-			auto& desc = m_depthTexture->descOfRenderTexture();
-			FLOAT depth = desc.clear.depth;
-			UINT8 stencil = desc.clear.stencil;
-		
-			D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
-			m_cmdList->ClearDepthStencilView(m_hDSV, clearFlags, depth, stencil, 0, nullptr);
+		if (m_depthTexture) {
+			if (auto impl = m_depthTexture.cast<DirectX12Texture>()) {
+				auto& desc = m_depthTexture->descOfRenderTexture();
+				FLOAT depth = desc.clear.depth;
+				UINT8 stencil = desc.clear.stencil;		
+				// TODO フォーマットを見てデプスとステンシルのクリアフラグを設定する
+				D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
+				m_cmdList->ClearDepthStencilView(impl->getDSV().getCpuHandle(), clearFlags, depth, stencil, 0, nullptr);
+			}
 		}
 	}
 
@@ -403,11 +417,9 @@ namespace ob::rhi::dx12 {
 #pragma endregion
 
 	//! @brief  デスクリプタハンドルのキャッシュをクリア
-	void DirectX12CommandList::clearDescriptorHandle() {
-		m_hDSV.ptr = 0;
-		for (s32 i = 0; i < std::size(m_hRTVs); ++i) {
-			m_hRTVs[i].ptr = 0;
-		}
+	void DirectX12CommandList::clearRenderTargets() {
+		m_colorTextures.clear();
+		m_depthTexture = nullptr;
 	}
 
 	//! @brief  GPUマーカーをプッシュ

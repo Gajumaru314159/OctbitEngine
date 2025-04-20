@@ -21,6 +21,8 @@ namespace ob::rhi {
 
     public:
 
+		virtual const RenderPassDesc& getDesc()const = 0; 
+
     };
 
 }

@@ -36,10 +36,14 @@ namespace ob::graphics {
 
 					cmdList.pushMarker("Opaque");
 
-					cmdList.setRenderTargets(
-						{ resources.get(data.albedo) ,resources.get(data.normal) ,resources.get(data.uv) },
-						resources.get(data.depth)
-					);
+
+					RenderPassDesc renderPass;
+					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					renderPass.colors.emplace_back(resources.get(data.uv), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
+
+					cmdList.beginRenderPass(renderPass);
 
 					cmdList.clearColors();
 					cmdList.clearDepthStencil();
@@ -47,6 +51,8 @@ namespace ob::graphics {
 					cmdList.setScissorRect(&rect, 1);
 
 					feature->render("Opaque", cmdList);
+
+					cmdList.endRenderPass();
 
 					cmdList.popMarker();
 				}
@@ -89,15 +95,18 @@ namespace ob::graphics {
 
 					Viewport vp(rect.left, rect.top, rect.right, rect.bottom, 1, 0);
 
-					cmdList.setRenderTargets(
-						{ resources.get(data.albedo) ,resources.get(data.normal) },
-						resources.get(data.depth)
-					);
+					RenderPassDesc renderPass;
+					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
+					cmdList.beginRenderPass(renderPass);
 					cmdList.setViewport(&vp, 1);
 					cmdList.setScissorRect(&rect, 1);
 
 					feature->render("Masked", cmdList);
+
+					cmdList.endRenderPass();
 
 					cmdList.popMarker();
 				}
@@ -207,7 +216,11 @@ namespace ob::graphics {
 				m_material->setTexture("Depth", depth);
 				m_material->setTexture("UV", uv);
 
-				cmdList.setRenderTarget(resources.get(data.accumulate));
+
+				RenderPassDesc renderPass;
+				renderPass.colors.emplace_back(resources.get(data.accumulate), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+				cmdList.beginRenderPass(renderPass);
 
 				cmdList.setViewport(&vp, 1);
 				cmdList.setScissorRect(&rect, 1);
@@ -216,6 +229,8 @@ namespace ob::graphics {
 				Matrix mtx;
 
 				m_material->record(cmd, mtx, m_mesh, 0, "PostProcess");
+
+				cmdList.endRenderPass();
 
 				cmdList.popMarker();
 

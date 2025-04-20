@@ -395,7 +395,12 @@ namespace ob::rhi::dx12 {
 		{
 			cmdList.pushMarker("Apply Display");
 
-			cmdList.setRenderTargets({ m_textures.current() }, {});
+
+
+			RenderPassDesc renderPass;
+			renderPass.colors.emplace_back(m_textures.current(), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+			cmdList.beginRenderPass(renderPass);
 
 			cmdList.setPipelineState(m_pipeline);
 
@@ -408,6 +413,8 @@ namespace ob::rhi::dx12 {
 			drawParam.startVertex = 0;
 			drawParam.vertexCount = 6;
 			cmdList.draw(drawParam);
+
+			cmdList.endRenderPass();
 
 			// Present準備
 			if (auto texture = m_textures.current().cast<DirectX12Texture>()) {

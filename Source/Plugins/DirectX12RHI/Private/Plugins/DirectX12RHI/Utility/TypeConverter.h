@@ -10,6 +10,7 @@
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
 
 namespace ob::rhi::dx12 {
 
@@ -40,6 +41,8 @@ namespace ob::rhi::dx12 {
         static D3D12_COMMAND_LIST_TYPE Convert(CommandListType value);
         static D3D12_RESOURCE_STATES Convert(BufferState value);
         static D3D12_RESOURCE_STATES Convert(TextureState value);
+        static D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE Convert(RenderPassBeforeAccessType value);
+        static D3D12_RENDER_PASS_ENDING_ACCESS_TYPE Convert(RenderPassAfterAccessType value);
 
         static TextureFormat Convert(DXGI_FORMAT dxgi);
 

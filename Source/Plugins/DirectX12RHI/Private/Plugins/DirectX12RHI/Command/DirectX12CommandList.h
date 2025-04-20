@@ -47,8 +47,11 @@ namespace ob::rhi::dx12 {
          //! @brief      記録終了
          void flush() override;
 
-         //! @brief      描画先設定
-         void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) override;
+		 //! @brief      RenderPass開始
+         void beginRenderPass(const RenderPassDesc& param) override;
+
+         //! @brief RenderPass終了
+         void endRenderPass() override;
 
         //! @brief      ディスプレイにテクスチャを適用
         void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) override;
@@ -106,7 +109,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        void clearDescriptorHandle();
+        void clearRenderTargets();
 
     private:
 
@@ -116,11 +119,10 @@ namespace ob::rhi::dx12 {
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
         ComPtr<ID3D12GraphicsCommandList6> m_cmdList;
 
-        D3D12_CPU_DESCRIPTOR_HANDLE m_hRTVs[RENDER_TARGET_MAX]; // 現在の描画ターゲット(クリア用)
-        D3D12_CPU_DESCRIPTOR_HANDLE m_hDSV;                     // 現在の描画ターゲット(クリア用)
+        RenderPassDesc m_currentRenderPass;
 
-        Ref<RenderTexture> m_colorTextures[RENDER_TARGET_MAX];  // 現在の描画ターゲット(クリア用)
-        Ref<RenderTexture>m_depthTexture;                       // 現在の描画ターゲット(クリア用)
+        RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
+        Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 
         ID3D12RootSignature* m_rootSignature = nullptr;         // 最後に設定されたPipelineStateのRootSignature
 

@@ -33,7 +33,8 @@ namespace ob::rhi::dx12 {
         void addTexture(DirectX12Texture& texture, D3D12_RESOURCE_STATES after, s32 subresource = -1) {
 
             D3D12_RESOURCE_BARRIER barrier{};
-            if (texture.addResourceTransition(barrier, after, subresource)) {
+            if (texture.addResourceTransition(barrier, after, subresource)) 
+            {
                 m_barriers.push_back(barrier);
             }
 

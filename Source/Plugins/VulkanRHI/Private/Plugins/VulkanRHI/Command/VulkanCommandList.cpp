@@ -78,26 +78,34 @@ namespace ob::rhi::vulkan {
 		}
 	}
 
-	//! @brief      描画先設定
-	void VulkanCommandList::setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth) {
+	void VulkanCommandList::beginRenderPass(const RenderPassDesc& param) {
+
+		s32 width = 0;
+		s32 height = 0;
 
 		FixedVector<vk::RenderingAttachmentInfo, 8> colorAttachments;
 		FixedVector<vk::RenderingAttachmentInfo, 1> depthAttachments;
-		for (s32 i = 0; i < colors.size(); ++i) {
-			if (auto p = colors[i].cast<VulkanTexture>()) {
+		for (auto [index,color] : Indexed(param.colors)) {
+			if (auto p = color.texture.cast<VulkanTexture>()) {
 				auto& colorAttachment = colorAttachments.emplace_back();
 				colorAttachment.imageView = p->getRTV();
 				colorAttachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
+
+				width = color.texture->width();
+				height = color.texture->height();
 			}
 			else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
 			}
 		}
 		{
-			if (auto p = depth.cast<VulkanTexture>()) {
+			if (auto p = param.depth.texture.cast<VulkanTexture>()) {
 				auto& depthAttachment = depthAttachments.emplace_back();
-				depthAttachment.imageView = p->getRTV();
+				depthAttachment.imageView = p->getDSV();
 				depthAttachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
+
+				width = param.depth.texture->width();
+				height = param.depth.texture->height();
 			}
 			else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
@@ -108,8 +116,8 @@ namespace ob::rhi::vulkan {
 		info.flags = vk::RenderingFlagBits{};
 		info.renderArea.offset.x = 0;
 		info.renderArea.offset.y = 0;
-		info.renderArea.extent.width = colors[0]->width();
-		info.renderArea.extent.height = colors[0]->height();
+		info.renderArea.extent.width = width;
+		info.renderArea.extent.height = height;
 		info.layerCount = 1;
 		info.viewMask = 0;
 		if (!colorAttachments.empty()) {
@@ -125,7 +133,10 @@ namespace ob::rhi::vulkan {
 
 		m_commandBuffer.beginRendering(info);
 
-		// TODO endRenderingはどう呼ぶ？
+	}
+	// virtual void nextSubpass();
+	void VulkanCommandList::endRenderPass() {
+		m_commandBuffer.endRenderPass();
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -133,9 +144,8 @@ namespace ob::rhi::vulkan {
 	//@―---------------------------------------------------------------------------
 	void VulkanCommandList::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) {
 		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
-		if (auto p = display.cast<VulkanDisplay>()) {
-			OB_NOTIMPLEMENTED();
-			//p->present(texture, m_commandBuffer);
+		if (auto pDisplay = display.cast<VulkanDisplay>()) {
+			pDisplay->recordApplyDisplay(*this, texture);
 		}
 		else {
 			LOG_ERROR("不正な引数。ディスプレイが不正です。");

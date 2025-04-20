@@ -78,6 +78,7 @@ TEST(RHI, ShowHide) {
 		platform::WindowDesc windowDesc;
 		windowDesc.title = "Graphic Test";
 		platform::Window window(windowDesc);
+		window.show();
 
 		// ディスプレイ
 		Ref<Display> display;
@@ -261,7 +262,11 @@ PsOut PS_Main(PsIn i) {
 			display->update();
 
 			cmdList->begin();
-			cmdList->setRenderTargets({colorRT});
+
+			RenderPassDesc renderPass;
+			renderPass.colors.emplace_back(colorRT, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+			cmdList->beginRenderPass(renderPass);
 
 			{
 				cmdList->setPipelineState(pipeline);
@@ -279,6 +284,8 @@ PsOut PS_Main(PsIn i) {
 				param.indexCount = indices.size();
 				cmdList->drawIndexed(param);
 			}
+
+			cmdList->endRenderPass();
 
 			cmdList->applyDisplay(display, colorRT);
 
