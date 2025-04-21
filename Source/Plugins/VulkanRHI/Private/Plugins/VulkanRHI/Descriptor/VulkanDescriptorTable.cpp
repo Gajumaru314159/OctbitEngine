@@ -97,6 +97,7 @@ namespace ob::rhi::vulkan
 
 		m_set = std::move(sets.front());
 
+		manage();
 	}
 
 	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const BindingSlot& desc)
@@ -105,6 +106,8 @@ namespace ob::rhi::vulkan
 	{
 
 		m_elemetns.resize(desc.items.size());
+
+		manage();
 	}
 
 

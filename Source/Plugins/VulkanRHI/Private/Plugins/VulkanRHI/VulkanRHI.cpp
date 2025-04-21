@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
+#include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
@@ -168,7 +169,13 @@ namespace ob::rhi::vulkan {
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
-		m_commandQueue.reset();
+
+		m_commandQueue->execute();
+		m_commandQueue->wait();
+		m_copyCommandList = {};
+		m_textureUploader = {};
+		m_bufferUploader = {};
+
 		finalize();
 	}
 
@@ -611,18 +618,17 @@ namespace ob::rhi::vulkan {
 	//! @brief サポートしているテクスチャフォーマットか 
 	bool VulkanRHI::supports(TextureFormat format, TextureType type)const {
 
-		if (format == TextureFormat::Unknown) {
-			return false;
+		try {
+			vk::ImageFormatProperties properties = m_physicalDevice.getImageFormatProperties(
+				TypeConverter::Convert(format),
+				TypeConverter::Convert(type),
+				vk::ImageTiling::eOptimal,
+				vk::ImageUsageFlagBits::eSampled,
+				vk::ImageCreateFlagBits{}
+			);
+			return true;
 		}
-
-		if (m_features.textureCompressionBC == false && TextureFormatUtility::IsBC(format)) {
-			return false;
-		}
-
-		switch (format)
-		{
-		case ob::rhi::TextureFormat::RGB32:
-		case ob::rhi::TextureFormat::RGB8:
+		catch (const vk::Error& e) {
 			return false;
 		}
 
@@ -631,18 +637,25 @@ namespace ob::rhi::vulkan {
 	//! @brief サポートしているレンダーテクスチャフォーマットか 
 	bool VulkanRHI::supportsForRenderTexture(TextureFormat format)const {
 
-		if (format == TextureFormat::Unknown) {
-			return false;
-		}
+		try {
+			vk::ImageUsageFlags flags{};
+			if (TextureFormatUtility::HasColor(format)) {
+				flags |= vk::ImageUsageFlagBits::eColorAttachment;
+			}
+			if (TextureFormatUtility::HasDepth(format)) {
+				flags |= vk::ImageUsageFlagBits::eDepthStencilAttachment;
+			}
 
-		if (m_features.textureCompressionBC == false && TextureFormatUtility::IsBC(format)) {
-			return false;
+			vk::ImageFormatProperties properties = m_physicalDevice.getImageFormatProperties(
+				TypeConverter::Convert(format),
+				vk::ImageType::e2D,
+				vk::ImageTiling::eOptimal,
+				flags,
+				vk::ImageCreateFlagBits{}
+			);
+			return true;
 		}
-
-		switch (format)
-		{
-		case ob::rhi::TextureFormat::RGB32:
-		case ob::rhi::TextureFormat::RGB8:
+		catch (const vk::Error& e) {
 			return false;
 		}
 

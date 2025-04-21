@@ -11,12 +11,6 @@ namespace ob::rhi {
 
     //! @brief  コンストラクタ
     GraphicObject::GraphicObject() {
-        if (auto manager = GraphicObjectManager::Get()) {
-            manager->registerObject(*this);
-            m_managed = true;
-        } else {
-            m_managed = false;
-        }
     }
 
 
@@ -24,6 +18,15 @@ namespace ob::rhi {
     GraphicObject::~GraphicObject() {
     }
 
+    //! @brief  
+    void GraphicObject::manage() {
+        if (!m_managed) {
+            if (auto manager = GraphicObjectManager::Get()) {
+                manager->registerObject(*this);
+                m_managed = true;
+            }
+        }
+    }
 
     //! @brief      終了処理
     void GraphicObject::finalize() {

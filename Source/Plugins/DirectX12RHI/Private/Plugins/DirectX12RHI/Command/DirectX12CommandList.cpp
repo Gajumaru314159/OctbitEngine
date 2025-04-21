@@ -59,6 +59,8 @@ namespace ob::rhi::dx12 {
 
 		Utility::SetName(m_cmdAllocator.Get(), getName());
 		Utility::SetName(m_cmdList.Get(), getName());
+
+		manage();
 	}
 
 

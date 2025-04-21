@@ -31,6 +31,8 @@ namespace ob::rhi::dx12
 		heap.allocateHandle(m_handle, itemCount);
 
 		m_elemetns.resize(itemCount);
+
+		manage();
 	}
 
 	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12RHI& rhi, DescriptorHeap& heap, const BindingSlot& desc)
@@ -40,6 +42,8 @@ namespace ob::rhi::dx12
 		heap.allocateHandle(m_handle, desc.items.size());
 
 		m_elemetns.resize(desc.items.size());
+
+		manage();
 	}
 
 

@@ -218,6 +218,7 @@ namespace ob::rhi::dx12 {
 
 		Utility::SetName(m_rootSignature.Get(), getName());
 
+		manage();
 	}
 
 	//! @brief  デストラクタ

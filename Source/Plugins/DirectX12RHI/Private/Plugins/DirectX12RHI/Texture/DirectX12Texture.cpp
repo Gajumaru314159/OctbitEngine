@@ -118,6 +118,8 @@ namespace ob::rhi::dx12 {
 		}
 
 		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
     }
 
 
@@ -183,7 +185,10 @@ namespace ob::rhi::dx12 {
 		
 
 		m_resource = resource;
+
 		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
 	}
 
 
@@ -272,6 +277,8 @@ namespace ob::rhi::dx12 {
 		m_resource = resource;
 
 		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
 	}
 
 
@@ -360,6 +367,8 @@ namespace ob::rhi::dx12 {
 		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
 		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
 	}
 
 
@@ -402,6 +411,8 @@ namespace ob::rhi::dx12 {
 		m_renderDesc.clear.color = Color::White;
 
 		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
 
 	}
 

@@ -16,6 +16,7 @@ namespace ob::rhi::vulkan {
 
 	class TypeConverter {
 	public:
+		static vk::ImageType Convert(TextureType value);
 		static vk::AccessFlags Convert(BufferState state);
 		static vk::PrimitiveTopology Convert(Topology value);
 		static vk::Format Convert(ElementType type, s32 dimension);

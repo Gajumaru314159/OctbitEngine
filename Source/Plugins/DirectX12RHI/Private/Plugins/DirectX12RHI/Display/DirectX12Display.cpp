@@ -43,6 +43,7 @@ namespace ob::rhi::dx12 {
 
 		m_desc.window.addEventListener(m_hEvent, { *this,&DirectX12Display::onWindowChanged });
 
+		manage();
 	}
 
 

@@ -50,6 +50,8 @@ namespace ob::rhi::vulkan {
         , m_stage(desc.stage)
     {
         compile(rhi, desc);
+
+        manage();
     }
 
 
@@ -69,6 +71,8 @@ namespace ob::rhi::vulkan {
             throw Exception("シェーダではないバイナリファイルから構築しようとしました。");
         }
         m_shaderBlob = Blob(blob.data(), blob.size());
+
+        manage();
     }
 
 

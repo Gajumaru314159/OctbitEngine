@@ -45,6 +45,8 @@ namespace ob::rhi::dx12 {
 
         device.allocateHandle(DescriptorHeapType::SamplerCopyable,m_handle,1);
         device.getNative()->CreateSampler(&ddesc, m_handle.getCpuHandle());
+
+        manage();
     }
 
 }

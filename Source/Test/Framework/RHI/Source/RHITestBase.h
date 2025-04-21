@@ -33,7 +33,6 @@ protected:
 	};
 	virtual void TearDown() {};
 
-	Logger m_logger;
 	RHIConfig m_config;
 	ServiceContainer m_container;
 };

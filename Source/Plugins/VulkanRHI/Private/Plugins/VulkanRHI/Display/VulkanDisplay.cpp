@@ -158,6 +158,7 @@ namespace ob::rhi::vulkan {
 		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
 		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
 
+		manage();
 	}
 
 	//@―---------------------------------------------------------------------------

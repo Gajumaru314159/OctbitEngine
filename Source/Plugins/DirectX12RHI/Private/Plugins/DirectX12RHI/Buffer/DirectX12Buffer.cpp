@@ -86,6 +86,8 @@ namespace ob::rhi::dx12 {
 
 		m_resource = buffer;
 		Utility::SetName(m_resource.Get(), getName());
+
+		manage();
 	}
 
 
@@ -99,6 +101,8 @@ namespace ob::rhi::dx12 {
 		if (!isValid())return; 
 		// TODO
 		OB_NOTIMPLEMENTED();
+
+		manage();
 	}
 
 

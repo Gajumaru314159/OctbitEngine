@@ -33,13 +33,15 @@ namespace ob::rhi {
 		//! @param name オブジェクト名
 		GraphicObject();
 
+		void manage();
+
 	private:
 
 		void finalize()override;
 
 	private:
 
-		bool m_managed;
+		bool m_managed = false;
 
 	};
 

@@ -69,6 +69,8 @@ namespace ob::rhi::vulkan {
 		}
 
 		m_pipelineLayout = device.createPipelineLayout(createInfo, rhi.getAllocationCallbacks());
+
+		manage();
 	}
 
 

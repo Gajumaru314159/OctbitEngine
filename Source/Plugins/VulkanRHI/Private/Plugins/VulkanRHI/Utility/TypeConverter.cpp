@@ -2,6 +2,16 @@
 
 namespace ob::rhi::vulkan {
 
+	vk::ImageType TypeConverter::Convert(TextureType value) {
+		switch (value) {
+		case TextureType::Texture1D:		return vk::ImageType::e1D;
+		case TextureType::Texture2D:		return vk::ImageType::e2D;
+		case TextureType::Texture3D:		return vk::ImageType::e3D;
+		case TextureType::Cube:				return vk::ImageType::e2D;
+		}
+		throw NotSupportedException();
+	}
+
 	vk::AccessFlags TypeConverter::Convert(BufferState state) {
 		switch (state)
 		{

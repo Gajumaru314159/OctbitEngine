@@ -62,6 +62,8 @@ namespace ob::rhi::dx12 {
             LOG_ERROR_EX("Graphic", "シェーダではないバイナリファイルから構築しようとしました。");
         }
         m_shaderBlob = Blob(blob.data(),blob.size());
+
+        manage();
     }
 
 

@@ -51,6 +51,7 @@ namespace ob::rhi::vulkan {
 		Utility::SetName(device, m_buffer, m_desc.name);
 		Utility::SetName(device, m_memory, m_desc.name);
 
+		manage();
 	}
 
 
@@ -62,6 +63,8 @@ namespace ob::rhi::vulkan {
 		: VulkanBuffer(rhi,desc)
 	{
 		update(blob.size(), blob.data(),0);
+
+		manage();
 	}
 
 

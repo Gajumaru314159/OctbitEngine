@@ -40,6 +40,8 @@ namespace ob::rhi::vulkan {
 		allocInfo.level = vk::CommandBufferLevel::ePrimary;
 
 		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(allocInfo).front());
+
+		manage();
 	}
 
 	VulkanCommandList::~VulkanCommandList() {

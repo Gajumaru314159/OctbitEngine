@@ -212,6 +212,7 @@ namespace ob::rhi::vulkan {
 
 		Utility::SetName(device, m_pipeline, m_desc.name);
 
+		manage();
 	}
 
 	const String& VulkanPipelineState::getName() const

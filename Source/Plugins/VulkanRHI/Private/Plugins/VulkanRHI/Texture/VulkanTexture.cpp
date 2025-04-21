@@ -122,7 +122,9 @@ namespace ob::rhi::vulkan {
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
-		createSRV(m_image, info.format);
+		createSRV2(m_image, info.format);
+
+		manage();
     }
 
 
@@ -169,7 +171,9 @@ namespace ob::rhi::vulkan {
 
 		m_rhi.getTextureUploader().add(m_image,info,subresources);
 
-		createSRV(m_image, info.format);
+		createSRV2(m_image, info.format);
+
+		manage();
 	}
 
 
@@ -179,6 +183,7 @@ namespace ob::rhi::vulkan {
 	{
 		//ファイルパスからVkImageを生成する
 
+		manage();
 	}
 
 
@@ -250,7 +255,9 @@ namespace ob::rhi::vulkan {
 			m_hDSV = device.createImageView(viewCreateInfo);
 		}
 
-		createSRV(m_image,info.format);
+		createSRV2(m_image,info.format);
+
+		manage();
 	}
 
 
@@ -280,14 +287,16 @@ namespace ob::rhi::vulkan {
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		m_hRTV = device.createImageView(viewCreateInfo);
 
-		createSRV(image,format);
+		createSRV2(image,format);
+
+		manage();
 	}
 
 
 	VulkanTexture::~VulkanTexture() {
 	}
 
-	void VulkanTexture::createSRV(vk::Image image, vk::Format format) {
+	void VulkanTexture::createSRV2(vk::Image image, vk::Format format) {
 
 		// View
 		vk::ImageViewCreateInfo viewCreateInfo;

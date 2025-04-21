@@ -44,6 +44,7 @@ namespace ob::rhi::vulkan {
 		auto& device = rhi.getDevice();
 		m_sampler = device.createSampler(info,rhi.getAllocationCallbacks());
 
+		manage();
 	}
 
 }

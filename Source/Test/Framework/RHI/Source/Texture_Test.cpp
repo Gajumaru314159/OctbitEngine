@@ -22,6 +22,11 @@ TEST_F(TextureTest, Type) {
 
 		auto texture = Texture::Create(desc);
 
+		if (!Texture::Supports(desc.format, type)) {
+			ASSERT_EQ(texture, nullptr);
+			continue;
+		}
+
 		ASSERT_NE(texture, nullptr);
 
 	}

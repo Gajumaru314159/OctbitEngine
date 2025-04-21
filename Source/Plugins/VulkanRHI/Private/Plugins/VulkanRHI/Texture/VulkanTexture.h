@@ -62,7 +62,7 @@ namespace ob::rhi::vulkan {
 
     private:
 
-        void createSRV(vk::Image image,vk::Format format);
+        void createSRV2(vk::Image image,vk::Format format);
 
     private:
 
