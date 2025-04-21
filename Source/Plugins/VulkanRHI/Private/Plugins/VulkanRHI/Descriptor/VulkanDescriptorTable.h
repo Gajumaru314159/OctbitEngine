@@ -59,7 +59,18 @@ namespace ob::rhi::vulkan {
 		String				m_name;
 
 
-		using Element = Variant<Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
+		struct BufferElement {
+			Ref<Buffer> resource;
+		};
+		struct TextureElement {
+			Ref<Texture> resource;
+			vk::raii::ImageView view;
+		};
+		struct SamplerElement {
+			Ref<Sampler> resource;
+		};
+
+		using Element = Variant<BufferElement, TextureElement, SamplerElement>;
 
 		Vector<Element> m_elemetns;
 

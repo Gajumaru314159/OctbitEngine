@@ -72,6 +72,7 @@ namespace ob::rhi::vulkan
 		info.poolSizeCount = descPoolSizes.size();
 		info.pPoolSizes = descPoolSizes.data();
 		info.maxSets = 1;
+		info.flags = vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
 
 
 
@@ -135,7 +136,8 @@ namespace ob::rhi::vulkan
 			return false;
 		}
 
-		m_elemetns.at(index) = resource;
+		m_elemetns.at(index) = BufferElement{ resource };
+		auto& element = std::get<BufferElement>(m_elemetns.at(index));
 
 		if (auto p = resource.cast<VulkanBuffer>()) {
 
@@ -178,12 +180,15 @@ namespace ob::rhi::vulkan
 			return false;
 		}
 
-		m_elemetns.at(index) = resource;
+		m_elemetns.at(index) = TextureElement{ resource , nullptr };
+		auto& element = std::get<TextureElement>(m_elemetns.at(index));
 
 		if (auto p = resource.cast<VulkanTexture>()) {
 
+			p->createSRV(element.view);
+
 			vk::DescriptorImageInfo imageInfo;
-			imageInfo.imageView = p->getSRV();
+			imageInfo.imageView = element.view;
 			imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
 
 			vk::WriteDescriptorSet writeDescSet;
@@ -220,7 +225,8 @@ namespace ob::rhi::vulkan
 			return false;
 		}
 
-		m_elemetns.at(index) = resource;
+		m_elemetns.at(index) = SamplerElement{ resource };
+		auto& element = std::get<SamplerElement>(m_elemetns.at(index));
 
 		if (auto p = resource.cast<VulkanSampler>()) {
 

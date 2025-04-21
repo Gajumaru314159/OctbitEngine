@@ -122,8 +122,6 @@ namespace ob::rhi::vulkan {
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
-		createSRV2(m_image, info.format);
-
 		manage();
     }
 
@@ -170,8 +168,6 @@ namespace ob::rhi::vulkan {
 		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
 
 		m_rhi.getTextureUploader().add(m_image,info,subresources);
-
-		createSRV2(m_image, info.format);
 
 		manage();
 	}
@@ -255,8 +251,6 @@ namespace ob::rhi::vulkan {
 			m_hDSV = device.createImageView(viewCreateInfo);
 		}
 
-		createSRV2(m_image,info.format);
-
 		manage();
 	}
 
@@ -287,8 +281,6 @@ namespace ob::rhi::vulkan {
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		m_hRTV = device.createImageView(viewCreateInfo);
 
-		createSRV2(image,format);
-
 		manage();
 	}
 
@@ -296,18 +288,37 @@ namespace ob::rhi::vulkan {
 	VulkanTexture::~VulkanTexture() {
 	}
 
-	void VulkanTexture::createSRV2(vk::Image image, vk::Format format) {
 
-		// View
-		vk::ImageViewCreateInfo viewCreateInfo;
-		viewCreateInfo.viewType = vk::ImageViewType::e2D;
-		viewCreateInfo.format = format;
-		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
-		viewCreateInfo.subresourceRange.levelCount = 1;
-		viewCreateInfo.subresourceRange.layerCount = 1;
-		viewCreateInfo.image = image;
-		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-		m_hSRV = m_rhi.getDevice().createImageView(viewCreateInfo);
+	vk::ImageViewType Convert(TextureType type,s32 arrayNum) {
+		switch (type) {
+		case TextureType::Texture1D:
+			return 0  < arrayNum ? vk::ImageViewType::e1DArray : vk::ImageViewType::e1D;
+		case TextureType::Texture2D:
+			return 0  < arrayNum ? vk::ImageViewType::e2DArray : vk::ImageViewType::e2D;
+		case TextureType::Texture3D:
+			return  vk::ImageViewType::e3D;
+		case TextureType::Cube:
+			return 0 < arrayNum ? vk::ImageViewType::eCubeArray : vk::ImageViewType::eCube;
+		}
+		throw NotSupportedException();
 	}
 
-}// ob::rhi::dx12
+	bool VulkanTexture::createSRV(vk::raii::ImageView& view) {
+		// View
+		vk::ImageViewCreateInfo info;
+		info.image = m_image;
+		info.viewType = Convert(m_desc.type,m_desc.arrayNum);
+		info.format = TypeConverter::Convert(m_desc.format);
+		info.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
+		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+		info.subresourceRange.baseMipLevel = 0;
+		info.subresourceRange.levelCount = 1; // TODO m_desc.mipLevels;
+		info.subresourceRange.baseArrayLayer = 0;
+		info.subresourceRange.layerCount = 1;
+		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+		view = m_rhi.getDevice().createImageView(info);
+
+		return true;
+	}
+
+}
