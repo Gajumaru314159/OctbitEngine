@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/Texture/TextureUploader.h>
+#include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 

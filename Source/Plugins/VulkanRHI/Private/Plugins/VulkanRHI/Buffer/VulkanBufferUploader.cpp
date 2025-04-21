@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
+#include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 

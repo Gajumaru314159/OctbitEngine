@@ -16,7 +16,7 @@
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
-#include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
+#include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Framework/Core/Misc/ErrorCode.h>
 
 #include <Framework/Platform/Window.h>
@@ -628,11 +628,10 @@ namespace ob::rhi::vulkan {
 			);
 			return true;
 		}
-		catch (const vk::Error& e) {
+		catch (const std::exception& e) {
 			return false;
 		}
 
-		return true;
 	}
 	//! @brief サポートしているレンダーテクスチャフォーマットか 
 	bool VulkanRHI::supportsForRenderTexture(TextureFormat format)const {
@@ -655,11 +654,10 @@ namespace ob::rhi::vulkan {
 			);
 			return true;
 		}
-		catch (const vk::Error& e) {
+		catch (const std::exception& e) {
 			return false;
 		}
 
-		return true;
 	}
 	//! @brief サポートしているシェーダーステージか
 	bool VulkanRHI::supports(ShaderStage stage)const {
