@@ -59,7 +59,7 @@ namespace ob::rhi::vulkan {
 		m_commandPool.reset(vk::CommandPoolResetFlags{});
 		m_commandBuffer.reset(vk::CommandBufferResetFlags{});
 		vk::CommandBufferBeginInfo info;
-		info.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
+		//info.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
 		m_commandBuffer.begin(info);
 	}
 
@@ -86,6 +86,8 @@ namespace ob::rhi::vulkan {
 		m_colorTextures.clear();
 		m_depthTexture = nullptr;
 
+		m_cache.clear();
+
 		s32 width = 0;
 		s32 height = 0;
 
@@ -102,6 +104,10 @@ namespace ob::rhi::vulkan {
 
 				width = color.texture->width();
 				height = color.texture->height();
+
+				m_colorTextures.push_back(color.texture);
+
+				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, vk::ImageAspectFlagBits::eColor);
 			} else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
 			}
@@ -118,6 +124,10 @@ namespace ob::rhi::vulkan {
 
 				width = param.depth.texture->width();
 				height = param.depth.texture->height();
+
+				m_depthTexture = param.depth.texture;
+
+				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageAspectFlagBits::eDepth);
 			} else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
 			}
@@ -134,6 +144,10 @@ namespace ob::rhi::vulkan {
 
 				width = param.stencil.texture->width();
 				height = param.stencil.texture->height();
+
+				m_depthTexture = param.depth.texture;
+
+				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eStencilAttachmentOptimal, vk::ImageAspectFlagBits::eStencil);
 			}
 			else {
 				LOG_ERROR("不正な引数。レンダーターゲットが不正です。");
@@ -158,6 +172,8 @@ namespace ob::rhi::vulkan {
 			info.pStencilAttachment = stencilAttachments.data();
 		}
 
+		m_cache.recordCommand(m_commandBuffer);
+
 		m_commandBuffer.beginRendering(info);
 
 		// 初期設定としてViewportとScissorRectを設定
@@ -177,19 +193,19 @@ namespace ob::rhi::vulkan {
 		
 		m_commandBuffer.endRendering();
 
-		// m_cache.clear();
-		// 
-		// for (auto [i, color] : Indexed(m_colorTextures)) {
-		// 	if (auto texture = color.cast<DirectX12Texture>()) {
-		// 		m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
-		// 	}
-		// }
-		// if (auto texture = m_depthTexture.cast<DirectX12Texture>()) {
-		// 	m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_COMMON);
-		// }
-		// 
-		// // リソースバリア
-		// m_cache.recordCommand(*m_cmdList.Get());
+		m_cache.clear();
+		
+		for (auto [i, color] : Indexed(m_colorTextures)) {
+			if (auto texture = color.cast<VulkanTexture>()) {
+				m_cache.addTexture(texture->getNative(),vk::ImageLayout::eColorAttachmentOptimal,vk::ImageLayout::eShaderReadOnlyOptimal,vk::ImageAspectFlagBits::eColor);
+			}
+		}
+		if (auto texture = m_depthTexture.cast<VulkanTexture>()) {
+			m_cache.addTexture(texture->getNative(), vk::ImageLayout::eDepthStencilAttachmentOptimal, vk::ImageLayout::eGeneral, vk::ImageAspectFlagBits::eColor);
+		}
+		
+		// リソースバリア
+		m_cache.recordCommand(m_commandBuffer);
 
 		m_colorTextures.clear();
 		m_depthTexture = nullptr;
@@ -201,7 +217,8 @@ namespace ob::rhi::vulkan {
 	void VulkanCommandList::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) {
 		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
 		if (auto pDisplay = display.cast<VulkanDisplay>()) {
-			pDisplay->recordApplyDisplay(*this, texture);
+			Ref<CommandList> commandList = this;
+			pDisplay->recordApplyDisplay(commandList, texture);
 		}
 		else {
 			LOG_ERROR("不正な引数。ディスプレイが不正です。");

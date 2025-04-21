@@ -8,6 +8,7 @@
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
 namespace ob::rhi::vulkan {
 
@@ -120,6 +121,8 @@ namespace ob::rhi::vulkan {
 
         RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
+
+        VulkanResourceStateCache m_cache;
 
     };
 

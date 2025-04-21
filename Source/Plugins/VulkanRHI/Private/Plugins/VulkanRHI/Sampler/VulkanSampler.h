@@ -17,6 +17,11 @@ namespace ob::rhi::vulkan {
         //! @brief      名前を取得
         const String& getName()const override { return m_name; }
 
+    public:
+
+		//! @brief      サンプラーを取得
+		vk::Sampler getNative() const { return m_sampler; }
+
     private:
         String m_name;
 		vk::raii::Sampler m_sampler = nullptr;

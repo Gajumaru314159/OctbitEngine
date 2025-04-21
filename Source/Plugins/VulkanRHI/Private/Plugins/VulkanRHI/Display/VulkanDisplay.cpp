@@ -6,6 +6,7 @@
 #include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Framework/Platform/Window.h>
@@ -24,6 +25,7 @@ namespace ob::rhi::vulkan {
 	VulkanDisplay::VulkanDisplay(VulkanRHI& rhi, const DisplayDesc& desc)
 		: m_rhi(rhi)
 	{
+		m_desc = desc;
 		// 未指定の場合はwindowから取得
 		if (desc.size.width <= 1 || desc.size.height <= 1) {
 			m_desc.size = { (s32)desc.window.getSize().x,(s32)desc.window.getSize().y };
@@ -47,7 +49,7 @@ namespace ob::rhi::vulkan {
 		
 		// サーフェスの機能を取得
 		auto capabilities = rhi.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
-		auto formats = rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
+		auto surfaceFormats = rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
 		auto presentModeList = rhi.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
 
 				
@@ -86,15 +88,26 @@ namespace ob::rhi::vulkan {
 			: vk::CompositeAlphaFlagBitsKHR::eOpaque;
 
 
-		vk::SurfaceFormatKHR format = formats.at(0); // TODO desc.formatチェック
+		auto format = TypeConverter::Convert(m_desc.format);
+		Optional<vk::SurfaceFormatKHR> surfaceFormat;
+		for (auto& item : surfaceFormats) {
+			if (item.format == format) {
+				surfaceFormat = item;
+				break;
+			}
+		}
+		if (!surfaceFormat) {
+			LOG_ERROR("サーフェスフォーマットが見つかりません。");
+			throw Exception();;
+		}
 
 		// サーフェイス生成
 		vk::SwapchainCreateInfoKHR swapChainCreateInfo;
 		swapChainCreateInfo.flags = {};
 		swapChainCreateInfo.surface = m_surface;
 		swapChainCreateInfo.minImageCount = capabilities.minImageCount;
-		swapChainCreateInfo.imageFormat = format.format;
-		swapChainCreateInfo.imageColorSpace = format.colorSpace;
+		swapChainCreateInfo.imageFormat = surfaceFormat->format;
+		swapChainCreateInfo.imageColorSpace = surfaceFormat->colorSpace;
 		swapChainCreateInfo.imageExtent.width = m_desc.size.width;
 		swapChainCreateInfo.imageExtent.height = m_desc.size.height;
 		swapChainCreateInfo.imageArrayLayers = 1;
@@ -113,19 +126,16 @@ namespace ob::rhi::vulkan {
 
 		// Image取得
 		auto images = m_swapchain.getImages();
+		m_images.insert(m_images.begin(), images.begin(), images.end());
 
 		// ImageView生成
 		for (auto [index,image] : Indexed(images)) {
-
-			String name = Format("{}_{}", m_desc.name,index);
-
-			m_textures.push_back(new VulkanTexture(rhi,image,format.format, size,name));
 
 			vk::ImageViewCreateInfo imageViewCreateInfo;
 			imageViewCreateInfo.flags = {};
 			imageViewCreateInfo.image = image;
 			imageViewCreateInfo.viewType = vk::ImageViewType::e2D;
-			imageViewCreateInfo.format = format.format;
+			imageViewCreateInfo.format = surfaceFormat->format;
 			imageViewCreateInfo.components.r = vk::ComponentSwizzle::eIdentity;
 			imageViewCreateInfo.components.g = vk::ComponentSwizzle::eIdentity;
 			imageViewCreateInfo.components.b = vk::ComponentSwizzle::eIdentity;
@@ -136,12 +146,18 @@ namespace ob::rhi::vulkan {
 			imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
 			imageViewCreateInfo.subresourceRange.layerCount = 1;
 
-			m_imageViews.push_back(m_rhi.getDevice().createImageView(imageViewCreateInfo, m_rhi.getAllocationCallbacks()));
-
+			m_imageViews2.emplace_back(m_rhi.getDevice().createImageView(imageViewCreateInfo, m_rhi.getAllocationCallbacks()));
+			m_imageViews.push_back(m_imageViews2.back());
 			
 		}
 
 		createResources(rhi);
+
+		// m_fenceの生成
+		vk::FenceCreateInfo fenceInfo;
+		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
+		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
+
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -159,13 +175,15 @@ namespace ob::rhi::vulkan {
 
 	//! @brief 更新
 	void VulkanDisplay::update() {
-		//update(m_rhi.getQueue());
+		update(m_rhi.getQueue());
 	}
 	void VulkanDisplay::update(vk::Queue queue) {
 
 		if (!m_desc.window.isValid())return;
 
 		auto& device = m_rhi.getDevice();
+
+		device.resetFences(*m_fence);
 
 		auto [result,index] = m_swapchain.acquireNextImage(1'000'000'000, {}, m_fence);
 		
@@ -191,7 +209,7 @@ namespace ob::rhi::vulkan {
 		
 		queue.waitIdle();
 
-		m_textures.next();
+		m_imageViews.next();
 	}
 
 
@@ -202,7 +220,7 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief      テクスチャをディスプレイにコピー
-	void VulkanDisplay::recordApplyDisplay(CommandList& cmdList, const Ref<RenderTexture>& texture) {
+	void VulkanDisplay::recordApplyDisplay(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture) {
 
 		// テクスチャが違う場合再バインド
 		if (m_bindedTexture != texture) {
@@ -214,7 +232,7 @@ namespace ob::rhi::vulkan {
 				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
 			}
-			if (m_bindedSamplerTable) {
+			if (m_bindedSampler) {
 				m_bindedSamplerTable = DescriptorTable::Create(m_signature, 1);
 				m_bindedSamplerTable->setResource(0, m_bindedSampler);
 			}
@@ -225,38 +243,63 @@ namespace ob::rhi::vulkan {
 		if (!m_bindedTextureTable)
 			return;
 
-		{
+		if(auto impl = cmdList.cast<VulkanCommandList>()) {
 
-			RenderPassDesc renderPass;
-			renderPass.colors.emplace_back(m_textures.current(), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+			vk::CommandBuffer commandBuffer = impl->getNative();
 
-			cmdList.beginRenderPass(renderPass);
+			m_cache.clear();
+			m_cache.addTexture(m_images[m_imageViews.index()], vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal,vk::ImageAspectFlagBits::eColor);
+			m_cache.recordCommand(commandBuffer);
 
-			cmdList.setPipelineState(m_pipeline);
+			vk::RenderingAttachmentInfo attachment;
+			attachment.imageView = m_imageViews.current();
+			attachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
+			attachment.loadOp = vk::AttachmentLoadOp::eClear;
+			attachment.storeOp = vk::AttachmentStoreOp::eStore;
 
-			SetDescriptorTableParam tableParam(m_bindedTextureTable, 0);
-			cmdList.setRootDesciptorTable(&tableParam, 1);
+			vk::RenderingInfo renderingInfo;
+			renderingInfo.flags = vk::RenderingFlagBits{};
+			renderingInfo.renderArea.offset.x = 0;
+			renderingInfo.renderArea.offset.y = 0;
+			renderingInfo.renderArea.extent.width = m_desc.size.width;
+			renderingInfo.renderArea.extent.height = m_desc.size.height;
+			renderingInfo.layerCount = 1;
+			renderingInfo.viewMask = 0;
+			renderingInfo.setColorAttachments(attachment);
 
-			cmdList.setVertexBuffer(m_verices);
+			commandBuffer.beginRendering(renderingInfo);
+
+			commandBuffer.setViewport(0, vk::Viewport(0, 0, m_desc.size.width, m_desc.size.height));
+
+			vk::Rect2D scissor;
+			scissor.extent.width = m_desc.size.width;;
+			scissor.extent.height = m_desc.size.height;;
+			commandBuffer.setScissor(0, scissor);
+
+			cmdList->setPipelineState(m_pipeline);
+
+			SetDescriptorTableParam tableParam[] = {
+				{m_bindedTextureTable, 0},
+				{m_bindedSamplerTable, 1},
+			};
+
+			cmdList->setRootDesciptorTable(tableParam, 2);
+
+			cmdList->setVertexBuffer(m_verices);
 
 			DrawParam drawParam;
 			drawParam.startVertex = 0;
 			drawParam.vertexCount = 6;
-			cmdList.draw(drawParam);
+			cmdList->draw(drawParam);
 
-			cmdList.endRenderPass();
+			commandBuffer.endRendering();
 
-			// Present準備
-			if (auto texture = m_textures.current().cast<VulkanTexture>()) {
-
-				// D3D12_RESOURCE_BARRIER barrier;
-				// if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
-				// 	cmdList.getNative()->ResourceBarrier(1, &barrier);
-				// }
-
-			}
+			m_cache.clear();
+			m_cache.addTexture(m_images[m_imageViews.index()], vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR, vk::ImageAspectFlagBits::eColor);
+			m_cache.recordCommand(commandBuffer);
 
 		}
+
 	}
 
 

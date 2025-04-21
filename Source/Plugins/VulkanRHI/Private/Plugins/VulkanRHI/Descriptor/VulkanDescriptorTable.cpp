@@ -221,20 +221,18 @@ namespace ob::rhi::vulkan
 
 		if (auto p = resource.cast<VulkanSampler>()) {
 
-			// vk::DescriptorImageInfo imageInfo;
-			// imageInfo.imageView;
-			// imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-			// imageInfo.sampler = nullptr;
-			// 
-			// vk::WriteDescriptorSet writeDescSet;
-			// writeDescSet.dstSet = m_set;
-			// writeDescSet.dstBinding = index;
-			// writeDescSet.dstArrayElement = 0;
-			// writeDescSet.descriptorType = type;
-			// writeDescSet.descriptorCount = 1;
-			// writeDescSet.pImageInfo = &imageInfo;
-			// 
-			// m_set.getDevice().updateDescriptorSets({ writeDescSet }, {});
+			vk::DescriptorImageInfo imageInfo;
+			imageInfo.sampler = p->getNative();
+			
+			vk::WriteDescriptorSet writeDescSet;
+			writeDescSet.dstSet = m_set;
+			writeDescSet.dstBinding = index;
+			writeDescSet.dstArrayElement = 0;
+			writeDescSet.descriptorType = type;
+			writeDescSet.descriptorCount = 1;
+			writeDescSet.pImageInfo = &imageInfo;
+			
+			m_set.getDevice().updateDescriptorSets({ writeDescSet }, {});
 		}
 		return true;
 	}

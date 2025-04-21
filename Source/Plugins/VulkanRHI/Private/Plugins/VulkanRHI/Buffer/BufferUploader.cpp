@@ -168,7 +168,7 @@ namespace ob::rhi::vulkan
 		for (auto& block : frame.blocks) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
-			barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
 			barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -180,7 +180,7 @@ namespace ob::rhi::vulkan
 		// バリア追加
 		if (!m_barriers.empty()) {
 			commandBuffer.pipelineBarrier(
-				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+				vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
 				{},
 				{}, m_barriers, {}
 			);
@@ -211,7 +211,7 @@ namespace ob::rhi::vulkan
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
 			barrier.srcAccessMask = vk::AccessFlagBits::eTransferRead;
-			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+			barrier.dstAccessMask = vk::AccessFlagBits::eNone;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.buffer = block.buffer;
@@ -220,7 +220,7 @@ namespace ob::rhi::vulkan
 		}
 		if (!m_barriers.empty()) {
 			commandBuffer.pipelineBarrier(
-				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eVertexInput,
 				{},
 				{}, m_barriers, {}
 			);

@@ -21,6 +21,10 @@ namespace ob::rhi::vulkan {
         void execute();
         void wait();
 
+		vk::Queue getQueue() const {
+			return *m_queue;
+		}
+
     private:
         VulkanRHI& m_rhi;
         vk::raii::Queue								m_queue = nullptr;

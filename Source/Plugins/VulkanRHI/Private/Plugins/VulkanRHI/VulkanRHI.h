@@ -9,6 +9,7 @@
 #include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Plugins/VulkanRHI/Buffer/BufferUploader.h>
 #include <Plugins/VulkanRHI/Texture/TextureUploader.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
 
 namespace ob::platform {
 	class WindowManager;
@@ -183,6 +184,7 @@ namespace ob::rhi::vulkan {
 		vk::raii::Instance&			getInstance() { return m_instance; }
 		vk::raii::Device&			getDevice() { return m_device; }
 		vk::raii::PhysicalDevice&	getPhysicalDevice() { return m_physicalDevice; }
+		vk::Queue				getQueue() { return m_commandQueue->getQueue(); }
 
 		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
 

@@ -57,7 +57,7 @@ namespace ob::rhi::vulkan {
             }
 
             commandBuffer.pipelineBarrier(
-                vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eTransfer,
+                vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eBottomOfPipe,
                 {},
                 {}, {}, m_barriers
             );

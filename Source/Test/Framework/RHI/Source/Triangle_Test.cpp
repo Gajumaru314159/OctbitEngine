@@ -98,6 +98,7 @@ PsOut PS_Main(PsIn i) {
 			desc.vertexLayout.attributes = {
 				VertexAttribute(Semantic::Position,offsetof(Vert,pos),ElementType::Float,4),
 			};
+			desc.vertexLayout.vertexStride = sizeof(Vert);
 			desc.blend[0] = BlendDesc::AlphaBlend;
 			desc.rasterizer.cullMode = CullMode::None;
 			desc.depthStencil.depth.enable = false;
@@ -109,7 +110,7 @@ PsOut PS_Main(PsIn i) {
 
 		Vector<Vert> vertices{
 			{Vec4(0,0,0,1)},
-			{Vec4(1,0,0,1)},
+			{Vec4(0.5,0,0,1)},
 			{Vec4(0,1,0,1)},
 		};
 		Vector<u16> indices{
@@ -177,7 +178,7 @@ PsOut PS_Main(PsIn i) {
 			cmdList->endRenderPass();
 
 
-			//cmdList->applyDisplay(display, colorRT);
+			cmdList->applyDisplay(display, colorRT);
 
 			cmdList->end();
 			cmdList->flush();

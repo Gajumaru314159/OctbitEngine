@@ -7,6 +7,7 @@
 #include <Framework/RHI/Display.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
 //===============================================================
 // クラス定義
@@ -45,7 +46,7 @@ namespace ob::rhi::vulkan {
 	public:
 
 		//! @brief      テクスチャをディスプレイにコピー
-		void recordApplyDisplay(CommandList& cmdList, const Ref<RenderTexture>& texture);
+		void recordApplyDisplay(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture);
 
 	private:
 
@@ -58,10 +59,10 @@ namespace ob::rhi::vulkan {
 
 		vk::raii::SurfaceKHR		m_surface = nullptr;
 		vk::raii::SwapchainKHR		m_swapchain = nullptr;
-		Vector<vk::raii::ImageView>	m_imageViews;
+		Swapper<vk::ImageView>		m_imageViews;
+		Vector<vk::raii::ImageView>m_imageViews2;
+		Vector<vk::Image>			m_images;
 		vk::raii::Fence				m_fence = nullptr;	
-
-		Swapper<Ref<RenderTexture>> m_textures;
 
 		// 描画リソース    
 		Ref<RootSignature>          m_signature;
@@ -72,6 +73,7 @@ namespace ob::rhi::vulkan {
 		Ref<DescriptorTable>        m_bindedTextureTable;
 		Ref<DescriptorTable>        m_bindedSamplerTable;
 
+		VulkanResourceStateCache	m_cache;
 	};
 }
 

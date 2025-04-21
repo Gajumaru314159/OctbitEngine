@@ -81,6 +81,8 @@ namespace ob::rhi::vulkan {
 			item.binding = 0;
 			item.stride = desc.vertexLayout.vertexStride;
 			item.inputRate = vk::VertexInputRate::eVertex;
+
+			OB_ASSERT_EXPR(0 < item.stride);
 		}
 		if(false){
 			auto& item = bindingDescriptions.emplace_back();
