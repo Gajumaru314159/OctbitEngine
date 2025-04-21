@@ -113,8 +113,8 @@ namespace ob::rhi::vulkan
 		// バインド
 		block.buffer.bindMemory(block.memory, 0);
 
-		Utility::SetName(device, block.buffer, "BufferUploader");
-		Utility::SetName(device, block.memory, "BufferUploader");
+		m_rhi.setName(block.buffer, "BufferUploader");
+		m_rhi.setName(block.memory, "BufferUploader");
 
 		// 一次バッファ生成
 		block.blob.reserve(m_blockSize);

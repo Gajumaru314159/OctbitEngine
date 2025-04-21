@@ -70,6 +70,11 @@ namespace ob::rhi::vulkan {
 
 		m_pipelineLayout = device.createPipelineLayout(createInfo, rhi.getAllocationCallbacks());
 
+		rhi.setName(m_pipelineLayout, m_desc.name);
+		for (auto& layout : m_layouts) {
+			rhi.setName(layout, m_desc.name);
+		}
+
 		manage();
 	}
 

@@ -84,6 +84,10 @@ namespace ob::rhi::vulkan {
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
+
+		rhi.setName(m_image, m_desc.name);
+		rhi.setName(m_memory, m_desc.name);
+
 		manage();
     }
 
@@ -130,6 +134,9 @@ namespace ob::rhi::vulkan {
 		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
 
 		m_rhi.getTextureUploader().add(m_image,info,subresources);
+
+		rhi.setName(m_image, m_desc.name);
+		rhi.setName(m_memory, m_desc.name);
 
 		manage();
 	}
@@ -207,11 +214,17 @@ namespace ob::rhi::vulkan {
 		if (isColor) {
 			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 			m_hRTV = device.createImageView(viewCreateInfo);
+			rhi.setName(m_hRTV, m_desc.name);
 		}
 		if (isDepth) {
 			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
 			m_hDSV = device.createImageView(viewCreateInfo);
+			rhi.setName(m_hDSV, m_desc.name);
 		}
+
+		rhi.setName(m_image, m_desc.name);
+		rhi.setName(m_memory, m_desc.name);
+
 
 		manage();
 	}

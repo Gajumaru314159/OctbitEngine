@@ -207,7 +207,7 @@ namespace ob::rhi::vulkan {
 
 		m_pipeline = device.createGraphicsPipeline(nullptr,info,rhi.getAllocationCallbacks());
 
-		Utility::SetName(device, m_pipeline, m_desc.name);
+		rhi.setName(m_pipeline, m_desc.name);
 
 		manage();
 	}

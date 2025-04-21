@@ -23,7 +23,7 @@ namespace ob::rhi::vulkan {
 
 
 	struct VulkanFeatureInfo {
-
+		bool debugMarkerEnabled = false;
 	};
 
 
@@ -142,8 +142,22 @@ namespace ob::rhi::vulkan {
 
 	public:
 
+		template<typename T>
+		void setName(const T& object, StringView name) {
+#if OB_DEBUG
+			if (m_featuresEx.debugMarkerEnabled) {
+			    vk::DebugUtilsObjectNameInfoEXT info;
+				info.objectType = T::objectType;
+				info.objectHandle = (uint64_t)((typename T::CType) * object);
+			    info.pObjectName = name.data();			
+				m_device.setDebugUtilsObjectNameEXT(info);
+			}
+#endif
+		}
+
 		const vk::PhysicalDeviceLimits& getLimits() const { return m_limits; }
 		const vk::PhysicalDeviceFeatures& getFeatures() const { return m_features; }
+		const VulkanFeatureInfo& getFeaturesEx() const { return m_featuresEx; }
 
 		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
 		TextureUploader& getTextureUploader() { return *m_textureUploader; }
@@ -193,6 +207,10 @@ namespace ob::rhi::vulkan {
 		ComPtr<IDxcIncludeHandler>& getIncludeHandler() { return m_shaderIncludeHandler; }
 #endif
 
+		bool supportsDebugMarker() const {
+			return m_vkDebugMarkerSetObjectNameEXT;
+		}
+
 	private:
 
 		void createInstance();
@@ -234,7 +252,14 @@ namespace ob::rhi::vulkan {
 
 		vk::PhysicalDeviceFeatures					m_features;
 		vk::PhysicalDeviceLimits					m_limits;
+		VulkanFeatureInfo							m_featuresEx;
 
+#if OB_DEBUG
+		PFN_vkDebugMarkerSetObjectNameEXT			m_vkDebugMarkerSetObjectNameEXT;
+		PFN_vkCmdDebugMarkerBeginEXT 				m_vkCmdDebugMarkerBeginEXT;
+		PFN_vkCmdDebugMarkerEndEXT 					m_vkCmdDebugMarkerEndEXT;
+		PFN_vkCmdDebugMarkerInsertEXT				m_vkCmdDebugMarkerInsertEXT;
+#endif
 	};
 }
 

@@ -48,8 +48,8 @@ namespace ob::rhi::vulkan {
 		m_buffer.bindMemory(m_memory, 0);
 
 
-		Utility::SetName(device, m_buffer, m_desc.name);
-		Utility::SetName(device, m_memory, m_desc.name);
+		m_rhi.setName(m_buffer, m_desc.name);
+		m_rhi.setName(m_memory, m_desc.name);
 
 		manage();
 	}

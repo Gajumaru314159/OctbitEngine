@@ -50,6 +50,7 @@ namespace ob::rhi::vulkan
 
 		memory.unmapMemory();
 
+
 		// リクエストを追加
 		ScopeLock lock(m_lock);
 
@@ -62,6 +63,9 @@ namespace ob::rhi::vulkan
 		request.mipLevels = subresources.size();
 		request.layerCount = 1;
 		request.format;
+
+		m_rhi.setName(request.source, "VulkanTextureUploader");
+		m_rhi.setName(request.memory, "VulkanTextureUploader");
 
 	}
 

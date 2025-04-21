@@ -188,6 +188,7 @@ namespace ob::rhi::vulkan {
 
         m_shaderModule = rhi.getDevice().createShaderModule(info, rhi.getAllocationCallbacks());
 
+        rhi.setName(m_shaderModule, desc.name);
     }
 
 }

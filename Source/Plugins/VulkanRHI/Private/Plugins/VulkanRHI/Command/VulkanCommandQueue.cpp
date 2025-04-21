@@ -17,6 +17,7 @@ namespace ob::rhi::vulkan {
 	{
 		auto& device = rhi.getDevice();
 		m_queue = device.getQueue(rhi.getQueryFamilyIndex(), 0);
+		m_rhi.setName(m_queue, "VulkanCommandQueue");
 	}
 
 	//! @brief コマンドリストを登録 

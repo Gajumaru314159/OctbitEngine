@@ -94,6 +94,9 @@ namespace ob::rhi::vulkan
 
 		auto sets = device.allocateDescriptorSets(allocInfo);
 		m_set = std::move(sets.front());
+		
+		m_rhi.setName(m_pool, "Octbit Descriptor");
+		m_rhi.setName(m_set, "Octbit Descriptor");
 
 		manage();
 	}

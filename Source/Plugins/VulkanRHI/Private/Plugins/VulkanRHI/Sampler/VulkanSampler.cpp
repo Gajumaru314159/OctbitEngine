@@ -44,6 +44,8 @@ namespace ob::rhi::vulkan {
 		auto& device = rhi.getDevice();
 		m_sampler = device.createSampler(info,rhi.getAllocationCallbacks());
 
+		rhi.setName(m_sampler, "Octbit Sampler");
+
 		manage();
 	}
 

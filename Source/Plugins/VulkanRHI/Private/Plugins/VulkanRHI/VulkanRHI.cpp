@@ -144,10 +144,12 @@ namespace ob::rhi::vulkan {
 		if (m_vconfig.enableDebugLayer) {
 			OB_DEBUG_CONTEXT(layerNames.push_back("VK_LAYER_KHRONOS_validation"));
 			OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME));
+			OB_DEBUG_CONTEXT(extensionNames.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME));
 		}
 		
 		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
+
 
 
 		// 利用可能なレイヤーでフィルタ
@@ -228,6 +230,12 @@ namespace ob::rhi::vulkan {
 		}
 #endif
 
+		for (auto name : extensionNames) {
+			if (strcmp(name, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0) {
+				m_featuresEx.debugMarkerEnabled = true;
+			}
+		}
+
 		m_instance = m_context.createInstance(instanceInfo, m_allocationCallbacks);
 
 	}
@@ -303,9 +311,6 @@ namespace ob::rhi::vulkan {
 		extensionNames.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
 		extensionNames.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
 		extensionNames.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
-		//OB_DEBUG_CONTEXT(layerNames.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME));
-
-		// TODO
 
 
 		// 利用可能なレイヤーでフィルタ

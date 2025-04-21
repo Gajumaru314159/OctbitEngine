@@ -156,6 +156,10 @@ namespace ob::rhi::vulkan {
 		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
 		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
 
+		m_rhi.setName(m_surface, m_desc.name);
+		m_rhi.setName(m_swapchain, m_desc.name);
+		m_rhi.setName(m_fence, m_desc.name);
+
 		manage();
 	}
 

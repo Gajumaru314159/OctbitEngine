@@ -38,6 +38,9 @@ namespace ob::rhi::vulkan {
 		allocInfo.level = vk::CommandBufferLevel::ePrimary;
 
 		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(allocInfo).front());
+		
+		m_rhi.setName(m_commandPool, m_desc.name);
+		m_rhi.setName(m_commandBuffer, m_desc.name);
 
 		manage();
 	}
@@ -361,13 +364,13 @@ namespace ob::rhi::vulkan {
 
 	//! @brief      GPUマーカーをプッシュ
 	void VulkanCommandList::pushMarker(StringView name) {
-		// if (m_rhi.debugMarkerEnabled) m_commandBuffer.debugMarkerBeginEXT("BufferUploader");
+		//if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.debugMarkerBeginEXT(name.data());
 	}
 
 
 	//! @brief      GPUマーカーをポップ
 	void VulkanCommandList::popMarker() {
-		// if (m_rhi.debugMarkerEnabled) m_commandBuffer.debugMarkerEndEXT();
+		//if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.debugMarkerEndEXT();
 	}
 
 #pragma endregion
