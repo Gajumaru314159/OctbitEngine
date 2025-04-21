@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
-//#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
@@ -13,9 +12,7 @@
 
 namespace ob::rhi::vulkan {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief		コンストラクタ
-	//@―---------------------------------------------------------------------------
 	VulkanPipelineState::VulkanPipelineState(VulkanRHI& rhi,const PipelineStateDesc& desc)
 		: m_desc(desc)
 	{
@@ -219,7 +216,5 @@ namespace ob::rhi::vulkan {
 	{
 		return m_desc.name;
 	}
-
-
 
 }

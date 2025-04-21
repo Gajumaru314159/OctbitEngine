@@ -6,6 +6,7 @@
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
 namespace ob::rhi::vulkan
 {
@@ -32,15 +33,15 @@ namespace ob::rhi::vulkan
 
 		size_t bufferSize = info.extent.width;
 
+		// アップロード用のバッファを生成
 		vk::BufferCreateInfo bufferCreateInfo({}, bufferSize, vk::BufferUsageFlagBits::eTransferSrc);
 		vk::raii::Buffer buffer = device.createBuffer(bufferCreateInfo,m_rhi.getAllocationCallbacks());
 
 		auto allocInfo = m_rhi.getAllocationInfo(buffer.getMemoryRequirements(), vk::MemoryPropertyFlags{} | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
-
 		vk::raii::DeviceMemory memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
-
 		buffer.bindMemory(memory, 0);
 
+		// バッファにデータをコピー
 		void* data = memory.mapMemory(0, bufferSize, vk::MemoryMapFlags{});
 
 		for (auto& subresource : subresources) {
@@ -49,7 +50,7 @@ namespace ob::rhi::vulkan
 
 		memory.unmapMemory();
 
-
+		// リクエストを追加
 		ScopeLock lock(m_lock);
 
 		auto& frame = m_frames.current();
@@ -58,34 +59,57 @@ namespace ob::rhi::vulkan
 		request.source = std::move(buffer);
 		request.memory = std::move(memory);
 		request.dest = dest;
-		// request.destLayout;
+		request.mipLevels = subresources.size();
+		request.layerCount = 1;
+		request.format;
 
 	}
 
-	void TextureUploader::update(vk::CommandBuffer commandBuffer) {
+	//! @brief フレームごとのバッファ更新を行う
+	void TextureUploader::update(Ref<CommandList>& commandList) {
+
+		auto commandListImpl = commandList.cast<VulkanCommandList>();
+		if (commandListImpl == nullptr) {
+			return;
+		}
+
+		vk::CommandBuffer commandBuffer = commandListImpl->getNative();
 
 		ScopeLock lock(m_lock);
 
 		auto& frame = m_frames.current();
 
+		commandList->pushMarker("TextureUploader");
+
+		// バリア
 		for (auto& request : frame.requests) {
-			auto& barrier = m_barriers.emplace_back();
-			barrier = vk::ImageMemoryBarrier();
-			barrier.srcAccessMask = {};
-			barrier.dstAccessMask = {};
-			barrier.oldLayout = vk::ImageLayout::eTransferDstOptimal;
-			barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-			barrier.srcQueueFamilyIndex = 0;
-			barrier.dstQueueFamilyIndex = 0;
+
+			vk::ImageAspectFlags flags{};
+			if (TextureFormatUtility::HasColor(request.format)) flags |= vk::ImageAspectFlagBits::eColor;
+			if (TextureFormatUtility::HasDepth(request.format)) flags |= vk::ImageAspectFlagBits::eDepth;
+			if (TextureFormatUtility::HasStencil(request.format)) flags |= vk::ImageAspectFlagBits::eStencil;
+
+			// 転送元
+			vk::ImageMemoryBarrier barrier;
+			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
+			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+			barrier.oldLayout = vk::ImageLayout::eUndefined;
+			barrier.newLayout = vk::ImageLayout::eTransferDstOptimal;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.image = request.dest;
-			barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+			barrier.subresourceRange.aspectMask = flags;
 			barrier.subresourceRange.baseMipLevel = 0;
 			barrier.subresourceRange.levelCount = request.mipLevels;
 			barrier.subresourceRange.baseArrayLayer = 0;
 			barrier.subresourceRange.layerCount = request.layerCount;
+			m_barriers.push_back(barrier);
+
+			// 転送先は一次バッファなのでバリアは不用
+
 		}
 
-
+		// コピー
 		for (auto& request : frame.requests) {
 
 			VkDeviceSize                bufferOffset;
@@ -103,10 +127,36 @@ namespace ob::rhi::vulkan
 			region.imageOffset = 0;
 			region.imageExtent = vk::Extent3D();
 
-			commandBuffer.copyBufferToImage(request.source, request.dest, request.destLayout, region);
+			commandBuffer.copyBufferToImage(request.source, request.dest, vk::ImageLayout::eTransferDstOptimal, region);
 
 		}
 
+		// バリア
+		for (auto& request : frame.requests) {
+
+			vk::ImageAspectFlags flags{};
+			if (TextureFormatUtility::HasColor(request.format)) flags |= vk::ImageAspectFlagBits::eColor;
+			if (TextureFormatUtility::HasDepth(request.format)) flags |= vk::ImageAspectFlagBits::eDepth;
+			if (TextureFormatUtility::HasStencil(request.format)) flags |= vk::ImageAspectFlagBits::eStencil;
+
+			vk::ImageMemoryBarrier barrier;
+			barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+			barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+			barrier.oldLayout = vk::ImageLayout::eUndefined;
+			barrier.newLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.image = request.dest;
+			barrier.subresourceRange.aspectMask = flags;
+			barrier.subresourceRange.baseMipLevel = 0;
+			barrier.subresourceRange.levelCount = request.mipLevels;
+			barrier.subresourceRange.baseArrayLayer = 0;
+			barrier.subresourceRange.layerCount = request.layerCount;
+			m_barriers.push_back(barrier);
+
+		}
+
+		commandList->popMarker();
 
 	}
 

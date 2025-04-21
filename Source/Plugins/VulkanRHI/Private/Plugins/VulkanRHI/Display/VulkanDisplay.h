@@ -9,23 +9,11 @@
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
-//===============================================================
-// クラス定義
-//===============================================================
 namespace ob::rhi::vulkan {
-
-	class VulkanRHI;
 
 	class VulkanDisplay :public Display{
 	public:
 
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
-
-		//@―---------------------------------------------------------------------------
-		//! @brief  コンストラクタ
-		//@―---------------------------------------------------------------------------
 		VulkanDisplay(VulkanRHI& rhi, const DisplayDesc& desc);
 		~VulkanDisplay();
 
@@ -52,6 +40,8 @@ namespace ob::rhi::vulkan {
 
 		void createResources(VulkanRHI& rhi);
 
+		void onWindowChanged(const platform::WindowEventArgs& args);
+
 	private:
 
 		VulkanRHI&					m_rhi;
@@ -60,7 +50,7 @@ namespace ob::rhi::vulkan {
 		vk::raii::SurfaceKHR		m_surface = nullptr;
 		vk::raii::SwapchainKHR		m_swapchain = nullptr;
 		Swapper<vk::ImageView>		m_imageViews;
-		Vector<vk::raii::ImageView>m_imageViews2;
+		Vector<vk::raii::ImageView>	m_imageViews2;
 		Vector<vk::Image>			m_images;
 		vk::raii::Fence				m_fence = nullptr;	
 
@@ -73,18 +63,10 @@ namespace ob::rhi::vulkan {
 		Ref<DescriptorTable>        m_bindedTextureTable;
 		Ref<DescriptorTable>        m_bindedSamplerTable;
 
+		bool						m_visible = false;	
+
 		VulkanResourceStateCache	m_cache;
+
+		DisplayEventNotifier        m_notifier;
 	};
-}
-
-
-
-
-
-
-//===============================================================
-// インライン
-//===============================================================
-namespace ob::rhi::dx12 {
-
 }

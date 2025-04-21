@@ -26,15 +26,12 @@ namespace ob::rhi::vulkan {
 		}
 
     private:
-        VulkanRHI& m_rhi;
-        vk::raii::Queue								m_queue = nullptr;
+        VulkanRHI&                  m_rhi;
+        vk::raii::Queue             m_queue = nullptr;
 
-        Vector<vk::CommandBuffer> m_commandBuffers;
+        Vector<Ref<CommandList>>    m_entriedCommandListVector;
 
-
-        Vector<CommandList*> m_entriedNativeCommandList;
-        Vector<Ref<CommandList>> m_entriedCommandListVector;
-
+        Vector<vk::CommandBuffer>   m_commandBuffers;
     };
 
 }

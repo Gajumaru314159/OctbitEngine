@@ -6,6 +6,7 @@
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
 namespace ob::rhi::vulkan
 {
@@ -14,6 +15,7 @@ namespace ob::rhi::vulkan
 	BufferUploader::BufferUploader(VulkanRHI& rhi, size_t blockSize)
 		: m_rhi(rhi)
 	{
+		// Vulkanは256バイトのアラインメント制限はないがプラットフォームごとの差異を減らすため256バイトでアラインメントを取る
 		m_blockSize = align_up(blockSize, 256);
 		m_frames.resize(4);
 		for (s32 i = 0; i < m_frames.size(); ++i) {
@@ -130,7 +132,15 @@ namespace ob::rhi::vulkan
 
 	}
 
-	void BufferUploader::update(vk::CommandBuffer commandBuffer,bool useDebugMarker) {
+	//! @brief フレームごとのバッファ更新を行う
+	void BufferUploader::update(Ref<CommandList>& commandList) {
+
+		auto commandListImpl = commandList.cast<VulkanCommandList>();
+		if (commandListImpl == nullptr) {
+			return;
+		}
+
+		vk::CommandBuffer commandBuffer = commandListImpl->getNative();
 
 		ScopeLock lock(m_lock);
 
@@ -149,21 +159,10 @@ namespace ob::rhi::vulkan
 			block.memory.unmapMemory();
 		}
 
-		//if(useDebugMarker) commandBuffer.debugMarkerBeginEXT("BufferUploader");
+		commandList->pushMarker("BufferUploader");
 
 		// blocks 事前バリア設定(COMMON or GENERIC_READ > COPY_SOURCE)
 		m_barriers.clear();
-		for (auto& [buffer,accessFlags] : m_entriedBuffers) {
-			auto& barrier = m_barriers.emplace_back();
-			barrier = vk::BufferMemoryBarrier();
-			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
-			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
-			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.buffer = buffer;
-			barrier.offset = 0;
-			barrier.size = VK_WHOLE_SIZE;
-		}
 		// requests  事前バリア設定 (COMMON > COPY_DEST)
 		for (auto& block : frame.blocks) {
 			auto& barrier = m_barriers.emplace_back();
@@ -173,6 +172,17 @@ namespace ob::rhi::vulkan
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.buffer = block.buffer;
+			barrier.offset = 0;
+			barrier.size = VK_WHOLE_SIZE;
+		}
+		for (auto& [buffer, accessFlags] : m_entriedBuffers) {
+			auto& barrier = m_barriers.emplace_back();
+			barrier = vk::BufferMemoryBarrier();
+			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
+			barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+			barrier.buffer = buffer;
 			barrier.offset = 0;
 			barrier.size = VK_WHOLE_SIZE;
 		}
@@ -230,7 +240,7 @@ namespace ob::rhi::vulkan
 		frame.clear();
 		m_entriedBuffers.clear();
 
-		//if (useDebugMarker) commandBuffer.debugMarkerEndEXT();
+		commandList->popMarker();
 
 	}
 

@@ -19,13 +19,17 @@ namespace ob::rhi::vulkan {
 		m_queue = device.getQueue(rhi.getQueryFamilyIndex(), 0);
 	}
 
+	//! @brief コマンドリストを登録 
 	void VulkanCommandQueue::entryCommandList(const Ref<CommandList>& commandList) {
 		m_entriedCommandListVector.push_back(commandList);
 	}
+
+	//! @brief コマンドリストを先頭に登録
 	void VulkanCommandQueue::entryCommandListTop(const Ref<CommandList>& commandList) {
 		m_entriedCommandListVector.insert(m_entriedCommandListVector.begin(), commandList);
 	}
 
+	//! @brief 登録したコマンドリストを実行
 	void VulkanCommandQueue::execute() {
 
 		m_commandBuffers.clear();
@@ -44,6 +48,7 @@ namespace ob::rhi::vulkan {
 
 	}
 
+	//! @brief 待機
 	void VulkanCommandQueue::wait() {
 		m_queue.waitIdle();
 	}

@@ -63,14 +63,8 @@ namespace ob::rhi::vulkan {
         //! @brief      ビューポートを設定
         void setViewport(const Viewport* pViewport, s32 num) override;
 
-        //! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
-        void clearColors(u32 mask) override;
-
-        //! @brief      レンダーターゲットのデプスとステンシルをクリア
-        void clearDepthStencil() override;
-
         //! @brief      頂点バッファを設定
-        void setVertexBuffers(Span<Ref<Buffer>>)override;
+        void setVertexBuffers(Span<Ref<Buffer>> buffers, s32 first)override;
 
         //! @brief      インデックスバッファを設定
         void setIndexBuffer(const Ref<Buffer>&)override;
@@ -93,11 +87,9 @@ namespace ob::rhi::vulkan {
         void setRootConstant(const SetRootConstantsParam&) override;
 
 
-        //! @brief      リソースバリアを挿入
-        void insertResourceBarrier(const ResourceBarrier&) override;
-
         //! @brief      GPUマーカーをプッシュ
         void pushMarker(StringView name) override;
+
 
         //! @brief      GPUマーカーをポップ
         void popMarker() override;
@@ -112,6 +104,10 @@ namespace ob::rhi::vulkan {
 
     private:
 
+        void clearRenderTargets();
+
+    private:
+
         VulkanRHI& m_rhi;
 
         const CommandListDesc m_desc;
@@ -119,6 +115,7 @@ namespace ob::rhi::vulkan {
         vk::raii::CommandPool		m_commandPool = nullptr;
         vk::raii::CommandBuffer     m_commandBuffer = nullptr;
 
+		Ref<PipelineState> m_pipeline;                          // 現在のパイプラインステート
         RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 

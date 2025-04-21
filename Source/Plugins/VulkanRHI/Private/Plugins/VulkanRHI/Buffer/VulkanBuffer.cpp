@@ -18,7 +18,7 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 
-		if (!m_desc.isValid()) throw Exception("Invalid ufferDesc");
+		if (!m_desc.isValid()) throw Exception("Invalid BufferDesc");
 
 		auto& device = rhi.getDevice();
 
@@ -40,7 +40,7 @@ namespace ob::rhi::vulkan {
 		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
 
 		// メモリ確保
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_buffer.getMemoryRequirements(), vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
 
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 

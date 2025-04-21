@@ -275,40 +275,8 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
-	void DirectX12CommandList::clearColors(u32 mask) {
-		for (auto [i, texture] : Indexed(m_colorTextures)) {
-			if (!(mask & (1 << i)))continue;
-			if (auto impl = texture.cast<DirectX12Texture>()) {
-				Color color = texture->descOfRenderTexture().clear.color;
-				FLOAT values[4];
-				values[0] = color.r;
-				values[1] = color.g;
-				values[2] = color.b;
-				values[3] = color.a;
-				m_cmdList->ClearRenderTargetView(impl->getRTV().getCpuHandle(), values, 0, nullptr);
-			}
-		}
-	}
-
-
-	//! @brief      レンダーターゲットのデプスとステンシルをクリア
-	void DirectX12CommandList::clearDepthStencil() {
-		if (m_depthTexture) {
-			if (auto impl = m_depthTexture.cast<DirectX12Texture>()) {
-				auto& desc = m_depthTexture->descOfRenderTexture();
-				FLOAT depth = desc.clear.depth;
-				UINT8 stencil = desc.clear.stencil;		
-				// TODO フォーマットを見てデプスとステンシルのクリアフラグを設定する
-				D3D12_CLEAR_FLAGS clearFlags = D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL;
-				m_cmdList->ClearDepthStencilView(impl->getDSV().getCpuHandle(), clearFlags, depth, stencil, 0, nullptr);
-			}
-		}
-	}
-
-
 	//! @brief      頂点バッファを設定
-	void DirectX12CommandList::setVertexBuffers(Span<Ref<Buffer>> buffers) {
+	void DirectX12CommandList::setVertexBuffers(Span<Ref<Buffer>> buffers, s32 first) {
 		Array<D3D12_VERTEX_BUFFER_VIEW, VERTEX_BUFFER_MAX> views;
 		if (views.size() <= buffers.size()) {
 			LOG_ERROR("頂点バッファは{}以下である必要があります。[size={}]",views.size(),buffers.size());
@@ -334,7 +302,7 @@ namespace ob::rhi::dx12 {
 			size++;
 		}
 
-		m_cmdList->IASetVertexBuffers(0, (UINT)size, views.data());
+		m_cmdList->IASetVertexBuffers(first, (UINT)size, views.data());
 	}
 
 
@@ -410,11 +378,16 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//! @brief  リソースバリアを挿入
-	void DirectX12CommandList::insertResourceBarrier(const ResourceBarrier& resourceBarrier) {
+	//! @brief  GPUマーカーをプッシュ
+	void DirectX12CommandList::pushMarker(StringView name) {
+		StringEncoder::Encode(name, m_markerNameCache);
+		::PIXBeginEvent(m_cmdList.Get(), PIX_COLOR_DEFAULT, m_markerNameCache.data());
+	}
 
-		// ネイティブに変換
-		// m_cmdList->ResourceBarrier(num, barriers.data());
+
+	//! @brief  GPUマーカーをポップ
+	void DirectX12CommandList::popMarker() {
+		::PIXEndEvent(m_cmdList.Get());
 	}
 
 #pragma endregion
@@ -423,17 +396,6 @@ namespace ob::rhi::dx12 {
 	void DirectX12CommandList::clearRenderTargets() {
 		m_colorTextures.clear();
 		m_depthTexture = nullptr;
-	}
-
-	//! @brief  GPUマーカーをプッシュ
-	void DirectX12CommandList::pushMarker(StringView name) {
-		StringEncoder::Encode(name, m_markerNameCache);
-		::PIXBeginEvent(m_cmdList.Get(),PIX_COLOR_DEFAULT, m_markerNameCache.data());
-	}
-
-	//! @brief  GPUマーカーをポップ
-	void DirectX12CommandList::popMarker() {
-		::PIXEndEvent(m_cmdList.Get());
 	}
 
 }

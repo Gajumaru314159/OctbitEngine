@@ -62,14 +62,8 @@ namespace ob::rhi::dx12 {
         //! @brief      ビューポートを設定
         void setViewport(const Viewport* pViewport, s32 num) override;
 
-        //! @brief      レンダーターゲットの色をRenderTargetに設定した色でクリア
-        void clearColors(u32 mask) override;
-
-        //! @brief      レンダーターゲットのデプスとステンシルをクリア
-        void clearDepthStencil() override;
-
         //! @brief      頂点バッファを設定
-        void setVertexBuffers(Span<Ref<Buffer>>)override;
+        void setVertexBuffers(Span<Ref<Buffer>> buffers, s32 first)override;
 
         //! @brief      インデックスバッファを設定
         void setIndexBuffer(const Ref<Buffer>&)override;
@@ -91,9 +85,6 @@ namespace ob::rhi::dx12 {
         //! @brief      ルート定数を設定
         void setRootConstant(const SetRootConstantsParam&) override;
 
-
-        //! @brief      リソースバリアを挿入
-        void insertResourceBarrier(const ResourceBarrier&) override;
 
         //! @brief      GPUマーカーをプッシュ
         void pushMarker(StringView name) override;

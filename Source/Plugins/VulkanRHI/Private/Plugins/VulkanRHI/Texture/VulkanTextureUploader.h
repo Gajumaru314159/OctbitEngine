@@ -5,6 +5,8 @@
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Framework/RHI/Forward.h>
+#include <Framework/RHI/Texture.h>
 
 namespace ob::rhi::vulkan {
 
@@ -29,7 +31,7 @@ namespace ob::rhi::vulkan {
 
         void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, Span<Subresource> subresources);
 
-        void update(vk::CommandBuffer commandBuffer);
+        void update(Ref<CommandList>& commandList);
 
     private:
 
@@ -40,7 +42,7 @@ namespace ob::rhi::vulkan {
             vk::raii::Buffer source = nullptr;
             vk::raii::DeviceMemory memory = nullptr;
 
-            vk::ImageLayout destLayout;
+            TextureFormat format;
             u32 mipLevels;
 			u32 layerCount;
 

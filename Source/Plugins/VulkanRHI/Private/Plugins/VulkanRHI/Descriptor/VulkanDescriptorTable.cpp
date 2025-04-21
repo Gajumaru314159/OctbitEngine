@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include "VulkanDescriptorTable.h"
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
@@ -11,6 +11,7 @@
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
+#include <magic_enum.hpp>
 
 namespace ob::rhi::vulkan
 {
@@ -24,17 +25,23 @@ namespace ob::rhi::vulkan
 		, m_signature(signature.cast<VulkanRootSignature>())
 		, m_slot(slot)
 	{
-		if (m_signature == nullptr) return;
+
+		auto& device = rhi.getDevice();
+
+		if (m_signature == nullptr) throw Exception("RootSignatureが未設定です");
 
 		s32 itemCount = m_signature->getItemCount(slot);
 
 		m_elemetns.resize(itemCount);
 
+		// TODO FixedHashMapを使う
+		constexpr auto TYPE_NUM = 5;
 		HashMap<vk::DescriptorType, u32> descTypeCount;
 
 
 		auto& rSlot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
 
+		// タイプごとのアイテム数を計算
 		for (auto& item : rSlot.items) {
 			switch (item.type)
 			{
@@ -60,7 +67,8 @@ namespace ob::rhi::vulkan
 			}
 		}
 
-		FixedVector<vk::DescriptorPoolSize, 16> descPoolSizes;
+		// タイプごとのアイテム数をDescriptorPoolSizeに格納
+		FixedVector<vk::DescriptorPoolSize, TYPE_NUM> descPoolSizes;
 		for (auto& [type, count] : descTypeCount) {
 			auto& descPoolSize = descPoolSizes.emplace_back();
 			descPoolSize.type = type;
@@ -68,42 +76,36 @@ namespace ob::rhi::vulkan
 			descPoolSizes.push_back(descPoolSize);
 		}
 
+		// Poolを生成
 		vk::DescriptorPoolCreateInfo info;
 		info.maxSets = 1;
 		info.flags = vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
 		info.setPoolSizes(descPoolSizes);
 
-		auto& device = rhi.getDevice();
-
 		m_pool = device.createDescriptorPool(info, m_rhi.getAllocationCallbacks());
 
 		
-
+		// DescriptorSetを生成
 		vk::DescriptorSetLayout descSetLayouts[] = { m_signature->getLayouts(slot)};
-
 		vk::DescriptorSetAllocateInfo allocInfo;
 		allocInfo.descriptorPool = m_pool;
 		allocInfo.descriptorSetCount = 1;
 		allocInfo.pSetLayouts = descSetLayouts;
 
 		auto sets = device.allocateDescriptorSets(allocInfo);
-
-		if (sets.size() != 1) {
-			LOG_ERROR("不正な呼び出し。DescriptorSetの取得に失敗しました。");
-			return;
-		}
-
 		m_set = std::move(sets.front());
 
 		manage();
 	}
 
+	//! @brief              コンストラクタ　
 	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const BindingSlot& desc)
 		: m_rhi(rhi)
 		, m_desc(desc)
 	{
+		// TODO 廃止
 
-		m_elemetns.resize(desc.items.size());
+		OB_NOTIMPLEMENTED();
 
 		manage();
 	}
@@ -204,6 +206,7 @@ namespace ob::rhi::vulkan
 		return false;
 	}
 
+
 	//! @brief  サンプラーリソースを設定
 	bool VulkanDescriptorTable::setResource(s32 index, const Ref<Sampler>& resource) {
 		
@@ -243,13 +246,14 @@ namespace ob::rhi::vulkan
 		return true;
 	}
 
+
 	//! @brief CommandListに記録
 	void VulkanDescriptorTable::record(vk::CommandBuffer commandBuffer, s32 slot) const {
 		commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_signature->getNative(), slot, *m_set, {});
 	}
 
 
-
+	//! @brief  Bufferから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, vk::DescriptorType& type) const {
 
 		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
@@ -292,6 +296,9 @@ namespace ob::rhi::vulkan
 		}
 		return false;
 	}
+
+
+	//! @brief  Textureから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, vk::DescriptorType& type) const {
 
 		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
@@ -314,6 +321,9 @@ namespace ob::rhi::vulkan
 		}
 		return false;
 	}
+
+
+	//! @brief  Samplerから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, vk::DescriptorType& type) const {
 
 		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;

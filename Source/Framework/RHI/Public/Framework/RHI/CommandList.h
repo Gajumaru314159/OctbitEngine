@@ -26,26 +26,17 @@ namespace ob::rhi {
         virtual void end() = 0;
         virtual void flush() = 0;
 
-        // virtual void setRenderTargets(const RenderTextureArray& colors, const Ref<RenderTexture>& depth = {}) = 0; //!< レンダーパス開始
-        // void setRenderTarget(const Ref<RenderTexture>& color, const Ref<RenderTexture>& depth = {}) { setRenderTargets({color},depth); }
-
-
         virtual void beginRenderPass(const RenderPassDesc& param) = 0;
         virtual void endRenderPass() = 0;
-
 
         virtual void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) = 0;
 
         virtual void setViewport(const Viewport* pViewport, s32 num) = 0;  //!< ビューポートを設定
         virtual void setScissorRect(const IntRect* pRect, s32 num) = 0;    //!< シザー矩形を設定
 
-        // 廃止予定
-        virtual void clearColors(u32 mask = -1) = 0;                         //!< カラーをクリア
-        virtual void clearDepthStencil() = 0;                           //!< 深度値をクリア
-
-                void setVertexBuffer(const Ref<Buffer>&);         //!< 頂点バッファ設定
-        virtual void setVertexBuffers(Span<Ref<Buffer>>) = 0;         //!< 頂点バッファ設定
-        virtual void setIndexBuffer(const Ref<Buffer>&) = 0;                 //!< インデックスバッファ設定
+                void setVertexBuffer(const Ref<Buffer>& buffer);         //!< 頂点バッファ設定
+        virtual void setVertexBuffers(Span<Ref<Buffer>> buffers,s32 first = 0) = 0;         //!< 頂点バッファ設定
+        virtual void setIndexBuffer(const Ref<Buffer>& buffer) = 0;                 //!< インデックスバッファ設定
 
 
         virtual void setPipelineState(const Ref<PipelineState>&) = 0;        //!< パイプライン設定
@@ -75,7 +66,6 @@ namespace ob::rhi {
 
         // void updateBuffer();
 
-        virtual void insertResourceBarrier(const ResourceBarrier&) = 0;
 
         virtual void pushMarker(StringView name) = 0;
         virtual void popMarker() = 0;

@@ -19,9 +19,7 @@
 
 namespace ob::rhi::vulkan {
 
-	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
-	//@―---------------------------------------------------------------------------
 	VulkanDisplay::VulkanDisplay(VulkanRHI& rhi, const DisplayDesc& desc)
 		: m_rhi(rhi)
 	{
@@ -161,11 +159,9 @@ namespace ob::rhi::vulkan {
 		manage();
 	}
 
-	//@―---------------------------------------------------------------------------
+
 	//! @brief  デストラクタ
-	//@―---------------------------------------------------------------------------
 	VulkanDisplay::~VulkanDisplay() {
-		LOG_INFO("削除");
 	}
 
 
@@ -174,10 +170,14 @@ namespace ob::rhi::vulkan {
 		return m_desc;
 	}
 
+	
 	//! @brief 更新
 	void VulkanDisplay::update() {
 		update(m_rhi.getQueue());
 	}
+
+
+	//! @brief 更新 
 	void VulkanDisplay::update(vk::Queue queue) {
 
 		if (!m_desc.window.isValid())return;
@@ -216,7 +216,7 @@ namespace ob::rhi::vulkan {
 
 	//! @brief      イベントリスナ追加
 	void VulkanDisplay::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
-
+		m_notifier.add(handle, func);
 	}
 
 
@@ -232,10 +232,6 @@ namespace ob::rhi::vulkan {
 			if (m_bindedTexture) {
 				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
-			}
-			if (m_bindedSampler) {
-				m_bindedSamplerTable = DescriptorTable::Create(m_signature, 1);
-				m_bindedSamplerTable->setResource(0, m_bindedSampler);
 			}
 
 		}
@@ -304,6 +300,7 @@ namespace ob::rhi::vulkan {
 	}
 
 
+	// !@brief      applyに必要なリソースを生成
 	void VulkanDisplay::createResources(VulkanRHI& rhi) {
 
 		{
@@ -398,6 +395,37 @@ namespace ob::rhi::vulkan {
 
 		m_signature = signature;
 		m_pipeline = pipeline;
+
+		m_bindedSamplerTable = DescriptorTable::Create(m_signature, 1);
+		m_bindedSamplerTable->setResource(0, m_bindedSampler);
+	}
+
+
+	//! @brief      ウィンドウの更新イベント
+	void VulkanDisplay::onWindowChanged(const platform::WindowEventArgs& args) {
+
+		if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
+			if (!args.isSizing) {
+
+				m_desc.size.width = (s32)args.newSize.x;
+				m_desc.size.height = (s32)args.newSize.y;
+
+				// TODO 旧リソースを解放
+
+				// TODO リサイズ
+
+				m_notifier.invoke();
+
+			}
+		}
+
+		if (args.type == platform::WindowEventType::Minimize) {
+			m_visible = false;
+		}
+		if (args.type == platform::WindowEventType::Maximize || args.type == platform::WindowEventType::Move) {
+			m_visible = true;
+		}
+
 	}
 
 }

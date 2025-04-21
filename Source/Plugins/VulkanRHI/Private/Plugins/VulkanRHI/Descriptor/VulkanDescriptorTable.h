@@ -49,15 +49,7 @@ namespace ob::rhi::vulkan {
 		bool tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, vk::DescriptorType& type) const;
 		bool tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, vk::DescriptorType& type) const;
 
-    private:
-		VulkanRHI&			m_rhi;
-
-		BindingSlot			m_desc;
-		Ref<VulkanRootSignature>  m_signature;
-		s32					m_slot = -1;
-
-		String				m_name;
-
+	private:
 
 		struct BufferElement {
 			Ref<Buffer> resource;
@@ -72,7 +64,15 @@ namespace ob::rhi::vulkan {
 
 		using Element = Variant<BufferElement, TextureElement, SamplerElement>;
 
-		Vector<Element> m_elemetns;
+    private:
+		VulkanRHI&				m_rhi;
+		String					m_name;
+
+		BindingSlot				m_desc;
+		Ref<VulkanRootSignature>m_signature;
+		s32						m_slot = -1;
+
+		Vector<Element>			m_elemetns;
 
 		vk::raii::DescriptorPool m_pool = nullptr;
 		vk::raii::DescriptorSet m_set = nullptr;

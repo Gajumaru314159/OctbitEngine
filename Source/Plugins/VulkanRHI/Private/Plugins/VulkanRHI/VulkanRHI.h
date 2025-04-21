@@ -17,9 +17,6 @@ namespace ob::platform {
 
 namespace ob::rhi::vulkan {
 
-	class VulkanCommandQueue;
-	class BufferUploader;
-
 	struct VulkanRHIConfig {
 		bool enableDebugLayer = true;
 	};
@@ -207,8 +204,8 @@ namespace ob::rhi::vulkan {
 
 	private:
 
-		RHIConfig								m_config;
-		VulkanRHIConfig							m_vconfig;
+		RHIConfig									m_config;
+		VulkanRHIConfig								m_vconfig;
 
 		vk::Optional<const vk::AllocationCallbacks>	m_allocationCallbacks = nullptr;
 
@@ -218,9 +215,9 @@ namespace ob::rhi::vulkan {
 		vk::raii::Device							m_device		= nullptr;
 
 #ifdef OS_WINDOWS
-		ComPtr<IDxcCompiler3>				m_shaderCompiler;
-		ComPtr<IDxcUtils>					m_shaderUtils;
-		ComPtr<IDxcIncludeHandler>			m_shaderIncludeHandler;
+		ComPtr<IDxcCompiler3>						m_shaderCompiler;
+		ComPtr<IDxcUtils>							m_shaderUtils;
+		ComPtr<IDxcIncludeHandler>					m_shaderIncludeHandler;
 #endif
 
 		vk::PhysicalDeviceMemoryProperties			m_memoryProperties;
@@ -230,13 +227,13 @@ namespace ob::rhi::vulkan {
 
 		UPtr<VulkanCommandQueue>					m_commandQueue;
 
-		UPtr<BufferUploader> m_bufferUploader;
-		UPtr<TextureUploader> m_textureUploader;
+		UPtr<BufferUploader>						m_bufferUploader;
+		UPtr<TextureUploader>						m_textureUploader;
 
-		Ref<CommandList>						m_copyCommandList;
+		Ref<CommandList>							m_copyCommandList;
 
-		vk::PhysicalDeviceFeatures				m_features;
-		vk::PhysicalDeviceLimits				m_limits;
+		vk::PhysicalDeviceFeatures					m_features;
+		vk::PhysicalDeviceLimits					m_limits;
 
 	};
 }

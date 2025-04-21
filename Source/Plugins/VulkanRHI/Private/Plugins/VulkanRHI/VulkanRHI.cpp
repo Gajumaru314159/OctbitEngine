@@ -34,64 +34,6 @@
 
 namespace ob::rhi::vulkan {
 
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能なレイヤー名のリストを取得
-	//@―---------------------------------------------------------------------------
-	static Set<std::string> EnumerateInstanceLayerNames() noexcept
-	{
-		uint32_t propertyCount;
-		::vkEnumerateInstanceLayerProperties(&propertyCount, nullptr);
-		Vector<::VkLayerProperties> properties(propertyCount);
-		::vkEnumerateInstanceLayerProperties(&propertyCount, properties.data());
-
-		Set<std::string> names;
-		for (auto const& prop : properties)
-		{
-			names.emplace(prop.layerName);
-		}
-
-		return std::move(names);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能な拡張機能のリストを取得
-	//@―---------------------------------------------------------------------------
-	static Set<std::string> EnumerateInstanceExtensionNames(Span<const char*> layers) noexcept
-	{
-		auto enumarate = [](Set<std::string>& names, const char* layerName) {
-			uint32_t propertyCount;
-			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, nullptr);
-			Vector<::VkExtensionProperties> properties(propertyCount);
-			::vkEnumerateInstanceExtensionProperties(layerName, &propertyCount, properties.data());
-			for (auto& name : properties)names.emplace(name.extensionName);
-			};
-
-		Set<std::string> names;
-
-		enumarate(names, nullptr);
-
-		for (auto& layer : layers) {
-			enumarate(names, layer);
-		}
-
-		return std::move(names);
-	}
-
-	//@―---------------------------------------------------------------------------
-	//! @brief  利用可能なGPUのリストを取得
-	//@―---------------------------------------------------------------------------
-	static Vector<VkPhysicalDevice> EnumerateDevices(VkInstance instance) noexcept
-	{
-		OB_ASSERT_EXPR(instance != nullptr);
-
-		uint32_t physicalDeviceCount = 0;
-		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, nullptr);
-		Vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
-		::vkEnumeratePhysicalDevices(instance, &physicalDeviceCount, physicalDevices.data());
-
-		return std::move(physicalDevices);
-	}
-
 	/*
 	//@―---------------------------------------------------------------------------
 	//! @brief  レポートフラグからログカテゴリを取得
@@ -211,10 +153,17 @@ namespace ob::rhi::vulkan {
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
 		Vector<const char*> invalidLayerNames;
-		const auto existLayerNames = EnumerateInstanceLayerNames();
+		const auto existLayerNames = vk::enumerateInstanceLayerProperties();
 		for (const auto& name : layerNames)
 		{
-			if (existLayerNames.count(name)) {
+			bool contains = false;
+			for (auto prop : existLayerNames) {
+				if (strcmp(name, prop.layerName) == 0) {
+					contains = true;
+					break;
+				}
+			}
+			if (contains) {
 				validLayerNames.push_back(name);
 			} else {
 				invalidLayerNames.push_back(name);
@@ -224,10 +173,17 @@ namespace ob::rhi::vulkan {
 		// 利用可能な拡張機能でフィルタ
 		Vector<const char*> validExtensionNames;
 		Vector<const char*> invalidExtensionNames;
-		const auto existExtensionNames = EnumerateInstanceExtensionNames(validLayerNames);
+		const auto existExtensionNames = vk::enumerateInstanceExtensionProperties();
 		for (const auto& name : extensionNames)
 		{
-			if (existExtensionNames.count(name)) {
+			bool contains = false;
+			for (auto prop : existExtensionNames) {
+				if (strcmp(name, prop.extensionName) == 0) {
+					contains = true;
+					break;
+				}
+			}
+			if (contains) {
 				validExtensionNames.push_back(name);
 			} else {
 				invalidExtensionNames.push_back(name);
@@ -514,10 +470,8 @@ namespace ob::rhi::vulkan {
 
 		{
 			m_copyCommandList->begin();
-			if (auto impl = m_copyCommandList.cast<VulkanCommandList>()) {
-				m_bufferUploader->update(impl->getNative(),false);
-				m_textureUploader->update(impl->getNative());
-			}
+			m_bufferUploader->update(m_copyCommandList);
+			m_textureUploader->update(m_copyCommandList);
 			m_copyCommandList->end();
 		
 			m_commandQueue->entryCommandListTop(m_copyCommandList);

@@ -13,21 +13,10 @@ namespace ob::rhi::vulkan {
     class VulkanResourceStateCache {
     public:
 
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
-
         //! @brief  コンストラクタ
         VulkanResourceStateCache() {
 
         }
-
-        //! @brief  バッファの遷移追加
-        // void addBuffer(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after) {
-        // 
-        //     OB_NOTIMPLEMENTED();
-        // 
-        // }
 
         //! @brief  テクスチャの遷移追加
         void addTexture(vk::Image image, vk::ImageLayout before, vk::ImageLayout after, vk::ImageAspectFlagBits aspectMask) {
@@ -79,4 +68,4 @@ namespace ob::rhi::vulkan {
 
     };
 
-}// ob::rhi::dx12 
+}

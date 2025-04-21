@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::rhi::vulkan {
 
@@ -24,7 +25,7 @@ namespace ob::rhi::vulkan {
         void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags);
         void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlags postAccessFlags);
 
-        void update(vk::CommandBuffer commandBuffer, bool useDebugMarker);
+        void update(Ref<CommandList>& commandList);
 
     private:
 
