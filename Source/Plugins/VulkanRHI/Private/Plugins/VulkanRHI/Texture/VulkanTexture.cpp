@@ -9,44 +9,6 @@
 
 namespace ob::rhi::vulkan {
 
-	//! @brief バリデート
-	static bool IsInvalid(const TextureDesc& desc) {
-
-		// フォーマット
-		if (desc.format == TextureFormat::Unknown) {
-			LOG_ERROR("Textureの生成に失敗。TextureFormat::Unknownは指定できません。[name={}]", desc.name);
-			return true;
-		}
-
-		// サイズ
-		bool isValidSize = true;
-
-		if (desc.type == TextureType::Texture1D) {
-			isValidSize &= 0 < desc.size.width && 1 == desc.size.height && 1 == desc.size.depth;
-		}
-		if (desc.type == TextureType::Texture2D) {
-			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 1 == desc.size.depth;
-		}
-		if (desc.type == TextureType::Texture3D) {
-			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 0 < desc.size.depth;
-		}
-		if (desc.type == TextureType::Cube) {
-			isValidSize &= 0 < desc.size.width && 0 < desc.size.height && 1 == desc.size.depth;
-		}
-		if (!isValidSize) {
-			LOG_ERROR("Textureの生成に失敗。サイズが不正です。[size={}]", desc.size);
-			return true;
-		}
-
-		// 配列
-		if (desc.type == TextureType::Texture3D && 0 < desc.arrayNum) {
-			LOG_ERROR("Texture3Dは配列に対応していません [name={}]", desc.name);
-			return true;
-		}
-
-		return false;
-	}
-
 	static vk::ImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
 		vk::ImageCreateInfo info;
 		info.flags = {};
@@ -98,7 +60,7 @@ namespace ob::rhi::vulkan {
 		, m_desc(desc)
 	{
 		// バリデート
-		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
+		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
 		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		auto& device = m_rhi.getDevice();
@@ -139,7 +101,7 @@ namespace ob::rhi::vulkan {
 		m_desc.mipLevels = 1;
 
 		// バリデート
-		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
+		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
 		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		if (std::max(size.width, 1) * std::max(size.height, 1) * std::max(size.depth, 1) != colors.size()) {
@@ -196,7 +158,7 @@ namespace ob::rhi::vulkan {
 		m_desc.mipLevels = 1;
 
 		// バリデート
-		if (IsInvalid(m_desc)) throw Exception("Invalid TextureDesc");
+		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
 		if (!rhi.supportsForRenderTexture(m_desc.format)) throw NotSupportedException();
 
 		if(TextureFormatUtility::IsBC(m_desc.format) || m_desc.format == TextureFormat::RGB32 || m_desc.format == TextureFormat::RGB8 || m_desc.format == TextureFormat::Unknown) {

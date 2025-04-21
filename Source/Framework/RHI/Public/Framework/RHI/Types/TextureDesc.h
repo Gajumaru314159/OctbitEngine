@@ -77,6 +77,43 @@ namespace ob::rhi {
         s32             arrayNum    = 0;                        //!< テクスチャ配列の要素数 (Texture3Dでは0にしてください)
         s32             mipLevels   = 0;                        //!< ミップ生成レベル (0の場合sizeから自動計算されます)
 		TextureFlags    flags       = TextureFlag::ShaderResource;            //!< フラグ
+
+		bool isValid() const {
+
+            // フォーマット
+            if (format == TextureFormat::Unknown) {
+                LOG_ERROR("TextureDescのフォーマットにUnknownは指定できません。[name={}]", name);
+                return false;
+            }
+
+            // サイズ
+            bool isValidSize = true;
+
+            if (type == TextureType::Texture1D) {
+                isValidSize &= 0 < size.width && 1 == size.height && 1 == size.depth;
+            }
+            if (type == TextureType::Texture2D) {
+                isValidSize &= 0 < size.width && 0 < size.height && 1 == size.depth;
+            }
+            if (type == TextureType::Texture3D) {
+                isValidSize &= 0 < size.width && 0 < size.height && 0 < size.depth;
+            }
+            if (type == TextureType::Cube) {
+                isValidSize &= 0 < size.width && 0 < size.height && 1 == size.depth;
+            }
+            if (!isValidSize) {
+                LOG_ERROR("TextureDescのサイズが不正です。[name={},size={}]", name, size);
+                return false;
+            }
+
+            // 配列
+            if (type == TextureType::Texture3D && 0 < arrayNum) {
+                LOG_ERROR("Texture3Dは配列に対応していません [name={}]", name);
+                return false;
+            }
+
+            return true;
+		}
     };
 
 }

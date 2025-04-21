@@ -69,12 +69,9 @@ namespace ob::rhi::vulkan
 		}
 
 		vk::DescriptorPoolCreateInfo info;
-		info.poolSizeCount = descPoolSizes.size();
-		info.pPoolSizes = descPoolSizes.data();
 		info.maxSets = 1;
 		info.flags = vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
-
-
+		info.setPoolSizes(descPoolSizes);
 
 		auto& device = rhi.getDevice();
 
