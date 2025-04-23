@@ -45,8 +45,6 @@ namespace ob::graphics {
 
 					cmdList.beginRenderPass(renderPass);
 
-					cmdList.clearColors();
-					cmdList.clearDepthStencil();
 					cmdList.setViewport(&viewport, 1);
 					cmdList.setScissorRect(&rect, 1);
 
