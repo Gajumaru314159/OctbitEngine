@@ -30,6 +30,6 @@ namespace ob::rhi {
 
     };
 
-    using RenderTextureArray = FixedVector<Ref<RenderTexture>,RENDER_TARGET_MAX>;
+    using RenderTargetArray = FixedVector<Ref<RenderTexture>,RENDER_TARGET_MAX>;
 
 }

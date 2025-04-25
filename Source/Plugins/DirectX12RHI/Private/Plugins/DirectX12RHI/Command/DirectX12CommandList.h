@@ -112,7 +112,7 @@ namespace ob::rhi::dx12 {
 
         RenderPassDesc m_currentRenderPass;
 
-        RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
+        RenderTargetArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 
         ID3D12RootSignature* m_rootSignature = nullptr;         // 最後に設定されたPipelineStateのRootSignature

@@ -134,7 +134,7 @@ namespace ob::rhi::dx12 {
 		D3D12_RENDER_PASS_DEPTH_STENCIL_DESC  depth;
 		D3D12_RENDER_PASS_DEPTH_STENCIL_DESC* pDepth = nullptr;
 
-		RenderTextureArray colorTextures;
+		RenderTargetArray colorTextures;
 		Ref<RenderTexture> depthTexture;
 
 		m_cache.clear();

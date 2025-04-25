@@ -9,7 +9,6 @@
 
 namespace ob::rhi {
 
-
     //! @brief      サンプラー
     class Sampler :public GraphicObject {
     public:

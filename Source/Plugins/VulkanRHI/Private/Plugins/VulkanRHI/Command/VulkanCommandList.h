@@ -116,7 +116,7 @@ namespace ob::rhi::vulkan {
         vk::raii::CommandBuffer     m_commandBuffer = nullptr;
 
 		Ref<PipelineState> m_pipeline;                          // 現在のパイプラインステート
-        RenderTextureArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
+        RenderTargetArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 
         VulkanResourceStateCache m_cache;

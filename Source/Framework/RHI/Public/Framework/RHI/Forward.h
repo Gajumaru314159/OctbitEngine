@@ -29,13 +29,11 @@ namespace ob::rhi {
 	class Display;
 	class PipelineState;
 	class RenderTexture;
-	class ResourceBarrier;
 	class RootSignature;
 	class Shader;
 	class Texture;
 	class Sampler;
 	class RenderPass;
-	class FrameBuffer;
 
 	class GraphicFileHandle;
 	class GraphicFileEvent;
