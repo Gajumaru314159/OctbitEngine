@@ -5,7 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/SubPass.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>

@@ -6,7 +6,6 @@
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Config.h>
-#include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
 #include <Plugins/DirectX12RHI/Texture/TextureUploader.h>

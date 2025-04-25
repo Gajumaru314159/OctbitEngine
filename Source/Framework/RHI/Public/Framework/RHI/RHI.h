@@ -14,7 +14,6 @@
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
-#include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/GraphicFile.h>
 #include <Framework/Core/Misc/BlobView.h>

@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Config.h>
-#include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>

@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 
 namespace ob::rhi {

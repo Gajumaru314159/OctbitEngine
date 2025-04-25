@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Types/DescriptorDesc.h>
 #include <Framework/Core/Allocator/Utility/TLSFMapper.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
