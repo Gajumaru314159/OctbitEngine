@@ -7,6 +7,7 @@
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/RHI/All.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Windows.h>
 
 using namespace ob;
@@ -69,7 +70,7 @@ TEST(RHI, ShowHide) {
 	rhi::dx12::RegisterDirectX12RHIService(injector);
 	rhi::RegisterRHIService(injector);
 
-	rhi::RHIConfig config;
+	rhi::dx12::DirectX12RHIConfig config;
 	config.enableDebugLayer = true;
 	injector.bind(config);
 

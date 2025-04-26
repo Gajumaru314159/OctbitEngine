@@ -9,16 +9,8 @@ namespace ob::rhi {
 
     //! @brief      Graphicモジュール設定
     struct RHIConfig {
-        s32 frameBufferCount = 2;   //!< ダブルバッファリング
-
-        bool enablePIX = false;
-        bool enableDebugLayer = false;
-        bool breakWithWarning = false;
-        bool enableDirectStorage = true;
-        bool enableDirectStorageDebug = false;
-
-        bool enableBindless = false;
-
+        s32 frameBufferCount = 2;       //!< ダブルバッファリング
+		bool enableBindless = false;    //!< Bindlessレンダリングを使用するか
     };
 
 }

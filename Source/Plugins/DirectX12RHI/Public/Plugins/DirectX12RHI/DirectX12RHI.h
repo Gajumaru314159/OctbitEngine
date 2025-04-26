@@ -7,6 +7,7 @@
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Config.h>
 #include <Framework/Core/Utility/Pimpl.h>
+#include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
 #include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
@@ -22,7 +23,7 @@ namespace ob::rhi::dx12 {
 		//! @brief  DirectX12RHIの起動に必要なサービスを登録
 		static void Inject(ServiceInjector&);
 	public:
-		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*);
+		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, RHIConfig*, DirectX12RHIConfig*);
 		~DirectX12RHI();
 
 		//! @brief  ゲーム更新イベント
@@ -193,6 +194,7 @@ namespace ob::rhi::dx12 {
 	private:
 
 		RHIConfig							m_config;
+		DirectX12RHIConfig					m_dx12config;
 
 		ComPtr<ID3D12Device8>               m_device;                   // D3D12のデバイス本体
 		ComPtr<IDXGIFactory7>               m_dxgiFactory;              // DXGIインターフェイス

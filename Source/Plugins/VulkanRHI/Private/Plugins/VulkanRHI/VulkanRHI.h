@@ -9,17 +9,13 @@
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
+#include <Plugins/VulkanRHI/VulkanRHIConfig.h>
 
 namespace ob::platform {
 	class WindowManager;
 }
 
 namespace ob::rhi::vulkan {
-
-	struct VulkanRHIConfig {
-		bool enableDebugLayer = true;
-	};
-
 
 	struct VulkanFeatureInfo {
 		bool debugMarkerEnabled = false;

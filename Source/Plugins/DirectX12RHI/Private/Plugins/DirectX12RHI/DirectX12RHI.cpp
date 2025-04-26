@@ -40,12 +40,13 @@ namespace ob::rhi::dx12 {
 	}
 
 	//! @brief  コンストラクタ
-	DirectX12RHI::DirectX12RHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config)
+	DirectX12RHI::DirectX12RHI(platform::WindowManager&, GraphicObjectManager& objectManager, RHIConfig* config,DirectX12RHIConfig* dx12config)
 		: RHI(objectManager,config)
-		, m_config(config ? *config : ob::rhi::RHIConfig{})
+		, m_config(config ? *config : RHIConfig{})
+		, m_dx12config(dx12config ? *dx12config : DirectX12RHIConfig{})
 	{
 		OB_DEBUG_CONTEXT(
-			if (m_config.enablePIX) {
+			if (m_dx12config.enablePIX) {
 				m_pixModule = std::make_unique<PIXModule>();
 			}
 		);
@@ -314,7 +315,7 @@ namespace ob::rhi::dx12 {
 		UINT flagsDXGI = 0;
 #if OB_DEBUG
 		// DirectX12のデバッグレイヤーを有効にする
-		if (m_config.enableDebugLayer) {
+		if (m_dx12config.enableDebugLayer) {
 			ComPtr<ID3D12Debug>	debugController;
 			result = ::D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 			if (FAILED(result)) {
@@ -396,7 +397,7 @@ namespace ob::rhi::dx12 {
 
 
 			// D3D12 エラー発生時にブレーク
-			if (m_config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
+			if (m_dx12config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
 		}
 
@@ -484,7 +485,7 @@ namespace ob::rhi::dx12 {
 
 	//! @brief  DirectStorageを初期化
 	bool DirectX12RHI::initializeDirectStorage() {
-		if (m_config.enableDirectStorage) {
+		if (m_dx12config.enableDirectStorage) {
 
 			DSTORAGE_CONFIGURATION1 config{};
 			config.NumSubmitThreads = 8;
@@ -494,7 +495,7 @@ namespace ob::rhi::dx12 {
 
 
 			::DStorageGetFactory(IID_PPV_ARGS(g_dsfactory.ReleaseAndGetAddressOf()));
-			if (g_dsfactory && m_config.enableDirectStorageDebug) {
+			if (g_dsfactory && m_dx12config.enableDirectStorageDebug) {
 				g_dsfactory->SetDebugFlags(
 					DSTORAGE_DEBUG_SHOW_ERRORS |
 					DSTORAGE_DEBUG_BREAK_ON_ERROR |
