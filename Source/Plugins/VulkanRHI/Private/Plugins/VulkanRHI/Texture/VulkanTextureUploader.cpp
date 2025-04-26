@@ -90,6 +90,7 @@ namespace ob::rhi::vulkan
 		commandList->pushMarker("TextureUploader");
 
 		// バリア
+		m_barriers.clear();
 		for (auto& request : frame.requests) {
 
 			vk::ImageAspectFlags flags{};
@@ -180,6 +181,9 @@ namespace ob::rhi::vulkan
 				{}, {}, m_barriers
 			);
 		}
+
+		m_frames.next();
+		m_frames.current().clear();
 
 		commandList->popMarker();
 

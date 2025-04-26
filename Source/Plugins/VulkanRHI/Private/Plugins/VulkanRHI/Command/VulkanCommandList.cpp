@@ -327,7 +327,7 @@ namespace ob::rhi::vulkan {
 
 	//! @brief      インデックス描画
 	void VulkanCommandList::drawIndexed(const DrawIndexedParam& param) {
-		m_commandBuffer.draw(param.indexCount,param.indexCount, param.startVertex, param.startIndex);
+		m_commandBuffer.drawIndexed(param.indexCount,1, param.startVertex,param.startVertex,0);
 	}
 
 

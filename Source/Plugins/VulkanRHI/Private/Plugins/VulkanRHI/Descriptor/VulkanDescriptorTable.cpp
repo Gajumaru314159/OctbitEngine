@@ -135,11 +135,10 @@ namespace ob::rhi::vulkan
 
 		if (auto p = resource.cast<VulkanBuffer>()) {
 
-			// TODO 引数再確認
 			vk::DescriptorBufferInfo descBufInfo[1];
 			descBufInfo[0].buffer = p->getNative();
 			descBufInfo[0].offset = 0;
-			descBufInfo[0].range = 1;
+			descBufInfo[0].range = p->getDesc().size;
 
 			vk::WriteDescriptorSet writeDescSet;
 			writeDescSet.dstSet = m_set;

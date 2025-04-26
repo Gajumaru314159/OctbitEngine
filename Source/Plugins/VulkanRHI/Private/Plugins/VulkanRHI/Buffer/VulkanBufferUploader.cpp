@@ -237,7 +237,8 @@ namespace ob::rhi::vulkan
 		}
 
 		// バッファを縮小
-		frame.clear();
+		m_frames.next();
+		m_frames.current().clear();
 		m_entriedBuffers.clear();
 
 		commandList->popMarker();

@@ -286,9 +286,6 @@ namespace ob::graphics {
 				if (!is_in_range(desc.index, m_textures))return;
 			}
 
-			// TODO Bindless時もリロード用に保持する
-			// NOTE リロードイベントはテクスチャの中に持たせないほうがいいかも...
-			//      Notifierのサイズが大きくなる。
 			m_textures[desc.index] = texture;
 			m_samplers[desc.index] = sampler;
 
