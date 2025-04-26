@@ -247,12 +247,14 @@ namespace ob::rhi::vulkan {
 			return vk::DescriptorType::eStorageImage;
 
 		case BindingType::Buffer:
-		case BindingType::StructuredBuffer:
-		case BindingType::ByteAddressBuffer:
-			return vk::DescriptorType::eUniformBuffer;
+			return vk::DescriptorType::eUniformTexelBuffer;
 
 		case BindingType::RWBuffer:
+			return vk::DescriptorType::eStorageTexelBuffer;
+
+		case BindingType::StructuredBuffer:
 		case BindingType::RWStructuredBuffer:
+		case BindingType::ByteAddressBuffer:
 		case BindingType::RWByteAddressBuffer:
 			return vk::DescriptorType::eStorageBuffer;
 

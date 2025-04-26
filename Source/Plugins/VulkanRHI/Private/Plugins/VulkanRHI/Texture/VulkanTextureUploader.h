@@ -29,7 +29,7 @@ namespace ob::rhi::vulkan {
 
         TextureUploader(VulkanRHI& rhi);
 
-        void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, Span<Subresource> subresources);
+        void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources);
 
         void update(Ref<CommandList>& commandList);
 
@@ -45,6 +45,7 @@ namespace ob::rhi::vulkan {
             TextureFormat format;
             u32 mipLevels;
 			u32 layerCount;
+            vk::Extent3D extent;
 
             // UINT sourceSubresource = 0;
             // UINT destSubresource = 0;

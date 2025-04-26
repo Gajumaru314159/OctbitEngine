@@ -36,7 +36,7 @@ namespace ob::rhi::vulkan
 		m_elemetns.resize(itemCount);
 
 		// TODO FixedHashMapを使う
-		constexpr auto TYPE_NUM = 5;
+		constexpr auto TYPE_NUM = 6;
 		HashMap<vk::DescriptorType, u32> descTypeCount;
 
 
@@ -53,12 +53,14 @@ namespace ob::rhi::vulkan
 				descTypeCount[vk::DescriptorType::eStorageImage]++;
 				break;
 			case BindingType::Buffer:
-			case BindingType::StructuredBuffer:
-			case BindingType::ByteAddressBuffer:
-				descTypeCount[vk::DescriptorType::eStorageBuffer]++;
+				descTypeCount[vk::DescriptorType::eUniformTexelBuffer]++;
 				break;
 			case BindingType::RWBuffer:
+				descTypeCount[vk::DescriptorType::eStorageTexelBuffer]++;
+				break;
+			case BindingType::StructuredBuffer:
 			case BindingType::RWStructuredBuffer:
+			case BindingType::ByteAddressBuffer:
 			case BindingType::RWByteAddressBuffer:
 				descTypeCount[vk::DescriptorType::eStorageBuffer]++;
 				break;
@@ -136,7 +138,7 @@ namespace ob::rhi::vulkan
 			// TODO 引数再確認
 			vk::DescriptorBufferInfo descBufInfo[1];
 			descBufInfo[0].buffer = p->getNative();
-			descBufInfo[0].offset = index;
+			descBufInfo[0].offset = 0;
 			descBufInfo[0].range = 1;
 
 			vk::WriteDescriptorSet writeDescSet;
@@ -266,15 +268,15 @@ namespace ob::rhi::vulkan
 
 		switch (items[index].type) {
 		case BindingType::Buffer:
-			type = vk::DescriptorType::eUniformBuffer;
+			type = vk::DescriptorType::eUniformTexelBuffer;
 			return hasSRV;
 
 		case BindingType::RWBuffer:
-			type = vk::DescriptorType::eStorageBuffer;
+			type = vk::DescriptorType::eStorageTexelBuffer;
 			return hasUAV;
 
 		case BindingType::StructuredBuffer:
-			type = vk::DescriptorType::eUniformBuffer;
+			type = vk::DescriptorType::eStorageBuffer;
 			return hasSRV && 0 < desc.stride;
 
 		case BindingType::RWStructuredBuffer:
@@ -282,7 +284,7 @@ namespace ob::rhi::vulkan
 			return hasUAV && 0 < desc.stride;
 
 		case BindingType::ByteAddressBuffer:
-			type = vk::DescriptorType::eUniformBuffer;
+			type = vk::DescriptorType::eStorageBuffer;
 			return hasSRV;
 
 		case BindingType::RWByteAddressBuffer:

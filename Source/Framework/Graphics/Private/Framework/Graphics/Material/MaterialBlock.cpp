@@ -107,7 +107,7 @@ namespace ob::graphics {
 		}
 
 		// バッファ生成
-		size_t size = offset;
+		size_t size = align_up(offset,16);
 		auto bufferDesc = rhi::BufferDesc::ByteAddress(size);
 		bufferDesc.name = Format("MaterialParameter ({})", desc.name);
 		m_valuesBuffer = rhi::Buffer::Create(bufferDesc);

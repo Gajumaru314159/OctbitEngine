@@ -19,7 +19,7 @@ namespace ob::rhi::vulkan
 	}
 
 	//! @brief  アップロード要素を追加
-	void TextureUploader::add(const vk::raii::Image& dest, vk::ImageCreateInfo info, Span<Subresource> subresources) {
+	void TextureUploader::add(const vk::raii::Image& dest, vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources) {
 
 		if (dest == nullptr) {
 			LOG_ERROR("[TextureUploader] destがnullです。");
@@ -31,7 +31,10 @@ namespace ob::rhi::vulkan
 		auto& device = m_rhi.getDevice();
 
 
-		size_t bufferSize = info.extent.width;
+		size_t bufferSize = 0;
+		for (auto& subresource : subresources) {
+			bufferSize += subresource.data.size();
+		}
 
 		// アップロード用のバッファを生成
 		vk::BufferCreateInfo bufferCreateInfo({}, bufferSize, vk::BufferUsageFlagBits::eTransferSrc);
@@ -62,7 +65,8 @@ namespace ob::rhi::vulkan
 		request.dest = dest;
 		request.mipLevels = subresources.size();
 		request.layerCount = 1;
-		request.format;
+		request.format = format;
+		request.extent = info.extent;
 
 		m_rhi.setName(request.source, "VulkanTextureUploader");
 		m_rhi.setName(request.memory, "VulkanTextureUploader");
@@ -113,6 +117,15 @@ namespace ob::rhi::vulkan
 
 		}
 
+		// バリア追加
+		if (!m_barriers.empty()) {
+			commandBuffer.pipelineBarrier(
+				vk::PipelineStageFlagBits::eTopOfPipe, vk::PipelineStageFlagBits::eTransfer,
+				{},
+				{}, {}, m_barriers
+			);
+		}
+
 		// コピー
 		for (auto& request : frame.requests) {
 
@@ -127,15 +140,16 @@ namespace ob::rhi::vulkan
 			region.bufferOffset = 0;
 			region.bufferRowLength = 0;
 			region.bufferImageHeight = 0;
-			region.imageSubresource = vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor,request.mipLevels,0,request.layerCount);
+			region.imageSubresource = vk::ImageSubresourceLayers(vk::ImageAspectFlagBits::eColor,0/*request.mipLevels*/, 0, request.layerCount);
 			region.imageOffset = 0;
-			region.imageExtent = vk::Extent3D();
+			region.imageExtent = request.extent;
 
 			commandBuffer.copyBufferToImage(request.source, request.dest, vk::ImageLayout::eTransferDstOptimal, region);
 
 		}
 
 		// バリア
+		m_barriers.clear();
 		for (auto& request : frame.requests) {
 
 			vk::ImageAspectFlags flags{};
@@ -158,6 +172,13 @@ namespace ob::rhi::vulkan
 			barrier.subresourceRange.layerCount = request.layerCount;
 			m_barriers.push_back(barrier);
 
+		}
+		if (!m_barriers.empty()) {
+			commandBuffer.pipelineBarrier(
+				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eAllGraphics,
+				{},
+				{}, {}, m_barriers
+			);
 		}
 
 		commandList->popMarker();

@@ -230,7 +230,7 @@ namespace ob::rhi::vulkan
 		}
 		if (!m_barriers.empty()) {
 			commandBuffer.pipelineBarrier(
-				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eVertexInput,
+				vk::PipelineStageFlagBits::eTransfer, vk::PipelineStageFlagBits::eAllGraphics,
 				{},
 				{}, m_barriers, {}
 			);

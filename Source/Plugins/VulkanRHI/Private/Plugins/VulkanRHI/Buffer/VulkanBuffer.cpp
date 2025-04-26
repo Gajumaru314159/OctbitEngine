@@ -28,7 +28,7 @@ namespace ob::rhi::vulkan {
 		info.usage = vk::BufferUsageFlagBits::eTransferDst;
 		info.sharingMode = vk::SharingMode::eExclusive;
 
-		if (m_desc.flags.has(BufferFlag::ShaderResource)) info.usage |= vk::BufferUsageFlagBits::eUniformBuffer;
+		if (m_desc.flags.has(BufferFlag::ShaderResource)) (info.usage |= vk::BufferUsageFlagBits::eUniformBuffer) |= vk::BufferUsageFlagBits::eStorageBuffer; // StorageBufferはStructuredとByteAddressで必須
 		if (m_desc.flags.has(BufferFlag::UnorderedAccess)) info.usage |= vk::BufferUsageFlagBits::eStorageBuffer;
 		if (m_desc.flags.has(BufferFlag::CopySource)) info.usage |= vk::BufferUsageFlagBits::eTransferSrc;
 		if (m_desc.flags.has(BufferFlag::CopyDest)) info.usage |= vk::BufferUsageFlagBits::eTransferDst;

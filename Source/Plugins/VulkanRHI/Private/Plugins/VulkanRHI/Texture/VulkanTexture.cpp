@@ -133,7 +133,7 @@ namespace ob::rhi::vulkan {
 		TextureUploader::Subresource subresources[1];
 		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
 
-		m_rhi.getTextureUploader().add(m_image,info,subresources);
+		m_rhi.getTextureUploader().add(m_image,info,m_desc.format,subresources);
 
 		rhi.setName(m_image, m_desc.name);
 		rhi.setName(m_memory, m_desc.name);
