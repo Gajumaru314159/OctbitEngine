@@ -80,7 +80,8 @@ namespace ob::rhi::vulkan
 		// Poolを生成
 		vk::DescriptorPoolCreateInfo info;
 		info.maxSets = 1;
-		info.flags = vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
+		info.flags |= vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
+		info.flags |= vk::DescriptorPoolCreateFlagBits::eUpdateAfterBindEXT; // Bindless用
 		info.setPoolSizes(descPoolSizes);
 
 		m_pool = device.createDescriptorPool(info, m_rhi.getAllocationCallbacks());

@@ -106,6 +106,8 @@ namespace ob::rhi::vulkan {
 		createQueue();
 		createUploaders();
 		createShaderCompiler();
+		initializeBindless();
+
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -312,7 +314,10 @@ namespace ob::rhi::vulkan {
 		extensionNames.push_back(VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME);
 		extensionNames.push_back(VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME);
 		extensionNames.push_back(VK_KHR_DYNAMIC_RENDERING_EXTENSION_NAME);
-
+		if (m_config.enableBindless) {
+			extensionNames.push_back(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
+			extensionNames.push_back(VK_EXT_MUTABLE_DESCRIPTOR_TYPE_EXTENSION_NAME);
+		}
 
 		// 利用可能なレイヤーでフィルタ
 		Vector<const char*> validLayerNames;
@@ -404,6 +409,11 @@ namespace ob::rhi::vulkan {
 		dynamicRenderingFeatures.dynamicRendering = true;
 		info.pNext = &dynamicRenderingFeatures;
 
+		// Mutable Descriptor Type
+		vk::PhysicalDeviceMutableDescriptorTypeFeaturesEXT mutableDescriptorTypeFeature;
+		mutableDescriptorTypeFeature.mutableDescriptorType = m_config.enableBindless;
+		dynamicRenderingFeatures.pNext = &mutableDescriptorTypeFeature;
+
 		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
 
 	}
@@ -459,6 +469,56 @@ namespace ob::rhi::vulkan {
 			return;
 		}
 #endif
+	}
+
+	//@―---------------------------------------------------------------------------
+	//! @brief  バインドレス初期化
+	//@―---------------------------------------------------------------------------
+	void VulkanRHI::initializeBindless() {
+
+		if (m_config.enableBindless) {
+
+			vk::DescriptorType cbvSrvUavTypes[] = {
+				vk::DescriptorType::eSampledImage,
+				vk::DescriptorType::eStorageImage,
+				vk::DescriptorType::eUniformTexelBuffer,
+				vk::DescriptorType::eStorageTexelBuffer,
+				vk::DescriptorType::eUniformBuffer,
+				vk::DescriptorType::eStorageBuffer,
+			};
+			vk::DescriptorType samplerType[] = {
+				vk::DescriptorType::eSampler,
+			};
+
+			vk::MutableDescriptorTypeListEXT mutableList[2];
+			mutableList[0].setDescriptorTypes(cbvSrvUavTypes);
+			mutableList[1].setDescriptorTypes(samplerType);
+
+			vk::MutableDescriptorTypeCreateInfoEXT mutableInfo;
+			mutableInfo.setMutableDescriptorTypeLists(mutableList);
+
+			vk::DescriptorSetLayoutBinding binding;
+			binding.binding = 0;
+			binding.descriptorType = vk::DescriptorType::eMutableEXT;
+			binding.descriptorCount = 1;
+			binding.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
+			binding.pImmutableSamplers = nullptr;
+
+			vk::DescriptorSetLayoutCreateInfo info;
+			info.setBindings(binding);
+			info.setPNext(&mutableInfo);
+			info.flags |= vk::DescriptorSetLayoutCreateFlagBits::eUpdateAfterBindPoolEXT;
+
+			vk::DescriptorSetLayoutSupport support = m_device.getDescriptorSetLayoutSupport(info);
+			if (!support.supported) {
+				LOG_FATAL("Bindlessレンダリングをサポートしていないハードウェアです");
+			}
+
+			m_bindlessDescriptorSetLayout = m_device.createDescriptorSetLayout(info, getAllocationCallbacks());
+
+			// TODO set
+
+		}
 	}
 
 

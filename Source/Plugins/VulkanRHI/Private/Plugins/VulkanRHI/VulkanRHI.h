@@ -194,6 +194,10 @@ namespace ob::rhi::vulkan {
 
 		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
 
+		vk::DescriptorSetLayout getBindlessDescriptorSetLayout() const {
+			return m_bindlessDescriptorSetLayout;
+		}
+
 #ifdef OS_WINDOWS
 		//! @brief  シェーダーコンパイラ―を取得
 		ComPtr<IDxcCompiler3>& getShaderCompiler() { return m_shaderCompiler; }
@@ -214,6 +218,7 @@ namespace ob::rhi::vulkan {
 		void createQueue();
 		void createUploaders();
 		void createShaderCompiler();
+		void initializeBindless();
 
 	private:
 
@@ -248,6 +253,8 @@ namespace ob::rhi::vulkan {
 		vk::PhysicalDeviceFeatures					m_features;
 		vk::PhysicalDeviceLimits					m_limits;
 		VulkanFeatureInfo							m_featuresEx;
+
+		vk::raii::DescriptorSetLayout				m_bindlessDescriptorSetLayout = nullptr;
 
 #if OB_DEBUG
 		PFN_vkDebugMarkerSetObjectNameEXT			m_vkDebugMarkerSetObjectNameEXT;

@@ -23,6 +23,10 @@ namespace ob::rhi::vulkan {
 			layouts.push_back(layout.cast<VulkanDescriptorLayout>()->getNative());
 		}
 
+		if (rhi.getConfig().enableBindless) {
+			layouts.push_back(rhi.getBindlessDescriptorSetLayout());
+		}
+
 		vk::PushConstantRange pushConstantRange;
 		pushConstantRange.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
 		pushConstantRange.offset = 0;
