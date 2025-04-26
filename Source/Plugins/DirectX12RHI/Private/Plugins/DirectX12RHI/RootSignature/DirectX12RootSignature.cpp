@@ -14,31 +14,6 @@
 
 namespace ob::rhi::dx12 {
 
-	static D3D12_DESCRIPTOR_RANGE_TYPE Convert(BindingType value) {
-		switch (value)
-		{
-		case BindingType::Texture:
-		case BindingType::Buffer:
-		case BindingType::StructuredBuffer:
-		case BindingType::ByteAddressBuffer:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-
-		case BindingType::RWTexture:
-		case BindingType::RWBuffer:
-		case BindingType::RWStructuredBuffer:
-		case BindingType::RWByteAddressBuffer:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-
-		case BindingType::ConstantBuffer:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-
-		case BindingType::Sampler:
-			return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-		}
-		OB_ABORT("不正なRootParameterTypeです。");
-		return {};
-	}
-
 	//! @brief  コンストラクタ
 	DirectX12RootSignature::DirectX12RootSignature(DirectX12RHI& rDevice, const RootSignatureDesc& desc)
 		: m_desc(desc)
@@ -49,77 +24,90 @@ namespace ob::rhi::dx12 {
 		parameters.reserve(100);
 		ranges.reserve(100);
 
+		s32 slot = 0;
+
 		// テーブル
 		for (auto& layout : m_desc.layouts) {
 
-			s32 rangeStart = (s32)ranges.size();
+			// DirectX12ではSamplerとCBV_SRV_UAVは別のヒープに分ける必要があるのでlayoutに対して複数のD3D12_ROOT_PARAMETERを設定する
+			DescriptorHeapType heapTypes[] = { DescriptorHeapType::Sampler, DescriptorHeapType::CBV_SRV_UAV };
+			const auto heapTypeOf = [](BindingType type) { return type == BindingType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV; };
 
-			auto& parameter = parameters.emplace_back();
-			parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-			parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-			parameter.DescriptorTable.pDescriptorRanges = ranges.data() + rangeStart;
+			MapInfo& mapInfo = m_mapInfos.emplace_back();
+			auto& items = layout->getDesc().items;
 
+			for (auto heapType : heapTypes) {
 
-			s32 numSampler = 0;
-			s32 numResource = 0;
+				s32 rangeStart = (s32)ranges.size();
 
+				auto& parameter = parameters.emplace_back();
+				parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+				parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+				parameter.DescriptorTable.pDescriptorRanges = ranges.data() + rangeStart;
 
-			// 連続する領域をCD3DX12_DESCRIPTOR_RANGEにまとめる
-			// NOTE 複雑なことをしなくても常にNumDescriptorsを1にしておけばよいのでは？
-			BindingItem last(BindingType::Texture, -1, -1);
+				// 連続する領域をCD3DX12_DESCRIPTOR_RANGEにまとめる
+				BindingItem last(BindingType::Texture, -1, -1);
 
-			for (auto [i, item] : Indexed(layout->getDesc().items)) {
+				for (s32 i = 0; i < items.size(); i++) {
 
-				if (Convert(last.type) != Convert(item.type) || last.index + 1 != item.index || last.space != item.space) {
-					auto& range = ranges.emplace_back();
-					range.RangeType = Convert(item.type);
-					range.NumDescriptors = 0;
-					range.BaseShaderRegister = item.index;
-					range.RegisterSpace = item.space;
-					range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+					auto lastType = TypeConverter::Convert(last.type);
+					auto itemType = TypeConverter::Convert(items[i].type);
+
+					if (lastType != itemType || last.index + 1 != items[i].index || last.space != items[i].space) {
+
+						// Heapが異なる要素はスキップ
+						while (i < items.size() && heapTypeOf(items[i].type) != heapType) ++i;
+						if (i == items.size()) break;
+
+						auto& range = ranges.emplace_back();
+						range.RangeType = itemType;
+						range.NumDescriptors = 0;
+						range.BaseShaderRegister = items[i].index;
+						range.RegisterSpace = items[i].space;
+						range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+					}
+
+					auto& range = ranges.back();
+					range.NumDescriptors++;
+
+					last = items[i];
+
 				}
 
-				auto& range = ranges.back();
-				range.NumDescriptors++;
-
-				last = item;
-
-				if (item.type == BindingType::Sampler) {
-					numSampler++;
-				}
-				else {
-					numResource++;
+				// 要素がない場合はスキップ
+				if (ranges.size() == rangeStart) {
+					parameters.pop_back();
+					continue;
 				}
 
-			}
+				// RHI層のSlotとDirectX12層のSlotをマッピング
+				if (heapType == DescriptorHeapType::Sampler) mapInfo.samplerSlot = parameters.size() - 1;
+				if (heapType == DescriptorHeapType::CBV_SRV_UAV) mapInfo.othersSlot = parameters.size() - 1;
 
-			if (0 < numSampler && 0 < numResource) {
-				LOG_ERROR("BindingSlot内にサンプラーとリソースが混在しています。 [name={}]", m_desc.name);
-				return;
-			}
-
-			parameter.DescriptorTable.NumDescriptorRanges = ranges.size() - rangeStart;
+				// このループで追加されたRange数 == NumDescriptorRanges
+				parameter.DescriptorTable.NumDescriptorRanges = ranges.size() - rangeStart;
 
 
-			// 要素数が1かつRootDescriptorが視聴できるのであれば切り替え
-			if (parameter.DescriptorTable.NumDescriptorRanges == 1) {
-				switch (parameter.DescriptorTable.pDescriptorRanges[0].RangeType) {
-					// テクスチャなどはRootDescriptorに指定できないのでとりあえず無効化。
-					// TODO StructuredBufferは使えるので対応する
-					//case D3D12_DESCRIPTOR_RANGE_TYPE_SRV:
-					//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-					//	break;
-					//case D3D12_DESCRIPTOR_RANGE_TYPE_UAV:
-					//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
-					//	break;
-					//case D3D12_DESCRIPTOR_RANGE_TYPE_CBV:
-					//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-					//	parameter.Descriptor.RegisterSpace = parameter.DescriptorTable.pDescriptorRanges[0].RegisterSpace;
-					//	parameter.Descriptor.ShaderRegister = parameter.DescriptorTable.pDescriptorRanges[0].BaseShaderRegister;
-					//	break;
-					//}
+				// TODO 要素数が1かつRootDescriptorが視聴できるのであれば切り替え
+				if (parameter.DescriptorTable.NumDescriptorRanges == 1) {
+					switch (parameter.DescriptorTable.pDescriptorRanges[0].RangeType) {
+						// テクスチャなどはRootDescriptorに指定できないのでとりあえず無効化。
+						// TODO StructuredBufferは使えるので対応する
+						//case D3D12_DESCRIPTOR_RANGE_TYPE_SRV:
+						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+						//	break;
+						//case D3D12_DESCRIPTOR_RANGE_TYPE_UAV:
+						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
+						//	break;
+						//case D3D12_DESCRIPTOR_RANGE_TYPE_CBV:
+						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+						//	parameter.Descriptor.RegisterSpace = parameter.DescriptorTable.pDescriptorRanges[0].RegisterSpace;
+						//	parameter.Descriptor.ShaderRegister = parameter.DescriptorTable.pDescriptorRanges[0].BaseShaderRegister;
+						//	break;
+						//}
+					}
+
 				}
-
 			}
 		}
 

@@ -44,9 +44,9 @@ namespace ob::rhi::dx12 {
         //! @brief      ネイティブオブジェクトを取得
         ID3D12PipelineState* getNative()const noexcept { return m_pipelineState.Get(); }
 
-        ID3D12RootSignature* getRootSignature()const { 
+        DirectX12RootSignature* getRootSignature()const { 
             if (auto p = m_desc.rootSignature.cast<DirectX12RootSignature>()) {
-                return p->getNative();
+                return p;
             }
             return nullptr;        
         }

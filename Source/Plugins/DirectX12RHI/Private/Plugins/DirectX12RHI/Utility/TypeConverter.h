@@ -10,6 +10,7 @@
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
+#include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 
 namespace ob::rhi::dx12 {
 
@@ -42,6 +43,7 @@ namespace ob::rhi::dx12 {
         static D3D12_RESOURCE_STATES Convert(TextureState value);
         static D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE Convert(RenderPassBeforeAccessType value);
         static D3D12_RENDER_PASS_ENDING_ACCESS_TYPE Convert(RenderPassAfterAccessType value);
+        static D3D12_DESCRIPTOR_RANGE_TYPE Convert(BindingType value);
 
         static TextureFormat Convert(DXGI_FORMAT dxgi);
 

@@ -24,6 +24,11 @@ namespace ob::rhi::dx12 {
     //! @brief  ルートシグネチャ実装(DirectX12)
     class DirectX12RootSignature :public rhi::RootSignature {
     public:
+        struct MapInfo {
+            s32 samplerSlot = -1;
+            s32 othersSlot = -1;
+        };
+    public:
 
         //===============================================================
         // コンストラクタ / デストラクタ
@@ -56,11 +61,15 @@ namespace ob::rhi::dx12 {
         //! @brief  ネイティブオブジェクトを取得
         auto getNative()const noexcept { return m_rootSignature.Get(); };
 
+		MapInfo getMapInfo(s32 index)const {
+			return m_mapInfos.at(index);
+		}
+
     private:
         RootSignatureDesc m_desc;
 
         ComPtr<ID3D12RootSignature> m_rootSignature;    //!< ルートシグネチャ
-
+		Vector<MapInfo> m_mapInfos;                //!< バインドスロット情報
     };
 
 }

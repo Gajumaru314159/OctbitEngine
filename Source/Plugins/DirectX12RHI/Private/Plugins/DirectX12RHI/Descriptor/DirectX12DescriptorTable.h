@@ -59,7 +59,7 @@ namespace ob::rhi::dx12 {
 
 	public:
 
-		void record(ID3D12GraphicsCommandList& cmdList,s32 slot) const;
+		void record(ID3D12GraphicsCommandList& cmdList, DirectX12RootSignature& signature,s32 slot) const;
 
 	private:
 

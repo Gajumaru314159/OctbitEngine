@@ -65,9 +65,8 @@ TEST_F(RootSignatureTest, Mixed) {
 		}
 	);
 
-	// NOTE Mixedも追加対応予定
-	// auto rootSignature = RootSignature::Create({ layout });
-	// ASSERT_TRUE(rootSignature == nullptr);
+	auto rootSignature = RootSignature::Create({ layout });
+	ASSERT_TRUE(rootSignature != nullptr);
 
 }
 TEST_F(RootSignatureTest, MultiSlots) {

@@ -156,7 +156,7 @@ namespace ob::rhi::dx12
 
 
 	//! @brief CommandListに記録 
-	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,s32 slot) const {
+	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,DirectX12RootSignature& signature,s32 slot) const {
 
 		bool isRootDescriptor = false;
 		if (isRootDescriptor) {
@@ -166,17 +166,15 @@ namespace ob::rhi::dx12
 			// cmdList.SetGraphicsRootUnorderedAccessView(m_slot, address);
 		} else {
 
-			s32 count = 0;
-			if (!m_samplerHandle.empty()) count++;
-			if (!m_othersHandle.empty()) count++;
-
-			OB_ASSERT(count<2,"SamplerとOthersの混合は非対応です");
+			auto mapInfo = signature.getMapInfo(slot);
 
 			if (!m_samplerHandle.empty()) {
-				cmdList.SetGraphicsRootDescriptorTable(slot, m_samplerHandle.getGpuHandle());
+				OB_ASSERT_EXPR(0<=mapInfo.samplerSlot);
+				cmdList.SetGraphicsRootDescriptorTable(mapInfo.samplerSlot, m_samplerHandle.getGpuHandle());
 			}
 			if (!m_othersHandle.empty()) {
-				cmdList.SetGraphicsRootDescriptorTable(slot, m_othersHandle.getGpuHandle());
+				OB_ASSERT_EXPR(0 <= mapInfo.othersSlot);
+				cmdList.SetGraphicsRootDescriptorTable(mapInfo.othersSlot, m_othersHandle.getGpuHandle());
 			}
 
 		}

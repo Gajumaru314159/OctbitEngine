@@ -103,7 +103,7 @@ namespace ob::rhi::dx12 {
 		// デスクリプタヒープを設定
 		m_device.setDescriptorHeaps(*this);
 
-		m_rootSignature = nullptr;
+		m_signature = nullptr;
 	}
 
 	//! @brief  描画終了
@@ -325,12 +325,12 @@ namespace ob::rhi::dx12 {
 	void DirectX12CommandList::setPipelineState(const Ref<PipelineState>& pipeline) {
 		if (auto p = pipeline.cast<DirectX12PipelineState>()) {
 
-			if (auto rootSignature = p->getRootSignature()) {
+			if (auto signature = p->getRootSignature()) {
 
 				// Bindless時は特にルートシグネチャが共通しているので変更時のみ記録する
-				if (m_rootSignature != rootSignature) {
-					m_cmdList->SetGraphicsRootSignature(rootSignature);
-					m_rootSignature = rootSignature;
+				if (m_signature != signature) {
+					m_cmdList->SetGraphicsRootSignature(signature->getNative());
+					m_signature = signature;
 				}
 
 				m_cmdList->SetPipelineState(p->getNative());
@@ -358,10 +358,18 @@ namespace ob::rhi::dx12 {
 
 	//! @brief      デスクリプタテーブルを設定
 	void DirectX12CommandList::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
+		OB_ASSERT(m_signature!=nullptr,"先にPipelineStateを設定してください");
+
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
+
+			if (!is_in_range(param.slot, m_signature->getDesc().layouts)) {
+				LOG_ERROR("スロットが範囲外です");
+				continue;
+			}
+
 			if (auto pTable = param.table.cast<DirectX12DescriptorTable>()) {
-				pTable->record(*m_cmdList.Get(),param.slot);
+				pTable->record(*m_cmdList.Get(), *m_signature, param.slot);
 			}
 		}
 	}

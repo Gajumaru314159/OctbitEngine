@@ -457,6 +457,31 @@ namespace ob::rhi::dx12
 		return D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
     }
 
+    D3D12_DESCRIPTOR_RANGE_TYPE TypeConverter::Convert(BindingType value) {
+        switch (value)
+        {
+        case BindingType::Texture:
+        case BindingType::Buffer:
+        case BindingType::StructuredBuffer:
+        case BindingType::ByteAddressBuffer:
+            return D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+
+        case BindingType::RWTexture:
+        case BindingType::RWBuffer:
+        case BindingType::RWStructuredBuffer:
+        case BindingType::RWByteAddressBuffer:
+            return D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
+
+        case BindingType::ConstantBuffer:
+            return D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+
+        case BindingType::Sampler:
+            return D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
+        }
+        OB_ABORT("不正なRootParameterTypeです。");
+        return {};
+    }
+
 
     //! @brief  DXGI_FORMAT を TextureFormat に変換
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {

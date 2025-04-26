@@ -12,6 +12,8 @@
 
 namespace ob::rhi::dx12 {
 
+    class DirectX12RootSignature;
+
     //! @brief  コマンドリスト実装(DirectX12)
     class DirectX12CommandList:public CommandList {
     public:
@@ -112,10 +114,10 @@ namespace ob::rhi::dx12 {
 
         RenderPassDesc m_currentRenderPass;
 
-        RenderTargetArray m_colorTextures;                     // 現在の描画ターゲット(クリア用)
+        RenderTargetArray m_colorTextures;                      // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)
 
-        ID3D12RootSignature* m_rootSignature = nullptr;         // 最後に設定されたPipelineStateのRootSignature
+        DirectX12RootSignature* m_signature = nullptr;          // 最後に設定されたPipelineStateのRootSignature
 
         ResourceStateCache m_cache;                             // リソースバリア用ステートキャッシュ
 
