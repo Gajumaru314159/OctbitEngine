@@ -103,16 +103,26 @@ namespace ob::rhi::vulkan {
 
         Vector<WString> args{
             L"-spirv",
-            // L"-fspv-extension=SPV_EXT_descriptor_indexing",
             L"-E",
             getEntryW(desc.stage),
             L"-T",
             getShadingModelW(desc.stage),
             L"-encoding",
             L"utf8",
+            L"-D",
+            L"VULKAN",
             L"/Zi",
-            L"-Qembed_debug"
+            L"-Qembed_debug",
         };
+
+        if (rhi.getConfig().enableBindless) {
+            args.push_back(L"-fvk-bind-resource-heap");
+            args.push_back(L"1000");
+            args.push_back(L"0");
+            args.push_back(L"-fvk-bind-sampler-heap");
+            args.push_back(L"1001");
+            args.push_back(L"0");
+        }
 
         for (auto& macro : desc.macros) {
             args.push_back(L"-D");

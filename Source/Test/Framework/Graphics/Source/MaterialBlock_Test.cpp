@@ -373,9 +373,17 @@ struct BufferHandle {
 	uint reserved1;
 };
 
-cbuffer Block : register(b0) {
-	BufferHandle ParamHandle;
-};
+
+#if defined(VULKAN)
+
+[[vk::push_constant]]
+BufferHandle ParamHandle;
+
+#elif defined(D3D)
+
+ConstantBuffer<BufferHandle> ParamHandle : register(b0);
+
+#endif
 
 struct Param {
 	TextureHandle MainTexture;
@@ -412,11 +420,10 @@ PsOut PS_Main(PsIn i){
 	PsOut o;					
 	Param param = ByteAddressBuffer(ResourceDescriptorHeap[ParamHandle.index]).Load<Param>(0);
 
-	//Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
-	//SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							
-	//o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(param.Width/16,param.Height/16) + float2(param.Time*param.Speed,param.Time*param.Speed))*param.Color;	
-	//o.color.xyz *= 1 - step(i.uv.x,param.Progress) * step(i.uv.y,0.1);
-	o.color = param.Color;
+	Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
+	SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							
+	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(param.Width/16,param.Height/16) + float2(param.Time*param.Speed,param.Time*param.Speed))*param.Color;	
+	o.color.xyz *= 1 - step(i.uv.x,param.Progress) * step(i.uv.y,0.1);
 	return o;											        
 }																
 
@@ -663,10 +670,21 @@ struct Param2 {
 	float Scale;
 };
 
-cbuffer PushConstants : register(b0) {
+struct PushConstant {
 	BufferHandle ParamHandle;
 	BufferHandle Param2Handle;
 };
+
+#if defined(VULKAN)
+
+[[vk::push_constant]]
+PushConstant g_pushConstant;
+
+#elif defined(D3D)
+
+ConstantBuffer<PushConstant> g_pushConstant: register(b0);
+
+#endif
 											
 // IN / OUT												
 struct VsIn {												
@@ -685,13 +703,13 @@ PsIn VS_Main(VsIn i) {
 	PsIn o;													
 	o.pos = float4(i.pos,0,1);			
 
-	Param2 param2 = ByteAddressBuffer(ResourceDescriptorHeap[Param2Handle.index]).Load<Param2>(0);		        
+	Param2 param2 = ByteAddressBuffer(ResourceDescriptorHeap[g_pushConstant.Param2Handle.index]).Load<Param2>(0);		        
 	o.uv  = i.uv * param2.Scale;
 	return o;
 }
 PsOut PS_Main(PsIn i){										
 	PsOut o;					
-	Param param = ByteAddressBuffer(ResourceDescriptorHeap[ParamHandle.index]).Load<Param>(0);
+	Param param = ByteAddressBuffer(ResourceDescriptorHeap[g_pushConstant.ParamHandle.index]).Load<Param>(0);
 
 	Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
 	SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							

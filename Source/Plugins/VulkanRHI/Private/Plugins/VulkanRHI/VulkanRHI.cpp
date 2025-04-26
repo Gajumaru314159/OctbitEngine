@@ -414,6 +414,12 @@ namespace ob::rhi::vulkan {
 		mutableDescriptorTypeFeature.mutableDescriptorType = m_config.enableBindless;
 		dynamicRenderingFeatures.pNext = &mutableDescriptorTypeFeature;
 
+
+		vk::PhysicalDeviceVulkan12Features vulkan12Features{};
+		vulkan12Features.runtimeDescriptorArray = true;
+		vulkan12Features.descriptorIndexing = true;
+		mutableDescriptorTypeFeature.pNext = &vulkan12Features;
+
 		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
 
 	}
@@ -497,15 +503,20 @@ namespace ob::rhi::vulkan {
 			vk::MutableDescriptorTypeCreateInfoEXT mutableInfo;
 			mutableInfo.setMutableDescriptorTypeLists(mutableList);
 
-			vk::DescriptorSetLayoutBinding binding;
-			binding.binding = 0;
-			binding.descriptorType = vk::DescriptorType::eMutableEXT;
-			binding.descriptorCount = 1;
-			binding.stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
-			binding.pImmutableSamplers = nullptr;
+			vk::DescriptorSetLayoutBinding bindings[2];
+			bindings[0].binding = 1000;
+			bindings[0].descriptorType = vk::DescriptorType::eMutableEXT;
+			bindings[0].descriptorCount = 1;
+			bindings[0].stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
+			bindings[0].pImmutableSamplers = nullptr;
+			bindings[1].binding = 1001;
+			bindings[1].descriptorType = vk::DescriptorType::eMutableEXT;
+			bindings[1].descriptorCount = 1;
+			bindings[1].stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
+			bindings[1].pImmutableSamplers = nullptr;
 
 			vk::DescriptorSetLayoutCreateInfo info;
-			info.setBindings(binding);
+			info.setBindings(bindings);
 			info.setPNext(&mutableInfo);
 			info.flags |= vk::DescriptorSetLayoutCreateFlagBits::eUpdateAfterBindPoolEXT;
 

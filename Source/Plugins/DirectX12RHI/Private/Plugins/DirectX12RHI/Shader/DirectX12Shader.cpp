@@ -120,6 +120,8 @@ namespace ob::rhi::dx12 {
             getShadingModelW(desc.stage),
             L"-encoding",
             L"utf8",
+            L"-D",
+            L"D3D",
             L"/Zi",
             L"-Qembed_debug"
         };
