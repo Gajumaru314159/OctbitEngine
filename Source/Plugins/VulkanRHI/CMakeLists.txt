@@ -15,7 +15,7 @@ SET_PCH("Plugins/VulkanRHI/PCH/stdafx.h")
 #------------------------------------------------------------------------------
 
 # インクルードディレクトリ設定
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${OCTBIT_THIRD_PARTY_PATH}/dxc/inc")
 set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "$ENV{VK_SDK_PATH}/Include")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
@@ -26,7 +26,8 @@ set(public_libs
 )
 set(private_libs     
     "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
-    dxcompiler.lib
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxcompiler.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxil.lib"
     glslang
     #spirv
 )

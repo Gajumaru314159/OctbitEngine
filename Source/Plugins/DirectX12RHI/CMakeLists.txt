@@ -20,7 +20,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)
 
 # インクルードディレクトリ設定
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "${OCTBIT_THIRD_PARTY_PATH}/PIX/include")
+set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "${OCTBIT_THIRD_PARTY_PATH}/PIX/include"  "${OCTBIT_THIRD_PARTY_PATH}/dxc/inc")
 if (WIN32)
     list(APPEND private_includes "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include")
 endif()
@@ -36,7 +36,8 @@ set(private_libs
     d3d12.lib
     dxgi.lib
     dxguid.lib
-    dxcompiler.lib
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxcompiler.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxil.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.lib"
 )
 if (WIN32)

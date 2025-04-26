@@ -10,6 +10,8 @@
 #include <Framework/Platform/Window.h>
 #include <Plugins/DirectX12RHI/System.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
+#include <Plugins/VulkanRHI/System.h>
+#include <Plugins/VulkanRHI/VulkanRHIConfig.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
 
 namespace ob::rhi {
@@ -18,7 +20,6 @@ namespace ob::rhi {
 
 TEST(Bindless, Handle) {
 #pragma region
-	
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
@@ -33,13 +34,18 @@ TEST(Bindless, Handle) {
 	rhi::dx12::DirectX12RHIConfig dx12config;
 	dx12config.enablePIX = true;
 
+	rhi::vulkan::VulkanRHIConfig vkconfig;
+	vkconfig.enableDebugLayer = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::vulkan::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
+		injector.bind(vkconfig);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}
@@ -147,6 +153,7 @@ TEST(Bindless, Handle) {
 			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
+		desc.vertexLayout.vertexStride = sizeof(Vertex);
 		desc.rasterizer.cullMode = CullMode::None;
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);

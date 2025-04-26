@@ -11,6 +11,8 @@
 #include <Plugins/DirectX12RHI/System.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
+#include <Plugins/VulkanRHI/System.h>
+#include <Plugins/VulkanRHI/VulkanRHIConfig.h>
 
 namespace ob::rhi {
 	class SystemResource;
@@ -27,20 +29,27 @@ TEST(MaterialBlock, Bindfull) {
 
 	System::Setup();
 
+	rhi::RHIConfig config;
+	config.enableBindless = false;
+
 	rhi::dx12::DirectX12RHIConfig dx12config;
 	dx12config.enablePIX = true;
-	//config.enableDebugLayer = true;
-	
+
+	rhi::vulkan::VulkanRHIConfig vkconfig;
+	vkconfig.enableDebugLayer = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::vulkan::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
-
+		injector.bind(config);
 		injector.bind(dx12config);
+		injector.bind(vkconfig);
 
 		struct Dependency {
-			Dependency(ob::graphics::Graphics&,SystemResource&) {}
+			Dependency(ob::graphics::Graphics&, SystemResource&) {}
 		};
 		injector.bind<Dependency>();
 
@@ -166,6 +175,8 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
+		desc.vertexLayout.vertexStride = sizeof(Vertex);
+		desc.rasterizer.cullMode = CullMode::None;
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);
@@ -275,13 +286,18 @@ TEST(MaterialBlock, Bindless) {
 	rhi::dx12::DirectX12RHIConfig dx12config;
 	dx12config.enablePIX = true;
 
+	rhi::vulkan::VulkanRHIConfig vkconfig;
+	vkconfig.enableDebugLayer = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::vulkan::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
+		injector.bind(vkconfig);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}
@@ -396,10 +412,11 @@ PsOut PS_Main(PsIn i){
 	PsOut o;					
 	Param param = ByteAddressBuffer(ResourceDescriptorHeap[ParamHandle.index]).Load<Param>(0);
 
-	Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
-	SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							
-	o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(param.Width/16,param.Height/16) + float2(param.Time*param.Speed,param.Time*param.Speed))*param.Color;	
-	o.color.xyz *= 1 - step(i.uv.x,param.Progress) * step(i.uv.y,0.1);
+	//Texture2D g_mainTex = ResourceDescriptorHeap[param.MainTexture.index];							
+	//SamplerState g_mainSampler = SamplerDescriptorHeap[param.MainSampler.index];							
+	//o.color = g_mainTex.Sample(g_mainSampler,i.uv * float2(param.Width/16,param.Height/16) + float2(param.Time*param.Speed,param.Time*param.Speed))*param.Color;	
+	//o.color.xyz *= 1 - step(i.uv.x,param.Progress) * step(i.uv.y,0.1);
+	o.color = param.Color;
 	return o;											        
 }																
 
@@ -432,6 +449,7 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
+		desc.vertexLayout.vertexStride = sizeof(Vertex);
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);
@@ -542,13 +560,18 @@ TEST(MaterialBlock, MultiBindless) {
 	rhi::dx12::DirectX12RHIConfig dx12config;
 	dx12config.enablePIX = true;
 
+	rhi::vulkan::VulkanRHIConfig vkconfig;
+	vkconfig.enableDebugLayer = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::vulkan::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
+		injector.bind(vkconfig);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}
@@ -706,6 +729,7 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::Position,offsetof(Vertex,pos),ElementType::Float,2),
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
+		desc.vertexLayout.vertexStride = sizeof(Vertex);
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);
