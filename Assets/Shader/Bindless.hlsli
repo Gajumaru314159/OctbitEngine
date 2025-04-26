@@ -7,28 +7,26 @@
 //==============================================================================
 
 struct TextureHandle {
-    uint index;
-    uint type;
-
-    uint pad0;
-    uint pad1;
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct SamplerHandle {
-    uint index;
-    uint type;
-
-    uint pad0;
-    uint pad1;
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct BufferHandle {
-    uint index;
-    uint type;
-
-    uint pad0;
-    uint pad1;
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
+
 
 
 //==============================================================================

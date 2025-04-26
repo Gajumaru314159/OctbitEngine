@@ -9,6 +9,7 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
 
 namespace ob::rhi {
@@ -26,19 +27,19 @@ TEST(Bindless, Handle) {
 
 	System::Setup();
 
+	rhi::RHIConfig config;
+	config.enableBindless = true;
+
+	rhi::dx12::DirectX12RHIConfig dx12config;
+	dx12config.enablePIX = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		graphics::RegisterGraphicsService(injector);
-		{
-			rhi::RHIConfig config;
-			config.enablePIX = true;
-			config.enableBindless = true;
-			config.enableDebugLayer = true;
-			config.breakWithWarning = true;
-			injector.bind(config);
-		}
+		injector.bind(config);
+		injector.bind(dx12config);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}

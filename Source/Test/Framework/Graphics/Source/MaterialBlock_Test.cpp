@@ -9,6 +9,7 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
 
 namespace ob::rhi {
@@ -25,6 +26,10 @@ TEST(MaterialBlock, Bindfull) {
 	 ob::core::Logger log;
 
 	System::Setup();
+
+	rhi::dx12::DirectX12RHIConfig dx12config;
+	dx12config.enablePIX = true;
+	//config.enableDebugLayer = true;
 	
 	ServiceInjector injector;
 	ServiceContainer container;
@@ -32,10 +37,7 @@ TEST(MaterialBlock, Bindfull) {
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 
-		rhi::RHIConfig config;
-		config.enablePIX = true;
-		//config.enableDebugLayer = true;
-		injector.bind(config);
+		injector.bind(dx12config);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&,SystemResource&) {}
@@ -98,9 +100,9 @@ struct Params {
 	float Height;
 };
 Texture2D g_mainTex:register(t0);
-SamplerState g_mainSampler:register(s0);
-ByteAddressBuffer g_buffer:register(t1);
-ByteAddressBuffer g_params:register(t2);
+SamplerState g_mainSampler:register(s1);
+ByteAddressBuffer g_buffer:register(t2);
+ByteAddressBuffer g_params:register(t3);
 											
 // IN / OUT												
 struct VsIn {												
@@ -135,18 +137,17 @@ PsOut PS_Main(PsIn i){
 		OB_ASSERT_EXPR(vs && ps);
 	}
 
+	Ref<DescriptorLayout> layout = DescriptorLayout::Create({
+		Binding::Texture(0),
+		Binding::Sampler(1),
+		Binding::ByteAddressBuffer(2),
+		Binding::ByteAddressBuffer(3),
+	});
+
 	Ref<RootSignature> signature;
 	{
-		RootSignatureDesc desc{
-			{
-				Binding::Texture(0),
-				Binding::Texture(1),
-				Binding::Texture(2)
-			},
-			{
-				Binding::Sampler(0),
-			}
-		};
+		RootSignatureDesc desc;
+		desc.layouts = { layout };
 		desc.name = "MaterialBlock";
 		signature = RootSignature::Create(desc);
 		OB_ASSERT_EXPR(signature);
@@ -173,6 +174,7 @@ PsOut PS_Main(PsIn i){
 
 	MaterialBlockDesc desc;
 	desc.name = "TestBlock";
+	desc.layout = layout;
 	desc.textures = { "Texture" };
 	desc.buffers = { "Buffer" };
 	desc.vectors = { "Color" };
@@ -227,7 +229,7 @@ PsOut PS_Main(PsIn i){
 		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0,-1,1);
+		block.record(commandList, 0);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);
@@ -267,18 +269,19 @@ TEST(MaterialBlock, Bindless) {
 
 	System::Setup();
 
+	rhi::RHIConfig config;
+	config.enableBindless = true;
+
+	rhi::dx12::DirectX12RHIConfig dx12config;
+	dx12config.enablePIX = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		graphics::RegisterGraphicsService(injector);
-		{
-			rhi::RHIConfig config;
-			// config.enableDebugLayer = true;
-			config.enableBindless = true;
-			config.enablePIX = true;
-			injector.bind(config);
-		}
+		injector.bind(config);
+		injector.bind(dx12config);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}
@@ -334,21 +337,24 @@ TEST(MaterialBlock, Bindless) {
 		String code = R"(
 
 struct TextureHandle {
-	uint index;
 	uint type;
-	uint padding[2];
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct SamplerHandle {
-	uint index;
 	uint type;
-	uint padding[2];
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct BufferHandle {
-	uint index;
 	uint type;
-	uint padding[2];
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 cbuffer Block : register(b0) {
@@ -530,18 +536,19 @@ TEST(MaterialBlock, MultiBindless) {
 
 	System::Setup();
 
+	rhi::RHIConfig config;
+	config.enableBindless = true;
+
+	rhi::dx12::DirectX12RHIConfig dx12config;
+	dx12config.enablePIX = true;
+
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
 		rhi::dx12::RegisterDirectX12RHIService(injector);
 		graphics::RegisterGraphicsService(injector);
-		{
-			rhi::RHIConfig config;
-			// config.enableDebugLayer = true;
-			config.enableBindless = true;
-			config.enablePIX = true;
-			injector.bind(config);
-		}
+		injector.bind(config);
+		injector.bind(dx12config);
 
 		struct Dependency {
 			Dependency(ob::graphics::Graphics&, SystemResource&) {}
@@ -597,24 +604,24 @@ TEST(MaterialBlock, MultiBindless) {
 		String code = R"(
 
 struct TextureHandle {
-	uint index;
 	uint type;
-	uint pad0;
-	uint pad;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct SamplerHandle {
-	uint index;
 	uint type;
-	uint pad0;
-	uint pad;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct BufferHandle {
-	uint index;
 	uint type;
-	uint pad0;
-	uint pad;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 struct Param {
