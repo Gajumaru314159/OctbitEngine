@@ -12,6 +12,7 @@ namespace ob::graphics {
     //! @brief  マテリアル定義
     struct MaterialBlockDesc {
         String          name;
+		Ref<rhi::DescriptorLayout> layout;
         Vector<String>  textures;
         Vector<String>  buffers;
         Vector<String>  matrices;
@@ -67,14 +68,6 @@ namespace ob::graphics {
         void setBuffer(StringView name, const Ref<Buffer>& value);
         //! @}
 
-        //! @brief MaterialBlockのハンドルを指定のスロットに記録する
-        //!@details Bindfull時のみ使用可能です。
-        //!         この関数を呼び出すと、指定のスロットに対してDescriptorTableが設定されます。
-		//!         Slotに-1が指定された場合、そのスロットには記録されません。
-        //!         CBVの先頭にはパラメータのバッファが記録され、その後ろにBufferのリストが記録されます。
-		//!         詳細は単体テストを参照してください。
-        void record(Ref<CommandList>& commandList, s32 srvSlot, s32 uavSlot, s32 samplerSlot);
-
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 		//! @details Bindless時のみ使用可能です。
         //!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
@@ -83,7 +76,7 @@ namespace ob::graphics {
     private:
 
         void initializeProperties(const MaterialBlockDesc& desc);
-        void initializeDescriptorTables();
+        void initializeDescriptorTables(const MaterialBlockDesc& desc);
 
         template<typename T, typename TEq = std::equal_to<T>>
         void setValueProprty(StringView name, MaterialPropertyType type, const T& value);
@@ -92,27 +85,28 @@ namespace ob::graphics {
 
     private:
 
-        union Component {
-            float f;
-            int i;
-            unsigned int u;
-        };
-
         MaterialPropertyMap     m_properties;
         
         bool					m_isBindless = false;
         bool					m_hasChanged = false;
         Blob            		m_values;
 
-		Span<Component>         m_valuesDebug;
-
         Ref<Buffer>	            m_valuesBuffer;
         Vector<Ref<Texture>>    m_textures;
         Vector<Ref<Sampler>>    m_samplers;
         Vector<Ref<Buffer>>     m_buffers;
 
-        Ref<DescriptorTable>    m_table0;
-        Ref<DescriptorTable>    m_table1;
+        Ref<DescriptorTable>    m_table;
+
+#define OB_MATERIAL_BLOCK_DEBUG_ENABLED OB_DEBUG
+#if OB_MATERIAL_BLOCK_DEBUG_ENABLED
+        union Component {
+            f32 f;
+            s32 i;
+            u32 u;
+        };
+        Span<Component>         m_valuesDebug;
+#endif
 
     };
 

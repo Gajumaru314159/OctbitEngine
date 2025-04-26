@@ -320,11 +320,8 @@ namespace ob::graphics {
 				cmdList.setVertexBuffer(m_vertexBuffer);
 				cmdList.setIndexBuffer(m_indexBuffer);
 
-				rhi::SetDescriptorTableParam params[] = {
-					{m_fontTextureTable,0},
-					{m_constantTable,1}
-				};
-				cmdList.setRootDesciptorTable(params, std::size(params));
+				rhi::SetDescriptorTableParam param = { m_table,0 };
+				cmdList.setRootDesciptorTable(&param, 1);
 
 
 				for (auto& cmd : m_commands) {
@@ -381,33 +378,27 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		{
-			RootSignatureDesc desc = {
-				{
-					Binding::Texture(0)
-				},
-				{
-					Binding::ConstantBuffer(0)
-				}
-			};
+			m_layout = DescriptorLayout::Create({ Binding::Texture(0),Binding::Sampler(1),Binding::ConstantBuffer(2) });
+
+			RootSignatureDesc desc;
+			desc.layouts = { m_layout };
 			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = "ImGui";
 			m_signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(m_signature);
 		}
 		{
-			m_fontTextureTable = DescriptorTable::Create(m_signature, 0);
-			m_constantTable = DescriptorTable::Create(m_signature, 1);
-			OB_ASSERT_EXPR(m_fontTextureTable);
-			OB_ASSERT_EXPR(m_constantTable);
+			m_table = DescriptorTable::Create({ m_layout});
+			OB_ASSERT_EXPR(m_table);
 		}
 
 		Ref<Shader> vs;
 		Ref<Shader> ps;
 		{
 			String code =
-				"SamplerState g_mainSampler:register(s0);						\n"
 				"Texture2D g_mainTex:register(t0);								\n"
-				"cbuffer vertexBuffer : register(b0) {							\n"
+				"SamplerState g_mainSampler:register(s1);						\n"
+				"cbuffer vertexBuffer : register(b2) {							\n"
 				"	float4x4 proj;												\n"
 				"};																\n"
 				"// IN / OUT													\n"
@@ -503,10 +494,11 @@ namespace ob::graphics {
 
 		// グラフィックリソース生成
 		m_fontTexture = rhi::Texture::Create("ImGuiFont",TextureType::Texture2D, Size(width, height), colors);
-		m_fontTextureTable->setResource(0, m_fontTexture);
+		m_table->setResource(0, m_fontTexture);
+		m_table->setResource(1, Sampler::Default());
 
 		// システム登録
-		io.Fonts->SetTexID((ImTextureID)&m_fontTextureTable);
+		io.Fonts->SetTexID((ImTextureID)&m_table);
 	}
 
 	//! @brief      マウス更新
@@ -712,7 +704,7 @@ namespace ob::graphics {
 			desc.name = "ImGuiConstant";
 			m_constantBuffer = Buffer::Create(desc);
 
-			m_constantTable->setResource(0, m_constantBuffer);
+			m_table->setResource(2, m_constantBuffer);
 		}
 		{
 			float L = draw_data->DisplayPos.x;

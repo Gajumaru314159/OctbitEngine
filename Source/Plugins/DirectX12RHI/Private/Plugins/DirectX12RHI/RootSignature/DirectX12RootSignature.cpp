@@ -60,7 +60,7 @@ namespace ob::rhi::dx12 {
 						if (i == items.size()) break;
 
 						auto& range = ranges.emplace_back();
-						range.RangeType = itemType;
+						range.RangeType = TypeConverter::Convert(items[i].type);
 						range.NumDescriptors = 0;
 						range.BaseShaderRegister = items[i].index;
 						range.RegisterSpace = items[i].space;

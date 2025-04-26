@@ -10,51 +10,18 @@
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/DescriptorTable.h>
 
 namespace ob::graphics {
-
-	enum ResourceHandleType {
-		Unknown,
-		Texture,
-		Sampler,
-		Buffer,
-	};
-
-	struct alignas(16) BufferHandle {
-		u32 index;
-		ResourceHandleType type = ResourceHandleType::Buffer;
-		u32 padding[2] = { 0,0 };
-
-		bool operator==(const BufferHandle& rhs)const { return index == rhs.index; }
-	};
-	struct alignas(16) TextureHandle {
-		u32 index;
-		ResourceHandleType type = ResourceHandleType::Texture;
-		u32 padding[2] = { 0,0 };
-
-		bool operator==(const TextureHandle& rhs)const { return index == rhs.index; }
-	};
-	struct alignas(16) SamplerHandle {
-		u32 index;
-		ResourceHandleType type = ResourceHandleType::Sampler;
-		u32 padding[2] = { 0,0 };
-
-		bool operator==(const SamplerHandle& rhs)const { return index == rhs.index; }
-	};
-	struct TextureAndSamplerHandle {
-		TextureHandle texture;
-		SamplerHandle sampler;
-
-		bool operator==(const TextureAndSamplerHandle& rhs)const { return texture == rhs.texture && sampler == rhs.sampler; }
-	};
 
 	//! @brief コンストラクタ
 	//! @param desc マテリアルブロックの説明
 	MaterialBlock::MaterialBlock(const MaterialBlockDesc& desc) {
 		initializeProperties(desc);
-		initializeDescriptorTables();
+		initializeDescriptorTables(desc);
 	}
+
 
 	//! @brief プロパティを初期化する
 	//! @param desc マテリアルブロックの説明
@@ -74,37 +41,42 @@ namespace ob::graphics {
 
 		// プロパティ名とオフセットを対応 (パディングが入らないようにアライメントが大きいものから)
 		s32 offset = 0;
+		s32 slot = 0;
 
 		if (m_isBindless) {
 
 			// バインドレス時はパラメーターバッファ内にハンドルを格納
 			for (auto [index, name] : Indexed(desc.textures)) {
-				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Texture,offset,(s32)index });
+				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Texture,offset,(s32)index,slot});
 				if (!added) LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name);
-				offset += sizeof(TextureAndSamplerHandle);
+				offset += sizeof(rhi::BindlessHandle) * 2;
+				slot += 2;
 			}
 			m_textures.resize(desc.textures.size());
 			m_samplers.resize(desc.textures.size());
 
 			for (auto [index, name] : Indexed(desc.buffers)) {
-				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,offset,(s32)index });
+				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,offset,(s32)index,slot});
 				if (!added) LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name);
-				offset += sizeof(BufferHandle);
+				offset += sizeof(rhi::BindlessHandle);
+				slot += 1;
 			}
 			m_buffers.resize(desc.buffers.size());
 		} else {
 
 			// バインドフル時は専用のDescriptorTableにリソースを格納
 			for (auto [index, name] : Indexed(desc.textures)) {
-				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Texture,-1,(s32)index });
+				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Texture,-1,(s32)index,slot});
 				if (!added) LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name);
+				slot+=2;
 			}
 			m_textures.resize(desc.textures.size());
 			m_samplers.resize(desc.textures.size());
 
 			for (auto [index, name] : Indexed(desc.buffers)) {
-				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,-1,(s32)index });
+				auto [itr, added] = m_properties.try_emplace(name, MaterialValuePropertyDesc{ MaterialPropertyType::Buffer,-1,(s32)index,slot});
 				if (!added) LOG_ERROR("プロパティ[{}]はマテリアルに既に含まれています。", name);
+				slot++;
 			}
 			m_buffers.resize(desc.buffers.size());
 
@@ -136,21 +108,51 @@ namespace ob::graphics {
 
 		// バッファ生成
 		size_t size = offset;
-		auto bufferDesc = rhi::BufferDesc::Constant(size, BufferFlag::Constant | BufferFlag::ShaderResource);
+		auto bufferDesc = rhi::BufferDesc::ByteAddress(size);
 		bufferDesc.name = Format("MaterialParameter ({})", desc.name);
 		m_valuesBuffer = rhi::Buffer::Create(bufferDesc);
 		OB_ASSERT_EXPR(m_valuesBuffer);
 
 		m_values.resize(size);
+#if OB_MATERIAL_BLOCK_DEBUG_ENABLED
 		m_valuesDebug = Span<Component>(reinterpret_cast<Component*>(m_values.data()), m_values.size() / sizeof(Component));
-
+#endif
 	}
+
 
 	//! @brief デスクリプタテーブルを初期化する
 	//! @param desc マテリアルブロックの説明
-	void MaterialBlock::initializeDescriptorTables() {
+	void MaterialBlock::initializeDescriptorTables(const MaterialBlockDesc& desc) {
 		using namespace ob::rhi;
-		size_t samplerNum = m_textures.size();
+
+		// バリデート (バインドレスはルート定数を使うのでバインドフルのみ)
+		if(desc.layout) {
+			s32 index = 0;
+			auto& items = desc.layout->getDesc().items;;
+			for (auto& name : desc.textures) {
+				if (items.at(index++).type != BindingType::Texture) {
+					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
+					return;
+				}
+				if (items.at(index++).type != BindingType::Sampler) {
+					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
+					return;
+				}
+			}
+			for (auto& name : desc.buffers) {
+				if (items.at(index++).type != BindingType::ByteAddressBuffer) {
+					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
+					return;
+				}
+			}
+			{
+				if (items.at(index++).type != BindingType::ByteAddressBuffer) {
+					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
+					return;
+				}
+			}
+		}
+			
 
 		// https://github.com/sebbbi/perftest
 		// によるとConstantBufferでもByteAddressBufferでも同じ速度が出るらしい
@@ -158,42 +160,42 @@ namespace ob::graphics {
 		// 唯一の例外はBindless時にValuesBufferのBufferHandleをRootConstantで渡すとき。
 		// C++側はRootSignatureでConstantを使用し、シェーダーではb(CBV)を使用する。
 
-		BindingSlot slot0;
+		if (desc.layout) {
+			m_table = DescriptorTable::Create({ desc.layout });
+		} else {
+			// バインドレスの場合はDescriptorTableは使用しないが、BindlessHandleを取得するためにDescriptorLayoutを作成する
+			s32 index = 0;
+			DescriptorLayoutDesc layoutDesc;
+			for (auto& texture : desc.textures) {
+				layoutDesc.items.push_back(Binding::Texture(index++));
+				layoutDesc.items.push_back(Binding::Sampler(index++));
+			}
+			for (auto& texture : desc.textures) {
+				layoutDesc.items.push_back(Binding::ByteAddressBuffer(index++));
+			}
+			{
+				layoutDesc.items.push_back(Binding::ByteAddressBuffer(index++));
+			}
+			auto layout = DescriptorLayout::Create(layoutDesc);
+			m_table = DescriptorTable::Create({ layout });
+		}
+
+
+		s32 index = 0;
+
 		for (s32 i = 0; i < m_textures.size(); ++i) {
-			// TODO RW対応
-			slot0.items.emplace_back(Binding::Texture());
-			// slot0.items.emplace_back(Binding::RWTexture());
-		}
-		for (s32 i = 0; i < m_buffers.size(); ++i) {
-			slot0.items.emplace_back(Binding::ByteAddressBuffer());
-			// slot0.items.emplace_back(Binding::RWByteAddressBuffer());
-		}
-		{
-			slot0.items.emplace_back(Binding::ByteAddressBuffer());
-		}
-
-		BindingSlot slot1;
-		for (s32 i = 0; i < samplerNum; ++i) {
-			slot1.items.emplace_back(Binding::Sampler());
-		}
-
-		m_table0 = DescriptorTable::Create(slot0);
-		m_table1 = DescriptorTable::Create(slot1);
-
-		s32 srv = 0;
-
-		for (s32 i = 0; i < m_textures.size(); ++i) {
-			m_table0->setResource(srv++, Texture::White());
-			m_table1->setResource(i, Sampler::Default());
+			m_table->setResource(index++, Texture::White());
+			m_table->setResource(index++, Sampler::Default());
 		}
 		for (s32 i = 0; i < m_buffers.size(); ++i) {
 			//m_tableSRV->setResource(srv++, Buffer::Empty());
-			srv++;
+			index++;
 		}
 		{
-			m_table0->setResource(srv++, m_valuesBuffer);
+			m_table->setResource(index++, m_valuesBuffer);
 		}
 	}
+
 
 	//! @brief  プロパティがあるか
 	bool MaterialBlock::hasProprty(StringView name, MaterialPropertyType type) const {
@@ -202,6 +204,7 @@ namespace ob::graphics {
 		}
 		return false;
 	}
+
 
 	//! @brief パラメーターバッファに対してプロパティを設定する
 	//! @tparam T 設定する値の型
@@ -252,9 +255,14 @@ namespace ob::graphics {
 		);
 	}
 
+
 	//! @brief  Textureプロパティを設定
 	void MaterialBlock::setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler) {
 
+		if (!m_table) {
+			LOG_ERROR("MaterialBlockの構築に失敗しています [{}]",name);
+			return;
+		}
 		if (!texture) {
 			LOG_ERROR("プロパティ[{}]に空のテクスチャを設定しようとしました", name);
 			return;
@@ -273,7 +281,7 @@ namespace ob::graphics {
 			// バリデート
 			if (desc.type != MaterialPropertyType::Texture)return;
 			if (useBindless) {
-				if (!is_in_range(desc.offset + sizeof(TextureAndSamplerHandle) - 1, m_values))return;
+				if (!is_in_range(desc.offset + sizeof(rhi::BindlessHandle) * 2 - 1, m_values))return;
 			} else {
 				if (!is_in_range(desc.index, m_textures))return;
 			}
@@ -284,21 +292,36 @@ namespace ob::graphics {
 			m_textures[desc.index] = texture;
 			m_samplers[desc.index] = sampler;
 
-			m_table0->setResource(desc.index, texture);
-			m_table1->setResource(desc.index, sampler);
+			m_table->setResource(desc.slot+0, texture);
+			m_table->setResource(desc.slot+1, sampler);
 
 			if (useBindless) {
-				TextureAndSamplerHandle handles;
-				handles.texture.index = m_table0->getBindlessIndex(desc.index);
-				handles.sampler.index = m_table1->getBindlessIndex(desc.index);
+
+				struct TextureSamplerHandle {
+					rhi::BindlessHandle texture;
+					rhi::BindlessHandle sampler;
+					bool operator == (const TextureSamplerHandle& rhs) const{
+						return texture == rhs.texture && sampler == rhs.sampler;
+					}
+				};
+
+				TextureSamplerHandle handles;
+				handles.texture = m_table->getBindlessHandle(desc.slot+0);
+				handles.sampler = m_table->getBindlessHandle(desc.slot+1);
 				setValueProprty(name, MaterialPropertyType::Texture, handles);
 			}
 
 		}
 	}
 
+
 	//! @brief  Bufferプロパティを設定
 	void MaterialBlock::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
+
+		if (!m_table) {
+			LOG_ERROR("MaterialBlockの構築に失敗しています [{}]", name);
+			return;
+		}
 
 		bool useBindless = rhi::RHI::Instance().getConfig().enableBindless;
 
@@ -309,18 +332,17 @@ namespace ob::graphics {
 			// バリデート
 			if (desc.type != MaterialPropertyType::Buffer)return;
 			if (useBindless) {
-				if (!is_in_range(desc.offset + sizeof(BufferHandle) - 1, m_values))return;
+				if (!is_in_range(desc.offset + sizeof(rhi::BindlessHandle) - 1, m_values))return;
 			} else {
 				if (!is_in_range(desc.index, m_buffers))return;
 			}
 
 			m_buffers[desc.index] = value;
 
-			m_table0->setResource(m_textures.size() + desc.index, value);
+			m_table->setResource(desc.slot, value);
 
 			if (useBindless) {
-				BufferHandle handle;
-				handle.index = m_table0->getBindlessIndex(m_textures.size() + desc.index);
+				rhi::BindlessHandle handle = m_table->getBindlessHandle(desc.slot);
 				setValueProprty(name, MaterialPropertyType::Buffer, handle);
 			}
 
@@ -329,58 +351,38 @@ namespace ob::graphics {
 
 
 	//! @brief MaterialBlockのハンドルを指定のスロットに記録する
-	//!@details Bindfull時のみ使用可能です。
-	//!         この関数を呼び出すと、指定のスロットに対してDescriptorTableが設定されます。
-	//!         Slotに-1が指定された場合、そのスロットには記録されません。
-	//!         CBVの先頭にはパラメータのバッファが記録され、その後ろにBufferのリストが記録されます。
-	//!         詳細は単体テストを参照してください。
-	void MaterialBlock::record(Ref<CommandList>& commandList, s32 srvSlot, s32 uavSlot, s32 samplerSlot) {
-		if (!commandList) return;
-		using namespace ob::rhi;
-
-		if (m_isBindless) return;
-
-		updateParameterBuffer();
-
-		FixedVector < SetDescriptorTableParam, 2> params;
-		if (0 <= srvSlot) {
-			auto& param = params.emplace_back();
-			param.slot = srvSlot;
-			param.table = m_table0;
-		}
-		if (0 <= samplerSlot) {
-			auto& param = params.emplace_back();
-			param.slot = samplerSlot;
-			param.table = m_table1;
-		}
-
-		commandList->setRootDesciptorTable(params.data(), params.size());
-
-	}
-
-	//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 	//! @details Bindless時のみ使用可能です。
 	//!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
 	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot, s32 offset) {
 		if (!commandList) return;
+		if (!m_table) return;
 		using namespace ob::rhi;
-
-		if (!m_isBindless) return;
 
 		updateParameterBuffer();
 
-		size_t valuesIndex = m_textures.size() + m_buffers.size();
+		if (m_isBindless) {
 
-		BufferHandle handle;
-		handle.index = m_table0->getBindlessIndex(valuesIndex);
+			size_t valuesIndex = m_textures.size() * 2 + m_buffers.size();
 
-		SetRootConstantsParam param;
-		param.slot = slot;
-		param.blob = BlobView(&handle, sizeof(handle));
-		param.offset = offset;
-		commandList->setRootConstant(param);
+			rhi::BindlessHandle handle = m_table->getBindlessHandle(valuesIndex);
+
+			SetRootConstantsParam param;
+			param.slot = 0;
+			param.blob = BlobView(&handle, sizeof(handle));
+			param.offset = offset;
+			commandList->setRootConstant(param);
+
+		} else {
+
+			SetDescriptorTableParam param;
+			param.slot = slot;
+			param.table = m_table;
+			commandList->setRootDesciptorTable(&param,1);
+
+		}
 
 	}
+
 
 	//! @brief パラメーターバッファを更新する
 	void MaterialBlock::updateParameterBuffer() {
