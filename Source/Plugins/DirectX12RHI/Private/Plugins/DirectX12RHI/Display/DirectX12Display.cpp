@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Display.h"
+#include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
@@ -192,7 +193,7 @@ namespace ob::rhi::dx12 {
 				{-1,+1},
 			};
 			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
-			bdesc.name = m_desc.name + "_Vertices";
+			bdesc.name = m_desc.name + "_DisplayVertices";
 			m_verices = Buffer::Create(bdesc);
 			m_verices->updateDirect(bdesc.size, vertices);
 		}
@@ -227,13 +228,12 @@ namespace ob::rhi::dx12 {
 			OB_ASSERT_EXPR(vs && ps);
 		}
 
+		m_layout = DescriptorLayout::Create({ Binding::Texture(0) });
+
 		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc{
-				{
-					Binding::Texture(),
-				}
-			};
+			RootSignatureDesc desc;
+			desc.layouts = { m_layout };
 			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = m_desc.name;
 			signature = RootSignature::Create(desc);
@@ -383,7 +383,7 @@ namespace ob::rhi::dx12 {
 			m_bindedTexture = texture;
 
 			if (m_bindedTexture) {
-				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
+				m_bindedTextureTable = DescriptorTable::Create({ m_layout });
 				m_bindedTextureTable->setResource(0, m_bindedTexture);
 			}
 

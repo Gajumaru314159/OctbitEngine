@@ -49,22 +49,25 @@ TEST_F(ARHITest, Triangle) {
 		{
 			String code = R"(	
 struct VsIn {
-	float4 pos : POSITION;
+	float4 position : POSITION;
+	float4 color : COLOR;
 };
 struct PsIn {
-	float4 pos : SV_POSITION;
+	float4 position : SV_POSITION;
+	float4 color : COLOR;
 };
 struct PsOut {
 	float4 color : SV_TARGET0;
 };											
 PsIn VS_Main(VsIn i) {
 	PsIn o;
-	o.pos = i.pos;
+	o.position = i.position;
+	o.color = i.color;
 	return o;
 }
 PsOut PS_Main(PsIn i) {
 	PsOut o;
-	o.color = float4(1.f,1.f,0.f,1.f);
+	o.color = i.color;
 	return o;
 }
 )";
@@ -83,7 +86,8 @@ PsOut PS_Main(PsIn i) {
 
 
 		struct Vert {
-			Vec4 pos;
+			Vec4  position;
+			Color color;
 		};
 
 		Ref<PipelineState> pipeline;
@@ -96,7 +100,8 @@ PsOut PS_Main(PsIn i) {
 			desc.vs = vs;
 			desc.ps = ps;
 			desc.vertexLayout.attributes = {
-				VertexAttribute(Semantic::Position,offsetof(Vert,pos),ElementType::Float,4),
+				VertexAttribute(Semantic::Position,offsetof(Vert,position),ElementType::Float,4),
+				VertexAttribute(Semantic::Color,offsetof(Vert,color),ElementType::Float,4),
 			};
 			desc.vertexLayout.vertexStride = sizeof(Vert);
 			desc.blend[0] = BlendDesc::AlphaBlend;
@@ -109,9 +114,9 @@ PsOut PS_Main(PsIn i) {
 		}
 
 		Vector<Vert> vertices{
-			{Vec4(0,0,0,1)},
-			{Vec4(0.5,0,0,1)},
-			{Vec4(0,1,0,1)},
+			{{0.0f, 0.5f, 0.0f,1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}, // 上
+			{{0.5f, -0.5f, 0.0f,1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}}, // 右下
+			{{-0.5f, -0.5f, 0.0f,1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}, // 左下
 		};
 		Vector<u16> indices{
 			0,1,2
@@ -188,6 +193,8 @@ PsOut PS_Main(PsIn i) {
 
 			Thread::Sleep(33);
 		}
+
+		Thread::Sleep(33);
 
 	}
 }

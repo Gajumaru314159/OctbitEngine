@@ -21,8 +21,8 @@ protected:
 		ServiceInjector injector;
 		ServiceContainer container;
 		
-		//rhi::dx12::RegisterDirectX12RHIService(injector);
-		rhi::vulkan::RegisterVulkanRHIService(injector);
+		rhi::dx12::RegisterDirectX12RHIService(injector);
+		//rhi::vulkan::RegisterVulkanRHIService(injector);
 		rhi::RegisterRHIService(injector);
 
 		m_config.enableDebugLayer = true;

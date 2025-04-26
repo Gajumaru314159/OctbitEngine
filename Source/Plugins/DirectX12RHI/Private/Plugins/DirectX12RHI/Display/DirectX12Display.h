@@ -116,6 +116,7 @@ namespace ob::rhi::dx12 {
         Swapper<Ref<RenderTexture>> m_textures;
 
         // 描画リソース    
+        Ref<DescriptorLayout>       m_layout;
         Ref<RootSignature>          m_signature;
         Ref<PipelineState>          m_pipeline;
         Ref<Buffer>                 m_verices;

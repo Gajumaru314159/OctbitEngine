@@ -15,6 +15,7 @@
 #include <Plugins/DirectX12RHI/Shader/DirectX12Shader.h>
 #include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
+#include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorTable.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/GraphicFile/DirectX12GraphicFile.h>
@@ -28,7 +29,7 @@
 #define SAFE_CREATE(type,type_impl,...)			\
 	Ref<type> p = new type_impl(__VA_ARGS__);	\
 	if(p.cast<type_impl>()->isValid() == false) p = {};			\
-	return p;							
+	return p;		
 
 namespace ob::rhi::dx12 {
 
@@ -55,6 +56,12 @@ namespace ob::rhi::dx12 {
 	//! @brief  デストラクタ
 	DirectX12RHI::~DirectX12RHI() {
 		clearCommands();
+
+		// GraphicsObjectを持っているものは先に破棄
+		m_textureUploader.destruct();
+		m_bufferUploader.destruct();
+		m_copyCommandList = {};
+
 		finalize();
 	}
 
@@ -165,22 +172,14 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//! @brief  デスクリプタ・テーブルを生成
-	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) {
-		auto nativeSignature = signature.cast<DirectX12RootSignature>();
-		if (nativeSignature == nullptr) return nullptr;
-		DescriptorHeapType heapType = nativeSignature->isSampler(slot) ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
-		auto itr = m_descriptorHeaps.find(heapType);
-		if (itr == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTable, DirectX12DescriptorTable, *this,*itr->second, signature,slot);
+	//! @brief  デスクリプタ・レイアウトを生成 
+	Ref<DescriptorLayout> DirectX12RHI::createDescriptorLayout(const DescriptorLayoutDesc& desc) {
+		SAFE_CREATE(DescriptorLayout, DirectX12DescriptorLayout, desc);
 	}
 
-	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(const BindingSlot& desc) {
-		if (desc.items.empty()) return nullptr;
-		DescriptorHeapType heapType = desc.items.front().type == BindingType::Sampler ? DescriptorHeapType::Sampler : DescriptorHeapType::CBV_SRV_UAV;
-		auto itr = m_descriptorHeaps.find(heapType);
-		if (itr == m_descriptorHeaps.end())return nullptr;
-		SAFE_CREATE(DescriptorTable, DirectX12DescriptorTable, *this, *itr->second, desc);
+	//! @brief  デスクリプタ・テーブルを生成
+	Ref<DescriptorTable> DirectX12RHI::createDescriptorTable(const DescriptorTableDesc& desc) {
+		SAFE_CREATE(DescriptorTable, DirectX12DescriptorTable, *this, desc, *m_descriptorHeaps.at(DescriptorHeapType::Sampler),*m_descriptorHeaps.at(DescriptorHeapType::CBV_SRV_UAV));
 	}
 
 

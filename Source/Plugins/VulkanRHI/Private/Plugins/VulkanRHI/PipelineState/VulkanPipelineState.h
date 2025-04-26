@@ -23,12 +23,15 @@ namespace ob::rhi::vulkan {
         //! @brief      パイプラインを取得
 		vk::raii::Pipeline& getNative() { return m_pipeline; }
 
+		vk::PipelineLayout getLayout() const { return m_layout; }
+
     private:
         // PipelineState を介して継承されました
         const String& getName() const override;
 
         const PipelineStateDesc m_desc;
 	    vk::raii::Pipeline      m_pipeline = nullptr;
+		vk::PipelineLayout      m_layout = nullptr;
 
 
     };

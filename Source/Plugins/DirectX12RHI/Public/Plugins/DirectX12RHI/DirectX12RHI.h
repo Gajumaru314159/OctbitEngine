@@ -96,8 +96,8 @@ namespace ob::rhi::dx12 {
 
 
 		//! @brief  デスクリプタ・テーブルを生成
-		Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) override;
-		Ref<DescriptorTable> createDescriptorTable(const Ref<RootSignature>& signature, s32 slot)override;
+		Ref<DescriptorLayout>	createDescriptorLayout(const DescriptorLayoutDesc& desc) override;
+		Ref<DescriptorTable>	createDescriptorTable(const DescriptorTableDesc& desc) override;
 
 
 

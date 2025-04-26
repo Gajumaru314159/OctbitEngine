@@ -10,7 +10,7 @@
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
-#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 #include <magic_enum.hpp>
 
 namespace ob::rhi::vulkan
@@ -20,17 +20,18 @@ namespace ob::rhi::vulkan
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const Ref<RootSignature>& signature, s32 slot)
+	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const DescriptorTableDesc& desc)
 		: m_rhi(rhi)
-		, m_signature(signature.cast<VulkanRootSignature>())
-		, m_slot(slot)
+		, m_desc(desc)
 	{
 
 		auto& device = rhi.getDevice();
 
-		if (m_signature == nullptr) throw Exception("RootSignatureが未設定です");
+		m_layout = m_desc.layout.cast<VulkanDescriptorLayout>();
 
-		s32 itemCount = m_signature->getItemCount(slot);
+		if (m_layout == nullptr) throw Exception("RootSignatureが未設定です");
+
+		s32 itemCount = m_layout->getDesc().items.size();
 
 		m_elemetns.resize(itemCount);
 
@@ -39,10 +40,10 @@ namespace ob::rhi::vulkan
 		HashMap<vk::DescriptorType, u32> descTypeCount;
 
 
-		auto& rSlot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
+		auto& items = m_layout->getDesc().items;
 
 		// タイプごとのアイテム数を計算
-		for (auto& item : rSlot.items) {
+		for (auto& item : items) {
 			switch (item.type)
 			{
 			case BindingType::Texture:
@@ -86,7 +87,7 @@ namespace ob::rhi::vulkan
 
 		
 		// DescriptorSetを生成
-		vk::DescriptorSetLayout descSetLayouts[] = { m_signature->getLayouts(slot)};
+		vk::DescriptorSetLayout descSetLayouts[] = { m_layout->getNative()};
 		vk::DescriptorSetAllocateInfo allocInfo;
 		allocInfo.descriptorPool = m_pool;
 		allocInfo.descriptorSetCount = 1;
@@ -101,22 +102,10 @@ namespace ob::rhi::vulkan
 		manage();
 	}
 
-	//! @brief              コンストラクタ　
-	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const BindingSlot& desc)
-		: m_rhi(rhi)
-		, m_desc(desc)
-	{
-		// TODO 廃止
-
-		OB_NOTIMPLEMENTED();
-
-		manage();
-	}
-
 
 	//! @brief      名前を取得
 	const String& VulkanDescriptorTable::getName()const {
-		return m_name;
+		return m_desc.name;
 	}
 
 
@@ -143,9 +132,10 @@ namespace ob::rhi::vulkan
 
 		if (auto p = resource.cast<VulkanBuffer>()) {
 
+			// TODO 引数再確認
 			vk::DescriptorBufferInfo descBufInfo[1];
 			descBufInfo[0].buffer = p->getNative();
-			descBufInfo[0].offset = m_slot;
+			descBufInfo[0].offset = index;
 			descBufInfo[0].range = 1;
 
 			vk::WriteDescriptorSet writeDescSet;
@@ -249,26 +239,31 @@ namespace ob::rhi::vulkan
 		return true;
 	}
 
+	//! @brief  バインドレスハンドルに使用するインデックスを取得
+	BindlessHandle VulkanDescriptorTable::getBindlessHandle(s32 index)const {
+		return BindlessHandle{ };
+	}
+
 
 	//! @brief CommandListに記録
-	void VulkanDescriptorTable::record(vk::CommandBuffer commandBuffer, s32 slot) const {
-		commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_signature->getNative(), slot, *m_set, {});
+	void VulkanDescriptorTable::record(vk::CommandBuffer commandBuffer, vk::PipelineLayout pipeline, s32 slot) const {
+		commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline, slot, *m_set, {});
 	}
 
 
 	//! @brief  Bufferから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, vk::DescriptorType& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
+		auto& items = m_layout->getDesc().items;
 
 		if (!buffer) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if (!is_in_range(index, items)) return false;
 
 		auto& desc = buffer->getDesc();
 		bool hasSRV = desc.flags.has(BufferFlag::ShaderResource);
 		bool hasUAV = desc.flags.has(BufferFlag::UnorderedAccess);
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Buffer:
 			type = vk::DescriptorType::eUniformBuffer;
 			return hasSRV;
@@ -304,16 +299,16 @@ namespace ob::rhi::vulkan
 	//! @brief  Textureから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, vk::DescriptorType& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
+		auto& items = m_layout->getDesc().items;
 
 		if (!texture) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if (!is_in_range(index, items)) return false;
 
 		auto& desc = texture->desc();
 		bool hasSRV = desc.flags.has(TextureFlag::ShaderResource);
 		bool hasUAV = desc.flags.has(TextureFlag::UnorderedAccess);
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Texture:
 			type = vk::DescriptorType::eSampledImage;
 			return hasSRV;
@@ -329,12 +324,12 @@ namespace ob::rhi::vulkan
 	//! @brief  Samplerから適したDescrptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, vk::DescriptorType& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
+		auto& items = m_layout->getDesc().items;
 
 		if (!sampler) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if (!is_in_range(index, items)) return false;
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Sampler:
 			type = vk::DescriptorType::eSampler;
 			return true;

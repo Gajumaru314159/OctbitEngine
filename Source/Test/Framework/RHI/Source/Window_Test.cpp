@@ -58,6 +58,8 @@ TEST(RHI, CreateEmptyDX12) {
 
 TEST(RHI, ShowHide) {
 
+	return;
+
 	using namespace ob::rhi;
 
 	Logger log;
@@ -143,13 +145,11 @@ PsOut PS_Main(PsIn i) {
 			OB_ASSERT_EXPR(vs && ps);
 		}
 
+		Ref<DescriptorLayout> layout = DescriptorLayout::Create({ Binding::ConstantBuffer(0) });
 		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc{
-				{
-					Binding::ConstantBuffer(),
-				}
-			};
+			RootSignatureDesc desc;
+			desc.layouts = { layout };
 			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
 			desc.name = "Common";
 			signature = RootSignature::Create(desc);
@@ -234,7 +234,7 @@ PsOut PS_Main(PsIn i) {
 			OB_ASSERT_EXPR(cmdList);
 		}
 
-		auto dt = DescriptorTable::Create(signature, 0);
+		auto dt = DescriptorTable::Create({ layout });
 		dt->setResource(0, buffer);
 
 

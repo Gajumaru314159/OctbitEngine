@@ -56,17 +56,6 @@ namespace ob::rhi::dx12 {
         //! @brief  ネイティブオブジェクトを取得
         auto getNative()const noexcept { return m_rootSignature.Get(); };
 
-        s32 getItemCount(s32 slot) const {
-            if (!is_in_range(slot, m_desc.slots)) return false;
-            return m_desc.slots[slot].items.size();
-        }
-
-		bool isSampler(s32 slot)const {
-            if (!is_in_range(slot, m_desc.slots)) return false;
-            if (m_desc.slots[slot].items.empty()) return false;
-			return m_desc.slots[slot].items.front().type == BindingType::Sampler;
-		}
-
     private:
         RootSignatureDesc m_desc;
 

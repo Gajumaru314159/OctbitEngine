@@ -10,17 +10,10 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 
-//===============================================================
-// クラス定義
-//===============================================================
-namespace ob::rhi{
-	class Texture;
-	class Buffer;
-}
-
 namespace ob::rhi::dx12 {
 	class DirectX12RHI;
 	class DescriptorHeap;
+	class DirectX12DescriptorLayout;
 }
 
 //===============================================================
@@ -41,11 +34,8 @@ namespace ob::rhi::dx12 {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        DirectX12DescriptorTable(DirectX12RHI& device,DescriptorHeap& heap, const Ref<RootSignature>& signature, s32 slot);
+        DirectX12DescriptorTable(DirectX12RHI& device, const DescriptorTableDesc& desc, DescriptorHeap& heap, DescriptorHeap& heap2);
 		
-		DirectX12DescriptorTable(DirectX12RHI& device, DescriptorHeap& heap, const BindingSlot& desc);
-
-
 
 		//! @brief  妥当な状態か
 		bool isValid()const;
@@ -53,6 +43,8 @@ namespace ob::rhi::dx12 {
 
 		//! @brief      名前を取得
 		const String& getName()const override;
+
+		const DescriptorTableDesc& getDesc() const override { return m_desc;  }
 
 
 		//! @brief  リソースを設定
@@ -62,20 +54,8 @@ namespace ob::rhi::dx12 {
 		bool setResource(s32 index, const Ref<Sampler>& resource) override;
 		//! @}
 
-		//! @brief  CPUハンドル取得
-		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(s32 index = 0)const {
-			return m_handle.getCpuHandle(index);
-		}
-
-		//! @brief  GPUハンドル取得
-		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(s32 index = 0)const {
-			return m_handle.getGpuHandle(index);
-		}
-
 		//! @brief  バインドレスハンドルに使用するインデックスを取得
-		u32 getBindlessIndex(s32 index = 0)const override {
-			return m_handle.getBindlessIndex(index);
-		}
+		BindlessHandle getBindlessHandle(s32 index = 0)const override;
 
 	public:
 
@@ -89,13 +69,11 @@ namespace ob::rhi::dx12 {
 
     private:
 		DirectX12RHI&		m_rhi;
+		DescriptorTableDesc m_desc;
+		DirectX12DescriptorLayout* m_layout = nullptr;
 
-		BindingSlot			m_desc;
-		Ref<DirectX12RootSignature>  m_signature;
-		s32					m_slot = -1;
-
-		String				m_name;
-        DescriptorHandle	m_handle;
+		DescriptorHandle	m_samplerHandle;
+		DescriptorHandle	m_othersHandle;
 
 		using Element = Variant<Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
 

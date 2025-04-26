@@ -26,6 +26,7 @@ namespace ob::rhi {
 	class Buffer;
 	class CommandList;
 	class DescriptorTable;
+	class DescriptorLayout;
 	class Display;
 	class PipelineState;
 	class RenderTexture;

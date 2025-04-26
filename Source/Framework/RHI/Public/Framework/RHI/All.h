@@ -10,6 +10,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Constants.h>
+#include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/RenderTexture.h>

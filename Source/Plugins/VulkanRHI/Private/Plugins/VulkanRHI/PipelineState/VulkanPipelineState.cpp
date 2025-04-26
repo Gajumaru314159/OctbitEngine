@@ -31,6 +31,8 @@ namespace ob::rhi::vulkan {
 			return;
 		}
 
+		m_layout = desc.rootSignature.cast<VulkanRootSignature>()->getNative();
+
 		auto& device = rhi.getDevice();
 
 		FixedVector<vk::PipelineShaderStageCreateInfo, 8> stages;

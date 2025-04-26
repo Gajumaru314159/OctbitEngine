@@ -334,11 +334,15 @@ namespace ob::rhi::vulkan {
 	//! @brief      デスクリプタテーブルを設定
 	void VulkanCommandList::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
 
+		auto pipeline = m_pipeline.cast<VulkanPipelineState>();
+		OB_ASSERT(pipeline != nullptr, "先にPipelineStateを設定してください");
+		auto layout = pipeline->getLayout();
+
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
 
 			if (auto impl = param.table.cast<VulkanDescriptorTable>()) {
-				impl->record(m_commandBuffer, param.slot);
+				impl->record(m_commandBuffer, layout, param.slot);
 			} else {
 				LOG_FATAL("不正な引数。デスクリプタテーブルが不正です。");
 			}

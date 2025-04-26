@@ -40,28 +40,14 @@ namespace ob::rhi::vulkan {
 
     public:
 
-		vk::DescriptorSetLayout getLayouts(s32 slot)const {
-            if (!is_in_range(slot, m_layouts)) return {};
-			return m_layouts.at(slot);
-		}
-
 		vk::PipelineLayout getNative() const noexcept
 		{
 			return *m_pipelineLayout;
 		}
 
-        s32 getItemCount(s32 slot) const {
-            if (!is_in_range(slot, m_desc.slots)) return false;
-            return m_desc.slots[slot].items.size();
-        }
-
-
     private:
 
         RootSignatureDesc m_desc;
-
-        Vector<vk::raii::DescriptorSetLayout> m_layouts;
-
 		vk::raii::PipelineLayout m_pipelineLayout = nullptr;
 
     };

@@ -12,6 +12,8 @@
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/DisplayDesc.h>
+#include <Framework/RHI/Types/DescriptorLayoutDesc.h>
+#include <Framework/RHI/Types/DescriptorTableDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
@@ -51,44 +53,37 @@ namespace ob::rhi {
 
         //! @brief  説明
 
-        virtual Ref<Display>        createDisplay(const DisplayDesc& desc) { return nullptr; }
+        virtual Ref<Display>                createDisplay(const DisplayDesc& desc) { return nullptr; }
 
-        virtual Ref<CommandList>    createCommandList(const CommandListDesc& desc) { return nullptr; }
+        virtual Ref<CommandList>            createCommandList(const CommandListDesc& desc) { return nullptr; }
 
-        virtual Ref<RootSignature>  createRootSignature(const RootSignatureDesc& desc) { return nullptr; }
-        virtual Ref<PipelineState>  createPipelineState(const PipelineStateDesc& desc) { return nullptr; }
+        virtual Ref<RootSignature>          createRootSignature(const RootSignatureDesc& desc) { return nullptr; }
+        virtual Ref<PipelineState>          createPipelineState(const PipelineStateDesc& desc) { return nullptr; }
 
-        virtual Ref<Buffer>         createBuffer(const BufferDesc& desc) { return nullptr; }
+        virtual Ref<Buffer>                 createBuffer(const BufferDesc& desc) { return nullptr; }
 
-        virtual Ref<Texture>        createTexture(const TextureDesc& desc) { return nullptr; }
-        virtual Ref<Texture>        createTexture(StringView name,BlobView blob) { return nullptr; }
-        virtual Ref<Texture>        createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { return nullptr; }
-        virtual Ref<RenderTexture>  createRenderTexture(const RenderTextureDesc& desc) { return nullptr; }
+        virtual Ref<Texture>                createTexture(const TextureDesc& desc) { return nullptr; }
+        virtual Ref<Texture>                createTexture(StringView name,BlobView blob) { return nullptr; }
+        virtual Ref<Texture>                createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { return nullptr; }
+        virtual Ref<RenderTexture>          createRenderTexture(const RenderTextureDesc& desc) { return nullptr; }
 
-        virtual Ref<Sampler>        createSampler(const SamplerDesc& desc) { return nullptr; }
+        virtual Ref<Sampler>                createSampler(const SamplerDesc& desc) { return nullptr; }
 
-        virtual Ref<Shader>         compileShader(const ShaderCompileDesc& desc) { return nullptr; }
-        virtual Ref<Shader>         loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
+        virtual Ref<Shader>                 compileShader(const ShaderCompileDesc& desc) { return nullptr; }
+        virtual Ref<Shader>                 loadShader(BlobView binary, ShaderStage stage) { return nullptr; }
 
-        virtual Ref<DescriptorTable>createDescriptorTable(const BindingSlot& desc) { return nullptr; }
-        virtual Ref<DescriptorTable>createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { return nullptr; }
+        virtual Ref<DescriptorLayout>       createDescriptorLayout(const DescriptorLayoutDesc& desc) { return nullptr; }
+        virtual Ref<DescriptorTable>        createDescriptorTable(const DescriptorTableDesc& desc) { return nullptr; }
 
-        virtual Ref<RenderPass>     createRenderPass(const RenderPassDesc& desc) { return nullptr; }
+        virtual Ref<RenderPass>             createRenderPass(const RenderPassDesc& desc) { return nullptr; }
 
-        //virtual IFence*           createFence(const FenceDesc&);
 
-        //void changeSyncType(SyncType)=0;
-        // virtual virtual bool isHdrSupported()const=0;
-        // virtual bool isMultiDrawSupported()const=0;
-        // virtual bool isAsyncComputeSupported()const=0;
-        // virtual bool isRaytracingSupported()const=0;
+        virtual Ref<GraphicFileHandle>      createGraphicFileHandle(StringView path) { return nullptr; }
+        virtual Ref<GraphicFileEvent>       createGraphicFileEvent() { return nullptr; }
+        virtual Ref<GraphicFileQueue>       createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }
 
-        virtual Ref<GraphicFileHandle>  createGraphicFileHandle(StringView path) { return nullptr; }
-        virtual Ref<GraphicFileEvent>   createGraphicFileEvent() { return nullptr; }
-        virtual Ref<GraphicFileQueue>   createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }
-
-        virtual bool                    generateGraphicFile(StringView input, StringView output, s32 compressionLevel) { return false; }
-        virtual Vector<GraphicFileMipInfo> prepareGraphicFile(StringView path) { return {}; }
+        virtual bool                        generateGraphicFile(StringView input, StringView output, s32 compressionLevel) { return false; }
+        virtual Vector<GraphicFileMipInfo>  prepareGraphicFile(StringView path) { return {}; }
 
 		const RHIConfig& getConfig()const { return m_config; }
 

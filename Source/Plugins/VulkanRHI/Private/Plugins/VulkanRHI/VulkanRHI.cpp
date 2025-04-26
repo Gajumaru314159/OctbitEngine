@@ -9,6 +9,7 @@
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
@@ -566,11 +567,11 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  デスクリプタ・テーブルを生成
-	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const BindingSlot& desc) { 
-		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, desc);
+	Ref<DescriptorLayout> VulkanRHI::createDescriptorLayout(const DescriptorLayoutDesc& desc) { 
+		SAFE_CREATE(DescriptorLayout, VulkanDescriptorLayout, *this, desc);
 	}
-	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const Ref<RootSignature>& signature, s32 slot) { 
-		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, signature,slot);
+	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const DescriptorTableDesc& desc) {
+		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, desc);
 	}
 
 

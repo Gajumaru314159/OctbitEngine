@@ -8,6 +8,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
+#include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
@@ -20,28 +21,18 @@ namespace ob::rhi::dx12
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12RHI& rhi, DescriptorHeap& heap, const Ref<RootSignature>& signature, s32 slot)
-		: m_rhi(rhi)
-		, m_signature(signature.cast<DirectX12RootSignature>())
-		, m_slot(slot)
-	{
-		if (m_signature == nullptr) return;
-		s32 itemCount = m_signature->getItemCount(slot);
-
-		heap.allocateHandle(m_handle, itemCount);
-
-		m_elemetns.resize(itemCount);
-
-		manage();
-	}
-
-	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12RHI& rhi, DescriptorHeap& heap, const BindingSlot& desc)
+	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12RHI& rhi, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
 		: m_rhi(rhi)
 		, m_desc(desc)
 	{
-		heap.allocateHandle(m_handle, desc.items.size());
+		m_layout = m_desc.layout.cast<DirectX12DescriptorLayout>();
+		if (m_layout == nullptr) return;
 
-		m_elemetns.resize(desc.items.size());
+		auto heapInfo = m_layout->getHeapInfo();
+		heap0.allocateHandle(m_samplerHandle, heapInfo.samplerNum);
+		heap1.allocateHandle(m_othersHandle, heapInfo.othersNum);
+
+		m_elemetns.resize(m_layout->getDesc().items.size());
 
 		manage();
 	}
@@ -49,13 +40,13 @@ namespace ob::rhi::dx12
 
 	//! @brief  妥当な状態か
 	bool DirectX12DescriptorTable::isValid()const {
-		return !m_handle.empty();
+		return !m_samplerHandle.empty() || !m_othersHandle.empty();
 	}
 
 
 	//! @brief      名前を取得
 	const String& DirectX12DescriptorTable::getName()const {
-		return m_name;
+		return m_desc.name;
 	}
 
 
@@ -80,7 +71,8 @@ namespace ob::rhi::dx12
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Buffer>()) {
-			auto handle = m_handle.getCpuHandle(index);
+			auto mapInfo = m_layout->getMapInfo(index);
+			auto handle = m_othersHandle.getCpuHandle(mapInfo.index);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_CBV)p->createCBV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle);
@@ -110,7 +102,8 @@ namespace ob::rhi::dx12
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Texture>()) {
-			auto handle = m_handle.getCpuHandle(index);
+			auto mapInfo = m_layout->getMapInfo(index);
+			auto handle = m_othersHandle.getCpuHandle(mapInfo.index);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle,0);
 		}
@@ -138,19 +131,32 @@ namespace ob::rhi::dx12
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Sampler>()) {
+			auto mapInfo = m_layout->getMapInfo(index);
 			auto source = p->getCopyableHandle();
-			auto dest = m_handle.getCpuHandle(index);
+			auto dest = m_samplerHandle.getCpuHandle(mapInfo.index);
 			
 			m_rhi.getNative()->CopyDescriptorsSimple(1, dest, source, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 		}
 		return true;
 	}
 
+	//! @brief  バインドレスハンドルに使用するインデックスを取得
+	BindlessHandle DirectX12DescriptorTable::getBindlessHandle(s32 index)const {
+
+		auto& items = m_layout->getDesc().items;
+		auto mapInfo = m_layout->getMapInfo(index);
+
+		BindlessHandle handle;
+		handle.type = items.at(index).type;
+		if (mapInfo.type == DescriptorHeapType::Sampler) handle.index = m_samplerHandle.getBindlessIndex(mapInfo.index);
+		if (mapInfo.type == DescriptorHeapType::CBV_SRV_UAV) handle.index = m_othersHandle.getBindlessIndex(mapInfo.index);
+
+		return handle;
+	}
+
+
 	//! @brief CommandListに記録 
 	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,s32 slot) const {
-
-		if (slot < 0) slot = m_slot;
-		OB_ASSERT(0<=slot,"スロット指定が必要です");
 
 		bool isRootDescriptor = false;
 		if (isRootDescriptor) {
@@ -159,7 +165,20 @@ namespace ob::rhi::dx12
 			// cmdList.SetGraphicsRootShaderResourceView(m_slot, address);
 			// cmdList.SetGraphicsRootUnorderedAccessView(m_slot, address);
 		} else {
-			cmdList.SetGraphicsRootDescriptorTable(slot, getGpuHandle());
+
+			s32 count = 0;
+			if (!m_samplerHandle.empty()) count++;
+			if (!m_othersHandle.empty()) count++;
+
+			OB_ASSERT(count<2,"SamplerとOthersの混合は非対応です");
+
+			if (!m_samplerHandle.empty()) {
+				cmdList.SetGraphicsRootDescriptorTable(slot, m_samplerHandle.getGpuHandle());
+			}
+			if (!m_othersHandle.empty()) {
+				cmdList.SetGraphicsRootDescriptorTable(slot, m_othersHandle.getGpuHandle());
+			}
+
 		}
 	}
 
@@ -168,16 +187,15 @@ namespace ob::rhi::dx12
 
 	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
-
+		auto& items = m_layout->getDesc().items;
 		if (!buffer) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if(!is_in_range(index, items)) return false;
 
 		auto& desc = buffer->getDesc();
 		bool hasSRV = desc.flags.has(BufferFlag::ShaderResource);
 		bool hasUAV = desc.flags.has(BufferFlag::UnorderedAccess);
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Buffer:
 			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 			return hasSRV;
@@ -210,16 +228,15 @@ namespace ob::rhi::dx12
 	}
 	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
-
+		auto& items = m_layout->getDesc().items;
 		if (!texture) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if (!is_in_range(index, items)) return false;
 
 		auto& desc = texture->desc();
 		bool hasSRV = desc.flags.has(TextureFlag::ShaderResource);
 		bool hasUAV = desc.flags.has(TextureFlag::UnorderedAccess);
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Texture:
 			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 			return hasSRV;
@@ -232,12 +249,11 @@ namespace ob::rhi::dx12
 	}
 	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 
-		auto& slot = m_signature ? m_signature->getDesc().slots.at(m_slot) : m_desc;
-
+		auto& items = m_layout->getDesc().items;
 		if (!sampler) return false;
-		if (!is_in_range(index, slot.items)) return false;
+		if (!is_in_range(index, items)) return false;
 
-		switch (slot.items[index].type) {
+		switch (items[index].type) {
 		case BindingType::Sampler:
 			type = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
 			return true;

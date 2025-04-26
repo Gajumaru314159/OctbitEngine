@@ -13,6 +13,7 @@
 #include <Framework/RHI/Shader.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Sampler.h>
@@ -229,20 +230,9 @@ namespace ob::rhi::vulkan {
 
 		// テクスチャが違う場合再バインド
 		if (m_bindedTexture != texture) {
-
-			m_bindedTextureTable.reset();
 			m_bindedTexture = texture.get();
-
-			if (m_bindedTexture) {
-				m_bindedTextureTable = DescriptorTable::Create(m_signature, 0);
-				m_bindedTextureTable->setResource(0, m_bindedTexture);
-			}
-
+			m_table->setResource(0, m_bindedTexture);
 		}
-
-		// バインドされていなければスキップ
-		if (!m_bindedTextureTable)
-			return;
 
 		if(auto impl = cmdList.cast<VulkanCommandList>()) {
 
@@ -280,11 +270,10 @@ namespace ob::rhi::vulkan {
 			cmdList->setPipelineState(m_pipeline);
 
 			SetDescriptorTableParam tableParam[] = {
-				{m_bindedTextureTable, 0},
-				{m_bindedSamplerTable, 1},
+				{m_table, 0}
 			};
 
-			cmdList->setRootDesciptorTable(tableParam, 2);
+			cmdList->setRootDesciptorTable(tableParam, std::size(tableParam));
 
 			cmdList->setVertexBuffer(m_verices);
 
@@ -334,7 +323,7 @@ namespace ob::rhi::vulkan {
 			String code;
 			code.append("[[vk::binding(0, 0)]]											\n");
 			code.append("Texture2D g_mainTex:register(t0);								\n");
-			code.append("[[vk::binding(0, 1)]]											\n");
+			code.append("[[vk::binding(1, 0)]]											\n");
 			code.append("SamplerState g_mainSampler:register(s0);						\n");
 			code.append("// IN / OUT													\n");
 			code.append("struct VsIn {													\n");
@@ -360,16 +349,16 @@ namespace ob::rhi::vulkan {
 			OB_ASSERT_EXPR(vs && ps);
 		}
 
+		{
+			m_layout = DescriptorLayout::Create({ Binding::Texture(0),Binding::Sampler(1) });
+			m_table = DescriptorTable::Create({ m_layout });
+			m_table->setResource(1, m_bindedSampler);
+		}
+
 		Ref<RootSignature> signature;
 		{
-			RootSignatureDesc desc{
-				{
-					Binding::Texture(),
-				},
-				{
-					Binding::Sampler(),
-				}
-			};
+			RootSignatureDesc desc;
+			desc.layouts = { m_layout };
 			desc.name = m_desc.name;
 			signature = RootSignature::Create(desc);
 			OB_ASSERT_EXPR(signature);
@@ -400,8 +389,6 @@ namespace ob::rhi::vulkan {
 		m_signature = signature;
 		m_pipeline = pipeline;
 
-		m_bindedSamplerTable = DescriptorTable::Create(m_signature, 1);
-		m_bindedSamplerTable->setResource(0, m_bindedSampler);
 	}
 
 

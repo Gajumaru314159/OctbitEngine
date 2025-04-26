@@ -11,6 +11,8 @@
 
 namespace ob::rhi::vulkan {
 
+	class VulkanDescriptorLayout;
+
     //! @brief  デスクリプタ・テーブル実装(DirectX12)
     class VulkanDescriptorTable :public DescriptorTable {
     public:
@@ -20,13 +22,13 @@ namespace ob::rhi::vulkan {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        VulkanDescriptorTable(VulkanRHI& rhi, const Ref<RootSignature>& signature, s32 slot);
-		
-		VulkanDescriptorTable(VulkanRHI& rhi, const BindingSlot& desc);
+        VulkanDescriptorTable(VulkanRHI& rhi, const DescriptorTableDesc& desc);
 
 
 		//! @brief      名前を取得
 		const String& getName()const override;
+
+		const DescriptorTableDesc& getDesc()const override { return m_desc; }
 
 
 		//! @brief  リソースを設定
@@ -37,11 +39,11 @@ namespace ob::rhi::vulkan {
 		//! @}
 
 		//! @brief  バインドレスハンドルに使用するインデックスを取得
-		u32 getBindlessIndex(s32 index = 0)const override { return 0; }
+		BindlessHandle getBindlessHandle(s32 index = 0)const override;
 
 	public:
 
-		void record(vk::CommandBuffer commandBuffer, s32 slot) const;
+		void record(vk::CommandBuffer commandBuffer, vk::PipelineLayout pipeline, s32 slot) const;
 
 	private:
 
@@ -66,11 +68,9 @@ namespace ob::rhi::vulkan {
 
     private:
 		VulkanRHI&				m_rhi;
-		String					m_name;
+		DescriptorTableDesc		m_desc;
+		VulkanDescriptorLayout*	m_layout = nullptr;
 
-		BindingSlot				m_desc;
-		Ref<VulkanRootSignature>m_signature;
-		s32						m_slot = -1;
 
 		Vector<Element>			m_elemetns;
 

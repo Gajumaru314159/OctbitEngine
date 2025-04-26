@@ -6,7 +6,8 @@
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/RootSignatureDesc.h>
+#include <Framework/RHI/Types/BindlessHandle.h>
+#include <Framework/RHI/Types/DescriptorTableDesc.h>
 
 namespace ob::rhi {
 
@@ -19,12 +20,11 @@ namespace ob::rhi {
         //! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
         //! @param name         デバッグ名
-        static Ref<DescriptorTable> Create(const Ref<RootSignature>& signature, s32 slot);
-        static Ref<DescriptorTable> Create(const PipelineStateDesc& desc, s32 slot);
-        // static Ref<DescriptorTable> Create(const Ref<PipelineState>& pipeline,s32 slot);
+        static Ref<DescriptorTable> Create(const DescriptorTableDesc& desc);
 
-        static Ref<DescriptorTable> Create(const BindingSlot& desc);
     public:
+
+        virtual const DescriptorTableDesc& getDesc() const = 0;
 
         //! @brief  リソースを設定
         //! @{
@@ -35,7 +35,7 @@ namespace ob::rhi {
 
 
         //! @brief  CPUハンドル取得
-        virtual u32 getBindlessIndex(s32 index = 0)const = 0;
+        virtual BindlessHandle getBindlessHandle(s32 index = 0)const = 0;
 
     };
 

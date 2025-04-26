@@ -4,33 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/ShaderStage.h>
 #include <Framework/RHI/Types/SamplerDesc.h>
 
 namespace ob::rhi {
-
-#pragma region Enum
-
-
-	enum class BindingType {
-		// [HLSL]						[D3D12]				[GLSL]						[Vulkan]
-		Texture,				// (t) Texture2D				SRV					sampler2D					eSampledImage
-		RWTexture,				// (u) RWTexture2D				UAV					image2D						eStorageImage
-		Buffer,					// (t) Buffer<T>				SRV					buffer						eUniformTexelBuffer
-		RWBuffer,				// (u) RWBuffer<T>				UAV					buffer						eStorageTexelBuffer
-		StructuredBuffer,		// (t) StructuredBuffer<T>		SRV					buffer						eStorageBuffer
-		RWStructuredBuffer,		// (u) RWStructuredBuffer<T>	UAV					buffer						eStorageBuffer
-		ByteAddressBuffer,		// (t) ByteAddressBuffer		SRV					buffer						eStorageBuffer
-		RWByteAddressBuffer,	// (u) RWByteAddressBuffer		UAV					buffer						eStorageBuffer
-		ConstantBuffer,			// (b) ConstantBuffer			CBV					uniform						eUniformBuffer
-		Sampler,				// (s) SamplerState				Sampler				sampler						eSampler
-	};
-
-
-#pragma endregion
-
-#pragma region Flag
 
 	//! @brief      ルートシグネチャ・フラグ
 	//! @see        RootSignatureDesc
@@ -51,9 +30,6 @@ namespace ob::rhi {
 	//! @see        RootSignatureDesc
 	using RootSignatureFlags = BitFlags<RootSignatureFlag>;
 
-#pragma endregion
-
-#pragma region Sub Structure
 
 	//! @brief      ルートコンスタント定義
 	//! @see        RootParameter
@@ -98,81 +74,24 @@ namespace ob::rhi {
 			:visibility(visibility), sampler(sampler), registerNo(registerNo), registerSpace(registerSpace) {}
 	};
 
-#pragma endregion
-
 	//! @brief      静的サンプラー・配列
 	using StaticSamplerArray = FixedVector<StaticSamplerDesc, STATIC_SAMPLER_MAX>;
 
 
-
-	struct BindingItem {
-		BindingType type;
-		s32         index; // register / binding 負の数の場合は前の要素からの相対値
-		s32         space; // space / set
-
-		constexpr BindingItem(BindingType type, s32 index, s32 space)
-			: type(type), index(index), space(space) {}
-	};
-
-	struct BindingSlot {
-		Vector<BindingItem> items;
-
-		BindingSlot() = default;
-		BindingSlot(std::initializer_list<BindingItem> items) : items(items) {}
-	};
-
+	//! @brief ルートシグネチャ定義
 	struct RootSignatureDesc {
-		String				name;		//!< 名前
-		Vector<BindingSlot> slots;		//!< バインディングスロット
-		StaticSamplerArray	samplers;	//!< 静的サンプラー
-		RootConstantsDesc	constants;	//!< ルートコンスタント
-		RootSignatureFlags	flags;		//!< フラグ
+		String							name;		//!< 名前
+		Vector<Ref<DescriptorLayout>>	layouts;	//!< バインディングスロット
+		StaticSamplerArray				samplers;	//!< 静的サンプラー
+		RootConstantsDesc				constants;	//!< ルートコンスタント
+		RootSignatureFlags				flags;		//!< フラグ
 
 		RootSignatureDesc() = default;
-		RootSignatureDesc(Vector<BindingSlot> slots) : slots(slots) {}
-		RootSignatureDesc(std::initializer_list<BindingSlot> slots) : slots(slots) {}
-
-		void normalize() {
-			// インデックスを正規化
-			s32 index = 0;
-			for (auto& slot : slots) {
-				for (auto [i, item] : Indexed(slot.items)) {
-					// 先頭がオフセット指定ならば0に置き換え
-					if (i == 0 && item.index < 0) {
-						item.index = 0;
-					}
-					// オフセット指定なら正規化
-					if (item.index < 0) {
-						item.index = index - item.index;
-					}
-					index = item.index;
-				}
-			}
-		}
-	};
-
-	//! @brief      BindingItem定義のユーティリティ
-	struct Binding {
-
-#define DECL_BINDING(TYPE) \
-		static constexpr BindingItem TYPE(s32 index = -1, s32 space = 0) {\
-			return BindingItem(BindingType::TYPE, index, space);\
-		}
-
-		// indexが負の場合は前のBindingItemのindexからの相対値を表します。
-		// 先頭のBindingItemが負の数の場合は0に置き換えられます
-		DECL_BINDING(Texture);
-		DECL_BINDING(RWTexture);
-		DECL_BINDING(Buffer);
-		DECL_BINDING(RWBuffer);
-		DECL_BINDING(StructuredBuffer);
-		DECL_BINDING(RWStructuredBuffer);
-		DECL_BINDING(ByteAddressBuffer);
-		DECL_BINDING(RWByteAddressBuffer);
-		DECL_BINDING(ConstantBuffer);
-		DECL_BINDING(Sampler);
-
-#undef DECL_BINDING
+		RootSignatureDesc(
+			std::initializer_list<Ref<DescriptorLayout>> layouts,
+			std::initializer_list<StaticSamplerDesc> samplers = {},
+			const RootConstantsDesc& constants = {},
+			RootSignatureFlags flags = {});
 	};
 
 }

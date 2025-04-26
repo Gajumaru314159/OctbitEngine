@@ -55,13 +55,13 @@ namespace ob::rhi::vulkan {
 		vk::raii::Fence				m_fence = nullptr;	
 
 		// 描画リソース    
+		Ref<DescriptorLayout>       m_layout;
 		Ref<RootSignature>          m_signature;
 		Ref<PipelineState>          m_pipeline;
 		Ref<Buffer>                 m_verices;
 		Ref<Texture>                m_bindedTexture;
 		Ref<Sampler>                m_bindedSampler;
-		Ref<DescriptorTable>        m_bindedTextureTable;
-		Ref<DescriptorTable>        m_bindedSamplerTable;
+		Ref<DescriptorTable>        m_table;
 
 		bool						m_visible = false;	
 

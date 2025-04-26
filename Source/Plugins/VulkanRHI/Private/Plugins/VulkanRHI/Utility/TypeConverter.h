@@ -6,6 +6,7 @@
 #pragma once
 #include <Framework/RHI/Types/TextureFormat.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
+#include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
@@ -29,7 +30,7 @@ namespace ob::rhi::vulkan {
 		static vk::ColorComponentFlags Convert(ColorMask value);
 		static vk::Format Convert(TextureFormat value);
 		static vk::ImageLayout Convert(TextureState value);
-		static  vk::DescriptorType Convert(BindingType value);
+		static vk::DescriptorType Convert(BindingType value);
 		static vk::Filter Convert(TextureFillter filter);
 		static vk::SamplerMipmapMode Convert(MipFillter mipFilter);
 		static vk::SamplerAddressMode Convert(TextureAddress address);

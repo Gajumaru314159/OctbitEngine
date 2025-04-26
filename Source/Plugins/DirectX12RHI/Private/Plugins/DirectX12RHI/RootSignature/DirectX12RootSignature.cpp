@@ -10,6 +10,7 @@
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
+#include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 
 namespace ob::rhi::dx12 {
 
@@ -48,24 +49,8 @@ namespace ob::rhi::dx12 {
 		parameters.reserve(100);
 		ranges.reserve(100);
 
-		// インデックスを正規化
-		s32 index = 0;
-		for (auto& slot : m_desc.slots) {
-			for (auto [i, item] : Indexed(slot.items)) {
-				// 先頭がオフセット指定ならば0に置き換え
-				if (i == 0 && item.index < 0) {
-					item.index = index;
-				}
-				// オフセット指定なら正規化
-				if (item.index < 0) {
-					item.index = index - item.index;
-				}
-				index = item.index;
-			}
-		}
-
 		// テーブル
-		for (auto& slot : m_desc.slots) {
+		for (auto& layout : m_desc.layouts) {
 
 			s32 rangeStart = (s32)ranges.size();
 
@@ -83,7 +68,7 @@ namespace ob::rhi::dx12 {
 			// NOTE 複雑なことをしなくても常にNumDescriptorsを1にしておけばよいのでは？
 			BindingItem last(BindingType::Texture, -1, -1);
 
-			for (auto [i, item] : Indexed(slot.items)) {
+			for (auto [i, item] : Indexed(layout->getDesc().items)) {
 
 				if (Convert(last.type) != Convert(item.type) || last.index + 1 != item.index || last.space != item.space) {
 					auto& range = ranges.emplace_back();
