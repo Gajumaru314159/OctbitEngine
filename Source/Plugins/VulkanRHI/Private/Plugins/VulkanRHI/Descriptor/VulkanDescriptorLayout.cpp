@@ -34,6 +34,18 @@ namespace ob::rhi::vulkan
 		vk::DescriptorSetLayoutCreateInfo info;
 		info.setBindings(bindings);
 
+
+		//std::vector<vk::DescriptorBindingFlags> bindFlag(vulkanLayoutBindings.size(), vk::DescriptorBindingFlagBits::ePartiallyBound);
+		//
+		//auto extendedInfo = vk::DescriptorSetLayoutBindingFlagsCreateInfo()
+		//	.setBindingCount(uint32_t(vulkanLayoutBindings.size()))
+		//	.setPBindingFlags(bindFlag.data());
+		//
+		//if (rhi.getConfig().enableBindless) {
+		//
+		//}
+
+
 		m_layout = device.createDescriptorSetLayout(info, rhi.getAllocationCallbacks());
 
 		manage();

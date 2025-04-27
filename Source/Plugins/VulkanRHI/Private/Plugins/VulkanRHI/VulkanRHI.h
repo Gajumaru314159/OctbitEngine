@@ -197,6 +197,9 @@ namespace ob::rhi::vulkan {
 		vk::DescriptorSetLayout getBindlessDescriptorSetLayout() const {
 			return m_bindlessDescriptorSetLayout;
 		}
+		vk::DescriptorSet getBindlessDescriptorSet() const {
+			return m_bindlessDescriptorSet;
+		}
 
 #ifdef OS_WINDOWS
 		//! @brief  シェーダーコンパイラ―を取得
@@ -255,6 +258,8 @@ namespace ob::rhi::vulkan {
 		VulkanFeatureInfo							m_featuresEx;
 
 		vk::raii::DescriptorSetLayout				m_bindlessDescriptorSetLayout = nullptr;
+		vk::raii::DescriptorPool					m_bindlessDescriptorPool = nullptr;
+		vk::raii::DescriptorSet						m_bindlessDescriptorSet = nullptr;
 
 #if OB_DEBUG
 		PFN_vkDebugMarkerSetObjectNameEXT			m_vkDebugMarkerSetObjectNameEXT;

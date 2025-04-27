@@ -516,6 +516,28 @@ namespace ob::rhi::vulkan {
 			m_bindlessDescriptorSetLayout = m_device.createDescriptorSetLayout(info, getAllocationCallbacks());
 
 			// TODO set
+			vk::DescriptorPoolSize poolSizes[2];
+			poolSizes[0].type = vk::DescriptorType::eMutableEXT;
+			poolSizes[0].descriptorCount = 100;
+			poolSizes[1].type = vk::DescriptorType::eMutableEXT;
+			poolSizes[1].descriptorCount = 100;
+
+			vk::DescriptorPoolCreateInfo poolInfo;
+			poolInfo.maxSets = 1;
+			poolInfo.flags |= vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
+			poolInfo.flags |= vk::DescriptorPoolCreateFlagBits::eUpdateAfterBindEXT; // Bindless用
+			poolInfo.setPoolSizes(poolSizes);
+
+			m_bindlessDescriptorPool = m_device.createDescriptorPool(poolInfo, getAllocationCallbacks());
+
+			vk::DescriptorSetLayout descSetLayouts[] = { m_bindlessDescriptorSetLayout };
+			vk::DescriptorSetAllocateInfo allocInfo;
+			allocInfo.descriptorPool = m_bindlessDescriptorPool;
+			allocInfo.descriptorSetCount = 1;
+			allocInfo.pSetLayouts = descSetLayouts;
+
+			auto sets = m_device.allocateDescriptorSets(allocInfo);
+			m_bindlessDescriptorSet = std::move(sets.front());
 
 		}
 	}

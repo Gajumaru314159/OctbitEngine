@@ -312,6 +312,12 @@ namespace ob::rhi::vulkan {
 		if (auto p = pipeline.cast<VulkanPipelineState>()) {
 			m_pipeline = pipeline;
 			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, p->getNative());
+
+			if (m_rhi.getConfig().enableBindless) {
+				auto bindlessSlot = p->getDesc().rootSignature->getDesc().layouts.size();//
+				m_commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, p->getLayout(), bindlessSlot, m_rhi.getBindlessDescriptorSet(), {});
+			}
+			
 		} else {
 			LOG_FATAL("不正な引数。パイプラインステートが不正です。");
 		}
