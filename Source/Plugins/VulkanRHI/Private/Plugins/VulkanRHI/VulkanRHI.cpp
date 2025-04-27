@@ -35,58 +35,28 @@
 
 namespace ob::rhi::vulkan {
 
-	/*
-	//@―---------------------------------------------------------------------------
-	//! @brief  レポートフラグからログカテゴリを取得
-	//@―---------------------------------------------------------------------------
-	static const StringView GetReportBitString(::VkDebugReportFlagsEXT flags)
-	{
-		if ((flags & VK_DEBUG_REPORT_INFORMATION_BIT_EXT) != 0)
-		{
-			return "INFO";
-		}
-		if ((flags & VK_DEBUG_REPORT_WARNING_BIT_EXT) != 0)
-		{
-			return "WARNING";
-		}
-		if ((flags & VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT) != 0)
-		{
-			return "PERFORMANCE_WARNING";
-		}
-		if ((flags & VK_DEBUG_REPORT_ERROR_BIT_EXT) != 0)
-		{
-			return "ERROR";
-		}
-		if ((flags & VK_DEBUG_REPORT_DEBUG_BIT_EXT) != 0)
-		{
-			return "DEBUG";
-		}
-		return "OTHER";
-	}
-
 	//@―---------------------------------------------------------------------------
 	//! @brief  デバッグレイヤのコールバック
 	//@―---------------------------------------------------------------------------
-	static VKAPI_ATTR VkBool32 VKAPI_CALL
-		DebugCallback(
-			::VkDebugReportFlagsEXT			flags,
-			::VkDebugReportObjectTypeEXT	objectType,
-			uint64_t						object,
-			size_t							location,
-			int32_t							messageCode,
-			const char*						pLayerPrefix,
-			const char* pMessage,
-			void*							pUserData)
-	{
+	static VkBool32 DebugUtilsMessengerCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,vk::DebugUtilsMessageTypeFlagsEXT messageTypes,const vk::DebugUtilsMessengerCallbackDataEXT* pCallbackData,void* pUserData) {
+
 		using namespace ob;
 
-		String message;
-		StringEncoder::Encode(pMessage, message);
+		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eError) {
+			LOG_ERROR("[VulkanRHI] {}", pCallbackData->pMessage);
+		}
+		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning) {
+			LOG_WARNING("[VulkanRHI] {}", pCallbackData->pMessage);
+		}
+		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo) {
+			LOG_INFO("[VulkanRHI] {}", pCallbackData->pMessage);
+		}
+		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose) {
+			LOG_TRACE("[VulkanRHI] {}", pCallbackData->pMessage);
+		}
 
-		LOG_ERROR("[{}]: {}", GetReportBitString(flags), message);
 		return VK_FALSE;
 	}
-	*/
 
 }
 
@@ -237,6 +207,24 @@ namespace ob::rhi::vulkan {
 			if (strcmp(name, VK_EXT_DEBUG_UTILS_EXTENSION_NAME) == 0) {
 				m_featuresEx.debugMarkerEnabled = true;
 			}
+		}
+
+		vk::DebugUtilsMessengerCreateInfoEXT debugUtilsCreateInfo;
+		if (m_vconfig.enableDebugLayer) {
+
+			if (m_vconfig.logLevel >= LogLevel::Error)		debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eError;
+			if (m_vconfig.logLevel >= LogLevel::Warning)	debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
+			if (m_vconfig.logLevel >= LogLevel::Info)		debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo;
+			if (m_vconfig.logLevel >= LogLevel::Trace)		debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose;
+
+			debugUtilsCreateInfo.messageType |= vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral;
+			debugUtilsCreateInfo.messageType |= vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation;
+			debugUtilsCreateInfo.messageType |= vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance;
+			// debugUtilsCreateInfo.messageType |= vk::DebugUtilsMessageTypeFlagBitsEXT::eDeviceAddressBinding; // VK_EXT_device_address_binding_reportが必要
+
+			debugUtilsCreateInfo.pfnUserCallback = DebugUtilsMessengerCallback;
+			debugUtilsCreateInfo.pUserData = nullptr;
+			instanceInfo.pNext = &debugUtilsCreateInfo;
 		}
 
 		m_instance = m_context.createInstance(instanceInfo, m_allocationCallbacks);

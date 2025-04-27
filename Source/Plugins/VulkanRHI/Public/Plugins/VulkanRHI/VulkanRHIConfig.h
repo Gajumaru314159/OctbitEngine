@@ -8,6 +8,7 @@ namespace ob::rhi::vulkan {
 
 	struct VulkanRHIConfig {
 		bool enableDebugLayer = false;
+		LogLevel logLevel = LogLevel::Warning;
 	};
 
 }
