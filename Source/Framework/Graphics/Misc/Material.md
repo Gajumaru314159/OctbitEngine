@@ -1,7 +1,7 @@
-﻿# Material
+﻿# Material {#Material}
 
-Materialは内部に複数のPassを持つ。  
-複数のPassがある場合でもプロパティは共通。
+Materialは内部に複数のPassを持ちます。(例:EarlyZ/Opacity)  
+複数のPassがある場合でもプロパティは共通しています。
 * Material
 	* Property[]
 		* Name
@@ -10,57 +10,70 @@ Materialは内部に複数のPassを持つ。
 		* Map<RenderTag,Subpass>
 		* Map<ShaderStage,Shader>
 
-## ローカル変数とグローバル変数
-* ローカル変数　：マテリアルごとに設定できる値
-* グローバル変数：全てのマテリアルで共通の値
-```c++
-Material::SetGlobalFloat("Time",Time::Now().toSeconds());
-Material::SetGlobalColor("LightColor",Color(1,1,0.8f));
-```
-内部的には新しくグローバル変数が追加されるたびにインデックスが追加される。
-```c++
-void SetGlobalFloat(StringView name,f32 value){
-	if(m_scalarNames.count(name)==0){
-		m_scalarNames.emplace_back(name,m_scalarNames.size());
-	}
-	m_scalars[m_scalarNames[name]]=value;
-}
-```
-マテリアルで使用する場合は生成時にインデックスが渡される
-```hlsl
-g_scalars[index];
-```
-TimeなどのBuilt-in変数はインデックスではなく専用の構造体で渡す。
+## 変数のスコープ
+変数を共有する単位で分けて管理します。
 
-## インスタンス変数
-モデル行列のようなインスタンスごとの値はインスタンス変数として定義される。  
-マテリアル毎にMaterialInstancePropertyとして設定すると一度の描画命令で異なる情報を描画できる。
-```hlsl
-struct InstanceProperties{
-	float4x4	matrix;
-	float4		color;
-};
-cbuffer Buffer : register(b0) {	
-	InstanceProperties ips[1024];				
-};
-```
-
-
-## カメラ変数
-カメラ行列やビュー行列など
-
-|名前|設定回数(フレーム内)|設定方法|
+|名前|管理者|使用例|
 |----|--------|---|
-|グローバル変数| 1回|```Material::SetColor("Color",Color(1,1,1,1));```|
-|カメラ変数| カメラ数 |-|
-|ローカル変数| マテリアル数 |```material->setColor("Color",Color(1,1,1,1));```|
-|インスタンス変数| マテリアル数 |-|
-
-
-## オブジェクトパラメータ
-* モデル行列はインスタンシングのため
+|グローバル変数|Graphics|時間|
+|マテリアル変数|Material|マテリアル毎のパラメータ|
+|シーン変数|RenderScene|ライト情報|
+|ビュー変数|RenderView|カメラ行列|
+|インスタンス変数|RenderUnit|インスタンシングのTransform配列|
 
 ## RenderPipelineからみたMaterial
-* RenderTagから描画するマテリアルを取得
+
+## MaterialPass
+MaterialPassはEarlyZやOpacityなど、同一のモデルを異なる方法で描画するための仕組みです。
+
+Materialは異なる頂点レイアウトのモデルの描画をサポートするために、最低限必要な頂点レイアウト(InputLayout)を設定します。
+
+描画に必要な情報として、RenderTargetのフォーマットやシェーダー、ブレンド方法などの設定も必要です。
+
+```cpp
+struct MaterialPass {
+	String name;
+
+    Vector<InputLayout>				inputLayout;
+	
+	rhi::RenderTargetFormatArray	colors;
+    Optional<rhi::TextureFormat>	depth;
+    rhi::BlendDescList		        blends;
+    rhi::RasterizerDesc		        rasterizer;
+    rhi::DepthStencilDesc	        depthStencil;
+
+	Ref<DescriptorLayout>			globalLayout;
+	Ref<DescriptorLayout>			sceneLayout;
+	Ref<DescriptorLayout>			viewLayout;
+	Ref<DescriptorLayout>			instanceLayout;
+};
+```
+
+## MaterialVariant
 
 ## MaterialLOD
+> [!warning]
+> MaterialVariantと設計を統合予定です。MaterialLODではShaderを指定せずに、どのMaterialVariantを使用するかを指定する予定です。
+
+MaterialLODは描画距離やグラフィックスクオリティに応じて、異なるシェーダーを使用するための仕組みです。これにより、パフォーマンスを最適化しつつ、視覚的な品質を維持することができます。
+ただし、マテリアルのパラメータはLOD間で共有されるため、LODごとに異なるシェーダーを使用する場合でも、同じマテリアルパラメータを使用できます。
+```cpp
+struct Shader {
+	Ref<ShaderProgram> vs;
+	Ref<ShaderProgram> ps;
+};
+
+struct MaterialLOD
+{
+	f32 quality = 1;
+	Shader shader;
+};
+
+struct MaterialPass {
+	Vector<MaterialLOD> lods;
+    ...
+};
+
+
+```
+

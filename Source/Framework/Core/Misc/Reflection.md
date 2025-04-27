@@ -1,4 +1,4 @@
-﻿Reflection
+﻿Reflection {#Reflection}
 ==========
 
 ## クラス一覧
@@ -29,7 +29,7 @@
 `OB_DEFINE_CLASS_INFO`は、クラスの型情報を登録するためのマクロです。  
 このマクロを使用することで、クラスのメンバー変数、メソッド、プロパティ、コンストラクタなどの情報を登録することができます。
 
-```c++
+```cpp
 class Fruit : public Food {
 public:
 	Fruit();
@@ -42,7 +42,7 @@ public:
 	f32 m_weight;
 };
 ```
-```c++
+```cpp
 OB_DEFINE_CLASS_INFO(Fruit) {
 	tag("Description", "Fruitフルーツ");
 	base<Food>();
@@ -60,14 +60,14 @@ OB_DEFINE_CLASS_INFO(Fruit) {
 `element()`の第一引数には列挙子の名前、第二引数には列挙子の値を指定します。
 必要に応じてチェーンメソッドの`desc()`を使用して説明を追加することができます。
 その他任意のタグを追加したい場合はチェーンメソッドの`tag()`を使用してください。
-```c++
+```cpp
 enum class FruitType : u32 {
 	Apple,
 	Melon,
 	Lemon,
 };
 ```
-```c++
+```cpp
 OB_DEFINE_ENUM_INFO(FruitType) {
 	tag("Description", "フルーツの種類");
 	element("Apple", T::Apple).desc("リンゴ");
@@ -76,14 +76,14 @@ OB_DEFINE_ENUM_INFO(FruitType) {
 }
 ```
 クラス型情報と同様に`OB_REGISTER_RTTI`を使用してマネージャーに型情報を登録してください。
-```c++
+```cpp
 OB_REGISTER_RTTI(FruitType);
 ```
 
 ## 型情報の取得
 型情報はTypeInfoManagerから取得できます。  
-```c++
-if(auto info = TypeInfoManager::Find(Type::Get<Fruit>())){
+```cpp
+if(auto info = TypeInfoManager::Find<Fruit>()){
 
 }
 if(auto info = TypeInfoManager::Find("Fruit")){
@@ -95,7 +95,7 @@ if(auto info = TypeInfoManager::Find("Fruit")){
 インスタンスの生成をするためにはTypeInfoからConstructorInfoを探す必要があります。
 `findConstructor`を使用して呼出し可能なコンストラクタ―を取得してください。
 `ConstructorInfo::invoke`を引数とともに呼び出すことでインスタンスを生成することができます。
-```c++
+```cpp
 if(auto info = TypeInfoManager::Find("Fruit")){
 	if(auto ctor = info->findConstructor<FruitType,s32,f32>()){
 		auto fruit = ctor->invoke<Fruit>(FruitType::Lemon,100,1.0f);

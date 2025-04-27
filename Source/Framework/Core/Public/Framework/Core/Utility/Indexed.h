@@ -37,7 +37,7 @@ namespace ob::core {
 	//! @brief		インデックス付きEnumlator
 	//! 
 	//! @details	使用方法
-	//!				```c++
+	//!				```cpp
 	//!				for(auto[index,item]:Indexed(container)){
 	//! 
 	//!				}

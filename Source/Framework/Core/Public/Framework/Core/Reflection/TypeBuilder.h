@@ -64,7 +64,7 @@ namespace ob::core {\
 template<> void builder_type<::type>::Register()
 
 //! @brief		Primitive型情報の定義
-//!	@details	```c++
+//!	@details	```cpp
 //!				OB_DEFINE_PRIMITIVE_INFO(int) {
 //!					desc("32bit符号付き整数型");
 //! 			}	
@@ -72,7 +72,7 @@ template<> void builder_type<::type>::Register()
 #define OB_DEFINE_PRIMITIVE_INFO(type) OB_DEFINE_INFO_BASE(ob::core::PrimitiveBuilderTemplate,type)
 
 //! @brief		Enum型情報の定義
-//!	@details	```c++
+//!	@details	```cpp
 //!				OB_DEFINE_ENUM_INFO(EnumType) {
 //!					element(T::First);
 //!					element(T::Second);
@@ -81,7 +81,7 @@ template<> void builder_type<::type>::Register()
 #define OB_DEFINE_ENUM_INFO(type) OB_DEFINE_INFO_BASE(ob::core::EnumBuilderTemplate,type)
 
 //! @brief		Class型情報の定義
-//!	@details	```c++
+//!	@details	```cpp
 //!				OB_DEFINE_CLASS_INFO(Foo) {
 //!					constructor();
 //!					field("field",&T::field);

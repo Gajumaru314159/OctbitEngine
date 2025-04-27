@@ -1,4 +1,4 @@
-# Scene
+# Scene {#Scene}
 
 ## 構成
 * Engine
@@ -31,7 +31,7 @@
 
 ## 使用例
 ### 構築
-```c++
+```cpp
 Ref<World> world = World::Create();
 
 // シーン構築
@@ -60,7 +60,7 @@ auto renderer = WorldRenderer::Create();
 renderer->setScene(scene);
 ```
 ### Component実装
-```c++
+```cpp
 class ModelComponent : public Component{
 public:
 	

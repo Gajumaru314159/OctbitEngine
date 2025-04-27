@@ -14,7 +14,7 @@ namespace ob::core {
     //!             Globalは「全体で共有される」ことを保証する。
     //!             そのためグローバルインスタンスとは別でSystemを単体テストすることも
     //!             可能となる。
-    //!             ```c++
+    //!             ```cpp
     //!             Global<AssetSystem> assetSysem;
     //!             if(auto system = Global<AssetSystem>::Instance()){
     //!                 // 処理

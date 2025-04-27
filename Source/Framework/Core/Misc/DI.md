@@ -1,11 +1,11 @@
-DI (Dependency Injection)
+DI (Dependency Injection) {#DI}
 ============
 ## 概要
-各サービス(システム)は依存するサービスをRequireかOptionalから選択して設定します。  
+各Service(システム)は依存するServiceをRequireかOptionalから選択して設定します。  
 * Require：必須依存
 * Optional：任意依存
 
-サービスはインターフェイス化することもでき、複数の実装がある場合はプライオリティの高いサービスが選択されます。インターフェイスはRequire/Optionalどちらでも使用可能です。
+Serviceはインターフェイス化することもでき、複数の実装がある場合はプライオリティの高いServiceが選択されます。インターフェイスはRequire/Optionalどちらでも使用可能です。
 
 ```mermaid
 graph LR
@@ -13,7 +13,7 @@ graph LR
     DX12RHI-->Platform
     DX12RHI-.-> Profiler -->|impl| PIXProfiler & RenderDocProfiler
 ```
-サービスの依存関係はコンストラクタの引数から判定されます。
+Serviceの依存関係はコンストラクタの引数から判定されます。
 |型|意味|
 |-|-|
 |T&|必須依存|
@@ -21,7 +21,7 @@ graph LR
 
 ## 実装例
 
-```c++
+```cpp
 class RHI{};
 class DX12RHI:public RHI{   public: DX12RHI(Platform&,Profiler*); };
 class Grahics{   public: Graphics(RHI&); };
@@ -41,130 +41,132 @@ int main(){
     return 0;
 }
 ```
-Engineがコンテナを持つ場合、依存定義用の内部クラスを登録/生成してください。  
-```c++
-class Engine{
-private:
-    class EngineService{
-        EngineService(Model&,Sound&){}
-    };
+
+# Serviceの登録方法
+Serviceは```ServiceInjector::bind<T>()```を使用して登録します。  
+```cpp
+ServiceInjector injector;
+injector.bind<Service>();
+```
+## インターフェイスの登録
+インターフェイスを登録する場合は```as<T>()```を使用してどのインターフェイスにバインドするかを指定します。
+インターフェイスをcreateした場合はServiceInjectorに先に登録したServiceから構築が試みられます。そして最初に構築に成功したServiceがインターフェスに対応したServiceとして扱われます。
+```cpp
+ServiceInjector injector;
+injector.bind<ServiceA>().as<IService>();
+injector.bind<ServiceB>().as<IService>();
+
+ServiceContainer container;
+injector.create<IService>(container);
+
+container.get<IService>(); // ServiceAが取得される
+container.get<ServiceA>(); // ServiceAが取得される
+```
+インターフェイスとして登録したものを具象クラスとしてcreateすることも可能です。
+```cpp
+ServiceInjector injector;
+injector.bind<ServiceA>().as<IService>();
+injector.bind<ServiceB>().as<IService>();
+
+ServiceContainer container;
+injector.create<ServiceB>(container);
+
+container.get<IService>(); // ServiceBが取得される
+container.get<ServiceB>(); // ServiceBが取得される
+```
+
+## 非公開サービスの登録
+外部に公開していない内部的なServiceを登録する場合はRegister関数を使用します。
+```cpp
+void func() {
+    ServiceInjector injector;
+    SomeService::Register(injector);
+}
+
+void SomeService::Register(ServiceInjector& injector) {
+    injector.bind<SomeService>();
+    injector.bind<InternalSomeService>();
+}
+```
+
+## 生成済みのインスタンスの登録
+生成済みのインスタンスを登録することも可能です。おもにConfigを登録する場合に使用します。
+```cpp
+struct Config {
+    bool debug;
+};
+class Service {
 public:
-
-    Engine(ServiceInjector& injector){
-        injector.bind<EngineService>();
-        injector.create<EngineService>(m_container);
+    Service(Config* config) {
+        if (config && config.debug) {
+            // デバッグ用処理
+        }
     }
-
-    template<class T>
-    T* getService()const{
-        return m_container.get<T>();
-    }
-
-private:
-    ServiceContainer m_container;
 };
 
-```
+void func() {
 
-# ServiceInjectorへの登録
-必須依存のサービスをServiceInjectorに登録する責務はそのサービスにあります。  
-登録用の関数を使用すると内部的に必要なサービスが登録されます。
-```c++
-void func(){
+    Config config;
+    config.debug = true;
+
     ServiceInjector injector;
-    ob::rhi::dx12::Register(injector);
-    ob::graphics::Register(injector);
+    injector.bind(config);
+    injector.bind<Service>();
 
-    auto graphics = injector.create<Graphics>();
+    ServiceContainer container;
+    injector.create<Service>(container);
+
 }
-//-----------------------------------------------------
-void ob::graphics::Register(ServiceInjector& injector){
-    injector.bind<Graphics>();
-    injector.bind<EmptyRHI>().as<RHI>();
-}
-void ob::rhi::dx12::Register(ServiceInjector& injector){
-    injector.bind<DX12RHI>().as<RHI>();
-    injector.bind<Platform>();
+```
+生成済みのインスタンスの寿命はServiceContainerは管理しません。必ずServiceContainerより後に破棄してください。
+```cpp
+void func() {
+
+    ServiceInjector injector;
+    {
+        Config config;
+        config.debug = true;
+        injector.bind(config);
+
+        // Configの寿命はここまで
+        // create時に無効なポインタが渡されるため危険
+    }
+    injector.bind<Service>();
+
+    ServiceContainer container;
+    injector.create<Service>(container);
+
 }
 ```
 
 
-# サービスの生成キャンセル
-必須のサービスが生成されていない場合はコンストラクタから例外を送信することで生成をキャンセルすることができます。  
-```c++
+# Serviceの生成キャンセル
+必須のServiceが生成されていない場合はコンストラクタから例外を送信することで生成をキャンセルすることができます。  
+```cpp
 struct Base{};
 struct A:Base{
-    A(SPtr<Req> req){
-        if(!req){
-            throw Exception();
-        }
+    A(){
+        throw Exception();
     }
 };
 struct B:Base{
     B(){
-
     }
 };
 struct C{
-    C(SPtr<Base>);
-}
+    C(Base& base) {
+        // baseはBのインスタンス
+    }
+};
 
 void func(){
     ServiceInjector injector;
-    injector.bind<Base>.to<A>();
-    injector.bind<Base>.to<B>();
-    injector.bind<C>.toSelf();
-    injector.create<C>();
-    // Cに渡されるのはB
+    injector.bind<Base>.as<A>();
+    injector.bind<Base>.as<B>();
+    injector.bind<C>();
+
+    ServiceContainer container;
+    injector.create<C>(container);    
 }
 
-
 ```
-
-# 生成単位
-```
-Engine
-    Editor
-        Tool[]
-            World
-    Game
-        World
-```
-## Engine
-* シングルトンです。
-
-```
-Engine::GetService<T>();
-```
-
-## Editor
-* シングルトンです。  
-* エディタ起動の場合のみ生成されます。
-
-```
-Editor::GetService<T>();
-```
-
-## Game
-* シングルトンです。
-* ランタイム起動の場合のみ生成されます。
-  * スタンドアロン起動
-  * プレビュー
-* ゲームプレビューとカットシーンプレビューは併用できません。
-
-```
-Game::GetService<T>();
-```
-
-## World
-* ワールドの数だけ生成されます
-* ライティングや時間制御などが独立しています。
-  
-```
-entity->getWorld()->getService<T>();
-```
-
-# エディタツールの扱い
-* 複数アセットを同時編集する場合はツールごとにWorldが生成されます
-  * ツール内で複数のWorldが生成される場合もあります
-* エディタ起動の場合はGameのサービスは生成されません

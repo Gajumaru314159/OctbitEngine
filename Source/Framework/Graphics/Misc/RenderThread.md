@@ -1,4 +1,4 @@
-﻿RenderThread
+﻿RenderThread {#RenderThread}
 ------------
 描画は以下の3つのスレッドから構成されます。
 * GameThread

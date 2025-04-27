@@ -1,4 +1,4 @@
-﻿Input
+﻿Input {#Input}
 =========
 
 ## 入力
@@ -12,14 +12,14 @@
 
 # コード例
 キーボード
-```c++
+```cpp
 // 固有
 Keyboard::Focus();
 // ボタン入力
 Keyboard::Space.down();
 ```
 マウス
-```c++
+```cpp
 // 軸入力
 Vec2 pos = Mouse::GetPos();
 Mouse::X.bind(handle,func);
@@ -35,7 +35,7 @@ Mouse::SetLockMode(MouseLockMode::Locked);
 Mouse::IsConnected();
 ```
 ゲームパッド
-```c++
+```cpp
 // 固有
 GamePad().vibrate(1.5f,100.0f,wave);
 GamePad(0).isConnected();
@@ -48,7 +48,7 @@ GamePad().BindLStick();
 
 ```
 バインディング
-```c++
+```cpp
 Player::Player(){
     // Player破棄時にバインドを解除するためハンドルが必要
     // InputComponentを経由する場合Behaviorにハンドルはいらないはず
@@ -64,7 +64,7 @@ void Player::onMove(Vec2 value){
 
 ```
 マッピング
-```c++
+```cpp
 // Static
 ActionMapper::registerKey(Keyboard::Space);
 // Manager
@@ -77,7 +77,7 @@ mapper.bindAction("Jump",func);
 
 # 複数ウィンドウ(インスタンス)での入力の取り扱い
 通常のゲームであればウィンドウフォーカスを考慮せずに入力を取り扱えばいいが、エディタで使用する場合は複数のインスタンスが立ち上がるため入力判定時にフォーカスされているかを判定する必要が出てくる。
-```c++
+```cpp
 Keyboard::Space.down(window);
 Keyboard::Space.bindDown(window,handle,func);
 

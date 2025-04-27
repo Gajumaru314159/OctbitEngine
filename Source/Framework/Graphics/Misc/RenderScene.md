@@ -1,4 +1,4 @@
-﻿RenderScene
+﻿RenderScene {#RenderScene}
 -----------
 RenderSceneは独立した1つの描画空間です。
 エディタ画面ごとに作成され、お互いの描画内容は影響しません。
@@ -36,6 +36,3 @@ for(auto& item:itemMap["Opaque"]){
 	item
 }
 ```
-
-
-# RenderStage

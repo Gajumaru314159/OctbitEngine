@@ -1,4 +1,4 @@
-﻿ Model
+﻿ Model {#Model}
 =====
 
 ## 構成
@@ -17,7 +17,7 @@ classDiagram
 ```
 
 
-```c++
+```cpp
 class BaseMesh{
     void setOpacity(f32);
     void setColor(Color);
@@ -62,3 +62,6 @@ class StaticMesh{
 fbxはModelとして読み込むことはできない。
 fbx自体がシーングラフとして扱われるためシーン、ないしはプレハブとしてインポートされる。
 オプションとしてマージして1つのMeshとしてインポートすることは可能。
+
+# サブページ
+* \subpage FBX

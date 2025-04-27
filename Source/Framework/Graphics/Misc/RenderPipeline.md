@@ -1,4 +1,4 @@
-﻿RenderPipeline
+﻿RenderPipeline {#RenderPipeline}
 ---------------
 
 ### 複数のRenderPipeline
@@ -47,7 +47,7 @@ Engine実装で実現できないものがある場合は別のRenderTagを用�
 
 ### サンプル
 
-```c++
+```cpp
 
 class SampleRenderPipeliene : public RenderPipeline{
 public:
@@ -85,7 +85,7 @@ public:
 * RenderPassは全体で共通
 	* RenderPassの登録はRendererの生成とは分離する必要がある
 	* FrameBufferはRendererFeatureの組み換えで変わる場合がある？
-```c++
+```cpp
 class Renderer{
 public:
 	Ref<RenderTexture> findRenderTexture(Name name){

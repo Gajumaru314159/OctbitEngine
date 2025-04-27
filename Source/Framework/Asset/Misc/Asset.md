@@ -1,4 +1,4 @@
-Asset
+Asset {#Asset}
 ================
 
 ## GameアセットとSystemアセット

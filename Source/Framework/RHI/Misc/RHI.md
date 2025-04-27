@@ -1,4 +1,4 @@
-# RHIモジュール
+# RHI {#RHI}
 
 ## 概要
 RHI (Render Hardware Interface) モジュールは、DirectX12やVulkanなどの異なる描画APIを共通化するためのインターフェイスを提供します。このモジュールは、グラフィックプログラミングの初心者にも理解しやすいように設計されており、GPUリソース管理や描画パイプラインの基本的な概念を学ぶための基盤となります。
@@ -11,12 +11,13 @@ RHIモジュールはインターフェイスの定義に特化しており、�
 ```mermaid
 graph TD
 
-    Buffer & Texture & Sampler & RootSignature --> DescriptorTable
-    RootSignature & Shader & RenderPass --> PipelineState
-    RenderTexture & RenderPass --> FrameBuffer
+    Buffer & Texture & Sampler & DescriptorLayout --> DescriptorTable
+    DescriptorLayout --> RootSignature
+    RootSignature & Shader --> PipelineState
+    RenderTexture --> RenderPass
     Window --> SwapChain
 
-    DescriptorTable & PipelineState & FrameBuffer & SwapChain --> CommandList
+    DescriptorTable & PipelineState & RenderPass & SwapChain --> CommandList
 ```
 DirectStorageやRTX IOといったGPUとFileIOが強く結びついている機能もRHI層に吸収されています。
 これらの機能はID3D12Resourceといった特定のRHI実装に強く依存した機能であるため各RHI実装によって使用できるかどうかが分かれます。
@@ -64,6 +65,9 @@ GPUメモリ上のレンダリング結果を格納するテクスチャです�
 ### FrameBuffer
 レンダリング結果を格納するためのバッファです。複数のレンダーターゲットをサポートします。
 
+### DescriptorLayout
+Texture、Buffer、Samplerといったシェーダーリソースをどのような構成でバインドするかを定義します。
+
 ### DescriptorTable
 Texture、Buffer、Samplerといったシェーダーリソースをバインドするためのテーブルです。リソースの効率的な管理をサポートします。
 
@@ -75,11 +79,11 @@ Texture、Buffer、Samplerといったシェーダーリソースをバインド
 
 ## インスタンスの生成方法
 RHIモジュールのクラスはRHIクラスを通して生成されます。
-```c++
+```cpp
 Ref<Texture> texture = rhi.createTexture(desc);
 ```
 RHIクラスはシングルトン指定されているため、各クラスのファクトリメソッドを使用して生成することも可能です。
-```c++
+```cpp
 // RHIクラスのインスタンスを生成しておく
 DirectXRHI rhi(/*引数*/);
 
@@ -90,7 +94,7 @@ Ref<Buffer> buffer = Buffer::Create(BufferDesc{});
 // RHIがインスタンス化されていない場合は空のオブジェクトが返る
 ```
 生成したTextureやBufferなどのインスタンスは```Ref<T>```によって参照カウントベースで管理されています。これらはRHIインスタンスの解放までに全て解放されている必要があります。
-```c++
+```cpp
 Ref<Texture> texture;
 {
     DirectXRHI rhi(/*引数*/);
@@ -102,7 +106,7 @@ Ref<Texture> texture;
 ```
 
 ## 基本的な描画フロー
-```c++
+```cpp
 DirectXRHI rhi(/*引数*/);
 
 // SwapChain
@@ -125,14 +129,14 @@ Ref<RenderTexture> target;
 Ref<Shader> vs = Shader::CompileVS(code);
 Ref<Shader> ps = Shader::CompilePS(code);
 
+// DescriptorLayout
+Ref<DescriptorLayout> layout = DescriptorLayout::Create({Binding::ConstantBuffer()});
+
 // RootSignature
 Ref<RootSignature> signature;
 {
-	RootSignatureDesc desc{
-		{
-			Binding::ConstantBuffer(),
-		}
-	};
+	RootSignatureDesc desc;
+    desc.layouts = {layout};
 	signature = RootSignature::Create(desc);
 }
 
@@ -148,8 +152,9 @@ Ref<PipelineState> pipeline;
 	desc.vs = vs;
 	desc.ps = ps;
 	desc.vertexLayout.attributes = {
-		VertexAttribute(Semantic::Position,offsetof(Vert,position),ElementType::Float,4)
+		VertexAttribute(Semantic::Position,offsetof(Vertex,position),ElementType::Float,4)
 	};
+    desc.vertexLayout.vertexStride = sizeof(Vertex);
 	pipeline = PipelineState::Create(desc);
 }
 
@@ -181,13 +186,7 @@ Ref<CommandList> commandList;
 }
 
 // DescriptorTable
-Ref<DescriptorTable> table;
-{
-    DescriptorTableDesc desc;
-    desc.rootSignature = signature;
-    desc.slot = 0;
-    table = DescriptorTable::Create(desc);
-}
+Ref<DescriptorTable> table = DescriptorTable::Create({layout});
 table->setResource(0, cbuffer);
 
 while(true) {
