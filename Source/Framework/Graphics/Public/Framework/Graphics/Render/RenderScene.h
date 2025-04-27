@@ -11,6 +11,7 @@
 namespace ob::graphics {
 
 	//! @brief      描画シーン
+	//! @ref 		RenderScene
 	class RenderScene{
 	public:
 

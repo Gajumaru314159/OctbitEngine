@@ -12,6 +12,7 @@ namespace ob::graphics {
 	//! @brief      描画機能
 	//! @details    O3DEでいうところのFeatureProcessor。
 	//!				初期状態は非アクティブです。
+	//! @ref 		RenderFeature
 	class RenderFeature {
 	public:
 

@@ -10,6 +10,7 @@
 namespace ob::graphics {
 
 	//! @brief      描画パイプライン
+	//! @ref 		RenderPipeline
 	class RenderPipeline {
 	public:
 

@@ -21,13 +21,7 @@ namespace ob::core {
 
 
     //! @brief  サービス依存注入クラス
-    //! @details ```cpp
-    //!         ServiceInjector injector;
-    //!         injector.bind<Hoge>();
-    //!         injector.bind<Fuga>().as<IFuga>();
-    //!         ServiceContainer container;
-    //!         auto hoge = container.create<Hoge>(container);
-    //!         ```
+    //! @details 詳細は @ref DI を確認してください
     class ServiceInjector {
     public:
 
@@ -304,7 +298,6 @@ namespace ob::core {
     };
 
     //! @brief  サービスを生成
-    //! @param container 生成されたサービスを管理させるコンテナの参照
     inline void ServiceInjector::createAll(ServiceContainer& container)const {
         for (auto& type : m_orders) {
             try {
@@ -342,7 +335,6 @@ namespace ob::core {
     }
 
     //! @brief  サービスを生成
-    //! @param container 生成されたサービスを管理させるコンテナの参照
     template<class T>
     T* ServiceInjector::create(ServiceContainer& container)const {
         // 生成済み

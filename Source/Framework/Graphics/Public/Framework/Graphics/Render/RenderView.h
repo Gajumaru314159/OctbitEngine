@@ -12,6 +12,7 @@
 namespace ob::graphics {
 
     //! @brief      レンダー・ビュー
+	//! @ref 		RenderView
     class RenderView {
     public:
 
