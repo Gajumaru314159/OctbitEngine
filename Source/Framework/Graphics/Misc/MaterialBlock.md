@@ -8,7 +8,6 @@ Bindfullモデルの場合はテクスチャ数やバッファ数が一致する
 Bindlessモデルの場合はPushConstantsでバインドを行うためDescriptorLayoutは必要ありません。もしBindfull用のDescriptorLayoutが設定されていたとしても無視されます。
 ```cpp
 // Texture&Sampler、Buffer、パラメータ用のバッファの順に定義する
-// ただしTexture
 Ref<DescriptorLayout> layout = DescriptorLayout::Create({
 	Binding::Texture(0),			// Albedo (Texture)
 	Binding::Sampler(1),			// Albedo (Sampler)
