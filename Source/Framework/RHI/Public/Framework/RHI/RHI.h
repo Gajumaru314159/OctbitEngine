@@ -20,6 +20,7 @@
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 #include <Framework/RHI/Types/ShaderStage.h>
 #include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Types/VideoCard.h>
 
 namespace ob::rhi {
 
@@ -50,10 +51,9 @@ namespace ob::rhi {
         //===============================================================
         virtual void entryCommandList(const Ref<CommandList>&) {}
 
+		virtual Vector<VideoCard>           getVideoCards()const { return {}; }
 
-        //! @brief  説明
-
-        virtual Ref<SwapChain>                createSwapChain(const SwapChainDesc& desc) { return nullptr; }
+        virtual Ref<SwapChain>              createSwapChain(const SwapChainDesc& desc) { return nullptr; }
 
         virtual Ref<CommandList>            createCommandList(const CommandListDesc& desc) { return nullptr; }
 

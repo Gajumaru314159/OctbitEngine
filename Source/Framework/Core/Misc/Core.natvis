@@ -191,5 +191,27 @@
 			</CustomListItems>
 		</Expand>
 	</Type>
+
+
+	<Type Name="ob::core::MemorySize">
+		<DisplayString Condition="1024ull*1024*1024*1024 &lt; size">{size/(1024.0*1024*1024*1024),g} TiB</DisplayString>
+		<DisplayString Condition="1024ull*1024*1024 &lt; size">{size/(1024.0*1024*1024),g} GiB</DisplayString>
+		<DisplayString Condition="1024ull*1024 &lt; size">{size/(1024.0*1024),g} MiB</DisplayString>
+		<DisplayString Condition="1024ull &lt; size">{size/(1024.0),g} KiB</DisplayString>
+		<DisplayString>{size} B</DisplayString>
+
+		<Expand>
+			<Item Name="B">size</Item>
+			<Item Name="KiB">size/(1024.0),g</Item>
+			<Item Name="MiB">size/(1024.0*1024),g</Item>
+			<Item Name="GiB">size/(1024.0*1024*1024),g</Item>
+			<Item Name="TiB">size/(1024.0*1024*1024*1024),g</Item>
+			<Item Name="B">size</Item>
+			<Item Name="KB">size/(1000.0),g</Item>
+			<Item Name="MB">size/(1000.0*1000),g</Item>
+			<Item Name="GB">size/(1000.0*1000*1000),g</Item>
+			<Item Name="TB">size/(1000.0*1000*1000*1000),g</Item>
+		</Expand>
+	</Type>
 	
 </AutoVisualizer>

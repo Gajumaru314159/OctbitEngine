@@ -79,6 +79,71 @@ namespace ob::rhi {
 		}
 	}
 
+    //! @brief ビデオカード情報を取得  
+    Vector<VideoCard> DirectX12RHI::getVideoCards() const {  
+       Vector<VideoCard> videoCards;  
+
+	   // IDXGIAdapter(VideoCard)を列挙
+       ComPtr<IDXGIAdapter1> adapter;  
+       for (UINT i = 0; m_dxgiFactory->EnumAdapters1(i, adapter.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; ++i) {  
+           DXGI_ADAPTER_DESC1 adapterDesc;  
+           if (FAILED(adapter->GetDesc1(&adapterDesc))) {  
+               continue;  
+           }  
+
+           VideoCard videoCard;  
+		   StringEncoder::Encode(adapterDesc.Description, videoCard.name);
+           videoCard.memory = static_cast<size_t>(adapterDesc.DedicatedVideoMemory);  
+		   videoCard.deviceId = adapterDesc.DeviceId;
+
+		   // IDXGIOutput(VideoOutput)を列挙
+           ComPtr<IDXGIOutput> output;  
+           for (UINT j = 0; adapter->EnumOutputs(j, output.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; ++j) {  
+               DXGI_OUTPUT_DESC outputDesc;  
+               if (FAILED(output->GetDesc(&outputDesc))) {  
+                   continue;  
+               }  
+			   VideoOutput videoOutput;
+			   StringEncoder::Encode(outputDesc.DeviceName, videoOutput.name);
+			   videoOutput.rect = IntRect(outputDesc.DesktopCoordinates.left, outputDesc.DesktopCoordinates.top, outputDesc.DesktopCoordinates.right, outputDesc.DesktopCoordinates.bottom);
+			   videoOutput.isPrimary = (outputDesc.AttachedToDesktop == TRUE);
+
+			   TextureFormat formats[] = { TextureFormat::RGBA8,TextureFormat::RGBA16 };
+
+			   for (auto format : formats) {
+				   DXGI_FORMAT dxgiFormat = TypeConverter::Convert(format);
+				   Vector<DXGI_MODE_DESC> modes;
+				   UINT modeCount = 0;
+				   if (SUCCEEDED(output->GetDisplayModeList(dxgiFormat, DXGI_ENUM_MODES_INTERLACED, &modeCount, nullptr))) {
+					   modes.resize(modeCount);
+					   if (SUCCEEDED(output->GetDisplayModeList(dxgiFormat, DXGI_ENUM_MODES_INTERLACED, &modeCount, modes.data()))) {
+						   for (const auto& mode : modes) {
+							   VideoOutputMode videoMode;
+							   videoMode.width = mode.Width;
+							   videoMode.height = mode.Height;
+							   videoMode.refreshRate = 1.0 * mode.RefreshRate.Numerator / std::max<UINT>(mode.RefreshRate.Denominator,1);
+							   videoMode.format = format;
+							   videoOutput.modes.push_back(videoMode);
+						   }
+
+						   struct Eq {
+							   bool operator()(const VideoOutputMode& lhs, const VideoOutputMode& rhs) const {
+								   return lhs.width == rhs.width && lhs.height == rhs.height && lhs.refreshRate == rhs.refreshRate && lhs.format == rhs.format;
+							   }
+						   };
+
+						   videoOutput.modes.erase(std::unique(videoOutput.modes.begin(), videoOutput.modes.end(), Eq()), videoOutput.modes.end());
+					   }
+				   }
+			   }
+			   videoCard.outputs.push_back(videoOutput);
+           }  
+
+           videoCards.push_back(videoCard);  
+       }  
+
+       return videoCards;  
+    }
 
 	//! @brief  更新
 	void DirectX12RHI::update() {

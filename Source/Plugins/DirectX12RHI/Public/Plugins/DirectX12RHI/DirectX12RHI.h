@@ -44,6 +44,9 @@ namespace ob::rhi {
 		void entryCommandList(const Ref<CommandList>&) override;
 
 
+		Vector<VideoCard> getVideoCards()const override;
+
+
 		//===============================================================
 		// 生成
 		//===============================================================
