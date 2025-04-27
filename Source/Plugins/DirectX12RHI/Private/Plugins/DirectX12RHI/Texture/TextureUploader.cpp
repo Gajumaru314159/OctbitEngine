@@ -10,14 +10,14 @@ namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	TextureUploader::TextureUploader(ID3D12Device& device)
+	DirectX12TextureUploader::DirectX12TextureUploader(ID3D12Device& device)
 		: m_device(device)
 	{
 		m_frames.resize(4);
 	}
 
 	//! @brief  アップロード要素を追加
-	void TextureUploader::add(const ComPtr<ID3D12Resource>& dest, Span<Subresource> subresources) {
+	void DirectX12TextureUploader::add(const ComPtr<ID3D12Resource>& dest, Span<Subresource> subresources) {
 
 		if (dest == nullptr) {
 			LOG_ERROR("[TextureUploader] destがnullです。");
@@ -131,7 +131,7 @@ namespace ob::rhi
 	}
 
     //! @brief アップロード用の一時リソースを作成 
-    ComPtr<ID3D12Resource> TextureUploader::createUploadResource(const D3D12_RESOURCE_DESC& desc) {
+    ComPtr<ID3D12Resource> DirectX12TextureUploader::createUploadResource(const D3D12_RESOURCE_DESC& desc) {
 
 		D3D12_HEAP_PROPERTIES  heap;
 		memset(&heap, 0, sizeof(heap));
@@ -152,7 +152,7 @@ namespace ob::rhi
 	}
 
 
-	void TextureUploader::update(ID3D12GraphicsCommandList& commandList) {
+	void DirectX12TextureUploader::update(ID3D12GraphicsCommandList& commandList) {
 
 		ScopeLock lock(m_lock);
 

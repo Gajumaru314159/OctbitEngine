@@ -17,7 +17,7 @@
 
 namespace ob::rhi {
 
-    const wchar_t* getEntryW(ShaderStage stage) {
+    static const wchar_t* getEntryW(ShaderStage stage) {
         switch (stage)
         {
         case ShaderStage::Vertex:          return L"VS_Main";
@@ -29,7 +29,7 @@ namespace ob::rhi {
         default:                           return L"";
         }
     }
-    const wchar_t* getShadingModelW(ShaderStage stage) {
+    static const wchar_t* getShadingModelW(ShaderStage stage) {
         switch (stage)
         {
         case ShaderStage::Vertex:          return L"vs_6_6";

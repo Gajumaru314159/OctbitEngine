@@ -11,14 +11,14 @@ namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	TextureUploader::TextureUploader(VulkanRHI& rhi)
+	VulkanTextureUploader::VulkanTextureUploader(VulkanRHI& rhi)
 		: m_rhi(rhi)
 	{
 		m_frames.resize(4);
 	}
 
 	//! @brief  アップロード要素を追加
-	void TextureUploader::add(const vk::raii::Image& dest, vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources) {
+	void VulkanTextureUploader::add(const vk::raii::Image& dest, vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources) {
 
 		if (dest == nullptr) {
 			LOG_ERROR("[TextureUploader] destがnullです。");
@@ -73,7 +73,7 @@ namespace ob::rhi
 	}
 
 	//! @brief フレームごとのバッファ更新を行う
-	void TextureUploader::update(Ref<CommandList>& commandList) {
+	void VulkanTextureUploader::update(Ref<CommandList>& commandList) {
 
 		auto commandListImpl = commandList.cast<VulkanCommandList>();
 		if (commandListImpl == nullptr) {

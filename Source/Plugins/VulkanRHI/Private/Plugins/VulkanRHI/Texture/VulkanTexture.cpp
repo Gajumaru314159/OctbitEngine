@@ -129,7 +129,7 @@ namespace ob::rhi {
 		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
 		m_image.bindMemory(m_memory, 0);
 
-		TextureUploader::Subresource subresources[1];
+		VulkanTextureUploader::Subresource subresources[1];
 		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
 
 		m_rhi.getTextureUploader().add(m_image,info,m_desc.format,subresources);

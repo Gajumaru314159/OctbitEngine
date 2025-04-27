@@ -17,10 +17,10 @@ namespace ob::rhi {
     //! CPUからデータを書き込めるGPUリソースは読み取り速度に制限がかかるため、
     //! 書き込み用のステージングバッファに書き込んだものをまとめてハイパフォーマンスなバッファにコピーします。
     //! コピー処理はフレームの先頭に行われます。必ず毎フレーム描画処理より前に実行してください。         
-    class BufferUploader {
+    class VulkanBufferUploader {
     public:
 
-        BufferUploader(VulkanRHI& device,size_t blockSize);
+        VulkanBufferUploader(VulkanRHI& device,size_t blockSize);
 
         void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags);
         void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlags postAccessFlags);

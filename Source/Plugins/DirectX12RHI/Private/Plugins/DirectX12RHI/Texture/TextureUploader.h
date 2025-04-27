@@ -14,7 +14,7 @@ namespace ob::rhi {
     //! CPUからデータを書き込めるGPUリソースは読み取り速度に制限がかかるため、
     //! 書き込み用のステージングバッファに書き込んだものをまとめてハイパフォーマンスなバッファにコピーします。
     //! コピー処理はフレームの先頭に行われます。必ず毎フレーム描画処理より前に実行してください。         
-    class TextureUploader {
+    class DirectX12TextureUploader {
     public:
         struct Subresource {
             BlobView data;
@@ -23,7 +23,7 @@ namespace ob::rhi {
         };
     public:
 
-        TextureUploader(ID3D12Device& device);
+        DirectX12TextureUploader(ID3D12Device& device);
 
         void add(const ComPtr<ID3D12Resource>& dest, Span<Subresource> subresources);
 

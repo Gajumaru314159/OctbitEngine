@@ -158,9 +158,9 @@ namespace ob::rhi {
 		//! @brief  システム・コマンド・リストを取得
 		//ComPtr<ID3D12GraphicsCommandList>& getSystemCommandList();
 
-		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
+		DirectX12BufferUploader& getBufferUploader() { return *m_bufferUploader; }
 
-		TextureUploader& getTextureUploader() { return *m_textureUploader; }
+		DirectX12TextureUploader& getTextureUploader() { return *m_textureUploader; }
 
 
 		//! @brief          ハンドルをアロケート
@@ -208,8 +208,8 @@ namespace ob::rhi {
 		ComPtr<ID3D12Fence>                 m_fence;
 		UINT64                              m_fenceVal;
 
-		MemoryStorage<BufferUploader>		m_bufferUploader;
-		MemoryStorage<TextureUploader>		m_textureUploader;
+		MemoryStorage<DirectX12BufferUploader>		m_bufferUploader;
+		MemoryStorage<DirectX12TextureUploader>		m_textureUploader;
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
 

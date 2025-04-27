@@ -380,7 +380,9 @@ namespace ob::rhi {
 			LOG_WARNING("ルート定数のサイズが4の倍数ではありません。");
 		}
 		if (param.blob.size()) {
-			m_cmdList->SetGraphicsRoot32BitConstants(param.slot, param.blob.size() / sizeof(s32), param.blob.data(), param.offset / sizeof(s32));
+			// DirectX12ではルート定数はスロット0に固定
+			constexpr s32 slot = 0;
+			m_cmdList->SetGraphicsRoot32BitConstants(slot, param.blob.size() / sizeof(s32), param.blob.data(), param.offset / sizeof(s32));
 		}
 	}
 

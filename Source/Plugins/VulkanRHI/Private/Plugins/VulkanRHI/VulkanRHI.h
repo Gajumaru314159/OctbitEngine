@@ -153,8 +153,8 @@ namespace ob::rhi {
 		const vk::PhysicalDeviceFeatures& getFeatures() const { return m_features; }
 		const VulkanFeatureInfo& getFeaturesEx() const { return m_featuresEx; }
 
-		BufferUploader& getBufferUploader() { return *m_bufferUploader; }
-		TextureUploader& getTextureUploader() { return *m_textureUploader; }
+		VulkanBufferUploader& getBufferUploader() { return *m_bufferUploader; }
+		VulkanTextureUploader& getTextureUploader() { return *m_textureUploader; }
 
 		VkMemoryAllocateInfo getAllocationInfo(vk::MemoryRequirements requirements, vk::MemoryPropertyFlags requestProps) {
 			uint32_t memoryTypeIndex = (uint32_t)(-1);
@@ -247,8 +247,8 @@ namespace ob::rhi {
 
 		UPtr<VulkanCommandQueue>					m_commandQueue;
 
-		UPtr<BufferUploader>						m_bufferUploader;
-		UPtr<TextureUploader>						m_textureUploader;
+		UPtr<VulkanBufferUploader>						m_bufferUploader;
+		UPtr<VulkanTextureUploader>						m_textureUploader;
 
 		Ref<CommandList>							m_copyCommandList;
 

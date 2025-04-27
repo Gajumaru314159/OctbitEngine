@@ -428,8 +428,8 @@ namespace ob::rhi {
 	//! @brief  VkQueue生成
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createUploaders() {
-		m_bufferUploader = std::make_unique<BufferUploader>(*this,16*1024);
-		m_textureUploader = std::make_unique<TextureUploader>(*this);
+		m_bufferUploader = std::make_unique<VulkanBufferUploader>(*this,16*1024);
+		m_textureUploader = std::make_unique<VulkanTextureUploader>(*this);
 
 		m_copyCommandList = createCommandList(CommandListDesc{ "CopyBuffer",CommandListType::Graphic});
 	}

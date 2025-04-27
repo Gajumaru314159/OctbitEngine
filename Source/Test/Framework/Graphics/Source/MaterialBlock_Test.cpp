@@ -41,8 +41,8 @@ TEST(MaterialBlock, Bindfull) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
+		rhi::RegisterDirectX12RHIService(injector);
+		//rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
@@ -291,8 +291,8 @@ TEST(MaterialBlock, Bindless) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
+		rhi::RegisterDirectX12RHIService(injector);
+		//rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
@@ -571,8 +571,8 @@ TEST(MaterialBlock, MultiBindless) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
+		rhi::RegisterDirectX12RHIService(injector);
+		//rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);

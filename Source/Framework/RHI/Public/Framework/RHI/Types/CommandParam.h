@@ -60,7 +60,6 @@ namespace ob::rhi {
 
 	//! @brief  
 	struct SetRootConstantsParam {
-		s32			slot;	//!< バインドのスロット番号
 		s32			offset;	//!< 書き込むオフセット
 		BlobView	blob;	//!< 書き込むバイナリ
 	};

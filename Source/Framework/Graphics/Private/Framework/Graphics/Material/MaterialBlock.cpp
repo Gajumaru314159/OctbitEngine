@@ -364,7 +364,6 @@ namespace ob::graphics {
 			rhi::BindlessHandle handle = m_table->getBindlessHandle(valuesIndex);
 
 			SetRootConstantsParam param;
-			param.slot = 0;
 			param.blob = BlobView(&handle, sizeof(handle));
 			param.offset = offset;
 			commandList->setRootConstant(param);

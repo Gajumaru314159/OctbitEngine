@@ -10,7 +10,7 @@ namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	BufferUploader::BufferUploader(ID3D12Device& device, size_t blockSize)
+	DirectX12BufferUploader::DirectX12BufferUploader(ID3D12Device& device, size_t blockSize)
 		: m_device(device)
 	{
 		m_blockSize = align_up(blockSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
@@ -22,7 +22,7 @@ namespace ob::rhi
 	}
 
 	//! @brief  アップロード要素を追加
-	void BufferUploader::add(BlobView blob, const ComPtr<ID3D12Resource>& dest, size_t offset) {
+	void DirectX12BufferUploader::add(BlobView blob, const ComPtr<ID3D12Resource>& dest, size_t offset) {
 
 		ScopeLock lock(m_lock);
 
@@ -49,7 +49,7 @@ namespace ob::rhi
 
 	}
 
-	void BufferUploader::add(const Buffer::CopyFunc& func, size_t size, const ComPtr<ID3D12Resource>& dest, size_t offset) {
+	void DirectX12BufferUploader::add(const Buffer::CopyFunc& func, size_t size, const ComPtr<ID3D12Resource>& dest, size_t offset) {
 
 		ScopeLock lock(m_lock);
 
@@ -78,7 +78,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを拡大する
-	void BufferUploader::extend() {
+	void DirectX12BufferUploader::extend() {
 
 		auto& frame = m_frames.current();
 
@@ -112,7 +112,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを縮小する
-	void BufferUploader::shurink() {
+	void DirectX12BufferUploader::shurink() {
 
 		auto& frame = m_frames.current();
 
@@ -125,7 +125,7 @@ namespace ob::rhi
 	//! @brief 更新
 	//! 
 	//! この関数は1フレームに1回だけ呼び出す必要があります。
-	void BufferUploader::update(ID3D12GraphicsCommandList& commandList) {
+	void DirectX12BufferUploader::update(ID3D12GraphicsCommandList& commandList) {
 
 		ScopeLock lock(m_lock);
 

@@ -11,7 +11,7 @@ namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	BufferUploader::BufferUploader(VulkanRHI& rhi, size_t blockSize)
+	VulkanBufferUploader::VulkanBufferUploader(VulkanRHI& rhi, size_t blockSize)
 		: m_rhi(rhi)
 	{
 		// Vulkanは256バイトのアラインメント制限はないがプラットフォームごとの差異を減らすため256バイトでアラインメントを取る
@@ -24,7 +24,7 @@ namespace ob::rhi
 	}
 
 	//! @brief  アップロード要素を追加
-	void BufferUploader::add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
+	void VulkanBufferUploader::add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
 
 		ScopeLock lock(m_lock);
 
@@ -51,7 +51,7 @@ namespace ob::rhi
 
 	}
 
-	void BufferUploader::add(const Buffer::CopyFunc& func, size_t size, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
+	void VulkanBufferUploader::add(const Buffer::CopyFunc& func, size_t size, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags) {
 
 		ScopeLock lock(m_lock);
 
@@ -80,7 +80,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを拡大する
-	void BufferUploader::extend() {
+	void VulkanBufferUploader::extend() {
 
 		auto& frame = m_frames.current();
 
@@ -121,7 +121,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを縮小する
-	void BufferUploader::shurink() {
+	void VulkanBufferUploader::shurink() {
 
 		auto& frame = m_frames.current();
 
@@ -132,7 +132,7 @@ namespace ob::rhi
 	}
 
 	//! @brief フレームごとのバッファ更新を行う
-	void BufferUploader::update(Ref<CommandList>& commandList) {
+	void VulkanBufferUploader::update(Ref<CommandList>& commandList) {
 
 		auto commandListImpl = commandList.cast<VulkanCommandList>();
 		if (commandListImpl == nullptr) {

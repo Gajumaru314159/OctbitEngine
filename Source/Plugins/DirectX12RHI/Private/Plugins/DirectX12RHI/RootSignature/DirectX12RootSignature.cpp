@@ -25,6 +25,24 @@ namespace ob::rhi {
 
 		s32 slot = 0;
 
+		// ルート定数
+		// Vulkan対応のためRootConstantsは0版固定で作成する
+		if (0 < desc.constants.size) {
+			if (desc.constants.size % sizeof(u32) != 0) {
+				LOG_WARNING("RootConstantのサイズが4の倍数ではありません。[size={}]", desc.constants.size);
+				return;
+			}
+
+			D3D12_ROOT_PARAMETER elm;
+			elm.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			elm.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+			elm.Constants.Num32BitValues = desc.constants.size / 4;
+			elm.Constants.ShaderRegister = desc.constants.registerNo;
+			elm.Constants.RegisterSpace = desc.constants.registerSpace;
+
+			parameters.push_back(elm);
+		}
+
 		// テーブル
 		for (auto& layout : m_desc.layouts) {
 
@@ -131,24 +149,6 @@ namespace ob::rhi {
 			);
 			samplerDescs.push_back(sampler);
 		}
-
-		// ルート定数
-		if (0 < desc.constants.size) {
-			if (desc.constants.size % sizeof(u32) != 0) {
-				LOG_WARNING("RootConstantのサイズが4の倍数ではありません。[size={}]", desc.constants.size);
-				return;
-			}
-
-			D3D12_ROOT_PARAMETER elm;
-			elm.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-			elm.ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
-			elm.Constants.Num32BitValues = desc.constants.size/4;
-			elm.Constants.ShaderRegister = desc.constants.registerNo;
-			elm.Constants.RegisterSpace = desc.constants.registerSpace;
-
-			parameters.push_back(elm);
-		}
-
 
 		// ルートシグネチャディスクリプタ
 		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(

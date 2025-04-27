@@ -14,10 +14,10 @@ namespace ob::rhi {
     //! CPUからデータを書き込めるGPUリソースは読み取り速度に制限がかかるため、
     //! 書き込み用のステージングバッファに書き込んだものをまとめてハイパフォーマンスなバッファにコピーします。
     //! コピー処理はフレームの先頭に行われます。必ず毎フレーム描画処理より前に実行してください。         
-    class BufferUploader {
+    class DirectX12BufferUploader {
     public:
 
-        BufferUploader(ID3D12Device& device,size_t blockSize);
+        DirectX12BufferUploader(ID3D12Device& device,size_t blockSize);
 
         void add(BlobView blob, const ComPtr<ID3D12Resource>& dest, size_t offset);
         void add(const Buffer::CopyFunc& func,size_t size, const ComPtr<ID3D12Resource>& dest,size_t offset);

@@ -18,7 +18,7 @@ namespace ob::rhi {
     //! CPUからデータを書き込めるGPUリソースは読み取り速度に制限がかかるため、
     //! 書き込み用のステージングバッファに書き込んだものをまとめてハイパフォーマンスなバッファにコピーします。
     //! コピー処理はフレームの先頭に行われます。必ず毎フレーム描画処理より前に実行してください。         
-    class TextureUploader {
+    class VulkanTextureUploader {
     public:
         struct Subresource {
             BlobView data;
@@ -27,7 +27,7 @@ namespace ob::rhi {
         };
     public:
 
-        TextureUploader(VulkanRHI& rhi);
+        VulkanTextureUploader(VulkanRHI& rhi);
 
         void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources);
 

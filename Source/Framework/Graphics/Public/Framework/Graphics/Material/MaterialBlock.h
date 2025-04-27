@@ -27,15 +27,19 @@ namespace ob::graphics {
     //! ただし、内部的な挙動が変わります。
     //! 
     //! ### Bindfull
-	//! * Integer, Scalar, Vector, Matrixのプロパティがパッキングされたバッファ (CBV)
     //! * Texture (SRV)
 	//! * Sampler (Sampler)
 	//! * Buffer (SRV)
+	//! * Integer, Scalar, Vector, Matrixのプロパティがパッキングされたバッファ (CBV)
+    //! 
+    //! 上記を含むDescriptorTableを指定したスロットに対してバインドする。
     //! 
     //! ### Bindless
-	//! * 「Integer, Scalar, Vector, Matrix、Textureのハンドル、Samplerのハンドル、Bufferのハンドルがパッキングされたバッファ」のハンドル (CBV)
+	//! * Integer, Scalar, Vector, Matrix、Textureのハンドル、Samplerのハンドル、Bufferのハンドルがパッキングされたバッファ
     //! 
+    //! 上記のバッファのBindlessHandleを指定したオフセットのRootConstantsに書き込む。
     //! 
+    //! @ref MaterialBlock
     class MaterialBlock {
     public:
         using CommandList = ob::rhi::CommandList;
@@ -65,8 +69,9 @@ namespace ob::graphics {
         void setBuffer(StringView name, const Ref<Buffer>& value);  //!< @copybrief setInteger()
 
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
-		//! @details Bindless時のみ使用可能です。
-        //!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
+		//! @details Bindfullの場合はslotにRootSignatureのスロットを指定する  
+        //!          Bindfullの場合はoffsetにBindlessHandleを書き込むオフセットを指定する (通常sizeof(BindlessHandle)の倍数)  
+        //!          BindfullとBindlessの両方に対応しやすいようにモードによらずこの関数を使用します。
         void record(Ref<CommandList>& commandList, s32 slot, s32 offset = 0);
 
     private:
