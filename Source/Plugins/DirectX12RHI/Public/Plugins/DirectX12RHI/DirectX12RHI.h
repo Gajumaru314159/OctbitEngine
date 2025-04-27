@@ -7,8 +7,8 @@
 #include <Framework/RHI/Config.h>
 #include <Framework/Core/Utility/Pimpl.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
-#include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
-#include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
+#include <Plugins/DirectX12RHI/Buffer/DirectX12BufferUploader.h>
+#include <Plugins/DirectX12RHI/Texture/DirectX12TextureUploader.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
 namespace ob::platform {

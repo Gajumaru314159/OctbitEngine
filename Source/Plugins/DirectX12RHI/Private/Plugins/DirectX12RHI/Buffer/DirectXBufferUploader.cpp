@@ -2,7 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/DirectX12RHI/Buffer/BufferUploader.h>
+#include <Plugins/DirectX12RHI/Buffer/DirectX12BufferUploader.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <pix3.h>
 

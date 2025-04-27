@@ -2,7 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
+#include <Plugins/DirectX12RHI/Texture/DirectX12TextureUploader.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <pix3.h>
 
