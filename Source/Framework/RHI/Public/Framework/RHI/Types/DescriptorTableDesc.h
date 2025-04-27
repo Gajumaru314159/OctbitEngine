@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ディスプレイ定義
+//! @brief		スワップチェーン定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,7 +8,7 @@
 
 namespace ob::rhi {
 
-    //! @brief      ディスプレイ定義
+    //! @brief      スワップチェーン定義
     struct DescriptorTableDesc {
         String name;
 		Ref<DescriptorLayout> layout;

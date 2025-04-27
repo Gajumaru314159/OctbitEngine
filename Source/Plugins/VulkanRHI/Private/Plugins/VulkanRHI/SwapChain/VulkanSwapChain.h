@@ -4,37 +4,37 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
 namespace ob::rhi::vulkan {
 
-	class VulkanDisplay :public Display{
+	class VulkanSwapChain :public SwapChain{
 	public:
 
-		VulkanDisplay(VulkanRHI& rhi, const DisplayDesc& desc);
-		~VulkanDisplay();
+		VulkanSwapChain(VulkanRHI& rhi, const SwapChainDesc& desc);
+		~VulkanSwapChain();
 
 		const String& getName()const override {
 			return m_desc.name;
 		}
 
 		//! @brief      定義を取得
-		const DisplayDesc& getDesc()const noexcept;
+		const SwapChainDesc& getDesc()const noexcept;
 
 		//! @brief      更新
 		void update() override;
 		void update(vk::Queue queue);
 
 		//! @brief      イベントリスナ追加
-		void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func);
+		void addEventListener(SwapChainEventHandle& handle, SwapChainEventDelegate func);
 
 	public:
 
-		//! @brief      テクスチャをディスプレイにコピー
-		void recordApplyDisplay(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture);
+		//! @brief      テクスチャをスワップチェーンにコピー
+		void recordApplySwapChain(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture);
 
 	private:
 
@@ -45,7 +45,7 @@ namespace ob::rhi::vulkan {
 	private:
 
 		VulkanRHI&					m_rhi;
-		DisplayDesc					m_desc;
+		SwapChainDesc					m_desc;
 
 		vk::raii::SurfaceKHR		m_surface = nullptr;
 		vk::raii::SwapchainKHR		m_swapchain = nullptr;
@@ -67,6 +67,6 @@ namespace ob::rhi::vulkan {
 
 		VulkanResourceStateCache	m_cache;
 
-		DisplayEventNotifier        m_notifier;
+		SwapChainEventNotifier        m_notifier;
 	};
 }

@@ -1,17 +1,17 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ディスプレイ
+//! @brief		スワップチェーン
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/RHI.h>
 
 namespace ob::rhi {
 
     //! @brief  生成
-    Ref<Display> Display::Create(const DisplayDesc& desc) {
+    Ref<SwapChain> SwapChain::Create(const SwapChainDesc& desc) {
         if (auto rhi= RHI::Get()) {
-            return rhi->createDisplay(desc);
+            return rhi->createSwapChain(desc);
         }
         return nullptr;
     }

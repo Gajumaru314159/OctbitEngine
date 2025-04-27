@@ -49,7 +49,7 @@ auto view = scene->createView();
 
 view->addDrawItem();
 
-// Display
+// SwapChain
 auto renderTexture = RenderTexture::Create();
 view->setRenderTexture(renderTexture);
 

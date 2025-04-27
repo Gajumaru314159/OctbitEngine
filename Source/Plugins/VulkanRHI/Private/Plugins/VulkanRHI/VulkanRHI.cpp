@@ -8,7 +8,7 @@
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
-#include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
+#include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
@@ -574,8 +574,8 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  スワップ・チェーンを生成
-	Ref<Display> VulkanRHI::createDisplay(const DisplayDesc& desc) {
-		SAFE_CREATE(Display, VulkanDisplay,*this, desc);
+	Ref<SwapChain> VulkanRHI::createSwapChain(const SwapChainDesc& desc) {
+		SAFE_CREATE(SwapChain, VulkanSwapChain,*this, desc);
 	}
 
 

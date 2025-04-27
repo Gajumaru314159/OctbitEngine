@@ -60,11 +60,11 @@ TEST(Graphis, MaterialBlock) {
 	windowDesc.title = "Graphic Test";
 	platform::Window window(windowDesc);
 
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
-		desc.name = "MainDisplay";
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
 		desc.window = window;
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 	}();
 #pragma endregion
 	// 事前セットアップここまで
@@ -73,7 +73,7 @@ TEST(Graphis, MaterialBlock) {
 	RenderView view(scene,"Test");
 	scene.addFeature<ImGuiRenderFeature>(scene);
 	scene.addFeature<MaterialRenderFeature>();
-	view.setDisplay(display);
+	view.setSwapChain(swapChain);
 	view.setPipeline<TestRenderPipeline>(view);
 
 	ImGuiHandle handle;
@@ -136,7 +136,7 @@ TEST(Graphis, MaterialBlock) {
 	auto now = DateTime::Now();
 
 
-	auto size = display->getDesc().size;
+	auto size = swapChain->getDesc().size;
 	auto viewMtx =
 		Matrix::Perspective(60, size.width, size.height, 0.01f, 10000.0f) *
 		Matrix::TRS(pos, rot, Vec3::One).inverse();
@@ -148,7 +148,7 @@ TEST(Graphis, MaterialBlock) {
 
 		RHI::Get()->update();
 		input::InputModule::Get()->update();
-		display->update();
+		swapChain->update();
 
 
 		// 行列更新

@@ -55,8 +55,8 @@ namespace ob::rhi::dx12 {
          //! @brief RenderPass終了
          void endRenderPass() override;
 
-        //! @brief      ディスプレイにテクスチャを適用
-        void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) override;
+        //! @brief      スワップチェーンにテクスチャを適用
+        void applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture) override;
 
         //! @brief      シザー矩形を設定
         void setScissorRect(const IntRect* pRect, s32 num) override;

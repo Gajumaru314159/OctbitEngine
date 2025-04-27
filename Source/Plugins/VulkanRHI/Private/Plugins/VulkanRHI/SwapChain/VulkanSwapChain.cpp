@@ -3,7 +3,7 @@
 //! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
+#include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
@@ -21,7 +21,7 @@
 namespace ob::rhi::vulkan {
 
 	//! @brief  コンストラクタ
-	VulkanDisplay::VulkanDisplay(VulkanRHI& rhi, const DisplayDesc& desc)
+	VulkanSwapChain::VulkanSwapChain(VulkanRHI& rhi, const SwapChainDesc& desc)
 		: m_rhi(rhi)
 	{
 		m_desc = desc;
@@ -166,24 +166,24 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief  デストラクタ
-	VulkanDisplay::~VulkanDisplay() {
+	VulkanSwapChain::~VulkanSwapChain() {
 	}
 
 
 	//! @brief  定義を取得
-	const DisplayDesc& VulkanDisplay::getDesc()const noexcept {
+	const SwapChainDesc& VulkanSwapChain::getDesc()const noexcept {
 		return m_desc;
 	}
 
 	
 	//! @brief 更新
-	void VulkanDisplay::update() {
+	void VulkanSwapChain::update() {
 		update(m_rhi.getQueue());
 	}
 
 
 	//! @brief 更新 
-	void VulkanDisplay::update(vk::Queue queue) {
+	void VulkanSwapChain::update(vk::Queue queue) {
 
 		if (!m_desc.window.isValid())return;
 
@@ -220,13 +220,13 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief      イベントリスナ追加
-	void VulkanDisplay::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
+	void VulkanSwapChain::addEventListener(SwapChainEventHandle& handle, SwapChainEventDelegate func) {
 		m_notifier.add(handle, func);
 	}
 
 
-	//! @brief      テクスチャをディスプレイにコピー
-	void VulkanDisplay::recordApplyDisplay(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture) {
+	//! @brief      テクスチャをスワップチェーンにコピー
+	void VulkanSwapChain::recordApplySwapChain(Ref<CommandList>& cmdList, const Ref<RenderTexture>& texture) {
 
 		// テクスチャが違う場合再バインド
 		if (m_bindedTexture != texture) {
@@ -294,7 +294,7 @@ namespace ob::rhi::vulkan {
 
 
 	// !@brief      applyに必要なリソースを生成
-	void VulkanDisplay::createResources(VulkanRHI& rhi) {
+	void VulkanSwapChain::createResources(VulkanRHI& rhi) {
 
 		{
 			Vec2 vertices[] = {
@@ -393,7 +393,7 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief      ウィンドウの更新イベント
-	void VulkanDisplay::onWindowChanged(const platform::WindowEventArgs& args) {
+	void VulkanSwapChain::onWindowChanged(const platform::WindowEventArgs& args) {
 
 		if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
 			if (!args.isSizing) {

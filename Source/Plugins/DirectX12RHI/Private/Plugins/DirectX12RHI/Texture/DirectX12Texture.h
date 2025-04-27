@@ -66,7 +66,7 @@ namespace ob::rhi::dx12 {
         ID3D12Resource* getResource()const;
 
         //! @brief      ネイティブリソースを解放
-        //! @details    Displayのリサイズ用
+        //! @details    SwapChainのリサイズ用
         void releaseNative() { m_resource = nullptr; }
 
         //! @brief      RTVを取得

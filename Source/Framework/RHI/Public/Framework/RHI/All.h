@@ -16,7 +16,7 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Sampler.h>
 #include <Framework/RHI/GraphicFile.h>

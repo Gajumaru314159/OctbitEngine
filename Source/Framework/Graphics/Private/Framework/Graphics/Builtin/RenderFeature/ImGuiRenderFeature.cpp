@@ -257,9 +257,9 @@ namespace ob::graphics {
 	//! @brief		コンストラクタ
 	bool ImGuiRenderer::render(FG& fg, FGTexture& target) {
 
-		auto display = m_view.getDisplay();
-		if (display == nullptr)return false;
-		auto window = display->getDesc().window;
+		auto swapChain = m_view.getDisplay();
+		if (swapChain == nullptr)return false;
+		auto window = swapChain->getDesc().window;
 
 
 		// このビューのコンテキストを設定
@@ -288,7 +288,7 @@ namespace ob::graphics {
 		updateBuffer();
 		updateCommand();
 
-		auto displaySize = ::ImGui::GetDrawData()->DisplaySize;
+		auto swapChainSize = ::ImGui::GetDrawData()->DisplaySize;
 
 
 		struct ImGuiData {
@@ -300,7 +300,7 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, ImGuiData& data) {
 				data.target = builder.write(target);
 			},
-			[this, displaySize](const ImGuiData& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[this, swapChainSize](const ImGuiData& data, FGResources& resources, rhi::CommandList& cmdList) {
 
 				using namespace ob::rhi;
 

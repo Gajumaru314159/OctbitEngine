@@ -63,11 +63,11 @@ TEST(Bindless, Handle) {
 	platform::Window window(windowDesc);
 	window.show();
 
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
-		desc.name = "MainDisplay";
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
 		desc.window = window;
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 		}();
 
 
@@ -84,7 +84,7 @@ TEST(Bindless, Handle) {
 	{
 		RenderTextureDesc desc;
 		desc.name = "RenderTexture";
-		desc.size = display->getDesc().size;
+		desc.size = swapChain->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
 		renderTexture = RenderTexture::Create(desc);
@@ -203,7 +203,7 @@ TEST(Bindless, Handle) {
 
 		commandList->endRenderPass();
 
-		commandList->applyDisplay(display, renderTexture);
+		commandList->applySwapChain(swapChain, renderTexture);
 
 		commandList->end();
 		commandList->flush();
@@ -213,7 +213,7 @@ TEST(Bindless, Handle) {
 		}
 
 		RHI::Get()->update();
-		display->update();
+		swapChain->update();
 
 		Thread::Sleep(33);
 	}

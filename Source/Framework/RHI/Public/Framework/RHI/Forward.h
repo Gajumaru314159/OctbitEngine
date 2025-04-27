@@ -27,7 +27,7 @@ namespace ob::rhi {
 	class CommandList;
 	class DescriptorTable;
 	class DescriptorLayout;
-	class Display;
+	class SwapChain;
 	class PipelineState;
 	class RenderTexture;
 	class RootSignature;

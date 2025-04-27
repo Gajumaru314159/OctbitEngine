@@ -9,7 +9,7 @@
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
-#include <Plugins/VulkanRHI/Display/VulkanDisplay.h>
+#include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
@@ -217,14 +217,14 @@ namespace ob::rhi::vulkan {
 
 
 	//! @brief      スワップチェーンにテクスチャを適用
-	void VulkanCommandList::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) {
+	void VulkanCommandList::applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture) {
 		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
-		if (auto pDisplay = display.cast<VulkanDisplay>()) {
+		if (auto pSwapChain = swapChain.cast<VulkanSwapChain>()) {
 			Ref<CommandList> commandList = this;
-			pDisplay->recordApplyDisplay(commandList, texture);
+			pSwapChain->recordApplySwapChain(commandList, texture);
 		}
 		else {
-			LOG_ERROR("不正な引数。ディスプレイが不正です。");
+			LOG_ERROR("不正な引数。スワップチェーンが不正です。");
 		}
 	}
 

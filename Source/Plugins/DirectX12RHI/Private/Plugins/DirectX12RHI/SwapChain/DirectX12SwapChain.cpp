@@ -1,9 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ディスプレイ・チェーン実装(DirectX12)
+//! @brief		スワップチェーン・チェーン実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
-#include "DirectX12Display.h"
+#include "DirectX12SwapChain.h"
 #include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
@@ -14,13 +14,13 @@
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <magic_enum.hpp>
 namespace {
-	int static const s_maxDisplayCount = 4;
+	int static const s_maxSwapChainCount = 4;
 }
 
 namespace ob::rhi::dx12 {
 
 	//! @brief  コンストラクタ
-	DirectX12Display::DirectX12Display(DirectX12RHI& rDevice, const DisplayDesc& desc)
+	DirectX12SwapChain::DirectX12SwapChain(DirectX12RHI& rDevice, const SwapChainDesc& desc)
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
@@ -38,24 +38,24 @@ namespace ob::rhi::dx12 {
 		m_syncInterval = desc.vsync ? 1 : 0;
 		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
 
-		if (!createDisplay(rDevice))return;
+		if (!createSwapChain(rDevice))return;
 		if (!createResources(rDevice))return;
 		if (!createBuffers(rDevice))return;
 
-		m_desc.window.addEventListener(m_hEvent, { *this,&DirectX12Display::onWindowChanged });
+		m_desc.window.addEventListener(m_hEvent, { *this,&DirectX12SwapChain::onWindowChanged });
 
 		manage();
 	}
 
 
 	//! @brief      名前を取得
-	const String& DirectX12Display::getName()const {
+	const String& DirectX12SwapChain::getName()const {
 		return m_desc.name;
 	}
 
 
 	//! @brief  スワップチェーン生成
-	bool DirectX12Display::createDisplay(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createSwapChain(DirectX12RHI& rDevice) {
 		auto& window = m_desc.window;
 
 		BOOL allowTearing = false;
@@ -140,10 +140,10 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief      レンダーテクスチャを初期化
-	bool DirectX12Display::createBuffers(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createBuffers(DirectX12RHI& rDevice) {
 
-		if (!is_in_range(m_desc.bufferCount, 1, s_maxDisplayCount)) {
-			LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxDisplayCount, m_desc.bufferCount);
+		if (!is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
+			LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxSwapChainCount, m_desc.bufferCount);
 			return false;
 		}
 
@@ -164,7 +164,7 @@ namespace ob::rhi::dx12 {
 			result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				// 生成が正しければ呼ばれないはず
-				Utility::OutputFatalLog(result, "IDXGIDisplay::GetBuffer()");
+				Utility::OutputFatalLog(result, "IDXGISwapChain::GetBuffer()");
 				return false;
 			}
 
@@ -181,7 +181,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  コンストラクタ
-	bool DirectX12Display::createResources(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createResources(DirectX12RHI& rDevice) {
 
 		{
 			Vec2 vertices[] = {
@@ -193,7 +193,7 @@ namespace ob::rhi::dx12 {
 				{-1,+1},
 			};
 			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
-			bdesc.name = m_desc.name + "_DisplayVertices";
+			bdesc.name = m_desc.name + "_SwapChainVertices";
 			m_verices = Buffer::Create(bdesc);
 			m_verices->updateDirect(bdesc.size, vertices);
 		}
@@ -270,7 +270,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief      カラースペースを設定
-	bool DirectX12Display::setColorSpace() {
+	bool DirectX12SwapChain::setColorSpace() {
 		bool isHdrEnabled = m_desc.hdr;
 		if (!isHdrEnabled)return false;
 
@@ -280,14 +280,14 @@ namespace ob::rhi::dx12 {
 
 		auto result = m_swapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, "IDXGIDisplay::CheckColorSpaceSupport()");
+			Utility::OutputFatalLog(result, "IDXGISwapChain::CheckColorSpaceSupport()");
 			return false;
 		}
 
 		if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
 			result = m_swapChain->SetColorSpace1(colorSpace);
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, "IDXGIDisplay::SetColorSpace1()");
+				Utility::OutputFatalLog(result, "IDXGISwapChain::SetColorSpace1()");
 				return false;
 			}
 		}
@@ -296,19 +296,19 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  デストラクタ
-	DirectX12Display::~DirectX12Display() {
+	DirectX12SwapChain::~DirectX12SwapChain() {
 
 	}
 
 
 	//! @brief  妥当なオブジェクトか
-	bool DirectX12Display::isValid()const {
+	bool DirectX12SwapChain::isValid()const {
 		return !m_textures.empty();
 	}
 
 
 	//! @brief  定義を取得
-	const DisplayDesc& DirectX12Display::getDesc()const noexcept {
+	const SwapChainDesc& DirectX12SwapChain::getDesc()const noexcept {
 		return m_desc;
 	}
 
@@ -316,7 +316,7 @@ namespace ob::rhi::dx12 {
 	//! @brief      更新
 	//! 
 	//! @details    表示するテクスチャを次のバックバッファにします。
-	void DirectX12Display::update() {
+	void DirectX12SwapChain::update() {
 
 		if (!m_desc.window.isValid())return;
 		if (!m_visible)return;
@@ -324,7 +324,7 @@ namespace ob::rhi::dx12 {
 		auto result = m_swapChain->Present(m_syncInterval, m_flags);
 
 		if (FAILED(result)) {
-			Utility::OutputFatalLog(result, "IDXGUIDisplay::Present()");
+			Utility::OutputFatalLog(result, "IDXGUISwapChain::Present()");
 			LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗")
 				return;
 		}
@@ -336,45 +336,45 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief      イベントリスナ追加
-	void DirectX12Display::addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func) {
+	void DirectX12SwapChain::addEventListener(SwapChainEventHandle& handle, SwapChainEventDelegate func) {
 		m_notifier.add(handle, func);
 	}
 
 
 
 	//! @brief      デスクリプタCPUハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE DirectX12Display::getCpuHandle()const {
+	D3D12_CPU_DESCRIPTOR_HANDLE DirectX12SwapChain::getCpuHandle()const {
 		return m_textures.current().cast<DirectX12Texture>()->getRTV().getCpuHandle();
 	}
 
 
 	//! @brief      デスクリプタGPUハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE DirectX12Display::getGpuHandle()const {
+	D3D12_GPU_DESCRIPTOR_HANDLE DirectX12SwapChain::getGpuHandle()const {
 		return m_textures.current().cast<DirectX12Texture>()->getRTV().getGpuHandle();
 	}
 
 
 	//! @brief      ビューポートを取得
-	D3D12_VIEWPORT DirectX12Display::getViewport()const {
+	D3D12_VIEWPORT DirectX12SwapChain::getViewport()const {
 		return m_viewport;
 	}
 
 
 	//! @brief      シザー矩形を取得
-	D3D12_RECT DirectX12Display::getScissorRect()const {
+	D3D12_RECT DirectX12SwapChain::getScissorRect()const {
 		return m_scissorRect;
 	}
 
 
 	//! @brief      リソース取得
-	ID3D12Resource* DirectX12Display::getResource()const {
+	ID3D12Resource* DirectX12SwapChain::getResource()const {
 
 		return m_textures.current().cast<DirectX12Texture>()->getResource();
 	}
 
 
 	//! @brief      バッファへコピー
-	void DirectX12Display::recordApplyDisplay(DirectX12CommandList& cmdList, const Ref<Texture>& texture) {
+	void DirectX12SwapChain::recordApplySwapChain(DirectX12CommandList& cmdList, const Ref<Texture>& texture) {
 
 		// テクスチャが違う場合再バインド
 		if (m_bindedTexture != texture) {
@@ -394,7 +394,7 @@ namespace ob::rhi::dx12 {
 			return;
 
 		{
-			cmdList.pushMarker("Apply Display");
+			cmdList.pushMarker("Apply SwapChain");
 
 
 
@@ -434,7 +434,7 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief      ウィンドウの更新イベント
-	void DirectX12Display::onWindowChanged(const platform::WindowEventArgs& args) {
+	void DirectX12SwapChain::onWindowChanged(const platform::WindowEventArgs& args) {
 
 		if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
 			if (!args.isSizing) {
@@ -470,7 +470,7 @@ namespace ob::rhi::dx12 {
 
 				createBuffers(m_device);
 
-				LOG_TRACE("ディスプレイをリサイズ ({},{}) -> ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
+				LOG_TRACE("スワップチェーンをリサイズ ({},{}) -> ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
 
 				m_notifier.invoke();
 

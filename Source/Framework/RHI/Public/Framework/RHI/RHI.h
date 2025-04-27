@@ -11,7 +11,7 @@
 #include <Framework/RHI/GraphicFile.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
-#include <Framework/RHI/Types/DisplayDesc.h>
+#include <Framework/RHI/Types/SwapChainDesc.h>
 #include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 #include <Framework/RHI/Types/DescriptorTableDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
@@ -53,7 +53,7 @@ namespace ob::rhi {
 
         //! @brief  説明
 
-        virtual Ref<Display>                createDisplay(const DisplayDesc& desc) { return nullptr; }
+        virtual Ref<SwapChain>                createSwapChain(const SwapChainDesc& desc) { return nullptr; }
 
         virtual Ref<CommandList>            createCommandList(const CommandListDesc& desc) { return nullptr; }
 

@@ -6,7 +6,7 @@
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-#include <Plugins/DirectX12RHI/Display/DirectX12Display.h>
+#include <Plugins/DirectX12RHI/SwapChain/DirectX12SwapChain.h>
 #include <Plugins/DirectX12RHI/Command/DirectX12CommandList.h>
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
@@ -102,8 +102,8 @@ namespace ob::rhi::dx12 {
 
 
 	//! @brief  コマンドリストを生成
-	Ref<Display> DirectX12RHI::createDisplay(const DisplayDesc& desc) {
-		SAFE_CREATE(Display, DirectX12Display, *this, desc);
+	Ref<SwapChain> DirectX12RHI::createSwapChain(const SwapChainDesc& desc) {
+		SAFE_CREATE(SwapChain, DirectX12SwapChain, *this, desc);
 	}
 
 

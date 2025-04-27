@@ -5,7 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
 
@@ -41,11 +41,11 @@ namespace ob::graphics {
         auto getViewport()const->Viewport;
 
         //! @brief      描画先ディスプレイを設定する
-        void setDisplay(const Ref<Display>& display);
+        void setDisplay(const Ref<SwapChain>& swapChain);
 
         //! @brief      描画先ディスプレイを取得する
         //! @details    描画先にRenderTextureが設定されている場合は空のオブジェクトが返されます。
-        auto getDisplay()const -> const Ref<rhi::Display>;
+        auto getDisplay()const -> const Ref<rhi::SwapChain>;
 
         //! @brief      描画先テクスチャを設定する
         void setRenderTexture(const Ref<RenderTexture>& renderTexture);
@@ -88,8 +88,8 @@ namespace ob::graphics {
         String                  m_name;
         Rect                    m_rect;
         RenderScene&            m_scene;
-        Ref<Display>            m_display;
-        DisplayEventHandle      m_hDisplayUpdated;
+        Ref<SwapChain>          m_swapChain;
+        SwapChainEventHandle    m_hDisplayUpdated;
         Ref<RenderTexture>      m_renderTexture;
         UPtr<RenderPipeline>    m_pipeline;
         RenderSceneEventHandle  m_hRelease;

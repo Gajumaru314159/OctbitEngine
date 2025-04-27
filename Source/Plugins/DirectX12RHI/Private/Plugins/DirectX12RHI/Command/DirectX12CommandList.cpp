@@ -10,7 +10,7 @@
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/RenderPass.h>
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
-#include <Plugins/DirectX12RHI/Display/DirectX12Display.h>
+#include <Plugins/DirectX12RHI/SwapChain/DirectX12SwapChain.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 #include <Plugins/DirectX12RHI/PipelineState/DirectX12PipelineState.h>
@@ -233,11 +233,11 @@ namespace ob::rhi::dx12 {
 	}
 
 
-	//! @brief      ディスプレイにテクスチャを適用
-	void DirectX12CommandList::applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture)
+	//! @brief      スワップチェーンにテクスチャを適用
+	void DirectX12CommandList::applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture)
 	{
-		if (auto pDisplay = display.cast<DirectX12Display>()) {
-			pDisplay->recordApplyDisplay(*this, texture);
+		if (auto pSwapChain = swapChain.cast<DirectX12SwapChain>()) {
+			pSwapChain->recordApplySwapChain(*this, texture);
 		}
 	}
 

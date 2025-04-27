@@ -22,7 +22,7 @@ TEST(RHI, CreateEmpty) {
 
 	injector.create<RHI>(container);
 
-	ASSERT_FALSE(Display::Create({}));
+	ASSERT_FALSE(SwapChain::Create({}));
 	ASSERT_FALSE(CommandList::Create({}));
 	ASSERT_FALSE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
@@ -44,7 +44,7 @@ TEST(RHI, CreateEmptyDX12) {
 
 	injector.create<RHI>(container);
 
-	ASSERT_FALSE(Display::Create({}));
+	ASSERT_FALSE(SwapChain::Create({}));
 	ASSERT_TRUE(CommandList::Create({}));
 	ASSERT_TRUE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
@@ -84,13 +84,13 @@ TEST(RHI, ShowHide) {
 		window.show();
 
 		// ディスプレイ
-		Ref<Display> display;
+		Ref<SwapChain> swapChain;
 		{
-			DisplayDesc desc;
-			desc.name = "MainDisplay";
+			SwapChainDesc desc;
+			desc.name = "MainSwapChain";
 			desc.window = window;
-			display = Display::Create(desc);
-			OB_ASSERT_EXPR(display);
+			swapChain = SwapChain::Create(desc);
+			OB_ASSERT_EXPR(swapChain);
 		}
 
 		// 描画先生成
@@ -98,7 +98,7 @@ TEST(RHI, ShowHide) {
 		{
 			RenderTextureDesc desc;
 			desc.name = "ColorRT";
-			desc.size = display->getDesc().size;
+			desc.size = swapChain->getDesc().size;
 			desc.format = TextureFormat::RGBA8;
 			desc.clear.color = Color::Black;
 
@@ -260,7 +260,7 @@ PsOut PS_Main(PsIn i) {
 			}
 
 			// 表示を更新(Present)
-			display->update();
+			swapChain->update();
 
 			cmdList->begin();
 
@@ -288,7 +288,7 @@ PsOut PS_Main(PsIn i) {
 
 			cmdList->endRenderPass();
 
-			cmdList->applyDisplay(display, colorRT);
+			cmdList->applySwapChain(swapChain, colorRT);
 
 			cmdList->end();
 

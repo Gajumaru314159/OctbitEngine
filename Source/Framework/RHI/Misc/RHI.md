@@ -14,9 +14,9 @@ graph TD
     Buffer & Texture & Sampler & RootSignature --> DescriptorTable
     RootSignature & Shader & RenderPass --> PipelineState
     RenderTexture & RenderPass --> FrameBuffer
-    Window --> Display
+    Window --> SwapChain
 
-    DescriptorTable & PipelineState & FrameBuffer & Display --> CommandList
+    DescriptorTable & PipelineState & FrameBuffer & SwapChain --> CommandList
 ```
 DirectStorageやRTX IOといったGPUとFileIOが強く結びついている機能もRHI層に吸収されています。
 これらの機能はID3D12Resourceといった特定のRHI実装に強く依存した機能であるため各RHI実装によって使用できるかどうかが分かれます。
@@ -70,7 +70,7 @@ Texture、Buffer、Samplerといったシェーダーリソースをバインド
 ### CommandList
 描画コマンドを記録するためのクラスです。これにより、描画パイプラインの効率的な制御が可能になります。
 
-### Display
+### SwapChain
 描画結果を画面に出力するためのクラスです。ウィンドウ管理やスワップチェインの制御を行います。
 
 ## インスタンスの生成方法
@@ -105,19 +105,19 @@ Ref<Texture> texture;
 ```c++
 DirectXRHI rhi(/*引数*/);
 
-// Display
-Ref<Display> display;
+// SwapChain
+Ref<SwapChain> swapChain;
 {
-	DisplayDesc desc;
+	SwapChainDesc desc;
 	desc.window = window;
-	display = Display::Create(desc);
+	swapChain = SwapChain::Create(desc);
 }
 
 // RenderTexture
 Ref<RenderTexture> target;
 {
 	RenderTextureDesc desc;
-	desc.size = display->getDesc().size;
+	desc.size = swapChain->getDesc().size;
 	target = RenderTexture::Create(desc);
 }
 
@@ -212,7 +212,7 @@ while(true) {
     
     commandList->endRenderPass();
     
-	commandList->applyDisplay(display, colorRT);
+	commandList->applySwapChain(swapChain, colorRT);
     
     commandList->end();
 

@@ -29,7 +29,7 @@ namespace ob::rhi {
         virtual void beginRenderPass(const RenderPassDesc& param) = 0;
         virtual void endRenderPass() = 0;
 
-        virtual void applyDisplay(const Ref<Display>& display, const Ref<RenderTexture>& texture) = 0;
+        virtual void applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture) = 0;
 
         virtual void setViewport(const Viewport* pViewport, s32 num) = 0;  //!< ビューポートを設定
         virtual void setScissorRect(const IntRect* pRect, s32 num) = 0;    //!< シザー矩形を設定

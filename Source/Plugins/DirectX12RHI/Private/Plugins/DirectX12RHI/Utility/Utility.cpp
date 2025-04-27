@@ -49,8 +49,8 @@ namespace ob::rhi::dx12 {
         ComPtr<ID3D12InfoQueue> infoQueue;
         if (pDevice&&SUCCEEDED(pDevice->QueryInterface(IID_PPV_ARGS(infoQueue.ReleaseAndGetAddressOf())))) {
             u64 storedCount = infoQueue->GetNumStoredMessages();
-            u64 displayCount = std::clamp<u64>(storedCount, 0,count);
-            for (u64 i = 0; i < displayCount; ++i) {
+            u64 swapChainCount = std::clamp<u64>(storedCount, 0,count);
+            for (u64 i = 0; i < swapChainCount; ++i) {
                 u64 index = (storedCount - 1) - i;
                 SIZE_T messageLength = 0;
                 if (FAILED(infoQueue->GetMessageW(index, nullptr, &messageLength))) {

@@ -1,6 +1,6 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ディスプレイ定義
+//! @brief		スワップチェーン定義
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,8 +10,8 @@
 
 namespace ob::rhi {
 
-    //! @brief      ディスプレイ定義
-    struct DisplayDesc {
+    //! @brief      スワップチェーン定義
+    struct SwapChainDesc {
         String              name;                       //!< 名前
         platform::Window    window;                     //!< 描画ウィンドウ
         TextureFormat       format=TextureFormat::RGBA8;//!< フォーマット(RGBA8/RGB16)

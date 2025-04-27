@@ -1,12 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ディスプレイ実装(DirectX12)
+//! @brief		スワップチェーン実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Core/Utility/Swapper.h>
 #include <Framework/Platform/Type/SystemEventType.h>
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/PipelineState.h>
@@ -29,7 +29,7 @@ namespace ob::rhi::dx12 {
 namespace ob::rhi::dx12 {
 
     //! @brief  説明
-    class DirectX12Display :public rhi::Display {
+    class DirectX12SwapChain :public rhi::SwapChain {
     public:
 
         //===============================================================
@@ -37,11 +37,11 @@ namespace ob::rhi::dx12 {
         //===============================================================
 
         //! @brief  コンストラクタ
-        DirectX12Display(DirectX12RHI& rDevice, const DisplayDesc& desc);
+        DirectX12SwapChain(DirectX12RHI& rDevice, const SwapChainDesc& desc);
 
 
         //! @brief  デストラクタ
-        ~DirectX12Display();
+        ~DirectX12SwapChain();
 
 
         //! @brief  妥当なオブジェクトか
@@ -53,7 +53,7 @@ namespace ob::rhi::dx12 {
 
 
         //! @brief  バックバッファの数を取得
-        const DisplayDesc& getDesc()const noexcept override;
+        const SwapChainDesc& getDesc()const noexcept override;
 
 
         //! @brief      更新
@@ -63,7 +63,7 @@ namespace ob::rhi::dx12 {
 
 
         //! @brief      イベントリスナ追加
-        void addEventListener(DisplayEventHandle& handle, DisplayEventDelegate func)override;
+        void addEventListener(SwapChainEventHandle& handle, SwapChainEventDelegate func)override;
 
 
     public:
@@ -88,8 +88,8 @@ namespace ob::rhi::dx12 {
         ID3D12Resource* getResource()const;
 
 
-        //! @brief      テクスチャをディスプレイにコピー
-        void recordApplyDisplay(DirectX12CommandList&, const Ref<Texture>& texture);
+        //! @brief      テクスチャをスワップチェーンにコピー
+        void recordApplySwapChain(DirectX12CommandList&, const Ref<Texture>& texture);
 
     private:
 
@@ -97,7 +97,7 @@ namespace ob::rhi::dx12 {
 
     private:
 
-        bool createDisplay(DirectX12RHI& rDevice);
+        bool createSwapChain(DirectX12RHI& rDevice);
         bool createResources(DirectX12RHI& rDevice);
         bool createBuffers(DirectX12RHI& rDevice);
         
@@ -108,7 +108,7 @@ namespace ob::rhi::dx12 {
 
         DirectX12RHI& m_device;
 
-        DisplayDesc m_desc;
+        SwapChainDesc m_desc;
 
         platform::WindowEventHandle m_hEvent;
         
@@ -129,7 +129,7 @@ namespace ob::rhi::dx12 {
         UINT m_syncInterval;
         UINT m_flags;
 
-        DisplayEventNotifier        m_notifier;
+        SwapChainEventNotifier        m_notifier;
         bool m_visible=true;
 
         s32                         m_resizeCountDown = -1;

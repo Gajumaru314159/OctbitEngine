@@ -6,7 +6,7 @@
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderView.h>
-#include <Framework/RHI/Display.h>
+#include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/RenderTexture.h>
 
 #include <Framework/Graphics/FrameGraph/FG.h>
@@ -73,21 +73,21 @@ namespace ob::graphics {
 	}
 
 	//! @brief      描画先を設定する
-	void RenderView::setDisplay(const Ref<Display>& display) {
-		if (m_display == display)return;
+	void RenderView::setDisplay(const Ref<SwapChain>& swapChain) {
+		if (m_swapChain == swapChain)return;
 		clearTarget();
 
-		m_display = display;
+		m_swapChain = swapChain;
 
-		m_display->addEventListener(m_hDisplayUpdated, { *this,&RenderView::onDisplayUpdated });
+		m_swapChain->addEventListener(m_hDisplayUpdated, { *this,&RenderView::onDisplayUpdated });
 
 		onDisplayUpdated();
 
 	}
 	
 	//! @brief      ディスプレイを取得する
-	auto RenderView::getDisplay()const->const Ref<rhi::Display> {
-		return m_display;
+	auto RenderView::getDisplay()const->const Ref<rhi::SwapChain> {
+		return m_swapChain;
 	}
 
 	//! @brief		ディスプレイ更新イベント
@@ -95,7 +95,7 @@ namespace ob::graphics {
 
 		RenderTextureDesc desc;
 		desc.name = Format("Display_{}", m_name);
-		desc.size = m_display->getDesc().size;
+		desc.size = m_swapChain->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
 		m_renderTexture = RenderTexture::Create(desc);
@@ -118,25 +118,25 @@ namespace ob::graphics {
 	//! @brief      描画
 	void RenderView::render(FG& fg) {
 		if (!m_pipeline) return;
-		if (!m_display || !m_renderTexture)return;
+		if (!m_swapChain || !m_renderTexture)return;
 		
 		FGTexture target = m_pipeline->render(fg);
 
 		struct Data {
-			Ref<Display> display;
+			Ref<SwapChain> swapChain;
 			FGTexture target;
 		};
 
 		fg.addPass<Data>(
 			"ApplyDisplay",
 			[&](FGBuilder& builder, Data& data) {
-				data.display = m_display;
+				data.swapChain = m_swapChain;
 				data.target = builder.read(target);
 				builder.setSideEffect();
 			},
 			[](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
 				auto texture = resources.get(data.target);
-				cmdList.applyDisplay(data.display, texture);
+				cmdList.applySwapChain(data.swapChain, texture);
 			}
 		);
 	}
@@ -144,7 +144,7 @@ namespace ob::graphics {
 	//! @brief      描画先をクリア
 	void RenderView::clearTarget() {
 		m_pipeline.reset();
-		m_display = {};
+		m_swapChain = {};
 		m_renderTexture = {};
 	}
 	//! @brief      シーンの開放チェック

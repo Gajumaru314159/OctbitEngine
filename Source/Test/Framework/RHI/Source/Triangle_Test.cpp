@@ -22,13 +22,13 @@ TEST_F(ARHITest, Triangle) {
 
 
 		// ディスプレイ
-		Ref<Display> display;
+		Ref<SwapChain> swapChain;
 		{
-			DisplayDesc desc;
+			SwapChainDesc desc;
 			desc.name = "RHITest Triangle";
 			desc.window = window;
-			display = Display::Create(desc);
-			OB_ASSERT_EXPR(display);
+			swapChain = SwapChain::Create(desc);
+			OB_ASSERT_EXPR(swapChain);
 		}
 
 		// 描画先生成
@@ -36,7 +36,7 @@ TEST_F(ARHITest, Triangle) {
 		{
 			RenderTextureDesc desc;
 			desc.name = "ColorRT";
-			desc.size = display->getDesc().size;
+			desc.size = swapChain->getDesc().size;
 			desc.format = TextureFormat::RGBA8;
 			desc.clear.color = Color::Black;
 
@@ -183,13 +183,13 @@ PsOut PS_Main(PsIn i) {
 			cmdList->endRenderPass();
 
 
-			cmdList->applyDisplay(display, colorRT);
+			cmdList->applySwapChain(swapChain, colorRT);
 
 			cmdList->end();
 			cmdList->flush();
 
 			RHI::Get()->update();
-			display->update();
+			swapChain->update();
 
 			Thread::Sleep(33);
 		}

@@ -63,11 +63,11 @@ TEST(MaterialBlock, Bindfull) {
 	platform::Window window(windowDesc);
 	window.show();
 
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
-		desc.name = "MainDisplay";
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
 		desc.window = window;
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 	}();
 
 #pragma endregion
@@ -213,7 +213,7 @@ PsOut PS_Main(PsIn i){
 	{
 		RenderTextureDesc desc;
 		desc.name = "RenderTexture";
-		desc.size = display->getDesc().size;
+		desc.size = swapChain->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
 		renderTexture = RenderTexture::Create(desc);
@@ -253,7 +253,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->endRenderPass();
 
-		commandList->applyDisplay(display, renderTexture);
+		commandList->applySwapChain(swapChain, renderTexture);
 
 		commandList->end();
 		commandList->flush();
@@ -263,7 +263,7 @@ PsOut PS_Main(PsIn i){
 		}
 
 		RHI::Get()->update();
-		display->update();
+		swapChain->update();
 
 		Thread::Sleep(33);
 	}
@@ -314,11 +314,11 @@ TEST(MaterialBlock, Bindless) {
 	platform::Window window(windowDesc);
 	window.show();
 
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
-		desc.name = "MainDisplay";
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
 		desc.window = window;
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 		}();
 
 #pragma endregion
@@ -492,7 +492,7 @@ PsOut PS_Main(PsIn i){
 	{
 		RenderTextureDesc desc;
 		desc.name = "RenderTexture";
-		desc.size = display->getDesc().size;
+		desc.size = swapChain->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
 		renderTexture = RenderTexture::Create(desc);
@@ -532,7 +532,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->endRenderPass();
 
-		commandList->applyDisplay(display, renderTexture);
+		commandList->applySwapChain(swapChain, renderTexture);
 
 		commandList->end();
 		commandList->flush();
@@ -542,7 +542,7 @@ PsOut PS_Main(PsIn i){
 		}
 
 		RHI::Get()->update();
-		display->update();
+		swapChain->update();
 
 		Thread::Sleep(33);
 	}
@@ -595,11 +595,11 @@ TEST(MaterialBlock, MultiBindless) {
 	platform::Window window(windowDesc);
 	window.show();
 
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
-		desc.name = "MainDisplay";
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
 		desc.window = window;
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 		}();
 
 #pragma endregion
@@ -792,7 +792,7 @@ PsOut PS_Main(PsIn i){
 	{
 		RenderTextureDesc desc;
 		desc.name = "RenderTexture";
-		desc.size = display->getDesc().size;
+		desc.size = swapChain->getDesc().size;
 		desc.format = TextureFormat::RGBA8;
 		desc.clear.color = Color::Black;
 		renderTexture = RenderTexture::Create(desc);
@@ -833,7 +833,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->endRenderPass();
 
-		commandList->applyDisplay(display, renderTexture);
+		commandList->applySwapChain(swapChain, renderTexture);
 
 		commandList->end();
 		commandList->flush();
@@ -843,7 +843,7 @@ PsOut PS_Main(PsIn i){
 		}
 
 		RHI::Get()->update();
-		display->update();
+		swapChain->update();
 
 		Thread::Sleep(33);
 	}

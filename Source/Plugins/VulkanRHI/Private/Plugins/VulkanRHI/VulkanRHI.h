@@ -58,7 +58,7 @@ namespace ob::rhi::vulkan {
 		//===============================================================
 
 		//! @brief  スワップ・チェーンを生成
-		Ref<Display> createDisplay(const DisplayDesc& desc) override;
+		Ref<SwapChain> createSwapChain(const SwapChainDesc& desc) override;
 
 
 		//! @brief  コマンドリスト生成

@@ -9,7 +9,7 @@
 using namespace ob;
 using namespace ob::rhi;
 
-TEST(VulkanRHI, Display) {
+TEST(VulkanRHI, SwapChain) {
 
 	Logger log;
 
@@ -24,8 +24,8 @@ TEST(VulkanRHI, Display) {
 	ServiceContainer m_container;
 	injector.create<RHI>(container);
 
-	DisplayDesc desc;
+	SwapChainDesc desc;
 	desc.window = platform::Window::Main();
 
-	auto display = Display::Create(desc);
+	auto swapChain = SwapChain::Create(desc);
 }
