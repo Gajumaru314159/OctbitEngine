@@ -549,6 +549,33 @@ namespace ob::rhi {
 		m_commandQueue->entryCommandList(commandList);
 	}
 
+	//! @brief ビデオカード情報を取得  
+	Vector<VideoCard> VulkanRHI::getVideoCards() const {
+
+		Vector<VideoCard> videoCards;
+		auto devices = m_instance.enumeratePhysicalDevices();
+		for (auto& device : devices) {
+			auto properties = device.getProperties(); 
+			auto memoryProperties = device.getMemoryProperties();
+			VideoCard videoCard;
+			videoCard.name = properties.deviceName.data();
+			videoCard.deviceId = properties.deviceID;
+			videoCard.memory = 0;
+			for (auto& heap : memoryProperties.memoryHeaps) {
+				if (heap.flags & vk::MemoryHeapFlagBits::eDeviceLocal) {
+					videoCard.memory.size += heap.size;
+				}
+			}
+
+			LOG_INFO("Vulkanはモニター情報の取得をまだ実装していません。");
+
+			videoCards.push_back(videoCard);
+		}
+		return videoCards;
+
+	}
+
+
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
