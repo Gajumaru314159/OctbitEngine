@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/CommandList.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief  コマンドキュー
     class VulkanCommandQueue {

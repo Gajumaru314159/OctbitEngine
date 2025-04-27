@@ -23,8 +23,8 @@ protected:
 		ServiceInjector injector;
 		ServiceContainer container;
 		
-		//rhi::dx12::RegisterDirectX12RHIService(injector);
-		rhi::vulkan::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		rhi::RegisterRHIService(injector);
 
 		m_dx12config.enableDebugLayer = true;
@@ -39,7 +39,7 @@ protected:
 	virtual void TearDown() {};
 
 	RHIConfig m_config;
-	dx12::DirectX12RHIConfig m_dx12config;
-	vulkan::VulkanRHIConfig m_vkconfig;
+	DirectX12RHIConfig m_dx12config;
+	VulkanRHIConfig m_vkconfig;
 	ServiceContainer m_container;
 };

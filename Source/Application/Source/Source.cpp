@@ -33,7 +33,7 @@ using namespace ob::rhi;
 using namespace ob::engine;
 using namespace ob::graphics;
 using namespace ob::platform;
-using namespace ob::rhi::dx12;
+using namespace ob::rhi;
 using namespace ob::input;
 
 int TestDirectX12() {

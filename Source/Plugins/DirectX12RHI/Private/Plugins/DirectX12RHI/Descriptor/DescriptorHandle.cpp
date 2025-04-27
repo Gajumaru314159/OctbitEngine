@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・ハンドル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	DescriptorHandle::DescriptorHandle()

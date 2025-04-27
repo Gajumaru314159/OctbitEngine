@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
@@ -16,7 +15,7 @@
 #include <dxcapi.h>
 #include <wrl/client.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     const wchar_t* getEntryW(ShaderStage stage) {
         switch (stage)

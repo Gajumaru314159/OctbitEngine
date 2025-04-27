@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・テーブル実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +9,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 	class DirectX12RHI;
 	class DescriptorHeap;
 	class DirectX12DescriptorLayout;
@@ -19,7 +18,7 @@ namespace ob::rhi::dx12 {
 //===============================================================
 // クラス定義
 //===============================================================
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  デスクリプタ・テーブル実装(DirectX12)
     class DirectX12DescriptorTable :public DescriptorTable {

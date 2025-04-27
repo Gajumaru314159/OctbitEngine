@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
@@ -13,7 +12,7 @@
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 #include <magic_enum.hpp>
 
-namespace ob::rhi::vulkan
+namespace ob::rhi
 {
 
 	//! @brief              コンストラクタ

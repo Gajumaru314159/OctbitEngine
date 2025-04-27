@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
@@ -8,7 +7,7 @@
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ

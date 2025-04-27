@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		テクスチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Texture.h"
@@ -10,7 +9,7 @@
 #include <DirectXTex.h>
 
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief D3D12_RESOURCE_DESCを構築する
 	static D3D12_RESOURCE_DESC CreateResourceDesc(TextureType type,TextureFormat format,Size size,s32 mipLevel,s32 arrayNum,StringView name) {
@@ -546,4 +545,4 @@ namespace ob::rhi::dx12 {
 
 	}
 
-}// ob::rhi::dx12
+}// ob::rhi

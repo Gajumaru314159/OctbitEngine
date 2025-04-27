@@ -1,11 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		DirectXの内部型変換
 //! @author		Gajumaru
 //***********************************************************
 #include "TypeConverter.h"
 
-namespace ob::rhi::dx12
+namespace ob::rhi
 {
     //! @brief  RootSignatureFlags を D3D12_ROOT_SIGNATURE_FLAGS に変換
     D3D12_ROOT_SIGNATURE_FLAGS TypeConverter::Convert(RootSignatureFlags value) {

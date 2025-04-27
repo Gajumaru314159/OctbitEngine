@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/PipelineState.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief		グラフィック・パイプライン実装(DirectX12)
     class VulkanPipelineState :public PipelineState {

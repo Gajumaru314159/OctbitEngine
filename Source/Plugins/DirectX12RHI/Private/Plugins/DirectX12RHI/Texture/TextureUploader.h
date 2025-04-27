@@ -6,7 +6,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Framework/Core/Utility/Swapper.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  テクスチャ・アップローダー
     //! 

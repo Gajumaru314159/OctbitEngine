@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ルートシグネチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -12,7 +11,7 @@
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	DirectX12RootSignature::DirectX12RootSignature(DirectX12RHI& rDevice, const RootSignatureDesc& desc)

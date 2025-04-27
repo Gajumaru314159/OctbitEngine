@@ -1,7 +1,6 @@
 ﻿
 //***********************************************************
 //! @file
-//! @brief		DirectXの内部型変換
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
@@ -9,7 +8,7 @@
 #include <Plugins/VulkanRHI/System.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 
-namespace ob::rhi::vulkan
+namespace ob::rhi
 {
 	//@―---------------------------------------------------------------------------
 	//! @brief      システムをServiceInjectorに登録

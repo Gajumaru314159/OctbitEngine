@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12DescriptorTable.h"
@@ -14,7 +13,7 @@
 #include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 
-namespace ob::rhi::dx12
+namespace ob::rhi
 {
 
 	//! @brief              コンストラクタ

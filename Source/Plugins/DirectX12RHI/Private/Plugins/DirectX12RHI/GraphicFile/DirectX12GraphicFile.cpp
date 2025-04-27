@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/GraphicFile/DirectX12GraphicFile.h>
@@ -13,7 +12,7 @@
 #include <Framework/Core/Misc/Compression.h>
 #include <DirectXTex.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 
 

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -9,7 +8,7 @@
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class VulkanSwapChain :public SwapChain{
 	public:

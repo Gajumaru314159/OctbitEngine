@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include "Utility.h"
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  エラーメッセージを取得
     String Utility::GetErrorMessage(DWORD errorCode) {

@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		バッファ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief      バッファ
 	class DirectX12Buffer:public rhi::Buffer {

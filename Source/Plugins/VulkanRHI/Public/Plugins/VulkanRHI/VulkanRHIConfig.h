@@ -1,10 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール・コンフィグ(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	struct VulkanRHIConfig {
 		bool enableDebugLayer = false;

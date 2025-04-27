@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ユーティリティ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Types/TextureFormat.h>
 #include <dxgi.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  ユーティリティ
     class Utility {

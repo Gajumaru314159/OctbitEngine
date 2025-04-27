@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanRHI.h>
@@ -33,7 +32,7 @@
 			return nullptr;\
 		}
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  デバッグレイヤのコールバック
@@ -60,7 +59,7 @@ namespace ob::rhi::vulkan {
 
 }
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
@@ -68,7 +67,7 @@ namespace ob::rhi::vulkan {
 	VulkanRHI::VulkanRHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config, VulkanRHIConfig* vconfig)
 		: RHI(objectManager, config)
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
-		, m_vconfig(vconfig ? *vconfig : ob::rhi::vulkan::VulkanRHIConfig{})
+		, m_vconfig(vconfig ? *vconfig : ob::rhi::VulkanRHIConfig{})
 	{
 		createInstance();
 		createPhysicalDevice();

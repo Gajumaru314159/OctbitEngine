@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		DirectXの内部型変換
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -12,7 +11,7 @@
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  DirectXの内部型変換
     class TypeConverter {

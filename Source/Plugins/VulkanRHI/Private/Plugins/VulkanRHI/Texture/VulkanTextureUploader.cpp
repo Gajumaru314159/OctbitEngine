@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
@@ -8,7 +7,7 @@
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
-namespace ob::rhi::vulkan
+namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ

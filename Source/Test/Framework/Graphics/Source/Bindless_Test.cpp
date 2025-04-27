@@ -32,17 +32,17 @@ TEST(Bindless, Handle) {
 	rhi::RHIConfig config;
 	config.enableBindless = true;
 
-	rhi::dx12::DirectX12RHIConfig dx12config;
+	rhi::DirectX12RHIConfig dx12config;
 	dx12config.enablePIX = true;
 
-	rhi::vulkan::VulkanRHIConfig vkconfig;
+	rhi::VulkanRHIConfig vkconfig;
 	vkconfig.enableDebugLayer = true;
 
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		//rhi::dx12::RegisterDirectX12RHIService(injector);
-		rhi::vulkan::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);

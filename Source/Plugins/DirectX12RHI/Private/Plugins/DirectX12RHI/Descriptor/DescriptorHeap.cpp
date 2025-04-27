@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・ヒープ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -11,7 +10,7 @@
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	static D3D12_DESCRIPTOR_HEAP_TYPE Convert(DescriptorHeapType value) {
 		switch (value)

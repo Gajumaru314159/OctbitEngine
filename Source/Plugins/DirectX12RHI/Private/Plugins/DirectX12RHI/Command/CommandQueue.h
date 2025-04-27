@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/CommandList.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  コマンドキュー
     class CommandQueue {
@@ -39,4 +38,4 @@ namespace ob::rhi::dx12 {
 
     };
 
-}// ob::rhi::dx12 
+}// ob::rhi 

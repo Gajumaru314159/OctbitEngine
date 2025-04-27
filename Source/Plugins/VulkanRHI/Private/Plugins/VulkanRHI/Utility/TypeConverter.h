@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		DirectXの内部型変換
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -12,7 +11,7 @@
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/RenderPass.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class TypeConverter {
 	public:

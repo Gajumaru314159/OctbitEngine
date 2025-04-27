@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
@@ -16,7 +15,7 @@ namespace ob::platform {
 	class WindowManager;
 }
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	class DirectX12RHI : public RHI{
 	public:
@@ -226,7 +225,7 @@ namespace ob::rhi::dx12 {
 //===============================================================
 // インライン
 //===============================================================
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  ネイティブ・デバイスを取得
 	inline ComPtr<ID3D12Device8>& DirectX12RHI::getNative() {

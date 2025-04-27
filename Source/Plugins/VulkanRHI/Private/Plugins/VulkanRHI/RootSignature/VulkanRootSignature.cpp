@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ルートシグネチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
@@ -8,7 +7,7 @@
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ

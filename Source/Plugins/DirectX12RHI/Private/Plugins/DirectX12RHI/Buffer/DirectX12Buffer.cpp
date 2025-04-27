@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
@@ -8,7 +7,7 @@
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  BufferState を D3D12_RESOURCE_STATESに変換
 	static D3D12_RESOURCE_STATES Convert(BufferState value) {
@@ -229,4 +228,4 @@ namespace ob::rhi::dx12 {
 
 	}
 
-}// ob::rhi::dx12 
+}// ob::rhi 

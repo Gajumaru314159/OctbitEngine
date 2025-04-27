@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		テクスチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	static vk::ImageCreateInfo CreateCreateInfo(TextureType type,TextureFormat format,Size size, s32 mipLevel, s32 arrayNum,StringView name) {
 		vk::ImageCreateInfo info;

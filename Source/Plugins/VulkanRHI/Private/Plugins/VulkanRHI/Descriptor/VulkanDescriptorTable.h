@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・テーブル実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -9,7 +8,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class VulkanDescriptorLayout;
 

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
@@ -10,7 +9,7 @@
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	//! @brief		コンストラクタ
 	VulkanPipelineState::VulkanPipelineState(VulkanRHI& rhi,const PipelineStateDesc& desc)

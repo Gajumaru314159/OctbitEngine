@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #ifdef OB_DEBUG
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  説明
     class PIXModule {

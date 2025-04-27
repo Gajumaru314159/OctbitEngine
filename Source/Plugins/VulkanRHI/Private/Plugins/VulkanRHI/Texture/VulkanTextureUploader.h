@@ -8,7 +8,7 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Texture.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     class VulkanRHI;
 

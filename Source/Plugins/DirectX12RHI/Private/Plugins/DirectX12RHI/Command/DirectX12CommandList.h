@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドリスト実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +9,7 @@
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     class DirectX12RootSignature;
 
@@ -126,4 +125,4 @@ namespace ob::rhi::dx12 {
 
     };
 
-}// ob::rhi::dx12 
+}// ob::rhi 

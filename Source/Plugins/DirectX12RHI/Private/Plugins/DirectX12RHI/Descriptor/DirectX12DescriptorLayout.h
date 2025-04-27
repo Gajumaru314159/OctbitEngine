@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・テーブル実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/DescriptorLayout.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	class DirectX12RHI;
 

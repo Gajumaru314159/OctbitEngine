@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Shader.h"
@@ -11,7 +10,7 @@
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     const wchar_t* getEntryW(ShaderStage stage) {
         switch (stage)

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドキュー
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
@@ -8,7 +7,7 @@
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ

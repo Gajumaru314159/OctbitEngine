@@ -1,10 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHIシステム(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief      システムをServiceInjectorに登録
 	void RegisterDirectX12RHIService(ServiceInjector&);

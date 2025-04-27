@@ -1,10 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・ヒープ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  デスクリプタ・タイプ
 	enum class DescriptorHeapType :u32 {

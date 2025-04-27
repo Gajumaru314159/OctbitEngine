@@ -15,7 +15,7 @@ TEST(VulkanRHI, SwapChain) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	ob::rhi::vulkan::RegisterVulkanRHIService(injector);
+	ob::rhi::RegisterVulkanRHIService(injector);
 	rhi::RegisterRHIService(injector);
 
 	RHIConfig config;

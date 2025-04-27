@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -15,7 +14,7 @@ namespace ob::platform {
 	class WindowManager;
 }
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	struct VulkanFeatureInfo {
 		bool debugMarkerEnabled = false;
@@ -278,6 +277,6 @@ namespace ob::rhi::vulkan {
 //===============================================================
 // インライン
 //===============================================================
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 }

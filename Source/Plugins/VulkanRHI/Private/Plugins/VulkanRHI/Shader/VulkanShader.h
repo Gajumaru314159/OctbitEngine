@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シェーダ実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,7 +7,7 @@
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief  シェーダ実装(DirectX12)
     class VulkanShader :public Shader {

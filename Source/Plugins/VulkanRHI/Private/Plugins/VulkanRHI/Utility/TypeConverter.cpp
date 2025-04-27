@@ -1,6 +1,6 @@
 ﻿#include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	vk::ImageType TypeConverter::Convert(TextureType value) {
 		switch (value) {

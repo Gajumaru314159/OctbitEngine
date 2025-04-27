@@ -7,7 +7,7 @@
 #include <Framework/Core/Utility/Swapper.h>
 #include <Framework/RHI/CommandList.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class VulkanRHI;
 

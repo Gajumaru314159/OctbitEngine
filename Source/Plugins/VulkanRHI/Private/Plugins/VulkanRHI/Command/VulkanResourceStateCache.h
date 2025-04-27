@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		リソースステート・キャッシュ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief  リソースステート・キャッシュ
     class VulkanResourceStateCache {

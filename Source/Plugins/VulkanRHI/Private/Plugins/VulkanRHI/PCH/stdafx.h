@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		プリコンパイルヘッダ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -24,7 +23,7 @@
 
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 	class VulkanRHI;
 }
 

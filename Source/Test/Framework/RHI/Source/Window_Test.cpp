@@ -39,7 +39,7 @@ TEST(RHI, CreateEmptyDX12) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	rhi::dx12::RegisterDirectX12RHIService(injector);
+	rhi::RegisterDirectX12RHIService(injector);
 	rhi::RegisterRHIService(injector);
 
 	injector.create<RHI>(container);
@@ -67,10 +67,10 @@ TEST(RHI, ShowHide) {
 
 	ServiceInjector injector;
 	ServiceContainer container;
-	rhi::dx12::RegisterDirectX12RHIService(injector);
+	rhi::RegisterDirectX12RHIService(injector);
 	rhi::RegisterRHIService(injector);
 
-	rhi::dx12::DirectX12RHIConfig config;
+	rhi::DirectX12RHIConfig config;
 	config.enableDebugLayer = true;
 	injector.bind(config);
 

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドリスト実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
@@ -19,7 +18,7 @@
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	VulkanCommandList::VulkanCommandList(VulkanRHI& rhi, const CommandListDesc& desc)

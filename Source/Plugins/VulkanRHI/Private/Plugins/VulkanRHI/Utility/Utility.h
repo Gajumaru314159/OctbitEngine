@@ -1,11 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class VulkanRHI;
 

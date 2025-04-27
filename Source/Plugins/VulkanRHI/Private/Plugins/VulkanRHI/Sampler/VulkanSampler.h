@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シェーダ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Sampler.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief  サンプラー実装(DirectX12)
     class VulkanSampler :public Sampler {

@@ -1,11 +1,10 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 
-namespace ob::rhi::dx12
+namespace ob::rhi
 {
 
 	//! @brief コンストラクタ

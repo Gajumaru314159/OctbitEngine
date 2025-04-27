@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		バッファ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	class VulkanRHI;
 

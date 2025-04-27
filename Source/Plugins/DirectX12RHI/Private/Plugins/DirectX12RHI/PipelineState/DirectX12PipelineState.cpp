@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		パイプラインステート実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/PipelineState/DirectX12PipelineState.h>
@@ -10,7 +9,7 @@
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 
 	//! @brief		コンストラクタ

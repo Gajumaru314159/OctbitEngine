@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		テクスチャ実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -8,7 +7,7 @@
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     class VulkanRHI;
 
@@ -93,7 +92,7 @@ namespace ob::rhi::vulkan {
 //===============================================================
 // インライン
 //===============================================================
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     //! @brief      名前を取得
     inline const String& VulkanTexture::getName()const {

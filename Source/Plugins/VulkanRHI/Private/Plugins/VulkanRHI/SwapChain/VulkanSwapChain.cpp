@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デバイス実装(Vulkan)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
@@ -18,7 +17,7 @@
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Sampler.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	VulkanSwapChain::VulkanSwapChain(VulkanRHI& rhi, const SwapChainDesc& desc)

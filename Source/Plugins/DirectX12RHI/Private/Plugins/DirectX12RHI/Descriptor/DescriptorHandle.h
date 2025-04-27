@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・ハンドル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +9,7 @@ namespace ob::core {
     struct TLSFBlock;
 }
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  説明
     class DescriptorHandle:private Noncopyable {

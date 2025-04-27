@@ -37,7 +37,7 @@ TEST(Graphis, MaterialBlock) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::dx12::RegisterDirectX12RHIService(injector);
+		rhi::RegisterDirectX12RHIService(injector);
 		input::RegisterInputService(injector);
 		graphics::RegisterGraphicsService(injector);
 

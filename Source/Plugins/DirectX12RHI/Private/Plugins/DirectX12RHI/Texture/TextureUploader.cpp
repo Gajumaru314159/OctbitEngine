@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Texture/TextureUploader.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <pix3.h>
 
-namespace ob::rhi::dx12
+namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Sampler.h"
@@ -8,7 +7,7 @@
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
     //!

@@ -1,12 +1,11 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		非同期読み込みファイル
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicFile.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief 非同期ファイルハンドル
 	class DirectX12GraphicFileHandle : public GraphicFileHandle {

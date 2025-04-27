@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		リソースステート・キャッシュ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
     //! @brief  リソースステート・キャッシュ
     class ResourceStateCache {
@@ -106,4 +105,4 @@ namespace ob::rhi::dx12 {
 
     };
 
-}// ob::rhi::dx12 
+}// ob::rhi 

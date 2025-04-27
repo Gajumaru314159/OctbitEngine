@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドリスト実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12CommandList.h"
@@ -29,7 +28,7 @@
 //===============================================================
 
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	DirectX12CommandList::DirectX12CommandList(class DirectX12RHI& device, const CommandListDesc& desc)

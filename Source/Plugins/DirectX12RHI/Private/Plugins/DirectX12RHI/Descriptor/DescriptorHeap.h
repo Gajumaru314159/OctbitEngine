@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デスクリプタ・ヒープ
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
 #include <Framework/Core/Allocator/Utility/TLSFMapper.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief      デスクリプタのアロケータ
 	//! 

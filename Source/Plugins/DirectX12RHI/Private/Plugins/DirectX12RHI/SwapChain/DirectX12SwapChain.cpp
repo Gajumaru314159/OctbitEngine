@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スワップチェーン・チェーン実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12SwapChain.h"
@@ -17,7 +16,7 @@ namespace {
 	int static const s_maxSwapChainCount = 4;
 }
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  コンストラクタ
 	DirectX12SwapChain::DirectX12SwapChain(DirectX12RHI& rDevice, const SwapChainDesc& desc)

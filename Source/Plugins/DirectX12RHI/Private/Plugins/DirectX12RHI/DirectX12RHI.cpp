@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/DirectX12RHI.h>
@@ -31,7 +30,7 @@
 	if(p.cast<type_impl>()->isValid() == false) p = {};			\
 	return p;		
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	//! @brief  DirectX12RHIの起動に必要なサービスを登録
 	void DirectX12RHI::Inject(ServiceInjector& injector) {

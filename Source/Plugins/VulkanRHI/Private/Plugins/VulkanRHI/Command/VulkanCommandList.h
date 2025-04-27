@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		コマンドリスト実装(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
@@ -10,7 +9,7 @@
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
-namespace ob::rhi::vulkan {
+namespace ob::rhi {
 
     class VulkanRHI;
 
@@ -123,4 +122,4 @@ namespace ob::rhi::vulkan {
 
     };
 
-}// ob::rhi::dx12 
+}// ob::rhi 

@@ -1,10 +1,9 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		RHI・モジュール・コンフィグ(DirectX12)
 //! @author		Gajumaru
 //***********************************************************
 
-namespace ob::rhi::dx12 {
+namespace ob::rhi {
 
 	struct DirectX12RHIConfig {
         bool enablePIX = false;

@@ -1,13 +1,12 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
-namespace ob::rhi::vulkan
+namespace ob::rhi
 {
 
 	//! @brief              コンストラクタ
