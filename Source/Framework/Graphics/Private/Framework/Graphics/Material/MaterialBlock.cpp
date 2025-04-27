@@ -15,6 +15,28 @@
 
 namespace ob::graphics {
 
+	//! @brief MaterialBlockDescに対応するDescriptorLayoutを生成するユーティリティ関数
+	Ref<rhi::DescriptorLayout> MaterialBlock::CreateLayout(const MaterialBlockDesc& desc) {
+		using namespace ob::rhi;
+
+		DescriptorLayoutDesc layoutDesc;
+		layoutDesc.name = desc.name;
+
+		s32 index = 0;
+		for (auto& name : desc.textures) {
+			layoutDesc.items.emplace_back(Binding::Texture(index++));
+			layoutDesc.items.emplace_back(Binding::Sampler(index++));
+		}
+		for (auto& name : desc.buffers) {
+			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++));
+		}
+		{
+			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++));
+		}
+
+		return DescriptorLayout::Create(layoutDesc);
+	}
+
 	//! @brief コンストラクタ
 	//! @param desc マテリアルブロックの説明
 	MaterialBlock::MaterialBlock(const MaterialBlockDesc& desc) {
