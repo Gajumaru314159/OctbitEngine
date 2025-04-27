@@ -18,9 +18,6 @@ namespace ob::graphics {
 
 	bool OpaqueRenderer::render(FG& fg, FGBlackboard& blackboard)const {
 
-		auto rect = m_view.getScaledRect();
-		auto viewport = m_view.getViewport();
-
 		auto& gbuffer = blackboard.get<GBufferData>();
 
 		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
@@ -36,7 +33,6 @@ namespace ob::graphics {
 
 					cmdList.pushMarker("Opaque");
 
-
 					RenderPassDesc renderPass;
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
@@ -44,9 +40,6 @@ namespace ob::graphics {
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
 					cmdList.beginRenderPass(renderPass);
-
-					cmdList.setViewport(&viewport, 1);
-					cmdList.setScissorRect(&rect, 1);
 
 					feature->render("Opaque", cmdList);
 
@@ -70,8 +63,6 @@ namespace ob::graphics {
 
 	bool MaskedRenderer::render(FG& fg, FGBlackboard& blackboard)const {
 
-		IntRect rect = m_view.getScaledRect();
-
 		auto& gbuffer = blackboard.get<GBufferData>();
 
 		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
@@ -91,16 +82,12 @@ namespace ob::graphics {
 
 					cmdList.pushMarker("Masked");
 
-					Viewport vp(rect.left, rect.top, rect.right, rect.bottom, 1, 0);
-
 					RenderPassDesc renderPass;
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
 					cmdList.beginRenderPass(renderPass);
-					cmdList.setViewport(&vp, 1);
-					cmdList.setScissorRect(&rect, 1);
 
 					feature->render("Masked", cmdList);
 
@@ -219,9 +206,6 @@ namespace ob::graphics {
 				renderPass.colors.emplace_back(resources.get(data.accumulate), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 				cmdList.beginRenderPass(renderPass);
-
-				cmdList.setViewport(&vp, 1);
-				cmdList.setScissorRect(&rect, 1);
 
 				Ref<rhi::CommandList> cmd = &cmdList;
 				Matrix mtx;

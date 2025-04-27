@@ -25,6 +25,7 @@
 #include <Framework/Platform/Window.h>
 #include <Framework/RHI/All.h>
 #include <Plugins/DirectX12RHI/System.h>
+#include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -69,11 +70,11 @@ int TestDirectX12() {
 
 
 	// ディスプレイ生成
-	Ref<Display> display = [&] {
-		DisplayDesc desc;
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
 		desc.name = "MainDisplay";
 		desc.window = platform::Window::Main();
-		return Display::Create(desc);
+		return SwapChain::Create(desc);
 	}();
 
 	{
@@ -95,7 +96,7 @@ int TestDirectX12() {
 	RenderView view(scene, "Test");
 	scene.addFeature<ImGuiRenderFeature>(scene);
 	scene.addFeature<MaterialRenderFeature>();
-	view.setDisplay(display);
+	view.setDisplay(swapChain);
 	view.setPipeline<TestRenderPipeline>(view);
 
 	// シーン生成
@@ -168,9 +169,9 @@ int TestDirectX12() {
 
 		MaterialDesc desc;
 		desc.name = "Default";
-		desc.matrixProperties = { "Matrix" };
-		desc.colorProperties = { "Color" };
 		desc.textureProperties = { "Main", "Normal", "Parameter" };
+		desc.matrixProperties = { "Matrix" , "Matrix" };
+		desc.colorProperties = { "Color" };
 
 		MaterialPass& opaque = desc.passes["Opaque"];
 		opaque.depthStencil.depth.enable = true;
@@ -193,6 +194,7 @@ int TestDirectX12() {
 	material->setColor("Color", Color::White);
 
 
+	// DirectStorageテスト
 	{
 		String src = "Assets/Texture/test2.dds";
 		String dest = "Assets/Texture/test2.bin";
@@ -247,7 +249,7 @@ int TestDirectX12() {
 
 
 	auto viewMtx =
-		Matrix::Perspective(60, display->getDesc().size, 0.01f, 10000.0f) *
+		Matrix::Perspective(60, swapChain->getDesc().size, 0.01f, 10000.0f) *
 		Matrix::TRS(Vec3(0,0,-10), Rot::Identity, Vec3::One).inverse();
 	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
 
@@ -263,7 +265,7 @@ int TestDirectX12() {
 		flyCamera->update();
 
 		Engine::Get()->update();
-		display->update();
+		swapChain->update();
 		Graphics::Get()->update();
 
 		fgdebugger.update();
@@ -278,7 +280,7 @@ int TestDirectX12() {
 	delete world;
 
 	Engine::Get()->update();
-	display->update();
+	swapChain->update();
 	Graphics::Get()->update();
 
 
@@ -286,17 +288,24 @@ int TestDirectX12() {
 	return 0;
 }
 
+
+rhi::RHIConfig config;
+rhi::DirectX12RHIConfig dx12Config;
+
 void OctbitInit(ServiceInjector& injector) {
 
 	RegisterDirectX12RHIService(injector);
 	RegisterInputService(injector);
 	RegisterGraphicsService(injector);
 
-	rhi::RHIConfig config;
-	config.enableDirectStorageDebug = true;
+	config.enableBindless = true;
 	//config.enableDebugLayer = true;
 	//config.breakWithWarning = true;
+
+	dx12Config.enableDirectStorage = true;
+
 	injector.bind(config);
+	injector.bind(dx12Config);
 
 }
 

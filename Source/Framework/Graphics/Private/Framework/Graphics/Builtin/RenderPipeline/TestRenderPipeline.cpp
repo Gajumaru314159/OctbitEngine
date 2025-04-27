@@ -47,6 +47,7 @@ namespace ob::graphics {
 
         FGBlackboard blackboard;
 
+        /*
         {
 			auto& data = blackboard.add<GBufferData>() = fg.addPass<GBufferData>(
 				"Prepare",
@@ -86,7 +87,8 @@ namespace ob::graphics {
 
         auto target = fg.import(m_view.getRenderTexture());
         m_defferedLight.render(fg, blackboard,target);
-
+        */
+        auto target = fg.import(m_view.getRenderTexture());
         m_imgui.render(fg, target);
 
         return target;

@@ -305,7 +305,6 @@ namespace ob::graphics {
 				using namespace ob::rhi;
 
 				auto texture = resources.get(data.target);
-				Viewport vp(0, 0, texture->width(), texture->height(), 0, 1);
 
 				cmdList.pushMarker("ImGui");
 
@@ -316,7 +315,6 @@ namespace ob::graphics {
 				cmdList.beginRenderPass(renderPass);
 
 				cmdList.setPipelineState(m_pipeline);
-				cmdList.setViewport(&vp, 1);
 				cmdList.setVertexBuffer(m_vertexBuffer);
 				cmdList.setIndexBuffer(m_indexBuffer);
 
@@ -328,7 +326,7 @@ namespace ob::graphics {
 
 					// テクスチャ設定
 					SetDescriptorTableParam tables[] = {
-						{*(Ref<DescriptorTable>*)cmd.texture,1}
+						{*(Ref<DescriptorTable>*)cmd.texture,0}
 					};
 
 					cmdList.setScissorRect(&cmd.rect, 1);
