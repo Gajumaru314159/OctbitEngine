@@ -41,7 +41,7 @@ namespace ob::graphics {
 	//! @brief  プロパティがあるか
 	bool MaterialImpl::hasProprty(StringView name, MaterialPropertyType type) const {
 		
-		return m_block->hasProprty(name, type);
+		return m_block->hasProperty(name, type);
 	}
 
 	//! @brief  Floatプロパティを設定

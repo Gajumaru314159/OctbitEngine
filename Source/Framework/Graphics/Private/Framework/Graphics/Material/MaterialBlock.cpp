@@ -198,7 +198,7 @@ namespace ob::graphics {
 
 
 	//! @brief  プロパティがあるか
-	bool MaterialBlock::hasProprty(StringView name, MaterialPropertyType type) const {
+	bool MaterialBlock::hasProperty(StringView name, MaterialPropertyType type) const {
 		if (auto found = m_properties.find(name); found != m_properties.end()) {
 			return found->second.type == type;
 		}

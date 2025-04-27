@@ -48,25 +48,21 @@ namespace ob::graphics {
         MaterialBlock(const MaterialBlockDesc& desc);
 
         //! @brief  マテリアルパラメータが存在するか
-        //! @{
-        bool hasProprty(StringView name, MaterialPropertyType type)const;
-        bool hasInteger(StringView name)const;
-        bool hasScalar(StringView name)const;
-        bool hasVector(StringView name)const;
-        bool hasMatrix(StringView name)const;
-        bool hasTexture(StringView name)const;
-        bool hasBuffer(StringView name)const;
-        //! @}
+        bool hasProperty(StringView name, MaterialPropertyType type)const;
+        bool hasInteger(StringView name)const;  //!< @copybrief hasProperty()
+        bool hasScalar(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasVector(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasMatrix(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasTexture(StringView name)const;  //!< @copybrief hasProperty()
+        bool hasBuffer(StringView name)const;   //!< @copybrief hasProperty()
 
         //! @brief  マテリアルパラメータを設定
-        //! @{
         void setInteger(StringView name, s32 value);
-        void setScalar(StringView name, f32 value);
-        void setVector(StringView name, Color value);
-        void setMatrix(StringView name, const Matrix& value);
-        void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler);
-        void setBuffer(StringView name, const Ref<Buffer>& value);
-        //! @}
+        void setScalar(StringView name, f32 value);                 //!< @copybrief setInteger()
+        void setVector(StringView name, Color value);               //!< @copybrief setInteger()
+        void setMatrix(StringView name, const Matrix& value);       //!< @copybrief setInteger()
+        void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler); //!< @copybrief setInteger()
+        void setBuffer(StringView name, const Ref<Buffer>& value);  //!< @copybrief setInteger()
 
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 		//! @details Bindless時のみ使用可能です。
@@ -112,11 +108,11 @@ namespace ob::graphics {
 
 
 
-    inline bool MaterialBlock::hasInteger(StringView name)const { return hasProprty(name, MaterialPropertyType::Integer); }
-    inline bool MaterialBlock::hasScalar(StringView name)const { return hasProprty(name, MaterialPropertyType::Scalar); }
-    inline bool MaterialBlock::hasVector(StringView name)const { return hasProprty(name, MaterialPropertyType::Vector); }
-    inline bool MaterialBlock::hasMatrix(StringView name)const { return hasProprty(name, MaterialPropertyType::Matrix); }
-    inline bool MaterialBlock::hasTexture(StringView name)const { return hasProprty(name, MaterialPropertyType::Texture); }
-    inline bool MaterialBlock::hasBuffer(StringView name)const { return hasProprty(name, MaterialPropertyType::Buffer); }
+    inline bool MaterialBlock::hasInteger(StringView name)const { return hasProperty(name, MaterialPropertyType::Integer); }
+    inline bool MaterialBlock::hasScalar(StringView name)const { return hasProperty(name, MaterialPropertyType::Scalar); }
+    inline bool MaterialBlock::hasVector(StringView name)const { return hasProperty(name, MaterialPropertyType::Vector); }
+    inline bool MaterialBlock::hasMatrix(StringView name)const { return hasProperty(name, MaterialPropertyType::Matrix); }
+    inline bool MaterialBlock::hasTexture(StringView name)const { return hasProperty(name, MaterialPropertyType::Texture); }
+    inline bool MaterialBlock::hasBuffer(StringView name)const { return hasProperty(name, MaterialPropertyType::Buffer); }
 
 }
