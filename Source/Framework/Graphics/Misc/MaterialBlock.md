@@ -25,6 +25,20 @@ desc.buffers = { "Instances" };
 desc.vectors = { "Color" };
 desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
 ```
+## DescriptorLayoutの生成
+ユーティリティとしてMaterialBlockDescからBindfull用のDescriptorLayoutを生成できます。
+```cpp
+MaterialBlockDesc desc;
+desc.name = "TestBlock";
+desc.textures = { "Albedo" ,"Normal" };
+desc.buffers = { "Instances" };
+desc.vectors = { "Color" };
+desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
+desc.layout = MaterialBlock::CreateLayout(desc);
+```
+
+
+
 ## プロパティの設定
 プロパティタイプごとにセッターが用意されています。
 TextureプロパティはTextureとSamplerをセットする必要があります。
@@ -100,12 +114,4 @@ PsOut PsMain(PsIn i) {
 
 ## 複数のMaterialBlockの使用
 Bindfullモデルの場合はスロット毎に```record()```を呼び出してください。
-Bindlessモデルの場合はrecordの第二引数にPushConstans時のバイトオフセットを指定してください。
-```cpp
-// Bindfull
-s32 slot = 0;
-block1.record(commandList, slot);
-
-// Bindless
-block2.record(commandList, slot, sizeof(BindlessHandle) * 1);
-```
+Bindlessモデルの場合はRootConstantsがBindlessHandleの配列という想定のもと、slot番目の要素にBindlessHandleが書き込まれます。
