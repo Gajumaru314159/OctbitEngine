@@ -154,7 +154,7 @@ namespace ob::rhi {
 		{
 			auto& targetDesc = depth;
 			if (auto texture = param.depth.texture.cast<DirectX12Texture>()) {
-				targetDesc.cpuDescriptor = texture->getRTV().getCpuHandle();
+				targetDesc.cpuDescriptor = texture->getDSV().getCpuHandle();
 				targetDesc.DepthBeginningAccess.Type = TypeConverter::Convert(param.depth.beforeAccess);
 				targetDesc.DepthEndingAccess.Type = TypeConverter::Convert(param.depth.afterAccess);
 

@@ -817,8 +817,8 @@ PsOut PS_Main(PsIn i){
 		commandList->beginRenderPass(renderPass);
 
 		commandList->setPipelineState(pipeline);
-		block.record(commandList, 0, 0);
-		block2.record(commandList, 0,16);
+		block.record(commandList, 0);
+		block2.record(commandList, 1);
 
 		commandList->setVertexBuffer(vertexBuffer);
 		commandList->setIndexBuffer(indexBuffer);

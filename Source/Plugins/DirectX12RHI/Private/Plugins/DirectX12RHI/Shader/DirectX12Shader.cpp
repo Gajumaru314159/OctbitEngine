@@ -41,6 +41,7 @@ namespace ob::rhi {
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
     DirectX12Shader::DirectX12Shader(DirectX12RHI& device, const ShaderCompileDesc& desc) 
 		: m_name(desc.name)
+        , m_stage(desc.stage)
     {
         compile(device, desc);
     }
@@ -54,6 +55,7 @@ namespace ob::rhi {
     //! @param errorDest	エラー出力先文字列
     DirectX12Shader::DirectX12Shader(BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
+        , m_stage(stage)
     {
         // チャンクタイプをチェック
         bool isShaderBlob = (!blob.empty()) && *reinterpret_cast<const u32*>(blob.data()) == 0x43425844;

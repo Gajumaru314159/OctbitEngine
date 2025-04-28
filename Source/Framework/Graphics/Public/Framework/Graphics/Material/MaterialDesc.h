@@ -6,11 +6,8 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Constants.h>
-#include <Framework/RHI/Types/PipelineStateDesc.h>
-
-// HashMap<Name, MaterialPass> で使用するためインクルード
-#include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
+#include <Framework/RHI/Types/PipelineStateDesc.h>
 
 namespace ob::graphics {
 
@@ -34,33 +31,47 @@ namespace ob::graphics {
 
     };
 
-    //! @brief  マテリアルパス定義
-    struct MaterialPass {
-        rhi::RenderTargetFormatArray	colors;			    //!< 描画先フォーマット
+    struct ShaderSet {
+        Ref<rhi::Shader> 		vs;
+        Ref<rhi::Shader> 		ps;
+
+        // PipelineState周りの必須情報
+        Vector<InputLayout>		        inputLayout;
+        rhi::RenderTargetFormatArray    colors;
         Optional<rhi::TextureFormat>	depth;
-
-        Ref<rhi::RootSignature>         rootSignature;
-        Ref<rhi::Shader>                vs;
-        Ref<rhi::Shader>                ps;
-
         rhi::BlendDescList		        blends;
         rhi::RasterizerDesc		        rasterizer;
         rhi::DepthStencilDesc	        depthStencil;
-
-        Vector<InputLayout>              requiredLayout;
     };
+
+    // TODO 効率的なキーワード管理
+    using ShaderKeywordSet = Set<String, std::less<>>;
+    using ShaderKeywordMap = Map<String, bool, std::less<>>;
+
+
+    using ShaderMap = Map<ShaderKeywordSet, ShaderSet>;
+
+    struct MaterialPass {
+        String              name;
+        ShaderKeywordSet	keywords;	// RenderPassのキーワード RENDER_PASS_EARLY_Z
+        s32					lodNum;		// SHADER_QUALITY_0
+        s32					lodMax;		// 最低限保証する品質 (遠景で使用している単色シェーダーは低品質にしたとしても使ってはいけないなど)
+    };
+    using MaterialPassMap = Map<String, MaterialPass,std::less<>>;
 
     //! @brief  マテリアル定義
     struct MaterialDesc{
         String          name;
         
-        Vector<String>   floatProperties;
-        Vector<String>   colorProperties;
-        Vector<String>   matrixProperties;
-        Vector<String>   textureProperties;
-        Vector<String>   bufferProperties;
+        Vector<String>  textures;
+        Vector<String>  buffers;
+        Vector<String>  matrices;
+        Vector<String>  colors;
+        Vector<String>  vectors;
+        Vector<String>  scalars;
 
-        Map<String, MaterialPass,std::less<>> passes;
+        MaterialPassMap	passes;
+        ShaderMap 		shaders;	// 対応するものがなければエラーシェーダーにフォールバック
     };
 
 }

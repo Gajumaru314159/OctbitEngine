@@ -8,8 +8,7 @@
 #include <Framework/RHI/Types/PipelineStateDesc.h>
 #include <Framework/Graphics/Material/MaterialInternalTypes.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
-
-#include <Framework/RHI/RootSignature.h>
+#include <Framework/RHI/DescriptorLayout.h>
 
 namespace ob::graphics {
 
@@ -41,14 +40,19 @@ namespace ob::graphics {
 		void setMatrix(StringView name, const Matrix& value);
 		void setTexture(StringView name, const Ref<rhi::Texture>& value);
 
-		auto getSignature() { return m_signature; }
-
 	public:
 
-		void initializeGlobalProperties();
-		void initializeRootSignature();
-
 		void recordGlobalShaderProperties(Ref<rhi::CommandList>&);
+
+		Ref<rhi::DescriptorLayout> getGlobalLayout()const { return m_globalLayout; }
+		Ref<rhi::DescriptorLayout> getSceneLayout()const { return m_sceneLayout; }
+		Ref<rhi::DescriptorLayout> getViewLayout()const { return m_viewLayout; }
+
+	private:
+
+		void initializeGlobalProperties();
+		void initializeSceneProperties();
+		void initializeViewProperties();
 
 	private:
 
@@ -78,9 +82,11 @@ namespace ob::graphics {
 		SpinLock m_lock;
 		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_vertexLayoutCache;
 
-		Ref<rhi::RootSignature>		m_signature;
-
 		MemoryStorage<MaterialBlock>	m_block;
+
+		Ref<rhi::DescriptorLayout>	m_globalLayout;
+		Ref<rhi::DescriptorLayout>	m_sceneLayout;
+		Ref<rhi::DescriptorLayout>	m_viewLayout;
 
 	};
 

@@ -310,7 +310,7 @@ namespace ob::graphics {
 
 
 				RenderPassDesc renderPass;
-				renderPass.colors.emplace_back(texture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+				renderPass.colors.emplace_back(texture, RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 
 				cmdList.beginRenderPass(renderPass);
 

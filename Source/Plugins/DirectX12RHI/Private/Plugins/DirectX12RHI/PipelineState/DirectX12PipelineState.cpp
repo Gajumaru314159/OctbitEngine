@@ -47,15 +47,15 @@ namespace ob::rhi {
 				gpsd.VS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
 			if (m_desc.gs) {
-				auto& shader = *m_desc.vs.cast<DirectX12Shader>();
+				auto& shader = *m_desc.gs.cast<DirectX12Shader>();
 				gpsd.GS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
 			if (m_desc.hs) {
-				auto& shader = *m_desc.vs.cast<DirectX12Shader>();
+				auto& shader = *m_desc.hs.cast<DirectX12Shader>();
 				gpsd.HS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
 			if (m_desc.ds) {
-				auto& shader = *m_desc.vs.cast<DirectX12Shader>();
+				auto& shader = *m_desc.ds.cast<DirectX12Shader>();
 				gpsd.PS = CD3DX12_SHADER_BYTECODE(shader.getBinaryData(), shader.getBinarySize());
 			}
 			if (m_desc.ps) {

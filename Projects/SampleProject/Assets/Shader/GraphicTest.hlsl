@@ -1,27 +1,67 @@
 //#include "Common.h"
 
-SamplerState g_mainSampler:register(s0);
 
-// Global
-cbuffer Param : register(b0) {
-  //float    s_scalars[4];
-  float4   s_colors[1];
-  float4x4 s_matrices[1];
+struct TextureHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
-// Local
-cbuffer Param : register(b1) { 
-  float    g_scalars[8];
-  float4   g_colors[8];
-  float4x4 g_matrices[8];
+struct SamplerHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
+};
+
+struct BufferHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
 
 
-Texture2D s_skyTex : register(t0);
-Texture2D g_mainTex:register(t1);
-Texture2D g_normalTex:register(t2);
-Texture2D g_paramTex : register(t3);
+struct MaterialProps { 
+	TextureHandle MainTex;
+	SamplerHandle MainSmp;
+	TextureHandle NormalTex;
+	SamplerHandle NormalSmp;
+	TextureHandle ParameterTex;
+	SamplerHandle ParameterSmp;
+	float4x4 Matrix;
+	float4 Color;
+};
+struct GlobalProps {
+	float4x4 MatrixTest;
+	float Time;
+};
+struct SceneProps {
+	float4 LightDir;
+};
+struct ViewProps {
+	float4x4 MatrixV;
+	float4x4 MatrixP;
+	float4x4 MatrixVP;
+	float4x4 MatrixInvV;
+	float4x4 MatrixInvP;
+	float4x4 MatrixInvVP;
+	float4 CameraPos;
+	float4 ScreenSize;
+	float4 CameraUp;
+	float4 CameraRight;
+	float4 CameraFront;
+};
+
+cbuffer RootConstants : register(b0) {
+	BufferHandle MaterialHandle;
+	BufferHandle GlobalHandle;
+	BufferHandle SceneHandle;
+	BufferHandle ViewHandle;
+};
+
 
 // IN / OUT
 struct VsIn {
@@ -41,20 +81,39 @@ struct PsOut {
 };
 
 // ƒGƒ“ƒgƒŠ
-PsIn VS_Main(VsIn i) {
+PsIn VS_Main(VsIn i) {    
     PsIn o;
-    o.pos = mul(s_matrices[0],mul(g_matrices[0],float4(i.pos.xyz,1)));
+
+	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
+	GlobalProps gparam = ByteAddressBuffer(ResourceDescriptorHeap[GlobalHandle.index]).Load<GlobalProps>(0);
+	ViewProps vparam = ByteAddressBuffer(ResourceDescriptorHeap[ViewHandle.index]).Load<ViewProps>(0);
+
+	float4 worldPos = mul(mparam.Matrix,float4(i.pos.xyz,1));
+    o.pos = mul(gparam.MatrixTest,worldPos);
     o.uv = i.uv;
     o.normal = i.normal;
     return o;
 }
 PsOut PS_Main(PsIn i){
+
+	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
+	GlobalProps gparam = ByteAddressBuffer(ResourceDescriptorHeap[GlobalHandle.index]).Load<GlobalProps>(0);
+	
+	Texture2D g_mainTex = ResourceDescriptorHeap[mparam.MainTex.index];
+	SamplerState g_mainSmp = ResourceDescriptorHeap[mparam.MainSmp.index];
+	
+	Texture2D g_normalTex = ResourceDescriptorHeap[mparam.NormalTex.index];
+	SamplerState g_normalSmp = ResourceDescriptorHeap[mparam.NormalSmp.index];
+	
+	Texture2D g_parameterTex = ResourceDescriptorHeap[mparam.ParameterTex.index];
+	SamplerState g_parameterSmp = ResourceDescriptorHeap[mparam.ParameterSmp.index];
+
     PsOut o;
-    o.albedo = g_mainTex.Sample(g_mainSampler,i.uv) * g_colors[0];
+    o.albedo = g_mainTex.Sample(g_mainSmp,i.uv) * mparam.Color;
     if(o.albedo.a < 0.5) discard;
 
     //o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
-    o.normal = g_normalTex.Sample(g_mainSampler, i.uv)*0.5+0.5;
+    o.normal = g_normalTex.Sample(g_normalSmp, i.uv)*0.5+0.5;
     o.uv = float4(i.uv,0,1);
     return o;
 }

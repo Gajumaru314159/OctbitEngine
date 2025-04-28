@@ -8,6 +8,8 @@
 
 namespace ob::graphics {
 
+	struct MaterialBlockDesc;
+
 	class FG;
 
 	class RenderFeature;

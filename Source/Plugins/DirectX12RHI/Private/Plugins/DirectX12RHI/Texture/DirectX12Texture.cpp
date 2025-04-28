@@ -216,10 +216,10 @@ namespace ob::rhi {
 			}
 		}
 #else
-		FixedVector<TextureUploader::Subresource, 20> subresources;
+		FixedVector<DirectX12TextureUploader::Subresource, 20> subresources;
 
-		for (s32 array = 0; array < m_desc.arrayNum; ++array) {
-			for (s32 depth = 0; depth < m_desc.size.depth; ++depth) {
+		for (s32 array = 0; array < std::max<s32>(m_desc.arrayNum,1); ++array) {
+			for (s32 depth = 0; depth < std::max<s32>(m_desc.size.depth, 1); ++depth) {
 				for (s32 mipLevel = 0; mipLevel < resourceDesc.MipLevels; ++mipLevel) {
 
 					auto img = scratchImg.GetImage(mipLevel, array, depth);

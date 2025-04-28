@@ -37,7 +37,7 @@ block.setVector("Color", Color::Cyan);
 ```
 
 ## CommandListへの記録
-```MaterialBlock::record()```を使用します。引数には記録したいCommandListと、RootSignatureの何番目のスロットに灯篭くするかを指定します。
+```MaterialBlock::record()```を使用します。引数には記録したいCommandListと、RootSignatureの何番目のスロットに登録するかを指定します。
 ```cpp
 s32 slot = 0;
 block.record(commandList, slot);

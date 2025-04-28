@@ -13,10 +13,20 @@
 
 namespace ob::graphics {
 
+	enum class MaterialBlockScope {
+		Material,
+		Global,
+		Scene,
+		View,
+		Draw,
+	};
+
+
 	//!	@brief			コンストラクタ
 	MaterialManager::MaterialManager(rhi::RHI&, NameDictionary&) {
 		initializeGlobalProperties();
-		initializeRootSignature();
+		initializeSceneProperties();
+		initializeViewProperties();
 	}
 
 	//!	@brief			デストラクタ
@@ -27,27 +37,63 @@ namespace ob::graphics {
 	void MaterialManager::initializeGlobalProperties() {
 
 		MaterialBlockDesc desc;
-		desc.name = "GlobalMaterialParamter";
-		desc.vectors = { "LightDir" };
-		desc.matrices = { "Matrix" };
+		desc.name = "GlobalMaterialProperties";
+		desc.matrices = { "MatrixTest"};
+		desc.scalars = { "Time" };
+		desc.layout = m_globalLayout = MaterialBlock::CreateLayout(desc,enum_cast(MaterialBlockScope::Global));
+
+		m_block.construct(desc);
+
+
+
+	}
+
+	//!	@brief			シーンプロパティの初期化
+	void MaterialManager::initializeSceneProperties() {
+
+		MaterialBlockDesc desc;
+		desc.name = "SceneMaterialProperties";
+		desc.textures = {
+			// "ShadowTexture",
+		};
+		desc.buffers = { 
+			// "SpotLightBuffer",
+			// "PointLightBuffer",
+			// "DirectionalLightBuffer",
+		};
+		desc.vectors = { 
+			"LightDir" 
+		};
+		desc.layout = m_sceneLayout = MaterialBlock::CreateLayout(desc, enum_cast(MaterialBlockScope::Scene));
 
 		m_block.construct(desc);
 
 	}
 
-	//!	@brief			共通ルートシグネチャを生成
-	void MaterialManager::initializeRootSignature() {
-		using namespace ob::rhi;
+	//!	@brief			グローバルビュープロパティの初期化
+	void MaterialManager::initializeViewProperties() {
 
-		// TODO テクスチャの複数枚対応
-		RootSignatureDesc desc;
-		desc.constants.set(16*2, 0);
-		desc.samplers = { StaticSamplerDesc(SamplerDesc(TextureFillter::Linear), 0) };	// グローバルプロパティ(サンプラー)
-		desc.flags &= RootSignatureFlag::EnableBindless;
-		desc.name = "Common";
+		MaterialBlockDesc desc;
+		desc.name = "ViewMaterialProperties";
+		desc.matrices = {
+			"MatrixV",
+			"MatrixP",
+			"MatrixVP",
+			"MatrixInvV",
+			"MatrixInvP",
+			"MatrixInvVP",
+		};
+		desc.vectors = {
+			"CameraPos",
+			"ScreenSize",
+			"CameraUp",
+			"CameraRight",
+			"CameraFront",
+		};
+		desc.layout = m_viewLayout = MaterialBlock::CreateLayout(desc, enum_cast(MaterialBlockScope::View));
 
-		m_signature = RootSignature::Create(desc);
-		OB_ASSERT_EXPR(m_signature);
+		m_block.construct(desc);
+
 	}
 
 	//!	@brief			レイアウトID取得
@@ -91,7 +137,7 @@ namespace ob::graphics {
 
 	//! @brief  
 	void MaterialManager::recordGlobalShaderProperties(Ref<rhi::CommandList>& cmdList) {
-		m_block->record(cmdList, 0);
+		m_block->record(cmdList, enum_cast(MaterialBlockScope::Global));
 	}
 
 

@@ -14,6 +14,7 @@
 #include <Framework/Graphics/Mesh/MeshData.h>
 #include <Framework/Graphics/Builtin/RenderFeature/ModelRenderFeature.h>
 #include <Framework/Graphics/Material/Material.h>
+#include <Framework/RHI/Shader.h>
 
 namespace ob::model {
 
@@ -57,10 +58,6 @@ namespace ob::model {
 		Map<String, Ref<rhi::Texture>, std::less<>> textures;
 		Vector<Ref<graphics::Material>> materials;
 
-		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
-		OB_ASSERT(code, "ファイル読み込み失敗");
-		auto vs = rhi::Shader::CompileVS(*code);
-		auto ps = rhi::Shader::CompilePS(*code);
 
 		// マテリアル
 		for (auto m : Span<aiMaterial*>(scene->mMaterials, scene->mNumMaterials)) {
@@ -69,27 +66,41 @@ namespace ob::model {
 
 			// マテリアル生成
 			using namespace ob::graphics;
-			auto material = [&] {			
+
+			Ref<Material> material = [&] {
+				using namespace ob::rhi;
+				using namespace ob::graphics;
+
+				auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
+				OB_ASSERT(code, "ファイル読み込み失敗");
+
 				MaterialDesc desc;
-				desc.name = name;
-				desc.matrixProperties = { "Matrix" };
-				desc.colorProperties = {"Color"};
-				desc.textureProperties = { "Main","Normal","Parameter"};
-			
+				desc.name = path;
+				desc.textures = { "Main", "Normal", "Parameter" };
+				desc.matrices = { "Matrix" };
+				desc.colors = { "Color" };
+
 				MaterialPass& opaque = desc.passes["Opaque"];
-				opaque.depthStencil.depth.enable = true;
-				opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
-				opaque.depth = TextureFormat::D32;
-				opaque.vs = vs;
-				opaque.ps = ps;
-				opaque.requiredLayout = {
+				opaque.name = "Opaque";
+				opaque.keywords = { "Opaque" };
+
+				ShaderKeywordSet keywords = { "Opaque" };
+
+				auto& shaders = desc.shaders[keywords];
+
+				shaders.depthStencil.depth.enable = true;
+				shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+				shaders.depth = TextureFormat::D32;
+				shaders.vs = Shader::CompileVS(code.value());
+				shaders.ps = Shader::CompilePS(code.value());
+				shaders.inputLayout = {
 					{Semantic::Position,ElementType::Float,4},
 					{Semantic::Normal,ElementType::Float,4},
 					{Semantic::TexCoord,ElementType::Float,2},
 				};
-			
+
 				return Material::Create(desc);
-			}();
+				}();
 
 			material->setMatrix("Matrix", Matrix::Identity);
 

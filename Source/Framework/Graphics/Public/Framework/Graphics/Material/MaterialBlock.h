@@ -12,13 +12,13 @@ namespace ob::graphics {
     //! @brief  マテリアル定義
     struct MaterialBlockDesc {
         String          name;
-		Ref<rhi::DescriptorLayout> layout;
         Vector<String>  textures;
         Vector<String>  buffers;
         Vector<String>  matrices;
         Vector<String>  vectors;
         Vector<String>  scalars;
         Vector<String>  integers;
+		Ref<rhi::DescriptorLayout> layout;
     };
 
 	//! @brief      マテリアルのパラメーターを管理するクラス
@@ -49,7 +49,7 @@ namespace ob::graphics {
         using Buffer = ob::rhi::Buffer;
     public:
         //! @brief MaterialBlockDescに対応するDescriptorLayoutを生成するユーティリティ関数
-        static Ref<rhi::DescriptorLayout> CreateLayout(const MaterialBlockDesc& desc);
+        static Ref<rhi::DescriptorLayout> CreateLayout(const MaterialBlockDesc& desc,s32 space = 0);
     public:
 
         MaterialBlock(const MaterialBlockDesc& desc);
@@ -73,9 +73,9 @@ namespace ob::graphics {
 
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 		//! @details Bindfullの場合はslotにRootSignatureのスロットを指定する  
-        //!          Bindfullの場合はoffsetにBindlessHandleを書き込むオフセットを指定する (通常sizeof(BindlessHandle)の倍数)  
+        //!          Bindfullの場合はRootConstantsのoffsetにBindlessHandleを書き込む  
         //!          BindfullとBindlessの両方に対応しやすいようにモードによらずこの関数を使用します。
-        void record(Ref<CommandList>& commandList, s32 slot, s32 offset = 0);
+        void record(Ref<CommandList>& commandList, s32 slot);
 
     private:
 

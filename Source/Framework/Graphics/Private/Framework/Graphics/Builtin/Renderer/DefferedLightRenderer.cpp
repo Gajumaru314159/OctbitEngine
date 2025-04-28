@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
 #include <Framework/Graphics/Material/Material.h>
+#include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
 
 namespace ob::graphics {
@@ -112,22 +113,25 @@ namespace ob::graphics {
 			OB_ASSERT(code, "ファイル読み込み失敗");
 
 			MaterialDesc desc;
-			desc.name = "DefferedLight";
-			desc.colorProperties = { "Color" };
-			desc.matrixProperties = { "Matrix" };
-			desc.textureProperties = { "Main" ,"Normal","Depth" ,"UV" };
+			desc.name = "DeferredLight";
+			desc.textures= { "Main" ,"Normal","Depth" ,"UV" };
 
-			MaterialPass lighting;
-			lighting.colors = { TextureFormat::RGBA8};
-			lighting.vs = Shader::CompileVS(code.value());
-			lighting.ps = Shader::CompilePS(code.value());
-			lighting.blends = { BlendDesc::AlphaBlend };
-			lighting.requiredLayout = {
+			MaterialPass& opaque = desc.passes["PostProcess"];
+			opaque.name = "PostProcess";
+			opaque.keywords = { "PostProcess" };
+
+			ShaderKeywordSet keywords = { "PostProcess" };
+
+			auto& shaders = desc.shaders[keywords];
+
+			shaders.depthStencil.depth.enable = true;
+			shaders.colors = { TextureFormat::RGBA8 };
+			shaders.vs = Shader::CompileVS(code.value());
+			shaders.ps = Shader::CompilePS(code.value());
+			shaders.inputLayout = {
 				{Semantic::Position,ElementType::Float,4},
-				{Semantic::TexCoord,ElementType::Float,2},
 			};
 
-			desc.passes.emplace("PostProcess", lighting);
 			return Material::Create(desc);
 		}();
 
@@ -186,11 +190,7 @@ namespace ob::graphics {
 			},
 			[=](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
 
-
 				cmdList.pushMarker("Deffered Lighting");
-
-
-				Viewport vp(rect.left, rect.top, rect.right, rect.bottom, 1, 0);
 
 				auto albedo = resources.get(data.albedo);
 				auto normal = resources.get(data.normal);
@@ -200,7 +200,6 @@ namespace ob::graphics {
 				m_material->setTexture("Normal", normal);
 				m_material->setTexture("Depth", depth);
 				m_material->setTexture("UV", uv);
-
 
 				RenderPassDesc renderPass;
 				renderPass.colors.emplace_back(resources.get(data.accumulate), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);

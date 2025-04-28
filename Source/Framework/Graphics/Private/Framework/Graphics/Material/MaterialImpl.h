@@ -100,6 +100,7 @@ namespace ob::graphics {
 		PipelineMap			m_pipelineMap;
 
 		MemoryStorage<MaterialBlock> m_block;
+		Ref<rhi::DescriptorLayout> m_materialLayout;
 
 	};
 

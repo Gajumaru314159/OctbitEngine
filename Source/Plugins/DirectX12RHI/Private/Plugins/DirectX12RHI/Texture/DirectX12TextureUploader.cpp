@@ -171,7 +171,17 @@ namespace ob::rhi
 			// NOTE MipmapStreamingのように一部のサブリソースを既存の別リソースからコピーしてくる場合は
 			// CopyTextureRegionでサブリソースごとにコピーする。
 
-			//commandList.CopyTextureRegion(&request.destLocation, request.destOffset.x, request.destOffset.y, request.destOffset.z, &request.sourceLocation,&request.sourceBox);
+			//D3D12_TEXTURE_COPY_LOCATION  dest{};
+			//dest.pResource = request.dest.Get();
+			//dest.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+			//dest.SubresourceIndex = 0;
+			//
+			//D3D12_TEXTURE_COPY_LOCATION  source{};
+			//source.pResource = request.source.Get();
+			//source.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+			//source.PlacedFootprint = footprint;
+			//
+			//commandList.CopyTextureRegion(&dest, 0,0,0, &source,&request.sourceBox);
 		}
 
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後

@@ -102,12 +102,17 @@ int TestDirectX12() {
 	// シーン生成
 	auto world = World::Create("MainWorld");
 	auto scene2 = Scene::Create("SubScene");
-	auto entity = Entity::Create("RootEntity");
-	// entity->addComponent<TransformComponent>();
-	entity->setActive(true);
-	entity->addComponent<ReflectionTestComponent>();
-	entity->addComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
-	scene2->addEntity(entity);
+	auto entity1 = Entity::Create("RootEntity");
+	entity1->setActive(true);
+	entity1->addComponent<ReflectionTestComponent>();
+	entity1->addComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
+	scene2->addEntity(entity1);
+	auto entity2 = Entity::Create("RootEntity");
+	entity2->setActive(true);
+	entity2->addComponent<ReflectionTestComponent>();
+	entity2->addComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
+	entity2->findComponent<TransformComponent>()->setLocalScale({ 10 ,10,10});
+	scene2->addEntity(entity2);
 
 	world->getRootScene().addSubScene(*scene2);
 
@@ -142,116 +147,10 @@ int TestDirectX12() {
 		}
 	);
 
-	// テクスチャ読み込み
-#if 1
-	auto skyTexture = Texture::Load("Assets/Texture/test.dds");
-#else
-
-	auto skyTexture = Texture::Create(
-		[] {
-			TextureDesc desc;
-			desc.type = TextureType::Texture2D;
-			desc.format = TextureFormat::RGBA16;
-			desc.size = { 4096,2048};
-			desc.mipLevels = 5;
-			return desc;
-		}()
-	);
-#endif
-	// メッシュ読み込み
-	Ref<Mesh> skyMesh = Mesh::Load("Assets/Model/sky.obj");
-
-	// 描画物生成
-	Ref<Material> material = [&] {
-
-		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
-		OB_ASSERT(code, "ファイル読み込み失敗");
-
-		MaterialDesc desc;
-		desc.name = "Default";
-		desc.textureProperties = { "Main", "Normal", "Parameter" };
-		desc.matrixProperties = { "Matrix" , "Matrix" };
-		desc.colorProperties = { "Color" };
-
-		MaterialPass& opaque = desc.passes["Opaque"];
-		opaque.depthStencil.depth.enable = true;
-		opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
-		opaque.depth = TextureFormat::D32;
-		opaque.vs = Shader::CompileVS(code.value());
-		opaque.ps = Shader::CompilePS(code.value());
-		opaque.requiredLayout = {
-			{Semantic::Position,ElementType::Float,4},
-			{Semantic::Normal,ElementType::Float,4},
-			{Semantic::TexCoord,ElementType::Float,2},
-		};
-
-		return Material::Create(desc);
-	}();
-	material->setMatrix("Matrix", Matrix::Scale(Vec3(100)));
-	material->setTexture("Main", skyTexture);
-	material->setTexture("Normal", Texture::Normal());
-	material->setTexture("Parameter", Texture::White());
-	material->setColor("Color", Color::White);
-
-
-	// DirectStorageテスト
-	{
-		String src = "Assets/Texture/test2.dds";
-		String dest = "Assets/Texture/test2.bin";
-		GraphicFile::Generate(src, dest,1);
-
-		GraphicFileQueueDesc desc;
-		desc.name = "GraphicFileQueue";
-		auto queue = GraphicFileQueue::Create(desc);
-
-		auto infos = GraphicFile::Prepare(dest);
-
-		s32 index = 1;
-		
-		GraphicFileRequest request;
-		if(true){
-			request.handle = GraphicFileHandle::Create(dest);
-			request.offset = infos[index].offset;
-			request.size = infos[index].size;
-			request.uncompressedSize = infos[index].uncompressedSize;
-			GraphicFileRequest::TextureDesc t;
-			t.texture = skyTexture;
-			t.subresourceIndex = index;
-
-			request.dest = t;
-		} else {
-			request.handle = GraphicFileHandle::Create(dest);
-			request.offset = infos[0].offset;
-			for (auto& info : infos) {
-				request.size += info.size;
-			}
-			GraphicFileRequest::TextureSequenceDesc t;
-			t.texture = skyTexture;
-			t.firstSubresourceIndex = 0;
-			request.dest = t;
-		}
-		queue->add(request);
-
-		auto event = GraphicFileEvent::Create();
-		queue->add(event);
-		queue->submit();
-
-		event->wait();
-
-		queue->validate();
-	}
-
-
-	// モデル登録
-	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
-		feature->addRenderable(skyMesh, material);
-	}
-
-
 	auto viewMtx =
 		Matrix::Perspective(60, swapChain->getDesc().size, 0.01f, 10000.0f) *
 		Matrix::TRS(Vec3(0,0,-10), Rot::Identity, Vec3::One).inverse();
-	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
+	graphics::Material::SetGlobalMatrix("MatrixTest", viewMtx);
 
 	auto now = DateTime::Now();
 	while (true) {
@@ -303,6 +202,8 @@ void OctbitInit(ServiceInjector& injector) {
 	//config.breakWithWarning = true;
 
 	dx12Config.enableDirectStorage = true;
+	dx12Config.enableDebugLayer = true;
+	dx12Config.enablePIX = true;
 
 	injector.bind(config);
 	injector.bind(dx12Config);

@@ -10,8 +10,10 @@
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Sampler.h>
+#include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/Graphics/Mesh/MeshImpl.h>
+#include <Framework/RHI/RHI.h>
 
 #include <Framework/Graphics/Material/MaterialManager.h>
 #include <magic_enum.hpp>
@@ -24,14 +26,14 @@ namespace ob::graphics {
 	{
 		MaterialBlockDesc mdesc;
 		mdesc.name = desc.name;
-		mdesc.textures = desc.textureProperties;
-		mdesc.buffers = desc.bufferProperties;
-		mdesc.matrices = desc.matrixProperties;
-		mdesc.vectors = desc.colorProperties;
-		mdesc.scalars = desc.floatProperties;
+		mdesc.textures = desc.textures;
+		mdesc.buffers = desc.buffers;
+		mdesc.matrices = desc.matrices;
+		mdesc.vectors = desc.colors;
+		mdesc.scalars = desc.scalars;
+		mdesc.layout = m_materialLayout = MaterialBlock::CreateLayout(mdesc);
 
 		m_block.construct(mdesc);
-
 	}
 
 	const MaterialDesc& MaterialImpl::getDesc()const {
@@ -40,7 +42,6 @@ namespace ob::graphics {
 
 	//! @brief  プロパティがあるか
 	bool MaterialImpl::hasProprty(StringView name, MaterialPropertyType type) const {
-		
 		return m_block->hasProperty(name, type);
 	}
 
@@ -124,15 +125,11 @@ namespace ob::graphics {
 
 		cmdList->setPipelineState(pipeline);
 
-		// グローバル変数設定
-		if (auto manager = MaterialManager::Get()) {
-			manager->recordGlobalShaderProperties(cmdList);
-		} else {
-			LOG_ERROR("MaterialManagerが未初期化です。");
-		}
+		// TODO 異なるスコープのMaterialBlockを再バインドする必要があるか未確認
 
+		m_block->record(cmdList, 0);
 
-		m_block->record(cmdList, 0,16);
+		MaterialManager::Instance().recordGlobalShaderProperties(cmdList);
 
 		pMesh->record(cmdList, submeshIndex);
 
@@ -146,27 +143,39 @@ namespace ob::graphics {
 
 
 	//! @brief  パイプラインを生成
-	Ref<rhi::PipelineState> MaterialImpl::createPipeline(StringView pass, const rhi::VertexLayout& layout,VertexLayoutId id) {
+	Ref<rhi::PipelineState> MaterialImpl::createPipeline(StringView passName, const rhi::VertexLayout& layout,VertexLayoutId id) {
 
 		using namespace ob::rhi;
 
 		Ref<rhi::PipelineState> pipeline;
 
 		// マテリアルパス取得
-		auto passItr = m_desc.passes.find(pass);
+		auto passItr = m_desc.passes.find(passName);
 
 		if (passItr == m_desc.passes.end()) {
-			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。",pass,m_desc.name);
+			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。",passName,m_desc.name);
 			return nullptr;
 		}
 
-		auto& materialPass = passItr->second;
+		auto& pass = passItr->second;
 
 		// 頂点レイアウト
+
+		ShaderKeywordSet keywords = pass.keywords;
+
+		// TODO LODレベルに応じたシェーダの選択
+		auto shaderSetItr = m_desc.shaders.find(keywords);
+		if (shaderSetItr == m_desc.shaders.end()) {
+			LOG_ERROR("PipelineStateの生成に失敗。登録されていないShaderSetです。");
+			return nullptr;
+		}
+
+		auto& shaderSet = shaderSetItr->second;
+
+		// 選択したシェーダーに必要な頂点情報があるかを確認し、対応マップを作成する。
 		rhi::VertexLayout mapped;
-
-		for (auto& attr1 : materialPass.requiredLayout) {
-
+		Vector<InputLayout> missingLayouts;
+		for (auto& attr1 : shaderSet.inputLayout) {
 			bool ok = false;
 			for (auto& attr2 : layout.attributes) {
 
@@ -183,20 +192,37 @@ namespace ob::graphics {
 				}
 			}
 			if (ok == false) {
-				LOG_ERROR("PipelineStateの生成に失敗。マテリアルに必要な頂点情報が足りません。");
-				LOG_ERROR("Semantic:{} Type:{} Dimention:{} Index:{}", magic_enum::enum_name(attr1.semantic), magic_enum::enum_name(attr1.type), attr1.dimention, attr1.index);
-				return nullptr;
+				missingLayouts.push_back(attr1);
 			}
-
+		}
+		if (!missingLayouts.empty()) {
+			String message = Format("PipelineStateの生成に失敗。マテリアルに必要な頂点情報が足りません。 [name={}]",m_desc.name);
+			for (auto& layout : missingLayouts) {
+				message += Format("\n* Semantic:{} Type:{} Dimention:{} Index:{}", magic_enum::enum_name(layout.semantic), magic_enum::enum_name(layout.type), layout.dimention, layout.index);
+			}
+			LOG_ERROR("{}", message);
+			return nullptr;
 		}
 
 		// RootSignature(仮)
 		Ref<RootSignature> signature = [&](){
 
-			// TODO テクスチャの複数枚対応
 			RootSignatureDesc desc;
-			desc.constants.set(16 * 2, 0);	// グローバルプロパティ(バッファ)
-			desc.name = "Common";
+			desc.name = m_desc.name;
+
+			if (RHI::Instance().getConfig().enableBindless) {
+				// TODO マジックナンバーを共通ヘッダーに定義
+				desc.constants.set(sizeof(BindlessHandle) * 4, 0);
+				desc.flags |= RootSignatureFlag::EnableBindless;
+			} else {
+				auto& manager = MaterialManager::Instance();
+				desc.layouts = {
+					m_materialLayout,
+					manager.getGlobalLayout(),
+					manager.getSceneLayout(),
+					manager.getViewLayout(),
+				};
+			}			
 
 			return RootSignature::Create(desc);
 		}();
@@ -205,27 +231,25 @@ namespace ob::graphics {
 		{
 			PipelineStateDesc desc;
 
-			desc.name = "Material";
-			desc.colors = materialPass.colors;
-			desc.depth = materialPass.depth;
-			//TODO RootSignatureをマテリアル内部に閉じ込める
-			desc.rootSignature = signature;// MaterialManager::Get()->getSignature();// materialPass.rootSignature;
+			desc.name = m_desc.name;
+			desc.colors = shaderSet.colors;
+			desc.depth = shaderSet.depth;
+			desc.rootSignature = signature;
 			desc.vertexLayout = layout;
-			desc.vs = materialPass.vs;
-			desc.ps = materialPass.ps;
-			desc.blend = materialPass.blends;
-			desc.rasterizer = materialPass.rasterizer;
-			desc.depthStencil = materialPass.depthStencil;
+			desc.vs = shaderSet.vs;
+			desc.ps = shaderSet.ps;
+			desc.blend = shaderSet.blends;
+			desc.rasterizer = shaderSet.rasterizer;
+			desc.depthStencil = shaderSet.depthStencil;
 
 			pipeline = PipelineState::Create(desc);
 
 			if (pipeline) {
-				PipelineKey key{pass,id};
+				PipelineKey key{passName,id};
 				ScopeLock lock(m_lock);
 				m_pipelineMap[key] = pipeline;
 			}
 		}
-
 
 		return pipeline;
 

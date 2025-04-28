@@ -90,7 +90,7 @@ namespace ob::engine {
 			auto viewMtx =
 				Matrix::Perspective(60, viewSize.x, viewSize.y, 0.01f, 10000.0f) *
 				trs.inverse();
-			graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
+			graphics::Material::SetGlobalMatrix("MatrixTest", viewMtx);
 			
 		}
 	}

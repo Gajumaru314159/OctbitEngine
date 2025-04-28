@@ -16,7 +16,7 @@
 namespace ob::graphics {
 
 	//! @brief MaterialBlockDescに対応するDescriptorLayoutを生成するユーティリティ関数
-	Ref<rhi::DescriptorLayout> MaterialBlock::CreateLayout(const MaterialBlockDesc& desc) {
+	Ref<rhi::DescriptorLayout> MaterialBlock::CreateLayout(const MaterialBlockDesc& desc, s32 space) {
 		using namespace ob::rhi;
 
 		DescriptorLayoutDesc layoutDesc;
@@ -24,14 +24,14 @@ namespace ob::graphics {
 
 		s32 index = 0;
 		for (auto& name : desc.textures) {
-			layoutDesc.items.emplace_back(Binding::Texture(index++));
-			layoutDesc.items.emplace_back(Binding::Sampler(index++));
+			layoutDesc.items.emplace_back(Binding::Texture(index++, space));
+			layoutDesc.items.emplace_back(Binding::Sampler(index++, space));
 		}
 		for (auto& name : desc.buffers) {
-			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++));
+			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++, space));
 		}
 		{
-			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++));
+			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++, space));
 		}
 
 		return DescriptorLayout::Create(layoutDesc);
@@ -372,7 +372,7 @@ namespace ob::graphics {
 	//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 	//! @details Bindless時のみ使用可能です。
 	//!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
-	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot, s32 offset) {
+	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot) {
 		if (!commandList) return;
 		if (!m_table) return;
 		using namespace ob::rhi;
@@ -387,7 +387,7 @@ namespace ob::graphics {
 
 			SetRootConstantsParam param;
 			param.blob = BlobView(&handle, sizeof(handle));
-			param.offset = offset;
+			param.offset = slot * sizeof(rhi::BindlessHandle);
 			commandList->setRootConstant(param);
 
 		} else {

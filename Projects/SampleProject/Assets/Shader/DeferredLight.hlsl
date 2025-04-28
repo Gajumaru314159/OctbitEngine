@@ -1,29 +1,64 @@
 ﻿//#include "Common.h"
 
-SamplerState g_mainSampler:register(s0);
-
-// Global
-cbuffer Param : register(b0) {
-  //float    s_scalars[4];
-  float4   s_colors[1];
-  float4x4 s_matrices[1];
+struct TextureHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
-// Local
-cbuffer Param : register(b1) { 
-  float    g_scalars[8];
-  float4   g_colors[8];
-  float4x4 g_matrices[8];
+struct SamplerHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
 };
 
+struct BufferHandle {
+	uint type;
+	uint index;
+	uint reserved0;
+	uint reserved1;
+};
 
+struct MaterialProps { 
+	TextureHandle MainTex;
+	SamplerHandle MainSmp;
+	TextureHandle NormalTex;
+	SamplerHandle NormalSmp;
+	TextureHandle DepthTex;
+	SamplerHandle DepthSmp;
+	TextureHandle UVTex;
+	SamplerHandle UVSmp;
+};
+struct GlobalProps {
+	float4x4 MatrixTest;
+	float Time;
+};
+struct SceneProps {
+	float4 LightDir;
+};
+struct ViewProps {
+	float4x4 MatrixV;
+	float4x4 MatrixP;
+	float4x4 MatrixVP;
+	float4x4 MatrixInvV;
+	float4x4 MatrixInvP;
+	float4x4 MatrixInvVP;
+	float4 CameraPos;
+	float4 ScreenSize;
+	float4 CameraUp;
+	float4 CameraRight;
+	float4 CameraFront;
+};
 
+cbuffer RootConstants : register(b0) {
+	BufferHandle MaterialHandle;
+	BufferHandle GlobalHandle;
+	BufferHandle SceneHandle;
+	BufferHandle ViewHandle;
+};
 
-Texture2D s_dummy : register(t0);
-Texture2D g_textures[] : register(t1);
-//Texture2D g_albedo : register(t1);
-//Texture2D g_normal : register(t2);
-//Texture2D g_depth : register(t3);
 
 // IN / OUT
 struct VsIn {
@@ -48,15 +83,26 @@ PsIn VS_Main(VsIn i) {
 PsOut PS_Main(PsIn i){
     PsOut o;
 
-    Texture2D g_albedo = g_textures[0];
-    Texture2D g_normal = g_textures[1];
-    Texture2D g_depth = g_textures[2];
-    Texture2D g_uv = g_textures[3];
+	
+	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
+	
+	Texture2D g_mainTex = ResourceDescriptorHeap[mparam.MainTex.index];
+	SamplerState g_mainSmp = ResourceDescriptorHeap[mparam.MainSmp.index];
+	
+	Texture2D g_normalTex = ResourceDescriptorHeap[mparam.NormalTex.index];
+	SamplerState g_normalSmp = ResourceDescriptorHeap[mparam.NormalSmp.index];
+	
+	Texture2D g_depthTex = ResourceDescriptorHeap[mparam.DepthTex.index];
+	SamplerState g_depthSmp = ResourceDescriptorHeap[mparam.DepthSmp.index];
+	
+	Texture2D g_uvTex = ResourceDescriptorHeap[mparam.UVTex.index];
+	SamplerState g_uvSmp = ResourceDescriptorHeap[mparam.UVSmp.index];
 
-    float4 albedo = g_albedo.Sample(g_mainSampler,i.uv);
-    float4 normal = g_normal.Sample(g_mainSampler,i.uv)*0.5+0.5;
-    float4 depth = g_depth.Sample(g_mainSampler,i.uv) / 0.003;
-    float4 uv = g_uv.Sample(g_mainSampler,i.uv);
+
+    float4 albedo = g_mainTex.Sample(g_mainSmp,i.uv);
+    float4 normal = g_normalTex.Sample(g_normalSmp,i.uv)*0.5+0.5;
+    float4 depth = g_depthTex.Sample(g_depthSmp,i.uv) / 0.003;
+    float4 uv = g_uvTex.Sample(g_uvSmp,i.uv);
     float4 l = lerp(normal,depth,step(i.uv.y,0.5));
     float4 r = lerp(albedo,uv,step(i.uv.y,0.5));
     

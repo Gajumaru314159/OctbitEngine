@@ -74,7 +74,7 @@ namespace ob::rhi {
 		DescriptorHandle	m_samplerHandle;
 		DescriptorHandle	m_othersHandle;
 
-		using Element = Variant<Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
+		using Element = Variant<std::monostate,Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
 
 		Vector<Element> m_elemetns;
 
