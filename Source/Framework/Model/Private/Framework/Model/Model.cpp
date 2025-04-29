@@ -71,36 +71,51 @@ namespace ob::model {
 				using namespace ob::rhi;
 				using namespace ob::graphics;
 
-				auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
-				OB_ASSERT(code, "ファイル読み込み失敗");
-
 				MaterialDesc desc;
 				desc.name = path;
 				desc.textures = { "Main", "Normal", "Parameter" };
 				desc.matrices = { "Matrix" };
 				desc.colors = { "Color" };
 
-				MaterialPass& opaque = desc.passes["Opaque"];
-				opaque.name = "Opaque";
-				opaque.keywords = { "Opaque" };
+				{
+					auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
+					OB_ASSERT(code, "ファイル読み込み失敗");
 
-				ShaderKeywordSet keywords = { "Opaque" };
+					MaterialPass& pass = desc.passes["Opaque"];
+					pass.keywords = { "PASS_OPACITY" };
+					auto& shaders = desc.shaders[pass.keywords];
 
-				auto& shaders = desc.shaders[keywords];
+					shaders.depthStencil.depth.enable = true;
+					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+					shaders.depth = TextureFormat::D32;
+					shaders.vs = Shader::CompileVS(code.value());
+					shaders.ps = Shader::CompilePS(code.value());
+					shaders.inputLayout = {
+						{Semantic::Position,ElementType::Float,4},
+						{Semantic::Normal,ElementType::Float,4},
+						{Semantic::TexCoord,ElementType::Float,2},
+					};
+				}
+				{
+					auto code = File::ReadAllText("Assets/Shader/EarlyZ.hlsl");
+					OB_ASSERT(code, "ファイル読み込み失敗");
 
-				shaders.depthStencil.depth.enable = true;
-				shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
-				shaders.depth = TextureFormat::D32;
-				shaders.vs = Shader::CompileVS(code.value());
-				shaders.ps = Shader::CompilePS(code.value());
-				shaders.inputLayout = {
-					{Semantic::Position,ElementType::Float,4},
-					{Semantic::Normal,ElementType::Float,4},
-					{Semantic::TexCoord,ElementType::Float,2},
-				};
+					MaterialPass& pass = desc.passes["EarlyZ"];
+					pass.keywords = { "PASS_EARLY_Z" };
+					auto& shaders = desc.shaders[pass.keywords];
+
+					shaders.depthStencil.depth.enable = true;
+					shaders.colors = { TextureFormat::RGBA8 };
+					shaders.depth = TextureFormat::D32;
+					shaders.vs = Shader::CompileVS(code.value());
+					shaders.ps = Shader::CompilePS(code.value());
+					shaders.inputLayout = {
+						{Semantic::Position,ElementType::Float,4},
+					};
+				}
 
 				return Material::Create(desc);
-				}();
+			}();
 
 			material->setMatrix("Matrix", Matrix::Identity);
 

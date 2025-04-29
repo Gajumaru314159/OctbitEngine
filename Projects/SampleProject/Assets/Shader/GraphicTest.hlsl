@@ -6,13 +6,20 @@ struct TextureHandle {
 	uint index;
 	uint reserved0;
 	uint reserved1;
-};
+	
+	uint sampler_type;
+	uint sampler_index;
+	uint sampler_reserved0;
+	uint sampler_reserved1;
 
-struct SamplerHandle {
-	uint type;
-	uint index;
-	uint reserved0;
-	uint reserved1;
+	template<typename T>
+	T Load() {
+		return ResourceDescriptorHeap[index];
+	}
+	
+	SamplerState LoadSampler() {
+		return SamplerDescriptorHeap[sampler_index];
+	}
 };
 
 struct BufferHandle {
@@ -20,17 +27,17 @@ struct BufferHandle {
 	uint index;
 	uint reserved0;
 	uint reserved1;
+	
+	template<typename T>
+	T Load() {
+		return ByteAddressBuffer(ResourceDescriptorHeap[index]).Load<T>(0);
+	}
 };
 
-
-
 struct MaterialProps { 
-	TextureHandle MainTex;
-	SamplerHandle MainSmp;
-	TextureHandle NormalTex;
-	SamplerHandle NormalSmp;
-	TextureHandle ParameterTex;
-	SamplerHandle ParameterSmp;
+	TextureHandle Main;
+	TextureHandle Normal;
+	TextureHandle Parameter;
 	float4x4 Matrix;
 	float4 Color;
 };
@@ -96,17 +103,17 @@ PsIn VS_Main(VsIn i) {
 }
 PsOut PS_Main(PsIn i){
 
-	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
-	GlobalProps gparam = ByteAddressBuffer(ResourceDescriptorHeap[GlobalHandle.index]).Load<GlobalProps>(0);
+	MaterialProps mparam = MaterialHandle.Load<MaterialProps>();
+	GlobalProps gparam = GlobalHandle.Load<GlobalProps>();
 	
-	Texture2D g_mainTex = ResourceDescriptorHeap[mparam.MainTex.index];
-	SamplerState g_mainSmp = ResourceDescriptorHeap[mparam.MainSmp.index];
+	Texture2D g_mainTex = mparam.Main.Load<Texture2D>();
+	SamplerState g_mainSmp = mparam.Main.LoadSampler();
 	
-	Texture2D g_normalTex = ResourceDescriptorHeap[mparam.NormalTex.index];
-	SamplerState g_normalSmp = ResourceDescriptorHeap[mparam.NormalSmp.index];
+	Texture2D g_normalTex = mparam.Normal.Load<Texture2D>();
+	SamplerState g_normalSmp = mparam.Normal.LoadSampler();
 	
-	Texture2D g_parameterTex = ResourceDescriptorHeap[mparam.ParameterTex.index];
-	SamplerState g_parameterSmp = ResourceDescriptorHeap[mparam.ParameterSmp.index];
+	Texture2D g_parameterTex = mparam.Parameter.Load<Texture2D>();
+	SamplerState g_parameterSmp = mparam.Parameter.LoadSampler();
 
     PsOut o;
     o.albedo = g_mainTex.Sample(g_mainSmp,i.uv) * mparam.Color;

@@ -19,6 +19,14 @@ namespace ob::graphics {
 	};
 
 
+	class EarlyZRenderer {
+	public:
+		EarlyZRenderer(RenderView& view);
+		bool render(FG& fg, FGBlackboard& blackboard)const;
+	private:
+		RenderView& m_view;
+	};
+
 	class OpaqueRenderer {
 	public:
 		OpaqueRenderer(RenderView& view);

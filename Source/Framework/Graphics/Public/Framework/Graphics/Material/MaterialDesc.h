@@ -52,7 +52,6 @@ namespace ob::graphics {
     using ShaderMap = Map<ShaderKeywordSet, ShaderSet>;
 
     struct MaterialPass {
-        String              name;
         ShaderKeywordSet	keywords;	// RenderPassのキーワード RENDER_PASS_EARLY_Z
         s32					lodNum;		// SHADER_QUALITY_0
         s32					lodMax;		// 最低限保証する品質 (遠景で使用している単色シェーダーは低品質にしたとしても使ってはいけないなど)

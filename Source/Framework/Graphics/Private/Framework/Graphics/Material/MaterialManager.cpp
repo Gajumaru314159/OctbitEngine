@@ -38,7 +38,7 @@ namespace ob::graphics {
 
 		MaterialBlockDesc desc;
 		desc.name = "GlobalMaterialProperties";
-		desc.matrices = { "MatrixTest"};
+		desc.matrices = { "MatrixTest" };
 		desc.scalars = { "Time" };
 		desc.layout = m_globalLayout = MaterialBlock::CreateLayout(desc,enum_cast(MaterialBlockScope::Global));
 

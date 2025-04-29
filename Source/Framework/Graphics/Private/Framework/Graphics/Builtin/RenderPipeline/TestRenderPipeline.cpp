@@ -31,6 +31,7 @@ namespace ob::graphics {
 
     TestRenderPipeline::TestRenderPipeline(RenderView& view)
         : m_view(view)
+        , m_earlyZ(view)
         , m_opaque(view)
         , m_masked(view)
         , m_defferedLight(view)
@@ -81,6 +82,7 @@ namespace ob::graphics {
             );
         }
 
+        m_earlyZ.render(fg, blackboard);
         m_opaque.render(fg, blackboard);
         m_masked.render(fg, blackboard);
 

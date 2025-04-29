@@ -135,7 +135,7 @@ int TestDirectX12() {
 		[&] {
 			// profiler.draw();
 			loginfo.draw();
-			// fgdebugger.draw();
+			fgdebugger.draw();
 			// ImGui::ShowDemoWindow();
 		}
 	);
@@ -203,6 +203,7 @@ void OctbitInit(ServiceInjector& injector) {
 
 	dx12Config.enableDirectStorage = true;
 	dx12Config.enableDebugLayer = true;
+	dx12Config.breakWithWarning = true;
 	dx12Config.enablePIX = true;
 
 	injector.bind(config);

@@ -19,6 +19,7 @@ namespace ob::graphics {
     private:
         RenderView& m_view;
         ImGuiRenderer m_imgui;
+        EarlyZRenderer m_earlyZ;
         OpaqueRenderer m_opaque;
         MaskedRenderer m_masked;
         DefferedLightRenderer m_defferedLight;

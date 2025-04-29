@@ -10,6 +10,48 @@
 
 namespace ob::graphics {
 
+	EarlyZRenderer::EarlyZRenderer(RenderView& view)
+		: m_view(view)
+	{
+
+	}
+
+	bool EarlyZRenderer::render(FG& fg, FGBlackboard& blackboard)const {
+
+		auto& gbuffer = blackboard.get<GBufferData>();
+
+		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
+			"EarlyZ",
+			[&](FGBuilder& builder, GBufferData& data) {
+				data.albedo = builder.write(gbuffer.albedo);
+				data.normal = gbuffer.normal;
+				data.depth = builder.write(gbuffer.depth);
+				data.uv = gbuffer.uv;
+			},
+			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
+				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
+
+					cmdList.pushMarker("EarlyZ");
+
+					RenderPassDesc renderPass;
+					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
+
+					cmdList.beginRenderPass(renderPass);
+
+					feature->render("EarlyZ", cmdList);
+
+					cmdList.endRenderPass();
+
+					cmdList.popMarker();
+				}
+			}
+		);
+
+		return true;
+	}
+
+	//--------------------------------
 
 	OpaqueRenderer::OpaqueRenderer(RenderView& view)
 		: m_view(view)
@@ -116,15 +158,10 @@ namespace ob::graphics {
 			desc.name = "DeferredLight";
 			desc.textures= { "Main" ,"Normal","Depth" ,"UV" };
 
-			MaterialPass& opaque = desc.passes["PostProcess"];
-			opaque.name = "PostProcess";
-			opaque.keywords = { "PostProcess" };
+			MaterialPass& pass = desc.passes["PostProcess"];
 
-			ShaderKeywordSet keywords = { "PostProcess" };
+			auto& shaders = desc.shaders[pass.keywords];
 
-			auto& shaders = desc.shaders[keywords];
-
-			shaders.depthStencil.depth.enable = true;
 			shaders.colors = { TextureFormat::RGBA8 };
 			shaders.vs = Shader::CompileVS(code.value());
 			shaders.ps = Shader::CompilePS(code.value());
