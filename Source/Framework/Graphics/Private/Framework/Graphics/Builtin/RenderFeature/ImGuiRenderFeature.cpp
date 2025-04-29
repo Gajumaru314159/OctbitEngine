@@ -467,9 +467,9 @@ namespace ob::graphics {
 		File file("Assets/Font/ipaexg.ttf");
 		if (Blob blob(file); blob) {
 			ImFontConfig config;
-			m_fontBlod = ::ImGui::MemAlloc(blob.size());
-			memcpy_s(m_fontBlod, blob.size(), blob.data(), blob.size());
-			io.Fonts->AddFontFromMemoryTTF(m_fontBlod, blob.size(), 13.0f, &config, io.Fonts->GetGlyphRangesJapanese());
+			m_fontBlob = ::ImGui::MemAlloc(blob.size());
+			memcpy_s(m_fontBlob, blob.size(), blob.data(), blob.size());
+			io.Fonts->AddFontFromMemoryTTF(m_fontBlob, blob.size(), 13.0f, &config, io.Fonts->GetGlyphRangesJapanese());
 		}
 
 		// テクスチャデータ生成

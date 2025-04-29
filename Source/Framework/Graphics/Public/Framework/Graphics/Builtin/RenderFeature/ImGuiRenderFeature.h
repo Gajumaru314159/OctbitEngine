@@ -98,7 +98,7 @@ namespace ob::graphics {
 
 		ImGuiContext* m_imguiContext;
 		ImPlotContext* m_implotContext;
-		void* m_fontBlod = nullptr;
+		void* m_fontBlob = nullptr;
 
 		ob::core::DateTime          m_time;
 
