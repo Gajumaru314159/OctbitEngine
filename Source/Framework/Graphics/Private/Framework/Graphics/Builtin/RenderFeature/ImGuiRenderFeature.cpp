@@ -300,26 +300,26 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, ImGuiData& data) {
 				data.target = builder.write(target);
 			},
-			[this, swapChainSize](const ImGuiData& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[this, swapChainSize](const ImGuiData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 
 				using namespace ob::rhi;
 
 				auto texture = resources.get(data.target);
 
-				cmdList.pushMarker("ImGui");
+				cmdList->pushMarker("ImGui");
 
 
 				RenderPassDesc renderPass;
 				renderPass.colors.emplace_back(texture, RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 
-				cmdList.beginRenderPass(renderPass);
+				cmdList->beginRenderPass(renderPass);
 
-				cmdList.setPipelineState(m_pipeline);
-				cmdList.setVertexBuffer(m_vertexBuffer);
-				cmdList.setIndexBuffer(m_indexBuffer);
+				cmdList->setPipelineState(m_pipeline);
+				cmdList->setVertexBuffer(m_vertexBuffer);
+				cmdList->setIndexBuffer(m_indexBuffer);
 
 				rhi::SetDescriptorTableParam param = { m_table,0 };
-				cmdList.setRootDesciptorTable(&param, 1);
+				cmdList->setRootDesciptorTable(&param, 1);
 
 
 				for (auto& cmd : m_commands) {
@@ -329,14 +329,14 @@ namespace ob::graphics {
 						{*(Ref<DescriptorTable>*)cmd.texture,0}
 					};
 
-					cmdList.setScissorRect(&cmd.rect, 1);
-					cmdList.setRootDesciptorTable(tables, std::size(tables));
-					cmdList.drawIndexed(cmd.param);
+					cmdList->setScissorRect(&cmd.rect, 1);
+					cmdList->setRootDesciptorTable(tables, std::size(tables));
+					cmdList->drawIndexed(cmd.param);
 				}
 
-				cmdList.endRenderPass();
+				cmdList->endRenderPass();
 
-				cmdList.popMarker();
+				cmdList->popMarker();
 			}
 		);
 

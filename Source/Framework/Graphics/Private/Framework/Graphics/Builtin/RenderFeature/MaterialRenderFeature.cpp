@@ -45,7 +45,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief      描画
-	bool MaterialRenderFeature::render(StringView pass, rhi::CommandList& cmdList)const {
+	bool MaterialRenderFeature::render(StringView pass, Ref<rhi::CommandList>& cmdList)const {
 
 		auto itr = m_renderablesMap.find(pass);
 		if (itr == m_renderablesMap.end())return false;
@@ -54,11 +54,8 @@ namespace ob::graphics {
 
 		for (auto& [maerialId,renderable] : renderables) {
 			Matrix matrix;
-			Ref<rhi::CommandList> cmdList2 = &cmdList;
-			renderable.material->record(cmdList2, matrix, renderable.mesh, renderable.submesh, pass);
+			renderable.material->record(cmdList, matrix, renderable.mesh, renderable.submesh, pass);
 		}
-
-		cmdList.popMarker();
 
 		return true;
 	}

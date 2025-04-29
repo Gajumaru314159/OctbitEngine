@@ -85,7 +85,7 @@ namespace ob::graphics {
 		auto commandList = m_commandLists.current();
 
 		commandList->begin();
-		m_fg->execute(*commandList, m_fgResourcePool);
+		m_fg->execute(commandList, m_fgResourcePool);
 		commandList->end();
 		commandList->flush();
 

@@ -77,7 +77,7 @@ namespace ob::graphics {
                         data.uv = builder.write(builder.create(desc));
                     }
                 },
-                [=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
+                [=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
                 }
             );
         }

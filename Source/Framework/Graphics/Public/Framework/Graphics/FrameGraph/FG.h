@@ -17,6 +17,8 @@
 namespace ob::graphics {
 
 	class FGResourcePool;
+	class FGBuilder;
+	class FGResources;
 
 	enum class FGTexture : s32 {};
 	enum class FGBuffer : s32 {};
@@ -106,13 +108,20 @@ namespace ob::graphics {
 
 	//! @brief      FrameGraph
 	class FG : Noncopyable, Nonmovable {
+	private:
+		template<typename TSetup, typename TData>
+		using Setupable = std::is_invocable<TSetup, FGBuilder&, TData&>;
+		template<typename TExecute, typename TData>
+		using Executable = std::is_invocable<TExecute, const TData&, FGResources&, Ref<rhi::CommandList>&>;
+		template<typename TData, typename TSetup, typename TExecute>
+		using IsValid = std::enable_if_t<Setupable<TSetup,TData>::value && Executable<TExecute,TData>::value, const TData&>;
 	public:
 
 		FG() = default;
 
 		//! @brief      パスを追加
 		template <typename Data, typename Setup, typename Execute>
-		const Data& addPass(StringView name, Setup&& setup, Execute&& execute);
+		auto addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid<Data, Setup, Execute>;
 
 		//! @brief      FGTextureのRenderTextureDescを取得する
 		const rhi::RenderTextureDesc& getDesc(FGTexture texture) {
@@ -153,7 +162,7 @@ namespace ob::graphics {
 		}
 
 		//! @brief     コンパイルされたパスを実行する
-		void execute(rhi::CommandList& cmd, FGResourcePool& pool) {
+		void execute(Ref<rhi::CommandList>& cmd, FGResourcePool& pool) {
 			m_fg.execute(&cmd, &pool);
 		}
 
@@ -253,7 +262,7 @@ namespace ob::graphics {
 
 	//! @brief      パスを追加
 	template <typename Data, typename Setup, typename Execute>
-	const Data& FG::addPass(StringView name, Setup&& setup, Execute&& execute) {
+	auto FG::addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid<Data, Setup, Execute> {
 		return m_fg.addCallbackPass<Data>(
 			name,
 			[&](FrameGraph::Builder& nativeBuilder, Data& data) {
@@ -261,7 +270,7 @@ namespace ob::graphics {
 				setup(builder, data);
 			},
 			[=](const Data& data, FrameGraphPassResources& nativeResources, void* ctx) {
-				auto& cmd = *static_cast<rhi::CommandList*>(ctx);
+				auto& cmd = *static_cast<Ref<rhi::CommandList>*>(ctx);
 				FGResources resources(nativeResources);
 				execute(data, resources, cmd);
 			}

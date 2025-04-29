@@ -28,22 +28,22 @@ namespace ob::graphics {
 				data.depth = builder.write(gbuffer.depth);
 				data.uv = gbuffer.uv;
 			},
-			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 
-					cmdList.pushMarker("EarlyZ");
+					cmdList->pushMarker("EarlyZ");
 
 					RenderPassDesc renderPass;
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
-					cmdList.beginRenderPass(renderPass);
+					cmdList->beginRenderPass(renderPass);
 
 					feature->render("EarlyZ", cmdList);
 
-					cmdList.endRenderPass();
+					cmdList->endRenderPass();
 
-					cmdList.popMarker();
+					cmdList->popMarker();
 				}
 			}
 		);
@@ -71,10 +71,10 @@ namespace ob::graphics {
 				data.depth = builder.write(gbuffer.depth);
 				data.uv = builder.write(gbuffer.uv);
 			},
-			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 
-					cmdList.pushMarker("Opaque");
+					cmdList->pushMarker("Opaque");
 
 					RenderPassDesc renderPass;
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
@@ -82,13 +82,13 @@ namespace ob::graphics {
 					renderPass.colors.emplace_back(resources.get(data.uv), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
-					cmdList.beginRenderPass(renderPass);
+					cmdList->beginRenderPass(renderPass);
 
 					feature->render("Opaque", cmdList);
 
-					cmdList.endRenderPass();
+					cmdList->endRenderPass();
 
-					cmdList.popMarker();
+					cmdList->popMarker();
 				}
 			}
 		);
@@ -120,23 +120,23 @@ namespace ob::graphics {
 				data.uv = builder.write(gbuffer.uv);
 
 			},
-			[=](const GBufferData& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 
-					cmdList.pushMarker("Masked");
+					cmdList->pushMarker("Masked");
 
 					RenderPassDesc renderPass;
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
-					cmdList.beginRenderPass(renderPass);
+					cmdList->beginRenderPass(renderPass);
 
 					feature->render("Masked", cmdList);
 
-					cmdList.endRenderPass();
+					cmdList->endRenderPass();
 
-					cmdList.popMarker();
+					cmdList->popMarker();
 				}
 			}
 		);
@@ -225,9 +225,9 @@ namespace ob::graphics {
 				data.uv = builder.read(gbuffer.uv);
 				data.accumulate = builder.write(accumulate);
 			},
-			[=](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[=](const Data& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 
-				cmdList.pushMarker("Deffered Lighting");
+				cmdList->pushMarker("Deffered Lighting");
 
 				auto albedo = resources.get(data.albedo);
 				auto normal = resources.get(data.normal);
@@ -241,16 +241,15 @@ namespace ob::graphics {
 				RenderPassDesc renderPass;
 				renderPass.colors.emplace_back(resources.get(data.accumulate), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-				cmdList.beginRenderPass(renderPass);
+				cmdList->beginRenderPass(renderPass);
 
-				Ref<rhi::CommandList> cmd = &cmdList;
 				Matrix mtx;
 
-				m_material->record(cmd, mtx, m_mesh, 0, "PostProcess");
+				m_material->record(cmdList, mtx, m_mesh, 0, "PostProcess");
 
-				cmdList.endRenderPass();
+				cmdList->endRenderPass();
 
-				cmdList.popMarker();
+				cmdList->popMarker();
 
 			}
 		);

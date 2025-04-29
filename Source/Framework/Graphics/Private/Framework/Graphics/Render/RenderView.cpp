@@ -134,9 +134,9 @@ namespace ob::graphics {
 				data.target = builder.read(target);
 				builder.setSideEffect();
 			},
-			[](const Data& data, FGResources& resources, rhi::CommandList& cmdList) {
+			[](const Data& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				auto texture = resources.get(data.target);
-				cmdList.applySwapChain(data.swapChain, texture);
+				cmdList->applySwapChain(data.swapChain, texture);
 			}
 		);
 	}
