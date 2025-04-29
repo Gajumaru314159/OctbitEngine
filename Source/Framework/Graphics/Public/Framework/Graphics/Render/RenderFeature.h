@@ -26,8 +26,7 @@ namespace ob::graphics {
 		//! @brief      非アクティブにする
 		virtual void deactivate() {}
 
-		//! @brief      描画
-		//@―---------------------------------------------------------------------------		
+		//! @brief      描画	
 		virtual void render(FG& fg) {}
 		
 	};

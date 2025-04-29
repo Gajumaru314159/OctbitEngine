@@ -4,15 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
-#include <Framework/Graphics/Graphics.h>
-#include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Material/MaterialManager.h>
-
-#include <Framework/RHI/System.h>
-#include <Framework/RHI/CommandList.h>
-
 #include <Framework/Graphics/FrameGraph/FG.h>
-#include <fstream>
+#include <Framework/Graphics/Graphics.h>
+#include <Framework/Graphics/Material/MaterialManager.h>
+#include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/System.h>
+
 namespace ob::graphics {
 
 	//! @brief      システムをServiceInjectorに登録

@@ -3,14 +3,13 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderView.h>
-#include <Framework/RHI/SwapChain.h>
-#include <Framework/RHI/RenderTexture.h>
-
-#include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/RHI/CommandList.h>
+#include <Framework/RHI/RenderTexture.h>
+#include <Framework/RHI/SwapChain.h>
 
 namespace ob::graphics {
 
@@ -160,6 +159,7 @@ namespace ob::graphics {
 		m_swapChain = {};
 		m_renderTexture = {};
 	}
+
 	//! @brief      シーンの開放チェック
 	void RenderView::onSceneReleased(RenderScene& scene) {
 		LOG_ERROR("シーンの開放前にビューを解放してください");
