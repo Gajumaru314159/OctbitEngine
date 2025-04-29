@@ -119,6 +119,18 @@ namespace ob::graphics {
 	void RenderView::render(FG& fg) {
 		if (!m_pipeline) return;
 		if (!m_swapChain || !m_renderTexture)return;
+
+		struct Empty {};
+
+		fg.addPass<Empty>(
+			m_name,
+			[&](FGBuilder& builder, Empty& data) {
+				builder.setSideEffect();
+			},
+			[this](const Empty& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+				cmdList->pushMarker(m_name);
+			}
+		);
 		
 		FGTexture target = m_pipeline->render(fg);
 
@@ -137,6 +149,7 @@ namespace ob::graphics {
 			[](const Data& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				auto texture = resources.get(data.target);
 				cmdList->applySwapChain(data.swapChain, texture);
+				cmdList->popMarker();
 			}
 		);
 	}
