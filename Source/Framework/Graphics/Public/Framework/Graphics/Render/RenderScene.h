@@ -20,7 +20,7 @@ namespace ob::graphics {
 
         //! @brief      RenderFeatureを追加する
         template<class T,class... Args>
-        void addFeature(Args&& ...args);
+        auto addFeature(Args&& ...args) -> std::enable_if_t<std::is_constructible<T, Args...>::value,T&>;
 
         //! @brief      RenderFeatureを見つける
         template<class T> T* findFeature()const;
@@ -44,8 +44,8 @@ namespace ob::graphics {
     private:
         void onFeatureAdded(RenderFeature& feature);
     private:
-        HashMap<Type, UPtr<RenderFeature>>    m_features;
-        Vector<RenderView*>                      m_views;
+        HashMap<Type, UPtr<RenderFeature>>      m_features;
+        Vector<RenderView*>                     m_views;
 
         RenderSceneEventNotifier                m_releasedNotifier;
         RenderFeatureEventNotifier              m_featureAddedNotifier;
@@ -54,9 +54,10 @@ namespace ob::graphics {
 
     //! @brief      RenderFeatureを追加する
     template<class T, class... Args>
-    void RenderScene::addFeature(Args&& ...args) {
+    auto RenderScene::addFeature(Args&& ...args) -> std::enable_if_t<std::is_constructible<T,Args...>::value, T&> {
         auto& feature = m_features[Type::Get<T>()] = std::make_unique<T>(args...);
         onFeatureAdded(*feature);
+        return *reinterpret_cast<T*>(feature.get());
     }
 
     //! @brief      RenderFeatureを見つける
