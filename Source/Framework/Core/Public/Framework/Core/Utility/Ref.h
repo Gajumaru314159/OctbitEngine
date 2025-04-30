@@ -9,19 +9,19 @@
 
 //! @cond
 
-#define OB_SAFE_RETAIN(p)  \
-    {                      \
-        if (p) {           \
-            (p)->retain(); \
-        }                  \
+#define OB_SAFE_RETAIN(p)								\
+    {													\
+        if (p) {										\
+            reinterpret_cast<RefObject*>(p)->retain();	\
+        }												\
     }
 
-#define OB_SAFE_RELEASE(p)  \
-    {                       \
-        if (p) {            \
-            (p)->release(); \
-            (p) = nullptr;  \
-        }                   \
+#define OB_SAFE_RELEASE(p)								\
+    {													\
+        if (p) {										\
+            reinterpret_cast<RefObject*>(p)->release(); \
+            (p) = nullptr;								\
+        }												\
     }
 
 //! @endcond
@@ -168,7 +168,7 @@ namespace ob::core {
 	template<class T>
 	Ref<T>::Ref(const Ref& ref) noexcept
 	{
-		m_ptr = ref.get();
+		m_ptr = ref.m_ptr;
 		OB_SAFE_RETAIN(m_ptr);
 	}
 
