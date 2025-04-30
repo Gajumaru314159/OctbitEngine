@@ -9,6 +9,7 @@
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/Graphics/FrameGraph/FGTexture.h>
 #include <Framework/Graphics/FrameGraph/FGBuffer.h>
+#include <Framework/Graphics/FrameGraph/FGDummy.h>
 #include <Framework/Graphics/FrameGraph/FGFrameBuffer.h>
 #include <fg/FrameGraph.hpp>
 #include <fg/Blackboard.hpp>
@@ -20,6 +21,7 @@ namespace ob::graphics {
 	class FGBuilder;
 	class FGResources;
 
+	enum class FGDummy : s32 {};
 	enum class FGTexture : s32 {};
 	enum class FGBuffer : s32 {};
 
@@ -115,6 +117,8 @@ namespace ob::graphics {
 		using Executable = std::is_invocable<TExecute, const TData&, FGResources&, Ref<rhi::CommandList>&>;
 		template<typename TData, typename TSetup, typename TExecute>
 		using IsValid = std::enable_if_t<Setupable<TSetup,TData>::value && Executable<TExecute,TData>::value, const TData&>;
+	public:
+		struct NoData {};
 	public:
 
 		FG() = default;
@@ -234,6 +238,10 @@ namespace ob::graphics {
 			return static_cast<FGBuffer>(m_builder.create<FGBufferInstance>(std::string_view(desc.name.data(), desc.name.size()), desc));
 		}
 
+		FGDummy createDummy() {
+			return static_cast<FGDummy>(m_builder.create<FGDummyInstance>("Dummy", 0));
+		}
+
 		FGTexture read(FGTexture id, u32 flags = 0) {
 			return static_cast<FGTexture>(m_builder.read(static_cast<FrameGraphResource>(id), flags));
 		}
@@ -242,12 +250,20 @@ namespace ob::graphics {
 			return static_cast<FGBuffer>(m_builder.read(static_cast<FrameGraphResource>(id), flags));
 		}
 
+		FGDummy read(FGDummy id, u32 flags = 0) {
+			return static_cast<FGDummy>(m_builder.read(static_cast<FrameGraphResource>(id), flags));
+		}
+
 		FGTexture write(FGTexture id, u32 flags = 0) {
 			return static_cast<FGTexture>(m_builder.write(static_cast<FrameGraphResource>(id), flags));
 		}
 
 		FGBuffer write(FGBuffer id, u32 flags = 0) {
 			return static_cast<FGBuffer>(m_builder.write(static_cast<FrameGraphResource>(id), flags));
+		}
+
+		FGDummy write(FGDummy id, u32 flags = 0) {
+			return static_cast<FGDummy>(m_builder.write(static_cast<FrameGraphResource>(id), flags));
 		}
 
 		FGBuilder& setSideEffect() {
