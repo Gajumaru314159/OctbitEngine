@@ -52,6 +52,7 @@ namespace ob::graphics {
         static Ref<rhi::DescriptorLayout> CreateLayout(const MaterialBlockDesc& desc,s32 space = 0);
     public:
 
+        MaterialBlock() = default;
         MaterialBlock(const MaterialBlockDesc& desc);
 
         //! @brief  マテリアルパラメータが存在するか
