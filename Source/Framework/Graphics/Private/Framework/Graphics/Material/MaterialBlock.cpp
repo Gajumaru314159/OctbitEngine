@@ -147,10 +147,12 @@ namespace ob::graphics {
 	void MaterialBlock::initializeDescriptorTables(const MaterialBlockDesc& desc) {
 		using namespace ob::rhi;
 
+		m_layout = desc.layout ? desc.layout : MaterialBlock::CreateLayout(desc);
+
 		// バリデート (バインドレスはルート定数を使うのでバインドフルのみ)
-		if(desc.layout) {
+		if(m_layout) {
 			s32 index = 0;
-			auto& items = desc.layout->getDesc().items;;
+			auto& items = m_layout->getDesc().items;
 			for (auto& name : desc.textures) {
 				if (items.at(index++).type != BindingType::Texture) {
 					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
@@ -182,26 +184,7 @@ namespace ob::graphics {
 		// 唯一の例外はBindless時にValuesBufferのBufferHandleをRootConstantで渡すとき。
 		// C++側はRootSignatureでConstantを使用し、シェーダーではb(CBV)を使用する。
 
-		if (desc.layout) {
-			m_table = DescriptorTable::Create({ desc.layout });
-		} else {
-			// バインドレスの場合はDescriptorTableは使用しないが、BindlessHandleを取得するためにDescriptorLayoutを作成する
-			s32 index = 0;
-			DescriptorLayoutDesc layoutDesc;
-			for (auto& texture : desc.textures) {
-				layoutDesc.items.push_back(Binding::Texture(index++));
-				layoutDesc.items.push_back(Binding::Sampler(index++));
-			}
-			for (auto& texture : desc.textures) {
-				layoutDesc.items.push_back(Binding::ByteAddressBuffer(index++));
-			}
-			{
-				layoutDesc.items.push_back(Binding::ByteAddressBuffer(index++));
-			}
-			auto layout = DescriptorLayout::Create(layoutDesc);
-			m_table = DescriptorTable::Create({ layout });
-		}
-
+		m_table = DescriptorTable::Create({ m_layout });
 
 		s32 index = 0;
 
@@ -410,4 +393,8 @@ namespace ob::graphics {
 		}
 	}
 
+	//! @brief レイアウトを取得 
+	const Ref<rhi::DescriptorLayout>& MaterialBlock::getLayout()const {
+		return m_layout;
+	}
 }

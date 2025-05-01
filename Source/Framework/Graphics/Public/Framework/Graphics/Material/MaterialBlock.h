@@ -43,6 +43,7 @@ namespace ob::graphics {
     class MaterialBlock {
     public:
         using CommandList = ob::rhi::CommandList;
+        using DescriptorLayout = ob::rhi::DescriptorLayout;
         using DescriptorTable = ob::rhi::DescriptorTable;
         using Sampler = ob::rhi::Sampler;
         using Texture = ob::rhi::Texture;
@@ -78,6 +79,9 @@ namespace ob::graphics {
         //!          BindfullとBindlessの両方に対応しやすいようにモードによらずこの関数を使用します。
         void record(Ref<CommandList>& commandList, s32 slot);
 
+		//! @brief  レイアウトを取得
+        const Ref<DescriptorLayout>& getLayout()const;
+
     private:
 
         void initializeProperties(const MaterialBlockDesc& desc);
@@ -101,6 +105,7 @@ namespace ob::graphics {
         Vector<Ref<Sampler>>    m_samplers;
         Vector<Ref<Buffer>>     m_buffers;
 
+        Ref<DescriptorLayout>   m_layout;
         Ref<DescriptorTable>    m_table;
 
 #define OB_MATERIAL_BLOCK_DEBUG_ENABLED OB_DEBUG
