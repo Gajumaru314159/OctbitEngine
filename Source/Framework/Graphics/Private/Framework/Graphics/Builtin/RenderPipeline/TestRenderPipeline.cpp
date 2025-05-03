@@ -7,7 +7,6 @@
 #include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>
-#include <Framework/Graphics/Material/MaterialRecorder.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 
 namespace ob::graphics {
