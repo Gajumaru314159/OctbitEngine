@@ -32,29 +32,23 @@ namespace ob::graphics {
     };
 
     struct ShaderSet {
-        Ref<rhi::Shader> 		vs;
-        Ref<rhi::Shader> 		ps;
+		s32                             quality;
 
         // PipelineState周りの必須情報
+        Ref<rhi::Shader> 		        vs;
+        Ref<rhi::Shader> 		        ps;
         Vector<InputLayout>		        inputLayout;
         rhi::RenderTargetFormatArray    colors;
         Optional<rhi::TextureFormat>	depth;
+		rhi::SampleDesc		            sample;
+		rhi::BlendDescList		        blend;
         rhi::BlendDescList		        blends;
         rhi::RasterizerDesc		        rasterizer;
         rhi::DepthStencilDesc	        depthStencil;
     };
 
-    // TODO 効率的なキーワード管理
-    using ShaderKeywordSet = Set<String, std::less<>>;
-    using ShaderKeywordMap = Map<String, bool, std::less<>>;
-
-
-    using ShaderMap = Map<ShaderKeywordSet, ShaderSet>;
-
     struct MaterialPass {
-        ShaderKeywordSet	keywords;	// RenderPassのキーワード RENDER_PASS_EARLY_Z
-        s32					lodNum;		// SHADER_QUALITY_0
-        s32					lodMax;		// 最低限保証する品質 (遠景で使用している単色シェーダーは低品質にしたとしても使ってはいけないなど)
+		Vector<ShaderSet>   qualities;	// 最低限のシェーダークオリティの保証はマテリアル毎ではなくクオリティ選択時に行う
     };
     using MaterialPassMap = Map<String, MaterialPass,std::less<>>;
 
@@ -70,7 +64,6 @@ namespace ob::graphics {
         Vector<String>  scalars;
 
         MaterialPassMap	passes;
-        ShaderMap 		shaders;	// 対応するものがなければエラーシェーダーにフォールバック
     };
 
 }

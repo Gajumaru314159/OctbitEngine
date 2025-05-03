@@ -8,15 +8,17 @@
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Material/MaterialDesc.h>
 
-namespace ob::graphics {   
+namespace ob::graphics {
+
+	enum class VertexLayoutId : s32 {};
 
 	enum class MaterialPropertyType {
-		Integer,
-		Scalar,
-		Vector,
-		Matrix,
 		Texture,
-		Buffer
+		Buffer,
+		Matrix,
+		Vector,
+		Scalar,
+		Integer,
 	};
 
 	struct MaterialValuePropertyDesc {

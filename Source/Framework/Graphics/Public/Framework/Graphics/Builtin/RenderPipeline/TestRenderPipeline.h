@@ -8,6 +8,8 @@
 #include <Framework/Graphics/Render/RenderPipeline.h>
 #include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
+#include <Framework/Graphics/Builtin/RenderFeature/LightRenderFeature.h>
 #include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
 
 namespace ob::graphics {
@@ -18,6 +20,7 @@ namespace ob::graphics {
         FGTexture render(FG& fg);
     private:
         RenderView& m_view;
+        MaterialRenderer m_material;
         ImGuiRenderer m_imgui;
         EarlyZRenderer m_earlyZ;
         OpaqueRenderer m_opaque;

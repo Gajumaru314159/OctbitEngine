@@ -6,6 +6,8 @@
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Material/MaterialImpl.h>
 #include <Framework/Graphics/Material/MaterialManager.h>
+#include <Framework/Graphics/Material/MaterialSystem.h>
+#include <Framework/RHI/Sampler.h>
 
 namespace ob::graphics {
 
@@ -17,26 +19,26 @@ namespace ob::graphics {
 
     //! @brief  グローバルマテリアルパラメータを設定
     void Material::SetGlobalFloat(StringView name, f32 value) {
-        if (auto manager = MaterialManager::Get()) {
-            manager->setFloat(name, value);
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setScalar(name, value);
         }
     }
     //! @brief  グローバルマテリアルパラメータを設定
     void Material::SetGlobalColor(StringView name, Color value) {
-        if (auto manager = MaterialManager::Get()) {
-            manager->setColor(name, value);
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setVector(name, value);
         }
     }
     //! @brief  グローバルマテリアルパラメータを設定
     void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
-        if (auto manager = MaterialManager::Get()) {
-            manager->setMatrix(name, value);
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setMatrix(name, value);
         }
     }
     //! @brief  グローバルマテリアルパラメータを設定
     void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
-        if (auto manager = MaterialManager::Get()) {
-            manager->setTexture(name, value);
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setTexture(name, value,rhi::Sampler::Default());
         }
     }
 

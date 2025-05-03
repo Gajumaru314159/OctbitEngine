@@ -24,35 +24,7 @@ namespace ob::graphics {
 
 	public:
 
-
-		//! @brief  説明
-
-		bool hasProprty(StringView name, MaterialPropertyType type)const;
-
-		bool hasInt(StringView name)const { return hasProprty(name, MaterialPropertyType::Integer); }
-		bool hasFloat(StringView name)const { return hasProprty(name, MaterialPropertyType::Scalar); }
-		bool hasColor(StringView name)const { return hasProprty(name, MaterialPropertyType::Vector); }
-		bool hasMatrix(StringView name)const { return hasProprty(name, MaterialPropertyType::Matrix); }
-		bool hasTexture(StringView name)const { return hasProprty(name, MaterialPropertyType::Texture); }
-
-		void setFloat(StringView name, f32 value);
-		void setColor(StringView name, Color value);
-		void setMatrix(StringView name, const Matrix& value);
-		void setTexture(StringView name, const Ref<rhi::Texture>& value);
-
-	public:
-
 		void recordGlobalShaderProperties(Ref<rhi::CommandList>&);
-
-		Ref<rhi::DescriptorLayout> getGlobalLayout()const { return m_globalLayout; }
-		Ref<rhi::DescriptorLayout> getSceneLayout()const { return m_sceneLayout; }
-		Ref<rhi::DescriptorLayout> getViewLayout()const { return m_viewLayout; }
-
-	private:
-
-		void initializeGlobalProperties();
-		void initializeSceneProperties();
-		void initializeViewProperties();
 
 	private:
 
@@ -81,12 +53,6 @@ namespace ob::graphics {
 
 		SpinLock m_lock;
 		Map<rhi::VertexLayout, VertexLayoutId, VertexLayoutPred> m_vertexLayoutCache;
-
-		MemoryStorage<MaterialBlock>	m_block;
-
-		Ref<rhi::DescriptorLayout>	m_globalLayout;
-		Ref<rhi::DescriptorLayout>	m_sceneLayout;
-		Ref<rhi::DescriptorLayout>	m_viewLayout;
 
 	};
 

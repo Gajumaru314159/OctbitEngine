@@ -16,6 +16,7 @@
 #include <Framework/RHI/RHI.h>
 
 #include <Framework/Graphics/Material/MaterialManager.h>
+#include <Framework/Graphics/Material/MaterialSystem.h>
 #include <magic_enum.hpp>
 
 namespace ob::graphics {
@@ -24,16 +25,28 @@ namespace ob::graphics {
 	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
 		: m_desc(desc)
 	{
-		MaterialBlockDesc mdesc;
-		mdesc.name = desc.name;
-		mdesc.textures = desc.textures;
-		mdesc.buffers = desc.buffers;
-		mdesc.matrices = desc.matrices;
-		mdesc.vectors = desc.colors;
-		mdesc.scalars = desc.scalars;
-		mdesc.layout = m_materialLayout = MaterialBlock::CreateLayout(mdesc);
+		using namespace ob::rhi;
 
-		m_block.construct(mdesc);
+		MaterialBlockDesc bdesc;
+		bdesc.name = desc.name;
+		bdesc.textures = desc.textures;
+		bdesc.buffers = desc.buffers;
+		bdesc.matrices = desc.matrices;
+		bdesc.vectors = desc.colors;
+		bdesc.scalars = desc.scalars;
+		m_block = MaterialBlock(bdesc);
+
+		RootSignatureDesc rdesc;
+		rdesc.name = desc.name;
+		rdesc.layouts = {
+			m_block.getLayout(),
+			MaterialSystem::Instance().getLayouts().global,
+			MaterialSystem::Instance().getLayouts().scene,
+			MaterialSystem::Instance().getLayouts().view,
+		};
+		rdesc.flags = RootSignatureFlag::EnableBindless;
+		rdesc.constants.set(sizeof(BindlessHandle) * 4, 0);
+		m_signature = RootSignature::Create(rdesc);
 	}
 
 	const MaterialDesc& MaterialImpl::getDesc()const {
@@ -42,32 +55,32 @@ namespace ob::graphics {
 
 	//! @brief  プロパティがあるか
 	bool MaterialImpl::hasProprty(StringView name, MaterialPropertyType type) const {
-		return m_block->hasProperty(name, type);
+		return m_block.hasProperty(name, type);
 	}
 
 	//! @brief  Floatプロパティを設定
 	void MaterialImpl::setFloat(StringView name, f32 value) {
-		m_block->setScalar(name, value);
+		m_block.setScalar(name, value);
 	}
 
 	//! @brief  Colorプロパティを設定
 	void MaterialImpl::setColor(StringView name, Color value) {
-		m_block->setVector(name, value);
+		m_block.setVector(name, value);
 	}
 
 	//! @brief  Matrixプロパティを設定
 	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
-		m_block->setMatrix(name, value);
+		m_block.setMatrix(name, value);
 	}
 
 	//! @brief  Textureプロパティを設定
 	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
-		m_block->setTexture(name, value,rhi::Sampler::Default());
+		m_block.setTexture(name, value,rhi::Sampler::Default());
 	}
 
 	//! @brief  Bufferプロパティを設定
 	void MaterialImpl::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
-		m_block->setBuffer(name, value);
+		m_block.setBuffer(name, value);
 	}
 
 	//! @brief  GPUリソースの事前生成
@@ -127,7 +140,7 @@ namespace ob::graphics {
 
 		// TODO 異なるスコープのMaterialBlockを再バインドする必要があるか未確認
 
-		m_block->record(cmdList, 0);
+		m_block.record(cmdList, 0);
 
 		MaterialManager::Instance().recordGlobalShaderProperties(cmdList);
 
@@ -215,12 +228,12 @@ namespace ob::graphics {
 				desc.constants.set(sizeof(BindlessHandle) * 4, 0);
 				desc.flags |= RootSignatureFlag::EnableBindless;
 			} else {
-				auto& manager = MaterialManager::Instance();
+				auto& layouts = MaterialSystem::Instance().getLayouts();
 				desc.layouts = {
 					m_materialLayout,
-					manager.getGlobalLayout(),
-					manager.getSceneLayout(),
-					manager.getViewLayout(),
+					layouts.global,
+					layouts.scene,
+					layouts.view,
 				};
 			}			
 

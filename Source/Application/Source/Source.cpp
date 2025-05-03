@@ -24,8 +24,9 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
 #include <Framework/RHI/All.h>
-#include <Plugins/DirectX12RHI/System.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
+#include <Plugins/DirectX12RHI/System.h>
+#include <Framework/Graphics/Material/MaterialSystem.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -90,12 +91,23 @@ int TestDirectX12() {
 		}
 	}
 
+	MaterialPropertiesSetDesc props;
+	props.merge(CameraRenderFeature::GetProperties());
+	props.merge(LightRenderFeature::GetProperties());
+	MaterialSystemDesc materialSystemDesc;
+	materialSystemDesc.properties = props;
+
+	MaterialSystem materialSystem(materialSystemDesc);
+
+
 
 	// 描画オブジェクト生成
 	RenderScene scene;
 	RenderView view(scene, "Test");
 	scene.addFeature<ImGuiRenderFeature>(scene);
-	scene.addFeature<MaterialRenderFeature>();
+	auto& materialRT = scene.addFeature<MaterialRenderFeature>();
+	scene.addFeature<CameraRenderFeature>(materialRT);
+	scene.addFeature<LightRenderFeature>(materialRT);
 	view.setDisplay(swapChain);
 	view.setPipeline<TestRenderPipeline>(view);
 

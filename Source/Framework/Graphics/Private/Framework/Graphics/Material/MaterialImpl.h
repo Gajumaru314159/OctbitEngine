@@ -46,6 +46,7 @@ namespace ob::graphics {
 	private:
 		using Texture = rhi::Texture;
 		using Buffer = rhi::Buffer;
+		using RootSignature = rhi::RootSignature;
 	public:
 
 		//===============================================================
@@ -93,14 +94,21 @@ namespace ob::graphics {
 
 		using PipelineMap = HashMap<PipelineKey, Ref<rhi::PipelineState>, PipelineKeyHasher>;
 
+	private:
+
 		const MaterialDesc	m_desc;
 
 		SpinLock			m_lock;
 
 		PipelineMap			m_pipelineMap;
 
-		MemoryStorage<MaterialBlock> m_block;
 		Ref<rhi::DescriptorLayout> m_materialLayout;
+
+
+		MaterialBlock       m_block;
+
+		Ref<RootSignature>  m_signature;
+
 
 	};
 

@@ -4,14 +4,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Material/MaterialDesc.h>
 
 namespace ob::graphics {   
 
     //! @brief  マテリアル
-    class Material:public RefObject {
+    class Material : public RefObject {
     public:
         using Texture = ob::rhi::Texture;
         using Buffer = ob::rhi::Buffer;

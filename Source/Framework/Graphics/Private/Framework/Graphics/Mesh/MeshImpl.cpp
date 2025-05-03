@@ -16,7 +16,6 @@
 
 #include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Mesh/MeshData.h>
-#include <Framework/Graphics/Builtin/RenderFeature/ModelRenderFeature.h>
 #include <Framework/Graphics/Material/Material.h>
 
 namespace ob::graphics {
