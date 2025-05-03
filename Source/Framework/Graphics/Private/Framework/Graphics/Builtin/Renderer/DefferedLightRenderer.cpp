@@ -10,8 +10,9 @@
 
 namespace ob::graphics {
 
-	EarlyZRenderer::EarlyZRenderer(RenderView& view)
+	EarlyZRenderer::EarlyZRenderer(RenderView& view, MaterialRenderer& material)
 		: m_view(view)
+		, m_materialRenderer(material)
 	{
 
 	}
@@ -31,6 +32,8 @@ namespace ob::graphics {
 			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
 
+					MaterialBlockSet blocks(m_materialRenderer);
+
 					cmdList->pushMarker("EarlyZ");
 
 					RenderPassDesc renderPass;
@@ -39,7 +42,7 @@ namespace ob::graphics {
 
 					cmdList->beginRenderPass(renderPass);
 
-					feature->render("EarlyZ", cmdList);
+					feature->render(cmdList,blocks,"EarlyZ");
 
 					cmdList->endRenderPass();
 
@@ -53,8 +56,9 @@ namespace ob::graphics {
 
 	//--------------------------------
 
-	OpaqueRenderer::OpaqueRenderer(RenderView& view)
+	OpaqueRenderer::OpaqueRenderer(RenderView& view, MaterialRenderer& material)
 		: m_view(view)
+		, m_materialRenderer(material)
 	{
 
 	}
@@ -84,7 +88,8 @@ namespace ob::graphics {
 
 					cmdList->beginRenderPass(renderPass);
 
-					feature->render("Opaque", cmdList);
+					MaterialBlockSet blocks(m_materialRenderer);
+					feature->render(cmdList,blocks,"Opaque");
 
 					cmdList->endRenderPass();
 
@@ -98,8 +103,9 @@ namespace ob::graphics {
 
 	//--------------------------------
 
-	MaskedRenderer::MaskedRenderer(RenderView& view)
+	MaskedRenderer::MaskedRenderer(RenderView& view, MaterialRenderer& material)
 		: m_view(view)
+		, m_materialRenderer(material)
 	{
 
 	}
@@ -132,7 +138,8 @@ namespace ob::graphics {
 
 					cmdList->beginRenderPass(renderPass);
 
-					feature->render("Masked", cmdList);
+					MaterialBlockSet blocks(m_materialRenderer);
+					feature->render(cmdList,blocks,"Masked");
 
 					cmdList->endRenderPass();
 
@@ -146,8 +153,9 @@ namespace ob::graphics {
 
 	//----
 
-	DefferedLightRenderer::DefferedLightRenderer(RenderView& view)
+	DefferedLightRenderer::DefferedLightRenderer(RenderView& view, MaterialRenderer& material)
 		: m_view(view)
+		, m_materialRenderer(material)
 	{
 		m_material = [&] {
 
@@ -160,7 +168,7 @@ namespace ob::graphics {
 
 			MaterialPass& pass = desc.passes["PostProcess"];
 
-			auto& shaders = desc.shaders[pass.keywords];
+			auto& shaders = pass.qualities.emplace_back();
 
 			shaders.colors = { TextureFormat::RGBA8 };
 			shaders.vs = Shader::CompileVS(code.value());
@@ -243,9 +251,8 @@ namespace ob::graphics {
 
 				cmdList->beginRenderPass(renderPass);
 
-				Matrix mtx;
-
-				m_material->record(cmdList, mtx, m_mesh, 0, "PostProcess");
+				MaterialBlockSet blocks(m_materialRenderer);
+				m_material->record(cmdList, blocks, m_mesh, 0, "PostProcess");
 
 				cmdList->endRenderPass();
 

@@ -33,7 +33,6 @@ struct MaterialProps {
 };
 struct GlobalProps {
 	float4x4 MatrixTest;
-	float Time;
 };
 struct SceneProps {
 	float4 LightDir;

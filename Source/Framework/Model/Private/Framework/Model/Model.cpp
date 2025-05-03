@@ -74,15 +74,14 @@ namespace ob::model {
 				desc.name = path;
 				desc.textures = { "Main", "Normal", "Parameter" };
 				desc.matrices = { "Matrix" };
-				desc.colors = { "Color" };
+				desc.vectors = { "Color" };
 
 				{
 					auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
 					OB_ASSERT(code, "ファイル読み込み失敗");
 
 					MaterialPass& pass = desc.passes["Opaque"];
-					pass.keywords = { "PASS_OPACITY" };
-					auto& shaders = desc.shaders[pass.keywords];
+					auto& shaders = pass.qualities.emplace_back();
 
 					shaders.depthStencil.depth.enable = true;
 					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
@@ -100,8 +99,7 @@ namespace ob::model {
 					OB_ASSERT(code, "ファイル読み込み失敗");
 
 					MaterialPass& pass = desc.passes["EarlyZ"];
-					pass.keywords = { "PASS_EARLY_Z" };
-					auto& shaders = desc.shaders[pass.keywords];
+					auto& shaders = pass.qualities.emplace_back();
 
 					shaders.depthStencil.depth.enable = true;
 					shaders.colors = { TextureFormat::RGBA8 };
@@ -162,7 +160,7 @@ namespace ob::model {
 			if (aiColor4D c; m->Get(AI_MATKEY_COLOR_DIFFUSE,color) == AI_SUCCESS) {
 				color = Color(c.r, c.g, c.b,c.a);
 			}
-			material->setColor("Color", color);
+			material->setVector("Color", color);
 
 			Map<String,aiColor4D> colors;
 			for(auto p:Span<aiMaterialProperty*>(m->mProperties,m->mNumProperties)){

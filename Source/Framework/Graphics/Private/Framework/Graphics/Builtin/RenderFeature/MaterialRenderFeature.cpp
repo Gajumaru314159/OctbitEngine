@@ -45,7 +45,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief      描画
-	bool MaterialRenderFeature::render(StringView pass, Ref<rhi::CommandList>& cmdList)const {
+	bool MaterialRenderFeature::render(Ref<rhi::CommandList>& cmdList,MaterialBlockSet& blocks, StringView pass)const {
 
 		auto itr = m_renderablesMap.find(pass);
 		if (itr == m_renderablesMap.end())return false;
@@ -53,8 +53,7 @@ namespace ob::graphics {
 		auto& renderables = itr->second;
 
 		for (auto& [maerialId,renderable] : renderables) {
-			Matrix matrix;
-			renderable.material->record(cmdList, matrix, renderable.mesh, renderable.submesh, pass);
+			renderable.material->record(cmdList,blocks ,renderable.mesh, renderable.submesh, pass);
 		}
 
 		return true;

@@ -18,27 +18,44 @@ namespace ob::graphics {
 
 
     //! @brief  グローバルマテリアルパラメータを設定
-    void Material::SetGlobalFloat(StringView name, f32 value) {
+    void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
         if (auto system = MaterialSystem::Get()) {
-            system->getGlobalBlock().setScalar(name, value);
+            system->getGlobalBlock().setTexture(name, value, rhi::Sampler::Default());
         }
     }
+
     //! @brief  グローバルマテリアルパラメータを設定
-    void Material::SetGlobalColor(StringView name, Color value) {
+    void Material::SetGlobalBuffer(StringView name, const Ref<Buffer>& value) {
         if (auto system = MaterialSystem::Get()) {
-            system->getGlobalBlock().setVector(name, value);
+            system->getGlobalBlock().setBuffer(name, value);
         }
     }
+
     //! @brief  グローバルマテリアルパラメータを設定
     void Material::SetGlobalMatrix(StringView name, const Matrix& value) {
         if (auto system = MaterialSystem::Get()) {
             system->getGlobalBlock().setMatrix(name, value);
         }
     }
+
     //! @brief  グローバルマテリアルパラメータを設定
-    void Material::SetGlobalTexture(StringView name, const Ref<Texture>& value) {
+    void Material::SetGlobalVector(StringView name, Color value) {
         if (auto system = MaterialSystem::Get()) {
-            system->getGlobalBlock().setTexture(name, value,rhi::Sampler::Default());
+            system->getGlobalBlock().setVector(name, value);
+        }
+    }
+
+    //! @brief  グローバルマテリアルパラメータを設定
+    void Material::SetGlobalScalar(StringView name, f32 value) {
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setScalar(name, value);
+        }
+    }
+
+    //! @brief  グローバルマテリアルパラメータを設定
+    void Material::SetGlobalInteger(StringView name, s32 value) {
+        if (auto system = MaterialSystem::Get()) {
+            system->getGlobalBlock().setInteger(name, value);
         }
     }
 

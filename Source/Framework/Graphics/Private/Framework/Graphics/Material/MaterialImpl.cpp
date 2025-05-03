@@ -21,251 +21,165 @@
 
 namespace ob::graphics {
 
-	//! @brief  コンストラクタ
-	MaterialImpl::MaterialImpl(const MaterialDesc& desc)
-		: m_desc(desc)
-	{
+	MaterialImpl::MaterialImpl(const MaterialDesc& desc) {
 		using namespace ob::rhi;
+
+		m_desc = desc;
+
+		// NOTE コンストラクタでMaterialBlockを作成する = GameThreadで作成するとヒッチの原因となる可能性がある。許容するか、非同期生成するかは要検討。
+		// if(Graphics::IsGameThread()) LOG_WARNING("GameThreadでマテリアルが生成されています。ヒッチを避けるために非同期スレッドで生成してください。");
 
 		MaterialBlockDesc bdesc;
 		bdesc.name = desc.name;
 		bdesc.textures = desc.textures;
 		bdesc.buffers = desc.buffers;
 		bdesc.matrices = desc.matrices;
-		bdesc.vectors = desc.colors;
+		bdesc.vectors = desc.vectors;
 		bdesc.scalars = desc.scalars;
+		bdesc.integers = desc.integers;
 		m_block = MaterialBlock(bdesc);
+
+		auto& layouts = MaterialSystem::Instance().getLayouts();
 
 		RootSignatureDesc rdesc;
 		rdesc.name = desc.name;
-		rdesc.layouts = {
-			m_block.getLayout(),
-			MaterialSystem::Instance().getLayouts().global,
-			MaterialSystem::Instance().getLayouts().scene,
-			MaterialSystem::Instance().getLayouts().view,
-		};
+		if (rhi::RHI::Instance().getConfig().enableBindless) {
+			rdesc.constants.set(sizeof(rhi::BindlessHandle) * 4, 0);
+		} else {
+			rdesc.layouts = { m_block.getLayout(), layouts.global, layouts.scene, layouts.view };
+		}
 		rdesc.flags = RootSignatureFlag::EnableBindless;
-		rdesc.constants.set(sizeof(BindlessHandle) * 4, 0);
+
 		m_signature = RootSignature::Create(rdesc);
 	}
 
-	const MaterialDesc& MaterialImpl::getDesc()const {
-		return m_desc;
-	}
-
-	//! @brief  プロパティがあるか
-	bool MaterialImpl::hasProprty(StringView name, MaterialPropertyType type) const {
-		return m_block.hasProperty(name, type);
-	}
-
-	//! @brief  Floatプロパティを設定
-	void MaterialImpl::setFloat(StringView name, f32 value) {
-		m_block.setScalar(name, value);
-	}
-
-	//! @brief  Colorプロパティを設定
-	void MaterialImpl::setColor(StringView name, Color value) {
-		m_block.setVector(name, value);
-	}
-
-	//! @brief  Matrixプロパティを設定
-	void MaterialImpl::setMatrix(StringView name, const Matrix& value) {
-		m_block.setMatrix(name, value);
-	}
-
-	//! @brief  Textureプロパティを設定
-	void MaterialImpl::setTexture(StringView name, const Ref<Texture>& value) {
-		m_block.setTexture(name, value,rhi::Sampler::Default());
-	}
-
-	//! @brief  Bufferプロパティを設定
-	void MaterialImpl::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
-		m_block.setBuffer(name, value);
-	}
-
-	//! @brief  GPUリソースの事前生成
-	bool MaterialImpl::reserve(const Ref<Mesh>& mesh) {
+	bool MaterialImpl::prepare(const Ref<Mesh>& mesh) {
 
 		auto pMesh = mesh.cast<MeshImpl>();
 		if (!pMesh) return false;
 
+		// NOTE ShaderLODやVariantなど、どこまで事前生成するかという問題がある。
+
+		PipelineKey key;
+		key.layout = pMesh->getVertexLayoutId();
+
 		auto& layout = mesh->getVertexLayout();
-		for (auto& [name,pass] : m_desc.passes) {
-			createPipeline(name, layout, pMesh->getVertexLayoutId());
+		for (auto& [passName, pass] : m_desc.passes) {
+			key.pass = passName;
+			for (auto [qualityIndex, quality] : Indexed(pass.qualities)) {
+				key.qualityIndex = qualityIndex;
+				createPipeline(key, quality, pMesh->getVertexLayout());
+			}
 		}
 
 		return true;
 	}
 
-	//! @brief  描画コマンドを記録
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, const Matrix& matrix, const Ref<Mesh>& mesh, s32 submeshIndex, StringView pass) {
-		// 1. 定数バッファのデスクリプタ設定
-		// 2. テクスチャのデスクリプタ設定
-		// 3. サンプラーのデスクリプタ設定
-		// 4. バッファのデスクリプタ設定
+	s32 MaterialImpl::calcQualityIndex(StringView passName, s32 quality) const {
 
-		// カメラ情報 → RenderSystemやModelで設定する
-		// 複数パス → パスを引数に取る
-		// シェーダ設定 → 
-		// メッシュの描画 → パイプラインごとに頂点レイアウトが違う
-
-		auto pMesh = mesh.cast<MeshImpl>();
-		if (!pMesh) return;
-
-		auto submesh = pMesh->getSubMesh(submeshIndex);
-		if (submesh.indexCount <= 0) return;
-
-
-		Ref<rhi::PipelineState> pipeline;
-
-		PipelineKey key{
-			pass,
-			pMesh->getVertexLayoutId()
-		};
-
-		{
-			ScopeLock lock(m_lock);
-			if (auto found = m_pipelineMap.find(key); found != m_pipelineMap.end()) {
-				pipeline = found->second;
-			}
-		}
-		if(!pipeline) {
-			pipeline = createPipeline(pass, pMesh->getVertexLayout(),pMesh->getVertexLayoutId());
-		}
-
-		if (!pipeline)
-			return;
-
-		cmdList->setPipelineState(pipeline);
-
-		// TODO 異なるスコープのMaterialBlockを再バインドする必要があるか未確認
-
-		m_block.record(cmdList, 0);
-
-		MaterialManager::Instance().recordGlobalShaderProperties(cmdList);
-
-		pMesh->record(cmdList, submeshIndex);
-
-	}
-
-	//! @brief  
-	void MaterialImpl::record(Ref<rhi::CommandList>& cmdList, Span<Matrix> matrices, const Ref<Mesh>& mesh, s32 submesh, StringView pass) {
-
-		OB_NOTIMPLEMENTED();
-	}
-
-
-	//! @brief  パイプラインを生成
-	Ref<rhi::PipelineState> MaterialImpl::createPipeline(StringView passName, const rhi::VertexLayout& layout,VertexLayoutId id) {
-
-		using namespace ob::rhi;
-
-		Ref<rhi::PipelineState> pipeline;
-
-		// マテリアルパス取得
+		// パス名か定義を取得
 		auto passItr = m_desc.passes.find(passName);
 
 		if (passItr == m_desc.passes.end()) {
-			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。",passName,m_desc.name);
-			return nullptr;
+			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。", passName, m_desc.name);
+			return -1;
 		}
 
-		auto& pass = passItr->second;
+		const MaterialPass& pass = passItr->second;
 
-		// 頂点レイアウト
-
-		ShaderKeywordSet keywords = pass.keywords;
-
-		// TODO LODレベルに応じたシェーダの選択
-		auto shaderSetItr = m_desc.shaders.find(keywords);
-		if (shaderSetItr == m_desc.shaders.end()) {
-			LOG_ERROR("PipelineStateの生成に失敗。登録されていないShaderSetです。");
-			return nullptr;
+		if (pass.qualities.empty()) {
+			LOG_ERROR("MaterialPassに有効なシェーダーが含まれていません [name={}]", m_desc.name);
+			return -1;
 		}
 
-		auto& shaderSet = shaderSetItr->second;
-
-		// 選択したシェーダーに必要な頂点情報があるかを確認し、対応マップを作成する。
-		rhi::VertexLayout mapped;
-		Vector<InputLayout> missingLayouts;
-		for (auto& attr1 : shaderSet.inputLayout) {
-			bool ok = false;
-			for (auto& attr2 : layout.attributes) {
-
-				if (
-					attr1.semantic == attr2.semantic &&
-					attr1.type == attr2.type &&
-					attr1.dimention == attr2.dimention &&
-					attr1.index == attr2.index
-					)
-				{
-					mapped.attributes.push_back(attr2);
-					ok = true;
-					break;
-				}
-			}
-			if (ok == false) {
-				missingLayouts.push_back(attr1);
-			}
-		}
-		if (!missingLayouts.empty()) {
-			String message = Format("PipelineStateの生成に失敗。マテリアルに必要な頂点情報が足りません。 [name={}]",m_desc.name);
-			for (auto& layout : missingLayouts) {
-				message += Format("\n* Semantic:{} Type:{} Dimention:{} Index:{}", magic_enum::enum_name(layout.semantic), magic_enum::enum_name(layout.type), layout.dimention, layout.index);
-			}
-			LOG_ERROR("{}", message);
-			return nullptr;
+		// 品質選択
+		s32 index = -1;
+		for (auto& shaders : pass.qualities) {
+			if (quality < shaders.quality) break;
+			index++;
 		}
 
-		// RootSignature(仮)
-		Ref<RootSignature> signature = [&](){
+		return index;
+	}
 
-			RootSignatureDesc desc;
-			desc.name = m_desc.name;
+	void MaterialImpl::record(Ref<rhi::CommandList>& commandList, MaterialBlockSet& blocks, const Ref<Mesh>& mesh, s32 submesh, StringView passName, s32 quality) {
 
-			if (RHI::Instance().getConfig().enableBindless) {
-				// TODO マジックナンバーを共通ヘッダーに定義
-				desc.constants.set(sizeof(BindlessHandle) * 4, 0);
-				desc.flags |= RootSignatureFlag::EnableBindless;
-			} else {
-				auto& layouts = MaterialSystem::Instance().getLayouts();
-				desc.layouts = {
-					m_materialLayout,
-					layouts.global,
-					layouts.scene,
-					layouts.view,
-				};
-			}			
+		// パス名からパスを取得
+		auto passItr = m_desc.passes.find(passName);
 
-			return RootSignature::Create(desc);
-		}();
+		if (passItr == m_desc.passes.end()) {
+			LOG_ERROR("PipelineStateの生成に失敗。{}は{}に登録されていないMaterialPassです。", passName, m_desc.name);
+			return;
+		}
 
-		// パイプライン
+		const MaterialPass& pass = passItr->second;
+
+		// 品質選択
+		s32 qualityIndex = calcQualityIndex(passName, quality);
+
+		if (!is_in_range(qualityIndex, pass.qualities)) {
+			LOG_ERROR("MaterialPassに有効なシェーダーが含まれていません [name={},quality={}]", m_desc.name, quality);
+			return;
+		}
+
+		// PipelineKeyからPipelineを取得
+		auto pMesh = mesh.cast<MeshImpl>();
+		if (!pMesh) return;
+
+		PipelineKey key{
+			String(passName),
+			qualityIndex,
+			pMesh->getVertexLayoutId()
+		};
+
+		Ref<rhi::PipelineState> pipeline = createPipeline(key, pass.qualities.at(qualityIndex), pMesh->getVertexLayout());
+		OB_ASSERT_EXPR(pipeline);
+
+		commandList->setPipelineState(pipeline);
+
+		m_block.record(commandList, 0);
+		if (blocks.global)blocks.global->record(commandList, 1);
+		if (blocks.scene)blocks.scene->record(commandList, 2);
+		if (blocks.view)blocks.view->record(commandList, 3);
+
+		pMesh->record(commandList, submesh);
+	}
+
+	//! @brief PipelineStateを作成 
+	Ref<rhi::PipelineState> MaterialImpl::createPipeline(const PipelineKey& key, const ShaderSet& shaders, const rhi::VertexLayout& vertexLayout) {
+		using namespace ob::rhi;
+
+		// 既に作成済み
 		{
-			PipelineStateDesc desc;
-
-			desc.name = m_desc.name;
-			desc.colors = shaderSet.colors;
-			desc.depth = shaderSet.depth;
-			desc.rootSignature = signature;
-			desc.vertexLayout = layout;
-			desc.vs = shaderSet.vs;
-			desc.ps = shaderSet.ps;
-			desc.blend = shaderSet.blends;
-			desc.rasterizer = shaderSet.rasterizer;
-			desc.depthStencil = shaderSet.depthStencil;
-
-			pipeline = PipelineState::Create(desc);
-
-			if (pipeline) {
-				PipelineKey key{passName,id};
-				ScopeLock lock(m_lock);
-				m_pipelineMap[key] = pipeline;
+			ScopeLock lock(m_pipelinesLock);
+			if (auto found = m_pipelines.find(key); found != m_pipelines.end()) {
+				return found->second;
 			}
+		}
+
+		// PipelineStateを作成
+		PipelineStateDesc desc;
+		desc.name = m_desc.name;
+		desc.colors = shaders.colors;
+		desc.depth = shaders.depth;
+		desc.rootSignature = m_signature;
+		desc.vertexLayout = vertexLayout;
+		desc.vs = shaders.vs;
+		desc.ps = shaders.ps;
+		desc.sample = shaders.sample;
+		desc.blend = shaders.blend;
+		desc.rasterizer = shaders.rasterizer;
+		desc.depthStencil = shaders.depthStencil;
+
+		Ref<PipelineState> pipeline = PipelineState::Create(desc);
+
+		// マップに登録
+		{
+			ScopeLock lock(m_pipelinesLock);
+			m_pipelines[key] = pipeline;
 		}
 
 		return pipeline;
-
 	}
 
 

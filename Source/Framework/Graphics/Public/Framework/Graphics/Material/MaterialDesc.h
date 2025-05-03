@@ -48,8 +48,9 @@ namespace ob::graphics {
     };
 
     struct MaterialPass {
-		Vector<ShaderSet>   qualities;	// 最低限のシェーダークオリティの保証はマテリアル毎ではなくクオリティ選択時に行う
+		Vector<ShaderSet>   qualities;
     };
+
     using MaterialPassMap = Map<String, MaterialPass,std::less<>>;
 
     //! @brief  マテリアル定義
@@ -59,9 +60,9 @@ namespace ob::graphics {
         Vector<String>  textures;
         Vector<String>  buffers;
         Vector<String>  matrices;
-        Vector<String>  colors;
         Vector<String>  vectors;
         Vector<String>  scalars;
+        Vector<String>  integers;
 
         MaterialPassMap	passes;
     };

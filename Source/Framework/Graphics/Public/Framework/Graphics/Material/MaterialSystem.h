@@ -13,6 +13,9 @@
 
 namespace ob::graphics {
 
+	class MaterialRenderer;
+	class RenderScene;
+
 	struct MaterialSystemDesc {
 		MaterialPropertiesSetDesc properties;
 	};
@@ -61,54 +64,10 @@ namespace ob::graphics {
 		MaterialBlock* global = nullptr;
 		MaterialBlock* scene = nullptr;
 		MaterialBlock* view = nullptr;
-	};
-
-
-
-
-
-
-
-
-	class Material2 : public RefObject {
-	public:
-		using PipelineState = ob::rhi::PipelineState;
-		using RootSignature = ob::rhi::RootSignature;
-	public:
-		static Ref<Material2> Create(const MaterialDesc& desc);
-	public:
-
-		//! @brief Meshの描画に必要なリソースを事前確保する
-		bool prepare(const Ref<Mesh>& mesh);
-
-		void record(Ref<rhi::CommandList>& commandList, MaterialBlockSet& blocks, const Ref<Mesh>& mesh, s32 submesh, StringView pass,s32 quality);
-
-	private:
 		
-		Material2(const MaterialDesc& desc);
-
-		Ref<PipelineState> createPipeline(StringView pass,s32 quality, const rhi::VertexLayout& vertexLayout, VertexLayoutId id);
-
-	private:
-		struct PipelineKey {
-			String pass;
-			s32 qualityIndex;
-			VertexLayoutId layout;
-			bool operator==(const PipelineKey& rhs)const { return pass == rhs.pass && qualityIndex == rhs.qualityIndex && layout == rhs.layout; }
-			bool operator!=(const PipelineKey& rhs)const { return !(*this == rhs); }
-		};
-		struct PipelineKeyHasher {
-			size_t operator()(const PipelineKey& v)const { return std::hash<decltype(v.pass)>{}(v.pass) ^ std::hash<decltype(v.qualityIndex)>{}(v.qualityIndex) ^ std::hash<decltype(v.layout)>{}(v.layout); }
-		};
-		using PipelineMap = HashMap<PipelineKey, Ref<rhi::PipelineState>, PipelineKeyHasher>;
-	private:
-		MaterialDesc		m_desc;			//!< 描画パスを含むマテリアルの説明
-		Ref<RootSignature>  m_signature;	//!< MaterialDesc に対応する RootSignature
-		MaterialBlock       m_block;		//!< Material 毎のプロパティブロック
-
-		SpinLock		    m_pipelinesLock;
-		PipelineMap	        m_pipelines;
-
+		MaterialBlockSet();
+		MaterialBlockSet(MaterialRenderer& renderer);
+		MaterialBlockSet(RenderScene& scene);
 	};
 
 }

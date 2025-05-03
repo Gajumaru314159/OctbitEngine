@@ -43,7 +43,7 @@ namespace ob::graphics {
 		void removeRenderable(MaterialId id);
 
 		//! @brief      描画
-		bool render(StringView pass, Ref<rhi::CommandList>& cmdList)const;
+		bool render(Ref<rhi::CommandList>& cmdList, MaterialBlockSet& blocks, StringView pass)const;
 
 
 		MaterialBlock& getSceneBlock() { return m_sceneBlock; }

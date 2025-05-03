@@ -7,6 +7,7 @@
 #include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>
+#include <Framework/Graphics/Material/MaterialRecorder.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 
 namespace ob::graphics {
@@ -34,28 +35,19 @@ namespace ob::graphics {
     TestRenderPipeline::TestRenderPipeline(RenderView& view)
         : m_view(view)
 		, m_material(view)
-        , m_earlyZ(view)
-        , m_opaque(view)
-        , m_masked(view)
-        , m_defferedLight(view)
+        , m_earlyZ(view,m_material)
+        , m_opaque(view,m_material)
+        , m_masked(view,m_material)
+        , m_defferedLight(view, m_material)
         , m_imgui(view)
     {
     }
     FGTexture TestRenderPipeline::render(FG& fg) {
 
-        MaterialBlockSet blocks{
-            MaterialSystem::Instance().getGlobalBlock(),
-            m_view.findFeature<MaterialRenderFeature>()->getSceneBlock(),
-            m_material.getViewBlock()
-        };
-
         // ソート設定
         
         // 描画設定
         // フィルタ設定
-
-		FGDummy dummy;
-        m_material.render(fg, dummy);
 
         FGBlackboard blackboard;
 
@@ -63,8 +55,6 @@ namespace ob::graphics {
             auto& data = blackboard.add<GBufferData>() = fg.addPass<GBufferData>(
                 "Prepare",
                 [&](FGBuilder& builder, GBufferData& data) {
-
-                    builder.read(dummy);
 
                     rhi::RenderTextureDesc desc;
                     desc.size = m_view.getRenderSize();

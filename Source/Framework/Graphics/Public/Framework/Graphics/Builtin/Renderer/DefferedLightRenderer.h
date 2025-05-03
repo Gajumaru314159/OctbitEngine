@@ -21,34 +21,38 @@ namespace ob::graphics {
 
 	class EarlyZRenderer {
 	public:
-		EarlyZRenderer(RenderView& view);
+		EarlyZRenderer(RenderView& view, MaterialRenderer& renderer);
 		bool render(FG& fg, FGBlackboard& blackboard)const;
 	private:
 		RenderView& m_view;
+		MaterialRenderer& m_materialRenderer;
 	};
 
 	class OpaqueRenderer {
 	public:
-		OpaqueRenderer(RenderView& view);
+		OpaqueRenderer(RenderView& view, MaterialRenderer& renderer);
 		bool render(FG& fg, FGBlackboard& blackboard)const;
 	private:
 		RenderView& m_view;
+		MaterialRenderer& m_materialRenderer;
 	};
 
 	class MaskedRenderer {
 	public:
-		MaskedRenderer(RenderView& view);
+		MaskedRenderer(RenderView& view, MaterialRenderer& renderer);
 		bool render(FG& fg, FGBlackboard& blackboard)const;
 	private:
 		RenderView& m_view;
+		MaterialRenderer& m_materialRenderer;
 	};
 
 	class DefferedLightRenderer {
 	public:
-		DefferedLightRenderer(RenderView& view);
+		DefferedLightRenderer(RenderView& view, MaterialRenderer& material);
 		bool render(FG& fg, FGBlackboard& blackboard, FGTexture& accumulate)const;
 	private:
 		RenderView& m_view;
+		MaterialRenderer& m_materialRenderer;
 		Ref<Material> m_material;
 		Ref<Mesh> m_mesh;
 	};
