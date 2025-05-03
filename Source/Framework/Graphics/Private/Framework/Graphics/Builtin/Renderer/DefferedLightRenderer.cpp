@@ -37,7 +37,7 @@ namespace ob::graphics {
 					cmdList->pushMarker("EarlyZ");
 
 					RenderPassDesc renderPass;
-					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::NoAccess, RenderPassAfterAccessType::NoAccess);
 					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
 					cmdList->beginRenderPass(renderPass);
@@ -84,7 +84,7 @@ namespace ob::graphics {
 					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					renderPass.colors.emplace_back(resources.get(data.uv), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
-					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
+					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
 					cmdList->beginRenderPass(renderPass);
 
