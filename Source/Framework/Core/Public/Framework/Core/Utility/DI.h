@@ -154,6 +154,12 @@ namespace ob::core {
     //! @brief  生成可能なクラスTをバインド
     template<class T>
     ServiceBuilder<T>& ServiceInjector::bind() {
+        // バインド済みであればBuilderを返す
+        auto itr = m_builders.find(Type::Get<T>());
+        if (itr != m_builders.end()) {
+            return *reinterpret_cast<ServiceBuilder<T>*>(itr->second.get());
+        }
+        //Builderを生成
         auto builder = new ServiceBuilder<T>(*this);
         m_builders[Type::Get<T>()].reset(builder);
         m_orders.push_back(Type::Get<T>());
