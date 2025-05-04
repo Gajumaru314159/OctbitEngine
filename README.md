@@ -143,4 +143,4 @@ EntityやComponentの仕組みを実装します。ModelやPhysicsをComponent�
 
 ThirdParty Libraries
 =====================
-[別ページ](Source/ThirdParty/ThirdPartyLibrary.mb)
+[別ページ](ThirdParty.mb)

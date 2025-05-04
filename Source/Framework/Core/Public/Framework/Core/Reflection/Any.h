@@ -82,7 +82,6 @@ namespace ob::core {
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
 		//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
-		//! @example property.as<s32&>();
 		template<class T>
 		auto as() const->std::enable_if_t<std::is_reference<T>::value, const T>;
 
@@ -92,7 +91,6 @@ namespace ob::core {
 
 		//! @brief  プロパティを特定の特定の型のコピーとして取得する
 		//! @details プロパティの型が異なる型の場合はassertが発生します。
-		//! @example property.as<s32>();
 		template<class T>
 		auto as() const->std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T>;
 
@@ -386,7 +384,6 @@ namespace ob::core {
 
 	//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
 	//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
-	//! @example property.as<s32&>();
 	template<class T>
 	auto Property::as() const -> std::enable_if_t<std::is_reference<T>::value, const T> {
 		OB_ASSERT(!empty(), "空のプロパティです。");
@@ -404,7 +401,6 @@ namespace ob::core {
 
 	//! @brief  プロパティを特定の特定の型のコピーとして取得する
 	//! @details プロパティの型が異なる型の場合はassertが発生します。
-	//! @example property.as<s32>();
 	template<class T>
 	auto Property::as() const -> std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T> {
 		OB_ASSERT(!empty(), "空のプロパティです。");
