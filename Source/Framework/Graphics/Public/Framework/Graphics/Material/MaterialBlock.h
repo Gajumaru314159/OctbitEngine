@@ -66,7 +66,7 @@ namespace ob::graphics {
         bool hasInteger(StringView name)const;  //!< @copybrief hasProperty()
 
         //! @brief  マテリアルパラメータを設定
-        void setTexture(StringView name, const Ref<Texture>& texture);  
+        void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler);
         void setBuffer(StringView name, const Ref<Buffer>& value);      //!< @copybrief setTexture()
         void setMatrix(StringView name, const Matrix& value);           //!< @copybrief setTexture()
         void setVector(StringView name, Color value);                   //!< @copybrief setTexture()
