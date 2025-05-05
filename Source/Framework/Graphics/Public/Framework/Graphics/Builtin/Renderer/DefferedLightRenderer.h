@@ -50,6 +50,8 @@ namespace ob::graphics {
 	public:
 		DefferedLightRenderer(RenderView& view, MaterialRenderer& material);
 		bool render(FG& fg, FGBlackboard& blackboard, FGTexture& accumulate)const;
+
+		void setDebugMode(s32 mode);
 	private:
 		RenderView& m_view;
 		MaterialRenderer& m_materialRenderer;

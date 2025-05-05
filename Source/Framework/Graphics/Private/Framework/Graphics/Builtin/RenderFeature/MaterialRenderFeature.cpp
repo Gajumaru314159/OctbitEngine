@@ -52,6 +52,11 @@ namespace ob::graphics {
 
 		auto& renderables = itr->second;
 
+		Vector<Renderable> items;
+		for (auto& [maerialId, renderable] : renderables) {
+			items.push_back(renderable);
+		}
+
 		for (auto& [maerialId,renderable] : renderables) {
 			renderable.material->record(cmdList,blocks ,renderable.mesh, renderable.submesh, pass);
 		}

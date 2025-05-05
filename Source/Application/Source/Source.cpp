@@ -142,6 +142,8 @@ int TestDirectX12() {
 	ImGuiHandle handle2;
 	ImGuiHandle handle3;
 
+	s32 debugMode = 0;
+
 	ImGuiRenderFeature::AddTask(
 		scene, handle,
 		[&] {
@@ -154,8 +156,19 @@ int TestDirectX12() {
 	ImGuiRenderFeature::AddTask(
 		scene, handle3,
 		[&] {
-			reflectionExplorer.draw();
+			//reflectionExplorer.draw();
 			outliner.draw(*world);
+
+			if (ImGui::Begin("Debug")) {
+				if (auto pipeline = view.getPipeline<TestRenderPipeline>()) {
+					if (ImGui::SliderInt("Mode", &debugMode, 0, 3)) {
+						pipeline->setDebugMode(debugMode);
+					}
+				}
+
+			}
+
+			ImGui::End();
 		}
 	);
 

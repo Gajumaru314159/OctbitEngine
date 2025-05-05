@@ -165,6 +165,7 @@ namespace ob::graphics {
 			MaterialDesc desc;
 			desc.name = "DeferredLight";
 			desc.textures= { "Main" ,"Normal","Depth" ,"UV" };
+			desc.integers = { "GBuffer" };
 
 			MaterialPass& pass = desc.passes["PostProcess"];
 
@@ -266,4 +267,7 @@ namespace ob::graphics {
 		return true;
 	}
 
+	void DefferedLightRenderer::setDebugMode(s32 mode) {
+		m_material->setInteger("GBuffer", mode);
+	}
 }

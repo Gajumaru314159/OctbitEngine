@@ -16,8 +16,11 @@ namespace ob::graphics {
 
     class TestRenderPipeline : public RenderPipeline{
     public:
+        OB_RTTI();
         TestRenderPipeline(RenderView& view);
         FGTexture render(FG& fg);
+
+		void setDebugMode(s32 mode) { m_defferedLight.setDebugMode(mode); }
     private:
         RenderView& m_view;
         MaterialRenderer m_material;

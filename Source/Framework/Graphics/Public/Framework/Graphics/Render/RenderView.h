@@ -65,7 +65,7 @@ namespace ob::graphics {
         template<class T>
         T* getPipeline() {
             if (!m_pipeline)return nullptr;
-            if (m_pipeline->getType() != Type::Get<T>())return;
+            if (m_pipeline->getType() != Type::Get<T>())return nullptr;
             return reinterpret_cast<T*>(m_pipeline.get());
         }
 

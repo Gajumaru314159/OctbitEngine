@@ -24,6 +24,13 @@ namespace ob::graphics {
 		// ReveievShadow
 	};
 
+
+	struct DrawRendelableSettings {
+		String pass;
+		// mask
+		// sort
+	};
+
 	enum class MaterialId : u32 {
 		Invalid = 0,
 	};
@@ -44,6 +51,9 @@ namespace ob::graphics {
 
 		//! @brief      描画
 		bool render(Ref<rhi::CommandList>& cmdList, MaterialBlockSet& blocks, StringView pass)const;
+
+
+		bool render(Ref<rhi::CommandList>& cmdList, MaterialBlockSet& blocks)const;
 
 
 		MaterialBlock& getSceneBlock() { return m_sceneBlock; }
@@ -69,19 +79,6 @@ namespace ob::graphics {
 			OB_ASSERT(m_view.findFeature<MaterialRenderFeature>(), "RenderSceneにMaterialRenderFeatureが登録されていません");
 
 			m_viewBlock = MaterialSystem::Instance().createViewBlock("TODO MaterialScene Name");
-		}
-
-		void render(FG& fg, FGDummy& dependency) {
-			
-			dependency = fg.addPass<FGDummy>(
-				"PrepareViewMaterialBlock",
-				[&](FGBuilder& builder, FGDummy& dummy) {
-					dummy = builder.write(builder.createDummy());
-				},
-				[&](const FGDummy&, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
-				}
-			);
-
 		}
 
 		MaterialBlock& getViewBlock() { 

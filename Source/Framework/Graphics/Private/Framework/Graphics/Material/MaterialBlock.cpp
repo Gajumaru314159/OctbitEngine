@@ -236,7 +236,7 @@ namespace ob::graphics {
 
 	//! @brief  Floatプロパティを設定
 	void MaterialBlock::setInteger(StringView name, s32 value) {
-		setValueProprty(name, MaterialPropertyType::Scalar, value);
+		setValueProprty(name, MaterialPropertyType::Integer, value);
 	}
 
 	//! @brief  Floatプロパティを設定
