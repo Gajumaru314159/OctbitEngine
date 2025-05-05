@@ -72,14 +72,17 @@ cbuffer RootConstants : register(b0) {
 
 // IN / OUT
 struct VsIn {
-  float4 pos	:POSITION;
-  float4 normal	:NORMAL;
-  float2 uv		:TEXCOORD;
+  float4 pos		:POSITION;
+  float3 normal		:NORMAL;
+  float3 tangent	:TANGENT;
+  float2 uv			:TEXCOORD;
 };
 struct PsIn {
-  float4 pos	:SV_POSITION;
-  float4 normal	:NORMAL;
-  float2 uv		:TEXCOORD;
+  float4 pos		:SV_POSITION;
+  float3 normal		:NORMAL;
+  float3 tangent	:TANGENT;
+  float3 binormal	:BINORMAL;
+  float2 uv			:TEXCOORD;
 };
 struct PsOut {
   float4 albedo	:SV_TARGET0; // Albedo Occlusion
@@ -98,7 +101,9 @@ PsIn VS_Main(VsIn i) {
 	float4 worldPos = mul(mparam.Matrix,float4(i.pos.xyz,1));
     o.pos = mul(gparam.MatrixTest,worldPos);
     o.uv = i.uv;
-    o.normal = i.normal;
+    o.normal = normalize(mul(mparam.Matrix,float4(i.normal,0.0))).xyz;
+    o.tangent = normalize(mul(mparam.Matrix,float4(i.tangent,0.0))).xyz;
+    o.binormal = cross(o.normal,o.tangent);
     return o;
 }
 PsOut PS_Main(PsIn i){
@@ -119,8 +124,9 @@ PsOut PS_Main(PsIn i){
     o.albedo = g_mainTex.Sample(g_mainSmp,i.uv) * mparam.Color;
     if(o.albedo.a < 0.5) discard;
 
-    //o.normal = float4((i.normal.xyz*0.5+0.5),1.0);
-    o.normal = g_normalTex.Sample(g_normalSmp, i.uv)*0.5+0.5;
+	float3 tn = g_normalTex.Sample(g_normalSmp, i.uv).xyz * 2.0 - 1.0;
+	float3 n = tn.x * i.binormal + tn.y * i.tangent + tn.z * i.normal;
+	o.normal = float4(normalize(n) * 0.5 + 0.5,1.0);
     o.uv = float4(i.uv,0,1);
     return o;
 }

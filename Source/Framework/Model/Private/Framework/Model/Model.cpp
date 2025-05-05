@@ -29,7 +29,7 @@ namespace ob::model {
 		int flag =
 			aiProcess_Triangulate |
 			aiProcess_PreTransformVertices |
-			//aiProcess_CalcTangentSpace |
+			aiProcess_CalcTangentSpace |
 			//aiProcess_GenSmoothNormals |
 			aiProcess_GenUVCoords |
 			//aiProcess_RemoveRedundantMaterials |
@@ -91,7 +91,8 @@ namespace ob::model {
 					shaders.ps = Shader::CompilePS(code.value());
 					shaders.inputLayout = {
 						{Semantic::Position,ElementType::Float,4},
-						{Semantic::Normal,ElementType::Float,4},
+						{Semantic::Normal,ElementType::Float,3},
+						{Semantic::Tangent,ElementType::Float,3},
 						{Semantic::TexCoord,ElementType::Float,2},
 					};
 				}
