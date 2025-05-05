@@ -10,6 +10,8 @@
 
 namespace ob::rhi {
 
+#define GRAPHIC_OBJECT_LEAK_CHECK_ENABLED OB_DEBUG
+
     //! @brief  グラフィック・オブジェクト・マネージャ
     class GraphicObjectManager : public Singleton<GraphicObjectManager> {
     public:
@@ -24,6 +26,9 @@ namespace ob::rhi {
 
         //! @brief  更新
         void update();
+
+        //! @brief  終了処理
+        void finalize();
 
         //! @brief  登録
         void registerObject(GraphicObject&);
@@ -40,9 +45,14 @@ namespace ob::rhi {
 
         using ObjectQueue = Queue<GraphicObject*>;
         RHIConfig                  m_config;
-        List<GraphicObject*>    m_objects;
+
+        SpinLock                m_deleteStackListLock;
         Swapper<ObjectQueue>    m_deleteStackList;
 
+#if GRAPHIC_OBJECT_LEAK_CHECK_ENABLED
+        SpinLock                m_objectsLock;
+        List<GraphicObject*>    m_objects;
+#endif
     };
 
 }

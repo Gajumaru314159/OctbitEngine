@@ -29,9 +29,6 @@ namespace ob::rhi {
 
     //! @brief  終了処理
     void RHI::finalize() {
-        // 遅延開放するものを全て削除
-        for (s32 i = 0; i < m_objectManager.getFrameBufferCount(); ++i) {
-            m_objectManager.update();
-        }
+        m_objectManager.finalize();
     }
 }
