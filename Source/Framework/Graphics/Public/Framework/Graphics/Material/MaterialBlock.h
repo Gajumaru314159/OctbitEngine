@@ -58,20 +58,20 @@ namespace ob::graphics {
 
         //! @brief  マテリアルパラメータが存在するか
         bool hasProperty(StringView name, MaterialPropertyType type)const;
-        bool hasInteger(StringView name)const;  //!< @copybrief hasProperty()
-        bool hasScalar(StringView name)const;   //!< @copybrief hasProperty()
-        bool hasVector(StringView name)const;   //!< @copybrief hasProperty()
-        bool hasMatrix(StringView name)const;   //!< @copybrief hasProperty()
         bool hasTexture(StringView name)const;  //!< @copybrief hasProperty()
         bool hasBuffer(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasMatrix(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasVector(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasScalar(StringView name)const;   //!< @copybrief hasProperty()
+        bool hasInteger(StringView name)const;  //!< @copybrief hasProperty()
 
         //! @brief  マテリアルパラメータを設定
-        void setInteger(StringView name, s32 value);
-        void setScalar(StringView name, f32 value);                 //!< @copybrief setInteger()
-        void setVector(StringView name, Color value);               //!< @copybrief setInteger()
-        void setMatrix(StringView name, const Matrix& value);       //!< @copybrief setInteger()
-        void setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler); //!< @copybrief setInteger()
-        void setBuffer(StringView name, const Ref<Buffer>& value);  //!< @copybrief setInteger()
+        void setTexture(StringView name, const Ref<Texture>& texture);  
+        void setBuffer(StringView name, const Ref<Buffer>& value);      //!< @copybrief setTexture()
+        void setMatrix(StringView name, const Matrix& value);           //!< @copybrief setTexture()
+        void setVector(StringView name, Color value);                   //!< @copybrief setTexture()
+        void setScalar(StringView name, f32 value);                     //!< @copybrief setTexture()
+        void setInteger(StringView name, s32 value);                    //!< @copybrief setTexture()
 
 		//! @brief MaterialBlockのハンドルを指定のスロットに記録する
 		//! @details Bindfullの場合はslotにRootSignatureのスロットを指定する  
@@ -122,11 +122,11 @@ namespace ob::graphics {
 
 
 
-    inline bool MaterialBlock::hasInteger(StringView name)const { return hasProperty(name, MaterialPropertyType::Integer); }
-    inline bool MaterialBlock::hasScalar(StringView name)const { return hasProperty(name, MaterialPropertyType::Scalar); }
-    inline bool MaterialBlock::hasVector(StringView name)const { return hasProperty(name, MaterialPropertyType::Vector); }
-    inline bool MaterialBlock::hasMatrix(StringView name)const { return hasProperty(name, MaterialPropertyType::Matrix); }
     inline bool MaterialBlock::hasTexture(StringView name)const { return hasProperty(name, MaterialPropertyType::Texture); }
     inline bool MaterialBlock::hasBuffer(StringView name)const { return hasProperty(name, MaterialPropertyType::Buffer); }
+    inline bool MaterialBlock::hasMatrix(StringView name)const { return hasProperty(name, MaterialPropertyType::Matrix); }
+    inline bool MaterialBlock::hasVector(StringView name)const { return hasProperty(name, MaterialPropertyType::Vector); }
+    inline bool MaterialBlock::hasScalar(StringView name)const { return hasProperty(name, MaterialPropertyType::Scalar); }
+    inline bool MaterialBlock::hasInteger(StringView name)const { return hasProperty(name, MaterialPropertyType::Integer); }
 
 }
