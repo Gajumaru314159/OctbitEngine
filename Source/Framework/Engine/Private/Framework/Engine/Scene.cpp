@@ -139,13 +139,14 @@ namespace ob::engine {
 		return m_entities;
 	}
 	//! @brief		エンティティを追加
-	void Scene::addEntity(Entity* entity) {
+	Entity* Scene::addEntity(Entity* entity) {
 		if (auto root = m_hRootEntity.get()) {
 			root->addChild(entity);
 			m_entities.emplace_back(entity->getHandle());
 		} else {
 			LOG_ERROR("ルートウィジェットが削除されています。 [this={}]",m_name);
 		}
+		return entity;
 	}
 	//! @brief		エンティティを検索
 	Entity* Scene::findEntity(StringView name, Recursive recursive) {

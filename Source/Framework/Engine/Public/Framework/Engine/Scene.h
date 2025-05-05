@@ -55,7 +55,7 @@ namespace ob::engine {
 		// Entity
 		//===============================================================
 		const EntityHandleList& getEntities()const;
-		void addEntity(Entity*);
+		Entity* addEntity(Entity*);
 		Entity* findEntity(StringView name, Recursive recursive = Recursive::No);
 
 	private:

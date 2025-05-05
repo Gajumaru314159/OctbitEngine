@@ -114,17 +114,22 @@ int TestDirectX12() {
 	// シーン生成
 	auto world = World::Create("MainWorld");
 	auto scene2 = Scene::Create("SubScene");
-	auto entity1 = Entity::Create("RootEntity");
+
+	auto entity1 = Entity::Create("Ukulele", scene2);
 	entity1->setActive(true);
 	entity1->addComponent<ReflectionTestComponent>();
 	entity1->addComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
-	scene2->addEntity(entity1);
-	auto entity2 = Entity::Create("RootEntity");
+
+	auto entity2 = Entity::Create<MeshComponent>("Sky", scene2);
 	entity2->setActive(true);
-	entity2->addComponent<ReflectionTestComponent>();
 	entity2->addComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
 	entity2->findComponent<TransformComponent>()->setLocalScale({ 10 ,10,10});
-	scene2->addEntity(entity2);
+
+	auto entity3 = Entity::Create("Ukulele2", scene2);
+	entity3->addComponents<ReflectionTestComponent, MeshComponent>();
+	entity3->findComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
+	entity3->findComponent<TransformComponent>()->setLocalPosition({10,0,0});
+	entity3->setActive(true);
 
 	world->getRootScene().addSubScene(*scene2);
 

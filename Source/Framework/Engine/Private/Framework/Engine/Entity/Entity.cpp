@@ -6,6 +6,7 @@
 #include <Framework/Core/Reflection/TypeInfoManager.h>
 #include <Framework/Engine/Entity.h>
 #include <Framework/Engine/Component.h>
+#include <Framework/Engine/Scene.h>
 #include <Framework/Engine/Engine.h>
 #include <Framework/Engine/Entity/EntityManager.h>
 #include <Framework/Core/Reflection/TypeBuilder.h>
@@ -19,10 +20,19 @@ OB_DEFINE_CLASS_INFO(ob::engine::Entity) {
 namespace ob::engine {
 
 	//! @brief		生成
-	Entity* Entity::Create(StringView name) {
+	Entity* Entity::Create(StringView name,Scene* scene, Span<Type> components) {
 		if (auto manager = EntityManager::Get()) {
 			auto entity = new Entity(name);
 			manager->add(*entity);
+
+			for (auto& component : components) {
+				entity->addComponent(component);
+			}
+
+			if (scene) {
+				scene->addEntity(entity);
+			}
+
 			return entity;
 		}
 		return nullptr;

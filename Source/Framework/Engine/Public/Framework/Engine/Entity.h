@@ -22,7 +22,10 @@ namespace ob::engine {
 	public:
 
 		//! @brief		Entityを生成
-		static Entity* Create(StringView name);
+		static Entity* Create(StringView name,Scene* scene = nullptr,Span<Type> components = {});
+
+		template<class... Ts>
+		static Entity* Create(StringView name, Scene* scene = nullptr);
 
 	public:
 
@@ -79,6 +82,8 @@ namespace ob::engine {
 		Component* findComponent(Type type, s32 index = 0)const;
 		//! @brief Comoponentを追加 
 		template<class T>T* addComponent();
+		//! @brief Comoponentを追加 
+		template<class... Ts>Tuple<Ts*...> addComponents();
 		//! @brief Comoponentを削除 
 		template<class T>bool removeComponent(s32 index = 0) { return removeComponent(Type::Get<T>(),index); }
 		//! @brief Componentを取得
@@ -142,9 +147,20 @@ namespace ob::engine {
 	};
 
 
+	template<class... Ts>
+	Entity* Entity::Create(StringView name,Scene* scene) {
+		Type components[] = { Type::Get<Ts>()... };
+		return Create(name, scene, components);
+	}
+
 	template<class T>
 	inline T* Entity::addComponent() {
 		return reinterpret_cast<T*>(addComponent(Type::Get<T>()));
+	}
+
+	template<class... Ts>
+	inline Tuple<Ts*...> Entity::addComponents() {
+		return { reinterpret_cast<Ts*>(addComponent(Type::Get<Ts>()))... };
 	}
 
 }
