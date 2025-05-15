@@ -20,6 +20,8 @@ namespace ob::graphics {
 	//! @brief      描画可能なオブジェクトを追加
 	MaterialId MaterialRenderFeature::addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material) {
 
+		ScopeLock lock(m_lock);
+
 		m_materialId = static_cast<MaterialId>(enum_cast(m_materialId)+1);
 
 		for (auto [i,submesh] : Indexed(mesh->getSubMeshes())) {
@@ -38,6 +40,7 @@ namespace ob::graphics {
 
 	//! @brief      描画アイテムを削除
 	void MaterialRenderFeature::removeRenderable(MaterialId id) {
+		ScopeLock lock(m_lock);
 		if(id==MaterialId::Invalid)return;
 		for (auto& [name, pass] : m_renderablesMap) {
 			pass.erase(id);
@@ -47,6 +50,7 @@ namespace ob::graphics {
 	//! @brief      描画
 	bool MaterialRenderFeature::render(Ref<rhi::CommandList>& cmdList,MaterialBlockSet& blocks, StringView pass)const {
 
+		ScopeLock lock(m_lock);
 		auto itr = m_renderablesMap.find(pass);
 		if (itr == m_renderablesMap.end())return false;
 

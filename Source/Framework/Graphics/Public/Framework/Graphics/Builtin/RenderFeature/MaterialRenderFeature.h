@@ -60,6 +60,8 @@ namespace ob::graphics {
 
 	private:
 
+		mutable SpinLock m_lock;
+
 		MaterialId m_materialId;
 		Map<String, HashMap<MaterialId, Renderable>, std::less<>> m_renderablesMap;
 
