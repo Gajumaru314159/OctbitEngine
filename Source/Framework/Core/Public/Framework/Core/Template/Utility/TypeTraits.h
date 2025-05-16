@@ -19,6 +19,8 @@ namespace ob::core {
 	template < class, class = void >
 	struct is_iterator : std::false_type {};
 
+	//! @cond
+	
 	template < typename T >
 	struct is_iterator<T,
 		std::enable_if_t<
@@ -27,5 +29,5 @@ namespace ob::core {
 		>
 	> : std::true_type {};
 
-
+	//! @endcond
 }
