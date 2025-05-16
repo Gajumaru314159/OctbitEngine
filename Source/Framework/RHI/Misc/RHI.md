@@ -229,3 +229,7 @@ DirectX12やVulkanといったRHIはプラグインとして実装されます�
 ## 制限事項
 - DirectX12とVulkanの併用はサポートされていません。
 - 高度な機能 (例: レイトレーシング) の実装には追加の拡張が必要です。
+
+
+# サブページ
+* @subpage IndirectDeraw
