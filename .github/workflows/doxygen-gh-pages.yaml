@@ -12,9 +12,14 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
+      - name: Move Directory
+        run: cd Docs
+      - name: Create Output Directory
+        run: mkdir html
+      - name: Build Doxygen
+        uses: DenverCoder1/doxygen-github-pages-action@v1.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: docs/html
-          config_file: Docs/Doxyfile
+          folder: html
+          config_file: Doxyfile
