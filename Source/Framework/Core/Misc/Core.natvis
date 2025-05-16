@@ -72,6 +72,53 @@
 		</Expand>
 	</Type>
 
+
+	<!--AnyContainer-->
+	<Type Name="ob::core::AnyContainer">
+		<Expand>
+			<ExpandedItem>m_container,view(AnyContainerHelper)</ExpandedItem>
+		</Expand>
+	</Type>
+	<Type Name="ob::core::AnyContainer::Holder&lt;*&gt;">
+		<Expand>
+			<Item Name="instance">instance</Item>
+		</Expand>
+	</Type>
+	<Type Name="std::unordered_map&lt;*&gt;" Priority="Low" IncludeView="AnyContainerHelper">
+		<AlternativeType Name="std::unordered_multimap&lt;*&gt;" />
+		<DisplayString>{_List}</DisplayString>
+		<Expand>
+			<ExpandedItem>_List,view(AnyContainerHelper)</ExpandedItem>
+		</Expand>
+	</Type>	
+	<Type Name="std::list&lt;std::pair&lt;*,*&gt;,*&gt;" IncludeView="AnyContainerHelper">
+		<DisplayString>Test</DisplayString>
+		<Expand>
+			<LinkedListItems>
+				<Size>_Mypair._Myval2._Mysize</Size>
+				<HeadPointer>_Mypair._Myval2._Myhead-&gt;_Next</HeadPointer>
+				<NextPointer>_Next</NextPointer>
+				<ValueNode Name="[{_Myval.first}]">*_Myval.second</ValueNode>
+			</LinkedListItems>
+		</Expand>
+	</Type>
+
+
+	<Type Name="std::unordered_map&lt;*&gt;" Priority="MediumHigh" ExcludeView="ShowElementsByIndex">
+		<AlternativeType Name="std::unordered_multimap&lt;*&gt;" />
+		<DisplayString>{_List}</DisplayString>
+		<Expand>
+			<Item Name="[bucket_count]" IncludeView="detailed">_Maxidx</Item>
+			<Item Name="[load_factor]" IncludeView="detailed">((float)_List._Mypair._Myval2._Mysize) / ((float)_Maxidx)</Item>
+			<Item Name="[max_load_factor]" IncludeView="detailed">_Traitsobj._Mypair._Myval2._Myval2</Item>
+			<Item Name="[hash_function]" ExcludeView="simple">_Traitsobj._Mypair</Item>
+			<Item Name="[key_eq]" ExcludeView="simple">_Traitsobj._Mypair._Myval2</Item>
+			<Item Name="[allocator]" ExcludeView="simple">_List._Mypair</Item>
+			<ExpandedItem>_List,view(MapHelper)</ExpandedItem>
+		</Expand>
+	</Type>
+
+
 	<!--Type-->
 	<Type Name="ob::core::Type">
 		<DisplayString>{m_name.m_view,sb}</DisplayString>
