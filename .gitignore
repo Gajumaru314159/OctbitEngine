@@ -1,7 +1,7 @@
 # directory
 /Build/
 /Insall/
-/Docs/html
+/docs
 /Memo/
 .vs/
 /Source/Editor/**/bin
