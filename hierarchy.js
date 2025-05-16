@@ -469,7 +469,6 @@ var hierarchy =
     [ "ob::core::Transition", "d1/d5c/classob_1_1core_1_1_transition.html", null ],
     [ "ob::core::Triangle", "d6/d6b/classob_1_1core_1_1_triangle.html", null ],
     [ "std::true_type", null, [
-      [ "ob::core::is_iterator< T, std::enable_if_t< std::is_base_of< std::input_iterator_tag, typename std::iterator_traits< T >::iterator_category >::value||std::is_base_of< std::output_iterator_tag, typename std::iterator_traits< T >::iterator_category >::value > >", "db/dd2/structob_1_1core_1_1is__iterator_3_01_t_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01sta523865f9f0071a061cbd9464c19ac89.html", null ],
       [ "ob::core::is_map< HashMap< TKey, TValue > >", "d7/d70/structob_1_1core_1_1is__map_3_01_hash_map_3_01_t_key_00_01_t_value_01_4_01_4.html", null ],
       [ "ob::core::is_map< Map< TKey, TValue > >", "d6/d54/structob_1_1core_1_1is__map_3_01_map_3_01_t_key_00_01_t_value_01_4_01_4.html", null ],
       [ "ob::core::is_sequence< Array< T, N > >", "d5/dbe/structob_1_1core_1_1is__sequence_3_01_array_3_01_t_00_01_n_01_4_01_4.html", null ],

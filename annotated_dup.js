@@ -87,7 +87,6 @@ var annotated_dup =
         [ "InvalidOperationException", "d9/dcb/classob_1_1core_1_1_invalid_operation_exception.html", null ],
         [ "IPAddress", "d1/d8a/structob_1_1core_1_1_i_p_address.html", null ],
         [ "is_iterator", "d2/d32/structob_1_1core_1_1is__iterator.html", null ],
-        [ "is_iterator< T, std::enable_if_t< std::is_base_of< std::input_iterator_tag, typename std::iterator_traits< T >::iterator_category >::value||std::is_base_of< std::output_iterator_tag, typename std::iterator_traits< T >::iterator_category >::value > >", "db/dd2/structob_1_1core_1_1is__iterator_3_01_t_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01sta523865f9f0071a061cbd9464c19ac89.html", null ],
         [ "is_map", "dc/d40/structob_1_1core_1_1is__map.html", null ],
         [ "is_map< HashMap< TKey, TValue > >", "d7/d70/structob_1_1core_1_1is__map_3_01_hash_map_3_01_t_key_00_01_t_value_01_4_01_4.html", null ],
         [ "is_map< Map< TKey, TValue > >", "d6/d54/structob_1_1core_1_1is__map_3_01_map_3_01_t_key_00_01_t_value_01_4_01_4.html", null ],
