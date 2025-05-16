@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/RHI/Public/Framework/RHI/Shader.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d9/d2f/_r_h_i_2_public_2_framework_2_r_h_i_2_shader_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Shader.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/Misc/BlobView.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/RHI/GraphicObject.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/RHI/Types/ShaderStage.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">   13</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ShaderCompileDesc</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad6d6480939179e11adc9826618961097">   14</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>         <a class="code hl_variable" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad6d6480939179e11adc9826618961097">name</a>;            </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad683babecc696e08196b35d8f911ae07">   15</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>         <a class="code hl_variable" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad683babecc696e08196b35d8f911ae07">code</a>;            </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a23313240607960aa452c754c88709b6f">   16</a></span>        ShaderStage    <a class="code hl_variable" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a23313240607960aa452c754c88709b6f">stage</a>;           </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#af3d0955ff06942c7907b6883bf3e252b">   17</a></span>        Vector&lt;String&gt; <a class="code hl_variable" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#af3d0955ff06942c7907b6883bf3e252b">directories</a>;     </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a9651f756bcb7eea422ae153c7cef5ebd">   18</a></span>        Vector&lt;String&gt; <a class="code hl_variable" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a9651f756bcb7eea422ae153c7cef5ebd">macros</a>;          </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    };</div>
+</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">   22</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">Shader</a> :<span class="keyword">public</span> <a class="code hl_class" href="../../d6/d98/classob_1_1rhi_1_1_graphic_object.html">GraphicObject</a> {</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a81c208fa6dfaa68d195183b207e9c0bf">   46</a></span>        <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a81c208fa6dfaa68d195183b207e9c0bf">GetEntryName</a>(ShaderStage stage);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a4dcfa281682bb850acfa456b2c4cdb9b">   53</a></span>        <span class="keyword">static</span> Ref&lt;Shader&gt; <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a4dcfa281682bb850acfa456b2c4cdb9b">Compile</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ShaderCompileDesc</a>&amp; desc);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keyword">static</span> Ref&lt;Shader&gt; <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a4dcfa281682bb850acfa456b2c4cdb9b">Compile</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; code, ShaderStage stage);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="keyword">static</span> Ref&lt;Shader&gt; CompileVS(<span class="keyword">const</span> <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; code);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keyword">static</span> Ref&lt;Shader&gt; CompilePS(<span class="keyword">const</span> <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; code);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a91ddb8e97e0c3618bc89dbf812ab5f1b">   64</a></span>        <span class="keyword">static</span> Ref&lt;Shader&gt; <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a91ddb8e97e0c3618bc89dbf812ab5f1b">Load</a>(<a class="code hl_class" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> binary, ShaderStage stage);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">static</span> Ref&lt;Shader&gt; LoadVS(<a class="code hl_class" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> binary);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keyword">static</span> Ref&lt;Shader&gt; LoadPS(<a class="code hl_class" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> binary);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a2292e156b3d6f3bf6d5db5894d63cbc7">   71</a></span>        <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a2292e156b3d6f3bf6d5db5894d63cbc7">Supports</a>(ShaderStage stage);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a8a3b7cb54a470b3bc97ab48d7fe3de73">   76</a></span>        <span class="keyword">virtual</span> ShaderStage <a class="code hl_function" href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a8a3b7cb54a470b3bc97ab48d7fe3de73">getStage</a>()<span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    };</div>
+</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>}</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="ttc" id="aclassob_1_1core_1_1_blob_view_html"><div class="ttname"><a href="../../da/dea/classob_1_1core_1_1_blob_view.html">ob::core::BlobView</a></div><div class="ttdoc">バイナリデータビュー(Binary Large Object View)</div><div class="ttdef"><b>Definition</b> BlobView.h:15</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_graphic_object_html"><div class="ttname"><a href="../../d6/d98/classob_1_1rhi_1_1_graphic_object.html">ob::rhi::GraphicObject</a></div><div class="ttdoc">グラフィック・オブジェクト</div><div class="ttdef"><b>Definition</b> GraphicObject.h:20</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html">ob::rhi::Shader</a></div><div class="ttdoc">シェーダ</div><div class="ttdef"><b>Definition</b> Shader.h:22</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html_a2292e156b3d6f3bf6d5db5894d63cbc7"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a2292e156b3d6f3bf6d5db5894d63cbc7">ob::rhi::Shader::Supports</a></div><div class="ttdeci">static bool Supports(ShaderStage stage)</div><div class="ttdoc">シェーダステージをサポートしているか</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html_a4dcfa281682bb850acfa456b2c4cdb9b"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a4dcfa281682bb850acfa456b2c4cdb9b">ob::rhi::Shader::Compile</a></div><div class="ttdeci">static Ref&lt; Shader &gt; Compile(const ShaderCompileDesc &amp;desc)</div><div class="ttdoc">シェーダコードをコンパイル</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html_a81c208fa6dfaa68d195183b207e9c0bf"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a81c208fa6dfaa68d195183b207e9c0bf">ob::rhi::Shader::GetEntryName</a></div><div class="ttdeci">static const char * GetEntryName(ShaderStage stage)</div><div class="ttdoc">シェーダのエントリ関数名を取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html_a8a3b7cb54a470b3bc97ab48d7fe3de73"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a8a3b7cb54a470b3bc97ab48d7fe3de73">ob::rhi::Shader::getStage</a></div><div class="ttdeci">virtual ShaderStage getStage() const =0</div><div class="ttdoc">シェーダステージを取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_shader_html_a91ddb8e97e0c3618bc89dbf812ab5f1b"><div class="ttname"><a href="../../d7/de4/classob_1_1rhi_1_1_shader.html#a91ddb8e97e0c3618bc89dbf812ab5f1b">ob::rhi::Shader::Load</a></div><div class="ttdeci">static Ref&lt; Shader &gt; Load(BlobView binary, ShaderStage stage)</div><div class="ttdoc">シェーダバイナリをロード</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ob::rhi::ShaderCompileDesc</a></div><div class="ttdef"><b>Definition</b> Shader.h:13</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html_a23313240607960aa452c754c88709b6f"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a23313240607960aa452c754c88709b6f">ob::rhi::ShaderCompileDesc::stage</a></div><div class="ttdeci">ShaderStage stage</div><div class="ttdoc">シェーダステージ</div><div class="ttdef"><b>Definition</b> Shader.h:16</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html_a9651f756bcb7eea422ae153c7cef5ebd"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#a9651f756bcb7eea422ae153c7cef5ebd">ob::rhi::ShaderCompileDesc::macros</a></div><div class="ttdeci">Vector&lt; String &gt; macros</div><div class="ttdoc">マクロ定義</div><div class="ttdef"><b>Definition</b> Shader.h:18</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html_ad683babecc696e08196b35d8f911ae07"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad683babecc696e08196b35d8f911ae07">ob::rhi::ShaderCompileDesc::code</a></div><div class="ttdeci">String code</div><div class="ttdoc">シェーダコード</div><div class="ttdef"><b>Definition</b> Shader.h:15</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html_ad6d6480939179e11adc9826618961097"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#ad6d6480939179e11adc9826618961097">ob::rhi::ShaderCompileDesc::name</a></div><div class="ttdeci">String name</div><div class="ttdoc">シェーダ名</div><div class="ttdef"><b>Definition</b> Shader.h:14</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html_af3d0955ff06942c7907b6883bf3e252b"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html#af3d0955ff06942c7907b6883bf3e252b">ob::rhi::ShaderCompileDesc::directories</a></div><div class="ttdeci">Vector&lt; String &gt; directories</div><div class="ttdoc">インクルードディレクトリ</div><div class="ttdef"><b>Definition</b> Shader.h:17</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_d82ccec992bd210755097980d56b772a.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_ad62dc539bf0513989cab6d0e67469da.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_2dde9cdd31bb6a124405cea450d725f7.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_ada43161bc5bd242ea360e956d58a61e.html">RHI</a></li><li class="navelem"><b>Shader.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

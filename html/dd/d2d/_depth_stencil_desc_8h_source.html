@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/RHI/Public/Framework/RHI/Types/DepthStencilDesc.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('dd/d2d/_depth_stencil_desc_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">DepthStencilDesc.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#pragma region Enum</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">enum class</span> StencilOp :u32 {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        Keep,               </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        Replace,            </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        Zero,               </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        Invert,             </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        IncrementAndClamp,  </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        DecrementAndClamp,  </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        IncrementAndWrap,   </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        DecrementAndWrap,   </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    };</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">enum class</span> ComparisonFunc :u32 {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        Never,          </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        Always,         </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        Equal,          </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        NotEqual,       </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        Less,           </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        Greater,        </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        LessEqual,      </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        GreaterEqual,   </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    };</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#pragma endregion</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="foldopen" id="foldopen00040" data-start="{" data-end="};">
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html">   40</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html">DepthStencilDesc</a> {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a1e65f35f5e40c9c5a1976dce335c82a0">   42</a></span>            <span class="keywordtype">bool</span>            <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a1e65f35f5e40c9c5a1976dce335c82a0">enable</a>{ <span class="keyword">false</span> };                    </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab8de6d03a5dc0b98b6977e6b13091f54">   43</a></span>            <span class="keywordtype">bool</span>            <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab8de6d03a5dc0b98b6977e6b13091f54">write</a>{ <span class="keyword">true</span> };                      </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a53087f07bb1d9edbb610609b544a5f4d">   44</a></span>            ComparisonFunc  <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a53087f07bb1d9edbb610609b544a5f4d">func</a>{ ComparisonFunc::Greater };    </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab7d7f5847569488a0cea44288aba4473">   45</a></span>        } <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab7d7f5847569488a0cea44288aba4473">depth</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">struct </span>{</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <span class="keywordtype">bool</span>            <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a1e65f35f5e40c9c5a1976dce335c82a0">enable</a>{ <span class="keyword">false</span> };                    </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a68eedea595720fd9cdb1db3d4de2c719">   49</a></span>            u8              <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a68eedea595720fd9cdb1db3d4de2c719">read_mask</a>{ 0xff };                  </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a77160b54808bcf0d4cee15d103ce3e0a">   50</a></span>            u8              <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a77160b54808bcf0d4cee15d103ce3e0a">write_mask</a>{ 0xff };                 </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            StencilOp       failOp{ StencilOp::Keep };          </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            StencilOp       depthFailOp{ StencilOp::Keep };     </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            StencilOp       passOp{ StencilOp::Keep };          </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            ComparisonFunc  <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a53087f07bb1d9edbb610609b544a5f4d">func</a>{ ComparisonFunc::Always };     </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            u8              reference{ 0x00 };                  </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ae17810602ec8fb44a3724ee0db91bcce">   56</a></span>        } <a class="code hl_variable" href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ae17810602ec8fb44a3724ee0db91bcce">stencil</a>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    };</div>
+</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}</div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html">ob::rhi::DepthStencilDesc</a></div><div class="ttdoc">デプス・ステンシル定義</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:40</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_a1e65f35f5e40c9c5a1976dce335c82a0"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a1e65f35f5e40c9c5a1976dce335c82a0">ob::rhi::DepthStencilDesc::enable</a></div><div class="ttdeci">bool enable</div><div class="ttdoc">デプステストを有効にする</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:42</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_a53087f07bb1d9edbb610609b544a5f4d"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a53087f07bb1d9edbb610609b544a5f4d">ob::rhi::DepthStencilDesc::func</a></div><div class="ttdeci">ComparisonFunc func</div><div class="ttdoc">デプステストの比較関数</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:44</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_a68eedea595720fd9cdb1db3d4de2c719"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a68eedea595720fd9cdb1db3d4de2c719">ob::rhi::DepthStencilDesc::read_mask</a></div><div class="ttdeci">u8 read_mask</div><div class="ttdoc">読み込みビットマスク</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:49</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_a77160b54808bcf0d4cee15d103ce3e0a"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#a77160b54808bcf0d4cee15d103ce3e0a">ob::rhi::DepthStencilDesc::write_mask</a></div><div class="ttdeci">u8 write_mask</div><div class="ttdoc">書き込みビットマスク</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:50</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_ab7d7f5847569488a0cea44288aba4473"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab7d7f5847569488a0cea44288aba4473">ob::rhi::DepthStencilDesc::depth</a></div><div class="ttdeci">struct ob::rhi::DepthStencilDesc::@9 depth</div><div class="ttdoc">デプス設定</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_ab8de6d03a5dc0b98b6977e6b13091f54"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ab8de6d03a5dc0b98b6977e6b13091f54">ob::rhi::DepthStencilDesc::write</a></div><div class="ttdeci">bool write</div><div class="ttdoc">デプスを書き込む</div><div class="ttdef"><b>Definition</b> DepthStencilDesc.h:43</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_depth_stencil_desc_html_ae17810602ec8fb44a3724ee0db91bcce"><div class="ttname"><a href="../../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html#ae17810602ec8fb44a3724ee0db91bcce">ob::rhi::DepthStencilDesc::stencil</a></div><div class="ttdeci">struct ob::rhi::DepthStencilDesc::@10 stencil</div><div class="ttdoc">ステンシル設定</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_d82ccec992bd210755097980d56b772a.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_ad62dc539bf0513989cab6d0e67469da.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_2dde9cdd31bb6a124405cea450d725f7.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_ada43161bc5bd242ea360e956d58a61e.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_f0808b29c201893cc6f00b351c7e923a.html">Types</a></li><li class="navelem"><b>DepthStencilDesc.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

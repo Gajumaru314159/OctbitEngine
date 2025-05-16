@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Graphics/Public/Framework/Graphics/Render/RenderView.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d3/d85/_render_view_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">RenderView.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/RHI/Forward.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/RHI/SwapChain.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderScene.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderPipeline.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span>ob::graphics {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">   16</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ae4f30c8d3aa2ae67990baf1374f88561">   20</a></span>        <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ae4f30c8d3aa2ae67990baf1374f88561">RenderView</a>(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene, StringView name);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3cfc02522d3b7805cfad276fc41993a5">   23</a></span>        <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3cfc02522d3b7805cfad276fc41993a5">~RenderView</a>();</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a78c2497b17c4259fb87697a987c2b629">   26</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a78c2497b17c4259fb87697a987c2b629">getScene</a>() -&gt; <a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; { <span class="keywordflow">return</span> m_scene; }</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a78c2497b17c4259fb87697a987c2b629">getScene</a>() const -&gt; const <a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp;{ <span class="keywordflow">return</span> m_scene; }</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a5a74ee8fdbc0f1249cabb28ad7db7a3d">   30</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a5a74ee8fdbc0f1249cabb28ad7db7a3d">setRect</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d3/db2/structob_1_1core_1_1_rect.html">Rect</a>&amp; rect);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3641d940d776c1f579f61cc1f7f9087f">   33</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3641d940d776c1f579f61cc1f7f9087f">getRect</a>()const-&gt;const <a class="code hl_struct" href="../../d3/db2/structob_1_1core_1_1_rect.html">Rect</a>&amp;;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0ca1d082f12e1fcd9db7c74931739db4">   36</a></span>        auto <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0ca1d082f12e1fcd9db7c74931739db4">getRenderSize</a>()const-&gt;<a class="code hl_struct" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#afcfdf872ad0c8c9d457241b729764276">   39</a></span>        auto <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#afcfdf872ad0c8c9d457241b729764276">getScaledRect</a>()const-&gt;<a class="code hl_struct" href="../../d3/df1/structob_1_1core_1_1_int_rect.html">IntRect</a>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad6d7ab63474a93f14b524e7141f862e7">   42</a></span>        auto <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad6d7ab63474a93f14b524e7141f862e7">getViewport</a>()const-&gt;<a class="code hl_struct" href="../../d0/d62/structob_1_1core_1_1_viewport.html">Viewport</a>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0b14937cc8a018e24a7b84bd8e31d1f1">   45</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0b14937cc8a018e24a7b84bd8e31d1f1">setDisplay</a>(const <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt;<a class="code hl_class" href="../../dd/d26/classob_1_1rhi_1_1_swap_chain.html">SwapChain</a>&gt;&amp; swapChain);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a234774f5d322f09018a3d0b7a3f4b076">   49</a></span>        auto <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a234774f5d322f09018a3d0b7a3f4b076">getDisplay</a>()const -&gt; const <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt;rhi::<a class="code hl_class" href="../../dd/d26/classob_1_1rhi_1_1_swap_chain.html">SwapChain</a>&gt;;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a45f28646dfb54e270de80a960a3a63df">   52</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a45f28646dfb54e270de80a960a3a63df">setRenderTexture</a>(const <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt;<a class="code hl_class" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">RenderTexture</a>&gt;&amp; renderTexture);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a39dd2b56f9cbc5475693f6608ea31eeb">   56</a></span>        auto <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a39dd2b56f9cbc5475693f6608ea31eeb">getRenderTexture</a>()const-&gt;const <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt;rhi::<a class="code hl_class" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">RenderTexture</a>&gt;;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        template&lt;class T, class... Args&gt;</div>
+<div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad166d805dde56f5caac3181866fbc6a1">   60</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad166d805dde56f5caac3181866fbc6a1">setPipeline</a>(Args&amp;&amp;... args) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            m_pipeline = std::make_unique&lt;T&gt;(args...);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
+</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="foldopen" id="foldopen00066" data-start="{" data-end="}">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a37523f2233e2e5d6f4240cfa808445a1">   66</a></span>        T* <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a37523f2233e2e5d6f4240cfa808445a1">getPipeline</a>() {</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            <span class="keywordflow">if</span> (!m_pipeline)<span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            <span class="keywordflow">if</span> (m_pipeline-&gt;getType() != Type::Get&lt;T&gt;())<span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(m_pipeline.get());</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        }</div>
+</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a1b144185afd7fb9d3acb851494a54fd4">   73</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a1b144185afd7fb9d3acb851494a54fd4">render</a>(<a class="code hl_class" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">FG</a>&amp; fg);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3dfff812d93b408f26b0bb41f3ae2644">   76</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3dfff812d93b408f26b0bb41f3ae2644">addReleasedEvent</a>(RenderViewEventHandle&amp; handle, RenderViewEventDelegate func);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; T* <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">findFeature</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <a class="code hl_class" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">RenderFeature</a>* <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">findFeature</a>(<a class="code hl_class" href="../../d8/d39/classob_1_1core_1_1_type.html">Type</a> type)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordtype">void</span> clearTarget();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordtype">void</span> onSceneReleased(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordtype">void</span> onDisplayUpdated();</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>                  m_name;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <a class="code hl_struct" href="../../d3/db2/structob_1_1core_1_1_rect.html">Rect</a>                    m_rect;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp;            m_scene;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        Ref&lt;SwapChain&gt;          m_swapChain;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        SwapChainEventHandle    m_hDisplayUpdated;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        Ref&lt;RenderTexture&gt;      m_renderTexture;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        UPtr&lt;RenderPipeline&gt;    m_pipeline;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        RenderSceneEventHandle  m_hRelease;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        RenderViewEventNotifier m_releasedNotifier;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    };</div>
+</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="foldopen" id="foldopen00101" data-start="{" data-end="}">
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">  101</a></span>    T* <a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">RenderView::findFeature</a>()<span class="keyword">const </span>{</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(<a class="code hl_function" href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">findFeature</a>(Type::Get&lt;T&gt;()));</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
+</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_type_html"><div class="ttname"><a href="../../d8/d39/classob_1_1core_1_1_type.html">ob::core::Type</a></div><div class="ttdoc">型ID</div><div class="ttdef"><b>Definition</b> Type.h:60</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_f_g_html"><div class="ttname"><a href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">ob::graphics::FG</a></div><div class="ttdoc">FrameGraph</div><div class="ttdef"><b>Definition</b> FG.h:112</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_feature_html"><div class="ttname"><a href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">ob::graphics::RenderFeature</a></div><div class="ttdoc">描画機能</div><div class="ttdef"><b>Definition</b> RenderFeature.h:16</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_scene_html"><div class="ttname"><a href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">ob::graphics::RenderScene</a></div><div class="ttdoc">描画シーン RenderScene</div><div class="ttdef"><b>Definition</b> RenderScene.h:15</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html">ob::graphics::RenderView</a></div><div class="ttdoc">レンダー・ビュー RenderView</div><div class="ttdef"><b>Definition</b> RenderView.h:16</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a0b14937cc8a018e24a7b84bd8e31d1f1"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0b14937cc8a018e24a7b84bd8e31d1f1">ob::graphics::RenderView::setDisplay</a></div><div class="ttdeci">void setDisplay(const Ref&lt; SwapChain &gt; &amp;swapChain)</div><div class="ttdoc">描画先ディスプレイを設定する</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a0ca1d082f12e1fcd9db7c74931739db4"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a0ca1d082f12e1fcd9db7c74931739db4">ob::graphics::RenderView::getRenderSize</a></div><div class="ttdeci">auto getRenderSize() const -&gt; Size</div><div class="ttdoc">描画サイズを取得</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a1b144185afd7fb9d3acb851494a54fd4"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a1b144185afd7fb9d3acb851494a54fd4">ob::graphics::RenderView::render</a></div><div class="ttdeci">void render(FG &amp;fg)</div><div class="ttdoc">描画</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a234774f5d322f09018a3d0b7a3f4b076"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a234774f5d322f09018a3d0b7a3f4b076">ob::graphics::RenderView::getDisplay</a></div><div class="ttdeci">auto getDisplay() const -&gt; const Ref&lt; rhi::SwapChain &gt;</div><div class="ttdoc">描画先ディスプレイを取得する</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a3641d940d776c1f579f61cc1f7f9087f"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3641d940d776c1f579f61cc1f7f9087f">ob::graphics::RenderView::getRect</a></div><div class="ttdeci">auto getRect() const -&gt; const Rect &amp;</div><div class="ttdoc">描画矩形を取得</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a37523f2233e2e5d6f4240cfa808445a1"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a37523f2233e2e5d6f4240cfa808445a1">ob::graphics::RenderView::getPipeline</a></div><div class="ttdeci">T * getPipeline()</div><div class="ttdoc">ビューに設定されたRenderPipelineを取得する</div><div class="ttdef"><b>Definition</b> RenderView.h:66</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a39dd2b56f9cbc5475693f6608ea31eeb"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a39dd2b56f9cbc5475693f6608ea31eeb">ob::graphics::RenderView::getRenderTexture</a></div><div class="ttdeci">auto getRenderTexture() const -&gt; const Ref&lt; rhi::RenderTexture &gt;</div><div class="ttdoc">描画先テクスチャを取得する</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a3cfc02522d3b7805cfad276fc41993a5"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3cfc02522d3b7805cfad276fc41993a5">ob::graphics::RenderView::~RenderView</a></div><div class="ttdeci">~RenderView()</div><div class="ttdoc">デストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a3dfff812d93b408f26b0bb41f3ae2644"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a3dfff812d93b408f26b0bb41f3ae2644">ob::graphics::RenderView::addReleasedEvent</a></div><div class="ttdeci">void addReleasedEvent(RenderViewEventHandle &amp;handle, RenderViewEventDelegate func)</div><div class="ttdoc">解放時イベント</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a45f28646dfb54e270de80a960a3a63df"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a45f28646dfb54e270de80a960a3a63df">ob::graphics::RenderView::setRenderTexture</a></div><div class="ttdeci">void setRenderTexture(const Ref&lt; RenderTexture &gt; &amp;renderTexture)</div><div class="ttdoc">描画先テクスチャを設定する</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a5a74ee8fdbc0f1249cabb28ad7db7a3d"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a5a74ee8fdbc0f1249cabb28ad7db7a3d">ob::graphics::RenderView::setRect</a></div><div class="ttdeci">void setRect(const Rect &amp;rect)</div><div class="ttdoc">描画矩形を設定</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a78c2497b17c4259fb87697a987c2b629"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a78c2497b17c4259fb87697a987c2b629">ob::graphics::RenderView::getScene</a></div><div class="ttdeci">auto getScene() -&gt; RenderScene &amp;</div><div class="ttdoc">シーンを取得</div><div class="ttdef"><b>Definition</b> RenderView.h:26</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_a7d3acf428cd02149b21163de5c75ed3e"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#a7d3acf428cd02149b21163de5c75ed3e">ob::graphics::RenderView::findFeature</a></div><div class="ttdeci">T * findFeature() const</div><div class="ttdoc">RenderFeatureを見つける</div><div class="ttdef"><b>Definition</b> RenderView.h:101</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_ad166d805dde56f5caac3181866fbc6a1"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad166d805dde56f5caac3181866fbc6a1">ob::graphics::RenderView::setPipeline</a></div><div class="ttdeci">void setPipeline(Args &amp;&amp;... args)</div><div class="ttdoc">ビューに使用するRenderPipelineを設定する</div><div class="ttdef"><b>Definition</b> RenderView.h:60</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_ad6d7ab63474a93f14b524e7141f862e7"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ad6d7ab63474a93f14b524e7141f862e7">ob::graphics::RenderView::getViewport</a></div><div class="ttdeci">auto getViewport() const -&gt; Viewport</div><div class="ttdoc">ビューポートを取得</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_ae4f30c8d3aa2ae67990baf1374f88561"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#ae4f30c8d3aa2ae67990baf1374f88561">ob::graphics::RenderView::RenderView</a></div><div class="ttdeci">RenderView(RenderScene &amp;scene, StringView name)</div><div class="ttdoc">コンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html_afcfdf872ad0c8c9d457241b729764276"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html#afcfdf872ad0c8c9d457241b729764276">ob::graphics::RenderView::getScaledRect</a></div><div class="ttdeci">auto getScaledRect() const -&gt; IntRect</div><div class="ttdoc">描画矩形を取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_render_texture_html"><div class="ttname"><a href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">ob::rhi::RenderTexture</a></div><div class="ttdoc">描画テクスチャ</div><div class="ttdef"><b>Definition</b> RenderTexture.h:14</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_swap_chain_html"><div class="ttname"><a href="../../dd/d26/classob_1_1rhi_1_1_swap_chain.html">ob::rhi::SwapChain</a></div><div class="ttdoc">スワップチェーン</div><div class="ttdef"><b>Definition</b> SwapChain.h:20</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_int_rect_html"><div class="ttname"><a href="../../d3/df1/structob_1_1core_1_1_int_rect.html">ob::core::IntRect</a></div><div class="ttdoc">矩形</div><div class="ttdef"><b>Definition</b> IntRect.h:15</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_rect_html"><div class="ttname"><a href="../../d3/db2/structob_1_1core_1_1_rect.html">ob::core::Rect</a></div><div class="ttdoc">矩形</div><div class="ttdef"><b>Definition</b> Rect.h:15</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_size_html"><div class="ttname"><a href="../../db/d78/structob_1_1core_1_1_size.html">ob::core::Size</a></div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> Size.h:12</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_viewport_html"><div class="ttname"><a href="../../d0/d62/structob_1_1core_1_1_viewport.html">ob::core::Viewport</a></div><div class="ttdoc">ビューポート</div><div class="ttdef"><b>Definition</b> Viewport.h:15</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_a9b4cf6a2e4735db345b26b35daa51eb.html">Graphics</a></li><li class="navelem"><a class="el" href="../../dir_91655b0972be5a2d42b0e87d4f4df1de.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_161548be48ea03341bdad92ff33ca239.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_d18f5afbdfb7cdeafed789c216d666de.html">Graphics</a></li><li class="navelem"><a class="el" href="../../dir_1088392341b3e175456a728bd8658385.html">Render</a></li><li class="navelem"><b>RenderView.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

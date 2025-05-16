@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Reflection</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d8/dfa/_reflection.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">Reflection</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><h1>クラス一覧</h1>
+<ul>
+<li>型情報<ul>
+<li>TagInfo</li>
+<li>EnumElementInfo</li>
+<li>ArgumentInfo</li>
+<li>ConstructorInfo</li>
+<li>PropertyInfo</li>
+<li>MethodInfo</li>
+<li>TypeInfo</li>
+</ul>
+</li>
+<li>ビルダー<ul>
+<li>TagBuilder</li>
+<li>EnumBuilder</li>
+<li>ClassBuilder</li>
+<li>EnumBuilderTemplate</li>
+<li>ClassBuilderTemplate</li>
+</ul>
+</li>
+<li>マネージャー<ul>
+<li>TypeInfoManager</li>
+</ul>
+</li>
+<li>インスタンス<ul>
+<li>Any</li>
+<li>AnyReference</li>
+</ul>
+</li>
+</ul>
+<h1>型情報の登録</h1>
+<h2>クラス型情報の登録</h2>
+<p><code>OB_DEFINE_CLASS_INFO</code>は、クラスの型情報を登録するためのマクロです。 <br  />
+ このマクロを使用することで、クラスのメンバー変数、メソッド、プロパティ、コンストラクタなどの情報を登録することができます。</p>
+<div class="fragment"><div class="line"><span class="keyword">class </span>Fruit : <span class="keyword">public</span> Food {</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">    Fruit();</div>
+<div class="line">    Fruit(FruitType type, s32 price, f32 weight);</div>
+<div class="line">    <span class="keywordtype">void</span> setPrice(s32 price);</div>
+<div class="line">    <span class="keyword">auto</span> getPrice()const -&gt; s32;</div>
+<div class="line">    <span class="keywordtype">void</span> print(<span class="keywordtype">bool</span> console, <span class="keywordtype">bool</span> file)const;</div>
+<div class="line">    auto toString()const-&gt;String;</div>
+<div class="line">public:</div>
+<div class="line">    f32 m_weight;</div>
+<div class="line">};</div>
+</div><!-- fragment --> <div class="fragment"><div class="line">OB_DEFINE_CLASS_INFO(Fruit) {</div>
+<div class="line">    tag(<span class="stringliteral">&quot;Description&quot;</span>, <span class="stringliteral">&quot;Fruitフルーツ&quot;</span>);</div>
+<div class="line">    base&lt;Food&gt;();</div>
+<div class="line">    constructor().desc(<span class="stringliteral">&quot;デフォルトコンストラクタ&quot;</span>);</div>
+<div class="line">    constructor&lt;FruitType, s32, f32&gt;(<span class="stringliteral">&quot;type&quot;</span>, <span class="stringliteral">&quot;price&quot;</span>, <span class="stringliteral">&quot;weight&quot;</span>).desc(<span class="stringliteral">&quot;プロパティを指定して生成&quot;</span>);</div>
+<div class="line">    method(<span class="stringliteral">&quot;print&quot;</span>, &amp;T::print, <span class="stringliteral">&quot;console&quot;</span>, <span class="stringliteral">&quot;file&quot;</span>);</div>
+<div class="line">    method(<span class="stringliteral">&quot;toString&quot;</span>, &amp;T::toString);</div>
+<div class="line">    property(<span class="stringliteral">&quot;Price&quot;</span>, &amp;T::getPrice, &amp;T::setPrice);</div>
+<div class="line">    field(<span class="stringliteral">&quot;Weight&quot;</span>, &amp;T::m_weight);</div>
+<div class="line">}</div>
+</div><!-- fragment --><h2>列挙型情報の登録</h2>
+<p>列挙型の情報を登録するためには、<code>OB_DEFINE_ENUM_INFO</code>マクロを使用します。 <br  />
+ <code>element()</code>の第一引数には列挙子の名前、第二引数には列挙子の値を指定します。 必要に応じてチェーンメソッドの<code>desc()</code>を使用して説明を追加することができます。 その他任意のタグを追加したい場合はチェーンメソッドの<code>tag()</code>を使用してください。 </p><div class="fragment"><div class="line"><span class="keyword">enum class</span> FruitType : u32 {</div>
+<div class="line">    Apple,</div>
+<div class="line">    Melon,</div>
+<div class="line">    Lemon,</div>
+<div class="line">};</div>
+</div><!-- fragment --> <div class="fragment"><div class="line">OB_DEFINE_ENUM_INFO(FruitType) {</div>
+<div class="line">    tag(<span class="stringliteral">&quot;Description&quot;</span>, <span class="stringliteral">&quot;フルーツの種類&quot;</span>);</div>
+<div class="line">    element(<span class="stringliteral">&quot;Apple&quot;</span>, T::Apple).desc(<span class="stringliteral">&quot;リンゴ&quot;</span>);</div>
+<div class="line">    element(<span class="stringliteral">&quot;Melon&quot;</span>, T::Melon).desc(<span class="stringliteral">&quot;メロン&quot;</span>);</div>
+<div class="line">    element(<span class="stringliteral">&quot;Lemon&quot;</span>, T::Lemon).desc(<span class="stringliteral">&quot;レモン&quot;</span>).tag(<span class="stringliteral">&quot;Color&quot;</span>,<span class="stringliteral">&quot;#FFFF00&quot;</span>);</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> クラス型情報と同様に<code>OB_REGISTER_RTTI</code>を使用してマネージャーに型情報を登録してください。 </p><div class="fragment"><div class="line">OB_REGISTER_RTTI(FruitType);</div>
+</div><!-- fragment --><h1>型情報の取得</h1>
+<p>型情報はTypeInfoManagerから取得できます。 <br  />
+ </p><div class="fragment"><div class="line"><span class="keywordflow">if</span>(<span class="keyword">auto</span> info = TypeInfoManager::Find&lt;Fruit&gt;()){</div>
+<div class="line"> </div>
+<div class="line">}</div>
+<div class="line"><span class="keywordflow">if</span>(<span class="keyword">auto</span> info = TypeInfoManager::Find(<span class="stringliteral">&quot;Fruit&quot;</span>)){</div>
+<div class="line"> </div>
+<div class="line">}</div>
+</div><!-- fragment --><h1>インスタンスの生成</h1>
+<p>インスタンスの生成をするためにはTypeInfoからConstructorInfoを探す必要があります。 <code>findConstructor</code>を使用して呼出し可能なコンストラクタ―を取得してください。 <code>ConstructorInfo::invoke</code>を引数とともに呼び出すことでインスタンスを生成することができます。 </p><div class="fragment"><div class="line"><span class="keywordflow">if</span>(<span class="keyword">auto</span> info = TypeInfoManager::Find(<span class="stringliteral">&quot;Fruit&quot;</span>)){</div>
+<div class="line">    <span class="keywordflow">if</span>(<span class="keyword">auto</span> ctor = info-&gt;findConstructor&lt;FruitType,s32,f32&gt;()){</div>
+<div class="line">        <span class="keyword">auto</span> fruit = ctor-&gt;invoke&lt;Fruit&gt;(FruitType::Lemon,100,1.0f);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../d0/dc3/_framework.html">Framework</a></li><li class="navelem"><a class="el" href="../../d9/dd9/_core.html">Core</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

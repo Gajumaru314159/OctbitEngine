@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: ob::core::BinaryStream クラス</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d9/d48/classob_1_1core_1_1_binary_stream.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="../../de/d15/classob_1_1core_1_1_binary_stream-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle"><div class="title">ob::core::BinaryStream クラス</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Blobストリーム  
+ <a href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../de/d05/_binary_stream_8h_source.html">BinaryStream.h</a>&gt;</code></p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html">ob::core::Stream</a>を継承しています。</p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a333dae0fec364591102d7a52c92a1544" id="r_a333dae0fec364591102d7a52c92a1544"><td class="memItemLeft" align="right" valign="top"><a id="a333dae0fec364591102d7a52c92a1544" name="a333dae0fec364591102d7a52c92a1544"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>BinaryStream</b> (<a class="el" href="../../db/d4d/classob_1_1core_1_1_blob.html">Blob</a> &amp;blob)</td></tr>
+<tr class="memdesc:a333dae0fec364591102d7a52c92a1544"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
+<tr class="separator:a333dae0fec364591102d7a52c92a1544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a333737987e4d1b394b010e382ea6d9ae" id="r_a333737987e4d1b394b010e382ea6d9ae"><td class="memItemLeft" align="right" valign="top"><a id="a333737987e4d1b394b010e382ea6d9ae" name="a333737987e4d1b394b010e382ea6d9ae"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~BinaryStream</b> () override</td></tr>
+<tr class="memdesc:a333737987e4d1b394b010e382ea6d9ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">デストラクタ <br /></td></tr>
+<tr class="separator:a333737987e4d1b394b010e382ea6d9ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95faadaa4cb78bc5715488404afa9d77" id="r_a95faadaa4cb78bc5715488404afa9d77"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#a95faadaa4cb78bc5715488404afa9d77">canRead</a> () const override</td></tr>
+<tr class="memdesc:a95faadaa4cb78bc5715488404afa9d77"><td class="mdescLeft">&#160;</td><td class="mdescRight">読み込み可能か  <br /></td></tr>
+<tr class="separator:a95faadaa4cb78bc5715488404afa9d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ecb53df5d34b7c5caf640f23ada5707" id="r_a1ecb53df5d34b7c5caf640f23ada5707"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#a1ecb53df5d34b7c5caf640f23ada5707">canWrite</a> () const override</td></tr>
+<tr class="memdesc:a1ecb53df5d34b7c5caf640f23ada5707"><td class="mdescLeft">&#160;</td><td class="mdescRight">書き込み可能か  <br /></td></tr>
+<tr class="separator:a1ecb53df5d34b7c5caf640f23ada5707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa672f6b2a7ee7eb3daf447576aa7635" id="r_afa672f6b2a7ee7eb3daf447576aa7635"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#afa672f6b2a7ee7eb3daf447576aa7635">size</a> () const override</td></tr>
+<tr class="memdesc:afa672f6b2a7ee7eb3daf447576aa7635"><td class="mdescLeft">&#160;</td><td class="mdescRight">サイズ取得  <br /></td></tr>
+<tr class="separator:afa672f6b2a7ee7eb3daf447576aa7635"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab4fd1a733f07492210a8c24f07371ce" id="r_aab4fd1a733f07492210a8c24f07371ce"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#aab4fd1a733f07492210a8c24f07371ce">position</a> () const override</td></tr>
+<tr class="memdesc:aab4fd1a733f07492210a8c24f07371ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">シーク位置取得  <br /></td></tr>
+<tr class="separator:aab4fd1a733f07492210a8c24f07371ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfe74e31abf77b849f8b5e3c25d38b1c" id="r_abfe74e31abf77b849f8b5e3c25d38b1c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#abfe74e31abf77b849f8b5e3c25d38b1c">read</a> (void *buffer, size_t byteCount) override</td></tr>
+<tr class="memdesc:abfe74e31abf77b849f8b5e3c25d38b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">読み込み  <br /></td></tr>
+<tr class="separator:abfe74e31abf77b849f8b5e3c25d38b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a718dac1f65a515ac9ef6faaba8d70aea" id="r_a718dac1f65a515ac9ef6faaba8d70aea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#a718dac1f65a515ac9ef6faaba8d70aea">write</a> (const void *buffer, size_t byteCount) override</td></tr>
+<tr class="memdesc:a718dac1f65a515ac9ef6faaba8d70aea"><td class="mdescLeft">&#160;</td><td class="mdescRight">書き込み  <br /></td></tr>
+<tr class="separator:a718dac1f65a515ac9ef6faaba8d70aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd30181b6b35c34b1d3cfac954bece84" id="r_abd30181b6b35c34b1d3cfac954bece84"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#abd30181b6b35c34b1d3cfac954bece84">seek</a> (offset_t offset, SeekOrigin origin=SeekOrigin::Begin) override</td></tr>
+<tr class="memdesc:abd30181b6b35c34b1d3cfac954bece84"><td class="mdescLeft">&#160;</td><td class="mdescRight">シーク  <br /></td></tr>
+<tr class="separator:abd30181b6b35c34b1d3cfac954bece84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a3940b3e057221fb0e0569be8f13757" id="r_a5a3940b3e057221fb0e0569be8f13757"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html#a5a3940b3e057221fb0e0569be8f13757">flush</a> () override</td></tr>
+<tr class="memdesc:a5a3940b3e057221fb0e0569be8f13757"><td class="mdescLeft">&#160;</td><td class="mdescRight">バッファのフラッシュ  <br /></td></tr>
+<tr class="separator:a5a3940b3e057221fb0e0569be8f13757"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>Blobストリーム </p>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a95faadaa4cb78bc5715488404afa9d77" name="a95faadaa4cb78bc5715488404afa9d77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95faadaa4cb78bc5715488404afa9d77">&#9670;&#160;</a></span>canRead()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ob::core::BinaryStream::canRead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>読み込み可能か </p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#ada87bc37a44a0b9c328859604bddee43">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="a1ecb53df5d34b7c5caf640f23ada5707" name="a1ecb53df5d34b7c5caf640f23ada5707"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ecb53df5d34b7c5caf640f23ada5707">&#9670;&#160;</a></span>canWrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ob::core::BinaryStream::canWrite </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>書き込み可能か </p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#a5fbfc98f19ca467dacaacf52f1319984">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="a5a3940b3e057221fb0e0569be8f13757" name="a5a3940b3e057221fb0e0569be8f13757"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a3940b3e057221fb0e0569be8f13757">&#9670;&#160;</a></span>flush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ob::core::BinaryStream::flush </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>バッファのフラッシュ </p>
+<p>書き込み中のデータを即時反映させる。 </p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#ad2caac0d256bd8c289f7c455e661843f">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="aab4fd1a733f07492210a8c24f07371ce" name="aab4fd1a733f07492210a8c24f07371ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab4fd1a733f07492210a8c24f07371ce">&#9670;&#160;</a></span>position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ob::core::BinaryStream::position </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>シーク位置取得 </p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#a33ff17cef91e2277df3343deded3c625">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="abfe74e31abf77b849f8b5e3c25d38b1c" name="abfe74e31abf77b849f8b5e3c25d38b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfe74e31abf77b849f8b5e3c25d38b1c">&#9670;&#160;</a></span>read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ob::core::BinaryStream::read </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>byteCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>読み込み </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>　 読み込みデータ格納先のポインタ </td></tr>
+    <tr><td class="paramname">byteCount</td><td>読み込むバイト数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>成功したか </dd></dl>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#a4f8ce3d1e9590839da35ec44c55ff375">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="abd30181b6b35c34b1d3cfac954bece84" name="abd30181b6b35c34b1d3cfac954bece84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd30181b6b35c34b1d3cfac954bece84">&#9670;&#160;</a></span>seek()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ob::core::BinaryStream::seek </td>
+          <td>(</td>
+          <td class="paramtype">offset_t&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SeekOrigin&#160;</td>
+          <td class="paramname"><em>origin</em> = <code>SeekOrigin::Begin</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>シーク </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">offset</td><td>　 基準からの移動量 </td></tr>
+    <tr><td class="paramname">origin</td><td>基準位置 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>成功したか </dd></dl>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#aa20319f5d8a98aa488cc3ff4a7b88b74">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="afa672f6b2a7ee7eb3daf447576aa7635" name="afa672f6b2a7ee7eb3daf447576aa7635"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa672f6b2a7ee7eb3daf447576aa7635">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ob::core::BinaryStream::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>サイズ取得 </p>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#ae720181139ed82df0ac846b11f71777c">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<a id="a718dac1f65a515ac9ef6faaba8d70aea" name="a718dac1f65a515ac9ef6faaba8d70aea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a718dac1f65a515ac9ef6faaba8d70aea">&#9670;&#160;</a></span>write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ob::core::BinaryStream::write </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>byteCount</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>書き込み </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>　 書き込むデータ格納先のポインタ </td></tr>
+    <tr><td class="paramname">byteCount</td><td>書き込むバイト数 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>成功したか </dd></dl>
+
+<p><a class="el" href="../../dd/d1e/classob_1_1core_1_1_stream.html#a4aa7db05548877dbd65e43ccc981b6e8">ob::core::Stream</a>を実装しています。</p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>Framework/Core/Public/Framework/Core/File/<a class="el" href="../../de/d05/_binary_stream_8h_source.html">BinaryStream.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ob</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a class="el" href="../../d9/d48/classob_1_1core_1_1_binary_stream.html">BinaryStream</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

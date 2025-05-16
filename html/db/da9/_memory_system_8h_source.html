@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Core/Public/Framework/Core/Memory/System/MemorySystem.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('db/da9/_memory_system_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">MemorySystem.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/Memory/Allocator/Allocator.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Core/Memory/Types/HeapUsage.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html">   13</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html">MemorySystem</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a01e067c6f148261e8e5ece0bfc428eeb">   21</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a01e067c6f148261e8e5ece0bfc428eeb">Init</a>();</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa00319bf455fbeb13f9c3c91b10b204d">   25</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa00319bf455fbeb13f9c3c91b10b204d">Release</a>();</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a6f960105d5f641a737eda20d4054c7a5">   32</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a6f960105d5f641a737eda20d4054c7a5">SetHeapAllocator</a>(HeapUsage heapType, <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">Allocator</a>* pAllocator);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa441c4c5daf2ec1fdff7bb2577f51fcb">   39</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa441c4c5daf2ec1fdff7bb2577f51fcb">SetDebugHeapAllocator</a>(HeapUsage heapType, <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">Allocator</a>* pAllocator);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#ab7357cfe201d435789516f70a51ed081">   46</a></span>        <span class="keyword">static</span> <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">Allocator</a>&amp; <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#ab7357cfe201d435789516f70a51ed081">GetHeapAllocator</a>(HeapUsage heapType = HeapUsage::VirtualMemory);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a8054d023ae35c151fad9f4a9f5e966ab">   53</a></span>        <span class="keyword">static</span> <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">Allocator</a>&amp; <a class="code hl_function" href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a8054d023ae35c151fad9f4a9f5e966ab">GetDebugHeapAllocator</a>(HeapUsage heapType = HeapUsage::VirtualMemory);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    };</div>
+</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>}</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#if !defined(OB_BUILD)</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>{</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> OB_API SetHeapAllocator(ob::core::HeapUsage heapType, <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">ob::core::Allocator</a>* pAllocator);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">void</span> OB_API SetDebugHeapAllocator(ob::core::HeapUsage heapType, <a class="code hl_class" href="../../d0/d98/classob_1_1core_1_1_allocator.html">ob::core::Allocator</a>* pAllocator);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>}</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassob_1_1core_1_1_allocator_html"><div class="ttname"><a href="../../d0/d98/classob_1_1core_1_1_allocator.html">ob::core::Allocator</a></div><div class="ttdoc">メモリ・アロケータ・インターフェース</div><div class="ttdef"><b>Definition</b> Allocator.h:19</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html">ob::core::MemorySystem</a></div><div class="ttdoc">メモリーデバイス</div><div class="ttdef"><b>Definition</b> MemorySystem.h:13</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_a01e067c6f148261e8e5ece0bfc428eeb"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a01e067c6f148261e8e5ece0bfc428eeb">ob::core::MemorySystem::Init</a></div><div class="ttdeci">static void Init()</div><div class="ttdoc">初期化</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_a6f960105d5f641a737eda20d4054c7a5"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a6f960105d5f641a737eda20d4054c7a5">ob::core::MemorySystem::SetHeapAllocator</a></div><div class="ttdeci">static void SetHeapAllocator(HeapUsage heapType, Allocator *pAllocator)</div><div class="ttdoc">ヒープにアロケータを設定</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_a8054d023ae35c151fad9f4a9f5e966ab"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#a8054d023ae35c151fad9f4a9f5e966ab">ob::core::MemorySystem::GetDebugHeapAllocator</a></div><div class="ttdeci">static Allocator &amp; GetDebugHeapAllocator(HeapUsage heapType=HeapUsage::VirtualMemory)</div><div class="ttdoc">デバッグ・ヒープのアロケータを取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_aa00319bf455fbeb13f9c3c91b10b204d"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa00319bf455fbeb13f9c3c91b10b204d">ob::core::MemorySystem::Release</a></div><div class="ttdeci">static void Release()</div><div class="ttdoc">解放</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_aa441c4c5daf2ec1fdff7bb2577f51fcb"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#aa441c4c5daf2ec1fdff7bb2577f51fcb">ob::core::MemorySystem::SetDebugHeapAllocator</a></div><div class="ttdeci">static void SetDebugHeapAllocator(HeapUsage heapType, Allocator *pAllocator)</div><div class="ttdoc">デバッグ・ヒープにアロケータを設定</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_memory_system_html_ab7357cfe201d435789516f70a51ed081"><div class="ttname"><a href="../../d1/dc5/classob_1_1core_1_1_memory_system.html#ab7357cfe201d435789516f70a51ed081">ob::core::MemorySystem::GetHeapAllocator</a></div><div class="ttdeci">static Allocator &amp; GetHeapAllocator(HeapUsage heapType=HeapUsage::VirtualMemory)</div><div class="ttdoc">ヒープのアロケータを取得</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_9f165b2481dacfe69aa54d326bd5cd47.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_091cb97c815342203f0af8739126cbb8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_5e9efae597f9007a5e31f6ef8f108de2.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_67076fa46bde3b85ed03424cfba08e54.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_8926a289bfb5862d229f61f1100f3f52.html">Memory</a></li><li class="navelem"><a class="el" href="../../dir_d06d1816cd0b8ce2fc1f581e4a6ddff5.html">System</a></li><li class="navelem"><b>MemorySystem.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Core/Public/Framework/Core/Network/TCPClient.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d1/dc1/_t_c_p_client_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">TCPClient.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/CorePrivate.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Core/Network/IPAddress.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">   13</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">TCPClient</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a3cc5272c0cc0bc2f14efcb5c21f25b06">   17</a></span>        <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a3cc5272c0cc0bc2f14efcb5c21f25b06">TCPClient</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#afc77b0202327081d2ad5b4982bf73dc2">   20</a></span>        <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#afc77b0202327081d2ad5b4982bf73dc2">~TCPClient</a>();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a99bb6c03541284aebcc2d6e6b696a1e4">   23</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a99bb6c03541284aebcc2d6e6b696a1e4">connect</a>(<a class="code hl_struct" href="../../d1/d8a/structob_1_1core_1_1_i_p_address.html">IPAddress</a> ip, u16 port);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4af322494c6e7bda4bceb934832909df">   26</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4af322494c6e7bda4bceb934832909df">send</a>(<span class="keywordtype">char</span>* data, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a66c1e06703cbfe333bd22d8098b8ad8a">   30</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a66c1e06703cbfe333bd22d8098b8ad8a">receive</a>(<span class="keywordtype">char</span>* data, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4de806ae139ff088e62ee4fecf8a1696">   33</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4de806ae139ff088e62ee4fecf8a1696">disconnect</a>();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#abbde34298892b67236d40a80c742a3a6">   36</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#abbde34298892b67236d40a80c742a3a6">isConnected</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">TCPServer</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a99bb6c03541284aebcc2d6e6b696a1e4">connect</a>(<a class="code hl_struct" href="../../d1/d8a/structob_1_1core_1_1_i_p_address.html">IPAddress</a> ip, u16 port,u64 socket);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <a class="code hl_struct" href="../../d1/d8a/structob_1_1core_1_1_i_p_address.html">IPAddress</a> m_ip;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        u16 m_port;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        u64 m_socket;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    };</div>
+</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">ob::core::TCPClient</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPClient.h:13</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_a3cc5272c0cc0bc2f14efcb5c21f25b06"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a3cc5272c0cc0bc2f14efcb5c21f25b06">ob::core::TCPClient::TCPClient</a></div><div class="ttdeci">TCPClient()</div><div class="ttdoc">コンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_a4af322494c6e7bda4bceb934832909df"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4af322494c6e7bda4bceb934832909df">ob::core::TCPClient::send</a></div><div class="ttdeci">bool send(char *data, size_t size)</div><div class="ttdoc">データを送信する</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_a4de806ae139ff088e62ee4fecf8a1696"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a4de806ae139ff088e62ee4fecf8a1696">ob::core::TCPClient::disconnect</a></div><div class="ttdeci">void disconnect()</div><div class="ttdoc">接続を閉じる</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_a66c1e06703cbfe333bd22d8098b8ad8a"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a66c1e06703cbfe333bd22d8098b8ad8a">ob::core::TCPClient::receive</a></div><div class="ttdeci">size_t receive(char *data, size_t size)</div><div class="ttdoc">データを受信する</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_a99bb6c03541284aebcc2d6e6b696a1e4"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#a99bb6c03541284aebcc2d6e6b696a1e4">ob::core::TCPClient::connect</a></div><div class="ttdeci">bool connect(IPAddress ip, u16 port)</div><div class="ttdoc">接続を確立する</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_abbde34298892b67236d40a80c742a3a6"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#abbde34298892b67236d40a80c742a3a6">ob::core::TCPClient::isConnected</a></div><div class="ttdeci">bool isConnected() const</div><div class="ttdoc">接続中かどうか</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html_afc77b0202327081d2ad5b4982bf73dc2"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html#afc77b0202327081d2ad5b4982bf73dc2">ob::core::TCPClient::~TCPClient</a></div><div class="ttdeci">~TCPClient()</div><div class="ttdoc">デストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">ob::core::TCPServer</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPServer.h:14</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_i_p_address_html"><div class="ttname"><a href="../../d1/d8a/structob_1_1core_1_1_i_p_address.html">ob::core::IPAddress</a></div><div class="ttdoc">IPアドレス</div><div class="ttdef"><b>Definition</b> IPAddress.h:17</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_9f165b2481dacfe69aa54d326bd5cd47.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_091cb97c815342203f0af8739126cbb8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_5e9efae597f9007a5e31f6ef8f108de2.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_67076fa46bde3b85ed03424cfba08e54.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_d901befddb24303aeb1b641cce64e81d.html">Network</a></li><li class="navelem"><b>TCPClient.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

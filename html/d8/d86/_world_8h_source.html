@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Engine/Public/Framework/Engine/World.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d8/d86/_world_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">World.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Engine/Forward.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Engine/Scene.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::engine {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html">   12</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html">SubSystemContainer</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#acb13d2bc21425ffdc540a0c6245caae3">   16</a></span>        T* <a class="code hl_function" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#acb13d2bc21425ffdc540a0c6245caae3">find</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="}">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#a31e00d3ddba1c64cd6fc505d9bdddd53">   20</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#a31e00d3ddba1c64cd6fc505d9bdddd53">add</a>(T&amp;&amp;) {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <span class="comment">//m_systems.try_emplace()</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        }</div>
+</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        HashMap&lt;Type, void*&gt; m_systems;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    };</div>
+</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="foldopen" id="foldopen00032" data-start="{" data-end="};">
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html">   32</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a> {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keyword">static</span> <a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a>* Create(StringView name) {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a>(name);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#a072eb4df58df37a2704b46cf2507bffa">   42</a></span>        <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#a072eb4df58df37a2704b46cf2507bffa">~World</a>();</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#a837d827205f17fa3f45bf6066a40c2cf">   45</a></span>        <a class="code hl_class" href="../../d7/d55/classob_1_1engine_1_1_scene.html">Scene</a>&amp; <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#a837d827205f17fa3f45bf6066a40c2cf">getRootScene</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#ae1ebc789f13922945bc97e6e3bf632c2">   50</a></span>        T* <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#ae1ebc789f13922945bc97e6e3bf632c2">findSubSystem</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">   54</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">addSubSystem</a>(T&amp;&amp;){}</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a>(StringView name);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keywordtype">void</span> createRootScene();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> m_name;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <a class="code hl_class" href="../../d7/d55/classob_1_1engine_1_1_scene.html">Scene</a>* m_scene = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    };</div>
+</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_scene_html"><div class="ttname"><a href="../../d7/d55/classob_1_1engine_1_1_scene.html">ob::engine::Scene</a></div><div class="ttdoc">シーン https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ULevel/</div><div class="ttdef"><b>Definition</b> Scene.h:24</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_sub_system_container_html"><div class="ttname"><a href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html">ob::engine::SubSystemContainer</a></div><div class="ttdef"><b>Definition</b> World.h:12</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_sub_system_container_html_a31e00d3ddba1c64cd6fc505d9bdddd53"><div class="ttname"><a href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#a31e00d3ddba1c64cd6fc505d9bdddd53">ob::engine::SubSystemContainer::add</a></div><div class="ttdeci">bool add(T &amp;&amp;)</div><div class="ttdoc">同じ型のサブシステムを尊くすることはできません</div><div class="ttdef"><b>Definition</b> World.h:20</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_sub_system_container_html_acb13d2bc21425ffdc540a0c6245caae3"><div class="ttname"><a href="../../de/d52/classob_1_1engine_1_1_sub_system_container.html#acb13d2bc21425ffdc540a0c6245caae3">ob::engine::SubSystemContainer::find</a></div><div class="ttdeci">T * find() const</div><div class="ttdoc">サブシステムを取得</div><div class="ttdef"><b>Definition</b> World.h:16</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_world_html"><div class="ttname"><a href="../../d2/d11/classob_1_1engine_1_1_world.html">ob::engine::World</a></div><div class="ttdoc">ワールド</div><div class="ttdef"><b>Definition</b> World.h:32</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_world_html_a072eb4df58df37a2704b46cf2507bffa"><div class="ttname"><a href="../../d2/d11/classob_1_1engine_1_1_world.html#a072eb4df58df37a2704b46cf2507bffa">ob::engine::World::~World</a></div><div class="ttdeci">~World()</div><div class="ttdoc">コンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_world_html_a270cca73afa7aa46883a7c35fed9c4f5"><div class="ttname"><a href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">ob::engine::World::addSubSystem</a></div><div class="ttdeci">bool addSubSystem(T &amp;&amp;)</div><div class="ttdoc">同じ型のサブシステムを尊くすることはできません</div><div class="ttdef"><b>Definition</b> World.h:54</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_world_html_a837d827205f17fa3f45bf6066a40c2cf"><div class="ttname"><a href="../../d2/d11/classob_1_1engine_1_1_world.html#a837d827205f17fa3f45bf6066a40c2cf">ob::engine::World::getRootScene</a></div><div class="ttdeci">Scene &amp; getRootScene() const</div><div class="ttdoc">ルートシーンを取得</div></div>
+<div class="ttc" id="aclassob_1_1engine_1_1_world_html_ae1ebc789f13922945bc97e6e3bf632c2"><div class="ttname"><a href="../../d2/d11/classob_1_1engine_1_1_world.html#ae1ebc789f13922945bc97e6e3bf632c2">ob::engine::World::findSubSystem</a></div><div class="ttdeci">T * findSubSystem() const</div><div class="ttdoc">サブシステムを取得</div><div class="ttdef"><b>Definition</b> World.h:50</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_8995d5bc03aec6e41ef380017ab0420b.html">Engine</a></li><li class="navelem"><a class="el" href="../../dir_50f4a306195bf5f319d6af5e08653b48.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_31057c7ec5fb2167dc79ee5258d3a5a4.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_0636a01af1ab633a2e0f46582dbfb18a.html">Engine</a></li><li class="navelem"><b>World.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

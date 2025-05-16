@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: RHI</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d5/da9/_r_h_i.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">RHI</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><h1>概要</h1>
+<p>RHI (Render Hardware Interface) モジュールは、DirectX12やVulkanなどの異なる描画APIを共通化するためのインターフェイスを提供します。このモジュールは、グラフィックプログラミングの初心者にも理解しやすいように設計されており、GPUリソース管理や描画パイプラインの基本的な概念を学ぶための基盤となります。</p>
+<p>RHIモジュールはインターフェイスの定義に特化しており、描画パイプラインやカメラの定義などの高レベルな機能は、上位のGraphics層で実装されます。</p>
+<h1>クラスの依存関係</h1>
+<p>以下に、RHIモジュール内の主要クラス間の依存関係を示します。</p>
+<div class="fragment"><div class="line">graph TD</div>
+<div class="line"> </div>
+<div class="line">    Buffer &amp; Texture &amp; Sampler &amp; DescriptorLayout --&gt; DescriptorTable</div>
+<div class="line">    DescriptorLayout --&gt; RootSignature</div>
+<div class="line">    RootSignature &amp; Shader --&gt; PipelineState</div>
+<div class="line">    RenderTexture --&gt; RenderPass</div>
+<div class="line">    Window --&gt; SwapChain</div>
+<div class="line"> </div>
+<div class="line">    DescriptorTable &amp; PipelineState &amp; RenderPass &amp; SwapChain --&gt; CommandList</div>
+</div><!-- fragment --><p> DirectStorageやRTX IOといったGPUとFileIOが強く結びついている機能もRHI層に吸収されています。 これらの機能はID3D12Resourceといった特定のRHI実装に強く依存した機能であるため各RHI実装によって使用できるかどうかが分かれます。 </p><div class="fragment"><div class="line">graph TD    </div>
+<div class="line">    GraphicFileHandle &amp; Texture &amp; Buffer --&gt; GraphicFileRequest --&gt; GraphicFileQueue</div>
+<div class="line">    GraphicFileEvent --&gt; GraphicFileQueue</div>
+</div><!-- fragment --><blockquote class="doxtable">
+<p>&zwj;[!NOTE] <br  />
+ FidelityFX Super Resolution ™AMD や YEBiS ™Silicon Studio といった特定のRHI実装に依存するミドルウェアの導入を考えると、DirectStorageも同様に追加のプラグインの実装に移動される可能性があります。 </p>
+</blockquote>
+<h1>クラス説明</h1>
+<h2>RHI</h2>
+<p>グラフィック・オブジェクトを生成するファクトリクラスです。</p>
+<blockquote class="doxtable">
+<p>&zwj;[!WARNING] <br  />
+ 複数のRHI実装 (例: DirectX12とVulkan) を同時に使用することはできません。 </p>
+</blockquote>
+<h2>Buffer</h2>
+<p>GPUメモリ上のデータを管理するクラスです。頂点バッファやインデックスバッファなど、描画に必要なデータを格納します。</p>
+<h2>Texture</h2>
+<p>GPUメモリ上のテクスチャデータを管理するクラスです。</p>
+<h2>RenderTexture</h2>
+<p>GPUメモリ上のレンダリング結果を格納するテクスチャです。ポストプロセスやシャドウマップに使用されます。</p>
+<h2>Sampler</h2>
+<p>テクスチャサンプリングの設定を管理します。例えば、フィルタリングモードやアドレッシングモードなどを指定します。</p>
+<h2>Shader</h2>
+<p>シェーダーコードまたはシェーダーバイナリから構築されます。</p>
+<h2>RootSignature</h2>
+<p>シェーダーとリソースのバインディングを定義するクラスです。効率的なリソースアクセスを可能にします。</p>
+<h2>PipelineState</h2>
+<p>描画パイプラインの設定を管理するクラスです。シェーダーステージやラスタライザーステートなどを含みます。</p>
+<h2>RenderPass</h2>
+<p>レンダリング操作を定義するクラスです。複数の描画コマンドをグループ化します。</p>
+<h2>FrameBuffer</h2>
+<p>レンダリング結果を格納するためのバッファです。複数のレンダーターゲットをサポートします。</p>
+<h2>DescriptorLayout</h2>
+<p>Texture、Buffer、Samplerといったシェーダーリソースをどのような構成でバインドするかを定義します。</p>
+<h2>DescriptorTable</h2>
+<p>Texture、Buffer、Samplerといったシェーダーリソースをバインドするためのテーブルです。リソースの効率的な管理をサポートします。</p>
+<h2>CommandList</h2>
+<p>描画コマンドを記録するためのクラスです。これにより、描画パイプラインの効率的な制御が可能になります。</p>
+<h2>SwapChain</h2>
+<p>描画結果を画面に出力するためのクラスです。ウィンドウ管理やスワップチェインの制御を行います。</p>
+<h1>インスタンスの生成方法</h1>
+<p>RHIモジュールのクラスはRHIクラスを通して生成されます。 </p><div class="fragment"><div class="line">Ref&lt;Texture&gt; texture = rhi.createTexture(desc);</div>
+</div><!-- fragment --><p> RHIクラスはシングルトン指定されているため、各クラスのファクトリメソッドを使用して生成することも可能です。 </p><div class="fragment"><div class="line"><span class="comment">// RHIクラスのインスタンスを生成しておく</span></div>
+<div class="line">DirectXRHI rhi(<span class="comment">/*引数*/</span>);</div>
+<div class="line"> </div>
+<div class="line">Ref&lt;Texture&gt; texture = Texture::Create(TextureDesc{});</div>
+<div class="line">Ref&lt;Buffer&gt; buffer = Buffer::Create(BufferDesc{});</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 内部的には RHI::Instance().createTexture(TextureDesc{});と同等</span></div>
+<div class="line"><span class="comment">// RHIがインスタンス化されていない場合は空のオブジェクトが返る</span></div>
+</div><!-- fragment --><p> 生成したTextureやBufferなどのインスタンスは<code>Ref&lt;T&gt;</code>によって参照カウントベースで管理されています。これらはRHIインスタンスの解放までに全て解放されている必要があります。 </p><div class="fragment"><div class="line">Ref&lt;Texture&gt; texture;</div>
+<div class="line">{</div>
+<div class="line">    DirectXRHI rhi(<span class="comment">/*引数*/</span>);</div>
+<div class="line"> </div>
+<div class="line">    texture = Texture::Create(TextureDesc{});</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// rhiがtextureより先に解放されるのでNG</span></div>
+<div class="line">}</div>
+</div><!-- fragment --><h1>基本的な描画フロー</h1>
+<div class="fragment"><div class="line">DirectXRHI rhi(<span class="comment">/*引数*/</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// SwapChain</span></div>
+<div class="line">Ref&lt;SwapChain&gt; swapChain;</div>
+<div class="line">{</div>
+<div class="line">    SwapChainDesc desc;</div>
+<div class="line">    desc.window = window;</div>
+<div class="line">    swapChain = SwapChain::Create(desc);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// RenderTexture</span></div>
+<div class="line">Ref&lt;RenderTexture&gt; target;</div>
+<div class="line">{</div>
+<div class="line">    RenderTextureDesc desc;</div>
+<div class="line">    desc.size = swapChain-&gt;getDesc().size;</div>
+<div class="line">    target = RenderTexture::Create(desc);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Shader</span></div>
+<div class="line">Ref&lt;Shader&gt; vs = Shader::CompileVS(code);</div>
+<div class="line">Ref&lt;Shader&gt; ps = Shader::CompilePS(code);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// DescriptorLayout</span></div>
+<div class="line">Ref&lt;DescriptorLayout&gt; layout = DescriptorLayout::Create({Binding::ConstantBuffer()});</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// RootSignature</span></div>
+<div class="line">Ref&lt;RootSignature&gt; signature;</div>
+<div class="line">{</div>
+<div class="line">    RootSignatureDesc desc;</div>
+<div class="line">    desc.layouts = {layout};</div>
+<div class="line">    signature = RootSignature::Create(desc);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// PipelineState</span></div>
+<div class="line"><span class="keyword">struct </span>Vertex {</div>
+<div class="line">    Vec4 position;</div>
+<div class="line">};</div>
+<div class="line">Ref&lt;PipelineState&gt; pipeline;</div>
+<div class="line">{</div>
+<div class="line">    PipelineStateDesc desc;</div>
+<div class="line">    desc.colors = { target-&gt;format() };</div>
+<div class="line">    desc.rootSignature = signature;</div>
+<div class="line">    desc.vs = vs;</div>
+<div class="line">    desc.ps = ps;</div>
+<div class="line">    desc.vertexLayout.attributes = {</div>
+<div class="line">        VertexAttribute(Semantic::Position,offsetof(Vertex,position),ElementType::Float,4)</div>
+<div class="line">    };</div>
+<div class="line">    desc.vertexLayout.vertexStride = <span class="keyword">sizeof</span>(Vertex);</div>
+<div class="line">    pipeline = PipelineState::Create(desc);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 頂点バッファとインデックスバッファを生成</span></div>
+<div class="line">Ref&lt;Buffer&gt; vertexBuffer;</div>
+<div class="line">Ref&lt;Buffer&gt; indexBuffer;</div>
+<div class="line">{</div>
+<div class="line">    <span class="keyword">auto</span> desc = BufferDesc::Vertex&lt;Vert&gt;(vertices.size());</div>
+<div class="line">    vertexBuffer = Buffer::Create(desc, BlobView(vertices));</div>
+<div class="line">}</div>
+<div class="line">{</div>
+<div class="line">    <span class="keyword">auto</span> desc = BufferDesc::Vertex&lt;u16&gt;(indices.size());</div>
+<div class="line">    indexBuffer = Buffer::Create(desc, BlobView(indices));</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 定数バッファを生成</span></div>
+<div class="line">Ref&lt;Buffer&gt; cbuffer;</div>
+<div class="line">{</div>
+<div class="line">    BufferDesc desc = BufferDesc::Constant(100);</div>
+<div class="line">    cbuffer = Buffer::Create(desc,cbufferData);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// CommandList</span></div>
+<div class="line">Ref&lt;CommandList&gt; commandList;</div>
+<div class="line">{</div>
+<div class="line">    CommandListDesc desc;</div>
+<div class="line">    desc.type = CommandListType::Graphic;</div>
+<div class="line">    commandList = CommandList::Create(desc);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// DescriptorTable</span></div>
+<div class="line">Ref&lt;DescriptorTable&gt; table = DescriptorTable::Create({layout});</div>
+<div class="line">table-&gt;setResource(0, cbuffer);</div>
+<div class="line"> </div>
+<div class="line"><span class="keywordflow">while</span>(<span class="keyword">true</span>) {</div>
+<div class="line"> </div>
+<div class="line">    rhi.update();</div>
+<div class="line"> </div>
+<div class="line">    commandList-&gt;begin();</div>
+<div class="line">    </div>
+<div class="line">    commandList-&gt;beginRenderPass({target});</div>
+<div class="line">    </div>
+<div class="line">    commandList-&gt;setPipelineState(pipeline);</div>
+<div class="line">    commandList-&gt;setVertexBuffer(vertexBuffer);</div>
+<div class="line">    commandList-&gt;setIndexBuffer(indexBuffer);</div>
+<div class="line">    Array&lt;SetDescriptorTableParam, 1&gt; params = {</div>
+<div class="line">        SetDescriptorTableParam(table,0),</div>
+<div class="line">    };</div>
+<div class="line">    cmdList-&gt;setRootDesciptorTable(params.data(), params.size());</div>
+<div class="line"> </div>
+<div class="line">    DrawIndexedParam param{};</div>
+<div class="line">    param.indexCount = indices.size();</div>
+<div class="line">    cmdList-&gt;drawIndexed(param);</div>
+<div class="line">    </div>
+<div class="line">    commandList-&gt;endRenderPass();</div>
+<div class="line">    </div>
+<div class="line">    commandList-&gt;applySwapChain(swapChain, colorRT);</div>
+<div class="line">    </div>
+<div class="line">    commandList-&gt;end();</div>
+<div class="line"> </div>
+<div class="line">    commandList-&gt;flush();</div>
+<div class="line"> </div>
+<div class="line">}</div>
+</div><!-- fragment --><h1>RHIプラグインの実装</h1>
+<p>DirectX12やVulkanといったRHIはプラグインとして実装されます。</p><ul>
+<li>Sources/Plugins/DirectX12RHI</li>
+<li>Sources/Plugins/VulkanRHI</li>
+</ul>
+<h1>制限事項</h1>
+<ul>
+<li>DirectX12とVulkanの併用はサポートされていません。</li>
+<li>高度な機能 (例: レイトレーシング) の実装には追加の拡張が必要です。</li>
+</ul>
+<h1>サブページ</h1>
+<ul>
+<li><a class="el" href="../../da/d3a/_indirect_deraw.html">IndirectDraw</a> </li>
+</ul>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../d0/dc3/_framework.html">Framework</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

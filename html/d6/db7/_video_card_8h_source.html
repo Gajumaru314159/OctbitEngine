@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/RHI/Public/Framework/RHI/Types/VideoCard.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d6/db7/_video_card_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">VideoCard.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/Misc/MemorySize.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/RHI/Types/TextureFormat.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html">   12</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html">VideoOutputMode</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#a19adadefa2b608cf5f46c2877b984859">   13</a></span>        u32             <a class="code hl_variable" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#a19adadefa2b608cf5f46c2877b984859">width</a>;      </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#afb7aa2aaeb348d1de5cac2b1a29ad2e7">   14</a></span>        u32             <a class="code hl_variable" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#afb7aa2aaeb348d1de5cac2b1a29ad2e7">height</a>;     </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#af2e4ac8d601db8ecdcc9bee0d1c1b0da">   15</a></span>        f32             <a class="code hl_variable" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#af2e4ac8d601db8ecdcc9bee0d1c1b0da">refreshRate</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#ae9d10cfde6b840737070743f110d3ebb">   16</a></span>        TextureFormat   <a class="code hl_variable" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#ae9d10cfde6b840737070743f110d3ebb">format</a>;     </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    };</div>
+</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="foldopen" id="foldopen00019" data-start="{" data-end="};">
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html">   19</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html">VideoOutput</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#aeaf8c68289ad7649165b9fc95d97bfdb">   20</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>  <a class="code hl_variable" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#aeaf8c68289ad7649165b9fc95d97bfdb">name</a>;       </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a81677b1c25c22ec3192b65f97ec79a4e">   21</a></span>        <a class="code hl_struct" href="../../d3/df1/structob_1_1core_1_1_int_rect.html">IntRect</a> <a class="code hl_variable" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a81677b1c25c22ec3192b65f97ec79a4e">rect</a>;       </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a6e21d904030e2a8914ccdc04e9899c28">   22</a></span>        <span class="keywordtype">bool</span>    <a class="code hl_variable" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a6e21d904030e2a8914ccdc04e9899c28">isPrimary</a>;  </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#abefc92bcc4e8a8bb96aef3705766b3bb">   23</a></span>        <a class="code hl_struct" href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html">VideoOutputMode</a>         <a class="code hl_variable" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#abefc92bcc4e8a8bb96aef3705766b3bb">currentMode</a>;    </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#ab3461d1acc04555b5a516b16cf9e56d3">   24</a></span>        Vector&lt;VideoOutputMode&gt; <a class="code hl_variable" href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#ab3461d1acc04555b5a516b16cf9e56d3">modes</a>;          </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    };</div>
+</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html">   27</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html">VideoCard</a> {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#ac6f9dfac0ba996fb27d48504b8e91839">   28</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>              <a class="code hl_variable" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#ac6f9dfac0ba996fb27d48504b8e91839">name</a>;       </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#aa469a91387499ae887b9a46f7d8ee5ae">   29</a></span>        <a class="code hl_struct" href="../../d6/d03/structob_1_1core_1_1_memory_size.html">MemorySize</a>          <a class="code hl_variable" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#aa469a91387499ae887b9a46f7d8ee5ae">memory</a>;     </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a760b284471ffa578428c64a413f4c837">   30</a></span>        u32                 <a class="code hl_variable" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a760b284471ffa578428c64a413f4c837">deviceId</a>;   </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a72ba5e2ced0a8403cdc79bb2fb4eb39d">   31</a></span>        Vector&lt;VideoOutput&gt; <a class="code hl_variable" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a72ba5e2ced0a8403cdc79bb2fb4eb39d">outputs</a>;    </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    };</div>
+</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="astructob_1_1core_1_1_int_rect_html"><div class="ttname"><a href="../../d3/df1/structob_1_1core_1_1_int_rect.html">ob::core::IntRect</a></div><div class="ttdoc">矩形</div><div class="ttdef"><b>Definition</b> IntRect.h:15</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_memory_size_html"><div class="ttname"><a href="../../d6/d03/structob_1_1core_1_1_memory_size.html">ob::core::MemorySize</a></div><div class="ttdef"><b>Definition</b> MemorySize.h:12</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_card_html"><div class="ttname"><a href="../../d0/da0/structob_1_1rhi_1_1_video_card.html">ob::rhi::VideoCard</a></div><div class="ttdef"><b>Definition</b> VideoCard.h:27</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_card_html_a72ba5e2ced0a8403cdc79bb2fb4eb39d"><div class="ttname"><a href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a72ba5e2ced0a8403cdc79bb2fb4eb39d">ob::rhi::VideoCard::outputs</a></div><div class="ttdeci">Vector&lt; VideoOutput &gt; outputs</div><div class="ttdoc">出力先</div><div class="ttdef"><b>Definition</b> VideoCard.h:31</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_card_html_a760b284471ffa578428c64a413f4c837"><div class="ttname"><a href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#a760b284471ffa578428c64a413f4c837">ob::rhi::VideoCard::deviceId</a></div><div class="ttdeci">u32 deviceId</div><div class="ttdoc">デバイスID</div><div class="ttdef"><b>Definition</b> VideoCard.h:30</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_card_html_aa469a91387499ae887b9a46f7d8ee5ae"><div class="ttname"><a href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#aa469a91387499ae887b9a46f7d8ee5ae">ob::rhi::VideoCard::memory</a></div><div class="ttdeci">MemorySize memory</div><div class="ttdoc">メモリサイズ</div><div class="ttdef"><b>Definition</b> VideoCard.h:29</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_card_html_ac6f9dfac0ba996fb27d48504b8e91839"><div class="ttname"><a href="../../d0/da0/structob_1_1rhi_1_1_video_card.html#ac6f9dfac0ba996fb27d48504b8e91839">ob::rhi::VideoCard::name</a></div><div class="ttdeci">String name</div><div class="ttdoc">名前</div><div class="ttdef"><b>Definition</b> VideoCard.h:28</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html">ob::rhi::VideoOutput</a></div><div class="ttdef"><b>Definition</b> VideoCard.h:19</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html_a6e21d904030e2a8914ccdc04e9899c28"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a6e21d904030e2a8914ccdc04e9899c28">ob::rhi::VideoOutput::isPrimary</a></div><div class="ttdeci">bool isPrimary</div><div class="ttdoc">プライマリフラグ</div><div class="ttdef"><b>Definition</b> VideoCard.h:22</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html_a81677b1c25c22ec3192b65f97ec79a4e"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#a81677b1c25c22ec3192b65f97ec79a4e">ob::rhi::VideoOutput::rect</a></div><div class="ttdeci">IntRect rect</div><div class="ttdoc">出力領域</div><div class="ttdef"><b>Definition</b> VideoCard.h:21</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html_ab3461d1acc04555b5a516b16cf9e56d3"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#ab3461d1acc04555b5a516b16cf9e56d3">ob::rhi::VideoOutput::modes</a></div><div class="ttdeci">Vector&lt; VideoOutputMode &gt; modes</div><div class="ttdoc">モードリスト</div><div class="ttdef"><b>Definition</b> VideoCard.h:24</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html_abefc92bcc4e8a8bb96aef3705766b3bb"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#abefc92bcc4e8a8bb96aef3705766b3bb">ob::rhi::VideoOutput::currentMode</a></div><div class="ttdeci">VideoOutputMode currentMode</div><div class="ttdoc">現在のモード</div><div class="ttdef"><b>Definition</b> VideoCard.h:23</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_html_aeaf8c68289ad7649165b9fc95d97bfdb"><div class="ttname"><a href="../../dc/dd0/structob_1_1rhi_1_1_video_output.html#aeaf8c68289ad7649165b9fc95d97bfdb">ob::rhi::VideoOutput::name</a></div><div class="ttdeci">String name</div><div class="ttdoc">名前</div><div class="ttdef"><b>Definition</b> VideoCard.h:20</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_mode_html"><div class="ttname"><a href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html">ob::rhi::VideoOutputMode</a></div><div class="ttdef"><b>Definition</b> VideoCard.h:12</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_mode_html_a19adadefa2b608cf5f46c2877b984859"><div class="ttname"><a href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#a19adadefa2b608cf5f46c2877b984859">ob::rhi::VideoOutputMode::width</a></div><div class="ttdeci">u32 width</div><div class="ttdoc">幅</div><div class="ttdef"><b>Definition</b> VideoCard.h:13</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_mode_html_ae9d10cfde6b840737070743f110d3ebb"><div class="ttname"><a href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#ae9d10cfde6b840737070743f110d3ebb">ob::rhi::VideoOutputMode::format</a></div><div class="ttdeci">TextureFormat format</div><div class="ttdoc">フォーマット</div><div class="ttdef"><b>Definition</b> VideoCard.h:16</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_mode_html_af2e4ac8d601db8ecdcc9bee0d1c1b0da"><div class="ttname"><a href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#af2e4ac8d601db8ecdcc9bee0d1c1b0da">ob::rhi::VideoOutputMode::refreshRate</a></div><div class="ttdeci">f32 refreshRate</div><div class="ttdoc">リフレッシュレート</div><div class="ttdef"><b>Definition</b> VideoCard.h:15</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_video_output_mode_html_afb7aa2aaeb348d1de5cac2b1a29ad2e7"><div class="ttname"><a href="../../d6/ddb/structob_1_1rhi_1_1_video_output_mode.html#afb7aa2aaeb348d1de5cac2b1a29ad2e7">ob::rhi::VideoOutputMode::height</a></div><div class="ttdeci">u32 height</div><div class="ttdoc">高さ</div><div class="ttdef"><b>Definition</b> VideoCard.h:14</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_d82ccec992bd210755097980d56b772a.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_ad62dc539bf0513989cab6d0e67469da.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_2dde9cdd31bb6a124405cea450d725f7.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_ada43161bc5bd242ea360e956d58a61e.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_f0808b29c201893cc6f00b351c7e923a.html">Types</a></li><li class="navelem"><b>VideoCard.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

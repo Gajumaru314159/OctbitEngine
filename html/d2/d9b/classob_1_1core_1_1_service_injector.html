@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: ob::core::ServiceInjector クラス</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d2/d9b/classob_1_1core_1_1_service_injector.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="../../de/df0/classob_1_1core_1_1_service_injector-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle"><div class="title">ob::core::ServiceInjector クラス</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>サービス依存注入クラス  
+ <a href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d0/d4d/_d_i_8h_source.html">DI.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:afc4dadd64612a4ddda4e8d111b1108dd" id="r_afc4dadd64612a4ddda4e8d111b1108dd"><td class="memTemplParams" colspan="2"><a id="afc4dadd64612a4ddda4e8d111b1108dd" name="afc4dadd64612a4ddda4e8d111b1108dd"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:afc4dadd64612a4ddda4e8d111b1108dd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d5/d7c/classob_1_1core_1_1_service_builder.html">ServiceBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>bind</b> ()</td></tr>
+<tr class="memdesc:afc4dadd64612a4ddda4e8d111b1108dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">生成可能なクラスTをバインド <br /></td></tr>
+<tr class="separator:afc4dadd64612a4ddda4e8d111b1108dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3f134c77f877d8d8f1e97f448a7043" id="r_a8c3f134c77f877d8d8f1e97f448a7043"><td class="memTemplParams" colspan="2"><a id="a8c3f134c77f877d8d8f1e97f448a7043" name="a8c3f134c77f877d8d8f1e97f448a7043"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a8c3f134c77f877d8d8f1e97f448a7043"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../d5/d7c/classob_1_1core_1_1_service_builder.html">ServiceBuilder</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>bind</b> (T &amp;instance)</td></tr>
+<tr class="memdesc:a8c3f134c77f877d8d8f1e97f448a7043"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンスTをバインド <br /></td></tr>
+<tr class="separator:a8c3f134c77f877d8d8f1e97f448a7043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0be770856a37193068afca90f8752938" id="r_a0be770856a37193068afca90f8752938"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a0be770856a37193068afca90f8752938"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#a0be770856a37193068afca90f8752938">create</a> (<a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;container) const</td></tr>
+<tr class="memdesc:a0be770856a37193068afca90f8752938"><td class="mdescLeft">&#160;</td><td class="mdescRight">サービスを生成  <br /></td></tr>
+<tr class="separator:a0be770856a37193068afca90f8752938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedeb329fec8aaa98c35f9d4e332d3a63" id="r_aedeb329fec8aaa98c35f9d4e332d3a63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#aedeb329fec8aaa98c35f9d4e332d3a63">createAll</a> (<a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;container) const</td></tr>
+<tr class="memdesc:aedeb329fec8aaa98c35f9d4e332d3a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">全てのサービスを生成  <br /></td></tr>
+<tr class="separator:aedeb329fec8aaa98c35f9d4e332d3a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:a9e9acd822fe7529324a65284741cd8df" id="r_a9e9acd822fe7529324a65284741cd8df"><td class="memTemplParams" colspan="2"><a id="a9e9acd822fe7529324a65284741cd8df" name="a9e9acd822fe7529324a65284741cd8df"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a9e9acd822fe7529324a65284741cd8df"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ServiceBuilder</b></td></tr>
+<tr class="separator:a9e9acd822fe7529324a65284741cd8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>サービス依存注入クラス </p>
+<p>詳細は <a class="el" href="../../da/dc9/_d_i.html">DI (Dependency Injection)</a> を確認してください </p>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a0be770856a37193068afca90f8752938" name="a0be770856a37193068afca90f8752938"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0be770856a37193068afca90f8752938">&#9670;&#160;</a></span>create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T * ob::core::ServiceInjector::create </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>container</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>サービスを生成 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">container</td><td>生成されたサービスを管理させるコンテナの参照 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aedeb329fec8aaa98c35f9d4e332d3a63" name="aedeb329fec8aaa98c35f9d4e332d3a63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedeb329fec8aaa98c35f9d4e332d3a63">&#9670;&#160;</a></span>createAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ob::core::ServiceInjector::createAll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>container</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>全てのサービスを生成 </p>
+<p>サービスを生成</p>
+<p>抽象クラスに対して </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">container</td><td>生成されたサービスを管理させるコンテナの参照 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>Framework/Core/Public/Framework/Core/Utility/<a class="el" href="../../d0/d4d/_d_i_8h_source.html">DI.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ob</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html">ServiceInjector</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Core/Public/Framework/Core/File/INI.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d7/d38/_i_n_i_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">INI.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/CorePrivate.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html">   12</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html">INISection</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_class" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html">INISection</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a4858a1b55c1f3470042bae376f0b4105">   17</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a4858a1b55c1f3470042bae376f0b4105">operator[]</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a155a91efe0c3dfeb1e7b34c165478a91">   20</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a155a91efe0c3dfeb1e7b34c165478a91">get</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key, <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> fallback)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#abc4112ae0ad59f26c4580fb7afad54eb">   23</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#abc4112ae0ad59f26c4580fb7afad54eb">has</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#af3bb0584aa9926451f8fe593564fa101">   26</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#af3bb0584aa9926451f8fe593564fa101">remove</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key);</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a5a5b91fb29c45207743448170ba72f84">   29</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a5a5b91fb29c45207743448170ba72f84">clear</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#ab176b5a2b208df6e77b2cd6c7f364c37">   32</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#ab176b5a2b208df6e77b2cd6c7f364c37">size</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#aa71898b52c7b16216a4c87fcacb7d460">   35</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#aa71898b52c7b16216a4c87fcacb7d460">begin</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> m_container.cbegin(); }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a1bae46f7e160a592127e7963669ad657">   38</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a1bae46f7e160a592127e7963669ad657">end</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> m_container.cend(); }</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        Map&lt;String, String&gt; m_container;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    };</div>
+</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="foldopen" id="foldopen00045" data-start="{" data-end="};">
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html">   45</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html">INI</a> {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a04d8f95b933d04e006ac166e945ce2c9">   49</a></span>        <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a04d8f95b933d04e006ac166e945ce2c9">INI</a>();</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aee769bfbf25783718aadee63dc2d7e7a">   52</a></span>        <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aee769bfbf25783718aadee63dc2d7e7a">INI</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> path);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a880426fd3a1c0beb0d7917946948bb94">   55</a></span>        <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a880426fd3a1c0beb0d7917946948bb94">~INI</a>();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#af7750e4c69b4d907272040df7c7b78d1">   58</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#af7750e4c69b4d907272040df7c7b78d1">load</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> path);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a54274f6f304d957f3ce5ccc1dd8ae434">   62</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a54274f6f304d957f3ce5ccc1dd8ae434">save</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> path = <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a2b04db155fbf47e8519fd588e0cb10f8">   65</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a2b04db155fbf47e8519fd588e0cb10f8">parse</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> str);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#acd055d5380fad56c49d2e19ccbaad049">   68</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#acd055d5380fad56c49d2e19ccbaad049">string</a>();</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a765e06861d136359e64a1efe63d5f87b">   71</a></span>        <a class="code hl_class" href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html">INISection</a>&amp; <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a765e06861d136359e64a1efe63d5f87b">operator[]</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a581e277db56b9e5a981440144ccc416e">   74</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a581e277db56b9e5a981440144ccc416e">get</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> section, <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key, <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> fallback = <span class="stringliteral">&quot;&quot;</span>)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aab74eeccf6d42c11b714fb7adaf0c450">   77</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aab74eeccf6d42c11b714fb7adaf0c450">has</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> section)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a3076725c12c4a5e68432121905b72250">   80</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a3076725c12c4a5e68432121905b72250">has</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> section,<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#abbf9a258c650375ca5458b41a0b6140c">   83</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#abbf9a258c650375ca5458b41a0b6140c">remove</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> section);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a02473523996b676211f506ea79ce774e">   86</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a02473523996b676211f506ea79ce774e">remove</a>(<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> section,<a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> key);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#afd2565d42c8da617645457254669bd70">   89</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#afd2565d42c8da617645457254669bd70">clear</a>();</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aba757a08fa14f53897065c002b2681e2">   92</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aba757a08fa14f53897065c002b2681e2">size</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a34c3cc13a34b2f5cc4c1e694961e93c9">   95</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a34c3cc13a34b2f5cc4c1e694961e93c9">empty</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a915054ede2ad4472aa1c620ae8243400">   98</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a915054ede2ad4472aa1c620ae8243400">begin</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> m_container.cbegin(); }</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#ad422db468c4b6805707a94bec1edd9aa">  101</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#ad422db468c4b6805707a94bec1edd9aa">end</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> m_container.cend(); }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> m_path;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        Map&lt;String, INISection&gt; m_container;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    };</div>
+</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html">ob::core::INI</a></div><div class="ttdoc">INIオブジェクト</div><div class="ttdef"><b>Definition</b> INI.h:45</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a02473523996b676211f506ea79ce774e"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a02473523996b676211f506ea79ce774e">ob::core::INI::remove</a></div><div class="ttdeci">void remove(String section, String key)</div><div class="ttdoc">対象のキーを削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a04d8f95b933d04e006ac166e945ce2c9"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a04d8f95b933d04e006ac166e945ce2c9">ob::core::INI::INI</a></div><div class="ttdeci">INI()</div><div class="ttdoc">INIオブジェクトを生成</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a2b04db155fbf47e8519fd588e0cb10f8"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a2b04db155fbf47e8519fd588e0cb10f8">ob::core::INI::parse</a></div><div class="ttdeci">bool parse(String str)</div><div class="ttdoc">文字列から設定をロード</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a3076725c12c4a5e68432121905b72250"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a3076725c12c4a5e68432121905b72250">ob::core::INI::has</a></div><div class="ttdeci">bool has(String section, String key) const</div><div class="ttdoc">対象のキーが存在するか</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a34c3cc13a34b2f5cc4c1e694961e93c9"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a34c3cc13a34b2f5cc4c1e694961e93c9">ob::core::INI::empty</a></div><div class="ttdeci">bool empty() const</div><div class="ttdoc">要素が空か</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a54274f6f304d957f3ce5ccc1dd8ae434"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a54274f6f304d957f3ce5ccc1dd8ae434">ob::core::INI::save</a></div><div class="ttdeci">bool save(String path=&quot;&quot;)</div><div class="ttdoc">ファイルに設定をセーブ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a581e277db56b9e5a981440144ccc416e"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a581e277db56b9e5a981440144ccc416e">ob::core::INI::get</a></div><div class="ttdeci">String get(String section, String key, String fallback=&quot;&quot;) const</div><div class="ttdoc">キーとフォールバックを指定して要素を取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a765e06861d136359e64a1efe63d5f87b"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a765e06861d136359e64a1efe63d5f87b">ob::core::INI::operator[]</a></div><div class="ttdeci">INISection &amp; operator[](String key)</div><div class="ttdoc">キーを指定して要素アクセス</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a880426fd3a1c0beb0d7917946948bb94"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a880426fd3a1c0beb0d7917946948bb94">ob::core::INI::~INI</a></div><div class="ttdeci">~INI()</div><div class="ttdoc">~デストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_a915054ede2ad4472aa1c620ae8243400"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#a915054ede2ad4472aa1c620ae8243400">ob::core::INI::begin</a></div><div class="ttdeci">auto begin() const</div><div class="ttdoc">Beginイテレータ</div><div class="ttdef"><b>Definition</b> INI.h:98</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_aab74eeccf6d42c11b714fb7adaf0c450"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aab74eeccf6d42c11b714fb7adaf0c450">ob::core::INI::has</a></div><div class="ttdeci">bool has(String section) const</div><div class="ttdoc">対象のセクションが存在するか</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_aba757a08fa14f53897065c002b2681e2"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aba757a08fa14f53897065c002b2681e2">ob::core::INI::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdoc">要素数</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_abbf9a258c650375ca5458b41a0b6140c"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#abbf9a258c650375ca5458b41a0b6140c">ob::core::INI::remove</a></div><div class="ttdeci">void remove(String section)</div><div class="ttdoc">対象のセクションを削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_acd055d5380fad56c49d2e19ccbaad049"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#acd055d5380fad56c49d2e19ccbaad049">ob::core::INI::string</a></div><div class="ttdeci">String string()</div><div class="ttdoc">文字列として出力</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_ad422db468c4b6805707a94bec1edd9aa"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#ad422db468c4b6805707a94bec1edd9aa">ob::core::INI::end</a></div><div class="ttdeci">auto end() const</div><div class="ttdoc">Endイテレータ</div><div class="ttdef"><b>Definition</b> INI.h:101</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_aee769bfbf25783718aadee63dc2d7e7a"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#aee769bfbf25783718aadee63dc2d7e7a">ob::core::INI::INI</a></div><div class="ttdeci">INI(String path)</div><div class="ttdoc">ファイルから設定をロードして生成</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_af7750e4c69b4d907272040df7c7b78d1"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#af7750e4c69b4d907272040df7c7b78d1">ob::core::INI::load</a></div><div class="ttdeci">bool load(String path)</div><div class="ttdoc">ファイルから設定をロード</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_html_afd2565d42c8da617645457254669bd70"><div class="ttname"><a href="../../dc/d29/classob_1_1core_1_1_i_n_i.html#afd2565d42c8da617645457254669bd70">ob::core::INI::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">要素をすべて削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html">ob::core::INISection</a></div><div class="ttdoc">INIセクションオブジェクト</div><div class="ttdef"><b>Definition</b> INI.h:12</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_a155a91efe0c3dfeb1e7b34c165478a91"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a155a91efe0c3dfeb1e7b34c165478a91">ob::core::INISection::get</a></div><div class="ttdeci">String get(String key, String fallback) const</div><div class="ttdoc">キーとフォールバックを指定して要素を取得</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_a1bae46f7e160a592127e7963669ad657"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a1bae46f7e160a592127e7963669ad657">ob::core::INISection::end</a></div><div class="ttdeci">auto end() const</div><div class="ttdoc">Endイテレータ</div><div class="ttdef"><b>Definition</b> INI.h:38</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_a4858a1b55c1f3470042bae376f0b4105"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a4858a1b55c1f3470042bae376f0b4105">ob::core::INISection::operator[]</a></div><div class="ttdeci">String &amp; operator[](String key)</div><div class="ttdoc">キーを指定して要素アクセス</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_a5a5b91fb29c45207743448170ba72f84"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#a5a5b91fb29c45207743448170ba72f84">ob::core::INISection::clear</a></div><div class="ttdeci">void clear()</div><div class="ttdoc">要素をすべて削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_aa71898b52c7b16216a4c87fcacb7d460"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#aa71898b52c7b16216a4c87fcacb7d460">ob::core::INISection::begin</a></div><div class="ttdeci">auto begin() const</div><div class="ttdoc">Beginイテレータ</div><div class="ttdef"><b>Definition</b> INI.h:35</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_ab176b5a2b208df6e77b2cd6c7f364c37"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#ab176b5a2b208df6e77b2cd6c7f364c37">ob::core::INISection::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdoc">要素数</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_abc4112ae0ad59f26c4580fb7afad54eb"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#abc4112ae0ad59f26c4580fb7afad54eb">ob::core::INISection::has</a></div><div class="ttdeci">bool has(String key) const</div><div class="ttdoc">対象のキーが存在するか</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_i_n_i_section_html_af3bb0584aa9926451f8fe593564fa101"><div class="ttname"><a href="../../db/de9/classob_1_1core_1_1_i_n_i_section.html#af3bb0584aa9926451f8fe593564fa101">ob::core::INISection::remove</a></div><div class="ttdeci">bool remove(String key)</div><div class="ttdoc">対象のキーを削除</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_9f165b2481dacfe69aa54d326bd5cd47.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_091cb97c815342203f0af8739126cbb8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_5e9efae597f9007a5e31f6ef8f108de2.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_67076fa46bde3b85ed03424cfba08e54.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_5a0f17fe5f2ef8a34bc031adc96b36c5.html">File</a></li><li class="navelem"><b>INI.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

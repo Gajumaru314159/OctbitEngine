@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Framework/Input/Public/Framework/Input/Button.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d2/daa/_button_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Button.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Input/InputType.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define OB_DECL_BUTTON(type,name) static constexpr Button name{ ID,type::name };</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span>ob::input {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html">   18</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d0/d01/classob_1_1input_1_1_button.html">Button</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a407ead2ce6bcc61ec9e08c73e5dcb88d">   22</a></span>        <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a407ead2ce6bcc61ec9e08c73e5dcb88d">Button</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#aab0e24eef84c2cc5f4b5e578b52df86d">   28</a></span>        <span class="keyword">constexpr</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#aab0e24eef84c2cc5f4b5e578b52df86d">Button</a>(DeviceID deviceID, u32 code, u32 user = 0) :m_deviceId(deviceID),m_code(code), m_user(user) {}</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a723b4159c63507a57f4ef734c7cb27bd">   32</a></span>        <span class="keyword">constexpr</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a723b4159c63507a57f4ef734c7cb27bd">Button</a>(DeviceID type, T code, u32 user = 0) : <a class="code hl_class" href="../../d0/d01/classob_1_1input_1_1_button.html">Button</a>(type, enum_cast(code), user) {}</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="comment">//StringView name()const;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="comment">//TimeSpan pressedTimeSpan()const;</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a0629ee761b8b3d6d0a0dac83e52bc140">   44</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a0629ee761b8b3d6d0a0dac83e52bc140">is</a>(ButtonState state)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a930b50f915f3d4a165c35ed358448716">   47</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a930b50f915f3d4a165c35ed358448716">down</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a22c5343a8d72db0b232da800732c9bc8">   50</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a22c5343a8d72db0b232da800732c9bc8">up</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#a626a09a6db4c9f898a80ac72245c0817">   53</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#a626a09a6db4c9f898a80ac72245c0817">pressed</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#af45fb357a32ad81ab0442e7e439b68a8">   56</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#af45fb357a32ad81ab0442e7e439b68a8">released</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="../../d0/d01/classob_1_1input_1_1_button.html#af1d8c7dd2d5e0615f45ecdde5cbd4d73">   64</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d0/d01/classob_1_1input_1_1_button.html#af1d8c7dd2d5e0615f45ecdde5cbd4d73">bindDown</a>(ButtonHandle&amp; handle, <span class="keyword">const</span> ButtonDelegate&amp; func)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keywordtype">bool</span> bindUp(ButtonHandle&amp; handle, <span class="keyword">const</span> ButtonDelegate&amp; func)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="keywordtype">bool</span> bindPressed(ButtonHandle&amp; handle, <span class="keyword">const</span> ButtonDelegate&amp; func)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordtype">bool</span> bindReleased(ButtonHandle&amp; handle, <span class="keyword">const</span> ButtonDelegate&amp; func)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordtype">bool</span> bind(ButtonState state, ButtonHandle&amp; handle, <span class="keyword">const</span> ButtonDelegate&amp; func)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        DeviceID m_deviceId;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        u32 m_code;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        u32 m_user;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    };</div>
+</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>}</div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html">ob::input::Button</a></div><div class="ttdoc">ボタン</div><div class="ttdef"><b>Definition</b> Button.h:18</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a0629ee761b8b3d6d0a0dac83e52bc140"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a0629ee761b8b3d6d0a0dac83e52bc140">ob::input::Button::is</a></div><div class="ttdeci">bool is(ButtonState state) const</div><div class="ttdoc">状態が state か</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a22c5343a8d72db0b232da800732c9bc8"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a22c5343a8d72db0b232da800732c9bc8">ob::input::Button::up</a></div><div class="ttdeci">bool up() const</div><div class="ttdoc">離された瞬間か</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a407ead2ce6bcc61ec9e08c73e5dcb88d"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a407ead2ce6bcc61ec9e08c73e5dcb88d">ob::input::Button::Button</a></div><div class="ttdeci">Button()=default</div><div class="ttdoc">デフォルトコンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a626a09a6db4c9f898a80ac72245c0817"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a626a09a6db4c9f898a80ac72245c0817">ob::input::Button::pressed</a></div><div class="ttdeci">bool pressed() const</div><div class="ttdoc">押されているか</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a723b4159c63507a57f4ef734c7cb27bd"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a723b4159c63507a57f4ef734c7cb27bd">ob::input::Button::Button</a></div><div class="ttdeci">constexpr Button(DeviceID type, T code, u32 user=0)</div><div class="ttdoc">コンストラクタ</div><div class="ttdef"><b>Definition</b> Button.h:32</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_a930b50f915f3d4a165c35ed358448716"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#a930b50f915f3d4a165c35ed358448716">ob::input::Button::down</a></div><div class="ttdeci">bool down() const</div><div class="ttdoc">押された瞬間か</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_aab0e24eef84c2cc5f4b5e578b52df86d"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#aab0e24eef84c2cc5f4b5e578b52df86d">ob::input::Button::Button</a></div><div class="ttdeci">constexpr Button(DeviceID deviceID, u32 code, u32 user=0)</div><div class="ttdoc">コンストラクタ</div><div class="ttdef"><b>Definition</b> Button.h:28</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_af1d8c7dd2d5e0615f45ecdde5cbd4d73"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#af1d8c7dd2d5e0615f45ecdde5cbd4d73">ob::input::Button::bindDown</a></div><div class="ttdeci">bool bindDown(ButtonHandle &amp;handle, const ButtonDelegate &amp;func) const</div><div class="ttdoc">バインド</div></div>
+<div class="ttc" id="aclassob_1_1input_1_1_button_html_af45fb357a32ad81ab0442e7e439b68a8"><div class="ttname"><a href="../../d0/d01/classob_1_1input_1_1_button.html#af45fb357a32ad81ab0442e7e439b68a8">ob::input::Button::released</a></div><div class="ttdeci">bool released() const</div><div class="ttdoc">離されているか</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_530c9abb591ebff05a3cf5a53cc27b48.html">Input</a></li><li class="navelem"><a class="el" href="../../dir_9db7335bb8f3d3d0f6cd2603a3f904f7.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_0a10515696778fef51c0efc29416a936.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_b8477725fae5da23b5ef9b52358b539e.html">Input</a></li><li class="navelem"><b>Button.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>
