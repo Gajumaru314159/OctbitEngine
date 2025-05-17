@@ -1,34 +1,12 @@
 ﻿cmake_minimum_required (VERSION 3.15)
 project (Model)
 
-#------------------------------------------------------------------------------
-# ソースコードの登録
-#------------------------------------------------------------------------------
-LOAD_FILES(out_sources "Framework/Model")
-add_library(${PROJECT_NAME} STATIC ${out_sources})
+# インクルードディレクトリ設定
+set(public_includes "")
+set(private_includes "")
 
-SET_PCH("Framework/Model/PCH/stdafx.h")
+# 依存ライブラリ設定
+set(public_libs Core Platform Graphics assimp)
+set(private_libs "")
 
-
-#------------------------------------------------------------------------------
-# プロジェクト設定
-#------------------------------------------------------------------------------
-
-# 追加のインクルードディレクトリ
-set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
-target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
-
-# 追加の依存ライブラリ
-set(OB_PROJECT_INCLUDE_LIB
-    Core
-    Platform
-    Graphics
-    assimp
-)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OB_PROJECT_INCLUDE_LIB})
-
-set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
-# プロジェクトのフィルタ設定
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")
+OB_ADD_FRAMEWORK_LIBRARY("${public_includes}" "${private_includes}" "${public_libs}" "${private_libs}")

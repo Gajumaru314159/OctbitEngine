@@ -30,6 +30,9 @@ ENDFUNCTION()
 
 #------------------------------------------------------------------------------
 # サブフォルダの列挙
+# result : 結果を格納する変数名
+# filter : 格納するVisualStudioのフィルタ名
+# root   : どのパスからの相対パスで表示するか
 #------------------------------------------------------------------------------
 FUNCTION(ADD_SOURCES result filter root)
 
@@ -96,6 +99,21 @@ FUNCTION(LOAD_FILES result root)
 ENDFUNCTION()
 
 #------------------------------------------------------------------------------
+# カレントとディレクトリ以下のソースファイルを読み込み
+#------------------------------------------------------------------------------
+FUNCTION(LOAD_FILES2 result ARG)
+
+	SET(files "")
+
+    foreach(ITEM ${ARGV})
+        ADD_SOURCES(sub_files ${ITEM} ".")
+		LIST(APPEND files ${sub_files})
+    endforeach()
+
+ENDFUNCTION()
+
+
+#------------------------------------------------------------------------------
 # すべてのファイルにインクルードさせるファイルを追加
 #------------------------------------------------------------------------------
 FUNCTION(SET_PCH header)
@@ -121,4 +139,85 @@ FUNCTION(COPY_REQUIRED_DLL)
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/bin/x64/dstorage.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/bin/x64/dstoragecore.dll" $<TARGET_FILE_DIR:${PROJECT_NAME}>
 	)
+ENDFUNCTION()
+
+#------------------------------------------------------------------------------
+# exeの実行に必要なDLLをコピーする
+#------------------------------------------------------------------------------
+FUNCTION(SETUP_LIB_COMMON)
+	
+	# ランタイムライブラリ設定
+	set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+ENDFUNCTION()
+
+#------------------------------------------------------------------------------
+# exeの実行に必要なDLLをコピーする
+#------------------------------------------------------------------------------
+FUNCTION(SETUP_TEST_COMMON)
+	
+	# メモリリークテストは無効化
+	target_compile_definitions(${PROJECT_NAME} PUBLIC CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
+
+	# ランタイムライブラリ設定
+	set_property(TARGET ${PROJECT_NAME} PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+	# GoogleTest
+	gtest_discover_tests(${PROJECT_NAME})
+
+ENDFUNCTION()
+
+
+#------------------------------------------------------------------------------
+# exeの実行に必要なDLLをコピーする
+#------------------------------------------------------------------------------
+FUNCTION(OB_ADD_FRAMEWORK_LIBRARY public_includes private_includes public_libs private_libs)	
+	
+	# ソースコードを登録
+	LOAD_FILES(out_sources "Framework/${PROJECT_NAME}")
+	add_library(${PROJECT_NAME} STATIC ${out_sources})
+
+	# プリコンパイルヘッダを設定
+	SET_PCH("Framework/${PROJECT_NAME}/PCH/stdafx.h")
+
+	# インクルードディレクトリ設定
+	list(APPEND public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+	list(APPEND private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
+	
+	# 依存ライブラリ設定
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
+
+	# フィルタ設定
+	set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Framework")
+
+	# 共通設定
+	SETUP_LIB_COMMON()
+
+ENDFUNCTION()
+
+
+#------------------------------------------------------------------------------
+# exeの実行に必要なDLLをコピーする
+#------------------------------------------------------------------------------
+FUNCTION(OB_ADD_PLUGIN public_includes private_includes public_libs private_libs)	
+	
+	# ソースコードを登録
+	LOAD_FILES(out_sources "Plugins/${PROJECT_NAME}")
+	add_library(${PROJECT_NAME} STATIC ${out_sources})
+
+	# インクルードディレクトリ設定
+	list(APPEND public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+	list(APPEND private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
+
+	# 依存ライブラリ設定
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
+
+	# フィルタ設定
+	set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Plugins")
+
+	# 共通設定
+	SETUP_LIB_COMMON()
+
 ENDFUNCTION()

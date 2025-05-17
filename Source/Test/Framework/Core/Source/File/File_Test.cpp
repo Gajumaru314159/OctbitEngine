@@ -10,7 +10,7 @@ using namespace ob::core;
 
 TEST(FileTest, Exists)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     File file("test.txt", FileOpenMode::Write);
     file.close();
 
@@ -25,7 +25,7 @@ TEST(FileTest, Exists)
 
 TEST(FileTest, Size)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     Blob blob(1024);
     File file("test.txt",FileOpenMode::Write);
     file.write(blob.data(),blob.size());
@@ -42,7 +42,7 @@ TEST(FileTest, Size)
 
 TEST(FileTest, Copy)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     File file("test.txt", FileOpenMode::Write);
     file.close();
 
@@ -60,7 +60,7 @@ TEST(FileTest, Copy)
 
 TEST(FileTest, Delete)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     File file("test.txt", FileOpenMode::Write);
     file.close();
 
@@ -74,7 +74,7 @@ TEST(FileTest, Delete)
 
 TEST(FileTest, Move)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     File::Delete("test_move.txt");
     File file("test.txt", FileOpenMode::Write);
     file.close();
@@ -92,7 +92,7 @@ TEST(FileTest, Move)
 
 TEST(FileTest, Rename)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     File::Delete("test_rename.txt");
     File file("test.txt", FileOpenMode::Write);
     file.close();
@@ -110,7 +110,7 @@ TEST(FileTest, Rename)
 
 TEST(FileTest, ReadAllText)
 {
-    GTEST_FLAG_SET(death_test_style, "threadsafe");
+    
     String text = "abcdefg";
     File file("test.txt", FileOpenMode::Write);
     file.write(text.data(), text.size());
