@@ -11,36 +11,25 @@
 #include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
 //#include <Framework/Graphics/Builtin/RenderFeature/LightRenderFeature.h>
 #include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
-#if 0
+#if 1
 
 namespace ob::graphics {
 
-
-
 	class TestRenderPipeline {
 	public:
-		OB_RTTI();
-		TestRenderPipeline(RenderView& view);
 
-		FGTexture render(FG& fg, RenderView& view) {
+		void render(FG& fg, RenderView& view) {
 
-			// auto earlyZ = m_earlyZ.render(fg, view, {});
-			// auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth});
-			// auto masked = m_masked.render(fg, view, {});
+			auto earlyZ = m_earlyZ.render(fg, view, {});
+			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
+			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, earlyZ.depth });
+			auto deferred = m_deferred.render(fg, view, { masked.albedo,masked.normal,earlyZ.depth });
+			auto imgui = m_imgui.render(fg, view, { deferred.color });
 
-		}
+			bool useImGui = true;
 
+			auto camera = m_camera.render(fg, view, { useImGui ? imgui.color : deferred.color});
 
-	private:
-
-		template<class T>
-		void setup(RenderView& view) {
-			if (auto feature = m_view.findFeature<T>()) {
-				feature->setup(view);
-			}
-			else {
-				LOG_ERROR("{}はRenderSceneに登録されていません", Type::Get<T>().name());
-			}
 		}
 
 	private:
@@ -51,5 +40,6 @@ namespace ob::graphics {
 		ImGuiPass m_imgui;
 		CameraPass m_camera;
 	};
+
 }
 #endif

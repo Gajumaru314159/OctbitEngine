@@ -125,12 +125,22 @@ int TestDirectX12() {
 
 				{"ImGuiPass.color", "CameraPass.color"},
 			}
+		},
+		{
+			"ImGuiPipeline",
+			{
+				{"EarlyZPass.albedo", "ImGuiPass.color"},
+
+				{"ImGuiPass.color", "CameraPass.color"},
+			}
 		}
 	};
 
 
 	RenderScene scene(sdesc);
 	RenderView view(scene, "Test","MainPipeline");
+
+
 	view.get<CameraRFData>().setSwapChain(swapChain);
 
 	// シーン生成
