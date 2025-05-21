@@ -5,8 +5,10 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/Graphics.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
+
+#include <Framework/Graphics/Render/RenderSceneDesc.h>
+#include <Framework/Graphics/Render/RenderPipeline.h>
 
 namespace ob::graphics {
 
@@ -15,56 +17,42 @@ namespace ob::graphics {
 	class RenderScene{
 	public:
 
-        RenderScene();
+        RenderScene(const RenderSceneDesc& desc);
         ~RenderScene();
-
-        //! @brief      RenderFeatureを追加する
-        template<class T,class... Args>
-        auto addFeature(Args&& ...args) -> std::enable_if_t<std::is_constructible<T, Args...>::value,T&>;
 
         //! @brief      RenderFeatureを見つける
         template<class T> T* findFeature()const;
         RenderFeature* findFeature(Type type)const;
 
+        //! @brief      描画
+        void render(FG& fg);
+
+        //! @brief      解放時イベント
+        void addReleasedEvent(RenderSceneEventHandle& handle, RenderSceneEventDelegate func);
+
+    private:
+		friend class RenderView;
 
         //! @brief      RenderViewを追加する
-        void addView(RenderView* view);
+        void addView(RenderView* view,StringView pipeline);
 
         //! @brief      RenderViewを削除する
         void removeView(RenderView* view);
 
-
-        //! @brief      解放時イベント
-        void addReleasedEvent(RenderSceneEventHandle& handle, RenderSceneEventDelegate func);
-        void addFeatureAddedEvent(RenderFeatureEventHandle& handle, RenderFeatureEventDelegate func);
-
-        //! @brief      描画
-        void render(FG& fg);
-
     private:
-        void onFeatureAdded(RenderFeature& feature);
-    private:
-        HashMap<Type, UPtr<RenderFeature>>      m_features;
-        Vector<RenderView*>                     m_views;
+
+        Vector<UPtr<RenderFeature>>             m_features;
+        HashMap<Type, RenderFeature*>           m_featuresByType;
+
+        Map<String,RenderPipeline,std::less<>>  m_pipelines;
 
         RenderSceneEventNotifier                m_releasedNotifier;
-        RenderFeatureEventNotifier              m_featureAddedNotifier;
 	};
-
-
-    //! @brief      RenderFeatureを追加する
-    template<class T, class... Args>
-    auto RenderScene::addFeature(Args&& ...args) -> std::enable_if_t<std::is_constructible<T,Args...>::value, T&> {
-        auto& feature = m_features[Type::Get<T>()] = std::make_unique<T>(args...);
-        onFeatureAdded(*feature);
-        return *reinterpret_cast<T*>(feature.get());
-    }
 
     //! @brief      RenderFeatureを見つける
     template<class T>
     T* RenderScene::findFeature()const {
         return reinterpret_cast<T*>(findFeature(Type::Get<T>()));
     }
-
 
 }

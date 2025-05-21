@@ -85,7 +85,7 @@ namespace ob::model {
 
 					shaders.depthStencil.depth.enable = true;
 					shaders.depthStencil.depth.func = ComparisonFunc::GreaterEqual;
-					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
 					shaders.depth = TextureFormat::D32;
 					shaders.vs = Shader::CompileVS(code.value());
 					shaders.ps = Shader::CompilePS(code.value());

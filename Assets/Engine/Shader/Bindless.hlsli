@@ -11,6 +11,11 @@ struct TextureHandle {
 	uint index;
 	uint reserved0;
 	uint reserved1;
+	
+	template<typename T>
+	T Load() {
+		return ResourceDescriptorHeap[index];
+	}
 };
 
 struct SamplerHandle {
@@ -25,6 +30,11 @@ struct BufferHandle {
 	uint index;
 	uint reserved0;
 	uint reserved1;
+	
+	template<typename T>
+	T Load() {
+		return ByteAddressBuffer(ResourceDescriptorHeap[index]).Load<T>(0);
+	}
 };
 
 

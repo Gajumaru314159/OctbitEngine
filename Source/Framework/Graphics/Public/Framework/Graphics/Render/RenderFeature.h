@@ -4,7 +4,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Utility/Ref.h>
 #include <Framework/Graphics/Forward.h>
 
 namespace ob::graphics {
@@ -20,11 +19,18 @@ namespace ob::graphics {
 
 		virtual ~RenderFeature(){}
 
+		//! @brief		MaterialRenderFeature の描画パスをセットアップします。
+		virtual void setupPasses(RenderPassBuilder&) const {}
+
 		//! @brief      アクティブにする
 		virtual void activate() {}
 
 		//! @brief      非アクティブにする
 		virtual void deactivate() {}
+
+		//! @brief		レンダービューのセットアップする
+		//! @details	RenderView毎に必要なデータをセットアップします。
+		virtual void setup(RenderView& view) {}
 
 		//! @brief      描画	
 		virtual void render(FG& fg) {}

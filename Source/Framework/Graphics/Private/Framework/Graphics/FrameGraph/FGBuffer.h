@@ -10,7 +10,7 @@
 namespace ob::graphics {
 
     //! @brief      FrameGraph中間テクスチャ
-    class FGBufferInstance{
+    class FGBuffer{
     public:
         using Desc = rhi::BufferDesc;
 

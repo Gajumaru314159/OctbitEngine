@@ -3,18 +3,28 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 #include <Framework/Graphics/FrameGraph/FG.h>
-#include <Framework/RHI/CommandList.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
+#include <Framework/Graphics/Render/RenderPassBuilder.h>
+#include <Framework/RHI/CommandList.h>
 
 namespace ob::graphics {
 
 
 	//! @brief      コンストラクタ
-	MaterialRenderFeature::MaterialRenderFeature() {		
+	MaterialRenderFeature::MaterialRenderFeature(RenderScene&) {		
 		m_materialId = static_cast<MaterialId>(0);
+	}
+
+	//! @brief MaterialRenderFeature の描画パスをセットアップします。
+	void MaterialRenderFeature::setupPasses(RenderPassBuilder& builder) const {
+		builder.add<EarlyZPass>();
+		builder.add<OpaquePass>();
+		builder.add<MaskedPass>();
+		builder.add<DeferredPass>();	
 	}
 
 	//! @brief      描画可能なオブジェクトを追加

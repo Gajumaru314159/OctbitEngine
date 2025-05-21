@@ -3,16 +3,21 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
 #include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
-#include <Framework/RHI/All.h>
-#include <Framework/Input/All.h>
-
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderView.h>
+#include <Framework/Input/All.h>
+#include <Framework/Platform/Window.h>
+#include <Framework/RHI/All.h>
 #include <Plugins/ImGui/ImGuiRAII.h>
+#include <Plugins/ImGui/Library/imgui.h>
+#include <Plugins/ImGui/Library/implot.h>
 #ifdef OS_WINDOWS
 #include <Windows.h>
 #endif
+
+using namespace ob::rhi;
 
 #pragma region
 
@@ -142,7 +147,8 @@ namespace ob::graphics {
 			d.ptCurrentPos.y = data->InputPos.y;
 			ImmSetCompositionWindow(hIMC, &d);
 #endif
-		} else {
+		}
+		else {
 
 		}
 	}
@@ -203,46 +209,80 @@ namespace ob::graphics {
 
 namespace ob::graphics {
 
+
+	struct ImGuiData {
+
+		ImGuiData();
+		~ImGuiData();
+
+		//! @brief      コンテキストの初期化
+		//! @details	ImGuiとImPlotのコンテキストを生成し、必要なオプションを設定する。
+		void initializeContext();
+
+		//! @brief      リソースの初期化
+		//! @details	RootSignatureやシェーダはRenderFeatureで共用することも可能。
+		//!				実装をシンプルにするためView毎に生成しています。
+		void initializeResource();
+
+		//! @brief      フォント画像生成
+		void initializeFont();
+
+		//! @brief      更新
+		bool update(RenderView& view);
+
+		//! @brief      マウス更新
+		void updateMouse(const platform::Window& window);
+
+		//! @brief      キーボード更新
+		void updateKeyboard(platform::Window& window);
+
+		//! @brief      時間更新
+		void updateTime();
+
+		//! @brief		バッファ更新
+		void updateBuffer();
+
+		//! @brief		バッファ更新
+		void updateCommand();
+
+		struct DrawCommand {
+			IntRect					rect;
+			ImTextureID				texture;
+			rhi::DrawIndexedParam	param;
+		};
+
+		ImGuiContext* m_imguiContext;
+		ImPlotContext* m_implotContext;
+		void* m_fontBlob = nullptr;
+
+		ob::core::DateTime          m_time;
+
+		Vector<DrawCommand>			m_commands;
+
+		size_t						m_vertexCount = 0;
+		size_t                      m_indexCount = 0;
+
+		Ref<rhi::DescriptorLayout>	m_layout;
+		Ref<rhi::DescriptorTable>   m_table;
+		Ref<rhi::RootSignature>		m_signature;
+		Ref<rhi::PipelineState>		m_pipeline;
+		Ref<rhi::Buffer>			m_vertexBuffer;
+		Ref<rhi::Buffer>			m_indexBuffer;
+		Ref<rhi::Buffer>            m_constantBuffer;
+		Ref<rhi::Texture>           m_fontTexture;
+	};
+
+
+
+
 	//! @brief		コンストラクタ
-	ImGuiRenderFeature::ImGuiRenderFeature(RenderScene& scene)
-	{
-	}
-
-	//! @brief		デストラクタ
-	ImGuiRenderFeature::~ImGuiRenderFeature() {
-	}
-
-	//! @brief		タスクを追加
-	void ImGuiRenderFeature::addTask(ImGuiHandle& handle, ImGuiDelegate func) {
-		m_notifier.add(handle, func);
-	}
-	//! @brief		タスクを追加
-	void ImGuiRenderFeature::AddTask(RenderScene& scene, ImGuiHandle& handle, ImGuiDelegate func) {
-		if (auto feature = scene.findFeature<ImGuiRenderFeature>()) {
-			feature->addTask(handle, func);
-		}
-	}
-	void ImGuiRenderFeature::AddTask(RenderView& view, ImGuiHandle& handle, ImGuiDelegate func) {
-		AddTask(view.getScene(), handle, func);
-	}
-
-	//! @brief		タスクを実行
-	void ImGuiRenderFeature::executeTasks() {
-		m_notifier.invoke();
-	}
-
-
-
-	//! @brief		コンストラクタ
-	ImGuiRenderer::ImGuiRenderer(RenderView& view) 
-		: m_view(view)
-	{
+	ImGuiData::ImGuiData() {
 		initializeContext();
 		initializeResource();
 	}
 
 	//! @brief		デストラクタ
-	ImGuiRenderer::~ImGuiRenderer() {
+	ImGuiData::~ImGuiData() {
 		ImGui::SetCurrentContext(m_imguiContext);
 		ImPlot::SetCurrentContext(m_implotContext);
 
@@ -254,99 +294,10 @@ namespace ob::graphics {
 		ImGui::DestroyContext(m_imguiContext);
 	}
 
-	//! @brief		コンストラクタ
-	bool ImGuiRenderer::render(FG& fg, FGTexture& target) {
-
-		auto swapChain = m_view.getDisplay();
-		if (swapChain == nullptr)return false;
-		auto window = swapChain->getDesc().window;
-
-
-		// このビューのコンテキストを設定
-		ImGui::SetCurrentContext(m_imguiContext);
-		ImPlot::SetCurrentContext(m_implotContext);
-
-
-		// 更新
-		if (window) {
-			ImGui::GetIO().DisplaySize = { std::max<f32>(window.getSize().x,1),std::max<f32>(window.getSize().y,1) };
-			updateMouse(window);
-			updateKeyboard(window);
-		}
-		updateTime();
-
-		// 描画
-		ImGui::NewFrame();
-
-		if (auto feature = m_view.findFeature<ImGuiRenderFeature>()) {
-			feature->executeTasks();
-		}
-
-		ImGui::EndFrame();
-		ImGui::Render();
-
-		updateBuffer();
-		updateCommand();
-
-		auto swapChainSize = ::ImGui::GetDrawData()->DisplaySize;
-
-
-		struct ImGuiData {
-			FGTexture target;
-		};
-
-		auto& data = fg.addPass<ImGuiData>(
-			"ImGui",
-			[&](FGBuilder& builder, ImGuiData& data) {
-				data.target = builder.write(target);
-			},
-			[this, swapChainSize](const ImGuiData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
-
-				using namespace ob::rhi;
-
-				auto texture = resources.get(data.target);
-
-				cmdList->pushMarker("ImGui");
-
-
-				RenderPassDesc renderPass;
-				renderPass.colors.emplace_back(texture, RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
-
-				cmdList->beginRenderPass(renderPass);
-
-				cmdList->setPipelineState(m_pipeline);
-				cmdList->setVertexBuffer(m_vertexBuffer);
-				cmdList->setIndexBuffer(m_indexBuffer);
-
-				rhi::SetDescriptorTableParam param = { m_table,0 };
-				cmdList->setRootDesciptorTable(&param, 1);
-
-
-				for (auto& cmd : m_commands) {
-
-					// テクスチャ設定
-					SetDescriptorTableParam tables[] = {
-						{*(Ref<DescriptorTable>*)cmd.texture,0}
-					};
-
-					cmdList->setScissorRect(&cmd.rect, 1);
-					cmdList->setRootDesciptorTable(tables, std::size(tables));
-					cmdList->drawIndexed(cmd.param);
-				}
-
-				cmdList->endRenderPass();
-
-				cmdList->popMarker();
-			}
-		);
-
-		target = data.target;
-		return true;
-	}
 
 	//! @brief      コンテキストの初期化
 	//! @details	ImGuiとImPlotのコンテキストを生成し、必要なオプションを設定する。
-	void ImGuiRenderer::initializeContext() {
+	void ImGuiData::initializeContext() {
 
 		m_imguiContext = ::ImGui::CreateContext();
 		m_implotContext = ::ImPlot::CreateContext();
@@ -371,7 +322,7 @@ namespace ob::graphics {
 	//! @brief      リソースの初期化
 	//! @details	RootSignatureやシェーダはRenderFeatureで共用することも可能。
 	//!				実装をシンプルにするためView毎に生成しています。
-	void ImGuiRenderer::initializeResource() {
+	void ImGuiData::initializeResource() {
 
 		using namespace ob::rhi;
 
@@ -386,7 +337,7 @@ namespace ob::graphics {
 			OB_ASSERT_EXPR(m_signature);
 		}
 		{
-			m_table = DescriptorTable::Create({ m_layout});
+			m_table = DescriptorTable::Create({ m_layout });
 			OB_ASSERT_EXPR(m_table);
 		}
 
@@ -456,7 +407,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief      フォント画像生成
-	void ImGuiRenderer::initializeFont()
+	void ImGuiData::initializeFont()
 	{
 		ImGui::ScopedContext sc(m_imguiContext);
 		ImGuiIO& io = ::ImGui::GetIO();
@@ -491,7 +442,7 @@ namespace ob::graphics {
 		}
 
 		// グラフィックリソース生成
-		m_fontTexture = rhi::Texture::Create("ImGuiFont",TextureType::Texture2D, Size(width, height), colors);
+		m_fontTexture = rhi::Texture::Create("ImGuiFont", TextureType::Texture2D, Size(width, height), colors);
 		m_table->setResource(0, m_fontTexture);
 		m_table->setResource(1, Sampler::Default());
 
@@ -500,7 +451,48 @@ namespace ob::graphics {
 	}
 
 	//! @brief      マウス更新
-	void ImGuiRenderer::updateMouse(const platform::Window& window)
+	bool ImGuiData::update(RenderView& view) {
+
+		auto& camera = view.get<CameraRFData>();
+		auto& swapChain = camera.swapChain;
+
+		if (swapChain == nullptr) return false;
+		auto window = swapChain->getDesc().window;
+
+
+		// このビューのコンテキストを設定
+		ImGui::SetCurrentContext(m_imguiContext);
+		ImPlot::SetCurrentContext(m_implotContext);
+
+
+		// 更新
+		if (window) {
+			ImGui::GetIO().DisplaySize = { std::max<f32>(window.getSize().x,1),std::max<f32>(window.getSize().y,1) };
+			updateMouse(window);
+			updateKeyboard(window);
+		}
+		updateTime();
+
+		// 描画
+		ImGui::NewFrame();
+
+		if (auto feature = view.findFeature<ImGuiRenderFeature>()) {
+			feature->executeTasks();
+		}
+
+		ImGui::EndFrame();
+		ImGui::Render();
+
+		updateBuffer();
+		updateCommand();
+
+		auto swapChainSize = ::ImGui::GetDrawData()->DisplaySize;
+
+		return true;
+	}
+
+	//! @brief      マウス更新
+	void ImGuiData::updateMouse(const platform::Window& window)
 	{
 		using namespace ob::input;
 		using namespace ob::platform;
@@ -534,7 +526,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief      キーボード更新
-	void ImGuiRenderer::updateKeyboard(platform::Window& window) {
+	void ImGuiData::updateKeyboard(platform::Window& window) {
 
 		using namespace ob::input;
 
@@ -669,14 +661,15 @@ namespace ob::graphics {
 	}
 
 	//! @brief      時間更新
-	void ImGuiRenderer::updateTime()
+	void ImGuiData::updateTime()
 	{
 		auto& io = ::ImGui::GetIO();
 		auto now = DateTime::Now();
 		if (m_time == DateTime()) {
 			// 初回更新
 			io.DeltaTime = 1.0f / 60.0f;
-		} else {
+		}
+		else {
 			io.DeltaTime = std::max(std::abs(TimeSpan(now, m_time).secondsF()), 1.0f / 10000.0f);
 		}
 
@@ -684,7 +677,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief		バッファ更新
-	void ImGuiRenderer::updateBuffer() {
+	void ImGuiData::updateBuffer() {
 
 		using namespace ob::rhi;
 
@@ -763,7 +756,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief		バッファ更新
-	void ImGuiRenderer::updateCommand() {
+	void ImGuiData::updateCommand() {
 
 		// コマンド更新
 		m_commands.clear();
@@ -795,6 +788,117 @@ namespace ob::graphics {
 			globalIndexOffset += cmdList->IdxBuffer.Size;
 			globalVertexOffset += cmdList->VtxBuffer.Size;
 		}
+
+	}
+
+
+
+
+
+	//! @brief		コンストラクタ
+	ImGuiRenderFeature::ImGuiRenderFeature(RenderScene& scene)
+	{}
+
+	//! @brief		デストラクタ
+	ImGuiRenderFeature::~ImGuiRenderFeature() {}
+
+	//! @brief MaterialRenderFeature の描画パスをセットアップします。
+	void ImGuiRenderFeature::setupPasses(RenderPassBuilder& builder) const {
+		builder.add<ImGuiPass>();
+	}
+
+	//! @brief レンダービューのセットアップする
+	void ImGuiRenderFeature::setup(RenderView& view) {
+		view.get<ImGuiData>();
+	}
+
+	//! @brief		タスクを追加
+	void ImGuiRenderFeature::addTask(ImGuiHandle& handle, ImGuiDelegate func) {
+		m_notifier.add(handle, func);
+	}
+	//! @brief		タスクを追加
+	void ImGuiRenderFeature::AddTask(RenderScene& scene, ImGuiHandle& handle, ImGuiDelegate func) {
+		if (auto feature = scene.findFeature<ImGuiRenderFeature>()) {
+			feature->addTask(handle, func);
+		}
+	}
+	void ImGuiRenderFeature::AddTask(RenderView& view, ImGuiHandle& handle, ImGuiDelegate func) {
+		AddTask(view.getScene(), handle, func);
+	}
+
+	//! @brief		タスクを実行
+	void ImGuiRenderFeature::executeTasks() {
+		m_notifier.invoke();
+	}
+
+
+
+
+
+
+	//! @brief		コンストラクタ
+	ImGuiPass::ImGuiPass() {
+	}
+
+	//! @brief		デストラクタ
+	ImGuiPass::~ImGuiPass() {
+	}
+
+	//! @brief		コンストラクタ
+	ImGuiPass::Output ImGuiPass::render(FG& fg, RenderView& view, Input input) const {
+
+		auto& imgui = view.get<ImGuiData>();
+		
+		if (!imgui.update(view)) {
+			return { input.color };
+		}
+
+		return fg.addPass<Output>(
+			"ImGui",
+			[&](FGBuilder& builder, Output& output) {
+				output.color = builder.write(input.color);
+			},
+			[&](const Output& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+
+				using namespace ob::rhi;
+
+				auto& imgui = view.get<ImGuiData>();
+
+				auto texture = resources.getTexture(data.color);
+
+				cmdList->pushMarker("ImGui");
+
+
+				BeginPassParam pass;
+				pass.colors.emplace_back(texture, RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+
+				cmdList->beginRenderPass(pass);
+
+				cmdList->setPipelineState(imgui.m_pipeline);
+				cmdList->setVertexBuffer(imgui.m_vertexBuffer);
+				cmdList->setIndexBuffer(imgui.m_indexBuffer);
+
+				rhi::SetDescriptorTableParam param = { imgui.m_table,0 };
+				cmdList->setRootDesciptorTable(&param, 1);
+
+
+				for (auto& cmd : imgui.m_commands) {
+
+					// テクスチャ設定
+					SetDescriptorTableParam tables[] = {
+						{*(Ref<DescriptorTable>*)cmd.texture,0}
+					};
+
+					cmdList->setScissorRect(&cmd.rect, 1);
+					cmdList->setRootDesciptorTable(tables, std::size(tables));
+					cmdList->drawIndexed(cmd.param);
+				}
+
+				cmdList->endRenderPass();
+
+				cmdList->popMarker();
+			}
+		);
 
 	}
 

@@ -264,7 +264,7 @@ PsOut PS_Main(PsIn i) {
 
 			cmdList->begin();
 
-			RenderPassDesc renderPass;
+			BeginPassParam renderPass;
 			renderPass.colors.emplace_back(colorRT, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 			cmdList->beginRenderPass(renderPass);

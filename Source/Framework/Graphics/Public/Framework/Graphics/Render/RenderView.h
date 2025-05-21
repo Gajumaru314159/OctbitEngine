@@ -4,10 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
-#include <Framework/RHI/SwapChain.h>
+#include <Framework/Core/Reflection/AnyContainer.h>
 #include <Framework/Graphics/Render/RenderScene.h>
-#include <Framework/Graphics/Render/RenderPipeline.h>
 
 namespace ob::graphics {
 
@@ -17,7 +15,7 @@ namespace ob::graphics {
     public:
 
         //! @brief      コンストラクタ
-        RenderView(RenderScene& scene, StringView name);
+        RenderView(RenderScene& scene, StringView name,StringView pipeline);
 
         //! @brief      デストラクタ
         ~RenderView();
@@ -26,56 +24,39 @@ namespace ob::graphics {
         auto getScene() -> RenderScene& { return m_scene; }
         auto getScene() const -> const RenderScene&{ return m_scene; }
 
-        //! @brief      描画矩形を設定
-        void setRect(const Rect& rect);
-
-        //! @brief      描画矩形を取得
-        auto getRect()const->const Rect&;
-
-        //! @brief      描画サイズを取得
-        auto getRenderSize()const->Size;
-
-        //! @brief      描画矩形を取得
-        auto getScaledRect()const->IntRect;
-
-        //! @brief      ビューポートを取得
-        auto getViewport()const->Viewport;
-
-        //! @brief      描画先ディスプレイを設定する
-        void setDisplay(const Ref<SwapChain>& swapChain);
-
-        //! @brief      描画先ディスプレイを取得する
-        //! @details    描画先にRenderTextureが設定されている場合は空のオブジェクトが返されます。
-        auto getDisplay()const -> const Ref<rhi::SwapChain>;
-
-        //! @brief      描画先テクスチャを設定する
-        void setRenderTexture(const Ref<RenderTexture>& renderTexture);
-
-        //! @brief      描画先テクスチャを取得する
-        //! @details    描画先にDisplayが設定されている場合は内部的に生成されたRnderTextureが返されます。
-        auto getRenderTexture()const->const Ref<rhi::RenderTexture>;
-
-        //! @brief      ビューに使用するRenderPipelineを設定する
-        template<class T, class... Args>
-        void setPipeline(Args&&... args) {
-            m_pipeline = std::make_unique<T>(args...);
-        }
-
-        //! @brief      ビューに設定されたRenderPipelineを取得する
-        template<class T>
-        T* getPipeline() {
-            if (!m_pipeline)return nullptr;
-            if (m_pipeline->getType() != Type::Get<T>())return nullptr;
-            return reinterpret_cast<T*>(m_pipeline.get());
-        }
-
         //! @brief      描画
         void render(FG& fg);
 
-        //! @brief      解放時イベント
-        void addReleasedEvent(RenderViewEventHandle& handle, RenderViewEventDelegate func);
+        //! @brief 指定した型Tのインスタンスへの参照を取得します。
+        //! @tparam T 取得するインスタンスの型。
+        //! @return 型Tのインスタンスへの参照。
+        template<class T>
+        auto get() -> std::enable_if_t<std::is_default_constructible<T>::value, T&> {
+            return m_container.get<T>();
+        }
 
-    public:
+        //! @brief 指定した型のインスタンスへの定数参照を取得します。
+        //! @tparam T 取得するインスタンスの型。
+        //! @return 型Tのインスタンスへのconst参照。指定した型がコンテナに存在しない場合はアサートに失敗します。
+        template<class T>
+        auto get() const -> std::enable_if_t<std::is_default_constructible<T>::value, const T&> {
+            return m_container.get<T>();
+        }
+
+        //! @brief 指定した型の要素がコンテナに含まれているかどうかを判定します。
+        //! @tparam T 検索する要素の型。
+        //! @return 指定した型の要素がコンテナに含まれていれば true、そうでなければ false を返します。
+        template<class T>
+        bool contains() const {
+            return m_container.contains<T>();
+        }
+
+        //! @brief 指定された型がコンテナに含まれているかどうかを判定します。
+        //! @param type 検索対象となる型の参照。
+        //! @return 型がコンテナに含まれていれば true、そうでなければ false を返します。
+        bool contains(const Type& type) const {
+            return m_container.contains(type);
+        }
 
         //! @brief      RenderFeatureを見つける
         template<class T> T* findFeature()const;
@@ -83,18 +64,10 @@ namespace ob::graphics {
 
     private:
         void clearTarget();
-        void onSceneReleased(RenderScene& scene);
-		void onDisplayUpdated();
     private:
         String                  m_name;
-        Rect                    m_rect;
         RenderScene&            m_scene;
-        Ref<SwapChain>          m_swapChain;
-        SwapChainEventHandle    m_hDisplayUpdated;
-        Ref<RenderTexture>      m_renderTexture;
-        UPtr<RenderPipeline>    m_pipeline;
-        RenderSceneEventHandle  m_hRelease;
-        RenderViewEventNotifier m_releasedNotifier;
+        AnyContainer            m_container;
     };
 
     template<class T>

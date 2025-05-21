@@ -66,7 +66,7 @@ namespace ob::graphics {
 		MaterialBlock* view = nullptr;
 		
 		MaterialBlockSet();
-		MaterialBlockSet(MaterialRenderer& renderer);
+		MaterialBlockSet(RenderView& scene);
 		MaterialBlockSet(RenderScene& scene);
 	};
 

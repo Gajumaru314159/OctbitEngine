@@ -8,7 +8,7 @@
 namespace ob::graphics {
 
     //! @brief      FrameGraphダミーインスタンス
-    class FGDummyInstance{
+    class FGDummy{
     public:
         using Desc = int;
 

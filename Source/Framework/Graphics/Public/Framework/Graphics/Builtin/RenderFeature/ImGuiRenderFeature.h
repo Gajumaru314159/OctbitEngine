@@ -6,11 +6,7 @@
 #pragma once
 #include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
-#include <Framework/Platform/Window.h>
-
-#include <Framework/RHI/CommandList.h>
-#include <Plugins/ImGui/Library/imgui.h>
-#include <Plugins/ImGui/Library/implot.h>
+#include <Framework/Graphics/Render/RenderPass.h>
 
 namespace ob::graphics {
 
@@ -24,6 +20,12 @@ namespace ob::graphics {
 
 		ImGuiRenderFeature(RenderScene& scene);
 		virtual ~ImGuiRenderFeature();
+
+		//! @brief MaterialRenderFeature の描画パスをセットアップします。
+		void setupPasses(RenderPassBuilder&) const override;
+
+		//! @brief レンダービューのセットアップする
+		void setup(RenderView& view) override;
 
 		//! @brief		タスクを追加
 		void addTask(ImGuiHandle& handle, ImGuiDelegate func);
@@ -44,77 +46,33 @@ namespace ob::graphics {
 
 
 	//! @brief		RenderView毎のImGui描画処理
-	class ImGuiRenderer {
+	class ImGuiPass : public RenderPass {
+	public:
+		struct Input {
+			FGResource color;
+
+			void connect(FGConnections& connections) {
+				color = connections.get("ImGuiPass.color");
+			}
+		};
+		struct Output {
+			FGResource color;
+
+			void connect(FGConnections& connections) {
+				connections.set("ImGuiPass.color", color);
+			}
+		};
 	public:
 		OB_RTTI();
 
 		//! @brief		コンストラクタ
-		ImGuiRenderer(RenderView& view);
+		ImGuiPass();
 
 		//! @brief		デストラクタ
-		~ImGuiRenderer();
+		~ImGuiPass();
 
 		//! @brief		描画
-		bool render(FG& fg, FGTexture& target);
-
-	private:
-
-		//! @brief      コンテキストの初期化
-		//! @details	ImGuiとImPlotのコンテキストを生成し、必要なオプションを設定する。
-		void initializeContext();
-
-		//! @brief      リソースの初期化
-		//! @details	RootSignatureやシェーダはRenderFeatureで共用することも可能。
-		//!				実装をシンプルにするためView毎に生成しています。
-		void initializeResource();
-
-		//! @brief      フォント画像生成
-		void initializeFont();
-
-		//! @brief      マウス更新
-		void updateMouse(const platform::Window& window);
-
-		//! @brief      キーボード更新
-		void updateKeyboard(platform::Window& window);
-
-		//! @brief      時間更新
-		void updateTime();
-
-		//! @brief		バッファ更新
-		void updateBuffer();
-
-		//! @brief		バッファ更新
-		void updateCommand();
-
-	private:
-
-		RenderView&					m_view;
-
-		struct DrawCommand {
-			IntRect					rect;
-			ImTextureID				texture;
-			rhi::DrawIndexedParam	param;
-		};
-
-		ImGuiContext* m_imguiContext;
-		ImPlotContext* m_implotContext;
-		void* m_fontBlob = nullptr;
-
-		ob::core::DateTime          m_time;
-
-		Vector<DrawCommand>			m_commands;
-
-		size_t						m_vertexCount = 0;
-		size_t                      m_indexCount = 0;
-
-		Ref<rhi::DescriptorLayout>	m_layout;
-		Ref<rhi::DescriptorTable>   m_table;
-		Ref<rhi::RootSignature>		m_signature;
-		Ref<rhi::PipelineState>		m_pipeline;
-		Ref<rhi::Buffer>			m_vertexBuffer;
-		Ref<rhi::Buffer>			m_indexBuffer;
-		Ref<rhi::Buffer>            m_constantBuffer;
-		Ref<rhi::Texture>           m_fontTexture;
+		Output render(FG& fg, RenderView& view, Input input) const;
 	};
 
 }

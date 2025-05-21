@@ -9,16 +9,16 @@
 
 namespace ob::graphics {
 
-	void FGBufferInstance::create(const Desc& desc, void* allocator) {
+	void FGBuffer::create(const Desc& desc, void* allocator) {
 		OB_ASSERT_EXPR(allocator);
 		instance = static_cast<FGResourcePool*>(allocator)->createBuffer(desc);
 	}
-	void FGBufferInstance::destroy(const Desc& desc, void* allocator) {
+	void FGBuffer::destroy(const Desc& desc, void* allocator) {
 		OB_ASSERT_EXPR(allocator);
 		OB_ASSERT_EXPR(instance);
 		static_cast<FGResourcePool*>(allocator)->destroyBuffer(desc, instance);
 	}
-	std::string FGBufferInstance::toString(const Desc& desc) {
+	std::string FGBuffer::toString(const Desc& desc) {
 		auto str = Format(
 			"Name  :{}\n"
 			"Type  :{}\n"

@@ -80,7 +80,7 @@ namespace ob::rhi {
 
 
 	//! @brief レンダーパスを開始する 
-	void VulkanCommandList::beginRenderPass(const RenderPassDesc& param) {
+	void VulkanCommandList::beginRenderPass(const BeginPassParam& param) {
 
 		clearRenderTargets();
 

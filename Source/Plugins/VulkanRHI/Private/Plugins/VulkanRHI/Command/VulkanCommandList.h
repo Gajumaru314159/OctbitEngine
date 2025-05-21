@@ -49,7 +49,7 @@ namespace ob::rhi {
         //! @brief      記録終了
         void flush() override;
 
-        void beginRenderPass(const RenderPassDesc& param) override;
+        void beginRenderPass(const BeginPassParam& param) override;
         // virtual void nextSubpass();
         void endRenderPass() override;
 

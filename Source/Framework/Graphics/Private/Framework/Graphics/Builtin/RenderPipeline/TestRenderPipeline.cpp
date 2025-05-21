@@ -3,6 +3,7 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#if 0
 #include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/Graphics/Render/RenderView.h>
@@ -41,6 +42,14 @@ namespace ob::graphics {
         , m_imgui(view)
     {
     }
+
+    void TestRenderPipeline::setup(RenderView& view) {
+        m_view.getScene().visit([&](RenderFeature& feature) { feature.setup(view); });
+        setup<MaterialRenderFeature>(view);
+        setup<CameraRenderFeature>(view);
+        setup<LightRenderFeature>(view);
+    }
+
     FGTexture TestRenderPipeline::render(FG& fg) {
 
         // ソート設定
@@ -98,3 +107,4 @@ namespace ob::graphics {
     }
 
 }
+#endif

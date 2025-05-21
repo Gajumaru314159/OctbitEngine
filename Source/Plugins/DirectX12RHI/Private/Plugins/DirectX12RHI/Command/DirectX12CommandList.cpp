@@ -120,7 +120,7 @@ namespace ob::rhi {
 	}
 
 	//! @brief      RenderPass開始
-	void DirectX12CommandList::beginRenderPass(const RenderPassDesc& param) {
+	void DirectX12CommandList::beginRenderPass(const BeginPassParam& param) {
 
 		clearRenderTargets();
 

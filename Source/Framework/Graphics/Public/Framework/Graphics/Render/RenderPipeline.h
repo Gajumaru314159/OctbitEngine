@@ -5,23 +5,14 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/Render/RenderScene.h>
+#include <Framework/Graphics/Render/RenderPassBuilder.h>
 
 namespace ob::graphics {
 
-	//! @brief      描画パイプライン
-	//! @ref 		RenderPipeline
-	class RenderPipeline {
-	public:
-
-		OB_RTTI();
-
-		//! @brief      デストラクタ
-		virtual ~RenderPipeline() = default;
-
-		//! @brief      描画
-		virtual FGTexture render(FG&) = 0;
-
+	struct RenderPipeline {
+		String						name;
+		RenderPassBuilder			builer;
+		Vector<RenderView*>			views;
 	};
 
 }

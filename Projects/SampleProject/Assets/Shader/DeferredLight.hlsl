@@ -28,8 +28,6 @@ struct MaterialProps {
 	SamplerHandle NormalSmp;
 	TextureHandle DepthTex;
 	SamplerHandle DepthSmp;
-	TextureHandle UVTex;
-	SamplerHandle UVSmp;
 	int GBuffer;
 };
 struct GlobalProps {
@@ -94,15 +92,10 @@ PsOut PS_Main(PsIn i){
 	
 	Texture2D g_depthTex = ResourceDescriptorHeap[mparam.DepthTex.index];
 	SamplerState g_depthSmp = ResourceDescriptorHeap[mparam.DepthSmp.index];
-	
-	Texture2D g_uvTex = ResourceDescriptorHeap[mparam.UVTex.index];
-	SamplerState g_uvSmp = ResourceDescriptorHeap[mparam.UVSmp.index];
-
 
     float4 albedo = g_mainTex.Sample(g_mainSmp,i.uv);
     float4 normal = g_normalTex.Sample(g_normalSmp,i.uv)*0.5+0.5;
     float4 depth = g_depthTex.Sample(g_depthSmp,i.uv) / 0.003;
-    float4 uv = g_uvTex.Sample(g_uvSmp,i.uv);
     
 	if(mparam.GBuffer==0){
 		float factor = max(dot(float3(0,1,0),normal.xyz * 2 - 1),0) * 0.5 + 0.5;
@@ -112,8 +105,6 @@ PsOut PS_Main(PsIn i){
 	} else if(mparam.GBuffer==2){
 		o.color.xyz = float3(1.0,1.0,1.0)*depth.x;
 		o.color.w = 1.0;
-	} else if(mparam.GBuffer==3){
-		o.color = uv;
 	}
     return o;
 }

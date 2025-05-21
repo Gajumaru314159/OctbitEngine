@@ -5,8 +5,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Graphics/Render/RenderFeature.h>
-#include <Framework/Graphics/FrameGraph/FG.h>
-
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>
@@ -35,13 +33,21 @@ namespace ob::graphics {
 		Invalid = 0,
 	};
 
+
+	struct MaterialRFData {
+		MaterialBlock block;
+	};
+
 	//! @brief      マテリアル描画機能
 	class MaterialRenderFeature : public RenderFeature {
 	public:
 
 		OB_RTTI();
 
-		MaterialRenderFeature();
+		MaterialRenderFeature(RenderScene& scene);
+
+		//! @brief MaterialRenderFeature の描画パスをセットアップします。
+		void setupPasses(RenderPassBuilder&) const override;
 
 		//! @brief      描画アイテムを追加
 		MaterialId addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material);

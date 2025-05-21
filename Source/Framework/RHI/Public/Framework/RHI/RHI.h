@@ -75,9 +75,6 @@ namespace ob::rhi {
         virtual Ref<DescriptorLayout>       createDescriptorLayout(const DescriptorLayoutDesc& desc) { return nullptr; }
         virtual Ref<DescriptorTable>        createDescriptorTable(const DescriptorTableDesc& desc) { return nullptr; }
 
-        virtual Ref<RenderPass>             createRenderPass(const RenderPassDesc& desc) { return nullptr; }
-
-
         virtual Ref<GraphicFileHandle>      createGraphicFileHandle(StringView path) { return nullptr; }
         virtual Ref<GraphicFileEvent>       createGraphicFileEvent() { return nullptr; }
         virtual Ref<GraphicFileQueue>       createGraphicFileQueue(const GraphicFileQueueDesc&) { return nullptr; }

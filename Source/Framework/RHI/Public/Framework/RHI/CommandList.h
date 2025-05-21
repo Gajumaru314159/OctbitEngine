@@ -26,7 +26,7 @@ namespace ob::rhi {
         virtual void end() = 0;
         virtual void flush() = 0;
 
-        virtual void beginRenderPass(const RenderPassDesc& param) = 0;
+        virtual void beginRenderPass(const BeginPassParam& param) = 0;
         virtual void endRenderPass() = 0;
 
         virtual void applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture) = 0;

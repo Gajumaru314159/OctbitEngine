@@ -55,11 +55,15 @@ namespace ob::graphics {
 		global = &MaterialSystem::Instance().getGlobalBlock();
 	}
 
-	MaterialBlockSet::MaterialBlockSet(MaterialRenderer& renderer)
+	MaterialBlockSet::MaterialBlockSet(RenderView& view)
 	{
-		global = &renderer.getGlobalBlock();
-		scene = &renderer.getSceneBlock();
-		view = &renderer.getViewBlock();
+		global = &MaterialSystem::Instance().getGlobalBlock();
+		if (auto feature = view.findFeature<MaterialRenderFeature>()) {
+			scene = &feature->getSceneBlock();
+		}
+		if (view.contains<MaterialRFData>()) {
+			this->view = &view.get<MaterialRFData>().block;
+		}
 	}
 
 	MaterialBlockSet::MaterialBlockSet(RenderScene& scene)

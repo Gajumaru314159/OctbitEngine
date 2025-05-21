@@ -9,7 +9,7 @@
 namespace ob::graphics {
 
     //! @brief      FrameGraph中間テクスチャ
-    class FGTextureInstance {
+    class FGTexture {
     public:
         using Desc = rhi::RenderTextureDesc;
 

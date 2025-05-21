@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Template/Utility/Memory.h>
+#include <assert.h>
 
 namespace ob::core {
 
@@ -43,6 +44,18 @@ namespace ob::core {
         //! @brief  ポインタアクセス(const)
         const T* operator ->()const noexcept {
             return m_impl.get();
+        }
+
+		//! @brief  参照アクセス
+        T& operator *() noexcept {
+			assert(m_impl != nullptr);
+            return *m_impl;
+		}
+
+		//! @brief  参照アクセス(const)
+        const T& operator *()const noexcept {
+            assert(m_impl != nullptr);
+            return *m_impl;
         }
 
         //! @brief  ポインタアクセス

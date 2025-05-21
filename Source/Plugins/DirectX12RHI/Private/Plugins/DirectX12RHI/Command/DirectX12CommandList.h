@@ -49,7 +49,7 @@ namespace ob::rhi {
          void flush() override;
 
 		 //! @brief      RenderPass開始
-         void beginRenderPass(const RenderPassDesc& param) override;
+         void beginRenderPass(const BeginPassParam& param) override;
 
          //! @brief RenderPass終了
          void endRenderPass() override;
@@ -111,7 +111,7 @@ namespace ob::rhi {
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;
         ComPtr<ID3D12GraphicsCommandList6> m_cmdList;
 
-        RenderPassDesc m_currentRenderPass;
+        BeginPassParam m_currentRenderPass;
 
         RenderTargetArray m_colorTextures;                      // 現在の描画ターゲット(クリア用)
         Ref<RenderTexture> m_depthTexture;                      // 現在の描画ターゲット(クリア用)

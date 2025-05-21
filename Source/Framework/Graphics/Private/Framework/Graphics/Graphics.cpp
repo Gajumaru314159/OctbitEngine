@@ -10,6 +10,7 @@
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/System.h>
+#include <Framework/Graphics/FrameGraph/FGResourcePool.h>
 
 namespace ob::graphics {
 
@@ -61,7 +62,7 @@ namespace ob::graphics {
 
 		// NOTE ENQUEUE_RENDER_COMMANDのようなカスタムコマンド実行を仕込む？そもそものFrameGraphもENQUEUE_RENDER_COMMANDで追加しても良いかも
 
-		m_fgResourcePool.update();
+		m_fgResourcePool->update();
 
 		m_fg = std::make_unique<FG>();
 
@@ -83,7 +84,7 @@ namespace ob::graphics {
 		auto commandList = m_commandLists.current();
 
 		commandList->begin();
-		m_fg->execute(commandList, m_fgResourcePool);
+		m_fg->execute(commandList, *m_fgResourcePool);
 		commandList->end();
 		commandList->flush();
 

@@ -9,16 +9,16 @@
 
 namespace ob::graphics {
 
-	void FGTextureInstance::create(const Desc& desc, void* allocator) {
+	void FGTexture::create(const Desc& desc, void* allocator) {
 		OB_ASSERT_EXPR(allocator);
 		instance = static_cast<FGResourcePool*>(allocator)->createTexture(desc);
 	}
-	void FGTextureInstance::destroy(const Desc& desc, void* allocator) {
+	void FGTexture::destroy(const Desc& desc, void* allocator) {
 		OB_ASSERT_EXPR(allocator);
 		OB_ASSERT_EXPR(instance);
 		static_cast<FGResourcePool*>(allocator)->destroyTexture(desc,instance);
 	}
-	std::string FGTextureInstance::toString(const Desc& desc) {
+	std::string FGTexture::toString(const Desc& desc) {
 		bool isColorFormat = !(TextureFormatUtility::HasDepth(desc.format) || TextureFormatUtility::HasStencil(desc.format));
 		auto str = Format(
 			"Name  :{}\n"

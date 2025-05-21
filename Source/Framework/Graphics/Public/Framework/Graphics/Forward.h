@@ -12,10 +12,14 @@ namespace ob::graphics {
 
 	class FG;
 
+	struct RenderSceneDesc;
+
 	class RenderFeature;
 	class RenderPipeline;
 	class RenderScene;
 	class RenderView;
+	class RenderPass;
+	class RenderPassBuilder;
 
 	class Mesh;
 	class Material;

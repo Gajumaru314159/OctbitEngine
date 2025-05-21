@@ -93,7 +93,6 @@ int TestDirectX12() {
 
 	MaterialPropertiesSetDesc props;
 	props.merge(CameraRenderFeature::GetProperties());
-	props.merge(LightRenderFeature::GetProperties());
 	MaterialSystemDesc materialSystemDesc;
 	materialSystemDesc.properties = props;
 
@@ -102,14 +101,37 @@ int TestDirectX12() {
 
 
 	// 描画オブジェクト生成
-	RenderScene scene;
-	RenderView view(scene, "Test");
-	scene.addFeature<ImGuiRenderFeature>(scene);
-	auto& materialRT = scene.addFeature<MaterialRenderFeature>();
-	scene.addFeature<CameraRenderFeature>(materialRT);
-	scene.addFeature<LightRenderFeature>(materialRT);
-	view.setDisplay(swapChain);
-	view.setPipeline<TestRenderPipeline>(view);
+	RenderSceneDesc sdesc;
+	sdesc.features.add<ImGuiRenderFeature>();
+	sdesc.features.add<MaterialRenderFeature>();
+	sdesc.features.add<CameraRenderFeature>();
+	sdesc.pipelines = {
+		{
+			"MainPipeline",
+			{
+				{"EarlyZPass.albedo", "OpaquePass.albedo"},
+				{"EarlyZPass.normal", "OpaquePass.normal"},
+				{"EarlyZPass.depth", "OpaquePass.depth"},
+
+				{"OpaquePass.albedo", "MaskedPass.albedo"},
+				{"OpaquePass.normal", "MaskedPass.normal"},
+				{"OpaquePass.depth", "MaskedPass.depth"},
+
+				{"MaskedPass.albedo", "DeferredPass.albedo"},
+				{"MaskedPass.normal", "DeferredPass.normal"},
+				{"MaskedPass.depth", "DeferredPass.depth"},
+
+				{"DeferredPass.color", "ImGuiPass.color"},
+
+				{"ImGuiPass.color", "CameraPass.color"},
+			}
+		}
+	};
+
+
+	RenderScene scene(sdesc);
+	RenderView view(scene, "Test","MainPipeline");
+	view.get<CameraRFData>().setSwapChain(swapChain);
 
 	// シーン生成
 	auto world = World::Create("MainWorld");
@@ -163,17 +185,6 @@ int TestDirectX12() {
 		[&] {
 			//reflectionExplorer.draw();
 			outliner.draw(*world);
-
-			if (ImGui::Begin("Debug")) {
-				if (auto pipeline = view.getPipeline<TestRenderPipeline>()) {
-					if (ImGui::SliderInt("Mode", &debugMode, 0, 3)) {
-						pipeline->setDebugMode(debugMode);
-					}
-				}
-
-			}
-
-			ImGui::End();
 		}
 	);
 

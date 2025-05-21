@@ -4,43 +4,56 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
+#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
 #include <Framework/Graphics/Material/Material.h>
-#include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
+
+using namespace ob::rhi;
 
 namespace ob::graphics {
 
-	EarlyZRenderer::EarlyZRenderer(RenderView& view, MaterialRenderer& material)
-		: m_view(view)
-		, m_materialRenderer(material)
-	{
+	EarlyZPass::EarlyZPass() {
 
 	}
 
-	bool EarlyZRenderer::render(FG& fg, FGBlackboard& blackboard)const {
+	EarlyZPass::Output EarlyZPass::render(FG& fg, RenderView& view, Input input)const {
 
-		auto& gbuffer = blackboard.get<GBufferData>();
+		return fg.addPass<Output>(
+			"EarlyZPass",
+			[&](FGBuilder& builder, Output& output) {
 
-		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
-			"EarlyZ",
-			[&](FGBuilder& builder, GBufferData& data) {
-				data.albedo = builder.write(gbuffer.albedo);
-				data.normal = gbuffer.normal;
-				data.depth = builder.write(gbuffer.depth);
-				data.uv = gbuffer.uv;
+				rhi::RenderTextureDesc desc;
+				desc.size = view.get<CameraRFData>().output->size();
+				{
+					desc.name = "Albedo";
+					desc.format = rhi::TextureFormat::RGBA8;
+					desc.clear.color = Color::Black;
+					output.albedo = builder.write(builder.create(desc));
+				}
+				{
+					desc.name = "Normal";
+					desc.format = rhi::TextureFormat::RGBA8;
+					desc.clear.color = Color::Normal;
+					output.normal = builder.write(builder.create(desc));
+				}
+				{
+					desc.name = "Depth";
+					desc.format = rhi::TextureFormat::D32;
+					output.depth = builder.write(builder.create(desc));
+				}
 			},
-			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
-				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
+			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+				if (auto feature = view.findFeature<MaterialRenderFeature>()) {
 
-					MaterialBlockSet blocks(m_materialRenderer);
+					MaterialBlockSet blocks(view);
 
 					cmdList->pushMarker("EarlyZ");
 
-					RenderPassDesc renderPass;
-					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::NoAccess, RenderPassAfterAccessType::NoAccess);
-					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
+					BeginPassParam param;
+					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::NoAccess, RenderPassAfterAccessType::NoAccess);
+					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
-					cmdList->beginRenderPass(renderPass);
+					cmdList->beginRenderPass(param);
 
 					feature->render(cmdList,blocks,"EarlyZ");
 
@@ -51,44 +64,36 @@ namespace ob::graphics {
 			}
 		);
 
-		return true;
 	}
 
 	//--------------------------------
 
-	OpaqueRenderer::OpaqueRenderer(RenderView& view, MaterialRenderer& material)
-		: m_view(view)
-		, m_materialRenderer(material)
-	{
+	OpaquePass::OpaquePass() {
 
 	}
 
-	bool OpaqueRenderer::render(FG& fg, FGBlackboard& blackboard)const {
+	OpaquePass::Output OpaquePass::render(FG& fg, RenderView& view, Input input)const {
 
-		auto& gbuffer = blackboard.get<GBufferData>();
-
-		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
+		return fg.addPass<Output>(
 			"Opaque",
-			[&](FGBuilder& builder, GBufferData& data) {
-				data.albedo = builder.write(gbuffer.albedo);
-				data.normal = builder.write(gbuffer.normal);
-				data.depth = builder.write(gbuffer.depth);
-				data.uv = builder.write(gbuffer.uv);
+			[&](FGBuilder& builder, Output& output) {
+				output.albedo = builder.write(input.albedo);
+				output.normal = builder.write(input.normal);
+				output.depth = builder.read(input.depth);
 			},
-			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
-				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
+			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+				if (auto feature = view.findFeature<MaterialRenderFeature>()) {
 
 					cmdList->pushMarker("Opaque");
 
-					RenderPassDesc renderPass;
-					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
-					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
-					renderPass.colors.emplace_back(resources.get(data.uv), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
-					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
+					BeginPassParam param;
+					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					param.colors.emplace_back(resources.getTexture(output.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
-					cmdList->beginRenderPass(renderPass);
+					cmdList->beginRenderPass(param);
 
-					MaterialBlockSet blocks(m_materialRenderer);
+					MaterialBlockSet blocks(view);
 					feature->render(cmdList,blocks,"Opaque");
 
 					cmdList->endRenderPass();
@@ -98,47 +103,36 @@ namespace ob::graphics {
 			}
 		);
 
-		return true;
 	}
 
 	//--------------------------------
 
-	MaskedRenderer::MaskedRenderer(RenderView& view, MaterialRenderer& material)
-		: m_view(view)
-		, m_materialRenderer(material)
-	{
+	MaskedPass::MaskedPass() {
 
 	}
 
-	bool MaskedRenderer::render(FG& fg, FGBlackboard& blackboard)const {
+	MaskedPass::Output MaskedPass::render(FG& fg, RenderView& view, Input input)const {
 
-		auto& gbuffer = blackboard.get<GBufferData>();
-
-		blackboard.get<GBufferData>() = fg.addPass<GBufferData>(
+		return fg.addPass<Output>(
 			"Masked",
-			[&](FGBuilder& builder, GBufferData& data) {
-				rhi::RenderTextureDesc desc;
-				desc.size = m_view.getRenderSize();
-
-				data.albedo = builder.write(gbuffer.albedo);
-				data.normal = builder.write(gbuffer.normal);
-				data.depth = builder.write(gbuffer.depth);
-				data.uv = builder.write(gbuffer.uv);
-
+			[&](FGBuilder& builder, Output& output) {
+				output.albedo = builder.write(input.albedo);
+				output.normal = builder.write(input.normal);
+				output.depth = builder.read(input.depth);
 			},
-			[=](const GBufferData& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
-				if (auto feature = m_view.findFeature<MaterialRenderFeature>()) {
+			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+				if (auto feature = view.findFeature<MaterialRenderFeature>()) {
 
 					cmdList->pushMarker("Masked");
 
-					RenderPassDesc renderPass;
-					renderPass.colors.emplace_back(resources.get(data.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
-					renderPass.colors.emplace_back(resources.get(data.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
-					renderPass.depth = { resources.get(data.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
+					BeginPassParam param;
+					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					param.colors.emplace_back(resources.getTexture(output.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
-					cmdList->beginRenderPass(renderPass);
+					cmdList->beginRenderPass(param);
 
-					MaterialBlockSet blocks(m_materialRenderer);
+					MaterialBlockSet blocks(view);
 					feature->render(cmdList,blocks,"Masked");
 
 					cmdList->endRenderPass();
@@ -148,15 +142,11 @@ namespace ob::graphics {
 			}
 		);
 
-		return true;
 	}
 
 	//----
 
-	DefferedLightRenderer::DefferedLightRenderer(RenderView& view, MaterialRenderer& material)
-		: m_view(view)
-		, m_materialRenderer(material)
-	{
+	DeferredPass::DeferredPass() {
 		m_material = [&] {
 
 			auto code = File::ReadAllText("Assets/Shader/DeferredLight.hlsl");
@@ -164,7 +154,7 @@ namespace ob::graphics {
 
 			MaterialDesc desc;
 			desc.name = "DeferredLight";
-			desc.textures= { "Main" ,"Normal","Depth" ,"UV" };
+			desc.textures= { "Main" ,"Normal","Depth" };
 			desc.integers = { "GBuffer" };
 
 			MaterialPass& pass = desc.passes["PostProcess"];
@@ -206,53 +196,42 @@ namespace ob::graphics {
 
 	}
 
-	bool DefferedLightRenderer::render(FG& fg, FGBlackboard& blackboard,FGTexture& accumulate)const {
 
-		IntRect rect = m_view.getScaledRect();
+	DeferredPass::Output DeferredPass::render(FG& fg, RenderView& view, Input input)const {
 
-		auto& gbuffer = blackboard.get<GBufferData>();
+		return fg.addPass<Output>(
+			"DeferredPass",
+			[&](FGBuilder& builder, Output& output) {
+				output.albedo = builder.read(input.albedo);
+				output.normal = builder.read(input.normal);
+				output.depth = builder.read(input.depth);
 
-		struct Data {
-			// in
-			FGTexture albedo;
-			FGTexture normal;
-			FGTexture depth;
-			FGTexture uv;
-			// out
-			FGTexture accumulate;
-		};
-
-		auto& data = fg.addPass<Data>(
-			"Deffered Lighting",
-			[&](FGBuilder& builder, Data& data) {
 				rhi::RenderTextureDesc desc;
-				desc.size = m_view.getRenderSize();
-
-				data.albedo = builder.read(gbuffer.albedo);
-				data.normal = builder.read(gbuffer.normal);
-				data.depth = builder.read(gbuffer.depth);
-				data.uv = builder.read(gbuffer.uv);
-				data.accumulate = builder.write(accumulate);
+				desc.size = view.get<CameraRFData>().output->size();
+				{
+					desc.name = "Color";
+					desc.format = rhi::TextureFormat::RGBA8;
+					desc.clear.color = Color::Black;
+					output.color= builder.write(builder.create(desc));
+				}
 			},
-			[=](const Data& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 
 				cmdList->pushMarker("Deffered Lighting");
 
-				auto albedo = resources.get(data.albedo);
-				auto normal = resources.get(data.normal);
-				auto depth = resources.get(data.depth);
-				auto uv = resources.get(data.uv);
+				auto albedo = resources.getTexture(output.albedo);
+				auto normal = resources.getTexture(output.normal);
+				auto depth = resources.getTexture(output.depth);
 				m_material->setTexture("Main", albedo);
 				m_material->setTexture("Normal", normal);
 				m_material->setTexture("Depth", depth);
-				m_material->setTexture("UV", uv);
 
-				RenderPassDesc renderPass;
-				renderPass.colors.emplace_back(resources.get(data.accumulate), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+				BeginPassParam param;
+				param.colors.emplace_back(resources.getTexture(output.color), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
-				cmdList->beginRenderPass(renderPass);
+				cmdList->beginRenderPass(param);
 
-				MaterialBlockSet blocks(m_materialRenderer);
+				MaterialBlockSet blocks(view);
 				m_material->record(cmdList, blocks, m_mesh, 0, "PostProcess");
 
 				cmdList->endRenderPass();
@@ -262,12 +241,6 @@ namespace ob::graphics {
 			}
 		);
 
-		accumulate = data.accumulate;
-
-		return true;
 	}
 
-	void DefferedLightRenderer::setDebugMode(s32 mode) {
-		m_material->setInteger("GBuffer", mode);
-	}
 }

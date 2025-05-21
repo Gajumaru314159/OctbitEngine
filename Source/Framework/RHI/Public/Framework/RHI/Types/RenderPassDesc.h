@@ -56,7 +56,7 @@ namespace ob::rhi {
     using RenderPassTargetDescArray = FixedVector<RenderPassTargetDesc, RENDER_TARGET_MAX>;
 
     //! レンダーパス定義
-    struct RenderPassDesc {
+    struct BeginPassParam {
         RenderPassTargetDescArray colors;
         RenderPassTargetDesc depth;
         RenderPassTargetDesc stencil;

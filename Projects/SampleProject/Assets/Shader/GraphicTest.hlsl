@@ -87,7 +87,6 @@ struct PsIn {
 struct PsOut {
   float4 albedo	:SV_TARGET0; // Albedo Occlusion
   float4 normal	:SV_TARGET1; // Metalic Specular Roughness
-  float4 uv	    :SV_TARGET2; // WorldNormal
 };
 
 // ƒGƒ“ƒgƒŠ
@@ -127,6 +126,6 @@ PsOut PS_Main(PsIn i){
 	float3 tn = g_normalTex.Sample(g_normalSmp, i.uv).xyz * 2.0 - 1.0;
 	float3 n = tn.x * i.binormal + tn.y * i.tangent + tn.z * i.normal;
 	o.normal = float4(normalize(n) * 0.5 + 0.5,1.0);
-    o.uv = float4(i.uv,0,1);
+
     return o;
 }

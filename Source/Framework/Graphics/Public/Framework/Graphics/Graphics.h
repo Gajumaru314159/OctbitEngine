@@ -8,9 +8,8 @@
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Core/Utility/Swapper.h>
 #include <Framework/Core/Utility/HandleManager.h>
-
-#include <Framework/Graphics/FrameGraph/FGResourcePool.h>
 #include <Framework/Graphics/FrameGraph/FG.h>
+#include <Framework/Graphics/FrameGraph/FGDataWriter.h>
 
 
 namespace ob::graphics {
@@ -67,7 +66,7 @@ namespace ob::graphics {
 
         Swapper<Ref<rhi::CommandList>> m_commandLists;
 
-        FGResourcePool m_fgResourcePool;
+        Pimpl<FGResourcePool> m_fgResourcePool;
 
         Vector<RenderScene*> m_scenes;
     };

@@ -397,7 +397,7 @@ namespace ob::rhi {
 
 
 
-			RenderPassDesc renderPass;
+			BeginPassParam renderPass;
 			renderPass.colors.emplace_back(m_textures.current(), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 			cmdList.beginRenderPass(renderPass);
