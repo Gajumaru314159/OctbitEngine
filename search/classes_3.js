@@ -1,7 +1,7 @@
 var searchData=
 [
   ['datetime_0',['DateTime',['../dd/de7/structob_1_1core_1_1_date_time.html',1,'ob::core']]],
-  ['defferedlightrenderer_1',['DefferedLightRenderer',['../d8/d91/classob_1_1graphics_1_1_deffered_light_renderer.html',1,'ob::graphics']]],
+  ['deferredpass_1',['DeferredPass',['../db/dd9/classob_1_1graphics_1_1_deferred_pass.html',1,'ob::graphics']]],
   ['delegate_3c_20r_28args_2e_2e_2e_29_2c_20buffersize_20_3e_2',['Delegate&lt; R(Args...), BufferSize &gt;',['../d6/d76/classob_1_1core_1_1_delegate_3_01_r_07_args_8_8_8_08_00_01_buffer_size_01_4.html',1,'ob::core']]],
   ['depthstencildesc_3',['DepthStencilDesc',['../d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html',1,'ob::rhi']]],
   ['descriptorlayout_4',['DescriptorLayout',['../da/d25/classob_1_1rhi_1_1_descriptor_layout.html',1,'ob::rhi']]],

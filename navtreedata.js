@@ -83,16 +83,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d1/d0a/structob_1_1core_1_1_range.html#af9b100f9c6fcd8adde05fd267593a14d",
-"d3/d2d/classob_1_1core_1_1_logger.html",
-"d4/d63/classob_1_1input_1_1_keyboard.html#ab7d41ba042e750009387ee8057682b03",
-"d6/d81/classob_1_1core_1_1_swapper.html#a3c7a9f44f05f4e9e830afb7556c2f100",
-"d8/d28/classob_1_1core_1_1_handle_list.html#a33907df942de20f9ce7c6b8281a10893",
-"da/d12/structob_1_1rhi_1_1_rasterizer_desc.html",
-"db/d4d/classob_1_1core_1_1_blob.html#afbf12997184bbc7a540fc1a10f1062ec",
-"dc/df7/structob_1_1core_1_1_point.html#af3721adb4a60a02abbdd2b297e4ce175",
-"de/d6f/classob_1_1platform_1_1_window.html#a7c3ad7c8dbd8fde85efd6858523fda58",
-"index.html"
+"d1/d0a/structob_1_1core_1_1_range.html#ad2d1957bfc91e5e86ba6f57cf4ee7ded",
+"d3/d29/classob_1_1core_1_1_mimalloc_heap.html#adf8eb01fc78391bdfe7bc8ca2be5d5b2",
+"d4/d63/classob_1_1input_1_1_keyboard.html#ab09ff1cf26e71e282174449b80cd3450",
+"d6/d81/classob_1_1core_1_1_swapper.html#a1bc52d6bc34f92e1057dade70182802b",
+"d8/d22/structob_1_1core_1_1_int_vec2.html#af0457dae0fb4f6afa3e04296309eccc2",
+"d9/dd8/structob_1_1core_1_1_source_location.html#aa233f8278205ac63dedcbf3804f53118",
+"db/d4d/classob_1_1core_1_1_blob.html#af34a5fb280b3fb200e01e40ad2c93dbc",
+"dc/de6/structob_1_1rhi_1_1_instanced_param.html#a049b5089318c5a5f4b804b23756e19cf",
+"de/d63/structob_1_1core_1_1_circle.html#ac164e4578f4f4abc677a13a2abb16eb0",
+"functions_vars_r.html"
 ];
 
 var SYNCONMSG = 'クリックで同期表示が無効になります';

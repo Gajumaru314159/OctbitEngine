@@ -4,11 +4,10 @@ var classob_1_1graphics_1_1_f_g =
     [ "addPass", "da/dd2/classob_1_1graphics_1_1_f_g.html#affda4fc00793f3aca2ab4d118c23fd10", null ],
     [ "compile", "da/dd2/classob_1_1graphics_1_1_f_g.html#a28185f83a2659b74d4da958539b0af58", null ],
     [ "execute", "da/dd2/classob_1_1graphics_1_1_f_g.html#aa6cf320bd4117b4887bdab1b5f70d78e", null ],
-    [ "getDesc", "da/dd2/classob_1_1graphics_1_1_f_g.html#a3ae1ba790a10842631fa55f0c4e5f8f0", null ],
-    [ "getDesc", "da/dd2/classob_1_1graphics_1_1_f_g.html#a9a7ba8aba8a5be8469b01b30d0ff094a", null ],
-    [ "import", "da/dd2/classob_1_1graphics_1_1_f_g.html#a8a39a9f5bf1aabf6022e668b50db8611", null ],
-    [ "import", "da/dd2/classob_1_1graphics_1_1_f_g.html#a16224fcd753f3f0164cc481fb391b352", null ],
-    [ "isValid", "da/dd2/classob_1_1graphics_1_1_f_g.html#a6c6ef6f947605d2779717f354f4d2345", null ],
-    [ "isValid", "da/dd2/classob_1_1graphics_1_1_f_g.html#aece8206d646b93678784c12f3f50cfd3", null ],
+    [ "getBufferDesc", "da/dd2/classob_1_1graphics_1_1_f_g.html#a5d689c85dd4fd32d1bab958287ae31bf", null ],
+    [ "getTextureDesc", "da/dd2/classob_1_1graphics_1_1_f_g.html#a3ca747eb155eeb6faee8560d6a059e13", null ],
+    [ "import", "da/dd2/classob_1_1graphics_1_1_f_g.html#a519ee9c429a7ea41a252b19ba28bcc22", null ],
+    [ "import", "da/dd2/classob_1_1graphics_1_1_f_g.html#a9a7d7dfc19299ece34a892338188771d", null ],
+    [ "isValid", "da/dd2/classob_1_1graphics_1_1_f_g.html#a0299c0986503b7c4bc21e2d608c2cb59", null ],
     [ "save", "da/dd2/classob_1_1graphics_1_1_f_g.html#a9f53db6b7345c252409674b7ca13185f", null ]
 ];

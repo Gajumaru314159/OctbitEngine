@@ -1,8 +1,8 @@
 var classob_1_1graphics_1_1_f_g_resources =
 [
     [ "FGResources", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#abf4b96b048678a1540b34c28348ef3e5", null ],
-    [ "get", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#ad54695d30226ba642a186852866bf983", null ],
-    [ "get", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#afcc972018874a154691b2464c55ec94f", null ],
-    [ "getDesc", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a659eb6867f4191180ecad0e57ece4b14", null ],
-    [ "getDesc", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a841dc34c7f726f55fe84f8797b2e3868", null ]
+    [ "getBuffer", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a53d4eec20853575bbb3615ffe548c862", null ],
+    [ "getBufferDesc", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a01a7bf571e5e1662434f949ba865cf91", null ],
+    [ "getTexture", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a80a626057b354a70fc26bea4c7e36dd2", null ],
+    [ "getTextureDesc", "d6/d34/classob_1_1graphics_1_1_f_g_resources.html#a31f83b151a16a8d8d37c4d767fa7e06f", null ]
 ];

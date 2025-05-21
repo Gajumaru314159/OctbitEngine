@@ -105,119 +105,94 @@ $(document).ready(function(){initNavTree('d0/dcf/_im_gui_render_feature_8h_sourc
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Graphics/FrameGraph/FG.h&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderFeature.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/Platform/Window.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderPass.h&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;Framework/RHI/CommandList.h&gt;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;Plugins/ImGui/Library/imgui.h&gt;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;Plugins/ImGui/Library/implot.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>ob::graphics {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    OB_EVENT_NOTIFIER(ImGui);</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>ob::graphics {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    OB_EVENT_NOTIFIER(ImGui);</div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">   16</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ImGuiRenderFeature</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">RenderFeature</a> {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">   20</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ImGuiRenderFeature</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">RenderFeature</a> {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        OB_RTTI();</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ImGuiRenderFeature</a>(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keyword">virtual</span> <a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">~ImGuiRenderFeature</a>();</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a69c7aff8a33476505468c57329247138">   29</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a69c7aff8a33476505468c57329247138">addTask</a>(ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a9786bf810e7949ee01c0dfb95770723f">   32</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a9786bf810e7949ee01c0dfb95770723f">executeTasks</a>();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        OB_RTTI();</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ImGuiRenderFeature</a>(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene);</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">virtual</span> <a class="code hl_class" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">~ImGuiRenderFeature</a>();</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a4464ff0a0b74d0cf5722f1ec079543d4">   25</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a4464ff0a0b74d0cf5722f1ec079543d4">setupPasses</a>(<a class="code hl_class" href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">RenderPassBuilder</a>&amp;) <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a8771bbd5a53e878f05f7e4fb38ae6473">   28</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a8771bbd5a53e878f05f7e4fb38ae6473">setup</a>(<a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp; view) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a69c7aff8a33476505468c57329247138">   31</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a69c7aff8a33476505468c57329247138">addTask</a>(ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a9786bf810e7949ee01c0dfb95770723f">   34</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a9786bf810e7949ee01c0dfb95770723f">executeTasks</a>();</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">   37</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">AddTask</a>(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene, ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">AddTask</a>(<a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp; view,ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        ImGuiNotifier m_notifier;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    };</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">   39</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">AddTask</a>(<a class="code hl_class" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a>&amp; scene, ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">AddTask</a>(<a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp; view,ImGuiHandle&amp; handle, ImGuiDelegate func);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        ImGuiNotifier m_notifier;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    };</div>
 </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="foldopen" id="foldopen00047" data-start="{" data-end="};">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html">   47</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html">ImGuiRenderer</a> {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        OB_RTTI();</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a61e6f8da14154f7d12e24951be5c0309">   52</a></span>        <a class="code hl_function" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a61e6f8da14154f7d12e24951be5c0309">ImGuiRenderer</a>(<a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp; view);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="foldopen" id="foldopen00049" data-start="{" data-end="};">
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html">   49</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html">ImGuiPass</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../d5/dba/classob_1_1graphics_1_1_render_pass.html">RenderPass</a> {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">public</span>:</div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="};">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="../../d9/d40/structob_1_1graphics_1_1_im_gui_pass_1_1_input.html">   51</a></span>        <span class="keyword">struct </span><a class="code hl_struct" href="../../d9/d40/structob_1_1graphics_1_1_im_gui_pass_1_1_input.html">Input</a> {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>            <a class="code hl_struct" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a> color;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a69dfdcfd19c9db3de2d814b370aaa13f">   55</a></span>        <a class="code hl_function" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a69dfdcfd19c9db3de2d814b370aaa13f">~ImGuiRenderer</a>();</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a4b60d9373df660201baf29ad162dc148">   58</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a4b60d9373df660201baf29ad162dc148">render</a>(<a class="code hl_class" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">FG</a>&amp; fg, FGTexture&amp; target);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordtype">void</span> initializeContext();</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keywordtype">void</span> initializeResource();</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keywordtype">void</span> initializeFont();</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keywordtype">void</span> updateMouse(<span class="keyword">const</span> <a class="code hl_class" href="../../de/d6f/classob_1_1platform_1_1_window.html">platform::Window</a>&amp; window);</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="keywordtype">void</span> updateKeyboard(<a class="code hl_class" href="../../de/d6f/classob_1_1platform_1_1_window.html">platform::Window</a>&amp; window);</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordtype">void</span> updateTime();</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordtype">void</span> updateBuffer();</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordtype">void</span> updateCommand();</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp;                 m_view;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keyword">struct </span>DrawCommand {</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>            <a class="code hl_struct" href="../../d3/df1/structob_1_1core_1_1_int_rect.html">IntRect</a>                 rect;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>            ImTextureID             texture;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <a class="code hl_struct" href="../../d4/d70/structob_1_1rhi_1_1_draw_indexed_param.html">rhi::DrawIndexedParam</a>   param;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        };</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        ImGuiContext* m_imguiContext;</div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        ImPlotContext* m_implotContext;</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keywordtype">void</span>* m_fontBlob = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <a class="code hl_struct" href="../../dd/de7/structob_1_1core_1_1_date_time.html">ob::core::DateTime</a>          m_time;</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>        Vector&lt;DrawCommand&gt;         m_commands;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordtype">size_t</span>                      m_vertexCount = 0;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        <span class="keywordtype">size_t</span>                      m_indexCount = 0;</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        Ref&lt;rhi::DescriptorLayout&gt;  m_layout;</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        Ref&lt;rhi::DescriptorTable&gt;   m_table;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        Ref&lt;rhi::RootSignature&gt;     m_signature;</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        Ref&lt;rhi::PipelineState&gt;     m_pipeline;</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        Ref&lt;rhi::Buffer&gt;            m_vertexBuffer;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        Ref&lt;rhi::Buffer&gt;            m_indexBuffer;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        Ref&lt;rhi::Buffer&gt;            m_constantBuffer;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        Ref&lt;rhi::Texture&gt;           m_fontTexture;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    };</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keywordtype">void</span> connect(<a class="code hl_class" href="../../dd/d99/classob_1_1graphics_1_1_f_g_connections.html">FGConnections</a>&amp; connections) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                color = connections.get(<span class="stringliteral">&quot;ImGuiPass.color&quot;</span>);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            }</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        };</div>
 </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}</div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_f_g_html"><div class="ttname"><a href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">ob::graphics::FG</a></div><div class="ttdoc">FrameGraph</div><div class="ttdef"><b>Definition</b> FG.h:112</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ob::graphics::ImGuiRenderFeature</a></div><div class="ttdoc">ImGui描画機能</div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:20</div></div>
+<div class="foldopen" id="foldopen00058" data-start="{" data-end="};">
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="../../d7/df3/structob_1_1graphics_1_1_im_gui_pass_1_1_output.html">   58</a></span>        <span class="keyword">struct </span><a class="code hl_struct" href="../../d7/df3/structob_1_1graphics_1_1_im_gui_pass_1_1_output.html">Output</a> {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <a class="code hl_struct" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a> color;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <span class="keywordtype">void</span> connect(<a class="code hl_class" href="../../dd/d99/classob_1_1graphics_1_1_f_g_connections.html">FGConnections</a>&amp; connections) {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                connections.set(<span class="stringliteral">&quot;ImGuiPass.color&quot;</span>, color);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            }</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        };</div>
+</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        OB_RTTI();</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#a7d5496d2289b13dcbeb2c006b3e0bdef">   69</a></span>        <a class="code hl_function" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#a7d5496d2289b13dcbeb2c006b3e0bdef">ImGuiPass</a>();</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ac82a7b5872e27cba134991c41d0ff848">   72</a></span>        <a class="code hl_function" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ac82a7b5872e27cba134991c41d0ff848">~ImGuiPass</a>();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ab3c57ad799af1c6fe2ccf827a8fe5b8a">   75</a></span>        <a class="code hl_struct" href="../../d7/df3/structob_1_1graphics_1_1_im_gui_pass_1_1_output.html">Output</a> <a class="code hl_function" href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ab3c57ad799af1c6fe2ccf827a8fe5b8a">render</a>(<a class="code hl_class" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">FG</a>&amp; fg, <a class="code hl_class" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a>&amp; view, <a class="code hl_struct" href="../../d9/d40/structob_1_1graphics_1_1_im_gui_pass_1_1_input.html">Input</a> input) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    };</div>
+</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>}</div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_f_g_connections_html"><div class="ttname"><a href="../../dd/d99/classob_1_1graphics_1_1_f_g_connections.html">ob::graphics::FGConnections</a></div><div class="ttdef"><b>Definition</b> FG.h:85</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_f_g_html"><div class="ttname"><a href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">ob::graphics::FG</a></div><div class="ttdoc">FrameGraph</div><div class="ttdef"><b>Definition</b> FG.h:103</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_pass_html"><div class="ttname"><a href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html">ob::graphics::ImGuiPass</a></div><div class="ttdoc">RenderView毎のImGui描画処理</div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:49</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_pass_html_a7d5496d2289b13dcbeb2c006b3e0bdef"><div class="ttname"><a href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#a7d5496d2289b13dcbeb2c006b3e0bdef">ob::graphics::ImGuiPass::ImGuiPass</a></div><div class="ttdeci">ImGuiPass()</div><div class="ttdoc">コンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_pass_html_ab3c57ad799af1c6fe2ccf827a8fe5b8a"><div class="ttname"><a href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ab3c57ad799af1c6fe2ccf827a8fe5b8a">ob::graphics::ImGuiPass::render</a></div><div class="ttdeci">Output render(FG &amp;fg, RenderView &amp;view, Input input) const</div><div class="ttdoc">描画</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_pass_html_ac82a7b5872e27cba134991c41d0ff848"><div class="ttname"><a href="../../de/dc5/classob_1_1graphics_1_1_im_gui_pass.html#ac82a7b5872e27cba134991c41d0ff848">ob::graphics::ImGuiPass::~ImGuiPass</a></div><div class="ttdeci">~ImGuiPass()</div><div class="ttdoc">デストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html">ob::graphics::ImGuiRenderFeature</a></div><div class="ttdoc">ImGui描画機能</div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:16</div></div>
 <div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html_a07e62f4ea4e9ad6a10da22e0ee2f1778"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a07e62f4ea4e9ad6a10da22e0ee2f1778">ob::graphics::ImGuiRenderFeature::AddTask</a></div><div class="ttdeci">static void AddTask(RenderScene &amp;scene, ImGuiHandle &amp;handle, ImGuiDelegate func)</div><div class="ttdoc">タスクを追加</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html_a4464ff0a0b74d0cf5722f1ec079543d4"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a4464ff0a0b74d0cf5722f1ec079543d4">ob::graphics::ImGuiRenderFeature::setupPasses</a></div><div class="ttdeci">void setupPasses(RenderPassBuilder &amp;) const override</div><div class="ttdoc">MaterialRenderFeature の描画パスをセットアップします。</div></div>
 <div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html_a69c7aff8a33476505468c57329247138"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a69c7aff8a33476505468c57329247138">ob::graphics::ImGuiRenderFeature::addTask</a></div><div class="ttdeci">void addTask(ImGuiHandle &amp;handle, ImGuiDelegate func)</div><div class="ttdoc">タスクを追加</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html_a8771bbd5a53e878f05f7e4fb38ae6473"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a8771bbd5a53e878f05f7e4fb38ae6473">ob::graphics::ImGuiRenderFeature::setup</a></div><div class="ttdeci">void setup(RenderView &amp;view) override</div><div class="ttdoc">レンダービューのセットアップする</div></div>
 <div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_render_feature_html_a9786bf810e7949ee01c0dfb95770723f"><div class="ttname"><a href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a9786bf810e7949ee01c0dfb95770723f">ob::graphics::ImGuiRenderFeature::executeTasks</a></div><div class="ttdeci">void executeTasks()</div><div class="ttdoc">タスクを実行</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_renderer_html"><div class="ttname"><a href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html">ob::graphics::ImGuiRenderer</a></div><div class="ttdoc">RenderView毎のImGui描画処理</div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:47</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_renderer_html_a4b60d9373df660201baf29ad162dc148"><div class="ttname"><a href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a4b60d9373df660201baf29ad162dc148">ob::graphics::ImGuiRenderer::render</a></div><div class="ttdeci">bool render(FG &amp;fg, FGTexture &amp;target)</div><div class="ttdoc">描画</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_renderer_html_a61e6f8da14154f7d12e24951be5c0309"><div class="ttname"><a href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a61e6f8da14154f7d12e24951be5c0309">ob::graphics::ImGuiRenderer::ImGuiRenderer</a></div><div class="ttdeci">ImGuiRenderer(RenderView &amp;view)</div><div class="ttdoc">コンストラクタ</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_im_gui_renderer_html_a69dfdcfd19c9db3de2d814b370aaa13f"><div class="ttname"><a href="../../d1/df0/classob_1_1graphics_1_1_im_gui_renderer.html#a69dfdcfd19c9db3de2d814b370aaa13f">ob::graphics::ImGuiRenderer::~ImGuiRenderer</a></div><div class="ttdeci">~ImGuiRenderer()</div><div class="ttdoc">デストラクタ</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_feature_html"><div class="ttname"><a href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">ob::graphics::RenderFeature</a></div><div class="ttdoc">描画機能</div><div class="ttdef"><b>Definition</b> RenderFeature.h:16</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_scene_html"><div class="ttname"><a href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">ob::graphics::RenderScene</a></div><div class="ttdoc">描画シーン RenderScene</div><div class="ttdef"><b>Definition</b> RenderScene.h:15</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html">ob::graphics::RenderView</a></div><div class="ttdoc">レンダー・ビュー RenderView</div><div class="ttdef"><b>Definition</b> RenderView.h:16</div></div>
-<div class="ttc" id="aclassob_1_1platform_1_1_window_html"><div class="ttname"><a href="../../de/d6f/classob_1_1platform_1_1_window.html">ob::platform::Window</a></div><div class="ttdoc">ウィンドウ</div><div class="ttdef"><b>Definition</b> Window.h:18</div></div>
-<div class="ttc" id="astructob_1_1core_1_1_date_time_html"><div class="ttname"><a href="../../dd/de7/structob_1_1core_1_1_date_time.html">ob::core::DateTime</a></div><div class="ttdoc">日時型</div><div class="ttdef"><b>Definition</b> DateTime.h:26</div></div>
-<div class="ttc" id="astructob_1_1core_1_1_int_rect_html"><div class="ttname"><a href="../../d3/df1/structob_1_1core_1_1_int_rect.html">ob::core::IntRect</a></div><div class="ttdoc">矩形</div><div class="ttdef"><b>Definition</b> IntRect.h:15</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_draw_indexed_param_html"><div class="ttname"><a href="../../d4/d70/structob_1_1rhi_1_1_draw_indexed_param.html">ob::rhi::DrawIndexedParam</a></div><div class="ttdoc">CommandList::drawIndexed() で指定するパラメータ</div><div class="ttdef"><b>Definition</b> CommandParam.h:31</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_feature_html"><div class="ttname"><a href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">ob::graphics::RenderFeature</a></div><div class="ttdoc">描画機能</div><div class="ttdef"><b>Definition</b> RenderFeature.h:15</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_pass_builder_html"><div class="ttname"><a href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">ob::graphics::RenderPassBuilder</a></div><div class="ttdef"><b>Definition</b> RenderPassBuilder.h:15</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_pass_html"><div class="ttname"><a href="../../d5/dba/classob_1_1graphics_1_1_render_pass.html">ob::graphics::RenderPass</a></div><div class="ttdef"><b>Definition</b> RenderPass.h:28</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_scene_html"><div class="ttname"><a href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">ob::graphics::RenderScene</a></div><div class="ttdoc">描画シーン RenderScene</div><div class="ttdef"><b>Definition</b> RenderScene.h:17</div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_view_html"><div class="ttname"><a href="../../da/de0/classob_1_1graphics_1_1_render_view.html">ob::graphics::RenderView</a></div><div class="ttdoc">レンダー・ビュー RenderView</div><div class="ttdef"><b>Definition</b> RenderView.h:14</div></div>
+<div class="ttc" id="astructob_1_1graphics_1_1_f_g_resource_html"><div class="ttname"><a href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">ob::graphics::FGResource</a></div><div class="ttdoc">フレームグラフリソースを表す構造体</div><div class="ttdef"><b>Definition</b> FG.h:25</div></div>
+<div class="ttc" id="astructob_1_1graphics_1_1_im_gui_pass_1_1_input_html"><div class="ttname"><a href="../../d9/d40/structob_1_1graphics_1_1_im_gui_pass_1_1_input.html">ob::graphics::ImGuiPass::Input</a></div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:51</div></div>
+<div class="ttc" id="astructob_1_1graphics_1_1_im_gui_pass_1_1_output_html"><div class="ttname"><a href="../../d7/df3/structob_1_1graphics_1_1_im_gui_pass_1_1_output.html">ob::graphics::ImGuiPass::Output</a></div><div class="ttdef"><b>Definition</b> ImGuiRenderFeature.h:58</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

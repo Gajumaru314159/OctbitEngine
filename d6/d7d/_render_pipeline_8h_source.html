@@ -104,28 +104,22 @@ $(document).ready(function(){initNavTree('d6/d7d/_render_pipeline_8h_source.html
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Graphics/Forward.h&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderScene.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Graphics/Render/RenderPassBuilder.h&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::graphics {</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html">   14</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html">RenderPipeline</a> {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        OB_RTTI();</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a65caeb6e36bd3dbcadd6aacfb02b470b">   20</a></span>        <span class="keyword">virtual</span> <a class="code hl_function" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a65caeb6e36bd3dbcadd6aacfb02b470b">~RenderPipeline</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a12f0807cbdd9dfd71e2082ad66b83932">   23</a></span>        <span class="keyword">virtual</span> FGTexture <a class="code hl_function" href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a12f0807cbdd9dfd71e2082ad66b83932">render</a>(<a class="code hl_class" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">FG</a>&amp;) = 0;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    };</div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../d1/d4e/structob_1_1graphics_1_1_render_pipeline.html">   12</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d1/d4e/structob_1_1graphics_1_1_render_pipeline.html">RenderPipeline</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>                      name;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_class" href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">RenderPassBuilder</a>           builer;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        Vector&lt;RenderView*&gt;         views;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    };</div>
 </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>}</div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_f_g_html"><div class="ttname"><a href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">ob::graphics::FG</a></div><div class="ttdoc">FrameGraph</div><div class="ttdef"><b>Definition</b> FG.h:112</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_pipeline_html"><div class="ttname"><a href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html">ob::graphics::RenderPipeline</a></div><div class="ttdoc">描画パイプライン RenderPipeline</div><div class="ttdef"><b>Definition</b> RenderPipeline.h:14</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_pipeline_html_a12f0807cbdd9dfd71e2082ad66b83932"><div class="ttname"><a href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a12f0807cbdd9dfd71e2082ad66b83932">ob::graphics::RenderPipeline::render</a></div><div class="ttdeci">virtual FGTexture render(FG &amp;)=0</div><div class="ttdoc">描画</div></div>
-<div class="ttc" id="aclassob_1_1graphics_1_1_render_pipeline_html_a65caeb6e36bd3dbcadd6aacfb02b470b"><div class="ttname"><a href="../../de/dc2/classob_1_1graphics_1_1_render_pipeline.html#a65caeb6e36bd3dbcadd6aacfb02b470b">ob::graphics::RenderPipeline::~RenderPipeline</a></div><div class="ttdeci">virtual ~RenderPipeline()=default</div><div class="ttdoc">デストラクタ</div></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1graphics_1_1_render_pass_builder_html"><div class="ttname"><a href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">ob::graphics::RenderPassBuilder</a></div><div class="ttdef"><b>Definition</b> RenderPassBuilder.h:15</div></div>
+<div class="ttc" id="astructob_1_1graphics_1_1_render_pipeline_html"><div class="ttname"><a href="../../d1/d4e/structob_1_1graphics_1_1_render_pipeline.html">ob::graphics::RenderPipeline</a></div><div class="ttdef"><b>Definition</b> RenderPipeline.h:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

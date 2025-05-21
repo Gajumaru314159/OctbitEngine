@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('d1/d4e/classob_1_1graphics_1_1_render_
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#friends">フレンド</a> &#124;
 <a href="../../d4/d01/classob_1_1graphics_1_1_render_scene-members.html">全メンバ一覧</a>  </div>
   <div class="headertitle"><div class="title">ob::graphics::RenderScene クラス</div></div>
 </div><!--header-->
@@ -106,11 +107,9 @@ $(document).ready(function(){initNavTree('d1/d4e/classob_1_1graphics_1_1_render_
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
-<tr class="memitem:a8e9d56f33099e9f3a735d3e83c4e5a6e" id="r_a8e9d56f33099e9f3a735d3e83c4e5a6e"><td class="memTemplParams" colspan="2"><a id="a8e9d56f33099e9f3a735d3e83c4e5a6e" name="a8e9d56f33099e9f3a735d3e83c4e5a6e"></a>
-template&lt;class T , class... Args&gt; </td></tr>
-<tr class="memitem:a8e9d56f33099e9f3a735d3e83c4e5a6e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addFeature</b> (Args &amp;&amp;...args) -&gt; std::enable_if_t&lt; std::is_constructible&lt; T, Args... &gt;::value, T &amp; &gt;</td></tr>
-<tr class="memdesc:a8e9d56f33099e9f3a735d3e83c4e5a6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderFeatureを追加する <br /></td></tr>
-<tr class="separator:a8e9d56f33099e9f3a735d3e83c4e5a6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a977a6a10a4a4252ba77f4a131de5a83a" id="r_a977a6a10a4a4252ba77f4a131de5a83a"><td class="memItemLeft" align="right" valign="top"><a id="a977a6a10a4a4252ba77f4a131de5a83a" name="a977a6a10a4a4252ba77f4a131de5a83a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RenderScene</b> (const <a class="el" href="../../dd/db2/structob_1_1graphics_1_1_render_scene_desc.html">RenderSceneDesc</a> &amp;desc)</td></tr>
+<tr class="separator:a977a6a10a4a4252ba77f4a131de5a83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab17a050dfa4d6d6f3886356aa3c053bd" id="r_ab17a050dfa4d6d6f3886356aa3c053bd"><td class="memTemplParams" colspan="2"><a id="ab17a050dfa4d6d6f3886356aa3c053bd" name="ab17a050dfa4d6d6f3886356aa3c053bd"></a>
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:ab17a050dfa4d6d6f3886356aa3c053bd"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>findFeature</b> () const</td></tr>
@@ -119,25 +118,20 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:a8524b48d4cfbd51e3487c49a741e4e99" id="r_a8524b48d4cfbd51e3487c49a741e4e99"><td class="memItemLeft" align="right" valign="top"><a id="a8524b48d4cfbd51e3487c49a741e4e99" name="a8524b48d4cfbd51e3487c49a741e4e99"></a>
 <a class="el" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html">RenderFeature</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>findFeature</b> (<a class="el" href="../../d8/d39/classob_1_1core_1_1_type.html">Type</a> type) const</td></tr>
 <tr class="separator:a8524b48d4cfbd51e3487c49a741e4e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa3cd5ca6a9a64a2729ab56681a68a54" id="r_afa3cd5ca6a9a64a2729ab56681a68a54"><td class="memItemLeft" align="right" valign="top"><a id="afa3cd5ca6a9a64a2729ab56681a68a54" name="afa3cd5ca6a9a64a2729ab56681a68a54"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addView</b> (<a class="el" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a> *view)</td></tr>
-<tr class="memdesc:afa3cd5ca6a9a64a2729ab56681a68a54"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderViewを追加する <br /></td></tr>
-<tr class="separator:afa3cd5ca6a9a64a2729ab56681a68a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d961b36e6fb743ed0c3b48dcb0ec36a" id="r_a5d961b36e6fb743ed0c3b48dcb0ec36a"><td class="memItemLeft" align="right" valign="top"><a id="a5d961b36e6fb743ed0c3b48dcb0ec36a" name="a5d961b36e6fb743ed0c3b48dcb0ec36a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>removeView</b> (<a class="el" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a> *view)</td></tr>
-<tr class="memdesc:a5d961b36e6fb743ed0c3b48dcb0ec36a"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderViewを削除する <br /></td></tr>
-<tr class="separator:a5d961b36e6fb743ed0c3b48dcb0ec36a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad538197b0d5b5cf282410f19def67cba" id="r_ad538197b0d5b5cf282410f19def67cba"><td class="memItemLeft" align="right" valign="top"><a id="ad538197b0d5b5cf282410f19def67cba" name="ad538197b0d5b5cf282410f19def67cba"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addReleasedEvent</b> (RenderSceneEventHandle &amp;handle, RenderSceneEventDelegate func)</td></tr>
-<tr class="memdesc:ad538197b0d5b5cf282410f19def67cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">解放時イベント <br /></td></tr>
-<tr class="separator:ad538197b0d5b5cf282410f19def67cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ffd7a0addce81e75fd650f8762618e8" id="r_a1ffd7a0addce81e75fd650f8762618e8"><td class="memItemLeft" align="right" valign="top"><a id="a1ffd7a0addce81e75fd650f8762618e8" name="a1ffd7a0addce81e75fd650f8762618e8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addFeatureAddedEvent</b> (RenderFeatureEventHandle &amp;handle, RenderFeatureEventDelegate func)</td></tr>
-<tr class="separator:a1ffd7a0addce81e75fd650f8762618e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb077057c0bec397ba74c8b4685d41ef" id="r_afb077057c0bec397ba74c8b4685d41ef"><td class="memItemLeft" align="right" valign="top"><a id="afb077057c0bec397ba74c8b4685d41ef" name="afb077057c0bec397ba74c8b4685d41ef"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>render</b> (<a class="el" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html">FG</a> &amp;fg)</td></tr>
 <tr class="memdesc:afb077057c0bec397ba74c8b4685d41ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">描画 <br /></td></tr>
 <tr class="separator:afb077057c0bec397ba74c8b4685d41ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad538197b0d5b5cf282410f19def67cba" id="r_ad538197b0d5b5cf282410f19def67cba"><td class="memItemLeft" align="right" valign="top"><a id="ad538197b0d5b5cf282410f19def67cba" name="ad538197b0d5b5cf282410f19def67cba"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addReleasedEvent</b> (RenderSceneEventHandle &amp;handle, RenderSceneEventDelegate func)</td></tr>
+<tr class="memdesc:ad538197b0d5b5cf282410f19def67cba"><td class="mdescLeft">&#160;</td><td class="mdescRight">解放時イベント <br /></td></tr>
+<tr class="separator:ad538197b0d5b5cf282410f19def67cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:a1a3589ecc9ab0ed636f3568dfd987a7e" id="r_a1a3589ecc9ab0ed636f3568dfd987a7e"><td class="memItemLeft" align="right" valign="top"><a id="a1a3589ecc9ab0ed636f3568dfd987a7e" name="a1a3589ecc9ab0ed636f3568dfd987a7e"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>RenderView</b></td></tr>
+<tr class="separator:a1a3589ecc9ab0ed636f3568dfd987a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>描画シーン <a class="el" href="../../d0/da4/_render_scene.html">RenderScene</a> </p>

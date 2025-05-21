@@ -115,6 +115,12 @@ $(document).ready(function(){initNavTree('d0/d2f/classob_1_1graphics_1_1_im_gui_
 <tr class="memitem:ac7c56617898bb0b0b835e61e59e09dcf" id="r_ac7c56617898bb0b0b835e61e59e09dcf"><td class="memItemLeft" align="right" valign="top"><a id="ac7c56617898bb0b0b835e61e59e09dcf" name="ac7c56617898bb0b0b835e61e59e09dcf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ImGuiRenderFeature</b> (<a class="el" href="../../d1/d4e/classob_1_1graphics_1_1_render_scene.html">RenderScene</a> &amp;scene)</td></tr>
 <tr class="separator:ac7c56617898bb0b0b835e61e59e09dcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4464ff0a0b74d0cf5722f1ec079543d4" id="r_a4464ff0a0b74d0cf5722f1ec079543d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a4464ff0a0b74d0cf5722f1ec079543d4">setupPasses</a> (<a class="el" href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">RenderPassBuilder</a> &amp;) const override</td></tr>
+<tr class="memdesc:a4464ff0a0b74d0cf5722f1ec079543d4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d7/da7/classob_1_1graphics_1_1_material_render_feature.html" title="マテリアル描画機能">MaterialRenderFeature</a> の描画パスをセットアップします。  <br /></td></tr>
+<tr class="separator:a4464ff0a0b74d0cf5722f1ec079543d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8771bbd5a53e878f05f7e4fb38ae6473" id="r_a8771bbd5a53e878f05f7e4fb38ae6473"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d2f/classob_1_1graphics_1_1_im_gui_render_feature.html#a8771bbd5a53e878f05f7e4fb38ae6473">setup</a> (<a class="el" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a> &amp;view) override</td></tr>
+<tr class="memdesc:a8771bbd5a53e878f05f7e4fb38ae6473"><td class="mdescLeft">&#160;</td><td class="mdescRight">レンダービューのセットアップする  <br /></td></tr>
+<tr class="separator:a8771bbd5a53e878f05f7e4fb38ae6473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69c7aff8a33476505468c57329247138" id="r_a69c7aff8a33476505468c57329247138"><td class="memItemLeft" align="right" valign="top"><a id="a69c7aff8a33476505468c57329247138" name="a69c7aff8a33476505468c57329247138"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addTask</b> (ImGuiHandle &amp;handle, ImGuiDelegate func)</td></tr>
 <tr class="memdesc:a69c7aff8a33476505468c57329247138"><td class="mdescLeft">&#160;</td><td class="mdescRight">タスクを追加 <br /></td></tr>
@@ -153,7 +159,68 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>AddTask</b> (<
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>ImGui描画機能 </p>
-</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a8771bbd5a53e878f05f7e4fb38ae6473" name="a8771bbd5a53e878f05f7e4fb38ae6473"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8771bbd5a53e878f05f7e4fb38ae6473">&#9670;&#160;</a></span>setup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ob::graphics::ImGuiRenderFeature::setup </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/de0/classob_1_1graphics_1_1_render_view.html">RenderView</a> &amp;&#160;</td>
+          <td class="paramname"><em>view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>レンダービューのセットアップする </p>
+
+<p><a class="el" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html#a6989b4b8869ec4fa70fc420a81332136">ob::graphics::RenderFeature</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a4464ff0a0b74d0cf5722f1ec079543d4" name="a4464ff0a0b74d0cf5722f1ec079543d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4464ff0a0b74d0cf5722f1ec079543d4">&#9670;&#160;</a></span>setupPasses()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ob::graphics::ImGuiRenderFeature::setupPasses </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../df/d3a/classob_1_1graphics_1_1_render_pass_builder.html">RenderPassBuilder</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../d7/da7/classob_1_1graphics_1_1_material_render_feature.html" title="マテリアル描画機能">MaterialRenderFeature</a> の描画パスをセットアップします。 </p>
+
+<p><a class="el" href="../../d4/d67/classob_1_1graphics_1_1_render_feature.html#a1250d4c5cd33a7550f30b7463e04a4bf">ob::graphics::RenderFeature</a>を再実装しています。</p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li>Framework/Graphics/Public/Framework/Graphics/Builtin/RenderFeature/<a class="el" href="../../d0/dcf/_im_gui_render_feature_8h_source.html">ImGuiRenderFeature.h</a></li>
 </ul>
 </div><!-- contents -->

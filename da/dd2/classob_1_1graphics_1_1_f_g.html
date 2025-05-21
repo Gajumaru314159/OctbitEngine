@@ -119,35 +119,31 @@ template&lt;typename Data , typename Setup , typename Execute &gt; </td></tr>
 <tr class="memitem:affda4fc00793f3aca2ab4d118c23fd10"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addPass</b> (StringView name, Setup &amp;&amp;setup, Execute &amp;&amp;<a class="el" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html#aa6cf320bd4117b4887bdab1b5f70d78e">execute</a>) -&gt; IsValid&lt; Data, Setup, Execute &gt;</td></tr>
 <tr class="memdesc:affda4fc00793f3aca2ab4d118c23fd10"><td class="mdescLeft">&#160;</td><td class="mdescRight">パスを追加 <br /></td></tr>
 <tr class="separator:affda4fc00793f3aca2ab4d118c23fd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a7ba8aba8a5be8469b01b30d0ff094a" id="r_a9a7ba8aba8a5be8469b01b30d0ff094a"><td class="memItemLeft" align="right" valign="top"><a id="a9a7ba8aba8a5be8469b01b30d0ff094a" name="a9a7ba8aba8a5be8469b01b30d0ff094a"></a>
-const <a class="el" href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">rhi::RenderTextureDesc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDesc</b> (FGTexture texture)</td></tr>
-<tr class="memdesc:a9a7ba8aba8a5be8469b01b30d0ff094a"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGTextureのRenderTextureDescを取得する <br /></td></tr>
-<tr class="separator:a9a7ba8aba8a5be8469b01b30d0ff094a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ae1ba790a10842631fa55f0c4e5f8f0" id="r_a3ae1ba790a10842631fa55f0c4e5f8f0"><td class="memItemLeft" align="right" valign="top"><a id="a3ae1ba790a10842631fa55f0c4e5f8f0" name="a3ae1ba790a10842631fa55f0c4e5f8f0"></a>
-const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">rhi::BufferDesc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDesc</b> (FGBuffer buffer)</td></tr>
-<tr class="memdesc:a3ae1ba790a10842631fa55f0c4e5f8f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGBufferのBufferDescを取得する <br /></td></tr>
-<tr class="separator:a3ae1ba790a10842631fa55f0c4e5f8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16224fcd753f3f0164cc481fb391b352" id="r_a16224fcd753f3f0164cc481fb391b352"><td class="memItemLeft" align="right" valign="top"><a id="a16224fcd753f3f0164cc481fb391b352" name="a16224fcd753f3f0164cc481fb391b352"></a>
-FGTexture&#160;</td><td class="memItemRight" valign="bottom"><b>import</b> (const <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">rhi::RenderTexture</a> &gt; &amp;texture)</td></tr>
-<tr class="memdesc:a16224fcd753f3f0164cc481fb391b352"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderTextureをインポートする <br /></td></tr>
-<tr class="separator:a16224fcd753f3f0164cc481fb391b352"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a39a9f5bf1aabf6022e668b50db8611" id="r_a8a39a9f5bf1aabf6022e668b50db8611"><td class="memItemLeft" align="right" valign="top"><a id="a8a39a9f5bf1aabf6022e668b50db8611" name="a8a39a9f5bf1aabf6022e668b50db8611"></a>
-FGBuffer&#160;</td><td class="memItemRight" valign="bottom"><b>import</b> (const <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">rhi::Buffer</a> &gt; &amp;buffer)</td></tr>
-<tr class="memdesc:a8a39a9f5bf1aabf6022e668b50db8611"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bufferをインポートする <br /></td></tr>
-<tr class="separator:a8a39a9f5bf1aabf6022e668b50db8611"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aece8206d646b93678784c12f3f50cfd3" id="r_aece8206d646b93678784c12f3f50cfd3"><td class="memItemLeft" align="right" valign="top"><a id="aece8206d646b93678784c12f3f50cfd3" name="aece8206d646b93678784c12f3f50cfd3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (FGTexture id) const</td></tr>
-<tr class="memdesc:aece8206d646b93678784c12f3f50cfd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGTextureが有効な値か <br /></td></tr>
-<tr class="separator:aece8206d646b93678784c12f3f50cfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c6ef6f947605d2779717f354f4d2345" id="r_a6c6ef6f947605d2779717f354f4d2345"><td class="memItemLeft" align="right" valign="top"><a id="a6c6ef6f947605d2779717f354f4d2345" name="a6c6ef6f947605d2779717f354f4d2345"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (FGBuffer id) const</td></tr>
-<tr class="memdesc:a6c6ef6f947605d2779717f354f4d2345"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGBufferが有効な値か <br /></td></tr>
-<tr class="separator:a6c6ef6f947605d2779717f354f4d2345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ca747eb155eeb6faee8560d6a059e13" id="r_a3ca747eb155eeb6faee8560d6a059e13"><td class="memItemLeft" align="right" valign="top"><a id="a3ca747eb155eeb6faee8560d6a059e13" name="a3ca747eb155eeb6faee8560d6a059e13"></a>
+const <a class="el" href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">rhi::RenderTextureDesc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTextureDesc</b> (<a class="el" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a> texture)</td></tr>
+<tr class="memdesc:a3ca747eb155eeb6faee8560d6a059e13"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGResourceのRenderTextureDescを取得する <br /></td></tr>
+<tr class="separator:a3ca747eb155eeb6faee8560d6a059e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d689c85dd4fd32d1bab958287ae31bf" id="r_a5d689c85dd4fd32d1bab958287ae31bf"><td class="memItemLeft" align="right" valign="top"><a id="a5d689c85dd4fd32d1bab958287ae31bf" name="a5d689c85dd4fd32d1bab958287ae31bf"></a>
+const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">rhi::BufferDesc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferDesc</b> (<a class="el" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a> buffer)</td></tr>
+<tr class="memdesc:a5d689c85dd4fd32d1bab958287ae31bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGResourceのBufferDescを取得する <br /></td></tr>
+<tr class="separator:a5d689c85dd4fd32d1bab958287ae31bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7d7dfc19299ece34a892338188771d" id="r_a9a7d7dfc19299ece34a892338188771d"><td class="memItemLeft" align="right" valign="top"><a id="a9a7d7dfc19299ece34a892338188771d" name="a9a7d7dfc19299ece34a892338188771d"></a>
+<a class="el" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a>&#160;</td><td class="memItemRight" valign="bottom"><b>import</b> (const <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">rhi::RenderTexture</a> &gt; &amp;texture)</td></tr>
+<tr class="memdesc:a9a7d7dfc19299ece34a892338188771d"><td class="mdescLeft">&#160;</td><td class="mdescRight">RenderTextureをインポートする <br /></td></tr>
+<tr class="separator:a9a7d7dfc19299ece34a892338188771d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a519ee9c429a7ea41a252b19ba28bcc22" id="r_a519ee9c429a7ea41a252b19ba28bcc22"><td class="memItemLeft" align="right" valign="top"><a id="a519ee9c429a7ea41a252b19ba28bcc22" name="a519ee9c429a7ea41a252b19ba28bcc22"></a>
+<a class="el" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a>&#160;</td><td class="memItemRight" valign="bottom"><b>import</b> (const <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">rhi::Buffer</a> &gt; &amp;buffer)</td></tr>
+<tr class="memdesc:a519ee9c429a7ea41a252b19ba28bcc22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bufferをインポートする <br /></td></tr>
+<tr class="separator:a519ee9c429a7ea41a252b19ba28bcc22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0299c0986503b7c4bc21e2d608c2cb59" id="r_a0299c0986503b7c4bc21e2d608c2cb59"><td class="memItemLeft" align="right" valign="top"><a id="a0299c0986503b7c4bc21e2d608c2cb59" name="a0299c0986503b7c4bc21e2d608c2cb59"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isValid</b> (<a class="el" href="../../d8/d68/structob_1_1graphics_1_1_f_g_resource.html">FGResource</a> resource) const</td></tr>
+<tr class="memdesc:a0299c0986503b7c4bc21e2d608c2cb59"><td class="mdescLeft">&#160;</td><td class="mdescRight">FGResourceが有効な値か <br /></td></tr>
+<tr class="separator:a0299c0986503b7c4bc21e2d608c2cb59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28185f83a2659b74d4da958539b0af58" id="r_a28185f83a2659b74d4da958539b0af58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dd2/classob_1_1graphics_1_1_f_g.html#a28185f83a2659b74d4da958539b0af58">compile</a> ()</td></tr>
 <tr class="memdesc:a28185f83a2659b74d4da958539b0af58"><td class="mdescLeft">&#160;</td><td class="mdescRight">FrameGraphをコンパイルして実行可能な状態にする  <br /></td></tr>
 <tr class="separator:a28185f83a2659b74d4da958539b0af58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6cf320bd4117b4887bdab1b5f70d78e" id="r_aa6cf320bd4117b4887bdab1b5f70d78e"><td class="memItemLeft" align="right" valign="top"><a id="aa6cf320bd4117b4887bdab1b5f70d78e" name="aa6cf320bd4117b4887bdab1b5f70d78e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>execute</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">rhi::CommandList</a> &gt; &amp;cmd, <a class="el" href="../../de/d78/classob_1_1graphics_1_1_f_g_resource_pool.html">FGResourcePool</a> &amp;pool)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>execute</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">rhi::CommandList</a> &gt; &amp;cmd, FGResourcePool &amp;pool)</td></tr>
 <tr class="memdesc:aa6cf320bd4117b4887bdab1b5f70d78e"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンパイルされたパスを実行する <br /></td></tr>
 <tr class="separator:aa6cf320bd4117b4887bdab1b5f70d78e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f53db6b7345c252409674b7ca13185f" id="r_a9f53db6b7345c252409674b7ca13185f"><td class="memItemLeft" align="right" valign="top"><a id="a9f53db6b7345c252409674b7ca13185f" name="a9f53db6b7345c252409674b7ca13185f"></a>
@@ -167,9 +163,6 @@ template&lt;class Writer &gt; </td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void ob::graphics::FG::compile </td>
@@ -178,11 +171,6 @@ template&lt;class Writer &gt; </td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>FrameGraphをコンパイルして実行可能な状態にする </p>
