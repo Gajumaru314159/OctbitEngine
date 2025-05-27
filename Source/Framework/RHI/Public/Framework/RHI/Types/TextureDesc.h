@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/TextureFormat.h>
 
 namespace ob::rhi {
@@ -17,30 +18,13 @@ namespace ob::rhi {
     };
     // TODO RenderTarget/DepthStencilを別管轄にする
 
-
-    //! @brief  テクスチャ使用法
-    enum class TextureUsage {
-        Sampling,
-        ColorAttachment,
-        DepthAttachment,
-        ResolveAttachment,
-        Storage,
-        StorageAttomic,
-        CPURead,
-        CanUpdate,
-        CanCopyFrom,
-        CanCopyTo,
-    };
-    using TextureUsages = BitFlags<TextureUsage>;
-
-
     //! @brief      テクスチャ状態
     //! 
     //! @details    D3D12_RESOURCE_STATE VkImageLayout 参照
     //!             | TextureState                      | D3D12_RESOURCE_STATE              | VkImageLayout                 |
     //!             |-----------------------------------|-----------------------------------|-------------------------------|
     //!             | Common                            | COMMON                            | -                             |
-    //!             | ShadeResource                     | PIXEL_SHADER_RESOURCE             | SHADER_READ_ONLY              |
+    //!             | ShaderResource                    | PIXEL_SHADER_RESOURCE             | SHADER_READ_ONLY              |
     //!             | UnorderedAccess                   | UNORDERED_ACCESS                  | GENERAL                       |
     //!             | RenderTarget                      | RENDER_TARGET                     | COLOR_ATTACHMENT              |
     //!             | DepthRead                         | DEPTH_READ                        | EPTH_STENCIL_READ_ONLY        |
@@ -68,6 +52,27 @@ namespace ob::rhi {
     using TextureFlags = BitFlags<TextureFlag>;
 
 
+    enum class TextureViewType {
+        Texture,
+        RWTexture,
+    };
+
+    //! @brief D3D12_SHADER_RESOURCE_VIEW_DESCまたはD3D12_UNORDERED_ACCESS_VIEW_DESC相当
+    struct TextureViewDesc {
+        Ref<Texture> base;
+        TextureViewType type;
+        // s32 mipSlice;
+        // s32 planeSlice;
+        // s32 arraySlice;
+        // s32 mipLevels;
+        // s32 firstMip;
+		// s32 arrayNum;
+        // s32 firstArray;
+        // s32 plane;
+        // s32 plane;
+    };
+
+
     //! @brief  テクスチャ定義
     struct TextureDesc {
         String          name;
@@ -78,42 +83,7 @@ namespace ob::rhi {
         s32             mipLevels   = 0;                        //!< ミップ生成レベル (0の場合sizeから自動計算されます)
 		TextureFlags    flags       = TextureFlag::ShaderResource;            //!< フラグ
 
-		bool isValid() const {
-
-            // フォーマット
-            if (format == TextureFormat::Unknown) {
-                LOG_ERROR("TextureDescのフォーマットにUnknownは指定できません。[name={}]", name);
-                return false;
-            }
-
-            // サイズ
-            bool isValidSize = true;
-
-            if (type == TextureType::Texture1D) {
-                isValidSize &= 0 < size.width && 1 == size.height && 1 == size.depth;
-            }
-            if (type == TextureType::Texture2D) {
-                isValidSize &= 0 < size.width && 0 < size.height && 1 == size.depth;
-            }
-            if (type == TextureType::Texture3D) {
-                isValidSize &= 0 < size.width && 0 < size.height && 0 < size.depth;
-            }
-            if (type == TextureType::Cube) {
-                isValidSize &= 0 < size.width && 0 < size.height && 1 == size.depth;
-            }
-            if (!isValidSize) {
-                LOG_ERROR("TextureDescのサイズが不正です。[name={},size={}]", name, size);
-                return false;
-            }
-
-            // 配列
-            if (type == TextureType::Texture3D && 0 < arrayNum) {
-                LOG_ERROR("Texture3Dは配列に対応していません [name={}]", name);
-                return false;
-            }
-
-            return true;
-		}
+        bool isValid() const;
     };
 
 }

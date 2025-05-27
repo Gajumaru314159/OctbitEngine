@@ -28,6 +28,7 @@ protected:
 		rhi::RegisterRHIService(injector);
 
 		m_dx12config.enableDebugLayer = true;
+		m_dx12config.breakWithWarning = true;
 		m_vkconfig.enableDebugLayer = true;
 		injector.bind(m_config);
 		injector.bind(m_dx12config);

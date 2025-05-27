@@ -7,6 +7,7 @@
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/BufferDesc.h>
+#include <Framework/RHI/Types/BindlessHandle.h>
 
 namespace ob::rhi {
 
@@ -16,23 +17,22 @@ namespace ob::rhi {
 		using CopyFunc = Func<void(void*)>;
 	public:
 
-		//! @brief  コンストラクタ
-		//! 
-		//! @param desc バッファ定義
-		//! @param name 名前
+		//! @brief  空のバッファを作成
 		static Ref<Buffer> Create(const BufferDesc& desc);
 
-		//! @brief  コンストラクタ
-		//! 
-		//! @param desc バッファ定義
-		//! @param blob 初期化データ
-		//! @param name 名前
+		//! @brief  初期データを指定してバッファを作成
 		static Ref<Buffer> Create(const BufferDesc& desc, BlobView blob);
+
+		//! @brief  ベースのバッファを指定して異なるビューを持つバッファを作成
+		static Ref<Buffer> Create(const BufferViewDesc& desc);
 
 	public:
 
-		//! @brief  定義を取得
+		//! @brief		定義を取得
 		virtual const BufferDesc& getDesc()const = 0;
+
+		//! @brief      BindlessHandleを取得
+		virtual BindlessHandle getHandle()const = 0;
 
 		//! @brief      バッファを更新
 		//! @note		deprecated

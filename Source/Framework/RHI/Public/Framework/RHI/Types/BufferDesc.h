@@ -4,6 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/RHI/Forward.h>
 
 namespace ob::rhi {
 
@@ -46,6 +47,25 @@ namespace ob::rhi {
 	};
 	//! @brief  バインド・フラグ・セット
 	using BufferFlags = BitFlags<BufferFlag>;
+
+	//! @brief	バッファリソースをどのリソースタイプとして参照するか
+	//! @see	BindingType
+	enum class BufferViewType {
+		None,
+		Buffer,
+		RWBuffer,
+		StructuredBuffer,
+		RWStructuredBuffer,
+		ByteAddressBuffer,
+		RWByteAddressBuffer,
+		ConstantBuffer,
+	};
+
+	struct BufferViewDesc {
+		Ref<Buffer>		base; //!< ベースバッファ
+		BufferViewType	type; //!< ビュータイプ
+	};
+
 
 
 	//! @brief  バッファ定義

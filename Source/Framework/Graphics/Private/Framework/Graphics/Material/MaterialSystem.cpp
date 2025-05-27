@@ -5,6 +5,7 @@
 //***********************************************************
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>
+#include <Framework/RHI/RHI.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/PipelineState.h>
@@ -31,9 +32,11 @@ namespace ob::graphics {
 		m_descs.global = Convert("MaterialGlobal", desc.properties.global);
 		m_descs.scene = Convert("MaterialScene", desc.properties.scene);
 		m_descs.view = Convert("MaterialView", desc.properties.view);
-		m_layouts.global = MaterialBlock::CreateLayout(m_descs.global,1);
-		m_layouts.scene = MaterialBlock::CreateLayout(m_descs.scene,2);
-		m_layouts.view = MaterialBlock::CreateLayout(m_descs.view,3);
+		if (!rhi::RHI::Instance().getConfig().enableBindless) {
+			m_descs.global.layout = m_layouts.global = MaterialBlock::CreateLayout(m_descs.global, 1);
+			m_descs.scene.layout = m_layouts.scene = MaterialBlock::CreateLayout(m_descs.scene, 2);
+			m_descs.view.layout = m_layouts.view = MaterialBlock::CreateLayout(m_descs.view, 3);
+		}
 
 		m_globalBlock = MaterialBlock(m_descs.global);
 	}

@@ -15,7 +15,8 @@ namespace ob::rhi {
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
     DirectX12Sampler::DirectX12Sampler(DirectX12RHI& device,const SamplerDesc& desc)
-		:m_rhi(device)
+		: m_rhi(device)
+		, m_desc(desc)
     {
 		D3D12_SAMPLER_DESC ddesc = {};
         switch (desc.filter)
@@ -40,10 +41,13 @@ namespace ob::rhi {
         ddesc.MinLOD = 0;
         ddesc.MaxLOD = 100; //  大きければよい
 
-        m_desc = ddesc;
+        m_nativeDesc = ddesc;
 
         device.allocateHandle(DescriptorHeapType::SamplerCopyable,m_handle,1);
         device.getNative()->CreateSampler(&ddesc, m_handle.getCpuHandle());
+
+        device.allocateHandle(DescriptorHeapType::Sampler, m_handle2, 1);
+        device.getNative()->CreateSampler(&ddesc, m_handle2.getCpuHandle());
 
         manage();
     }

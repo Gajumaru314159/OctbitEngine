@@ -35,6 +35,9 @@ namespace ob::rhi {
         //! @brief      定義取得
         const TextureDesc& desc()const override;
 
+        //! @brief      BindlessHandleを取得
+        BindlessHandle handle()const override;
+
         //! @brief      定義取得
         const RenderTextureDesc& descOfRenderTexture()const override;
 
@@ -107,6 +110,14 @@ namespace ob::rhi {
     //! @brief      定義取得
     inline const TextureDesc& VulkanTexture::desc()const {
         return m_desc;
+    }
+
+    //! @brief      BindlessHandleを取得
+    inline BindlessHandle VulkanTexture::handle()const {
+        BindlessHandle handle;
+        handle.type = BindingType::Texture;
+        handle.index = 0;
+        return handle;
     }
 
     //! @brief      定義取得

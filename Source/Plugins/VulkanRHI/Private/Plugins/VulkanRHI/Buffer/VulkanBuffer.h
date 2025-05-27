@@ -35,6 +35,10 @@ namespace ob::rhi {
 		const BufferDesc& getDesc()const override;
 
 
+		//! @brief      BindlessHandleを取得
+		BindlessHandle getHandle()const override;
+
+
 		//! @brief      バッファを更新
 		//! 
 		//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
@@ -69,6 +73,22 @@ namespace ob::rhi {
 		vk::raii::DeviceMemory m_memory = nullptr;
 
 	};
+
+
+
+	//!@ condn
+
+	//! @brief      BindlessHandleを取得
+	inline BindlessHandle VulkanBuffer::getHandle()const {
+		BindlessHandle handle;
+		handle.type = BindingType::ByteAddressBuffer;
+		handle.index = 0;
+		// TODO
+		return handle;
+	}
+
+
+	//! @endcond
 
 
 }

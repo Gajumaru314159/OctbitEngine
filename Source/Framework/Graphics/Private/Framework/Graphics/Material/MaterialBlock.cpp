@@ -50,7 +50,7 @@ namespace ob::graphics {
 	void MaterialBlock::initializeProperties(const MaterialBlockDesc& desc) {
 		using namespace ob::rhi;
 
-		m_isBindless = RHI::Instance().getConfig().enableBindless;
+		m_isBindless = desc.layout==nullptr;
 
 		// NOTE ここで生成しているマップはMaterialBlockDescが同じであればシステム内で共有可能
 		//      キャッシュ対応することによってメモリ消費量の削減が見込める
@@ -147,7 +147,17 @@ namespace ob::graphics {
 	void MaterialBlock::initializeDescriptorTables(const MaterialBlockDesc& desc) {
 		using namespace ob::rhi;
 
-		m_layout = desc.layout ? desc.layout : MaterialBlock::CreateLayout(desc);
+		if (m_isBindless) {
+			for (auto& name : desc.buffers) {
+				// setBuffer(name, Buffer::Empty());
+			}
+			for (auto& name : desc.textures) {
+				setTexture(name, Texture::White(), Sampler::Default());
+			}
+			return;
+		}
+
+		m_layout = desc.layout;
 
 		// バリデート (バインドレスはルート定数を使うのでバインドフルのみ)
 		if(m_layout) {
@@ -264,7 +274,7 @@ namespace ob::graphics {
 	//! @brief  Textureプロパティを設定
 	void MaterialBlock::setTexture(StringView name, const Ref<Texture>& texture, const Ref<Sampler>& sampler) {
 
-		if (!m_table) {
+		if (!m_isBindless && !m_table) {
 			LOG_ERROR("MaterialBlockの構築に失敗しています [{}]",name);
 			return;
 		}
@@ -294,23 +304,23 @@ namespace ob::graphics {
 			m_textures[desc.index] = texture;
 			m_samplers[desc.index] = sampler;
 
-			m_table->setResource(desc.slot+0, texture);
-			m_table->setResource(desc.slot+1, sampler);
-
 			if (useBindless) {
 
 				struct TextureSamplerHandle {
 					rhi::BindlessHandle texture;
 					rhi::BindlessHandle sampler;
-					bool operator == (const TextureSamplerHandle& rhs) const{
+					bool operator == (const TextureSamplerHandle& rhs) const {
 						return texture == rhs.texture && sampler == rhs.sampler;
 					}
 				};
 
 				TextureSamplerHandle handles;
-				handles.texture = m_table->getBindlessHandle(desc.slot+0);
-				handles.sampler = m_table->getBindlessHandle(desc.slot+1);
+				handles.texture = texture->handle();
+				handles.sampler = sampler->getHandle();
 				setValueProprty(name, MaterialPropertyType::Texture, handles);
+			} else {
+				m_table->setResource(desc.slot + 0, texture);
+				m_table->setResource(desc.slot + 1, sampler);
 			}
 
 		}
@@ -320,7 +330,7 @@ namespace ob::graphics {
 	//! @brief  Bufferプロパティを設定
 	void MaterialBlock::setBuffer(StringView name, const Ref<rhi::Buffer>& value) {
 
-		if (!m_table) {
+		if (!m_isBindless && !m_table) {
 			LOG_ERROR("MaterialBlockの構築に失敗しています [{}]", name);
 			return;
 		}
@@ -341,11 +351,11 @@ namespace ob::graphics {
 
 			m_buffers[desc.index] = value;
 
-			m_table->setResource(desc.slot, value);
-
 			if (useBindless) {
-				rhi::BindlessHandle handle = m_table->getBindlessHandle(desc.slot);
+				rhi::BindlessHandle handle = value->getHandle();
 				setValueProprty(name, MaterialPropertyType::Buffer, handle);
+			} else {
+				m_table->setResource(desc.slot, value);
 			}
 
 		}
@@ -357,16 +367,14 @@ namespace ob::graphics {
 	//!          この関数を呼び出すと、指定のスロットに対してMaterialBlockのBufferHandle記録されます。
 	void MaterialBlock::record(Ref<CommandList>& commandList, s32 slot) {
 		if (!commandList) return;
-		if (!m_table) return;
+		if (!m_isBindless && !m_table) return;
 		using namespace ob::rhi;
 
 		updateParameterBuffer();
 
 		if (m_isBindless) {
 
-			size_t valuesIndex = m_textures.size() * 2 + m_buffers.size();
-
-			rhi::BindlessHandle handle = m_table->getBindlessHandle(valuesIndex);
+			rhi::BindlessHandle handle = m_valuesBuffer->getHandle();
 
 			SetRootConstantsParam param;
 			param.blob = BlobView(&handle, sizeof(handle));
@@ -393,8 +401,10 @@ namespace ob::graphics {
 		}
 	}
 
+
 	//! @brief レイアウトを取得 
 	const Ref<rhi::DescriptorLayout>& MaterialBlock::getLayout()const {
 		return m_layout;
 	}
+
 }

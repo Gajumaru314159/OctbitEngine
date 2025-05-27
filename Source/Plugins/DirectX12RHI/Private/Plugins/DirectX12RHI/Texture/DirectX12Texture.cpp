@@ -78,7 +78,7 @@ namespace ob::rhi {
 			return;
 		}
 
-		Utility::SetName(m_resource.Get(), m_desc.name);
+		initialize();
 
 		manage();
     }
@@ -143,13 +143,11 @@ namespace ob::rhi {
 
 		m_device.getTextureUploader().add(resource, subresources);
 #endif
-		
 
 		m_resource = resource;
 
-		Utility::SetName(m_resource.Get(), m_desc.name);
+		initialize();
 
-		manage();
 	}
 
 
@@ -237,9 +235,45 @@ namespace ob::rhi {
 
 		m_resource = resource;
 
-		Utility::SetName(m_resource.Get(), m_desc.name);
+		initialize();
+
+	}
+
+
+	//! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, const TextureViewDesc& desc)
+		: m_device(rDevice)
+	{
+		auto base = desc.base.cast<DirectX12Texture>();
+		if (!base) {
+			LOG_ERROR("ベーステクスチャが指定されていません");
+			return;
+		}
+
+		m_desc = base->m_desc;
+		m_viewDesc = desc;
+
+		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+
+		auto flags = m_desc.flags;
+
+		switch (desc.type) {
+		case TextureViewType::Texture:
+			if (flags & TextureFlag::ShaderResource) {
+				createSRV(m_handle.getCpuHandle());
+			}
+			break;
+		case TextureViewType::RWTexture:
+			if (flags & TextureFlag::UnorderedAccess) {
+				createUAV(m_handle.getCpuHandle(),0);
+			}
+			break;
+		}
+
+		m_resource = base->m_resource;
 
 		manage();
+
 	}
 
 
@@ -327,9 +361,8 @@ namespace ob::rhi {
 		m_viewport = CD3DX12_VIEWPORT(resource.Get());
 		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
 
-		Utility::SetName(m_resource.Get(), m_desc.name);
+		initialize();
 
-		manage();
 	}
 
 
@@ -377,6 +410,20 @@ namespace ob::rhi {
 
 	}
 
+	//! @brief 共通初期化処理
+	void DirectX12Texture::initialize() {
+		
+		// デフォルトSRVを割り当て
+		// TODO SRVをつくってはいけないパターンがないか確認する
+		m_device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+		createSRV(m_handle.getCpuHandle());
+
+		// リソース名を設定
+		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		manage();
+	}
+
 
 	//! @brief      SRVを生成
 	void DirectX12Texture::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
@@ -391,24 +438,29 @@ namespace ob::rhi {
 			desc.Format = TypeConverter::ConvertDepthAsColor(m_desc.format);
 		}
 
+		// エンジンの仕様では0以下がすべてのミップを表すがD3D12では-1を指定する
+		auto mipLevels = m_desc.mipLevels <= 0 ? -1 : m_desc.mipLevels;
+
 		// NOTE 特定のスライスを指定する場合は追加の引数が必要
 		switch (m_desc.type) {
 		case TextureType::Texture1D:
 			if (0 < m_desc.arrayNum) {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
-				desc.Texture1DArray.MipLevels = m_desc.mipLevels;
+				desc.Texture1DArray.MipLevels = mipLevels;
+				desc.Texture1DArray.ArraySize = m_desc.arrayNum;
 			} else {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE1D;
-				desc.Texture1D.MipLevels = m_desc.mipLevels;
+				desc.Texture1D.MipLevels = mipLevels;
 			}
 			break;
 		case TextureType::Texture2D:
 			if (0 < m_desc.arrayNum) {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
-				desc.Texture2DArray.MipLevels = m_desc.mipLevels;
+				desc.Texture2DArray.MipLevels = mipLevels;
+				desc.Texture2DArray.ArraySize = m_desc.arrayNum;
 			} else {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-				desc.Texture2D.MipLevels = m_desc.mipLevels;
+				desc.Texture2D.MipLevels = mipLevels;
 			}
 			break;
 		case TextureType::Texture3D:
@@ -416,16 +468,17 @@ namespace ob::rhi {
 				OB_ABORT("Texture3Dは配列にできません。IsInvalid()の条件を修正してください。");
 			} else {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE3D;
-				desc.Texture3D.MipLevels = m_desc.mipLevels;
+				desc.Texture3D.MipLevels = mipLevels;
 			}
 			break;
 		case TextureType::Cube:
 			if (0 < m_desc.arrayNum) {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBEARRAY;
-				desc.TextureCubeArray.MipLevels = m_desc.mipLevels;
+				desc.TextureCubeArray.MipLevels = mipLevels;
+				desc.TextureCubeArray.NumCubes = m_desc.arrayNum;
 			} else {
 				desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
-				desc.TextureCube.MipLevels = m_desc.mipLevels;
+				desc.TextureCube.MipLevels = mipLevels;
 			}
 			break;
 		default:
@@ -459,7 +512,7 @@ namespace ob::rhi {
 				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1DARRAY;
 				desc.Texture1DArray.MipSlice = slice;
 				desc.Texture1DArray.FirstArraySlice = 0;
-				desc.Texture1DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+				desc.Texture1DArray.ArraySize = m_desc.arrayNum;
 			}
 			else {
 				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE1D;
@@ -470,9 +523,8 @@ namespace ob::rhi {
 			if (1 < m_desc.arrayNum) {
 				desc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
 				desc.Texture2DArray.MipSlice = slice;
-				desc.Texture2DArray.MipSlice = slice;
 				desc.Texture2DArray.FirstArraySlice = 0;
-				desc.Texture2DArray.ArraySize = m_resource->GetDesc().DepthOrArraySize;
+				desc.Texture2DArray.ArraySize = m_desc.arrayNum;
 				desc.Texture2DArray.PlaneSlice = 0;
 			}
 			else {

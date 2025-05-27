@@ -26,7 +26,7 @@ TEST(RHI, CreateEmpty) {
 	ASSERT_FALSE(CommandList::Create({}));
 	ASSERT_FALSE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
-	ASSERT_FALSE(Buffer::Create({}));
+	ASSERT_FALSE(Buffer::Create(BufferDesc{}));
 	ASSERT_FALSE(Texture::Create("Texture",Blob{}));
 	ASSERT_FALSE(RenderTexture::Create({}));
 	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));
@@ -48,7 +48,7 @@ TEST(RHI, CreateEmptyDX12) {
 	ASSERT_TRUE(CommandList::Create({}));
 	ASSERT_TRUE(RootSignature::Create({}));
 	ASSERT_FALSE(PipelineState::Create({}));
-	ASSERT_FALSE(Buffer::Create({}));
+	ASSERT_FALSE(Buffer::Create(BufferDesc{}));
 	ASSERT_FALSE(Texture::Create("Texture", Blob{}));
 	ASSERT_FALSE(RenderTexture::Create({}));
 	ASSERT_FALSE(Shader::Load({}, ShaderStage::Vertex));

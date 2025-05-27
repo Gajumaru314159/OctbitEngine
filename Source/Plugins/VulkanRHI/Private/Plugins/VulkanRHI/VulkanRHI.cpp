@@ -657,6 +657,9 @@ namespace ob::rhi {
 	Ref<Buffer> VulkanRHI::createBuffer(const BufferDesc& desc) { 
 		SAFE_CREATE(Buffer, VulkanBuffer, *this, desc);
 	}
+	Ref<Buffer> VulkanRHI::createBuffer(const BufferViewDesc& desc) { 
+		return nullptr;
+	}
 
 
 	//! @brief  シェーダをコンパイル

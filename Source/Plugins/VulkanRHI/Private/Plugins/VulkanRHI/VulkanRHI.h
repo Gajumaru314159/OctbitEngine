@@ -94,6 +94,7 @@ namespace ob::rhi {
 
 		//! @brief  バッファーを生成
 		Ref<Buffer> createBuffer(const BufferDesc& desc) override;
+		Ref<Buffer> createBuffer(const BufferViewDesc& desc) override;
 
 
 		//! @brief  シェーダをコンパイル

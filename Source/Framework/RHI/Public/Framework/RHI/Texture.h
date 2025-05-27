@@ -7,6 +7,7 @@
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/TextureDesc.h>
+#include <Framework/RHI/Types/BindlessHandle.h>
 #include <Framework/Core/Graphic/Bitmap.h>
 
 namespace ob::rhi {
@@ -23,30 +24,30 @@ namespace ob::rhi {
 
     public:
 
-        //! @brief  コンストラクタ
-        //! 
-        //! @param desc テクスチャ定義
+		//! @brief  空テクスチャを生成
         static Ref<Texture> Create(const TextureDesc& desc);
 
-        //! @brief  コンストラクタ
-        //! 
-        //! @param desc テクスチャ定義
+		//! @brief  ビットマップデータを指定して2Dテクスチャを生成
         static Ref<Texture> Create(StringView name, const Bitmap& bitmap);
 
-        //! @brief  コンストラクタ
-        //! 
-        //! @param desc テクスチャ定義
+        //! @brief 色データから新しいテクスチャを作成
+        //! @details 次元数はTextureTypeを指定してください。
+		//!          colors.size() が size.volume() の値と一致する必要があります。
         static Ref<Texture> Create(StringView name, TextureType type,Size size,Span<const IntColor> colors);
 
-        //! @brief  コンストラクタ
-        //! 
-        //! @param desc テクスチャ定義
+        //! @brief  テクスチャバイナリからテクスチャを生成
+        //! @details blobに渡せるデータ形式はプラットフォームごとに異なります
+        //!          |プラットフォーム|形式|
+        //!          |----------------|----|
+        //!          |Windows         |DDS,BMP,GIF,TIFF,PNG,JPG,TGA,HDR|
         static Ref<Texture> Create(StringView name,BlobView blob);
 
-        //! @brief      パスからテクスチャを読み込み
-        //! 
-        //! @param path ファイルパス
+        //! @brief      ファイルパスからテクスチャを読み込む
+		//! @details    Create(StringView name,BlobView blob) のラッパー関数です。
         static Ref<Texture> Load(StringView path);
+
+        //! @brief  ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+        static Ref<Texture> Create(const TextureViewDesc& desc);
 
 
 		//! @brief      テクスチャフォーマットがサポートされているか
@@ -80,6 +81,9 @@ namespace ob::rhi {
 
         //! @brief      ミップレベルを取得
         s32 mipLevels()const { return desc().mipLevels; }
+
+		//! @brief      BindlessHandleを取得
+        virtual BindlessHandle handle()const = 0;
 
     };
 

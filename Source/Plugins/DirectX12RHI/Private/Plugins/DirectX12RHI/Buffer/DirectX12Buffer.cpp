@@ -52,7 +52,6 @@ namespace ob::rhi {
 		: m_device(rDevice)
 		, m_desc(desc)
 	{
-
 		if (!m_desc.isValid()) return;
 
 		HRESULT result;
@@ -86,6 +85,22 @@ namespace ob::rhi {
 		m_resource = buffer;
 		Utility::SetName(m_resource.Get(), getName());
 
+		if (desc.flags & BufferFlag::Constant) {
+			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			createCBV(m_handle.getCpuHandle());
+			m_viewDesc.type = BufferViewType::ConstantBuffer;
+		} else if (desc.flags & BufferFlag::ShaderResource) {
+			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			createSRV(m_handle.getCpuHandle());
+			m_viewDesc.type = BufferViewType::ByteAddressBuffer;
+		} else if (desc.flags & BufferFlag::UnorderedAccess) {
+			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			createUAV(m_handle.getCpuHandle());
+			m_viewDesc.type = BufferViewType::RWByteAddressBuffer;
+		} else {
+			m_viewDesc.type = BufferViewType::None;
+		}
+
 		manage();
 	}
 
@@ -100,6 +115,51 @@ namespace ob::rhi {
 		if (!isValid())return; 
 		// TODO
 		OB_NOTIMPLEMENTED();
+	}
+
+	//! @brief  コンストラクタ
+	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferViewDesc& desc)
+		: m_device(rDevice)
+		, m_viewDesc(desc)
+	{
+		auto base = desc.base.cast<DirectX12Buffer>();
+
+		if (base == nullptr) {
+			LOG_ERROR("ベースバッファが指定されていません");
+			return;
+		}
+
+		m_desc = base->m_desc;
+
+		if (!m_desc.isValid()) return;
+
+		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+
+		auto flags = m_desc.flags;
+
+		switch (desc.type) {
+		case BufferViewType::ConstantBuffer:
+			if (flags & BufferFlag::Constant) {
+				createCBV(m_handle.getCpuHandle());
+			}
+			break;
+		case BufferViewType::Buffer:
+		case BufferViewType::StructuredBuffer:
+		case BufferViewType::ByteAddressBuffer:
+			if (flags & BufferFlag::ShaderResource) {
+				createSRV(m_handle.getCpuHandle());
+			}
+			break;
+		case BufferViewType::RWBuffer:
+		case BufferViewType::RWStructuredBuffer:
+		case BufferViewType::RWByteAddressBuffer:
+			if (flags & BufferFlag::UnorderedAccess) {
+				createUAV(m_handle.getCpuHandle());
+			}
+			break;
+		}
+
+		m_resource = base->m_resource;
 
 		manage();
 	}
@@ -178,6 +238,8 @@ namespace ob::rhi {
 	//! @brief      CBVを生成
 	void DirectX12Buffer::createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
+		OB_ASSERT(m_desc.flags & BufferFlag::Constant, "定数バッファを生成するには、BufferFlag::Constantフラグが必要です。 [name={}]", m_desc.name);
+
 		D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
 		desc.BufferLocation = m_resource->GetGPUVirtualAddress();
 		desc.SizeInBytes = (UINT)m_desc.size;
@@ -190,14 +252,16 @@ namespace ob::rhi {
 	//! @brief      SRVを生成
 	void DirectX12Buffer::createSRV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
+		OB_ASSERT(m_desc.flags & BufferFlag::ShaderResource, "SRVを生成するには、BufferFlag::ShaderResourceフラグが必要です。 [name={}]", m_desc.name);
+
 		bool isStructuredBuffer = 0 < m_desc.stride;
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC desc = {};
-		desc.Format = DXGI_FORMAT_R32_TYPELESS;
+		desc.Format = isStructuredBuffer ? DXGI_FORMAT_UNKNOWN : DXGI_FORMAT_R32_TYPELESS;
 		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = m_desc.size/4;
+		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size/m_desc.stride : m_desc.size/4;
 		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
 
@@ -209,19 +273,24 @@ namespace ob::rhi {
 	//! @brief      UAVを生成
 	void DirectX12Buffer::createUAV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const {
 
+		OB_ASSERT(m_desc.flags & BufferFlag::UnorderedAccess, "UAVを生成するには、BufferFlag::UnorderedAccessフラグが必要です。 [name={}]", m_desc.name);
+
 		bool isStructuredBuffer = 0 < m_desc.stride;
+
+		// TODO DXGI_FORMAT_R32_TYPELESS対応
+		if (m_resource->GetDesc().Format != DXGI_FORMAT_R32_TYPELESS) {
+			LOG_ERROR("リソースがDXGI_FORMAT_R32_TYPELESSではないためUAVの生成ができません");
+			return;
+		}
 
 		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
 		desc.Format = DXGI_FORMAT_UNKNOWN;
 		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = m_desc.size;
 		desc.Buffer.StructureByteStride = m_desc.stride;
+		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size / m_desc.stride : m_desc.size / 4;
 		desc.Buffer.CounterOffsetInBytes = 0; // 何？
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
-
-		// TODO DXGI_FORMAT_R32_TYPELESS対応
-		OB_NOTIMPLEMENTED();
 
 		// TODO pCounterResource の調査
 		m_device.getNative()->CreateUnorderedAccessView(m_resource.Get(),nullptr, &desc, handle);

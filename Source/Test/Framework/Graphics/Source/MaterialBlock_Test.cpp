@@ -190,6 +190,7 @@ PsOut PS_Main(PsIn i){
 	desc.buffers = { "Buffer" };
 	desc.vectors = { "Color" };
 	desc.scalars = { "Progress","Speed", "Time", "Width", "Height" };
+	desc.layout = layout;
 
 	MaterialBlock block(desc);
 	block.setScalar("Speed", 3.f);
@@ -234,7 +235,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		RenderPassDesc renderPass;
+		BeginPassParam renderPass;
 		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 		commandList->beginRenderPass(renderPass);
@@ -512,7 +513,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		RenderPassDesc renderPass;
+		BeginPassParam renderPass;
 		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 		commandList->beginRenderPass(renderPass);
@@ -811,7 +812,7 @@ PsOut PS_Main(PsIn i){
 
 		commandList->begin();
 
-		RenderPassDesc renderPass;
+		BeginPassParam renderPass;
 		renderPass.colors.emplace_back(renderTexture, RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 
 		commandList->beginRenderPass(renderPass);

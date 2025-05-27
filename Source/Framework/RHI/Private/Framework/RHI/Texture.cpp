@@ -32,10 +32,7 @@ namespace ob::rhi {
 		return GetPreset(PresetTexture::Check);
 	}
 
-	//! @brief  コンストラクタ
-	//! 
-	//! @param desc テクスチャ定義
-	//! @param name オブジェクト名
+	//! @brief  空テクスチャを生成
 	Ref<Texture> Texture::Create(const TextureDesc& desc) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(desc);
@@ -43,15 +40,12 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-	//! @brief  コンストラクタ
+	//! @brief  ビットマップデータを指定して2Dテクスチャを生成
 	Ref<Texture> Texture::Create(StringView name, const Bitmap& bitmap) {
 		return Create(name, TextureType::Texture2D, bitmap.size(), {bitmap.data(),bitmap.pixelCount()});
 	}
 
-	//! @brief  コンストラクタ
-	//! 
-	//! @param desc テクスチャ定義
-	//! @param name オブジェクト名
+	//! @brief 色データから新しいテクスチャを作成
 	Ref<Texture> Texture::Create(StringView name, BlobView blob) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(name, blob);
@@ -59,9 +53,7 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-	//! @brief  コンストラクタ
-	//! 
-	//! @param desc テクスチャ定義
+	//! @brief  テクスチャバイナリからテクスチャを生成
 	Ref<Texture> Texture::Create(StringView name, TextureType type, Size size, Span<const IntColor> colors) {
 		if (auto rhi = RHI::Get()) {
 			return rhi->createTexture(name, type, size, colors);
@@ -69,10 +61,7 @@ namespace ob::rhi {
 		return nullptr;
 	}
 
-
-	//! @brief      パスからテクスチャを読み込み
-	//! 
-	//! @param path ファイルパス
+	//! @brief      ファイルパスからテクスチャを読み込む
 	Ref<Texture> Texture::Load(StringView path) {
 
 		File fs(path);
@@ -82,6 +71,14 @@ namespace ob::rhi {
 			return Texture::Create(path, blob);
 		}
 
+		return nullptr;
+	}
+
+	//! @brief  ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+	Ref<Texture> Texture::Create(const TextureViewDesc& desc) {
+		if (auto rhi = RHI::Get()) {
+			return rhi->createTexture(desc);
+		}
 		return nullptr;
 	}
 

@@ -16,8 +16,13 @@ namespace ob::rhi {
 			return false;
 		}
 
-		if (state == BufferState::Constant && size % 256 != 0) {
-			LOG_ERROR("定数バッファは256の倍数で作成する必要があります。 [name={},size]", name, size);
+		if (flags & BufferFlag::Constant && size % 256 != 0) {
+			LOG_ERROR("定数バッファは256の倍数で作成する必要があります。 [name={},size={}]", name, size);
+			return false;
+		}
+
+		if (0 < stride && size % stride != 0) {
+			LOG_ERROR("StructuredBufferを生成す場合はsizeはstrideの倍数である必要があります [name={},size={},stride={}]", name, size,stride);
 			return false;
 		}
 

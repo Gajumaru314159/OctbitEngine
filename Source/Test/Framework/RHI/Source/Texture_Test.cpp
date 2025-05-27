@@ -22,7 +22,7 @@ TEST_F(TextureTest, Type) {
 
 		auto texture = Texture::Create(desc);
 
-		if (!Texture::Supports(desc.format, type)) {
+		if (!desc.isValid()) {
 			ASSERT_EQ(texture, nullptr);
 			continue;
 		}
@@ -43,7 +43,7 @@ TEST_F(TextureTest, Format) {
 
 		auto texture = Texture::Create(desc);
 
-		if (!Texture::Supports(format,desc.type)) {
+		if (!desc.isValid()) {
 			ASSERT_EQ(texture, nullptr);
 			continue;
 		}

@@ -32,13 +32,33 @@ namespace ob::rhi {
 
 
         //! @brief      名前を取得
-        const String& getName()const override { return m_name; }
+        const String& getName()const override { return m_desc.name; }
+
+
+        //! @brief      BindlessHandleを取得
+        BindlessHandle getHandle()const override;
 
     private:
-        DirectX12RHI& m_rhi;
-        D3D12_SAMPLER_DESC m_desc;
-        String m_name;
-        DescriptorHandle m_handle;
+        DirectX12RHI&       m_rhi;
+		SamplerDesc         m_desc;
+        DescriptorHandle    m_handle;
+		DescriptorHandle    m_handle2; // NOTE DescriptorHandleのコピー対応をしたらm_handleだけで良いはず
+        D3D12_SAMPLER_DESC  m_nativeDesc;
     };
+
+
+    //!@ condn
+
+
+    //! @brief      BindlessHandleを取得
+    inline BindlessHandle DirectX12Sampler::getHandle()const {
+        BindlessHandle handle;
+        handle.type = BindingType::Sampler;
+        handle.index = m_handle.getBindlessIndex();
+        return handle;
+    }
+
+
+    //! @endcond
 
 }

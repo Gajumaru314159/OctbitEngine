@@ -10,6 +10,8 @@
 namespace ob::graphics {
 
     //! @brief  マテリアル定義
+	//! @details マテリアルのプロパティ゙定義するための構造体です。
+	//!          layout を指定しない場合はBindlessモードとして扱われます。
     struct MaterialBlockDesc {
         String          name;
         Vector<String>  textures;

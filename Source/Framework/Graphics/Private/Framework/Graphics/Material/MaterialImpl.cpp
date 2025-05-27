@@ -28,6 +28,7 @@ namespace ob::graphics {
 
 		// NOTE コンストラクタでMaterialBlockを作成する = GameThreadで作成するとヒッチの原因となる可能性がある。許容するか、非同期生成するかは要検討。
 		// if(Graphics::IsGameThread()) LOG_WARNING("GameThreadでマテリアルが生成されています。ヒッチを避けるために非同期スレッドで生成してください。");
+		bool isBindless = RHI::Instance().getConfig().enableBindless;
 
 		MaterialBlockDesc bdesc;
 		bdesc.name = desc.name;
@@ -37,6 +38,9 @@ namespace ob::graphics {
 		bdesc.vectors = desc.vectors;
 		bdesc.scalars = desc.scalars;
 		bdesc.integers = desc.integers;
+		if (!isBindless) {
+			bdesc.layout = MaterialBlock::CreateLayout(bdesc);
+		}
 		m_block = MaterialBlock(bdesc);
 
 		auto& layouts = MaterialSystem::Instance().getLayouts();
@@ -45,10 +49,10 @@ namespace ob::graphics {
 		rdesc.name = desc.name;
 		if (rhi::RHI::Instance().getConfig().enableBindless) {
 			rdesc.constants.set(sizeof(rhi::BindlessHandle) * 4, 0);
+			rdesc.flags = RootSignatureFlag::EnableBindless;
 		} else {
-			rdesc.layouts = { m_block.getLayout(), layouts.global, layouts.scene, layouts.view };
+			rdesc.layouts = { bdesc.layout, layouts.global, layouts.scene, layouts.view };
 		}
-		rdesc.flags = RootSignatureFlag::EnableBindless;
 
 		m_signature = RootSignature::Create(rdesc);
 	}

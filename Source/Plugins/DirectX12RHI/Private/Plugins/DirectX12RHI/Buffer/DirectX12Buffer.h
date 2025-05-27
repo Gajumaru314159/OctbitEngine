@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
+#include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 namespace ob::rhi {
 
@@ -25,6 +26,10 @@ namespace ob::rhi {
 		DirectX12Buffer(class DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob);
 
 
+		//! @brief  コンストラクタ
+		DirectX12Buffer(class DirectX12RHI& rDevice, const BufferViewDesc& desc);
+
+
 		//! @brief  妥当な状態か
 		bool isValid()const;
 
@@ -35,6 +40,10 @@ namespace ob::rhi {
 
 		//! @brief  定義を取得
 		const BufferDesc& getDesc()const override;
+
+
+		//! @brief      BindlessHandleを取得
+		BindlessHandle getHandle()const override;
 
 
 		//! @brief      バッファを更新
@@ -74,12 +83,28 @@ namespace ob::rhi {
 
 	private:
 
-		class DirectX12RHI& m_device;
-		BufferDesc m_desc;
-
-		ComPtr<ID3D12Resource> m_resource;
+		class DirectX12RHI&		m_device;
+		BufferDesc				m_desc;
+		BufferViewDesc			m_viewDesc;
+		DescriptorHandle		m_handle;
+		ComPtr<ID3D12Resource>	m_resource;
 
 	};
 
+
+	//!@ condn
+
+
+	//! @brief      BindlessHandleを取得
+	inline BindlessHandle DirectX12Buffer::getHandle()const {
+		if (m_handle.empty()) return {};
+		BindlessHandle handle;
+		handle.type = BindingType::ByteAddressBuffer;
+		handle.index = m_handle.getBindlessIndex();
+		return handle;
+	}
+
+
+	//! @endcond
 
 }

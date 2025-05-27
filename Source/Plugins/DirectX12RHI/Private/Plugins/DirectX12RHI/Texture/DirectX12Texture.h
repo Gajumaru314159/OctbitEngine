@@ -27,14 +27,17 @@ namespace ob::rhi {
     class DirectX12Texture :public rhi::RenderTexture {
     public:
 
-        //! @brief      TextureDesc から空のテクスチャを生成
+        //! @brief      空テクスチャを生成
         DirectX12Texture(DirectX12RHI& rDevice, const TextureDesc& desc);
 
-        //! @brief      IntColorの配列 から空のテクスチャを生成
+        //! @brief      色データから新しいテクスチャを作成
         DirectX12Texture(DirectX12RHI& rDevice, StringView name, TextureType type, Size size,Span<const IntColor> colors);
 
         //! @brief      テクスチャバイナリから生成
-        DirectX12Texture(DirectX12RHI& rDevice, StringView name,BlobView blob);
+        DirectX12Texture(DirectX12RHI& rDevice, StringView name, BlobView blob);
+
+        //! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+        DirectX12Texture(DirectX12RHI& rDevice, const TextureViewDesc& desc);
 
         //! @brief      妥当な状態か
         bool isValid()const;
@@ -47,6 +50,9 @@ namespace ob::rhi {
 
         //! @brief      定義取得
         const TextureDesc& desc()const override;
+
+        //! @brief      BindlessHandleを取得
+        BindlessHandle handle()const override;
 
         //! @brief      定義取得
         const RenderTextureDesc& descOfRenderTexture()const override;
@@ -92,16 +98,23 @@ namespace ob::rhi {
         //! @brief      遷移バリアを追加
         bool addResourceTransition(D3D12_RESOURCE_BARRIER& barrier, D3D12_RESOURCE_STATES state,s32 subresource=-1);
 
+    private:
+
+        //! @brief      共通初期化処理
+        void initialize();
+
     protected:
 
-        class DirectX12RHI& m_device;
+        class DirectX12RHI&     m_device;
 
         TextureDesc             m_desc;         //!< 定義
-        RenderTextureDesc       m_renderDesc;   //!< 定義
+        TextureViewDesc         m_viewDesc;     //!< ビュー定義
+		DescriptorHandle        m_handle;       //!< デスクリプタハンドル
+        ComPtr<ID3D12Resource>  m_resource;     //!< リソース 
 
-        ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
 
         // TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
+        RenderTextureDesc       m_renderDesc;   //!< 定義
         DescriptorHandle        m_hRTV;         //!< デスクリプタハンドル
         DescriptorHandle        m_hDSV;         //!< デスクリプタハンドル
 
@@ -139,6 +152,14 @@ namespace ob::rhi {
     //! @brief      定義取得
     inline const TextureDesc& DirectX12Texture::desc()const {
         return m_desc;
+    }
+
+    //! @brief      BindlessHandleを取得
+    inline BindlessHandle DirectX12Texture::handle()const {
+		BindlessHandle handle;
+		handle.type = BindingType::Texture;
+		handle.index = m_handle.getBindlessIndex();
+        return handle;
     }
 
     //! @brief      定義取得

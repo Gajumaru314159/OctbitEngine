@@ -32,13 +32,7 @@ TEST_F(BufferTest, Create) {
 					Ref<Buffer> buffer = Buffer::Create(desc);
 
 					// サイズチェック
-					if (size == 0) {
-						ASSERT_FALSE(buffer);
-						continue;
-					}
-
-					// 256バイト制限
-					if (size %256 != 0 && type == BufferState::Constant) {
+					if (!desc.isValid()) {
 						ASSERT_FALSE(buffer);
 						continue;
 					}

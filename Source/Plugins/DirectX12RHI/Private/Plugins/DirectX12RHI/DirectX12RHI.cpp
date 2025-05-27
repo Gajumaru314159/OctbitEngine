@@ -207,6 +207,12 @@ namespace ob::rhi {
 	}
 
 
+	//! @brief  テクスチャを生成
+	Ref<Texture> DirectX12RHI::createTexture(const TextureViewDesc& desc) {
+		SAFE_CREATE(Texture, DirectX12Texture, *this, desc);
+	}
+
+
 	//! @brief  レンダーテクスチャを生成
 	Ref<RenderTexture> DirectX12RHI::createRenderTexture(const RenderTextureDesc& desc) {
 		SAFE_CREATE(RenderTexture, DirectX12Texture, *this, desc);
@@ -221,6 +227,9 @@ namespace ob::rhi {
 
 	//! @brief  バッファーを生成
 	Ref<Buffer> DirectX12RHI::createBuffer(const BufferDesc& desc) {
+		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
+	}
+	Ref<Buffer> DirectX12RHI::createBuffer(const BufferViewDesc& desc) {
 		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
 	}
 
