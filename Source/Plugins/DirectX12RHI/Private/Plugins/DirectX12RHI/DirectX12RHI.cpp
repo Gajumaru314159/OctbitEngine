@@ -229,6 +229,7 @@ namespace ob::rhi {
 
 	//! @brief  サンプラーを生成
 	Ref<Sampler> DirectX12RHI::createSampler(const SamplerDesc& desc) {
+		// TODO descが共通している場合はキャッシュから使いまわす
 		SAFE_CREATE(Sampler, DirectX12Sampler, *this, desc);
 	}
 

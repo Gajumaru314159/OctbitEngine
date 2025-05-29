@@ -15,18 +15,11 @@ namespace ob::rhi {
 	class DirectX12DescriptorLayout;
 }
 
-//===============================================================
-// クラス定義
-//===============================================================
 namespace ob::rhi {
 
     //! @brief  デスクリプタ・テーブル実装(DirectX12)
     class DirectX12DescriptorTable :public DescriptorTable {
     public:
-
-        //===============================================================
-        //	コンストラクタ
-        //===============================================================
 
         //! @brief              コンストラクタ
         //!
@@ -45,13 +38,10 @@ namespace ob::rhi {
 
 		const DescriptorTableDesc& getDesc() const override { return m_desc;  }
 
-
 		//! @brief  リソースを設定
-		//! @{
 		bool setResource(s32 index, const Ref<Buffer>& resource) override;
 		bool setResource(s32 index, const Ref<Texture>& resource) override;
 		bool setResource(s32 index, const Ref<Sampler>& resource) override;
-		//! @}
 
 		//! @brief  バインドレスハンドルに使用するインデックスを取得
 		BindlessHandle getBindlessHandle(s32 index = 0)const override;

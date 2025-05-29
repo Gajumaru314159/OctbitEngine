@@ -2,19 +2,18 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include "DirectX12DescriptorTable.h"
-#include <Framework/RHI/Texture.h>
 #include <Framework/RHI/Buffer.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Framework/RHI/Texture.h>
+#include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
-#include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
-#include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
-#include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
+#include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorTable.h>
+#include <Plugins/DirectX12RHI/DirectX12RHI.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
+#include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
+#include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 
-namespace ob::rhi
-{
+namespace ob::rhi {
 
 	//! @brief              コンストラクタ
 	//!
@@ -39,7 +38,7 @@ namespace ob::rhi
 
 	//! @brief  妥当な状態か
 	bool DirectX12DescriptorTable::isValid()const {
-		return !m_samplerHandle.empty() || !m_othersHandle.empty();
+		return !m_elemetns.empty();
 	}
 
 
@@ -67,7 +66,7 @@ namespace ob::rhi
 			return false;
 		}
 
-		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Buffer>()) {
@@ -76,7 +75,7 @@ namespace ob::rhi
 			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
-			if (isFirstTime==false) {
+			if (isInitialSet==false) {
 				handle2 = handle;
 				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
 			}
@@ -85,7 +84,7 @@ namespace ob::rhi
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle);
 
-			if (isFirstTime == false) {
+			if (isInitialSet == false) {
 				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,handle2,handle);
 			}
 		}
@@ -111,7 +110,7 @@ namespace ob::rhi
 			return false;
 		}
 
-		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Texture>()) {
@@ -120,7 +119,7 @@ namespace ob::rhi
 			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
-			if (isFirstTime == false) {
+			if (isInitialSet == false) {
 				handle2 = handle;
 				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
 			}
@@ -128,7 +127,7 @@ namespace ob::rhi
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle, 0);
 
-			if (isFirstTime == false) {
+			if (isInitialSet == false) {
 				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle2, handle);
 			}
 		}
@@ -153,23 +152,22 @@ namespace ob::rhi
 			return false;
 		}
 
-		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Sampler>()) {
-
 			auto mapInfo = m_layout->getMapInfo(index);
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_samplerHandle.getCpuHandle(mapInfo.index);
 			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
-			if (isFirstTime == false) {
+			if (isInitialSet == false) {
 				handle2 = handle;
 				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::Sampler);
 			}
 			p->createView(handle);
 
-			if (isFirstTime == false) {
+			if (isInitialSet == false) {
 				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle2, handle);
 			}
 		}
@@ -178,14 +176,13 @@ namespace ob::rhi
 
 	//! @brief  バインドレスハンドルに使用するインデックスを取得
 	BindlessHandle DirectX12DescriptorTable::getBindlessHandle(s32 index)const {
-
 		auto& items = m_layout->getDesc().items;
 		auto mapInfo = m_layout->getMapInfo(index);
 
 		BindlessHandle handle;
 		handle.type = items.at(index).type;
-		if (mapInfo.type == DescriptorHeapType::Sampler) handle.index = m_samplerHandle.getBindlessIndex(mapInfo.index);
-		if (mapInfo.type == DescriptorHeapType::CBV_SRV_UAV) handle.index = m_othersHandle.getBindlessIndex(mapInfo.index);
+		if (mapInfo.type == DescriptorHeapType::Sampler)		handle.index = m_samplerHandle.getBindlessIndex(mapInfo.index);
+		if (mapInfo.type == DescriptorHeapType::CBV_SRV_UAV)	handle.index = m_othersHandle.getBindlessIndex(mapInfo.index);
 
 		return handle;
 	}
@@ -221,8 +218,8 @@ namespace ob::rhi
 
 
 
+	//! @brief 指定されたインデックスとバッファに基づいて、対応するDirectX 12ディスクリプタレンジタイプを取得しようとします。
 	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
-
 		auto& items = m_layout->getDesc().items;
 		if (!buffer) return false;
 		if(!is_in_range(index, items)) return false;
@@ -232,38 +229,20 @@ namespace ob::rhi
 		bool hasUAV = desc.flags.has(BufferFlag::UnorderedAccess);
 
 		switch (items[index].type) {
-		case BindingType::Buffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-			return hasSRV;
-
-		case BindingType::RWBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-			return hasUAV;
-
-		case BindingType::StructuredBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-			return hasSRV && 0 < desc.stride;
-
-		case BindingType::RWStructuredBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-			return hasUAV && 0 < desc.stride;
-
-		case BindingType::ByteAddressBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-			return hasSRV;
-
-		case BindingType::RWByteAddressBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-			return hasUAV;
-
-		case BindingType::ConstantBuffer:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-			return desc.state == BufferState::Constant;
+		case BindingType::Buffer:				type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	return hasSRV;
+		case BindingType::RWBuffer:				type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV;
+		case BindingType::StructuredBuffer:		type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	return hasSRV && 0 < desc.stride;
+		case BindingType::RWStructuredBuffer:	type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV && 0 < desc.stride;
+		case BindingType::ByteAddressBuffer:	type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; return hasSRV;
+		case BindingType::RWByteAddressBuffer:	type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV;
+		case BindingType::ConstantBuffer:		type = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;	return desc.state == BufferState::Constant;
 		}
 		return false;
 	}
-	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 
+
+	//! @brief 指定されたインデックスとバッファに基づいて、対応するDirectX 12ディスクリプタレンジタイプを取得しようとします。
+	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 		auto& items = m_layout->getDesc().items;
 		if (!texture) return false;
 		if (!is_in_range(index, items)) return false;
@@ -273,26 +252,21 @@ namespace ob::rhi
 		bool hasUAV = desc.flags.has(TextureFlag::UnorderedAccess);
 
 		switch (items[index].type) {
-		case BindingType::Texture:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-			return hasSRV;
-
-		case BindingType::RWTexture:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;
-			return hasUAV;
+		case BindingType::Texture:				type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	return hasSRV;
+		case BindingType::RWTexture:			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV;
 		}
 		return false;
 	}
-	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 
+
+	//! @brief 指定されたインデックスとバッファに基づいて、対応するDirectX 12ディスクリプタレンジタイプを取得しようとします。
+	bool DirectX12DescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, D3D12_DESCRIPTOR_RANGE_TYPE& type) const {
 		auto& items = m_layout->getDesc().items;
 		if (!sampler) return false;
 		if (!is_in_range(index, items)) return false;
 
 		switch (items[index].type) {
-		case BindingType::Sampler:
-			type = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;
-			return true;
+		case BindingType::Sampler:				type = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;	return true;
 		}
 		return false;
 	}
