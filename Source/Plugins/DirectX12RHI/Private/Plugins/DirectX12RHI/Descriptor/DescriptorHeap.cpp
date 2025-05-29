@@ -154,8 +154,13 @@ namespace ob::rhi {
 	}
 
 	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorStagingHeap::allocate(s32 size) {
+
+		auto index = m_index.fetch_add(size);
+
+		OB_ASSERT(index<m_capacity,"1フレーム内にアロケートできるDescriptorHandleの数をオーバーしました");
+
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_heap->GetCPUDescriptorHandleForHeapStart();
-		handle.ptr += m_index.fetch_add(size) * m_stride;
+		handle.ptr += index * m_stride;
 		return handle;
 	}
 
