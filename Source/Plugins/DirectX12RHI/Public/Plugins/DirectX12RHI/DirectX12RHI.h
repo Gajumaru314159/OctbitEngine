@@ -9,6 +9,7 @@
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12BufferUploader.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12TextureUploader.h>
+#include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorUploader.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
 namespace ob::platform {
@@ -162,6 +163,8 @@ namespace ob::rhi {
 
 		DirectX12TextureUploader& getTextureUploader() { return *m_textureUploader; }
 
+		DirectX12DescriptorUploader& getDescriptorUploader() { return *m_descriptorUploader; }
+
 
 		//! @brief          ハンドルをアロケート
 		//! 
@@ -169,6 +172,7 @@ namespace ob::rhi {
 		//! @param handle   アロケート先ハンドル
 		//! @param size     割り当て個数
 		void allocateHandle(DescriptorHeapType type, class DescriptorHandle& handle, s32 size);
+		auto allocateStagingHandle(DescriptorHeapType type, s32 size = 1) -> D3D12_CPU_DESCRIPTOR_HANDLE;
 
 
 		//! @brief          デスクリプタヒープを設定
@@ -210,8 +214,10 @@ namespace ob::rhi {
 
 		MemoryStorage<DirectX12BufferUploader>		m_bufferUploader;
 		MemoryStorage<DirectX12TextureUploader>		m_textureUploader;
+		MemoryStorage<DirectX12DescriptorUploader>	m_descriptorUploader;
 
 		HashMap<DescriptorHeapType, UPtr<class DescriptorHeap>>        m_descriptorHeaps;          // デスクリプタ・ヒープ・リスト
+		HashMap<DescriptorHeapType, UPtr<class DescriptorStagingHeap>> m_descriptorStagingHeaps;   // デスクリプタ・ヒープ・リスト
 
 		ComPtr<IDStorageFactory>			g_dsfactory;
 

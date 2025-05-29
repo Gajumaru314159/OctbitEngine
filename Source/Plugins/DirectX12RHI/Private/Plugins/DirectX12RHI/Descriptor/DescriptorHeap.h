@@ -15,10 +15,6 @@ namespace ob::rhi {
 		friend class DescriptorHandle;
 	public:
 
-		//===============================================================
-		// コンストラクタ / デストラクタ
-		//===============================================================
-
 		//! @brief          コンストラクタ
 		//! 
 		//! @param device   デバイス
@@ -69,6 +65,26 @@ namespace ob::rhi {
 		TLSFMapper						m_mapper;
 		u32								m_descriptorSize;
 
+		ComPtr<ID3D12DescriptorHeap>	m_stagingHeap;
+		Atomic<s32>						m_stagingIndex;
+		s32								m_stagingCapacity;
+	};
+
+
+	class DescriptorStagingHeap :private Noncopyable {
+	public:
+
+		DescriptorStagingHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity);
+
+		D3D12_CPU_DESCRIPTOR_HANDLE allocate(s32 size = 1);
+
+		void reset();
+
+	private:
+		ComPtr<ID3D12DescriptorHeap>	m_heap;
+		Atomic<s32>						m_index;
+		s32								m_capacity;
+		s32								m_stride;	
 	};
 
 }

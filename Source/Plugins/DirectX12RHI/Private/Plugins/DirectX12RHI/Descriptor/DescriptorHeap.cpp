@@ -17,7 +17,6 @@ namespace ob::rhi {
 		{
 		case DescriptorHeapType::CBV_SRV_UAV:		return D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 		case DescriptorHeapType::Sampler:			return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
-		case DescriptorHeapType::SamplerCopyable:   return D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER;
 		case DescriptorHeapType::RTV:				return D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
 		case DescriptorHeapType::DSV:				return D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 		}
@@ -126,6 +125,42 @@ namespace ob::rhi {
 	//! @brief  タイプを取得
 	DescriptorHeapType DescriptorHeap::getHeapType()const {
 		return m_type;
+	}
+
+
+
+
+
+
+
+
+	DescriptorStagingHeap::DescriptorStagingHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity) {
+
+		D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
+		descHeapDesc.Type = Convert(type);
+		descHeapDesc.NumDescriptors = (UINT)capacity;
+		descHeapDesc.NodeMask = 0;
+		descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+		m_capacity = capacity;
+		m_stride = device.getNative()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);
+
+		HRESULT result;
+		result = device.getNative()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "ID3D12Device::CreateDescriptorHeap()");
+			return;
+		}
+	}
+
+	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorStagingHeap::allocate(s32 size) {
+		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_heap->GetCPUDescriptorHandleForHeapStart();
+		handle.ptr += m_index.fetch_add(size) * m_stride;
+		return handle;
+	}
+
+	void DescriptorStagingHeap::reset() {		
+		m_index = 0;	
 	}
 
 }

@@ -148,6 +148,14 @@ namespace ob::rhi {
 	//! @brief  更新
 	void DirectX12RHI::update() {
 
+		// Descriptorコピー
+		{
+			m_descriptorUploader->update();
+			for (auto& [type,heap] : m_descriptorStagingHeaps) {
+				heap->reset();
+			}
+		}
+
 		{
 			m_copyCommandList->begin();
 			m_bufferUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
@@ -346,6 +354,16 @@ namespace ob::rhi {
 	}
 
 
+	auto DirectX12RHI::allocateStagingHandle(DescriptorHeapType type, s32 size) -> D3D12_CPU_DESCRIPTOR_HANDLE {
+
+		if (m_descriptorStagingHeaps.find(type) == m_descriptorStagingHeaps.end()) {
+			OB_ABORT("不正なDescriptorHeapType");
+		}
+
+		return m_descriptorStagingHeaps[type]->allocate(size);
+	}
+
+
 	//! @brief  SetDescriptorHeaps コマンドを積む
 	void DirectX12RHI::setDescriptorHeaps(DirectX12CommandList& cmdList) {
 		ID3D12DescriptorHeap* pHeaps[] = {
@@ -500,15 +518,22 @@ namespace ob::rhi {
 		m_descriptorHeaps[DescriptorHeapType::DSV] =
 			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::DSV, 256);
 		m_descriptorHeaps[DescriptorHeapType::Sampler] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE / 2 );
-		m_descriptorHeaps[DescriptorHeapType::SamplerCopyable] =
-			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::SamplerCopyable, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE / 2);
+			std::make_unique<DescriptorHeap>(*this, DescriptorHeapType::Sampler, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE);
 
 		m_descriptorHeaps[DescriptorHeapType::CBV_SRV_UAV]->setName("SystemCBV_SRV_UAVHeap");
 		m_descriptorHeaps[DescriptorHeapType::RTV]->setName("SystemRTVHeap");
 		m_descriptorHeaps[DescriptorHeapType::DSV]->setName("SystemDSVHeap");
 		m_descriptorHeaps[DescriptorHeapType::Sampler]->setName("SystemSamplerHeap");
-		m_descriptorHeaps[DescriptorHeapType::SamplerCopyable]->setName("SystemSamplerCopyableHeap");
+
+
+		m_descriptorStagingHeaps[DescriptorHeapType::CBV_SRV_UAV] =
+			std::make_unique<DescriptorStagingHeap>(*this, DescriptorHeapType::CBV_SRV_UAV, D3D12_MAX_SHADER_VISIBLE_DESCRIPTOR_HEAP_SIZE_TIER_1);
+		m_descriptorStagingHeaps[DescriptorHeapType::RTV] =
+			std::make_unique<DescriptorStagingHeap>(*this, DescriptorHeapType::RTV, 256);
+		m_descriptorStagingHeaps[DescriptorHeapType::DSV] =
+			std::make_unique<DescriptorStagingHeap>(*this, DescriptorHeapType::DSV, 256);
+		m_descriptorStagingHeaps[DescriptorHeapType::Sampler] =
+			std::make_unique<DescriptorStagingHeap>(*this, DescriptorHeapType::Sampler, D3D12_MAX_SHADER_VISIBLE_SAMPLER_HEAP_SIZE);
 
 		return true;
 	}
@@ -552,6 +577,8 @@ namespace ob::rhi {
 		m_bufferUploader.construct(*m_device.Get(), blockSize);
 
 		m_textureUploader.construct(*m_device.Get());
+
+		m_descriptorUploader.construct(*m_device.Get());
 
 		return true;
 	}

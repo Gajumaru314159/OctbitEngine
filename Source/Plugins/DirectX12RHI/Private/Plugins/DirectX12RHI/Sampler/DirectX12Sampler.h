@@ -25,7 +25,6 @@ namespace ob::rhi {
     public:
 
         DirectX12Sampler(DirectX12RHI& rhi, const SamplerDesc& desc);
-		D3D12_CPU_DESCRIPTOR_HANDLE getCopyableHandle() const { return m_handle.getCpuHandle(); }
 
         //! @brief  妥当な状態か
         bool isValid()const { return !m_handle.empty(); }
@@ -38,11 +37,12 @@ namespace ob::rhi {
         //! @brief      BindlessHandleを取得
         BindlessHandle getHandle()const override;
 
+        void createView(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+
     private:
         DirectX12RHI&       m_rhi;
 		SamplerDesc         m_desc;
         DescriptorHandle    m_handle;
-		DescriptorHandle    m_handle2; // NOTE DescriptorHandleのコピー対応をしたらm_handleだけで良いはず
         D3D12_SAMPLER_DESC  m_nativeDesc;
     };
 

@@ -67,14 +67,27 @@ namespace ob::rhi
 			return false;
 		}
 
+		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Buffer>()) {
 			auto mapInfo = m_layout->getMapInfo(index);
-			auto handle = m_othersHandle.getCpuHandle(mapInfo.index);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_othersHandle.getCpuHandle(mapInfo.index);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+
+			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
+			if (isFirstTime==false) {
+				handle2 = handle;
+				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
+			}
+
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_CBV)p->createCBV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle);
+
+			if (isFirstTime == false) {
+				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,handle2,handle);
+			}
 		}
 		return true;
 	}
@@ -98,13 +111,26 @@ namespace ob::rhi
 			return false;
 		}
 
+		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Texture>()) {
 			auto mapInfo = m_layout->getMapInfo(index);
-			auto handle = m_othersHandle.getCpuHandle(mapInfo.index);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_othersHandle.getCpuHandle(mapInfo.index);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+
+			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
+			if (isFirstTime == false) {
+				handle2 = handle;
+				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
+			}
+
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
-			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle,0);
+			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle, 0);
+
+			if (isFirstTime == false) {
+				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle2, handle);
+			}
 		}
 		return true;
 	}
@@ -127,14 +153,25 @@ namespace ob::rhi
 			return false;
 		}
 
+		bool isFirstTime = std::holds_alternative<std::monostate>(m_elemetns.at(index));
 		m_elemetns.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Sampler>()) {
+
 			auto mapInfo = m_layout->getMapInfo(index);
-			auto source = p->getCopyableHandle();
-			auto dest = m_samplerHandle.getCpuHandle(mapInfo.index);
-			
-			m_rhi.getNative()->CopyDescriptorsSimple(1, dest, source, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_samplerHandle.getCpuHandle(mapInfo.index);
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+
+			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
+			if (isFirstTime == false) {
+				handle2 = handle;
+				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::Sampler);
+			}
+			p->createView(handle);
+
+			if (isFirstTime == false) {
+				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle2, handle);
+			}
 		}
 		return true;
 	}
@@ -156,6 +193,8 @@ namespace ob::rhi
 
 	//! @brief CommandListに記録 
 	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,DirectX12RootSignature& signature,s32 slot) const {
+
+		// bool isReady = std::none_of(m_elemetns.begin(), m_elemetns.end(), [](const auto& e) { return std::holds_alternative<std::monostate>(e); });
 
 		bool isRootDescriptor = false;
 		if (isRootDescriptor) {

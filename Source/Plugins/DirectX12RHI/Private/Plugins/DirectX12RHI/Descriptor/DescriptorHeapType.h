@@ -11,7 +11,6 @@ namespace ob::rhi {
 		RTV,            //!< レンダーターゲット
 		DSV,            //!< デプスステンシル
 		Sampler,        //!< サンプラー
-		SamplerCopyable,//!< コピー可能サンプラー
 	};
 
 }
