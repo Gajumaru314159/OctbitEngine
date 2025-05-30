@@ -25,5 +25,6 @@ var searchData=
   ['box_22',['Box',['../d0/d77/structob_1_1core_1_1_box.html',1,'ob::core']]],
   ['buffer_23',['Buffer',['../d1/db5/classob_1_1rhi_1_1_buffer.html',1,'ob::rhi']]],
   ['bufferdesc_24',['bufferdesc',['../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html',1,'ob::rhi::BufferDesc'],['../d8/d37/structob_1_1rhi_1_1_graphic_file_request_1_1_buffer_desc.html',1,'ob::rhi::GraphicFileRequest::BufferDesc']]],
-  ['button_25',['Button',['../d0/d01/classob_1_1input_1_1_button.html',1,'ob::input']]]
+  ['bufferviewdesc_25',['BufferViewDesc',['../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html',1,'ob::rhi']]],
+  ['button_26',['Button',['../d0/d01/classob_1_1input_1_1_button.html',1,'ob::input']]]
 ];

@@ -120,6 +120,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>CopyFunc</b> = Func&
 virtual const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDesc</b> () const =0</td></tr>
 <tr class="memdesc:a982055c9a79306e51e4f1713051da5e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">定義を取得 <br /></td></tr>
 <tr class="separator:a982055c9a79306e51e4f1713051da5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21eb3462fa5061fe0eaa33996db51b46" id="r_a21eb3462fa5061fe0eaa33996db51b46"><td class="memItemLeft" align="right" valign="top"><a id="a21eb3462fa5061fe0eaa33996db51b46" name="a21eb3462fa5061fe0eaa33996db51b46"></a>
+virtual <a class="el" href="../../d7/d4c/structob_1_1rhi_1_1_bindless_handle.html">BindlessHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getHandle</b> () const =0</td></tr>
+<tr class="memdesc:a21eb3462fa5061fe0eaa33996db51b46"><td class="mdescLeft">&#160;</td><td class="mdescRight">BindlessHandleを取得 <br /></td></tr>
+<tr class="separator:a21eb3462fa5061fe0eaa33996db51b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec3a89200cfff276316ae841fd22b861" id="r_aec3a89200cfff276316ae841fd22b861"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html#aec3a89200cfff276316ae841fd22b861">update</a> (size_t size, const void *pData, size_t offset=0)=0</td></tr>
 <tr class="memdesc:aec3a89200cfff276316ae841fd22b861"><td class="mdescLeft">&#160;</td><td class="mdescRight">バッファを更新  <br /></td></tr>
 <tr class="separator:aec3a89200cfff276316ae841fd22b861"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,12 +154,18 @@ virtual const <a class="el" href="../../da/dc1/classob_1_1core_1_1_string_base.h
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
-<tr class="memitem:a0e52de8e1bf836e88ba0abce5734b8f6" id="r_a0e52de8e1bf836e88ba0abce5734b8f6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html#a0e52de8e1bf836e88ba0abce5734b8f6">Create</a> (const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;desc)</td></tr>
-<tr class="memdesc:a0e52de8e1bf836e88ba0abce5734b8f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ  <br /></td></tr>
+<tr class="memitem:a0e52de8e1bf836e88ba0abce5734b8f6" id="r_a0e52de8e1bf836e88ba0abce5734b8f6"><td class="memItemLeft" align="right" valign="top"><a id="a0e52de8e1bf836e88ba0abce5734b8f6" name="a0e52de8e1bf836e88ba0abce5734b8f6"></a>
+static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Create</b> (const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;desc)</td></tr>
+<tr class="memdesc:a0e52de8e1bf836e88ba0abce5734b8f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">空のバッファを作成 <br /></td></tr>
 <tr class="separator:a0e52de8e1bf836e88ba0abce5734b8f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c46ae73fd641a1555397617158506b9" id="r_a9c46ae73fd641a1555397617158506b9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html#a9c46ae73fd641a1555397617158506b9">Create</a> (const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;desc, <a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> blob)</td></tr>
-<tr class="memdesc:a9c46ae73fd641a1555397617158506b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ  <br /></td></tr>
+<tr class="memitem:a9c46ae73fd641a1555397617158506b9" id="r_a9c46ae73fd641a1555397617158506b9"><td class="memItemLeft" align="right" valign="top"><a id="a9c46ae73fd641a1555397617158506b9" name="a9c46ae73fd641a1555397617158506b9"></a>
+static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Create</b> (const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;desc, <a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> blob)</td></tr>
+<tr class="memdesc:a9c46ae73fd641a1555397617158506b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期データを指定してバッファを作成 <br /></td></tr>
 <tr class="separator:a9c46ae73fd641a1555397617158506b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15fabf9951503b29abe436e493f124fa" id="r_a15fabf9951503b29abe436e493f124fa"><td class="memItemLeft" align="right" valign="top"><a id="a15fabf9951503b29abe436e493f124fa" name="a15fabf9951503b29abe436e493f124fa"></a>
+static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Create</b> (const <a class="el" href="../../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html">BufferViewDesc</a> &amp;desc)</td></tr>
+<tr class="memdesc:a15fabf9951503b29abe436e493f124fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">ベースのバッファを指定して異なるビューを持つバッファを作成 <br /></td></tr>
+<tr class="separator:a15fabf9951503b29abe436e493f124fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 その他の継承メンバ</h2></td></tr>
@@ -178,87 +188,6 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~RefObject</b> ()<
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>バッファ </p>
 </div><h2 class="groupheader">関数詳解</h2>
-<a id="a0e52de8e1bf836e88ba0abce5734b8f6" name="a0e52de8e1bf836e88ba0abce5734b8f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e52de8e1bf836e88ba0abce5734b8f6">&#9670;&#160;</a></span>Create() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt; ob::rhi::Buffer::Create </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;&#160;</td>
-          <td class="paramname"><em>desc</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>コンストラクタ </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">desc</td><td>バッファ定義 </td></tr>
-    <tr><td class="paramname">name</td><td>名前 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a9c46ae73fd641a1555397617158506b9" name="a9c46ae73fd641a1555397617158506b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c46ae73fd641a1555397617158506b9">&#9670;&#160;</a></span>Create() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt; ob::rhi::Buffer::Create </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;&#160;</td>
-          <td class="paramname"><em>desc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a>&#160;</td>
-          <td class="paramname"><em>blob</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>コンストラクタ </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">desc</td><td>バッファ定義 </td></tr>
-    <tr><td class="paramname">blob</td><td>初期化データ </td></tr>
-    <tr><td class="paramname">name</td><td>名前 </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a0e4db2bc90e5c7f68525577992021cc3" name="a0e4db2bc90e5c7f68525577992021cc3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0e4db2bc90e5c7f68525577992021cc3">&#9670;&#160;</a></span>update() <span class="overload">[1/2]</span></h2>
 
