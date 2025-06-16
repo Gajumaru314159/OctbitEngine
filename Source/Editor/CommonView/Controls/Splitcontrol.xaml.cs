@@ -132,14 +132,14 @@ namespace CommonView.Controls
             {
                 for (int i = 0; i < n; i++)
                 {
-                    m_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                    m_grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star),MinWidth=100 });
                 }
             }
             else
             {
                 for (int i = 0; i < n; i++)
                 {
-                    m_grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                    m_grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star),MinHeight=100 });
                 }
             }
 
