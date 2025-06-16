@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/CommonView;component/Controls/Inspector/Inspector.xaml"/>
         <ResourceDictionary Source="/CommonView;component/Controls/SearchBox.xaml"/>
+        <ResourceDictionary Source="/CommonView;component/Controls/SplitControl.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
