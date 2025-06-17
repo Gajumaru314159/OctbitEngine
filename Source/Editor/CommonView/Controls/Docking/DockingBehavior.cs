@@ -38,7 +38,6 @@ namespace CommonView.Controls
             m_dragStartPoint = e.GetPosition(null);
             m_tabControl = (e.OriginalSource as DependencyObject)?.GetParentFast<TabControl>();
             m_tab = (e.OriginalSource as DependencyObject)?.GetParentFast<TabItem>();
-            e.Handled = true;
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
