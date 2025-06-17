@@ -10,6 +10,17 @@ namespace CommonView.Controls
     {
         protected DockingBase() { }
     }
+    public class DockingWindowGroup
+    {
+        public ObservableCollection<DockingLayoutGroup> Items { get; } = new();
+
+        public DockingWindowGroup() { }
+
+        public void Add(DockingLayoutGroup item)
+        {
+            Items.Add(item);
+        }
+    }
 
     public class DockingLayoutGroup : DockingBase
     {
@@ -110,6 +121,7 @@ namespace CommonView.Controls
             Items.Add(item);
         }
     }
+
 
 
     public class DockingTab

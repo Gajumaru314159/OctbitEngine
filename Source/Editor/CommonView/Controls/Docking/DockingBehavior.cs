@@ -9,9 +9,16 @@ namespace CommonView.Controls
     public class DockingBehavior : Behavior<DockingLayout>
     {
         private Point m_dragStartPoint;
-        private TabControl? m_tabControl;
         private TabItem? m_tab;
         private bool m_isDragging;
+
+        class DockingDragObject
+        {
+            public object? Scope { get; init; }
+            public IList? SourceList { get; init; }
+            public object? Source { get; init; }
+            public int Index => SourceList?.IndexOf(Source) ?? -1;
+        }
 
         protected override void OnAttached()
         {
@@ -36,55 +43,62 @@ namespace CommonView.Controls
         {
             if (sender is not FrameworkElement f) return;
             m_dragStartPoint = e.GetPosition(null);
-            m_tabControl = (e.OriginalSource as DependencyObject)?.GetParentFast<TabControl>();
             m_tab = (e.OriginalSource as DependencyObject)?.GetParentFast<TabItem>();
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed || m_isDragging || m_tab == null)
+            if (m_isDragging || m_tab == null)
                 return;
 
             var currentPos = e.GetPosition(null);
             if (Math.Abs(currentPos.X - m_dragStartPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
                 Math.Abs(currentPos.Y - m_dragStartPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
             {
-                m_isDragging = true;
-                var data = new DataObject(typeof(object), m_tab.DataContext);
-                DragDrop.DoDragDrop(m_tab, data, DragDropEffects.Move);
-                m_isDragging = false;
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    m_isDragging = true;
+
+                    var dragObject = new DockingDragObject
+                    {
+                        Scope = null,
+                        Source = m_tab.DataContext,
+                        SourceList =  m_tab.GetParentFast<TabControl>()?.ItemsSource as IList
+                    };
+
+                    var data = new DataObject(dragObject.GetType(), dragObject);
+                    DragDrop.DoDragDrop(m_tab, data, DragDropEffects.Move);
+
+                    m_isDragging = false;
+                }
             }
         }
 
         private void OnDragOver(object sender, DragEventArgs e)
         {
-            e.Effects = DragDropEffects.Move;
+            e.Effects = e.Data.GetDataPresent(typeof(DockingDragObject)) ? DragDropEffects.Move : DragDropEffects.None;
             e.Handled = true;
         }
 
         private void OnDrop(object sender, DragEventArgs e)
         {
-            // 同一DockingLayoutのみ
-            // TODO 別ウィンドウ化した場合はsendorが異なるので別の判定方法に変える
-            if (sender != AssociatedObject)
+            var dragObject = e.Data.GetData(typeof(DockingDragObject)) as DockingDragObject;
+            if (dragObject == null || dragObject.SourceList == null || dragObject.Source == null)
                 return;
+            // 異なるスコープであればキャンセル
+            // if (dragObject.Scope != Scope) return;
 
-            var srcTab = m_tab;
-            var srcCtrl = m_tabControl;
             var dstTab = (e.OriginalSource as DependencyObject)?.GetParentFast<TabItem>();
             var dstCtrl = (e.OriginalSource as DependencyObject)?.GetParentFast<TabControl>();
 
-            if (srcTab == null || srcCtrl == null || dstCtrl == null) 
+            if (dstCtrl == null)
                 return;
 
-            var srcList = srcCtrl.ItemsSource as IList;
+            var srcList = dragObject.SourceList;
             var dstList = dstCtrl.ItemsSource as IList;
 
             if (srcList == null || dstList == null)
                 return;
-
-            var sourceVM = srcTab.DataContext;
-
 
             // ドロップ位置が[上下左右]の場合
             var host = dstCtrl?.Template.FindName("PART_SelectedContentHost", dstCtrl) as ContentPresenter;
@@ -119,7 +133,7 @@ namespace CommonView.Controls
 
                         // 分割する場合は新しいTabGroupが必要
                         var newTabs = new DockingTabGroup();
-                        newTabs.Add(sourceVM);
+                        newTabs.Add(dragObject.Source);
 
                         // ドロップ先のグループのOrientationを取得
                         var isHorizontal = layout.Orientation.Value == Orientation.Horizontal;
@@ -151,11 +165,9 @@ namespace CommonView.Controls
                             layout.Items.Insert(targetIndex, newTabs);
                         }
 
-                        srcList.Remove(sourceVM);
+                        dragObject.SourceList.Remove(dragObject.Source);
                     }
 
-                    m_tab = null;
-                    m_tabControl = null;
                     e.Handled = true;
                     return;
                 }
@@ -164,7 +176,7 @@ namespace CommonView.Controls
 
 
             // ドロップ位置が[タブ/中央]の場合
-            int oldIndex = srcList.IndexOf(srcTab.DataContext);
+            int oldIndex = dragObject.Index;
             int newIndex = dstTab != null
                 ? dstList.IndexOf(dstTab.DataContext)
                 : dstList.Count;
@@ -179,13 +191,11 @@ namespace CommonView.Controls
             else if (oldIndex > newIndex) oldIndex++;
             else if (oldIndex == newIndex) return;
 
-            dstList.Insert(newIndex, sourceVM);
+            dstList.Insert(newIndex, dragObject.Source);
             srcList.RemoveAt(oldIndex);
 
-            if(dstCtrl!=null) dstCtrl.SelectedItem = sourceVM;
+            if(dstCtrl!=null) dstCtrl.SelectedItem = dragObject.Source;
 
-            m_tab = null;
-            m_tabControl = null;
             e.Handled = true;
         }
 
