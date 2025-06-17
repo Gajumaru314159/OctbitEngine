@@ -875,7 +875,7 @@
                                 KeyboardNavigation.TabIndex="2"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" />
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
                         </Border>
                     </Grid>
                 </ControlTemplate>
