@@ -120,10 +120,9 @@ namespace CommonView.Controls.Inspector.Reflection
                 if (!CanWrite) return;
                 if (value == Value) return;
 
-                return;
 
                 // TODO リストの復元対応
-
+                /*
                 var oldValue = Value;
 
                 int delta = (int)value! - (int)oldValue!;
@@ -182,6 +181,7 @@ namespace CommonView.Controls.Inspector.Reflection
                         }
                     );
                 }
+                */
 
             }
         }
