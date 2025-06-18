@@ -919,6 +919,11 @@
         <Setter Property="Padding" Value="0"/>
     </Style>
 
+    <!--TextBlock-->
+    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}"/>
+    </Style>
+
     <!--TextBox-->
     <ControlTemplate x:Key="TextBoxErrorTemplate">
         <DockPanel IsHitTestVisible="False" Width="{Binding ElementName=AdornerPlaceholder, Path=ActualWidth}">
