@@ -19,7 +19,9 @@
 
     <!--タブ表示-->
     <DataTemplate DataType="{x:Type local:DockingLayoutGroup}">
-        <local:SplitControl ItemsSource="{Binding Items}" Orientation="{Binding Orientation.Value}"/>
+        <local:SplitControl ItemsSource="{Binding Items}" Orientation="{Binding Orientation.Value}">
+            
+        </local:SplitControl>
     </DataTemplate>
 
     <!--ルートのドッキング-->
@@ -27,7 +29,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:DockingLayout">
-                    <ContentControl Content="{TemplateBinding Item}"/>
+                    <ContentControl Content="{TemplateBinding Item}" Margin="1"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

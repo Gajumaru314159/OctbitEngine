@@ -4,7 +4,7 @@
                     xmlns:local="clr-namespace:CommonView"
                     >
 
-    <sys:Double x:Key="DisableOpacity">0.5</sys:Double>
+    <sys:Double x:Key="DisableOpacity">0.3</sys:Double>
 
     <SolidColorBrush x:Key="Foreground" Color="#C0C0C0"/>
     <SolidColorBrush x:Key="Background" Color="#242424"/>
