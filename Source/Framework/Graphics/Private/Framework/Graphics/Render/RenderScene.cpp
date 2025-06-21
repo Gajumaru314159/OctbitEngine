@@ -81,9 +81,12 @@ namespace ob::graphics {
 	//! @brief      描画
 	void RenderScene::render(FG& fg) {
 
+		std::sort(m_views.begin(), m_views.end(), [](auto& a, auto& b) { return a->get<RenderViewData>().priority < b->get<RenderViewData>().priority; });
+
 		for (auto& [type,pipeline] : m_pipelines) {
 			pipeline->render(fg, *this);
 		}
+
 		for (auto& view : m_views) {
 			s32 index = view->get<RenderViewData>().pipeline;
 			if (!is_in_range(index, m_pipelines)) continue;
