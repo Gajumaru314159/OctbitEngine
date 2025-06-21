@@ -4,14 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/FrameGraph/FGResource.h>
+#include <Framework/Graphics/Render/Pass/ImGuiPass.h>
+#include <Framework/Graphics/FrameGraph/FG.h>
 
 namespace ob::graphics {
-
-	class RenderPass {
-	public:
-		virtual ~RenderPass() = default;
-	};
 
 }

@@ -4,10 +4,9 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
-#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
+#include <Framework/Graphics/Render/Pass/ImGuiPass.h>
+#include <Framework/Graphics/Render/Pass/OutputPass.h>
 
 namespace ob::graphics {
 

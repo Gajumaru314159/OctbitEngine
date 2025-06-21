@@ -4,12 +4,11 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
 #include <Framework/Graphics/Render/RenderPipeline.h>
-#include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
-#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
-#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
-#include <Framework/Graphics/Builtin/Renderer/DefferedLightRenderer.h>
+#include <Framework/Graphics/Render/Pass/GBufferPass.h>
+#include <Framework/Graphics/Render/Pass/DeferredPass.h>
+#include <Framework/Graphics/Render/Pass/ImGuiPass.h>
+#include <Framework/Graphics/Render/Pass/OutputPass.h>
 
 namespace ob::graphics {
 

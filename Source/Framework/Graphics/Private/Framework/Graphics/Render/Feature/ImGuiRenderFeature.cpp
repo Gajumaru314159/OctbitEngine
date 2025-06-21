@@ -3,8 +3,9 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Builtin/RenderFeature/CameraRenderFeature.h>
-#include <Framework/Graphics/Builtin/RenderFeature/ImGuiRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
+#include <Framework/Graphics/Render/Pass/OutputPass.h>
 #include <Framework/Graphics/Render/RenderScene.h>
 #include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/Input/All.h>

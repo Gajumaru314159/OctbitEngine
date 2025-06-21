@@ -17,8 +17,9 @@
 #include <Framework/Engine/Component/ReflectionTestComponent.h>
 #include <Framework/Engine/Reflection.h>
 #include <Framework/Graphics/All.h>
-#include <Framework/Graphics/Builtin/RenderPipeline/UniversalRenderPipeline.h>
-#include <Framework/Graphics/Builtin/RenderPipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>
+#include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Arguments.h>

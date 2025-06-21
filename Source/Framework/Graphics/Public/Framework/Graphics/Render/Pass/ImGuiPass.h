@@ -4,14 +4,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/Forward.h>
-#include <Framework/Graphics/FrameGraph/FGResource.h>
+#include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
 
 namespace ob::graphics {
 
-	class RenderPass {
-	public:
-		virtual ~RenderPass() = default;
-	};
+	// TODO ImGuiのタスク管理を整理してImGuiPassをここに移動
 
 }

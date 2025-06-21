@@ -9,7 +9,7 @@
 #include <Framework/Graphics/Render/RenderScene.h>
 
 #include <Framework/Graphics/Render/RenderFeature.h>
-#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
 #include <Framework/Model/ModelData.h>
 
 namespace ob::model {

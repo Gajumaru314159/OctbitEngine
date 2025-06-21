@@ -3,7 +3,10 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Builtin/RenderPipeline/UniversalRenderPipeline.h>
+#include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>
+#include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
 
 namespace ob::graphics {
 
@@ -23,7 +26,7 @@ namespace ob::graphics {
 
 		if (!size) return;
 
-		// リソースセットアップ
+		// リソースセットアップ6
 
 		struct Resources {
 			FGResource albedo;

@@ -4,9 +4,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Render/RenderPass.h>
-#include <Framework/Graphics/FrameGraph/FG.h>
 
 namespace ob::graphics {
 
@@ -24,7 +22,7 @@ namespace ob::graphics {
 		};
 	public:
 		EarlyZPass();
-		Output render(FG& fg, RenderView& view,Input input)const;
+		Output render(FG& fg, RenderView& view, Input input)const;
 	};
 
 	class OpaquePass : public RenderPass {
@@ -36,7 +34,7 @@ namespace ob::graphics {
 		};
 		struct Output {
 			FGResource albedo;
-			FGResource normal;			
+			FGResource normal;
 			FGResource depth;
 		};
 	public:
@@ -53,7 +51,7 @@ namespace ob::graphics {
 		};
 		struct Output {
 			FGResource albedo;
-			FGResource normal;			
+			FGResource normal;
 			FGResource depth;
 		};
 	public:
@@ -61,7 +59,8 @@ namespace ob::graphics {
 		Output render(FG& fg, RenderView& view, Input input)const;
 	};
 
-	class DeferredPass : public RenderPass {
+
+	class GBufferPass : public RenderPass {
 	public:
 		struct Input {
 			FGResource albedo;
@@ -69,18 +68,22 @@ namespace ob::graphics {
 			FGResource depth;
 		};
 		struct Output {
-			FGResource color;
-
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
 		};
 	public:
-		DeferredPass();
-		Output render(FG& fg, RenderView& view, Input input)const;
+		GBufferPass() {}
+		Output render(FG& fg, RenderView& view, Input input)const {
+			auto earlyZ = m_earlyZ.render(fg, view, { input.albedo, input.normal, input.depth });
+			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
+			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.depth });
+			return { masked.albedo,masked.normal,masked.depth };
+		}
 	private:
-		Ref<Material> m_material;
-		Ref<Mesh> m_mesh;
+		EarlyZPass m_earlyZ;
+		OpaquePass m_opaque;
+		MaskedPass m_masked;
 	};
 
 }

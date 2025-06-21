@@ -3,7 +3,7 @@
 //! @brief		ファイル説明
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/RootSignature.h>

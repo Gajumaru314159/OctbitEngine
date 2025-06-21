@@ -3,7 +3,10 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Graphics/Builtin/RenderPipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
 
 namespace ob::graphics {
 

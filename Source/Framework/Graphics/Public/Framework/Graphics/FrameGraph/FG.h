@@ -7,30 +7,12 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
+#include <Framework/Graphics/FrameGraph/FGResource.h>
 #include <fg/FrameGraph.hpp>
 
 namespace ob::graphics {
 
 	class FGResourcePool;
-
-	//! @brief FrameGraphで使用されるリソースの種類
-	enum class FGResourceType : s32 {
-		Invalid,
-		Texture,
-		Buffer,
-		Dummy,
-	};
-
-	//! @brief フレームグラフリソースを表す構造体
-	struct FGResource {
-		FGResourceType type = FGResourceType::Invalid;
-		FrameGraphResource value = -1;
-
-		operator bool()const {
-			return type != FGResourceType::Invalid;
-		}
-	};
-
 
 
 	//! @brief		FrameGraphのリソース管理クラス
