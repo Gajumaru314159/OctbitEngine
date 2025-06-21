@@ -24,6 +24,12 @@ namespace ob::graphics {
         template<class T> T* findFeature()const;
         RenderFeature* findFeature(Type type)const;
 
+        void visitFeatures(const Func<void(RenderFeature&)>& func) const {
+            for (const auto& feature : m_features) {
+                func(*feature);
+            }
+        }
+
         //! @brief      描画
         void render(FG& fg);
 
