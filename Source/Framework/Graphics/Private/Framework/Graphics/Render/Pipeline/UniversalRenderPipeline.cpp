@@ -7,6 +7,7 @@
 #include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
+#include <Framework/Graphics/FrameGraph/FG.h>
 
 namespace ob::graphics {
 

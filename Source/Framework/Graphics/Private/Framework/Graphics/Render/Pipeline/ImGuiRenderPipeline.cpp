@@ -3,6 +3,7 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
 #include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
