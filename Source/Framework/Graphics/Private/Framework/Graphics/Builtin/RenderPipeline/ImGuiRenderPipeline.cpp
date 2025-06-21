@@ -14,7 +14,30 @@ namespace ob::graphics {
 	}
 
 	void ImGuiRenderPipeline::render(FG& fg, RenderView& view) const {
-		auto imgui = m_imgui.render(fg, view, {});
+
+		auto size = view.get<OutputViewData>().size();
+
+		if (!size) return;
+
+		// リソースセットアップ
+
+		struct Resources {
+			FGResource color;
+		};
+
+		auto resources = fg.addPass<Resources>(
+			"ResourceSetup",
+			[&](FGBuilder& builder, Resources& resources) {
+				rhi::RenderTextureDesc desc;
+				desc.name = "Color";
+				desc.size = *size;
+				desc.format = rhi::TextureFormat::RGBA8;
+				desc.clear.color = Color::Black;
+				resources.color = builder.write(builder.create(desc));
+			}
+		);
+
+		auto imgui = m_imgui.render(fg, view, { resources.color});
 		auto camera = m_camera.render(fg, view, { imgui.color });
 	}
 

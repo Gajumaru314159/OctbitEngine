@@ -15,31 +15,16 @@ namespace ob::graphics {
 
 	class CameraPass;
 
-	struct CameraRFData {
-		Ref<rhi::RenderTexture> output;				//!< 描画先
+	struct OutputViewData {
+		Ref<rhi::SwapChain>		swapchain;			//!< 描画先
+		Ref<rhi::RenderTexture> texture;			//!< 描画先
 		Rect                    rect;				//!< 描画範囲の矩形
 		Viewport				viewport;			//!< 描画範囲
 
-		Ref<rhi::SwapChain>		swapChain;			//!< 
-
-		void setSwapChain(Ref<rhi::RenderTexture>& output) {
-
-		}
-		void setSwapChain(Ref<rhi::SwapChain>& swapChain) {
-			this->swapChain = swapChain;
-			onSwapChainUpdated();
-			swapChain->addEventListener(hSwapChainUpdated, { *this,&CameraRFData::onSwapChainUpdated });
-		}
-	private:
-		rhi::SwapChainEventHandle    hSwapChainUpdated;	//!< 
-
-		void onSwapChainUpdated() {
-			rhi::RenderTextureDesc desc;
-			desc.name = Format("SwapChain_{}", swapChain->getName());
-			desc.size = swapChain->getDesc().size;
-			desc.format = rhi::TextureFormat::RGBA8;
-			desc.clear.color = Color::Black;
-			output = rhi::RenderTexture::Create(desc);
+		Optional<Size> size()const {
+			if (swapchain) return swapchain->getDesc().size;
+			if (texture) return texture->size();
+			return std::nullopt;
 		}
 	};
 
@@ -92,10 +77,8 @@ namespace ob::graphics {
 
 		Output render(FG& fg, RenderView& view, Input input) const {
 
-			auto& camera = view.get<CameraRFData>();
+			auto& output = view.get<OutputViewData>();
 			auto& material = view.get<MaterialRFData>();
-
-			if (!camera.output) return { input.color };
 
 			material.block.setMatrix("MatrixV", Matrix::Identity);
 
@@ -108,9 +91,15 @@ namespace ob::graphics {
 				[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 					auto albedo = resources.getTexture(output.color);
 
-					auto& camera = view.get<CameraRFData>();
+					auto& data = view.get<OutputViewData>();
 
-					cmdList->applySwapChain(camera.swapChain, albedo);
+					if (data.swapchain) {
+						cmdList->applySwapChain(data.swapchain, albedo);
+					}
+					else if (data.texture) {
+						// TODO コピー処理
+						OB_NOTIMPLEMENTED();
+					}
 
 				}
 			);

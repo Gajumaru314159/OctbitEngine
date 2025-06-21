@@ -21,26 +21,9 @@ namespace ob::graphics {
 		return fg.addPass<Output>(
 			"EarlyZPass",
 			[&](FGBuilder& builder, Output& output) {
-
-				rhi::RenderTextureDesc desc;
-				desc.size = view.get<CameraRFData>().output->size();
-				{
-					desc.name = "Albedo";
-					desc.format = rhi::TextureFormat::RGBA8;
-					desc.clear.color = Color::Black;
-					output.albedo = builder.write(builder.create(desc));
-				}
-				{
-					desc.name = "Normal";
-					desc.format = rhi::TextureFormat::RGBA8;
-					desc.clear.color = Color::Normal;
-					output.normal = builder.write(builder.create(desc));
-				}
-				{
-					desc.name = "Depth";
-					desc.format = rhi::TextureFormat::D32;
-					output.depth = builder.write(builder.create(desc));
-				}
+				output.albedo = builder.write(input.albedo);
+				output.normal = builder.read(input.normal);
+				output.depth = builder.write(input.depth);
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				if (auto feature = view.findFeature<MaterialRenderFeature>()) {
@@ -206,8 +189,7 @@ namespace ob::graphics {
 				output.normal = builder.read(input.normal);
 				output.depth = builder.read(input.depth);
 
-				rhi::RenderTextureDesc desc;
-				desc.size = view.get<CameraRFData>().output->size();
+				rhi::RenderTextureDesc desc = fg.getTextureDesc(input.albedo);
 				{
 					desc.name = "Color";
 					desc.format = rhi::TextureFormat::RGBA8;

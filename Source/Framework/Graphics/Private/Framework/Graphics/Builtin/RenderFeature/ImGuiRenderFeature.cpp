@@ -453,11 +453,11 @@ namespace ob::graphics {
 	//! @brief      マウス更新
 	bool ImGuiData::update(RenderView& view) {
 
-		auto& camera = view.get<CameraRFData>();
-		auto& swapChain = camera.swapChain;
+		auto& camera = view.get<OutputViewData>();
+		auto& swapchain = camera.swapchain;
 
-		if (swapChain == nullptr) return false;
-		auto window = swapChain->getDesc().window;
+		if (swapchain == nullptr) return false;
+		auto window = swapchain->getDesc().window;
 
 
 		// このビューのコンテキストを設定
@@ -846,7 +846,6 @@ namespace ob::graphics {
 		return fg.addPass<Output>(
 			"ImGui",
 			[&](FGBuilder& builder, Output& output) {
-				if (!input.color) input.color = builder.create({"ImGui",rhi::TextureFormat::RGBA8,view.get<CameraRFData>().output->size() });
 				output.color = builder.write(input.color);
 			},
 			[&](const Output& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {

@@ -110,8 +110,10 @@ namespace ob::graphics {
 		using Setupable = std::is_invocable<TSetup, FGBuilder&, TData&>;
 		template<typename TExecute, typename TData>
 		using Executable = std::is_invocable<TExecute, const TData&, FGResources&, Ref<rhi::CommandList>&>;
+		template<typename TData, typename TSetup>
+		using IsValid1 = std::enable_if_t<Setupable<TSetup, TData>::value, const TData&>;
 		template<typename TData, typename TSetup, typename TExecute>
-		using IsValid = std::enable_if_t<Setupable<TSetup,TData>::value && Executable<TExecute,TData>::value, const TData&>;
+		using IsValid2 = std::enable_if_t<Setupable<TSetup, TData>::value && Executable<TExecute, TData>::value, const TData&>;
 	public:
 		struct NoData {};
 	public:
@@ -119,8 +121,12 @@ namespace ob::graphics {
 		FG() = default;
 
 		//! @brief      パスを追加
+		template <typename Data, typename Setup>
+		auto addPass(StringView name, Setup&& setup) -> IsValid1<Data, Setup>;
+
+		//! @brief      パスを追加
 		template <typename Data, typename Setup, typename Execute>
-		auto addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid<Data, Setup, Execute>;
+		auto addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid2<Data, Setup, Execute>;
 
 		//! @brief      FGResourceのRenderTextureDescを取得する
 		const rhi::RenderTextureDesc& getTextureDesc(FGResource texture);
@@ -159,8 +165,23 @@ namespace ob::graphics {
 
 
 	//! @brief      パスを追加
+	template <typename Data, typename Setup>
+	auto FG::addPass(StringView name, Setup&& setup) -> IsValid1<Data, Setup> {
+		return m_fg.addCallbackPass<Data>(
+			name,
+			[&](FrameGraph::Builder& nativeBuilder, Data& data) {
+				FGBuilder builder(nativeBuilder);
+				setup(builder, data);
+			},
+			[=](const Data& data, FrameGraphPassResources& nativeResources, void* ctx) {
+			}
+		);
+	}
+
+
+	//! @brief      パスを追加
 	template <typename Data, typename Setup, typename Execute>
-	auto FG::addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid<Data, Setup, Execute> {
+	auto FG::addPass(StringView name, Setup&& setup, Execute&& execute) -> IsValid2<Data, Setup, Execute> {
 		return m_fg.addCallbackPass<Data>(
 			name,
 			[&](FrameGraph::Builder& nativeBuilder, Data& data) {
