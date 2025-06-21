@@ -34,4 +34,11 @@ namespace ob::graphics {
 		return std::move(str);
 	}
 
+	void FGBuffer::preRead(const Desc& desc, uint32_t flags, void* ctx) {
+		auto& cmd = *static_cast<Ref<rhi::CommandList>*>(ctx);
+	}
+	void FGBuffer::preWrite(const Desc& desc, uint32_t flags, void* ctx) {
+		auto& cmd = *static_cast<Ref<rhi::CommandList>*>(ctx);
+	}
+
 }

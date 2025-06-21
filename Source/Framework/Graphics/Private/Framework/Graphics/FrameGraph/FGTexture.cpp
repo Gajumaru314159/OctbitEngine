@@ -38,4 +38,11 @@ namespace ob::graphics {
 		return std::move(str);
 	}
 
+	void FGTexture::preRead(const Desc& desc, uint32_t flags, void* ctx) {
+		auto& cmd = *static_cast<Ref<rhi::CommandList>*>(ctx);
+	}
+	void FGTexture::preWrite(const Desc& desc, uint32_t flags, void* ctx) {
+		auto& cmd = *static_cast<Ref<rhi::CommandList>*>(ctx);
+	}
+
 }

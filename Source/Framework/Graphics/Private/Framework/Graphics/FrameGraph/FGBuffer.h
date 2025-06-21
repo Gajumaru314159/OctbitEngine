@@ -18,6 +18,9 @@ namespace ob::graphics {
         void destroy(const Desc& desc, void* allocator);
         static std::string toString(const Desc& desc);
 
+        void preRead(const Desc& desc, uint32_t flags, void* ctx);
+        void preWrite(const Desc& desc, uint32_t flags, void* ctx);
+
         Ref<rhi::Buffer> instance;
     };
 
