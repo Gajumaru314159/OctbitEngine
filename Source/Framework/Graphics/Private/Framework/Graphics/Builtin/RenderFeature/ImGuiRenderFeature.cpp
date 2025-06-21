@@ -802,16 +802,6 @@ namespace ob::graphics {
 	//! @brief		デストラクタ
 	ImGuiRenderFeature::~ImGuiRenderFeature() {}
 
-	//! @brief MaterialRenderFeature の描画パスをセットアップします。
-	void ImGuiRenderFeature::setupPasses(RenderPassBuilder& builder) const {
-		builder.add<ImGuiPass>();
-	}
-
-	//! @brief レンダービューのセットアップする
-	void ImGuiRenderFeature::setup(RenderView& view) {
-		view.get<ImGuiData>();
-	}
-
 	//! @brief		タスクを追加
 	void ImGuiRenderFeature::addTask(ImGuiHandle& handle, ImGuiDelegate func) {
 		m_notifier.add(handle, func);
@@ -856,6 +846,7 @@ namespace ob::graphics {
 		return fg.addPass<Output>(
 			"ImGui",
 			[&](FGBuilder& builder, Output& output) {
+				if (!input.color) input.color = builder.create({"ImGui",rhi::TextureFormat::RGBA8,view.get<CameraRFData>().output->size() });
 				output.color = builder.write(input.color);
 			},
 			[&](const Output& data, FGResources& resources, Ref<rhi::CommandList>& cmdList) {

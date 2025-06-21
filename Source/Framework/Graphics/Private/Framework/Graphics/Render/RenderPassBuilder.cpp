@@ -3,7 +3,7 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
+#if 0
 #include <Framework/Core/Utility/Algorithm.h>
 #include <Framework/Graphics/Render/RenderPassBuilder.h>
 
@@ -96,3 +96,4 @@ namespace ob::graphics {
 	}
 
 }
+#endif

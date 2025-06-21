@@ -9,11 +9,24 @@
 namespace ob::graphics {
 
 	//! @brief      コンストラクタ
-	RenderView::RenderView(RenderScene& scene, StringView name, StringView pipeline)
+	RenderView::RenderView(RenderScene& scene, const RenderViewData& data)
 		: m_scene(scene)
-		, m_name(name)
 	{
-		scene.addView(this,pipeline);
+		get<RenderViewData>() = data;
+		scene.addView(this);
+	}
+
+	//! @brief      コンストラクタ
+	RenderView::RenderView(RenderScene& scene, StringView name, s32 pipeline)
+		: RenderView(scene, 
+			[&] {
+				RenderViewData data;
+				data.name = name;
+				data.pipeline = pipeline;
+				return data;
+			}()
+		)
+	{
 	}
 
 	//! @brief      デストラクタ

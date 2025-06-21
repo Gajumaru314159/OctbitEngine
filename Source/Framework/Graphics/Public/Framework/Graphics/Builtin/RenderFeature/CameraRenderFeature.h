@@ -5,6 +5,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/SwapChain.h>
+#include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Render/RenderFeature.h>
 #include <Framework/Graphics/Render/RenderPass.h>
 #include <Framework/Graphics/Builtin/RenderFeature/MaterialRenderFeature.h>
@@ -72,18 +73,7 @@ namespace ob::graphics {
 		OB_RTTI();
 
 		CameraRenderFeature(RenderScene& scene) {
-		
-		}
 
-		//! @brief MaterialRenderFeature の描画パスをセットアップします。
-		void setupPasses(RenderPassBuilder& builder) const override {
-			builder.add<CameraPass>();
-		}
-
-
-		//! @brief レンダービューのセットアップする
-		void setup(RenderView& view) override {
-			auto& camera = view.get<CameraRFData>();
 		}
 
 	private:
@@ -94,17 +84,9 @@ namespace ob::graphics {
 	public:
 		struct Input {
 			FGResource color;
-
-			void connect(FGConnections& connections) {
-				color = connections.get("CameraPass.color");
-			}
 		};
 		struct Output {
 			FGResource color;
-
-			void connect(FGConnections& connections) {
-				connections.set("CameraPass.color", color);
-			}
 		};
 	public:
 
@@ -112,10 +94,10 @@ namespace ob::graphics {
 
 			auto& camera = view.get<CameraRFData>();
 			auto& material = view.get<MaterialRFData>();
-			
-			if (!camera.output) return {input.color};
 
-			material.block.setMatrix("MatrixV",Matrix::Identity);
+			if (!camera.output) return { input.color };
+
+			material.block.setMatrix("MatrixV", Matrix::Identity);
 
 			return fg.addPass<Output>(
 				"CameraPass",
@@ -123,7 +105,7 @@ namespace ob::graphics {
 					output.color = builder.read(input.color);
 					builder.setSideEffect();
 				},
-				[&](const Output& output,FGResources& resources, Ref<rhi::CommandList>& cmdList) {
+				[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 					auto albedo = resources.getTexture(output.color);
 
 					auto& camera = view.get<CameraRFData>();

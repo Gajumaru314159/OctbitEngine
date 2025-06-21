@@ -16,23 +16,11 @@ namespace ob::graphics {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				albedo = connections.get("EarlyZPass.albedo");
-				normal = connections.get("EarlyZPass.normal");
-				depth = connections.get("EarlyZPass.depth");
-			}
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				connections.set("EarlyZPass.albedo", albedo);
-				connections.set("EarlyZPass.normal", normal);
-				connections.set("EarlyZPass.depth", depth);
-			}
 		};
 	public:
 		EarlyZPass();
@@ -45,23 +33,11 @@ namespace ob::graphics {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				albedo = connections.get("OpaquePass.albedo");
-				normal = connections.get("OpaquePass.normal");
-				depth = connections.get("OpaquePass.depth");
-			}
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;			
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				connections.set("OpaquePass.albedo", albedo);
-				connections.set("OpaquePass.normal", normal);
-				connections.set("OpaquePass.depth", depth);
-			}
 		};
 	public:
 		OpaquePass();
@@ -74,23 +50,11 @@ namespace ob::graphics {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				albedo = connections.get("MaskedPass.albedo");
-				normal = connections.get("MaskedPass.normal");
-				depth = connections.get("MaskedPass.depth");
-			}
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;			
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				connections.set("MaskedPass.albedo", albedo);
-				connections.set("MaskedPass.normal", normal);
-				connections.set("MaskedPass.depth", depth);
-			}
 		};
 	public:
 		MaskedPass();
@@ -103,12 +67,6 @@ namespace ob::graphics {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				albedo = connections.get("DeferredPass.albedo");
-				normal = connections.get("DeferredPass.normal");
-				depth = connections.get("DeferredPass.depth");
-			}
 		};
 		struct Output {
 			FGResource color;
@@ -116,13 +74,6 @@ namespace ob::graphics {
 			FGResource albedo;
 			FGResource normal;
 			FGResource depth;
-
-			void connect(FGConnections& connections) {
-				connections.set("DeferredPass.color", color);
-				connections.set("DeferredPass.albedo", albedo);
-				connections.set("DeferredPass.normal", normal);
-				connections.set("DeferredPass.depth", depth);
-			}
 		};
 	public:
 		DeferredPass();

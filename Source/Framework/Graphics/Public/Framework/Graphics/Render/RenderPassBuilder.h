@@ -3,6 +3,7 @@
 //! @brief		
 //! @author		Gajumaru
 //***********************************************************
+#if 0
 #pragma once
 #include <Framework/Graphics/Render/RenderSceneDesc.h>
 #include <Framework/Core/Reflection/AnyContainer.h>
@@ -67,3 +68,4 @@ namespace ob::graphics {
 	};
 
 }
+#endif

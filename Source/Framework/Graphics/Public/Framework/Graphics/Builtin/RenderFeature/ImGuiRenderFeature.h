@@ -21,12 +21,6 @@ namespace ob::graphics {
 		ImGuiRenderFeature(RenderScene& scene);
 		virtual ~ImGuiRenderFeature();
 
-		//! @brief MaterialRenderFeature の描画パスをセットアップします。
-		void setupPasses(RenderPassBuilder&) const override;
-
-		//! @brief レンダービューのセットアップする
-		void setup(RenderView& view) override;
-
 		//! @brief		タスクを追加
 		void addTask(ImGuiHandle& handle, ImGuiDelegate func);
 
@@ -50,17 +44,9 @@ namespace ob::graphics {
 	public:
 		struct Input {
 			FGResource color;
-
-			void connect(FGConnections& connections) {
-				color = connections.get("ImGuiPass.color");
-			}
 		};
 		struct Output {
 			FGResource color;
-
-			void connect(FGConnections& connections) {
-				connections.set("ImGuiPass.color", color);
-			}
 		};
 	public:
 		OB_RTTI();

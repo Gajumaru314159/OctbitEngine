@@ -19,14 +19,6 @@ namespace ob::graphics {
 		m_materialId = static_cast<MaterialId>(0);
 	}
 
-	//! @brief MaterialRenderFeature の描画パスをセットアップします。
-	void MaterialRenderFeature::setupPasses(RenderPassBuilder& builder) const {
-		builder.add<EarlyZPass>();
-		builder.add<OpaquePass>();
-		builder.add<MaskedPass>();
-		builder.add<DeferredPass>();	
-	}
-
 	//! @brief      描画可能なオブジェクトを追加
 	MaterialId MaterialRenderFeature::addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material) {
 

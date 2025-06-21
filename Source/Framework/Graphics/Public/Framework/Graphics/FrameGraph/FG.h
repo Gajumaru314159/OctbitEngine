@@ -25,6 +25,10 @@ namespace ob::graphics {
 	struct FGResource {
 		FGResourceType type = FGResourceType::Invalid;
 		FrameGraphResource value = -1;
+
+		operator bool()const {
+			return type != FGResourceType::Invalid;
+		}
 	};
 
 

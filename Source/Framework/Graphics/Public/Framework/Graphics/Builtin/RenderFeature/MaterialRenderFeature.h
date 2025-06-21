@@ -46,9 +46,6 @@ namespace ob::graphics {
 
 		MaterialRenderFeature(RenderScene& scene);
 
-		//! @brief MaterialRenderFeature の描画パスをセットアップします。
-		void setupPasses(RenderPassBuilder&) const override;
-
 		//! @brief      描画アイテムを追加
 		MaterialId addRenderable(const Ref<Mesh>& mesh, const Ref<Material>& material);
 
