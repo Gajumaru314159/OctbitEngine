@@ -53,6 +53,10 @@ namespace ob::graphics {
         //! @brief      解放時イベント
         void addReleasedEvent(RenderSceneEventHandle& handle, RenderSceneEventDelegate func);
 
+    public:
+
+        void visitView(Func<void(RenderView&)> visitor);
+
     private:
 
 		friend class RenderView;

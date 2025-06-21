@@ -17,7 +17,8 @@
 #include <Framework/Engine/Component/ReflectionTestComponent.h>
 #include <Framework/Engine/Reflection.h>
 #include <Framework/Graphics/All.h>
-#include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
+#include <Framework/Graphics/Builtin/RenderPipeline/UniversalRenderPipeline.h>
+#include <Framework/Graphics/Builtin/RenderPipeline/ImGuiRenderPipeline.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Arguments.h>
@@ -101,47 +102,17 @@ int TestDirectX12() {
 
 
 	// 描画オブジェクト生成
-	RenderSceneDesc sdesc;
-	sdesc.features.add<ImGuiRenderFeature>();
-	sdesc.features.add<MaterialRenderFeature>();
-	sdesc.features.add<CameraRenderFeature>();
-	sdesc.pipelines = {
-		{
-			"MainPipeline",
-			{
-				{"EarlyZPass.albedo", "OpaquePass.albedo"},
-				{"EarlyZPass.normal", "OpaquePass.normal"},
-				{"EarlyZPass.depth", "OpaquePass.depth"},
+	RenderScene scene;
 
-				{"OpaquePass.albedo", "MaskedPass.albedo"},
-				{"OpaquePass.normal", "MaskedPass.normal"},
-				{"OpaquePass.depth", "MaskedPass.depth"},
+	auto urp = UniversalRenderPipeline::Create();
+	scene.setPipeline(0, urp);
+	auto pi = ImGuiRenderPipeline::Create();
+	scene.setPipeline(1,pi);
 
-				{"MaskedPass.albedo", "DeferredPass.albedo"},
-				{"MaskedPass.normal", "DeferredPass.normal"},
-				{"MaskedPass.depth", "DeferredPass.depth"},
-
-				{"DeferredPass.color", "ImGuiPass.color"},
-
-				{"ImGuiPass.color", "CameraPass.color"},
-			}
-		},
-		{
-			"ImGuiPipeline",
-			{
-				{"EarlyZPass.albedo", "ImGuiPass.color"},
-
-				{"ImGuiPass.color", "CameraPass.color"},
-			}
-		}
-	};
+	RenderView view(scene, "Test");
 
 
-	RenderScene scene(sdesc);
-	RenderView view(scene, "Test","MainPipeline");
-
-
-	view.get<CameraRFData>().setSwapChain(swapChain);
+	view.get<OutputViewData>().swapchain = swapChain;
 
 	// シーン生成
 	auto world = World::Create("MainWorld");
@@ -191,10 +162,25 @@ int TestDirectX12() {
 		}
 	);
 	ImGuiRenderFeature::AddTask(
-		scene, handle3,
+		scene, handle2,
 		[&] {
 			//reflectionExplorer.draw();
 			outliner.draw(*world);
+		}
+	);
+	ImGuiRenderFeature::AddTask(
+		scene, handle3,
+		[&] {
+			if (ImGui::Begin("RenderPipeline")) {
+				scene.visitView([&](RenderView& view) {
+					auto& data = view.get<RenderViewData>();
+					if (ImGui::CollapsingHeader(data.name.c_str())) {
+						ImGui::InputInt("Pipeline", &data.pipeline, 0, 2);
+						ImGui::InputInt("Priority", &data.priority);
+					}
+				});
+			}
+			ImGui::End();
 		}
 	);
 

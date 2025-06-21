@@ -71,6 +71,13 @@ namespace ob::graphics {
 
 	}
 
+	void RenderScene::visitView(Func<void(RenderView&)> visitor) {
+		if (!visitor)return;
+		for (auto& view : m_views) {
+			visitor(*view);
+		}
+	}
+
 	//! @brief      描画
 	void RenderScene::render(FG& fg) {
 
