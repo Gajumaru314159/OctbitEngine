@@ -15,24 +15,92 @@
 
 namespace ob::graphics {
 
-	class TestRenderPipeline {
+
+	class GlobalTestPass : public RenderPass {
 	public:
+		struct Input {
+			void connect(FGConnections& connections) {
+			}
+		};
+		struct Output {
+			void connect(FGConnections& connections) {
+			}
+		};
+	public:
+		GlobalTestPass() {}
+		Output render(FG& fg, Input input)const {
+		}
+	};
 
-		void render(FG& fg, RenderView& view) {
+	class UpscalePass : public RenderPass {
+	public:
+		struct Input {
+			void connect(FGConnections& connections) {
+			}
+		};
+		struct Output {
+			void connect(FGConnections& connections) {}
+		};
+		struct Param {
+			f32 scale = 1.2f;
+		};
+		Output render(FG& fg, RenderView& view,Input input) const {
+			auto& data = view.get<MaterialRFData>();
+			data.block.setScalar("g_upsacale",1.2);
+		}
+	};
 
+	struct TestRenderPipelineConfig {
+		bool useImGui = true;
+	};
+
+	class TestRenderPipeline : public IRenderPipeline {
+	public:
+		void render(FG& fg, RenderViewList& views) override {
+
+			auto global = m_global.render(fg, {});
+
+			for (auto& view : views) {
+
+				auto viewData = view.get<RenderViewData>();
+
+				if (viewData.pipeline == "PBR") {
+					renderPBR(fg, view);
+				}
+				if (viewData.pipeline == "Tool") {
+					renderOnlyTool(fg, view);
+				}
+			}
+		}
+
+	private:
+
+		void renderPBR(FG& fg, RenderView& view) {
 			auto earlyZ = m_earlyZ.render(fg, view, {});
 			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
 			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, earlyZ.depth });
 			auto deferred = m_deferred.render(fg, view, { masked.albedo,masked.normal,earlyZ.depth });
 			auto imgui = m_imgui.render(fg, view, { deferred.color });
 
-			bool useImGui = true;
+			bool useImGui = m_config->useImGui;
 
-			auto camera = m_camera.render(fg, view, { useImGui ? imgui.color : deferred.color});
+			auto camera = m_camera.render(fg, view, { useImGui ? imgui.color : deferred.color });
+		}
 
+		void renderOnlyTool(FG& fg, RenderView& view) {
+			auto earlyZ = m_earlyZ.render(fg, view, {});
+			auto imgui = m_imgui.render(fg, view, { earlyZ.albedo });
+			auto camera = m_camera.render(fg, view, { imgui.color });
 		}
 
 	private:
+
+		SPtr<TestRenderPipelineConfig> m_config;
+
+		// Global
+		GlobalTestPass m_global;
+
+		// Local
 		EarlyZPass m_earlyZ;
 		OpaquePass m_opaque;
 		MaskedPass m_masked;
