@@ -8,6 +8,7 @@
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Render/Pass/DeferredPass.h>
+#include <Framework/Graphics/Render/RenderView.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Shader.h>
@@ -16,30 +17,11 @@ using namespace ob::rhi;
 
 namespace ob::graphics {
 
+	struct DeferredData {
+		Ref<Material> material;
+	};
+
 	DeferredPass::DeferredPass() {
-		m_material = [&] {
-
-			auto code = File::ReadAllText("Assets/Shader/DeferredLight.hlsl");
-			OB_ASSERT(code, "ファイル読み込み失敗");
-
-			MaterialDesc desc;
-			desc.name = "DeferredLight";
-			desc.textures = { "Main" ,"Normal","Depth" };
-			desc.integers = { "GBuffer" };
-
-			MaterialPass& pass = desc.passes["PostProcess"];
-
-			auto& shaders = pass.qualities.emplace_back();
-
-			shaders.colors = { TextureFormat::RGBA8 };
-			shaders.vs = Shader::CompileVS(code.value());
-			shaders.ps = Shader::CompilePS(code.value());
-			shaders.inputLayout = {
-				{Semantic::Position,ElementType::Float,4},
-			};
-
-			return Material::Create(desc);
-			}();
 
 		MeshData md;
 		md.name = "FullScreen";
@@ -70,6 +52,33 @@ namespace ob::graphics {
 
 		using namespace ob::rhi;
 
+		auto& data = view.get<DeferredData>();
+		if (!data.material) {
+			data.material = [&] {
+
+				auto code = File::ReadAllText("Assets/Shader/DeferredLight.hlsl");
+				OB_ASSERT(code, "ファイル読み込み失敗");
+
+				MaterialDesc desc;
+				desc.name = "DeferredLight";
+				desc.textures = { "Main" ,"Normal","Depth" };
+				desc.integers = { "GBuffer" };
+
+				MaterialPass& pass = desc.passes["PostProcess"];
+
+				auto& shaders = pass.qualities.emplace_back();
+
+				shaders.colors = { TextureFormat::RGBA8 };
+				shaders.vs = Shader::CompileVS(code.value());
+				shaders.ps = Shader::CompilePS(code.value());
+				shaders.inputLayout = {
+					{Semantic::Position,ElementType::Float,4},
+				};
+
+				return Material::Create(desc);
+			}();
+		}
+
 		return fg.addPass<Output>(
 			"DeferredPass",
 			[&](FGBuilder& builder, Output& output) {
@@ -92,9 +101,9 @@ namespace ob::graphics {
 				auto albedo = resources.getTexture(output.albedo);
 				auto normal = resources.getTexture(output.normal);
 				auto depth = resources.getTexture(output.depth);
-				m_material->setTexture("Main", albedo);
-				m_material->setTexture("Normal", normal);
-				m_material->setTexture("Depth", depth);
+				data.material->setTexture("Main", albedo);
+				data.material->setTexture("Normal", normal);
+				data.material->setTexture("Depth", depth);
 
 				BeginPassParam param;
 				param.colors.emplace_back(resources.getTexture(output.color), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
@@ -102,7 +111,7 @@ namespace ob::graphics {
 				cmdList->beginRenderPass(param);
 
 				MaterialBlockSet blocks(view);
-				m_material->record(cmdList, blocks, m_mesh, 0, "PostProcess");
+				data.material->record(cmdList, blocks, m_mesh, 0, "PostProcess");
 
 				cmdList->endRenderPass();
 

@@ -26,7 +26,6 @@ namespace ob::graphics {
 		DeferredPass();
 		Output render(FG& fg, RenderView& view, Input input)const;
 	private:
-		Ref<Material> m_material;
 		Ref<Mesh> m_mesh;
 	};
 
