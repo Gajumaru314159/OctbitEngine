@@ -153,8 +153,8 @@ int TestDirectX12() {
 
 	s32 debugMode = 0;
 
-	ImGuiRenderFeature::AddTask(
-		scene, handle,
+	ImGuiPass::AddTask(
+		view, handle,
 		[&] {
 			// profiler.draw();
 			loginfo.draw();
@@ -162,15 +162,15 @@ int TestDirectX12() {
 			// ImGui::ShowDemoWindow();
 		}
 	);
-	ImGuiRenderFeature::AddTask(
-		scene, handle2,
+	ImGuiPass::AddTask(
+		view, handle2,
 		[&] {
 			//reflectionExplorer.draw();
 			outliner.draw(*world);
 		}
 	);
-	ImGuiRenderFeature::AddTask(
-		scene, handle3,
+	ImGuiPass::AddTask(
+		view, handle3,
 		[&] {
 			if (ImGui::Begin("RenderPipeline")) {
 				scene.visitView([&](RenderView& view) {
