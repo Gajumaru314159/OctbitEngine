@@ -13,9 +13,6 @@
 
 namespace ob::graphics {
 
-	class MaterialRenderer;
-	class RenderScene;
-
 	struct MaterialSystemDesc {
 		MaterialPropertiesSetDesc properties;
 	};
@@ -58,7 +55,6 @@ namespace ob::graphics {
 		SpinLock				m_vertexLayoutsLock;
 		Vector<VertexLayout>	m_vertexLayouts;
 	};
-
 
 	struct MaterialBlockSet {
 		MaterialBlock* global = nullptr;

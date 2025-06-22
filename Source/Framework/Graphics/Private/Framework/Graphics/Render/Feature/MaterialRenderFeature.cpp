@@ -4,10 +4,8 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
-#include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
-#include <Framework/Graphics/Render/RenderPassBuilder.h>
 #include <Framework/RHI/CommandList.h>
 
 namespace ob::graphics {

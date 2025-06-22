@@ -72,35 +72,4 @@ namespace ob::graphics {
 
 	};
 
-
-	//! @brief		RenderView毎のMaterial管理オブジェクト
-	//! @details	描画を担当するのではなく、RenderView毎のMaterialBlockを設定する役割を持ちます。
-	class MaterialRenderer {
-	public:
-		OB_RTTI();
-		MaterialRenderer(RenderView& view)
-			: m_view(view)
-		{
-			OB_ASSERT(m_view.findFeature<MaterialRenderFeature>(), "RenderSceneにMaterialRenderFeatureが登録されていません");
-
-			m_viewBlock = MaterialSystem::Instance().createViewBlock("TODO MaterialScene Name");
-		}
-
-		MaterialBlock& getViewBlock() { 
-			return m_viewBlock; 
-		}
-
-		MaterialBlock& getSceneBlock() {
-			// MaterialRenderFeatureが登録されていないならMaterialRendererも無効
-			return NotNull(m_view.findFeature<MaterialRenderFeature>())->getSceneBlock();
-		}
-
-		MaterialBlock& getGlobalBlock() {
-			// MaterialRenderFeatureが登録されていないならMaterialRendererも無効
-			return MaterialSystem::Instance().getGlobalBlock();
-		}
-	private:
-		RenderView& m_view;
-		MaterialBlock m_viewBlock;
-	};
 }
