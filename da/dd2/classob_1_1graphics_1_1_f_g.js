@@ -1,7 +1,8 @@
 var classob_1_1graphics_1_1_f_g =
 [
     [ "NoData", "d0/d37/structob_1_1graphics_1_1_f_g_1_1_no_data.html", null ],
-    [ "addPass", "da/dd2/classob_1_1graphics_1_1_f_g.html#affda4fc00793f3aca2ab4d118c23fd10", null ],
+    [ "addPass", "da/dd2/classob_1_1graphics_1_1_f_g.html#af4c1142dc55a1c248310c6cd5ca85525", null ],
+    [ "addPass", "da/dd2/classob_1_1graphics_1_1_f_g.html#a9157a77fe22e32774efd88dc6b72f836", null ],
     [ "compile", "da/dd2/classob_1_1graphics_1_1_f_g.html#a28185f83a2659b74d4da958539b0af58", null ],
     [ "execute", "da/dd2/classob_1_1graphics_1_1_f_g.html#aa6cf320bd4117b4887bdab1b5f70d78e", null ],
     [ "getBufferDesc", "da/dd2/classob_1_1graphics_1_1_f_g.html#a5d689c85dd4fd32d1bab958287ae31bf", null ],
