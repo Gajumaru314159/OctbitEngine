@@ -42,7 +42,7 @@ namespace ob::graphics {
 		);
 
 		auto imgui = m_imgui.render(fg, view, { resources.color});
-		auto camera = m_camera.render(fg, view, { imgui.color });
+		auto output = m_output.render(fg, view, { imgui.color });
 	}
 
 }

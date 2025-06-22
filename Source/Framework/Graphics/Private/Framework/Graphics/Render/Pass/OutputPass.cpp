@@ -20,7 +20,7 @@ namespace ob::graphics {
 		return std::nullopt;
 	}
 
-	CameraPass::Output CameraPass::render(FG& fg, RenderView& view, Input input) const {
+	OutputPass::Output OutputPass::render(FG& fg, RenderView& view, Input input) const {
 
 		auto& output = view.get<OutputViewData>();
 		auto& material = view.get<MaterialRFData>();

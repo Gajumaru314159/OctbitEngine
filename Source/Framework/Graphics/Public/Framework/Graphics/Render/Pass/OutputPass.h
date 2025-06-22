@@ -17,7 +17,7 @@ namespace ob::graphics {
 		Optional<Size> size()const;
 	};
 
-	class CameraPass : public RenderPass {
+	class OutputPass : public RenderPass {
 	public:
 		struct Input {
 			FGResource color;

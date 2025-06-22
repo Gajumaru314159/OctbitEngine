@@ -32,7 +32,7 @@ namespace ob::graphics {
 		MaskedPass m_masked;
 		DeferredPass m_deferred;
 		ImGuiPass m_imgui;
-		CameraPass m_camera;
+		OutputPass m_output;
 	};
 
 }

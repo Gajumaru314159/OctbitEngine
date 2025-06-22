@@ -22,7 +22,7 @@ namespace ob::graphics {
 		void render(FG& fg, RenderView& view) const override;
 	private:
 		ImGuiPass m_imgui;
-		CameraPass m_camera;
+		OutputPass m_output;
 	};
 
 }

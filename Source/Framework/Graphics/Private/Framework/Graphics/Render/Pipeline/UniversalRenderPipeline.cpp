@@ -64,6 +64,10 @@ namespace ob::graphics {
 			}
 		);
 
+		// TODO CullBufferを生成
+		// * RenderableのBoundsをGPUに転送
+		// * FrustumCullingをGPUで実行
+
 		auto earlyZ = m_earlyZ.render(fg, view, { resource.albedo, resource.normal, resource.depth });
 		auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
 		auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.depth });
@@ -72,7 +76,7 @@ namespace ob::graphics {
 
 		bool useImGui = true;
 
-		auto camera = m_camera.render(fg, view, { useImGui ? imgui.color : deferred.color });
+		auto output = m_output.render(fg, view, { useImGui ? imgui.color : deferred.color });
 	}
 
 }
