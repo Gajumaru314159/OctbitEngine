@@ -14,6 +14,7 @@ namespace ob::graphics {
 	//! @brief      コンストラクタ
 	MaterialRenderFeature::MaterialRenderFeature(RenderScene&) {		
 		m_materialId = static_cast<MaterialId>(0);
+		m_sceneBlock = MaterialSystem::Instance().createSceneBlock("Test");
 	}
 
 	//! @brief      描画可能なオブジェクトを追加

@@ -35,6 +35,7 @@ struct GlobalProps {
 };
 struct SceneProps {
 	float4 LightDir;
+	BufferHandle PointLight;
 };
 struct ViewProps {
 	float4x4 MatrixV;

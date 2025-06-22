@@ -20,6 +20,7 @@
 #include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>
 #include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
 #include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/LightRenderFeature.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Arguments.h>
@@ -95,6 +96,7 @@ int TestDirectX12() {
 
 	MaterialPropertiesSetDesc props;
 	props.merge(CameraRenderFeature::GetProperties());
+	props.merge(PointLightRenderFeature::GetProperties());
 	MaterialSystemDesc materialSystemDesc;
 	materialSystemDesc.properties = props;
 
@@ -127,7 +129,7 @@ int TestDirectX12() {
 	auto entity2 = Entity::Create<MeshComponent>("Sky", scene2);
 	entity2->setActive(true);
 	entity2->addComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
-	entity2->findComponent<TransformComponent>()->setLocalScale({ 10 ,10,10});
+	entity2->findComponent<TransformComponent>()->setLocalScale({ 1000 ,1000,1000});
 
 	auto entity3 = Entity::Create("Ukulele2", scene2);
 	entity3->addComponents<ReflectionTestComponent, MeshComponent>();

@@ -303,9 +303,9 @@ namespace ob::model {
 
 	void Model::finalize(){
 		leaveScene();
-		
+
 		// TODO 即時解放に問題がある場合はRenderFeatureに削除登録
-		delete this;
+		RefObject::finalize();
 	}
 
 	void Model::join(RenderScene& scene) {
@@ -314,6 +314,7 @@ namespace ob::model {
 
 		m_scene = &scene;
 
+		// TODO モデルは直接描画要素として登録するのではなくグループ化したものを登録するようにする
 		if (auto feature = m_scene->findFeature<graphics::MaterialRenderFeature>()) {
 			for(auto& part:m_data.parts) {					
 				auto id = feature->addRenderable(part.mesh, part.material);

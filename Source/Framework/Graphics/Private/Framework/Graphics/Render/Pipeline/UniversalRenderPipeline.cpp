@@ -7,6 +7,7 @@
 #include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/ImGuiRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/MaterialRenderFeature.h>
+#include <Framework/Graphics/Render/Feature/LightRenderFeature.h>
 #include <Framework/Graphics/FrameGraph/FG.h>
 
 namespace ob::graphics {
@@ -15,10 +16,13 @@ namespace ob::graphics {
 		features.add<MaterialRenderFeature>(scene);
 		features.add<ImGuiRenderFeature>(scene);
 		features.add<CameraRenderFeature>(scene);
+		features.add<PointLightRenderFeature>();
 	}
 
 	void UniversalRenderPipeline::render(FG& fg, RenderScene& scene) const {
-
+		if (auto light = scene.findFeature<PointLightRenderFeature>()) {
+			light->render(fg,scene);
+		}
 	}
 
 	void UniversalRenderPipeline::render(FG& fg, RenderView& view) const {
