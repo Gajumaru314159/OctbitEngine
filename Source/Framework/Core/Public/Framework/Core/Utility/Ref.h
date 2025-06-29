@@ -161,7 +161,7 @@ namespace ob::core {
 	Ref<T>::Ref(T* ptr)
 	{
 		m_ptr = ptr;
-		OB_SAFE_RETAIN(ptr);
+		OB_SAFE_RETAIN(m_ptr);
 	}
 
 	//! @brief	コピーコンストラクタ
@@ -177,8 +177,8 @@ namespace ob::core {
 	template<class Y>
 	Ref<T>::Ref(const Ref<Y>& ref) noexcept
 	{
-		T* t = ref.get();
-		m_ptr = t;
+		T* obj = ref.get();   // 暗黙変換チェック
+		m_ptr = obj;
 		OB_SAFE_RETAIN(m_ptr);
 	}
 
@@ -195,9 +195,11 @@ namespace ob::core {
 	template<class Y>
 	Ref<T>::Ref(Ref<Y>&& ref) noexcept
 	{
-		T* t = ref.get();
-		m_ptr = t;
-		ref.m_ptr = nullptr;
+		// Ref<T>からRef<T>::m_ptrにアクセスできないので参照カウンタの増減を挟む
+		T* obj = ref.get();   // 暗黙変換チェック
+		m_ptr = obj;
+		OB_SAFE_RETAIN(m_ptr);
+		ref.reset();
 	}
 
 	//! @brief	デストラクタ
@@ -224,11 +226,11 @@ namespace ob::core {
 	template<class Y>
 	Ref<T>& Ref<T>::operator=(const Ref<Y>& ref) noexcept
 	{
-		T* t = ref.get();   // 暗黙変換チェック
-		if (m_ptr != ref.m_ptr) {
-			OB_SAFE_RETAIN(ref.m_ptr);
+		T* obj = ref.get();   // 暗黙変換チェック
+		if (m_ptr != obj) {
+			OB_SAFE_RETAIN(obj);
 			OB_SAFE_RELEASE(m_ptr);
-			m_ptr = ref.m_ptr;
+			m_ptr = obj;
 		}
 		return *this;
 	}
@@ -237,7 +239,7 @@ namespace ob::core {
 	template<class T>
 	Ref<T>& Ref<T>::operator=(Ref&& ref) noexcept
 	{
-		if (&ref != this) {
+		if (m_ptr != ref.m_ptr) {
 			OB_SAFE_RELEASE(m_ptr);
 			m_ptr = ref.m_ptr;
 			ref.m_ptr = nullptr;
@@ -250,10 +252,10 @@ namespace ob::core {
 	template<class Y>
 	Ref<T>& Ref<T>::operator=(Ref<Y>&& ref) noexcept
 	{
-		OB_SAFE_RELEASE(m_ptr);
-		T* t = ref.get();
-		m_ptr = t;
-		ref.m_ptr = nullptr;
+		// Ref<T>からRef<T>::m_ptrにアクセスできないので参照カウンタの増減を挟む
+		reset();
+		m_ptr = ref.get();
+		ref.reset();
 		return *this;
 	}
 
@@ -262,7 +264,7 @@ namespace ob::core {
 	T& Ref<T>::operator*() const noexcept
 	{
 		OB_ASSERT(m_ptr != nullptr,"空の{}にアクセスしました", Type::Get<T>().name());
-		return *static_cast<T*>(m_ptr);
+		return *reinterpret_cast<T*>(m_ptr);
 	}
 
 	//! @brief	ポインタアクセス 
@@ -270,7 +272,7 @@ namespace ob::core {
 	T* Ref<T>::operator->() const noexcept
 	{
 		OB_ASSERT(m_ptr != nullptr, "空の{}にアクセスしました", Type::Get<T>().name());
-		return static_cast<T*>(m_ptr);
+		return reinterpret_cast<T*>(m_ptr);
 	}
 
 	//! @brief	有効なポインタを保持しているか 
@@ -301,21 +303,22 @@ namespace ob::core {
 	template<class T>
 	T* Ref<T>::get() const
 	{
-		return static_cast<T*>(m_ptr);
+		return reinterpret_cast<T*>(m_ptr);
 	}
 
 	//! @brief	オブジェクトのポインタへの変換をサポート
 	//! @note   ここでコンパイルエラーとなる場合、T の定義があるヘッダファイルを include しているか確認すること。
 	template<class T>
 	Ref<T>::operator T* () const {
-		return static_cast<T*>(m_ptr);
+		return reinterpret_cast<T*>(m_ptr);
 	}
 
 	//! @brief	派生クラスへキャスト
+	//! @details Tの派生先へキャストしたポインタを取得します。変換チェックは行いません。
 	template<class T>
 	template<class Y>
 	auto Ref<T>::cast() const->std::enable_if_t<std::is_base_of<T, Y>::value, Y*> {
-		return static_cast<Y*>(m_ptr);
+		return reinterpret_cast<Y*>(m_ptr);
 	}
 
 	// 以下比較関数
