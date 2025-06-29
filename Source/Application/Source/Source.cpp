@@ -48,17 +48,19 @@ int TestDirectX12() {
 
 	ob::editor::Editor editor;
 
-	ThreadPool threadPool;
-	TypeInfoManager typeInfoManager;
-	Logger log;
-	Profiler profiler;
-	LogInfo loginfo;
-	FrameGraphDebugger fgdebugger;
-	ReflectionExplorer reflectionExplorer;
-	Outliner outliner;
+	struct Tools {
+		ThreadPool threadPool;
+		TypeInfoManager typeInfoManager;
+		Logger log;
+		Profiler profiler;
+		LogInfo loginfo;
+		FrameGraphDebugger fgdebugger;
+		ReflectionExplorer reflectionExplorer;
+		Outliner outliner;
+	} tools;
 
 	Logger::EventHandle hLog;
-	log.addEvent(hLog,
+	tools.log.addEvent(hLog,
 		[&](const Log& log){
 			ob::editor::LogNotice notice;
 			notice.level = log.level;
@@ -74,12 +76,8 @@ int TestDirectX12() {
 
 
 	// ディスプレイ生成
-	Ref<SwapChain> swapChain = [&] {
-		SwapChainDesc desc;
-		desc.name = "MainDisplay";
-		desc.window = platform::Window::Main();
-		return SwapChain::Create(desc);
-	}();
+	Ref<SwapChain> swapChain = SwapChain::Create({ .name = "MainDisplay", .window = platform::Window::Main() });
+	
 
 	{
 		bool isEditor = false;
@@ -97,91 +95,59 @@ int TestDirectX12() {
 	MaterialPropertiesSetDesc props;
 	props.merge(CameraRenderFeature::GetProperties());
 	props.merge(PointLightRenderFeature::GetProperties());
-	MaterialSystemDesc materialSystemDesc;
-	materialSystemDesc.properties = props;
-
-	MaterialSystem materialSystem(materialSystemDesc);
+	MaterialSystem materialSystem({ props });
 
 
 
-	// 描画オブジェクト生成
-	RenderScene scene;
+	// シーン生成
+	RenderScene rscene;
+	rscene.setPipeline(0, UniversalRenderPipeline::Create());
+	rscene.setPipeline(1, ImGuiRenderPipeline::Create());
 
-	auto urp = UniversalRenderPipeline::Create();
-	scene.setPipeline(0, urp);
-	auto pi = ImGuiRenderPipeline::Create();
-	scene.setPipeline(1,pi);
-
-	RenderView view(scene, "Test");
-
-
+	// ビュー生成
+	RenderView view(rscene, "Test");
 	view.get<OutputViewData>().swapchain = swapChain;
+
 
 	// シーン生成
 	auto world = World::Create("MainWorld");
-	auto scene2 = Scene::Create("SubScene");
+	auto scene = Scene::Create("SubScene");
+	world->getRootScene().addSubScene(*scene);
 
-	auto entity1 = Entity::Create("Ukulele", scene2);
+	auto entity1 = Entity::Create("Ukulele", scene);
 	entity1->setActive(true);
 	entity1->addComponent<ReflectionTestComponent>();
 	entity1->addComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
 
-	auto entity2 = Entity::Create<MeshComponent>("Sky", scene2);
+	auto entity2 = Entity::Create<MeshComponent>("Sky", scene);
 	entity2->setActive(true);
 	entity2->addComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
 	entity2->findComponent<TransformComponent>()->setLocalScale({ 1000 ,1000,1000});
 
-	auto entity3 = Entity::Create("Ukulele2", scene2);
-	entity3->addComponents<ReflectionTestComponent, MeshComponent>();
-	entity3->findComponent<MeshComponent>()->setModel("Assets/Model/Ukulele.obj");
-	entity3->findComponent<TransformComponent>()->setLocalPosition({10,0,0});
-	entity3->setActive(true);
-
-	world->getRootScene().addSubScene(*scene2);
-
-
 	auto camera = Entity::Create("FlyCamera");
-	if (auto transform = camera->addComponent<TransformComponent>()) {
-		transform->setWorldPosition({ 0,0,-10 });
-	}
+	camera->addComponent<TransformComponent>()->setWorldPosition({ 0,0,-10 });
 	auto flyCamera = camera->addComponent<FlyCameraComponent>();
-	scene2->addEntity(camera);
+	scene->addEntity(camera);
 
 
 	// デバッグ描画タスク追加
 	ImGuiHandle handle;
-	ImGuiHandle handle2;
-	ImGuiHandle handle3;
-
-	s32 debugMode = 0;
 
 	ImGuiPass::AddTask(
 		view, handle,
 		[&] {
-			// profiler.draw();
-			loginfo.draw();
-			fgdebugger.draw();
-			// ImGui::ShowDemoWindow();
-		}
-	);
-	ImGuiPass::AddTask(
-		view, handle2,
-		[&] {
-			//reflectionExplorer.draw();
-			outliner.draw(*world);
-		}
-	);
-	ImGuiPass::AddTask(
-		view, handle3,
-		[&] {
+			tools.outliner.draw(*world);
+			tools.loginfo.draw();
+			tools.fgdebugger.draw();
+			tools.outliner.draw(*world);
 			if (ImGui::Begin("RenderPipeline")) {
-				scene.visitView([&](RenderView& view) {
+				rscene.visitView([&](RenderView& view) {
 					auto& data = view.get<RenderViewData>();
 					if (ImGui::CollapsingHeader(data.name.c_str())) {
 						ImGui::InputInt("Pipeline", &data.pipeline, 0, 2);
 						ImGui::InputInt("Priority", &data.priority);
 					}
-				});
+					});
 			}
 			ImGui::End();
 		}
@@ -197,25 +163,19 @@ int TestDirectX12() {
 
 		if (System::Update() == false)break;
 
-		// 行列更新
-		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
-		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t * 30.0f, 70), Vec3::One);
-
 		flyCamera->update();
 
 		Engine::Get()->update();
 		swapChain->update();
 		Graphics::Get()->update();
 
-		fgdebugger.update();
+		tools.fgdebugger.update();
 		editor.update();
 	}
 
 	handle.remove();
-	handle2.remove();
-	handle3.remove();
 
-	delete scene2;
+	delete scene;
 	delete world;
 
 	Engine::Get()->update();
