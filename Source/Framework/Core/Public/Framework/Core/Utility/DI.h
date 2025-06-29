@@ -38,6 +38,11 @@ namespace ob::core {
         template<class T>
         T* create(ServiceContainer& container)const;
 
+        //! @brief  サービスを生成(複数ルート)
+        //! @param container 生成されたサービスを管理させるコンテナの参照
+        template<class... Ts>
+        Tuple<Ts*...> createAll(ServiceContainer& container)const;
+
         //! @brief      全てのサービスを生成
         //! @details    抽象クラスに対して
         //! @param container 生成されたサービスを管理させるコンテナの参照
@@ -361,4 +366,12 @@ namespace ob::core {
         }
         return nullptr;
     }
+
+    //! @brief  サービスを生成(複数ルート)
+    //! @param container 生成されたサービスを管理させるコンテナの参照
+    template<class... Ts>
+    Tuple<Ts*...> ServiceInjector::createAll(ServiceContainer& container)const {
+        return { create<Ts>(container)... };
+    }
+
 }
