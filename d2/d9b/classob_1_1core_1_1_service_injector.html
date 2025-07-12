@@ -121,6 +121,10 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:a0be770856a37193068afca90f8752938"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#a0be770856a37193068afca90f8752938">create</a> (<a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;container) const</td></tr>
 <tr class="memdesc:a0be770856a37193068afca90f8752938"><td class="mdescLeft">&#160;</td><td class="mdescRight">サービスを生成  <br /></td></tr>
 <tr class="separator:a0be770856a37193068afca90f8752938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2a37a33b0eb3d1a1d2f8eec28300d0c" id="r_aa2a37a33b0eb3d1a1d2f8eec28300d0c"><td class="memTemplParams" colspan="2">template&lt;class... Ts&gt; </td></tr>
+<tr class="memitem:aa2a37a33b0eb3d1a1d2f8eec28300d0c"><td class="memTemplItemLeft" align="right" valign="top">Tuple&lt; Ts *... &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#aa2a37a33b0eb3d1a1d2f8eec28300d0c">createAll</a> (<a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;container) const</td></tr>
+<tr class="memdesc:aa2a37a33b0eb3d1a1d2f8eec28300d0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">サービスを生成(複数ルート)  <br /></td></tr>
+<tr class="separator:aa2a37a33b0eb3d1a1d2f8eec28300d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedeb329fec8aaa98c35f9d4e332d3a63" id="r_aedeb329fec8aaa98c35f9d4e332d3a63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html#aedeb329fec8aaa98c35f9d4e332d3a63">createAll</a> (<a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;container) const</td></tr>
 <tr class="memdesc:aedeb329fec8aaa98c35f9d4e332d3a63"><td class="mdescLeft">&#160;</td><td class="mdescRight">全てのサービスを生成  <br /></td></tr>
 <tr class="separator:aedeb329fec8aaa98c35f9d4e332d3a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,8 +168,36 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
+<a id="aa2a37a33b0eb3d1a1d2f8eec28300d0c" name="aa2a37a33b0eb3d1a1d2f8eec28300d0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2a37a33b0eb3d1a1d2f8eec28300d0c">&#9670;&#160;</a></span>createAll() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class... Ts&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Tuple&lt; Ts *... &gt; ob::core::ServiceInjector::createAll </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d8c/classob_1_1core_1_1_service_container.html">ServiceContainer</a> &amp;&#160;</td>
+          <td class="paramname"><em>container</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>サービスを生成(複数ルート) </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">container</td><td>生成されたサービスを管理させるコンテナの参照 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aedeb329fec8aaa98c35f9d4e332d3a63" name="aedeb329fec8aaa98c35f9d4e332d3a63"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedeb329fec8aaa98c35f9d4e332d3a63">&#9670;&#160;</a></span>createAll()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aedeb329fec8aaa98c35f9d4e332d3a63">&#9670;&#160;</a></span>createAll() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
