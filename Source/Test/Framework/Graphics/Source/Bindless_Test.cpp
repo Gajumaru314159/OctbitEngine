@@ -19,8 +19,8 @@ namespace ob::rhi {
 }
 
 TEST(Bindless, Handle) {
-	return;
 #pragma region
+	return;
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;

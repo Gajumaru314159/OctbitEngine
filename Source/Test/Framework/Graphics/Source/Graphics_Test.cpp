@@ -5,7 +5,6 @@
 //***********************************************************
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/Graphics/All.h>
-#include <Framework/Graphics/Builtin/RenderPipeline/TestRenderPipeline.h>
 #include <Framework/RHI/All.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/System.h>

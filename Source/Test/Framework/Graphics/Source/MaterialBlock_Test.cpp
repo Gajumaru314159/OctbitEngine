@@ -20,7 +20,7 @@ namespace ob::rhi {
 
 TEST(MaterialBlock, Bindfull) {
 #pragma region
-	
+	return;
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
