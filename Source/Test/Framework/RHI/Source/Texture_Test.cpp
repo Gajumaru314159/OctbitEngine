@@ -6,9 +6,10 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class TextureTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
-TEST_F(TextureTest, Type) {
+TYPED_TEST(RHITest, Texture_Type) {
 
 	// タイプ
 	for (auto type : magic_enum::enum_values<TextureType>()) {
@@ -32,7 +33,7 @@ TEST_F(TextureTest, Type) {
 	}
 
 }
-TEST_F(TextureTest, Format) {
+TYPED_TEST(RHITest, Texture_Format) {
 
 	// フォーマット
 	for (auto format : magic_enum::enum_values<TextureFormat>()) {
@@ -54,7 +55,7 @@ TEST_F(TextureTest, Format) {
 	}
 
 }
-TEST_F(TextureTest, Size) {
+TYPED_TEST(RHITest, Texture_Size) {
 
 	// 不正サイズ
 	{
@@ -67,7 +68,7 @@ TEST_F(TextureTest, Size) {
 	}
 
 }
-TEST_F(TextureTest, Array) {
+TYPED_TEST(RHITest, Texture_Array) {
 
 	// 配列
 	{

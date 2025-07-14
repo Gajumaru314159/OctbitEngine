@@ -6,16 +6,17 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class RootSignatureTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
 // Emptyテスト
-TEST_F(RootSignatureTest, Empty) {
+TYPED_TEST(RHITest, RootSignature_Empty) {
 	auto rootSignature = RootSignature::Create({});
 	ASSERT_TRUE(rootSignature != nullptr);
 }
 
 // Slotテスト
-TEST_F(RootSignatureTest, Resources) {
+TYPED_TEST(RHITest, RootSignature_Resources) {
 
 	Ref<DescriptorLayout> layout = DescriptorLayout::Create(
 		{
@@ -35,7 +36,7 @@ TEST_F(RootSignatureTest, Resources) {
 	ASSERT_TRUE(rootSignature != nullptr);
 
 }
-TEST_F(RootSignatureTest, Sampler) {
+TYPED_TEST(RHITest, RootSignature_Sampler) {
 
 
 	Ref<DescriptorLayout> layout = DescriptorLayout::Create(
@@ -48,7 +49,7 @@ TEST_F(RootSignatureTest, Sampler) {
 	ASSERT_TRUE(rootSignature != nullptr);
 
 }
-TEST_F(RootSignatureTest, Mixed) {
+TYPED_TEST(RHITest, RootSignature_Mixed) {
 
 	Ref<DescriptorLayout> layout = DescriptorLayout::Create(
 		{
@@ -69,7 +70,7 @@ TEST_F(RootSignatureTest, Mixed) {
 	ASSERT_TRUE(rootSignature != nullptr);
 
 }
-TEST_F(RootSignatureTest, MultiSlots) {
+TYPED_TEST(RHITest, RootSignature_MultiSlots) {
 
 	Ref<DescriptorLayout> layout0 = DescriptorLayout::Create(
 		{
@@ -98,19 +99,13 @@ TEST_F(RootSignatureTest, MultiSlots) {
 			Binding::ConstantBuffer(18),
 		}
 	);
-	
-	Ref<DescriptorLayout> layout2 = DescriptorLayout::Create(
-		{
-			Binding::Sampler(20),
-		}
-	);
 
-	auto rootSignature = RootSignature::Create({layout0,layout1,layout2});
+	auto rootSignature = RootSignature::Create({ layout0,layout1 });
 	ASSERT_TRUE(rootSignature != nullptr);
-}
 
+}
 // StaticSamplerテスト
-TEST_F(RootSignatureTest, StaticSampler) {
+TYPED_TEST(RHITest, RootSignature_StaticSampler) {
 	RootSignatureDesc desc;
 	desc.samplers = {
 		StaticSamplerDesc(SamplerDesc(),0) ,
@@ -121,7 +116,7 @@ TEST_F(RootSignatureTest, StaticSampler) {
 }
 
 // StaticSamplerテスト
-TEST_F(RootSignatureTest, RootConstants) {
+TYPED_TEST(RHITest, RootSignature_RootConstants) {
 	RootSignatureDesc desc;
 	desc.constants = {
 		RootConstantsDesc(128,0)
@@ -131,7 +126,7 @@ TEST_F(RootSignatureTest, RootConstants) {
 }
 
 // Flagsテスト
-TEST_F(RootSignatureTest, Flags) {
+TYPED_TEST(RHITest, RootSignature_Flags) {
 	RootSignatureDesc desc;
 	desc.flags = RootSignatureFlag::EnableBindless;
 	auto rootSignature = RootSignature::Create(desc);

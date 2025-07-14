@@ -9,9 +9,7 @@
 using namespace ob;
 using namespace ob::rhi;
 
-class BufferTest : public RHITestBase {};
-
-TEST_F(BufferTest, Create) {
+TYPED_TEST(RHITest, Buffer_Create) {
 
 	for (auto type : magic_enum::enum_values<BufferState>()) {
 
@@ -51,7 +49,7 @@ TEST_F(BufferTest, Create) {
 
 }
 
-TEST_F(BufferTest, CreateUtility) {
+TYPED_TEST(RHITest, Buffer_CreateUtility) {
 
 	// Constant
 	{
@@ -87,7 +85,7 @@ TEST_F(BufferTest, CreateUtility) {
 
 }
 
-TEST_F(BufferTest, Update) {
+TYPED_TEST(RHITest, Buffer_Update) {
 
 	// バッファの作成
 	Ref<Buffer> buffer = Buffer::Create(BufferDesc::Vertex<f32>(6));

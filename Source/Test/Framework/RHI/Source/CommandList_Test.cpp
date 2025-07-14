@@ -6,9 +6,7 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class CommandListTest : public RHITestBase {};
-
-TEST_F(CommandListTest, Create) {
+TYPED_TEST(RHITest, CommandList_Create) {
 
     for (auto type : magic_enum::enum_values<CommandListType>()) {
 
@@ -23,8 +21,7 @@ TEST_F(CommandListTest, Create) {
 
 }
 
-TEST_F(CommandListTest, GraphicCommands) {
-    return;
+TYPED_TEST(RHITest, CommandList_GraphicCommands) {
 
     RenderTextureDesc rtDesc;
 	rtDesc.size = { 1280, 720 };

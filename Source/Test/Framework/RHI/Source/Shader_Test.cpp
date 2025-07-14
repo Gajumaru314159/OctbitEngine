@@ -6,7 +6,8 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class ShaderTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
 static const char* s_code =
 R"(
@@ -119,7 +120,7 @@ R"(
     }
 )";
 
-TEST_F(ShaderTest, Vertex) {
+TYPED_TEST(RHITest, Shader_Vertex) {
 	ShaderCompileDesc desc;
     desc.code = s_code;
     desc.stage = ShaderStage::Vertex;
@@ -131,7 +132,7 @@ TEST_F(ShaderTest, Vertex) {
 		EXPECT_TRUE(shader == nullptr);
 	}
 }
-TEST_F(ShaderTest, Hull) {
+TYPED_TEST(RHITest, Shader_Hull) {
 	ShaderCompileDesc desc;
 	desc.code = s_code;
 	desc.stage = ShaderStage::Hull;
@@ -142,7 +143,7 @@ TEST_F(ShaderTest, Hull) {
 		EXPECT_TRUE(shader == nullptr);
 	}
 }
-TEST_F(ShaderTest, Domain) {
+TYPED_TEST(RHITest, Shader_Domain) {
 	ShaderCompileDesc desc;
 	desc.code = s_code;
 	desc.stage = ShaderStage::Domain;
@@ -153,7 +154,7 @@ TEST_F(ShaderTest, Domain) {
 		EXPECT_TRUE(shader == nullptr);
 	}
 }
-TEST_F(ShaderTest, Geometry) {
+TYPED_TEST(RHITest, Shader_Geometry) {
 	ShaderCompileDesc desc;
 	desc.code = s_code;
 	desc.stage = ShaderStage::Geometry;
@@ -164,7 +165,7 @@ TEST_F(ShaderTest, Geometry) {
 		EXPECT_TRUE(shader == nullptr);
 	}
 }
-TEST_F(ShaderTest, Pixel) {
+TYPED_TEST(RHITest, Shader_Pixel) {
 	ShaderCompileDesc desc;
 	desc.code = s_code;
 	desc.stage = ShaderStage::Pixel;

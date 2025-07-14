@@ -6,6 +6,9 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
+using namespace ob;
+using namespace ob::rhi;
+
 static const char* s_code =
 R"(
     // Vertex Shader
@@ -48,9 +51,7 @@ struct Vertex {
     Color color;
 };
 
-class PipelineStateTest : public RHITestBase {};
-
-TEST_F(PipelineStateTest, Create) {
+TYPED_TEST(RHITest, PipelineState_Create) {
 
     PipelineStateDesc desc;
     desc.name = "TestPipelineState";

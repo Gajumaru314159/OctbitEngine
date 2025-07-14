@@ -6,9 +6,10 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class VideoCardTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
-TEST_F(VideoCardTest, Get) {
+TYPED_TEST(RHITest, VideoCard_Get) {
 
 	auto videoCards = RHI::Get()->getVideoCards();
 

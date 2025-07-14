@@ -4,10 +4,12 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <RHITestBase.h>
+#include <magic_enum.hpp>
 
-class RenderTextureTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
-TEST_F(RenderTextureTest, Create) {
+TYPED_TEST(RHITest, RenderTexture_Create) {
     return;
     for (auto format : magic_enum::enum_values<TextureFormat>()) {
 

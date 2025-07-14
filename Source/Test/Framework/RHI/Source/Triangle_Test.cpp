@@ -6,9 +6,10 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class ARHITest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
-TEST_F(ARHITest, Triangle) {
+TYPED_TEST(RHITest, Triangle_Test) {
 
 	using namespace ob::rhi;
 

@@ -16,15 +16,24 @@ using namespace ob;
 using namespace ob::rhi;
 using namespace ob::platform;
 
-class RHITestBase : public ::testing::Test {
+struct DirectX12Tag {};
+struct VulkanTag {};
+
+template<typename T>
+class RHITest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 
 		ServiceInjector injector;
 		ServiceContainer container;
 		
-		rhi::RegisterDirectX12RHIService(injector);
-		//rhi::RegisterVulkanRHIService(injector);
+		if constexpr (std::is_same_v<T, DirectX12Tag>) {
+			rhi::RegisterDirectX12RHIService(injector);
+		}
+		if constexpr (std::is_same_v<T, VulkanTag>) {
+			rhi::RegisterVulkanRHIService(injector);
+		}
+
 		rhi::RegisterRHIService(injector);
 
 		m_dx12config.enableDebugLayer = true;
@@ -44,3 +53,7 @@ protected:
 	VulkanRHIConfig m_vkconfig;
 	ServiceContainer m_container;
 };
+
+
+using RHIImplementations = ::testing::Types<DirectX12Tag, VulkanTag>;
+TYPED_TEST_SUITE(RHITest, RHIImplementations);

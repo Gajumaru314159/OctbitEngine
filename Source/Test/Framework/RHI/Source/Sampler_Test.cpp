@@ -6,9 +6,10 @@
 #include <RHITestBase.h>
 #include <magic_enum.hpp>
 
-class SamplerTest : public RHITestBase {};
+using namespace ob;
+using namespace ob::rhi;
 
-TEST_F(SamplerTest, Create) {
+TYPED_TEST(RHITest, Sampler_Create) {
 
     for (auto filter : magic_enum::enum_values<TextureFillter>()) {
 
