@@ -39,18 +39,17 @@ namespace ob::rhi {
 	struct BindingItem {
 		BindingType type;
 		s32         index; // register / binding
-		s32         space; // space / set
 
-		constexpr BindingItem(BindingType type, s32 index, s32 space)
-			: type(type), index(index), space(space) {}
+		constexpr BindingItem(BindingType type, s32 index)
+			: type(type), index(index) {}
 	};
 
 	//! @brief      BindingItem定義のユーティリティ
 	struct Binding {
 
 		#define DECL_BINDING(TYPE) \
-		static constexpr BindingItem TYPE(s32 index, s32 space = 0) {\
-			return BindingItem(BindingType::TYPE, index, space);\
+		static constexpr BindingItem TYPE(s32 index) {\
+			return BindingItem(BindingType::TYPE, index);\
 		}
 
 		// indexが負の場合は前のBindingItemのindexからの相対値を表します。
