@@ -63,14 +63,14 @@ namespace ob::rhi {
 				parameter.DescriptorTable.pDescriptorRanges = ranges.data() + rangeStart;
 
 				// 連続する領域をCD3DX12_DESCRIPTOR_RANGEにまとめる
-				BindingItem last(BindingType::Texture, -1, -1);
+				BindingItem last(BindingType::Texture, -2);
 
 				for (s32 i = 0; i < items.size(); i++) {
 
 					auto lastType = TypeConverter::Convert(last.type);
 					auto itemType = TypeConverter::Convert(items[i].type);
 
-					if (lastType != itemType || last.index + 1 != items[i].index || last.space != items[i].space) {
+					if (lastType != itemType || last.index + 1 != items[i].index) {
 
 						// Heapが異なる要素はスキップ
 						while (i < items.size() && heapTypeOf(items[i].type) != heapType) ++i;
@@ -80,7 +80,7 @@ namespace ob::rhi {
 						range.RangeType = TypeConverter::Convert(items[i].type);
 						range.NumDescriptors = 0;
 						range.BaseShaderRegister = items[i].index;
-						range.RegisterSpace = items[i].space;
+						range.RegisterSpace = 0; // Vulkan互換のためspaceは公開しない
 						range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 					}
 
