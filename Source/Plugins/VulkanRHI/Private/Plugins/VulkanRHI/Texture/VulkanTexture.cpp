@@ -67,27 +67,16 @@ namespace ob::rhi {
 		// 定義生成
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
-		if (info.format == vk::Format::eUndefined) {
-			LOG_ERROR("不正なフォーマットです [name={}]", m_desc.name);
-			throw Exception("Invalid TextureDesc");
-		}
-
 		// リソース生成
-		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
-
-		auto requirements = m_image.getMemoryRequirements();
-
-
+		m_shared = std::make_shared<SharedResource>();
+		m_shared->image = device.createImage(info, m_rhi.getAllocationCallbacks());
+		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->image.bindMemory(m_shared->memory, 0);
 
-		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
-		m_image.bindMemory(m_memory, 0);
-
-
-		rhi.setName(m_image, m_desc.name);
-		rhi.setName(m_memory, m_desc.name);
-
-		manage();
+		// 共通初期化
+		initialize();
     }
 
 
@@ -119,25 +108,20 @@ namespace ob::rhi {
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
 		// リソース生成
-		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
-
-		auto requirements = m_image.getMemoryRequirements();
-
-
+		m_shared = std::make_shared<SharedResource>();
+		m_shared->image = device.createImage(info, m_rhi.getAllocationCallbacks());
+		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->image.bindMemory(m_shared->memory, 0);
 
-		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
-		m_image.bindMemory(m_memory, 0);
-
+		// 色データをアップロード
 		VulkanTextureUploader::Subresource subresources[1];
 		subresources[0].data = BlobView(colors.data(),colors.size_bytes());
+		m_rhi.getTextureUploader().add(m_shared->image, info, m_desc.format, subresources);
 
-		m_rhi.getTextureUploader().add(m_image,info,m_desc.format,subresources);
-
-		rhi.setName(m_image, m_desc.name);
-		rhi.setName(m_memory, m_desc.name);
-
-		manage();
+		// 共通初期化
+		initialize();
 	}
 
 
@@ -145,10 +129,63 @@ namespace ob::rhi {
 	VulkanTexture::VulkanTexture(VulkanRHI& rhi, StringView name,BlobView blob)
 		: m_rhi(rhi)
 	{
-		//ファイルパスからVkImageを生成する
+		// TODO テクスチャバイナリから読み込み
+		throw NotImplementedException("テクスチャの読み込みをサポートしていません");
 
-		manage();
+		// 定義生成
+		
+		// リソース生成
+		m_shared = std::make_shared<SharedResource>();
+
+		// 共通初期化
+		initialize();
 	}
+
+
+	//! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+	VulkanTexture::VulkanTexture(VulkanRHI& rDevice, const TextureViewDesc& desc)
+		: m_rhi(rDevice)
+	{
+		auto base = desc.base.cast<VulkanTexture>();
+		if (!base) {
+			LOG_ERROR("ベーステクスチャが指定されていません");
+			return;
+		}
+
+		m_desc = base->m_desc;
+		m_viewDesc = desc;
+		m_shared = base->m_shared;
+
+		vk::DescriptorImageInfo info({}, m_view, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::WriteDescriptorSet ddesc;
+		ddesc.setImageInfo(info);
+
+		switch (desc.type) {
+		case TextureViewType::Texture:
+			if (m_desc.flags & TextureFlag::ShaderResource) {
+				createView(m_view);
+				ddesc.descriptorType = vk::DescriptorType::eSampledImage;
+			} else {
+				throw Exception("TextureFlag::ShaderResourceが指定されていないTextureをTextureViewType::Textureで使用しようとしました");
+			}
+			break;
+		case TextureViewType::RWTexture:
+			if (m_desc.flags & TextureFlag::UnorderedAccess) {
+				// createUAV(m_view,0);
+				vk::WriteDescriptorSet desc;
+				ddesc.descriptorType = vk::DescriptorType::eStorageImage;
+			} else {
+				throw Exception("TextureFlag::UnorderedAccessが指定されていないTextureをTextureViewType::RWTextureで使用しようとしました");
+			}
+			break;
+		}
+
+		m_rhi.allocateHandle(m_handle, ddesc);
+
+		initialize();
+
+	}
+
 
 
 	//! @brief       RenderTextureDesc からRenderTextureを生成
@@ -191,25 +228,24 @@ namespace ob::rhi {
 		auto info2 = (VkImageCreateInfo)info;
 
 		// リソース生成
-		m_image = device.createImage(info, m_rhi.getAllocationCallbacks());
-
-		auto requirements = m_image.getMemoryRequirements();
-
+		m_shared = std::make_shared<SharedResource>();
+		m_shared->image = device.createImage(info, m_rhi.getAllocationCallbacks());
+		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->image.bindMemory(m_shared->memory, 0);
 
-		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
-		m_image.bindMemory(m_memory, 0);
 
-
-		// View
+		// ビュー生成
 		vk::ImageViewCreateInfo viewCreateInfo;
 		viewCreateInfo.viewType = vk::ImageViewType::e2D;
 		viewCreateInfo.format = info.format;
 		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
 		viewCreateInfo.subresourceRange.levelCount = 1;
 		viewCreateInfo.subresourceRange.layerCount = 1;
-		viewCreateInfo.image = m_image;
+		viewCreateInfo.image = m_shared->image;
 
+		// TODO DirectX12と異なりRTVとDSVはImageViewで管理できるので必要なもののみ生成する
 		if (isColor) {
 			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 			m_hRTV = device.createImageView(viewCreateInfo);
@@ -221,11 +257,11 @@ namespace ob::rhi {
 			rhi.setName(m_hDSV, m_desc.name);
 		}
 
-		rhi.setName(m_image, m_desc.name);
-		rhi.setName(m_memory, m_desc.name);
+		rhi.setName(m_shared->image, m_desc.name);
+		rhi.setName(m_shared->memory, m_desc.name);
 
+		initialize();
 
-		manage();
 	}
 
 
@@ -242,8 +278,6 @@ namespace ob::rhi {
 		m_desc.arrayNum = 0;
 		m_desc.mipLevels = 1;
 
-
-
 		// View
 		vk::ImageViewCreateInfo viewCreateInfo;
 		viewCreateInfo.viewType = vk::ImageViewType::e2D;
@@ -255,6 +289,29 @@ namespace ob::rhi {
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		m_hRTV = device.createImageView(viewCreateInfo);
 
+		initialize();
+	}
+
+
+	//! @brief 共通初期化処理
+	//! @details テクスチャリソースはデフォルトでShaderResourceとして使用できるViewを持つ
+	void VulkanTexture::initialize() {
+
+		// View生成
+		createView(m_view);
+
+		// デスクリプタハンドルを割り当て
+		vk::DescriptorImageInfo info({},m_view,vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::WriteDescriptorSet desc;
+		desc.descriptorType = vk::DescriptorType::eSampledImage;
+		desc.setImageInfo(info);
+
+		m_rhi.allocateHandle(m_handle, desc);
+
+
+		m_rhi.setName(m_shared->image, m_desc.name);
+		m_rhi.setName(m_shared->memory, m_desc.name);
+
 		manage();
 	}
 
@@ -262,34 +319,31 @@ namespace ob::rhi {
 	VulkanTexture::~VulkanTexture() {
 	}
 
-
+	//! @brief TextureTypeからvk::ImageViewTypeに変換
 	vk::ImageViewType Convert(TextureType type,s32 arrayNum) {
 		switch (type) {
-		case TextureType::Texture1D:
-			return 0  < arrayNum ? vk::ImageViewType::e1DArray : vk::ImageViewType::e1D;
-		case TextureType::Texture2D:
-			return 0  < arrayNum ? vk::ImageViewType::e2DArray : vk::ImageViewType::e2D;
-		case TextureType::Texture3D:
-			return  vk::ImageViewType::e3D;
-		case TextureType::Cube:
-			return 0 < arrayNum ? vk::ImageViewType::eCubeArray : vk::ImageViewType::eCube;
+		case TextureType::Texture1D:	return 0  < arrayNum ? vk::ImageViewType::e1DArray : vk::ImageViewType::e1D;
+		case TextureType::Texture2D:	return 0  < arrayNum ? vk::ImageViewType::e2DArray : vk::ImageViewType::e2D;
+		case TextureType::Cube:			return 0 < arrayNum ? vk::ImageViewType::eCubeArray : vk::ImageViewType::eCube;
+		case TextureType::Texture3D:	return vk::ImageViewType::e3D;
 		}
 		throw NotSupportedException();
 	}
 
-	bool VulkanTexture::createSRV(vk::raii::ImageView& view) {
-		// View
+	bool VulkanTexture::createView(vk::raii::ImageView& view) {
+		
 		vk::ImageViewCreateInfo info;
-		info.image = m_image;
-		info.viewType = Convert(m_desc.type,m_desc.arrayNum);
+		info.image = m_shared->image;
+		info.viewType = Convert(m_desc.type, m_desc.arrayNum);
 		info.format = TypeConverter::Convert(m_desc.format);
 		info.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
 		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		info.subresourceRange.baseMipLevel = 0;
-		info.subresourceRange.levelCount = 1; // TODO m_desc.mipLevels;
+		info.subresourceRange.levelCount = m_desc.mipLevels * std::max(m_desc.arrayNum,1);
 		info.subresourceRange.baseArrayLayer = 0;
 		info.subresourceRange.layerCount = 1;
 		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+		if (m_desc.type == TextureType::Cube) info.subresourceRange.levelCount *= 6;
 		view = m_rhi.getDevice().createImageView(info);
 
 		return true;

@@ -4,10 +4,11 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Sampler.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHandle.h>
 
 namespace ob::rhi {
 
-    //! @brief  サンプラー実装(DirectX12)
+    //! @brief  サンプラー実装(Vulkan)
     class VulkanSampler :public Sampler {
     public:
 
@@ -27,6 +28,7 @@ namespace ob::rhi {
     private:
         String m_name;
 		vk::raii::Sampler m_sampler = nullptr;
+        VulkanDescriptorHandle m_handle;
     };
 
 
@@ -35,7 +37,10 @@ namespace ob::rhi {
 
 	//! @brief      BindlessHandleを取得
 	inline BindlessHandle VulkanSampler::getHandle()const {
-        return {};
+        BindlessHandle handle;
+        handle.type = BindingType::Sampler;
+        handle.index = m_handle.getBindlessIndex();
+        return handle;
 	}
 
 

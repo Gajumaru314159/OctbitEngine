@@ -112,9 +112,7 @@ namespace ob::rhi {
 	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob)
 		: DirectX12Buffer(rDevice,desc)
 	{
-		if (!isValid())return; 
-		// TODO
-		OB_NOTIMPLEMENTED();
+		update(blob.size(), blob.data(), 0);
 	}
 
 	//! @brief  コンストラクタ

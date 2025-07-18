@@ -20,7 +20,6 @@ namespace ob::rhi {
 
 TEST(MaterialBlock, Bindfull) {
 #pragma region
-	return;
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
@@ -41,8 +40,8 @@ TEST(MaterialBlock, Bindfull) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::RegisterDirectX12RHIService(injector);
-		//rhi::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
@@ -292,8 +291,8 @@ TEST(MaterialBlock, Bindless) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::RegisterDirectX12RHIService(injector);
-		//rhi::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
@@ -457,6 +456,7 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
 		desc.vertexLayout.vertexStride = sizeof(Vertex);
+		desc.rasterizer.cullMode = CullMode::None;
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);
@@ -572,8 +572,8 @@ TEST(MaterialBlock, MultiBindless) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::RegisterDirectX12RHIService(injector);
-		//rhi::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);
@@ -747,6 +747,7 @@ PsOut PS_Main(PsIn i){
 			VertexAttribute(Semantic::TexCoord,offsetof(Vertex,uv),ElementType::Float,2),
 		};
 		desc.vertexLayout.vertexStride = sizeof(Vertex);
+		desc.rasterizer.cullMode = CullMode::None;
 
 		pipeline = PipelineState::Create(desc);
 		OB_ASSERT_EXPR(pipeline);

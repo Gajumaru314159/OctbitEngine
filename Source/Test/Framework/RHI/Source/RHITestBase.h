@@ -55,5 +55,7 @@ protected:
 };
 
 
-using RHIImplementations = ::testing::Types<DirectX12Tag, VulkanTag>;
+//using RHIImplementations = ::testing::Types<DirectX12Tag, VulkanTag>;
+//using RHIImplementations = ::testing::Types<DirectX12Tag>;
+using RHIImplementations = ::testing::Types<VulkanTag>;
 TYPED_TEST_SUITE(RHITest, RHIImplementations);

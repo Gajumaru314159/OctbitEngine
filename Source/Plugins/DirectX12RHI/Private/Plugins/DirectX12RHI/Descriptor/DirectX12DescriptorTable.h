@@ -43,9 +43,6 @@ namespace ob::rhi {
 		bool setResource(s32 index, const Ref<Texture>& resource) override;
 		bool setResource(s32 index, const Ref<Sampler>& resource) override;
 
-		//! @brief  バインドレスハンドルに使用するインデックスを取得
-		BindlessHandle getBindlessHandle(s32 index = 0)const override;
-
 	public:
 
 		void record(ID3D12GraphicsCommandList& cmdList, DirectX12RootSignature& signature,s32 slot) const;

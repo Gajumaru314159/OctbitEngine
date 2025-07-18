@@ -36,19 +36,51 @@ namespace ob::rhi {
 		if (m_desc.flags.has(BufferFlag::Constant)) info.usage |= vk::BufferUsageFlagBits::eUniformBuffer;
 		if (m_desc.flags.has(BufferFlag::IndirectArgument)) info.usage |= vk::BufferUsageFlagBits::eIndirectBuffer;
 
-		m_buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
-
 		// メモリ確保
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared = std::make_shared<SharedResource>();
+		m_shared->buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
+		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_shared->buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->buffer.bindMemory(m_shared->memory, 0);
 
-		m_memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		// バッファハンドルの生成
+		{
+			vk::DescriptorBufferInfo descBufInfo[1];
+			descBufInfo[0].buffer = m_shared->buffer;
+			descBufInfo[0].offset = 0;
+			descBufInfo[0].range = m_desc.size;
 
-		// バインド
-		m_buffer.bindMemory(m_memory, 0);
+			vk::WriteDescriptorSet writeDescSet;
+			writeDescSet.dstArrayElement = 0;
 
+			bool withoutView = false;
+			
+			if (desc.flags & BufferFlag::Constant) {
+				writeDescSet.descriptorType = vk::DescriptorType::eUniformBuffer;
+				m_viewDesc.type = BufferViewType::ConstantBuffer;
+			} else if (desc.flags & BufferFlag::ShaderResource) {
+				writeDescSet.descriptorType = vk::DescriptorType::eStorageBuffer;
+				m_viewDesc.type = BufferViewType::ByteAddressBuffer;
+			} else if (desc.flags & BufferFlag::UnorderedAccess) {
+				writeDescSet.descriptorType = vk::DescriptorType::eStorageBuffer;
+				m_viewDesc.type = BufferViewType::RWByteAddressBuffer;
+			} else {
+				// 純粋なVertexBufferなど
+				withoutView = true;
+			}
+			// 初回生成時対応
+			// eUniformTexelBuffer
+			// eStorageTexelBuffer
 
-		m_rhi.setName(m_buffer, m_desc.name);
-		m_rhi.setName(m_memory, m_desc.name);
+			if (!withoutView) {
+				writeDescSet.setBufferInfo(descBufInfo);
+
+				m_rhi.allocateHandle(m_handle, writeDescSet);
+			}
+		}
+
+		m_rhi.setName(m_shared->buffer, m_desc.name);
+		m_rhi.setName(m_shared->memory, m_desc.name);
 
 		manage();
 	}
@@ -62,6 +94,69 @@ namespace ob::rhi {
 		: VulkanBuffer(rhi,desc)
 	{
 		update(blob.size(), blob.data(),0);
+	}
+
+	//! @brief  コンストラクタ
+	VulkanBuffer::VulkanBuffer(VulkanRHI& rDevice, const BufferViewDesc& desc) 
+		: m_rhi(rDevice)
+		, m_viewDesc(desc)
+	{
+
+		auto base = desc.base.cast<VulkanBuffer>();
+
+		if (base == nullptr) throw Exception("ベースバッファが指定されていません");
+
+		m_desc = base->m_desc;
+
+		if (!m_desc.isValid()) throw Exception("Invalid BufferDesc");
+
+		m_shared = base->m_shared;
+
+		vk::DescriptorBufferInfo descBufInfo[1];
+		descBufInfo[0].buffer = m_shared->buffer;
+		descBufInfo[0].offset = 0;
+		descBufInfo[0].range = m_desc.size;
+
+		vk::WriteDescriptorSet writeDescSet;
+		writeDescSet.dstArrayElement = 0;
+		writeDescSet.setBufferInfo(descBufInfo);
+	
+		bool withView = false;
+
+		switch (desc.type) {
+		case BufferViewType::ConstantBuffer:
+			if (m_desc.flags & BufferFlag::Constant) {
+				writeDescSet.descriptorType = vk::DescriptorType::eUniformBuffer;
+				withView = true;
+			} else {
+				throw Exception("flagsとtypeに互換性がありません");
+			}
+			break;
+		case BufferViewType::Buffer:
+		case BufferViewType::StructuredBuffer:
+		case BufferViewType::ByteAddressBuffer:
+			if (m_desc.flags & BufferFlag::ShaderResource) {
+				writeDescSet.descriptorType = vk::DescriptorType::eStorageBuffer;
+				withView = true;
+			} else {
+				throw Exception("flagsとtypeに互換性がありません");
+			}
+			break;
+		case BufferViewType::RWBuffer:
+		case BufferViewType::RWStructuredBuffer:
+		case BufferViewType::RWByteAddressBuffer:
+			if (m_desc.flags & BufferFlag::UnorderedAccess) {
+				writeDescSet.descriptorType = vk::DescriptorType::eStorageBuffer;
+				withView = true;
+			} else {
+				throw Exception("flagsとtypeに互換性がありません");
+			}
+			break;
+		}
+
+		if (withView) {
+			m_rhi.allocateHandle(m_handle, writeDescSet);
+		}
 
 		manage();
 	}
@@ -102,7 +197,7 @@ namespace ob::rhi {
 	void VulkanBuffer::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
 
-		m_rhi.getBufferUploader().add(BlobView(data, size), m_buffer, offset,TypeConverter::Convert(m_desc.state));
+		m_rhi.getBufferUploader().add(BlobView(data, size), m_shared->buffer, offset,TypeConverter::Convert(m_desc.state));
 	}
 
 
@@ -112,7 +207,7 @@ namespace ob::rhi {
 	void VulkanBuffer::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-		m_rhi.getBufferUploader().add(func, m_desc.size, m_buffer, 0, TypeConverter::Convert(m_desc.state));
+		m_rhi.getBufferUploader().add(func, m_desc.size, m_shared->buffer, 0, TypeConverter::Convert(m_desc.state));
 
 		return;
 

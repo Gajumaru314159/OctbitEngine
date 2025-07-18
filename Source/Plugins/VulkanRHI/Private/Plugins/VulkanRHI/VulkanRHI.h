@@ -16,6 +16,8 @@ namespace ob::platform {
 
 namespace ob::rhi {
 
+	class VulkanDescriptorHeap;
+
 	struct VulkanFeatureInfo {
 		bool debugMarkerEnabled = false;
 	};
@@ -195,12 +197,15 @@ namespace ob::rhi {
 
 		vk::Optional<const vk::AllocationCallbacks>&	getAllocationCallbacks() { return m_allocationCallbacks; }
 
-		vk::DescriptorSetLayout getBindlessDescriptorSetLayout() const {
-			return m_bindlessDescriptorSetLayout;
-		}
-		vk::DescriptorSet getBindlessDescriptorSet() const {
-			return m_bindlessDescriptorSet;
-		}
+		vk::DescriptorSetLayout getBindlessDescriptorSetLayout() const;
+
+
+		void allocateHandle(class VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc);
+
+		//! @brief          デスクリプタヒープを設定
+		void setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout, s32 slot);
+
+
 
 #ifdef OS_WINDOWS
 		//! @brief  シェーダーコンパイラ―を取得
@@ -258,9 +263,11 @@ namespace ob::rhi {
 		vk::PhysicalDeviceLimits					m_limits;
 		VulkanFeatureInfo							m_featuresEx;
 
-		vk::raii::DescriptorSetLayout				m_bindlessDescriptorSetLayout = nullptr;
-		vk::raii::DescriptorPool					m_bindlessDescriptorPool = nullptr;
-		vk::raii::DescriptorSet						m_bindlessDescriptorSet = nullptr;
+		UPtr<VulkanDescriptorHeap>					m_descriptorHeap; // デスクリプタ・ヒープ
+
+		//vk::raii::DescriptorSetLayout				m_bindlessDescriptorSetLayout = nullptr;
+		//vk::raii::DescriptorPool					m_bindlessDescriptorPool = nullptr;
+		//vk::raii::DescriptorSet						m_bindlessDescriptorSet = nullptr;
 
 #if OB_DEBUG
 		PFN_vkDebugMarkerSetObjectNameEXT			m_vkDebugMarkerSetObjectNameEXT;

@@ -25,13 +25,14 @@ namespace ob::rhi {
 		vk::PipelineLayout getLayout() const { return m_layout; }
 
     private:
-        // PipelineState を介して継承されました
+
         const String& getName() const override;
 
-        const PipelineStateDesc m_desc;
+    private:
+
+        PipelineStateDesc       m_desc;
 	    vk::raii::Pipeline      m_pipeline = nullptr;
 		vk::PipelineLayout      m_layout = nullptr;
-
 
     };
 

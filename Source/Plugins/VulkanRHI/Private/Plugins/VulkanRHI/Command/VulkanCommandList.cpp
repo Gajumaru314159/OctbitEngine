@@ -2,21 +2,20 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
+#include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/CommandParam.h>
-#include <Framework/RHI/Buffer.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
+#include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
+#include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
+#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
-#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
-#include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
-#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
-#include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
-#include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
+#include <Plugins/VulkanRHI/Utility/Utility.h>
+#include <Plugins/VulkanRHI/VulkanRHI.h>
 
 namespace ob::rhi {
 
@@ -100,6 +99,8 @@ namespace ob::rhi {
 				attachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(color.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(color.afterAccess);
+				auto fcol = p->descOfRenderTexture().clear.color;
+				attachment.clearValue.color.float32 = vk::ArrayWrapper1D<float, 4>({ fcol.r,fcol.g,fcol.b,fcol.a });
 
 				width = color.texture->width();
 				height = color.texture->height();
@@ -118,6 +119,7 @@ namespace ob::rhi {
 				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(param.depth.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(param.depth.afterAccess);
+				attachment.clearValue.depthStencil.depth = p->descOfRenderTexture().clear.depth;
 
 				width = param.depth.texture->width();
 				height = param.depth.texture->height();
@@ -137,6 +139,7 @@ namespace ob::rhi {
 				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(param.stencil.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(param.stencil.afterAccess);
+				attachment.clearValue.depthStencil.stencil = p->descOfRenderTexture().clear.stencil;
 
 				width = param.stencil.texture->width();
 				height = param.stencil.texture->height();
@@ -312,11 +315,8 @@ namespace ob::rhi {
 			m_pipeline = pipeline;
 			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, p->getNative());
 
-			if (m_rhi.getConfig().enableBindless) {
-				auto bindlessSlot = p->getDesc().rootSignature->getDesc().layouts.size();//
-				m_commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, p->getLayout(), bindlessSlot, m_rhi.getBindlessDescriptorSet(), {});
-			}
-			
+			auto bindlessSlot = p->getDesc().rootSignature->getDesc().layouts.size();
+			m_rhi.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
 		} else {
 			LOG_FATAL("不正な引数。パイプラインステートが不正です。");
 		}

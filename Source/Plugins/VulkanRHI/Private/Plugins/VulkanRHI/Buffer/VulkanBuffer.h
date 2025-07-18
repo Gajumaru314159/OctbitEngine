@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHandle.h>
 
 namespace ob::rhi {
 
@@ -25,6 +26,10 @@ namespace ob::rhi {
 		//! @param desc バッファ定義
 		//! @param data 初期化データ
 		VulkanBuffer(VulkanRHI& rDevice, const BufferDesc& desc, const Blob& blob);
+
+
+		//! @brief  コンストラクタ
+		VulkanBuffer(VulkanRHI& rDevice, const BufferViewDesc& desc);
 
 
 		//! @brief      名前を取得
@@ -61,17 +66,22 @@ namespace ob::rhi {
 	public:
 
 		//! @brief      バッファを取得
-		vk::Buffer getNative()const { return *m_buffer; }
+		vk::Buffer getNative()const { return m_shared->buffer; }
 
 
 	private:
 
 		VulkanRHI& m_rhi;
 		BufferDesc m_desc;
+		BufferViewDesc m_viewDesc;
 
-		vk::raii::Buffer m_buffer = nullptr;
-		vk::raii::DeviceMemory m_memory = nullptr;
+		struct SharedResource {
+			vk::raii::Buffer buffer = nullptr;
+			vk::raii::DeviceMemory memory = nullptr;
+		};
 
+		SPtr<SharedResource> m_shared;
+		VulkanDescriptorHandle m_handle;
 	};
 
 
@@ -81,9 +91,8 @@ namespace ob::rhi {
 	//! @brief      BindlessHandleを取得
 	inline BindlessHandle VulkanBuffer::getHandle()const {
 		BindlessHandle handle;
-		handle.type = BindingType::ByteAddressBuffer;
-		handle.index = 0;
-		// TODO
+		handle.type = m_handle.empty() ? BindingType::Unknown : BindingType::ByteAddressBuffer;
+		handle.index = m_handle.getBindlessIndex();
 		return handle;
 	}
 

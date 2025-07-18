@@ -33,9 +33,9 @@ namespace ob::graphics {
 		m_descs.scene = Convert("MaterialScene", desc.properties.scene);
 		m_descs.view = Convert("MaterialView", desc.properties.view);
 		if (!rhi::RHI::Instance().getConfig().enableBindless) {
-			m_descs.global.layout = m_layouts.global = MaterialBlock::CreateLayout(m_descs.global, 1);
-			m_descs.scene.layout = m_layouts.scene = MaterialBlock::CreateLayout(m_descs.scene, 2);
-			m_descs.view.layout = m_layouts.view = MaterialBlock::CreateLayout(m_descs.view, 3);
+			m_descs.global.layout = m_layouts.global = MaterialBlock::CreateLayout(m_descs.global);
+			m_descs.scene.layout = m_layouts.scene = MaterialBlock::CreateLayout(m_descs.scene);
+			m_descs.view.layout = m_layouts.view = MaterialBlock::CreateLayout(m_descs.view);
 		}
 
 		m_globalBlock = MaterialBlock(m_descs.global);

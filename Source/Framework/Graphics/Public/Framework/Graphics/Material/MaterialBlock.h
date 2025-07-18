@@ -52,7 +52,7 @@ namespace ob::graphics {
         using Buffer = ob::rhi::Buffer;
     public:
         //! @brief MaterialBlockDescに対応するDescriptorLayoutを生成するユーティリティ関数
-        static Ref<rhi::DescriptorLayout> CreateLayout(const MaterialBlockDesc& desc,s32 space = 0);
+        static Ref<rhi::DescriptorLayout> CreateLayout(const MaterialBlockDesc& desc);
     public:
 
         MaterialBlock() = default;

@@ -67,6 +67,9 @@ namespace ob::core {
 		auto capacity()const { return m_capacity; }
 
 
+		//! @brief			ブロックを管理しているか
+		bool contains(const TLSFBlock* block)const;
+
 	private:
 
 		TLSFBlock*	allocateFreeBlock(s32 size);							//!< ブロックをアロケート

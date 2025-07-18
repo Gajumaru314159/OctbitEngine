@@ -41,8 +41,8 @@ TEST(Bindless, Handle) {
 	ServiceInjector injector;
 	ServiceContainer container;
 	{
-		rhi::RegisterDirectX12RHIService(injector);
-		//rhi::RegisterVulkanRHIService(injector);
+		//rhi::RegisterDirectX12RHIService(injector);
+		rhi::RegisterVulkanRHIService(injector);
 		graphics::RegisterGraphicsService(injector);
 		injector.bind(config);
 		injector.bind(dx12config);

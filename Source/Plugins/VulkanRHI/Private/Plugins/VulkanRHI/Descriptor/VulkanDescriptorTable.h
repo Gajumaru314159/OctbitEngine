@@ -4,9 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/DescriptorTable.h>
-#include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Buffer.h>
-#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 
 namespace ob::rhi {
 
@@ -37,9 +34,6 @@ namespace ob::rhi {
 		bool setResource(s32 index, const Ref<Sampler>& resource) override;
 		//! @}
 
-		//! @brief  バインドレスハンドルに使用するインデックスを取得
-		BindlessHandle getBindlessHandle(s32 index = 0)const override;
-
 	public:
 
 		void record(vk::CommandBuffer commandBuffer, vk::PipelineLayout pipeline, s32 slot) const;
@@ -68,14 +62,12 @@ namespace ob::rhi {
     private:
 		VulkanRHI&				m_rhi;
 		DescriptorTableDesc		m_desc;
-		VulkanDescriptorLayout*	m_layout = nullptr;
-
-
-		Vector<Element>			m_elemetns;
 
 		vk::raii::DescriptorPool m_pool = nullptr;
 		vk::raii::DescriptorSet m_set = nullptr;
+		Vector<Element>			m_elements;
 
+		VulkanDescriptorLayout* m_layout = nullptr; // m_desc.layoutのキャッシュ
     };
 
 }

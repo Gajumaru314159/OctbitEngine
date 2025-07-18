@@ -6,6 +6,7 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/Core/Misc/BlobView.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHandle.h>
 
 namespace ob::rhi {
 
@@ -22,6 +23,9 @@ namespace ob::rhi {
 
         //! @brief      テクスチャバイナリから生成
         VulkanTexture(VulkanRHI& rhi, StringView name,BlobView blob);
+
+        //! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
+        VulkanTexture(VulkanRHI& rhi, const TextureViewDesc& desc);
 
         //! @brief      デストラクタ
         ~VulkanTexture();
@@ -52,9 +56,9 @@ namespace ob::rhi {
     public:
 
 		//! @brief      テクスチャを取得
-		vk::raii::Image& getNative() { return m_image; }
+		vk::raii::Image& getNative() { return m_shared->image; }
 		//! @brief      メモリを取得
-		vk::raii::DeviceMemory& getMemory() { return m_memory; }
+		vk::raii::DeviceMemory& getMemory() { return m_shared->memory; }
         //! @brief      のイメージビューを取得(要修正)
         // vk::raii::ImageView& getSRV() { return m_hSRV; }
         //! @brief      レンダーテクスチャのイメージビューを取得
@@ -62,29 +66,30 @@ namespace ob::rhi {
 		//! @brief      レンダーテクスチャのデプスステンシルビューを取得
 		vk::raii::ImageView& getDSV() { return m_hDSV; }
 
-        bool createSRV(vk::raii::ImageView& view);
+        void initialize();
+
+        bool createView(vk::raii::ImageView& view);
 
     private:
 
 		VulkanRHI&              m_rhi;
 
         TextureDesc             m_desc;         //!< 定義
+		TextureViewDesc         m_viewDesc;     //!< ビュー定義
+		VulkanDescriptorHandle  m_handle;       //!< デスクリプタハンドル
+
+        struct SharedResource {
+            vk::raii::DeviceMemory	memory = nullptr;
+            vk::raii::Image         image = nullptr;
+        };
+
+        SPtr< SharedResource>   m_shared;
+        vk::raii::ImageView     m_view = nullptr;
+
+        // TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
         RenderTextureDesc       m_renderDesc;   //!< 定義
-
-        vk::raii::Image         m_image = nullptr;
-		vk::raii::DeviceMemory	m_memory = nullptr;
-
-        //ComPtr<ID3D12Resource>  m_resource;     //!< リソース        
-        //
-        //// TODO RenderTextureのみ必要なメンバはUPtrで囲ってTexture生成時にはメモリを消費しないようにする
-        vk::raii::ImageView       m_hRTV = nullptr;
-        vk::raii::ImageView       m_hDSV = nullptr;
-
-        //
-        //D3D12_VIEWPORT          m_viewport{};   //!< ビューポート
-        //D3D12_RECT              m_scissorRect{};//!< シザー矩形
-        //
-        //D3D12_RESOURCE_STATES   m_state = D3D12_RESOURCE_STATE_COMMON;
+        vk::raii::ImageView     m_hRTV = nullptr;
+        vk::raii::ImageView     m_hDSV = nullptr;
 
     };
 
@@ -116,7 +121,7 @@ namespace ob::rhi {
     inline BindlessHandle VulkanTexture::handle()const {
         BindlessHandle handle;
         handle.type = BindingType::Texture;
-        handle.index = 0;
+        handle.index = m_handle.getBindlessIndex();
         return handle;
     }
 

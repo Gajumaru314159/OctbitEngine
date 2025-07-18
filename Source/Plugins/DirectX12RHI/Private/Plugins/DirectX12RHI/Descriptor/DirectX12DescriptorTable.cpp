@@ -174,20 +174,6 @@ namespace ob::rhi {
 		return true;
 	}
 
-	//! @brief  バインドレスハンドルに使用するインデックスを取得
-	BindlessHandle DirectX12DescriptorTable::getBindlessHandle(s32 index)const {
-		auto& items = m_layout->getDesc().items;
-		auto mapInfo = m_layout->getMapInfo(index);
-
-		BindlessHandle handle;
-		handle.type = items.at(index).type;
-		if (mapInfo.type == DescriptorHeapType::Sampler)		handle.index = m_samplerHandle.getBindlessIndex(mapInfo.index);
-		if (mapInfo.type == DescriptorHeapType::CBV_SRV_UAV)	handle.index = m_othersHandle.getBindlessIndex(mapInfo.index);
-
-		return handle;
-	}
-
-
 	//! @brief CommandListに記録 
 	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,DirectX12RootSignature& signature,s32 slot) const {
 

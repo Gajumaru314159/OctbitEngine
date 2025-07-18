@@ -6,20 +6,18 @@
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
-namespace ob::rhi
-{
+namespace ob::rhi {
 
 	//! @brief              コンストラクタ
 	VulkanDescriptorLayout::VulkanDescriptorLayout(VulkanRHI& rhi, const DescriptorLayoutDesc& desc)
 		: m_desc(desc)
 	{
-
 		auto& device = rhi.getDevice();
 
 		FixedVector<vk::DescriptorSetLayoutBinding, 32> bindings;
 
-		s32 resourceCount = 0;
-		s32 samplerCount = 0;
+		// NOTE bindingが連続していればまとめられるが処理が複雑になるので1つずつ登録する
+		//      パフォーマンス上の問題があればまとめる
 
 		for (auto [index, item] : Indexed(desc.items)) {
 			auto& binding = bindings.emplace_back();
@@ -32,18 +30,6 @@ namespace ob::rhi
 
 		vk::DescriptorSetLayoutCreateInfo info;
 		info.setBindings(bindings);
-
-
-		//std::vector<vk::DescriptorBindingFlags> bindFlag(vulkanLayoutBindings.size(), vk::DescriptorBindingFlagBits::ePartiallyBound);
-		//
-		//auto extendedInfo = vk::DescriptorSetLayoutBindingFlagsCreateInfo()
-		//	.setBindingCount(uint32_t(vulkanLayoutBindings.size()))
-		//	.setPBindingFlags(bindFlag.data());
-		//
-		//if (rhi.getConfig().enableBindless) {
-		//
-		//}
-
 
 		m_layout = device.createDescriptorSetLayout(info, rhi.getAllocationCallbacks());
 

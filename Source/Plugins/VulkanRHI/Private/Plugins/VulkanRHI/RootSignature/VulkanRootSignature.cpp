@@ -4,11 +4,9 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
-#include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 
 namespace ob::rhi {
-
 
 	//! @brief  コンストラクタ
 	VulkanRootSignature::VulkanRootSignature(VulkanRHI& rhi, const RootSignatureDesc& desc)
@@ -16,14 +14,18 @@ namespace ob::rhi {
 	{
 		auto& device = rhi.getDevice();
 
+		// NOTE ここのlayouts[i]がlayout(set=i)と対応する
 		FixedVector<vk::DescriptorSetLayout,32> layouts;		
 
-		for (auto& layout : m_desc.layouts) {
-			layouts.push_back(layout.cast<VulkanDescriptorLayout>()->getNative());
-		}
-
+		// Bindless用のDescriptorSetLayoutはシェーダーコンパイル時点でsetを確定させるためにset=0で固定する
 		if (rhi.getConfig().enableBindless) {
 			layouts.push_back(rhi.getBindlessDescriptorSetLayout());
+		}
+
+		// Bindfull用のDescriptorSetLayoutを追加
+		for (auto& layout : m_desc.layouts) {
+			OB_ASSERT(layout.cast<VulkanDescriptorLayout>(),"DescriptorLayoutが取得できません");
+			layouts.push_back(layout.cast<VulkanDescriptorLayout>()->getNative());
 		}
 
 		vk::PushConstantRange pushConstantRange;
@@ -32,7 +34,7 @@ namespace ob::rhi {
 		pushConstantRange.size = m_desc.constants.size;
 
 		vk::PipelineLayoutCreateInfo createInfo;
-		createInfo.setLayoutCount = (u32)layouts.size();
+		createInfo.setLayoutCount = layouts.size();
 		createInfo.pSetLayouts = layouts.empty() ? nullptr : layouts.data();
 		if (0 < m_desc.constants.size) {
 			createInfo.pushConstantRangeCount = 1;

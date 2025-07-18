@@ -17,6 +17,7 @@
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
+#include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHeap.h>
 #include <Framework/Core/Misc/ErrorCode.h>
 
 #include <Framework/Platform/Window.h>
@@ -76,7 +77,6 @@ namespace ob::rhi {
 		createUploaders();
 		createShaderCompiler();
 		initializeBindless();
-
 	}
 
 	//@―---------------------------------------------------------------------------
@@ -91,6 +91,8 @@ namespace ob::rhi {
 		m_bufferUploader = {};
 
 		finalize();
+
+		m_descriptorHeap = {};
 	}
 
 
@@ -470,74 +472,7 @@ namespace ob::rhi {
 	void VulkanRHI::initializeBindless() {
 
 		if (m_config.enableBindless) {
-
-			vk::DescriptorType cbvSrvUavTypes[] = {
-				vk::DescriptorType::eSampledImage,
-				vk::DescriptorType::eStorageImage,
-				vk::DescriptorType::eUniformTexelBuffer,
-				vk::DescriptorType::eStorageTexelBuffer,
-				vk::DescriptorType::eUniformBuffer,
-				vk::DescriptorType::eStorageBuffer,
-			};
-			vk::DescriptorType samplerType[] = {
-				vk::DescriptorType::eSampler,
-			};
-
-			vk::MutableDescriptorTypeListEXT mutableList[2];
-			mutableList[0].setDescriptorTypes(cbvSrvUavTypes);
-			mutableList[1].setDescriptorTypes(samplerType);
-
-			vk::MutableDescriptorTypeCreateInfoEXT mutableInfo;
-			mutableInfo.setMutableDescriptorTypeLists(mutableList);
-
-			vk::DescriptorSetLayoutBinding bindings[2];
-			bindings[0].binding = 1000;
-			bindings[0].descriptorType = vk::DescriptorType::eMutableEXT;
-			bindings[0].descriptorCount = 1;
-			bindings[0].stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
-			bindings[0].pImmutableSamplers = nullptr;
-			bindings[1].binding = 1001;
-			bindings[1].descriptorType = vk::DescriptorType::eMutableEXT;
-			bindings[1].descriptorCount = 1;
-			bindings[1].stageFlags = vk::FlagTraits<vk::ShaderStageFlagBits>::allFlags;
-			bindings[1].pImmutableSamplers = nullptr;
-
-			vk::DescriptorSetLayoutCreateInfo info;
-			info.setBindings(bindings);
-			info.setPNext(&mutableInfo);
-			info.flags |= vk::DescriptorSetLayoutCreateFlagBits::eUpdateAfterBindPoolEXT;
-
-			vk::DescriptorSetLayoutSupport support = m_device.getDescriptorSetLayoutSupport(info);
-			if (!support.supported) {
-				LOG_FATAL("Bindlessレンダリングをサポートしていないハードウェアです");
-			}
-
-			m_bindlessDescriptorSetLayout = m_device.createDescriptorSetLayout(info, getAllocationCallbacks());
-
-			// TODO set
-			vk::DescriptorPoolSize poolSizes[2];
-			poolSizes[0].type = vk::DescriptorType::eMutableEXT;
-			poolSizes[0].descriptorCount = 100;
-			poolSizes[1].type = vk::DescriptorType::eMutableEXT;
-			poolSizes[1].descriptorCount = 100;
-
-			vk::DescriptorPoolCreateInfo poolInfo;
-			poolInfo.maxSets = 1;
-			poolInfo.flags |= vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet;
-			poolInfo.flags |= vk::DescriptorPoolCreateFlagBits::eUpdateAfterBindEXT; // Bindless用
-			poolInfo.setPoolSizes(poolSizes);
-
-			m_bindlessDescriptorPool = m_device.createDescriptorPool(poolInfo, getAllocationCallbacks());
-
-			vk::DescriptorSetLayout descSetLayouts[] = { m_bindlessDescriptorSetLayout };
-			vk::DescriptorSetAllocateInfo allocInfo;
-			allocInfo.descriptorPool = m_bindlessDescriptorPool;
-			allocInfo.descriptorSetCount = 1;
-			allocInfo.pSetLayouts = descSetLayouts;
-
-			auto sets = m_device.allocateDescriptorSets(allocInfo);
-			m_bindlessDescriptorSet = std::move(sets.front());
-
+			m_descriptorHeap = std::make_unique<VulkanDescriptorHeap>(*this, m_limits.maxDescriptorSetSampledImages, m_limits.maxDescriptorSetSamplers);
 		}
 	}
 
@@ -742,6 +677,23 @@ namespace ob::rhi {
 		}
 
 		return true;
+	}
+
+	void VulkanRHI::allocateHandle(VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc) {
+		if (m_descriptorHeap) {
+			m_descriptorHeap->allocateHandle(handle, desc);
+		}
+	}
+
+
+	void VulkanRHI::setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout,s32 slot) {
+		if (m_descriptorHeap) {
+			m_descriptorHeap->recordDescriptorHeap(commandBuffer, layout, slot);
+		}
+	}
+
+	vk::DescriptorSetLayout VulkanRHI::getBindlessDescriptorSetLayout() const {
+		return m_descriptorHeap->getLayout();
 	}
 
 }

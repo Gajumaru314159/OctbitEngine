@@ -137,6 +137,13 @@ namespace ob::core {
 	}
 
 
+	//! @brief          キャパシティを取得
+	bool TLSFMapper::contains(const TLSFBlock* block) const {
+		auto distance = std::distance(m_buffer.data(), block);
+		return 0 <= distance && distance < m_capacity;
+	}
+
+
 	//! @brief          フリーブロックを確保
 	//! 
 	//! @details		内部で firstLevel と secondLevel が変更されます。

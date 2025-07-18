@@ -261,11 +261,15 @@ namespace ob::rhi {
 		case TextureViewType::Texture:
 			if (flags & TextureFlag::ShaderResource) {
 				createSRV(m_handle.getCpuHandle());
+			} else {
+				throw Exception("TextureFlag::ShaderResourceが指定されていないTextureをTextureViewType::Textureで使用しようとしました");
 			}
 			break;
 		case TextureViewType::RWTexture:
 			if (flags & TextureFlag::UnorderedAccess) {
 				createUAV(m_handle.getCpuHandle(),0);
+			} else {
+				throw Exception("TextureFlag::UnorderedAccessが指定されていないTextureをTextureViewType::RWTextureで使用しようとしました");
 			}
 			break;
 		}

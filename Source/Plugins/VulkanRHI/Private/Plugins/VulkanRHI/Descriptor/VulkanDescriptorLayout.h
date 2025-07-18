@@ -4,9 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/DescriptorLayout.h>
-#include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Buffer.h>
-#include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 
 namespace ob::rhi {
 
@@ -34,6 +31,7 @@ namespace ob::rhi {
 		}
 
     private:
+
 		DescriptorLayoutDesc			m_desc;
 		vk::raii::DescriptorSetLayout	m_layout = nullptr;
 

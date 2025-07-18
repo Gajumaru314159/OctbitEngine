@@ -5,7 +5,6 @@
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 
@@ -38,14 +37,34 @@ namespace ob::rhi {
         FixedVector<vk::VertexInputBindingDescription, 16> bindingDescriptions;
         FixedVector<vk::VertexInputAttributeDescription, 16> attributeDescriptions;
 
-        
-
+		// シェーダステージの設定
 		if (auto shader = desc.vs.cast<VulkanShader>()) {
 			auto& stage = stages.emplace_back();
 			stage.flags = vk::PipelineShaderStageCreateFlags{};
 			stage.stage = vk::ShaderStageFlagBits::eVertex;
 			stage.module = shader->getNative();
 			stage.pName = Shader::GetEntryName(ShaderStage::Vertex);
+		}
+		if (auto shader = desc.gs.cast<VulkanShader>()) {
+			auto& stage = stages.emplace_back();
+			stage.flags = vk::PipelineShaderStageCreateFlags{};
+			stage.stage = vk::ShaderStageFlagBits::eGeometry;
+			stage.module = shader->getNative();
+			stage.pName = Shader::GetEntryName(ShaderStage::Geometry);
+		}
+		if (auto shader = desc.hs.cast<VulkanShader>()) {
+			auto& stage = stages.emplace_back();
+			stage.flags = vk::PipelineShaderStageCreateFlags{};
+			stage.stage = vk::ShaderStageFlagBits::eTessellationControl;
+			stage.module = shader->getNative();
+			stage.pName = Shader::GetEntryName(ShaderStage::Hull);
+		}
+		if (auto shader = desc.ds.cast<VulkanShader>()) {
+			auto& stage = stages.emplace_back();
+			stage.flags = vk::PipelineShaderStageCreateFlags{};
+			stage.stage = vk::ShaderStageFlagBits::eTessellationEvaluation;
+			stage.module = shader->getNative();
+			stage.pName = Shader::GetEntryName(ShaderStage::Domain);
 		}
 		if (auto shader = desc.ps.cast<VulkanShader>()) {
 			auto& stage = stages.emplace_back();
@@ -54,8 +73,8 @@ namespace ob::rhi {
 			stage.module = shader->getNative();
 			stage.pName = Shader::GetEntryName(ShaderStage::Pixel);
 		}
-		// TODO 他ステージの対応
 
+		// 頂点レイアウトの設定
 		uint32_t vertexLocation = 0;
 		uint32_t instanceLocation = 0;
 
@@ -79,14 +98,7 @@ namespace ob::rhi {
 			item.binding = 0;
 			item.stride = desc.vertexLayout.vertexStride;
 			item.inputRate = vk::VertexInputRate::eVertex;
-
 			OB_ASSERT_EXPR(0 < item.stride);
-		}
-		if(false){
-			auto& item = bindingDescriptions.emplace_back();
-			item.binding = 1;
-			item.stride = desc.vertexLayout.instanceStride;
-			item.inputRate = vk::VertexInputRate::eInstance;
 		}
 
 
@@ -190,10 +202,7 @@ namespace ob::rhi {
 		info.pColorBlendState = &colorBlendInfo;
 		info.pDynamicState = &dynamicStateInfo;
 		info.layout = desc.rootSignature.cast<VulkanRootSignature>()->getNative();
-		info.renderPass;
-		info.subpass;
-		info.basePipelineHandle;
-		info.basePipelineIndex;
+		// RenderPassは動的設定する
 
 		vk::PipelineRenderingCreateInfo renderingInfo;
 		FixedVector<vk::Format, 8> colorFormats;
@@ -213,8 +222,7 @@ namespace ob::rhi {
 		manage();
 	}
 
-	const String& VulkanPipelineState::getName() const
-	{
+	const String& VulkanPipelineState::getName() const {
 		return m_desc.name;
 	}
 

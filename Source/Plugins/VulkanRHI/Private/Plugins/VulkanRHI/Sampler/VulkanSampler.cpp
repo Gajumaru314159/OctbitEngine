@@ -8,12 +8,7 @@
 
 namespace ob::rhi {
 
-
-	//! @brief				シェーダーコードからシェーダーオブジェクトを生成
-	//!
-	//! @param src			シェーダコード
-	//! @param stage		シェーダステージ
-	//! @param errorDest	エラー出力先文字列
+	//! @brief コンストラクタ 
 	VulkanSampler::VulkanSampler(VulkanRHI& rhi, const SamplerDesc& desc)
 	{
 		m_name = desc.name;
@@ -42,6 +37,15 @@ namespace ob::rhi {
 
 		auto& device = rhi.getDevice();
 		m_sampler = device.createSampler(info,rhi.getAllocationCallbacks());
+
+		// デスクリプタハンドルを割り当て
+		vk::DescriptorImageInfo imageInfo(m_sampler);
+		vk::WriteDescriptorSet writeDescSet;
+		writeDescSet.descriptorType = vk::DescriptorType::eSampler;
+		writeDescSet.setImageInfo(imageInfo);
+
+		rhi.allocateHandle(m_handle, writeDescSet);
+
 
 		rhi.setName(m_sampler, "Octbit Sampler");
 

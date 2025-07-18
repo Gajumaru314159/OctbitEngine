@@ -3,17 +3,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
-#include <Framework/RHI/Texture.h>
-#include <Framework/RHI/Buffer.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
-#include <magic_enum.hpp>
 
-namespace ob::rhi
-{
+namespace ob::rhi {
 
 	//! @brief              コンストラクタ
 	//!
@@ -30,9 +26,7 @@ namespace ob::rhi
 
 		if (m_layout == nullptr) throw Exception("RootSignatureが未設定です");
 
-		s32 itemCount = m_layout->getDesc().items.size();
-
-		m_elemetns.resize(itemCount);
+		m_elements.resize(m_layout->getDesc().items.size());
 
 		// TODO FixedHashMapを使う
 		constexpr auto TYPE_NUM = 6;
@@ -43,8 +37,7 @@ namespace ob::rhi
 
 		// タイプごとのアイテム数を計算
 		for (auto& item : items) {
-			switch (item.type)
-			{
+			switch (item.type) {
 			case BindingType::Texture:
 				descTypeCount[vk::DescriptorType::eSampledImage]++;
 				break;
@@ -75,7 +68,6 @@ namespace ob::rhi
 			auto& descPoolSize = descPoolSizes.emplace_back();
 			descPoolSize.type = type;
 			descPoolSize.descriptorCount = count;
-			descPoolSizes.push_back(descPoolSize);
 		}
 
 		// Poolを生成
@@ -87,8 +79,8 @@ namespace ob::rhi
 
 		m_pool = device.createDescriptorPool(info, m_rhi.getAllocationCallbacks());
 
-		
 		// DescriptorSetを生成
+		// NOTE 同じレイアウトのものは巨大なプールにする必要があるかもしれない
 		vk::DescriptorSetLayout descSetLayouts[] = { m_layout->getNative()};
 		vk::DescriptorSetAllocateInfo allocInfo;
 		allocInfo.descriptorPool = m_pool;
@@ -98,8 +90,8 @@ namespace ob::rhi
 		auto sets = device.allocateDescriptorSets(allocInfo);
 		m_set = std::move(sets.front());
 		
-		m_rhi.setName(m_pool, "Octbit Descriptor");
-		m_rhi.setName(m_set, "Octbit Descriptor");
+		m_rhi.setName(m_pool, m_desc.name);
+		m_rhi.setName(m_set, m_desc.name);
 
 		manage();
 	}
@@ -124,13 +116,13 @@ namespace ob::rhi
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		m_elemetns.at(index) = BufferElement{ resource };
-		auto& element = std::get<BufferElement>(m_elemetns.at(index));
+		m_elements.at(index) = BufferElement{ resource };
+		auto& element = std::get<BufferElement>(m_elements.at(index));
 
 		if (auto p = resource.cast<VulkanBuffer>()) {
 
@@ -168,17 +160,18 @@ namespace ob::rhi
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		m_elemetns.at(index) = TextureElement{ resource , nullptr };
-		auto& element = std::get<TextureElement>(m_elemetns.at(index));
+		m_elements.at(index) = TextureElement{ resource , nullptr };
+		auto& element = std::get<TextureElement>(m_elements.at(index));
 
 		if (auto p = resource.cast<VulkanTexture>()) {
 
-			p->createSRV(element.view);
+			// TODO TextureがTextureViewを兼ねるのでTextureからImageViewを取得しても良い
+			p->createView(element.view);
 
 			vk::DescriptorImageInfo imageInfo;
 			imageInfo.imageView = element.view;
@@ -214,13 +207,13 @@ namespace ob::rhi
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		m_elemetns.at(index) = SamplerElement{ resource };
-		auto& element = std::get<SamplerElement>(m_elemetns.at(index));
+		m_elements.at(index) = SamplerElement{ resource };
+		auto& element = std::get<SamplerElement>(m_elements.at(index));
 
 		if (auto p = resource.cast<VulkanSampler>()) {
 
@@ -238,11 +231,6 @@ namespace ob::rhi
 			m_set.getDevice().updateDescriptorSets({ writeDescSet }, {});
 		}
 		return true;
-	}
-
-	//! @brief  バインドレスハンドルに使用するインデックスを取得
-	BindlessHandle VulkanDescriptorTable::getBindlessHandle(s32 index)const {
-		return BindlessHandle{ };
 	}
 
 

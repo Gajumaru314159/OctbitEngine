@@ -5,18 +5,11 @@
 #pragma once
 #include <Framework/RHI/RootSignature.h>
 
-//===============================================================
-// クラス宣言
-//===============================================================
 namespace ob::rhi {
 
     //! @brief  ルートシグネチャ実装(Vulkan)
     class VulkanRootSignature :public rhi::RootSignature {
     public:
-
-        //===============================================================
-        // コンストラクタ / デストラクタ
-        //===============================================================
 
         //! @brief  コンストラクタ
         VulkanRootSignature(VulkanRHI& rhi,const RootSignatureDesc& desc);
@@ -30,19 +23,12 @@ namespace ob::rhi {
         const String& getName()const override;
 
 
-        //===============================================================
-        // ゲッター
-        //===============================================================
-
         //! @brief  定義を取得
         const RootSignatureDesc& getDesc()const noexcept override;
 
     public:
 
-		vk::PipelineLayout getNative() const noexcept
-		{
-			return *m_pipelineLayout;
-		}
+		vk::PipelineLayout getNative() const noexcept { return *m_pipelineLayout; }
 
     private:
 

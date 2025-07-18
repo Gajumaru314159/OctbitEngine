@@ -115,12 +115,12 @@ namespace ob::rhi {
         };
 
         if (rhi.getConfig().enableBindless) {
-            args.push_back(L"-fvk-bind-resource-heap");
-            args.push_back(L"1000");
-            args.push_back(L"0");
             args.push_back(L"-fvk-bind-sampler-heap");
-            args.push_back(L"1001");
-            args.push_back(L"0");
+            args.push_back(L"0"); // binding
+            args.push_back(L"0"); // set
+            args.push_back(L"-fvk-bind-resource-heap");
+			args.push_back(L"1"); // binding
+            args.push_back(L"0"); // set
         }
 
         for (auto& macro : desc.macros) {
