@@ -33,10 +33,6 @@ namespace ob::rhi {
         virtual bool setResource(s32 index, const Ref<Sampler>& resource) = 0;
         //! @}
 
-
-        //! @brief  CPUハンドル取得
-        virtual BindlessHandle getBindlessHandle(s32 index = 0)const = 0;
-
     };
 
 }
