@@ -223,14 +223,16 @@ namespace ob::graphics {
 		ADD_VERTEX_ATTRIBUTE(Vec2, uvs6		, TexCoord	, ElementType::Float, 2, 6);
 		ADD_VERTEX_ATTRIBUTE(Vec2, uvs7		, TexCoord	, ElementType::Float, 2, 7);
 
-		auto stribe = align_up(offset, 16);
+		auto stride = align_up(offset, 16);
+
+		m_layout.vertexStride = stride;
 
 		// 頂点バッファ生成
 		{
 			auto desc = BufferDesc::Vertex<s32>(0);
 			desc.name = meshData.name;
-			desc.size = stribe * vertexCount;
-			desc.stride = stribe;
+			desc.size = stride * vertexCount;
+			desc.stride = stride;
 
 			m_vertexBuffer = Buffer::Create(desc);
 		}
@@ -262,7 +264,7 @@ namespace ob::graphics {
 		// 頂点バッファ更新
 		if (m_vertexBuffer) {
 			m_vertexBuffer->update(
-				[&meshData, stribe, vertexCount](void* ptr) {
+				[&meshData, stride, vertexCount](void* ptr) {
 
 					size_t offset = 0;
 
@@ -271,7 +273,7 @@ namespace ob::graphics {
 						using type = std::remove_const_t<decltype(meshData.container)::value_type>;\
 						if (!meshData.container.empty()) {\
 							for (size_t i = 0; i < vertexCount; ++i) {\
-								*GetOffsetPtr<type>(ptr, i * stribe + offset) = meshData.container[i];\
+								*GetOffsetPtr<type>(ptr, i * stride + offset) = meshData.container[i];\
 							}\
 							offset+=sizeof(type);\
 						}\

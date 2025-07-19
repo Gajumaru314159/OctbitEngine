@@ -83,6 +83,7 @@ namespace ob::rhi {
 			setupVertexLayout(attributes.back(), attr);
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
+		OB_ASSERT(0 < desc.vertexLayout.vertexStride,"頂点のサイズは0より大きい必要があります");
 
 		gpsd.pRootSignature = desc.rootSignature.cast<DirectX12RootSignature>()->getNative();
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;

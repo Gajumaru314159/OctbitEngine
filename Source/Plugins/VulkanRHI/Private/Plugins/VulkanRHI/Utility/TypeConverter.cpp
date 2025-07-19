@@ -92,6 +92,22 @@ namespace ob::rhi {
 			case 4: return vk::Format::eR32G32B32A32Sfloat;
 			}
 			break;
+		case ElementType::Int8Norm:
+			switch (dimension) {
+			case 1: return vk::Format::eR8Snorm;
+			case 2: return vk::Format::eR8G8Snorm;
+			case 3: return vk::Format::eR8G8B8Snorm;
+			case 4: return vk::Format::eR8G8B8A8Snorm;
+			}
+			break;
+		case ElementType::UInt8Norm:
+			switch (dimension) {
+			case 1: return vk::Format::eR8Unorm;
+			case 2: return vk::Format::eR8G8Unorm;
+			case 3: return vk::Format::eR8G8B8Unorm;
+			case 4: return vk::Format::eR8G8B8A8Unorm;
+			}
+			break;
 		}
 		throw NotSupportedException();
 	}

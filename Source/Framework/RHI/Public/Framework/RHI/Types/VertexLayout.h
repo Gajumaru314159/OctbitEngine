@@ -26,6 +26,8 @@ namespace ob::rhi {
 		UInt16,
 		UInt32,
 		Float,
+		Int8Norm,
+		UInt8Norm,
 	};
 
 
