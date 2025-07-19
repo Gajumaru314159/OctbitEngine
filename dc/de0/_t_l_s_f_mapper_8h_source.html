@@ -151,41 +151,44 @@ $(document).ready(function(){initNavTree('dc/de0/_t_l_s_f_mapper_8h_source.html'
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#add75a617890dc98677d6e771744a78a6">   67</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#add75a617890dc98677d6e771744a78a6">capacity</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> m_capacity; }</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>*  allocateFreeBlock(s32 size);                            </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordtype">void</span>        returnSurplusBlock(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block, s32 size);         </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>*  mergeFreeBlocks(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block1, <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block2);  </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordtype">void</span> addFreeBlock(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block);                                </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keywordtype">void</span> separateFreeList(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block);                            </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#ab45c207c57997755d3fe711d14d9f1d7">   71</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#ab45c207c57997755d3fe711d14d9f1d7">contains</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>* block)<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>*  allocateFreeBlock(s32 size);                            </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordtype">void</span>        returnSurplusBlock(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block, s32 size);         </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>*  mergeFreeBlocks(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block1, <a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block2);  </div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="keywordtype">void</span> entryFreeListBitState(s32 firstLevel, s32 secondLevel);        </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordtype">void</span> removeFreeListBitState(s32 firstLevel, s32 secondLevel);       </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="keywordtype">void</span> addFreeBlock(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block);                                </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordtype">void</span> separateFreeList(<a class="code hl_struct" href="../../d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html">TLSFBlock</a>&amp; block);                            </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        s32  getFreeBlockIndex(s32 firstLevel, s32 secondLevel)<span class="keyword">const</span> <span class="keyword">noexcept</span>;                          </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordtype">void</span> getLevelIndex(s32 size, s32&amp; firstLevel, s32&amp; secondLevel)<span class="keyword">const</span> <span class="keyword">noexcept</span>;                  </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordtype">void</span> getLevelAndIndex(s32 size, s32&amp; firstLevel, s32&amp; secondLevel, s32&amp; index)<span class="keyword">const</span> <span class="keyword">noexcept</span>;   </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordtype">void</span> entryFreeListBitState(s32 firstLevel, s32 secondLevel);        </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordtype">void</span> removeFreeListBitState(s32 firstLevel, s32 secondLevel);       </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        s32  getFreeBlockIndex(s32 firstLevel, s32 secondLevel)<span class="keyword">const</span> <span class="keyword">noexcept</span>;                          </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordtype">void</span> getLevelIndex(s32 size, s32&amp; firstLevel, s32&amp; secondLevel)<span class="keyword">const</span> <span class="keyword">noexcept</span>;                  </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordtype">void</span> getLevelAndIndex(s32 size, s32&amp; firstLevel, s32&amp; secondLevel, s32&amp; index)<span class="keyword">const</span> <span class="keyword">noexcept</span>;   </div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        s32                 m_capacity;     </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        u32                 m_freeFLI;      </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        Vector&lt;u32&gt;         m_freeSLI;      </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        s32                 m_capacity;     </div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        Vector&lt;TLSFBlock&gt;   m_buffer;       </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        Vector&lt;TLSFBlock*&gt;  m_freeList;     </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        Vector&lt;TLSFBlock*&gt;  m_blocks;       </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    };</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        u32                 m_freeFLI;      </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        Vector&lt;u32&gt;         m_freeSLI;      </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        Vector&lt;TLSFBlock&gt;   m_buffer;       </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        Vector&lt;TLSFBlock*&gt;  m_freeList;     </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        Vector&lt;TLSFBlock*&gt;  m_blocks;       </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    };</div>
 </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>}</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>}</div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html">ob::core::TLSFMapper</a></div><div class="ttdoc">Two Level Segregate Fit Mapper</div><div class="ttdef"><b>Definition</b> TLSFMapper.h:38</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_a23c7d1a672389d4d585f8a3066fce569"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#a23c7d1a672389d4d585f8a3066fce569">ob::core::TLSFMapper::TLSFMapper</a></div><div class="ttdeci">TLSFMapper(s32 capacity)</div><div class="ttdoc">コンストラクタ</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_ab1fc827ec6fc9656df7ac58d061e09cb"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#ab1fc827ec6fc9656df7ac58d061e09cb">ob::core::TLSFMapper::free</a></div><div class="ttdeci">void free(const TLSFBlock *block)</div><div class="ttdoc">ハンドルを解放</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_ab45c207c57997755d3fe711d14d9f1d7"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#ab45c207c57997755d3fe711d14d9f1d7">ob::core::TLSFMapper::contains</a></div><div class="ttdeci">bool contains(const TLSFBlock *block) const</div><div class="ttdoc">ブロックを管理しているか</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_add75a617890dc98677d6e771744a78a6"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#add75a617890dc98677d6e771744a78a6">ob::core::TLSFMapper::capacity</a></div><div class="ttdeci">auto capacity() const</div><div class="ttdoc">キャパシティを取得</div><div class="ttdef"><b>Definition</b> TLSFMapper.h:67</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_ae6627cb11b5bc9e7c1fbe6214a51a87b"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#ae6627cb11b5bc9e7c1fbe6214a51a87b">ob::core::TLSFMapper::allocate</a></div><div class="ttdeci">auto allocate(s32 size) -&gt; const TLSFBlock *</div><div class="ttdoc">ハンドルをアロケート</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_l_s_f_mapper_html_af4bdc8b8b38ba3f877ad11407633ffa2"><div class="ttname"><a href="../../d1/d0a/classob_1_1core_1_1_t_l_s_f_mapper.html#af4bdc8b8b38ba3f877ad11407633ffa2">ob::core::TLSFMapper::~TLSFMapper</a></div><div class="ttdeci">~TLSFMapper()</div><div class="ttdoc">デストラクタ</div></div>
