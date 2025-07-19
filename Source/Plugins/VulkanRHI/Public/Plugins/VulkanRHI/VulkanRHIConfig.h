@@ -2,6 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#pragma once
 
 namespace ob::rhi {
 

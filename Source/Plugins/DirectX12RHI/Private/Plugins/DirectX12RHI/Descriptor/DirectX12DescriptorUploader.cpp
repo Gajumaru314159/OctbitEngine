@@ -20,7 +20,7 @@ namespace ob::rhi
 
 		auto& frame = m_frames.current();
 
-		auto& request = frame.requests[D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV].emplace_back();
+		auto& request = frame.requests[type].emplace_back();
 		request.src = src;
 		request.dst = dst;
 
@@ -37,17 +37,10 @@ namespace ob::rhi
 			m_frames.next();
 		}
 
-		D3D12_DESCRIPTOR_HEAP_TYPE heaps[] = {
-			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-			D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
-			D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
-			D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
-		};
-
 		for (s32 i = 0; i < std::size(frame.requests); ++i) {
-			DescriptorHeapType type = (DescriptorHeapType)i;
+			D3D12_DESCRIPTOR_HEAP_TYPE type = (D3D12_DESCRIPTOR_HEAP_TYPE)i;
 			for(auto& request : frame.requests[i]) {
-				m_device.CopyDescriptorsSimple(1, request.dst, request.src, heaps[i]);
+				m_device.CopyDescriptorsSimple(1, request.dst, request.src, type);
 			}
 		}
 

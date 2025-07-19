@@ -17,15 +17,15 @@ namespace ob::rhi {
 		// NOTE ここのlayouts[i]がlayout(set=i)と対応する
 		FixedVector<vk::DescriptorSetLayout,32> layouts;		
 
-		// Bindless用のDescriptorSetLayoutはシェーダーコンパイル時点でsetを確定させるためにset=0で固定する
-		if (rhi.getConfig().enableBindless) {
-			layouts.push_back(rhi.getBindlessDescriptorSetLayout());
-		}
-
 		// Bindfull用のDescriptorSetLayoutを追加
 		for (auto& layout : m_desc.layouts) {
 			OB_ASSERT(layout.cast<VulkanDescriptorLayout>(),"DescriptorLayoutが取得できません");
 			layouts.push_back(layout.cast<VulkanDescriptorLayout>()->getNative());
+		}
+
+		// Bindless用のDescriptorSetLayoutはシェーダーコンパイル時点でsetを確定させるためにset=0で固定する
+		if (rhi.getConfig().enableBindless) {
+			layouts.push_back(rhi.getBindlessDescriptorSetLayout());
 		}
 
 		vk::PushConstantRange pushConstantRange;

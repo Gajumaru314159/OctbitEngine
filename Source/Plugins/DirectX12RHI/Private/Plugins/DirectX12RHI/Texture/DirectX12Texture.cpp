@@ -79,8 +79,6 @@ namespace ob::rhi {
 		}
 
 		initialize();
-
-		manage();
     }
 
 
@@ -416,7 +414,9 @@ namespace ob::rhi {
 
 	//! @brief 共通初期化処理
 	void DirectX12Texture::initialize() {
-		
+
+		m_viewDesc.type = TextureViewType::Texture;
+
 		// デフォルトSRVを割り当て
 		// TODO SRVをつくってはいけないパターンがないか確認する
 		m_device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);

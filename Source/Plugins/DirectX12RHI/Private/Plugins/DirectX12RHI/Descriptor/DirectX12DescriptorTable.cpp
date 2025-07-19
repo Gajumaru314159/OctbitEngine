@@ -128,7 +128,7 @@ namespace ob::rhi {
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle, 0);
 
 			if (isInitialSet == false) {
-				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle2, handle);
+				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle, handle2);
 			}
 		}
 		return true;
@@ -168,7 +168,7 @@ namespace ob::rhi {
 			p->createView(handle);
 
 			if (isInitialSet == false) {
-				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle2, handle);
+				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle, handle2);
 			}
 		}
 		return true;

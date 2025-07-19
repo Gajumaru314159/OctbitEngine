@@ -3,6 +3,7 @@
 //! @brief		Box のテスト
 //! @author		Gajumaru
 //***********************************************************
+#include <GraphicsTest.h>
 #include <Framework/Core/Utility/DI.h>
 #include <Framework/Graphics/All.h>
 #include <Framework/RHI/All.h>
@@ -18,43 +19,12 @@ namespace ob::rhi {
 	class SystemResource;
 }
 
-TEST(MaterialBlock, Bindfull) {
+TYPED_TEST(BindfullGraphicsTest, MaterialBlock) {
 #pragma region
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
-	 ob::core::Logger log;
-
-	System::Setup();
-
-	rhi::RHIConfig config;
-	config.enableBindless = false;
-
-	rhi::DirectX12RHIConfig dx12config;
-	dx12config.enablePIX = true;
-
-	rhi::VulkanRHIConfig vkconfig;
-	vkconfig.enableDebugLayer = true;
-
-	ServiceInjector injector;
-	ServiceContainer container;
-	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
-		graphics::RegisterGraphicsService(injector);
-		injector.bind(config);
-		injector.bind(dx12config);
-		injector.bind(vkconfig);
-
-		struct Dependency {
-			Dependency(ob::graphics::Graphics&, SystemResource&) {}
-		};
-		injector.bind<Dependency>();
-
-		injector.create<Dependency>(container);
-	}
-
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
@@ -258,7 +228,7 @@ PsOut PS_Main(PsIn i){
 		commandList->end();
 		commandList->flush();
 
-		if (auto graphics = container.get<Graphics>()) {
+		if (auto graphics = Graphics::Get()) {
 			graphics->update();
 		}
 
@@ -269,44 +239,12 @@ PsOut PS_Main(PsIn i){
 
 }
 
-TEST(MaterialBlock, Bindless) {
+TYPED_TEST(BindlessGraphicsTest, MaterialBlock) {
 #pragma region
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
-	ob::core::Logger log;
-
-	System::Setup();
-
-	rhi::RHIConfig config;
-	config.enableBindless = true;
-
-	rhi::DirectX12RHIConfig dx12config;
-	dx12config.enablePIX = true;
-
-	rhi::VulkanRHIConfig vkconfig;
-	vkconfig.enableDebugLayer = true;
-
-	ServiceInjector injector;
-	ServiceContainer container;
-	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
-		graphics::RegisterGraphicsService(injector);
-		injector.bind(config);
-		injector.bind(dx12config);
-		injector.bind(vkconfig);
-
-		struct Dependency {
-			Dependency(ob::graphics::Graphics&, SystemResource&) {}
-		};
-		injector.bind<Dependency>();
-
-		injector.create<Dependency>(container);
-	}
-
-
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
 	windowDesc.title = "MaterialBlock Bindless";
@@ -318,8 +256,7 @@ TEST(MaterialBlock, Bindless) {
 		desc.name = "MainSwapChain";
 		desc.window = window;
 		return SwapChain::Create(desc);
-		}();
-
+	}();
 #pragma endregion
 
 	struct Vertex {
@@ -537,7 +474,7 @@ PsOut PS_Main(PsIn i){
 		commandList->end();
 		commandList->flush();
 
-		if (auto graphics = container.get<Graphics>()) {
+		if (auto graphics = Graphics::Get()) {
 			graphics->update();
 		}
 
@@ -550,43 +487,12 @@ PsOut PS_Main(PsIn i){
 
 
 
-TEST(MaterialBlock, MultiBindless) {
+TYPED_TEST(BindlessGraphicsTest, MultiMaterialBlock) {
 #pragma region
 	using namespace ob;
 	using namespace ob::rhi;
 	using namespace ob::graphics;
 	using namespace ob::platform;
-	ob::core::Logger log;
-
-	System::Setup();
-
-	rhi::RHIConfig config;
-	config.enableBindless = true;
-
-	rhi::DirectX12RHIConfig dx12config;
-	dx12config.enablePIX = true;
-
-	rhi::VulkanRHIConfig vkconfig;
-	vkconfig.enableDebugLayer = true;
-
-	ServiceInjector injector;
-	ServiceContainer container;
-	{
-		//rhi::RegisterDirectX12RHIService(injector);
-		rhi::RegisterVulkanRHIService(injector);
-		graphics::RegisterGraphicsService(injector);
-		injector.bind(config);
-		injector.bind(dx12config);
-		injector.bind(vkconfig);
-
-		struct Dependency {
-			Dependency(ob::graphics::Graphics&, SystemResource&) {}
-		};
-		injector.bind<Dependency>();
-
-		injector.create<Dependency>(container);
-	}
-
 
 	// ウィンドウ生成
 	platform::WindowDesc windowDesc;
@@ -838,7 +744,7 @@ PsOut PS_Main(PsIn i){
 		commandList->end();
 		commandList->flush();
 
-		if (auto graphics = container.get<Graphics>()) {
+		if (auto graphics = Graphics::Get()) {
 			graphics->update();
 		}
 
