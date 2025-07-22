@@ -120,6 +120,7 @@ namespace ob::rhi {
     //! @brief      BindlessHandleを取得
     inline BindlessHandle VulkanTexture::handle()const {
         BindlessHandle handle;
+        if (m_handle.empty()) return handle;
         handle.type = BindingType::Texture;
         handle.index = m_handle.getBindlessIndex();
         return handle;

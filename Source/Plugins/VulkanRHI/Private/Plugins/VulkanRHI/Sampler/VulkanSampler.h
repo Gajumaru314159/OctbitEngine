@@ -38,6 +38,7 @@ namespace ob::rhi {
 	//! @brief      BindlessHandleを取得
 	inline BindlessHandle VulkanSampler::getHandle()const {
         BindlessHandle handle;
+        if (m_handle.empty()) return handle;
         handle.type = BindingType::Sampler;
         handle.index = m_handle.getBindlessIndex();
         return handle;

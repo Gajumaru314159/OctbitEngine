@@ -91,7 +91,8 @@ namespace ob::rhi {
 	//! @brief      BindlessHandleを取得
 	inline BindlessHandle VulkanBuffer::getHandle()const {
 		BindlessHandle handle;
-		handle.type = m_handle.empty() ? BindingType::Unknown : BindingType::ByteAddressBuffer;
+		if (m_handle.empty()) return handle;
+		handle.type = BindingType::ByteAddressBuffer;
 		handle.index = m_handle.getBindlessIndex();
 		return handle;
 	}
