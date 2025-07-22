@@ -16,7 +16,7 @@ SET_PCH("Plugins/VulkanRHI/PCH/stdafx.h")
 
 # インクルードディレクトリ設定
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public" "${OCTBIT_THIRD_PARTY_PATH}/dxc/inc")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "$ENV{VK_SDK_PATH}/Include")
+set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "$ENV{VK_SDK_PATH}/Include" "${OCTBIT_THIRD_PARTY_PATH}/stb/include")
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ

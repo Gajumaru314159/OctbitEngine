@@ -5,6 +5,9 @@
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/VulkanRHI.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
+#include <Framework/Core/String/FixedString.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 
 namespace ob::rhi {
 
@@ -129,13 +132,50 @@ namespace ob::rhi {
 	VulkanTexture::VulkanTexture(VulkanRHI& rhi, StringView name,BlobView blob)
 		: m_rhi(rhi)
 	{
-		// TODO テクスチャバイナリから読み込み
-		throw NotImplementedException("テクスチャの読み込みをサポートしていません");
 
 		// 定義生成
-		
+		FixedString<256> fname = name;
+		int width, height, bpp;
+		auto pixels = stbi_load(fname.data(), &width, &height, &bpp, 4);
+
+		if (pixels == nullptr) throw Exception(Format("{}のピクセルデータの取得に失敗しました",name));
+
+		auto f = gsl::final_action([&] {stbi_image_free(pixels); });
+
+		// Desc設定
+		m_desc.name = name;
+		m_desc.size.width = width;
+		m_desc.size.height = height;
+		m_desc.type = TextureType::Texture2D;
+		if (bpp == 1) m_desc.format = TextureFormat::R8;
+		if (bpp == 2) m_desc.format = TextureFormat::RG8;
+		if (bpp == 3) m_desc.format = TextureFormat::RGB8;
+		if (bpp == 4) m_desc.format = TextureFormat::RGBA8;
+		if (m_desc.format == TextureFormat::Unknown) throw Exception(Format("bpp={}はサポートされていません [file={}]", bpp,name));
+		m_desc.arrayNum = 0;
+		m_desc.mipLevels = 1;
+
+		// バリデート
+		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
+		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
+
+		auto& device = m_rhi.getDevice();
+
+		// 定義生成
+		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
+
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
+		m_shared->image = device.createImage(info, m_rhi.getAllocationCallbacks());
+		auto requirements = m_shared->image.getMemoryRequirements();
+		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->image.bindMemory(m_shared->memory, 0);
+
+		// 色データをアップロード
+		VulkanTextureUploader::Subresource subresources[1];
+		subresources[0].data = BlobView(pixels, width * height * bpp);
+		//m_rhi.getTextureUploader().add(m_shared->image, info, m_desc.format, subresources);
 
 		// 共通初期化
 		initialize();
@@ -261,7 +301,6 @@ namespace ob::rhi {
 		rhi.setName(m_shared->memory, m_desc.name);
 
 		initialize();
-
 	}
 
 
@@ -331,7 +370,7 @@ namespace ob::rhi {
 	}
 
 	bool VulkanTexture::createView(vk::raii::ImageView& view) {
-		
+
 		vk::ImageViewCreateInfo info;
 		info.image = m_shared->image;
 		info.viewType = Convert(m_desc.type, m_desc.arrayNum);
