@@ -32,6 +32,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(blob.size())) {
+			OB_ASSERT_EXPR(blob.size()<=m_blockSize);
 			extend();
 		}
 
@@ -59,6 +60,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(size)) {
+			OB_ASSERT_EXPR(size <= m_blockSize);
 			extend();
 		}
 
