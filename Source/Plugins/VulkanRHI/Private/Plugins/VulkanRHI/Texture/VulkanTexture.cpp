@@ -175,7 +175,7 @@ namespace ob::rhi {
 		// 色データをアップロード
 		VulkanTextureUploader::Subresource subresources[1];
 		subresources[0].data = BlobView(pixels, width * height * bpp);
-		//m_rhi.getTextureUploader().add(m_shared->image, info, m_desc.format, subresources);
+		m_rhi.getTextureUploader().add(m_shared->image, info, m_desc.format, subresources);
 
 		// 共通初期化
 		initialize();
