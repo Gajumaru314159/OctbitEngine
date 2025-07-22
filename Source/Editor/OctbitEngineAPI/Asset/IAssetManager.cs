@@ -2,17 +2,11 @@
 {
     public interface IAssetManager
     {
-        public static IAssetManager? Instance { get; }
 
         /// <summary>
         /// ファイル名に使用できない文字のリスト
         /// </summary>
         public static char[] InvalidChars = System.IO.Path.GetInvalidFileNameChars();
-
-        /// <summary>
-        /// ルートフォルダ
-        /// </summary>
-        public IAssetFolder RootFolder { get; }
 
         /// <summary>
         /// 名前に使用できる文字列か
@@ -21,6 +15,18 @@
         {
             return name.IndexOfAny(InvalidChars) == -1;
         }
+
+        #region FileSystem Operation
+
+        /// <summary>
+        /// ルートフォルダ
+        /// </summary>
+        public IAssetFolder RootFolder { get; }
+
+        /// <summary>
+        /// 全てのAssetFileにアクセスする
+        /// </summary>
+        public IEnumerable<IAssetFile> AllAssetFile { get; }
 
         /// <summary>
         /// フォルダを作成します。
@@ -43,10 +49,12 @@
         /// </code>
         /// </example>
         /// <exception cref="ArgumentException">
-        /// * パスがルートフォルダ名から始まらない
-        /// * 使用できない文字が含まれている
-        /// * 既に存在する
-        /// * アセットタイプが登録されていない
+        ///     <list type="bullet">
+        ///         <item>パスがルートフォルダ名から始まらない</item>
+        ///         <item>使用できない文字が含まれている</item>
+        ///         <item>既に存在する</item>
+        ///         <item>アセットタイプが登録されていない</item>
+        ///     </list>
         /// </exception>
         public IAssetFile CreateFile(string path, string type);
 
@@ -60,17 +68,39 @@
         /// </summary>
         public IAssetFile? FindFile(string path);
 
+        #endregion
+
+        #region Import
+
         /// <summary>
         /// 指定したパスのファイルをアセットとしてインポートできるか
         /// </summary>
-
-        public event EventHandler<IAssetEntry>? AssetCreated; 
-
-
         public bool CanImport(string path);
+
+        /// <summary>
+        /// ファイルをインポートします。
+        /// </summary>
         public bool Import(string path,IAssetFolder folder);
 
-        public IEnumerable<IAssetFile> AllAssetFile { get; }
+        #endregion
+
+        #region Access
+
+
+
+        #endregion
+
+        /// <summary>
+        /// アセットのパスからGUIDを取得します。
+        /// </summary>
+        //Guid AssetPathToGuid(string path);
+
+        //string? GuidToAssetPath(Guid guid);
+        //string? GuidAssetPath(object instance);
+
+        //bool Contains(object instance);
+
+
 
 
         //Test

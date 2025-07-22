@@ -1,0 +1,102 @@
+﻿<Window x:Class="OctbitEditor.DockingTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OctbitEditor"
+        xmlns:ctrl="clr-namespace:CommonView.Controls;assembly=CommonView"
+        Background="Black"
+        mc:Ignorable="d"
+        Title="DockingTest" Height="450" Width="800">
+
+    <Window.DataContext>
+        <local:DockingTestVM/>
+    </Window.DataContext>
+
+    <Window.Resources>
+
+        <ctrl:GenericDataTemplateSelector x:Key="TabSelector">
+            <DataTemplate DataType="{x:Type local:DockingTabA}">
+                <StackPanel>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                    <TextBlock Text="This is a sample text."/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:DockingTabB}">
+                <StackPanel>
+                    <Button Content="Button A0" Margin="1"/>
+                    <Button Content="Button A1" Margin="1"/>
+                    <Button Content="Button A2" Margin="1"/>
+                    <Button Content="Button A3" Margin="1"/>
+                    <Button Content="Button A4" Margin="1"/>
+                    <Button Content="Button A5" Margin="1"/>
+                    <Button Content="Button A6" Margin="1"/>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:DockingTabC}">
+                <StackPanel>
+                    <Slider Margin="1"/>
+                    <Slider Margin="1"/>
+                    <Slider Margin="1"/>
+                    <Slider Margin="1"/>
+                    <Slider Margin="1"/>
+                    <Slider Margin="1"/>
+                </StackPanel>
+            </DataTemplate>
+        </ctrl:GenericDataTemplateSelector>
+
+    </Window.Resources>
+
+    <TabControl Padding="0,0,0,0">
+        <TabItem Header="👤Layout">
+            <ctrl:DockingLayout x:Name="docking" Item="{Binding Item}" ContentTemplateSelector="{StaticResource TabSelector}">
+                <i:Interaction.Behaviors>
+                    <ctrl:DockingBehavior/>
+                </i:Interaction.Behaviors>
+                <ctrl:DockingLayout.Resources>
+                    <Style TargetType="GridSplitter">
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </ctrl:DockingLayout.Resources>
+                <ctrl:DockingLayout.ItemTemplate>
+                    <DataTemplate DataType="local:DockingTest">
+                        <DockPanel x:Name="Header" Tag="{Binding ElementName=docking}">
+                            <DockPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="_Close" Command="{Binding PlacementTarget.Tag.DataContext.CloseCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                        CommandParameter="{Binding}"/>
+                                    <MenuItem Header="_Window" Command="{Binding PlacementTarget.Tag.DataContext.WindowCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ContextMenu}}"
+                                        CommandParameter="{Binding}"/>
+                                    <MenuItem Header="_Add">
+                                        <MenuItem Header="Outliner"/>
+                                        <MenuItem Header="Viewport"/>
+                                        <MenuItem Header="AssetBrowser"/>
+                                        <MenuItem Header="Inspector"/>
+                                        <MenuItem Header="History"/>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DockPanel.ContextMenu>
+                            <TextBlock Text="👤"/>
+                            <TextBlock Text="{Binding Title}" Padding="4,0"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ctrl:DockingLayout.ItemTemplate>
+            </ctrl:DockingLayout>
+        </TabItem>
+        <TabItem Header="👤Animation">
+
+        </TabItem>
+        <TabItem Header="👤Scripting">
+
+        </TabItem>
+    </TabControl>
+
+    
+</Window>

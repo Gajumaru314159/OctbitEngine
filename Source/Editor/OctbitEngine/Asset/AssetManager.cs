@@ -2,6 +2,7 @@
 using Common.Log;
 using Common.Tree;
 using OctbitEngine.Config;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
@@ -13,15 +14,8 @@ namespace OctbitEngine.Asset
         public static string MetaExtension = ".meta";
         public static string RootFolderName = "Assets";
 
-        private FileSystemWatcher m_watcher;
         private DefaultAssetImporter m_defaultImporter= new();
-
-        public static IAssetManager Instance { get; private set; }
-
-        static AssetManager()
-        {
-            Instance = new AssetManager();
-        }
+        private AssetWatcher m_watcher;
 
         /// <summary>
         /// 名前に使用できる文字列か
@@ -34,31 +28,20 @@ namespace OctbitEngine.Asset
 
         private Dictionary<string,IAssetImporter> Importers = new();
 
-        internal AssetManager()
+        private ICoreSystem CoreSystem { get; }
+
+        internal AssetManager(ICoreSystem coreSystem)
         {
+            CoreSystem = coreSystem;
+
             InitializeImporter();
             InitializeEditor();
 
             RootFolder = new AssetFolder(RootFolderName,this);
             LoadAssets();
 
-            m_watcher = new FileSystemWatcher(Path.Combine(WorkSpace.RootPath, RootFolderName));
-            m_watcher.NotifyFilter = 
-                NotifyFilters.FileName | 
-                NotifyFilters.DirectoryName | 
-                NotifyFilters.LastWrite;
+            m_watcher = new AssetWatcher(this,RootFolder.PhysicalPath);
 
-            m_watcher.Changed +=OnFileChanged;
-            m_watcher.Created  +=OnFileChanged;
-            m_watcher.Deleted  +=OnFileChanged;
-            m_watcher.Renamed  +=OnFileChanged;
-            m_watcher.IncludeSubdirectories = true;
-            m_watcher.EnableRaisingEvents = true;
-        }
-
-        private void OnFileChanged(object sender, FileSystemEventArgs e)
-        {
-            Log.Info($"ファイル変更 : {e.FullPath} ({e.ChangeType})");
         }
 
         private void CheckValidPath(string[] items)
@@ -155,7 +138,7 @@ namespace OctbitEngine.Asset
                 WriteIndented = true,
                 Converters = { 
                     new AssetImporterJsonConverter(
-                        CoreSystem.Instance.PluginAssemblies.Append(GetType().Assembly).SelectMany(i=>i.GetTypes()).Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
+                        CoreSystem.Types.Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
                     )
                 }
             };
@@ -269,7 +252,7 @@ namespace OctbitEngine.Asset
                 WriteIndented = true,
                 Converters = {
                     new AssetImporterJsonConverter(
-                        CoreSystem.Instance.PluginAssemblies.Append(GetType().Assembly).SelectMany(i=>i.GetTypes()).Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
+                        CoreSystem.Types.Where(i=>i.IsAssignableTo(typeof(IAssetImporter))).ToHashSet()
                     )
                 }
             };
@@ -322,12 +305,10 @@ namespace OctbitEngine.Asset
 
         private void InitializeImporter()
         {
-            CoreSystem.Instance?.PluginAssemblies.Append(typeof(AssetManager).Assembly)
-                .SelectMany(i=>i.GetTypes())
+            CoreSystem.Types
                 .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IAssetImporter)))
                 .Select(t => Activator.CreateInstance(t) as IAssetImporter)
                 .NotNull()
-                .ToList()
                 .ForEach(importer => importer.EliagebleExtensions.ForEach(extension=>Importers.Add(extension, importer)));
 
             var extensions = new Dictionary<IAssetImporter, HashSet<string>>();
@@ -346,20 +327,16 @@ namespace OctbitEngine.Asset
 
         private void InitializeEditor()
         {
-            m_editorMap = CoreSystem.Instance!.PluginAssemblies.Append(typeof(AssetManager).Assembly)
-                .SelectMany(i => i.GetTypes())
+            m_editorMap = CoreSystem.Types
                 .Where(t => t.GetCustomAttribute<AssetEditorAttribute>()!=null)
                 .ToDictionary(t => t.GetCustomAttribute<AssetEditorAttribute>()!.Type, t => t);
         }
 
         public IAssetFolder RootFolder { get; private set; }
 
-        public event EventHandler<IAssetEntry>? AssetCreated;
-
 
 
         public IEnumerable<IAssetFile> AllAssetFile => RootFolder.DepthFirst(i=>i.ChildFolders).SelectMany(i=>i.ChildFiles);
-
 
 
         // 検証

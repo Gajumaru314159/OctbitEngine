@@ -1,0 +1,10 @@
+{
+  "Version": 0,
+  "Guid": "d9ecdd8c-6e8a-4b12-8e9e-257c343f225f",
+  "Importer": {
+    "Type": "OctbitEngine.Asset.DefaultAssetImporter",
+    "Value": {
+      "EliagebleExtensions": []
+    }
+  }
+}

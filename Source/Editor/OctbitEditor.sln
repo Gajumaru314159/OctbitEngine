@@ -33,6 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{D8BD6930
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctbitEngine.Model", "OctbitEngineAPI.Model\OctbitEngine.Model.csproj", "{C379E6F8-0A13-4AF8-B60E-5A4CB3B336B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctbitEngine2", "OctbitEngine2\OctbitEngine2.csproj", "{8EF0E493-63FD-4921-9235-876379C01C20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OctbitEngine2.Test", "OctbitEngine2.Test\OctbitEngine2.Test.csproj", "{E051C9E3-5AEF-475C-B0B0-C2E9262D3042}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,14 @@ Global
 		{C379E6F8-0A13-4AF8-B60E-5A4CB3B336B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C379E6F8-0A13-4AF8-B60E-5A4CB3B336B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C379E6F8-0A13-4AF8-B60E-5A4CB3B336B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EF0E493-63FD-4921-9235-876379C01C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EF0E493-63FD-4921-9235-876379C01C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EF0E493-63FD-4921-9235-876379C01C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EF0E493-63FD-4921-9235-876379C01C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E051C9E3-5AEF-475C-B0B0-C2E9262D3042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E051C9E3-5AEF-475C-B0B0-C2E9262D3042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E051C9E3-5AEF-475C-B0B0-C2E9262D3042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E051C9E3-5AEF-475C-B0B0-C2E9262D3042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

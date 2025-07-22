@@ -6,7 +6,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!--Colorsは0番目に定義してください-->
-                <ResourceDictionary Source="/CommonView;component/Themes/Colors/Dark.xaml"/>
+                <ResourceDictionary Source="/CommonView;component/Themes/Colors/UnityDark.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Theme.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Icons.xaml"/>
                 <ResourceDictionary Source="/CommonView;component/Themes/Controls.xaml"/>

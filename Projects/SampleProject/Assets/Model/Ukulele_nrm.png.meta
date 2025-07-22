@@ -1,0 +1,16 @@
+{
+  "Version": 0,
+  "Guid": "0d8842b4-ec7d-429b-9e13-1d1ebe534c7b",
+  "Importer": {
+    "Type": "OctbitEngine.Asset.TextureAssetImporter",
+    "Value": {
+      "EliagebleExtensions": [
+        ".png",
+        ".jpg",
+        ".jpeg"
+      ],
+      "TextureGroup": "Default",
+      "DownScaleMethod": 0
+    }
+  }
+}

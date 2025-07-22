@@ -7,5 +7,7 @@ namespace OctbitEngine
     {
         IAssetManager AssetManager { get; }
         IRuntime Runtime { get; }
+        IReadOnlySet<Type> Types { get; }
+
     }
 }

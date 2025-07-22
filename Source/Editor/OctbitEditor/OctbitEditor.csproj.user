@@ -10,7 +10,16 @@
     <Compile Update="Dialog\StartupDialog\StartupDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Windows\ControlTest.xaml.cs">
+    <Compile Update="Test\ControlTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Test\DockingTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Test\DockTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Test\SplitControlTestWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Windows\Inspector\Inspector.xaml.cs">
@@ -21,7 +30,7 @@
     <Page Update="Dialog\StartupDialog\StartupDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Windows\ControlTest.xaml">
+    <Page Update="Test\ControlTest.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Windows\History\HistoryWindow.xaml">

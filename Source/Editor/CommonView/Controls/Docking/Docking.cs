@@ -31,13 +31,28 @@ namespace CommonView.Controls
         private readonly Dictionary<DockingBase, NotifyCollectionChangedEventHandler> m_tabHandlers = new();
 
         public DockingLayoutGroup()
+            : this(System.Windows.Controls.Orientation.Horizontal)
         {
+        }
+        public DockingLayoutGroup(Orientation orientation)
+        {
+            Orientation.Value = orientation;
             Items.CollectionChanged += OnItemsChanged;
         }
 
-        public void Add(DockingBase item)
+        public void Add(params DockingBase[] items)
         {
-            Items.Add(item);
+            foreach (var item in items)
+            {
+                Items.Add(item);
+            }
+        }
+        public void AddTab(params object[] items)
+        {
+            foreach (var item in items)
+            {
+                Add(new DockingTabGroup(item));
+            }
         }
 
         private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -115,10 +130,17 @@ namespace CommonView.Controls
         public ObservableCollection<object> Items { get; } = new();
 
         public DockingTabGroup() { }
-
-        public void Add(object item)
+        public DockingTabGroup(params object[] items)
         {
-            Items.Add(item);
+            Add(items);
+        }
+
+        public void Add(params object[] items)
+        {
+            foreach (var it in items)
+            {
+                Items.Add(it);
+            }
         }
     }
 

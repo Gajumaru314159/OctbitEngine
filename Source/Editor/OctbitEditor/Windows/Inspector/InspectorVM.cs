@@ -158,8 +158,8 @@ namespace OctbitEditor
             Name = name;
             Inspectables = inspectables;
         }
-        public string Name { get; init; } = string.Empty;
-        public IList<Inspectable> Inspectables { get; init; } = Array.Empty<Inspectable>();
+        public string Name { get; } = string.Empty;
+        public IList<Inspectable> Inspectables { get; } = Array.Empty<Inspectable>();
     }
 
     public class InspectorVM : TabBase

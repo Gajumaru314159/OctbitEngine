@@ -23,11 +23,12 @@
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_addressBar}" InputGesture="Ctrl+L"/>
         <behavior:KeyboardFocusBehavior Target="{Binding ElementName=_searchBox}" InputGesture="F3"/>
     </i:Interaction.Behaviors>
-    <i:Interaction.Triggers>
+    
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="OnLoaded"/>
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
 
     <UserControl.InputBindings>
         <KeyBinding Gesture="Ctrl+Shift+N" Command="{Binding CreateFolderCommand}"/>
@@ -303,7 +304,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="local:ExplorerItem">
+                            <DataTemplate DataType="local:AssetBrowserItem">
                                 <DockPanel Background="Transparent" ToolTip="{Binding Name}" ToolTipService.InitialShowDelay="0">
                                     <base:EditableTextBlock Text="{Binding Name}" IsEditable="{Binding IsEditable}" MaxWidth="{Binding DataContext.IconSize.Value,ElementName=Root}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
                                     <Border BorderThickness="0,0,0,2" BorderBrush="{Binding ItemColorBrush}" Background="{DynamicResource Surface}">

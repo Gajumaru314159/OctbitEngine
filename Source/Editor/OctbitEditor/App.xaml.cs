@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using OctbitEditor.Test;
+using System.Windows;
 
 namespace OctbitEditor
 {
@@ -11,9 +12,12 @@ namespace OctbitEditor
         {
             //var dialog = new StartupDialog();
             //dialog.ShowDialog();
+            var w2 = new DockingTest();
+            w2.Show();
 
             var window = new MainWindow();
             window.Show();
+
         }
     }
 

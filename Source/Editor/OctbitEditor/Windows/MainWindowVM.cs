@@ -1,4 +1,5 @@
 ﻿using Common.Log;
+using CommonView.Controls;
 using CommonView.History;
 using CommonView.Menu;
 using Livet;
@@ -7,6 +8,7 @@ using OctbitEngine.Asset;
 using Reactive.Bindings;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace OctbitEditor
@@ -36,12 +38,23 @@ namespace OctbitEditor
 
             _coreSystem = new CoreSystem();
 
-            _dockingDocumentViewModels.Add(new ViewportVM(_coreSystem.Runtime));
-            _dockingPaneViewModels.Add(new OutlinerVM(_coreSystem.Runtime.ViewportWorld));
-            _dockingPaneViewModels.Add(new InspectorVM(_coreSystem.Runtime));
-            _dockingPaneViewModels.Add(new HistoryWindowVM());
-            _dockingPaneViewModels.Add(new AssetBrowserVM(_coreSystem.AssetManager));
-            _dockingPaneViewModels.Add(new LogListVM());
+#if false // 独自ドッキング
+                Item.Orientation.Value = Orientation.Vertical;
+                var t = new DockingLayoutGroup(Orientation.Horizontal);
+                t.AddTab(new OutlinerVM(_coreSystem.Runtime.ViewportWorld));
+                t.AddTab(new ViewportVM(_coreSystem.Runtime));
+                t.AddTab(new InspectorVM(_coreSystem.Runtime));
+                var b = new DockingLayoutGroup(Orientation.Horizontal);
+                b.AddTab(new AssetBrowserVM(_coreSystem.AssetManager));
+                b.AddTab(new LogListVM(), new HistoryWindowVM());
+#else
+                _dockingDocumentViewModels.Add(new ViewportVM(_coreSystem.Runtime));
+                _dockingPaneViewModels.Add(new OutlinerVM(_coreSystem.Runtime.ViewportWorld));
+                _dockingPaneViewModels.Add(new InspectorVM(_coreSystem.Runtime));
+                _dockingPaneViewModels.Add(new HistoryWindowVM());
+                _dockingPaneViewModels.Add(new AssetBrowserVM(_coreSystem.AssetManager));
+                _dockingPaneViewModels.Add(new LogListVM());
+#endif
 
             Log.EndShink();
 
@@ -155,6 +168,9 @@ namespace OctbitEditor
         private ObservableCollection<ViewModel> _dockingDocumentViewModels = new();
         public ReadOnlyObservableCollection<ViewModel> DockingPaneViewModels => new(_dockingPaneViewModels);
         private ObservableCollection<ViewModel> _dockingPaneViewModels = new();
+
+
+        public DockingLayoutGroup Item { get; } = new DockingLayoutGroup();
 
 
         public ReactivePropertySlim<string> Title { get; } = new();
