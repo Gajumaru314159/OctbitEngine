@@ -114,13 +114,13 @@ namespace ob::rhi {
 
 		vk::PipelineTessellationStateCreateInfo tessellationInfo;
 
-		vk::Viewport viewport[8];
-		vk::Rect2D scissor[8];
+		vk::Viewport viewport;
+		vk::Rect2D scissor;
 		vk::PipelineViewportStateCreateInfo viewportInfo;
-		viewportInfo.viewportCount = desc.colors.size();
-		viewportInfo.scissorCount = desc.colors.size();
-		viewportInfo.pViewports = viewport;
-		viewportInfo.pScissors = scissor;
+		viewportInfo.viewportCount = 1;
+		viewportInfo.scissorCount = 1;
+		viewportInfo.pViewports = &viewport;
+		viewportInfo.pScissors = &scissor;
 
 		vk::PipelineRasterizationStateCreateInfo rasterizationInfo;
 		rasterizationInfo.flags = vk::PipelineRasterizationStateCreateFlags{};
