@@ -196,15 +196,11 @@ namespace ob::rhi {
 		m_cmdList->BeginRenderPass(colors.size(), colors.data(), pDepth, flags);
 
 		// 初期設定としてViewportとScissorRectを設定
-		FixedVector<Viewport, RENDER_TARGET_MAX> viewports;
-		FixedVector<IntRect, RENDER_TARGET_MAX> scissors;
-		for (s32 i = 0; i < std::max<s32>(param.colors.size(), 1); ++i) {
-			viewports.emplace_back(0, 0, width, height);
-			scissors.emplace_back(0, 0, width, height);
-		}
+		Viewport viewport(0, 0, width, height);
+		IntRect scissor(0,0,width,height);
 
-		setViewport(viewports.data(), (UINT)viewports.size());
-		setScissorRect(scissors.data(), (UINT)scissors.size());
+		setViewport(&viewport,1);
+		setScissorRect(&scissor,1);
 
 	}
 
