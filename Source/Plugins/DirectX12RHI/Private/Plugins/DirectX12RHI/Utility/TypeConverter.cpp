@@ -541,6 +541,7 @@ namespace ob::rhi
         case DXGI_FORMAT_BC7_UNORM_SRGB:		return TextureFormat::BC7_SRGB;
 
         case DXGI_FORMAT_B8G8R8A8_UNORM:		return TextureFormat::RGBA8;
+        case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:	return TextureFormat::RGBA8_SRGB;
 
         }
         LOG_WARNING_EX("Graphic", "不正なDXGI_FORMAT[value={}]", enum_cast(value));
