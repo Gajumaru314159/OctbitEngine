@@ -62,7 +62,9 @@ namespace ob::graphics {
 		}
 
 		for (auto& [maerialId,renderable] : renderables) {
+			cmdList->pushMarker(renderable.material->getDesc().name);
 			renderable.material->record(cmdList,blocks ,renderable.mesh, renderable.submesh, pass);
+			cmdList->popMarker();
 		}
 
 		return true;

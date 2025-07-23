@@ -235,6 +235,8 @@ namespace ob::rhi {
 
 		if(auto impl = cmdList.cast<VulkanCommandList>()) {
 
+			cmdList->pushMarker("Apply SwapChain");
+
 			vk::CommandBuffer commandBuffer = impl->getNative();
 
 			m_cache.clear();
@@ -287,6 +289,7 @@ namespace ob::rhi {
 			m_cache.addTexture(m_images[m_imageViews.index()], vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR, vk::ImageAspectFlagBits::eColor);
 			m_cache.recordCommand(commandBuffer);
 
+			cmdList->popMarker();
 		}
 
 	}
