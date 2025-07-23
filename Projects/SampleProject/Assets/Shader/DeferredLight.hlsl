@@ -51,13 +51,20 @@ struct ViewProps {
 	float4 CameraFront;
 };
 
-cbuffer RootConstants : register(b0) {
+struct RootConstant {
 	BufferHandle MaterialHandle;
 	BufferHandle GlobalHandle;
 	BufferHandle SceneHandle;
 	BufferHandle ViewHandle;
 };
 
+#if defined(VULKAN)
+#define ROOT_CONSTANT(type,name)	[[vk::push_constant]] type name
+#elif defined(D3D)
+#define								ConstantBuffer<type> name : register(b0)
+#endif
+
+ROOT_CONSTANT(RootConstant,rc);
 
 // IN / OUT
 struct VsIn {
@@ -80,19 +87,23 @@ PsIn VS_Main(VsIn i) {
     return o;
 }
 PsOut PS_Main(PsIn i){
+	BufferHandle MaterialHandle = rc.MaterialHandle;
+	BufferHandle GlobalHandle = rc.GlobalHandle;
+	BufferHandle SceneHandle = rc.SceneHandle;
+	BufferHandle ViewHandle = rc.ViewHandle;
     PsOut o;
 
 	
 	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
 	
 	Texture2D g_mainTex = ResourceDescriptorHeap[mparam.MainTex.index];
-	SamplerState g_mainSmp = ResourceDescriptorHeap[mparam.MainSmp.index];
+	SamplerState g_mainSmp = SamplerDescriptorHeap[mparam.MainSmp.index];
 	
 	Texture2D g_normalTex = ResourceDescriptorHeap[mparam.NormalTex.index];
-	SamplerState g_normalSmp = ResourceDescriptorHeap[mparam.NormalSmp.index];
+	SamplerState g_normalSmp = SamplerDescriptorHeap[mparam.NormalSmp.index];
 	
 	Texture2D g_depthTex = ResourceDescriptorHeap[mparam.DepthTex.index];
-	SamplerState g_depthSmp = ResourceDescriptorHeap[mparam.DepthSmp.index];
+	SamplerState g_depthSmp = SamplerDescriptorHeap[mparam.DepthSmp.index];
 
     float4 albedo = g_mainTex.Sample(g_mainSmp,i.uv);
     float4 normal = g_normalTex.Sample(g_normalSmp,i.uv)*0.5+0.5;

@@ -111,8 +111,12 @@ namespace ob::rhi {
             L"-D",
             L"VULKAN",
             L"/Zi",
-            L"-Qembed_debug",
+            L"-Qembed_debug"
         };
+
+        if (desc.stage == ShaderStage::Vertex) {
+            args.push_back(L"-fvk-invert-y");
+        }
 
         if (rhi.getConfig().enableBindless) {
             args.push_back(L"-fvk-bind-sampler-heap");

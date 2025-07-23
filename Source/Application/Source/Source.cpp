@@ -17,11 +17,12 @@
 #include <Framework/Engine/Component/ReflectionTestComponent.h>
 #include <Framework/Engine/Reflection.h>
 #include <Framework/Graphics/All.h>
-#include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>
-#include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Material/Material.h>
+#include <Framework/Graphics/Material/MaterialSystem.h>
 #include <Framework/Graphics/Render/Feature/CameraRenderFeature.h>
 #include <Framework/Graphics/Render/Feature/LightRenderFeature.h>
-#include <Framework/Graphics/Material/Material.h>
+#include <Framework/Graphics/Render/Pipeline/ImGuiRenderPipeline.h>
+#include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>
 #include <Framework/Input/All.h>
 #include <Framework/Platform/Arguments.h>
 #include <Framework/Platform/System.h>
@@ -29,7 +30,8 @@
 #include <Framework/RHI/All.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Plugins/DirectX12RHI/System.h>
-#include <Framework/Graphics/Material/MaterialSystem.h>
+#include <Plugins/VulkanRHI/System.h>
+#include <Plugins/VulkanRHI/VulkanRHIConfig.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -121,7 +123,7 @@ int TestDirectX12() {
 
 	auto entity2 = Entity::Create<MeshComponent>("Sky", scene);
 	entity2->setActive(true);
-	entity2->addComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
+	entity2->findComponent<MeshComponent>()->setModel("Assets/Model/sky.obj");
 	entity2->findComponent<TransformComponent>()->setLocalScale({ 1000 ,1000,1000});
 
 	auto camera = Entity::Create("FlyCamera");
@@ -139,7 +141,6 @@ int TestDirectX12() {
 			tools.outliner.draw(*world);
 			tools.loginfo.draw();
 			tools.fgdebugger.draw();
-			tools.outliner.draw(*world);
 			if (ImGui::Begin("RenderPipeline")) {
 				rscene.visitView([&](RenderView& view) {
 					auto& data = view.get<RenderViewData>();
@@ -190,10 +191,12 @@ int TestDirectX12() {
 
 rhi::RHIConfig config;
 rhi::DirectX12RHIConfig dx12Config;
+VulkanRHIConfig vkconfig;
 
 void OctbitInit(ServiceInjector& injector) {
 
-	RegisterDirectX12RHIService(injector);
+	//RegisterDirectX12RHIService(injector);
+	RegisterVulkanRHIService(injector);
 	RegisterInputService(injector);
 	RegisterGraphicsService(injector);
 
@@ -205,9 +208,11 @@ void OctbitInit(ServiceInjector& injector) {
 	dx12Config.enableDebugLayer = true;
 	dx12Config.breakWithWarning = true;
 	dx12Config.enablePIX = true;
+	vkconfig.enableDebugLayer = true;
 
 	injector.bind(config);
 	injector.bind(dx12Config);
+	injector.bind(vkconfig);
 
 }
 

@@ -37,6 +37,9 @@ namespace ob::rhi {
 		//! @brief          ハンドルを解放
 		void releaseHandle(class VulkanDescriptorHandle& handle);
 
+		//! @birief			更新
+		void update();
+
 
 		//! @brief          デスクリプタセットをコマンドバッファに記録
 		void recordDescriptorHeap(vk::raii::CommandBuffer& commandBuffer,vk::PipelineLayout pipeline,s32 slot);
@@ -48,9 +51,20 @@ namespace ob::rhi {
 
 	private:
 
+		void initializeStaged();
+		void initializeStaging();
+
+	private:
+
 		SpinLock						m_mutex;
 		TLSFMapper						m_samplerMapper;
 		TLSFMapper						m_resourceMapper;
+
+		using SubRequest = Variant<vk::DescriptorImageInfo, vk::DescriptorBufferInfo>;
+
+		SpinLock						m_requestsLock;
+		Vector<vk::WriteDescriptorSet>	m_requests;
+		Vector<SubRequest>				m_subrequests;
 
 		vk::raii::DescriptorPool		m_pool = nullptr;
 		vk::raii::DescriptorSet			m_set = nullptr;

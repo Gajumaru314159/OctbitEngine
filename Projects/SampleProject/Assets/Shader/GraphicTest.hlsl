@@ -63,12 +63,20 @@ struct ViewProps {
 	float4 CameraFront;
 };
 
-cbuffer RootConstants : register(b0) {
+struct RootConstant {
 	BufferHandle MaterialHandle;
 	BufferHandle GlobalHandle;
 	BufferHandle SceneHandle;
 	BufferHandle ViewHandle;
 };
+
+#if defined(VULKAN)
+#define ROOT_CONSTANT(type,name)	[[vk::push_constant]] type name
+#elif defined(D3D)
+#define								ConstantBuffer<type> name : register(b0)
+#endif
+
+ROOT_CONSTANT(RootConstant,rc);
 
 
 // IN / OUT
@@ -94,6 +102,11 @@ struct PsOut {
 PsIn VS_Main(VsIn i) {    
     PsIn o;
 
+	BufferHandle MaterialHandle = rc.MaterialHandle;
+	BufferHandle GlobalHandle = rc.GlobalHandle;
+	BufferHandle SceneHandle = rc.SceneHandle;
+	BufferHandle ViewHandle = rc.ViewHandle;
+
 	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
 	GlobalProps gparam = ByteAddressBuffer(ResourceDescriptorHeap[GlobalHandle.index]).Load<GlobalProps>(0);
 	ViewProps vparam = ByteAddressBuffer(ResourceDescriptorHeap[ViewHandle.index]).Load<ViewProps>(0);
@@ -107,6 +120,10 @@ PsIn VS_Main(VsIn i) {
     return o;
 }
 PsOut PS_Main(PsIn i){
+	BufferHandle MaterialHandle = rc.MaterialHandle;
+	BufferHandle GlobalHandle = rc.GlobalHandle;
+	BufferHandle SceneHandle = rc.SceneHandle;
+	BufferHandle ViewHandle = rc.ViewHandle;
 
 	MaterialProps mparam = MaterialHandle.Load<MaterialProps>();
 	GlobalProps gparam = GlobalHandle.Load<GlobalProps>();

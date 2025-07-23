@@ -311,8 +311,11 @@ namespace ob::rhi {
 			m_pipeline = pipeline;
 			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, p->getNative());
 
-			auto bindlessSlot = p->getDesc().rootSignature->getDesc().layouts.size();
-			m_rhi.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
+			auto& desc = p->getDesc().rootSignature->getDesc();
+			if (desc.flags.has(RootSignatureFlag::EnableBindless)) {
+				auto bindlessSlot = desc.layouts.size();
+				m_rhi.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
+			}
 		} else {
 			LOG_FATAL("不正な引数。パイプラインステートが不正です。");
 		}
@@ -369,13 +372,13 @@ namespace ob::rhi {
 
 	//! @brief      GPUマーカーをプッシュ
 	void VulkanCommandList::pushMarker(StringView name) {
-		//if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.debugMarkerBeginEXT(name.data());
+		if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.beginDebugUtilsLabelEXT(name.data());
 	}
 
 
 	//! @brief      GPUマーカーをポップ
 	void VulkanCommandList::popMarker() {
-		//if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.debugMarkerEndEXT();
+		if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.endDebugUtilsLabelEXT();
 	}
 
 #pragma endregion

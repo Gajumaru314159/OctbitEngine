@@ -44,9 +44,11 @@ namespace ob::rhi {
 
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eError) {
 			LOG_ERROR("[VulkanRHI] {}", pCallbackData->pMessage);
+			CallBreakPoint();
 		}
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning) {
 			LOG_WARNING("[VulkanRHI] {}", pCallbackData->pMessage);
+			CallBreakPoint();
 		}
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo) {
 			LOG_INFO("[VulkanRHI] {}", pCallbackData->pMessage);
@@ -84,8 +86,8 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	VulkanRHI::~VulkanRHI() {
 
-		m_commandQueue->execute();
-		m_commandQueue->wait();
+		clearCommands();
+
 		m_copyCommandList = {};
 		m_textureUploader = {};
 		m_bufferUploader = {};
@@ -407,6 +409,7 @@ namespace ob::rhi {
 		vk::PhysicalDeviceVulkan12Features vulkan12Features{};
 		vulkan12Features.runtimeDescriptorArray = true;
 		vulkan12Features.descriptorIndexing = true;
+		vulkan12Features.descriptorBindingPartiallyBound = true;
 		mutableDescriptorTypeFeature.pNext = &vulkan12Features;
 
 		m_device = m_physicalDevice.createDevice(info, m_allocationCallbacks);
@@ -430,7 +433,7 @@ namespace ob::rhi {
 	//! @brief  VkQueue生成
 	//@―---------------------------------------------------------------------------
 	void VulkanRHI::createUploaders() {
-		m_bufferUploader = std::make_unique<VulkanBufferUploader>(*this,16*1024);
+		m_bufferUploader = std::make_unique<VulkanBufferUploader>(*this,10  * 1024*1024);
 		m_textureUploader = std::make_unique<VulkanTextureUploader>(*this);
 
 		m_copyCommandList = createCommandList(CommandListDesc{ "CopyBuffer",CommandListType::Graphic});
@@ -472,7 +475,11 @@ namespace ob::rhi {
 	void VulkanRHI::initializeBindless() {
 
 		if (m_config.enableBindless) {
-			m_descriptorHeap = std::make_unique<VulkanDescriptorHeap>(*this, m_limits.maxDescriptorSetSampledImages, m_limits.maxDescriptorSetSamplers);
+			m_descriptorHeap = std::make_unique<VulkanDescriptorHeap>(
+				*this, 
+				std::min<s32>(m_limits.maxDescriptorSetSampledImages,10000), 
+				std::min<s32>(m_limits.maxDescriptorSetSamplers,100000)
+			);
 		}
 	}
 
@@ -517,6 +524,7 @@ namespace ob::rhi {
 	void VulkanRHI::update() {
 
 		{
+
 			m_copyCommandList->begin();
 			m_bufferUploader->update(m_copyCommandList);
 			m_textureUploader->update(m_copyCommandList);
@@ -526,6 +534,7 @@ namespace ob::rhi {
 			// m_copyCommandList->wait();
 		}
 
+		if (m_descriptorHeap) m_descriptorHeap->update();
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 
@@ -694,6 +703,12 @@ namespace ob::rhi {
 
 	vk::DescriptorSetLayout VulkanRHI::getBindlessDescriptorSetLayout() const {
 		return m_descriptorHeap->getLayout();
+	}
+
+
+	void VulkanRHI::clearCommands() {
+		m_commandQueue->execute();
+		m_commandQueue->wait();
 	}
 
 }

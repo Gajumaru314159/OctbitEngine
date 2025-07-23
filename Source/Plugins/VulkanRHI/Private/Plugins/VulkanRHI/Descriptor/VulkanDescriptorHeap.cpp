@@ -15,8 +15,8 @@ namespace ob::rhi {
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
 	VulkanDescriptorHeap::VulkanDescriptorHeap(VulkanRHI& device, s32 resourceCapacity, s32 samplerCapacity)
-		: m_resourceMapper(std::min(samplerCapacity, 100))
-		, m_samplerMapper(std::min(samplerCapacity,100))
+		: m_resourceMapper(resourceCapacity)
+		, m_samplerMapper(samplerCapacity)
 	{
 		// SamplerDescriptorHeap
 		vk::DescriptorType samplerType[] = {
@@ -32,12 +32,23 @@ namespace ob::rhi {
 			vk::DescriptorType::eStorageBuffer,
 		};
 
+		// バインディングフラグの配列を作成
+		vk::DescriptorBindingFlags bindingFlags[2] = {
+			vk::DescriptorBindingFlags{} | vk::DescriptorBindingFlagBits::eUpdateAfterBind | vk::DescriptorBindingFlagBits::ePartiallyBound,
+			vk::DescriptorBindingFlags{} | vk::DescriptorBindingFlagBits::eUpdateAfterBind | vk::DescriptorBindingFlagBits::ePartiallyBound,
+		};
+
+		// バインディングフラグ拡張構造体の作成
+		vk::DescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo;
+		bindingFlagsInfo.setBindingFlags(bindingFlags);
+
 		vk::MutableDescriptorTypeListEXT mutableList[2];
 		mutableList[0].setDescriptorTypes(samplerType);
 		mutableList[1].setDescriptorTypes(resourceTypes);
 
 		vk::MutableDescriptorTypeCreateInfoEXT mutableInfo;
 		mutableInfo.setMutableDescriptorTypeLists(mutableList);
+		mutableInfo.setPNext(&bindingFlagsInfo);
 
 		vk::DescriptorSetLayoutBinding bindings[2];
 		bindings[0].binding = 0; // VulkanShaderの-fvk-bind-sampler-heapと合わせる
@@ -63,7 +74,6 @@ namespace ob::rhi {
 
 		m_layout = device.getDevice().createDescriptorSetLayout(info, device.getAllocationCallbacks());
 
-		// TODO set
 		vk::DescriptorPoolSize poolSizes[2];
 		poolSizes[0].type = vk::DescriptorType::eMutableEXT;
 		poolSizes[0].descriptorCount = m_samplerMapper.capacity();
@@ -124,7 +134,17 @@ namespace ob::rhi {
 		desc.dstArrayElement = handle.m_pBlock->index;
 		desc.descriptorCount = 1;
 
-		m_set.getDevice().updateDescriptorSets({ desc }, {});
+		{
+			ScopeLock lock(m_requestsLock);
+			auto& request = m_requests.emplace_back();
+			request = desc;
+
+			auto& subrequest = m_subrequests.emplace_back();
+			if (desc.pImageInfo) subrequest = *desc.pImageInfo;
+			if (desc.pBufferInfo) subrequest = *desc.pBufferInfo;
+
+		}
+
 
 	}
 
@@ -143,6 +163,29 @@ namespace ob::rhi {
 	//! @brief          デスクリプタセットをコマンドバッファに記録
 	void VulkanDescriptorHeap::recordDescriptorHeap(vk::raii::CommandBuffer& commandBuffer, vk::PipelineLayout pipeline, s32 slot) {
 		commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline, slot, *m_set, {});
+	}
+
+
+	//! @brief          ハンドルを解放
+	void VulkanDescriptorHeap::update() {
+		ScopeLock lock(m_requestsLock);
+
+		if (m_requests.empty()) {
+			return;
+		}
+
+		for(s32 i=0;i<m_requests.size();++i) {
+			auto& request = m_requests[i];
+			auto& subrequest = m_subrequests[i];
+
+			if (request.pBufferInfo) request.pBufferInfo = &std::get<vk::DescriptorBufferInfo>(subrequest);
+			if (request.pImageInfo) request.pImageInfo = &std::get<vk::DescriptorImageInfo>(subrequest);
+		}
+
+		m_set.getDevice().updateDescriptorSets(m_requests, {});
+
+		m_requests.clear();
+		m_subrequests.clear();
 	}
 
 }

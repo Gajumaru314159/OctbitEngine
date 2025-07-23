@@ -219,6 +219,8 @@ namespace ob::rhi {
 			return m_vkDebugMarkerSetObjectNameEXT;
 		}
 
+		void clearCommands();
+
 	private:
 
 		void createInstance();

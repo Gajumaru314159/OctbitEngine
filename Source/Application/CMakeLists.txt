@@ -28,7 +28,7 @@ set(public_libs
     Platform
     RHI
     DirectX12RHI
-    #VulkanRHI
+    VulkanRHI
     Input
     Engine
     ImGui

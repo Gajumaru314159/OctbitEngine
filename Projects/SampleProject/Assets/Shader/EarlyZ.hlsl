@@ -54,12 +54,20 @@ struct ViewProps {
 	float4 CameraFront;
 };
 
-cbuffer RootConstants : register(b0) {
+struct RootConstant {
 	BufferHandle MaterialHandle;
 	BufferHandle GlobalHandle;
 	BufferHandle SceneHandle;
 	BufferHandle ViewHandle;
 };
+
+#if defined(VULKAN)
+#define ROOT_CONSTANT(type,name)	[[vk::push_constant]] type name
+#elif defined(D3D)
+#define								ConstantBuffer<type> name : register(b0)
+#endif
+
+ROOT_CONSTANT(RootConstant,rc);
 
 
 // IN / OUT
@@ -75,6 +83,10 @@ struct PsOut {
 
 // ƒGƒ“ƒgƒŠ
 VsOut VS_Main(VsIn i) {    
+	BufferHandle MaterialHandle = rc.MaterialHandle;
+	BufferHandle GlobalHandle = rc.GlobalHandle;
+	BufferHandle SceneHandle = rc.SceneHandle;
+	BufferHandle ViewHandle = rc.ViewHandle;
     VsOut o;
 
 	MaterialProps mparam = ByteAddressBuffer(ResourceDescriptorHeap[MaterialHandle.index]).Load<MaterialProps>(0);
