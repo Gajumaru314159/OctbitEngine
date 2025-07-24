@@ -24,141 +24,16 @@ namespace ob::rhi {
 		: m_rhi(rhi)
 	{
 		m_desc = desc;
+		
 		// 未指定の場合はwindowから取得
 		if (desc.size.width <= 1 || desc.size.height <= 1) {
 			m_desc.size = { (s32)desc.window.getSize().x,(s32)desc.window.getSize().y };
 		}
 
-		// デバイスごとのサーフェイス生成
-#ifdef OS_WINDOWS
-		vk::Win32SurfaceCreateInfoKHR info;
-		info.hinstance = GetModuleHandle(nullptr);
-		info.hwnd = (HWND)desc.window.getHandle();
+		createResources();
+		createBuffer();
 
-		m_surface = rhi.getInstance().createWin32SurfaceKHR(info, rhi.getAllocationCallbacks());
-#else
-		static_assert(true, "Surface is not implemented.");
-#endif
-
-		// サーフェイスのサポートをチェック
-		if (!rhi.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
-			throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
-		}
-		
-		// サーフェスの機能を取得
-		auto capabilities = rhi.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
-		auto surfaceFormats = rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
-		auto presentModeList = rhi.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
-
-				
-		vk::Extent2D size;
-		size.width = std::clamp<u32>(desc.size.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-		size.height = std::clamp<u32>(desc.size.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-		
-		if (desc.size.width != 0 && desc.size.height != 0) {
-			size.width = desc.size.width;
-			size.height = desc.size.height;
-		} else if(desc.window) {
-			size.width = desc.window.getSize().x;
-			size.height = desc.window.getSize().y;
-			// size = capabilities.currentExtent;
-		} else {
-			throw Exception("ウィンドウが指定されていません。");
-		}
-
-		// サイズをクランプ
-		size.width = std::clamp(size.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-		size.height = std::clamp(size.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
-
-
-
-		vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifo;
-
-		vk::SurfaceTransformFlagBitsKHR preTransform = 
-			(capabilities.supportedTransforms & vk::SurfaceTransformFlagBitsKHR::eIdentity)
-			? vk::SurfaceTransformFlagBitsKHR::eIdentity
-			: capabilities.currentTransform;
-
-		vk::CompositeAlphaFlagBitsKHR compositeAlpha =
-			(capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePreMultiplied) ? vk::CompositeAlphaFlagBitsKHR::ePreMultiplied
-			: (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePostMultiplied) ? vk::CompositeAlphaFlagBitsKHR::ePostMultiplied
-			: (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit) ? vk::CompositeAlphaFlagBitsKHR::eInherit
-			: vk::CompositeAlphaFlagBitsKHR::eOpaque;
-
-
-		auto format = TypeConverter::Convert(m_desc.format);
-		Optional<vk::SurfaceFormatKHR> surfaceFormat;
-		for (auto& item : surfaceFormats) {
-			if (item.format == format) {
-				surfaceFormat = item;
-				break;
-			}
-		}
-		if (!surfaceFormat) {
-			LOG_ERROR("サーフェスフォーマットが見つかりません。");
-			throw Exception();;
-		}
-
-		// サーフェイス生成
-		vk::SwapchainCreateInfoKHR swapChainCreateInfo;
-		swapChainCreateInfo.flags = {};
-		swapChainCreateInfo.surface = m_surface;
-		swapChainCreateInfo.minImageCount = capabilities.minImageCount;
-		swapChainCreateInfo.imageFormat = surfaceFormat->format;
-		swapChainCreateInfo.imageColorSpace = surfaceFormat->colorSpace;
-		swapChainCreateInfo.imageExtent.width = m_desc.size.width;
-		swapChainCreateInfo.imageExtent.height = m_desc.size.height;
-		swapChainCreateInfo.imageArrayLayers = 1;
-		swapChainCreateInfo.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
-		swapChainCreateInfo.imageSharingMode = vk::SharingMode::eExclusive;
-		swapChainCreateInfo.queueFamilyIndexCount = 0;
-		swapChainCreateInfo.pQueueFamilyIndices = nullptr;
-		swapChainCreateInfo.preTransform = preTransform;
-		swapChainCreateInfo.compositeAlpha = compositeAlpha;
-		swapChainCreateInfo.presentMode = swapchainPresentMode;
-		swapChainCreateInfo.clipped = VK_TRUE;
-		swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
-
-		m_swapchain = m_rhi.getDevice().createSwapchainKHR(swapChainCreateInfo, m_rhi.getAllocationCallbacks());
-
-
-		// Image取得
-		auto images = m_swapchain.getImages();
-		m_images.insert(m_images.begin(), images.begin(), images.end());
-
-		// ImageView生成
-		for (auto [index,image] : Indexed(images)) {
-
-			vk::ImageViewCreateInfo imageViewCreateInfo;
-			imageViewCreateInfo.flags = {};
-			imageViewCreateInfo.image = image;
-			imageViewCreateInfo.viewType = vk::ImageViewType::e2D;
-			imageViewCreateInfo.format = surfaceFormat->format;
-			imageViewCreateInfo.components.r = vk::ComponentSwizzle::eIdentity;
-			imageViewCreateInfo.components.g = vk::ComponentSwizzle::eIdentity;
-			imageViewCreateInfo.components.b = vk::ComponentSwizzle::eIdentity;
-			imageViewCreateInfo.components.a = vk::ComponentSwizzle::eIdentity;
-			imageViewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-			imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-			imageViewCreateInfo.subresourceRange.levelCount = 1;
-			imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-			imageViewCreateInfo.subresourceRange.layerCount = 1;
-
-			m_imageViews2.emplace_back(m_rhi.getDevice().createImageView(imageViewCreateInfo, m_rhi.getAllocationCallbacks()));
-			m_imageViews.push_back(m_imageViews2.back());
-			
-		}
-
-		createResources(rhi);
-
-		// m_fenceの生成
-		vk::FenceCreateInfo fenceInfo;
-		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
-		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
-
-		m_rhi.setName(m_surface, m_desc.name);
-		m_rhi.setName(m_swapchain, m_desc.name);
-		m_rhi.setName(m_fence, m_desc.name);
+		m_desc.window.addEventListener(m_hEvent, { *this,&VulkanSwapChain::onWindowChanged });
 
 		manage();
 	}
@@ -183,6 +58,9 @@ namespace ob::rhi {
 
 	//! @brief 更新 
 	void VulkanSwapChain::update(vk::Queue queue) {
+
+		if (m_closed) return;
+		if (!m_visible) return;
 
 		if (!m_desc.window.isValid())return;
 
@@ -234,8 +112,6 @@ namespace ob::rhi {
 		}
 
 		if(auto impl = cmdList.cast<VulkanCommandList>()) {
-
-			cmdList->pushMarker("Apply SwapChain");
 
 			vk::CommandBuffer commandBuffer = impl->getNative();
 
@@ -289,14 +165,151 @@ namespace ob::rhi {
 			m_cache.addTexture(m_images[m_imageViews.index()], vk::ImageLayout::eUndefined, vk::ImageLayout::ePresentSrcKHR, vk::ImageAspectFlagBits::eColor);
 			m_cache.recordCommand(commandBuffer);
 
-			cmdList->popMarker();
 		}
 
 	}
 
 
+
+	void VulkanSwapChain::createBuffer() {
+
+		// デバイスごとのサーフェイス生成
+#ifdef OS_WINDOWS
+		vk::Win32SurfaceCreateInfoKHR info;
+		info.hinstance = GetModuleHandle(nullptr);
+		info.hwnd = (HWND)m_desc.window.getHandle();
+
+		m_surface = m_rhi.getInstance().createWin32SurfaceKHR(info, m_rhi.getAllocationCallbacks());
+#else
+		static_assert(true, "Surface is not implemented.");
+#endif
+
+		// サーフェイスのサポートをチェック
+		if (!m_rhi.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
+			throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
+		}
+
+		// サーフェスの機能を取得
+		auto capabilities = m_rhi.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
+		auto surfaceFormats = m_rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
+		auto presentModeList = m_rhi.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
+
+
+		vk::Extent2D size;
+		size.width = std::clamp<u32>(m_desc.size.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+		size.height = std::clamp<u32>(m_desc.size.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+
+		if (m_desc.size.width != 0 && m_desc.size.height != 0) {
+			size.width = m_desc.size.width;
+			size.height = m_desc.size.height;
+		}
+		else if (m_desc.window) {
+			size.width = m_desc.window.getSize().x;
+			size.height = m_desc.window.getSize().y;
+			// size = capabilities.currentExtent;
+		}
+		else {
+			throw Exception("ウィンドウが指定されていません。");
+		}
+
+		// サイズをクランプ
+		size.width = std::clamp(size.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+		size.height = std::clamp(size.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+
+
+
+		vk::PresentModeKHR swapchainPresentMode = vk::PresentModeKHR::eFifo;
+
+		vk::SurfaceTransformFlagBitsKHR preTransform =
+			(capabilities.supportedTransforms & vk::SurfaceTransformFlagBitsKHR::eIdentity)
+			? vk::SurfaceTransformFlagBitsKHR::eIdentity
+			: capabilities.currentTransform;
+
+		vk::CompositeAlphaFlagBitsKHR compositeAlpha =
+			(capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePreMultiplied) ? vk::CompositeAlphaFlagBitsKHR::ePreMultiplied
+			: (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::ePostMultiplied) ? vk::CompositeAlphaFlagBitsKHR::ePostMultiplied
+			: (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit) ? vk::CompositeAlphaFlagBitsKHR::eInherit
+			: vk::CompositeAlphaFlagBitsKHR::eOpaque;
+
+
+		auto format = TypeConverter::Convert(m_desc.format);
+		Optional<vk::SurfaceFormatKHR> surfaceFormat;
+		for (auto& item : surfaceFormats) {
+			if (item.format == format) {
+				surfaceFormat = item;
+				break;
+			}
+		}
+		if (!surfaceFormat) {
+			LOG_ERROR("サーフェスフォーマットが見つかりません。");
+			throw Exception();;
+		}
+
+		// サーフェイス生成
+		vk::SwapchainCreateInfoKHR swapChainCreateInfo;
+		swapChainCreateInfo.flags = {};
+		swapChainCreateInfo.surface = m_surface;
+		swapChainCreateInfo.minImageCount = capabilities.minImageCount;
+		swapChainCreateInfo.imageFormat = surfaceFormat->format;
+		swapChainCreateInfo.imageColorSpace = surfaceFormat->colorSpace;
+		swapChainCreateInfo.imageExtent.width = m_desc.size.width;
+		swapChainCreateInfo.imageExtent.height = m_desc.size.height;
+		swapChainCreateInfo.imageArrayLayers = 1;
+		swapChainCreateInfo.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
+		swapChainCreateInfo.imageSharingMode = vk::SharingMode::eExclusive;
+		swapChainCreateInfo.queueFamilyIndexCount = 0;
+		swapChainCreateInfo.pQueueFamilyIndices = nullptr;
+		swapChainCreateInfo.preTransform = preTransform;
+		swapChainCreateInfo.compositeAlpha = compositeAlpha;
+		swapChainCreateInfo.presentMode = swapchainPresentMode;
+		swapChainCreateInfo.clipped = VK_TRUE;
+		swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
+
+		m_swapchain = m_rhi.getDevice().createSwapchainKHR(swapChainCreateInfo, m_rhi.getAllocationCallbacks());
+
+
+		// Image取得
+		auto images = m_swapchain.getImages();
+		m_images.insert(m_images.begin(), images.begin(), images.end());
+
+		// ImageView生成
+		for (auto [index, image] : Indexed(images)) {
+
+			vk::ImageViewCreateInfo imageViewCreateInfo;
+			imageViewCreateInfo.flags = {};
+			imageViewCreateInfo.image = image;
+			imageViewCreateInfo.viewType = vk::ImageViewType::e2D;
+			imageViewCreateInfo.format = surfaceFormat->format;
+			imageViewCreateInfo.components.r = vk::ComponentSwizzle::eIdentity;
+			imageViewCreateInfo.components.g = vk::ComponentSwizzle::eIdentity;
+			imageViewCreateInfo.components.b = vk::ComponentSwizzle::eIdentity;
+			imageViewCreateInfo.components.a = vk::ComponentSwizzle::eIdentity;
+			imageViewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+			imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+			imageViewCreateInfo.subresourceRange.levelCount = 1;
+			imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+			imageViewCreateInfo.subresourceRange.layerCount = 1;
+
+			m_imageViews2.emplace_back(m_rhi.getDevice().createImageView(imageViewCreateInfo, m_rhi.getAllocationCallbacks()));
+			m_imageViews.push_back(m_imageViews2.back());
+
+		}
+
+		m_rhi.setName(m_surface, m_desc.name);
+		m_rhi.setName(m_swapchain, m_desc.name);
+	}
+
+	void VulkanSwapChain::clearBuffer() {
+		m_images.clear();
+		m_imageViews2.clear();
+		m_imageViews.clear();
+		m_swapchain.clear();
+		m_surface.clear();
+	}
+
+
 	// !@brief      applyに必要なリソースを生成
-	void VulkanSwapChain::createResources(VulkanRHI& rhi) {
+	void VulkanSwapChain::createResources() {
 
 		{
 			Vec2 vertices[] = {
@@ -316,7 +329,7 @@ namespace ob::rhi {
 		{
 			SamplerDesc desc;
 			desc.name = m_desc.name + "_Sampler";
-			m_bindedSampler = rhi.createSampler(desc);
+			m_bindedSampler = m_rhi.createSampler(desc);
 		}
 
 		Ref<Shader> vs;
@@ -391,6 +404,13 @@ namespace ob::rhi {
 		m_signature = signature;
 		m_pipeline = pipeline;
 
+
+		// m_fenceの生成
+		vk::FenceCreateInfo fenceInfo;
+		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
+		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
+
+		m_rhi.setName(m_fence, m_desc.name);
 	}
 
 
@@ -399,16 +419,23 @@ namespace ob::rhi {
 
 		if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
 			if (!args.isSizing) {
+				if (m_desc.size.width != args.newSize.x || m_desc.size.height != args.newSize.y) {
 
-				m_desc.size.width = (s32)args.newSize.x;
-				m_desc.size.height = (s32)args.newSize.y;
+					auto oldSize = m_desc.size;
 
-				// TODO 旧リソースを解放
+					m_desc.size.width = (s32)args.newSize.x;
+					m_desc.size.height = (s32)args.newSize.y;
 
-				// TODO リサイズ
+					m_rhi.clearCommands();
 
-				m_notifier.invoke();
+					clearBuffer();
+					createBuffer();
 
+					LOG_TRACE("スワップチェーンをリサイズ ({},{}) -> ({},{})", oldSize.width, oldSize.height, m_desc.size.width, m_desc.size.height);
+
+					m_notifier.invoke();
+
+				}
 			}
 		}
 
@@ -418,6 +445,10 @@ namespace ob::rhi {
 		if (args.type == platform::WindowEventType::Maximize || args.type == platform::WindowEventType::Move) {
 			m_visible = true;
 		}
+
+		if(args.type == platform::WindowEventType::Close) {
+			m_closed = true;
+		}	
 
 	}
 

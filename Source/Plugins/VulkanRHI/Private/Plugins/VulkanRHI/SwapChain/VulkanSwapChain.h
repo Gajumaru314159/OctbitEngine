@@ -6,6 +6,7 @@
 #include <Framework/RHI/SwapChain.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/Core/Utility/Swapper.h>
+#include <Framework/Platform/Type/SystemEventType.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
 namespace ob::rhi {
@@ -37,7 +38,11 @@ namespace ob::rhi {
 
 	private:
 
-		void createResources(VulkanRHI& rhi);
+		void createResources();
+
+		void createBuffer();
+
+		void clearBuffer();
 
 		void onWindowChanged(const platform::WindowEventArgs& args);
 
@@ -62,10 +67,15 @@ namespace ob::rhi {
 		Ref<Sampler>                m_bindedSampler;
 		Ref<DescriptorTable>        m_table;
 
-		bool						m_visible = false;	
+		bool						m_visible = true;	
 
 		VulkanResourceStateCache	m_cache;
 
 		SwapChainEventNotifier        m_notifier;
+
+		platform::WindowEventHandle m_hEvent;
+
+		bool m_firstTimeTest = true;
+		bool m_closed = false;
 	};
 }
