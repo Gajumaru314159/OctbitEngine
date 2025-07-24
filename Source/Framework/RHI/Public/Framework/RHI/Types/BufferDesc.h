@@ -133,11 +133,12 @@ namespace ob::rhi {
 		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc Constant(
 			u64				size,
+			BufferState		initialState = BufferState::Constant,
 			BufferFlags     flags = BufferFlag::Constant
 		)
 		{
 			return BufferDesc(
-				BufferState::Constant,
+				initialState,
 				align_up(size, 256),
 				0,
 				flags
@@ -148,13 +149,31 @@ namespace ob::rhi {
 		//! @details サイズが256の倍数になるように調整されます。
 		static BufferDesc ByteAddress(
 			u64				size,
+			BufferState		initialState = BufferState::ShaderResource,
 			BufferFlags     flags = BufferFlag::ShaderResource
 		)
 		{
 			return BufferDesc(
-				BufferState::ShaderResource,
+				initialState,
 				size,
 				0,
+				flags
+			);
+		}
+
+		//! @brief  ByteAddressバッファ用初期化
+		//! @details サイズが256の倍数になるように調整されます。
+		template<typename T>
+		static BufferDesc Structured(
+			u64				count,
+			BufferState		initialState = BufferState::ShaderResource,
+			BufferFlags     flags = BufferFlag::ShaderResource | BufferFlag::UnorderedAccess
+		)
+		{
+			return BufferDesc(
+				initialState,
+				count * sizeof(T),
+				sizeof(T),
 				flags
 			);
 		}
