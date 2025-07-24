@@ -16,6 +16,7 @@
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/PipelineState/VulkanPipelineState.h>
+#include <Plugins/VulkanRHI/PipelineState/VulkanComputePipelineState.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHeap.h>
 #include <Framework/Core/Misc/ErrorCode.h>
@@ -565,6 +566,12 @@ namespace ob::rhi {
 	//! @brief  パイプラインステートを生成
 	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
 		SAFE_CREATE(PipelineState, VulkanPipelineState,*this, desc);
+	}
+
+
+	//! @brief  コンピュートパイプラインステートを生成
+	Ref<ComputePipelineState> VulkanRHI::createComputePipelineState(const ComputePipelineStateDesc& desc) {
+		SAFE_CREATE(ComputePipelineState, VulkanComputePipelineState, *this, desc);
 	}
 
 

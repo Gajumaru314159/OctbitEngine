@@ -10,6 +10,7 @@
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 #include <Plugins/DirectX12RHI/PipelineState/DirectX12PipelineState.h>
+#include <Plugins/DirectX12RHI/PipelineState/DirectX12ComputePipelineState.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Shader/DirectX12Shader.h>
 #include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
@@ -194,6 +195,14 @@ namespace ob::rhi {
 	//! @brief  パイプラインステートを生成
 	Ref<PipelineState> DirectX12RHI::createPipelineState(const PipelineStateDesc& desc) {
 		SAFE_CREATE(PipelineState, DirectX12PipelineState, *this, desc);
+	}
+
+
+	//! @brief  コンピュートパイプラインステートを生成
+	Ref<ComputePipelineState> DirectX12RHI::createComputePipelineState(const ComputePipelineStateDesc& desc) {
+		Ref<ComputePipelineState> p = new DirectX12ComputePipelineState(*this, desc);
+		if (p.cast<DirectX12ComputePipelineState>()->isValid() == false) p = {}; 
+		return p;;
 	}
 
 

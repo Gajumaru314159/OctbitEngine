@@ -15,6 +15,7 @@
 #include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 #include <Framework/RHI/Types/DescriptorTableDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
+#include <Framework/RHI/Types/ComputePipelineStateDesc.h>
 #include <Framework/RHI/Types/RenderPassDesc.h>
 #include <Framework/RHI/Types/RenderTextureDesc.h>
 #include <Framework/RHI/Types/RootSignatureDesc.h>
@@ -59,6 +60,7 @@ namespace ob::rhi {
 
         virtual Ref<RootSignature>          createRootSignature(const RootSignatureDesc& desc) { return nullptr; }
         virtual Ref<PipelineState>          createPipelineState(const PipelineStateDesc& desc) { return nullptr; }
+        virtual Ref<ComputePipelineState>   createComputePipelineState(const ComputePipelineStateDesc& desc) { return nullptr; }
 
         virtual Ref<Buffer>                 createBuffer(const BufferDesc& desc) { return nullptr; }
         virtual Ref<Buffer>                 createBuffer(const BufferViewDesc& desc) { return nullptr; }
