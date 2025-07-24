@@ -63,6 +63,7 @@ var hierarchy =
     [ "ob::core::ComponentHolder< T >", "d8/d9b/classob_1_1core_1_1_component_holder.html", null ],
     [ "ob::core::ComponentManager< T >", "dd/d01/classob_1_1core_1_1_component_manager.html", null ],
     [ "ob::core::Compression", "d1/d75/classob_1_1core_1_1_compression.html", null ],
+    [ "ob::rhi::ComputePipelineStateDesc", "dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html", null ],
     [ "std::conjunction", null, [
       [ "ob::engine2::ECS::is_all_component< TCompoennts >", "db/dec/structob_1_1engine2_1_1_e_c_s_1_1is__all__component.html", null ]
     ] ],
@@ -337,6 +338,7 @@ var hierarchy =
       [ "ob::rhi::GraphicObject", "d6/d98/classob_1_1rhi_1_1_graphic_object.html", [
         [ "ob::rhi::Buffer", "d1/db5/classob_1_1rhi_1_1_buffer.html", null ],
         [ "ob::rhi::CommandList", "d3/dc1/classob_1_1rhi_1_1_command_list.html", null ],
+        [ "ob::rhi::ComputePipelineState", "d1/def/classob_1_1rhi_1_1_compute_pipeline_state.html", null ],
         [ "ob::rhi::DescriptorLayout", "da/d25/classob_1_1rhi_1_1_descriptor_layout.html", null ],
         [ "ob::rhi::DescriptorTable", "d0/d2e/classob_1_1rhi_1_1_descriptor_table.html", null ],
         [ "ob::rhi::PipelineState", "de/db3/classob_1_1rhi_1_1_pipeline_state.html", null ],

@@ -346,6 +346,8 @@ var annotated_dup =
         [ "ClearColor", "d6/d21/structob_1_1rhi_1_1_clear_color.html", null ],
         [ "CommandList", "d3/dc1/classob_1_1rhi_1_1_command_list.html", "d3/dc1/classob_1_1rhi_1_1_command_list" ],
         [ "CommandListDesc", "d7/db1/structob_1_1rhi_1_1_command_list_desc.html", "d7/db1/structob_1_1rhi_1_1_command_list_desc" ],
+        [ "ComputePipelineState", "d1/def/classob_1_1rhi_1_1_compute_pipeline_state.html", null ],
+        [ "ComputePipelineStateDesc", "dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html", "dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc" ],
         [ "CopyTextureParam", "db/db1/structob_1_1rhi_1_1_copy_texture_param.html", "db/db1/structob_1_1rhi_1_1_copy_texture_param" ],
         [ "DepthStencilDesc", "d5/d51/structob_1_1rhi_1_1_depth_stencil_desc.html", "d5/d51/structob_1_1rhi_1_1_depth_stencil_desc" ],
         [ "DescriptorLayout", "da/d25/classob_1_1rhi_1_1_descriptor_layout.html", null ],
