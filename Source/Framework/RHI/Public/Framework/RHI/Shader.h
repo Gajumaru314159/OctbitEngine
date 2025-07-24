@@ -54,6 +54,7 @@ namespace ob::rhi {
         static Ref<Shader> Compile(const String& code, ShaderStage stage);
         static Ref<Shader> CompileVS(const String& code);
         static Ref<Shader> CompilePS(const String& code);
+        static Ref<Shader> CompileCS(const String& code);
         //! @}
 
         //! @brief          シェーダバイナリをロード

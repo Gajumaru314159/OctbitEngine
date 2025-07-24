@@ -55,6 +55,9 @@ namespace ob::rhi {
     Ref<Shader> Shader::CompilePS(const String& code) {
         return Shader::Compile(code, ShaderStage::Pixel);
     }
+    Ref<Shader> Shader::CompileCS(const String& code) {
+        return Shader::Compile(code, ShaderStage::Compute);
+    }
 
 
 
