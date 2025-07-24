@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmake:*)",
+      "Bash(./Build/bin/RHI-test.exe:*)"
+    ],
+    "deny": []
+  }
+}
