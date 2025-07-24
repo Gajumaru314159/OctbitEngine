@@ -59,6 +59,11 @@ namespace ob::rhi {
 	//! @brief 更新 
 	void VulkanSwapChain::update(vk::Queue queue) {
 
+		// TODO SwapChainのupdateが初回の描画より前だった場合SwapChainがPreset状態ではないのでスキップ
+		if (m_firstTimeTest) {
+			m_firstTimeTest = false;
+			return;
+		}
 		if (m_closed) return;
 		if (!m_visible) return;
 
