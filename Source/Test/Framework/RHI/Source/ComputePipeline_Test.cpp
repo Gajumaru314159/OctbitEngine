@@ -11,7 +11,6 @@ using namespace ob::rhi;
 
 static const char* s_computeCode =
 R"(
-    // コンピュートシェーダー - シンプルなデータ処理テスト
     [[vk::binding(0, 0)]] RWStructuredBuffer<float4> inputBuffer;
     [[vk::binding(1, 0)]] RWStructuredBuffer<float4> outputBuffer;
 
@@ -19,8 +18,7 @@ R"(
     void CS_Main(uint3 DTid : SV_DispatchThreadID) {
         uint index = DTid.x;
         
-        // シンプルな計算: 入力を2倍して1を加算
-        if (index < 1024) {  // 境界チェック
+        if (index < 1024) {
             outputBuffer[index] = inputBuffer[index] * 2.0f + float4(1.0f, 1.0f, 1.0f, 1.0f);
         }
     }
@@ -28,7 +26,6 @@ R"(
 
 static const char* s_simpleComputeCode =
 R"(
-    // シンプルなコンピュートシェーダー - 基本機能テスト
     [[vk::binding(0, 0)]] RWStructuredBuffer<float4> buffer;
 
     [numthreads(1, 1, 1)]
@@ -171,4 +168,53 @@ TYPED_TEST(RHITest, ComputePipelineState_CreateComplex) {
 
     auto computePipelineState = ComputePipelineState::Create(desc);
     EXPECT_TRUE(computePipelineState != nullptr) << "Complex ComputePipelineState creation failed";
+}
+
+
+TYPED_TEST(RHITest, ComputePipelineState_Readback) {
+    
+    auto code =R"(
+        [[vk::binding(0, 0)]] RWStructuredBuffer<int> buffer : register(u0);
+
+        [numthreads(1, 1, 1)]
+        void CS_Main(uint3 DTid : SV_DispatchThreadID) {
+            buffer[DTid.x] = buffer[DTid.x] + 1;
+        }
+    )";
+
+    Ref<DescriptorLayout> layout = DescriptorLayout::Create({Binding::RWStructuredBuffer(0)});
+	Ref<DescriptorTable> table = DescriptorTable::Create({ layout });
+    Ref<RootSignature> signature = RootSignature::Create({ layout });
+
+    ComputePipelineStateDesc desc;
+    desc.cs = Shader::CompileCS(code);
+	desc.rootSignature = signature;
+
+	Ref<ComputePipelineState> pipeline = ComputePipelineState::Create(desc);
+
+    Ref<Buffer> buffer = Buffer::Create(BufferDesc::Structured<Vec4>(1024));
+    buffer->update([](void* p) { for (s32 i = 0; i < 1024;++i) reinterpret_cast<int*>(p)[i] = i; });
+	table->setResource(0, buffer);
+
+
+    /*
+    Ref<CommandList> cmdList = CommandList::Create();
+    cmdList->setComputePipelineState(pipeline);
+    cmdList->setRootDesciptorTable({ {table, 0} });
+    // ディスパッチ
+    DispatchParam dispatch;
+    dispatch.groupCountX = 1;
+    dispatch.groupCountY = 1;
+    dispatch.groupCountZ = 1;
+    cmdList->dispatch(dispatch);
+    // コマンドを実行
+    cmdList->execute();
+    // 結果の読み取り
+    buffer->readback([](const void* p) {
+        for (s32 i = 0; i < 1024; ++i) {
+            EXPECT_EQ(reinterpret_cast<const int*>(p)[i], i + 1);
+        }
+		});
+    */
+
 }
