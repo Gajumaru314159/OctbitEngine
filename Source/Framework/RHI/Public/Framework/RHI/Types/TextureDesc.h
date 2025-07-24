@@ -36,7 +36,7 @@ namespace ob::rhi {
         Common,
         ShaderResource,
         UnorderedAccess,
-        RenderTargtet,
+        RenderTarget,
         DepthRead,
         DepthWrite,
         CopyDest,
