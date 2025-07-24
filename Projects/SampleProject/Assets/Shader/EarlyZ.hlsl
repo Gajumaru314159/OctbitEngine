@@ -64,7 +64,7 @@ struct RootConstant {
 #if defined(VULKAN)
 #define ROOT_CONSTANT(type,name)	[[vk::push_constant]] type name
 #elif defined(D3D)
-#define								ConstantBuffer<type> name : register(b0)
+#define	ROOT_CONSTANT(type,name)	ConstantBuffer<type> name : register(b0)
 #endif
 
 ROOT_CONSTANT(RootConstant,rc);
