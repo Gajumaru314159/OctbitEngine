@@ -381,8 +381,12 @@ namespace ob::rhi {
 		info.subresourceRange.levelCount = m_desc.mipLevels * std::max(m_desc.arrayNum,1);
 		info.subresourceRange.baseArrayLayer = 0;
 		info.subresourceRange.layerCount = 1;
-		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+
 		if (m_desc.type == TextureType::Cube) info.subresourceRange.levelCount *= 6;
+
+		// Depthの場合はAspectMaskを変更
+		if (TextureFormatUtility::HasDepth(m_desc.format)) info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
+
 		view = m_rhi.getDevice().createImageView(info);
 
 		return true;
