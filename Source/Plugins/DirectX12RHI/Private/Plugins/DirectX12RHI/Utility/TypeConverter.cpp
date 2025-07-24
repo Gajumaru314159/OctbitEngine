@@ -450,7 +450,7 @@ namespace ob::rhi
 		case TextureState::Common:         return D3D12_RESOURCE_STATE_COMMON;
 		case TextureState::ShaderResource: return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
 		case TextureState::UnorderedAccess:return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-		case TextureState::RenderTargtet:  return D3D12_RESOURCE_STATE_RENDER_TARGET;
+		case TextureState::RenderTarget:  return D3D12_RESOURCE_STATE_RENDER_TARGET;
 		case TextureState::DepthRead:     return D3D12_RESOURCE_STATE_DEPTH_READ;
 		case TextureState::DepthWrite:    return D3D12_RESOURCE_STATE_DEPTH_WRITE;
 		case TextureState::CopySource:     return D3D12_RESOURCE_STATE_COPY_SOURCE;

@@ -243,7 +243,7 @@ namespace ob::rhi {
 		case TextureState::Common:			return vk::ImageLayout::eUndefined;
 		case TextureState::ShaderResource:	return vk::ImageLayout::eShaderReadOnlyOptimal;
 		case TextureState::UnorderedAccess:	return vk::ImageLayout::eGeneral;
-		case TextureState::RenderTargtet:	return vk::ImageLayout::eColorAttachmentOptimal;
+		case TextureState::RenderTarget:	return vk::ImageLayout::eColorAttachmentOptimal;
 		case TextureState::DepthRead:		return vk::ImageLayout::eDepthStencilReadOnlyOptimal;
 		case TextureState::DepthWrite:		return vk::ImageLayout::eDepthStencilAttachmentOptimal;
 		case TextureState::CopySource:		return vk::ImageLayout::eTransferSrcOptimal;

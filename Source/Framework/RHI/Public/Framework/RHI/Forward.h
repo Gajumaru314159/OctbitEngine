@@ -19,6 +19,7 @@ namespace ob::rhi {
 	struct ShaderCompileDesc;
 	struct RootSignatureDesc;
 	struct PipelineStateDesc;
+	struct ComputePipelineStateDesc;
 	struct BindingSlot;
 
 	// クラス
@@ -29,6 +30,7 @@ namespace ob::rhi {
 	class DescriptorLayout;
 	class SwapChain;
 	class PipelineState;
+	class ComputePipelineState;
 	class RenderTexture;
 	class RootSignature;
 	class Shader;

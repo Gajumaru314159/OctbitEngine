@@ -13,6 +13,7 @@
 #include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/PipelineState.h>
+#include <Framework/RHI/ComputePipelineState.h>
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>

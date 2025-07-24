@@ -34,6 +34,8 @@ namespace ob::rhi {
             if (auto manager = GraphicObjectManager::Get()) {
                 manager->requestRelease(*this);
             }
+        } else {
+            delete this;
         }
     }
 

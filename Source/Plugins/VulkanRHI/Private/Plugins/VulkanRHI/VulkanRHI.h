@@ -75,6 +75,10 @@ namespace ob::rhi {
 		Ref<PipelineState> createPipelineState(const PipelineStateDesc& desc) override;
 
 
+		//! @brief  コンピュートパイプラインステートを生成
+		Ref<ComputePipelineState> createComputePipelineState(const ComputePipelineStateDesc& desc) override;
+
+
 		//! @brief  テクスチャを生成
 		Ref<Texture> createTexture(const TextureDesc& desc) override;
 
