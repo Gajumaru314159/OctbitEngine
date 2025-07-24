@@ -166,7 +166,7 @@ namespace ob::rhi {
         if (FAILED(result)) {
             LOG_ERROR_EX("Graphic", "シェーダコンパイルに失敗しました {}", ErrorCode(result));
             printArgs();
-            return;
+            throw Exception("シェーダーバイナリの取得に失敗しました");
         }
 
         // エラーチェック
@@ -183,7 +183,7 @@ namespace ob::rhi {
         if (FAILED(resultBlob->GetStatus(&blobStatus)) || FAILED(blobStatus))
         {
             LOG_ERROR_EX("Graphic", "シェーダコンパイルに失敗しました\n{}", errorMessage);
-            return;
+            throw Exception("シェーダーバイナリの取得に失敗しました");
         } else if (!errorMessage.empty()) {
             LOG_WARNING_EX("Graphic", "シェーダコンパイル時に警告が発生しています\n{}", errorMessage);
         }
