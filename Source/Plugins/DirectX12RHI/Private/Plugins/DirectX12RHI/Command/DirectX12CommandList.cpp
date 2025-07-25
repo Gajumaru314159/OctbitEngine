@@ -352,7 +352,7 @@ namespace ob::rhi {
 
 
 	//! @brief      デスクリプタテーブルを設定
-	void DirectX12CommandList::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
+	void DirectX12CommandList::setDescriptorTables(const SetDescriptorTableParam* params, s32 num) {
 		OB_ASSERT(m_signature!=nullptr,"先にPipelineStateを設定してください");
 
 		for (s32 i = 0; i < num; ++i) {

@@ -386,7 +386,7 @@ namespace ob::graphics {
 			SetDescriptorTableParam param;
 			param.slot = slot;
 			param.table = m_table;
-			commandList->setRootDesciptorTable(&param,1);
+			commandList->setDescriptorTables(&param,1);
 
 		}
 

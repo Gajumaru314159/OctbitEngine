@@ -405,7 +405,7 @@ namespace ob::rhi {
 			cmdList.setPipelineState(m_pipeline);
 
 			SetDescriptorTableParam tableParam(m_bindedTextureTable, 0);
-			cmdList.setRootDesciptorTable(&tableParam, 1);
+			cmdList.setDescriptorTables(&tableParam, 1);
 
 			cmdList.setVertexBuffer(m_verices);
 

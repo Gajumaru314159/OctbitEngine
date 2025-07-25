@@ -79,7 +79,7 @@ namespace ob::rhi {
 
 
         //! @brief      デスクリプタ・テーブルを設定
-        void setRootDesciptorTable(const rhi::SetDescriptorTableParam*, s32 num) override;
+        void setDescriptorTables(const rhi::SetDescriptorTableParam*, s32 num) override;
 
 
         //! @brief      ルート定数を設定

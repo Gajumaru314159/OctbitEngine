@@ -45,7 +45,7 @@ namespace ob::rhi {
         // setBlendFactor
         // setStencilRef
 
-        virtual void setRootDesciptorTable(const SetDescriptorTableParam*, s32 num) = 0;
+        virtual void setDescriptorTables(const SetDescriptorTableParam*, s32 num) = 0;
         // void setRootDescriptor();
         virtual void setRootConstant(const SetRootConstantsParam&) = 0;
 

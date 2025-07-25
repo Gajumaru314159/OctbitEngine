@@ -155,7 +155,7 @@ namespace ob::rhi {
 				{m_table, 0}
 			};
 
-			cmdList->setRootDesciptorTable(tableParam, std::size(tableParam));
+			cmdList->setDescriptorTables(tableParam, std::size(tableParam));
 
 			cmdList->setVertexBuffer(m_verices);
 

@@ -336,7 +336,7 @@ namespace ob::rhi {
 
 
 	//! @brief      デスクリプタテーブルを設定
-	void VulkanCommandList::setRootDesciptorTable(const rhi::SetDescriptorTableParam* params, s32 num) {
+	void VulkanCommandList::setDescriptorTables(const rhi::SetDescriptorTableParam* params, s32 num) {
 
 		auto pipeline = m_pipeline.cast<VulkanPipelineState>();
 		OB_ASSERT(pipeline != nullptr, "先にPipelineStateを設定してください");

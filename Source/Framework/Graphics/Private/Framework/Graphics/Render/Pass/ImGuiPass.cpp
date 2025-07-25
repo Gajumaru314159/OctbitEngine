@@ -843,7 +843,7 @@ namespace ob::graphics {
 				cmdList->setIndexBuffer(imgui.m_indexBuffer);
 
 				rhi::SetDescriptorTableParam param = { imgui.m_table,0 };
-				cmdList->setRootDesciptorTable(&param, 1);
+				cmdList->setDescriptorTables(&param, 1);
 
 
 				for (auto& cmd : imgui.m_commands) {
@@ -854,7 +854,7 @@ namespace ob::graphics {
 					};
 
 					cmdList->setScissorRect(&cmd.rect, 1);
-					cmdList->setRootDesciptorTable(tables, std::size(tables));
+					cmdList->setDescriptorTables(tables, std::size(tables));
 					cmdList->drawIndexed(cmd.param);
 				}
 

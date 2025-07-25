@@ -279,7 +279,7 @@ PsOut PS_Main(PsIn i) {
 				Array<SetDescriptorTableParam, 1> params = {
 					SetDescriptorTableParam(dt,0),
 				};
-				cmdList->setRootDesciptorTable(params.data(), params.size());
+				cmdList->setDescriptorTables(params.data(), params.size());
 
 				DrawIndexedParam param{};
 				param.indexCount = indices.size();
