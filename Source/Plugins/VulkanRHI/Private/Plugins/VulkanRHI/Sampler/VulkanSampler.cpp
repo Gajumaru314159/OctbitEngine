@@ -3,13 +3,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
 namespace ob::rhi {
 
 	//! @brief コンストラクタ 
-	VulkanSampler::VulkanSampler(VulkanRHI& rhi, const SamplerDesc& desc)
+	VulkanSampler::VulkanSampler(VulkanDevice& rhi, const SamplerDesc& desc)
 	{
 		m_name = desc.name;
 		vk::SamplerCreateInfo info;

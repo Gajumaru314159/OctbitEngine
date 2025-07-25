@@ -10,7 +10,7 @@ namespace ob::rhi {
 
     //! @brief  生成
     Ref<SwapChain> SwapChain::Create(const SwapChainDesc& desc) {
-        if (auto rhi= RHI::Get()) {
+        if (auto rhi= Device::Get()) {
             return rhi->createSwapChain(desc);
         }
         return nullptr;

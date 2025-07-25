@@ -189,7 +189,7 @@ PsOut PS_Main(PsIn i) {
 			cmdList->end();
 			cmdList->flush();
 
-			RHI::Get()->update();
+			Device::Get()->update();
 			swapChain->update();
 
 			Thread::Sleep(33);

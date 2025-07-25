@@ -4,15 +4,15 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
 namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	VulkanBufferUploader::VulkanBufferUploader(VulkanRHI& rhi, size_t blockSize)
-		: m_rhi(rhi)
+	VulkanBufferUploader::VulkanBufferUploader(VulkanDevice& device, size_t blockSize)
+		: m_device(device)
 	{
 		// Vulkanは256バイトのアラインメント制限はないがプラットフォームごとの差異を減らすため256バイトでアラインメントを取る
 		m_blockSize = align_up(blockSize, 256);
@@ -95,8 +95,8 @@ namespace ob::rhi
 
 		auto& block = frame.blocks.emplace_back();
 
-		auto& device = m_rhi.getDevice();
-		auto allocationCallbacks = m_rhi.getAllocationCallbacks();
+		auto& device = m_device.getDevice();
+		auto allocationCallbacks = m_device.getAllocationCallbacks();
 
 		// 転送用バッファを生成
 		vk::BufferCreateInfo info;
@@ -107,15 +107,15 @@ namespace ob::rhi
 		block.buffer = device.createBuffer(info, allocationCallbacks);
 
 		// メモリ確保
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(block.buffer.getMemoryRequirements(), vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+		VkMemoryAllocateInfo allocInfo = m_device.getAllocationInfo(block.buffer.getMemoryRequirements(), vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
 		block.memory = device.allocateMemory(allocInfo, allocationCallbacks);
 
 		// バインド
 		block.buffer.bindMemory(block.memory, 0);
 
-		m_rhi.setName(block.buffer, "BufferUploader");
-		m_rhi.setName(block.memory, "BufferUploader");
+		m_device.setName(block.buffer, "BufferUploader");
+		m_device.setName(block.memory, "BufferUploader");
 
 		// 一次バッファ生成
 		block.blob.reserve(m_blockSize);
@@ -147,7 +147,7 @@ namespace ob::rhi
 
 		auto& frame = m_frames.current();
 
-		auto& device = m_rhi.getDevice();
+		auto& device = m_device.getDevice();
 
 		// アップロードバッファにデータをコピー
 		for (s32 i = 0; i <= frame.blockIndex; ++i) {

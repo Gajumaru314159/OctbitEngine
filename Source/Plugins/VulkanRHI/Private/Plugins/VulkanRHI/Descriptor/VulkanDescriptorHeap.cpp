@@ -4,7 +4,7 @@
 //***********************************************************
 #pragma once
 #include "VulkanDescriptorHeap.h"
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHandle.h>
 
 namespace ob::rhi {
@@ -14,7 +14,7 @@ namespace ob::rhi {
 	//! @param device   デバイス
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
-	VulkanDescriptorHeap::VulkanDescriptorHeap(VulkanRHI& device, s32 resourceCapacity, s32 samplerCapacity)
+	VulkanDescriptorHeap::VulkanDescriptorHeap(VulkanDevice& device, s32 resourceCapacity, s32 samplerCapacity)
 		: m_resourceMapper(resourceCapacity)
 		, m_samplerMapper(samplerCapacity)
 	{

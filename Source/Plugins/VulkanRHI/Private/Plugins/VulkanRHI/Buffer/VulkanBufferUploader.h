@@ -9,7 +9,7 @@
 
 namespace ob::rhi {
 
-	class VulkanRHI;
+	class VulkanDevice;
 
     //! @brief  バッファ・アップローダー
     //! 
@@ -20,7 +20,7 @@ namespace ob::rhi {
     class VulkanBufferUploader {
     public:
 
-        VulkanBufferUploader(VulkanRHI& device,size_t blockSize);
+        VulkanBufferUploader(VulkanDevice& device,size_t blockSize);
 
         void add(BlobView blob, vk::raii::Buffer& dest, size_t offset, vk::AccessFlags postAccessFlags);
         void add(const Buffer::CopyFunc& func,size_t size,vk::raii::Buffer& dest,size_t offset, vk::AccessFlags postAccessFlags);
@@ -78,7 +78,7 @@ namespace ob::rhi {
 
     private:
 
-        VulkanRHI& m_rhi;
+        VulkanDevice& m_device;
 
 		size_t m_blockSize;
 

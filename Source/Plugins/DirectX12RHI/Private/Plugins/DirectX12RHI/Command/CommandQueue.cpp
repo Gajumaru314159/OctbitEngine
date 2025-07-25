@@ -4,14 +4,14 @@
 //***********************************************************
 #include <Plugins/DirectX12RHI/Command/CommandQueue.h>
 #include <Plugins/DirectX12RHI/Command/DirectX12CommandList.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	CommandQueue::CommandQueue(DirectX12RHI& device) 
+	CommandQueue::CommandQueue(DirectX12Device& device) 
 		:m_fenceVal(0)
 	{
 		HRESULT result;

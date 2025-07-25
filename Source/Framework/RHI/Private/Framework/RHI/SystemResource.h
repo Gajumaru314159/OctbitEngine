@@ -27,7 +27,7 @@ namespace ob::rhi {
 	public:
 
 		//! @brief  コンストラクタ
-		SystemResource(RHI&);
+		SystemResource(Device&);
 
 		//! @brief  デストラクタ
 		~SystemResource();

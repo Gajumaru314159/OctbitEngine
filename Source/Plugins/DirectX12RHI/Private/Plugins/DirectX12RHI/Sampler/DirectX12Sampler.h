@@ -10,7 +10,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class DirectX12RHI;
+    class DirectX12Device;
     class ITexture;
 }
 
@@ -24,7 +24,7 @@ namespace ob::rhi {
     class DirectX12Sampler :public Sampler {
     public:
 
-        DirectX12Sampler(DirectX12RHI& rhi, const SamplerDesc& desc);
+        DirectX12Sampler(DirectX12Device& rhi, const SamplerDesc& desc);
 
         //! @brief  妥当な状態か
         bool isValid()const { return !m_handle.empty(); }
@@ -40,7 +40,7 @@ namespace ob::rhi {
         void createView(D3D12_CPU_DESCRIPTOR_HANDLE handle);
 
     private:
-        DirectX12RHI&       m_rhi;
+        DirectX12Device&       m_device;
 		SamplerDesc         m_desc;
         DescriptorHandle    m_handle;
         D3D12_SAMPLER_DESC  m_nativeDesc;

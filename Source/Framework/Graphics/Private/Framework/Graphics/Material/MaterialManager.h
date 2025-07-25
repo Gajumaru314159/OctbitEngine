@@ -16,7 +16,7 @@ namespace ob::graphics {
 	class MaterialManager : public Singleton<MaterialManager> {
 	public:
 
-		MaterialManager(rhi::RHI&, NameDictionary&);
+		MaterialManager(rhi::Device&, NameDictionary&);
 		~MaterialManager();
 
 		//!	@brief			レイアウトID取得

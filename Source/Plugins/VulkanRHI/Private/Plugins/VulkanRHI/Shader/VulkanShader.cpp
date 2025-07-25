@@ -6,7 +6,7 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Shader.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Framework/Core/Misc/ErrorCode.h>
 
@@ -44,7 +44,7 @@ namespace ob::rhi {
 
 
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    VulkanShader::VulkanShader(VulkanRHI& rhi, const ShaderCompileDesc& desc)
+    VulkanShader::VulkanShader(VulkanDevice& rhi, const ShaderCompileDesc& desc)
         : m_name(desc.name)
         , m_stage(desc.stage)
     {
@@ -60,7 +60,7 @@ namespace ob::rhi {
     //! @param src			バイナリ
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    VulkanShader::VulkanShader(VulkanRHI& rhi,BlobView blob, ShaderStage stage, StringView name)
+    VulkanShader::VulkanShader(VulkanDevice& rhi,BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
         , m_stage(stage)
     {
@@ -88,7 +88,7 @@ namespace ob::rhi {
 
 
     //! @brief				初期化
-    void VulkanShader::compile(VulkanRHI& rhi, const ShaderCompileDesc& desc) {
+    void VulkanShader::compile(VulkanDevice& rhi, const ShaderCompileDesc& desc) {
 
 		using namespace Microsoft::WRL;
 

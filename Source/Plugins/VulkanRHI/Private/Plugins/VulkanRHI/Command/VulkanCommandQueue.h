@@ -12,7 +12,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンストラクタ
-        VulkanCommandQueue(VulkanRHI& rhi);
+        VulkanCommandQueue(VulkanDevice& rhi);
 
         void entryCommandList(const Ref<CommandList>& commandList);
         void entryCommandListTop(const Ref<CommandList>& commandList);
@@ -25,7 +25,7 @@ namespace ob::rhi {
 		}
 
     private:
-        VulkanRHI&                  m_rhi;
+        VulkanDevice&                  m_device;
         vk::raii::Queue             m_queue = nullptr;
 
         Vector<Ref<CommandList>>    m_entriedCommandListVector;

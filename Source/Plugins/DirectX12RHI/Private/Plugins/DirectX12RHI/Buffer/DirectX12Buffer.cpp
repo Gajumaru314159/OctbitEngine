@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
@@ -48,8 +48,8 @@ namespace ob::rhi {
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc バッファ定義
-	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferDesc& desc)
-		: m_device(rDevice)
+	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 		if (!m_desc.isValid()) return;
@@ -74,7 +74,7 @@ namespace ob::rhi {
 		// resdesc.Format = DXGI_FORMAT_R32_TYPELESS;
 
 		ComPtr<ID3D12Resource> buffer;
-		result = rDevice.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,state,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
+		result = device.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,state,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
 
 		if (FAILED(result))
 		{
@@ -86,15 +86,15 @@ namespace ob::rhi {
 		Utility::SetName(m_resource.Get(), getName());
 
 		if (desc.flags & BufferFlag::Constant) {
-			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 			createCBV(m_handle.getCpuHandle());
 			m_viewDesc.type = BufferViewType::ConstantBuffer;
 		} else if (desc.flags & BufferFlag::ShaderResource) {
-			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 			createSRV(m_handle.getCpuHandle());
 			m_viewDesc.type = BufferViewType::ByteAddressBuffer;
 		} else if (desc.flags & BufferFlag::UnorderedAccess) {
-			rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 			createUAV(m_handle.getCpuHandle());
 			m_viewDesc.type = BufferViewType::RWByteAddressBuffer;
 		} else {
@@ -109,15 +109,15 @@ namespace ob::rhi {
 	//! 
 	//! @param desc バッファ定義
 	//! @param data 初期化データ
-	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob)
-		: DirectX12Buffer(rDevice,desc)
+	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc, const Blob& blob)
+		: DirectX12Buffer(device,desc)
 	{
 		update(blob.size(), blob.data(), 0);
 	}
 
 	//! @brief  コンストラクタ
-	DirectX12Buffer::DirectX12Buffer(DirectX12RHI& rDevice, const BufferViewDesc& desc)
-		: m_device(rDevice)
+	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferViewDesc& desc)
+		: m_device(device)
 		, m_viewDesc(desc)
 	{
 		auto base = desc.base.cast<DirectX12Buffer>();
@@ -131,7 +131,7 @@ namespace ob::rhi {
 
 		if (!m_desc.isValid()) return;
 
-		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+		device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 
 		auto flags = m_desc.flags;
 

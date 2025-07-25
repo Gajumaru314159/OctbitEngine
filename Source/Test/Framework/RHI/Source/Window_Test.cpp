@@ -20,7 +20,7 @@ TEST(RHI, CreateEmpty) {
 	ServiceContainer container;
 	rhi::RegisterRHIService(injector);
 
-	injector.create<RHI>(container);
+	injector.create<Device>(container);
 
 	ASSERT_FALSE(SwapChain::Create({}));
 	ASSERT_FALSE(CommandList::Create({}));
@@ -42,7 +42,7 @@ TEST(RHI, CreateEmptyDX12) {
 	rhi::RegisterDirectX12RHIService(injector);
 	rhi::RegisterRHIService(injector);
 
-	injector.create<RHI>(container);
+	injector.create<Device>(container);
 
 	ASSERT_FALSE(SwapChain::Create({}));
 	ASSERT_TRUE(CommandList::Create({}));
@@ -74,7 +74,7 @@ TEST(RHI, ShowHide) {
 	config.enableDebugLayer = true;
 	injector.bind(config);
 
-	injector.create<RHI>(container);
+	injector.create<Device>(container);
 	{
 
 		// ウィンドウ生成
@@ -247,7 +247,7 @@ PsOut PS_Main(PsIn i) {
 			cbuf.color = HSV(i * 6, 1, 1).toColor();
 			buffer->updateDirect(cbuf, 0);
 
-			if (auto rhi = container.get<RHI>()) {
+			if (auto rhi = container.get<Device>()) {
 				rhi->update();
 			}
 

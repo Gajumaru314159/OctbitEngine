@@ -9,7 +9,7 @@
 namespace ob::rhi {
 
     Ref<DescriptorTable> DescriptorTable::Create(const DescriptorTableDesc& desc) {
-        if (auto rhi = RHI::Get()) {
+        if (auto rhi = Device::Get()) {
             return rhi->createDescriptorTable(desc);
         }
         return nullptr;

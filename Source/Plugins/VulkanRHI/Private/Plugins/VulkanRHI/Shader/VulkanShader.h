@@ -14,7 +14,7 @@ namespace ob::rhi {
     public:
 
         //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-        VulkanShader(VulkanRHI& rhi, const ShaderCompileDesc& desc);
+        VulkanShader(VulkanDevice& rhi, const ShaderCompileDesc& desc);
 
 
         //! @brief				バイナリからシェーダーオブジェクトを生成
@@ -22,7 +22,7 @@ namespace ob::rhi {
         //! @param src			バイナリ
         //! @param stage		シェーダステージ
         //! @param errorDest	エラー出力先文字列
-        VulkanShader(VulkanRHI& rhi, BlobView blob, ShaderStage stage, StringView name = "Shader");
+        VulkanShader(VulkanDevice& rhi, BlobView blob, ShaderStage stage, StringView name = "Shader");
 
 
         //! @brief      名前を取得
@@ -40,7 +40,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンパイル
-        void compile(VulkanRHI& rhi, const ShaderCompileDesc& desc);
+        void compile(VulkanDevice& rhi, const ShaderCompileDesc& desc);
 
     private:
 

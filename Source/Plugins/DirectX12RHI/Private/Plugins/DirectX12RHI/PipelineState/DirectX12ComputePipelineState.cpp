@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/PipelineState/DirectX12ComputePipelineState.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 #include <Plugins/DirectX12RHI/Shader/DirectX12Shader.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -12,7 +12,7 @@ namespace ob::rhi {
 
 
 	//! @brief		コンストラクタ
-	DirectX12ComputePipelineState::DirectX12ComputePipelineState(DirectX12RHI& rDevice, const ComputePipelineStateDesc& desc)
+	DirectX12ComputePipelineState::DirectX12ComputePipelineState(DirectX12Device& device, const ComputePipelineStateDesc& desc)
 		: m_desc(desc)
 	{
 
@@ -41,7 +41,7 @@ namespace ob::rhi {
 		// コンピュートパイプラインを生成
 		HRESULT result;
 		ComPtr<ID3D12PipelineState> pipelineState;
-		result = rDevice.getNative()->CreateComputePipelineState(&cpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
+		result = device.getNative()->CreateComputePipelineState(&cpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "ID3D12Device::CreateComputePipelineState()");
 			return;

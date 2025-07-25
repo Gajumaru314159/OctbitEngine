@@ -10,7 +10,7 @@
 
 namespace ob::rhi {
 
-    class VulkanRHI;
+    class VulkanDevice;
 
     //! @brief  テクスチャ・アップローダー
     //! 
@@ -27,7 +27,7 @@ namespace ob::rhi {
         };
     public:
 
-        VulkanTextureUploader(VulkanRHI& rhi);
+        VulkanTextureUploader(VulkanDevice& rhi);
 
         void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources);
 
@@ -70,7 +70,7 @@ namespace ob::rhi {
 
     private:
 
-        VulkanRHI& m_rhi;
+        VulkanDevice& m_device;
         bool m_isUMA = false;
 
 		size_t m_blockSize;

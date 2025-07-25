@@ -23,7 +23,7 @@ namespace ob::graphics {
 	}
 
 	//! @brief      コンストラクタ
-	Graphics::Graphics(rhi::RHI& rhi,MaterialManager&)
+	Graphics::Graphics(rhi::Device& rhi,MaterialManager&)
 		: m_rhi(rhi)
 		, m_fgResourcePool(rhi)
 	{

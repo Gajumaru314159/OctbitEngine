@@ -11,7 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class DirectX12RHI;
+    class DirectX12Device;
     class ITexture;
 }
 
@@ -30,7 +30,7 @@ namespace ob::rhi {
         //===============================================================
 
         //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-        DirectX12Shader(DirectX12RHI& device, const ShaderCompileDesc& desc);
+        DirectX12Shader(DirectX12Device& device, const ShaderCompileDesc& desc);
 
 
         //! @brief				バイナリからシェーダーオブジェクトを生成
@@ -64,7 +64,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンパイル
-        void compile(DirectX12RHI& device, const ShaderCompileDesc& desc);
+        void compile(DirectX12Device& device, const ShaderCompileDesc& desc);
 
     private:
 

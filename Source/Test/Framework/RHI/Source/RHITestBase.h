@@ -43,7 +43,7 @@ protected:
 		injector.bind(m_dx12config);
 		injector.bind(m_vkconfig);
 
-		injector.create<RHI>(m_container);
+		injector.create<Device>(m_container);
 
 	};
 	virtual void TearDown() {};
@@ -55,7 +55,5 @@ protected:
 };
 
 
-//using RHIImplementations = ::testing::Types<DirectX12Tag, VulkanTag>;
-//using RHIImplementations = ::testing::Types<DirectX12Tag>;
-using RHIImplementations = ::testing::Types<VulkanTag>;
+using RHIImplementations = ::testing::Types<DirectX12Tag, VulkanTag>;
 TYPED_TEST_SUITE(RHITest, RHIImplementations);

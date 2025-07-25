@@ -7,7 +7,7 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/Shader.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 namespace ob::rhi {
@@ -39,7 +39,7 @@ namespace ob::rhi {
 
 
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    DirectX12Shader::DirectX12Shader(DirectX12RHI& device, const ShaderCompileDesc& desc) 
+    DirectX12Shader::DirectX12Shader(DirectX12Device& device, const ShaderCompileDesc& desc) 
 		: m_name(desc.name)
         , m_stage(desc.stage)
     {
@@ -104,7 +104,7 @@ namespace ob::rhi {
     }
 
     //! @brief				初期化
-    void DirectX12Shader::compile(DirectX12RHI& device, const ShaderCompileDesc& desc) {
+    void DirectX12Shader::compile(DirectX12Device& device, const ShaderCompileDesc& desc) {
 
         HRESULT result;
 

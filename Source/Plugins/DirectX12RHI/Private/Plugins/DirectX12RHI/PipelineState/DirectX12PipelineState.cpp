@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/DirectX12RHI/PipelineState/DirectX12PipelineState.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 #include <Plugins/DirectX12RHI/Shader/DirectX12Shader.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -13,7 +13,7 @@ namespace ob::rhi {
 
 
 	//! @brief		コンストラクタ
-	DirectX12PipelineState::DirectX12PipelineState(DirectX12RHI& rDevice, const PipelineStateDesc& desc)
+	DirectX12PipelineState::DirectX12PipelineState(DirectX12Device& device, const PipelineStateDesc& desc)
 		: m_desc(desc)
 	{
 
@@ -97,7 +97,7 @@ namespace ob::rhi {
 		// グラフィックパイプラインを生成
 		HRESULT result;
 		ComPtr<ID3D12PipelineState> pipelineState;
-		result = rDevice.getNative()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
+		result = device.getNative()->CreateGraphicsPipelineState(&gpsd, IID_PPV_ARGS(pipelineState.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "ID3D12Device::CreateGraphicsPipelineState()");
 			return;

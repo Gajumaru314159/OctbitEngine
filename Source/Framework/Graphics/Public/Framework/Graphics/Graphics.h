@@ -24,7 +24,7 @@ namespace ob::graphics {
     public:
 
         //! @brief      コンストラクタ
-        Graphics(rhi::RHI& rhi, MaterialManager&);
+        Graphics(rhi::Device& rhi, MaterialManager&);
 
         //! @brief      デストラクタ
         ~Graphics();
@@ -60,7 +60,7 @@ namespace ob::graphics {
 
     private:
 
-        rhi::RHI& m_rhi;
+        rhi::Device& m_rhi;
 
         UPtr<FG> m_fg{ nullptr };
 

@@ -57,7 +57,7 @@ namespace ob::engine {
 		update_debug<EntityManager>();
 
 		update_debug<input::InputModule>();
-		update_debug<rhi::RHI>();
+		update_debug<rhi::Device>();
 
 		return true;
 	}

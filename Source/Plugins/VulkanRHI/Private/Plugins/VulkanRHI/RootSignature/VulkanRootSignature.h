@@ -12,7 +12,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンストラクタ
-        VulkanRootSignature(VulkanRHI& rhi,const RootSignatureDesc& desc);
+        VulkanRootSignature(VulkanDevice& rhi,const RootSignatureDesc& desc);
 
 
         //! @brief  デストラクタ

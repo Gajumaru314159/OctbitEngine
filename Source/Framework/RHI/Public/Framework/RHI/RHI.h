@@ -25,18 +25,16 @@
 
 namespace ob::rhi {
 
-	//! @brief      RHI・モジュール
-	//! 
-	//! @details    RHIのモジュール基底です。
-	//!             DirectXやVulkanなど、APIを共通化する場合はこのモジュール・インターフェースを実装して下さい。
-	class RHI:public Singleton<RHI> {
+	//! @brief      Rendering Hardware Interface (RHI)
+	//! @details    DirectX, Vulkan, MetalなどのグラフィックAPIを抽象化したインターフェース。
+	class Device:public Singleton<Device> {
 	public:
 
         //! @brief      コンストラクタ
-		RHI(GraphicObjectManager&, RHIConfig*);
+		Device(GraphicObjectManager&, RHIConfig*);
 
         //! @brief      デストラクタ
-        virtual ~RHI();
+        virtual ~Device();
 
 		//! @brief      
         virtual void update();

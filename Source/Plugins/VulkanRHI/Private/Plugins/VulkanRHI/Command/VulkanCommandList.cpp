@@ -15,30 +15,30 @@
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanCommandList::VulkanCommandList(VulkanRHI& rhi, const CommandListDesc& desc)
-		: m_rhi(rhi)
+	VulkanCommandList::VulkanCommandList(VulkanDevice& rhi, const CommandListDesc& desc)
+		: m_device(rhi)
 		, m_desc(desc)
 	{
 		vk::CommandPoolCreateInfo info;
-		info.queueFamilyIndex = m_rhi.getQueryFamilyIndex();
+		info.queueFamilyIndex = m_device.getQueryFamilyIndex();
 		info.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
 
-		m_commandPool = rhi.getDevice().createCommandPool(info, m_rhi.getAllocationCallbacks());
+		m_commandPool = rhi.getDevice().createCommandPool(info, m_device.getAllocationCallbacks());
 
 		vk::CommandBufferAllocateInfo allocInfo;
 		allocInfo.commandPool = m_commandPool;
 		allocInfo.commandBufferCount = 1;
 		allocInfo.level = vk::CommandBufferLevel::ePrimary;
 
-		m_commandBuffer = std::move(m_rhi.getDevice().allocateCommandBuffers(allocInfo).front());
+		m_commandBuffer = std::move(m_device.getDevice().allocateCommandBuffers(allocInfo).front());
 		
-		m_rhi.setName(m_commandPool, m_desc.name);
-		m_rhi.setName(m_commandBuffer, m_desc.name);
+		m_device.setName(m_commandPool, m_desc.name);
+		m_device.setName(m_commandBuffer, m_desc.name);
 
 		manage();
 	}
@@ -71,7 +71,7 @@ namespace ob::rhi {
 	//! @brief  描画終了
 	void VulkanCommandList::flush() {
 		// TODO オミット
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			Ref<CommandList> commandList = this;
 			rhi->entryCommandList(commandList);
 		}
@@ -314,7 +314,7 @@ namespace ob::rhi {
 			auto& desc = p->getDesc().rootSignature->getDesc();
 			if (desc.flags.has(RootSignatureFlag::EnableBindless)) {
 				auto bindlessSlot = desc.layouts.size();
-				m_rhi.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
+				m_device.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
 			}
 		} else {
 			LOG_FATAL("不正な引数。パイプラインステートが不正です。");
@@ -372,13 +372,13 @@ namespace ob::rhi {
 
 	//! @brief      GPUマーカーをプッシュ
 	void VulkanCommandList::pushMarker(StringView name) {
-		if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.beginDebugUtilsLabelEXT(name.data());
+		if (m_device.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.beginDebugUtilsLabelEXT(name.data());
 	}
 
 
 	//! @brief      GPUマーカーをポップ
 	void VulkanCommandList::popMarker() {
-		if (m_rhi.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.endDebugUtilsLabelEXT();
+		if (m_device.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.endDebugUtilsLabelEXT();
 	}
 
 #pragma endregion

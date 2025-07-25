@@ -15,7 +15,7 @@ namespace ob::graphics {
 	class FGResourcePool {
 	public:
 
-		FGResourcePool(::ob::rhi::RHI& rhi);
+		FGResourcePool(::ob::rhi::Device& rhi);
 
 		void update();
 
@@ -31,7 +31,7 @@ namespace ob::graphics {
 		template <typename T> using ResourcePool = Vector<ResourceEntry<T>>;
 
 	private:
-		rhi::RHI& m_rhi;
+		rhi::Device& m_rhi;
 
 		HashMap<size_t, ResourcePool<RenderTexture>>	m_texturePools;
 		HashMap<size_t, ResourcePool<Buffer>>			m_bufferPools;

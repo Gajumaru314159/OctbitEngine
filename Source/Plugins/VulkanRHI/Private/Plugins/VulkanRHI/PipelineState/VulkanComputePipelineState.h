@@ -11,7 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class VulkanRHI;
+    class VulkanDevice;
 }
 
 
@@ -25,7 +25,7 @@ namespace ob::rhi {
     public:
 
         //! @brief		コンストラクタ
-        VulkanComputePipelineState(VulkanRHI&, const ComputePipelineStateDesc& desc);
+        VulkanComputePipelineState(VulkanDevice&, const ComputePipelineStateDesc& desc);
 
         //! @brief		デストラクタ
         ~VulkanComputePipelineState();

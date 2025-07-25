@@ -287,7 +287,7 @@ namespace ob::graphics {
 			return;
 		}
 
-		bool useBindless = rhi::RHI::Instance().getConfig().enableBindless;
+		bool useBindless = rhi::Device::Instance().getConfig().enableBindless;
 
 		if (auto found = m_properties.find(name); found != m_properties.end()) {
 
@@ -335,7 +335,7 @@ namespace ob::graphics {
 			return;
 		}
 
-		bool useBindless = rhi::RHI::Instance().getConfig().enableBindless;
+		bool useBindless = rhi::Device::Instance().getConfig().enableBindless;
 
 		if (auto found = m_properties.find(name); found != m_properties.end()) {
 

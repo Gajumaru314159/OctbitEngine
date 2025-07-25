@@ -11,7 +11,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class DirectX12RHI;
+    class DirectX12Device;
 }
 
 
@@ -25,7 +25,7 @@ namespace ob::rhi {
     public:
 
         //! @brief		コンストラクタ
-        DirectX12ComputePipelineState(DirectX12RHI&, const ComputePipelineStateDesc& desc);
+        DirectX12ComputePipelineState(DirectX12Device&, const ComputePipelineStateDesc& desc);
 
 
         //! @brief  妥当な状態か

@@ -22,7 +22,7 @@ namespace ob::rhi {
         //===============================================================
 
         //! @brief  コンストラクタ
-        DirectX12CommandList(class DirectX12RHI& device, const CommandListDesc& desc);
+        DirectX12CommandList(class DirectX12Device& device, const CommandListDesc& desc);
 
 
         //! @brief  妥当な状態か
@@ -105,7 +105,7 @@ namespace ob::rhi {
 
     private:
 
-        class DirectX12RHI& m_device;
+        class DirectX12Device& m_device;
         const CommandListDesc m_desc;
 
         ComPtr<ID3D12CommandAllocator> m_cmdAllocator;

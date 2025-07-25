@@ -4,7 +4,7 @@
 //***********************************************************
 #pragma once
 #include "DirectX12RootSignature.h"
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
@@ -14,7 +14,7 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	DirectX12RootSignature::DirectX12RootSignature(DirectX12RHI& rDevice, const RootSignatureDesc& desc)
+	DirectX12RootSignature::DirectX12RootSignature(DirectX12Device& device, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		// パラメータ
@@ -182,7 +182,7 @@ namespace ob::rhi {
 		}
 
 		// ルートシグネチャの作成
-		result = rDevice.getNative()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(m_rootSignature.ReleaseAndGetAddressOf()));
+		result = device.getNative()->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(m_rootSignature.ReleaseAndGetAddressOf()));
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "ID3D12Device::CreateRootSignature()");
 			return;

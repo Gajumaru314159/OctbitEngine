@@ -8,7 +8,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorTable.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 #include <Plugins/DirectX12RHI/Sampler/DirectX12Sampler.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
@@ -19,8 +19,8 @@ namespace ob::rhi {
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12RHI& rhi, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
-		: m_rhi(rhi)
+	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12Device& rhi, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
+		: m_device(rhi)
 		, m_desc(desc)
 	{
 		m_layout = m_desc.layout.cast<DirectX12DescriptorLayout>();
@@ -77,7 +77,7 @@ namespace ob::rhi {
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet==false) {
 				handle2 = handle;
-				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
+				handle = m_device.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
 			}
 
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_CBV)p->createCBV(handle);
@@ -85,7 +85,7 @@ namespace ob::rhi {
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle);
 
 			if (isInitialSet == false) {
-				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,handle2,handle);
+				m_device.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,handle2,handle);
 			}
 		}
 		return true;
@@ -121,14 +121,14 @@ namespace ob::rhi {
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet == false) {
 				handle2 = handle;
-				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
+				handle = m_device.allocateStagingHandle(DescriptorHeapType::CBV_SRV_UAV);
 			}
 
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_SRV)p->createSRV(handle);
 			if (type == D3D12_DESCRIPTOR_RANGE_TYPE_UAV)p->createUAV(handle, 0);
 
 			if (isInitialSet == false) {
-				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle, handle2);
+				m_device.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, handle, handle2);
 			}
 		}
 		return true;
@@ -163,12 +163,12 @@ namespace ob::rhi {
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet == false) {
 				handle2 = handle;
-				handle = m_rhi.allocateStagingHandle(DescriptorHeapType::Sampler);
+				handle = m_device.allocateStagingHandle(DescriptorHeapType::Sampler);
 			}
 			p->createView(handle);
 
 			if (isInitialSet == false) {
-				m_rhi.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle, handle2);
+				m_device.getDescriptorUploader().add(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER, handle, handle2);
 			}
 		}
 		return true;

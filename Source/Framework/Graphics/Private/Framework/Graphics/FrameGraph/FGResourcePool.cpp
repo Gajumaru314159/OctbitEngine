@@ -57,7 +57,7 @@ namespace std {
 
 namespace ob::graphics {
 
-	FGResourcePool::FGResourcePool(::ob::rhi::RHI& rhi)
+	FGResourcePool::FGResourcePool(::ob::rhi::Device& rhi)
 		: m_rhi(rhi)
 	{
 	}

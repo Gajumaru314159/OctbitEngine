@@ -11,7 +11,7 @@
 
 namespace ob::rhi {
 
-    class VulkanRHI;
+    class VulkanDevice;
 
     //@―---------------------------------------------------------------------------
     //! @brief  コマンドリスト実装(DirectX12)
@@ -26,7 +26,7 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        VulkanCommandList(VulkanRHI& rhi,const CommandListDesc& desc);
+        VulkanCommandList(VulkanDevice& rhi,const CommandListDesc& desc);
 
         ~VulkanCommandList();
 
@@ -107,7 +107,7 @@ namespace ob::rhi {
 
     private:
 
-        VulkanRHI& m_rhi;
+        VulkanDevice& m_device;
 
         const CommandListDesc m_desc;
 		

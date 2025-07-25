@@ -20,7 +20,7 @@ namespace ob::rhi {
 		//! @param device   デバイス
 		//! @param type     ヒープ・タイプ
 		//! @param capacity 容量
-		DescriptorHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity);
+		DescriptorHeap(class DirectX12Device& device, DescriptorHeapType type, s32 capacity);
 
 
 		//! @brief          デストラクタ
@@ -74,7 +74,7 @@ namespace ob::rhi {
 	class DescriptorStagingHeap :private Noncopyable {
 	public:
 
-		DescriptorStagingHeap(class DirectX12RHI& device, DescriptorHeapType type, s32 capacity);
+		DescriptorStagingHeap(class DirectX12Device& device, DescriptorHeapType type, s32 capacity);
 
 		D3D12_CPU_DESCRIPTOR_HANDLE allocate(s32 size = 1);
 

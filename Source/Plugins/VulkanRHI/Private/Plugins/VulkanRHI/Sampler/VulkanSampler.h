@@ -12,7 +12,7 @@ namespace ob::rhi {
     class VulkanSampler :public Sampler {
     public:
 
-        VulkanSampler(VulkanRHI& rhi,const SamplerDesc& desc);
+        VulkanSampler(VulkanDevice& rhi,const SamplerDesc& desc);
 
         //! @brief      名前を取得
         const String& getName()const override { return m_name; }

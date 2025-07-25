@@ -9,21 +9,21 @@
 namespace ob::rhi {
 
 	Ref<GraphicFileHandle> GraphicFileHandle::Create(StringView path) {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->createGraphicFileHandle(path);
 		}
 		return nullptr;
 	}
 
 	Ref<GraphicFileEvent> GraphicFileEvent::Create() {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->createGraphicFileEvent();
 		}
 		return nullptr;
 	}
 
 	Ref<GraphicFileQueue> GraphicFileQueue::Create(const GraphicFileQueueDesc& desc) {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->createGraphicFileQueue(desc);
 		}
 		return nullptr;
@@ -31,14 +31,14 @@ namespace ob::rhi {
 
 
 	bool GraphicFile::Generate(StringView input, StringView output,s32 compressionLevel) {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->generateGraphicFile(input,output,compressionLevel);
 		}
 		return false;
 	}
 
 	Vector<GraphicFileMipInfo> GraphicFile::Prepare(StringView file) {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->prepareGraphicFile(file);
 		}
 		return {};

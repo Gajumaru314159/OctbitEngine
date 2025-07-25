@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/PipelineState/VulkanComputePipelineState.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
@@ -12,7 +12,7 @@ namespace ob::rhi {
 
 
 	//! @brief		コンストラクタ
-	VulkanComputePipelineState::VulkanComputePipelineState(VulkanRHI& rDevice, const ComputePipelineStateDesc& desc)
+	VulkanComputePipelineState::VulkanComputePipelineState(VulkanDevice& device, const ComputePipelineStateDesc& desc)
 		: m_desc(desc)
 	{
 
@@ -25,7 +25,7 @@ namespace ob::rhi {
 			return;
 		}
 
-		auto& device = rDevice.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		// コンピュートシェーダステージ
 		vk::PipelineShaderStageCreateInfo shaderStageInfo;
@@ -45,7 +45,7 @@ namespace ob::rhi {
 		pipelineInfo.layout = desc.rootSignature.cast<VulkanRootSignature>()->getNative();
 
 		// コンピュートパイプラインを生成
-		m_pipeline = device.createComputePipeline(nullptr, pipelineInfo, rDevice.getAllocationCallbacks());
+		m_pipeline = vkdevice.createComputePipeline(nullptr, pipelineInfo, device.getAllocationCallbacks());
 
 		manage();
 	}

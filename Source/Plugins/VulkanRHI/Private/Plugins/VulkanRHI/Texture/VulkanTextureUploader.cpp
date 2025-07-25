@@ -4,15 +4,15 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
 namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	VulkanTextureUploader::VulkanTextureUploader(VulkanRHI& rhi)
-		: m_rhi(rhi)
+	VulkanTextureUploader::VulkanTextureUploader(VulkanDevice& rhi)
+		: m_device(rhi)
 	{
 		m_frames.resize(4);
 	}
@@ -27,7 +27,7 @@ namespace ob::rhi
 
 		OB_ASSERT(subresources.size()==1,"Mipmapは未実装です");
 
-		auto& device = m_rhi.getDevice();
+		auto& device = m_device.getDevice();
 
 
 		size_t bufferSize = 0;
@@ -37,10 +37,10 @@ namespace ob::rhi
 
 		// アップロード用のバッファを生成
 		vk::BufferCreateInfo bufferCreateInfo({}, bufferSize, vk::BufferUsageFlagBits::eTransferSrc);
-		vk::raii::Buffer buffer = device.createBuffer(bufferCreateInfo,m_rhi.getAllocationCallbacks());
+		vk::raii::Buffer buffer = device.createBuffer(bufferCreateInfo,m_device.getAllocationCallbacks());
 
-		auto allocInfo = m_rhi.getAllocationInfo(buffer.getMemoryRequirements(), vk::MemoryPropertyFlags{} | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
-		vk::raii::DeviceMemory memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		auto allocInfo = m_device.getAllocationInfo(buffer.getMemoryRequirements(), vk::MemoryPropertyFlags{} | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+		vk::raii::DeviceMemory memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		buffer.bindMemory(memory, 0);
 
 		// バッファにデータをコピー
@@ -67,8 +67,8 @@ namespace ob::rhi
 		request.format = format;
 		request.extent = info.extent;
 
-		m_rhi.setName(request.source, "VulkanTextureUploader");
-		m_rhi.setName(request.memory, "VulkanTextureUploader");
+		m_device.setName(request.source, "VulkanTextureUploader");
+		m_device.setName(request.memory, "VulkanTextureUploader");
 
 	}
 

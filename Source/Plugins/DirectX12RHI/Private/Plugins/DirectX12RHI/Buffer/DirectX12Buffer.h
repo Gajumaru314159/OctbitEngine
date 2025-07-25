@@ -16,18 +16,18 @@ namespace ob::rhi {
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
-		DirectX12Buffer(class DirectX12RHI& rDevice,const BufferDesc& desc);
+		DirectX12Buffer(class DirectX12Device& device,const BufferDesc& desc);
 
 
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
 		//! @param data 初期化データ
-		DirectX12Buffer(class DirectX12RHI& rDevice, const BufferDesc& desc, const Blob& blob);
+		DirectX12Buffer(class DirectX12Device& device, const BufferDesc& desc, const Blob& blob);
 
 
 		//! @brief  コンストラクタ
-		DirectX12Buffer(class DirectX12RHI& rDevice, const BufferViewDesc& desc);
+		DirectX12Buffer(class DirectX12Device& device, const BufferViewDesc& desc);
 
 
 		//! @brief  妥当な状態か
@@ -83,7 +83,7 @@ namespace ob::rhi {
 
 	private:
 
-		class DirectX12RHI&		m_device;
+		class DirectX12Device&		m_device;
 		BufferDesc				m_desc;
 		BufferViewDesc			m_viewDesc;
 		DescriptorHandle		m_handle;

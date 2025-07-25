@@ -4,19 +4,19 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/Command/VulkanCommandQueue.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 
 namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	VulkanCommandQueue::VulkanCommandQueue(VulkanRHI& rhi) 
-		: m_rhi(rhi)
+	VulkanCommandQueue::VulkanCommandQueue(VulkanDevice& rhi) 
+		: m_device(rhi)
 	{
 		auto& device = rhi.getDevice();
 		m_queue = device.getQueue(rhi.getQueryFamilyIndex(), 0);
-		m_rhi.setName(m_queue, "VulkanCommandQueue");
+		m_device.setName(m_queue, "VulkanCommandQueue");
 	}
 
 	//! @brief コマンドリストを登録 

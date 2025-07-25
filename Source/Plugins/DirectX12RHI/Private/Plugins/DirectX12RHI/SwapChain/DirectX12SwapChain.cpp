@@ -6,7 +6,7 @@
 #include <Framework/RHI/DescriptorLayout.h>
 #include <Framework/RHI/RootSignature.h>
 #include <Framework/RHI/Shader.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Command/DirectX12CommandList.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
@@ -19,8 +19,8 @@ namespace {
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	DirectX12SwapChain::DirectX12SwapChain(DirectX12RHI& rDevice, const SwapChainDesc& desc)
-		: m_device(rDevice)
+	DirectX12SwapChain::DirectX12SwapChain(DirectX12Device& device, const SwapChainDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 
@@ -37,9 +37,9 @@ namespace ob::rhi {
 		m_syncInterval = desc.vsync ? 1 : 0;
 		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
 
-		if (!createSwapChain(rDevice))return;
-		if (!createResources(rDevice))return;
-		if (!createBuffers(rDevice))return;
+		if (!createSwapChain(device))return;
+		if (!createResources(device))return;
+		if (!createBuffers(device))return;
 
 		m_desc.window.addEventListener(m_hEvent, { *this,&DirectX12SwapChain::onWindowChanged });
 
@@ -54,7 +54,7 @@ namespace ob::rhi {
 
 
 	//! @brief  スワップチェーン生成
-	bool DirectX12SwapChain::createSwapChain(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createSwapChain(DirectX12Device& device) {
 		auto& window = m_desc.window;
 
 		BOOL allowTearing = false;
@@ -64,7 +64,7 @@ namespace ob::rhi {
 		{
 			{
 				D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
-				auto result = rDevice.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
+				auto result = device.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
 				if (SUCCEEDED(result)) {
 					LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
 					LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
@@ -73,7 +73,7 @@ namespace ob::rhi {
 				}
 			}
 
-			rDevice.getFactory()->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
+			device.getFactory()->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
 		}
 
 		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -105,8 +105,8 @@ namespace ob::rhi {
 			0;
 
 		// スワップチェイン生成
-		auto result = rDevice.getFactory()->CreateSwapChain(
-			rDevice.getCommandQueue().Get(),
+		auto result = device.getFactory()->CreateSwapChain(
+			device.getCommandQueue().Get(),
 			&swapChainDesc,
 			(IDXGISwapChain**)m_swapChain.ReleaseAndGetAddressOf());
 
@@ -120,14 +120,14 @@ namespace ob::rhi {
 		{
 			// When tearing support is enabled we will handle ALT+Enter key presses in the
 			// window message loop rather than let DXGI handle it by calling SetFullscreenState.
-			//rDevice.getFactory()->MakeWindowAssociation((HWND)m_desc.window.getHandle(), DXGI_MWA_NO_ALT_ENTER);
+			//device.getFactory()->MakeWindowAssociation((HWND)m_desc.window.getHandle(), DXGI_MWA_NO_ALT_ENTER);
 		}
 
 
 		if (window.isMainWindow()) {
 
 			// Alt + Enter でウィンドウモードに変わらないようにする 
-			rDevice.getFactory()->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+			device.getFactory()->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
 			if (window.getMode() == platform::WindowMode::FullScreen) {
 				// TODO フルスクリーンの場合バックバッファをリサイズ
@@ -139,7 +139,7 @@ namespace ob::rhi {
 
 
 	//! @brief      レンダーテクスチャを初期化
-	bool DirectX12SwapChain::createBuffers(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createBuffers(DirectX12Device& device) {
 
 		if (!is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
 			LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxSwapChainCount, m_desc.bufferCount);
@@ -169,7 +169,7 @@ namespace ob::rhi {
 
 			auto name = Format("{}_{}", m_desc.name, i);
 
-			auto& texture = m_textures.emplace_back(new DirectX12Texture(rDevice, resource, D3D12_RESOURCE_STATE_PRESENT, name));
+			auto& texture = m_textures.emplace_back(new DirectX12Texture(device, resource, D3D12_RESOURCE_STATE_PRESENT, name));
 
 			m_viewport = CD3DX12_VIEWPORT(resource.Get());
 			m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
@@ -180,7 +180,7 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	bool DirectX12SwapChain::createResources(DirectX12RHI& rDevice) {
+	bool DirectX12SwapChain::createResources(DirectX12Device& device) {
 
 		{
 			Vec2 vertices[] = {

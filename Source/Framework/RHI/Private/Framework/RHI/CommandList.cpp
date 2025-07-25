@@ -11,7 +11,7 @@ namespace ob::rhi {
 
 	//! @brief  生成
 	Ref<CommandList> CommandList::Create(const CommandListDesc& desc) {
-		if (auto rhi= RHI::Get()) {
+		if (auto rhi= Device::Get()) {
 			return rhi->createCommandList(desc);
 		}
 		return nullptr;

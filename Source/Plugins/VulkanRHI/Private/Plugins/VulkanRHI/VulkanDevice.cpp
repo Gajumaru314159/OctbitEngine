@@ -2,7 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
@@ -27,10 +27,10 @@
 		try {\
 			return new type_impl(__VA_ARGS__);\
 		} catch (const vk::Error& error) {\
-			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", #type,error.what());\
+			LOG_ERROR("[VulkanDevice] {}の構築に失敗 {}", #type,error.what());\
 			return nullptr;\
 		} catch (const std::exception& error) {\
-			LOG_ERROR("[VulkanRHI] {}の構築に失敗 {}", #type,error.what());\
+			LOG_ERROR("[VulkanDevice] {}の構築に失敗 {}", #type,error.what());\
 			return nullptr;\
 		}
 
@@ -44,18 +44,18 @@ namespace ob::rhi {
 		using namespace ob;
 
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eError) {
-			LOG_ERROR("[VulkanRHI] {}", pCallbackData->pMessage);
+			LOG_ERROR("[VulkanDevice] {}", pCallbackData->pMessage);
 			CallBreakPoint();
 		}
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning) {
-			LOG_WARNING("[VulkanRHI] {}", pCallbackData->pMessage);
+			LOG_WARNING("[VulkanDevice] {}", pCallbackData->pMessage);
 			CallBreakPoint();
 		}
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo) {
-			LOG_INFO("[VulkanRHI] {}", pCallbackData->pMessage);
+			LOG_INFO("[VulkanDevice] {}", pCallbackData->pMessage);
 		}
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose) {
-			LOG_TRACE("[VulkanRHI] {}", pCallbackData->pMessage);
+			LOG_TRACE("[VulkanDevice] {}", pCallbackData->pMessage);
 		}
 
 		return VK_FALSE;
@@ -68,8 +68,8 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	VulkanRHI::VulkanRHI(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config, VulkanRHIConfig* vconfig)
-		: RHI(objectManager, config)
+	VulkanDevice::VulkanDevice(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config, VulkanRHIConfig* vconfig)
+		: Device(objectManager, config)
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
 		, m_vconfig(vconfig ? *vconfig : ob::rhi::VulkanRHIConfig{})
 	{
@@ -85,7 +85,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デストラクタ
 	//@―---------------------------------------------------------------------------
-	VulkanRHI::~VulkanRHI() {
+	VulkanDevice::~VulkanDevice() {
 
 		clearCommands();
 
@@ -102,7 +102,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  妥当な状態か
 	//@―---------------------------------------------------------------------------
-	bool VulkanRHI::isValid()const {
+	bool VulkanDevice::isValid()const {
 		return
 			m_instance != nullptr &&
 			m_physicalDevice != nullptr &&
@@ -113,7 +113,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkInstance生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createInstance() {
+	void VulkanDevice::createInstance() {
 
 		// レイヤー / 拡張機能名
 		Vector<const char*> layerNames;
@@ -239,7 +239,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkPhysicalDevice生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createPhysicalDevice() {
+	void VulkanDevice::createPhysicalDevice() {
 
 		auto devices = m_instance.enumeratePhysicalDevices();
 
@@ -291,7 +291,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkDevice生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createDevice() {
+	void VulkanDevice::createDevice() {
 
 		if (m_physicalDevice == nullptr)
 			return;
@@ -421,7 +421,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkQueue生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createQueue() {
+	void VulkanDevice::createQueue() {
 
 		if (m_device == nullptr)
 			return;
@@ -433,7 +433,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  VkQueue生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createUploaders() {
+	void VulkanDevice::createUploaders() {
 		m_bufferUploader = std::make_unique<VulkanBufferUploader>(*this,10  * 1024*1024);
 		m_textureUploader = std::make_unique<VulkanTextureUploader>(*this);
 
@@ -444,7 +444,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  ShaderCompiler生成
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::createShaderCompiler() {
+	void VulkanDevice::createShaderCompiler() {
 #ifdef OS_WINDOWS
 
 		HRESULT result;
@@ -473,7 +473,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  バインドレス初期化
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::initializeBindless() {
+	void VulkanDevice::initializeBindless() {
 
 		if (m_config.enableBindless) {
 			m_descriptorHeap = std::make_unique<VulkanDescriptorHeap>(
@@ -488,12 +488,12 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コマンドをシステムキューに追加
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::entryCommandList(const Ref<CommandList>& commandList) {
+	void VulkanDevice::entryCommandList(const Ref<CommandList>& commandList) {
 		m_commandQueue->entryCommandList(commandList);
 	}
 
 	//! @brief ビデオカード情報を取得  
-	Vector<VideoCard> VulkanRHI::getVideoCards() const {
+	Vector<VideoCard> VulkanDevice::getVideoCards() const {
 
 		Vector<VideoCard> videoCards;
 		auto devices = m_instance.enumeratePhysicalDevices();
@@ -522,7 +522,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  更新
 	//@―---------------------------------------------------------------------------
-	void VulkanRHI::update() {
+	void VulkanDevice::update() {
 
 		{
 
@@ -539,82 +539,82 @@ namespace ob::rhi {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 
-		RHI::update();
+		Device::update();
 	}
 
 
 
 	//! @brief  スワップ・チェーンを生成
-	Ref<SwapChain> VulkanRHI::createSwapChain(const SwapChainDesc& desc) {
+	Ref<SwapChain> VulkanDevice::createSwapChain(const SwapChainDesc& desc) {
 		SAFE_CREATE(SwapChain, VulkanSwapChain,*this, desc);
 	}
 
 
 	//! @brief  コマンドリスト生成
-	Ref<CommandList> VulkanRHI::createCommandList(const CommandListDesc& desc) {
+	Ref<CommandList> VulkanDevice::createCommandList(const CommandListDesc& desc) {
 		SAFE_CREATE(CommandList, VulkanCommandList, *this, desc);
 	}
 
 
 
 	//! @brief  ルートシグネチャを生成
-	Ref<RootSignature> VulkanRHI::createRootSignature(const RootSignatureDesc& desc) {
+	Ref<RootSignature> VulkanDevice::createRootSignature(const RootSignatureDesc& desc) {
 		SAFE_CREATE(RootSignature, VulkanRootSignature, *this,desc);
 	}
 
 
 	//! @brief  パイプラインステートを生成
-	Ref<PipelineState> VulkanRHI::createPipelineState(const PipelineStateDesc& desc) {
+	Ref<PipelineState> VulkanDevice::createPipelineState(const PipelineStateDesc& desc) {
 		SAFE_CREATE(PipelineState, VulkanPipelineState,*this, desc);
 	}
 
 
 	//! @brief  コンピュートパイプラインステートを生成
-	Ref<ComputePipelineState> VulkanRHI::createComputePipelineState(const ComputePipelineStateDesc& desc) {
+	Ref<ComputePipelineState> VulkanDevice::createComputePipelineState(const ComputePipelineStateDesc& desc) {
 		SAFE_CREATE(ComputePipelineState, VulkanComputePipelineState, *this, desc);
 	}
 
 
 	//! @brief  テクスチャを生成
-	Ref<Texture> VulkanRHI::createTexture(const TextureDesc& desc) {
+	Ref<Texture> VulkanDevice::createTexture(const TextureDesc& desc) {
 		SAFE_CREATE(Texture, VulkanTexture, *this, desc);
 	}
 
 
-	Ref<Texture> VulkanRHI::createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { 
+	Ref<Texture> VulkanDevice::createTexture(StringView name, TextureType type, Size size, Span<const IntColor> colors) { 
 		SAFE_CREATE(Texture, VulkanTexture, *this,name,type,size,colors);
 	}
 
 
 	//! @brief  テクスチャを生成
-	Ref<Texture> VulkanRHI::createTexture(StringView name, BlobView blob) {
+	Ref<Texture> VulkanDevice::createTexture(StringView name, BlobView blob) {
 		SAFE_CREATE(Texture, VulkanTexture, *this, name, blob);
 	}
 
 
 	//! @brief  レンダーテクスチャを生成
-	Ref<RenderTexture> VulkanRHI::createRenderTexture(const RenderTextureDesc& desc) {
+	Ref<RenderTexture> VulkanDevice::createRenderTexture(const RenderTextureDesc& desc) {
 		SAFE_CREATE(Texture, VulkanTexture, *this, desc);
 	}
 
 
 	//! @brief  サンプラーを生成
-	Ref<Sampler> VulkanRHI::createSampler(const SamplerDesc& desc) { 
+	Ref<Sampler> VulkanDevice::createSampler(const SamplerDesc& desc) { 
 		SAFE_CREATE(Sampler, VulkanSampler, *this, desc);
 	}
 
 
 	//! @brief  バッファーを生成
-	Ref<Buffer> VulkanRHI::createBuffer(const BufferDesc& desc) { 
+	Ref<Buffer> VulkanDevice::createBuffer(const BufferDesc& desc) { 
 		SAFE_CREATE(Buffer, VulkanBuffer, *this, desc);
 	}
-	Ref<Buffer> VulkanRHI::createBuffer(const BufferViewDesc& desc) { 
+	Ref<Buffer> VulkanDevice::createBuffer(const BufferViewDesc& desc) { 
 		return nullptr;
 	}
 
 
 	//! @brief  シェーダをコンパイル
-	Ref<Shader> VulkanRHI::compileShader(const ShaderCompileDesc& desc) { 
+	Ref<Shader> VulkanDevice::compileShader(const ShaderCompileDesc& desc) { 
 		if (!supports(desc.stage)) {
 			LOG_ERROR("非対応のShaderStageです。Shader::Supports()でサポート状況を確認してください。");
 			return nullptr;
@@ -624,20 +624,20 @@ namespace ob::rhi {
 
 
 	//! @brief  シェーダをロード
-	Ref<Shader> VulkanRHI::loadShader(BlobView, ShaderStage) { return {}; }
+	Ref<Shader> VulkanDevice::loadShader(BlobView, ShaderStage) { return {}; }
 
 
 	//! @brief  デスクリプタ・テーブルを生成
-	Ref<DescriptorLayout> VulkanRHI::createDescriptorLayout(const DescriptorLayoutDesc& desc) { 
+	Ref<DescriptorLayout> VulkanDevice::createDescriptorLayout(const DescriptorLayoutDesc& desc) { 
 		SAFE_CREATE(DescriptorLayout, VulkanDescriptorLayout, *this, desc);
 	}
-	Ref<DescriptorTable> VulkanRHI::createDescriptorTable(const DescriptorTableDesc& desc) {
+	Ref<DescriptorTable> VulkanDevice::createDescriptorTable(const DescriptorTableDesc& desc) {
 		SAFE_CREATE(DescriptorTable, VulkanDescriptorTable, *this, desc);
 	}
 
 
 	//! @brief サポートしているテクスチャフォーマットか 
-	bool VulkanRHI::supports(TextureFormat format, TextureType type)const {
+	bool VulkanDevice::supports(TextureFormat format, TextureType type)const {
 
 		try {
 			vk::ImageFormatProperties properties = m_physicalDevice.getImageFormatProperties(
@@ -655,7 +655,7 @@ namespace ob::rhi {
 
 	}
 	//! @brief サポートしているレンダーテクスチャフォーマットか 
-	bool VulkanRHI::supportsForRenderTexture(TextureFormat format)const {
+	bool VulkanDevice::supportsForRenderTexture(TextureFormat format)const {
 
 		try {
 			vk::ImageUsageFlags flags{};
@@ -681,7 +681,7 @@ namespace ob::rhi {
 
 	}
 	//! @brief サポートしているシェーダーステージか
-	bool VulkanRHI::supports(ShaderStage stage)const {
+	bool VulkanDevice::supports(ShaderStage stage)const {
 		if (stage == ShaderStage::Hull && m_features.tessellationShader) {
 			return false;
 		}
@@ -695,25 +695,25 @@ namespace ob::rhi {
 		return true;
 	}
 
-	void VulkanRHI::allocateHandle(VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc) {
+	void VulkanDevice::allocateHandle(VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc) {
 		if (m_descriptorHeap) {
 			m_descriptorHeap->allocateHandle(handle, desc);
 		}
 	}
 
 
-	void VulkanRHI::setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout,s32 slot) {
+	void VulkanDevice::setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout,s32 slot) {
 		if (m_descriptorHeap) {
 			m_descriptorHeap->recordDescriptorHeap(commandBuffer, layout, slot);
 		}
 	}
 
-	vk::DescriptorSetLayout VulkanRHI::getBindlessDescriptorSetLayout() const {
+	vk::DescriptorSetLayout VulkanDevice::getBindlessDescriptorSetLayout() const {
 		return m_descriptorHeap->getLayout();
 	}
 
 
-	void VulkanRHI::clearCommands() {
+	void VulkanDevice::clearCommands() {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 	}

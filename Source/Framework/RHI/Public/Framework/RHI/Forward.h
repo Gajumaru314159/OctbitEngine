@@ -23,7 +23,7 @@ namespace ob::rhi {
 	struct BindingSlot;
 
 	// クラス
-	class RHI;
+	class Device;
 	class Buffer;
 	class CommandList;
 	class DescriptorTable;

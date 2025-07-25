@@ -11,7 +11,7 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	SystemResource::SystemResource(RHI& rhi) {
+	SystemResource::SystemResource(Device& rhi) {
 		{
 			// テクスチャ
 			auto creator = [this,&rhi](IntColor color) {

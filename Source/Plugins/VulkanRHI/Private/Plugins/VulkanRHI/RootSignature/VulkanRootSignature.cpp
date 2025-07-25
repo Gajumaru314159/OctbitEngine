@@ -3,13 +3,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
 
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanRootSignature::VulkanRootSignature(VulkanRHI& rhi, const RootSignatureDesc& desc)
+	VulkanRootSignature::VulkanRootSignature(VulkanDevice& rhi, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
 		auto& device = rhi.getDevice();

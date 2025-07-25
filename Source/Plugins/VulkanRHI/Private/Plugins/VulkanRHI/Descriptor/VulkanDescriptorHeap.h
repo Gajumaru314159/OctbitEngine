@@ -20,7 +20,7 @@ namespace ob::rhi {
 		//! @param type     ヒープ・タイプ
 		//! @param resourceCapacity 容量
 		//! @param samplerCapacity  サンプラー容量
-		VulkanDescriptorHeap(class VulkanRHI& device, s32 resourceCapacity, s32 samplerCapacity);
+		VulkanDescriptorHeap(class VulkanDevice& device, s32 resourceCapacity, s32 samplerCapacity);
 
 
 		//! @brief          デストラクタ

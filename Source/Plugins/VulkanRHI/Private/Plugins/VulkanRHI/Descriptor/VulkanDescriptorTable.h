@@ -18,7 +18,7 @@ namespace ob::rhi {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        VulkanDescriptorTable(VulkanRHI& rhi, const DescriptorTableDesc& desc);
+        VulkanDescriptorTable(VulkanDevice& rhi, const DescriptorTableDesc& desc);
 
 
 		//! @brief      名前を取得
@@ -60,7 +60,7 @@ namespace ob::rhi {
 		using Element = Variant<BufferElement, TextureElement, SamplerElement>;
 
     private:
-		VulkanRHI&				m_rhi;
+		VulkanDevice&				m_device;
 		DescriptorTableDesc		m_desc;
 
 		vk::raii::DescriptorPool m_pool = nullptr;

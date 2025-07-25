@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
@@ -20,8 +20,8 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanSwapChain::VulkanSwapChain(VulkanRHI& rhi, const SwapChainDesc& desc)
-		: m_rhi(rhi)
+	VulkanSwapChain::VulkanSwapChain(VulkanDevice& rhi, const SwapChainDesc& desc)
+		: m_device(rhi)
 	{
 		m_desc = desc;
 		
@@ -52,7 +52,7 @@ namespace ob::rhi {
 	
 	//! @brief 更新
 	void VulkanSwapChain::update() {
-		update(m_rhi.getQueue());
+		update(m_device.getQueue());
 	}
 
 
@@ -69,7 +69,7 @@ namespace ob::rhi {
 
 		if (!m_desc.window.isValid())return;
 
-		auto& device = m_rhi.getDevice();
+		auto& device = m_device.getDevice();
 
 		device.resetFences(*m_fence);
 
@@ -184,20 +184,20 @@ namespace ob::rhi {
 		info.hinstance = GetModuleHandle(nullptr);
 		info.hwnd = (HWND)m_desc.window.getHandle();
 
-		m_surface = m_rhi.getInstance().createWin32SurfaceKHR(info, m_rhi.getAllocationCallbacks());
+		m_surface = m_device.getInstance().createWin32SurfaceKHR(info, m_device.getAllocationCallbacks());
 #else
 		static_assert(true, "Surface is not implemented.");
 #endif
 
 		// サーフェイスのサポートをチェック
-		if (!m_rhi.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
+		if (!m_device.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
 			throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
 		}
 
 		// サーフェスの機能を取得
-		auto capabilities = m_rhi.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
-		auto surfaceFormats = m_rhi.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
-		auto presentModeList = m_rhi.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
+		auto capabilities = m_device.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
+		auto surfaceFormats = m_device.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
+		auto presentModeList = m_device.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
 
 
 		vk::Extent2D size;
@@ -270,7 +270,7 @@ namespace ob::rhi {
 		swapChainCreateInfo.clipped = VK_TRUE;
 		swapChainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-		m_swapchain = m_rhi.getDevice().createSwapchainKHR(swapChainCreateInfo, m_rhi.getAllocationCallbacks());
+		m_swapchain = m_device.getDevice().createSwapchainKHR(swapChainCreateInfo, m_device.getAllocationCallbacks());
 
 
 		// Image取得
@@ -295,13 +295,13 @@ namespace ob::rhi {
 			imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
 			imageViewCreateInfo.subresourceRange.layerCount = 1;
 
-			m_imageViews2.emplace_back(m_rhi.getDevice().createImageView(imageViewCreateInfo, m_rhi.getAllocationCallbacks()));
+			m_imageViews2.emplace_back(m_device.getDevice().createImageView(imageViewCreateInfo, m_device.getAllocationCallbacks()));
 			m_imageViews.push_back(m_imageViews2.back());
 
 		}
 
-		m_rhi.setName(m_surface, m_desc.name);
-		m_rhi.setName(m_swapchain, m_desc.name);
+		m_device.setName(m_surface, m_desc.name);
+		m_device.setName(m_swapchain, m_desc.name);
 	}
 
 	void VulkanSwapChain::clearBuffer() {
@@ -334,7 +334,7 @@ namespace ob::rhi {
 		{
 			SamplerDesc desc;
 			desc.name = m_desc.name + "_Sampler";
-			m_bindedSampler = m_rhi.createSampler(desc);
+			m_bindedSampler = m_device.createSampler(desc);
 		}
 
 		Ref<Shader> vs;
@@ -413,9 +413,9 @@ namespace ob::rhi {
 		// m_fenceの生成
 		vk::FenceCreateInfo fenceInfo;
 		fenceInfo.flags = vk::FenceCreateFlagBits::eSignaled;
-		m_fence = m_rhi.getDevice().createFence(fenceInfo, m_rhi.getAllocationCallbacks());
+		m_fence = m_device.getDevice().createFence(fenceInfo, m_device.getAllocationCallbacks());
 
-		m_rhi.setName(m_fence, m_desc.name);
+		m_device.setName(m_fence, m_desc.name);
 	}
 
 
@@ -431,7 +431,7 @@ namespace ob::rhi {
 					m_desc.size.width = (s32)args.newSize.x;
 					m_desc.size.height = (s32)args.newSize.y;
 
-					m_rhi.clearCommands();
+					m_device.clearCommands();
 
 					clearBuffer();
 					createBuffer();

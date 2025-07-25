@@ -15,7 +15,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class DirectX12RHI;
+    class DirectX12Device;
 }
 
 
@@ -28,16 +28,16 @@ namespace ob::rhi {
     public:
 
         //! @brief      空テクスチャを生成
-        DirectX12Texture(DirectX12RHI& rDevice, const TextureDesc& desc);
+        DirectX12Texture(DirectX12Device& device, const TextureDesc& desc);
 
         //! @brief      色データから新しいテクスチャを作成
-        DirectX12Texture(DirectX12RHI& rDevice, StringView name, TextureType type, Size size,Span<const IntColor> colors);
+        DirectX12Texture(DirectX12Device& device, StringView name, TextureType type, Size size,Span<const IntColor> colors);
 
         //! @brief      テクスチャバイナリから生成
-        DirectX12Texture(DirectX12RHI& rDevice, StringView name, BlobView blob);
+        DirectX12Texture(DirectX12Device& device, StringView name, BlobView blob);
 
         //! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
-        DirectX12Texture(DirectX12RHI& rDevice, const TextureViewDesc& desc);
+        DirectX12Texture(DirectX12Device& device, const TextureViewDesc& desc);
 
         //! @brief      妥当な状態か
         bool isValid()const;
@@ -60,10 +60,10 @@ namespace ob::rhi {
     public:
 
         //! @brief      RenderTextureDesc からRenderTextureを生成
-        DirectX12Texture(DirectX12RHI& rDevice, const RenderTextureDesc& desc);
+        DirectX12Texture(DirectX12Device& device, const RenderTextureDesc& desc);
 
         //! @brief      SwapChainのリソースからRenderTextureを生成
-        DirectX12Texture(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
+        DirectX12Texture(DirectX12Device& device, const ComPtr<ID3D12Resource>& resource,D3D12_RESOURCE_STATES state,StringView name);
 
     public:
 
@@ -105,7 +105,7 @@ namespace ob::rhi {
 
     protected:
 
-        class DirectX12RHI&     m_device;
+        class DirectX12Device&     m_device;
 
         TextureDesc             m_desc;         //!< 定義
         TextureViewDesc         m_viewDesc;     //!< ビュー定義

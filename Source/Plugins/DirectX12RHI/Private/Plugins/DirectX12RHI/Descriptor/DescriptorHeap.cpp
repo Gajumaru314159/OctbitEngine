@@ -5,7 +5,7 @@
 #pragma once
 #include "DescriptorHeap.h"
 #include <Framework/Core/Math/BitOp.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
@@ -31,7 +31,7 @@ namespace ob::rhi {
 	//! @param device   デバイス
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
-	DescriptorHeap::DescriptorHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity)
+	DescriptorHeap::DescriptorHeap(DirectX12Device& device, DescriptorHeapType type, s32 capacity)
 		: m_mapper(capacity)
 		, m_type(type)
 	{
@@ -134,7 +134,7 @@ namespace ob::rhi {
 
 
 
-	DescriptorStagingHeap::DescriptorStagingHeap(DirectX12RHI& device, DescriptorHeapType type, s32 capacity) {
+	DescriptorStagingHeap::DescriptorStagingHeap(DirectX12Device& device, DescriptorHeapType type, s32 capacity) {
 
 		D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 		descHeapDesc.Type = Convert(type);

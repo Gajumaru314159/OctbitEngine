@@ -16,7 +16,7 @@ namespace ob::rhi {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-		VulkanDescriptorLayout(VulkanRHI& rhi,const DescriptorLayoutDesc& desc);
+		VulkanDescriptorLayout(VulkanDevice& rhi,const DescriptorLayoutDesc& desc);
 
 		const DescriptorLayoutDesc& getDesc() const override { return m_desc; }
 

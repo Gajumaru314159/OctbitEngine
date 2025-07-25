@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorTable.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Sampler/VulkanSampler.h>
@@ -15,8 +15,8 @@ namespace ob::rhi {
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	VulkanDescriptorTable::VulkanDescriptorTable(VulkanRHI& rhi, const DescriptorTableDesc& desc)
-		: m_rhi(rhi)
+	VulkanDescriptorTable::VulkanDescriptorTable(VulkanDevice& rhi, const DescriptorTableDesc& desc)
+		: m_device(rhi)
 		, m_desc(desc)
 	{
 
@@ -77,7 +77,7 @@ namespace ob::rhi {
 		info.flags |= vk::DescriptorPoolCreateFlagBits::eUpdateAfterBindEXT; // Bindless用
 		info.setPoolSizes(descPoolSizes);
 
-		m_pool = device.createDescriptorPool(info, m_rhi.getAllocationCallbacks());
+		m_pool = device.createDescriptorPool(info, m_device.getAllocationCallbacks());
 
 		// DescriptorSetを生成
 		// NOTE 同じレイアウトのものは巨大なプールにする必要があるかもしれない
@@ -90,8 +90,8 @@ namespace ob::rhi {
 		auto sets = device.allocateDescriptorSets(allocInfo);
 		m_set = std::move(sets.front());
 		
-		m_rhi.setName(m_pool, m_desc.name);
-		m_rhi.setName(m_set, m_desc.name);
+		m_device.setName(m_pool, m_desc.name);
+		m_device.setName(m_set, m_desc.name);
 
 		manage();
 	}

@@ -9,7 +9,7 @@
 namespace ob::rhi {
 
     //! @brief  コンストラクタ
-    RHI::RHI(GraphicObjectManager& manager,RHIConfig* config) 
+    Device::Device(GraphicObjectManager& manager,RHIConfig* config) 
         : m_objectManager(manager)
         , m_config(config? *config:RHIConfig())
     {
@@ -17,18 +17,18 @@ namespace ob::rhi {
 
 
     //! @brief  デストラクタ
-    RHI::~RHI() {
+    Device::~Device() {
     }
 
 
     //! @brief  更新
-    void RHI::update() {
+    void Device::update() {
         m_objectManager.update();
     }
 
 
     //! @brief  終了処理
-    void RHI::finalize() {
+    void Device::finalize() {
         m_objectManager.finalize();
     }
 }

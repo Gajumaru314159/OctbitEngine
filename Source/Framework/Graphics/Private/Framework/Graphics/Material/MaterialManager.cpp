@@ -24,7 +24,7 @@ namespace ob::graphics {
 
 
 	//!	@brief			コンストラクタ
-	MaterialManager::MaterialManager(rhi::RHI&, NameDictionary&) {
+	MaterialManager::MaterialManager(rhi::Device&, NameDictionary&) {
 	}
 
 	//!	@brief			デストラクタ

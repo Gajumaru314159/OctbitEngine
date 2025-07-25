@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Texture.h"
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 #include <DirectXTex.h>
@@ -56,8 +56,8 @@ namespace ob::rhi {
 
 
     //! @brief      TextureDesc から空のテクスチャを生成
-    DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, const TextureDesc& desc)
-		: m_device(rDevice)
+    DirectX12Texture::DirectX12Texture(DirectX12Device& device, const TextureDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 		// バリデート
@@ -71,7 +71,7 @@ namespace ob::rhi {
 
 		// リソース生成
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps,D3D12_HEAP_FLAG_NONE,&resourceDesc,m_state,nullptr,IID_PPV_ARGS(m_resource.GetAddressOf()));
+		auto result = device.getNative()->CreateCommittedResource(&heapProps,D3D12_HEAP_FLAG_NONE,&resourceDesc,m_state,nullptr,IID_PPV_ARGS(m_resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result,"ID3D12Device::CreateCommittedResource()");
@@ -83,8 +83,8 @@ namespace ob::rhi {
 
 
 	//! @brief      IntColorの配列 から空のテクスチャを生成
-	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, StringView name, TextureType type,Size size, Span<const IntColor> colors)
-		: m_device(rDevice)
+	DirectX12Texture::DirectX12Texture(DirectX12Device& device, StringView name, TextureType type,Size size, Span<const IntColor> colors)
+		: m_device(device)
 	{
 		// Desc設定
 		m_desc.name = name;
@@ -111,7 +111,7 @@ namespace ob::rhi {
 		// リソース生成
 		ComPtr<ID3D12Resource> resource;
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
-		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
+		auto result = device.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
@@ -150,8 +150,8 @@ namespace ob::rhi {
 
 
 	//! @brief      テクスチャバイナリから生成
-	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, StringView name,BlobView blob)
-		: m_device(rDevice)
+	DirectX12Texture::DirectX12Texture(DirectX12Device& device, StringView name,BlobView blob)
+		: m_device(device)
 	{
 		// 拡張子に合わせて読み込み
 		HRESULT result = 0;
@@ -239,8 +239,8 @@ namespace ob::rhi {
 
 
 	//! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
-	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, const TextureViewDesc& desc)
-		: m_device(rDevice)
+	DirectX12Texture::DirectX12Texture(DirectX12Device& device, const TextureViewDesc& desc)
+		: m_device(device)
 	{
 		auto base = desc.base.cast<DirectX12Texture>();
 		if (!base) {
@@ -251,7 +251,7 @@ namespace ob::rhi {
 		m_desc = base->m_desc;
 		m_viewDesc = desc;
 
-		rDevice.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+		device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 
 		auto flags = m_desc.flags;
 
@@ -280,8 +280,8 @@ namespace ob::rhi {
 
 
 	//! @brief       RenderTextureDesc からRenderTextureを生成
-	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, const RenderTextureDesc& desc)
-		: m_device(rDevice)
+	DirectX12Texture::DirectX12Texture(DirectX12Device& device, const RenderTextureDesc& desc)
+		: m_device(device)
 		, m_renderDesc(desc)
 	{
 		m_desc.name = desc.name;
@@ -323,7 +323,7 @@ namespace ob::rhi {
 		// リソース生成
 		ComPtr<ID3D12Resource> resource;
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		auto result = rDevice.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
+		auto result = device.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
@@ -369,8 +369,8 @@ namespace ob::rhi {
 
 
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	DirectX12Texture::DirectX12Texture(DirectX12RHI& rDevice, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
-		: m_device(rDevice)
+	DirectX12Texture::DirectX12Texture(DirectX12Device& device, const ComPtr<ID3D12Resource>& resource, D3D12_RESOURCE_STATES state,StringView name)
+		: m_device(device)
 		, m_resource(resource)
 		, m_state(state)
 	{
@@ -380,14 +380,14 @@ namespace ob::rhi {
 
 		// RTV生成
 		{
-			rDevice.allocateHandle(DescriptorHeapType::RTV, m_hRTV, 1);
+			device.allocateHandle(DescriptorHeapType::RTV, m_hRTV, 1);
 
 			D3D12_RENDER_TARGET_VIEW_DESC viewDesc = {};
 			viewDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 			viewDesc.Format = resource->GetDesc().Format;
 
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_hRTV.getCpuHandle();
-			rDevice.getNative()->CreateRenderTargetView(resource.Get(), &viewDesc, handle);
+			device.getNative()->CreateRenderTargetView(resource.Get(), &viewDesc, handle);
 		}
 
 		m_viewport = CD3DX12_VIEWPORT(resource.Get());

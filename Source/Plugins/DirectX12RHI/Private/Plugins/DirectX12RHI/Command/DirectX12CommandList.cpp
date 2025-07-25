@@ -8,7 +8,7 @@
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/CommandParam.h>
 #include <Framework/RHI/RenderPass.h>
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/SwapChain/DirectX12SwapChain.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
@@ -31,7 +31,7 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	DirectX12CommandList::DirectX12CommandList(class DirectX12RHI& device, const CommandListDesc& desc)
+	DirectX12CommandList::DirectX12CommandList(class DirectX12Device& device, const CommandListDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
 	{
@@ -113,7 +113,7 @@ namespace ob::rhi {
 	//! @brief  コマンドをシステムキューに追加
 	//! // TODO Singletonに依存しているので廃止
 	void DirectX12CommandList::flush() {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			Ref<CommandList> commandList = this;
 			rhi->entryCommandList(commandList);
 		}

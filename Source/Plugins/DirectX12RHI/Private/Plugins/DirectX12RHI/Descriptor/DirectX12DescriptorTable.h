@@ -10,7 +10,7 @@
 #include <Plugins/DirectX12RHI/RootSignature/DirectX12RootSignature.h>
 
 namespace ob::rhi {
-	class DirectX12RHI;
+	class DirectX12Device;
 	class DescriptorHeap;
 	class DirectX12DescriptorLayout;
 }
@@ -26,7 +26,7 @@ namespace ob::rhi {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        DirectX12DescriptorTable(DirectX12RHI& device, const DescriptorTableDesc& desc, DescriptorHeap& heap, DescriptorHeap& heap2);
+        DirectX12DescriptorTable(DirectX12Device& device, const DescriptorTableDesc& desc, DescriptorHeap& heap, DescriptorHeap& heap2);
 		
 
 		//! @brief  妥当な状態か
@@ -54,7 +54,7 @@ namespace ob::rhi {
 		bool tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, D3D12_DESCRIPTOR_RANGE_TYPE& type) const;
 
     private:
-		DirectX12RHI&		m_rhi;
+		DirectX12Device&		m_device;
 		DescriptorTableDesc m_desc;
 		DirectX12DescriptorLayout* m_layout = nullptr;
 

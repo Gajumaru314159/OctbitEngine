@@ -11,7 +11,7 @@ using namespace ob::rhi;
 
 TYPED_TEST(RHITest, VideoCard_Get) {
 
-	auto videoCards = RHI::Get()->getVideoCards();
+	auto videoCards = Device::Get()->getVideoCards();
 
 	for (auto& videoCard : videoCards) {
 		ASSERT_NE(videoCard.name, "");

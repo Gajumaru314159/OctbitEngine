@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include "DirectX12Sampler.h"
-#include <Plugins/DirectX12RHI/DirectX12RHI.h>
+#include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
@@ -14,8 +14,8 @@ namespace ob::rhi {
     //! @param src			シェーダコード
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    DirectX12Sampler::DirectX12Sampler(DirectX12RHI& rhi,const SamplerDesc& desc)
-		: m_rhi(rhi)
+    DirectX12Sampler::DirectX12Sampler(DirectX12Device& rhi,const SamplerDesc& desc)
+		: m_device(rhi)
 		, m_desc(desc)
     {
 		D3D12_SAMPLER_DESC ddesc = {};
@@ -43,7 +43,7 @@ namespace ob::rhi {
 
         m_nativeDesc = ddesc;
 
-        m_rhi.allocateHandle(DescriptorHeapType::Sampler, m_handle, 1);
+        m_device.allocateHandle(DescriptorHeapType::Sampler, m_handle, 1);
 
         createView(m_handle.getCpuHandle());
 
@@ -51,7 +51,7 @@ namespace ob::rhi {
     }
 
     void DirectX12Sampler::createView(D3D12_CPU_DESCRIPTOR_HANDLE handle) {        
-        m_rhi.getNative()->CreateSampler(&m_nativeDesc, handle);
+        m_device.getNative()->CreateSampler(&m_nativeDesc, handle);
     }
 
 }

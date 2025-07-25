@@ -12,7 +12,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンストラクタ
-        CommandQueue(class DirectX12RHI& device);
+        CommandQueue(class DirectX12Device& device);
 
         void entryCommandList(const CommandList& commandList);
         void entryCommandListTop(const CommandList& commandList);

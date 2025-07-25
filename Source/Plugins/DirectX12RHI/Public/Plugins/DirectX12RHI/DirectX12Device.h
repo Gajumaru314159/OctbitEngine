@@ -18,13 +18,13 @@ namespace ob::platform {
 
 namespace ob::rhi {
 
-	class DirectX12RHI : public RHI{
+	class DirectX12Device : public Device{
 	public:
 		//! @brief  DirectX12RHIの起動に必要なサービスを登録
 		static void Inject(ServiceInjector&);
 	public:
-		DirectX12RHI(ob::platform::WindowManager&, GraphicObjectManager&, RHIConfig*, DirectX12RHIConfig*);
-		~DirectX12RHI();
+		DirectX12Device(ob::platform::WindowManager&, GraphicObjectManager&, RHIConfig*, DirectX12RHIConfig*);
+		~DirectX12Device();
 
 		//! @brief  ゲーム更新イベント
 		void update() override;
@@ -238,23 +238,23 @@ namespace ob::rhi {
 namespace ob::rhi {
 
 	//! @brief  ネイティブ・デバイスを取得
-	inline ComPtr<ID3D12Device8>& DirectX12RHI::getNative() {
+	inline ComPtr<ID3D12Device8>& DirectX12Device::getNative() {
 		return m_device;
 	}
 
 
 	//! @brief  ファクトリを取得
-	inline ComPtr<IDXGIFactory7>& DirectX12RHI::getFactory() {
+	inline ComPtr<IDXGIFactory7>& DirectX12Device::getFactory() {
 		return m_dxgiFactory;
 	}
 
 	//! @brief  シェーダーコンパイラ―を取得
-	inline ComPtr<IDxcCompiler3>& DirectX12RHI::getShaderCompiler() {
+	inline ComPtr<IDxcCompiler3>& DirectX12Device::getShaderCompiler() {
 		return m_shaderCompiler;
 	}
 
 	//! @brief  シェーダーインクルードハンドラーを取得
-	inline ComPtr<IDxcIncludeHandler>& DirectX12RHI::getIncludeHandler() {
+	inline ComPtr<IDxcIncludeHandler>& DirectX12Device::getIncludeHandler() {
 		return m_shaderIncludeHandler;
 	}
 

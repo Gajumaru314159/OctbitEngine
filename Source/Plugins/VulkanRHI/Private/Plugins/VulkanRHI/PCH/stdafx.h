@@ -24,7 +24,7 @@
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 
 namespace ob::rhi {
-	class VulkanRHI;
+	class VulkanDevice;
 }
 
 #ifdef OS_WINDOWS

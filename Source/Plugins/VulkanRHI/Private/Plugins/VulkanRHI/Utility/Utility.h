@@ -6,7 +6,7 @@
 
 namespace ob::rhi {
 
-	class VulkanRHI;
+	class VulkanDevice;
 
     inline bool Failed(::VkResult res)
     {

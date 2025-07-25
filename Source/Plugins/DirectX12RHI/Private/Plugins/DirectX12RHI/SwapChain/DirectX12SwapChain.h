@@ -16,7 +16,7 @@
 // 前方宣言
 //===============================================================
 namespace ob::rhi {
-    class DirectX12RHI;
+    class DirectX12Device;
     class DirectX12CommandList;
     class ITexture;
 }
@@ -36,7 +36,7 @@ namespace ob::rhi {
         //===============================================================
 
         //! @brief  コンストラクタ
-        DirectX12SwapChain(DirectX12RHI& rDevice, const SwapChainDesc& desc);
+        DirectX12SwapChain(DirectX12Device& device, const SwapChainDesc& desc);
 
 
         //! @brief  デストラクタ
@@ -96,16 +96,16 @@ namespace ob::rhi {
 
     private:
 
-        bool createSwapChain(DirectX12RHI& rDevice);
-        bool createResources(DirectX12RHI& rDevice);
-        bool createBuffers(DirectX12RHI& rDevice);
+        bool createSwapChain(DirectX12Device& device);
+        bool createResources(DirectX12Device& device);
+        bool createBuffers(DirectX12Device& device);
         
         bool setColorSpace();
 
 
     private:
 
-        DirectX12RHI& m_device;
+        DirectX12Device& m_device;
 
         SwapChainDesc m_desc;
 

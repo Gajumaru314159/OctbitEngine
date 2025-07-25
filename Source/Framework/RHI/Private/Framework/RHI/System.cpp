@@ -15,7 +15,7 @@ namespace ob::rhi {
 	void RegisterRHIService(ServiceInjector& injector) {
 		injector.bind<GraphicObjectManager>();
 		injector.bind<SystemResource>();
-		injector.bind<EmptyRHI>().as<RHI>();
+		injector.bind<EmptyRHI>().as<Device>();
 	}
 
 }

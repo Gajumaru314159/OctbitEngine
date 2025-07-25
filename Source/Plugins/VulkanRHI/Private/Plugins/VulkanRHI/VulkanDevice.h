@@ -23,7 +23,7 @@ namespace ob::rhi {
 	};
 
 
-	class VulkanRHI :public RHI {
+	class VulkanDevice :public Device {
 	public:
 
 		//===============================================================
@@ -33,8 +33,8 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		VulkanRHI(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*,VulkanRHIConfig*);
-		~VulkanRHI();
+		VulkanDevice(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*,VulkanRHIConfig*);
+		~VulkanDevice();
 
 		//! @brief  ゲーム更新イベント
 		void update();

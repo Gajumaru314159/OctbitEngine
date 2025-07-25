@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
@@ -12,14 +12,14 @@ namespace ob::rhi {
 	//! @brief  コンストラクタ
 	//! 
 	//! @param desc バッファ定義
-	VulkanBuffer::VulkanBuffer(VulkanRHI& rhi, const BufferDesc& desc)
-		: m_rhi(rhi)
+	VulkanBuffer::VulkanBuffer(VulkanDevice& device, const BufferDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 
 		if (!m_desc.isValid()) throw Exception("Invalid BufferDesc");
 
-		auto& device = rhi.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		// バッファ生成
 		vk::BufferCreateInfo info;
@@ -38,9 +38,9 @@ namespace ob::rhi {
 
 		// メモリ確保
 		m_shared = std::make_shared<SharedResource>();
-		m_shared->buffer = device.createBuffer(info, m_rhi.getAllocationCallbacks());		
-		VkMemoryAllocateInfo allocInfo = m_rhi.getAllocationInfo(m_shared->buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
-		m_shared->memory = device.allocateMemory(allocInfo, m_rhi.getAllocationCallbacks());
+		m_shared->buffer = vkdevice.createBuffer(info, m_device.getAllocationCallbacks());		
+		VkMemoryAllocateInfo allocInfo = m_device.getAllocationInfo(m_shared->buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		m_shared->buffer.bindMemory(m_shared->memory, 0);
 
 		// バッファハンドルの生成
@@ -75,12 +75,12 @@ namespace ob::rhi {
 			if (!withoutView) {
 				writeDescSet.setBufferInfo(descBufInfo);
 
-				m_rhi.allocateHandle(m_handle, writeDescSet);
+				m_device.allocateHandle(m_handle, writeDescSet);
 			}
 		}
 
-		m_rhi.setName(m_shared->buffer, m_desc.name);
-		m_rhi.setName(m_shared->memory, m_desc.name);
+		m_device.setName(m_shared->buffer, m_desc.name);
+		m_device.setName(m_shared->memory, m_desc.name);
 
 		manage();
 	}
@@ -90,15 +90,15 @@ namespace ob::rhi {
 	//! 
 	//! @param desc バッファ定義
 	//! @param data 初期化データ
-	VulkanBuffer::VulkanBuffer(VulkanRHI& rhi, const BufferDesc& desc, const Blob& blob)
-		: VulkanBuffer(rhi,desc)
+	VulkanBuffer::VulkanBuffer(VulkanDevice& device, const BufferDesc& desc, const Blob& blob)
+		: VulkanBuffer(device,desc)
 	{
 		update(blob.size(), blob.data(),0);
 	}
 
 	//! @brief  コンストラクタ
-	VulkanBuffer::VulkanBuffer(VulkanRHI& rDevice, const BufferViewDesc& desc) 
-		: m_rhi(rDevice)
+	VulkanBuffer::VulkanBuffer(VulkanDevice& device, const BufferViewDesc& desc) 
+		: m_device(device)
 		, m_viewDesc(desc)
 	{
 
@@ -155,7 +155,7 @@ namespace ob::rhi {
 		}
 
 		if (withView) {
-			m_rhi.allocateHandle(m_handle, writeDescSet);
+			m_device.allocateHandle(m_handle, writeDescSet);
 		}
 
 		manage();
@@ -197,7 +197,7 @@ namespace ob::rhi {
 	void VulkanBuffer::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
 
-		m_rhi.getBufferUploader().add(BlobView(data, size), m_shared->buffer, offset,TypeConverter::Convert(m_desc.state));
+		m_device.getBufferUploader().add(BlobView(data, size), m_shared->buffer, offset,TypeConverter::Convert(m_desc.state));
 	}
 
 
@@ -207,7 +207,7 @@ namespace ob::rhi {
 	void VulkanBuffer::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-		m_rhi.getBufferUploader().add(func, m_desc.size, m_shared->buffer, 0, TypeConverter::Convert(m_desc.state));
+		m_device.getBufferUploader().add(func, m_desc.size, m_shared->buffer, 0, TypeConverter::Convert(m_desc.state));
 
 		return;
 

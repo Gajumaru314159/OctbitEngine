@@ -21,7 +21,7 @@ namespace ob::rhi {
 	}
 
     Ref<Sampler> Sampler::Create(const SamplerDesc& desc) {
-		if (auto rhi = RHI::Get()) {
+		if (auto rhi = Device::Get()) {
 			return rhi->createSampler(desc);
 		}
 		return nullptr;

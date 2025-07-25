@@ -3,13 +3,13 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorLayout.h>
-#include <Plugins/VulkanRHI/VulkanRHI.h>
+#include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
 namespace ob::rhi {
 
 	//! @brief              コンストラクタ
-	VulkanDescriptorLayout::VulkanDescriptorLayout(VulkanRHI& rhi, const DescriptorLayoutDesc& desc)
+	VulkanDescriptorLayout::VulkanDescriptorLayout(VulkanDevice& rhi, const DescriptorLayoutDesc& desc)
 		: m_desc(desc)
 	{
 		auto& device = rhi.getDevice();

@@ -11,11 +11,11 @@ namespace ob::rhi {
 
 	//! @brief      空RHI
 	//! @details	Headlessビルドなどで使用する空のRHI
-	class EmptyRHI : public RHI {
+	class EmptyRHI : public Device {
 	public:
 
 		EmptyRHI(GraphicObjectManager& manager,RHIConfig* config)
-			: RHI(manager,config)
+			: Device(manager,config)
 		{
 
 		}

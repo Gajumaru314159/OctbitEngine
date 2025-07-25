@@ -9,7 +9,7 @@
 
 namespace ob::rhi {
 
-	class VulkanRHI;
+	class VulkanDevice;
 
 	//! @brief      バッファ
 	class VulkanBuffer:public rhi::Buffer {
@@ -18,18 +18,18 @@ namespace ob::rhi {
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
-		VulkanBuffer(VulkanRHI& rDevice,const BufferDesc& desc);
+		VulkanBuffer(VulkanDevice& device,const BufferDesc& desc);
 
 
 		//! @brief  コンストラクタ
 		//! 
 		//! @param desc バッファ定義
 		//! @param data 初期化データ
-		VulkanBuffer(VulkanRHI& rDevice, const BufferDesc& desc, const Blob& blob);
+		VulkanBuffer(VulkanDevice& device, const BufferDesc& desc, const Blob& blob);
 
 
 		//! @brief  コンストラクタ
-		VulkanBuffer(VulkanRHI& rDevice, const BufferViewDesc& desc);
+		VulkanBuffer(VulkanDevice& device, const BufferViewDesc& desc);
 
 
 		//! @brief      名前を取得
@@ -71,7 +71,7 @@ namespace ob::rhi {
 
 	private:
 
-		VulkanRHI& m_rhi;
+		VulkanDevice& m_device;
 		BufferDesc m_desc;
 		BufferViewDesc m_viewDesc;
 

@@ -232,7 +232,7 @@ PsOut PS_Main(PsIn i){
 			graphics->update();
 		}
 
-		RHI::Get()->update();
+		Device::Get()->update();
 		swapChain->update();
 
 	}
@@ -478,7 +478,7 @@ PsOut PS_Main(PsIn i){
 			graphics->update();
 		}
 
-		RHI::Get()->update();
+		Device::Get()->update();
 		swapChain->update();
 
 	}
@@ -748,7 +748,7 @@ PsOut PS_Main(PsIn i){
 			graphics->update();
 		}
 
-		RHI::Get()->update();
+		Device::Get()->update();
 		swapChain->update();
 
 	}
