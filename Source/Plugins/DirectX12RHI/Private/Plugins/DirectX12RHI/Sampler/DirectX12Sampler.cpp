@@ -14,8 +14,8 @@ namespace ob::rhi {
     //! @param src			シェーダコード
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    DirectX12Sampler::DirectX12Sampler(DirectX12Device& rhi,const SamplerDesc& desc)
-		: m_device(rhi)
+    DirectX12Sampler::DirectX12Sampler(DirectX12Device& device,const SamplerDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
     {
 		D3D12_SAMPLER_DESC ddesc = {};

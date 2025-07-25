@@ -20,15 +20,15 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanCommandList::VulkanCommandList(VulkanDevice& rhi, const CommandListDesc& desc)
-		: m_device(rhi)
+	VulkanCommandList::VulkanCommandList(VulkanDevice& device, const CommandListDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 		vk::CommandPoolCreateInfo info;
 		info.queueFamilyIndex = m_device.getQueryFamilyIndex();
 		info.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer;
 
-		m_commandPool = rhi.getDevice().createCommandPool(info, m_device.getAllocationCallbacks());
+		m_commandPool = device.getDevice().createCommandPool(info, m_device.getAllocationCallbacks());
 
 		vk::CommandBufferAllocateInfo allocInfo;
 		allocInfo.commandPool = m_commandPool;

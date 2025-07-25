@@ -11,8 +11,8 @@ namespace ob::rhi
 {
 
 	//! @brief  コンストラクタ
-	VulkanTextureUploader::VulkanTextureUploader(VulkanDevice& rhi)
-		: m_device(rhi)
+	VulkanTextureUploader::VulkanTextureUploader(VulkanDevice& device)
+		: m_device(device)
 	{
 		m_frames.resize(4);
 	}

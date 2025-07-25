@@ -44,11 +44,11 @@ namespace ob::rhi {
 
 
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    VulkanShader::VulkanShader(VulkanDevice& rhi, const ShaderCompileDesc& desc)
+    VulkanShader::VulkanShader(VulkanDevice& device, const ShaderCompileDesc& desc)
         : m_name(desc.name)
         , m_stage(desc.stage)
     {
-        compile(rhi, desc);
+        compile(device, desc);
 
         manage();
     }
@@ -60,7 +60,7 @@ namespace ob::rhi {
     //! @param src			バイナリ
     //! @param stage		シェーダステージ
     //! @param errorDest	エラー出力先文字列
-    VulkanShader::VulkanShader(VulkanDevice& rhi,BlobView blob, ShaderStage stage, StringView name)
+    VulkanShader::VulkanShader(VulkanDevice& device,BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
         , m_stage(stage)
     {
@@ -88,7 +88,7 @@ namespace ob::rhi {
 
 
     //! @brief				初期化
-    void VulkanShader::compile(VulkanDevice& rhi, const ShaderCompileDesc& desc) {
+    void VulkanShader::compile(VulkanDevice& device, const ShaderCompileDesc& desc) {
 
 		using namespace Microsoft::WRL;
 
@@ -118,7 +118,7 @@ namespace ob::rhi {
             args.push_back(L"-fvk-invert-y");
         }
 
-        if (rhi.getConfig().enableBindless) {
+        if (device.getConfig().enableBindless) {
             args.push_back(L"-fvk-bind-sampler-heap");
             args.push_back(L"0"); // binding
             args.push_back(L"0"); // set
@@ -156,11 +156,11 @@ namespace ob::rhi {
         // コンパイル
         // TODO スレッド安全性の確認
         ComPtr<IDxcResult> resultBlob;
-        result = rhi.getShaderCompiler()->Compile(
+        result = device.getShaderCompiler()->Compile(
             &buffer,
             pargs.data(),
             pargs.size(),
-            rhi.getIncludeHandler().Get(),
+            device.getIncludeHandler().Get(),
             IID_PPV_ARGS(&resultBlob)
         );
         if (FAILED(result)) {
@@ -199,9 +199,9 @@ namespace ob::rhi {
         info.codeSize = shaderBlob->GetBufferSize();
 		info.pCode = (uint32_t*)shaderBlob->GetBufferPointer();
 
-        m_shaderModule = rhi.getDevice().createShaderModule(info, rhi.getAllocationCallbacks());
+        m_shaderModule = device.getDevice().createShaderModule(info, device.getAllocationCallbacks());
 
-        rhi.setName(m_shaderModule, desc.name);
+        device.setName(m_shaderModule, desc.name);
     }
 
 }

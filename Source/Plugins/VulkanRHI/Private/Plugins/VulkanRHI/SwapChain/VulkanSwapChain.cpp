@@ -20,8 +20,8 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanSwapChain::VulkanSwapChain(VulkanDevice& rhi, const SwapChainDesc& desc)
-		: m_device(rhi)
+	VulkanSwapChain::VulkanSwapChain(VulkanDevice& device, const SwapChainDesc& desc)
+		: m_device(device)
 	{
 		m_desc = desc;
 		

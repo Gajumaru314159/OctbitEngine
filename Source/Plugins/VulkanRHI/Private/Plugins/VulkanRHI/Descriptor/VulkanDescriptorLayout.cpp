@@ -9,10 +9,10 @@
 namespace ob::rhi {
 
 	//! @brief              コンストラクタ
-	VulkanDescriptorLayout::VulkanDescriptorLayout(VulkanDevice& rhi, const DescriptorLayoutDesc& desc)
+	VulkanDescriptorLayout::VulkanDescriptorLayout(VulkanDevice& device, const DescriptorLayoutDesc& desc)
 		: m_desc(desc)
 	{
-		auto& device = rhi.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		FixedVector<vk::DescriptorSetLayoutBinding, 32> bindings;
 
@@ -31,7 +31,7 @@ namespace ob::rhi {
 		vk::DescriptorSetLayoutCreateInfo info;
 		info.setBindings(bindings);
 
-		m_layout = device.createDescriptorSetLayout(info, rhi.getAllocationCallbacks());
+		m_layout = vkdevice.createDescriptorSetLayout(info, device.getAllocationCallbacks());
 
 		manage();
 	}

@@ -11,11 +11,11 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	VulkanCommandQueue::VulkanCommandQueue(VulkanDevice& rhi) 
-		: m_device(rhi)
+	VulkanCommandQueue::VulkanCommandQueue(VulkanDevice& device) 
+		: m_device(device)
 	{
-		auto& device = rhi.getDevice();
-		m_queue = device.getQueue(rhi.getQueryFamilyIndex(), 0);
+		auto& vkdevice = device.getDevice();
+		m_queue = vkdevice.getQueue(device.getQueryFamilyIndex(), 0);
 		m_device.setName(m_queue, "VulkanCommandQueue");
 	}
 

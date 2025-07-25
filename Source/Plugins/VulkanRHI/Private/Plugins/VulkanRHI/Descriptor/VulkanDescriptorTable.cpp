@@ -15,12 +15,12 @@ namespace ob::rhi {
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	VulkanDescriptorTable::VulkanDescriptorTable(VulkanDevice& rhi, const DescriptorTableDesc& desc)
-		: m_device(rhi)
+	VulkanDescriptorTable::VulkanDescriptorTable(VulkanDevice& device, const DescriptorTableDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 
-		auto& device = rhi.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		m_layout = m_desc.layout.cast<VulkanDescriptorLayout>();
 
@@ -77,7 +77,7 @@ namespace ob::rhi {
 		info.flags |= vk::DescriptorPoolCreateFlagBits::eUpdateAfterBindEXT; // Bindless用
 		info.setPoolSizes(descPoolSizes);
 
-		m_pool = device.createDescriptorPool(info, m_device.getAllocationCallbacks());
+		m_pool = vkdevice.createDescriptorPool(info, m_device.getAllocationCallbacks());
 
 		// DescriptorSetを生成
 		// NOTE 同じレイアウトのものは巨大なプールにする必要があるかもしれない
@@ -87,7 +87,7 @@ namespace ob::rhi {
 		allocInfo.descriptorSetCount = 1;
 		allocInfo.pSetLayouts = descSetLayouts;
 
-		auto sets = device.allocateDescriptorSets(allocInfo);
+		auto sets = vkdevice.allocateDescriptorSets(allocInfo);
 		m_set = std::move(sets.front());
 		
 		m_device.setName(m_pool, m_desc.name);

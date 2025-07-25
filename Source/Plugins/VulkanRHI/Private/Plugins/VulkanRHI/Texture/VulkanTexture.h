@@ -16,16 +16,16 @@ namespace ob::rhi {
     public:
 
         //! @brief      TextureDesc から空のテクスチャを生成
-        VulkanTexture(VulkanDevice& rhi, const TextureDesc& desc);
+        VulkanTexture(VulkanDevice& device, const TextureDesc& desc);
 
         //! @brief      IntColorの配列 から空のテクスチャを生成
-        VulkanTexture(VulkanDevice& rhi, StringView name, TextureType type, Size size,Span<const IntColor> colors);
+        VulkanTexture(VulkanDevice& device, StringView name, TextureType type, Size size,Span<const IntColor> colors);
 
         //! @brief      テクスチャバイナリから生成
-        VulkanTexture(VulkanDevice& rhi, StringView name,BlobView blob);
+        VulkanTexture(VulkanDevice& device, StringView name,BlobView blob);
 
         //! @brief      ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
-        VulkanTexture(VulkanDevice& rhi, const TextureViewDesc& desc);
+        VulkanTexture(VulkanDevice& device, const TextureViewDesc& desc);
 
         //! @brief      デストラクタ
         ~VulkanTexture();
@@ -48,10 +48,10 @@ namespace ob::rhi {
     public:
 
         //! @brief      RenderTextureDesc からRenderTextureを生成
-        VulkanTexture(VulkanDevice& rhi, const RenderTextureDesc& desc);
+        VulkanTexture(VulkanDevice& device, const RenderTextureDesc& desc);
 
         //! @brief      SwapChainのリソースからRenderTextureを生成
-        VulkanTexture(VulkanDevice& rhi, VkImage image, vk::Format format, vk::Extent2D size, StringView name);
+        VulkanTexture(VulkanDevice& device, VkImage image, vk::Format format, vk::Extent2D size, StringView name);
 
     public:
 

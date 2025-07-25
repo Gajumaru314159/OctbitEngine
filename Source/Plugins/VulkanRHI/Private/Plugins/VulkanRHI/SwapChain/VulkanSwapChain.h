@@ -14,7 +14,7 @@ namespace ob::rhi {
 	class VulkanSwapChain :public SwapChain{
 	public:
 
-		VulkanSwapChain(VulkanDevice& rhi, const SwapChainDesc& desc);
+		VulkanSwapChain(VulkanDevice& device, const SwapChainDesc& desc);
 		~VulkanSwapChain();
 
 		const String& getName()const override {

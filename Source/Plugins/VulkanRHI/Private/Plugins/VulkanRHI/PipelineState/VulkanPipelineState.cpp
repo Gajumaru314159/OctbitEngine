@@ -11,7 +11,7 @@
 namespace ob::rhi {
 
 	//! @brief		コンストラクタ
-	VulkanPipelineState::VulkanPipelineState(VulkanDevice& rhi,const PipelineStateDesc& desc)
+	VulkanPipelineState::VulkanPipelineState(VulkanDevice& device,const PipelineStateDesc& desc)
 		: m_desc(desc)
 	{
 
@@ -31,7 +31,7 @@ namespace ob::rhi {
 
 		m_layout = desc.rootSignature.cast<VulkanRootSignature>()->getNative();
 
-		auto& device = rhi.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		FixedVector<vk::PipelineShaderStageCreateInfo, 8> stages;
         FixedVector<vk::VertexInputBindingDescription, 16> bindingDescriptions;
@@ -215,9 +215,9 @@ namespace ob::rhi {
 		renderingInfo.setColorAttachmentFormats(colorFormats);
 		info.pNext = &renderingInfo;
 
-		m_pipeline = device.createGraphicsPipeline(nullptr,info,rhi.getAllocationCallbacks());
+		m_pipeline = vkdevice.createGraphicsPipeline(nullptr,info,device.getAllocationCallbacks());
 
-		rhi.setName(m_pipeline, m_desc.name);
+		device.setName(m_pipeline, m_desc.name);
 
 		manage();
 	}

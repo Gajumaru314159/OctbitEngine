@@ -12,7 +12,7 @@ namespace ob::rhi {
     public:
 
         //! @brief		コンストラクタ
-        VulkanPipelineState(VulkanDevice& rhi, const PipelineStateDesc& desc);
+        VulkanPipelineState(VulkanDevice& device, const PipelineStateDesc& desc);
 
         //! @brief      定義を取得
         const PipelineStateDesc& getDesc()const { return m_desc; };

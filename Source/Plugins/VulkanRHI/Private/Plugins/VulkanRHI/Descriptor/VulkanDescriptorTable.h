@@ -18,7 +18,7 @@ namespace ob::rhi {
 		//! @param device       デバイス
 		//! @param type         デスクリプタに設定するリソースの種類
         //! @param elementNum   要素数
-        VulkanDescriptorTable(VulkanDevice& rhi, const DescriptorTableDesc& desc);
+        VulkanDescriptorTable(VulkanDevice& device, const DescriptorTableDesc& desc);
 
 
 		//! @brief      名前を取得

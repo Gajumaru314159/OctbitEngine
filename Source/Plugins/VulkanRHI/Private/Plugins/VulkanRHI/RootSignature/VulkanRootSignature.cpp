@@ -9,10 +9,10 @@
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	VulkanRootSignature::VulkanRootSignature(VulkanDevice& rhi, const RootSignatureDesc& desc)
+	VulkanRootSignature::VulkanRootSignature(VulkanDevice& device, const RootSignatureDesc& desc)
 		: m_desc(desc)
 	{
-		auto& device = rhi.getDevice();
+		auto& vkdevice = device.getDevice();
 
 		// NOTE ここのlayouts[i]がlayout(set=i)と対応する
 		FixedVector<vk::DescriptorSetLayout,32> layouts;		
@@ -24,8 +24,8 @@ namespace ob::rhi {
 		}
 
 		// Bindless用のDescriptorSetLayoutはシェーダーコンパイル時点でsetを確定させるためにset=0で固定する
-		if (rhi.getConfig().enableBindless) {
-			layouts.push_back(rhi.getBindlessDescriptorSetLayout());
+		if (device.getConfig().enableBindless) {
+			layouts.push_back(device.getBindlessDescriptorSetLayout());
 		}
 
 		vk::PushConstantRange pushConstantRange;
@@ -41,9 +41,9 @@ namespace ob::rhi {
 			createInfo.pPushConstantRanges = &pushConstantRange;
 		}
 
-		m_pipelineLayout = device.createPipelineLayout(createInfo, rhi.getAllocationCallbacks());
+		m_pipelineLayout = vkdevice.createPipelineLayout(createInfo, device.getAllocationCallbacks());
 
-		rhi.setName(m_pipelineLayout, m_desc.name);
+		device.setName(m_pipelineLayout, m_desc.name);
 
 		manage();
 	}

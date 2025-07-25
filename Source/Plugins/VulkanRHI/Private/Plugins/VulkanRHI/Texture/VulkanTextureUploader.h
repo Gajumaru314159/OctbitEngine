@@ -27,7 +27,7 @@ namespace ob::rhi {
         };
     public:
 
-        VulkanTextureUploader(VulkanDevice& rhi);
+        VulkanTextureUploader(VulkanDevice& device);
 
         void add(const vk::raii::Image& dest,vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources);
 

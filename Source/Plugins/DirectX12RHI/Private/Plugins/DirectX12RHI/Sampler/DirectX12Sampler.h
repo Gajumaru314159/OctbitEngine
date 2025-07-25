@@ -24,7 +24,7 @@ namespace ob::rhi {
     class DirectX12Sampler :public Sampler {
     public:
 
-        DirectX12Sampler(DirectX12Device& rhi, const SamplerDesc& desc);
+        DirectX12Sampler(DirectX12Device& device, const SamplerDesc& desc);
 
         //! @brief  妥当な状態か
         bool isValid()const { return !m_handle.empty(); }

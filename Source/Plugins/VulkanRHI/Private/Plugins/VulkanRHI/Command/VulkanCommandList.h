@@ -26,7 +26,7 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         //! @brief  コンストラクタ
         //@―---------------------------------------------------------------------------
-        VulkanCommandList(VulkanDevice& rhi,const CommandListDesc& desc);
+        VulkanCommandList(VulkanDevice& device,const CommandListDesc& desc);
 
         ~VulkanCommandList();
 

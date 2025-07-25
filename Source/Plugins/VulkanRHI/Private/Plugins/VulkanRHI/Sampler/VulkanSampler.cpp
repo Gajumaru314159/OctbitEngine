@@ -9,7 +9,7 @@
 namespace ob::rhi {
 
 	//! @brief コンストラクタ 
-	VulkanSampler::VulkanSampler(VulkanDevice& rhi, const SamplerDesc& desc)
+	VulkanSampler::VulkanSampler(VulkanDevice& device, const SamplerDesc& desc)
 	{
 		m_name = desc.name;
 		vk::SamplerCreateInfo info;
@@ -30,13 +30,13 @@ namespace ob::rhi {
 		info.borderColor = vk::BorderColor::eFloatOpaqueBlack;
 		info.unnormalizedCoordinates = false;
 
-		if (rhi.getFeatures().samplerAnisotropy == false && info.anisotropyEnable) {
+		if (device.getFeatures().samplerAnisotropy == false && info.anisotropyEnable) {
 			info.anisotropyEnable = false;
 			info.maxAnisotropy = 0.0f;
 		}
 
-		auto& device = rhi.getDevice();
-		m_sampler = device.createSampler(info,rhi.getAllocationCallbacks());
+		auto& vkdevice = device.getDevice();
+		m_sampler = vkdevice.createSampler(info,device.getAllocationCallbacks());
 
 		// デスクリプタハンドルを割り当て
 		vk::DescriptorImageInfo imageInfo(m_sampler);
@@ -44,10 +44,10 @@ namespace ob::rhi {
 		writeDescSet.descriptorType = vk::DescriptorType::eSampler;
 		writeDescSet.setImageInfo(imageInfo);
 
-		rhi.allocateHandle(m_handle, writeDescSet);
+		device.allocateHandle(m_handle, writeDescSet);
 
 
-		rhi.setName(m_sampler, "Octbit Sampler");
+		device.setName(m_sampler, "Octbit Sampler");
 
 		manage();
 	}

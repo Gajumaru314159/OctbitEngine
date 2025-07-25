@@ -19,8 +19,8 @@ namespace ob::rhi {
 	//!
 	//! @param type         デスクリプタに設定するリソースの種類
 	//! @param elementNum   要素数
-	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12Device& rhi, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
-		: m_device(rhi)
+	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12Device& device, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
+		: m_device(device)
 		, m_desc(desc)
 	{
 		m_layout = m_desc.layout.cast<DirectX12DescriptorLayout>();

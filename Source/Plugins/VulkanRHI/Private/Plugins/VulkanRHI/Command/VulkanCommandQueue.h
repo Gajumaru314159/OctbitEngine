@@ -12,7 +12,7 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンストラクタ
-        VulkanCommandQueue(VulkanDevice& rhi);
+        VulkanCommandQueue(VulkanDevice& device);
 
         void entryCommandList(const Ref<CommandList>& commandList);
         void entryCommandListTop(const Ref<CommandList>& commandList);

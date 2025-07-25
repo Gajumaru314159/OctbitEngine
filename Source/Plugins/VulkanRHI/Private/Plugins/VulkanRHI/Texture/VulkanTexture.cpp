@@ -57,25 +57,25 @@ namespace ob::rhi {
 
 
     //! @brief      TextureDesc から空のテクスチャを生成
-    VulkanTexture::VulkanTexture(VulkanDevice& rhi,const TextureDesc& desc)
-		: m_device(rhi)
+    VulkanTexture::VulkanTexture(VulkanDevice& device,const TextureDesc& desc)
+		: m_device(device)
 		, m_desc(desc)
 	{
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
+		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
-		auto& device = m_device.getDevice();
+		auto& vkdevice = m_device.getDevice();
 
 		// 定義生成
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type,m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
-		m_shared->image = device.createImage(info, m_device.getAllocationCallbacks());
+		m_shared->image = vkdevice.createImage(info, m_device.getAllocationCallbacks());
 		auto requirements = m_shared->image.getMemoryRequirements();
-		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
-		m_shared->memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
+		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		m_shared->image.bindMemory(m_shared->memory, 0);
 
 		// 共通初期化
@@ -84,8 +84,8 @@ namespace ob::rhi {
 
 
 	//! @brief      IntColorの配列 から空のテクスチャを生成
-	VulkanTexture::VulkanTexture(VulkanDevice& rhi, StringView name, TextureType type,Size size, Span<const IntColor> colors)
-		: m_device(rhi)
+	VulkanTexture::VulkanTexture(VulkanDevice& device, StringView name, TextureType type,Size size, Span<const IntColor> colors)
+		: m_device(device)
 	{
 		// Desc設定
 		m_desc.name = name;
@@ -97,14 +97,14 @@ namespace ob::rhi {
 
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
+		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		if (std::max(size.width, 1) * std::max(size.height, 1) * std::max(size.depth, 1) != colors.size()) {
 			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size={}, name={}]", size, name);
 			return;
 		}
 
-		auto& device = m_device.getDevice();
+		auto& vkdevice = m_device.getDevice();
 
 
 		// 定義生成
@@ -112,10 +112,10 @@ namespace ob::rhi {
 
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
-		m_shared->image = device.createImage(info, m_device.getAllocationCallbacks());
+		m_shared->image = vkdevice.createImage(info, m_device.getAllocationCallbacks());
 		auto requirements = m_shared->image.getMemoryRequirements();
-		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
-		m_shared->memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
+		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		m_shared->image.bindMemory(m_shared->memory, 0);
 
 		// 色データをアップロード
@@ -129,8 +129,8 @@ namespace ob::rhi {
 
 
 	//! @brief      テクスチャバイナリから生成
-	VulkanTexture::VulkanTexture(VulkanDevice& rhi, StringView name,BlobView blob)
-		: m_device(rhi)
+	VulkanTexture::VulkanTexture(VulkanDevice& device, StringView name,BlobView blob)
+		: m_device(device)
 	{
 
 		// 定義生成
@@ -157,19 +157,19 @@ namespace ob::rhi {
 
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!rhi.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
+		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
-		auto& device = m_device.getDevice();
+		auto& vkdevice = m_device.getDevice();
 
 		// 定義生成
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
-		m_shared->image = device.createImage(info, m_device.getAllocationCallbacks());
+		m_shared->image = vkdevice.createImage(info, m_device.getAllocationCallbacks());
 		auto requirements = m_shared->image.getMemoryRequirements();
-		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
-		m_shared->memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
+		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		m_shared->image.bindMemory(m_shared->memory, 0);
 
 		// 色データをアップロード
@@ -229,8 +229,8 @@ namespace ob::rhi {
 
 
 	//! @brief       RenderTextureDesc からRenderTextureを生成
-	VulkanTexture::VulkanTexture(VulkanDevice& rhi, const RenderTextureDesc& desc)
-		: m_device(rhi)
+	VulkanTexture::VulkanTexture(VulkanDevice& device, const RenderTextureDesc& desc)
+		: m_device(device)
 		, m_renderDesc(desc)
 	{
 		m_desc.name = desc.name;
@@ -242,14 +242,14 @@ namespace ob::rhi {
 
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!rhi.supportsForRenderTexture(m_desc.format)) throw NotSupportedException();
+		if (!device.supportsForRenderTexture(m_desc.format)) throw NotSupportedException();
 
 		if(TextureFormatUtility::IsBC(m_desc.format) || m_desc.format == TextureFormat::RGB32 || m_desc.format == TextureFormat::RGB8 || m_desc.format == TextureFormat::Unknown) {
 			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
 			throw NotSupportedException();
 		}
 
-		auto& device = m_device.getDevice();
+		auto& vkdevice = m_device.getDevice();
 
 		const bool isColor = !TextureFormatUtility::HasDepth(m_renderDesc.format);
 		const bool isDepth = !isColor;
@@ -269,10 +269,10 @@ namespace ob::rhi {
 
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
-		m_shared->image = device.createImage(info, m_device.getAllocationCallbacks());
+		m_shared->image = vkdevice.createImage(info, m_device.getAllocationCallbacks());
 		auto requirements = m_shared->image.getMemoryRequirements();
-		auto allocInfo = rhi.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
-		m_shared->memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
+		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
+		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
 		m_shared->image.bindMemory(m_shared->memory, 0);
 
 
@@ -288,27 +288,27 @@ namespace ob::rhi {
 		// TODO DirectX12と異なりRTVとDSVはImageViewで管理できるので必要なもののみ生成する
 		if (isColor) {
 			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-			m_hRTV = device.createImageView(viewCreateInfo);
-			rhi.setName(m_hRTV, m_desc.name);
+			m_hRTV = vkdevice.createImageView(viewCreateInfo);
+			device.setName(m_hRTV, m_desc.name);
 		}
 		if (isDepth) {
 			viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
-			m_hDSV = device.createImageView(viewCreateInfo);
-			rhi.setName(m_hDSV, m_desc.name);
+			m_hDSV = vkdevice.createImageView(viewCreateInfo);
+			device.setName(m_hDSV, m_desc.name);
 		}
 
-		rhi.setName(m_shared->image, m_desc.name);
-		rhi.setName(m_shared->memory, m_desc.name);
+		device.setName(m_shared->image, m_desc.name);
+		device.setName(m_shared->memory, m_desc.name);
 
 		initialize();
 	}
 
 
 	//! @brief      SwapChainのリソースからRenderTextureを生成
-	VulkanTexture::VulkanTexture(VulkanDevice& rhi, VkImage image, vk::Format format,vk::Extent2D size, StringView name)
-		: m_device(rhi)
+	VulkanTexture::VulkanTexture(VulkanDevice& device, VkImage image, vk::Format format,vk::Extent2D size, StringView name)
+		: m_device(device)
 	{
-		auto& device = m_device.getDevice();
+		auto& vkdevice = m_device.getDevice();
 
 		m_desc.name = name;
 		m_desc.size = Size(size.width, size.height);
@@ -326,7 +326,7 @@ namespace ob::rhi {
 		viewCreateInfo.subresourceRange.layerCount = 1;
 		viewCreateInfo.image = image;
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-		m_hRTV = device.createImageView(viewCreateInfo);
+		m_hRTV = vkdevice.createImageView(viewCreateInfo);
 
 		initialize();
 	}
