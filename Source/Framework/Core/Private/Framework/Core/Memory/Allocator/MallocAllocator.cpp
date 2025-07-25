@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		システムヒープ(Windows)
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Memory/Allocator/MallocAllocator.h>

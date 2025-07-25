@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Delegate のテスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Container/BitSet.h>

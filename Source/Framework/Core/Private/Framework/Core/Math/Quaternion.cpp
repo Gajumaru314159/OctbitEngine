@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief Quaternion
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Quaternion.h>

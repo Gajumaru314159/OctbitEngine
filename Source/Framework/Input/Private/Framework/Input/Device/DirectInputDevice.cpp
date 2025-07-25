@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		DirectInputデバイス
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Input/Device/DirectInputDevice.h>

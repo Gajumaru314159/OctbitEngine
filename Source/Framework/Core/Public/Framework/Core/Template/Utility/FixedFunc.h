@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		固定長関数オブジェクト
 //! @author		Gajumaru
 //! @reference	https://zenn.dev/suuta/articles/c4c47e8626d5aa
 //! @reference	https://gist.github.com/Suuta/43b2e7ee973d8d3fda581e89efe28b45

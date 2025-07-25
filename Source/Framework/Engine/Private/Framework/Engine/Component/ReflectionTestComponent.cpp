@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Engine/Component/ReflectionTestComponent.h>

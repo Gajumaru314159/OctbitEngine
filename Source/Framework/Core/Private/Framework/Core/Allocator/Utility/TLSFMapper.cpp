@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		Two Level Segregate Fit Mapper
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Allocator/Utility/TLSFMapper.h>

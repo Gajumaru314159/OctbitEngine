@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		デリゲート
 //! @author		Gajumaru
 //! @reference	https://zenn.dev/suuta/articles/c4c47e8626d5aa
 //! @reference	https://gist.github.com/Suuta/e294208c04f346103723a9df5e134d2f

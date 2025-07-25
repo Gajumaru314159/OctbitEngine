@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		TransformComponent
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Engine/Component/TransformComponent.h>

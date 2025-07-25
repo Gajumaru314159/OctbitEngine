@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		EventNotifier テスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Event/EventNotifier.h>

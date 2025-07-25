@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		シーン
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Reflection/TypeInfoManager.h>

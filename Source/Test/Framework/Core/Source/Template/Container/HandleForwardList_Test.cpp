@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		HandleForwardList のテスト
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Container/HandleForwardList.h>

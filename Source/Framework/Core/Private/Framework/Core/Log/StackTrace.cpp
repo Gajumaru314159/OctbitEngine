@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		スタックトレース
 //***********************************************************
 #include <Framework/Core/Log/StackTrace.h>
 #include <Framework/Core/CoreTypes.h>

@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		システム
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/FrameGraph/FGResourcePool.h>

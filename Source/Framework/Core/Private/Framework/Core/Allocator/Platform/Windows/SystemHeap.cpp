@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		システムヒープ(Windows)
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Allocator/Platform/Windows/SystemHeap.h>

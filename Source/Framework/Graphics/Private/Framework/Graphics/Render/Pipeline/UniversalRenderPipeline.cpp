@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Graphics/Render/Pipeline/UniversalRenderPipeline.h>

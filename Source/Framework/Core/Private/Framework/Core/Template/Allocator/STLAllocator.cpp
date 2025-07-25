@@ -1,6 +1,5 @@
 ﻿//***********************************************************
 //! @file
-//! @brief		STLアロケータ
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Template/Allocator/STLAllocator.h>
