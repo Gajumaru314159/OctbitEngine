@@ -112,7 +112,7 @@ namespace ob::rhi {
         DxcBuffer buffer;
         buffer.Ptr = desc.code.data();
         buffer.Size = desc.code.size();
-        buffer.Encoding = 0;
+        buffer.Encoding = CP_UTF8;
 
         Vector<WString> args{
             L"-E",
