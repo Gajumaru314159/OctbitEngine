@@ -7,18 +7,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a CMake-based C++ project. Use these commands to build and test:
 
 ```bash
-# Generate build files and build the project
-cmake -B Build/x64-Debug -S . -A x64
-cmake --build Build/x64-Debug --config Debug
+# Generate build files
+./Build.bat setup
+
+# Build the project
+./Build.bat
 
 # Run unit tests
-cd Build/x64-Debug
+cd Build/Bat
 ctest -C Debug
 
 # Build specific modules
-cmake --build Build/x64-Debug --config Debug --target Core
-cmake --build Build/x64-Debug --config Debug --target RHI
-cmake --build Build/x64-Debug --config Debug --target Graphics
+./Build.bat RHI
 ```
 
 ## Project Structure

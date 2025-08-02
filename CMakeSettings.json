@@ -5,7 +5,7 @@
       "generator": "Ninja",
       "configurationType": "Debug",
       "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${projectDir}\\Build\\${name}",
+      "buildRoot": "${projectDir}\\Build\\VS\\${name}",
       "installRoot": "${projectDir}\\Install\\${name}",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",

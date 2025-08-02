@@ -28,8 +28,6 @@ set(private_libs
     "$ENV{VULKAN_SDK}/Lib/vulkan-1.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxcompiler.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxil.lib"
-    glslang
-    #spirv
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
 target_link_directories(${PROJECT_NAME} PRIVATE "$ENV{VULKAN_SDK}/Bin")

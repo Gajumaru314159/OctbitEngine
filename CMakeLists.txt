@@ -15,8 +15,7 @@ set(CMAKE_CXX_STANDARD 20)                                          # C++17を�
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                                 # 古いSTLにフォールバックしない
 set(CMAKE_CXX_EXTENSIONS OFF)                                       # GNU拡張オフ
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                     # DebugとReleaseのみ使用(MinSizeRel等を使わない)
-set(CMAKE_DEBUG_POSTFIX "")                                         # 
-
+set(CMAKE_DEBUG_POSTFIX "")                                         #
 add_definitions(-D_UNICODE -DUNICODE)                               # 文字リテラルをユニコードとする
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
@@ -88,15 +87,14 @@ if(DirectX)
 endif()
 
 if(Vulkan)
-    FetchContent_Declare(glslang GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git GIT_TAG "vulkan-1.1-rc9")
-    FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
-    FetchContent_MakeAvailable(glslang spirv)
+    #FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
+    #FetchContent_MakeAvailable(spirv)
 endif()
 
 #------------------------------------------------------------------------------
 # 汎用機能
 #------------------------------------------------------------------------------
-include("ThirdParty.cmake")
+include("Source/CMake/ThirdParty.cmake")
 include("Source/CMake/Common.cmake")
 
 
