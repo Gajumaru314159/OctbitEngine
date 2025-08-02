@@ -407,6 +407,9 @@ var hierarchy =
     [ "ob::core::Singleton< AsyncFileSystem >", "dd/df6/classob_1_1core_1_1_singleton.html", [
       [ "ob::core::AsyncFileSystem", "d9/d44/classob_1_1core_1_1_async_file_system.html", null ]
     ] ],
+    [ "ob::core::Singleton< Device >", "dd/df6/classob_1_1core_1_1_singleton.html", [
+      [ "ob::rhi::Device", "dc/ddd/classob_1_1rhi_1_1_device.html", null ]
+    ] ],
     [ "ob::core::Singleton< Engine >", "dd/df6/classob_1_1core_1_1_singleton.html", [
       [ "ob::engine::Engine", "da/d2a/classob_1_1engine_1_1_engine.html", null ]
     ] ],
@@ -421,9 +424,6 @@ var hierarchy =
     ] ],
     [ "ob::core::Singleton< MaterialSystem >", "dd/df6/classob_1_1core_1_1_singleton.html", [
       [ "ob::graphics::MaterialSystem", "d0/d18/classob_1_1graphics_1_1_material_system.html", null ]
-    ] ],
-    [ "ob::core::Singleton< RHI >", "dd/df6/classob_1_1core_1_1_singleton.html", [
-      [ "ob::rhi::RHI", "d7/d76/classob_1_1rhi_1_1_r_h_i.html", null ]
     ] ],
     [ "ob::core::Singleton< ThreadPool >", "dd/df6/classob_1_1core_1_1_singleton.html", [
       [ "ob::core::ThreadPool", "db/d8d/classob_1_1core_1_1_thread_pool.html", null ]

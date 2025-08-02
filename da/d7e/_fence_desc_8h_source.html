@@ -101,41 +101,41 @@ $(document).ready(function(){initNavTree('da/d7e/_fence_desc_8h_source.html','..
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>ob::rhi {</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keyword">enum class</span> FenceType :u32 {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>        BinaryGpuToCpu, </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        BinaryGpuToGpu, </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        Timeline,       </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    };</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="keyword">enum class</span> FenceType :u32 {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>        BinaryGpuToCpu, </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>        BinaryGpuToGpu, </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        Timeline,       </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    };</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">enum class</span> FenceFlag :u32 {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        None                = get_bit(0),   </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        Shared              = get_bit(1),   </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        SharedCrossAdapter  = get_bit(2),   </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    };</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keyword">using </span>FenceFlags = BitFlags&lt;FenceFlag&gt;;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">enum class</span> FenceFlag :u32 {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        None                = get_bit(0),   </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        Shared              = get_bit(1),   </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        SharedCrossAdapter  = get_bit(2),   </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    };</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">using </span>FenceFlags = BitFlags&lt;FenceFlag&gt;;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">   30</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">FenceDesc</a> {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">   31</a></span>        FenceType <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">type</a>;     </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">   32</a></span>        u64 <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">initialValue</a>;   </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">   33</a></span>        <a class="code hl_class" href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">FenceFlags</a> <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">flags</a>;   </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    };</div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="};">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">   29</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">FenceDesc</a> {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">   30</a></span>        FenceType <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">type</a>;     </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">   31</a></span>        u64 <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">initialValue</a>;   </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">   32</a></span>        <a class="code hl_class" href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">FenceFlags</a> <a class="code hl_variable" href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">flags</a>;   </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    };</div>
 </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>}</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>}</div>
 <div class="ttc" id="aclassob_1_1core_1_1_bit_flags_html"><div class="ttname"><a href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">ob::core::BitFlags&lt; FenceFlag &gt;</a></div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">ob::rhi::FenceDesc</a></div><div class="ttdoc">フェンス・定義</div><div class="ttdef"><b>Definition</b> FenceDesc.h:30</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_a7bab33802e723ce4992635080d1dac2d"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">ob::rhi::FenceDesc::initialValue</a></div><div class="ttdeci">u64 initialValue</div><div class="ttdoc">初期値</div><div class="ttdef"><b>Definition</b> FenceDesc.h:32</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_a8259aac4b5de2fa6f97f8244de69bac6"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">ob::rhi::FenceDesc::type</a></div><div class="ttdeci">FenceType type</div><div class="ttdoc">タイプ</div><div class="ttdef"><b>Definition</b> FenceDesc.h:31</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_ae00057a4097c1a2298bf7537cf0611c9"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">ob::rhi::FenceDesc::flags</a></div><div class="ttdeci">FenceFlags flags</div><div class="ttdoc">フラグ</div><div class="ttdef"><b>Definition</b> FenceDesc.h:33</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html">ob::rhi::FenceDesc</a></div><div class="ttdoc">フェンス・定義</div><div class="ttdef"><b>Definition</b> FenceDesc.h:29</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_a7bab33802e723ce4992635080d1dac2d"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a7bab33802e723ce4992635080d1dac2d">ob::rhi::FenceDesc::initialValue</a></div><div class="ttdeci">u64 initialValue</div><div class="ttdoc">初期値</div><div class="ttdef"><b>Definition</b> FenceDesc.h:31</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_a8259aac4b5de2fa6f97f8244de69bac6"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#a8259aac4b5de2fa6f97f8244de69bac6">ob::rhi::FenceDesc::type</a></div><div class="ttdeci">FenceType type</div><div class="ttdoc">タイプ</div><div class="ttdef"><b>Definition</b> FenceDesc.h:30</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_fence_desc_html_ae00057a4097c1a2298bf7537cf0611c9"><div class="ttname"><a href="../../d4/d55/structob_1_1rhi_1_1_fence_desc.html#ae00057a4097c1a2298bf7537cf0611c9">ob::rhi::FenceDesc::flags</a></div><div class="ttdeci">FenceFlags flags</div><div class="ttdoc">フラグ</div><div class="ttdef"><b>Definition</b> FenceDesc.h:32</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -37,10 +37,9 @@ var searchData=
   ['resizablebuffer_34',['ResizableBuffer',['../dc/d28/classob_1_1graphics_1_1_resizable_buffer.html',1,'ob::graphics']]],
   ['resource_35',['Resource',['../d6/d37/structob_1_1graphics_1_1_f_g_data_1_1_resource.html',1,'ob::graphics::FGData']]],
   ['response_36',['Response',['../dd/dcc/classob_1_1editor_1_1_response.html',1,'ob::editor']]],
-  ['rhi_37',['RHI',['../d7/d76/classob_1_1rhi_1_1_r_h_i.html',1,'ob::rhi']]],
-  ['rhiconfig_38',['RHIConfig',['../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html',1,'ob::rhi']]],
-  ['rootconstantsdesc_39',['RootConstantsDesc',['../de/d24/structob_1_1rhi_1_1_root_constants_desc.html',1,'ob::rhi']]],
-  ['rootsignature_40',['RootSignature',['../dc/d9f/classob_1_1rhi_1_1_root_signature.html',1,'ob::rhi']]],
-  ['rootsignaturedesc_41',['RootSignatureDesc',['../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html',1,'ob::rhi']]],
-  ['rot_42',['Rot',['../d4/d1c/structob_1_1core_1_1_rot.html',1,'ob::core']]]
+  ['rhiconfig_37',['RHIConfig',['../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html',1,'ob::rhi']]],
+  ['rootconstantsdesc_38',['RootConstantsDesc',['../de/d24/structob_1_1rhi_1_1_root_constants_desc.html',1,'ob::rhi']]],
+  ['rootsignature_39',['RootSignature',['../dc/d9f/classob_1_1rhi_1_1_root_signature.html',1,'ob::rhi']]],
+  ['rootsignaturedesc_40',['RootSignatureDesc',['../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html',1,'ob::rhi']]],
+  ['rot_41',['Rot',['../d4/d1c/structob_1_1core_1_1_rot.html',1,'ob::core']]]
 ];

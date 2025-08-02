@@ -101,38 +101,38 @@ $(document).ready(function(){initNavTree('d8/d74/_windows_2_macro_8h_source.html
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Core/HAL/Platform.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#if defined(OS_WINDOWS)</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// ワーニング抑制</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#pragma warning(disable:4018)   </span><span class="comment">// signedとunsignedの数値を比較</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#pragma warning(disable:4389)   </span><span class="comment">// signedとunsignedの数値を等価比較</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#pragma warning(disable:4324)   </span><span class="comment">// 構造体のパディング自動追加</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#pragma warning(disable:4127)   </span><span class="comment">// 条件式が定数</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#pragma warning(disable:4512)   </span><span class="comment">// クラスの代入演算子が生成できない</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#pragma warning(disable:4505)   </span><span class="comment">// 参照されていないローカル関数の削除</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/HAL/Platform.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#if defined(OS_WINDOWS)</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// ワーニング抑制</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#pragma warning(disable:4018)   </span><span class="comment">// signedとunsignedの数値を比較</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#pragma warning(disable:4389)   </span><span class="comment">// signedとunsignedの数値を等価比較</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#pragma warning(disable:4324)   </span><span class="comment">// 構造体のパディング自動追加</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#pragma warning(disable:4127)   </span><span class="comment">// 条件式が定数</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#pragma warning(disable:4512)   </span><span class="comment">// クラスの代入演算子が生成できない</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#pragma warning(disable:4505)   </span><span class="comment">// 参照されていないローカル関数の削除</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// マクロ定義</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define ALIGN_DECL_IMPL(type,alignment) _declspec(align(alignment)) type                    </span><span class="comment">// アライン付き宣言</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#define ALIGN_VAR_IMPL(var,alignment)   _declspec(align(alignment)) var                     </span><span class="comment">// アライン付き変数宣言</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define FINLINE_IMPL                    __forceinline                                       </span><span class="comment">// 強制inline修飾子</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define RESTRICT_IMPL                   __restrict                                          </span><span class="comment">// restrict型修飾子</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#define DIRECTORY_CHAR_IMPL             &#39;\\&#39;                                                </span><span class="comment">// ディレクトリ文字</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#define DIRECTORY_STR_IMPL              &quot;\\&quot;                                                </span><span class="comment">// ディレクトリ文字列</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#define LIKELY_IMPL(expr)               (expr)                                              </span><span class="comment">// コンパイラ最適化オプション</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#define UNLIKELY_IMPL(expr)             (expr)                                              </span><span class="comment">// コンパイラ最適化オプション</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#define DLL_EXPORT_IMPL                 __declspec(dllexport)                               </span><span class="comment">// DLL出力</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#define DLL_IMPORT_IMPL                 __declspec(dllimport)                               </span><span class="comment">// DLL入力</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#define _internal_FUNC_NAME             __FUNCSIG__                                         </span><span class="comment">// 関数名</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">// 型定義</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">using </span>NativeChar = wchar_t;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">// マクロ定義</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#define ALIGN_DECL_IMPL(type,alignment) _declspec(align(alignment)) type                    </span><span class="comment">// アライン付き宣言</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#define ALIGN_VAR_IMPL(var,alignment)   _declspec(align(alignment)) var                     </span><span class="comment">// アライン付き変数宣言</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#define FINLINE_IMPL                    __forceinline                                       </span><span class="comment">// 強制inline修飾子</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#define RESTRICT_IMPL                   __restrict                                          </span><span class="comment">// restrict型修飾子</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#define DIRECTORY_CHAR_IMPL             &#39;\\&#39;                                                </span><span class="comment">// ディレクトリ文字</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#define DIRECTORY_STR_IMPL              &quot;\\&quot;                                                </span><span class="comment">// ディレクトリ文字列</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#define LIKELY_IMPL(expr)               (expr)                                              </span><span class="comment">// コンパイラ最適化オプション</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#define UNLIKELY_IMPL(expr)             (expr)                                              </span><span class="comment">// コンパイラ最適化オプション</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#define DLL_EXPORT_IMPL                 __declspec(dllexport)                               </span><span class="comment">// DLL出力</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#define DLL_IMPORT_IMPL                 __declspec(dllimport)                               </span><span class="comment">// DLL入力</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#define _internal_FUNC_NAME             __FUNCSIG__                                         </span><span class="comment">// 関数名</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">// 型定義</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">using </span>NativeChar = wchar_t;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

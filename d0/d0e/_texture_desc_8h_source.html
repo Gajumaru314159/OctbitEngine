@@ -101,89 +101,89 @@ $(document).ready(function(){initNavTree('d0/d0e/_texture_desc_8h_source.html','
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//***********************************************************</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/RHI/Forward.h&gt;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/RHI/Types/TextureFormat.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::rhi {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">enum class</span> TextureType {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        Texture1D,          </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        Texture2D,          </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        Texture3D,          </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        Cube,               </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    };</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="comment">// TODO RenderTarget/DepthStencilを別管轄にする</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">enum class</span> TextureState {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        Common,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        ShaderResource,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        UnorderedAccess,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        RenderTarget,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        DepthRead,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        DepthWrite,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        CopyDest,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        CopySource,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        Present,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    };</div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Framework/RHI/Forward.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/RHI/Types/TextureFormat.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">enum class</span> TextureType {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        Texture1D,          </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        Texture2D,          </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        Texture3D,          </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        Cube,               </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    };</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="comment">// TODO RenderTarget/DepthStencilを別管轄にする</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">enum class</span> TextureState {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        Common,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        ShaderResource,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        UnorderedAccess,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        RenderTarget,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        DepthRead,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        DepthWrite,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        CopyDest,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        CopySource,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        Present,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    };</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">enum class</span> TextureFlag {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        ShaderResource = get_bit(0),    </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        UnorderedAccess = get_bit(1),   </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    };</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keyword">using </span>TextureFlags = BitFlags&lt;TextureFlag&gt;;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">enum class</span> TextureFlag {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        ShaderResource = get_bit(0),    </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        UnorderedAccess = get_bit(1),   </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    };</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">using </span>TextureFlags = BitFlags&lt;TextureFlag&gt;;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">enum class</span> TextureViewType {</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        Texture,</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        RWTexture,</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    };</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="foldopen" id="foldopen00061" data-start="{" data-end="};">
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">   61</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">TextureViewDesc</a> {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        Ref&lt;Texture&gt; base;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        TextureViewType type;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// s32 mipSlice;</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="comment">// s32 planeSlice;</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="comment">// s32 arraySlice;</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="comment">// s32 mipLevels;</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="comment">// s32 firstMip;</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="comment">// s32 arrayNum;</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="comment">// s32 firstArray;</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">enum class</span> TextureViewType {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        Texture,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        RWTexture,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    };</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="foldopen" id="foldopen00060" data-start="{" data-end="};">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">   60</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">TextureViewDesc</a> {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        Ref&lt;Texture&gt; base;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        TextureViewType type;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="comment">// s32 mipSlice;</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// s32 planeSlice;</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="comment">// s32 arraySlice;</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="comment">// s32 mipLevels;</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="comment">// s32 firstMip;</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="comment">// s32 arrayNum;</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="comment">// s32 firstArray;</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="comment">// s32 plane;</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="comment">// s32 plane;</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="comment">// s32 plane;</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    };</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    };</div>
 </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="foldopen" id="foldopen00077" data-start="{" data-end="};">
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">   77</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">TextureDesc</a> {</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>          name;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">   79</a></span>        TextureType     <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">type</a>        = TextureType::Texture2D;   </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">   80</a></span>        TextureFormat   <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">format</a>      = TextureFormat::RGBA8;     </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">   81</a></span>        <a class="code hl_struct" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a>            <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">size</a>        = { 1,1,1 };                </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">   82</a></span>        s32             <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">arrayNum</a>    = 0;                        </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">   83</a></span>        s32             <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">mipLevels</a>   = 0;                        </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">   84</a></span>        <a class="code hl_class" href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">TextureFlags</a>    <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">flags</a>       = TextureFlag::ShaderResource;            </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keywordtype">bool</span> isValid() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    };</div>
+<div class="foldopen" id="foldopen00076" data-start="{" data-end="};">
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">   76</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">TextureDesc</a> {</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>          name;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">   78</a></span>        TextureType     <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">type</a>        = TextureType::Texture2D;   </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">   79</a></span>        TextureFormat   <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">format</a>      = TextureFormat::RGBA8;     </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">   80</a></span>        <a class="code hl_struct" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a>            <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">size</a>        = { 1,1,1 };                </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">   81</a></span>        s32             <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">arrayNum</a>    = 0;                        </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">   82</a></span>        s32             <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">mipLevels</a>   = 0;                        </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">   83</a></span>        <a class="code hl_class" href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">TextureFlags</a>    <a class="code hl_variable" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">flags</a>       = TextureFlag::ShaderResource;            </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordtype">bool</span> isValid() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    };</div>
 </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>}</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>}</div>
 <div class="ttc" id="aclassob_1_1core_1_1_bit_flags_html"><div class="ttname"><a href="../../d5/d71/classob_1_1core_1_1_bit_flags.html">ob::core::BitFlags&lt; TextureFlag &gt;</a></div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
-<div class="ttc" id="astructob_1_1core_1_1_size_html"><div class="ttname"><a href="../../db/d78/structob_1_1core_1_1_size.html">ob::core::Size</a></div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> Size.h:12</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">ob::rhi::TextureDesc</a></div><div class="ttdoc">テクスチャ定義</div><div class="ttdef"><b>Definition</b> TextureDesc.h:77</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_a27b662105020ea0686d862304e8a426d"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">ob::rhi::TextureDesc::size</a></div><div class="ttdeci">Size size</div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:81</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_ab68b0679d78365730074253d405f5d6c"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">ob::rhi::TextureDesc::type</a></div><div class="ttdeci">TextureType type</div><div class="ttdoc">テクスチャタイプ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:79</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_ab86128fb84674036f1c5b6568749637a"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">ob::rhi::TextureDesc::arrayNum</a></div><div class="ttdeci">s32 arrayNum</div><div class="ttdoc">テクスチャ配列の要素数 (Texture3Dでは0にしてください)</div><div class="ttdef"><b>Definition</b> TextureDesc.h:82</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_aca78f35b9d38a124861c016b83b17ca3"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">ob::rhi::TextureDesc::format</a></div><div class="ttdeci">TextureFormat format</div><div class="ttdoc">テクスチャフォーマット</div><div class="ttdef"><b>Definition</b> TextureDesc.h:80</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_acc9d2f7684b19fac6184adfcdd25cc7b"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">ob::rhi::TextureDesc::mipLevels</a></div><div class="ttdeci">s32 mipLevels</div><div class="ttdoc">ミップ生成レベル (0の場合sizeから自動計算されます)</div><div class="ttdef"><b>Definition</b> TextureDesc.h:83</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_af3616a720f92f89f8c2598ef054767a3"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">ob::rhi::TextureDesc::flags</a></div><div class="ttdeci">TextureFlags flags</div><div class="ttdoc">フラグ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:84</div></div>
-<div class="ttc" id="astructob_1_1rhi_1_1_texture_view_desc_html"><div class="ttname"><a href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">ob::rhi::TextureViewDesc</a></div><div class="ttdoc">D3D12_SHADER_RESOURCE_VIEW_DESCまたはD3D12_UNORDERED_ACCESS_VIEW_DESC相当</div><div class="ttdef"><b>Definition</b> TextureDesc.h:61</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_size_html"><div class="ttname"><a href="../../db/d78/structob_1_1core_1_1_size.html">ob::core::Size</a></div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> Size.h:11</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">ob::rhi::TextureDesc</a></div><div class="ttdoc">テクスチャ定義</div><div class="ttdef"><b>Definition</b> TextureDesc.h:76</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_a27b662105020ea0686d862304e8a426d"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#a27b662105020ea0686d862304e8a426d">ob::rhi::TextureDesc::size</a></div><div class="ttdeci">Size size</div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:80</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_ab68b0679d78365730074253d405f5d6c"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab68b0679d78365730074253d405f5d6c">ob::rhi::TextureDesc::type</a></div><div class="ttdeci">TextureType type</div><div class="ttdoc">テクスチャタイプ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:78</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_ab86128fb84674036f1c5b6568749637a"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#ab86128fb84674036f1c5b6568749637a">ob::rhi::TextureDesc::arrayNum</a></div><div class="ttdeci">s32 arrayNum</div><div class="ttdoc">テクスチャ配列の要素数 (Texture3Dでは0にしてください)</div><div class="ttdef"><b>Definition</b> TextureDesc.h:81</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_aca78f35b9d38a124861c016b83b17ca3"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#aca78f35b9d38a124861c016b83b17ca3">ob::rhi::TextureDesc::format</a></div><div class="ttdeci">TextureFormat format</div><div class="ttdoc">テクスチャフォーマット</div><div class="ttdef"><b>Definition</b> TextureDesc.h:79</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_acc9d2f7684b19fac6184adfcdd25cc7b"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#acc9d2f7684b19fac6184adfcdd25cc7b">ob::rhi::TextureDesc::mipLevels</a></div><div class="ttdeci">s32 mipLevels</div><div class="ttdoc">ミップ生成レベル (0の場合sizeから自動計算されます)</div><div class="ttdef"><b>Definition</b> TextureDesc.h:82</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html_af3616a720f92f89f8c2598ef054767a3"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html#af3616a720f92f89f8c2598ef054767a3">ob::rhi::TextureDesc::flags</a></div><div class="ttdeci">TextureFlags flags</div><div class="ttdoc">フラグ</div><div class="ttdef"><b>Definition</b> TextureDesc.h:83</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_view_desc_html"><div class="ttname"><a href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">ob::rhi::TextureViewDesc</a></div><div class="ttdoc">D3D12_SHADER_RESOURCE_VIEW_DESCまたはD3D12_UNORDERED_ACCESS_VIEW_DESC相当</div><div class="ttdef"><b>Definition</b> TextureDesc.h:60</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

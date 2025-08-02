@@ -65,7 +65,7 @@ var NAVTREEINDEX1 =
 "d1/d82/structob_1_1core_1_1is__sequence.html":[5,0,0,1,79],
 "d1/d88/classob_1_1core_1_1_async_file_handle.html":[5,0,0,1,9],
 "d1/d8a/structob_1_1core_1_1_i_p_address.html":[5,0,0,1,74],
-"d1/d99/classob_1_1rhi_1_1_graphic_file_handle.html":[5,0,0,11,25],
+"d1/d99/classob_1_1rhi_1_1_graphic_file_handle.html":[5,0,0,11,26],
 "d1/d9e/classob_1_1core_1_1_event_notifier.html":[5,0,0,1,46],
 "d1/d9e/classob_1_1core_1_1_event_notifier.html#a0158871b5703199bbe21924313dc2943":[5,0,0,1,46,9],
 "d1/d9e/classob_1_1core_1_1_event_notifier.html#a0af7b12cbf6caf964a5f7738409621e2":[5,0,0,1,46,5],

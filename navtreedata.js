@@ -88,10 +88,10 @@ var NAVTREEINDEX =
 "d3/d2d/classob_1_1core_1_1_logger.html",
 "d4/d63/classob_1_1input_1_1_keyboard.html#aa857d4107f897f3f17235509260e2fb5",
 "d6/d81/classob_1_1core_1_1_swapper.html#a1fcd94ef0f6fd6d51739e55691c3754e",
-"d8/d22/structob_1_1core_1_1_int_vec2.html#ae8e378496621a3e6a2c1ae190fb8a284",
-"d9/dc1/classob_1_1debug_1_1_inspector.html",
-"db/d4d/classob_1_1core_1_1_blob.html#aa850600c0656ddc036ed0dc601e37874",
-"dc/db8/classob_1_1core_1_1_not_implemented_exception.html",
+"d8/d28/classob_1_1core_1_1_handle_list.html#a1de79ff3fa28f25dd6781d81e1d42f15",
+"d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html#a643d8200a80827bc676fcc3ebfc58dc0",
+"db/d4d/classob_1_1core_1_1_blob.html#ac2f8f4a4f59464b602864cc056642bcd",
+"dc/dc8/classob_1_1editor_1_1_create_world_query.html",
 "de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb",
 "functions_s.html"
 ];
