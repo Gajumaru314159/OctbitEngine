@@ -93,7 +93,7 @@ namespace ob::core {
 		BY_HANDLE_FILE_INFORMATION info;
 		auto hr = m_impl->file->GetFileInformation(&info);
 		if (FAILED(hr))return 0;
-		return ((size_t)info.nFileSizeHigh) << 32 | info.nFileSizeLow;
+		return static_cast<size_t>(info.nFileSizeHigh) << 32 | info.nFileSizeLow;
 	}
 
 
