@@ -85,3 +85,4 @@ Uses FetchContent for dependency management including:
 
 ## IMPORTANT
 - Before completing the task, be sure to build and test to ensure it works properly.
+- Please explain the work and have conversations in Japanese.
