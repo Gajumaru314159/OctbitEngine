@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Platform/Type/SystemEventType.h>
-#include <Framework/Platform/Type/CursorType.h>
 #include <Framework/Platform/Type/WindowDesc.h>
 #include <Framework/Platform/Type/WindowState.h>
 
@@ -27,7 +26,7 @@ namespace ob::platform {
         //! @brief      コンストラクタ
         //! 
         //! @details    生成情報を指定してウィンドウを生成する。
-        Window(const WindowDesc& desc);
+        explicit Window(const WindowDesc& desc);
 
 
         //! @brief      デストラクタ
