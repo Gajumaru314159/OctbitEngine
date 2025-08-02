@@ -268,19 +268,60 @@ namespace ob::core {
 
 
     //! @brief ターゲット方向に向けるQuaternionを計算
-    Quat Quat::LookAt(const Vec3& target, [[maybe_unused]]const Vec3& up) {
-        // TODO Upベクトル対応
-        Vec3 tar = target.unitVec();
-        Vec3 norm(0, 0, 1);
-        f32 dot = Vec3::Dot(norm, tar);
-        f32 theta = Math::Acos(dot);
-        Vec3 cross = Vec3::Cross(norm, tar);
-        cross.normalize();
-        theta = theta / 2;
-
-        f32 sin = Math::Sin(theta);
-        f32 cos = Math::Cos(theta);
-        return Quat(cross.x * sin, cross.y * sin, cross.z * sin, cos);
+    Quat Quat::LookAt(const Vec3& target, const Vec3& up) {
+        Vec3 forward = target.unitVec();
+        Vec3 upN = up.unitVec();
+        
+        // 前方向ベクトルとアップベクトルから右方向ベクトルを計算
+        Vec3 right = Vec3::Cross(forward, upN).unitVec();
+        
+        // 前方向ベクトルと右方向ベクトルから実際のアップベクトルを再計算
+        Vec3 actualUp = Vec3::Cross(right, forward).unitVec();
+        
+        // 回転行列を構築
+        Matrix rotMatrix(
+            right.x,    actualUp.x,    -forward.x,    0.0f,
+            right.y,    actualUp.y,    -forward.y,    0.0f,
+            right.z,    actualUp.z,    -forward.z,    0.0f,
+            0.0f,       0.0f,          0.0f,          1.0f
+        );
+        
+        // 行列からクォータニオンに変換
+        f32 trace = rotMatrix.m[0][0] + rotMatrix.m[1][1] + rotMatrix.m[2][2];
+        
+        if (trace > 0.0f) {
+            f32 s = Math::Sqrt(trace + 1.0f) * 2.0f;
+            return Quat(
+                (rotMatrix.m[2][1] - rotMatrix.m[1][2]) / s,
+                (rotMatrix.m[0][2] - rotMatrix.m[2][0]) / s,
+                (rotMatrix.m[1][0] - rotMatrix.m[0][1]) / s,
+                0.25f * s
+            );
+        } else if (rotMatrix.m[0][0] > rotMatrix.m[1][1] && rotMatrix.m[0][0] > rotMatrix.m[2][2]) {
+            f32 s = Math::Sqrt(1.0f + rotMatrix.m[0][0] - rotMatrix.m[1][1] - rotMatrix.m[2][2]) * 2.0f;
+            return Quat(
+                0.25f * s,
+                (rotMatrix.m[0][1] + rotMatrix.m[1][0]) / s,
+                (rotMatrix.m[0][2] + rotMatrix.m[2][0]) / s,
+                (rotMatrix.m[2][1] - rotMatrix.m[1][2]) / s
+            );
+        } else if (rotMatrix.m[1][1] > rotMatrix.m[2][2]) {
+            f32 s = Math::Sqrt(1.0f + rotMatrix.m[1][1] - rotMatrix.m[0][0] - rotMatrix.m[2][2]) * 2.0f;
+            return Quat(
+                (rotMatrix.m[0][1] + rotMatrix.m[1][0]) / s,
+                0.25f * s,
+                (rotMatrix.m[1][2] + rotMatrix.m[2][1]) / s,
+                (rotMatrix.m[0][2] - rotMatrix.m[2][0]) / s
+            );
+        } else {
+            f32 s = Math::Sqrt(1.0f + rotMatrix.m[2][2] - rotMatrix.m[0][0] - rotMatrix.m[1][1]) * 2.0f;
+            return Quat(
+                (rotMatrix.m[0][2] + rotMatrix.m[2][0]) / s,
+                (rotMatrix.m[1][2] + rotMatrix.m[2][1]) / s,
+                0.25f * s,
+                (rotMatrix.m[1][0] - rotMatrix.m[0][1]) / s
+            );
+        }
     }
 
 
