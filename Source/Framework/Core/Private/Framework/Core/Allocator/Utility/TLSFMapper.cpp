@@ -24,13 +24,13 @@ namespace ob::core {
 	//		         ++			SecondLevel			00(2) = 0
 	//		         |-----|	LinearManagement	下位6ビット
 	//===============================================================
-	static const s32 s_maxSecondLevelLog2 = 2;
-	static const s32 s_linearManagementSizeLog2 = 2;// 6; TODO 本当は6当たりだったがリニア検索がバグっているので一時的に小さくしている
+	static constexpr s32 s_maxSecondLevelLog2 = 2;
+	static constexpr s32 s_linearManagementSizeLog2 = 6;
 
-	static const s32 s_maxSecondLevel = 1 << s_maxSecondLevelLog2;		// 4
-	static const s32 s_linearManagementSize = 1 << s_linearManagementSizeLog2;	// 64
+	static constexpr s32 s_maxSecondLevel = 1 << s_maxSecondLevelLog2;		// 4
+	static constexpr s32 s_linearManagementSize = 1 << s_linearManagementSizeLog2;	// 64
 
-	static const s32 s_secondLevelShift = s_linearManagementSizeLog2 - s_maxSecondLevelLog2;	// 4
+	static constexpr s32 s_secondLevelShift = s_linearManagementSizeLog2 - s_maxSecondLevelLog2;	// 4
 
 	//! @brief          コンストラクタ
 	//! 
@@ -43,12 +43,12 @@ namespace ob::core {
 
 		// 必要な容量を計算
 		s32 firstLevel, secondLevel, blockIndex;
-		getLevelAndIndex(m_capacity, firstLevel, secondLevel, blockIndex);
+		GetLevelAndIndex(m_capacity, firstLevel, secondLevel, blockIndex);
 
 		// アロケート
 		m_freeFLI = 0;
-		m_freeSLI.resize((size_t)firstLevel + 1, 0);
-		m_blocks.resize((size_t)blockIndex + 1, nullptr);
+		m_freeSLI.resize(static_cast<size_t>(firstLevel) + 1, 0);
+		m_blocks.resize(static_cast<size_t>(blockIndex) + 1, nullptr);
 
 		// フリーリスト確保
 		m_freeList.reserve(capacity);
@@ -83,14 +83,12 @@ namespace ob::core {
 				}
 			}
 		}
-		OB_ASSERT(m_freeList.size() + 1 == m_capacity, "未開放のTLSFBlockがあります。RHI::finalize()の呼び出しを確認してください。");
+		OB_ASSERT(m_freeList.size() + 1 == m_capacity, "{}つの未開放のTLSFBlockがあります。RHI::finalize()の呼び出しを確認してください。",blocks.size());
 	}
 
 
 	//! @brief          ハンドルをアロケート
-	//! 
-	//! @param handle   アロケート先ハンドル
-	//! @param viewNum  割り当て個数
+	//! @param size  割り当て個数
 	auto TLSFMapper::allocate(s32 size) -> const TLSFBlock*{
 		
 		if (size <= 0)return nullptr;
@@ -149,7 +147,7 @@ namespace ob::core {
 	TLSFBlock* TLSFMapper::allocateFreeBlock(s32 size) {
 
 		s32 firstLevel, secondLevel;
-		getLevelIndex(size, firstLevel, secondLevel);
+		GetLevelIndex(size, firstLevel, secondLevel);
 
 		// 最大第1レベルを超えたので失敗
 		if (m_freeSLI.size() <= firstLevel)return nullptr;
@@ -174,7 +172,7 @@ namespace ob::core {
 			secondLevel = BitOp::GetLSB((u32)slMap);
 		}
 
-		s32 blockIndex = getFreeBlockIndex(firstLevel, secondLevel);
+		s32 blockIndex = GetFreeBlockIndex(firstLevel, secondLevel);
 		auto pBlock = m_blocks.at(blockIndex);
 		OB_ASSERT(pBlock, "内部エラー。allocateFreeBlock()にバグがあります。[pBlock==null]");
 		OB_ASSERT(size <= pBlock->capacity, "内部エラー。allocateFreeBlock()にバグがあります。[{}<={}]", size, pBlock->capacity);
@@ -236,7 +234,7 @@ namespace ob::core {
 
 		// フリーリストの先頭の場合は先頭を入れなおす
 		s32 firstIndex, secondIndex, blockIndex;
-		getLevelAndIndex(block.capacity, firstIndex, secondIndex, blockIndex);
+		GetLevelAndIndex(block.capacity, firstIndex, secondIndex, blockIndex);
 		if (m_blocks.at(blockIndex) == &block) {
 			m_blocks.at(blockIndex) = pFreeNext;
 
@@ -290,7 +288,7 @@ namespace ob::core {
 		OB_ASSERT(!block.pFreePrev && !block.pFreeNext, "連結されているブロックはフリーリストに追加できません。");
 
 		s32 firstLevel, secondLevel, blockIndex;
-		getLevelAndIndex(block.capacity, firstLevel, secondLevel, blockIndex);
+		GetLevelAndIndex(block.capacity, firstLevel, secondLevel, blockIndex);
 		auto& pTop = m_blocks.at(blockIndex);
 		if (pTop) {
 			block.pFreeNext = pTop;
@@ -320,30 +318,28 @@ namespace ob::core {
 
 
 	//! @brief	レベルからフリーブロックリストのインデックスを計算
-	s32 TLSFMapper::getFreeBlockIndex(s32 firstLevel, s32 secondLevel)const noexcept {
+	s32 TLSFMapper::GetFreeBlockIndex(s32 firstLevel, s32 secondLevel) noexcept {
 		return firstLevel * s_maxSecondLevel + secondLevel;
 	}
 
 
 	//! @brief	サイズから各レベルのカテゴリを計算
-	void TLSFMapper::getLevelIndex(s32 size, s32& firstLevel, s32& secondLevel)const noexcept {
+	void TLSFMapper::GetLevelIndex(s32 size, s32& firstLevel, s32& secondLevel) noexcept {
 		if (size < s_linearManagementSize) {
 			firstLevel = 0;
-#pragma warning(suppress: 4293)
 			secondLevel = size >> s_secondLevelShift;
-#pragma warning(default: 4293)
 		} else {
-			firstLevel = std::max(0, BitOp::GetMSB((u32)size) + 1 - s_linearManagementSizeLog2);
-			secondLevel = size >> (firstLevel + s_maxSecondLevel);
+			firstLevel = std::max(0, BitOp::GetMSB(static_cast<u32>(size)) + 1 - s_linearManagementSizeLog2);
+			secondLevel = size >> (firstLevel + s_secondLevelShift);
 			secondLevel &= (s_maxSecondLevel - 1);
 		}
 	}
 
 
 	//! @brief	サイズからレベルとブロックインデックスを計算
-	void TLSFMapper::getLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index)const noexcept {
-		getLevelIndex(size, firstLevel, secondLevel);
-		index = getFreeBlockIndex(firstLevel, secondLevel);
+	void TLSFMapper::GetLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index) noexcept {
+		GetLevelIndex(size, firstLevel, secondLevel);
+		index = GetFreeBlockIndex(firstLevel, secondLevel);
 	}
 
 }

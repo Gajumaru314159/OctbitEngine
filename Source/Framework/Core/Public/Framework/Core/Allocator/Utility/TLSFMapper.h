@@ -44,7 +44,7 @@ namespace ob::core {
 		//! @brief          コンストラクタ
 		//! 
 		//! @param capacity 容量
-		TLSFMapper(s32 capacity);
+		explicit TLSFMapper(s32 capacity);
 
 
 		//! @brief          デストラクタ
@@ -52,8 +52,6 @@ namespace ob::core {
 
 
 		//! @brief          ハンドルをアロケート
-		//! 
-		//! @param handle   アロケート先ハンドル
 		//! @param size  割り当て個数
 		auto allocate(s32 size)-> const TLSFBlock*;
 
@@ -81,9 +79,9 @@ namespace ob::core {
 		void entryFreeListBitState(s32 firstLevel, s32 secondLevel);		//!< フリーリストビットへ登録
 		void removeFreeListBitState(s32 firstLevel, s32 secondLevel);		//!< フリーリストビットから削除
 
-		s32  getFreeBlockIndex(s32 firstLevel, s32 secondLevel)const noexcept;							//!< レベルからフリーブロックリストのインデックスを計算
-		void getLevelIndex(s32 size, s32& firstLevel, s32& secondLevel)const noexcept;					//!< サイズから各レベルのカテゴリを計算
-		void getLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index)const noexcept;	//!< サイズからレベルとブロックインデックスを計算
+		static s32 GetFreeBlockIndex(s32 firstLevel, s32 secondLevel) noexcept;							//!< レベルからフリーブロックリストのインデックスを計算
+		static void GetLevelIndex(s32 size, s32& firstLevel, s32& secondLevel) noexcept;					//!< サイズから各レベルのカテゴリを計算
+		static void GetLevelAndIndex(s32 size, s32& firstLevel, s32& secondLevel, s32& index) noexcept;	//!< サイズからレベルとブロックインデックスを計算
 
 
 	private:
