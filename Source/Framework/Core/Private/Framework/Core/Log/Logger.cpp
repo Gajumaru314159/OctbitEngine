@@ -36,11 +36,9 @@ namespace ob::core {
                 }
                 // フォーマット
                 const auto message = Format ("{} {}", typeName, log.message);
-                WString ws;
-                StringEncoder::Encode(message, ws);
 
                 // 標準出力
-                std::wcout << ws.data() << std::endl;
+                std::cout << message << std::endl;
             }
 
 #ifdef OS_WINDOWS
@@ -94,8 +92,8 @@ namespace ob::core {
 
         };
 
-        // std::wcoutで日本語が表示できないため対応
-        setlocale(LC_ALL, "Japanese");
+        // std::coutでUTF-8を正しく表示するための対応
+        setlocale(LC_ALL, ".utf8");
 
 
         addEvent(m_hDebugEvent, func);
