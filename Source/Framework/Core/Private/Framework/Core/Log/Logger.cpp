@@ -21,7 +21,7 @@ namespace ob::core {
         s_instance = this;
 
         // デフォルトログイベント
-        auto func = [](const Log& log) {
+        auto func = [useLineOutput=m_useLineOutput](const Log& log) {
 
             // 標準出力
             if(log.level!=LogLevel::Trace){
@@ -35,9 +35,9 @@ namespace ob::core {
                 default:                typeName = "\033[32m[Unknown]\033[0m"; break;// 緑
                 }
                 // フォーマット
-                auto msg = Format ("{} {}", typeName, log.message);
+                const auto message = Format ("{} {}", typeName, log.message);
                 WString ws;
-                StringEncoder::Encode(msg, ws);
+                StringEncoder::Encode(message, ws);
 
                 // 標準出力
                 std::wcout << ws.data() << std::endl;
@@ -56,17 +56,16 @@ namespace ob::core {
                 default:                typeName = "[Unknown]"; break;
                 }
                 // フォーマット
-                auto msg = Format("{} {}\n{}({})\n", typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
+                const auto message = Format("{} {}\n{}({})\n", typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
                 WString ws;
-                StringEncoder::Encode(msg, ws);
+                StringEncoder::Encode(message, ws);
 
                 // 出力
                 ::OutputDebugLog(ws.c_str());
 
-                bool outputLine = false;
-                if (outputLine) {
-                    auto msg2 = Format("{}({})\n", log.sourceLocation.filePath, log.sourceLocation.line);
-                    StringEncoder::Encode(msg2, ws);
+                if (useLineOutput) {
+                    const auto message2 = Format("{}({})\n", log.sourceLocation.filePath, log.sourceLocation.line);
+                    StringEncoder::Encode(message2, ws);
                     ::OutputDebugLog(ws.c_str());
                 }
 
@@ -114,7 +113,7 @@ namespace ob::core {
     //! 
     //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
     //!                         直接呼び出しは非推奨です。
-    //! @param type             ログの種類
+    //! @param level            ログの種類
     //! @param sourceLocation   ログ生成場所
     //! @param category         カテゴリ名
     //! @param pMessage         メッセージ

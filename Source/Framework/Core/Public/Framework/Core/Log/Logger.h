@@ -6,7 +6,6 @@
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/String/Format.h>
 #include <Framework/Core/Thread/Mutex.h>
-#include <Framework/Core/Thread/Atomic.h>
 #include <Framework/Core/Log/LogTypes.h>
 #include <Framework/Core/Template/Event/EventNotifier.h>
 
@@ -41,6 +40,7 @@ namespace ob::core {
         //! @brief      インスタンスを取得
         static Logger& Instance()noexcept {
             assert(s_instance);
+            // ReSharper disable once CppDFANullDereference
             return *s_instance;
         }
 
@@ -57,7 +57,7 @@ namespace ob::core {
         //! 
         //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
         //!                         直接呼び出しは非推奨です。
-        //! @param type             ログの種類
+        //! @param level            ログの種類
         //! @param sourceLocation   ログ生成場所
         //! @param category         カテゴリ名
         //! @param pMessage         メッセージ
@@ -68,11 +68,11 @@ namespace ob::core {
         //! 
         //! @details                この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。@n
         //!                         直接呼び出しは非推奨です。
-        //! @param type             ログの種類
+        //! @param level            ログの種類
         //! @param sourceLocation   ログ生成場所
         //! @param category         カテゴリ名
         //! @param pFormat          フォーマット文字列
-        //! @param ...args          フォーマット引数
+        //! @param args             フォーマット引数
         template<typename... Args>
         void addLog(LogLevel level, const SourceLocation& sourceLocation, const Char* category, const Char* pFormat, Args&&... args) {
             String message = Format(pFormat, std::forward<Args>(args)...);
@@ -89,7 +89,7 @@ namespace ob::core {
 
 
     private:
-
+        bool            m_useLineOutput = false;
         Mutex           m_mutex;
         EventNotifier   m_notifier;
         EventHandle     m_hDebugEvent;

@@ -36,10 +36,10 @@ namespace ob::core {
 
     //! @brief ログ・オブジェクト
     struct Log {
-        LogLevel        level;              //!< タイプ
-        const Char*     category = nullptr; //!< カテゴリ
-        const Char*     message = nullptr;  //!< メッセージ
-        SourceLocation  sourceLocation;     //!< ログが発生したソースコード上の位置
+        LogLevel        level = LogLevel::Trace;//!< タイプ
+        const Char*     category = nullptr;     //!< カテゴリ
+        const Char*     message = nullptr;      //!< メッセージ
+        SourceLocation  sourceLocation;         //!< ログが発生したソースコード上の位置
     };
 
 }
