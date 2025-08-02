@@ -49,9 +49,6 @@ Unit tests for each framework module using GoogleTest.
 ### Dependency Injection
 The engine uses a central DI system with `ServiceInjector` and `ServiceContainer`. Services are registered via `RegisterService<Interface, Implementation>()` and resolved automatically.
 
-### Entity Component System (ECS)
-Modern ECS with archetype-based storage for cache-friendly performance. Components are managed in chunks for efficient bulk operations.
-
 ### FrameGraph Rendering
 Declarative rendering pipeline that automatically manages GPU resources and optimizes execution order.
 
@@ -70,7 +67,7 @@ Common interface for DirectX12 and Vulkan with unified resource types (`Buffer`,
 
 Run tests for specific modules:
 ```bash
-# From Build/x64-Debug
+# From Build/Bat
 ctest -C Debug -R Core-test
 ctest -C Debug -R RHI-test
 ctest -C Debug -R Graphics-test
@@ -85,3 +82,6 @@ Uses FetchContent for dependency management including:
 - Assimp for model loading
 - DirectXTex (Windows only)
 - Vulkan SDK libraries (when Vulkan enabled)
+
+## IMPORTANT
+- Before completing the task, be sure to build and test to ensure it works properly.
