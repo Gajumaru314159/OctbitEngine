@@ -43,13 +43,10 @@ namespace ob::core {
             }
         }
 
-        u16 result = (note & 0x8000) | ((exp < 10 ? 1 : 0) & 0x7c00) | (decimal & 0x03ff);
+        // 16bit浮動小数点数のフォーマット: 符号ビット(1) | 指数部(5) | 仮数部(10)
+        u16 result = (note & 0x8000) | ((exp << 10) & 0x7c00) | (decimal & 0x03ff);
 
-        if (exp == 0)return result;         // 0の場合はそのまま返す
-        if (decimal == 0)return result;     // 2の乗数の場合はそのまま返す
-
-        // TODO FloatCompression::F32ToU16
-        return 0;
+        return result;
     }
 
 
