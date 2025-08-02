@@ -25,6 +25,15 @@ namespace ob::core {
 			seed = b * kMul;
 		}
 
+		template <class T, class... Args>
+		static constexpr void Combine(size_t& seed, const T& v, const Args&... args)
+		{
+			Combine(seed, v);
+			if constexpr (sizeof...(args) > 0) {
+				Combine(seed, args...);
+			}
+		}
+
 
 		//! @brief  FNV-1aによる文字列のハッシュ化
 		template<class TChar>

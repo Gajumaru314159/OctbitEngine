@@ -89,3 +89,73 @@ TEST(Hash, FNV64Const) {
     EXPECT_EQ(OB_FNV64("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0xe276b7953364d122);
 
 }
+
+TEST(Hash, Combine) {
+
+    // 2つの値のCombine（従来の動作確認）
+    {
+        size_t seed1 = 0;
+        Hash::Combine(seed1, 42);
+        Hash::Combine(seed1, 100);
+        
+        size_t seed2 = 0;
+        Hash::Combine(seed2, 42, 100);
+        
+        EXPECT_EQ(seed1, seed2);
+    }
+
+    // 3つの値のCombine
+    {
+        size_t seed1 = 0;
+        Hash::Combine(seed1, 1);
+        Hash::Combine(seed1, 2);
+        Hash::Combine(seed1, 3);
+        
+        size_t seed2 = 0;
+        Hash::Combine(seed2, 1, 2, 3);
+        
+        EXPECT_EQ(seed1, seed2);
+    }
+
+    // 異なる型の値のCombine
+    {
+        size_t seed1 = 0;
+        Hash::Combine(seed1, 42);
+        Hash::Combine(seed1, 3.14f);
+        Hash::Combine(seed1, true);
+        Hash::Combine(seed1, std::string("test"));
+        
+        size_t seed2 = 0;
+        Hash::Combine(seed2, 42, 3.14f, true, std::string("test"));
+        
+        EXPECT_EQ(seed1, seed2);
+    }
+
+    // 順序の違いで異なるハッシュ値になることを確認
+    {
+        size_t seed1 = 0;
+        Hash::Combine(seed1, 1, 2, 3);
+        
+        size_t seed2 = 0;
+        Hash::Combine(seed2, 3, 2, 1);
+        
+        EXPECT_NE(seed1, seed2);
+    }
+
+    // 多くの引数のCombine
+    {
+        size_t seed1 = 0;
+        Hash::Combine(seed1, 1);
+        Hash::Combine(seed1, 2);
+        Hash::Combine(seed1, 3);
+        Hash::Combine(seed1, 4);
+        Hash::Combine(seed1, 5);
+        Hash::Combine(seed1, 6);
+        
+        size_t seed2 = 0;
+        Hash::Combine(seed2, 1, 2, 3, 4, 5, 6);
+        
+        EXPECT_EQ(seed1, seed2);
+    }
+
+}
