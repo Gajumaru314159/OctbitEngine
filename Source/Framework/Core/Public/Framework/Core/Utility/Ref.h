@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Reflection/Type.h>
+#include <Framework/Core/Thread/Atomic.h>
 
 //! @cond
 
