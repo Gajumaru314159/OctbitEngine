@@ -11,7 +11,7 @@ namespace ob::graphics {
 	public:
 		OB_RTTI();
 
-		virtual ~RenderPipeline() = default;
+		~RenderPipeline() override = default;
 
 		//! @brief		RenderSceneのセットアップを行う
 		//! @details	RenderSceneにRenderPipelineが設定された時に実行されます。

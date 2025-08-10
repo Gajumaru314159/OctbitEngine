@@ -56,8 +56,8 @@ namespace ob::rhi {
 		// 初期状態で記録モードなのでクローズ
 		m_cmdList->Close();
 
-		Utility::SetName(m_cmdAllocator.Get(), getName());
-		Utility::SetName(m_cmdList.Get(), getName());
+		Utility::SetName(m_cmdAllocator.Get(), m_desc.name);
+		Utility::SetName(m_cmdList.Get(), m_desc.name);
 
 		manage();
 	}
@@ -74,7 +74,6 @@ namespace ob::rhi {
 		return m_desc.name;
 	}
 
-#pragma endregion Command
 
 	//! @brief  描画開始
 	void DirectX12CommandList::begin() {
@@ -354,7 +353,6 @@ namespace ob::rhi {
 	//! @brief      デスクリプタテーブルを設定
 	void DirectX12CommandList::setDescriptorTables(const SetDescriptorTableParam* params, s32 num) {
 		OB_ASSERT(m_signature!=nullptr,"先にPipelineStateを設定してください");
-
 		for (s32 i = 0; i < num; ++i) {
 			auto& param = params[i];
 
@@ -394,8 +392,7 @@ namespace ob::rhi {
 	void DirectX12CommandList::popMarker() {
 		::PIXEndEvent(m_cmdList.Get());
 	}
-
-#pragma endregion
+	
 
 	//! @brief  デスクリプタハンドルのキャッシュをクリア
 	void DirectX12CommandList::clearRenderTargets() {
