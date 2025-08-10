@@ -7,54 +7,6 @@
 
 namespace ob::core {
 
-	//! @brief  日時の正規化
-	DateTime& DateTime::normalize() {
-		year = 0;
-		month = 1;
-		day = 1;
-		hour = 0;
-		minute = 0;
-		second = 0;
-		milliSeconds = 0;
-
-		if (1000 <= milliSeconds) {
-			second += milliSeconds / 1000;
-			milliSeconds %= 1000;
-		}
-
-		if (60 <= second) {
-			minute += second / 60;
-			second %= 60;
-		}
-
-		if (60 <= minute) {
-			hour += minute / 60;
-			minute %= 60;
-		}
-
-		if (24 <= hour) {
-			day += hour / 24;
-			hour %= 24;
-		}
-
-		// 閏年があるため月から計算
-		if (12 < month) {
-			year += (month - 1) / 12;
-			month = (month - 1) % 12 + 1;
-		}
-
-		for (auto dom = 1; dom = DayInMonth(month, year), dom < day;) {
-			month++;
-			if (12 < month) {
-				month = 1;
-				year++;
-			}
-			day -= dom;
-		}
-
-		return *this;
-	}
-
 	//!	@brief	曜日
 	DayOfWeek DateTime::dayOfWeek()const {
 		auto k = year % 100;
@@ -162,9 +114,9 @@ namespace ob::core {
 			else if (read("m"))out += Format("{}", minute);
 			else if (read("ss"))out += Format("{:02}", second);
 			else if (read("s"))out += Format("{}", second);
-			else if (read("fff"))out += Format("{:03}", milliSeconds);
-			else if (read("ff"))out += Format("{:02}", milliSeconds / 10);
-			else if (read("f"))out += Format("{:01}", milliSeconds / 100);
+			else if (read("fff"))out += Format("{:03}", milliSecond);
+			else if (read("ff"))out += Format("{:02}", milliSecond / 10);
+			else if (read("f"))out += Format("{:01}", milliSecond / 100);
 			else out.append(1,format[i++]);
 
 		}
@@ -176,12 +128,12 @@ namespace ob::core {
 
 	//!	@brief		現在の日時を取得
 	DateTime DateTime::Now() {
-		using namespace std::chrono;
+
 		DateTime dt{};
 
 #ifdef OS_WINDOWS
-		system_clock::time_point tp = system_clock::now();
-		time_t time = system_clock::to_time_t(tp);
+		std::chrono::system_clock::time_point tp = std::chrono::system_clock::now();
+		time_t time = std::chrono::system_clock::to_time_t(tp);
 		tm p;
 		if (localtime_s(&p, &time) == 0) {
 			dt.year = p.tm_year + 1900;
@@ -193,8 +145,8 @@ namespace ob::core {
 		} else {
 			LOG_ERROR_EX("Core", "現在時刻の取得に失敗。");
 		}
-		auto msec = duration_cast<milliseconds>(tp.time_since_epoch()).count();
-		dt.milliSeconds = milliseconds(msec).count() % 1000;
+		auto msec = duration_cast<std::chrono::milliseconds>(tp.time_since_epoch()).count();
+		dt.milliSecond = std::chrono::milliseconds(msec).count() % 1000;
 #else
 #pragma error("DateTime::Now() is not supported in this platform.")
 #endif

@@ -25,12 +25,12 @@ namespace ob::core {
 	struct DateTime {
 	public:
 		s32			year = 0;						//!< 年
-		s32			month = 1;						//!< 月
-		s32			day = 1;						//!< 日
-		s32			hour = 0;						//!< 時間
-		s32			minute = 0;						//!< 分
-		s32			second = 0;						//!< 秒
-		s32			milliSeconds = 0;				//!< ミリ秒
+		s32			month = 1;						//!< 月(1-12)
+		s32			day = 1;						//!< 日(1-31)
+		s32			hour = 0;						//!< 時間(0-23
+		s32			minute = 0;						//!< 分(0-59)
+		s32			second = 0;						//!< 秒(0-59)
+		s32			milliSecond = 0;				//!< ミリ秒(0-999)
 	public:
 
 		bool operator==(const DateTime& rhs)const noexcept;			//!< 等価演算子
@@ -39,9 +39,6 @@ namespace ob::core {
 		bool operator<=(const DateTime& rhs)const noexcept;			//!< 比較演算子
 		bool operator>(const DateTime& rhs)const noexcept;			//!< 比較演算子
 		bool operator>=(const DateTime& rhs)const noexcept;			//!< 比較演算子
-
-		//!	@brief	正規化
-		DateTime& normalize();
 
 		//!	@brief	午前か
 		bool isMorning()const;
@@ -53,13 +50,13 @@ namespace ob::core {
 		DayOfWeek dayOfWeek()const;
 
 		//!	@brief		1月1日から数えて何日目か
-		//! 
+		//!
 		//! @details	1月1日を1として何日目かを返す。
 		//!				閏年の場合3月以降の日数がずれる。
 		s32 daysInYear()const;
 
 		//!	@brief		日時を文字列に変換
-		//! 
+		//!
 		//! @details	使用可能なフォーマットは以下の通りです。
 		//!				必要に応じてエスケープ文字を使用してください。
 		//!				* yyyyy	年 (5 桁の数値)
@@ -101,7 +98,7 @@ namespace ob::core {
 		static s32 DayInMonth(s32 month, s32 year);
 
 		//! [brief	システムの現在時刻を取得
-		static DateTime Now();	
+		static DateTime Now();
 
 	};
 
@@ -122,38 +119,22 @@ namespace ob::core {
 			hour == rhs.hour &&
 			minute == rhs.minute &&
 			second == rhs.second &&
-			milliSeconds == rhs.milliSeconds;
+			milliSecond == rhs.milliSecond;
 	}
 	inline bool DateTime::operator!=(const DateTime& rhs)const noexcept {
 		return !(*this == rhs);
 	}
 	inline bool DateTime::operator<(const DateTime& rhs)const noexcept {
-		auto l = *this; l.normalize();
-		auto r = rhs; r.normalize();
-
-		if (year < r.year)return true;
-		if (month < r.month)return true;
-		if (day < r.day)return true;
-		if (hour < r.hour)return true;
-		if (minute < r.minute)return true;
-		if (second < r.second)return true;
-		if (milliSeconds < r.milliSeconds)return true;
-
-		return false;
+		if (year != rhs.year) return year < rhs.year;
+		if (month != rhs.month) return month < rhs.month;
+		if (day != rhs.day) return day < rhs.day;
+		if (hour != rhs.hour) return hour < rhs.hour;
+		if (minute != rhs.minute) return minute < rhs.minute;
+		if (second != rhs.second) return second < rhs.second;
+		return milliSecond < rhs.milliSecond;
 	}
 	inline bool DateTime::operator<=(const DateTime& rhs)const noexcept {
-		auto l = *this; l.normalize();
-		auto r = rhs; r.normalize();
-
-		if (year <= r.year)return true;
-		if (month <= r.month)return true;
-		if (day <= r.day)return true;
-		if (hour <= r.hour)return true;
-		if (minute <= r.minute)return true;
-		if (second <= r.second)return true;
-		if (milliSeconds <= r.milliSeconds)return true;
-
-		return false;
+		return *this < rhs || *this == rhs;
 	}
 	inline bool DateTime::operator>(const DateTime& rhs)const noexcept {
 		return !(*this <= rhs);
@@ -165,7 +146,7 @@ namespace ob::core {
 
 	//!	@brief	午前か
 	inline bool DateTime::isMorning()const {
-		return DateTime(*this).normalize().hour < 12;
+		return hour < 12;
 	}
 
 	//!	@brief	午後か

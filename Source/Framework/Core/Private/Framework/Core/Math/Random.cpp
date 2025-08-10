@@ -14,7 +14,7 @@ namespace ob::core {
         z = 521288629;
         w = 88675123;
 
-        setSeed(static_cast<u32>(DateTime::Now().milliSeconds));
+        setSeed(static_cast<u32>(DateTime::Now().milliSecond));
     }
 
 

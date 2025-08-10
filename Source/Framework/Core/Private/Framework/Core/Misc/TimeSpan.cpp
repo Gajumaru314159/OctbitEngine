@@ -23,7 +23,7 @@ namespace ob::core {
 			to.hour - from.hour,
 			to.minute - from.minute,
 			to.second - from.second,
-			to.milliSeconds - from.milliSeconds
+			to.milliSecond - from.milliSecond
 		);
 	}
 
