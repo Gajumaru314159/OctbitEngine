@@ -45,9 +45,6 @@ namespace ob::rhi {
         static const char* GetEntryName(ShaderStage stage);
 
         //! @brief          シェーダコードをコンパイル
-        //! 
-        //! @param code     シェーダコード
-        //! @param stage    シェーダステージ
         //! @{
 		static Ref<Shader> Compile(const ShaderCompileDesc& desc);
         static Ref<Shader> Compile(const String& code, ShaderStage stage);

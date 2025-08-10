@@ -23,7 +23,7 @@ namespace ob::rhi {
 		//! @brief  DirectX12RHIの起動に必要なサービスを登録
 		static void Inject(ServiceInjector&);
 	public:
-		DirectX12Device(ob::platform::WindowManager&, GraphicObjectManager&, RHIConfig*, DirectX12RHIConfig*);
+		DirectX12Device(ob::platform::WindowManager&, GraphicObjectManager&, const RHIConfig*, const DirectX12RHIConfig*);
 		~DirectX12Device();
 
 		//! @brief  ゲーム更新イベント

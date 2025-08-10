@@ -19,7 +19,7 @@ namespace ob::rhi {
 	//! @details	描画速度に直結するため、アンチエイリアシングの使用を検討してください。
 	struct SampleDesc {
 		s32 count	=1;		//!< ピクセル当たりのマルチサンプル数
-		s32 qualitty=0;		//!< 品質
+		s32 quality =0;		//!< 品質
 	};
 
 	//! @brief  レンダーターゲット・フォーマット・配列
@@ -48,7 +48,7 @@ namespace ob::rhi {
 		DepthStencilDesc		depthStencil;					//!< デプス・ステンシル定義
 
 		Topology				topology=Topology::TriangleList;//!< GeometryShaderでのトポロジー
-		u32						sampleMask=~u32(0);				//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
+		u32						sampleMask=~static_cast<u32>(0);//!< マルチレンダーターゲットの何枚目に書き込むか(下位ビットから)
 	};
 
 }

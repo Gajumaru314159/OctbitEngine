@@ -7,9 +7,9 @@
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 #include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 #include <Framework/RHI/Types/PipelineStateDesc.h>
-#include <Framework/RHI/Types/CommandListDesc.h>
+#include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/BufferDesc.h>
-#include <Framework/RHI/RenderPass.h>
+#include <Framework/RHI/Types/RenderPassDesc.h>
 
 namespace ob::rhi {
 
@@ -30,8 +30,8 @@ namespace ob::rhi {
 		static vk::Format Convert(TextureFormat value);
 		static vk::ImageLayout Convert(TextureState value);
 		static vk::DescriptorType Convert(BindingType value);
-		static vk::Filter Convert(TextureFillter filter);
-		static vk::SamplerMipmapMode Convert(MipFillter mipFilter);
+		static vk::Filter Convert(TextureFilter filter);
+		static vk::SamplerMipmapMode Convert(MipFilter mipFilter);
 		static vk::SamplerAddressMode Convert(TextureAddress address);
 		static f32 Convert(Anisotropy anisotropy);
 		static vk::AttachmentLoadOp Convert(RenderPassBeforeAccessType type);

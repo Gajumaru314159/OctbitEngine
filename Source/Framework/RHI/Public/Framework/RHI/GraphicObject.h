@@ -20,7 +20,7 @@ namespace ob::rhi {
 	public:
 
 		//! @brief		デストラクタ
-		virtual ~GraphicObject();
+		~GraphicObject() override;
 
 		//! @brief      名前を取得
 		virtual const String& getName()const = 0;
@@ -28,8 +28,6 @@ namespace ob::rhi {
 	protected:
 
 		//! @brief		コンストラクタ
-		//! 
-		//! @param name オブジェクト名
 		GraphicObject();
 
 		void manage();

@@ -10,7 +10,7 @@ namespace ob::rhi {
         BlendFactor::One,   \
         BlendFactor::Zero,  \
         BlendOp::Add,       \
-        ColorCompoent::All
+        ColorComponent::All
 
 
     const BlendDesc BlendDesc::None = {
@@ -29,7 +29,7 @@ namespace ob::rhi {
         BlendFactor::One,
         BlendFactor::OneMinusSrcAlpha,
         BlendOp::Add,
-        ColorCompoent::All,
+        ColorComponent::All,
     };
 
     const BlendDesc BlendDesc::Addition = {
@@ -40,7 +40,7 @@ namespace ob::rhi {
         BlendFactor::SrcAlpha,
         BlendFactor::One,
         BlendOp::Add,
-        ColorCompoent::All,
+        ColorComponent::All,
     };
 
     const BlendDesc BlendDesc::AdditionAlpha = {
@@ -51,7 +51,7 @@ namespace ob::rhi {
         BlendFactor::SrcAlpha,
         BlendFactor::One,
         BlendOp::Add,
-        ColorCompoent::All,
+        ColorComponent::All,
     };
 
     const BlendDesc BlendDesc::Subtraction = {
@@ -62,7 +62,7 @@ namespace ob::rhi {
         BlendFactor::SrcAlpha,
         BlendFactor::One,
         BlendOp::Sub,
-        ColorCompoent::All,
+        ColorComponent::All,
     };
 
 }

@@ -9,8 +9,8 @@ namespace ob::rhi {
 
     //! @brief  空のバッファを作成
     Ref<Buffer> Buffer::Create(const BufferDesc& desc) {
-        if (auto rhi= Device::Get()) {
-            return rhi->createBuffer(desc);
+        if (auto device = Device::Get()) {
+            return device->createBuffer(desc);
         }
         return nullptr;
     }
@@ -28,8 +28,8 @@ namespace ob::rhi {
 
     //! @brief  ベースのバッファを指定して異なるビューを持つバッファを作成
     Ref<Buffer> Buffer::Create(const BufferViewDesc& desc) {
-        if (auto rhi = Device::Get()) {
-            return rhi->createBuffer(desc);
+        if (auto device = Device::Get()) {
+            return device->createBuffer(desc);
         }
         return nullptr;
     }

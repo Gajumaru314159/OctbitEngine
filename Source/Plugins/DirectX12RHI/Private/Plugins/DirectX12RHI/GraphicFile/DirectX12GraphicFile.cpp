@@ -51,7 +51,7 @@ namespace ob::rhi {
 		BY_HANDLE_FILE_INFORMATION info;
 		auto hr = m_file->GetFileInformation(&info);
 		if (FAILED(hr))return 0;
-		return ((size_t)info.nFileSizeHigh) << 32 | info.nFileSizeLow;
+		return static_cast<size_t>(info.nFileSizeHigh) << 32 | info.nFileSizeLow;
 	}
 
 	const ComPtr<IDStorageFile>& DirectX12GraphicFileHandle::file()const {
@@ -75,7 +75,7 @@ namespace ob::rhi {
 		return true;
 	}
 
-	void DirectX12GraphicFileEvent::set(ComPtr<ID3D12Fence> fence,HANDLE handle) {
+	void DirectX12GraphicFileEvent::set(const ComPtr<ID3D12Fence>& fence,HANDLE handle) {
 		m_handle = handle;
 		m_fence = fence;
 	}
@@ -122,6 +122,8 @@ namespace ob::rhi {
 
 		// ファイルハンドルが無効な場合は何もしない
 		auto handle = desc.handle.cast<DirectX12GraphicFileHandle>();
+
+		// ReSharper disable once CppDFAConstantConditions
 		if (handle == nullptr || handle->file() == nullptr) return;
 
 		bool useDecompression = 0 < desc.uncompressedSize;
@@ -287,6 +289,7 @@ namespace ob::rhi {
 #undef DS_ERROR
 			switch (errorRecord.FirstFailure.CommandType) {
 			case DSTORAGE_COMMAND_TYPE_REQUEST: message += Format(" ({})", errorRecord.FirstFailure.Request.RequestName); break;
+			default:break;
 			}
 			LOG_ERROR("DirectStorage Error : {}", message);
 		}
@@ -325,7 +328,7 @@ namespace ob::rhi {
 			if (FAILED(result)) result = DirectX::LoadFromWICMemory(inputBlob.data(), inputBlob.size(), DirectX::WIC_FLAGS_NONE, &metadata, scratchImg);
 			if (FAILED(result)) result = DirectX::LoadFromTGAMemory(inputBlob.data(), inputBlob.size(), &metadata, scratchImg);
 			if (FAILED(result)) result = DirectX::LoadFromHDRMemory(inputBlob.data(), inputBlob.size(), &metadata, scratchImg);
-			if (FAILED(result)) false;
+			if (FAILED(result)) return false;
 
 			// TODO Tex3D対応
 			D3D12_RESOURCE_DESC desc{};
@@ -333,23 +336,23 @@ namespace ob::rhi {
 			if (metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE1D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex1D(
 					metadata.format,
-					(UINT16)metadata.width,
-					(UINT16)metadata.arraySize,
-					(UINT16)metadata.mipLevels);
+					static_cast<UINT16>(metadata.width),
+					static_cast<UINT16>(metadata.arraySize),
+					static_cast<UINT16>(metadata.mipLevels));
 			} else if (metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE2D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex2D(
 					metadata.format,
-					(UINT16)metadata.width,
-					(UINT)metadata.height,
-					(UINT16)metadata.arraySize,
-					(UINT16)metadata.mipLevels);
+					static_cast<UINT16>(metadata.width),
+					static_cast<UINT>(metadata.height),
+					static_cast<UINT16>(metadata.arraySize),
+					static_cast<UINT16>(metadata.mipLevels));
 			} else if(metadata.dimension == DirectX::TEX_DIMENSION_TEXTURE3D) {
 				desc = CD3DX12_RESOURCE_DESC::Tex3D(
 					metadata.format,
-					(UINT16)metadata.width,
-					(UINT)metadata.height,
-					(UINT)metadata.depth,
-					(UINT16)metadata.mipLevels);
+					static_cast<UINT16>(metadata.width),
+					static_cast<UINT>(metadata.height),
+					static_cast<UINT>(metadata.depth),
+					static_cast<UINT16>(metadata.mipLevels));
 				LOG_ERROR("GraphicFile::Generate() Texture3Dは非対応です");
 				return false;
 			} else {
@@ -372,7 +375,7 @@ namespace ob::rhi {
 			// リソースレイアウト取得
 			std::vector<D3D12_SUBRESOURCE_DATA> subresources;
 			result = DirectX::PrepareUpload(&device, scratchImg.GetImages(), scratchImg.GetImageCount(), metadata, subresources);
-			if (FAILED(result)) false;
+			if (FAILED(result)) return false;
 
 			Vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> layouts(subresources.size());
 			Vector<UINT> numRows(subresources.size());
@@ -410,7 +413,7 @@ namespace ob::rhi {
 
 				// 16バイトアラインメントにそろえる(Xbox用)
 				auto padding = align_up(stream.position(), 16) - stream.position();
-				for (s32 i = 0; i < padding; ++i)writer.writeUInt8(0);
+				for (s32 j = 0; j < padding; ++j)writer.writeUInt8(0);
 
 				// 再配置
 				size_t size = layouts[i+1].Offset - layouts[i].Offset;
@@ -486,9 +489,9 @@ namespace ob::rhi {
 		File file(path);
 		BinaryReader reader(file);
 
-		u32 format = reader.readU32();
-		u32 width = reader.readU32();
-		u32 height = reader.readU32();
+		[[maybe_unused]]u32 format = reader.readU32();
+		[[maybe_unused]]u32 width = reader.readU32();
+		[[maybe_unused]]u32 height = reader.readU32();
 		u32 arraySize = reader.readU32();
 		u32 mipLevels = reader.readU32();
 

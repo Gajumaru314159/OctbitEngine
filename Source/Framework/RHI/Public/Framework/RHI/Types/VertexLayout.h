@@ -4,12 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/Constants.h>
-#include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/BlendDesc.h>
-#include <Framework/RHI/Types/DepthStencilDesc.h>
-#include <Framework/RHI/Types/RasterizerDesc.h>
-#include <Framework/RHI/Types/Topology.h>
-#include <Framework/RHI/Types/TextureFormat.h>
 
 namespace ob::rhi {
 
@@ -59,7 +53,7 @@ namespace ob::rhi {
 		Semantic		semantic;	//!< セマンティクス
 		s32				offset;		//!< 頂点構造体内でのオフセット
 		ElementType		type;		//!< コンポーネント型
-		s32				dimention;	//!< 次元数
+		s32				dimension;	//!< 次元数
 		s32				index;		//!< セマンティクス内インデックス
 		VertexInputRate inputRate = VertexInputRate::Vertex;	//!< 頂点ごとかインスタンスごとか
 
@@ -69,8 +63,8 @@ namespace ob::rhi {
 		VertexAttribute() = default;
 
 		//! @brief      コンストラクタ
-		VertexAttribute(Semantic semantic, s32 offset, ElementType type, s32 dimention = 1, s32 index = 0)
-			:semantic(semantic), offset(offset), type(type), dimention(dimention), index(index) {}
+		VertexAttribute(Semantic semantic, s32 offset, ElementType type, s32 dimension = 1, s32 index = 0)
+			:semantic(semantic), offset(offset), type(type), dimension(dimension), index(index) {}
 
 	};
 

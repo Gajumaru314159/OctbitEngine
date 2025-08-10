@@ -6,10 +6,8 @@
 #include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/RootSignature/VulkanRootSignature.h>
 #include <Plugins/VulkanRHI/Shader/VulkanShader.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 
 namespace ob::rhi {
-
 
 	//! @brief		コンストラクタ
 	VulkanComputePipelineState::VulkanComputePipelineState(VulkanDevice& device, const ComputePipelineStateDesc& desc)

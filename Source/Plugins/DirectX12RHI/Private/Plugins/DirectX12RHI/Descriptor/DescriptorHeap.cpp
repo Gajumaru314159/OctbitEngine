@@ -4,9 +4,7 @@
 //***********************************************************
 #pragma once
 #include "DescriptorHeap.h"
-#include <Framework/Core/Math/BitOp.h>
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
-#include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
@@ -32,30 +30,31 @@ namespace ob::rhi {
 	//! @param type     アロケート・タイプ
 	//! @param capacity 容量
 	DescriptorHeap::DescriptorHeap(DirectX12Device& device, DescriptorHeapType type, s32 capacity)
-		: m_mapper(capacity)
-		, m_type(type)
+		: m_type(type)
+		, m_mapper(capacity)
+		, m_stagingCapacity(0)
 	{
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 			descHeapDesc.Type = Convert(type);
-			descHeapDesc.NumDescriptors = (UINT)m_mapper.capacity();
+			descHeapDesc.NumDescriptors = static_cast<UINT>(m_mapper.capacity());
 			descHeapDesc.NodeMask = 0;
 			descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-			if (type == DescriptorHeapType::CBV_SRV_UAV || type == DescriptorHeapType::Sampler ) {
+			if (type == DescriptorHeapType::CBV_SRV_UAV || type == DescriptorHeapType::Sampler) {
 				descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 			}
 
 			m_descriptorSize = device.getNative()->GetDescriptorHandleIncrementSize(descHeapDesc.Type);
 
 			HRESULT result;
-			result = device.getNative()->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
+			result = device.getNative()->CreateDescriptorHeap(&descHeapDesc,
+			                                                  IID_PPV_ARGS(m_heap.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
 				Utility::OutputFatalLog(result, "ID3D12Device::CreateDescriptorHeap()");
 				return;
 			}
 		}
-
 	}
 
 
@@ -73,7 +72,7 @@ namespace ob::rhi {
 	//! @brief          ハンドルをアロケート
 	//! 
 	//! @param handle   アロケート先ハンドル
-	//! @param viewNum  割り当て個数
+	//! @param size		割り当て個数
 	void DescriptorHeap::allocateHandle(class DescriptorHandle& handle, s32 size) {
 
 		handle.release();
@@ -103,7 +102,7 @@ namespace ob::rhi {
 
 
 	//! @brief          CPUハンドルを取得
-	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::getCpuHandle(u32 index) {
+	D3D12_CPU_DESCRIPTOR_HANDLE DescriptorHeap::getCpuHandle(u32 index) const {
 		OB_ASSERT_RANGE(index, 0, m_mapper.capacity() - 1);
 		OB_ASSERT(m_heap,"ヒープが空です。");
 		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_heap->GetCPUDescriptorHandleForHeapStart();
@@ -113,7 +112,7 @@ namespace ob::rhi {
 
 
 	//! @brief          CPUハンドルを取得
-	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::getGpuHandle(u32 index) {
+	D3D12_GPU_DESCRIPTOR_HANDLE DescriptorHeap::getGpuHandle(u32 index) const {
 		OB_ASSERT_RANGE(index, 0, m_mapper.capacity() - 1);
 		OB_ASSERT(m_heap, "ヒープが空です。");
 		D3D12_GPU_DESCRIPTOR_HANDLE handle = m_heap->GetGPUDescriptorHandleForHeapStart();
@@ -138,7 +137,7 @@ namespace ob::rhi {
 
 		D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
 		descHeapDesc.Type = Convert(type);
-		descHeapDesc.NumDescriptors = (UINT)capacity;
+		descHeapDesc.NumDescriptors = static_cast<UINT>(capacity);
 		descHeapDesc.NodeMask = 0;
 		descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 

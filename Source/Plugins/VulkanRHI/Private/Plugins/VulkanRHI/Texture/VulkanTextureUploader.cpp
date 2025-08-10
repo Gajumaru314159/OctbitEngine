@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Texture/VulkanTextureUploader.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
@@ -13,12 +12,13 @@ namespace ob::rhi
 	//! @brief  コンストラクタ
 	VulkanTextureUploader::VulkanTextureUploader(VulkanDevice& device)
 		: m_device(device)
+		, m_blockSize(0)
 	{
 		m_frames.resize(4);
 	}
 
 	//! @brief  アップロード要素を追加
-	void VulkanTextureUploader::add(const vk::raii::Image& dest, vk::ImageCreateInfo info, TextureFormat format, Span<Subresource> subresources) {
+	void VulkanTextureUploader::add(const vk::raii::Image& dest, const vk::ImageCreateInfo& info, TextureFormat format, Span<Subresource> subresources) {
 
 		if (dest == nullptr) {
 			LOG_ERROR("[TextureUploader] destがnullです。");
@@ -73,7 +73,7 @@ namespace ob::rhi
 	}
 
 	//! @brief フレームごとのバッファ更新を行う
-	void VulkanTextureUploader::update(Ref<CommandList>& commandList) {
+	void VulkanTextureUploader::update(const Ref<CommandList>& commandList) {
 
 		auto commandListImpl = commandList.cast<VulkanCommandList>();
 		if (commandListImpl == nullptr) {
@@ -128,13 +128,6 @@ namespace ob::rhi
 
 		// コピー
 		for (auto& request : frame.requests) {
-
-			VkDeviceSize                bufferOffset;
-			uint32_t                    bufferRowLength;
-			uint32_t                    bufferImageHeight;
-			VkImageSubresourceLayers    imageSubresource;
-			VkOffset3D                  imageOffset;
-			VkExtent3D                  imageExtent;
 
 			vk::BufferImageCopy region;
 			region.bufferOffset = 0;

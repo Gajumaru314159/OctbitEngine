@@ -15,7 +15,7 @@ namespace ob::rhi {
 		vk::ImageCreateInfo info;
 		info.flags = {};
 		info.format = TypeConverter::Convert(format);
-		info.extent = vk::Extent3D{(u32)size.width,(u32)size.height,(u32)size.depth};
+		info.extent = vk::Extent3D{static_cast<u32>(size.width),static_cast<u32>(size.height),static_cast<u32>(size.depth)};
 		info.mipLevels = std::max(mipLevel,1);
 		info.arrayLayers =std::max(arrayNum,1);
 		info.samples = vk::SampleCountFlagBits::e1;
@@ -45,14 +45,6 @@ namespace ob::rhi {
 		}
 
 		return info;
-	}
-
-
-	//! @brief SizeからTextureTypeに変換 (Texture::Cube非対応) 
-	static TextureType TextureTypeFrom(Size size) {
-		if (size.height == 0) return TextureType::Texture1D;
-		if (size.depth == 0) return TextureType::Texture2D;
-		return TextureType::Texture3D;
 	}
 
 
@@ -212,7 +204,6 @@ namespace ob::rhi {
 		case TextureViewType::RWTexture:
 			if (m_desc.flags & TextureFlag::UnorderedAccess) {
 				// createUAV(m_view,0);
-				vk::WriteDescriptorSet desc;
 				ddesc.descriptorType = vk::DescriptorType::eStorageImage;
 			} else {
 				throw Exception("TextureFlag::UnorderedAccessが指定されていないTextureをTextureViewType::RWTextureで使用しようとしました");
@@ -264,8 +255,6 @@ namespace ob::rhi {
 		if (isDepth) {
 			info.usage |= vk::ImageUsageFlagBits::eDepthStencilAttachment;
 		}
-
-		auto info2 = (VkImageCreateInfo)info;
 
 		// リソース生成
 		m_shared = std::make_shared<SharedResource>();
@@ -369,7 +358,7 @@ namespace ob::rhi {
 		throw NotSupportedException();
 	}
 
-	bool VulkanTexture::createView(vk::raii::ImageView& view) {
+	bool VulkanTexture::createView(vk::raii::ImageView& view) const {
 
 		vk::ImageViewCreateInfo info;
 		info.image = m_shared->image;

@@ -4,18 +4,17 @@
 //***********************************************************
 #ifdef OB_DEBUG
 #include "PIXModule.h"
-#include <Framework/RHI/Config.h>
 #include <filesystem>
 #include <shlobj.h>
 
 namespace {
 
 	//! @brief  説明
-	//! @link https://devblogs.microsoft.com/pix/taking-a-capture/
+	//! @ref https://devblogs.microsoft.com/pix/taking-a-capture/
 	static std::wstring GetLatestWinPixGpuCapturerPath_Cpp17()
 	{
 		LPWSTR programFilesPath = nullptr;
-		SHGetKnownFolderPath(FOLDERID_ProgramFiles, KF_FLAG_DEFAULT, NULL, &programFilesPath);
+		SHGetKnownFolderPath(FOLDERID_ProgramFiles, KF_FLAG_DEFAULT, nullptr, &programFilesPath);
 
 		std::filesystem::path pixInstallationPath = programFilesPath;
 		pixInstallationPath /= "Microsoft PIX";
@@ -54,7 +53,7 @@ namespace ob::rhi {
 
 		auto pixPath = GetLatestWinPixGpuCapturerPath_Cpp17();
 
-		if (GetModuleHandleW((LPCWSTR)L"WinPixGpuCapture.dll") != 0) {
+		if (GetModuleHandleW((LPCWSTR)L"WinPixGpuCapture.dll") != nullptr) {
 			goto ERROR_END;
 		}
 		if (!pixPath.empty()) {

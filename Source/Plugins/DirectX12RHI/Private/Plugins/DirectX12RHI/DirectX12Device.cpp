@@ -40,7 +40,7 @@ namespace ob::rhi {
 	}
 
 	//! @brief  コンストラクタ
-	DirectX12Device::DirectX12Device(platform::WindowManager&, GraphicObjectManager& objectManager, RHIConfig* config,DirectX12RHIConfig* dx12config)
+	DirectX12Device::DirectX12Device(platform::WindowManager&, GraphicObjectManager& objectManager, const RHIConfig* config, const DirectX12RHIConfig* dx12config)
 		: Device(objectManager,config)
 		, m_config(config ? *config : RHIConfig{})
 		, m_dx12config(dx12config ? *dx12config : DirectX12RHIConfig{})
@@ -357,7 +357,7 @@ namespace ob::rhi {
 	//! @param handle   アロケート先ハンドル
 	//! @param size     割り当て個数
 	void DirectX12Device::allocateHandle(DescriptorHeapType type, DescriptorHandle& handle, s32 size) {
-		if (m_descriptorHeaps.find(type) == m_descriptorHeaps.end()) {
+		if (!m_descriptorHeaps.contains(type)) {
 			OB_ABORT("不正なDescriptorHeapType");
 		}
 		m_descriptorHeaps[type]->allocateHandle(handle, size);
@@ -366,7 +366,7 @@ namespace ob::rhi {
 
 	auto DirectX12Device::allocateStagingHandle(DescriptorHeapType type, s32 size) -> D3D12_CPU_DESCRIPTOR_HANDLE {
 
-		if (m_descriptorStagingHeaps.find(type) == m_descriptorStagingHeaps.end()) {
+		if (!m_descriptorStagingHeaps.contains(type)) {
 			OB_ABORT("不正なDescriptorHeapType");
 		}
 
@@ -489,9 +489,9 @@ namespace ob::rhi {
 			  D3D12_MESSAGE_SEVERITY_INFO,
 			};
 			D3D12_INFO_QUEUE_FILTER filter{};
-			filter.DenyList.NumIDs = (UINT)std::size(denyIds);
+			filter.DenyList.NumIDs = static_cast<UINT>(std::size(denyIds));
 			filter.DenyList.pIDList = denyIds;
-			filter.DenyList.NumSeverities = (UINT)std::size(severities);
+			filter.DenyList.NumSeverities = static_cast<UINT>(std::size(severities));
 			filter.DenyList.pSeverityList = severities;
 
 			infoQueue->PushStorageFilter(&filter);
@@ -514,9 +514,6 @@ namespace ob::rhi {
 
 	//! @brief  デスクリプタヒープを初期化
 	bool DirectX12Device::initializeDescriptorHeaps() {
-
-		bool readable = false;
-		bool writable = true;
 
 		// TODO Tierチェック
 		// Samplerの割り当て割合調整

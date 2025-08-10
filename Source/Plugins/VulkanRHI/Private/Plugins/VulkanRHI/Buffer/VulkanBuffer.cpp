@@ -4,14 +4,11 @@
 //***********************************************************
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/VulkanDevice.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 
 namespace ob::rhi {
 
 	//! @brief  コンストラクタ
-	//! 
-	//! @param desc バッファ定義
 	VulkanBuffer::VulkanBuffer(VulkanDevice& device, const BufferDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
@@ -87,9 +84,6 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	//! 
-	//! @param desc バッファ定義
-	//! @param data 初期化データ
 	VulkanBuffer::VulkanBuffer(VulkanDevice& device, const BufferDesc& desc, const Blob& blob)
 		: VulkanBuffer(device,desc)
 	{
@@ -152,6 +146,7 @@ namespace ob::rhi {
 				throw Exception("flagsとtypeに互換性がありません");
 			}
 			break;
+		default:break;
 		}
 
 		if (withView) {

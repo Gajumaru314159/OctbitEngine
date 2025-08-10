@@ -10,7 +10,6 @@
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/PipelineState.h>
 #include <Framework/RHI/Buffer.h>
-#include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 
 //===============================================================
 // 前方宣言
@@ -40,7 +39,7 @@ namespace ob::rhi {
 
 
         //! @brief  デストラクタ
-        ~DirectX12SwapChain();
+        ~DirectX12SwapChain() override;
 
 
         //! @brief  妥当なオブジェクトか
@@ -118,9 +117,9 @@ namespace ob::rhi {
         Ref<DescriptorLayout>       m_layout;
         Ref<RootSignature>          m_signature;
         Ref<PipelineState>          m_pipeline;
-        Ref<Buffer>                 m_verices;
-        Ref<Texture>                m_bindedTexture;
-        Ref<DescriptorTable>        m_bindedTextureTable;
+        Ref<Buffer>                 m_vertices;
+        Ref<Texture>                m_boundTexture;
+        Ref<DescriptorTable>        m_boundTextureTable;
 
         D3D12_VIEWPORT              m_viewport;
         D3D12_RECT                  m_scissorRect;

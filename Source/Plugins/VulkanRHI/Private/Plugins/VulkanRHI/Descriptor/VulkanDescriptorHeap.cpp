@@ -10,13 +10,9 @@
 namespace ob::rhi {
 
 	//! @brief          コンストラクタ
-	//! 
-	//! @param device   デバイス
-	//! @param type     アロケート・タイプ
-	//! @param capacity 容量
 	VulkanDescriptorHeap::VulkanDescriptorHeap(VulkanDevice& device, s32 resourceCapacity, s32 samplerCapacity)
-		: m_resourceMapper(resourceCapacity)
-		, m_samplerMapper(samplerCapacity)
+		: m_samplerMapper(samplerCapacity)
+		, m_resourceMapper(resourceCapacity)
 	{
 		// SamplerDescriptorHeap
 		vk::DescriptorType samplerType[] = {
@@ -108,9 +104,6 @@ namespace ob::rhi {
 
 
 	//! @brief          ハンドルをアロケート
-	//! 
-	//! @param handle   アロケート先ハンドル
-	//! @param viewNum  割り当て個数
 	void VulkanDescriptorHeap::allocateHandle(VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc) {
 
 		handle.release();
@@ -161,7 +154,7 @@ namespace ob::rhi {
 
 
 	//! @brief          デスクリプタセットをコマンドバッファに記録
-	void VulkanDescriptorHeap::recordDescriptorHeap(vk::raii::CommandBuffer& commandBuffer, vk::PipelineLayout pipeline, s32 slot) {
+	void VulkanDescriptorHeap::recordDescriptorHeap(const vk::raii::CommandBuffer& commandBuffer, vk::PipelineLayout pipeline, s32 slot) const {
 		commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline, slot, *m_set, {});
 	}
 

@@ -8,8 +8,8 @@
 namespace ob::rhi {
 
     Ref<DescriptorLayout> DescriptorLayout::Create(const DescriptorLayoutDesc& desc) {
-        if (auto rhi = Device::Get()) {
-            return rhi->createDescriptorLayout(desc);
+        if (auto device = Device::Get()) {
+            return device->createDescriptorLayout(desc);
         }
         return nullptr;
     }

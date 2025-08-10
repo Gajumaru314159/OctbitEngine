@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Forward.h>
-#include <Framework/RHI/Types/BindlessHandle.h>
 #include <Framework/RHI/Types/DescriptorTableDesc.h>
 
 namespace ob::rhi {
@@ -15,10 +14,6 @@ namespace ob::rhi {
     public:
 
         //! @brief              コンストラクタ
-        //!
-        //! @param type         デスクリプタに設定するリソースの種類
-        //! @param elementNum   要素数
-        //! @param name         デバッグ名
         static Ref<DescriptorTable> Create(const DescriptorTableDesc& desc);
 
     public:

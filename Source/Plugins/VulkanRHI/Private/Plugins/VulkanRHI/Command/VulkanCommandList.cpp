@@ -14,7 +14,6 @@
 #include <Plugins/VulkanRHI/SwapChain/VulkanSwapChain.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanDevice.h>
 
 namespace ob::rhi {
@@ -51,8 +50,6 @@ namespace ob::rhi {
 	const String& VulkanCommandList::getName() const {
 		return m_desc.name;
 	}
-
-#pragma endregion Command
 
 	//! @brief  描画開始
 	void VulkanCommandList::begin() {
@@ -380,7 +377,5 @@ namespace ob::rhi {
 	void VulkanCommandList::popMarker() {
 		if (m_device.getFeaturesEx().debugMarkerEnabled) m_commandBuffer.endDebugUtilsLabelEXT();
 	}
-
-#pragma endregion
-
+	
 }

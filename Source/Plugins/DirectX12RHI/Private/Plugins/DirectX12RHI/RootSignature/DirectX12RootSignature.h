@@ -38,7 +38,7 @@ namespace ob::rhi {
 
 
         //! @brief  デストラクタ
-        ~DirectX12RootSignature();
+        ~DirectX12RootSignature() override;
 
 
         //! @brief  妥当なオブジェクトか

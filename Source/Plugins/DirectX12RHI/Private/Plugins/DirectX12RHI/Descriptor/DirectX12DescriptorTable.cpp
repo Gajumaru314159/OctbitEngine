@@ -16,9 +16,6 @@
 namespace ob::rhi {
 
 	//! @brief              コンストラクタ
-	//!
-	//! @param type         デスクリプタに設定するリソースの種類
-	//! @param elementNum   要素数
 	DirectX12DescriptorTable::DirectX12DescriptorTable(DirectX12Device& device, const DescriptorTableDesc& desc, DescriptorHeap& heap0, DescriptorHeap& heap1)
 		: m_device(device)
 		, m_desc(desc)
@@ -30,7 +27,7 @@ namespace ob::rhi {
 		heap0.allocateHandle(m_samplerHandle, heapInfo.samplerNum);
 		heap1.allocateHandle(m_othersHandle, heapInfo.othersNum);
 
-		m_elemetns.resize(m_layout->getDesc().items.size());
+		m_elements.resize(m_layout->getDesc().items.size());
 
 		manage();
 	}
@@ -38,7 +35,7 @@ namespace ob::rhi {
 
 	//! @brief  妥当な状態か
 	bool DirectX12DescriptorTable::isValid()const {
-		return !m_elemetns.empty();
+		return !m_elements.empty();
 	}
 
 
@@ -61,18 +58,18 @@ namespace ob::rhi {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
-		m_elemetns.at(index) = resource;
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elements.at(index));
+		m_elements.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Buffer>()) {
 			auto mapInfo = m_layout->getMapInfo(index);
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_othersHandle.getCpuHandle(mapInfo.index);
-			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2 = handle;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet==false) {
@@ -105,18 +102,18 @@ namespace ob::rhi {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
-		m_elemetns.at(index) = resource;
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elements.at(index));
+		m_elements.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Texture>()) {
 			auto mapInfo = m_layout->getMapInfo(index);
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_othersHandle.getCpuHandle(mapInfo.index);
-			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2 = handle;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet == false) {
@@ -147,18 +144,18 @@ namespace ob::rhi {
 			LOG_ERROR("不正な呼び出し。異なるタイプのDescriptorTableにバッファを指定しました。[index={}]", index);
 			return false;
 		}
-		if (!is_in_range(index, m_elemetns)) {
+		if (!is_in_range(index, m_elements)) {
 			LOG_ERROR("範囲外エラー。DescriptorTableのインデックスが不正です。[index={}]", index);
 			return false;
 		}
 
-		bool isInitialSet = std::holds_alternative<std::monostate>(m_elemetns.at(index));
-		m_elemetns.at(index) = resource;
+		bool isInitialSet = std::holds_alternative<std::monostate>(m_elements.at(index));
+		m_elements.at(index) = resource;
 
 		if (auto p = resource.cast<DirectX12Sampler>()) {
 			auto mapInfo = m_layout->getMapInfo(index);
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_samplerHandle.getCpuHandle(mapInfo.index);
-			D3D12_CPU_DESCRIPTOR_HANDLE handle2;
+			D3D12_CPU_DESCRIPTOR_HANDLE handle2 = handle;
 
 			// 2回目以降は描画中の可能性があるのでステージングバッファを使用する
 			if (isInitialSet == false) {
@@ -175,9 +172,9 @@ namespace ob::rhi {
 	}
 
 	//! @brief CommandListに記録 
-	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList,DirectX12RootSignature& signature,s32 slot) const {
+	void DirectX12DescriptorTable::record(ID3D12GraphicsCommandList& cmdList, const DirectX12RootSignature& signature,s32 slot) const {
 
-		// bool isReady = std::none_of(m_elemetns.begin(), m_elemetns.end(), [](const auto& e) { return std::holds_alternative<std::monostate>(e); });
+		// bool isReady = std::none_of(m_elements.begin(), m_elements.end(), [](const auto& e) { return std::holds_alternative<std::monostate>(e); });
 
 		bool isRootDescriptor = false;
 		if (isRootDescriptor) {
@@ -222,8 +219,8 @@ namespace ob::rhi {
 		case BindingType::ByteAddressBuffer:	type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV; return hasSRV;
 		case BindingType::RWByteAddressBuffer:	type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV;
 		case BindingType::ConstantBuffer:		type = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;	return desc.state == BufferState::Constant;
+		default: return false;
 		}
-		return false;
 	}
 
 
@@ -240,8 +237,8 @@ namespace ob::rhi {
 		switch (items[index].type) {
 		case BindingType::Texture:				type = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;	return hasSRV;
 		case BindingType::RWTexture:			type = D3D12_DESCRIPTOR_RANGE_TYPE_UAV;	return hasUAV;
+		default: return false;
 		}
-		return false;
 	}
 
 
@@ -253,8 +250,8 @@ namespace ob::rhi {
 
 		switch (items[index].type) {
 		case BindingType::Sampler:				type = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER;	return true;
+		default: return false;
 		}
-		return false;
 	}
 
 }

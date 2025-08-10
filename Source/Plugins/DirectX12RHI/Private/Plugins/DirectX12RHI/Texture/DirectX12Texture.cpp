@@ -35,13 +35,6 @@ namespace ob::rhi {
 		}
 	}
 
-	//! @brief SizeからTextureTypeに変換 (Texture::Cube非対応) 
-	static TextureType TextureTypeFrom(Size size) {
-		if (size.height == 0) return TextureType::Texture1D;
-		if (size.depth == 0) return TextureType::Texture2D;
-		return TextureType::Texture3D;
-	}
-
 	//! @brief TEX_DIMENSIONからTextureTypeに変換 (Texture::Cube非対応) 
 	static TextureType TextureTypeFrom(DirectX::TEX_DIMENSION dimension) {
 		switch (dimension) {
@@ -169,11 +162,11 @@ namespace ob::rhi {
 
 		// Desc設定
 		m_desc.name = name;
-		m_desc.size = { (s32)metadata.width,(s32)metadata.height,(s32)metadata.depth };
+		m_desc.size = { static_cast<s32>(metadata.width),static_cast<s32>(metadata.height),static_cast<s32>(metadata.depth) };
 		m_desc.type = TextureTypeFrom(metadata.dimension);
 		m_desc.format = TypeConverter::Convert(metadata.format);
-		m_desc.arrayNum = (s32)metadata.arraySize;
-		m_desc.mipLevels = (s32)metadata.mipLevels;
+		m_desc.arrayNum = static_cast<s32>(metadata.arraySize);
+		m_desc.mipLevels = static_cast<s32>(metadata.mipLevels);
 		if (m_desc.arrayNum == 1) m_desc.arrayNum = 0; // 要素数1のTextureArrayはddsからは読み込めない
 
 		// バリデート
@@ -185,7 +178,7 @@ namespace ob::rhi {
 		// リソース生成
 		ComPtr<ID3D12Resource> resource;
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
-		auto resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(metadata.format, (UINT16)metadata.width, (UINT)metadata.height, (UINT16)metadata.arraySize, (UINT16)metadata.mipLevels);
+		auto resourceDesc = CD3DX12_RESOURCE_DESC::Tex2D(metadata.format, static_cast<UINT16>(metadata.width), static_cast<UINT>(metadata.height), static_cast<UINT16>(metadata.arraySize), static_cast<UINT16>(metadata.mipLevels));
 		result = m_device.getNative()->CreateCommittedResource(&heapProps,D3D12_HEAP_FLAG_NONE,&resourceDesc,m_state,nullptr,IID_PPV_ARGS(resource.GetAddressOf()));
 		
 		if (FAILED(result)) {
@@ -203,8 +196,8 @@ namespace ob::rhi {
 				i,
 				nullptr,
 				img->pixels,
-				(UINT)img->rowPitch,
-				(UINT)img->slicePitch
+				static_cast<UINT>(img->rowPitch),
+				static_cast<UINT>(img->slicePitch)
 			);
 			if (FAILED(result)) {
 				Utility::OutputErrorLog(result, "ID3D12Resource::WriteToSubresource()");
@@ -323,7 +316,7 @@ namespace ob::rhi {
 		// リソース生成
 		ComPtr<ID3D12Resource> resource;
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		auto result = device.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, nullptr, IID_PPV_ARGS(resource.GetAddressOf()));
+		auto result = device.getNative()->CreateCommittedResource(&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, m_state, clearValue, IID_PPV_ARGS(resource.GetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputErrorLog(result, "ID3D12Device::CreateCommittedResource()");
@@ -361,7 +354,7 @@ namespace ob::rhi {
 
 		m_resource = resource;
 		m_viewport = CD3DX12_VIEWPORT(resource.Get());
-		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
+		m_scissorRect = CD3DX12_RECT(0, 0, static_cast<LONG>(m_viewport.Width), static_cast<LONG>(m_viewport.Height));
 
 		initialize();
 
@@ -391,12 +384,12 @@ namespace ob::rhi {
 		}
 
 		m_viewport = CD3DX12_VIEWPORT(resource.Get());
-		m_scissorRect = CD3DX12_RECT(0, 0, (LONG)m_viewport.Width, (LONG)m_viewport.Height);
+		m_scissorRect = CD3DX12_RECT(0, 0, static_cast<LONG>(m_viewport.Width), static_cast<LONG>(m_viewport.Height));
 
 		auto resourceDesc = m_resource->GetDesc();
 
 		m_desc.name = name;
-		m_desc.size = { (s32)resourceDesc.Width,(s32)resourceDesc.Height, 0};
+		m_desc.size = { static_cast<s32>(resourceDesc.Width),static_cast<s32>(resourceDesc.Height), 0};
 		m_desc.type = TextureType::Texture2D;
 		m_desc.format = TypeConverter::Convert(resourceDesc.Format);
 		m_desc.arrayNum = 0;
@@ -562,7 +555,6 @@ namespace ob::rhi {
 
 
 	//! @brief  リソース遷移を追加
-	//! @param  subresource -1で全てのサブリソースを指定
 	bool DirectX12Texture::addResourceTransition(D3D12_RESOURCE_BARRIER& barrier,D3D12_RESOURCE_STATES state,s32 subresource) {
 
 		if (m_state == state)

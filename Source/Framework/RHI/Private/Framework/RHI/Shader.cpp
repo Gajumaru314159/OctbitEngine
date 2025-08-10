@@ -39,9 +39,6 @@ namespace ob::rhi {
     }
 
     //! @brief              コンストラクタ
-    //! 
-    //! @param codeSet      シェーダ・バイナリ
-    //! @param stage        シェーダステージ
     Ref<Shader> Shader::Compile(const String& code,ShaderStage stage) {
         ShaderCompileDesc desc;
 		desc.code = code;
@@ -61,12 +58,9 @@ namespace ob::rhi {
 
 
     //! @brief              コンストラクタ
-    //! 
-    //! @param binarySet    シェーダ・バイナリ
-    //! @param stage        シェーダステージ
     Ref<Shader> Shader::Load(BlobView binary, ShaderStage stage) {
-        if (auto rhi = Device::Get()) {
-            return rhi->loadShader(binary, stage);
+        if (auto device = Device::Get()) {
+            return device->loadShader(binary, stage);
         }
         return nullptr;
     }
@@ -80,8 +74,8 @@ namespace ob::rhi {
 
     //! @brief          シェーダステージをサポートしているか
     bool Shader::Supports(ShaderStage stage) {
-        if (auto rhi = Device::Get()) {
-            return rhi->supports(stage);
+        if (auto device = Device::Get()) {
+            return device->supports(stage);
         }
         return false;
     }

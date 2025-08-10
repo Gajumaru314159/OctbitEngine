@@ -39,32 +39,32 @@ namespace ob::rhi
     }
 
 
-    //! @brief  TextureFillter を D3D12_FILTER_TYPE に変換
-    D3D12_FILTER_TYPE TypeConverter::Convert(TextureFillter value){
+    //! @brief  TextureFilter を D3D12_FILTER_TYPE に変換
+    D3D12_FILTER_TYPE TypeConverter::Convert(TextureFilter value){
         switch (value) {
-        case TextureFillter::Point:         return D3D12_FILTER_TYPE_POINT;
-        case TextureFillter::Linear:        return D3D12_FILTER_TYPE_LINEAR;
+        case TextureFilter::Point:         return D3D12_FILTER_TYPE_POINT;
+        case TextureFilter::Linear:        return D3D12_FILTER_TYPE_LINEAR;
         }
 
-        LOG_WARNING_EX("Graphic", "不正なTextureFillter[value={}]", enum_cast(value));
+        LOG_WARNING_EX("Graphic", "不正なTextureFilter[value={}]", enum_cast(value));
         return D3D12_FILTER_TYPE_LINEAR;
     }
 
 
-    //! @brief  MipFillter を D3D12_DESCRIPTOR_RANGE_TYPE に変換
-    D3D12_FILTER_TYPE TypeConverter::Convert(MipFillter value){
+    //! @brief  MipFilter を D3D12_DESCRIPTOR_RANGE_TYPE に変換
+    D3D12_FILTER_TYPE TypeConverter::Convert(MipFilter value){
         switch (value) {
-        case MipFillter::Point:             return D3D12_FILTER_TYPE_POINT;
-        case MipFillter::Linear:            return D3D12_FILTER_TYPE_LINEAR;
+        case MipFilter::Point:             return D3D12_FILTER_TYPE_POINT;
+        case MipFilter::Linear:            return D3D12_FILTER_TYPE_LINEAR;
         }
-        LOG_WARNING_EX("Graphic", "不正なMipFillter[value={}]", enum_cast(value));
+        LOG_WARNING_EX("Graphic", "不正なMipFilter[value={}]", enum_cast(value));
         return D3D12_FILTER_TYPE_LINEAR;
     }
 
 
     //! @brief  D3D12_FILTER に変換
-    D3D12_FILTER TypeConverter::Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic) {
-        if (anisotropic && up != TextureFillter::Point && down != TextureFillter::Point)return D3D12_FILTER_ANISOTROPIC;
+    D3D12_FILTER TypeConverter::Convert(TextureFilter up, TextureFilter down, MipFilter mip, bool anisotropic) {
+        if (anisotropic && up != TextureFilter::Point && down != TextureFilter::Point)return D3D12_FILTER_ANISOTROPIC;
         return D3D12_ENCODE_BASIC_FILTER(
             Convert(down),  //!< 縮小時
             Convert(up),    //!< 拡大時
@@ -227,10 +227,10 @@ namespace ob::rhi
     //! @brief  BlendFactor を UINT8 に変換
     UINT8 TypeConverter::Convert(ColorMask value) {
         UINT8 result = 0;
-        if (value[ColorCompoent::R])result |= D3D12_COLOR_WRITE_ENABLE_RED;
-        if (value[ColorCompoent::G])result |= D3D12_COLOR_WRITE_ENABLE_GREEN;
-        if (value[ColorCompoent::B])result |= D3D12_COLOR_WRITE_ENABLE_BLUE;
-        if (value[ColorCompoent::A])result |= D3D12_COLOR_WRITE_ENABLE_ALPHA;
+        if (value[ColorComponent::R])result |= D3D12_COLOR_WRITE_ENABLE_RED;
+        if (value[ColorComponent::G])result |= D3D12_COLOR_WRITE_ENABLE_GREEN;
+        if (value[ColorComponent::B])result |= D3D12_COLOR_WRITE_ENABLE_BLUE;
+        if (value[ColorComponent::A])result |= D3D12_COLOR_WRITE_ENABLE_ALPHA;
         return result;
     }
 

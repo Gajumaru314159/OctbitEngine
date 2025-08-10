@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
-#include <Framework/RHI/Constants.h>
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/VulkanRHI/Command/VulkanResourceStateCache.h>
 
@@ -28,7 +27,7 @@ namespace ob::rhi {
         //@―---------------------------------------------------------------------------
         VulkanCommandList(VulkanDevice& device,const CommandListDesc& desc);
 
-        ~VulkanCommandList();
+        ~VulkanCommandList() override;
 
         //! @brief      名前を取得
         const String& getName()const override;

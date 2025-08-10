@@ -163,7 +163,7 @@ namespace ob::rhi {
     }
 
     //! @brief      定義取得
-    //! @note		RenderTexutreとして使用される場合のみアクセス可能
+    //! @note		RenderTextureとして使用される場合のみアクセス可能
     inline const RenderTextureDesc& DirectX12Texture::descOfRenderTexture()const {
         return m_renderDesc;
     }

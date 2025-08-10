@@ -70,7 +70,7 @@ namespace ob::rhi {
 
 		//! @brief      コンストラクタ
 		StaticSamplerDesc(const SamplerDesc& sampler, u32 registerNo, u32 registerSpace=0, ShaderStage visibility = ShaderStage::All)
-			:visibility(visibility), sampler(sampler), registerNo(registerNo), registerSpace(registerSpace) {}
+			:sampler(sampler), registerNo(registerNo), registerSpace(registerSpace), visibility(visibility) {}
 	};
 
 	//! @brief      静的サンプラー・配列

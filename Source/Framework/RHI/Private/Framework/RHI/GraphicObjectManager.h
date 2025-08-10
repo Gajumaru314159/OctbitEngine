@@ -16,12 +16,10 @@ namespace ob::rhi {
     public:
 
         //! @brief  コンストラクタ
-        //! 
-        //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
-        GraphicObjectManager(RHIConfig*);
+        GraphicObjectManager(const RHIConfig*);
 
         //! @brief  デストラクタ
-        ~GraphicObjectManager();
+        ~GraphicObjectManager() override;
 
         //! @brief  更新
         void update();

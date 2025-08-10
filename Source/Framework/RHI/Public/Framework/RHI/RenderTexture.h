@@ -16,7 +16,6 @@ namespace ob::rhi {
         //! @brief          コンストラクタ
         //! 
         //! @param desc     定義
-        //! @param name     オブジェクト名
         static Ref<RenderTexture> Create(const RenderTextureDesc& desc);
 
         //! @brief      テクスチャフォーマットがサポートされているか

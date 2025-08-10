@@ -33,19 +33,19 @@ namespace ob::rhi {
 		//@―---------------------------------------------------------------------------
 		//! @brief  コンストラクタ
 		//@―---------------------------------------------------------------------------
-		VulkanDevice(ob::platform::WindowManager&, GraphicObjectManager&, ob::rhi::RHIConfig*,VulkanRHIConfig*);
-		~VulkanDevice();
+		VulkanDevice(ob::platform::WindowManager&, GraphicObjectManager&, const ob::rhi::RHIConfig*, const VulkanRHIConfig*);
+		~VulkanDevice() override;
 
 		//! @brief  ゲーム更新イベント
-		void update();
+		void update() override;
 
 
 		//! @brief  妥当な状態か
-		bool isValid()const;
+		bool isValid()const override;
 
 
 		//! @brief	API名を取得
-		String getAPIName()const { return "Vulkan"; };
+		String getAPIName()const override { return "Vulkan"; };
 
 		//===============================================================
 		// 更新
@@ -207,7 +207,7 @@ namespace ob::rhi {
 		void allocateHandle(class VulkanDescriptorHandle& handle, vk::WriteDescriptorSet& desc);
 
 		//! @brief          デスクリプタヒープを設定
-		void setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout, s32 slot);
+		void setDescriptorHeaps(const vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout, s32 slot);
 
 
 
@@ -223,7 +223,7 @@ namespace ob::rhi {
 			return m_vkDebugMarkerSetObjectNameEXT;
 		}
 
-		void clearCommands();
+		void clearCommands() const;
 
 	private:
 

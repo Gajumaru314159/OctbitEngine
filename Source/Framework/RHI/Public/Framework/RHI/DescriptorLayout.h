@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/RHI/GraphicObject.h>
-#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Types/DescriptorLayoutDesc.h>
 
 namespace ob::rhi {

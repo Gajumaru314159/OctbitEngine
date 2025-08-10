@@ -31,7 +31,7 @@ namespace ob::rhi {
 
         void extend();
 
-        void shurink();
+        void shrink();
 
     private:
 
@@ -86,7 +86,7 @@ namespace ob::rhi {
 		Swapper<FrameData> m_frames;
 
 		Vector<vk::BufferMemoryBarrier> m_barriers;
-		HashMap<VkBuffer, vk::AccessFlags> m_entriedBuffers;
+		HashMap<VkBuffer, vk::AccessFlags> m_enteredBuffers;
     };
 
 }

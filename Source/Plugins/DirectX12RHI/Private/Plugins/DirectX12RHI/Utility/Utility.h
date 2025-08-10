@@ -3,8 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Types/TextureFormat.h>
-#include <dxgi.h>
 
 namespace ob::rhi {
 
@@ -28,7 +26,7 @@ namespace ob::rhi {
 
         
         //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
-        static D3D12_SRV_DIMENSION GetSrvDimention(const D3D12_RESOURCE_DESC& desc);
+        static D3D12_SRV_DIMENSION GetSrvDimension(const D3D12_RESOURCE_DESC& desc);
 
 
         //! @brief  ID3D12Objectに名前を設定

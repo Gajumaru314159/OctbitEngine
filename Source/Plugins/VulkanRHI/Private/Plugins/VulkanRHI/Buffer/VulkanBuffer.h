@@ -16,15 +16,10 @@ namespace ob::rhi {
 	public:
 
 		//! @brief  コンストラクタ
-		//! 
-		//! @param desc バッファ定義
 		VulkanBuffer(VulkanDevice& device,const BufferDesc& desc);
 
 
 		//! @brief  コンストラクタ
-		//! 
-		//! @param desc バッファ定義
-		//! @param data 初期化データ
 		VulkanBuffer(VulkanDevice& device, const BufferDesc& desc, const Blob& blob);
 
 
@@ -86,7 +81,7 @@ namespace ob::rhi {
 
 
 
-	//!@ condn
+	//! @cond
 
 	//! @brief      BindlessHandleを取得
 	inline BindlessHandle VulkanBuffer::getHandle()const {

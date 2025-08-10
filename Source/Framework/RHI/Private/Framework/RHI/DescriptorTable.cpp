@@ -8,8 +8,8 @@
 namespace ob::rhi {
 
     Ref<DescriptorTable> DescriptorTable::Create(const DescriptorTableDesc& desc) {
-        if (auto rhi = Device::Get()) {
-            return rhi->createDescriptorTable(desc);
+        if (auto device = Device::Get()) {
+            return device->createDescriptorTable(desc);
         }
         return nullptr;
     }

@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Buffer.h>
 #include <Framework/Core/Utility/Swapper.h>
 
 namespace ob::rhi {
@@ -31,7 +30,7 @@ namespace ob::rhi {
 
     private:
 
-        ComPtr<ID3D12Resource> createUploadResource(const D3D12_RESOURCE_DESC& desc);
+        ComPtr<ID3D12Resource> createUploadResource(const D3D12_RESOURCE_DESC& desc) const;
 
     private:
 
@@ -65,7 +64,7 @@ namespace ob::rhi {
         ID3D12Device& m_device;
         bool m_isUMA = false;
 
-		size_t m_blockSize;
+		size_t m_blockSize = 0;
 
 		SpinLock m_lock;
 		Swapper<FrameData> m_frames;

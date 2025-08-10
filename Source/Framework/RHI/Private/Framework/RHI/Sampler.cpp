@@ -20,8 +20,8 @@ namespace ob::rhi {
 	}
 
     Ref<Sampler> Sampler::Create(const SamplerDesc& desc) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createSampler(desc);
+		if (auto device = Device::Get()) {
+			return device->createSampler(desc);
 		}
 		return nullptr;
     }

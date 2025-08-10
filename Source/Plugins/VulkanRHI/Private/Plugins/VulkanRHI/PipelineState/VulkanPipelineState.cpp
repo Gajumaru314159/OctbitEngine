@@ -82,15 +82,13 @@ namespace ob::rhi {
             auto& attr = attributeDescriptions.emplace_back();
 			attr.binding = TypeConverter::Convert(attribute.inputRate);
 			attr.offset = attribute.offset;
-			attr.format = TypeConverter::Convert(attribute.type, attribute.dimention);
+			attr.format = TypeConverter::Convert(attribute.type, attribute.dimension);
 
 			if (attribute.inputRate == VertexInputRate::Vertex) {
 				attr.location = vertexLocation++;
-				attr.offset = attr.offset;
 			}
 			else if (attribute.inputRate == VertexInputRate::Instance) {
 				attr.location = instanceLocation++;
-				attr.offset = attr.offset;
 			}
         }
 		{

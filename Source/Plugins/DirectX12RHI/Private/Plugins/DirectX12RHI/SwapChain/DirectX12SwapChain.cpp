@@ -13,7 +13,7 @@
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 #include <magic_enum.hpp>
 namespace {
-	int static const s_maxSwapChainCount = 4;
+	constexpr int static s_maxSwapChainCount = 4;
 }
 
 namespace ob::rhi {
@@ -58,9 +58,9 @@ namespace ob::rhi {
 		auto& window = m_desc.window;
 
 		BOOL allowTearing = false;
-		UINT sampleQuarity = 0;
+		UINT sampleQuality = 0;
 		UINT sampleCount = 1;
-		HWND hWnd = (HWND)window.getHandle();
+		HWND hWnd = static_cast<HWND>(window.getHandle());
 		{
 			{
 				D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
@@ -68,7 +68,7 @@ namespace ob::rhi {
 				if (SUCCEEDED(result)) {
 					LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
 					LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
-					//sampleQuarity = feature.SampleCount;
+					//sampleQuality = feature.SampleCount;
 					//sampleCount = feature.NumQualityLevels;
 				}
 			}
@@ -85,7 +85,7 @@ namespace ob::rhi {
 		swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
 		swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;                     //解像度に合うように同補正するか => 拡大
 
-		swapChainDesc.SampleDesc.Quality = sampleQuarity;                                   // マルチサンプル・クオリティ
+		swapChainDesc.SampleDesc.Quality = sampleQuality;                                   // マルチサンプル・クオリティ
 		swapChainDesc.SampleDesc.Count = sampleCount;                                       // マルチサンプル・カウント
 
 		swapChainDesc.BufferCount = m_desc.bufferCount;						                // バッファの数
@@ -108,7 +108,7 @@ namespace ob::rhi {
 		auto result = device.getFactory()->CreateSwapChain(
 			device.getCommandQueue().Get(),
 			&swapChainDesc,
-			(IDXGISwapChain**)m_swapChain.ReleaseAndGetAddressOf());
+			reinterpret_cast<IDXGISwapChain **>(m_swapChain.ReleaseAndGetAddressOf()));
 
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "IDXGIFactory::CreateSwapChain()");
@@ -169,10 +169,10 @@ namespace ob::rhi {
 
 			auto name = Format("{}_{}", m_desc.name, i);
 
-			auto& texture = m_textures.emplace_back(new DirectX12Texture(device, resource, D3D12_RESOURCE_STATE_PRESENT, name));
+			m_textures.emplace_back(new DirectX12Texture(device, resource, D3D12_RESOURCE_STATE_PRESENT, name));
 
 			m_viewport = CD3DX12_VIEWPORT(resource.Get());
-			m_scissorRect = CD3DX12_RECT(0, 0, (UINT)m_viewport.Width, (UINT)m_viewport.Height);
+			m_scissorRect = CD3DX12_RECT(0, 0, static_cast<UINT>(m_viewport.Width), static_cast<UINT>(m_viewport.Height));
 		}
 
 		return true;
@@ -193,8 +193,8 @@ namespace ob::rhi {
 			};
 			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
 			bdesc.name = m_desc.name + "_SwapChainVertices";
-			m_verices = Buffer::Create(bdesc);
-			m_verices->updateDirect(bdesc.size, vertices);
+			m_vertices = Buffer::Create(bdesc);
+			m_vertices->updateDirect(bdesc.size, vertices);
 		}
 
 		Ref<Shader> vs;
@@ -376,20 +376,20 @@ namespace ob::rhi {
 	void DirectX12SwapChain::recordApplySwapChain(DirectX12CommandList& cmdList, const Ref<Texture>& texture) {
 
 		// テクスチャが違う場合再バインド
-		if (m_bindedTexture != texture) {
+		if (m_boundTexture != texture) {
 
-			m_bindedTextureTable.reset();
-			m_bindedTexture = texture;
+			m_boundTextureTable.reset();
+			m_boundTexture = texture;
 
-			if (m_bindedTexture) {
-				m_bindedTextureTable = DescriptorTable::Create({ m_layout });
-				m_bindedTextureTable->setResource(0, m_bindedTexture);
+			if (m_boundTexture) {
+				m_boundTextureTable = DescriptorTable::Create({ m_layout });
+				m_boundTextureTable->setResource(0, m_boundTexture);
 			}
 
 		}
 
 		// バインドされていなければスキップ
-		if (!m_bindedTextureTable)
+		if (!m_boundTextureTable)
 			return;
 
 		{
@@ -404,10 +404,10 @@ namespace ob::rhi {
 
 			cmdList.setPipelineState(m_pipeline);
 
-			SetDescriptorTableParam tableParam(m_bindedTextureTable, 0);
+			SetDescriptorTableParam tableParam(m_boundTextureTable, 0);
 			cmdList.setDescriptorTables(&tableParam, 1);
 
-			cmdList.setVertexBuffer(m_verices);
+			cmdList.setVertexBuffer(m_vertices);
 
 			DrawParam drawParam;
 			drawParam.startVertex = 0;
@@ -417,10 +417,10 @@ namespace ob::rhi {
 			cmdList.endRenderPass();
 
 			// Present準備
-			if (auto texture = m_textures.current().cast<DirectX12Texture>()) {
+			if (auto pTexture = m_textures.current().cast<DirectX12Texture>()) {
 
 				D3D12_RESOURCE_BARRIER barrier;
-				if (texture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
+				if (pTexture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
 					cmdList.getNative()->ResourceBarrier(1, &barrier);
 				}
 
@@ -451,8 +451,8 @@ namespace ob::rhi {
 				m_device.clearCommands();
 
 
-				m_desc.size.width = (s32)args.newSize.x;
-				m_desc.size.height = (s32)args.newSize.y;
+				m_desc.size.width = static_cast<s32>(args.newSize.x);
+				m_desc.size.height = static_cast<s32>(args.newSize.y);
 
 				for (s32 i = 0; i < m_desc.bufferCount; ++i) {
 					// リソースが使用中だとResizeBuffersに失敗する。
@@ -482,8 +482,6 @@ namespace ob::rhi {
 		if (args.type == platform::WindowEventType::Maximize || args.type == platform::WindowEventType::Move) {
 			m_visible = true;
 		}
-
-		auto a = magic_enum::enum_name(args.type);
 
 	}
 

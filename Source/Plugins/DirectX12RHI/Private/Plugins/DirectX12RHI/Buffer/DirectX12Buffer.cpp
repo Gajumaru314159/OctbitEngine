@@ -5,29 +5,10 @@
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
-#include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
 namespace ob::rhi {
 
-	//! @brief  BufferState を D3D12_RESOURCE_STATESに変換
-	static D3D12_RESOURCE_STATES Convert(BufferState value) {
-		switch (value)
-		{
-		case BufferState::Common:					return D3D12_RESOURCE_STATE_COMMON;
-		case BufferState::Vertex:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-		case BufferState::Index:					return D3D12_RESOURCE_STATE_INDEX_BUFFER;
-		case BufferState::Constant:					return D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER;
-		case BufferState::UnorderedAccess:			return D3D12_RESOURCE_STATE_UNORDERED_ACCESS;
-		case BufferState::ShaderResource:			return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE; // TODO ステートが必要か
-		case BufferState::IndirectArgument:			return D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT;
-		case BufferState::CopySource:				return D3D12_RESOURCE_STATE_COPY_SOURCE;
-		case BufferState::CopyDest:					return D3D12_RESOURCE_STATE_COPY_DEST;
-		}
-		LOG_ERROR("不正なバッファ状態です。");
-		return {};
-	}
-
-	//! @brief  BufferFlags を D3D12_RESOURCE_FLAGS に変換	
+	//! @brief  BufferFlags を D3D12_RESOURCE_FLAGS に変換
 	static D3D12_RESOURCE_FLAGS Convert(BufferFlags value) {
 		D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE;
 		if (!value.has(BufferFlag::ShaderResource)) flags |= D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE;
@@ -46,8 +27,6 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	//! 
-	//! @param desc バッファ定義
 	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
@@ -83,7 +62,7 @@ namespace ob::rhi {
 		}
 
 		m_resource = buffer;
-		Utility::SetName(m_resource.Get(), getName());
+		Utility::SetName(m_resource.Get(), m_desc.name);
 
 		if (desc.flags & BufferFlag::Constant) {
 			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
@@ -106,9 +85,6 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	//! 
-	//! @param desc バッファ定義
-	//! @param data 初期化データ
 	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc, const Blob& blob)
 		: DirectX12Buffer(device,desc)
 	{
@@ -154,6 +130,9 @@ namespace ob::rhi {
 			if (flags & BufferFlag::UnorderedAccess) {
 				createUAV(m_handle.getCpuHandle());
 			}
+			break;
+		default:
+			OB_ABORT("未実装のBufferViewType");
 			break;
 		}
 
@@ -240,7 +219,7 @@ namespace ob::rhi {
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
 		desc.BufferLocation = m_resource->GetGPUVirtualAddress();
-		desc.SizeInBytes = (UINT)m_desc.size;
+		desc.SizeInBytes = static_cast<UINT>(m_desc.size);
 
 		m_device.getNative()->CreateConstantBufferView(&desc, handle);
 

@@ -69,12 +69,12 @@ namespace ob::rhi
 
 		} else {
 
-			constexpr u32 maxSubresoureNum = BitOp::GetMSB((u32)D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION);
+			constexpr u32 maxSubresourceNum = BitOp::GetMSB(static_cast<u32>(D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION));
 
-			D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint[maxSubresoureNum];
-			UINT pNumRows[maxSubresoureNum];
-			UINT64 pRowSizeInBytes[maxSubresoureNum];
-			UINT64 pTotalBytes[maxSubresoureNum];
+			D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprint[maxSubresourceNum];
+			UINT pNumRows[maxSubresourceNum];
+			UINT64 pRowSizeInBytes[maxSubresourceNum];
+			UINT64 pTotalBytes[maxSubresourceNum];
 			m_device.GetCopyableFootprints(&desc, 0, desc.MipLevels, 0, footprint, pNumRows, pRowSizeInBytes, pTotalBytes);
 
 
@@ -98,11 +98,11 @@ namespace ob::rhi
 
 						for (s32 row = 0; row < pNumRows[subresourceIndex]; ++row) {
 
-							void* dest = GetOffsetPtr(data, rowSizeInBytes * row);
-							void* src = GetOffsetPtr(data, subresource.rowPitch * row);
+							void* copyDest = GetOffsetPtr(data, rowSizeInBytes * row);
+							void* copySource = GetOffsetPtr(data, subresource.rowPitch * row);
 							size_t size = subresource.rowPitch;
 
-							memcpy(dest,src,size);
+							memcpy(copyDest,copySource,size);
 
 						}
 
@@ -131,10 +131,9 @@ namespace ob::rhi
 	}
 
     //! @brief アップロード用の一時リソースを作成 
-    ComPtr<ID3D12Resource> DirectX12TextureUploader::createUploadResource(const D3D12_RESOURCE_DESC& desc) {
+    ComPtr<ID3D12Resource> DirectX12TextureUploader::createUploadResource(const D3D12_RESOURCE_DESC& desc) const {
 
-		D3D12_HEAP_PROPERTIES  heap;
-		memset(&heap, 0, sizeof(heap));
+		D3D12_HEAP_PROPERTIES  heap = {};
 		heap.Type = D3D12_HEAP_TYPE_UPLOAD;
 
 		ComPtr<ID3D12Resource> resource;

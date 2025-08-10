@@ -3,21 +3,20 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Types/ShaderStage.h>
 
 namespace ob::rhi {
 
 #pragma region Enum
 
     //! @brief      テクスチャ・フィルター
-    enum class TextureFillter :u32 {
+    enum class TextureFilter :u32 {
         Point,  //!< 最近ピクセルのテクセルを使用
         Linear, //!< 2*2の線形補完値を使用
     };
 
 
     //! @brief      ミップマップ・フィルター
-    enum class MipFillter :u32 {
+    enum class MipFilter :u32 {
         Point,  //!< 最近ピクセルのテクセルを使用
         Linear, //!< 2*2の線形補完値を使用
     };
@@ -49,8 +48,8 @@ namespace ob::rhi {
     struct SamplerDesc {
 
         String			name;			    //!< 名前
-        TextureFillter  filter;             //!< 拡縮時のフィルタ
-        MipFillter      mipFilter;          //!< ミップ時のフィルタ
+        TextureFilter  filter;             //!< 拡縮時のフィルタ
+        MipFilter      mipFilter;          //!< ミップ時のフィルタ
         bool            zFilter;            //!< 3DテクスチャのZ軸フィルタを設定するか
         Anisotropy      anisotropy;         //!< 異方性フィルタレベル
         TextureAddress  addressU;           //!< テクスチャ・アドレス・モード U
@@ -63,7 +62,7 @@ namespace ob::rhi {
 
         //! @brief      コンストラクタ
         SamplerDesc(
-            TextureFillter filter = TextureFillter::Linear,
+            TextureFilter filter = TextureFilter::Linear,
             TextureAddress addressU = TextureAddress::Repeat,
             TextureAddress addressV = TextureAddress::Repeat,
             TextureAddress addressW = TextureAddress::Repeat,
@@ -71,7 +70,7 @@ namespace ob::rhi {
             Anisotropy anisotropy = Anisotropy::None,
             f32 minLod = 0,
             f32 maxLod = (std::numeric_limits<f32>::max)(),
-            MipFillter mipFilter = MipFillter::Linear,
+            MipFilter mipFilter = MipFilter::Linear,
             bool zFilter = false
         ) {
             setFilter(filter, mipFilter);
@@ -82,7 +81,7 @@ namespace ob::rhi {
         }
 
         //! @brief      フィルタ設定
-        SamplerDesc& setFilter(TextureFillter filter, MipFillter mipFilter = MipFillter::Linear) {
+        SamplerDesc& setFilter(TextureFilter filter, MipFilter mipFilter = MipFilter::Linear) {
             this->filter = filter;
             this->mipFilter = mipFilter;
             return *this;

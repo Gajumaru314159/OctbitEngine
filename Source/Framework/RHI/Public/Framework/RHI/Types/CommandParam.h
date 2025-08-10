@@ -13,7 +13,7 @@ namespace ob::rhi {
 		s32				slot;
 	public:
 		SetDescriptorTableParam() = default;
-		SetDescriptorTableParam(const Ref<DescriptorTable> table,s32 slot)
+		SetDescriptorTableParam(const Ref<DescriptorTable>& table,s32 slot)
 			:table(table),slot(slot)
 		{}
 	};

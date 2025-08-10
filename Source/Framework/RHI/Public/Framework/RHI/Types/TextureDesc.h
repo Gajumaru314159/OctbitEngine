@@ -26,7 +26,7 @@ namespace ob::rhi {
     //!             | ShaderResource                    | PIXEL_SHADER_RESOURCE             | SHADER_READ_ONLY              |
     //!             | UnorderedAccess                   | UNORDERED_ACCESS                  | GENERAL                       |
     //!             | RenderTarget                      | RENDER_TARGET                     | COLOR_ATTACHMENT              |
-    //!             | DepthRead                         | DEPTH_READ                        | EPTH_STENCIL_READ_ONLY        |
+    //!             | DepthRead                         | DEPTH_READ                        | DEPTH_STENCIL_READ_ONLY       |
     //!             | DepthWrite                        | DEPTH_WRITE                       | DEPTH_STENCIL_ATTACHMENT      |
     //!             | CopyDest                          | COPY_DEST                         | TRANSFER_SRC                  |
     //!             | CopySource                        | COPY_SOURCE                       | TRANSFER_DST                  |

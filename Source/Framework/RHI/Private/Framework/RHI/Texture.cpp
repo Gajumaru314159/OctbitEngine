@@ -33,8 +33,8 @@ namespace ob::rhi {
 
 	//! @brief  空テクスチャを生成
 	Ref<Texture> Texture::Create(const TextureDesc& desc) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createTexture(desc);
+		if (auto device = Device::Get()) {
+			return device->createTexture(desc);
 		}
 		return nullptr;
 	}
@@ -46,16 +46,16 @@ namespace ob::rhi {
 
 	//! @brief 色データから新しいテクスチャを作成
 	Ref<Texture> Texture::Create(StringView name, BlobView blob) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createTexture(name, blob);
+		if (auto device = Device::Get()) {
+			return device->createTexture(name, blob);
 		}
 		return nullptr;
 	}
 
 	//! @brief  テクスチャバイナリからテクスチャを生成
 	Ref<Texture> Texture::Create(StringView name, TextureType type, Size size, Span<const IntColor> colors) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createTexture(name, type, size, colors);
+		if (auto device = Device::Get()) {
+			return device->createTexture(name, type, size, colors);
 		}
 		return nullptr;
 	}
@@ -75,15 +75,15 @@ namespace ob::rhi {
 
 	//! @brief  ベースのテクスチャを指定して異なるビューを持つテクスチャを作成
 	Ref<Texture> Texture::Create(const TextureViewDesc& desc) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createTexture(desc);
+		if (auto device = Device::Get()) {
+			return device->createTexture(desc);
 		}
 		return nullptr;
 	}
 
 	bool Texture::Supports(TextureFormat format, TextureType type) {
-		if (auto rhi = Device::Get()) {
-			return rhi->supports(format,type);
+		if (auto device = Device::Get()) {
+			return device->supports(format,type);
 		}
 		return false;
 	}

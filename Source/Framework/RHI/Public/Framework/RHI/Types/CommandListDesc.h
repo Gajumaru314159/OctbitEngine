@@ -15,7 +15,7 @@ namespace ob::rhi {
         Copy
         // VideoDecode
         // VideoProcess
-        // ViewoEncode
+        // VideoEncode
     };
 
 #pragma endregion

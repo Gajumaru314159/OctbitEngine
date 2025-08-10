@@ -110,7 +110,7 @@ namespace ob::rhi {
 
 
     //! @brief  D3D12_RESOURCE_DESC から D3D12_SRV_DIMENSIONを取得
-    D3D12_SRV_DIMENSION Utility::GetSrvDimention(const D3D12_RESOURCE_DESC& desc) {
+    D3D12_SRV_DIMENSION Utility::GetSrvDimension(const D3D12_RESOURCE_DESC& desc) {
         switch (desc.Dimension) {
         case D3D12_RESOURCE_DIMENSION_TEXTURE1D:
             if (desc.DepthOrArraySize == 0) {
@@ -118,16 +118,12 @@ namespace ob::rhi {
             } else {
                 return D3D12_SRV_DIMENSION_TEXTURE1DARRAY;
             }
-            break;
-
         case D3D12_RESOURCE_DIMENSION_TEXTURE2D:
             if (desc.DepthOrArraySize == 0) {
                 return D3D12_SRV_DIMENSION_TEXTURE2D;
             } else {
                 return D3D12_SRV_DIMENSION_TEXTURE2DARRAY;
             }
-            break;
-
         case D3D12_RESOURCE_DIMENSION_TEXTURE3D:
             return D3D12_SRV_DIMENSION_TEXTURE3D;
 

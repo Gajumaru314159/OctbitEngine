@@ -38,7 +38,7 @@ namespace ob::rhi
 		}
 
 		for (s32 i = 0; i < std::size(frame.requests); ++i) {
-			D3D12_DESCRIPTOR_HEAP_TYPE type = (D3D12_DESCRIPTOR_HEAP_TYPE)i;
+			D3D12_DESCRIPTOR_HEAP_TYPE type = static_cast<D3D12_DESCRIPTOR_HEAP_TYPE>(i);
 			for(auto& request : frame.requests[i]) {
 				m_device.CopyDescriptorsSimple(1, request.dst, request.src, type);
 			}

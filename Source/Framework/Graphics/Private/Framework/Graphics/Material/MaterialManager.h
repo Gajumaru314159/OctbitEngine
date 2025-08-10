@@ -39,7 +39,7 @@ namespace ob::graphics {
 
 					if (aa.semantic < ab.semantic) return true;
 					if (aa.type < ab.type) return true;
-					if (aa.dimention < ab.dimention) return true;
+					if (aa.dimension < ab.dimension) return true;
 					if (aa.semantic < ab.semantic) return true;
 					if (aa.index < ab.index) return true;
 

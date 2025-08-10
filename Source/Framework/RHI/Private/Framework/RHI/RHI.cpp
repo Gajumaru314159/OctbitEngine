@@ -8,9 +8,9 @@
 namespace ob::rhi {
 
     //! @brief  コンストラクタ
-    Device::Device(GraphicObjectManager& manager,RHIConfig* config) 
-        : m_objectManager(manager)
-        , m_config(config? *config:RHIConfig())
+    Device::Device(GraphicObjectManager& manager, const RHIConfig* config)
+        : m_config(config? *config:RHIConfig())
+        , m_objectManager(manager)
     {
     }
 

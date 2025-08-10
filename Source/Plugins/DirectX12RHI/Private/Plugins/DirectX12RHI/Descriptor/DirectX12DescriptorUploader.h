@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Utility/Swapper.h>
-#include <Plugins/DirectX12RHI/Descriptor/DescriptorHeapType.h>
 
 namespace ob::rhi {
 

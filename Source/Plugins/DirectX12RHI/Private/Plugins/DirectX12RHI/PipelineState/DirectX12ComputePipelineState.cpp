@@ -49,7 +49,7 @@ namespace ob::rhi {
 
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
-		Utility::SetName(m_pipelineState.Get(), getName());
+		Utility::SetName(m_pipelineState.Get(), m_desc.name);
 
 		manage();
 	}

@@ -68,7 +68,7 @@ namespace ob::rhi {
 
         void initialize();
 
-        bool createView(vk::raii::ImageView& view);
+        bool createView(vk::raii::ImageView& view) const;
 
     private:
 

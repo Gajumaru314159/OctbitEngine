@@ -18,17 +18,17 @@ namespace ob::rhi {
         void entryCommandListTop(const Ref<CommandList>& commandList);
 
         void execute();
-        void wait();
+        void wait() const;
 
 		vk::Queue getQueue() const {
 			return *m_queue;
 		}
 
     private:
-        VulkanDevice&                  m_device;
+        VulkanDevice&               m_device;
         vk::raii::Queue             m_queue = nullptr;
 
-        Vector<Ref<CommandList>>    m_entriedCommandListVector;
+        Vector<Ref<CommandList>>    m_enteredCommandListVector;
 
         Vector<vk::CommandBuffer>   m_commandBuffers;
     };

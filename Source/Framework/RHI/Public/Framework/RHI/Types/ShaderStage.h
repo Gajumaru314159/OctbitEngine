@@ -31,7 +31,7 @@ namespace ob::rhi {
         Callable        = get_bit(13),
         Amplification   = get_bit(14),
 
-        All             = ~((u32)(0)),
+        All             = ~static_cast<u32>(0),
     };
 
     //! @brief      シェーダ・ステージ・セット

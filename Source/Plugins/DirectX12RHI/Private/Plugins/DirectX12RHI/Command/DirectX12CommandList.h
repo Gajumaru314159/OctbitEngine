@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Types/CommandListDesc.h>
-#include <Framework/RHI/Constants.h>
 #include <Framework/Core/Utility/Swapper.h>
 #include <Plugins/DirectX12RHI/Command/ResourceStateCache.h>
 

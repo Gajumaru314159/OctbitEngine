@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/VulkanDevice.h>
 #include <Plugins/VulkanRHI/Command/VulkanCommandList.h>
 
@@ -48,7 +47,7 @@ namespace ob::rhi
 
 		block.blob.append(blob.data(), blob.size());
 
-		m_entriedBuffers[(VkBuffer)*dest] = postAccessFlags;
+		m_enteredBuffers[static_cast<VkBuffer>(*dest)] = postAccessFlags;
 
 	}
 
@@ -78,7 +77,7 @@ namespace ob::rhi
 
 		func(block.blob.data() + request.sourceOffset);
 
-		m_entriedBuffers[(VkBuffer)*dest] = postAccessFlags;
+		m_enteredBuffers[static_cast<VkBuffer>(*dest)] = postAccessFlags;
 	}
 
 	//! @brief アップロードバッファを拡大する
@@ -123,7 +122,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを縮小する
-	void VulkanBufferUploader::shurink() {
+	void VulkanBufferUploader::shrink() {
 
 		auto& frame = m_frames.current();
 
@@ -146,8 +145,6 @@ namespace ob::rhi
 		ScopeLock lock(m_lock);
 
 		auto& frame = m_frames.current();
-
-		auto& device = m_device.getDevice();
 
 		// アップロードバッファにデータをコピー
 		for (s32 i = 0; i <= frame.blockIndex; ++i) {
@@ -176,7 +173,7 @@ namespace ob::rhi
 			barrier.offset = 0;
 			barrier.size = VK_WHOLE_SIZE;
 		}
-		for (auto& [buffer, accessFlags] : m_entriedBuffers) {
+		for (auto& [buffer, accessFlags] : m_enteredBuffers) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
 			barrier.srcAccessMask = vk::AccessFlagBits::eNone;
@@ -206,7 +203,7 @@ namespace ob::rhi
 
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
 		m_barriers.clear();
-		for (auto& [buffer,accessFlags] : m_entriedBuffers) {
+		for (auto& [buffer,accessFlags] : m_enteredBuffers) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier = vk::BufferMemoryBarrier();
 			barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
@@ -240,7 +237,7 @@ namespace ob::rhi
 		// バッファを縮小
 		m_frames.next();
 		m_frames.current().clear();
-		m_entriedBuffers.clear();
+		m_enteredBuffers.clear();
 
 		commandList->popMarker();
 

@@ -7,8 +7,6 @@
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
-#include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
-#include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 
 namespace ob::rhi {
@@ -22,8 +20,6 @@ namespace ob::rhi {
 		Vector<CD3DX12_DESCRIPTOR_RANGE> ranges;
 		parameters.reserve(100);
 		ranges.reserve(100);
-
-		s32 slot = 0;
 
 		// ルート定数
 		// Vulkan対応のためRootConstantsは0版固定で作成する
@@ -55,7 +51,7 @@ namespace ob::rhi {
 
 			for (auto heapType : heapTypes) {
 
-				s32 rangeStart = (s32)ranges.size();
+				s32 rangeStart = static_cast<s32>(ranges.size());
 
 				auto& parameter = parameters.emplace_back();
 				parameter.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
@@ -122,6 +118,7 @@ namespace ob::rhi {
 						//	parameter.Descriptor.ShaderRegister = parameter.DescriptorTable.pDescriptorRanges[0].BaseShaderRegister;
 						//	break;
 						//}
+					default: break;
 					}
 
 				}
@@ -152,8 +149,8 @@ namespace ob::rhi {
 
 		// ルートシグネチャディスクリプタ
 		CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc(
-			(UINT)parameters.size(), parameters.data(),
-			(UINT)samplerDescs.size(), samplerDescs.data(),
+			static_cast<UINT>(parameters.size()), parameters.data(),
+			static_cast<UINT>(samplerDescs.size()), samplerDescs.data(),
 			TypeConverter::Convert(desc.flags)
 		);
 
@@ -172,10 +169,10 @@ namespace ob::rhi {
 
 		auto result = D3D12SerializeRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
 		if (FAILED(result)) {
-			String s;
 			if (errorBlob) {
+				String s;
 				s.resize(errorBlob->GetBufferSize());
-				std::copy_n((char*)errorBlob->GetBufferPointer(), errorBlob->GetBufferSize(), s.begin());
+				std::copy_n(static_cast<char *>(errorBlob->GetBufferPointer()), errorBlob->GetBufferSize(), s.begin());
 			}
 			Utility::OutputFatalLog(result, "D3D12SerializeRootSignature");
 			return;
@@ -188,7 +185,7 @@ namespace ob::rhi {
 			return;
 		}
 
-		Utility::SetName(m_rootSignature.Get(), getName());
+		Utility::SetName(m_rootSignature.Get(), m_desc.name);
 
 		manage();
 	}

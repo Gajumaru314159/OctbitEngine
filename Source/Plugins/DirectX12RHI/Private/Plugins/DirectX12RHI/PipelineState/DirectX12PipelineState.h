@@ -52,12 +52,12 @@ namespace ob::rhi {
 
     private:
         
-        void setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src);
-        void setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src);
-        void setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src);
-        void setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src);
-        void setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src);
-        void setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
+        static void SetupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src);
+        static void SetupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src);
+        static void SetupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src);
+        static void SetupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src);
+        static void SetupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src);
+        static void SetupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src);
 
 
     private:

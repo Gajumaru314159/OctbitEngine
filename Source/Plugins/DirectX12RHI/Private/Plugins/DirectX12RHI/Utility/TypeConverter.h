@@ -19,9 +19,9 @@ namespace ob::rhi {
 
         static D3D12_ROOT_SIGNATURE_FLAGS Convert(RootSignatureFlags value);
         static D3D12_SHADER_VISIBILITY Convert(ShaderStage value);
-        static D3D12_FILTER_TYPE Convert(TextureFillter value);
-        static D3D12_FILTER_TYPE Convert(MipFillter value);
-        static D3D12_FILTER Convert(TextureFillter up, TextureFillter down, MipFillter mip, bool anisotropic);
+        static D3D12_FILTER_TYPE Convert(TextureFilter value);
+        static D3D12_FILTER_TYPE Convert(MipFilter value);
+        static D3D12_FILTER Convert(TextureFilter up, TextureFilter down, MipFilter mip, bool anisotropic);
         static UINT Convert(Anisotropy value);
         static D3D12_TEXTURE_ADDRESS_MODE Convert(TextureAddress value);
         static D3D12_FILL_MODE Convert(FillMode value);

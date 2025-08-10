@@ -31,7 +31,7 @@ namespace ob::rhi {
         ComPtr<ID3D12CommandQueue> m_commandQueue;
         ComPtr<ID3D12Fence> m_fence;
         UINT64 m_fenceVal;
-        HANDLE m_fenceEvent;
+        HANDLE m_fenceEvent = nullptr;
 
         Vector<ID3D12CommandList*> m_entriedNativeCommandList;
         Vector<const CommandList*> m_entriedCommandList;

@@ -69,10 +69,10 @@ namespace ob::rhi {
 
 		}
 
-		setupFormats(gpsd, desc);
-		setupBlend(gpsd.BlendState, desc);
-		setupRasterizerState(gpsd.RasterizerState, desc.rasterizer);
-		setupDepthStencilState(gpsd.DepthStencilState, desc.depthStencil);
+		SetupFormats(gpsd, desc);
+		SetupBlend(gpsd.BlendState, desc);
+		SetupRasterizerState(gpsd.RasterizerState, desc.rasterizer);
+		SetupDepthStencilState(gpsd.DepthStencilState, desc.depthStencil);
 
 		// 頂点レイアウト
 		Vector<D3D12_INPUT_ELEMENT_DESC> attributes;
@@ -80,7 +80,7 @@ namespace ob::rhi {
 		attributes.reserve(gpsd.InputLayout.NumElements);
 		for (auto& attr : desc.vertexLayout.attributes) {
 			attributes.push_back({});
-			setupVertexLayout(attributes.back(), attr);
+			SetupVertexLayout(attributes.back(), attr);
 		}
 		gpsd.InputLayout.pInputElementDescs = attributes.data();
 		OB_ASSERT(0 < desc.vertexLayout.vertexStride,"頂点のサイズは0より大きい必要があります");
@@ -89,7 +89,7 @@ namespace ob::rhi {
 		gpsd.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
 		gpsd.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;// TypeConverter::Convert(desc.topology);
 		gpsd.SampleDesc.Count = desc.sample.count;
-		gpsd.SampleDesc.Quality = desc.sample.qualitty;
+		gpsd.SampleDesc.Quality = desc.sample.quality;
 		gpsd.NodeMask = 0;
 		gpsd.SampleMask = desc.sampleMask;
 
@@ -105,16 +105,16 @@ namespace ob::rhi {
 
 		// リソースを参照に追加
 		m_pipelineState = pipelineState;
-		Utility::SetName(m_pipelineState.Get(), getName());
+		Utility::SetName(m_pipelineState.Get(), m_desc.name);
 
 		manage();
 	}
 
 
 	//! @brief  フォーマット設定
-	void DirectX12PipelineState::setupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
+	void DirectX12PipelineState::SetupFormats(D3D12_GRAPHICS_PIPELINE_STATE_DESC& dst, const PipelineStateDesc& src) {
 
-		dst.NumRenderTargets = (UINT)src.colors.size();
+		dst.NumRenderTargets = static_cast<UINT>(src.colors.size());
 
 		for (auto [i, format] : Indexed(src.colors)) {
 			dst.RTVFormats[i] = TypeConverter::Convert(format);
@@ -128,16 +128,16 @@ namespace ob::rhi {
 
 
 	//! @brief  ブレンド設定
-	void DirectX12PipelineState::setupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src) {
+	void DirectX12PipelineState::SetupBlend(D3D12_BLEND_DESC& dst, const PipelineStateDesc& src) {
 		dst = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
 		for (s32 i = 0; i < std::size(src.blend); ++i) {
-			setupRenderTargetBlend(dst.RenderTarget[i], src.blend[i]);
+			SetupRenderTargetBlend(dst.RenderTarget[i], src.blend[i]);
 		}
 	}
 
 
 	//! @brief  レンダーターゲットごとのブレンド設定
-	void DirectX12PipelineState::setupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src) {
+	void DirectX12PipelineState::SetupRenderTargetBlend(D3D12_RENDER_TARGET_BLEND_DESC& dst, const BlendDesc& src) {
 		dst.BlendEnable = src.blendEnable;
 		dst.SrcBlend = TypeConverter::Convert(src.srcColorFactor);
 		dst.DestBlend = TypeConverter::Convert(src.dstColorFactor);
@@ -150,10 +150,10 @@ namespace ob::rhi {
 
 
 	//! @brief  頂点レイアウト設定
-	void DirectX12PipelineState::setupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src) {
+	void DirectX12PipelineState::SetupVertexLayout(D3D12_INPUT_ELEMENT_DESC& dst, const VertexAttribute& src) {
 		dst.SemanticName = TypeConverter::Convert(src.semantic);
 		dst.SemanticIndex = src.index;
-		dst.Format = TypeConverter::Convert(src.type, src.dimention);
+		dst.Format = TypeConverter::Convert(src.type, src.dimension);
 		dst.InputSlot = 0;
 		dst.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 		dst.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
@@ -162,7 +162,7 @@ namespace ob::rhi {
 
 
 	//! @brief  ラスタライズ設定
-	void DirectX12PipelineState::setupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src) {
+	void DirectX12PipelineState::SetupRasterizerState(D3D12_RASTERIZER_DESC& dst, const RasterizerDesc& src) {
 
 		dst = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 		dst.FillMode = TypeConverter::Convert(src.fillMode);
@@ -180,7 +180,7 @@ namespace ob::rhi {
 
 
 	//! @brief  デプス・ステンシル設定
-	void DirectX12PipelineState::setupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src) {
+	void DirectX12PipelineState::SetupDepthStencilState(D3D12_DEPTH_STENCIL_DESC& dst, const DepthStencilDesc& src) {
 		dst = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 		dst.DepthEnable = src.depth.enable;
 		dst.DepthWriteMask = src.depth.write ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;

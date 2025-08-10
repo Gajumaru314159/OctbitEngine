@@ -15,11 +15,6 @@ namespace ob::rhi {
 	public:
 
 		//! @brief          コンストラクタ
-		//! 
-		//! @param device   デバイス
-		//! @param type     ヒープ・タイプ
-		//! @param resourceCapacity 容量
-		//! @param samplerCapacity  サンプラー容量
 		VulkanDescriptorHeap(class VulkanDevice& device, s32 resourceCapacity, s32 samplerCapacity);
 
 
@@ -42,7 +37,7 @@ namespace ob::rhi {
 
 
 		//! @brief          デスクリプタセットをコマンドバッファに記録
-		void recordDescriptorHeap(vk::raii::CommandBuffer& commandBuffer,vk::PipelineLayout pipeline,s32 slot);
+		void recordDescriptorHeap(const vk::raii::CommandBuffer& commandBuffer,vk::PipelineLayout pipeline,s32 slot) const;
 
 
 		//! @brief			レイアウトを取得

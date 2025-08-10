@@ -28,7 +28,7 @@ namespace ob::rhi {
         VulkanComputePipelineState(VulkanDevice&, const ComputePipelineStateDesc& desc);
 
         //! @brief		デストラクタ
-        ~VulkanComputePipelineState();
+        ~VulkanComputePipelineState() override;
 
         //! @brief  妥当な状態か
         bool isValid()const { return m_pipeline != VK_NULL_HANDLE; }

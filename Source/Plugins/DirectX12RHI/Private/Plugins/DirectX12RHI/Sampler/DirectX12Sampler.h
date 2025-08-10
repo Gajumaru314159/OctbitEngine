@@ -37,7 +37,7 @@ namespace ob::rhi {
         //! @brief      BindlessHandleを取得
         BindlessHandle getHandle()const override;
 
-        void createView(D3D12_CPU_DESCRIPTOR_HANDLE handle);
+        void createView(D3D12_CPU_DESCRIPTOR_HANDLE handle) const;
 
     private:
         DirectX12Device&       m_device;
@@ -47,7 +47,7 @@ namespace ob::rhi {
     };
 
 
-    //!@ condn
+    //! @cond
 
 
     //! @brief      BindlessHandleを取得

@@ -45,7 +45,7 @@ namespace ob::rhi
 
 		block.blob.append(blob.data(), blob.size());
 
-		m_entriedResources.emplace(dest.Get());
+		m_enteredResources.emplace(dest.Get());
 
 	}
 
@@ -74,7 +74,7 @@ namespace ob::rhi
 
 		func(block.blob.data() + request.sourceOffset);
 
-		m_entriedResources.emplace(dest.Get());
+		m_enteredResources.emplace(dest.Get());
 	}
 
 	//! @brief アップロードバッファを拡大する
@@ -112,7 +112,7 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを縮小する
-	void DirectX12BufferUploader::shurink() {
+	void DirectX12BufferUploader::shrink() {
 
 		auto& frame = m_frames.current();
 
@@ -158,7 +158,7 @@ namespace ob::rhi
 		// blocks 事前バリア設定は暗黙的な降格を使用 (COPY_SOURCE > COMMON) ※ExecuteCommandLists後
 		// TODO 同じリソースが複数回使用される場合は、バリアをまとめて実行する
 		m_barriers.clear();
-		for (auto& resource : m_entriedResources) {
+		for (auto& resource : m_enteredResources) {
 			auto& barrier = m_barriers.emplace_back();
 			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -173,7 +173,7 @@ namespace ob::rhi
 
 		// バッファを縮小
 		frame.clear();
-		m_entriedResources.clear();
+		m_enteredResources.clear();
 
 		::PIXEndEvent(&commandList);
 

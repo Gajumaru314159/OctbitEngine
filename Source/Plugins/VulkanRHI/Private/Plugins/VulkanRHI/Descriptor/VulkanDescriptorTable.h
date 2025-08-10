@@ -14,10 +14,6 @@ namespace ob::rhi {
     public:
 
         //! @brief              コンストラクタ
-        //!
-		//! @param device       デバイス
-		//! @param type         デスクリプタに設定するリソースの種類
-        //! @param elementNum   要素数
         VulkanDescriptorTable(VulkanDevice& device, const DescriptorTableDesc& desc);
 
 
@@ -60,7 +56,7 @@ namespace ob::rhi {
 		using Element = Variant<BufferElement, TextureElement, SamplerElement>;
 
     private:
-		VulkanDevice&				m_device;
+		VulkanDevice&			m_device;
 		DescriptorTableDesc		m_desc;
 
 		vk::raii::DescriptorPool m_pool = nullptr;

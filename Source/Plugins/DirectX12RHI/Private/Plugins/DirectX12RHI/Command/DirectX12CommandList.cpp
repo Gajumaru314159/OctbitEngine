@@ -7,7 +7,6 @@
 #include <Framework/RHI/RenderTexture.h>
 #include <Framework/RHI/Constants.h>
 #include <Framework/RHI/Types/CommandParam.h>
-#include <Framework/RHI/RenderPass.h>
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/SwapChain/DirectX12SwapChain.h>
 #include <Plugins/DirectX12RHI/Texture/DirectX12Texture.h>
@@ -288,7 +287,7 @@ namespace ob::rhi {
 				// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 				auto& view = views[size];
 				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-				view.SizeInBytes = (UINT)pBuffer->getDesc().size;
+				view.SizeInBytes = static_cast<UINT>(pBuffer->getDesc().size);
 				view.StrideInBytes = pBuffer->getDesc().stride;
 			} else {
 				LOG_ERROR("空の頂点バッファが含まれています");
@@ -296,7 +295,7 @@ namespace ob::rhi {
 			size++;
 		}
 
-		m_cmdList->IASetVertexBuffers(first, (UINT)size, views.data());
+		m_cmdList->IASetVertexBuffers(first, static_cast<UINT>(size), views.data());
 	}
 
 
@@ -306,7 +305,7 @@ namespace ob::rhi {
 			// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 			D3D12_INDEX_BUFFER_VIEW view;
 			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = (UINT)pBuffer->getDesc().size;
+			view.SizeInBytes = static_cast<UINT>(pBuffer->getDesc().size);
 			view.Format = pBuffer->getDesc().stride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 			m_cmdList->IASetIndexBuffer(&view);
 		} else {

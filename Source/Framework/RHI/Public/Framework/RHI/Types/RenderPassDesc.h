@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/RHI/Forward.h>
 #include <Framework/RHI/Constants.h>
-#include <Framework/RHI/Types/TextureDesc.h>
 
 namespace ob::rhi {
 

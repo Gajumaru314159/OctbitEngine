@@ -2,6 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#pragma once
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Texture.h>
 
@@ -29,7 +30,7 @@ namespace ob::rhi {
 		SystemResource(Device&);
 
 		//! @brief  デストラクタ
-		~SystemResource();
+		~SystemResource() override;
 
 		//! @brief  プリセットテクスチャ取得
 		Ref<Texture> getPresetTexture(PresetTexture type);

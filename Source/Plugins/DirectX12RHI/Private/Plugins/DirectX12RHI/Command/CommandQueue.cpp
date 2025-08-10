@@ -11,7 +11,7 @@ namespace ob::rhi {
 
 
 	//! @brief  コンストラクタ
-	CommandQueue::CommandQueue(DirectX12Device& device) 
+	CommandQueue::CommandQueue(DirectX12Device& device)
 		:m_fenceVal(0)
 	{
 		HRESULT result;
@@ -24,7 +24,7 @@ namespace ob::rhi {
 
 			result = device.getNative()->CreateCommandQueue(&desc, IID_PPV_ARGS(m_commandQueue.ReleaseAndGetAddressOf()));
 			if (FAILED(result)) {
-				Utility::OutputFatalLog(result, "ID3D12Device::CreatteCommandQueue()");
+				Utility::OutputFatalLog(result, "ID3D12Device::CreateCommandQueue()");
 				return;
 			}
 		}
@@ -55,14 +55,14 @@ namespace ob::rhi {
 			m_entriedNativeCommandList.push_back(static_cast<const DirectX12CommandList*>(cmdList)->getNative());
 		}
 		m_entriedCommandList.clear();
-		m_commandQueue->ExecuteCommandLists((UINT)m_entriedNativeCommandList.size(), m_entriedNativeCommandList.data());
+		m_commandQueue->ExecuteCommandLists(static_cast<UINT>(m_entriedNativeCommandList.size()), m_entriedNativeCommandList.data());
 	}
 
 	void CommandQueue::wait() {
 		// 描画待ち
-		auto a = m_fence->GetCompletedValue();
+		[[maybe_unused]]auto a = m_fence->GetCompletedValue();
 		m_commandQueue->Signal(m_fence.Get(), ++m_fenceVal);
-		auto b = m_fence->GetCompletedValue();
+		[[maybe_unused]]auto b = m_fence->GetCompletedValue();
 		if (m_fence->GetCompletedValue() < m_fenceVal)
 		{
 			if (auto event = CreateEvent(nullptr, false, false, nullptr)) {

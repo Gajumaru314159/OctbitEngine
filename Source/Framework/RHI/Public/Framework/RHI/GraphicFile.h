@@ -5,9 +5,6 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/String/StringView.h>
-#include <Framework/Core/Misc/BlobView.h>
-#include <Framework/Core/Utility/MemoryStorage.h>
-#include <Framework/Core/Utility/Singleton.h>
 #include <Framework/RHI/Forward.h>
 
 namespace ob::rhi {

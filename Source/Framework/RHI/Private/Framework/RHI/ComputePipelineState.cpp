@@ -9,8 +9,8 @@ namespace ob::rhi {
 
 	//! @brief  生成
 	Ref<ComputePipelineState> ComputePipelineState::Create(const ComputePipelineStateDesc& desc) {
-		if (auto rhi = Device::Get()) {
-			return rhi->createComputePipelineState(desc);
+		if (auto device = Device::Get()) {
+			return device->createComputePipelineState(desc);
 		}
 		return nullptr;
 	}

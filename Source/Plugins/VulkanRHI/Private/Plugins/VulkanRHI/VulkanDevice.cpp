@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Plugins/VulkanRHI/VulkanDevice.h>
-#include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Plugins/VulkanRHI/Utility/TypeConverter.h>
 #include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 #include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
@@ -20,8 +19,6 @@
 #include <Plugins/VulkanRHI/Buffer/VulkanBufferUploader.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHeap.h>
 #include <Framework/Core/Misc/ErrorCode.h>
-
-#include <Framework/Platform/Window.h>
 
 #define SAFE_CREATE(type,type_impl,...)			\
 		try {\
@@ -68,7 +65,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  コンストラクタ
 	//@―---------------------------------------------------------------------------
-	VulkanDevice::VulkanDevice(platform::WindowManager&, GraphicObjectManager& objectManager, ob::rhi::RHIConfig* config, VulkanRHIConfig* vconfig)
+	VulkanDevice::VulkanDevice(platform::WindowManager&, GraphicObjectManager& objectManager, const ob::rhi::RHIConfig* config, const VulkanRHIConfig* vconfig)
 		: Device(objectManager, config)
 		, m_config(config ? *config : ob::rhi::RHIConfig{})
 		, m_vconfig(vconfig ? *vconfig : ob::rhi::VulkanRHIConfig{})
@@ -178,9 +175,9 @@ namespace ob::rhi {
 		// インスタンス情報
 		vk::InstanceCreateInfo instanceInfo;
 		instanceInfo.pApplicationInfo = &appInfo;
-		instanceInfo.enabledLayerCount = (uint32_t)validLayerNames.size();
+		instanceInfo.enabledLayerCount = static_cast<uint32_t>(validLayerNames.size());
 		instanceInfo.ppEnabledLayerNames = validLayerNames.data();
-		instanceInfo.enabledExtensionCount = (uint32_t)validExtensionNames.size();
+		instanceInfo.enabledExtensionCount = static_cast<uint32_t>(validExtensionNames.size());
 		instanceInfo.ppEnabledExtensionNames = validExtensionNames.data();
 
 #if OB_DEBUG
@@ -384,15 +381,15 @@ namespace ob::rhi {
 		queueInfo.queueCount = 1;
 		queueInfo.pQueuePriorities = queuePriorities.data();
 		queueInfo.queueFamilyIndex = m_queueFamilyIndex;
-		queueInfo.queueCount = (uint32_t)queuePriorities.size();
+		queueInfo.queueCount = static_cast<uint32_t>(queuePriorities.size());
 
 		// 生成情報
 		vk::DeviceCreateInfo info;
 		info.queueCreateInfoCount = 1;
 		info.pQueueCreateInfos = &queueInfo;
-		info.enabledExtensionCount = (uint32_t)validExtensionNames.size();
+		info.enabledExtensionCount = static_cast<uint32_t>(validExtensionNames.size());
 		info.ppEnabledExtensionNames = validExtensionNames.data();
-		info.enabledLayerCount = (uint32_t)validLayerNames.size();
+		info.enabledLayerCount = static_cast<uint32_t>(validLayerNames.size());
 		info.ppEnabledLayerNames = validLayerNames.data();
 		info.pEnabledFeatures = nullptr;
 
@@ -702,7 +699,7 @@ namespace ob::rhi {
 	}
 
 
-	void VulkanDevice::setDescriptorHeaps(vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout,s32 slot) {
+	void VulkanDevice::setDescriptorHeaps(const vk::raii::CommandBuffer& commandBuffer, const vk::PipelineLayout& layout, s32 slot) {
 		if (m_descriptorHeap) {
 			m_descriptorHeap->recordDescriptorHeap(commandBuffer, layout, slot);
 		}
@@ -713,7 +710,7 @@ namespace ob::rhi {
 	}
 
 
-	void VulkanDevice::clearCommands() {
+	void VulkanDevice::clearCommands() const {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 	}

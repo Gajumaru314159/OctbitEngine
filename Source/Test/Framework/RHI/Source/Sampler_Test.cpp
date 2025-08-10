@@ -10,9 +10,9 @@ using namespace ob::rhi;
 
 TYPED_TEST(RHITest, Sampler_Create) {
 
-    for (auto filter : magic_enum::enum_values<TextureFillter>()) {
+    for (auto filter : magic_enum::enum_values<TextureFilter>()) {
 
-        for (auto mipFiler : magic_enum::enum_values<MipFillter>()) {
+        for (auto mipFiler : magic_enum::enum_values<MipFilter>()) {
 
             for (auto address : magic_enum::enum_values<TextureAddress>()) {
                 

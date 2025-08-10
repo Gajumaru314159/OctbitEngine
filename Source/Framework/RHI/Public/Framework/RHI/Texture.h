@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/RHI/Forward.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Types/BindlessHandle.h>

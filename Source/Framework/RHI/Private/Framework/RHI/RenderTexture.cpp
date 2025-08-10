@@ -9,15 +9,15 @@ namespace ob::rhi {
 
     //! @brief          生成
     Ref<RenderTexture> RenderTexture::Create(const RenderTextureDesc& desc) {
-        if (auto rhi= Device::Get()) {
-            return rhi->createRenderTexture(desc);;
+        if (auto device = Device::Get()) {
+            return device->createRenderTexture(desc);;
         }
         return nullptr;
     }
 
     bool RenderTexture::Supports(TextureFormat format) {
-        if (auto rhi = Device::Get()) {
-            return rhi->supportsForRenderTexture(format);
+        if (auto device = Device::Get()) {
+            return device->supportsForRenderTexture(format);
         }
         return false;
     }

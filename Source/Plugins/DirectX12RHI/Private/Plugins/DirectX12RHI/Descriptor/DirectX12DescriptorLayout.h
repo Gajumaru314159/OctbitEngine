@@ -11,7 +11,7 @@ namespace ob::rhi {
 	class DirectX12Device;
 
     //! @brief  デスクリプタ・レイアウト実装(DirectX12)
-	//! @details DirectX12では対応するオブジェクトが存在しません。RootSignature/DescirtorTable生成時に必要な情報を保持します。
+	//! @details DirectX12では対応するオブジェクトが存在しません。RootSignature/DescriptorTable生成時に必要な情報を保持します。
     class DirectX12DescriptorLayout :public DescriptorLayout {
 	public:
 		struct HeapInfo {

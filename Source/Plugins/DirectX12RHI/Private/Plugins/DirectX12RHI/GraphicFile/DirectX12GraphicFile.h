@@ -25,9 +25,9 @@ namespace ob::rhi {
 	class DirectX12GraphicFileEvent : public GraphicFileEvent {
 	public:
 		DirectX12GraphicFileEvent();
-		~DirectX12GraphicFileEvent();
+		~DirectX12GraphicFileEvent() override;
 		bool isValid()const;
-		void set(ComPtr<ID3D12Fence> fence,HANDLE handle);
+		void set(const ComPtr<ID3D12Fence>& fence,HANDLE handle);
 		bool poll() const override;
 		void wait() const override;
 	private:

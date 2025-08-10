@@ -43,11 +43,11 @@ namespace ob::rhi {
 
 
 		//! @brief          CPUハンドルを取得
-		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(u32 index);
+		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(u32 index) const;
 
 
 		//! @brief          CPUハンドルを取得
-		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(u32 index);
+		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(u32 index) const;
 
 
 		//! @brief  タイプを取得

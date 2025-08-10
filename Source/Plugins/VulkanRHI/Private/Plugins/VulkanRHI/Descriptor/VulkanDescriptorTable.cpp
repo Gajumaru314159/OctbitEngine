@@ -12,9 +12,6 @@
 namespace ob::rhi {
 
 	//! @brief              コンストラクタ
-	//!
-	//! @param type         デスクリプタに設定するリソースの種類
-	//! @param elementNum   要素数
 	VulkanDescriptorTable::VulkanDescriptorTable(VulkanDevice& device, const DescriptorTableDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
@@ -122,7 +119,6 @@ namespace ob::rhi {
 		}
 
 		m_elements.at(index) = BufferElement{ resource };
-		auto& element = std::get<BufferElement>(m_elements.at(index));
 
 		if (auto p = resource.cast<VulkanBuffer>()) {
 
@@ -240,7 +236,7 @@ namespace ob::rhi {
 	}
 
 
-	//! @brief  Bufferから適したDescrptorTypeを取得
+	//! @brief  Bufferから適したDescriptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Buffer>& buffer, vk::DescriptorType& type) const {
 
 		auto& items = m_layout->getDesc().items;
@@ -280,12 +276,13 @@ namespace ob::rhi {
 		case BindingType::ConstantBuffer:
 			type = vk::DescriptorType::eUniformBuffer;
 			return desc.state == BufferState::Constant;
+			
+		default: return false;
 		}
-		return false;
 	}
 
 
-	//! @brief  Textureから適したDescrptorTypeを取得
+	//! @brief  Textureから適したDescriptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Texture>& texture, vk::DescriptorType& type) const {
 
 		auto& items = m_layout->getDesc().items;
@@ -305,12 +302,13 @@ namespace ob::rhi {
 		case BindingType::RWTexture:
 			type = vk::DescriptorType::eStorageImage;
 			return hasUAV;
+
+		default: return false;
 		}
-		return false;
 	}
 
 
-	//! @brief  Samplerから適したDescrptorTypeを取得
+	//! @brief  Samplerから適したDescriptorTypeを取得
 	bool VulkanDescriptorTable::tryGetRangeType(s32 index, const Ref<rhi::Sampler>& sampler, vk::DescriptorType& type) const {
 
 		auto& items = m_layout->getDesc().items;
@@ -322,7 +320,7 @@ namespace ob::rhi {
 		case BindingType::Sampler:
 			type = vk::DescriptorType::eSampler;
 			return true;
+		default: return false;
 		}
-		return false;
 	}
 }

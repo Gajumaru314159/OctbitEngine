@@ -46,7 +46,7 @@ namespace ob::rhi {
                 return;
             }
 
-            commandList.ResourceBarrier((UINT)m_barriers.size(), m_barriers.data());
+            commandList.ResourceBarrier(static_cast<UINT>(m_barriers.size()), m_barriers.data());
 
             m_barriers.clear();
 

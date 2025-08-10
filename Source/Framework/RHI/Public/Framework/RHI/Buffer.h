@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Misc/Blob.h>
 #include <Framework/RHI/GraphicObject.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Framework/RHI/Types/BindlessHandle.h>

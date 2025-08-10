@@ -30,10 +30,10 @@ namespace ob::rhi {
 	public:
 
         //! @brief      コンストラクタ
-		Device(GraphicObjectManager&, RHIConfig*);
+		Device(GraphicObjectManager&, const RHIConfig*);
 
         //! @brief      デストラクタ
-        virtual ~Device();
+        ~Device() override;
 
 		//! @brief      
         virtual void update();

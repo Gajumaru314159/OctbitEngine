@@ -67,7 +67,7 @@ namespace ob::rhi {
 #pragma region Flag
 
     //! @brief      色要素   
-    enum class ColorCompoent :u8 {
+    enum class ColorComponent :u8 {
         Red     = get_bit(0),               //!< 赤
         Green   = get_bit(1),               //!< 緑
         Blue    = get_bit(2),               //!< 青
@@ -81,7 +81,7 @@ namespace ob::rhi {
         A       = Alpha,                    //!< Alphaのエイリアス
     };
     //! @brief      色マスク
-    using ColorMask = BitFlags<ColorCompoent>;
+    using ColorMask = BitFlags<ColorComponent>;
 
 #pragma endregion
 
@@ -123,7 +123,7 @@ namespace ob::rhi {
             BlendFactor srcAlphaFactor=BlendFactor::One,
             BlendFactor dstAlphaFactor=BlendFactor::Zero,
             BlendOp     alphaOp=BlendOp::Add,
-            ColorMask   mask= ColorCompoent::All)
+            ColorMask   mask= ColorComponent::All)
             : blendEnable(blendEnable)
             , srcColorFactor(srcColorFactor)
             , dstColorFactor(dstColorFactor)

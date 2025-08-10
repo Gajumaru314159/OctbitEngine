@@ -8,9 +8,7 @@
 namespace ob::rhi {
 
     //! @brief  コンストラクタ
-    //! 
-    //! @param frameCount   削除命令後、何フレーム削除を遅らせるか。
-    GraphicObjectManager::GraphicObjectManager(RHIConfig* config) 
+    GraphicObjectManager::GraphicObjectManager(const RHIConfig* config)
         : m_config(config ? *config : RHIConfig{})
         , m_deleteStackList(std::max(m_config.frameBufferCount+1,1)) // 描画遅延+解放中の書き込み先
     {
@@ -76,8 +74,8 @@ namespace ob::rhi {
             update();
             ScopeLock lock(m_deleteStackListLock);
 		    s32 deletingCount = 0;
-		    for (s32 i = 0; i < m_deleteStackList.size(); ++i) {
-			    deletingCount += m_deleteStackList.at(i).size();
+		    for (s32 j = 0; j < m_deleteStackList.size(); ++j) {
+			    deletingCount += m_deleteStackList.at(j).size();
 		    }
             if (deletingCount == 0) {
                 break;

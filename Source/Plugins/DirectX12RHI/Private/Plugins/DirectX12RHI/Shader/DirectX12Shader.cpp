@@ -49,10 +49,6 @@ namespace ob::rhi {
 
 
     //! @brief				バイナリからシェーダーオブジェクトを生成
-    //!
-    //! @param src			バイナリ
-    //! @param stage		シェーダステージ
-    //! @param errorDest	エラー出力先文字列
     DirectX12Shader::DirectX12Shader(BlobView blob, ShaderStage stage, StringView name)
         : m_name(name)
         , m_stage(stage)

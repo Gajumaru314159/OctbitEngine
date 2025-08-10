@@ -187,10 +187,10 @@ namespace ob::rhi {
 	}
 	vk::ColorComponentFlags TypeConverter::Convert(ColorMask value) {
 		vk::ColorComponentFlags result{ 0 };
-		if (value & ColorCompoent::R) result |= vk::ColorComponentFlagBits::eR;
-		if (value & ColorCompoent::G) result |= vk::ColorComponentFlagBits::eG;
-		if (value & ColorCompoent::B) result |= vk::ColorComponentFlagBits::eB;
-		if (value & ColorCompoent::A) result |= vk::ColorComponentFlagBits::eA;
+		if (value & ColorComponent::R) result |= vk::ColorComponentFlagBits::eR;
+		if (value & ColorComponent::G) result |= vk::ColorComponentFlagBits::eG;
+		if (value & ColorComponent::B) result |= vk::ColorComponentFlagBits::eB;
+		if (value & ColorComponent::A) result |= vk::ColorComponentFlagBits::eA;
 		return result;
 	}
 
@@ -283,18 +283,18 @@ namespace ob::rhi {
 		throw NotSupportedException();
 	}
 
-	vk::Filter TypeConverter::Convert(TextureFillter filter) {
+	vk::Filter TypeConverter::Convert(TextureFilter filter) {
 		switch (filter) {
-		case TextureFillter::Point: return vk::Filter::eNearest;
-		case TextureFillter::Linear: return vk::Filter::eLinear;
+		case TextureFilter::Point: return vk::Filter::eNearest;
+		case TextureFilter::Linear: return vk::Filter::eLinear;
 		default: return vk::Filter::eLinear;
 		}
 	}
 
-	vk::SamplerMipmapMode TypeConverter::Convert(MipFillter mipFilter) {
+	vk::SamplerMipmapMode TypeConverter::Convert(MipFilter mipFilter) {
 		switch (mipFilter) {
-		case MipFillter::Point: return vk::SamplerMipmapMode::eNearest;
-		case MipFillter::Linear: return vk::SamplerMipmapMode::eLinear;
+		case MipFilter::Point: return vk::SamplerMipmapMode::eNearest;
+		case MipFilter::Linear: return vk::SamplerMipmapMode::eLinear;
 		default: return vk::SamplerMipmapMode::eLinear;
 		}
 	}

@@ -22,10 +22,6 @@ namespace ob::rhi {
     public:
 
         //! @brief              コンストラクタ
-        //!
-		//! @param device       デバイス
-		//! @param type         デスクリプタに設定するリソースの種類
-        //! @param elementNum   要素数
         DirectX12DescriptorTable(DirectX12Device& device, const DescriptorTableDesc& desc, DescriptorHeap& heap, DescriptorHeap& heap2);
 		
 
@@ -45,7 +41,7 @@ namespace ob::rhi {
 
 	public:
 
-		void record(ID3D12GraphicsCommandList& cmdList, DirectX12RootSignature& signature,s32 slot) const;
+		void record(ID3D12GraphicsCommandList& cmdList, const DirectX12RootSignature& signature,s32 slot) const;
 
 	private:
 
@@ -63,7 +59,7 @@ namespace ob::rhi {
 
 		using Element = Variant<std::monostate,Ref<Buffer>, Ref<Texture>, Ref<Sampler>>;
 
-		Vector<Element> m_elemetns;
+		Vector<Element> m_elements;
 
     };
 

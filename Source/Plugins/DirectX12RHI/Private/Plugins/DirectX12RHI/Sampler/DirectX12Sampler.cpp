@@ -4,16 +4,11 @@
 //***********************************************************
 #include "DirectX12Sampler.h"
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
-#include <Plugins/DirectX12RHI/Utility/Utility.h>
 #include <Plugins/DirectX12RHI/Utility/TypeConverter.h>
 
 namespace ob::rhi {
 
     //! @brief				シェーダーコードからシェーダーオブジェクトを生成
-    //!
-    //! @param src			シェーダコード
-    //! @param stage		シェーダステージ
-    //! @param errorDest	エラー出力先文字列
     DirectX12Sampler::DirectX12Sampler(DirectX12Device& device,const SamplerDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
@@ -21,10 +16,10 @@ namespace ob::rhi {
 		D3D12_SAMPLER_DESC ddesc = {};
         switch (desc.filter)
         {
-        case TextureFillter::Point:
+        case TextureFilter::Point:
             ddesc.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
             break;
-        case TextureFillter::Linear:
+        case TextureFilter::Linear:
             ddesc.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
             break;
         default:
@@ -50,7 +45,7 @@ namespace ob::rhi {
         manage();
     }
 
-    void DirectX12Sampler::createView(D3D12_CPU_DESCRIPTOR_HANDLE handle) {        
+    void DirectX12Sampler::createView(D3D12_CPU_DESCRIPTOR_HANDLE handle) const {
         m_device.getNative()->CreateSampler(&m_nativeDesc, handle);
     }
 

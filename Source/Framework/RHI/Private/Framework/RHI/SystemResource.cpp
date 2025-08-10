@@ -35,9 +35,9 @@ namespace ob::rhi {
 		}
 
 		{
-			SamplerDesc desc(TextureFillter::Linear);
+			SamplerDesc desc(TextureFilter::Linear);
 			desc.anisotropy = Anisotropy::None;
-			desc.filter = TextureFillter::Linear;
+			desc.filter = TextureFilter::Linear;
 			m_presetSamplers[PresetSampler::Default] = rhi.createSampler(desc);
 		}
 	}

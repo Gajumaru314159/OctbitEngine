@@ -3,8 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Plugins/VulkanRHI/Texture/VulkanTexture.h>
-#include <Plugins/VulkanRHI/Buffer/VulkanBuffer.h>
 
 namespace ob::rhi {
 
