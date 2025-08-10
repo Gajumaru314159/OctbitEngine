@@ -199,8 +199,8 @@ namespace ob::rhi
 			commandList.ResourceBarrier(m_barriers.size(), m_barriers.data());
 		}
 
-		// バッファを縮小
-		frame.clear();
+		m_frames.next();
+		m_frames.current().clear();
 
 		::PIXEndEvent(&commandList);
 
