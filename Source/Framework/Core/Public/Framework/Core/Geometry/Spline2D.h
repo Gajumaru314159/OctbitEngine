@@ -78,6 +78,10 @@ namespace ob::core {
         //! @param t 時間[0,1]
         f32 curvature(f32 t)const;
 
+    private:
+
+        //! @brief  制御点を取得（範囲外は端点を使用）
+        Vec2 getControlPoint(s32 index) const;
 
     public:
 
