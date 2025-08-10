@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(cmake:*)",
-      "Bash(./Build.bat *)"
+      "Bash(cmd.exe /c \"Build.bat\")",
+      "Bash(ctest:*)",
+      "Bash(Build/bin/*-test.exe)"
     ],
     "deny": []
   }

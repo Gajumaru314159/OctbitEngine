@@ -7,18 +7,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a CMake-based C++ project. Use these commands to build and test:
 
 ```bash
+# From Root Directory
+
 # Generate build files
-./Build.bat setup
+cmd.exe /c Build.bat setup
 
 # Build the project
-./Build.bat
-
-# Run unit tests
-cd Build/Bat
-ctest -C Debug
+cmd.exe /c Build.bat
 
 # Build specific modules
-./Build.bat RHI
+# When building the Core module, you can build UnitTest at the same time by building Core-test.
+cmd.exe /c Build.bat RHI-test
 ```
 
 ## Project Structure
@@ -67,10 +66,11 @@ Common interface for DirectX12 and Vulkan with unified resource types (`Buffer`,
 
 Run tests for specific modules:
 ```bash
-# From Build/Bat
-ctest -C Debug -R Core-test
-ctest -C Debug -R RHI-test
-ctest -C Debug -R Graphics-test
+# From Root Directory
+Build/bin/Core-test.exe
+Build/bin/RHI-test.exe
+Build/bin/Platform-test.exe
+Build/bin/Graphics-test.exe
 ```
 
 ## Third-Party Dependencies
