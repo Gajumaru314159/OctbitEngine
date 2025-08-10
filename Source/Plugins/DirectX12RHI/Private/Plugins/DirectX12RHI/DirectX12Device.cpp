@@ -580,7 +580,7 @@ namespace ob::rhi {
 		desc.type = CommandListType::Graphic;
 		m_copyCommandList = createCommandList(desc);
 					
-		size_t blockSize = 4 * 1024 * 1024;
+		size_t blockSize = 4 * 1024;
 		m_bufferUploader.construct(*m_device.Get(), blockSize);
 
 		m_textureUploader.construct(*m_device.Get());

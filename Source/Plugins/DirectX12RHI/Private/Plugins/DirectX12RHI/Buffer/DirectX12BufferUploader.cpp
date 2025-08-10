@@ -14,6 +14,7 @@ namespace ob::rhi
 		: m_device(device)
 	{
 		m_blockSize = align_up(blockSize, D3D12_CONSTANT_BUFFER_DATA_PLACEMENT_ALIGNMENT);
+
 		m_frames.resize(4);
 		for (s32 i = 0; i < m_frames.size(); ++i) {
 			size_t requestNum = m_blockSize / 256;
@@ -30,7 +31,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(blob.size())) {
-			extend();
+			extend(blob.size());
 		}
 
 		auto& block = frame.block();
@@ -57,7 +58,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(size)) {
-			extend();
+			extend(size);
 		}
 
 		auto& block = frame.block();
@@ -78,21 +79,24 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを拡大する
-	void DirectX12BufferUploader::extend() {
+	void DirectX12BufferUploader::extend(size_t size) {
+
+		size = std::max(size, m_blockSize);
 
 		auto& frame = m_frames.current();
 
 		frame.blockIndex++;
 
 		// 確保済みバッファがある場合はインデックスだけ進める
-		if (frame.blockIndex < frame.blocks.size()) {
+		if (frame.blockIndex < frame.blocks.size() && size <= frame.blocks[frame.blockIndex].blob.size()) {
 			return;
 		}
 
-		auto& block = frame.blocks.emplace_back();
+		auto itr = frame.blocks.emplace(frame.blocks.begin()+frame.blockIndex);
+		auto& block = *itr;
 
 		auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-		auto resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(m_blockSize);
+		auto resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(size);
 
 		// バッファ生成
 		m_device.CreateCommittedResource(
@@ -107,18 +111,7 @@ namespace ob::rhi
 		Utility::SetName(block.resource.Get(), "BufferUploaderBlock");
 
 		// 一次バッファ生成
-		block.blob.reserve(m_blockSize);
-
-	}
-
-	//! @brief アップロードバッファを縮小する
-	void DirectX12BufferUploader::shrink() {
-
-		auto& frame = m_frames.current();
-
-		if (frame.blocks.empty()) return;
-
-		frame.blocks.pop_back();
+		block.blob.reserve(size);
 
 	}
 
@@ -141,7 +134,7 @@ namespace ob::rhi
 				continue;
 			}
 
-			memcpy_s(data, m_blockSize, block.blob.data(), block.blob.size());
+			memcpy_s(data, block.blob.size(), block.blob.data(), block.blob.size());
 			block.resource->Unmap(0, nullptr);
 		}
 
@@ -171,8 +164,10 @@ namespace ob::rhi
 			commandList.ResourceBarrier(m_barriers.size(), m_barriers.data());
 		}
 
-		// バッファを縮小
-		frame.clear();
+		// フレームを進める
+		m_frames.next();
+		// バッファを初期化
+		m_frames.current().clear(m_blockSize);
 		m_enteredResources.clear();
 
 		::PIXEndEvent(&commandList);

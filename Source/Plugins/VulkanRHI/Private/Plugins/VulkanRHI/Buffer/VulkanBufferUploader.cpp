@@ -31,8 +31,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(blob.size())) {
-			OB_ASSERT_EXPR(blob.size()<=m_blockSize);
-			extend();
+			extend(blob.size());
 		}
 
 		auto& block = frame.block();
@@ -59,8 +58,7 @@ namespace ob::rhi
 
 		// バッファが足りない場合は拡張
 		if (!frame.available(size)) {
-			OB_ASSERT_EXPR(size <= m_blockSize);
-			extend();
+			extend(size);
 		}
 
 		auto& block = frame.block();
@@ -81,25 +79,28 @@ namespace ob::rhi
 	}
 
 	//! @brief アップロードバッファを拡大する
-	void VulkanBufferUploader::extend() {
+	void VulkanBufferUploader::extend(size_t size) {
+
+		size = std::max(size, m_blockSize);
 
 		auto& frame = m_frames.current();
 
 		frame.blockIndex++;
 
 		// 確保済みバッファがある場合はインデックスだけ進める
-		if (frame.blockIndex < frame.blocks.size()) {
+		if (frame.blockIndex < frame.blocks.size() && size <= frame.blocks[frame.blockIndex].blob.capacity()) {
 			return;
 		}
 
-		auto& block = frame.blocks.emplace_back();
+		auto itr = frame.blocks.emplace(frame.blocks.begin()+frame.blockIndex);
+		auto& block = *itr;
 
 		auto& device = m_device.getDevice();
 		auto allocationCallbacks = m_device.getAllocationCallbacks();
 
 		// 転送用バッファを生成
 		vk::BufferCreateInfo info;
-		info.size = m_blockSize;
+		info.size = size;
 		info.usage = vk::BufferUsageFlagBits::eTransferSrc;
 		info.sharingMode = vk::SharingMode::eExclusive;
 
@@ -117,7 +118,7 @@ namespace ob::rhi
 		m_device.setName(block.memory, "BufferUploader");
 
 		// 一次バッファ生成
-		block.blob.reserve(m_blockSize);
+		block.blob.reserve(size);
 
 	}
 
@@ -152,7 +153,7 @@ namespace ob::rhi
 
 			void* data = block.memory.mapMemory(0, block.blob.size());
 
-			memcpy_s(data, m_blockSize, block.blob.data(), block.blob.size());
+			memcpy_s(data, block.blob.size(), block.blob.data(), block.blob.size());
 
 			block.memory.unmapMemory();
 		}
@@ -236,7 +237,7 @@ namespace ob::rhi
 
 		// バッファを縮小
 		m_frames.next();
-		m_frames.current().clear();
+		m_frames.current().clear(m_blockSize);
 		m_enteredBuffers.clear();
 
 		commandList->popMarker();

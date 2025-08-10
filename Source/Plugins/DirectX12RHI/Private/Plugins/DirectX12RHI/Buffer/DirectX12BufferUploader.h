@@ -26,9 +26,7 @@ namespace ob::rhi {
 
     private:
 
-        void extend();
-
-        void shrink();
+        void extend(size_t size);
 
     private:
 
@@ -62,10 +60,16 @@ namespace ob::rhi {
             bool available(size_t size)const {
                 return -1 < blockIndex &&  blockIndex < blocks.size() && blocks[blockIndex].available(size);
             }
-            void clear() {
+            void clear(size_t removeThreshold) {
                 blockIndex = -1;
-                for (auto& block : blocks) {
-                    block.blob.clear();
+                for (auto itr = blocks.begin(); itr != blocks.end();) {
+                    auto& block = *itr;
+                    if (removeThreshold < block.blob.capacity()) {
+                        itr = blocks.erase(itr);
+                    } else {
+                        block.blob.clear();
+                        ++itr;
+                    }
                 }
                 requests.clear();
             }
