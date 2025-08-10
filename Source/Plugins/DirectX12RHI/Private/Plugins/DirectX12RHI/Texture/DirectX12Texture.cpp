@@ -292,7 +292,7 @@ namespace ob::rhi {
 
 		// クリアカラー設定
 		const FLOAT clearColor[4] = { m_renderDesc.clear.color.r,m_renderDesc.clear.color.g,m_renderDesc.clear.color.b,m_renderDesc.clear.color.a };
-		auto format = TypeConverter::Convert(m_renderDesc.format, true);
+		auto format = TypeConverter::Convert(m_renderDesc.format, false);
 		auto colorClearValue = CD3DX12_CLEAR_VALUE(format, clearColor);
 		auto depthClearValue = CD3DX12_CLEAR_VALUE(format, m_renderDesc.clear.depth, m_renderDesc.clear.stencil);
 
