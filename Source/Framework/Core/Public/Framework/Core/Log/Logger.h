@@ -81,7 +81,7 @@ namespace ob::core {
 
 
         //! @brief ログ・イベントの追加
-        void addEvent(EventHandle& handle, EventDelegateType func);
+        void addEvent(EventHandle& handle, const EventDelegateType& func);
 
 
         //! @brief ログ・イベントの削除

@@ -137,7 +137,7 @@ namespace ob::core {
 
 
     //! @brief ログ・イベントの追加
-    void Logger::addEvent(EventHandle& handle, EventDelegateType func) {
+    void Logger::addEvent(EventHandle& handle, const EventDelegateType& func) {
         m_notifier.add(handle, func);
     }
 
