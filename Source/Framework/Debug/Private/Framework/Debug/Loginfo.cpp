@@ -159,7 +159,8 @@ namespace ob::debug {
 					ImGui::TableNextColumn();
 					ImGui::TextUnformatted(log.file.c_str());
 					if (ImGui::IsItemClicked()) {
-						String cmd = Format("call \"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/devenv.exe\" /edit \"{}\" /l {}", log.path, log.line2);
+						// String cmd = Format("call \"C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/devenv.exe\" /edit \"{}\" /l {}", log.path, log.line2);
+						String cmd = Format("call \"C:/Program Files/JetBrains/CLion 2025.1.4/bin/clion64.exe\" --line {} {}", log.line2,log.path);
 						system(cmd.c_str());
 					}
 
