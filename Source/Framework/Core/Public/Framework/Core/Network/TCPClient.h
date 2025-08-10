@@ -4,7 +4,6 @@
 /// @author Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Network/IPAddress.h>
 
 namespace ob::core {
@@ -23,7 +22,7 @@ namespace ob::core {
 		bool connect(IPAddress ip, u16 port);
 
 		/// データを送信する
-		bool send(char* data, size_t size);
+		bool send(const char* data, size_t size);
 
 		/// データを受信する
 		/// @return 受信したデータのサイズ

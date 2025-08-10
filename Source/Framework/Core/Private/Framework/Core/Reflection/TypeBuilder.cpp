@@ -82,7 +82,7 @@ namespace ob::core {
 			"arg8",
 			"arg9",
 		};
-		if (std::size(names) < index) return "argX";
+		if (std::size(names) <= index) return "argX";
 		return names[index];
 	}
 

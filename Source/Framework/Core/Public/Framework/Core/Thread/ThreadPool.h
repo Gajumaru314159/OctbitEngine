@@ -4,9 +4,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/String/String.h>
 #include <Framework/Core/Thread/Thread.h>
-#include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Utility/Singleton.h>
 
 namespace ob::core {
@@ -15,7 +13,7 @@ namespace ob::core {
 	public:
 
 		ThreadPool();
-		~ThreadPool();
+		~ThreadPool() override;
 
 		void resize(s32 threadNum);
 		void enqueue(Action&& action);

@@ -14,30 +14,30 @@ public:
 
 	A() {
 
-		MiniDalegate<void()> d00(*this, &A::func00);
-		MiniDalegate<bool()> d01(*this, &A::func01);
-		MiniDalegate<void(bool)> d02(*this, &A::func02);
-		MiniDalegate<bool(bool)> d03(*this, &A::func03);
+		MiniDelegate<void()> d00(*this, &A::func00);
+		MiniDelegate<bool()> d01(*this, &A::func01);
+		MiniDelegate<void(bool)> d02(*this, &A::func02);
+		MiniDelegate<bool(bool)> d03(*this, &A::func03);
 
 		d00();
 		d01();
 		d02(true);
 		d03(true);
 		
-		MiniDalegate<void()> d10(*this, &A::func10);
-		MiniDalegate<bool()> d11(*this, &A::func11);
-		MiniDalegate<void(bool)> d12(*this, &A::func12);
-		MiniDalegate<bool(bool)> d13(*this, &A::func13);
+		MiniDelegate<void()> d10(*this, &A::func10);
+		MiniDelegate<bool()> d11(*this, &A::func11);
+		MiniDelegate<void(bool)> d12(*this, &A::func12);
+		MiniDelegate<bool(bool)> d13(*this, &A::func13);
 
 		d10();
 		d11();
 		d12(true);
 		d13(true);
 		
-		MiniDalegate<void()> d20(&A::func20);
-		MiniDalegate<bool()> d21(&A::func21);
-		MiniDalegate<void(bool)> d22(&A::func22);
-		MiniDalegate<bool(bool)> d23(&A::func23);
+		MiniDelegate<void()> d20(&A::func20);
+		MiniDelegate<bool()> d21(&A::func21);
+		MiniDelegate<void(bool)> d22(&A::func22);
+		MiniDelegate<bool(bool)> d23(&A::func23);
 
 		d20();
 		d21();
@@ -45,17 +45,17 @@ public:
 		d23(true);
 
 
-		MiniDalegate<void()> d04 = { *this, &A::func00 };
-		MiniDalegate<void()> d14 = { *this, &A::func10 };
-		MiniDalegate<void()> d24 = {&A::func20};
+		MiniDelegate<void()> d04 = { *this, &A::func00 };
+		MiniDelegate<void()> d14 = { *this, &A::func10 };
+		MiniDelegate<void()> d24 = {&A::func20};
 
 	}
 
 	void constTest() {		
-		MiniDalegate<void()> d10(*this, &A::func00);
-		MiniDalegate<bool()> d11(*this, &A::func01);
-		MiniDalegate<void(bool)> d12(*this, &A::func02);
-		MiniDalegate<bool(bool)> d13(*this, &A::func03);
+		MiniDelegate<void()> d10(*this, &A::func00);
+		MiniDelegate<bool()> d11(*this, &A::func01);
+		MiniDelegate<void(bool)> d12(*this, &A::func02);
+		MiniDelegate<bool(bool)> d13(*this, &A::func03);
 	}
 
 	void func00() {

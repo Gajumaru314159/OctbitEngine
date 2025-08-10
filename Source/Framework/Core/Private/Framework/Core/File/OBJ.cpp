@@ -9,7 +9,7 @@
 namespace ob::core {
 
 	//! @brief  ファイルに保存
-	bool OBJ::save(StringView path) {
+	bool OBJ::save(StringView path) const {
 		File file(path, FileOpenMode::Write);
 		if (!file)return false;
 		auto str = m_ss.str();
@@ -134,7 +134,7 @@ namespace ob::core {
 
 
 
-	void MTL::save(StringView path) {
+	void MTL::save(StringView path) const {
 		std::ofstream os{std::string(path.data(), path.size())};
 		os << m_ss.str();
 	}

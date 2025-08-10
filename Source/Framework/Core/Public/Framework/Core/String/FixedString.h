@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <string>
-#include <ostream>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/StringView.h>
 
@@ -24,7 +23,7 @@ namespace ob::core {
 		FixedStringBase(StringViewBase<TChar> str) {
 			size_t len = std::min(N - 1, str.size());
 			memcpy_s(m_data, N, str.data(), len);
-			m_data[len + 1] = (TChar)'\0';
+			m_data[len + 1] = static_cast<TChar>('\0');
 		}
 
 		void push_back(TChar c) {

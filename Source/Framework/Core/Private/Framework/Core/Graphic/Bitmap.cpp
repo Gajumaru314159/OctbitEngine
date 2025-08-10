@@ -163,9 +163,9 @@ namespace ob::core {
         result.resize(rect.width(), rect.height());
 
         for (s32 y = 0; y < rect.height(); ++y) {
-            std::copy(
+            std::copy_n(
                 m_pixels.begin() + (rect.top + y) * m_size.width + rect.left,
-                m_pixels.begin() + (rect.top + y) * m_size.width + rect.left + rect.width(),
+                rect.width(),
                 result.m_pixels.begin() + y * rect.width()
             );
         }

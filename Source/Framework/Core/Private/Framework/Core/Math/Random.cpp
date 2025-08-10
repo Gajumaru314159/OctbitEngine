@@ -39,9 +39,7 @@ namespace ob::core {
     }
 
 
-    //! @brief			乱数のシード値を変更
-    //! 
-    //! @param seed		シード値
+    //! @brief			u32の乱数を生成する
     u32 Random::getU32() {
         u32 t;
         t = x ^ (x << 11);

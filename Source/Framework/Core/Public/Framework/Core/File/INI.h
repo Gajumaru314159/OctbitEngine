@@ -48,7 +48,7 @@ namespace ob::core {
 		INI();
 
 		//! @brief  ファイルから設定をロードして生成
-		INI(String path);
+		explicit INI(StringView path);
 
 		//! @brief  ~デストラクタ
 		~INI();
@@ -61,7 +61,7 @@ namespace ob::core {
 		bool save(String path = "");
 
 		//! @brief  文字列から設定をロード
-		bool parse(String str);
+		bool parse(StringView text);
 
 		//! @brief  文字列として出力
 		String string();

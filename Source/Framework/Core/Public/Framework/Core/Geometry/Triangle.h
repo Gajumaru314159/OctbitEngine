@@ -206,11 +206,11 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     constexpr Triangle Triangle::Lerp(const Triangle& a, const Triangle& b, f32 t)noexcept {
-        return Triangle(
+        return {
             Vec3::Lerp(a.p0, b.p0, t),
             Vec3::Lerp(a.p1, b.p1, t),
             Vec3::Lerp(a.p2, b.p2, t)
-        );
+        };
     }
 
 

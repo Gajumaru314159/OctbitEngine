@@ -151,8 +151,8 @@ public: Any_Construct_Test() = default; ~Any_Construct_Test() override = default
 	BinaryStream stream(blob);
 	BinaryReader reader(stream);
 	BinaryWriter writer(stream);
-	a.serealize(writer);
-	a.deserealize(reader);
+	a.serialize(writer);
+	a.deserialize(reader);
 
 	Any empty;
 	ObjectA object1;

@@ -15,6 +15,8 @@ namespace ob::core {
 	class Any;
 	struct TypeInfo;
 	struct PropertyInfo;
+	class BinaryReader;
+	class BinaryWriter;
 
 
 	//! @brief プロパティ
@@ -37,7 +39,7 @@ namespace ob::core {
 
 		//! @brief 値の代入演算子 
 		template<class T>
-		auto operator=(T&& value) -> std::enable_if_t<!std::is_same<remove_cvr_t<T>, Any>::value, Property&> {
+		auto operator=(T&& value) -> std::enable_if_t<!std::is_same_v<remove_cvr_t<T>, Any>, Property&> {
 			assign(Any(value));
 			return *this;
 		}
@@ -77,25 +79,25 @@ namespace ob::core {
 
 		//! @brief Propertyをコピーした値で取得する
 		template<class T>
-		auto copy() const->std::enable_if_t<!std::is_reference<T>::value, T>;
+		auto copy() const->std::enable_if_t<!std::is_reference_v<T>, T>;
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
 		//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
 		template<class T>
-		auto as() const->std::enable_if_t<std::is_reference<T>::value, const T>;
+		auto as() const->std::enable_if_t<std::is_reference_v<T>, const T>;
 
 		//! @brief  プロパティを特定の特定の型の参照として取得する
 		template<class T>
-		auto as(const T& fallback) const->std::enable_if_t<std::is_reference<T>::value, const T>;
+		auto as(const T& fallback) const->std::enable_if_t<std::is_reference_v<T>, const T>;
 
 		//! @brief  プロパティを特定の特定の型のコピーとして取得する
 		//! @details プロパティの型が異なる型の場合はassertが発生します。
 		template<class T>
-		auto as() const->std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T>;
+		auto as() const->std::enable_if_t<!std::is_reference_v<T>&& std::is_copy_assignable_v<T>, T>;
 
 		//! @brief  フォールバックを指定してプロパティを特定の特定の型のコピーとして取得する
 		template<class T>
-		auto as(const T& fallback) const->std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T>;
+		auto as(const T& fallback) const->std::enable_if_t<!std::is_reference_v<T>&& std::is_copy_assignable_v<T>, T>;
 
 		//! @brief プロパティの型を取得
 		Type type() const;
@@ -122,8 +124,8 @@ namespace ob::core {
 		Any owner();
 		Any owner()const;
 
-		void serealize(BinaryWriter& writer);
-		void deserealize(BinaryReader& reader);
+		void serialize(BinaryWriter& writer);
+		void deserialize(BinaryReader& reader);
 
 	private:
 
@@ -147,7 +149,7 @@ namespace ob::core {
 
 
 	//! @brief 任意の型を保持するクラス
-	//! @details 型情報を保持し、型情報に基づいて値を取得、設定することができます。
+	//! @details 型情報を保持し、型情報に基づいて値を取得、設定できます。
 	//!			 内部値はconstかと、参照型かを保持します。
 	class Any {
 	private:
@@ -211,11 +213,11 @@ namespace ob::core {
 		//! 		 * 書き込み不可のAnyオブジェクト
 		//! 		 * 異なる型の代入
 		template<class T>
-		auto operator=(T&& value) -> std::enable_if_t<!std::is_same<remove_cvr_t<T>, Any>::value,Any&> {
+		auto operator=(T&& value) -> std::enable_if_t<!std::is_same_v<remove_cvr_t<T>, Any>,Any&> {
 			if (m_pointer) {
 				if (m_writable) {
 					if (is<T>()) {
-						(*reinterpret_cast<remove_cvr_t<T>*>(m_pointer)) = value;
+						(*static_cast<remove_cvr_t<T>*>(m_pointer)) = value;
 					}
 				}
 			}
@@ -251,32 +253,32 @@ namespace ob::core {
 		template<class T>
 		T& as() {
 			OB_ASSERT(is<T>(), "型が違います");
-			return *reinterpret_cast<T*>(m_pointer);
+			return *static_cast<T*>(m_pointer);
 		}
 
 		template<class T>
 		const T& as() const {
 			OB_ASSERT(is<T>(), "型が違います");
-			return *reinterpret_cast<const T*>(m_pointer);
+			return *static_cast<const T*>(m_pointer);
 		}
 
 		template<class T>
 		T& as(T& fallback) const {
-			if (is<T>()) return *reinterpret_cast<T*>(m_pointer);
+			if (is<T>()) return *static_cast<T*>(m_pointer);
 			return fallback;
 		}
 
 		template<class T>
 		const T& as(const T& fallback) const {
-			if (is<T>()) return *reinterpret_cast<T*>(m_pointer);
+			if (is<T>()) return *static_cast<T*>(m_pointer);
 			return fallback;
 		}
 
 		bool isReference() const {
-			return (bool)m_reference;
+			return static_cast<bool>(m_reference);
 		}
 		bool isWritable() const {
-			return (bool)m_writable;
+			return static_cast<bool>(m_writable);
 		}
 
 		template<class T>
@@ -327,8 +329,8 @@ namespace ob::core {
 		// Vector<Any> list();
 		// Map<Any, Any> map();
 
-		void serealize([[maybe_unused]] BinaryWriter& writer) {}
-		void deserealize([[maybe_unused]] BinaryReader& reader) {}
+		void serialize([[maybe_unused]] BinaryWriter& writer) {}
+		void deserialize([[maybe_unused]] BinaryReader& reader) {}
 
 	private:
 
@@ -376,7 +378,7 @@ namespace ob::core {
 
 	//! @brief Propertyをコピーした値で取得する
 	template<class T>
-	auto Property::copy() const -> std::enable_if_t<!std::is_reference<T>::value, T> {
+	auto Property::copy() const -> std::enable_if_t<!std::is_reference_v<T>, T> {
 		OB_ASSERT(is<T>(), "型が違います");
 		return get().template as<T>();
 	}
@@ -384,7 +386,7 @@ namespace ob::core {
 	//! @brief  フォールバックを指定してプロパティを特定の特定の型の参照として取得する
 	//! @details プロパティの型が異なる型であったり参照型でない場合はassertが発生します。
 	template<class T>
-	auto Property::as() const -> std::enable_if_t<std::is_reference<T>::value, const T> {
+	auto Property::as() const -> std::enable_if_t<std::is_reference_v<T>, const T> {
 		OB_ASSERT(!empty(), "空のプロパティです。");
 		OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
 		OB_ASSERT(isReference(), "値型は参照型で受け取ることはできません。isReference()で参照可能か確認してください。");
@@ -393,7 +395,7 @@ namespace ob::core {
 
 	//! @brief  プロパティを特定の特定の型の参照として取得する
 	template<class T>
-	auto Property::as(const T& fallback) const -> std::enable_if_t<std::is_reference<T>::value, const T> {
+	auto Property::as(const T& fallback) const -> std::enable_if_t<std::is_reference_v<T>, const T> {
 		if (empty() || !is<T>() || !isReference()) return fallback;
 		return get().template as<std::remove_reference_t<T>>();
 	}
@@ -401,7 +403,7 @@ namespace ob::core {
 	//! @brief  プロパティを特定の特定の型のコピーとして取得する
 	//! @details プロパティの型が異なる型の場合はassertが発生します。
 	template<class T>
-	auto Property::as() const -> std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T> {
+	auto Property::as() const -> std::enable_if_t<!std::is_reference_v<T>&& std::is_copy_assignable_v<T>, T> {
 		OB_ASSERT(!empty(), "空のプロパティです。");
 		OB_ASSERT(is<T>(), "型が違います。is<T>()でアクセス可能な型か事前に確認してください。");
 		return get().template as<T>();
@@ -409,7 +411,7 @@ namespace ob::core {
 
 	//! @brief  フォールバックを指定してプロパティを特定の特定の型のコピーとして取得する
 	template<class T>
-	auto Property::as(const T& fallback) const -> std::enable_if_t<!std::is_reference<T>::value&& std::is_copy_assignable<T>::value, T> {
+	auto Property::as(const T& fallback) const -> std::enable_if_t<!std::is_reference_v<T>&& std::is_copy_assignable_v<T>, T> {
 		if (empty() || !is<T>())return fallback;
 		return get().template as<T>();
 	}

@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/Core/Template/Utility/Delegate.h>
 #include <Framework/Core/Template/Container/HandleList.h>
-#include <Framework/Core/Thread/Mutex.h>
 #include <Framework/Core/Thread/ScopeLock.h>
 
 namespace ob::core {
@@ -17,8 +16,8 @@ namespace ob::core {
 
     //! @brief              イベント通知クラス
     //! 
-    //! @details            登録したイベントをまとめて呼び出すことができる。
-    //! @tparam ...Args     イベント引数
+    //! @details            登録したイベントをまとめて呼び出す
+    //! @tparam Args        イベント引数
     template<typename... Args>
     class EventNotifier :Noncopyable {
     public:
@@ -85,7 +84,7 @@ namespace ob::core {
     };
 
     template<typename... Args>
-    using EventProxty = typename EventNotifier<Args...>::Proxy;
+    using EventProxy = typename EventNotifier<Args...>::Proxy;
 
 
 
@@ -177,7 +176,7 @@ namespace ob::core {
 
     //! @brief  イベントを呼び出す
     //! 
-    //! @param ...args 呼び出し引数
+    //! @param args 呼び出し引数
     template<typename... Args>
     void EventNotifier<Args...>::invoke(Args... args)const {
         ScopeLock lock(m_mutex);

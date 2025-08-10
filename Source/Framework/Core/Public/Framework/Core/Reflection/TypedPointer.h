@@ -26,11 +26,11 @@ namespace ob::core {
 			m_pointer = reinterpret_cast<Base*>(m_storage.data());
 			return *this;
 		}
-		TypedPointer(TypedPointer&& other) {
+		TypedPointer(TypedPointer&& other) noexcept {
 			m_storage = other.m_storage;
 			m_pointer = reinterpret_cast<Base*>(m_storage.data());
 		}
-		TypedPointer& operator=(TypedPointer&& other) {
+		TypedPointer& operator=(TypedPointer&& other) noexcept {
 			m_storage = other.m_storage;
 			m_pointer = reinterpret_cast<Base*>(m_storage.data());
 			return *this;
@@ -41,7 +41,7 @@ namespace ob::core {
 		TypedPointer(T* pointer) {
 #if OB_TYPED_POINTER_ENABLED
 			static_assert(sizeof(Pointer<T>) <= sizeof(m_storage));
-			if constexpr (std::is_same<T,void>::value)
+			if constexpr (std::is_same_v<T,void>)
 				m_pointer = new(m_storage.data())VoidPointer(pointer);
 			else
 				m_pointer = new(m_storage.data())Pointer<T>(pointer);
@@ -50,15 +50,15 @@ namespace ob::core {
 #endif
 		}
 
-		TypedPointer(void* ptr) : m_pointer(nullptr) { }
-		TypedPointer(std::nullptr_t) : m_pointer(nullptr) { }
+		explicit TypedPointer(void* ptr) : m_pointer(nullptr) { }
+		explicit TypedPointer(std::nullptr_t) : m_pointer(nullptr) { }
 
 		//! @brief		ポインタを設定
 		template<class T>
 		TypedPointer& operator=(T* pointer) {
 #if OB_TYPED_POINTER_ENABLED
 			static_assert(sizeof(Pointer<T>) <= sizeof(m_storage));
-			if constexpr (std::is_same<T, void>::value)
+			if constexpr (std::is_same_v<T, void>)
 				m_pointer = new(m_storage.data())VoidPointer(pointer);
 			else
 				m_pointer = new(m_storage.data())Pointer<T>(pointer);
@@ -88,6 +88,7 @@ namespace ob::core {
 	private:
 		class Base {
 		public:
+			virtual ~Base() = default;
 			virtual void* get() = 0;
 			virtual const void* get()const = 0;
 		};
@@ -98,10 +99,10 @@ namespace ob::core {
 				m_pointer = pointer;
 			}
 			void* get() override {
-				return (void*)m_pointer;
+				return static_cast<void *>(m_pointer);
 			}
 			const void* get() const override {
-				return (const void*)m_pointer;
+				return static_cast<const void *>(m_pointer);
 			}
 		private:
 			T* m_pointer;
@@ -123,7 +124,7 @@ namespace ob::core {
 	private:
 #if OB_TYPED_POINTER_ENABLED
 		Base* m_pointer = nullptr;
-		std::array<char,16> m_storage;
+		std::array<char,16> m_storage = {};
 #else
 		void* m_pointer = nullptr;
 #endif

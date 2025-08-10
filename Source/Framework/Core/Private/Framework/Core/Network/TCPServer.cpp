@@ -60,7 +60,7 @@ namespace ob::core {
 	bool TCPServer::open(u16 port) {
 
 		// ソケットの作成
-		m_socket = (s32)::socket(AF_INET, SOCK_STREAM, 0);
+		m_socket = static_cast<s32>(::socket(AF_INET, SOCK_STREAM, 0));
 		if (m_socket == INVALID_SOCKET) {
 			LOG_ERROR("[TCPServer] {}", GetWSALastErrorMessage());
 			close();
@@ -69,7 +69,7 @@ namespace ob::core {
 
 		// ポート再利用の設定
 		int reuseFlag = 1;
-		if (::setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuseFlag, sizeof(reuseFlag)) == -1) {
+		if (::setsockopt(m_socket, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<const char *>(&reuseFlag), sizeof(reuseFlag)) == -1) {
 			LOG_ERROR("[TCPServer] {}", GetWSALastErrorMessage());
 			close();
 			return false;
@@ -80,7 +80,7 @@ namespace ob::core {
 		addr.sin_family = AF_INET;
 		addr.sin_addr.s_addr = htonl(INADDR_ANY);
 		addr.sin_port = htons(port);
-		if (::bind(m_socket, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+		if (::bind(m_socket, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) == -1) {
 			LOG_ERROR("[TCPServer] {}", GetWSALastErrorMessage());
 			close();
 			return false;
@@ -105,7 +105,7 @@ namespace ob::core {
 	}
 
 	/// クライアントからの接続を受け入れる
-	auto TCPServer::accept() -> UPtr<TCPClient> {
+	auto TCPServer::accept() const -> UPtr<TCPClient> {
 		sockaddr_in clientAddr;
 		int addrLen = sizeof(clientAddr);
 		SOCKET socket = ::accept(m_socket, reinterpret_cast<sockaddr*>(&clientAddr), &addrLen);

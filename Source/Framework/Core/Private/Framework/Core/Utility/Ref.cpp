@@ -14,7 +14,7 @@ namespace ob::core
 
 	//! @brief		デストラクタ
 	RefObject::~RefObject() {
-		OB_ASSERT(m_referenceCount==0,"参照中のRefObjetctが解放されました。[count={}]", m_referenceCount.load());
+		OB_ASSERT(m_referenceCount==0,"参照中のRefObjectが解放されました。[count={}]", m_referenceCount.load());
 	}
 
 	//! @brief		参照カウントが0になったときの処理
@@ -25,7 +25,7 @@ namespace ob::core
 	//! @brief		参照カウントを増やす
 	void RefObject::retain() {
 
-		m_referenceCount++;
+		++m_referenceCount;
 
 	}
 

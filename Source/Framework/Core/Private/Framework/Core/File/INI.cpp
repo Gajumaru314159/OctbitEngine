@@ -47,14 +47,12 @@ namespace ob::core {
 	}
 
 	//! @brief  ファイルから設定をロードして生成
-	INI::INI(String path) {
+	INI::INI(StringView path) {
 		m_path = path;
 	}
 
 	//! @brief  ~デストラクタ
-	INI::~INI() {
-
-	}
+	INI::~INI() = default;
 
 	//! @brief  ファイルから設定をロード
 	bool INI::load(String path) {
@@ -86,10 +84,10 @@ namespace ob::core {
 	}
 
 	//! @brief  ファイルから設定をロード
-	bool INI::parse(String str) {
+	bool INI::parse(StringView text) {
 
 		std::basic_stringstream<Char> ss;
-		ss << str.c_str();
+		ss << std::string_view(text.data(),text.size());
 
 		std::basic_string<Char> buf;
 		String section;

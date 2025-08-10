@@ -3,7 +3,6 @@
 //! @author Gajumaru
 //***********************************************************
 #include <Framework/Core/Math/Vectors.h>
-#include <Framework/Core/Math/Matrix.h>
 #include <Framework/Core/Math/Quaternion.h>
 
 #include <Framework/Core/Math/IntVector4.h>
@@ -80,7 +79,7 @@ namespace ob::core {
     //! @param axis     回転軸
     Vec3& Vec3::rotate(Vec3 axis, f32 angle) {
         Quat q(axis, angle);
-        *this = axis * (*this);
+        *this = q * (*this);
         return *this;
     }
 

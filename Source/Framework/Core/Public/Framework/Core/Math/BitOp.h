@@ -69,7 +69,7 @@ namespace ob::core {
 		value = (value & 0x0F0F0F0F) + ((value >> 4) & 0x0F0F0F0F);
 		value = (value & 0x00FF00FF) + ((value >> 8) & 0x00FF00FF);
 		value = (value & 0x0000FFFF) + ((value >> 16) & 0x0000FFFF);
-		return (s32)value;
+		return static_cast<s32>(value);
 	}
 	constexpr s32 BitOp::GetBitCount(u64 value) {
 		value = (value & 0x5555555555555555) + ((value >> 1) & 0x5555555555555555);
@@ -78,7 +78,7 @@ namespace ob::core {
 		value = (value & 0x00FF00FF00FF00FF) + ((value >> 8) & 0x00FF00FF00FF00FF);
 		value = (value & 0x0000FFFF0000FFFF) + ((value >> 16) & 0x0000FFFF0000FFFF);
 		value = (value & 0x00000000FFFFFFFF) + ((value >> 32) & 0x00000000FFFFFFFF);
-		return (s32)value;
+		return static_cast<s32>(value);
 	}
 
 	//! @brief  最上位ビットのインデックスを取得(Most Significant Bit)

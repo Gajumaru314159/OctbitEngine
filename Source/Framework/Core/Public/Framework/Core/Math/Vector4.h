@@ -674,7 +674,8 @@ namespace ob::core {
 
 
     //! @brief 等価判定(許容誤差指定)
-    //! 
+    //!
+    //! @param v            評価値
     //! @param tolerance    許容誤差
     constexpr bool Vec4::equals(const Vec4& v, f32 tolerance)const noexcept {
         return

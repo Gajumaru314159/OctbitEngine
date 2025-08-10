@@ -93,13 +93,13 @@ namespace ob::core {
 	}
 
 	/// データを送信する
-	bool TCPClient::send(char* data, size_t size)
+	bool TCPClient::send(const char* data, size_t size)
 	{
 		if (!isConnected()) {
 			return false;
 		}
 
-		auto sentSize = ::send((SOCKET)m_socket, data, (int)size, 0);
+		auto sentSize = ::send((SOCKET)m_socket, data, static_cast<int>(size), 0);
 		if (sentSize == -1) {
 			disconnect();
 			return false;
@@ -114,7 +114,7 @@ namespace ob::core {
 			return 0;
 		}
 
-		auto receivedSize = ::recv((SOCKET)m_socket, data, (int)size, 0);
+		auto receivedSize = ::recv((SOCKET)m_socket, data, static_cast<int>(size), 0);
 		if (receivedSize == -1) {
 			disconnect();
 			return 0;

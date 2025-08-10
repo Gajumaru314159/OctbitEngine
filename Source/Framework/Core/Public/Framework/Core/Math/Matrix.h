@@ -3,7 +3,6 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Geometry/Size.h>
 #include <Framework/Core/Math/Vectors.h>
 #include <Framework/Core/Math/Rotation.h>
@@ -23,7 +22,7 @@ namespace ob::core {
 	//! @details    数学的表現は列優先表現です。Vec4は列ベクトルとして扱います。DirectXとは異なるので注意してください。
 	//!             行列A、B、Cとベクトルvがあるとき、数学同様<br>
 	//!				```v' = ABCv = A*B*C*v```<br>
-	//!             と記述しても正しい結果を得ることができますが、プログラムだと<br>
+	//!             と記述しても正しい結果を得られますが、プログラムだと<br>
 	//!				```v' = ABCv = ((A*B)*C)*v```<br>
 	//!             というように行列同士の計算が先にされパフォーマンス的に良くありません。
 	//!             複数の行列とベクトルを計算する場合は明示的に行列とベクトルの合成を先にするようにしてください。
@@ -388,7 +387,7 @@ namespace ob::core {
 
 	//! @brief 平行移動行列
 	//! 
-	//! @param position 移動量
+	//! @param trans 移動量
 	constexpr Matrix Matrix::Translate(Vec3 trans) {
 		return Translate(trans.x, trans.y, trans.z);
 	}
@@ -396,7 +395,7 @@ namespace ob::core {
 
 	//! @brief 回転行列
 	//! 
-	//! @param eulerAngles 回転量
+	//! @param rotation 回転量
 	inline Matrix Matrix::Rotate(Rot rotation) {
 		return Rotate(rotation.x, rotation.y, rotation.z);
 	}
@@ -404,7 +403,7 @@ namespace ob::core {
 
 	//! @brief 回転行列
 	//! 
-	//! @param rotation 回転量
+	//! @param quat 回転量
 	inline Matrix Matrix::Rotate(Quat quat) {
 		return quat.toMatrix();
 	}

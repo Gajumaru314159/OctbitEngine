@@ -143,7 +143,7 @@ template <> struct std::formatter<ob::core::UUID, ob::core::Char> {
 //===============================================================
 template<>
 struct std::hash<ob::core::UUID> {
-    constexpr size_t operator()(const ob::core::UUID& value)const {
+    constexpr size_t operator()(const ob::core::UUID& value)const noexcept {
 
         constexpr ob::u64 offset_basis = 14695981039346656037u;
         constexpr ob::u64 fnv_prime = 1099511628211u;

@@ -50,7 +50,7 @@ namespace ob::core {
 		//! 
 		//! @param path ファイルパス
 		//! @param mode モード
-		File(StringView path, FileOpenMode mode = FileOpenMode::Read);
+		explicit File(StringView path, FileOpenMode mode = FileOpenMode::Read);
 
 		//! @brief  デストラクタ
 		~File() override;

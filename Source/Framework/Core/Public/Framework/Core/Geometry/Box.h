@@ -30,7 +30,7 @@ namespace ob::core {
         //! 
         //! @details        指定された点群をすべて含む最小のボックスを構築する。
         //!                 要素数が1以下の時は Empty が設定される
-        Box(Span<Vec3> points)noexcept;
+        explicit Box(Span<Vec3> points)noexcept;
 
 
         //! @brief      始点と終点を指定して Box を設定
@@ -133,7 +133,7 @@ namespace ob::core {
     //! @cond
 
     //! @brief          デフォルトコンストラクタ(初期化なし)
-    inline Box::Box()noexcept 
+    inline Box::Box()noexcept
     {
     }
 
@@ -147,10 +147,10 @@ namespace ob::core {
 
     //! @brief          始点と終点を指定して Box を設定
     constexpr Box Box::FromTo(Vec3 from, Vec3 to) {
-        return Box(
+        return {
             Vec3::Abs(from - to),
             (from + to) * 0.5f
-        );
+        };
     }
 
 
@@ -239,7 +239,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     constexpr Box Box::Lerp(const Box& a, const Box& b, f32 t)noexcept {
-        return Box(Vec3::Lerp(a.size, b.size, t), Vec3::Lerp(a.center, b.center, t));
+        return {Vec3::Lerp(a.size, b.size, t), Vec3::Lerp(a.center, b.center, t)};
     }
 
     //! @endcond

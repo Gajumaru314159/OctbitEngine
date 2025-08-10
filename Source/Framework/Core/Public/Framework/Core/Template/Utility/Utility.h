@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CoreTypes.h>
 #include <type_traits>
 #include <algorithm>
 
@@ -20,7 +19,7 @@ namespace ob::core {
 
     //! @brief      二乗値の計算
     template<typename T>
-    inline constexpr T get_square(T value)noexcept(std::is_arithmetic<T>::value) {
+    inline constexpr T get_square(T value)noexcept(std::is_arithmetic_v<T>) {
         return value * value;
     }
 
@@ -29,8 +28,8 @@ namespace ob::core {
     //! 
     //! @param value       入力
     template<typename T>
-    inline constexpr T clamp01(T value)noexcept(std::is_arithmetic<T>::value) {
-        return std::clamp(value, (T)0, (T)1);
+    inline constexpr T clamp01(T value)noexcept(std::is_arithmetic_v<T>) {
+        return std::clamp(value, static_cast<T>(0), static_cast<T>(1));
     }
 
 
@@ -42,7 +41,7 @@ namespace ob::core {
     //! @retval true    範囲内
     //! @retval false   範囲外
     template<typename T>
-    inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(std::is_arithmetic<T>::value) {
+    inline constexpr bool is_in_range(T val, T minVal, T maxVal)noexcept(std::is_arithmetic_v<T>) {
         return (minVal <= val) && (val <= maxVal);
     }
 
@@ -54,14 +53,15 @@ namespace ob::core {
     //! @retval true    範囲内
     //! @retval false   範囲外
     template<typename T, typename TContainer>
-    inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(std::is_arithmetic<T>::value) {
-        return is_in_range<T>(index, (T)0, (T)container.size()-1);
+    inline constexpr bool is_in_range(T index, const TContainer& container)noexcept(std::is_arithmetic_v<T>) {
+        if (container.size() == 0) return false;
+        return is_in_range<T>(index, static_cast<T>(0), static_cast<T>(container.size())-1);
     }
 
 
     //! @brief          1<<digit
     template<typename T>
-    inline constexpr T get_bit(T digit)noexcept(std::is_arithmetic<T>::value) {
+    inline constexpr T get_bit(T digit)noexcept(std::is_arithmetic_v<T>) {
         return 1 << digit;
     }
 
@@ -73,7 +73,7 @@ namespace ob::core {
     //! @return                 アラインされた値
     template<typename T>
     inline constexpr T align_up(T val, size_t alignment) {
-        return (T)(((size_t)val + alignment - 1) & (~(alignment - 1)));
+        return static_cast<T>((static_cast<size_t>(val) + alignment - 1) & (~(alignment - 1)));
     }
 
 
@@ -84,7 +84,7 @@ namespace ob::core {
     //! @return                 アラインされた値
     template<typename T>
     inline constexpr T align_down(T val, size_t alignment) {
-        return (T)(((size_t)val) & (~(alignment - 1)));
+        return static_cast<T>(static_cast<size_t>(val) & (~(alignment - 1)));
     }
 
 
@@ -95,7 +95,7 @@ namespace ob::core {
     //! @return                 アラインされた値
     template<typename T>
     inline constexpr T align_near(T val, size_t alignment) {
-        return (T)((((size_t)val + alignment - 1) / alignment) * alignment);
+        return static_cast<T>(((static_cast<size_t>(val) + alignment - 1) / alignment) * alignment);
     }
 
 
@@ -107,7 +107,7 @@ namespace ob::core {
     //! @retval FALSE           アライメントされていない
     template<typename T>
     inline constexpr bool is_aligned(T val, size_t alignment) {
-        return !((size_t)val & (alignment - 1));
+        return !(static_cast<size_t>(val) & (alignment - 1));
     }
 
 
@@ -118,7 +118,7 @@ namespace ob::core {
     //! @retval true            更新あり
     //! @retval false           更新なし
     template<typename T>
-    inline constexpr bool update_max(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
+    inline constexpr bool update_max(T& out, T val)noexcept(std::is_arithmetic_v<T>) {
         if (val <= out)
             return false;
 
@@ -135,7 +135,7 @@ namespace ob::core {
     //! @retval true            更新あり
     //! @retval false           更新なし
     template<typename T>
-    inline constexpr bool update_min(T& out, T val)noexcept(std::is_arithmetic<T>::value) {
+    inline constexpr bool update_min(T& out, T val)noexcept(std::is_arithmetic_v<T>) {
         if (out <= val)
             return false;
 

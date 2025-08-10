@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
-#include <Framework/Core/Utility/ConstValue.h>
 #include <Framework/Core/String/StringView.h>
 
 namespace ob::core {
@@ -17,7 +16,7 @@ namespace ob::core {
 		static constexpr void Combine(size_t& seed, const T& v)
 		{
 			std::hash<T> hasher;
-			const std::size_t kMul = 0x9ddfea08eb382d69ULL;
+			constexpr std::size_t kMul = 0x9ddfea08eb382d69ULL;
 			size_t a = (hasher(v) ^ seed) * kMul;
 			a ^= (a >> 47);
 			size_t b = (seed ^ a) * kMul;

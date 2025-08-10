@@ -39,7 +39,7 @@ namespace ob::core {
         NameDictionary();
 
         //! @brief      デストラクタ
-        ~NameDictionary();
+        ~NameDictionary() override;
 
         //! @brief      Nameを作成して辞書に追加
         //! 

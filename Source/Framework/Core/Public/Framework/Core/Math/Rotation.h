@@ -102,7 +102,7 @@ namespace ob::core {
 		//===============================================================
 
 		//! @brief  NaNを含むか
-		bool isNaN();
+		bool isNaN() const;
 
 	public:
 
@@ -162,7 +162,7 @@ namespace ob::core {
 
 
 	//! @brief  NaNを含むか
-	inline bool Rot::isNaN() {
+	inline bool Rot::isNaN() const {
 		return
 			Math::IsNaN(x) ||
 			Math::IsNaN(y) ||
@@ -187,10 +187,10 @@ template <> struct std::formatter<ob::core::Rot, ob::core::Char> : std::formatte
 		auto mode = *ctx.begin();
 		if (mode == 'r' || mode == 'R') {
 			isRad = true;
-			itr++;
+			++itr;
 		}else if (mode == 'd' || mode == 'D') {
 			isRad = false;
-			itr++;
+			++itr;
 		}
 		ctx.advance_to(itr);
 		return base::parse(ctx);

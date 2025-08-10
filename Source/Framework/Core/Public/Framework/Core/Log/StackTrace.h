@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include<vector>
-#include<array>
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/Template/Container/Vector.h>

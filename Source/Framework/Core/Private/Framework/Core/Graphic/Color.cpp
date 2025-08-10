@@ -26,7 +26,7 @@ namespace ob::core {
 
     //! @brief ColorU8 を変換して初期化
     Color::Color(const IntColor& another) noexcept {
-        const f32 div = 1.0f / 255.0f;
+        constexpr f32 div = 1.0f / 255.0f;
         *this = Color(another.r * div, another.g * div, another.b * div, another.a * div);
     }
 

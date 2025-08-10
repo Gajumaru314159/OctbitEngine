@@ -10,12 +10,12 @@ namespace ob::core {
 
     namespace {
         //! @brief		std::filesystem::pathに変換
-        static std::filesystem::path ToStdPath(StringView path) {
+        std::filesystem::path ToStdPath(StringView path) {
             return std::filesystem::u8path((std::string_view)path);
         }
 
         //! @brief		Stringに変換
-        static String ToString(const std::filesystem::path& path) {
+        String ToString(const std::filesystem::path& path) {
             return reinterpret_cast<const char*>(path.u8string().c_str());
         }
     }

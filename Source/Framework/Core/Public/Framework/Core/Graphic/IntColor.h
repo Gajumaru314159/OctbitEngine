@@ -41,9 +41,9 @@ namespace ob::core {
 		//! @brief          コンストラクタ(輝度とアルファ値を指定して初期化)
 		//! 
 		//! @details		色成分を輝度で指定します。
-		//! @param grey	    輝度
+		//! @param gray	    輝度
 		//! @param a		アルファ
-		explicit constexpr IntColor(s32 grey, s32 a = 255) noexcept;
+		explicit constexpr IntColor(s32 gray, s32 a = 255) noexcept;
 
 
 		//===============================================================
@@ -134,10 +134,10 @@ namespace ob::core {
 	//! @param b		青成分
 	//! @param a		アルファ
 	constexpr IntColor::IntColor(s32 r, s32 g, s32 b, s32 a) noexcept
-		: r((u8)std::clamp(r, 0, 255))
-		, g((u8)std::clamp(g, 0, 255))
-		, b((u8)std::clamp(b, 0, 255))
-		, a((u8)std::clamp(a, 0, 255))
+		: r(static_cast<u8>(std::clamp(r, 0, 255)))
+		, g(static_cast<u8>(std::clamp(g, 0, 255)))
+		, b(static_cast<u8>(std::clamp(b, 0, 255)))
+		, a(static_cast<u8>(std::clamp(a, 0, 255)))
 	{
 	}
 
@@ -145,7 +145,7 @@ namespace ob::core {
 	//! @brief			コンストラクタ
 	//! 
 	//! @details		色成分を輝度で指定します。
-	//! @param grey	輝度
+	//! @param gray	輝度
 	//! @param a		アルファ
 	constexpr IntColor::IntColor(s32 gray, s32 a) noexcept
 		: IntColor(gray, gray, gray, a)

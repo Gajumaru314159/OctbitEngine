@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/Core/Allocator/Heap.h>
 #include <Framework/Core/Thread/Mutex.h>
+#include <Framework/Core/Thread/ScopeLock.h>
 
 namespace ob::core {
 

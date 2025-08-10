@@ -16,9 +16,9 @@ namespace ob::core {
 
 
     byte DigitCharToHex(int ch) {
-        if ('0' <= ch && ch <= '9') return (byte)(ch - 48);
-        if ('a' <= ch && ch <= 'f') return (byte)(ch - 87);
-        if ('A' <= ch && ch <= 'F') return (byte)(ch - 55);
+        if ('0' <= ch && ch <= '9') return static_cast<byte>(ch - 48);
+        if ('a' <= ch && ch <= 'f') return static_cast<byte>(ch - 87);
+        if ('A' <= ch && ch <= 'F') return static_cast<byte>(ch - 55);
         return 0;
     }
 

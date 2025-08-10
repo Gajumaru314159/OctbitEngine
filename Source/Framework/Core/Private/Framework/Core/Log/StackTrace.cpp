@@ -50,10 +50,10 @@ namespace ob::core {
 		IMAGEHLP_LINE64 line{};
 
 		for (s32 i = 0; i < limit; ++i) {
-			if (!::SymFromAddr(process, (DWORD64)(stack[i]), nullptr, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
+			if (!::SymFromAddr(process, reinterpret_cast<DWORD64>(stack[i]), nullptr, reinterpret_cast<SYMBOL_INFO*>(symbol))) {
 				continue;
 			}
-			if (!::SymGetLineFromAddr64(process, (DWORD64)(stack[i]), &disp, &line)) {
+			if (!::SymGetLineFromAddr64(process, reinterpret_cast<DWORD64>(stack[i]), &disp, &line)) {
 				continue;
 			}
 

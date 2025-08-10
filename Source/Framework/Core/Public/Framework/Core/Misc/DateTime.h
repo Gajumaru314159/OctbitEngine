@@ -66,7 +66,7 @@ namespace ob::core {
 		//!				* yyyy	年 (4 桁の数値)
 		//!				* yy	年 (00 ～ 99)
 		//!				* y		年 ( 0 ～ 99)
-		//!				* MMMM	英語の月名 (January-Febuarty)
+		//!				* MMMM	英語の月名 (January-February)
 		//!				* MMM	英語の月名の略称 (Jan-Feb)
 		//!				* MM	月 (01 ～ 12)
 		//!				* M		月 ( 1 ～ 12)

@@ -6,7 +6,6 @@
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/String/StringView.h>
 #include <Framework/Core/Utility/Singleton.h>
-#include <Framework/Core/Utility/Ref.h>
 #include <Framework/Core/Utility/Pimpl.h>
 
 namespace ob::core {

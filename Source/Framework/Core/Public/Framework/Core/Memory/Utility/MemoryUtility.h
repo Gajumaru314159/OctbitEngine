@@ -10,7 +10,7 @@ namespace ob::core {
     //! @brief  入力ポインタからオフセットバイト進んだポインタを取得
     template<typename T>
     constexpr T* GetOffsetPtr(const void* pBuffer, ptrdiff_t offset)noexcept {
-        return reinterpret_cast<T*>(reinterpret_cast<byte*>(const_cast<void*>(pBuffer)) + offset);
+        return reinterpret_cast<T*>(static_cast<byte*>(const_cast<void*>(pBuffer)) + offset);
     }
 
     //! @brief  入力ポインタからオフセットバイト進んだポインタを取得

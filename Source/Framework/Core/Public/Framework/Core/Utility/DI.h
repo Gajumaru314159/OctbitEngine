@@ -144,7 +144,7 @@ namespace ob::core {
         template<class T, class... Args>
         struct FactoryBase<T, arg_types<Args...>> {
             static void* Create(const ServiceInjector& injector, ServiceContainer& container) {
-                return (void*)new T(Args{ injector,container }...);
+                return static_cast<void *>(new T(Args{injector, container}...));
             }
         };
 
@@ -226,7 +226,7 @@ namespace ob::core {
             };
         }
         //! @brief      サービス生成
-        void* create(ServiceContainer& container);
+        void* create(ServiceContainer& container) override;
     private:
         friend class ServiceInjector;
         ServiceInjector& m_injector;
@@ -251,7 +251,7 @@ namespace ob::core {
                 m_instance = instance;
                 m_destructible = destructible;
             }
-            ~ServiceHolder() {
+            ~ServiceHolder() override {
                 if (m_instance && m_destructible) {
                     delete m_instance;
                 }
@@ -287,18 +287,18 @@ namespace ob::core {
         T* get()const {
             auto found = m_indices.find(Type::Get<T>());
             if (found == m_indices.end()) return nullptr;
-            return reinterpret_cast<T*>(m_services.at(found->second)->get());
+            return static_cast<T*>(m_services.at(found->second)->get());
         }
 
         //! @brief      サービスが存在しているか
         bool has(Type type)const {
-            return m_indices.count(type);
+            return m_indices.contains(type);
         }
 
         //! @brief      サービスが存在しているか
         template<class T>
         bool has()const {
-            return m_indices.count(Type::Get<T>());
+            return m_indices.contains(Type::Get<T>());
         }
 
     private:

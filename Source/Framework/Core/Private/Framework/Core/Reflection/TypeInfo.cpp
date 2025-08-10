@@ -19,7 +19,7 @@ namespace ob::core {
 
 	bool TypeInfo::isSuperClassOf(const Type& base)const {
 
-		if(bases.count(base))return true;
+		if(bases.contains(base))return true;
 
 		for (auto& base2 : bases) {
 			if (auto info = TypeInfoManager::Find(base2)) {
@@ -48,7 +48,7 @@ namespace ob::core {
 		}
 		return nullptr;
 	}
-	void TypeInfo::Visit(const std::function<void(const TypeInfo&)> func) {
+	void TypeInfo::Visit(const std::function<void(const TypeInfo&)>& func) {
 		if (auto manager = TypeInfoManager::Get()) {
 			manager->visit(func);
 		}

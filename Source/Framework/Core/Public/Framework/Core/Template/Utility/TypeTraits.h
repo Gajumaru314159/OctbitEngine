@@ -23,8 +23,8 @@ namespace ob::core {
 	template < typename T >
 	struct is_iterator<T,
 		std::enable_if_t<
-			std::is_base_of<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value || 
-			std::is_base_of<std::output_iterator_tag, typename std::iterator_traits<T>::iterator_category>::value
+			std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<T>::iterator_category> ||
+			std::is_base_of_v<std::output_iterator_tag, typename std::iterator_traits<T>::iterator_category>
 		>
 	> : std::true_type {};
 

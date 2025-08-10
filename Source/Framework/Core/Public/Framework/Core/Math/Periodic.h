@@ -31,7 +31,7 @@ namespace ob::core {
 
         //! @brief  矩形波に従って周期的に[0,1]の値を返す
         static constexpr f32 Square0_1(f32 period, f32 t)noexcept {
-            return (f32)(static_cast<s32>(t / period * 0.5f) % 2);
+            return static_cast<f32>(static_cast<s32>(t / period * 0.5f) % 2);
         }
 
 
@@ -48,13 +48,13 @@ namespace ob::core {
 
 
         //! @brief  鋸波に従って周期的に[-1,1]の値を返す
-        static f32 Sawthooth1_1(f32 period, f32 t)noexcept {
-            return Sawthooth0_1(period, t) * 2.0f - 1.0f;
+        static f32 Sawtooth1_1(f32 period, f32 t)noexcept {
+            return Sawtooth0_1(period, t) * 2.0f - 1.0f;
         }
 
 
         //! @brief  鋸波に従って周期的に[0,1]の値を返す
-        static f32 Sawthooth0_1(f32 period, f32 t)noexcept {
+        static f32 Sawtooth0_1(f32 period, f32 t)noexcept {
             return Math::Fract(t / period);
         }
 

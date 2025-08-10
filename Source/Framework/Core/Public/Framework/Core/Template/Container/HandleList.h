@@ -7,8 +7,8 @@
 #include <iterator>
 #include <memory>
 #include <optional>
-#include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/Thread/SpinLock.h>
+#include <Framework/Core/Thread/ScopeLock.h>
 #include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Utility/Nonmovable.h>
 
@@ -130,7 +130,7 @@ namespace ob::core {
 			friend class HandleList<T>;
 		public:
 			using this_type = const_iterator;                                                                               //!< 型
-			using difference_type = typename HandleList<T>::difference_type;												//!< ポインタ差分型
+			using difference_type = difference_type;																		//!< ポインタ差分型
 			using value_type = T;                                                                                           //!< インスタンス型
 			using pointer = const T*;                                                                                       //!< ポインタ型
 			using reference = const T&;																						//!< 参照型
@@ -310,6 +310,15 @@ namespace ob::core {
 	template<typename T>
 	inline HandleList<T>::HandleList(){
 		clear_impl();
+	}
+
+	template<typename T>
+	HandleList<T>::HandleList(this_type &&x) noexcept {
+	}
+
+	template<typename T>
+	typename HandleList<T>::this_type & HandleList<T>::operator=(this_type &&x) noexcept {
+		return *this;
 	}
 
 

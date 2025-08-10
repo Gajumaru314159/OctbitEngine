@@ -140,17 +140,16 @@ namespace ob::core {
 				continue;
 			}
 
-			if (false);
-			else if (read("yyyyy"))out += Format("{:05}", year);
+			/**/ if (read("yyyyy"))out += Format("{:05}", year);
 			else if (read("yyyy"))out += Format("{:04}", year);
 			else if (read("yy"))out += Format("{:02}", year % 100);
 			else if (read("y"))out += Format("{}", year % 100);
-			else if (read("MMMM"))out += MONTH_TEXT[((u32)month + 11) % 12];
-			else if (read("MMM"))out += MONTH_SHORT_TEXT[((u32)month + 11) % 12];
+			else if (read("MMMM"))out += MONTH_TEXT[(static_cast<u32>(month) + 11) % 12];
+			else if (read("MMM"))out += MONTH_SHORT_TEXT[(static_cast<u32>(month) + 11) % 12];
 			else if (read("MM"))out += Format("{:02}", month);
 			else if (read("M"))out += Format("{:}", month);
-			else if (read("dddd"))out += DAY_OF_WEEK_TEXT[((u32)enum_cast(dayOfWeek())) % 7];
-			else if (read("ddd"))out += DAY_OF_WEEK_SHORT_TEXT[((u32)enum_cast(dayOfWeek())) % 7];
+			else if (read("dddd"))out += DAY_OF_WEEK_TEXT[static_cast<u32>(enum_cast(dayOfWeek())) % 7];
+			else if (read("ddd"))out += DAY_OF_WEEK_SHORT_TEXT[static_cast<u32>(enum_cast(dayOfWeek())) % 7];
 			else if (read("dd"))out += Format("{:02}", day);
 			else if (read("d"))out += Format("{:}", day);
 			else if (read("tt"))out += isMorning() ? "AM" : "PM";

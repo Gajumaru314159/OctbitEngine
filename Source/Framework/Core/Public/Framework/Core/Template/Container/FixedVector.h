@@ -126,7 +126,7 @@ namespace ob::core {
             return m_size;
         }
 
-        constexpr size_type max_size() const noexcept {
+        static constexpr size_type max_size() noexcept {
             return N;
         }
 
@@ -145,7 +145,7 @@ namespace ob::core {
             m_size = count;
         }
 
-        constexpr size_type capacity() const noexcept {
+        static constexpr size_type capacity() noexcept {
             return N;
         }
 
@@ -367,7 +367,7 @@ namespace ob::core {
 
     private:
         std::array<T, N> m_data;
-        size_type m_size;
+        size_type m_size = 0;
     };
 
 

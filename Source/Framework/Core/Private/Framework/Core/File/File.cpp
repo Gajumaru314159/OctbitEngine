@@ -30,9 +30,7 @@ namespace ob::core {
 	public:
 
 		//! @brief  コンストラクタ
-		FileImpl() {
-
-		}
+		FileImpl() = default;
 
 		//! @brief  コンストラクタ
 		FileImpl(StringView path, FileOpenMode mode)
@@ -192,9 +190,9 @@ namespace ob::core {
 
 	private:
 		FILE* m_fp = nullptr;
-		FileOpenMode m_mode;
+		FileOpenMode m_mode = FileOpenMode::Read;
 		String m_path;
-		size_t m_size;
+		size_t m_size = 0;
 	};
 
 
@@ -269,7 +267,7 @@ namespace ob::core {
 
 
 	//! @brief  デフォルトコンストラクタ
-	File::File() {}
+	File::File() = default;
 	//! @brief  コンストラクタ
 	File::File(StringView path, FileOpenMode mode) :m_impl(std::make_unique<FileImpl>(path, mode)) {}
 	//! @brief  デストラクタ

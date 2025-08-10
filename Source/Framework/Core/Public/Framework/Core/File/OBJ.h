@@ -12,7 +12,7 @@ namespace ob::core {
 	public:
 		OBJ() = default;
 
-		bool save(StringView);
+		bool save(StringView) const;
 
 		void comment(StringView comment);
 		void mtllib(StringView filename);
@@ -135,7 +135,7 @@ namespace ob::core {
 	//! @brief		Material Template Library Writer
 	class MTL {
 	public:
-		void save(StringView);
+		void save(StringView) const;
 
 		void newmtl(StringView name);
 		void ambient(Color color = {0.2f,0.2f,0.2f}, StringView tex = "");

@@ -28,8 +28,8 @@ namespace ob::core {
 	Property& Property::assign(const Any& value) {
 		if (m_info && m_ownerInfo) {
 			if (isWritable()) {
-				Any tempOowner(*m_ownerInfo, m_owner);
-				m_info->setter(tempOowner,value);
+				Any tempOwner(*m_ownerInfo, m_owner);
+				m_info->setter(tempOwner,value);
 			}
 		}
 		return *this;
@@ -75,14 +75,14 @@ namespace ob::core {
 			if (m_writableOwner) {
 				return Any(*m_ownerInfo, m_owner);
 			} else {
-				return Any(*m_ownerInfo, (const void*)m_owner);
+				return Any(*m_ownerInfo, static_cast<const void *>(m_owner));
 			}
 		}
 		return {};
 	}
 	Any Property::owner()const {
 		if (m_ownerInfo && m_owner) {
-			return Any(*m_ownerInfo, (const void*)m_owner);
+			return Any(*m_ownerInfo, static_cast<const void *>(m_owner));
 		}
 		return {};
 	}
@@ -107,10 +107,10 @@ namespace ob::core {
 	}
 
 
-	void Property::serealize([[maybe_unused]] BinaryWriter& writer) {
+	void Property::serialize([[maybe_unused]] BinaryWriter& writer) {
 		
 	}
-	void Property::deserealize([[maybe_unused]] BinaryReader& reader) {
+	void Property::deserialize([[maybe_unused]] BinaryReader& reader) {
 	
 	}
 
@@ -158,7 +158,7 @@ namespace ob::core {
 					return { *m_info,  m_pointer ,property };
 				}
 				else {
-					return { *m_info, (const void*)(m_pointer),property };
+					return { *m_info, static_cast<const void *>(m_pointer),property };
 				}
 			}
 		}

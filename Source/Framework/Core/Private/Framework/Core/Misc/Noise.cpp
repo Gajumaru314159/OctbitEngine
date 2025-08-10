@@ -90,6 +90,9 @@ namespace ob::core {
     //! 
     //! @param octaves     何回重ね合わせるか
     //! @param persistence 詳細なノイズの強度
+    //! @param x            サンプリングX座標
+    //! @param y            サンプリングY座標
+    //! @param z            サンプリングZ座標
     f32 Noise::PerlinOctave(s32 octaves, f32 persistence, f32 x, f32 y, f32 z) {
         f32 result = 0.0f;
         f32 amplitude = 1.0f;

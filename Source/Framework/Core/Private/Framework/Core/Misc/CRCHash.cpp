@@ -10,7 +10,7 @@ namespace ob::core {
 
     namespace {
         // CRCテーブル
-        static const u32 g_crctab[256] =
+        static constexpr u32 g_crctab[256] =
         {
             0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
             0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4, 0xe0d5e91e, 0x97d2d988,
@@ -63,10 +63,6 @@ namespace ob::core {
 
 
     //! @brief 指定した文字列のハッシュ値を求める
-    //! 
-    //! @param str 元文字配列
-    //! @param len 配列の長さ
-    //! @return ハッシュ値
     static u32 CalcCRCHash(gsl::span<const byte> bytes) {
         u32 hash = static_cast<u32>(bytes.size());
         for (s32 i = 0; i < bytes.size(); ++i) {
@@ -86,7 +82,7 @@ namespace ob::core {
     u32 CRCHash::Compute(const char* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>((len < 0) ? strlen(str) : len);
-        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
+        return CalcCRCHash(gsl::span<const byte>(reinterpret_cast<const byte *>(str), len));
     }
 
 
@@ -98,7 +94,7 @@ namespace ob::core {
     u32 CRCHash::Compute(const wchar_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? wcslen(str) : len) * sizeof(wchar_t));
-        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
+        return CalcCRCHash(gsl::span<const byte>(reinterpret_cast<const byte *>(str), len));
     }
 
 
@@ -110,7 +106,7 @@ namespace ob::core {
     u32 CRCHash::Compute(const char16_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? std::char_traits<char16_t>::length(str) : len) * sizeof(char16_t));
-        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
+        return CalcCRCHash(gsl::span<const byte>(reinterpret_cast<const byte *>(str), len));
     }
 
 
@@ -122,7 +118,7 @@ namespace ob::core {
     u32 CRCHash::Compute(const char32_t* str, s32 len) {
         if (str == nullptr)return 0;
         len = static_cast<s32>(((len < 0) ? std::char_traits<char32_t>::length(str) : len) * sizeof(char32_t));
-        return CalcCRCHash(gsl::span<const byte>((const byte*)(str), len));
+        return CalcCRCHash(gsl::span<const byte>(reinterpret_cast<const byte *>(str), len));
     }
 
 

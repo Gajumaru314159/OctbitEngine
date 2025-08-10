@@ -114,7 +114,7 @@ namespace ob::core {
 template<>
 struct std::hash<ob::core::Name> {
 public:
-    size_t operator()(const ob::core::Name& name)const {
+    size_t operator()(const ob::core::Name& name)const noexcept {
         return name.m_hash;
     }
 };

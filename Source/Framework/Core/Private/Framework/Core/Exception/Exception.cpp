@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Core/Exception/Exception.h>
-#include <Framework/Core/String/Format.h>
 
 namespace ob::core {
 
@@ -23,8 +22,6 @@ namespace ob::core {
 
 
     //! @brief デストラクタ
-    Exception::~Exception() {
-
-    }
+    Exception::~Exception() = default;
 
 }

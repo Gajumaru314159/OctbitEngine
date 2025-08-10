@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Math.h>
-#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 
@@ -376,7 +375,7 @@ namespace ob::core {
 
     //! @brief 単項マイナス演算子
     constexpr IntVec2 IntVec2::operator - () const noexcept {
-        return IntVec2(-x, -y);
+        return {-x, -y};
     }
 
 
@@ -436,7 +435,7 @@ namespace ob::core {
 
     //! @brief ベクトルの各要素の絶対値からベクトルを作成
     constexpr IntVec2 IntVec2::Abs(const IntVec2& v) noexcept {
-        return IntVec2(Math::Abs(v.x), Math::Abs(v.y));
+        return {Math::Abs(v.x), Math::Abs(v.y)};
     }
 
 
@@ -462,13 +461,13 @@ namespace ob::core {
 
     //! @brief 二つのベクトルの各要素の大きいほうからベクトルを生成
     constexpr IntVec2 IntVec2::Max(const IntVec2& a, const IntVec2& b) noexcept {
-        return IntVec2(std::max(a.x, b.x), std::max(a.y, b.y));
+        return {std::max(a.x, b.x), std::max(a.y, b.y)};
     }
 
 
     //! @brief 二つのベクトルの各要素の小さいほうからベクトルを生成
     constexpr IntVec2 IntVec2::Min(const IntVec2& a, const IntVec2& b) noexcept {
-        return IntVec2(std::min(a.x, b.x), std::min(a.y, b.y));
+        return {std::min(a.x, b.x), std::min(a.y, b.y)};
     }
 
     //! @endcond

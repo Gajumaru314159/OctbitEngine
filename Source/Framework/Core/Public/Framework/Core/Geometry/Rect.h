@@ -27,13 +27,13 @@ namespace ob::core {
 
 
         //! @brief      コンストラクタ(サイズ/中心指定)
-        constexpr Rect(const Vec2& center, const Vec2& size = Vec2::Zero) noexcept;
+        explicit constexpr Rect(const Vec2& size, const Vec2& center = Vec2::Zero) noexcept;
 
 
         //! @brief      コンストラクタ(点群指定)
         //! 
         //! @details    指定された点群をすべて含むボックスを構築する
-        Rect(const gsl::span<Vec2>& points) noexcept;
+        explicit Rect(const gsl::span<Vec2>& points) noexcept;
 
 
         //===============================================================
@@ -61,7 +61,7 @@ namespace ob::core {
 
 
         //! @brief          矩形の論理積
-        constexpr Rect operator&(const Rect& rhs) noexcept;
+        constexpr Rect operator&(const Rect& rhs) const noexcept;
 
 
         //! @brief          矩形の論理積
@@ -221,13 +221,13 @@ namespace ob::core {
 
 
     //! @brief          矩形の論理積
-    constexpr Rect Rect::operator&(const Rect& rhs) noexcept {
-        return Rect(
+    constexpr Rect Rect::operator&(const Rect& rhs) const noexcept {
+        return {
             Math::Max(left, rhs.left),
             Math::Max(top, rhs.top),
             Math::Min(right, rhs.right),
             Math::Min(bottom, rhs.bottom)
-        );
+        };
     }
 
 
@@ -240,61 +240,61 @@ namespace ob::core {
 
     //! @brief      左上
     constexpr Vec2 Rect::tl()const noexcept {
-        return Vec2(left, top);
+        return {left, top};
     }
 
 
     //! @brief      右上
     constexpr Vec2 Rect::tr()const noexcept {
-        return Vec2(right, top);
+        return {right, top};
     }
 
 
     //! @brief      左下
     constexpr Vec2 Rect::bl()const noexcept {
-        return Vec2(left, bottom);
+        return {left, bottom};
     }
 
 
     //! @brief      右下
     constexpr Vec2 Rect::br()const noexcept {
-        return Vec2(right, bottom);
+        return {right, bottom};
     }
 
 
     //! @brief      中央
     constexpr Vec2 Rect::center()const noexcept {
-        return Vec2((left + right) * 0.5f, (top + bottom) * 0.5f);
+        return {(left + right) * 0.5f, (top + bottom) * 0.5f};
     }
 
 
     //! @brief      上辺の中央
     constexpr Vec2 Rect::topCenter()const noexcept {
-        return Vec2((left + right) * 0.5f, top);
+        return {(left + right) * 0.5f, top};
     }
 
 
     //! @brief      下辺の中央
     constexpr Vec2 Rect::bottomCenter()const noexcept {
-        return Vec2((left + right) * 0.5f, bottom);
+        return {(left + right) * 0.5f, bottom};
     }
 
 
     //! @brief      左辺の中央
     constexpr Vec2 Rect::leftCenter()const noexcept {
-        return Vec2(left, (top + bottom) * 0.5f);
+        return {left, (top + bottom) * 0.5f};
     }
 
 
     //! @brief      右辺の中央
     constexpr Vec2 Rect::rightCenter()const noexcept {
-        return Vec2(right, (top + bottom) * 0.5f);
+        return {right, (top + bottom) * 0.5f};
     }
 
 
     //! @brief      高さ
     constexpr Vec2 Rect::size()const noexcept {
-        return Vec2(width(), height());
+        return {width(), height()};
     }
 
 
@@ -340,13 +340,13 @@ namespace ob::core {
     //! @param b    終了
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
-    constexpr Rect Lerp(Rect a, Rect b, f32 t) noexcept {
-        return Rect(
+    constexpr Rect Rect::Lerp(Rect a, Rect b, f32 t) noexcept {
+        return {
             Math::Lerp(a.left, b.left, t),
             Math::Lerp(a.top, b.top, t),
             Math::Lerp(a.right, b.right, t),
             Math::Lerp(a.bottom, b.bottom, t)
-        );
+        };
     }
 
 

@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Math/Math.h>
-#include <Framework/Core/Template/include.h>
 
 namespace ob::core {
 

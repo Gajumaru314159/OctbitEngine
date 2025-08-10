@@ -34,7 +34,7 @@ namespace ob::core {
 
 		void clear() {
 			while (dequeue()) {
-				// NTOTHING TO DO
+				// NOTHING TO DO
 			}
 		}
 		void enqueue(T& instance) {
@@ -67,10 +67,11 @@ namespace ob::core {
 			return m_top == nullptr;
 		}
 	private:
-		T*& get_next(T* node) {
-			return (T*&)(node->*pMember);
+		static T*& get_next(T* node) {
+			return static_cast<T *&>(node->*pMember);
 		}
-		void set_next(T* node, T* next) {
+
+		static void set_next(T* node, T* next) {
 			(node)->*pMember = next;
 		}
 	private:
@@ -151,7 +152,7 @@ namespace ob::core {
 			Deleter{}(node.instance);
 
 			node.instance = nullptr;
-			node.version++;
+			++node.version;
 
 			m_queue.enqueue(node);
 		}
@@ -214,7 +215,7 @@ namespace ob::core {
 		void remove(const handle_type& handle) {
 			if (handle.empty())return;
 			ScopeLock lock(m_lock);
-			if (m_disposedSet.count(handle.id()))return;
+			if (m_disposedSet.contains(handle.id()))return;
 			m_disposedSet.emplace(handle.id());
 			m_disposeQueue.push_back(handle);
 		}

@@ -40,7 +40,7 @@ namespace ob::core {
         Bitmap(s32 width, s32 height, IntColor color = IntColor::Black);
         template<class TGen>
         Bitmap(s32 width, s32 height,TGen generator);
-        Bitmap(StringView path,ImageFormat fotrmat = ImageFormat::Unspecified);
+        explicit Bitmap(StringView path,ImageFormat format = ImageFormat::Unspecified);
 
 
         //===============================================================

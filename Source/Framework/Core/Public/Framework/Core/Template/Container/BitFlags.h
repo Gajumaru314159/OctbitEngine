@@ -11,12 +11,12 @@ namespace ob::core {
 	//! @brief		enum値をビットフラグとして扱うためのラップクラス
 	//! @details	enum型の内部値が1以上TBitsTypeの最大値以下の2のべき乗である必要があります。
 	//! @tparam		TEnum ビットフラグに用いるenum型
-	//! @tparam		BitType 内部でビットを管理する変数の型
+	//! @tparam		TBitsType 内部でビットを管理する変数の型
 	template<typename TEnum, typename TBitsType = u32>
 	class BitFlags {
 	public:
 
-		//! @brief bit_flagss<TEnum, TBitsType>
+		//! @brief bit_flags<TEnum, TBitsType>
 		using this_type = BitFlags<TEnum, TBitsType>;
 
 	public:
@@ -71,7 +71,7 @@ namespace ob::core {
 		//! @brief ビット反転演算子
 		BitFlags<TEnum> operator~() const {
 			BitFlags<TEnum> result;
-			result.m_bits = (TBitsType)(~m_bits);
+			result.m_bits = static_cast<TBitsType>(~m_bits);
 			return result;
 		}
 

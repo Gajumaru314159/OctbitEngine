@@ -16,7 +16,7 @@ namespace ob::core {
 	//! @endcond
 
 	//! @brief デリゲート
-	//! @details デリゲートは関数ポインタ、メンバ関数ポインタ、ラムダ式などを保持し、呼び出すことができる。
+	//! @details デリゲートは関数ポインタ、メンバ関数ポインタ、ラムダ式などを保持し、呼び出す。
 	template <class R, class... Args, std::size_t BufferSize>
 	class Delegate<R(Args...), BufferSize> {
 	public:

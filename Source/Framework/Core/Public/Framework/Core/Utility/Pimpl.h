@@ -25,12 +25,12 @@ namespace ob::core {
         {}
 
         //! @brief  ムーブコンストラクタ
-        Pimpl(Pimpl && rhs)
+        Pimpl(Pimpl && rhs) noexcept
             : m_impl(std::move(rhs.m_impl))
         {}
 
         //! @brief  ムーブ代入演算子
-        Pimpl& operator =(Pimpl && rhs){
+        Pimpl& operator =(Pimpl && rhs) noexcept {
             m_impl = std::move(rhs.m_impl);
             return *this;
         }

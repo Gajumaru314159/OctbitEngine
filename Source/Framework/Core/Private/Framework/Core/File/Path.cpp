@@ -9,12 +9,12 @@ namespace ob::core {
 
 	namespace {
 		//! @brief		std::filesystem::pathに変換
-		static std::filesystem::path ToStdPath(StringView path) {
+		std::filesystem::path ToStdPath(StringView path) {
 			return std::filesystem::u8path((std::string_view)path);
 		}
 
 		//! @brief		Stringに変換
-		static String ToString(const std::filesystem::path& path) {
+		String ToString(const std::filesystem::path& path) {
 			return reinterpret_cast<const char*>(path.u8string().c_str());
 		}
 	}
@@ -49,11 +49,12 @@ namespace ob::core {
 	}
 
 	//! @brief		ファイルパスから拡張子を取得
+	//! @param		path	ファイルパス
 	//! @param		withDot	ドットを含めるか
 	//! @details	例：.txt / txt
 	String Path::Extension(StringView path, WithDot withDot) {
 		auto pos = path.rfind('.');
-		if (pos == path.npos) return {};
+		if (pos == StringView::npos) return {};
 		if (!withDot) pos++;
 		return String(path.substr(pos));
 	}
@@ -111,14 +112,14 @@ namespace ob::core {
 	//! @brief		ファイルパスの拡張子を削除
 	String Path::RemoveExtension(StringView path) {
 		auto pos = path.rfind('.');
-		if (pos == path.npos) return String(path);
+		if (pos == StringView::npos) return String(path);
 		return String(path.substr(0,pos));
 	}
 
 	//! @brief		ファイルパスのファイル名を削除
 	String Path::RemoveFileName(StringView path) {
 		auto pos = path.rfind(Separator());
-		if (pos == path.npos) return String(path);
+		if (pos == StringView::npos) return String(path);
 		return String(path.substr(0, pos+1));
 	}
 

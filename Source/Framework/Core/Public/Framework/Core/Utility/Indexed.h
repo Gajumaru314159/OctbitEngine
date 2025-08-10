@@ -3,11 +3,10 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CorePrivate.h>
 
 namespace ob::core {
 
-    //! @brief  インデックス付きEnumlator
+    //! @brief  インデックス付きEnumerator
 	template <class Type, class TItr = decltype(std::begin(std::declval<Type>())), class = decltype(std::end(std::declval<Type>()))>
 	inline constexpr auto IndexedRef(Type&& iterable)
 	{
@@ -33,7 +32,7 @@ namespace ob::core {
 		return IterableWrapper{ std::forward<Type>(iterable) };
 	}
 
-	//! @brief		インデックス付きEnumlator
+	//! @brief		インデックス付きEnumerator
 	//! 
 	//! @details	使用方法
 	//!				```cpp
@@ -47,7 +46,7 @@ namespace ob::core {
 		return IndexedRef<Type, TItr>(std::forward<Type>(iterable));
 	}
 
-	//! @brief  インデックス付き逆Enumlator
+	//! @brief  インデックス付き逆Enumerator
 	template <class Type, class TItr = decltype(std::rbegin(std::declval<Type>())), class = decltype(std::rend(std::declval<Type>()))>
 	inline constexpr auto ReverseIndexedRef(Type&& iterable)
 	{
@@ -70,7 +69,7 @@ namespace ob::core {
 		return IterableWrapper{ std::forward<Type>(iterable) };
 	}
 
-	//! @brief  インデックス付き逆Enumlator
+	//! @brief  インデックス付き逆Enumerator
 	template <class Type, class TItr = decltype(std::rbegin(std::declval<Type>())), class = decltype(std::rend(std::declval<Type>()))>
 	inline constexpr auto ReverseIndexed(Type&& iterable)
 	{

@@ -6,7 +6,6 @@
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/Format.h>
 #include <string_view>
-#include <ostream>
 
 namespace ob::core {
 

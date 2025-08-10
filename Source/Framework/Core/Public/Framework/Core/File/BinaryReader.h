@@ -20,7 +20,7 @@ namespace ob::core {
 		//! @details ストリームからバイナリデータを読み込む。コンストラクタに渡す Stream はBinaryReaderより後に解放される必要があります。
 		//! @param stream	 入力ストリーム
 		//! @param byteOrder 入力ストリームのバイトオーダー
-		BinaryReader(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);
+		explicit BinaryReader(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);
 		~BinaryReader();	//!< デストラクタ
 		s8  readS8();		//!< s8 を読み込む
 		s16 readS16();		//!< s16 を読み込む
@@ -36,8 +36,8 @@ namespace ob::core {
 
 		//! @brief  バイト列読み込み
 		//! 
-		//! @param buffer 　 読み込みデータ格納先のポインタ
-		//! @param byteCount 読み込むバイト数
+		//! @param buffer	読み込みデータ格納先のポインタ
+		//! @param count	読み込むバイト数
 		//! @return 読み込みに成功したか
 		bool read(void* buffer, size_t count);
 
@@ -74,7 +74,7 @@ namespace ob::core {
 
 	private:
 		Stream& m_stream;
-		ByteOrder m_byteOrder;
+		ByteOrder m_byteOrder = ByteOrder::Auto;
 	};
 
 

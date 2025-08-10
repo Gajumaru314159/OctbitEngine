@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Misc/DateTime.h>
 
 namespace ob::core {
@@ -20,7 +19,7 @@ namespace ob::core {
 		// コンストラクタ / デストラクタ
 		//===============================================================
 		TimeSpan() = default;										//!< デフォルトコンストラクタ
-		TimeSpan(s64 ticks) noexcept;								//!< コンストラクタ(Tick初期化)
+		explicit TimeSpan(s64 ticks) noexcept;						//!< コンストラクタ(Tick初期化)
 		TimeSpan(s32 days, s32 hours, s32 minutes, s32 seconds, s32 milliSeconds) noexcept;	//!< コンストラクタ
 		TimeSpan(const DateTime& from, const DateTime& to) noexcept;	//!< コンストラクタ
 
@@ -105,13 +104,13 @@ namespace ob::core {
 		//===============================================================
 		// 定数
 		//===============================================================
-		static const s64 TicksPerMicroSeconds = 1;							//!< 1秒あたりのTick数
-		static const s64 TicksPerNanoSeconds = TicksPerMicroSeconds * 1000;	//!< 1秒あたりのTick数
-		static const s64 TicksPerMilliSeconds = TicksPerNanoSeconds * 1000;	//!< 1秒あたりのTick数
-		static const s64 TicksPerSeconds = TicksPerMilliSeconds * 100;		//!< 1秒あたりのTick数
-		static const s64 TicksPerMinutes = TicksPerSeconds * 60;			//!< 1分あたりのTick数 
-		static const s64 TicksPerHours = TicksPerMinutes * 60;				//!< 1時間あたりのTick数
-		static const s64 TicksPerDays = TicksPerHours * 24;					//!< 1時間あたりのTick数
+		static constexpr s64 TicksPerMicroSeconds = 1;							//!< 1秒あたりのTick数
+		static constexpr s64 TicksPerNanoSeconds = TicksPerMicroSeconds * 1000;	//!< 1秒あたりのTick数
+		static constexpr s64 TicksPerMilliSeconds = TicksPerNanoSeconds * 1000;	//!< 1秒あたりのTick数
+		static constexpr s64 TicksPerSeconds = TicksPerMilliSeconds * 100;		//!< 1秒あたりのTick数
+		static constexpr s64 TicksPerMinutes = TicksPerSeconds * 60;			//!< 1分あたりのTick数
+		static constexpr s64 TicksPerHours = TicksPerMinutes * 60;				//!< 1時間あたりのTick数
+		static constexpr s64 TicksPerDays = TicksPerHours * 24;					//!< 1時間あたりのTick数
 
 		//===============================================================
 		// ユーティリティ
@@ -181,11 +180,11 @@ namespace ob::core {
 		return *this;
 	}
 	inline TimeSpan& TimeSpan::operator*=(f64 scalar) noexcept {
-		m_ticks = (s64)(m_ticks * scalar);
+		m_ticks = static_cast<s64>(m_ticks * scalar);
 		return *this;
 	}
 	inline TimeSpan& TimeSpan::operator/=(f64 scalar) noexcept {
-		m_ticks = (s64)(m_ticks / scalar);
+		m_ticks = static_cast<s64>(m_ticks / scalar);
 		return *this;
 	}
 	inline TimeSpan& TimeSpan::operator%=(const TimeSpan& rhs) noexcept {
@@ -261,30 +260,30 @@ namespace ob::core {
 
 	// 累計経過時間取得
 	inline s32 TimeSpan::totalDays()const noexcept {
-		return (s32)(m_ticks / TicksPerDays);
+		return static_cast<s32>(m_ticks / TicksPerDays);
 	}
 	inline s32 TimeSpan::totalHours()const noexcept {
-		return (s32)(m_ticks / TicksPerHours);
+		return static_cast<s32>(m_ticks / TicksPerHours);
 	}
 	inline s32 TimeSpan::totalMinutes()const noexcept {
-		return (s32)(m_ticks / TicksPerMinutes);
+		return static_cast<s32>(m_ticks / TicksPerMinutes);
 	}
 	inline s32 TimeSpan::totalSeconds()const noexcept {
-		return (s32)(m_ticks / TicksPerSeconds);
+		return static_cast<s32>(m_ticks / TicksPerSeconds);
 	}
 
 	// 累計経過時間取得(小数込み)
 	inline f32 TimeSpan::totalDaysF()const noexcept {
-		return (f32)((f64)m_ticks / TicksPerDays);
+		return static_cast<f32>(static_cast<f64>(m_ticks) / TicksPerDays);
 	}
 	inline f32 TimeSpan::totalHoursF()const noexcept {
-		return (f32)((f64)m_ticks / TicksPerHours);
+		return static_cast<f32>(static_cast<f64>(m_ticks) / TicksPerHours);
 	}
 	inline f32 TimeSpan::totalMinutesF()const noexcept {
-		return (f32)((f64)m_ticks / TicksPerMinutes);
+		return static_cast<f32>(static_cast<f64>(m_ticks) / TicksPerMinutes);
 	}
 	inline f32 TimeSpan::totalSecondsF()const noexcept {
-		return (f32)((f64)m_ticks / TicksPerSeconds);
+		return static_cast<f32>(static_cast<f64>(m_ticks) / TicksPerSeconds);
 	}
 
 	// Tick数取得
@@ -297,25 +296,25 @@ namespace ob::core {
 	// 名前付きコンストラクタ
 	//===============================================================
 	inline TimeSpan TimeSpan::Days(f64 days) noexcept {
-		return TimeSpan((s64)(days * TicksPerDays));
+		return TimeSpan(static_cast<s64>(days * TicksPerDays));
 	}
 	inline TimeSpan TimeSpan::Hours(f64 hour) noexcept {
-		return TimeSpan((s64)(hour * TicksPerHours));
+		return TimeSpan(static_cast<s64>(hour * TicksPerHours));
 	}
 	inline TimeSpan TimeSpan::Minutes(f64 minutes) noexcept {
-		return TimeSpan((s64)(minutes * TicksPerMinutes));
+		return TimeSpan(static_cast<s64>(minutes * TicksPerMinutes));
 	}
 	inline TimeSpan TimeSpan::Seconds(f64 seconds) noexcept {
-		return TimeSpan((s64)(seconds * TicksPerSeconds));
+		return TimeSpan(static_cast<s64>(seconds * TicksPerSeconds));
 	}
 	inline TimeSpan TimeSpan::MilliSeconds(f64 milliSeconds) noexcept {
-		return TimeSpan((s64)(milliSeconds * TicksPerMilliSeconds));
+		return TimeSpan(static_cast<s64>(milliSeconds * TicksPerMilliSeconds));
 	}
 	inline TimeSpan TimeSpan::NanoSeconds(f64 nanoSeconds) noexcept {
-		return TimeSpan((s64)(nanoSeconds * TicksPerNanoSeconds));
+		return TimeSpan(static_cast<s64>(nanoSeconds * TicksPerNanoSeconds));
 	}
 	inline TimeSpan TimeSpan::MicroSeconds(f64 microSeconds) noexcept {
-		return TimeSpan((s64)(microSeconds * TicksPerMicroSeconds));
+		return TimeSpan(static_cast<s64>(microSeconds * TicksPerMicroSeconds));
 	}
 
 	inline TimeSpan TimeSpan::Max()noexcept {
@@ -330,7 +329,7 @@ namespace ob::core {
 	// ユーティリティ
 	//===============================================================
 	inline double TimeSpan::Ratio(const TimeSpan& dividend, const TimeSpan& divisor) noexcept {
-		return (f64)dividend.m_ticks / divisor.m_ticks;
+		return static_cast<f64>(dividend.m_ticks) / divisor.m_ticks;
 	}
 
 	//! @endcond

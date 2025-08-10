@@ -192,12 +192,12 @@ namespace ob::core {
     //! @param t	補完パラメータ
     //! @return		補完された色オブジェクト
     constexpr HSV HSV::Lerp(const HSV& a, const HSV& b, f32 t) noexcept {
-        return HSV(
+        return {
             Math::Lerp(a.h, b.h, t),
             Math::Lerp(a.s, b.s, t),
             Math::Lerp(a.v, b.v, t),
             Math::Lerp(a.a, b.a, t)
-        );
+        };
     }
 
     //! @endcond

@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Misc/Blob.h>
-#include <Framework/Core/Log/Assertion.h>
 
 namespace ob::core {
 
@@ -36,7 +35,7 @@ namespace ob::core {
         //! @brief コンストラクタ(ポインタ指定)
         BlobView(const void* pData, size_t size)
         {
-            m_pData = reinterpret_cast<const byte*>(pData);
+            m_pData = static_cast<const byte*>(pData);
             m_size = size;
         }
 
@@ -86,7 +85,7 @@ namespace ob::core {
 
 
         //! @brief 代入演算子(Vector)
-        template<class T,typename std::enable_if_t<!std::is_same_v<T,Blob>>>
+        template<class T, std::enable_if_t<!std::is_same_v<T,Blob>>>
         BlobView& operator =(const Vector<T>& other) {
             m_pData = static_cast<const byte*>(other.data());
             m_size = other.size() * sizeof(T);

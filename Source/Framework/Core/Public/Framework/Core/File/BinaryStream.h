@@ -13,7 +13,7 @@ namespace ob::core {
 	public:
 
 		//! @brief  コンストラクタ
-		BinaryStream(Blob& blob);
+		explicit BinaryStream(Blob& blob);
 
 		
 		//! @brief  デストラクタ
@@ -57,7 +57,7 @@ namespace ob::core {
 		//! @param offset 　 基準からの移動量
 		//! @param origin	 基準位置
 		//! @return 成功したか
-		bool seek(offset_t offset, SeekOrigin origin = SeekOrigin::Begin) override;
+		bool seek(offset_t offset, SeekOrigin origin = SeekOrigin::Current) override;
 
 
 		//! @brief  バッファのフラッシュ

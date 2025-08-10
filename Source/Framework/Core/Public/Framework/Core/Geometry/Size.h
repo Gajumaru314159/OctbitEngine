@@ -20,7 +20,7 @@ namespace ob::core {
 
 
         //! @brief  コンストラクタ
-        constexpr Size(s32 width)noexcept
+        explicit constexpr Size(s32 width)noexcept
             : Size(width, 1, 1) {}
 
         //! @brief  コンストラクタ

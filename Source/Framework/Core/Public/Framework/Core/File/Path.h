@@ -40,6 +40,7 @@ namespace ob::core {
 		static String Stem(StringView path);
 
 		//! @brief		ファイルパスから拡張子を取得
+		//! @param		path	ファイルパス
 		//! @param		withDot	ドットを含めるか
 		//! @details	例：.txt / txt
 		static String Extension(StringView path, WithDot withDot = WithDot::No);

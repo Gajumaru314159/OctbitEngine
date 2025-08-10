@@ -20,7 +20,7 @@ namespace ob::core {
 	//! 		 * privateuse (プライベート使用)
 	//!			 で構成され、それぞれの要素はハイフンで区切られる。
 	//! 		 例: ja-JP-u-ca-japanese	
-	//! @link	 https://en.wikipedia.org/wiki/IETF_language_tag
+	//! @ref	 https://en.wikipedia.org/wiki/IETF_language_tag
 	class Locale {
 	public:
 
@@ -100,7 +100,7 @@ template <> struct std::formatter<ob::core::Locale, ob::core::Char> {
 //===============================================================
 template<>
 struct std::hash<ob::core::Locale> {
-	size_t operator()(const ob::core::Locale& value)const {
+	size_t operator()(const ob::core::Locale& value)const noexcept {
 		return std::hash<ob::core::StringView>()(value.tag());
 	}
 };

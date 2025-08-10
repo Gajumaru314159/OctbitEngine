@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Template/Container/Map.h>
-#include <Framework/Core/Template/Container/Set.h>
 #include <Framework/Core/Utility/Singleton.h>
 #include <Framework/Core/Reflection/Type.h>
 #include <Framework/Core/Reflection/TypeInfo.h>
@@ -16,7 +15,7 @@ namespace ob::core {
 
 		TypeInfoManager();
 
-		void visit(const std::function<void(const TypeInfo&)> func) const;
+		void visit(const std::function<void(const TypeInfo&)>& func) const;
 		const TypeInfo* find(Type type)const;
 		const TypeInfo* find(StringView type)const;
 		const TypeInfo* find(Type::hash_type type)const;
@@ -24,7 +23,7 @@ namespace ob::core {
 
 	public:
 
-		static void Visit(const std::function<void(const TypeInfo&)> func) {
+		static void Visit(const std::function<void(const TypeInfo&)>& func) {
 			if (auto manager = Get()) {
 				manager->visit(func);
 			}

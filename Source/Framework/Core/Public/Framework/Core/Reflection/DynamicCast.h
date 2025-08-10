@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Core.h>
 #include <Framework/Core/Reflection/Type.h>
 
 namespace ob::core {

@@ -404,6 +404,7 @@ namespace ob::core {
 
     //! @brief 等価判定(許容誤差指定)
     //! 
+    //! @param v            比較値
     //! @param tolerance    許容誤差
     constexpr bool Quat::equals(Quat v, f32 tolerance)const noexcept {
         return

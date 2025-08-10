@@ -213,9 +213,9 @@ namespace ob::core {
 			for (n = i = 0; i + n < m_str.size();) {
 				m_str[i] = m_str[i + n];
 				if (m_str[i] == c)
-					n++;
+					++n;
 				else
-					i++;
+					++i;
 			}
 			m_str.resize(i);
 			return *this;
@@ -233,7 +233,7 @@ namespace ob::core {
 				if (substr(i).starts_with(s)) {
 					n += s.size();
 				} else {
-					i++;
+					++i;
 				}
 
 			}

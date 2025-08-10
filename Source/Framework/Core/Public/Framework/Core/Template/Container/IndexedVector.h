@@ -6,7 +6,6 @@
 #include <Framework/Core/Log/LogMacro.h>
 #include <Framework/Core/Log/Assertion.h>
 #include <Framework/Core/Template/Container/Vector.h>
-#include <Framework/Core/Template/Allocator/STLAllocator.h>
 #include <limits>
 
 namespace ob::core {
@@ -37,7 +36,7 @@ namespace ob::core {
 				return index;
 			}
 
-			TIndex index = (TIndex)m_indices.size();
+			TIndex index = static_cast<TIndex>(m_indices.size());
 
 			// 枯渇
 			if (index == NoFreeSlot) {

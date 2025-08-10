@@ -28,7 +28,7 @@ namespace ob::core {
 		HashMap<StringView, String> tags;
 
 		//! @brief		タグを持っているか
-		bool hasTag(StringView name)const { return tags.count(name); }
+		bool hasTag(StringView name)const { return tags.contains(name); }
 
 		//! @brief		タグを取得
 		Optional<StringView> findTag(StringView name)const { auto found = tags.find(name); return (found == tags.end()) ? std::nullopt : Optional<StringView>{ found->second }; }
@@ -61,8 +61,8 @@ namespace ob::core {
 		template<class T,class... Args>
 		UPtr<T> invoke(Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
-			Any rargs[] = {args...,Any()};
-			return invoker(Span<Any>(rargs,sizeof...(Args))).release<T>();
+			Any invokeArgs[] = {args...,Any()};
+			return invoker(Span<Any>(invokeArgs,sizeof...(Args))).release<T>();
 		}
 
 		template<class T>
@@ -72,8 +72,8 @@ namespace ob::core {
 		template<class T, class... Args>
 		void invoke_placed(void* p,Args&&... args) const {
 			// 0引数に対応するために最後尾に空要素を追加している
-			Any rargs[] = { args...,Any() };
-			placedInvoker(p, Span<Any>(rargs, sizeof...(Args)));
+			Any invokeArgs[] = { args...,Any() };
+			placedInvoker(p, Span<Any>(invokeArgs, sizeof...(Args)));
 		}
 
 		template<class... Args>
@@ -97,7 +97,7 @@ namespace ob::core {
 			return getter(owner).template as<T>();
 		}
 
-		template<class T,class TOwner, class = std::enable_if_t<!std::is_const<std::remove_reference_t<TOwner>>::value>>
+		template<class T,class TOwner, class = std::enable_if_t<!std::is_const_v<std::remove_reference_t<TOwner>>>>
 		void set(TOwner&& owner, T&& value) const {
 			if(setter) setter(owner, value);
 		}
@@ -182,7 +182,7 @@ namespace ob::core {
 			auto itr = properties.find(name);
 			if (itr == properties.end()) return nullptr;
 
-			if constexpr (std::is_same<T, void>::value) {
+			if constexpr (std::is_same_v<T, void>) {
 				return &itr->second;
 			} else {
 				if (itr->second.type.is<T>()) {
@@ -221,7 +221,7 @@ namespace ob::core {
 		static const TypeInfo* Find(const Type& type);
 		static const TypeInfo* Find(StringView type);
 		static const TypeInfo* Find(Type::hash_type hash);
-		static void Visit(const std::function<void(const TypeInfo&)> func);
+		static void Visit(const std::function<void(const TypeInfo&)> &func);
 
 	};
 

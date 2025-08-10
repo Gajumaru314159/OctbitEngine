@@ -81,7 +81,7 @@ namespace ob::core {
 	//! @brief 列を設定
 	//! 
 	//! @param index 列インデックス
-	//! @param row 列ベクトル
+	//! @param column 列ベクトル
 	Matrix& Matrix::setRow(s32 index, Vec4 column) {
 		if (index < 0 || ROW <= index)return *this;
 		m[0][index] = column.x;
@@ -160,6 +160,9 @@ namespace ob::core {
 			*q[0] = (m[2][3] - m[3][2]) * mult;
 			*q[1] = (m[3][1] - m[1][3]) * mult;
 			*q[2] = (m[1][2] - m[2][1]) * mult;
+			break;
+		default:
+			OB_ABORT("不正なインデックス");
 			break;
 		}
 		return quat;

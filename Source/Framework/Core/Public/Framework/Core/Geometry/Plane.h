@@ -55,7 +55,7 @@ namespace ob::core {
         //===============================================================
 
         //! @brief 面を反転
-        constexpr Plane flipped() noexcept;
+        constexpr Plane flipped() const noexcept;
 
 
         //===============================================================
@@ -118,8 +118,8 @@ namespace ob::core {
     //===============================================================
 
     //! @brief 面を反転
-    constexpr Plane Plane::flipped() noexcept {
-        return Plane(-normal, distance);
+    constexpr Plane Plane::flipped() const noexcept {
+        return {-normal, distance};
     }
 
 

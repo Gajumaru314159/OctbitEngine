@@ -4,7 +4,6 @@
 //***********************************************************
 #pragma once
 #include <type_traits>
-#include <Framework/Core/Template/include.h>
 #include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Utility/Nonmovable.h>
 #include <Framework/Core/Log/Assertion.h>
@@ -16,7 +15,7 @@ namespace ob::core {
 	//! @details	遅延初期化をする場合に使用します。
 	//!				通常はRAIIに則り生成時に初期化することが望ましいですが、
 	//!				初期化を遅らせる必要がある場合に使用します。
-	//!				uniqque_ptrと違いメンバ変数として使用する場合はクラスのインクルードが必要です。
+	//!				unique_ptrと違いメンバ変数として使用する場合はクラスのインクルードが必要です。
 	template<class T,size_t SIZE,size_t ALIGN>
 	class MemoryStorageBase : Noncopyable,Nonmovable{
 	public:
@@ -44,7 +43,7 @@ namespace ob::core {
 
 		//! @brief  構築
 		template<typename ...Args>
-		auto construct(Args&&... args) -> std::enable_if_t<std::is_constructible<T,Args...>::value,void> {
+		auto construct(Args&&... args) -> std::enable_if_t<std::is_constructible_v<T,Args...>,void> {
 			static_assert(sizeof(T) <= SIZE);
 			if (!m_constructed) {
 				new(m_data) T(std::forward<Args>(args)...);
@@ -86,7 +85,7 @@ namespace ob::core {
 
 	private:
 
-		alignas(ALIGN) std::byte m_data[SIZE];
+		alignas(ALIGN) std::byte m_data[SIZE] {};
 		bool m_constructed;
 
 	};

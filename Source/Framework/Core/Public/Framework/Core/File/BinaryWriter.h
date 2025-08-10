@@ -12,7 +12,7 @@ namespace ob::core {
 	//! @brief  説明
 	class BinaryWriter{
 	public:
-		BinaryWriter(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);
+		explicit BinaryWriter(Stream& stream, ByteOrder byteOrder = ByteOrder::Auto);
 		~BinaryWriter();
 
 		void writeInt8(s8 value);

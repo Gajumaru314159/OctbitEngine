@@ -38,9 +38,9 @@ namespace ob::core {
         //! @brief コンストラクタ(輝度とアルファ値を指定して初期化)
         //! 
         //! @details		色成分を輝度で指定します。
-        //! @param grey	    輝度
+        //! @param gray	    輝度
         //! @param a		アルファ
-        explicit constexpr Color(f32 grey, f32 a = 1.0f)noexcept;
+        explicit constexpr Color(f32 gray, f32 a = 1.0f)noexcept;
 
 
         //! @brief ColorU8 を変換して初期化
@@ -209,8 +209,8 @@ namespace ob::core {
         //!             out.rgb = (src.rgb*src.a + dst.rgb*dst.a * (1-src.a)) / out.a;
         //!             out.a   = 0 => out.rgb = 0
         //!             ```
-        //! @param a    色1
-        //! @param b    色2
+        //! @param dst  色1
+        //! @param src  色2
         //! @return		ブレンドされた色オブジェクト
         static constexpr Color AlphaBlend(const Color& dst, const Color& src) noexcept;
 
@@ -221,8 +221,8 @@ namespace ob::core {
         //!             out.a   = src.a + dst.a*(1-src.a);
         //!             out.rgb = src.rgb + dst.rgb * (1-src.a);
         //!             ```
-        //! @param a    色1
-        //! @param b    色2
+        //! @param dst  色1
+        //! @param src  色2
         //! @return		ブレンドされた色オブジェクト
         static constexpr Color PremultipliedAlphaBlend(const Color& dst, const Color& src) noexcept;
 
@@ -276,7 +276,7 @@ namespace ob::core {
     //! @brief コンストラクタ(輝度とアルファ値を指定して初期化)
     //! 
     //! @details		色成分を輝度で指定します。
-    //! @param grey	    輝度
+    //! @param gray	    輝度
     //! @param a		アルファ
     constexpr Color::Color(f32 gray, f32 a) noexcept 
         : Color(gray,gray,gray,a)
@@ -422,7 +422,7 @@ namespace ob::core {
 
     //! @brief          Vec4 に変換
     constexpr Vec4 Color::toVec4()const noexcept {
-        return Vec4(r, g, b, a);
+        return {r, g, b, a};
     }
 
 
@@ -473,14 +473,14 @@ namespace ob::core {
     //!             out.rgb = (src.rgb*src.a + dst.rgb*dst.a * (1-src.a)) / out.a;
     //!             out.a   = 0 => out.rgb = 0
     //!             ```
-    //! @param a    色1
-    //! @param b    色2
+    //! @param dst  色1
+    //! @param src  色2
     //! @return		ブレンドされた色オブジェクト
     constexpr Color Color::AlphaBlend(const Color& dst, const Color& src) noexcept {
         auto a = src.a + dst.a * (1 - src.a);
         auto rgb = (src * src.a + dst * dst.a * (1 - src.a)) / a;
         if (Math::IsNearZero(a))rgb = Color(0);
-        return Color(rgb.r, rgb.g, rgb.a, a);
+        return {rgb.r, rgb.g, rgb.a, a};
     }
 
     //! @brief		色の事前乗算アルファブレンド
@@ -489,13 +489,13 @@ namespace ob::core {
     //!             out.a   = src.a + dst.a*(1-src.a);
     //!             out.rgb = src.rgb + dst.rgb * (1-src.a);
     //!             ```
-    //! @param a    色1
-    //! @param b    色2
+    //! @param dst  色1
+    //! @param src  色2
     //! @return		ブレンドされた色オブジェクト
     constexpr Color Color::PremultipliedAlphaBlend(const Color& dst, const Color& src) noexcept {
         auto a = src.a + dst.a * (1 - src.a);
         auto rgb = src + dst * (1 - src.a);
-        return Color(rgb.r, rgb.g, rgb.a, a);
+        return {rgb.r, rgb.g, rgb.a, a};
     }
 
     //! @endcond

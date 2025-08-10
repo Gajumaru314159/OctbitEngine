@@ -35,7 +35,7 @@ do{                                                                             
 #define OB_ASSERT_EXPR(expr)				OB_ASSERT(expr,#expr)
 
 //! @brief      プログラムを中断する。
-//! 
+//!
 //! @details    エラーログを出力しプログラムを停止する。
 //! @param format ログフォーマット
 #define OB_ABORT(format,...)				OB_ASSERT(false,format,__VA_ARGS__)
@@ -70,10 +70,10 @@ do{                                                                             
 #ifndef OB_ENABLE_REQUIRE
 #undef OB_ASSERT_EXPR
 #define OB_ASSERT_EXPR(expr,format,...) /* space */
-#endif // OB_DISABLE_REQUIRE
+#endif // OB_ENABLE_REQUIRE
 
 #ifndef OB_ENABLE_ENSURE
 #undef OB_ASSERT_EXPR
 #define OB_ASSERT_EXPR(expr,format,...)  /* space */
-#endif // OB_DISABLE_ENSURE
+#endif // OB_ENABLE_ENSURE
 //! @endcond

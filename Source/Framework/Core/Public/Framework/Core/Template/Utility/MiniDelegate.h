@@ -7,27 +7,27 @@
 
 namespace ob::core {
 
-	//@ cond
+	//! @cond
 	template<class>
-	class MiniDalegate;
-	//@ endcond
+	class MiniDelegate;
+	//! @endcond
 
     //! @brief      Ownerのみをキャプチャできる軽量デリゲート
     //!	@details    通常のデリゲートよりも軽量ですが、ラムダ式のように変数をキャプチャすることはできません。
     template<class R, class... Args>
-    class MiniDalegate<R(Args...)> {
+    class MiniDelegate<R(Args...)> {
     public:
         using StaticFuncPtr = R(*)(Args...);
         constexpr static size_t kBufferSize = 24; // T (8) + BaseInvoker (8) + Invoker (8) = 24
 
     public:
         //! @brief      デフォルトコンストラクタ
-        //! @details    MiniDalegateクラスのデフォルトコンストラクタです。
-        MiniDalegate() = default;
+        //! @details    MiniDelegateクラスのデフォルトコンストラクタです。
+        MiniDelegate() = default;
 
         //! @brief      コンストラクタ
         //! @param[in]  func  静的関数ポインタ
-        MiniDalegate(StaticFuncPtr func) {
+        MiniDelegate(StaticFuncPtr func) {
             assign(func);
         }
 
@@ -35,7 +35,7 @@ namespace ob::core {
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ
         template<class T>
-        MiniDalegate(T& object, R(T::* func)(Args...)) {
+        MiniDelegate(T& object, R(T::* func)(Args...)) {
             assign(object, func);
         }
 
@@ -43,7 +43,7 @@ namespace ob::core {
         //! @param[in]  object  オブジェクトの参照
         //! @param[in]  func    メンバ関数ポインタ(const)
         template<class T>
-        MiniDalegate(const T& object, R(T::* func)(Args...) const) {
+        MiniDelegate(const T& object, R(T::* func)(Args...) const) {
             assign(object, func);
         }
 
@@ -96,13 +96,14 @@ namespace ob::core {
     private:
 
         struct BaseInvoker {
+            virtual ~BaseInvoker() = default;
             virtual R invoke(Args... args) const = 0;
         };
 
         struct StaticInvoker : public BaseInvoker {
             StaticFuncPtr m_func;
             StaticInvoker(StaticFuncPtr func) : m_func(func) {}
-            R invoke(Args... args) const {
+            R invoke(Args... args) const override {
                 return m_func(args...);
             }
         };
@@ -113,7 +114,7 @@ namespace ob::core {
             T& m_owner;
             SIG m_method;
             Invoker(T& owner, SIG method) : m_owner(owner), m_method(method) {}
-            R invoke(Args... args) const {
+            R invoke(Args... args) const override {
                 return (m_owner.*m_method)(args...);
             }
         };
@@ -124,7 +125,7 @@ namespace ob::core {
             const T& m_owner;
             SIG m_method;
             ConstInvoker(const T& owner, SIG method) : m_owner(owner), m_method(method) {}
-            R invoke(Args... args) const {
+            R invoke(Args... args) const override {
                 return (m_owner.*m_method)(args...);
             }
         };

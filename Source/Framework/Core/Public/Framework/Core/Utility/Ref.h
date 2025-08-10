@@ -117,7 +117,7 @@ namespace ob::core {
 		void reset();
 
 		//! @brief	2つの Ref オブジェクトを入れ替える
-		void swap(Ref<T>& other);
+		void swap(Ref<T>& other) noexcept;
 
 		//! @brief	保持しているオブジェクトへのポインタを取得 
 		T* get() const;
@@ -128,7 +128,7 @@ namespace ob::core {
 
 		//! @brief	派生クラスへキャスト
 		template<class Y>
-		auto cast() const->std::enable_if_t<std::is_base_of<T, Y>::value, Y*>;
+		auto cast() const->std::enable_if_t<std::is_base_of_v<T, Y>, Y*>;
 
 	private:
 		RefObject* m_ptr = nullptr;
@@ -290,8 +290,7 @@ namespace ob::core {
 
 	//! @brief	2つの Ref オブジェクトを入れ替える
 	template<class T>
-	void Ref<T>::swap(Ref<T>& other)
-	{
+	void Ref<T>::swap(Ref<T>& other) noexcept {
 		if (&other != this) {
 			T* t = m_ptr;
 			m_ptr = other.m_ptr;
@@ -317,7 +316,7 @@ namespace ob::core {
 	//! @details Tの派生先へキャストしたポインタを取得します。変換チェックは行いません。
 	template<class T>
 	template<class Y>
-	auto Ref<T>::cast() const->std::enable_if_t<std::is_base_of<T, Y>::value, Y*> {
+	auto Ref<T>::cast() const->std::enable_if_t<std::is_base_of_v<T, Y>, Y*> {
 		return reinterpret_cast<Y*>(m_ptr);
 	}
 

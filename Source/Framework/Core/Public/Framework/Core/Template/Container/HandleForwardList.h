@@ -7,6 +7,7 @@
 #include <iterator>
 #include <memory>
 #include <Framework/Core/Thread/SpinLock.h>
+#include <Framework/Core/Thread/ScopeLock.h>
 #include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Utility/Nonmovable.h>
 
@@ -18,7 +19,7 @@ namespace ob::core {
     //! @details        このコンテナは要素をコンテナ内部で管理せずハンドル内で管理する。<br> 
     //!                 よって、ハンドルのデストラクタが呼ばれるとリストの管理から外される。<br> 
     //!                 要素のデストラクタが呼ばれるタイミングはハンドルが破棄されるタイミングである。<br> 
-    //!                 通常のリストと比べ排他的制御が入るため速度は遅いが、delgateなどのインスタンスの寿命と合わせる必要がある場合に使用する。<br> 
+    //!                 通常のリストと比べ排他的制御が入るため速度は遅いが、delegateなどのインスタンスの寿命と合わせる必要がある場合に使用する。<br>
     //!                 <br> 
     //!                 使用方法：<br> 
     //! ```
@@ -113,7 +114,7 @@ namespace ob::core {
             friend class HandleForwardList;
         public:
             using this_type = const_iterator;                                                                               //!< 型
-            using difference_type = typename HandleForwardList<T>::difference_type;                                               //!< ポインタ差分型
+            using difference_type = difference_type;                                                                        //!< ポインタ差分型
             using value_type = T;                                                                                           //!< インスタンス型
             using pointer = T*;                                                                                             //!< ポインタ型
             using reference = value_type&;                                                                                  //!< 参照型
@@ -392,7 +393,7 @@ namespace ob::core {
     inline typename HandleForwardList<T>::reference HandleForwardList<T>::emplace_front(Handle& h, Args&&... args) {
         ScopeLock lock(m_lock);
         insert_front_impl(h);
-        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
+        std::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return *h.get_ptr();
     }
 
@@ -421,7 +422,7 @@ namespace ob::core {
     inline typename HandleForwardList<T>::iterator HandleForwardList<T>::emplace_after(Handle& h, const_iterator position, Args&&... args) {
         ScopeLock lock(m_lock);
         insert_impl(position.pHandle, h);
-        ob::construct_at(h.get_ptr(), std::forward<Args>(args)...);
+        std::construct_at(h.get_ptr(), std::forward<Args>(args)...);
         return &h;
     }
 

@@ -91,7 +91,7 @@ namespace ob::core {
     //! @param t    補間係数
     //! @return     t=0のときa、t=1の時bを返す。
     constexpr Sphere Sphere::Lerp(const Sphere& a, const Sphere& b, f32 t)noexcept {
-        return Sphere(Vec3::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t));
+        return {Vec3::Lerp(a.center, b.center, t), Math::Lerp(a.radius, b.radius, t)};
     }
 
     //! @endcond

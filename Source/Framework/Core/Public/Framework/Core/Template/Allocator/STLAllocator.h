@@ -3,7 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <new>
+
 namespace ob::core {
 
     //! @cond
@@ -15,7 +15,7 @@ namespace ob::core {
         STLAllocatorBase();
 
         // メモリ確保
-        void* allocate(std::size_t n);
+        void* allocate(size_t n);
 
         // メモリ解放
         void deallocate(void* pBuffer);
@@ -40,12 +40,12 @@ namespace ob::core {
         STLAllocator(const STLAllocator<U>&) {}
 
         //! @brief メモリ確保
-        T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(STLAllocatorBase::allocate(sizeof(T) * n));
+        T* allocate(size_t n) {
+            return static_cast<T*>(STLAllocatorBase::allocate(sizeof(T) * n));
         }
 
         //! @brief メモリ解放
-        void deallocate(T* p, [[maybe_unused]]std::size_t n) {
+        void deallocate(T* p, [[maybe_unused]]size_t n) {
             STLAllocatorBase::deallocate(p);
         }
     };

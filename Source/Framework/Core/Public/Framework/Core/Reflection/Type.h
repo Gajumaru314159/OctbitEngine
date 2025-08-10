@@ -5,7 +5,6 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Hash/Hash.h>
-#include <Framework/Core/Utility/ConstValue.h>
 
 namespace ob::core {
 
@@ -181,7 +180,7 @@ namespace ob::core {
 template<>
 struct std::hash<ob::core::Type> {
 public:
-	size_t operator()(const ob::core::Type& value)const {
+	size_t operator()(const ob::core::Type& value)const noexcept {
 		return value.hash();
 	}
 };

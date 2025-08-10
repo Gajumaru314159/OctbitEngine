@@ -20,9 +20,7 @@ namespace ob::core {
 	}
 
 	//! @brief  デストラクタ
-	BinaryReader::~BinaryReader()
-	{
-	}
+	BinaryReader::~BinaryReader() = default;
 
 	//! @brief   s8 を読み込む
 	s8 BinaryReader::readS8()
@@ -109,7 +107,7 @@ namespace ob::core {
 	bool BinaryReader::readImpl(void* dest, size_t size) {
 		if (m_stream.read(dest, size)) {
 			if (m_byteOrder != Endian::Get()) {
-				auto bytes = reinterpret_cast<byte*>(dest);
+				auto bytes = static_cast<byte*>(dest);
 				std::reverse(bytes, bytes + size);
 			}
 			return true;
@@ -121,7 +119,7 @@ namespace ob::core {
 	//! @brief  バイト列読み込み
 	//! 
 	//! @param buffer 　 読み込みデータ格納先のポインタ
-	//! @param byteCount 読み込むバイト数
+	//! @param count	読み込むバイト数
 	//! @return 読み込みに成功したか
 	bool BinaryReader::read(void* buffer, size_t count)
 	{

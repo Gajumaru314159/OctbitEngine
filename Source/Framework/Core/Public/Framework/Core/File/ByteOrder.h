@@ -32,7 +32,7 @@ namespace ob::core {
 		//! @brief		現在のシステムがリトルエンディアン
 		static inline bool IsLittleEndian()
 		{
-			int const t = 1;
+			constexpr int t = 1;
 			return *reinterpret_cast<unsigned char const*>(&t) != 1;
 		}
 
@@ -43,7 +43,7 @@ namespace ob::core {
 		}
 
 		//! @brief		値のバイト順序を入れ替える
-		template<typename T,typename std::enable_if_t<std::is_arithmetic_v<T>>>
+		template<typename T,std::enable_if_t<std::is_arithmetic_v<T>>>
 		static constexpr T Swap(T value) {
 			Array<byte, sizeof(T)> bytes;
 			reinterpret_cast<T*>(bytes.data()) = value;

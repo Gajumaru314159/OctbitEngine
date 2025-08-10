@@ -3,7 +3,6 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
-#include <Framework/Core/Thread/ScopeLock.h>
 #include <Framework/Core/Utility/Noncopyable.h>
 #include <Framework/Core/Utility/Pimpl.h>
 

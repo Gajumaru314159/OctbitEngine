@@ -15,11 +15,11 @@ namespace ob::core {
 
 
 #ifdef OS_WINDOWS
-	static bool s_isStartupped = false;
+	static bool s_isStartedUp = false;
 
 	/// ネットワーク機能の開始
 	void Network::Startup() {
-		if (s_isStartupped == false) {
+		if (s_isStartedUp == false) {
 			WSAData wsaData;
 			int error = WSAStartup(MAKEWORD(2, 2), &wsaData);
 			if (error != 0)
@@ -27,7 +27,7 @@ namespace ob::core {
 				LOG_ERROR("[Socket] {}", error);
 				return;
 			}
-			s_isStartupped = true;
+			s_isStartedUp = true;
 		}
 		else {
 			LOG_WARNING("[Socket] ソケットはスタートアップ済みです");
@@ -36,9 +36,9 @@ namespace ob::core {
 
 	/// ネットワーク機能の終了
 	void Network::Shutdown() {
-		if (s_isStartupped == true) {
+		if (s_isStartedUp == true) {
 			WSACleanup();
-			s_isStartupped = false;
+			s_isStartedUp = false;
 		}
 		else {
 			LOG_WARNING("[Socket] ソケットはシャットダウン済みです");

@@ -51,7 +51,7 @@ namespace ob::core {
 
 
 //! @brief		型情報の定義
-//! @details	Builderを通じて型情報を登録するRegiser()と、翻訳単位を明示的にリンクするためのLink()を定義します。
+//! @details	Builderを通じて型情報を登録するRegister()と、翻訳単位を明示的にリンクするためのLink()を定義します。
 #define OB_DEFINE_INFO_BASE(builder_type,type)\
 namespace ob::core {\
 	template<> void TypeRegisterTemplate<::type>::Register() {\
@@ -184,20 +184,20 @@ namespace ob::core {
 		}
 		static void _Delete(void* ptr) {
 			OB_ASSERT(ptr, "ptrがnullです");
-			delete reinterpret_cast<T*>(ptr);
+			delete static_cast<T*>(ptr);
 		}
 		static void _PlacedDelete(void* ptr) {
 			OB_ASSERT(ptr, "ptrがnullです");
-			reinterpret_cast<T*>(ptr)->~T();
+			static_cast<T*>(ptr)->~T();
 		}
 		static void* _Copy(const void* ptr) {
 			OB_ASSERT(ptr, "ptrがnullです");
-			return (void*)new T(*reinterpret_cast<const T*>(ptr));
+			return static_cast<void *>(new T(*static_cast<const T *>(ptr)));
 		}
 		static void _Assign(const void* from, void* to) {
 			OB_ASSERT(from, "fromがnullです");
 			OB_ASSERT(to, "toがnullです");
-			(*reinterpret_cast<T*>(to)) = (*reinterpret_cast<const T*>(from));
+			(*static_cast<T*>(to)) = (*static_cast<const T*>(from));
 		}
 	};
 
@@ -238,7 +238,7 @@ namespace ob::core {
 			}
 
 			// コピー
-			if constexpr (std::is_copy_assignable<T>::value) {
+			if constexpr (std::is_copy_assignable_v<T>) {
 				m_info.copyInvoker = ClassTrait<T>::_Copy;
 				m_info.assignInvoker = ClassTrait<T>::_Assign;
 			}
@@ -294,7 +294,7 @@ namespace ob::core {
 			}
 
 			// コピー
-			if constexpr (std::is_copy_assignable<T>::value) {
+			if constexpr (std::is_copy_assignable_v<T>) {
 				m_info.copyInvoker = ClassTrait<T>::_Copy;
 				m_info.assignInvoker = ClassTrait<T>::_Assign;
 			}
@@ -335,7 +335,7 @@ namespace ob::core {
 			}
 
 			// コピー
-			if constexpr(std::is_copy_assignable<T>::value){
+			if constexpr(std::is_copy_assignable_v<T>){
 				m_info.copyInvoker = ClassTrait<T>::_Copy;
 				m_info.assignInvoker = ClassTrait<T>::_Assign;
 			}
@@ -354,7 +354,7 @@ namespace ob::core {
 		//===============================================================
 
 		//! @brief			基底クラスを追加
-		template<class TBase, class = std::enable_if_t<std::is_base_of<TBase, T>::value>>
+		template<class TBase, class = std::enable_if_t<std::is_base_of_v<TBase, T>>>
 		void base() {
 			m_info.bases.emplace(::ob::Type::Get<TBase>());
 		}
@@ -365,7 +365,7 @@ namespace ob::core {
 		
 		//! @brief			デフォルトコンストラクタを追加
 		TagBuilder constructor() {
-			static_assert(std::is_constructible<T>::value,"0引数のコンストラクタがありません");
+			static_assert(std::is_constructible_v<T>,"0引数のコンストラクタがありません");
 			auto& info = m_info.constructors.emplace_back();
 			info.invoker = ClassTrait<T>::_New;
 			info.placedInvoker = ClassTrait<T>::_PlacedNew;
@@ -377,7 +377,7 @@ namespace ob::core {
 		//!					引数名を指定しない場合はデフォルトの引数名が使用されます。
 		template<class... Args,class... Names>
 		auto constructor(Names&&... argNames)
-			-> std::enable_if_t<std::is_constructible<T, Args...>::value && (sizeof...(Args)==sizeof...(Names) || sizeof...(Names) == 0), TagBuilder>
+			-> std::enable_if_t<std::is_constructible_v<T, Args...> && (sizeof...(Args)==sizeof...(Names) || sizeof...(Names) == 0), TagBuilder>
 		{
 			auto& info = m_info.constructors.emplace_back();
 
@@ -486,7 +486,7 @@ namespace ob::core {
 		auto _method_impl(StringView name, M method, Names&&... argNames)
 			-> std::enable_if_t<MethodTraits<M>::Count == sizeof...(Names) || 0 == sizeof...(Names), TagBuilder >
 		{
-			OB_ASSERT(m_info.methods.count(name) == 0, "{}は登録済みのメソッドです [{}]", name, m_info.type.name());
+			OB_ASSERT(!m_info.methods.contains(name), "{}は登録済みのメソッドです [{}]", name, m_info.type.name());
 
 			m_info.methodOrder.emplace_back(name);
 			auto& info = m_info.methods[name];
@@ -521,7 +521,7 @@ namespace ob::core {
 		//! @brief			フィールド追加(メンバ変数)
 		template<class TField>
 		TagBuilder field(StringView name, TField T::* address) {
-			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
+			OB_ASSERT(!m_info.properties.contains(name), "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
 			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<TField>();
@@ -529,12 +529,12 @@ namespace ob::core {
 			info.isReference = true;
 			info.getter = [=](const Any& owner) {
 				if (owner.isReference()) {
-					return Any(std::remove_const_t<Any&>(owner).as<T>().*address);
+					return Any(const_cast<std::remove_const_t<Any &>>(owner).as<T>().*address);
 				} else {
 					return Any(owner.as<T>().*address);
 				}
 			};
-			if constexpr (!std::is_const<std::remove_reference_t<TField>>::value) {
+			if constexpr (!std::is_const_v<std::remove_reference_t<TField>>) {
 				info.setter = [=](Any& owner, const Any& value) {
 					(owner.as<T>().*(address)) = value.as<TField>();
 				};
@@ -556,20 +556,20 @@ namespace ob::core {
 		template<class F1, class F2>
 		TagBuilder property(StringView name, F1 getter, F2 setter) {
 			using return_type = typename MethodTraits<F1>::return_type;
-			OB_ASSERT(m_info.properties.count(name) == 0, "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
+			OB_ASSERT(!m_info.properties.contains(name), "{}は登録済みのプロパティです [{}]", name, m_info.type.name());
 			m_info.propertyOrder.emplace_back(name);
 			auto& info = m_info.properties[name];
 			info.type = Type::Get<return_type>();
 			info.name = name;
-			info.isReference = std::is_reference<return_type>::value && !std::is_const<return_type>::value;
+			info.isReference = std::is_reference_v<return_type> && !std::is_const_v<return_type>;
 			info.getter = [=](const Any& owner) {
 				if (owner.isWritable()) {
-					return Any((std::remove_const_t<Any&>(owner).as<T>().*(getter))());
+					return Any((const_cast<std::remove_const_t<Any&>>(owner).as<T>().*(getter))());
 				} else {
-					return Any((std::remove_const_t<Any&>(owner).as<T>().*(getter))());
+					return Any((const_cast<std::remove_const_t<Any&>>(owner).as<T>().*(getter))());
 				}
 			};
-			if constexpr (!std::is_same<F1, F2>::value) {
+			if constexpr (!std::is_same_v<F1, F2>) {
 				info.setter = [=](Any& owner,const Any& value) {
 					// 適切な実装ではないが、setterとgetterが同じシグネチャならgetterのみとして扱う
 					(owner.as<T>().*(setter))(value.as<remove_cvr_t<return_type>>());
@@ -585,7 +585,7 @@ namespace ob::core {
 		//! @brief			引数なしのメソッド呼び出し
 		template<class M, class... Args>
 		static Any _InvokeWithoutArgs(Any& owner, [[maybe_unused]] Span<Any>, M method) {
-			if constexpr (std::is_same<typename MethodTraits<M>::return_type, void>::value) {
+			if constexpr (std::is_same_v<typename MethodTraits<M>::return_type, void>) {
 				(owner.as<T>().*(method))();
 				return Any();
 			} else {
@@ -596,11 +596,11 @@ namespace ob::core {
 		//! @brief			引数ありのメソッド呼び出し
 		template<class M,class... Args, size_t... I>
 		static Any _InvokeMethodImpl(Any& owner, Span<Any> args, M method, std::index_sequence<I...>) {			
-			if constexpr (std::is_same<typename MethodTraits<M>::return_type, void>::value) {
-				(owner.as<T>().*(method))(args[I].as<std::remove_reference_t<Args>>()...);
+			if constexpr (std::is_same_v<typename MethodTraits<M>::return_type, void>) {
+				(owner.as<T>().*(method))(args[I].template as<std::remove_reference_t<Args>>()...);
 				return Any();
 			} else {
-				return Any((owner.as<T>().*(method))(args[I].as<std::remove_reference_t<Args>>()...));
+				return Any((owner.as<T>().*(method))(args[I].template as<std::remove_reference_t<Args>>()...));
 			}
 		}
 
@@ -622,7 +622,7 @@ namespace ob::core {
 		//! @brief			引数ありのコンストラクタ
 		template<class T,class... Args,size_t ...I>
 		static Any _NewImpl(Span<Any> args, std::index_sequence<I...>) {
-			return Any::Create<T>(args[I].as<std::remove_reference_t<Args>>()...);
+			return Any::Create<T>(args[I].template as<std::remove_reference_t<Args>>()...);
 		}
 
 		//! @brief			引数ありのコンストラクタ
@@ -639,7 +639,7 @@ namespace ob::core {
 		//! @brief			引数ありのコンストラクタ
 		template<class T, class... Args, size_t ...I>
 		static void _PlacedNewImpl(void* ptr, Span<Any> args, std::index_sequence<I...>) {
-			new(ptr)T(args[I].as<std::remove_reference_t<Args>>()...);
+			new(ptr)T(args[I].template as<std::remove_reference_t<Args>>()...);
 		}
 
 		//! @brief			引数ありのコンストラクタ

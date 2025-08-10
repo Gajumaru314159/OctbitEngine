@@ -41,8 +41,7 @@ namespace ob::core {
 	AsyncFileEvent::AsyncFileEvent() {
 		m_impl.construct();
 	}
-	AsyncFileEvent::~AsyncFileEvent() {
-	}
+	AsyncFileEvent::~AsyncFileEvent() = default;
 	bool AsyncFileEvent::poll() const {
 		return WaitForSingleObject(m_impl->handle, 0) == WAIT_OBJECT_0;
 	}
@@ -77,9 +76,7 @@ namespace ob::core {
 	}
 
 	//! @brief デストラクタ
-	AsyncFileHandle::~AsyncFileHandle() {
-
-	}
+	AsyncFileHandle::~AsyncFileHandle() = default;
 
 	const String& AsyncFileHandle::path()const {
 		return m_impl->path;
@@ -121,9 +118,7 @@ namespace ob::core {
 	}
 
 	//! @brief デストラクタ
-	AsyncFileQueue::~AsyncFileQueue() {
-
-	}
+	AsyncFileQueue::~AsyncFileQueue() = default;
 
 	//! @brief 非同期読み込みリクエストを追加
 	void AsyncFileQueue::add(const AsyncFileRequest& desc) {
@@ -160,7 +155,7 @@ namespace ob::core {
 
 				bool canUseStackAlloc = desc.size < STACK_ALLOCATABLE_SIZE;
 
-				void* compressed = canUseStackAlloc ? stackBuffer : new u8(desc.size);
+				u8* compressed = canUseStackAlloc ? stackBuffer : new u8(desc.size);
 
 				file.read(compressed, desc.size);
 
@@ -231,9 +226,7 @@ namespace ob::core {
 	}
 
 	//! @brief デストラクタ
-	AsyncFile::~AsyncFile() {
-
-	}
+	AsyncFile::~AsyncFile() = default;
 
 	//! @brief 非同期読み込みが完了しているか
 	bool AsyncFile::poll()const {

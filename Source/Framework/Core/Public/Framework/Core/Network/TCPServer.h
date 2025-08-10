@@ -6,7 +6,6 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Network/TCPClient.h>
-#include <Framework/Core/Network/IPAddress.h>
 
 namespace ob::core {
 
@@ -30,7 +29,7 @@ namespace ob::core {
 		/// @details
 		/// 新規のクライアント接続があった場合は、そのクライアントと通信するためのTCPClientを返します。
 		/// 新規のクライアント接続がなかった場合は空のUPtrを返します。
-		auto accept() -> UPtr<TCPClient>;
+		auto accept() const -> UPtr<TCPClient>;
 
 		/// クローズ状態か
 		bool isClosed() const;

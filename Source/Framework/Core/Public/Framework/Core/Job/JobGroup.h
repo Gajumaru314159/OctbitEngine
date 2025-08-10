@@ -48,7 +48,7 @@ namespace ob::core {
         void requestRelease();
 
     private:
-        JobGroup(JobSystem& system,StringView name);
+
         void onLeaveSubGroup(JobExecutor& executor);
 
         s32 countLeafGroup()const;

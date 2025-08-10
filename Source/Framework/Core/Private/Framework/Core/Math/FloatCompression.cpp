@@ -60,7 +60,7 @@ namespace ob::core {
 
         if (expNum == 0)return 0.0f;
 
-        f32 sign = (f32)((1 << 10) + (value & 0x03ff)) / (f32)(1 << 10);
+        f32 sign = static_cast<f32>((1 << 10) + (value & 0x03ff)) / static_cast<f32>(1 << 10);
         u32 note = (value & 0x8000) >> 15;
         f32 exp = s_float16ToFloat[note][expNum];
 
