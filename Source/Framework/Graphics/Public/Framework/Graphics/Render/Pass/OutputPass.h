@@ -26,7 +26,7 @@ namespace ob::graphics {
 		};
 	public:
 
-		Output render(FG& fg, RenderView& view, Input input) const;
+		Output render(FG& fg, RenderView& view, const Input& input) const;
 
 	};
 

@@ -21,7 +21,7 @@ namespace ob::graphics {
 		};
 	public:
 		EarlyZPass();
-		Output render(FG& fg, RenderView& view, Input input)const;
+		Output render(FG& fg, RenderView& view, const Input& input)const;
 	};
 
 	class OpaquePass : public RenderPass {
@@ -38,7 +38,7 @@ namespace ob::graphics {
 		};
 	public:
 		OpaquePass();
-		Output render(FG& fg, RenderView& view, Input input)const;
+		Output render(FG& fg, RenderView& view, const Input& input)const;
 	};
 
 	class MaskedPass : public RenderPass {
@@ -55,7 +55,7 @@ namespace ob::graphics {
 		};
 	public:
 		MaskedPass();
-		Output render(FG& fg, RenderView& view, Input input)const;
+		Output render(FG& fg, RenderView& view, const Input& input)const;
 	};
 
 

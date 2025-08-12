@@ -25,10 +25,10 @@ namespace ob::graphics {
 		ImGuiPass();
 
 		//! @brief		デストラクタ
-		~ImGuiPass();
+		~ImGuiPass() override;
 
 		//! @brief		描画
-		Output render(FG& fg, RenderView& view, Input input) const;
+		Output render(FG& fg, RenderView& view, const Input& input) const;
 	public:
 		static void AddTask(RenderView& view, ImGuiHandle& handle, ImGuiDelegate func);
 	};

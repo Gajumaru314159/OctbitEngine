@@ -19,9 +19,9 @@ namespace ob::graphics {
 		return std::nullopt;
 	}
 
-	OutputPass::Output OutputPass::render(FG& fg, RenderView& view, Input input) const {
+	OutputPass::Output OutputPass::render(FG& fg, RenderView& view, const Input& input) const {
 
-		auto& output = view.get<OutputViewData>();
+		auto& data = view.get<OutputViewData>();
 		auto& material = view.get<MaterialRFData>();
 
 		material.block.setMatrix("MatrixV", Matrix::Identity);
@@ -34,8 +34,6 @@ namespace ob::graphics {
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
 				auto albedo = resources.getTexture(output.color);
-
-				auto& data = view.get<OutputViewData>();
 
 				if (data.swapchain) {
 					cmdList->applySwapChain(data.swapchain, albedo);

@@ -808,7 +808,7 @@ namespace ob::graphics {
 	ImGuiPass::~ImGuiPass() {}
 
 	//! @brief		コンストラクタ
-	ImGuiPass::Output ImGuiPass::render(FG& fg, RenderView& view, Input input) const {
+	ImGuiPass::Output ImGuiPass::render(FG& fg, RenderView& view, const Input& input) const {
 
 		auto& imgui = view.get<ImGuiData>();
 

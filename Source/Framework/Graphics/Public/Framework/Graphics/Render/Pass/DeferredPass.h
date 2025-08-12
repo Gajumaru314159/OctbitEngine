@@ -23,7 +23,7 @@ namespace ob::graphics {
 		};
 	public:
 		DeferredPass();
-		Output render(FG& fg, RenderView& view, Input input)const;
+		Output render(FG& fg, RenderView& view, const Input& input)const;
 	private:
 		Ref<Mesh> m_mesh;
 	};

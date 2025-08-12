@@ -47,7 +47,7 @@ namespace ob::graphics {
 
 	}
 
-	DeferredPass::Output DeferredPass::render(FG& fg, RenderView& view, Input input)const {
+	DeferredPass::Output DeferredPass::render(FG& fg, RenderView& view, const Input& input)const {
 
 		using namespace ob::rhi;
 
