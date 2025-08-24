@@ -279,43 +279,6 @@ namespace ob::rhi {
 
 	//! @brief  バッファーを生成
 	Ref<Buffer> DirectX12Device::createBuffer(const BufferDesc& desc) {
-
-		if (!desc.isValid()) return nullptr;
-
-		// SmallBufferAllocatorを使用できるかチェック
-		auto canUseSmallAllocator = [&]() -> bool {
-			// UAVは個別リソース必須（リソースバリア制約）
-			if (desc.flags & BufferFlag::UnorderedAccess) {
-				return false;
-			}
-			
-			// 複数のバインドフラグがある場合は状態遷移が発生するため個別リソース推奨
-			if (1 < BitOp::GetBitCount(static_cast<u32>(desc.flags))) {
-				return false;
-			}
-
-			// サイズ制限
-			if (desc.size > 65536) {
-				return false;
-			}
-
-			return true;
-		};
-
-		if (canUseSmallAllocator()) {
-			auto& allocator = getSmallBufferAllocator(desc.flags.get_enum());
-			size_t alignment = SmallBufferAllocator::GetAlignmentFromUsage(desc);
-			auto allocation = allocator.allocate(desc.size, alignment);
-			
-			if (allocation.resource) {
-				Ref<Buffer> p = new DirectX12Buffer(*this, desc, allocation);
-				if (p.cast<DirectX12Buffer>()->isValid()) {
-					return p;
-				}
-			}
-		}
-
-		// フォールバック：従来の個別リソース生成
 		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
 	}
 

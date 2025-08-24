@@ -8,11 +8,6 @@
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
 #include "SmallBufferAllocator.h"
 
-// 前方宣言
-namespace ob::rhi {
-	struct BufferAllocation;
-}
-
 namespace ob::rhi {
 
 	//! @brief      バッファ
@@ -31,12 +26,8 @@ namespace ob::rhi {
 		DirectX12Buffer(class DirectX12Device& device, const BufferViewDesc& desc);
 
 
-		//! @brief  コンストラクタ（サブアロケーション用）
-		DirectX12Buffer(class DirectX12Device& device, const BufferDesc& desc, const BufferAllocation& allocation);
-
-
 		//! @brief  デストラクタ
-		~DirectX12Buffer();
+		~DirectX12Buffer() override;
 
 
 		//! @brief  妥当な状態か
@@ -95,7 +86,7 @@ namespace ob::rhi {
 
 	private:
 
-		class DirectX12Device&			m_device;
+		DirectX12Device&			m_device;
 		BufferDesc					m_desc;
 		BufferViewDesc				m_viewDesc;
 		DescriptorHandle			m_handle;

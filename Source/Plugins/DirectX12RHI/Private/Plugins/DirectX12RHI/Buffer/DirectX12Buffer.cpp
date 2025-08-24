@@ -34,36 +34,53 @@ namespace ob::rhi {
 	{
 		if (!m_desc.isValid()) return;
 
-		HRESULT result;
+		// SmallBufferAllocatorを使用できるかチェック
+		auto canUseSmallAllocator =
+			(desc.flags & BufferFlag::UnorderedAccess) &&
+			(1 < BitOp::GetBitCount(static_cast<u32>(desc.flags))) &&
+			(desc.size > 65536);
 
-		// リソースの生成
-		D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-		UINT64 alignment = 0; // PlacedBuffer対応時に設定
-		D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COMMON; // D3D12はパフォーマンス上暗黙的な状態遷移を使用するのでCommonを利用する
-		D3D12_RESOURCE_FLAGS flags = Convert(m_desc.flags);
-
-		D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.size,flags, alignment);
-
-		// TODO ReadBack対応
-		// if(m_desc.state == BufferState::CopyDesc) {
-		//	state = D3D12_RESOURCE_STATE_COPY_DEST;
-		//	heapprop.Type = D3D12_HEAP_TYPE_READBACK;
-		//	
-		
-		// ByteAddressBufferはSRVのFormatをR32_TYPELESSにする必要がある?
-		// resdesc.Format = DXGI_FORMAT_R32_TYPELESS;
-
-		ComPtr<ID3D12Resource> buffer;
-		result = device.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,state,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
-
-		if (FAILED(result))
-		{
-			Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
-			return;
+		// SmallBufferAllocatorを試す
+		if (canUseSmallAllocator) {
+			auto& allocator = device.getSmallBufferAllocator(desc.flags.get_enum());
+			size_t alignment = SmallBufferAllocator::GetAlignmentFromUsage(desc);
+			auto allocation = allocator.allocate(desc.size, alignment);
+			
+			if (allocation.resource) {
+				// サブアロケーション成功
+				m_resource = allocation.resource;
+				m_allocation = allocation;
+				return;
+			}
 		}
 
-		m_resource = buffer;
-		Utility::SetName(m_resource.Get(), m_desc.name);
+		// SmallBufferAllocatorを使用しない、またはサブアロケーションに失敗した場合は個別リソース生成
+		if (!m_resource) {
+			// フォールバック：従来の個別リソース生成
+			HRESULT result;
+
+			// リソースの生成
+			D3D12_HEAP_PROPERTIES heapprop = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+			UINT64 alignment = 0; // PlacedBuffer対応時に設定
+			D3D12_RESOURCE_STATES state = D3D12_RESOURCE_STATE_COMMON; // D3D12はパフォーマンス上暗黙的な状態遷移を使用するのでCommonを利用する
+			D3D12_RESOURCE_FLAGS flags = Convert(m_desc.flags);
+
+			D3D12_RESOURCE_DESC resdesc = CD3DX12_RESOURCE_DESC::Buffer(m_desc.size,flags, alignment);
+
+			// TODO ReadBack対応
+
+			ComPtr<ID3D12Resource> buffer;
+			result = device.getNative()->CreateCommittedResource(&heapprop,D3D12_HEAP_FLAG_NONE,&resdesc,state,nullptr,IID_PPV_ARGS(buffer.GetAddressOf()));
+
+			if (FAILED(result))
+			{
+				Utility::OutputFatalLog(result, "ID3D12Device::CreateCommittedResource()");
+				return;
+			}
+
+			m_resource = buffer;
+			Utility::SetName(m_resource.Get(), m_desc.name);
+		}
 
 		if (desc.flags & BufferFlag::Constant) {
 			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
@@ -77,36 +94,6 @@ namespace ob::rhi {
 			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
 			createUAV(m_handle.getCpuHandle());
 			m_viewDesc.type = BufferViewType::RWByteAddressBuffer;
-		} else {
-			m_viewDesc.type = BufferViewType::None;
-		}
-
-		manage();
-	}
-
-
-	//! @brief  コンストラクタ（サブアロケーション用）
-	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc, const BufferAllocation& allocation)
-		: m_device(device)
-		, m_desc(desc)
-	{
-		if (!m_desc.isValid()) return;
-
-		// サブアロケーションリソースを使用
-		m_resource = allocation.resource;
-		m_allocation = allocation;
-
-		if (desc.flags & BufferFlag::Constant) {
-			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
-			createCBV(m_handle.getCpuHandle());
-			m_viewDesc.type = BufferViewType::ConstantBuffer;
-		} else if (desc.flags & BufferFlag::ShaderResource) {
-			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
-			createSRV(m_handle.getCpuHandle());
-			m_viewDesc.type = BufferViewType::ByteAddressBuffer;
-		} else if (desc.flags & BufferFlag::UnorderedAccess) {
-			// UAVはサブアロケーション対象外（リソースバリア制約のため）
-			OB_ABORT("UAVはサブアロケーション対象外です");
 		} else {
 			m_viewDesc.type = BufferViewType::None;
 		}
