@@ -5,7 +5,8 @@
 #pragma once
 #include <Framework/Core/CorePrivate.h>
 #include <Framework/Core/Utility/Noncopyable.h>
-#ifdef ENALBE_TLSF_STACK_TRACE
+//#define ENABLE_TLSF_STACK_TRACE
+#ifdef ENABLE_TLSF_STACK_TRACE
 #include <Framework/Core/Log/StackTrace.h>
 #endif
 
@@ -21,7 +22,7 @@ namespace ob::core {
 		s32			index;      //!< 割り当て位置
 		s32			capacity;   //!< 割り当て可能容量
 		bool		allocated;  //!< 確保済みか
-#ifdef ENALBE_TLSF_STACK_TRACE
+#ifdef ENABLE_TLSF_STACK_TRACE
 		StackTrace stack;
 #endif
 	};

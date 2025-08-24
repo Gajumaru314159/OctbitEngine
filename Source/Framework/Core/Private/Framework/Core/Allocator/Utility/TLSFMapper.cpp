@@ -95,7 +95,6 @@ namespace ob::core {
 
 		TLSFBlock* pBlock = allocateFreeBlock(size);
 		if (pBlock == nullptr) {
-			LOG_FATAL_EX("Graphic", "TLSFBlockのアロケートに失敗しました。[size={}]", size);
 			return nullptr;
 		}
 #ifdef ENABLE_TLSF_STACK_TRACE
