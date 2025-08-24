@@ -2,24 +2,24 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include "SmallBufferAllocator.h"
+#include <Plugins/DirectX12RHI/Buffer/SmallBufferAllocator.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
 
 namespace ob::rhi {
 
-	//! @brief バッファ用途からアライメント要求を取得
-	BufferUsageAlignment SmallBufferAllocator::GetAlignmentFromUsage(rhi::BufferState usage) {
-		switch (usage) {
+	//! @brief バッファ記述からアライメント要求を取得
+	size_t SmallBufferAllocator::GetAlignmentFromUsage(const BufferDesc& desc) {
+		switch (desc.state) {
 		case BufferState::Vertex:
-			return BufferUsageAlignment::None;
+			return 1; // アライメントなし（頂点バッファ等）
 		case BufferState::Index:
-			return BufferUsageAlignment::Index32; // 32bit前提、実際は動的に決める必要あり
+			return desc.stride > 0 ? desc.stride : 4; // strideで判定（2 or 4バイト）、strideが0の場合は4バイトとする
 		case BufferState::Constant:
-			return BufferUsageAlignment::ConstantBuffer;
+			return 256; // 定数バッファ
 		case BufferState::ShaderResource:
-			return BufferUsageAlignment::ByteAddress;
+			return 16; // ByteAddressBuffer
 		default:
-			return BufferUsageAlignment::None;
+			return 1; // アライメントなし
 		}
 	}
 
@@ -78,10 +78,10 @@ namespace ob::rhi {
 	}
 
 	//! @brief バッファをアロケート
-	BufferAllocation SmallBufferAllocator::allocate(size_t size, BufferUsageAlignment alignment) {
+	BufferAllocation SmallBufferAllocator::allocate(size_t size, size_t alignment) {
 		ScopeLock lock(m_spinLock);
 
-		size_t alignedSize = core::align_up(size, static_cast<size_t>(alignment));
+		size_t alignedSize = core::align_up(size, alignment);
 
 		BufferAllocation allocation = {};
 		allocation.size = size;
@@ -95,9 +95,8 @@ namespace ob::rhi {
 
 				// アライメント調整されたオフセットを計算
 				size_t offset = static_cast<size_t>(block->index);
-				size_t alignmentValue = static_cast<size_t>(alignment);
-				if (alignmentValue > 1) {
-					offset = (offset + alignmentValue - 1) & ~(alignmentValue - 1);
+				if (alignment > 1) {
+					offset = (offset + alignment - 1) & ~(alignment - 1);
 				}
 
 				allocation.resource = chunk->resource;
@@ -123,9 +122,8 @@ namespace ob::rhi {
 
 		// アライメント調整されたオフセットを計算
 		size_t offset = static_cast<size_t>(block->index);
-		size_t alignmentValue = static_cast<size_t>(alignment);
-		if (alignmentValue > 1) {
-			offset = (offset + alignmentValue - 1) & ~(alignmentValue - 1);
+		if (alignment > 1) {
+			offset = (offset + alignment - 1) & ~(alignment - 1);
 		}
 
 		allocation.resource = chunk->resource;
@@ -156,7 +154,7 @@ namespace ob::rhi {
 
 
 	//! @brief 新しいチャンクを作成
-	core::UPtr<SmallBufferAllocator::BufferChunk> SmallBufferAllocator::createChunk() {
+	UPtr<SmallBufferAllocator::BufferChunk> SmallBufferAllocator::createChunk() {
 		return std::make_unique<BufferChunk>(m_device, m_heapType, m_chunkSize);
 	}
 

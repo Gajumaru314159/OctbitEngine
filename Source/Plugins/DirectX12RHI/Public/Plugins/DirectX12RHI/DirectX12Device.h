@@ -192,7 +192,7 @@ namespace ob::rhi {
 		ComPtr<IDStorageFactory>& getDirectStorageFactory();
 
 		//! @brief  SmallBufferAllocatorを取得
-		SmallBufferAllocator& getSmallBufferAllocator(D3D12_HEAP_TYPE heapType);
+		SmallBufferAllocator& getSmallBufferAllocator(BufferFlag flag);
 
 
 	private:
@@ -249,7 +249,7 @@ namespace ob::rhi {
 		ComPtr<IDStorageFactory>			g_dsfactory;
 
 		// SmallBufferAllocator管理
-		HashMap<D3D12_HEAP_TYPE, core::UPtr<SmallBufferAllocator>>	m_smallBufferAllocators;
+		HashMap<BufferFlag, core::UPtr<SmallBufferAllocator>>	m_smallBufferAllocators;
 
 #ifdef OB_DEBUG
 		UPtr<class PIXModule> m_pixModule;

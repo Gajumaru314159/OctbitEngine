@@ -263,12 +263,14 @@ namespace ob::rhi {
 
 
 	//! @brief  SmallBufferAllocatorを取得
-	SmallBufferAllocator& DirectX12Device::getSmallBufferAllocator(D3D12_HEAP_TYPE heapType) {
-		auto it = m_smallBufferAllocators.find(heapType);
+	SmallBufferAllocator& DirectX12Device::getSmallBufferAllocator(BufferFlag flag) {
+		auto it = m_smallBufferAllocators.find(flag);
 		if (it == m_smallBufferAllocators.end()) {
+			// BufferFlagに基づいてヒープタイプを決定
+			D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT;
 			auto allocator = std::make_unique<SmallBufferAllocator>(*m_device.Get(), heapType);
 			auto ptr = allocator.get();
-			m_smallBufferAllocators[heapType] = std::move(allocator);
+			m_smallBufferAllocators[flag] = std::move(allocator);
 			return *ptr;
 		}
 		return *it->second;
@@ -301,14 +303,8 @@ namespace ob::rhi {
 		};
 
 		if (canUseSmallAllocator()) {
-			// ヒープタイプを用途に応じて決定
-			D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT;
-			if (desc.state == BufferState::CopySource || desc.state == BufferState::CopyDest) {
-				heapType = D3D12_HEAP_TYPE_UPLOAD;
-			}
-
-			auto& allocator = getSmallBufferAllocator(heapType);
-			BufferUsageAlignment alignment = SmallBufferAllocator::GetAlignmentFromUsage(desc.state);
+			auto& allocator = getSmallBufferAllocator(desc.flags.get_enum());
+			size_t alignment = SmallBufferAllocator::GetAlignmentFromUsage(desc);
 			auto allocation = allocator.allocate(desc.size, alignment);
 			
 			if (allocation.resource) {

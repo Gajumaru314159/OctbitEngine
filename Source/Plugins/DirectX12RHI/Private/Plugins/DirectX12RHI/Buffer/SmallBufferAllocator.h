@@ -18,17 +18,6 @@ namespace ob::rhi {
 	// 前方宣言
 	class SmallBufferAllocator;
 
-	//! @brief バッファの用途別アライメント情報
-	enum class BufferUsageAlignment : u32 {
-		None = 1,           //!< アライメントなし（頂点バッファ等）
-		Index16 = 2,        //!< 16bitインデックスバッファ
-		Index32 = 4,        //!< 32bitインデックスバッファ  
-		ConstantBuffer = 256, //!< 定数バッファ
-		ByteAddress = 16,   //!< ByteAddressBuffer
-		TypedR32 = 4,      //!< R32フォーマット
-		TypedRG32 = 8,     //!< RG32フォーマット
-		TypedRGBA32 = 16,  //!< RGBA32フォーマット
-	};
 
 	//! @brief バッファ確保情報
 	struct BufferAllocation {
@@ -44,7 +33,7 @@ namespace ob::rhi {
 	//!
 	//! @details D3D12_DEFAULT_RESOURCE_PLACEMENT_ALIGNMENT以下の
 	//!          小さなバッファを効率的に管理するアロケーター
-	class SmallBufferAllocator : private core::Noncopyable {
+	class SmallBufferAllocator : private Noncopyable {
 	public:
 
 		//! @brief コンストラクタ
@@ -60,14 +49,14 @@ namespace ob::rhi {
 		//! @param size バッファサイズ
 		//! @param alignment アライメント要求
 		//! @return 確保情報
-		BufferAllocation allocate(size_t size, BufferUsageAlignment alignment);
+		BufferAllocation allocate(size_t size, size_t alignment);
 
 		//! @brief バッファを解放
 		//! @param allocation 確保情報
 		void free(const BufferAllocation& allocation);
 
-		//! @brief バッファ用途からアライメント要求を取得
-		static BufferUsageAlignment GetAlignmentFromUsage(rhi::BufferState usage);
+		//! @brief バッファ記述からアライメント要求を取得
+		static size_t GetAlignmentFromUsage(const BufferDesc& desc);
 
 	private:
 
@@ -81,7 +70,7 @@ namespace ob::rhi {
 		};
 
 		//! @brief 新しいチャンクを作成
-		core::UPtr<BufferChunk> createChunk();
+		UPtr<BufferChunk> createChunk();
 
 		//! @brief 指定サイズを確保できるチャンクを検索
 		BufferChunk* findAvailableChunk(size_t alignedSize);
@@ -90,8 +79,8 @@ namespace ob::rhi {
 		ID3D12Device& m_device;                   //!< DirectX12デバイス
 		D3D12_HEAP_TYPE m_heapType;               //!< ヒープタイプ
 		size_t m_chunkSize;                      //!< チャンクサイズ
-		Vector<core::UPtr<BufferChunk>> m_chunks; //!< チャンクリスト
-		mutable core::SpinLock m_spinLock;        //!< スピンロック
+		Vector<UPtr<BufferChunk>> m_chunks; //!< チャンクリスト
+		mutable SpinLock m_spinLock;        //!< スピンロック
 	};
 
 
