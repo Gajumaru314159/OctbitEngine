@@ -284,10 +284,9 @@ namespace ob::rhi {
 			}
 			
 			if (auto pBuffer = buffer.cast<DirectX12Buffer>()) {
-				// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 				auto& view = views[size];
-				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-				view.SizeInBytes = static_cast<UINT>(pBuffer->getDesc().size);
+				view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress() + pBuffer->getViewOffset();
+				view.SizeInBytes = static_cast<UINT>(pBuffer->getViewSize());
 				view.StrideInBytes = pBuffer->getDesc().stride;
 			} else {
 				LOG_ERROR("空の頂点バッファが含まれています");
@@ -302,10 +301,9 @@ namespace ob::rhi {
 	//! @brief      インデックスバッファを設定
 	void DirectX12CommandList::setIndexBuffer(const Ref<Buffer>& buffer) {
 		if (auto pBuffer = buffer.cast<DirectX12Buffer>()) {
-			// TODO SmallBufferAllocatorに対応してBufferLocationにオフセットを対応する
 			D3D12_INDEX_BUFFER_VIEW view;
-			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress();
-			view.SizeInBytes = static_cast<UINT>(pBuffer->getDesc().size);
+			view.BufferLocation = pBuffer->getNative()->GetGPUVirtualAddress() + pBuffer->getViewOffset();
+			view.SizeInBytes = static_cast<UINT>(pBuffer->getViewSize());
 			view.Format = pBuffer->getDesc().stride == 2 ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT;
 			m_cmdList->IASetIndexBuffer(&view);
 		} else {

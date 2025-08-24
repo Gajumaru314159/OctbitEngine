@@ -12,6 +12,11 @@
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorUploader.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHeap.h>
 
+// 前方宣言
+namespace ob::rhi {
+	class SmallBufferAllocator;
+}
+
 namespace ob::platform {
 	class WindowManager;
 }
@@ -186,6 +191,9 @@ namespace ob::rhi {
 		//! @brief  IDStorageFactoryを取得
 		ComPtr<IDStorageFactory>& getDirectStorageFactory();
 
+		//! @brief  SmallBufferAllocatorを取得
+		SmallBufferAllocator& getSmallBufferAllocator(D3D12_HEAP_TYPE heapType);
+
 
 	private:
 
@@ -224,6 +232,9 @@ namespace ob::rhi {
 		HashMap<DescriptorHeapType, UPtr<class DescriptorStagingHeap>> m_descriptorStagingHeaps;   // デスクリプタ・ヒープ・リスト
 
 		ComPtr<IDStorageFactory>			g_dsfactory;
+
+		// SmallBufferAllocator管理
+		HashMap<D3D12_HEAP_TYPE, core::UPtr<SmallBufferAllocator>>	m_smallBufferAllocators;
 
 #ifdef OB_DEBUG
 		UPtr<class PIXModule> m_pixModule;

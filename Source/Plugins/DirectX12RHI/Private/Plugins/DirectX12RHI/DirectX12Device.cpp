@@ -18,6 +18,7 @@
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorLayout.h>
 #include <Plugins/DirectX12RHI/Descriptor/DirectX12DescriptorTable.h>
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
+#include <Plugins/DirectX12RHI/Buffer/SmallBufferAllocator.h>
 #include <Plugins/DirectX12RHI/GraphicFile/DirectX12GraphicFile.h>
 #include <Framework/Platform/System.h>
 
@@ -64,6 +65,18 @@ namespace ob::rhi {
 		m_copyCommandList = {};
 
 		finalize();
+	}
+
+	//! @brief  SmallBufferAllocatorを取得
+	SmallBufferAllocator& DirectX12Device::getSmallBufferAllocator(D3D12_HEAP_TYPE heapType) {
+		auto it = m_smallBufferAllocators.find(heapType);
+		if (it == m_smallBufferAllocators.end()) {
+			auto allocator = std::make_unique<SmallBufferAllocator>(*m_device.Get(), heapType);
+			auto& ref = *allocator;
+			m_smallBufferAllocators[heapType] = std::move(allocator);
+			return ref;
+		}
+		return *it->second;
 	}
 
 
@@ -245,6 +258,26 @@ namespace ob::rhi {
 
 	//! @brief  バッファーを生成
 	Ref<Buffer> DirectX12Device::createBuffer(const BufferDesc& desc) {
+		// UAVは従来通り個別リソース生成（リソースバリア制約のため）
+		if (desc.flags & BufferFlag::UnorderedAccess) {
+			SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
+		}
+
+		// 64KB以下で小さいバッファの場合、SmallBufferAllocatorを使用
+		if (desc.size <= 65536) {
+
+			D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT; // TODO: 実際の用途に応じて決定
+			auto& allocator = getSmallBufferAllocator(heapType);
+			
+			BufferUsageAlignment alignment = getAlignmentFromUsage(desc.state);
+			auto allocation = allocator.allocate(desc.size, alignment);
+			
+			if (allocation.resource) {
+				SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc, allocation);
+			}
+		}
+
+		// フォールバック：従来の個別リソース生成
 		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
 	}
 	Ref<Buffer> DirectX12Device::createBuffer(const BufferViewDesc& desc) {

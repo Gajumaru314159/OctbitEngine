@@ -5,6 +5,7 @@
 #include <Plugins/DirectX12RHI/Buffer/DirectX12Buffer.h>
 #include <Plugins/DirectX12RHI/DirectX12Device.h>
 #include <Plugins/DirectX12RHI/Utility/Utility.h>
+#include <Plugins/DirectX12RHI/Buffer/SmallBufferAllocator.h>
 
 namespace ob::rhi {
 
@@ -30,6 +31,10 @@ namespace ob::rhi {
 	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc)
 		: m_device(device)
 		, m_desc(desc)
+		, m_viewOffset(0)
+		, m_viewSize(desc.size)
+		, m_isSubAllocation(false)
+		, m_allocation(nullptr)
 	{
 		if (!m_desc.isValid()) return;
 
@@ -84,6 +89,40 @@ namespace ob::rhi {
 	}
 
 
+	//! @brief  コンストラクタ（サブアロケーション用）
+	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc, const BufferAllocation& allocation)
+		: m_device(device)
+		, m_desc(desc)
+		, m_viewOffset(allocation.offset)
+		, m_viewSize(allocation.size)
+		, m_isSubAllocation(true)
+		, m_allocation(&allocation)
+	{
+		if (!m_desc.isValid()) return;
+
+		// サブアロケーションリソースを使用
+		m_resource = allocation.resource;
+		Utility::SetName(m_resource.Get(), m_desc.name);
+
+		if (desc.flags & BufferFlag::Constant) {
+			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			createCBV(m_handle.getCpuHandle());
+			m_viewDesc.type = BufferViewType::ConstantBuffer;
+		} else if (desc.flags & BufferFlag::ShaderResource) {
+			device.allocateHandle(DescriptorHeapType::CBV_SRV_UAV, m_handle, 1);
+			createSRV(m_handle.getCpuHandle());
+			m_viewDesc.type = BufferViewType::ByteAddressBuffer;
+		} else if (desc.flags & BufferFlag::UnorderedAccess) {
+			// UAVはサブアロケーション対象外（リソースバリア制約のため）
+			OB_ABORT("UAVはサブアロケーション対象外です");
+		} else {
+			m_viewDesc.type = BufferViewType::None;
+		}
+
+		manage();
+	}
+
+
 	//! @brief  コンストラクタ
 	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferDesc& desc, const Blob& blob)
 		: DirectX12Buffer(device,desc)
@@ -95,6 +134,10 @@ namespace ob::rhi {
 	DirectX12Buffer::DirectX12Buffer(DirectX12Device& device, const BufferViewDesc& desc)
 		: m_device(device)
 		, m_viewDesc(desc)
+		, m_viewOffset(0)
+		, m_viewSize(0)
+		, m_isSubAllocation(false)
+		, m_allocation(nullptr)
 	{
 		auto base = desc.base.cast<DirectX12Buffer>();
 
@@ -137,6 +180,10 @@ namespace ob::rhi {
 		}
 
 		m_resource = base->m_resource;
+		m_viewOffset = base->m_viewOffset;
+		m_viewSize = base->m_viewSize;
+		m_isSubAllocation = base->m_isSubAllocation;
+		m_allocation = base->m_allocation;
 
 		manage();
 	}
@@ -182,7 +229,7 @@ namespace ob::rhi {
 	//! @details    map / unmap と異なり、バッファの更新は描画スレッドの直前にまとめて行われます。
 	void DirectX12Buffer::updateDirect(size_t size, const void* data, size_t offset) {
 		if (data == nullptr) return;
-		m_device.getBufferUploader().add(BlobView(data, size), m_resource, offset);
+		m_device.getBufferUploader().add(BlobView(data, size), m_resource, offset + m_viewOffset);
 	}
 
 
@@ -192,8 +239,7 @@ namespace ob::rhi {
 	void DirectX12Buffer::updateDirect(const CopyFunc& func){
 		if (!func) return;
 
-
-		m_device.getBufferUploader().add(func, m_desc.size, m_resource, 0);
+		m_device.getBufferUploader().add(func, m_viewSize, m_resource, m_viewOffset);
 
 		return;
 
@@ -218,8 +264,8 @@ namespace ob::rhi {
 		OB_ASSERT(m_desc.flags & BufferFlag::Constant, "定数バッファを生成するには、BufferFlag::Constantフラグが必要です。 [name={}]", m_desc.name);
 
 		D3D12_CONSTANT_BUFFER_VIEW_DESC desc = {};
-		desc.BufferLocation = m_resource->GetGPUVirtualAddress();
-		desc.SizeInBytes = static_cast<UINT>(m_desc.size);
+		desc.BufferLocation = m_resource->GetGPUVirtualAddress() + m_viewOffset;
+		desc.SizeInBytes = static_cast<UINT>(m_viewSize);
 
 		m_device.getNative()->CreateConstantBufferView(&desc, handle);
 
@@ -237,8 +283,8 @@ namespace ob::rhi {
 		desc.Format = isStructuredBuffer ? DXGI_FORMAT_UNKNOWN : DXGI_FORMAT_R32_TYPELESS;
 		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		desc.Buffer.FirstElement = 0;
-		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size/m_desc.stride : m_desc.size/4;
+		desc.Buffer.FirstElement = static_cast<UINT64>(m_viewOffset / (isStructuredBuffer ? m_desc.stride : 4));
+		desc.Buffer.NumElements = isStructuredBuffer ? m_viewSize/m_desc.stride : m_viewSize/4;
 		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
 
@@ -263,9 +309,9 @@ namespace ob::rhi {
 		D3D12_UNORDERED_ACCESS_VIEW_DESC desc = {};
 		desc.Format = DXGI_FORMAT_UNKNOWN;
 		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-		desc.Buffer.FirstElement = 0;
+		desc.Buffer.FirstElement = static_cast<UINT64>(m_viewOffset / (isStructuredBuffer ? m_desc.stride : 4));
 		desc.Buffer.StructureByteStride = m_desc.stride;
-		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size / m_desc.stride : m_desc.size / 4;
+		desc.Buffer.NumElements = isStructuredBuffer ? m_viewSize / m_desc.stride : m_viewSize / 4;
 		desc.Buffer.CounterOffsetInBytes = 0; // 何？
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
 
