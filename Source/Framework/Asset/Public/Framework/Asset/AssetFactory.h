@@ -10,7 +10,7 @@ namespace ob::asset {
 
 	class AssetFactory {
 	public:
-		virtual SPtr<Asset> create() = 0;
+		virtual Ref<Asset> create() = 0;
 	};
 
 

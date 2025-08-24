@@ -42,10 +42,10 @@ namespace ob::asset {
 	}
 
 	//! @brief 読み込み完了イベント
-	void AssetHandleBase::onLoad(const SPtr<Asset>& asset) {
+	void AssetHandleBase::onLoad(const Ref<Asset>& asset) {
 
 		// Swapが終わるまで寿命を延長
-		SPtr<Asset> old = m_asset;
+		Ref<Asset> old = m_asset;
 
 		m_asset = asset;
 

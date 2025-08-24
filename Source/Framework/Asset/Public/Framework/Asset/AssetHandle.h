@@ -35,10 +35,10 @@ namespace ob::asset {
 		AssetHandleBase() = default;
 		virtual ~AssetHandleBase();
 
-		void onLoad(const SPtr<Asset>& asset);
+		void onLoad(const Ref<Asset>& asset);
 
 	protected:
-		SPtr<Asset>         m_asset;
+		Ref<Asset>			m_asset;
 		Action              m_loaded;
 
 		// NOTE EventNotifierはメモリサイズを使用するため専用のハンドルを実装しても良いかもしれない

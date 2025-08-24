@@ -12,7 +12,7 @@ namespace ob::core {
 namespace ob::asset {
 
 	//! @brief アセット基底
-	class Asset {
+	class Asset : public RefObject {
 	public:
 
 		//! @brief AssetId を取得

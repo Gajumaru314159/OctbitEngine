@@ -75,7 +75,7 @@ namespace ob::asset {
 
 		// ロード中に新規読み込みリクエストが来た場合は？
 		SpinLock m_assetLock;
-		SPtr<Asset> m_asset;
+		Ref<Asset> m_asset;
 
 		// TODO 実体を持ちたい
 		Vector<AssetId> m_dependencies;

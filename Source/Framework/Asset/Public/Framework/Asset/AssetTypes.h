@@ -7,7 +7,7 @@
 namespace ob::asset {
 
 	class Asset;
-	OB_EVENT_NOTIFIER(AssetEvent, const SPtr<Asset>&);
+	OB_EVENT_NOTIFIER(AssetEvent, const Ref<Asset>&);
 
 
 }
