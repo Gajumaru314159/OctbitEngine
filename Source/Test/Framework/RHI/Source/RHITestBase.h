@@ -47,6 +47,7 @@ protected:
 	};
 	virtual void TearDown() {};
 
+	//Logger m_logger;
 	RHIConfig m_config;
 	DirectX12RHIConfig m_dx12config;
 	VulkanRHIConfig m_vkconfig;

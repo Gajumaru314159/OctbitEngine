@@ -51,7 +51,20 @@ namespace ob::rhi {
 				m_pixModule = std::make_unique<PIXModule>();
 			}
 		);
-		initialize();
+
+		if (!initializeDXGIDevice()) throw Exception("");
+
+		m_commandQueue = std::make_unique<CommandQueue>(*this);
+		OB_DEBUG_CONTEXT(m_commandQueue->setName("SystemCommandQueue"));
+
+		if (!initializeDescriptorHeaps()) throw Exception("");
+
+		if (!initializeShaderCompiler()) throw Exception("");
+
+		if (!initializeUploaders()) throw Exception("");
+
+		if (!initializeDirectStorage()) throw Exception("");
+
 	}
 
 
@@ -64,19 +77,11 @@ namespace ob::rhi {
 		m_bufferUploader.destruct();
 		m_copyCommandList = {};
 
-		finalize();
-	}
+		OB_DEBUG_CONTEXT(finalizeDebugMessageCallback());
 
-	//! @brief  SmallBufferAllocatorを取得
-	SmallBufferAllocator& DirectX12Device::getSmallBufferAllocator(D3D12_HEAP_TYPE heapType) {
-		auto it = m_smallBufferAllocators.find(heapType);
-		if (it == m_smallBufferAllocators.end()) {
-			auto allocator = std::make_unique<SmallBufferAllocator>(*m_device.Get(), heapType);
-			auto& ref = *allocator;
-			m_smallBufferAllocators[heapType] = std::move(allocator);
-			return ref;
-		}
-		return *it->second;
+		finalize();
+
+		m_smallBufferAllocators.clear();
 	}
 
 
@@ -92,6 +97,35 @@ namespace ob::rhi {
 			m_commandQueue->entryCommandList(*commandList);
 		}
 	}
+
+
+	//! @brief  更新
+	void DirectX12Device::update() {
+
+		// Descriptorコピー
+		{
+			m_descriptorUploader->update();
+			for (auto& [type,heap] : m_descriptorStagingHeaps) {
+				heap->reset();
+			}
+		}
+
+		{
+			m_copyCommandList->begin();
+			m_bufferUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
+			m_textureUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
+			m_copyCommandList->end();
+
+			m_commandQueue->entryCommandListTop(*m_copyCommandList);
+			// m_copyCommandList->wait();
+		}
+
+		m_commandQueue->execute();
+		m_commandQueue->wait();
+
+		Device::update();
+	}
+
 
     //! @brief ビデオカード情報を取得  
     Vector<VideoCard> DirectX12Device::getVideoCards() const {  
@@ -158,34 +192,6 @@ namespace ob::rhi {
 
        return videoCards;  
     }
-
-	//! @brief  更新
-	void DirectX12Device::update() {
-
-		// Descriptorコピー
-		{
-			m_descriptorUploader->update();
-			for (auto& [type,heap] : m_descriptorStagingHeaps) {
-				heap->reset();
-			}
-		}
-
-		{
-			m_copyCommandList->begin();
-			m_bufferUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
-			m_textureUploader->update(*const_cast<DirectX12CommandList*>(m_copyCommandList.cast<DirectX12CommandList>())->getNative());
-			m_copyCommandList->end();
-
-			m_commandQueue->entryCommandListTop(*m_copyCommandList);
-			// m_copyCommandList->wait();
-		}
-
-		m_commandQueue->execute();
-		m_commandQueue->wait();
-
-		Device::update();
-	}
-
 
 	//! @brief  コマンドリストを生成
 	Ref<SwapChain> DirectX12Device::createSwapChain(const SwapChainDesc& desc) {
@@ -256,30 +262,69 @@ namespace ob::rhi {
 	}
 
 
+	//! @brief  SmallBufferAllocatorを取得
+	SmallBufferAllocator& DirectX12Device::getSmallBufferAllocator(D3D12_HEAP_TYPE heapType) {
+		auto it = m_smallBufferAllocators.find(heapType);
+		if (it == m_smallBufferAllocators.end()) {
+			auto allocator = std::make_unique<SmallBufferAllocator>(*m_device.Get(), heapType);
+			auto ptr = allocator.get();
+			m_smallBufferAllocators[heapType] = std::move(allocator);
+			return *ptr;
+		}
+		return *it->second;
+	}
+
+
 	//! @brief  バッファーを生成
 	Ref<Buffer> DirectX12Device::createBuffer(const BufferDesc& desc) {
-		// UAVは従来通り個別リソース生成（リソースバリア制約のため）
-		if (desc.flags & BufferFlag::UnorderedAccess) {
-			SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
-		}
 
-		// 64KB以下で小さいバッファの場合、SmallBufferAllocatorを使用
-		if (desc.size <= 65536) {
+		if (!desc.isValid()) return nullptr;
 
-			D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT; // TODO: 実際の用途に応じて決定
-			auto& allocator = getSmallBufferAllocator(heapType);
+		// SmallBufferAllocatorを使用できるかチェック
+		auto canUseSmallAllocator = [&]() -> bool {
+			// UAVは個別リソース必須（リソースバリア制約）
+			if (desc.flags & BufferFlag::UnorderedAccess) {
+				return false;
+			}
 			
-			BufferUsageAlignment alignment = getAlignmentFromUsage(desc.state);
+			// 複数のバインドフラグがある場合は状態遷移が発生するため個別リソース推奨
+			if (1 < BitOp::GetBitCount(static_cast<u32>(desc.flags))) {
+				return false;
+			}
+
+			// サイズ制限
+			if (desc.size > 65536) {
+				return false;
+			}
+
+			return true;
+		};
+
+		if (canUseSmallAllocator()) {
+			// ヒープタイプを用途に応じて決定
+			D3D12_HEAP_TYPE heapType = D3D12_HEAP_TYPE_DEFAULT;
+			if (desc.state == BufferState::CopySource || desc.state == BufferState::CopyDest) {
+				heapType = D3D12_HEAP_TYPE_UPLOAD;
+			}
+
+			auto& allocator = getSmallBufferAllocator(heapType);
+			BufferUsageAlignment alignment = SmallBufferAllocator::GetAlignmentFromUsage(desc.state);
 			auto allocation = allocator.allocate(desc.size, alignment);
 			
 			if (allocation.resource) {
-				SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc, allocation);
+				Ref<Buffer> p = new DirectX12Buffer(*this, desc, allocation);
+				if (p.cast<DirectX12Buffer>()->isValid()) {
+					return p;
+				}
 			}
 		}
 
 		// フォールバック：従来の個別リソース生成
 		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
 	}
+
+
+	//! @brief  バッファーを生成
 	Ref<Buffer> DirectX12Device::createBuffer(const BufferViewDesc& desc) {
 		SAFE_CREATE(Buffer, DirectX12Buffer, *this, desc);
 	}
@@ -423,30 +468,11 @@ namespace ob::rhi {
 	}
 
 
-	//! @brief  初期化
-	bool DirectX12Device::initialize() {
-
-		if (!initializeDXGIDevice())return false;
-
-		m_commandQueue = std::make_unique<CommandQueue>(*this);
-		OB_DEBUG_CONTEXT(m_commandQueue->setName("SystemCommandQueue"));
-
-		if (!initializeDescriptorHeaps())return false;
-
-		if (!initializeShaderCompiler())return false;
-
-		if (!initializeUploaders())return false;
-
-		if (!initializeDirectStorage())return false;
-
-		return true;
-	}
-
-
 	//! @brief  DXGIDeviceの初期化
 	bool DirectX12Device::initializeDXGIDevice() {
 		HRESULT result;
 		UINT flagsDXGI = 0;
+
 #if OB_DEBUG
 		// DirectX12のデバッグレイヤーを有効にする
 		if (m_dx12config.enableDebugLayer) {
@@ -509,10 +535,10 @@ namespace ob::rhi {
 		OB_DEBUG_CONTEXT(m_device->SetName(L"System Device"));
 
 
-
-
 		ComPtr<ID3D12InfoQueue> infoQueue;
 		if (SUCCEEDED(m_device->QueryInterface(IID_PPV_ARGS(infoQueue.ReleaseAndGetAddressOf())))) {
+			// ID3D12InfoQueue1にQueryInterface
+			infoQueue.As(&m_infoQueue);
 			// 不必要な警告をフィルター
 			D3D12_MESSAGE_ID denyIds[] = {
 				D3D12_MESSAGE_ID_CLEARRENDERTARGETVIEW_MISMATCHINGCLEARVALUE,
@@ -529,20 +555,16 @@ namespace ob::rhi {
 
 			infoQueue->PushStorageFilter(&filter);
 
-
 			// D3D12 エラー発生時にブレーク
 			if (m_dx12config.breakWithWarning)infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, TRUE);
 			infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, TRUE);
 		}
 
+		OB_DEBUG_CONTEXT(if (!initializeDebugMessageCallback()) return false);
+
 		return true;
 	}
 
-
-	//! @brief  ビデオカード情報を初期化
-	bool DirectX12Device::initializeVideoCardInfo() {
-		return true;
-	}
 
 
 	//! @brief  デスクリプタヒープを初期化
@@ -656,6 +678,82 @@ namespace ob::rhi {
 		m_commandQueue->execute();
 		m_commandQueue->wait();
 	}
+
+#ifdef OB_DEBUG
+	//! @brief  デバッグメッセージコールバックを初期化
+	bool DirectX12Device::initializeDebugMessageCallback() {
+		if (!m_infoQueue) {
+			return true; // InfoQueue1が取得できない場合はスキップ
+		}
+
+		// メッセージコールバックを登録
+		HRESULT result = m_infoQueue->RegisterMessageCallback(
+			debugMessageCallback,
+			D3D12_MESSAGE_CALLBACK_FLAG_NONE,
+			this, // contextとしてthisポインタを渡す
+			&m_callbackCookie
+		);
+
+		if (FAILED(result)) {
+			LOG_ERROR_EX("DirectX12", "デバッグメッセージコールバックの登録に失敗しました。HRESULT = 0x{:08X}", static_cast<u32>(result));
+			return false;
+		}
+
+		return true;
+	}
+
+	//! @brief  デバッグメッセージコールバックを終了
+	void DirectX12Device::finalizeDebugMessageCallback() {
+		if (m_infoQueue && m_callbackCookie != 0) {
+			m_infoQueue->UnregisterMessageCallback(m_callbackCookie);
+			m_callbackCookie = 0;
+		}
+	}
+
+	//! @brief  デバッグメッセージコールバック関数
+	void CALLBACK DirectX12Device::debugMessageCallback(
+		D3D12_MESSAGE_CATEGORY category,
+		D3D12_MESSAGE_SEVERITY severity,
+		D3D12_MESSAGE_ID id,
+		LPCSTR description,
+		void* context
+	) {
+		// カテゴリを文字列に変換
+		const char* categoryStr = "Unknown";
+		switch (category) {
+		case D3D12_MESSAGE_CATEGORY_APPLICATION_DEFINED: categoryStr = "Application"; break;
+		case D3D12_MESSAGE_CATEGORY_MISCELLANEOUS: categoryStr = "Misc"; break;
+		case D3D12_MESSAGE_CATEGORY_INITIALIZATION: categoryStr = "Init"; break;
+		case D3D12_MESSAGE_CATEGORY_CLEANUP: categoryStr = "Cleanup"; break;
+		case D3D12_MESSAGE_CATEGORY_COMPILATION: categoryStr = "Compilation"; break;
+		case D3D12_MESSAGE_CATEGORY_STATE_CREATION: categoryStr = "StateCreation"; break;
+		case D3D12_MESSAGE_CATEGORY_STATE_SETTING: categoryStr = "StateSetting"; break;
+		case D3D12_MESSAGE_CATEGORY_STATE_GETTING: categoryStr = "StateGetting"; break;
+		case D3D12_MESSAGE_CATEGORY_RESOURCE_MANIPULATION: categoryStr = "Resource"; break;
+		case D3D12_MESSAGE_CATEGORY_EXECUTION: categoryStr = "Execution"; break;
+		case D3D12_MESSAGE_CATEGORY_SHADER: categoryStr = "Shader"; break;
+		}
+
+		// 重要度に応じてログレベルを決定し、出力
+		switch (severity) {
+		case D3D12_MESSAGE_SEVERITY_CORRUPTION:
+		case D3D12_MESSAGE_SEVERITY_ERROR:
+			LOG_ERROR_EX("DirectX12", "[{}] ID:{} {}", categoryStr, static_cast<u32>(id), description);
+			CallBreakPoint();
+			break;
+		case D3D12_MESSAGE_SEVERITY_WARNING:
+			LOG_WARNING_EX("DirectX12", "[{}] ID:{} {}", categoryStr, static_cast<u32>(id), description);
+			CallBreakPoint();
+			break;
+		case D3D12_MESSAGE_SEVERITY_INFO:
+			LOG_INFO_EX("DirectX12", "[{}] ID:{} {}", categoryStr, static_cast<u32>(id), description);
+			break;
+		case D3D12_MESSAGE_SEVERITY_MESSAGE:
+			LOG_TRACE_EX("DirectX12", "[{}] ID:{} {}", categoryStr, static_cast<u32>(id), description);
+			break;
+		}
+	}
+#endif
 
 
 }

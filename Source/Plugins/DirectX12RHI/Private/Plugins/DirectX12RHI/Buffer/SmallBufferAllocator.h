@@ -15,6 +15,9 @@ namespace ob::rhi {
 	using core::TLSFMapper;
 	using core::TLSFBlock;
 
+	// 前方宣言
+	class SmallBufferAllocator;
+
 	//! @brief バッファの用途別アライメント情報
 	enum class BufferUsageAlignment : u32 {
 		None = 1,           //!< アライメントなし（頂点バッファ等）
@@ -29,11 +32,12 @@ namespace ob::rhi {
 
 	//! @brief バッファ確保情報
 	struct BufferAllocation {
-		ID3D12Resource* resource;   //!< DirectX12リソース
-		size_t offset;             //!< ビュー開始オフセット
-		size_t size;               //!< ビューサイズ
-		const TLSFBlock* block;    //!< TLSFブロック（解放用）
-		bool isSubAllocation;      //!< サブアロケーションか
+		ComPtr<ID3D12Resource> resource;			//!< DirectX12リソース
+		size_t offset = 0;							//!< ビュー開始オフセット
+		size_t size = 0;							//!< ビューサイズ
+		const TLSFBlock* block = nullptr;			//!< TLSFブロック（解放用）
+		bool isSubAllocation = false;				//!< サブアロケーションか
+		SmallBufferAllocator* allocator = nullptr;	//!< アロケータ（解放用）
 	};
 
 	//! @brief Small Buffer Allocator
@@ -62,11 +66,8 @@ namespace ob::rhi {
 		//! @param allocation 確保情報
 		void free(const BufferAllocation& allocation);
 
-		//! @brief アライメント調整されたサイズを計算
-		//! @param size 元のサイズ
-		//! @param alignment アライメント要求
-		//! @return アライメント調整後のサイズ
-		static size_t GetAlignedSize(size_t size, BufferUsageAlignment alignment);
+		//! @brief バッファ用途からアライメント要求を取得
+		static BufferUsageAlignment GetAlignmentFromUsage(rhi::BufferState usage);
 
 	private:
 
@@ -93,7 +94,5 @@ namespace ob::rhi {
 		mutable core::SpinLock m_spinLock;        //!< スピンロック
 	};
 
-	//! @brief バッファ用途からアライメント要求を取得
-	BufferUsageAlignment getAlignmentFromUsage(rhi::BufferState usage);
 
 }

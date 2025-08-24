@@ -8,7 +8,7 @@
 namespace ob::rhi {
 
 	//! @brief バッファ用途からアライメント要求を取得
-	BufferUsageAlignment getAlignmentFromUsage(rhi::BufferState usage) {
+	BufferUsageAlignment SmallBufferAllocator::GetAlignmentFromUsage(rhi::BufferState usage) {
 		switch (usage) {
 		case BufferState::Vertex:
 			return BufferUsageAlignment::None;
@@ -79,18 +79,40 @@ namespace ob::rhi {
 
 	//! @brief バッファをアロケート
 	BufferAllocation SmallBufferAllocator::allocate(size_t size, BufferUsageAlignment alignment) {
-		core::ScopeLock lock(m_spinLock);
+		ScopeLock lock(m_spinLock);
 
-		size_t alignedSize = GetAlignedSize(size, alignment);
+		size_t alignedSize = core::align_up(size, static_cast<size_t>(alignment));
 
-		// 利用可能なチャンクを検索
-		BufferChunk* chunk = findAvailableChunk(alignedSize);
-		if (!chunk) {
-			// 新しいチャンクを作成
-			auto newChunk = createChunk();
-			chunk = newChunk.get();
-			m_chunks.push_back(std::move(newChunk));
+		BufferAllocation allocation = {};
+		allocation.size = size;
+		allocation.isSubAllocation = true;
+		allocation.allocator = this;
+
+		for (auto& chunk : m_chunks) {
+
+			// チャンクからメモリを確保
+			if (auto block = chunk->mapper.allocate(static_cast<s32>(alignedSize))) {
+
+				// アライメント調整されたオフセットを計算
+				size_t offset = static_cast<size_t>(block->index);
+				size_t alignmentValue = static_cast<size_t>(alignment);
+				if (alignmentValue > 1) {
+					offset = (offset + alignmentValue - 1) & ~(alignmentValue - 1);
+				}
+
+				allocation.resource = chunk->resource;
+				allocation.offset = offset;
+				allocation.block = block;
+
+				return allocation;
+			}
+
 		}
+
+		// 新しいチャンクを作成
+		auto newChunk = createChunk();
+		auto chunk = newChunk.get();
+		m_chunks.push_back(std::move(newChunk));
 
 		// チャンクからメモリを確保
 		const TLSFBlock* block = chunk->mapper.allocate(static_cast<s32>(alignedSize));
@@ -106,12 +128,9 @@ namespace ob::rhi {
 			offset = (offset + alignmentValue - 1) & ~(alignmentValue - 1);
 		}
 
-		BufferAllocation allocation = {};
-		allocation.resource = chunk->resource.Get();
+		allocation.resource = chunk->resource;
 		allocation.offset = offset;
-		allocation.size = size;
 		allocation.block = block;
-		allocation.isSubAllocation = true;
 
 		return allocation;
 	}
@@ -122,7 +141,7 @@ namespace ob::rhi {
 			return;
 		}
 
-		core::ScopeLock lock(m_spinLock);
+		ScopeLock lock(m_spinLock);
 
 		// 該当するチャンクを検索して解放
 		for (auto& chunk : m_chunks) {
@@ -135,14 +154,6 @@ namespace ob::rhi {
 		LOG_WARNING_EX("Graphic", "SmallBufferAllocatorで管理されていないブロックの解放が試行されました。");
 	}
 
-	//! @brief アライメント調整されたサイズを計算
-	size_t SmallBufferAllocator::GetAlignedSize(size_t size, BufferUsageAlignment alignment) {
-		size_t alignmentValue = static_cast<size_t>(alignment);
-		if (alignmentValue <= 1) {
-			return size;
-		}
-		return (size + alignmentValue - 1) & ~(alignmentValue - 1);
-	}
 
 	//! @brief 新しいチャンクを作成
 	core::UPtr<SmallBufferAllocator::BufferChunk> SmallBufferAllocator::createChunk() {

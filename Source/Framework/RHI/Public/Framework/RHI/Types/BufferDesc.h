@@ -154,7 +154,7 @@ namespace ob::rhi {
 		{
 			return BufferDesc(
 				initialState,
-				size,
+				align_up(size,16),
 				0,
 				flags
 			);

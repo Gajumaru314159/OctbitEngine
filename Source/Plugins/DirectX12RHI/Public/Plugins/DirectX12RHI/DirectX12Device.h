@@ -197,14 +197,23 @@ namespace ob::rhi {
 
 	private:
 
-		bool initialize();
-
 		bool initializeDXGIDevice();
-		bool initializeVideoCardInfo();
 		bool initializeDescriptorHeaps();
 		bool initializeShaderCompiler();
 		bool initializeUploaders();
 		bool initializeDirectStorage();
+
+#ifdef OB_DEBUG
+		bool initializeDebugMessageCallback();
+		void finalizeDebugMessageCallback();
+		static void CALLBACK debugMessageCallback(
+			D3D12_MESSAGE_CATEGORY category,
+			D3D12_MESSAGE_SEVERITY severity,
+			D3D12_MESSAGE_ID id,
+			LPCSTR description,
+			void* context
+		);
+#endif
 
 	private:
 
@@ -223,6 +232,12 @@ namespace ob::rhi {
 
 		ComPtr<ID3D12Fence>                 m_fence;
 		UINT64                              m_fenceVal;
+
+		// デバッグレイヤーメッセージコールバック
+#ifdef OB_DEBUG
+		ComPtr<ID3D12InfoQueue1>            m_infoQueue;
+		DWORD                               m_callbackCookie = 0;
+#endif
 
 		MemoryStorage<DirectX12BufferUploader>		m_bufferUploader;
 		MemoryStorage<DirectX12TextureUploader>		m_textureUploader;

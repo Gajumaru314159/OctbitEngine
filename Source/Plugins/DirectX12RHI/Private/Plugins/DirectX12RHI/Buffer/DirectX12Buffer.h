@@ -6,6 +6,7 @@
 #include <Framework/RHI/Buffer.h>
 #include <Framework/RHI/Types/BufferDesc.h>
 #include <Plugins/DirectX12RHI/Descriptor/DescriptorHandle.h>
+#include "SmallBufferAllocator.h"
 
 // 前方宣言
 namespace ob::rhi {
@@ -32,6 +33,10 @@ namespace ob::rhi {
 
 		//! @brief  コンストラクタ（サブアロケーション用）
 		DirectX12Buffer(class DirectX12Device& device, const BufferDesc& desc, const BufferAllocation& allocation);
+
+
+		//! @brief  デストラクタ
+		~DirectX12Buffer();
 
 
 		//! @brief  妥当な状態か
@@ -76,13 +81,7 @@ namespace ob::rhi {
 		ID3D12Resource* getNative()const {return m_resource.Get();}
 
 		//! @brief      ビューのオフセットを取得
-		size_t getViewOffset()const {return m_viewOffset;}
-
-		//! @brief      ビューのサイズを取得
-		size_t getViewSize()const {return m_viewSize;}
-
-		//! @brief      サブアロケーションかどうか
-		bool isSubAllocation()const {return m_isSubAllocation;}
+		size_t getViewOffset()const {return m_allocation.offset;}
 
 		//! @brief      CBVを生成
 		void createCBV(D3D12_CPU_DESCRIPTOR_HANDLE handle)const;
@@ -103,10 +102,7 @@ namespace ob::rhi {
 		ComPtr<ID3D12Resource>		m_resource;
 		
 		// サブアロケーション管理用
-		size_t						m_viewOffset;		//!< ビューの開始オフセット
-		size_t						m_viewSize;			//!< ビューのサイズ
-		bool						m_isSubAllocation;	//!< サブアロケーションか
-		const BufferAllocation*		m_allocation;		//!< アロケーション情報（解放用）
+		BufferAllocation			m_allocation;		//!< アロケーション情報（解放用）
 
 	};
 

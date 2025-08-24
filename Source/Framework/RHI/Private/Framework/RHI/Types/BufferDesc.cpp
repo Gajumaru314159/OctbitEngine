@@ -25,6 +25,11 @@ namespace ob::rhi {
 			return false;
 		}
 
+		if (0 == stride && size % 16 != 0) {
+			LOG_ERROR("ByteAddressBufferとして使用する場合は16の倍数で作成する必要があります [name={},size={}]", name, size);
+			return false;
+		}
+
 		// if (size < 65536 && size % 4 != 0) {
 		// 	LOG_ERROR("64KiB以下のバッファサイズは4の倍数である必要があります。 [name={} size={}]", name, size);
 		// 	return false;
