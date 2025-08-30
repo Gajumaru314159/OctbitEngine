@@ -73,13 +73,14 @@ set(P2T_STATIC_EXPORTS TRUE)
 # ThirdPartyライブラリ
 #------------------------------------------------------------------------------
 include(FetchContent)
+FetchContent_Declare(mimalloc GIT_REPOSITORY https://github.com/microsoft/mimalloc.git GIT_TAG "v3.1.5")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v4.0.5")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "v1.15.2")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
 FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
-FetchContent_MakeAvailable(GSL utf8cpp magic_enum googletest FrameGraph assimp)
+FetchContent_MakeAvailable(mimalloc GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")

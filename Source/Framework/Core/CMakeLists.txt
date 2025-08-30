@@ -19,7 +19,8 @@ set(public_libs
     utf8cpp
     magic_enum
 )
-set(private_libs    
+set(private_libs
+    mimalloc
     "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/GDeflate.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/deflate.lib"
 )
