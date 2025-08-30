@@ -54,7 +54,7 @@ namespace ob::core {
                 default:                typeName = "[Unknown]"; break;
                 }
                 // フォーマット
-                const auto message = Format("{} {}\n{}({})\n", typeName, log.message,log.sourceLocation.filePath,log.sourceLocation.line);
+                const auto message = Format("{} {}", typeName, log.message);
                 WString ws;
                 StringEncoder::Encode(message, ws);
 
@@ -62,7 +62,7 @@ namespace ob::core {
                 ::OutputDebugLog(ws.c_str());
 
                 if (useLineOutput) {
-                    const auto message2 = Format("{}({})\n", log.sourceLocation.filePath, log.sourceLocation.line);
+                    const auto message2 = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
                     StringEncoder::Encode(message2, ws);
                     ::OutputDebugLog(ws.c_str());
                 }
