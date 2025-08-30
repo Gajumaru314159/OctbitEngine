@@ -4,11 +4,13 @@
       "Bash(cmake:*)",
       "Bash(cmd.exe /c Build.bat)",
       "Bash(cmd.exe /c Build.bat *)",
-      "Bash(cmd.exe /c \"Build.bat\")",
-      "Bash(cmd.exe /c \"Build.bat *\")",
       "Bash(ctest:*)",
       "Bash(Build/bin/*-test.exe)",
-      "Bash(Build/bin/*-test.exe *)"
+      "Bash(Build/bin/*-test.exe *)",
+      "Bash(timeout:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
