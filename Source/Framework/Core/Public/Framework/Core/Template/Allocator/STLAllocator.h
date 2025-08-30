@@ -3,6 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include "Framework/Core/Memory/Memory.h"
 
 namespace ob::core {
 
@@ -12,13 +13,17 @@ namespace ob::core {
         // 特殊関数
         // (デフォルトコンストラクタ、コピーコンストラクタ
         //  、ムーブコンストラクタ)
-        STLAllocatorBase();
+        STLAllocatorBase() = default;
 
         // メモリ確保
-        void* allocate(size_t n);
+        void* allocate(size_t size, size_t alignment = alignof(std::max_align_t)) {
+            return Alloc(size, alignment);
+        }
 
         // メモリ解放
-        void deallocate(void* pBuffer);
+        void deallocate(void* pBuffer) {
+            Free(pBuffer);
+        }
     };
     //! @endcond
 
@@ -41,7 +46,7 @@ namespace ob::core {
 
         //! @brief メモリ確保
         T* allocate(size_t n) {
-            return static_cast<T*>(STLAllocatorBase::allocate(sizeof(T) * n));
+            return static_cast<T*>(STLAllocatorBase::allocate(sizeof(T) * n, alignof(T)));
         }
 
         //! @brief メモリ解放

@@ -53,7 +53,7 @@
 #include <Framework/Core/Math/Rotation.h>
 #include <Framework/Core/Math/Transform.h>
 
-#include <Framework/Core/Memory/Utility/MemoryUtility.h>
+#include <Framework/Core/Memory/MemoryUtility.h>
 
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/Core/Misc/BlobView.h>

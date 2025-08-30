@@ -53,7 +53,6 @@ int TestDirectX12() {
 	struct Tools {
 		ThreadPool threadPool;
 		TypeInfoManager typeInfoManager;
-		Logger log;
 		Profiler profiler;
 		LogInfo loginfo;
 		FrameGraphDebugger fgdebugger;
@@ -62,7 +61,7 @@ int TestDirectX12() {
 	} tools;
 
 	Logger::EventHandle hLog;
-	tools.log.addEvent(hLog,
+	Logger::Get()->addEvent(hLog,
 		[&](const Log& log){
 			ob::editor::LogNotice notice;
 			notice.level = log.level;
@@ -195,8 +194,8 @@ VulkanRHIConfig vkconfig;
 
 void OctbitInit(ServiceInjector& injector) {
 
-	//RegisterDirectX12RHIService(injector);
-	RegisterVulkanRHIService(injector);
+	RegisterDirectX12RHIService(injector);
+	//RegisterVulkanRHIService(injector);
 	RegisterInputService(injector);
 	RegisterGraphicsService(injector);
 

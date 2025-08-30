@@ -20,7 +20,7 @@ set(public_libs
     magic_enum
 )
 set(private_libs
-    mimalloc
+    mimalloc-static
     "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/GDeflate.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/deflate.lib"
 )

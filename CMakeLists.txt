@@ -52,6 +52,10 @@ add_compile_options(/wd26451)   # 算術オーバーフロー
 #------------------------------------------------------------------------------
 # ThirdPartyオプション設定
 #------------------------------------------------------------------------------
+# mimalloc
+set(MI_BUILD_SHARED OFF)
+set(MI_BUILD_TESTS OFF)
+set(MI_USE_CXX ON)
 # DirectXTex
 set(BUILD_TOOLS OFF)
 # GoogleTest
