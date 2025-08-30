@@ -36,13 +36,11 @@ void operator delete[](void* ptr) {
     ob::core::Free(ptr);
 }
 
-void operator delete(void* ptr, std::align_val_t alignment) {
-    (void)alignment;  // 未使用警告を抑制
+void operator delete(void* ptr, [[maybe_unused]]std::align_val_t alignment) {
     ob::core::Free(ptr);
 }
 
-void operator delete[](void* ptr, std::align_val_t alignment) {
-    (void)alignment;  // 未使用警告を抑制
+void operator delete[](void* ptr, [[maybe_unused]]std::align_val_t alignment) {
     ob::core::Free(ptr);
 }
 
