@@ -14,7 +14,7 @@ namespace ob::engine {
 	}
 	//! @brief		コンストラクタ
 	World::~World() {
-
+		delete m_scene;
 	}
 
 	//! @brief		ルートシーン取得

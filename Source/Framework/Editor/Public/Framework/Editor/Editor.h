@@ -14,7 +14,7 @@ namespace ob::editor {
 	class Response {
 	public:
 		OB_RTTI();
-		~Response() = default;
+		virtual ~Response() = default;
 	protected:
 		friend class Editor;
 		virtual bool serialize(BinaryWriter& writer) const = 0;
@@ -23,7 +23,8 @@ namespace ob::editor {
 	class Query {
 	public:
 		OB_RTTI();
-		~Query() = default;
+
+		virtual ~Query() = default;
 	protected:
 		friend class Editor;
 		virtual bool deserialize(BinaryReader& reader) = 0;
@@ -33,7 +34,7 @@ namespace ob::editor {
 	class Notice {
 	public:
 		OB_RTTI();
-		~Notice() = default;
+		virtual ~Notice() = default;
 	protected:
 		friend class Editor;
 		virtual bool serialize(BinaryWriter& writer) const = 0;
@@ -114,8 +115,8 @@ namespace ob::editor {
 	private:
 		bool deserialize(BinaryReader& reader) override {
 			auto len = reader.readS32();
-			name.resize(len);
-			reader.read(name.data(), len);
+			//name.resize(len);
+			//reader.read(name.data(), len);
 			return true;
 		}
 		Response* execute() const override {
