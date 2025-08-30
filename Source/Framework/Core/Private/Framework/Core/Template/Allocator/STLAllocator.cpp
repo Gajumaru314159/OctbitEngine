@@ -2,8 +2,8 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#include <cstdlib>
 #include <Framework/Core/Template/Allocator/STLAllocator.h>
-#include <Framework/Core/Memory/System/MemorySystem.h>
 
 namespace ob::core {
 
@@ -13,13 +13,13 @@ namespace ob::core {
 
     //! @brief メモリ確保
     void* STLAllocatorBase::allocate(std::size_t n) {
-        return MemorySystem::GetHeapAllocator().allocate(n);
+        return malloc(n);
     }
 
 
     //! @brief メモリ解放
     void STLAllocatorBase::deallocate(void* pBuffer) {
-        return Allocator::Free(pBuffer);
+        return free(pBuffer);
     }
 
 }
