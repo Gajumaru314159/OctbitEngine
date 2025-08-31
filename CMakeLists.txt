@@ -56,6 +56,12 @@ add_compile_options(/wd26451)   # 算術オーバーフロー
 set(MI_BUILD_SHARED OFF)
 set(MI_BUILD_TESTS OFF)
 set(MI_USE_CXX ON)
+# tracy
+set(TRACY_ENABLE ON)
+set(TRACY_ON_DEMAND ON)
+set(TRACY_DELAYED_INIT ON)
+set(TRACY_MANUAL_LIFETIME ON)
+set(TRACY_DBGHELP_LOCK DbgHelp)
 # DirectXTex
 set(BUILD_TOOLS OFF)
 # GoogleTest
@@ -78,13 +84,14 @@ set(P2T_STATIC_EXPORTS TRUE)
 #------------------------------------------------------------------------------
 include(FetchContent)
 FetchContent_Declare(mimalloc GIT_REPOSITORY https://github.com/microsoft/mimalloc.git GIT_TAG "v3.1.5")
+FetchContent_Declare(tracy GIT_REPOSITORY https://github.com/wolfpld/tracy GIT_TAG "v0.12.2")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v4.0.5")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
 FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest.git GIT_TAG "v1.15.2")
 FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/FrameGraph.git)
 FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
-FetchContent_MakeAvailable(mimalloc GSL utf8cpp magic_enum googletest FrameGraph assimp)
+FetchContent_MakeAvailable(mimalloc tracy GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")

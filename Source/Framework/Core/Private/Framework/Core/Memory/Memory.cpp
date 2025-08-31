@@ -2,10 +2,10 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include "Framework/Core/Memory/Memory.h"
-#include "MallocAllocator.h"
-#include "MimallocAllocator.h"
 #include <Framework/Core/Log/Assertion.h>
+#include <Framework/Core/Memory/Memory.h>
+#include <Framework/Core/Memory/MimallocAllocator.h>
+#include <Framework/Core/Profile/Profile.h>
 
 namespace ob::core {
 
@@ -17,6 +17,7 @@ namespace ob::core {
         void* signature = (void*)MEMORY_SIGNATURE;
         size_t size;           //!< 確保されたサイズ
         size_t headerOffset;   //!< ヘッダーからユーザー領域までのオフセット
+        const char* category = "Invalid";
     };
 
     // デフォルトアロケーター
@@ -69,6 +70,7 @@ namespace ob::core {
 		header->signature = (void*)MEMORY_SIGNATURE;
         header->size = size;
         header->headerOffset = alignedPreUserSize;
+        header->category = internal::MemoryCategoryScope::GetCurrentCategory();
 
         // ユーザー領域の直前にオフセット情報を格納
         size_t* offsetPtr = GetOffsetPtr<size_t>(ptr, alignedPreUserSize - sizeof(size_t));
@@ -76,6 +78,8 @@ namespace ob::core {
 
         // メモリ使用量更新
         s_memoryUsage += size;
+
+        OB_PROFILE_ALLOC(header->category,GetOffsetPtr(header, alignedPreUserSize),size);
 
         // ユーザー領域のポインタを返す（適切にアライメントされている）
         return GetOffsetPtr(header, alignedPreUserSize);
@@ -106,6 +110,8 @@ namespace ob::core {
         
         // メモリ使用量更新
         s_memoryUsage -= header->size;
+
+        OB_PROFILE_FREE(header->category,ptr);
         
         // アロケーターで解放
         s_allocator->free(header);

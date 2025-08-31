@@ -3,8 +3,14 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#include <Framework/Core/Profile/Profile.h>
 #include <Framework/Core/Utility/Noncopyable.h>
-#include <Framework/Core/Utility/Pimpl.h>
+
+#if OB_DEBUG_SPIN_LOCK
+#	define OB_DEBUG_SPIN_LOCK_CONTEX(context)	context
+#else
+#	define OB_DEBUG_SPIN_LOCK_CONTEX(contex)	/**/
+#endif
 
 namespace ob::core {
 
@@ -29,7 +35,16 @@ namespace ob::core {
 
     private:
 
-        Pimpl<class SpinLockImpl> m_impl;
+        struct Impl {
+            std::atomic<bool> m_lock;
+            OB_DEBUG_SPIN_LOCK_CONTEX(
+                std::atomic<unsigned int> m_threadId{ 0 };
+            )
+            void lock();
+            void unlock();
+        };
+
+        OB_PROFILE_LOCK(Impl,m_impl);
 
     };
 

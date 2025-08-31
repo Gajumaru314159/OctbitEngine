@@ -6,8 +6,9 @@
 #include <mutex>
 #include <atomic>
 #include <Framework/Core/Thread/Thread.h>
+#include <Framework/Core/Profile/Profile.h>
 
-#ifdef OB_DEBUG_MUTEX
+#if OB_DEBUG_MUTEX
 #	define OB_DEBUG_MUTEX_CONTEX(context)	context
 #else
 #	define OB_DEBUG_MUTEX_CONTEX(contex)	/**/
@@ -18,7 +19,7 @@ namespace ob::core {
 	//! @brief  説明
 	class MutexImpl {
 	public:
-		std::mutex m_mutex;
+		OB_PROFILE_LOCK(std::mutex, m_mutex);
 		OB_DEBUG_MUTEX_CONTEX(
 			std::atomic<u32> m_threadId{ 0 };
 		)
@@ -38,6 +39,7 @@ namespace ob::core {
 
 	//! @brief  ロックを取得する
 	void Mutex::lock() {
+
 		OB_DEBUG_MUTEX_CONTEX(
 			u32 id = m_impl->m_threadId.load();
 			assert(id != Thread::GetCurrentThreadId());

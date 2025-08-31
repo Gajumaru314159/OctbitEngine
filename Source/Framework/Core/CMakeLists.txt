@@ -18,6 +18,7 @@ set(public_libs
     GSL
     utf8cpp
     magic_enum
+    TracyClient
 )
 set(private_libs
     mimalloc-static

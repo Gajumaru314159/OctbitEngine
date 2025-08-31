@@ -4,6 +4,7 @@
 //***********************************************************
 #include <Framework/Core/Thread/Thread.h>
 #include <Framework/Core/String/StringEncoder.h>
+#include <Framework/Core/Profile/Profile.h>
 #include <functional>
 
 #ifdef OS_WINDOWS
@@ -13,6 +14,7 @@ namespace ob::core {
 
 	class ThreadImpl {
 	public:
+		String name;
 		std::thread th;
 	};
 
@@ -35,7 +37,11 @@ namespace ob::core {
 	//! @param entryPoint	実行する関数オブジェクト
 	Thread::Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint) 
 	{
-		m_impl->th = std::thread(entryPoint);
+		m_impl->name = name;
+		m_impl->th = std::thread([this, entryPoint]() {
+			OB_PROFILE_THREAD(m_impl->name.c_str());
+			entryPoint();
+		});
 #ifdef OS_WINDOWS
 		WString wname;
 		StringEncoder::Encode(name, wname);

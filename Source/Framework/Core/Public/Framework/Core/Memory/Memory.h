@@ -25,11 +25,38 @@ namespace ob::core {
     //! @return メモリ使用量（バイト）
     size_t GetMemoryUsage();
 
+
+#define OB_MEMORY_SCOPE(category) ob::core::internal::MemoryCategoryScope __memoryScope(category)
+
+
+
     namespace internal {
 
+		//! @brief メモリシステムの初期化
+        //! @details メモリのプロファイリングを開始します。
         void InitMemory();
 
+        //! @brief メモリシステムの終了
         void FinalizeMemory();
+
+        //! @brief      メモリカテゴリのスコープを管理するクラス
+		//! @details    スレッドごとに現在のメモリカテゴリを保持し、スコープ内で変更を行います。
+        class MemoryCategoryScope {
+        private:
+            const char* m_store;
+        public:
+            MemoryCategoryScope(const char* category) {
+				m_store = GetCurrentCategory();
+                std::swap(GetCurrentCategory(),category);
+            }
+            ~MemoryCategoryScope() {
+                std::swap(GetCurrentCategory(), m_store);
+            }
+            static const char*& GetCurrentCategory() {
+                thread_local const char* category = "Unknown";
+                return category;
+			}
+        };
 
     }
 
