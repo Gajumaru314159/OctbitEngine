@@ -32,6 +32,7 @@
 #include <Plugins/DirectX12RHI/System.h>
 #include <Plugins/VulkanRHI/System.h>
 #include <Plugins/VulkanRHI/VulkanRHIConfig.h>
+#include <Framework/Core/Profile/Profile.h>
 
 //-----------------------------------------------------------------
 using namespace ob;
@@ -160,6 +161,8 @@ int TestDirectX12() {
 
 	auto now = DateTime::Now();
 	while (true) {
+
+		OB_PROFILE_FRAME();
 
 		if (System::Update() == false)break;
 
