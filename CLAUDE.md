@@ -10,6 +10,7 @@ This is a CMake-based C++ project. Use these commands to build and test:
 # From Root Directory
 
 # Generate build files
+# if you add or remove files, you must run this command again.
 cmd.exe /c Build.bat setup
 
 # Build the project
@@ -37,7 +38,7 @@ OctbitEngine is a multi-platform game engine written in C++20 with a modular arc
 
 ### Plugin System (Source/Plugins/)
 - **DirectX12RHI** - DirectX 12 implementation
-- **VulkanRHI** - Vulkan implementation  
+- **VulkanRHI** - Vulkan implementation
 - **ImGui** - Immediate mode GUI integration
 
 ### Testing (Source/Test/)
