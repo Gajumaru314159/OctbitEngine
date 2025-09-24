@@ -1,6 +1,43 @@
 Asset {#Asset}
 ================
 
+## アセット参照方式
+* ```Assets/Map/Root```というようにパス指定で参照する
+* アセットを移動した場合はリダイレクタを作成する
+
+```cpp
+Optional<String> ReadAll(StringView path) {
+    while (true) {
+        File file(path);
+        if (file) {
+            u32 magic = file.readU32();
+            if (magic==MAGIC("REDI")) {
+                path = file.readString();
+            } else {
+                file.seek(0);
+                return file.readAll();
+            }    
+        } else {
+            break;
+        }
+    }
+    return std::nullopt;
+}
+```
+### なぜUUIDを使用しないか
+* UUIDだと一度すべてのアセットを読み込んでMapを作らないと参照できない
+* アセットは1つのリポジトリで管理されるためすでにファイルパス=ユニークIDである
+
+### パスを使用する問題点
+* UUIDと比べてメモリを消費する(16バイト→可変長)
+* アセット名のスワップが面倒
+
+## アセットのホットリロード
+* エディタ上からのアセット編集は必ずメインスレッドから行う
+* Ref<Texture> であれば、メンバを直接編集する
+* setTexture()は呼ばない
+
+
 ## GameアセットとSystemアセット
 
 ## FilePath
@@ -17,11 +54,21 @@ DxLibと同様に特定の拡張子のアーカイブファイルをディレク
 	* Image
 		* Sample.png
 
-## アセットバイナリの構成
-アセットのバイナリはUUID.binという形で保存する。同一フォルダに全てのアセットを保存するとファイルシステムが重くなってしまうので先頭2文字でフォルダを分ける。(Minectaftの.minecraft/assets/objects以下参考)
-* 00
-	* 000c82756fd54e40cb236199f2b479629d0aca2f.bin
-	* 00aa12fe2aab46f5252a795ae944cae92caba77b.bin
-* 01
-	* 01c5ba2d1645698cc2f6e462982bd4513a3e0d93.bin
-	* 01db5c538d2de459f02047208bebf00e6a085ef9.bin
+## アセット識別子
+| 方式   | 例                                    | 採用事例     |
+|------|--------------------------------------|--------------|
+| UUID | 86403732-bcac-af88-13ab-d4b8d8a2f91e | Unity　       |
+| Path | Assets/Map/Root                      | UnrealEngine |
+
+### UUID
+* メリット
+  * フォルダ移動にかかわらず固有のID
+* デメリット
+  * すべてのアセットを読み込むまでUUIDが有効かがわからない
+
+### Path
+* メリット
+  * 人間も把握しやすい
+* デメリット
+  * フォルダ移動時にリダイレクタが必要
+  * パス文字列がメモリ使用量を食う(Nameを使用する)
