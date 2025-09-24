@@ -95,7 +95,45 @@ $(document).ready(function(){initNavTree('db/dbe/_asset.html','../../'); initRes
   <div class="headertitle"><div class="title">Asset</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1>GameアセットとSystemアセット</h1>
+<div class="textblock"><h1>アセット参照方式</h1>
+<ul>
+<li><code>Assets/Map/Root</code>というようにパス指定で参照する</li>
+<li>アセットを移動した場合はリダイレクタを作成する</li>
+</ul>
+<div class="fragment"><div class="line">Optional&lt;String&gt; ReadAll(StringView path) {</div>
+<div class="line">    <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
+<div class="line">        File file(path);</div>
+<div class="line">        <span class="keywordflow">if</span> (file) {</div>
+<div class="line">            u32 magic = file.readU32();</div>
+<div class="line">            <span class="keywordflow">if</span> (magic==MAGIC(<span class="stringliteral">&quot;REDI&quot;</span>)) {</div>
+<div class="line">                path = file.readString();</div>
+<div class="line">            } <span class="keywordflow">else</span> {</div>
+<div class="line">                file.seek(0);</div>
+<div class="line">                <span class="keywordflow">return</span> file.readAll();</div>
+<div class="line">            }    </div>
+<div class="line">        } <span class="keywordflow">else</span> {</div>
+<div class="line">            <span class="keywordflow">break</span>;</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">    <span class="keywordflow">return</span> std::nullopt;</div>
+<div class="line">}</div>
+</div><!-- fragment --> <h2>なぜUUIDを使用しないか</h2>
+<ul>
+<li>UUIDだと一度すべてのアセットを読み込んでMapを作らないと参照できない</li>
+<li>アセットは1つのリポジトリで管理されるためすでにファイルパス=ユニークIDである</li>
+</ul>
+<h2>パスを使用する問題点</h2>
+<ul>
+<li>UUIDと比べてメモリを消費する(16バイト→可変長)</li>
+<li>アセット名のスワップが面倒</li>
+</ul>
+<h1>アセットのホットリロード</h1>
+<ul>
+<li>エディタ上からのアセット編集は必ずメインスレッドから行う</li>
+<li>Ref&lt;Texture&gt; であれば、メンバを直接編集する</li>
+<li>setTexture()は呼ばない</li>
+</ul>
+<h1>GameアセットとSystemアセット</h1>
 <h1>FilePath</h1>
 <h1>アーカイブ</h1>
 <ul>
@@ -116,16 +154,35 @@ $(document).ready(function(){initNavTree('db/dbe/_asset.html','../../'); initRes
 </ul>
 </li>
 </ul>
-<h1>アセットバイナリの構成</h1>
-<p>アセットのバイナリはUUID.binという形で保存する。同一フォルダに全てのアセットを保存するとファイルシステムが重くなってしまうので先頭2文字でフォルダを分ける。(Minectaftの.minecraft/assets/objects以下参考)</p><ul>
-<li>00<ul>
-<li>000c82756fd54e40cb236199f2b479629d0aca2f.bin</li>
-<li>00aa12fe2aab46f5252a795ae944cae92caba77b.bin</li>
+<h1>アセット識別子</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">方式   </th><th class="markdownTableHeadNone">例   </th><th class="markdownTableHeadNone">採用事例    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">UUID   </td><td class="markdownTableBodyNone">86403732-bcac-af88-13ab-d4b8d8a2f91e   </td><td class="markdownTableBodyNone">Unity　    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Path   </td><td class="markdownTableBodyNone">Assets/Map/Root   </td><td class="markdownTableBodyNone">UnrealEngine   </td></tr>
+</table>
+<h2>UUID</h2>
+<ul>
+<li>メリット<ul>
+<li>フォルダ移動にかかわらず固有のID</li>
 </ul>
 </li>
-<li>01<ul>
-<li>01c5ba2d1645698cc2f6e462982bd4513a3e0d93.bin</li>
-<li>01db5c538d2de459f02047208bebf00e6a085ef9.bin </li>
+<li>デメリット<ul>
+<li>すべてのアセットを読み込むまでUUIDが有効かがわからない</li>
+</ul>
+</li>
+</ul>
+<h2>Path</h2>
+<ul>
+<li>メリット<ul>
+<li>人間も把握しやすい</li>
+</ul>
+</li>
+<li>デメリット<ul>
+<li>フォルダ移動時にリダイレクタが必要</li>
+<li>パス文字列がメモリ使用量を食う(Nameを使用する) </li>
 </ul>
 </li>
 </ul>
