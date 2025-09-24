@@ -95,6 +95,7 @@ $(document).ready(function(){initNavTree('d9/d75/classob_1_1core_1_1_fixed_vecto
   <div class="summary">
 <a href="#pub-types">公開型</a> &#124;
 <a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-methods">静的公開メンバ関数</a> &#124;
 <a href="../../de/d7d/classob_1_1core_1_1_fixed_vector-members.html">全メンバ一覧</a>  </div>
   <div class="headertitle"><div class="title">ob::core::FixedVector&lt; T, N &gt; クラステンプレート</div></div>
 </div><!--header-->
@@ -108,211 +109,214 @@ $(document).ready(function(){initNavTree('d9/d75/classob_1_1core_1_1_fixed_vecto
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 公開型</h2></td></tr>
 <tr class="memitem:a773b821e2f3c5d510293011d7070edae" id="r_a773b821e2f3c5d510293011d7070edae"><td class="memItemLeft" align="right" valign="top"><a id="a773b821e2f3c5d510293011d7070edae" name="a773b821e2f3c5d510293011d7070edae"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = T &amp;</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = T &amp;</td></tr>
 <tr class="separator:a773b821e2f3c5d510293011d7070edae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f6b6afa7197168803c7211ff24c0ab2" id="r_a1f6b6afa7197168803c7211ff24c0ab2"><td class="memItemLeft" align="right" valign="top"><a id="a1f6b6afa7197168803c7211ff24c0ab2" name="a1f6b6afa7197168803c7211ff24c0ab2"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b> = const T &amp;</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;</td></tr>
 <tr class="separator:a1f6b6afa7197168803c7211ff24c0ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca3f12d7845f6807bbff9d2b32a776a3" id="r_aca3f12d7845f6807bbff9d2b32a776a3"><td class="memItemLeft" align="right" valign="top"><a id="aca3f12d7845f6807bbff9d2b32a776a3" name="aca3f12d7845f6807bbff9d2b32a776a3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = typename std::array&lt; T, N &gt;::iterator</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> std::array&lt; T, N &gt;::iterator</td></tr>
 <tr class="separator:aca3f12d7845f6807bbff9d2b32a776a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4c4d97ba154b9c22349363949f833d9" id="r_ae4c4d97ba154b9c22349363949f833d9"><td class="memItemLeft" align="right" valign="top"><a id="ae4c4d97ba154b9c22349363949f833d9" name="ae4c4d97ba154b9c22349363949f833d9"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = typename std::array&lt; T, N &gt;::const_iterator</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> std::array&lt; T, N &gt;::const_iterator</td></tr>
 <tr class="separator:ae4c4d97ba154b9c22349363949f833d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9d716e4e2c4c54430af87fbe736ade1" id="r_ad9d716e4e2c4c54430af87fbe736ade1"><td class="memItemLeft" align="right" valign="top"><a id="ad9d716e4e2c4c54430af87fbe736ade1" name="ad9d716e4e2c4c54430af87fbe736ade1"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b> = std::size_t</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b> = std::size_t</td></tr>
 <tr class="separator:ad9d716e4e2c4c54430af87fbe736ade1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b5559a9550535e81987eee41451690e" id="r_a1b5559a9550535e81987eee41451690e"><td class="memItemLeft" align="right" valign="top"><a id="a1b5559a9550535e81987eee41451690e" name="a1b5559a9550535e81987eee41451690e"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
 <tr class="separator:a1b5559a9550535e81987eee41451690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bf052d68127b299db9d2cbe4ff4b658" id="r_a9bf052d68127b299db9d2cbe4ff4b658"><td class="memItemLeft" align="right" valign="top"><a id="a9bf052d68127b299db9d2cbe4ff4b658" name="a9bf052d68127b299db9d2cbe4ff4b658"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = T</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = T</td></tr>
 <tr class="separator:a9bf052d68127b299db9d2cbe4ff4b658"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2a4237c4191e8db3adb7d323ba6ac3" id="r_aee2a4237c4191e8db3adb7d323ba6ac3"><td class="memItemLeft" align="right" valign="top"><a id="aee2a4237c4191e8db3adb7d323ba6ac3" name="aee2a4237c4191e8db3adb7d323ba6ac3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
 <tr class="separator:aee2a4237c4191e8db3adb7d323ba6ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a987c785dd2616132b5b61a5219eaecf8" id="r_a987c785dd2616132b5b61a5219eaecf8"><td class="memItemLeft" align="right" valign="top"><a id="a987c785dd2616132b5b61a5219eaecf8" name="a987c785dd2616132b5b61a5219eaecf8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b> = const value_type *</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> value_type *</td></tr>
 <tr class="separator:a987c785dd2616132b5b61a5219eaecf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0d65033de454bf9a5f7aadeeed94827" id="r_af0d65033de454bf9a5f7aadeeed94827"><td class="memItemLeft" align="right" valign="top"><a id="af0d65033de454bf9a5f7aadeeed94827" name="af0d65033de454bf9a5f7aadeeed94827"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>reverse_iterator</b> = typename std::array&lt; T, N &gt;::reverse_iterator</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>reverse_iterator</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> std::array&lt; T, N &gt;::reverse_iterator</td></tr>
 <tr class="separator:af0d65033de454bf9a5f7aadeeed94827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365eb889efdc354befd82b49a6dd716a" id="r_a365eb889efdc354befd82b49a6dd716a"><td class="memItemLeft" align="right" valign="top"><a id="a365eb889efdc354befd82b49a6dd716a" name="a365eb889efdc354befd82b49a6dd716a"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_reverse_iterator</b> = typename std::array&lt; T, N &gt;::const_reverse_iterator</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>const_reverse_iterator</b> = <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> std::array&lt; T, N &gt;::const_reverse_iterator</td></tr>
 <tr class="separator:a365eb889efdc354befd82b49a6dd716a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
 <tr class="memitem:a7c2843a24d1fcea064a70cfbc1d2c7a6" id="r_a7c2843a24d1fcea064a70cfbc1d2c7a6"><td class="memItemLeft" align="right" valign="top"><a id="a7c2843a24d1fcea064a70cfbc1d2c7a6" name="a7c2843a24d1fcea064a70cfbc1d2c7a6"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (size_type size)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (size_type size)</td></tr>
 <tr class="separator:a7c2843a24d1fcea064a70cfbc1d2c7a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ddaed2e58e431b583d0edb0d952a303" id="r_a1ddaed2e58e431b583d0edb0d952a303"><td class="memItemLeft" align="right" valign="top"><a id="a1ddaed2e58e431b583d0edb0d952a303" name="a1ddaed2e58e431b583d0edb0d952a303"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (size_type size, const T &amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (size_type size, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;value)</td></tr>
 <tr class="separator:a1ddaed2e58e431b583d0edb0d952a303"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63502dae4b8c905f562da735fa5140ff" id="r_a63502dae4b8c905f562da735fa5140ff"><td class="memItemLeft" align="right" valign="top"><a id="a63502dae4b8c905f562da735fa5140ff" name="a63502dae4b8c905f562da735fa5140ff"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (std::initializer_list&lt; T &gt; init)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>FixedVector</b> (std::initializer_list&lt; T &gt; init)</td></tr>
 <tr class="separator:a63502dae4b8c905f562da735fa5140ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf985244f1d87629c9dd9655c620d04d" id="r_aaf985244f1d87629c9dd9655c620d04d"><td class="memTemplParams" colspan="2"><a id="aaf985244f1d87629c9dd9655c620d04d" name="aaf985244f1d87629c9dd9655c620d04d"></a>
-template&lt;class InputIt , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; InputIt &gt;::value &gt; &gt; </td></tr>
-<tr class="memitem:aaf985244f1d87629c9dd9655c620d04d"><td class="memTemplItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><b>FixedVector</b> (InputIt first, InputIt last)</td></tr>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> &gt;::value &gt; &gt; </td></tr>
+<tr class="memitem:aaf985244f1d87629c9dd9655c620d04d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>FixedVector</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">first</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">last</a>)</td></tr>
 <tr class="separator:aaf985244f1d87629c9dd9655c620d04d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca6658b8897d17fb5f1073ba9a863d8" id="r_acca6658b8897d17fb5f1073ba9a863d8"><td class="memItemLeft" align="right" valign="top"><a id="acca6658b8897d17fb5f1073ba9a863d8" name="acca6658b8897d17fb5f1073ba9a863d8"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:acca6658b8897d17fb5f1073ba9a863d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf299c0c3e9ca38d4b875b017dfabfe6" id="r_acf299c0c3e9ca38d4b875b017dfabfe6"><td class="memItemLeft" align="right" valign="top"><a id="acf299c0c3e9ca38d4b875b017dfabfe6" name="acf299c0c3e9ca38d4b875b017dfabfe6"></a>
-constexpr const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:acf299c0c3e9ca38d4b875b017dfabfe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1b758a350125cc028a4f0a6414b15b9" id="r_ab1b758a350125cc028a4f0a6414b15b9"><td class="memItemLeft" align="right" valign="top"><a id="ab1b758a350125cc028a4f0a6414b15b9" name="ab1b758a350125cc028a4f0a6414b15b9"></a>
-constexpr const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:ab1b758a350125cc028a4f0a6414b15b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c818fecfd940b28ec70bd5493353197" id="r_a7c818fecfd940b28ec70bd5493353197"><td class="memItemLeft" align="right" valign="top"><a id="a7c818fecfd940b28ec70bd5493353197" name="a7c818fecfd940b28ec70bd5493353197"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a7c818fecfd940b28ec70bd5493353197"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0e8b25f3c30ac2b13cc6057de4dd60e" id="r_ae0e8b25f3c30ac2b13cc6057de4dd60e"><td class="memItemLeft" align="right" valign="top"><a id="ae0e8b25f3c30ac2b13cc6057de4dd60e" name="ae0e8b25f3c30ac2b13cc6057de4dd60e"></a>
-constexpr const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:ae0e8b25f3c30ac2b13cc6057de4dd60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a451fe6ce732256f7ad72e0ff8480fac5" id="r_a451fe6ce732256f7ad72e0ff8480fac5"><td class="memItemLeft" align="right" valign="top"><a id="a451fe6ce732256f7ad72e0ff8480fac5" name="a451fe6ce732256f7ad72e0ff8480fac5"></a>
-constexpr const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a451fe6ce732256f7ad72e0ff8480fac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6d24e1b8949bc2dbb95bc4fad797e82" id="r_ae6d24e1b8949bc2dbb95bc4fad797e82"><td class="memItemLeft" align="right" valign="top"><a id="ae6d24e1b8949bc2dbb95bc4fad797e82" name="ae6d24e1b8949bc2dbb95bc4fad797e82"></a>
-constexpr reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rbegin</b> () noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rbegin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:ae6d24e1b8949bc2dbb95bc4fad797e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fed2f4637ba5d4cb06f18ae33907511" id="r_a3fed2f4637ba5d4cb06f18ae33907511"><td class="memItemLeft" align="right" valign="top"><a id="a3fed2f4637ba5d4cb06f18ae33907511" name="a3fed2f4637ba5d4cb06f18ae33907511"></a>
-constexpr const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rbegin</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rbegin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a3fed2f4637ba5d4cb06f18ae33907511"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a352b57de6a61183c2d91c80f5986564e" id="r_a352b57de6a61183c2d91c80f5986564e"><td class="memItemLeft" align="right" valign="top"><a id="a352b57de6a61183c2d91c80f5986564e" name="a352b57de6a61183c2d91c80f5986564e"></a>
-constexpr const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>crbegin</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>crbegin</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a352b57de6a61183c2d91c80f5986564e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1745b51a44755ee56f3f679a2ecec0f2" id="r_a1745b51a44755ee56f3f679a2ecec0f2"><td class="memItemLeft" align="right" valign="top"><a id="a1745b51a44755ee56f3f679a2ecec0f2" name="a1745b51a44755ee56f3f679a2ecec0f2"></a>
-constexpr reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rend</b> () noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rend</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a1745b51a44755ee56f3f679a2ecec0f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cd308a24b166fcdfecbbc8d354ce3c4" id="r_a2cd308a24b166fcdfecbbc8d354ce3c4"><td class="memItemLeft" align="right" valign="top"><a id="a2cd308a24b166fcdfecbbc8d354ce3c4" name="a2cd308a24b166fcdfecbbc8d354ce3c4"></a>
-constexpr const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rend</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>rend</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a2cd308a24b166fcdfecbbc8d354ce3c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a705d2847968f0896940f190709ce7315" id="r_a705d2847968f0896940f190709ce7315"><td class="memItemLeft" align="right" valign="top"><a id="a705d2847968f0896940f190709ce7315" name="a705d2847968f0896940f190709ce7315"></a>
-constexpr const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>crend</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>crend</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a705d2847968f0896940f190709ce7315"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4273e3b3c261e7228db4408f111e3f89" id="r_a4273e3b3c261e7228db4408f111e3f89"><td class="memItemLeft" align="right" valign="top"><a id="a4273e3b3c261e7228db4408f111e3f89" name="a4273e3b3c261e7228db4408f111e3f89"></a>
-constexpr size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a4273e3b3c261e7228db4408f111e3f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63dd179bdb008bdf45e0fa1ca4a4cfba" id="r_a63dd179bdb008bdf45e0fa1ca4a4cfba"><td class="memItemLeft" align="right" valign="top"><a id="a63dd179bdb008bdf45e0fa1ca4a4cfba" name="a63dd179bdb008bdf45e0fa1ca4a4cfba"></a>
-constexpr size_type&#160;</td><td class="memItemRight" valign="bottom"><b>max_size</b> () const noexcept</td></tr>
-<tr class="separator:a63dd179bdb008bdf45e0fa1ca4a4cfba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a499cfe8a390a3cb9420ae173419f8198" id="r_a499cfe8a390a3cb9420ae173419f8198"><td class="memItemLeft" align="right" valign="top"><a id="a499cfe8a390a3cb9420ae173419f8198" name="a499cfe8a390a3cb9420ae173419f8198"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (size_type count)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (size_type count)</td></tr>
 <tr class="separator:a499cfe8a390a3cb9420ae173419f8198"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9a46d73d5d084281ef723d03049c9e1" id="r_ab9a46d73d5d084281ef723d03049c9e1"><td class="memItemLeft" align="right" valign="top"><a id="ab9a46d73d5d084281ef723d03049c9e1" name="ab9a46d73d5d084281ef723d03049c9e1"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (size_type count, const value_type &amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (size_type count, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> value_type &amp;value)</td></tr>
 <tr class="separator:ab9a46d73d5d084281ef723d03049c9e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a265ce1eb716d8ac2845761ba7e2c18ef" id="r_a265ce1eb716d8ac2845761ba7e2c18ef"><td class="memItemLeft" align="right" valign="top"><a id="a265ce1eb716d8ac2845761ba7e2c18ef" name="a265ce1eb716d8ac2845761ba7e2c18ef"></a>
-constexpr size_type&#160;</td><td class="memItemRight" valign="bottom"><b>capacity</b> () const noexcept</td></tr>
-<tr class="separator:a265ce1eb716d8ac2845761ba7e2c18ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af13f1f3a0c0279dedf773e0a4322fd62" id="r_af13f1f3a0c0279dedf773e0a4322fd62"><td class="memItemLeft" align="right" valign="top"><a id="af13f1f3a0c0279dedf773e0a4322fd62" name="af13f1f3a0c0279dedf773e0a4322fd62"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:af13f1f3a0c0279dedf773e0a4322fd62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a37ef3beff1997f4b14e32373910f79" id="r_a9a37ef3beff1997f4b14e32373910f79"><td class="memItemLeft" align="right" valign="top"><a id="a9a37ef3beff1997f4b14e32373910f79" name="a9a37ef3beff1997f4b14e32373910f79"></a>
-constexpr reference&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type pos)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reference&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type pos)</td></tr>
 <tr class="separator:a9a37ef3beff1997f4b14e32373910f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1be51b8c3344c37c3ce1ea5bf30803e7" id="r_a1be51b8c3344c37c3ce1ea5bf30803e7"><td class="memItemLeft" align="right" valign="top"><a id="a1be51b8c3344c37c3ce1ea5bf30803e7" name="a1be51b8c3344c37c3ce1ea5bf30803e7"></a>
-constexpr const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type pos) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type pos) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a1be51b8c3344c37c3ce1ea5bf30803e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a636e900089104021a3eb2089fdf13946" id="r_a636e900089104021a3eb2089fdf13946"><td class="memItemLeft" align="right" valign="top"><a id="a636e900089104021a3eb2089fdf13946" name="a636e900089104021a3eb2089fdf13946"></a>
-constexpr reference&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (size_type pos)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reference&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (size_type pos)</td></tr>
 <tr class="separator:a636e900089104021a3eb2089fdf13946"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5029b121f2582f7bc14446a94f39286d" id="r_a5029b121f2582f7bc14446a94f39286d"><td class="memItemLeft" align="right" valign="top"><a id="a5029b121f2582f7bc14446a94f39286d" name="a5029b121f2582f7bc14446a94f39286d"></a>
-constexpr const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (size_type pos) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (size_type pos) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a5029b121f2582f7bc14446a94f39286d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad21dd812bd8560a7da01ec2dc3c870cf" id="r_ad21dd812bd8560a7da01ec2dc3c870cf"><td class="memItemLeft" align="right" valign="top"><a id="ad21dd812bd8560a7da01ec2dc3c870cf" name="ad21dd812bd8560a7da01ec2dc3c870cf"></a>
-constexpr pointer&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> pointer&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
 <tr class="separator:ad21dd812bd8560a7da01ec2dc3c870cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a499096617aabfb140608a96f6de593ec" id="r_a499096617aabfb140608a96f6de593ec"><td class="memItemLeft" align="right" valign="top"><a id="a499096617aabfb140608a96f6de593ec" name="a499096617aabfb140608a96f6de593ec"></a>
-constexpr const_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a499096617aabfb140608a96f6de593ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04cdc6bf01a5cbbfd3646e5986b16e48" id="r_a04cdc6bf01a5cbbfd3646e5986b16e48"><td class="memItemLeft" align="right" valign="top"><a id="a04cdc6bf01a5cbbfd3646e5986b16e48" name="a04cdc6bf01a5cbbfd3646e5986b16e48"></a>
-constexpr reference&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reference&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> ()</td></tr>
 <tr class="separator:a04cdc6bf01a5cbbfd3646e5986b16e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae579261f10c996f29809cb921339dd86" id="r_ae579261f10c996f29809cb921339dd86"><td class="memItemLeft" align="right" valign="top"><a id="ae579261f10c996f29809cb921339dd86" name="ae579261f10c996f29809cb921339dd86"></a>
-constexpr const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> () const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:ae579261f10c996f29809cb921339dd86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d6679059eff262e47fc5389fd4be4f1" id="r_a1d6679059eff262e47fc5389fd4be4f1"><td class="memItemLeft" align="right" valign="top"><a id="a1d6679059eff262e47fc5389fd4be4f1" name="a1d6679059eff262e47fc5389fd4be4f1"></a>
-constexpr reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> ()</td></tr>
 <tr class="separator:a1d6679059eff262e47fc5389fd4be4f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcc0c64052d015546970747d95eaace2" id="r_abcc0c64052d015546970747d95eaace2"><td class="memItemLeft" align="right" valign="top"><a id="abcc0c64052d015546970747d95eaace2" name="abcc0c64052d015546970747d95eaace2"></a>
-constexpr const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:abcc0c64052d015546970747d95eaace2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae26947174eee928d8b0f0025057992d2" id="r_ae26947174eee928d8b0f0025057992d2"><td class="memItemLeft" align="right" valign="top"><a id="ae26947174eee928d8b0f0025057992d2" name="ae26947174eee928d8b0f0025057992d2"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>assign</b> (size_type n, const T &amp;t)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assign</b> (size_type <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">n</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">t</a>)</td></tr>
 <tr class="separator:ae26947174eee928d8b0f0025057992d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbfe1d4759ad4cf5e85bc4394dd3ddf2" id="r_abbfe1d4759ad4cf5e85bc4394dd3ddf2"><td class="memTemplParams" colspan="2"><a id="abbfe1d4759ad4cf5e85bc4394dd3ddf2" name="abbfe1d4759ad4cf5e85bc4394dd3ddf2"></a>
-template&lt;class InputIt , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; InputIt &gt;::value &gt; &gt; </td></tr>
-<tr class="memitem:abbfe1d4759ad4cf5e85bc4394dd3ddf2"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>assign</b> (InputIt first, InputIt last)</td></tr>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> &gt;::value &gt; &gt; </td></tr>
+<tr class="memitem:abbfe1d4759ad4cf5e85bc4394dd3ddf2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>assign</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">first</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">last</a>)</td></tr>
 <tr class="separator:abbfe1d4759ad4cf5e85bc4394dd3ddf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a744c3bdbc1f664bbe782ca92b79e32" id="r_a8a744c3bdbc1f664bbe782ca92b79e32"><td class="memItemLeft" align="right" valign="top"><a id="a8a744c3bdbc1f664bbe782ca92b79e32" name="a8a744c3bdbc1f664bbe782ca92b79e32"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (const T &amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;value)</td></tr>
 <tr class="separator:a8a744c3bdbc1f664bbe782ca92b79e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20c3f4b50d6015a553d073760812719" id="r_ab20c3f4b50d6015a553d073760812719"><td class="memItemLeft" align="right" valign="top"><a id="ab20c3f4b50d6015a553d073760812719" name="ab20c3f4b50d6015a553d073760812719"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (T &amp;&amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>push_back</b> (T &amp;&amp;value)</td></tr>
 <tr class="separator:ab20c3f4b50d6015a553d073760812719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af12ac51f7d7bed3a4d644fcd2c2ce8d3" id="r_af12ac51f7d7bed3a4d644fcd2c2ce8d3"><td class="memTemplParams" colspan="2"><a id="af12ac51f7d7bed3a4d644fcd2c2ce8d3" name="af12ac51f7d7bed3a4d644fcd2c2ce8d3"></a>
 template&lt;class... Args&gt; </td></tr>
-<tr class="memitem:af12ac51f7d7bed3a4d644fcd2c2ce8d3"><td class="memTemplItemLeft" align="right" valign="top">constexpr reference&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace_back</b> (Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:af12ac51f7d7bed3a4d644fcd2c2ce8d3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> reference&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace_back</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a> &amp;&amp;... args)</td></tr>
 <tr class="separator:af12ac51f7d7bed3a4d644fcd2c2ce8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d973f15a02c61dfd446dffdc2a37bf3" id="r_a7d973f15a02c61dfd446dffdc2a37bf3"><td class="memItemLeft" align="right" valign="top"><a id="a7d973f15a02c61dfd446dffdc2a37bf3" name="a7d973f15a02c61dfd446dffdc2a37bf3"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>pop_back</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>pop_back</b> ()</td></tr>
 <tr class="separator:a7d973f15a02c61dfd446dffdc2a37bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a551fca96cf0bb5d2bc2789efa2177f2d" id="r_a551fca96cf0bb5d2bc2789efa2177f2d"><td class="memItemLeft" align="right" valign="top"><a id="a551fca96cf0bb5d2bc2789efa2177f2d" name="a551fca96cf0bb5d2bc2789efa2177f2d"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, const T &amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;value)</td></tr>
 <tr class="separator:a551fca96cf0bb5d2bc2789efa2177f2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3e8e8d8366f0b634f221490dbbb8b91" id="r_ad3e8e8d8366f0b634f221490dbbb8b91"><td class="memItemLeft" align="right" valign="top"><a id="ad3e8e8d8366f0b634f221490dbbb8b91" name="ad3e8e8d8366f0b634f221490dbbb8b91"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, T &amp;&amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, T &amp;&amp;value)</td></tr>
 <tr class="separator:ad3e8e8d8366f0b634f221490dbbb8b91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa74b638b867b4b39e0d5c0ce3f36d8e8" id="r_aa74b638b867b4b39e0d5c0ce3f36d8e8"><td class="memItemLeft" align="right" valign="top"><a id="aa74b638b867b4b39e0d5c0ce3f36d8e8" name="aa74b638b867b4b39e0d5c0ce3f36d8e8"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, size_type count, const T &amp;value)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, size_type count, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> T &amp;value)</td></tr>
 <tr class="separator:aa74b638b867b4b39e0d5c0ce3f36d8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af41e90e88f361af7b2ba2b6609f82092" id="r_af41e90e88f361af7b2ba2b6609f82092"><td class="memTemplParams" colspan="2"><a id="af41e90e88f361af7b2ba2b6609f82092" name="af41e90e88f361af7b2ba2b6609f82092"></a>
-template&lt;class InputIt , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; InputIt &gt;::value &gt; &gt; </td></tr>
-<tr class="memitem:af41e90e88f361af7b2ba2b6609f82092"><td class="memTemplItemLeft" align="right" valign="top">constexpr iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert</b> (const_iterator pos, InputIt first, InputIt last)</td></tr>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> , std::enable_if_t&lt; <a class="el" href="../../d2/d32/structob_1_1core_1_1is__iterator.html">is_iterator</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> &gt;::value &gt; &gt; </td></tr>
+<tr class="memitem:af41e90e88f361af7b2ba2b6609f82092"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert</b> (const_iterator pos, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">first</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">InputIt</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">last</a>)</td></tr>
 <tr class="separator:af41e90e88f361af7b2ba2b6609f82092"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5f1802731ede3b62a496b3a72d34c0b" id="r_ad5f1802731ede3b62a496b3a72d34c0b"><td class="memItemLeft" align="right" valign="top"><a id="ad5f1802731ede3b62a496b3a72d34c0b" name="ad5f1802731ede3b62a496b3a72d34c0b"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, std::initializer_list&lt; T &gt; ilist)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const_iterator pos, std::initializer_list&lt; T &gt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ilist</a>)</td></tr>
 <tr class="separator:ad5f1802731ede3b62a496b3a72d34c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56d775119f132ab168339e05b8e21680" id="r_a56d775119f132ab168339e05b8e21680"><td class="memTemplParams" colspan="2"><a id="a56d775119f132ab168339e05b8e21680" name="a56d775119f132ab168339e05b8e21680"></a>
 template&lt;class... Args&gt; </td></tr>
-<tr class="memitem:a56d775119f132ab168339e05b8e21680"><td class="memTemplItemLeft" align="right" valign="top">constexpr iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace</b> (const_iterator pos, Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:a56d775119f132ab168339e05b8e21680"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace</b> (const_iterator pos, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a> &amp;&amp;... args)</td></tr>
 <tr class="separator:a56d775119f132ab168339e05b8e21680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a311aa03d3bcceeb1419622e5187a8e" id="r_a5a311aa03d3bcceeb1419622e5187a8e"><td class="memItemLeft" align="right" valign="top"><a id="a5a311aa03d3bcceeb1419622e5187a8e" name="a5a311aa03d3bcceeb1419622e5187a8e"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (const_iterator pos)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (const_iterator pos)</td></tr>
 <tr class="separator:a5a311aa03d3bcceeb1419622e5187a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99302bc8c429b13235b60cfe74ca5b43" id="r_a99302bc8c429b13235b60cfe74ca5b43"><td class="memItemLeft" align="right" valign="top"><a id="a99302bc8c429b13235b60cfe74ca5b43" name="a99302bc8c429b13235b60cfe74ca5b43"></a>
-constexpr iterator&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (const_iterator first, const_iterator last)</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> iterator&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (const_iterator <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">first</a>, const_iterator <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">last</a>)</td></tr>
 <tr class="separator:a99302bc8c429b13235b60cfe74ca5b43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f89f90dfaa704005cf0f036040ac116" id="r_a1f89f90dfaa704005cf0f036040ac116"><td class="memItemLeft" align="right" valign="top"><a id="a1f89f90dfaa704005cf0f036040ac116" name="a1f89f90dfaa704005cf0f036040ac116"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a1f89f90dfaa704005cf0f036040ac116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30436c57ea2b012f866444025e94e2d9" id="r_a30436c57ea2b012f866444025e94e2d9"><td class="memItemLeft" align="right" valign="top"><a id="a30436c57ea2b012f866444025e94e2d9" name="a30436c57ea2b012f866444025e94e2d9"></a>
-constexpr void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> () noexcept</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
 <tr class="separator:a30436c57ea2b012f866444025e94e2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdb83f9a043f2ff6c61b3d488e93b79b" id="r_abdb83f9a043f2ff6c61b3d488e93b79b"><td class="memItemLeft" align="right" valign="top"><a id="abdb83f9a043f2ff6c61b3d488e93b79b" name="abdb83f9a043f2ff6c61b3d488e93b79b"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:abdb83f9a043f2ff6c61b3d488e93b79b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d4df6351191e36c09501b6656a32c54" id="r_a5d4df6351191e36c09501b6656a32c54"><td class="memItemLeft" align="right" valign="top"><a id="a5d4df6351191e36c09501b6656a32c54" name="a5d4df6351191e36c09501b6656a32c54"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a5d4df6351191e36c09501b6656a32c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a766f7deddf28edaf1421d5653465216e" id="r_a766f7deddf28edaf1421d5653465216e"><td class="memItemLeft" align="right" valign="top"><a id="a766f7deddf28edaf1421d5653465216e" name="a766f7deddf28edaf1421d5653465216e"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a766f7deddf28edaf1421d5653465216e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a204fb990de735389db2bd335e070e072" id="r_a204fb990de735389db2bd335e070e072"><td class="memItemLeft" align="right" valign="top"><a id="a204fb990de735389db2bd335e070e072" name="a204fb990de735389db2bd335e070e072"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;=</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;=</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:a204fb990de735389db2bd335e070e072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2fe91db8afea2a7fa5a76a1fb5e87fe" id="r_ae2fe91db8afea2a7fa5a76a1fb5e87fe"><td class="memItemLeft" align="right" valign="top"><a id="ae2fe91db8afea2a7fa5a76a1fb5e87fe" name="ae2fe91db8afea2a7fa5a76a1fb5e87fe"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:ae2fe91db8afea2a7fa5a76a1fb5e87fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabf1b86522ecd848c9790d74fcb248e5" id="r_aabf1b86522ecd848c9790d74fcb248e5"><td class="memItemLeft" align="right" valign="top"><a id="aabf1b86522ecd848c9790d74fcb248e5" name="aabf1b86522ecd848c9790d74fcb248e5"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (const <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;other) const</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d75/classob_1_1core_1_1_fixed_vector.html">FixedVector</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
 <tr class="separator:aabf1b86522ecd848c9790d74fcb248e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+静的公開メンバ関数</h2></td></tr>
+<tr class="memitem:a395204bf29131140ca3aa61f53e32f5f" id="r_a395204bf29131140ca3aa61f53e32f5f"><td class="memItemLeft" align="right" valign="top"><a id="a395204bf29131140ca3aa61f53e32f5f" name="a395204bf29131140ca3aa61f53e32f5f"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> size_type&#160;</td><td class="memItemRight" valign="bottom"><b>max_size</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="separator:a395204bf29131140ca3aa61f53e32f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca952934c5aa2970ef9add516e84e25b" id="r_aca952934c5aa2970ef9add516e84e25b"><td class="memItemLeft" align="right" valign="top"><a id="aca952934c5aa2970ef9add516e84e25b" name="aca952934c5aa2970ef9add516e84e25b"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">constexpr</a> size_type&#160;</td><td class="memItemRight" valign="bottom"><b>capacity</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="separator:aca952934c5aa2970ef9add516e84e25b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename T, std::size_t N&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> T, std::size_t N&gt;<br />
 class ob::core::FixedVector&lt; T, N &gt;</div><p>Fixed配列 </p>
 </div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li>Framework/Core/Public/Framework/Core/Template/Container/<a class="el" href="../../d3/dec/_fixed_vector_8h_source.html">FixedVector.h</a></li>

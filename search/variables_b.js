@@ -7,5 +7,5 @@ var searchData=
   ['no_4',['No',['../d8/d6c/classob_1_1core_1_1_yes_no.html#a6b5a8814e31991d2da05fe04e5806c3c',1,'ob::core::YesNo']]],
   ['nodecount_5',['nodeCount',['../d3/dd6/structob_1_1rhi_1_1_device_adapter_info.html#a8e75afd2116cffaf2d0b3bac085b9074',1,'ob::rhi::DeviceAdapterInfo']]],
   ['none_6',['None',['../d5/daa/structob_1_1rhi_1_1_blend_desc.html#a0983393afa01094c52e7862bb13133a0',1,'ob::rhi::BlendDesc']]],
-  ['normal_7',['normal',['../d2/de2/structob_1_1core_1_1_plane.html#aaebb28073c4367ce3a41060f77ee3849',1,'ob::core::Plane::normal'],['../df/d0a/structob_1_1core_1_1_color.html#ac6109cca6eced18ed32fe3b987c30e5a',1,'ob::core::Color::Normal'],['../d8/d4c/structob_1_1core_1_1_int_color.html#af63fd9af2de1350cb9bf7641c4c762b4',1,'ob::core::IntColor::Normal']]]
+  ['normal_7',['normal',['../df/d0a/structob_1_1core_1_1_color.html#ac6109cca6eced18ed32fe3b987c30e5a',1,'ob::core::Color::Normal'],['../d8/d4c/structob_1_1core_1_1_int_color.html#af63fd9af2de1350cb9bf7641c4c762b4',1,'ob::core::IntColor::Normal'],['../d2/de2/structob_1_1core_1_1_plane.html#aaebb28073c4367ce3a41060f77ee3849',1,'ob::core::Plane::normal']]]
 ];

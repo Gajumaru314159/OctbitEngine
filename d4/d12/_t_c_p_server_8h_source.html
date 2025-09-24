@@ -105,39 +105,40 @@ $(document).ready(function(){initNavTree('d4/d12/_t_c_p_server_8h_source.html','
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/CorePrivate.h&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Core/Network/TCPClient.h&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/Core/Network/IPAddress.h&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>ob::core {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="foldopen" id="foldopen00014" data-start="{" data-end="};">
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">   14</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">TCPServer</a> {</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a3f44022fe8301603d28cdedb220b54eb">   18</a></span>        <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a3f44022fe8301603d28cdedb220b54eb">TCPServer</a>();</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#adb3851e3334200ffb73fa81eb3cbb626">   21</a></span>        <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#adb3851e3334200ffb73fa81eb3cbb626">~TCPServer</a>();</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a801dd85869ccaeea82e5748e2d3353f9">   24</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a801dd85869ccaeea82e5748e2d3353f9">open</a>(u16 port);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb">   27</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb">close</a>();</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a8036e6bec29d66a21cf8fe2a887ae3dd">   33</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a8036e6bec29d66a21cf8fe2a887ae3dd">accept</a>() -&gt; UPtr&lt;TCPClient&gt;;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#ad85e10670dcbce758d49372dc5d9eb0e">   36</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#ad85e10670dcbce758d49372dc5d9eb0e">isClosed</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        s16 m_port;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        u64 m_socket;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    };</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">   13</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">TCPServer</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a3f44022fe8301603d28cdedb220b54eb">   17</a></span>        <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a3f44022fe8301603d28cdedb220b54eb">TCPServer</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#adb3851e3334200ffb73fa81eb3cbb626">   20</a></span>        <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#adb3851e3334200ffb73fa81eb3cbb626">~TCPServer</a>();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a801dd85869ccaeea82e5748e2d3353f9">   23</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a801dd85869ccaeea82e5748e2d3353f9">open</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u16</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">port</a>);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb">   26</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb">close</a>();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a41333e72d1b8b6aa32020bbc9d1fc8ac">   32</a></span>        <span class="keyword">auto</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a41333e72d1b8b6aa32020bbc9d1fc8ac">accept</a>() <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> -&gt; UPtr&lt;<a class="code hl_class" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">TCPClient</a>&gt;;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#ad85e10670dcbce758d49372dc5d9eb0e">   35</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#ad85e10670dcbce758d49372dc5d9eb0e">isClosed</a>() <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">private</a>:</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s16</a> m_port;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u64</a> m_socket;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    };</div>
 </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>}</div>
-<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">ob::core::TCPServer</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPServer.h:14</div></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">ob::core::TCPClient</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPClient.h:12</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html">ob::core::TCPServer</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPServer.h:13</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_a3f44022fe8301603d28cdedb220b54eb"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a3f44022fe8301603d28cdedb220b54eb">ob::core::TCPServer::TCPServer</a></div><div class="ttdeci">TCPServer()</div><div class="ttdoc">コンストラクタ</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_a41333e72d1b8b6aa32020bbc9d1fc8ac"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a41333e72d1b8b6aa32020bbc9d1fc8ac">ob::core::TCPServer::accept</a></div><div class="ttdeci">auto accept() const -&gt; UPtr&lt; TCPClient &gt;</div><div class="ttdoc">クライアントからの接続を受け入れる</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_a61f5ff149373339feb43837f5ca897cb"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a61f5ff149373339feb43837f5ca897cb">ob::core::TCPServer::close</a></div><div class="ttdeci">void close()</div><div class="ttdoc">サーバーを停止する</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_a801dd85869ccaeea82e5748e2d3353f9"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a801dd85869ccaeea82e5748e2d3353f9">ob::core::TCPServer::open</a></div><div class="ttdeci">bool open(u16 port)</div><div class="ttdoc">サーバーを開始する</div></div>
-<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_a8036e6bec29d66a21cf8fe2a887ae3dd"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#a8036e6bec29d66a21cf8fe2a887ae3dd">ob::core::TCPServer::accept</a></div><div class="ttdeci">auto accept() -&gt; UPtr&lt; TCPClient &gt;</div><div class="ttdoc">クライアントからの接続を受け入れる</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_ad85e10670dcbce758d49372dc5d9eb0e"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#ad85e10670dcbce758d49372dc5d9eb0e">ob::core::TCPServer::isClosed</a></div><div class="ttdeci">bool isClosed() const</div><div class="ttdoc">クローズ状態か</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_t_c_p_server_html_adb3851e3334200ffb73fa81eb3cbb626"><div class="ttname"><a href="../../de/d3a/classob_1_1core_1_1_t_c_p_server.html#adb3851e3334200ffb73fa81eb3cbb626">ob::core::TCPServer::~TCPServer</a></div><div class="ttdeci">~TCPServer()</div><div class="ttdoc">デストラクタ</div></div>
 </div><!-- fragment --></div><!-- contents -->

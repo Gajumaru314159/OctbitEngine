@@ -9,7 +9,7 @@ var searchData=
   ['bindlesshandle_6',['BindlessHandle',['../d7/d4c/structob_1_1rhi_1_1_bindless_handle.html',1,'ob::rhi']]],
   ['bitflags_7',['BitFlags',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
   ['bitflags_3c_20bufferflag_20_3e_8',['BitFlags&lt; BufferFlag &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
-  ['bitflags_3c_20colorcompoent_20_3e_9',['BitFlags&lt; ColorCompoent &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
+  ['bitflags_3c_20colorcomponent_20_3e_9',['BitFlags&lt; ColorComponent &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
   ['bitflags_3c_20fenceflag_20_3e_10',['BitFlags&lt; FenceFlag &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
   ['bitflags_3c_20renderpassflag_20_3e_11',['BitFlags&lt; RenderPassFlag &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
   ['bitflags_3c_20rootsignatureflag_20_3e_12',['BitFlags&lt; RootSignatureFlag &gt;',['../d5/d71/classob_1_1core_1_1_bit_flags.html',1,'ob::core']]],
@@ -19,12 +19,11 @@ var searchData=
   ['blenddesc_16',['BlendDesc',['../d5/daa/structob_1_1rhi_1_1_blend_desc.html',1,'ob::rhi']]],
   ['blob_17',['Blob',['../db/d4d/classob_1_1core_1_1_blob.html',1,'ob::core']]],
   ['blobview_18',['BlobView',['../da/dea/classob_1_1core_1_1_blob_view.html',1,'ob::core']]],
-  ['blockheader_19',['BlockHeader',['../da/d7e/structob_1_1core_1_1_allocator_1_1_block_header.html',1,'ob::core::Allocator']]],
-  ['boneweight_20',['BoneWeight',['../de/de9/structob_1_1graphics_1_1_bone_weight.html',1,'ob::graphics']]],
-  ['bounds_21',['Bounds',['../d4/d67/structob_1_1core_1_1_bounds.html',1,'ob::core']]],
-  ['box_22',['Box',['../d0/d77/structob_1_1core_1_1_box.html',1,'ob::core']]],
-  ['buffer_23',['Buffer',['../d1/db5/classob_1_1rhi_1_1_buffer.html',1,'ob::rhi']]],
-  ['bufferdesc_24',['bufferdesc',['../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html',1,'ob::rhi::BufferDesc'],['../d8/d37/structob_1_1rhi_1_1_graphic_file_request_1_1_buffer_desc.html',1,'ob::rhi::GraphicFileRequest::BufferDesc']]],
-  ['bufferviewdesc_25',['BufferViewDesc',['../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html',1,'ob::rhi']]],
-  ['button_26',['Button',['../d0/d01/classob_1_1input_1_1_button.html',1,'ob::input']]]
+  ['boneweight_19',['BoneWeight',['../de/de9/structob_1_1graphics_1_1_bone_weight.html',1,'ob::graphics']]],
+  ['bounds_20',['Bounds',['../d4/d67/structob_1_1core_1_1_bounds.html',1,'ob::core']]],
+  ['box_21',['Box',['../d0/d77/structob_1_1core_1_1_box.html',1,'ob::core']]],
+  ['buffer_22',['Buffer',['../d1/db5/classob_1_1rhi_1_1_buffer.html',1,'ob::rhi']]],
+  ['bufferdesc_23',['bufferdesc',['../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html',1,'ob::rhi::BufferDesc'],['../d8/d37/structob_1_1rhi_1_1_graphic_file_request_1_1_buffer_desc.html',1,'ob::rhi::GraphicFileRequest::BufferDesc']]],
+  ['bufferviewdesc_24',['BufferViewDesc',['../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html',1,'ob::rhi']]],
+  ['button_25',['Button',['../d0/d01/classob_1_1input_1_1_button.html',1,'ob::input']]]
 ];

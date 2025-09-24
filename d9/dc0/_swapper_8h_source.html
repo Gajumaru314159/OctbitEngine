@@ -122,12 +122,12 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&gt;</div>
 <div class="foldopen" id="foldopen00030" data-start="{" data-end="}">
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#abb078947b9380b9ad9ca359f9274fc08">   30</a></span>        <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#abb078947b9380b9ad9ca359f9274fc08">Swapper</a>(<span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>,Args&amp;... args):<a class="code hl_class" href="../../d6/d81/classob_1_1core_1_1_swapper.html">Swapper</a>(){</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#abb078947b9380b9ad9ca359f9274fc08">   30</a></span>        <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#abb078947b9380b9ad9ca359f9274fc08">Swapper</a>(<span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&amp;... args):<a class="code hl_class" href="../../d6/d81/classob_1_1core_1_1_swapper.html">Swapper</a>(){</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            OB_ASSERT(<a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>, <span class="stringliteral">&quot;Swapperのサイズは0にできません。&quot;</span>);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            m_instances.reserve(<a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>; ++i) {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a> = 0; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a> &lt; <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>; ++<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>) {</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>                m_instances.emplace_back(args...);</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            }</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        }</div>
@@ -139,7 +139,7 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="comment">//===============================================================</span></div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="foldopen" id="foldopen00044" data-start="{" data-end="}">
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">   44</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>()const noexcept {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">   44</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#ac139e1be6440f1b7605e87dcea7d8703">size</a>()<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a> {</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            <span class="keywordflow">return</span> m_instances.size();</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        }</div>
 </div>
@@ -153,22 +153,22 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="foldopen" id="foldopen00056" data-start="{" data-end="}">
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a7d280ffe693f5d68540d124e06f7fbd6">   56</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a7d280ffe693f5d68540d124e06f7fbd6">resize</a>(<span class="keywordtype">size_t</span> size_,<span class="keyword">const</span> T&amp; c) {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            m_instances.resize(size_,c);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a7d280ffe693f5d68540d124e06f7fbd6">   56</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a7d280ffe693f5d68540d124e06f7fbd6">resize</a>(<span class="keywordtype">size_t</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">size_</a>,<span class="keyword">const</span> T&amp; c) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            m_instances.resize(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">size_</a>,c);</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        }</div>
 </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
 <div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a201fd90a547749dd680f865d0d5d2d14">   62</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a201fd90a547749dd680f865d0d5d2d14">empty</a>()const noexcept {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a201fd90a547749dd680f865d0d5d2d14">   62</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a201fd90a547749dd680f865d0d5d2d14">empty</a>()<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a> {</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            <span class="keywordflow">return</span> m_instances.empty();</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        }</div>
 </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 <div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a1fcd94ef0f6fd6d51739e55691c3754e">   68</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a1fcd94ef0f6fd6d51739e55691c3754e">reserve</a>(<span class="keywordtype">size_t</span> size_){</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            m_instances.reserve(size_);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a1fcd94ef0f6fd6d51739e55691c3754e">   68</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a1fcd94ef0f6fd6d51739e55691c3754e">reserve</a>(<span class="keywordtype">size_t</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">size_</a>){</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            m_instances.reserve(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">size_</a>);</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        }</div>
 </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
@@ -192,7 +192,7 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
 <div class="foldopen" id="foldopen00090" data-start="{" data-end="}">
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a29832efc441000d6986b5f37c9632d4d">   90</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a29832efc441000d6986b5f37c9632d4d">index</a>()const noexcept {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a29832efc441000d6986b5f37c9632d4d">   90</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a29832efc441000d6986b5f37c9632d4d">index</a>()<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a> {</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            <span class="keywordflow">return</span> m_index;</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        }</div>
 </div>
@@ -229,9 +229,9 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 </div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keyword">template</span> &lt;<span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keyword">template</span> &lt;<span class="keyword">class</span>... <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&gt;</div>
 <div class="foldopen" id="foldopen00124" data-start="{" data-end="}">
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a4c5a895bcdf1a8f8850555c012dea391">  124</a></span>        T&amp; <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a4c5a895bcdf1a8f8850555c012dea391">emplace_back</a>(Args&amp;&amp;... args) {</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a4c5a895bcdf1a8f8850555c012dea391">  124</a></span>        T&amp; <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a4c5a895bcdf1a8f8850555c012dea391">emplace_back</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&amp;&amp;... args) {</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordflow">return</span> m_instances.emplace_back(args...);</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        }</div>
 </div>
@@ -249,7 +249,7 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        <span class="comment">//===============================================================</span></div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
 <div class="foldopen" id="foldopen00140" data-start="{" data-end="}">
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a03725c68a38834984dd61af9d1619e96">  140</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a03725c68a38834984dd61af9d1619e96">next</a>()noexcept {</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a03725c68a38834984dd61af9d1619e96">  140</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d6/d81/classob_1_1core_1_1_swapper.html#a03725c68a38834984dd61af9d1619e96">next</a>()<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a> {</div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            m_index++;</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            <span class="keywordflow">if</span> (m_instances.size() &lt;= m_index) {</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>                m_index = 0;</div>
@@ -268,13 +268,14 @@ $(document).ready(function(){initNavTree('d9/dc0/_swapper_8h_source.html','../..
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        Vector&lt;T&gt; m_instances;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Vector&lt;T&gt;</a> m_instances;</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <span class="keywordtype">size_t</span> m_index;</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    };</div>
 </div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_swapper_html"><div class="ttname"><a href="../../d6/d81/classob_1_1core_1_1_swapper.html">ob::core::Swapper</a></div><div class="ttdoc">入れ替えユーティリティ</div><div class="ttdef"><b>Definition</b> Swapper.h:12</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_swapper_html_a03725c68a38834984dd61af9d1619e96"><div class="ttname"><a href="../../d6/d81/classob_1_1core_1_1_swapper.html#a03725c68a38834984dd61af9d1619e96">ob::core::Swapper::next</a></div><div class="ttdeci">void next() noexcept</div><div class="ttdoc">次のバッファに進める</div><div class="ttdef"><b>Definition</b> Swapper.h:140</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_swapper_html_a19af4e7258dbee6850d3f0db92ec679d"><div class="ttname"><a href="../../d6/d81/classob_1_1core_1_1_swapper.html#a19af4e7258dbee6850d3f0db92ec679d">ob::core::Swapper::push_back</a></div><div class="ttdeci">void push_back(const T &amp;x)</div><div class="ttdoc">新たな要素を末尾に追加</div><div class="ttdef"><b>Definition</b> Swapper.h:111</div></div>

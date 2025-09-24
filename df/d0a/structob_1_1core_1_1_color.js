@@ -2,7 +2,7 @@ var structob_1_1core_1_1_color =
 [
     [ "Color", "df/d0a/structob_1_1core_1_1_color.html#a74a3ad5de26f6fd32ccd84545f42aa3c", null ],
     [ "Color", "df/d0a/structob_1_1core_1_1_color.html#af8b1e683f60952e62989a54c44d8e8a3", null ],
-    [ "Color", "df/d0a/structob_1_1core_1_1_color.html#a7de339b1a5f6225982502584fb1d9e4d", null ],
+    [ "Color", "df/d0a/structob_1_1core_1_1_color.html#a44d503e43517ab0090a579246d25ace9", null ],
     [ "Color", "df/d0a/structob_1_1core_1_1_color.html#a44cc87dfe337569b41d289abb5766a14", null ],
     [ "Color", "df/d0a/structob_1_1core_1_1_color.html#ade6ae62803f5d7790995a2a4ee350236", null ],
     [ "Color", "df/d0a/structob_1_1core_1_1_color.html#a6bd21e14c7f0d2a4a21e66ec338244a2", null ],

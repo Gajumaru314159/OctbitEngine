@@ -123,15 +123,16 @@ $(document).ready(function(){initNavTree('d0/dd3/_material_types_8h_source.html'
 <div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../da/db9/structob_1_1graphics_1_1_material_value_property_desc.html">   23</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../da/db9/structob_1_1graphics_1_1_material_value_property_desc.html">MaterialValuePropertyDesc</a> {</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        MaterialPropertyType type;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        s32 offset = -1; <span class="comment">// バッファ内のバイトオフセット</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        s32 index = -1; <span class="comment">// 何番目のリソースか (Textureの何番目か/Samplerの何番目か/Bufferの何番目か)</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        s32 slot = -1; <span class="comment">// DescriptorTableの何番目にバインドされているか</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> offset = -1; <span class="comment">// バッファ内のバイトオフセット</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> index = -1; <span class="comment">// 何番目のリソースか (Textureの何番目か/Samplerの何番目か/Bufferの何番目か)</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> slot = -1; <span class="comment">// DescriptorTableの何番目にバインドされているか</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    };</div>
 </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">using </span>MaterialPropertyMap = Map&lt;String, MaterialValuePropertyDesc, std::less&lt;&gt;&gt;;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">using </span><a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MaterialPropertyMap</a> = <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Map&lt;String, MaterialValuePropertyDesc, std::less&lt;&gt;</a>&gt;;</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="astructob_1_1graphics_1_1_material_value_property_desc_html"><div class="ttname"><a href="../../da/db9/structob_1_1graphics_1_1_material_value_property_desc.html">ob::graphics::MaterialValuePropertyDesc</a></div><div class="ttdef"><b>Definition</b> MaterialTypes.h:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

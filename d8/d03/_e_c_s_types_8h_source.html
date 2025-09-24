@@ -127,22 +127,22 @@ $(document).ready(function(){initNavTree('d8/d03/_e_c_s_types_8h_source.html','.
 <div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">   27</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a> {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">using </span>value_type = BitSet&lt;32&gt;;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">using </span><a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">value_type</a> = <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">BitSet&lt;32&gt;</a>;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">static</span> <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a> FromName(StringView name);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">static</span> <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a> FromName(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a>(s32 index) { </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> index) { </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            set(index,<span class="keyword">true</span>);</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        }</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> set(s32 index,<span class="keywordtype">bool</span> value) {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">void</span> set(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> index,<span class="keywordtype">bool</span> value) {</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            <span class="keywordflow">if</span> (is_in_range(index, m_value)) {</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                m_value.set(index, value);</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>            }</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        }</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordtype">void</span> reset() {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            m_value.reset();</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>            m_value.<a class="code hl_function" href="../../db/dac/classob_1_1core_1_1_ref.html#afffc9e2951065d18152ee123b7edc4dc">reset</a>();</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        }</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordtype">bool</span> operator[](<span class="keywordtype">size_t</span> index)<span class="keyword">const </span>{</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <span class="keywordflow">if</span> (is_in_range(index, m_value)) {</div>
@@ -154,20 +154,22 @@ $(document).ready(function(){initNavTree('d8/d03/_e_c_s_types_8h_source.html','.
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="keywordflow">return</span> m_value.size();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a>&amp; rhs) {</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keywordflow">return</span> (m_value &amp; rhs.m_value).any();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> <a class="code hl_class" href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">LayerMask</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">rhs</a>) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            <span class="keywordflow">return</span> (m_value &amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">rhs</a>.m_value).any();</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        }</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        value_type m_value;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">value_type</a> m_value;</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    };</div>
 </div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">using </span>TagSet = Set&lt;String, std::less&lt;&gt;&gt;;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">using </span><a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TagSet</a> = <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Set&lt;String, std::less&lt;&gt;</a>&gt;;</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html_afffc9e2951065d18152ee123b7edc4dc"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html#afffc9e2951065d18152ee123b7edc4dc">ob::core::Ref::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">解放</div></div>
 <div class="ttc" id="aclassob_1_1engine_1_1_layer_mask_html"><div class="ttname"><a href="../../dc/d7a/classob_1_1engine_1_1_layer_mask.html">ob::engine::LayerMask</a></div><div class="ttdef"><b>Definition</b> ECSTypes.h:27</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

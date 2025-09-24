@@ -1,16 +1,11 @@
 var hierarchy =
 [
     [ "ob::core::AABB", "d0/d10/structob_1_1core_1_1_a_a_b_b.html", null ],
-    [ "ob::core::Allocator", "d0/d98/classob_1_1core_1_1_allocator.html", [
-      [ "ob::core::MallocAllocator", "db/db5/classob_1_1core_1_1_malloc_allocator.html", null ]
-    ] ],
+    [ "ob::core::Allocator", "d0/d98/classob_1_1core_1_1_allocator.html", null ],
     [ "ob::core::Any", "de/d11/classob_1_1core_1_1_any.html", null ],
     [ "ob::engine2::Archetype", "d3/d57/classob_1_1engine2_1_1_archetype.html", null ],
     [ "ob::core::ArgumentInfo", "dc/d2a/structob_1_1core_1_1_argument_info.html", null ],
     [ "ob::platform::Arguments", "d4/da7/classob_1_1platform_1_1_arguments.html", null ],
-    [ "ob::asset::Asset", "da/df3/classob_1_1asset_1_1_asset.html", [
-      [ "ob::asset::TextureAsset", "d3/dde/classob_1_1asset_1_1_texture_asset.html", null ]
-    ] ],
     [ "ob::asset::AssetFactory", "d9/db1/classob_1_1asset_1_1_asset_factory.html", [
       [ "ob::asset::TextureAssetFactory", "d1/d70/classob_1_1asset_1_1_texture_asset_factory.html", null ]
     ] ],
@@ -33,7 +28,7 @@ var hierarchy =
     [ "ob::rhi::BindlessHandle", "d7/d4c/structob_1_1rhi_1_1_bindless_handle.html", null ],
     [ "ob::core::BitFlags< TEnum, TBitsType >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
     [ "ob::core::BitFlags< BufferFlag >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
-    [ "ob::core::BitFlags< ColorCompoent >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
+    [ "ob::core::BitFlags< ColorComponent >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
     [ "ob::core::BitFlags< FenceFlag >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
     [ "ob::core::BitFlags< RenderPassFlag >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
     [ "ob::core::BitFlags< RootSignatureFlag >", "d5/d71/classob_1_1core_1_1_bit_flags.html", null ],
@@ -43,7 +38,6 @@ var hierarchy =
     [ "ob::rhi::BlendDesc", "d5/daa/structob_1_1rhi_1_1_blend_desc.html", null ],
     [ "ob::core::Blob", "db/d4d/classob_1_1core_1_1_blob.html", null ],
     [ "ob::core::BlobView", "da/dea/classob_1_1core_1_1_blob_view.html", null ],
-    [ "ob::core::Allocator::BlockHeader", "da/d7e/structob_1_1core_1_1_allocator_1_1_block_header.html", null ],
     [ "ob::graphics::BoneWeight", "de/de9/structob_1_1graphics_1_1_bone_weight.html", null ],
     [ "ob::core::Bounds", "d4/d67/structob_1_1core_1_1_bounds.html", null ],
     [ "ob::core::Box", "d0/d77/structob_1_1core_1_1_box.html", null ],
@@ -149,11 +143,6 @@ var hierarchy =
     [ "ob::core::HandleManager< T, Deleter >", "da/d23/classob_1_1core_1_1_handle_manager.html", null ],
     [ "ob::core::Hash", "d9/da6/classob_1_1core_1_1_hash.html", null ],
     [ "ob::core::SyncHandleManager< T, Deleter >::Hasher", "de/de3/structob_1_1core_1_1_sync_handle_manager_1_1_hasher.html", null ],
-    [ "ob::core::Heap", "db/d53/classob_1_1core_1_1_heap.html", [
-      [ "ob::core::MimallocHeap", "d3/d29/classob_1_1core_1_1_mimalloc_heap.html", null ],
-      [ "ob::core::SystemHeap", "d4/dc3/classob_1_1core_1_1_system_heap.html", null ]
-    ] ],
-    [ "ob::core::Heap::HeapHeader", "d6/dbe/structob_1_1core_1_1_heap_1_1_heap_header.html", null ],
     [ "ob::core::HSV", "d1/db9/structob_1_1core_1_1_h_s_v.html", null ],
     [ "ob::input::IInputDevice", "dc/d23/classob_1_1input_1_1_i_input_device.html", null ],
     [ "ob::core::IndexedVector< T, TIndex, TDataVector, TIndexVector >", "da/d5f/classob_1_1core_1_1_indexed_vector.html", null ],
@@ -203,14 +192,13 @@ var hierarchy =
     [ "ob::graphics::MaterialValuePropertyDesc", "da/db9/structob_1_1graphics_1_1_material_value_property_desc.html", null ],
     [ "ob::core::Math", "d5/d80/classob_1_1core_1_1_math.html", null ],
     [ "ob::core::Matrix", "d1/d5c/structob_1_1core_1_1_matrix.html", null ],
+    [ "ob::core::internal::MemoryCategoryScope", "d9/d35/classob_1_1core_1_1internal_1_1_memory_category_scope.html", null ],
     [ "ob::core::MemorySize", "d6/d03/structob_1_1core_1_1_memory_size.html", null ],
-    [ "ob::core::MemorySystem", "d1/dc5/classob_1_1core_1_1_memory_system.html", null ],
     [ "ob::model2::Mesh", "d5/d07/structob_1_1model2_1_1_mesh.html", null ],
     [ "ob::graphics::MeshData", "d1/d24/structob_1_1graphics_1_1_mesh_data.html", null ],
     [ "ob::model::MeshRange", "d9/d7b/structob_1_1model_1_1_mesh_range.html", null ],
     [ "ob::graphics::MeshSystem", "d5/de1/classob_1_1graphics_1_1_mesh_system.html", null ],
-    [ "ob::core::MiniDalegate< class >", "d1/ddb/classob_1_1core_1_1_mini_dalegate.html", null ],
-    [ "ob::core::MiniDalegate< R(Args...)>", "db/d9a/classob_1_1core_1_1_mini_dalegate_3_01_r_07_args_8_8_8_08_4.html", null ],
+    [ "ob::core::MiniDelegate< R(Args...)>", "d4/d70/classob_1_1core_1_1_mini_delegate_3_01_r_07_args_8_8_8_08_4.html", null ],
     [ "ob::model2::Model", "d5/d8d/structob_1_1model2_1_1_model.html", null ],
     [ "ob::model::ModelData", "d3/d0a/structob_1_1model_1_1_model_data.html", null ],
     [ "ob::model::ModelParts", "d4/db6/structob_1_1model_1_1_model_parts.html", null ],
@@ -275,7 +263,6 @@ var hierarchy =
     [ "ob::core::Pimpl< T >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
     [ "ob::core::Pimpl< class JobSystemImpl >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
     [ "ob::core::Pimpl< class MutexImpl >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
-    [ "ob::core::Pimpl< class SpinLockImpl >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
     [ "ob::core::Pimpl< class ThreadImpl >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
     [ "ob::core::Pimpl< FGResourcePool >", "d3/dee/classob_1_1core_1_1_pimpl.html", null ],
     [ "ob::rhi::PipelineStateDesc", "d6/d84/structob_1_1rhi_1_1_pipeline_state_desc.html", null ],
@@ -310,6 +297,7 @@ var hierarchy =
     [ "ob::rhi::RasterizerDesc", "da/d12/structob_1_1rhi_1_1_rasterizer_desc.html", null ],
     [ "ob::core::Rect", "d3/db2/structob_1_1core_1_1_rect.html", null ],
     [ "ob::core::Ref< T >", "db/dac/classob_1_1core_1_1_ref.html", null ],
+    [ "ob::core::Ref< ob::asset::Asset >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::graphics::Material >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::graphics::Mesh >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::model::Model >", "db/dac/classob_1_1core_1_1_ref.html", null ],
@@ -325,6 +313,9 @@ var hierarchy =
     [ "ob::debug::ReflectionExplorer", "de/d1f/classob_1_1debug_1_1_reflection_explorer.html", null ],
     [ "ob::core::ReflectionFunction", "d5/ddb/structob_1_1core_1_1_reflection_function.html", null ],
     [ "ob::core::RefObject", "db/ded/classob_1_1core_1_1_ref_object.html", [
+      [ "ob::asset::Asset", "da/df3/classob_1_1asset_1_1_asset.html", [
+        [ "ob::asset::TextureAsset", "d3/dde/classob_1_1asset_1_1_texture_asset.html", null ]
+      ] ],
       [ "ob::graphics::Material", "db/d93/classob_1_1graphics_1_1_material.html", null ],
       [ "ob::graphics::Mesh", "d7/d9b/classob_1_1graphics_1_1_mesh.html", null ],
       [ "ob::graphics::RenderPipeline", "de/dc2/classob_1_1graphics_1_1_render_pipeline.html", [

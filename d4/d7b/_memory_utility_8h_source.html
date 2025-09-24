@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>OctbitEngine: Framework/Core/Public/Framework/Core/Memory/Utility/MemoryUtility.h ソースファイル</title>
+<title>OctbitEngine: Framework/Core/Public/Framework/Core/Memory/MemoryUtility.h ソースファイル</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('d4/d7b/_memory_utility_8h_source.html'
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">constexpr</span> T* GetOffsetPtr(<span class="keyword">const</span> <span class="keywordtype">void</span>* pBuffer, ptrdiff_t offset)<span class="keyword">noexcept</span> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(<span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">byte</span>*<span class="keyword">&gt;</span>(<span class="keyword">const_cast&lt;</span><span class="keywordtype">void</span>*<span class="keyword">&gt;</span>(pBuffer)) + offset);</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keywordflow">return</span> <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(<span class="keyword">static_cast&lt;</span><span class="keywordtype">byte</span>*<span class="keyword">&gt;</span>(<span class="keyword">const_cast&lt;</span><span class="keywordtype">void</span>*<span class="keyword">&gt;</span>(pBuffer)) + offset);</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    }</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">constexpr</span> <span class="keywordtype">void</span>* GetOffsetPtr(<span class="keyword">const</span> <span class="keywordtype">void</span>* pBuffer, ptrdiff_t offset)<span class="keyword">noexcept</span> {</div>
@@ -157,7 +157,7 @@ $(document).ready(function(){initNavTree('d4/d7b/_memory_utility_8h_source.html'
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_9f165b2481dacfe69aa54d326bd5cd47.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_091cb97c815342203f0af8739126cbb8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_5e9efae597f9007a5e31f6ef8f108de2.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_67076fa46bde3b85ed03424cfba08e54.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_8926a289bfb5862d229f61f1100f3f52.html">Memory</a></li><li class="navelem"><a class="el" href="../../dir_8575f9435319d65d8409cb29c3912cac.html">Utility</a></li><li class="navelem"><b>MemoryUtility.h</b></li>
+    <li class="navelem"><a class="el" href="../../dir_bcbb2cf9a3d3d83e5515c82071a07177.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_9f165b2481dacfe69aa54d326bd5cd47.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_091cb97c815342203f0af8739126cbb8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_5e9efae597f9007a5e31f6ef8f108de2.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_67076fa46bde3b85ed03424cfba08e54.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_8926a289bfb5862d229f61f1100f3f52.html">Memory</a></li><li class="navelem"><b>MemoryUtility.h</b></li>
     <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
   </ul>
 </div>

@@ -53,6 +53,5 @@ var searchData=
   ['swapper_50',['Swapper',['../d6/d81/classob_1_1core_1_1_swapper.html',1,'ob::core']]],
   ['swapper_3c_20ob_3a_3acore_3a_3aref_3c_20ob_3a_3arhi_3a_3acommandlist_20_3e_20_3e_51',['Swapper&lt; ob::core::Ref&lt; ob::rhi::CommandList &gt; &gt;',['../d6/d81/classob_1_1core_1_1_swapper.html',1,'ob::core']]],
   ['synchandlemanager_52',['SyncHandleManager',['../dd/d55/classob_1_1core_1_1_sync_handle_manager.html',1,'ob::core']]],
-  ['systemdesc_53',['SystemDesc',['../d7/dd0/structob_1_1rhi_1_1_system_desc.html',1,'ob::rhi']]],
-  ['systemheap_54',['SystemHeap',['../d4/dc3/classob_1_1core_1_1_system_heap.html',1,'ob::core']]]
+  ['systemdesc_53',['SystemDesc',['../d7/dd0/structob_1_1rhi_1_1_system_desc.html',1,'ob::rhi']]]
 ];

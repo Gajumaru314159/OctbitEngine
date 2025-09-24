@@ -106,10 +106,10 @@ $(document).ready(function(){initNavTree('d8/da0/classob_1_1core_1_1_scope_value
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
-<tr class="memitem:afa6137b6709973ff4648fab945d0ced9" id="r_afa6137b6709973ff4648fab945d0ced9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">ScopeValue</a> (T &amp;value, const V &amp;initialValue, const V &amp;restoreValue)</td></tr>
+<tr class="memitem:afa6137b6709973ff4648fab945d0ced9" id="r_afa6137b6709973ff4648fab945d0ced9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">ScopeValue</a> (T &amp;value, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;initialValue, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">restoreValue</a>)</td></tr>
 <tr class="memdesc:afa6137b6709973ff4648fab945d0ced9"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ  <br /></td></tr>
 <tr class="separator:afa6137b6709973ff4648fab945d0ced9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4a3db8d39b08fb5af2f9a3d7ecbb73b" id="r_af4a3db8d39b08fb5af2f9a3d7ecbb73b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#af4a3db8d39b08fb5af2f9a3d7ecbb73b">ScopeValue</a> (T &amp;value, const V &amp;initialValue)</td></tr>
+<tr class="memitem:af4a3db8d39b08fb5af2f9a3d7ecbb73b" id="r_af4a3db8d39b08fb5af2f9a3d7ecbb73b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#af4a3db8d39b08fb5af2f9a3d7ecbb73b">ScopeValue</a> (T &amp;value, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;initialValue)</td></tr>
 <tr class="memdesc:af4a3db8d39b08fb5af2f9a3d7ecbb73b"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ  <br /></td></tr>
 <tr class="separator:af4a3db8d39b08fb5af2f9a3d7ecbb73b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6fff6a7062a2782cfecaec4119370ff" id="r_ab6fff6a7062a2782cfecaec4119370ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#ab6fff6a7062a2782cfecaec4119370ff">ScopeValue</a> (T &amp;value)</td></tr>
@@ -121,7 +121,7 @@ $(document).ready(function(){initNavTree('d8/da0/classob_1_1core_1_1_scope_value
 <tr class="separator:a4f8dc6c5f33b2f025aac0260b700991b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename T, typename V = T&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> T, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> V = T&gt;<br />
 class ob::core::ScopeValue&lt; T, V &gt;</div><p>スコープ値 </p>
 <p>スコープを抜けるときに値を元の状態、または指定した値に復元します。 <code> s32 value = 0; { ScopedValue sv(value); value = 1; std::cout&lt;&lt;value&lt;&lt;std::endl;// 1 } std::cout&lt;&lt;value&lt;&lt;std::endl;// 0 { // 復元する値を2に指定 ScopedValue sv(value,2); std::cout&lt;&lt;value&lt;&lt;std::endl;// 0 } std::cout&lt;&lt;value&lt;&lt;std::endl;// 2 { // 復元する値を4に指定して3で初期化 ScopedValue sv(value,3,4); std::cout&lt;&lt;value&lt;&lt;std::endl;// 3 } std::cout&lt;&lt;value&lt;&lt;std::endl;// 4 </code> </p>
 </div><h2 class="groupheader">構築子と解体子</h2>
@@ -131,7 +131,7 @@ class ob::core::ScopeValue&lt; T, V &gt;</div><p>スコープ値 </p>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename V  = T&gt; </div>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> T , <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> V  = T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -145,13 +145,13 @@ template&lt;typename T , typename V  = T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const V &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;&#160;</td>
           <td class="paramname"><em>initialValue</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const V &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;&#160;</td>
           <td class="paramname"><em>restoreValue</em>&#160;</td>
         </tr>
         <tr>
@@ -185,7 +185,7 @@ template&lt;typename T , typename V  = T&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename V  = T&gt; </div>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> T , <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> V  = T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -199,7 +199,7 @@ template&lt;typename T , typename V  = T&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const V &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> V &amp;&#160;</td>
           <td class="paramname"><em>initialValue</em>&#160;</td>
         </tr>
         <tr>
@@ -232,7 +232,7 @@ template&lt;typename T , typename V  = T&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T , typename V  = T&gt; </div>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> T , <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">typename</a> V  = T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

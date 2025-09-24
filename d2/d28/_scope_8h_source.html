@@ -113,9 +113,9 @@ $(document).ready(function(){initNavTree('d2/d28/_scope_8h_source.html','../../'
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
 <div class="foldopen" id="foldopen00044" data-start="{" data-end="}">
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">   44</a></span>        <a class="code hl_function" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">ScopeValue</a>(T&amp; value, <span class="keyword">const</span> V&amp; initialValue, <span class="keyword">const</span> V&amp; restoreValue)</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">   44</a></span>        <a class="code hl_function" href="../../d8/da0/classob_1_1core_1_1_scope_value.html#afa6137b6709973ff4648fab945d0ced9">ScopeValue</a>(T&amp; value, <span class="keyword">const</span> V&amp; initialValue, <span class="keyword">const</span> V&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">restoreValue</a>)</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>            : m_value(value)</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            , m_restoreValue(restoreValue)</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            , m_restoreValue(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">restoreValue</a>)</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        {</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            m_value = initialValue;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        }</div>
@@ -159,15 +159,15 @@ $(document).ready(function(){initNavTree('d2/d28/_scope_8h_source.html','../../'
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> TProc&gt;</div>
 <div class="foldopen" id="foldopen00096" data-start="{" data-end="}">
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#afa374483d65ab2292a9730e59208d12b">   96</a></span>        <a class="code hl_function" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#afa374483d65ab2292a9730e59208d12b">ScopeOutAction</a>(<span class="keyword">const</span> TProc&amp; proc)</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            : m_proc(proc)</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#afa374483d65ab2292a9730e59208d12b">   96</a></span>        <a class="code hl_function" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#afa374483d65ab2292a9730e59208d12b">ScopeOutAction</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TProc</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">proc</a>)</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            : m_proc(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">proc</a>)</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>        {}</div>
 </div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> TProc&gt;</div>
 <div class="foldopen" id="foldopen00102" data-start="{" data-end="}">
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#aa1dc6748547dca214245eacedd8e611c">  102</a></span>        <a class="code hl_function" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#aa1dc6748547dca214245eacedd8e611c">ScopeOutAction</a>(TProc&amp;&amp; proc)</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            : m_proc(std::forward&lt;TProc&gt;(proc))</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#aa1dc6748547dca214245eacedd8e611c">  102</a></span>        <a class="code hl_function" href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#aa1dc6748547dca214245eacedd8e611c">ScopeOutAction</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TProc</a>&amp;&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">proc</a>)</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>            : m_proc(std::<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">forward</a>&lt;<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TProc</a>&gt;(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">proc</a>))</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        {}</div>
 </div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
@@ -181,11 +181,12 @@ $(document).ready(function(){initNavTree('d2/d28/_scope_8h_source.html','../../'
 </div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        Func&lt;void()&gt; m_proc;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        Func&lt;<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>()&gt; m_proc;</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    };</div>
 </div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_scope_out_action_html"><div class="ttname"><a href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html">ob::core::ScopeOutAction</a></div><div class="ttdoc">スコープ・アウト・アクション</div><div class="ttdef"><b>Definition</b> Scope.h:91</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_scope_out_action_html_a3015e0ff1a985fea47565ad441ec0cbb"><div class="ttname"><a href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#a3015e0ff1a985fea47565ad441ec0cbb">ob::core::ScopeOutAction::~ScopeOutAction</a></div><div class="ttdeci">~ScopeOutAction()</div><div class="ttdoc">デストラクタ</div><div class="ttdef"><b>Definition</b> Scope.h:107</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_scope_out_action_html_aa1dc6748547dca214245eacedd8e611c"><div class="ttname"><a href="../../d0/d70/classob_1_1core_1_1_scope_out_action.html#aa1dc6748547dca214245eacedd8e611c">ob::core::ScopeOutAction::ScopeOutAction</a></div><div class="ttdeci">ScopeOutAction(TProc &amp;&amp;proc)</div><div class="ttdoc">コンストラクタ</div><div class="ttdef"><b>Definition</b> Scope.h:102</div></div>

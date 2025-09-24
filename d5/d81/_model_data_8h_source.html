@@ -112,9 +112,9 @@ $(document).ready(function(){initNavTree('d5/d81/_model_data_8h_source.html','..
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="../../d9/d7b/structob_1_1model_1_1_mesh_range.html">   13</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d9/d7b/structob_1_1model_1_1_mesh_range.html">MeshRange</a> {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        s32             start = 0;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        s32             count = 0;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        s32             base = 0;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a>             start = 0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a>             count = 0;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a>             base = 0;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        rhi::Topology   topology = rhi::Topology::TriangleList;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    };</div>
 </div>
@@ -123,19 +123,20 @@ $(document).ready(function(){initNavTree('d5/d81/_model_data_8h_source.html','..
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="../../d4/db6/structob_1_1model_1_1_model_parts.html">   20</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d4/db6/structob_1_1model_1_1_model_parts.html">ModelParts</a> {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <a class="code hl_struct" href="../../d9/d7b/structob_1_1model_1_1_mesh_range.html">MeshRange</a>   range;</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <a class="code hl_struct" href="../../d4/d67/structob_1_1core_1_1_bounds.html">Bounds</a>      bounds;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        Ref&lt;graphics::Mesh&gt;     mesh;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        Ref&lt;graphics::Material&gt; material;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;graphics::Mesh&gt;</a>     mesh;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;graphics::Material&gt;</a> material;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    };</div>
 </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="foldopen" id="foldopen00028" data-start="{" data-end="};">
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../d3/d0a/structob_1_1model_1_1_model_data.html">   28</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../d3/d0a/structob_1_1model_1_1_model_data.html">ModelData</a> {</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        Vector&lt;ModelParts&gt;  parts;        <span class="comment">// メッシュとマテリアルの組み合わせ</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Vector&lt;ModelParts&gt;</a>  parts;        <span class="comment">// メッシュとマテリアルの組み合わせ</span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    };</div>
 </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="astructob_1_1core_1_1_bounds_html"><div class="ttname"><a href="../../d4/d67/structob_1_1core_1_1_bounds.html">ob::core::Bounds</a></div><div class="ttdoc">Box と Sphere</div><div class="ttdef"><b>Definition</b> Bounding.h:26</div></div>
 <div class="ttc" id="astructob_1_1model_1_1_mesh_range_html"><div class="ttname"><a href="../../d9/d7b/structob_1_1model_1_1_mesh_range.html">ob::model::MeshRange</a></div><div class="ttdef"><b>Definition</b> ModelData.h:13</div></div>
 <div class="ttc" id="astructob_1_1model_1_1_model_data_html"><div class="ttname"><a href="../../d3/d0a/structob_1_1model_1_1_model_data.html">ob::model::ModelData</a></div><div class="ttdef"><b>Definition</b> ModelData.h:28</div></div>

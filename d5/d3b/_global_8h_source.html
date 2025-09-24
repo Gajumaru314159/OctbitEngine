@@ -112,17 +112,17 @@ $(document).ready(function(){initNavTree('d5/d3b/_global_8h_source.html','../../
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="../../de/dab/classob_1_1core_1_1_global.html">   23</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../de/dab/classob_1_1core_1_1_global.html">Global</a> {</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span>... <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&gt;</div>
 <div class="foldopen" id="foldopen00028" data-start="{" data-end="}">
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../de/dab/classob_1_1core_1_1_global.html#ab0dc278b52019369acc2c11371edde93">   28</a></span>        <a class="code hl_function" href="../../de/dab/classob_1_1core_1_1_global.html#ab0dc278b52019369acc2c11371edde93">Global</a>(Args&amp;&amp;... args) {</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            assert(s_instance == <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../de/dab/classob_1_1core_1_1_global.html#ab0dc278b52019369acc2c11371edde93">   28</a></span>        <a class="code hl_function" href="../../de/dab/classob_1_1core_1_1_global.html#ab0dc278b52019369acc2c11371edde93">Global</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a>&amp;&amp;... args) {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">assert</a>(s_instance == <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            s_instance = <span class="keyword">new</span> T(args...);</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        }</div>
 </div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="foldopen" id="foldopen00034" data-start="{" data-end="}">
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="../../de/dab/classob_1_1core_1_1_global.html#a286f5e33a20c996bcd1bd24f0df19b9b">   34</a></span>        <a class="code hl_function" href="../../de/dab/classob_1_1core_1_1_global.html#a286f5e33a20c996bcd1bd24f0df19b9b">~Global</a>() {</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            assert(s_instance != <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">assert</a>(s_instance != <span class="keyword">nullptr</span>);</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keyword">delete</span> s_instance;</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        }</div>
 </div>
@@ -147,6 +147,7 @@ $(document).ready(function(){initNavTree('d5/d3b/_global_8h_source.html','../../
 <div class="ttc" id="aclassob_1_1core_1_1_global_html_a286f5e33a20c996bcd1bd24f0df19b9b"><div class="ttname"><a href="../../de/dab/classob_1_1core_1_1_global.html#a286f5e33a20c996bcd1bd24f0df19b9b">ob::core::Global::~Global</a></div><div class="ttdeci">~Global()</div><div class="ttdoc">デストラクタ</div><div class="ttdef"><b>Definition</b> Global.h:34</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_global_html_ab0dc278b52019369acc2c11371edde93"><div class="ttname"><a href="../../de/dab/classob_1_1core_1_1_global.html#ab0dc278b52019369acc2c11371edde93">ob::core::Global::Global</a></div><div class="ttdeci">Global(Args &amp;&amp;... args)</div><div class="ttdoc">コンストラクタ</div><div class="ttdef"><b>Definition</b> Global.h:28</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_global_html_ac6ef76912b910a8d36ac725c727948c2"><div class="ttname"><a href="../../de/dab/classob_1_1core_1_1_global.html#ac6ef76912b910a8d36ac725c727948c2">ob::core::Global::Instance</a></div><div class="ttdeci">static T * Instance()</div><div class="ttdoc">インスタンス取得</div><div class="ttdef"><b>Definition</b> Global.h:41</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

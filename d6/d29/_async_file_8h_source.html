@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">   22</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a> {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>(StringView path);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">~AsyncFileHandle</a>();</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">const</span> <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; path()<span class="keyword">const</span>;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">bool</span> empty()<span class="keyword">const</span>;</div>
@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a>;</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        SPtr&lt;Impl&gt; m_impl;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">SPtr&lt;Impl&gt;</a> m_impl;</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    };</div>
 </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
@@ -157,7 +157,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        MemoryStorageBase&lt;Impl, 8, 8&gt; m_impl;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorageBase&lt;Impl, 8, 8&gt;</a> m_impl;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    };</div>
 </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
@@ -172,7 +172,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordtype">void</span> submit();</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        MemoryStorageBase&lt;Impl, 128, 8&gt; m_impl;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorageBase&lt;Impl, 128, 8&gt;</a> m_impl;</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    };</div>
 </div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
@@ -180,7 +180,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="foldopen" id="foldopen00079" data-start="{" data-end="};">
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="../../d7/da6/classob_1_1core_1_1_async_file.html">   79</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d7/da6/classob_1_1core_1_1_async_file.html">AsyncFile</a> {</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a3c11685a7f313de15e850e794eca7e92">   82</a></span>        <a class="code hl_function" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a3c11685a7f313de15e850e794eca7e92">AsyncFile</a>(<a class="code hl_class" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a>&amp; queue,StringView path);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a3c11685a7f313de15e850e794eca7e92">   82</a></span>        <a class="code hl_function" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a3c11685a7f313de15e850e794eca7e92">AsyncFile</a>(<a class="code hl_class" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">queue</a>,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a8d1a4e71d1375efc276890f87904c05d">   85</a></span>        <a class="code hl_function" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a8d1a4e71d1375efc276890f87904c05d">~AsyncFile</a>();</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
@@ -193,7 +193,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a096e83f883805750705aabb5d48383fd">   99</a></span>        <span class="keywordtype">size_t</span> <a class="code hl_function" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a096e83f883805750705aabb5d48383fd">size</a>()<span class="keyword">const</span>;</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        MemoryStorageBase&lt;Impl, 128,8&gt; m_impl;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorageBase&lt;Impl, 128,8&gt;</a> m_impl;</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    };</div>
 </div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
@@ -209,6 +209,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="ttc" id="aclassob_1_1core_1_1_async_file_html_aa6d450815f65dfd5110fbff371323181"><div class="ttname"><a href="../../d7/da6/classob_1_1core_1_1_async_file.html#aa6d450815f65dfd5110fbff371323181">ob::core::AsyncFile::poll</a></div><div class="ttdeci">bool poll() const</div><div class="ttdoc">非同期読み込みが完了しているか</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_async_file_queue_html"><div class="ttname"><a href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">ob::core::AsyncFileQueue</a></div><div class="ttdoc">非同期ファイル読み込みキュー @detail このクラスは非同期ファイル読み込みを管理するキューです。</div><div class="ttdef"><b>Definition</b> AsyncFile.h:63</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_async_file_system_html"><div class="ttname"><a href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">ob::core::AsyncFileSystem</a></div><div class="ttdef"><b>Definition</b> AsyncFile.h:14</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_singleton_html"><div class="ttname"><a href="../../dd/df6/classob_1_1core_1_1_singleton.html">ob::core::Singleton</a></div><div class="ttdoc">シングルトン・パターン</div><div class="ttdef"><b>Definition</b> Singleton.h:14</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
 <div class="ttc" id="astructob_1_1core_1_1_async_file_request_html"><div class="ttname"><a href="../../da/d5c/structob_1_1core_1_1_async_file_request.html">ob::core::AsyncFileRequest</a></div><div class="ttdoc">非同期ファイル定義</div><div class="ttdef"><b>Definition</b> AsyncFile.h:40</div></div>

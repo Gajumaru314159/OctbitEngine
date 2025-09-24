@@ -107,26 +107,27 @@ $(document).ready(function(){initNavTree('d7/dd2/classob_1_1core_1_1_network.htm
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
 <tr class="memitem:a31cce1236bac4ff0e08aac504023f60e" id="r_a31cce1236bac4ff0e08aac504023f60e"><td class="memItemLeft" align="right" valign="top"><a id="a31cce1236bac4ff0e08aac504023f60e" name="a31cce1236bac4ff0e08aac504023f60e"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>Startup</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Startup</b> ()</td></tr>
 <tr class="memdesc:a31cce1236bac4ff0e08aac504023f60e"><td class="mdescLeft">&#160;</td><td class="mdescRight">ネットワーク機能の開始 <br /></td></tr>
 <tr class="separator:a31cce1236bac4ff0e08aac504023f60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab107830c62825e96965b6970f53a81a2" id="r_ab107830c62825e96965b6970f53a81a2"><td class="memItemLeft" align="right" valign="top"><a id="ab107830c62825e96965b6970f53a81a2" name="ab107830c62825e96965b6970f53a81a2"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>Shutdown</b> ()</td></tr>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Shutdown</b> ()</td></tr>
 <tr class="memdesc:ab107830c62825e96965b6970f53a81a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">ネットワーク機能の終了 <br /></td></tr>
 <tr class="separator:ab107830c62825e96965b6970f53a81a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>ネットワーク </p>
-<p>ネットワーク機能を使用する場合は <a class="el" href="../../d7/dd2/classob_1_1core_1_1_network.html#a31cce1236bac4ff0e08aac504023f60e" title="ネットワーク機能の開始">Startup()</a> と <a class="el" href="../../d7/dd2/classob_1_1core_1_1_network.html#ab107830c62825e96965b6970f53a81a2" title="ネットワーク機能の終了">Shutdown()</a> をそれぞれ1回ずつ呼び出す必要があります。 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> main(){</div>
+<p>ネットワーク機能を使用する場合は <a class="el" href="../../d7/dd2/classob_1_1core_1_1_network.html#a31cce1236bac4ff0e08aac504023f60e" title="ネットワーク機能の開始">Startup()</a> と <a class="el" href="../../d7/dd2/classob_1_1core_1_1_network.html#ab107830c62825e96965b6970f53a81a2" title="ネットワーク機能の終了">Shutdown()</a> をそれぞれ1回ずつ呼び出す必要があります。 </p><div class="fragment"><div class="line"><span class="keywordtype">int</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">main</a>(){</div>
 <div class="line">    <a class="code hl_function" href="../../d7/dd2/classob_1_1core_1_1_network.html#a31cce1236bac4ff0e08aac504023f60e">Network::Startup</a>();</div>
 <div class="line">    {</div>
-<div class="line">        <a class="code hl_class" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">TCPClient</a> client;</div>
+<div class="line">        <a class="code hl_class" href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">TCPClient</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">client</a>;</div>
 <div class="line">    }</div>
 <div class="line">    <a class="code hl_function" href="../../d7/dd2/classob_1_1core_1_1_network.html#ab107830c62825e96965b6970f53a81a2">Network::Shutdown</a>();</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassob_1_1core_1_1_network_html_a31cce1236bac4ff0e08aac504023f60e"><div class="ttname"><a href="../../d7/dd2/classob_1_1core_1_1_network.html#a31cce1236bac4ff0e08aac504023f60e">ob::core::Network::Startup</a></div><div class="ttdeci">static void Startup()</div><div class="ttdoc">ネットワーク機能の開始</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_network_html_ab107830c62825e96965b6970f53a81a2"><div class="ttname"><a href="../../d7/dd2/classob_1_1core_1_1_network.html#ab107830c62825e96965b6970f53a81a2">ob::core::Network::Shutdown</a></div><div class="ttdeci">static void Shutdown()</div><div class="ttdoc">ネットワーク機能の終了</div></div>
-<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">ob::core::TCPClient</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPClient.h:13</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_t_c_p_client_html"><div class="ttname"><a href="../../d0/db4/classob_1_1core_1_1_t_c_p_client.html">ob::core::TCPClient</a></div><div class="ttdoc">TCPクライアント</div><div class="ttdef"><b>Definition</b> TCPClient.h:12</div></div>
 </div><!-- fragment --> </div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li>Framework/Core/Public/Framework/Core/Network/<a class="el" href="../../db/d9e/_network_8h_source.html">Network.h</a></li>
 </ul>

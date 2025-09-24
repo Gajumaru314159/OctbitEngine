@@ -2,7 +2,7 @@ var classob_1_1core_1_1_memory_storage_base =
 [
     [ "MemoryStorageBase", "df/d15/classob_1_1core_1_1_memory_storage_base.html#aae2d350dbafa5a25894e4ff6152eb7c3", null ],
     [ "~MemoryStorageBase", "df/d15/classob_1_1core_1_1_memory_storage_base.html#a4900ce2e07eeb2af646753822dbdcd8a", null ],
-    [ "construct", "df/d15/classob_1_1core_1_1_memory_storage_base.html#a1fbad8792b0cd06ebe15c3eab4a2c41c", null ],
+    [ "construct", "df/d15/classob_1_1core_1_1_memory_storage_base.html#aedc43d4ba2e41ea5a5739d9f27b56123", null ],
     [ "destruct", "df/d15/classob_1_1core_1_1_memory_storage_base.html#a77bc1ffbfce8518d296e45668a7ee22d", null ],
     [ "empty", "df/d15/classob_1_1core_1_1_memory_storage_base.html#a86f9c74762df2f60c76dbb4c5362aedd", null ],
     [ "operator bool", "df/d15/classob_1_1core_1_1_memory_storage_base.html#ae48394f3bfa84ce9bdf52df839d72201", null ],

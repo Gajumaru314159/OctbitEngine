@@ -128,8 +128,8 @@ $(document).ready(function(){initNavTree('d1/d02/_byte_order_8h_source.html','..
 <div class="foldopen" id="foldopen00033" data-start="{" data-end="}">
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../d6/d69/classob_1_1core_1_1_endian.html#a4ddfad74da3945fe252eb610b22f88bf">   33</a></span>        <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d6/d69/classob_1_1core_1_1_endian.html#a4ddfad74da3945fe252eb610b22f88bf">IsLittleEndian</a>()</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        {</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keywordtype">int</span> <span class="keyword">const</span> t = 1;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordflow">return</span> *<span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> const*<span class="keyword">&gt;</span>(&amp;t) != 1;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            <span class="keyword">constexpr</span> <span class="keywordtype">int</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">t</a> = 1;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordflow">return</span> *<span class="keyword">reinterpret_cast&lt;</span><span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a>*<span class="keyword">&gt;</span>(&amp;<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">t</a>) != 1;</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        }</div>
 </div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
@@ -140,13 +140,13 @@ $(document).ready(function(){initNavTree('d1/d02/_byte_order_8h_source.html','..
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        }</div>
 </div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,<span class="keyword">typename</span> std::enable_if_t&lt;std::is_arithmetic_v&lt;T&gt;&gt;&gt;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,std::enable_if_t&lt;std::is_arithmetic_v&lt;T&gt;&gt;&gt;</div>
 <div class="foldopen" id="foldopen00047" data-start="{" data-end="}">
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="../../d6/d69/classob_1_1core_1_1_endian.html#aa77c58b8f5345749b84019cadb1c5e43">   47</a></span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> T <a class="code hl_function" href="../../d6/d69/classob_1_1core_1_1_endian.html#aa77c58b8f5345749b84019cadb1c5e43">Swap</a>(T value) {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            Array&lt;byte, <span class="keyword">sizeof</span>(T)&gt; bytes;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(bytes.data()) = value;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            std::reverse(bytes.begin(), bytes.end());</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="keywordflow">return</span> *<span class="keyword">static_cast&lt;</span>T*<span class="keyword">&gt;</span>(bytes.data());</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            Array&lt;<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">byte</a>, <span class="keyword">sizeof</span>(T)&gt; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">bytes</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">bytes</a>.data()) = value;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            std::reverse(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">bytes</a>.begin(), <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">bytes</a>.end());</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="keywordflow">return</span> *<span class="keyword">static_cast&lt;</span>T*<span class="keyword">&gt;</span>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">bytes</a>.data());</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        }</div>
 </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
@@ -160,6 +160,7 @@ $(document).ready(function(){initNavTree('d1/d02/_byte_order_8h_source.html','..
 <div class="ttc" id="aclassob_1_1core_1_1_endian_html_a4ddfad74da3945fe252eb610b22f88bf"><div class="ttname"><a href="../../d6/d69/classob_1_1core_1_1_endian.html#a4ddfad74da3945fe252eb610b22f88bf">ob::core::Endian::IsLittleEndian</a></div><div class="ttdeci">static bool IsLittleEndian()</div><div class="ttdoc">現在のシステムがリトルエンディアン</div><div class="ttdef"><b>Definition</b> ByteOrder.h:33</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_endian_html_a56f3f27503fa186fb1eb9d4e354b5d61"><div class="ttname"><a href="../../d6/d69/classob_1_1core_1_1_endian.html#a56f3f27503fa186fb1eb9d4e354b5d61">ob::core::Endian::IsBigEndian</a></div><div class="ttdeci">static bool IsBigEndian()</div><div class="ttdoc">現在のシステムがビッグエンディアン</div><div class="ttdef"><b>Definition</b> ByteOrder.h:40</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_endian_html_aa77c58b8f5345749b84019cadb1c5e43"><div class="ttname"><a href="../../d6/d69/classob_1_1core_1_1_endian.html#aa77c58b8f5345749b84019cadb1c5e43">ob::core::Endian::Swap</a></div><div class="ttdeci">static constexpr T Swap(T value)</div><div class="ttdoc">値のバイト順序を入れ替える</div><div class="ttdef"><b>Definition</b> ByteOrder.h:47</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

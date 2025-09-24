@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('de/dab/classob_1_1core_1_1_global.html
 公開メンバ関数</h2></td></tr>
 <tr class="memitem:ab0dc278b52019369acc2c11371edde93" id="r_ab0dc278b52019369acc2c11371edde93"><td class="memTemplParams" colspan="2"><a id="ab0dc278b52019369acc2c11371edde93" name="ab0dc278b52019369acc2c11371edde93"></a>
 template&lt;class... Args&gt; </td></tr>
-<tr class="memitem:ab0dc278b52019369acc2c11371edde93"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Global</b> (Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:ab0dc278b52019369acc2c11371edde93"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Global</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a> &amp;&amp;... args)</td></tr>
 <tr class="memdesc:ab0dc278b52019369acc2c11371edde93"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
 <tr class="separator:ab0dc278b52019369acc2c11371edde93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a286f5e33a20c996bcd1bd24f0df19b9b" id="r_a286f5e33a20c996bcd1bd24f0df19b9b"><td class="memItemLeft" align="right" valign="top"><a id="a286f5e33a20c996bcd1bd24f0df19b9b" name="a286f5e33a20c996bcd1bd24f0df19b9b"></a>
@@ -119,14 +119,14 @@ template&lt;class... Args&gt; </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
-<tr class="memitem:ac6ef76912b910a8d36ac725c727948c2" id="r_ac6ef76912b910a8d36ac725c727948c2"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dab/classob_1_1core_1_1_global.html#ac6ef76912b910a8d36ac725c727948c2">Instance</a> ()</td></tr>
+<tr class="memitem:ac6ef76912b910a8d36ac725c727948c2" id="r_ac6ef76912b910a8d36ac725c727948c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dab/classob_1_1core_1_1_global.html#ac6ef76912b910a8d36ac725c727948c2">Instance</a> ()</td></tr>
 <tr class="memdesc:ac6ef76912b910a8d36ac725c727948c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンス取得  <br /></td></tr>
 <tr class="separator:ac6ef76912b910a8d36ac725c727948c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;class T&gt;<br />
+<div class="textblock"><div class="compoundTemplParams">template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> T&gt;<br />
 class ob::core::Global&lt; T &gt;</div><p>グローバルインスタンス </p>
-<p>インスタンスの寿命を厳格に管理するためのクラス。 Singletonは「インスタンスが1つである」ことを保証するのに対し、 Globalは「全体で共有される」ことを保証する。 そのためグローバルインスタンスとは別でSystemを単体テストすることも 可能となる。 <code>cpp <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html" title="グローバルインスタンス">Global</a>&lt;AssetSystem&gt; assetSysem; if(auto system = <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html" title="グローバルインスタンス">Global</a>&lt;AssetSystem&gt;::<a class="el" href="../../de/dab/classob_1_1core_1_1_global.html#ac6ef76912b910a8d36ac725c727948c2" title="インスタンス取得">Instance()</a>){ // 処理 } </code> </p>
+<p>インスタンスの寿命を厳格に管理するためのクラス。 Singletonは「インスタンスが1つである」ことを保証するのに対し、 Globalは「全体で共有される」ことを保証する。 そのためグローバルインスタンスとは別でSystemを単体テストすることも 可能となる。 <code>cpp <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html" title="グローバルインスタンス">Global</a>&lt;AssetSystem&gt; assetSystem; if(auto system = <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html" title="グローバルインスタンス">Global</a>&lt;AssetSystem&gt;::<a class="el" href="../../de/dab/classob_1_1core_1_1_global.html#ac6ef76912b910a8d36ac725c727948c2" title="インスタンス取得">Instance()</a>){ // 処理 } </code> </p>
 </div><h2 class="groupheader">関数詳解</h2>
 <a id="ac6ef76912b910a8d36ac725c727948c2" name="ac6ef76912b910a8d36ac725c727948c2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac6ef76912b910a8d36ac725c727948c2">&#9670;&#160;</a></span>Instance()</h2>
@@ -134,13 +134,13 @@ class ob::core::Global&lt; T &gt;</div><p>グローバルインスタンス </p>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class T &gt; </div>
+template&lt;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> T &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static T * <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html">ob::core::Global</a>&lt; T &gt;::Instance </td>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> T * <a class="el" href="../../de/dab/classob_1_1core_1_1_global.html">ob::core::Global</a>&lt; T &gt;::Instance </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
