@@ -147,6 +147,9 @@ namespace ob::rhi {
 				height = texture->height();
 
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_RENDER_TARGET);
+			} else {
+				targetDesc.BeginningAccess.Type = D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS;
+				targetDesc.EndingAccess.Type = D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
 			}
 		}
 		{
@@ -163,6 +166,9 @@ namespace ob::rhi {
 
 				// TODO D3D12_RESOURCE_STATE_DEPTH_READが必要か確認する
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			} else {
+				targetDesc.DepthBeginningAccess.Type = D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS;
+				targetDesc.DepthEndingAccess.Type = D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
 			}
 			if (auto texture = param.stencil.texture.cast<DirectX12Texture>()) {
 				targetDesc.cpuDescriptor = texture->getRTV().getCpuHandle();
@@ -175,6 +181,9 @@ namespace ob::rhi {
 				pDepth = &depth;
 
 				m_cache.addTexture(*texture, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+			} else {
+				targetDesc.StencilBeginningAccess.Type = D3D12_RENDER_PASS_BEGINNING_ACCESS_TYPE_NO_ACCESS;
+				targetDesc.StencilEndingAccess.Type = D3D12_RENDER_PASS_ENDING_ACCESS_TYPE_NO_ACCESS;
 			}
 
 			if (param.depth.texture && param.stencil.texture && param.depth.texture != param.stencil.texture) {
