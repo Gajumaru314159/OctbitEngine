@@ -52,6 +52,10 @@ namespace ob::rhi {
 			}
 		);
 
+		// WICファイル読込のため、COMを初期化しておく
+		auto result = CoInitializeEx(NULL, COINITBASE_MULTITHREADED);
+		if (FAILED(result)) throw Exception("");
+
 		if (!initializeDXGIDevice()) throw Exception("");
 
 		m_commandQueue = std::make_unique<CommandQueue>(*this);
