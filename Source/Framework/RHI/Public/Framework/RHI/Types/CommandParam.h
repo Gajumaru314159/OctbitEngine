@@ -21,23 +21,20 @@ namespace ob::rhi {
 
 	//! @brief  CommandList::draw() で指定するパラメータ
 	struct DrawParam {
-		u32 startVertex;	//!< 頂点開始インデックス
-		u32 vertexCount;	//!< 描画頂点数
+		u32 startVertex = 0;	//!< 頂点開始インデックス
+		u32 vertexCount = 0;	//!< 描画頂点数
+		u32 startInstance = 0;	//!< インスタンス開始インデックス
+		u32 instanceCount = 1;	//!< インスタンス数
 	};
 
 
 	//! @brief  CommandList::drawIndexed() で指定するパラメータ
 	struct DrawIndexedParam {
-		u32 startVertex;	//!< 頂点開始インデックス
-		u32 startIndex;		//!< インデックス開始インデックス
-		u32 indexCount;		//!< 描画頂点数
-	};
-
-
-	//! @brief  CommandList::drawInstanced() で指定するパラメータ
-	struct InstancedParam {
-		u32 startInstance;	//!< インスタンス開始インデックス
-		u32 instanceCount;	//!< インスタンス数
+		u32 startVertex = 0;	//!< 頂点開始インデックス
+		u32 startIndex = 0;		//!< インデックス開始インデックス
+		u32 indexCount = 0;		//!< 描画頂点数
+		u32 startInstance = 0;	//!< インスタンス開始インデックス
+		u32 instanceCount = 1;	//!< インスタンス数
 	};
 
 

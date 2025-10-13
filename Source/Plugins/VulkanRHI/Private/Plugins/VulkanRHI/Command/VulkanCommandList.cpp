@@ -322,13 +322,13 @@ namespace ob::rhi {
 
 	//! @brief      描画
 	void VulkanCommandList::draw(const DrawParam& param) {
-		m_commandBuffer.draw(param.vertexCount, 1, param.startVertex, 0);
+		m_commandBuffer.draw(param.vertexCount, param.instanceCount, param.startVertex, param.startInstance);
 	}
 
 
 	//! @brief      インデックス描画
 	void VulkanCommandList::drawIndexed(const DrawIndexedParam& param) {
-		m_commandBuffer.drawIndexed(param.indexCount,1, param.startIndex,param.startVertex,0);
+		m_commandBuffer.drawIndexed(param.indexCount,param.instanceCount, param.startIndex,gsl::narrow_cast<int32_t>(param.startVertex),param.startInstance);
 	}
 
 

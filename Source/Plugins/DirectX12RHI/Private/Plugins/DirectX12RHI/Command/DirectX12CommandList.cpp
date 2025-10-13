@@ -346,13 +346,13 @@ namespace ob::rhi {
 
 	//! @brief      描画
 	void DirectX12CommandList::draw(const DrawParam& param) {
-		m_cmdList->DrawInstanced(param.vertexCount, 1, param.startVertex,0);
+		m_cmdList->DrawInstanced(param.vertexCount, param.instanceCount, param.startVertex,param.startInstance);
 	}
 
 
 	//! @brief      インデックス描画
 	void DirectX12CommandList::drawIndexed(const DrawIndexedParam& param) {
-		m_cmdList->DrawIndexedInstanced(param.indexCount,1, param.startIndex,param.startVertex,0);
+		m_cmdList->DrawIndexedInstanced(param.indexCount,param.instanceCount, param.startIndex, gsl::narrow_cast<INT>(param.startVertex),param.startInstance);
 	}
 
 
