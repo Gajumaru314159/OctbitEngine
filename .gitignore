@@ -4,6 +4,7 @@
 /docs
 /Memo/
 .vs/
+.idea/
 /Source/Editor/**/bin
 /Source/Editor/**/obj
 
