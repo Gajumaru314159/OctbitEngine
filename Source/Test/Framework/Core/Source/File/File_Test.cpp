@@ -121,4 +121,6 @@ TEST(FileTest, ReadAllText)
     // テキストが正しく読み込まれたことを確認
     EXPECT_TRUE(text2);
     EXPECT_EQ(*text2, "abcdefg");
+    
+    File::Delete("test.txt");
 }

@@ -32,6 +32,8 @@ TEST(INI, Test)
 
         }
     }
+
+    std::filesystem::remove(filename);
 }
 
 TEST(INITest, BasicOperations) {

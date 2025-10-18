@@ -12,7 +12,7 @@ namespace ob::core {
 	bool OBJ::save(StringView path) const {
 		File file(path, FileOpenMode::Write);
 		if (!file)return false;
-		auto str = m_ss.str();
+		const auto str = m_ss.str();
 		return file.write(str.data(), str.size());
 	}
 
@@ -134,9 +134,11 @@ namespace ob::core {
 
 
 
-	void MTL::save(StringView path) const {
-		std::ofstream os{std::string(path.data(), path.size())};
-		os << m_ss.str();
+	bool MTL::save(StringView path) const {
+		File file(path, FileOpenMode::Write);
+		if (!file)return false;
+		const auto str = m_ss.str();
+		return file.write(str.data(), str.size());
 	}
 	void MTL::newmtl(StringView name) {
 		m_ss << "newmtl " << name << std::endl;

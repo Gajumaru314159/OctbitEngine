@@ -37,6 +37,10 @@ TEST(OBJ, Test)
 	);
 
 	obj.save("test.obj");
+
+
+	File::Delete("test.obj");
+	File::Delete("test.mtl");
 }
 
 
