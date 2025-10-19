@@ -5,7 +5,7 @@ var searchData=
   ['day_2',['day',['../dd/de7/structob_1_1core_1_1_date_time.html#afbebec769e0d32cca3c49bb8332d7c76',1,'ob::core::DateTime']]],
   ['dayinmonth_3',['DayInMonth',['../dd/de7/structob_1_1core_1_1_date_time.html#a9cc129ee6391e95381aea75888e3321c',1,'ob::core::DateTime']]],
   ['dayofweek_4',['dayOfWeek',['../dd/de7/structob_1_1core_1_1_date_time.html#a99cb5232b2371c42ad492bb186ed8a91',1,'ob::core::DateTime']]],
-  ['days_5',['days',['../d0/d6e/classob_1_1core_1_1_time_span.html#a59df80935601c7cc24348f34c7ab31e5',1,'ob::core::TimeSpan::days() const noexcept'],['../d0/d6e/classob_1_1core_1_1_time_span.html#a42a093a4795abbe31b512856076a7b38',1,'ob::core::TimeSpan::Days(f64 days) noexcept']]],
+  ['days_5',['days',['../d0/d6e/classob_1_1core_1_1_time_span.html#a42a093a4795abbe31b512856076a7b38',1,'ob::core::TimeSpan::Days(f64 days) noexcept'],['../d0/d6e/classob_1_1core_1_1_time_span.html#a59df80935601c7cc24348f34c7ab31e5',1,'ob::core::TimeSpan::days() const noexcept']]],
   ['daysf_6',['daysF',['../d0/d6e/classob_1_1core_1_1_time_span.html#ac34bb102eb29432987e7d35bd2ed2da9',1,'ob::core::TimeSpan']]],
   ['daysinyear_7',['daysInYear',['../dd/de7/structob_1_1core_1_1_date_time.html#a954df7e1cd2a6886baf1d459867c58ac',1,'ob::core::DateTime']]],
   ['deactivate_8',['deactivate',['../df/dd8/classob_1_1engine_1_1_component.html#ad51b59205eabd8868939b865905e104e',1,'ob::engine::Component']]],
