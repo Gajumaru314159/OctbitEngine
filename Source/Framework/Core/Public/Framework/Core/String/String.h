@@ -99,7 +99,7 @@ namespace ob::core {
 		iterator begin() noexcept { return m_str.begin(); }
 		const_iterator begin() const noexcept { return m_str.begin(); }
 		iterator end() noexcept { return m_str.end(); }
-		const_iterator end() const noexcept { return m_str.begin(); }
+		const_iterator end() const noexcept { return m_str.end(); }
 		const_iterator cbegin() const noexcept { return m_str.cbegin(); }
 		const_iterator cend() const noexcept { return m_str.cend(); }
 		reverse_iterator rbegin() noexcept { return m_str.rbegin(); }
