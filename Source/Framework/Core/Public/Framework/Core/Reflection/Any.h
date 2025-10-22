@@ -349,9 +349,9 @@ namespace ob::core {
 		class has_get_type {
 		private:
 			template< typename Arg >
-			static auto impl(...) -> std::false_type {}
+			static auto impl(...) -> std::false_type { return {}; }
 			template < typename Arg >
-			static auto impl(Arg*) -> decltype(std::declval<Arg>().getType(), std::true_type()) {}
+			static auto impl(Arg*) -> decltype(std::declval<Arg>().getType(), std::true_type()) { return {}; }
 		public:
 			static constexpr bool value = decltype(impl<T>(nullptr)) ::value;
 		};
