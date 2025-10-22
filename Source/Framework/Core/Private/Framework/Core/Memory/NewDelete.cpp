@@ -8,39 +8,36 @@
 #pragma warning(push)
 #pragma warning(disable : 28251)
 
-// グローバルnew/delete演算子の実装
-#if 0
-void* operator new(size_t size) {
-    return ob::core::Alloc(size, alignof(std::max_align_t));
+void operator delete  (void* p, [[maybe_unused]]std::align_val_t al) noexcept {
+    ob::core::Free(p);
+}
+void operator delete[](void* p, [[maybe_unused]]std::align_val_t al) noexcept {
+    ob::core::Free(p);
+}
+void operator delete  (void* p, [[maybe_unused]]std::size_t n, [[maybe_unused]]std::align_val_t al) noexcept {
+    ob::core::Free(p);
+}
+void operator delete[](void* p, [[maybe_unused]]std::size_t n, [[maybe_unused]]std::align_val_t al) noexcept {
+    ob::core::Free(p);
+}
+void operator delete  (void* p, [[maybe_unused]]std::align_val_t al, [[maybe_unused]]const std::nothrow_t&) noexcept {
+    ob::core::Free(p);
+}
+void operator delete[](void* p, [[maybe_unused]]std::align_val_t al, [[maybe_unused]]const std::nothrow_t&) noexcept {
+    ob::core::Free(p);
 }
 
-void* operator new[](size_t size) {
-    return ob::core::Alloc(size, alignof(std::max_align_t));
+void* operator new( std::size_t n, std::align_val_t al)   noexcept(false) {
+    return ob::core::Alloc(n, static_cast<size_t>(al));
 }
-
-void* operator new(size_t size, std::align_val_t alignment) {
-    return ob::core::Alloc(size, static_cast<size_t>(alignment));
+void* operator new[]( std::size_t n, std::align_val_t al) noexcept(false) {
+    return ob::core::Alloc(n, static_cast<size_t>(al));
 }
-
-void* operator new[](size_t size, std::align_val_t alignment) {
-    return ob::core::Alloc(size, static_cast<size_t>(alignment));
+void* operator new  (std::size_t n, std::align_val_t al, const std::nothrow_t&) noexcept {
+    return ob::core::Alloc(n, static_cast<size_t>(al));
 }
-
-void operator delete(void* ptr) {
-    ob::core::Free(ptr);
+void* operator new[](std::size_t n, std::align_val_t al, const std::nothrow_t&) noexcept {
+    return ob::core::Alloc(n, static_cast<size_t>(al));
 }
-
-void operator delete[](void* ptr) {
-    ob::core::Free(ptr);
-}
-
-void operator delete(void* ptr, [[maybe_unused]]std::align_val_t alignment) {
-    ob::core::Free(ptr);
-}
-
-void operator delete[](void* ptr, [[maybe_unused]]std::align_val_t alignment) {
-    ob::core::Free(ptr);
-}
-#endif
 
 #pragma warning(pop)
