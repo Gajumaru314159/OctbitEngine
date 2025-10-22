@@ -41,8 +41,7 @@ namespace ob::core {
                 std::cout << message << std::endl;
             }
 
-#ifdef OS_WINDOWS
-            // Visual Studio
+            // IDEのデバッグ出力
             if (log.level != LogLevel::Trace || true) {
                 StringView typeName;
                 switch (log.level) {
@@ -55,40 +54,34 @@ namespace ob::core {
                 }
                 // フォーマット
                 const auto message = Format("{} {}", typeName, log.message);
-                WString ws;
-                StringEncoder::Encode(message, ws);
 
                 // 出力
-                ::OutputDebugLog(ws.c_str());
+                ::OutputDebugLog(message.c_str());
 
                 if (useLineOutput) {
                     const auto message2 = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
-                    StringEncoder::Encode(message2, ws);
-                    ::OutputDebugLog(ws.c_str());
+                    ::OutputDebugLog(message2.c_str());
                 }
 
 
                 // エラーダイアログ表示
                 if (log.level == LogLevel::Fatal) {
-                    ::ShowMessageBox(ws.c_str());
+                    ::ShowMessageBox(message.c_str());
                 }
             }
 
             if (log.level == LogLevel::Fatal) {
 
-                ::OutputDebugLog(L"********************");
-                ::OutputDebugLog(L"* スタックトレース *");
-                ::OutputDebugLog(L"********************");
+                ::OutputDebugLog("********************");
+                ::OutputDebugLog("* スタックトレース *");
+                ::OutputDebugLog("********************");
                 
                 for (auto& s : StackTrace::Capture().elements()) {
                     // auto msg2 = Format("{}\n{}({})\n", s.name, s.filename, s.line);
                     auto msg2 = Format("{}({})",s.filename, s.line);
-                    WString ws;
-                    StringEncoder::Encode(msg2, ws);
-                    ::OutputDebugLog(ws.c_str());
+                    ::OutputDebugLog(msg2.c_str());
                 }
             }
-#endif
 
         };
 

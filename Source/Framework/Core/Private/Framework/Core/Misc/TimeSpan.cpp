@@ -4,10 +4,6 @@
 //***********************************************************
 #include <Framework/Core/Misc/TimeSpan.h>
 
-#ifdef OS_WINDOWS
-#include <Windows.h>
-#endif
-
 namespace ob::core {
 
 	//! @brief  システムを起動してからの時間
@@ -25,15 +21,6 @@ namespace ob::core {
 			to.second - from.second,
 			to.milliSecond - from.milliSecond
 		);
-	}
-
-	//! @brief  システムを起動してからの時間
-	TimeSpan TimeSpan::FromSystemLaunch() {
-#ifdef OS_WINDOWS
-		return TimeSpan::MilliSeconds(gsl::narrow_cast<f64>(GetTickCount64()));
-#else
-#pragma error("TimeSpan::FromSystemLaunch() is not supported in this platform.")
-#endif
 	}
 
 }

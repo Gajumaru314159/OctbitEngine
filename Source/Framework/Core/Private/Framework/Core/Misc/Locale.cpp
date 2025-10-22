@@ -5,10 +5,6 @@
 #include <Framework/Core/Misc/Locale.h>
 #include <Framework/Core/Template/Utility/Utility.h>
 
-#ifdef OS_WINDOWS
-#include <objbase.h>
-#endif
-
 namespace ob::core {
 
 	//! @brief IETFタグからロケールを生成する
@@ -50,40 +46,6 @@ namespace ob::core {
 		auto start = index == 0 ? 0 : m_subtags[index - 1] + 1;
 		auto end = m_subtags[index];
 		return StringView(m_tag).substr(start, end - start);
-	}
-
-	//! @brief システム言語を取得する
-	Locale Locale::System() {
-#ifdef OS_WINDOWS
-		wchar_t localeNameW[LOCALE_NAME_MAX_LENGTH];
-		char localeName[LOCALE_NAME_MAX_LENGTH];
-		if (GetUserDefaultLocaleName(localeNameW, LOCALE_NAME_MAX_LENGTH)) {
-			for (auto i = 0; i < std::size(localeNameW); ++i) {
-				localeName[i] = static_cast<char>(localeNameW[i]);
-			}
-			return Locale(localeName);
-		}
-#elif defined(OS_LINUX)
-		std::string name = std::locale("").name();
-		while (!name.empty())
-		{
-			if (name.back()=='.')
-			{
-				name.pop_back();
-				break;
-			}
-			name.pop_back();
-		}
-		for (auto& c:name)
-		{
-			if (c=='_') c='-';
-		}
-		return Locale(name);
-#else
-		std::locale();
-		static_assert("未実装");
-#endif
-		return Locale("");
 	}
 
 }

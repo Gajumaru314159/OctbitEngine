@@ -5,13 +5,6 @@
 #include <Framework/Core/Misc/UUID.h>
 #include <Framework/Core/Utility/Indexed.h>
 
-#ifdef OS_WINDOWS
-#include <objbase.h>
-#endif
-
-#include <Framework/Core/Misc/CRCHash.h>
-
-
 namespace ob::core {
 
 
@@ -34,24 +27,6 @@ namespace ob::core {
     void HexToCharPair(byte hex, Char* ch1, Char* ch2) {
         *ch1 = HexToDigitChar((hex >> 4) & 0x0F);
         *ch2 = HexToDigitChar((hex) & 0x0F);
-    }
-
-
-
-    //==============================================================================
-    // Uuid
-    //==============================================================================
-
-    //! @brief 新しいUUIDを生成
-    UUID UUID::Generate() {
-        UUID uuid;
-#ifdef OS_WINDOWS
-        HRESULT r = CoCreateGuid(reinterpret_cast<GUID*>(&uuid));
-        OB_ASSERT(r == S_OK, "Failed to create UUID.");
-#else
-#pragma error("UUID::Generate() is not supported in this platform.")
-#endif
-        return uuid;
     }
 
 

@@ -14,15 +14,15 @@ namespace ob::core {
 	class AsyncFileSystem : public Singleton<AsyncFileSystem> {
 	public:
 		AsyncFileSystem();
-		~AsyncFileSystem();
+		~AsyncFileSystem() override;
 	public:
-		static bool CanUseDirectStorage();
+		static bool CanUseAsyncFile();
 	};
 
 	class AsyncFileHandle {
 	public:
 		AsyncFileHandle() = default;
-		AsyncFileHandle(StringView path);
+		explicit AsyncFileHandle(StringView path);
 		~AsyncFileHandle();
 		const String& path()const;
 		bool empty()const;

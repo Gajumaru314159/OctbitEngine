@@ -81,6 +81,8 @@ namespace ob::core {
 
 
 	private:
+		void setup();
+	private:
 
 		Pimpl<class ThreadImpl> m_impl;
 

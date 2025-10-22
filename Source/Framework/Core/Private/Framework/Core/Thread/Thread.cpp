@@ -44,7 +44,11 @@ namespace ob::core {
 			OB_PROFILE_THREAD(m_impl->name.c_str());
 			entryPoint();
 		});
+
+		setup();
+
 #ifdef OS_WINDOWS
+
 		WString wname;
 		StringEncoder::Encode(name, wname);
 		if (auto hr = ::SetThreadDescription(m_impl->th.native_handle(), wname.c_str());FAILED(hr)) {
@@ -53,8 +57,6 @@ namespace ob::core {
 		if (auto hr = ::SetProcessAffinityMask(m_impl->th.native_handle(),desc.affinity);FAILED(hr)) {
 			LOG_WARNING("スレッドのアフィニティマスクの設定に失敗 [{}]",name);
 		}
-#else
-		// static_assert(false, "Thread::Thread()が実装されていません。");
 #endif
 	}
 
@@ -72,20 +74,12 @@ namespace ob::core {
 
 	//! @brief				スレッドの実行を他スレッドに譲る
 	void Thread::YieldThread() {
-#ifdef OS_WINDOWS
-		::SwitchToThread();
-#else
-		//static_assert(false,"Thread::YieldThread()が実装されていません。");
-#endif
+		std::this_thread::yield();
 	}
 
 	//! @brief				スレッドの実行を他スレッドに譲る
 	void Thread::Sleep(u32 milliSeconds) {
-#ifdef OS_WINDOWS
-		::Sleep(milliSeconds);
-#else
-		//static_assert(false, "Thread::Sleep()が実装されていません。");
-#endif
+		std::this_thread::sleep_for(std::chrono::milliseconds(milliSeconds));
 	}
 
 	//! @brief				現在のスレッドIDを取得

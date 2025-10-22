@@ -98,10 +98,10 @@
 
 
 //! @brief  システムログ出力 
-extern void OutputDebugLog(const wchar_t* message);
+extern void OutputDebugLog(const char* message);
 
 //! @brief  メッセージボックス表示
-extern void ShowMessageBox(const wchar_t* message);
+extern void ShowMessageBox(const char* message);
 
 //! @brief  ブレークポイントを呼び出し
 #ifdef _DEBUG
