@@ -36,6 +36,7 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMakeé–¢ä¿
 # mimalloc
 set(MI_BUILD_SHARED OFF)
 set(MI_BUILD_TESTS OFF)
+set(MI_MALLOC_OVERRIDE OFF)
 set(MI_USE_CXX ON)
 # tracy
 #set(TRACY_ENABLE ON)
