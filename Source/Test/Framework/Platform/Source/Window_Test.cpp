@@ -3,6 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #include <Framework/Platform/Window.h>
+#include <Framework/Core/Thread/Thread.h>
 
 using namespace ob;
 
@@ -14,6 +15,8 @@ TEST(Window, ShowHide) {
 
     window.show();
     window.moveToCenter();
+
+    Thread::Sleep(1000);
 
     window.maximize();
     ASSERT_TRUE(window.getState().has(WindowState::Maximized));

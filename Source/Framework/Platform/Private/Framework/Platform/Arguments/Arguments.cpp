@@ -8,7 +8,7 @@
 #ifdef OS_WINDOWS
 
 #include <Windows.h>
-static void GetCommandLineForWindows(ob::platform::Arguments::container_type& dest) {
+static void GetCommandLine(ob::platform::Arguments::container_type& dest) {
     dest.clear();
     int numArgs;
     LPWSTR* ppArgs = ::CommandLineToArgvW(GetCommandLineW(), &numArgs);
@@ -20,8 +20,12 @@ static void GetCommandLineForWindows(ob::platform::Arguments::container_type& de
     }
 }
 
-#elif
-
+#elif defined(OS_LINUX)
+#include <wordexp.h>
+static void GetCommandLine(ob::platform::Arguments::container_type& dest) {
+    dest.clear();
+    LOG_ERROR("GetCommandLineは未実装です");
+}
 
 #endif
 
@@ -31,7 +35,7 @@ namespace ob::platform {
 
     //! @brief  コンストラクタ
     Arguments::Arguments() {
-        ::GetCommandLineForWindows(m_args);
+        ::GetCommandLine(m_args);
     }
 
 
