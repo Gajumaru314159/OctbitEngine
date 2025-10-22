@@ -183,10 +183,8 @@ namespace ob::rhi {
 
 			m_set.getDevice().updateDescriptorSets({ writeDescSet }, {});
 		}
+
 		return true;
-
-
-		return false;
 	}
 
 
@@ -209,7 +207,6 @@ namespace ob::rhi {
 		}
 
 		m_elements.at(index) = SamplerElement{ resource };
-		auto& element = std::get<SamplerElement>(m_elements.at(index));
 
 		if (auto p = resource.cast<VulkanSampler>()) {
 

@@ -63,7 +63,24 @@ namespace ob::core {
 			}
 			return Locale(localeName);
 		}
+#elif defined(OS_LINUX)
+		std::string name = std::locale("").name();
+		while (!name.empty())
+		{
+			if (name.back()=='.')
+			{
+				name.pop_back();
+				break;
+			}
+			name.pop_back();
+		}
+		for (auto& c:name)
+		{
+			if (c=='_') c='-';
+		}
+		return Locale(name);
 #else
+		std::locale();
 		static_assert("未実装");
 #endif
 		return Locale("");

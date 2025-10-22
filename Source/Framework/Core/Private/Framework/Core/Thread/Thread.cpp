@@ -6,10 +6,15 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <Framework/Core/Profile/Profile.h>
 #include <functional>
-
 #ifdef OS_WINDOWS
 #include <Windows.h>
-#include <combaseapi.h>
+#endif
+#ifdef OS_LINUX
+# include <unistd.h>
+# include <sys/types.h>
+# include <sys/syscall.h>
+#endif
+
 namespace ob::core {
 
 	class ThreadImpl {
@@ -19,9 +24,6 @@ namespace ob::core {
 	};
 
 }
-#else
-#pragma error("Thread is not supported in this platform.")
-#endif
 
 namespace ob::core {
 
@@ -35,7 +37,7 @@ namespace ob::core {
 	//! @param name			スレッド名
 	//! @param desc			定義
 	//! @param entryPoint	実行する関数オブジェクト
-	Thread::Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint) 
+	Thread::Thread(StringView name, const ThreadDesc& desc, const Func<void()>& entryPoint)
 	{
 		m_impl->name = name;
 		m_impl->th = std::thread([this, entryPoint]() {
@@ -45,12 +47,14 @@ namespace ob::core {
 #ifdef OS_WINDOWS
 		WString wname;
 		StringEncoder::Encode(name, wname);
-		auto hr = ::SetThreadDescription(m_impl->th.native_handle(), wname.c_str());
-		if (FAILED(hr)) {
+		if (auto hr = ::SetThreadDescription(m_impl->th.native_handle(), wname.c_str());FAILED(hr)) {
 			LOG_WARNING("スレッド名の設定に失敗 [{}]",name);
 		}
+		if (auto hr = ::SetProcessAffinityMask(m_impl->th.native_handle(),desc.affinity);FAILED(hr)) {
+			LOG_WARNING("スレッドのアフィニティマスクの設定に失敗 [{}]",name);
+		}
 #else
-		static_assert(false, "Thread::Thread()が実装されていません。");
+		// static_assert(false, "Thread::Thread()が実装されていません。");
 #endif
 	}
 
@@ -71,7 +75,7 @@ namespace ob::core {
 #ifdef OS_WINDOWS
 		::SwitchToThread();
 #else
-		static_assert(false,"Thread::YieldThread()が実装されていません。");
+		//static_assert(false,"Thread::YieldThread()が実装されていません。");
 #endif
 	}
 
@@ -80,7 +84,7 @@ namespace ob::core {
 #ifdef OS_WINDOWS
 		::Sleep(milliSeconds);
 #else
-		static_assert(false, "Thread::Sleep()が実装されていません。");
+		//static_assert(false, "Thread::Sleep()が実装されていません。");
 #endif
 	}
 
@@ -88,8 +92,10 @@ namespace ob::core {
 	u32 Thread::GetCurrentThreadId() {
 #ifdef OS_WINDOWS
 		return static_cast<u32>(::GetCurrentThreadId());
+#elif defined(OS_LINUX)
+		return syscall(SYS_gettid);
 #else
-		static_assert(false, "Thread::GetCurrentThreadId()が実装されていません。");
+		//static_assert(false, "Thread::GetCurrentThreadId()が実装されていません。");
 #endif
 	}
 
@@ -98,7 +104,8 @@ namespace ob::core {
 #ifdef OS_WINDOWS
 		return static_cast<u32>(::GetCurrentProcessorNumber());
 #else
-		static_assert(false, "Thread::GetCurrentCpuCore()が実装されていません。");
+		//static_assert(false, "Thread::GetCurrentCpuCore()が実装されていません。");
+		return 0;
 #endif
 
 	}

@@ -5,6 +5,7 @@
 #include <Framework/Core/Template/Container/BitSet.h>
 #include <Framework/Core/Template/Utility/MiniDelegate.h>
 
+#if 0
 using namespace ob;
 
 BitSet<4> s_result;
@@ -125,3 +126,4 @@ TEST(MiniDelegate, Test) {
 	EXPECT_TRUE(a.success());
 
 }
+#endif

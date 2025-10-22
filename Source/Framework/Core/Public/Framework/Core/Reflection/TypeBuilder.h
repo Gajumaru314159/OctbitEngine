@@ -141,7 +141,7 @@ namespace ob::core {
 		TagBuilder element(StringView name, E value) {
 			auto& element = m_info.enumElements.emplace_back();
 			element.name = name;
-			element.index = m_info.enumElements.size() - 1;
+			element.index = gsl::narrow_cast<s32>(m_info.enumElements.size()) - 1;
 			element.value = enum_cast(value);
 			return element;
 		}

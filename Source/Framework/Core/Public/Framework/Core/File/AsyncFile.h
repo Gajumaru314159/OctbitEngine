@@ -55,7 +55,7 @@ namespace ob::core {
 	private:
 		friend class AsyncFileQueue;
 		struct Impl;
-		MemoryStorageBase<Impl, 8, 8> m_impl;
+		MemoryStorageBase<Impl, 32, 8> m_impl;
 	};
 
 	//! @brief 非同期ファイル読み込みキュー

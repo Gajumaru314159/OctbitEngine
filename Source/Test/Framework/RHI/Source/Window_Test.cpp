@@ -58,8 +58,6 @@ TEST(RHI, CreateEmptyDX12) {
 
 TEST(RHI, ShowHide) {
 
-	return;
-
 	using namespace ob::rhi;
 
 	Logger log;

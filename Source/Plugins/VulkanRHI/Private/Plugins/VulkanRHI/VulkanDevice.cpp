@@ -248,7 +248,7 @@ namespace ob::rhi {
 		for (auto& device : devices) {
 
 			// 拡張機能チェック
-			auto featuresProperties = device.getFeatures();
+			// auto featuresProperties = device.getFeatures();
 			auto familyPropertyList = device.getQueueFamilyProperties();
 
 			u32 index = 0;

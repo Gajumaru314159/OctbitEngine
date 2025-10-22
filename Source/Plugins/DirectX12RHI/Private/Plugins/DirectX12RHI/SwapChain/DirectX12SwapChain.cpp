@@ -324,8 +324,8 @@ namespace ob::rhi {
 
 		if (FAILED(result)) {
 			Utility::OutputFatalLog(result, "IDXGUISwapChain::Present()");
-			LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗")
-				return;
+			LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗");
+			return;
 		}
 
 		auto index = m_swapChain->GetCurrentBackBufferIndex();

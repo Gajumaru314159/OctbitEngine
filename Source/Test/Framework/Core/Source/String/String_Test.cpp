@@ -283,18 +283,26 @@ TEST(String, Iterator) {
 	// 拡張for文のテスト
 	{
 		String str("test");
+		s32 index = 0;
 		for (auto c : str) {
-			EXPECT_EQ(c, 't');
-			break;
+			if (index==0) EXPECT_EQ(c, 't');
+			if (index==1) EXPECT_EQ(c, 'e');
+			if (index==2) EXPECT_EQ(c, 's');
+			if (index==3) EXPECT_EQ(c, 't');
 		}
+		EXPECT_EQ(index, 4);
 	}
 	// 拡張for分のテスト(const版)
 	{
 		const String str("test");
+		s32 index = 0;
 		for (auto c : str) {
-			EXPECT_EQ(c, 't');
-			break;
+			if (index==0) EXPECT_EQ(c, 't');
+			if (index==1) EXPECT_EQ(c, 'e');
+			if (index==2) EXPECT_EQ(c, 's');
+			if (index==3) EXPECT_EQ(c, 't');
 		}
+		EXPECT_EQ(index, 4);
 	}
 }
 

@@ -114,11 +114,11 @@ namespace ob::core {
 
 
         //! @brief f32*Vec2演算子 
-        friend Vec2 operator * (f32 scalar, const Vec2& v) noexcept;
+        constexpr friend Vec2 operator * (f32 scalar, const Vec2& v) noexcept;
 
 
         //! @brief f32/Vec2演算子 
-        friend Vec2 operator / (f32 scalar, const Vec2& v) noexcept;
+        constexpr friend Vec2 operator / (f32 scalar, const Vec2& v) noexcept;
 
         
         //! @brief      要素取得
@@ -329,6 +329,20 @@ namespace ob::core {
 
 
 
+    //===============================================================
+    //  friect
+    //===============================================================
+
+    //! @brief f32*Vec2演算子
+    constexpr Vec2 operator * (f32 f, const Vec2& v) noexcept {
+        return v * f;
+    }
+
+
+    //! @brief f32/Vec2演算子
+    constexpr Vec2 operator / (f32 f, const Vec2& v) noexcept {
+        return Vec2(f) / v;
+    }
 
 
 

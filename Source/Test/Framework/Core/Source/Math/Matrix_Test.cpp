@@ -64,10 +64,10 @@ TEST(Matrix, GetRow) {
 }
 
 TEST(Matrix, Translate) {
-    Matrix mtx;
+    Matrix mtx = Matrix::Identity;
     mtx.setRow(3, Vec4(1, 2, 3, 1));
 
-    Matrix mtx2;
+    Matrix mtx2 = Matrix::Identity;
     mtx2.translate(1, 2, 3);
     ASSERT_EQ(mtx2, mtx2);
 }

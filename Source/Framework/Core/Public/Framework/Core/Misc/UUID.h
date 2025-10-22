@@ -62,7 +62,7 @@ namespace ob::core {
 
     private:
 
-        friend class std::hash<UUID>;
+        friend struct std::hash<UUID>;
 
         constexpr s32 compare(const UUID& b)const {
             for (s32 i = 0; i < 4; i++) {

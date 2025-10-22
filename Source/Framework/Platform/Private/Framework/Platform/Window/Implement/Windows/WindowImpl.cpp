@@ -74,8 +74,8 @@ namespace ob::platform {
 		RECT clientRect;
 		clientRect.left = 0;
 		clientRect.top = 0;
-		clientRect.right = desc.clientSize.x;
-		clientRect.bottom = desc.clientSize.y;
+		clientRect.right = gsl::narrow_cast<LONG>(desc.clientSize.x);
+		clientRect.bottom = gsl::narrow_cast<LONG>(desc.clientSize.y);
 		::AdjustWindowRect(&clientRect, mWindowedStyle, FALSE);
 
 		// 文字コードを変換
@@ -333,10 +333,10 @@ namespace ob::platform {
 	Vec2 WindowImpl::getScreenPoint(const Vec2& clientPoint) const {
 		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
-		point.x = clientPoint.x;
-		point.y = clientPoint.y;
+		point.x = gsl::narrow_cast<LONG>(clientPoint.x);
+		point.y = gsl::narrow_cast<LONG>(clientPoint.y);
 		if (!::ClientToScreen(m_hWnd, &point))return Vec2::Zero;
-		return Vec2(point.x, point.y);
+		return Vec2(gsl::narrow_cast<f32>(point.x), gsl::narrow_cast<f32>(point.y));
 	}
 
 
@@ -348,10 +348,10 @@ namespace ob::platform {
 	Vec2 WindowImpl::getClientPoint(const Vec2& screenPoint) const {
 		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
-		point.x = screenPoint.x;
-		point.y = screenPoint.y;
+		point.x = gsl::narrow_cast<LONG>(screenPoint.x);
+		point.y = gsl::narrow_cast<LONG>(screenPoint.x);
 		if (!::ScreenToClient(m_hWnd, &point))return Vec2::Zero;
-		return Vec2(point.x, point.y);
+		return Vec2(gsl::narrow_cast<f32>(point.x), gsl::narrow_cast<f32>(point.y));
 	}
 
 

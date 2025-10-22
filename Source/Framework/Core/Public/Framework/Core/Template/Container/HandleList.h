@@ -129,8 +129,8 @@ namespace ob::core {
 		class const_iterator {
 			friend class HandleList<T>;
 		public:
-			using this_type = const_iterator;                                                                               //!< 型
-			using difference_type = difference_type;																		//!< ポインタ差分型
+			using this_type = HandleList<T>::const_iterator;																//!< 型
+			using difference_type = HandleList<T>::difference_type;															//!< ポインタ差分型
 			using value_type = T;                                                                                           //!< インスタンス型
 			using pointer = const T*;                                                                                       //!< ポインタ型
 			using reference = const T&;																						//!< 参照型

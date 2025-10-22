@@ -76,9 +76,13 @@ TEST(Path, Parent)
 
 TEST(Path, IsAbsolute)
 {
+#ifdef OS_WINDOWS
     String absolutePath = "C:/Program Files/MyApp";
     String relativePath = "Documents/report.docx";
-
+#elif defined(OS_LINUX)
+    String absolutePath = "/mnt/c/Program Files/MyApp";
+    String relativePath = "Documents/report.docx";
+#endif
     bool isAbsolutePath = Path::IsAbsolute(absolutePath);
     bool isRelativePath = Path::IsAbsolute(relativePath);
 
@@ -88,9 +92,13 @@ TEST(Path, IsAbsolute)
 
 TEST(Path, IsRelative)
 {
+#ifdef OS_WINDOWS
     String absolutePath = "C:/Program Files/MyApp";
     String relativePath = "Documents/report.docx";
-
+#elif defined(OS_LINUX)
+    String absolutePath = "/mnt/c/Program Files/MyApp";
+    String relativePath = "Documents/report.docx";
+#endif
     bool isAbsolutePath = Path::IsRelative(absolutePath);
     bool isRelativePath = Path::IsRelative(relativePath);
 

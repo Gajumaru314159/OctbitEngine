@@ -326,7 +326,7 @@ namespace ob::core {
 
 	//! @brief 透視投影行列の生成
 	Matrix Matrix::Perspective(f32 fov, Size size, f32 zNear, f32 zFar) {
-		return Perspective(fov, size.width / std::max<f32>(size.height, 0.00001f), zNear, zFar);
+		return Perspective(fov, size.width / std::max(gsl::narrow_cast<f32>(size.height), 0.00001f), zNear, zFar);
 	}
 
 	//! @brief  平行投影行列の生成

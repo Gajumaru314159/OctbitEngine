@@ -4,7 +4,7 @@
 //***********************************************************
 #pragma once
 //! @cond
-#include <Framework/core/Base/Platform.h>
+#include <Framework/Core/HAL/Platform.h>
 #if defined(OS_LINUX)
 
 //===============================================================

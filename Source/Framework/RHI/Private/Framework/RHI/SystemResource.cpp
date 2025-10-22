@@ -23,7 +23,7 @@ namespace ob::rhi {
 			m_presetTextures[PresetTexture::Normal] = creator(IntColor::Normal);
 		}
 		{
-			size_t size = 32;
+			s32 size = 32;
 			Vector<IntColor> colors(size * size);
 			for (s32 y = 0; y < size; ++y) {
 				for (s32 x = 0; x < size; ++x) {

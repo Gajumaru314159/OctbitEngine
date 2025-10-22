@@ -28,9 +28,9 @@ namespace ob::core {
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
 			
-#if defined(__clang__)
-			constexpr size_t prefix = GetTypeName().size() + " [T = "sv.size();
-			constexpr size_t suffix = "]"sv.size();
+#if defined(__clang__) || defined(__GNUC__)
+			constexpr size_t prefix = GetTypeName().size() + " [with T = "sv.size();
+			constexpr size_t suffix = signature.size() - signature.find(';',prefix);
 #elif defined(_MSC_VER)
 			constexpr size_t prefix2 = GetTypeName().size() - "(void)"sv.size() + "<"sv.size();
 			constexpr size_t suffix = ">(void)"sv.size();

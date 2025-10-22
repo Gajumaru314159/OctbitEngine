@@ -172,8 +172,8 @@ namespace ob::rhi {
 		m_commandBuffer.beginRendering(info);
 
 		// 初期設定としてViewportとScissorRectを設定
-		Viewport viewport(0, 0, width, height);
-		IntRect scissor(0, 0, width, height);
+		Viewport viewport(0, 0, 1.0f * width, 1.0f * height);
+		IntRect scissor(0, 0, 1.0f * width, 1.0f * height);
 
 		setViewport(&viewport, 1);
 		setScissorRect(&scissor, 1);
@@ -310,7 +310,7 @@ namespace ob::rhi {
 
 			auto& desc = p->getDesc().rootSignature->getDesc();
 			if (desc.flags.has(RootSignatureFlag::EnableBindless)) {
-				auto bindlessSlot = desc.layouts.size();
+				s32 bindlessSlot = gsl::narrow<s32>(desc.layouts.size());
 				m_device.setDescriptorHeaps(m_commandBuffer,p->getLayout(), bindlessSlot);			
 			}
 		} else {

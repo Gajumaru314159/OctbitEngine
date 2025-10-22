@@ -6,6 +6,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/Template/Utility/TypeTraits.h>
+#include <cstring>
 
 namespace ob::core {
 
@@ -127,7 +128,7 @@ namespace ob::core {
 				m_callable->~ICallable();
 				m_callable = nullptr;
 			}
-			memset(m_buffer, 0, BufferSize + sizeof(void*));
+			std::memset(m_buffer, 0, BufferSize + sizeof(void*));
 		}
 
 	};

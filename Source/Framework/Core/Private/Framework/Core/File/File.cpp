@@ -14,7 +14,7 @@ namespace ob::core {
 
 	//! @brief		std::filesystem::pathに変換
 	static std::filesystem::path ToStdPath(StringView path) {
-		return std::filesystem::u8path((std::string_view)path);
+		return std::filesystem::path(reinterpret_cast<const char8_t*>(path.data()));
 	}
 
 	//! @brief  エラーメッセージを取得
@@ -40,25 +40,23 @@ namespace ob::core {
 			, m_size(0)
 		{
 			BitFlags modes(mode);
-			const wchar_t* pMode = L"";
+			const char* pMode = "";
 			if (modes.has(FileOpenMode::Text)) {
-				if (modes.has(FileOpenMode::Read))pMode = L"r";
-				if (modes.has(FileOpenMode::Write))pMode = L"w";
-				if (modes.has(FileOpenMode::Append))pMode = L"a";
+				if (modes.has(FileOpenMode::Read))pMode = "r";
+				if (modes.has(FileOpenMode::Write))pMode = "w";
+				if (modes.has(FileOpenMode::Append))pMode = "a";
 			}
 			else {
-				if (modes.has(FileOpenMode::Read))pMode = L"rb";
-				if (modes.has(FileOpenMode::Write))pMode = L"wb";
-				if (modes.has(FileOpenMode::Append))pMode = L"ab";
+				if (modes.has(FileOpenMode::Read))pMode = "rb";
+				if (modes.has(FileOpenMode::Write))pMode = "wb";
+				if (modes.has(FileOpenMode::Append))pMode = "ab";
 			}
 
-			WString wpath;
-			StringEncoder::Encode(path, wpath);
-			auto err = _wfopen_s(&m_fp, wpath.c_str(), pMode);
-			if (err == 0) {
+			errno = 0;
+			m_fp = fopen(path.data(), pMode);
+			if (errno == 0) {
 				std::error_code code;
-				std::filesystem::path fspath = wpath.c_str();
-				auto s = file_size(fspath, code);
+				auto s = file_size(m_path.c_str(), code);
 				if (s != static_cast<std::uintmax_t>(-1)) {
 					m_size = (size_t)s;
 				}
@@ -119,20 +117,21 @@ namespace ob::core {
 		}
 
 		//! @brief  読み取り位置取得
-		size_t position()const {
-			fpos_t pos;
-			if (m_fp == nullptr)return 0;
-			if (fgetpos(m_fp, &pos)) {
-				LOG_WARNING("読み取り位置の取得に失敗[{}]\n{}", m_path, GetErrnoString());
+		size_t position() const {
+			if (m_fp == nullptr) return 0;
+			long pos = ftell(m_fp);
+			if (pos == -1L) {
+				LOG_WARNING("読み取り位置の取得に失敗 [{}]\n{}", m_path, GetErrnoString());
 				return 0;
 			}
-			return (size_t)pos;
+			return static_cast<size_t>(pos);
 		}
+
 
 		//! @brief  読み取り
 		bool read(void* buffer, size_t byteCount) {
 			checkOpen();
-			offset_t readCount = fread_s(buffer, byteCount, sizeof(byte), byteCount, m_fp);
+			offset_t readCount = std::fread(buffer, sizeof(byte), byteCount, m_fp);
 			if (readCount != byteCount) {
 				LOG_WARNING("読み取り失敗[{}]\n{}", m_path, GetErrnoString());
 				// readCount 読めなかったら戻す

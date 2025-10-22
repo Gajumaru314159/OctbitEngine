@@ -21,7 +21,7 @@ namespace ob::core {
 
     //! @brief nullチェック付きretain呼び出し
     template<class T>
-    inline void SafeRetain(T* ptr)noexcept(ptr->retain()) {
+    inline void SafeRetain(T* ptr)noexcept(T::retain()) {
         if (ptr) {
             ptr->retain();
         }
@@ -30,7 +30,7 @@ namespace ob::core {
 
     //! @brief nullチェック付き解放release呼び出し
     template<class T>
-    inline void SafeRelease(T*& ptr)noexcept(ptr->release()) {
+    inline void SafeRelease(T*& ptr)noexcept(T::release()) {
         if (ptr) {
             ptr->release();
             ptr = nullptr;

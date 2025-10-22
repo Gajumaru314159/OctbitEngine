@@ -236,21 +236,21 @@ namespace ob::core {
 		//! @param x X軸方向の拡大縮小量
 		//! @param y Y軸方向の拡大縮小量
 		//! @param z Z軸方向の拡大縮小量
-		static constexpr Matrix Scale(f32 x, f32 y, f32 z);
+		static inline Matrix Scale(f32 x, f32 y, f32 z);
 
 
 		//! @brief 拡大縮小行列
 		//! 
 		//! @param scale 拡大縮小量
-		static constexpr Matrix Scale(Vec3 scale);
+		static inline Matrix Scale(Vec3 scale);
 
 
 		//! @brief トランスフォーム行列
-		static constexpr Matrix TRS(Vec3 trans, Rot rot, Vec3 scale);
+		static inline Matrix TRS(Vec3 trans, Rot rot, Vec3 scale);
 
 
 		//! @brief トランスフォーム行列
-		static constexpr Matrix TRS(Vec3 trans, Quat rot, Vec3 scale);
+		static inline Matrix TRS(Vec3 trans, Quat rot, Vec3 scale);
 
 
 		//! @brief 透視投影行列の生成
@@ -412,7 +412,7 @@ namespace ob::core {
 	//! @brief 拡大縮小行列
 	//! 
 	//! @param scale 拡大縮小量
-	constexpr Matrix Matrix::Scale(Vec3 scale) {
+	inline Matrix Matrix::Scale(Vec3 scale) {
 		return Scale(scale.x, scale.y, scale.z);
 	}
 
@@ -421,7 +421,7 @@ namespace ob::core {
 	//! @param x X軸方向の拡大縮小量
 	//! @param y Y軸方向の拡大縮小量
 	//! @param z Z軸方向の拡大縮小量
-	constexpr Matrix Matrix::Scale(const f32 x, const f32 y, const f32 z) {
+	inline Matrix Matrix::Scale(const f32 x, const f32 y, const f32 z) {
 		return Matrix(
 			x, 0, 0, 0,
 			0, y, 0, 0,
@@ -430,12 +430,12 @@ namespace ob::core {
 	}
 
 	//! @brief トランスフォーム行列
-	constexpr Matrix Matrix::TRS(Vec3 trans, Rot rot, Vec3 scale) {
+	inline Matrix Matrix::TRS(Vec3 trans, Rot rot, Vec3 scale) {
 		return Translate(trans) * Rotate(rot) * Scale(scale);
 	}
 
 	//! @brief トランスフォーム行列
-	constexpr Matrix Matrix::TRS(Vec3 trans, Quat rot, Vec3 scale) {
+	inline Matrix Matrix::TRS(Vec3 trans, Quat rot, Vec3 scale) {
 		return Translate(trans) * Rotate(rot) * Scale(scale);
 	}
 

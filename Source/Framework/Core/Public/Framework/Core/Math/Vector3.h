@@ -114,11 +114,11 @@ namespace ob::core {
 
 
         //! @brief f32*Vec3演算子 
-        friend Vec3 operator * (f32 scalar, const Vec3& v) noexcept;
+        constexpr friend Vec3 operator * (f32 scalar, const Vec3& v) noexcept;
 
 
         //! @brief f32/Vec3演算子 
-        friend Vec3 operator / (f32 scalar, const Vec3& v) noexcept;
+        constexpr friend Vec3 operator / (f32 scalar, const Vec3& v) noexcept;
 
 
         //! @brief      要素取得
@@ -425,6 +425,26 @@ namespace ob::core {
 
 
 
+
+
+
+
+
+
+    //===============================================================
+    //  friend
+    //===============================================================
+
+    //! @brief f32*Vec3演算子
+    constexpr Vec3 operator * (f32 f, const Vec3& v) noexcept {
+        return v * f;
+    }
+
+
+    //! @brief f32/Vec3演算子
+    constexpr Vec3 operator / (f32 f, const Vec3& v) noexcept {
+        return Vec3(f) / v;
+    }
 
 
 

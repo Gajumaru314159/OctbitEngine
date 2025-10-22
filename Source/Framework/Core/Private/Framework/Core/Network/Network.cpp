@@ -7,6 +7,9 @@
 #ifdef OS_WINDOWS
 #include <WinSock2.h>
 #pragma comment(lib, "ws2_32.lib")
+#elif defined(OS_LINUX)
+#include <sys/types.h>
+#include <sys/socket.h>
 #else
 #error "Unsupported platform"
 #endif
@@ -43,6 +46,14 @@ namespace ob::core {
 		else {
 			LOG_WARNING("[Socket] ソケットはシャットダウン済みです");
 		}
+	}
+#elif defined(OS_LINUX)
+
+	void Network::Startup() {
+		LOG_WARNING("[Socket] Linux プラットフォームではネットワーク初期化処理は未実装です。");
+	}
+
+	void Network::Shutdown() {
 	}
 #endif
 

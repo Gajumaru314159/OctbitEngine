@@ -29,7 +29,6 @@ namespace ob::rhi {
 #if GRAPHIC_OBJECT_LEAK_CHECK_ENABLED
         // メモリリーク検知
 		ScopeLock lock(m_objectsLock);
-        bool hasMemoryLeak = false;
         for (auto& pObject : m_objects) {
             LOG_ERROR("未開放のグラフィックオブジェクト [name={}]", pObject->getName());
             delete pObject;
@@ -73,7 +72,7 @@ namespace ob::rhi {
         for (s32 i = 0; i < 100;++i) {
             update();
             ScopeLock lock(m_deleteStackListLock);
-		    s32 deletingCount = 0;
+		    size_t deletingCount = 0;
 		    for (s32 j = 0; j < m_deleteStackList.size(); ++j) {
 			    deletingCount += m_deleteStackList.at(j).size();
 		    }

@@ -224,21 +224,6 @@ namespace ob::rhi {
 		if (!func) return;
 
 		m_device.getBufferUploader().add(func, m_desc.size, m_resource, m_allocation.offset);
-
-		return;
-
-		HRESULT result;
-		byte* ptr = nullptr;
-		result = m_resource->Map(0, nullptr, (void**)&ptr);
-		if (FAILED(result))
-		{
-			Utility::OutputFatalLog(result, "ID3D12Resource::Map()");
-			return;
-		}
-
-		func(ptr);
-
-		m_resource->Unmap(0, nullptr);
 	}
 
 
@@ -268,7 +253,7 @@ namespace ob::rhi {
 		desc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		desc.Buffer.FirstElement = static_cast<UINT64>(m_allocation.offset / (isStructuredBuffer ? m_desc.stride : 4));
-		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size/m_desc.stride : m_desc.size/4;
+		desc.Buffer.NumElements = gsl::narrow<UINT>(isStructuredBuffer ? m_desc.size/m_desc.stride : m_desc.size/4);
 		desc.Buffer.StructureByteStride = isStructuredBuffer ? m_desc.stride : 0;
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_SRV_FLAG_NONE : D3D12_BUFFER_SRV_FLAG_RAW;
 
@@ -295,7 +280,7 @@ namespace ob::rhi {
 		desc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
 		desc.Buffer.FirstElement = static_cast<UINT64>(m_allocation.offset / (isStructuredBuffer ? m_desc.stride : 4));
 		desc.Buffer.StructureByteStride = m_desc.stride;
-		desc.Buffer.NumElements = isStructuredBuffer ? m_desc.size / m_desc.stride : m_desc.size / 4;
+		desc.Buffer.NumElements = gsl::narrow<UINT>(isStructuredBuffer ? m_desc.size / m_desc.stride : m_desc.size / 4);
 		desc.Buffer.CounterOffsetInBytes = 0; // 何？
 		desc.Buffer.Flags = isStructuredBuffer ? D3D12_BUFFER_UAV_FLAG_NONE : D3D12_BUFFER_UAV_FLAG_RAW;
 

@@ -23,7 +23,7 @@ namespace ob::core {
 			d = ip & 0xff;
 		}
 		IPAddress(const char* ip) {
-			if(sscanf_s(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)){}
+			if(sscanf(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)){}
 		}
 
 		static IPAddress LocalHost() { return IPAddress(127, 0, 0, 1); }

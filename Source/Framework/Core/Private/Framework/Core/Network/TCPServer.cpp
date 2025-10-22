@@ -9,6 +9,8 @@
 #ifdef OS_WINDOWS
 #include <WinSock2.h>
 #pragma comment(lib, "ws2_32.lib")
+#elif defined(OS_LINUX)
+#include <sys/socket.h>
 #else
 #error "Unsupported platform"
 #endif
@@ -134,6 +136,34 @@ namespace ob::core {
 		return m_socket == INVALID_SOCKET;
 	}
 
+#elif defined(OS_LINUX)
+
+	TCPServer::TCPServer() {
+		m_port = 0;
+		m_socket = 0;
+	}
+
+	TCPServer::~TCPServer() = default;
+
+	bool TCPServer::open(u16 port) {
+		(void)port;
+		LOG_ERROR("[TCPServer] Linux プラットフォームでは未対応です。");
+		return false;
+	}
+
+	void TCPServer::close() {
+	}
+
+	auto TCPServer::accept() const -> UPtr<TCPClient> {
+		return nullptr;
+	}
+
+	bool TCPServer::isClosed() const {
+		return true;
+	}
+
+#else
+#error "Unsupported platform"
 #endif
 
 }

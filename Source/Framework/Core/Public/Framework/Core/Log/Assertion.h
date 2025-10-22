@@ -18,7 +18,7 @@
 #define _internal_OB_ASSERT_BASE(expr,format,...)                                           \
 do{                                                                                         \
     if(UNLIKELY(!(expr))){                                                                  \
-        _internal_OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,__VA_ARGS__);    \
+        _internal_OB_LOG_BASE(ob::core::LogLevel::Fatal,"Assertion",format,##__VA_ARGS__);  \
     }                                                                                       \
 }while(0)
 
@@ -30,7 +30,7 @@ do{                                                                             
 //!             回復可能なエラーハンドリングをしてください。
 //! @param expr 式
 //! @param format ログフォーマット
-#define OB_ASSERT(expr,format,...)			_internal_OB_ASSERT_BASE(expr,format,__VA_ARGS__)
+#define OB_ASSERT(expr,format,...)			_internal_OB_ASSERT_BASE(expr,format,##__VA_ARGS__)
 //! @copydoc OB_ABORT
 #define OB_ASSERT_EXPR(expr)				OB_ASSERT(expr,#expr)
 
@@ -38,7 +38,7 @@ do{                                                                             
 //!
 //! @details    エラーログを出力しプログラムを停止する。
 //! @param format ログフォーマット
-#define OB_ABORT(format,...)				OB_ASSERT(false,format,__VA_ARGS__)
+#define OB_ABORT(format,...)				OB_ASSERT(false,format,##__VA_ARGS__)
 
 
 //============================================

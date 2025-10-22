@@ -114,7 +114,7 @@ namespace ob::core {
             friend class HandleForwardList;
         public:
             using this_type = const_iterator;                                                                               //!< 型
-            using difference_type = difference_type;                                                                        //!< ポインタ差分型
+            using difference_type = HandleForwardList<T>::difference_type;                                                  //!< ポインタ差分型
             using value_type = T;                                                                                           //!< インスタンス型
             using pointer = T*;                                                                                             //!< ポインタ型
             using reference = value_type&;                                                                                  //!< 参照型

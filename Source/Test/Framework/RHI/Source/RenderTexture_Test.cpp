@@ -9,7 +9,7 @@ using namespace ob;
 using namespace ob::rhi;
 
 TYPED_TEST(RHITest, RenderTexture_Create) {
-    return;
+
     for (auto format : magic_enum::enum_values<TextureFormat>()) {
 
         Size sizes[] = {

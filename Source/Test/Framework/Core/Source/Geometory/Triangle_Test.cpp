@@ -71,17 +71,17 @@ TEST(Triangle, Getter) {
 	//centerOfGravity
 	{
 		Triangle tri(Vec2(1, 2), Vec2(4, 6), Vec2(3, 5));
-		EXPECT_EQ(tri.centerOfGravity(), Vec3(2.6666666666666665, 4.333333333333333,0.0f));
+		EXPECT_EQ(tri.centerOfGravity(), Vec3(2.6666666f, 4.3333333f,0.0f));
 	}
 	// innerGravity
 	{
 		Triangle tri(Vec2(1, 2), Vec2(4, 6), Vec2(3, 5));
-		EXPECT_EQ(tri.innerGravity(), Vec3(3.077559120727383561246, 4.936416730136271231764,0.0f));
+		EXPECT_EQ(tri.innerGravity(), Vec3(3.077559f, 4.9364167f,0.0f));
 	}
 	// circumcenter
 	{
 		Triangle tri(Vec2(1, 2), Vec2(4, 6), Vec2(3, 5));
-		EXPECT_EQ(tri.circumcenter(), Vec3(12.5, -3.5,0.0));
+		EXPECT_EQ(tri.circumcenter(), Vec3(12.5f, -3.5f,0.0f));
 	}
 	// area
 	{

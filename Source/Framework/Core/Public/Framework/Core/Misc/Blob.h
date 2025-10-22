@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/Template/include.h>
+#include <cstring>
 
 namespace ob::core {
 
@@ -103,7 +104,7 @@ namespace ob::core {
         //! @brief データを設定
         void set(const void* pData, size_t dataSize) {
             m_data.resize(dataSize);
-            memcpy_s(m_data.data(), dataSize, pData, dataSize);
+            std::memcpy(m_data.data(), pData, dataSize);
         }
 
 
@@ -123,7 +124,7 @@ namespace ob::core {
         void append(const void* pData, size_t dataSize) {
             auto size = m_data.size();
             m_data.resize(size +dataSize);
-            memcpy_s(m_data.data() + size, dataSize, pData, dataSize);
+            std::memcpy(m_data.data() + size, pData, dataSize);
         }
 
 
@@ -139,13 +140,13 @@ namespace ob::core {
 
         //! @brief マジックナンバーを持っているか
         bool magic(const Char magic[5]) const {
-			return 4 <= size() && memcmp(data(), magic, 4) == 0;
+			return 4 <= size() && std::memcmp(data(), magic, 4) == 0;
 		}
 
 
         //! @brief マジックナンバーを持っているか
         bool magic(u32 magic) const {
-            return 4 <= size() && memcmp(data(), &magic, 4) == 0;
+            return 4 <= size() && std::memcmp(data(), &magic, 4) == 0;
         }
 
 

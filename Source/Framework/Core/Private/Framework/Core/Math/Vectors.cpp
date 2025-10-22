@@ -39,40 +39,6 @@ namespace ob::core {
 
 
 
-    //===============================================================
-    //  Vec2
-    //===============================================================
-
-    //! @brief f32*Vec2演算子 
-    Vec2 operator * (f32 f, const Vec2& v) noexcept {
-        return v * f;
-    }
-
-
-    //! @brief f32/Vec2演算子 
-    Vec2 operator / (f32 f, const Vec2& v) noexcept {
-        return Vec2(f) / v;
-    }
-
-
-
-
-    //===============================================================
-    //  Vec3
-    //===============================================================
-
-    //! @brief f32*Vec3演算子 
-    Vec3 operator * (f32 f, const Vec3& v) noexcept {
-        return v * f;
-    }
-
-
-    //! @brief f32/Vec3演算子 
-    Vec3 operator / (f32 f, const Vec3& v) noexcept {
-        return Vec3(f) / v;
-    }
-
-
     //! @brief          任意軸回転
     //! 
     //! @param angle    回転量

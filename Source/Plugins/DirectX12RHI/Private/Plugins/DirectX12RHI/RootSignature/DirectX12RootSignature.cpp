@@ -94,34 +94,36 @@ namespace ob::rhi {
 				}
 
 				// RHI層のSlotとDirectX12層のSlotをマッピング
-				if (heapType == DescriptorHeapType::Sampler) mapInfo.samplerSlot = parameters.size() - 1;
-				if (heapType == DescriptorHeapType::CBV_SRV_UAV) mapInfo.othersSlot = parameters.size() - 1;
+				if (heapType == DescriptorHeapType::Sampler) mapInfo.samplerSlot = gsl::narrow<s32>(parameters.size()) - 1;
+				if (heapType == DescriptorHeapType::CBV_SRV_UAV) mapInfo.othersSlot = gsl::narrow<s32>(parameters.size()) - 1;
 
 				// このループで追加されたRange数 == NumDescriptorRanges
-				parameter.DescriptorTable.NumDescriptorRanges = ranges.size() - rangeStart;
+				parameter.DescriptorTable.NumDescriptorRanges = gsl::narrow<s32>(ranges.size()) - rangeStart;
 
 
 				// TODO 要素数が1かつRootDescriptorが視聴できるのであれば切り替え
+#if 0
 				if (parameter.DescriptorTable.NumDescriptorRanges == 1) {
 					switch (parameter.DescriptorTable.pDescriptorRanges[0].RangeType) {
-						// テクスチャなどはRootDescriptorに指定できないのでとりあえず無効化。
-						// TODO StructuredBufferは使えるので対応する
-						//case D3D12_DESCRIPTOR_RANGE_TYPE_SRV:
-						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-						//	break;
-						//case D3D12_DESCRIPTOR_RANGE_TYPE_UAV:
-						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
-						//	break;
-						//case D3D12_DESCRIPTOR_RANGE_TYPE_CBV:
-						//	parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-						//	parameter.Descriptor.RegisterSpace = parameter.DescriptorTable.pDescriptorRanges[0].RegisterSpace;
-						//	parameter.Descriptor.ShaderRegister = parameter.DescriptorTable.pDescriptorRanges[0].BaseShaderRegister;
-						//	break;
-						//}
+						 //テクスチャなどはRootDescriptorに指定できないのでとりあえず無効化。
+						 //TODO StructuredBufferは使えるので対応する
+						case D3D12_DESCRIPTOR_RANGE_TYPE_SRV:
+							parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+							break;
+						case D3D12_DESCRIPTOR_RANGE_TYPE_UAV:
+							parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_UAV;
+							break;
+						case D3D12_DESCRIPTOR_RANGE_TYPE_CBV:
+							parameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+							parameter.Descriptor.RegisterSpace = parameter.DescriptorTable.pDescriptorRanges[0].RegisterSpace;
+							parameter.Descriptor.ShaderRegister = parameter.DescriptorTable.pDescriptorRanges[0].BaseShaderRegister;
+							break;
+						}
 					default: break;
 					}
 
 				}
+#endif
 			}
 		}
 

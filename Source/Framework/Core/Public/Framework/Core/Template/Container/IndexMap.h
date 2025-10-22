@@ -81,21 +81,13 @@ namespace ob::core {
 		};
 
 		template<bool IsConst>
-		struct pointer_proxy;
-
-		template<>
-		struct pointer_proxy<false> {
+		struct pointer_proxy {
+			using ref_type = std::conditional_t<IsConst, const_value_reference, value_reference>;
+			using pointer_type = std::conditional_t<IsConst, const value_type*, value_type*>;
 			value_type value;
-			explicit pointer_proxy(value_reference ref) : value(ref) {}
-			value_type* operator->() { return &value; }
-			const value_type* operator->() const { return &value; }
-		};
-
-		template<>
-		struct pointer_proxy<true> {
-			value_type value;
-			explicit pointer_proxy(const_value_reference ref) : value(ref) {}
-			const value_type* operator->() const { return &value; }
+			explicit pointer_proxy(ref_type ref) : value(ref) {}
+			pointer_type operator->() { return &value; }
+			pointer_type operator->() const { return &value; }
 		};
 
 		template<bool IsConst>
@@ -122,9 +114,9 @@ namespace ob::core {
 				return reference(m_owner->m_keys[m_index], m_owner->m_values[m_index]);
 			}
 
-			pointer operator->() const {
-				return pointer(**this);
-			}
+            pointer operator->() const {
+                return pointer_proxy<IsConst>(**this);
+            }
 
 			reference operator[](difference_type n) const {
 				return *(*this + n);

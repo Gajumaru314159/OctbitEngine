@@ -11,7 +11,7 @@ namespace ob::core {
     namespace {
         //! @brief		std::filesystem::pathに変換
         std::filesystem::path ToStdPath(StringView path) {
-            return std::filesystem::u8path((std::string_view)path);
+            return std::filesystem::path(std::u8string_view(reinterpret_cast<const char8_t*>(path.data()),path.size()));
         }
 
         //! @brief		Stringに変換

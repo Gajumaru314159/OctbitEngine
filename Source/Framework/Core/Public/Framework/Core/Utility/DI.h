@@ -115,18 +115,31 @@ namespace ob::core {
         struct constructor {};
 
         // つくれる場合
-        template <class T, int... ArgIndex>
+        template <class T, size_t... ArgIndex>
         struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_true<T, ArgIndex...>> {
             using args = arg_types<arg_type<T, ArgIndex>...>;
-            //static constexpr size_t arg_size = sizeof...(ArgIndex);
+        };
+
+        // 引数なしで構築できる場合
+        template <class T>
+        struct constructor<T, std::index_sequence<>, can_construct_true<T>> {
+            using args = arg_types<>;
         };
 
         // つくれない場合
-        template <class T, int... ArgIndex>
+        template <class T, size_t... ArgIndex>
         struct constructor<T, std::index_sequence<ArgIndex...>, can_construct_false<T, ArgIndex...>> {
             using next = constructor<T, std::make_index_sequence<sizeof...(ArgIndex) - 1>>;
             using args = typename next::args;
         };
+
+        // これ以上引数を減らせない場合
+        template <class T>
+        struct constructor<T, std::index_sequence<>, can_construct_false<T>> {
+            static_assert(can_construct<T>::value, "Type is not constructible with provided dependencies.");
+            using args = arg_types<>;
+        };
+
 
 
         // 構築可能なコンストラクタの引数情報

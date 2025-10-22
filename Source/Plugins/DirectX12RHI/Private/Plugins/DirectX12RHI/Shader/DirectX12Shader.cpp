@@ -155,7 +155,7 @@ namespace ob::rhi {
         result = device.getShaderCompiler()->Compile(
             &buffer,
             pargs.data(),
-            pargs.size(),
+            gsl::narrow<s32>(pargs.size()),
             device.getIncludeHandler().Get(),
             IID_PPV_ARGS(&resultBlob)
         );

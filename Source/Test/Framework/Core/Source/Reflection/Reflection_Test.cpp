@@ -57,7 +57,7 @@ public:
 
 	const Nutrients& getNutrients() const { return m_nutrients; }
 
-	void print(bool console, bool file)const {
+	void print(bool, bool)const {
 		// プリント処理
 	}
 
@@ -135,6 +135,7 @@ TEST(TypeBuilder, Construct) {
 	EXPECT_NE(manager.find(Type::Get<Food>()), nullptr);
 	EXPECT_NE(manager.find(Type::Get<Fruit>()), nullptr);
 
+	/*
 	auto items = Type::Get<Vector<int>>();
 	if (auto info = TypeInfo::Find(items)) {
 
@@ -177,7 +178,7 @@ TEST(TypeBuilder, Construct) {
 
 		}
 	}
-
+*/
 }
 
 

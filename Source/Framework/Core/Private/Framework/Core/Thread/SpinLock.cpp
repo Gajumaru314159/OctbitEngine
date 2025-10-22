@@ -21,7 +21,11 @@ namespace ob::core {
 				break;
 			}
 			while (m_lock.load(std::memory_order_relaxed)) {
+#ifdef OS_WINDOWS
 				_mm_pause();
+#else
+				std::this_thread::yield();
+#endif
 			}
 		}
 

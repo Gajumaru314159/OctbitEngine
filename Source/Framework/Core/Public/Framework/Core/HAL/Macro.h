@@ -106,8 +106,12 @@ extern void ShowMessageBox(const wchar_t* message);
 //! @brief  ブレークポイントを呼び出し
 #ifdef _DEBUG
 #ifdef OS_WINDOWS
-#define CallBreakPoint()  { _CrtDbgBreak(); } // if (::IsDebuggerPresent())
+#define CallBreakPoint()  { _CrtDbgBreak(); }
+#elif defined(OS_LINUX)
+#define CallBreakPoint()  { __builtin_trap(); }
 #else
-#define CallBreakPoint() /**/
+#define CallBreakPoint()  do {} while(0)
 #endif
+#else
+#define CallBreakPoint()  do {} while(0)
 #endif

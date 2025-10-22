@@ -12,9 +12,6 @@ namespace ob {
         void LogEvent(const Log& log)
         {
             s_logType = log.level;
-
-            s32 index = 0;
-
             s_message = log.message;
         }
 

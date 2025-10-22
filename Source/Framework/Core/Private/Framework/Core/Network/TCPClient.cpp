@@ -9,12 +9,15 @@
 #ifdef OS_WINDOWS
 #include <WinSock2.h>
 #pragma comment(lib, "ws2_32.lib")
+#elif defined(OS_LINUX)
+// TODO
 #else
 #error "Unsupported platform"
 #endif
 
 namespace ob::core {
 
+#ifdef OS_WINDOWS
 	/// 最後のWSAエラーメッセージを取得する
 	static String GetWSALastErrorMessage() {
 		WCHAR buffer[256];
@@ -140,5 +143,54 @@ namespace ob::core {
 	bool TCPClient::isConnected() const {
 		return m_socket != INVALID_SOCKET;
 	}
+
+#elif defined(OS_LINUX)
+
+	TCPClient::TCPClient() {
+		m_ip = {0,0,0,0};
+		m_port = 0;
+		m_socket = 0;
+	}
+
+	TCPClient::~TCPClient() = default;
+
+	bool TCPClient::connect(IPAddress ip, u16 port) {
+		LOG_ERROR("[TCPClient] Linux プラットフォームでは未対応です。");
+		(void)ip;
+		(void)port;
+		return false;
+	}
+
+	bool TCPClient::connect(IPAddress ip, u16 port, u64 socket) {
+		(void)ip;
+		(void)port;
+		(void)socket;
+		LOG_WARNING("[TCPClient] Linux プラットフォームでは未対応です。(accept)");
+		return false;
+	}
+
+	bool TCPClient::send(const char* data, size_t size) {
+		(void)data;
+		(void)size;
+		return false;
+	}
+
+	size_t TCPClient::receive(char* data, size_t size) {
+		(void)data;
+		(void)size;
+		return 0;
+	}
+
+	void TCPClient::disconnect() {
+	}
+
+	bool TCPClient::isConnected() const {
+		return false;
+	}
+
+#else
+#error "Unsupported platform"
+#endif
+
 
 }

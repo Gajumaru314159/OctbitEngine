@@ -21,9 +21,9 @@ namespace ob::core {
     class Logger {
     public:
 
-        using EventNotifier = EventNotifier<const Log&>;       //!< イベント・通知型
-        using EventHandle = EventNotifier::Handle;              //!< イベント・ハンドル型
-        using EventDelegateType = EventNotifier::delegate_type; //!< イベント・デリゲート型
+        using Notifier = EventNotifier<const Log&>;       //!< イベント・通知型
+        using EventHandle = Notifier::Handle;              //!< イベント・ハンドル型
+        using EventDelegateType = Notifier::delegate_type; //!< イベント・デリゲート型
 
         //! @brief メッセージの最大バイト数
         enum {
@@ -91,7 +91,7 @@ namespace ob::core {
     private:
         bool            m_useLineOutput = false;
         Mutex           m_mutex;
-        EventNotifier   m_notifier;
+        Notifier        m_notifier;
         EventHandle     m_hDebugEvent;
         static Logger*  s_instance;
     };

@@ -22,7 +22,6 @@ namespace ob::core {
 	//! @brief  スレッド優先順序
 	struct ThreadDesc {
 		u32 affinity = 0xFFFFFFFF;
-		u32 stackSize = 64 * 1024;
 		ThreadPriority priority = ThreadPriority::Level3;
 	public:
 		ThreadDesc() = default;
@@ -56,7 +55,7 @@ namespace ob::core {
 		//! @param name			スレッド名
 		//! @param desc			定義
 		//! @param entryPoint	実行する関数オブジェクト
-		Thread(StringView name, ThreadDesc desc, const Func<void()>& entryPoint);
+		Thread(StringView name, const ThreadDesc& desc, const Func<void()>& entryPoint);
 
 		//! @brief				デストラクタ
 		//! 

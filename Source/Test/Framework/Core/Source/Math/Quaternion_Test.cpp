@@ -85,7 +85,6 @@ TEST(Quat, Get) {
     ASSERT_EQ(q.left(), Vec3::Front);
 
     ASSERT_EQ(q.axis(), Vec3(1, 1, -1).unitVec());
-    f32 ang = q.angle();
     ASSERT_EQ(q.angle(), 120.0f);
 
 }

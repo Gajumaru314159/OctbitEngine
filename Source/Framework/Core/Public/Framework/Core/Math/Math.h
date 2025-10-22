@@ -3,7 +3,8 @@
 //! @author Gajumaru
 //***********************************************************
 #pragma once
-#include <math.h>
+#include <cmath>
+#include <cfloat>
 #include <limits>
 #include <gsl/gsl>
 #include <Framework/Core/CorePrivate.h>

@@ -84,8 +84,11 @@ namespace ob::core {
                 utf8::utf8to16(src.begin(), src.end(), std::back_inserter(dest));
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
+#pragma warning(push)
+#pragma warning(disable : 4244)
                 dest.reserve(size8to32(src.size()));
                 utf8::utf8to32(src.begin(), src.end(), std::back_inserter(dest));
+#pragma warning(pop)
             }
         } catch (utf8::exception) {
             dest.clear();
@@ -142,9 +145,12 @@ namespace ob::core {
                 for (s32 i = 0; i < dest.size(); ++i)dest[i] = src[i];
             }
             if (sizeof(wchar_t) == sizeof(char32_t)) {
+#pragma warning(push)
+#pragma warning(disable : 4244)
                 dest.reserve(size16to32(src.size()));
                 auto tmp = utf8::utf16to8(src);
                 utf8::utf8to32(tmp.begin(),tmp.end(),std::back_inserter(dest));
+#pragma warning(pop)
             }
         } catch (utf8::exception) {
             dest.clear();

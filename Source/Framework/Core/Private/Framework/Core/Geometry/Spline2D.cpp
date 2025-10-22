@@ -101,7 +101,7 @@ namespace ob::core {
         // Catmull-Romスプライン補間
         const f32 segmentCount = static_cast<f32>(points.size() - 1);
         const f32 scaledT = t * segmentCount;
-        const s32 segmentIndex = Math::Min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
+        const s32 segmentIndex = std::min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
         const f32 localT = scaledT - static_cast<f32>(segmentIndex);
         
         // 4つの制御点を取得
@@ -140,7 +140,7 @@ namespace ob::core {
         // Catmull-Romスプライン速度計算（1次導関数）
         const f32 segmentCount = static_cast<f32>(points.size() - 1);
         const f32 scaledT = t * segmentCount;
-        const s32 segmentIndex = Math::Min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
+        const s32 segmentIndex = std::min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
         const f32 localT = scaledT - static_cast<f32>(segmentIndex);
         
         // 4つの制御点を取得
@@ -173,7 +173,7 @@ namespace ob::core {
         // Catmull-Romスプライン加速度計算（2次導関数）
         const f32 segmentCount = static_cast<f32>(points.size() - 1);
         const f32 scaledT = t * segmentCount;
-        const s32 segmentIndex = Math::Min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
+        const s32 segmentIndex = std::min(static_cast<s32>(scaledT), static_cast<s32>(points.size() - 2));
         const f32 localT = scaledT - static_cast<f32>(segmentIndex);
         
         // 4つの制御点を取得
