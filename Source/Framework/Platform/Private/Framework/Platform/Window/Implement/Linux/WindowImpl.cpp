@@ -3,177 +3,305 @@
 //! @author		Gajumaru
 //***********************************************************
 #ifdef OS_LINUX
-#include "Window.h"
-#include "WindowImpl.h"
+#include <Framework/Platform/Window/Implement/Linux/WindowImpl.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <Framework/Platform/Window/WindowManager.h>
 
-#include <Framework/Platform/System/PlatformSystem.h>
+namespace ob::platform {
 
-static const char* s_proWindowProcedure = "OctbitWindowProp";
+    namespace {
 
-
-namespace ob {
-    namespace platform {
-
-        //! @brief  説明
-
-        WindowsWindow::WindowsWindow(const WindowDesc& params) :Window(params) {
-            m_hWnd = nullptr;
-            m_accelerator = nullptr;
-
-            HINSTANCE hInst = (HINSTANCE)::GetModuleHandle(NULL);
-
-            // ウィンドウクラスを設定
-            WNDCLASSEXW	wcex = {
-                sizeof(WNDCLASSEX),
-                NULL,
-                ::StaticWndProc,
-                0, 0,
-                hInst,
-                NULL,
-                ::LoadCursor(NULL, IDC_ARROW),
-                (HBRUSH)(COLOR_WINDOW + 1),
-                NULL,
-                s_windowClassName,
-                NULL
-            };
-
-            // ウィンドウクラスの登録
-            ATOM wc = ::RegisterClassExW(&wcex);
-            if (!wc) return;
-
-
-            // ウィンドウモードのときのウィンドウスタイルの選択
-            DWORD mWindowedStyle = WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-            if (params.resizable) {
-                mWindowedStyle |= (WS_THICKFRAME | WS_MAXIMIZEBOX);
-            }
-            DWORD dwExStyle = 0;
-            //if (params.win32IconResourceId == 0) {
-            dwExStyle |= WS_EX_DLGMODALFRAME;	// アイコンの無いスタイル
-        //}
-
-            RECT clientRect;
-            clientRect.left = 0;
-            clientRect.top = 0;
-            clientRect.right = params.clientSize.width;
-            clientRect.bottom = params.clientSize.height;
-            ::AdjustWindowRect(&clientRect, mWindowedStyle, FALSE);
-
-            // ウィンドウの作成
-            m_hWnd = ::CreateWindowExW(
-                dwExStyle,
-                s_windowClassName,
-                params.title,
-                mWindowedStyle,
-                CW_USEDEFAULT, CW_USEDEFAULT,
-                clientRect.right - clientRect.left, clientRect.bottom - clientRect.top,
-                NULL, NULL, hInst, NULL);
-            if (!m_hWnd) return;
-
-            // アクセラレータの作成
-            ACCEL accels[1] =
-            {
-                { FALT | FVIRTKEY, VK_RETURN, 0 }
-            };
-            m_accelerator = ::CreateAcceleratorTable(accels, 1);
-            if (!m_accelerator) {
-                UnregisterClassW(s_windowClassName, hInst);
-                m_hWnd = nullptr;
-                m_accelerator = nullptr;
-                return;
+        class X11Context {
+        public:
+            static X11Context& Instance() {
+                static X11Context instance;
+                return instance;
             }
 
-            abjustLocationCentering();
+            ::Display* display() const { return m_display; }
+            int screen() const { return m_screen; }
+            ::Window root() const { return m_root; }
 
-            // WM_PAINTが呼ばれないようにする
-            ::ValidateRect(m_hWnd, 0);
-
-            // ウィンドウハンドルとインスタンスを関連付ける
-            BOOL r = ::SetPropW(m_hWnd, s_proWindowProcedure, this);
-            if (r == FALSE) {
-                UnregisterClassW(s_windowClassName, hInst);
-                m_hWnd = nullptr;
-                m_accelerator = nullptr;
-                return;
+        private:
+            X11Context() {
+                m_display = XOpenDisplay(nullptr);
+                if (!m_display) {
+                    LOG_ERROR("XOpenDisplay に失敗しました。DISPLAY 環境変数を確認してください。");
+                    return;
+                }
+                m_screen = XDefaultScreen(m_display);
+                m_root = XRootWindow(m_display, m_screen);
             }
 
-
-            ::ShowWindow(m_hWnd, SW_SHOW);
-        }
-
-        WindowsWindow::~WindowsWindow() {
-            if (m_accelerator) {
-                ::DestroyAcceleratorTable(m_accelerator);
-                m_accelerator = NULL;
+            ~X11Context() {
+                if (m_display) {
+                    XCloseDisplay(m_display);
+                    m_display = nullptr;
+                }
             }
 
-            if (m_hWnd) {
-                ::DestroyWindow(m_hWnd);
-                m_hWnd = NULL;
-            }
-        }
+            ::Display* m_display = nullptr;
+            int m_screen = 0;
+            ::Window m_root = 0;
+        };
 
-        void WindowsWindow::setTitle(const Char* pTitle) {
-        }
+    } // namespace
 
-        Vec2 WindowsWindow::size() {
-            return Vec2();
-        }
-
-        Vec2 WindowsWindow::getScreenPoint(const Vec2& clientPoint) {
-            return Vec2();
-        }
-
-        Vec2 WindowsWindow::getClientPoint(const Vec2& screenPoint) {
-            return Vec2();
-        }
-
-        void WindowsWindow::setCursor() {
-        }
-
-
-
-        bool WindowsWindow::isValid() {
-            return m_hWnd != nullptr;
-        }
-
-        LRESULT WindowsWindow::wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-            if (msg == WM_DESTROY) {
-                PostQuitMessage(0);
-                return 0;
-            }
-            return DefWindowProc(hwnd, msg, wparam, lparam);
-        }
-
-
-        void WindowsWindow::abjustLocationCentering() {
-            if (m_hWnd == nullptr)return;
-
-            RECT rcWindow;
-            ::GetWindowRect(m_hWnd, &rcWindow);
-
-            // ディスプレイ全体のサイズを取得
-            int sw = ::GetSystemMetrics(SM_CXSCREEN);
-            int sh = ::GetSystemMetrics(SM_CYSCREEN);
-            int x = (sw - (rcWindow.right - rcWindow.left)) / 2;
-            int y = (sh - (rcWindow.bottom - rcWindow.top)) / 2;
-
-            // サイズ変更せず移動だけ行う
-            ::SetWindowPos(m_hWnd, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-        }
-
-
-        LRESULT CALLBACK WindowsWindow::staticWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
-            auto pWindow = reinterpret_cast<ob::platform::WindowsWindow*>(::GetPropA(hwnd, s_proWindowProcedure));
-
-            if (pWindow) {
-                return pWindow->wndProc(hwnd, msg, wparam, lparam);
-            } else {
-                return ::DefWindowProc(hwnd, msg, wparam, lparam);
-            }
-        }
-
+    WindowImpl::WindowImpl(const WindowDesc& desc) {
+        createWindow(desc);
     }
-}
+
+    WindowImpl::~WindowImpl() {
+        destroyWindow();
+    }
+
+    void WindowImpl::createWindow(const WindowDesc& desc) {
+        auto& context = X11Context::Instance();
+        if (!context.display()) {
+            return;
+        }
+
+        m_title = desc.title.empty() ? "OctbitEngine" : String(desc.title);
+        m_mode = desc.mode;
+        m_resizable = desc.resizable;
+        m_clientSize = desc.clientSize;
+        m_restoreSize = desc.clientSize;
+
+        unsigned int width = static_cast<unsigned int>(desc.clientSize.x > 0 ? desc.clientSize.x : 1280);
+        unsigned int height = static_cast<unsigned int>(desc.clientSize.y > 0 ? desc.clientSize.y : 720);
+
+        ::Window window = XCreateSimpleWindow(
+            context.display(),
+            context.root(),
+            0,
+            0,
+            width,
+            height,
+            0,
+            0,
+            0);
+
+        if (!window) {
+            LOG_ERROR("XCreateSimpleWindow に失敗しました。");
+            return;
+        }
+
+        m_native.display = context.display();
+        m_native.window = window;
+
+        XStoreName(m_native.display, m_native.window, m_title.c_str());
+        XFlush(m_native.display);
+
+        if (desc.show) {
+            show();
+        }
+    }
+
+    void WindowImpl::destroyWindow() {
+        if (m_native.display && m_native.window) {
+            XDestroyWindow(m_native.display, m_native.window);
+            XFlush(m_native.display);
+            m_native.window = 0;
+        }
+    }
+
+    void WindowImpl::show() {
+        if (!m_native.window) return;
+        XMapRaised(m_native.display, m_native.window);
+        XFlush(m_native.display);
+        m_visible = true;
+        updateState(WindowState::Minimized, false);
+        updateState(WindowState::Focused, true);
+
+        WindowEventArgs args{};
+        args.type = WindowEventType::Show;
+        m_notifier.invoke(args);
+    }
+
+    void WindowImpl::close() {
+        if (m_closed) return;
+        m_closed = true;
+        m_visible = false;
+        updateState(WindowState::Minimized, false);
+        updateState(WindowState::Maximized, false);
+        updateState(WindowState::Focused, false);
+        WindowEventArgs args{};
+        args.type = WindowEventType::Close;
+        m_notifier.invoke(args);
+        destroyWindow();
+    }
+
+    void WindowImpl::maximize() {
+        if (!m_native.window) return;
+
+        auto& context = X11Context::Instance();
+        Vec2 size{
+            static_cast<f32>(XDisplayWidth(context.display(), context.screen())),
+            static_cast<f32>(XDisplayHeight(context.display(), context.screen()))
+        };
+
+        m_restoreSize = m_clientSize;
+        setPosition({0.0f, 0.0f});
+        setSize(size);
+        updateState(WindowState::Maximized, true);
+        updateState(WindowState::Minimized, false);
+    }
+
+    void WindowImpl::minimize() {
+        if (!m_native.window) return;
+        auto& context = X11Context::Instance();
+        XIconifyWindow(m_native.display, m_native.window, context.screen());
+        XFlush(m_native.display);
+        updateState(WindowState::Maximized, false);
+        updateState(WindowState::Minimized, true);
+        m_visible = false;
+
+        WindowEventArgs args{};
+        args.type = WindowEventType::Hide;
+        m_notifier.invoke(args);
+    }
+
+    void WindowImpl::moveToCenter() {
+        auto& context = X11Context::Instance();
+        Vec2 size = getSize();
+        Vec2 position{
+            static_cast<f32>((XDisplayWidth(context.display(), context.screen()) - static_cast<int>(size.x)) / 2),
+            static_cast<f32>((XDisplayHeight(context.display(), context.screen()) - static_cast<int>(size.y)) / 2)
+        };
+        setPosition(position);
+    }
+
+    void WindowImpl::restoreSize() {
+        updateState(WindowState::Minimized, false);
+        updateState(WindowState::Maximized, false);
+        if (m_mode == WindowMode::FullScreen) {
+            applyFullscreen(false);
+        } else {
+            setSize(m_restoreSize);
+        }
+        show();
+    }
+
+    bool WindowImpl::isValid()const noexcept {
+        return !m_closed && m_native.window != 0;
+    }
+
+    bool WindowImpl::isMainWindow()const {
+        if (auto manager = WindowManager::Get()) {
+            return manager->hasMainWindow() && manager->getMainWindow().getHandle() == getHandle();
+        }
+        return false;
+    }
+
+    WindowStates WindowImpl::getState()const {
+        return m_states;
+    }
+
+    Vec2 WindowImpl::getScreenPoint(const Vec2& clientPoint)const {
+        return clientPoint + m_position;
+    }
+
+    Vec2 WindowImpl::getClientPoint(const Vec2& screenPoint)const {
+        return screenPoint - m_position;
+    }
+
+    void WindowImpl::setTitle(StringView title) {
+        m_title = title;
+        if (!m_native.window) return;
+        XStoreName(m_native.display, m_native.window, m_title.c_str());
+        XFlush(m_native.display);
+    }
+
+    const String& WindowImpl::getTitle()const {
+        return m_title;
+    }
+
+    void WindowImpl::setPosition(Vec2 position) {
+        if (!m_native.window) return;
+        m_position = position;
+        XMoveWindow(m_native.display, m_native.window, static_cast<int>(position.x), static_cast<int>(position.y));
+        XFlush(m_native.display);
+    }
+
+    Vec2 WindowImpl::getPosition()const noexcept {
+        return m_position;
+    }
+
+    void WindowImpl::setSize(Vec2 size) {
+        if (!m_native.window) return;
+        m_clientSize = size;
+        if (!m_states.has(WindowState::Minimized) && m_mode != WindowMode::FullScreen) {
+            m_restoreSize = size;
+        }
+        XResizeWindow(m_native.display, m_native.window,
+                      static_cast<unsigned int>(size.x),
+                      static_cast<unsigned int>(size.y));
+        XFlush(m_native.display);
+    }
+
+    Vec2 WindowImpl::getSize()const {
+        return m_clientSize;
+    }
+
+    void WindowImpl::setMode(WindowMode mode) {
+        if (m_mode == mode) return;
+        if (mode == WindowMode::FullScreen) {
+            applyFullscreen(true);
+        } else {
+            applyFullscreen(false);
+        }
+        m_mode = mode;
+    }
+
+    WindowMode WindowImpl::getMode()const {
+        return m_mode;
+    }
+
+    WindowStyle WindowImpl::getStyle()const {
+        return m_style;
+    }
+
+    void WindowImpl::setStyle(WindowStyle style) {
+        m_style = style;
+    }
+
+    void* WindowImpl::getHandle()const {
+        return const_cast<NativeWindowHandle*>(&m_native);
+    }
+
+    String WindowImpl::getTextInput() {
+        return {};
+    }
+
+    void WindowImpl::addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) {
+        m_notifier.add(handle, func);
+    }
+
+    void WindowImpl::applyFullscreen(bool enable) {
+        auto& context = X11Context::Instance();
+        if (enable) {
+            updateState(WindowState::FullScreen, true);
+            setPosition({0.0f, 0.0f});
+            setSize({
+                static_cast<f32>(XDisplayWidth(context.display(), context.screen())),
+                static_cast<f32>(XDisplayHeight(context.display(), context.screen()))
+            });
+        } else {
+            updateState(WindowState::FullScreen, false);
+            setSize(m_restoreSize);
+            moveToCenter();
+        }
+    }
+
+    void WindowImpl::updateState(WindowState state, bool enable) {
+        if (enable) {
+            m_states.on(state);
+        } else {
+            m_states.off(state);
+        }
+    }
+
+} // namespace ob::platform
 
 #endif // OS_LINUX

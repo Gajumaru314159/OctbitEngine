@@ -6,41 +6,76 @@
 #ifdef OS_LINUX
 #include "../IWindowImpl.h"
 
-namespace ob {
-    namespace platform {
+#include <X11/Xlib.h>
+namespace ob::platform {
+    struct NativeWindowHandle {
+        ::Display* display = nullptr;
+        ::Window window = 0;
+    };
+}
 
-        //! @brief  ウィンドウ
-        class WindowImpl :public Window {
-        public:
-            WindowImpl(const WindowDescParams& params);
-            ~WindowImpl()override;
+namespace ob::platform {
 
-            virtual void setTitle(const Char* pTitle) override;
-            virtual Vec2 size() override;
-            virtual Vec2 getScreenPoint(const Vec2& clientPoint) override;
-            virtual Vec2 getClientPoint(const Vec2& screenPoint) override;
-            virtual void setCursor() override;
-            virtual bool isValid();
+    class WindowImpl : public IWindowImpl {
+    public:
+        explicit WindowImpl(const WindowDesc& desc);
+        ~WindowImpl() override;
 
-            LRESULT wndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+        void show() override;
+        void close() override;
+        void maximize() override;
+        void minimize() override;
+        void moveToCenter() override;
+        void restoreSize() override;
 
-        public:
+        bool isValid()const noexcept override;
+        bool isMainWindow()const override;
+        WindowStates getState()const override;
 
-            static LRESULT CALLBACK staticWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+        Vec2 getScreenPoint(const Vec2& clientPoint)const override;
+        Vec2 getClientPoint(const Vec2& screenPoint)const override;
 
+        void setTitle(StringView title) override;
+        const String& getTitle()const override;
 
-        private:
+        void setPosition(Vec2 position) override;
+        Vec2 getPosition()const noexcept override;
 
-            void abjustLocationCentering();
+        void setSize(Vec2 size) override;
+        Vec2 getSize()const override;
 
+        void setMode(WindowMode mode) override;
+        WindowMode getMode()const override;
 
-        private:
+        WindowStyle getStyle()const override;
+        void setStyle(WindowStyle style) override;
 
-            HWND m_hWnd;
-            HACCEL m_accelerator;
+        void* getHandle()const override;
+        String getTextInput() override;
 
-        };
+        void addEventListener(WindowEventHandle& handle, WindowEventNotifier::delegate_type& func) override;
 
-    }
+    private:
+        void createWindow(const WindowDesc& desc);
+        void destroyWindow();
+        void updateState(WindowState state, bool enable);
+        void applyFullscreen(bool enable);
+
+    private:
+        NativeWindowHandle m_native{};
+        WindowStates m_states;
+        WindowMode m_mode = WindowMode::Window;
+        WindowStyle m_style = WindowStyle::Sizable;
+        Vec2 m_position{0, 0};
+        Vec2 m_clientSize{0, 0};
+        Vec2 m_restoreSize{1280, 720};
+        String m_title;
+        bool m_visible = false;
+        bool m_closed = false;
+        bool m_resizable = true;
+
+        WindowEventNotifier m_notifier;
+    };
+
 }
 #endif
