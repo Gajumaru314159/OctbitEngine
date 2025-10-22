@@ -10,7 +10,7 @@ namespace ob::engine {
 	//! @brief		EntityHandle
 	//! @details	Entityの弱参照ハンドル
 	class EntityHandle {
-		friend class std::hash<class EntityHandle>;
+		friend struct std::hash<class EntityHandle>;
 	public:
 
 		//! @brief		デフォルトコンストラクタ

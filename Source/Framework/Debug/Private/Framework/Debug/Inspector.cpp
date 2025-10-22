@@ -52,12 +52,12 @@ namespace ob::debug {
 					if (min && max) {
 						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
 							s16 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					} else {
 						if (ImGui::DragInt(name.c_str(), &value)) {
 							s16 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<s8>()) {
@@ -68,12 +68,12 @@ namespace ob::debug {
 					if (min && max) {
 						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
 							s8 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					} else {
 						if (ImGui::DragInt(name.c_str(), &value)) {
 							s8 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<u32>()) {					
@@ -84,12 +84,12 @@ namespace ob::debug {
 					if (min && max) {
 						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
 							u32 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					} else {
 						if (ImGui::DragInt(name.c_str(), &value)) {
 							u32 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<u16>()) {
@@ -100,12 +100,12 @@ namespace ob::debug {
 					if (min && max) {
 						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
 							u16 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					} else {
 						if (ImGui::DragInt(name.c_str(), &value)) {
 							u16 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<u8>()) {
@@ -116,12 +116,12 @@ namespace ob::debug {
 					if (min && max) {
 						if (ImGui::SliderInt(name.c_str(), &value, min.value(), max.value())) {
 							u8 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					} else {
 						if (ImGui::DragInt(name.c_str(), &value)) {
 							u8 value2 = value;
-							p.setter(obj, value);
+							p.setter(obj, value2);
 						}
 					}
 				} else if (p.type.is<f32>()) {

@@ -66,7 +66,6 @@ namespace ob::graphics {
 		PipelineKey key;
 		key.layout = pMesh->getVertexLayoutId();
 
-		auto& layout = mesh->getVertexLayout();
 		for (auto& [passName, pass] : m_desc.passes) {
 			key.pass = passName;
 			for (auto [qualityIndex, quality] : Indexed(pass.qualities)) {

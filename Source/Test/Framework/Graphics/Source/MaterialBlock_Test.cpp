@@ -192,8 +192,6 @@ PsOut PS_Main(PsIn i){
 
 	while (true) {
 
-		if (System::Update() == false);// break;
-
 		auto time = TimeSpan(start,DateTime::Now()).totalSecondsF();
 
 		if (endTime < time)break;
@@ -437,8 +435,6 @@ PsOut PS_Main(PsIn i){
 	f32 endTime = 5;
 
 	while (true) {
-
-		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 
@@ -706,8 +702,6 @@ PsOut PS_Main(PsIn i){
 	f32 endTime = 5;
 
 	while (true) {
-
-		if (System::Update() == false);// break;
 
 		auto time = TimeSpan(start, DateTime::Now()).totalSecondsF();
 

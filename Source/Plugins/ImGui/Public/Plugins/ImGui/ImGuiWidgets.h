@@ -288,9 +288,9 @@ namespace ImGui {
         //! @{
         inline bool ColorRadioButton(const char* label, bool active, Color color, const ImVec2& size = ImVec2(0, 0)) {
 
-            Color hovered = Color::Lerp(color, Color::White, 0.2);
+            Color hovered = Color::Lerp(color, Color::White, 0.2f);
             if (active == false) {
-                color *= Color(0.2);
+                color *= Color(0.2f);
             }
 
             ScopedButtonColor sbc(color);

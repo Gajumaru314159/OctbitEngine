@@ -22,11 +22,11 @@ namespace ob::graphics {
 		layoutDesc.name = desc.name;
 
 		s32 index = 0;
-		for (auto& name : desc.textures) {
+		for ([[maybe_unused]] auto& name : desc.textures) {
 			layoutDesc.items.emplace_back(Binding::Texture(index++));
 			layoutDesc.items.emplace_back(Binding::Sampler(index++));
 		}
-		for (auto& name : desc.buffers) {
+		for ([[maybe_unused]] auto& name : desc.buffers) {
 			layoutDesc.items.emplace_back(Binding::ByteAddressBuffer(index++));
 		}
 		{
@@ -147,10 +147,10 @@ namespace ob::graphics {
 		using namespace ob::rhi;
 
 		if (m_isBindless) {
-			for (auto& name : desc.buffers) {
+			for ([[maybe_unused]] auto& name : desc.buffers) {
 				// setBuffer(name, Buffer::Empty());
 			}
-			for (auto& name : desc.textures) {
+			for ([[maybe_unused]] auto& name : desc.textures) {
 				setTexture(name, Texture::White(), Sampler::Default());
 			}
 			return;
@@ -162,7 +162,7 @@ namespace ob::graphics {
 		if(m_layout) {
 			s32 index = 0;
 			auto& items = m_layout->getDesc().items;
-			for (auto& name : desc.textures) {
+			for ([[maybe_unused]] auto& name : desc.textures) {
 				if (items.at(index++).type != BindingType::Texture) {
 					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
 					return;
@@ -172,7 +172,7 @@ namespace ob::graphics {
 					return;
 				}
 			}
-			for (auto& name : desc.buffers) {
+			for ([[maybe_unused]] auto& name : desc.buffers) {
 				if (items.at(index++).type != BindingType::ByteAddressBuffer) {
 					LOG_ERROR("DescriptorLayoutとパラメータが一致していません");
 					return;

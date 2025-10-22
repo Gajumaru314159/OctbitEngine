@@ -73,10 +73,10 @@ TEST(ECS, Construct) {
 	trans.local.position.set(1, 2, 3);
 	ecs.destroy(entity0);
 	entity0 = ecs.create<TransformComponent>();
-	auto& trans2 = ecs.get<TransformComponent>(entity0);
+	ecs.get<TransformComponent>(entity0);
 
 
-	auto& trans3 = ecs.get("TransformComponent", entity0).as<TransformComponent>();
+	ecs.get("TransformComponent", entity0).as<TransformComponent>();
 
 	ecs.destroy(entity1);
 

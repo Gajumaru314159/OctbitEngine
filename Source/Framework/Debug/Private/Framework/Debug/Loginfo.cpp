@@ -14,7 +14,7 @@ namespace ob::debug {
 
 		m_levelColors[LogLevel::Fatal] = Color::Magenta;
 		m_levelColors[LogLevel::Error] = Color::Red;
-		m_levelColors[LogLevel::Warning] = Color(1,0.8,0);
+		m_levelColors[LogLevel::Warning] = Color(1,0.8f,0);
 		m_levelColors[LogLevel::Info] = Color::Cyan;
 		m_levelColors[LogLevel::Trace] = Color(0.7f);
 
@@ -83,9 +83,9 @@ namespace ob::debug {
 
 			auto drawLevelFilter = [this](LogLevel level) {
 				Color color = m_levelColors[level];
-				Color hovered = Color::Lerp(color, Color::White, 0.1);
+				Color hovered = Color::Lerp(color, Color::White, 0.1f);
 				if (m_levelFilter[level] == false) {
-					color = Color::Lerp(color, Color(0.2), 0.8);
+					color = Color::Lerp(color, Color(0.2f), 0.8f);
 				}
 				ImGui::ScopedTextColor stc(Color::Black);
 				ImGui::ScopedStyleVar ssv(ImGuiStyleVar_FrameRounding,12);

@@ -427,7 +427,6 @@ namespace ob::engine2 {
 		Archetype archetype(Entity entity)const {
 			auto itr = m_archetypes.find(entity.archetype);
 			if (itr == m_archetypes.end()) return {};
-			auto& archetype = itr->second;
 			return itr->second;
 		}
 

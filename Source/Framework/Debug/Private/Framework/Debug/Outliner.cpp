@@ -69,7 +69,6 @@ namespace ob::debug {
 
 		ImGui::ScopedID sid(&scene);
 
-		auto name = scene.getName().c_str();
 		bool empty = scene.getChildren().empty() && scene.getEntities().empty();
 		auto flag = empty ? ImGuiTreeNodeFlags_Leaf : 0;
 		if (m_selectedScene == &scene) flag |= ImGuiTreeNodeFlags_Selected;
