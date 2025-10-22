@@ -289,6 +289,7 @@ TEST(String, Iterator) {
 			if (index==1) EXPECT_EQ(c, 'e');
 			if (index==2) EXPECT_EQ(c, 's');
 			if (index==3) EXPECT_EQ(c, 't');
+			index++;
 		}
 		EXPECT_EQ(index, 4);
 	}
@@ -301,6 +302,7 @@ TEST(String, Iterator) {
 			if (index==1) EXPECT_EQ(c, 'e');
 			if (index==2) EXPECT_EQ(c, 's');
 			if (index==3) EXPECT_EQ(c, 't');
+			index++;
 		}
 		EXPECT_EQ(index, 4);
 	}
