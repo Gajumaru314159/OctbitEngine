@@ -56,8 +56,8 @@ var structob_1_1core_1_1_vec3 =
     [ "translate", "d0/dda/structob_1_1core_1_1_vec3.html#a1876836cf9559d3bc044171764522617", null ],
     [ "translate", "d0/dda/structob_1_1core_1_1_vec3.html#ae9b7e1e368c4d5736470d2d6597176a1", null ],
     [ "unitVec", "d0/dda/structob_1_1core_1_1_vec3.html#a6342630af744d524a6f7d8a144f56241", null ],
-    [ "operator*", "d0/dda/structob_1_1core_1_1_vec3.html#a3468456a8199a49cab7e96e823860983", null ],
-    [ "operator/", "d0/dda/structob_1_1core_1_1_vec3.html#a41b62351671b40ebb0b6f7218a5ae977", null ],
+    [ "operator*", "d0/dda/structob_1_1core_1_1_vec3.html#a10cd1a2fd8a5bee36c0a28490983d2d0", null ],
+    [ "operator/", "d0/dda/structob_1_1core_1_1_vec3.html#af743839d6fa77fde5874c3bd08922802", null ],
     [ "x", "d0/dda/structob_1_1core_1_1_vec3.html#ae0addfbb8bf3d900d9b378b2107b0da4", null ],
     [ "y", "d0/dda/structob_1_1core_1_1_vec3.html#a47cbb914f252efe0cd6995ac46097cee", null ],
     [ "z", "d0/dda/structob_1_1core_1_1_vec3.html#a4c7b3831878c6a2090a21b85de848ec0", null ]

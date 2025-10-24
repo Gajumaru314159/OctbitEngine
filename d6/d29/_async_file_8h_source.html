@@ -115,9 +115,9 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">   14</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">AsyncFileSystem</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../dd/df6/classob_1_1core_1_1_singleton.html">Singleton</a>&lt;AsyncFileSystem&gt; {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_class" href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">AsyncFileSystem</a>();</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <a class="code hl_class" href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">~AsyncFileSystem</a>();</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <a class="code hl_class" href="../../d9/d44/classob_1_1core_1_1_async_file_system.html">~AsyncFileSystem</a>() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">static</span> <span class="keywordtype">bool</span> CanUseDirectStorage();</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keyword">static</span> <span class="keywordtype">bool</span> CanUseAsyncFile();</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    };</div>
 </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">   22</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a> {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keyword">explicit</span> <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">AsyncFileHandle</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path);</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_class" href="../../d1/d88/classob_1_1core_1_1_async_file_handle.html">~AsyncFileHandle</a>();</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">const</span> <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&amp; path()<span class="keyword">const</span>;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">bool</span> empty()<span class="keyword">const</span>;</div>
@@ -157,7 +157,7 @@ $(document).ready(function(){initNavTree('d6/d29/_async_file_8h_source.html','..
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code hl_class" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a>;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keyword">struct </span>Impl;</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorageBase&lt;Impl, 8, 8&gt;</a> m_impl;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorageBase&lt;Impl, 32, 8&gt;</a> m_impl;</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    };</div>
 </div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>

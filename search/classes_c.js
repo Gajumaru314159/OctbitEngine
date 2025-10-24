@@ -23,7 +23,7 @@ var searchData=
   ['memorysize_20',['MemorySize',['../d6/d03/structob_1_1core_1_1_memory_size.html',1,'ob::core']]],
   ['memorystoragebase_21',['MemoryStorageBase',['../df/d15/classob_1_1core_1_1_memory_storage_base.html',1,'ob::core']]],
   ['memorystoragebase_3c_20impl_2c_20128_2c_208_20_3e_22',['MemoryStorageBase&lt; Impl, 128, 8 &gt;',['../df/d15/classob_1_1core_1_1_memory_storage_base.html',1,'ob::core']]],
-  ['memorystoragebase_3c_20impl_2c_208_2c_208_20_3e_23',['MemoryStorageBase&lt; Impl, 8, 8 &gt;',['../df/d15/classob_1_1core_1_1_memory_storage_base.html',1,'ob::core']]],
+  ['memorystoragebase_3c_20impl_2c_2032_2c_208_20_3e_23',['MemoryStorageBase&lt; Impl, 32, 8 &gt;',['../df/d15/classob_1_1core_1_1_memory_storage_base.html',1,'ob::core']]],
   ['mesh_24',['mesh',['../d7/d9b/classob_1_1graphics_1_1_mesh.html',1,'ob::graphics::Mesh'],['../d5/d07/structob_1_1model2_1_1_mesh.html',1,'ob::model2::Mesh']]],
   ['meshcomponent_25',['MeshComponent',['../d6/da7/classob_1_1engine_1_1_mesh_component.html',1,'ob::engine']]],
   ['meshdata_26',['MeshData',['../d1/d24/structob_1_1graphics_1_1_mesh_data.html',1,'ob::graphics']]],

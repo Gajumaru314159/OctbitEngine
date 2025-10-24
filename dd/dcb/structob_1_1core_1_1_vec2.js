@@ -45,8 +45,8 @@ var structob_1_1core_1_1_vec2 =
     [ "sqrLength", "dd/dcb/structob_1_1core_1_1_vec2.html#a193fc4f04ff0bee56d1d25184816471f", null ],
     [ "toDirectionAndLength", "dd/dcb/structob_1_1core_1_1_vec2.html#ac4db5bcf7e8ce212fa180aa907490136", null ],
     [ "unitVec", "dd/dcb/structob_1_1core_1_1_vec2.html#a85dcdc255357b3768c60c4a7e749e728", null ],
-    [ "operator*", "dd/dcb/structob_1_1core_1_1_vec2.html#a6df9d893019c51a728e6e7fd02dcd1d8", null ],
-    [ "operator/", "dd/dcb/structob_1_1core_1_1_vec2.html#a0d87a51bf8613b84b4aa4588b7db90a0", null ],
+    [ "operator*", "dd/dcb/structob_1_1core_1_1_vec2.html#acbb85f7620866f76b41b85c498fb179e", null ],
+    [ "operator/", "dd/dcb/structob_1_1core_1_1_vec2.html#a009406728799d712b8173c0d8421c2b6", null ],
     [ "x", "dd/dcb/structob_1_1core_1_1_vec2.html#a1888419fbb09be6441093e0c1bafdd78", null ],
     [ "y", "dd/dcb/structob_1_1core_1_1_vec2.html#ac999003966c94219fd8e455397776ce3", null ]
 ];

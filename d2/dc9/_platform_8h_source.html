@@ -191,7 +191,7 @@ $(document).ready(function(){initNavTree('d2/dc9/_platform_8h_source.html','../.
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">// デバッグ判定</span></div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">//============================================</span></div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="preprocessor">#if defined(_DEBUG)||defined(DEBUG)</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="preprocessor">#if defined(_DEBUG)||defined(DEBUG)||!defined(NDEBUG)</span></div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="preprocessor">#define OB_DEBUG 1</span></div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="preprocessor">#else</span></div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="preprocessor">#define OB_DEBUG 0</span></div>

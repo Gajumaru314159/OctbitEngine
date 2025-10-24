@@ -213,7 +213,7 @@ var hierarchy =
       [ "ob::core::EventNotifier< const Log & >", "d1/d9e/classob_1_1core_1_1_event_notifier.html", null ],
       [ "ob::core::HandleList< delegate_type >", "d8/d28/classob_1_1core_1_1_handle_list.html", null ],
       [ "ob::core::MemoryStorageBase< Impl, 128, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
-      [ "ob::core::MemoryStorageBase< Impl, 8, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
+      [ "ob::core::MemoryStorageBase< Impl, 32, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
       [ "ob::core::AnyContainer", "d2/d69/classob_1_1core_1_1_any_container.html", null ],
       [ "ob::core::EventNotifier< Args >", "d1/d9e/classob_1_1core_1_1_event_notifier.html", null ],
       [ "ob::core::HandleForwardList< T >", "d6/dee/classob_1_1core_1_1_handle_forward_list.html", null ],
@@ -233,7 +233,7 @@ var hierarchy =
     [ "ob::core::Nonmovable", "d6/d32/classob_1_1core_1_1_nonmovable.html", [
       [ "ob::core::HandleList< delegate_type >", "d8/d28/classob_1_1core_1_1_handle_list.html", null ],
       [ "ob::core::MemoryStorageBase< Impl, 128, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
-      [ "ob::core::MemoryStorageBase< Impl, 8, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
+      [ "ob::core::MemoryStorageBase< Impl, 32, 8 >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
       [ "ob::core::AnyContainer", "d2/d69/classob_1_1core_1_1_any_container.html", null ],
       [ "ob::core::HandleForwardList< T >::Handle", "d8/dc3/classob_1_1core_1_1_handle_forward_list_1_1_handle.html", null ],
       [ "ob::core::HandleList< T >", "d8/d28/classob_1_1core_1_1_handle_list.html", null ],
