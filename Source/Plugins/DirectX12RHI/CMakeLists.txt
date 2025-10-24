@@ -20,10 +20,14 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE OB_BUILD_DLL)
 
 # インクルードディレクトリ設定
 set(public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
-set(private_includes "${CMAKE_CURRENT_SOURCE_DIR}/Private" "${OCTBIT_THIRD_PARTY_PATH}/PIX/include"  "${OCTBIT_THIRD_PARTY_PATH}/dxc/inc")
-if (WIN32)
-    list(APPEND private_includes "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include")
-endif()
+set(
+    private_includes
+    "${CMAKE_CURRENT_SOURCE_DIR}/Private"
+    "${OCTBIT_THIRD_PARTY_PATH}/PIX/include"
+    "${OCTBIT_THIRD_PARTY_PATH}/Windows/dxc/inc"
+    "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include"
+)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 
 # 追加の依存ライブラリ
@@ -36,13 +40,11 @@ set(private_libs
     d3d12.lib
     dxgi.lib
     dxguid.lib
-    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxcompiler.lib"
-    "${OCTBIT_THIRD_PARTY_PATH}/dxc/lib/x64/dxil.lib"
     "${OCTBIT_THIRD_PARTY_PATH}/PIX/bin/WinPixEventRuntime.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/Windows/lib/x64/dxcompiler.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/dxc/Windows/lib/x64/dxil.lib"
+    "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib"
 )
-if (WIN32)
-    list(APPEND private_libs "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib")
-endif()
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs} PRIVATE ${private_libs})
 
 # ランタイムライブラリ設定

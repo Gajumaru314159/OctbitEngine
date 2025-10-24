@@ -23,7 +23,7 @@ namespace ob::rhi {
 
 
     //! @brief      異方性レベル
-    enum class Anisotropy :u32 {
+    enum class Anisotropy : u32 {
         None,
         Level1,
         Level2,

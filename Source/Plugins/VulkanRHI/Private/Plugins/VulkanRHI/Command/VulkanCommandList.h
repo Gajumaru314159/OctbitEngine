@@ -97,7 +97,7 @@ namespace ob::rhi {
     public:
 
 		vk::CommandBuffer getNative() {
-			return m_commandBuffer;
+			return *m_commandBuffer;
 		}
 
     private:

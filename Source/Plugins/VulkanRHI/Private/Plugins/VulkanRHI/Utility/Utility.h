@@ -3,6 +3,7 @@
 //! @author		Gajumaru
 //***********************************************************
 #pragma once
+#undef Success
 
 namespace ob::rhi {
 

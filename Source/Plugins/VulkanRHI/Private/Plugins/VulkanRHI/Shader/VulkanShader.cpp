@@ -10,10 +10,11 @@
 #include <Plugins/VulkanRHI/Utility/Utility.h>
 #include <Framework/Core/Misc/ErrorCode.h>
 
+#ifdef OS_WINDOWS
 #include <d3dcompiler.h>
-//#include <d3d12shader.h>
 #include <dxcapi.h>
 #include <wrl/client.h>
+#endif
 
 namespace ob::rhi {
 
@@ -90,8 +91,6 @@ namespace ob::rhi {
     //! @brief				初期化
     void VulkanShader::compile(VulkanDevice& device, const ShaderCompileDesc& desc) {
 
-		using namespace Microsoft::WRL;
-
         HRESULT result;
 
         // シェーダーコード
@@ -160,7 +159,11 @@ namespace ob::rhi {
             &buffer,
             pargs.data(),
             pargs.size(),
+#ifdef OS_WINDOWS
             device.getIncludeHandler().Get(),
+#else
+            device.getIncludeHandler(),
+#endif
             IID_PPV_ARGS(&resultBlob)
         );
         if (FAILED(result)) {
@@ -171,7 +174,12 @@ namespace ob::rhi {
 
         // エラーチェック
         ComPtr<IDxcBlobUtf8> errors{};
+#ifdef OS_WINDOWS
         ComPtr<IDxcBlobUtf16> outputName{};
+#endif
+#ifdef OS_LINUX
+        ComPtr<IDxcBlobWide> outputName{};
+#endif
         String errorMessage;
         if (SUCCEEDED(resultBlob->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&errors), &outputName))) {
             if (errors->GetBufferSize() != 0) {
@@ -190,7 +198,13 @@ namespace ob::rhi {
 
         // バイナリ取得
         ComPtr<IDxcBlob> shaderBlob;
+#ifdef OS_WINDOWS
         result = resultBlob->GetResult(shaderBlob.ReleaseAndGetAddressOf());
+#endif
+#ifdef OS_LINUX
+        result = resultBlob->GetResult(&shaderBlob);
+#endif
+
         if (FAILED(result)) {
             throw Exception("シェーダーバイナリの取得に失敗しました");
         }

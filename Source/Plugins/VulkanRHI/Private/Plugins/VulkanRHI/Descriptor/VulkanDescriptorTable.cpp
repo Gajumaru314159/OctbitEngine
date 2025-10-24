@@ -80,7 +80,7 @@ namespace ob::rhi {
 		// NOTE 同じレイアウトのものは巨大なプールにする必要があるかもしれない
 		vk::DescriptorSetLayout descSetLayouts[] = { m_layout->getNative()};
 		vk::DescriptorSetAllocateInfo allocInfo;
-		allocInfo.descriptorPool = m_pool;
+		allocInfo.descriptorPool = *m_pool;
 		allocInfo.descriptorSetCount = 1;
 		allocInfo.pSetLayouts = descSetLayouts;
 
@@ -128,7 +128,7 @@ namespace ob::rhi {
 			descBufInfo[0].range = p->getDesc().size;
 
 			vk::WriteDescriptorSet writeDescSet;
-			writeDescSet.dstSet = m_set;
+			writeDescSet.dstSet = *m_set;
 			writeDescSet.dstBinding = index;
 			writeDescSet.dstArrayElement = 0;
 			writeDescSet.descriptorType =type;
@@ -170,11 +170,11 @@ namespace ob::rhi {
 			p->createView(element.view);
 
 			vk::DescriptorImageInfo imageInfo;
-			imageInfo.imageView = element.view;
+			imageInfo.imageView = *element.view;
 			imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
 
 			vk::WriteDescriptorSet writeDescSet;
-			writeDescSet.dstSet = m_set;
+			writeDescSet.dstSet = *m_set;
 			writeDescSet.dstBinding = index;
 			writeDescSet.dstArrayElement = 0;
 			writeDescSet.descriptorType = type;
@@ -214,7 +214,7 @@ namespace ob::rhi {
 			imageInfo.sampler = p->getNative();
 			
 			vk::WriteDescriptorSet writeDescSet;
-			writeDescSet.dstSet = m_set;
+			writeDescSet.dstSet = *m_set;
 			writeDescSet.dstBinding = index;
 			writeDescSet.dstArrayElement = 0;
 			writeDescSet.descriptorType = type;

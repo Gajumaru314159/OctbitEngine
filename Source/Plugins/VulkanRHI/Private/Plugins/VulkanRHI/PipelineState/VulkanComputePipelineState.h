@@ -31,7 +31,7 @@ namespace ob::rhi {
         ~VulkanComputePipelineState() override;
 
         //! @brief  妥当な状態か
-        bool isValid()const { return m_pipeline != VK_NULL_HANDLE; }
+        bool isValid()const { return *m_pipeline; }
 
 
         //! @brief      名前を取得

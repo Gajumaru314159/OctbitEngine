@@ -23,7 +23,7 @@ namespace ob::rhi {
 	public:
 
 		vk::DescriptorSetLayout getNative() const {
-			return m_layout;
+			return *m_layout;
 		}
 
     private:

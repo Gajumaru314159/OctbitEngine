@@ -39,7 +39,7 @@ namespace ob::rhi {
 		m_sampler = vkdevice.createSampler(info,device.getAllocationCallbacks());
 
 		// デスクリプタハンドルを割り当て
-		vk::DescriptorImageInfo imageInfo(m_sampler);
+		vk::DescriptorImageInfo imageInfo(*m_sampler);
 		vk::WriteDescriptorSet writeDescSet;
 		writeDescSet.descriptorType = vk::DescriptorType::eSampler;
 		writeDescSet.setImageInfo(imageInfo);

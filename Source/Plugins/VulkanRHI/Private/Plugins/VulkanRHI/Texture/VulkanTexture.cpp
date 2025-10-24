@@ -68,7 +68,7 @@ namespace ob::rhi {
 		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		m_shared->image.bindMemory(m_shared->memory, 0);
+		m_shared->image.bindMemory(*m_shared->memory, 0);
 
 		// 共通初期化
 		initialize();
@@ -108,7 +108,7 @@ namespace ob::rhi {
 		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		m_shared->image.bindMemory(m_shared->memory, 0);
+		m_shared->image.bindMemory(*m_shared->memory, 0);
 
 		// 色データをアップロード
 		VulkanTextureUploader::Subresource subresources[1];
@@ -162,7 +162,7 @@ namespace ob::rhi {
 		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		m_shared->image.bindMemory(m_shared->memory, 0);
+		m_shared->image.bindMemory(*m_shared->memory, 0);
 
 		// 色データをアップロード
 		VulkanTextureUploader::Subresource subresources[1];
@@ -188,7 +188,7 @@ namespace ob::rhi {
 		m_viewDesc = desc;
 		m_shared = base->m_shared;
 
-		vk::DescriptorImageInfo info({}, m_view, vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::DescriptorImageInfo info({}, *m_view, vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet ddesc;
 		ddesc.setImageInfo(info);
 
@@ -262,7 +262,7 @@ namespace ob::rhi {
 		auto requirements = m_shared->image.getMemoryRequirements();
 		auto allocInfo = device.getAllocationInfo(requirements, vk::MemoryPropertyFlags() | vk::MemoryPropertyFlagBits::eDeviceLocal);
 		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		m_shared->image.bindMemory(m_shared->memory, 0);
+		m_shared->image.bindMemory(*m_shared->memory, 0);
 
 
 		// ビュー生成
@@ -272,7 +272,7 @@ namespace ob::rhi {
 		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
 		viewCreateInfo.subresourceRange.levelCount = 1;
 		viewCreateInfo.subresourceRange.layerCount = 1;
-		viewCreateInfo.image = m_shared->image;
+		viewCreateInfo.image = *m_shared->image;
 
 		// TODO DirectX12と異なりRTVとDSVはImageViewで管理できるので必要なもののみ生成する
 		if (isColor) {
@@ -329,7 +329,7 @@ namespace ob::rhi {
 		createView(m_view);
 
 		// デスクリプタハンドルを割り当て
-		vk::DescriptorImageInfo info({},m_view,vk::ImageLayout::eShaderReadOnlyOptimal);
+		vk::DescriptorImageInfo info({},*m_view,vk::ImageLayout::eShaderReadOnlyOptimal);
 		vk::WriteDescriptorSet desc;
 		desc.descriptorType = vk::DescriptorType::eSampledImage;
 		desc.setImageInfo(info);
@@ -361,7 +361,7 @@ namespace ob::rhi {
 	bool VulkanTexture::createView(vk::raii::ImageView& view) const {
 
 		vk::ImageViewCreateInfo info;
-		info.image = m_shared->image;
+		info.image = *m_shared->image;
 		info.viewType = Convert(m_desc.type, m_desc.arrayNum);
 		info.format = TypeConverter::Convert(m_desc.format);
 		info.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };

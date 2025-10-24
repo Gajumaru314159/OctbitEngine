@@ -61,7 +61,7 @@ namespace ob::rhi {
 	public:
 
 		//! @brief      バッファを取得
-		vk::Buffer getNative()const { return m_shared->buffer; }
+		vk::Buffer getNative()const { return *m_shared->buffer; }
 
 
 	private:

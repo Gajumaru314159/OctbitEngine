@@ -30,7 +30,7 @@ namespace ob::rhi {
 		m_commandPool = device.getDevice().createCommandPool(info, m_device.getAllocationCallbacks());
 
 		vk::CommandBufferAllocateInfo allocInfo;
-		allocInfo.commandPool = m_commandPool;
+		allocInfo.commandPool = *m_commandPool;
 		allocInfo.commandBufferCount = 1;
 		allocInfo.level = vk::CommandBufferLevel::ePrimary;
 
@@ -92,7 +92,7 @@ namespace ob::rhi {
 		for (auto [index,color] : Indexed(param.colors)) {
 			if (auto p = color.texture.cast<VulkanTexture>()) {
 				auto& attachment = colorAttachments.emplace_back();
-				attachment.imageView = p->getRTV();
+				attachment.imageView = *p->getRTV();
 				attachment.imageLayout = vk::ImageLayout::eColorAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(color.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(color.afterAccess);
@@ -104,7 +104,7 @@ namespace ob::rhi {
 
 				m_colorTextures.push_back(color.texture);
 
-				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, vk::ImageAspectFlagBits::eColor);
+				m_cache.addTexture(*p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eColorAttachmentOptimal, vk::ImageAspectFlagBits::eColor);
 			} else {
 				LOG_FATAL("不正な引数。レンダーテクスチャが不正です。");
 			}
@@ -112,7 +112,7 @@ namespace ob::rhi {
 		if (param.depth.texture) {
 			if (auto p = param.depth.texture.cast<VulkanTexture>()) {
 				auto& attachment = depthAttachments.emplace_back();
-				attachment.imageView = p->getDSV();
+				attachment.imageView = *p->getDSV();
 				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(param.depth.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(param.depth.afterAccess);
@@ -123,7 +123,7 @@ namespace ob::rhi {
 
 				m_depthTexture = param.depth.texture;
 
-				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageAspectFlagBits::eDepth);
+				m_cache.addTexture(*p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthAttachmentOptimal, vk::ImageAspectFlagBits::eDepth);
 			} else {
 				LOG_FATAL("不正な引数。レンダーテクスチャが不正です。");
 			}
@@ -132,7 +132,7 @@ namespace ob::rhi {
 			OB_NOTIMPLEMENTED();
 			if (auto p = param.stencil.texture.cast<VulkanTexture>()) {
 				auto& attachment = stencilAttachments.emplace_back();
-				attachment.imageView = p->getDSV();
+				attachment.imageView = *p->getDSV();
 				attachment.imageLayout = vk::ImageLayout::eDepthAttachmentOptimal;
 				attachment.loadOp = TypeConverter::Convert(param.stencil.beforeAccess);
 				attachment.storeOp = TypeConverter::Convert(param.stencil.afterAccess);
@@ -143,7 +143,7 @@ namespace ob::rhi {
 
 				m_depthTexture = param.depth.texture;
 
-				m_cache.addTexture(p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eStencilAttachmentOptimal, vk::ImageAspectFlagBits::eStencil);
+				m_cache.addTexture(*p->getNative(), vk::ImageLayout::eUndefined, vk::ImageLayout::eStencilAttachmentOptimal, vk::ImageAspectFlagBits::eStencil);
 			}
 			else {
 				LOG_FATAL("不正な引数。レンダーテクスチャが不正です。");
@@ -151,7 +151,7 @@ namespace ob::rhi {
 		}
 
 		// バリア設定
-		m_cache.recordCommand(m_commandBuffer);
+		m_cache.recordCommand(*m_commandBuffer);
 
 		// 描画開始コマンド
 		vk::RenderingInfo info;
@@ -190,15 +190,15 @@ namespace ob::rhi {
 		
 		for (auto [i, color] : Indexed(m_colorTextures)) {
 			if (auto texture = color.cast<VulkanTexture>()) {
-				m_cache.addTexture(texture->getNative(),vk::ImageLayout::eColorAttachmentOptimal,vk::ImageLayout::eShaderReadOnlyOptimal,vk::ImageAspectFlagBits::eColor);
+				m_cache.addTexture(*texture->getNative(),vk::ImageLayout::eColorAttachmentOptimal,vk::ImageLayout::eShaderReadOnlyOptimal,vk::ImageAspectFlagBits::eColor);
 			}
 		}
 		if (auto texture = m_depthTexture.cast<VulkanTexture>()) {
-			m_cache.addTexture(texture->getNative(), vk::ImageLayout::eDepthStencilAttachmentOptimal, vk::ImageLayout::eGeneral, vk::ImageAspectFlagBits::eDepth);
+			m_cache.addTexture(*texture->getNative(), vk::ImageLayout::eDepthStencilAttachmentOptimal, vk::ImageLayout::eGeneral, vk::ImageAspectFlagBits::eDepth);
 		}
 		
 		// リソースバリア
-		m_cache.recordCommand(m_commandBuffer);
+		m_cache.recordCommand(*m_commandBuffer);
 
 		clearRenderTargets();
 	}
@@ -213,7 +213,7 @@ namespace ob::rhi {
 
 	//! @brief      スワップチェーンにテクスチャを適用
 	void VulkanCommandList::applySwapChain(const Ref<SwapChain>& swapChain, const Ref<RenderTexture>& texture) {
-		OB_ASSERT_EXPR(m_commandBuffer != nullptr);
+		OB_ASSERT_EXPR(*m_commandBuffer);
 		if (auto pSwapChain = swapChain.cast<VulkanSwapChain>()) {
 			Ref<CommandList> commandList = this;
 			pSwapChain->recordApplySwapChain(commandList, texture);
@@ -306,7 +306,7 @@ namespace ob::rhi {
 
 		if (auto p = pipeline.cast<VulkanPipelineState>()) {
 			m_pipeline = pipeline;
-			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, p->getNative());
+			m_commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, *p->getNative());
 
 			auto& desc = p->getDesc().rootSignature->getDesc();
 			if (desc.flags.has(RootSignatureFlag::EnableBindless)) {
@@ -343,7 +343,7 @@ namespace ob::rhi {
 			auto& param = params[i];
 
 			if (auto impl = param.table.cast<VulkanDescriptorTable>()) {
-				impl->record(m_commandBuffer, layout, param.slot);
+				impl->record(*m_commandBuffer, layout, param.slot);
 			} else {
 				LOG_FATAL("不正な引数。デスクリプタテーブルが不正です。");
 			}

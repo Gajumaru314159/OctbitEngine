@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHandle.h>
 #include <Plugins/VulkanRHI/Descriptor/VulkanDescriptorHeap.h>
 

@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#ifdef OS_WINDOWS
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window/WindowManager.h>
 #include <Framework/Core/Utility/DI.h>
@@ -21,6 +20,7 @@ namespace ob::platform::System {
 
 	//! @brief  プラットフォームの言語を取得
 	Language GetLanguage() {
+#ifdef OS_WINDOWS
 		LANGID langID = GetSystemDefaultLangID();
 		switch (langID) {
 		case 0x0411:
@@ -86,6 +86,7 @@ namespace ob::platform::System {
 		case 0x0404:
 			return Language::Chinese;
 		}
+#endif
 		return Language::Unknown;
 	}
 
@@ -125,4 +126,3 @@ namespace ob::platform::System {
 #endif
 	}
 }
-#endif

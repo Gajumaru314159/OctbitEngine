@@ -211,16 +211,18 @@ namespace ob::rhi {
 
 
 
-#ifdef OS_WINDOWS
 		//! @brief  シェーダーコンパイラ―を取得
 		ComPtr<IDxcCompiler3>& getShaderCompiler() { return m_shaderCompiler; }
 
 		//! @brief  シェーダーインクルードハンドラーを取得
 		ComPtr<IDxcIncludeHandler>& getIncludeHandler() { return m_shaderIncludeHandler; }
-#endif
 
 		bool supportsDebugMarker() const {
+#if OB_DEBUG
 			return m_vkDebugMarkerSetObjectNameEXT;
+#else
+			return false;
+#endif
 		}
 
 		void clearCommands() const;
@@ -247,11 +249,9 @@ namespace ob::rhi {
 		vk::raii::PhysicalDevice					m_physicalDevice	= nullptr;
 		vk::raii::Device							m_device		= nullptr;
 
-#ifdef OS_WINDOWS
 		ComPtr<IDxcCompiler3>						m_shaderCompiler;
 		ComPtr<IDxcUtils>							m_shaderUtils;
 		ComPtr<IDxcIncludeHandler>					m_shaderIncludeHandler;
-#endif
 
 		vk::PhysicalDeviceMemoryProperties			m_memoryProperties;
 

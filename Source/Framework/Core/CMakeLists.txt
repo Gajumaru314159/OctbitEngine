@@ -6,10 +6,9 @@ set(public_includes
     "${OCTBIT_THIRD_PARTY_PATH}/nlohmann"
 )
 set(private_includes
-    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate"
 )
 if (WIN32)
-    list(APPEND private_includes "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include")
+    list(APPEND private_includes "${OCTBIT_THIRD_PARTY_PATH}/GDeflate" "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/include")
 endif()
 
 
@@ -22,11 +21,13 @@ set(public_libs
 )
 set(private_libs
     mimalloc-static
-    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/GDeflate.lib"
-    "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/deflate.lib"
 )
 if (WIN32)
-    list(APPEND private_libs "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib")
+    list(APPEND private_libs
+        "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/GDeflate.lib"
+        "${OCTBIT_THIRD_PARTY_PATH}/GDeflate/deflate.lib"
+        "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib"
+    )
 endif()
 
 message(${public_libs})

@@ -22,7 +22,7 @@ namespace ob::core {
 		FixedStringBase() {}
 		FixedStringBase(StringViewBase<TChar> str) {
 			size_t len = std::min(N - 1, str.size());
-			memcpy_s(m_data, N, str.data(), len);
+			std::memcpy(m_data, str.data(), len);
 			m_data[len + 1] = static_cast<TChar>('\0');
 		}
 

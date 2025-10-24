@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/RHI/Types/RootSignatureDesc.h>
 #include <Framework/RHI/DescriptorLayout.h>
 

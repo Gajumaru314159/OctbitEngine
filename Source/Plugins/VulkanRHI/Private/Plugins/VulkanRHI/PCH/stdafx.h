@@ -42,3 +42,11 @@ namespace ob::rhi {
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;
 #endif
+#ifdef OS_LINUX
+#include <dxcapi.h>
+template<class T>
+using ComPtr = CComPtr<T>;
+#undef None
+#undef Always
+#undef Success
+#endif

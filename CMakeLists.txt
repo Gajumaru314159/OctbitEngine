@@ -119,6 +119,8 @@ if(CLANG OR GCC)
     # 文字コード設定
     add_compile_options(-utf-8)
 
+    # NDEBUG設定
+    add_compile_options(-DNDEBUG)
 
 endif()
 

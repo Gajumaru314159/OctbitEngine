@@ -84,9 +84,9 @@ namespace ob::rhi {
 
 		m_pool = device.getDevice().createDescriptorPool(poolInfo, device.getAllocationCallbacks());
 
-		vk::DescriptorSetLayout descSetLayouts[] = { m_layout };
+		vk::DescriptorSetLayout descSetLayouts[] = { *m_layout };
 		vk::DescriptorSetAllocateInfo allocInfo;
-		allocInfo.descriptorPool = m_pool;
+		allocInfo.descriptorPool = *m_pool;
 		allocInfo.setSetLayouts(descSetLayouts);
 
 		auto sets = device.getDevice().allocateDescriptorSets(allocInfo);
@@ -122,7 +122,7 @@ namespace ob::rhi {
 		const_cast<TLSFBlock*>(pBlock)->pUser = this;
 		handle.m_pBlock = pBlock;
 
-		desc.dstSet = m_set;
+		desc.dstSet = *m_set;
 		desc.dstBinding = (desc.descriptorType == vk::DescriptorType::eSampler) ? 0 : 1;
 		desc.dstArrayElement = handle.m_pBlock->index;
 		desc.descriptorCount = 1;

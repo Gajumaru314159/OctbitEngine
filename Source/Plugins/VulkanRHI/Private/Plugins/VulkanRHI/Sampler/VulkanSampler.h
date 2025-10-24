@@ -23,7 +23,7 @@ namespace ob::rhi {
     public:
 
 		//! @brief      サンプラーを取得
-		vk::Sampler getNative() const { return m_sampler; }
+		vk::Sampler getNative() const { return *m_sampler; }
 
     private:
         String m_name;

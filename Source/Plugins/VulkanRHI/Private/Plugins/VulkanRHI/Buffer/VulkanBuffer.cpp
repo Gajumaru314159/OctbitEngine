@@ -38,12 +38,12 @@ namespace ob::rhi {
 		m_shared->buffer = vkdevice.createBuffer(info, m_device.getAllocationCallbacks());		
 		VkMemoryAllocateInfo allocInfo = m_device.getAllocationInfo(m_shared->buffer.getMemoryRequirements(), vk::MemoryPropertyFlagBits::eDeviceLocal);
 		m_shared->memory = vkdevice.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		m_shared->buffer.bindMemory(m_shared->memory, 0);
+		m_shared->buffer.bindMemory(*m_shared->memory, 0);
 
 		// バッファハンドルの生成
 		{
 			vk::DescriptorBufferInfo descBufInfo[1];
-			descBufInfo[0].buffer = m_shared->buffer;
+			descBufInfo[0].buffer = *m_shared->buffer;
 			descBufInfo[0].offset = 0;
 			descBufInfo[0].range = m_desc.size;
 
@@ -107,7 +107,7 @@ namespace ob::rhi {
 		m_shared = base->m_shared;
 
 		vk::DescriptorBufferInfo descBufInfo[1];
-		descBufInfo[0].buffer = m_shared->buffer;
+		descBufInfo[0].buffer = *m_shared->buffer;
 		descBufInfo[0].offset = 0;
 		descBufInfo[0].range = m_desc.size;
 

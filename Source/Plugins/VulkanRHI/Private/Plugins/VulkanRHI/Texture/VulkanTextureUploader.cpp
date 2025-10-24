@@ -20,7 +20,7 @@ namespace ob::rhi
 	//! @brief  アップロード要素を追加
 	void VulkanTextureUploader::add(const vk::raii::Image& dest, const vk::ImageCreateInfo& info, TextureFormat format, Span<Subresource> subresources) {
 
-		if (dest == nullptr) {
+		if (!*dest) {
 			LOG_ERROR("[TextureUploader] destがnullです。");
 			return;
 		}
@@ -41,13 +41,13 @@ namespace ob::rhi
 
 		auto allocInfo = m_device.getAllocationInfo(buffer.getMemoryRequirements(), vk::MemoryPropertyFlags{} | vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 		vk::raii::DeviceMemory memory = device.allocateMemory(allocInfo, m_device.getAllocationCallbacks());
-		buffer.bindMemory(memory, 0);
+		buffer.bindMemory(*memory, 0);
 
 		// バッファにデータをコピー
 		void* data = memory.mapMemory(0, bufferSize, vk::MemoryMapFlags{});
 
 		for (auto& subresource : subresources) {
-			memcpy_s(data,bufferSize,subresource.data.data(),subresource.data.size());
+			std::memcpy(data,subresource.data.data(),subresource.data.size());
 		}
 
 		memory.unmapMemory();
@@ -61,7 +61,7 @@ namespace ob::rhi
 		auto& request = frame.requests.emplace_back();
 		request.source = std::move(buffer);
 		request.memory = std::move(memory);
-		request.dest = dest;
+		request.dest = *dest;
 		request.mipLevels = subresources.size();
 		request.layerCount = 1;
 		request.format = format;
@@ -137,7 +137,7 @@ namespace ob::rhi
 			region.imageOffset = 0;
 			region.imageExtent = request.extent;
 
-			commandBuffer.copyBufferToImage(request.source, request.dest, vk::ImageLayout::eTransferDstOptimal, region);
+			commandBuffer.copyBufferToImage(*request.source, request.dest, vk::ImageLayout::eTransferDstOptimal, region);
 
 		}
 

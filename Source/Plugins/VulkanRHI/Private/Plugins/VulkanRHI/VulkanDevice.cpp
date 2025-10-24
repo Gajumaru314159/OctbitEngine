@@ -36,8 +36,8 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	//! @brief  デバッグレイヤのコールバック
 	//@―---------------------------------------------------------------------------
+#if defined(OS_WINDOWS)
 	static VkBool32 DebugUtilsMessengerCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,vk::DebugUtilsMessageTypeFlagsEXT messageTypes,const vk::DebugUtilsMessengerCallbackDataEXT* pCallbackData,void* pUserData) {
-
 		using namespace ob;
 
 		if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eError) {
@@ -57,6 +57,28 @@ namespace ob::rhi {
 
 		return VK_FALSE;
 	}
+#else
+	static VkBool32 DebugUtilsMessengerCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,VkDebugUtilsMessageTypeFlagsEXT messageTypes,const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,void* pUserData) {
+		using namespace ob;
+
+		if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
+			LOG_ERROR("[VulkanDevice] {}", pCallbackData->pMessage);
+			CallBreakPoint();
+		}
+		if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+			LOG_WARNING("[VulkanDevice] {}", pCallbackData->pMessage);
+			CallBreakPoint();
+		}
+		if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT) {
+			LOG_INFO("[VulkanDevice] {}", pCallbackData->pMessage);
+		}
+		if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT) {
+			LOG_TRACE("[VulkanDevice] {}", pCallbackData->pMessage);
+		}
+
+		return VK_FALSE;
+	}
+#endif
 
 }
 
@@ -101,9 +123,9 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	bool VulkanDevice::isValid()const {
 		return
-			m_instance != nullptr &&
-			m_physicalDevice != nullptr &&
-			m_device != nullptr;
+			*m_instance &&
+			*m_physicalDevice &&
+			*m_device;
 	}
 
 
@@ -212,7 +234,6 @@ namespace ob::rhi {
 
 		vk::DebugUtilsMessengerCreateInfoEXT debugUtilsCreateInfo;
 		if (m_vconfig.enableDebugLayer) {
-
 			if (m_vconfig.logLevel >= LogLevel::Error)		debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eError;
 			if (m_vconfig.logLevel >= LogLevel::Warning)	debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
 			if (m_vconfig.logLevel >= LogLevel::Info)		debugUtilsCreateInfo.messageSeverity |= vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo;
@@ -274,7 +295,7 @@ namespace ob::rhi {
 			break;
 		}
 
-		if (m_physicalDevice == nullptr) {
+		if (!*m_physicalDevice) {
 			LOG_ERROR("GPUが見つかりません。");
 			return;
 		}
@@ -290,7 +311,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	void VulkanDevice::createDevice() {
 
-		if (m_physicalDevice == nullptr)
+		if (!*m_physicalDevice)
 			return;
 
 		Vector<const char*> layerNames;
@@ -420,7 +441,7 @@ namespace ob::rhi {
 	//@―---------------------------------------------------------------------------
 	void VulkanDevice::createQueue() {
 
-		if (m_device == nullptr)
+		if (!*m_device)
 			return;
 
 		m_commandQueue = std::make_unique<VulkanCommandQueue>(*this);
@@ -442,7 +463,6 @@ namespace ob::rhi {
 	//! @brief  ShaderCompiler生成
 	//@―---------------------------------------------------------------------------
 	void VulkanDevice::createShaderCompiler() {
-#ifdef OS_WINDOWS
 
 		HRESULT result;
 
@@ -459,12 +479,11 @@ namespace ob::rhi {
 		}
 
 		// NOTE FileIOをフックする場合は、IDxcIncludeHandlerを継承したカスタムハンドラーを生成する
-		result = m_shaderUtils->CreateDefaultIncludeHandler(m_shaderIncludeHandler.GetAddressOf());
+		result = m_shaderUtils->CreateDefaultIncludeHandler(&m_shaderIncludeHandler);
 		if (FAILED(result)) {
 			LOG_ERROR("CreateDefaultIncludeHandler() {}", ErrorCode(result));
 			return;
 		}
-#endif
 	}
 
 	//@―---------------------------------------------------------------------------

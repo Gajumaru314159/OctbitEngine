@@ -92,7 +92,7 @@
 // デバッグ判定
 //============================================
 
-#if defined(_DEBUG)||defined(DEBUG)
+#if defined(_DEBUG)||defined(DEBUG)||!defined(NDEBUG)
 #define OB_DEBUG 1
 #else
 #define OB_DEBUG 0

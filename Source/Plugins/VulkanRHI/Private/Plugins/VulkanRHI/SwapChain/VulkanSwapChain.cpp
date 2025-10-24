@@ -73,7 +73,7 @@ namespace ob::rhi {
 
 		device.resetFences(*m_fence);
 
-		auto [result,index] = m_swapchain.acquireNextImage(1'000'000'000, {}, m_fence);
+		auto [result,index] = m_swapchain.acquireNextImage(1'000'000'000, {}, *m_fence);
 		
 		if (result != vk::Result::eSuccess) {
 			LOG_ERROR("次フレームの取得に失敗");
@@ -185,19 +185,40 @@ namespace ob::rhi {
 		info.hwnd = (HWND)m_desc.window.getHandle();
 
 		m_surface = m_device.getInstance().createWin32SurfaceKHR(info, m_device.getAllocationCallbacks());
+#elif defined(OS_LINUX)
+
+		struct NativeWindowHandle {
+			::Display* display = nullptr;
+			::Window window = 0;
+		};
+		NativeWindowHandle* handle = reinterpret_cast<NativeWindowHandle*>(m_desc.window.getHandle());
+		if (!handle) throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
+
+		vk::XlibSurfaceCreateInfoKHR info;
+		info.flags = vk::XlibSurfaceCreateFlagsKHR();
+		info.dpy = handle->display;
+		info.window = handle->window;
+		VkXlibSurfaceCreateInfoKHR info2 = info;
+
+		VkSurfaceKHR surface2 = VK_NULL_HANDLE;
+		vkCreateXlibSurfaceKHR(*m_device.getInstance(),&info2,nullptr,&surface2);
+		m_surface = vk::raii::SurfaceKHR(m_device.getInstance(), surface2);
+		//m_surface = m_device.getInstance().createXlibSurfaceKHR(info, m_device.getAllocationCallbacks());
 #else
 		static_assert(true, "Surface is not implemented.");
 #endif
 
+		OB_ASSERT(*m_surface,"サーフェイスが生成されていません");
+
 		// サーフェイスのサポートをチェック
-		if (!m_device.getPhysicalDevice().getSurfaceSupportKHR(0, m_surface)) {
+		if (!m_device.getPhysicalDevice().getSurfaceSupportKHR(0, *m_surface)) {
 			throw vk::InitializationFailedError("スワップチェーンがサポートされていません。");
 		}
 
 		// サーフェスの機能を取得
-		auto capabilities = m_device.getPhysicalDevice().getSurfaceCapabilitiesKHR(m_surface);
-		auto surfaceFormats = m_device.getPhysicalDevice().getSurfaceFormatsKHR(m_surface);
-		auto presentModeList = m_device.getPhysicalDevice().getSurfacePresentModesKHR(m_surface);
+		auto capabilities = m_device.getPhysicalDevice().getSurfaceCapabilitiesKHR(*m_surface);
+		auto surfaceFormats = m_device.getPhysicalDevice().getSurfaceFormatsKHR(*m_surface);
+		auto presentModeList = m_device.getPhysicalDevice().getSurfacePresentModesKHR(*m_surface);
 
 
 		vk::Extent2D size;
@@ -253,7 +274,7 @@ namespace ob::rhi {
 		// サーフェイス生成
 		vk::SwapchainCreateInfoKHR swapChainCreateInfo;
 		swapChainCreateInfo.flags = {};
-		swapChainCreateInfo.surface = m_surface;
+		swapChainCreateInfo.surface = *m_surface;
 		swapChainCreateInfo.minImageCount = capabilities.minImageCount;
 		swapChainCreateInfo.imageFormat = surfaceFormat->format;
 		swapChainCreateInfo.imageColorSpace = surfaceFormat->colorSpace;
@@ -296,7 +317,7 @@ namespace ob::rhi {
 			imageViewCreateInfo.subresourceRange.layerCount = 1;
 
 			m_imageViews2.emplace_back(m_device.getDevice().createImageView(imageViewCreateInfo, m_device.getAllocationCallbacks()));
-			m_imageViews.push_back(m_imageViews2.back());
+			m_imageViews.push_back(*m_imageViews2.back());
 
 		}
 

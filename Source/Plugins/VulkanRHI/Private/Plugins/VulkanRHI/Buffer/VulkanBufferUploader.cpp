@@ -38,7 +38,7 @@ namespace ob::rhi
 
 		auto& request = frame.requests.emplace_back();
 
-		request.source = block.buffer;
+		request.source = *block.buffer;
 		request.dest = *dest;
 		request.sourceOffset = block.blob.size();
 		request.destOffset = offset;
@@ -65,8 +65,8 @@ namespace ob::rhi
 
 		auto& request = frame.requests.emplace_back();
 
-		request.source = block.buffer;
-		request.dest = dest;
+		request.source = *block.buffer;
+		request.dest = *dest;
 		request.sourceOffset = block.blob.size();
 		request.destOffset = offset;
 		request.size = size;
@@ -112,7 +112,7 @@ namespace ob::rhi
 		block.memory = device.allocateMemory(allocInfo, allocationCallbacks);
 
 		// バインド
-		block.buffer.bindMemory(block.memory, 0);
+		block.buffer.bindMemory(*block.memory, 0);
 
 		m_device.setName(block.buffer, "BufferUploader");
 		m_device.setName(block.memory, "BufferUploader");
@@ -153,7 +153,7 @@ namespace ob::rhi
 
 			void* data = block.memory.mapMemory(0, block.blob.size());
 
-			memcpy_s(data, block.blob.size(), block.blob.data(), block.blob.size());
+			std::memcpy(data, block.blob.data(), block.blob.size());
 
 			block.memory.unmapMemory();
 		}
@@ -170,7 +170,7 @@ namespace ob::rhi
 			barrier.dstAccessMask = vk::AccessFlagBits::eTransferRead;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.buffer = block.buffer;
+			barrier.buffer = *block.buffer;
 			barrier.offset = 0;
 			barrier.size = VK_WHOLE_SIZE;
 		}
@@ -223,7 +223,7 @@ namespace ob::rhi
 			barrier.dstAccessMask = vk::AccessFlagBits::eNone;
 			barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 			barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-			barrier.buffer = block.buffer;
+			barrier.buffer = *block.buffer;
 			barrier.offset = 0;
 			barrier.size = VK_WHOLE_SIZE;
 		}
