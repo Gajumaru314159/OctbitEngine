@@ -145,6 +145,7 @@ namespace ob::rhi {
 		
 		extensionNames.push_back(VK_KHR_SURFACE_EXTENSION_NAME);
 		OS_WINDOWS_CONTEXT(extensionNames.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME));
+		OS_LINUX_CONTEXT(extensionNames.push_back(VK_KHR_XLIB_SURFACE_EXTENSION_NAME));
 
 
 
@@ -672,6 +673,11 @@ namespace ob::rhi {
 	}
 	//! @brief サポートしているレンダーテクスチャフォーマットか 
 	bool VulkanDevice::supportsForRenderTexture(TextureFormat format)const {
+
+		if(TextureFormatUtility::IsBC(format) || format == TextureFormat::RGB32 || format == TextureFormat::RGB8 || format == TextureFormat::Unknown) {
+			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
+			return false;
+		}
 
 		try {
 			vk::ImageUsageFlags flags{};

@@ -16,6 +16,7 @@
 #include <Framework/RHI/DescriptorTable.h>
 #include <Framework/RHI/CommandList.h>
 #include <Framework/RHI/Sampler.h>
+#include <magic_enum.hpp>
 
 namespace ob::rhi {
 
@@ -265,6 +266,10 @@ namespace ob::rhi {
 				surfaceFormat = item;
 				break;
 			}
+		}
+		if (!surfaceFormats.empty()) {
+			LOG_WARNING("サーフェスフォーマットが見つかりません。{}で代替します",magic_enum::enum_name(surfaceFormats.front().format));
+			surfaceFormat = surfaceFormats.front();
 		}
 		if (!surfaceFormat) {
 			LOG_ERROR("サーフェスフォーマットが見つかりません。");

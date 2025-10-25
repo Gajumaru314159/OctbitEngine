@@ -235,11 +235,6 @@ namespace ob::rhi {
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
 		if (!device.supportsForRenderTexture(m_desc.format)) throw NotSupportedException();
 
-		if(TextureFormatUtility::IsBC(m_desc.format) || m_desc.format == TextureFormat::RGB32 || m_desc.format == TextureFormat::RGB8 || m_desc.format == TextureFormat::Unknown) {
-			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
-			throw NotSupportedException();
-		}
-
 		auto& vkdevice = m_device.getDevice();
 
 		const bool isColor = !TextureFormatUtility::HasDepth(m_renderDesc.format);

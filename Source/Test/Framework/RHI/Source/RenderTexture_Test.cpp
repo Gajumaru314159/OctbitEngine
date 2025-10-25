@@ -24,14 +24,15 @@ TYPED_TEST(RHITest, RenderTexture_Create) {
             desc.name = Format("{} {}x{}",magic_enum::enum_name(format),size.width,size.height);
 			desc.format = format;
 			desc.size = size;
+
 			auto renderTexture = RenderTexture::Create(desc);
 
-            if (!RenderTexture::Supports(format)) {
+            if (TextureFormatUtility::HasStencil(format) || !RenderTexture::Supports(format)) {
                 ASSERT_EQ(renderTexture, nullptr);
                 continue;
             }
 
-            //if (!renderTexture)CallBreakPoint();
+            if (!renderTexture)CallBreakPoint();
 			ASSERT_NE(renderTexture, nullptr);
             ASSERT_EQ(renderTexture->descOfRenderTexture().format, format);
             ASSERT_EQ(renderTexture->descOfRenderTexture().size, size);
