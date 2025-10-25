@@ -5,6 +5,8 @@
 #include <Framework/Core/File/AsyncFile.h>
 #include <Framework/Core/File/File.h>
 
+#ifdef OS_LINUX
+
 namespace ob::core {
 
 	AsyncFileSystem::AsyncFileSystem() {
@@ -114,3 +116,5 @@ namespace ob::core {
 	}
 
 }
+
+#endif

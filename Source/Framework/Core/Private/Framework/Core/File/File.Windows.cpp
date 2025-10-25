@@ -7,6 +7,7 @@
 #include <Framework/Core/String/StringEncoder.h>
 #include <filesystem>
 
+#ifdef OS_WINDOWS
 
 namespace ob::core {
 
@@ -292,3 +293,5 @@ namespace ob::core {
 	//! @brief  ファイルをクローズして無効なハンドルにする
 	void File::close() { return m_impl->close(); }
 }
+
+#endif
