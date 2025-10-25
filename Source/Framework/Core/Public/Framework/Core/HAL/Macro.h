@@ -104,7 +104,7 @@ extern void OutputDebugLog(const char* message);
 extern void ShowMessageBox(const char* message);
 
 //! @brief  ブレークポイントを呼び出し
-#ifdef _DEBUG
+#ifdef OB_DEBUG
 #ifdef OS_WINDOWS
 #define CallBreakPoint()  { _CrtDbgBreak(); }
 #elif defined(OS_LINUX)
