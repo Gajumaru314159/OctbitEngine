@@ -20,6 +20,8 @@ namespace ob::core {
         assert(s_instance == nullptr);
         s_instance = this;
 
+        m_useLineOutput = true;
+
         // デフォルトログイベント
         auto func = [useLineOutput=m_useLineOutput](const Log& log) {
 
@@ -42,7 +44,7 @@ namespace ob::core {
             }
 
             // IDEのデバッグ出力
-            if (log.level != LogLevel::Trace || true) {
+            if (log.level != LogLevel::Trace) {
                 StringView typeName;
                 switch (log.level) {
                 case LogLevel::Fatal:   typeName = "[Fatal]  "; break;
