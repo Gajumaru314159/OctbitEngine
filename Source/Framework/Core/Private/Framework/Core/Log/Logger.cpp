@@ -23,7 +23,7 @@ namespace ob::core {
         m_useLineOutput = true;
 
         // デフォルトログイベント
-        auto func = [useLineOutput=m_useLineOutput](const Log& log) {
+        auto func = [useLineOutput = m_useLineOutput](const Log& log) {
 
             // 標準出力
             if(log.level!=LogLevel::Trace){
@@ -41,6 +41,13 @@ namespace ob::core {
 
                 // 標準出力
                 std::cout << message << std::endl;
+
+#ifdef OS_LINUX
+                if (useLineOutput||true) {
+                    const auto message2 = Format("{}({})", log.sourceLocation.filePath, log.sourceLocation.line);
+                    std::cout << message2 << std::endl;
+                }
+#endif
             }
 
             // IDEのデバッグ出力
