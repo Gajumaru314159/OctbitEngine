@@ -47,7 +47,7 @@ namespace ob::core {
 
 		setup();
 
-#ifdef OS_WINDOWS
+#if defined(OS_WINDOWS)
 
 		WString wname;
 		StringEncoder::Encode(name, wname);

@@ -27,8 +27,13 @@
 #define UNLIKELY_IMPL(expr)             (expr)                                              // コンパイラ最適化オプション
 #define DLL_EXPORT_IMPL                 __declspec(dllexport)                               // DLL出力
 #define DLL_IMPORT_IMPL                 __declspec(dllimport)                               // DLL入力
-#define _internal_FUNC_NAME             __FUNCSIG__                                         // 関数名
 
+#ifdef COMPILER_MSVC
+#define _internal_FUNC_NAME             __FUNCSIG__                                         // 関数名
+#endif
+#ifdef COMPILER_GCC
+#define _internal_FUNC_NAME             __PRETTY_FUNCTION__
+#endif
 // 型定義
 using NativeChar = wchar_t;
 

@@ -105,13 +105,13 @@ extern void ShowMessageBox(const char* message);
 
 //! @brief  ブレークポイントを呼び出し
 #ifdef OB_DEBUG
-#ifdef OS_WINDOWS
+
+#if defined(_MSC_VER)
 #define CallBreakPoint()  { _CrtDbgBreak(); }
-#elif defined(OS_LINUX)
+#elif defined(__clang__) || defined(__GNUC__)
 #define CallBreakPoint()  { __builtin_trap(); }
 #else
 #define CallBreakPoint()  do {} while(0)
 #endif
-#else
-#define CallBreakPoint()  do {} while(0)
+
 #endif

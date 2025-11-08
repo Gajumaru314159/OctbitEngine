@@ -6,8 +6,9 @@
 #include <Framework/Core/String/StringEncoder.h>
 
 #ifdef OS_WINDOWS
-
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <Windows.h>
 #include <DbgHelp.h>
 #pragma comment(lib, "DbgHelp.lib")

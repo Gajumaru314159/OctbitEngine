@@ -28,10 +28,10 @@ namespace ob::core {
 			// TODO __PRETTY_FUNCTION__ 対応
 			// TODO GCC Clang 対応
 			
-#if defined(__clang__) || defined(__GNUC__)
+#if defined(__clang__) || defined(COMPILER_GCC)
 			constexpr size_t prefix = GetTypeName().size() + " [with T = "sv.size();
 			constexpr size_t suffix = signature.size() - signature.find(';',prefix);
-#elif defined(_MSC_VER)
+#elif defined(COMPILER_MSVC)
 			constexpr size_t prefix2 = GetTypeName().size() - "(void)"sv.size() + "<"sv.size();
 			constexpr size_t suffix = ">(void)"sv.size();
 			constexpr size_t prefix = prefix2 +

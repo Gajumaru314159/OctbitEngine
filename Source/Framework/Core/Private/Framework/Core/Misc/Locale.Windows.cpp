@@ -23,6 +23,7 @@ namespace ob::core {
 			}
 			return Locale(localeName);
 		}
+		return Locale();
 	}
 
 }
