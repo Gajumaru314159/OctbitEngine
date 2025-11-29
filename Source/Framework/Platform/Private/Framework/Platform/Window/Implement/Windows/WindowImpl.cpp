@@ -349,7 +349,7 @@ namespace ob::platform {
 		OB_ASSERT_EXPR(m_hWnd);
 		POINT point;
 		point.x = gsl::narrow_cast<LONG>(screenPoint.x);
-		point.y = gsl::narrow_cast<LONG>(screenPoint.x);
+		point.y = gsl::narrow_cast<LONG>(screenPoint.y);
 		if (!::ScreenToClient(m_hWnd, &point))return Vec2::Zero;
 		return Vec2(gsl::narrow_cast<f32>(point.x), gsl::narrow_cast<f32>(point.y));
 	}
