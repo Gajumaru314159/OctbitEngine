@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Material/Material.h>
+#include <Framework/Graphics/Material/MaterialSystem.h>
 #include <Framework/Graphics/Mesh/Mesh.h>
 #include <Framework/Graphics/Render/Pass/DeferredPass.h>
 #include <Framework/Graphics/Render/RenderView.h>

@@ -6,9 +6,11 @@
 #include <Framework/Graphics/Forward.h>
 #include <Framework/Graphics/Material/MaterialDesc.h>
 #include <Framework/Graphics/Material/MaterialBlock.h>
-#include <Framework/Graphics/Material/MaterialSystem.h>
 
 namespace ob::graphics {
+
+	class MaterialShader;
+	struct MaterialBlockSet;
 
 	//! @brief  マテリアル
 	class Material : public RefObject {
@@ -19,14 +21,16 @@ namespace ob::graphics {
 	public:
 
 		//! @brief  生成
+		static Ref<Material> Create(const Ref<MaterialShader>& shader);
 		static Ref<Material> Create(const MaterialDesc& desc);
 
 	public:
 
-		virtual const MaterialDesc& getDesc()const = 0;
+		const MaterialDesc& getDesc()const;
+		const Ref<MaterialShader>& getShader()const { return m_shader; }
 
 		//! @brief  マテリアルパラメータが存在するか
-		virtual bool hasProperty(StringView name, MaterialPropertyType type)const = 0;
+		bool hasProperty(StringView name, MaterialPropertyType type)const;
 		bool hasTexture(StringView name)const;  //!< @copybrief hasProperty()
 		bool hasBuffer(StringView name)const;   //!< @copybrief hasProperty()
 		bool hasMatrix(StringView name)const;   //!< @copybrief hasProperty()
@@ -35,20 +39,20 @@ namespace ob::graphics {
 		bool hasInteger(StringView name)const;  //!< @copybrief hasProperty()
 
 		//! @brief  マテリアルパラメータを設定
-		virtual void setTexture(StringView name, const Ref<Texture>& value) = 0;
-		virtual void setBuffer(StringView name, const Ref<Buffer>& value) = 0;
-		virtual void setMatrix(StringView name, const Matrix& value) = 0;
-		virtual void setVector(StringView name, Color value) = 0;
-		virtual void setScalar(StringView name, f32 value) = 0;
-		virtual void setInteger(StringView name, f32 value) = 0;
+		void setTexture(StringView name, const Ref<Texture>& value);
+		void setBuffer(StringView name, const Ref<Buffer>& value);
+		void setMatrix(StringView name, const Matrix& value);
+		void setVector(StringView name, Color value);
+		void setScalar(StringView name, f32 value);
+		void setInteger(StringView name, f32 value);
 
-		virtual s32 calcQualityIndex(StringView pass, s32 quality) const = 0;
+		s32 calcQualityIndex(StringView pass, s32 quality) const;
 
 		//! @brief  GPUリソースの事前生成
 		//! @details GPUリソースを事前生成しておくことで描画時のスパイクを回避することができます。
-		virtual bool prepare(const Ref<Mesh>& mesh) = 0;
+		bool prepare(const Ref<Mesh>& mesh);
 
-		virtual void record(Ref<rhi::CommandList>& commandList, MaterialBlockSet& blocks, const Ref<Mesh>& mesh, s32 submesh, StringView pass, s32 quality = 0) = 0;
+		void record(Ref<rhi::CommandList>& commandList, MaterialBlockSet& blocks, const Ref<Mesh>& mesh, s32 submesh, StringView pass, s32 quality = 0);
 
 	public:
 
@@ -61,6 +65,13 @@ namespace ob::graphics {
 		static void SetGlobalScalar(StringView name, f32 value);
 		static void SetGlobalInteger(StringView name, s32 value);
 		//! @}
+
+	private:
+		Material(const Ref<MaterialShader>& shader);
+
+	private:
+		Ref<MaterialShader> m_shader;
+		MaterialBlock       m_block;
 
 	};
 
