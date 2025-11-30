@@ -29,6 +29,9 @@ if (WIN32)
         "${OCTBIT_THIRD_PARTY_PATH}/DirectStorage/native/lib/x64/dstorage.lib"
     )
 endif()
+if (UNIX)
+    list(APPEND private_libs uuid)
+endif()
 
 message(${public_libs})
 OB_ADD_FRAMEWORK_LIBRARY("${public_includes}" "${private_includes}" "${public_libs}" "${private_libs}")
