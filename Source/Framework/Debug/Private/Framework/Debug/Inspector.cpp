@@ -20,7 +20,7 @@ namespace ob::debug {
 				auto& p = *info->findProperty(name);
 
 				char format[32] = "%.3f";
-				if (auto tag = p.findTag("Unit")) sprintf_s(format, "%%.3f %s", tag->data());
+				if (auto tag = p.findTag("Unit")) std::snprintf(format, sizeof(format), "%%.3f %s", tag->data());
 
 				if (!p.canRead())continue;
 				if (!p.canWrite()) ImGui::BeginDisabled();
@@ -216,7 +216,7 @@ namespace ob::debug {
 				if (ImGui::IsItemHovered()) {
 					if (auto desc = p.findTag("Description")) {
 						name = *desc;
-						ImGui::SetTooltip(name.c_str());
+						ImGui::SetTooltip("%s",name.c_str());
 					}
 				}
 

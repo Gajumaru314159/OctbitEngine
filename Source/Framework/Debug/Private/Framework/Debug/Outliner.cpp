@@ -114,7 +114,7 @@ namespace ob::debug {
 		if (m_selectedEntity == entity.getHandle())flag |= ImGuiTreeNodeFlags_Selected;
 		flag |= ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow;
 
-		bool opend = ImGui::TreeNodeEx(name, flag, name);
+		bool opend = ImGui::TreeNodeEx(name, flag,"%s", name);
 
 		if (ImGui::IsItemClicked(0) || ImGui::IsItemClicked(1)) {
 			m_selectedEntity = entity.getHandle();
@@ -210,7 +210,7 @@ namespace ob::debug {
 							bool clicked = ImGui::MenuItem(shortName.c_str());
 							if (ImGui::IsItemHovered()) {
 								if (ImGui::BeginTooltip()) {
-									ImGui::Text(name.c_str());
+									ImGui::Text("%s",name.c_str());
 									ImGui::Separator();
 									if (auto tag = info->findTag("Description")) {
 										ImGui::Text("[Description]");

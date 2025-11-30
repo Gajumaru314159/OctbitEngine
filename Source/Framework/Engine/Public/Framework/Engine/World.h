@@ -50,7 +50,9 @@ namespace ob::engine {
 
 		//! @brief		同じ型のサブシステムを尊くすることはできません
 		template<class T>
-		bool addSubSystem(T&&){}
+		bool addSubSystem(T&&){
+			return false;
+		}
 
 	private:
 

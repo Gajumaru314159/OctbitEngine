@@ -23,7 +23,7 @@ namespace ob::debug {
 	}
 	void ReflectionExplorer::drawDetail(const TypeInfo& info) {
 		auto text = PrintTypeInfo(info);
-		ImGui::Text(text.data());
+		ImGui::Text("%s",text.data());
 	}
 
 	void ReflectionExplorer::draw() {
@@ -40,7 +40,7 @@ namespace ob::debug {
 
 				ImGui::Separator();
 				if (auto desc = info->findTag("Description")) {
-					ImGui::Text(desc->data());
+					ImGui::Text("%s",desc->data());
 				}
 			}
 		}

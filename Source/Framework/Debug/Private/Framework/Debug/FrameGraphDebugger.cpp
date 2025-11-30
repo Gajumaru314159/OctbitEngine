@@ -75,10 +75,11 @@ namespace ob::debug {
 						ImGui::TableNextRow();
 						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, bgColor, 0);
 						ImGui::TableSetColumnIndex(0);
-						ImGui::Text(resource.name.c_str());
+						ImGui::Text("%s",resource.name.c_str());
 
 						if (ImGui::IsItemHovered()) {
 							ImGui::SetTooltip(
+								"%s",
 								Format(
 									"{}\n"
 									"Transient:{}",

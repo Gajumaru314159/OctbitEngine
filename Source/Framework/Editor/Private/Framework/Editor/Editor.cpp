@@ -185,7 +185,7 @@ namespace ob::editor {
 		// ストリームで読み込み済みの分をずらす
 		if (0 < stream.position()) {
 			auto remain = stream.size() - stream.position();
-			memmove_s(m_blob.data(), m_blob.size(), m_blob.data() + stream.position(), remain);
+			std::memmove(m_blob.data(), m_blob.data() + stream.position(), remain);
 			m_blob.resize(remain);
 		}
 

@@ -136,7 +136,7 @@ namespace ob::debug {
 					ImGui::TableSetColumnIndex(0);
 					{
 						ImGui::ScopedTextColor stc(m_levelColors[log.level]);
-						ImGui::Text(m_levelNames[log.level].c_str());
+						ImGui::Text("%s",m_levelNames[log.level].c_str());
 					}
 
 					ImGui::TableNextColumn();
