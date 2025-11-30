@@ -267,7 +267,7 @@ namespace ob::rhi {
 				break;
 			}
 		}
-		if (!surfaceFormats.empty()) {
+		if (!surfaceFormat && !surfaceFormats.empty()) {
 			LOG_WARNING("サーフェスフォーマットが見つかりません。{}で代替します",magic_enum::enum_name(surfaceFormats.back().format));
 			surfaceFormat = surfaceFormats.back();
 		}
