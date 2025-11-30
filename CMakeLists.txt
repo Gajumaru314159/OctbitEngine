@@ -76,13 +76,18 @@ FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git 
 FetchContent_MakeAvailable(mimalloc tracy GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
 if(DirectX AND WIN32)
-    FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2021")
+    FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2023")
     FetchContent_MakeAvailable(DirectXTex)
 endif()
 
 if(Vulkan)
     #FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
     #FetchContent_MakeAvailable(spirv)
+endif()
+
+if(UNIX)
+    FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw.git "3.4")
+    FetchContent_MakeAvailable(glfw)
 endif()
 
 #------------------------------------------------------------------------------
