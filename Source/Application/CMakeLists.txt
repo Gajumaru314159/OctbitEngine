@@ -27,7 +27,6 @@ set(public_libs
     Core
     Platform
     RHI
-    DirectX12RHI
     VulkanRHI
     Input
     Engine
@@ -36,6 +35,10 @@ set(public_libs
     Debug
     Editor
 )
+
+if(WIN32)
+    list(APPEND public_libs DirectX12RHI)
+endif()
 target_link_libraries(${PROJECT_NAME} PUBLIC ${public_libs})
 
 # ランタイムライブラリ設定

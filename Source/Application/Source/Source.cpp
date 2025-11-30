@@ -28,8 +28,10 @@
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
 #include <Framework/RHI/All.h>
+#ifdef OS_WINDOWS
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
 #include <Plugins/DirectX12RHI/System.h>
+#endif
 #include <Plugins/VulkanRHI/System.h>
 #include <Plugins/VulkanRHI/VulkanRHIConfig.h>
 #include <Framework/Core/Profile/Profile.h>
@@ -192,13 +194,17 @@ int TestDirectX12() {
 
 
 rhi::RHIConfig config;
+#ifdef OS_WINDOWS
 rhi::DirectX12RHIConfig dx12Config;
+#endif
 VulkanRHIConfig vkconfig;
 
 void OctbitInit(ServiceInjector& injector) {
-
+#ifdef OS_WINDOWS
 	RegisterDirectX12RHIService(injector);
-	//RegisterVulkanRHIService(injector);
+#else
+	RegisterVulkanRHIService(injector);
+#endif
 	RegisterInputService(injector);
 	RegisterGraphicsService(injector);
 
@@ -206,14 +212,19 @@ void OctbitInit(ServiceInjector& injector) {
 	//config.enableDebugLayer = true;
 	//config.breakWithWarning = true;
 
+#ifdef OS_WINDOWS
 	dx12Config.enableDirectStorage = true;
 	dx12Config.enableDebugLayer = true;
 	dx12Config.breakWithWarning = true;
 	dx12Config.enablePIX = true;
+#endif
 	vkconfig.enableDebugLayer = true;
 
 	injector.bind(config);
+
+#ifdef OS_WINDOWS
 	injector.bind(dx12Config);
+#endif
 	injector.bind(vkconfig);
 
 }
