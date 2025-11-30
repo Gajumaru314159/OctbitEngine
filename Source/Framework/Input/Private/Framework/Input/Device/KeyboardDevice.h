@@ -5,7 +5,16 @@
 #pragma once
 #include <Framework/Input/Interface/IInputDevice.h>
 #include <Framework/Input/Keyboard.h>
+#include <Framework/Core/HAL/Platform.h>
+
+#ifdef OS_WINDOWS
 #include <Framework/Core/Platform/WindowsHeaders.h>
+#endif
+
+#ifdef OS_LINUX
+#include <X11/Xlib.h>
+#include <X11/keysym.h>
+#endif
 
 namespace ob::input {
 
@@ -40,8 +49,13 @@ namespace ob::input {
 		};
 	private:
 
+    #ifdef OS_WINDOWS
 		HWND m_hWnd = nullptr;
-		HashMap<Key, KeyState> m_states;;
+    #elif defined(OS_LINUX)
+        ::Display* m_display = nullptr;
+        bool m_ownDisplay = false;
+    #endif
+		HashMap<Key, KeyState> m_states;
 
 	};
 

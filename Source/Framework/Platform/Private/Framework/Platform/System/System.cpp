@@ -122,7 +122,8 @@ namespace ob::platform::System {
 
 		return msg.message != WM_QUIT;
 #else
-		return false;
+		// TODO 他OSの実装
+		return true;
 #endif
 	}
 }

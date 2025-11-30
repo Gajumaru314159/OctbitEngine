@@ -8,7 +8,9 @@
 #include <Framework/Input/All.h>
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
+#ifdef OS_WINDOWS
 #include <Plugins/DirectX12RHI/System.h>
+#endif
 
 #include <Framework/Debug/LogInfo.h>
 #include <Framework/Debug/Profiler.h>

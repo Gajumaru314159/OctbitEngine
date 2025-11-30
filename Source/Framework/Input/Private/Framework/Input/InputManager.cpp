@@ -6,7 +6,7 @@
 
 #include <Framework/Input/Device/KeyboardDevice.h>
 #include <Framework/Input/Device/MouseDevice.h>
-#include <Framework/Input/Device/DirectInputDevice.h>
+#include <Framework/Input/Device/GamePadDevice.h>
 
 #include <Framework/Input/Config.h>
 

@@ -6,12 +6,14 @@
 #include <Framework/Input/Interface/IInputDevice.h>
 #include <Framework/Input/Mouse.h>
 #include <Framework/Platform/Window.h>
+#include <Framework/Core/HAL/Platform.h>
 
-
-#include <Framework/Core/Platform/WindowsHeaders.h>
 #ifdef OS_WINDOWS
+#include <Framework/Core/Platform/WindowsHeaders.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#elif defined(OS_LINUX)
+#include <X11/Xlib.h>
 #endif
 
 namespace ob::input {
@@ -57,9 +59,15 @@ namespace ob::input {
             f32 next{0.0f};
         };
 
+    #ifdef OS_WINDOWS
         DIMOUSESTATE2 m_mouseState;
         LPDIRECTINPUT8 m_interface;
         LPDIRECTINPUTDEVICE8 m_mouse;
+    #elif defined(OS_LINUX)
+        ::Display* m_display = nullptr;
+        ::Window m_window = 0;
+        bool m_ownDisplay = false;
+    #endif
 
         HashMap<MouseButton, KeyState> m_states;
         HashMap<MouseAxis,AxisState> m_axisStates;

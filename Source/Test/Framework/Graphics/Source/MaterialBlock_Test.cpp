@@ -8,8 +8,10 @@
 #include <Framework/RHI/All.h>
 #include <Framework/Platform/System.h>
 #include <Framework/Platform/Window.h>
+#ifdef OS_WINDOWS
 #include <Plugins/DirectX12RHI/System.h>
 #include <Plugins/DirectX12RHI/DirectX12RHIConfig.h>
+#endif
 #include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Plugins/VulkanRHI/System.h>
 #include <Plugins/VulkanRHI/VulkanRHIConfig.h>
