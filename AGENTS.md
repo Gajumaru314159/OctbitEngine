@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a CMake-based C++ project. Use these commands to build and test:
 
+Windows
 ```bash
 # From Root Directory
 
@@ -20,6 +21,24 @@ cmd.exe /c Build.bat
 # When building the Core module, you can build UnitTest at the same time by building Core-test.
 cmd.exe /c Build.bat RHI-test
 ```
+
+Linux(WSL)
+```bash
+
+# From Root Directory
+
+# Generate build files
+# if you add or remove files, you must run this command again.
+/usr/bin/cmake --build -G "Ninja" -S /mnt/d/My/Productions/C++/OctbitEngine -B /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL
+
+# Build the project
+/usr/bin/cmake --build /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL -j 22
+
+# Build specific modules
+# When building the Core module, you can build UnitTest at the same time by building Core-test.
+/usr/bin/cmake --build /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL --target Core-test -j 22
+
+````
 
 ## Project Structure
 
