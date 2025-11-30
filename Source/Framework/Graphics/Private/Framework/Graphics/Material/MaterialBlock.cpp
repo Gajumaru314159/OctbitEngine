@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Graphics/Material/MaterialBlock.h>
 #include <Framework/RHI/RHI.h>
 #include <Framework/RHI/Buffer.h>

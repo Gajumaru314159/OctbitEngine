@@ -80,7 +80,9 @@ namespace ob::graphics {
 	//! @brief      描画
 	void RenderScene::render(FG& fg) {
 
-		std::sort(m_views.begin(), m_views.end(), [](auto& a, auto& b) { return a->get<RenderViewData>().priority < b->get<RenderViewData>().priority; });
+		std::sort(m_views.begin(), m_views.end(), [](auto& a, auto& b) {
+            return a->template get<RenderViewData>().priority < b->template get<RenderViewData>().priority;
+        });
 
 		for (auto& [type,pipeline] : m_pipelines) {
 			pipeline->render(fg, *this);

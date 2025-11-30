@@ -314,12 +314,12 @@ namespace ob::graphics {
 				[&meshData](void* ptr) {
 					if (!meshData.indices.empty()) {
 						size_t size = sizeof(u16) * meshData.indices.size();
-						memcpy_s(ptr, size, meshData.indices.data(), size);
+						memcpy(ptr, meshData.indices.data(), size);
 						return;
 					}
 					if (!meshData.indices32.empty()) {
 						size_t size = sizeof(u32) * meshData.indices32.size();
-						memcpy_s(ptr, size, meshData.indices32.data(), size);
+						memcpy(ptr, meshData.indices32.data(), size);
 						return;
 					}
 				}

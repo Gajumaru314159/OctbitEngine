@@ -52,7 +52,7 @@ ob::u64 ImFileRead(void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	return size * count;
 }
 //! @brief      ファイル書き込み
-ImU64 ImFileWrite(const void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
+ob::u64 ImFileWrite(const void* data, ob::u64 size, ob::u64 count, ImFileHandle file) {
 	if (!file)return 0;
 	if (file->canWrite() == false)return 0;
 	file->write(data, size * count);
@@ -423,7 +423,7 @@ namespace ob::graphics {
 		if (Blob blob(file); blob) {
 			ImFontConfig config;
 			m_fontBlob = ::ImGui::MemAlloc(blob.size());
-			memcpy_s(m_fontBlob, blob.size(), blob.data(), blob.size());
+						memcpy(m_fontBlob, blob.data(), blob.size());
 			io.Fonts->AddFontFromMemoryTTF(m_fontBlob, blob.size(), 13.0f, &config, io.Fonts->GetGlyphRangesJapanese());
 		}
 

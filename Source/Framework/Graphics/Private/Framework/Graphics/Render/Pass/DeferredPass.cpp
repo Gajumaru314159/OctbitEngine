@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/Graphics/Material/Material.h>
 #include <Framework/Graphics/Material/MaterialSystem.h>

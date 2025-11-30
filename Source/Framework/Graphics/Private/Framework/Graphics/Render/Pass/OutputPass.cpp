@@ -2,7 +2,6 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#pragma once
 #include <Framework/Graphics/Render/Pass/OutputPass.h>
 #include <Framework/Graphics/FrameGraph/FG.h>
 #include <Framework/RHI/SwapChain.h>
