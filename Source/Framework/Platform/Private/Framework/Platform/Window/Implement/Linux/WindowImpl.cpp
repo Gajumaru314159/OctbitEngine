@@ -199,10 +199,12 @@ namespace ob::platform {
     }
 
     Vec2 WindowImpl::getScreenPoint(const Vec2& clientPoint)const {
+        updateWindowGeometryCache();
         return clientPoint + m_position;
     }
 
     Vec2 WindowImpl::getClientPoint(const Vec2& screenPoint)const {
+        updateWindowGeometryCache();
         return screenPoint - m_position;
     }
 
@@ -225,6 +227,7 @@ namespace ob::platform {
     }
 
     Vec2 WindowImpl::getPosition()const noexcept {
+        updateWindowGeometryCache();
         return m_position;
     }
 
@@ -241,6 +244,7 @@ namespace ob::platform {
     }
 
     Vec2 WindowImpl::getSize()const {
+        updateWindowGeometryCache();
         return m_clientSize;
     }
 
@@ -299,6 +303,38 @@ namespace ob::platform {
             m_states.on(state);
         } else {
             m_states.off(state);
+        }
+    }
+
+    void WindowImpl::updateWindowGeometryCache() const {
+        if (!m_native.display || !m_native.window) return;
+
+        XWindowAttributes attrs{};
+        if (XGetWindowAttributes(m_native.display, m_native.window, &attrs)) {
+            m_clientSize = {
+                static_cast<f32>(attrs.width),
+                static_cast<f32>(attrs.height)
+            };
+        }
+
+        auto& context = X11Context::Instance();
+        ::Window child;
+        int screenX = 0;
+        int screenY = 0;
+        if (context.display() &&
+            XTranslateCoordinates(
+                m_native.display,
+                m_native.window,
+                context.root(),
+                0,
+                0,
+                &screenX,
+                &screenY,
+                &child)) {
+            m_position = {
+                static_cast<f32>(screenX),
+                static_cast<f32>(screenY)
+            };
         }
     }
 

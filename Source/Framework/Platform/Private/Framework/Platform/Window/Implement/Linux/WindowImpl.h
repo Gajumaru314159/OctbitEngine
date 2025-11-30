@@ -60,14 +60,15 @@ namespace ob::platform {
         void destroyWindow();
         void updateState(WindowState state, bool enable);
         void applyFullscreen(bool enable);
+        void updateWindowGeometryCache() const;
 
     private:
         NativeWindowHandle m_native{};
         WindowStates m_states;
         WindowMode m_mode = WindowMode::Window;
         WindowStyle m_style = WindowStyle::Sizable;
-        Vec2 m_position{0, 0};
-        Vec2 m_clientSize{0, 0};
+        mutable Vec2 m_position{0, 0};
+        mutable Vec2 m_clientSize{0, 0};
         Vec2 m_restoreSize{1280, 720};
         String m_title;
         bool m_visible = false;
