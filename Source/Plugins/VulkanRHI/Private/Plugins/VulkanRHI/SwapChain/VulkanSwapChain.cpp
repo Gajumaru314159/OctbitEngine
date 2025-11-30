@@ -258,8 +258,8 @@ namespace ob::rhi {
 			: (capabilities.supportedCompositeAlpha & vk::CompositeAlphaFlagBitsKHR::eInherit) ? vk::CompositeAlphaFlagBitsKHR::eInherit
 			: vk::CompositeAlphaFlagBitsKHR::eOpaque;
 
+		vk::Format format = m_desc.hdr ? vk::Format::eA2R10G10B10UnormPack32 : vk::Format::eB8G8R8A8Unorm;
 
-		auto format = TypeConverter::Convert(m_desc.format);
 		Optional<vk::SurfaceFormatKHR> surfaceFormat;
 		for (auto& item : surfaceFormats) {
 			if (item.format == format) {
@@ -268,8 +268,8 @@ namespace ob::rhi {
 			}
 		}
 		if (!surfaceFormats.empty()) {
-			LOG_WARNING("サーフェスフォーマットが見つかりません。{}で代替します",magic_enum::enum_name(surfaceFormats.front().format));
-			surfaceFormat = surfaceFormats.front();
+			LOG_WARNING("サーフェスフォーマットが見つかりません。{}で代替します",magic_enum::enum_name(surfaceFormats.back().format));
+			surfaceFormat = surfaceFormats.back();
 		}
 		if (!surfaceFormat) {
 			LOG_ERROR("サーフェスフォーマットが見つかりません。");
@@ -412,9 +412,11 @@ namespace ob::rhi {
 
 		Ref<PipelineState> pipeline;
 		{
+			TextureFormat format = m_desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
+
 			PipelineStateDesc desc;
 			desc.name = m_desc.name;
-			desc.colors = { m_desc.format };
+			desc.colors = { format };
 
 			desc.rootSignature = signature;
 			desc.vs = vs;

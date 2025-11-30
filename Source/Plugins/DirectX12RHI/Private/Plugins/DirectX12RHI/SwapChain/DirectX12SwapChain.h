@@ -107,6 +107,7 @@ namespace ob::rhi {
         DirectX12Device& m_device;
 
         SwapChainDesc m_desc;
+        TextureFormat m_format;
 
         platform::WindowEventHandle m_hEvent;
         

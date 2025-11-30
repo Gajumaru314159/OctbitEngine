@@ -36,6 +36,7 @@ namespace ob::rhi {
 		}
 		m_syncInterval = desc.vsync ? 1 : 0;
 		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
+		m_format = m_desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
 
 		if (!createSwapChain(device))return;
 		if (!createResources(device))return;
@@ -79,9 +80,9 @@ namespace ob::rhi {
 		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 		swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
 		swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
-		swapChainDesc.BufferDesc.Format = TypeConverter::Convert(m_desc.format);            // ピクセルフォーマット
-		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;                             // リフレッシュ・レート分子
-		swapChainDesc.BufferDesc.RefreshRate.Denominator = 00;                            // リフレッシュ・レート分母
+		swapChainDesc.BufferDesc.Format = TypeConverter::Convert(m_format);					// ピクセルフォーマット
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;								// リフレッシュ・レート分子
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 00;								// リフレッシュ・レート分母
 		swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
 		swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;                     //解像度に合うように同補正するか => 拡大
 
@@ -154,7 +155,7 @@ namespace ob::rhi {
 
 		// レンダーターゲットビュー生成
 		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
-		rtvDesc.Format = TypeConverter::Convert(m_desc.format);
+		rtvDesc.Format = TypeConverter::Convert(m_format);
 		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 		for (s32 i = 0; i < m_desc.bufferCount; ++i) {
@@ -243,7 +244,7 @@ namespace ob::rhi {
 		{
 			PipelineStateDesc desc;
 			desc.name = m_desc.name;
-			desc.colors = { m_desc.format };
+			desc.colors = { m_format };
 
 			desc.rootSignature = signature;
 			desc.vs = vs;
