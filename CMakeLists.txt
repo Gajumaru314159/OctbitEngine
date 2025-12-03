@@ -4,31 +4,30 @@ project ("OctbitEngine")
 #------------------------------------------------------------------------------
 # オプション定義
 #------------------------------------------------------------------------------
-option(DirectX "Enable DirectX RHI" ON)
-option(Vulkan "Enable Vulkan RHI" ON)
-option(UnitTest "Enable UnitTest" ON)
+option(OCTBIT_DIRECTX "Enable DirectX RHI" ON)
+option(OCTBIT_VULKAN "Enable Vulkan RHI" ON)
+option(OCTBIT_TEST "Enable UnitTest" ON)
 
 #------------------------------------------------------------------------------
 # パス設定
 #------------------------------------------------------------------------------
 set(OCTBIT_ROOT_PATH "${CMAKE_CURRENT_LIST_DIR}")
-set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Source")
+set(OCTBIT_SOURCE_PATH "${OCTBIT_ROOT_PATH}/Engine/Source")
 set(OCTBIT_THIRD_PARTY_PATH "${OCTBIT_SOURCE_PATH}/ThirdParty")
-set(OCTBIT_SAMPLE_PROJECT_PATH "${OCTBIT_SOURCE_PATH}/Projects/SampleProject")
-
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/bin")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/bin")
+set(OCTBIT_SAMPLE_PROJECT_PATH "${OCTBIT_SOURCE_PATH}/Sample/Sandbox")
 
 #------------------------------------------------------------------------------
 # ソリューション設定
 #------------------------------------------------------------------------------
-set(CMAKE_CXX_STANDARD 20)                                          # C++20を使用
-set(CMAKE_CXX_STANDARD_REQUIRED ON)                                 # 古いSTLにフォールバックしない
-set(CMAKE_CXX_EXTENSIONS OFF)                                       # GNU拡張オフ
-set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                     # DebugとReleaseのみ使用(MinSizeRel等を使わない)
-set(CMAKE_DEBUG_POSTFIX "")                                         #
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)                        # フィルタを使用する
-set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")    # CMake関係のプロジェクトを_CMakeにまとめる
+set(CMAKE_CXX_STANDARD 20)                                                  # C++20を使用
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                                         # 古いSTLにフォールバックしない
+set(CMAKE_CXX_EXTENSIONS OFF)                                               # GNU拡張オフ
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )                             # DebugとReleaseのみ使用(MinSizeRel等を使わない)
+set(CMAKE_DEBUG_POSTFIX "")                                                 #
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)                                # フィルタを使用する
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "_CMake")            # CMake関係のプロジェクトを_CMakeにまとめる
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/Bin")   # ライブラリの出力先
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/Build/Bin")   # 実行ファイルの出力先
 
 #------------------------------------------------------------------------------
 # ThirdPartyオプション設定
@@ -75,12 +74,12 @@ FetchContent_Declare(FrameGraph GIT_REPOSITORY https://github.com/skaarj1989/Fra
 FetchContent_Declare(assimp GIT_REPOSITORY https://github.com/assimp/assimp.git "v5.2.0")
 FetchContent_MakeAvailable(mimalloc tracy GSL utf8cpp magic_enum googletest FrameGraph assimp)
 
-if(DirectX AND WIN32)
+if(OCTBIT_DIRECTX AND WIN32)
     FetchContent_Declare(DirectXTex GIT_REPOSITORY https://github.com/microsoft/DirectXTex.git GIT_TAG "sept2023")
     FetchContent_MakeAvailable(DirectXTex)
 endif()
 
-if(Vulkan)
+if(OCTBIT_VULKAN)
     #FetchContent_Declare(spirv GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Cross.git GIT_TAG "sdk-1.3.231.1")
     #FetchContent_MakeAvailable(spirv)
 endif()
@@ -132,49 +131,20 @@ endif()
 #------------------------------------------------------------------------------
 # 汎用機能
 #------------------------------------------------------------------------------
-include("Source/CMake/ThirdParty.cmake")
-include("Source/CMake/Common.cmake")
+include("Engine/Source/CMake/ThirdParty.cmake")
+include("Engine/Source/CMake/Common.cmake")
+
+
+#------------------------------------------------------------------------------
+# GoogleTestを有効化
+#------------------------------------------------------------------------------
+if(OCTBIT_TEST)
+    enable_testing()
+    include(GoogleTest)
+endif()
 
 
 #------------------------------------------------------------------------------
 # プロジェクト読み込み
 #------------------------------------------------------------------------------
-
-# Framework
-add_subdirectory ("Source/Framework/Core")
-add_subdirectory ("Source/Framework/Platform")
-add_subdirectory ("Source/Framework/Input")
-add_subdirectory ("Source/Framework/RHI")
-add_subdirectory ("Source/Framework/Graphics")
-add_subdirectory ("Source/Framework/Model")
-#add_subdirectory ("Source/Framework/Asset")
-add_subdirectory ("Source/Framework/Debug")
-add_subdirectory ("Source/Framework/Engine")
-add_subdirectory ("Source/Framework/Asset")
-add_subdirectory ("Source/Framework/Editor")
-add_subdirectory ("Source/Framework/Runtime")
-
-# Plugins
-if(DirectX AND WIN32)
-    add_subdirectory ("Source/Plugins/DirectX12RHI")
-endif()
-
-if(Vulkan)
-    add_subdirectory ("Source/Plugins/VulkanRHI")
-endif()
-
-add_subdirectory ("Source/Plugins/ImGui")
-
-# Test
-if(UnitTest)
-    enable_testing()
-    include(GoogleTest)
-    add_subdirectory ("Source/Test/Framework/Core")
-    add_subdirectory ("Source/Test/Framework/Platform")
-    add_subdirectory ("Source/Test/Framework/RHI")
-    add_subdirectory ("Source/Test/Framework/Graphics")
-    add_subdirectory ("Source/Test/Framework/Engine")
-endif()
-
-# Application
-add_subdirectory ("Source/Application")
+add_subdirectory("Engine/Source")

@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a CMake-based C++ project. Use these commands to build and test:
 
 Windows
+
 ```bash
 # From Root Directory
 
@@ -23,28 +24,30 @@ cmd.exe /c Build.bat RHI-test
 ```
 
 Linux(WSL)
+
 ```bash
 
 # From Root Directory
 
 # Generate build files
 # if you add or remove files, you must run this command again.
-/usr/bin/cmake --build -G "Ninja" -S /mnt/d/My/Productions/C++/OctbitEngine -B /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL
+/usr/bin/cmake --build -G "Ninja" -B Build/WSL
 
 # Build the project
-/usr/bin/cmake --build /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL -j 22
+/usr/bin/cmake --build Build/WSL -j 22
 
 # Build specific modules
 # When building the Core module, you can build UnitTest at the same time by building Core-test.
-/usr/bin/cmake --build /mnt/d/My/Productions/C++/OctbitEngine/Build/WSL --target Core-test -j 22
+/usr/bin/cmake --build Build/WSL --target Core-test -j 22
 
-````
+```
 
 ## Project Structure
 
 OctbitEngine is a multi-platform game engine written in C++20 with a modular architecture:
 
-### Framework Modules (Source/Framework/)
+### Framework Modules (Engine/Source/Framework/)
+
 - **Core** - Foundation utilities, math, DI container, reflection system, memory management
 - **Platform** - Window management, file I/O, platform abstraction
 - **RHI** - Rendering Hardware Interface abstracting DirectX12/Vulkan
@@ -54,24 +57,22 @@ OctbitEngine is a multi-platform game engine written in C++20 with a modular arc
 - **Asset** - Asset loading and management system
 - **Debug** - Debugging tools and profiler
 - **Editor** - Editor-specific functionality
-
-### Plugin System (Source/Plugins/)
 - **DirectX12RHI** - DirectX 12 implementation
 - **VulkanRHI** - Vulkan implementation
 - **ImGui** - Immediate mode GUI integration
 
-### Testing (Source/Test/)
-Unit tests for each framework module using GoogleTest.
-
 ## Key Architecture Patterns
 
 ### Dependency Injection
+
 The engine uses a central DI system with `ServiceInjector` and `ServiceContainer`. Services are registered via `RegisterService<Interface, Implementation>()` and resolved automatically.
 
 ### FrameGraph Rendering
+
 Declarative rendering pipeline that automatically manages GPU resources and optimizes execution order.
 
 ### RHI Abstraction
+
 Common interface for DirectX12 and Vulkan with unified resource types (`Buffer`, `Texture`, `CommandList`, `PipelineState`).
 
 ## Development Notes
@@ -85,17 +86,19 @@ Common interface for DirectX12 and Vulkan with unified resource types (`Buffer`,
 ## Testing
 
 Run tests for specific modules:
+
 ```bash
 # From Root Directory
-Build/bin/Core-test.exe
-Build/bin/RHI-test.exe
-Build/bin/Platform-test.exe
-Build/bin/Graphics-test.exe
+Build/Bin/Core-test.exe
+Build/Bin/RHI-test.exe
+Build/Bin/Platform-test.exe
+Build/Bin/Graphics-test.exe
 ```
 
 ## Third-Party Dependencies
 
 Uses FetchContent for dependency management including:
+
 - GSL (Microsoft Guidelines Support Library)
 - GoogleTest for unit testing
 - FrameGraph for rendering pipeline
@@ -104,5 +107,6 @@ Uses FetchContent for dependency management including:
 - Vulkan SDK libraries (when Vulkan enabled)
 
 ## IMPORTANT
+
 - Before completing the task, be sure to build and test to ensure it works properly.
 - Please explain the work and have conversations in Japanese.

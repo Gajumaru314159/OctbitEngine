@@ -1,0 +1,163 @@
+﻿//***********************************************************
+//! @file
+//! @author		Gajumaru
+//***********************************************************
+#include <Framework/Core/Utility/DI.h>
+#include <Framework/Graphics/All.h>
+#include <Framework/RHI/All.h>
+#include <Framework/Input/All.h>
+#include <Framework/Platform/System.h>
+#include <Framework/Platform/Window.h>
+
+#include <Framework/Graphics/Material/Material.h>
+
+/*
+TEST(Graphis, MaterialBlock) {
+#pragma region
+	using namespace ob;
+	using namespace ob::rhi;
+	using namespace ob::graphics;
+	using namespace ob::platform;
+
+	ob::core::Logger log;
+
+	ob::debug::Profiler profiler;
+	ob::debug::LogInfo loginfo;
+	ob::debug::FrameGraphDebugger fgdebugger;
+
+	System::Setup();
+	
+	ServiceInjector injector;
+	ServiceContainer container;
+	{
+		rhi::RegisterDirectX12RHIService(injector);
+		input::RegisterInputService(injector);
+		graphics::RegisterGraphicsService(injector);
+
+		rhi::RHIConfig config;
+		config.enablePIX = true;
+		config.breakWithWarning = true;
+		injector.bind(config);
+
+		struct Dependency {
+			Dependency(ob::graphics::Graphics&, ob::input::InputModule&) {}
+		};
+		injector.bind<Dependency>();
+
+		injector.create<Dependency>(container);
+	}
+
+
+	// ウィンドウ生成
+	platform::WindowDesc windowDesc;
+	windowDesc.title = "Graphic Test";
+	platform::Window window(windowDesc);
+
+	Ref<SwapChain> swapChain = [&] {
+		SwapChainDesc desc;
+		desc.name = "MainSwapChain";
+		desc.window = window;
+		return SwapChain::Create(desc);
+	}();
+#pragma endregion
+	// 事前セットアップここまで
+
+	RenderScene scene;
+	RenderView view(scene,"Test");
+	scene.addFeature<ImGuiRenderFeature>(scene);
+	scene.addFeature<MaterialRenderFeature>();
+	view.setSwapChain(swapChain);
+	view.setPipeline<TestRenderPipeline>(view);
+
+	ImGuiHandle handle;
+	ImGuiHandle handle2;
+
+	ImGuiRenderFeature::AddTask(
+		scene, handle,
+		[&] {
+			profiler.draw();
+			loginfo.draw();
+			fgdebugger.draw();
+		}
+	);
+
+	Ref<Material> material = [&]{
+
+		auto code = File::ReadAllText("Assets/Shader/GraphicTest.hlsl");
+		OB_ASSERT(code,"ファイル読み込み失敗");
+
+		MaterialDesc desc;
+		desc.name = "Default";
+		desc.matrixProperties = { "Matrix" };
+		desc.textureProperties = { "Main" };
+
+		MaterialPass& opaque = desc.passes["Opaque"];
+		opaque.depthStencil.depth.enable = true;
+		opaque.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+		opaque.depth = TextureFormat::D32;
+		opaque.vs = Shader::CompileVS(code.value());
+		opaque.ps = Shader::CompilePS(code.value());
+		opaque.requiredLayout = {
+			{Semantic::Position,ElementType::Float,4},
+			{Semantic::Normal,ElementType::Float,4},
+			{Semantic::TexCoord,ElementType::Float,2},
+		};
+
+		return Material::Create(desc);
+	}();
+	auto skyMat = Material::Create(material->getDesc());
+
+
+	auto texture = Texture::Load("Assets/Model/Ukulele_col.dds");
+	auto skyTexture = Texture::Load("Assets/Texture/sky.dds");
+	Ref<Mesh> mesh = Mesh::Load("Assets/Model/Ukulele.obj");
+	Ref<Mesh> skyMesh = Mesh::Load("Assets/Model/sky.obj");
+
+	material->setMatrix("Matrix", Matrix::Identity);
+	material->setTexture("Main", texture);
+
+	skyMat->setMatrix("Matrix", Matrix::Identity);
+	skyMat->setTexture("Main", skyTexture);
+
+	if (auto feature = scene.findFeature<MaterialRenderFeature>()) {
+		feature->addRenderable(mesh, material);
+		feature->addRenderable(skyMesh, skyMat);
+	}
+
+	Vec3 pos(0, 0, -10);
+	Rot rot = Rot::Identity;
+	auto now = DateTime::Now();
+
+
+	auto size = swapChain->getDesc().size;
+	auto viewMtx =
+		Matrix::Perspective(60, size.width, size.height, 0.01f, 10000.0f) *
+		Matrix::TRS(pos, rot, Vec3::One).inverse();
+	graphics::Material::SetGlobalMatrix("Matrix", viewMtx);
+
+	for (s32 i = 0; i < 1000; ++i) {
+
+		if (System::Update() == false)break;
+
+		RHI::Get()->update();
+		input::InputModule::Get()->update();
+		swapChain->update();
+
+
+		// 行列更新
+		auto t = TimeSpan(now, DateTime::Now()).totalSecondsF();
+		auto mtx = Matrix::TRS(Vec3::Zero, Quat(0, t*30.0f, 70), Vec3::One);
+		material->setMatrix("Matrix",mtx);
+		material->setColor("Color", Color::White);
+
+
+		if (auto graphics = container.get<Graphics>()) {
+			graphics->update();
+		}
+
+		fgdebugger.update();
+
+	}
+
+}
+*/
