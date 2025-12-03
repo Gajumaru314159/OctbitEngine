@@ -3,7 +3,7 @@ var searchData=
   ['data_0',['data',['../db/d4d/classob_1_1core_1_1_blob.html#a7838206e044a5acd44e2e63a5f896e2c',1,'ob::core::Blob::data()'],['../d7/da6/classob_1_1core_1_1_async_file.html#a98cab16f50b408166b2e9f91e4a1ec9a',1,'ob::core::AsyncFile::data()'],['../da/dea/classob_1_1core_1_1_blob_view.html#ac4d5496588508a663fade7416f1ed507',1,'ob::core::BlobView::data()'],['../db/d4d/classob_1_1core_1_1_blob.html#a7865e394b248bed854933ad41c08ea2a',1,'ob::core::Blob::data()']]],
   ['dayinmonth_1',['DayInMonth',['../dd/de7/structob_1_1core_1_1_date_time.html#a9cc129ee6391e95381aea75888e3321c',1,'ob::core::DateTime']]],
   ['dayofweek_2',['dayOfWeek',['../dd/de7/structob_1_1core_1_1_date_time.html#a99cb5232b2371c42ad492bb186ed8a91',1,'ob::core::DateTime']]],
-  ['days_3',['days',['../d0/d6e/classob_1_1core_1_1_time_span.html#a59df80935601c7cc24348f34c7ab31e5',1,'ob::core::TimeSpan::days() const noexcept'],['../d0/d6e/classob_1_1core_1_1_time_span.html#a42a093a4795abbe31b512856076a7b38',1,'ob::core::TimeSpan::Days(f64 days) noexcept']]],
+  ['days_3',['days',['../d0/d6e/classob_1_1core_1_1_time_span.html#a42a093a4795abbe31b512856076a7b38',1,'ob::core::TimeSpan::Days(f64 days) noexcept'],['../d0/d6e/classob_1_1core_1_1_time_span.html#a59df80935601c7cc24348f34c7ab31e5',1,'ob::core::TimeSpan::days() const noexcept']]],
   ['daysf_4',['daysF',['../d0/d6e/classob_1_1core_1_1_time_span.html#ac34bb102eb29432987e7d35bd2ed2da9',1,'ob::core::TimeSpan']]],
   ['daysinyear_5',['daysInYear',['../dd/de7/structob_1_1core_1_1_date_time.html#a954df7e1cd2a6886baf1d459867c58ac',1,'ob::core::DateTime']]],
   ['deactivate_6',['deactivate',['../df/dd8/classob_1_1engine_1_1_component.html#ad51b59205eabd8868939b865905e104e',1,'ob::engine::Component']]],

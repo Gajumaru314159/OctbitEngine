@@ -73,6 +73,7 @@ var annotated_dup =
         [ "GDeflate", "dc/dbb/classob_1_1core_1_1_g_deflate.html", null ],
         [ "Global", "de/dab/classob_1_1core_1_1_global.html", "de/dab/classob_1_1core_1_1_global" ],
         [ "HalfLine", "dd/df7/classob_1_1core_1_1_half_line.html", "dd/df7/classob_1_1core_1_1_half_line" ],
+        [ "Handle", "d4/d0b/classob_1_1core_1_1_handle.html", null ],
         [ "HandleForwardList", "d6/dee/classob_1_1core_1_1_handle_forward_list.html", "d6/dee/classob_1_1core_1_1_handle_forward_list" ],
         [ "HandleList", "d8/d28/classob_1_1core_1_1_handle_list.html", "d8/d28/classob_1_1core_1_1_handle_list" ],
         [ "HandleManager", "da/d23/classob_1_1core_1_1_handle_manager.html", "da/d23/classob_1_1core_1_1_handle_manager" ],
@@ -179,6 +180,7 @@ var annotated_dup =
         [ "TCPServer", "de/d3a/classob_1_1core_1_1_t_c_p_server.html", "de/d3a/classob_1_1core_1_1_t_c_p_server" ],
         [ "Thread", "d0/d0f/classob_1_1core_1_1_thread.html", "d0/d0f/classob_1_1core_1_1_thread" ],
         [ "ThreadDesc", "d6/d7d/structob_1_1core_1_1_thread_desc.html", null ],
+        [ "ThreadLocalContext", "d0/d4f/classob_1_1core_1_1_thread_local_context.html", null ],
         [ "ThreadPool", "db/d8d/classob_1_1core_1_1_thread_pool.html", null ],
         [ "TimeSpan", "d0/d6e/classob_1_1core_1_1_time_span.html", "d0/d6e/classob_1_1core_1_1_time_span" ],
         [ "TLSFBlock", "d1/dbc/structob_1_1core_1_1_t_l_s_f_block.html", "d1/dbc/structob_1_1core_1_1_t_l_s_f_block" ],
@@ -277,6 +279,7 @@ var annotated_dup =
         [ "MaterialPropertiesSetDesc", "d3/d8a/structob_1_1graphics_1_1_material_properties_set_desc.html", "d3/d8a/structob_1_1graphics_1_1_material_properties_set_desc" ],
         [ "MaterialRenderFeature", "d7/da7/classob_1_1graphics_1_1_material_render_feature.html", "d7/da7/classob_1_1graphics_1_1_material_render_feature" ],
         [ "MaterialRFData", "d8/d87/structob_1_1graphics_1_1_material_r_f_data.html", null ],
+        [ "MaterialShader", "db/d42/classob_1_1graphics_1_1_material_shader.html", null ],
         [ "MaterialSystem", "d0/d18/classob_1_1graphics_1_1_material_system.html", "d0/d18/classob_1_1graphics_1_1_material_system" ],
         [ "MaterialSystemDesc", "d2/d52/structob_1_1graphics_1_1_material_system_desc.html", null ],
         [ "MaterialValuePropertyDesc", "da/db9/structob_1_1graphics_1_1_material_value_property_desc.html", null ],
@@ -297,7 +300,6 @@ var annotated_dup =
         [ "RenderView", "da/de0/classob_1_1graphics_1_1_render_view.html", "da/de0/classob_1_1graphics_1_1_render_view" ],
         [ "RenderViewData", "d7/db2/structob_1_1graphics_1_1_render_view_data.html", "d7/db2/structob_1_1graphics_1_1_render_view_data" ],
         [ "ResizableBuffer", "dc/d28/classob_1_1graphics_1_1_resizable_buffer.html", "dc/d28/classob_1_1graphics_1_1_resizable_buffer" ],
-        [ "Shader", "dd/d66/classob_1_1graphics_1_1_shader.html", null ],
         [ "ShaderSet", "d5/d1a/structob_1_1graphics_1_1_shader_set.html", null ],
         [ "SpotLightData", "d0/d24/structob_1_1graphics_1_1_spot_light_data.html", null ],
         [ "SubMesh", "d4/d8a/structob_1_1graphics_1_1_sub_mesh.html", "d4/d8a/structob_1_1graphics_1_1_sub_mesh" ],
@@ -401,5 +403,8 @@ var annotated_dup =
       [ "test", null, [
         [ "ComponentTest", "d9/d84/classob_1_1test_1_1_component_test.html", null ]
       ] ]
+    ] ],
+    [ "std", null, [
+      [ "hash< ob::core::Handle< T > >", "d7/d2f/structstd_1_1hash_3_01ob_1_1core_1_1_handle_3_01_t_01_4_01_4.html", null ]
     ] ]
 ];

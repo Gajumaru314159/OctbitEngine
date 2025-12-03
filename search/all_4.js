@@ -36,5 +36,5 @@ var searchData=
   ['execute_33',['execute',['../dd/db2/classob_1_1core_1_1_job_system.html#af6bf60bd2c633228adf8bbe9f57165d4',1,'ob::core::JobSystem::execute()'],['../da/dd2/classob_1_1graphics_1_1_f_g.html#aa6cf320bd4117b4887bdab1b5f70d78e',1,'ob::graphics::FG::execute()'],['../d8/db2/classob_1_1graphics_1_1_graphics.html#a2bbed9121502c8c30237a60e6d0cf63c',1,'ob::graphics::Graphics::execute()']]],
   ['exists_34',['exists',['../d2/d72/classob_1_1core_1_1_directory.html#a6af84e489cd55278b415679d761249e5',1,'ob::core::Directory::Exists()'],['../df/d34/classob_1_1core_1_1_file.html#a8d102ad02430b51d17413f796aaab00e',1,'ob::core::File::Exists()']]],
   ['exp_35',['Exp',['../d5/d80/classob_1_1core_1_1_math.html#ae4ae36b1f1d4265203913b3f7af5e481',1,'ob::core::Math']]],
-  ['extension_36',['extension',['../d6/d77/classob_1_1core_1_1_locale.html#ac7aae91d6cc6832e450cc38fb1887dc5',1,'ob::core::Locale::extension()'],['../d7/de6/classob_1_1core_1_1_path.html#a13a69ef20624da088a8711a6a48329da',1,'ob::core::Path::Extension()']]]
+  ['extension_36',['extension',['../d7/de6/classob_1_1core_1_1_path.html#a13a69ef20624da088a8711a6a48329da',1,'ob::core::Path::Extension()'],['../d6/d77/classob_1_1core_1_1_locale.html#ac7aae91d6cc6832e450cc38fb1887dc5',1,'ob::core::Locale::extension()']]]
 ];

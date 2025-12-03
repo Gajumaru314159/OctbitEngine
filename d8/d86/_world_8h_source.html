@@ -147,24 +147,28 @@ $(document).ready(function(){initNavTree('d8/d86/_world_8h_source.html','../../'
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#ae1ebc789f13922945bc97e6e3bf632c2">   49</a></span>        T* <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#ae1ebc789f13922945bc97e6e3bf632c2">findSubSystem</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> <span class="keyword">nullptr</span>; }</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">   53</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">addSubSystem</a>(T&amp;&amp;){}</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordtype">void</span> createRootScene();</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> m_name;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_class" href="../../d7/d55/classob_1_1engine_1_1_scene.html">Scene</a>* m_scene = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    };</div>
+<div class="foldopen" id="foldopen00053" data-start="{" data-end="}">
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">   53</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d2/d11/classob_1_1engine_1_1_world.html#a270cca73afa7aa46883a7c35fed9c4f5">addSubSystem</a>(T&amp;&amp;){</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        }</div>
 </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <a class="code hl_class" href="../../d2/d11/classob_1_1engine_1_1_world.html">World</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordtype">void</span> createRootScene();</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> m_name;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <a class="code hl_class" href="../../d7/d55/classob_1_1engine_1_1_scene.html">Scene</a>* m_scene = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>}</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    };</div>
+</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>}</div>
 <div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
 <div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
 <div class="ttc" id="aclassob_1_1engine_1_1_scene_html"><div class="ttname"><a href="../../d7/d55/classob_1_1engine_1_1_scene.html">ob::engine::Scene</a></div><div class="ttdoc">シーン https://docs.unrealengine.com/4.27/en-US/API/Runtime/Engine/Engine/ULevel/</div><div class="ttdef"><b>Definition</b> Scene.h:23</div></div>

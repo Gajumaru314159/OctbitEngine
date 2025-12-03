@@ -136,12 +136,14 @@ var hierarchy =
     [ "ob::rhi::GraphicFileQueueDesc", "d5/d2f/structob_1_1rhi_1_1_graphic_file_queue_desc.html", null ],
     [ "ob::rhi::GraphicFileRequest", "d9/dee/structob_1_1rhi_1_1_graphic_file_request.html", null ],
     [ "ob::core::HalfLine", "dd/df7/classob_1_1core_1_1_half_line.html", null ],
+    [ "ob::core::Handle< T, TNamespace >", "d4/d0b/classob_1_1core_1_1_handle.html", null ],
     [ "ob::core::HandleManager< T, Deleter >::Handle", "de/dbd/classob_1_1core_1_1_handle_manager_1_1_handle.html", null ],
     [ "HandleBase", null, [
       [ "ob::core::HandleForwardList< T >::Handle", "d8/dc3/classob_1_1core_1_1_handle_forward_list_1_1_handle.html", null ]
     ] ],
     [ "ob::core::HandleManager< T, Deleter >", "da/d23/classob_1_1core_1_1_handle_manager.html", null ],
     [ "ob::core::Hash", "d9/da6/classob_1_1core_1_1_hash.html", null ],
+    [ "std::hash< ob::core::Handle< T > >", "d7/d2f/structstd_1_1hash_3_01ob_1_1core_1_1_handle_3_01_t_01_4_01_4.html", null ],
     [ "ob::core::SyncHandleManager< T, Deleter >::Hasher", "de/de3/structob_1_1core_1_1_sync_handle_manager_1_1_hasher.html", null ],
     [ "ob::core::HSV", "d1/db9/structob_1_1core_1_1_h_s_v.html", null ],
     [ "ob::input::IInputDevice", "dc/d23/classob_1_1input_1_1_i_input_device.html", null ],
@@ -241,6 +243,7 @@ var hierarchy =
       [ "ob::core::JobGroupHandle", "d8/d78/classob_1_1core_1_1_job_group_handle.html", null ],
       [ "ob::core::JobHandle", "dc/de4/classob_1_1core_1_1_job_handle.html", null ],
       [ "ob::core::MemoryStorageBase< T, SIZE, ALIGN >", "df/d15/classob_1_1core_1_1_memory_storage_base.html", null ],
+      [ "ob::core::ThreadLocalContext< T >", "d0/d4f/classob_1_1core_1_1_thread_local_context.html", null ],
       [ "ob::graphics::FG", "da/dd2/classob_1_1graphics_1_1_f_g.html", null ]
     ] ],
     [ "ob::editor::Notice", "d2/dc3/classob_1_1editor_1_1_notice.html", [
@@ -299,6 +302,7 @@ var hierarchy =
     [ "ob::core::Ref< T >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::asset::Asset >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::graphics::Material >", "db/dac/classob_1_1core_1_1_ref.html", null ],
+    [ "ob::core::Ref< ob::graphics::MaterialShader >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::graphics::Mesh >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::model::Model >", "db/dac/classob_1_1core_1_1_ref.html", null ],
     [ "ob::core::Ref< ob::rhi::Buffer >", "db/dac/classob_1_1core_1_1_ref.html", null ],
@@ -317,6 +321,7 @@ var hierarchy =
         [ "ob::asset::TextureAsset", "d3/dde/classob_1_1asset_1_1_texture_asset.html", null ]
       ] ],
       [ "ob::graphics::Material", "db/d93/classob_1_1graphics_1_1_material.html", null ],
+      [ "ob::graphics::MaterialShader", "db/d42/classob_1_1graphics_1_1_material_shader.html", null ],
       [ "ob::graphics::Mesh", "d7/d9b/classob_1_1graphics_1_1_mesh.html", null ],
       [ "ob::graphics::RenderPipeline", "de/dc2/classob_1_1graphics_1_1_render_pipeline.html", [
         [ "ob::graphics::ImGuiRenderPipeline", "d8/dff/classob_1_1graphics_1_1_im_gui_render_pipeline.html", null ],
@@ -391,7 +396,6 @@ var hierarchy =
     [ "ob::core::ServiceInjector", "d2/d9b/classob_1_1core_1_1_service_injector.html", null ],
     [ "ob::rhi::SetDescriptorTableParam", "db/d1f/structob_1_1rhi_1_1_set_descriptor_table_param.html", null ],
     [ "ob::rhi::SetRootConstantsParam", "db/d4f/structob_1_1rhi_1_1_set_root_constants_param.html", null ],
-    [ "ob::graphics::Shader", "dd/d66/classob_1_1graphics_1_1_shader.html", null ],
     [ "ob::rhi::ShaderCompileDesc", "db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html", null ],
     [ "ob::graphics::ShaderSet", "d5/d1a/structob_1_1graphics_1_1_shader_set.html", null ],
     [ "ob::core::Singleton< T >", "dd/df6/classob_1_1core_1_1_singleton.html", null ],

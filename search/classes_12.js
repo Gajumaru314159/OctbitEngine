@@ -16,7 +16,7 @@ var searchData=
   ['serviceinjector_13',['ServiceInjector',['../d2/d9b/classob_1_1core_1_1_service_injector.html',1,'ob::core']]],
   ['setdescriptortableparam_14',['SetDescriptorTableParam',['../db/d1f/structob_1_1rhi_1_1_set_descriptor_table_param.html',1,'ob::rhi']]],
   ['setrootconstantsparam_15',['SetRootConstantsParam',['../db/d4f/structob_1_1rhi_1_1_set_root_constants_param.html',1,'ob::rhi']]],
-  ['shader_16',['shader',['../dd/d66/classob_1_1graphics_1_1_shader.html',1,'ob::graphics::Shader'],['../d7/de4/classob_1_1rhi_1_1_shader.html',1,'ob::rhi::Shader']]],
+  ['shader_16',['Shader',['../d7/de4/classob_1_1rhi_1_1_shader.html',1,'ob::rhi']]],
   ['shadercompiledesc_17',['ShaderCompileDesc',['../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html',1,'ob::rhi']]],
   ['shaderset_18',['ShaderSet',['../d5/d1a/structob_1_1graphics_1_1_shader_set.html',1,'ob::graphics']]],
   ['singleton_19',['Singleton',['../dd/df6/classob_1_1core_1_1_singleton.html',1,'ob::core']]],
