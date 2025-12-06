@@ -16,9 +16,6 @@ using namespace ob::rhi;
 
 namespace ob::graphics {
 
-	struct DeferredData {
-		Ref<Material> material;
-	};
 
 	DeferredPass::DeferredPass() {
 
@@ -60,7 +57,7 @@ namespace ob::graphics {
 
 				MaterialDesc desc;
 				desc.name = "DeferredLight";
-				desc.textures = { "Main" ,"Normal","Depth" };
+				desc.textures = { "Main" ,"Normal","Params", "Depth" };
 				desc.integers = { "GBuffer" };
 
 				MaterialPass& pass = desc.passes["PostProcess"];
@@ -83,6 +80,7 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, Output& output) {
 				output.albedo = builder.read(input.albedo);
 				output.normal = builder.read(input.normal);
+				output.params = builder.read(input.params);
 				output.depth = builder.read(input.depth);
 
 				rhi::RenderTextureDesc desc = fg.getTextureDesc(input.albedo);
@@ -99,9 +97,11 @@ namespace ob::graphics {
 
 				auto albedo = resources.getTexture(output.albedo);
 				auto normal = resources.getTexture(output.normal);
+				auto params = resources.getTexture(output.params);
 				auto depth = resources.getTexture(output.depth);
 				data.material->setTexture("Main", albedo);
 				data.material->setTexture("Normal", normal);
+				data.material->setTexture("Params", params);
 				data.material->setTexture("Depth", depth);
 
 				BeginPassParam param;

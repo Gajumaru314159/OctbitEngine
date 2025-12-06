@@ -35,6 +35,7 @@ namespace ob::graphics {
 		struct Resources {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		
@@ -56,6 +57,12 @@ namespace ob::graphics {
 					resources.normal = builder.write(builder.create(desc));
 				}
 				{
+					desc.name = "Params";
+					desc.format = rhi::TextureFormat::RGBA8;
+					desc.clear.color = Color::Black;
+					resources.params = builder.write(builder.create(desc));
+				}
+				{
 					desc.name = "Depth";
 					desc.format = rhi::TextureFormat::D32;
 					resources.depth = builder.write(builder.create(desc));
@@ -66,11 +73,8 @@ namespace ob::graphics {
 		// TODO CullBufferを生成
 		// * RenderableのBoundsをGPUに転送
 		// * FrustumCullingをGPUで実行
-
-		auto earlyZ = m_earlyZ.render(fg, view, { resource.albedo, resource.normal, resource.depth });
-		auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
-		auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.depth });
-		auto deferred = m_deferred.render(fg, view, { masked.albedo,masked.normal,masked.depth });
+		auto gbuffer = m_gbuffer.render(fg, view, { resource.albedo, resource.normal, resource.params, resource.depth });
+		auto deferred = m_deferred.render(fg, view, { gbuffer.albedo,gbuffer.normal,gbuffer.params, gbuffer.depth });
 		auto imgui = m_imgui.render(fg, view, { deferred.color });
 
 		bool useImGui = true;

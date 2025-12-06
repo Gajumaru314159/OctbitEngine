@@ -26,6 +26,8 @@ struct MaterialProps {
 	SamplerHandle MainSmp;
 	TextureHandle NormalTex;
 	SamplerHandle NormalSmp;
+	TextureHandle ParamsTex;
+	SamplerHandle ParamsSmp;
 	TextureHandle DepthTex;
 	SamplerHandle DepthSmp;
 	int GBuffer;
@@ -98,25 +100,33 @@ PsOut PS_Main(PsIn i){
 	
 	Texture2D g_mainTex = ResourceDescriptorHeap[mparam.MainTex.index];
 	SamplerState g_mainSmp = SamplerDescriptorHeap[mparam.MainSmp.index];
-	
+
 	Texture2D g_normalTex = ResourceDescriptorHeap[mparam.NormalTex.index];
 	SamplerState g_normalSmp = SamplerDescriptorHeap[mparam.NormalSmp.index];
+
+	Texture2D g_paramsTex = ResourceDescriptorHeap[mparam.ParamsTex.index];
+	SamplerState g_paramsSmp = SamplerDescriptorHeap[mparam.ParamsSmp.index];
 	
 	Texture2D g_depthTex = ResourceDescriptorHeap[mparam.DepthTex.index];
 	SamplerState g_depthSmp = SamplerDescriptorHeap[mparam.DepthSmp.index];
 
     float4 albedo = g_mainTex.Sample(g_mainSmp,i.uv);
     float4 normal = g_normalTex.Sample(g_normalSmp,i.uv)*0.5+0.5;
+    float4 params = g_paramsTex.Sample(g_paramsSmp,i.uv);
     float4 depth = g_depthTex.Sample(g_depthSmp,i.uv) / 0.003;
     
-	if(mparam.GBuffer==0){
-		float factor = max(dot(float3(0,1,0),normal.xyz * 2 - 1),0) * 0.5 + 0.5;
-		o.color = albedo * float4(factor,factor,factor,1);
-	} else if(mparam.GBuffer==1){
+	if(mparam.GBuffer==1){
 		o.color = normal;
 	} else if(mparam.GBuffer==2){
+		o.color = float4(params.x,params.y,params.z,1.0);
+	} else if(mparam.GBuffer==3){
+		o.color = float4(params.w,params.w,params.w,1.0);
+	} else if(mparam.GBuffer==4){
 		o.color.xyz = float3(1.0,1.0,1.0)*depth.x;
 		o.color.w = 1.0;
+	} else {
+		float factor = max(dot(float3(0,1,0),normal.xyz * 2 - 1),0) * 0.5 + 0.5;
+		o.color = albedo * float4(factor,factor,factor,1);
 	}
     return o;
 }

@@ -7,11 +7,16 @@
 
 namespace ob::graphics {
 
+	struct DeferredData {
+		Ref<Material> material;
+	};
+
 	class DeferredPass : public RenderPass {
 	public:
 		struct Input {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
@@ -19,6 +24,7 @@ namespace ob::graphics {
 
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 	public:

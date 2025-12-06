@@ -21,6 +21,7 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, Output& output) {
 				output.albedo = builder.write(input.albedo);
 				output.normal = builder.read(input.normal);
+				output.params = builder.read(input.params);
 				output.depth = builder.write(input.depth);
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
@@ -60,6 +61,7 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, Output& output) {
 				output.albedo = builder.write(input.albedo);
 				output.normal = builder.write(input.normal);
+				output.params = builder.write(input.params);
 				output.depth = builder.read(input.depth);
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
@@ -70,6 +72,7 @@ namespace ob::graphics {
 					BeginPassParam param;
 					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					param.colors.emplace_back(resources.getTexture(output.normal), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+					param.colors.emplace_back(resources.getTexture(output.params), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
 					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
 					cmdList->beginRenderPass(param);
@@ -99,6 +102,7 @@ namespace ob::graphics {
 			[&](FGBuilder& builder, Output& output) {
 				output.albedo = builder.write(input.albedo);
 				output.normal = builder.write(input.normal);
+				output.params = builder.write(input.params);
 				output.depth = builder.read(input.depth);
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
@@ -109,6 +113,7 @@ namespace ob::graphics {
 					BeginPassParam param;
 					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					param.colors.emplace_back(resources.getTexture(output.normal), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
+					param.colors.emplace_back(resources.getTexture(output.params), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve);
 					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Preserve, RenderPassAfterAccessType::Preserve };
 
 					cmdList->beginRenderPass(param);

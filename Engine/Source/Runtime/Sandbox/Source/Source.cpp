@@ -146,11 +146,15 @@ int TestDirectX12() {
 			if (ImGui::Begin("RenderPipeline")) {
 				rscene.visitView([&](RenderView& view) {
 					auto& data = view.get<RenderViewData>();
+					auto& deferredData = view.get<DeferredData>();
 					if (ImGui::CollapsingHeader(data.name.c_str())) {
-						ImGui::InputInt("Pipeline", &data.pipeline, 0, 2);
-						ImGui::InputInt("Priority", &data.priority);
+						static int gbuffer = 0;
+						if (ImGui::SliderInt("GBuffer", &gbuffer, 0, 5))
+						{
+							deferredData.material->setInteger("GBuffer",gbuffer);
+						}
 					}
-					});
+				});
 			}
 			ImGui::End();
 		}

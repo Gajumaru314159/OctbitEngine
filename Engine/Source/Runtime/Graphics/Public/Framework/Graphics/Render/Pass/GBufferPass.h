@@ -12,11 +12,13 @@ namespace ob::graphics {
 		struct Input {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 	public:
@@ -29,11 +31,13 @@ namespace ob::graphics {
 		struct Input {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 	public:
@@ -46,11 +50,13 @@ namespace ob::graphics {
 		struct Input {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 	public:
@@ -64,20 +70,22 @@ namespace ob::graphics {
 		struct Input {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
 			FGResource albedo;
 			FGResource normal;
+			FGResource params;
 			FGResource depth;
 		};
 	public:
 		GBufferPass() {}
 		Output render(FG& fg, RenderView& view, Input input)const {
-			auto earlyZ = m_earlyZ.render(fg, view, { input.albedo, input.normal, input.depth });
-			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });
-			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.depth });
-			return { masked.albedo,masked.normal,masked.depth };
+			auto earlyZ = m_earlyZ.render(fg, view, { input.albedo, input.normal, input.params, input.depth });
+			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.params, earlyZ.depth });
+			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.params, opaque.depth });
+			return { masked.albedo,masked.normal, masked.params, masked.depth };
 		}
 	private:
 		EarlyZPass m_earlyZ;

@@ -71,7 +71,7 @@ namespace ob::model {
 
 				MaterialDesc desc;
 				desc.name = path;
-				desc.textures = { "Main", "Normal", "Parameter" };
+				desc.textures = { "Main", "Normal", "Params" };
 				desc.matrices = { "Matrix" };
 				desc.vectors = { "Color" };
 
@@ -84,7 +84,7 @@ namespace ob::model {
 
 					shaders.depthStencil.depth.enable = true;
 					shaders.depthStencil.depth.func = ComparisonFunc::GreaterEqual;
-					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
+					shaders.colors = { TextureFormat::RGBA8 ,TextureFormat::RGBA8,TextureFormat::RGBA8 };	// Shaderに情報を持たせたい
 					shaders.depth = TextureFormat::D32;
 					shaders.vs = Shader::CompileVS(code.value());
 					shaders.ps = Shader::CompilePS(code.value());
@@ -154,7 +154,7 @@ namespace ob::model {
 			{
 				Ref<rhi::Texture> texture;
 				if (!texture) texture = rhi::Texture::White();
-				material->setTexture("Parameter", rhi::Texture::Black());
+				material->setTexture("Params", rhi::Texture::Black());
 			}
 
 			Color color = Color::White;

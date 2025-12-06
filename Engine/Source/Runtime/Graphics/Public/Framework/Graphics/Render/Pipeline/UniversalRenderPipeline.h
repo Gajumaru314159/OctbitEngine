@@ -26,9 +26,7 @@ namespace ob::graphics {
 		// Global;
 
 		// Local
-		EarlyZPass m_earlyZ;
-		OpaquePass m_opaque;
-		MaskedPass m_masked;
+		GBufferPass m_gbuffer;
 		DeferredPass m_deferred;
 		ImGuiPass m_imgui;
 		OutputPass m_output;
