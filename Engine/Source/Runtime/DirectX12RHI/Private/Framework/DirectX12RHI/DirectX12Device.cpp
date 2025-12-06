@@ -378,7 +378,12 @@ namespace ob::rhi {
 		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
 		result.Format = TypeConverter::Convert(format);
 		if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)))) return false;
-		return result.Support1 & D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
+
+		if (TextureFormatUtility::HasDepth(format) || TextureFormatUtility::HasStencil(format)) {
+			return result.Support1 & D3D12_FORMAT_SUPPORT1_DEPTH_STENCIL;
+		} else {
+			return result.Support1 & D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
+		}
 	}
 
 	//! @brief サポートしているシェーダーステージか 
