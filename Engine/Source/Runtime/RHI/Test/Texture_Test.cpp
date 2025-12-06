@@ -80,16 +80,24 @@ TYPED_TEST(RHITest, Texture_Array) {
 		ASSERT_EQ(texture, nullptr);
 	}
 
-	for (s32 i = 0; i < 10; ++i) {
+	for (auto type : magic_enum::enum_values<TextureType>())
+	{
+		for (s32 i = 0; i < 10; ++i) {
 
-		TextureDesc desc;
-		desc.size = { 1024, 600};
-		desc.arrayNum = i;
+			TextureDesc desc;
+			desc.arrayNum = i;
+			desc.type = type;
 
-		auto texture = Texture::Create(desc);
+			if (type == TextureType::Texture1D) desc.size = Size{ 128 };
+			if (type == TextureType::Texture2D) desc.size = Size{ 128,128 };
+			if (type == TextureType::Cube) desc.size = Size{ 128,128 };
+			if (type == TextureType::Texture3D) continue;
 
-		ASSERT_NE(texture, nullptr);
+			auto texture = Texture::Create(desc);
 
+			ASSERT_NE(texture, nullptr);
+
+		}
 	}
 
 }
