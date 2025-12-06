@@ -360,7 +360,6 @@ namespace ob::rhi {
 
 		if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)))) return false;
 
-		result.Support1 = D3D12_FORMAT_SUPPORT1_NONE;
 		if (type == TextureType::Texture1D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE1D)) return false;
 		if (type == TextureType::Texture2D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D)) return false;
 		if (type == TextureType::Texture3D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE3D)) return false;
@@ -371,15 +370,14 @@ namespace ob::rhi {
 
 	//! @brief サポートしているテクスチャフォーマットか 
 	bool DirectX12Device::supportsForRenderTexture(TextureFormat format)const {
-		
-		if (format == TextureFormat::Unknown)return false;
+
+		// そもそも2Dテクスチャに対応していない場合は不可
 		if (!supports(format,TextureType::Texture2D)) return false;
 
+		// RenderTargetに対応しているか
 		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
 		result.Format = TypeConverter::Convert(format);
-
 		if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)))) return false;
-
 		return result.Support1 & D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
 	}
 

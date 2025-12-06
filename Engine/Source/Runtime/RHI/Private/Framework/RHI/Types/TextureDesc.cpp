@@ -2,18 +2,13 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#include <magic_enum.hpp>
 #include <Framework/RHI/Types/TextureDesc.h>
 #include <Framework/RHI/Texture.h>
 
 namespace ob::rhi {
 
     bool TextureDesc::isValid() const {
-
-        // フォーマット
-        if (format == TextureFormat::Unknown) {
-            LOG_ERROR("TextureDescのフォーマットにUnknownは指定できません。[name={}]", name);
-            return false;
-        }
 
         // サイズ
         bool isValidSize = true;
@@ -41,15 +36,16 @@ namespace ob::rhi {
             return false;
         }
 
-        // フォーマット
-        if (!Texture::Supports(format, type)) {
-            LOG_ERROR("サポート外のフォーマットです [name={}]", name);
-            return false;
-        }
-
+        // ステンシルを含んでいるとそのままShaderResourceとして使用できない
         if (TextureFormatUtility::HasStencil(format) && flags & TextureFlag::ShaderResource) {
             // TODO D24S8の扱いを考える(Plane指定？)
             LOG_ERROR("ステンシルを含むテクスチャはShaderResourceとして使用できません [name={}]", name);
+            return false;
+        }
+
+        // フォーマット
+        if (!Texture::Supports(format, type)) {
+            LOG_ERROR("サポート外のフォーマットです [name={}, format={}, type={}]", name,magic_enum::enum_name(format),magic_enum::enum_name(type));
             return false;
         }
 

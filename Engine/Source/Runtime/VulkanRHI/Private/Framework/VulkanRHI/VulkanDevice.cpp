@@ -674,10 +674,8 @@ namespace ob::rhi {
 	//! @brief サポートしているレンダーテクスチャフォーマットか 
 	bool VulkanDevice::supportsForRenderTexture(TextureFormat format)const {
 
-		if(TextureFormatUtility::IsBC(format) || format == TextureFormat::RGB32 || format == TextureFormat::RGB8 || format == TextureFormat::Unknown) {
-			// 上記2つのフォーマットだけvk::Errorではなくゼロ除算の構造化例外がcreateImageで発生するため個別対処
-			return false;
-		}
+		// そもそも2Dテクスチャに対応していない場合は不可
+		if (!supports(format,TextureType::Texture2D)) return false;
 
 		try {
 			vk::ImageUsageFlags flags{};

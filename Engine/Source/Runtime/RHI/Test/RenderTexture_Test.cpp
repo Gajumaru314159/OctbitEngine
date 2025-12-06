@@ -27,12 +27,16 @@ TYPED_TEST(RHITest, RenderTexture_Create) {
 
 			auto renderTexture = RenderTexture::Create(desc);
 
-            if (TextureFormatUtility::HasStencil(format) || !RenderTexture::Supports(format)) {
+            if (!desc.isValid()) {
                 ASSERT_EQ(renderTexture, nullptr);
                 continue;
             }
 
-            if (!renderTexture)CallBreakPoint();
+            if (!renderTexture)
+            {
+                CallBreakPoint();
+                renderTexture = RenderTexture::Create(desc);
+            }
 			ASSERT_NE(renderTexture, nullptr);
             ASSERT_EQ(renderTexture->descOfRenderTexture().format, format);
             ASSERT_EQ(renderTexture->descOfRenderTexture().size, size);

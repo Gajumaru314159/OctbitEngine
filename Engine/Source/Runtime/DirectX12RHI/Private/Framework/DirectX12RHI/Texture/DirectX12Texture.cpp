@@ -285,6 +285,7 @@ namespace ob::rhi {
 		m_desc.mipLevels = 1;
 
 		// バリデート
+    	if (!m_renderDesc.isValid()) return;
 		if (!m_desc.isValid()) return;
 
 		// 定義生成

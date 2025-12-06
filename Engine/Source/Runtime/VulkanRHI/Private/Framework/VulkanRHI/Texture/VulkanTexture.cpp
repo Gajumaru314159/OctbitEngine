@@ -55,7 +55,6 @@ namespace ob::rhi {
 	{
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		auto& vkdevice = m_device.getDevice();
 
@@ -89,7 +88,6 @@ namespace ob::rhi {
 
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		if (std::max(size.width, 1) * std::max(size.height, 1) * std::max(size.depth, 1) != colors.size()) {
 			LOG_ERROR("Textureの生成に失敗。サイズとcolors.size()が一致していません。[size={}, name={}]", size, name);
@@ -149,7 +147,6 @@ namespace ob::rhi {
 
 		// バリデート
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!device.supports(m_desc.format, m_desc.type)) throw NotSupportedException();
 
 		auto& vkdevice = m_device.getDevice();
 
@@ -232,8 +229,8 @@ namespace ob::rhi {
 		m_desc.mipLevels = 1;
 
 		// バリデート
+		if (!m_renderDesc.isValid()) throw Exception("Invalid TextureDesc");
 		if (!m_desc.isValid()) throw Exception("Invalid TextureDesc");
-		if (!device.supportsForRenderTexture(m_desc.format)) throw NotSupportedException();
 
 		auto& vkdevice = m_device.getDevice();
 
