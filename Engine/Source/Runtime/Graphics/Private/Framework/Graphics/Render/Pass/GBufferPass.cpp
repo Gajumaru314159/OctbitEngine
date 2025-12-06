@@ -19,9 +19,6 @@ namespace ob::graphics {
 		return fg.addPass<Output>(
 			"EarlyZPass",
 			[&](FGBuilder& builder, Output& output) {
-				output.albedo = builder.write(input.albedo);
-				output.normal = builder.read(input.normal);
-				output.params = builder.read(input.params);
 				output.depth = builder.write(input.depth);
 			},
 			[&](const Output& output, FGResources& resources, Ref<rhi::CommandList>& cmdList) {
@@ -32,7 +29,6 @@ namespace ob::graphics {
 					cmdList->pushMarker("EarlyZ");
 
 					BeginPassParam param;
-					param.colors.emplace_back(resources.getTexture(output.albedo), RenderPassBeforeAccessType::NoAccess, RenderPassAfterAccessType::NoAccess);
 					param.depth = { resources.getTexture(output.depth), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve };
 
 					cmdList->beginRenderPass(param);

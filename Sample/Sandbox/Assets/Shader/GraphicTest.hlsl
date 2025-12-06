@@ -1,4 +1,4 @@
-//#include "Common.h"
+ï»¿//#include "Common.h"
 
 
 struct TextureHandle {
@@ -98,7 +98,7 @@ struct PsOut {
   float4 normal	:SV_TARGET1; // Metalic Specular Roughness
 };
 
-// ƒGƒ“ƒgƒŠ
+// ã‚¨ãƒ³ãƒˆãƒª
 PsIn VS_Main(VsIn i) {    
     PsIn o;
 

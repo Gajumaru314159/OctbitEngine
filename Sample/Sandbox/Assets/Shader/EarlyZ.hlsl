@@ -1,4 +1,4 @@
-//#include "Common.h"
+ï»¿//#include "Common.h"
 
 
 struct TextureHandle {
@@ -78,10 +78,10 @@ struct VsOut {
   float4 pos	:SV_POSITION;
 };
 struct PsOut {
-  float4 color	:SV_TARGET0;
+  float depth	:SV_Depth;
 };
 
-// ƒGƒ“ƒgƒŠ
+// ã‚¨ãƒ³ãƒˆãƒª
 VsOut VS_Main(VsIn i) {    
 	BufferHandle MaterialHandle = rc.MaterialHandle;
 	BufferHandle GlobalHandle = rc.GlobalHandle;
@@ -98,8 +98,9 @@ VsOut VS_Main(VsIn i) {
     return o;
 }
 
+[earlydepthstencil]
 PsOut PS_Main(VsOut i) {    
     PsOut o;
-	o.color = float4(0,0,0,0);
+	o.depth = i.pos.z / i.pos.w;
     return o;
 }

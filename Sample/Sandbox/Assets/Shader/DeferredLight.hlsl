@@ -114,7 +114,11 @@ PsOut PS_Main(PsIn i){
     float4 normal = g_normalTex.Sample(g_normalSmp,i.uv)*0.5+0.5;
     float4 params = g_paramsTex.Sample(g_paramsSmp,i.uv);
     float4 depth = g_depthTex.Sample(g_depthSmp,i.uv) / 0.003;
-    
+
+	float factor = max(dot(float3(0,1,0),normal.xyz * 2 - 1),0) * 0.5 + 0.5;
+	o.color = albedo * float4(factor,factor,factor,1);
+
+	// GBufferテスト表示
 	if(mparam.GBuffer==1){
 		o.color = normal;
 	} else if(mparam.GBuffer==2){
@@ -128,5 +132,6 @@ PsOut PS_Main(PsIn i){
 		float factor = max(dot(float3(0,1,0),normal.xyz * 2 - 1),0) * 0.5 + 0.5;
 		o.color = albedo * float4(factor,factor,factor,1);
 	}
+	
     return o;
 }

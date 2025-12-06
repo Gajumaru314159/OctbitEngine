@@ -10,15 +10,9 @@ namespace ob::graphics {
 	class EarlyZPass : public RenderPass {
 	public:
 		struct Input {
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
 			FGResource depth;
 		};
 		struct Output {
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
 			FGResource depth;
 		};
 	public:
@@ -82,8 +76,8 @@ namespace ob::graphics {
 	public:
 		GBufferPass() {}
 		Output render(FG& fg, RenderView& view, Input input)const {
-			auto earlyZ = m_earlyZ.render(fg, view, { input.albedo, input.normal, input.params, input.depth });
-			auto opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.params, earlyZ.depth });
+			auto earlyZ = m_earlyZ.render(fg, view, { input.depth });
+			auto opaque = m_opaque.render(fg, view, { input.albedo , input.normal, input.params, earlyZ.depth });
 			auto masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.params, opaque.depth });
 			return { masked.albedo,masked.normal, masked.params, masked.depth };
 		}

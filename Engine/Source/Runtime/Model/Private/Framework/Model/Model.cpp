@@ -103,7 +103,6 @@ namespace ob::model {
 					auto& shaders = pass.qualities.emplace_back();
 
 					shaders.depthStencil.depth.enable = true;
-					shaders.colors = { TextureFormat::RGBA8 };
 					shaders.depth = TextureFormat::D32;
 					shaders.vs = Shader::CompileVS(code.value());
 					shaders.ps = Shader::CompilePS(code.value());
