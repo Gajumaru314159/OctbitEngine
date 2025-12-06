@@ -2,4 +2,4 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include "stdafx.h"
+#include <Framework/Asset/pch.h>

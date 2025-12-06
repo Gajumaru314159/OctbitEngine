@@ -25,6 +25,7 @@ ENDFUNCTION()
 FUNCTION(SUBDIRLIST result root_path)
 	SET(dirs "")
 	SUBDIRLIST_RECLUSIVE(dirs ${root_path} "*")
+	LIST(APPEND dirs ${root_path})
 	SET(${result} ${dirs} PARENT_SCOPE)
 ENDFUNCTION()
 
@@ -32,10 +33,9 @@ ENDFUNCTION()
 # サブフォルダの列挙
 # result      : 結果を格納する変数名
 # filter      : 格納するVisualStudioのフィルタ名
-# filter_root : フィルタをどこに格納するか
 # dir_root    : 検索するルートのディレクトリ
 #------------------------------------------------------------------------------
-FUNCTION(ADD_SOURCES result dir_root filter_root filter)
+FUNCTION(ADD_SOURCES result dir_root filter)
 
 	SET(root_path "${CMAKE_CURRENT_SOURCE_DIR}/${dir_root}")
 	# サブディレクトリを列挙(ルートからの相対)
@@ -57,10 +57,10 @@ FUNCTION(ADD_SOURCES result dir_root filter_root filter)
 			"${abs_dir}/*.h"
 			"${abs_dir}/*.cpp")
 		# ソースリストを結合
-		LIST(APPEND all_files ${files})
+		LIST(APPEND all_files ${files})		
 		# フィルタ設定
 		if(${dir} STREQUAL ".")
-			SOURCE_GROUP("${filter}/" FILES ${files})
+			SOURCE_GROUP("${filter}" FILES ${files})
 		else()
 			SOURCE_GROUP("${filter}/${dir}" FILES ${files})
 		endif()
@@ -73,23 +73,20 @@ ENDFUNCTION()
 #------------------------------------------------------------------------------
 # カレントとディレクトリ以下のソースファイルを読み込み
 #------------------------------------------------------------------------------
-FUNCTION(OB_LOAD_FILES result filter_root)
+FUNCTION(OB_LOAD_FILES result)
 
 	message("Load project [${PROJECT_NAME}]")
 
 	# ファイルを列挙
-	if(EXISTS ../Test)
-		ADD_SOURCES(test_files . ${filter_root} Test)
-	else()
-		ADD_SOURCES(public_files Public ${filter_root} Public)
-		ADD_SOURCES(private_files Private ${filter_root} Private)
-	endif()
+	ADD_SOURCES(public_files Public Public)
+	ADD_SOURCES(private_files Private Private)
+	ADD_SOURCES(src_files Source Source)
 
 	# PublicとPrivateを結合
 	SET(files "")
 	LIST(APPEND files ${public_files})
 	LIST(APPEND files ${private_files})
-	LIST(APPEND files ${test_files})
+	LIST(APPEND files ${src_files})
 
 	# resultに格納
 	SET(${result} ${files} PARENT_SCOPE)
@@ -99,11 +96,11 @@ ENDFUNCTION()
 #------------------------------------------------------------------------------
 # カレントとディレクトリ以下のソースファイルを読み込み
 #------------------------------------------------------------------------------
-FUNCTION(OB_LOAD_TEST_FILES result filter_root)
+FUNCTION(OB_LOAD_TEST_FILES result)
 
 	message("Load project [${PROJECT_NAME}]")
 
-	ADD_SOURCES(test_files . ${filter_root} Test)
+	ADD_SOURCES(test_files . Test)
 
 	# PublicとPrivateを結合
 	SET(files "")
@@ -165,19 +162,19 @@ ENDFUNCTION()
 #------------------------------------------------------------------------------
 # Frameworkモジュールを追加
 # * Public/Private以下のソースファイルを登録
-# * Public/Framework/{PROJECT_NAME}/PCH/stdafx.hが存在すればPCHに登録
+# * Public/Framework/{PROJECT_NAME}/pch.hが存在すればプリコンパイルヘッダに登録
 # * ライブラリと追加の依存ディレクトリを登録
 # * Frameworkフィルターを設定
 #------------------------------------------------------------------------------
 FUNCTION(OB_ADD_LIBRARY)	
 	
 	# ソースコードを登録
-	OB_LOAD_FILES(out_sources "Framework/${PROJECT_NAME}")
+	OB_LOAD_FILES(out_sources)
 	add_library(${PROJECT_NAME} STATIC ${out_sources})
 
 	# プリコンパイルヘッダを設定
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Public/Framework/${PROJECT_NAME}/PCH/stdafx.h)
-		SET_PCH("Framework/${PROJECT_NAME}/PCH/stdafx.h")
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/Public/Framework/${PROJECT_NAME}/pch.h)
+		SET_PCH("Framework/${PROJECT_NAME}/pch.h")
 	endif()
 
 	# インクルードディレクトリ設定
@@ -204,12 +201,12 @@ FUNCTION(OB_ADD_TEST)
 	LIST(APPEND private_libs GTest::gtest_main)
 	
 	# ソースコードを登録
-	OB_LOAD_TEST_FILES(out_sources "Test/${PROJECT_NAME}")
+	OB_LOAD_TEST_FILES(out_sources)
 	add_executable(${PROJECT_NAME} ${out_sources})
 
 	# プリコンパイルヘッダを設定
-	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/PCH/stdafx.h)
-		SET_PCH("PCH/stdafx.h")
+	if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/pch.h)
+		SET_PCH("pch.h")
 	endif()
 
 	# 定義
@@ -243,17 +240,17 @@ ENDFUNCTION()
 FUNCTION(OB_ADD_APP)	
 	
 	# ソースコードを登録
-	OB_LOAD_FILES(out_sources "Application")
+	OB_LOAD_FILES(out_sources)
 	add_executable(${PROJECT_NAME} ${out_sources})
 
 	# プリコンパイルヘッダを設定
-	SET_PCH("PCH/stdafx.h")
+	SET_PCH("pch.h")
 
 	# 定義
 	target_compile_definitions(${PROJECT_NAME} PRIVATE OB_PLATFORM_BUILD)
 
 	# インクルードディレクトリ設定
-	list(APPEND public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Public")
+	list(APPEND public_includes "${CMAKE_CURRENT_SOURCE_DIR}/Source")
 	target_include_directories(${PROJECT_NAME} PUBLIC ${public_includes} PRIVATE ${private_includes})
 	
 	# 依存ライブラリ設定

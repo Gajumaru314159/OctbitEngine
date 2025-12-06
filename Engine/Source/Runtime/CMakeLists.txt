@@ -22,4 +22,4 @@ if(OCTBIT_VULKAN)
 endif()
 
 # Executable
-add_subdirectory ("Application")
+add_subdirectory ("Sandbox")

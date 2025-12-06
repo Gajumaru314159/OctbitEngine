@@ -2,4 +2,5 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Debug/PCH/stdafx.h>
+#pragma once
+#include "pch.h"

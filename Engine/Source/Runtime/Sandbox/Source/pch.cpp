@@ -2,4 +2,4 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/DirectX12RHI/PCH/stdafx.h>
+#include "pch.h"
