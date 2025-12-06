@@ -114,7 +114,7 @@ namespace ob::editor {
 		String name;
 	private:
 		bool deserialize(BinaryReader& reader) override {
-			auto len = reader.readS32();
+			//auto len = reader.readS32();
 			//name.resize(len);
 			//reader.read(name.data(), len);
 			return true;

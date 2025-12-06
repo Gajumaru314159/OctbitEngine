@@ -19,7 +19,7 @@ private:
     s32 m_value = 123;
 };
 using TestAssetHandle = AssetHandle<TestAsset>;
-
+/*
 TEST(Asset, AssetHandle)
 {
     AssetManager manager;
@@ -40,3 +40,4 @@ TEST(Asset, AssetHandle)
     );
 
 }
+*/

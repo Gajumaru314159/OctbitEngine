@@ -5,6 +5,7 @@
 #pragma once
 #include <Framework/Engine/Component.h>
 #include <Framework/Engine/Entity.h>
+#include <Framework/Core/Math/Transform.h>
 
 namespace ob::engine {
 

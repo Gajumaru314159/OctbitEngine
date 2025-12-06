@@ -4,6 +4,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Engine/Forward.h>
+#include <Framework/Core/Misc/UUID.h>
 
 namespace ob::engine {
 
