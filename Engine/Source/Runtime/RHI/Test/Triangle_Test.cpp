@@ -141,7 +141,7 @@ PsOut PS_Main(PsIn i) {
 		Ref<CommandList> cmdList;
 		{
 			CommandListDesc desc;
-			desc.name = "MaincmdList";
+			desc.name = "MainCmdList";
 			desc.type = CommandListType::Graphic;
 			cmdList = CommandList::Create(desc);
 			OB_ASSERT_EXPR(cmdList);
