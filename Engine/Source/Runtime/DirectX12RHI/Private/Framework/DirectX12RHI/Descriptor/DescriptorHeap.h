@@ -1,0 +1,90 @@
+﻿//***********************************************************
+//! @file
+//! @author		Gajumaru
+//***********************************************************
+#pragma once
+#include <Framework/Core/Allocator/Utility/TLSFMapper.h>
+#include <Framework/DirectX12RHI/Descriptor/DescriptorHeapType.h>
+
+namespace ob::rhi {
+
+	//! @brief      デスクリプタのアロケータ
+	//! 
+	//! @details    Two-Level Segregate Fit を利用してデスクリプタを割り当てます。
+	class DescriptorHeap :private Noncopyable {
+		friend class DescriptorHandle;
+	public:
+
+		//! @brief          コンストラクタ
+		//! 
+		//! @param device   デバイス
+		//! @param type     ヒープ・タイプ
+		//! @param capacity 容量
+		DescriptorHeap(class DirectX12Device& device, DescriptorHeapType type, s32 capacity);
+
+
+		//! @brief          デストラクタ
+		~DescriptorHeap();
+
+
+		//! @brief  名前を設定
+		void setName(StringView name);
+
+
+		//! @brief          ハンドルをアロケート
+		//! 
+		//! @param handle   アロケート先ハンドル
+		//! @param size  割り当て個数
+		void allocateHandle(class DescriptorHandle& handle, s32 size);
+
+
+		//! @brief          ハンドルを解放
+		void releaseHandle(class DescriptorHandle& handle);
+
+
+		//! @brief          CPUハンドルを取得
+		D3D12_CPU_DESCRIPTOR_HANDLE getCpuHandle(u32 index) const;
+
+
+		//! @brief          CPUハンドルを取得
+		D3D12_GPU_DESCRIPTOR_HANDLE getGpuHandle(u32 index) const;
+
+
+		//! @brief  タイプを取得
+		DescriptorHeapType getHeapType()const;
+
+
+		//! @brief  ネイティブクラスを取得
+		const auto& getNative()const { return m_heap; };
+
+	private:
+
+		Mutex							m_mutex;		//!< ミューテックス
+		DescriptorHeapType				m_type;
+		ComPtr<ID3D12DescriptorHeap>	m_heap;
+		TLSFMapper						m_mapper;
+		u32								m_descriptorSize;
+
+		ComPtr<ID3D12DescriptorHeap>	m_stagingHeap;
+		Atomic<s32>						m_stagingIndex;
+		s32								m_stagingCapacity;
+	};
+
+
+	class DescriptorStagingHeap :private Noncopyable {
+	public:
+
+		DescriptorStagingHeap(class DirectX12Device& device, DescriptorHeapType type, s32 capacity);
+
+		D3D12_CPU_DESCRIPTOR_HANDLE allocate(s32 size = 1);
+
+		void reset();
+
+	private:
+		ComPtr<ID3D12DescriptorHeap>	m_heap;
+		Atomic<s32>						m_index;
+		s32								m_capacity;
+		s32								m_stride;	
+	};
+
+}

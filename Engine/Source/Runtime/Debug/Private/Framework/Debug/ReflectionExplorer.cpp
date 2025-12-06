@@ -1,0 +1,52 @@
+﻿//***********************************************************
+//! @file
+//! @author		Gajumaru
+//***********************************************************
+#include <Framework/Debug/ReflectionExplorer.h>
+#include <Framework/ImGui/ImGui.h>
+#include <Framework/Core/Reflection/TypeInfoPrinter.h>
+
+namespace ob::debug {
+
+	ReflectionExplorer::ReflectionExplorer()
+	{
+
+	}
+
+	void ReflectionExplorer::draw(const TypeInfo& info) {
+
+		m_buffer = info.type.name();
+		if (auto tag = info.findTag("DisplayName")) m_buffer = tag.value();
+		if (ImGui::Selectable(m_buffer.data())) {
+			m_selected = info.type;
+		}
+	}
+	void ReflectionExplorer::drawDetail(const TypeInfo& info) {
+		auto text = PrintTypeInfo(info);
+		ImGui::Text("%s",text.data());
+	}
+
+	void ReflectionExplorer::draw() {
+
+		if (ImGui::Begin("ReflectionExplorer")) {
+
+			if (ImGui::BeginListBox("Types")) {
+				TypeInfoManager::Visit([this](const TypeInfo& info) { draw(info); });
+				ImGui::EndListBox();
+			}
+
+			if (auto info = TypeInfoManager::Find(m_selected)) {
+				drawDetail(*info);
+
+				ImGui::Separator();
+				if (auto desc = info->findTag("Description")) {
+					ImGui::Text("%s",desc->data());
+				}
+			}
+		}
+
+		ImGui::End();
+
+	}
+
+}

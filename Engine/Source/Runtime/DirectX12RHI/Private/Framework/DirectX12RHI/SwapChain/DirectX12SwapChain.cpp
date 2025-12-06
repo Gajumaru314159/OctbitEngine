@@ -1,0 +1,489 @@
+﻿//***********************************************************
+//! @file
+//! @author		Gajumaru
+//***********************************************************
+#include "DirectX12SwapChain.h"
+#include <Framework/RHI/DescriptorLayout.h>
+#include <Framework/RHI/RootSignature.h>
+#include <Framework/RHI/Shader.h>
+#include <Framework/DirectX12RHI/DirectX12Device.h>
+#include <Framework/DirectX12RHI/Texture/DirectX12Texture.h>
+#include <Framework/DirectX12RHI/Command/DirectX12CommandList.h>
+#include <Framework/DirectX12RHI/Utility/Utility.h>
+#include <Framework/DirectX12RHI/Utility/TypeConverter.h>
+#include <magic_enum.hpp>
+namespace {
+	constexpr int static s_maxSwapChainCount = 4;
+}
+
+namespace ob::rhi {
+
+	//! @brief  コンストラクタ
+	DirectX12SwapChain::DirectX12SwapChain(DirectX12Device& device, const SwapChainDesc& desc)
+		: m_device(device)
+		, m_desc(desc)
+	{
+
+		if (!desc.window.isValid()) {
+			LOG_ERROR_EX("Graphic", "Windowが設定されていません。");
+			return;
+		}
+
+		// サイズが指定されていない場合はウィンドウサイズを使用
+		if (m_desc.size.width == 0 || m_desc.size.height == 0) {
+			auto size = m_desc.window.getSize();
+			m_desc.size = Size(size.x, size.y);
+		}
+		m_syncInterval = desc.vsync ? 1 : 0;
+		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
+		m_format = m_desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
+
+		if (!createSwapChain(device))return;
+		if (!createResources(device))return;
+		if (!createBuffers(device))return;
+
+		m_desc.window.addEventListener(m_hEvent, { *this,&DirectX12SwapChain::onWindowChanged });
+
+		manage();
+	}
+
+
+	//! @brief      名前を取得
+	const String& DirectX12SwapChain::getName()const {
+		return m_desc.name;
+	}
+
+
+	//! @brief  スワップチェーン生成
+	bool DirectX12SwapChain::createSwapChain(DirectX12Device& device) {
+		auto& window = m_desc.window;
+
+		BOOL allowTearing = false;
+		UINT sampleQuality = 0;
+		UINT sampleCount = 1;
+		HWND hWnd = static_cast<HWND>(window.getHandle());
+		{
+			{
+				D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS feature{};
+				auto result = device.getNative()->CheckFeatureSupport(D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS, &feature, sizeof(feature));
+				if (SUCCEEDED(result)) {
+					LOG_INFO_EX("Graphic", "最大マルチサンプルカウント={}", feature.SampleCount);
+					LOG_INFO_EX("Graphic", "最大マルチサンプルクオリティ={}", feature.NumQualityLevels);
+					//sampleQuality = feature.SampleCount;
+					//sampleCount = feature.NumQualityLevels;
+				}
+			}
+
+			device.getFactory()->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &allowTearing, sizeof(allowTearing));
+		}
+
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+		swapChainDesc.BufferDesc.Width = m_desc.size.width;                                 // 画面解像度【横】
+		swapChainDesc.BufferDesc.Height = m_desc.size.height;                               // 画面解像度【縦】
+		swapChainDesc.BufferDesc.Format = TypeConverter::Convert(m_format);					// ピクセルフォーマット
+		swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;								// リフレッシュ・レート分子
+		swapChainDesc.BufferDesc.RefreshRate.Denominator = 00;								// リフレッシュ・レート分母
+		swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;   // スキャンラインの順番 => 指定なし
+		swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_STRETCHED;                     //解像度に合うように同補正するか => 拡大
+
+		swapChainDesc.SampleDesc.Quality = sampleQuality;                                   // マルチサンプル・クオリティ
+		swapChainDesc.SampleDesc.Count = sampleCount;                                       // マルチサンプル・カウント
+
+		swapChainDesc.BufferCount = m_desc.bufferCount;						                // バッファの数
+		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;			            // バックバッファとして使用
+		swapChainDesc.OutputWindow = hWnd;                                                  // ウィンドウ
+		swapChainDesc.Windowed = TRUE;                                                      // ※公式リファレンスによるとフルスクリーン指定は別ので行う
+		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;                           // Present後破棄
+
+		swapChainDesc.Flags =
+			// (allowTearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0) |
+			//DXGI_SWAP_CHAIN_FLAG_NONPREROTATED |                  // フルスクリーン時自動回転
+			DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH |                // ResizeTargetでサイズ変更許可
+			//DXGI_SWAP_CHAIN_FLAG_DISPLAY_ONLY |                   // リモートアクセス禁止
+			//DXGI_SWAP_CHAIN_FLAG_FRAME_LATENCY_WAITABLE_OBJECT |  // フルスクリーン以外で描画待機
+			//DXGI_SWAP_CHAIN_FLAG_FULLSCREEN_VIDEO |               // フルスクリーンビデオ
+			//DXGI_SWAP_CHAIN_FLAG_YUV_VIDEO |                      // YUVビデオのスワップチェーン
+			0;
+
+		// スワップチェイン生成
+		auto result = device.getFactory()->CreateSwapChain(
+			device.getCommandQueue().Get(),
+			&swapChainDesc,
+			reinterpret_cast<IDXGISwapChain **>(m_swapChain.ReleaseAndGetAddressOf()));
+
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "IDXGIFactory::CreateSwapChain()");
+			return false;
+		}
+
+
+		if (allowTearing)
+		{
+			// When tearing support is enabled we will handle ALT+Enter key presses in the
+			// window message loop rather than let DXGI handle it by calling SetFullscreenState.
+			//device.getFactory()->MakeWindowAssociation((HWND)m_desc.window.getHandle(), DXGI_MWA_NO_ALT_ENTER);
+		}
+
+
+		if (window.isMainWindow()) {
+
+			// Alt + Enter でウィンドウモードに変わらないようにする 
+			device.getFactory()->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+
+			if (window.getMode() == platform::WindowMode::FullScreen) {
+				// TODO フルスクリーンの場合バックバッファをリサイズ
+			}
+		}
+
+		return true;
+	}
+
+
+	//! @brief      レンダーテクスチャを初期化
+	bool DirectX12SwapChain::createBuffers(DirectX12Device& device) {
+
+		if (!is_in_range(m_desc.bufferCount, 1, s_maxSwapChainCount)) {
+			LOG_ERROR_EX("Graphic", "バックバッファの枚数が不正です。[Min=1,Max={0},Value={1}]", s_maxSwapChainCount, m_desc.bufferCount);
+			return false;
+		}
+
+		HRESULT result;
+
+		// バッファを生成
+		m_textures.clear();
+		m_textures.reserve(m_desc.bufferCount);
+
+		// レンダーターゲットビュー生成
+		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc = {};
+		rtvDesc.Format = TypeConverter::Convert(m_format);
+		rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+		for (s32 i = 0; i < m_desc.bufferCount; ++i) {
+
+			ComPtr<ID3D12Resource> resource;
+			result = m_swapChain->GetBuffer(i, IID_PPV_ARGS(resource.ReleaseAndGetAddressOf()));
+			if (FAILED(result)) {
+				// 生成が正しければ呼ばれないはず
+				Utility::OutputFatalLog(result, "IDXGISwapChain::GetBuffer()");
+				return false;
+			}
+
+			auto name = Format("{}_{}", m_desc.name, i);
+
+			m_textures.emplace_back(new DirectX12Texture(device, resource, D3D12_RESOURCE_STATE_PRESENT, name));
+
+			m_viewport = CD3DX12_VIEWPORT(resource.Get());
+			m_scissorRect = CD3DX12_RECT(0, 0, static_cast<UINT>(m_viewport.Width), static_cast<UINT>(m_viewport.Height));
+		}
+
+		return true;
+	}
+
+
+	//! @brief  コンストラクタ
+	bool DirectX12SwapChain::createResources(DirectX12Device& device) {
+
+		{
+			Vec2 vertices[] = {
+				{-1,-1},
+				{+1,-1},
+				{-1,+1},
+				{+1,-1},
+				{+1,+1},
+				{-1,+1},
+			};
+			BufferDesc bdesc = BufferDesc::Vertex<Vec2>(std::size(vertices));
+			bdesc.name = m_desc.name + "_SwapChainVertices";
+			m_vertices = Buffer::Create(bdesc);
+			m_vertices->updateDirect(bdesc.size, vertices);
+		}
+
+		Ref<Shader> vs;
+		Ref<Shader> ps;
+		{
+			String code;
+			code.append("SamplerState g_mainSampler:register(s0);						\n");
+			code.append("Texture2D g_mainTex:register(t0);								\n");
+			code.append("// IN / OUT														\n");
+			code.append("struct VsIn {													\n");
+			code.append("  float2 pos	:POSITION;										\n");
+			code.append("};																\n");
+			code.append("struct PsIn {													\n");
+			code.append("  float4 pos	:SV_POSITION;									\n");
+			code.append("  float2 uv	    :TEXCOORD;									    \n");
+			code.append("};																\n");
+			code.append("// エントリ														\n");
+			code.append("PsIn VS_Main(VsIn i) {											\n");
+			code.append("    PsIn o;														\n");
+			code.append("    o.pos = float4(i.pos*float2(2,-2)-1,0,1);				    \n");
+			code.append("    o.uv = i.pos.xy;								            \n");
+			code.append("    return o;													\n");
+			code.append("}																\n");
+			code.append("float4 PS_Main(PsIn i):SV_TARGET0{								\n");
+			code.append("    return g_mainTex.Sample(g_mainSampler,i.uv);		        \n");
+			code.append("}																\n");
+
+			vs = Shader::CompileVS(code);
+			ps = Shader::CompilePS(code);
+			OB_ASSERT_EXPR(vs && ps);
+		}
+
+		m_layout = DescriptorLayout::Create({ Binding::Texture(0) });
+
+		Ref<RootSignature> signature;
+		{
+			RootSignatureDesc desc;
+			desc.layouts = { m_layout };
+			desc.samplers = { StaticSamplerDesc(SamplerDesc(),0) };
+			desc.name = m_desc.name;
+			signature = RootSignature::Create(desc);
+			OB_ASSERT_EXPR(signature);
+		}
+
+		Ref<PipelineState> pipeline;
+		{
+			PipelineStateDesc desc;
+			desc.name = m_desc.name;
+			desc.colors = { m_format };
+
+			desc.rootSignature = signature;
+			desc.vs = vs;
+			desc.ps = ps;
+			desc.vertexLayout.attributes = {
+				VertexAttribute(Semantic::Position,0,ElementType::Float,2),
+			};
+			desc.vertexLayout.vertexStride = sizeof(Vec2);
+			desc.blend[0] = BlendDesc::AlphaBlend;
+			desc.rasterizer.cullMode = CullMode::None;
+			desc.depthStencil.depth.enable = false;
+			desc.depthStencil.stencil.enable = false;
+
+			pipeline = PipelineState::Create(desc);
+			OB_ASSERT_EXPR(pipeline);
+		}
+
+		m_signature = signature;
+		m_pipeline = pipeline;
+
+		return true;
+	}
+
+
+	//! @brief      カラースペースを設定
+	bool DirectX12SwapChain::setColorSpace() {
+		bool isHdrEnabled = m_desc.hdr;
+		if (!isHdrEnabled)return false;
+
+		// TODO Rec2020以外の指定対応
+		DXGI_COLOR_SPACE_TYPE colorSpace = DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020;
+		UINT colorSpaceSupport;
+
+		auto result = m_swapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport);
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "IDXGISwapChain::CheckColorSpaceSupport()");
+			return false;
+		}
+
+		if (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT) {
+			result = m_swapChain->SetColorSpace1(colorSpace);
+			if (FAILED(result)) {
+				Utility::OutputFatalLog(result, "IDXGISwapChain::SetColorSpace1()");
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	//! @brief  デストラクタ
+	DirectX12SwapChain::~DirectX12SwapChain() {
+
+	}
+
+
+	//! @brief  妥当なオブジェクトか
+	bool DirectX12SwapChain::isValid()const {
+		return !m_textures.empty();
+	}
+
+
+	//! @brief  定義を取得
+	const SwapChainDesc& DirectX12SwapChain::getDesc()const noexcept {
+		return m_desc;
+	}
+
+
+	//! @brief      更新
+	//! 
+	//! @details    表示するテクスチャを次のバックバッファにします。
+	void DirectX12SwapChain::update() {
+
+		if (!m_desc.window.isValid())return;
+		if (!m_visible)return;
+
+		auto result = m_swapChain->Present(m_syncInterval, m_flags);
+
+		if (FAILED(result)) {
+			Utility::OutputFatalLog(result, "IDXGUISwapChain::Present()");
+			LOG_FATAL_EX("Graphic", "スワップチェーンの更新に失敗");
+			return;
+		}
+
+		auto index = m_swapChain->GetCurrentBackBufferIndex();
+		m_textures.setIndex(index);
+
+	}
+
+
+	//! @brief      イベントリスナ追加
+	void DirectX12SwapChain::addEventListener(SwapChainEventHandle& handle, SwapChainEventDelegate func) {
+		m_notifier.add(handle, func);
+	}
+
+
+
+	//! @brief      デスクリプタCPUハンドルを取得
+	D3D12_CPU_DESCRIPTOR_HANDLE DirectX12SwapChain::getCpuHandle()const {
+		return m_textures.current().cast<DirectX12Texture>()->getRTV().getCpuHandle();
+	}
+
+
+	//! @brief      デスクリプタGPUハンドルを取得
+	D3D12_GPU_DESCRIPTOR_HANDLE DirectX12SwapChain::getGpuHandle()const {
+		return m_textures.current().cast<DirectX12Texture>()->getRTV().getGpuHandle();
+	}
+
+
+	//! @brief      ビューポートを取得
+	D3D12_VIEWPORT DirectX12SwapChain::getViewport()const {
+		return m_viewport;
+	}
+
+
+	//! @brief      シザー矩形を取得
+	D3D12_RECT DirectX12SwapChain::getScissorRect()const {
+		return m_scissorRect;
+	}
+
+
+	//! @brief      リソース取得
+	ID3D12Resource* DirectX12SwapChain::getResource()const {
+
+		return m_textures.current().cast<DirectX12Texture>()->getResource();
+	}
+
+
+	//! @brief      バッファへコピー
+	void DirectX12SwapChain::recordApplySwapChain(DirectX12CommandList& cmdList, const Ref<Texture>& texture) {
+
+		// テクスチャが違う場合再バインド
+		if (m_boundTexture != texture) {
+
+			m_boundTextureTable.reset();
+			m_boundTexture = texture;
+
+			if (m_boundTexture) {
+				m_boundTextureTable = DescriptorTable::Create({ m_layout });
+				m_boundTextureTable->setResource(0, m_boundTexture);
+			}
+
+		}
+
+		// バインドされていなければスキップ
+		if (!m_boundTextureTable)
+			return;
+
+		{
+			cmdList.pushMarker("Apply SwapChain");
+
+
+
+			BeginPassParam renderPass;
+			renderPass.colors.emplace_back(m_textures.current(), RenderPassBeforeAccessType::Clear, RenderPassAfterAccessType::Preserve);
+
+			cmdList.beginRenderPass(renderPass);
+
+			cmdList.setPipelineState(m_pipeline);
+
+			SetDescriptorTableParam tableParam(m_boundTextureTable, 0);
+			cmdList.setDescriptorTables(&tableParam, 1);
+
+			cmdList.setVertexBuffer(m_vertices);
+
+			DrawParam drawParam;
+			drawParam.startVertex = 0;
+			drawParam.vertexCount = 6;
+			cmdList.draw(drawParam);
+
+			cmdList.endRenderPass();
+
+			// Present準備
+			if (auto pTexture = m_textures.current().cast<DirectX12Texture>()) {
+
+				D3D12_RESOURCE_BARRIER barrier;
+				if (pTexture->addResourceTransition(barrier, D3D12_RESOURCE_STATE_PRESENT)) {
+					cmdList.getNative()->ResourceBarrier(1, &barrier);
+				}
+
+			}
+
+			cmdList.popMarker();
+		}
+
+	}
+
+
+	//! @brief      ウィンドウの更新イベント
+	void DirectX12SwapChain::onWindowChanged(const platform::WindowEventArgs& args) {
+
+		if (args.type == platform::WindowEventType::Size || args.type == platform::WindowEventType::Maximize) {
+			if (!args.isSizing) {
+
+				DXGI_SWAP_CHAIN_DESC desc = {};
+				m_swapChain->GetDesc(&desc);
+
+				if (desc.BufferDesc.Width == args.newSize.x && desc.BufferDesc.Height == args.newSize.y)
+					return;
+
+				m_newSize = args.newSize;
+
+				m_resizeCountDown = 2;
+
+				m_device.clearCommands();
+
+
+				m_desc.size.width = static_cast<s32>(args.newSize.x);
+				m_desc.size.height = static_cast<s32>(args.newSize.y);
+
+				for (s32 i = 0; i < m_desc.bufferCount; ++i) {
+					// リソースが使用中だとResizeBuffersに失敗する。
+					// TODO 無効なメモリを描画に使用しそうだがいったん保留
+					m_textures.at(i).cast<DirectX12Texture>()->releaseNative();
+				}
+
+				// リサイズ
+				auto result = m_swapChain->ResizeBuffers(m_desc.bufferCount, 0, 0, desc.BufferDesc.Format, desc.Flags);
+				if (FAILED(result)) {
+					Utility::OutputErrorLog(result, "IDXGISwapChain::ResizeBuffersに失敗");
+					return;
+				}
+
+				createBuffers(m_device);
+
+				LOG_TRACE("スワップチェーンをリサイズ ({},{}) -> ({},{})", desc.BufferDesc.Width, desc.BufferDesc.Height, m_desc.size.width, m_desc.size.height);
+
+				m_notifier.invoke();
+
+			}
+		}
+
+		if (args.type == platform::WindowEventType::Minimize) {
+			m_visible = false;
+		}
+		if (args.type == platform::WindowEventType::Maximize || args.type == platform::WindowEventType::Move) {
+			m_visible = true;
+		}
+
+	}
+
+}
