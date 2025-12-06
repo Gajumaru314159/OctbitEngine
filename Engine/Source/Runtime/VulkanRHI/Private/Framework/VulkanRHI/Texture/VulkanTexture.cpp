@@ -38,6 +38,8 @@ namespace ob::rhi {
 			break;
 		case TextureType::Cube:
 			info.imageType = vk::ImageType::e2D;
+			info.flags = vk::ImageCreateFlagBits::eCubeCompatible;
+			info.arrayLayers *= 6;
 			break;
 		default:
 			LOG_ERROR("不明なテクスチャタイプです [name={}]", name);
@@ -263,7 +265,7 @@ namespace ob::rhi {
 		viewCreateInfo.viewType = vk::ImageViewType::e2D;
 		viewCreateInfo.format = info.format;
 		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
-		viewCreateInfo.subresourceRange.levelCount = 1;
+		viewCreateInfo.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
 		viewCreateInfo.subresourceRange.layerCount = 1;
 		viewCreateInfo.image = *m_shared->image;
 
@@ -304,7 +306,7 @@ namespace ob::rhi {
 		viewCreateInfo.viewType = vk::ImageViewType::e2D;
 		viewCreateInfo.format = format;
 		viewCreateInfo.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
-		viewCreateInfo.subresourceRange.levelCount = 1;
+		viewCreateInfo.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
 		viewCreateInfo.subresourceRange.layerCount = 1;
 		viewCreateInfo.image = image;
 		viewCreateInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
@@ -360,11 +362,9 @@ namespace ob::rhi {
 		info.components = { vk::ComponentSwizzle::eR, vk::ComponentSwizzle::eG, vk::ComponentSwizzle::eB, vk::ComponentSwizzle::eA };
 		info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
 		info.subresourceRange.baseMipLevel = 0;
-		info.subresourceRange.levelCount = m_desc.mipLevels * std::max(m_desc.arrayNum,1);
+		info.subresourceRange.levelCount = VK_REMAINING_MIP_LEVELS;
 		info.subresourceRange.baseArrayLayer = 0;
-		info.subresourceRange.layerCount = 1;
-
-		if (m_desc.type == TextureType::Cube) info.subresourceRange.levelCount *= 6;
+		info.subresourceRange.layerCount = VK_REMAINING_ARRAY_LAYERS;
 
 		// Depthの場合はAspectMaskを変更
 		if (TextureFormatUtility::HasDepth(m_desc.format)) info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;

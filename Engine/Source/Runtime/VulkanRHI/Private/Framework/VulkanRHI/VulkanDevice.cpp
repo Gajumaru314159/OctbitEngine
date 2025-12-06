@@ -405,6 +405,14 @@ namespace ob::rhi {
 		queueInfo.queueFamilyIndex = m_queueFamilyIndex;
 		queueInfo.queueCount = static_cast<uint32_t>(queuePriorities.size());
 
+		// 必要なデバイス機能
+		vk::PhysicalDeviceFeatures deviceFeatures{};
+		if (m_features.imageCubeArray) {
+			deviceFeatures.imageCubeArray = VK_TRUE;
+		} else {
+			LOG_WARNING("このデバイスはimageCubeArrayをサポートしていません。キューブマップ配列は使用できません。");
+		}
+
 		// 生成情報
 		vk::DeviceCreateInfo info;
 		info.queueCreateInfoCount = 1;
@@ -413,7 +421,7 @@ namespace ob::rhi {
 		info.ppEnabledExtensionNames = validExtensionNames.data();
 		info.enabledLayerCount = static_cast<uint32_t>(validLayerNames.size());
 		info.ppEnabledLayerNames = validLayerNames.data();
-		info.pEnabledFeatures = nullptr;
+		info.pEnabledFeatures = &deviceFeatures;
 
 		// Dynamic Rendering機能を有効にするための構造体
 		vk::PhysicalDeviceDynamicRenderingFeaturesKHR dynamicRenderingFeatures{};
@@ -421,7 +429,7 @@ namespace ob::rhi {
 		info.pNext = &dynamicRenderingFeatures;
 
 		// Mutable Descriptor Type
-		vk::PhysicalDeviceMutableDescriptorTypeFeaturesEXT mutableDescriptorTypeFeature;
+		vk::PhysicalDeviceMutableDescriptorTypeFeaturesEXT mutableDescriptorTypeFeature{};
 		mutableDescriptorTypeFeature.mutableDescriptorType = m_config.enableBindless;
 		dynamicRenderingFeatures.pNext = &mutableDescriptorTypeFeature;
 
