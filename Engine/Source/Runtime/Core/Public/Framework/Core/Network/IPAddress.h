@@ -4,6 +4,7 @@
 //***********************************************************
 #pragma once
 #include <Framework/Core/CorePrivate.h>
+#include <Framework/Core/Misc/CAPI.h>
 
 namespace ob::core {
 
@@ -23,7 +24,7 @@ namespace ob::core {
 			d = ip & 0xff;
 		}
 		IPAddress(const char* ip) {
-			if(sscanf(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)){}
+			if (CAPI::SScanf(ip, "%hhu.%hhu.%hhu.%hhu", &a, &b, &c, &d)) {}
 		}
 
 		static IPAddress LocalHost() { return IPAddress(127, 0, 0, 1); }

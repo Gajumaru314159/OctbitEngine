@@ -57,6 +57,7 @@
 
 #include <Framework/Core/Misc/Blob.h>
 #include <Framework/Core/Misc/BlobView.h>
+#include <Framework/Core/Misc/CAPI.h>
 #include <Framework/Core/Misc/Compression.h>
 #include <Framework/Core/Misc/CRCHash.h>
 #include <Framework/Core/Misc/DateTime.h>

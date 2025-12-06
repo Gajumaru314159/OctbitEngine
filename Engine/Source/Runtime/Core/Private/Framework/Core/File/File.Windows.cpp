@@ -4,6 +4,7 @@
 //***********************************************************
 #include <Framework/Core/File/File.h>
 #include <Framework/Core/Misc/Blob.h>
+#include <Framework/Core/Misc/CAPI.h>
 #include <Framework/Core/String/StringEncoder.h>
 #include <filesystem>
 
@@ -20,10 +21,11 @@ namespace ob::core {
 
 	//! @brief  エラーメッセージを取得
 	static String GetErrnoString() {
-		std::string errorStr = strerror(errno);
-		String errorStr2;
-		StringEncoder::Encode(errorStr, errorStr2);
-		return errorStr2;
+		char errorBuf[256] = {};
+		CAPI::StrError(errno, errorBuf, sizeof(errorBuf));
+		String errorStr;
+		StringEncoder::Encode(errorBuf, errorStr);
+		return errorStr;
 	}
 
 	//! @brief  ファイル(Windows)
@@ -54,7 +56,7 @@ namespace ob::core {
 			}
 
 			errno = 0;
-			m_fp = fopen(path.data(), pMode);
+			m_fp = CAPI::FOpen(path.data(), pMode);
 			if (errno == 0) {
 				std::error_code code;
 				auto s = file_size(m_path.c_str(), code);
