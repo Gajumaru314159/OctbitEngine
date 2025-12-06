@@ -56,6 +56,9 @@ namespace ob::rhi {
 			case BindingType::ConstantBuffer:
 				descTypeCount[vk::DescriptorType::eUniformBuffer]++;
 				break;
+			case BindingType::Sampler:
+				descTypeCount[vk::DescriptorType::eSampler]++;
+				break;
 			}
 		}
 
