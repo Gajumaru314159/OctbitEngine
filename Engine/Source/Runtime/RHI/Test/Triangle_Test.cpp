@@ -149,7 +149,7 @@ PsOut PS_Main(PsIn i) {
 
 		auto start = DateTime::Now();
 
-		f32 endTime = 5.0f;
+		f32 endTime = 1.0f;
 
 		while (true) {
 

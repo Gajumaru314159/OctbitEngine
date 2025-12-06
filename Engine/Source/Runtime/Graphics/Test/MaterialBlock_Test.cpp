@@ -190,7 +190,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 5;
+	f32 endTime = 1;
 
 	while (true) {
 
@@ -434,7 +434,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 5;
+	f32 endTime = 1;
 
 	while (true) {
 
@@ -701,7 +701,7 @@ PsOut PS_Main(PsIn i){
 		renderTexture = RenderTexture::Create(desc);
 	}
 
-	f32 endTime = 5;
+	f32 endTime = 1;
 
 	while (true) {
 
