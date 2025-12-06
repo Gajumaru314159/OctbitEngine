@@ -65,7 +65,7 @@ set(P2T_STATIC_EXPORTS TRUE)
 #------------------------------------------------------------------------------
 include(FetchContent)
 FetchContent_Declare(mimalloc GIT_REPOSITORY https://github.com/microsoft/mimalloc.git GIT_TAG "v3.1.5")
-FetchContent_Declare(tracy GIT_REPOSITORY https://github.com/wolfpld/tracy GIT_TAG "v0.12.2")
+FetchContent_Declare(tracy GIT_REPOSITORY https://github.com/wolfpld/tracy GIT_TAG "v0.13.0")
 FetchContent_Declare(GSL GIT_REPOSITORY https://github.com/microsoft/GSL.git GIT_TAG "v4.0.0")
 FetchContent_Declare(utf8cpp GIT_REPOSITORY https://github.com/nemtrif/utfcpp.git GIT_TAG "v4.0.5")
 FetchContent_Declare(magic_enum GIT_REPOSITORY https://github.com/Neargye/magic_enum.git GIT_TAG "v0.8.0")
@@ -105,6 +105,7 @@ if(MSVC)
     add_compile_options(/wd4100)    # 仮パラメーターが関数の本体で参照されていません。 未参照のパラメーターは無視されます。
     add_compile_options(/wd4267)    # 'var': 'size_t' から 'type' への変換です。データが失われる可能性があります。
     add_compile_options(/wd4244)    # 'argument' : 'type1' から 'type2' への変換です。データが失われる可能性があります
+    add_compile_options(/wd4702)    # unreachable code
 
     # 文字コード設定
     add_compile_options("/utf-8")   # UTF-8を強制する
