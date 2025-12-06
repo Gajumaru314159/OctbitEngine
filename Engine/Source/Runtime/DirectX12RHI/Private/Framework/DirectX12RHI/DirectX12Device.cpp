@@ -357,27 +357,30 @@ namespace ob::rhi {
 
 		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
 		result.Format = TypeConverter::Convert(format);
-		result.Support1 = D3D12_FORMAT_SUPPORT1_NONE;
-		if (type == TextureType::Texture1D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE1D;
-		if (type == TextureType::Texture2D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE2D;
-		if (type == TextureType::Texture3D) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE3D;
-		if (type == TextureType::Cube) result.Support1 = D3D12_FORMAT_SUPPORT1_TEXTURE3D;
-		result.Support2 = D3D12_FORMAT_SUPPORT2_NONE;
 
-		return SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)));
+		if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)))) return false;
+
+		result.Support1 = D3D12_FORMAT_SUPPORT1_NONE;
+		if (type == TextureType::Texture1D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE1D)) return false;
+		if (type == TextureType::Texture2D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE2D)) return false;
+		if (type == TextureType::Texture3D && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE3D)) return false;
+		if (type == TextureType::Cube && !(result.Support1 & D3D12_FORMAT_SUPPORT1_TEXTURE3D)) return false;
+
+		return true;
 	}
 
 	//! @brief サポートしているテクスチャフォーマットか 
 	bool DirectX12Device::supportsForRenderTexture(TextureFormat format)const {
 		
 		if (format == TextureFormat::Unknown)return false;
+		if (!supports(format,TextureType::Texture2D)) return false;
 
 		D3D12_FEATURE_DATA_FORMAT_SUPPORT result;
 		result.Format = TypeConverter::Convert(format);
-		result.Support1 = D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
-		result.Support2 = D3D12_FORMAT_SUPPORT2_NONE;
 
-		return SUCCEEDED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)));
+		if (FAILED(m_device->CheckFeatureSupport(D3D12_FEATURE_FORMAT_SUPPORT, &result, sizeof(result)))) return false;
+
+		return result.Support1 & D3D12_FORMAT_SUPPORT1_RENDER_TARGET;
 	}
 
 	//! @brief サポートしているシェーダーステージか 
