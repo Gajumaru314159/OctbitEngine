@@ -20,7 +20,7 @@ if (WIN32)
 endif()
 if (UNIX)
     # UUIDで使用するライブラリ
-    list(APPEND private_libs uuid)
+    list(APPEND private_libs uuid stdc++_libbacktrace)
 endif()
 
 

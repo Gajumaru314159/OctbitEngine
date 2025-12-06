@@ -7,6 +7,8 @@
 #include <Framework/Core/CoreTypes.h>
 #include <Framework/Core/String/String.h>
 #include <Framework/Core/Template/Container/Vector.h>
+#include <stacktrace>
+#include "Framework/Core/Template/Container/FixedVector.h"
 
 namespace ob::core {
 
@@ -19,16 +21,17 @@ namespace ob::core {
 
 	//! @brief      スタック情報を取得
 	struct StackTrace {
-		static constexpr s32 MAX_DEPTH = 32;
-		
-		s32		depth = 0;
-		void*	stack[MAX_DEPTH] = {};
+
+		static constexpr auto MAX_ENTRY_COUNT = 32;
+
+		//! @brief      スタック情報のエントリ一覧
+		FixedVector<std::stacktrace_entry,MAX_ENTRY_COUNT> entries;
 
 		//! @brief      スタック情報をキャプチャ
 		static StackTrace Capture(s32 frameToSkip = 0);
 
 		//! @brief      スタック情報をStackTraceElementに変換して取得
-		auto elements()const -> Vector<StackTraceElement>;
+		auto elements()const -> FixedVector<StackTraceElement,MAX_ENTRY_COUNT>;
 
 	};
 

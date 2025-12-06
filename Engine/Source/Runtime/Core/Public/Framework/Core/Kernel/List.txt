@@ -1,8 +1,0 @@
-﻿Process
-Memory
-Device
-CPU
-Thread
-Mutex
-Atomic
-StackTrace
