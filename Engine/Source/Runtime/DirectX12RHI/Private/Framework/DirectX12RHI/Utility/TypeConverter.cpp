@@ -134,6 +134,9 @@ namespace ob::rhi
     //! @brief  TextureFormat を DXGI_FORMAT に変換
     DXGI_FORMAT TypeConverter::Convert(TextureFormat value,bool useTypeless ) {
         switch (value) {
+        case TextureFormat::SDR:            return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case TextureFormat::HDR:            return DXGI_FORMAT_R10G10B10A2_UNORM;
+
         case TextureFormat::RGBA32:         return DXGI_FORMAT_R32G32B32A32_FLOAT;
         case TextureFormat::RGBA16:         return DXGI_FORMAT_R16G16B16A16_UNORM;
         case TextureFormat::RGBA8:          return DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -148,8 +151,6 @@ namespace ob::rhi
         case TextureFormat::R32:            return DXGI_FORMAT_R32_FLOAT;
         case TextureFormat::R16:            return DXGI_FORMAT_R16_FLOAT;
         case TextureFormat::R8:             return DXGI_FORMAT_R8_UNORM;
-
-        case TextureFormat::R10G10B10A2:    return DXGI_FORMAT_R10G10B10A2_UNORM;
 
         // Depthはシェーダーリソースとしても使えるようにTYPELESSにする
         case TextureFormat::D32S8:          return useTypeless?DXGI_FORMAT_R32G8X24_TYPELESS: DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
@@ -512,6 +513,7 @@ namespace ob::rhi
     //! @brief  DXGI_FORMAT を TextureFormat に変換
     TextureFormat TypeConverter::Convert(DXGI_FORMAT value) {
         switch (static_cast<DXGI_FORMAT>(value)) {
+        case DXGI_FORMAT_R10G10B10A2_UNORM:		return TextureFormat::HDR;
         case DXGI_FORMAT_R32G32B32A32_FLOAT:	return TextureFormat::RGBA32;
         case DXGI_FORMAT_R16G16B16A16_UNORM:	return TextureFormat::RGBA16;
         case DXGI_FORMAT_R8G8B8A8_UNORM:		return TextureFormat::RGBA8;
@@ -523,7 +525,6 @@ namespace ob::rhi
         case DXGI_FORMAT_R32_FLOAT:				return TextureFormat::R32;
         case DXGI_FORMAT_R16_FLOAT:				return TextureFormat::R16;
         case DXGI_FORMAT_R8_UNORM:				return TextureFormat::R8;
-        case DXGI_FORMAT_R10G10B10A2_UNORM:		return TextureFormat::R10G10B10A2;
         case DXGI_FORMAT_D32_FLOAT_S8X24_UINT:	return TextureFormat::D32S8;
         case DXGI_FORMAT_D32_FLOAT:				return TextureFormat::D32;
         case DXGI_FORMAT_D24_UNORM_S8_UINT:		return TextureFormat::D24S8;

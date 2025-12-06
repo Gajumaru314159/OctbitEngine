@@ -238,6 +238,7 @@ namespace ob::rhi {
 		const bool isDepth = !isColor;
 
 
+
 		// 定義生成
 		vk::ImageCreateInfo info = CreateCreateInfo(m_desc.type, m_desc.format, m_desc.size, m_desc.mipLevels, m_desc.arrayNum, m_desc.name);
 

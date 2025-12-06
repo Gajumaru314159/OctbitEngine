@@ -32,12 +32,6 @@ namespace ob::rhi {
     class TextureFormatUtility {
     public:
 
-        //! @brief  HDRフォーマットか
-        static bool IsHdr(TextureFormat format) {
-            return
-                format == TextureFormat::R10G10B10A2;
-        }
-
         //! @brief  デプスを持っているか
         static bool HasDepth(TextureFormat format) {
             return

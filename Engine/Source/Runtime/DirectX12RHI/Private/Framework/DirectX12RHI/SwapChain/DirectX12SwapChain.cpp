@@ -36,7 +36,7 @@ namespace ob::rhi {
 		}
 		m_syncInterval = desc.vsync ? 1 : 0;
 		m_flags = 0;// desc.vsync ? 0 : (DXGI_PRESENT_ALLOW_TEARING | DXGI_PRESENT_DO_NOT_WAIT);
-		m_format = m_desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
+		m_format = m_desc.hdr ? TextureFormat::HDR : TextureFormat::SDR;
 
 		if (!createSwapChain(device))return;
 		if (!createResources(device))return;

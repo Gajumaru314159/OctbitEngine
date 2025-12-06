@@ -197,6 +197,10 @@ namespace ob::rhi {
 	// TODO 複数ファイルで使用するので、共通化する
 	vk::Format TypeConverter::Convert(TextureFormat value) {
 		switch (value) {
+
+		case TextureFormat::SDR:			return vk::Format::eB8G8R8A8Unorm;
+		case TextureFormat::HDR:			return vk::Format::eA2B10G10R10UnormPack32;
+
 		case TextureFormat::RGBA32:         return vk::Format::eR32G32B32A32Sfloat;
 		case TextureFormat::RGBA16:         return vk::Format::eR16G16B16A16Sfloat;
 		case TextureFormat::RGBA8:          return vk::Format::eR8G8B8A8Unorm;
@@ -214,8 +218,6 @@ namespace ob::rhi {
 		case TextureFormat::R32:            return vk::Format::eR32Sfloat;
 		case TextureFormat::R16:            return vk::Format::eR16Sfloat;
 		case TextureFormat::R8:             return vk::Format::eR8Unorm;
-
-		case TextureFormat::R10G10B10A2:    return vk::Format::eA2R10G10B10UnormPack32;
 
 		case TextureFormat::D32S8:          return vk::Format::eD32SfloatS8Uint;
 		case TextureFormat::D32:            return vk::Format::eD32Sfloat;

@@ -28,7 +28,7 @@ namespace ob::rhi {
 		
 		// 未指定の場合はwindowから取得
 		if (desc.size.width <= 1 || desc.size.height <= 1) {
-			m_desc.size = { (s32)desc.window.getSize().x,(s32)desc.window.getSize().y };
+			m_desc.size = { static_cast<s32>(desc.window.getSize().x),static_cast<s32>(desc.window.getSize().y) };
 		}
 
 		createResources();
@@ -143,7 +143,7 @@ namespace ob::rhi {
 
 			commandBuffer.beginRendering(renderingInfo);
 
-			commandBuffer.setViewport(0, vk::Viewport(0, 0, m_desc.size.width, m_desc.size.height));
+			commandBuffer.setViewport(0, vk::Viewport(0, 0, static_cast<f32>(m_desc.size.width), static_cast<f32>(m_desc.size.height)));
 
 			vk::Rect2D scissor;
 			scissor.extent.width = m_desc.size.width;;
@@ -183,7 +183,7 @@ namespace ob::rhi {
 #ifdef OS_WINDOWS
 		vk::Win32SurfaceCreateInfoKHR info;
 		info.hinstance = GetModuleHandle(nullptr);
-		info.hwnd = (HWND)m_desc.window.getHandle();
+		info.hwnd = static_cast<HWND>(m_desc.window.getHandle());
 
 		m_surface = m_device.getInstance().createWin32SurfaceKHR(info, m_device.getAllocationCallbacks());
 #elif defined(OS_LINUX)
@@ -304,7 +304,7 @@ namespace ob::rhi {
 		m_images.insert(m_images.begin(), images.begin(), images.end());
 
 		// ImageView生成
-		for (auto [index, image] : Indexed(images)) {
+		for (const auto [index, image] : Indexed(images)) {
 
 			vk::ImageViewCreateInfo imageViewCreateInfo;
 			imageViewCreateInfo.flags = {};
@@ -412,7 +412,7 @@ namespace ob::rhi {
 
 		Ref<PipelineState> pipeline;
 		{
-			TextureFormat format = m_desc.hdr ? TextureFormat::R10G10B10A2 : TextureFormat::RGBA8;
+			TextureFormat format = m_desc.hdr ? TextureFormat::HDR : TextureFormat::SDR;
 
 			PipelineStateDesc desc;
 			desc.name = m_desc.name;
@@ -456,8 +456,8 @@ namespace ob::rhi {
 
 					auto oldSize = m_desc.size;
 
-					m_desc.size.width = (s32)args.newSize.x;
-					m_desc.size.height = (s32)args.newSize.y;
+					m_desc.size.width = static_cast<s32>(args.newSize.x);
+					m_desc.size.height = static_cast<s32>(args.newSize.y);
 
 					m_device.clearCommands();
 
