@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['quat_0',['quat',['../dc/da8/structob_1_1core_1_1_quat.html#aa4cd259966a3891140e0d503801dd95a',1,'ob::core::Quat::Quat() noexcept'],['../dc/da8/structob_1_1core_1_1_quat.html#a3ef22d6672971cad56c171b41d5b5745',1,'ob::core::Quat::Quat(f32 x, f32 y, f32 z, f32 w) noexcept'],['../dc/da8/structob_1_1core_1_1_quat.html#a1990f1195d9f9144d56e81feee56338e',1,'ob::core::Quat::Quat(f32 x, f32 y, f32 z)'],['../dc/da8/structob_1_1core_1_1_quat.html#ac728bcb1b3e32faced04e61d3e4671e1',1,'ob::core::Quat::Quat(const Rot &amp;rotation)'],['../dc/da8/structob_1_1core_1_1_quat.html#a5384dd23006d86ba5ad5b2daf93f06e2',1,'ob::core::Quat::Quat(Vec3 axis, f32 angle)']]]
-];

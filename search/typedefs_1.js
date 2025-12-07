@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['const_5fiterator_0',['const_iterator',['../d6/d17/classob_1_1core_1_1_bitmap.html#a676d39df02af1e67e0c1548ff1eacab1',1,'ob::core::Bitmap::const_iterator'],['../db/d4d/classob_1_1core_1_1_blob.html#a11a88873247a0c2f716ba4d03280919b',1,'ob::core::Blob::const_iterator'],['../da/dea/classob_1_1core_1_1_blob_view.html#a666c4310c86b8ce86585feecf34616ef',1,'ob::core::BlobView::const_iterator'],['../d4/da7/classob_1_1platform_1_1_arguments.html#a1d228f52adac93a730626d6aeca431ce',1,'ob::platform::Arguments::const_iterator']]],
-  ['const_5fmethod_5ftype_1',['const_method_type',['../d1/d9e/classob_1_1core_1_1_event_notifier.html#a9e1dcd0776634d2809beaaa9c131a336',1,'ob::core::EventNotifier']]],
-  ['const_5fpointer_2',['const_pointer',['../d6/dee/classob_1_1core_1_1_handle_forward_list.html#af651447fb7d8478ada76bad1457e10f8',1,'ob::core::HandleForwardList::const_pointer'],['../d8/d28/classob_1_1core_1_1_handle_list.html#ac36265cdf932fec3dd8f1394f92e5b29',1,'ob::core::HandleList::const_pointer']]],
-  ['const_5freference_3',['const_reference',['../d6/dee/classob_1_1core_1_1_handle_forward_list.html#a2ceb6f1e4a23783f377654890b51f0d9',1,'ob::core::HandleForwardList::const_reference'],['../d8/d28/classob_1_1core_1_1_handle_list.html#abf1418080716ce91d44975b9416cc0af',1,'ob::core::HandleList::const_reference']]],
-  ['const_5freverse_5fiterator_4',['const_reverse_iterator',['../d6/d17/classob_1_1core_1_1_bitmap.html#a366d5d957c048970df3490ba9be824ff',1,'ob::core::Bitmap::const_reverse_iterator'],['../db/d4d/classob_1_1core_1_1_blob.html#a78f4e5a90edc76b7a6e8c606d2845465',1,'ob::core::Blob::const_reverse_iterator'],['../d8/d28/classob_1_1core_1_1_handle_list.html#afa335265d5da6b4c17666c1e9906eae4',1,'ob::core::HandleList::const_reverse_iterator']]],
-  ['container_5ftype_5',['container_type',['../d4/da7/classob_1_1platform_1_1_arguments.html#a31648dbed808e779690cb47c85df22fd',1,'ob::platform::Arguments']]]
-];
