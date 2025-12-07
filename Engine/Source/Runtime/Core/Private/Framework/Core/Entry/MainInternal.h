@@ -2,8 +2,7 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#pragma once
 
-int OctbitMain(int argc, char *argv[]) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+//! @brief  内部エントリ関数宣言
+int OctbitInternalMain(int argc, char *argv[]);

@@ -2,9 +2,8 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
-#include <Framework/Platform/System.h>
 
-int main(int argc, char** argv) {
+int OctbitMain(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

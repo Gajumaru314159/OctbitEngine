@@ -29,9 +29,9 @@ namespace ob::asset {
 		void loadAsync(Locale locale) {
 
 			// 依存アセットもロード命令
-			for (auto& depenency : m_dependencies) {
-
-			}
+			//for (auto& depenency : m_dependencies) {
+			//
+			//}
 
 
 

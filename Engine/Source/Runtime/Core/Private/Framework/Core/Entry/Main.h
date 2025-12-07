@@ -4,4 +4,5 @@
 //***********************************************************
 #pragma once
 
-int CommonMain();
+//! @brief  プラットフォーム共通メイン関数宣言
+int OctbitMain(int argc, char *argv[]);

@@ -2,16 +2,14 @@
 //! @file
 //! @author		Gajumaru
 //***********************************************************
+#include <Framework/Core/HAL/Platform.h>
+#include <Framework/Core/Entry/MainInternal.h>
 
 #ifdef OS_WINDOWS
 
 #include <Windows.h>
 #include <DbgHelp.h>
-#include <Framework/Engine/Entry/MainInternal.h>
-#include <Framework/Core/Memory/Memory.h>
-#include "Framework/Core/Profile/Profile.h"
 
-#include "tracy/TracyC.h"
 extern "C"
 {
     static HANDLE dbgHelpLock ;
@@ -21,24 +19,12 @@ extern "C"
 }
 
 //! @brief  エントリ関数(Windows)
-int main(int argc, const char* argv[]) {
+int main(int argc, char *argv[]) {
 
     // dbghelpの初期化
     SymInitialize(GetCurrentProcess(), NULL, TRUE);
 
-
-    ob::core::BeginProfile();
-    {
-        ob::core::Logger log;
-
-        ob::internal::InitMemory();
-
-        CommonMain();
-
-        ob::internal::FinalizeMemory();
-    }
-
-    ob::core::EndProfile();
+    OctbitInternalMain(argc,argv);
 
     return 0;
 }

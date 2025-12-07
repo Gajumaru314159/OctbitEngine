@@ -233,7 +233,35 @@ void OctbitInit(ServiceInjector& injector) {
 
 }
 
-int OctbitMain() {
+
+int OctbitMain(int argc, char *argv[])
+{
+	ob::core::Logger logger;
+
+	LOG_INFO("OctbitInit()");
+
+	// EngineRootMarkがあるフォルダをカレントパスに変更
+	auto path = std::filesystem::current_path();
+	while (path.has_parent_path()) {
+		auto rootMarkPath = path / "EngineRootMark";
+		if (std::filesystem::exists(rootMarkPath)) {
+			std::filesystem::current_path(path);
+			ob::String t;
+			ob::StringEncoder::Encode(path.u16string(), t);
+			LOG_INFO("カレントパスを{}に設定", t);
+			break;
+		}
+		path = path.parent_path();
+	}
+
+	// 初期化
+	ob::core::ServiceInjector engineInjector;
+	OctbitInit(engineInjector);
+
+	// エンジン生成
+	ob::engine::Engine engine(engineInjector);
+
 	TestDirectX12();
+
 	return 0;
 }
