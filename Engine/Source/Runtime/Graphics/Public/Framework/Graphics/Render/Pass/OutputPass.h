@@ -21,8 +21,7 @@ namespace ob::graphics {
 		struct Input {
 			FGResource color;
 		};
-		struct Output {
-			FGResource color;
+		struct Output : Input {
 		};
 	public:
 

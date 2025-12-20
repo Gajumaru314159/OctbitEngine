@@ -19,13 +19,8 @@ namespace ob::graphics {
 			FGResource params;
 			FGResource depth;
 		};
-		struct Output {
+		struct Output : Input{
 			FGResource color;
-
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
-			FGResource depth;
 		};
 	public:
 		DeferredPass();

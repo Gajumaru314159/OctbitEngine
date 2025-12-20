@@ -28,11 +28,7 @@ namespace ob::graphics {
 			FGResource params;
 			FGResource depth;
 		};
-		struct Output {
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
-			FGResource depth;
+		struct Output : Input{
 		};
 	public:
 		OpaquePass();
@@ -47,11 +43,7 @@ namespace ob::graphics {
 			FGResource params;
 			FGResource depth;
 		};
-		struct Output {
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
-			FGResource depth;
+		struct Output : Input{
 		};
 	public:
 		MaskedPass();
@@ -67,11 +59,7 @@ namespace ob::graphics {
 			FGResource params;
 			FGResource depth;
 		};
-		struct Output {
-			FGResource albedo;
-			FGResource normal;
-			FGResource params;
-			FGResource depth;
+		struct Output : Input{
 		};
 	public:
 		GBufferPass() {}
