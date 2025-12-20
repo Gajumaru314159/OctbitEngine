@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Runtime/DirectX12RHI/Public/Framework/DirectX12RHI/DirectX12Device.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('db/da3/_direct_x12_device_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">DirectX12Device.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;Framework/Core/Utility/DI.h&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Framework/RHI/RHI.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/RHI/Config.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/Core/Utility/Pimpl.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/DirectX12RHI/DirectX12RHIConfig.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Framework/DirectX12RHI/Buffer/DirectX12BufferUploader.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;Framework/DirectX12RHI/Texture/DirectX12TextureUploader.h&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;Framework/DirectX12RHI/Descriptor/DirectX12DescriptorUploader.h&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;Framework/DirectX12RHI/Descriptor/DescriptorHeap.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// 前方宣言</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keyword">class </span>SmallBufferAllocator;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>}</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>ob::platform {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">class </span>WindowManager;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">   26</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">DirectX12Device</a> : <span class="keyword">public</span> <a class="code hl_class" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">Device</a>{</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6d65dd95f40879582c79c406256231e8">   29</a></span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6d65dd95f40879582c79c406256231e8">Inject</a>(<a class="code hl_class" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html">ServiceInjector</a>&amp;);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <a class="code hl_class" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">DirectX12Device</a>(ob::platform::WindowManager&amp;, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">GraphicObjectManager</a>&amp;, <span class="keyword">const</span> <a class="code hl_struct" href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">RHIConfig</a>*, <span class="keyword">const</span> <a class="code hl_struct" href="../../d4/da7/structob_1_1rhi_1_1_direct_x12_r_h_i_config.html">DirectX12RHIConfig</a>*);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <a class="code hl_class" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">~DirectX12Device</a>();</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a462143e649e5df027271de77c23e8102">   35</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a462143e649e5df027271de77c23e8102">update</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a76e9e4af0b7f67f4a439fab4310016cc">   39</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a76e9e4af0b7f67f4a439fab4310016cc">isValid</a>()<span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ae48e8e94649a87399c0f27cbca24552a">   43</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ae48e8e94649a87399c0f27cbca24552a">getAPIName</a>()<span class="keyword">const </span>{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;DirectX12&quot;</span>; };</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="comment">// 更新</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordtype">void</span> entryCommandList(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;CommandList&gt;</a>&amp;) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Vector&lt;VideoCard&gt;</a> getVideoCards()<span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="comment">// 生成</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a2d9ca35eb6fda696d2337d396e1b0ac5">   61</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;SwapChain&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a2d9ca35eb6fda696d2337d396e1b0ac5">createSwapChain</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d6/d11/structob_1_1rhi_1_1_swap_chain_desc.html">SwapChainDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a0d265411c971843fbe841a818d600460">   65</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;CommandList&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a0d265411c971843fbe841a818d600460">createCommandList</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">CommandListDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#aed99d043765863958d0b8d6c5fd8a9b6">   69</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;RootSignature&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#aed99d043765863958d0b8d6c5fd8a9b6">createRootSignature</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html">RootSignatureDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4b10135fd0d578fe689e4a57e5d9ffa3">   73</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;PipelineState&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4b10135fd0d578fe689e4a57e5d9ffa3">createPipelineState</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d6/d84/structob_1_1rhi_1_1_pipeline_state_desc.html">PipelineStateDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a92746116d57417f4acad3ea390862c88">   77</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;ComputePipelineState&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a92746116d57417f4acad3ea390862c88">createComputePipelineState</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html">ComputePipelineStateDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">   81</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Texture&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">createTexture</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">TextureDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Texture&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">createTexture</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name, TextureType type, <a class="code hl_struct" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a> size, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Span&lt;const IntColor&gt;</a> colors) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Texture&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">createTexture</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name,<a class="code hl_class" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> blob)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Texture&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">createTexture</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">TextureViewDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af88444f2616f2b0d08a56209eb660e20">   88</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;RenderTexture&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af88444f2616f2b0d08a56209eb660e20">createRenderTexture</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">RenderTextureDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#acde385d4fdbbe81cc16017b5034873eb">   92</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Sampler&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#acde385d4fdbbe81cc16017b5034873eb">createSampler</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d7/d83/structob_1_1rhi_1_1_sampler_desc.html">SamplerDesc</a>&amp; desc)<span class="keyword">override</span>;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adfb12afe8630dec1c9b01d846ee0fd55">   96</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adfb12afe8630dec1c9b01d846ee0fd55">createBuffer</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adfb12afe8630dec1c9b01d846ee0fd55">createBuffer</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html">BufferViewDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a7523794a3b4f2ee17cfd6ad4e9a8d70f">  101</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Shader&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a7523794a3b4f2ee17cfd6ad4e9a8d70f">compileShader</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ShaderCompileDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a28afa08849e875bbd787280c2bc8ee6a">  105</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Shader&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a28afa08849e875bbd787280c2bc8ee6a">loadShader</a>(<a class="code hl_class" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a>, ShaderStage) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1baddc022e24a64e0b5a2437c8823e45">  109</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;DescriptorLayout&gt;</a>   <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1baddc022e24a64e0b5a2437c8823e45">createDescriptorLayout</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d6/d37/structob_1_1rhi_1_1_descriptor_layout_desc.html">DescriptorLayoutDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;DescriptorTable&gt;</a>    createDescriptorTable(<span class="keyword">const</span> <a class="code hl_struct" href="../../d7/d9d/structob_1_1rhi_1_1_descriptor_table_desc.html">DescriptorTableDesc</a>&amp; desc) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6c96a104eabf6c20d8df0a688617ef2a">  115</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;GraphicFileHandle&gt;</a>  <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6c96a104eabf6c20d8df0a688617ef2a">createGraphicFileHandle</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a19aefa3319a7e3721cae5e28577f75e8">  118</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;GraphicFileEvent&gt;</a>   <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a19aefa3319a7e3721cae5e28577f75e8">createGraphicFileEvent</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a85e259f2e176a5b89f15694ee5eab388">  121</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;GraphicFileQueue&gt;</a>   <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a85e259f2e176a5b89f15694ee5eab388">createGraphicFileQueue</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d5/d2f/structob_1_1rhi_1_1_graphic_file_queue_desc.html">GraphicFileQueueDesc</a>&amp;) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a70071f5eb3983d5a6669f0aa97bd59be">  124</a></span>        <span class="keywordtype">bool</span>                    <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a70071f5eb3983d5a6669f0aa97bd59be">generateGraphicFile</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> input, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">output</a>, s32 <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">compressionLevel</a>) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ad5f81ce67317b9c274db00b4635f67c4">  127</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Vector&lt;GraphicFileMipInfo&gt;</a> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ad5f81ce67317b9c274db00b4635f67c4">prepareGraphicFile</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a9142e5b7743961e7f0bd964a1c91b2e2">  132</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a9142e5b7743961e7f0bd964a1c91b2e2">supports</a>(TextureFormat format, TextureType type)<span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a843c351301e2523f088d03b7fce4e721">  135</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a843c351301e2523f088d03b7fce4e721">supportsForRenderTexture</a>(TextureFormat format)<span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adf95a6d3deba9d0b4490d6f703d6c8ac">  138</a></span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adf95a6d3deba9d0b4490d6f703d6c8ac">supports</a>(ShaderStage format)<span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keywordtype">void</span> clearCommands();</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="comment">// ゲッター</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12Device8&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ab40c8939af29c9f38511d9708bd96277">getNative</a>();</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDXGIFactory7&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a17c3149a7c4593fc520790b58eea9b3f">getFactory</a>();</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcCompiler3&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#add1bf294628d83bbe977274a56f053af">getShaderCompiler</a>();</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcIncludeHandler&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af499c776edcc68e157339300133d6ef7">getIncludeHandler</a>();</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4d400b88023eb94d9a5ddeaffdc013d5">  165</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12CommandQueue&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4d400b88023eb94d9a5ddeaffdc013d5">getCommandQueue</a>();</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        <span class="comment">//ComPtr&lt;ID3D12GraphicsCommandList&gt;&amp; getSystemCommandList();</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6b129fc017e5c5e1d3348b6dd198c66c">  171</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12BufferUploader</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6b129fc017e5c5e1d3348b6dd198c66c">getBufferUploader</a>() { <span class="keywordflow">return</span> *m_bufferUploader; }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12TextureUploader</a>&amp; getTextureUploader() { <span class="keywordflow">return</span> *m_textureUploader; }</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12DescriptorUploader</a>&amp; getDescriptorUploader() { <span class="keywordflow">return</span> *m_descriptorUploader; }</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af8f1b396a2bc361162f8543b03e265e6">  183</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af8f1b396a2bc361162f8543b03e265e6">allocateHandle</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHeapType</a> type, <span class="keyword">class</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHandle</a>&amp; handle, s32 size);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        <span class="keyword">auto</span> allocateStagingHandle(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHeapType</a> type, s32 size = 1) -&gt; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">D3D12_CPU_DESCRIPTOR_HANDLE</a>;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span> </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1b3ff5e5e7caa6748657d439f48b2c8e">  188</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1b3ff5e5e7caa6748657d439f48b2c8e">setDescriptorHeaps</a>(<span class="keyword">class</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12CommandList</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">cmdList</a>);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4e53130bb55d3374b10b5b8d672b2830">  192</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDStorageFactory&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4e53130bb55d3374b10b5b8d672b2830">getDirectStorageFactory</a>();</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a845fb6f06dddaa22b103e3bbe1427fba">  195</a></span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">SmallBufferAllocator</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a845fb6f06dddaa22b103e3bbe1427fba">getSmallBufferAllocator</a>(BufferFlag <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">flag</a>);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        <span class="keywordtype">bool</span> initializeDXGIDevice();</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        <span class="keywordtype">bool</span> initializeDescriptorHeaps();</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>        <span class="keywordtype">bool</span> initializeShaderCompiler();</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>        <span class="keywordtype">bool</span> initializeUploaders();</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordtype">bool</span> initializeDirectStorage();</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="preprocessor">#ifdef OB_DEBUG</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>        <span class="keywordtype">bool</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">initializeDebugMessageCallback</a>();</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>        <span class="keywordtype">void</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">finalizeDebugMessageCallback</a>();</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>        <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">CALLBACK</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">debugMessageCallback</a>(</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">D3D12_MESSAGE_CATEGORY</a> category,</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">D3D12_MESSAGE_SEVERITY</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">severity</a>,</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">D3D12_MESSAGE_ID</a> <span class="keywordtype">id</span>,</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">LPCSTR</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">description</a>,</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>            <span class="keywordtype">void</span>* <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">context</a></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        );</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        <a class="code hl_struct" href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">RHIConfig</a>                           m_config;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        <a class="code hl_struct" href="../../d4/da7/structob_1_1rhi_1_1_direct_x12_r_h_i_config.html">DirectX12RHIConfig</a>                  m_dx12config;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12Device8&gt;</a>               m_device;                   <span class="comment">// D3D12のデバイス本体</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDXGIFactory7&gt;</a>               m_dxgiFactory;              <span class="comment">// DXGIインターフェイス</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcCompiler3&gt;</a>               m_shaderCompiler;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcUtils&gt;</a>                   m_shaderUtils;</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcIncludeHandler&gt;</a>          m_shaderIncludeHandler;</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">UPtr&lt;class CommandQueue&gt;</a>            m_commandQueue;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;CommandList&gt;</a>                    m_copyCommandList;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12Fence&gt;</a>                 m_fence;</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">UINT64</a>                              m_fenceVal;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        <span class="comment">// デバッグレイヤーメッセージコールバック</span></div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="preprocessor">#ifdef OB_DEBUG</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12InfoQueue1&gt;</a>            <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">m_infoQueue</a>;</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">DWORD</a>                               <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">m_callbackCookie</a> = 0;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorage&lt;DirectX12BufferUploader&gt;</a>      m_bufferUploader;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorage&lt;DirectX12TextureUploader&gt;</a>     m_textureUploader;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">MemoryStorage&lt;DirectX12DescriptorUploader&gt;</a>  m_descriptorUploader;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">HashMap&lt;DescriptorHeapType, UPtr&lt;class DescriptorHeap&gt;</a>&gt;        m_descriptorHeaps;          <span class="comment">// デスクリプタ・ヒープ・リスト</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">HashMap&lt;DescriptorHeapType, UPtr&lt;class DescriptorStagingHeap&gt;</a>&gt; m_descriptorStagingHeaps;   <span class="comment">// デスクリプタ・ヒープ・リスト</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDStorageFactory&gt;</a>            g_dsfactory;</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        <span class="comment">// SmallBufferAllocator管理</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">HashMap&lt;BufferFlag, core::UPtr&lt;SmallBufferAllocator&gt;</a>&gt;   m_smallBufferAllocators;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="preprocessor">#ifdef OB_DEBUG</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">UPtr&lt;class PIXModule&gt;</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">m_pixModule</a>;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    };</div>
+</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="comment">// インライン</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="foldopen" id="foldopen00267" data-start="{" data-end="}">
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ab40c8939af29c9f38511d9708bd96277">  267</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;ID3D12Device8&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ab40c8939af29c9f38511d9708bd96277">DirectX12Device::getNative</a>() {</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>        <span class="keywordflow">return</span> m_device;</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    }</div>
+</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
+<div class="foldopen" id="foldopen00273" data-start="{" data-end="}">
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a17c3149a7c4593fc520790b58eea9b3f">  273</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDXGIFactory7&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a17c3149a7c4593fc520790b58eea9b3f">DirectX12Device::getFactory</a>() {</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>        <span class="keywordflow">return</span> m_dxgiFactory;</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    }</div>
+</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="foldopen" id="foldopen00278" data-start="{" data-end="}">
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#add1bf294628d83bbe977274a56f053af">  278</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcCompiler3&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#add1bf294628d83bbe977274a56f053af">DirectX12Device::getShaderCompiler</a>() {</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        <span class="keywordflow">return</span> m_shaderCompiler;</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    }</div>
+</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="foldopen" id="foldopen00283" data-start="{" data-end="}">
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno"><a class="line" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af499c776edcc68e157339300133d6ef7">  283</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr&lt;IDxcIncludeHandler&gt;</a>&amp; <a class="code hl_function" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af499c776edcc68e157339300133d6ef7">DirectX12Device::getIncludeHandler</a>() {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        <span class="keywordflow">return</span> m_shaderIncludeHandler;</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    }</div>
+</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_blob_view_html"><div class="ttname"><a href="../../da/dea/classob_1_1core_1_1_blob_view.html">ob::core::BlobView</a></div><div class="ttdoc">バイナリデータビュー(Binary Large Object View)</div><div class="ttdef"><b>Definition</b> BlobView.h:13</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_service_injector_html"><div class="ttname"><a href="../../d2/d9b/classob_1_1core_1_1_service_injector.html">ob::core::ServiceInjector</a></div><div class="ttdoc">サービス依存注入クラス</div><div class="ttdef"><b>Definition</b> DI.h:24</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_device_html"><div class="ttname"><a href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a></div><div class="ttdoc">Rendering Hardware Interface (RHI)</div><div class="ttdef"><b>Definition</b> RHI.h:29</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">ob::rhi::DirectX12Device</a></div><div class="ttdef"><b>Definition</b> DirectX12Device.h:26</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a0d265411c971843fbe841a818d600460"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a0d265411c971843fbe841a818d600460">ob::rhi::DirectX12Device::createCommandList</a></div><div class="ttdeci">Ref&lt; CommandList &gt; createCommandList(const CommandListDesc &amp;desc) override</div><div class="ttdoc">コマンドリスト生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a17c3149a7c4593fc520790b58eea9b3f"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a17c3149a7c4593fc520790b58eea9b3f">ob::rhi::DirectX12Device::getFactory</a></div><div class="ttdeci">ComPtr&lt; IDXGIFactory7 &gt; &amp; getFactory()</div><div class="ttdoc">ファクトリを取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:273</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a19aefa3319a7e3721cae5e28577f75e8"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a19aefa3319a7e3721cae5e28577f75e8">ob::rhi::DirectX12Device::createGraphicFileEvent</a></div><div class="ttdeci">Ref&lt; GraphicFileEvent &gt; createGraphicFileEvent() override</div><div class="ttdoc">GraphicFileEventを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a1b3ff5e5e7caa6748657d439f48b2c8e"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1b3ff5e5e7caa6748657d439f48b2c8e">ob::rhi::DirectX12Device::setDescriptorHeaps</a></div><div class="ttdeci">void setDescriptorHeaps(class DirectX12CommandList &amp;cmdList)</div><div class="ttdoc">デスクリプタヒープを設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a1baddc022e24a64e0b5a2437c8823e45"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1baddc022e24a64e0b5a2437c8823e45">ob::rhi::DirectX12Device::createDescriptorLayout</a></div><div class="ttdeci">Ref&lt; DescriptorLayout &gt; createDescriptorLayout(const DescriptorLayoutDesc &amp;desc) override</div><div class="ttdoc">デスクリプタ・テーブルを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a28afa08849e875bbd787280c2bc8ee6a"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a28afa08849e875bbd787280c2bc8ee6a">ob::rhi::DirectX12Device::loadShader</a></div><div class="ttdeci">Ref&lt; Shader &gt; loadShader(BlobView, ShaderStage) override</div><div class="ttdoc">シェーダをロード</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a2d9ca35eb6fda696d2337d396e1b0ac5"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a2d9ca35eb6fda696d2337d396e1b0ac5">ob::rhi::DirectX12Device::createSwapChain</a></div><div class="ttdeci">Ref&lt; SwapChain &gt; createSwapChain(const SwapChainDesc &amp;desc) override</div><div class="ttdoc">スワップ・チェーンを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a4398ddc153fe0920ea49d36725df63a1"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">ob::rhi::DirectX12Device::createTexture</a></div><div class="ttdeci">Ref&lt; Texture &gt; createTexture(const TextureDesc &amp;desc) override</div><div class="ttdoc">テクスチャを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a462143e649e5df027271de77c23e8102"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a462143e649e5df027271de77c23e8102">ob::rhi::DirectX12Device::update</a></div><div class="ttdeci">void update() override</div><div class="ttdoc">ゲーム更新イベント</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a4b10135fd0d578fe689e4a57e5d9ffa3"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4b10135fd0d578fe689e4a57e5d9ffa3">ob::rhi::DirectX12Device::createPipelineState</a></div><div class="ttdeci">Ref&lt; PipelineState &gt; createPipelineState(const PipelineStateDesc &amp;desc) override</div><div class="ttdoc">パイプラインステートを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a4d400b88023eb94d9a5ddeaffdc013d5"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4d400b88023eb94d9a5ddeaffdc013d5">ob::rhi::DirectX12Device::getCommandQueue</a></div><div class="ttdeci">ComPtr&lt; ID3D12CommandQueue &gt; &amp; getCommandQueue()</div><div class="ttdoc">システム・コマンド・キューを取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a4e53130bb55d3374b10b5b8d672b2830"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4e53130bb55d3374b10b5b8d672b2830">ob::rhi::DirectX12Device::getDirectStorageFactory</a></div><div class="ttdeci">ComPtr&lt; IDStorageFactory &gt; &amp; getDirectStorageFactory()</div><div class="ttdoc">IDStorageFactoryを取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a6b129fc017e5c5e1d3348b6dd198c66c"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6b129fc017e5c5e1d3348b6dd198c66c">ob::rhi::DirectX12Device::getBufferUploader</a></div><div class="ttdeci">DirectX12BufferUploader &amp; getBufferUploader()</div><div class="ttdoc">システム・コマンド・リストを取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:171</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a6c96a104eabf6c20d8df0a688617ef2a"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6c96a104eabf6c20d8df0a688617ef2a">ob::rhi::DirectX12Device::createGraphicFileHandle</a></div><div class="ttdeci">Ref&lt; GraphicFileHandle &gt; createGraphicFileHandle(StringView path) override</div><div class="ttdoc">GraphicFileHandleを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a6d65dd95f40879582c79c406256231e8"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6d65dd95f40879582c79c406256231e8">ob::rhi::DirectX12Device::Inject</a></div><div class="ttdeci">static void Inject(ServiceInjector &amp;)</div><div class="ttdoc">DirectX12RHIの起動に必要なサービスを登録</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a70071f5eb3983d5a6669f0aa97bd59be"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a70071f5eb3983d5a6669f0aa97bd59be">ob::rhi::DirectX12Device::generateGraphicFile</a></div><div class="ttdeci">bool generateGraphicFile(StringView input, StringView output, s32 compressionLevel) override</div><div class="ttdoc">GraphicFileQueueを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a7523794a3b4f2ee17cfd6ad4e9a8d70f"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a7523794a3b4f2ee17cfd6ad4e9a8d70f">ob::rhi::DirectX12Device::compileShader</a></div><div class="ttdeci">Ref&lt; Shader &gt; compileShader(const ShaderCompileDesc &amp;desc) override</div><div class="ttdoc">シェーダをコンパイル</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a76e9e4af0b7f67f4a439fab4310016cc"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a76e9e4af0b7f67f4a439fab4310016cc">ob::rhi::DirectX12Device::isValid</a></div><div class="ttdeci">bool isValid() const override</div><div class="ttdoc">妥当な状態か</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a843c351301e2523f088d03b7fce4e721"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a843c351301e2523f088d03b7fce4e721">ob::rhi::DirectX12Device::supportsForRenderTexture</a></div><div class="ttdeci">bool supportsForRenderTexture(TextureFormat format) const override</div><div class="ttdoc">サポートしているテクスチャフォーマットか</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a845fb6f06dddaa22b103e3bbe1427fba"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a845fb6f06dddaa22b103e3bbe1427fba">ob::rhi::DirectX12Device::getSmallBufferAllocator</a></div><div class="ttdeci">SmallBufferAllocator &amp; getSmallBufferAllocator(BufferFlag flag)</div><div class="ttdoc">SmallBufferAllocatorを取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a85e259f2e176a5b89f15694ee5eab388"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a85e259f2e176a5b89f15694ee5eab388">ob::rhi::DirectX12Device::createGraphicFileQueue</a></div><div class="ttdeci">Ref&lt; GraphicFileQueue &gt; createGraphicFileQueue(const GraphicFileQueueDesc &amp;) override</div><div class="ttdoc">GraphicFileQueueを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a9142e5b7743961e7f0bd964a1c91b2e2"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a9142e5b7743961e7f0bd964a1c91b2e2">ob::rhi::DirectX12Device::supports</a></div><div class="ttdeci">bool supports(TextureFormat format, TextureType type) const override</div><div class="ttdoc">サポートしているテクスチャフォーマットか</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_a92746116d57417f4acad3ea390862c88"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a92746116d57417f4acad3ea390862c88">ob::rhi::DirectX12Device::createComputePipelineState</a></div><div class="ttdeci">Ref&lt; ComputePipelineState &gt; createComputePipelineState(const ComputePipelineStateDesc &amp;desc) override</div><div class="ttdoc">コンピュートパイプラインステートを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_ab40c8939af29c9f38511d9708bd96277"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ab40c8939af29c9f38511d9708bd96277">ob::rhi::DirectX12Device::getNative</a></div><div class="ttdeci">ComPtr&lt; ID3D12Device8 &gt; &amp; getNative()</div><div class="ttdoc">ネイティブ・デバイスを取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:267</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_acde385d4fdbbe81cc16017b5034873eb"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#acde385d4fdbbe81cc16017b5034873eb">ob::rhi::DirectX12Device::createSampler</a></div><div class="ttdeci">Ref&lt; Sampler &gt; createSampler(const SamplerDesc &amp;desc) override</div><div class="ttdoc">サンプラーを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_ad5f81ce67317b9c274db00b4635f67c4"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ad5f81ce67317b9c274db00b4635f67c4">ob::rhi::DirectX12Device::prepareGraphicFile</a></div><div class="ttdeci">Vector&lt; GraphicFileMipInfo &gt; prepareGraphicFile(StringView path) override</div><div class="ttdoc">プラットフォームごとのGraphicFileから事前情報を取得</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_add1bf294628d83bbe977274a56f053af"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#add1bf294628d83bbe977274a56f053af">ob::rhi::DirectX12Device::getShaderCompiler</a></div><div class="ttdeci">ComPtr&lt; IDxcCompiler3 &gt; &amp; getShaderCompiler()</div><div class="ttdoc">シェーダーコンパイラ―を取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:278</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_adf95a6d3deba9d0b4490d6f703d6c8ac"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adf95a6d3deba9d0b4490d6f703d6c8ac">ob::rhi::DirectX12Device::supports</a></div><div class="ttdeci">bool supports(ShaderStage format) const override</div><div class="ttdoc">サポートしているシェーダーステージか</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_adfb12afe8630dec1c9b01d846ee0fd55"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adfb12afe8630dec1c9b01d846ee0fd55">ob::rhi::DirectX12Device::createBuffer</a></div><div class="ttdeci">Ref&lt; Buffer &gt; createBuffer(const BufferDesc &amp;desc) override</div><div class="ttdoc">バッファーを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_ae48e8e94649a87399c0f27cbca24552a"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ae48e8e94649a87399c0f27cbca24552a">ob::rhi::DirectX12Device::getAPIName</a></div><div class="ttdeci">String getAPIName() const</div><div class="ttdoc">API名を取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:43</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_aed99d043765863958d0b8d6c5fd8a9b6"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#aed99d043765863958d0b8d6c5fd8a9b6">ob::rhi::DirectX12Device::createRootSignature</a></div><div class="ttdeci">Ref&lt; RootSignature &gt; createRootSignature(const RootSignatureDesc &amp;desc) override</div><div class="ttdoc">ルートシグネチャを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_af499c776edcc68e157339300133d6ef7"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af499c776edcc68e157339300133d6ef7">ob::rhi::DirectX12Device::getIncludeHandler</a></div><div class="ttdeci">ComPtr&lt; IDxcIncludeHandler &gt; &amp; getIncludeHandler()</div><div class="ttdoc">シェーダーインクルードハンドラーを取得</div><div class="ttdef"><b>Definition</b> DirectX12Device.h:283</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_af88444f2616f2b0d08a56209eb660e20"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af88444f2616f2b0d08a56209eb660e20">ob::rhi::DirectX12Device::createRenderTexture</a></div><div class="ttdeci">Ref&lt; RenderTexture &gt; createRenderTexture(const RenderTextureDesc &amp;desc) override</div><div class="ttdoc">レンダーテクスチャを生成</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_direct_x12_device_html_af8f1b396a2bc361162f8543b03e265e6"><div class="ttname"><a href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af8f1b396a2bc361162f8543b03e265e6">ob::rhi::DirectX12Device::allocateHandle</a></div><div class="ttdeci">void allocateHandle(DescriptorHeapType type, class DescriptorHandle &amp;handle, s32 size)</div><div class="ttdoc">ハンドルをアロケート</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_size_html"><div class="ttname"><a href="../../db/d78/structob_1_1core_1_1_size.html">ob::core::Size</a></div><div class="ttdoc">サイズ</div><div class="ttdef"><b>Definition</b> Size.h:11</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_buffer_desc_html"><div class="ttname"><a href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">ob::rhi::BufferDesc</a></div><div class="ttdoc">バッファ定義</div><div class="ttdef"><b>Definition</b> BufferDesc.h:71</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_buffer_view_desc_html"><div class="ttname"><a href="../../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html">ob::rhi::BufferViewDesc</a></div><div class="ttdef"><b>Definition</b> BufferDesc.h:63</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_command_list_desc_html"><div class="ttname"><a href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">ob::rhi::CommandListDesc</a></div><div class="ttdoc">コマンドリスト定義</div><div class="ttdef"><b>Definition</b> CommandListDesc.h:24</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_compute_pipeline_state_desc_html"><div class="ttname"><a href="../../dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html">ob::rhi::ComputePipelineStateDesc</a></div><div class="ttdoc">コンピュートパイプラインステート定義</div><div class="ttdef"><b>Definition</b> ComputePipelineStateDesc.h:11</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_descriptor_layout_desc_html"><div class="ttname"><a href="../../d6/d37/structob_1_1rhi_1_1_descriptor_layout_desc.html">ob::rhi::DescriptorLayoutDesc</a></div><div class="ttdef"><b>Definition</b> DescriptorLayoutDesc.h:70</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_descriptor_table_desc_html"><div class="ttname"><a href="../../d7/d9d/structob_1_1rhi_1_1_descriptor_table_desc.html">ob::rhi::DescriptorTableDesc</a></div><div class="ttdoc">スワップチェーン定義</div><div class="ttdef"><b>Definition</b> DescriptorTableDesc.h:11</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_direct_x12_r_h_i_config_html"><div class="ttname"><a href="../../d4/da7/structob_1_1rhi_1_1_direct_x12_r_h_i_config.html">ob::rhi::DirectX12RHIConfig</a></div><div class="ttdef"><b>Definition</b> DirectX12RHIConfig.h:9</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_graphic_file_queue_desc_html"><div class="ttname"><a href="../../d5/d2f/structob_1_1rhi_1_1_graphic_file_queue_desc.html">ob::rhi::GraphicFileQueueDesc</a></div><div class="ttdef"><b>Definition</b> GraphicFile.h:12</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_pipeline_state_desc_html"><div class="ttname"><a href="../../d6/d84/structob_1_1rhi_1_1_pipeline_state_desc.html">ob::rhi::PipelineStateDesc</a></div><div class="ttdoc">パイプラインステート定義</div><div class="ttdef"><b>Definition</b> PipelineStateDesc.h:29</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_r_h_i_config_html"><div class="ttname"><a href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">ob::rhi::RHIConfig</a></div><div class="ttdoc">Graphicモジュール設定</div><div class="ttdef"><b>Definition</b> Config.h:10</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_render_texture_desc_html"><div class="ttname"><a href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">ob::rhi::RenderTextureDesc</a></div><div class="ttdoc">レンダーテクスチャ定義</div><div class="ttdef"><b>Definition</b> RenderTextureDesc.h:18</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_root_signature_desc_html"><div class="ttname"><a href="../../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html">ob::rhi::RootSignatureDesc</a></div><div class="ttdoc">ルートシグネチャ定義</div><div class="ttdef"><b>Definition</b> RootSignatureDesc.h:81</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_sampler_desc_html"><div class="ttname"><a href="../../d7/d83/structob_1_1rhi_1_1_sampler_desc.html">ob::rhi::SamplerDesc</a></div><div class="ttdoc">サンプラー定義</div><div class="ttdef"><b>Definition</b> SamplerDesc.h:48</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_shader_compile_desc_html"><div class="ttname"><a href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ob::rhi::ShaderCompileDesc</a></div><div class="ttdef"><b>Definition</b> Shader.h:12</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_swap_chain_desc_html"><div class="ttname"><a href="../../d6/d11/structob_1_1rhi_1_1_swap_chain_desc.html">ob::rhi::SwapChainDesc</a></div><div class="ttdoc">スワップチェーン定義</div><div class="ttdef"><b>Definition</b> SwapChainDesc.h:13</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_desc_html"><div class="ttname"><a href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">ob::rhi::TextureDesc</a></div><div class="ttdoc">テクスチャ定義</div><div class="ttdef"><b>Definition</b> TextureDesc.h:76</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_texture_view_desc_html"><div class="ttname"><a href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">ob::rhi::TextureViewDesc</a></div><div class="ttdoc">D3D12_SHADER_RESOURCE_VIEW_DESCまたはD3D12_UNORDERED_ACCESS_VIEW_DESC相当</div><div class="ttdef"><b>Definition</b> TextureDesc.h:60</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_7536b172fbd480bfd146a1b1acd6856b.html">Runtime</a></li><li class="navelem"><a class="el" href="../../dir_69290b08cdf26fe2d530633c1eb411bf.html">DirectX12RHI</a></li><li class="navelem"><a class="el" href="../../dir_08c25fe24edd3a1d38b4d07e3f2cb3e8.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_e470a7c1e315f006b84c49ce4b27b840.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_56d242943d14d24a4a073d7584582212.html">DirectX12RHI</a></li><li class="navelem"><b>DirectX12Device.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+html {
+    --header-background: #212933;
+    --header-foreground: #dddddd;
+    --search-results-background-color: none;
+    --odd-color:none;
+    --index-odd-item-bg-color:none;
+}
+.memberdecls {
+    --code-background: none;
+}
+
+/* 不要物を非表示 */
+#projectname {
+    display: none;
+}
+#nav-sync {
+    display: none;
+}
+.summary {
+    display: none !important;
+}
+
+/* メンバ説明の文字サイズ */
+td.mdescRight{
+    font-size:80%;
+}
+
+/* TreeViewの矢印 */
+.arrow{
+    font-family: fantasy;
+    opacity: 1.0 !important;
+    font-size: 50%;
+}
+
+/* コンテンツを横幅いっぱいに */
+div.contents, div.header .title {
+    line-height: initial;
+    margin: initial;
+}
+
+div.contents, div.header .title, div.header .summary {
+    max-width:initial;
+}
+
+#main-menu {
+    margin-right: 40px;
+}
+
+/* メンバ定義などのセクションをカスタマイズ */
+h2.groupheader{
+    margin: 12px 0px 12px 0;
+    padding: 5px;
+    background:#f7f7f7;
+    border-left:7px solid #5cd1ff;
+    color:black;
+    font-size:20px;
+    font-weight:normal;
+    box-shadow:0px 2px 2px 0px #DEDEDE ;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+div.groupHeader{
+    display: inline-block;
+    margin: 12px;
+    padding: 5px;
+    padding-right: 50px;
+    background:#f7f7f7;
+    border-left:7px solid #ff7c5c;
+    color:black;
+    font-size:20px;
+    font-weight:normal;
+    box-shadow:0px 2px 2px 0px #DEDEDE ;
+    border-radius: 5px;
+}
+
+div.summary{
+    font-size: 14px;
+    position: absolute;
+    background: white;
+    right: 50px;
+    border-radius: 100px;
+    box-shadow: #00000026 1px 1px 2px 2px;
+}

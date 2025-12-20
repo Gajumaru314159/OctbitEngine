@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: FrameGraph</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d2/dab/_frame_graph.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">FrameGraph</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><h1>FrameGraphとは？</h1>
+<p>FrameGraphとは、 <b>各描画パス（Pass）をノードとし、依存関係をエッジとして持つ</b> ような <b>有向非巡回グラフ（DAG）</b> で、レンダリングの全体フローを構築・管理するシステムです。</p>
+<p>GDC 2017のFrostbiteの <a href="https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in">FrameGraph: Extensible Rendering Architecture in Frostbite</a> の講演に基づきます。</p>
+<h2>主な機能・役割：</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">機能   </th><th class="markdownTableHeadNone">説明    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">📦 リソーストラッキング   </td><td class="markdownTableBodyNone">テクスチャ、バッファなどの**仮想リソースを自動で管理**し、必要な時点で物理リソースを割り当てる（遅延割当）    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">🔄 依存関係解析   </td><td class="markdownTableBodyNone">**Pass間の読み書き依存関係**から描画順序を自動決定    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">🧹 ライフタイム最適化   </td><td class="markdownTableBodyNone">使用されなくなったリソースは破棄 or 再利用（**リソースの寿命管理**）    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">🧪 バリア挿入   </td><td class="markdownTableBodyNone">グラフィクスAPI（DirectX12, Vulkan等）における**必要なバリアやシンクの自動挿入**    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">🧵 並列実行の最適化   </td><td class="markdownTableBodyNone">パスの依存性グラフに基づき**非依存パスを並列実行可能**にする    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">🧰 デバッグ支援   </td><td class="markdownTableBodyNone">FrameGraphから**可視化ツール**を生成可能にし、各Passやリソースの状態を視認可能   </td></tr>
+</table>
+<hr  />
+<h1>構成の概要（例）</h1>
+<p>以下のような概念的なフローを構築：</p>
+<div class="fragment"><div class="line">graph LR</div>
+<div class="line">   EarlyZ--&gt;|depth|Opaque</div>
+<div class="line">   </div>
+<div class="line">   Opaque--&gt;|albedo|DeferredLight</div>
+<div class="line">   Opaque--&gt;|normal|DeferredLight</div>
+<div class="line">   Opaque--&gt;|param|DeferredLight</div>
+<div class="line">   Opaque--&gt;|depth|DeferredLight</div>
+<div class="line"> </div>
+<div class="line">   DeferredLight--&gt;|color|Translucent</div>
+<div class="line">   DeferredLight--&gt;|depth|Translucent</div>
+<div class="line"> </div>
+<div class="line">   Translucent--&gt;|color|PostProcess--&gt;|color|Present</div>
+</div><!-- fragment --><p>各パスは明示的に「何のリソースを読み、何を出力するか」を宣言。FrameGraphが依存関係とリソースの寿命を自動的に解決します。</p>
+<h1>特徴的な思想</h1>
+<ol type="1">
+<li><b>記述型（Declarative）API**：<ul>
+<li>描画処理を **「何をしたいか」中心に記述 し、「いつどうやるか」はFrameGraphに任せる。</li>
+</ul>
+</b></li>
+<li><b>**物理リソースと論理リソースの分離**：<ul>
+<li><code>RenderTargetA</code>などを仮想的に定義し、FrameGraphがバックで実体を最適化して割り当てる。</li>
+</ul>
+</b></li>
+<li><b>**最小限のオーバーヘッドで可搬性・保守性向上**：<ul>
+<li>パス同士が密結合しないため、**機能追加やレンダリング手法の変更に強い**。</li>
+</ul>
+</b></li>
+</ol>
+<p><b></p><h1>影響を受けた/与えた代表的なシステム</h1>
+<p></b></p>
+<p><b></b></p>
+<p><b></p><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">フレームワーク   </th><th class="markdownTableHeadNone">備考    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Unity SRP (Scriptable Render Pipeline)   </td><td class="markdownTableBodyNone">FrameGraph的構造を取り入れている    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Unreal RDG (Render Dependency Graph)   </td><td class="markdownTableBodyNone">明示的なPass/Resource構造、遅延実行、グラフ構築など多くの共通点あり   </td></tr>
+</table>
+<p></b></p>
+<p><b></p><h1>実装方法</h1>
+<p></b></p>
+<p><b> 各パスは<code>Input</code>と<code>Output</code>を定義する必要があります。 </p><div class="fragment"><div class="line"><span class="keyword">class </span>OpaquePass : <span class="keyword">public</span> RenderPass {</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">   <span class="keyword">struct </span>Input {</div>
+<div class="line">      FGResource albedo;</div>
+<div class="line">      FGResource normal;</div>
+<div class="line">      FGResource depth;</div>
+<div class="line">   };</div>
+<div class="line">   <span class="keyword">struct </span>Output {</div>
+<div class="line">      FGResource albedo;</div>
+<div class="line">      FGResource normal;            </div>
+<div class="line">      FGResource depth;</div>
+<div class="line">   };</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line">   OpaquePass();</div>
+<div class="line">   Output render(FG&amp; fg, RenderView&amp; view, Input input)<span class="keyword">const</span>;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">class </span>SampleRenderPipeline {</div>
+<div class="line"><span class="keyword">public</span>:</div>
+<div class="line"> </div>
+<div class="line">   <span class="keywordtype">void</span> render(FG&amp; fg, RenderView&amp; view) {</div>
+<div class="line"> </div>
+<div class="line">      <span class="keyword">auto</span> earlyZ = m_earlyZ.render(fg, view, {});</div>
+<div class="line">      <span class="keyword">auto</span> opaque = m_opaque.render(fg, view, { earlyZ.albedo , earlyZ.normal, earlyZ.depth });</div>
+<div class="line">      <span class="keyword">auto</span> masked = m_masked.render(fg, view, { opaque.albedo , opaque.normal, opaque.depth });</div>
+<div class="line">      <span class="keyword">auto</span> deferred = m_deferred.render(fg, view, { masked.albedo,masked.normal,masked.depth });</div>
+<div class="line">      <span class="keyword">auto</span> imgui = m_imgui.render(fg, view, { deferred.color });</div>
+<div class="line"> </div>
+<div class="line">      <span class="keywordtype">bool</span> useImGui = <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line">      <span class="keyword">auto</span> camera = m_camera.render(fg, view, { useImGui ? imgui.color : deferred.color});</div>
+<div class="line"> </div>
+<div class="line">   }</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">private</span>:</div>
+<div class="line">   EarlyZPass m_earlyZ;</div>
+<div class="line">   OpaquePass m_opaque;</div>
+<div class="line">   MaskedPass m_masked;</div>
+<div class="line">   DeferredPass m_deferred;</div>
+<div class="line">   ImGuiPass m_imgui;</div>
+<div class="line">   CameraPass m_camera;</div>
+<div class="line">};</div>
+</div><!-- fragment --><p> </b></p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../d0/dc3/_framework.html">Framework</a></li><li class="navelem"><a class="el" href="../../da/dc1/_graphics.html">Graphics</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: ob::core::AsyncFile クラス</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d7/da6/classob_1_1core_1_1_async_file.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="../../dc/dac/classob_1_1core_1_1_async_file-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle"><div class="title">ob::core::AsyncFile クラス</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>非同期ファイル  
+ <a href="../../d7/da6/classob_1_1core_1_1_async_file.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d6/d29/_async_file_8h_source.html">AsyncFile.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a3c11685a7f313de15e850e794eca7e92" id="r_a3c11685a7f313de15e850e794eca7e92"><td class="memItemLeft" align="right" valign="top"><a id="a3c11685a7f313de15e850e794eca7e92" name="a3c11685a7f313de15e850e794eca7e92"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>AsyncFile</b> (<a class="el" href="../../d9/d21/classob_1_1core_1_1_async_file_queue.html">AsyncFileQueue</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">queue</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path)</td></tr>
+<tr class="memdesc:a3c11685a7f313de15e850e794eca7e92"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
+<tr class="separator:a3c11685a7f313de15e850e794eca7e92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1a4e71d1375efc276890f87904c05d" id="r_a8d1a4e71d1375efc276890f87904c05d"><td class="memItemLeft" align="right" valign="top"><a id="a8d1a4e71d1375efc276890f87904c05d" name="a8d1a4e71d1375efc276890f87904c05d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~AsyncFile</b> ()</td></tr>
+<tr class="memdesc:a8d1a4e71d1375efc276890f87904c05d"><td class="mdescLeft">&#160;</td><td class="mdescRight">デストラクタ <br /></td></tr>
+<tr class="separator:a8d1a4e71d1375efc276890f87904c05d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6d450815f65dfd5110fbff371323181" id="r_aa6d450815f65dfd5110fbff371323181"><td class="memItemLeft" align="right" valign="top"><a id="aa6d450815f65dfd5110fbff371323181" name="aa6d450815f65dfd5110fbff371323181"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><b>poll</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="memdesc:aa6d450815f65dfd5110fbff371323181"><td class="mdescLeft">&#160;</td><td class="mdescRight">非同期読み込みが完了しているか <br /></td></tr>
+<tr class="separator:aa6d450815f65dfd5110fbff371323181"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc36f926072145746266b42e0e68ca4" id="r_a0bc36f926072145746266b42e0e68ca4"><td class="memItemLeft" align="right" valign="top"><a id="a0bc36f926072145746266b42e0e68ca4" name="a0bc36f926072145746266b42e0e68ca4"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>wait</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="memdesc:a0bc36f926072145746266b42e0e68ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">非同期読み込みの完了を待つ <br /></td></tr>
+<tr class="separator:a0bc36f926072145746266b42e0e68ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98cab16f50b408166b2e9f91e4a1ec9a" id="r_a98cab16f50b408166b2e9f91e4a1ec9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a98cab16f50b408166b2e9f91e4a1ec9a">data</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="memdesc:a98cab16f50b408166b2e9f91e4a1ec9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">読み込み済みデータにアクセスする  <br /></td></tr>
+<tr class="separator:a98cab16f50b408166b2e9f91e4a1ec9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a096e83f883805750705aabb5d48383fd" id="r_a096e83f883805750705aabb5d48383fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/da6/classob_1_1core_1_1_async_file.html#a096e83f883805750705aabb5d48383fd">size</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="memdesc:a096e83f883805750705aabb5d48383fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">読み込み済みデータのサイズを取得する  <br /></td></tr>
+<tr class="separator:a096e83f883805750705aabb5d48383fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>非同期ファイル </p>
+<p>このクラスはAsyncFileQueue、AsyncFileHandle、AsyncFileRequestのラッパークラスです。 </p>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a98cab16f50b408166b2e9f91e4a1ec9a" name="a98cab16f50b408166b2e9f91e4a1ec9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98cab16f50b408166b2e9f91e4a1ec9a">&#9670;&#160;</a></span>data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> * ob::core::AsyncFile::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>読み込み済みデータにアクセスする </p>
+<p>読み込みが完了していない場合はnullptrを返します。 </p>
+
+</div>
+</div>
+<a id="a096e83f883805750705aabb5d48383fd" name="a096e83f883805750705aabb5d48383fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a096e83f883805750705aabb5d48383fd">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">size_t</a> ob::core::AsyncFile::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>読み込み済みデータのサイズを取得する </p>
+<p>読み込みが完了していない場合は0を返します。 </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>Runtime/Core/Public/Framework/Core/File/<a class="el" href="../../d6/d29/_async_file_8h_source.html">AsyncFile.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ob</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a class="el" href="../../d7/da6/classob_1_1core_1_1_async_file.html">AsyncFile</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

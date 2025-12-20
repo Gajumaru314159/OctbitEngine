@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: ob::core::Logger クラス</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d3/d2d/classob_1_1core_1_1_logger.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-methods">静的公開メンバ関数</a> &#124;
+<a href="../../dd/d35/classob_1_1core_1_1_logger-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle"><div class="title">ob::core::Logger クラス</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>ロガー  
+ <a href="../../d3/d2d/classob_1_1core_1_1_logger.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d6/dec/_logger_8h_source.html">Logger.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a1af3a655d47de7e439c42815d0109b1f" id="r_a1af3a655d47de7e439c42815d0109b1f"><td class="memItemLeft" align="right" valign="top"><a id="a1af3a655d47de7e439c42815d0109b1f" name="a1af3a655d47de7e439c42815d0109b1f"></a>enum &#160;</td><td class="memItemRight" valign="bottom">{ <b>MESSAGE_MAX</b> = 2048
+ }</td></tr>
+<tr class="memdesc:a1af3a655d47de7e439c42815d0109b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">メッセージの最大バイト数 <br /></td></tr>
+<tr class="separator:a1af3a655d47de7e439c42815d0109b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16383d8c4f3b5cb89aa96282c95f8013" id="r_a16383d8c4f3b5cb89aa96282c95f8013"><td class="memItemLeft" align="right" valign="top"><a id="a16383d8c4f3b5cb89aa96282c95f8013" name="a16383d8c4f3b5cb89aa96282c95f8013"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Notifier</b> = <a class="el" href="../../d1/d9e/classob_1_1core_1_1_event_notifier.html">EventNotifier</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../de/df1/structob_1_1core_1_1_log.html">Log</a> &amp; &gt;</td></tr>
+<tr class="memdesc:a16383d8c4f3b5cb89aa96282c95f8013"><td class="mdescLeft">&#160;</td><td class="mdescRight">イベント・通知型 <br /></td></tr>
+<tr class="separator:a16383d8c4f3b5cb89aa96282c95f8013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f63b48e5de51de36bed92f45f2ffcd6" id="r_a5f63b48e5de51de36bed92f45f2ffcd6"><td class="memItemLeft" align="right" valign="top"><a id="a5f63b48e5de51de36bed92f45f2ffcd6" name="a5f63b48e5de51de36bed92f45f2ffcd6"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EventHandle</b> = <a class="el" href="../../d1/d9e/classob_1_1core_1_1_event_notifier.html#a1bff18a4d381640dafb11ecb65710bb5">Notifier::Handle</a></td></tr>
+<tr class="memdesc:a5f63b48e5de51de36bed92f45f2ffcd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">イベント・ハンドル型 <br /></td></tr>
+<tr class="separator:a5f63b48e5de51de36bed92f45f2ffcd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a721e000c13a5aee4736e7ff55ac0ec48" id="r_a721e000c13a5aee4736e7ff55ac0ec48"><td class="memItemLeft" align="right" valign="top"><a id="a721e000c13a5aee4736e7ff55ac0ec48" name="a721e000c13a5aee4736e7ff55ac0ec48"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">using</a>&#160;</td><td class="memItemRight" valign="bottom"><b>EventDelegateType</b> = <a class="el" href="../../d1/d9e/classob_1_1core_1_1_event_notifier.html#a6dacce3ef20836f8941a74300a456d8c">Notifier::delegate_type</a></td></tr>
+<tr class="memdesc:a721e000c13a5aee4736e7ff55ac0ec48"><td class="mdescLeft">&#160;</td><td class="mdescRight">イベント・デリゲート型 <br /></td></tr>
+<tr class="separator:a721e000c13a5aee4736e7ff55ac0ec48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:af1670ca73e04784f5feac517e49c8fbe" id="r_af1670ca73e04784f5feac517e49c8fbe"><td class="memItemLeft" align="right" valign="top"><a id="af1670ca73e04784f5feac517e49c8fbe" name="af1670ca73e04784f5feac517e49c8fbe"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Logger</b> ()</td></tr>
+<tr class="memdesc:af1670ca73e04784f5feac517e49c8fbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
+<tr class="separator:af1670ca73e04784f5feac517e49c8fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef8bdcd5b0099f13023306bd5a58f202" id="r_aef8bdcd5b0099f13023306bd5a58f202"><td class="memItemLeft" align="right" valign="top"><a id="aef8bdcd5b0099f13023306bd5a58f202" name="aef8bdcd5b0099f13023306bd5a58f202"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>~Logger</b> ()</td></tr>
+<tr class="memdesc:aef8bdcd5b0099f13023306bd5a58f202"><td class="mdescLeft">&#160;</td><td class="mdescRight">デストラクタ <br /></td></tr>
+<tr class="separator:aef8bdcd5b0099f13023306bd5a58f202"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8af230be0278ecffb7b87280e8282c3" id="r_ad8af230be0278ecffb7b87280e8282c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html#ad8af230be0278ecffb7b87280e8282c3">addLog</a> (LogLevel level, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd8/structob_1_1core_1_1_source_location.html">SourceLocation</a> &amp;sourceLocation, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *category, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">pMessage</a>)</td></tr>
+<tr class="memdesc:ad8af230be0278ecffb7b87280e8282c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">ログの追加  <br /></td></tr>
+<tr class="separator:ad8af230be0278ecffb7b87280e8282c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0117690aa02e22d67e3f571f2d6ff77a" id="r_a0117690aa02e22d67e3f571f2d6ff77a"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a0117690aa02e22d67e3f571f2d6ff77a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html#a0117690aa02e22d67e3f571f2d6ff77a">addLog</a> (LogLevel level, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd8/structob_1_1core_1_1_source_location.html">SourceLocation</a> &amp;sourceLocation, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *category, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">pFormat</a>, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a> &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a0117690aa02e22d67e3f571f2d6ff77a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ログの追加  <br /></td></tr>
+<tr class="separator:a0117690aa02e22d67e3f571f2d6ff77a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa399622bf620442b23533b1d19e94c4c" id="r_aa399622bf620442b23533b1d19e94c4c"><td class="memItemLeft" align="right" valign="top"><a id="aa399622bf620442b23533b1d19e94c4c" name="aa399622bf620442b23533b1d19e94c4c"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>addEvent</b> (<a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html#a5f63b48e5de51de36bed92f45f2ffcd6">EventHandle</a> &amp;handle, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html#a721e000c13a5aee4736e7ff55ac0ec48">EventDelegateType</a> &amp;func)</td></tr>
+<tr class="memdesc:aa399622bf620442b23533b1d19e94c4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">ログ・イベントの追加 <br /></td></tr>
+<tr class="separator:aa399622bf620442b23533b1d19e94c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a94a63ecd313ea069aa2206ee87f7c7" id="r_a4a94a63ecd313ea069aa2206ee87f7c7"><td class="memItemLeft" align="right" valign="top"><a id="a4a94a63ecd313ea069aa2206ee87f7c7" name="a4a94a63ecd313ea069aa2206ee87f7c7"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>removeEvent</b> (<a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html#a5f63b48e5de51de36bed92f45f2ffcd6">EventHandle</a> &amp;handle)</td></tr>
+<tr class="memdesc:a4a94a63ecd313ea069aa2206ee87f7c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">ログ・イベントの削除 <br /></td></tr>
+<tr class="separator:a4a94a63ecd313ea069aa2206ee87f7c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+静的公開メンバ関数</h2></td></tr>
+<tr class="memitem:aba6bcfd91bba44e05c6f2d8a0e044c8c" id="r_aba6bcfd91bba44e05c6f2d8a0e044c8c"><td class="memItemLeft" align="right" valign="top"><a id="aba6bcfd91bba44e05c6f2d8a0e044c8c" name="aba6bcfd91bba44e05c6f2d8a0e044c8c"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html">Logger</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>Get</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="memdesc:aba6bcfd91bba44e05c6f2d8a0e044c8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンスを取得 <br /></td></tr>
+<tr class="separator:aba6bcfd91bba44e05c6f2d8a0e044c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4fd20ff9e1e2894e229c0d9d0e736c7" id="r_ab4fd20ff9e1e2894e229c0d9d0e736c7"><td class="memItemLeft" align="right" valign="top"><a id="ab4fd20ff9e1e2894e229c0d9d0e736c7" name="ab4fd20ff9e1e2894e229c0d9d0e736c7"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html">Logger</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>Instance</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="memdesc:ab4fd20ff9e1e2894e229c0d9d0e736c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンスを取得 <br /></td></tr>
+<tr class="separator:ab4fd20ff9e1e2894e229c0d9d0e736c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>ロガー </p>
+<p>登録したイベントにログの追加を通知する。<br  />
+ このクラスではログの登録と通知のみを行うため、ログウィンドウへの 出力やログファイルへの保存をする場合は別途実装し登録する必要があ る。 </p>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a0117690aa02e22d67e3f571f2d6ff77a" name="a0117690aa02e22d67e3f571f2d6ff77a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0117690aa02e22d67e3f571f2d6ff77a">&#9670;&#160;</a></span>addLog() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> ob::core::Logger::addLog </td>
+          <td>(</td>
+          <td class="paramtype">LogLevel&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd8/structob_1_1core_1_1_source_location.html">SourceLocation</a> &amp;&#160;</td>
+          <td class="paramname"><em>sourceLocation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *&#160;</td>
+          <td class="paramname"><em>pFormat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Args</a> &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ログの追加 </p>
+<p>この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。<br  />
+ 直接呼び出しは非推奨です。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>ログの種類 </td></tr>
+    <tr><td class="paramname">sourceLocation</td><td>ログ生成場所 </td></tr>
+    <tr><td class="paramname">category</td><td>カテゴリ名 </td></tr>
+    <tr><td class="paramname">pFormat</td><td>フォーマット文字列 </td></tr>
+    <tr><td class="paramname">args</td><td>フォーマット引数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad8af230be0278ecffb7b87280e8282c3" name="ad8af230be0278ecffb7b87280e8282c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8af230be0278ecffb7b87280e8282c3">&#9670;&#160;</a></span>addLog() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> ob::core::Logger::addLog </td>
+          <td>(</td>
+          <td class="paramtype">LogLevel&#160;</td>
+          <td class="paramname"><em>level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd8/structob_1_1core_1_1_source_location.html">SourceLocation</a> &amp;&#160;</td>
+          <td class="paramname"><em>sourceLocation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *&#160;</td>
+          <td class="paramname"><em>category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a> *&#160;</td>
+          <td class="paramname"><em>pMessage</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ログの追加 </p>
+<p>この関数の呼び出しは LOG_INFO_EX や LOG_WARNING_EX マクロから呼び出される。<br  />
+ 直接呼び出しは非推奨です。 </p><dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">level</td><td>ログの種類 </td></tr>
+    <tr><td class="paramname">sourceLocation</td><td>ログ生成場所 </td></tr>
+    <tr><td class="paramname">category</td><td>カテゴリ名 </td></tr>
+    <tr><td class="paramname">pMessage</td><td>メッセージ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>Runtime/Core/Public/Framework/Core/Log/<a class="el" href="../../d6/dec/_logger_8h_source.html">Logger.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ob</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a class="el" href="../../d3/d2d/classob_1_1core_1_1_logger.html">Logger</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

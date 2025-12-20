@@ -1,0 +1,1295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: ob::rhi::DirectX12Device クラス</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-methods">静的公開メンバ関数</a> &#124;
+<a href="../../d5/d7e/classob_1_1rhi_1_1_direct_x12_device-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle"><div class="title">ob::rhi::DirectX12Device クラス</div></div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:af251e0c7af947d0b45d0d63256f26113" id="r_af251e0c7af947d0b45d0d63256f26113"><td class="memItemLeft" align="right" valign="top"><a id="af251e0c7af947d0b45d0d63256f26113" name="af251e0c7af947d0b45d0d63256f26113"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>DirectX12Device</b> (ob::platform::WindowManager &amp;, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">GraphicObjectManager</a> &amp;, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">RHIConfig</a> *, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d4/da7/structob_1_1rhi_1_1_direct_x12_r_h_i_config.html">DirectX12RHIConfig</a> *)</td></tr>
+<tr class="separator:af251e0c7af947d0b45d0d63256f26113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a462143e649e5df027271de77c23e8102" id="r_a462143e649e5df027271de77c23e8102"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a462143e649e5df027271de77c23e8102">update</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a462143e649e5df027271de77c23e8102"><td class="mdescLeft">&#160;</td><td class="mdescRight">ゲーム更新イベント  <br /></td></tr>
+<tr class="separator:a462143e649e5df027271de77c23e8102"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e9e4af0b7f67f4a439fab4310016cc" id="r_a76e9e4af0b7f67f4a439fab4310016cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a76e9e4af0b7f67f4a439fab4310016cc">isValid</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a76e9e4af0b7f67f4a439fab4310016cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">妥当な状態か  <br /></td></tr>
+<tr class="separator:a76e9e4af0b7f67f4a439fab4310016cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae48e8e94649a87399c0f27cbca24552a" id="r_ae48e8e94649a87399c0f27cbca24552a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ae48e8e94649a87399c0f27cbca24552a">getAPIName</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="memdesc:ae48e8e94649a87399c0f27cbca24552a"><td class="mdescLeft">&#160;</td><td class="mdescRight">API名を取得  <br /></td></tr>
+<tr class="separator:ae48e8e94649a87399c0f27cbca24552a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05a92ae1509073d06b7cbed542bc45df" id="r_a05a92ae1509073d06b7cbed542bc45df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a05a92ae1509073d06b7cbed542bc45df">entryCommandList</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">CommandList</a> &gt; &amp;) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:a05a92ae1509073d06b7cbed542bc45df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4221f1c27121ee76e0cc5722a8140589" id="r_a4221f1c27121ee76e0cc5722a8140589"><td class="memItemLeft" align="right" valign="top">Vector&lt; <a class="el" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html">VideoCard</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4221f1c27121ee76e0cc5722a8140589">getVideoCards</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:a4221f1c27121ee76e0cc5722a8140589"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d9ca35eb6fda696d2337d396e1b0ac5" id="r_a2d9ca35eb6fda696d2337d396e1b0ac5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../dd/d26/classob_1_1rhi_1_1_swap_chain.html">SwapChain</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a2d9ca35eb6fda696d2337d396e1b0ac5">createSwapChain</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d11/structob_1_1rhi_1_1_swap_chain_desc.html">SwapChainDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a2d9ca35eb6fda696d2337d396e1b0ac5"><td class="mdescLeft">&#160;</td><td class="mdescRight">スワップ・チェーンを生成  <br /></td></tr>
+<tr class="separator:a2d9ca35eb6fda696d2337d396e1b0ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d265411c971843fbe841a818d600460" id="r_a0d265411c971843fbe841a818d600460"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">CommandList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a0d265411c971843fbe841a818d600460">createCommandList</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">CommandListDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a0d265411c971843fbe841a818d600460"><td class="mdescLeft">&#160;</td><td class="mdescRight">コマンドリスト生成  <br /></td></tr>
+<tr class="separator:a0d265411c971843fbe841a818d600460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed99d043765863958d0b8d6c5fd8a9b6" id="r_aed99d043765863958d0b8d6c5fd8a9b6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../dc/d9f/classob_1_1rhi_1_1_root_signature.html">RootSignature</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#aed99d043765863958d0b8d6c5fd8a9b6">createRootSignature</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html">RootSignatureDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:aed99d043765863958d0b8d6c5fd8a9b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">ルートシグネチャを生成  <br /></td></tr>
+<tr class="separator:aed99d043765863958d0b8d6c5fd8a9b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b10135fd0d578fe689e4a57e5d9ffa3" id="r_a4b10135fd0d578fe689e4a57e5d9ffa3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../de/db3/classob_1_1rhi_1_1_pipeline_state.html">PipelineState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4b10135fd0d578fe689e4a57e5d9ffa3">createPipelineState</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d84/structob_1_1rhi_1_1_pipeline_state_desc.html">PipelineStateDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a4b10135fd0d578fe689e4a57e5d9ffa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">パイプラインステートを生成  <br /></td></tr>
+<tr class="separator:a4b10135fd0d578fe689e4a57e5d9ffa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92746116d57417f4acad3ea390862c88" id="r_a92746116d57417f4acad3ea390862c88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/def/classob_1_1rhi_1_1_compute_pipeline_state.html">ComputePipelineState</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a92746116d57417f4acad3ea390862c88">createComputePipelineState</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html">ComputePipelineStateDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a92746116d57417f4acad3ea390862c88"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンピュートパイプラインステートを生成  <br /></td></tr>
+<tr class="separator:a92746116d57417f4acad3ea390862c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4398ddc153fe0920ea49d36725df63a1" id="r_a4398ddc153fe0920ea49d36725df63a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a4398ddc153fe0920ea49d36725df63a1">createTexture</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">TextureDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a4398ddc153fe0920ea49d36725df63a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">テクスチャを生成  <br /></td></tr>
+<tr class="separator:a4398ddc153fe0920ea49d36725df63a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab59ee00bb5e48a570b8b8e706a706bd8" id="r_ab59ee00bb5e48a570b8b8e706a706bd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ab59ee00bb5e48a570b8b8e706a706bd8">createTexture</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name, TextureType type, <a class="el" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a> size, Span&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d8/d4c/structob_1_1core_1_1_int_color.html">IntColor</a> &gt; colors) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:ab59ee00bb5e48a570b8b8e706a706bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf3ea8e715f8f43f142f6cba25059bf3" id="r_adf3ea8e715f8f43f142f6cba25059bf3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adf3ea8e715f8f43f142f6cba25059bf3">createTexture</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name, <a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a> blob) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:adf3ea8e715f8f43f142f6cba25059bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecacdbe59f90d487d366466981bfa24a" id="r_aecacdbe59f90d487d366466981bfa24a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#aecacdbe59f90d487d366466981bfa24a">createTexture</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">TextureViewDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:aecacdbe59f90d487d366466981bfa24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af88444f2616f2b0d08a56209eb660e20" id="r_af88444f2616f2b0d08a56209eb660e20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">RenderTexture</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af88444f2616f2b0d08a56209eb660e20">createRenderTexture</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">RenderTextureDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:af88444f2616f2b0d08a56209eb660e20"><td class="mdescLeft">&#160;</td><td class="mdescRight">レンダーテクスチャを生成  <br /></td></tr>
+<tr class="separator:af88444f2616f2b0d08a56209eb660e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acde385d4fdbbe81cc16017b5034873eb" id="r_acde385d4fdbbe81cc16017b5034873eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d45/classob_1_1rhi_1_1_sampler.html">Sampler</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#acde385d4fdbbe81cc16017b5034873eb">createSampler</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d83/structob_1_1rhi_1_1_sampler_desc.html">SamplerDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:acde385d4fdbbe81cc16017b5034873eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">サンプラーを生成  <br /></td></tr>
+<tr class="separator:acde385d4fdbbe81cc16017b5034873eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfb12afe8630dec1c9b01d846ee0fd55" id="r_adfb12afe8630dec1c9b01d846ee0fd55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adfb12afe8630dec1c9b01d846ee0fd55">createBuffer</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:adfb12afe8630dec1c9b01d846ee0fd55"><td class="mdescLeft">&#160;</td><td class="mdescRight">バッファーを生成  <br /></td></tr>
+<tr class="separator:adfb12afe8630dec1c9b01d846ee0fd55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f46850e0aac381cc72593065dd82371" id="r_a1f46850e0aac381cc72593065dd82371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1f46850e0aac381cc72593065dd82371">createBuffer</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html">BufferViewDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:a1f46850e0aac381cc72593065dd82371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7523794a3b4f2ee17cfd6ad4e9a8d70f" id="r_a7523794a3b4f2ee17cfd6ad4e9a8d70f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">Shader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a7523794a3b4f2ee17cfd6ad4e9a8d70f">compileShader</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ShaderCompileDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a7523794a3b4f2ee17cfd6ad4e9a8d70f"><td class="mdescLeft">&#160;</td><td class="mdescRight">シェーダをコンパイル  <br /></td></tr>
+<tr class="separator:a7523794a3b4f2ee17cfd6ad4e9a8d70f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28afa08849e875bbd787280c2bc8ee6a" id="r_a28afa08849e875bbd787280c2bc8ee6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">Shader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a28afa08849e875bbd787280c2bc8ee6a">loadShader</a> (<a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a>, ShaderStage) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a28afa08849e875bbd787280c2bc8ee6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">シェーダをロード  <br /></td></tr>
+<tr class="separator:a28afa08849e875bbd787280c2bc8ee6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1baddc022e24a64e0b5a2437c8823e45" id="r_a1baddc022e24a64e0b5a2437c8823e45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../da/d25/classob_1_1rhi_1_1_descriptor_layout.html">DescriptorLayout</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a1baddc022e24a64e0b5a2437c8823e45">createDescriptorLayout</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d37/structob_1_1rhi_1_1_descriptor_layout_desc.html">DescriptorLayoutDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a1baddc022e24a64e0b5a2437c8823e45"><td class="mdescLeft">&#160;</td><td class="mdescRight">デスクリプタ・テーブルを生成  <br /></td></tr>
+<tr class="separator:a1baddc022e24a64e0b5a2437c8823e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95fd2cc8ea093dfd7e52d11c46b311ce" id="r_a95fd2cc8ea093dfd7e52d11c46b311ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d0/d2e/classob_1_1rhi_1_1_descriptor_table.html">DescriptorTable</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a95fd2cc8ea093dfd7e52d11c46b311ce">createDescriptorTable</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d9d/structob_1_1rhi_1_1_descriptor_table_desc.html">DescriptorTableDesc</a> &amp;desc) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="separator:a95fd2cc8ea093dfd7e52d11c46b311ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c96a104eabf6c20d8df0a688617ef2a" id="r_a6c96a104eabf6c20d8df0a688617ef2a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/d99/classob_1_1rhi_1_1_graphic_file_handle.html">GraphicFileHandle</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a6c96a104eabf6c20d8df0a688617ef2a">createGraphicFileHandle</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a6c96a104eabf6c20d8df0a688617ef2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">GraphicFileHandleを生成  <br /></td></tr>
+<tr class="separator:a6c96a104eabf6c20d8df0a688617ef2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19aefa3319a7e3721cae5e28577f75e8" id="r_a19aefa3319a7e3721cae5e28577f75e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d6/d72/classob_1_1rhi_1_1_graphic_file_event.html">GraphicFileEvent</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a19aefa3319a7e3721cae5e28577f75e8">createGraphicFileEvent</a> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a19aefa3319a7e3721cae5e28577f75e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">GraphicFileEventを生成  <br /></td></tr>
+<tr class="separator:a19aefa3319a7e3721cae5e28577f75e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85e259f2e176a5b89f15694ee5eab388" id="r_a85e259f2e176a5b89f15694ee5eab388"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d6/df2/classob_1_1rhi_1_1_graphic_file_queue.html">GraphicFileQueue</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a85e259f2e176a5b89f15694ee5eab388">createGraphicFileQueue</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d5/d2f/structob_1_1rhi_1_1_graphic_file_queue_desc.html">GraphicFileQueueDesc</a> &amp;) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a85e259f2e176a5b89f15694ee5eab388"><td class="mdescLeft">&#160;</td><td class="mdescRight">GraphicFileQueueを生成  <br /></td></tr>
+<tr class="separator:a85e259f2e176a5b89f15694ee5eab388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70071f5eb3983d5a6669f0aa97bd59be" id="r_a70071f5eb3983d5a6669f0aa97bd59be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a70071f5eb3983d5a6669f0aa97bd59be">generateGraphicFile</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> input, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">output</a>, s32 <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">compressionLevel</a>) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a70071f5eb3983d5a6669f0aa97bd59be"><td class="mdescLeft">&#160;</td><td class="mdescRight">GraphicFileQueueを生成  <br /></td></tr>
+<tr class="separator:a70071f5eb3983d5a6669f0aa97bd59be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5f81ce67317b9c274db00b4635f67c4" id="r_ad5f81ce67317b9c274db00b4635f67c4"><td class="memItemLeft" align="right" valign="top">Vector&lt; <a class="el" href="../../de/d74/structob_1_1rhi_1_1_graphic_file_mip_info.html">GraphicFileMipInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#ad5f81ce67317b9c274db00b4635f67c4">prepareGraphicFile</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> path) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:ad5f81ce67317b9c274db00b4635f67c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">プラットフォームごとのGraphicFileから事前情報を取得  <br /></td></tr>
+<tr class="separator:ad5f81ce67317b9c274db00b4635f67c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9142e5b7743961e7f0bd964a1c91b2e2" id="r_a9142e5b7743961e7f0bd964a1c91b2e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a9142e5b7743961e7f0bd964a1c91b2e2">supports</a> (TextureFormat format, TextureType type) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a9142e5b7743961e7f0bd964a1c91b2e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">サポートしているテクスチャフォーマットか  <br /></td></tr>
+<tr class="separator:a9142e5b7743961e7f0bd964a1c91b2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a843c351301e2523f088d03b7fce4e721" id="r_a843c351301e2523f088d03b7fce4e721"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#a843c351301e2523f088d03b7fce4e721">supportsForRenderTexture</a> (TextureFormat format) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a843c351301e2523f088d03b7fce4e721"><td class="mdescLeft">&#160;</td><td class="mdescRight">サポートしているテクスチャフォーマットか  <br /></td></tr>
+<tr class="separator:a843c351301e2523f088d03b7fce4e721"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf95a6d3deba9d0b4490d6f703d6c8ac" id="r_adf95a6d3deba9d0b4490d6f703d6c8ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#adf95a6d3deba9d0b4490d6f703d6c8ac">supports</a> (ShaderStage format) <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:adf95a6d3deba9d0b4490d6f703d6c8ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">サポートしているシェーダーステージか  <br /></td></tr>
+<tr class="separator:adf95a6d3deba9d0b4490d6f703d6c8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24e966ba8632da9d23601ed5e5e8b212" id="r_a24e966ba8632da9d23601ed5e5e8b212"><td class="memItemLeft" align="right" valign="top"><a id="a24e966ba8632da9d23601ed5e5e8b212" name="a24e966ba8632da9d23601ed5e5e8b212"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>clearCommands</b> ()</td></tr>
+<tr class="separator:a24e966ba8632da9d23601ed5e5e8b212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab40c8939af29c9f38511d9708bd96277" id="r_ab40c8939af29c9f38511d9708bd96277"><td class="memItemLeft" align="right" valign="top"><a id="ab40c8939af29c9f38511d9708bd96277" name="ab40c8939af29c9f38511d9708bd96277"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ID3D12Device8</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getNative</b> ()</td></tr>
+<tr class="memdesc:ab40c8939af29c9f38511d9708bd96277"><td class="mdescLeft">&#160;</td><td class="mdescRight">ネイティブ・デバイスを取得 <br /></td></tr>
+<tr class="separator:ab40c8939af29c9f38511d9708bd96277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17c3149a7c4593fc520790b58eea9b3f" id="r_a17c3149a7c4593fc520790b58eea9b3f"><td class="memItemLeft" align="right" valign="top"><a id="a17c3149a7c4593fc520790b58eea9b3f" name="a17c3149a7c4593fc520790b58eea9b3f"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">IDXGIFactory7</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFactory</b> ()</td></tr>
+<tr class="memdesc:a17c3149a7c4593fc520790b58eea9b3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ファクトリを取得 <br /></td></tr>
+<tr class="separator:a17c3149a7c4593fc520790b58eea9b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add1bf294628d83bbe977274a56f053af" id="r_add1bf294628d83bbe977274a56f053af"><td class="memItemLeft" align="right" valign="top"><a id="add1bf294628d83bbe977274a56f053af" name="add1bf294628d83bbe977274a56f053af"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">IDxcCompiler3</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getShaderCompiler</b> ()</td></tr>
+<tr class="memdesc:add1bf294628d83bbe977274a56f053af"><td class="mdescLeft">&#160;</td><td class="mdescRight">シェーダーコンパイラ―を取得 <br /></td></tr>
+<tr class="separator:add1bf294628d83bbe977274a56f053af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af499c776edcc68e157339300133d6ef7" id="r_af499c776edcc68e157339300133d6ef7"><td class="memItemLeft" align="right" valign="top"><a id="af499c776edcc68e157339300133d6ef7" name="af499c776edcc68e157339300133d6ef7"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">IDxcIncludeHandler</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getIncludeHandler</b> ()</td></tr>
+<tr class="memdesc:af499c776edcc68e157339300133d6ef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">シェーダーインクルードハンドラーを取得 <br /></td></tr>
+<tr class="separator:af499c776edcc68e157339300133d6ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d400b88023eb94d9a5ddeaffdc013d5" id="r_a4d400b88023eb94d9a5ddeaffdc013d5"><td class="memItemLeft" align="right" valign="top"><a id="a4d400b88023eb94d9a5ddeaffdc013d5" name="a4d400b88023eb94d9a5ddeaffdc013d5"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ID3D12CommandQueue</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCommandQueue</b> ()</td></tr>
+<tr class="memdesc:a4d400b88023eb94d9a5ddeaffdc013d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">システム・コマンド・キューを取得 <br /></td></tr>
+<tr class="separator:a4d400b88023eb94d9a5ddeaffdc013d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b129fc017e5c5e1d3348b6dd198c66c" id="r_a6b129fc017e5c5e1d3348b6dd198c66c"><td class="memItemLeft" align="right" valign="top"><a id="a6b129fc017e5c5e1d3348b6dd198c66c" name="a6b129fc017e5c5e1d3348b6dd198c66c"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12BufferUploader</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getBufferUploader</b> ()</td></tr>
+<tr class="memdesc:a6b129fc017e5c5e1d3348b6dd198c66c"><td class="mdescLeft">&#160;</td><td class="mdescRight">システム・コマンド・リストを取得 <br /></td></tr>
+<tr class="separator:a6b129fc017e5c5e1d3348b6dd198c66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70599b3dba1f943c35c497fb864ada14" id="r_a70599b3dba1f943c35c497fb864ada14"><td class="memItemLeft" align="right" valign="top"><a id="a70599b3dba1f943c35c497fb864ada14" name="a70599b3dba1f943c35c497fb864ada14"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12TextureUploader</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTextureUploader</b> ()</td></tr>
+<tr class="separator:a70599b3dba1f943c35c497fb864ada14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ffce7b958fb0384263c4d96956ae066" id="r_a0ffce7b958fb0384263c4d96956ae066"><td class="memItemLeft" align="right" valign="top"><a id="a0ffce7b958fb0384263c4d96956ae066" name="a0ffce7b958fb0384263c4d96956ae066"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12DescriptorUploader</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDescriptorUploader</b> ()</td></tr>
+<tr class="separator:a0ffce7b958fb0384263c4d96956ae066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f1b396a2bc361162f8543b03e265e6" id="r_af8f1b396a2bc361162f8543b03e265e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html#af8f1b396a2bc361162f8543b03e265e6">allocateHandle</a> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHeapType</a> type, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHandle</a> &amp;handle, s32 size)</td></tr>
+<tr class="memdesc:af8f1b396a2bc361162f8543b03e265e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">ハンドルをアロケート  <br /></td></tr>
+<tr class="separator:af8f1b396a2bc361162f8543b03e265e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addfdd459d33b38f123077f33bca1f93b" id="r_addfdd459d33b38f123077f33bca1f93b"><td class="memItemLeft" align="right" valign="top"><a id="addfdd459d33b38f123077f33bca1f93b" name="addfdd459d33b38f123077f33bca1f93b"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">auto</a>&#160;</td><td class="memItemRight" valign="bottom"><b>allocateStagingHandle</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHeapType</a> type, s32 size=1) -&gt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">D3D12_CPU_DESCRIPTOR_HANDLE</a></td></tr>
+<tr class="separator:addfdd459d33b38f123077f33bca1f93b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b3ff5e5e7caa6748657d439f48b2c8e" id="r_a1b3ff5e5e7caa6748657d439f48b2c8e"><td class="memItemLeft" align="right" valign="top"><a id="a1b3ff5e5e7caa6748657d439f48b2c8e" name="a1b3ff5e5e7caa6748657d439f48b2c8e"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setDescriptorHeaps</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DirectX12CommandList</a> &amp;<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">cmdList</a>)</td></tr>
+<tr class="memdesc:a1b3ff5e5e7caa6748657d439f48b2c8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">デスクリプタヒープを設定 <br /></td></tr>
+<tr class="separator:a1b3ff5e5e7caa6748657d439f48b2c8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e53130bb55d3374b10b5b8d672b2830" id="r_a4e53130bb55d3374b10b5b8d672b2830"><td class="memItemLeft" align="right" valign="top"><a id="a4e53130bb55d3374b10b5b8d672b2830" name="a4e53130bb55d3374b10b5b8d672b2830"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">ComPtr</a>&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">IDStorageFactory</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDirectStorageFactory</b> ()</td></tr>
+<tr class="memdesc:a4e53130bb55d3374b10b5b8d672b2830"><td class="mdescLeft">&#160;</td><td class="mdescRight">IDStorageFactoryを取得 <br /></td></tr>
+<tr class="separator:a4e53130bb55d3374b10b5b8d672b2830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a845fb6f06dddaa22b103e3bbe1427fba" id="r_a845fb6f06dddaa22b103e3bbe1427fba"><td class="memItemLeft" align="right" valign="top"><a id="a845fb6f06dddaa22b103e3bbe1427fba" name="a845fb6f06dddaa22b103e3bbe1427fba"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">SmallBufferAllocator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSmallBufferAllocator</b> (BufferFlag <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">flag</a>)</td></tr>
+<tr class="memdesc:a845fb6f06dddaa22b103e3bbe1427fba"><td class="mdescLeft">&#160;</td><td class="mdescRight">SmallBufferAllocatorを取得 <br /></td></tr>
+<tr class="separator:a845fb6f06dddaa22b103e3bbe1427fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classob_1_1rhi_1_1_device"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classob_1_1rhi_1_1_device')"><img src="../../closed.png" alt="-"/>&#160;基底クラス <a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a> に属する継承公開メンバ関数</td></tr>
+<tr class="memitem:af6b863ce606373348c1bfef2e126abdd inherit pub_methods_classob_1_1rhi_1_1_device" id="r_af6b863ce606373348c1bfef2e126abdd"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Device</b> (<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">GraphicObjectManager</a> &amp;, <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">RHIConfig</a> *)</td></tr>
+<tr class="memdesc:af6b863ce606373348c1bfef2e126abdd inherit pub_methods_classob_1_1rhi_1_1_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
+<tr class="separator:af6b863ce606373348c1bfef2e126abdd inherit pub_methods_classob_1_1rhi_1_1_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fffcaa157f485902323d42b2f184c41 inherit pub_methods_classob_1_1rhi_1_1_device" id="r_a7fffcaa157f485902323d42b2f184c41"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>~Device</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">override</a></td></tr>
+<tr class="memdesc:a7fffcaa157f485902323d42b2f184c41 inherit pub_methods_classob_1_1rhi_1_1_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">デストラクタ <br /></td></tr>
+<tr class="separator:a7fffcaa157f485902323d42b2f184c41 inherit pub_methods_classob_1_1rhi_1_1_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc164df328823f24dd919f711831c0cc inherit pub_methods_classob_1_1rhi_1_1_device" id="r_abc164df328823f24dd919f711831c0cc"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d0d/structob_1_1rhi_1_1_r_h_i_config.html">RHIConfig</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getConfig</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a></td></tr>
+<tr class="separator:abc164df328823f24dd919f711831c0cc inherit pub_methods_classob_1_1rhi_1_1_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classob_1_1core_1_1_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classob_1_1core_1_1_singleton')"><img src="../../closed.png" alt="-"/>&#160;基底クラス <a class="el" href="../../dd/df6/classob_1_1core_1_1_singleton.html">ob::core::Singleton&lt; Device &gt;</a> に属する継承公開メンバ関数</td></tr>
+<tr class="memitem:ad60ead9c91f5250a46263472de5431b8 inherit pub_methods_classob_1_1core_1_1_singleton" id="r_ad60ead9c91f5250a46263472de5431b8"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">virtual</a>&#160;</td><td class="memItemRight" valign="bottom"><b>~Singleton</b> ()</td></tr>
+<tr class="memdesc:ad60ead9c91f5250a46263472de5431b8 inherit pub_methods_classob_1_1core_1_1_singleton"><td class="mdescLeft">&#160;</td><td class="mdescRight">デストラクタ <br /></td></tr>
+<tr class="separator:ad60ead9c91f5250a46263472de5431b8 inherit pub_methods_classob_1_1core_1_1_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+静的公開メンバ関数</h2></td></tr>
+<tr class="memitem:a6d65dd95f40879582c79c406256231e8" id="r_a6d65dd95f40879582c79c406256231e8"><td class="memItemLeft" align="right" valign="top"><a id="a6d65dd95f40879582c79c406256231e8" name="a6d65dd95f40879582c79c406256231e8"></a>
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Inject</b> (<a class="el" href="../../d2/d9b/classob_1_1core_1_1_service_injector.html">ServiceInjector</a> &amp;)</td></tr>
+<tr class="memdesc:a6d65dd95f40879582c79c406256231e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">DirectX12RHIの起動に必要なサービスを登録 <br /></td></tr>
+<tr class="separator:a6d65dd95f40879582c79c406256231e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_static_methods_classob_1_1core_1_1_singleton"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classob_1_1core_1_1_singleton')"><img src="../../closed.png" alt="-"/>&#160;基底クラス <a class="el" href="../../dd/df6/classob_1_1core_1_1_singleton.html">ob::core::Singleton&lt; Device &gt;</a> に属する継承静的公開メンバ関数</td></tr>
+<tr class="memitem:a274218cac93fd890eb21e9c3bcfbb24a inherit pub_static_methods_classob_1_1core_1_1_singleton" id="r_a274218cac93fd890eb21e9c3bcfbb24a"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> Device *&#160;</td><td class="memItemRight" valign="bottom"><b>Get</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="memdesc:a274218cac93fd890eb21e9c3bcfbb24a inherit pub_static_methods_classob_1_1core_1_1_singleton"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンスを取得 <br /></td></tr>
+<tr class="separator:a274218cac93fd890eb21e9c3bcfbb24a inherit pub_static_methods_classob_1_1core_1_1_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0772247f7d531e32e946b2fc535b2f72 inherit pub_static_methods_classob_1_1core_1_1_singleton" id="r_a0772247f7d531e32e946b2fc535b2f72"><td class="memItemLeft" align="right" valign="top">
+<a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">static</a> Device &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>Instance</b> () <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">noexcept</a></td></tr>
+<tr class="memdesc:a0772247f7d531e32e946b2fc535b2f72 inherit pub_static_methods_classob_1_1core_1_1_singleton"><td class="mdescLeft">&#160;</td><td class="mdescRight">インスタンスを取得 <br /></td></tr>
+<tr class="separator:a0772247f7d531e32e946b2fc535b2f72 inherit pub_static_methods_classob_1_1core_1_1_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+その他の継承メンバ</h2></td></tr>
+<tr class="inherit_header pro_methods_classob_1_1rhi_1_1_device"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classob_1_1rhi_1_1_device')"><img src="../../closed.png" alt="-"/>&#160;基底クラス <a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a> に属する継承限定公開メンバ関数</td></tr>
+<tr class="memitem:a273fe2af4009349b87f496d2cab51a53 inherit pro_methods_classob_1_1rhi_1_1_device" id="r_a273fe2af4009349b87f496d2cab51a53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html#a273fe2af4009349b87f496d2cab51a53">finalize</a> ()</td></tr>
+<tr class="memdesc:a273fe2af4009349b87f496d2cab51a53 inherit pro_methods_classob_1_1rhi_1_1_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">終了処理  <br /></td></tr>
+<tr class="separator:a273fe2af4009349b87f496d2cab51a53 inherit pro_methods_classob_1_1rhi_1_1_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classob_1_1core_1_1_singleton"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classob_1_1core_1_1_singleton')"><img src="../../closed.png" alt="-"/>&#160;基底クラス <a class="el" href="../../dd/df6/classob_1_1core_1_1_singleton.html">ob::core::Singleton&lt; Device &gt;</a> に属する継承限定公開メンバ関数</td></tr>
+<tr class="memitem:aaa8b573a344aee18082856ad02024ccf inherit pro_methods_classob_1_1core_1_1_singleton" id="r_aaa8b573a344aee18082856ad02024ccf"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>Singleton</b> ()</td></tr>
+<tr class="memdesc:aaa8b573a344aee18082856ad02024ccf inherit pro_methods_classob_1_1core_1_1_singleton"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンストラクタ <br /></td></tr>
+<tr class="separator:aaa8b573a344aee18082856ad02024ccf inherit pro_methods_classob_1_1core_1_1_singleton"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">関数詳解</h2>
+<a id="af8f1b396a2bc361162f8543b03e265e6" name="af8f1b396a2bc361162f8543b03e265e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f1b396a2bc361162f8543b03e265e6">&#9670;&#160;</a></span>allocateHandle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> ob::rhi::DirectX12Device::allocateHandle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHeapType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">class</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">DescriptorHandle</a> &amp;&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">s32&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ハンドルをアロケート </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>ヒープタイプ </td></tr>
+    <tr><td class="paramname">handle</td><td>アロケート先ハンドル </td></tr>
+    <tr><td class="paramname">size</td><td>割り当て個数 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7523794a3b4f2ee17cfd6ad4e9a8d70f" name="a7523794a3b4f2ee17cfd6ad4e9a8d70f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7523794a3b4f2ee17cfd6ad4e9a8d70f">&#9670;&#160;</a></span>compileShader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">Shader</a> &gt; ob::rhi::DirectX12Device::compileShader </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/d6d/structob_1_1rhi_1_1_shader_compile_desc.html">ShaderCompileDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>シェーダをコンパイル </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="adfb12afe8630dec1c9b01d846ee0fd55" name="adfb12afe8630dec1c9b01d846ee0fd55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfb12afe8630dec1c9b01d846ee0fd55">&#9670;&#160;</a></span>createBuffer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt; ob::rhi::DirectX12Device::createBuffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d3/d4c/structob_1_1rhi_1_1_buffer_desc.html">BufferDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>バッファーを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a1f46850e0aac381cc72593065dd82371" name="a1f46850e0aac381cc72593065dd82371"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f46850e0aac381cc72593065dd82371">&#9670;&#160;</a></span>createBuffer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/db5/classob_1_1rhi_1_1_buffer.html">Buffer</a> &gt; ob::rhi::DirectX12Device::createBuffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/d67/structob_1_1rhi_1_1_buffer_view_desc.html">BufferViewDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a0d265411c971843fbe841a818d600460" name="a0d265411c971843fbe841a818d600460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d265411c971843fbe841a818d600460">&#9670;&#160;</a></span>createCommandList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">CommandList</a> &gt; ob::rhi::DirectX12Device::createCommandList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">CommandListDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>コマンドリスト生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a92746116d57417f4acad3ea390862c88" name="a92746116d57417f4acad3ea390862c88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92746116d57417f4acad3ea390862c88">&#9670;&#160;</a></span>createComputePipelineState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/def/classob_1_1rhi_1_1_compute_pipeline_state.html">ComputePipelineState</a> &gt; ob::rhi::DirectX12Device::createComputePipelineState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../dc/dc0/structob_1_1rhi_1_1_compute_pipeline_state_desc.html">ComputePipelineStateDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>コンピュートパイプラインステートを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a1baddc022e24a64e0b5a2437c8823e45" name="a1baddc022e24a64e0b5a2437c8823e45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1baddc022e24a64e0b5a2437c8823e45">&#9670;&#160;</a></span>createDescriptorLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../da/d25/classob_1_1rhi_1_1_descriptor_layout.html">DescriptorLayout</a> &gt; ob::rhi::DirectX12Device::createDescriptorLayout </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d37/structob_1_1rhi_1_1_descriptor_layout_desc.html">DescriptorLayoutDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>デスクリプタ・テーブルを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a95fd2cc8ea093dfd7e52d11c46b311ce" name="a95fd2cc8ea093dfd7e52d11c46b311ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95fd2cc8ea093dfd7e52d11c46b311ce">&#9670;&#160;</a></span>createDescriptorTable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d0/d2e/classob_1_1rhi_1_1_descriptor_table.html">DescriptorTable</a> &gt; ob::rhi::DirectX12Device::createDescriptorTable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d9d/structob_1_1rhi_1_1_descriptor_table_desc.html">DescriptorTableDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a19aefa3319a7e3721cae5e28577f75e8" name="a19aefa3319a7e3721cae5e28577f75e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19aefa3319a7e3721cae5e28577f75e8">&#9670;&#160;</a></span>createGraphicFileEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d6/d72/classob_1_1rhi_1_1_graphic_file_event.html">GraphicFileEvent</a> &gt; ob::rhi::DirectX12Device::createGraphicFileEvent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GraphicFileEventを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a6c96a104eabf6c20d8df0a688617ef2a" name="a6c96a104eabf6c20d8df0a688617ef2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c96a104eabf6c20d8df0a688617ef2a">&#9670;&#160;</a></span>createGraphicFileHandle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d1/d99/classob_1_1rhi_1_1_graphic_file_handle.html">GraphicFileHandle</a> &gt; ob::rhi::DirectX12Device::createGraphicFileHandle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GraphicFileHandleを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a85e259f2e176a5b89f15694ee5eab388" name="a85e259f2e176a5b89f15694ee5eab388"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e259f2e176a5b89f15694ee5eab388">&#9670;&#160;</a></span>createGraphicFileQueue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d6/df2/classob_1_1rhi_1_1_graphic_file_queue.html">GraphicFileQueue</a> &gt; ob::rhi::DirectX12Device::createGraphicFileQueue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d5/d2f/structob_1_1rhi_1_1_graphic_file_queue_desc.html">GraphicFileQueueDesc</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GraphicFileQueueを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a4b10135fd0d578fe689e4a57e5d9ffa3" name="a4b10135fd0d578fe689e4a57e5d9ffa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b10135fd0d578fe689e4a57e5d9ffa3">&#9670;&#160;</a></span>createPipelineState()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../de/db3/classob_1_1rhi_1_1_pipeline_state.html">PipelineState</a> &gt; ob::rhi::DirectX12Device::createPipelineState </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d84/structob_1_1rhi_1_1_pipeline_state_desc.html">PipelineStateDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>パイプラインステートを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="af88444f2616f2b0d08a56209eb660e20" name="af88444f2616f2b0d08a56209eb660e20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af88444f2616f2b0d08a56209eb660e20">&#9670;&#160;</a></span>createRenderTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d53/classob_1_1rhi_1_1_render_texture.html">RenderTexture</a> &gt; ob::rhi::DirectX12Device::createRenderTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d65/structob_1_1rhi_1_1_render_texture_desc.html">RenderTextureDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>レンダーテクスチャを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="aed99d043765863958d0b8d6c5fd8a9b6" name="aed99d043765863958d0b8d6c5fd8a9b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed99d043765863958d0b8d6c5fd8a9b6">&#9670;&#160;</a></span>createRootSignature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../dc/d9f/classob_1_1rhi_1_1_root_signature.html">RootSignature</a> &gt; ob::rhi::DirectX12Device::createRootSignature </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d9/dd5/structob_1_1rhi_1_1_root_signature_desc.html">RootSignatureDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ルートシグネチャを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="acde385d4fdbbe81cc16017b5034873eb" name="acde385d4fdbbe81cc16017b5034873eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acde385d4fdbbe81cc16017b5034873eb">&#9670;&#160;</a></span>createSampler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d9/d45/classob_1_1rhi_1_1_sampler.html">Sampler</a> &gt; ob::rhi::DirectX12Device::createSampler </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d83/structob_1_1rhi_1_1_sampler_desc.html">SamplerDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>サンプラーを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a2d9ca35eb6fda696d2337d396e1b0ac5" name="a2d9ca35eb6fda696d2337d396e1b0ac5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d9ca35eb6fda696d2337d396e1b0ac5">&#9670;&#160;</a></span>createSwapChain()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../dd/d26/classob_1_1rhi_1_1_swap_chain.html">SwapChain</a> &gt; ob::rhi::DirectX12Device::createSwapChain </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d6/d11/structob_1_1rhi_1_1_swap_chain_desc.html">SwapChainDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>スワップ・チェーンを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a4398ddc153fe0920ea49d36725df63a1" name="a4398ddc153fe0920ea49d36725df63a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4398ddc153fe0920ea49d36725df63a1">&#9670;&#160;</a></span>createTexture() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt; ob::rhi::DirectX12Device::createTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d7/d26/structob_1_1rhi_1_1_texture_desc.html">TextureDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>テクスチャを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="aecacdbe59f90d487d366466981bfa24a" name="aecacdbe59f90d487d366466981bfa24a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecacdbe59f90d487d366466981bfa24a">&#9670;&#160;</a></span>createTexture() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt; ob::rhi::DirectX12Device::createTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d3/da0/structob_1_1rhi_1_1_texture_view_desc.html">TextureViewDesc</a> &amp;&#160;</td>
+          <td class="paramname"><em>desc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="adf3ea8e715f8f43f142f6cba25059bf3" name="adf3ea8e715f8f43f142f6cba25059bf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf3ea8e715f8f43f142f6cba25059bf3">&#9670;&#160;</a></span>createTexture() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt; ob::rhi::DirectX12Device::createTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a>&#160;</td>
+          <td class="paramname"><em>blob</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="ab59ee00bb5e48a570b8b8e706a706bd8" name="ab59ee00bb5e48a570b8b8e706a706bd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab59ee00bb5e48a570b8b8e706a706bd8">&#9670;&#160;</a></span>createTexture() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/d32/classob_1_1rhi_1_1_texture.html">Texture</a> &gt; ob::rhi::DirectX12Device::createTexture </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TextureType&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d78/structob_1_1core_1_1_size.html">Size</a>&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Span&lt; <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../d8/d4c/structob_1_1core_1_1_int_color.html">IntColor</a> &gt;&#160;</td>
+          <td class="paramname"><em>colors</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a05a92ae1509073d06b7cbed542bc45df" name="a05a92ae1509073d06b7cbed542bc45df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05a92ae1509073d06b7cbed542bc45df">&#9670;&#160;</a></span>entryCommandList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> ob::rhi::DirectX12Device::entryCommandList </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">const</a> <a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">CommandList</a> &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a70071f5eb3983d5a6669f0aa97bd59be" name="a70071f5eb3983d5a6669f0aa97bd59be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70071f5eb3983d5a6669f0aa97bd59be">&#9670;&#160;</a></span>generateGraphicFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a> ob::rhi::DirectX12Device::generateGraphicFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">s32&#160;</td>
+          <td class="paramname"><em>compressionLevel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GraphicFileQueueを生成 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="ae48e8e94649a87399c0f27cbca24552a" name="ae48e8e94649a87399c0f27cbca24552a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae48e8e94649a87399c0f27cbca24552a">&#9670;&#160;</a></span>getAPIName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a> ob::rhi::DirectX12Device::getAPIName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>API名を取得 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a4221f1c27121ee76e0cc5722a8140589" name="a4221f1c27121ee76e0cc5722a8140589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4221f1c27121ee76e0cc5722a8140589">&#9670;&#160;</a></span>getVideoCards()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector&lt; <a class="el" href="../../d0/da0/structob_1_1rhi_1_1_video_card.html">VideoCard</a> &gt; ob::rhi::DirectX12Device::getVideoCards </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a76e9e4af0b7f67f4a439fab4310016cc" name="a76e9e4af0b7f67f4a439fab4310016cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76e9e4af0b7f67f4a439fab4310016cc">&#9670;&#160;</a></span>isValid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a> ob::rhi::DirectX12Device::isValid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>妥当な状態か </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html#a59bbb58666436e40d36ff288c8e3af15">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a28afa08849e875bbd787280c2bc8ee6a" name="a28afa08849e875bbd787280c2bc8ee6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28afa08849e875bbd787280c2bc8ee6a">&#9670;&#160;</a></span>loadShader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref</a>&lt; <a class="el" href="../../d7/de4/classob_1_1rhi_1_1_shader.html">Shader</a> &gt; ob::rhi::DirectX12Device::loadShader </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../da/dea/classob_1_1core_1_1_blob_view.html">BlobView</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ShaderStage&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>シェーダをロード </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="ad5f81ce67317b9c274db00b4635f67c4" name="ad5f81ce67317b9c274db00b4635f67c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5f81ce67317b9c274db00b4635f67c4">&#9670;&#160;</a></span>prepareGraphicFile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector&lt; <a class="el" href="../../de/d74/structob_1_1rhi_1_1_graphic_file_mip_info.html">GraphicFileMipInfo</a> &gt; ob::rhi::DirectX12Device::prepareGraphicFile </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>プラットフォームごとのGraphicFileから事前情報を取得 </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="adf95a6d3deba9d0b4490d6f703d6c8ac" name="adf95a6d3deba9d0b4490d6f703d6c8ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf95a6d3deba9d0b4490d6f703d6c8ac">&#9670;&#160;</a></span>supports() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a> ob::rhi::DirectX12Device::supports </td>
+          <td>(</td>
+          <td class="paramtype">ShaderStage&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>サポートしているシェーダーステージか </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a9142e5b7743961e7f0bd964a1c91b2e2" name="a9142e5b7743961e7f0bd964a1c91b2e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9142e5b7743961e7f0bd964a1c91b2e2">&#9670;&#160;</a></span>supports() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a> ob::rhi::DirectX12Device::supports </td>
+          <td>(</td>
+          <td class="paramtype">TextureFormat&#160;</td>
+          <td class="paramname"><em>format</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TextureType&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>サポートしているテクスチャフォーマットか </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a843c351301e2523f088d03b7fce4e721" name="a843c351301e2523f088d03b7fce4e721"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a843c351301e2523f088d03b7fce4e721">&#9670;&#160;</a></span>supportsForRenderTexture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">bool</a> ob::rhi::DirectX12Device::supportsForRenderTexture </td>
+          <td>(</td>
+          <td class="paramtype">TextureFormat&#160;</td>
+          <td class="paramname"><em>format</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>サポートしているテクスチャフォーマットか </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<a id="a462143e649e5df027271de77c23e8102" name="a462143e649e5df027271de77c23e8102"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a462143e649e5df027271de77c23e8102">&#9670;&#160;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dac/classob_1_1core_1_1_ref.html">void</a> ob::rhi::DirectX12Device::update </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ゲーム更新イベント </p>
+
+<p><a class="el" href="../../dc/ddd/classob_1_1rhi_1_1_device.html#a51799bedb9dbb4b263fb672ae468d5aa">ob::rhi::Device</a>を再実装しています。</p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>Runtime/DirectX12RHI/Public/Framework/DirectX12RHI/<a class="el" href="../../db/da3/_direct_x12_device_8h_source.html">DirectX12Device.h</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>ob</b></li><li class="navelem"><b>rhi</b></li><li class="navelem"><a class="el" href="../../d8/d3e/classob_1_1rhi_1_1_direct_x12_device.html">DirectX12Device</a></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

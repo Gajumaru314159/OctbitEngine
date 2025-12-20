@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Runtime/Core/Public/Framework/Core/Misc/UUID.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('df/ddd/_u_u_i_d_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">UUID.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Framework/Core/CorePrivate.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/Core/String/String.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>ob::core {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">   12</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u32</a> data[4];</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#ad5053aea741b351f61ab92371ead25b3">   19</a></span>        <span class="keyword">static</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#ad5053aea741b351f61ab92371ead25b3">Generate</a>();</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9d23e9d120ebdff8ac0c0bd665bde2fc">   25</a></span>        <span class="keyword">static</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Optional&lt;UUID&gt;</a> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9d23e9d120ebdff8ac0c0bd665bde2fc">FromString</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">uuidText</a>);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a8c7bf8a724c504f20c7f357471a8d1fe">   28</a></span>        <span class="keyword">constexpr</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a8c7bf8a724c504f20c7f357471a8d1fe">UUID</a>();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3279cf7467ec4bdad5f42efc87cbe084">   31</a></span>        <span class="keyword">constexpr</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3279cf7467ec4bdad5f42efc87cbe084">UUID</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">data0</a>,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">data1</a>,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">data2</a>,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">data3</a>);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="comment">// オペレータ</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a1c6995f4dd5e3d28ef32bd7ac6006ca2">   37</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a1c6995f4dd5e3d28ef32bd7ac6006ca2">operator==</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;  </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3ad79998aca306dbd1a9765b61565a4f">   38</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3ad79998aca306dbd1a9765b61565a4f">operator!=</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;  </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a4ee7669f1d15a76f5f4b856a25ae5720">   39</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a4ee7669f1d15a76f5f4b856a25ae5720">operator&lt;=</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;  </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3b13b5bc23602a5468a906c3e2d561ea">   40</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3b13b5bc23602a5468a906c3e2d561ea">operator&lt;</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;   </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#aa57e4c4e2cf0b2071b4188170b38240b">   41</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#aa57e4c4e2cf0b2071b4188170b38240b">operator&gt;=</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;  </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9f768f3bae5d21630c3e212dbb0b293e">   42</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9f768f3bae5d21630c3e212dbb0b293e">operator&gt;</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">other</a>)<span class="keyword">const</span>;   </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a31cc2c4679a3d1ecc60f7683fbbb38c1">   48</a></span>        <span class="keywordtype">void</span>  <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a31cc2c4679a3d1ecc60f7683fbbb38c1">toString</a>(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Char</a>(&amp;dest)[37])<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a02e7cd960a92957b9684c3203e3588f8">   54</a></span>        <a class="code hl_class" href="../../da/dc1/classob_1_1core_1_1_string_base.html">String</a>  <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a02e7cd960a92957b9684c3203e3588f8">toString</a>()<span class="keyword">const</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a322db7f85bd7b9cd949a24f419590223">   61</a></span>        <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a322db7f85bd7b9cd949a24f419590223">empty</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="keyword">friend</span> <span class="keyword">struct </span>std::hash&lt;<a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&gt;;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keyword">constexpr</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> compare(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">UUID</a>&amp; b)<span class="keyword">const </span>{</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            <span class="keywordflow">for</span> (<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a> = 0; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a> &lt; 4; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>++) {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                <span class="keywordflow">if</span> (data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>] == b.data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>])<span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                <span class="keywordflow">if</span> (data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>] &gt; b.data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>])<span class="keywordflow">return</span> 1;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                <span class="keywordflow">if</span> (data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>] &lt; b.data[<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">i</a>])<span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            }</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>            <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        }</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    };</div>
+</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="comment">// インライン関数</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">constexpr</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a8c7bf8a724c504f20c7f357471a8d1fe">UUID::UUID</a>():UUID(0,0,0,0) {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    }</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <span class="keyword">constexpr</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a8c7bf8a724c504f20c7f357471a8d1fe">UUID::UUID</a>(u32 data0, u32 data1, u32 data2, u32 data3)</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        : data{data0,data1,data2,data3}</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    }</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a1c6995f4dd5e3d28ef32bd7ac6006ca2">UUID::operator==</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) == 0; }</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3ad79998aca306dbd1a9765b61565a4f">UUID::operator!=</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) != 0; }</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3b13b5bc23602a5468a906c3e2d561ea">UUID::operator&lt;</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) &lt; 0; }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a4ee7669f1d15a76f5f4b856a25ae5720">UUID::operator&lt;=</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) &lt;= 0; }</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#aa57e4c4e2cf0b2071b4188170b38240b">UUID::operator&gt;=</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) &gt;= 0; }</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9f768f3bae5d21630c3e212dbb0b293e">UUID::operator&gt;</a>(<span class="keyword">const</span> UUID&amp; other)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> compare(other) &gt; 0;}</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a322db7f85bd7b9cd949a24f419590223">UUID::empty</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="keywordflow">return</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            data[0] == 0 &amp;&amp;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            data[1] == 0 &amp;&amp;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            data[2] == 0 &amp;&amp;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            data[3] == 0;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    }</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">// フォーマット</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="keyword">template</span> &lt;&gt; <span class="keyword">struct </span>std::formatter&lt;ob::core::UUID, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Char</a>&gt; {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> ParseContext&gt;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keyword">constexpr</span> <span class="keyword">auto</span> parse(ParseContext&amp; ctx) -&gt; <span class="keyword">decltype</span>(ctx.begin()) {</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        <span class="keywordflow">return</span> ctx.end();</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    }</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> FormatContext&gt;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keyword">auto</span> format(<a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">ob::core::UUID</a> value, FormatContext&amp; ctx)<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Char</a> text[37];</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        value.<a class="code hl_function" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a31cc2c4679a3d1ecc60f7683fbbb38c1">toString</a>(text);</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        <span class="keywordflow">return</span> format_to(ctx.out(), <span class="stringliteral">&quot;{}&quot;</span>, text);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    }</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>};</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">// ハッシュ化</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">//===============================================================</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="keyword">template</span>&lt;&gt;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="keyword">struct </span>std::hash&lt;ob::core::UUID&gt; {</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keyword">constexpr</span> <span class="keywordtype">size_t</span> operator()(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">ob::core::UUID</a>&amp; value)<span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keyword">constexpr</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::u64</a> offset_basis = 14695981039346656037u;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        <span class="keyword">constexpr</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::u64</a> fnv_prime = 1099511628211u;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::u64</a> result = offset_basis;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; 4; ++i) {</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>            result ^= <span class="keyword">static_cast&lt;</span><a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">ob::u64</a><span class="keyword">&gt;</span>(value.data[i]);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>            result *= fnv_prime;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        }</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    }</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>};</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1core_1_1_string_base_html"><div class="ttname"><a href="../../da/dc1/classob_1_1core_1_1_string_base.html">ob::core::StringBase&lt; Char &gt;</a></div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html">ob::core::UUID</a></div><div class="ttdoc">UUIDクラス</div><div class="ttdef"><b>Definition</b> UUID.h:12</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a02e7cd960a92957b9684c3203e3588f8"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a02e7cd960a92957b9684c3203e3588f8">ob::core::UUID::toString</a></div><div class="ttdeci">String toString() const</div><div class="ttdoc">文字列表現で取得</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a1c6995f4dd5e3d28ef32bd7ac6006ca2"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a1c6995f4dd5e3d28ef32bd7ac6006ca2">ob::core::UUID::operator==</a></div><div class="ttdeci">constexpr bool operator==(const UUID &amp;other) const</div><div class="ttdoc">等価演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a31cc2c4679a3d1ecc60f7683fbbb38c1"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a31cc2c4679a3d1ecc60f7683fbbb38c1">ob::core::UUID::toString</a></div><div class="ttdeci">void toString(Char(&amp;dest)[37]) const</div><div class="ttdoc">文字列表現で取得</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a322db7f85bd7b9cd949a24f419590223"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a322db7f85bd7b9cd949a24f419590223">ob::core::UUID::empty</a></div><div class="ttdeci">constexpr bool empty() const</div><div class="ttdoc">空のUUIDか判定</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a3279cf7467ec4bdad5f42efc87cbe084"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3279cf7467ec4bdad5f42efc87cbe084">ob::core::UUID::UUID</a></div><div class="ttdeci">constexpr UUID(u32 data0, u32 data1, u32 data2, u32 data3)</div><div class="ttdoc">コンストラクタ(要素指定)</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a3ad79998aca306dbd1a9765b61565a4f"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3ad79998aca306dbd1a9765b61565a4f">ob::core::UUID::operator!=</a></div><div class="ttdeci">constexpr bool operator!=(const UUID &amp;other) const</div><div class="ttdoc">否等価演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a3b13b5bc23602a5468a906c3e2d561ea"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a3b13b5bc23602a5468a906c3e2d561ea">ob::core::UUID::operator&lt;</a></div><div class="ttdeci">constexpr bool operator&lt;(const UUID &amp;other) const</div><div class="ttdoc">比較演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a4ee7669f1d15a76f5f4b856a25ae5720"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a4ee7669f1d15a76f5f4b856a25ae5720">ob::core::UUID::operator&lt;=</a></div><div class="ttdeci">constexpr bool operator&lt;=(const UUID &amp;other) const</div><div class="ttdoc">比較演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a8c7bf8a724c504f20c7f357471a8d1fe"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a8c7bf8a724c504f20c7f357471a8d1fe">ob::core::UUID::UUID</a></div><div class="ttdeci">constexpr UUID()</div><div class="ttdoc">デフォルトコンストラクタ(ゼロ初期化)</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a9d23e9d120ebdff8ac0c0bd665bde2fc"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9d23e9d120ebdff8ac0c0bd665bde2fc">ob::core::UUID::FromString</a></div><div class="ttdeci">static Optional&lt; UUID &gt; FromString(const StringView &amp;uuidText)</div><div class="ttdoc">UUID文字列からUUIDオブジェクトを生成</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_a9f768f3bae5d21630c3e212dbb0b293e"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#a9f768f3bae5d21630c3e212dbb0b293e">ob::core::UUID::operator&gt;</a></div><div class="ttdeci">constexpr bool operator&gt;(const UUID &amp;other) const</div><div class="ttdoc">比較演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_aa57e4c4e2cf0b2071b4188170b38240b"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#aa57e4c4e2cf0b2071b4188170b38240b">ob::core::UUID::operator&gt;=</a></div><div class="ttdeci">constexpr bool operator&gt;=(const UUID &amp;other) const</div><div class="ttdoc">比較演算子</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_u_u_i_d_html_ad5053aea741b351f61ab92371ead25b3"><div class="ttname"><a href="../../dd/d11/structob_1_1core_1_1_u_u_i_d.html#ad5053aea741b351f61ab92371ead25b3">ob::core::UUID::Generate</a></div><div class="ttdeci">static UUID Generate()</div><div class="ttdoc">ランダムなUUIDを生成</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_7536b172fbd480bfd146a1b1acd6856b.html">Runtime</a></li><li class="navelem"><a class="el" href="../../dir_0e6cddcc9caa1238c7f3774224afaa45.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_ba49309ee78fabe0452662bc1a7ef37d.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_36401868ad2ee673180e1aaa8510bbcc.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_e21e8c2e9eddca07fbbf2a4e213036d0.html">Core</a></li><li class="navelem"><a class="el" href="../../dir_0a94146a8a38d82c0df398b3a43496cb.html">Misc</a></li><li class="navelem"><b>UUID.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

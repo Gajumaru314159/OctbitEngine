@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>OctbitEngine: Runtime/RHI/Public/Framework/RHI/CommandList.h ソースファイル</title>
+<link href="../../tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../dynsections.js"></script>
+<link href="../../navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../resize.js"></script>
+<script type="text/javascript" src="../../navtreedata.js"></script>
+<script type="text/javascript" src="../../navtree.js"></script>
+<link href="../../search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../search/searchdata.js"></script>
+<script type="text/javascript" src="../../search/search.js"></script>
+<link href="../../doxygen.css" rel="stylesheet" type="text/css" />
+<link href="../../doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="../../style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="../../header.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">OctbitEngine
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "../../search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="../../menudata.js"></script>
+<script type="text/javascript" src="../../menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('../../',true,false,'search.php','検索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(1); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('d0/d37/_command_list_8h_source.html','../../'); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">読み取り中…</div>
+<div class="SRStatus" id="Searching">検索中…</div>
+<div class="SRStatus" id="NoMatches">一致する文字列を見つけられません</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">CommandList.h</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//***********************************************************</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Framework/Core/Geometry/Viewport.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;Framework/RHI/Forward.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;Framework/RHI/GraphicObject.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;Framework/RHI/Types/CommandListDesc.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Framework/RHI/Types/CommandParam.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;Framework/RHI/Types/RenderPassDesc.h&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;Framework/RHI/RenderTexture.h&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">namespace </span>ob::rhi {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">   17</a></span>    <span class="keyword">class </span><a class="code hl_class" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">CommandList</a> :<span class="keyword">public</span> <a class="code hl_class" href="../../d6/d98/classob_1_1rhi_1_1_graphic_object.html">GraphicObject</a> {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keyword">static</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;CommandList&gt;</a> Create(<span class="keyword">const</span> <a class="code hl_struct" href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">CommandListDesc</a>&amp; desc);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> begin() = 0;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> end() = 0;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> flush() = 0;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> beginRenderPass(<span class="keyword">const</span> <a class="code hl_struct" href="../../dd/d97/structob_1_1rhi_1_1_begin_pass_param.html">BeginPassParam</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">param</a>) = 0;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> endRenderPass() = 0;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> applySwapChain(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;SwapChain&gt;</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">swapChain</a>, <span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;RenderTexture&gt;</a>&amp; texture) = 0;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#ac3077c0ad00527d3aa823588fa1a4b51">   33</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#ac3077c0ad00527d3aa823588fa1a4b51">setViewport</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d0/d62/structob_1_1core_1_1_viewport.html">Viewport</a>* <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">pViewport</a>, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">num</a>) = 0;  </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a0689f50bc267dd3d547bcbd68c8be600">   34</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a0689f50bc267dd3d547bcbd68c8be600">setScissorRect</a>(<span class="keyword">const</span> <a class="code hl_struct" href="../../d3/df1/structob_1_1core_1_1_int_rect.html">IntRect</a>* <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">pRect</a>, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">num</a>) = 0;    </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>                <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a6e930254bbcbf17efef04eabf03cc9f2">setVertexBuffer</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a>&amp; buffer);         </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5a6d0a5e3b4cab638935bf2ac9f0ce06">   37</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5a6d0a5e3b4cab638935bf2ac9f0ce06">setVertexBuffers</a>(Span&lt;<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a>&gt; buffers,<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> first = 0) = 0;         </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5c255383809034fd4bc0a55bc740e1cb">   38</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5c255383809034fd4bc0a55bc740e1cb">setIndexBuffer</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a>&amp; buffer) = 0;                 </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a435b74840e76d6766b58d8cac098ff04">   41</a></span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a435b74840e76d6766b58d8cac098ff04">setPipelineState</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;PipelineState&gt;</a>&amp;) = 0;        </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="comment">//virtual void setComputePipelineState(const ComputePipelineState&amp;) = 0;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="comment">// setBlendFactor</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="comment">// setStencilRef</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setDescriptorTables(<span class="keyword">const</span> <a class="code hl_struct" href="../../db/d1f/structob_1_1rhi_1_1_set_descriptor_table_param.html">SetDescriptorTableParam</a>*, <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">s32</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">num</a>) = 0;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="comment">// void setRootDescriptor();</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setRootConstant(<span class="keyword">const</span> <a class="code hl_struct" href="../../db/d4f/structob_1_1rhi_1_1_set_root_constants_param.html">SetRootConstantsParam</a>&amp;) = 0;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> draw(<span class="keyword">const</span> <a class="code hl_struct" href="../../d4/d93/structob_1_1rhi_1_1_draw_param.html">DrawParam</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">param</a>) = 0;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> drawIndexed(<span class="keyword">const</span> <a class="code hl_struct" href="../../d4/d70/structob_1_1rhi_1_1_draw_indexed_param.html">DrawIndexedParam</a>&amp; <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">param</a>) = 0;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="comment">//virtual void drawInstanced() = 0;</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="comment">// バッファのコピー</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="comment">//virtual void copyBuffer();</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="comment">//virtual void copyBufferRegion();</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="comment">//</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="comment">//virtual void copyTexture(Texture&amp; src, Texture&amp; dst) = 0;</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <span class="comment">//virtual void copyTexture(Texture&amp; src, Texture&amp; dst, const CopyTextureParam* pParam, s32 num) = 0;</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="comment">//</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">//virtual void updateBuffer(Buffer&amp; buffer, const void* pData, size_t offset, size_t size) = 0;</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        <span class="comment">// void updateBuffer();</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> pushMarker(<a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">StringView</a> name) = 0;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> popMarker() = 0;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <span class="comment">// virtual void setViewports(const Viewport* pViewport, s32 num) = 0;  //!&lt; ビューポートを設定</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="comment">// virtual void setScissors(const IntRect* pRect, s32 num) = 0;    //!&lt; シザー矩形を設定</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        <span class="comment">// virtual void setShaderResourceGroup(const ShaderResourceGroup&amp;);</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="comment">// virtual void submit(const CopyItem&amp;);</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="comment">// virtual void submit(const DrawItem&amp;);</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="comment">// virtual void submit(const DispatchItem&amp;);</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <span class="comment">// virtual void submit(const CopyItem&amp;);</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    };</div>
+</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="foldopen" id="foldopen00083" data-start="{" data-end="}">
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a6e930254bbcbf17efef04eabf03cc9f2">   83</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a6e930254bbcbf17efef04eabf03cc9f2">CommandList::setVertexBuffer</a>(<span class="keyword">const</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a>&amp; buffer) {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Ref&lt;Buffer&gt;</a> buffers[1];</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        buffers[0] = buffer;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <a class="code hl_function" href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5a6d0a5e3b4cab638935bf2ac9f0ce06">setVertexBuffers</a>(buffers);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
+</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">#if 0</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">enum class</span> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TextureAspect</a> {</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <a class="code hl_struct" href="../../df/d0a/structob_1_1core_1_1_color.html">Color</a>,</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Depth</a>,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">Stencil</a>,</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    };</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keyword">struct </span>TextureSubresource {</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u16</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">mipSlice</a> = 0;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">u16</a> <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">arraySlice</a> = 0;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <a class="code hl_class" href="../../db/dac/classob_1_1core_1_1_ref.html">TextureAspect</a> aspect;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    };</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keyword">struct </span>CopyBufferParam {</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        Ref&lt;Buffer&gt; source;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        Ref&lt;Buffer&gt; target;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        s32 sourceOffset = 0;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        s32 targetOffset = 0;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        s32 size = 0;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    };</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    <span class="keyword">struct </span>CopyTextureParam {</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        Ref&lt;Texture&gt; source;</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        Ref&lt;Texture&gt; target;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        TextureSubresource sourceSubresource;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        TextureSubresource targetSubresource;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        Point sourceOrigin;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        Point targetOrigin;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        Size size;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    };</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keyword">struct </span>CopyBufferToTextureParam {};</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keyword">struct </span>CopyTextureToBufferParam {};</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keyword">using </span>CopyItemParam = Variant&lt;CopyBufferParam, CopyTextureParam, CopyBufferToTextureParam, CopyTextureToBufferParam&gt;;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keyword">struct </span>DrawItemParam {};</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keyword">struct </span>DispatchItemParam {};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keyword">class </span>CommandListSimple {</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setViewports(<span class="keyword">const</span> Viewport* viewports, s32 num) = 0;  </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setScissors(<span class="keyword">const</span> IntRect* scissors, s32 num) = 0;    </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                <span class="keywordtype">void</span> setViewport(<span class="keyword">const</span> Viewport&amp; viewport) { setViewports(&amp;viewport, 1); }</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                <span class="keywordtype">void</span> setScissors(<span class="keyword">const</span> IntRect&amp; scissor) { setScissors(&amp;scissor, 1); }</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> submit(<span class="keyword">const</span> CopyItemParam&amp; param) = 0;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> submit(<span class="keyword">const</span> DrawItemParam&amp; param) = 0;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> submit(<span class="keyword">const</span> DispatchItemParam&amp; param) = 0;</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> submit(<span class="keyword">const</span> DispatchItemParam&amp; param) = 0;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    };</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>}</div>
+<div class="ttc" id="aclassob_1_1core_1_1_ref_html"><div class="ttname"><a href="../../db/dac/classob_1_1core_1_1_ref.html">ob::core::Ref</a></div><div class="ttdoc">RefObject 用スマートポインタ</div><div class="ttdef"><b>Definition</b> Ref.h:64</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html">ob::rhi::CommandList</a></div><div class="ttdoc">コマンドリスト</div><div class="ttdef"><b>Definition</b> CommandList.h:17</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_a0689f50bc267dd3d547bcbd68c8be600"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a0689f50bc267dd3d547bcbd68c8be600">ob::rhi::CommandList::setScissorRect</a></div><div class="ttdeci">virtual void setScissorRect(const IntRect *pRect, s32 num)=0</div><div class="ttdoc">シザー矩形を設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_a435b74840e76d6766b58d8cac098ff04"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a435b74840e76d6766b58d8cac098ff04">ob::rhi::CommandList::setPipelineState</a></div><div class="ttdeci">virtual void setPipelineState(const Ref&lt; PipelineState &gt; &amp;)=0</div><div class="ttdoc">パイプライン設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_a5a6d0a5e3b4cab638935bf2ac9f0ce06"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5a6d0a5e3b4cab638935bf2ac9f0ce06">ob::rhi::CommandList::setVertexBuffers</a></div><div class="ttdeci">virtual void setVertexBuffers(Span&lt; Ref&lt; Buffer &gt; &gt; buffers, s32 first=0)=0</div><div class="ttdoc">頂点バッファ設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_a5c255383809034fd4bc0a55bc740e1cb"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a5c255383809034fd4bc0a55bc740e1cb">ob::rhi::CommandList::setIndexBuffer</a></div><div class="ttdeci">virtual void setIndexBuffer(const Ref&lt; Buffer &gt; &amp;buffer)=0</div><div class="ttdoc">インデックスバッファ設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_a6e930254bbcbf17efef04eabf03cc9f2"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#a6e930254bbcbf17efef04eabf03cc9f2">ob::rhi::CommandList::setVertexBuffer</a></div><div class="ttdeci">void setVertexBuffer(const Ref&lt; Buffer &gt; &amp;buffer)</div><div class="ttdoc">頂点バッファ設定</div><div class="ttdef"><b>Definition</b> CommandList.h:83</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_command_list_html_ac3077c0ad00527d3aa823588fa1a4b51"><div class="ttname"><a href="../../d3/dc1/classob_1_1rhi_1_1_command_list.html#ac3077c0ad00527d3aa823588fa1a4b51">ob::rhi::CommandList::setViewport</a></div><div class="ttdeci">virtual void setViewport(const Viewport *pViewport, s32 num)=0</div><div class="ttdoc">ビューポートを設定</div></div>
+<div class="ttc" id="aclassob_1_1rhi_1_1_graphic_object_html"><div class="ttname"><a href="../../d6/d98/classob_1_1rhi_1_1_graphic_object.html">ob::rhi::GraphicObject</a></div><div class="ttdoc">グラフィック・オブジェクト</div><div class="ttdef"><b>Definition</b> GraphicObject.h:19</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_color_html"><div class="ttname"><a href="../../df/d0a/structob_1_1core_1_1_color.html">ob::core::Color</a></div><div class="ttdoc">RGBAカラーを表現するクラス</div><div class="ttdef"><b>Definition</b> Color.h:17</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_int_rect_html"><div class="ttname"><a href="../../d3/df1/structob_1_1core_1_1_int_rect.html">ob::core::IntRect</a></div><div class="ttdoc">矩形</div><div class="ttdef"><b>Definition</b> IntRect.h:14</div></div>
+<div class="ttc" id="astructob_1_1core_1_1_viewport_html"><div class="ttname"><a href="../../d0/d62/structob_1_1core_1_1_viewport.html">ob::core::Viewport</a></div><div class="ttdoc">ビューポート</div><div class="ttdef"><b>Definition</b> Viewport.h:14</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_begin_pass_param_html"><div class="ttname"><a href="../../dd/d97/structob_1_1rhi_1_1_begin_pass_param.html">ob::rhi::BeginPassParam</a></div><div class="ttdoc">レンダーパス定義</div><div class="ttdef"><b>Definition</b> RenderPassDesc.h:57</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_command_list_desc_html"><div class="ttname"><a href="../../d7/db1/structob_1_1rhi_1_1_command_list_desc.html">ob::rhi::CommandListDesc</a></div><div class="ttdoc">コマンドリスト定義</div><div class="ttdef"><b>Definition</b> CommandListDesc.h:24</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_draw_indexed_param_html"><div class="ttname"><a href="../../d4/d70/structob_1_1rhi_1_1_draw_indexed_param.html">ob::rhi::DrawIndexedParam</a></div><div class="ttdoc">CommandList::drawIndexed() で指定するパラメータ</div><div class="ttdef"><b>Definition</b> CommandParam.h:32</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_draw_param_html"><div class="ttname"><a href="../../d4/d93/structob_1_1rhi_1_1_draw_param.html">ob::rhi::DrawParam</a></div><div class="ttdoc">CommandList::draw() で指定するパラメータ</div><div class="ttdef"><b>Definition</b> CommandParam.h:23</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_set_descriptor_table_param_html"><div class="ttname"><a href="../../db/d1f/structob_1_1rhi_1_1_set_descriptor_table_param.html">ob::rhi::SetDescriptorTableParam</a></div><div class="ttdoc">デスクリプタ・テーブル・コマンドパラメータ</div><div class="ttdef"><b>Definition</b> CommandParam.h:11</div></div>
+<div class="ttc" id="astructob_1_1rhi_1_1_set_root_constants_param_html"><div class="ttname"><a href="../../db/d4f/structob_1_1rhi_1_1_set_root_constants_param.html">ob::rhi::SetRootConstantsParam</a></div><div class="ttdef"><b>Definition</b> CommandParam.h:58</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="../../dir_7536b172fbd480bfd146a1b1acd6856b.html">Runtime</a></li><li class="navelem"><a class="el" href="../../dir_77f6f65374f8c3475f5863f1d7155f21.html">RHI</a></li><li class="navelem"><a class="el" href="../../dir_b02f64f4aa17aa83393bee2665c3b72d.html">Public</a></li><li class="navelem"><a class="el" href="../../dir_d53e2a2cb4cffa488150da14d0fdfd93.html">Framework</a></li><li class="navelem"><a class="el" href="../../dir_a6e017247a38c106bf1117473d26bb21.html">RHI</a></li><li class="navelem"><b>CommandList.h</b></li>
+    <li class="footer">構築: <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>
